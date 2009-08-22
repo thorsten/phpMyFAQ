@@ -55,14 +55,14 @@ $IDN = new idna_convert;
 //
 // Get language (default: english)
 //
-$pmf      = new PMF_Init();
-$LANGCODE = $pmf->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
+$Language = new PMF_Language();
+$LANGCODE = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
 // Preload English strings
 require_once 'lang/language_en.php';
 
 
 $showCaptcha = PMF_Filter::filterInput(INPUT_GET, 'gen', FILTER_SANITIZE_STRING);
-if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE) && is_null($showCaptcha)) {
+if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE) && is_null($showCaptcha)) {
     // Overwrite English strings with the ones we have in the current language,
     // but don't include UTF-8 encoded files, these will break the captcha images
     require_once 'lang/language_'.$LANGCODE.'.php';
@@ -239,7 +239,7 @@ if ($faqconfig->get('main.enableUserTracking')) {
 // Found a article language?
 //
 $lang = PMF_Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
-if (is_null($lang) && !PMF_Init::isASupportedLanguage($lang) ) {
+if (is_null($lang) && !PMF_Language::isASupportedLanguage($lang) ) {
     $lang = $LANGCODE;
 }
 

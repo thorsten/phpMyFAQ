@@ -1752,7 +1752,7 @@ class PMF_Faq
             AND
                 fcr.category_id = \''.$categoryId.'\'';
         }
-        if (isset($language) && PMF_Init::isASupportedLanguage($language)) {
+        if (isset($language) && PMF_Language::isASupportedLanguage($language)) {
             $query .= '
             AND
                 fd.lang = \''.$language.'\'';
@@ -1855,7 +1855,7 @@ class PMF_Faq
                 AND fd.lang = fv.lang
                 AND fd.active = \'yes\'';
 
-        if (isset($language) && PMF_Init::isASupportedLanguage($language)) {
+        if (isset($language) && PMF_Language::isASupportedLanguage($language)) {
             $query .= '
             AND
                 fd.lang = \''.$language.'\'';
@@ -2711,7 +2711,7 @@ class PMF_Faq
      * Set or unset a faq item to be sticky 
      *
      * @param  integer $id       Record id
-     * @param  string  $lang     language code which is valid with PMF_Init::isASupportedLanguage
+     * @param  string  $lang     language code which is valid with PMF_Language::isASupportedLanguage
      * @param  boolean $isSticky weither or not the record is set to sticky
      * @return boolean
      */

@@ -42,7 +42,7 @@ $LANGCODE      = $pmf->setLanguage($faqconfig->get('main.languageDetection'), $f
 
 require_once PMF_ROOT_DIR . '/lang/language_en.php';
 
-if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
+if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
     require_once PMF_ROOT_DIR . '/lang/language_'.$LANGCODE.'.php';
 } else {
     $LANGCODE = 'en';

@@ -64,7 +64,7 @@ class PMF_String_Mbstring extends PMF_String_Abstract
         if (!self::$instance) {
             self::$instance = new self;
             self::$instance->encoding = null == $encoding ? self::DEFAULT_ENCODING : $encoding;
-            self::$instance->language = PMF_Init::isASupportedLanguage($language) ? $language : self::DEFAULT_LANGUAGE;
+            self::$instance->language = PMF_Language::isASupportedLanguage($language) ? $language : self::DEFAULT_LANGUAGE;
             mb_regex_encoding(self::$instance->encoding);
         }
         

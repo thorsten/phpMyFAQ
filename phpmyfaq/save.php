@@ -46,7 +46,8 @@ $categories  = PMF_Filter::filterInputArray(INPUT_POST, array('rubrik' => array(
 if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($content) && 
     IPCheck($_SERVER['REMOTE_ADDR']) && checkBannedWord(PMF_String::htmlspecialchars($thema)) && 
     checkBannedWord(PMF_String::htmlspecialchars($content)) && $captcha->checkCaptchaCode($code) && 
-    ((is_null($faqid) && !is_null($categories)) || (!is_null($faqid) && !is_null($faqlanguage) && PMF_Init::isASupportedLanguage($faqlanguage)))) {
+    ((is_null($faqid) && !is_null($categories)) || (!is_null($faqid) && !is_null($faqlanguage) && 
+    PMF_Language::isASupportedLanguage($faqlanguage)))) {
 
     $isNew = true;
     if (!is_null($faqid)) {

@@ -325,9 +325,7 @@ function safeEmail($email)
 }
 
 /**
- * check4AddrMatch()
- *
- * Checks for an address match (IP or Network)
+ * Checks for an address match (IPv4 or Network)
  *
  * @param   string  IP Address
  * @param   string  Network Address (e.g.: a.b.c.d/255.255.255.0 or a.b.c.d/24) or IP Address
@@ -336,7 +334,7 @@ function safeEmail($email)
  * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author  Kenneth Shaw <ken@expitrans.com>
  */
-function check4AddrMatch($ip, $network)
+function checkForAddrMatchIpv4($ip, $network)
 {
     // See also ip2long PHP online manual: Kenneth Shaw
     // coded a network matching function called net_match.
@@ -364,6 +362,18 @@ function check4AddrMatch($ip, $network)
 }
 
 /**
+ * Checks for an address match (IPv6 or Network)
+ *
+ * @param   string $ip      IP Address
+ * @param   string $network Network Address (e.g.: a.b.c.d/255.255.255.0 or a.b.c.d/24) or IP Address
+ * @return  boolean
+ */
+function checkForAddrMatchIpv6($ip, $network)
+{
+    
+}
+
+/**
  * Performs a check if an IPv4 is banned
  * 
  * NOTE: This function does not support IPv6
@@ -380,7 +390,7 @@ function IPCheck($ip)
     $bannedIPs = explode(' ', $faqconfig->get('main.bannedIPs'));
     
     foreach ($bannedIPs as $oneIPorNetwork) {
-        if (check4AddrMatch($ip, $oneIPorNetwork)) {
+        if (checkForAddrMatchIpv4($ip, $oneIPorNetwork)) {
             return false;
         }
     }

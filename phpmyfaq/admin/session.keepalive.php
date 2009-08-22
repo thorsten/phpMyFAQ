@@ -46,7 +46,7 @@ require PMF_ROOT_DIR.'/lang/language_en.php';
 // Get language (default: english)
 //
 $_language = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
-if (!is_null($_language) && PMF_Init::isASupportedLanguage($_language)) {
+if (!is_null($_language) && PMF_Language::isASupportedLanguage($_language)) {
     require PMF_ROOT_DIR.'/lang/language_' . $_language . '.php';
 }
 
