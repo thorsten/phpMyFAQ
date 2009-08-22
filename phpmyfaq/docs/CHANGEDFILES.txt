@@ -15,6 +15,7 @@ CHANGED FILES FROM 2.5.1 -> 2.5.2
 ./lang/language_pl.php
 ./lang/language_tw.php
 ./template/register.tpl
+./savequestion.php
 
 
 
