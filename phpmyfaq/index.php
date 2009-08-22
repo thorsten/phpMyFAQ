@@ -26,9 +26,9 @@
  */
 
 //
-// Check if data.php exist -> if not, redirect to installer
+// Check if config/database.php exist -> if not, redirect to installer
 //
-if (!file_exists('inc/data.php')) {
+if (!file_exists('config/database.php')) {
     header("Location: install/installer.php");
     exit();
 }

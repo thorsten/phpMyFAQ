@@ -23,9 +23,9 @@
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
 //
-// Check if data.php exist -> if not, redirect to installer
+// Check if config/database.php exist -> if not, redirect to installer
 //
-if (!file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
+if (!file_exists(PMF_ROOT_DIR . '/config/database.php')) {
     header("Location: ".str_replace('admin/index.php', '', $_SERVER["PHP_SELF"])."install/installer.php");
     exit();
 }

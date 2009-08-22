@@ -70,9 +70,10 @@ require_once 'autoLoader.php';
 // Read configuration and constants, included main functions
 //
 define('PMF_INCLUDE_DIR', dirname(__FILE__));
-require_once PMF_INCLUDE_DIR.'/data.php';
-require_once PMF_INCLUDE_DIR.'/constants.php';
-require_once PMF_INCLUDE_DIR.'/functions.php';
+define('PMF_CONFIG_DIR', dirname(dirname(__FILE__)) . '/config');
+require PMF_CONFIG_DIR . '/database.php';
+require PMF_CONFIG_DIR . '/constants.php';
+require PMF_INCLUDE_DIR . '/functions.php';
 // TODO: Linkverifier.php contains both PMF_Linkverifier class and
 //       helper functions => move the fns into the class.
 require_once PMF_INCLUDE_DIR.'/Linkverifier.php';
@@ -107,9 +108,9 @@ ini_set('url_rewriter.tags', '');
 //
 // Connect to LDAP server, when LDAP support is enabled
 //
-if ($faqconfig->get('main.ldapSupport') && file_exists(PMF_INCLUDE_DIR . '/dataldap.php')) {
-    require PMF_INCLUDE_DIR . '/dataldap.php';
-    require PMF_INCLUDE_DIR . '/constants_ldap.php';
+if ($faqconfig->get('main.ldapSupport') && file_exists(PMF_CONFIG_DIR . '/ldap.php')) {
+    require PMF_CONFIG_DIR . '/ldap.php';
+    require PMF_CONFIG_DIR . '/constants_ldap.php';
 } else {
     $ldap = null;
 }

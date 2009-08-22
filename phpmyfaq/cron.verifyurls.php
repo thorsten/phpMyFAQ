@@ -40,7 +40,7 @@ $isRequestedByWebLocalhost = isset($_SERVER['REMOTE_ADDR']) && ('127.0.0.1' == $
 
 $isCronRequest = $isRequestedByCLI || $isRequestedByWebLocalhost;
 
-if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
+if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/config/database.php')) {
     // Hack: set dummy values for those entries evaluated during a Web request but not during a CLI request
     if ($isRequestedByCLI) {
         $_SERVER['HTTP_HOST']       = '';
