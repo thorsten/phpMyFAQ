@@ -73,6 +73,13 @@ PMF_String::init($PMF_LANG["metaCharset"], $LANGCODE);
  */
 PMF_Template::setTplSetName($faqconfig->get('main.templateSet'));
 
+/**
+ * Initialize attachment factory
+ */
+PMF_Attachment_Factory::init($faqconfig->get('main.attachmentsStorageType'),
+                             $faqconfig->get('main.defaultAttachmentEncKey'),
+                             'true' == $faqconfig->get('main.enableAttachmentEncryption'));
+
 //
 // Create a new FAQ object
 //

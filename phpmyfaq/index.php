@@ -78,6 +78,13 @@ $plr = new PMF_Language_Plurals($PMF_LANG);
 //
 PMF_String::init($PMF_LANG["metaCharset"], $LANGCODE);
 
+/**
+ * Initialize attachment factory
+ */
+PMF_Attachment_Factory::init($faqconfig->get('main.attachmentsStorageType'),
+                             $faqconfig->get('main.defaultAttachmentEncKey'),
+                             'true' == $faqconfig->get('main.enableAttachmentEncryption'));
+
 //
 // Get user action
 //
