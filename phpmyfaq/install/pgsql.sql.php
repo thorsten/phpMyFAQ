@@ -1,27 +1,29 @@
 <?php
 /**
-* $Id: pgsql.sql.php,v 1.34 2008-05-24 16:35:43 thorstenr Exp $
-*
-* CREATE TABLE instruction for PostgreSQL database
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Tom Rochester <tom.rochester@gmail.com>
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @since        2004-09-18
-* @copyright    (c) 2004-2007 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * CREATE TABLE instruction for PostgreSQL database
+ *
+ * @package	   phpMyFAQ
+ * @subpackage Installation
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Tom Rochester <tom.rochester@gmail.com>
+ * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since      2004-09-18
+ * @version    SVN: $Id$
+ * @copyright  2004-2009 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqattachment CASCADE";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcaptcha CASCADE";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategories CASCADE";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategoryrelations CASCADE";

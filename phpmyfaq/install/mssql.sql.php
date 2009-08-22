@@ -22,6 +22,7 @@
  */
 
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqattachment";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcaptcha";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategories";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategoryrelations";
@@ -75,6 +76,17 @@ time integer NOT NULL,
 usr integer NOT NULL REFERENCES ".$sqltblpre."faquser(user_id),
 text VARCHAR(max) NOT NULL,
 ip varchar(64) NOT NULL,
+PRIMARY KEY (id))";
+
+//faqattachment
+$query[] = "CREATE TABLE " . $sqltblpre . "faqattachment (
+id INTEGER NOT NULL,
+record_id INTEGER NOT NULL,
+record_lang VARCHAR(5) NOT NULL,
+hash CHAR(33) NOT NULL,
+filename VARCHAR(255) NOT NULL,
+file_contents BLOB,
+encrypted BIT,
 PRIMARY KEY (id))";
 
 //faqcaptcha

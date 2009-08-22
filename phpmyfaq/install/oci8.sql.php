@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id: oracle.sql.php,v 1.5 2008-05-24 16:35:43 thorstenr Exp $
- *
  * CREATE TABLE instruction for Oracle databases
  *
- * 
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2007-02-24
- * @copyright   (c) 2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Installation
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2007-02-24
+ * @version    SVN: $Id$
+ * @copyright  2007-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -21,6 +21,7 @@
  */
 
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqattachment";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcaptcha";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategories";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategoryrelations";
@@ -60,6 +61,17 @@ time INTEGER NOT NULL,
 usr VARCHAR(255) NOT NULL,
 text VARCHAR(512) NOT NULL,
 ip VARCHAR(64) NOT NULL,
+PRIMARY KEY (id))";
+
+//faqattachment
+$query[] = "CREATE TABLE " . $sqltblpre . "faqattachment (
+id INTEGER NOT NULL,
+record_id INTEGER NOT NULL,
+record_lang VARCHAR(5) NOT NULL,
+hash CHAR(33) NOT NULL,
+filename VARCHAR(255) NOT NULL,
+file_contents BLOB,
+encrypted INTEGER,
 PRIMARY KEY (id))";
 
 //faqcaptcha

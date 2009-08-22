@@ -1,26 +1,28 @@
 <?php
 /**
-* $Id: sybase.sql.php,v 1.24 2008-05-24 16:35:43 thorstenr Exp $
-*
-* CREATE TABLE instruction for Sybase database
-*
-* @author       Adam Greene <phpmyfaq@skippy.fastmail.fm>
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @since        2004-12-10
-* @copyright    (c) 2004-2007 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * CREATE TABLE instruction for Sybase database
+ *
+ * @package	   phpMyFAQ
+ * @subpackage Installation
+ * @author     Adam Greene <phpmyfaq@skippy.fastmail.fm>
+ * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since      2004-12-10
+ * @version    SVN: $Id$
+ * @copyright  2004-2009 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqattachment";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcaptcha";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategories";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategoryrelations";
@@ -74,6 +76,17 @@ time integer NOT NULL,
 usr integer NOT NULL REFERENCES ".$sqltblpre."faquser(user_id),
 text text NOT NULL,
 ip varchar(64) NOT NULL,
+PRIMARY KEY (id))";
+
+//faqattachment
+$query[] = "CREATE TABLE " . $sqltblpre . "faqattachment (
+id INTEGER NOT NULL,
+record_id INTEGER NOT NULL,
+record_lang VARCHAR(5) NOT NULL,
+hash CHAR(33) NOT NULL,
+filename VARCHAR(255) NOT NULL,
+file_contents BLOB,
+encrypted BIT,
 PRIMARY KEY (id))";
 
 //faqcaptcha
