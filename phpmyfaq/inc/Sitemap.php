@@ -79,7 +79,7 @@ class PMF_Sitemap
         global $DB, $faqconfig;
 
         $this->db       = PMF_Db::getInstance();
-        $this->language = PMF_Init::$language;
+        $this->language = PMF_Language::$language;
         $this->type     = $DB['type'];
 
         if (is_null($user)) {

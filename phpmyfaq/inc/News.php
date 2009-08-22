@@ -64,7 +64,7 @@ class PMF_News
         global $PMF_LANG;
 
         $this->db       = PMF_Db::getInstance();
-        $this->language = PMF_Init::$language;
+        $this->language = PMF_Language::$language;
         $this->pmf_lang = $PMF_LANG;
     }
 

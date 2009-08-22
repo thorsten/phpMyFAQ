@@ -61,7 +61,7 @@ class PMF_Visits
 	private function __construct()
 	{
 		$this->db       = PMF_Db::getInstance();
-		$this->language = PMF_Init::$language;
+		$this->language = PMF_Language::$language;
 	}
 
 

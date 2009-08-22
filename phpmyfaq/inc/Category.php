@@ -136,7 +136,7 @@ class PMF_Category
      */
     public function __construct($user = null, $groups = null, $withperm = true)
     {
-        $this->language   = PMF_Init::$language;
+        $this->language   = PMF_Language::$language;
         $this->db         = PMF_Db::getInstance();
         $this->categories = array();
 

@@ -146,7 +146,7 @@ class PMF_Captcha
     public function __construct($sids, $caplength = 6)
     {
         $this->db        = PMF_Db::getInstance();
-        $this->language  = PMF_Init::$language;
+        $this->language  = PMF_Language::$language;
         if ($sids > 0) {
             $this->sids  = $sids;
         } else {

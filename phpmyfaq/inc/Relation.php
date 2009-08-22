@@ -53,12 +53,12 @@ class PMF_Relation
         global $PMF_LANG;
 
         $this->db       = PMF_Db::getInstance();
-        $this->language = PMF_Init::$language;
+        $this->language = PMF_Language::$language;
         $this->pmf_lang = $PMF_LANG;
     }
 
     /**
-     * Verlinkt einen Artikel dynamisch mit der Suche über die übergebenen Schlüsselwörter
+     * Verlinkt einen Artikel dynamisch mit der Suche ï¿½ber die ï¿½bergebenen Schlï¿½sselwï¿½rter
      *
      * @param    string     $strHighlight
      * @param    string     $strSource

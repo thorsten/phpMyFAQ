@@ -94,7 +94,7 @@ class PMF_Stopwords
     private function __construct()
     {
         $this->db       = PMF_Db::getInstance();
-        $this->language = PMF_Init::$language;
+        $this->language = PMF_Language::$language;
         $this->table_name = SQLPREFIX . "faqstopwords";
     }
     
