@@ -2,8 +2,8 @@
 /**
  * The main phpMyFAQ Installer
  *
- * This script tests the complete environment, writes the database connection
- * parameters into the file data.php and the configuration into the database.
+ * This script checks the complete environment, writes the database connection
+ * parameters into the file config/database.php and the configuration into the database.
  *
  * @package    phpMyFAQ
  * @subpackage Installation
@@ -27,15 +27,15 @@
  * under the License.
  */
 
-define('VERSION', '2.6.0-dev');
+define('VERSION', '2.6.0-alpha');
 define('COPYRIGHT', '&copy; 2001-2009 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('SAFEMODE', @ini_get('safe_mode'));
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
-require_once PMF_ROOT_DIR.'/inc/autoLoader.php';
-require_once PMF_ROOT_DIR.'/inc/constants.php';
-require_once PMF_ROOT_DIR.'/inc/functions.php';
-require_once PMF_ROOT_DIR.'/install/questionnaire.php';
+require PMF_ROOT_DIR . '/config/constants.php';
+require PMF_ROOT_DIR . '/inc/autoLoader.php';
+require PMF_ROOT_DIR . '/inc/functions.php';
+require PMF_ROOT_DIR . '/install/questionnaire.php';
 
 $query = $uninst = array();
 
@@ -99,14 +99,11 @@ function extension_check($enabled_extensions)
  */
 function phpmyfaq_check()
 {
-    if (is_file(PMF_ROOT_DIR.'/inc/data.php')) {
-        include PMF_ROOT_DIR.'/inc/data.php';
-        if ((isset($DB["server"]) && $DB["server"] != '') || (isset($DB["user"]) && $DB["user"] != '') || (isset($DB["password"]) && $DB["password"] != '') || (isset($DB["db"]) && $DB["db"] != '') || (isset($DB["prefix"]) && $DB["prefix"] != '')  || (isset($DB["type"]) && $DB["type"] != '')) {
-            return false;
-        }
+    if (is_file(PMF_ROOT_DIR.'/inc/data.php') || is_file(PMF_ROOT_DIR . '/config/database.php')) {
+        return false;
+    } else {
+        return true;
     }
-
-    return true;
 }
 
 /**
@@ -205,7 +202,7 @@ function cleanInstallation()
     /*<![CDATA[*/
     <!--
     body {
-        margin: 10px;
+        margin: 0px;
         padding: 0px;
         font-size: 12px;
         font-family: "Bitstream Vera Sans", "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
@@ -214,16 +211,13 @@ function cleanInstallation()
     }
     #header {
         margin: auto;
-        padding: 25px;
-        background: #E1F0A6;
-        color: #234361;
+        padding: 15px;
+        background: #353535;
+        color: #ffffff;
         font-size: 36px;
         font-weight: bold;
         text-align: center;
-        border-right: 3px solid silver;
-        border-bottom: 3px solid silver;
-        -moz-border-radius: 20px 20px 20px 20px;
-        border-radius: 20px 20px 20px 20px;
+        border-bottom: 2px solid silver;
     }
     #header h1 {
         font-family: "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
@@ -239,32 +233,31 @@ function cleanInstallation()
     fieldset.installation {
         margin: auto;
         border: 1px solid black;
-        width: 550px;
+        width: 444px;
         margin-bottom: 10px;
+    	padding-top: 15px;
         clear: both;
     }
     legend.installation {
         border: 1px solid black;
-        background-color: #D5EDFF;
+        background-color: #C79810;
         padding: 4px 8px 4px 8px;
         font-size: 14px;
         font-weight: bold;
-        -moz-border-radius: 5px 5px 5px 5px;
-        border-radius: 5px 5px 5px 5px;
     }
     .input {
         width: 250px;
-        background-color: #f5f5f5;
+        background-color: #F9F7ED;
         border: 1px solid black;
         margin-bottom: 8px;
     }
     .checkbox {
-        background-color: #f5f5f5;
+        background-color: #F9F7ED;
         border: 1px solid black;
         margin-bottom: 8px;
     }
     label.left {
-        width: 200px;
+        width: 150px;
         float: left;
         text-align: right;
         padding-right: 10px;
@@ -283,14 +276,12 @@ function cleanInstallation()
         margin-bottom: 10px;
     }
     .button {
-        background-color: #89AC15;
+        background-color: #6BBA70;
         border: 3px solid #000000;
         color: #ffffff;
         font-weight: bold;
         font-size: 24px;
         padding: 10px 30px 10px 30px;
-        -moz-border-radius: 10px 10px 10px 10px;
-        border-radius: 10px 10px 10px 10px;
     }
     .error {
         margin: auto;
@@ -320,7 +311,7 @@ function cleanInstallation()
 </head>
 <body>
 
-<h1 id="header">phpMyFAQ <?php print VERSION; ?> Installation</h1>
+<h1 id="header">phpMyFAQ <?php print VERSION; ?> Setup</h1>
 
 <?php
 
@@ -400,11 +391,13 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         print '<p class="center">You don\'t have Freetype support enabled in the GD extension of your PHP installation. Please enabled Freetype support in GD extension otherwise the Captchas for spam protection will be quite easy to break.</p>';
     }
 ?>
-<p class="center">You should read the <a href="../docs/documentation.en.html">documentation</a> carefully before installing phpMyFAQ.</p>
+<p class="center">
+	Did you already read the <a href="../docs/documentation.en.html">documentation</a> carefully before 
+	starting the phpMyFAQ setup?</p>
 
 <form action="installer.php" method="post">
 <fieldset class="installation">
-<legend class="installation">Database information</legend>
+<legend class="installation">Please add your database connection setup information</legend>
 
     <label class="left">SQL server:</label>
     <select class="input" name="sql_type" size="1" onchange="select_database(this);">
@@ -453,7 +446,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 <fieldset class="installation">
 <legend class="installation">LDAP information</legend>
 
-    <label class="left">Do you want to use LDAP for authentication?</label>
+    <label class="left">Add LDAP authentication?</label>
     <input class="checkbox" type="checkbox" name="ldap_enabled" value="yes" /><br />
 
     <label class="left">LDAP server host:</label>
@@ -508,25 +501,28 @@ foreach ($permLevels as $level => $desc) {
 ?>
     </select><br />
 
-    <label class="left">Administrator's real name:</label>
+    <label class="left">Admin's real name:</label>
     <input class="input" type="text" name="realname" title="Please enter your real name here." /><br />
 
-    <label class="left">Administrator's e-mail address:</label>
+    <label class="left">Admin's e-mail address:</label>
     <input class="input" type="text" name="email" title="Please enter your email adress here." /><br />
 
-    <label class="left">Administrator's username:</label>
-    <span id="admin">admin</span><br />
+    <label class="left">Admin's username:</label>
+    <input class="input" type="text" name="username" title="You don't have to do anything here." value="admin" readonly="readonly" /><br />
 
-    <label class="left">Administrator's password:</label>
+    <label class="left">Admini's password:</label>
     <input class="input" type="password" name="password" title="Please enter your password for the admin area." /><br />
 
     <label class="left">Retype password:</label>
     <input class="input" type="password" name="password_retyped" title="Please retype your password for checkup." /><br />
 
+</fieldset>
+
+
 <p class="center"><strong>Do not use it if you're already running a version of phpMyFAQ!</strong></p>
 
-<p class="center"><input type="submit" value="Install phpMyFAQ <?php print VERSION; ?> now!" class="button" /></p>
-</fieldset>
+<p class="center"><input type="submit" value="Click to install phpMyFAQ <?php print VERSION; ?>" class="button" /></p>
+
 </form>
 <?php
     HTMLFooter();
@@ -1129,11 +1125,11 @@ echo '</dl><input type="hidden" name="systemdata" value="'.PMF_String::htmlspeci
         @unlink(PMF_ROOT_DIR."/phpmyfaq.spec");
     }
     
-    // Remove 'installer.php' file
+    // Remove 'setup.php' file
     if (@unlink(basename($_SERVER["PHP_SELF"]))) {
-        print "<p class=\"center\">The file <em>./install/installer.php</em> was deleted automatically.</p>\n";
+        print "<p class=\"center\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";
     } else {
-        print "<p class=\"center\">Please delete the file <em>./install/installer.php</em> manually.</p>\n";
+        print "<p class=\"center\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
     }
     // Remove 'update.php' file
     if (@unlink(dirname($_SERVER["PATH_TRANSLATED"])."/update.php")) {
