@@ -53,7 +53,7 @@ if (isset($auth)) {
 tinyMCE.init({
     // General options
     mode : "exact",
-    language : "<?php echo (PMF_Init::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en'); ?>",
+    language : "<?php echo (PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en'); ?>",
     elements : "content",
     theme : "advanced",
     plugins : "safari,spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,imagemanager,filemanager,syntaxhl",
