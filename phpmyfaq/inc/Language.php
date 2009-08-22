@@ -6,6 +6,7 @@
  * @subpackage PMF_Language
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author     Matteo scaramuccia <matteo@phpmyfaq.de>
+ * @author     Aurimas Fišeras <aurimas@gmail.com>
  * @since      2009-05-14
  * @version    SVN: $Id$
  * @copyright  2009 phpMyFAQ Team
@@ -28,6 +29,7 @@
  * @subpackage PMF_Language
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author     Matteo scaramuccia <matteo@phpmyfaq.de>
+ * @author     Aurimas Fišeras <aurimas@gmail.com>
  * @since      2009-05-14
  * @version    SVN: $Id$
  * @copyright  2009 phpMyFAQ Team
@@ -236,13 +238,32 @@ class PMF_Language
      * True if the language is supported by the current phpMyFAQ installation
      *
      * @param  string $langcode Language code
-     * @return bool
+     * @return boolean
      */
     public static function isASupportedLanguage($langcode)
     {
         global $languageCodes;
         return isset($languageCodes[strtoupper($langcode)]);
     }
+    
+    /**
+     * True if the language is supported by the bundled TinyMCE editor
+     *
+     * @param  string $langcode Language code
+     * @return boolean
+     */
+    public static function isASupportedTinyMCELanguage($langcode)
+    {
+        // TinyMCE Language is supported if there is a language file present in
+        // PMF_ROOT/admin/editor/langs/$langcode.js
+
+        // TinyMCE language packs can be downloaded from
+        // http://tinymce.moxiecode.com/download_i18n.php
+        // and extracted to PMF_ROOT/admin/editor
+
+        return file_exists(dirname(dirname(__FILE__)).'/admin/editor/langs/'.$langcode.'.js');
+    }
+    
 
     /**
      * Gets the accepted language from the user agent

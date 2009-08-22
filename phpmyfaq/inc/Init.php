@@ -163,20 +163,6 @@ if ('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:(\\\\|/)%i', $confAtta
 class PMF_Init
 {
     /**
-     * The accepted language of the user agend
-     *
-     * @var string
-     */
-    public $acceptedLanguage = '';
-
-    /**
-     * The current language
-     *
-     * @var string
-     */
-    public static $language = '';
-
-    /**
      * cleanRequest
      *
      * Cleans the request environment from:
@@ -341,113 +327,7 @@ class PMF_Init
             }
         }
     }
-
-    /**
-     * True if the language is supported by the current phpMyFAQ installation
-     *
-     * @param   string  $langcode
-     * @return  bool
-     * @access  public
-     * @author  Matteo scaramuccia <matteo@phpmyfaq.de>
-     */
-    public static function isASupportedLanguage($langcode)
-    {
-        global $languageCodes;
-        return isset($languageCodes[strtoupper($langcode)]);
-    }
-
-    /**
-     * True if the language is supported by the bundled TinyMCE editor
-     *
-     * @param   string  $langcode
-     * @return  bool
-     * @access  public
-     * @since   2009-08-02
-     * @author  Aurimas Fišeras <aurimas@gmail.com>
-     */
-    public static function isASupportedTinyMCELanguage($langcode)
-    {
-        // TinyMCE Language is supported if there is a language file present in
-        // PMF_ROOT/admin/editor/langs/$langcode.js
-
-        // TinyMCE language packs can be downloaded from
-        // http://tinymce.moxiecode.com/download_i18n.php
-        // and extracted to PMF_ROOT/admin/editor
-
-        return file_exists(dirname(dirname(__FILE__)).'/admin/editor/langs/'.$langcode.'.js');
-    }
-
-    /**
-     * Sets the current language for phpMyFAQ user session
-     *
-     * @param   bool    $config_detection Configuration detection
-     * @param   string  $config_language  Language from configuration
-     * @return  string
-     */
-    public function setLanguage($config_detection, $config_language)
-    {
-        global $sid;
-
-        $_lang = array();
-        self::_getUserAgentLanguage();
-
-        // Get language from: _POST, _GET, _COOKIE, phpMyFAQ configuration and the automatic language detection
-        $_lang['post'] = PMF_Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_STRING);
-        if (!is_null($_lang['post']) && !self::isASupportedLanguage($_lang['post']) ) {
-            $_lang['post'] = null;
-        }
-        // Get the user language
-        $_lang['get'] = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
-        if (!is_null($_lang['get']) && !self::isASupportedLanguage($_lang['get']) ) {
-            $_lang['get'] = null;
-        }
-        // Get the faq record language
-        $_lang['artget'] = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
-        if (!is_null($_lang['artget']) && !self::isASupportedLanguage($_lang['artget']) ) {
-            $_lang['get'] = null;
-        }
-        // Get the language from the session
-        if (isset($_SESSION['pmf_lang']) && self::isASupportedLanguage($_SESSION['pmf_lang']) ) {
-            $_lang['session'] = trim($_SESSION['pmf_lang']);
-        }
-        
-        // Get the language from the config
-        if (isset($config_language)) {
-            $confLangCode = str_replace(array("language_", ".php"), "", $config_language);
-            if (self::isASupportedLanguage($confLangCode) ) {
-                $_lang['config'] = $confLangCode;
-            }
-        }
-        // Detect the browser's language
-        if ((true === $config_detection) && self::isASupportedLanguage($this->acceptedLanguage) ) {
-            $_lang['detection'] = $this->acceptedLanguage;
-        }
-        // Select the language
-        if (isset($_lang['post'])) {
-            self::$language = $_lang['post'];
-            $_lang = null;
-            unset($_lang);
-        } elseif (isset($_lang['get'])) {
-            self::$language = $_lang['get'];
-        } elseif (isset($_lang['session'])) {
-            self::$language = $_lang['session'];
-            $_lang = null;
-            unset($_lang);
-        } elseif (isset($_lang['detection'])) {
-            self::$language = $_lang['detection'];
-            $_lang = null;
-            unset($_lang);
-        } elseif (isset($_lang['config'])) {
-            self::$language = $_lang['config'];
-            $_lang = null;
-            unset($_lang);
-        } else {
-            self::$language = 'en'; // just a fallback
-        }
-        
-        return $_SESSION['pmf_lang'] = self::$language;
-    }
-
+    
     /**
      * This function deregisters the global variables only when 'register_globals = On'.
      * Note: you must assure that 'session_start()' is called AFTER this function and not BEFORE,
