@@ -149,7 +149,7 @@ function HTMLFooter()
 <h1 id="header">phpMyFAQ <?php print NEWVERSION; ?> Update</h1>
 <?php
 if (!@is_readable(PMF_ROOT_DIR.'/inc/data.php')) {
-    print '<p class="center">It seems you never run a version of phpMyFAQ.<br />Please use the <a href="installer.php">install script</a>.</p>';
+    print '<p class="center">It seems you never run a version of phpMyFAQ.<br />Please use the <a href="setup.php">install script</a>.</p>';
     HTMLFooter();
     die();
 }
@@ -641,11 +641,11 @@ if ($step == 4) {
     if (file_exists(PMF_ROOT_DIR.'/phpmyfaq.spec')) {
         @unlink(PMF_ROOT_DIR.'/phpmyfaq.spec');
     }
-    // Remove 'installer.php' file
-    if (@unlink(dirname($_SERVER['PATH_TRANSLATED']).'/installer.php')) {
-        print "<p class=\"center\">The file <em>./install/installer.php</em> was deleted automatically.</p>\n";
+    // Remove 'setup.php' file
+    if (@unlink(dirname($_SERVER['PATH_TRANSLATED']).'/setup.php')) {
+        print "<p class=\"center\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";
     } else {
-        print "<p class=\"center\">Please delete the file <em>./install/installer.php</em> manually.</p>\n";
+        print "<p class=\"center\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
     }
     // Remove 'update.php' file
     if (@unlink(dirname($_SERVER['PATH_TRANSLATED']).'/update.php')) {

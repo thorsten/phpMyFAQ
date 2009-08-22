@@ -1,6 +1,6 @@
 <?php
 /**
- * The main phpMyFAQ Installer
+ * The main phpMyFAQ Setup
  *
  * This script checks the complete environment, writes the database connection
  * parameters into the file config/database.php and the configuration into the database.
@@ -395,7 +395,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 	Did you already read the <a href="../docs/documentation.en.html">documentation</a> carefully before 
 	starting the phpMyFAQ setup?</p>
 
-<form action="installer.php" method="post">
+<form action="setup.php" method="post">
 <fieldset class="installation">
 <legend class="installation">Please add your database connection setup information</legend>
 
@@ -1011,7 +1011,7 @@ foreach ($permLevels as $level => $desc) {
     $oConf->getAll();
     $configs = $oConf->config;
     $configs['spam.enableCatpchaCode'] = (extension_loaded('gd') ? 'true' : 'false');
-    $configs['main.referenceURL']      = PMF_Link::getSystemUri('/install/installer.php');
+    $configs['main.referenceURL']      = PMF_Link::getSystemUri('/install/setup.php');
     $configs['main.phpMyFAQToken']     = md5(uniqid(rand()));
     $oConf->update($configs);
     

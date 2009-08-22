@@ -300,7 +300,7 @@ if [ $1 = 1 ] ; then
     echo "Now you need to complete this installation launching"
     echo "the web interactive install stage:"
     echo
-    echo "    http://$HOSTNAME/%{name}/install/installer.php"
+    echo "    http://$HOSTNAME/%{name}/install/setup.php"
     echo
     echo "You'll be asked for a MySQL database and its credentials"
     echo "and some other info."

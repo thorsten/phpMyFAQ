@@ -29,7 +29,7 @@
 // Check if config/database.php exist -> if not, redirect to installer
 //
 if (!file_exists('config/database.php')) {
-    header("Location: install/installer.php");
+    header("Location: install/setup.php");
     exit();
 }
 
