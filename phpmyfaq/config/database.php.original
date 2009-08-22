@@ -1,0 +1,8 @@
+<?php
+$DB["server"] = "";
+$DB["user"] = "";
+$DB["password"] = "";
+$DB["db"] = "";
+$DB["prefix"] = "";
+$DB["type"] = "";
+?>
