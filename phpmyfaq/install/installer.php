@@ -146,13 +146,13 @@ function HTMLFooter()
  */
 function cleanInstallation()
 {
-    // Remove 'data.php' file: no need of prompt anything to the user
-    if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
-        @unlink(PMF_ROOT_DIR.'/inc/data.php');
+    // Remove 'database.php' file: no need of prompt anything to the user
+    if (file_exists(PMF_ROOT_DIR.'/config/database.php')) {
+        @unlink(PMF_ROOT_DIR.'/config/database.php');
     }
     // Remove 'dataldap.php' file: no need of prompt anything to the user
-    if (file_exists(PMF_ROOT_DIR.'/inc/dataldap.php')) {
-        @unlink(PMF_ROOT_DIR.'/inc/dataldap.php');
+    if (file_exists(PMF_ROOT_DIR.'/config/ldap.php')) {
+        @unlink(PMF_ROOT_DIR.'/config/ldap.php');
     }
 }
 
@@ -359,17 +359,18 @@ if (!phpmyfaq_check()) {
     die();
 }
 
-$dirs       = array('/attachments', '/config', '/data', '/inc', '/pdf', '/xml',);
+$dirs       = array('/attachments', '/config', '/data', '/pdf', '/xml',);
 $faileddirs = array();
+
 foreach ($dirs as $dir) {
-    if (!@is_dir(PMF_ROOT_DIR.$dir)) {
-        if (!@mkdir (PMF_ROOT_DIR.$dir, 0755)) {
+    if (!@is_dir(PMF_ROOT_DIR . $dir)) {
+        if (!@mkdir (PMF_ROOT_DIR . $dir, 0755)) {
             $faileddirs[] = $dir;
         }
-    } else if (!@is_writable(PMF_ROOT_DIR.$dir)) {
+    } else if (!@is_writable(PMF_ROOT_DIR . $dir)) {
         $faileddirs[] = $dir;
     } else {
-        @copy("index.html", PMF_ROOT_DIR.$dir.'/index.html');
+        @copy('index.html', PMF_ROOT_DIR . $dir . '/index.html');
     }
 }
 
@@ -482,7 +483,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     <label class="left">Default language:</label>
     <select class="input" name="language" size="1" title="Please select your default language.">
 <?php
-    if ($dir = @opendir(PMF_ROOT_DIR.'/lang')) {
+    if ($dir = @opendir(PMF_ROOT_DIR . '/lang')) {
         while ($dat = @readdir($dir)) {
             if (substr($dat, -4) == '.php') {
                 printf('<option value="%s"', $dat);
@@ -684,8 +685,8 @@ foreach ($permLevels as $level => $desc) {
     $email     = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL, '');
     $permLevel = PMF_Filter::filterInput(INPUT_POST, 'permLevel', FILTER_SANITIZE_STRING, 'basic');
     
-    // Write the DB variables in data.php
-    $datafile = PMF_ROOT_DIR . '/config/setup_database.php';
+    // Write the DB variables in database.php
+    $datafile = PMF_ROOT_DIR . '/config/database.php';
     $ret = file_put_contents($datafile, "<?php\n\$DB[\"server\"] = '".$sql_server."';\n\$DB[\"user\"] = '".$sql_user."';\n\$DB[\"password\"] = '".$sql_passwort."';\n\$DB[\"db\"] = '".$sql_db."';\n\$DB[\"prefix\"] = '".$sqltblpre."';\n\$DB[\"type\"] = '".$sql_type."';", LOCK_EX);
     if (!$ret) {
         print "<p class=\"error\"><strong>Error:</strong> Cannot write to data.php.</p>";
@@ -696,7 +697,7 @@ foreach ($permLevels as $level => $desc) {
 
     // check LDAP if available
     if (extension_loaded('ldap') && !is_null($ldap_enabled)) {
-        $datafile = PMF_ROOT_DIR . '/config/setup_ldap.php';
+        $datafile = PMF_ROOT_DIR . '/config/ldap.php';
         $ret = file_put_contents($datafile, "<?php\n\$PMF_LDAP[\"ldap_server\"] = '".$ldap_server."';\n\$PMF_LDAP[\"ldap_port\"] = '".$ldap_port."';\n\$PMF_LDAP[\"ldap_user\"] = '".$ldap_user."';\n\$PMF_LDAP[\"ldap_password\"] = '".$ldap_password."';\n\$PMF_LDAP[\"ldap_base\"] = '".$ldap_base."';", LOCK_EX);
         if (!$ret) {
             print "<p class=\"error\"><strong>Error:</strong> Cannot write to dataldap.php.</p>";
@@ -707,7 +708,7 @@ foreach ($permLevels as $level => $desc) {
     }
 
     // connect to the database using inc/data.php
-    require PMF_ROOT_DIR . '/config/setup_database.php';
+    require PMF_ROOT_DIR . '/config/database.php';
     $db = PMF_Db::dbSelect($sql_type);
     $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
     if (!$db) {
