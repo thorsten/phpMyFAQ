@@ -28,7 +28,7 @@ header("Pragma: no-cache");
 header("Content-type: text/xml");
 header("Vary: Negotiate,Accept");
 
-require_once 'inc/constants.php';
+require_once 'config/constants.php';
 require_once 'inc/Filter.php';
 require_once 'inc/Link.php';
 
