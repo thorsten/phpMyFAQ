@@ -157,7 +157,7 @@ function cleanInstallation()
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <title>phpMyFAQ <?php print VERSION; ?> Installation</title>
+    <title>phpMyFAQ <?php print VERSION; ?> Setup</title>
     <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=iso-8859-1" />
     <link rel="shortcut icon" href="../template/default/favicon.ico" type="image/x-icon" />
     <link rel="icon" href="../template/default/favicon.ico" type="image/x-icon" />

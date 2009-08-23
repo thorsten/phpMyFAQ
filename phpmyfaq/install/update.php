@@ -27,7 +27,7 @@ define('COPYRIGHT', '&copy; 2001-2009 <a href="http://www.phpmyfaq.de/">phpMyFAQ
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
 require_once PMF_ROOT_DIR.'/inc/autoLoader.php';
-require_once PMF_ROOT_DIR.'/inc/constants.php';
+require_once PMF_ROOT_DIR.'/config/constants.php';
 
 $step        = PMF_Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
 $version     = PMF_Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);
@@ -56,7 +56,7 @@ function HTMLFooter()
     <link rel="icon" href="../template/default/favicon.ico" type="image/x-icon" />
     <style type="text/css"><!--
     body {
-        margin: 10px;
+        margin: 0px;
         padding: 0px;
         font-size: 12px;
         font-family: "Bitstream Vera Sans", "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
@@ -65,16 +65,13 @@ function HTMLFooter()
     }
     #header {
         margin: auto;
-        padding: 25px;
-        background: #E1F0A6;
-        color: #234361;
+        padding: 15px;
+        background: #353535;
+        color: #ffffff;
         font-size: 36px;
         font-weight: bold;
         text-align: center;
-        border-right: 3px solid silver;
-        border-bottom: 3px solid silver;
-        -moz-border-radius: 20px 20px 20px 20px;
-        border-radius: 20px 20px 20px 20px;
+        border-bottom: 2px solid silver;
     }
     #header h1 {
         font-family: "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
@@ -87,17 +84,17 @@ function HTMLFooter()
     fieldset.installation {
         margin: auto;
         border: 1px solid black;
-        width: 550px;
-        margin-top: 10px;
+        width: 444px;
+        margin-bottom: 10px;
+        padding-top: 15px;
+        clear: both;
     }
     legend.installation {
         border: 1px solid black;
-        background-color: #D5EDFF;
+        background-color: #C79810;
         padding: 4px 8px 4px 8px;
         font-size: 14px;
         font-weight: bold;
-        -moz-border-radius: 5px 5px 5px 5px;
-        border-radius: 5px 5px 5px 5px;
     }
     .input {
         width: 200px;
@@ -123,14 +120,12 @@ function HTMLFooter()
         padding-left: 5px;
     }
     .button {
-        background-color: #89AC15;
+        background-color: #6BBA70;
         border: 3px solid #000000;
         color: #ffffff;
         font-weight: bold;
         font-size: 24px;
         padding: 10px 30px 10px 30px;
-        -moz-border-radius: 10px 10px 10px 10px;
-        border-radius: 10px 10px 10px 10px;
     }
     .error {
         margin: auto;
@@ -148,8 +143,9 @@ function HTMLFooter()
 
 <h1 id="header">phpMyFAQ <?php print NEWVERSION; ?> Update</h1>
 <?php
-if (!@is_readable(PMF_ROOT_DIR.'/inc/data.php')) {
-    print '<p class="center">It seems you never run a version of phpMyFAQ.<br />Please use the <a href="setup.php">install script</a>.</p>';
+if (!is_readable(PMF_ROOT_DIR.'/inc/data.php') && !is_readable(PMF_ROOT_DIR.'/config/database.php')) {
+    print '<p class="center">It seems you never run a version of phpMyFAQ.<br />' .
+          'Please use the <a href="setup.php">install script</a>.</p>';
     HTMLFooter();
     die();
 }
@@ -159,8 +155,15 @@ if (version_compare(PHP_VERSION, '5.2.0', '<')) {
     die();
 }
 
-require PMF_ROOT_DIR . '/inc/data.php';
+if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
+	// before 2.6.0-alpha
+	require PMF_ROOT_DIR . '/inc/data.php';
+} else {
+	// after 2.6.0-alpha
+	require PMF_ROOT_DIR . '/config/database.php';
+}
 require PMF_ROOT_DIR . '/inc/functions.php';
+
 
 define('SQLPREFIX', $DB['prefix']);
 $db = PMF_Db::dbSelect($DB["type"]);
