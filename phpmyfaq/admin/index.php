@@ -51,8 +51,8 @@ require_once PMF_ROOT_DIR.'/inc/libs/idna_convert.class.php';
 $IDN = new idna_convert;
 
 // get language (default: english)
-$pmf = new PMF_Init();
-$LANGCODE = $pmf->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
+$Language = new PMF_Language();
+$LANGCODE = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
 // Preload English strings
 require_once (PMF_ROOT_DIR.'/lang/language_en.php');
 

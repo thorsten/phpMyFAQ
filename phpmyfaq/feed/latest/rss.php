@@ -31,6 +31,7 @@ session_start();
 //
 $Language = new PMF_Language();
 $LANGCODE = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
+
 // Preload English strings
 require_once (PMF_ROOT_DIR.'/lang/language_en.php');
 

@@ -30,8 +30,8 @@ session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')))
 session_start();
 
 // get language (default: english)
-$pmf      = new PMF_Init();
-$LANGCODE = $pmf->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
+$Language = new PMF_Language();
+$LANGCODE = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
 
 if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
     require_once "lang/language_".$LANGCODE.".php";

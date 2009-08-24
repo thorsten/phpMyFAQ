@@ -37,8 +37,9 @@ session_start();
 
 $currentSave   = filter_input(INPUT_POST, 'save',   FILTER_SANITIZE_STRING);
 $currentAction = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
-$pmf           = new PMF_Init();
-$LANGCODE      = $pmf->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
+
+$Language = new PMF_Language();
+$LANGCODE = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
 
 require_once PMF_ROOT_DIR . '/lang/language_en.php';
 
