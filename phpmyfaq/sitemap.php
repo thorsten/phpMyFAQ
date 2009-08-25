@@ -41,6 +41,6 @@ $tpl->processTemplate (
     'writeContent', array(
         'writeLetters'          => $sitemap->getAllFirstLetters(),
         'writeMap'              => $sitemap->getRecordsFromLetter($currentLetter),
-        'writeCuttentLetter'    => $currentLetter));
+        'writeCurrentLetter'    => $currentLetter));
 
 $tpl->includeTemplate('writeContent', 'index');
