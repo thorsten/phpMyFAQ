@@ -31,7 +31,7 @@ $captcha = new PMF_Captcha($sids);
 
 $name     = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
 $email    = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-$question = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRIPPED);
+$question = PMF_Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
 $code     = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
 
 if (!is_null($name) && !is_null($email) && !is_null($question) && IPCheck($_SERVER['REMOTE_ADDR']) && 
