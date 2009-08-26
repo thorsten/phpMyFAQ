@@ -119,8 +119,8 @@ if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($
             }
             $mail->subject = '%sitename%';
             // TODO: let the email contains the faq article both as plain text and as HTML
-            $mail->message = html_entity_decode(
-                $PMF_LANG['msgMailCheck']) . "\n%sitename%: " .
+            $mail->message = html_entity_decode($PMF_LANG['msgMailCheck']) .
+                "\n\n" . $faqconfig->get('main.titleFAQ') . ": " .
                 PMF_Link::getSystemUri('/index.php').'/admin';
             $result = $mail->send();
             unset($mail);
