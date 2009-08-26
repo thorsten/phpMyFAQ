@@ -17,6 +17,7 @@ CHANGED FILES FROM 2.5.1 -> 2.5.2
 ./template/register.tpl
 ./template/sitemap.tpl
 ./sendmail.php
+./save.php
 ./savequestion.php
 ./sitemap.php
 
