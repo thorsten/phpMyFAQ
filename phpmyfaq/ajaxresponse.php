@@ -31,7 +31,7 @@ session_start();
 $searchString = PMF_Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
 $ajaxLanguage = PMF_Filter::filterInput(INPUT_POST, 'ajaxlanguage', FILTER_SANITIZE_STRING, 'en');
 
-if (PMF_Lamnguage::isASupportedLanguage($ajaxLanguage)) {
+if (PMF_Language::isASupportedLanguage($ajaxLanguage)) {
     $LANGCODE = trim($ajaxLanguage);
     require_once 'lang/language_'.$LANGCODE.'.php';
 } else {
