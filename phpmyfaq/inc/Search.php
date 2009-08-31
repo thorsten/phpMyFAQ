@@ -7,8 +7,8 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
- * @copyright 2008-2009 phpMyFAQ Team
  * @version   SVN: $Id$
+ * @copyright 2008-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -30,7 +30,6 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
  * @copyright 2008-2009 phpMyFAQ Team
- * @version   SVN: $Id$
  */
 class PMF_Search
 {
@@ -47,6 +46,13 @@ class PMF_Search
      * @var string
      */
     private $language;
+    
+    /**
+     * Category
+     * 
+     * @var integer
+     */
+    private $categoryId = null;
 
     /**
      * Constructor
@@ -57,6 +63,27 @@ class PMF_Search
         $this->db       = PMF_Db::getInstance();
         $this->language = PMF_Language::$language;
     }
+    
+    /**
+     * Setter for category
+     * 
+     * @param  integer $categoryId Category ID
+     * @return void
+     */
+    public function setCategory($categoryId)
+    {
+    	$this->categoryId = (int)$categoryId;
+    }
+    
+    /**
+     * Getter for category
+     * 
+     * @return integer
+     */
+    public function getCategory()
+    {
+    	return $this->categoryId;
+    }
 
     /**
      * The main search function for the full text search
@@ -64,18 +91,17 @@ class PMF_Search
      * TODO: add filter for (X)HTML tag names and attributes!
      *
      * @param   string  $searchterm     Text/Number (solution id)
-     * @param   string  $searchcategory '%' to avoid any category filtering
      * @param   boolean $allLanguages   true to search over all languages
      * @param   boolean $hasMore        true to disable the results paging
      * @param   boolean $instantRespnse true to use it for Instant Response
      * @return  array
      */
-    public function search($searchterm, $searchcategory = '%', $allLanguages = true, $hasMore = false, $instantResponse = false)
+    public function search($searchterm, $allLanguages = true, $hasMore = false, $instantResponse = false)
     {
         $condition = array(SQLPREFIX . 'faqdata.active' => "'yes'");
 
         // Search in all or one category?
-        if ($searchcategory != '%' && !empty($searchcategory)) {
+        if (!is_null($this->categoryId)) {
             $selectedCategory = array(SQLPREFIX . 'faqcategoryrelations.category_id' => $searchcategory);
             $condition        = array_merge($selectedCategory, $condition);
         }
