@@ -287,8 +287,16 @@ if ($permission['editbt'] || $permission['delbt']) {
 ?></td>
         <td class="list" style="width: 48px;"><?php print PMF_String::substr($record['date'], 0, 10); ?></td>
         <td class="list" style="width: 96px;"><?php print $linkverifier->getEntryStateHTML($record['id'], $record['lang']); ?></td>
-        <td class="list" style="width: 16px;"><a href="#" onclick="javascript:deleteRecord(<?php print $record['id']; ?>, '<?php print $record['lang']; ?>');" title="<?php print $PMF_LANG["ad_user_delete"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" /></a></td>
-        <td class="list" style="width: 16px;"><a href="?action=copyentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>">copy</a></td>
+        <td class="list" style="width: 16px;">
+            <a href="#" onclick="javascript:deleteRecord(<?php print $record['id']; ?>, '<?php print $record['lang']; ?>');" title="<?php print $PMF_LANG["ad_user_delete"]; ?>">
+                <img src="images/delete.png" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" />
+            </a>
+        </td>
+        <td class="list" style="width: 16px;">
+            <a href="?action=copyentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>">
+            <img src="images/copy.png" alt="<?php print $PMF_LANG['ad_categ_copy']; ?>" title="<?php print $PMF_LANG['ad_categ_copy']; ?>" />
+            </a>
+        </td>
     </tr>
 <?php
             $old = $cid;
