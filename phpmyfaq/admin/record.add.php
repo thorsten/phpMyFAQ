@@ -128,14 +128,14 @@ if ($permission['editbt']) {
 ?>
     <h3><strong><em><?php print $categorylist; ?></em>
     <?php print $question; ?></strong></h3>
-    <?php print $content; ?>
+    <?php print html_entity_decode($content); ?>
     <p class="little"><?php print $PMF_LANG["msgLastUpdateArticle"].makeDate(date("YmdHis")); ?><br />
     <?php print $PMF_LANG["msgAuthor"].' '.$author; ?></p>
 
     <form action="?action=editpreview" method="post">
     <input type="hidden" name="id"                  value="<?php print $record_id; ?>" />
-    <input type="hidden" name="thema"               value="<?php print PMF_String::htmlspecialchars($question); ?>" />
-    <input type="hidden" name="content" class="mceNoEditor" value="<?php print PMF_String::htmlspecialchars($content); ?>" />
+    <input type="hidden" name="thema"               value="<?php print $question; ?>" />
+    <input type="hidden" name="content" class="mceNoEditor" value="<?php print $content; ?>" />
     <input type="hidden" name="lang"                value="<?php print $record_lang; ?>" />
     <input type="hidden" name="keywords"            value="<?php print $keywords; ?>" />
     <input type="hidden" name="tags"                value="<?php print $tags; ?>" />
