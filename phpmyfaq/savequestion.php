@@ -115,7 +115,7 @@ if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SE
     }
     
     if ($search_result) {
-        $search_result_html = '<p>' . $counter . $PMF_LANG["msgSearchAmount"] . "</p>\n";
+        $search_result_html = '<p>'.$plr->GetMsg('plmsgSearchAmount',$num)."</p>\n";
         $counter = 0;
         foreach($search_result as $cat_id => $cat_contents) {
             $tmp_result_html = '';

@@ -107,14 +107,14 @@ class PMF_Language_Plurals
     }
 
     /**
-     * Returns the translation in the correct plural form
+     * Helper function that returns the translation template in the correct plural form
      * If translation is missing, message in English plural form is returned
      *
      * @param  string  $msgID Message identificator
      * @param  integer $n     The number used to determine the plural form
      * @return string
      */
-    public function getMsg($msgID, $n)
+    public function getMsgTemplate($msgID, $n)
     {
         $plural = $this->_getPlural($n);
         if (isset($this->PMF_TRANSL[$msgID][$plural])) {
@@ -124,6 +124,19 @@ class PMF_Language_Plurals
             // in current language is missing, so as a last resort return default English plural form
             return $this->PMF_TRANSL[$msgID][1];
         }
+    }
+
+    /**
+     * Returns a translated string in the correct plural form,
+     * produced according to the formatting of the message.
+     *
+     * @param  string  $msgID Message identificator
+     * @param  integer $n     The number used to determine the plural form
+     * @return string
+     */
+    public function getMsg($msgID, $n)
+    {
+        return sprintf($this->getMsgTemplate($msgID, $n), $n);
     }
 
     /**

@@ -999,8 +999,9 @@ $LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "Path where attach
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "The file you're trying to download was not found on this server";
 
-// added 2.6.0-alpha - 2009-07-30 by Aurimas Fišeras (plural messages test)
-$PMF_LANG["plmsgUserOnline"][0] = "%d user online"; //"One User online" is also possible, since sprintf just ignores extra args
+// added 2.6.0-alpha - 2009-07-30 by Aurimas Fišeras
+//P.S. "One User online" is also possible, since sprintf just ignores extra args
+$PMF_LANG["plmsgUserOnline"][0] = "%d user online";
 $PMF_LANG["plmsgUserOnline"][1] = "%d users online";
 
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy
@@ -1011,3 +1012,23 @@ $PMF_LANG['msgTransToolRemove'] = 'Remove';
 $PMF_LANG["msgTransToolLanguageNumberOfPlurals"] = "Number of plural forms";
 $PMF_LANG['msgTransToolLanguageOnePlural'] = 'This language has only one plural form';
 $PMF_LANG['msgTransToolLanguagePluralNotSet'] = "Plural form support for language %s is disabled (nplurals not set)";
+
+// added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras - Plural messages
+$PMF_LANG["plmsgHomeArticlesOnline"][0] = "There is %d FAQ online";
+$PMF_LANG["plmsgHomeArticlesOnline"][1] = "There are %d FAQs online";
+$PMF_LANG["plmsgViews"][0] = "%d view";
+$PMF_LANG["plmsgViews"][1] = "%d views";
+
+// added 2.6.0-alpha - 2009-08-30 by Aurimas Fišeras - Plural messages
+$PMF_LANG['plmsgGuestOnline'][0] = ' :: %d Guest';
+$PMF_LANG['plmsgGuestOnline'][1] = ' :: %d Guests';
+$PMF_LANG['plmsgRegisteredOnline'][0] = ' and %d Registered';
+$PMF_LANG['plmsgRegisteredOnline'][1] = ' and %d Registered';
+$PMF_LANG["plmsgSearchAmount"][0] = "%d search result";
+$PMF_LANG["plmsgSearchAmount"][1] = "%d search results";
+$PMF_LANG["plmsgPagesTotal"][0] = " %d Page";
+$PMF_LANG["plmsgPagesTotal"][1] = " %d Pages";
+$PMF_LANG["plmsgVotes"][0] = "%d Vote";
+$PMF_LANG["plmsgVotes"][1] = "%d Votes";
+$PMF_LANG["plmsgEntries"][0] = "%d FAQ";
+$PMF_LANG["plmsgEntries"][1] = "%d FAQs";

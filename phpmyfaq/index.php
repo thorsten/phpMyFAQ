@@ -391,10 +391,9 @@ $main_template_vars = array(
     'languageBox'         => $PMF_LANG['msgLangaugeSubmit'],
     'writeLangAdress'     => $writeLangAdress,
     'switchLanguages'     => PMF_Language::selectLanguages($LANGCODE, true),
-    'userOnline'          => sprintf($plr->getMsg('plmsgUserOnline',$totUsersOnLine), $totUsersOnLine).
-                             sprintf($PMF_LANG['msgUsersOnline'],
-                             $usersOnLine[0],
-                             $usersOnLine[1]),
+    'userOnline'          => $plr->getMsg('plmsgUserOnline',$totUsersOnLine).
+                             $plr->getMsg('plmsgGuestOnline',$usersOnLine[0]).
+                             $plr->getMsg('plmsgRegisteredOnline',$usersOnLine[1]),
     'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
     'copyright'           => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' . 
                              $faqconfig->get('main.currentVersion'));

@@ -90,6 +90,13 @@ class PMF_Faq
     private $pmf_lang;
 
     /**
+    * Plural form support
+    *
+    * @var  PMF_Language_Plurals
+    */
+    private $plr;
+
+    /**
     * The current FAQ record
     *
     * @var  array
@@ -133,11 +140,12 @@ class PMF_Faq
      */
     public function __construct($user = null, $groups = null)
     {
-        global $PMF_LANG;
+        global $PMF_LANG, $plr;
 
         $this->db       = PMF_Db::getInstance();
         $this->language = PMF_Language::$language;
         $this->pmf_lang = $PMF_LANG;
+        $this->plr      = $plr;
 
         if (is_null($user)) {
             $this->user = -1;
@@ -433,10 +441,8 @@ class PMF_Faq
                 $oLink->itemTitle = $row->thema;
                 $oLink->text = $title;
                 $oLink->tooltip = $title;
-                $listItem = sprintf('<li>%s<br /><span class="little">(%d %s)</span>%s</li>',
+                $listItem = sprintf('<li>%s<br /><span class="little">('.$this->plr->GetMsg('plmsgViews',$visits).')</span>%s</li>',
                     $oLink->toHtmlAnchor(),
-                    $visits,
-                    $this->pmf_lang['msgViews'],
                     ($row->sticky == 1) ? '<br /><br />' : '');
 
                 $output .= $listItem;
@@ -636,10 +642,8 @@ class PMF_Faq
                 $oLink->itemTitle = $row->thema;
                 $oLink->text = $title;
                 $oLink->tooltip = $title;
-                $listItem = sprintf('<li>%s<br /><span class="little">(%d %s)</span></li>',
-                    $oLink->toHtmlAnchor(),
-                    $visits,
-                    $this->pmf_lang['msgViews']);
+                $listItem = sprintf('<li>%s<br /><span class="little">('.$this->plr->GetMsg('plmsgViews',$visits).')</span></li>',
+                    $oLink->toHtmlAnchor());
 
                 $output .= $listItem;
             }
@@ -1569,7 +1573,7 @@ class PMF_Faq
 
                 $output['title'][]  = $shortTitle;
                 $output['url'][]    = $row['url'];
-                $output['visits'][] = $row['visits'] . ' ' . $this->pmf_lang['msgViews'];
+                $output['visits'][] = $this->plr->GetMsg('plmsgViews',$row['visits']);
             }
         } else {
             $output['error'] = $this->pmf_lang['err_noTopTen'];

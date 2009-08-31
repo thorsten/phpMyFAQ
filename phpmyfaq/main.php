@@ -48,8 +48,6 @@ $tpl->processTemplate('writeContent', array(
     'writeNewsRSS'          => $writeNewsRSS,
     'writeNews'             => $news->getNews($archived),
     'showAllNews'           => $showAllNews,
-    'writeNumberOfArticles' => $PMF_LANG['msgHomeThereAre'] .
-                               $faq->getNumberOfRecords($LANGCODE) .
-                               $PMF_LANG['msgHomeArticlesOnline']));
+    'writeNumberOfArticles' => $plr->getMsg('plmsgHomeArticlesOnline',$faq->getNumberOfRecords($LANGCODE))));
 
 $tpl->includeTemplate('writeContent', 'index');

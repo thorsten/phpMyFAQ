@@ -67,7 +67,7 @@ $PMF_LANG["msgVoteUseability"] = "Įvertinti šį DUK:";
 $PMF_LANG["msgVoteFrom"] = "iš";
 $PMF_LANG["msgVoteBad"] = "visiškai nenaudingas";
 $PMF_LANG["msgVoteGood"] = "labai vertingas";
-$PMF_LANG["msgVotings"] = "balsai ";
+$PMF_LANG["msgVotings"] = "balsai";
 $PMF_LANG["msgVoteSubmit"] = "Balsuoti";
 $PMF_LANG["msgVoteThanks"] = "Labai ačiū už jūsų balsą!";
 $PMF_LANG["msgYouCan"] = "Jūs galite ";
@@ -453,7 +453,7 @@ $PMF_LANG["ad_sess_sid"] = "Seanso identifikatorius";
 $PMF_LANG["ad_sess_ip"] = "IP adresas";
 
 $PMF_LANG["ad_ques_take"] = "Imtis klausimo ir redaguoti";
-$PMF_LANG["no_cats"] = "Nerasta grupė.";
+$PMF_LANG["no_cats"] = "Nerasta grupė";
 
 // Added v1.1 - 17.01.2002 - Bastian
 $PMF_LANG["ad_log_lger"] = "Neteisingas naudotojo vardas ar slaptažodis.";
@@ -976,7 +976,44 @@ $LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "Kelias, kur bus s
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "Failas, kurį mėginate atsisiųsti buvo nerastas serveryje";
 
-// added 2.6.0-alpha - 2009-07-30 by Aurimas Fišeras (plural messages test)
-$PMF_LANG["plmsgUserOnline"][0] = "%d prisijungęs naudotojas"; //"One User online" is also possible, since sprintf just ignores extra args
+// added 2.6.0-alpha - 2009-07-30 by Aurimas Fišeras - Plural messages
+$PMF_LANG["plmsgUserOnline"][0] = "%d prisijungęs naudotojas";
 $PMF_LANG["plmsgUserOnline"][1] = "%d prisijungę naudotojai";
 $PMF_LANG["plmsgUserOnline"][2] = "%d prisijungusių naudotojų";
+
+// added 2.6.0-alpha - 2009-08-02 by Anatoliy
+$LANG_CONF['main.templateSet'] = array(0 => "select", 1 => "Naudojamas šablonų rinkinys");
+
+// added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras
+$PMF_LANG['msgTransToolRemove'] = 'Šalinti';
+$PMF_LANG["msgTransToolLanguageNumberOfPlurals"] = "Daugiskaitos formų skaičius";
+$PMF_LANG['msgTransToolLanguageOnePlural'] = 'Ši kalba turi tik vieną daugiskaitos formą';
+$PMF_LANG['msgTransToolLanguagePluralNotSet'] = "Daugiskaitos formų palaikymas kalbai „%s“ neįjungtas („nplurals“ reikšmė nenustatyta)";
+
+// added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras - Plural messages
+$PMF_LANG["plmsgHomeArticlesOnline"][0] = "Yra pateiktas %d DUK";
+$PMF_LANG["plmsgHomeArticlesOnline"][1] = "Yra pateikti %d DUK";
+$PMF_LANG["plmsgHomeArticlesOnline"][2] = "Yra peteikta %d DUK";
+$PMF_LANG["plmsgViews"][0] = "%d peržiūra";
+$PMF_LANG["plmsgViews"][1] = "%d peržiūros";
+$PMF_LANG["plmsgViews"][2] = "%d peržiūrų";
+
+// added 2.6.0-alpha - 2009-08-30 by Aurimas Fišeras - Plural messages
+$PMF_LANG['plmsgGuestOnline'][0] = ' :: %d svečias';
+$PMF_LANG['plmsgGuestOnline'][1] = ' :: %d svečiai';
+$PMF_LANG['plmsgGuestOnline'][2] = ' :: %d svečių';
+$PMF_LANG['plmsgRegisteredOnline'][0] = ' ir %d registruotas';
+$PMF_LANG['plmsgRegisteredOnline'][1] = ' ir %d registruoti';
+$PMF_LANG['plmsgRegisteredOnline'][2] = ' ir %d registruotų';
+$PMF_LANG["plmsgSearchAmount"][0] = "%d paieškos rezultatas";
+$PMF_LANG["plmsgSearchAmount"][1] = "%d paieškos rezultatai";
+$PMF_LANG["plmsgSearchAmount"][2] = "%d paieškos rezultatų";
+$PMF_LANG["plmsgPagesTotal"][0] = " %d puslapio";
+$PMF_LANG["plmsgPagesTotal"][1] = " %d puslapių";
+$PMF_LANG["plmsgPagesTotal"][2] = " %d puslapių";
+$PMF_LANG["plmsgVotes"][0] = "%d balsas";
+$PMF_LANG["plmsgVotes"][1] = "%d balsai";
+$PMF_LANG["plmsgVotes"][2] = "%d balsų";
+$PMF_LANG["plmsgEntries"][0] = "%d DUK";
+$PMF_LANG["plmsgEntries"][1] = "%d DUK";
+$PMF_LANG["plmsgEntries"][2] = "%d DUK";

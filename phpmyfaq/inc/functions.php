@@ -791,7 +791,7 @@ function getSearchData($searchterm, $asResource = false, $cat = '%', $allLanguag
  */
 function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = false, $instantRespnse = false)
 {
-    global $sids, $category, $PMF_LANG, $LANGCODE, $faq, $current_user, $current_groups;
+    global $sids, $category, $PMF_LANG, $plr, $LANGCODE, $faq, $current_user, $current_groups;
 
     $_searchterm = PMF_htmlentities(stripslashes($searchterm), ENT_QUOTES, $PMF_LANG['metaCharset']);
     $seite       = 1;
@@ -818,19 +818,15 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
     }
 
     if ($num > 0) {
-        if ($num == "1") {
-            $output .= '<p>'.$num.$PMF_LANG["msgSearchAmount"]."</p>\n";
-        } else {
-            $output .= '<p>'.$num.$PMF_LANG["msgSearchAmounts"];
-            if ($hasMore && ($pages > 1)) {
-                $output .= sprintf(
-                    $PMF_LANG['msgInstantResponseMaxRecords'],
-                    $faqconfig->get('main.numberOfRecordsPerPage'));
-            }
-            $output .= "</p>\n";
+        $output .= '<p>'.$plr->GetMsg('plmsgSearchAmount',$num);
+        if ($hasMore && ($pages > 1)) {
+            $output .= sprintf(
+                $PMF_LANG['msgInstantResponseMaxRecords'],
+                $faqconfig->get('main.numberOfRecordsPerPage'));
         }
+        $output .= "</p>\n";
         if (!$hasMore && ($pages > 1)) {
-            $output .= "<p><strong>".$PMF_LANG["msgPage"].$seite." ".$PMF_LANG["msgVoteFrom"]." ".$pages." ".$PMF_LANG["msgPages"]."</strong></p>";
+            $output .= "<p><strong>".$PMF_LANG["msgPage"].$seite." ".$PMF_LANG["msgVoteFrom"]." ".$plr->GetMsg('plmsgPagesTotal',$pages)."</strong></p>";
         }
         $output .= "<ul class=\"phpmyfaq_ul\">\n";
 
