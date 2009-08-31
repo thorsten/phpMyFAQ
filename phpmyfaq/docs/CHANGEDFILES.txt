@@ -2,6 +2,9 @@ $Id$
 
 CHANGED FILES FROM 2.5.1 -> 2.5.2
 
+./admin/record.add.php
+./admin/record.edit.php
+./admin/record.save.php
 ./inc/PMF_Auth/AuthDb.php
 ./inc/PMF_Auth/AuthDriver.php
 ./inc/PMF_Auth/AuthHttp.php
