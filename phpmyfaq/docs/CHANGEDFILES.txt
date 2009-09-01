@@ -1,5 +1,12 @@
 $Id$
 
+CHANGED FILES FROM 2.5.2 -> 2.5.3
+
+./install/installer.php
+./install/update.php
+
+
+
 CHANGED FILES FROM 2.5.1 -> 2.5.2
 
 ./admin/record.add.php

@@ -45,7 +45,7 @@ fi
 
 # PMF Version
 if [ "x${PMF_VERSION}" = "x" ]; then
-	PMF_VERSION="2.5.2"
+	PMF_VERSION="2.5.3"
 fi
 
 if [ "x${MD5BIN}" = "x" ]; then
@@ -58,7 +58,7 @@ fi
 
 # Build folder
 if [ "x${PMF_BUILD_FOLDER}" = "x" ]; then
-	PMF_BUILD_FOLDER="PMFBUILD_TRUNK_${PMF_VERSION}"
+	PMF_BUILD_FOLDER="PMFBUILD_BRANCH_${PMF_VERSION}"
 fi
 
 # Package Folder

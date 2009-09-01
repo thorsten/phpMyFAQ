@@ -57,7 +57,7 @@
 # phpMyFAQ
 #
 %define name        phpmyfaq
-%define version     2.5.2
+%define version     2.5.3
 %define release     1
 %define epoch       0
 
@@ -154,6 +154,9 @@ XML-support, PDF-support, a backup-system and an easy to use
 installation script.
 
 %changelog
+
+* Tue Sep 01 2009 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.5.3-1
+- New upstream version 2.5.3.
 
 * Mon Aug 10 2009 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.5.2-1
 - New upstream version 2.5.2.
