@@ -16,7 +16,7 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.17 - 2009-09-
+Version 2.0.17 - 2009-09-01
 - fixed IE6/7 only XSS vulnerability (Thorsten)
 
 Version 2.0.16 - 2009-08-10
