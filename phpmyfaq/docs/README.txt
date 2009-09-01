@@ -1,6 +1,6 @@
 $Id$
 
-phpMyFAQ 2.5.1
+phpMyFAQ 2.5.2
 Codename "Pandora"
 
 Installation/Update:
