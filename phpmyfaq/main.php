@@ -32,10 +32,11 @@ $news = new PMF_News();
 $archived        = PMF_Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
 $writeNewsHeader = PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']);
 
-if ($archived) {
+if (!is_null($archived)) {
     $writeNewsHeader .= $PMF_LANG['newsArchive'];
     $writeNewsRSS     = '';
     $showAllNews      = sprintf('<a href="?%s">%s</a>', $sids, $PMF_LANG['newsShowCurrent']);
+    $archived         = true;
 } else {
     $writeNewsHeader .= ' ' . $PMF_LANG['msgNews'];
     $writeNewsRSS     = '&nbsp;<a href="feed/news/rss.php" target="_blank">' . 
