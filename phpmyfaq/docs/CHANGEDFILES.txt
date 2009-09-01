@@ -1,10 +1,18 @@
 $Id$
 
+CHANGED FILES FROM 2.0.17 -> 2.0.18
+
+./install/installer.php
+./install/update.php
+
+
+
 CHANGED FILES FROM 2.0.16 -> 2.0.17
 
 ./install/installer.php
 ./install/update.php
 ./search.php
+
 
 
 CHANGED FILES FROM 2.0.15 -> 2.0.16

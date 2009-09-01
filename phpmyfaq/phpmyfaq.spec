@@ -56,7 +56,7 @@
 # phpMyFAQ
 #
 %define name        phpmyfaq
-%define version     2.0.17
+%define version     2.0.18
 %define release     1
 %define epoch       0
 
@@ -152,6 +152,10 @@ content negotiation, accessible XHTML based templates, extensive
 XML-support, PDF-support, a backup-system and an easy to use
 installation script.
 
+
+%changelog
+* Tue Sep 01 2009 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.0.18-1
+- New upstream version 2.0.18.
 
 %changelog
 * Mon Aug 10 2009 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.0.17-1

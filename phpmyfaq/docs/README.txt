@@ -1,6 +1,6 @@
 $Id$
 
-phpMyFAQ 2.0.16
+phpMyFAQ 2.0.18
 Codename "Prometheus"
 
 Installation/Update:
@@ -15,6 +15,9 @@ Changes since 2.0.16:
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
+
+Version 2.0.18 - 2009-
+-
 
 Version 2.0.17 - 2009-09-01
 - fixed IE6/7 only XSS vulnerability (Thorsten)
