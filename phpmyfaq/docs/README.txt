@@ -10,14 +10,14 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.16:
-- 
+- fixed IE6/7 only XSS vulnerability (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.17 - 2009-
-- 
+Version 2.0.17 - 2009-09-
+- fixed IE6/7 only XSS vulnerability (Thorsten)
 
 Version 2.0.16 - 2009-08-10
 - updated French translation (Klaus Gapp)

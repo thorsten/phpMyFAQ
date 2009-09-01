@@ -91,7 +91,7 @@ $tpl->processTemplate('writeContent', array(
     'selectCategories'      => $PMF_LANG['msgSelectCategories'],
     'allCategories'         => $PMF_LANG['msgAllCategories'],
     'printCategoryOptions'  => $category->printCategoryOptions($searchCategory),
-    'writeSendAdress'       => $_SERVER['PHP_SELF'].'?'.$sids.'action=search',
+    'writeSendAdress'       => '?'.$sids.'action=search',
     'msgSearchWord'         => $PMF_LANG['msgSearchWord'],
     'printResult'           => $printResult,
     'openSearchLink'        => $openSearchLink));
