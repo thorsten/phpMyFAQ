@@ -127,7 +127,7 @@ if ($action == "sendmail") {
         <label class="left"><?php print $PMF_LANG["ad_entry_email"]; ?></label>
         <input type="text"  name="email" size="30" /><br />
 
-        <input class="submit" style="margin-left: 190px;" type="submit" value="<?php print $PMF_LANG["msgNewContentSubmit"]; ?>" />
+        <input class="submit" type="submit" value="<?php print $PMF_LANG["msgNewContentSubmit"]; ?>" />
 
         <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_LANG["ad_sess_back"]; ?> FAQ" border="0" /> <a href="index.php" title="<?php print $PMF_LANG["ad_sess_back"]; ?> FAQ"><?php print $PMF_LANG["ad_sess_back"]; ?></a></p>
         <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?> FAQ" border="0" /> <a href="../index.php" title="<?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?> FAQ"><?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?> FAQ</a></p>
