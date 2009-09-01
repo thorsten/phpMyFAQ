@@ -22,6 +22,7 @@ CHANGED FILES FROM 2.5.1 -> 2.5.2
 ./sendmail.php
 ./save.php
 ./savequestion.php
+./search.php
 ./sitemap.php
 
 
