@@ -309,7 +309,7 @@ if (isset($cat) && ($cat != 0) && ($id == '') && isset($category->categoryName[$
 //
 // Found an action request?
 //
-if (preg_match("=/=", $action) && !isset($allowedVariables[$action])) {
+if (!isset($allowedVariables[$action])) {
     $action = 'main';
 }
 
