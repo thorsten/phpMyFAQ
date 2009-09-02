@@ -84,7 +84,7 @@ function HTMLFooter()
     fieldset.installation {
         margin: auto;
         border: 1px solid black;
-        width: 444px;
+        width: 500px;
         margin-bottom: 10px;
         padding-top: 15px;
         clear: both;

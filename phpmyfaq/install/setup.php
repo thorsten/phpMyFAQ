@@ -233,7 +233,7 @@ function cleanInstallation()
     fieldset.installation {
         margin: auto;
         border: 1px solid black;
-        width: 444px;
+        width: 500px;
         margin-bottom: 10px;
     	padding-top: 15px;
         clear: both;
@@ -255,9 +255,10 @@ function cleanInstallation()
         background-color: #F9F7ED;
         border: 1px solid black;
         margin-bottom: 8px;
+        clear: both;
     }
     label.left {
-        width: 150px;
+        width: 200px;
         float: left;
         text-align: right;
         padding-right: 10px;
