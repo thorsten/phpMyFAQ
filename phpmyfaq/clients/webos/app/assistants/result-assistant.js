@@ -1,73 +1,15 @@
-function ResultAssistant() {
+function ResultAssistant(argFromPusher) {
+    /* this is the creator function for your scene assistant object. It will be passed all the 
+       additional parameters (after the scene name) that were passed to pushScene. The reference
+       to the scene controller (this.controller) has not be established yet, so any initialization
+       that needs the scene controller should be done in the setup function below. */
+    this.currentValue = argFromPusher;
 }
 
 ResultAssistant.prototype.setup = function(){
 
-    /*
-     * Textfield-Attributes Declaration
-     */
-    this.usernameAtt = {
-        hintText:         'Username',
-        textFieldName:    'name', 
-        modelProperty:    'original', 
-        multiline:        false,
-        disabledProperty: 'disabled',
-        focus:            true, 
-        modifierState:    Mojo.Widget.capsLock,
-        //autoResize:     automatically grow or shrink the textbox horizontally,
-        //autoResizeMax:  how large horizontally it can get
-        //enterSubmits:   when used in conjunction with multline, if this is set, then enter will submit rather than newline
-        limitResize:      false, 
-        holdToEnable:     false, 
-        focusMode:        Mojo.Widget.focusSelectMode,
-        changeOnKeyPress: true,
-        textReplacement:  false,
-        maxLength:        30,
-        requiresEnterKey: false
-    };
-    
-    this.passwordAtt = {
-        hintText:         'Password',
-        textFieldName:    'password', 
-        modelProperty:    'value', 
-        multiline:        false,
-        disabledProperty: 'disabled',
-        focus:            true, 
-        modifierState:    Mojo.Widget.capsLock,
-        //autoResize:     automatically grow or shrink the textbox horizontally,
-        //autoResizeMax:  how large horizontally it can get
-        //enterSubmits:   when used in conjunction with multline, if this is set, then enter will submit rather than newline
-        limitResize:      false, 
-        holdToEnable:     false, 
-        focusMode:        Mojo.Widget.focusSelectMode,
-        changeOnKeyPress: true,
-        textReplacement:  false,
-        maxLength:        30,
-        requiresEnterKey: false
-        
-    };
-    
-    /*
-     * Textfield-Models Declaration
-     */
-    this.usernameModel = {
-        value:    "",
-        disabled: false
-    };
-    
-    this.passwordModel = {
-        value:    "",
-        disabled: false
-    };
-    
-    /*
-     * Setup Textfield-Widget's
-     */
-    this.controller.setupWidget('Auth_name',     this.usernameAtt, this.usernameModel);
-    this.controller.setupWidget('Auth_password', this.passwordAtt, this.passwordModel);
-    
-    
-    this.controller.setupWidget("buttonId",
+    this.controller.get('area-to-update').update(this.currentValue);
+    this.controller.setupWidget("back_button",
             this.buttonAtt1 = {
             //type : 'Activity'
             },
@@ -79,13 +21,13 @@ ResultAssistant.prototype.setup = function(){
     );
     /* add listener button*/
     this.handleButtonPressBinder = this.handleButtonPress.bind(this);
-    Mojo.Event.listen(this.controller.get("buttonId"),
+    Mojo.Event.listen(this.controller.get("back_button"),
                       Mojo.Event.tap, 
                       this.handleButtonPressBinder
     )
     
     /* set copywrite */
-    this.controller.get( 'AppName' ).innerHTML = _APP_Name;
+    this.controller.get( 'resutl_hdr' ).innerHTML = _APP_Name;
     
 }
 ResultAssistant.prototype.handleButtonPress = function(event){
