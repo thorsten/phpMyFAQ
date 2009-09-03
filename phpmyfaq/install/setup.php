@@ -511,7 +511,7 @@ foreach ($permLevels as $level => $desc) {
     <label class="left">Admin's username:</label>
     <input class="input" type="text" name="username" title="You don't have to do anything here." value="admin" readonly="readonly" /><br />
 
-    <label class="left">Admini's password:</label>
+    <label class="left">Admin's password:</label>
     <input class="input" type="password" name="password" title="Please enter your password for the admin area." /><br />
 
     <label class="left">Retype password:</label>
