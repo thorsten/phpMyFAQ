@@ -1,1 +1,1 @@
-PMF_URL = 'http://localhost/'
+PMF_URL = 'http://phpmyfaq.local'
