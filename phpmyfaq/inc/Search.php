@@ -148,8 +148,8 @@ class PMF_Search
         if ($result) {
             $num = $this->db->num_rows($result);
         }
-
-        if ($num) {
+        
+        if ($num == 0) {
             return array();
         } else {
             return $this->db->fetchAll($result);
