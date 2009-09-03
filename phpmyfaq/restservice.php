@@ -54,6 +54,8 @@ if (PMF_Language::isASupportedLanguage($language)) {
     require_once 'lang/language_en.php';
 }
 
+PMF_String::init('utf-8', $LANGCODE);
+
 // Handle actions
 switch ($action) {
     case 'search':
