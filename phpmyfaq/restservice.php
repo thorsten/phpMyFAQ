@@ -38,11 +38,29 @@ header('Pragma: no-cache');
 header('Vary: Negotiate,Accept');
 header('Content-type: application/json');
 
-$action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+// Set user permissions
+$current_user   = -1;
+$current_groups = array(-1);
 
+$action   = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+$language = PMF_Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_STRING, 'en');
+
+// Set language
+if (PMF_Language::isASupportedLanguage($language)) {
+    $LANGCODE = trim($language);
+    require_once 'lang/language_'.$LANGCODE.'.php';
+} else {
+    $LANGCODE = 'en';
+    require_once 'lang/language_en.php';
+}
+
+// Handle actions
 switch ($action) {
     case 'search':
+        $search       = new PMF_Search();
         $searchString = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
+        $result       = $search->search($searchString, false, true, false);
         
+        print json_encode($result);
         break;
 }
