@@ -40,12 +40,12 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
 	 * @return PMF_Attachment
 	 */
 	private function __construct($id = null)
-	{		
+	{
 		if(null !== $id) {
-			
-		} else {
-			
+			$this->id = $id;
 		}
+		
+//		parent::__construct();
 	}
 	
 	/**

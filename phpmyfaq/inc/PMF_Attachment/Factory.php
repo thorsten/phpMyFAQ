@@ -20,10 +20,11 @@
  * under the License.
  */
 
-set_include_path(dirname(dirname(__FILE__)) . '/libs/phpseclib' . PATH_SEPARATOR . 
-                 get_include_path());
+set_include_path(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'libs' .
+                         DIRECTORY_SEPARATOR . 'phpseclib' . PATH_SEPARATOR . 
+                         get_include_path());
 
-require_once "Crypt/AES.php";
+require_once 'Crypt' . DIRECTORY_SEPARATOR .'AES.php';
                  
 /**
  * PMF_Atachment 
@@ -42,7 +43,7 @@ class PMF_Attachment_Factory
 	 * 
 	 * @var string
 	 */
-	private static $defaultEncKey     = null;
+	private static $defaultKey     = null;
 	
 	/**
 	 * Storage type
@@ -67,11 +68,28 @@ class PMF_Attachment_Factory
 	 */
 	public static function create($id = null, $key = null)
 	{	
+		$retval = null;
+		
 		switch(self::$storageType) {
 			case PMF_Attachment::STORAGE_TYPE_FILESYSTEM:
 					$retval = new PMF_Attachment_File($id);
+					$retval->setKey($key);
 				break;
 		}
+		
+		return $retval;
+	}
+	
+	/**
+	 * Fetch all record attachments
+	 * 
+	 * @param int $id
+	 * 
+	 * @return array
+	 */
+	public static function fetchByRecordId($recorId)
+	{
+		$retval = array();
 		
 		return $retval;
 	}
@@ -80,19 +98,19 @@ class PMF_Attachment_Factory
 	 * Initalizing factory with global attachment settings
 	 * 
 	 * @param int     $storageType
-	 * @param string  $defaultEncKey
+	 * @param string  $defaultKey
 	 * @param boolean $encryptionEnabled
 	 * 
 	 * @return null
 	 */
-	public static function init($storageType, $defaultEncKey, $encryptionEnabled)
+	public static function init($storageType, $defaultKey, $encryptionEnabled)
 	{
 		if(null === self::$storageType) {
 			self::$storageType = $storageType;	
 		}
 		
-		if(null === self::$defaultEncKey) {
-			self::$defaultEncKey = $defaultEncKey;	
+		if(null === self::$defaultKey) {
+			self::$defaultKey = $defaultKey;	
 		}
 		
 		if(null === self::$encryptionEnabled) {
