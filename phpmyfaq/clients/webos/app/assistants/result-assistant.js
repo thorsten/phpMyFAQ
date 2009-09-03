@@ -3,12 +3,14 @@ function ResultAssistant(argFromPusher) {
        additional parameters (after the scene name) that were passed to pushScene. The reference
        to the scene controller (this.controller) has not be established yet, so any initialization
        that needs the scene controller should be done in the setup function below. */
-    this.currentValue = argFromPusher;
+    this.currentResult = argFromPusher;
 }
 
 ResultAssistant.prototype.setup = function(){
-
+    /* set resultset area */
     this.controller.get('area-to-update').update(this.currentValue);
+    /* set app headline */
+    this.controller.get( 'resutl_hdr' ).innerHTML = _APP_Name;
     this.controller.setupWidget("back_button",
             this.buttonAtt1 = {
             //type : 'Activity'
@@ -25,16 +27,10 @@ ResultAssistant.prototype.setup = function(){
                       Mojo.Event.tap, 
                       this.handleButtonPressBinder
     )
-    
-    /* set copywrite */
-    this.controller.get( 'resutl_hdr' ).innerHTML = _APP_Name;
-    
 }
 ResultAssistant.prototype.handleButtonPress = function(event){
     //this.controller.get('string').update(this.text2);
     //push the second scene on the scene stack
-    this.name = this.textNameModel.value;
-    this.password = this.textPasswordModel.value;
     this.controller.stageController.pushScene(event.item.scene);
 }
 
@@ -57,5 +53,5 @@ ResultAssistant.prototype.deactivate = function(event) {
 ResultAssistant.prototype.cleanup = function(event) {
     /* this function should do any cleanup needed before the scene is destroyed as 
        a result of being popped off the scene stack */
-   Mojo.Event.stopListening(this.controller.get('push_button'),Mojo.Event.tap, this.handleButtonPressBinder)
+   Mojo.Event.stopListening(this.controller.get('back_button'),Mojo.Event.tap, this.handleButtonPressBinder)
 }
