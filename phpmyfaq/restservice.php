@@ -45,6 +45,10 @@ $current_groups = array(-1);
 $action   = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 $language = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING, 'en');
 
+// Get language (default: english)
+$Language = new PMF_Language();
+$LANGCODE = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
+
 // Set language
 if (PMF_Language::isASupportedLanguage($language)) {
     $LANGCODE = trim($language);
