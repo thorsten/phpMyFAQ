@@ -3,12 +3,25 @@ function ResultAssistant(argFromPusher) {
        additional parameters (after the scene name) that were passed to pushScene. The reference
        to the scene controller (this.controller) has not be established yet, so any initialization
        that needs the scene controller should be done in the setup function below. */
-    this.currentResult = argFromPusher;
+    this.currentResult = _Result;
 }
 
 ResultAssistant.prototype.setup = function(){
     /* set resultset area */
-    this.controller.get('area-to-update').update(this.currentValue);
+    this.controller.setupWidget("listId",
+             this.attributes = {
+                 itemTemplate: 'result/listitem',
+                 listTemplate: 'result/listcontainer',
+                 addItemLabel: $L('Add ...'),
+                 swipeToDelete: true,
+                 reorderable: true,
+                 emptyTemplate:'result/emptylist'
+             },
+             this.model = {
+                 listTitle: $L('List Title'),
+                 items : this.currentResult
+
+     });
     /* set app headline */
     this.controller.get( 'resutl_hdr' ).innerHTML = _APP_Name;
     this.controller.setupWidget("back_button",
@@ -37,11 +50,6 @@ ResultAssistant.prototype.handleButtonPress = function(event){
 ResultAssistant.prototype.activate = function(event){
     /* put in event handlers here that should only be in effect when this scene is active. For
      example, key handlers that are observing the document */
-    if (event != undefined) {
-        this.controller.get('string').update(this.text2 + "<br>" + event);
-        this.model.original = "New Text";
-        this.controller.modelChanged(this.model);
-    }   
 }
 
 

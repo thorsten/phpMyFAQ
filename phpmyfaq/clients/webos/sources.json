@@ -6,7 +6,11 @@
         "source": "app\/assistants\/search-assistant.js"
     },
     {
+        "scenes": "result",
         "source": "app\/assistants\/result-assistant.js"
+    },
+    {
+        "source": "javascript\/result_info.js"
     },
     {
         "source": "javascript\/settings.js"
