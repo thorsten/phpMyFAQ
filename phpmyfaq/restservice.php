@@ -28,3 +28,21 @@ define('IS_VALID_PHPMYFAQ', null);
 PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
+
+// Send headers
+header('Expires: Thu, 07 Apr 1977 14:47:00 GMT');
+header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+header('Cache-Control: no-store, no-cache, must-revalidate');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
+header('Vary: Negotiate,Accept');
+header('Content-type: application/json');
+
+$action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+
+switch ($action) {
+    case 'search':
+        $searchString = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
+        
+        break;
+}
