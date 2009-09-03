@@ -19,7 +19,6 @@
  * License for the specific language governing rights and limitations
  * under the License.
  */
-
 /**
  * PMF_Atachment_Interface
  * 
@@ -32,106 +31,132 @@
  */
 interface PMF_Attachment_Interface
 {
-	/**
-	 * Attachment id
-	 * 
-	 * @var int
-	 */
-	protected $id;
-	
-	/**
-	 * The key to encrypt with
-	 * 
-	 * @var string
-	 */
-	protected $key;
-	
-	/**
-	 * Errors
-	 * @var array
-	 */
-	protected $error = array();
-	
-	/**
-	 * Database instance
-	 * 
-	 * @var unknown_type
-	 */
-	protected $db;
-	
-	protected $recordId;
-	protected $recordLang;
-	protected $hash;
-	protected $filename;
-	protected $encrypted;
-	
-	/**
-	 * Constructor
-	 */
-	public function __construct()
-	{
-		global $db;
-		
-		$this->db = &$db;
-		
-		if($this->id) {
-			$this->getMeta();
-		}
-	}
-	
-	/**
-	 * Build attachment url
-	 * 
-	 * @param boolean $forHTML either to use ampersands directly
-	 * 
-	 * @return string
-	 */
-	public function buildUrl($forHTML = true)
-	{
-		
-	}
-	
-	/**
-	 * Set encryption key
-	 * 
-	 * @param string $key
-	 * 
-	 * @return null
-	 */
-	public function setKey($key)
-	{
-		$this->key = $key;	
-	}
-	
-	/**
-	 * Get meta data
-	 * 
-	 * @return boolean
-	 */
-	protected function getMeta()
-	{
-		$retval = false;
-		
-		$sql = sprintf('SELECT record_id, record_lang,
-		                       hash, filename, encrypted
-		                WHERE id = %d', (int)$this->id);
-		
-		$result = $this->db->query($sql);
-		
-		if($result) {
-			$assoc = $this->db->fetch_assoc($result);
-			
-			if(!empty($assoc)) {
-			    $this->recordId = $assoc['record_id'];
-			    $this->recordLang = $assoc['record_lang'];
-			    $this->hash = $assoc['hash'];
-			    $this->filename = $assoc['filename'];
-			    $this->encrypted = $assoc['encrypted'];
-			    
-			    $retval = true;
-			}
-		}
-		
-		return $retval;
-	}
+    /**
+     * Attachment id
+     * 
+     * @var int
+     */
+    protected $id;
+    
+    /**
+     * The key to encrypt with
+     * 
+     * @var string
+     */
+    protected $key;
+    
+    /**
+     * Errors
+     * @var array
+     */
+    protected $error = array();
+    
+    /**
+     * Database instance
+     * 
+     * @var PMF_Db_Driver
+     */
+    protected $db;
+    
+    /**
+     * Record ID
+     * 
+     * @var integer
+     */
+    protected $recordId;
+    
+    /**
+     * Record language
+     * 
+     * @var string
+     */
+    protected $recordLang;
+    
+    /**
+     * Hash
+     * 
+     * @var string
+     */
+    protected $hash;
+    
+    /**
+     * Filename
+     * 
+     * @var string
+     */
+    protected $filename;
+    
+    /**
+     * Encrypted
+     * 
+     * @var string
+     */
+    protected $encrypted;
+    
+    /**
+     * Constructor
+     * 
+     * @return void
+     */
+    public function __construct ()
+    {
+        $this->db = PMF_Db::getInstance();
+        
+        if ($this->id) {
+            $this->getMeta();
+        }
+    }
+    /**
+     * Build attachment url
+     * 
+     * @param boolean $forHTML either to use ampersands directly
+     * 
+     * @return string
+     */
+    public function buildUrl ($forHTML = true)
+    {
+        
+    }
+    
+    /**
+     * Set encryption key
+     * 
+     * @param string $key
+     * 
+     * @return null
+     */
+    public function setKey ($key)
+    {
+        $this->key = $key;
+    }
+    
+    /**
+     * Get meta data
+     * 
+     * @return boolean
+     */
+    protected function getMeta ()
+    {
+        $retval = false;
+        $sql = sprintf("
+            SELECT 
+		      record_id, record_lang, hash, filename, encrypted
+            FROM
+                %sfaqattachment
+            WHERE 
+                id = %d", SQLPREFIX, (int) $this->id);
+        $result = $this->db->query($sql);
+        if ($result) {
+            $assoc = $this->db->fetch_assoc($result);
+            if (! empty($assoc)) {
+                $this->recordId = $assoc['record_id'];
+                $this->recordLang = $assoc['record_lang'];
+                $this->hash = $assoc['hash'];
+                $this->filename = $assoc['filename'];
+                $this->encrypted = $assoc['encrypted'];
+                $retval = true;
+            }
+        }
+        return $retval;
+    }
 }
