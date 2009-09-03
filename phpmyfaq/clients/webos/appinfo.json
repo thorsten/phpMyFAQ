@@ -1,9 +1,9 @@
 {
-	"id": "com.pact.phpmyfaqwebos",
-	"version": "1.0.0",
-	"vendor": "Pact",
-	"type": "web",
-	"main": "index.html",
-	"title": "phpMyFaqWebOS",
-	"icon": "icon.png"
+    "id": "com.pact.phpmyfaqwebos",
+    "version": "1.0.0",
+    "vendor": "phpMyFAQ Team",
+    "type": "web",
+    "main": "index.html",
+    "title": "phpMyFAQ WebOS",
+    "icon": "icon.png"
 }
