@@ -3,6 +3,12 @@
         "source": "app\/assistants\/stage-assistant.js"
     },
     {
+        "source": "app\/assistants\/search-assistant.js"
+    },
+    {
+        "source": "app\/assistants\/result-assistant.js"
+    },
+    {
         "source": "javascript\/settings.js"
     }
 ]
