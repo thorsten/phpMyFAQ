@@ -86,7 +86,7 @@ RewriteRule ^category(.*)\.html$        index.php?action=show&cat=$1 [L,QSA]
 RewriteRule index.html$                 index.php [PT]
 
 # sitemap (backward compatibility)
-RewriteCond %{REQUEST_URI}              sitemap-([a-zA-Z0-9äöüÄÖÜß]*)_([a-z\-]+)\.html$ [NC]
+RewriteCond %{REQUEST_URI}              sitemap-([a-zA-Z0-9ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]*)_([a-z\-]+)\.html$ [NC]
 RewriteRule ^sitemap-(.*)_(.*)\.html$   index.php?action=sitemap&letter=$1&lang=$2 [L,QSA]
 
 # a solution id page
@@ -143,3 +143,7 @@ RewriteRule tags/([0-9]+)/([^\/]+)\.htm(l?)$     index.php?action=search&tagging
 # the instant response page
 RewriteCond %{REQUEST_URI}          instantresponse\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=instantresponse [L,QSA]
+
+# rest/json API
+# * http://[...]/restservice/search/<LANGUAGE CODE>/<SEARCH>
+RewriteRule restservice/search/([a-z\-]+)/([a-z\-]+)$     restservice.php?action=search&lang=$1&q=$2 [L,QSA]
