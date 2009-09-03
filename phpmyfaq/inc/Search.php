@@ -149,8 +149,11 @@ class PMF_Search
             $num = $this->db->num_rows($result);
         }
 
-
-
+        if ($num) {
+            return array();
+        } else {
+            return $this->db->fetchAll($result);
+        }
     }
 
     /**
