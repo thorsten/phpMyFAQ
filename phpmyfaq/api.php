@@ -1,13 +1,18 @@
 <?php
 /**
- * The REST Services interface
+ * The rest/json application interface
+ * 
+ * You can call the resource with the following URIs:
+ *
+ * - http://www.example.org/phpmyfaq/api.php?action=search&lang=en&q=phpMyFAQ (standard)
+ * - http://www.example.org/phpmyfaq/api/search/en/phpMyFAQ (rewrite rules enabled)
  *
  * @package    phpMyFAQ 
  * @subpackage PMF_Service
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2009-09-03
- * @copyright  2009 phpMyFAQ Team
  * @version    SVN: $Id$
+ * @copyright  2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -60,6 +65,9 @@ if (PMF_Language::isASupportedLanguage($language)) {
 
 PMF_String::init('utf-8', $LANGCODE);
 
+// Set empty result
+$result = array();
+
 // Handle actions
 switch ($action) {
     case 'search':
@@ -73,7 +81,8 @@ switch ($action) {
         	$data->answer = PMF_Utils::makeShorterText($data->answer, 12);
         	$data->link   = sprintf($url, $data->category_id, $data->id, $data->lang);
         }
-        
-        print json_encode($result);
         break;
 }
+
+// print result as JSON
+print json_encode($result);
