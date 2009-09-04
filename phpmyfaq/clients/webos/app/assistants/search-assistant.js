@@ -29,23 +29,27 @@ SearchAssistant.prototype.setup = function(){
     };
 
     this.controller.setupWidget('search', this.searchField, this.searchModel);
-    this.controller.setupWidget('submit', this.submitField, this.submitModel);
+    this.controller.setupWidget('submit_button', this.submitField, this.submitModel);
 	this.handleButtonPressBinder = this.handleButtonPress.bind(this);
-    Mojo.Event.listen(this.controller.get('submit'),Mojo.Event.tap, this.handleButtonPressBinder)
+    Mojo.Event.listen(this.controller.get('submit_button'),Mojo.Event.tap, this.handleButtonPressBinder)
 
 }
 
 SearchAssistant.prototype.handleButtonPress = function(event){
-	this.restValue = this.searchModel.value;	
-	this.controller.stageController.pushScene('result', this.restValue);        
-/*
-    var request = new Ajax.Request(PMF_URL + "/restservice.php?action=search&lang=de&q=as", {
+	/*
+	 * Get FAQ-Results
+	 */
+    var request = new Ajax.Request("http://faq.phpmyfaq.de/restservice.php?action=search&lang=en&q=phpmyfaq", {
         method: "get",
         evalJSON: "true",
         onSuccess: "",
         onFailure: ""
     });
-    */
+
+    
+    
+    	
+	this.controller.stageController.pushScene('result', request); 
 }
 
 SearchAssistant.prototype.activate = function(event){
