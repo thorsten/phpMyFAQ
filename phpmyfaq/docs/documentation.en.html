@@ -87,7 +87,11 @@
         <ol class="alpha">
             <li><a href="#7a">Creating custom layout</a></li>
         </ol></li>
-        <li><strong><a href="#8">One more thing</a></strong></li>
+        <li><strong><a href="#8">Developer documentation</a></strong>
+        <ol class="alpha">
+            <li><a href="#8a">rest/json API</a></li>
+        </ol></li>
+        <li><strong><a href="#9">One more thing</a></strong></li>
     </ol>
 
 
@@ -987,12 +991,14 @@
     an email and we can talk about it.</p>
     <p><a href="#top">back to top</a></p>
 
+
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="7"></a>7. Customizing phpMyFAQ 2.6.x</strong></p>
     <p>With phpMyFAQ v2.6.x users have even more customization opportunities. The
     key feature is the user selectable template sets. From version v2.6.x there is
     a templates/default directory where the default layouts get shipped.</p>
     <p><a href="#top">back to top</a></p>
+
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="7a"></a>7.a. Creating a custom layout</strong></p>
@@ -1005,8 +1011,30 @@
     of the actual layout available in each template file.</p>
     <p><a href="#top">back to top</a></p>
 
+
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="8"></a>8. One more thing</strong></p>
+    <p><strong><a name="8"></a>8. Developer documentation</strong></p>
+    <p>Beginning with version 2.6 phpMyFAQ will offer more and more interface.</p>
+    <p><a href="#top">back to top</a></p>
+
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="8a"></a>8.a. rest/json API</strong></p>
+    <p>The rest/json API is included since phpMyFAQ 2.6.0 and offers an API for various services. 
+    Currently we implemented an interface for the search for other clients. You can call the resource
+    with the following URIs:</p>
+    <ul>
+        <li>http://www.example.org/phpmyfaq/restservice.php?action=search&lang=en&q=phpMyFAQ (standard)</li>
+        <li>http://www.example.org/phpmyfaq/restservice/search/en/phpMyFAQ (rewrite rules enabled)</li>
+    </ul>
+    <p>You have to variables, <em>lang</em> for the language and <em>q</em> for the search term. You'll 
+    get an JSON object as result with the follwing structure:</p>
+    <pre>
+    
+    </pre>
+    <p><a href="#top">back to top</a></p>
+
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="9"></a>9. One more thing</strong></p>
     <p>Thank you for using phpMyFAQ! :-)</p>
     <p>
     Author: Thorsten Rinne<br />
