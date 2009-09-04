@@ -88,8 +88,6 @@ class PMF_Search
     /**
      * The main search function for the full text search
      *
-     * TODO: add filter for (X)HTML tag names and attributes!
-     *
      * @param   string  $searchterm     Text/Number (solution id)
      * @param   boolean $allLanguages   true to search over all languages
      * @param   boolean $hasMore        true to disable the results paging
@@ -119,8 +117,8 @@ class PMF_Search
                 SQLPREFIX.'faqdata.lang AS lang',
                 SQLPREFIX.'faqdata.solution_id AS solution_id',
                 SQLPREFIX.'faqcategoryrelations.category_id AS category_id',
-                SQLPREFIX.'faqdata.thema AS thema',
-                SQLPREFIX.'faqdata.content AS content'),
+                SQLPREFIX.'faqdata.thema AS question',
+                SQLPREFIX.'faqdata.content AS answer'),
                 SQLPREFIX.'faqcategoryrelations',
                 array(SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id',
                       SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang'),
@@ -133,14 +131,14 @@ class PMF_Search
                 SQLPREFIX."faqdata.id AS id",
                 SQLPREFIX."faqdata.lang AS lang",
                 SQLPREFIX."faqcategoryrelations.category_id AS category_id",
-                SQLPREFIX."faqdata.thema AS thema",
-                SQLPREFIX."faqdata.content AS content"),
+                SQLPREFIX.'faqdata.thema AS question',
+                SQLPREFIX.'faqdata.content AS answer'),
                 SQLPREFIX."faqcategoryrelations",
                 array(SQLPREFIX."faqdata.id = ".SQLPREFIX."faqcategoryrelations.record_id",
                       SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqcategoryrelations.record_lang"),
                 array(SQLPREFIX."faqdata.thema",
-                SQLPREFIX."faqdata.content",
-                SQLPREFIX."faqdata.keywords"),
+                      SQLPREFIX."faqdata.content",
+                      SQLPREFIX."faqdata.keywords"),
                 $searchterm,
                 $condition);
         }
