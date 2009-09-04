@@ -145,5 +145,5 @@ RewriteCond %{REQUEST_URI}          instantresponse\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=instantresponse [L,QSA]
 
 # rest/json API
-# * http://[...]/restservice/search/<LANGUAGE CODE>/<SEARCH>
-RewriteRule restservice/search/([a-z\-]+)/([a-z\-]+)$     restservice.php?action=search&lang=$1&q=$2 [L,QSA]
+# * http://[...]/api/search/<LANGUAGE CODE>/<SEARCH>
+RewriteRule api/search/([a-z\-]+)/([a-z\-]+)$     api.php?action=search&lang=$1&q=$2 [L,QSA]
