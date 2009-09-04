@@ -1,1 +1,1 @@
-PMF_URL = 'http://faq.phpmyfaq.de/restservice/search/en/'
+PMF_URL = 'http://faq.phpmyfaq.de/api/search/en/'
