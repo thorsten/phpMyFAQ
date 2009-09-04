@@ -66,9 +66,12 @@ switch ($action) {
         $search       = new PMF_Search();
         $searchString = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
         $result       = $search->search($searchString, false, true, false);
+        $url          = $faqconfig->get('main.referenceURL') . '/index.php?action=artikel&cat=%d&id=%d&artlang=%s';
         
         foreach ($result as &$data) {
-        	$data->answer = strip_tags($data->answer);
+        	$data->answer = html_entity_decode(strip_tags($data->answer), ENT_COMPAT, 'utf-8');
+        	$data->answer = PMF_Utils::makeShorterText($data->answer, 12);
+        	$data->link   = sprintf($url, $data->category_id, $data->id, $data->lang);
         }
         
         print json_encode($result);
