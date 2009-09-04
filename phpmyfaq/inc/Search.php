@@ -53,6 +53,13 @@ class PMF_Search
      * @var integer
      */
     private $categoryId = null;
+    
+    /**
+     * Search table
+     * 
+     * @var string
+     */
+    private $_table = null;
 
     /**
      * Constructor
@@ -62,6 +69,7 @@ class PMF_Search
     {
         $this->db       = PMF_Db::getInstance();
         $this->language = PMF_Language::$language;
+        $this->_table   = SQLPREFIX . 'faqsearches';
     }
     
     /**
@@ -96,49 +104,51 @@ class PMF_Search
      */
     public function search($searchterm, $allLanguages = true, $hasMore = false, $instantResponse = false)
     {
-        $condition = array(SQLPREFIX . 'faqdata.active' => "'yes'");
+        $fdTable   = SQLPREFIX . 'faqdata';
+        $fcrTable  = SQLPREFIX . 'faqcategoryrelations';
+        $condition = array($fdTable . '.active' => "'yes'");
 
         // Search in all or one category?
         if (!is_null($this->categoryId)) {
-            $selectedCategory = array(SQLPREFIX . 'faqcategoryrelations.category_id' => $searchcategory);
+            $selectedCategory = array($fcrTable . '.category_id' => $searchcategory);
             $condition        = array_merge($selectedCategory, $condition);
         }
 
         if ((!$allLanguages) && (!is_numeric($searchterm))) {
-            $selectedLanguage = array(SQLPREFIX . 'faqdata.lang' => "'" . $this->language . "'");
+            $selectedLanguage = array($fdTable . '.lang' => "'" . $this->language . "'");
             $condition        = array_merge($selectedLanguage, $condition);
         }
 
         if (is_numeric($searchterm)) {
             // search for the solution_id
-            $result = $this->db->search(SQLPREFIX.'faqdata',
+            $result = $this->db->search($fdTable,
                 array(
-                SQLPREFIX.'faqdata.id AS id',
-                SQLPREFIX.'faqdata.lang AS lang',
-                SQLPREFIX.'faqdata.solution_id AS solution_id',
-                SQLPREFIX.'faqcategoryrelations.category_id AS category_id',
-                SQLPREFIX.'faqdata.thema AS question',
-                SQLPREFIX.'faqdata.content AS answer'),
-                SQLPREFIX.'faqcategoryrelations',
-                array(SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id',
-                      SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang'),
-                array(SQLPREFIX.'faqdata.solution_id'),
+                $fdTable . '.id AS id',
+                $fdTable . '.lang AS lang',
+                $fdTable . '.solution_id AS solution_id',
+                $fcrTable . '.category_id AS category_id',
+                $fdTable . '.thema AS question',
+                $fdTable . '.content AS answer'),
+                $fcrTable,
+                array($fdTable . '.id = ' . $fcrTable . '.record_id',
+                      $fdTable . '.lang = ' . $fcrTable . '.record_lang'),
+                array($fdTable . '.solution_id'),
                 $searchterm,
                 $condition);
         } else {
-            $result = $this->db->search(SQLPREFIX."faqdata",
+            $result = $this->db->search($fdTable,
                 array(
-                SQLPREFIX."faqdata.id AS id",
-                SQLPREFIX."faqdata.lang AS lang",
-                SQLPREFIX."faqcategoryrelations.category_id AS category_id",
-                SQLPREFIX.'faqdata.thema AS question',
-                SQLPREFIX.'faqdata.content AS answer'),
-                SQLPREFIX."faqcategoryrelations",
-                array(SQLPREFIX."faqdata.id = ".SQLPREFIX."faqcategoryrelations.record_id",
-                      SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqcategoryrelations.record_lang"),
-                array(SQLPREFIX."faqdata.thema",
-                      SQLPREFIX."faqdata.content",
-                      SQLPREFIX."faqdata.keywords"),
+                $fdTable . '.id AS id',
+                $fdTable . '.lang AS lang',
+                $fcrTable . '.category_id AS category_id',
+                $fdTable . '.thema AS question',
+                $fdTable . '.content AS answer'),
+                $fcrTable,
+                array($fdTable . '.id = ' . $fcrTable . '.record_id', 
+                      $fdTable . '.lang = ' . $fcrTable . '.record_lang'),
+                array($fdTable . '.thema',
+                      $fdTable . '.content',
+                      $fdTable . '.keywords'),
                 $searchterm,
                 $condition);
         }
@@ -170,8 +180,8 @@ class PMF_Search
             (id, lang, searchterm, searchdate)
                 VALUES
             (%d, '%s', '%s', '%s')",
-            SQLPREFIX . 'faqsearches',
-            $this->db->nextID(SQLPREFIX . 'faqsearches', 'id'),
+            $this->_table,
+            $this->db->nextID($this->_table, 'id'),
             $this->language,
             $this->db->escape_string($searchterm),
             $date->format('Y-m-d H:i:s'));
@@ -201,7 +211,9 @@ class PMF_Search
             ORDER BY
                 number
             DESC",
-            $byLang, SQLPREFIX . 'faqsearches', $byLang);
+            $byLang, 
+            $this->_table, 
+            $byLang);
         
         $result = $this->db->query($query);
         
@@ -225,7 +237,12 @@ class PMF_Search
      */
     public function getSearchesCount()
     {
-    	$sql = 'SELECT COUNT(1) AS count FROM ' . SQLPREFIX . 'faqsearches';
+    	$sql = sprintf("
+    	   SELECT 
+    	       COUNT(1) AS count 
+    	   FROM 
+    	       %s",
+    	   $this->_table);
     	
     	$result = $this->db->query($sql);
 
