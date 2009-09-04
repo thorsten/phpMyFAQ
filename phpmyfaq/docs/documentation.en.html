@@ -167,7 +167,7 @@
     <ul type="square">
         <li><strong><a href="http://www.php.net">PHP</a></strong>
         <ul type="circle">
-            <li>from version 5.2.0 (recommended: latest PHP 5.2)</li>
+            <li>from version 5.2.0 (recommended: latest PHP 5.x)</li>
             <li>register_globals = off (recommended)</li>
             <li>safe_mode = off (recommended)</li>
             <li>GD support</li>
@@ -293,9 +293,9 @@
     <p>Use the username <strong>admin</strong> and your selected password for your
     first login into the admin section.</p>
     <p>Some variables that doesn't change regularly, they can be edited in the file
-    <em>inc/constants.php</em>. You can change the</p>
+    <em>config/constants.php</em>. You can change the</p>
     <ul>
-        <li>the time zone of your server (default: 0:00 hours)</li>
+        <li>the time zone of your server (default: "Europe/Berlin")</li>
         <li>the timeout in the admin section (default: 30 minutes)</li>
         <li>the timeout warning pop-up in the admin section (default: 5 minutes)</li>
         <li>the solution id start value (default: 1000)</li>
