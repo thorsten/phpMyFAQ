@@ -9,4 +9,16 @@
 
 .listQuestion, .listAnswer {
     font-size: 10px;
+    text-shadow: black 0 0 5px;
+}
+
+.listQuestion {
+    font-size: 14px;
+    font-weight:bold;
+}
+
+.listAnswer a{
+    text-decoration:none;
+    color:gray;
+    line-height:12px;
 }
