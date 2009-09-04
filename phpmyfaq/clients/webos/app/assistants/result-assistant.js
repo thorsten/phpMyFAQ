@@ -3,40 +3,41 @@ function ResultAssistant(argFromPusher) {
        additional parameters (after the scene name) that were passed to pushScene. The reference
        to the scene controller (this.controller) has not be established yet, so any initialization
        that needs the scene controller should be done in the setup function below. */
-    this.currentResult = _Result;
+    this.currentResult = argFromPusher;
 }
 
 ResultAssistant.prototype.setup = function(){
     /* set resultset area */
-    this.controller.setupWidget("listId",
-             this.attributes = {
-                 itemTemplate: 'result/listitem',
-                 listTemplate: 'result/listcontainer',
-                 addItemLabel: $L('Add ...'),
-                 swipeToDelete: true,
-                 reorderable: true,
-                 emptyTemplate:'result/emptylist'
-             },
-             this.model = {
-                 listTitle: $L('List Title'),
-                 items : this.currentResult
-
-     });
+    result = _APP_Result;
     /* set app headline */
-    this.controller.get( 'resutl_hdr' ).innerHTML = _APP_Name;
-    this.controller.setupWidget("back_button",
-            this.buttonAtt1 = {
+    this.controller.get('resultHdr').innerHTML = _APP_Result_Name;
+    this.attributes = {
+            itemTemplate: 'result/listitem',
+            listTemplate: 'result/listcontainer',
+            swipeToDelete: true,
+            renderLimit: 40,
+            reorderable: false,
+            autoconfirmDelete: true,
+            emptyTemplate:'result/emptylist'
+    };
+    this.model = {
+            listTitle: "List Label",
+            items: result
+    };
+    this.controller.setupWidget("pushList", this.attributes, this.model);
+   
+    this.buttonAtt1 = {
             //type : 'Activity'
-            },
-            this.buttonModel1 = {
-                buttonLabel : 'Login',
-                buttonClass : '',
-                disable : false
-            }
-    );
+    };
+    this.buttonModel1 = {
+            buttonLabel : 'Back',
+            buttonClass : '',
+            disable : false
+    };
+    this.controller.setupWidget("backButton", this.buttonAtt1, this.buttonModel1);
     /* add listener button*/
     this.handleButtonPressBinder = this.handleButtonPress.bind(this);
-    Mojo.Event.listen(this.controller.get("back_button"),
+    Mojo.Event.listen(this.controller.get("backButton"),
                       Mojo.Event.tap, 
                       this.handleButtonPressBinder
     )
@@ -61,5 +62,5 @@ ResultAssistant.prototype.deactivate = function(event) {
 ResultAssistant.prototype.cleanup = function(event) {
     /* this function should do any cleanup needed before the scene is destroyed as 
        a result of being popped off the scene stack */
-   Mojo.Event.stopListening(this.controller.get('back_button'),Mojo.Event.tap, this.handleButtonPressBinder)
+   Mojo.Event.stopListening(this.controller.get('backButton'),Mojo.Event.tap, this.handleButtonPressBinder)
 }

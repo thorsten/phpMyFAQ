@@ -2,5 +2,5 @@ function StageAssistant() {
 }
 
 StageAssistant.prototype.setup = function() {
-    this.controller.pushScene('search')
+	this.controller.pushScene('result')
 }

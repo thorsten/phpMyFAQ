@@ -10,9 +10,9 @@
         "source": "app\/assistants\/result-assistant.js"
     },
     {
-        "source": "javascript\/result_info.js"
+        "source": "javascript\/settings.js"
     },
     {
-        "source": "javascript\/settings.js"
+        "source": "javascript\/result_info.js"
     }
 ]
