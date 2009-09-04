@@ -14,10 +14,11 @@ Changes since 2.5.x:
 - added TCPDF as replacement for FPDF library (Thorsten)
 - added support for TinyMCE translations (Aurimas Fišeras)
 - added support for multi-language news (Thorsten)
-- added user adjustable template sets and styles (Anaotliy)
+- added user adjustable template sets and styles (Anatoliy)
 - added support plurals in translations (Aurimas Fišeras)
 - added share on Facebook link (Thorsten)
 - added a rest/json API (Thorsten)
+- minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
@@ -28,10 +29,11 @@ Version 2.6.0-alpha - 2009-09-
 - added TCPDF as replacement for FPDF library (Thorsten)
 - added support for TinyMCE translations (Aurimas Fišeras)
 - added support for multi-language news (Thorsten)
-- added user adjustable template sets and styles (Anaotliy)
+- added user adjustable template sets and styles (Anatoliy)
 - added support plurals in translations (Aurimas Fišeras)
 - added share on Facebook link (Thorsten)
 - added a rest/json API (Thorsten)
+- minor bugfixes (Thorsten)
 
 Version 2.5.1 - 2009-08-
 - minor bugfixes (Thorsten)
