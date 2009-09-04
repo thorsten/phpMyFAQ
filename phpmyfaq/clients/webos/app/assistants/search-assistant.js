@@ -42,11 +42,13 @@ SearchAssistant.prototype.handleButtonPress = function(event){
     var request = new Ajax.Request("http://faq.phpmyfaq.de/restservice.php?action=search&lang=en&q=phpmyfaq", {
         method: "get",
         evalJSON: "true",
-        onSuccess: "",
+        onSuccess: function(transport) {
+            responseText = transport.responseText;
+        },
         onFailure: ""
     });
 
-    this.controller.stageController.pushScene('result', request); 
+    this.controller.stageController.pushScene('result', responseText); 
 }
 
 SearchAssistant.prototype.activate = function(event){
