@@ -59,6 +59,15 @@ $oGlossary = new PMF_Glossary();
 $content   = $oGlossary->insertItemsIntoContent($content);
 $header    = $oGlossary->insertItemsIntoContent($header);
 
+// Add information link if existing
+if (strlen($news['link']) > 0) {
+    $content .= sprintf('</p><p>%s<a href="%s" target="%s">%s</a>',
+        $PMF_LANG['msgInfo'],
+        $news['link'],
+        $news['target'],
+        $news['linkTitle']);
+}
+
 // Show link to edit the news?
 $editThisEntry = '';
 if (isset($permission['editnews'])) {

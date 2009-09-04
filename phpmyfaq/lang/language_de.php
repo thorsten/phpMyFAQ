@@ -253,7 +253,7 @@ $PMF_LANG["ad_entry_back"] = "Zurück";
 // Newsverwaltung
 $PMF_LANG["ad_news_header"] = "Überschrift:";
 $PMF_LANG["ad_news_text"] = "Text";
-$PMF_LANG["ad_news_link_url"] = "Link: (<strong>ohne http://</strong>)!";
+$PMF_LANG["ad_news_link_url"] = "Link:";
 $PMF_LANG["ad_news_link_title"] = "Titel des Links:";
 $PMF_LANG["ad_news_link_target"] = "Ziel des Links";
 $PMF_LANG["ad_news_link_window"] = "Neues Fenster";

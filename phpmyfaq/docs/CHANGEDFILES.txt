@@ -23,11 +23,14 @@ CHANGED FILES FROM 2.5.1 -> 2.5.2
 ./install/installer.php
 ./install/update.php
 ./lang/language_cs.php
+./lang/language_de.php
+./lang/language_en.php
 ./lang/language_pl.php
 ./lang/language_tw.php
 ./template/register.tpl
 ./template/sitemap.tpl
 ./main.php
+./news.php
 ./sendmail.php
 ./save.php
 ./savequestion.php
