@@ -8,7 +8,7 @@ function ResultAssistant(argFromPusher) {
 
 ResultAssistant.prototype.setup = function(){
     /* set resultset area */
-    result = _APP_Result;
+    result = this.currentResult;
     /* set app headline */
     this.controller.get('resultHdr').innerHTML = _APP_Result_Name;
     this.attributes = {

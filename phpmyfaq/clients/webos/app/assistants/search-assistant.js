@@ -46,10 +46,7 @@ SearchAssistant.prototype.handleButtonPress = function(event){
         onFailure: ""
     });
 
-    
-    
-    	
-	this.controller.stageController.pushScene('result', request); 
+    this.controller.stageController.pushScene('result', request); 
 }
 
 SearchAssistant.prototype.activate = function(event){
