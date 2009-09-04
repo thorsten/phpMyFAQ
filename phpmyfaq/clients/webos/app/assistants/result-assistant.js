@@ -21,7 +21,7 @@ ResultAssistant.prototype.setup = function(){
             emptyTemplate:'result/emptylist'
     };
     this.model = {
-            listTitle: "List Label",
+            listTitle: "Search Result",
             items: result
     };
     this.controller.setupWidget("pushList", this.attributes, this.model);
@@ -44,8 +44,7 @@ ResultAssistant.prototype.setup = function(){
 }
 ResultAssistant.prototype.handleButtonPress = function(event){
     //this.controller.get('string').update(this.text2);
-    //push the second scene on the scene stack
-    this.controller.stageController.pushScene(event.item.scene);
+    this.controller.stageController.pushScene('search');
 }
 
 ResultAssistant.prototype.activate = function(event){
