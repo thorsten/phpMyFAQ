@@ -39,7 +39,7 @@ SearchAssistant.prototype.handleButtonPress = function(event){
 	/*
 	 * Get FAQ-Results
 	 */
-    var request = new Ajax.Request("http://faq.phpmyfaq.de/restservice.php?action=search&lang=en&q=internet", {
+    var request = new Ajax.Request("http://faq.phpmyfaq.de/restservice.php?action=search&lang=en&q=" + this.searchModel.original, {
         method: "get",
         evalJSON: "true",
         onSuccess: function(transport) {
