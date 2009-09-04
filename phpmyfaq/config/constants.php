@@ -6,8 +6,8 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since     2003-12-10
- * @copyright 2003-2009 phpMyFAQ Team
  * @version   SVN: $Id$
+ * @copyright 2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License Version
  * 1.1 (the "License"); you may not use this file except in compliance with
@@ -191,32 +191,32 @@ $supported_databases = array(
 /**
  * Allowed 'action' variables for GET. DO NOT CHANGE!
  *
- * @var  array
+ * @var array
  */
 $allowedVariables = array(
-    'add'               => 1,
-    'artikel'           => 1,
-	'attachment'        => 1,
-    'ask'               => 1,
-    'contact'           => 1,
-    'help'              => 1,
-    'instantresponse'   => 1,
-    'mailsend2friend'   => 1,
-    'news'              => 1,
-    'open'              => 1,
-    'register'          => 1,
-    'save'              => 1,
-    'savecomment'       => 1,
-    'savequestion'      => 1,
-    'savevoting'        => 1,
-    'search'            => 1,
-    'send2friend'       => 1,
-    'sendmail'          => 1,
-    'show'              => 1,
-    'sitemap'           => 1,
-    'thankyou'          => 1,
-    'translate'         => 1,
-    'writecomment'      => 1
+    'add'             => 1,
+    'artikel'         => 1,
+    'ask'             => 1,
+    'attachment'      => 1,
+    'contact'         => 1,
+    'help'            => 1,
+    'instantresponse' => 1,
+    'mailsend2friend' => 1,
+    'news'            => 1,
+    'open'            => 1,
+    'register'        => 1,
+    'save'            => 1,
+    'savecomment'     => 1,
+    'savequestion'    => 1,
+    'savevoting'      => 1,
+    'search'          => 1,
+    'send2friend'     => 1,
+    'sendmail'        => 1,
+    'show'            => 1,
+    'sitemap'         => 1,
+    'thankyou'        => 1,
+    'translate'       => 1,
+    'writecomment'    => 1
 );
 
 /**
