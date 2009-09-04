@@ -39,16 +39,16 @@ SearchAssistant.prototype.handleButtonPress = function(event){
 	/*
 	 * Get FAQ-Results
 	 */
-    var request = new Ajax.Request("http://faq.phpmyfaq.de/restservice.php?action=search&lang=en&q=phpmyfaq", {
+    var request = new Ajax.Request("http://faq.phpmyfaq.de/restservice.php?action=search&lang=en&q=internet", {
         method: "get",
         evalJSON: "true",
         onSuccess: function(transport) {
-            responseText = transport.responseText;
+            responseJSON = transport.responseJSON;
         },
         onFailure: ""
     });
 
-    this.controller.stageController.pushScene('result', responseText); 
+    this.controller.stageController.pushScene('result', responseJSON); 
 }
 
 SearchAssistant.prototype.activate = function(event){
