@@ -6,7 +6,7 @@
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2009-08-21
- * @version    SVN: $Id: Interface.php 4459 2009-06-10 15:57:47Z thorsten $
+ * @version    SVN: $Id$
  * @copyright  2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -27,36 +27,36 @@
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2009-08-21
- * @version    SVN: $Id: Interface.php 4459 2009-06-10 15:57:47Z thorsten $
+ * @version    SVN: $Id$
  * @copyright  2009 phpMyFAQ Team
  */
 interface PMF_Attachment_Interface
 {	
-	/**
-	 * Check weither the filestorage is ok
-	 * 
-	 * @return boolean
-	 */
-	function isStorageOk();
-	
-	/**
-	 * Save current attachment to the appropriate storage
-	 * 
-	 * @return boolean
-	 */
-	function save();
-	
-	/**
-	 * Retrieve file contents into a variable
-	 * 
-	 * @return string
-	 */
-	function get();
-	
-	/**
-	 * Output current file to stdout
-	 * 
-	 * @return null
-	 */
-	function rawOut();
+    /**
+     * Check weither the filestorage is ok
+     * 
+     * @return boolean
+     */
+    function isStorageOk();
+    
+    /**
+     * Save current attachment to the appropriate storage
+     * 
+     * @return boolean
+     */
+    function save();
+    
+    /**
+     * Retrieve file contents into a variable
+     * 
+     * @return string
+     */
+    function get();
+    
+    /**
+     * Output current file to stdout
+     * 
+     * @return null
+     */
+    function rawOut();
 }
