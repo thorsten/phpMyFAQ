@@ -6,7 +6,7 @@
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2009-08-21
- * @version    SVN: $Id: File.php 4459 2009-06-10 15:57:47Z thorsten $
+ * @version    SVN: $Id$
  * @copyright  2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -27,64 +27,62 @@
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2009-08-21
- * @version    SVN: $Id: File.php 4459 2009-06-10 15:57:47Z thorsten $
+ * @version    SVN: $Id$
  * @copyright  2009 phpMyFAQ Team
  */
 class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachment_Interface
 {		
-	/**
-	 * Construtor
-	 * 
-	 * @param int $id
-	 * 
-	 * @return PMF_Attachment
-	 */
-	private function __construct($id = null)
-	{
-		if(null !== $id) {
-			$this->id = $id;
-		}
-		
-//		parent::__construct();
-	}
-	
-	/**
-	 * Check weither the filestorage is ok
-	 * 
-	 * @return boolean
-	 */
-	public function isStorageOk()
-	{
-		
-	}
-	
-	/**
-	 * Save current attachment to the appropriate storage
-	 * 
-	 * @return boolean
-	 */
-	public function save()
-	{
-		
-	}
-	
-	/**
-	 * Retrieve file contents into a variable
-	 * 
-	 * @return string
-	 */
-	public function get()
-	{
-		
-	}
-	
-	/**
-	 * Output current file to stdout
-	 * 
-	 * @return null
-	 */
-	public function rawOut()
-	{
-		
-	}
+    /**
+     * Construtor
+     * 
+     * @param int $id
+     * 
+     * @return PMF_Attachment
+     */
+    private function __construct($id = null)
+    {
+        if (null !== $id) {
+            $this->id = $id;
+        }
+    }
+    
+    /**
+     * Check weither the filestorage is ok
+     * 
+     * @return boolean
+     */
+    public function isStorageOk()
+    {
+        
+    }
+    
+    /**
+     * Save current attachment to the appropriate storage
+     * 
+     * @return boolean
+     */
+    public function save()
+    {
+        
+    }
+    
+    /**
+     * Retrieve file contents into a variable
+     * 
+     * @return string
+     */
+    public function get()
+    {
+        
+    }
+    
+    /**
+     * Output current file to stdout
+     * 
+     * @return null
+     */
+    public function rawOut()
+    {
+        
+    }
 }
