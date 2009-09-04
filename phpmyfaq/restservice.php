@@ -67,6 +67,10 @@ switch ($action) {
         $searchString = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
         $result       = $search->search($searchString, false, true, false);
         
+        foreach ($result as &$data) {
+        	$data->answer = strip_tags($data->answer);
+        }
+        
         print json_encode($result);
         break;
 }
