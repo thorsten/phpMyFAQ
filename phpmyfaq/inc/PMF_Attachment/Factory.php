@@ -6,7 +6,7 @@
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2009-08-21
- * @version    SVN: $Id: Factory.php 4459 2009-06-10 15:57:47Z thorsten $
+ * @version    SVN: $Id$
  * @copyright  2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -33,89 +33,90 @@ require_once 'Crypt' . DIRECTORY_SEPARATOR .'AES.php';
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2009-08-21
- * @version    SVN: $Id: Factory.php 4459 2009-06-10 15:57:47Z thorsten $
+ * @version    SVN: $Id$
  * @copyright  2009 phpMyFAQ Team
  */
 class PMF_Attachment_Factory
 {
-	/**
-	 * Default encryption key
-	 * 
-	 * @var string
-	 */
-	private static $defaultKey     = null;
-	
-	/**
-	 * Storage type
-	 * 
-	 * @var integer
-	 */
-	private static $storageType       = null;
-	
-	/**
-	 * Weither file encryption is enabled
-	 * 
-	 * @var boolean
-	 */
-	private static $encryptionEnabled = null;
-	
-	/**
-	 * Create an attachment exemplar
-	 * 
-	 * @param int    $id
-	 * @param string $key
-	 * @return unknown_type
-	 */
-	public static function create($id = null, $key = null)
-	{	
-		$retval = null;
-		
-		switch(self::$storageType) {
-			case PMF_Attachment::STORAGE_TYPE_FILESYSTEM:
-					$retval = new PMF_Attachment_File($id);
-					$retval->setKey($key);
-				break;
-		}
-		
-		return $retval;
-	}
-	
-	/**
-	 * Fetch all record attachments
-	 * 
-	 * @param int $id
-	 * 
-	 * @return array
-	 */
-	public static function fetchByRecordId($recorId)
-	{
-		$retval = array();
-		
-		return $retval;
-	}
-	
-	/**
-	 * Initalizing factory with global attachment settings
-	 * 
-	 * @param int     $storageType
-	 * @param string  $defaultKey
-	 * @param boolean $encryptionEnabled
-	 * 
-	 * @return null
-	 */
-	public static function init($storageType, $defaultKey, $encryptionEnabled)
-	{
-		if(null === self::$storageType) {
-			self::$storageType = $storageType;	
-		}
-		
-		if(null === self::$defaultKey) {
-			self::$defaultKey = $defaultKey;	
-		}
-		
-		if(null === self::$encryptionEnabled) {
-			self::$encryptionEnabled = $encryptionEnabled;
-		}
-	}
+    /**
+     * Default encryption key
+     * 
+     * @var string
+     */
+    private static $defaultKey = null;
+    
+    /**
+     * Storage type
+     * 
+     * @var integer
+     */
+    private static $storageType = null;
+    
+    /**
+     * Weither file encryption is enabled
+     * 
+     * @var boolean
+     */
+    private static $encryptionEnabled = null;
+    
+    /**
+     * Create an attachment exemplar
+     * 
+     * @param int    $id  ID
+     * @param string $key Key
+     * 
+     * @return PMF_Attachment_File
+     */
+    public static function create($id = null, $key = null)
+    {    
+        $retval = null;
+        
+        switch (self::$storageType) {
+            case PMF_Attachment::STORAGE_TYPE_FILESYSTEM:
+                    $retval = new PMF_Attachment_File($id);
+                    $retval->setKey($key);
+                break;
+        }
+        
+        return $retval;
+    }
+    
+    /**
+     * Fetch all record attachments
+     * 
+     * @param int $id ID
+     * 
+     * @return array
+     */
+    public static function fetchByRecordId($recorId)
+    {
+        $retval = array();
+        
+        return $retval;
+    }
+    
+    /**
+     * Initalizing factory with global attachment settings
+     * 
+     * @param int     $storageType       Storage type   
+     * @param string  $defaultKey        Default key
+     * @param boolean $encryptionEnabled Enabled encryption?
+     * 
+     * @return null
+     */
+    public static function init($storageType, $defaultKey, $encryptionEnabled)
+    {
+        if (null === self::$storageType) {
+            self::$storageType = $storageType;    
+        }
+        
+        if (null === self::$defaultKey) {
+            self::$defaultKey = $defaultKey;    
+        }
+        
+        if (null === self::$encryptionEnabled) {
+            self::$encryptionEnabled = $encryptionEnabled;
+        }
+    }
 
 }
