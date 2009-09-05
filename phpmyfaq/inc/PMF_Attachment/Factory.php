@@ -21,7 +21,7 @@
  */
 
 set_include_path(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'libs' .
-                         DIRECTORY_SEPARATOR . 'phpseclib' . PATH_SEPARATOR . 
+                         DIRECTORY_SEPARATOR . 'phpseclib' . PATH_SEPARATOR .
                          get_include_path());
 
 require_once 'Crypt' . DIRECTORY_SEPARATOR .'AES.php';
@@ -70,13 +70,17 @@ class PMF_Attachment_Factory
     public static function create($id = null, $key = null)
     {    
         $retval = null;
-        
+
         switch (self::$storageType) {
             case PMF_Attachment::STORAGE_TYPE_FILESYSTEM:
-                    $retval = new PMF_Attachment_File($id);
-                    $retval->setKey($key);
+                $retval = new PMF_Attachment_File($id);
+                break;
+            case PMF_Attachment::STORAGE_TYPE_DB:
+                $retval = new PMF_Attachment_DB($id);
                 break;
         }
+        
+        $retval->setKey($key);
         
         return $retval;
     }

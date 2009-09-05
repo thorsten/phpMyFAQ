@@ -20,7 +20,7 @@
  * under the License.
  */
 /**
- * PMF_Atachment_Interface
+ * PMF_Atachment_Abstract
  * 
  * @package    phpMyFAQ
  * @license    MPL
@@ -29,7 +29,7 @@
  * @version    SVN: $Id: Abstract.php 4459 2009-06-10 15:57:47Z thorsten $
  * @copyright  2009 phpMyFAQ Team
  */
-interface PMF_Attachment_Interface
+abstract class PMF_Attachment_Abstract
 {
     /**
      * Attachment id
@@ -96,16 +96,20 @@ interface PMF_Attachment_Interface
     /**
      * Constructor
      * 
-     * @return void
+     * @param int $id attachment id
+     * 
+     * @return null
      */
-    public function __construct ()
+    public function __construct ($id = null)
     {
         $this->db = PMF_Db::getInstance();
         
-        if ($this->id) {
+        if (null !== $id) {
+            $this->id = $id;
             $this->getMeta();
         }
     }
+    
     /**
      * Build attachment url
      * 
@@ -138,6 +142,7 @@ interface PMF_Attachment_Interface
     protected function getMeta ()
     {
         $retval = false;
+        
         $sql = sprintf("
             SELECT 
 		      record_id, record_lang, hash, filename, encrypted
@@ -145,7 +150,9 @@ interface PMF_Attachment_Interface
                 %sfaqattachment
             WHERE 
                 id = %d", SQLPREFIX, (int) $this->id);
+        
         $result = $this->db->query($sql);
+        
         if ($result) {
             $assoc = $this->db->fetch_assoc($result);
             if (! empty($assoc)) {
@@ -157,6 +164,7 @@ interface PMF_Attachment_Interface
                 $retval = true;
             }
         }
+        
         return $retval;
     }
 }

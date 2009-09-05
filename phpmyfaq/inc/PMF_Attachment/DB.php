@@ -1,12 +1,12 @@
 <?php
 /**
- * Attachment handler class for files stored in filesystem 
+ * Attachment handler class for files stored in database
  *
  * @package    phpMyFAQ
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2009-08-21
- * @version    SVN: $Id$
+ * @version    SVN: $Id: DB.php 4840 2009-09-04 06:07:51Z thorsten $
  * @copyright  2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -27,11 +27,23 @@
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2009-08-21
- * @version    SVN: $Id$
+ * @version    SVN: $Id: DB.php 4840 2009-09-04 06:07:51Z thorsten $
  * @copyright  2009 phpMyFAQ Team
  */
-class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachment_Interface
+class PMF_Attachment_DB extends PMF_Attachment_Abstract implements PMF_Attachment_Interface
 {
+    
+    /**
+     * Constructor
+     * 
+     * @param int $id attachment id
+     * 
+     * @return null
+     */
+    public function __construct ($id = null)
+    {
+        throw new Exception('The database attachment storage type is not yet implemented');
+    }
     
     /**
      * Check weither the filestorage is ok
