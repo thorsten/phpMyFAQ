@@ -34,13 +34,77 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
 {
     
     /**
+     * Generate hash based on current conditions
+     * 
+     * @return string
+     * 
+     * NOTE The way a file is saved in the filesystem
+     * is based on md5 hash. If the file is unencrypted,
+     * it's md5 hash is used directly, otherwise a
+     * hash based on several tokens gets generated.
+     */
+    protected function getHashForFS()
+    {
+        $hash = '';
+        
+        if($this->encrypted) {
+            $hash = md5($this->id . $this->recordId);
+        } else {
+            $hash = $this->hash;
+        }
+        
+        return $hash;
+    }
+    
+    /**
+     * Build filepath under which the attachment
+     * file is accessible in filesystem
+     * 
+     * @return string
+     */
+    protected function buildFilePath()
+    {        
+        $retval = PMF_ATTACHMENTS_DIR;
+        $fsHash = $this->getHashForFS();
+        $subDirCount = 3;
+        
+        for($i = 0; $i < $subDirCount; $i++) {
+            $retval .= DIRECTORY_SEPARATOR . substr($fsHash, $i*$subDirCount, $subDirCount);
+        }
+        $retval .= DIRECTORY_SEPARATOR . substr($fsHash, $i*$subDirCount);
+        
+        return $retval;
+    }
+
+    /**
+     * Create subdirs to save file to
+     * 
+     * @return boolean success
+     */
+    public function createSubDirs()
+    {
+        $attDir = dirname($this->buildFilePath());
+        
+        return file_exists($attDir) && is_dir($attDir) ||
+               mkdir($attDir, 0700, true);
+    }
+    
+    /**
      * Check weither the filestorage is ok
      * 
      * @return boolean
      */
     public function isStorageOk()
     {
+        clearstatcache();
         
+        $attachmentDir = dirname($this->buildFilePath()); 
+        
+        return false !== PMF_ATTACHMENTS_DIR &&
+               file_exists(PMF_ATTACHMENTS_DIR) &&
+               is_dir(PMF_ATTACHMENTS_DIR) &&
+               file_exists($recordAttachmentsDir) &&
+               is_dir($recordAttachmentsDir);
     }
     
     /**
@@ -50,7 +114,14 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
      */
     public function save()
     {
+        $retval = false;
         
+        $this->saveMeta();
+        if(null !== $this->id && $this->createSubDirs()) {
+            //do save to filesystem
+        }
+        
+        $retval = false;
     }
     
     /**

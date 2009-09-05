@@ -75,9 +75,23 @@ class PMF_Attachment_Factory
             case PMF_Attachment::STORAGE_TYPE_FILESYSTEM:
                 $retval = new PMF_Attachment_File($id);
                 break;
+                
             case PMF_Attachment::STORAGE_TYPE_DB:
                 $retval = new PMF_Attachment_DB($id);
                 break;
+                
+            default:
+                throw new Exception('Unknown attachment storage type');
+                break;
+        }
+        
+        /**
+         * If encryption isn't enabled, just ignoring all keys
+         */
+        if(self::$encryptionEnabled) {
+            $key = null == $key ? $defaultKey : $key;
+        } else {
+            $key = null;
         }
         
         $retval->setKey($key);

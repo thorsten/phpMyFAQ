@@ -92,7 +92,7 @@ abstract class PMF_Attachment_Abstract
      * @var string
      */
     protected $encrypted;
-    
+        
     /**
      * Constructor
      * 
@@ -101,7 +101,7 @@ abstract class PMF_Attachment_Abstract
      * @return null
      */
     public function __construct ($id = null)
-    {
+    {   
         $this->db = PMF_Db::getInstance();
         
         if (null !== $id) {
@@ -119,7 +119,9 @@ abstract class PMF_Attachment_Abstract
      */
     public function buildUrl ($forHTML = true)
     {
+        $amp = true == $forHTML ? '&amp;' : '&';
         
+        return "index.php?action=attachment{$amp}id={$this->id}";
     }
     
     /**
@@ -132,6 +134,7 @@ abstract class PMF_Attachment_Abstract
     public function setKey ($key)
     {
         $this->key = $key;
+        $this->encrypted = null == $key;
     }
     
     /**
@@ -163,6 +166,56 @@ abstract class PMF_Attachment_Abstract
                 $this->encrypted = $assoc['encrypted'];
                 $retval = true;
             }
+        }
+        
+        return $retval;
+    }
+    
+    /**
+     * Save attachment meta data
+     * 
+     * @return integer saved attachment id
+     * 
+     * TODO implement update case
+     */
+    protected function saveMeta()
+    {
+        $retval = null;
+        
+        if(null == $this->id) {
+            $sql = sprintf("INSERT INTO 
+                        %sfaqattachment(record_id, record_lang, hash, filename, encrypted)
+                        VALUES(NULL, %d, '%s', '%s', '%s', %d)",
+                        $this->recordId,
+                        $this->recordLang,
+                        $this->hash,
+                        $this->filename,
+                        $this->encrypted);            
+            $this->db->query($sql);
+            
+            $sql = "SELECT MAX(id) FROM %sfaqattachment";
+            $retval = $this->db->getOne();
+            $this->id = $retval;
+        } else {
+            // do update here
+        }
+        
+        return $retval;
+    }
+    
+    /**
+     * Full path to the attachment file
+     * 
+     * @param $filepath
+     * 
+     * @return boolean
+     */
+    public function importUploadedFile($filepath)
+    {
+        $retval = false;
+        
+        if(file_exists($filepath)) {
+            
         }
         
         return $retval;

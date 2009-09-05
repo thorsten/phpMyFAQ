@@ -31,14 +31,7 @@
  * @copyright  2009 phpMyFAQ Team
  */
 interface PMF_Attachment_Interface
-{	
-    /**
-     * Check weither the filestorage is ok
-     * 
-     * @return boolean
-     */
-    function isStorageOk();
-    
+{	    
     /**
      * Save current attachment to the appropriate storage
      * 
