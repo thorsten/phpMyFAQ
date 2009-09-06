@@ -746,7 +746,7 @@ $PMF_LANG['ad_news_insertfail'] = 'Įvyko klaida įterpiant naujienos įrašą �
 $PMF_LANG['ad_news_updatefail'] = 'Įvyko klaida atnaujinant naujienos įrašą į duomenų bazėje.';
 $PMF_LANG['newsShowCurrent'] = 'Rodyti dabartines naujienas.';
 $PMF_LANG['newsShowArchive'] = 'Rodyti archyvuotas naujienas.';
-$PMF_LANG['newsArchive'] = ' Naujienų archyvas';
+$PMF_LANG['newsArchive'] = ' – naujienų archyvas';
 $PMF_LANG['newsWriteComment'] = 'komentuoti šį įrašą';
 $PMF_LANG['newsCommentDate'] = 'Pridėta: ';
 
@@ -993,7 +993,7 @@ $PMF_LANG['msgTransToolLanguagePluralNotSet'] = "Daugiskaitos formų palaikymas 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras - Plural messages
 $PMF_LANG["plmsgHomeArticlesOnline"][0] = "Yra pateiktas %d DUK";
 $PMF_LANG["plmsgHomeArticlesOnline"][1] = "Yra pateikti %d DUK";
-$PMF_LANG["plmsgHomeArticlesOnline"][2] = "Yra peteikta %d DUK";
+$PMF_LANG["plmsgHomeArticlesOnline"][2] = "Yra pateikta %d DUK";
 $PMF_LANG["plmsgViews"][0] = "%d peržiūra";
 $PMF_LANG["plmsgViews"][1] = "%d peržiūros";
 $PMF_LANG["plmsgViews"][2] = "%d peržiūrų";
@@ -1017,3 +1017,9 @@ $PMF_LANG["plmsgVotes"][2] = "%d balsų";
 $PMF_LANG["plmsgEntries"][0] = "%d DUK";
 $PMF_LANG["plmsgEntries"][1] = "%d DUK";
 $PMF_LANG["plmsgEntries"][2] = "%d DUK";
+
+// added 2.6.0-alpha - 2009-09-06 by Aurimas Fišeras
+$PMF_LANG["rightsLanguage"]['addtranslation'] = "pridėti vertimą";
+$PMF_LANG["rightsLanguage"]['edittranslation'] = "redaguoti vertimą";
+$PMF_LANG["rightsLanguage"]['deltranslation'] = "šalinti vertimą";
+$PMF_LANG["rightsLanguage"]['approverec'] = "patvirtinti įrašus";

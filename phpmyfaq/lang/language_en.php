@@ -1032,3 +1032,9 @@ $PMF_LANG["plmsgVotes"][0] = "%d Vote";
 $PMF_LANG["plmsgVotes"][1] = "%d Votes";
 $PMF_LANG["plmsgEntries"][0] = "%d FAQ";
 $PMF_LANG["plmsgEntries"][1] = "%d FAQs";
+
+// added 2.6.0-alpha - 2009-09-06 by Aurimas Fišeras
+$PMF_LANG["rightsLanguage"]['addtranslation'] = "add translation";
+$PMF_LANG["rightsLanguage"]['edittranslation'] = "edit translation";
+$PMF_LANG["rightsLanguage"]['deltranslation'] = "delete translation";
+$PMF_LANG["rightsLanguage"]['approverec'] = "approve records";

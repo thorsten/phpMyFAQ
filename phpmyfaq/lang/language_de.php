@@ -982,3 +982,28 @@ $PMF_LANG["msgTransToolLanguageNumberOfPlurals"] = "Anzahl der Pluralformen";
 $PMF_LANG['msgTransToolLanguageOnePlural'] = 'Diese Sprache hat nur eine Pluralform';
 $PMF_LANG['msgTransToolLanguagePluralNotSet'] = "Für %s ist die Unterstützung für Pluralformen deaktiviert (nplurals nicht gesetzt).";
 
+// added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras - Plural messages
+$PMF_LANG["plmsgHomeArticlesOnline"][0] = "Es ist %d FAQ-Eintrag online-";
+$PMF_LANG["plmsgHomeArticlesOnline"][1] = "Es sind %d FAQ-Eubträge online";
+$PMF_LANG["plmsgViews"][0] = "%d mal gesehen";
+$PMF_LANG["plmsgViews"][1] = "%d mal gesehen";
+
+// added 2.6.0-alpha - 2009-08-30 by Aurimas Fišeras - Plural messages
+$PMF_LANG['plmsgGuestOnline'][0] = ' :: %d Gast';
+$PMF_LANG['plmsgGuestOnline'][1] = ' :: %d Gäste';
+$PMF_LANG['plmsgRegisteredOnline'][0] = ' und %d Registrierter';
+$PMF_LANG['plmsgRegisteredOnline'][1] = ' und %d Registrierte';
+$PMF_LANG["plmsgSearchAmount"][0] = "%d Suchergebnis";
+$PMF_LANG["plmsgSearchAmount"][1] = "%d Suchergebnisse";
+$PMF_LANG["plmsgPagesTotal"][0] = " %d Seite";
+$PMF_LANG["plmsgPagesTotal"][1] = " %d Seiten";
+$PMF_LANG["plmsgVotes"][0] = "%d Abstimung";
+$PMF_LANG["plmsgVotes"][1] = "%d Abstimmungen";
+$PMF_LANG["plmsgEntries"][0] = "%d FAQ";
+$PMF_LANG["plmsgEntries"][1] = "%d FAQs";
+
+// added 2.6.0-alpha - 2009-09-06 by Aurimas Fišeras
+$PMF_LANG["rightsLanguage"]['addtranslation'] = "Übersetzung hinzufügen";
+$PMF_LANG["rightsLanguage"]['edittranslation'] = "Übersetzung bearbeiten";
+$PMF_LANG["rightsLanguage"]['deltranslation'] = "Übersetzung löschen";
+$PMF_LANG["rightsLanguage"]['approverec'] = "Eintrag freigeben";
