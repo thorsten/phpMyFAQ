@@ -73,7 +73,7 @@ class PMF_Attachment_Filesystem_File_Vanilla extends PMF_Attachment_Filesystem_F
             $this->copyToSimple($target);
         } else {
             $target->setMode(self::MODE_WRITE);
-            while($this->eof()) {
+            while(!$this->eof()) {
                 $target->putChunk($this->getChunk());
             }
             

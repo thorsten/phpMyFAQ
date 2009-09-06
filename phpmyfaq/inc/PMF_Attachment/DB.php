@@ -42,17 +42,18 @@ class PMF_Attachment_DB extends PMF_Attachment_Abstract implements PMF_Attachmen
      */
     public function __construct ($id = null)
     {
+        // TODO implement this
         throw new PMF_Attachment_Exception('The database attachment storage type is not yet implemented');
     }
     
     /**
-     * Check weither the filestorage is ok
+     * Delete attachment
      * 
      * @return boolean
      */
-    public function isStorageOk()
+    function delete()
     {
-        
+        // TODO implement this
     }
     
     /**
@@ -62,7 +63,7 @@ class PMF_Attachment_DB extends PMF_Attachment_Abstract implements PMF_Attachmen
      */
     public function save()
     {
-        
+        // TODO implement this
     }
     
     /**
@@ -72,7 +73,7 @@ class PMF_Attachment_DB extends PMF_Attachment_Abstract implements PMF_Attachmen
      */
     public function get()
     {
-        
+        // TODO implement this
     }
     
     /**
@@ -82,6 +83,6 @@ class PMF_Attachment_DB extends PMF_Attachment_Abstract implements PMF_Attachmen
      */
     public function rawOut()
     {
-        
+        // TODO implement this
     }
 }

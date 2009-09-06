@@ -66,7 +66,7 @@ class PMF_Attachment_Filesystem_File_Encrypted extends PMF_Attachment_Filesystem
         $chunk   = '';
         $chunkDelimLen = strlen(self::chunkDelimiter);
         
-        while(!$chunkReaded) {
+        while(!$readEnd) {
             $chunk .= fread($this->handle, 1);
             $readEnd = self::chunkDelimiter == substr($chunk, -$chunkDelimLen);
         }
@@ -107,7 +107,7 @@ class PMF_Attachment_Filesystem_File_Encrypted extends PMF_Attachment_Filesystem
         }
         
         if($target->isOk()) {
-            while($this->eof()) {
+            while(!$this->eof()) {
                 $target->putChunk($this->getChunk());
             }
             

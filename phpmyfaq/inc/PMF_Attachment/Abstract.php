@@ -92,7 +92,7 @@ abstract class PMF_Attachment_Abstract
      * @var string
      */
     protected $encrypted;
-        
+            
     /**
      * Constructor
      * 
@@ -134,7 +134,7 @@ abstract class PMF_Attachment_Abstract
     public function setKey ($key)
     {
         $this->key = $key;
-        $this->encrypted = null == $key;
+        $this->encrypted = null !== $key;
     }
     
     /**
@@ -207,7 +207,7 @@ abstract class PMF_Attachment_Abstract
             if (!empty($assoc)) {
                 $this->recordId   = $assoc['record_id'];
                 $this->recordLang = $assoc['record_lang'];
-                $this->hash       = $assoc['hash'];
+                $this->hash       = trim($assoc['hash']);
                 $this->filename   = $assoc['filename'];
                 $this->encrypted  = $assoc['encrypted'];
                 $retval           = true;
@@ -227,9 +227,11 @@ abstract class PMF_Attachment_Abstract
     protected function saveMeta()
     {
         $faqattTableName = sprintf('%sfaqattachment', SQLPREFIX);
-        $this->id        = $this->db->nextID($faqattTableName, 'id');
-        
+
         if (null == $this->id) {
+            
+            $this->id = $this->db->nextID($faqattTableName, 'id');
+            
             $sql = sprintf("
                 INSERT INTO 
                     %s
@@ -240,12 +242,11 @@ abstract class PMF_Attachment_Abstract
                     $this->id,
                     $this->recordId,
                     $this->recordLang,
-                    $this->hash,
+                    trim($this->hash),
                     $this->filename,
                     $this->encrypted ? 'TRUE' : 'FALSE');
-                    
-            $this->db->query($sql);
             
+            $result = $this->db->query($sql);
         } else {
             // do update here
         }
@@ -262,4 +263,12 @@ abstract class PMF_Attachment_Abstract
     {
         // TODO implement this
     }
+    
+    /*abstract protected function saveInternal();
+    
+    abstract protected function begin();
+    
+    abstract protected function commit();
+    
+    abstract protected function rollback();*/
 }

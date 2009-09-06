@@ -45,25 +45,30 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
      */
     protected function getHashForFS()
     {
-        $hash = '';
+        $retval = '';
         
         if($this->encrypted) {
             if(null === $this->id || null === $this->recordId ||
                null === $this->hash || null === $this->filename ||
                null === $this->key) {
-                throw new PMF_Attachment_Exception('Each of id, ' .
+                throw new PMF_Attachment_Exception('All of id, ' .
                                      'recordId, hash, filename, ' .
-                                     'key is missing but needed to generate ' . 
+                                     'key is needed to generate ' . 
                                      'fs hash for encrypted files');
             }
             
-            $hash = md5($this->id . $this->recordId . $this->hash .
-                        $this->filename . $this->key);
+//            $hash = new Crypt_Hash();
+//            $hash->setKey($this->key);
+            
+            $src = $this->id . $this->recordId . $this->hash .
+                        $this->filename . $this->key;
+            $retval = md5($src);            
+//            $retval = $hash->hash($src);
         } else {
-            $hash = $this->hash;
+            $retval = $this->hash;
         }
         
-        return $hash;
+        return $retval;
     }
     
     /**
@@ -147,7 +152,18 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
             $targetFile = $this->buildFilePath();
             
             if(null !== $this->id && $this->createSubDirs($targetFile)) {
-                $retval = $this->moveFile($filepath, $targetFile);
+                $source = new PMF_Attachment_Filesystem_File_Vanilla($filepath);
+                if($this->encrypted) {
+                    $target = new PMF_Attachment_Filesystem_File_Encrypted(
+                            $targetFile,
+                            PMF_Attachment_Filesystem_File::MODE_WRITE,
+                            $this->key
+                            );
+                } else {
+                    $target = $targetFile;
+                }
+                
+                $retval = $source->moveTo($target);
             }
         }
         
@@ -162,32 +178,6 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
     public function delete()
     {
         
-    }
-    
-    /**
-     * Move file
-     * 
-     * @param string $source absolute filepath
-     * @param string $target absolute filepath
-     * 
-     * @return boolean
-     * FIXME do we deal only with uploaded files?  
-     */
-    protected function moveFile($source, $target)
-    {
-        $retval = false;
-        
-        if(!$this->encrypted && file_exists($target)) {
-            $retval = true;
-        } else {
-            if(is_uploaded_file($source)) {
-                $retval = move_uploaded_file($source, $target);
-            } else {
-                $retval = rename($source, $target);
-            }
-        }
-        
-        return $retval;
     }
     
     /**
@@ -206,6 +196,18 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
      */
     public function rawOut()
     {
+        if($this->encrypted) {
+            $file = new PMF_Attachment_Filesystem_File_Encrypted(
+                            $this->buildFilePath(),
+                            PMF_Attachment_Filesystem_File::MODE_READ,
+                            $this->key
+                            );
+        } else {
+            $file = new PMF_Attachment_Filesystem_File_Vanilla($this->buildFilePath());
+        }
         
+        while(!$file->eof()) {
+            echo $file->getChunk();   
+        }
     }
 }
