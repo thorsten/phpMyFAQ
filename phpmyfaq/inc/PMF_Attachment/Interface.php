@@ -31,13 +31,15 @@
  * @copyright  2009 phpMyFAQ Team
  */
 interface PMF_Attachment_Interface
-{	    
+{    
     /**
      * Save current attachment to the appropriate storage
      * 
+     * @param string $filepath full path to the attachment file
+     * 
      * @return boolean
      */
-    function save();
+    function save($filepath);
     
     /**
      * Retrieve file contents into a variable

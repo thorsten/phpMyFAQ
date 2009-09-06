@@ -69,7 +69,8 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
         $subDirCount = 3;
         
         for($i = 0; $i < $subDirCount; $i++) {
-            $retval .= DIRECTORY_SEPARATOR . substr($fsHash, $i*$subDirCount, $subDirCount);
+            $retval .= DIRECTORY_SEPARATOR
+                     . substr($fsHash, $i*$subDirCount, $subDirCount);
         }
         $retval .= DIRECTORY_SEPARATOR . substr($fsHash, $i*$subDirCount);
         
@@ -108,20 +109,30 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
     }
     
     /**
-     * Save current attachment to the appropriate storage
+     * Save current attachment to the appropriate storage. The
+     * filepath given will be processed and moved to appropriate
+     * location.
+     * 
+     * @param string $filepath full path to the attachment file
      * 
      * @return boolean
      */
-    public function save()
+    public function save($filepath)
     {
         $retval = false;
         
-        $this->saveMeta();
-        if(null !== $this->id && $this->createSubDirs()) {
-            //do save to filesystem
+        if(file_exists($filepath)) {
+
+            $this->hash = md5_file($filepath);
+            $this->filename = basename($filepath);
+            
+            $this->saveMeta();
+            if(null !== $this->id && $this->createSubDirs()) {
+
+            }
         }
         
-        $retval = false;
+        return $retval;
     }
     
     /**

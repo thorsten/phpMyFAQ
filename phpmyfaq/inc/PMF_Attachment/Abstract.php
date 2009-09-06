@@ -96,7 +96,7 @@ abstract class PMF_Attachment_Abstract
     /**
      * Constructor
      * 
-     * @param int $id attachment id
+     * @param integer $id attachment id
      * 
      * @return null
      */
@@ -127,7 +127,7 @@ abstract class PMF_Attachment_Abstract
     /**
      * Set encryption key
      * 
-     * @param string $key
+     * @param string $key encryption key
      * 
      * @return null
      */
@@ -135,6 +135,50 @@ abstract class PMF_Attachment_Abstract
     {
         $this->key = $key;
         $this->encrypted = null == $key;
+    }
+    
+    /**
+     * Set record id
+     * 
+     * @param integer $id record id
+     * 
+     * @return null
+     */
+    public function setRecordId ($id)
+    {
+        $this->recordId = $id;
+    }
+    
+    /**
+     * Set record language
+     * 
+     * @param lang $lang record language
+     * 
+     * @return null
+     */
+    public function setRecordLang ($lang)
+    {
+        $this->recordLang = $lang;
+    }
+    
+    /**
+     * Get attachment id
+     * 
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+    
+    /**
+     * Get attachment record id
+     * 
+     * @return integer
+     */
+    public function getRecordId()
+    {
+        return $this->recordId;
     }
     
     /**
@@ -177,45 +221,30 @@ abstract class PMF_Attachment_Abstract
      * @return integer saved attachment id
      * 
      * TODO implement update case
+     * FIXME max isn't safe to get id just inserted
      */
     protected function saveMeta()
     {
         $retval = null;
-        
+        $faqattTableName = sprintf('%sfaqattachment', SQLPREFIX);
         if(null == $this->id) {
             $sql = sprintf("INSERT INTO 
-                        %sfaqattachment(record_id, record_lang, hash, filename, encrypted)
-                        VALUES(NULL, %d, '%s', '%s', '%s', %d)",
+                        %s(\"id\", record_id, record_lang, hash, filename, encrypted)
+                        VALUES(%d, %d, '%s', '%s', '%s', %s)",
+                        $faqattTableName,
+                        $this->db->nextID($faqattTableName, 'id'),
                         $this->recordId,
                         $this->recordLang,
                         $this->hash,
                         $this->filename,
-                        $this->encrypted);            
+                        $this->encrypted ? 'TRUE' : 'FALSE');
             $this->db->query($sql);
             
-            $sql = "SELECT MAX(id) FROM %sfaqattachment";
-            $retval = $this->db->getOne();
+            $sql = sprintf('SELECT MAX("id") AS "id" FROM %s', $faqattTableName);
+            $retval = $this->db->fetch_object($this->db->query($sql))->id;
             $this->id = $retval;
         } else {
             // do update here
-        }
-        
-        return $retval;
-    }
-    
-    /**
-     * Full path to the attachment file
-     * 
-     * @param $filepath
-     * 
-     * @return boolean
-     */
-    public function importUploadedFile($filepath)
-    {
-        $retval = false;
-        
-        if(file_exists($filepath)) {
-            
         }
         
         return $retval;
