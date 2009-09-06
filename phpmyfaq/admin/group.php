@@ -638,7 +638,7 @@ getGroupList();
 <?php foreach ($user->perm->getAllRightsData() as $right) { ?>
                 <tr>
                     <td><input id="group_right_<?php print $right['right_id']; ?>" type="checkbox" name="group_rights[]" value="<?php print $right['right_id']; ?>"/></td>
-                    <td><?php print $right['description']; ?></td>
+                    <td><?php print (isset($PMF_LANG['rightsLanguage'][$right['name']]) ? $PMF_LANG['rightsLanguage'][$right['name']] : $right['description']); ?></td>
                 </tr>
 <?php } ?>
                 </table>
