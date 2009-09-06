@@ -7,8 +7,8 @@
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since      2005-11-02
- * @copyright  2005-2009 phpMyFAQ Team
  * @version    SVN: $Id$
+ * @copyright  2005-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -21,7 +21,7 @@
  * under the License.
  */
 
-require_once PMF_INCLUDE_DIR.'/constants.php';
+require_once PMF_CONFIG_DIR . '/constants.php';
 
 define("EXPORT_TYPE_DOCBOOK", "docbook");
 define("EXPORT_TYPE_PDF", "pdf");
@@ -40,18 +40,39 @@ define("EXPORT_TYPE_NONE", "none");
  * - XML
  *
  * This class has only static methods
+ * @package    phpMyFAQ
+ * @subpackage PMF_Export
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since      2005-11-02
+ * @copyright  2005-2009 phpMyFAQ Team
  */
 class PMF_Export
 {
-
+    /**
+     * Returns the timestamp of the export
+     *
+     * @return string
+     */
     function getExportTimeStamp()
     {
         global $PMF_CONST;
-        $offset = (60 * 60) * ($PMF_CONST["timezone"] / 100);
+        
+        $offset    = (60 * 60) * ($PMF_CONST["timezone"] / 100);
         $timestamp = $_SERVER['REQUEST_TIME'] + $offset;
+        
         return date("Y-m-d-H-i-s", $timestamp);
     }
 
+    /**
+     * Returns the DocBook XML export
+     * 
+     * @param integer $nCatid     Number of categories
+     * @param boolean $bDownwards Downwards
+     * @param string  $lang       Language
+     * 
+     * @return string
+     */
     public static function getDocBookExport($nCatid = 0, $bDownwards = true, $lang = "")
     {
         // TODO: remove the need of pre-generating a file to be read
@@ -59,13 +80,20 @@ class PMF_Export
         PMF_Export::_generateDocBookExport2();
         $filename = "xml/docbook/docbook.xml";
         $filename = dirname(dirname(__FILE__))."/".$filename;
-        return(PMF_Export::_getFileContents($filename));
+        return PMF_Export::_getFileContents($filename);
     }
 
+    /**
+     * Returns the PDF export
+     * 
+     * @param integer $nCatid     Number of categories
+     * @param boolean $bDownwards Downwards
+     * @param string  $lang       Language
+     * 
+     * @return string
+     */
     public static function getPDFExport($nCatid = 0, $bDownwards = true, $lang = "")
     {
-        global $db, $LANGCODE;
-
         $tree       = new PMF_Category();
         $arrRubrik  = array();
         $arrThema   = array();
@@ -114,10 +142,17 @@ class PMF_Export
         }
     }
 
+    /**
+     * Returns the XHTML export
+     * 
+     * @param integer $nCatid     Number of categories
+     * @param boolean $bDownwards Downwards
+     * @param string  $lang       Language
+     * 
+     * @return string
+     */
     public static function getXHTMLExport($nCatid = 0, $bDownwards = true, $lang = "")
     {
-        global $db, $LANGCODE;
-
         global $PMF_CONF, $PMF_LANG;
 
         $tree = new PMF_Category();
@@ -171,7 +206,16 @@ class PMF_Export
 
         return $xhtml;
     }
-
+    
+    /**
+     * Returns the XML export
+     * 
+     * @param integer $nCatid     Number of categories
+     * @param boolean $bDownwards Downwards
+     * @param string  $lang       Language
+     * 
+     * @return string
+     */
     public static function getXMLExport($nCatid = 0, $bDownwards = true, $lang = "")
     {
         global $db, $LANGCODE, $PMF_LANG, $PMF_CONF;
@@ -225,6 +269,10 @@ class PMF_Export
         return $my_xml_output;
     }
 
+    /**
+     * Wrapper for the PMF_Export_Docbook class
+     * 
+     */
     private static function _generateDocBookExport2()
     {
         // TODO: check/refine/improve/fix docbook.php and add toString method before recoding the method in order to use faq and news classes.
@@ -293,6 +341,13 @@ class PMF_Export
         $export->write_file();
     }
 
+    /**
+     * Wrapper for file_get_contents()
+     * 
+     * @param string $filename Filename
+     * 
+     * @return void
+     */
     private static function _getFileContents($filename)
     {
         $filedata = "";
@@ -302,15 +357,12 @@ class PMF_Export
         // Read the content of the text file
         $file_handler = fopen($filename, "r");
         if ($file_handler) {
-            while (!feof($file_handler))
-            {
+            while (!feof($file_handler)) {
                 $buffer = fgets($file_handler, 4096);
                 $filedata .= $buffer;
             }
             fclose($file_handler);
-        }
-        else
-        {
+        } else {
             die( "<b>PMF_Export Class</b> error: unable to open ".$filename);
         }
 
