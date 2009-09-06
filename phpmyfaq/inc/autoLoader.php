@@ -37,11 +37,20 @@ function __autoload($class)
     // Try to load the class/interface declaration using its name if splittable by '_'
     // Note: using include instead of require give us the possibility to echo failures
     $classParts = explode('_', $class);
+    $classPartsCount = count($classParts); 
     $includeDir = $rootDir . DIRECTORY_SEPARATOR . 'inc'. DIRECTORY_SEPARATOR;
-    if (2 == count($classParts)) {
-        include $includeDir . $classParts[1] . '.php';
-    } else if (3 == count($classParts)) {
-        include $includeDir . 'PMF_'. $classParts[1] . DIRECTORY_SEPARATOR . $classParts[2] . '.php';
+    if (2 == $classPartsCount) {
+        $path = $includeDir . $classParts[1] . '.php';
+    } else {
+        $path = $includeDir . 'PMF_'. $classParts[1];
+        for($i = 2; $i < $classPartsCount; $i++) {
+            $path .= DIRECTORY_SEPARATOR . $classParts[$i];
+        }
+        $path .= '.php';
+    }
+    
+    if(file_exists($path)) {
+        include $path;
     } else {
         printf("<br /><b>PMF Autoloader</b>: unable to find a suitable file declaring '%s'.", $class);
     }
