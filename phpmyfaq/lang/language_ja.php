@@ -25,6 +25,7 @@ $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'ja';
 $PMF_LANG['language'] = '日本語';
 $PMF_LANG['dir'] = 'ltr';
+$PMF_LANG["nplurals"] = "1";
 $PMF_LANG['msgCategory'] = 'カテゴリ';
 $PMF_LANG['msgShowAllCategories'] = '全カテゴリを表示する';
 $PMF_LANG['msgSearch'] = '検索';
