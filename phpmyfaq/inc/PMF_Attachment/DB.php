@@ -42,7 +42,7 @@ class PMF_Attachment_DB extends PMF_Attachment_Abstract implements PMF_Attachmen
      */
     public function __construct ($id = null)
     {
-        throw new Exception('The database attachment storage type is not yet implemented');
+        throw new PMF_Attachment_Exception('The database attachment storage type is not yet implemented');
     }
     
     /**

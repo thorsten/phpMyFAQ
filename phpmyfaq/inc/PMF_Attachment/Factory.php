@@ -81,7 +81,7 @@ class PMF_Attachment_Factory
                 break;
                 
             default:
-                throw new Exception('Unknown attachment storage type');
+                throw new PMF_Attachment_Exception('Unknown attachment storage type');
                 break;
         }
         

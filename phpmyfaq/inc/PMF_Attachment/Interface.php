@@ -42,6 +42,13 @@ interface PMF_Attachment_Interface
     function save($filepath);
     
     /**
+     * Delete attachment
+     * 
+     * @return boolean
+     */
+    function delete();
+    
+    /**
      * Retrieve file contents into a variable
      * 
      * @return string

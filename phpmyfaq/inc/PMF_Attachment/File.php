@@ -48,7 +48,17 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
         $hash = '';
         
         if($this->encrypted) {
-            $hash = md5($this->id . $this->recordId);
+            if(null === $this->id || null === $this->recordId ||
+               null === $this->hash || null === $this->filename ||
+               null === $this->key) {
+                throw new PMF_Attachment_Exception('Each of id, ' .
+                                     'recordId, hash, filename, ' .
+                                     'key is missing but needed to generate ' . 
+                                     'fs hash for encrypted files');
+            }
+            
+            $hash = md5($this->id . $this->recordId . $this->hash .
+                        $this->filename . $this->key);
         } else {
             $hash = $this->hash;
         }
@@ -58,6 +68,7 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
     
     /**
      * Build filepath under which the attachment
+     * 
      * file is accessible in filesystem
      * 
      * @return string
@@ -67,12 +78,13 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
         $retval = PMF_ATTACHMENTS_DIR;
         $fsHash = $this->getHashForFS();
         $subDirCount = 3;
+        $subDirNameLength = 5;
         
         for($i = 0; $i < $subDirCount; $i++) {
             $retval .= DIRECTORY_SEPARATOR
-                     . substr($fsHash, $i*$subDirCount, $subDirCount);
+                     . substr($fsHash, $i*$subDirNameLength, $subDirNameLength);
         }
-        $retval .= DIRECTORY_SEPARATOR . substr($fsHash, $i*$subDirCount);
+        $retval .= DIRECTORY_SEPARATOR . substr($fsHash, $i*$subDirNameLength);
         
         return $retval;
     }
@@ -80,11 +92,15 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
     /**
      * Create subdirs to save file to
      * 
+     * @param string $filepath filpath to create subdirs for
+     * 
      * @return boolean success
      */
-    public function createSubDirs()
+    public function createSubDirs($filepath)
     {
-        $attDir = dirname($this->buildFilePath());
+        clearstatcache();
+        
+        $attDir = dirname($filepath);
         
         return file_exists($attDir) && is_dir($attDir) ||
                mkdir($attDir, 0700, true);
@@ -122,13 +138,52 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
         $retval = false;
         
         if(file_exists($filepath)) {
-
+            
             $this->hash = md5_file($filepath);
             $this->filename = basename($filepath);
             
             $this->saveMeta();
-            if(null !== $this->id && $this->createSubDirs()) {
-
+            
+            $targetFile = $this->buildFilePath();
+            
+            if(null !== $this->id && $this->createSubDirs($targetFile)) {
+                $retval = $this->moveFile($filepath, $targetFile);
+            }
+        }
+        
+        return $retval;
+    }
+    
+    /**
+     * Delete attachment
+     * 
+     * @return boolean
+     */
+    public function delete()
+    {
+        
+    }
+    
+    /**
+     * Move file
+     * 
+     * @param string $source absolute filepath
+     * @param string $target absolute filepath
+     * 
+     * @return boolean
+     * FIXME do we deal only with uploaded files?  
+     */
+    protected function moveFile($source, $target)
+    {
+        $retval = false;
+        
+        if(!$this->encrypted && file_exists($target)) {
+            $retval = true;
+        } else {
+            if(is_uploaded_file($source)) {
+                $retval = move_uploaded_file($source, $target);
+            } else {
+                $retval = rename($source, $target);
             }
         }
         
@@ -142,7 +197,6 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
      */
     public function get()
     {
-        
     }
     
     /**

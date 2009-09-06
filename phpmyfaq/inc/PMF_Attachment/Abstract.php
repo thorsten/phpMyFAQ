@@ -227,7 +227,7 @@ abstract class PMF_Attachment_Abstract
     protected function saveMeta()
     {
         $faqattTableName = sprintf('%sfaqattachment', SQLPREFIX);
-        $$this->id       = $this->db->nextID($faqattTableName, 'id');
+        $this->id        = $this->db->nextID($faqattTableName, 'id');
         
         if (null == $this->id) {
             $sql = sprintf("
@@ -251,5 +251,15 @@ abstract class PMF_Attachment_Abstract
         }
         
         return $this->id;
+    }
+    
+    /**
+     * Validate attached file with hash
+     * 
+     * @return boolean
+     */
+    public function validate()
+    {
+        // TODO implement this
     }
 }
