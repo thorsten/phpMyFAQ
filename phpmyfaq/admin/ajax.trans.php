@@ -66,13 +66,6 @@ switch($ajax_action) {
          */
         foreach ($_POST['PMF_LANG'] as $key => $val) {
             if (is_string($val)) {
-                /**
-                 * Since we get data per ajax, it's always utf-8 encoded
-                 */
-                if(PMF_String::isUTF8($val)) {
-                    $val = @iconv('UTF-8', $PMF_LANG["metaCharset"], $val);
-                }
-                       
                 $val = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $val);
                 $val = str_replace("'", "\\'", $val);
                 $newFileContents .= "\$PMF_LANG['$key'] = '$val';\n";
@@ -81,26 +74,12 @@ switch($ajax_action) {
                  * Here we deal with a two dimensional array
                  */
                 foreach ($val as $key2 => $val2) {
-                    /**
-                     * Since we get data per ajax, it's always utf-8 encoded
-                     */
-                    if (PMF_String::isUTF8($val2)) {
-                       $val2 = iconv('UTF-8', $PMF_LANG["metaCharset"], $val2);
-                    }
-                    
                     $newFileContents .= "\$PMF_LANG['$key']['$key2'] = '$val2';\n";
                 }
             }
         }
         
         foreach ($_POST['LANG_CONF'] as $key => $val) {
-            /**
-             * Since we get data per ajax, it's always utf-8 encoded
-             */
-            if(PMF_String::isUTF8($val)) {
-                $val = iconv('UTF-8', $PMF_LANG["metaCharset"], $val);
-            }
-            
             $newFileContents .= "\$LANG_CONF['$key'] = $val;\n";
         }
         

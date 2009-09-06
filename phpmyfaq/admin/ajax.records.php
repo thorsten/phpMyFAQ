@@ -65,5 +65,5 @@ if ('delete_record' == $ajax_action && $permission['delbt']) {
     }
     
     $faq->deleteRecord($record_id, $record_lang);
-    print utf8_encode($PMF_LANG['ad_entry_delsuc']);
+    print $PMF_LANG['ad_entry_delsuc'];
 }
