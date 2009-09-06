@@ -104,6 +104,7 @@
     <script type="text/javascript" src="inc/js/syntaxhighlighter/scripts/shBrushGroovy.js"></script>
     <script type="text/javascript" src="inc/js/syntaxhighlighter/scripts/shBrushJava.js"></script>
     <script type="text/javascript" src="inc/js/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+    <script type="text/javascript" src="inc/js/syntaxhighlighter/scripts/shBrushPerl.js"></script>
     <script type="text/javascript" src="inc/js/syntaxhighlighter/scripts/shBrushPhp.js"></script>
     <script type="text/javascript" src="inc/js/syntaxhighlighter/scripts/shBrushPlain.js"></script>
     <script type="text/javascript" src="inc/js/syntaxhighlighter/scripts/shBrushPython.js"></script>
