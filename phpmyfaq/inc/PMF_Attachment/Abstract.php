@@ -6,7 +6,7 @@
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2009-08-21
- * @version    SVN: $Id: Abstract.php 4459 2009-06-10 15:57:47Z thorsten $
+ * @version    SVN: $Id$
  * @copyright  2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -26,7 +26,7 @@
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2009-08-21
- * @version    SVN: $Id: Abstract.php 4459 2009-06-10 15:57:47Z thorsten $
+ * @version    SVN: $Id$
  * @copyright  2009 phpMyFAQ Team
  */
 abstract class PMF_Attachment_Abstract
@@ -192,23 +192,25 @@ abstract class PMF_Attachment_Abstract
         
         $sql = sprintf("
             SELECT 
-		      record_id, record_lang, hash, filename, encrypted
+                record_id, record_lang, hash, filename, encrypted
             FROM
                 %sfaqattachment
             WHERE 
-                id = %d", SQLPREFIX, (int) $this->id);
+                id = %d", 
+            SQLPREFIX, 
+            (int)$this->id);
         
         $result = $this->db->query($sql);
         
         if ($result) {
             $assoc = $this->db->fetch_assoc($result);
-            if (! empty($assoc)) {
-                $this->recordId = $assoc['record_id'];
+            if (!empty($assoc)) {
+                $this->recordId   = $assoc['record_id'];
                 $this->recordLang = $assoc['record_lang'];
-                $this->hash = $assoc['hash'];
-                $this->filename = $assoc['filename'];
-                $this->encrypted = $assoc['encrypted'];
-                $retval = true;
+                $this->hash       = $assoc['hash'];
+                $this->filename   = $assoc['filename'];
+                $this->encrypted  = $assoc['encrypted'];
+                $retval           = true;
             }
         }
         
@@ -221,32 +223,33 @@ abstract class PMF_Attachment_Abstract
      * @return integer saved attachment id
      * 
      * TODO implement update case
-     * FIXME max isn't safe to get id just inserted
      */
     protected function saveMeta()
     {
-        $retval = null;
         $faqattTableName = sprintf('%sfaqattachment', SQLPREFIX);
-        if(null == $this->id) {
-            $sql = sprintf("INSERT INTO 
-                        %s(\"id\", record_id, record_lang, hash, filename, encrypted)
-                        VALUES(%d, %d, '%s', '%s', '%s', %s)",
-                        $faqattTableName,
-                        $this->db->nextID($faqattTableName, 'id'),
-                        $this->recordId,
-                        $this->recordLang,
-                        $this->hash,
-                        $this->filename,
-                        $this->encrypted ? 'TRUE' : 'FALSE');
+        $$this->id       = $this->db->nextID($faqattTableName, 'id');
+        
+        if (null == $this->id) {
+            $sql = sprintf("
+                INSERT INTO 
+                    %s
+                (id, record_id, record_lang, hash, filename, encrypted)
+                    VALUES
+                (%d, %d, '%s', '%s', '%s', %s)",
+                    $faqattTableName,
+                    $this->id,
+                    $this->recordId,
+                    $this->recordLang,
+                    $this->hash,
+                    $this->filename,
+                    $this->encrypted ? 'TRUE' : 'FALSE');
+                    
             $this->db->query($sql);
             
-            $sql = sprintf('SELECT MAX("id") AS "id" FROM %s', $faqattTableName);
-            $retval = $this->db->fetch_object($this->db->query($sql))->id;
-            $this->id = $retval;
         } else {
             // do update here
         }
         
-        return $retval;
+        return $this->id;
     }
 }
