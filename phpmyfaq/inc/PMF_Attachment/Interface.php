@@ -58,7 +58,10 @@ interface PMF_Attachment_Interface
     /**
      * Output current file to stdout
      * 
+     * @param boolean $headers     if headers must be sent
+     * @param string  $disposition diposition type (ignored if $headers false)
+     * 
      * @return null
      */
-    function rawOut();
+    function rawOut($headers = true, $disposition = 'attachment');
 }

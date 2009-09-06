@@ -34,10 +34,11 @@ class PMF_Attachment_Filesystem_File_Vanilla extends PMF_Attachment_Filesystem_F
 {   
     /**
      * Chunk size read/write operations will deal with
+     * (in bytes)
      * 
      * @var integer
      */
-    const chunkSize = 128;
+    const chunkSize = 512;
     
     /**
      * @see PMF_Attachment_Filesystem_File#getChunk()

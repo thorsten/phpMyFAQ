@@ -29,6 +29,7 @@
  * @since      2009-08-21
  * @version    SVN: $Id$
  * @copyright  2009 phpMyFAQ Team
+ * TODO refactor to move filesystem stuff in more specialized places
  */
 class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachment_Interface
 {
@@ -144,7 +145,7 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
         
         if(file_exists($filepath)) {
             
-            $this->hash = md5_file($filepath);
+            $this->hash = trim(md5_file($filepath));
             $this->filename = basename($filepath);
             
             $this->saveMeta();
@@ -192,9 +193,15 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
     /**
      * Output current file to stdout
      * 
+     * @param boolean $headers     if headers must be sent
+     * @param string  $disposition diposition type (ignored if $headers false)
+     * 
      * @return null
+     * 
+     * TODO send exact content type
+     * TODO send content length header
      */
-    public function rawOut()
+    public function rawOut($headers = true, $disposition = 'attachment')
     {
         if($this->encrypted) {
             $file = new PMF_Attachment_Filesystem_File_Encrypted(
@@ -204,6 +211,12 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
                             );
         } else {
             $file = new PMF_Attachment_Filesystem_File_Vanilla($this->buildFilePath());
+        }
+        
+        if($headers) {
+            $disposition = 'attachment' == $disposition ? 'attachment' : 'inline';
+            header('Content-Type: application/octet-stream', true);
+            header('Content-Disposition: $disposition; filename=' . $this->filename , true);
         }
         
         while(!$file->eof()) {

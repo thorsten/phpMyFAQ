@@ -66,12 +66,13 @@ class PMF_Attachment_Filesystem_File_Encrypted extends PMF_Attachment_Filesystem
         $chunk   = '';
         $chunkDelimLen = strlen(self::chunkDelimiter);
         
-        while(!$readEnd) {
+        while(!$readEnd && !$this->eof()) {
             $chunk .= fread($this->handle, 1);
             $readEnd = self::chunkDelimiter == substr($chunk, -$chunkDelimLen);
         }
         
-        return $this->aes->decrypt(substr($chunk, 0, -$chunkDelimLen));
+        $chunk = substr($chunk, 0, -$chunkDelimLen);
+        return empty($chunk) ? '' : $this->aes->decrypt($chunk);
     }
     
     /**
