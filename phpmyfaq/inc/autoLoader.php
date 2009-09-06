@@ -8,8 +8,8 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramucia <matteo@phpmyfaq.de>
  * @since     2009-01-07
- * @copyright (c) 2009 phpMyFAQ Team
  * @version   SVN: $Id$
+ * @copyright 2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -36,20 +36,20 @@ function __autoload($class)
 
     // Try to load the class/interface declaration using its name if splittable by '_'
     // Note: using include instead of require give us the possibility to echo failures
-    $classParts = explode('_', $class);
+    $classParts      = explode('_', $class);
     $classPartsCount = count($classParts); 
-    $includeDir = $rootDir . DIRECTORY_SEPARATOR . 'inc'. DIRECTORY_SEPARATOR;
+    $includeDir      = $rootDir . DIRECTORY_SEPARATOR . 'inc'. DIRECTORY_SEPARATOR;
     if (2 == $classPartsCount) {
         $path = $includeDir . $classParts[1] . '.php';
     } else {
         $path = $includeDir . 'PMF_'. $classParts[1];
-        for($i = 2; $i < $classPartsCount; $i++) {
+        for ($i = 2; $i < $classPartsCount; $i++) {
             $path .= DIRECTORY_SEPARATOR . $classParts[$i];
         }
         $path .= '.php';
     }
     
-    if(file_exists($path)) {
+    if (file_exists($path)) {
         include $path;
     } else {
         printf("<br /><b>PMF Autoloader</b>: unable to find a suitable file declaring '%s'.", $class);
