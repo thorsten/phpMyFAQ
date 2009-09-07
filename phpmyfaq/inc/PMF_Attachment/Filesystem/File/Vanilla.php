@@ -68,8 +68,8 @@ class PMF_Attachment_Filesystem_File_Vanilla extends PMF_Attachment_Filesystem_F
         
         if($doSimple) {
         /**
-         * If the target is string, just move to it the simplest
-         * way we can. 
+         * If the target is a string or vanilla object, just move
+         * it the simplest way we can. 
          */
             $this->copyToSimple($target);
         } else {

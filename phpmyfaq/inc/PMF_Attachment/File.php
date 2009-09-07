@@ -32,46 +32,7 @@
  * TODO refactor to move filesystem stuff in more specialized places
  */
 class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachment_Interface
-{
-    
-    /**
-     * Generate hash based on current conditions
-     * 
-     * @return string
-     * 
-     * NOTE The way a file is saved in the filesystem
-     * is based on md5 hash. If the file is unencrypted,
-     * it's md5 hash is used directly, otherwise a
-     * hash based on several tokens gets generated.
-     */
-    protected function getHashForFS()
-    {
-        $retval = '';
-        
-        if($this->encrypted) {
-            if(null === $this->id || null === $this->recordId ||
-               null === $this->hash || null === $this->filename ||
-               null === $this->key) {
-                throw new PMF_Attachment_Exception('All of id, ' .
-                                     'recordId, hash, filename, ' .
-                                     'key is needed to generate ' . 
-                                     'fs hash for encrypted files');
-            }
-            
-//            $hash = new Crypt_Hash();
-//            $hash->setKey($this->key);
-            
-            $src = $this->id . $this->recordId . $this->hash .
-                        $this->filename . $this->key;
-            $retval = md5($src);            
-//            $retval = $hash->hash($src);
-        } else {
-            $retval = $this->hash;
-        }
-        
-        return $retval;
-    }
-    
+{   
     /**
      * Build filepath under which the attachment
      * 
@@ -82,7 +43,7 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
     protected function buildFilePath()
     {        
         $retval = PMF_ATTACHMENTS_DIR;
-        $fsHash = $this->getHashForFS();
+        $fsHash = $this->mkVirtualHash();
         $subDirCount = 3;
         $subDirNameLength = 5;
         
@@ -138,6 +99,8 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
      * @param string $filepath full path to the attachment file
      * 
      * @return boolean
+     * 
+     * TODO rollback if something went wrong
      */
     public function save($filepath)
     {
@@ -145,7 +108,8 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
         
         if(file_exists($filepath)) {
             
-            $this->hash = trim(md5_file($filepath));
+            $this->realHash = md5_file($filepath);
+            $this->filesize = filesize($filepath);
             $this->filename = basename($filepath);
             
             $this->saveMeta();
@@ -165,6 +129,8 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
                 }
                 
                 $retval = $source->moveTo($target);
+                
+                $this->postUpdateMeta();
             }
         }
         
@@ -215,8 +181,10 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
         
         if($headers) {
             $disposition = 'attachment' == $disposition ? 'attachment' : 'inline';
-            header('Content-Type: application/octet-stream', true);
-            header('Content-Disposition: $disposition; filename=' . $this->filename , true);
+            header('Content-Type: ' . $this->mimeType, true);
+            header('Content-Length: ' . $this->filesize, true);
+            header("Content-Disposition: $disposition; filename={$this->filename}" , true);
+            header("Content-MD5: {$this->realHash}", true);
         }
         
         while(!$file->eof()) {

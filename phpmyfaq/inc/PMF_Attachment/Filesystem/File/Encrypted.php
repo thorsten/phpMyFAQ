@@ -91,6 +91,7 @@ class PMF_Attachment_Filesystem_File_Encrypted extends PMF_Attachment_Filesystem
     public function putChunk($chunk)
     {
         $content = $this->aes->encrypt($chunk) . self::chunkDelimiter;
+        
         return fwrite($this->handle, $content);
     }
     

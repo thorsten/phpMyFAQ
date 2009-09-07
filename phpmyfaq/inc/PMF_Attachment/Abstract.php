@@ -73,11 +73,33 @@ abstract class PMF_Attachment_Abstract
     protected $recordLang;
     
     /**
-     * Hash
+     * Real file md5 hash
      * 
      * @var string
      */
-    protected $hash;
+    protected $realHash;
+    
+    /**
+     * Virtual unique md5 hash used for encrypted files.
+     * Must equal real hash for unencrypted files.
+     * 
+     * @var string
+     */
+    protected $virtualHash;
+    
+    /**
+     * If this is set, the sh1 hashed key we got must equal to it 
+     * 
+     * @var string
+     */
+    protected $passwordHash;
+    
+    /**
+     * Filesize in bytes
+     * 
+     * @var integer
+     */
+    protected $filesize;
     
     /**
      * Filename
@@ -93,6 +115,12 @@ abstract class PMF_Attachment_Abstract
      */
     protected $encrypted;
             
+    /**
+     * Attachment file mime type
+     * 
+     * @var string
+     */
+    protected $mimeType;
     /**
      * Constructor
      * 
@@ -127,14 +155,23 @@ abstract class PMF_Attachment_Abstract
     /**
      * Set encryption key
      * 
-     * @param string $key encryption key
+     * @param string $key     encryption key
+     * @param string $default if the key is default system wide
      * 
      * @return null
      */
-    public function setKey ($key)
+    public function setKey ($key, $default = true)
     {
         $this->key = $key;
         $this->encrypted = null !== $key;
+        
+        /**
+         * Not default means the key was set explicitly
+         * for this attachment, so lets hash it
+         */
+        if($this->encrypted && !$default) {
+            $this->passwordHash = sha1($key);
+        }
     }
     
     /**
@@ -192,7 +229,8 @@ abstract class PMF_Attachment_Abstract
         
         $sql = sprintf("
             SELECT 
-                record_id, record_lang, hash, filename, encrypted
+                record_id, record_lang, real_hash, virtual_hash, password_hash,
+                filename, filesize, encrypted, mime_type
             FROM
                 %sfaqattachment
             WHERE 
@@ -205,12 +243,17 @@ abstract class PMF_Attachment_Abstract
         if ($result) {
             $assoc = $this->db->fetch_assoc($result);
             if (!empty($assoc)) {
-                $this->recordId   = $assoc['record_id'];
-                $this->recordLang = $assoc['record_lang'];
-                $this->hash       = trim($assoc['hash']);
-                $this->filename   = $assoc['filename'];
-                $this->encrypted  = $assoc['encrypted'];
-                $retval           = true;
+                $this->recordId     = $assoc['record_id'];
+                $this->recordLang   = $assoc['record_lang'];
+                $this->realHash     = $assoc['real_hash'];
+                $this->virtualHash  = $assoc['virtual_hash'];
+                $this->passwordHash = $assoc['password_hash'];
+                $this->filename     = $assoc['filename'];
+                $this->filesize     = $assoc['filesize'];
+                $this->encrypted    = $assoc['encrypted'];
+                $this->mimeType     = $assoc['mime_type'];
+                
+                $retval             = true;
             }
         }
         
@@ -235,16 +278,21 @@ abstract class PMF_Attachment_Abstract
             $sql = sprintf("
                 INSERT INTO 
                     %s
-                (id, record_id, record_lang, hash, filename, encrypted)
+                (id, record_id, record_lang, real_hash, virtual_hash,
+                password_hash, filename, filesize, encrypted, mime_type)
                     VALUES
-                (%d, %d, '%s', '%s', '%s', %s)",
+                (%d, %d, '%s', '%s', '%s', '%s', '%s', %d, %s, '%s')",
                     $faqattTableName,
                     $this->id,
                     $this->recordId,
                     $this->recordLang,
-                    trim($this->hash),
+                    $this->realHash,
+                    $this->virtualHash,
+                    $this->passwordHash,
                     $this->filename,
-                    $this->encrypted ? 'TRUE' : 'FALSE');
+                    $this->filesize,
+                    $this->encrypted ? 'TRUE' : 'FALSE',
+                    $this->mimeType);
             
             $result = $this->db->query($sql);
         } else {
@@ -255,7 +303,74 @@ abstract class PMF_Attachment_Abstract
     }
     
     /**
-     * Validate attached file with hash
+     * Update several meta things after it was saved
+     * 
+     * @return null
+     */
+    protected function postUpdateMeta()
+    {
+        $sql = sprintf("UPDATE
+                            %sfaqattachment
+                        SET virtual_hash = '%s',
+                            mime_type = '%s'
+                        WHERE id = %d",
+                        SQLPREFIX,
+                        $this->virtualHash,
+                        $this->readMimeType(),
+                        $this->id);
+        
+        $this->db->query($sql);
+    }
+    
+    /**
+     * The function is supposed to detect the file mime
+     * type.
+     * 
+     * @return string
+     * TODO implement this
+     */
+    protected function readMimeType()
+    {
+        $ext = pathinfo($this->filename, PATHINFO_EXTENSION);
+        $this->mimeType = PMF_Attachment_MimeType::guessByExt($ext);
+        
+        return $this->mimeType;
+    }
+    
+    /**
+     * Generate hash based on current conditions
+     * 
+     * @return string
+     * 
+     * NOTE The way a file is saved in the filesystem
+     * is based on md5 hash. If the file is unencrypted,
+     * it's md5 hash is used directly, otherwise a
+     * hash based on several tokens gets generated.
+     */
+    protected function mkVirtualHash()
+    {
+        if($this->encrypted) {
+            if(null === $this->id || null === $this->recordId ||
+               null === $this->realHash || null === $this->filename ||
+               null === $this->key) {
+                throw new PMF_Attachment_Exception('All of id, ' .
+                                     'recordId, hash, filename, ' .
+                                     'key is needed to generate ' . 
+                                     'fs hash for encrypted files');
+            }
+            
+            $src = $this->id . $this->recordId . $this->realHash .
+                        $this->filename . $this->key;
+            $this->virtualHash = md5($src);            
+        } else {
+            $this->virtualHash = $this->realHash;
+        }
+        
+        return $this->virtualHash;
+    }
+    
+    /**
+     * Validate attached file with the real hash
      * 
      * @return boolean
      */
