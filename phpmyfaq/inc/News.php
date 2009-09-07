@@ -1,14 +1,14 @@
 <?php
 /**
- * $Id: News.php,v 1.19 2008-02-16 15:33:04 thorstenr Exp $
- *
  * The News class for phpMyFAQ news
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
- * @package     phpMyFAQ
- * @since       2006-06-25
- * @copyright   (c) 2006-2007 phpMyFAQ Team
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @package   phpMyFAQ
+ * @since     2006-06-25
+ * @version   SVN: $Id$
+ * @copyright 2006-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -21,7 +21,17 @@
  * under the License.
  */
 
-// {{{ Classes
+
+/**
+ * PMF_News
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @package   phpMyFAQ
+ * @since     2006-06-25
+ * @copyright 2006-2009 phpMyFAQ Team
+ */
 class PMF_News
 {
     /**
@@ -59,58 +69,49 @@ class PMF_News
     }
 
     /**
-     * getLatestData()
-     *
      * Return the latest news data
      *
-     * @param   boolean $showArchive
-     * @param   boolean $active
-     * @param   boolean $forceConfLimit
-     * @return  string
-     * @access  public
-     * @since   2002-08-23
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @param  boolean $showArchive    Show archive
+     * @param  boolean $active         Show active
+     * @param  boolean $forceConfLimit Force to configuration limit
+     * @return string
      */
     function getLatestData($showArchive = false, $active = true, $forceConfLimit = false)
     {
-        global $PMF_CONF;
+        $faqconfig = PMF_Configuration::getInstance();
 
-        $news = array();
+        $news    = array();
         $counter = 0;
-        $now = date('YmdHis');
+        $now     = date('YmdHis');
 
         $query = sprintf(
             "SELECT
-                id, datum, lang,
-                header, artikel,
-                author_name, author_email,
-                date_start, date_end,
-                active, comment,
+                id, datum, lang, header, artikel, author_name, author_email, date_start, date_end, active, comment,
                 link, linktitel, target
             FROM
                 %sfaqnews
             WHERE
-                    date_start <= '%s'
-                AND date_end   >= '%s'
+                date_start <= '%s'
+            AND 
+                date_end   >= '%s'
                 %s
             ORDER BY
                 datum DESC",
             SQLPREFIX,
             $now,
             $now,
-            $active ? "AND active = 'y'" : ''
-            );
+            $active ? "AND active = 'y'" : '');
+            
         $result = $this->db->query($query);
 
-        if ($PMF_CONF['main.numberOfShownNewsEntries'] > 0 && $this->db->num_rows($result) > 0) {
-            while (    ($row = $this->db->fetch_object($result))
-                   ) {
+        if ($faqconfig->get('main.numberOfShownNewsEntries') > 0 && $this->db->num_rows($result) > 0) {
+            while (($row = $this->db->fetch_object($result))) {
                 $counter++;
-                if (   ($showArchive  && ($counter > $PMF_CONF['main.numberOfShownNewsEntries']))
-                    || ((!$showArchive) && (!$forceConfLimit) && ($counter <= $PMF_CONF['main.numberOfShownNewsEntries']))
-                    || ((!$showArchive) && $forceConfLimit)
-                   ) {
+                if (($showArchive  && ($counter > $faqconfig->get('main.numberOfShownNewsEntries'))) || 
+                    ((!$showArchive) && (!$forceConfLimit) && 
+                    ($counter <= $faqconfig->get('main.numberOfShownNewsEntries'))) || 
+                    ((!$showArchive) && $forceConfLimit)) {
+                        
                     $item = array(
                         'id'            => $row->id,
                         'date'          => $row->datum,
@@ -136,23 +137,16 @@ class PMF_News
     }
 
     /**
-     * getNews()
-     *
      * Function for generating the HTML fro the current news
      *
-     * @param   boolean $showArchive
-     * @param   boolean $active
-     * @return  string
-     * @access  public
-     * @since   2002-08-23
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @param  boolean $showArchive
+     * @param  boolean $active
+     * @return string
      */
-    function getNews($showArchive = false, $active = true)
+    public function getNews($showArchive = false, $active = true)
     {
         $output = '';
-
-        $news = $this->getLatestData($showArchive, $active);
+        $news   = $this->getLatestData($showArchive, $active);
 
         foreach ($news as $item) {
             $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?action=news&amp;newsid='.$item['id'].'&amp;newslang='.$item['lang']);;
@@ -160,18 +154,17 @@ class PMF_News
                 $oLink->itemTitle =$item['header'];
             }
             $output .= sprintf('<h3><a name="news_%d" href="%s">%s <img class="goNews" src="images/more.gif" width="11" height="11" alt="%s" /></a></h3><div class="block">%s',
-                            $item['id'],
-                            $oLink->toString(),
-                            $item['header'],
-                            $item['header'],
-                            $item['content']
-                        );
-            if ('' != $item['link']) {
-                $output .= sprintf('<br />Info: <a href="http://%s" target="_%s">%s</a>',
-                                $item['link'],
-                                $item['target'],
-                                $item['linkTitle']
-                            );
+                $item['id'],
+                $oLink->toString(),
+                $item['header'],
+                $item['header'],
+                $item['content']);
+            if (strlen($item['link']) > 0) {
+                $output .= sprintf('<br />%s <a href="http://%s" target="_%s">%s</a>',
+                    $this->pmf_lang['msgInfo'],
+                    $item['link'],
+                    $item['target'],
+                    $item['linkTitle']);
             }
             $output .= sprintf('</div><div class="date">%s</div>', makeDate($item['date']));
         }
@@ -184,16 +177,12 @@ class PMF_News
      *
      * @param   boolean $active
      * @return  array
-     * @access  public
-     * @since   2006-06-25
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function getNewsHeader($active = false)
+    public function getNewsHeader($active = false)
     {
         $headers = array();
-
-        $now = date('YmdHis');
+        $now     = date('YmdHis');
+        
         $query = sprintf("
             SELECT
                 id, datum, lang, header,
@@ -203,20 +192,20 @@ class PMF_News
                 %sfaqnews
             ORDER BY
                 datum DESC",
-            SQLPREFIX
-            );
+            SQLPREFIX);
+            
         $result = $this->db->query($query);
 
         if ($this->db->num_rows($result) > 0) {
             while ($row = $this->db->fetch_object($result)) {
                 $expired = ($now > $row->date_end);
                 $headers[] = array(
-                    'id'        => $row->id,
-                    'lang'      => $row->lang,
-                    'header'    => $row->header,
-                    'date'      => makeDate($row->datum),
-                    'active'    => $row->active,
-                    'expired'   => $expired);
+                    'id'      => $row->id,
+                    'lang'    => $row->lang,
+                    'header'  => $row->header,
+                    'date'    => makeDate($row->datum),
+                    'active'  => $row->active,
+                    'expired' => $expired);
             }
         }
 
@@ -229,12 +218,8 @@ class PMF_News
      * @param   integer $id
      * @param   boolean $admin
      * @return  array
-     * @access  public
-     * @since   2006-06-25
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function getNewsEntry($id, $admin = false)
+    public function getNewsEntry($id, $admin = false)
     {
         $news = array();
 
@@ -256,10 +241,10 @@ class PMF_News
 
         if ($this->db->num_rows($result) > 0) {
             if ($row = $this->db->fetch_object($result)) {
-                $content        = $row->artikel;
-                $active         = ('y' == $row->active);
-                $allowComments  = ('y' == $row->comment);
-                $expired        = (date('YmdHis') > $row->date_end);
+                $content       = $row->artikel;
+                $active        = ('y' == $row->active);
+                $allowComments = ('y' == $row->comment);
+                $expired       = (date('YmdHis') > $row->date_end);
 
                 if (!$admin) {
                     if (!$active) {
@@ -293,35 +278,25 @@ class PMF_News
     }
 
     /**
-     * addComment()
-     *
      * Adds a comment
      *
-     * @param   array       $commentData
-     * @return  boolean
-     * @access  public
-     * @since   2006-06-18
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  array   $commentData Data
+     * @return boolean
      */
-    function addComment($commentData)
+    public function addComment($commentData)
     {
         $oComment = new PMF_Comment();
         return $oComment->addComment($commentData);
     }
 
     /**
-     * deleteComment()
-     *
      * Deletes a comment
      *
      * @param   integer     $record_id
      * @param   integer     $comment_id
      * @return  boolean
-     * @access  public
-     * @since   2006-06-18
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function deleteComment($record_id, $comment_id)
+    public function deleteComment($record_id, $comment_id)
     {
         $oComment = new PMF_Comment();
         return $oComment->deleteComment($record_id, $comment_id);
@@ -332,11 +307,8 @@ class PMF_News
      *
      * @param   array   $data
      * @return  boolean
-     * @access  public
-     * @since   2006-06-25
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function addNewsEntry($data)
+    public function addNewsEntry($data)
     {
         $query = sprintf("
             INSERT INTO
@@ -387,11 +359,8 @@ class PMF_News
      * @param   integer $id
      * @param   array   $data
      * @return  boolean
-     * @access  public
-     * @since   2006-06-25
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function updateNewsEntry($id, $data)
+    public function updateNewsEntry($id, $data)
     {
         $query = sprintf("
             UPDATE
@@ -439,11 +408,8 @@ class PMF_News
      *
      * @param   integer $id
      * @return  array
-     * @access  public
-     * @since   2006-06-25
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function deleteNews($id)
+    public function deleteNews($id)
     {
         $query = sprintf("
             DELETE FROM
@@ -458,4 +424,3 @@ class PMF_News
         return true;
     }
 }
-// }}}
