@@ -171,10 +171,11 @@ class PMF_News
                 $item['content']);
             
             if ('' != $item['link']) {
-                $output .= sprintf('<br />Info: <a href="http://%s" target="_%s">%s</a>',
-                                $item['link'],
-                                $item['target'],
-                                $item['linkTitle']);
+                $output .= sprintf('<br />%s <a href="http://%s" target="_%s">%s</a>',
+                    $this->pmf_lang['msgInfo'],
+                    $item['link'],
+                    $item['target'],
+                    $item['linkTitle']);
             }
             
             $output .= sprintf('</div><div class="date">%s</div>', makeDate($item['date']));
