@@ -1,6 +1,6 @@
 <?php
 /*
- * $Id: questionnaire.php,v 1.13 2007-06-06 22:12:13 matteo Exp $
+ * $Id$
  *
  * This class collects data which is used to create some usage statistics.
  *

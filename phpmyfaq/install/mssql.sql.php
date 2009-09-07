@@ -23,6 +23,7 @@
 
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqattachment";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqattachment_file";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcaptcha";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategories";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategoryrelations";
@@ -55,20 +56,6 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faquser_right";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqvisits";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqvoting";
 
-//faquser
-$query[] = "CREATE TABLE ".$sqltblpre."faquser (
-user_id integer NOT NULL,
-login varchar(25) NOT NULL,
-session_id varchar(150) NULL,
-session_timestamp integer NULL,
-ip varchar(15) NULL,
-account_status varchar(50) NULL,
-last_login varchar(14) NULL,
-auth_source varchar(100) NULL,
-member_since varchar(14) NULL,
-PRIMARY KEY (user_id)
-)";
-
 //faqadminlog
 $query[] = "CREATE TABLE ".$sqltblpre."faqadminlog (
 id integer NOT NULL,
@@ -88,6 +75,26 @@ filename VARCHAR(255) NOT NULL,
 file_contents BLOB,
 encrypted BIT,
 PRIMARY KEY (id))";
+
+//faqattachment
+$query[] = "CREATE TABLE " . $sqltblpre . "faqattachment (
+id INTEGER NOT NULL,
+record_id INTEGER NOT NULL,
+record_lang VARCHAR(5) NOT NULL,
+real_hash CHAR(32) NOT NULL,
+virtual_hash CHAR(32) NOT NULL,
+password_hash CHAR(40) NULL,
+filename VARCHAR(255) NOT NULL,
+filesize INTEGER NOT NULL,
+encrypted INTEGER NOT NULL DEFAULT FALSE,
+mime_type VARCHAR(255) NULL,
+PRIMARY KEY (id))";
+
+//faqattachment file
+$query[] = "CREATE TABLE " . $sqltblpre . "faqattachment_file (
+virtual_hash CHAR(32) NOT NULL,
+contents BLOB NOT NULL,
+PRIMARY KEY (virtual_hash))";
 
 //faqcaptcha
 $query[] = "CREATE TABLE ".$sqltblpre."faqcaptcha (
@@ -330,6 +337,19 @@ tagging_id INTEGER NOT NULL,
 tagging_name VARCHAR(255) NOT NULL ,
 PRIMARY KEY (tagging_id, tagging_name)
 )";
+
+//faquser
+$query[] = "CREATE TABLE ".$sqltblpre."faquser (
+user_id integer NOT NULL,
+login varchar(25) NOT NULL,
+session_id varchar(150) NULL,
+session_timestamp integer NULL,
+ip varchar(15) NULL,
+account_status varchar(50) NULL,
+last_login varchar(14) NULL,
+auth_source varchar(100) NULL,
+member_since varchar(14) NULL,
+PRIMARY KEY (user_id))";
 
 //faquserdata
 $query[] = "CREATE TABLE ".$sqltblpre."faquserdata (
