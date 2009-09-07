@@ -24,6 +24,7 @@
 
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog CASCADE";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqattachment CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqattachment_file CASCADE";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcaptcha CASCADE";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategories CASCADE";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategoryrelations CASCADE";
@@ -378,8 +379,17 @@ $query[] = "CREATE TABLE " . $sqltblpre . "faqattachment (
 id SERIAL NOT NULL,
 record_id int4 NOT NULL,
 record_lang varchar(5) NOT NULL,
-hash char(33) NOT NULL,
+real_hash char(32) NOT NULL,
+virtual_hash char(32) NOT NULL,
+password_hash char(40) NULL,
 filename varchar(255) NOT NULL,
-file_contents bytea,
-encrypted boolean,
+filesize int NOT NULL,
+encrypted boolean NOT NULL DEFAULT FALSE,
+mime_type varchar(255) NULL,
 PRIMARY KEY (id))";
+
+//faqattachment file
+$query[] = "CREATE TABLE " . $sqltblpre . "faqattachment_file (
+virtual_hash char(32) NOT NULL,
+contents bytea,
+PRIMARY KEY (virtual_hash))";

@@ -24,6 +24,7 @@
 
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqattachment";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqattachment_file";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcaptcha";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategories";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategoryrelations";
@@ -70,11 +71,20 @@ $query[] = "CREATE TABLE " . $sqltblpre . "faqattachment (
 id int(11) NOT NULL,
 record_id int(11) NOT NULL,
 record_lang varchar(5) NOT NULL,
-hash char(33) NOT NULL,
+real_hash char(32) NOT NULL,
+virtual_hash char(32) NOT NULL,
+password_hash char(40) NULL,
 filename varchar(255) NOT NULL,
-file_contents BLOB,
-encrypted boolean,
+filesize int NOT NULL,
+encrypted tinyint NOT NULL DEFAULT FALSE,
+mime_type varchar(255) NULL,
 PRIMARY KEY (id))";
+
+//faqattachment file
+$query[] = "CREATE TABLE " . $sqltblpre . "faqattachment_file (
+virtual_hash char(32) NOT NULL,
+contents blob NOT NULL,
+PRIMARY KEY (virtual_hash))";
 
 //faqcaptcha
 $query[] = "CREATE TABLE ".$sqltblpre."faqcaptcha (

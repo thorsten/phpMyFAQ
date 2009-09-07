@@ -512,11 +512,19 @@ if ($step == 4) {
                     id SERIAL NOT NULL,
                     record_id int4 NOT NULL,
                     record_lang varchar(5) NOT NULL,
-                    hash char(33) NOT NULL,
+                    real_hash char(32) NOT NULL,
+                    virtual_hash char(32) NOT NULL,
+                    password_hash char(40) NULL,
                     filename varchar(255) NOT NULL,
-                    file_contents bytea,
-                    encrypted boolean,
+                    filesize int NOT NULL,
+                    encrypted boolean NOT NULL DEFAULT FALSE,
+                    mime_type varchar(255) NULL,
                     PRIMARY KEY (id))";
+                
+                $query[] = "CREATE TABLE " . SQLPREFIX . "faqattachment_file (
+                    virtual_hash char(32) NOT NULL,
+                    contents bytea,
+                    PRIMARY KEY (virtual_hash))";
                 break;
                 
             case 'mysqli':
@@ -525,11 +533,19 @@ if ($step == 4) {
                     id int(11) NOT NULL,
                     record_id int(11) NOT NULL,
                     record_lang varchar(5) NOT NULL,
-                    hash char(33) NOT NULL,
+                    real_hash char(32) NOT NULL,
+                    virtual_hash char(32) NOT NULL,
+                    password_hash char(40) NULL,
                     filename varchar(255) NOT NULL,
-                    file_contents blob,
-                    encrypted tinyint,
+                    filesize int NOT NULL,
+                    encrypted tinyint NOT NULL DEFAULT FALSE,
+                    mime_type varchar(255) NULL,
                     PRIMARY KEY (id))";
+                
+                $query[] = "CREATE TABLE " . SQLPREFIX . "faqattachment_file (
+                    virtual_hash char(32) NOT NULL,
+                    contents blob NOT NULL,
+                    PRIMARY KEY (virtual_hash))";
                 break;
                 
             default:
