@@ -57,7 +57,7 @@ if ('addnews' == $action && $permission["addnews"]) {
         <input type="checkbox" name="comment" id="comment" value="y" /><?php print $PMF_LANG['ad_gen_yes']; ?><br />
 
         <label class="lefteditor" for="link"><?php print $PMF_LANG['ad_news_link_url']; ?></label>
-        <input type="text" name="link" style="width: 390px;" /><br />
+        <input type="text" name="link" style="width: 390px;" value="http://" /><br />
 
         <label class="lefteditor" for="linkTitle"><?php print $PMF_LANG['ad_news_link_title']; ?></label>
         <input type="text" name="linkTitle" style="width: 390px;" /><br />

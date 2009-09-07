@@ -2,6 +2,7 @@ $Id$
 
 CHANGED FILES FROM 2.5.2 -> 2.5.3
 
+./admin/news.php
 ./install/installer.php
 ./install/update.php
 ./lang/language_ja.php
