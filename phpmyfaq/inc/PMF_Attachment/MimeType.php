@@ -31,7 +31,11 @@
  */
 abstract class PMF_Attachment_MimeType
 {
-
+    /**
+     * Simple file extensien to mime type mapping
+     * 
+     * @var array
+     */
     protected static $list = array(
                 'ez' => 'application/andrew-inset',
                 'hqx' => 'application/mac-binhex40',
@@ -174,6 +178,13 @@ abstract class PMF_Attachment_MimeType
                 'ice' => 'x-conference/x-cooltalk',
     );
     
+    /**
+     * Read mime type mapped to extension
+     * 
+     * @param string $ext file extension
+     * 
+     * @return string|null
+     */
     public static function guessByExt($ext)
     {
         return @self::$list[$ext];
