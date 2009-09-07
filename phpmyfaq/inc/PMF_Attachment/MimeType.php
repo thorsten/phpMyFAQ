@@ -187,6 +187,8 @@ abstract class PMF_Attachment_MimeType
      */
     public static function guessByExt($ext)
     {
-        return @self::$list[$ext];
+        return isset(self::$list[$ext])
+               ? self::$list[$ext]
+               : 'application/octet-stream';
     }
 }
