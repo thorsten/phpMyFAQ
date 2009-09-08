@@ -3,6 +3,7 @@ $Id$
 CHANGED FILES FROM 2.5.2 -> 2.5.3
 
 ./admin/news.php
+./admin/record.edit.php
 ./inc/News.php
 ./install/installer.php
 ./install/update.php
