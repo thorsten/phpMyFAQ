@@ -729,24 +729,32 @@ class PMF_Category
     /**
      * Method to create a category link
      *
-     * @param   string  $sids         Session id
-     * @param   integer $parent       Parent category
-     * @param   string  $categoryName Category name
-     * @param   string  $description  Description
-     * @param   boolean $hasChildren  Child categories available
-     * @return  string
+     * @param string  $sids        Session id
+     * @param integer $parent      Parent category
+     * @param string  $name        Category name
+     * @param string  $description Description
+     * @param boolean $hasChildren Child categories available
+     * @param boolean $isActive    Active category
+     * 
+     * @return string
      */
-    public function addCategoryLink($sids, $parent, $categoryName, $description, $hasChildren = false)
+    public function addCategoryLink($sids, $parent, $name, $description, $hasChildren = false, $isActive = false)
     {
         $url   = sprintf('%saction=show&amp;cat=%d', $sids, $parent);
         $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-        $oLink->itemTitle = $categoryName;
-        $oLink->text = $categoryName;
+        $oLink->itemTitle = $oLink->text = $name;
+        
         if ($hasChildren) {
             $oLink->text .= sprintf(' <img src="images/more.gif" width="11" height="11" alt="%s" style="border: none; vertical-align: middle;" />',
-                $categoryName);
+                $name);
         }
+        
+        if ($isActive) {
+            $oLink->class = 'active';
+        }
+        
         $oLink->tooltip = $description;
+        
         return $oLink->toHtmlAnchor();
     }
 
