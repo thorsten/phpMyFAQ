@@ -91,29 +91,30 @@ class PMF_Helper_Category extends PMF_Helper
     {
         global $sids, $PMF_LANG;
 
-        $open   = 0;
-        $output = '';
-
-        if ($this->Category->height() > 0) {
-            for ($y = 0 ;$y < $this->Category->height(); $y = $this->Category->getNextLineTree($y)) {
+        $open          = 0;
+        $output        = '';
+        $numCategories = $this->Category->height();
+        
+        if ($numCategories > 0) {
+            for ($y = 0 ;$y < $numCategories; $y = $this->Category->getNextLineTree($y)) {
                 
-                list($symbol, $categoryName, $parent, $description) = $this->Category->getLineDisplay($y);
+                list($symbol, $name, $categoryId, $description) = $this->Category->getLineDisplay($y);
 
-                if ($activeCategory == $parent) {
-                    $a = ' class="active"';
+                if ($activeCategory == $categoryId) {
+                    $isActive = true;
                 } else {
-                    $a = '';
+                    $isActive = false;
                 }
 
-                $level     = $this->Category->treeTab[$y]["level"];
+                $level     = $this->Category->treeTab[$y]['level'];
                 $leveldiff = $open - $level;
 
                 if ($leveldiff > 1) {
                     $output .= '</li>';
                     for ($i = $leveldiff; $i > 1; $i--) {
                         $output .= sprintf("\n%s</ul>\n%s</li>\n",
-                        str_repeat("\t", $level + $i + 1),
-                        str_repeat("\t", $level + $i));
+                            str_repeat("\t", $level + $i + 1),
+                            str_repeat("\t", $level + $i));
                     }
                 }
 
@@ -135,17 +136,17 @@ class PMF_Helper_Category extends PMF_Helper
                 }
 
                 if (isset($this->Category->treeTab[$y]['symbol']) && $this->Category->treeTab[$y]['symbol'] == 'plus') {
-                    $output .= $this->Category->addCategoryLink($sids, $parent, $categoryName, $description, true);
+                    $output .= $this->Category->addCategoryLink($sids, $categoryId, $name, $description, true, $isActive);
                 } else {
                     if ($this->Category->treeTab[$y]['symbol'] == 'minus') {
                         $name = ($this->Category->treeTab[$y]['parent_id'] == 0) 
                                 ? 
-                                $categoryName 
+                                $name 
                                 : 
                                 $this->Category->categoryName[$this->treeTab[$y]['id']]['name'];
-                        $output .= $this->Category->addCategoryLink($sids, $this->Category->treeTab[$y]['parent_id'], $name, $description);
+                        $output .= $this->Category->addCategoryLink($sids, $this->Category->treeTab[$y]['parent_id'], $name, $description, false, $isActive);
                     } else {
-                        $output .= $this->Category->addCategoryLink($sids, $parent, $categoryName, $description);
+                        $output .= $this->Category->addCategoryLink($sids, $categoryId, $name, $description, false, $isActive);
                     }
                 }
                 $open = $level;
