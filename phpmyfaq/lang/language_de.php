@@ -1010,3 +1010,4 @@ $PMF_LANG["rightsLanguage"]['approverec'] = "Eintrag freigeben";
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['ad_menu_upgrade'] = 'Aktualisieren';
+$PMF_LANG['ad_you_shouldnt_update'] = 'Sie nutzen die aktuelle Version von phpMyFAQ. Eine Aktualisierung ist nicht notwendig.';

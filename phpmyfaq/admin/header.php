@@ -173,6 +173,7 @@ header("Vary: Negotiate,Accept");
         case 'translist':
         case 'transedit':
         case 'transadd':
+        case 'upgrade':
             $secLevelHeader   = $PMF_LANG['admin_mainmenu_configuration'];
             $secLevelEntries .= addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
             $secLevelEntries .= addMenuEntry('editconfig', 'upgrade', 'ad_menu_upgrade', $action);
