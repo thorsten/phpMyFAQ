@@ -370,6 +370,10 @@ $tpl = new PMF_Template (array('index'        => 'index.tpl',
 $usersOnLine    = getUsersOnline();
 $totUsersOnLine = $usersOnLine[0] + $usersOnLine[1];
 $systemUri      = PMF_Link::getSystemUri('index.php');
+
+$helper = PMF_Helper_Category::getInstance();
+$helper->setCategory($category);
+
 $main_template_vars = array(
     'title'               => $faqconfig->get('main.titleFAQ').$title,
     'baseHref'            => $systemUri,
@@ -386,7 +390,7 @@ $main_template_vars = array(
     'action'              => $action,
     'dir'                 => $PMF_LANG['dir'],
     'msgCategory'         => $PMF_LANG['msgCategory'],
-    'showCategories'      => $category->printCategories($cat),
+    'showCategories'      => $helper->renderCategoryNavigation($cat),
     'searchBox'           => $PMF_LANG['msgSearch'],
     'languageBox'         => $PMF_LANG['msgLangaugeSubmit'],
     'writeLangAdress'     => $writeLangAdress,

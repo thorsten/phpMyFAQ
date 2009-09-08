@@ -110,7 +110,7 @@ class PMF_Category
      *
      * @var  array
      */
-    private $treeTab = array();
+    public $treeTab = array();
 
     /**
      * Symbol for each item
@@ -551,11 +551,11 @@ class PMF_Category
     }
 
     /**
-     *  total height of the expanded tree
+     * Total height of the expanded tree
      * 
      * @return integer
      */
-    private function height()
+    public function height()
     {
         return count($this->treeTab);
     }
@@ -685,7 +685,7 @@ class PMF_Category
      * @param  integer $y ID
      * @return array
      */
-    private function getLineDisplay($y)
+    public function getLineDisplay($y)
     {
         $ret[0] = $this->symbols[$this->treeTab[$y]["symbol"]];
         $ret[1] = $this->treeTab[$y]["name"];
@@ -701,7 +701,7 @@ class PMF_Category
      * @param  integer $l Current line
      * @return integer
      */
-    private function getNextLineTree($l)
+    public function getNextLineTree($l)
     {
         if ($this->treeTab[$l]["symbol"] != "plus") {
             return $l + 1;
@@ -725,85 +725,9 @@ class PMF_Category
     {
         return $this->getChildren($this->categoryName[$id]['parent_id']);
     }
-
+    
     /**
-    * Displays the main navigation
-    *
-    * @param  integer $activeCat Selected category
-    * @return string
-    */
-    public function printCategories($activeCat = 0)
-    {
-        global $sids, $PMF_LANG;
-
-        $open   = 0;
-        $output = '';
-
-        if ($this->height() > 0) {
-            for ($y = 0 ;$y < $this->height(); $y = $this->getNextLineTree($y)) {
-                list($symbol, $categoryName, $parent, $description) = $this->getLineDisplay($y);
-
-                if ($activeCat == $parent) {
-                    $a = ' class="active"';
-                } else {
-                    $a = '';
-                }
-
-                $level = $this->treeTab[$y]["level"];
-                $leveldiff = $open - $level;
-
-                if ($leveldiff > 1) {
-                    $output .= '</li>';
-                    for ($i = $leveldiff; $i > 1; $i--) {
-                        $output .= sprintf("\n%s</ul>\n%s</li>\n",
-                        str_repeat("\t", $level + $i + 1),
-                        str_repeat("\t", $level + $i));
-                    }
-                }
-
-                if ($level < $open) {
-                    if (($level - $open) == -1) {
-                        $output .= '</li>';
-                    }
-                    $output .= "\n".str_repeat("\t", $level + 2)."</ul>\n".str_repeat("\t", $level + 1)."</li>\n";
-                } elseif ($level == $open && $y != 0) {
-                    $output .= "</li>\n";
-                }
-
-                if ($level > $open) {
-                    $output .= sprintf("\n%s<ul class=\"subcat\">\n%s<li>",
-                        str_repeat("\t", $level + 1),
-                        str_repeat("\t", $level + 1));
-                } else {
-                    $output .= str_repeat("\t", $level + 1)."<li>";
-                }
-
-                if (isset($this->treeTab[$y]['symbol']) && $this->treeTab[$y]['symbol'] == 'plus') {
-                    $output .= $this->addCategoryLink($sids, $parent, $categoryName, $description, true);
-                } else {
-                    if ($this->treeTab[$y]['symbol'] == 'minus') {
-                        $name = ($this->treeTab[$y]['parent_id'] == 0) ? $categoryName : $this->categoryName[$this->treeTab[$y]['id']]['name'];
-                        $output .= $this->addCategoryLink($sids, $this->treeTab[$y]['parent_id'], $name, $description);
-                    } else {
-                        $output .= $this->addCategoryLink($sids, $parent, $categoryName, $description);
-                    }
-                }
-                $open = $level;
-            }
-            if ($open > 0) {
-                $output .= str_repeat("</li>\n\t</ul>\n\t", $open);
-            }
-            $output .= "</li>";
-            return $output;
-
-        } else {
-            $output = '<li><a href="#">'.$PMF_LANG['no_cats'].'</a></li>';
-        }
-        return $output;
-    }
-
-    /**
-     * Private method to create a category link
+     * Method to create a category link
      *
      * @param   string  $sids         Session id
      * @param   integer $parent       Parent category
@@ -812,7 +736,7 @@ class PMF_Category
      * @param   boolean $hasChildren  Child categories available
      * @return  string
      */
-    private function addCategoryLink($sids, $parent, $categoryName, $description, $hasChildren = false)
+    public function addCategoryLink($sids, $parent, $categoryName, $description, $hasChildren = false)
     {
         $url   = sprintf('%saction=show&amp;cat=%d', $sids, $parent);
         $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
