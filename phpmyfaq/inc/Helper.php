@@ -58,7 +58,7 @@ abstract class PMF_Helper
      * 
      * @return void
      */
-    protected function setCategory(PMF_Category $Category)
+    public function setCategory(PMF_Category $Category)
     {
         $this->Category = $Category;
     }
@@ -68,7 +68,7 @@ abstract class PMF_Helper
      * 
      * @return void
      */
-    protected function setTags(PMF_Tags $Tags)
+    public function setTags(PMF_Tags $Tags)
     {
         $this->Tags = $Tags;
     }
@@ -78,7 +78,7 @@ abstract class PMF_Helper
      * 
      * @var PMF_Template
      */
-    protected function setTemplate(PMF_Template $Template)
+    public function setTemplate(PMF_Template $Template)
     {
         $this->Template = $Template;
     }

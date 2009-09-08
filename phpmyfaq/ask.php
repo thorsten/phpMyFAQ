@@ -2,11 +2,12 @@
 /**
  * Page for adding new questions
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2002-09-17
- * @version   SVN: $Id$
- * @copyright 2002-2009 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Frontend
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2002-09-17
+ * @version    SVN: $Id$
+ * @copyright  2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -35,6 +36,9 @@ $faqsession->userTracking('ask_question', 0);
 
 $category->buildTree();
 
+$helper = PMF_Helper_Category::getInstance();
+$helper->setCategory($category);
+
 $tpl->processTemplate('writeContent', array(
     'msgQuestion'          => $PMF_LANG['msgQuestion'],
     'msgNewQuestion'       => $PMF_LANG['msgNewQuestion'],
@@ -44,7 +48,7 @@ $tpl->processTemplate('writeContent', array(
     'defaultContentMail'   => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
     'defaultContentName'   => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
     'msgAskCategory'       => $PMF_LANG['msgAskCategory'],
-    'printCategoryOptions' => $category->printCategoryOptions(),
+    'printCategoryOptions' => $helper->renderCategoryOptions(),
     'msgAskYourQuestion'   => $PMF_LANG['msgAskYourQuestion'],
     'captchaFieldset'      => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('ask'), $captcha->caplength),
     'msgNewContentSubmit'  => $PMF_LANG['msgNewContentSubmit']));

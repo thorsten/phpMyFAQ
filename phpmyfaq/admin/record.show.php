@@ -31,8 +31,10 @@ printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 if ($permission['editbt'] || $permission['delbt']) {
     // (re)evaluate the Category object w/o passing the user language
     $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
-    $category->transform(0);
     $category->buildTree();
+    
+    $helper = PMF_Helper_Category::getInstance();
+    $helper->setCategory($category);
 
     $linkverifier = new PMF_Linkverifier($user->getLogin());
     if ($linkverifier->isReady()) {
@@ -104,7 +106,7 @@ if ($permission['editbt'] || $permission['delbt']) {
             <td><strong><?php print $PMF_LANG["msgCategory"]; ?>:</strong></td>
             <td><select class="admin" name="searchcat">
             <option value="0"><?php print $PMF_LANG["msgShowAllCategories"]; ?></option>
-            <?php print $category->printCategoryOptions($searchcat); ?>
+            <?php print $helper->renderCategoryOptions($searchcat); ?>
             </select></td>
             <td><input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["msgSearch"]; ?>" /></td>
         </tr>

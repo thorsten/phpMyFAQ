@@ -60,7 +60,7 @@ class PMF_Helper_Category extends PMF_Helper
      * Returns the single instance
      *
      * @access static
-     * @return PMF_Helper_Search
+     * @return PMF_Helper_Category
      */
     public static function getInstance()
     {
@@ -79,6 +79,48 @@ class PMF_Helper_Category extends PMF_Helper
     private function __clone()
     {
         
+    }
+    
+
+    /**
+     * Get all categories in <option> tags
+     *
+     * @param  mixed $categoryId Category id or array of category ids
+     * 
+     * @return string
+     */
+    public function renderCategoryOptions($categoryId = '')
+    {
+        $categories = '';
+
+        if (!is_array($categoryId)) {
+            $categoryId = array(array('category_id'   => $categoryId, 
+                                      'category_lang' => ''));
+        }
+
+        $i = 0;
+        foreach ($this->Category->catTree as $cat) {
+            $indent = '';
+            for ($j = 0; $j < $cat['indent']; $j++) {
+                $indent .= '....';
+            }
+            $categories .= "\t<option value=\"".$cat['id']."\"";
+
+            if (0 == $i && count($categoryId) == 0) {
+                $categories .= ' selected="selected"';
+            } else {
+                foreach ($categoryId as $categoryid) {
+                    if ($cat['id'] == $categoryid['category_id']) {
+                        $categories .= ' selected="selected"';
+                    }
+                }
+            }
+
+            $categories .= ">";
+            $categories .= $indent.$cat['name'] . "</option>\n";
+            $i++;
+        }
+        return $categories;
     }
        
 }

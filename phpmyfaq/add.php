@@ -34,27 +34,24 @@ if (!is_null($showCaptcha)) {
 
 $faqsession->userTracking('new_entry', 0);
 
-$question    = '';
-$readonly    = '';
-$question_id = PMF_Filter::filterInput(INPUT_GET, 'question', FILTER_VALIDATE_INT);
-if (!is_null($question_id)) {
-    $oQuestion = $faq->getQuestion($question_id);
+// Get possible user input
+$inputQuestion = PMF_Filter::filterInput(INPUT_GET, 'question', FILTER_VALIDATE_INT);
+$inputCategory = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+
+
+$question = $readonly = '';
+if (!is_null($inputQuestion)) {
+    $oQuestion = $faq->getQuestion($inputQuestion);
     $question  = $oQuestion['question'];
     if (PMF_String::strlen($question)) {
         $readonly = ' readonly="readonly"';
     }
 }
 
-$category_id = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
-if (!is_null($category_id)) {
-    $categories = array(array(
-        'category_id'   => $category_id,
-        'category_lang' => $LANGCODE));
-} else {
-    $categories = array();
-}
-
 $category->buildTree();
+
+$helper = PMF_Helper_Category::getInstance();
+$helper->setCategory($category);
 
 $tpl->processTemplate('writeContent', array(
     'msgNewContentHeader'   => $PMF_LANG['msgNewContentHeader'],
@@ -65,7 +62,7 @@ $tpl->processTemplate('writeContent', array(
     'msgNewContentName'     => $PMF_LANG['msgNewContentName'],
     'msgNewContentMail'     => $PMF_LANG['msgNewContentMail'],
     'msgNewContentCategory' => $PMF_LANG['msgNewContentCategory'],
-    'printCategoryOptions'  => $category->printCategoryOptions($categories),
+    'printCategoryOptions'  => $helper->renderCategoryOptions($inputCategory),
     'msgNewContentTheme'    => $PMF_LANG['msgNewContentTheme'],
     'readonly'              => $readonly,
     'printQuestion'         => $question,

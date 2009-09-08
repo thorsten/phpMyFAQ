@@ -27,10 +27,16 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $faqsession->userTracking('fulltext_search', 0);
 
+// Get possible user input
+$inputLanguage   = PMF_Filter::filterInput(INPUT_GET, 'langs', FILTER_SANITIZE_STRING);
+$inputCategory   = PMF_Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALIDATE_INT, '%');
+$inputTag        = PMF_Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_VALIDATE_INT);
+$inputSearchTerm = PMF_Filter::filterInput(INPUT_GET, 'suchbegriff', FILTER_SANITIZE_STRIPPED);
+$search          = PMF_Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_STRIPPED);
+
 // Search only on current language (default)
 $allLanguages = false;
-$langs        = PMF_Filter::filterInput(INPUT_GET, 'langs', FILTER_SANITIZE_STRING);
-if (!is_null($langs)) {
+if (!is_null($inputLanguage)) {
     $allLanguages = true;
 }
 
@@ -44,8 +50,7 @@ if ($allLanguages) {
 }
 
 $faqsearch           = new PMF_Search();
-$searchCategory      = PMF_Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALIDATE_INT, '%');
-$searchterm          = '';
+$inputSearchTerm          = '';
 $printResult         = $PMF_LANG['help_search'];
 $tagSearch           = false;
 $mostPopularSearches = 'n/a'; // to be implemented
@@ -53,36 +58,33 @@ $mostPopularSearches = 'n/a'; // to be implemented
 //
 // Handle the Tagging ID
 //
-$tag_id      = PMF_Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_VALIDATE_INT);
-if (!is_null($tag_id)) {
+if (!is_null($inputTag)) {
     $tagSearch   = true;
     $tagging     = new PMF_Tags();
-    $record_ids  = $tagging->getRecordsByTagId($tag_id);
+    $record_ids  = $tagging->getRecordsByTagId($inputTag);
     $printResult = $faq->showAllRecordsByIds($record_ids);
 }
 
 //
 // Handle the full text search stuff
 //
-$suchbegriff = PMF_Filter::filterInput(INPUT_GET, 'suchbegriff', FILTER_SANITIZE_STRIPPED);
-$search      = PMF_Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_STRIPPED);
-if (!is_null($suchbegriff) || !is_null($search)) {
-    if (!is_null($suchbegriff)) {
-        $searchterm = $db->escape_string(strip_tags($suchbegriff));
+if (!is_null($inputSearchTerm) || !is_null($search)) {
+    if (!is_null($inputSearchTerm)) {
+        $inputSearchTerm = $db->escape_string(strip_tags($inputSearchTerm));
     }
     if (!is_null($search)) {
-        $searchterm = $db->escape_string(strip_tags($search));
+        $inputSearchTerm = $db->escape_string(strip_tags($search));
     }
-    $printResult = searchEngine($searchterm, $searchCategory, $allLanguages);
-    $searchterm  = stripslashes($searchterm);
+    $printResult      = searchEngine($inputSearchTerm, $inputCategory, $allLanguages);
+    $inputSearchTerm  = stripslashes($inputSearchTerm);
     
-    $faqsearch->logSearchTerm($searchterm);
+    $faqsearch->logSearchTerm($inputSearchTerm);
 }
 
 // Change a little bit the $searchCategory value;
-$searchCategory = ('%' == $searchCategory) ? 0 : $searchCategory;
+$inputCategory = ('%' == $inputCategory) ? 0 : $inputCategory;
 
-$faqsession->userTracking('fulltext_search', $searchterm);
+$faqsession->userTracking('fulltext_search', $inputSearchTerm);
 
 $category->buildTree();
 
@@ -99,14 +101,17 @@ foreach ($mostPopularSearchData as $searchItem) {
         $searchItem['number']);
 }
 
+$helper = PMF_Helper_Category::getInstance();
+$helper->setCategory($category);
+
 $tpl->processTemplate('writeContent', array(
     'msgSearch'                => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgSearch']),
-    'searchString'             => PMF_htmlentities($searchterm, ENT_QUOTES, $PMF_LANG['metaCharset']),
+    'searchString'             => PMF_htmlentities($inputSearchTerm, ENT_QUOTES, $PMF_LANG['metaCharset']),
     'searchOnAllLanguages'     => $PMF_LANG['msgSearchOnAllLanguages'],
     'checkedAllLanguages'      => $allLanguages ? ' checked="checked"' : '',
     'selectCategories'         => $PMF_LANG['msgSelectCategories'],
     'allCategories'            => $PMF_LANG['msgAllCategories'],
-    'printCategoryOptions'     => $category->printCategoryOptions($searchCategory),
+    'printCategoryOptions'     => $helper->renderCategoryOptions($inputCategory),
     'writeSendAdress'          => '?'.$sids.'action=search',
     'msgSearchWord'            => $PMF_LANG['msgSearchWord'],
     'printResult'              => $printResult,

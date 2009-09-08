@@ -33,6 +33,9 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
     $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $category->buildTree();
+    
+    $helper = PMF_Helper_Category::getInstance();
+    $helper->setCategory($category);
 
     $current_category = '';
     $categories       = array();
@@ -207,7 +210,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
     <label class="lefteditor" for="rubrik"><?php print $PMF_LANG["ad_entry_category"]; ?></label>
     <select name="rubrik[]" id="rubrik" size="5" multiple="multiple">
-<?php print $category->printCategoryOptions($categories); ?>
+<?php print $helper->renderCategoryOptions($categories); ?>
     </select><br />
 
     <label class="lefteditor" for="thema"><?php print $PMF_LANG["ad_entry_theme"]; ?></label>

@@ -727,46 +727,6 @@ class PMF_Category
     }
 
     /**
-     * Get all categories in <option> tags
-     *
-     * @param  mixed $catID Category id or array of category ids
-     * @return string
-     */
-    public function printCategoryOptions($catID = "")
-    {
-        $categories = '';
-
-        if (!is_array($catID)) {
-            $catID = array(array('category_id'   => $catID, 
-                                 'category_lang' => ''));
-        }
-
-        $i = 0;
-        foreach ($this->catTree as $cat) {
-            $indent = '';
-            for ($j = 0; $j < $cat['indent']; $j++) {
-                $indent .= '....';
-            }
-            $categories .= "\t<option value=\"".$cat['id']."\"";
-
-            if (0 == $i && count($catID) == 0) {
-                $categories .= " selected=\"selected\"";
-            } else {
-                foreach ($catID as $categoryid) {
-                    if ($cat['id'] == $categoryid['category_id']) {
-                        $categories .= " selected=\"selected\"";
-                    }
-                }
-            }
-
-            $categories .= ">";
-            $categories .= $indent.$cat['name']."</option>\n";
-            $i++;
-        }
-        return $categories;
-    }
-
-    /**
      * Get all categories in a unordered list
      *
      * @param  mixed $catID Category id or array of category ids

@@ -8,8 +8,8 @@
  * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author     Peter Beauvain <pbeauvain@web.de>
  * @since      2003-04-17
- * @copyright  2003-2009 phpMyFAQ Team
  * @version    SVN: $Id$
+ * @copyright  2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-require_once PMF_INCLUDE_DIR.'/Export.php';
+require PMF_INCLUDE_DIR . '/Export.php';
 ?>
     <h2><?php print($PMF_LANG["ad_menu_export"]); ?></h2>
     <form action="?action=exportfile" method="post">
@@ -37,17 +37,15 @@ if (!emptyTable(SQLPREFIX."faqdata")) {
     if (!emptyTable(SQLPREFIX."faqcategories")) {
         $category = new PMF_Category($current_admin_user, $current_admin_groups);
         $category->buildTree();
-        // TODO: ENHANCEMENT/VERY LOW PRIORITY
-        //       Give the user a multple selection and add support
-        //       for multiple category ids (multiple="multiple")
-        //       on export.php, $nCatid->$aCatid
-        //       Currently the user can choose ONLY 1 category (not a big limitation)
+        
+        $helper = PMF_Helper_Category::getInstance();
+        $helper->setCategory($category);
 ?>
         <fieldset><legend><?php print($PMF_LANG['ad_export_which_cat']); ?></legend>
             <label class="left" for="rubrik"><?php print($PMF_LANG["ad_entry_category"]); ?></label>
-            <select name="catid" id="catid" size="10">
+            <select name="catid" id="catid" size="1">
 <?php
-        print($category->printCategoryOptions());
+        print $helper->renderCategoryOptions();
 ?>
             </select>
             <br />
