@@ -158,7 +158,7 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
         if(is_uploaded_file($this->path)) {
             $retval = move_uploaded_file($this->path, $target);
         } else {
-            $retval = rename($this->path, $target);
+            $retval = copy($this->path, $target);
         }
         
         return $retval;

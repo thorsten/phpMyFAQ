@@ -370,6 +370,48 @@ abstract class PMF_Attachment_Abstract
     }
     
     /**
+     * Check if the same virtual hash exists more than once
+     * in the database. If so, this means the file
+     * is already uploaded as unencrypted.
+     *  
+     * @return boolean
+     */
+    protected function linkedRecords()
+    {
+        $sql = sprintf("SELECT
+                             COUNT(1) AS count
+                        FROM 
+                             %sfaqattachment
+                        WHERE virtual_hash = '%s'",
+                        SQLPREFIX,
+                        $this->virtualHash);
+        
+        $result = $this->db->query($sql);
+        
+        if ($result) {
+            $assoc = $this->db->fetch_assoc($result);
+        }
+                        
+        return $assoc['count'] > 1;
+    }
+    
+    /**
+     * Remove meta data from the db
+     * 
+     * @return null
+     */
+    protected function deleteMeta()
+    {
+        $sql = sprintf("DELETE FROM
+                             %sfaqattachment
+                        WHERE id = %d",
+                        SQLPREFIX,
+                        $this->id);
+                        
+        $this->db->query($sql);
+    }
+    
+    /**
      * Validate attached file with the real hash
      * 
      * @return boolean
@@ -379,11 +421,13 @@ abstract class PMF_Attachment_Abstract
         // TODO implement this
     }
     
-    /*abstract protected function saveInternal();
-    
-    abstract protected function begin();
-    
-    abstract protected function commit();
-    
-    abstract protected function rollback();*/
+    /**
+     * Destructor
+     * 
+     * @return null
+     */
+    public function __destruct()
+    {
+        
+    }
 }

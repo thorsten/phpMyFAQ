@@ -116,21 +116,25 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
             
             $targetFile = $this->buildFilePath();
             
-            if(null !== $this->id && $this->createSubDirs($targetFile)) {
-                $source = new PMF_Attachment_Filesystem_File_Vanilla($filepath);
-                if($this->encrypted) {
-                    $target = new PMF_Attachment_Filesystem_File_Encrypted(
-                            $targetFile,
-                            PMF_Attachment_Filesystem_File::MODE_WRITE,
-                            $this->key
-                            );
+            if(null !== $this->id && $this->createSubDirs($targetFile)) {                
+                if(!$this->linkedRecords()) {
+                    $source = new PMF_Attachment_Filesystem_File_Vanilla($filepath);
+                    $target = $this->getFile(PMF_Attachment_Filesystem_File::MODE_WRITE);
+                    
+                    $retval = $source->moveTo($target);
                 } else {
-                    $target = $targetFile;
+                    $retval = true;
                 }
                 
-                $retval = $source->moveTo($target);
-                
-                $this->postUpdateMeta();
+                if($retval) {
+                    $this->postUpdateMeta();
+                } else {
+                    /**
+                     * File wasn't saved
+                     */
+                    $this->delete();
+                    $retval = false;
+                }
             }
         }
         
@@ -140,11 +144,21 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
     /**
      * Delete attachment
      * 
-     * @return boolean
+     * @return null
      */
     public function delete()
     {
+        /**
+         * Won't delete the file if there are still some
+         * records hanging on it
+         */
+        if(!$this->linkedRecords()) {
+            $this->getFile()->delete();
+        }
         
+        $this->deleteMeta();
+        
+        $this->__destruct();
     }
     
     /**
@@ -163,21 +177,10 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
      * @param string  $disposition diposition type (ignored if $headers false)
      * 
      * @return null
-     * 
-     * TODO send exact content type
-     * TODO send content length header
      */
     public function rawOut($headers = true, $disposition = 'attachment')
     {
-        if($this->encrypted) {
-            $file = new PMF_Attachment_Filesystem_File_Encrypted(
-                            $this->buildFilePath(),
-                            PMF_Attachment_Filesystem_File::MODE_READ,
-                            $this->key
-                            );
-        } else {
-            $file = new PMF_Attachment_Filesystem_File_Vanilla($this->buildFilePath());
-        }
+        $file = $this->getFile();
         
         if($headers) {
             $disposition = 'attachment' == $disposition ? 'attachment' : 'inline';
@@ -190,5 +193,27 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
         while(!$file->eof()) {
             echo $file->getChunk();   
         }
+    }
+    
+    /**
+     * Factory method to initialise the corresponding file object
+     * 
+     * @param string $mode filemode for file open
+     * 
+     * @return object
+     */
+    private function getFile($mode = PMF_Attachment_Filesystem_File::MODE_READ)
+    {
+        if($this->encrypted) {
+            $file = new PMF_Attachment_Filesystem_File_Encrypted(
+                            $this->buildFilePath(),
+                            $mode,
+                            $this->key
+                            );
+        } else {
+            $file = new PMF_Attachment_Filesystem_File_Vanilla($this->buildFilePath());
+        }
+        
+        return $file;
     }
 }
