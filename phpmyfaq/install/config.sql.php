@@ -61,3 +61,4 @@ $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.templateSet', 'def
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.attachmentsStorageType', '0')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.enableAttachmentEncryption', 'false')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.defaultAttachmentEncKey', '')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.useSslForLogins', 'false')";

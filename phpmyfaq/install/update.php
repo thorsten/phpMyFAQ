@@ -477,8 +477,9 @@ if ($step == 4) {
                 break; 
         }
         
-        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.enableUpdate', 'false')";
-        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.templateSet', 'default')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.enableUpdate', 'false')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.useSslForLogins', 'false')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.templateSet', 'default')";
         
         /**
          * We did check in the first and second steps,
@@ -503,9 +504,9 @@ if ($step == 4) {
         /**
          * Attachments stuff
          */
-        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.attachmentsStorageType', '0')";
-        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.enableAttachmentEncryption', 'false')";
-        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.defaultAttachmentEncKey', '')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.attachmentsStorageType', '0')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.enableAttachmentEncryption', 'false')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.defaultAttachmentEncKey', '')";
         switch($DB['type']) {
             case 'pgsql':
                 $query[] = "CREATE TABLE " . SQLPREFIX . "faqattachment (
