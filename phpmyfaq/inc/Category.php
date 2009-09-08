@@ -727,34 +727,6 @@ class PMF_Category
     }
 
     /**
-     * Get all categories in a unordered list
-     *
-     * @param  mixed $catID Category id or array of category ids
-     * @return string
-     */
-    public function printCategoryList($catID = "")
-    {
-        $categories = '<ul>';
-
-        if (!is_array($catID)) {
-            $catID = array(array('category_id' => $catID, 'category_lang' => ''));
-        }
-
-        $i = 0;
-        foreach ($this->catTree as $cat) {
-            $indent = '';
-            for ($j = 0; $j < $cat['indent']; $j++) {
-                $indent .= '....';
-            }
-            $categories .= "\t<li>";
-            $categories .= $indent.$cat['name'];
-            $i++;
-        }
-        $categories .= '</ul>';
-        return $categories;
-    }
-
-    /**
     * Displays the main navigation
     *
     * @param  integer $activeCat Selected category
