@@ -409,20 +409,7 @@ if($permission['approverec']):
     
     /* ]]> */
     </script>
-    
 <?php
-        $comment  = new PMF_Comment();
-        $comments = $comment->getCommentsData($faqData['id'], 'faq');
-        if (count($comments) > 0) {
-?>
-    <p><strong><?php print $PMF_LANG["ad_entry_comment"] ?></strong></p>
-<?php
-            foreach ($comments as $co) {
-?>
-    <p><?php print $PMF_LANG["ad_entry_commentby"] ?> <a href="mailto:<?php print $co['email']; ?>"><?php print $co['user']; ?></a>:<br /><?php print $co['content']; ?><br /><a href="?action=delcomment&amp;artid=<?php print $faqData['id']; ?>&amp;cmtid=<?php print $co['id']; ?>&amp;lang=<?php print $faqData['lang']; ?>"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></p>
-<?php
-            }
-        }
     }
 } elseif ($permission["editbt"] != 1 && !emptyTable(SQLPREFIX."faqcategories")) {
     print $PMF_LANG["err_NotAuth"];
