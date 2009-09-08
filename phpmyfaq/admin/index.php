@@ -308,6 +308,7 @@ if (isset($auth) && in_array(true, $permission)) {
             case "searchstats": 			require_once 'stat.search.php'; break;
             // functions for config administration
             case 'config':                  require_once 'configuration.php'; break;
+            case 'upgrade':                 require_once 'upgrade.php'; break;
             case 'linkconfig':              require_once 'linkconfig.main.php'; break;
             case 'stopwordsconfig':         require_once 'stopwordsconfig.main.php'; break;
             // functions for backup administration

@@ -1007,3 +1007,6 @@ $PMF_LANG["rightsLanguage"]['addtranslation'] = "Übersetzung hinzufügen";
 $PMF_LANG["rightsLanguage"]['edittranslation'] = "Übersetzung bearbeiten";
 $PMF_LANG["rightsLanguage"]['deltranslation'] = "Übersetzung löschen";
 $PMF_LANG["rightsLanguage"]['approverec'] = "Eintrag freigeben";
+
+// added 2.6.0-alpha - 2009-09-06 by Thorsten
+$PMF_LANG['ad_menu_upgrade'] = 'Aktualisieren';

@@ -1038,3 +1038,6 @@ $PMF_LANG["rightsLanguage"]['addtranslation'] = "add translation";
 $PMF_LANG["rightsLanguage"]['edittranslation'] = "edit translation";
 $PMF_LANG["rightsLanguage"]['deltranslation'] = "delete translation";
 $PMF_LANG["rightsLanguage"]['approverec'] = "approve records";
+
+// added 2.6.0-alpha - 2009-09-06 by Thorsten
+$PMF_LANG['ad_menu_upgrade'] = 'Upgrade';
