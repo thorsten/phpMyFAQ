@@ -150,7 +150,7 @@ class PMF_Relation
                     $row->lang);
             $oLink             = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
             $oLink->itemTitle  = $row->thema;
-            $oLink->text       = PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']);
+            $oLink->text       = $row->thema;
             $oLink->tooltip    = $row->thema;
             $relevantslisting .= $oLink->toHtmlAnchor().'</li>';
             $i++;
