@@ -995,11 +995,11 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
 			}
 
 			if ($b_permission) {
-                $rubriktext = $category->getPath($row->category_id);
-                $thema = PMF_htmlentities(chopString($row->thema, 15),ENT_QUOTES, $PMF_LANG['metaCharset']);
-                $content = chopString(strip_tags($row->content), 25);
-                $searchterm = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'), '', $searchterm);
-                $searchterm = preg_quote($searchterm, '/');
+                $rubriktext  = $category->getPath($row->category_id);
+                $thema       = chopString($row->thema, 15);
+                $content     = chopString(strip_tags($row->content), 25);
+                $searchterm  = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'), '', $searchterm);
+                $searchterm  = preg_quote($searchterm, '/');
                 $searchItems = explode(' ', $searchterm);
 
                 if (strlen($searchItems[0]) > 1) {
