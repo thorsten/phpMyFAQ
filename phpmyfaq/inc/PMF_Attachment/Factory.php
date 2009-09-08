@@ -102,7 +102,7 @@ class PMF_Attachment_Factory
     /**
      * Fetch all record attachments
      * 
-     * @param int $id ID
+     * @param int $recordId ID of the record
      * 
      * @return array
      */
@@ -110,6 +110,21 @@ class PMF_Attachment_Factory
     {
         $retval = array();
         
+        $db = PMF_Db::getInstance();
+        
+        $sql = sprintf("SELECT
+                              id
+                       FROM %sfaqattachment
+                       WHERE record_id = %d",
+                       SQLPREFIX,
+                       $recorId);
+        $result = $db->fetchAll($db->query($sql));
+        
+        if($result) {
+            foreach($result as $item) {
+                $retval[] = self::create($item->id);
+            }
+        }
         return $retval;
     }
     
