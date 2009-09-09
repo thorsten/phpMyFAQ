@@ -163,7 +163,7 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
             $retval &= $this->getFile()->delete();
         }
         
-        $retval &= $this->deleteMeta();
+        $this->deleteMeta();
         
         $this->__destruct();
         
