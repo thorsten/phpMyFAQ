@@ -19,6 +19,8 @@ Changes since 2.5.x:
 - added share on Facebook link (Thorsten)
 - added a rest/json API (Thorsten)
 - added secure login if SSL is available (Tobias Hommel)
+- improved attachment functionality (Anatoliy)
+- improved install script (Thorsten)
 - minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
@@ -35,10 +37,31 @@ Version 2.6.0-alpha - 2009-09-
 - added share on Facebook link (Thorsten)
 - added a rest/json API (Thorsten)
 - added secure login if SSL is available (Tobias Hommel)
+- improved attachment functionality (Anatoliy)
+- improved install script (Thorsten)
 - minor bugfixes (Thorsten)
 
-Version 2.5.1 - 2009-08-
-- minor bugfixes (Thorsten)
+Version 2.5.3 - 2009-10-
+- added missing Perl syntax hightlighting (Thorsten)
+- fixed missing info link in news (Thorsten)
+- updated Japanese translation
+
+Version 2.5.2 - 2009-09-01
+- fixed IE6/7 only XSS vulnerability (Thorsten)
+- updated Polish language file (Dariusz Grzesista)
+- updated Chinese language file
+- fixed problem with Czech translation (Anatoliy)
+- many minor bugfixes (Thorsten)
+
+Version 2.5.1 - 2009-08-10
+- added support for LDAP-datamapping, e.g. against an Active Directory Server (Lars Scheithauer)
+- added support for multi-domain-authentication, e.g. against an ADS-Global Catalog (Lars Scheithauer)
+- added support for PHP LDAP options (Lars Scheithauer)
+- Added Lithuanian translation (Aurimas Fiseras)
+- fixed LDAP issues (Lars Scheithauer)
+- fixed some Oracle issues (Thorsten)
+- improved svn2package script (Rene Treffer)
+- many minor bugfixes (Thorsten)
 
 Version 2.5.0 - 2009-07-21
 - changed PHP requirement to PHP 5.2 (Thorsten)
