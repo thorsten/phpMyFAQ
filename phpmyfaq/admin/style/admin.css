@@ -111,7 +111,9 @@ input[type=checkbox].right, input[type=radio].right, input[type=submit].right { 
 fieldset.login { margin: 30px auto; padding: 30px 30px 10px 30px; width: 400px; }
 fieldset.login label.left { width: 30%; }
 fieldset.login input[type=text] { width: 60%; }
-fieldset.login input[type=submit] { position: relative; left: 50%; margin: 10px 10px 10px -50px; width: 100px; }
+fieldset.login input[type=submit] { position: relative; left: -50px; width: 50px; }
+fieldset.login input[type=reset] { position: relative; left: -40px; width: 50px; }
+fieldset.login #faqpassword { width: 60%; margin-bottom: 20px; }
 
 /* Table CSS definitions */
 table.list { border: 1px solid #cccccc; border-collapse: collapse; width: 768px; }
