@@ -350,10 +350,10 @@ if($permission['approverec']):
     <fieldset class="fullwidth">
     <legend><?php print $PMF_LANG['ad_record_expiration_window']; ?></legend>
         <label class="lefteditor" for="dateStart"><?php print $PMF_LANG['ad_news_from']; ?></label>
-        <input name="dateStart" id="dateStart" class="date-pick" />
+        <input name="dateStart" id="dateStart" class="date-pick" value="<?php print $faqData['dateStart']; ?>" />
         <br />
         <label class="lefteditor" for="dateEnd"><?php print $PMF_LANG['ad_news_to']; ?></label>
-        <input name="dateEnd" id="dateEnd" class="date-pick" />
+        <input name="dateEnd" id="dateEnd" class="date-pick" value="<?php print $faqData['dateEnd']; ?>" />
     </fieldset>
 
     <fieldset class="fullwidth">
