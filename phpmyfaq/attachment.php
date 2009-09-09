@@ -29,6 +29,10 @@ if(headers_sent()) {
     die();
 }
 
+/**
+ * TODO check if user is allowed to download this file
+ */
+
 $id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $att = PMF_Attachment_Factory::create($id);
 

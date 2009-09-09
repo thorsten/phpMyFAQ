@@ -78,7 +78,7 @@ PMF_Template::setTplSetName($faqconfig->get('main.templateSet'));
  */
 PMF_Attachment_Factory::init($faqconfig->get('main.attachmentsStorageType'),
                              $faqconfig->get('main.defaultAttachmentEncKey'),
-                             'true' == $faqconfig->get('main.enableAttachmentEncryption'));
+                             $faqconfig->get('main.enableAttachmentEncryption'));
 
 //
 // Create a new FAQ object
