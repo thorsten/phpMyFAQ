@@ -417,7 +417,7 @@ if (isset($auth) && in_array(true, $permission)) {
     } else {
         print "<p><strong>".$PMF_LANG["ad_auth_insert"]."</strong></p>\n";
     }
-    if (isset($_SERVER['HTTPS']) || $faqconfig->get('main.useSslForLogins')) {
+    if (isset($_SERVER['HTTPS']) || !$faqconfig->get('main.useSslForLogins')) {
 ?>
             <label class="left" for="faqusername"><?php print $PMF_LANG["ad_auth_user"]; ?></label>
             <input type="text" name="faqusername" id="faqusername" size="20" /><br />

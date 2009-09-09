@@ -329,7 +329,7 @@ if (!isset($allowedVariables[$action])) {
 if (isset($auth)) {
     $login_tpl = 'loggedin.tpl';
 } else {
-    if (isset($_SERVER['HTTPS']) || $faqconfig->get('main.useSslForLogins')) {
+    if (isset($_SERVER['HTTPS']) || !$faqconfig->get('main.useSslForLogins')) {
         $login_tpl = 'loginbox.tpl';
     } else {
         $login_tpl = 'secureswitch.tpl';
@@ -493,7 +493,7 @@ if (isset($auth)) {
         'printLogoutPath' => '?action=logout',
         'logout'          => $PMF_LANG['ad_menu_logout']));
 } else {
-    if (isset($_SERVER['HTTPS']) || $faqconfig->get('main.useSslForLogins')) {
+    if (isset($_SERVER['HTTPS']) || !$faqconfig->get('main.useSslForLogins')) {
         $tpl->processTemplate('loginBox', array(
             'writeLoginPath'  => $_SERVER['PHP_SELF'].'?action=login',
             'login'           => $PMF_LANG['ad_auth_ok'],
