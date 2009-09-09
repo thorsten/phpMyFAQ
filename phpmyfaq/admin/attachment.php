@@ -36,6 +36,13 @@ PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH.trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
+/**
+ * Initialize attachment factory
+ */
+PMF_Attachment_Factory::init($faqconfig->get('main.attachmentsStorageType'),
+                             $faqconfig->get('main.defaultAttachmentEncKey'),
+                             'true' == $faqconfig->get('main.enableAttachmentEncryption'));
+
 $currentSave   = filter_input(INPUT_POST, 'save',   FILTER_SANITIZE_STRING);
 $currentAction = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 
