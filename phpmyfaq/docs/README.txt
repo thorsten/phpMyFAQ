@@ -18,6 +18,7 @@ Changes since 2.5.x:
 - added support plurals in translations (Aurimas Fišeras)
 - added share on Facebook link (Thorsten)
 - added a rest/json API (Thorsten)
+- added secure login if SSL is available (Tobias Hommel)
 - minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
@@ -33,6 +34,7 @@ Version 2.6.0-alpha - 2009-09-
 - added support plurals in translations (Aurimas Fišeras)
 - added share on Facebook link (Thorsten)
 - added a rest/json API (Thorsten)
+- added secure login if SSL is available (Tobias Hommel)
 - minor bugfixes (Thorsten)
 
 Version 2.5.1 - 2009-08-
