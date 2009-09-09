@@ -1042,3 +1042,5 @@ $PMF_LANG["rightsLanguage"]['approverec'] = "approve records";
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['ad_menu_upgrade'] = 'Upgrade';
 $PMF_LANG['ad_you_shouldnt_update'] = 'You have the latest version of phpMyFAQ. You do not need to upgrade.';
+$LANG_CONF['main.onlySecureLogins'] = array(0 => 'checkbox', 1 => "Only allow logins over secure connection? (default: disabled)");
+$PMF_LANG['msgSecureSwitch'] = "Switch to secure mode to login!";

@@ -1011,3 +1011,5 @@ $PMF_LANG["rightsLanguage"]['approverec'] = "Eintrag freigeben";
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['ad_menu_upgrade'] = 'Aktualisieren';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Sie nutzen die aktuelle Version von phpMyFAQ. Eine Aktualisierung ist nicht notwendig.';
+$LANG_CONF['main.onlySecureLogins'] = array(0 => 'checkbox', 1 => "Logins nur &uuml;ber sichere Verbindung erlauben? (Voreinstellung: deaktiviert)");
+$PMF_LANG['msgSecureSwitch'] = "Zum sicheren Login wechseln";
