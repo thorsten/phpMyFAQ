@@ -174,7 +174,7 @@ if ($faqconfig->get('main.disableAttachments') && 'yes' == $faq->faqRecord['acti
     $outstr = "";
     
     while (list(,$att) = each($attList)) {
-        $outstr .= sprintf('<a href="%s" target="_blank">%s</a>, ',
+        $outstr .= sprintf('<a href="%s">%s</a>, ',
             $att->buildUrl(),
             $att->getFilename());
     }
