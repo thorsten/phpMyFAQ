@@ -89,8 +89,7 @@ if ((!$news['active']) || (!$news['allowComments']) || $expired) {
     $oLink->itemTitle = $header;
     $commentHref      = $oLink->toString().'#comment';
     $commentMessage   = sprintf(
-        '%s<a onclick="javascript:$(\'#comment\').show();" href="%s">%s</a>',
-        $PMF_LANG['msgYouCan'],
+        '<a onclick="javascript:$(\'#comment\').show();" href="%s">%s</a>',
         $commentHref,
         $PMF_LANG['newsWriteComment']);
 }

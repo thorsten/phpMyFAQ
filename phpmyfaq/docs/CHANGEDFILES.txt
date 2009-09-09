@@ -12,6 +12,7 @@ CHANGED FILES FROM 2.5.2 -> 2.5.3
 ./lang/language_ja.php
 ./template/artikel.tpl
 ./index.php
+./news.php
 
 
 

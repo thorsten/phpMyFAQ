@@ -160,7 +160,7 @@ class PMF_News
                 $item['header'],
                 $item['content']);
             if (strlen($item['link']) > 0) {
-                $output .= sprintf('<br />%s <a href="http://%s" target="_%s">%s</a>',
+                $output .= sprintf('<br />%s <a href="%s" target="_%s">%s</a>',
                     $this->pmf_lang['msgInfo'],
                     $item['link'],
                     $item['target'],
