@@ -23,58 +23,24 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
-
-$attachmentErrors = array();
+set_time_limit(0);
 
 if(headers_sent()) {
     die();
 }
 
-$recordId = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$attachmentFilename  = PMF_Filter::filterInput(INPUT_GET, 'file', FILTER_SANITIZE_STRING);
+$id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$att = PMF_Attachment_Factory::create($id);
 
-$recordAttachmentsDir = PMF_ATTACHMENTS_DIR . DIRECTORY_SEPARATOR . $recordId;
-$attachmentFilepath = $recordAttachmentsDir . DIRECTORY_SEPARATOR . $attachmentFilename;  
-
-$faq->getRecord($recordId);
-
-if(0 !== strpos(realpath($attachmentFilepath), $recordAttachmentsDir)) {
-    /**
-     * Check that nobody is traversing
-     * TODO much better would be to save attachment info
-     *      into db and handle downloads by index
-     */
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
-    exit();
-} else if(empty($recordId) || empty($attachmentFilename) || !isAttachmentDirOk($recordId) ||
-   !file_exists($attachmentFilepath) 
-) {
-    header('Status: 404 Not Found', true);
-    $attachmentErrors[] = $PMF_LANG['msgAttachmentNotFound'];
-}
-
-if(empty($attachmentErrors)) {
-
-    /**
-     * overwriting text/html header previously sent in index.php
-     * TODO read file mime type, decide either to send file as
-     *       atachment or inline, send exact content type 
-     *       
-     */
-    header('Content-Type: application/octet-stream', true);
-    
-    header('Content-Disposition: attachment; filename=' . $attachmentFilename , true);
-    header('Status: 200 OK', true);
-    
-    readfile($attachmentFilepath);
-    
+if($att) {
+    $att->rawOut();
     exit;
 }
 
 /**
  * If we're here, there was an error with file download
  */
-$tpl->processBlock('writeContent', 'attachmentErrors', array('item' => $attachmentErrors));
+$tpl->processBlock('writeContent', 'attachmentErrors', array('item' => 'Error'));
 $tpl->processTemplate('writeContent', array());
 $tpl->includeTemplate('writeContent', 'index');
 

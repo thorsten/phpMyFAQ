@@ -60,7 +60,7 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
         $this->path = $filepath;
         $this->mode = $mode;
         
-        $this->handle = fopen($this->path, $this->mode);
+        $this->handle = @fopen($this->path, $this->mode);
     }
     
     /**
@@ -106,11 +106,17 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
      */
     public function delete()
     {
+        $retval = true;
+        
         if($this->handle) {
             fclose($this->handle);
         }
         
-        return unlink($this->path);
+        if(!is_uploaded_file($this->path) && file_exists($this->path)) {
+            $retval = unlink($this->path);
+        }
+        
+        return $retval;
     }
     
     /**

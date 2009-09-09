@@ -101,6 +101,16 @@ function printInputFieldByType($key, $type)
 			    		}
 			    	}
                 	break;
+                	
+                case "main.attachmentsStorageType":
+                    foreach($PMF_LANG['att_storage_type'] as $i => $item) {
+                        $selected = $faqconfig->get($key) == $i
+                                  ? ' selected="selected"'
+                                  : '';
+                        printf('<option value="%d"%s>%s</option>',
+                               $i, $selected, $item);
+                    }
+                    break;
             }
             
             print "</select>\n<br />\n";

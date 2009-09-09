@@ -430,4 +430,9 @@ abstract class PMF_Attachment_Abstract
     {
         
     }
+    
+    public function getFilename()
+    {
+        return $this->filename;
+    } 
 }

@@ -227,30 +227,28 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     }
 
     if ($permission["addatt"]) {
-?>
-    <label><?php print $PMF_LANG["ad_att_att"]; ?></label>
-<?php
         if (isset($faqData['id']) && $faqData['id'] != "") {
-            $recordAttachmentsDir = PMF_ATTACHMENTS_DIR . DIRECTORY_SEPARATOR . $faqData['id'];
-?>
-        <strong><?php print $recordAttachmentsDir . DIRECTORY_SEPARATOR ?></strong><br />
-<?php
-            if (isAttachmentDirOk($faqData['id'])) {
-                $do = dir($recordAttachmentsDir);
-                while ($dat = $do->read()) {
-                    if ($dat != "." && $dat != "..") {
-                        print "<a href=\"../".buildAttachmentUrl($faqData['id'], rawurlencode($dat), true)."\">".$dat."</a>";
-                        if ($permission["delatt"]) {
-                            print "&nbsp;[&nbsp;<a href=\"?action=delatt&amp;id=".$faqData['id']."&amp;which=".rawurlencode($dat)."&amp;lang=".$faqData['lang']."\">".$PMF_LANG["ad_att_del"]."</a>&nbsp;]";
-                        }
-                        print "<br />\n";
+//            if (isAttachmentDirOk($faqData['id'])) {
+                $attList = PMF_Attachment_Factory::fetchByRecordId($faqData['id']);
+                while (list(,$att) = each($attList)) {
+                    print "<a href=\"../" .
+                          $att->buildUrl() .
+                          "\">" . 
+                          $att->getFilename() .
+                          "</a>";
+                    if ($permission["delatt"]) {
+                        print "&nbsp;[&nbsp;<a href=\"?action=delatt&amp;" .
+                        "record_id=" . $faqData['id'] . "&amp;id=" . 
+                        $att->getId() . "&amp;lang=" . $faqData['lang'] .
+                        "\">" . $PMF_LANG["ad_att_del"] . "</a>&nbsp;]";
                     }
+                    print "<br />\n";
                 }
-            } else {
-                print "<br />\n";
-                print "<em>".$PMF_LANG["ad_att_none"]."</em> ";
-            }
-            print "<a href=\"#\" onclick=\"Picture('attachment.php?id=".$faqData['id']."&amp;rubrik=".$current_category."', 'Attachment', 400,80)\">".$PMF_LANG["ad_att_add"]."</a>";
+//            } else {
+//                print "<br />\n";
+//                print "<em>".$PMF_LANG["ad_att_none"]."</em> ";
+//            }
+            print "<a href=\"#\" onclick=\"Picture('attachment.php?record_id=".$faqData['id']."&amp;record_lang=".$faqData['lang']."&amp;rubrik=".$current_category."', 'Attachment', 400,80)\">".$PMF_LANG["ad_att_add"]."</a>";
         } else {
             print "&nbsp;".$PMF_LANG["ad_att_nope"];
         }

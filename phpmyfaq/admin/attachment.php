@@ -5,6 +5,7 @@
  * @package    phpMyFAQ
  * @subpackage Administration
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Anatoliy Belsky <ab@php.net>
  * @since      2002-09-17
  * @version    SVN: $Id$ 
  * @copyright  2002-2009 phpMyFAQ
@@ -97,12 +98,15 @@ if (is_null($currentAction) || !is_null($currentSave)) {
 <?php
 }
 if (is_null($currentAction) && $auth && $permission["addatt"]) {
+    $recordId   = filter_input(INPUT_GET, 'record_id',   FILTER_VALIDATE_INT);
+    $recordLang = filter_input(INPUT_GET, 'record_lang', FILTER_SANITIZE_STRING);
 ?>
     <form action="?action=save" enctype="multipart/form-data" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></legend>
         <input type="hidden" name="MAX_FILE_SIZE" value="<?php print $faqconfig->get('main.maxAttachmentSize'); ?>" />
-        <input type="hidden" name="id" value="<?php print filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT); ?>" />
+        <input type="hidden" name="record_id" value="<?php print $recordId; ?>" />
+        <input type="hidden" name="record_lang" value="<?php print $recordLang; ?>" />
         <input type="hidden" name="save" value="TRUE" />
         <?php print $PMF_LANG["ad_att_att"]; ?> <input name="userfile" type="file" />
         <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_att_butt"]; ?>" />
@@ -117,23 +121,23 @@ if (!is_null($currentAction) && $auth && !$permission["addatt"]) {
 }
 
 if (!is_null($currentSave) && $currentSave == true && $auth && $permission["addatt"]) {
-    $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+    $recordId   = filter_input(INPUT_POST, 'record_id',   FILTER_VALIDATE_INT);
+    $recordLang = filter_input(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
 ?>
 <p><strong><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></strong></p>
 <?php
     if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && !(filesize($_FILES["userfile"]["tmp_name"]) > $faqconfig->get('main.maxAttachmentSize'))) {
-        if (!is_dir(PMF_ATTACHMENTS_DIR)) {
-            mkdir(PMF_ATTACHMENTS_DIR, 0777);
-        }
 
-        $recordAttachmentsDir = PMF_ATTACHMENTS_DIR . DIRECTORY_SEPARATOR . $id;
-        if (!is_dir($recordAttachmentsDir)) {
-            mkdir($recordAttachmentsDir, 0777);
-        }
+        $att = PMF_Attachment_Factory::create();
+        $att->setRecordId($recordId);
+        $att->setRecordLang($recordLang);
         
-        $attachmentFilepath = $recordAttachmentsDir . DIRECTORY_SEPARATOR . $_FILES["userfile"]["name"];
-        if (move_uploaded_file($_FILES["userfile"]["tmp_name"], $attachmentFilepath)) {
-            chmod ($attachmentFilepath, 0644);
+        /**
+         * To add user difined key
+         * $att->setKey($somekey, false);
+         */
+        
+        if ($att->save($_FILES["userfile"]["tmp_name"], $_FILES["userfile"]["name"])) {
             print "<p>".$PMF_LANG["ad_att_suc"]."</p>";
         }
         else {

@@ -125,6 +125,8 @@ class PMF_Attachment_Factory
                 $retval[] = self::create($item->id);
             }
         }
+        reset($retval);
+        
         return $retval;
     }
     

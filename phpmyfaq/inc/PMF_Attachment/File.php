@@ -97,12 +97,13 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
      * location.
      * 
      * @param string $filepath full path to the attachment file
+     * @param string $filename filename to force
      * 
      * @return boolean
      * 
      * TODO rollback if something went wrong
      */
-    public function save($filepath)
+    public function save($filepath, $filename = null)
     {
         $retval = false;
         
@@ -110,7 +111,7 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
             
             $this->realHash = md5_file($filepath);
             $this->filesize = filesize($filepath);
-            $this->filename = basename($filepath);
+            $this->filename = null == $filename ? basename($filepath) : $filename;
             
             $this->saveMeta();
             
@@ -152,17 +153,21 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
      */
     public function delete()
     {
+        $retval = true;
+        
         /**
          * Won't delete the file if there are still some
          * records hanging on it
          */
         if(!$this->linkedRecords()) {
-            $this->getFile()->delete();
+            $retval &= $this->getFile()->delete();
         }
         
-        $this->deleteMeta();
+        $retval &= $this->deleteMeta();
         
         $this->__destruct();
+        
+        return $retval;
     }
     
     /**

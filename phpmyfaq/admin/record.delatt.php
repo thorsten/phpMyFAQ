@@ -29,24 +29,20 @@ printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 
 if ($permission["delatt"]) {
 
-    $record_id   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    $record_lang = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
-    $record_file = PMF_Filter::filterInput(INPUT_GET, 'which', FILTER_SANITIZE_STRING);
-    $record_path = PMF_ATTACHMENTS_DIR . DIRECTORY_SEPARATOR . $record_id;
-    $filename    = realpath($record_path . DIRECTORY_SEPARATOR . $record_file);
-    $file_okay   = true;
+    $recordId   = PMF_Filter::filterInput(INPUT_GET, 'record_id', FILTER_VALIDATE_INT);
+    $recordLang = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+    $id         = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     
-    if (!$filename || PMF_String::strpos($filename, realpath($record_path)) !== 0) {
-    	$file_okay = false;
-    }
+    $att        = PMF_Attachment_Factory::create($id);
     
-    if ($file_okay && unlink($filename)) {
+    if ($att && $att->delete()) {
         printf("<p>%s</p>\n", $PMF_LANG['ad_att_delsuc']);
     } else {
         printf("<p>%s</p>\n", $PMF_LANG['ad_att_delfail']);
     }
     printf('<p><a href="?action=editentry&amp;id=%d&amp;lang=%s">%s</a></p>',
-        $record_id, $record_lang, $PMF_LANG['ad_entry_back']);
+        $recordId, $recordLang, $PMF_LANG['ad_entry_back']);
 } else {
     print $PMF_LANG['err_NotAuth'];
 }
+
