@@ -329,12 +329,16 @@ if (!isset($allowedVariables[$action])) {
 if (isset($auth)) {
     $login_tpl = 'loggedin.tpl';
 } else {
-    $login_tpl = 'loginbox.tpl';
+    if (isset($_SERVER['HTTPS']) || $faqconfig->get('main.useSslForLogins')) {
+        $login_tpl = 'loginbox.tpl';
+    } else {
+        $login_tpl = 'secureswitch.tpl';
+    }
 }
 if ($action != 'main') {
     $inc_tpl         = $action . '.tpl';
-    $inc_php         = $action.".php";
-    $writeLangAdress = "?".str_replace("&", "&amp;",$_SERVER["QUERY_STRING"]);
+    $inc_php         = $action . '.php';
+    $writeLangAdress = '?' . str_replace("&", "&amp;",$_SERVER["QUERY_STRING"]);
 } else {
     if (isset($solution_id) && is_numeric($solution_id)) {
         // show the record with the solution ID
@@ -344,7 +348,7 @@ if ($action != 'main') {
         $inc_tpl = 'main.tpl';
         $inc_php = 'main.php';
     }
-    $writeLangAdress = '?'.$sids;
+    $writeLangAdress = '?' . $sids;
 }
 
 //
@@ -361,11 +365,11 @@ if ($hasTags && (($action == 'artikel') || ($action == 'show'))) {
 //
 // Load template files and set template variables
 //
-$tpl = new PMF_Template (array('index'        => 'index.tpl',
-                               'loginBox'     => $login_tpl,
-                               'rightBox'     => $right_tpl,
-                               'writeContent' => $inc_tpl),
-                         $faqconfig->get('main.templateSet'));
+$tpl = new PMF_Template(array('index'        => 'index.tpl',
+                              'loginBox'     => $login_tpl,
+                              'rightBox'     => $right_tpl,
+                              'writeContent' => $inc_tpl),
+                              $faqconfig->get('main.templateSet'));
 
 $usersOnLine    = getUsersOnline();
 $totUsersOnLine = $usersOnLine[0] + $usersOnLine[1];
@@ -482,26 +486,30 @@ $tpl->processTemplate(
 //
 if (isset($auth)) {
     $tpl->processTemplate('loginBox', array(
-        'loggedinas'        => $PMF_LANG['ad_user_loggedin'],
-        'currentuser'       => $user->getUserData('display_name'),
-        'printAdminPath'    => (in_array(true, $permission)) ? 'admin/index.php' : '#',
-        'adminSection'      => $PMF_LANG['adminSection'],
-        'printLogoutPath'   => $_SERVER['PHP_SELF'].'?action=logout',
-        'logout'            => $PMF_LANG['ad_menu_logout'])
-    );
+        'loggedinas'      => $PMF_LANG['ad_user_loggedin'],
+        'currentuser'     => $user->getUserData('display_name'),
+        'printAdminPath'  => (in_array(true, $permission)) ? 'admin/index.php' : '#',
+        'adminSection'    => $PMF_LANG['adminSection'],
+        'printLogoutPath' => '?action=logout',
+        'logout'          => $PMF_LANG['ad_menu_logout']));
 } else {
-    $tpl->processTemplate('loginBox', array(
-        'writeLoginPath'    => $_SERVER['PHP_SELF'].'?action=login',
-        'login'             => $PMF_LANG['ad_auth_ok'],
-        'username'          => $PMF_LANG['ad_auth_user'],
-        'password'          => $PMF_LANG['ad_auth_passwd'],
-        'msgRegisterUser'   => (($faqconfig->get('main.enableRewriteRules'))
-                               ?
-                               '<a href="' . $systemUri . 'register.html">'.$PMF_LANG['msgRegisterUser'].'</a>'
-                               :
-                               '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=register">'.$PMF_LANG['msgRegisterUser'].'</a>'),
-        'msgLoginFailed'    => $error)
-    );
+    if (isset($_SERVER['HTTPS']) || $faqconfig->get('main.useSslForLogins')) {
+        $tpl->processTemplate('loginBox', array(
+            'writeLoginPath'  => $_SERVER['PHP_SELF'].'?action=login',
+            'login'           => $PMF_LANG['ad_auth_ok'],
+            'username'        => $PMF_LANG['ad_auth_user'],
+            'password'        => $PMF_LANG['ad_auth_passwd'],
+            'msgRegisterUser' => (($faqconfig->get('main.enableRewriteRules'))
+                                 ?
+                                 '<a href="' . $systemUri . 'register.html">'.$PMF_LANG['msgRegisterUser'].'</a>'
+                                 :
+                                 '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=register">'.$PMF_LANG['msgRegisterUser'].'</a>'),
+            'msgLoginFailed'  => $error));
+    } else {
+        $tpl->processTemplate('loginBox', array(
+            'secureloginurl'  => sprintf('https://%s%s', $_SERVER['HTTP_HOST'], $_SERVER['REQUEST_URI']),
+            'securelogintext' => $PMF_LANG['msgSecureSwitch']));
+    }
 }
 $tpl->includeTemplate('loginBox', 'index');
 

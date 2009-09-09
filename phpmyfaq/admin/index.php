@@ -409,14 +409,15 @@ if (isset($auth) && in_array(true, $permission)) {
         <fieldset class="login">
             <legend class="login">phpMyFAQ Login</legend>
 <?php
-    if ($action == "logout") {
-        print "<p>".$PMF_LANG["ad_logout"]."</p>";
+    if ($action == 'logout') {
+        printf("<p>%s</p>\n", $PMF_LANG['ad_logout']);
     }
     if (isset($error)) {
         print "<p><strong>".$error."</strong></p>\n";
     } else {
         print "<p><strong>".$PMF_LANG["ad_auth_insert"]."</strong></p>\n";
     }
+    if (isset($_SERVER['HTTPS']) || $faqconfig->get('main.useSslForLogins')) {
 ?>
             <label class="left" for="faqusername"><?php print $PMF_LANG["ad_auth_user"]; ?></label>
             <input type="text" name="faqusername" id="faqusername" size="20" /><br />
@@ -431,6 +432,14 @@ if (isset($auth) && in_array(true, $permission)) {
 <?php print $PMF_LANG["lostPassword"]; ?>
 </a></p>
             <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?>" border="0" /> <a href="../index.php" title="<?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?>"><?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?></a></p>
+<?php
+    } else {
+        printf('<p><a href="https://%s%s">%s</a></p>',
+            $_SERVER['HTTP_HOST'],
+            $_SERVER['REQUEST_URI'],
+            $PMF_LANG['msgSecureSwitch']);
+    }
+?>
         </fieldset>
         </form>
 <?php
