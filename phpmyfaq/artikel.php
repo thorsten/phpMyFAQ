@@ -168,19 +168,17 @@ if ($num > 1) {
 }
 
 // List all faq attachments
-if (isAttachmentDirOk($record_id) && $faqconfig->get('main.disableAttachments') && 'yes' == $faq->faqRecord['active']) {
-    $files  = 0;
+if ($faqconfig->get('main.disableAttachments') && 'yes' == $faq->faqRecord['active']) {
+    
+    $attList = PMF_Attachment_Factory::fetchByRecordId($record_id);
     $outstr = "";
-    $dir    = opendir(PMF_ATTACHMENTS_DIR . DIRECTORY_SEPARATOR .  $record_id);
-    while ($dat = readdir($dir)) {
-        if ($dat != '.' && $dat != '..') {
-            $files++;
-            $outstr .= sprintf('<a href="%s" target="_blank">%s</a>, ',
-                buildAttachmentUrl($record_id, rawurlencode($dat), true),
-                $dat);
-        }
+    
+    while (list(,$att) = each($attList)) {
+        $outstr .= sprintf('<a href="%s" target="_blank">%s</a>, ',
+            $att->buildUrl(),
+            $att->getFilename());
     }
-    if ($files > 0) {
+    if (count($attList) > 0) {
         $content .= '<p>'.$PMF_LANG['msgAttachedFiles'].' '.PMF_String::substr($outstr, 0, -2).'</p>';
     }
 }
