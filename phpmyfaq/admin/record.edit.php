@@ -40,7 +40,9 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
         'id'          => 0,
         'lang'        => $LANGCODE,
         'revision_id' => 0,
-        'title'       => '');
+        'title'       => '',
+        'dateStart'   => '',
+        'dateEnd'     => '');
 
     $tagging = new PMF_Tags();
 
@@ -193,7 +195,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
             $faq->language = $faqData['lang'];
             $faq->getRecord($faqData['id'], $revisionid_selected, true);
             $faqData = $faq->faqRecord;
-            $tags = implode(',', $tagging->getAllTagsById($faqData['id']));
+            $tags    = implode(',', $tagging->getAllTagsById($faqData['id']));
         }
     }
 ?>
