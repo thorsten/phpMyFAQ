@@ -273,15 +273,13 @@ class PMF_Faq
                             $row->lang
                         );
                 $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-                $oLink->itemTitle = $row->thema;
-                $oLink->text      = $title;
-                $oLink->tooltip   = $title;
+                $oLink->itemTitle = $oLink->text = $oLink->tooltip = $row->thema;
 
                 $faqdata[] = array(
                     'record_id'      => $row->id,
                     'record_lang'    => $row->lang,
                     'category_id'    => $row->category_id,
-                    'record_title'   => $title,
+                    'record_title'   => $row->thema,
                     'record_preview' => chopString(strip_tags($row->record_content), 25),
                     'record_link'    => $oLink->toString(),
                     'record_date'    => $row->record_date,
