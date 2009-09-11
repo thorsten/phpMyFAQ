@@ -24,6 +24,7 @@ $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.administrationMail
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.bannedIPs', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.contactInformations', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.currentVersion', '".VERSION."')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.currentApiVersion', '".APIVERSION."')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.disableAttachments', 'true')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.enableAdminLog', 'true')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.enableRewriteRules', 'false')";
