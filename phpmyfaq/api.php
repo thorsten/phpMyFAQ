@@ -90,6 +90,18 @@ switch ($action) {
         	$data->link   = sprintf($url, $data->category_id, $data->id, $data->lang);
         }
         break;
+        
+    case 'getFAQ':
+
+        break;
+        
+    case 'addFAQ':
+        
+        break;
+     
+    case 'addQuestion':
+        
+        break;
 }
 
 // print result as JSON
