@@ -260,10 +260,10 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 ?>
 
     <label class="lefteditor" for="keywords"><?php print $PMF_LANG["ad_entry_keywords"]; ?></label>
-    <input name="keywords" id="keywords" style="width: 390px;" value="<?php if (isset($faqData['keywords'])) { print htmlspecialchars($faqData['keywords']); } ?>" /><br />
+    <input name="keywords" id="keywords" style="width: 390px;" value="<?php if (isset($faqData['keywords'])) { print $faqData['keywords']; } ?>" /><br />
 
     <label class="lefteditor" for="tags"><?php print $PMF_LANG['ad_entry_tags']; ?>:</label>
-    <input name="tags" id="tags" style="width: 390px;" value="<?php if (isset($tags)) { print htmlspecialchars($tags); } ?>" /><img style="display: none; margin-bottom: -5px;" id="tags_autocomplete_wait" src="images/indicator.gif" alt="waiting..."></img>
+    <input name="tags" id="tags" style="width: 390px;" value="<?php if (isset($tags)) { print $tags; } ?>" /><img style="display: none; margin-bottom: -5px;" id="tags_autocomplete_wait" src="images/indicator.gif" alt="waiting..."></img>
     <script type="text/javascript">
         $('#tags').autocomplete("index.php?action=ajax&ajax=tags_list", { width: 260, selectFirst: false, multiple: true } );
     </script><br />
