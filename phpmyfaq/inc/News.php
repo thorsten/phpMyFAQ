@@ -170,7 +170,7 @@ class PMF_News
                 $item['header'],
                 $item['content']);
             
-            if ('' != $item['link']) {
+            if (strlen($item['link']) > 1) {
                 $output .= sprintf('<br />%s <a href="%s" target="_%s">%s</a>',
                     $this->pmf_lang['msgInfo'],
                     $item['link'],
