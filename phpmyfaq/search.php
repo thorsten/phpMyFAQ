@@ -101,7 +101,7 @@ foreach ($mostPopularSearchData as $searchItem) {
 
 $tpl->processTemplate('writeContent', array(
     'msgSearch'                => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgSearch']),
-    'searchString'             => PMF_htmlentities($searchterm, ENT_QUOTES, $PMF_LANG['metaCharset']),
+    'searchString'             => $searchterm,
     'searchOnAllLanguages'     => $PMF_LANG['msgSearchOnAllLanguages'],
     'checkedAllLanguages'      => $allLanguages ? ' checked="checked"' : '',
     'selectCategories'         => $PMF_LANG['msgSelectCategories'],
