@@ -71,11 +71,11 @@ $result = array();
 // Handle actions
 switch ($action) {
     case 'getVersion':
-        $result = $faqconfig->get('main.currentVersion');
+        $result = array('version' => $faqconfig->get('main.currentVersion'));
         break;
         
     case 'getApiVersion':
-        $result = (int)$faqconfig->get('main.currentApiVersion');
+        $result = array('apiVersion' => (int)$faqconfig->get('main.currentApiVersion'));
         break;
         
     case 'search':
