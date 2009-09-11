@@ -70,6 +70,14 @@ $result = array();
 
 // Handle actions
 switch ($action) {
+    case 'getVersion':
+        $result = $faqconfig->get('main.currentVersion');
+        break;
+        
+    case 'getApiVersion':
+        $result = (int)$faqconfig->get('main.currentApiVersion');
+        break;
+        
     case 'search':
         $search       = new PMF_Search();
         $searchString = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
