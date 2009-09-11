@@ -279,7 +279,7 @@ if ($permission['editbt'] || $permission['delbt']) {
         <td class="list" style="width: 24px; text-align: right;"><?php print $record['id']; ?></td>
         <td class="list" style="width: 16px;"><?php print $record['lang']; ?></td>
         <td class="list" style="width: 56px;"><input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStickyStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>);" id="record_<?php print $cid . '_' . $record['id'] ?>" <?php $record['sticky'] ? print 'checked="checked"' : print '    ' ?> /></td>
-        <td class="list"><a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><?php print PMF_htmlentities($record['title'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?></a>
+        <td class="list"><a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><?php print $record['title']; ?></a>
 <?php
         if (isset($numCommentsByFaq[$record['id']])) {
             print " (".$numCommentsByFaq[$record['id']]." ".$PMF_LANG["ad_start_comments"].")";
