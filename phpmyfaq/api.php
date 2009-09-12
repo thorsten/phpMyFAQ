@@ -4,8 +4,8 @@
  * 
  * You can call the resource with the following URIs:
  *
- * - http://www.example.org/phpmyfaq/api.php?action=search&lang=en&q=phpMyFAQ (standard)
- * - http://www.example.org/phpmyfaq/api/search/en/phpMyFAQ (rewrite rules enabled)
+ * - http://www.example.org/phpmyfaq/api.php?action=<action>&<...> [parameter list] (standard)
+ * - http://www.example.org/phpmyfaq/api/<...>/<...> [parameter list] (rewrite rules enabled)
  *
  * @package    phpMyFAQ 
  * @subpackage PMF_Service
@@ -89,6 +89,10 @@ switch ($action) {
         	$data->answer = PMF_Utils::makeShorterText($data->answer, 12);
         	$data->link   = sprintf($url, $data->category_id, $data->id, $data->lang);
         }
+        break;
+        
+    case 'getCategories':
+        
         break;
         
     case 'getFAQ':
