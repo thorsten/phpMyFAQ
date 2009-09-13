@@ -99,6 +99,34 @@ class PMF_Attachment_Migration
     }
     
     /**
+     * Quite simple migration from versions <2.6 
+     * 
+     * @return null
+     */
+    protected function migrateFromOldFormatToFs()
+    {
+        $list = $this->getOldFileList(PMF_ATTACHMENTS_DIR);
+    
+        foreach($list as $recordId => $item) {
+            $recordLang = $item['lang'];
+            foreach($item['files'] as $file) {
+                $att = PMF_Attachment_Factory::create();
+                $att->setRecordId($recordId);
+                $att->setRecordLang($recordLang);
+                
+                if(!$att->save($file)) {
+                    $this->error[] = "File $file couldn't be migrated";
+                }
+            }
+            
+            $recordDir = PMF_ATTACHMENTS_DIR . "/$recordId";
+            if(!@rmdir(PMF_ATTACHMENTS_DIR . "/$file")) {
+                $this->warning[] = "Couldn't remove dir $recordDir after migration";
+            }
+        }
+    }
+    
+    /**
      * Migrate
      * 
      * @param integer $migrationType how to migrate
@@ -111,29 +139,11 @@ class PMF_Attachment_Migration
         switch($migrationType) {
             case PMF_Attachment_Migration::MIGRATION_TYPE1:
                 
-            PMF_Attachment_Factory::init(PMF_Attachment::STORAGE_TYPE_FILESYSTEM,
-                                         '',
-                                         false);
-                
-                $list = $this->getOldFileList(PMF_ATTACHMENTS_DIR);
-
-                foreach($list as $recordId => $item) {
-                    $recordLang = $item['lang'];
-                    foreach($item['files'] as $file) {
-                        $att = PMF_Attachment_Factory::create();
-                        $att->setRecordId($recordId);
-                        $att->setRecordLang($recordLang);
-                        
-                        if(!$att->save($file)) {
-                            $this->error[] = "File $file couldn't be migrated";
-                        }
-                    }
-                                
-                    if(!@unlink(PMF_ATTACHMENTS_DIR . "/$file")) {
-                        $this->warning[] = "Couldn't remove dir $recordId after migration";
-                    }
-                }
-                // FIXME should we reset attachment settings here?
+                PMF_Attachment_Factory::init(PMF_Attachment::STORAGE_TYPE_FILESYSTEM,
+                                             '',
+                                             false);
+                $this->migrateFromOldFormatToFs();
+                // FIXME should attachment settings update be triggered here?
                 
                 break;
               
@@ -141,10 +151,13 @@ class PMF_Attachment_Migration
                 /**
                  * Awaiting new default key here
                  */
-                if(isset($options['defaultKey'])) {
-                    
+                if(isset($options['defaultKey']) && !empty($options['defaultKey'])) {
+                    PMF_Attachment_Factory::init(PMF_Attachment::STORAGE_TYPE_FILESYSTEM,
+                                                 $options['defaultKey'],
+                                                 true);
+                    $this->migrateFromOldFormatToFs();
                 } else {
-                    $this->error[] = 'Default key empty but required';
+                    $this->error[] = 'Default key required to be set for this option';
                 }
                 break;
                 
