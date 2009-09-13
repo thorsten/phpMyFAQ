@@ -6,7 +6,7 @@
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2009-08-21
- * @version    SVN: $Id: Attachment.php 4459 2009-06-10 15:57:47Z thorsten $
+ * @version    SVN: $Id$
  * @copyright  2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -27,11 +27,23 @@
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2009-08-21
- * @version    SVN: $Id: Attachment.php 4459 2009-06-10 15:57:47Z thorsten $
+ * @version    SVN: $Id$
  * @copyright  2009 phpMyFAQ Team
  */
 class PMF_Attachment
 {
+    /**
+     * Storage type filesystem
+     * 
+     * @var integer
+     */
 	const STORAGE_TYPE_FILESYSTEM = 0;
+	
+	/**
+	 * Storage type database
+	 * 
+	 * @var integer
+	 */
 	const STORAGE_TYPE_DB         = 1;
+	
 }
