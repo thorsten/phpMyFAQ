@@ -136,15 +136,15 @@ session_start();
 <body>
 <h1 id="header">phpMyFAQ Atatchment Migration</h1>
 <?php 
-    $action = PMF_Filter::filterInput(INPUT_POST,
-                                      'action',
-                                      FILTER_SANITIZE_STRING);
+    $migrationType = PMF_Filter::filterInput(INPUT_POST,
+                                             'migrationType',
+                                             FILTER_SANITIZE_STRING);
     
     $migration = new PMF_Attachment_Migration;
     
     $options = array();
     
-    switch($action) {
+    switch($migrationType) {
         case PMF_Attachment_Migration::MIGRATION_TYPE1:
         case PMF_Attachment_Migration::MIGRATION_TYPE3:
             //TODO implenemt this
@@ -165,11 +165,10 @@ session_start();
             
     }
     
-    if(!empty($action)) {
-        $result = $migration->doMigrate($action, $options);
-        
-        if($result) {
-            echo '<center><font color="red">Success</font></center>';
+    if(!empty($migrationType))
+    {
+        if($migration->doMigrate($migrationType, $options)) {
+            echo '<br><center><h2><font color="green">Success</font></h2></center>';
         } else {
             echo '<center>',
                  '<font color="red">',
@@ -204,7 +203,7 @@ function showOptions(migrationType)
 
         case <?php echo PMF_Attachment_Migration::MIGRATION_TYPE2 ?>:
         case <?php echo PMF_Attachment_Migration::MIGRATION_TYPE4 ?>:
-            html = 'Default Key: <input name="password" maxlength="256">'
+            html = 'Default Key: <input name="defaultKey" maxlength="256">'
             break;
     }
 

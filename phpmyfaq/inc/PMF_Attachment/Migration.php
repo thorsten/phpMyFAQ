@@ -56,6 +56,13 @@ class PMF_Attachment_Migration
     const MIGRATION_TYPE4 = 4;
     
     /**
+     * Errors
+     * 
+     * @var array
+     */
+    private $error = array();
+    
+    /**
      * Migrate
      * 
      * @param integer $migrationType how to migrate
@@ -65,7 +72,30 @@ class PMF_Attachment_Migration
      */
     public function doMigrate($migrationType, $options)
     {
+        switch($migrationType) {
+            case PMF_Attachment_Migration::MIGRATION_TYPE1:
+                //TODO implenemt this
+                break;
+              
+            case PMF_Attachment_Migration::MIGRATION_TYPE2:
+                //TODO implenemt this
+                break;
+                
+            case PMF_Attachment_Migration::MIGRATION_TYPE3:
+                //TODO implenemt this
+                break;
+                
+            case PMF_Attachment_Migration::MIGRATION_TYPE4:
+                //TODO implenemt this
+                break;
+                
+            default:
+                $this->error[] = 'Nothing to do';
+                break;
+                
+        }
         
+        return empty($this->error);
     }
     
     /**
@@ -75,6 +105,6 @@ class PMF_Attachment_Migration
      */
     public function getErrors()
     {
-        
+        return $this->error;
     }
 }
