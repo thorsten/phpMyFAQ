@@ -228,16 +228,16 @@ function showOptions(migrationType)
                 <select id="migrationType" name="migrationType"
                         onchange="showOptions(this.options[this.selectedIndex].value)">
                     <option value="<?php echo PMF_Attachment_Migration::MIGRATION_TYPE1 ?>">
-                        2.0.x, 2.5.x to 2.6+ files without encryption
+                        2.0.x, 2.5.x ==> 2.6+ files without encryption
                     </option>
                     <option value="<?php echo PMF_Attachment_Migration::MIGRATION_TYPE2 ?>">
-                        2.0.x, 2.5.x to 2.6+ files with encryption
+                        2.0.x, 2.5.x ==> 2.6+ files with encryption
                     </option>
 <!--                    <option value="<?php echo PMF_Attachment_Migration::MIGRATION_TYPE3 ?>">
-                        2.6+ default encrypted files to unencrypted files
+                        2.6+ default encrypted files ==> unencrypted files
                     </option>
                     <option value="<?php echo PMF_Attachment_Migration::MIGRATION_TYPE4 ?>">
-                        2.6+ unencrypted files to default encrypted files
+                        2.6+ unencrypted files ==> default encrypted files
                     </option>-->
                 </select>
             </td>            

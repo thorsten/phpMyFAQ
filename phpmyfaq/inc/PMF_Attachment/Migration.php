@@ -73,13 +73,29 @@ class PMF_Attachment_Migration
     protected function getOldFileList($dir)
     {
         $list = array();
-        $faq  = new PMF_Faq;
         
-        $records = reset($faq->getAllRecords());
-        while(list(,$item) = each($records)) {
-            $itemDir = "$dir/$item";
-            print_r($item);
+        $faq  = new PMF_Faq;
+        $faq->getAllRecords();
+        $records = $faq->faqRecords;
+        
+        reset($records);
+        while(list(,$record) = each($records)) {
+            
+            $recordDir = "$dir/$record[id]";
+            if(file_exists($recordDir) && is_dir($recordDir)) {
+                
+                $list[$record['id']]['files'] = array();
+                foreach(new DirectoryIterator($recordDir) as $entry) {
+                    if(!$entry->isDot() && $entry->isFile()) {
+                        $list[$record['id']]['files'][] = "$recordDir/{$entry->getFilename()}";
+                    }
+                }
+                
+                $list[$record['id']]['lang'] = $record['lang'];
+            }
         }
+        
+        return $list;
     }
     
     /**
@@ -94,7 +110,30 @@ class PMF_Attachment_Migration
     {
         switch($migrationType) {
             case PMF_Attachment_Migration::MIGRATION_TYPE1:
+                
+            PMF_Attachment_Factory::init(PMF_Attachment::STORAGE_TYPE_FILESYSTEM,
+                                         '',
+                                         false);
+                
                 $list = $this->getOldFileList(PMF_ATTACHMENTS_DIR);
+
+                foreach($list as $recordId => $item) {
+                    $recordLang = $item['lang'];
+                    foreach($item['files'] as $file) {
+                        $att = PMF_Attachment_Factory::create();
+                        $att->setRecordId($recordId);
+                        $att->setRecordLang($recordLang);
+                        
+                        if(!$att->save($file)) {
+                            $this->error[] = "File $file couldn't be migrated";
+                        }
+                    }
+                                
+                    if(!@unlink(PMF_ATTACHMENTS_DIR . "/$file")) {
+                        $this->warning[] = "Couldn't remove dir $recordId after migration";
+                    }
+                }
+                // FIXME should we reset attachment settings here?
                 
                 break;
               
