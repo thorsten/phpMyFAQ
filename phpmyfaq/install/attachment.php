@@ -20,6 +20,8 @@
  * under the License.
  */
 
+set_time_limit(0);
+
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
 //
@@ -134,24 +136,25 @@ session_start();
 <body>
 <h1 id="header">phpMyFAQ Atatchment Migration</h1>
 <?php 
-    $action = PMF_Filter::filterInput(INPUT_POST, 'action', FILTER_SANITIZE_STRING);
+    $action = PMF_Filter::filterInput(INPUT_POST,
+                                      'action',
+                                      FILTER_SANITIZE_STRING);
     
+    $migration = new PMF_Attachment_Migration;
+    
+    $options = array();
     
     switch($action) {
         case PMF_Attachment_Migration::MIGRATION_TYPE1:
+        case PMF_Attachment_Migration::MIGRATION_TYPE3:
             //TODO implenemt this
             break;
             
         case PMF_Attachment_Migration::MIGRATION_TYPE2:
-            //TODO implenemt this
-            break;
-            
-        case PMF_Attachment_Migration::MIGRATION_TYPE3:
-            //TODO implenemt this
-            break;
-
         case PMF_Attachment_Migration::MIGRATION_TYPE4:
-            //TODO implenemt this
+            $options['defaultKey'] = PMF_Filter::filterInput(INPUT_POST,
+                                                             'defaultKey',
+                                                             FILTER_SANITIZE_STRING);                                 
             break;
             
         default:
@@ -162,20 +165,83 @@ session_start();
             
     }
     
+    if(!empty($action)) {
+        $result = $migration->doMigrate($action, $options);
+        
+        if($result) {
+            echo '<center><font color="red">Success</font></center>';
+        } else {
+            echo '<center>',
+                 '<font color="red">',
+                 'Following errors happened:',
+                 '</font><br>',
+                 implode('<br>', $migration->getErrors()),
+                 '</center>';
+            showForm();
+        }
+    }
     
 function showForm()
 {
 ?>
+<script>
+/**
+ * Show option fields corresponding to attachment type
+ *
+ * @param integer migrationType to show options for
+ *
+ * @return void
+ */
+function showOptions(migrationType)
+{
+	var html = ''
+	 
+    switch(migrationType*1) {
+        case <?php echo PMF_Attachment_Migration::MIGRATION_TYPE1 ?>:
+        case <?php echo PMF_Attachment_Migration::MIGRATION_TYPE3 ?>:
+            // nothing to do yet
+            break;
+
+        case <?php echo PMF_Attachment_Migration::MIGRATION_TYPE2 ?>:
+        case <?php echo PMF_Attachment_Migration::MIGRATION_TYPE4 ?>:
+            html = 'Default Key: <input name="password" maxlength="256">'
+            break;
+    }
+
+    document.getElementById('optionFields').innerHTML = html
+}
+</script>
+<center>
 <form method="post">
     <table>
         <tr>
             <td>
+                <select id="migrationType" name="migrationType"
+                        onchange="showOptions(this.options[this.selectedIndex].value)">
+                    <option value="<?php echo PMF_Attachment_Migration::MIGRATION_TYPE1 ?>">
+                        2.0.x, 2.5.x to 2.6+ without encryption
+                    </option>
+                    <option value="<?php echo PMF_Attachment_Migration::MIGRATION_TYPE2 ?>">
+                        2.0.x, 2.5.x to 2.6+ with encryption
+                    </option>
+                    <option value="<?php echo PMF_Attachment_Migration::MIGRATION_TYPE3 ?>">
+                        default encrypted to unencrypted
+                    </option>
+                    <option value="<?php echo PMF_Attachment_Migration::MIGRATION_TYPE4 ?>">
+                        unencrypted to default encrypted
+                    </option>
+                </select>
+            </td>            
+        </tr>
+        <tr>
+            <td id="optionFields">
             
             </td>
-            <td></td>
         </tr>
+        <tr><td><input type="submit"></td></tr>
     </table>
 </form>
+</center>
 <?php     
 }   
     

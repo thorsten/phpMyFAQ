@@ -66,5 +66,15 @@ class PMF_Attachment_Migration
     public function doMigrate($migrationType, $options)
     {
         
-    } 
+    }
+    
+    /**
+     * Get errors happened while migrating
+     * 
+     * @return array
+     */
+    public function getErrors()
+    {
+        
+    }
 }
