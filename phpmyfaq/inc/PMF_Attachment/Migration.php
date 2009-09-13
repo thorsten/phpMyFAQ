@@ -33,12 +33,12 @@
 class PMF_Attachment_Migration
 {
     /**
-     * Migrate 2.0.x, 2.5.x to 2.6+ without encryption
+     * Migrate 2.0.x, 2.5.x to 2.6+ files without encryption
      */
     const MIGRATION_TYPE1 = 1;
     
     /**
-     * Migrate 2.0.x, 2.5.x to 2.6+ encrypting with default key
+     * Migrate 2.0.x, 2.5.x to 2.6+ files encrypting with default key
      */
     const MIGRATION_TYPE2 = 2;
         
@@ -60,7 +60,27 @@ class PMF_Attachment_Migration
      * 
      * @var array
      */
-    private $error = array();
+    protected $error = array();
+    
+    /**
+     * Warnings
+     * 
+     * @var array
+     */
+    protected $warning = array();
+    
+    
+    protected function getOldFileList($dir)
+    {
+        $list = array();
+        $faq  = new PMF_Faq;
+        
+        $records = reset($faq->getAllRecords());
+        while(list(,$item) = each($records)) {
+            $itemDir = "$dir/$item";
+            print_r($item);
+        }
+    }
     
     /**
      * Migrate
@@ -74,19 +94,29 @@ class PMF_Attachment_Migration
     {
         switch($migrationType) {
             case PMF_Attachment_Migration::MIGRATION_TYPE1:
-                //TODO implenemt this
+                $list = $this->getOldFileList(PMF_ATTACHMENTS_DIR);
+                
                 break;
               
             case PMF_Attachment_Migration::MIGRATION_TYPE2:
-                //TODO implenemt this
+                /**
+                 * Awaiting new default key here
+                 */
+                if(isset($options['defaultKey'])) {
+                    
+                } else {
+                    $this->error[] = 'Default key empty but required';
+                }
                 break;
                 
             case PMF_Attachment_Migration::MIGRATION_TYPE3:
-                //TODO implenemt this
+                // TODO implement this
+                $this->error[] = 'not implemented';
                 break;
                 
             case PMF_Attachment_Migration::MIGRATION_TYPE4:
                 //TODO implenemt this
+                $this->error[] = 'not implemented';
                 break;
                 
             default:
@@ -99,12 +129,22 @@ class PMF_Attachment_Migration
     }
     
     /**
-     * Get errors happened while migrating
+     * Get migration errors
      * 
      * @return array
      */
     public function getErrors()
     {
         return $this->error;
+    }
+    
+    /**
+     * Get migration warnings
+     * 
+     * @return array
+     */
+    public function getWarnings()
+    {
+        return $this->warning;
     }
 }

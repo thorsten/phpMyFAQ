@@ -146,12 +146,12 @@ session_start();
     
     switch($migrationType) {
         case PMF_Attachment_Migration::MIGRATION_TYPE1:
-        case PMF_Attachment_Migration::MIGRATION_TYPE3:
             //TODO implenemt this
             break;
             
         case PMF_Attachment_Migration::MIGRATION_TYPE2:
-        case PMF_Attachment_Migration::MIGRATION_TYPE4:
+/*        case PMF_Attachment_Migration::MIGRATION_TYPE3:
+        case PMF_Attachment_Migration::MIGRATION_TYPE4:*/
             $options['defaultKey'] = PMF_Filter::filterInput(INPUT_POST,
                                                              'defaultKey',
                                                              FILTER_SANITIZE_STRING);                                 
@@ -172,11 +172,21 @@ session_start();
         } else {
             echo '<center>',
                  '<font color="red">',
-                 'Following errors happened:',
+                 'Errors:',
                  '</font><br>',
                  implode('<br>', $migration->getErrors()),
                  '</center>';
             showForm();
+        }
+        
+        $warnings = $migration->getWarnings();
+        if(!empty($warnings)) {
+            echo '<center>',
+                 '<font color="yellow">',
+                 'Warnings:',
+                 '</font><br>',
+                 implode('<br>', $migration->getWarnings()),
+                 '</center>';
         }
     }
     
@@ -197,12 +207,12 @@ function showOptions(migrationType)
 	 
     switch(migrationType*1) {
         case <?php echo PMF_Attachment_Migration::MIGRATION_TYPE1 ?>:
-        case <?php echo PMF_Attachment_Migration::MIGRATION_TYPE3 ?>:
             // nothing to do yet
             break;
 
         case <?php echo PMF_Attachment_Migration::MIGRATION_TYPE2 ?>:
-        case <?php echo PMF_Attachment_Migration::MIGRATION_TYPE4 ?>:
+/*        case <?php echo PMF_Attachment_Migration::MIGRATION_TYPE3 ?>:
+        case <?php echo PMF_Attachment_Migration::MIGRATION_TYPE4 ?>:*/
             html = 'Default Key: <input name="defaultKey" maxlength="256">'
             break;
     }
@@ -218,17 +228,17 @@ function showOptions(migrationType)
                 <select id="migrationType" name="migrationType"
                         onchange="showOptions(this.options[this.selectedIndex].value)">
                     <option value="<?php echo PMF_Attachment_Migration::MIGRATION_TYPE1 ?>">
-                        2.0.x, 2.5.x to 2.6+ without encryption
+                        2.0.x, 2.5.x to 2.6+ files without encryption
                     </option>
                     <option value="<?php echo PMF_Attachment_Migration::MIGRATION_TYPE2 ?>">
-                        2.0.x, 2.5.x to 2.6+ with encryption
+                        2.0.x, 2.5.x to 2.6+ files with encryption
                     </option>
-                    <option value="<?php echo PMF_Attachment_Migration::MIGRATION_TYPE3 ?>">
-                        default encrypted to unencrypted
+<!--                    <option value="<?php echo PMF_Attachment_Migration::MIGRATION_TYPE3 ?>">
+                        2.6+ default encrypted files to unencrypted files
                     </option>
                     <option value="<?php echo PMF_Attachment_Migration::MIGRATION_TYPE4 ?>">
-                        unencrypted to default encrypted
-                    </option>
+                        2.6+ unencrypted files to default encrypted files
+                    </option>-->
                 </select>
             </td>            
         </tr>
@@ -243,27 +253,6 @@ function showOptions(migrationType)
 </center>
 <?php     
 }   
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
 ?>
 </body>
