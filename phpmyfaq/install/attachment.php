@@ -38,6 +38,7 @@ PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH.trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
+
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -137,33 +138,25 @@ session_start();
     
     
     switch($action) {
-        /**
-         * Migrate 2.0.x, 2.5.x to 2.6+ without encryption
-         */
-        case 'oldStyle2FileUnencrypted':
+        case PMF_Attachment_Migration::MIGRATION_TYPE1:
             //TODO implenemt this
             break;
             
-        /**
-         * Migrate 2.0.x, 2.5.x to 2.6+ encrypting with default key
-         */
-        case 'oldStyle2FileEncrypted':
+        case PMF_Attachment_Migration::MIGRATION_TYPE2:
             //TODO implenemt this
             break;
             
-        /**
-         * Migrate encrypted to unencrypted.
-         * NOTE this will migrate only files encrypted
-         */
-        case 'fileEncrypted2FileDefaultUnencrypted':
+        case PMF_Attachment_Migration::MIGRATION_TYPE3:
             //TODO implenemt this
             break;
 
-        case 'fileDefaultUnencrypted2FileEncrypted':
+        case PMF_Attachment_Migration::MIGRATION_TYPE4:
             //TODO implenemt this
             break;
             
         default:
+            echo '<center><h2><font color="red">BACKUP YOUR FILES BEFORE ',
+                 'PROCEED!!!</font></h2></center>';
             showForm();
             break;
             
@@ -179,6 +172,7 @@ function showForm()
             <td>
             
             </td>
+            <td></td>
         </tr>
     </table>
 </form>
