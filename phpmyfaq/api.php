@@ -71,11 +71,7 @@ switch ($action) {
         break;
         
     case 'getApiVersion':
-        $category = PMF_Category();
-        $faq      = PMF_Faq();
-        $result = array('apiVersion'     => (int)$faqconfig->get('main.currentApiVersion'),
-                        'hashFAQs'       => '...',
-                        'hashCategories' => '...');
+        $result = array('apiVersion' => (int)$faqconfig->get('main.currentApiVersion'));
         break;
         
     case 'search':
@@ -92,7 +88,8 @@ switch ($action) {
         break;
         
     case 'getCategories':
-        
+        $category = new PMF_Category($current_user, $current_groups, true);
+        $result   = $category->categories;
         break;
         
     case 'getFAQ':
