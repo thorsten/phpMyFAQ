@@ -42,9 +42,10 @@ if (PMF_Language::isASupportedLanguage($ajaxLanguage)) {
 //
 // Get current user and group id - default: -1
 //
+$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 if (isset($user) && is_object($user)) {
     $current_user = $user->getUserId();
-    if ($user->perm instanceof PMF_PermMedium) {
+    if ($user->perm instanceof PMF_Perm_PermMedium) {
         $current_groups = $user->perm->getUserGroups($current_user);
     } else {
         $current_groups = array(-1);
