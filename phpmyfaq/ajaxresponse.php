@@ -58,7 +58,7 @@ if (isset($user) && is_object($user)) {
     $current_groups = array(-1);
 }
 
-$category = new PMF_Category();
+$category = new PMF_Category($current_user, $current_groups);
 $category->transform(0);
 $category->buildTree();
 
