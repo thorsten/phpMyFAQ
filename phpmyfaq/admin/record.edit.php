@@ -114,14 +114,14 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
     } elseif ($action == 'copyentry') {
 
-        $faqData['id']   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+        $faqData['id']        = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $faqData['lang']      = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
         $faq->language   = $faqData['lang'];
         $categories      = $category->getCategoryRelationsFromArticle($faqData['id'], $faqData['lang']);
 
         $faq->getRecord($faqData['id'], null, true);
 
-        $faqData         = $faq->faqRecord;
+        $faqData              = $faq->faqRecord;
         $url_variables   = 'insertentry';
 
     } else {
@@ -219,12 +219,6 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript><textarea id="content" name="content" cols="84" rows="10"><?php if (isset($faqData['content'])) { print trim(htmlspecialchars($faqData['content'])); } ?></textarea><br />
 
 <?php
-
-    if ($action == 'copyentry') {
-        unset($faqData);
-        $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
-    }
-
     if ($permission["addatt"]) {
 ?>
     <label><?php print $PMF_LANG["ad_att_att"]; ?></label>
@@ -287,7 +281,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
     <label class="left" for="active"><?php print $PMF_LANG["ad_entry_active"]; ?></label>
 <?php
-if($permission['approverec']):
+if ($permission['approverec']):
     if (isset($faqData['active']) && $faqData['active'] == 'yes') {
         $suf = ' checked="checked"';
         $sul = null;
@@ -342,7 +336,7 @@ if($permission['approverec']):
 ?>
     <input type="hidden" name="grouppermission" class="active" value="all" />
 <?php   
-        }
+    }
 ?>
     <label class="left" for="userpermission"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
     <input type="radio" id="userpermission" name="userpermission" class="active" value="all" <?php print ($all_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_all_users']; ?> <input type="radio" name="userpermission" class="active" value="restricted" <?php print ($restricted_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_restricted_users']; ?> <select name="restricted_users" size="1"><?php print $user->getAllUserOptions($user_permission[0]); ?></select><br />
