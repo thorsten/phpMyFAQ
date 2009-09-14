@@ -13,6 +13,7 @@ CHANGED FILES FROM 2.5.2 -> 2.5.3
 ./install/update.php
 ./lang/language_ja.php
 ./template/artikel.tpl
+./ajaxresponse.php
 ./index.php
 ./news.php
 ./search.php

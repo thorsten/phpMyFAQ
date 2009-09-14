@@ -12,6 +12,7 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 Changes since 2.5.2:
 - added missing Perl syntax hightlighting (Thorsten)
 - fixed missing info link in news (Thorsten)
+- fixed broken group permission check for instant response (Thorsten)
 - updated Japanese translation
 
 For known issues please take a look at KNOWNBUGS.txt
@@ -21,6 +22,7 @@ CHANGELOG:
 Version 2.5.3 - 2009-10-
 - added missing Perl syntax hightlighting (Thorsten)
 - fixed missing info link in news (Thorsten)
+- fixed broken group permission check for instant response (Thorsten)
 - updated Japanese translation
 
 Version 2.5.2 - 2009-09-01
