@@ -5,6 +5,7 @@ CHANGED FILES FROM 2.5.2 -> 2.5.3
 ./admin/news.php
 ./admin/record.edit.php
 ./admin/record.show.php
+./inc/constants.php
 ./inc/Faq.php
 ./inc/functions.php
 ./inc/News.php

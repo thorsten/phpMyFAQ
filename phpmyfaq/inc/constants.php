@@ -195,6 +195,7 @@ $supported_databases = array(
  */
 $allowedVariables = array(
     'add'               => 1,
+    'attachment'        => 1,
     'artikel'           => 1,
     'ask'               => 1,
     'contact'           => 1,
