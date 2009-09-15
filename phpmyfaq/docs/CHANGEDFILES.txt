@@ -2,6 +2,7 @@ $Id$
 
 CHANGED FILES FROM 2.5.2 -> 2.5.3
 
+./admin/category.edit.php
 ./admin/news.php
 ./admin/record.edit.php
 ./admin/record.show.php
