@@ -117,7 +117,7 @@ $PMF_LANG["msgInfo"] = "Mehr Informationen unter: ";
 $PMF_LANG["msgNewContentThanks"] = "<p><strong>Vielen Dank für diesen Vorschlag!</strong></p>";
 
 // ask Question
-$PMF_LANG["msgNewQuestion"] = "Auf dieser Seite können Fragen an die FAQ-Leser gestellt werden und so neue Artikeleinträge fördern. Nur durch Fragen können wir erfahren, zu welchen Themen Antworten gewünscht werden! Die offene Fragen erscheinen in der Kategorie der offenen Fragen.";
+$PMF_LANG["msgNewQuestion"] = "Auf dieser Seite können Fragen an die FAQ-Leser gestellt werden und so neue Artikeleinträge fördern. Nur durch Fragen können wir erfahren, zu welchen Themen Antworten gewünscht werden! Die gestellten Fragen erscheinen in der Kategorie der offenen Fragen.";
 $PMF_LANG["msgAskCategory"] = "Kategorie:";
 $PMF_LANG["msgAskYourQuestion"] = "Frage:";
 $PMF_LANG["msgAskThx4Mail"] = "<p><strong>Vielen Dank für diese Anfrage.</strong></p>";
