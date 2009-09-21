@@ -1,5 +1,3 @@
-$Id$
-
 CHANGED FILES FROM 2.5.2 -> 2.5.3
 
 ./admin/category.edit.php
@@ -16,6 +14,8 @@ CHANGED FILES FROM 2.5.2 -> 2.5.3
 ./install/update.php
 ./lang/language_de.php
 ./lang/language_ja.php
+./scripts/git2package.sh added
+./scripts/svn2package.sh removed
 ./template/artikel.tpl
 ./ajaxresponse.php
 ./index.php
