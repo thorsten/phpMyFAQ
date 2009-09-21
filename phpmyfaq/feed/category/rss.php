@@ -5,8 +5,7 @@
  * @package    phpMyFAQ
  * @subpackage RSS
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2008-01-25 
- * @version    SVN: $Id$
+ * @since      2008-01-25
  * @copyright  2008-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -67,7 +66,7 @@ if (is_array($records)) {
         $rss->endElement();
         
         $rss->writeElement('link', utf8_encode($item['record_link']));
-        $rss->writeElement('pubDate', makeRFC822Date($item['record_date'], false));
+        $rss->writeElement('pubDate', makeRFC822Date($item['record_date'], true));
         $rss->endElement();
     }
 }
