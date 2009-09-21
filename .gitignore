@@ -1,0 +1,12 @@
+# Eclipse folders and files
+.cache*
+.project
+.settings*
+
+# phpMyFAQ generated folders
+
+phpmyfaq/config/database.php
+phpmyfaq/data*
+phpmyfaq/pdf*
+phpmyfaq/xml*
+
