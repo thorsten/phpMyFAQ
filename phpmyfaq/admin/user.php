@@ -149,12 +149,15 @@ if ($userAction == 'update_data') {
                 $newPassword .= $vowels[rand(0,4)];
             }
             $user->changePassword($newPassword);
-            $text = "\nUsername: ".$userData['display_name']."\nLoginname: ".$user->getLogin()."\nNew Password: ".$newPassword."\n\n";
+            $message = sprintf("\nUsername: %s\nLoginname: %s\nNew Password: %s\n\n",
+                $userData['display_name'],
+                $user->getLogin(),
+                $newPassword);
 
             $mail = new PMF_Mail();
             $mail->addTo($userData['email']);
             $mail->subject = '[%sitename%] Username / activation';
-            $mail->message = $text;
+            $mail->message = $message;
             $result = $mail->send();
             unset($mail);
         }
