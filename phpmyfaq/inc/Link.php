@@ -274,14 +274,24 @@ class PMF_Link
         return !(false === strpos($this->url, $_SERVER['HTTP_HOST']));
     }
 
-    function hasScheme()
+    /**
+     * Checks if URL contains a scheme
+     * 
+     * @return boolean
+     */
+    protected function hasScheme()
     {
         $parsed = parse_url($this->url);
 
         return (!empty($parsed['scheme']));
     }
 
-    function getSEOItemTitle()
+    /**
+     * Returns a search engine optimized title
+     * 
+     * @return string
+     */
+    protected function getSEOItemTitle()
     {
         $itemTitle = trim($this->itemTitle);
         // Lower the case (aesthetic)
@@ -308,20 +318,22 @@ class PMF_Link
         return rawurlencode($itemTitle);
     }
 
-    function getHttpGetParameters()
+    /**
+     * Returns the HTTP GET parameters
+     *
+     * @return array
+     */
+    protected function getHttpGetParameters()
     {
-        $query = $this->getQuery();
-        $parameters  = array();
+        $query      = $this->getQuery();
+        $parameters = array();
 
-        if (!empty($query))
-        {
+        if (!empty($query)) {
             $params = explode(self::PMF_LINK_AMPERSAND, $query);
-            foreach ($params as $param)
-            {
-                if (!empty($param))
-                {
-                    $couple = explode(self::PMF_LINK_EQUAL, $param);
-                    list($key, $val) = $couple;
+            foreach ($params as $param) {
+                if (!empty($param)) {
+                    $couple           = explode(self::PMF_LINK_EQUAL, $param);
+                    list($key, $val)  = $couple;
                     $parameters[$key] = urldecode($val);
                 }
             }
@@ -330,19 +342,12 @@ class PMF_Link
         return $parameters;
     }
 
-    function getPage()
-    {
-        $page = '';
-        if (!empty($this->url)) {
-            $parsed = parse_url($this->url);
-            // Take the last element
-            $page = substr(strrchr($parsed['path'], self::PMF_LINK_SLASH), 1);
-        }
-
-        return $page;
-    }
-
-    function getQuery()
+    /**
+     * Returns the Query of an URL
+     *
+     * @return string
+     */
+    protected function getQuery()
     {
         $query = '';
         if (!empty($this->url)) {
@@ -355,7 +360,12 @@ class PMF_Link
         return $query;
     }
 
-    function getDefaultScheme()
+    /**
+     * Returns the default scheme
+     * 
+     * @return string
+     */
+    protected function getDefaultScheme()
     {
         $scheme = 'http://';
         if ($this->isSystemLink()) {
@@ -365,14 +375,24 @@ class PMF_Link
         return $scheme;
     }
 
+    /**
+     * Returns the system scheme, http or https
+     * 
+     * @return string
+     */
     public static function getSystemScheme()
     {
-        $scheme = 'http'.(    ((!PMF_Link::isIISServer()) && isset($_SERVER['HTTPS']))
-                           || ((PMF_Link::isIISServer()) && ('on' == strtolower($_SERVER['HTTPS']))) ? 's' : '').'://';
+        $scheme = 'http' . (((!PMF_Link::isIISServer()) && isset($_SERVER['HTTPS'])) || 
+                           ((PMF_Link::isIISServer()) && ('on' == strtolower($_SERVER['HTTPS']))) ? 's' : '') . '://';
 
         return $scheme;
     }
 
+    /**
+     * Returns the relative URI
+     * 
+     * @return string
+     */
     public static function getSystemRelativeUri($path = null)
     {
         if (isset($path)) {
@@ -382,6 +402,11 @@ class PMF_Link
         return str_replace('/inc/Link.php', '', $_SERVER['PHP_SELF']);
     }
 
+    /**
+     * Returns the system URI
+     * 
+     * @return string
+     */
     public static function getSystemUri($path = null)
     {
         // $_SERVER['HTTP_HOST'] is the name of the website or virtual host name (HTTP/1.1)
@@ -397,7 +422,12 @@ class PMF_Link
         return $sysUri.PMF_link::getSystemRelativeUri($path);
     }
 
-    function toHtmlAnchor()
+    /**
+     * Builds a HTML anchor
+     *
+     * @return string
+     */
+    public function toHtmlAnchor()
     {
         // Sanitize the provided url
         $url = $this->toString();
@@ -420,10 +450,7 @@ class PMF_Link
             }
         }
         $htmlAnchor .= '>';
-        if (
-               ('0' == $this->text) // Possible when used w/ Sitemap letter = 0
-            || (!empty($this->text))
-            ) {
+        if (('0' == $this->text) || (!empty($this->text))) {
             $htmlAnchor .= $this->text;
         } else {
             if (!empty($this->name)) {
@@ -437,13 +464,32 @@ class PMF_Link
         return $htmlAnchor;
     }
 
-    function appendSids($url, $sids)
+    /**
+     * Appends the session id
+     *
+     * @param string  $url  URL
+     * @param integer $sids Session Id
+     * 
+     * @return string
+     */
+    protected function appendSids($url, $sids)
     {
-        $separator = (false === strpos($url, self::PMF_LINK_SEARCHPART_SEPARATOR)) ? self::PMF_LINK_SEARCHPART_SEPARATOR : self::PMF_LINK_AMPERSAND ;
-        return $url.$separator.self::PMF_LINK_GET_SIDS.'='.$sids;
+        $separator = (false === strpos($url, self::PMF_LINK_SEARCHPART_SEPARATOR)) 
+                     ? 
+                     self::PMF_LINK_SEARCHPART_SEPARATOR 
+                     : 
+                     self::PMF_LINK_AMPERSAND;
+        return $url . $separator . self::PMF_LINK_GET_SIDS . self::PMF_LINK_EQUAL . $sids;
     }
-
-    function toString($forceNoModrewriteSupport = false)
+    
+    /**
+     * Rewrites a URL string
+     *
+     * @param boolean $forceNoModrewriteSupport Force no rewrite support
+     * 
+     * @return string
+     */
+    protected function toString($forceNoModrewriteSupport = false)
     {
     	$faqconfig = PMF_Configuration::getInstance();
         $url       = $this->toUri();
@@ -533,13 +579,17 @@ class PMF_Link
         return $url;
     }
 
+    /**
+     * Transforms a URI
+     *
+     * @return string
+     */
     function toUri()
     {
-        $url = $this->url;
-        if (!empty($url)) {
+    	$url = $this->url;
+        if (!empty($this->url)) {
             if ((!$this->hasScheme()) && (!$this->isInternalReference())) {
-                // Manage an URI without a Scheme BUT NOT those that are 'internal' references
-                $url = $this->getDefaultScheme().$this->url;
+                $url = $this->getDefaultScheme() . $this->url;
             }
         }
 
