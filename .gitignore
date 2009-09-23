@@ -5,6 +5,7 @@
 
 # phpMyFAQ generated folders
 
+phpmyfaq/attachments*
 phpmyfaq/config/database.php
 phpmyfaq/data*
 phpmyfaq/pdf*
