@@ -1,12 +1,14 @@
 <?php
 /**
- * $Id: Link.php,v 1.30 2008-02-29 19:38:35 thorstenr Exp $
- *
  * Link management - Functions and Classes
  *
+ * @category  phpMyFAQ
+ * @package   PMF_Link  
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since     2005-11-02
- * @copyright 2005-2008 phpMyFAQ Team
+ * @version   git: $Id$
+ * @copyright 2005-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -24,85 +26,6 @@
  *
  */
 declare(encoding='latin1');
-
-// {{{ Constants
-/**#@+
-  * General Link definitions
-  */
-define('PMF_LINK_AMPERSAND', '&amp;');
-define('PMF_LINK_CATEGORY', 'category/');
-define('PMF_LINK_CONTENT', 'content/');
-define('PMF_LINK_EQUAL', '=');
-define('PMF_LINK_FRAGMENT_SEPARATOR', '#');
-define('PMF_LINK_HTML_MINUS', '-');
-define('PMF_LINK_HTML_UNDERSCORE', '_');
-define('PMF_LINK_HTML_SLASH', '/');
-define('PMF_LINK_HTML_TARGET_BLANK', '_blank');
-define('PMF_LINK_HTML_TARGET_PARENT', '_parent');
-define('PMF_LINK_HTML_TARGET_SELF', '_self');
-define('PMF_LINK_HTML_TARGET_TOP', '_top');
-define('PMF_LINK_NEWS', 'news/');
-define('PMF_LINK_SITEMAP', 'sitemap/');
-define('PMF_LINK_SLASH', '/');
-define('PMF_LINK_SEARCHPART_SEPARATOR', '?');
-define('PMF_LINK_TAGS', 'tags/');
-/**#@-*/
-/**#@+
-  * System pages definitions
-  */
-define('PMF_LINK_INDEX_ADMIN', '/admin/index.php');
-define('PMF_LINK_INDEX_HOME', '/index.php');
-/**#@-*/
-/**#@+
-  * System GET keys definitions
-  */
-define('PMF_LINK_GET_ACTION', 'action');
-define('PMF_LINK_GET_ARTLANG', 'artlang');
-define('PMF_LINK_GET_CATEGORY', 'cat');
-define('PMF_LINK_GET_HIGHLIGHT', 'highlight');
-define('PMF_LINK_GET_ID', 'id');
-define('PMF_LINK_GET_LANG', 'lang');
-define('PMF_LINK_GET_LETTER', 'letter');
-define('PMF_LINK_GET_NEWS_ID', 'newsid');
-define('PMF_LINK_GET_NEWS_LANG', 'newslang');
-define('PMF_LINK_GET_PAGE', 'seite');
-define('PMF_LINK_GET_SIDS', 'SIDS');
-define('PMF_LINK_GET_TAGGING_ID', 'tagging_id');
-define('PMF_LINK_GET_LANGS', 'langs');
-/**#@-*/
-/**#@+
-  * System GET values definitions
-  */
-define('PMF_LINK_GET_ACTION_ADD', 'add');
-define('PMF_LINK_GET_ACTION_ARTIKEL', 'artikel');
-define('PMF_LINK_GET_ACTION_ASK', 'ask');
-define('PMF_LINK_GET_ACTION_CONTACT', 'contact');
-define('PMF_LINK_GET_ACTION_HELP', 'help');
-define('PMF_LINK_GET_ACTION_NEWS', 'news');
-define('PMF_LINK_GET_ACTION_OPEN', 'open');
-define('PMF_LINK_GET_ACTION_SEARCH', 'search');
-define('PMF_LINK_GET_ACTION_SITEMAP', 'sitemap');
-define('PMF_LINK_GET_ACTION_SHOW', 'show');
-/**#@-*/
-/**#@+
-  * Modrewrite virtual pages: w/o extension due to concatenated parameters
-  */
-define('PMF_LINK_HTML_CATEGORY', 'category');
-define('PMF_LINK_HTML_EXTENSION', '.html');
-define('PMF_LINK_HTML_SITEMAP', 'sitemap');
-/**#@-*/
-/**#@+
-  * Modrewrite virtual pages: w/ extension
-  */
-define('PMF_LINK_HTML_ADDCONTENT', 'addcontent.html');
-define('PMF_LINK_HTML_ASK', 'ask.html');
-define('PMF_LINK_HTML_CONTACT', 'contact.html');
-define('PMF_LINK_HTML_HELP', 'help.html');
-define('PMF_LINK_HTML_OPEN', 'open.html');
-define('PMF_LINK_HTML_SEARCH', 'search.html');
-define('PMF_LINK_HTML_SHOWCAT', 'showcat.html');
-/**#@-*/
-// }}}
 
 // {{{ Functions
 function getLinkHtmlAnchor($url, $text = null, $target = null)
@@ -131,67 +54,184 @@ function getLinkUri($url, $text = null, $target = null)
  * This class wrap the needs for managing an HTML anchor
  * taking into account also the HTML anchor creation
  * with specific handling for mod_rewrite PMF native support
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_Link  
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2005-11-02
+ * @copyright 2005-2009 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
  */
 class PMF_Link
 {
-    // {{{ Class properties specific to an HTML link anchor
-    var $url        = '';
-    var $class      = '';
-    var $text       = '';
-    var $tooltip    = '';
-    var $target     = '';
-    var $name       = '';
-    // }}}
-    // {{{ Class properties specific to the SEO/SEF URLs
-    var $itemTitle = '';
-    // }}}
+	/**
+	 * class constants
+	 * 
+	 */
+    const PMF_LINK_AMPERSAND = '&amp;';
+    const PMF_LINK_CATEGORY = 'category/';
+    const PMF_LINK_CONTENT = 'content/';
+    const PMF_LINK_EQUAL = '=';
+    const PMF_LINK_FRAGMENT_SEPARATOR = '#';
+    const PMF_LINK_HTML_MINUS = '-';
+    const PMF_LINK_HTML_UNDERSCORE = '_';
+    const PMF_LINK_HTML_SLASH = '/';
+    const PMF_LINK_HTML_TARGET_BLANK = '_blank';
+    const PMF_LINK_HTML_TARGET_PARENT = '_parent';
+    const PMF_LINK_HTML_TARGET_SELF = '_self';
+    const PMF_LINK_HTML_TARGET_TOP = '_top';
+    const PMF_LINK_NEWS = 'news/';
+    const PMF_LINK_SITEMAP = 'sitemap/';
+    const PMF_LINK_SLASH = '/';
+    const PMF_LINK_SEARCHPART_SEPARATOR = '?';
+    const PMF_LINK_TAGS = 'tags/';
+    
+    const PMF_LINK_INDEX_ADMIN = '/admin/index.php';
+    const PMF_LINK_INDEX_HOME = '/index.php';
+    
+    const PMF_LINK_GET_ACTION = 'action';
+    const PMF_LINK_GET_ARTLANG = 'artlang';
+    const PMF_LINK_GET_CATEGORY = 'cat';
+    const PMF_LINK_GET_HIGHLIGHT = 'highlight';
+    const PMF_LINK_GET_ID = 'id';
+    const PMF_LINK_GET_LANG = 'lang';
+    const PMF_LINK_GET_LETTER = 'letter';
+    const PMF_LINK_GET_NEWS_ID = 'newsid';
+    const PMF_LINK_GET_NEWS_LANG = 'newslang';
+    const PMF_LINK_GET_PAGE = 'seite';
+    const PMF_LINK_GET_SIDS = 'SIDS';
+    const PMF_LINK_GET_TAGGING_ID = 'tagging_id';
+    const PMF_LINK_GET_LANGS = 'langs';
+    
+    const PMF_LINK_GET_ACTION_ADD = 'add';
+    const PMF_LINK_GET_ACTION_ARTIKEL = 'artikel';
+    const PMF_LINK_GET_ACTION_ASK = 'ask';
+    const PMF_LINK_GET_ACTION_CONTACT = 'contact';
+    const PMF_LINK_GET_ACTION_HELP = 'help';
+    const PMF_LINK_GET_ACTION_NEWS = 'news';
+    const PMF_LINK_GET_ACTION_OPEN = 'open';
+    const PMF_LINK_GET_ACTION_SEARCH = 'search';
+    const PMF_LINK_GET_ACTION_SITEMAP = 'sitemap';
+    const PMF_LINK_GET_ACTION_SHOW = 'show';
+    
+    const PMF_LINK_HTML_CATEGORY = 'category';
+    const PMF_LINK_HTML_EXTENSION = '.html';
+    const PMF_LINK_HTML_SITEMAP = 'sitemap';
+    
+    const PMF_LINK_HTML_ADDCONTENT = 'addcontent.html';
+    const PMF_LINK_HTML_ASK = 'ask.html';
+    const PMF_LINK_HTML_CONTACT = 'contact.html';
+    const PMF_LINK_HTML_HELP = 'help.html';
+    const PMF_LINK_HTML_OPEN = 'open.html';
+    const PMF_LINK_HTML_SEARCH = 'search.html';
+    const PMF_LINK_HTML_SHOWCAT = 'showcat.html';
 
-    function PMF_Link($url, $text = null, $target = null)
+	
+	/**
+	 * URL
+	 * 
+	 * @var string
+	 */
+    private $url = '';
+    
+    /**
+     * CSS class
+     * 
+     * @var string
+     */
+    private $class = '';
+    
+    /**
+     * Linktext
+     * 
+     * @var string
+     */
+    private $text = '';
+    
+    /**
+     * Tooltip
+     * 
+     * @var string
+     */
+    private $tooltip = '';
+    
+    /**
+     * Target
+     * 
+     * @var string
+     */
+    private $target = '';
+    
+    /**
+     * Name selector
+     * 
+     * @var string
+     */
+    private $name       = '';
+    
+    /**
+     * property specific to the SEO/SEF URLs
+     * 
+     * @var string
+     */
+    private $itemTitle = '';
+
+    /**
+     * Constructor
+     * 
+     * @param string $url    URL
+     * @param string $text   Text
+     * @param string $target Target
+     * 
+     * @return void
+     */
+    public function __construct($url, $text = '', $target = '')
     {
-        $this->url = $url;
-        $this->text = $text;
-        if ( (!isset($text)) || (empty($text)) ) {
-            $this->title = '';
-        }
+        $this->url    = $url;
+        $this->text   = $text;
         $this->target = $target;
-        if ( (!isset($target)) || (empty($target)) ) {
-            $this->target = '';
-        }
-        $this->class   = '';
-        $this->tooltip = '';
-        $this->name    = '';
-
-        $this->itemTitle = '';
     }
 
+    /**
+     * Checks if webserver is an IIS Server
+     * 
+     * @return boolean
+     */
     public static function isIISServer()
     {
-        return (
-               isset($_SERVER['ALL_HTTP'])      // IIS 5.x possible signature
-            || isset($_SERVER['COMPUTERNAME'])  // IIS 5.x possible signature
-            || isset($_SERVER['APP_POOL_ID'])   // IIS 6.0 possible signature
-        );
+        return (isset($_SERVER['ALL_HTTP']) || isset($_SERVER['COMPUTERNAME']) || isset($_SERVER['APP_POOL_ID']));
     }
 
-    function isAdminIndex()
+    /**
+     * Checks if the the current URL is the main index.php file
+     * 
+     * @return boolean
+     */
+    protected function isHomeIndex()
     {
         if (!$this->isSystemLink()) {
             return false;
         }
 
-        return !(false === strpos($this->url, PMF_LINK_INDEX_ADMIN));
+        return !(false === strpos($this->url, self::PMF_LINK_INDEX_HOME));
     }
 
-    function isHomeIndex()
-    {
-        if (!$this->isSystemLink()) {
-            return false;
-        }
-
-        return !(false === strpos($this->url, PMF_LINK_INDEX_HOME));
-    }
-
-    function isInternalReference()
+    /**
+     * Checks if URL is an internal reference
+     * 
+     * @return boolean
+     */
+    protected function isInternalReference()
     {
         if ($this->isRelativeSystemLink()) {
             return true;
@@ -203,9 +243,14 @@ class PMF_Link
         return (strpos($this->url, '#') == 0);
     }
 
-    function isRelativeSystemLink()
+    /**
+     * Checks if URL is a relative system link
+     *
+     * @return boolean
+     */
+    protected function isRelativeSystemLink()
     {
-        $slashIdx = strpos($this->url, PMF_LINK_SLASH);
+        $slashIdx = strpos($this->url, self::PMF_LINK_SLASH);
         if (false === $slashIdx) {
             return false;
         }
@@ -213,7 +258,12 @@ class PMF_Link
         return ($slashIdx == 0);
     }
 
-    function isSystemLink()
+    /**
+     * Checks if URL is a system link
+     * 
+     * @return boolean
+     */
+    protected function isSystemLink()
     {
         // a. Is the url relative, starting with '/'?
         // b. Is the url related to the current running PMF system?
@@ -222,12 +272,6 @@ class PMF_Link
         }
         // $_SERVER['HTTP_HOST'] is the name of the website or virtual host name
         return !(false === strpos($this->url, $_SERVER['HTTP_HOST']));
-    }
-
-    function hasModRewriteSupport()
-    {
-        $faqconfig = PMF_Configuration::getInstance();
-        return $faqconfig->get('main.enableRewriteRules');
     }
 
     function hasScheme()
@@ -271,12 +315,12 @@ class PMF_Link
 
         if (!empty($query))
         {
-            $params = explode(PMF_LINK_AMPERSAND, $query);
+            $params = explode(self::PMF_LINK_AMPERSAND, $query);
             foreach ($params as $param)
             {
                 if (!empty($param))
                 {
-                    $couple = explode(PMF_LINK_EQUAL, $param);
+                    $couple = explode(self::PMF_LINK_EQUAL, $param);
                     list($key, $val) = $couple;
                     $parameters[$key] = urldecode($val);
                 }
@@ -292,7 +336,7 @@ class PMF_Link
         if (!empty($this->url)) {
             $parsed = parse_url($this->url);
             // Take the last element
-            $page = substr(strrchr($parsed['path'], PMF_LINK_SLASH), 1);
+            $page = substr(strrchr($parsed['path'], self::PMF_LINK_SLASH), 1);
         }
 
         return $page;
@@ -395,91 +439,92 @@ class PMF_Link
 
     function appendSids($url, $sids)
     {
-        $separator = (false === strpos($url, PMF_LINK_SEARCHPART_SEPARATOR)) ? PMF_LINK_SEARCHPART_SEPARATOR : PMF_LINK_AMPERSAND ;
-        return $url.$separator.PMF_LINK_GET_SIDS.'='.$sids;
+        $separator = (false === strpos($url, self::PMF_LINK_SEARCHPART_SEPARATOR)) ? self::PMF_LINK_SEARCHPART_SEPARATOR : self::PMF_LINK_AMPERSAND ;
+        return $url.$separator.self::PMF_LINK_GET_SIDS.'='.$sids;
     }
 
     function toString($forceNoModrewriteSupport = false)
     {
-        $url = $this->toUri();
+    	$faqconfig = PMF_Configuration::getInstance();
+        $url       = $this->toUri();
         // Check mod_rewrite support and 'rewrite' the passed (system) uri
         // according to the rewrite rules written in .htaccess
-        if ((!$forceNoModrewriteSupport) && ($this->hasModRewriteSupport())) {
+        if ((!$forceNoModrewriteSupport) && ($faqconfig->get('main.enableRewriteRules'))) {
             if ($this->isHomeIndex()) {
                 $getParams = $this->getHttpGetParameters();
-                if (isset($getParams[PMF_LINK_GET_ACTION])) {
+                if (isset($getParams[self::PMF_LINK_GET_ACTION])) {
                     // Get the part of the url 'till the '/' just before the pattern
-                    $url = substr($url, 0, strpos($url, PMF_LINK_INDEX_HOME) + 1);
+                    $url = substr($url, 0, strpos($url, self::PMF_LINK_INDEX_HOME) + 1);
                     // Build the Url according to .htaccess rules
-                    switch($getParams[PMF_LINK_GET_ACTION]) {
-                        case PMF_LINK_GET_ACTION_ADD:
-                            $url .= PMF_LINK_HTML_ADDCONTENT;
+                    switch($getParams[self::PMF_LINK_GET_ACTION]) {
+                        case self::PMF_LINK_GET_ACTION_ADD:
+                            $url .= self::PMF_LINK_HTML_ADDCONTENT;
                             break;
-                        case PMF_LINK_GET_ACTION_ARTIKEL:
-                            $url .= PMF_LINK_CONTENT.$getParams[PMF_LINK_GET_CATEGORY].PMF_LINK_HTML_SLASH.$getParams[PMF_LINK_GET_ID].PMF_LINK_HTML_SLASH.$getParams[PMF_LINK_GET_ARTLANG].PMF_LINK_SLASH.$this->getSEOItemTitle().PMF_LINK_HTML_EXTENSION;
-                            if (isset($getParams[PMF_LINK_GET_HIGHLIGHT])) {
-                                $url .= PMF_LINK_SEARCHPART_SEPARATOR.PMF_LINK_GET_HIGHLIGHT.'='.$getParams[PMF_LINK_GET_HIGHLIGHT];
+                        case self::PMF_LINK_GET_ACTION_ARTIKEL:
+                            $url .= self::PMF_LINK_CONTENT.$getParams[self::PMF_LINK_GET_CATEGORY].self::PMF_LINK_HTML_SLASH.$getParams[self::PMF_LINK_GET_ID].self::PMF_LINK_HTML_SLASH.$getParams[self::PMF_LINK_GET_ARTLANG].self::PMF_LINK_SLASH.$this->getSEOItemTitle().self::PMF_LINK_HTML_EXTENSION;
+                            if (isset($getParams[self::PMF_LINK_GET_HIGHLIGHT])) {
+                                $url .= self::PMF_LINK_SEARCHPART_SEPARATOR.self::PMF_LINK_GET_HIGHLIGHT.'='.$getParams[self::PMF_LINK_GET_HIGHLIGHT];
                             }
                             break;
-                        case PMF_LINK_GET_ACTION_ASK:
-                            $url .= PMF_LINK_HTML_ASK;
+                        case self::PMF_LINK_GET_ACTION_ASK:
+                            $url .= self::PMF_LINK_HTML_ASK;
                             break;
-                        case PMF_LINK_GET_ACTION_CONTACT:
-                            $url .= PMF_LINK_HTML_CONTACT;
+                        case self::PMF_LINK_GET_ACTION_CONTACT:
+                            $url .= self::PMF_LINK_HTML_CONTACT;
                             break;
-                        case PMF_LINK_GET_ACTION_HELP:
-                            $url .= PMF_LINK_HTML_HELP;
+                        case self::PMF_LINK_GET_ACTION_HELP:
+                            $url .= self::PMF_LINK_HTML_HELP;
                             break;
-                        case PMF_LINK_GET_ACTION_OPEN:
-                            $url .= PMF_LINK_HTML_OPEN;
+                        case self::PMF_LINK_GET_ACTION_OPEN:
+                            $url .= self::PMF_LINK_HTML_OPEN;
                             break;
-                        case PMF_LINK_GET_ACTION_SEARCH:
-                            if (!isset($getParams[PMF_LINK_GET_ACTION_SEARCH]) && isset($getParams[PMF_LINK_GET_TAGGING_ID])) {
-                                $url .= PMF_LINK_TAGS.$getParams[PMF_LINK_GET_TAGGING_ID];
-                                if (isset($getParams[PMF_LINK_GET_PAGE])) {
-                                    $url .= PMF_LINK_HTML_SLASH.$getParams[PMF_LINK_GET_PAGE];
+                        case self::PMF_LINK_GET_ACTION_SEARCH:
+                            if (!isset($getParams[self::PMF_LINK_GET_ACTION_SEARCH]) && isset($getParams[self::PMF_LINK_GET_TAGGING_ID])) {
+                                $url .= self::PMF_LINK_TAGS.$getParams[self::PMF_LINK_GET_TAGGING_ID];
+                                if (isset($getParams[self::PMF_LINK_GET_PAGE])) {
+                                    $url .= self::PMF_LINK_HTML_SLASH.$getParams[self::PMF_LINK_GET_PAGE];
                                 }
-                                $url .= PMF_LINK_SLASH.$this->getSEOItemTitle().PMF_LINK_HTML_EXTENSION; 
-                            } elseif (isset($getParams[PMF_LINK_GET_ACTION_SEARCH])) {
-                                $url .= PMF_LINK_HTML_SEARCH;
-                                $url .= PMF_LINK_SEARCHPART_SEPARATOR.PMF_LINK_GET_ACTION_SEARCH.'='.$getParams[PMF_LINK_GET_ACTION_SEARCH];
-                                if (isset($getParams[PMF_LINK_GET_PAGE])) {
-                                    $url .= PMF_LINK_AMPERSAND.PMF_LINK_GET_PAGE.'='.$getParams[PMF_LINK_GET_PAGE];
+                                $url .= self::PMF_LINK_SLASH.$this->getSEOItemTitle().self::PMF_LINK_HTML_EXTENSION; 
+                            } elseif (isset($getParams[self::PMF_LINK_GET_ACTION_SEARCH])) {
+                                $url .= self::PMF_LINK_HTML_SEARCH;
+                                $url .= self::PMF_LINK_SEARCHPART_SEPARATOR.self::PMF_LINK_GET_ACTION_SEARCH.'='.$getParams[self::PMF_LINK_GET_ACTION_SEARCH];
+                                if (isset($getParams[self::PMF_LINK_GET_PAGE])) {
+                                    $url .= self::PMF_LINK_AMPERSAND.self::PMF_LINK_GET_PAGE.'='.$getParams[self::PMF_LINK_GET_PAGE];
                                 }
                             }
-                            if (isset($getParams[PMF_LINK_GET_LANGS])) {
-                                $url .= PMF_LINK_AMPERSAND.PMF_LINK_GET_LANGS.'='.$getParams[PMF_LINK_GET_LANGS];
+                            if (isset($getParams[self::PMF_LINK_GET_LANGS])) {
+                                $url .= self::PMF_LINK_AMPERSAND.self::PMF_LINK_GET_LANGS.'='.$getParams[self::PMF_LINK_GET_LANGS];
                             }
                             break;
-                        case PMF_LINK_GET_ACTION_SITEMAP:
-                            if (isset($getParams[PMF_LINK_GET_LETTER])) {
-                                $url .= PMF_LINK_SITEMAP.$getParams[PMF_LINK_GET_LETTER].PMF_LINK_HTML_SLASH.$getParams[PMF_LINK_GET_LANG].PMF_LINK_HTML_EXTENSION;
+                        case self::PMF_LINK_GET_ACTION_SITEMAP:
+                            if (isset($getParams[self::PMF_LINK_GET_LETTER])) {
+                                $url .= self::PMF_LINK_SITEMAP.$getParams[self::PMF_LINK_GET_LETTER].self::PMF_LINK_HTML_SLASH.$getParams[self::PMF_LINK_GET_LANG].self::PMF_LINK_HTML_EXTENSION;
                             } else {
-                                $url .= PMF_LINK_SITEMAP.'A'.PMF_LINK_HTML_SLASH.$getParams[PMF_LINK_GET_LANG].PMF_LINK_HTML_EXTENSION;
+                                $url .= self::PMF_LINK_SITEMAP.'A'.self::PMF_LINK_HTML_SLASH.$getParams[self::PMF_LINK_GET_LANG].self::PMF_LINK_HTML_EXTENSION;
                             }
                             break;
-                        case PMF_LINK_GET_ACTION_SHOW:
-                            if (    !isset($getParams[PMF_LINK_GET_CATEGORY])
-                                 || (isset($getParams[PMF_LINK_GET_CATEGORY]) && (0 == $getParams[PMF_LINK_GET_CATEGORY]))
+                        case self::PMF_LINK_GET_ACTION_SHOW:
+                            if (    !isset($getParams[self::PMF_LINK_GET_CATEGORY])
+                                 || (isset($getParams[self::PMF_LINK_GET_CATEGORY]) && (0 == $getParams[self::PMF_LINK_GET_CATEGORY]))
                                 ) {
-                                $url .= PMF_LINK_HTML_SHOWCAT;
+                                $url .= self::PMF_LINK_HTML_SHOWCAT;
                             }
                             else {
-                                $url .= PMF_LINK_CATEGORY.$getParams[PMF_LINK_GET_CATEGORY];
-                                if (isset($getParams[PMF_LINK_GET_PAGE])) {
-                                    $url .= PMF_LINK_HTML_SLASH.$getParams[PMF_LINK_GET_PAGE];
+                                $url .= self::PMF_LINK_CATEGORY.$getParams[self::PMF_LINK_GET_CATEGORY];
+                                if (isset($getParams[self::PMF_LINK_GET_PAGE])) {
+                                    $url .= self::PMF_LINK_HTML_SLASH.$getParams[self::PMF_LINK_GET_PAGE];
                                 }
-                                $url .= PMF_LINK_HTML_SLASH.$this->getSEOItemTitle().PMF_LINK_HTML_EXTENSION;
+                                $url .= self::PMF_LINK_HTML_SLASH.$this->getSEOItemTitle().self::PMF_LINK_HTML_EXTENSION;
                             }
                             break;
-                        case PMF_LINK_GET_ACTION_NEWS:
-                            $url .= PMF_LINK_NEWS.$getParams[PMF_LINK_GET_NEWS_ID].PMF_LINK_HTML_SLASH.$getParams[PMF_LINK_GET_NEWS_LANG].PMF_LINK_SLASH.$this->getSEOItemTitle().PMF_LINK_HTML_EXTENSION;
+                        case self::PMF_LINK_GET_ACTION_NEWS:
+                            $url .= self::PMF_LINK_NEWS.$getParams[self::PMF_LINK_GET_NEWS_ID].self::PMF_LINK_HTML_SLASH.$getParams[self::PMF_LINK_GET_NEWS_LANG].self::PMF_LINK_SLASH.$this->getSEOItemTitle().self::PMF_LINK_HTML_EXTENSION;
                             break;
                         default:
                             break;
                     }
-                    if (isset($getParams[PMF_LINK_GET_SIDS])) {
-                        $url = $this->appendSids($url, $getParams[PMF_LINK_GET_SIDS]);
+                    if (isset($getParams[self::PMF_LINK_GET_SIDS])) {
+                        $url = $this->appendSids($url, $getParams[self::PMF_LINK_GET_SIDS]);
                     }
                 }
             }
