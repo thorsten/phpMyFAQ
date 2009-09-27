@@ -79,15 +79,20 @@ function db_check($supported_databases)
  * @access public
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  */
-function extension_check($enabled_extensions)
+function extension_check($enabled_extensions, &$output = NULL)
 {
+    $missing_extensions = array();
     foreach ($enabled_extensions as $extension) {
 
         if (!extension_loaded($extension)) {
-            return false;
+            $missing_extensions[] = $extension;
         }
     }
 
+    if (count($missing_extensions) > 0) {
+        $output = $missing_extensions;
+        return false;
+    }
     return true;
 }
 
@@ -335,10 +340,11 @@ if (!db_check($supported_databases)) {
     die();
 }
 
-if (!extension_check($enabled_extensions)) {
-    print "<p class=\"center\">Some missing extensions were detected! Please enable the corresponding PHP extension:</p>\n";
+$missing = array();
+if (!extension_check($enabled_extensions, $missing)) {
+    print "<p class=\"center\">The following extensions are missing! Please enable the PHP extension:</p>\n";
     print "<ul>\n";
-    foreach ($enabled_extensions as $extension) {
+    foreach ($missing as $extension) {
         printf('    <li>ext/%s</li>', $extension);
     }
     print "</ul>\n";
