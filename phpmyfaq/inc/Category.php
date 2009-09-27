@@ -806,17 +806,18 @@ class PMF_Category
     {
         global $sids, $PMF_LANG;
 
-        $open   = 0;
-        $output = '';
+        $open     = 0;
+        $output   = '';
+        $isActive = false;
 
         if ($this->height() > 0) {
             for ($y = 0 ;$y < $this->height(); $y = $this->getNextLineTree($y)) {
                 list($symbol, $categoryName, $parent, $description) = $this->getLineDisplay($y);
 
                 if ($activeCat == $parent) {
-                    $a = ' class="active"';
+                    $isActive = true;
                 } else {
-                    $a = '';
+                    $isActive = false;
                 }
 
                 $level = $this->treeTab[$y]["level"];
@@ -849,13 +850,13 @@ class PMF_Category
                 }
 
                 if (isset($this->treeTab[$y]['symbol']) && $this->treeTab[$y]['symbol'] == 'plus') {
-                    $output .= $this->addCategoryLink($sids, $parent, $categoryName, $description, true);
+                    $output .= $this->addCategoryLink($sids, $parent, $categoryName, $description, true, $isActive);
                 } else {
                     if ($this->treeTab[$y]['symbol'] == 'minus') {
                         $name = ($this->treeTab[$y]['parent_id'] == 0) ? $categoryName : $this->categoryName[$this->treeTab[$y]['id']]['name'];
                         $output .= $this->addCategoryLink($sids, $this->treeTab[$y]['parent_id'], $name, $description);
                     } else {
-                        $output .= $this->addCategoryLink($sids, $parent, $categoryName, $description);
+                        $output .= $this->addCategoryLink($sids, $parent, $categoryName, $description, false, $isActive);
                     }
                 }
                 $open = $level;
@@ -875,23 +876,30 @@ class PMF_Category
     /**
      * Private method to create a category link
      *
-     * @param   string  $sids         Session id
-     * @param   integer $parent       Parent category
-     * @param   string  $categoryName Category name
-     * @param   string  $description  Description
-     * @param   boolean $hasChildren  Child categories available
+     * @param  string  $sids         Session id
+     * @param  integer $parent       Parent category
+     * @param  string  $categoryName Category name
+     * @param  string  $description  Description
+     * @param  boolean $hasChildren  Child categories available
+     * @param  boolean $isActive     Sets a link active via CSS
      * @return  string
      */
-    private function addCategoryLink($sids, $parent, $categoryName, $description, $hasChildren = false)
+    private function addCategoryLink($sids, $parent, $categoryName, $description, $hasChildren = false, $isActive = false)
     {
-        $url   = sprintf('%saction=show&amp;cat=%d', $sids, $parent);
-        $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+        $url              = sprintf('%saction=show&amp;cat=%d', $sids, $parent);
+        $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
         $oLink->itemTitle = $categoryName;
-        $oLink->text = $categoryName;
+        $oLink->text      = $categoryName;
+        
         if ($hasChildren) {
             $oLink->text .= sprintf(' <img src="images/more.gif" width="11" height="11" alt="%s" style="border: none; vertical-align: middle;" />',
                 $categoryName);
         }
+        
+        if ($isActive) {
+            $oLink->class = 'active';
+        }
+        
         $oLink->tooltip = $description;
         return $oLink->toHtmlAnchor();
     }

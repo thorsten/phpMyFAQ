@@ -6,6 +6,7 @@ CHANGED FILES FROM 2.5.2 -> 2.5.3
 ./admin/record.show.php
 ./admin/user.php
 ./inc/constants.php
+./inc/Category.php
 ./inc/Faq.php
 ./inc/functions.php
 ./inc/News.php
