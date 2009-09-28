@@ -1,0 +1,94 @@
+CHANGED FILES FROM 2.5.2 -> 2.5.3
+
+./admin/category.edit.php
+./admin/news.php
+./admin/record.edit.php
+./admin/record.show.php
+./inc/constants.php
+./inc/Faq.php
+./inc/functions.php
+./inc/News.php
+./inc/Relation.php
+./install/config.sql.php
+./install/installer.php
+./install/update.php
+./lang/language_de.php
+./lang/language_ja.php
+./scripts/git2package.sh added
+./scripts/svn2package.sh removed
+./template/artikel.tpl
+./ajaxresponse.php
+./index.php
+./news.php
+./search.php
+
+
+
+CHANGED FILES FROM 2.5.1 -> 2.5.2
+
+./admin/record.add.php
+./admin/record.edit.php
+./admin/record.save.php
+./inc/PMF_Auth/AuthDb.php
+./inc/PMF_Auth/AuthDriver.php
+./inc/PMF_Auth/AuthHttp.php
+./inc/PMF_Auth/AuthLdap.php
+./inc/Faq.php
+./inc/String.php
+./lang/language_cs.php
+./install/installer.php
+./install/update.php
+./lang/language_cs.php
+./lang/language_de.php
+./lang/language_en.php
+./lang/language_pl.php
+./lang/language_tw.php
+./template/register.tpl
+./template/sitemap.tpl
+./main.php
+./news.php
+./sendmail.php
+./save.php
+./savequestion.php
+./search.php
+./sitemap.php
+
+
+
+CHANGED FILES FROM 2.5.0 -> 2.5.1
+
+./admin/footer.php
+./admin/pwd.change.php
+./admin/record.show.php
+./docs/documentation.en.html
+./inc/PMF_Auth/AuthDb.php
+./inc/PMF_Auth/AuthDriver.php
+./inc/PMF_Auth/AuthHttp.php
+./inc/PMF_Auth/AuthLdap.php
+./inc/PMF_Enc/Enc.php added
+./inc/PMF_DB/Oracle.php deleted
+./inc/PMF_DB/Oci8.php added
+./inc/PMF_Export/Docbook.php
+./inc/PMF_Export/Pdf.php
+./inc/PMF_User/CurrentUser.php
+./inc/constants.php
+./inc/constants_ldap.php added
+./inc/record.save.php
+./inc/Export.php
+./inc/Faq.php
+./inc/Filter.php
+./inc/functions.php
+./inc/Init.php
+./inc/Ldap.php
+./inc/String.php
+./inc/Tags.php
+./inc/User.php
+./install/installer.php
+./install/oracle.sql.php deleted
+./install/oci8.sql.php added
+./install/stopwords.sql.php
+./install/update.php
+./lang/language_lt.php added
+,/scripts/svn2package.sh
+./main.php
+./show.php

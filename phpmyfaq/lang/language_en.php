@@ -998,6 +998,7 @@ $LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "Path where attach
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "The file you're trying to download was not found on this server";
+$PMF_LANG['ad_sess_noentry'] = "No entry";
 
 // added 2.6.0-alpha - 2009-07-30 by Aurimas Fišeras
 //P.S. "One User online" is also possible, since sprintf just ignores extra args
