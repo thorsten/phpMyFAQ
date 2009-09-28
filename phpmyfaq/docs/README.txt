@@ -13,6 +13,7 @@ Changes since 2.5.2:
 - fixed missing info link in news (Thorsten)
 - fixed broken group permission check for instant response (Thorsten)
 - fixed broken attachment download (Thorsten)
+- fixed SQLite problems (David Soria Parra)
 - updated Japanese translation
 
 For known issues please take a look at KNOWNBUGS.txt
@@ -25,6 +26,7 @@ Version 2.5.3 - 2009-10-
 - fixed missing info link in news (Thorsten)
 - fixed broken group permission check for instant response (Thorsten)
 - fixed broken attachment download (Thorsten)
+- fixed SQLite problems (David Soria Parra)
 - updated Japanese translation
 
 Version 2.5.2 - 2009-09-01
