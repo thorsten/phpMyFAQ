@@ -1377,7 +1377,7 @@ if ($step == 4) {
     
     //
     // UPDATES FROM 2.5.2
-    if (version_compare($version, '2.5.2', '<')) {
+    if (version_compare($version, '2.5.3', '<')) {
     	$query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'spam.enableCaptchaCode' WHERE config_name = 'spam.enableCatpchaCode'";
     }
     
