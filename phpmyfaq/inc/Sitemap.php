@@ -145,7 +145,7 @@ class PMF_Sitemap
                     AND
                         %s
                     ORDER BY
-                        fd.letters",
+                        letters",
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
