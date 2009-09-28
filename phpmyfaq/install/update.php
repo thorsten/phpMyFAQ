@@ -241,7 +241,9 @@ if ($step == 1) {
     <option value="2.5.0-RC">phpMyFAQ 2.5.0-RC and later</option>
     <option value="2.5.0-RC3">phpMyFAQ 2.5.0-RC3</option>
     <option value="2.5.0">phpMyFAQ 2.5.0</option>
-    <option value="2.5.1">phpMyFAQ 2.5.1 and later</option>
+    <option value="2.5.1">phpMyFAQ 2.5.1</option>
+    <option value="2.5.2">phpMyFAQ 2.5.2</option>
+    <option value="2.5.3">phpMyFAQ 2.5.3 and later</option>
 </select>
 
 <p class="center"><input type="submit" value="Go to step 2 of 4" class="button" /></p>
@@ -1371,6 +1373,12 @@ if ($step == 4) {
     	// Truncate table and re-import all stopwords with the new Lithuanian ones
         $query[] = "DELETE FROM ".SQLPREFIX."faqstopwords";
         require 'stopwords.sql.php';
+    }
+    
+    //
+    // UPDATES FROM 2.5.2
+    if (version_compare($version, '2.5.2', '<')) {
+    	$query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'spam.enableCaptchaCode' WHERE config_name = 'spam.enableCatpchaCode'";
     }
     
     // Perform the queries for updating/migrating the database from 2.x
