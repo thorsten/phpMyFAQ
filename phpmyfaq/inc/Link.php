@@ -142,49 +142,49 @@ class PMF_Link
 	 * 
 	 * @var string
 	 */
-    private $url = '';
+    public $url = '';
     
     /**
      * CSS class
      * 
      * @var string
      */
-    private $class = '';
+    public $class = '';
     
     /**
      * Linktext
      * 
      * @var string
      */
-    private $text = '';
+    public $text = '';
     
     /**
      * Tooltip
      * 
      * @var string
      */
-    private $tooltip = '';
+    public $tooltip = '';
     
     /**
      * Target
      * 
      * @var string
      */
-    private $target = '';
+    public $target = '';
     
     /**
      * Name selector
      * 
      * @var string
      */
-    private $name       = '';
+    public $name = '';
     
     /**
      * property specific to the SEO/SEF URLs
      * 
      * @var string
      */
-    private $itemTitle = '';
+    public $itemTitle = '';
 
     /**
      * Constructor
