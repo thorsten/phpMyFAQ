@@ -458,6 +458,21 @@ if ($step == 4) {
     }
     
     //
+    // UPDATES FROM 2.5.1
+    //
+    if (version_compare($version, '2.5.1', '<')) {
+        // Truncate table and re-import all stopwords with the new Lithuanian ones
+        $query[] = "DELETE FROM ".SQLPREFIX."faqstopwords";
+        require 'stopwords.sql.php';
+    }
+    
+    //
+    // UPDATES FROM 2.5.2
+    if (version_compare($version, '2.5.2', '<')) {
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'spam.enableCaptchaCode' WHERE config_name = 'spam.enableCatpchaCode'";
+    }
+    
+    //
     // UPDATES FROM 2.6.0-alpha
     //
     if (version_compare($version, '2.6.0-alpha', '<')) {
