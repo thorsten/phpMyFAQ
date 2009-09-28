@@ -9,7 +9,7 @@
  * @author     Sarah Hermann <sayh@gmx.de>
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2005-12-15
- * @version    SVN: $Id$
+ * @version    git: $Id$
  * @copyright  2005-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
