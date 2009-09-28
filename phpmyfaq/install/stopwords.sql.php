@@ -20,3303 +20,3299 @@
  * under the License.
  */
 
-$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES
-(0, 'cs', 'dnes'),
-(1, 'cs', 'cz'),
-(2, 'cs', 'timto'),
-(3, 'cs', 'budes'),
-(4, 'cs', 'budem'),
-(5, 'cs', 'byli'),
-(6, 'cs', 'jses'),
-(7, 'cs', 'muj'),
-(8, 'cs', 'svym'),
-(9, 'cs', 'ta'),
-(10, 'cs', 'tomto'),
-(11, 'cs', 'tohle'),
-(12, 'cs', 'tuto'),
-(13, 'cs', 'tyto'),
-(14, 'cs', 'jej'),
-(15, 'cs', 'zda'),
-(16, 'cs', 'proc'),
-(17, 'cs', 'mate'),
-(18, 'cs', 'tato'),
-(19, 'cs', 'kam'),
-(20, 'cs', 'tohoto'),
-(21, 'cs', 'kdo'),
-(22, 'cs', 'kteri'),
-(23, 'cs', 'mi'),
-(24, 'cs', 'nam'),
-(25, 'cs', 'tom'),
-(26, 'cs', 'tomuto'),
-(27, 'cs', 'mit'),
-(28, 'cs', 'nic'),
-(29, 'cs', 'proto'),
-(30, 'cs', 'kterou'),
-(31, 'cs', 'byla'),
-(32, 'cs', 'toho'),
-(33, 'cs', 'protoze'),
-(34, 'cs', 'asi'),
-(35, 'cs', 'ho'),
-(36, 'cs', 'nasi'),
-(37, 'cs', 'napiste'),
-(38, 'cs', 're'),
-(39, 'cs', 'coz'),
-(40, 'cs', 'tim'),
-(41, 'cs', 'takze'),
-(42, 'cs', 'svych'),
-(43, 'cs', 'jeji'),
-(44, 'cs', 'svymi'),
-(45, 'cs', 'jste'),
-(46, 'cs', 'aj'),
-(47, 'cs', 'tu'),
-(48, 'cs', 'tedy'),
-(49, 'cs', 'teto'),
-(50, 'cs', 'bylo'),
-(51, 'cs', 'kde'),
-(52, 'cs', 'ke'),
-(53, 'cs', 'prave'),
-(54, 'cs', 'ji'),
-(55, 'cs', 'nad'),
-(56, 'cs', 'nejsou'),
-(57, 'cs', 'ci'),
-(58, 'cs', 'pod'),
-(59, 'cs', 'tema'),
-(60, 'cs', 'mezi'),
-(61, 'cs', 'pres'),
-(62, 'cs', 'ty'),
-(63, 'cs', 'pak'),
-(64, 'cs', 'vam'),
-(65, 'cs', 'ani'),
-(66, 'cs', 'kdyz'),
-(67, 'cs', 'vsak'),
-(68, 'cs', 'ne'),
-(69, 'cs', 'jsem'),
-(70, 'cs', 'tento'),
-(71, 'cs', 'clanku'),
-(72, 'cs', 'clanky'),
-(73, 'cs', 'aby'),
-(74, 'cs', 'jsme'),
-(75, 'cs', 'pred'),
-(76, 'cs', 'pta'),
-(77, 'cs', 'jejich'),
-(78, 'cs', 'byl'),
-(79, 'cs', 'jeste'),
-(80, 'cs', 'az'),
-(81, 'cs', 'bez'),
-(82, 'cs', 'take'),
-(83, 'cs', 'pouze'),
-(84, 'cs', 'prvni'),
-(85, 'cs', 'vase'),
-(86, 'cs', 'ktera'),
-(87, 'cs', 'nas'),
-(88, 'cs', 'novy'),
-(89, 'cs', 'tipy'),
-(90, 'cs', 'pokud'),
-(91, 'cs', 'muze'),
-(92, 'cs', 'design'),
-(93, 'cs', 'strana'),
-(94, 'cs', 'jeho'),
-(95, 'cs', 'sve'),
-(96, 'cs', 'jine'),
-(97, 'cs', 'zpravy'),
-(98, 'cs', 'nove'),
-(99, 'cs', 'neni'),
-(100, 'cs', 'vas'),
-(101, 'cs', 'jen'),
-(102, 'cs', 'podle'),
-(103, 'cs', 'zde'),
-(104, 'cs', 'clanek'),
-(105, 'cs', 'uz'),
-(106, 'cs', 'email'),
-(107, 'cs', 'byt'),
-(108, 'cs', 'vice'),
-(109, 'cs', 'bude'),
-(110, 'cs', 'jiz'),
-(111, 'cs', 'nez'),
-(112, 'cs', 'ktery'),
-(113, 'cs', 'by'),
-(114, 'cs', 'ktere'),
-(115, 'cs', 'co'),
-(116, 'cs', 'nebo'),
-(117, 'cs', 'ten'),
-(118, 'cs', 'tak'),
-(119, 'cs', 'ma'),
-(120, 'cs', 'pri'),
-(121, 'cs', 'od'),
-(122, 'cs', 'po'),
-(123, 'cs', 'jsou'),
-(124, 'cs', 'jak'),
-(125, 'cs', 'dalsi'),
-(126, 'cs', 'ale'),
-(127, 'cs', 'si'),
-(128, 'cs', 've'),
-(129, 'cs', 'to'),
-(130, 'cs', 'jako'),
-(131, 'cs', 'za'),
-(132, 'cs', 'zpet'),
-(133, 'cs', 'ze'),
-(134, 'cs', 'do'),
-(135, 'cs', 'pro'),
-(136, 'cs', 'je'),
-(137, 'da', 'af'),
-(138, 'da', 'alle'),
-(139, 'da', 'andet'),
-(140, 'da', 'andre'),
-(141, 'da', 'at'),
-(142, 'da', 'begge'),
-(143, 'da', 'da'),
-(144, 'da', 'de'),
-(145, 'da', 'den'),
-(146, 'da', 'denne'),
-(147, 'da', 'der'),
-(148, 'da', 'deres'),
-(149, 'da', 'det'),
-(150, 'da', 'dette'),
-(151, 'da', 'dig'),
-(152, 'da', 'din'),
-(153, 'da', 'dog'),
-(154, 'da', 'du'),
-(155, 'da', 'ej'),
-(156, 'da', 'eller'),
-(157, 'da', 'en'),
-(158, 'da', 'end'),
-(159, 'da', 'ene'),
-(160, 'da', 'eneste'),
-(161, 'da', 'enhver'),
-(162, 'da', 'et'),
-(163, 'da', 'fem'),
-(164, 'da', 'fire'),
-(165, 'da', 'flere'),
-(166, 'da', 'fleste'),
-(167, 'da', 'for'),
-(168, 'da', 'fordi'),
-(169, 'da', 'forrige'),
-(170, 'da', 'fra'),
-(171, 'da', 'f√•'),
-(172, 'da', 'f√∏r'),
-(173, 'da', 'god'),
-(174, 'da', 'han'),
-(175, 'da', 'hans'),
-(176, 'da', 'har'),
-(177, 'da', 'hendes'),
-(178, 'da', 'her'),
-(179, 'da', 'hun'),
-(180, 'da', 'hvad'),
-(181, 'da', 'hvem'),
-(182, 'da', 'hver'),
-(183, 'da', 'hvilken'),
-(184, 'da', 'hvis'),
-(185, 'da', 'hvor'),
-(186, 'da', 'hvordan'),
-(187, 'da', 'hvorfor'),
-(188, 'da', 'hvorn√•r'),
-(189, 'da', 'i'),
-(190, 'da', 'ikke'),
-(191, 'da', 'ind'),
-(192, 'da', 'ingen'),
-(193, 'da', 'intet'),
-(194, 'da', 'jeg'),
-(195, 'da', 'jeres'),
-(196, 'da', 'kan'),
-(197, 'da', 'kom'),
-(198, 'da', 'kommer'),
-(199, 'da', 'lav'),
-(200, 'da', 'lidt'),
-(201, 'da', 'lille'),
-(202, 'da', 'man mand'),
-(203, 'da', 'mange'),
-(204, 'da', 'med'),
-(205, 'da', 'meget'),
-(206, 'da', 'men'),
-(207, 'da', 'mens'),
-(208, 'da', 'mere'),
-(209, 'da', 'mig'),
-(210, 'da', 'ned'),
-(211, 'da', 'ni'),
-(212, 'da', 'nogen'),
-(213, 'da', 'noget'),
-(214, 'da', 'ny'),
-(215, 'da', 'nyt'),
-(216, 'da', 'n√¶r'),
-(217, 'da', 'n√¶ste'),
-(218, 'da', 'n√¶sten'),
-(219, 'da', 'og'),
-(220, 'da', 'op'),
-(221, 'da', 'otte'),
-(222, 'da', 'over'),
-(223, 'da', 'p√•'),
-(224, 'da', 'se'),
-(225, 'da', 'seks'),
-(226, 'da', 'ses'),
-(227, 'da', 'som'),
-(228, 'da', 'stor'),
-(229, 'da', 'store'),
-(230, 'da', 'syv'),
-(231, 'da', 'ti'),
-(232, 'da', 'til'),
-(233, 'da', 'to'),
-(234, 'da', 'tre'),
-(235, 'da', 'ud'),
-(236, 'de', 'ab'),
-(237, 'de', 'bei'),
-(238, 'de', 'da'),
-(239, 'de', 'deshalb'),
-(240, 'de', 'ein'),
-(241, 'de', 'f√ºr'),
-(242, 'de', 'haben'),
-(243, 'de', 'hier'),
-(244, 'de', 'ich'),
-(245, 'de', 'ja'),
-(246, 'de', 'kann'),
-(247, 'de', 'machen'),
-(248, 'de', 'muesste'),
-(249, 'de', 'nach'),
-(250, 'de', 'oder'),
-(251, 'de', 'seid'),
-(252, 'de', 'sonst'),
-(253, 'de', 'und'),
-(254, 'de', 'vom'),
-(255, 'de', 'wann'),
-(256, 'de', 'wenn'),
-(257, 'de', 'wie'),
-(258, 'de', 'zu'),
-(259, 'de', 'bin'),
-(260, 'de', 'eines'),
-(261, 'de', 'hat'),
-(262, 'de', 'manche'),
-(263, 'de', 'solches'),
-(264, 'de', 'an'),
-(265, 'de', 'anderm'),
-(266, 'de', 'bis'),
-(267, 'de', 'das'),
-(268, 'de', 'deinem'),
-(269, 'de', 'demselben'),
-(270, 'de', 'dir'),
-(271, 'de', 'doch'),
-(272, 'de', 'einig'),
-(273, 'de', 'er'),
-(274, 'de', 'eurer'),
-(275, 'de', 'hatte'),
-(276, 'de', 'ihnen'),
-(277, 'de', 'ihre'),
-(278, 'de', 'ins'),
-(279, 'de', 'jenen'),
-(280, 'de', 'keinen'),
-(281, 'de', 'manchem'),
-(282, 'de', 'meinen'),
-(283, 'de', 'nichts'),
-(284, 'de', 'seine'),
-(285, 'de', 'soll'),
-(286, 'de', 'unserm'),
-(287, 'de', 'welche'),
-(288, 'de', 'werden'),
-(289, 'de', 'wollte'),
-(290, 'de', 'w√§hrend'),
-(291, 'de', 'alle'),
-(292, 'de', 'allem'),
-(293, 'de', 'allen'),
-(294, 'de', 'aller'),
-(295, 'de', 'alles'),
-(296, 'de', 'als'),
-(297, 'de', 'also'),
-(298, 'de', 'am'),
-(299, 'de', 'ander'),
-(300, 'de', 'andere'),
-(301, 'de', 'anderem'),
-(302, 'de', 'anderen'),
-(303, 'de', 'anderer'),
-(304, 'de', 'anderes'),
-(305, 'de', 'andern'),
-(306, 'de', 'anderr'),
-(307, 'de', 'anders'),
-(308, 'de', 'auch'),
-(309, 'de', 'auf'),
-(310, 'de', 'aus'),
-(311, 'de', 'bist'),
-(312, 'de', 'bsp.'),
-(313, 'de', 'daher'),
-(314, 'de', 'damit'),
-(315, 'de', 'dann'),
-(316, 'de', 'dasselbe'),
-(317, 'de', 'dazu'),
-(318, 'de', 'da√ü'),
-(319, 'de', 'dein'),
-(320, 'de', 'deine'),
-(321, 'de', 'deinen'),
-(322, 'de', 'deiner'),
-(323, 'de', 'deines'),
-(324, 'de', 'dem'),
-(325, 'de', 'den'),
-(326, 'de', 'denn'),
-(327, 'de', 'denselben'),
-(328, 'de', 'der'),
-(329, 'de', 'derer'),
-(330, 'de', 'derselbe'),
-(331, 'de', 'derselben'),
-(332, 'de', 'des'),
-(333, 'de', 'desselben'),
-(334, 'de', 'dessen'),
-(335, 'de', 'dich'),
-(336, 'de', 'die'),
-(337, 'de', 'dies'),
-(338, 'de', 'diese'),
-(339, 'de', 'dieselbe'),
-(340, 'de', 'dieselben'),
-(341, 'de', 'diesem'),
-(342, 'de', 'diesen'),
-(343, 'de', 'dieser'),
-(344, 'de', 'dieses'),
-(345, 'de', 'dort'),
-(346, 'de', 'du'),
-(347, 'de', 'durch'),
-(348, 'de', 'eine'),
-(349, 'de', 'einem'),
-(350, 'de', 'einen'),
-(351, 'de', 'einer'),
-(352, 'de', 'einige'),
-(353, 'de', 'einigem'),
-(354, 'de', 'einigen'),
-(355, 'de', 'einiger'),
-(356, 'de', 'einiges'),
-(357, 'de', 'einmal'),
-(358, 'de', 'es'),
-(359, 'de', 'etwas'),
-(360, 'de', 'euch'),
-(361, 'de', 'euer'),
-(362, 'de', 'eure'),
-(363, 'de', 'eurem'),
-(364, 'de', 'euren'),
-(365, 'de', 'eures'),
-(366, 'de', 'ganz'),
-(367, 'de', 'ganze'),
-(368, 'de', 'ganzen'),
-(369, 'de', 'ganzer'),
-(370, 'de', 'ganzes'),
-(371, 'de', 'gegen'),
-(372, 'de', 'gemacht'),
-(373, 'de', 'gesagt'),
-(374, 'de', 'gesehen'),
-(375, 'de', 'gewesen'),
-(376, 'de', 'gewollt'),
-(377, 'de', 'hab'),
-(378, 'de', 'habe'),
-(379, 'de', 'hatten'),
-(380, 'de', 'hin'),
-(381, 'de', 'hinter'),
-(382, 'de', 'ihm'),
-(383, 'de', 'ihn'),
-(384, 'de', 'ihr'),
-(385, 'de', 'ihrem'),
-(386, 'de', 'ihren'),
-(387, 'de', 'ihrer'),
-(388, 'de', 'ihres'),
-(389, 'de', 'im'),
-(390, 'de', 'in'),
-(391, 'de', 'indem'),
-(392, 'de', 'ist'),
-(393, 'de', 'jede'),
-(394, 'de', 'jedem'),
-(395, 'de', 'jeden'),
-(396, 'de', 'jeder'),
-(397, 'de', 'jedes'),
-(398, 'de', 'jene'),
-(399, 'de', 'jenem'),
-(400, 'de', 'jener'),
-(401, 'de', 'jenes'),
-(402, 'de', 'jetzt'),
-(403, 'de', 'kein'),
-(404, 'de', 'keine'),
-(405, 'de', 'keinem'),
-(406, 'de', 'keiner'),
-(407, 'de', 'keines'),
-(408, 'de', 'konnte'),
-(409, 'de', 'k√∂nnen'),
-(410, 'de', 'k√∂nnte'),
-(411, 'de', 'mache'),
-(412, 'de', 'machst'),
-(413, 'de', 'macht'),
-(414, 'de', 'machte'),
-(415, 'de', 'machten'),
-(416, 'de', 'man'),
-(417, 'de', 'manchen'),
-(418, 'de', 'mancher'),
-(419, 'de', 'manches'),
-(420, 'de', 'mein'),
-(421, 'de', 'meine'),
-(422, 'de', 'meinem'),
-(423, 'de', 'meiner'),
-(424, 'de', 'meines'),
-(425, 'de', 'mich'),
-(426, 'de', 'mir'),
-(427, 'de', 'mit'),
-(428, 'de', 'muss'),
-(429, 'de', 'musste'),
-(430, 'de', 'm√º√üt'),
-(431, 'de', 'nicht'),
-(432, 'de', 'noch'),
-(433, 'de', 'nun'),
-(434, 'de', 'nur'),
-(435, 'de', 'ob'),
-(436, 'de', 'ohne'),
-(437, 'de', 'sage'),
-(438, 'de', 'sagen'),
-(439, 'de', 'sagt'),
-(440, 'de', 'sagte'),
-(441, 'de', 'sagten'),
-(442, 'de', 'sagtest'),
-(443, 'de', 'sehe'),
-(444, 'de', 'sehen'),
-(445, 'de', 'sehr'),
-(446, 'de', 'seht'),
-(447, 'de', 'sein'),
-(448, 'de', 'seinem'),
-(449, 'de', 'seinen'),
-(450, 'de', 'seiner'),
-(451, 'de', 'seines'),
-(452, 'de', 'selbst'),
-(453, 'de', 'sich'),
-(454, 'de', 'sicher'),
-(455, 'de', 'sie'),
-(456, 'de', 'sind'),
-(457, 'de', 'so'),
-(458, 'de', 'solche'),
-(459, 'de', 'solchem'),
-(460, 'de', 'solchen'),
-(461, 'de', 'solcher'),
-(462, 'de', 'sollte'),
-(463, 'de', 'sondern'),
-(464, 'de', 'um'),
-(465, 'de', 'uns'),
-(466, 'de', 'unse'),
-(467, 'de', 'unsen'),
-(468, 'de', 'unser'),
-(469, 'de', 'unses'),
-(470, 'de', 'unter'),
-(471, 'de', 'viel'),
-(472, 'de', 'von'),
-(473, 'de', 'vor'),
-(474, 'de', 'war'),
-(475, 'de', 'waren'),
-(476, 'de', 'warst'),
-(477, 'de', 'was'),
-(478, 'de', 'weg'),
-(479, 'de', 'weil'),
-(480, 'de', 'weiter'),
-(481, 'de', 'welchem'),
-(482, 'de', 'welchen'),
-(483, 'de', 'welcher'),
-(484, 'de', 'welches'),
-(485, 'de', 'werde'),
-(486, 'de', 'wieder'),
-(487, 'de', 'will'),
-(488, 'de', 'wir'),
-(489, 'de', 'wird'),
-(490, 'de', 'wirst'),
-(491, 'de', 'wo'),
-(492, 'de', 'wolle'),
-(493, 'de', 'wollen'),
-(494, 'de', 'wollt'),
-(495, 'de', 'wollten'),
-(496, 'de', 'wolltest'),
-(497, 'de', 'wolltet'),
-(498, 'de', 'w√ºrde'),
-(499, 'de', 'w√ºrden'),
-(500, 'de', 'z.B.'),
-(501, 'de', 'zum'),
-(502, 'de', 'zur'),
-(503, 'de', 'zwar'),
-(504, 'de', 'zwischen'),
-(505, 'de', '√ºber'),
-(506, 'de', 'aber'),
-(507, 'de', 'abgerufen'),
-(508, 'de', 'abgerufene'),
-(509, 'de', 'abgerufener'),
-(510, 'de', 'abgerufenes'),
-(511, 'de', 'acht'),
-(512, 'de', 'acute'),
-(513, 'de', 'allein'),
-(514, 'de', 'allerdings'),
-(515, 'de', 'allerlei'),
-(516, 'de', 'allg'),
-(517, 'de', 'allgemein'),
-(518, 'de', 'allm√§hlich'),
-(519, 'de', 'allzu'),
-(520, 'de', 'alsbald'),
-(521, 'de', 'amp'),
-(522, 'de', 'and'),
-(523, 'de', 'andererseits'),
-(524, 'de', 'andernfalls'),
-(525, 'de', 'anerkannt'),
-(526, 'de', 'anerkannte'),
-(527, 'de', 'anerkannter'),
-(528, 'de', 'anerkanntes'),
-(529, 'de', 'anfangen'),
-(530, 'de', 'anfing'),
-(531, 'de', 'angefangen'),
-(532, 'de', 'angesetze'),
-(533, 'de', 'angesetzt'),
-(534, 'de', 'angesetzten'),
-(535, 'de', 'angesetzter'),
-(536, 'de', 'ansetzen'),
-(537, 'de', 'anstatt'),
-(538, 'de', 'arbeiten'),
-(539, 'de', 'aufgeh√∂rt'),
-(540, 'de', 'aufgrund'),
-(541, 'de', 'aufh√∂ren'),
-(542, 'de', 'aufh√∂rte'),
-(543, 'de', 'aufzusuchen'),
-(544, 'de', 'ausdr√ºcken'),
-(545, 'de', 'ausdr√ºckt'),
-(546, 'de', 'ausdr√ºckte'),
-(547, 'de', 'ausgenommen'),
-(548, 'de', 'ausser'),
-(549, 'de', 'ausserdem'),
-(550, 'de', 'author'),
-(551, 'de', 'autor'),
-(552, 'de', 'au√üen'),
-(553, 'de', 'au√üer'),
-(554, 'de', 'au√üerdem'),
-(555, 'de', 'au√üerhalb'),
-(556, 'de', 'background'),
-(557, 'de', 'bald'),
-(558, 'de', 'bearbeite'),
-(559, 'de', 'bearbeiten'),
-(560, 'de', 'bearbeitete'),
-(561, 'de', 'bearbeiteten'),
-(562, 'de', 'bedarf'),
-(563, 'de', 'bedurfte'),
-(564, 'de', 'bed√ºrfen'),
-(565, 'de', 'been'),
-(566, 'de', 'befragen'),
-(567, 'de', 'befragte'),
-(568, 'de', 'befragten'),
-(569, 'de', 'befragter'),
-(570, 'de', 'begann'),
-(571, 'de', 'beginnen'),
-(572, 'de', 'begonnen'),
-(573, 'de', 'behalten'),
-(574, 'de', 'behielt'),
-(575, 'de', 'beide'),
-(576, 'de', 'beiden'),
-(577, 'de', 'beiderlei'),
-(578, 'de', 'beides'),
-(579, 'de', 'beim'),
-(580, 'de', 'beinahe'),
-(581, 'de', 'beitragen'),
-(582, 'de', 'beitrugen'),
-(583, 'de', 'bekannt'),
-(584, 'de', 'bekannte'),
-(585, 'de', 'bekannter'),
-(586, 'de', 'bekennen'),
-(587, 'de', 'benutzt'),
-(588, 'de', 'bereits'),
-(589, 'de', 'berichten'),
-(590, 'de', 'berichtet'),
-(591, 'de', 'berichtete'),
-(592, 'de', 'berichteten'),
-(593, 'de', 'besonders'),
-(594, 'de', 'besser'),
-(595, 'de', 'bestehen'),
-(596, 'de', 'besteht'),
-(597, 'de', 'betr√§chtlich'),
-(598, 'de', 'bevor'),
-(599, 'de', 'bez√ºglich'),
-(600, 'de', 'bietet'),
-(601, 'de', 'bisher'),
-(602, 'de', 'bislang'),
-(603, 'de', 'biz'),
-(604, 'de', 'bleiben'),
-(605, 'de', 'blieb'),
-(606, 'de', 'bloss'),
-(607, 'de', 'blo√ü'),
-(608, 'de', 'border'),
-(609, 'de', 'brachte'),
-(610, 'de', 'brachten'),
-(611, 'de', 'brauchen'),
-(612, 'de', 'braucht'),
-(613, 'de', 'bringen'),
-(614, 'de', 'br√§uchte'),
-(615, 'de', 'bzw'),
-(616, 'de', 'b√∂den'),
-(617, 'de', 'ca'),
-(618, 'de', 'ca.'),
-(619, 'de', 'collapsed'),
-(620, 'de', 'com'),
-(621, 'de', 'comment'),
-(622, 'de', 'content'),
-(623, 'de', 'da?'),
-(624, 'de', 'dabei'),
-(625, 'de', 'dadurch'),
-(626, 'de', 'daf√ºr'),
-(627, 'de', 'dagegen'),
-(628, 'de', 'dahin'),
-(629, 'de', 'damals'),
-(630, 'de', 'danach'),
-(631, 'de', 'daneben'),
-(632, 'de', 'dank'),
-(633, 'de', 'danke'),
-(634, 'de', 'danken'),
-(635, 'de', 'dannen'),
-(636, 'de', 'daran'),
-(637, 'de', 'darauf'),
-(638, 'de', 'daraus'),
-(639, 'de', 'darf'),
-(640, 'de', 'darfst'),
-(641, 'de', 'darin'),
-(642, 'de', 'darum'),
-(643, 'de', 'darunter'),
-(644, 'de', 'dar√ºber'),
-(645, 'de', 'dar√ºberhinaus'),
-(646, 'de', 'dass'),
-(647, 'de', 'davon'),
-(648, 'de', 'davor'),
-(649, 'de', 'demnach'),
-(650, 'de', 'denen'),
-(651, 'de', 'dennoch'),
-(652, 'de', 'derart'),
-(653, 'de', 'derartig'),
-(654, 'de', 'derem'),
-(655, 'de', 'deren'),
-(656, 'de', 'derjenige'),
-(657, 'de', 'derjenigen'),
-(658, 'de', 'derzeit'),
-(659, 'de', 'desto'),
-(660, 'de', 'deswegen'),
-(661, 'de', 'diejenige'),
-(662, 'de', 'diesseits'),
-(663, 'de', 'dinge'),
-(664, 'de', 'direkt'),
-(665, 'de', 'direkte'),
-(666, 'de', 'direkten'),
-(667, 'de', 'direkter'),
-(668, 'de', 'doc'),
-(669, 'de', 'doppelt'),
-(670, 'de', 'dorther'),
-(671, 'de', 'dorthin'),
-(672, 'de', 'drauf'),
-(673, 'de', 'drei'),
-(674, 'de', 'drei√üig'),
-(675, 'de', 'drin'),
-(676, 'de', 'dritte'),
-(677, 'de', 'drunter'),
-(678, 'de', 'dr√ºber'),
-(679, 'de', 'dunklen'),
-(680, 'de', 'durchaus'),
-(681, 'de', 'durfte'),
-(682, 'de', 'durften'),
-(683, 'de', 'd√ºrfen'),
-(684, 'de', 'd√ºrfte'),
-(685, 'de', 'eben'),
-(686, 'de', 'ebenfalls'),
-(687, 'de', 'ebenso'),
-(688, 'de', 'ehe'),
-(689, 'de', 'eher'),
-(690, 'de', 'eigenen'),
-(691, 'de', 'eigenes'),
-(692, 'de', 'eigentlich'),
-(693, 'de', 'einba√ºn'),
-(694, 'de', 'einerseits'),
-(695, 'de', 'einfach'),
-(696, 'de', 'einf√ºhren'),
-(697, 'de', 'einf√ºhrte'),
-(698, 'de', 'einf√ºhrten'),
-(699, 'de', 'eingesetzt'),
-(700, 'de', 'einigerma√üen'),
-(701, 'de', 'eins'),
-(702, 'de', 'einseitig'),
-(703, 'de', 'einseitige'),
-(704, 'de', 'einseitigen'),
-(705, 'de', 'einseitiger'),
-(706, 'de', 'einst'),
-(707, 'de', 'einstmals'),
-(708, 'de', 'einzig'),
-(709, 'de', 'elf'),
-(710, 'de', 'ende'),
-(711, 'de', 'entsprechend'),
-(712, 'de', 'entweder'),
-(713, 'de', 'erg√§nze'),
-(714, 'de', 'erg√§nzen'),
-(715, 'de', 'erg√§nzte'),
-(716, 'de', 'erg√§nzten'),
-(717, 'de', 'erhalten'),
-(718, 'de', 'erhielt'),
-(719, 'de', 'erhielten'),
-(720, 'de', 'erh√§lt'),
-(721, 'de', 'erneut'),
-(722, 'de', 'erst'),
-(723, 'de', 'erste'),
-(724, 'de', 'ersten'),
-(725, 'de', 'erster'),
-(726, 'de', 'er√∂ffne'),
-(727, 'de', 'er√∂ffnen'),
-(728, 'de', 'er√∂ffnet'),
-(729, 'de', 'er√∂ffnete'),
-(730, 'de', 'er√∂ffnetes'),
-(731, 'de', 'etc'),
-(732, 'de', 'etliche'),
-(733, 'de', 'etwa'),
-(734, 'de', 'fall'),
-(735, 'de', 'falls'),
-(736, 'de', 'fand'),
-(737, 'de', 'fast'),
-(738, 'de', 'ferner'),
-(739, 'de', 'finden'),
-(740, 'de', 'findest'),
-(741, 'de', 'findet'),
-(742, 'de', 'folgende'),
-(743, 'de', 'folgenden'),
-(744, 'de', 'folgender'),
-(745, 'de', 'folgendes'),
-(746, 'de', 'folglich'),
-(747, 'de', 'for'),
-(748, 'de', 'fordern'),
-(749, 'de', 'fordert'),
-(750, 'de', 'forderte'),
-(751, 'de', 'forderten'),
-(752, 'de', 'fortsetzen'),
-(753, 'de', 'fortsetzt'),
-(754, 'de', 'fortsetzte'),
-(755, 'de', 'fortsetzten'),
-(756, 'de', 'fragte'),
-(757, 'de', 'frau'),
-(758, 'de', 'frei'),
-(759, 'de', 'freie'),
-(760, 'de', 'freier'),
-(761, 'de', 'freies'),
-(762, 'de', 'fuer'),
-(763, 'de', 'f√ºnf'),
-(764, 'de', 'gab'),
-(765, 'de', 'ganzem'),
-(766, 'de', 'gar'),
-(767, 'de', 'gbr'),
-(768, 'de', 'geb'),
-(769, 'de', 'geben'),
-(770, 'de', 'geblieben'),
-(771, 'de', 'gebracht'),
-(772, 'de', 'gedurft'),
-(773, 'de', 'geehrt'),
-(774, 'de', 'geehrte'),
-(775, 'de', 'geehrten'),
-(776, 'de', 'geehrter'),
-(777, 'de', 'gefallen'),
-(778, 'de', 'gefiel'),
-(779, 'de', 'gef√§lligst'),
-(780, 'de', 'gef√§llt'),
-(781, 'de', 'gegeben'),
-(782, 'de', 'gehabt'),
-(783, 'de', 'gehen'),
-(784, 'de', 'geht'),
-(785, 'de', 'gekommen'),
-(786, 'de', 'gekonnt'),
-(787, 'de', 'gemocht'),
-(788, 'de', 'gem√§ss'),
-(789, 'de', 'genommen'),
-(790, 'de', 'genug'),
-(791, 'de', 'gern'),
-(792, 'de', 'gestern'),
-(793, 'de', 'gestrige'),
-(794, 'de', 'getan'),
-(795, 'de', 'geteilt'),
-(796, 'de', 'geteilte'),
-(797, 'de', 'getragen'),
-(798, 'de', 'gewisserma√üen'),
-(799, 'de', 'geworden'),
-(800, 'de', 'ggf'),
-(801, 'de', 'gib'),
-(802, 'de', 'gibt'),
-(803, 'de', 'gleich'),
-(804, 'de', 'gleichwohl'),
-(805, 'de', 'gleichzeitig'),
-(806, 'de', 'gl√ºcklicherweise'),
-(807, 'de', 'gmbh'),
-(808, 'de', 'gratulieren'),
-(809, 'de', 'gratuliert'),
-(810, 'de', 'gratulierte'),
-(811, 'de', 'gute'),
-(812, 'de', 'guten'),
-(813, 'de', 'g√§ngig'),
-(814, 'de', 'g√§ngige'),
-(815, 'de', 'g√§ngigen'),
-(816, 'de', 'g√§ngiger'),
-(817, 'de', 'g√§ngiges'),
-(818, 'de', 'g√§nzlich'),
-(819, 'de', 'haette'),
-(820, 'de', 'halb'),
-(821, 'de', 'hallo'),
-(822, 'de', 'hast'),
-(823, 'de', 'hattest'),
-(824, 'de', 'hattet'),
-(825, 'de', 'heraus'),
-(826, 'de', 'herein'),
-(827, 'de', 'heute'),
-(828, 'de', 'heutige'),
-(829, 'de', 'hiermit'),
-(830, 'de', 'hiesige'),
-(831, 'de', 'hinein'),
-(832, 'de', 'hinten'),
-(833, 'de', 'hinterher'),
-(834, 'de', 'hoch'),
-(835, 'de', 'html'),
-(836, 'de', 'http'),
-(837, 'de', 'hundert'),
-(838, 'de', 'h√§tt'),
-(839, 'de', 'h√§tte'),
-(840, 'de', 'h√§tten'),
-(841, 'de', 'h√∂chstens'),
-(842, 'de', 'igitt'),
-(843, 'de', 'image'),
-(844, 'de', 'immer'),
-(845, 'de', 'immerhin'),
-(846, 'de', 'important'),
-(847, 'de', 'indessen'),
-(848, 'de', 'info'),
-(849, 'de', 'infolge'),
-(850, 'de', 'innen'),
-(851, 'de', 'innerhalb'),
-(852, 'de', 'insofern'),
-(853, 'de', 'inzwischen'),
-(854, 'de', 'irgend'),
-(855, 'de', 'irgendeine'),
-(856, 'de', 'irgendwas'),
-(857, 'de', 'irgendwen'),
-(858, 'de', 'irgendwer'),
-(859, 'de', 'irgendwie'),
-(860, 'de', 'irgendwo'),
-(861, 'de', 'je'),
-(862, 'de', 'jed'),
-(863, 'de', 'jedenfalls'),
-(864, 'de', 'jederlei'),
-(865, 'de', 'jedoch'),
-(866, 'de', 'jemand'),
-(867, 'de', 'jenseits'),
-(868, 'de', 'j√§hrig'),
-(869, 'de', 'j√§hrige'),
-(870, 'de', 'j√§hrigen'),
-(871, 'de', 'j√§hriges'),
-(872, 'de', 'kam'),
-(873, 'de', 'kannst'),
-(874, 'de', 'kaum'),
-(875, 'de', 'kei nes'),
-(876, 'de', 'keinerlei'),
-(877, 'de', 'keineswegs'),
-(878, 'de', 'klar'),
-(879, 'de', 'klare'),
-(880, 'de', 'klaren'),
-(881, 'de', 'klares'),
-(882, 'de', 'klein'),
-(883, 'de', 'kleinen'),
-(884, 'de', 'kleiner'),
-(885, 'de', 'kleines'),
-(886, 'de', 'koennen'),
-(887, 'de', 'koennt'),
-(888, 'de', 'koennte'),
-(889, 'de', 'koennten'),
-(890, 'de', 'komme'),
-(891, 'de', 'kommen'),
-(892, 'de', 'kommt'),
-(893, 'de', 'konkret'),
-(894, 'de', 'konkrete'),
-(895, 'de', 'konkreten'),
-(896, 'de', 'konkreter'),
-(897, 'de', 'konkretes'),
-(898, 'de', 'konnten'),
-(899, 'de', 'k√∂nn'),
-(900, 'de', 'k√∂nnt'),
-(901, 'de', 'k√∂nnten'),
-(902, 'de', 'k√ºnftig'),
-(903, 'de', 'lag'),
-(904, 'de', 'lagen'),
-(905, 'de', 'langsam'),
-(906, 'de', 'lassen'),
-(907, 'de', 'laut'),
-(908, 'de', 'lediglich'),
-(909, 'de', 'leer'),
-(910, 'de', 'legen'),
-(911, 'de', 'legte'),
-(912, 'de', 'legten'),
-(913, 'de', 'leicht'),
-(914, 'de', 'leider'),
-(915, 'de', 'lesen'),
-(916, 'de', 'letze'),
-(917, 'de', 'letzten'),
-(918, 'de', 'letztendlich'),
-(919, 'de', 'letztens'),
-(920, 'de', 'letztes'),
-(921, 'de', 'letztlich'),
-(922, 'de', 'lichten'),
-(923, 'de', 'liegt'),
-(924, 'de', 'liest'),
-(925, 'de', 'links'),
-(926, 'de', 'l√§ngst'),
-(927, 'de', 'l√§ngstens'),
-(928, 'de', 'mag'),
-(929, 'de', 'magst'),
-(930, 'de', 'mal'),
-(931, 'de', 'mancherorts'),
-(932, 'de', 'manchmal'),
-(933, 'de', 'mann'),
-(934, 'de', 'margin'),
-(935, 'de', 'med'),
-(936, 'de', 'mehr'),
-(937, 'de', 'mehrere'),
-(938, 'de', 'meist'),
-(939, 'de', 'meiste'),
-(940, 'de', 'meisten'),
-(941, 'de', 'meta'),
-(942, 'de', 'mindestens'),
-(943, 'de', 'mithin'),
-(944, 'de', 'mochte'),
-(945, 'de', 'morgen'),
-(946, 'de', 'morgige'),
-(947, 'de', 'muessen'),
-(948, 'de', 'muesst'),
-(949, 'de', 'musst'),
-(950, 'de', 'mussten'),
-(951, 'de', 'mu√ü'),
-(952, 'de', 'mu√üt'),
-(953, 'de', 'm√∂chte'),
-(954, 'de', 'm√∂chten'),
-(955, 'de', 'm√∂chtest'),
-(956, 'de', 'm√∂gen'),
-(957, 'de', 'm√∂glich'),
-(958, 'de', 'm√∂gliche'),
-(959, 'de', 'm√∂glichen'),
-(960, 'de', 'm√∂glicher'),
-(961, 'de', 'm√∂glicherweise'),
-(962, 'de', 'm√ºssen'),
-(963, 'de', 'm√ºsste'),
-(964, 'de', 'm√ºssten'),
-(965, 'de', 'm√º√üte'),
-(966, 'de', 'nachdem'),
-(967, 'de', 'nacher'),
-(968, 'de', 'nachhinein'),
-(969, 'de', 'nahm'),
-(970, 'de', 'nat√ºrlich'),
-(971, 'de', 'ncht'),
-(972, 'de', 'neben'),
-(973, 'de', 'nebenan'),
-(974, 'de', 'nehmen'),
-(975, 'de', 'nein'),
-(976, 'de', 'neu'),
-(977, 'de', 'neue'),
-(978, 'de', 'neuem'),
-(979, 'de', 'neuen'),
-(980, 'de', 'neuer'),
-(981, 'de', 'neues'),
-(982, 'de', 'neun'),
-(983, 'de', 'nie'),
-(984, 'de', 'niemals'),
-(985, 'de', 'niemand'),
-(986, 'de', 'nimm'),
-(987, 'de', 'nimmer'),
-(988, 'de', 'nimmt'),
-(989, 'de', 'nirgends'),
-(990, 'de', 'nirgendwo'),
-(991, 'de', 'nter'),
-(992, 'de', 'nutzen'),
-(993, 'de', 'nutzt'),
-(994, 'de', 'nutzung'),
-(995, 'de', 'n√§chste'),
-(996, 'de', 'n√§mlich'),
-(997, 'de', 'n√∂tigenfalls'),
-(998, 'de', 'n√ºtzt'),
-(999, 'de', 'oben'),
-(1000, 'de', 'oberhalb'),
-(1001, 'de', 'obgleich'),
-(1002, 'de', 'obschon'),
-(1003, 'de', 'obwohl'),
-(1004, 'de', 'oft'),
-(1005, 'de', 'online'),
-(1006, 'de', 'org'),
-(1007, 'de', 'padding'),
-(1008, 'de', 'per'),
-(1009, 'de', 'pfui'),
-(1010, 'de', 'pl√∂tzlich'),
-(1011, 'de', 'pro'),
-(1012, 'de', 'reagiere'),
-(1013, 'de', 'reagieren'),
-(1014, 'de', 'reagiert'),
-(1015, 'de', 'reagierte'),
-(1016, 'de', 'rechts'),
-(1017, 'de', 'regelm√§√üig'),
-(1018, 'de', 'rief'),
-(1019, 'de', 'rund'),
-(1020, 'de', 'sang'),
-(1021, 'de', 'sangen'),
-(1022, 'de', 'schlechter'),
-(1023, 'de', 'schlie√ülich'),
-(1024, 'de', 'schnell'),
-(1025, 'de', 'schon'),
-(1026, 'de', 'schreibe'),
-(1027, 'de', 'schreiben'),
-(1028, 'de', 'schreibens'),
-(1029, 'de', 'schreiber'),
-(1030, 'de', 'schwierig'),
-(1031, 'de', 'sch√§tzen'),
-(1032, 'de', 'sch√§tzt'),
-(1033, 'de', 'sch√§tzte'),
-(1034, 'de', 'sch√§tzten'),
-(1035, 'de', 'sechs'),
-(1036, 'de', 'sect'),
-(1037, 'de', 'sehrwohl'),
-(1038, 'de', 'sei'),
-(1039, 'de', 'seit'),
-(1040, 'de', 'seitdem'),
-(1041, 'de', 'seite'),
-(1042, 'de', 'seiten'),
-(1043, 'de', 'seither'),
-(1044, 'de', 'selber'),
-(1045, 'de', 'senke'),
-(1046, 'de', 'senken'),
-(1047, 'de', 'senkt'),
-(1048, 'de', 'senkte'),
-(1049, 'de', 'senkten'),
-(1050, 'de', 'setzen'),
-(1051, 'de', 'setzt'),
-(1052, 'de', 'setzte'),
-(1053, 'de', 'setzten'),
-(1054, 'de', 'sicherlich'),
-(1055, 'de', 'sieben'),
-(1056, 'de', 'siebte'),
-(1057, 'de', 'siehe'),
-(1058, 'de', 'sieht'),
-(1059, 'de', 'singen'),
-(1060, 'de', 'singt'),
-(1061, 'de', 'sobald'),
-(1062, 'de', 'soda√ü'),
-(1063, 'de', 'soeben'),
-(1064, 'de', 'sofern'),
-(1065, 'de', 'sofort'),
-(1066, 'de', 'sog'),
-(1067, 'de', 'sogar'),
-(1068, 'de', 'solange'),
-(1069, 'de', 'solc hen'),
-(1070, 'de', 'solch'),
-(1071, 'de', 'sollen'),
-(1072, 'de', 'sollst'),
-(1073, 'de', 'sollt'),
-(1074, 'de', 'sollten'),
-(1075, 'de', 'solltest'),
-(1076, 'de', 'somit'),
-(1077, 'de', 'sonstwo'),
-(1078, 'de', 'sooft'),
-(1079, 'de', 'soviel'),
-(1080, 'de', 'soweit'),
-(1081, 'de', 'sowie'),
-(1082, 'de', 'sowohl'),
-(1083, 'de', 'spielen'),
-(1084, 'de', 'sp√§ter'),
-(1085, 'de', 'startet'),
-(1086, 'de', 'startete'),
-(1087, 'de', 'starteten'),
-(1088, 'de', 'statt'),
-(1089, 'de', 'stattdessen'),
-(1090, 'de', 'steht'),
-(1091, 'de', 'steige'),
-(1092, 'de', 'steigen'),
-(1093, 'de', 'steigt'),
-(1094, 'de', 'stets'),
-(1095, 'de', 'stieg'),
-(1096, 'de', 'stiegen'),
-(1097, 'de', 'such'),
-(1098, 'de', 'suchen'),
-(1099, 'de', 's√§mtliche'),
-(1100, 'de', 'tages'),
-(1101, 'de', 'tat'),
-(1102, 'de', 'tats√§chlich'),
-(1103, 'de', 'tats√§chlichen'),
-(1104, 'de', 'tats√§chlicher'),
-(1105, 'de', 'tats√§chliches'),
-(1106, 'de', 'tausend'),
-(1107, 'de', 'teile'),
-(1108, 'de', 'teilen'),
-(1109, 'de', 'teilte'),
-(1110, 'de', 'teilten'),
-(1111, 'de', 'titel'),
-(1112, 'de', 'total'),
-(1113, 'de', 'trage'),
-(1114, 'de', 'tragen'),
-(1115, 'de', 'trotzdem'),
-(1116, 'de', 'trug'),
-(1117, 'de', 'tr√§gt'),
-(1118, 'de', 'tun'),
-(1119, 'de', 'tust'),
-(1120, 'de', 'tut'),
-(1121, 'de', 'txt'),
-(1122, 'de', 't√§t'),
-(1123, 'de', 'ueber'),
-(1124, 'de', 'umso'),
-(1125, 'de', 'unbedingt'),
-(1126, 'de', 'ungef√§hr'),
-(1127, 'de', 'unm√∂glich'),
-(1128, 'de', 'unm√∂gliche'),
-(1129, 'de', 'unm√∂glichen'),
-(1130, 'de', 'unm√∂glicher'),
-(1131, 'de', 'unn√∂tig'),
-(1132, 'de', 'unsem'),
-(1133, 'de', 'unser'),
-(1134, 'de', 'unsere'),
-(1135, 'de', 'unserem'),
-(1136, 'de', 'unseren'),
-(1137, 'de', 'unserer'),
-(1138, 'de', 'unseres'),
-(1139, 'de', 'unten'),
-(1140, 'de', 'unterbrach'),
-(1141, 'de', 'unterbrechen'),
-(1142, 'de', 'unterhalb'),
-(1143, 'de', 'unwichtig'),
-(1144, 'de', 'usw'),
-(1145, 'de', 'var'),
-(1146, 'de', 'vergangen'),
-(1147, 'de', 'vergangene'),
-(1148, 'de', 'vergangener'),
-(1149, 'de', 'vergangenes'),
-(1150, 'de', 'vermag'),
-(1151, 'de', 'vermutlich'),
-(1152, 'de', 'verm√∂gen'),
-(1153, 'de', 'verrate'),
-(1154, 'de', 'verraten'),
-(1155, 'de', 'verriet'),
-(1156, 'de', 'verrieten'),
-(1157, 'de', 'version'),
-(1158, 'de', 'versorge'),
-(1159, 'de', 'versorgen'),
-(1160, 'de', 'versorgt'),
-(1161, 'de', 'versorgte'),
-(1162, 'de', 'versorgten'),
-(1163, 'de', 'versorgtes'),
-(1164, 'de', 'ver√∂ffentlichen'),
-(1165, 'de', 'ver√∂ffentlicher'),
-(1166, 'de', 'ver√∂ffentlicht'),
-(1167, 'de', 'ver√∂ffentlichte'),
-(1168, 'de', 'ver√∂ffentlichten'),
-(1169, 'de', 'ver√∂ffentlichtes'),
-(1170, 'de', 'viele'),
-(1171, 'de', 'vielen'),
-(1172, 'de', 'vieler'),
-(1173, 'de', 'vieles'),
-(1174, 'de', 'vielleicht'),
-(1175, 'de', 'vielmals'),
-(1176, 'de', 'vier'),
-(1177, 'de', 'vollst√§ndig'),
-(1178, 'de', 'voran'),
-(1179, 'de', 'vorbei'),
-(1180, 'de', 'vorgestern'),
-(1181, 'de', 'vorher'),
-(1182, 'de', 'vorne'),
-(1183, 'de', 'vor√ºber'),
-(1184, 'de', 'v√∂llig'),
-(1185, 'de', 'w√§hrend'),
-(1186, 'de', 'wachen'),
-(1187, 'de', 'waere'),
-(1188, 'de', 'warum'),
-(1189, 'de', 'weder'),
-(1190, 'de', 'wegen'),
-(1191, 'de', 'weitere'),
-(1192, 'de', 'weiterem'),
-(1193, 'de', 'weiteren'),
-(1194, 'de', 'weiterer'),
-(1195, 'de', 'weiteres'),
-(1196, 'de', 'weiterhin'),
-(1197, 'de', 'wei√ü'),
-(1198, 'de', 'wem'),
-(1199, 'de', 'wen'),
-(1200, 'de', 'wenig'),
-(1201, 'de', 'wenige'),
-(1202, 'de', 'weniger'),
-(1203, 'de', 'wenigstens'),
-(1204, 'de', 'wenngleich'),
-(1205, 'de', 'wer'),
-(1206, 'de', 'werdet'),
-(1207, 'de', 'weshalb'),
-(1208, 'de', 'wessen'),
-(1209, 'de', 'wichtig'),
-(1210, 'de', 'wieso'),
-(1211, 'de', 'wieviel'),
-(1212, 'de', 'wiewohl'),
-(1213, 'de', 'willst'),
-(1214, 'de', 'wirklich'),
-(1215, 'de', 'wodurch'),
-(1216, 'de', 'wogegen'),
-(1217, 'de', 'woher'),
-(1218, 'de', 'wohin'),
-(1219, 'de', 'wohingegen'),
-(1220, 'de', 'wohl'),
-(1221, 'de', 'wohlweislich'),
-(1222, 'de', 'womit'),
-(1223, 'de', 'woraufhin'),
-(1224, 'de', 'woraus'),
-(1225, 'de', 'worin'),
-(1226, 'de', 'wurde'),
-(1227, 'de', 'wurden'),
-(1228, 'de', 'w√§hrenddessen'),
-(1229, 'de', 'w√§r'),
-(1230, 'de', 'w√§re'),
-(1231, 'de', 'w√§ren'),
-(1232, 'de', 'zahlreich'),
-(1233, 'de', 'zehn'),
-(1234, 'de', 'zeitweise'),
-(1235, 'de', 'ziehen'),
-(1236, 'de', 'zieht'),
-(1237, 'de', 'zog'),
-(1238, 'de', 'zogen'),
-(1239, 'de', 'zudem'),
-(1240, 'de', 'zuerst'),
-(1241, 'de', 'zufolge'),
-(1242, 'de', 'zugleich'),
-(1243, 'de', 'zuletzt'),
-(1244, 'de', 'zumal'),
-(1245, 'de', 'zur√ºck'),
-(1246, 'de', 'zusammen'),
-(1247, 'de', 'zuviel'),
-(1248, 'de', 'zwanzig'),
-(1249, 'de', 'zwei'),
-(1250, 'de', 'zw√∂lf'),
-(1251, 'de', '√§hnlich'),
-(1252, 'de', '√ºbel'),
-(1253, 'de', '√ºberall'),
-(1254, 'de', '√ºberallhin'),
-(1255, 'de', '√ºberdies'),
-(1256, 'de', '√ºbermorgen'),
-(1257, 'de', '√ºbrig'),
-(1258, 'de', '√ºbrigens'),
-(1259, 'en', 'a'),
-(1260, 'en', 'a'),
-(1261, 'en', 'able'),
-(1262, 'en', 'about'),
-(1263, 'en', 'about'),
-(1264, 'en', 'above'),
-(1265, 'en', 'above'),
-(1266, 'en', 'abroad'),
-(1267, 'en', 'according'),
-(1268, 'en', 'accordingly'),
-(1269, 'en', 'across'),
-(1270, 'en', 'across'),
-(1271, 'en', 'actually'),
-(1272, 'en', 'adj'),
-(1273, 'en', 'after'),
-(1274, 'en', 'after'),
-(1275, 'en', 'afterwards'),
-(1276, 'en', 'afterwards'),
-(1277, 'en', 'again'),
-(1278, 'en', 'again'),
-(1279, 'en', 'against'),
-(1280, 'en', 'against'),
-(1281, 'en', 'ago'),
-(1282, 'en', 'ahead'),
-(1283, 'en', 'all'),
-(1284, 'en', 'all'),
-(1285, 'en', 'allow'),
-(1286, 'en', 'allows'),
-(1287, 'en', 'almost'),
-(1288, 'en', 'almost'),
-(1289, 'en', 'alone'),
-(1290, 'en', 'alone'),
-(1291, 'en', 'along'),
-(1292, 'en', 'along'),
-(1293, 'en', 'alongside'),
-(1294, 'en', 'already'),
-(1295, 'en', 'already'),
-(1296, 'en', 'also'),
-(1297, 'en', 'also'),
-(1298, 'en', 'although'),
-(1299, 'en', 'although'),
-(1300, 'en', 'always'),
-(1301, 'en', 'always'),
-(1302, 'en', 'am'),
-(1303, 'en', 'am'),
-(1304, 'en', 'amid'),
-(1305, 'en', 'amidst'),
-(1306, 'en', 'among'),
-(1307, 'en', 'among'),
-(1308, 'en', 'amongst'),
-(1309, 'en', 'amongst'),
-(1310, 'en', 'amoungst'),
-(1311, 'en', 'amount'),
-(1312, 'en', 'an'),
-(1313, 'en', 'an'),
-(1314, 'en', 'and'),
-(1315, 'en', 'and'),
-(1316, 'en', 'another'),
-(1317, 'en', 'another'),
-(1318, 'en', 'any'),
-(1319, 'en', 'any'),
-(1320, 'en', 'anybody'),
-(1321, 'en', 'anyhow'),
-(1322, 'en', 'anyhow'),
-(1323, 'en', 'anyone'),
-(1324, 'en', 'anyone'),
-(1325, 'en', 'anything'),
-(1326, 'en', 'anything'),
-(1327, 'en', 'anyway'),
-(1328, 'en', 'anyway'),
-(1329, 'en', 'anyways'),
-(1330, 'en', 'anywhere'),
-(1331, 'en', 'anywhere'),
-(1332, 'en', 'apart'),
-(1333, 'en', 'appear'),
-(1334, 'en', 'appreciate'),
-(1335, 'en', 'appropriate'),
-(1336, 'en', 'are'),
-(1337, 'en', 'are'),
-(1338, 'en', 'around'),
-(1339, 'en', 'around'),
-(1340, 'en', 'as'),
-(1341, 'en', 'as'),
-(1342, 'en', 'aside'),
-(1343, 'en', 'ask'),
-(1344, 'en', 'asking'),
-(1345, 'en', 'associated'),
-(1346, 'en', 'at'),
-(1347, 'en', 'at'),
-(1348, 'en', 'available'),
-(1349, 'en', 'away'),
-(1350, 'en', 'awfully'),
-(1351, 'en', 'b'),
-(1352, 'en', 'back'),
-(1353, 'en', 'back'),
-(1354, 'en', 'backward'),
-(1355, 'en', 'backwards'),
-(1356, 'en', 'be'),
-(1357, 'en', 'be'),
-(1358, 'en', 'became'),
-(1359, 'en', 'became'),
-(1360, 'en', 'because'),
-(1361, 'en', 'because'),
-(1362, 'en', 'become'),
-(1363, 'en', 'become'),
-(1364, 'en', 'becomes'),
-(1365, 'en', 'becomes'),
-(1366, 'en', 'becoming'),
-(1367, 'en', 'becoming'),
-(1368, 'en', 'been'),
-(1369, 'en', 'been'),
-(1370, 'en', 'before'),
-(1371, 'en', 'before'),
-(1372, 'en', 'beforehand'),
-(1373, 'en', 'beforehand'),
-(1374, 'en', 'begin'),
-(1375, 'en', 'behind'),
-(1376, 'en', 'behind'),
-(1377, 'en', 'being'),
-(1378, 'en', 'being'),
-(1379, 'en', 'believe'),
-(1380, 'en', 'below'),
-(1381, 'en', 'below'),
-(1382, 'en', 'beside'),
-(1383, 'en', 'beside'),
-(1384, 'en', 'besides'),
-(1385, 'en', 'besides'),
-(1386, 'en', 'best'),
-(1387, 'en', 'better'),
-(1388, 'en', 'between'),
-(1389, 'en', 'between'),
-(1390, 'en', 'beyond'),
-(1391, 'en', 'beyond'),
-(1392, 'en', 'bill'),
-(1393, 'en', 'both'),
-(1394, 'en', 'both'),
-(1395, 'en', 'bottom'),
-(1396, 'en', 'brief'),
-(1397, 'en', 'but'),
-(1398, 'en', 'but'),
-(1399, 'en', 'by'),
-(1400, 'en', 'by'),
-(1401, 'en', 'c'),
-(1402, 'en', 'call'),
-(1403, 'en', 'came'),
-(1404, 'en', 'can'),
-(1405, 'en', 'can'),
-(1406, 'en', 'cannot'),
-(1407, 'en', 'cannot'),
-(1408, 'en', 'cant'),
-(1409, 'en', 'cant'),
-(1410, 'en', 'caption'),
-(1411, 'en', 'cause'),
-(1412, 'en', 'causes'),
-(1413, 'en', 'certain'),
-(1414, 'en', 'certainly'),
-(1415, 'en', 'changes'),
-(1416, 'en', 'clearly'),
-(1417, 'en', 'co'),
-(1418, 'en', 'co'),
-(1419, 'en', 'co.'),
-(1420, 'en', 'com'),
-(1421, 'en', 'come'),
-(1422, 'en', 'comes'),
-(1423, 'en', 'computer'),
-(1424, 'en', 'con'),
-(1425, 'en', 'concerning'),
-(1426, 'en', 'consequently'),
-(1427, 'en', 'consider'),
-(1428, 'en', 'considering'),
-(1429, 'en', 'contain'),
-(1430, 'en', 'containing'),
-(1431, 'en', 'contains'),
-(1432, 'en', 'corresponding'),
-(1433, 'en', 'could'),
-(1434, 'en', 'could'),
-(1435, 'en', 'couldnt'),
-(1436, 'en', 'course'),
-(1437, 'en', 'cry'),
-(1438, 'en', 'currently'),
-(1439, 'en', 'd'),
-(1440, 'en', 'dare'),
-(1441, 'en', 'de'),
-(1442, 'en', 'definitely'),
-(1443, 'en', 'describe'),
-(1444, 'en', 'described'),
-(1445, 'en', 'despite'),
-(1446, 'en', 'detail'),
-(1447, 'en', 'did'),
-(1448, 'en', 'different'),
-(1449, 'en', 'directly'),
-(1450, 'en', 'do'),
-(1451, 'en', 'do'),
-(1452, 'en', 'does'),
-(1453, 'en', 'doing'),
-(1454, 'en', 'done'),
-(1455, 'en', 'done'),
-(1456, 'en', 'down'),
-(1457, 'en', 'down'),
-(1458, 'en', 'downwards'),
-(1459, 'en', 'due'),
-(1460, 'en', 'during'),
-(1461, 'en', 'during'),
-(1462, 'en', 'e'),
-(1463, 'en', 'each'),
-(1464, 'en', 'each'),
-(1465, 'en', 'edu'),
-(1466, 'en', 'eg'),
-(1467, 'en', 'eg'),
-(1468, 'en', 'eight'),
-(1469, 'en', 'eight'),
-(1470, 'en', 'eighty'),
-(1471, 'en', 'either'),
-(1472, 'en', 'either'),
-(1473, 'en', 'eleven'),
-(1474, 'en', 'else'),
-(1475, 'en', 'else'),
-(1476, 'en', 'elsewhere'),
-(1477, 'en', 'elsewhere'),
-(1478, 'en', 'empty'),
-(1479, 'en', 'end'),
-(1480, 'en', 'ending'),
-(1481, 'en', 'enough'),
-(1482, 'en', 'enough'),
-(1483, 'en', 'entirely'),
-(1484, 'en', 'especially'),
-(1485, 'en', 'et'),
-(1486, 'en', 'etc'),
-(1487, 'en', 'etc'),
-(1488, 'en', 'even'),
-(1489, 'en', 'even'),
-(1490, 'en', 'ever'),
-(1491, 'en', 'ever'),
-(1492, 'en', 'evermore'),
-(1493, 'en', 'every'),
-(1494, 'en', 'every'),
-(1495, 'en', 'everybody'),
-(1496, 'en', 'everyone'),
-(1497, 'en', 'everyone'),
-(1498, 'en', 'everything'),
-(1499, 'en', 'everything'),
-(1500, 'en', 'everywhere'),
-(1501, 'en', 'everywhere'),
-(1502, 'en', 'ex'),
-(1503, 'en', 'exactly'),
-(1504, 'en', 'example'),
-(1505, 'en', 'except'),
-(1506, 'en', 'except'),
-(1507, 'en', 'f'),
-(1508, 'en', 'fairly'),
-(1509, 'en', 'far'),
-(1510, 'en', 'farther'),
-(1511, 'en', 'few'),
-(1512, 'en', 'few'),
-(1513, 'en', 'fewer'),
-(1514, 'en', 'fifteen'),
-(1515, 'en', 'fifth'),
-(1516, 'en', 'fify'),
-(1517, 'en', 'fill'),
-(1518, 'en', 'find'),
-(1519, 'en', 'fire'),
-(1520, 'en', 'first'),
-(1521, 'en', 'first'),
-(1522, 'en', 'five'),
-(1523, 'en', 'five'),
-(1524, 'en', 'followed'),
-(1525, 'en', 'following'),
-(1526, 'en', 'follows'),
-(1527, 'en', 'for'),
-(1528, 'en', 'for'),
-(1529, 'en', 'forever'),
-(1530, 'en', 'former'),
-(1531, 'en', 'former'),
-(1532, 'en', 'formerly'),
-(1533, 'en', 'formerly'),
-(1534, 'en', 'forth'),
-(1535, 'en', 'forty'),
-(1536, 'en', 'forward'),
-(1537, 'en', 'found'),
-(1538, 'en', 'found'),
-(1539, 'en', 'four'),
-(1540, 'en', 'four'),
-(1541, 'en', 'from'),
-(1542, 'en', 'from'),
-(1543, 'en', 'front'),
-(1544, 'en', 'full'),
-(1545, 'en', 'further'),
-(1546, 'en', 'further'),
-(1547, 'en', 'furthermore'),
-(1548, 'en', 'g'),
-(1549, 'en', 'get'),
-(1550, 'en', 'get'),
-(1551, 'en', 'gets'),
-(1552, 'en', 'getting'),
-(1553, 'en', 'give'),
-(1554, 'en', 'given'),
-(1555, 'en', 'gives'),
-(1556, 'en', 'go'),
-(1557, 'en', 'go'),
-(1558, 'en', 'goes'),
-(1559, 'en', 'going'),
-(1560, 'en', 'gone'),
-(1561, 'en', 'got'),
-(1562, 'en', 'gotten'),
-(1563, 'en', 'greetings'),
-(1564, 'en', 'h'),
-(1565, 'en', 'had'),
-(1566, 'en', 'had'),
-(1567, 'en', 'half'),
-(1568, 'en', 'happens'),
-(1569, 'en', 'hardly'),
-(1570, 'en', 'has'),
-(1571, 'en', 'has'),
-(1572, 'en', 'hasnt'),
-(1573, 'en', 'have'),
-(1574, 'en', 'have'),
-(1575, 'en', 'having'),
-(1576, 'en', 'he'),
-(1577, 'en', 'he'),
-(1578, 'en', 'hello'),
-(1579, 'en', 'help'),
-(1580, 'en', 'hence'),
-(1581, 'en', 'hence'),
-(1582, 'en', 'her'),
-(1583, 'en', 'her'),
-(1584, 'en', 'here'),
-(1585, 'en', 'here'),
-(1586, 'en', 'hereafter'),
-(1587, 'en', 'hereafter'),
-(1588, 'en', 'hereby'),
-(1589, 'en', 'hereby'),
-(1590, 'en', 'herein'),
-(1591, 'en', 'herein'),
-(1592, 'en', 'hereupon'),
-(1593, 'en', 'hereupon'),
-(1594, 'en', 'hers'),
-(1595, 'en', 'hers'),
-(1596, 'en', 'herself'),
-(1597, 'en', 'herself'),
-(1598, 'en', 'hi'),
-(1599, 'en', 'him'),
-(1600, 'en', 'him'),
-(1601, 'en', 'himself'),
-(1602, 'en', 'himself'),
-(1603, 'en', 'his'),
-(1604, 'en', 'his'),
-(1605, 'en', 'hither'),
-(1606, 'en', 'hopefully'),
-(1607, 'en', 'how'),
-(1608, 'en', 'how'),
-(1609, 'en', 'howbeit'),
-(1610, 'en', 'however'),
-(1611, 'en', 'however'),
-(1612, 'en', 'hundred'),
-(1613, 'en', 'hundred'),
-(1614, 'en', 'i'),
-(1615, 'en', 'i'),
-(1616, 'en', 'ie'),
-(1617, 'en', 'ie'),
-(1618, 'en', 'if'),
-(1619, 'en', 'if'),
-(1620, 'en', 'ignored'),
-(1621, 'en', 'immediate'),
-(1622, 'en', 'in'),
-(1623, 'en', 'in'),
-(1624, 'en', 'inasmuch'),
-(1625, 'en', 'inc'),
-(1626, 'en', 'inc'),
-(1627, 'en', 'inc.'),
-(1628, 'en', 'indeed'),
-(1629, 'en', 'indeed'),
-(1630, 'en', 'indicate'),
-(1631, 'en', 'indicated'),
-(1632, 'en', 'indicates'),
-(1633, 'en', 'inner'),
-(1634, 'en', 'inside'),
-(1635, 'en', 'insofar'),
-(1636, 'en', 'instead'),
-(1637, 'en', 'interest'),
-(1638, 'en', 'into'),
-(1639, 'en', 'into'),
-(1640, 'en', 'inward'),
-(1641, 'en', 'is'),
-(1642, 'en', 'is'),
-(1643, 'en', 'it'),
-(1644, 'en', 'it'),
-(1645, 'en', 'its'),
-(1646, 'en', 'its'),
-(1647, 'en', 'itself'),
-(1648, 'en', 'itself'),
-(1649, 'en', 'j'),
-(1650, 'en', 'just'),
-(1651, 'en', 'k'),
-(1652, 'en', 'keep'),
-(1653, 'en', 'keep'),
-(1654, 'en', 'keeps'),
-(1655, 'en', 'kept'),
-(1656, 'en', 'know'),
-(1657, 'en', 'known'),
-(1658, 'en', 'knows'),
-(1659, 'en', 'l'),
-(1660, 'en', 'last'),
-(1661, 'en', 'last'),
-(1662, 'en', 'lately'),
-(1663, 'en', 'later'),
-(1664, 'en', 'latter'),
-(1665, 'en', 'latter'),
-(1666, 'en', 'latterly'),
-(1667, 'en', 'latterly'),
-(1668, 'en', 'least'),
-(1669, 'en', 'least'),
-(1670, 'en', 'less'),
-(1671, 'en', 'less'),
-(1672, 'en', 'lest'),
-(1673, 'en', 'let'),
-(1674, 'en', 'like'),
-(1675, 'en', 'liked'),
-(1676, 'en', 'likely'),
-(1677, 'en', 'likewise'),
-(1678, 'en', 'little'),
-(1679, 'en', 'look'),
-(1680, 'en', 'looking'),
-(1681, 'en', 'looks'),
-(1682, 'en', 'low'),
-(1683, 'en', 'lower'),
-(1684, 'en', 'ltd'),
-(1685, 'en', 'ltd'),
-(1686, 'en', 'm'),
-(1687, 'en', 'made'),
-(1688, 'en', 'made'),
-(1689, 'en', 'mainly'),
-(1690, 'en', 'make'),
-(1691, 'en', 'makes'),
-(1692, 'en', 'many'),
-(1693, 'en', 'many'),
-(1694, 'en', 'may'),
-(1695, 'en', 'may'),
-(1696, 'en', 'maybe'),
-(1697, 'en', 'me'),
-(1698, 'en', 'me'),
-(1699, 'en', 'mean'),
-(1700, 'en', 'meantime'),
-(1701, 'en', 'meanwhile'),
-(1702, 'en', 'meanwhile'),
-(1703, 'en', 'merely'),
-(1704, 'en', 'might'),
-(1705, 'en', 'might'),
-(1706, 'en', 'mill'),
-(1707, 'en', 'mine'),
-(1708, 'en', 'mine'),
-(1709, 'en', 'minus'),
-(1710, 'en', 'miss'),
-(1711, 'en', 'more'),
-(1712, 'en', 'more'),
-(1713, 'en', 'moreover'),
-(1714, 'en', 'moreover'),
-(1715, 'en', 'most'),
-(1716, 'en', 'most'),
-(1717, 'en', 'mostly'),
-(1718, 'en', 'mostly'),
-(1719, 'en', 'move'),
-(1720, 'en', 'mr'),
-(1721, 'en', 'mrs'),
-(1722, 'en', 'much'),
-(1723, 'en', 'much'),
-(1724, 'en', 'must'),
-(1725, 'en', 'must'),
-(1726, 'en', 'my'),
-(1727, 'en', 'my'),
-(1728, 'en', 'myself'),
-(1729, 'en', 'myself'),
-(1730, 'en', 'n'),
-(1731, 'en', 'name'),
-(1732, 'en', 'name'),
-(1733, 'en', 'namely'),
-(1734, 'en', 'namely'),
-(1735, 'en', 'nd'),
-(1736, 'en', 'near'),
-(1737, 'en', 'nearly'),
-(1738, 'en', 'necessary'),
-(1739, 'en', 'need'),
-(1740, 'en', 'needs'),
-(1741, 'en', 'neither'),
-(1742, 'en', 'neither'),
-(1743, 'en', 'never'),
-(1744, 'en', 'never'),
-(1745, 'en', 'neverf'),
-(1746, 'en', 'neverless'),
-(1747, 'en', 'nevertheless'),
-(1748, 'en', 'nevertheless'),
-(1749, 'en', 'new'),
-(1750, 'en', 'next'),
-(1751, 'en', 'next'),
-(1752, 'en', 'nine'),
-(1753, 'en', 'nine'),
-(1754, 'en', 'ninety'),
-(1755, 'en', 'no'),
-(1756, 'en', 'no'),
-(1757, 'en', 'nobody'),
-(1758, 'en', 'nobody'),
-(1759, 'en', 'non'),
-(1760, 'en', 'none'),
-(1761, 'en', 'none'),
-(1762, 'en', 'nonetheless'),
-(1763, 'en', 'noone'),
-(1764, 'en', 'noone'),
-(1765, 'en', 'no-one'),
-(1766, 'en', 'nor'),
-(1767, 'en', 'nor'),
-(1768, 'en', 'normally'),
-(1769, 'en', 'not'),
-(1770, 'en', 'not'),
-(1771, 'en', 'nothing'),
-(1772, 'en', 'nothing'),
-(1773, 'en', 'notwithstanding'),
-(1774, 'en', 'novel'),
-(1775, 'en', 'now'),
-(1776, 'en', 'now'),
-(1777, 'en', 'nowhere'),
-(1778, 'en', 'nowhere'),
-(1779, 'en', 'o'),
-(1780, 'en', 'obviously'),
-(1781, 'en', 'of'),
-(1782, 'en', 'of'),
-(1783, 'en', 'off'),
-(1784, 'en', 'off'),
-(1785, 'en', 'often'),
-(1786, 'en', 'often'),
-(1787, 'en', 'oh'),
-(1788, 'en', 'ok'),
-(1789, 'en', 'okay'),
-(1790, 'en', 'old'),
-(1791, 'en', 'on'),
-(1792, 'en', 'on'),
-(1793, 'en', 'once'),
-(1794, 'en', 'once'),
-(1795, 'en', 'one'),
-(1796, 'en', 'one'),
-(1797, 'en', 'ones'),
-(1798, 'en', 'only'),
-(1799, 'en', 'only'),
-(1800, 'en', 'onto'),
-(1801, 'en', 'onto'),
-(1802, 'en', 'opposite'),
-(1803, 'en', 'or'),
-(1804, 'en', 'or'),
-(1805, 'en', 'other'),
-(1806, 'en', 'other'),
-(1807, 'en', 'others'),
-(1808, 'en', 'others'),
-(1809, 'en', 'otherwise'),
-(1810, 'en', 'otherwise'),
-(1811, 'en', 'ought'),
-(1812, 'en', 'our'),
-(1813, 'en', 'our'),
-(1814, 'en', 'ours'),
-(1815, 'en', 'ours'),
-(1816, 'en', 'ourselves'),
-(1817, 'en', 'ourselves'),
-(1818, 'en', 'out'),
-(1819, 'en', 'out'),
-(1820, 'en', 'outside'),
-(1821, 'en', 'over'),
-(1822, 'en', 'over'),
-(1823, 'en', 'overall'),
-(1824, 'en', 'own'),
-(1825, 'en', 'own'),
-(1826, 'en', 'p'),
-(1827, 'en', 'part'),
-(1828, 'en', 'particular'),
-(1829, 'en', 'particularly'),
-(1830, 'en', 'past'),
-(1831, 'en', 'per'),
-(1832, 'en', 'per'),
-(1833, 'en', 'perhaps'),
-(1834, 'en', 'perhaps'),
-(1835, 'en', 'placed'),
-(1836, 'en', 'please'),
-(1837, 'en', 'please'),
-(1838, 'en', 'plus'),
-(1839, 'en', 'possible'),
-(1840, 'en', 'presumably'),
-(1841, 'en', 'probably'),
-(1842, 'en', 'provided'),
-(1843, 'en', 'provides'),
-(1844, 'en', 'put'),
-(1845, 'en', 'q'),
-(1846, 'en', 'que'),
-(1847, 'en', 'quite'),
-(1848, 'en', 'qv'),
-(1849, 'en', 'r'),
-(1850, 'en', 'rather'),
-(1851, 'en', 'rather'),
-(1852, 'en', 'rd'),
-(1853, 'en', 're'),
-(1854, 'en', 're'),
-(1855, 'en', 'really'),
-(1856, 'en', 'reasonably'),
-(1857, 'en', 'recent'),
-(1858, 'en', 'recently'),
-(1859, 'en', 'regarding'),
-(1860, 'en', 'regardless'),
-(1861, 'en', 'regards'),
-(1862, 'en', 'relatively'),
-(1863, 'en', 'respectively'),
-(1864, 'en', 'right'),
-(1865, 'en', 'round'),
-(1866, 'en', 's'),
-(1867, 'en', 'said'),
-(1868, 'en', 'same'),
-(1869, 'en', 'same'),
-(1870, 'en', 'saw'),
-(1871, 'en', 'say'),
-(1872, 'en', 'saying'),
-(1873, 'en', 'says'),
-(1874, 'en', 'second'),
-(1875, 'en', 'secondly'),
-(1876, 'en', 'see'),
-(1877, 'en', 'see'),
-(1878, 'en', 'seeing'),
-(1879, 'en', 'seem'),
-(1880, 'en', 'seem'),
-(1881, 'en', 'seemed'),
-(1882, 'en', 'seemed'),
-(1883, 'en', 'seeming'),
-(1884, 'en', 'seeming'),
-(1885, 'en', 'seems'),
-(1886, 'en', 'seems'),
-(1887, 'en', 'seen'),
-(1888, 'en', 'self'),
-(1889, 'en', 'selves'),
-(1890, 'en', 'sensible'),
-(1891, 'en', 'sent'),
-(1892, 'en', 'serious'),
-(1893, 'en', 'serious'),
-(1894, 'en', 'seriously'),
-(1895, 'en', 'seven'),
-(1896, 'en', 'several'),
-(1897, 'en', 'several'),
-(1898, 'en', 'shall'),
-(1899, 'en', 'she'),
-(1900, 'en', 'she'),
-(1901, 'en', 'should'),
-(1902, 'en', 'should'),
-(1903, 'en', 'show'),
-(1904, 'en', 'side'),
-(1905, 'en', 'since'),
-(1906, 'en', 'since'),
-(1907, 'en', 'sincere'),
-(1908, 'en', 'six'),
-(1909, 'en', 'six'),
-(1910, 'en', 'sixty'),
-(1911, 'en', 'so'),
-(1912, 'en', 'so'),
-(1913, 'en', 'some'),
-(1914, 'en', 'some'),
-(1915, 'en', 'somebody'),
-(1916, 'en', 'someday'),
-(1917, 'en', 'somehow'),
-(1918, 'en', 'somehow'),
-(1919, 'en', 'someone'),
-(1920, 'en', 'someone'),
-(1921, 'en', 'something'),
-(1922, 'en', 'something'),
-(1923, 'en', 'sometime'),
-(1924, 'en', 'sometime'),
-(1925, 'en', 'sometimes'),
-(1926, 'en', 'sometimes'),
-(1927, 'en', 'somewhat'),
-(1928, 'en', 'somewhere'),
-(1929, 'en', 'somewhere'),
-(1930, 'en', 'soon'),
-(1931, 'en', 'sorry'),
-(1932, 'en', 'specified'),
-(1933, 'en', 'specify'),
-(1934, 'en', 'specifying'),
-(1935, 'en', 'still'),
-(1936, 'en', 'still'),
-(1937, 'en', 'sub'),
-(1938, 'en', 'such'),
-(1939, 'en', 'such'),
-(1940, 'en', 'sup'),
-(1941, 'en', 'sure'),
-(1942, 'en', 'system'),
-(1943, 'en', 't'),
-(1944, 'en', 'take'),
-(1945, 'en', 'take'),
-(1946, 'en', 'taken'),
-(1947, 'en', 'taking'),
-(1948, 'en', 'tell'),
-(1949, 'en', 'ten'),
-(1950, 'en', 'tends'),
-(1951, 'en', 'th'),
-(1952, 'en', 'than'),
-(1953, 'en', 'than'),
-(1954, 'en', 'thank'),
-(1955, 'en', 'thanks'),
-(1956, 'en', 'thanx'),
-(1957, 'en', 'that'),
-(1958, 'en', 'that'),
-(1959, 'en', 'thats'),
-(1960, 'en', 'the'),
-(1961, 'en', 'the'),
-(1962, 'en', 'their'),
-(1963, 'en', 'their'),
-(1964, 'en', 'theirs'),
-(1965, 'en', 'them'),
-(1966, 'en', 'them'),
-(1967, 'en', 'themselves'),
-(1968, 'en', 'themselves'),
-(1969, 'en', 'then'),
-(1970, 'en', 'then'),
-(1971, 'en', 'thence'),
-(1972, 'en', 'thence'),
-(1973, 'en', 'there'),
-(1974, 'en', 'there'),
-(1975, 'en', 'thereafter'),
-(1976, 'en', 'thereafter'),
-(1977, 'en', 'thereby'),
-(1978, 'en', 'thereby'),
-(1979, 'en', 'therefore'),
-(1980, 'en', 'therefore'),
-(1981, 'en', 'therein'),
-(1982, 'en', 'therein'),
-(1983, 'en', 'theres'),
-(1984, 'en', 'thereupon'),
-(1985, 'en', 'thereupon'),
-(1986, 'en', 'these'),
-(1987, 'en', 'these'),
-(1988, 'en', 'they'),
-(1989, 'en', 'they'),
-(1990, 'en', 'thick'),
-(1991, 'en', 'thin'),
-(1992, 'en', 'thing'),
-(1993, 'en', 'things'),
-(1994, 'en', 'think'),
-(1995, 'en', 'third'),
-(1996, 'en', 'third'),
-(1997, 'en', 'thirty'),
-(1998, 'en', 'this'),
-(1999, 'en', 'this'),
-(2000, 'en', 'thorough'),
-(2001, 'en', 'thoroughly'),
-(2002, 'en', 'those'),
-(2003, 'en', 'those'),
-(2004, 'en', 'though'),
-(2005, 'en', 'though'),
-(2006, 'en', 'three'),
-(2007, 'en', 'three'),
-(2008, 'en', 'through'),
-(2009, 'en', 'through'),
-(2010, 'en', 'throughout'),
-(2011, 'en', 'throughout'),
-(2012, 'en', 'thru'),
-(2013, 'en', 'thru'),
-(2014, 'en', 'thus'),
-(2015, 'en', 'thus'),
-(2016, 'en', 'till'),
-(2017, 'en', 'to'),
-(2018, 'en', 'to'),
-(2019, 'en', 'together'),
-(2020, 'en', 'together'),
-(2021, 'en', 'too'),
-(2022, 'en', 'too'),
-(2023, 'en', 'took'),
-(2024, 'en', 'top'),
-(2025, 'en', 'toward'),
-(2026, 'en', 'toward'),
-(2027, 'en', 'towards'),
-(2028, 'en', 'towards'),
-(2029, 'en', 'tried'),
-(2030, 'en', 'tries'),
-(2031, 'en', 'truly'),
-(2032, 'en', 'try'),
-(2033, 'en', 'trying'),
-(2034, 'en', 'twelve'),
-(2035, 'en', 'twenty'),
-(2036, 'en', 'twice'),
-(2037, 'en', 'two'),
-(2038, 'en', 'two'),
-(2039, 'en', 'u'),
-(2040, 'en', 'un'),
-(2041, 'en', 'un'),
-(2042, 'en', 'under'),
-(2043, 'en', 'under'),
-(2044, 'en', 'underneath'),
-(2045, 'en', 'undoing'),
-(2046, 'en', 'unfortunately'),
-(2047, 'en', 'unless'),
-(2048, 'en', 'unlike'),
-(2049, 'en', 'unlikely'),
-(2050, 'en', 'until'),
-(2051, 'en', 'until'),
-(2052, 'en', 'unto'),
-(2053, 'en', 'up'),
-(2054, 'en', 'up'),
-(2055, 'en', 'upon'),
-(2056, 'en', 'upon'),
-(2057, 'en', 'upwards'),
-(2058, 'en', 'us'),
-(2059, 'en', 'us'),
-(2060, 'en', 'use'),
-(2061, 'en', 'used'),
-(2062, 'en', 'useful'),
-(2063, 'en', 'uses'),
-(2064, 'en', 'using'),
-(2065, 'en', 'usually'),
-(2066, 'en', 'v'),
-(2067, 'en', 'value'),
-(2068, 'en', 'various'),
-(2069, 'en', 'versus'),
-(2070, 'en', 'very'),
-(2071, 'en', 'very'),
-(2072, 'en', 'via'),
-(2073, 'en', 'via'),
-(2074, 'en', 'viz'),
-(2075, 'en', 'vs'),
-(2076, 'en', 'w'),
-(2077, 'en', 'want'),
-(2078, 'en', 'wants'),
-(2079, 'en', 'was'),
-(2080, 'en', 'was'),
-(2081, 'en', 'way'),
-(2082, 'en', 'we'),
-(2083, 'en', 'we'),
-(2084, 'en', 'welcome'),
-(2085, 'en', 'well'),
-(2086, 'en', 'well'),
-(2087, 'en', 'went'),
-(2088, 'en', 'were'),
-(2089, 'en', 'were'),
-(2090, 'en', 'what'),
-(2091, 'en', 'what'),
-(2092, 'en', 'whatever'),
-(2093, 'en', 'whatever'),
-(2094, 'en', 'when'),
-(2095, 'en', 'when'),
-(2096, 'en', 'whence'),
-(2097, 'en', 'whence'),
-(2098, 'en', 'whenever'),
-(2099, 'en', 'whenever'),
-(2100, 'en', 'where'),
-(2101, 'en', 'where'),
-(2102, 'en', 'whereafter'),
-(2103, 'en', 'whereafter'),
-(2104, 'en', 'whereas'),
-(2105, 'en', 'whereas'),
-(2106, 'en', 'whereby'),
-(2107, 'en', 'whereby'),
-(2108, 'en', 'wherein'),
-(2109, 'en', 'wherein'),
-(2110, 'en', 'whereupon'),
-(2111, 'en', 'whereupon'),
-(2112, 'en', 'wherever'),
-(2113, 'en', 'wherever'),
-(2114, 'en', 'whether'),
-(2115, 'en', 'whether'),
-(2116, 'en', 'which'),
-(2117, 'en', 'which'),
-(2118, 'en', 'whichever'),
-(2119, 'en', 'while'),
-(2120, 'en', 'while'),
-(2121, 'en', 'whilst'),
-(2122, 'en', 'whither'),
-(2123, 'en', 'whither'),
-(2124, 'en', 'who'),
-(2125, 'en', 'who'),
-(2126, 'en', 'whoever'),
-(2127, 'en', 'whoever'),
-(2128, 'en', 'whole'),
-(2129, 'en', 'whole'),
-(2130, 'en', 'whom'),
-(2131, 'en', 'whom'),
-(2132, 'en', 'whomever'),
-(2133, 'en', 'whose'),
-(2134, 'en', 'whose'),
-(2135, 'en', 'why'),
-(2136, 'en', 'why'),
-(2137, 'en', 'will'),
-(2138, 'en', 'will'),
-(2139, 'en', 'willing'),
-(2140, 'en', 'wish'),
-(2141, 'en', 'with'),
-(2142, 'en', 'with'),
-(2143, 'en', 'within'),
-(2144, 'en', 'within'),
-(2145, 'en', 'without'),
-(2146, 'en', 'without'),
-(2147, 'en', 'wonder'),
-(2148, 'en', 'would'),
-(2149, 'en', 'would'),
-(2150, 'en', 'x'),
-(2151, 'en', 'y'),
-(2152, 'en', 'yes'),
-(2153, 'en', 'yet'),
-(2154, 'en', 'yet'),
-(2155, 'en', 'you'),
-(2156, 'en', 'you'),
-(2157, 'en', 'your'),
-(2158, 'en', 'your'),
-(2159, 'en', 'yours'),
-(2160, 'en', 'yours'),
-(2161, 'en', 'yourself'),
-(2162, 'en', 'yourself'),
-(2163, 'en', 'yourselves'),
-(2164, 'en', 'yourselves'),
-(2165, 'en', 'z'),
-(2166, 'en', 'zero'),
-(2167, 'es', 'un'),
-(2168, 'es', 'una'),
-(2169, 'es', 'unas'),
-(2170, 'es', 'unos'),
-(2171, 'es', 'uno'),
-(2172, 'es', 'sobre'),
-(2173, 'es', 'todo'),
-(2174, 'es', 'tambi√©n'),
-(2175, 'es', 'tras'),
-(2176, 'es', 'otro'),
-(2177, 'es', 'alg√∫n'),
-(2178, 'es', 'alguno'),
-(2179, 'es', 'alguna'),
-(2180, 'es', 'algunos'),
-(2181, 'es', 'algunas'),
-(2182, 'es', 'ser'),
-(2183, 'es', 'es'),
-(2184, 'es', 'soy'),
-(2185, 'es', 'eres'),
-(2186, 'es', 'somos'),
-(2187, 'es', 'sois'),
-(2188, 'es', 'estoy'),
-(2189, 'es', 'esta'),
-(2190, 'es', 'estamos'),
-(2191, 'es', 'estais'),
-(2192, 'es', 'estan'),
-(2193, 'es', 'como'),
-(2194, 'es', 'en'),
-(2195, 'es', 'para'),
-(2196, 'es', 'atras'),
-(2197, 'es', 'porque'),
-(2198, 'es', 'por qu√©'),
-(2199, 'es', 'estado'),
-(2200, 'es', 'estaba'),
-(2201, 'es', 'ante'),
-(2202, 'es', 'antes'),
-(2203, 'es', 'siendo'),
-(2204, 'es', 'ambos'),
-(2205, 'es', 'pero'),
-(2206, 'es', 'por'),
-(2207, 'es', 'poder'),
-(2208, 'es', 'puede'),
-(2209, 'es', 'puedo'),
-(2210, 'es', 'podemos'),
-(2211, 'es', 'podeis'),
-(2212, 'es', 'pueden'),
-(2213, 'es', 'fui'),
-(2214, 'es', 'fue'),
-(2215, 'es', 'fuimos'),
-(2216, 'es', 'fueron'),
-(2217, 'es', 'hacer'),
-(2218, 'es', 'hago'),
-(2219, 'es', 'hace'),
-(2220, 'es', 'hacemos'),
-(2221, 'es', 'haceis'),
-(2222, 'es', 'hacen'),
-(2223, 'es', 'cada'),
-(2224, 'es', 'fin'),
-(2225, 'es', 'incluso'),
-(2226, 'es', 'primero'),
-(2227, 'es', 'desde'),
-(2228, 'es', 'conseguir'),
-(2229, 'es', 'consigo'),
-(2230, 'es', 'consigue'),
-(2231, 'es', 'consigues'),
-(2232, 'es', 'conseguimos'),
-(2233, 'es', 'consiguen'),
-(2234, 'es', 'ir'),
-(2235, 'es', 'voy'),
-(2236, 'es', 'va'),
-(2237, 'es', 'vamos'),
-(2238, 'es', 'vais'),
-(2239, 'es', 'van'),
-(2240, 'es', 'vaya'),
-(2241, 'es', 'gueno'),
-(2242, 'es', 'ha'),
-(2243, 'es', 'tener'),
-(2244, 'es', 'tengo'),
-(2245, 'es', 'tiene'),
-(2246, 'es', 'tenemos'),
-(2247, 'es', 'teneis'),
-(2248, 'es', 'tienen'),
-(2249, 'es', 'el'),
-(2250, 'es', 'la'),
-(2251, 'es', 'lo'),
-(2252, 'es', 'las'),
-(2253, 'es', 'los'),
-(2254, 'es', 'su'),
-(2255, 'es', 'aqui'),
-(2256, 'es', 'mio'),
-(2257, 'es', 'tuyo'),
-(2258, 'es', 'ellos'),
-(2259, 'es', 'ellas'),
-(2260, 'es', 'nos'),
-(2261, 'es', 'nosotros'),
-(2262, 'es', 'vosotros'),
-(2263, 'es', 'vosotras'),
-(2264, 'es', 'si'),
-(2265, 'es', 'dentro'),
-(2266, 'es', 'solo'),
-(2267, 'es', 'solamente'),
-(2268, 'es', 'saber'),
-(2269, 'es', 'sabes'),
-(2270, 'es', 'sabe'),
-(2271, 'es', 'sabemos'),
-(2272, 'es', 'sabeis'),
-(2273, 'es', 'saben'),
-(2274, 'es', 'ultimo'),
-(2275, 'es', 'largo'),
-(2276, 'es', 'bastante'),
-(2277, 'es', 'haces'),
-(2278, 'es', 'muchos'),
-(2279, 'es', 'aquellos'),
-(2280, 'es', 'aquellas'),
-(2281, 'es', 'sus'),
-(2282, 'es', 'entonces'),
-(2283, 'es', 'tiempo'),
-(2284, 'es', 'verdad'),
-(2285, 'es', 'verdadero'),
-(2286, 'es', 'verdadera'),
-(2287, 'es', 'cierto'),
-(2288, 'es', 'ciertos'),
-(2289, 'es', 'cierta'),
-(2290, 'es', 'ciertas'),
-(2291, 'es', 'intentar'),
-(2292, 'es', 'intento'),
-(2293, 'es', 'intenta'),
-(2294, 'es', 'intentas'),
-(2295, 'es', 'intentamos'),
-(2296, 'es', 'intentais'),
-(2297, 'es', 'intentan'),
-(2298, 'es', 'dos'),
-(2299, 'es', 'bajo'),
-(2300, 'es', 'arriba'),
-(2301, 'es', 'encima'),
-(2302, 'es', 'usar'),
-(2303, 'es', 'uso'),
-(2304, 'es', 'usas'),
-(2305, 'es', 'usa'),
-(2306, 'es', 'usamos'),
-(2307, 'es', 'usais'),
-(2308, 'es', 'usan'),
-(2309, 'es', 'emplear'),
-(2310, 'es', 'empleo'),
-(2311, 'es', 'empleas'),
-(2312, 'es', 'emplean'),
-(2313, 'es', 'ampleamos'),
-(2314, 'es', 'empleais'),
-(2315, 'es', 'valor'),
-(2316, 'es', 'muy'),
-(2317, 'es', 'era'),
-(2318, 'es', 'eras'),
-(2319, 'es', 'eramos'),
-(2320, 'es', 'eran'),
-(2321, 'es', 'modo'),
-(2322, 'es', 'bien'),
-(2323, 'es', 'cual'),
-(2324, 'es', 'cuando'),
-(2325, 'es', 'donde'),
-(2326, 'es', 'mientras'),
-(2327, 'es', 'quien'),
-(2328, 'es', 'con'),
-(2329, 'es', 'entre'),
-(2330, 'es', 'sin'),
-(2331, 'es', 'trabajo'),
-(2332, 'es', 'trabajar'),
-(2333, 'es', 'trabajas'),
-(2334, 'es', 'trabaja'),
-(2335, 'es', 'trabajamos'),
-(2336, 'es', 'trabajais'),
-(2337, 'es', 'trabajan'),
-(2338, 'es', 'podria'),
-(2339, 'es', 'podrias'),
-(2340, 'es', 'podriamos'),
-(2341, 'es', 'podrian'),
-(2342, 'es', 'podriais'),
-(2343, 'es', 'yo'),
-(2344, 'fr', 'alors'),
-(2345, 'fr', 'au'),
-(2346, 'fr', 'aucuns'),
-(2347, 'fr', 'aussi'),
-(2348, 'fr', 'autre'),
-(2349, 'fr', 'avant'),
-(2350, 'fr', 'avec'),
-(2351, 'fr', 'avoir'),
-(2352, 'fr', 'bon'),
-(2353, 'fr', 'car'),
-(2354, 'fr', 'ce'),
-(2355, 'fr', 'cela'),
-(2356, 'fr', 'ces'),
-(2357, 'fr', 'ceux'),
-(2358, 'fr', 'chaque'),
-(2359, 'fr', 'ci')";
-
-$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES
-(2360, 'fr', 'comme'),
-(2361, 'fr', 'comment'),
-(2362, 'fr', 'dans'),
-(2363, 'fr', 'des'),
-(2364, 'fr', 'du'),
-(2365, 'fr', 'dedans'),
-(2366, 'fr', 'dehors'),
-(2367, 'fr', 'depuis'),
-(2368, 'fr', 'deux'),
-(2369, 'fr', 'devrait'),
-(2370, 'fr', 'doit'),
-(2371, 'fr', 'donc'),
-(2372, 'fr', 'dos'),
-(2373, 'fr', 'droite'),
-(2374, 'fr', 'd√©but'),
-(2375, 'fr', 'elle'),
-(2376, 'fr', 'elles'),
-(2377, 'fr', 'en'),
-(2378, 'fr', 'encore'),
-(2379, 'fr', 'essai'),
-(2380, 'fr', 'est'),
-(2381, 'fr', 'et'),
-(2382, 'fr', 'eu'),
-(2383, 'fr', 'fait'),
-(2384, 'fr', 'faites'),
-(2385, 'fr', 'fois'),
-(2386, 'fr', 'font'),
-(2387, 'fr', 'force'),
-(2388, 'fr', 'haut'),
-(2389, 'fr', 'hors'),
-(2390, 'fr', 'ici'),
-(2391, 'fr', 'il'),
-(2392, 'fr', 'ils'),
-(2393, 'fr', 'je'),
-(2394, 'fr', 'juste'),
-(2395, 'fr', 'la'),
-(2396, 'fr', 'le'),
-(2397, 'fr', 'les'),
-(2398, 'fr', 'leur'),
-(2399, 'fr', 'l√†'),
-(2400, 'fr', 'ma'),
-(2401, 'fr', 'maintenant'),
-(2402, 'fr', 'mais'),
-(2403, 'fr', 'mes'),
-(2404, 'fr', 'mine'),
-(2405, 'fr', 'moins'),
-(2406, 'fr', 'mon'),
-(2407, 'fr', 'mot'),
-(2408, 'fr', 'm√™me'),
-(2409, 'fr', 'ni'),
-(2410, 'fr', 'nomm√©s'),
-(2411, 'fr', 'notre'),
-(2412, 'fr', 'nous'),
-(2413, 'fr', 'nouveaux'),
-(2414, 'fr', 'ou'),
-(2415, 'fr', 'o√π'),
-(2416, 'fr', 'par'),
-(2417, 'fr', 'parce'),
-(2418, 'fr', 'parole'),
-(2419, 'fr', 'pas'),
-(2420, 'fr', 'personnes'),
-(2421, 'fr', 'peut'),
-(2422, 'fr', 'peu'),
-(2423, 'fr', 'pi√®ce'),
-(2424, 'fr', 'plupart'),
-(2425, 'fr', 'pour'),
-(2426, 'fr', 'pourquoi'),
-(2427, 'fr', 'quand'),
-(2428, 'fr', 'que'),
-(2429, 'fr', 'quel'),
-(2430, 'fr', 'quelle'),
-(2431, 'fr', 'quelles'),
-(2432, 'fr', 'quels'),
-(2433, 'fr', 'qui'),
-(2434, 'fr', 'sa'),
-(2435, 'fr', 'sans'),
-(2436, 'fr', 'ses'),
-(2437, 'fr', 'seulement'),
-(2438, 'fr', 'si'),
-(2439, 'fr', 'sien'),
-(2440, 'fr', 'son'),
-(2441, 'fr', 'sont'),
-(2442, 'fr', 'sous'),
-(2443, 'fr', 'soyez'),
-(2444, 'fr', 'sujet'),
-(2445, 'fr', 'sur'),
-(2446, 'fr', 'ta'),
-(2447, 'fr', 'tandis'),
-(2448, 'fr', 'tellement'),
-(2449, 'fr', 'tels'),
-(2450, 'fr', 'tes'),
-(2451, 'fr', 'ton'),
-(2452, 'fr', 'tous'),
-(2453, 'fr', 'tout'),
-(2454, 'fr', 'trop'),
-(2455, 'fr', 'tr√®s'),
-(2456, 'fr', 'tu'),
-(2457, 'fr', 'valeur'),
-(2458, 'fr', 'voie'),
-(2459, 'fr', 'voient'),
-(2460, 'fr', 'vont'),
-(2461, 'fr', 'votre'),
-(2462, 'fr', 'vous'),
-(2463, 'fr', 'vu'),
-(2464, 'fr', '√ßa'),
-(2465, 'fr', '√©taient'),
-(2466, 'fr', '√©tat'),
-(2467, 'fr', '√©tions'),
-(2468, 'fr', '√©t√©'),
-(2469, 'hu', 'a'),
-(2470, 'hu', 'az'),
-(2471, 'hu', 'egy'),
-(2472, 'hu', 'be'),
-(2473, 'hu', 'ki'),
-(2474, 'hu', 'le'),
-(2475, 'hu', 'fel'),
-(2476, 'hu', 'meg'),
-(2477, 'hu', 'el'),
-(2478, 'hu', '√°t'),
-(2479, 'hu', 'r√°'),
-(2480, 'hu', 'ide'),
-(2481, 'hu', 'oda'),
-(2482, 'hu', 'sz√©t'),
-(2483, 'hu', '√∂ssze'),
-(2484, 'hu', 'vissza'),
-(2485, 'hu', 'de'),
-(2486, 'hu', 'h√°t'),
-(2487, 'hu', '√©s'),
-(2488, 'hu', 'vagy'),
-(2489, 'hu', 'hogy'),
-(2490, 'hu', 'van'),
-(2491, 'hu', 'lesz'),
-(2492, 'hu', 'volt'),
-(2493, 'hu', 'csak'),
-(2494, 'hu', 'nem'),
-(2495, 'hu', 'igen'),
-(2496, 'hu', 'mint'),
-(2497, 'hu', '√©n'),
-(2498, 'hu', 'te'),
-(2499, 'hu', '√µ'),
-(2500, 'hu', 'mi'),
-(2501, 'hu', 'ti'),
-(2502, 'hu', '√µk'),
-(2503, 'it', 'a'),
-(2504, 'it', 'adesso'),
-(2505, 'it', 'ai'),
-(2506, 'it', 'al'),
-(2507, 'it', 'alla'),
-(2508, 'it', 'allo'),
-(2509, 'it', 'allora'),
-(2510, 'it', 'altre'),
-(2511, 'it', 'altri'),
-(2512, 'it', 'altro'),
-(2513, 'it', 'anche'),
-(2514, 'it', 'ancora'),
-(2515, 'it', 'avere'),
-(2516, 'it', 'aveva'),
-(2517, 'it', 'avevano'),
-(2518, 'it', 'ben'),
-(2519, 'it', 'buono'),
-(2520, 'it', 'che'),
-(2521, 'it', 'chi'),
-(2522, 'it', 'cinque'),
-(2523, 'it', 'comprare'),
-(2524, 'it', 'con'),
-(2525, 'it', 'consecutivi'),
-(2526, 'it', 'consecutivo'),
-(2527, 'it', 'cosa'),
-(2528, 'it', 'cui'),
-(2529, 'it', 'da'),
-(2530, 'it', 'del'),
-(2531, 'it', 'della'),
-(2532, 'it', 'dello'),
-(2533, 'it', 'dentro'),
-(2534, 'it', 'deve'),
-(2535, 'it', 'devo'),
-(2536, 'it', 'di'),
-(2537, 'it', 'doppio'),
-(2538, 'it', 'due'),
-(2539, 'it', 'e'),
-(2540, 'it', 'ecco'),
-(2541, 'it', 'fare'),
-(2542, 'it', 'fine'),
-(2543, 'it', 'fino'),
-(2544, 'it', 'fra'),
-(2545, 'it', 'gente'),
-(2546, 'it', 'giu'),
-(2547, 'it', 'ha'),
-(2548, 'it', 'hai'),
-(2549, 'it', 'hanno'),
-(2550, 'it', 'ho'),
-(2551, 'it', 'il'),
-(2552, 'it', 'indietro'),
-(2553, 'it', 'invece'),
-(2554, 'it', 'io'),
-(2555, 'it', 'la'),
-(2556, 'it', 'lavoro'),
-(2557, 'it', 'le'),
-(2558, 'it', 'lei'),
-(2559, 'it', 'lo'),
-(2560, 'it', 'loro'),
-(2561, 'it', 'lui'),
-(2562, 'it', 'lungo'),
-(2563, 'it', 'ma'),
-(2564, 'it', 'me'),
-(2565, 'it', 'meglio'),
-(2566, 'it', 'molta'),
-(2567, 'it', 'molti'),
-(2568, 'it', 'molto'),
-(2569, 'it', 'nei'),
-(2570, 'it', 'nella'),
-(2571, 'it', 'no'),
-(2572, 'it', 'noi'),
-(2573, 'it', 'nome'),
-(2574, 'it', 'nostro'),
-(2575, 'it', 'nove'),
-(2576, 'it', 'nuovi'),
-(2577, 'it', 'nuovo'),
-(2578, 'it', 'o'),
-(2579, 'it', 'oltre'),
-(2580, 'it', 'ora'),
-(2581, 'it', 'otto'),
-(2582, 'it', 'peggio'),
-(2583, 'it', 'pero'),
-(2584, 'it', 'persone'),
-(2585, 'it', 'piu'),
-(2586, 'it', 'poco'),
-(2587, 'it', 'primo'),
-(2588, 'it', 'promesso'),
-(2589, 'it', 'qua'),
-(2590, 'it', 'quarto'),
-(2591, 'it', 'quasi'),
-(2592, 'it', 'quattro'),
-(2593, 'it', 'quello'),
-(2594, 'it', 'questo'),
-(2595, 'it', 'qui'),
-(2596, 'it', 'quindi'),
-(2597, 'it', 'quinto'),
-(2598, 'it', 'rispetto'),
-(2599, 'it', 'sara'),
-(2600, 'it', 'secondo'),
-(2601, 'it', 'sei'),
-(2602, 'it', 'sembra'),
-(2603, 'it', 'sembrava'),
-(2604, 'it', 'senza'),
-(2605, 'it', 'sette'),
-(2606, 'it', 'sia'),
-(2607, 'it', 'siamo'),
-(2608, 'it', 'siete'),
-(2609, 'it', 'solo'),
-(2610, 'it', 'sono'),
-(2611, 'it', 'sopra'),
-(2612, 'it', 'soprattutto'),
-(2613, 'it', 'sotto'),
-(2614, 'it', 'stati'),
-(2615, 'it', 'stato'),
-(2616, 'it', 'stesso'),
-(2617, 'it', 'su'),
-(2618, 'it', 'subito'),
-(2619, 'it', 'sul'),
-(2620, 'it', 'sulla'),
-(2621, 'it', 'tanto'),
-(2622, 'it', 'te'),
-(2623, 'it', 'tempo'),
-(2624, 'it', 'terzo'),
-(2625, 'it', 'tra'),
-(2626, 'it', 'tre'),
-(2627, 'it', 'triplo'),
-(2628, 'it', 'ultimo'),
-(2629, 'it', 'un'),
-(2630, 'it', 'una'),
-(2631, 'it', 'uno'),
-(2632, 'it', 'va'),
-(2633, 'it', 'vai'),
-(2634, 'it', 'voi'),
-(2635, 'it', 'volte'),
-(2636, 'nb', 'alle'),
-(2637, 'nb', 'andre'),
-(2638, 'nb', 'arbeid'),
-(2639, 'nb', 'av'),
-(2640, 'nb', 'begge'),
-(2641, 'nb', 'bort'),
-(2642, 'nb', 'bra'),
-(2643, 'nb', 'bruke'),
-(2644, 'nb', 'da'),
-(2645, 'nb', 'denne'),
-(2646, 'nb', 'der'),
-(2647, 'nb', 'deres'),
-(2648, 'nb', 'det'),
-(2649, 'nb', 'din'),
-(2650, 'nb', 'disse'),
-(2651, 'nb', 'du'),
-(2652, 'nb', 'eller'),
-(2653, 'nb', 'en'),
-(2654, 'nb', 'ene'),
-(2655, 'nb', 'eneste'),
-(2656, 'nb', 'enhver'),
-(2657, 'nb', 'enn'),
-(2658, 'nb', 'er'),
-(2659, 'nb', 'et'),
-(2660, 'nb', 'folk'),
-(2661, 'nb', 'for'),
-(2662, 'nb', 'fordi'),
-(2663, 'nb', 'fors√õke'),
-(2664, 'nb', 'fra'),
-(2665, 'nb', 'f√Ö'),
-(2666, 'nb', 'f√õr'),
-(2667, 'nb', 'f√õrst'),
-(2668, 'nb', 'gjorde'),
-(2669, 'nb', 'gj√õre'),
-(2670, 'nb', 'god'),
-(2671, 'nb', 'g√Ö'),
-(2672, 'nb', 'ha'),
-(2673, 'nb', 'hadde'),
-(2674, 'nb', 'han'),
-(2675, 'nb', 'hans'),
-(2676, 'nb', 'hennes'),
-(2677, 'nb', 'her'),
-(2678, 'nb', 'hva'),
-(2679, 'nb', 'hvem'),
-(2680, 'nb', 'hver'),
-(2681, 'nb', 'hvilken'),
-(2682, 'nb', 'hvis'),
-(2683, 'nb', 'hvor'),
-(2684, 'nb', 'hvordan'),
-(2685, 'nb', 'hvorfor'),
-(2686, 'nb', 'i'),
-(2687, 'nb', 'ikke'),
-(2688, 'nb', 'inn'),
-(2689, 'nb', 'innen'),
-(2690, 'nb', 'kan'),
-(2691, 'nb', 'kunne'),
-(2692, 'nb', 'lage'),
-(2693, 'nb', 'lang'),
-(2694, 'nb', 'lik'),
-(2695, 'nb', 'like'),
-(2696, 'nb', 'makt'),
-(2697, 'nb', 'mange'),
-(2698, 'nb', 'med'),
-(2699, 'nb', 'meg'),
-(2700, 'nb', 'meget'),
-(2701, 'nb', 'men'),
-(2702, 'nb', 'mens'),
-(2703, 'nb', 'mer'),
-(2704, 'nb', 'mest'),
-(2705, 'nb', 'min'),
-(2706, 'nb', 'mye'),
-(2707, 'nb', 'm√Ö'),
-(2708, 'nb', 'm√Öte'),
-(2709, 'nb', 'navn'),
-(2710, 'nb', 'nei'),
-(2711, 'nb', 'ny'),
-(2712, 'nb', 'n√Ö'),
-(2713, 'nb', 'n√Ör'),
-(2714, 'nb', 'og'),
-(2715, 'nb', 'ogs√Ö'),
-(2716, 'nb', 'om'),
-(2717, 'nb', 'opp'),
-(2718, 'nb', 'oss'),
-(2719, 'nb', 'over'),
-(2720, 'nb', 'part'),
-(2721, 'nb', 'punkt'),
-(2722, 'nb', 'p√Ö'),
-(2723, 'nb', 'rett'),
-(2724, 'nb', 'riktig'),
-(2725, 'nb', 'samme'),
-(2726, 'nb', 'sant'),
-(2727, 'nb', 'si'),
-(2728, 'nb', 'siden'),
-(2729, 'nb', 'sist'),
-(2730, 'nb', 'skulle'),
-(2731, 'nb', 'slik'),
-(2732, 'nb', 'slutt'),
-(2733, 'nb', 'som'),
-(2734, 'nb', 'start'),
-(2735, 'nb', 'stille'),
-(2736, 'nb', 's√Ö'),
-(2737, 'nb', 'tid'),
-(2738, 'nb', 'til'),
-(2739, 'nb', 'tilbake'),
-(2740, 'nb', 'tilstand'),
-(2741, 'nb', 'under'),
-(2742, 'nb', 'ut'),
-(2743, 'nb', 'uten'),
-(2744, 'nb', 'var'),
-(2745, 'nb', 'ved'),
-(2746, 'nb', 'verdi'),
-(2747, 'nb', 'vi'),
-(2748, 'nb', 'vil'),
-(2749, 'nb', 'ville'),
-(2750, 'nb', 'vite'),
-(2751, 'nb', 'v√Ör'),
-(2752, 'nb', 'v√ñre'),
-(2753, 'nb', 'v√ñrt'),
-(2754, 'nl', 'aan'),
-(2755, 'nl', 'af'),
-(2756, 'nl', 'al'),
-(2757, 'nl', 'als'),
-(2758, 'nl', 'bij'),
-(2759, 'nl', 'dan'),
-(2760, 'nl', 'dat'),
-(2761, 'nl', 'die'),
-(2762, 'nl', 'dit'),
-(2763, 'nl', 'een'),
-(2764, 'nl', 'en'),
-(2765, 'nl', 'er'),
-(2766, 'nl', 'had'),
-(2767, 'nl', 'heb'),
-(2768, 'nl', 'hem'),
-(2769, 'nl', 'het'),
-(2770, 'nl', 'hij'),
-(2771, 'nl', 'hoe'),
-(2772, 'nl', 'hun'),
-(2773, 'nl', 'ik'),
-(2774, 'nl', 'in'),
-(2775, 'nl', 'is'),
-(2776, 'nl', 'je'),
-(2777, 'nl', 'kan'),
-(2778, 'nl', 'me'),
-(2779, 'nl', 'men'),
-(2780, 'nl', 'met'),
-(2781, 'nl', 'mij'),
-(2782, 'nl', 'nog'),
-(2783, 'nl', 'nu'),
-(2784, 'nl', 'of'),
-(2785, 'nl', 'ons'),
-(2786, 'nl', 'ook'),
-(2787, 'nl', 'te'),
-(2788, 'nl', 'tot'),
-(2789, 'nl', 'uit'),
-(2790, 'nl', 'van'),
-(2791, 'nl', 'was'),
-(2792, 'nl', 'wat'),
-(2793, 'nl', 'we'),
-(2794, 'nl', 'wel'),
-(2795, 'nl', 'wij'),
-(2796, 'nl', 'zal'),
-(2797, 'nl', 'ze'),
-(2798, 'nl', 'zei'),
-(2799, 'nl', 'zij'),
-(2800, 'nl', 'zo'),
-(2801, 'pl', 'a'),
-(2802, 'pl', 'aby'),
-(2803, 'pl', 'acz'),
-(2804, 'pl', 'aczkolwiek'),
-(2805, 'pl', 'a?'),
-(2806, 'pl', 'ale'),
-(2807, 'pl', 'ale?'),
-(2808, 'pl', 'bardzo'),
-(2809, 'pl', 'bardziej'),
-(2810, 'pl', 'bez'),
-(2811, 'pl', 'b?d?'),
-(2812, 'pl', 'b?dzie'),
-(2813, 'pl', 'bo'),
-(2814, 'pl', 'by'),
-(2815, 'pl', 'by?'),
-(2816, 'pl', 'byli'),
-(2817, 'pl', 'by?'),
-(2818, 'pl', 'by?a'),
-(2819, 'pl', 'by?o'),
-(2820, 'pl', 'by?y'),
-(2821, 'pl', 'cali'),
-(2822, 'pl', 'ca?a'),
-(2823, 'pl', 'ca?y'),
-(2824, 'pl', 'co'),
-(2825, 'pl', 'cokolwiek'),
-(2826, 'pl', 'co?'),
-(2827, 'pl', 'czasami'),
-(2828, 'pl', 'czasem'),
-(2829, 'pl', 'czy'),
-(2830, 'pl', 'czemu'),
-(2831, 'pl', 'dla'),
-(2832, 'pl', 'dlaczego'),
-(2833, 'pl', 'do'),
-(2834, 'pl', 'gdy'),
-(2835, 'pl', 'gdy?'),
-(2836, 'pl', 'gdzie'),
-(2837, 'pl', 'gdziekolwiek'),
-(2838, 'pl', 'gdzie?'),
-(2839, 'pl', 'i'),
-(2840, 'pl', 'ile'),
-(2841, 'pl', 'ich'),
-(2842, 'pl', 'inna'),
-(2843, 'pl', 'inny'),
-(2844, 'pl', 'i?'),
-(2845, 'pl', 'ja'),
-(2846, 'pl', 'jak'),
-(2847, 'pl', 'jaka?'),
-(2848, 'pl', 'jakich?'),
-(2849, 'pl', 'jaki?'),
-(2850, 'pl', 'jaki?'),
-(2851, 'pl', 'jakkolwiek'),
-(2852, 'pl', 'jako'),
-(2853, 'pl', 'jako?'),
-(2854, 'pl', 'j?'),
-(2855, 'pl', 'jednak'),
-(2856, 'pl', 'jednak?e'),
-(2857, 'pl', 'jego'),
-(2858, 'pl', 'jej'),
-(2859, 'pl', 'jest'),
-(2860, 'pl', 'jeszcze'),
-(2861, 'pl', 'je?eli'),
-(2862, 'pl', 'ju?'),
-(2863, 'pl', 'kiedy'),
-(2864, 'pl', 'kim?'),
-(2865, 'pl', 'kto'),
-(2866, 'pl', 'ktokolwiek'),
-(2867, 'pl', 'kto?'),
-(2868, 'pl', 'kt√≥ra'),
-(2869, 'pl', 'kt√≥re'),
-(2870, 'pl', 'kt√≥ry'),
-(2871, 'pl', 'kt√≥rych'),
-(2872, 'pl', 'lat'),
-(2873, 'pl', 'lecz'),
-(2874, 'pl', 'lub'),
-(2875, 'pl', 'ma'),
-(2876, 'pl', 'mi'),
-(2877, 'pl', 'mimo'),
-(2878, 'pl', 'mnie'),
-(2879, 'pl', 'moim'),
-(2880, 'pl', 'mo?e'),
-(2881, 'pl', 'mo?liwe'),
-(2882, 'pl', 'mo?na'),
-(2883, 'pl', 'mu'),
-(2884, 'pl', 'na'),
-(2885, 'pl', 'nad'),
-(2886, 'pl', 'nas'),
-(2887, 'pl', 'natomiast'),
-(2888, 'pl', 'nawet'),
-(2889, 'pl', 'nic'),
-(2890, 'pl', 'nich'),
-(2891, 'pl', 'nie'),
-(2892, 'pl', 'nigdy'),
-(2893, 'pl', 'ni?'),
-(2894, 'pl', 'no'),
-(2895, 'pl', 'o'),
-(2896, 'pl', 'obok'),
-(2897, 'pl', 'od'),
-(2898, 'pl', 'oko?o'),
-(2899, 'pl', 'on'),
-(2900, 'pl', 'ona'),
-(2901, 'pl', 'ono'),
-(2902, 'pl', 'oraz'),
-(2903, 'pl', 'pan'),
-(2904, 'pl', 'pana'),
-(2905, 'pl', 'pani'),
-(2906, 'pl', 'po'),
-(2907, 'pl', 'pod'),
-(2908, 'pl', 'podczas'),
-(2909, 'pl', 'teraz'),
-(2910, 'pl', 'te?'),
-(2911, 'pl', 'trzeba'),
-(2912, 'pl', 'to'),
-(2913, 'pl', 'tobie'),
-(2914, 'pl', 'tote?'),
-(2915, 'pl', 'tu'),
-(2916, 'pl', 'twoim'),
-(2917, 'pl', 'twoja'),
-(2918, 'pl', 'twoje'),
-(2919, 'pl', 'tw√≥j'),
-(2920, 'pl', 'twym'),
-(2921, 'pl', 'ty'),
-(2922, 'pl', 'tych'),
-(2923, 'pl', 'tylko'),
-(2924, 'pl', 'tym'),
-(2925, 'pl', 'w'),
-(2926, 'pl', 'we'),
-(2927, 'pl', 'wed?ug'),
-(2928, 'pl', 'wi?c'),
-(2929, 'pl', 'w?a?nie'),
-(2930, 'pl', 'wszyscy'),
-(2931, 'pl', 'wszystko'),
-(2932, 'pl', 'wszystkie'),
-(2933, 'pl', 'z'),
-(2934, 'pl', 'za'),
-(2935, 'pl', 'zapewne'),
-(2936, 'pl', 'zawsze'),
-(2937, 'pl', 'ze'),
-(2938, 'pl', 'znowu'),
-(2939, 'pl', 'zn√≥w'),
-(2940, 'pl', '?adna'),
-(2941, 'pl', '?adne'),
-(2942, 'pl', '?adnych'),
-(2943, 'pl', '?e'),
-(2944, 'pl', '?eby'),
-(2945, 'pl', ''),
-(2946, 'pl', ''),
-(2947, 'pt', '√∫ltimo'),
-(2948, 'pt', '√©'),
-(2949, 'pt', 'acerca'),
-(2950, 'pt', 'agora'),
-(2951, 'pt', 'algmas'),
-(2952, 'pt', 'alguns'),
-(2953, 'pt', 'ali'),
-(2954, 'pt', 'ambos'),
-(2955, 'pt', 'antes'),
-(2956, 'pt', 'apontar'),
-(2957, 'pt', 'aquela'),
-(2958, 'pt', 'aquelas'),
-(2959, 'pt', 'aquele'),
-(2960, 'pt', 'aqueles'),
-(2961, 'pt', 'aqui'),
-(2962, 'pt', 'atr√°s'),
-(2963, 'pt', 'bem'),
-(2964, 'pt', 'bom'),
-(2965, 'pt', 'cada'),
-(2966, 'pt', 'caminho'),
-(2967, 'pt', 'cima'),
-(2968, 'pt', 'com'),
-(2969, 'pt', 'como'),
-(2970, 'pt', 'comprido'),
-(2971, 'pt', 'conhecido'),
-(2972, 'pt', 'corrente'),
-(2973, 'pt', 'das'),
-(2974, 'pt', 'debaixo'),
-(2975, 'pt', 'dentro'),
-(2976, 'pt', 'desde'),
-(2977, 'pt', 'desligado'),
-(2978, 'pt', 'deve'),
-(2979, 'pt', 'devem'),
-(2980, 'pt', 'dever√°'),
-(2981, 'pt', 'direita'),
-(2982, 'pt', 'diz'),
-(2983, 'pt', 'dizer'),
-(2984, 'pt', 'dois'),
-(2985, 'pt', 'dos'),
-(2986, 'pt', 'e'),
-(2987, 'pt', 'ela'),
-(2988, 'pt', 'ele'),
-(2989, 'pt', 'eles'),
-(2990, 'pt', 'em'),
-(2991, 'pt', 'enquanto'),
-(2992, 'pt', 'ent√£o'),
-(2993, 'pt', 'est√°'),
-(2994, 'pt', 'est√£o'),
-(2995, 'pt', 'estado'),
-(2996, 'pt', 'estar'),
-(2997, 'pt', 'estar√°'),
-(2998, 'pt', 'este'),
-(2999, 'pt', 'estes'),
-(3000, 'pt', 'esteve'),
-(3001, 'pt', 'estive'),
-(3002, 'pt', 'estivemos'),
-(3003, 'pt', 'estiveram'),
-(3004, 'pt', 'eu'),
-(3005, 'pt', 'far√°'),
-(3006, 'pt', 'faz'),
-(3007, 'pt', 'fazer'),
-(3008, 'pt', 'fazia'),
-(3009, 'pt', 'fez'),
-(3010, 'pt', 'fim'),
-(3011, 'pt', 'foi'),
-(3012, 'pt', 'fora'),
-(3013, 'pt', 'horas'),
-(3014, 'pt', 'iniciar'),
-(3015, 'pt', 'inicio'),
-(3016, 'pt', 'ir'),
-(3017, 'pt', 'ir√°'),
-(3018, 'pt', 'ista'),
-(3019, 'pt', 'iste'),
-(3020, 'pt', 'isto'),
-(3021, 'pt', 'ligado'),
-(3022, 'pt', 'maioria'),
-(3023, 'pt', 'maiorias'),
-(3024, 'pt', 'mais'),
-(3025, 'pt', 'mas'),
-(3026, 'pt', 'mesmo'),
-(3027, 'pt', 'meu'),
-(3028, 'pt', 'muito'),
-(3029, 'pt', 'muitos'),
-(3030, 'pt', 'n√≥s'),
-(3031, 'pt', 'n√£o'),
-(3032, 'pt', 'nome'),
-(3033, 'pt', 'nosso'),
-(3034, 'pt', 'novo'),
-(3035, 'pt', 'o'),
-(3036, 'pt', 'onde'),
-(3037, 'pt', 'os'),
-(3038, 'pt', 'ou'),
-(3039, 'pt', 'outro'),
-(3040, 'pt', 'para'),
-(3041, 'pt', 'parte'),
-(3042, 'pt', 'pegar'),
-(3043, 'pt', 'pelo'),
-(3044, 'pt', 'pessoas'),
-(3045, 'pt', 'pode'),
-(3046, 'pt', 'poder√°'),
-(3047, 'pt', 'podia'),
-(3048, 'pt', 'por'),
-(3049, 'pt', 'porque'),
-(3050, 'pt', 'povo'),
-(3051, 'pt', 'promeiro'),
-(3052, 'pt', 'qu√™'),
-(3053, 'pt', 'qual'),
-(3054, 'pt', 'qualquer'),
-(3055, 'pt', 'quando'),
-(3056, 'pt', 'quem'),
-(3057, 'pt', 'quieto'),
-(3058, 'pt', 's√£o'),
-(3059, 'pt', 'saber'),
-(3060, 'pt', 'sem'),
-(3061, 'pt', 'ser'),
-(3062, 'pt', 'seu'),
-(3063, 'pt', 'somente'),
-(3064, 'pt', 't√™m'),
-(3065, 'pt', 'tal'),
-(3066, 'pt', 'tamb√©m'),
-(3067, 'pt', 'tem'),
-(3068, 'pt', 'tempo'),
-(3069, 'pt', 'tenho'),
-(3070, 'pt', 'tentar'),
-(3071, 'pt', 'tentaram'),
-(3072, 'pt', 'tente'),
-(3073, 'pt', 'tentei'),
-(3074, 'pt', 'teu'),
-(3075, 'pt', 'teve'),
-(3076, 'pt', 'tipo'),
-(3077, 'pt', 'tive'),
-(3078, 'pt', 'todos'),
-(3079, 'pt', 'trabalhar'),
-(3080, 'pt', 'trabalho'),
-(3081, 'pt', 'tu'),
-(3082, 'pt', 'um'),
-(3083, 'pt', 'uma'),
-(3084, 'pt', 'umas'),
-(3085, 'pt', 'uns'),
-(3086, 'pt', 'usa'),
-(3087, 'pt', 'usar'),
-(3088, 'pt', 'valor'),
-(3089, 'pt', 'veja'),
-(3090, 'pt', 'ver'),
-(3091, 'pt', 'verdade'),
-(3092, 'pt', 'verdadeiro'),
-(3093, 'tr', 'acaba'),
-(3094, 'tr', 'altm√Ω√æ'),
-(3095, 'tr', 'alt√Ω'),
-(3096, 'tr', 'ama'),
-(3097, 'tr', 'bana'),
-(3098, 'tr', 'baz√Ω'),
-(3099, 'tr', 'belki'),
-(3100, 'tr', 'ben'),
-(3101, 'tr', 'benden'),
-(3102, 'tr', 'beni'),
-(3103, 'tr', 'benim'),
-(3104, 'tr', 'be√æ'),
-(3105, 'tr', 'bin'),
-(3106, 'tr', 'bir'),
-(3107, 'tr', 'biri'),
-(3108, 'tr', 'birka√ß'),
-(3109, 'tr', 'birkez'),
-(3110, 'tr', 'bir√æey'),
-(3111, 'tr', 'bir√æeyi'),
-(3112, 'tr', 'biz'),
-(3113, 'tr', 'bizden'),
-(3114, 'tr', 'bizi'),
-(3115, 'tr', 'bizim'),
-(3116, 'tr', 'bu'),
-(3117, 'tr', 'buna'),
-(3118, 'tr', 'bunda'),
-(3119, 'tr', 'bundan'),
-(3120, 'tr', 'bunu'),
-(3121, 'tr', 'bunun'),
-(3122, 'tr', 'da'),
-(3123, 'tr', 'daha'),
-(3124, 'tr', 'dahi'),
-(3125, 'tr', 'de'),
-(3126, 'tr', 'defa'),
-(3127, 'tr', 'diye'),
-(3128, 'tr', 'doksan'),
-(3129, 'tr', 'dokuz'),
-(3130, 'tr', 'd√∂rt'),
-(3131, 'tr', 'elli'),
-(3132, 'tr', 'en'),
-(3133, 'tr', 'gibi'),
-(3134, 'tr', 'hem'),
-(3135, 'tr', 'hep'),
-(3136, 'tr', 'hepsi'),
-(3137, 'tr', 'her'),
-(3138, 'tr', 'hi√ß'),
-(3139, 'tr', 'iki'),
-(3140, 'tr', 'ile'),
-(3141, 'tr', 'INSERmi'),
-(3142, 'tr', 'ise'),
-(3143, 'tr', 'i√ßin'),
-(3144, 'tr', 'katrilyon'),
-(3145, 'tr', 'kez'),
-(3146, 'tr', 'ki'),
-(3147, 'tr', 'kim'),
-(3148, 'tr', 'kimden'),
-(3149, 'tr', 'kime'),
-(3150, 'tr', 'kimi'),
-(3151, 'tr', 'k√Ωrk'),
-(3152, 'tr', 'milyar'),
-(3153, 'tr', 'milyon'),
-(3154, 'tr', 'mu'),
-(3155, 'tr', 'm√º'),
-(3156, 'tr', 'm√Ω'),
-(3157, 'tr', 'nas√Ωl'),
-(3158, 'tr', 'ne'),
-(3159, 'tr', 'neden'),
-(3160, 'tr', 'nerde'),
-(3161, 'tr', 'nerede'),
-(3162, 'tr', 'nereye'),
-(3163, 'tr', 'niye'),
-(3164, 'tr', 'ni√ßin'),
-(3165, 'tr', 'on'),
-(3166, 'tr', 'ona'),
-(3167, 'tr', 'ondan'),
-(3168, 'tr', 'onlar'),
-(3169, 'tr', 'onlardan'),
-(3170, 'tr', 'onlari'),
-(3171, 'tr', 'onlar√Ωn'),
-(3172, 'tr', 'onu'),
-(3173, 'tr', 'otuz'),
-(3174, 'tr', 'sanki'),
-(3175, 'tr', 'sekiz'),
-(3176, 'tr', 'seksen'),
-(3177, 'tr', 'sen'),
-(3178, 'tr', 'senden'),
-(3179, 'tr', 'seni'),
-(3180, 'tr', 'senin'),
-(3181, 'tr', 'siz'),
-(3182, 'tr', 'sizden'),
-(3183, 'tr', 'sizi'),
-(3184, 'tr', 'sizin'),
-(3185, 'tr', 'trilyon'),
-(3186, 'tr', 't√ºm'),
-(3187, 'tr', 've'),
-(3188, 'tr', 'veya'),
-(3189, 'tr', 'ya'),
-(3190, 'tr', 'yani'),
-(3191, 'tr', 'yedi'),
-(3192, 'tr', 'yetmi√æ'),
-(3193, 'tr', 'yirmi'),
-(3194, 'tr', 'y√ºz'),
-(3195, 'tr', '√ßok'),
-(3196, 'tr', '√ß√ºnk√º'),
-(3197, 'tr', '√º√ß'),
-(3198, 'tr', '√æey'),
-(3199, 'tr', '√æeyden'),
-(3200, 'tr', '√æeyi'),
-(3201, 'tr', '√æeyler'),
-(3202, 'tr', '√æu'),
-(3203, 'tr', '√æuna'),
-(3204, 'tr', '√æunda'),
-(3205, 'tr', '√æundan'),
-(3206, 'lt', 'ant'),
-(3207, 'lt', 'apie'),
-(3208, 'lt', 'ar'),
-(3209, 'lt', 'arba'),
-(3210, 'lt', 'aš'),
-(3211, 'lt', 'be'),
-(3212, 'lt', 'bei'),
-(3213, 'lt', 'bet'),
-(3214, 'lt', 'būti'),
-(3215, 'lt', 'būtų'),
-(3216, 'lt', 'buvo'),
-(3217, 'lt', 'čia'),
-(3218, 'lt', 'dabar'),
-(3219, 'lt', 'dar'),
-(3220, 'lt', 'daug'),
-(3221, 'lt', 'daugiau'),
-(3222, 'lt', 'dėl'),
-(3223, 'lt', 'gal'),
-(3224, 'lt', 'gali'),
-(3225, 'lt', 'į'),
-(3226, 'lt', 'iki'),
-(3227, 'lt', 'ir'),
-(3228, 'lt', 'iš'),
-(3229, 'lt', 'yra'),
-(3230, 'lt', 'jam'),
-(3231, 'lt', 'jau'),
-(3232, 'lt', 'jei'),
-(3233, 'lt', 'jeigu'),
-(3234, 'lt', 'ji'),
-(3235, 'lt', 'jį'),
-(3236, 'lt', 'jie'),
-(3237, 'lt', 'jis'),
-(3238, 'lt', 'jo'),
-(3239, 'lt', 'jog'),
-(3240, 'lt', 'jos'),
-(3241, 'lt', 'jų'),
-(3242, 'lt', 'juk'),
-(3243, 'lt', 'juos'),
-(3244, 'lt', 'jūs'),
-(3245, 'lt', 'ką'),
-(3246, 'lt', 'kad'),
-(3247, 'lt', 'kai'),
-(3248, 'lt', 'kaip'),
-(3249, 'lt', 'kas'),
-(3250, 'lt', 'ko'),
-(3251, 'lt', 'kol'),
-(3252, 'lt', 'kur'),
-(3253, 'lt', 'kuris'),
-(3254, 'lt', 'labai'),
-(3255, 'lt', 'man'),
-(3256, 'lt', 'mano'),
-(3257, 'lt', 'mes'),
-(3258, 'lt', 'mūsų'),
-(3259, 'lt', 'ne'),
-(3260, 'lt', 'nebuvo'),
-(3261, 'lt', 'nei'),
-(3262, 'lt', 'nėra'),
-(3263, 'lt', 'nes'),
-(3264, 'lt', 'net'),
-(3265, 'lt', 'nieko'),
-(3266, 'lt', 'nors'),
-(3267, 'lt', 'nuo'),
-(3268, 'lt', 'o'),
-(3269, 'lt', 'pats'),
-(3270, 'lt', 'per'),
-(3271, 'lt', 'po'),
-(3272, 'lt', 'prie'),
-(3273, 'lt', 'prieš'),
-(3274, 'lt', 'savo'),
-(3275, 'lt', 'su'),
-(3276, 'lt', 'tačiau'),
-(3277, 'lt', 'tada'),
-(3278, 'lt', 'tai'),
-(3279, 'lt', 'taip'),
-(3280, 'lt', 'tarė'),
-(3281, 'lt', 'tarp'),
-(3282, 'lt', 'ten'),
-(3283, 'lt', 'tiek'),
-(3284, 'lt', 'tik'),
-(3285, 'lt', 'to'),
-(3286, 'lt', 'todėl'),
-(3287, 'lt', 'tu'),
-(3288, 'lt', 'turi'),
-(3289, 'lt', 'už'),
-(3290, 'lt', 'vėl'),
-(3291, 'lt', 'vieną'),
-(3292, 'lt', 'vienas'),
-(3293, 'lt', 'vis'),
-(3294, 'lt', 'visi'),
-(3295, 'lt', 'viskas');";
-
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (0, 'cs', 'dnes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1, 'cs', 'cz')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2, 'cs', 'timto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3, 'cs', 'budes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (4, 'cs', 'budem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (5, 'cs', 'byli')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (6, 'cs', 'jses')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (7, 'cs', 'muj')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (8, 'cs', 'svym')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (9, 'cs', 'ta')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (10, 'cs', 'tomto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (11, 'cs', 'tohle')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (12, 'cs', 'tuto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (13, 'cs', 'tyto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (14, 'cs', 'jej')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (15, 'cs', 'zda')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (16, 'cs', 'proc')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (17, 'cs', 'mate')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (18, 'cs', 'tato')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (19, 'cs', 'kam')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (20, 'cs', 'tohoto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (21, 'cs', 'kdo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (22, 'cs', 'kteri')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (23, 'cs', 'mi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (24, 'cs', 'nam')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (25, 'cs', 'tom')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (26, 'cs', 'tomuto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (27, 'cs', 'mit')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (28, 'cs', 'nic')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (29, 'cs', 'proto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (30, 'cs', 'kterou')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (31, 'cs', 'byla')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (32, 'cs', 'toho')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (33, 'cs', 'protoze')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (34, 'cs', 'asi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (35, 'cs', 'ho')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (36, 'cs', 'nasi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (37, 'cs', 'napiste')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (38, 'cs', 're')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (39, 'cs', 'coz')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (40, 'cs', 'tim')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (41, 'cs', 'takze')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (42, 'cs', 'svych')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (43, 'cs', 'jeji')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (44, 'cs', 'svymi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (45, 'cs', 'jste')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (46, 'cs', 'aj')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (47, 'cs', 'tu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (48, 'cs', 'tedy')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (49, 'cs', 'teto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (50, 'cs', 'bylo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (51, 'cs', 'kde')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (52, 'cs', 'ke')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (53, 'cs', 'prave')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (54, 'cs', 'ji')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (55, 'cs', 'nad')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (56, 'cs', 'nejsou')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (57, 'cs', 'ci')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (58, 'cs', 'pod')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (59, 'cs', 'tema')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (60, 'cs', 'mezi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (61, 'cs', 'pres')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (62, 'cs', 'ty')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (63, 'cs', 'pak')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (64, 'cs', 'vam')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (65, 'cs', 'ani')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (66, 'cs', 'kdyz')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (67, 'cs', 'vsak')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (68, 'cs', 'ne')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (69, 'cs', 'jsem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (70, 'cs', 'tento')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (71, 'cs', 'clanku')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (72, 'cs', 'clanky')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (73, 'cs', 'aby')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (74, 'cs', 'jsme')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (75, 'cs', 'pred')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (76, 'cs', 'pta')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (77, 'cs', 'jejich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (78, 'cs', 'byl')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (79, 'cs', 'jeste')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (80, 'cs', 'az')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (81, 'cs', 'bez')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (82, 'cs', 'take')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (83, 'cs', 'pouze')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (84, 'cs', 'prvni')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (85, 'cs', 'vase')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (86, 'cs', 'ktera')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (87, 'cs', 'nas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (88, 'cs', 'novy')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (89, 'cs', 'tipy')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (90, 'cs', 'pokud')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (91, 'cs', 'muze')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (92, 'cs', 'design')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (93, 'cs', 'strana')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (94, 'cs', 'jeho')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (95, 'cs', 'sve')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (96, 'cs', 'jine')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (97, 'cs', 'zpravy')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (98, 'cs', 'nove')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (99, 'cs', 'neni')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (100, 'cs', 'vas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (101, 'cs', 'jen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (102, 'cs', 'podle')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (103, 'cs', 'zde')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (104, 'cs', 'clanek')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (105, 'cs', 'uz')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (106, 'cs', 'email')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (107, 'cs', 'byt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (108, 'cs', 'vice')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (109, 'cs', 'bude')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (110, 'cs', 'jiz')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (111, 'cs', 'nez')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (112, 'cs', 'ktery')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (113, 'cs', 'by')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (114, 'cs', 'ktere')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (115, 'cs', 'co')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (116, 'cs', 'nebo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (117, 'cs', 'ten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (118, 'cs', 'tak')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (119, 'cs', 'ma')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (120, 'cs', 'pri')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (121, 'cs', 'od')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (122, 'cs', 'po')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (123, 'cs', 'jsou')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (124, 'cs', 'jak')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (125, 'cs', 'dalsi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (126, 'cs', 'ale')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (127, 'cs', 'si')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (128, 'cs', 've')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (129, 'cs', 'to')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (130, 'cs', 'jako')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (131, 'cs', 'za')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (132, 'cs', 'zpet')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (133, 'cs', 'ze')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (134, 'cs', 'do')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (135, 'cs', 'pro')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (136, 'cs', 'je')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (137, 'da', 'af')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (138, 'da', 'alle')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (139, 'da', 'andet')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (140, 'da', 'andre')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (141, 'da', 'at')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (142, 'da', 'begge')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (143, 'da', 'da')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (144, 'da', 'de')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (145, 'da', 'den')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (146, 'da', 'denne')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (147, 'da', 'der')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (148, 'da', 'deres')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (149, 'da', 'det')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (150, 'da', 'dette')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (151, 'da', 'dig')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (152, 'da', 'din')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (153, 'da', 'dog')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (154, 'da', 'du')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (155, 'da', 'ej')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (156, 'da', 'eller')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (157, 'da', 'en')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (158, 'da', 'end')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (159, 'da', 'ene')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (160, 'da', 'eneste')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (161, 'da', 'enhver')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (162, 'da', 'et')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (163, 'da', 'fem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (164, 'da', 'fire')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (165, 'da', 'flere')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (166, 'da', 'fleste')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (167, 'da', 'for')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (168, 'da', 'fordi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (169, 'da', 'forrige')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (170, 'da', 'fra')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (171, 'da', 'f√•')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (172, 'da', 'f√∏r')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (173, 'da', 'god')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (174, 'da', 'han')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (175, 'da', 'hans')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (176, 'da', 'har')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (177, 'da', 'hendes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (178, 'da', 'her')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (179, 'da', 'hun')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (180, 'da', 'hvad')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (181, 'da', 'hvem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (182, 'da', 'hver')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (183, 'da', 'hvilken')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (184, 'da', 'hvis')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (185, 'da', 'hvor')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (186, 'da', 'hvordan')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (187, 'da', 'hvorfor')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (188, 'da', 'hvorn√•r')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (189, 'da', 'i')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (190, 'da', 'ikke')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (191, 'da', 'ind')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (192, 'da', 'ingen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (193, 'da', 'intet')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (194, 'da', 'jeg')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (195, 'da', 'jeres')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (196, 'da', 'kan')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (197, 'da', 'kom')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (198, 'da', 'kommer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (199, 'da', 'lav')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (200, 'da', 'lidt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (201, 'da', 'lille')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (202, 'da', 'man mand')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (203, 'da', 'mange')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (204, 'da', 'med')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (205, 'da', 'meget')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (206, 'da', 'men')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (207, 'da', 'mens')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (208, 'da', 'mere')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (209, 'da', 'mig')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (210, 'da', 'ned')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (211, 'da', 'ni')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (212, 'da', 'nogen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (213, 'da', 'noget')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (214, 'da', 'ny')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (215, 'da', 'nyt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (216, 'da', 'n√¶r')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (217, 'da', 'n√¶ste')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (218, 'da', 'n√¶sten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (219, 'da', 'og')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (220, 'da', 'op')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (221, 'da', 'otte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (222, 'da', 'over')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (223, 'da', 'p√•')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (224, 'da', 'se')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (225, 'da', 'seks')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (226, 'da', 'ses')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (227, 'da', 'som')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (228, 'da', 'stor')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (229, 'da', 'store')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (230, 'da', 'syv')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (231, 'da', 'ti')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (232, 'da', 'til')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (233, 'da', 'to')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (234, 'da', 'tre')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (235, 'da', 'ud')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (236, 'de', 'ab')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (237, 'de', 'bei')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (238, 'de', 'da')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (239, 'de', 'deshalb')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (240, 'de', 'ein')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (241, 'de', 'f√ºr')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (242, 'de', 'haben')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (243, 'de', 'hier')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (244, 'de', 'ich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (245, 'de', 'ja')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (246, 'de', 'kann')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (247, 'de', 'machen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (248, 'de', 'muesste')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (249, 'de', 'nach')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (250, 'de', 'oder')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (251, 'de', 'seid')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (252, 'de', 'sonst')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (253, 'de', 'und')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (254, 'de', 'vom')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (255, 'de', 'wann')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (256, 'de', 'wenn')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (257, 'de', 'wie')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (258, 'de', 'zu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (259, 'de', 'bin')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (260, 'de', 'eines')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (261, 'de', 'hat')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (262, 'de', 'manche')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (263, 'de', 'solches')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (264, 'de', 'an')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (265, 'de', 'anderm')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (266, 'de', 'bis')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (267, 'de', 'das')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (268, 'de', 'deinem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (269, 'de', 'demselben')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (270, 'de', 'dir')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (271, 'de', 'doch')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (272, 'de', 'einig')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (273, 'de', 'er')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (274, 'de', 'eurer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (275, 'de', 'hatte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (276, 'de', 'ihnen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (277, 'de', 'ihre')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (278, 'de', 'ins')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (279, 'de', 'jenen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (280, 'de', 'keinen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (281, 'de', 'manchem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (282, 'de', 'meinen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (283, 'de', 'nichts')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (284, 'de', 'seine')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (285, 'de', 'soll')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (286, 'de', 'unserm')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (287, 'de', 'welche')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (288, 'de', 'werden')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (289, 'de', 'wollte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (290, 'de', 'w√§hrend')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (291, 'de', 'alle')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (292, 'de', 'allem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (293, 'de', 'allen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (294, 'de', 'aller')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (295, 'de', 'alles')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (296, 'de', 'als')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (297, 'de', 'also')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (298, 'de', 'am')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (299, 'de', 'ander')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (300, 'de', 'andere')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (301, 'de', 'anderem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (302, 'de', 'anderen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (303, 'de', 'anderer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (304, 'de', 'anderes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (305, 'de', 'andern')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (306, 'de', 'anderr')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (307, 'de', 'anders')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (308, 'de', 'auch')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (309, 'de', 'auf')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (310, 'de', 'aus')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (311, 'de', 'bist')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (312, 'de', 'bsp.')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (313, 'de', 'daher')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (314, 'de', 'damit')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (315, 'de', 'dann')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (316, 'de', 'dasselbe')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (317, 'de', 'dazu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (318, 'de', 'da√ü')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (319, 'de', 'dein')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (320, 'de', 'deine')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (321, 'de', 'deinen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (322, 'de', 'deiner')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (323, 'de', 'deines')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (324, 'de', 'dem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (325, 'de', 'den')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (326, 'de', 'denn')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (327, 'de', 'denselben')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (328, 'de', 'der')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (329, 'de', 'derer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (330, 'de', 'derselbe')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (331, 'de', 'derselben')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (332, 'de', 'des')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (333, 'de', 'desselben')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (334, 'de', 'dessen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (335, 'de', 'dich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (336, 'de', 'die')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (337, 'de', 'dies')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (338, 'de', 'diese')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (339, 'de', 'dieselbe')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (340, 'de', 'dieselben')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (341, 'de', 'diesem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (342, 'de', 'diesen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (343, 'de', 'dieser')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (344, 'de', 'dieses')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (345, 'de', 'dort')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (346, 'de', 'du')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (347, 'de', 'durch')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (348, 'de', 'eine')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (349, 'de', 'einem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (350, 'de', 'einen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (351, 'de', 'einer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (352, 'de', 'einige')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (353, 'de', 'einigem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (354, 'de', 'einigen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (355, 'de', 'einiger')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (356, 'de', 'einiges')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (357, 'de', 'einmal')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (358, 'de', 'es')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (359, 'de', 'etwas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (360, 'de', 'euch')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (361, 'de', 'euer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (362, 'de', 'eure')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (363, 'de', 'eurem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (364, 'de', 'euren')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (365, 'de', 'eures')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (366, 'de', 'ganz')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (367, 'de', 'ganze')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (368, 'de', 'ganzen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (369, 'de', 'ganzer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (370, 'de', 'ganzes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (371, 'de', 'gegen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (372, 'de', 'gemacht')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (373, 'de', 'gesagt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (374, 'de', 'gesehen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (375, 'de', 'gewesen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (376, 'de', 'gewollt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (377, 'de', 'hab')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (378, 'de', 'habe')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (379, 'de', 'hatten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (380, 'de', 'hin')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (381, 'de', 'hinter')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (382, 'de', 'ihm')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (383, 'de', 'ihn')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (384, 'de', 'ihr')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (385, 'de', 'ihrem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (386, 'de', 'ihren')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (387, 'de', 'ihrer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (388, 'de', 'ihres')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (389, 'de', 'im')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (390, 'de', 'in')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (391, 'de', 'indem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (392, 'de', 'ist')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (393, 'de', 'jede')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (394, 'de', 'jedem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (395, 'de', 'jeden')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (396, 'de', 'jeder')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (397, 'de', 'jedes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (398, 'de', 'jene')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (399, 'de', 'jenem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (400, 'de', 'jener')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (401, 'de', 'jenes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (402, 'de', 'jetzt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (403, 'de', 'kein')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (404, 'de', 'keine')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (405, 'de', 'keinem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (406, 'de', 'keiner')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (407, 'de', 'keines')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (408, 'de', 'konnte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (409, 'de', 'k√∂nnen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (410, 'de', 'k√∂nnte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (411, 'de', 'mache')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (412, 'de', 'machst')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (413, 'de', 'macht')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (414, 'de', 'machte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (415, 'de', 'machten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (416, 'de', 'man')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (417, 'de', 'manchen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (418, 'de', 'mancher')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (419, 'de', 'manches')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (420, 'de', 'mein')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (421, 'de', 'meine')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (422, 'de', 'meinem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (423, 'de', 'meiner')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (424, 'de', 'meines')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (425, 'de', 'mich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (426, 'de', 'mir')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (427, 'de', 'mit')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (428, 'de', 'muss')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (429, 'de', 'musste')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (430, 'de', 'm√º√üt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (431, 'de', 'nicht')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (432, 'de', 'noch')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (433, 'de', 'nun')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (434, 'de', 'nur')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (435, 'de', 'ob')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (436, 'de', 'ohne')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (437, 'de', 'sage')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (438, 'de', 'sagen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (439, 'de', 'sagt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (440, 'de', 'sagte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (441, 'de', 'sagten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (442, 'de', 'sagtest')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (443, 'de', 'sehe')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (444, 'de', 'sehen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (445, 'de', 'sehr')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (446, 'de', 'seht')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (447, 'de', 'sein')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (448, 'de', 'seinem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (449, 'de', 'seinen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (450, 'de', 'seiner')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (451, 'de', 'seines')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (452, 'de', 'selbst')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (453, 'de', 'sich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (454, 'de', 'sicher')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (455, 'de', 'sie')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (456, 'de', 'sind')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (457, 'de', 'so')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (458, 'de', 'solche')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (459, 'de', 'solchem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (460, 'de', 'solchen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (461, 'de', 'solcher')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (462, 'de', 'sollte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (463, 'de', 'sondern')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (464, 'de', 'um')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (465, 'de', 'uns')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (466, 'de', 'unse')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (467, 'de', 'unsen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (468, 'de', 'unser')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (469, 'de', 'unses')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (470, 'de', 'unter')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (471, 'de', 'viel')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (472, 'de', 'von')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (473, 'de', 'vor')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (474, 'de', 'war')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (475, 'de', 'waren')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (476, 'de', 'warst')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (477, 'de', 'was')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (478, 'de', 'weg')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (479, 'de', 'weil')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (480, 'de', 'weiter')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (481, 'de', 'welchem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (482, 'de', 'welchen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (483, 'de', 'welcher')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (484, 'de', 'welches')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (485, 'de', 'werde')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (486, 'de', 'wieder')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (487, 'de', 'will')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (488, 'de', 'wir')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (489, 'de', 'wird')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (490, 'de', 'wirst')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (491, 'de', 'wo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (492, 'de', 'wolle')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (493, 'de', 'wollen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (494, 'de', 'wollt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (495, 'de', 'wollten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (496, 'de', 'wolltest')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (497, 'de', 'wolltet')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (498, 'de', 'w√ºrde')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (499, 'de', 'w√ºrden')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (500, 'de', 'z.B.')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (501, 'de', 'zum')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (502, 'de', 'zur')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (503, 'de', 'zwar')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (504, 'de', 'zwischen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (505, 'de', '√ºber')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (506, 'de', 'aber')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (507, 'de', 'abgerufen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (508, 'de', 'abgerufene')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (509, 'de', 'abgerufener')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (510, 'de', 'abgerufenes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (511, 'de', 'acht')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (512, 'de', 'acute')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (513, 'de', 'allein')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (514, 'de', 'allerdings')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (515, 'de', 'allerlei')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (516, 'de', 'allg')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (517, 'de', 'allgemein')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (518, 'de', 'allm√§hlich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (519, 'de', 'allzu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (520, 'de', 'alsbald')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (521, 'de', 'amp')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (522, 'de', 'and')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (523, 'de', 'andererseits')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (524, 'de', 'andernfalls')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (525, 'de', 'anerkannt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (526, 'de', 'anerkannte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (527, 'de', 'anerkannter')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (528, 'de', 'anerkanntes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (529, 'de', 'anfangen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (530, 'de', 'anfing')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (531, 'de', 'angefangen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (532, 'de', 'angesetze')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (533, 'de', 'angesetzt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (534, 'de', 'angesetzten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (535, 'de', 'angesetzter')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (536, 'de', 'ansetzen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (537, 'de', 'anstatt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (538, 'de', 'arbeiten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (539, 'de', 'aufgeh√∂rt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (540, 'de', 'aufgrund')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (541, 'de', 'aufh√∂ren')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (542, 'de', 'aufh√∂rte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (543, 'de', 'aufzusuchen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (544, 'de', 'ausdr√ºcken')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (545, 'de', 'ausdr√ºckt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (546, 'de', 'ausdr√ºckte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (547, 'de', 'ausgenommen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (548, 'de', 'ausser')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (549, 'de', 'ausserdem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (550, 'de', 'author')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (551, 'de', 'autor')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (552, 'de', 'au√üen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (553, 'de', 'au√üer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (554, 'de', 'au√üerdem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (555, 'de', 'au√üerhalb')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (556, 'de', 'background')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (557, 'de', 'bald')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (558, 'de', 'bearbeite')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (559, 'de', 'bearbeiten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (560, 'de', 'bearbeitete')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (561, 'de', 'bearbeiteten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (562, 'de', 'bedarf')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (563, 'de', 'bedurfte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (564, 'de', 'bed√ºrfen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (565, 'de', 'been')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (566, 'de', 'befragen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (567, 'de', 'befragte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (568, 'de', 'befragten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (569, 'de', 'befragter')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (570, 'de', 'begann')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (571, 'de', 'beginnen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (572, 'de', 'begonnen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (573, 'de', 'behalten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (574, 'de', 'behielt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (575, 'de', 'beide')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (576, 'de', 'beiden')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (577, 'de', 'beiderlei')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (578, 'de', 'beides')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (579, 'de', 'beim')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (580, 'de', 'beinahe')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (581, 'de', 'beitragen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (582, 'de', 'beitrugen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (583, 'de', 'bekannt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (584, 'de', 'bekannte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (585, 'de', 'bekannter')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (586, 'de', 'bekennen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (587, 'de', 'benutzt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (588, 'de', 'bereits')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (589, 'de', 'berichten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (590, 'de', 'berichtet')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (591, 'de', 'berichtete')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (592, 'de', 'berichteten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (593, 'de', 'besonders')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (594, 'de', 'besser')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (595, 'de', 'bestehen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (596, 'de', 'besteht')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (597, 'de', 'betr√§chtlich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (598, 'de', 'bevor')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (599, 'de', 'bez√ºglich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (600, 'de', 'bietet')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (601, 'de', 'bisher')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (602, 'de', 'bislang')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (603, 'de', 'biz')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (604, 'de', 'bleiben')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (605, 'de', 'blieb')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (606, 'de', 'bloss')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (607, 'de', 'blo√ü')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (608, 'de', 'border')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (609, 'de', 'brachte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (610, 'de', 'brachten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (611, 'de', 'brauchen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (612, 'de', 'braucht')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (613, 'de', 'bringen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (614, 'de', 'br√§uchte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (615, 'de', 'bzw')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (616, 'de', 'b√∂den')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (617, 'de', 'ca')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (618, 'de', 'ca.')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (619, 'de', 'collapsed')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (620, 'de', 'com')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (621, 'de', 'comment')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (622, 'de', 'content')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (623, 'de', 'da?')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (624, 'de', 'dabei')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (625, 'de', 'dadurch')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (626, 'de', 'daf√ºr')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (627, 'de', 'dagegen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (628, 'de', 'dahin')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (629, 'de', 'damals')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (630, 'de', 'danach')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (631, 'de', 'daneben')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (632, 'de', 'dank')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (633, 'de', 'danke')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (634, 'de', 'danken')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (635, 'de', 'dannen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (636, 'de', 'daran')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (637, 'de', 'darauf')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (638, 'de', 'daraus')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (639, 'de', 'darf')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (640, 'de', 'darfst')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (641, 'de', 'darin')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (642, 'de', 'darum')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (643, 'de', 'darunter')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (644, 'de', 'dar√ºber')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (645, 'de', 'dar√ºberhinaus')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (646, 'de', 'dass')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (647, 'de', 'davon')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (648, 'de', 'davor')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (649, 'de', 'demnach')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (650, 'de', 'denen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (651, 'de', 'dennoch')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (652, 'de', 'derart')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (653, 'de', 'derartig')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (654, 'de', 'derem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (655, 'de', 'deren')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (656, 'de', 'derjenige')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (657, 'de', 'derjenigen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (658, 'de', 'derzeit')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (659, 'de', 'desto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (660, 'de', 'deswegen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (661, 'de', 'diejenige')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (662, 'de', 'diesseits')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (663, 'de', 'dinge')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (664, 'de', 'direkt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (665, 'de', 'direkte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (666, 'de', 'direkten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (667, 'de', 'direkter')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (668, 'de', 'doc')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (669, 'de', 'doppelt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (670, 'de', 'dorther')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (671, 'de', 'dorthin')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (672, 'de', 'drauf')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (673, 'de', 'drei')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (674, 'de', 'drei√üig')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (675, 'de', 'drin')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (676, 'de', 'dritte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (677, 'de', 'drunter')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (678, 'de', 'dr√ºber')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (679, 'de', 'dunklen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (680, 'de', 'durchaus')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (681, 'de', 'durfte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (682, 'de', 'durften')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (683, 'de', 'd√ºrfen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (684, 'de', 'd√ºrfte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (685, 'de', 'eben')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (686, 'de', 'ebenfalls')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (687, 'de', 'ebenso')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (688, 'de', 'ehe')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (689, 'de', 'eher')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (690, 'de', 'eigenen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (691, 'de', 'eigenes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (692, 'de', 'eigentlich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (693, 'de', 'einba√ºn')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (694, 'de', 'einerseits')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (695, 'de', 'einfach')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (696, 'de', 'einf√ºhren')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (697, 'de', 'einf√ºhrte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (698, 'de', 'einf√ºhrten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (699, 'de', 'eingesetzt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (700, 'de', 'einigerma√üen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (701, 'de', 'eins')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (702, 'de', 'einseitig')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (703, 'de', 'einseitige')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (704, 'de', 'einseitigen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (705, 'de', 'einseitiger')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (706, 'de', 'einst')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (707, 'de', 'einstmals')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (708, 'de', 'einzig')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (709, 'de', 'elf')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (710, 'de', 'ende')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (711, 'de', 'entsprechend')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (712, 'de', 'entweder')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (713, 'de', 'erg√§nze')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (714, 'de', 'erg√§nzen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (715, 'de', 'erg√§nzte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (716, 'de', 'erg√§nzten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (717, 'de', 'erhalten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (718, 'de', 'erhielt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (719, 'de', 'erhielten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (720, 'de', 'erh√§lt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (721, 'de', 'erneut')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (722, 'de', 'erst')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (723, 'de', 'erste')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (724, 'de', 'ersten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (725, 'de', 'erster')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (726, 'de', 'er√∂ffne')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (727, 'de', 'er√∂ffnen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (728, 'de', 'er√∂ffnet')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (729, 'de', 'er√∂ffnete')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (730, 'de', 'er√∂ffnetes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (731, 'de', 'etc')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (732, 'de', 'etliche')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (733, 'de', 'etwa')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (734, 'de', 'fall')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (735, 'de', 'falls')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (736, 'de', 'fand')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (737, 'de', 'fast')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (738, 'de', 'ferner')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (739, 'de', 'finden')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (740, 'de', 'findest')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (741, 'de', 'findet')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (742, 'de', 'folgende')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (743, 'de', 'folgenden')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (744, 'de', 'folgender')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (745, 'de', 'folgendes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (746, 'de', 'folglich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (747, 'de', 'for')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (748, 'de', 'fordern')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (749, 'de', 'fordert')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (750, 'de', 'forderte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (751, 'de', 'forderten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (752, 'de', 'fortsetzen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (753, 'de', 'fortsetzt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (754, 'de', 'fortsetzte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (755, 'de', 'fortsetzten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (756, 'de', 'fragte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (757, 'de', 'frau')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (758, 'de', 'frei')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (759, 'de', 'freie')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (760, 'de', 'freier')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (761, 'de', 'freies')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (762, 'de', 'fuer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (763, 'de', 'f√ºnf')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (764, 'de', 'gab')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (765, 'de', 'ganzem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (766, 'de', 'gar')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (767, 'de', 'gbr')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (768, 'de', 'geb')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (769, 'de', 'geben')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (770, 'de', 'geblieben')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (771, 'de', 'gebracht')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (772, 'de', 'gedurft')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (773, 'de', 'geehrt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (774, 'de', 'geehrte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (775, 'de', 'geehrten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (776, 'de', 'geehrter')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (777, 'de', 'gefallen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (778, 'de', 'gefiel')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (779, 'de', 'gef√§lligst')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (780, 'de', 'gef√§llt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (781, 'de', 'gegeben')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (782, 'de', 'gehabt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (783, 'de', 'gehen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (784, 'de', 'geht')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (785, 'de', 'gekommen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (786, 'de', 'gekonnt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (787, 'de', 'gemocht')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (788, 'de', 'gem√§ss')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (789, 'de', 'genommen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (790, 'de', 'genug')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (791, 'de', 'gern')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (792, 'de', 'gestern')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (793, 'de', 'gestrige')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (794, 'de', 'getan')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (795, 'de', 'geteilt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (796, 'de', 'geteilte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (797, 'de', 'getragen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (798, 'de', 'gewisserma√üen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (799, 'de', 'geworden')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (800, 'de', 'ggf')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (801, 'de', 'gib')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (802, 'de', 'gibt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (803, 'de', 'gleich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (804, 'de', 'gleichwohl')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (805, 'de', 'gleichzeitig')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (806, 'de', 'gl√ºcklicherweise')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (807, 'de', 'gmbh')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (808, 'de', 'gratulieren')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (809, 'de', 'gratuliert')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (810, 'de', 'gratulierte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (811, 'de', 'gute')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (812, 'de', 'guten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (813, 'de', 'g√§ngig')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (814, 'de', 'g√§ngige')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (815, 'de', 'g√§ngigen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (816, 'de', 'g√§ngiger')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (817, 'de', 'g√§ngiges')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (818, 'de', 'g√§nzlich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (819, 'de', 'haette')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (820, 'de', 'halb')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (821, 'de', 'hallo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (822, 'de', 'hast')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (823, 'de', 'hattest')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (824, 'de', 'hattet')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (825, 'de', 'heraus')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (826, 'de', 'herein')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (827, 'de', 'heute')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (828, 'de', 'heutige')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (829, 'de', 'hiermit')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (830, 'de', 'hiesige')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (831, 'de', 'hinein')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (832, 'de', 'hinten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (833, 'de', 'hinterher')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (834, 'de', 'hoch')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (835, 'de', 'html')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (836, 'de', 'http')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (837, 'de', 'hundert')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (838, 'de', 'h√§tt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (839, 'de', 'h√§tte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (840, 'de', 'h√§tten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (841, 'de', 'h√∂chstens')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (842, 'de', 'igitt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (843, 'de', 'image')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (844, 'de', 'immer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (845, 'de', 'immerhin')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (846, 'de', 'important')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (847, 'de', 'indessen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (848, 'de', 'info')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (849, 'de', 'infolge')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (850, 'de', 'innen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (851, 'de', 'innerhalb')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (852, 'de', 'insofern')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (853, 'de', 'inzwischen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (854, 'de', 'irgend')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (855, 'de', 'irgendeine')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (856, 'de', 'irgendwas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (857, 'de', 'irgendwen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (858, 'de', 'irgendwer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (859, 'de', 'irgendwie')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (860, 'de', 'irgendwo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (861, 'de', 'je')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (862, 'de', 'jed')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (863, 'de', 'jedenfalls')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (864, 'de', 'jederlei')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (865, 'de', 'jedoch')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (866, 'de', 'jemand')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (867, 'de', 'jenseits')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (868, 'de', 'j√§hrig')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (869, 'de', 'j√§hrige')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (870, 'de', 'j√§hrigen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (871, 'de', 'j√§hriges')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (872, 'de', 'kam')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (873, 'de', 'kannst')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (874, 'de', 'kaum')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (875, 'de', 'kei nes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (876, 'de', 'keinerlei')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (877, 'de', 'keineswegs')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (878, 'de', 'klar')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (879, 'de', 'klare')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (880, 'de', 'klaren')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (881, 'de', 'klares')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (882, 'de', 'klein')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (883, 'de', 'kleinen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (884, 'de', 'kleiner')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (885, 'de', 'kleines')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (886, 'de', 'koennen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (887, 'de', 'koennt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (888, 'de', 'koennte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (889, 'de', 'koennten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (890, 'de', 'komme')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (891, 'de', 'kommen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (892, 'de', 'kommt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (893, 'de', 'konkret')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (894, 'de', 'konkrete')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (895, 'de', 'konkreten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (896, 'de', 'konkreter')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (897, 'de', 'konkretes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (898, 'de', 'konnten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (899, 'de', 'k√∂nn')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (900, 'de', 'k√∂nnt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (901, 'de', 'k√∂nnten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (902, 'de', 'k√ºnftig')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (903, 'de', 'lag')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (904, 'de', 'lagen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (905, 'de', 'langsam')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (906, 'de', 'lassen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (907, 'de', 'laut')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (908, 'de', 'lediglich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (909, 'de', 'leer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (910, 'de', 'legen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (911, 'de', 'legte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (912, 'de', 'legten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (913, 'de', 'leicht')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (914, 'de', 'leider')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (915, 'de', 'lesen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (916, 'de', 'letze')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (917, 'de', 'letzten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (918, 'de', 'letztendlich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (919, 'de', 'letztens')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (920, 'de', 'letztes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (921, 'de', 'letztlich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (922, 'de', 'lichten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (923, 'de', 'liegt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (924, 'de', 'liest')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (925, 'de', 'links')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (926, 'de', 'l√§ngst')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (927, 'de', 'l√§ngstens')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (928, 'de', 'mag')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (929, 'de', 'magst')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (930, 'de', 'mal')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (931, 'de', 'mancherorts')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (932, 'de', 'manchmal')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (933, 'de', 'mann')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (934, 'de', 'margin')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (935, 'de', 'med')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (936, 'de', 'mehr')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (937, 'de', 'mehrere')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (938, 'de', 'meist')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (939, 'de', 'meiste')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (940, 'de', 'meisten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (941, 'de', 'meta')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (942, 'de', 'mindestens')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (943, 'de', 'mithin')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (944, 'de', 'mochte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (945, 'de', 'morgen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (946, 'de', 'morgige')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (947, 'de', 'muessen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (948, 'de', 'muesst')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (949, 'de', 'musst')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (950, 'de', 'mussten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (951, 'de', 'mu√ü')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (952, 'de', 'mu√üt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (953, 'de', 'm√∂chte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (954, 'de', 'm√∂chten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (955, 'de', 'm√∂chtest')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (956, 'de', 'm√∂gen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (957, 'de', 'm√∂glich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (958, 'de', 'm√∂gliche')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (959, 'de', 'm√∂glichen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (960, 'de', 'm√∂glicher')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (961, 'de', 'm√∂glicherweise')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (962, 'de', 'm√ºssen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (963, 'de', 'm√ºsste')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (964, 'de', 'm√ºssten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (965, 'de', 'm√º√üte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (966, 'de', 'nachdem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (967, 'de', 'nacher')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (968, 'de', 'nachhinein')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (969, 'de', 'nahm')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (970, 'de', 'nat√ºrlich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (971, 'de', 'ncht')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (972, 'de', 'neben')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (973, 'de', 'nebenan')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (974, 'de', 'nehmen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (975, 'de', 'nein')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (976, 'de', 'neu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (977, 'de', 'neue')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (978, 'de', 'neuem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (979, 'de', 'neuen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (980, 'de', 'neuer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (981, 'de', 'neues')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (982, 'de', 'neun')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (983, 'de', 'nie')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (984, 'de', 'niemals')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (985, 'de', 'niemand')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (986, 'de', 'nimm')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (987, 'de', 'nimmer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (988, 'de', 'nimmt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (989, 'de', 'nirgends')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (990, 'de', 'nirgendwo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (991, 'de', 'nter')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (992, 'de', 'nutzen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (993, 'de', 'nutzt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (994, 'de', 'nutzung')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (995, 'de', 'n√§chste')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (996, 'de', 'n√§mlich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (997, 'de', 'n√∂tigenfalls')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (998, 'de', 'n√ºtzt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (999, 'de', 'oben')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1000, 'de', 'oberhalb')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1001, 'de', 'obgleich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1002, 'de', 'obschon')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1003, 'de', 'obwohl')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1004, 'de', 'oft')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1005, 'de', 'online')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1006, 'de', 'org')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1007, 'de', 'padding')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1008, 'de', 'per')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1009, 'de', 'pfui')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1010, 'de', 'pl√∂tzlich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1011, 'de', 'pro')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1012, 'de', 'reagiere')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1013, 'de', 'reagieren')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1014, 'de', 'reagiert')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1015, 'de', 'reagierte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1016, 'de', 'rechts')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1017, 'de', 'regelm√§√üig')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1018, 'de', 'rief')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1019, 'de', 'rund')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1020, 'de', 'sang')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1021, 'de', 'sangen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1022, 'de', 'schlechter')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1023, 'de', 'schlie√ülich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1024, 'de', 'schnell')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1025, 'de', 'schon')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1026, 'de', 'schreibe')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1027, 'de', 'schreiben')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1028, 'de', 'schreibens')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1029, 'de', 'schreiber')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1030, 'de', 'schwierig')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1031, 'de', 'sch√§tzen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1032, 'de', 'sch√§tzt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1033, 'de', 'sch√§tzte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1034, 'de', 'sch√§tzten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1035, 'de', 'sechs')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1036, 'de', 'sect')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1037, 'de', 'sehrwohl')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1038, 'de', 'sei')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1039, 'de', 'seit')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1040, 'de', 'seitdem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1041, 'de', 'seite')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1042, 'de', 'seiten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1043, 'de', 'seither')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1044, 'de', 'selber')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1045, 'de', 'senke')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1046, 'de', 'senken')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1047, 'de', 'senkt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1048, 'de', 'senkte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1049, 'de', 'senkten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1050, 'de', 'setzen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1051, 'de', 'setzt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1052, 'de', 'setzte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1053, 'de', 'setzten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1054, 'de', 'sicherlich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1055, 'de', 'sieben')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1056, 'de', 'siebte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1057, 'de', 'siehe')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1058, 'de', 'sieht')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1059, 'de', 'singen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1060, 'de', 'singt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1061, 'de', 'sobald')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1062, 'de', 'soda√ü')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1063, 'de', 'soeben')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1064, 'de', 'sofern')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1065, 'de', 'sofort')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1066, 'de', 'sog')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1067, 'de', 'sogar')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1068, 'de', 'solange')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1069, 'de', 'solc hen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1070, 'de', 'solch')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1071, 'de', 'sollen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1072, 'de', 'sollst')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1073, 'de', 'sollt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1074, 'de', 'sollten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1075, 'de', 'solltest')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1076, 'de', 'somit')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1077, 'de', 'sonstwo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1078, 'de', 'sooft')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1079, 'de', 'soviel')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1080, 'de', 'soweit')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1081, 'de', 'sowie')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1082, 'de', 'sowohl')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1083, 'de', 'spielen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1084, 'de', 'sp√§ter')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1085, 'de', 'startet')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1086, 'de', 'startete')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1087, 'de', 'starteten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1088, 'de', 'statt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1089, 'de', 'stattdessen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1090, 'de', 'steht')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1091, 'de', 'steige')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1092, 'de', 'steigen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1093, 'de', 'steigt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1094, 'de', 'stets')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1095, 'de', 'stieg')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1096, 'de', 'stiegen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1097, 'de', 'such')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1098, 'de', 'suchen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1099, 'de', 's√§mtliche')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1100, 'de', 'tages')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1101, 'de', 'tat')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1102, 'de', 'tats√§chlich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1103, 'de', 'tats√§chlichen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1104, 'de', 'tats√§chlicher')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1105, 'de', 'tats√§chliches')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1106, 'de', 'tausend')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1107, 'de', 'teile')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1108, 'de', 'teilen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1109, 'de', 'teilte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1110, 'de', 'teilten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1111, 'de', 'titel')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1112, 'de', 'total')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1113, 'de', 'trage')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1114, 'de', 'tragen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1115, 'de', 'trotzdem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1116, 'de', 'trug')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1117, 'de', 'tr√§gt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1118, 'de', 'tun')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1119, 'de', 'tust')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1120, 'de', 'tut')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1121, 'de', 'txt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1122, 'de', 't√§t')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1123, 'de', 'ueber')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1124, 'de', 'umso')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1125, 'de', 'unbedingt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1126, 'de', 'ungef√§hr')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1127, 'de', 'unm√∂glich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1128, 'de', 'unm√∂gliche')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1129, 'de', 'unm√∂glichen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1130, 'de', 'unm√∂glicher')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1131, 'de', 'unn√∂tig')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1132, 'de', 'unsem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1133, 'de', 'unser')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1134, 'de', 'unsere')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1135, 'de', 'unserem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1136, 'de', 'unseren')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1137, 'de', 'unserer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1138, 'de', 'unseres')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1139, 'de', 'unten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1140, 'de', 'unterbrach')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1141, 'de', 'unterbrechen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1142, 'de', 'unterhalb')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1143, 'de', 'unwichtig')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1144, 'de', 'usw')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1145, 'de', 'var')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1146, 'de', 'vergangen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1147, 'de', 'vergangene')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1148, 'de', 'vergangener')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1149, 'de', 'vergangenes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1150, 'de', 'vermag')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1151, 'de', 'vermutlich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1152, 'de', 'verm√∂gen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1153, 'de', 'verrate')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1154, 'de', 'verraten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1155, 'de', 'verriet')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1156, 'de', 'verrieten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1157, 'de', 'version')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1158, 'de', 'versorge')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1159, 'de', 'versorgen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1160, 'de', 'versorgt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1161, 'de', 'versorgte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1162, 'de', 'versorgten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1163, 'de', 'versorgtes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1164, 'de', 'ver√∂ffentlichen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1165, 'de', 'ver√∂ffentlicher')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1166, 'de', 'ver√∂ffentlicht')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1167, 'de', 'ver√∂ffentlichte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1168, 'de', 'ver√∂ffentlichten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1169, 'de', 'ver√∂ffentlichtes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1170, 'de', 'viele')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1171, 'de', 'vielen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1172, 'de', 'vieler')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1173, 'de', 'vieles')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1174, 'de', 'vielleicht')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1175, 'de', 'vielmals')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1176, 'de', 'vier')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1177, 'de', 'vollst√§ndig')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1178, 'de', 'voran')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1179, 'de', 'vorbei')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1180, 'de', 'vorgestern')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1181, 'de', 'vorher')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1182, 'de', 'vorne')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1183, 'de', 'vor√ºber')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1184, 'de', 'v√∂llig')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1185, 'de', 'w√§hrend')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1186, 'de', 'wachen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1187, 'de', 'waere')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1188, 'de', 'warum')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1189, 'de', 'weder')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1190, 'de', 'wegen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1191, 'de', 'weitere')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1192, 'de', 'weiterem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1193, 'de', 'weiteren')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1194, 'de', 'weiterer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1195, 'de', 'weiteres')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1196, 'de', 'weiterhin')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1197, 'de', 'wei√ü')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1198, 'de', 'wem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1199, 'de', 'wen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1200, 'de', 'wenig')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1201, 'de', 'wenige')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1202, 'de', 'weniger')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1203, 'de', 'wenigstens')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1204, 'de', 'wenngleich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1205, 'de', 'wer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1206, 'de', 'werdet')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1207, 'de', 'weshalb')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1208, 'de', 'wessen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1209, 'de', 'wichtig')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1210, 'de', 'wieso')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1211, 'de', 'wieviel')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1212, 'de', 'wiewohl')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1213, 'de', 'willst')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1214, 'de', 'wirklich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1215, 'de', 'wodurch')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1216, 'de', 'wogegen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1217, 'de', 'woher')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1218, 'de', 'wohin')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1219, 'de', 'wohingegen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1220, 'de', 'wohl')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1221, 'de', 'wohlweislich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1222, 'de', 'womit')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1223, 'de', 'woraufhin')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1224, 'de', 'woraus')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1225, 'de', 'worin')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1226, 'de', 'wurde')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1227, 'de', 'wurden')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1228, 'de', 'w√§hrenddessen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1229, 'de', 'w√§r')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1230, 'de', 'w√§re')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1231, 'de', 'w√§ren')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1232, 'de', 'zahlreich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1233, 'de', 'zehn')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1234, 'de', 'zeitweise')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1235, 'de', 'ziehen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1236, 'de', 'zieht')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1237, 'de', 'zog')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1238, 'de', 'zogen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1239, 'de', 'zudem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1240, 'de', 'zuerst')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1241, 'de', 'zufolge')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1242, 'de', 'zugleich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1243, 'de', 'zuletzt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1244, 'de', 'zumal')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1245, 'de', 'zur√ºck')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1246, 'de', 'zusammen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1247, 'de', 'zuviel')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1248, 'de', 'zwanzig')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1249, 'de', 'zwei')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1250, 'de', 'zw√∂lf')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1251, 'de', '√§hnlich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1252, 'de', '√ºbel')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1253, 'de', '√ºberall')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1254, 'de', '√ºberallhin')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1255, 'de', '√ºberdies')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1256, 'de', '√ºbermorgen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1257, 'de', '√ºbrig')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1258, 'de', '√ºbrigens')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1259, 'en', 'a')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1260, 'en', 'a')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1261, 'en', 'able')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1262, 'en', 'about')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1263, 'en', 'about')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1264, 'en', 'above')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1265, 'en', 'above')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1266, 'en', 'abroad')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1267, 'en', 'according')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1268, 'en', 'accordingly')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1269, 'en', 'across')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1270, 'en', 'across')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1271, 'en', 'actually')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1272, 'en', 'adj')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1273, 'en', 'after')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1274, 'en', 'after')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1275, 'en', 'afterwards')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1276, 'en', 'afterwards')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1277, 'en', 'again')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1278, 'en', 'again')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1279, 'en', 'against')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1280, 'en', 'against')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1281, 'en', 'ago')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1282, 'en', 'ahead')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1283, 'en', 'all')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1284, 'en', 'all')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1285, 'en', 'allow')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1286, 'en', 'allows')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1287, 'en', 'almost')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1288, 'en', 'almost')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1289, 'en', 'alone')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1290, 'en', 'alone')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1291, 'en', 'along')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1292, 'en', 'along')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1293, 'en', 'alongside')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1294, 'en', 'already')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1295, 'en', 'already')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1296, 'en', 'also')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1297, 'en', 'also')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1298, 'en', 'although')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1299, 'en', 'although')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1300, 'en', 'always')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1301, 'en', 'always')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1302, 'en', 'am')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1303, 'en', 'am')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1304, 'en', 'amid')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1305, 'en', 'amidst')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1306, 'en', 'among')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1307, 'en', 'among')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1308, 'en', 'amongst')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1309, 'en', 'amongst')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1310, 'en', 'amoungst')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1311, 'en', 'amount')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1312, 'en', 'an')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1313, 'en', 'an')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1314, 'en', 'and')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1315, 'en', 'and')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1316, 'en', 'another')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1317, 'en', 'another')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1318, 'en', 'any')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1319, 'en', 'any')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1320, 'en', 'anybody')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1321, 'en', 'anyhow')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1322, 'en', 'anyhow')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1323, 'en', 'anyone')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1324, 'en', 'anyone')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1325, 'en', 'anything')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1326, 'en', 'anything')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1327, 'en', 'anyway')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1328, 'en', 'anyway')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1329, 'en', 'anyways')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1330, 'en', 'anywhere')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1331, 'en', 'anywhere')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1332, 'en', 'apart')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1333, 'en', 'appear')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1334, 'en', 'appreciate')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1335, 'en', 'appropriate')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1336, 'en', 'are')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1337, 'en', 'are')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1338, 'en', 'around')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1339, 'en', 'around')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1340, 'en', 'as')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1341, 'en', 'as')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1342, 'en', 'aside')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1343, 'en', 'ask')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1344, 'en', 'asking')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1345, 'en', 'associated')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1346, 'en', 'at')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1347, 'en', 'at')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1348, 'en', 'available')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1349, 'en', 'away')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1350, 'en', 'awfully')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1351, 'en', 'b')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1352, 'en', 'back')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1353, 'en', 'back')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1354, 'en', 'backward')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1355, 'en', 'backwards')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1356, 'en', 'be')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1357, 'en', 'be')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1358, 'en', 'became')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1359, 'en', 'became')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1360, 'en', 'because')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1361, 'en', 'because')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1362, 'en', 'become')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1363, 'en', 'become')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1364, 'en', 'becomes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1365, 'en', 'becomes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1366, 'en', 'becoming')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1367, 'en', 'becoming')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1368, 'en', 'been')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1369, 'en', 'been')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1370, 'en', 'before')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1371, 'en', 'before')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1372, 'en', 'beforehand')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1373, 'en', 'beforehand')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1374, 'en', 'begin')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1375, 'en', 'behind')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1376, 'en', 'behind')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1377, 'en', 'being')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1378, 'en', 'being')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1379, 'en', 'believe')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1380, 'en', 'below')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1381, 'en', 'below')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1382, 'en', 'beside')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1383, 'en', 'beside')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1384, 'en', 'besides')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1385, 'en', 'besides')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1386, 'en', 'best')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1387, 'en', 'better')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1388, 'en', 'between')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1389, 'en', 'between')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1390, 'en', 'beyond')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1391, 'en', 'beyond')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1392, 'en', 'bill')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1393, 'en', 'both')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1394, 'en', 'both')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1395, 'en', 'bottom')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1396, 'en', 'brief')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1397, 'en', 'but')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1398, 'en', 'but')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1399, 'en', 'by')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1400, 'en', 'by')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1401, 'en', 'c')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1402, 'en', 'call')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1403, 'en', 'came')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1404, 'en', 'can')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1405, 'en', 'can')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1406, 'en', 'cannot')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1407, 'en', 'cannot')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1408, 'en', 'cant')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1409, 'en', 'cant')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1410, 'en', 'caption')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1411, 'en', 'cause')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1412, 'en', 'causes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1413, 'en', 'certain')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1414, 'en', 'certainly')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1415, 'en', 'changes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1416, 'en', 'clearly')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1417, 'en', 'co')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1418, 'en', 'co')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1419, 'en', 'co.')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1420, 'en', 'com')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1421, 'en', 'come')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1422, 'en', 'comes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1423, 'en', 'computer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1424, 'en', 'con')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1425, 'en', 'concerning')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1426, 'en', 'consequently')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1427, 'en', 'consider')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1428, 'en', 'considering')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1429, 'en', 'contain')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1430, 'en', 'containing')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1431, 'en', 'contains')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1432, 'en', 'corresponding')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1433, 'en', 'could')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1434, 'en', 'could')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1435, 'en', 'couldnt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1436, 'en', 'course')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1437, 'en', 'cry')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1438, 'en', 'currently')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1439, 'en', 'd')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1440, 'en', 'dare')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1441, 'en', 'de')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1442, 'en', 'definitely')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1443, 'en', 'describe')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1444, 'en', 'described')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1445, 'en', 'despite')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1446, 'en', 'detail')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1447, 'en', 'did')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1448, 'en', 'different')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1449, 'en', 'directly')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1450, 'en', 'do')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1451, 'en', 'do')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1452, 'en', 'does')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1453, 'en', 'doing')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1454, 'en', 'done')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1455, 'en', 'done')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1456, 'en', 'down')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1457, 'en', 'down')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1458, 'en', 'downwards')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1459, 'en', 'due')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1460, 'en', 'during')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1461, 'en', 'during')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1462, 'en', 'e')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1463, 'en', 'each')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1464, 'en', 'each')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1465, 'en', 'edu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1466, 'en', 'eg')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1467, 'en', 'eg')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1468, 'en', 'eight')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1469, 'en', 'eight')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1470, 'en', 'eighty')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1471, 'en', 'either')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1472, 'en', 'either')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1473, 'en', 'eleven')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1474, 'en', 'else')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1475, 'en', 'else')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1476, 'en', 'elsewhere')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1477, 'en', 'elsewhere')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1478, 'en', 'empty')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1479, 'en', 'end')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1480, 'en', 'ending')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1481, 'en', 'enough')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1482, 'en', 'enough')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1483, 'en', 'entirely')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1484, 'en', 'especially')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1485, 'en', 'et')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1486, 'en', 'etc')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1487, 'en', 'etc')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1488, 'en', 'even')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1489, 'en', 'even')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1490, 'en', 'ever')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1491, 'en', 'ever')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1492, 'en', 'evermore')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1493, 'en', 'every')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1494, 'en', 'every')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1495, 'en', 'everybody')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1496, 'en', 'everyone')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1497, 'en', 'everyone')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1498, 'en', 'everything')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1499, 'en', 'everything')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1500, 'en', 'everywhere')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1501, 'en', 'everywhere')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1502, 'en', 'ex')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1503, 'en', 'exactly')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1504, 'en', 'example')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1505, 'en', 'except')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1506, 'en', 'except')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1507, 'en', 'f')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1508, 'en', 'fairly')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1509, 'en', 'far')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1510, 'en', 'farther')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1511, 'en', 'few')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1512, 'en', 'few')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1513, 'en', 'fewer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1514, 'en', 'fifteen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1515, 'en', 'fifth')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1516, 'en', 'fify')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1517, 'en', 'fill')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1518, 'en', 'find')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1519, 'en', 'fire')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1520, 'en', 'first')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1521, 'en', 'first')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1522, 'en', 'five')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1523, 'en', 'five')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1524, 'en', 'followed')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1525, 'en', 'following')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1526, 'en', 'follows')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1527, 'en', 'for')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1528, 'en', 'for')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1529, 'en', 'forever')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1530, 'en', 'former')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1531, 'en', 'former')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1532, 'en', 'formerly')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1533, 'en', 'formerly')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1534, 'en', 'forth')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1535, 'en', 'forty')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1536, 'en', 'forward')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1537, 'en', 'found')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1538, 'en', 'found')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1539, 'en', 'four')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1540, 'en', 'four')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1541, 'en', 'from')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1542, 'en', 'from')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1543, 'en', 'front')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1544, 'en', 'full')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1545, 'en', 'further')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1546, 'en', 'further')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1547, 'en', 'furthermore')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1548, 'en', 'g')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1549, 'en', 'get')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1550, 'en', 'get')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1551, 'en', 'gets')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1552, 'en', 'getting')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1553, 'en', 'give')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1554, 'en', 'given')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1555, 'en', 'gives')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1556, 'en', 'go')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1557, 'en', 'go')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1558, 'en', 'goes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1559, 'en', 'going')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1560, 'en', 'gone')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1561, 'en', 'got')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1562, 'en', 'gotten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1563, 'en', 'greetings')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1564, 'en', 'h')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1565, 'en', 'had')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1566, 'en', 'had')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1567, 'en', 'half')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1568, 'en', 'happens')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1569, 'en', 'hardly')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1570, 'en', 'has')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1571, 'en', 'has')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1572, 'en', 'hasnt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1573, 'en', 'have')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1574, 'en', 'have')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1575, 'en', 'having')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1576, 'en', 'he')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1577, 'en', 'he')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1578, 'en', 'hello')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1579, 'en', 'help')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1580, 'en', 'hence')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1581, 'en', 'hence')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1582, 'en', 'her')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1583, 'en', 'her')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1584, 'en', 'here')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1585, 'en', 'here')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1586, 'en', 'hereafter')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1587, 'en', 'hereafter')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1588, 'en', 'hereby')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1589, 'en', 'hereby')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1590, 'en', 'herein')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1591, 'en', 'herein')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1592, 'en', 'hereupon')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1593, 'en', 'hereupon')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1594, 'en', 'hers')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1595, 'en', 'hers')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1596, 'en', 'herself')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1597, 'en', 'herself')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1598, 'en', 'hi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1599, 'en', 'him')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1600, 'en', 'him')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1601, 'en', 'himself')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1602, 'en', 'himself')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1603, 'en', 'his')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1604, 'en', 'his')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1605, 'en', 'hither')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1606, 'en', 'hopefully')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1607, 'en', 'how')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1608, 'en', 'how')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1609, 'en', 'howbeit')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1610, 'en', 'however')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1611, 'en', 'however')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1612, 'en', 'hundred')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1613, 'en', 'hundred')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1614, 'en', 'i')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1615, 'en', 'i')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1616, 'en', 'ie')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1617, 'en', 'ie')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1618, 'en', 'if')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1619, 'en', 'if')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1620, 'en', 'ignored')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1621, 'en', 'immediate')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1622, 'en', 'in')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1623, 'en', 'in')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1624, 'en', 'inasmuch')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1625, 'en', 'inc')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1626, 'en', 'inc')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1627, 'en', 'inc.')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1628, 'en', 'indeed')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1629, 'en', 'indeed')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1630, 'en', 'indicate')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1631, 'en', 'indicated')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1632, 'en', 'indicates')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1633, 'en', 'inner')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1634, 'en', 'inside')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1635, 'en', 'insofar')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1636, 'en', 'instead')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1637, 'en', 'interest')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1638, 'en', 'into')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1639, 'en', 'into')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1640, 'en', 'inward')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1641, 'en', 'is')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1642, 'en', 'is')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1643, 'en', 'it')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1644, 'en', 'it')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1645, 'en', 'its')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1646, 'en', 'its')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1647, 'en', 'itself')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1648, 'en', 'itself')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1649, 'en', 'j')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1650, 'en', 'just')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1651, 'en', 'k')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1652, 'en', 'keep')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1653, 'en', 'keep')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1654, 'en', 'keeps')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1655, 'en', 'kept')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1656, 'en', 'know')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1657, 'en', 'known')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1658, 'en', 'knows')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1659, 'en', 'l')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1660, 'en', 'last')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1661, 'en', 'last')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1662, 'en', 'lately')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1663, 'en', 'later')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1664, 'en', 'latter')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1665, 'en', 'latter')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1666, 'en', 'latterly')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1667, 'en', 'latterly')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1668, 'en', 'least')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1669, 'en', 'least')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1670, 'en', 'less')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1671, 'en', 'less')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1672, 'en', 'lest')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1673, 'en', 'let')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1674, 'en', 'like')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1675, 'en', 'liked')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1676, 'en', 'likely')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1677, 'en', 'likewise')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1678, 'en', 'little')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1679, 'en', 'look')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1680, 'en', 'looking')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1681, 'en', 'looks')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1682, 'en', 'low')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1683, 'en', 'lower')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1684, 'en', 'ltd')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1685, 'en', 'ltd')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1686, 'en', 'm')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1687, 'en', 'made')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1688, 'en', 'made')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1689, 'en', 'mainly')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1690, 'en', 'make')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1691, 'en', 'makes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1692, 'en', 'many')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1693, 'en', 'many')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1694, 'en', 'may')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1695, 'en', 'may')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1696, 'en', 'maybe')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1697, 'en', 'me')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1698, 'en', 'me')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1699, 'en', 'mean')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1700, 'en', 'meantime')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1701, 'en', 'meanwhile')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1702, 'en', 'meanwhile')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1703, 'en', 'merely')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1704, 'en', 'might')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1705, 'en', 'might')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1706, 'en', 'mill')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1707, 'en', 'mine')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1708, 'en', 'mine')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1709, 'en', 'minus')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1710, 'en', 'miss')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1711, 'en', 'more')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1712, 'en', 'more')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1713, 'en', 'moreover')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1714, 'en', 'moreover')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1715, 'en', 'most')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1716, 'en', 'most')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1717, 'en', 'mostly')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1718, 'en', 'mostly')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1719, 'en', 'move')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1720, 'en', 'mr')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1721, 'en', 'mrs')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1722, 'en', 'much')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1723, 'en', 'much')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1724, 'en', 'must')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1725, 'en', 'must')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1726, 'en', 'my')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1727, 'en', 'my')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1728, 'en', 'myself')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1729, 'en', 'myself')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1730, 'en', 'n')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1731, 'en', 'name')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1732, 'en', 'name')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1733, 'en', 'namely')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1734, 'en', 'namely')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1735, 'en', 'nd')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1736, 'en', 'near')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1737, 'en', 'nearly')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1738, 'en', 'necessary')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1739, 'en', 'need')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1740, 'en', 'needs')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1741, 'en', 'neither')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1742, 'en', 'neither')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1743, 'en', 'never')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1744, 'en', 'never')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1745, 'en', 'neverf')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1746, 'en', 'neverless')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1747, 'en', 'nevertheless')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1748, 'en', 'nevertheless')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1749, 'en', 'new')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1750, 'en', 'next')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1751, 'en', 'next')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1752, 'en', 'nine')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1753, 'en', 'nine')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1754, 'en', 'ninety')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1755, 'en', 'no')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1756, 'en', 'no')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1757, 'en', 'nobody')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1758, 'en', 'nobody')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1759, 'en', 'non')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1760, 'en', 'none')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1761, 'en', 'none')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1762, 'en', 'nonetheless')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1763, 'en', 'noone')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1764, 'en', 'noone')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1765, 'en', 'no-one')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1766, 'en', 'nor')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1767, 'en', 'nor')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1768, 'en', 'normally')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1769, 'en', 'not')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1770, 'en', 'not')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1771, 'en', 'nothing')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1772, 'en', 'nothing')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1773, 'en', 'notwithstanding')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1774, 'en', 'novel')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1775, 'en', 'now')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1776, 'en', 'now')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1777, 'en', 'nowhere')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1778, 'en', 'nowhere')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1779, 'en', 'o')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1780, 'en', 'obviously')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1781, 'en', 'of')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1782, 'en', 'of')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1783, 'en', 'off')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1784, 'en', 'off')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1785, 'en', 'often')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1786, 'en', 'often')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1787, 'en', 'oh')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1788, 'en', 'ok')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1789, 'en', 'okay')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1790, 'en', 'old')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1791, 'en', 'on')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1792, 'en', 'on')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1793, 'en', 'once')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1794, 'en', 'once')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1795, 'en', 'one')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1796, 'en', 'one')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1797, 'en', 'ones')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1798, 'en', 'only')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1799, 'en', 'only')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1800, 'en', 'onto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1801, 'en', 'onto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1802, 'en', 'opposite')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1803, 'en', 'or')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1804, 'en', 'or')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1805, 'en', 'other')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1806, 'en', 'other')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1807, 'en', 'others')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1808, 'en', 'others')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1809, 'en', 'otherwise')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1810, 'en', 'otherwise')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1811, 'en', 'ought')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1812, 'en', 'our')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1813, 'en', 'our')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1814, 'en', 'ours')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1815, 'en', 'ours')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1816, 'en', 'ourselves')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1817, 'en', 'ourselves')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1818, 'en', 'out')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1819, 'en', 'out')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1820, 'en', 'outside')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1821, 'en', 'over')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1822, 'en', 'over')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1823, 'en', 'overall')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1824, 'en', 'own')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1825, 'en', 'own')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1826, 'en', 'p')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1827, 'en', 'part')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1828, 'en', 'particular')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1829, 'en', 'particularly')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1830, 'en', 'past')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1831, 'en', 'per')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1832, 'en', 'per')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1833, 'en', 'perhaps')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1834, 'en', 'perhaps')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1835, 'en', 'placed')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1836, 'en', 'please')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1837, 'en', 'please')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1838, 'en', 'plus')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1839, 'en', 'possible')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1840, 'en', 'presumably')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1841, 'en', 'probably')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1842, 'en', 'provided')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1843, 'en', 'provides')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1844, 'en', 'put')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1845, 'en', 'q')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1846, 'en', 'que')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1847, 'en', 'quite')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1848, 'en', 'qv')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1849, 'en', 'r')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1850, 'en', 'rather')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1851, 'en', 'rather')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1852, 'en', 'rd')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1853, 'en', 're')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1854, 'en', 're')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1855, 'en', 'really')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1856, 'en', 'reasonably')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1857, 'en', 'recent')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1858, 'en', 'recently')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1859, 'en', 'regarding')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1860, 'en', 'regardless')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1861, 'en', 'regards')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1862, 'en', 'relatively')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1863, 'en', 'respectively')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1864, 'en', 'right')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1865, 'en', 'round')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1866, 'en', 's')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1867, 'en', 'said')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1868, 'en', 'same')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1869, 'en', 'same')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1870, 'en', 'saw')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1871, 'en', 'say')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1872, 'en', 'saying')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1873, 'en', 'says')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1874, 'en', 'second')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1875, 'en', 'secondly')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1876, 'en', 'see')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1877, 'en', 'see')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1878, 'en', 'seeing')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1879, 'en', 'seem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1880, 'en', 'seem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1881, 'en', 'seemed')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1882, 'en', 'seemed')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1883, 'en', 'seeming')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1884, 'en', 'seeming')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1885, 'en', 'seems')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1886, 'en', 'seems')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1887, 'en', 'seen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1888, 'en', 'self')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1889, 'en', 'selves')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1890, 'en', 'sensible')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1891, 'en', 'sent')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1892, 'en', 'serious')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1893, 'en', 'serious')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1894, 'en', 'seriously')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1895, 'en', 'seven')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1896, 'en', 'several')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1897, 'en', 'several')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1898, 'en', 'shall')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1899, 'en', 'she')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1900, 'en', 'she')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1901, 'en', 'should')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1902, 'en', 'should')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1903, 'en', 'show')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1904, 'en', 'side')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1905, 'en', 'since')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1906, 'en', 'since')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1907, 'en', 'sincere')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1908, 'en', 'six')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1909, 'en', 'six')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1910, 'en', 'sixty')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1911, 'en', 'so')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1912, 'en', 'so')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1913, 'en', 'some')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1914, 'en', 'some')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1915, 'en', 'somebody')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1916, 'en', 'someday')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1917, 'en', 'somehow')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1918, 'en', 'somehow')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1919, 'en', 'someone')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1920, 'en', 'someone')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1921, 'en', 'something')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1922, 'en', 'something')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1923, 'en', 'sometime')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1924, 'en', 'sometime')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1925, 'en', 'sometimes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1926, 'en', 'sometimes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1927, 'en', 'somewhat')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1928, 'en', 'somewhere')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1929, 'en', 'somewhere')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1930, 'en', 'soon')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1931, 'en', 'sorry')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1932, 'en', 'specified')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1933, 'en', 'specify')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1934, 'en', 'specifying')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1935, 'en', 'still')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1936, 'en', 'still')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1937, 'en', 'sub')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1938, 'en', 'such')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1939, 'en', 'such')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1940, 'en', 'sup')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1941, 'en', 'sure')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1942, 'en', 'system')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1943, 'en', 't')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1944, 'en', 'take')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1945, 'en', 'take')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1946, 'en', 'taken')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1947, 'en', 'taking')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1948, 'en', 'tell')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1949, 'en', 'ten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1950, 'en', 'tends')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1951, 'en', 'th')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1952, 'en', 'than')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1953, 'en', 'than')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1954, 'en', 'thank')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1955, 'en', 'thanks')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1956, 'en', 'thanx')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1957, 'en', 'that')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1958, 'en', 'that')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1959, 'en', 'thats')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1960, 'en', 'the')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1961, 'en', 'the')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1962, 'en', 'their')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1963, 'en', 'their')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1964, 'en', 'theirs')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1965, 'en', 'them')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1966, 'en', 'them')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1967, 'en', 'themselves')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1968, 'en', 'themselves')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1969, 'en', 'then')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1970, 'en', 'then')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1971, 'en', 'thence')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1972, 'en', 'thence')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1973, 'en', 'there')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1974, 'en', 'there')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1975, 'en', 'thereafter')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1976, 'en', 'thereafter')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1977, 'en', 'thereby')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1978, 'en', 'thereby')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1979, 'en', 'therefore')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1980, 'en', 'therefore')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1981, 'en', 'therein')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1982, 'en', 'therein')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1983, 'en', 'theres')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1984, 'en', 'thereupon')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1985, 'en', 'thereupon')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1986, 'en', 'these')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1987, 'en', 'these')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1988, 'en', 'they')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1989, 'en', 'they')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1990, 'en', 'thick')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1991, 'en', 'thin')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1992, 'en', 'thing')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1993, 'en', 'things')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1994, 'en', 'think')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1995, 'en', 'third')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1996, 'en', 'third')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1997, 'en', 'thirty')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1998, 'en', 'this')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (1999, 'en', 'this')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2000, 'en', 'thorough')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2001, 'en', 'thoroughly')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2002, 'en', 'those')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2003, 'en', 'those')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2004, 'en', 'though')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2005, 'en', 'though')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2006, 'en', 'three')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2007, 'en', 'three')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2008, 'en', 'through')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2009, 'en', 'through')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2010, 'en', 'throughout')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2011, 'en', 'throughout')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2012, 'en', 'thru')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2013, 'en', 'thru')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2014, 'en', 'thus')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2015, 'en', 'thus')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2016, 'en', 'till')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2017, 'en', 'to')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2018, 'en', 'to')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2019, 'en', 'together')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2020, 'en', 'together')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2021, 'en', 'too')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2022, 'en', 'too')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2023, 'en', 'took')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2024, 'en', 'top')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2025, 'en', 'toward')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2026, 'en', 'toward')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2027, 'en', 'towards')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2028, 'en', 'towards')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2029, 'en', 'tried')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2030, 'en', 'tries')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2031, 'en', 'truly')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2032, 'en', 'try')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2033, 'en', 'trying')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2034, 'en', 'twelve')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2035, 'en', 'twenty')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2036, 'en', 'twice')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2037, 'en', 'two')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2038, 'en', 'two')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2039, 'en', 'u')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2040, 'en', 'un')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2041, 'en', 'un')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2042, 'en', 'under')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2043, 'en', 'under')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2044, 'en', 'underneath')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2045, 'en', 'undoing')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2046, 'en', 'unfortunately')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2047, 'en', 'unless')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2048, 'en', 'unlike')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2049, 'en', 'unlikely')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2050, 'en', 'until')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2051, 'en', 'until')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2052, 'en', 'unto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2053, 'en', 'up')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2054, 'en', 'up')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2055, 'en', 'upon')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2056, 'en', 'upon')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2057, 'en', 'upwards')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2058, 'en', 'us')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2059, 'en', 'us')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2060, 'en', 'use')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2061, 'en', 'used')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2062, 'en', 'useful')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2063, 'en', 'uses')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2064, 'en', 'using')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2065, 'en', 'usually')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2066, 'en', 'v')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2067, 'en', 'value')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2068, 'en', 'various')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2069, 'en', 'versus')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2070, 'en', 'very')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2071, 'en', 'very')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2072, 'en', 'via')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2073, 'en', 'via')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2074, 'en', 'viz')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2075, 'en', 'vs')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2076, 'en', 'w')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2077, 'en', 'want')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2078, 'en', 'wants')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2079, 'en', 'was')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2080, 'en', 'was')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2081, 'en', 'way')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2082, 'en', 'we')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2083, 'en', 'we')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2084, 'en', 'welcome')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2085, 'en', 'well')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2086, 'en', 'well')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2087, 'en', 'went')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2088, 'en', 'were')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2089, 'en', 'were')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2090, 'en', 'what')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2091, 'en', 'what')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2092, 'en', 'whatever')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2093, 'en', 'whatever')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2094, 'en', 'when')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2095, 'en', 'when')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2096, 'en', 'whence')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2097, 'en', 'whence')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2098, 'en', 'whenever')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2099, 'en', 'whenever')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2100, 'en', 'where')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2101, 'en', 'where')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2102, 'en', 'whereafter')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2103, 'en', 'whereafter')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2104, 'en', 'whereas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2105, 'en', 'whereas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2106, 'en', 'whereby')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2107, 'en', 'whereby')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2108, 'en', 'wherein')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2109, 'en', 'wherein')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2110, 'en', 'whereupon')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2111, 'en', 'whereupon')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2112, 'en', 'wherever')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2113, 'en', 'wherever')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2114, 'en', 'whether')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2115, 'en', 'whether')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2116, 'en', 'which')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2117, 'en', 'which')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2118, 'en', 'whichever')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2119, 'en', 'while')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2120, 'en', 'while')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2121, 'en', 'whilst')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2122, 'en', 'whither')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2123, 'en', 'whither')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2124, 'en', 'who')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2125, 'en', 'who')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2126, 'en', 'whoever')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2127, 'en', 'whoever')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2128, 'en', 'whole')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2129, 'en', 'whole')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2130, 'en', 'whom')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2131, 'en', 'whom')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2132, 'en', 'whomever')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2133, 'en', 'whose')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2134, 'en', 'whose')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2135, 'en', 'why')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2136, 'en', 'why')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2137, 'en', 'will')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2138, 'en', 'will')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2139, 'en', 'willing')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2140, 'en', 'wish')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2141, 'en', 'with')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2142, 'en', 'with')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2143, 'en', 'within')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2144, 'en', 'within')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2145, 'en', 'without')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2146, 'en', 'without')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2147, 'en', 'wonder')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2148, 'en', 'would')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2149, 'en', 'would')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2150, 'en', 'x')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2151, 'en', 'y')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2152, 'en', 'yes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2153, 'en', 'yet')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2154, 'en', 'yet')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2155, 'en', 'you')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2156, 'en', 'you')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2157, 'en', 'your')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2158, 'en', 'your')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2159, 'en', 'yours')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2160, 'en', 'yours')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2161, 'en', 'yourself')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2162, 'en', 'yourself')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2163, 'en', 'yourselves')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2164, 'en', 'yourselves')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2165, 'en', 'z')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2166, 'en', 'zero')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2167, 'es', 'un')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2168, 'es', 'una')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2169, 'es', 'unas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2170, 'es', 'unos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2171, 'es', 'uno')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2172, 'es', 'sobre')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2173, 'es', 'todo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2174, 'es', 'tambi√©n')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2175, 'es', 'tras')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2176, 'es', 'otro')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2177, 'es', 'alg√∫n')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2178, 'es', 'alguno')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2179, 'es', 'alguna')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2180, 'es', 'algunos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2181, 'es', 'algunas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2182, 'es', 'ser')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2183, 'es', 'es')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2184, 'es', 'soy')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2185, 'es', 'eres')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2186, 'es', 'somos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2187, 'es', 'sois')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2188, 'es', 'estoy')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2189, 'es', 'esta')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2190, 'es', 'estamos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2191, 'es', 'estais')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2192, 'es', 'estan')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2193, 'es', 'como')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2194, 'es', 'en')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2195, 'es', 'para')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2196, 'es', 'atras')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2197, 'es', 'porque')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2198, 'es', 'por qu√©')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2199, 'es', 'estado')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2200, 'es', 'estaba')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2201, 'es', 'ante')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2202, 'es', 'antes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2203, 'es', 'siendo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2204, 'es', 'ambos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2205, 'es', 'pero')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2206, 'es', 'por')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2207, 'es', 'poder')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2208, 'es', 'puede')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2209, 'es', 'puedo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2210, 'es', 'podemos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2211, 'es', 'podeis')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2212, 'es', 'pueden')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2213, 'es', 'fui')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2214, 'es', 'fue')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2215, 'es', 'fuimos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2216, 'es', 'fueron')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2217, 'es', 'hacer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2218, 'es', 'hago')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2219, 'es', 'hace')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2220, 'es', 'hacemos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2221, 'es', 'haceis')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2222, 'es', 'hacen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2223, 'es', 'cada')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2224, 'es', 'fin')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2225, 'es', 'incluso')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2226, 'es', 'primero')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2227, 'es', 'desde')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2228, 'es', 'conseguir')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2229, 'es', 'consigo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2230, 'es', 'consigue')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2231, 'es', 'consigues')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2232, 'es', 'conseguimos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2233, 'es', 'consiguen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2234, 'es', 'ir')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2235, 'es', 'voy')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2236, 'es', 'va')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2237, 'es', 'vamos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2238, 'es', 'vais')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2239, 'es', 'van')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2240, 'es', 'vaya')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2241, 'es', 'gueno')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2242, 'es', 'ha')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2243, 'es', 'tener')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2244, 'es', 'tengo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2245, 'es', 'tiene')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2246, 'es', 'tenemos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2247, 'es', 'teneis')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2248, 'es', 'tienen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2249, 'es', 'el')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2250, 'es', 'la')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2251, 'es', 'lo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2252, 'es', 'las')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2253, 'es', 'los')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2254, 'es', 'su')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2255, 'es', 'aqui')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2256, 'es', 'mio')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2257, 'es', 'tuyo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2258, 'es', 'ellos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2259, 'es', 'ellas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2260, 'es', 'nos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2261, 'es', 'nosotros')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2262, 'es', 'vosotros')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2263, 'es', 'vosotras')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2264, 'es', 'si')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2265, 'es', 'dentro')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2266, 'es', 'solo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2267, 'es', 'solamente')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2268, 'es', 'saber')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2269, 'es', 'sabes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2270, 'es', 'sabe')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2271, 'es', 'sabemos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2272, 'es', 'sabeis')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2273, 'es', 'saben')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2274, 'es', 'ultimo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2275, 'es', 'largo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2276, 'es', 'bastante')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2277, 'es', 'haces')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2278, 'es', 'muchos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2279, 'es', 'aquellos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2280, 'es', 'aquellas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2281, 'es', 'sus')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2282, 'es', 'entonces')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2283, 'es', 'tiempo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2284, 'es', 'verdad')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2285, 'es', 'verdadero')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2286, 'es', 'verdadera')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2287, 'es', 'cierto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2288, 'es', 'ciertos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2289, 'es', 'cierta')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2290, 'es', 'ciertas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2291, 'es', 'intentar')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2292, 'es', 'intento')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2293, 'es', 'intenta')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2294, 'es', 'intentas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2295, 'es', 'intentamos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2296, 'es', 'intentais')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2297, 'es', 'intentan')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2298, 'es', 'dos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2299, 'es', 'bajo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2300, 'es', 'arriba')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2301, 'es', 'encima')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2302, 'es', 'usar')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2303, 'es', 'uso')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2304, 'es', 'usas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2305, 'es', 'usa')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2306, 'es', 'usamos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2307, 'es', 'usais')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2308, 'es', 'usan')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2309, 'es', 'emplear')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2310, 'es', 'empleo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2311, 'es', 'empleas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2312, 'es', 'emplean')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2313, 'es', 'ampleamos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2314, 'es', 'empleais')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2315, 'es', 'valor')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2316, 'es', 'muy')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2317, 'es', 'era')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2318, 'es', 'eras')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2319, 'es', 'eramos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2320, 'es', 'eran')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2321, 'es', 'modo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2322, 'es', 'bien')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2323, 'es', 'cual')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2324, 'es', 'cuando')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2325, 'es', 'donde')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2326, 'es', 'mientras')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2327, 'es', 'quien')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2328, 'es', 'con')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2329, 'es', 'entre')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2330, 'es', 'sin')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2331, 'es', 'trabajo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2332, 'es', 'trabajar')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2333, 'es', 'trabajas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2334, 'es', 'trabaja')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2335, 'es', 'trabajamos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2336, 'es', 'trabajais')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2337, 'es', 'trabajan')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2338, 'es', 'podria')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2339, 'es', 'podrias')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2340, 'es', 'podriamos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2341, 'es', 'podrian')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2342, 'es', 'podriais')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2343, 'es', 'yo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2344, 'fr', 'alors')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2345, 'fr', 'au')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2346, 'fr', 'aucuns')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2347, 'fr', 'aussi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2348, 'fr', 'autre')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2349, 'fr', 'avant')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2350, 'fr', 'avec')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2351, 'fr', 'avoir')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2352, 'fr', 'bon')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2353, 'fr', 'car')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2354, 'fr', 'ce')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2355, 'fr', 'cela')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2356, 'fr', 'ces')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2357, 'fr', 'ceux')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2358, 'fr', 'chaque')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2359, 'fr', 'ci')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2360, 'fr', 'comme')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2361, 'fr', 'comment')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2362, 'fr', 'dans')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2363, 'fr', 'des')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2364, 'fr', 'du')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2365, 'fr', 'dedans')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2366, 'fr', 'dehors')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2367, 'fr', 'depuis')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2368, 'fr', 'deux')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2369, 'fr', 'devrait')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2370, 'fr', 'doit')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2371, 'fr', 'donc')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2372, 'fr', 'dos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2373, 'fr', 'droite')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2374, 'fr', 'd√©but')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2375, 'fr', 'elle')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2376, 'fr', 'elles')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2377, 'fr', 'en')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2378, 'fr', 'encore')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2379, 'fr', 'essai')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2380, 'fr', 'est')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2381, 'fr', 'et')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2382, 'fr', 'eu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2383, 'fr', 'fait')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2384, 'fr', 'faites')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2385, 'fr', 'fois')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2386, 'fr', 'font')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2387, 'fr', 'force')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2388, 'fr', 'haut')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2389, 'fr', 'hors')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2390, 'fr', 'ici')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2391, 'fr', 'il')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2392, 'fr', 'ils')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2393, 'fr', 'je')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2394, 'fr', 'juste')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2395, 'fr', 'la')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2396, 'fr', 'le')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2397, 'fr', 'les')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2398, 'fr', 'leur')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2399, 'fr', 'l√†')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2400, 'fr', 'ma')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2401, 'fr', 'maintenant')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2402, 'fr', 'mais')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2403, 'fr', 'mes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2404, 'fr', 'mine')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2405, 'fr', 'moins')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2406, 'fr', 'mon')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2407, 'fr', 'mot')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2408, 'fr', 'm√™me')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2409, 'fr', 'ni')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2410, 'fr', 'nomm√©s')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2411, 'fr', 'notre')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2412, 'fr', 'nous')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2413, 'fr', 'nouveaux')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2414, 'fr', 'ou')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2415, 'fr', 'o√π')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2416, 'fr', 'par')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2417, 'fr', 'parce')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2418, 'fr', 'parole')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2419, 'fr', 'pas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2420, 'fr', 'personnes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2421, 'fr', 'peut')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2422, 'fr', 'peu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2423, 'fr', 'pi√®ce')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2424, 'fr', 'plupart')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2425, 'fr', 'pour')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2426, 'fr', 'pourquoi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2427, 'fr', 'quand')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2428, 'fr', 'que')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2429, 'fr', 'quel')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2430, 'fr', 'quelle')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2431, 'fr', 'quelles')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2432, 'fr', 'quels')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2433, 'fr', 'qui')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2434, 'fr', 'sa')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2435, 'fr', 'sans')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2436, 'fr', 'ses')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2437, 'fr', 'seulement')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2438, 'fr', 'si')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2439, 'fr', 'sien')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2440, 'fr', 'son')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2441, 'fr', 'sont')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2442, 'fr', 'sous')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2443, 'fr', 'soyez')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2444, 'fr', 'sujet')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2445, 'fr', 'sur')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2446, 'fr', 'ta')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2447, 'fr', 'tandis')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2448, 'fr', 'tellement')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2449, 'fr', 'tels')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2450, 'fr', 'tes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2451, 'fr', 'ton')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2452, 'fr', 'tous')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2453, 'fr', 'tout')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2454, 'fr', 'trop')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2455, 'fr', 'tr√®s')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2456, 'fr', 'tu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2457, 'fr', 'valeur')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2458, 'fr', 'voie')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2459, 'fr', 'voient')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2460, 'fr', 'vont')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2461, 'fr', 'votre')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2462, 'fr', 'vous')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2463, 'fr', 'vu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2464, 'fr', '√ßa')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2465, 'fr', '√©taient')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2466, 'fr', '√©tat')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2467, 'fr', '√©tions')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2468, 'fr', '√©t√©')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2469, 'hu', 'a')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2470, 'hu', 'az')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2471, 'hu', 'egy')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2472, 'hu', 'be')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2473, 'hu', 'ki')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2474, 'hu', 'le')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2475, 'hu', 'fel')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2476, 'hu', 'meg')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2477, 'hu', 'el')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2478, 'hu', '√°t')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2479, 'hu', 'r√°')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2480, 'hu', 'ide')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2481, 'hu', 'oda')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2482, 'hu', 'sz√©t')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2483, 'hu', '√∂ssze')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2484, 'hu', 'vissza')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2485, 'hu', 'de')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2486, 'hu', 'h√°t')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2487, 'hu', '√©s')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2488, 'hu', 'vagy')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2489, 'hu', 'hogy')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2490, 'hu', 'van')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2491, 'hu', 'lesz')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2492, 'hu', 'volt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2493, 'hu', 'csak')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2494, 'hu', 'nem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2495, 'hu', 'igen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2496, 'hu', 'mint')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2497, 'hu', '√©n')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2498, 'hu', 'te')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2499, 'hu', '√µ')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2500, 'hu', 'mi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2501, 'hu', 'ti')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2502, 'hu', '√µk')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2503, 'it', 'a')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2504, 'it', 'adesso')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2505, 'it', 'ai')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2506, 'it', 'al')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2507, 'it', 'alla')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2508, 'it', 'allo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2509, 'it', 'allora')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2510, 'it', 'altre')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2511, 'it', 'altri')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2512, 'it', 'altro')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2513, 'it', 'anche')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2514, 'it', 'ancora')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2515, 'it', 'avere')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2516, 'it', 'aveva')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2517, 'it', 'avevano')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2518, 'it', 'ben')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2519, 'it', 'buono')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2520, 'it', 'che')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2521, 'it', 'chi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2522, 'it', 'cinque')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2523, 'it', 'comprare')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2524, 'it', 'con')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2525, 'it', 'consecutivi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2526, 'it', 'consecutivo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2527, 'it', 'cosa')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2528, 'it', 'cui')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2529, 'it', 'da')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2530, 'it', 'del')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2531, 'it', 'della')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2532, 'it', 'dello')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2533, 'it', 'dentro')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2534, 'it', 'deve')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2535, 'it', 'devo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2536, 'it', 'di')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2537, 'it', 'doppio')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2538, 'it', 'due')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2539, 'it', 'e')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2540, 'it', 'ecco')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2541, 'it', 'fare')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2542, 'it', 'fine')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2543, 'it', 'fino')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2544, 'it', 'fra')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2545, 'it', 'gente')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2546, 'it', 'giu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2547, 'it', 'ha')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2548, 'it', 'hai')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2549, 'it', 'hanno')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2550, 'it', 'ho')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2551, 'it', 'il')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2552, 'it', 'indietro')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2553, 'it', 'invece')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2554, 'it', 'io')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2555, 'it', 'la')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2556, 'it', 'lavoro')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2557, 'it', 'le')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2558, 'it', 'lei')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2559, 'it', 'lo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2560, 'it', 'loro')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2561, 'it', 'lui')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2562, 'it', 'lungo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2563, 'it', 'ma')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2564, 'it', 'me')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2565, 'it', 'meglio')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2566, 'it', 'molta')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2567, 'it', 'molti')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2568, 'it', 'molto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2569, 'it', 'nei')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2570, 'it', 'nella')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2571, 'it', 'no')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2572, 'it', 'noi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2573, 'it', 'nome')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2574, 'it', 'nostro')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2575, 'it', 'nove')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2576, 'it', 'nuovi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2577, 'it', 'nuovo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2578, 'it', 'o')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2579, 'it', 'oltre')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2580, 'it', 'ora')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2581, 'it', 'otto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2582, 'it', 'peggio')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2583, 'it', 'pero')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2584, 'it', 'persone')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2585, 'it', 'piu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2586, 'it', 'poco')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2587, 'it', 'primo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2588, 'it', 'promesso')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2589, 'it', 'qua')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2590, 'it', 'quarto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2591, 'it', 'quasi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2592, 'it', 'quattro')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2593, 'it', 'quello')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2594, 'it', 'questo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2595, 'it', 'qui')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2596, 'it', 'quindi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2597, 'it', 'quinto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2598, 'it', 'rispetto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2599, 'it', 'sara')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2600, 'it', 'secondo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2601, 'it', 'sei')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2602, 'it', 'sembra')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2603, 'it', 'sembrava')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2604, 'it', 'senza')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2605, 'it', 'sette')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2606, 'it', 'sia')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2607, 'it', 'siamo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2608, 'it', 'siete')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2609, 'it', 'solo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2610, 'it', 'sono')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2611, 'it', 'sopra')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2612, 'it', 'soprattutto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2613, 'it', 'sotto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2614, 'it', 'stati')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2615, 'it', 'stato')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2616, 'it', 'stesso')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2617, 'it', 'su')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2618, 'it', 'subito')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2619, 'it', 'sul')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2620, 'it', 'sulla')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2621, 'it', 'tanto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2622, 'it', 'te')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2623, 'it', 'tempo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2624, 'it', 'terzo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2625, 'it', 'tra')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2626, 'it', 'tre')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2627, 'it', 'triplo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2628, 'it', 'ultimo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2629, 'it', 'un')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2630, 'it', 'una')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2631, 'it', 'uno')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2632, 'it', 'va')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2633, 'it', 'vai')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2634, 'it', 'voi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2635, 'it', 'volte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2636, 'nb', 'alle')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2637, 'nb', 'andre')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2638, 'nb', 'arbeid')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2639, 'nb', 'av')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2640, 'nb', 'begge')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2641, 'nb', 'bort')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2642, 'nb', 'bra')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2643, 'nb', 'bruke')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2644, 'nb', 'da')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2645, 'nb', 'denne')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2646, 'nb', 'der')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2647, 'nb', 'deres')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2648, 'nb', 'det')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2649, 'nb', 'din')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2650, 'nb', 'disse')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2651, 'nb', 'du')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2652, 'nb', 'eller')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2653, 'nb', 'en')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2654, 'nb', 'ene')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2655, 'nb', 'eneste')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2656, 'nb', 'enhver')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2657, 'nb', 'enn')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2658, 'nb', 'er')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2659, 'nb', 'et')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2660, 'nb', 'folk')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2661, 'nb', 'for')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2662, 'nb', 'fordi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2663, 'nb', 'fors√õke')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2664, 'nb', 'fra')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2665, 'nb', 'f√Ö')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2666, 'nb', 'f√õr')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2667, 'nb', 'f√õrst')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2668, 'nb', 'gjorde')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2669, 'nb', 'gj√õre')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2670, 'nb', 'god')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2671, 'nb', 'g√Ö')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2672, 'nb', 'ha')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2673, 'nb', 'hadde')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2674, 'nb', 'han')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2675, 'nb', 'hans')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2676, 'nb', 'hennes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2677, 'nb', 'her')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2678, 'nb', 'hva')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2679, 'nb', 'hvem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2680, 'nb', 'hver')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2681, 'nb', 'hvilken')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2682, 'nb', 'hvis')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2683, 'nb', 'hvor')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2684, 'nb', 'hvordan')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2685, 'nb', 'hvorfor')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2686, 'nb', 'i')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2687, 'nb', 'ikke')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2688, 'nb', 'inn')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2689, 'nb', 'innen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2690, 'nb', 'kan')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2691, 'nb', 'kunne')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2692, 'nb', 'lage')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2693, 'nb', 'lang')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2694, 'nb', 'lik')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2695, 'nb', 'like')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2696, 'nb', 'makt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2697, 'nb', 'mange')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2698, 'nb', 'med')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2699, 'nb', 'meg')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2700, 'nb', 'meget')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2701, 'nb', 'men')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2702, 'nb', 'mens')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2703, 'nb', 'mer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2704, 'nb', 'mest')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2705, 'nb', 'min')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2706, 'nb', 'mye')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2707, 'nb', 'm√Ö')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2708, 'nb', 'm√Öte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2709, 'nb', 'navn')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2710, 'nb', 'nei')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2711, 'nb', 'ny')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2712, 'nb', 'n√Ö')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2713, 'nb', 'n√Ör')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2714, 'nb', 'og')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2715, 'nb', 'ogs√Ö')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2716, 'nb', 'om')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2717, 'nb', 'opp')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2718, 'nb', 'oss')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2719, 'nb', 'over')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2720, 'nb', 'part')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2721, 'nb', 'punkt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2722, 'nb', 'p√Ö')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2723, 'nb', 'rett')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2724, 'nb', 'riktig')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2725, 'nb', 'samme')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2726, 'nb', 'sant')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2727, 'nb', 'si')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2728, 'nb', 'siden')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2729, 'nb', 'sist')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2730, 'nb', 'skulle')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2731, 'nb', 'slik')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2732, 'nb', 'slutt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2733, 'nb', 'som')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2734, 'nb', 'start')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2735, 'nb', 'stille')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2736, 'nb', 's√Ö')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2737, 'nb', 'tid')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2738, 'nb', 'til')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2739, 'nb', 'tilbake')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2740, 'nb', 'tilstand')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2741, 'nb', 'under')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2742, 'nb', 'ut')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2743, 'nb', 'uten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2744, 'nb', 'var')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2745, 'nb', 'ved')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2746, 'nb', 'verdi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2747, 'nb', 'vi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2748, 'nb', 'vil')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2749, 'nb', 'ville')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2750, 'nb', 'vite')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2751, 'nb', 'v√Ör')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2752, 'nb', 'v√ñre')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2753, 'nb', 'v√ñrt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2754, 'nl', 'aan')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2755, 'nl', 'af')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2756, 'nl', 'al')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2757, 'nl', 'als')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2758, 'nl', 'bij')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2759, 'nl', 'dan')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2760, 'nl', 'dat')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2761, 'nl', 'die')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2762, 'nl', 'dit')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2763, 'nl', 'een')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2764, 'nl', 'en')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2765, 'nl', 'er')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2766, 'nl', 'had')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2767, 'nl', 'heb')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2768, 'nl', 'hem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2769, 'nl', 'het')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2770, 'nl', 'hij')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2771, 'nl', 'hoe')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2772, 'nl', 'hun')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2773, 'nl', 'ik')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2774, 'nl', 'in')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2775, 'nl', 'is')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2776, 'nl', 'je')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2777, 'nl', 'kan')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2778, 'nl', 'me')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2779, 'nl', 'men')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2780, 'nl', 'met')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2781, 'nl', 'mij')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2782, 'nl', 'nog')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2783, 'nl', 'nu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2784, 'nl', 'of')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2785, 'nl', 'ons')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2786, 'nl', 'ook')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2787, 'nl', 'te')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2788, 'nl', 'tot')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2789, 'nl', 'uit')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2790, 'nl', 'van')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2791, 'nl', 'was')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2792, 'nl', 'wat')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2793, 'nl', 'we')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2794, 'nl', 'wel')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2795, 'nl', 'wij')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2796, 'nl', 'zal')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2797, 'nl', 'ze')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2798, 'nl', 'zei')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2799, 'nl', 'zij')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2800, 'nl', 'zo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2801, 'pl', 'a')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2802, 'pl', 'aby')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2803, 'pl', 'acz')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2804, 'pl', 'aczkolwiek')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2805, 'pl', 'a?')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2806, 'pl', 'ale')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2807, 'pl', 'ale?')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2808, 'pl', 'bardzo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2809, 'pl', 'bardziej')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2810, 'pl', 'bez')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2811, 'pl', 'b?d?')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2812, 'pl', 'b?dzie')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2813, 'pl', 'bo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2814, 'pl', 'by')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2815, 'pl', 'by?')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2816, 'pl', 'byli')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2817, 'pl', 'by?')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2818, 'pl', 'by?a')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2819, 'pl', 'by?o')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2820, 'pl', 'by?y')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2821, 'pl', 'cali')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2822, 'pl', 'ca?a')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2823, 'pl', 'ca?y')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2824, 'pl', 'co')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2825, 'pl', 'cokolwiek')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2826, 'pl', 'co?')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2827, 'pl', 'czasami')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2828, 'pl', 'czasem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2829, 'pl', 'czy')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2830, 'pl', 'czemu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2831, 'pl', 'dla')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2832, 'pl', 'dlaczego')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2833, 'pl', 'do')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2834, 'pl', 'gdy')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2835, 'pl', 'gdy?')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2836, 'pl', 'gdzie')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2837, 'pl', 'gdziekolwiek')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2838, 'pl', 'gdzie?')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2839, 'pl', 'i')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2840, 'pl', 'ile')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2841, 'pl', 'ich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2842, 'pl', 'inna')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2843, 'pl', 'inny')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2844, 'pl', 'i?')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2845, 'pl', 'ja')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2846, 'pl', 'jak')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2847, 'pl', 'jaka?')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2848, 'pl', 'jakich?')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2849, 'pl', 'jaki?')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2850, 'pl', 'jaki?')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2851, 'pl', 'jakkolwiek')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2852, 'pl', 'jako')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2853, 'pl', 'jako?')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2854, 'pl', 'j?')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2855, 'pl', 'jednak')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2856, 'pl', 'jednak?e')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2857, 'pl', 'jego')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2858, 'pl', 'jej')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2859, 'pl', 'jest')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2860, 'pl', 'jeszcze')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2861, 'pl', 'je?eli')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2862, 'pl', 'ju?')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2863, 'pl', 'kiedy')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2864, 'pl', 'kim?')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2865, 'pl', 'kto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2866, 'pl', 'ktokolwiek')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2867, 'pl', 'kto?')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2868, 'pl', 'kt√≥ra')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2869, 'pl', 'kt√≥re')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2870, 'pl', 'kt√≥ry')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2871, 'pl', 'kt√≥rych')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2872, 'pl', 'lat')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2873, 'pl', 'lecz')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2874, 'pl', 'lub')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2875, 'pl', 'ma')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2876, 'pl', 'mi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2877, 'pl', 'mimo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2878, 'pl', 'mnie')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2879, 'pl', 'moim')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2880, 'pl', 'mo?e')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2881, 'pl', 'mo?liwe')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2882, 'pl', 'mo?na')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2883, 'pl', 'mu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2884, 'pl', 'na')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2885, 'pl', 'nad')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2886, 'pl', 'nas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2887, 'pl', 'natomiast')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2888, 'pl', 'nawet')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2889, 'pl', 'nic')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2890, 'pl', 'nich')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2891, 'pl', 'nie')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2892, 'pl', 'nigdy')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2893, 'pl', 'ni?')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2894, 'pl', 'no')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2895, 'pl', 'o')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2896, 'pl', 'obok')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2897, 'pl', 'od')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2898, 'pl', 'oko?o')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2899, 'pl', 'on')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2900, 'pl', 'ona')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2901, 'pl', 'ono')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2902, 'pl', 'oraz')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2903, 'pl', 'pan')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2904, 'pl', 'pana')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2905, 'pl', 'pani')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2906, 'pl', 'po')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2907, 'pl', 'pod')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2908, 'pl', 'podczas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2909, 'pl', 'teraz')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2910, 'pl', 'te?')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2911, 'pl', 'trzeba')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2912, 'pl', 'to')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2913, 'pl', 'tobie')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2914, 'pl', 'tote?')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2915, 'pl', 'tu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2916, 'pl', 'twoim')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2917, 'pl', 'twoja')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2918, 'pl', 'twoje')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2919, 'pl', 'tw√≥j')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2920, 'pl', 'twym')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2921, 'pl', 'ty')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2922, 'pl', 'tych')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2923, 'pl', 'tylko')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2924, 'pl', 'tym')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2925, 'pl', 'w')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2926, 'pl', 'we')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2927, 'pl', 'wed?ug')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2928, 'pl', 'wi?c')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2929, 'pl', 'w?a?nie')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2930, 'pl', 'wszyscy')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2931, 'pl', 'wszystko')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2932, 'pl', 'wszystkie')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2933, 'pl', 'z')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2934, 'pl', 'za')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2935, 'pl', 'zapewne')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2936, 'pl', 'zawsze')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2937, 'pl', 'ze')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2938, 'pl', 'znowu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2939, 'pl', 'zn√≥w')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2940, 'pl', '?adna')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2941, 'pl', '?adne')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2942, 'pl', '?adnych')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2943, 'pl', '?e')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2944, 'pl', '?eby')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2945, 'pl', '')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2946, 'pl', '')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2947, 'pt', '√∫ltimo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2948, 'pt', '√©')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2949, 'pt', 'acerca')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2950, 'pt', 'agora')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2951, 'pt', 'algmas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2952, 'pt', 'alguns')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2953, 'pt', 'ali')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2954, 'pt', 'ambos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2955, 'pt', 'antes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2956, 'pt', 'apontar')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2957, 'pt', 'aquela')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2958, 'pt', 'aquelas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2959, 'pt', 'aquele')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2960, 'pt', 'aqueles')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2961, 'pt', 'aqui')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2962, 'pt', 'atr√°s')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2963, 'pt', 'bem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2964, 'pt', 'bom')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2965, 'pt', 'cada')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2966, 'pt', 'caminho')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2967, 'pt', 'cima')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2968, 'pt', 'com')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2969, 'pt', 'como')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2970, 'pt', 'comprido')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2971, 'pt', 'conhecido')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2972, 'pt', 'corrente')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2973, 'pt', 'das')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2974, 'pt', 'debaixo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2975, 'pt', 'dentro')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2976, 'pt', 'desde')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2977, 'pt', 'desligado')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2978, 'pt', 'deve')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2979, 'pt', 'devem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2980, 'pt', 'dever√°')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2981, 'pt', 'direita')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2982, 'pt', 'diz')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2983, 'pt', 'dizer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2984, 'pt', 'dois')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2985, 'pt', 'dos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2986, 'pt', 'e')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2987, 'pt', 'ela')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2988, 'pt', 'ele')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2989, 'pt', 'eles')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2990, 'pt', 'em')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2991, 'pt', 'enquanto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2992, 'pt', 'ent√£o')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2993, 'pt', 'est√°')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2994, 'pt', 'est√£o')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2995, 'pt', 'estado')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2996, 'pt', 'estar')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2997, 'pt', 'estar√°')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2998, 'pt', 'este')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (2999, 'pt', 'estes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3000, 'pt', 'esteve')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3001, 'pt', 'estive')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3002, 'pt', 'estivemos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3003, 'pt', 'estiveram')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3004, 'pt', 'eu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3005, 'pt', 'far√°')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3006, 'pt', 'faz')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3007, 'pt', 'fazer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3008, 'pt', 'fazia')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3009, 'pt', 'fez')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3010, 'pt', 'fim')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3011, 'pt', 'foi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3012, 'pt', 'fora')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3013, 'pt', 'horas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3014, 'pt', 'iniciar')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3015, 'pt', 'inicio')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3016, 'pt', 'ir')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3017, 'pt', 'ir√°')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3018, 'pt', 'ista')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3019, 'pt', 'iste')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3020, 'pt', 'isto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3021, 'pt', 'ligado')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3022, 'pt', 'maioria')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3023, 'pt', 'maiorias')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3024, 'pt', 'mais')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3025, 'pt', 'mas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3026, 'pt', 'mesmo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3027, 'pt', 'meu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3028, 'pt', 'muito')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3029, 'pt', 'muitos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3030, 'pt', 'n√≥s')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3031, 'pt', 'n√£o')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3032, 'pt', 'nome')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3033, 'pt', 'nosso')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3034, 'pt', 'novo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3035, 'pt', 'o')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3036, 'pt', 'onde')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3037, 'pt', 'os')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3038, 'pt', 'ou')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3039, 'pt', 'outro')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3040, 'pt', 'para')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3041, 'pt', 'parte')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3042, 'pt', 'pegar')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3043, 'pt', 'pelo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3044, 'pt', 'pessoas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3045, 'pt', 'pode')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3046, 'pt', 'poder√°')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3047, 'pt', 'podia')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3048, 'pt', 'por')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3049, 'pt', 'porque')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3050, 'pt', 'povo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3051, 'pt', 'promeiro')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3052, 'pt', 'qu√™')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3053, 'pt', 'qual')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3054, 'pt', 'qualquer')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3055, 'pt', 'quando')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3056, 'pt', 'quem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3057, 'pt', 'quieto')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3058, 'pt', 's√£o')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3059, 'pt', 'saber')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3060, 'pt', 'sem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3061, 'pt', 'ser')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3062, 'pt', 'seu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3063, 'pt', 'somente')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3064, 'pt', 't√™m')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3065, 'pt', 'tal')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3066, 'pt', 'tamb√©m')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3067, 'pt', 'tem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3068, 'pt', 'tempo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3069, 'pt', 'tenho')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3070, 'pt', 'tentar')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3071, 'pt', 'tentaram')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3072, 'pt', 'tente')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3073, 'pt', 'tentei')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3074, 'pt', 'teu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3075, 'pt', 'teve')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3076, 'pt', 'tipo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3077, 'pt', 'tive')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3078, 'pt', 'todos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3079, 'pt', 'trabalhar')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3080, 'pt', 'trabalho')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3081, 'pt', 'tu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3082, 'pt', 'um')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3083, 'pt', 'uma')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3084, 'pt', 'umas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3085, 'pt', 'uns')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3086, 'pt', 'usa')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3087, 'pt', 'usar')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3088, 'pt', 'valor')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3089, 'pt', 'veja')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3090, 'pt', 'ver')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3091, 'pt', 'verdade')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3092, 'pt', 'verdadeiro')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3093, 'tr', 'acaba')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3094, 'tr', 'altm√Ω√æ')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3095, 'tr', 'alt√Ω')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3096, 'tr', 'ama')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3097, 'tr', 'bana')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3098, 'tr', 'baz√Ω')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3099, 'tr', 'belki')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3100, 'tr', 'ben')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3101, 'tr', 'benden')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3102, 'tr', 'beni')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3103, 'tr', 'benim')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3104, 'tr', 'be√æ')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3105, 'tr', 'bin')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3106, 'tr', 'bir')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3107, 'tr', 'biri')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3108, 'tr', 'birka√ß')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3109, 'tr', 'birkez')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3110, 'tr', 'bir√æey')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3111, 'tr', 'bir√æeyi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3112, 'tr', 'biz')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3113, 'tr', 'bizden')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3114, 'tr', 'bizi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3115, 'tr', 'bizim')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3116, 'tr', 'bu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3117, 'tr', 'buna')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3118, 'tr', 'bunda')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3119, 'tr', 'bundan')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3120, 'tr', 'bunu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3121, 'tr', 'bunun')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3122, 'tr', 'da')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3123, 'tr', 'daha')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3124, 'tr', 'dahi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3125, 'tr', 'de')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3126, 'tr', 'defa')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3127, 'tr', 'diye')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3128, 'tr', 'doksan')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3129, 'tr', 'dokuz')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3130, 'tr', 'd√∂rt')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3131, 'tr', 'elli')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3132, 'tr', 'en')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3133, 'tr', 'gibi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3134, 'tr', 'hem')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3135, 'tr', 'hep')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3136, 'tr', 'hepsi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3137, 'tr', 'her')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3138, 'tr', 'hi√ß')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3139, 'tr', 'iki')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3140, 'tr', 'ile')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3141, 'tr', 'INSERmi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3142, 'tr', 'ise')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3143, 'tr', 'i√ßin')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3144, 'tr', 'katrilyon')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3145, 'tr', 'kez')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3146, 'tr', 'ki')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3147, 'tr', 'kim')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3148, 'tr', 'kimden')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3149, 'tr', 'kime')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3150, 'tr', 'kimi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3151, 'tr', 'k√Ωrk')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3152, 'tr', 'milyar')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3153, 'tr', 'milyon')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3154, 'tr', 'mu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3155, 'tr', 'm√º')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3156, 'tr', 'm√Ω')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3157, 'tr', 'nas√Ωl')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3158, 'tr', 'ne')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3159, 'tr', 'neden')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3160, 'tr', 'nerde')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3161, 'tr', 'nerede')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3162, 'tr', 'nereye')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3163, 'tr', 'niye')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3164, 'tr', 'ni√ßin')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3165, 'tr', 'on')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3166, 'tr', 'ona')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3167, 'tr', 'ondan')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3168, 'tr', 'onlar')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3169, 'tr', 'onlardan')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3170, 'tr', 'onlari')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3171, 'tr', 'onlar√Ωn')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3172, 'tr', 'onu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3173, 'tr', 'otuz')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3174, 'tr', 'sanki')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3175, 'tr', 'sekiz')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3176, 'tr', 'seksen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3177, 'tr', 'sen')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3178, 'tr', 'senden')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3179, 'tr', 'seni')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3180, 'tr', 'senin')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3181, 'tr', 'siz')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3182, 'tr', 'sizden')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3183, 'tr', 'sizi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3184, 'tr', 'sizin')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3185, 'tr', 'trilyon')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3186, 'tr', 't√ºm')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3187, 'tr', 've')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3188, 'tr', 'veya')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3189, 'tr', 'ya')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3190, 'tr', 'yani')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3191, 'tr', 'yedi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3192, 'tr', 'yetmi√æ')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3193, 'tr', 'yirmi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3194, 'tr', 'y√ºz')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3195, 'tr', '√ßok')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3196, 'tr', '√ß√ºnk√º')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3197, 'tr', '√º√ß')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3198, 'tr', '√æey')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3199, 'tr', '√æeyden')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3200, 'tr', '√æeyi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3201, 'tr', '√æeyler')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3202, 'tr', '√æu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3203, 'tr', '√æuna')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3204, 'tr', '√æunda')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3205, 'tr', '√æundan')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3206, 'lt', 'ant')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3207, 'lt', 'apie')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3208, 'lt', 'ar')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3209, 'lt', 'arba')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3210, 'lt', 'aš')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3211, 'lt', 'be')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3212, 'lt', 'bei')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3213, 'lt', 'bet')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3214, 'lt', 'būti')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3215, 'lt', 'būtų')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3216, 'lt', 'buvo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3217, 'lt', 'čia')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3218, 'lt', 'dabar')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3219, 'lt', 'dar')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3220, 'lt', 'daug')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3221, 'lt', 'daugiau')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3222, 'lt', 'dėl')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3223, 'lt', 'gal')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3224, 'lt', 'gali')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3225, 'lt', 'į')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3226, 'lt', 'iki')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3227, 'lt', 'ir')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3228, 'lt', 'iš')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3229, 'lt', 'yra')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3230, 'lt', 'jam')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3231, 'lt', 'jau')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3232, 'lt', 'jei')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3233, 'lt', 'jeigu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3234, 'lt', 'ji')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3235, 'lt', 'jį')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3236, 'lt', 'jie')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3237, 'lt', 'jis')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3238, 'lt', 'jo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3239, 'lt', 'jog')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3240, 'lt', 'jos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3241, 'lt', 'jų')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3242, 'lt', 'juk')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3243, 'lt', 'juos')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3244, 'lt', 'jūs')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3245, 'lt', 'ką')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3246, 'lt', 'kad')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3247, 'lt', 'kai')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3248, 'lt', 'kaip')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3249, 'lt', 'kas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3250, 'lt', 'ko')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3251, 'lt', 'kol')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3252, 'lt', 'kur')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3253, 'lt', 'kuris')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3254, 'lt', 'labai')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3255, 'lt', 'man')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3256, 'lt', 'mano')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3257, 'lt', 'mes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3258, 'lt', 'mūsų')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3259, 'lt', 'ne')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3260, 'lt', 'nebuvo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3261, 'lt', 'nei')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3262, 'lt', 'nėra')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3263, 'lt', 'nes')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3264, 'lt', 'net')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3265, 'lt', 'nieko')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3266, 'lt', 'nors')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3267, 'lt', 'nuo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3268, 'lt', 'o')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3269, 'lt', 'pats')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3270, 'lt', 'per')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3271, 'lt', 'po')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3272, 'lt', 'prie')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3273, 'lt', 'prieš')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3274, 'lt', 'savo')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3275, 'lt', 'su')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3276, 'lt', 'tačiau')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3277, 'lt', 'tada')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3278, 'lt', 'tai')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3279, 'lt', 'taip')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3280, 'lt', 'tarė')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3281, 'lt', 'tarp')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3282, 'lt', 'ten')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3283, 'lt', 'tiek')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3284, 'lt', 'tik')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3285, 'lt', 'to')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3286, 'lt', 'todėl')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3287, 'lt', 'tu')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3288, 'lt', 'turi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3289, 'lt', 'už')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3290, 'lt', 'vėl')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3291, 'lt', 'vieną')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3292, 'lt', 'vienas')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3293, 'lt', 'vis')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3294, 'lt', 'visi')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES (3295, 'lt', 'viskas')";

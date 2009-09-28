@@ -402,7 +402,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 <legend class="installation">Please add your database connection setup information</legend>
 
     <label class="left">SQL server:</label>
-    <select class="input" name="sql_type" size="1" onchange="select_database(this);">
+    <select class="input" name="sql_type" id="sql_selector" size="1" onchange="select_database(this);">
 <?php
     // check what extensions are loaded in PHP
     foreach ($supported_databases as $extension => $database) {
@@ -441,6 +441,12 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     <input class="input" type="text" name="sqltblpre" title="Please enter a table prefix here if you want to install more phpMyFAQ installations on one database." />
 
 </fieldset>
+<script language="javascript" type="text/javascript">
+obj = document.getElementById("sql_selector");
+if (obj.options.length > obj.selectedIndex) {
+    select_database(obj.options[obj.selectedIndex]);
+}
+</script>
 <br />
 <?php
     if (extension_loaded('ldap')) {
