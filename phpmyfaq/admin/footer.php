@@ -58,8 +58,15 @@ tinymce.create('tinymce.plugins.internalFaqLinkPlugin', {
             case 'faqlistbox':
                 var flb = cm.createListBox('faqlistbox', {
                      title    : '<?php print $PMF_LANG['ad_entry_intlink']; ?>',
-                     onselect : function(v) {
-                         tinyMCE.activeEditor.windowManager.alert('Value selected:' + v);
+                     onselect : function(value) {
+                         var elements = value.split('_');
+                         var faqLink  = '<a class="intfaqlink" href="index.php?action=artikel&amp;cat=' + elements[0] + 
+                                        '&amp;id=' + elements[1] + 
+                                        '&amp;artlang=' + elements[2] + 
+                                        '">' + elements[3] + '</a>';
+                         tinyMCE.execCommand('mceBeginUndoLevel');
+                         tinyMCE.execCommand('mceInsertContent', false, faqLink);
+                         tinyMCE.execCommand('mceEndUndoLevel');
                      }
                 });
 <?php
