@@ -144,7 +144,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
     // Permissions
     $user_permission = $faq->getPermission('user', $faqData['id']);
-    if (is_null($user_permission) || $user_permission[0] == -1) {
+    if (count($user_permission) == 0 || $user_permission[0] == -1) {
         $all_users        = true;
         $restricted_users = false;
     } else {
@@ -153,7 +153,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     }
 
     $group_permission = $faq->getPermission('group', $faqData['id']);
-    if (is_null($group_permission) || $group_permission[0] == -1) {
+    if (count($group_permission) == 0 || $group_permission[0] == -1) {
         $all_groups        = true;
         $restricted_groups = false;
     } else {
@@ -215,11 +215,12 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 <?php print $helper->renderCategoryOptions($categories); ?>
     </select><br />
 
-    <label class="lefteditor" for="thema"><?php print $PMF_LANG["ad_entry_theme"]; ?></label>
-    <textarea name="thema" id="thema" style="width: 390px; height: 50px;" cols="2" rows="50"><?php if (isset($faqData['title'])) { print $faqData['title']; } ?></textarea><br />
+    <label for="thema"><?php print $PMF_LANG["ad_entry_theme"]; ?></label>
+    <input name="thema" id="thema" style="width: 590px; height: 30px; font-size: 24px;" value="<?php if (isset($faqData['title'])) { print $faqData['title']; } ?>" /><br />
 
     <label for="content"><?php print $PMF_LANG["ad_entry_content"]; ?></label>
-    <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript><textarea id="content" name="content" cols="84" rows="10"><?php if (isset($faqData['content'])) { print trim(PMF_String::htmlspecialchars($faqData['content'])); } ?></textarea><br />
+    <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
+    <textarea id="content" name="content" cols="84" rows="10"><?php if (isset($faqData['content'])) { print trim(PMF_String::htmlspecialchars($faqData['content'])); } ?></textarea><br />
 
 <?php
 
