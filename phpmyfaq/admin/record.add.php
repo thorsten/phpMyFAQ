@@ -7,7 +7,7 @@
  * @subpackage Administration
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2003-02-23
- * @version    SVN: $Id$ 
+ * @version    git: $Id$ 
  * @copyright  2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -60,7 +60,7 @@ if ($permission['editbt']) {
     $group_permission  = PMF_Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING);
     $restricted_groups = ('all' == $group_permission) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_groups', FILTER_VALIDATE_INT);
     
-    if (isset($submit['submit'][1]) && !is_null($question) && !is_null($categories)) {
+    if (isset($submit['submit'][1]) && !is_null($question) && !is_null($categories['rubrik'])) {
         // new entry
         adminlog("Beitragcreatesave");
         printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
