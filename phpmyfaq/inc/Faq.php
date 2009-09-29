@@ -2507,7 +2507,7 @@ class PMF_Faq
      */
     function getPermission($mode, $record_id)
     {
-        $permissions = null;
+        $permissions = array();
 
         if (!($mode == 'user' || $mode == 'group')) {
             return false;
