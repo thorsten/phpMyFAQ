@@ -489,7 +489,7 @@ class PMF_Link
      * 
      * @return string
      */
-    protected function toString($forceNoModrewriteSupport = false)
+    public function toString($forceNoModrewriteSupport = false)
     {
     	$faqconfig = PMF_Configuration::getInstance();
         $url       = $this->toUri();
