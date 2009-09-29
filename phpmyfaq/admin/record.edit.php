@@ -141,7 +141,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
     // Permissions
     $user_permission = $faq->getPermission('user', $faqData['id']);
-    if (is_null($user_permission) || $user_permission[0] == -1) {
+    if (count($user_permission) == 0 || $user_permission[0] == -1) {
         $all_users        = true;
         $restricted_users = false;
     } else {
@@ -150,7 +150,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     }
 
     $group_permission = $faq->getPermission('group', $faqData['id']);
-    if (is_null($group_permission) || $group_permission[0] == -1) {
+    if (count($group_permission) == 0 || $group_permission[0] == -1) {
         $all_groups        = true;
         $restricted_groups = false;
     } else {
