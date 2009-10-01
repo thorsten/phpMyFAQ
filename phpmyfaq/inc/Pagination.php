@@ -90,28 +90,28 @@ class PMF_Pagination
      * 
      * @var string
      */
-    protected $nextPageLinkTpl = '';
+    protected $nextPageLinkTpl = '<a href="{LINK_URL}">&gt;</a>';
     
     /**
      * Previous page link template
      * 
      * @var string
      */
-    protected $prevPageLinkTpl = '';
+    protected $prevPageLinkTpl = '<a href="{LINK_URL}">&lt;</a>';
     
     /**
      * First page link template
      * 
      * @var string
      */
-    protected $firstPageLinkTpl = '';
+    protected $firstPageLinkTpl = '<a href="{LINK_URL}">&lt;&lt;</a>';
     
     /**
      * Last page link template
      * 
      * @var string
      */
-    protected $lastPageLinkTpl = '';
+    protected $lastPageLinkTpl = '<a href="{LINK_URL}">&gt;&gt;</a>';
     
     /**
      * Layout template
@@ -151,6 +151,9 @@ class PMF_Pagination
      * - layoutTpl
      * - urlStyle
      * - pageParamName (default "page")
+     * 
+     * NOTE we read in the current page from the baseUrl, so if it contains
+     *      no pageParamName, first page is asumed
      * 
      * @return null
      * 
@@ -214,16 +217,16 @@ class PMF_Pagination
      */
     public function render()
     {
-        $content = '';
+        $content = array();
         
         $page = 1;
         for($i = 0; $i < $this->total; $i += $this->perPage, $page++) {
             $link = $this->renderUrl($this->baseUrl, $page);
             
-            $content .= $this->renderLink($this->linkTpl, $link, $page);
+            $content[] = $this->renderLink($this->linkTpl, $link, $page);
         }
         
-        return $this->renderLayout($content);
+        return $this->renderLayout(implode('&nbsp;', $content));
     }
     
     /**
