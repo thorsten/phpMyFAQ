@@ -196,7 +196,7 @@ if ($permission['editbt'] || $permission['delbt']) {
                 'sticky'      => $row->sticky,
                 'title'       => $row->thema,
                 'content'     => $row->content,
-                'date'        => makeDate($row->date));
+                'date'        => PMF_Date::createIsoDate($row->date));
         }
 
     } elseif ($action == 'accept') {

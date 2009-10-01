@@ -204,27 +204,6 @@ function sortingOptions($current)
 }
 
 /**
- * Converts the phpMyFAQ date format to a format similar to ISO 8601 standard
- *
- * @param   string  $date
- * @return  date
- * @access  public
- * @since   2001-04-30
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- */
-function makeDate($date)
-{
-    $current    = strtotime(substr($date, 0, 4) . '-' .
-                  substr($date, 4, 2) . '-' .
-                  substr($date, 6, 2) . ' ' .
-                  substr($date, 8, 2) . ':' .
-                  substr($date, 10, 2));
-    $timestamp  = $current;
-
-    return date('Y-m-d H:i', $timestamp);
-}
-
-/**
  * Converts the phpMyFAQ/Unix date format to the format given by the PHP date
  * format
  *

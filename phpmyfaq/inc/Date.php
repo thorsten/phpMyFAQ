@@ -31,5 +31,22 @@
  */
 class PMF_Date
 {
-	
+	/**
+	 * Converts the phpMyFAQ date format to a format similar to ISO 8601 standard
+     *
+     * @param  string $date Date string
+     * 
+     * @return string
+	 */
+	public static function createIsoDate($date)
+	{
+        $datestring = strtotime(
+            substr($date, 0, 4) . '-' .
+            substr($date, 4, 2) . '-' .
+            substr($date, 6, 2) . ' ' .
+            substr($date, 8, 2) . ':' .
+            substr($date, 10, 2));
+
+        return date('Y-m-d H:i', $datestring);
+	}
 }
