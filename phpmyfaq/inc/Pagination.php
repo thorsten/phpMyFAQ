@@ -34,7 +34,19 @@
  */
 class PMF_Pagination
 {
-
+    /**
+     * Template vars
+     */
+    const TPL_VAR_LINK_URL        = '{LINK_URL}';
+    const TPL_VAR_LINK_TEXT       = '{LINK_TEXT}';
+    const TPL_VAR_LAYOUT_CONTENT  = '{LAYOUT_CONTENT}';
+    
+    /**
+     * Url style variants
+     */
+    const URL_STYLE_DEFAULT = 0;
+    const URL_STYLE_REWRITE = 1;
+    
     /**
      * Base url used for links
      * 
@@ -57,53 +69,75 @@ class PMF_Pagination
     protected $perPage = 0;
     
     /**
-     * Default link template in printf format
+     * Default link template. 
+     * Possible variables are {LINK}, {TITLE}, {TEXT}
      * 
      * @var string
      */
-    protected $linkTpl = '<a href="%s">%s</a>';
+    protected $linkTpl = '<a href="{LINK_URL}">{LINK_TEXT}</a>';
     
     /**
-     * Current page link template in printf format
+     * Current page link template
      * 
      * @var string
      */
     protected $currentPageLinkTpl = '';
     
     /**
-     * Next page link template in printf format
+     * Next page link template
      * 
      * @var string
      */
     protected $nextPageLinkTpl = '';
     
     /**
-     * Previous page link template in printf format
+     * Previous page link template
      * 
      * @var string
      */
     protected $prevPageLinkTpl = '';
     
     /**
-     * First page link template in printf format
+     * First page link template
      * 
      * @var string
      */
     protected $firstPageLinkTpl = '';
     
     /**
-     * Last page link template in printf format
+     * Last page link template
      * 
      * @var string
      */
     protected $lastPageLinkTpl = '';
     
     /**
+     * Layout template
+     * 
+     * @var string
+     */
+    protected $lastPageLinkTpl = '<div>{LAYOUT_CONTENT}</div>';
+    
+    /**
+     * Url style 
+     * 
+     * @var string
+     */
+    protected $urlStyle = self::URL_STYLE_DEFAULT;
+    
+    /**
+     * Param name to associate the page numbers to
+     * 
+     * @var string
+     */
+    protected $pageParamName = 'page';
+    
+    /**
      * Constructor
      *
      * @param array $options initialization options,
      * possible options:
-     * - baseUrl
+     * - baseUrl (default "")
      * - total
      * - perPage
      * - linkTpl
@@ -112,22 +146,129 @@ class PMF_Pagination
      * - prevPageLinkTpl
      * - firstPageLinkTpl
      * - lastPageLinkTpl
+     * - layoutTpl
+     * - urlStyle
+     * - pageParamName (default "page")
      * 
      * @return null
+     * 
+     * TODO do some checks to params (eq. arguments count for templates etc)
      */
-	public function __construct($options = null)
-	{
-	 
-	}
-	
-	/**
-	 * Render full pagination string
-	 * 
-	 * @return string
-	 */
-	public function render()
-	{
-	 
-	}
+    public function __construct($options = null)
+    {
+        if(isset($options['baseUrl'])) {
+            $this->baseUrl = $options['baseUrl'];
+        }
+       
+        if(isset($options['total'])) {
+            $this->total = $options['total'];
+        }
+
+        if(isset($options['perPage'])) {
+            $this->perPage = $options['perPage'];
+        }
+       
+        if(isset($options['linkTpl'])) {
+            $this->linkTpl = $options['linkTpl'];
+        }
+       
+        if(isset($options['currentPageLinkTpl'])) {
+            $this->currentPageLinkTpl = $options['currentPageLinkTpl'];
+        }
+       
+        if(isset($options['nextPageLinkTpl'])) {
+            $this->nextPageLinkTpl = $options['nextPageLinkTpl'];
+        }
+       
+        if(isset($options['prevPageLinkTpl'])) {
+            $this->prevPageLinkTpl = $options['prevPageLinkTpl'];
+        }
+       
+        if(isset($options['firstPageLinkTpl'])) {
+           $this->firstPageLinkTpl = $options['firstPageLinkTpl'];
+        }
+        
+        if(isset($options['lastPageLinkTpl'])) {
+           $this->lastPageLinkTpl = $options['lastPageLinkTpl'];
+        }
+        
+        if(isset($options['layoutTpl'])) {
+           $this->layoutTpl = $options['layoutTpl'];
+        }
+        
+        if(isset($options['urlStyle'])) {
+           $this->urlStyle = $options['urlStyle'];
+        }
+        
+        if(isset($options['pageParamName'])) {
+           $this->pageParamName = $options['pageParamName'];
+        }
+    }
+    
+    /**
+     * Render full pagination string
+     * 
+     * @return string
+     */
+    public function render()
+    {
+        $content = '';
+        
+        for($i = 0; $i < $this->total; $i += $this->perPage) {
+//            $tmp .= $this->_renderLink()
+        }
+        
+        return $this->renderLayout($content);
+    }
+    
+    /**
+     * Render url 
+     * 
+     * @param $page
+     * 
+     * @return string
+     */
+    protected function renderUrl($page)
+    {
+        switch($this->urlStyle) {
+            case self::URL_STYLE_REWRITE:
+                
+            break;
+                
+            case self::URL_STYLE_DEFAULT:
+            default:
+                
+            break;
+            
+        }
+    }
+    
+    /**
+     * Render a link
+     * 
+     * @param string $tpl      link template
+     * @param string $url      url value for template container
+     * @param string $linkText text value for template container
+     * 
+     * @return string
+     */
+    protected function renderLink($tpl, $url, $linkText)
+    {
+        
+    }
+    
+    /**
+     * Render the whole pagination layout
+     * 
+     * @param string $content layout contents
+     * 
+     * @return string
+     */
+    protected function renderLayout($content)
+    {
+        return str_replace(self::TPL_VAR_LAYOUT_CONTENT,
+                           $content,
+                           $this->layoutTpl);
+    }
 }
  
