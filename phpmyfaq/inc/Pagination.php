@@ -105,13 +105,6 @@ class PMF_Pagination
     protected $firstPageLinkTpl = '';
     
     /**
-     * Last page link template
-     * 
-     * @var string
-     */
-    protected $lastPageLinkTpl = '';
-    
-    /**
      * Layout template
      * 
      * @var string
@@ -156,51 +149,51 @@ class PMF_Pagination
      */
     public function __construct($options = null)
     {
-        if(isset($options['baseUrl'])) {
+        if (isset($options['baseUrl'])) {
             $this->baseUrl = $options['baseUrl'];
         }
        
-        if(isset($options['total'])) {
+        if (isset($options['total'])) {
             $this->total = $options['total'];
         }
 
-        if(isset($options['perPage'])) {
+        if (isset($options['perPage'])) {
             $this->perPage = $options['perPage'];
         }
        
-        if(isset($options['linkTpl'])) {
+        if (isset($options['linkTpl'])) {
             $this->linkTpl = $options['linkTpl'];
         }
        
-        if(isset($options['currentPageLinkTpl'])) {
+        if (isset($options['currentPageLinkTpl'])) {
             $this->currentPageLinkTpl = $options['currentPageLinkTpl'];
         }
        
-        if(isset($options['nextPageLinkTpl'])) {
+        if (isset($options['nextPageLinkTpl'])) {
             $this->nextPageLinkTpl = $options['nextPageLinkTpl'];
         }
        
-        if(isset($options['prevPageLinkTpl'])) {
+        if (isset($options['prevPageLinkTpl'])) {
             $this->prevPageLinkTpl = $options['prevPageLinkTpl'];
         }
        
-        if(isset($options['firstPageLinkTpl'])) {
+        if (isset($options['firstPageLinkTpl'])) {
            $this->firstPageLinkTpl = $options['firstPageLinkTpl'];
         }
         
-        if(isset($options['lastPageLinkTpl'])) {
+        if (isset($options['lastPageLinkTpl'])) {
            $this->lastPageLinkTpl = $options['lastPageLinkTpl'];
         }
         
-        if(isset($options['layoutTpl'])) {
+        if (isset($options['layoutTpl'])) {
            $this->layoutTpl = $options['layoutTpl'];
         }
         
-        if(isset($options['urlStyle'])) {
+        if (isset($options['urlStyle'])) {
            $this->urlStyle = $options['urlStyle'];
         }
         
-        if(isset($options['pageParamName'])) {
+        if (isset($options['pageParamName'])) {
            $this->pageParamName = $options['pageParamName'];
         }
     }
