@@ -73,7 +73,7 @@ require_once(PMF_ROOT_DIR.'/inc/Faq.php');
 function buildSitemapNode($location, $lastmod = null, $changeFreq = null, $priority = null)
 {
     if (!isset($lastmod)) {
-        $lastmod = makeISO8601Date($_SERVER['REQUEST_TIME'], false);
+        $lastmod = PMF_Date::createISO8601Date($_SERVER['REQUEST_TIME'], false);
     }
     if (!isset($changeFreq)) {
         $changeFreq = PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY;
@@ -138,7 +138,7 @@ $sitemap =
     .' http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">';
 // 1st entry: the faq server itself
 $sitemap .= buildSitemapNode(PMF_Link::getSystemUri('/sitemap.google.php'),
-                makeISO8601Date($_SERVER['REQUEST_TIME'], false),
+                PMF_Date::createISO8601Date($_SERVER['REQUEST_TIME'], false),
                 PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY,
                 PMF_SITEMAP_GOOGLE_PRIORITY_MAX
             );
@@ -161,7 +161,7 @@ foreach ($items as $item) {
     }
     $sitemap .= buildSitemapNode(
                     PMF_Link::getSystemUri('/sitemap.google.php').$link,
-                    makeISO8601Date($item['date']),
+                    PMF_Date::createISO8601Date($item['date']),
                     // TODO: manage changefreq node with the info provided by faqchanges, IF this will not add a big load to the server (+1 query/faq)
                     PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY,
                     $priority
