@@ -43,6 +43,8 @@ class PMF_Pagination
     
     /**
      * Url style variants
+     * - URL_STYLE_DEFAULT is a normal query string style
+     * - URL_STYLE_REWRITE is the style of host/param0/val0/param1/val1
      */
     const URL_STYLE_DEFAULT = 0;
     const URL_STYLE_REWRITE = 1;
@@ -116,7 +118,7 @@ class PMF_Pagination
      * 
      * @var string
      */
-    protected $lastPageLinkTpl = '<div>{LAYOUT_CONTENT}</div>';
+    protected $layoutTpl = '<div>{LAYOUT_CONTENT}</div>';
     
     /**
      * Url style 
@@ -214,33 +216,45 @@ class PMF_Pagination
     {
         $content = '';
         
-        for($i = 0; $i < $this->total; $i += $this->perPage) {
-//            $tmp .= $this->_renderLink()
+        $page = 1;
+        for($i = 0; $i < $this->total; $i += $this->perPage, $page++) {
+            $link = $this->renderUrl($this->baseUrl, $page);
+            
+            $content .= $this->renderLink($this->linkTpl, $link, $page);
         }
         
         return $this->renderLayout($content);
     }
     
     /**
-     * Render url 
+     * Render url for a given page
      * 
-     * @param $page
+     * @param string  $url  url
+     * @param integer $page page number
      * 
      * @return string
      */
-    protected function renderUrl($page)
+    protected function renderUrl($url, $page)
     {
         switch($this->urlStyle) {
             case self::URL_STYLE_REWRITE:
-                
+                $cleanedUrl = PMF_String::preg_replace(array('$/' . $this->pageParamName . '/(\d+)$',
+                                                             '$//$'),
+                                                       "",
+                                                       $this->baseUrl);
+                $url = "$cleanedLink/{$this->pageParamName}/$page";
             break;
                 
             case self::URL_STYLE_DEFAULT:
             default:
-                
+                $cleanedUrl = PMF_String::preg_replace(array('$&(amp;?)' . $this->pageParamName . '=(\d+)$'),
+                                                       "",
+                                                       $this->baseUrl);
+                $url = "$cleanedUrl&amp;{$this->pageParamName}=$page";
             break;
-            
         }
+        
+        return $url;
     }
     
     /**
@@ -254,7 +268,10 @@ class PMF_Pagination
      */
     protected function renderLink($tpl, $url, $linkText)
     {
+        $search  = array(self::TPL_VAR_LINK_URL, self::TPL_VAR_LINK_TEXT);
+        $replace = array($url, $linkText);
         
+        return str_replace($search, $replace, $tpl);
     }
     
     /**
