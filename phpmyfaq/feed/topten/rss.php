@@ -79,7 +79,7 @@ if ($num > 0) {
         $rss->endElement();
         
         $rss->writeElement('link', utf8_encode(PMF_Link::getSystemUri('/feed/topten/rss.php').$link));
-        $rss->writeElement('pubDate', makeRFC822Date($item['last_visit'], false));
+        $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['last_visit'], false));
         $rss->endElement();
     }
 }

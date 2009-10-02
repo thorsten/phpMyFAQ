@@ -182,7 +182,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
         <select name="revisionid_selected" onchange="selectRevision.submit();">
             <option value="<?php print $faqData['revision_id']; ?>"><?php print $PMF_LANG['ad_changerev']; ?></option>
 <?php foreach ($revisions as $_revision_id => $_revision_data) { ?>
-            <option value="<?php print $_revision_data['revision_id']; ?>" <?php if ($revisionid_selected == $_revision_data['revision_id']) { print 'selected="selected"'; } ?> ><?php print $PMF_LANG['ad_entry_revision'].' 1.'.$_revision_data['revision_id'].': '.makeDate($_revision_data['datum'])." - ".$_revision_data['author']; ?></option>
+            <option value="<?php print $_revision_data['revision_id']; ?>" <?php if ($revisionid_selected == $_revision_data['revision_id']) { print 'selected="selected"'; } ?> ><?php print $PMF_LANG['ad_entry_revision'].' 1.'.$_revision_data['revision_id'].': '.PMF_Date::createIsoDate($_revision_data['datum'])." - ".$_revision_data['author']; ?></option>
 <?php } ?>
         </select>
     </fieldset>
@@ -364,7 +364,7 @@ if($permission['approverec']):
     <legend><?php print $PMF_LANG['ad_entry_changelog']; ?></legend>
 
     <label class="lefteditor"><?php print $PMF_LANG["ad_entry_date"]; ?></label>
-    <?php if (isset($faqData['date'])) { print $faqData['date']; } else { print makeDate(date("YmdHis")); } ?><br />
+    <?php if (isset($faqData['date'])) { print $faqData['date']; } else { print PMF_Date::createIsoDate(date("YmdHis")); } ?><br />
 
     <label class="lefteditor" for="changed"><?php print $PMF_LANG["ad_entry_changed"]; ?></label>
     <textarea name="changed" id="changed" style="width: 390px; height: 50px;" cols="40" rows="4"><?php if (isset($changed)) { print $changed; } ?></textarea><br />

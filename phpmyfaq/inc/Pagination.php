@@ -7,8 +7,8 @@
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2009-09-27
- * @copyright  2004-2009 phpMyFAQ Team
- * @version    SVN: $Id: Pagination.php,v 1.56 2008-01-26 01:02:56 thorstenr Exp $
+ * @version    git: $Id$
+ * @copyright  2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -29,8 +29,7 @@
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2007-09-27
- * @copyright  2004-2009 phpMyFAQ Team
- * @version    SVN: $Id: Pagination.php,v 1.56 2008-01-26 01:02:56 thorstenr Exp $
+ * @copyright  2009 phpMyFAQ Team
  */
 class PMF_Pagination
 {
@@ -161,51 +160,51 @@ class PMF_Pagination
      */
     public function __construct($options = null)
     {
-        if(isset($options['baseUrl'])) {
+        if (isset($options['baseUrl'])) {
             $this->baseUrl = $options['baseUrl'];
         }
        
-        if(isset($options['total'])) {
+        if (isset($options['total'])) {
             $this->total = $options['total'];
         }
 
-        if(isset($options['perPage'])) {
+        if (isset($options['perPage'])) {
             $this->perPage = $options['perPage'];
         }
        
-        if(isset($options['linkTpl'])) {
+        if (isset($options['linkTpl'])) {
             $this->linkTpl = $options['linkTpl'];
         }
        
-        if(isset($options['currentPageLinkTpl'])) {
+        if (isset($options['currentPageLinkTpl'])) {
             $this->currentPageLinkTpl = $options['currentPageLinkTpl'];
         }
        
-        if(isset($options['nextPageLinkTpl'])) {
+        if (isset($options['nextPageLinkTpl'])) {
             $this->nextPageLinkTpl = $options['nextPageLinkTpl'];
         }
        
-        if(isset($options['prevPageLinkTpl'])) {
+        if (isset($options['prevPageLinkTpl'])) {
             $this->prevPageLinkTpl = $options['prevPageLinkTpl'];
         }
        
-        if(isset($options['firstPageLinkTpl'])) {
+        if (isset($options['firstPageLinkTpl'])) {
            $this->firstPageLinkTpl = $options['firstPageLinkTpl'];
         }
         
-        if(isset($options['lastPageLinkTpl'])) {
+        if (isset($options['lastPageLinkTpl'])) {
            $this->lastPageLinkTpl = $options['lastPageLinkTpl'];
         }
         
-        if(isset($options['layoutTpl'])) {
+        if (isset($options['layoutTpl'])) {
            $this->layoutTpl = $options['layoutTpl'];
         }
         
-        if(isset($options['urlStyle'])) {
+        if (isset($options['urlStyle'])) {
            $this->urlStyle = $options['urlStyle'];
         }
         
-        if(isset($options['pageParamName'])) {
+        if (isset($options['pageParamName'])) {
            $this->pageParamName = $options['pageParamName'];
         }
     }
@@ -220,7 +219,7 @@ class PMF_Pagination
         $content = array();
         
         $page = 1;
-        for($i = 0; $i < $this->total; $i += $this->perPage, $page++) {
+        for ($i = 0; $i < $this->total; $i += $this->perPage, $page++) {
             $link = $this->renderUrl($this->baseUrl, $page);
             
             $content[] = $this->renderLink($this->linkTpl, $link, $page);
@@ -239,7 +238,7 @@ class PMF_Pagination
      */
     protected function renderUrl($url, $page)
     {
-        switch($this->urlStyle) {
+        switch ($this->urlStyle) {
             case self::URL_STYLE_REWRITE:
                 $cleanedUrl = PMF_String::preg_replace(array('$/' . $this->pageParamName . '/(\d+)$',
                                                              '$//$'),
@@ -286,9 +285,7 @@ class PMF_Pagination
      */
     protected function renderLayout($content)
     {
-        return str_replace(self::TPL_VAR_LAYOUT_CONTENT,
-                           $content,
-                           $this->layoutTpl);
+        return str_replace(self::TPL_VAR_LAYOUT_CONTENT, $content, $this->layoutTpl);
     }
 }
  

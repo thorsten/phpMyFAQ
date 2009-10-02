@@ -195,7 +195,7 @@ class PMF_Export
                 $xhtml .= '<h2>'.$thema.'</h2>';
                 $xhtml .= '<p>'.$content.'</p>';
                 $xhtml .= '<p>'.$PMF_LANG["msgAuthor"].$author.'<br />';
-                $xhtml .= $PMF_LANG["msgLastUpdateArticle"].makeDate($datum).'</p>';
+                $xhtml .= $PMF_LANG["msgLastUpdateArticle"].PMF_Date::createIsoDate($datum).'</p>';
                 $xhtml .= '<hr style="width: 90%;" />';
                 $old = $rub;
             }
@@ -223,7 +223,7 @@ class PMF_Export
         $tree = new PMF_Category();
         $tree->transform(0);
         $my_xml_output  = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n";
-        $my_xml_output .= "<!-- XML-Output by phpMyFAQ ".$PMF_CONF['main.currentVersion']." | Date: ".makeDate(date("YmdHis"))." -->\n";
+        $my_xml_output .= "<!-- XML-Output by phpMyFAQ ".$PMF_CONF['main.currentVersion']." | Date: ".PMF_Date::createIsoDate(date("YmdHis"))." -->\n";
         $my_xml_output .= "<phpmyfaq xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:NamespaceSchemaLocation=\"http://www.phpmyfaq.de/xml/faqschema.xsd\">\n";
 
         // Get Faq Data
@@ -260,7 +260,7 @@ class PMF_Export
                 else {
                     $my_xml_output .= "\t<author />\n";
                 }
-                $my_xml_output .= "\t<date>".makeDate($faq['lastmodified'])."</date>\n";
+                $my_xml_output .= "\t<date>".PMF_Date::createIsoDate($faq['lastmodified'])."</date>\n";
                 $my_xml_output .= "\t</article>\n";
             }
         }

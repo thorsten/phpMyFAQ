@@ -71,7 +71,7 @@ if ($num > 0) {
             $rss->endElement();
         
             $rss->writeElement('link', utf8_encode((isset($_SERVER['HTTPS']) ? 's' : '')."://".$_SERVER["HTTP_HOST"].str_replace("feed/openquestions/rss.php", "index.php", $_SERVER["PHP_SELF"])."?action=open#openq_".$item['id']));
-            $rss->writeElement('pubDate', makeRFC822Date($item['date'], false));
+            $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['date'], false));
             $rss->endElement();
         }
     }

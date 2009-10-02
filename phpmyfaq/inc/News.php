@@ -178,7 +178,7 @@ class PMF_News
                     $item['linkTitle']);
             }
             
-            $output .= sprintf('</div><div class="date">%s</div>', makeDate($item['date']));
+            $output .= sprintf('</div><div class="date">%s</div>', PMF_Date::createIsoDate($item['date']));
         }
 
         return ('' == $output) ? $this->pmf_lang['msgNoNews'] : $output;
@@ -215,7 +215,7 @@ class PMF_News
                     'id'        => $row->id,
                     'lang'      => $row->lang,
                     'header'    => $row->header,
-                    'date'      => makeDate($row->datum),
+                    'date'      => PMF_Date::createIsoDate($row->datum),
                     'active'    => $row->active,
                     'expired'   => $expired);
             }
@@ -269,7 +269,7 @@ class PMF_News
                 $news = array(
                     'id'            => $row->id,
                     'lang'          => $row->lang,
-                    'date'          => makeDate($row->datum),
+                    'date'          => PMF_Date::createIsoDate($row->datum),
                     'header'        => $row->header,
                     'content'       => $content,
                     'authorName'    => $row->author_name,

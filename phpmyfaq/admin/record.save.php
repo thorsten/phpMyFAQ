@@ -74,7 +74,7 @@ if ($permission['editbt']) {
     <h3><strong><em><?php print $categorylist; ?></em>
     <?php print $question; ?></strong></h3>
     <?php print html_entity_decode($content); ?>
-    <p class="little"><?php print $PMF_LANG["msgLastUpdateArticle"].makeDate(date("YmdHis")); ?><br />
+    <p class="little"><?php print $PMF_LANG["msgLastUpdateArticle"].PMF_Date::createIsoDate(date("YmdHis")); ?><br />
     <?php print $PMF_LANG["msgAuthor"].' '.$author; ?></p>
 
     <form action="?action=editpreview" method="post">

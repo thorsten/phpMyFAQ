@@ -67,7 +67,7 @@ if (is_array($records)) {
         $rss->endElement();
         
         $rss->writeElement('link', utf8_encode($item['record_link']));
-        $rss->writeElement('pubDate', makeRFC822Date($item['record_date'], true));
+        $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['record_date'], true));
         $rss->endElement();
     }
 }
