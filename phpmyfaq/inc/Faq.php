@@ -765,7 +765,7 @@ class PMF_Faq
                 'author'        => $row->author,
                 'email'         => $row->email,
                 'comment'       => $row->comment,
-                'date'          => makeDate($row->datum),
+                'date'          => PMF_Date::createIsoDate($row->datum),
                 'dateStart'     => $row->date_start,
                 'dateEnd'       => $row->date_end,
                 'linkState'     => $row->links_state,
@@ -785,7 +785,7 @@ class PMF_Faq
                 'author'        => '',
                 'email'         => '',
                 'comment'       => '',
-                'date'          => makeDate(date('YmdHis')),
+                'date'          => PMF_Date::createIsoDate(date('YmdHis')),
                 'dateStart'     => '',
                 'dateEnd'       => '',
                 'linkState'     => '',
@@ -1148,7 +1148,7 @@ class PMF_Faq
                 'author'        => $row->author,
                 'email'         => $row->email,
                 'comment'       => $row->comment,
-                'date'          => makeDate($row->datum),
+                'date'          => PMF_Date::createIsoDate($row->datum),
                 'dateStart'     => $row->date_start,
                 'dateEnd'       => $row->date_end,
                 'linkState'     => $row->links_state,
@@ -1340,7 +1340,7 @@ class PMF_Faq
                 'author'        => $row->author,
                 'email'         => $row->email,
                 'comment'       => $row->comment,
-                'date'          => makeDate($row->datum),
+                'date'          => PMF_Date::createIsoDate($row->datum),
                 'dateStart'     => $row->date_start,
                 'dateEnd'       => $row->date_end);
         }
@@ -1597,7 +1597,7 @@ class PMF_Faq
                 
                 $output['url'][]   =  $row['url'];
                 $output['title'][] = $shortTitle;
-                $output['date'][]  = makeDate($row['datum']);
+                $output['date'][]  = PMF_Date::createIsoDate($row['datum']);
             }
         } else {
             $output['error'] = $this->pmf_lang["err_noArticles"];
@@ -2676,7 +2676,7 @@ class PMF_Faq
             while ($row = $this->db->fetch_object($result)) {
                 $output .= '<tr class="openquestions">';
                 $output .= sprintf('<td valign="top" nowrap="nowrap">%s<br /><a href="mailto:%s">%s</a></td>',
-                    makeDate($row->ask_date),
+                    PMF_Date::createIsoDate($row->ask_date),
                     safeEmail($row->ask_usermail),
                     $row->ask_username);
                 $output .= sprintf('<td valign="top"><strong>%s:</strong><br />%s</td>',
