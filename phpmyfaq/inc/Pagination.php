@@ -82,7 +82,7 @@ class PMF_Pagination
      * 
      * @var string
      */
-    protected $currentPageLinkTpl = '';
+    protected $currentPageLinkTpl = '{LINK_TEXT}';
     
     /**
      * Next page link template
@@ -125,6 +125,13 @@ class PMF_Pagination
      * @var string
      */
     protected $urlStyle = self::URL_STYLE_DEFAULT;
+    
+    /**
+     * Current page index
+     * 
+     * @var integer
+     */
+    protected $currentPage = 0;
     
     /**
      * Param name to associate the page numbers to
@@ -207,12 +214,48 @@ class PMF_Pagination
         if (isset($options['pageParamName'])) {
            $this->pageParamName = $options['pageParamName'];
         }
+        
+        /**
+         * Let this call to be last cuz it 
+         * needs some options to be set before
+         */
+        $this->currentPage = $this->getCurrentPageFromUrl($this->baseUrl);
+        
+    }
+    
+    protected function getCurrentPageFromUrl($url)
+    {
+        $retval = 1;
+        
+        if(!empty($url)) {
+            
+            $match = array();
+            
+            switch ($this->urlStyle) {
+                case self::URL_STYLE_REWRITE:
+                    $pattern = '$/(' . $this->pageParamName . ')/(\d+)$';
+                break;
+                    
+                case self::URL_STYLE_DEFAULT:
+                default:
+                    $pattern = '$&(amp;?)' . $this->pageParamName . '=(\d+)$';
+                break;
+            }
+            
+            if(preg_match($pattern, $url, $match)) {
+                $retval = $match[2];
+            }
+        }
+        
+        return $retval;
     }
     
     /**
      * Render full pagination string
      * 
      * @return string
+     * 
+     * TODO implement last and first link rendering
      */
     public function render()
     {
@@ -221,8 +264,30 @@ class PMF_Pagination
         $page = 1;
         for ($i = 0; $i < $this->total; $i += $this->perPage, $page++) {
             $link = $this->renderUrl($this->baseUrl, $page);
+
+            if($page == $this->currentPage) {
+                $template = $this->currentPageLinkTpl;
+            } else {
+                $template = $this->linkTpl;
+            }
             
-            $content[] = $this->renderLink($this->linkTpl, $link, $page);
+            $content[] = $this->renderLink($template, $link, $page);
+        }
+        
+        if(1 < $this->currentPage) {
+            array_unshift($content,
+                          $this->renderLink($this->prevPageLinkTpl,
+                                            $this->renderUrl($this->baseUrl, $this->currentPage - 1),
+                                            $this->currentPage - 1)
+                          );
+        }
+        
+        if($page - 1 > $this->currentPage) {
+            array_push($content,
+                          $this->renderLink($this->nextPageLinkTpl,
+                                            $this->renderUrl($this->baseUrl, $this->currentPage + 1),
+                                            $this->currentPage + 1)
+                          );
         }
         
         return $this->renderLayout(implode('&nbsp;', $content));
