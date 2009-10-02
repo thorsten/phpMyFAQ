@@ -819,38 +819,31 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
         $output = $PMF_LANG["err_noArticles"];
     }
 
-    if (!$hasMore && ($num > $faqconfig->get('main.numberOfRecordsPerPage'))) {
-        $output .= "<p align=\"center\"><strong>";
-        $vor = $seite - 1;
-        $next = $seite + 1;
-        if ($vor != 0) {
-            if ($faqconfig->get('main.enableRewriteRules')) {
-                $output .= sprintf("[ <a href=\"search.html?search=%s&amp;seite=%d%s&amp;searchcategory=%d\">%s</a> ]",
-                                urlencode($_searchterm),
-                                $vor,
-                                $langs,
-                                $cat,
-                                $PMF_LANG['msgPrevious']);
-            } else {
-                $output .= sprintf("[ <a href=\"index.php?%saction=search&amp;search=%s&amp;seite=%d%s&amp;searchcategory=%d\">%s</a> ]",
-                                $sids,
-                                urlencode($_searchterm),
-                                $vor,
-                                $langs,
-                                $cat,
-                                $PMF_LANG['msgPrevious']);
-            }
+    if (!$hasMore && ($num > $faqconfig->get('main.numberOfRecordsPerPage'))) {        
+        if ($faqconfig->get('main.enableRewriteRules')) {
+            $baseUrl = sprintf("search.html?search=%s&amp;seite=%d%s&amp;searchcategory=%d",
+                            urlencode($_searchterm),
+                            $seite,
+                            $langs,
+                            $cat);
+        } else {
+            $baseUrl = PMF_Link::getSystemRelativeUri() . '?'
+                     . (empty($sids) ? '' : "$sids&amp;")
+                     . 'action=search&amp;search=' . urlencode($_searchterm)
+                     . '&amp;seite=' . $seite . $langs
+                     . "&amp;searchcategory=" . $cat;
         }
-        $output .= " ";
-        if ($next <= $pages) {
-            $url = $sids.'&amp;action=search&amp;search='.urlencode($_searchterm).'&amp;seite='.$next.$langs."&amp;searchcategory=".$cat;
-            $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-            $oLink->itemTitle = '';
-            $oLink->text = $PMF_LANG["msgNext"];
-            $oLink->tooltip = $PMF_LANG["msgNext"];
-            $output .= '[ '.$oLink->toHtmlAnchor().' ]';
-        }
-        $output .= "</strong></p>";
+                 
+        $options = array('baseUrl'         => $baseUrl,
+                         'total'           => $num,
+                         'perPage'         => $faqconfig->get('main.numberOfRecordsPerPage'),
+                         'pageParamName'   => 'seite',
+                         'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG["msgNext"] . '</a>',
+                         'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG["msgPrevious"] . '</a>',
+                         'layoutTpl'       => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>',
+                        );
+        $pagination = new PMF_Pagination($options);
+        $output .= $pagination->render();
     }
 
     return $output;
