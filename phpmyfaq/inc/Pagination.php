@@ -238,15 +238,15 @@ class PMF_Pagination
                     
                 case self::URL_STYLE_DEFAULT:
                 default:
-                    $pattern = '$&(amp;?)' . $this->pageParamName . '=(\d+)$';
+                    $pattern = '$&(amp;|)' . $this->pageParamName . '=(\d+)$';
                 break;
             }
             
-            if(preg_match($pattern, $url, $match)) {
-                $retval = $match[2];
+            if(PMF_String::preg_match($pattern, $url, $match)) {
+                $retval = isset($match[2]) ? $match[2] : $retval;
             }
         }
-        
+
         return $retval;
     }
     
@@ -314,7 +314,7 @@ class PMF_Pagination
                 
             case self::URL_STYLE_DEFAULT:
             default:
-                $cleanedUrl = PMF_String::preg_replace(array('$&(amp;?)' . $this->pageParamName . '=(\d+)$'),
+                $cleanedUrl = PMF_String::preg_replace(array('$&(amp;|)' . $this->pageParamName . '=(\d+)$'),
                                                        "",
                                                        $this->baseUrl);
                 $url = "$cleanedUrl&amp;{$this->pageParamName}=$page";
