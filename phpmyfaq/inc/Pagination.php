@@ -7,8 +7,8 @@
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2009-09-27
- * @copyright  2004-2009 phpMyFAQ Team
- * @version    SVN: $Id: Pagination.php,v 1.56 2008-01-26 01:02:56 thorstenr Exp $
+ * @version    git: $Id$
+ * @copyright  2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -29,8 +29,7 @@
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2007-09-27
- * @copyright  2004-2009 phpMyFAQ Team
- * @version    SVN: $Id: Pagination.php,v 1.56 2008-01-26 01:02:56 thorstenr Exp $
+ * @copyright  2009 phpMyFAQ Team
  */
 class PMF_Pagination
 {
@@ -210,7 +209,7 @@ class PMF_Pagination
         $content = '';
         
         $page = 1;
-        for($i = 0; $i < $this->total; $i += $this->perPage, $page++) {
+        for ($i = 0; $i < $this->total; $i += $this->perPage, $page++) {
             $link = $this->renderUrl($this->baseUrl, $page);
             
             $content .= $this->renderLink($this->linkTpl, $link, $page);
@@ -229,7 +228,7 @@ class PMF_Pagination
      */
     protected function renderUrl($url, $page)
     {
-        switch($this->urlStyle) {
+        switch ($this->urlStyle) {
             case self::URL_STYLE_REWRITE:
                 $cleanedUrl = PMF_String::preg_replace(array('$/' . $this->pageParamName . '/(\d+)$',
                                                              '$//$'),
@@ -276,9 +275,7 @@ class PMF_Pagination
      */
     protected function renderLayout($content)
     {
-        return str_replace(self::TPL_VAR_LAYOUT_CONTENT,
-                           $content,
-                           $this->layoutTpl);
+        return str_replace(self::TPL_VAR_LAYOUT_CONTENT, $content, $this->layoutTpl);
     }
 }
  
