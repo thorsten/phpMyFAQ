@@ -39,7 +39,7 @@ printf('<h2>%s</h2>', $PMF_LANG['ad_menu_translations']);
 <?php if(!$isTransDirWritable):
     echo '<tr><td colspan="5"><font color="red">'. $PMF_LANG['msgLangDirIsntWritable'] . "</font></tr></td>";
 endif; ?>
-<?php if($permission["addtranslation"]): ?>
+<?php if($permission["addtranslation"] && $isTransDirWritable): ?>
 <tr><td colspan="6">
 <a href="?action=transadd"><?php echo $PMF_LANG['msgTransToolAddNewTranslation'] ?></a>
 </td></tr>
