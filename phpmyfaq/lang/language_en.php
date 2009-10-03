@@ -1052,3 +1052,9 @@ $PMF_LANG['ad_menu_upgrade'] = 'Upgrade';
 $PMF_LANG['ad_you_shouldnt_update'] = 'You have the latest version of phpMyFAQ. You do not need to upgrade.';
 $LANG_CONF['main.onlySecureLogins'] = array(0 => 'checkbox', 1 => "Only allow logins over secure connection? (default: disabled)");
 $PMF_LANG['msgSecureSwitch'] = "Switch to secure mode to login!";
+
+// added 2.6.0-alpha - 2009-10-03 by Anatoliy Belsky
+$PMF_LANG['msgTransToolNoteFileSaving']  = 'Please note that no files will we written until you click save button';
+$PMF_LANG['msgTransToolPageBufferRecorded'] = 'Page %d buffer recorded successfully';
+$PMF_LANG['msgTransToolErrorRecordingPageBuffer'] = 'Error recording page %d buffer';
+$PMF_LANG['msgTransToolRecordingPageBuffer'] = 'Recording page %d buffer';
