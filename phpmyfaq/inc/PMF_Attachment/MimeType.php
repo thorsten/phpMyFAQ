@@ -176,6 +176,10 @@ abstract class PMF_Attachment_MimeType
                 'avi'     => 'video/x-msvideo',
                 'movie'   => 'video/x-sgi-movie',
                 'ice'     => 'x-conference/x-cooltalk',
+                'ods'     => 'application/vnd.oasis.opendocument.spreadsheet',
+                'odp'     => 'application/vnd.oasis.opendocument.presentation ',
+                'sxc'     => 'application/vnd.sun.xml.calc',
+                'odt'     => 'application/vnd.oasis.opendocument.text',
     );
     
     /**

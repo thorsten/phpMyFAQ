@@ -61,6 +61,10 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
         $this->mode = $mode;
         
         $this->handle = @fopen($this->path, $this->mode);
+        
+        if(!is_resource($this->handle)) {
+            throw new PMF_Attachment_Filesystem_File_Exception('Could not open file');
+        }
     }
     
     /**
