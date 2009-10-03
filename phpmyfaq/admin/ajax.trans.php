@@ -92,7 +92,10 @@ switch($ajax_action) {
          * Construct lines with variable definitions
          */
         foreach ($_SESSION['trans']['rightVarsOnly'] as $key => $val) {
-            array_push($tmpLines, '$' . str_replace(array('[', ']'), array("['", "']"), $key) . " = '$val';");
+            if(0 === strpos($key, 'PMF_LANG')) {
+                $val = "'$val'";
+            }
+            array_push($tmpLines, '$' . str_replace(array('[', ']'), array("['", "']"), $key) . " = $val;");
         }
         
         $newFileContents .= implode("\n", $tmpLines);
