@@ -154,7 +154,7 @@ class PMF_Glossary
      * @param  array $matches Matchings
      * @return string
      */
-    private function _setAcronyms($matches)
+    public function _setAcronyms($matches)
     {
     	if (count($matches) > 4) {
             $prefix  = $matches[4];
