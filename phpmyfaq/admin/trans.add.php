@@ -29,6 +29,10 @@ if (!$permission["addtranslation"]) {
     return;
 }
 
+if(isset($_SESSION['trans'])) {
+    unset($_SESSION['trans']);
+}
+
 printf('<h2>%s</h2>', $PMF_LANG['ad_menu_translations']);
 ?>
 <form id="newTranslationForm"> 

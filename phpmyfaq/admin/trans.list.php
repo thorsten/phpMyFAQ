@@ -26,6 +26,9 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 clearstatcache();
+if(isset($_SESSION['trans'])) {
+    unset($_SESSION['trans']);
+}
 
 $langDir            = PMF_ROOT_DIR . DIRECTORY_SEPARATOR . "lang";
 $transDir           = new DirectoryIterator($langDir);

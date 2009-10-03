@@ -28,6 +28,32 @@ $ajax_action = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_
 
 switch($ajax_action) {
     
+    case 'save_page_buffer':
+        /**
+         * Build language variable definitions
+         */
+        foreach ((array)@$_POST['PMF_LANG'] as $key => $val) {
+            if (is_string($val)) {
+                $val = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $val);
+                $val = str_replace("'", "\\'", $val);
+                $_SESSION['trans']['rightVarsOnly']["PMF_LANG[$key]"]  = $val;
+            } elseif (is_array($val)) {
+                /**
+                 * Here we deal with a two dimensional array
+                 */
+                foreach ($val as $key2 => $val2) {
+                    $_SESSION['trans']['rightVarsOnly']["PMF_LANG[$key][$key2]"] = $val2;
+                }
+            }
+        }
+        
+        foreach ((array)@$_POST['LANG_CONF'] as $key => $val) {
+            $_SESSION['trans']['rightVarsOnly']["LANG_CONF[$key]"] = $val;
+        }
+        
+        print 1;
+    break;
+    
     case 'save_translated_lang':
         
         if (!$permission["edittranslation"]) {
@@ -35,7 +61,7 @@ switch($ajax_action) {
             exit;
         }
         
-        $lang     = $_POST['PMF_LANG']['metaLanguage'];
+        $lang     = $_SESSION['trans']['rightVarsOnly']["PMF_LANG[metaLanguage]"];
         $filename = PMF_ROOT_DIR . "/lang/language_$lang.php"; 
         
         if (!is_writable(PMF_ROOT_DIR . "/lang")) {
@@ -49,39 +75,29 @@ switch($ajax_action) {
         }
         
         $newFileContents = '';
+        $tmpLines        = array();
+        
         /**
          * Read in the head of the file we're writing to
          */
         $fh   = fopen($filename, 'r');
-        $line = '';
         do {
             $line             = fgets($fh);
-            $newFileContents .= $line;
+            array_push($tmpLines, rtrim($line));
         }
         while ('*/' != substr(trim($line), -2));
         fclose($fh);
-        
+       
         /**
-         * Build language variable definitions
+         * Construct lines with variable definitions
          */
-        foreach ($_POST['PMF_LANG'] as $key => $val) {
-            if (is_string($val)) {
-                $val = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $val);
-                $val = str_replace("'", "\\'", $val);
-                $newFileContents .= "\$PMF_LANG['$key'] = '$val';\n";
-            } elseif (is_array($val)) {
-                /**
-                 * Here we deal with a two dimensional array
-                 */
-                foreach ($val as $key2 => $val2) {
-                    $newFileContents .= "\$PMF_LANG['$key']['$key2'] = '$val2';\n";
-                }
-            }
+        foreach ($_SESSION['trans']['rightVarsOnly'] as $key => $val) {
+            array_push($tmpLines, '$' . str_replace(array('[', ']'), array("['", "']"), $key) . " = '$val';");
         }
         
-        foreach ($_POST['LANG_CONF'] as $key => $val) {
-            $newFileContents .= "\$LANG_CONF['$key'] = $val;\n";
-        }
+        $newFileContents .= implode("\n", $tmpLines);
+        
+        unset($_SESSION['trans']);
         
         $retval = @file_put_contents($filename, $newFileContents);
         print intval($retval);

@@ -31,26 +31,55 @@ if (!$permission["edittranslation"]) {
 
 $translateLang = PMF_Filter::filterInput(INPUT_GET, 'translang', FILTER_SANITIZE_STRING);
 
+$page = PMF_Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT);
+$page = 1 > $page ? 1 : $page;
+
 if (empty($translateLang) || !file_exists(PMF_ROOT_DIR . "/lang/language_$translateLang.php")) {
     header("Location: ?action=translist");
 }
 
 $tt = new PMF_TransTool;
+
 /**
- * English is our exemplary language
+ * There are meanwhile over 600 language
+ * vars and we won't to show them all
+ * at once, so let's paginate.
  */
-$leftVarsOnly  = $tt->getVars(PMF_ROOT_DIR . "/lang/language_en.php");
-$rightVarsOnly = $tt->getVars(PMF_ROOT_DIR . "/lang/language_$translateLang.php");
+$itemsPerPage = 16;
+if(!isset($_SESSION['trans'])) {
+    /**
+     * English is our exemplary language
+     */
+    $_SESSION['trans']['leftVarsOnly']  = $tt->getVars(PMF_ROOT_DIR . "/lang/language_en.php");
+    $_SESSION['trans']['rightVarsOnly'] = $tt->getVars(PMF_ROOT_DIR . "/lang/language_$translateLang.php");
+    
+}
+
+$leftVarsOnly   = array_slice($_SESSION['trans']['leftVarsOnly'], 
+                              ($page-1)*$itemsPerPage,
+                              $itemsPerPage);
+$rightVarsOnly  = &$_SESSION['trans']['rightVarsOnly'];
+
+
+$options = array('baseUrl'         => '?' . str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
+                 'total'           => count($_SESSION['trans']['leftVarsOnly']),
+                 'perPage'         => $itemsPerPage,
+                 'linkTpl'         => '<a href="javascript: go(\'{LINK_URL}\');void(0);">{LINK_TEXT}</a>',
+                 'layoutTpl'       => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>',
+                );
+$pagination = new PMF_Pagination($options);
+$pageBar    = $pagination->render();
 
 /**
  * These keys always exist as they are defined when creating translation.
  * We use these values to add the correct number of input boxes.
  * Left column will always have 2 boxes, right - 1 to 6+ boxes.
  */
-$leftNPlurals  = intval($leftVarsOnly['PMF_LANG[nplurals]']);
+$leftNPlurals  = intval($_SESSION['trans']['leftVarsOnly']['PMF_LANG[nplurals]']);
 $rightNPlurals = intval($rightVarsOnly['PMF_LANG[nplurals]']);
 
 printf('<h2>%s</h2>', $PMF_LANG['ad_menu_translations']);
+printf('<font color="red">%s</font>', $PMF_LANG['msgTransToolNoteFileSaving']);
 
 $NPluralsErrorReported = false;
 ?>
@@ -149,6 +178,9 @@ $NPluralsErrorReported = false;
 </tr>
 <?php endwhile; ?>
 <tr>
+<td colspan="3"><?php echo $pageBar; ?></td>
+</tr>
+<tr>
 <td>&nbsp;</td>
 <td><input type="button" value="<?php echo $PMF_LANG['msgCancel'] ?>" onclick="location.href='?action=translist'" /></td>
 <td><input type="button"
@@ -158,14 +190,14 @@ $NPluralsErrorReported = false;
 </table>
 </form>
 <script>
+
 /**
- * Transparently save the translation form
- * @return void
+ * Gather data from the current form
+ * 
+ * @return object
  */
-function save()
+function getFormData()
 {
-    $('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php echo $PMF_LANG['msgSaving3Dots'] ?>');
-    
     var data = {};
     var form = document.getElementById('transDiffForm');
     for (var i=0; i < form.elements.length;i++) {
@@ -175,16 +207,75 @@ function save()
         }
     }
 
-    $.post('index.php?action=ajax&ajax=trans&ajaxaction=save_translated_lang',
-            data,
-            function (retval, status) {
-                if (1*retval > 0 && 'success' == status) {
-                    $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolFileSaved'] ?>');
-                    document.location = '?action=translist'
+    return data;
+}
+
+/**
+ * Go to some page
+ * 
+ * @return void
+ */
+function go(url)
+{
+	if(savePageBuffer()) {
+		document.location = url;
+	}
+}
+
+/**
+ * Send page buffer to save it into the session
+ *
+ * @return boolean
+ */
+function savePageBuffer()
+{
+	var result = false;
+	
+	$('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php printf($PMF_LANG['msgTransToolRecordingPageBuffer'], $page); ?>');
+
+    $.ajax({url: 'index.php?action=ajax&ajax=trans&ajaxaction=save_page_buffer',
+           data: getFormData(),
+           async: false,
+           type: 'POST',
+           success: function (retval, status) {
+                result = 1*retval > 0 && 'success' == status;
+                if (result) {
+                    $('#saving_data_indicator').html('<?php printf($PMF_LANG['msgTransToolPageBufferRecorded'], $page); ?>');
                 } else {
-                    $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolErrorSavingFile'] ?>');
+                    $('#saving_data_indicator').html('<?php printf($PMF_LANG['msgTransToolErrorRecordingPageBuffer'], $page); ?>');
                 }
-            }
-    )
+           },
+           error: function() {
+        	   $('#saving_data_indicator').html('<?php printf($PMF_LANG['msgTransToolErrorRecordingPageBuffer'], $page); ?>');
+           }
+    });
+
+    return result;
+}
+
+
+/**
+ * Transparently save the translation form
+ * @return void
+ */
+function save()
+{
+    $('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php echo $PMF_LANG['msgSaving3Dots'] ?>');
+
+    if(savePageBuffer()) {
+        $.post('index.php?action=ajax&ajax=trans&ajaxaction=save_translated_lang',
+                null,
+                function (retval, status) {
+                    if (1*retval > 0 && 'success' == status) {
+                        $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolFileSaved'] ?>');
+                        document.location = '?action=translist'
+                    } else {
+                        $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolErrorSavingFile'] ?>');
+                    }
+                }
+        )
+    } else {
+    	 $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolErrorSavingFile'] ?>');
+    }
 }
 </script>
