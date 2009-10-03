@@ -15,3 +15,6 @@ phpmyfaq/xml*
 phpmyfaq/attachments*
 phpmyfaq/inc/data.php
 phpmyfaq/inc/index.html
+
+# other files
+.htaccess
