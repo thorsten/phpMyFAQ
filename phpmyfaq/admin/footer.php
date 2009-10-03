@@ -60,7 +60,9 @@ tinymce.create('tinymce.plugins.internalFaqLinkPlugin', {
                    title    : '<?php print $PMF_LANG['ad_entry_intlink']; ?>',
                    onselect : function(value) {
                        var elements = value.split('_');
-                       var faqLink  = '<a class="intfaqlink" href="index.php?action=artikel&amp;cat=' + elements[0] + 
+                       var faqLink  = '<a class="intfaqlink" href="' +
+                                      '<?php print $faqconfig->get('main.referenceURL'); ?>' +
+                                      '/index.php?action=artikel&amp;cat=' + elements[0] + 
                                       '&amp;id=' + elements[1] + 
                                       '&amp;artlang=' + elements[2] + 
                                       '">' + elements[3] + '</a>';
