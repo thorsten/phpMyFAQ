@@ -254,8 +254,6 @@ class PMF_Pagination
      * Render full pagination string
      * 
      * @return string
-     * 
-     * TODO implement last and first link rendering
      */
     public function render()
     {
@@ -280,14 +278,26 @@ class PMF_Pagination
                                             $this->renderUrl($this->baseUrl, $this->currentPage - 1),
                                             $this->currentPage - 1)
                           );
+            array_unshift($content,
+                          $this->renderLink($this->firstPageLinkTpl,
+                                            $this->renderUrl($this->baseUrl, 1),
+                                            1)
+                          );                          
+                          
         }
         
         if($page - 1 > $this->currentPage) {
             array_push($content,
-                          $this->renderLink($this->nextPageLinkTpl,
-                                            $this->renderUrl($this->baseUrl, $this->currentPage + 1),
-                                            $this->currentPage + 1)
-                          );
+                       $this->renderLink($this->nextPageLinkTpl,
+                                         $this->renderUrl($this->baseUrl, $this->currentPage + 1),
+                                         $this->currentPage + 1)
+                       );
+                          
+            array_push($content,
+                       $this->renderLink($this->lastPageLinkTpl,
+                                         $this->renderUrl($this->baseUrl, $page - 1),
+                                         $page - 1)
+                       );
         }
         
         return $this->renderLayout(implode('&nbsp;', $content));
