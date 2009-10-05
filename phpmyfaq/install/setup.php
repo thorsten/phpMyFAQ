@@ -1024,7 +1024,7 @@ foreach ($permLevels as $level => $desc) {
     $oConf = PMF_Configuration::getInstance();
     $oConf->getAll();
     $configs = $oConf->config;
-    $configs['spam.enableCatpchaCode'] = (extension_loaded('gd') ? 'true' : 'false');
+    $configs['spam.enableCaptchaCode'] = (extension_loaded('gd') ? 'true' : 'false');
     $configs['main.referenceURL']      = PMF_Link::getSystemUri('/install/setup.php');
     $configs['main.phpMyFAQToken']     = md5(uniqid(rand()));
     $oConf->update($configs);

@@ -619,7 +619,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'Tìm kiếu nâng cao';
 $PMF_LANG["spamControlCenter"] = 'Trung tâm kiểm soát Spam';
 $LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Xem email của thành viên dưới hình thức an toàn  (mặc định: kích hoạt).");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Kiểm tra nội dung các public form để tránh những từ cấm (mặc định: kích hoạt).");
-$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "Sử dụng mã catpcha để cho phép trình các public form (mặc định: kích hoạt).");
+$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "Sử dụng mã catpcha để cho phép trình các public form (mặc định: kích hoạt).");
 
 // added v1.6.2 - 2006-06-13 by Matteo
 $PMF_LANG['ad_stat_management'] = 'Quản lý các Session';

@@ -641,7 +641,7 @@ $PMF_LANG['msgAdvancedSearch'] = '高级搜索';
 $PMF_LANG['spamControlCenter'] = '垃圾过滤控制中心';
 $LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "安全方式显示用户 Email (默认: 激活).");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "检查公共表单内容以防止禁用单词 (默认: 激活).");
-$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "使用 catpcha 验证码来验证公共表单的提交 (默认: 激活).");
+$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "使用 catpcha 验证码来验证公共表单的提交 (默认: 激活).");
 $PMF_LANG['ad_session_expiring'] = '您的会话(session)连接将在 %d 分钟后终止: 您希望继续工作么?';
 
 // added v1.6.2 - 2006-06-13 by Matteo

@@ -782,7 +782,7 @@ $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => "checkbox", 1 => "�
 $LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "Уровень доступа");
 $LANG_CONF['spam.enableSafeEmail'] = array(0 => "checkbox", 1 => "Показывать адреса электронной почты безопасным способом (включено по умолчанию).");
 $LANG_CONF['spam.checkBannedWords'] = array(0 => "checkbox", 1 => "Проверять содержание публично доступных форм на заблокированные слова (включено по умолчанию).");
-$LANG_CONF['spam.enableCatpchaCode'] = array(0 => "checkbox", 1 => "Use a captcha code to allow public form submission (default: enabled).");
+$LANG_CONF['spam.enableCaptchaCode'] = array(0 => "checkbox", 1 => "Use a captcha code to allow public form submission (default: enabled).");
 $LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Number of related entries");
 $LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'Record sorting (according to property)');
 $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Record sorting (descending or ascending)');

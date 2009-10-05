@@ -620,7 +620,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'Napredna pretraga';
 $PMF_LANG['spamControlCenter'] = 'Spam kontrolni centar';
 $LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Ispisuj korisni&#269;ke email adrese na siguran na&#269;in (uklju&#269;eno).");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Proveri javnu formu za zabranjene re&#269;i (uklju&#269;eno).");
-$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "Koristi catpcha slike za kori&scaron;&#263;enje javne forme (uklju&#269;eno).");
+$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "Koristi catpcha slike za kori&scaron;&#263;enje javne forme (uklju&#269;eno).");
 $PMF_LANG['ad_session_expiring'] = 'Va&scaron;a sesija &#263;e iste&#263;i za %d minuta: da li &#382;elite da nastavite sa radom?';
 
 // added v1.6.2 - 2006-06-13 by Matteo

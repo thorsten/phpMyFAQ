@@ -625,7 +625,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'Patikslintoji paieška';
 $PMF_LANG['spamControlCenter'] = 'Brukalo kontrolės centras';
 $LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Spausdinti naudotojų el. laiškus saugiu būdu (numatyta r.: įjungta).");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Tikrinti viešų formų turinį pagal draudžiamų žodžių sąrašą (numatyta r.: įjungta).");
-$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "Naudoti CAPTCHA kodus viešam formų pateikimui (numatyta r.: įjungta).");
+$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "Naudoti CAPTCHA kodus viešam formų pateikimui (numatyta r.: įjungta).");
 $PMF_LANG['ad_session_expiring'] = 'Jūsų seansas baigs galioti po %d minučių: ar norėtumėte tęsti darbą?';
 
 // added v1.6.2 - 2006-06-13 by Matteo

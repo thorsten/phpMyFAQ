@@ -622,7 +622,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'Avanceret s&oslash;gning';
 $PMF_LANG['spamControlCenter'] = 'Spam control center';
 $LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Print user email in a safe way (standard: enabled).");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Check public form content against banned words (standard: enabled).");
-$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "Use a catpcha code to allow public form submission (standard: enabled).");
+$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "Use a catpcha code to allow public form submission (standard: enabled).");
 $PMF_LANG['ad_session_expiring'] = 'Your session will expire in %d minutes: would you like to go on working?';
 
 // added v1.6.2 - 2006-06-13 by Matteo

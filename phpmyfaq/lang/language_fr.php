@@ -742,5 +742,5 @@ $PMF_LANG['msgAdvancedSearch'] = 'Recherche avancée';
 $PMF_LANG['spamControlCenter'] = 'Centre de contrôle Spam';
 $LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Affichage sécurisé de l'e-mail utilisateur (défaut: activé).");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Analyser le contenu des formulaires publics pour éviter les termes prohibés (défaut: activé).");
-$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "Utiliser un code variable de sécurité pour autoriser la soumission d'un formulaire public (défaut: activé).");
+$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "Utiliser un code variable de sécurité pour autoriser la soumission d'un formulaire public (défaut: activé).");
 $PMF_LANG['ad_session_expiring'] = 'Votre session va expirer dans %d minutes. Souhaitez-vous continuer à travailler ?';

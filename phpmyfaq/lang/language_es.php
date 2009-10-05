@@ -624,7 +624,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'Búsqueda avanzada';
 $PMF_LANG['spamControlCenter'] = 'Centro de control de Spam';
 $LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "Imprimir email de usuario en modo seguro (por omisión: activado).");
 $LANG_CONF["spamCheckBannedWords"] = array(0 => "checkbox", 1 => "Chequear palabras prohibidas el contenido de formularios públicos (por omisión: activado).");
-$LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => "Usar código catpcha para permitir nuevos registros en formularios públicos (por omisión: activado).");
+$LANG_CONF["spamenableCaptchaCode"] = array(0 => "checkbox", 1 => "Usar código catpcha para permitir nuevos registros en formularios públicos (por omisión: activado).");
 $PMF_LANG['ad_session_expiring'] = 'Su sesión terminará en %d minutos: quiere continuar trabajando?';
 
 // added v1.6.2 - 2006-06-13 by Matteo

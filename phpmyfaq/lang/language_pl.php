@@ -626,7 +626,7 @@ $LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Iloś�
 $LANG_CONF['records.orderby'] = array(0 => "select", 1 => "Sortowanie rekordów (stosownie do własności)");
 $LANG_CONF['records.sortby'] = array(0 => "select", 1 => "Kierunek sortowania rekordów (malejąco lub rosnąco)");
 $LANG_CONF['spam.checkBannedWords'] = array(0 => "checkbox", 1 => "Sprawdzaj formularze publiczne na występowanie słów zabronionych (domyślnie włączone).");
-$LANG_CONF['spam.enableCatpchaCode'] = array(0 => "checkbox", 1 => "Używaj captcha do zatwierdzania publicznych formularzy (domyślnie włączone).");
+$LANG_CONF['spam.enableCaptchaCode'] = array(0 => "checkbox", 1 => "Używaj captcha do zatwierdzania publicznych formularzy (domyślnie włączone).");
 $LANG_CONF['spam.enableSafeEmail'] = array(0 => "checkbox", 1 => "Wyświetlaj adres e-mail użytkownika w sposób bezpieczny (domyślnie włączone).");
 $PMF_LANG['rightsLanguage']['addglossary'] = "dodaj do glosariusza";
 $PMF_LANG['rightsLanguage']['editglossary'] = "edytuj w glosariuszu";

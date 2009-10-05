@@ -619,7 +619,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'Chwiliad manwl';
 $PMF_LANG['spamControlCenter'] = 'Canolfan rheoli sbam';
 $LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => " Argraffu e-bost defnyddiwr mewn ffordd ddiogel (default: enabled).");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => " Cynnwys ffurflen gyhoeddus yn erbyn geiriau a waharddwyd (default: enabled).");
-$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => " Defnyddio côd catpcha i gyflwyno ffurflen gyhoeddus (default: enabled).");
+$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => " Defnyddio côd catpcha i gyflwyno ffurflen gyhoeddus (default: enabled).");
 $PMF_LANG['ad_session_expiring'] = 'Bydd eich sesiwn yn dod i ben mewn %d munud: hoffech chi barhau i weithio?';
 
 // added v1.6.2 - 2006-06-13 by Matteo

@@ -625,7 +625,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'ค้นหาแบบพิเศษ';
 $PMF_LANG['spamControlCenter'] = 'ระบบควบคุม Spam';
 $LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "ป้องกันการแสดงอีเมล์ผู้ใช้ (ค่าเริ่มต้น: เปิดใช้)");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "เปิดระบบตรวจสอบคำหยาบ (ค่าเริ่มต้น: เปิดใช้)");
-$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "เปิดระบบกรอกรหัสอักษร Catpcha (ค่าเริ่มต้น: เปิดใช้)");
+$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "เปิดระบบกรอกรหัสอักษร Captcha (ค่าเริ่มต้น: เปิดใช้)");
 $PMF_LANG['ad_session_expiring'] = 'การเชื่อมต่อของคุณจะถูกยกเลิกใน %d นาที: คุณต้องการใช้งานต่อหรือไม่?';
 
 // added v1.6.2 - 2006-06-13 by Matteo
