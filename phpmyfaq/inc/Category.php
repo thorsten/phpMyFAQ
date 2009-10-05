@@ -725,28 +725,28 @@ class PMF_Category
     {
         return $this->getChildren($this->categoryName[$id]['parent_id']);
     }
-    
+
     /**
-     * Method to create a category link
+     * Private method to create a category link
      *
-     * @param string  $sids        Session id
-     * @param integer $parent      Parent category
-     * @param string  $name        Category name
-     * @param string  $description Description
-     * @param boolean $hasChildren Child categories available
-     * @param boolean $isActive    Active category
-     * 
-     * @return string
+     * @param  string  $sids         Session id
+     * @param  integer $parent       Parent category
+     * @param  string  $categoryName Category name
+     * @param  string  $description  Description
+     * @param  boolean $hasChildren  Child categories available
+     * @param  boolean $isActive     Sets a link active via CSS
+     * @return  string
      */
-    public function addCategoryLink($sids, $parent, $name, $description, $hasChildren = false, $isActive = false)
+    private function addCategoryLink($sids, $parent, $categoryName, $description, $hasChildren = false, $isActive = false)
     {
-        $url   = sprintf('%saction=show&amp;cat=%d', $sids, $parent);
-        $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-        $oLink->itemTitle = $oLink->text = $name;
+        $url              = sprintf('%saction=show&amp;cat=%d', $sids, $parent);
+        $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+        $oLink->itemTitle = $categoryName;
+        $oLink->text      = $categoryName;
         
         if ($hasChildren) {
             $oLink->text .= sprintf(' <img src="images/more.gif" width="11" height="11" alt="%s" style="border: none; vertical-align: middle;" />',
-                $name);
+                $categoryName);
         }
         
         if ($isActive) {

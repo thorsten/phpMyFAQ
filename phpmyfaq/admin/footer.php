@@ -92,6 +92,7 @@ tinymce.create('tinymce.plugins.internalFaqLinkPlugin', {
 // Register plugin with a short name
 tinymce.PluginManager.add('internalfaqlinkbox', tinymce.plugins.internalFaqLinkPlugin);
 
+
 tinyMCE.init({
     // General options
     mode     : "exact",
