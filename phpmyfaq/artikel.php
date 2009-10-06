@@ -3,11 +3,12 @@
  * Shows the page with the FAQ record and - when available - the user
  * comments
  *
- * @package   phpMyFAQ
+ * @category  phpMyFAQ
+ * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Lars Tiedemann <larstiedemann@yahoo.de>
  * @since     2002-08-27
- * @version   SVN: $Id$
+ * @version   git: $Id$
  * @copyright 2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -52,11 +53,12 @@ if (0 == $solution_id) {
 } else {
     $faq->getRecordBySolutionId($solution_id);
 }
+
 $faqvisits = PMF_Visits::getInstance();
 $faqvisits->logViews($faq->faqRecord['id']);
 
 $content = $faq->faqRecord['content'];
-$thema   = $faq->getRecordTitle($record_id);
+$thema   = $faq->getRecordTitle($faq->faqRecord['id']);
 // Add Glossary entries
 $content = $oGlossary->insertItemsIntoContent($content);
 $thema   = $oGlossary->insertItemsIntoContent($thema);
