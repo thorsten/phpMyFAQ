@@ -1,16 +1,18 @@
 <?php
-/*
- * $Id$
- *
+/**
  * This class collects data which is used to create some usage statistics.
  *
  * The collected data is - after authorization of the administrator - submitted
  * to phpMyFAQ.de. For privacy reasons we try to collect only data which aren't private
  * or don't give any information which might help to identify the user.
  *
- * @author      Johannes Schlueter <johannes@php.net>
- * @since       2007-03-17
- * @copyright   (c) 2007 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   PMF_Questionnaire_Data
+ * @author    Johannes Schlueter <johannes@php.net>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2007-03-17
+ * @version   git: $Id$
+ * @copyright 2007-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -23,23 +25,48 @@
  * under the License.
  */
 
+/**
+ * PMF_Questionnaire_Data
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Questionnaire_Data
+ * @author    Johannes Schlueter <johannes@php.net>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2007-03-17
+ * @copyright 2007-2009 phpMyFAQ Team
+ */
 class PMF_Questionnaire_Data
 {
-    var $data = null;
-    var $config;
-    var $oldversion;
+    /**
+     * Array with data
+     * 
+     * @var array
+     */
+    private $data = array();
+    
+    /**
+     * Array with configuration data
+     * 
+     * @var array
+     */
+    private $config = array();
+    
+    /**
+     * Old version number
+     * 
+     * @var string
+     */
+    private $oldversion = '0';
 
     /**
      * Constructor.
      *
-     * @param   array
-     * @param   string
-     * @return  void
-     * @access  public
-     * @since   2007-03-17
-     * @author  Johannes Schlueter <johannes@php.net>
+     * @param  array  $config     Array of configuration items
+     * @param  string $oldversion Old version number
+     * 
+     * @return void
      */
-    function PMF_Questionnaire_Data($config, $oldversion = 0)
+    function __construct(Array $config, $oldversion = '0')
     {
         $this->config = $config;
         $this->config['oldversion'] = $oldversion;
@@ -48,12 +75,9 @@ class PMF_Questionnaire_Data
     /**
      * Get data as an array.
      *
-     * @return  array
-     * @access  public
-     * @since   2007-03-17
-     * @author  Johannes Schlueter <johannes@php.net>
+     * @return array
      */
-    function get()
+    public function get()
     {
         if (!$this->data) {
             $this->collect();
@@ -65,30 +89,22 @@ class PMF_Questionnaire_Data
     /**
      * Collect info into the data property.
      *
-     * @return  void
-     * @access  public
-     * @since   2007-03-17
-     * @author  Johannes Schlueter <johannes@php.net>
+     * @return void
      */
-    function collect()
+    public function collect()
     {
         $this->data = array(
-            'phpMyFAQ'  => $this->getPmfInfo(),
-            'PHP'       => $this->getPHPInfo(),
-            'System'    => $this->getSystemInfo()
-        );
+            'phpMyFAQ' => $this->getPmfInfo(),
+            'PHP'      => $this->getPHPInfo(),
+            'System'   => $this->getSystemInfo());
     }
 
     /**
      * Get data about this phpMyFAQ installation.
      *
      * @return  array
-     * @access  public
-     * @since   2007-03-17
-     * @author  Johannes Schlueter <johannes@php.net>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function getPMFInfo()
+    public function getPMFInfo()
     {
         // oldversion isn't a real PMF config option and it is just used by this class
         $settings = array(
@@ -97,68 +113,48 @@ class PMF_Questionnaire_Data
             'main.language',
             'main.permLevel',
             'main.languageDetection',
-            'main.ldapSupport'
-        );
+            'main.ldapSupport');
 
-        if (function_exists('array_intersect_key')) {
-            return array_intersect_key($this->config, array_flip($settings));
-        } else {
-            $result = array();
-            $selected = array_flip($settings);
-            foreach ($this->config as $key => $value) {
-                if (array_key_exists($key, $selected)) {
-                    $result[$key] = $this->config[$key];
-                }
-            }
-
-            return $result;
-        }
+        return array_intersect_key($this->config, array_flip($settings));
     }
 
     /**
      * Get data about the PHP runtime setup.
      *
-     * @return  array
-     * @access  public
-     * @since   2007-03-17
-     * @author  Johannes Schlueter <johannes@php.net>
+     * @return array
      */
-    function getPHPInfo()
+    public function getPHPInfo()
     {
         return array(
-            'version'                       => PHP_VERSION,
-            'sapi'                          => PHP_SAPI,
-            'int_size'                      => defined('PHP_INT_SIZE') ? PHP_INT_SIZE : '',
-            'safe_mode'                     => (int)ini_get('safe_mode'),
-            'open_basedir'                  => (int)ini_get('open_basedir'),
-            'memory_limit'                  => ini_get('memory_limit'),
-            'allow_url_fopen'               => (int)ini_get('allow_url_fopen'),
-            'allow_url_include'             => (int)ini_get('allow_url_include'),
-            'file_uploads'                  => (int)ini_get('file_uploads'),
-            'upload_max_filesize'           => ini_get('upload_max_filesize'),
-            'post_max_size'                 => ini_get('post_max_size'),
-            'disable_functions'             => ini_get('disable_functions'),
-            'disable_classes'               => ini_get('disable_classes'),
-            'enable_dl'                     => (int)ini_get('enable_dl'),
-            'magic_quotes_gpc'              => (int)ini_get('magic_quotes_gpc'),
-            'register_globals'              => (int)ini_get('register_globals'),
-            'filter.default'                => ini_get('filter.default'),
-            'zend.ze1_compatibility_mode'   => (int)ini_get('zend.ze1_compatibility_mode'),
-            'unicode.semantics'             => (int)ini_get('unicode.semantics'),
-            'zend_thread_safty'             => (int)function_exists('zend_thread_id'),
-            'extensions'                    => get_loaded_extensions()
-        );
+            'version'                     => PHP_VERSION,
+            'sapi'                        => PHP_SAPI,
+            'int_size'                    => defined('PHP_INT_SIZE') ? PHP_INT_SIZE : '',
+            'safe_mode'                   => (int)ini_get('safe_mode'),
+            'open_basedir'                => (int)ini_get('open_basedir'),
+            'memory_limit'                => ini_get('memory_limit'),
+            'allow_url_fopen'             => (int)ini_get('allow_url_fopen'),
+            'allow_url_include'           => (int)ini_get('allow_url_include'),
+            'file_uploads'                => (int)ini_get('file_uploads'),
+            'upload_max_filesize'         => ini_get('upload_max_filesize'),
+            'post_max_size'               => ini_get('post_max_size'),
+            'disable_functions'           => ini_get('disable_functions'),
+            'disable_classes'             => ini_get('disable_classes'),
+            'enable_dl'                   => (int)ini_get('enable_dl'),
+            'magic_quotes_gpc'            => (int)ini_get('magic_quotes_gpc'),
+            'register_globals'            => (int)ini_get('register_globals'),
+            'filter.default'              => ini_get('filter.default'),
+            'zend.ze1_compatibility_mode' => (int)ini_get('zend.ze1_compatibility_mode'),
+            'unicode.semantics'           => (int)ini_get('unicode.semantics'),
+            'zend_thread_safty'           => (int)function_exists('zend_thread_id'),
+            'extensions'                  => get_loaded_extensions());
     }
 
     /**
      * Get data about the general system information, like OS or IP (shortened).
      *
-     * @return  array
-     * @access  public
-     * @since   2007-03-17
-     * @author  Johannes Schlueter <johannes@php.net>
+     * @return array
      */
-    function getSystemInfo()
+    public function getSystemInfo()
     {
         // Start discovering the IPV4 server address, if available
         $serverAddress = '0.0.0.0';
@@ -180,21 +176,18 @@ class PMF_Questionnaire_Data
             // - 10.0.0.0/8
             // - 172.16.0.0/12
             // - 192.168.0.0/16
-            'ip'    => $aIPAddress[0].'.'.$aIPAddress[1].'.XXX.YYY'
-        );
+            'ip'    => $aIPAddress[0].'.'.$aIPAddress[1].'.XXX.YYY');
     }
 }
 
 /**
  * Output the data as an HTML Definition List.
  *
- * @param   mixed
- * @param   string
- * @param   string
+ * @param  mixed  $value Value
+ * @param  string $key   Key
+ * @param  string $ident Identian
+ * 
  * @return  void
- * @access  public
- * @since   2007-03-17
- * @author  Johannes Schlueter <johannes@php.net>
  */
 function data_printer($value, $key, $ident = "\n\t")
 {
