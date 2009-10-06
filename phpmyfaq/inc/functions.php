@@ -934,6 +934,10 @@ function buildAttachmentUrl($recordId, $filename, $forHtml = true)
  */
 function isAttachmentDirOk($id)
 {
+	if ($id == null) {
+		return false;
+	}
+	
     $recordAttachmentsDir = PMF_ATTACHMENTS_DIR . DIRECTORY_SEPARATOR . $id; 
     
     return false !== PMF_ATTACHMENTS_DIR && file_exists(PMF_ATTACHMENTS_DIR) && is_dir(PMF_ATTACHMENTS_DIR) &&
