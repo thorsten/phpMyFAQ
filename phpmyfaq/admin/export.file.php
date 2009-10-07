@@ -2,12 +2,12 @@
 /**
  * XML, XML DocBook, XHTML and PDF export - streamer page
  *
- * @package    phpMyFAQ
+ * @category   phpMyFAQ
  * @subpackage Administration
  * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2005-11-02
  * @copyright  2005-2009 phpMyFAQ Team
- * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -25,8 +25,6 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-include '../inc/Export.php';
-
 //
 // GET Parameters Syntax:
 //   export.file.php?
@@ -40,31 +38,16 @@ $downwards         = PMF_Filter::filterInput(INPUT_POST, 'downwards', FILTER_VAL
 $inlineDisposition = PMF_Filter::filterInput(INPUT_POST, 'dispos', FILTER_VALIDATE_BOOLEAN, false);
 $type              = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING, EXPORT_TYPE_NONE);
 
-// Prepare the file content to be streamed
-switch ($type) {
-    case EXPORT_TYPE_DOCBOOK:
-        $content = PMF_Export::getDocBookExport($catid, $downwards);
-        break;
-    case EXPORT_TYPE_PDF:
-        $content = PMF_Export::getPDFExport($catid, $downwards);
-        break;
-    case EXPORT_TYPE_XHTML:
-        $content = PMF_Export::getXHTMLExport($catid, $downwards);
-        break;
-    case EXPORT_TYPE_XML:
-        $content = PMF_Export::getXMLExport($catid, $downwards);
-        break;
-    // In this case no default statement is required:
-    // the one above is just for clean coding style
-    default:
-        break;
-}
+$faq      = new PMF_Faq();
+$category = new PMF_Category();
+
+$export  = PMF_Export::create($faq, $category, $type);
+$content = $export->generate($categoryId, $downwards);
 
 // Stream the file content
 $oHttpStreamer = new PMF_HttpStreamer($type, $content);
 if ($inlineDisposition) {
     $oHttpStreamer->send(PMF_HttpStreamer::HTTP_CONTENT_DISPOSITION_INLINE);
-}
-else {
+} else {
     $oHttpStreamer->send(PMF_HttpStreamer::HTTP_CONTENT_DISPOSITION_ATTACHMENT);
 }
