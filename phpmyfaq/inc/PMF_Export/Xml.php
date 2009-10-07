@@ -33,5 +33,41 @@
  */
 class PMF_Export_Xml extends PMF_Export 
 {
+	/**
+	 * XMLWriter object
+	 * 
+	 * @var XMLWriter
+	 */
+	private $xml = null;
 	
+	/**
+	 * Constructor
+	 * 
+     * @param PMF_Faq      $faq      PMF_Faq object
+     * @param PMF_Category $category PMF_Category object 
+     * 
+	 * return PMF_Export_Xml
+	 */
+	public function __construct(PMF_Faq $faq, PMF_Category $category)
+	{
+		$this->faq      = $faq;
+		$this->category = $category;
+		$this->xml      = new XMLWriter();
+		
+		$this->xml->openMemory();
+	}
+	
+	/**
+	 * Generates the export
+	 * 
+	 * @param integer $categoryId Category Id
+	 * @param boolean $downwards  If true, downwards, otherwise upward ordering
+	 * @param string  $language   Language
+	 * 
+	 * @return string
+	 */
+	public function generate($categoryId = 0, $downwards = true, $language = '')
+	{
+		
+	}
 }

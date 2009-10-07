@@ -50,26 +50,42 @@ define("EXPORT_TYPE_NONE", "none");
 class PMF_Export
 {
 	/**
+	 * PMF_Faq object
+	 * 
+	 * @var PMF_Faq
+	 */
+	protected $faq = null;
+	
+	/**
+	 * PMF_Category object
+	 * 
+	 * @var PMF_Category
+	 */
+	protected $category = null;
+	
+	/**
 	 * Factory
 	 * 
-	 * @param string $mode Export 
+	 * @param PMF_Faq      $faq      PMF_Faq object
+	 * @param PMF_Category $category PMF_Category object 
+	 * @param string       $mode     Export 
 	 * 
 	 * @return PMF_Export
 	 */
-	public static function create($mode = 'pdf')
+	public static function create(PMF_Faq $faq, PMF_Category $category, $mode = 'pdf')
 	{
 		switch ($mode) {
 			case 'pdf':
-				return new PMF_Export_Pdf();
+				return new PMF_Export_Pdf($faq, $category);
 				break;
 			case 'xml':
-                return new PMF_Export_Xml();
+                return new PMF_Export_Xml($faq, $category);
                 break;
 			case 'xhtml':
-				return new PMF_Export_Xhtml();
+				return new PMF_Export_Xhtml($faq, $category);
 				break;
 			case 'docbook':
-				return new PMF_Export_Docbook();
+				return new PMF_Export_Docbook($faq, $category);
 				break;
 			default:
 				throw new Exception('Export not implemented!');
