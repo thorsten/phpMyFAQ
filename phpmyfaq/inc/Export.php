@@ -49,19 +49,42 @@ define("EXPORT_TYPE_NONE", "none");
  */
 class PMF_Export
 {
+	/**
+	 * Factory
+	 * 
+	 * @param string $mode Export 
+	 * 
+	 * @return PMF_Export
+	 */
+	public static function create($mode = 'pdf')
+	{
+		switch ($mode) {
+			case 'pdf':
+				return new PMF_Export_Pdf();
+				break;
+			case 'xml':
+                return new PMF_Export_Xml();
+                break;
+			case 'xhtml':
+				return new PMF_Export_Xhtml();
+				break;
+			case 'docbook':
+				return new PMF_Export_Docbook();
+				break;
+			default:
+				throw new Exception('Export not implemented!');
+		}
+	}
+	
+	
     /**
      * Returns the timestamp of the export
      *
      * @return string
      */
-    function getExportTimeStamp()
+    public static function getExportTimeStamp()
     {
-        global $PMF_CONST;
-        
-        $offset    = (60 * 60) * ($PMF_CONST["timezone"] / 100);
-        $timestamp = $_SERVER['REQUEST_TIME'] + $offset;
-        
-        return date("Y-m-d-H-i-s", $timestamp);
+        return date("Y-m-d-H-i-s", $_SERVER['REQUEST_TIME']);
     }
 
     /**
@@ -78,8 +101,7 @@ class PMF_Export
         // TODO: remove the need of pre-generating a file to be read
         //generateDocBookExport();
         PMF_Export::_generateDocBookExport2();
-        $filename = "xml/docbook/docbook.xml";
-        $filename = dirname(dirname(__FILE__))."/".$filename;
+        $filename = dirname(dirname(__FILE__)) . "/xml/docbook/docbook.xml";
         return PMF_Export::_getFileContents($filename);
     }
 
@@ -280,11 +302,8 @@ class PMF_Export
         global $PMF_CONF, $PMF_LANG;
 
         // XML DocBook export
-        $parentID     = 0;
-        $rubrik       = 0;
-        $sql          = '';
-        $selectString = '';
-        $db           = PMF_Db::getInstance();
+        $parentID = 0;
+        $db       = PMF_Db::getInstance();
 
         $export = new PMF_Export_Docbook();
         $export->delete_file();
