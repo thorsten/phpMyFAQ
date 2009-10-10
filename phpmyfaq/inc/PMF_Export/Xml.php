@@ -68,6 +68,52 @@ class PMF_Export_Xml extends PMF_Export
 	 */
 	public function generate($categoryId = 0, $downwards = true, $language = '')
 	{
+		// Initialize categories
+		$this->category->transform($categoryId);
 		
+		$faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
+		$version = PMF_Configuration::getInstance()->get('main.currentVersion');
+		$comment = sprintf('XML output by phpMyFAQ %s | Date: %s', 
+		  $version, 
+		  PMF_Date::createIsoDate(date("YmdHis")));
+		
+		$this->xml->startDocument('1.0', 'utf-8', 'yes');
+		$this->xml->writeComment($comment);
+		$this->xml->startElement('phpmyfaq');
+		
+		if (count($faqdata)) {
+            foreach ($faqdata as $data) {
+                
+                // Build the <article/> node
+                $this->xml->startElement('article');
+                $this->xml->writeAttribute('id', $data['id']);
+                $this->xml->writeElement('language', $data['lang']);
+                $this->xml->writeElement('category', $this->category->getPath($data['category_id'], ' >> '));
+                
+                if (!empty($data['keywords'])) {
+                    $this->xml->writeElement('keywords', $data['keywords']);
+                } else {
+                    $this->xml->writeElement('keywords');
+                }
+                
+                $this->xml->writeElement('question', strip_tags($data['topic']));
+                $this->xml->writeElement('answer', PMF_String::htmlspecialchars($data['content']));
+
+                if (!empty($data['author_name'])) {
+                	$this->xml->writeElement('author', $data['author_name']);
+                } else {
+                    $this->xml->writeElement('author');
+                }
+                
+                $this->xml->writeElement('data', PMF_Date::createIsoDate($data['lastmodified']));
+                $this->xml->endElement();
+            }
+            	
+		}
+		
+		$this->xml->endElement();
+		
+		header('Content-type: text/xml'); 
+		return $this->xml->outputMemory();
 	}
 }
