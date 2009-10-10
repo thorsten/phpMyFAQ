@@ -33,10 +33,10 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 //       [&catid=NN[&downwards=1]], default: all, downwards
 //
 
-$catid             = PMF_Filter::filterInput(INPUT_POST, 'catid', FILTER_VALIDATE_INT, 0);
+$categoryId        = PMF_Filter::filterInput(INPUT_POST, 'catid', FILTER_VALIDATE_INT, 0);
 $downwards         = PMF_Filter::filterInput(INPUT_POST, 'downwards', FILTER_VALIDATE_BOOLEAN, false);
 $inlineDisposition = PMF_Filter::filterInput(INPUT_POST, 'dispos', FILTER_VALIDATE_BOOLEAN, false);
-$type              = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING, EXPORT_TYPE_NONE);
+$type              = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING, 'none');
 
 $faq      = new PMF_Faq();
 $category = new PMF_Category();
