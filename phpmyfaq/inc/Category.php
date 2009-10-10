@@ -737,7 +737,7 @@ class PMF_Category
      * @param  boolean $isActive     Sets a link active via CSS
      * @return  string
      */
-    private function addCategoryLink($sids, $parent, $categoryName, $description, $hasChildren = false, $isActive = false)
+    public function addCategoryLink($sids, $parent, $categoryName, $description, $hasChildren = false, $isActive = false)
     {
         $url              = sprintf('%saction=show&amp;cat=%d', $sids, $parent);
         $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
