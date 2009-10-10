@@ -246,68 +246,6 @@ class PMF_Export
     }
     
     /**
-     * Returns the XML export
-     * 
-     * @param integer $nCatid     Number of categories
-     * @param boolean $bDownwards Downwards
-     * @param string  $lang       Language
-     * 
-     * @return string
-     */
-    public static function getXMLExport($nCatid = 0, $bDownwards = true, $lang = "")
-    {
-        global $db, $LANGCODE, $PMF_LANG, $PMF_CONF;
-
-        $tree = new PMF_Category();
-        $tree->transform(0);
-        $my_xml_output  = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n";
-        $my_xml_output .= "<!-- XML-Output by phpMyFAQ ".$PMF_CONF['main.currentVersion']." | Date: ".PMF_Date::createIsoDate(date("YmdHis"))." -->\n";
-        $my_xml_output .= "<phpmyfaq xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:NamespaceSchemaLocation=\"http://www.phpmyfaq.de/xml/faqschema.xsd\">\n";
-
-        // Get Faq Data
-        $oFaq = new PMF_Faq();
-        $faqs = $oFaq->get(FAQ_QUERY_TYPE_EXPORT_XML, $nCatid,  $bDownwards, $lang);
-
-        // Start composing XML
-        if (count($faqs) > 0) {
-            foreach ($faqs as $faq) {
-                // Get faq properties
-                $xml_content  = $faq['content'];
-                $xml_rubrik   = $tree->getPath($faq['category_id'], " >> ");
-                $xml_thema    = $faq['topic'];
-                $xml_keywords = $faq['keywords'];
-                // Take care of XML entities
-                $xml_content  = strip_tags(PMF_String::htmlspecialchars($xml_content, ENT_QUOTES, $PMF_LANG['metaCharset']));
-                $xml_rubrik   = PMF_htmlentities(strip_tags($xml_rubrik), ENT_QUOTES, $PMF_LANG['metaCharset']);
-                $xml_thema    = strip_tags($xml_thema);
-                // Build the <article/> node
-                $my_xml_output .= "\t<article id=\"".$faq['id']."\">\n";
-                $my_xml_output .= "\t<language>".$faq['lang']."</language>\n";
-                $my_xml_output .= "\t<category>".$xml_rubrik."</category>\n";
-                if (!empty($xml_keywords)) {
-                    $my_xml_output .= "\t<keywords>".$xml_keywords."</keywords>\n";
-                }
-                else {
-                    $my_xml_output .= "\t<keywords />\n";
-                }
-                $my_xml_output .= "\t<theme>".$xml_thema."</theme>\n";
-                $my_xml_output .= "\t<content xmlns=\"http://www.w3.org/TR/REC-html40\">".$xml_content."</content>\n";
-                if (!empty($faq['author_name'])) {
-                    $my_xml_output .= "\t<author>".$faq['author_name']."</author>\n";
-                }
-                else {
-                    $my_xml_output .= "\t<author />\n";
-                }
-                $my_xml_output .= "\t<date>".PMF_Date::createIsoDate($faq['lastmodified'])."</date>\n";
-                $my_xml_output .= "\t</article>\n";
-            }
-        }
-        $my_xml_output .= "</phpmyfaq>";
-
-        return $my_xml_output;
-    }
-
-    /**
      * Wrapper for the PMF_Export_Docbook class
      * 
      */
