@@ -1023,3 +1023,22 @@ $PMF_LANG["rightsLanguage"]['addtranslation'] = "pridėti vertimą";
 $PMF_LANG["rightsLanguage"]['edittranslation'] = "redaguoti vertimą";
 $PMF_LANG["rightsLanguage"]['deltranslation'] = "šalinti vertimą";
 $PMF_LANG["rightsLanguage"]['approverec'] = "patvirtinti įrašus";
+
+// added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
+$LANG_CONF["main.enableAttachmentEncryption"] = array(0 => "checkbox", 1 => "Įjungti priedų užšifravimą <br><small>Ignoruojama, kai priedai išjungti</small>");
+$LANG_CONF["main.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Numatytasis priedų užšifravimo raktas <br><small>Ignoruojama, jei priedų užšifravimas išjungtas</small><br><small><font color="red">ĮSPĖJIMAS: Nekeiskite šio rakto, kai užšifravimas jau įjungtas!!!</font></small>');
+//$LANG_CONF["main.attachmentsStorageType"] = array(0 => "select", 1 => "Attachment storage type");
+//$PMF_LANG['att_storage_type'][0] = 'Failų sistema';
+//$PMF_LANG['att_storage_type'][1] = 'Duomenų bazė';
+
+// added 2.6.0-alpha - 2009-09-06 by Thorsten
+$PMF_LANG['ad_menu_upgrade'] = 'Atnaujinti';
+$PMF_LANG['ad_you_shouldnt_update'] = 'Jūs turite naujausią phpMyFAQ versiją. Jums nereikia atnaujinti.';
+$LANG_CONF['main.onlySecureLogins'] = array(0 => 'checkbox', 1 => "Leisti prisijungimus tik per saugujį ryšį? (numatyta r.: išjungta)");
+$PMF_LANG['msgSecureSwitch'] = "Jei norite prisijungti, persijunkite į saugujį režimą!";
+
+// added 2.6.0-alpha - 2009-10-03 by Anatoliy Belsky
+$PMF_LANG['msgTransToolNoteFileSaving']  = 'Pastebėkite, kad jokie failai nebus įrašyti kol nepaspausite mygtuko išsaugoti';
+$PMF_LANG['msgTransToolPageBufferRecorded'] = 'Puslapio %d buferis sėkmingai įrašytas';
+$PMF_LANG['msgTransToolErrorRecordingPageBuffer'] = 'Klaida įrašant puslapio %d buferį';
+$PMF_LANG['msgTransToolRecordingPageBuffer'] = 'Įrašomas puslapio %d buferis';
