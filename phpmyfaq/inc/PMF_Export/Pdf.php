@@ -72,9 +72,7 @@ class PMF_Export_Pdf extends PMF_Export
      * @return string
      */
     public function generate($categoryId = 0, $downwards = true, $language = '')
-    {
-        global $PMF_LANG;
-        
+    {        
         // Initialize categories
         $this->category->transform($categoryId);
         
@@ -101,10 +99,6 @@ class PMF_Export_Pdf extends PMF_Export
             	$this->pdf->setCategory($categories[$key]);
             	$this->pdf->setQuestion($questions[$key]);
             	$this->pdf->setCategories($this->category->categoryName);
-            	
-            	$author = $authors[$key];
-                $date   = $dates[$key];
-
                 $this->pdf->AddPage();
                 $this->pdf->SetFont('dejavusans', '', 12);
                 $this->pdf->WriteHTML($value);
