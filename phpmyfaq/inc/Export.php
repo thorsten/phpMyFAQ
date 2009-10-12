@@ -120,65 +120,6 @@ class PMF_Export
         $filename = dirname(dirname(__FILE__)) . "/xml/docbook/docbook.xml";
         return PMF_Export::_getFileContents($filename);
     }
-
-    /**
-     * Returns the PDF export
-     * 
-     * @param integer $nCatid     Number of categories
-     * @param boolean $bDownwards Downwards
-     * @param string  $lang       Language
-     * 
-     * @return string
-     */
-    public static function getPDFExport($nCatid = 0, $bDownwards = true, $lang = "")
-    {
-        $tree       = new PMF_Category();
-        $arrRubrik  = array();
-        $arrThema   = array();
-        $arrContent = array();
-        $arrAuthor  = array();
-        $arrDatum   = array();
-
-        // Get Faq Data
-        $oFaq = new PMF_Faq();
-        $faqs = $oFaq->get(FAQ_QUERY_TYPE_EXPORT_PDF, $nCatid,  $bDownwards, $lang);
-
-        if (count($faqs) > 0) {
-            $i = 0;
-
-            // Get the data
-            foreach ($faqs as $faq) {
-                $arrRubrik[$i]  = $faq['category_id'];
-                $arrThema[$i]   = $faq['topic'];
-                $arrContent[$i] = $faq['content'];
-                $arrAuthor[$i]  = $faq['author_name'];
-                $arrDatum[$i]   = $faq['lastmodified'];
-                $i++;
-            }
-
-            // Start composing PDF
-            $pdf = new PMF_Export_Pdf();
-            $pdf->enableBookmarks = true;
-            $pdf->isFullExport    = true;
-            $pdf->Open();
-            $pdf->AliasNbPages();
-            $pdf->SetDisplayMode('real');
-
-            // Create the PDF
-            foreach ($arrContent as $key => $value) {
-                $pdf->category   = $arrRubrik[$key];
-                $pdf->thema      = $arrThema[$key];
-                $pdf->categories = $tree->categoryName;
-                $date            = $arrDatum[$key];
-                $author          = $arrAuthor[$key];
-                $pdf->AddPage();
-                $pdf->SetFont("Arial", "", 12);
-                $pdf->WriteHTML($value);
-            }
-
-            return $pdf->Output('', 'S');
-        }
-    }
     
     /**
      * Wrapper for the PMF_Export_Docbook class
