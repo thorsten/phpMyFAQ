@@ -2883,8 +2883,12 @@ class PMF_Faq
             @unlink($pdfFile);
         }
         
-        $pdf      = new PMF_Export_Pdf($currentCategory, $this->faqRecord['title'], $category->categoryName);
+        $pdf      = new PMF_Export_Pdf_Wrapper();
         $pdf->faq = $this->faqRecord;
+        
+        $pdf->setCategory($currentCategory);
+        $pdf->setQuestion($this->faqRecord['title']);
+        $pdf->setCategories($category->categoryName);
 
         // Start building PDF...
         $pdf->Open();
