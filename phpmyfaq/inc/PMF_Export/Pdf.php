@@ -1,6 +1,6 @@
 <?php
 /**
- * XHTML Export class for phpMyFAQ
+ * PDF Export class for phpMyFAQ
  *
  * @category  phpMyFAQ
  * @package   PMF_Export
@@ -22,7 +22,7 @@
 
 
 /**
- * PMF_Export_Xhtml
+ * PMF_Export_Pdf
  *
  * @category  phpMyFAQ
  * @package   PMF_Export
