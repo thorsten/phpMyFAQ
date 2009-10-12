@@ -54,7 +54,8 @@ class PMF_Export_Xml extends PMF_Export
 		$this->category = $category;
 		$this->xml      = new XMLWriter();
 		
-		$this->xml->openMemory();
+        $this->xml->openMemory();
+        $this->xml->setIndent(true);
 	}
 	
 	/**

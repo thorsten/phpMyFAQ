@@ -55,6 +55,7 @@ class PMF_Export_Xhtml extends PMF_Export
         $this->xml      = new XMLWriter();
         
         $this->xml->openMemory();
+        $this->xml->setIndent(true);
     }
     
     /**
