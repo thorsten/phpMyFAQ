@@ -1,26 +1,46 @@
 <?php
 /**
-* $Id: Docbook.php,v 1.3 2007-04-06 10:54:03 thorstenr Exp $
-*
-* This is the DocBook XML export class for phpMyFAQ content
-*
-* @author       Sauer <david_sauer@web.de>
-* @since        2005-07-21
-* @copyright    (c) 2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * This is the DocBook XML export class for phpMyFAQ content
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Export
+ * @author    David Sauer <david_sauer@web.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2005-07-21
+ * @license   Mozilla Public License 1.1
+ * @copyright 2005-2009 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
-class PMF_Export_Docbook
+/**
+ * PMF_Export_Docbook
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Export
+ * @author    David Sauer <david_sauer@web.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2005-07-21
+ * @license   Mozilla Public License 1.1
+ * @copyright 2005-2009 phpMyFAQ Team
+ */
+class PMF_Export_Docbook extends PMF_Export 
 {
+    /**
+     * XMLWriter object
+     * 
+     * @var XMLWriter
+     */
+    private $xml = null;
+    
 
 	var $xmlContent;
 	var $xmlEntities;
@@ -35,18 +55,78 @@ class PMF_Export_Docbook
 	var $sectcount = 0;
 	var $einid = 0;
 
-	/**
+    /**
      * Constructor
-     *
-     * @author  David Sauer <david_sauer@web.de>
-     * @since   2005-07-21
+     * 
+     * @param PMF_Faq      $faq      PMF_Faq object
+     * @param PMF_Category $category PMF_Category object 
+     * 
+     * return PMF_Export_Pdf
      */
-	function __construct()
-	{
-
-		$this->db = PMF_Db::getInstance();
+    public function __construct(PMF_Faq $faq, PMF_Category $category)
+    {
+        $this->faq      = $faq;
+        $this->category = $category;
+        $this->xml      = new XMLWriter();
+        
+        $this->xml->openMemory();
+        $this->xml->setIndent(true);
 	}
 
+    /**
+     * Generates the export
+     * 
+     * @param integer $categoryId Category Id
+     * @param boolean $downwards  If true, downwards, otherwise upward ordering
+     * @param string  $language   Language
+     * 
+     * @return string
+     */
+    public function generate($categoryId = 0, $downwards = true, $language = '')
+    {        
+    	global $PMF_LANG;
+    	
+        // Initialize categories
+        $this->category->transform($categoryId);
+        
+        $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
+        $version = PMF_Configuration::getInstance()->get('main.currentVersion');
+        $comment = sprintf('Docbook XML output by phpMyFAQ %s | Date: %s', 
+            $version, 
+            PMF_Date::createIsoDate(date("YmdHis")));
+        
+        // Docbook XML Header
+        $this->xml->startDocument('1.0', 'utf-8');
+        $this->xml->writeComment($comment);
+        $this->xml->startElement('book');
+        $this->xml->writeElement('lang', $language);
+        $this->xml->writeElement('title', 'phpMyFAQ ' . $version);
+        $this->xml->startElement('bookinfo');
+        $this->xml->writeElement('title', PMF_Configuration::getInstance()->get('main.titleFAQ'));
+        $this->xml->endElement();
+        
+        // Categories
+        $this->xml->startElement('part');
+        $this->xml->writeElement('title', $PMF_LANG['msgEntries']);
+        $this->xml->startElement('preface');
+        $this->xml->writeElement('title', $PMF_LANG['msgCategory']);
+        
+        // FAQs
+        if (count($faqdata)) {
+        	
+        }
+        
+        $this->xml->endElement(); // </preface>
+        $this->xml->endElement(); // </part>
+        $this->xml->endElement(); // </book>
+        
+        header('Content-type: text/xml'); 
+        return $this->xml->outputMemory();
+    }
+    
+    
+    
+    
 	 /**
      * Unterscheidung HTML-Tags
      *
