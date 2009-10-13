@@ -37,7 +37,7 @@ require_once 'inc/Link.php';
 //
 $action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING, 'main');
 
-if (preg_match("=/=", $action) && !isset($allowedVariables[$action])) {
+if (!isset($allowedVariables[$action])) {
     $action = "main";
 }
 
