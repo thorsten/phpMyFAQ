@@ -2,6 +2,7 @@
 .cache*
 .project
 .settings*
+.buildpath*
 
 # phpMyFAQ generated folders
 
@@ -12,3 +13,4 @@ phpmyfaq/xml*
 phpmyfaq/attachments*
 phpmyfaq/inc/data.php
 phpmyfaq/inc/index.html
+phpmyfaq/images/Image*
