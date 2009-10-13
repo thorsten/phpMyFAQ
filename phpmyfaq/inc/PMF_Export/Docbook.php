@@ -140,8 +140,8 @@ class PMF_Export_Docbook extends PMF_Export
      */
     protected function convertAnswer($xhtml)
     {
-    	$docbookXml = '';
-    	
+    	$converter  = new PMF_Export_Docbook_Converter($xhtml);
+    	$docbookXml = $converter->run();
     	
     	return $docbookXml;
     }

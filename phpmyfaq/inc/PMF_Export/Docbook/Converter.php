@@ -33,5 +33,34 @@
  */
 class PMF_Export_Docbook_Converter extends PMF_Export_Docbook_Abstract
 {
+	/**
+	 * XHTML string
+	 * 
+	 * @var string
+	 */
+	private $xhtml = '';
 	
+	/**
+	 * Constructor
+	 *
+	 * @param string $xhtml XHTML string
+	 * 
+	 * @return PMF_Export_Docbook_Converter
+	 */
+	public function __construct($xhtml = '')
+	{
+		$this->xhtml = trim($xhtml);
+	}
+	
+	/**
+	 * Public interface for XHTML 2 Docbook XML convertion
+	 * 
+	 * @return string
+	 */
+	public function run()
+	{
+		$docbookXml = '';
+		
+		return $docbookXml;
+	}
 }

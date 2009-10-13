@@ -32,5 +32,10 @@
  */
 abstract class PMF_Export_Docbook_Abstract
 {
-    
+    /**
+     * Public interface for XHTML 2 Docbook XML convertion
+     * 
+     * @return string
+     */
+    abstract public function run();
 }
