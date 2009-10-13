@@ -853,8 +853,8 @@ class PMF_Category
                     $output .= $this->addCategoryLink($sids, $parent, $categoryName, $description, true, $isActive);
                 } else {
                     if ($this->treeTab[$y]['symbol'] == 'minus') {
-                        $name = ($this->treeTab[$y]['parent_id'] == 0) ? $categoryName : $this->categoryName[$this->treeTab[$y]['id']]['name'];
-                        $output .= $this->addCategoryLink($sids, $this->treeTab[$y]['parent_id'], $name, $description);
+                        $name    = ($this->treeTab[$y]['parent_id'] == 0) ? $categoryName : $this->categoryName[$this->treeTab[$y]['id']]['name'];
+                        $output .= $this->addCategoryLink($sids, $this->treeTab[$y]['parent_id'], $name, $description, false, $isActive);
                     } else {
                         $output .= $this->addCategoryLink($sids, $parent, $categoryName, $description, false, $isActive);
                     }
