@@ -110,7 +110,7 @@ class PMF_Category
      *
      * @var  array
      */
-    private $treeTab = array();
+    public $treeTab = array();
 
     /**
      * Symbol for each item
@@ -136,7 +136,7 @@ class PMF_Category
      */
     public function __construct($user = null, $groups = null, $withperm = true)
     {
-        $this->language   = PMF_Init::$language;
+        $this->language   = PMF_Language::$language;
         $this->db         = PMF_Db::getInstance();
         $this->categories = array();
 
@@ -248,8 +248,8 @@ class PMF_Category
         foreach (explode(';', $categories) as $cats) {
             $_query .= ' OR parent_id = '.$cats;
         }
-        if (false == $parent_id && 0 < strlen($_query)) {
-            $query .= substr($_query, 4);
+        if (false == $parent_id && 0 < PMF_String::strlen($_query)) {
+            $query .= PMF_String::substr($_query, 4);
         }
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
             $query .= " AND lang = '".$this->language."'";
@@ -551,11 +551,11 @@ class PMF_Category
     }
 
     /**
-     *  total height of the expanded tree
+     * Total height of the expanded tree
      * 
      * @return integer
      */
-    private function height()
+    public function height()
     {
         return count($this->treeTab);
     }
@@ -567,7 +567,7 @@ class PMF_Category
     */
     public function viewTree()
     {
-        global $sids, $PMF_LANG;
+        global $sids, $PMF_LANG, $plr;
         $totFaqRecords = 0;
 
         $query = sprintf("
@@ -648,9 +648,7 @@ class PMF_Category
                 $num_entries = '';
             } else {
                 $totFaqRecords += $number[$parent];
-                $num_entries = sprintf(' (%d %s ',
-                                        $number[$parent],
-                                        $PMF_LANG['msgEntries']);
+                $num_entries = ' ('.$plr->GetMsg('plmsgEntries',$number[$parent]).' ';
                 $num_entries .= sprintf(' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank"><img id="category_%d_RSS" src="images/feed.png" width="16" height="16" alt="RSS" /></a>)',
                                         $parent,
                                         $this->language,
@@ -687,7 +685,7 @@ class PMF_Category
      * @param  integer $y ID
      * @return array
      */
-    private function getLineDisplay($y)
+    public function getLineDisplay($y)
     {
         $ret[0] = $this->symbols[$this->treeTab[$y]["symbol"]];
         $ret[1] = $this->treeTab[$y]["name"];
@@ -703,7 +701,7 @@ class PMF_Category
      * @param  integer $l Current line
      * @return integer
      */
-    private function getNextLineTree($l)
+    public function getNextLineTree($l)
     {
         if ($this->treeTab[$l]["symbol"] != "plus") {
             return $l + 1;
@@ -729,151 +727,6 @@ class PMF_Category
     }
 
     /**
-     * Get all categories in <option> tags
-     *
-     * @param  mixed $catID Category id or array of category ids
-     * @return string
-     */
-    public function printCategoryOptions($catID = "")
-    {
-        $categories = '';
-
-        if (!is_array($catID)) {
-            $catID = array(array('category_id'   => $catID, 
-                                 'category_lang' => ''));
-        }
-
-        $i = 0;
-        foreach ($this->catTree as $cat) {
-            $indent = '';
-            for ($j = 0; $j < $cat['indent']; $j++) {
-                $indent .= '....';
-            }
-            $categories .= "\t<option value=\"".$cat['id']."\"";
-
-            if (0 == $i && count($catID) == 0) {
-                $categories .= " selected=\"selected\"";
-            } else {
-                foreach ($catID as $categoryid) {
-                    if ($cat['id'] == $categoryid['category_id']) {
-                        $categories .= " selected=\"selected\"";
-                    }
-                }
-            }
-
-            $categories .= ">";
-            $categories .= $indent.$cat['name']."</option>\n";
-            $i++;
-        }
-        return $categories;
-    }
-
-    /**
-     * Get all categories in a unordered list
-     *
-     * @param  mixed $catID Category id or array of category ids
-     * @return string
-     */
-    public function printCategoryList($catID = "")
-    {
-        $categories = '<ul>';
-
-        if (!is_array($catID)) {
-            $catID = array(array('category_id' => $catID, 'category_lang' => ''));
-        }
-
-        $i = 0;
-        foreach ($this->catTree as $cat) {
-            $indent = '';
-            for ($j = 0; $j < $cat['indent']; $j++) {
-                $indent .= '....';
-            }
-            $categories .= "\t<li>";
-            $categories .= $indent.$cat['name'];
-            $i++;
-        }
-        $categories .= '</ul>';
-        return $categories;
-    }
-
-    /**
-    * Displays the main navigation
-    *
-    * @param  integer $activeCat Selected category
-    * @return string
-    */
-    public function printCategories($activeCat = 0)
-    {
-        global $sids, $PMF_LANG;
-
-        $open     = 0;
-        $output   = '';
-        $isActive = false;
-
-        if ($this->height() > 0) {
-            for ($y = 0 ;$y < $this->height(); $y = $this->getNextLineTree($y)) {
-                list($symbol, $categoryName, $parent, $description) = $this->getLineDisplay($y);
-
-                if ($activeCat == $parent) {
-                    $isActive = true;
-                } else {
-                    $isActive = false;
-                }
-
-                $level = $this->treeTab[$y]["level"];
-                $leveldiff = $open - $level;
-
-                if ($leveldiff > 1) {
-                    $output .= '</li>';
-                    for ($i = $leveldiff; $i > 1; $i--) {
-                        $output .= sprintf("\n%s</ul>\n%s</li>\n",
-                        str_repeat("\t", $level + $i + 1),
-                        str_repeat("\t", $level + $i));
-                    }
-                }
-
-                if ($level < $open) {
-                    if (($level - $open) == -1) {
-                        $output .= '</li>';
-                    }
-                    $output .= "\n".str_repeat("\t", $level + 2)."</ul>\n".str_repeat("\t", $level + 1)."</li>\n";
-                } elseif ($level == $open && $y != 0) {
-                    $output .= "</li>\n";
-                }
-
-                if ($level > $open) {
-                    $output .= sprintf("\n%s<ul class=\"subcat\">\n%s<li>",
-                        str_repeat("\t", $level + 1),
-                        str_repeat("\t", $level + 1));
-                } else {
-                    $output .= str_repeat("\t", $level + 1)."<li>";
-                }
-
-                if (isset($this->treeTab[$y]['symbol']) && $this->treeTab[$y]['symbol'] == 'plus') {
-                    $output .= $this->addCategoryLink($sids, $parent, $categoryName, $description, true, $isActive);
-                } else {
-                    if ($this->treeTab[$y]['symbol'] == 'minus') {
-                        $name = ($this->treeTab[$y]['parent_id'] == 0) ? $categoryName : $this->categoryName[$this->treeTab[$y]['id']]['name'];
-                        $output .= $this->addCategoryLink($sids, $this->treeTab[$y]['parent_id'], $name, $description);
-                    } else {
-                        $output .= $this->addCategoryLink($sids, $parent, $categoryName, $description, false, $isActive);
-                    }
-                }
-                $open = $level;
-            }
-            if ($open > 0) {
-                $output .= str_repeat("</li>\n\t</ul>\n\t", $open);
-            }
-            $output .= "</li>";
-            return $output;
-
-        } else {
-            $output = '<li><a href="#">'.$PMF_LANG['no_cats'].'</a></li>';
-        }
-        return $output;
-    }
-
-    /**
      * Private method to create a category link
      *
      * @param  string  $sids         Session id
@@ -884,7 +737,7 @@ class PMF_Category
      * @param  boolean $isActive     Sets a link active via CSS
      * @return  string
      */
-    private function addCategoryLink($sids, $parent, $categoryName, $description, $hasChildren = false, $isActive = false)
+    public function addCategoryLink($sids, $parent, $categoryName, $description, $hasChildren = false, $isActive = false)
     {
         $url              = sprintf('%saction=show&amp;cat=%d', $sids, $parent);
         $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
@@ -901,6 +754,7 @@ class PMF_Category
         }
         
         $oLink->tooltip = $description;
+        
         return $oLink->toHtmlAnchor();
     }
 
@@ -1378,7 +1232,7 @@ class PMF_Category
         $output       = "";
         $existcatlang = PMF_Utils::languageAvailable($category_id, 'faqcategories');
 
-        foreach (getAvailableLanguages() as $lang => $langname) {
+        foreach (PMF_Language::getAvailableLanguages() as $lang => $langname) {
            if (!in_array(strtolower($lang),$existcatlang)) {
               $output .= "\t<option value=\"".strtolower($lang)."\"";
               if ($lang == $selected_lang) {
