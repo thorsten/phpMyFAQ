@@ -23,7 +23,6 @@
 
 require_once PMF_CONFIG_DIR . '/constants.php';
 
-define("EXPORT_TYPE_DOCBOOK", "docbook");
 define("EXPORT_TYPE_PDF", "pdf");
 define("EXPORT_TYPE_XHTML", "xhtml");
 define("EXPORT_TYPE_XML", "xml");
@@ -83,9 +82,6 @@ class PMF_Export
                 break;
 			case 'xhtml':
 				return new PMF_Export_Xhtml($faq, $category);
-				break;
-			case 'docbook':
-				return new PMF_Export_Docbook($faq, $category);
 				break;
 			default:
 				throw new Exception('Export not implemented!');
