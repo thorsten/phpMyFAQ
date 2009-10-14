@@ -45,7 +45,7 @@ $tt = new PMF_TransTool;
  * vars and we won't to show them all
  * at once, so let's paginate.
  */
-$itemsPerPage = 16;
+$itemsPerPage = 32;
 if(!isset($_SESSION['trans'])) {
     /**
      * English is our exemplary language
