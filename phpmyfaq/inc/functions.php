@@ -411,40 +411,6 @@ function getHighlightedBannedWords($content)
 }
 
 /**
- * Adds PHP syntax highlighting to your pre tags
- *
- * @param   string  $content
- * @return  string
- * @access  public
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since   2004-12-25
- */
-function hilight($content)
-{
-    $string = $content[2];
-
-    $string = str_replace("&lt;?php", " ", $string);
-    $string = str_replace("?&gt;", " ", $string);
-
-    if (!ereg('^<\\?', $string) || !ereg('^&lt;\\?', $string)) {
-        $string = "<?php\n".$string."\n?>";
-    }
-
-    $string = implode("\n", explode("<br />", $string));
-    $string = highlight_string($string, true);
-    $string = eregi_replace('^.*<pre>',  '', $string);
-    $string = eregi_replace('</pre>.*$', '', $string);
-    $string = str_replace("\n", "", $string);
-    $string = str_replace("&nbsp;", " ", $string);
-
-    // Making the PHP generated stuff XHTML compatible
-    $string = PMF_String::preg_replace('/<FONT COLOR="/i', '<span style="color:', $string);
-    $string = PMF_String::preg_replace('/<\/FONT>/i', '</span>', $string);
-
-    return $string;
-}
-
-/**
  * An OS independent function like usleep
  *
  * @param   integer
