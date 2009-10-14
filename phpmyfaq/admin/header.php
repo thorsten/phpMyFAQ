@@ -176,7 +176,6 @@ header("Vary: Negotiate,Accept");
         case 'upgrade':
             $secLevelHeader   = $PMF_LANG['admin_mainmenu_configuration'];
             $secLevelEntries .= addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
-            $secLevelEntries .= addMenuEntry('editconfig', 'upgrade', 'ad_menu_upgrade', $action);
             $secLevelEntries .= addMenuEntry('editconfig+editbt+delbt', 'linkconfig', 'ad_menu_linkconfig', $action);
             $secLevelEntries .= addMenuEntry('editconfig', 'stopwordsconfig', 'ad_menu_stopwordsconfig', $action);
             $secLevelEntries .= addMenuEntry('edittranslation+addtranslation+deltranslation', 'translist', 'ad_menu_translations', $action);
