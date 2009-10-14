@@ -319,7 +319,7 @@ class PMF_Pagination
                                                              '$//$'),
                                                        "",
                                                        $this->baseUrl);
-                $url = "$cleanedLink/{$this->pageParamName}/$page";
+                $url = "$cleanedUrl/{$this->pageParamName}/$page";
             break;
                 
             case self::URL_STYLE_DEFAULT:
