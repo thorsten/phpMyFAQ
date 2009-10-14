@@ -33,18 +33,6 @@ function getLinkHtmlAnchor($url, $text = null, $target = null)
     $link = new PMF_Link($url, $text, $target);
     return $link->toHtmlAnchor();
 }
-
-function getLinkString($url, $forceNoModrewriteSupport = false, $text = null, $target = null)
-{
-    $link = new PMF_Link($url, $text, $target);
-    return $link->toString($forceNoModrewriteSupport);
-}
-
-function getLinkUri($url, $text = null, $target = null)
-{
-    $link = new PMF_Link($url, $text, $target);
-    return $link->toUri();
-}
 // }}}
 
 // {{{ Classes
