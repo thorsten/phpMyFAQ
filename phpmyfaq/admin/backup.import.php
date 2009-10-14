@@ -2,12 +2,11 @@
 /**
  * The import function to import the phpMyFAQ backups
  *
- * @package    phpMyFAQ 
- * @subpackage Administration
- * @author     Thorsten Rinne <thorsten@rinne.info>
- * @since      2003-02-24
- * @version    SVN: $Id$ 
- * @copyright  2003-2009 phpMyFAQ Team
+ * @category  phpMyFAQ 
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2003-02-24
+ * @copyright 2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -31,10 +30,11 @@ if ($permission["restore"]) {
     if (isset($_FILES["userfile"]["type"]) && ($_FILES["userfile"]["type"] == "application/octet-stream" || $_FILES["userfile"]["type"] == "text/plain" || $_FILES["userfile"]["type"] == "text/x-sql")) {
         $ok  = 1;
         // @todo: Add check if file is utf-8 encoded
-        $handle = fopen($_FILES['userfile']['tmp_name'], 'r');
-        $dat    = fgets($handle, 65536);
+        $handle       = fopen($_FILES['userfile']['tmp_name'], 'r');
+        $dat          = fgets($handle, 65536);
+        $majorVersion = substr($faqconfig->get('main.currentVersion'), 0, 3);
 
-        if (PMF_String::substr($dat, 0, 9) != '-- pmf2.6') {
+        if (PMF_String::substr($dat, 0, 9) != '-- pmf' . $majorVersion) {
             print $PMF_LANG["ad_csv_no"];
             $ok = 0;
         } else {

@@ -2,12 +2,11 @@
 /**
  * The export function to import the phpMyFAQ backups
  *
- * @package    phpMyFAQ 
- * @subpackage Administration
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2009-08-18
- * @version    SVN: $Id$ 
- * @copyright  2009 phpMyFAQ Team
+ * @category  phpMyFAQ 
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2009-08-18
+ * @copyright 2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -70,9 +69,10 @@ header('Pragma: no-cache');
 if ($permission['backup']) {
 	
 	$db->getTableNames ( SQLPREFIX );
-	$tablenames = '';
+	$tablenames   = '';
+    $majorVersion = substr($faqconfig->get('main.currentVersion'), 0, 3);
 	
-	$text[] = "-- pmf2.6: " . $tablenames;
+	$text[] = "-- pmf" . $majorVersion . ": " . $tablenames;
 	$text[] = "-- DO NOT REMOVE THE FIRST LINE!";
 	$text[] = "-- pmftableprefix: " . SQLPREFIX;
 	$text[] = "-- DO NOT REMOVE THE LINES ABOVE!";
