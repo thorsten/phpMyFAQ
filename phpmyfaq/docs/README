@@ -19,6 +19,7 @@ Changes since 2.5.x:
 - added secure login if SSL is available (Tobias Hommel)
 - improved attachment functionality (Anatoliy)
 - improved install script (Thorsten)
+- removed Docbook XML export (Thorsten)
 - minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
@@ -37,6 +38,7 @@ Version 2.6.0-alpha - 2009-09-
 - added secure login if SSL is available (Tobias Hommel)
 - improved attachment functionality (Anatoliy)
 - improved install script (Thorsten)
+- removed Docbook XML export (Thorsten)
 - minor bugfixes (Thorsten)
 
 
