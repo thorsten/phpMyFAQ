@@ -10,7 +10,6 @@
  * @author     Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
  * @since      2004-11-21
  * @license    Mozilla Public License 1.1
- * @version    SVN: $Id$
  * @copyright  2004-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -323,14 +322,14 @@ class PMF_Export_Pdf extends FPDF
         if ($this->enableBookmarks == false) {
             $this->SetY(-15);
             $this->SetFont("Helvetica", "", 8);
-            $baseUrl = '/index.php';
+            $baseUrl = 'index.php';
             if (is_array($this->faq) && !empty($this->faq)) {
                 $baseUrl .= '?action=artikel&amp;cat='.$this->categories[$this->category]['id'];
                 $baseUrl .= '&amp;id='.$this->faq['id'];
                 $baseUrl .= '&amp;artlang='.$this->faq['lang'];
             }
-            $url = PMF_Link::getSystemScheme().$_SERVER['HTTP_HOST'].$baseUrl;
-            $urlObj = new PMF_Link($url);
+            $url               = PMF_Configuration::getInstance()->get('main.referenceURL').$baseUrl;
+            $urlObj            = new PMF_Link($url);
             $urlObj->itemTitle = $this->thema;
             $_url = str_replace('&amp;', '&', $urlObj->toString());
             $this->Cell(0, 10, 'URL: '.$_url, 0, 1, 'C', 0, $_url);
