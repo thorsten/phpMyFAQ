@@ -1,28 +1,40 @@
 CHANGED FILES FROM 2.5.2 -> 2.5.3
 
+./admin/ajax.tags_list.php
 ./admin/category.edit.php
+./admin/footer.php
 ./admin/news.php
+./admin/record.add.php
 ./admin/record.edit.php
 ./admin/record.show.php
 ./admin/user.php
-./inc/constants.php
+./feed/category/rss.php
+./inc/Captcha.php
 ./inc/Category.php
 ./inc/Faq.php
-./inc/functions.php
 ./inc/News.php
+./inc/PMF_DB/Sqlite.php
+./inc/PMF_Export/Pdf.php
 ./inc/Relation.php
+./inc/Sitemap.php
+./inc/constants.php
+./inc/functions.php
+./index.php
 ./install/config.sql.php
 ./install/installer.php
+./install/stopwords.sql.php
 ./install/update.php
 ./lang/language_de.php
+./lang/language_en.php
 ./lang/language_ja.php
 ./scripts/git2package.sh added
-./scripts/svn2package.sh removed
+./scripts/svn2package.shremoved
 ./template/artikel.tpl
-./ajaxresponse.php
-./index.php
-./news.php
 ./search.php
+./ajaxresponse.php
+./artikel.php
+./microsummary.php
+./news.php
 
 
 
