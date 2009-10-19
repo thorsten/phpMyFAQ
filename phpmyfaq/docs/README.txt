@@ -20,7 +20,7 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.5.3 - 2009-10-
+Version 2.5.3 - 2009-10-19
 - switched repository from SVN to git (David Soria Parra, Thorsten)
 - added missing Perl syntax hightlighting (Thorsten)
 - fixed missing info link in news (Thorsten)
