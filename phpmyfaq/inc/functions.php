@@ -582,7 +582,7 @@ function printCaptchaFieldset($legend, $img, $length, $error = '')
     $faqconfig = PMF_Configuration::getInstance();
     $html      = '';
 
-    if ($faqconfig->get('spam.enableCatpchaCode')) {
+    if ($faqconfig->get('spam.enableCaptchaCode')) {
         $html = sprintf('<fieldset><legend>%s</legend>', $legend);
         $html .= '<div style="text-align:left;">';
         if ($error != '') {

@@ -1026,7 +1026,7 @@ foreach ($permLevels as $level => $desc) {
     $oConf->getAll();
     $configs = $oConf->config;
     // Disable Captcha if GD is not available
-    $configs['spam.enableCatpchaCode'] = (extension_loaded('gd') ? 'true' : 'false');
+    $configs['spam.enableCaptchaCode'] = (extension_loaded('gd') ? 'true' : 'false');
     // Set the link verification base url
     $configs['main.referenceURL'] = PMF_Link::getSystemUri('/install/installer.php');
     // Create a unique identifier for this installation
