@@ -495,6 +495,11 @@ function check4AddrMatch($ip, $network)
  */
 function IPCheck($ip)
 {
+	if (strstr($ip, '::')) {
+		// currently we cannot handle IPv6
+		return true;
+	}
+	
     $faqconfig = PMF_Configuration::getInstance();
     $bannedIPs = explode(' ', $faqconfig->get('main.bannedIPs'));
     
