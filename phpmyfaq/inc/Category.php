@@ -727,7 +727,7 @@ class PMF_Category
     }
 
     /**
-     * Private method to create a category link
+     * Creates a category link
      *
      * @param  string  $sids         Session id
      * @param  integer $categoryId   Parent category
@@ -737,7 +737,7 @@ class PMF_Category
      * @param  boolean $isActive     Sets a link active via CSS
      * @return  string
      */
-    private function addCategoryLink($sids, $categoryId, $categoryName, $description, $hasChildren = false, $isActive = false)
+    public function addCategoryLink($sids, $categoryId, $categoryName, $description, $hasChildren = false, $isActive = false)
     {
         $url              = sprintf('%saction=show&amp;cat=%d', $sids, $categoryId);
         $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
