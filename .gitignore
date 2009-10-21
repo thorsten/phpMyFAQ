@@ -2,11 +2,9 @@
 .cache*
 .project
 .settings*
-.buildpath
 
 # phpMyFAQ generated folders
 
-phpmyfaq/attachments*
 phpmyfaq/config/database.php
 phpmyfaq/config/index.html
 phpmyfaq/data*
@@ -15,6 +13,3 @@ phpmyfaq/xml*
 phpmyfaq/attachments*
 phpmyfaq/inc/data.php
 phpmyfaq/inc/index.html
-
-# other files
-.htaccess

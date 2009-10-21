@@ -92,7 +92,6 @@ class PMF_Export_Pdf extends PMF_Export
                 $i++;
         	}
         	
-        
             // Create the PDF
             foreach ($answers as $key => $value) {
             	

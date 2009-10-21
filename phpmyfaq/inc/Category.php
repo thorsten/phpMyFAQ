@@ -730,16 +730,16 @@ class PMF_Category
      * Private method to create a category link
      *
      * @param  string  $sids         Session id
-     * @param  integer $parent       Parent category
+     * @param  integer $categoryId   Parent category
      * @param  string  $categoryName Category name
      * @param  string  $description  Description
      * @param  boolean $hasChildren  Child categories available
      * @param  boolean $isActive     Sets a link active via CSS
      * @return  string
      */
-    public function addCategoryLink($sids, $parent, $categoryName, $description, $hasChildren = false, $isActive = false)
+    private function addCategoryLink($sids, $categoryId, $categoryName, $description, $hasChildren = false, $isActive = false)
     {
-        $url              = sprintf('%saction=show&amp;cat=%d', $sids, $parent);
+        $url              = sprintf('%saction=show&amp;cat=%d', $sids, $categoryId);
         $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
         $oLink->itemTitle = $categoryName;
         $oLink->text      = $categoryName;
