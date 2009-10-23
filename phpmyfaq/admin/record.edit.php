@@ -344,7 +344,19 @@ if($permission['approverec']):
 ?>
     <input type="hidden" name="grouppermission" class="active" value="all" />
 <?php   
-        }
+    }
+    
+    if('00000000000000' == $faqData['dateStart']) {
+        $dateStart = '';
+    } else {
+        $dateStart = preg_replace("/(\d{4})(\d{2})(\d{2}).*/", "$1-$2-$3", $faqData['dateStart']);
+    }
+    
+    if('99991231235959' == $faqData['dateEnd']) {
+        $dateEnd = '';
+    } else {
+        $dateEnd = preg_replace("/(\d{4})(\d{2})(\d{2}).*/", "$1-$2-$3", $faqData['dateEnd']);
+    }
 ?>
     <label class="left" for="userpermission"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
     <input type="radio" id="userpermission" name="userpermission" class="active" value="all" <?php print ($all_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_all_users']; ?> <input type="radio" name="userpermission" class="active" value="restricted" <?php print ($restricted_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_restricted_users']; ?> <select name="restricted_users" size="1"><?php print $user->getAllUserOptions($user_permission[0]); ?></select><br />
@@ -354,10 +366,10 @@ if($permission['approverec']):
     <fieldset class="fullwidth">
     <legend><?php print $PMF_LANG['ad_record_expiration_window']; ?></legend>
         <label class="lefteditor" for="dateStart"><?php print $PMF_LANG['ad_news_from']; ?></label>
-        <input name="dateStart" id="dateStart" class="date-pick" value="<?php print $faqData['dateStart']; ?>" />
+        <input name="dateStart" id="dateStart" class="date-pick" value="<?php print $dateStart; ?>" maxlength="10" />
         <br />
         <label class="lefteditor" for="dateEnd"><?php print $PMF_LANG['ad_news_to']; ?></label>
-        <input name="dateEnd" id="dateEnd" class="date-pick" value="<?php print $faqData['dateEnd']; ?>" />
+        <input name="dateEnd" id="dateEnd" class="date-pick" value="<?php print $dateEnd; ?>" maxlength="10" />
     </fieldset>
 
     <fieldset class="fullwidth">
