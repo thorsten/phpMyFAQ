@@ -34,15 +34,16 @@ $usermail = PMF_Filter::filterInput(INPUT_POST, 'usermail', FILTER_VALIDATE_EMAI
 $usercat  = PMF_Filter::filterInput(INPUT_POST, 'rubrik', FILTER_VALIDATE_INT);
 $content  = PMF_Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_STRIPPED);
 $code     = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
-$code     = $code ? $code : PMF_Filter::filterInput(INPUT_GET, 'code', FILTER_SANITIZE_STRING);
+$code     = (is_null($code) ? PMF_Filter::filterInput(INPUT_GET, 'code', FILTER_SANITIZE_STRING, 42) : $code);
 $domail   = PMF_Filter::filterInput(INPUT_GET, 'domail', FILTER_VALIDATE_INT);
 $thankyou = PMF_Filter::filterInput(INPUT_GET, 'thankyou', FILTER_VALIDATE_INT);
 
 function sendAskedQuestion($username, $usermail, $usercat, $content)
 {
-    global $IDN, $category, $PMF_LANG, $faq, $faqconfig;
+    global $category, $PMF_LANG, $faq;
     
-    $retval = false;
+    $retval     = false;
+    $faqconfig  = PMF_Configuration::getInstance();
     $cat        = new PMF_Category();
     $categories = $cat->getAllCategories();
 
@@ -53,13 +54,12 @@ function sendAskedQuestion($username, $usermail, $usercat, $content)
     }
 
     $questionData = array(
-        'ask_username'  => $username,
-        'ask_usermail'  => $IDN->encode($usermail),
-        'ask_category'  => $usercat,
-        'ask_content'   => $content,
-        'ask_date'      => date('YmdHis'),
-        'is_visible'    => $visibility
-        );
+        'ask_username' => $username,
+        'ask_usermail' => $usermail,
+        'ask_category' => $usercat,
+        'ask_content'  => $content,
+        'ask_date'     => date('YmdHis'),
+        'is_visible'   => $visibility);
 
     list($user, $host) = explode("@", $questionData['ask_usermail']);
     
@@ -72,7 +72,7 @@ function sendAskedQuestion($username, $usermail, $usercat, $content)
                         .wordwrap($content, 72);
 
         $userId = $category->getCategoryUser($questionData['ask_category']);
-        $oUser = new PMF_User();
+        $oUser  = new PMF_User();
         $oUser->getUserById($userId);
 
         $userEmail      = $oUser->getUserData('email');
@@ -159,14 +159,14 @@ if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SE
     
                 $currentUrl = PMF_Link::getSystemRelativeUri();
             
-                $oLink = new PMF_Link($currentUrl.$url);
+                $oLink            = new PMF_Link($currentUrl.$url);
                 $oLink->itemTitle = $cat_content_item->thema;
-                $oLink->text = $cat_content_item->thema;
-                $oLink->tooltip = $cat_content_item->thema;
+                $oLink->text      = $cat_content_item->thema;
+                $oLink->tooltip   = $cat_content_item->thema;
                 $tmp_result_html .= '<li>' . $oLink->toHtmlAnchor() . '<br /></li>' . "\n";
             }
             
-            if($tmp_result_html) {
+            if ($tmp_result_html) {
                 $search_result_html .= '<strong>'.$category->getPath($cat_id).'</strong>: ';
                 $search_result_html .= '<ul class="phpmyfaq_ul">' . "\n";
                 $search_result_html .= $tmp_result_html;
@@ -204,9 +204,11 @@ if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SE
     unset($_SESSION['asked_questions'][$code]);
     header('Location: index.php?action=savequestion&thankyou=1');
     exit;
+    
 } elseif (null != $thankyou) {
-    $tpl->processBlock('writeContent', 
-        'messageSaveQuestion', array('Message' => $PMF_LANG['msgAskThx4Mail']));
+	
+    $tpl->processBlock('writeContent', 'messageSaveQuestion', array('Message' => $PMF_LANG['msgAskThx4Mail']));
+    
 } else {
     if (false === IPCheck($_SERVER['REMOTE_ADDR'])) {
         $message = $PMF_LANG['err_bannedIP'];
@@ -217,6 +219,5 @@ if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SE
     $tpl->processBlock('writeContent', 'messageSaveQuestion', array('Message' => $message));
 }
 
-$tpl->processTemplate('writeContent', array(
-          'msgQuestion' => $PMF_LANG['msgQuestion']));
+$tpl->processTemplate('writeContent', array('msgQuestion' => $PMF_LANG['msgQuestion']));
 $tpl->includeTemplate('writeContent', 'index');
