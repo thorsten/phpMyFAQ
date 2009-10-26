@@ -1,59 +1,57 @@
 <?php
 /**
-* $Id: pgsql.sql.php,v 1.34 2008-05-24 16:35:43 thorstenr Exp $
-*
-* CREATE TABLE instruction for PostgreSQL database
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Tom Rochester <tom.rochester@gmail.com>
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @since        2004-09-18
-* @copyright    (c) 2004-2007 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * CREATE TABLE instruction for PostgreSQL database
+ *
+ * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author       Tom Rochester <tom.rochester@gmail.com>
+ * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since        2004-09-18
+ * @copyright    2004-2009 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
-$uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqcaptcha CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqcategories CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqcategoryrelations CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqcategory_group CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqcategory_user CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqchanges CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqcomments CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqconfig CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqdata CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqdata_revisions CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqdata_group CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqdata_tags CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqdata_user CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqglossary CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqgroup CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqgroup_right CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqlinkverifyrules CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqnews CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqquestions CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqright CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqsearches CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqsessions CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqstopwords CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqtags CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faquser CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqadminlog CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqcaptcha CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqcategories CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqcategoryrelations CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqcategory_group CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqcategory_user CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqchanges CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqcomments CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqconfig CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqdata CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqdata_revisions CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqdata_group CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqdata_tags CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqdata_user CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqglossary CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqgroup CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqgroup_right CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqlinkverifyrules CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqnews CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqquestions CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqright CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqsearches CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqsessions CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqstopwords CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqtags CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faquser CASCADE";
 $uninst[] = "DROP SEQUENCE ".$sqltblpre."faquser_user_id_seq";
-$uninst[] = "DROP TABLE ".$sqltblpre."faquserdata CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faquserlogin CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faquser_group CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faquser_right CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqvisits CASCADE";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqvoting CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faquserdata CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faquserlogin CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faquser_group CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faquser_right CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqvisits CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqvoting CASCADE";
 
 
 

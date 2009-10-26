@@ -906,10 +906,6 @@ class PMF_Faq
                 SQLPREFIX, $record_id, $record_lang),
             sprintf("DELETE FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
                 SQLPREFIX, $record_id, $record_lang),
-            sprintf("DELETE FROM %sfaqcategory_user WHERE record_id = %d AND record_lang = '%s'",
-                SQLPREFIX, $record_id, $record_lang),
-            sprintf("DELETE FROM %sfaqcategory_group WHERE record_id = %d AND record_lang = '%s'",
-                SQLPREFIX, $record_id, $record_lang),
             sprintf("DELETE FROM %sfaqdata_user WHERE record_id = %d AND record_lang = '%s'",
                 SQLPREFIX, $record_id, $record_lang),
             sprintf("DELETE FROM %sfaqdata_group WHERE record_id = %d AND record_lang = '%s'",
@@ -918,9 +914,9 @@ class PMF_Faq
                 SQLPREFIX, $record_id),
             sprintf('DELETE FROM %sfaqdata_tags WHERE %sfaqdata_tags.record_id NOT IN (SELECT %sfaqdata.id FROM %sfaqdata)',
                 SQLPREFIX, SQLPREFIX, SQLPREFIX, SQLPREFIX),
-            sprintf("DELETE FROM %faqcomments WHERE id = %d",
+            sprintf("DELETE FROM %sfaqcomments WHERE id = %d",
                 SQLPREFIX, $record_id),
-            sprintf("DELETE FROM %faqvoting WHERE artikel = %d",
+            sprintf("DELETE FROM %sfaqvoting WHERE artikel = %d",
                 SQLPREFIX, $record_id));
 
          foreach($queries as $query) {

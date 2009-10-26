@@ -8,14 +8,14 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.5.3:
-- 
+- Fixed various PostgreSQL related issues (Anatoliy, Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
 Version 2.5.4 - 2009-11-
--
+- Fixed various PostgreSQL related issues (Anatoliy, Thorsten)
 
 Version 2.5.3 - 2009-10-19
 - switched repository from SVN to git (David Soria Parra, Thorsten)
