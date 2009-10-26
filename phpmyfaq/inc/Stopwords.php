@@ -2,12 +2,11 @@
 /**
  * The main Stopwords class
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Stopwords
- * @author     Anatoliy Belsky
- * @since      2009-04-01
- * @version    SVN: $Id: Stopwords.php,v 1.39 2007-08-12 13:56:28 thorstenr Exp $
- * @copyright  2006-2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   PMF_Stopwords
+ * @author    Anatoliy Belsky
+ * @since     2009-04-01
+ * @copyright 2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -23,12 +22,11 @@
 /**
  * PMF_Stopwords
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Stopwords
- * @author     Anatoliy Belsky
- * @since      2009-04-01
- * @version    SVN: $Id: Stopwords.php,v 1.39 2007-08-12 13:56:28 thorstenr Exp $
- * @copyright  2006-2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   PMF_Stopwords
+ * @author    Anatoliy Belsky
+ * @since     2009-04-01
+ * @copyright 2009 phpMyFAQ Team
  */
 class PMF_Stopwords
 {
@@ -52,7 +50,6 @@ class PMF_Stopwords
      * @var string
      */
     private $language;
-
     
     /**
      * Table name
@@ -60,34 +57,7 @@ class PMF_Stopwords
      * @var string
      */
     private $table_name;
-    /**
-     * @return string
-     */
-    public function getLanguage ()
-    {
-        return $this->language;
-    }
-    /**
-     * @return string
-     */
-    public function getTableName ()
-    {
-        return $this->table_name;
-    }
-    /**
-     * @param string $language
-     */
-    public function setLanguage ($language)
-    {
-        $this->language = $language;
-    }
-    /**
-     * @param string $table_name
-     */
-    public function setTableName ($table_name)
-    {
-        $this->table_name = $table_name;
-    }
+
     /**
      * Constructor
      */
@@ -98,6 +68,37 @@ class PMF_Stopwords
         $this->table_name = SQLPREFIX . "faqstopwords";
     }
     
+    /**
+     * @return string
+     */
+    public function getLanguage ()
+    {
+        return $this->language;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getTableName ()
+    {
+        return $this->table_name;
+    }
+    
+    /**
+     * @param string $language
+     */
+    public function setLanguage ($language)
+    {
+        $this->language = $language;
+    }
+    
+    /**
+     * @param string $table_name
+     */
+    public function setTableName ($table_name)
+    {
+        $this->table_name = $table_name;
+    }
     
     /**
      * Returns the single instance
@@ -114,7 +115,6 @@ class PMF_Stopwords
         return self::$instance;
     }
     
-    
     /**
      * Add a word to the stop words dictionary.
      * If the given word already exists, false is returned. 
@@ -125,7 +125,7 @@ class PMF_Stopwords
      */
     public function add($word)
     {
-        if(!$this->match($word)) {
+        if (!$this->match($word)) {
             $sql = "INSERT INTO $this->table_name VALUES(%d, '%s', '%s')";
             $sql = sprintf($sql, $this->db->nextID($this->table_name, 'id'), $this->language, $word);
             
@@ -136,7 +136,6 @@ class PMF_Stopwords
         
         return false;
     }
-    
     
     /**
      * Update a word in the stop words dictionary
@@ -199,8 +198,7 @@ class PMF_Stopwords
     public function getByLang($lang = null, $wordsOnly = false)
     {
         $lang = is_null($lang) ? $this->language : $lang;
-        
-        $sql = sprintf("SELECT id, lang, LOWER(stopword) AS stopword FROM $this->table_name WHERE lang = '%s'", $lang);
+        $sql  = sprintf("SELECT id, lang, LOWER(stopword) AS stopword FROM $this->table_name WHERE lang = '%s'", $lang);
         
         $result = $this->db->query($sql);
         
@@ -227,13 +225,13 @@ class PMF_Stopwords
      */
     public function clean($input)
     {
-        $words = explode(' ', ereg_replace('[[:punct:][:space:]]+', ' ', $input));
+        $words      = explode(' ', $input);
         $stop_words = $this->getByLang(null, true); 
-        $retval = array();
+        $retval     = array();
         
-        foreach($words as $word) {
+        foreach ($words as $word) {
             $word = strtolower($word);
-            if(!is_numeric($word) && 1 < strlen($word) && 
+            if (!is_numeric($word) && 1 < strlen($word) && 
                !in_array($word, $stop_words) && !in_array($word, $retval)) {
                 $retval[] = $word;
             }
