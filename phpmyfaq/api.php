@@ -28,7 +28,7 @@
 //
 // Prepend and start the PHP session
 //
-require_once 'inc/Init.php';
+require 'inc/Init.php';
 define('IS_VALID_PHPMYFAQ', null);
 PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
@@ -43,8 +43,10 @@ $http->addHeader();
 $current_user   = -1;
 $current_groups = array(-1);
 
-$action   = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
-$language = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING, 'en');
+$action     = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+$language   = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING, 'en');
+$categoryId = PMF_Filter::filterInput(INPUT_GET, 'categryId', FILTER_VALIDATE_INT);
+$recordId   = PMF_Filter::filterInput(INPUT_GET, 'recordId', FILTER_VALIDATE_INT);
 
 // Get language (default: english)
 $Language = new PMF_Language();
@@ -52,14 +54,12 @@ $LANGCODE = $Language->setLanguage($faqconfig->get('main.languageDetection'), $f
 
 // Set language
 if (PMF_Language::isASupportedLanguage($language)) {
-    $LANGCODE = trim($language);
-    require_once 'lang/language_'.$LANGCODE.'.php';
+    require 'lang/language_' . $language . '.php';
 } else {
-    $LANGCODE = 'en';
-    require_once 'lang/language_en.php';
+    require 'lang/language_en.php';
 }
 
-PMF_String::init('utf-8', $LANGCODE);
+PMF_String::init('utf-8', $language);
 
 // Set empty result
 $result = array();
@@ -92,16 +92,14 @@ switch ($action) {
         $result   = $category->categories;
         break;
         
-    case 'getFAQ':
-
-        break;
+    case 'getFaqs':
         
-    case 'addFAQ':
-        
-        break;
-     
-    case 'addQuestion':
-        
+    	break;
+    	
+    case 'getFaq':
+        $faq = new PMF_Faq($current_user, $current_groups);
+        $faq->getRecord($recordId);
+        $result = $faq->faqRecord;
         break;
 }
 
