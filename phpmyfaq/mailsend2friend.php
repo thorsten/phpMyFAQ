@@ -58,7 +58,6 @@ if (!is_null($name) && !is_null($mailfrom) && is_array($mailto) && IPCheck($_SER
     $faq      = new PMF_Faq();
     $faq->getRecord($id);
     
-    $html    = PMF_Utils::getHTTPContent($link);
     $pdfFile = $faq->buildPDFFile($cat);
 
     foreach($mailto['mailto'] as $recipient) {
@@ -70,13 +69,10 @@ if (!is_null($name) && !is_null($mailfrom) && is_array($mailto) && IPCheck($_SER
             $mail->addTo($recipient);
             $mail->subject = $PMF_LANG["msgS2FMailSubject"].$name;
             $mail->message = $faqconfig->get("main.send2friendText")."\r\n\r\n".$PMF_LANG["msgS2FText2"]."\r\n".$link."\r\n\r\n".$attached;
-            if ($html !== false) {
-                $mail->messageAlt = $faqconfig->get("main.send2friendText")."\r\n\r\n".$PMF_LANG["msgS2FText2"]."\r\n".$link."\r\n\r\n".$attached;
-                $mail->setHTMLMessage($html);
-            }
             if (!empty($pdfFile) && (file_exists($pdfFile))) {
                 $mail->addAttachment($pdfFile, basename($pdfFile), 'application/pdf');
             }
+            
             // Send the email
             $result = $mail->send();
             unset($mail);
