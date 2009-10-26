@@ -6,11 +6,10 @@
  * @subpackage PMF_Ldap
  * @author     Adam Greene <phpmyfaq@skippy.fastmail.fm>
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Alberto Cabello Sánchez <alberto@unex.es>
+ * @author     Alberto Cabello Sï¿½nchez <alberto@unex.es>
  * @author     Lars Scheithauer <larsscheithauer@googlemail.com>
  * @since      2004-12-16
  * @copyright  2004-2009 phpMyFAQ Team
- * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -30,7 +29,7 @@
  * @subpackage PMF_Ldap
  * @author     Adam Greene <phpmyfaq@skippy.fastmail.fm>
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Alberto Cabello Sánchez <alberto@unex.es>
+ * @author     Alberto Cabello Sï¿½nchez <alberto@unex.es>
  * @author     Lars Scheithauer <larsscheithauer@googlemail.com>
  * @since      2004-12-16
  * @copyright  2004-2009 phpMyFAQ Team
@@ -143,7 +142,6 @@ class PMF_Ldap
         }
         return ldap_error($ds);
     }
-    
     /**
      * Returns specific data from LDAP
      * 
@@ -151,28 +149,36 @@ class PMF_Ldap
      * @param  string $data     MapKey
      * @return string
      */
-    private function getLdapData($username, $data)
+    private function getLdapData ($username, $data)
     {
         global $PMF_LDAP;
-       
+        
+        $values = array();
+        
         if (!array_key_exists($data, $PMF_LDAP['ldap_mapping'])) {
-            $this->error = 'requested datafield "'.$data.'" does not exist in $PMF_LDAP["ldap_mapping"].';
+            $this->error = 'requested datafield "' . $data . '" does not exist in $PMF_LDAP["ldap_mapping"].';
             return '';
         }
- 
+        
         $filter = "(" . $PMF_LDAP['ldap_mapping']['username'] . "=" . $username . ")";
         $fields = array($PMF_LDAP['ldap_mapping'][$data]);
+        $sr     = ldap_search($this->ds, $this->base, $filter, $fields);
         
-         $sr = ldap_search($this->ds, $this->base, $filter, $fields);
-         if (!$sr) {
+        if (!$sr) {
             $this->errno = ldap_errno($this->ds);
-            $this->error = 'Unable to search for "'.$username.'" (Error: '.ldap_error($this->ds).')';
-         }
-         
-         $entryId = ldap_first_entry($this->ds, $sr);
-         $values  = ldap_get_values($this->ds, $entryId, $fields[0]);
-         
-         return $values[0];
+            $this->error = 'Unable to search for "' . $username . '" (Error: ' . ldap_error($this->ds) . ')';
+        }
+        
+        $entryId = ldap_first_entry($this->ds, $sr);
+        
+        if (!$entryId) {
+            $this->errno = ldap_errno($this->ds);
+            $this->error = 'Cannot get the value(s). Error: ' . ldap_error($this->ds);
+        }
+        
+        $values  = ldap_get_values($this->ds, $entryId, $fields[0]);
+        
+        return $values[0];
     }
     
 }
