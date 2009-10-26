@@ -2893,7 +2893,7 @@ class PMF_Faq
         $pdf->AddPage();
         $pdf->SetFont('Helvetica', '', 12);
         $pdf->SetDisplayMode('real');
-        $pdf->WriteHTML(str_replace('../', '', $this->faqRecord['content']));
+        $pdf->WriteHTML(html_entity_decode(str_replace('../', '', $this->faqRecord['content'])));
         $pdf->Ln();
         $pdf->Ln();
         $pdf->SetStyle('I', true);
