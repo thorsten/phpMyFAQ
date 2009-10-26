@@ -66,9 +66,7 @@ if (
     // Load the required faq
     $faq = new PMF_Faq();
     $faq->getRecord($id);
-    // Get the HTML content
-    $html = @PMF_Utils::getHTTPContent($link);
-    // Try to attach the PDF content
+
     $pdfFile = $faq->buildPDFFile($cat);
 
     foreach($mailto['mailto'] as $recipient) {
@@ -80,13 +78,10 @@ if (
             $mail->addTo($recipient);
             $mail->subject = $PMF_LANG["msgS2FMailSubject"].$name;
             $mail->message = $faqconfig->get("main.send2friendText")."\r\n\r\n".$PMF_LANG["msgS2FText2"]."\r\n".$link."\r\n\r\n".$attached;
-            if ($html !== false) {
-                $mail->messageAlt = $faqconfig->get("main.send2friendText")."\r\n\r\n".$PMF_LANG["msgS2FText2"]."\r\n".$link."\r\n\r\n".$attached;
-                $mail->setHTMLMessage($html);
-            }
             if (!empty($pdfFile) && (file_exists($pdfFile))) {
                 $mail->addAttachment($pdfFile, basename($pdfFile), 'application/pdf');
             }
+            
             // Send the email
             $result = $mail->send();
             unset($mail);

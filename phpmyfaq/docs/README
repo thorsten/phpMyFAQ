@@ -42,7 +42,7 @@ Version 2.6.0-alpha - 2009-09-
 - minor bugfixes (Thorsten)
 
 Version 2.5.4 - 2009-11-
--
+- Fixed various PostgreSQL related issues (Anatoliy, Thorsten)
 
 Version 2.5.3 - 2009-10-19
 - switched repository from SVN to git (David Soria Parra, Thorsten)
