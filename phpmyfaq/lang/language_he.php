@@ -624,7 +624,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'חיפוש מתקדם';
 $PMF_LANG['spamControlCenter'] = 'בקרת ספאם';
 $LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "הדפס כתובות אימייל בצורה בטוחה (ברירת מחדל: פעיל).");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "בדוק מילים חסומות בטפסים ציבוריים (ברירת מחדל: פעיל).");
-$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "השתמש בסימנים גרפיים לאישור שליחת טפסים ציבוריים (ברירת מחדל: פעיל).");
+$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "השתמש בסימנים גרפיים לאישור שליחת טפסים ציבוריים (ברירת מחדל: פעיל).");
 $PMF_LANG['ad_session_expiring'] = 'הסשן שלך יפקע בעוד %d דקות: האם אתה רוצה להמשיך לעבוד?';
 
 // added v1.6.2 - 2006-06-13 by Matteo

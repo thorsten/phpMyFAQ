@@ -625,7 +625,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'جستجوی پیشر�?ته';
 $PMF_LANG['spamControlCenter'] = 'Spam control center';
 $LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Print user email in a safe way (default: enabled).");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Check public form content against banned words (default: enabled).");
-$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "Use a catpcha code to allow public form submission (default: enabled).");
+$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "Use a catpcha code to allow public form submission (default: enabled).");
 $PMF_LANG['ad_firefoxsearch_plugin_title'] = 'Create Firefox search plugin';
 $PMF_LANG['ad_msiesearch_plugin_install'] = 'Install Microsoft Internet Explorer 7 search plugin';
 $PMF_LANG['ad_msiesearch_plugin_title'] = 'Create Microsoft Internet Explorer 7 search plugin';

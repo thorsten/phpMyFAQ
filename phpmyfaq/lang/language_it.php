@@ -623,7 +623,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'Ricerca avanzata';
 $PMF_LANG['spamControlCenter'] = 'Centro di controllo contro lo Spam';
 $LANG_CONF['spam.enableSafeEmail'] = array(0 => 'checkbox', 1 => 'Stampa l\'email dell\'utente in maniera sicura (predefinito: abilitato).');
 $LANG_CONF['spam.checkBannedWords'] = array(0 => 'checkbox', 1 => 'Controlla se il testo delle form pubbliche contenga parole vietate (predefinito: abilitato).');
-$LANG_CONF['spam.enableCatpchaCode'] = array(0 => 'checkbox', 1 => 'Usa un codice <a href="http://it.wikipedia.org/wiki/Captcha" title="Vai alla definizione di Wikipedia" target="_blank">captcha</a> per permettere la sottomissione delle form pubbliche (predefinito: abilitato).');
+$LANG_CONF['spam.enableCaptchaCode'] = array(0 => 'checkbox', 1 => 'Usa un codice <a href="http://it.wikipedia.org/wiki/Captcha" title="Vai alla definizione di Wikipedia" target="_blank">captcha</a> per permettere la sottomissione delle form pubbliche (predefinito: abilitato).');
 $PMF_LANG['ad_session_expiring'] = 'Questa sessione scadrà tra %d minuti: vuoi continuare a lavorare?';
 
 // added v1.6.2 - 2006-06-13 by Matteo

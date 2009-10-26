@@ -778,7 +778,7 @@ $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => "checkbox", 1 => "�
 $LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "パーミッションレベル");
 $LANG_CONF['spam.enableSafeEmail'] = array(0 => "checkbox", 1 => "安全にユーザーの電子メールを表示する (デフォルト: 有効)");
 $LANG_CONF['spam.checkBannedWords'] = array(0 => "checkbox", 1 => "公開フォームの内容に対する禁止単語を確認する (デフォルト: 有効)");
-$LANG_CONF['spam.enableCatpchaCode'] = array(0 => "checkbox", 1 => "公開フォームの送信を許可するために captcha を使用する (デフォルト: 有効)");
+$LANG_CONF['spam.enableCaptchaCode'] = array(0 => "checkbox", 1 => "公開フォームの送信を許可するために captcha を使用する (デフォルト: 有効)");
 $LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "関連エントリの数");
 $LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'レコードのソート (according to property)');
 $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'レコードのソート (descending or ascending)');

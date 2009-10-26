@@ -617,7 +617,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'Pesquisa avan&ccedil;ada';
 $PMF_LANG['spamControlCenter'] = 'Centro de controlo de Spam';
 $LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Mostrar email do utilizador de forma segura (por defeito: activado).");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Verificar conte&uacute;do de formul&aacute;rios p&uacute;blicos por palavras banidas (por defeito: activado).");
-$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "Usar c&oacute;digo catpcha para permitir submeter formul&aacute;rios p&uacute;blicos (por defeito: activado).");
+$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "Usar c&oacute;digo catpcha para permitir submeter formul&aacute;rios p&uacute;blicos (por defeito: activado).");
 $PMF_LANG['ad_session_expiring'] = 'A sua sess&atilde;o expira daqui a %d minutos: deseja continuar a trabalhar?';
 
 // added v1.6.2 - 2006-06-13 by Matteo

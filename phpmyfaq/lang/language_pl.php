@@ -620,7 +620,7 @@ $LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Ilo¶æ 
 $LANG_CONF['records.orderby'] = array(0 => "select", 1 => "Sortowanie rekordów (stosownie do w³asno¶ci)");
 $LANG_CONF['records.sortby'] = array(0 => "select", 1 => "Kierunek sortowania rekordów (malej±co lub rosn±co)");
 $LANG_CONF['spam.checkBannedWords'] = array(0 => "checkbox", 1 => "Sprawdzaj formularze publiczne na wystêpowanie s³ów zabronionych (domy¶lnie w³±czone).");
-$LANG_CONF['spam.enableCatpchaCode'] = array(0 => "checkbox", 1 => "U¿ywaj captcha do zatwierdzania publicznych formularzy (domy¶lnie w³±czone).");
+$LANG_CONF['spam.enableCaptchaCode'] = array(0 => "checkbox", 1 => "U¿ywaj captcha do zatwierdzania publicznych formularzy (domy¶lnie w³±czone).");
 $LANG_CONF['spam.enableSafeEmail'] = array(0 => "checkbox", 1 => "Wy¶wietlaj adres e-mail u¿ytkownika w sposób bezpieczny (domy¶lnie w³±czone).");
 $PMF_LANG['rightsLanguage']['addglossary'] = "dodaj do glosariusza";
 $PMF_LANG['rightsLanguage']['editglossary'] = "edytuj w glosariuszu";

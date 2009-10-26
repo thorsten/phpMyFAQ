@@ -621,7 +621,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'आधुनिक खोज';
 $PMF_LANG['spamControlCenter'] = 'अन्वान्चित क्रिया नियंत्रण केंद्र';
 $LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "प्रयोगकर्ताओं का ईमेल पता सुरक्षित तरीके से छापें (पूर्वनिर्धारित: सक्रिय).");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "सार्वजनिक लेखों की जांच प्रतिबंधित शब्दों के साथ करें (पूर्वनिर्धारित: सक्रिय).");
-$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "सार्वजनिक फॉर्म को जमा करने के लिए Captcha code का प्रयोग करें (पूर्वनिर्धारित: सक्रिय).");
+$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "सार्वजनिक फॉर्म को जमा करने के लिए Captcha code का प्रयोग करें (पूर्वनिर्धारित: सक्रिय).");
 $PMF_LANG['ad_session_expiring'] = 'आपका सत्र %d minutes: में समाप्त हो जाएगा. क्या आप काम आगे जारी रखना चाहते हैं?';
 
 // added v1.6.2 - 2006-06-13 by Matteo

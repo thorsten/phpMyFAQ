@@ -617,7 +617,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'Gelişmiş arama';
 $PMF_LANG['spamControlCenter'] = 'Spam kontrol merkezi';
 $LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Kullanıcı e-posta adresini güvenli şekilde göster (varsayılan: aktif).");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Form içeriğinde karalistelenmiş kelimeleri kontrol et (varsayılan: aktif).");
-$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "Form gönderimini doğrulama kodu (CAPTCHA) ile koru (varsayılan: aktif).");
+$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "Form gönderimini doğrulama kodu (CAPTCHA) ile koru (varsayılan: aktif).");
 $PMF_LANG['ad_session_expiring'] = 'Oturumunuz %d dakika sonra sona erecek: çalışmaya devam etmek istiyor musunuz?';
 
 // added v1.6.2 - 2006-06-13 by Matteo

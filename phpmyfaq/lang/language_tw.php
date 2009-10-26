@@ -774,7 +774,7 @@ $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => "checkbox", 1 => "D
 $LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "權限層級");
 $LANG_CONF['spam.enableSafeEmail'] = array(0 => "checkbox", 1 => "安全方式列印 email  (default: enabled).");
 $LANG_CONF['spam.checkBannedWords'] = array(0 => "checkbox", 1 => "檢查公開禁止內容的字語 (default: enabled).");
-$LANG_CONF['spam.enableCatpchaCode'] = array(0 => "checkbox", 1 => "使用 captcha code to allow public form submission (default: enabled).");
+$LANG_CONF['spam.enableCaptchaCode'] = array(0 => "checkbox", 1 => "使用 captcha code to allow public form submission (default: enabled).");
 $LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "相關的條目數");
 $LANG_CONF['records.orderby'] = array(0 => 'select', 1 => '記錄排序(按性質)');
 $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => '記錄排序 (降序或升序)');

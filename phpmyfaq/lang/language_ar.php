@@ -653,7 +653,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'بحث متقدم';
 $PMF_LANG['spamControlCenter'] = 'Spamمركز التحكم �?ي ال ';
 $LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "اكتب بريد المستخدم بصورة آمنة(الأصل : نشط). ");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "�?حص محتويات النماذج العامة ضد الكلمات الممنوعة(الأصل : نشط) ");
-$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "استخدم كود ال catpcha  للسماح بإرسال النماذج العامة .");
+$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "استخدم كود ال catpcha  للسماح بإرسال النماذج العامة .");
 $PMF_LANG['ad_session_expiring'] = ' جلستك الحالية ستنتهي خلال%dدقيقة : حل تحب مدها وتكملة العمل ؟ ';
 
 // added v1.6.2 - 2006-06-13 by Matteo
