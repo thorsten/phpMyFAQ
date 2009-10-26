@@ -1,6 +1,4 @@
 #
-# $Id: phpmyfaq.spec,v 1.16 2008-05-18 11:26:22 thorstenr Exp $
-#
 # This is the spec file for building an RPM package of phpMyFAQ
 # for most of the different RPM-based distributions
 #
@@ -57,7 +55,7 @@
 # phpMyFAQ
 #
 %define name        phpmyfaq
-%define version     2.6.0-dev
+%define version     2.6.0-alpha
 %define release     1
 %define epoch       0
 
@@ -108,7 +106,7 @@ Vendor:             phpMyFAQ
 Source0:            %{name}-%{version}.tar.gz
 URL:                http://www.phpmyfaq.de
 Group:              Networking/WWW
-Packager:           Matteo Scaramuccia <matteo@scaramuccia.com>
+Packager:           Matteo Scaramuccia <matteo@scaramuccia.com>, Thorsten Rinne <thorsten@phpmyfaq.de>
 
 %if "%{_vendor}" == "suse"
 Prefix:             /srv/www
