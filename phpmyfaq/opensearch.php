@@ -2,12 +2,11 @@
 /**
  * This is XML code for OpenSearch
  *
- * @package    phpMyFAQ
- * @subpackage Frontend
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2006-11-19
- * @version    SVN: $Id$
- * @copyright: 2006-2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   Frontend
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2006-11-19
+ * @copyright 2006-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -22,13 +21,12 @@
 
 define('PMF_ROOT_DIR', dirname(__FILE__));
 
-require_once PMF_ROOT_DIR.'/inc/Init.php';
-require_once PMF_ROOT_DIR.'/inc/Link.php';
+require PMF_ROOT_DIR . '/inc/Init.php';
+require PMF_ROOT_DIR . '/inc/Link.php';
 
-$plugin_icon    = $_SERVER['HTTP_HOST'] . '.pmfsearch.png';
-$baseUrl        = PMF_Link::getSystemUri('/opensearch.php');
-$search_url     = $baseUrl . '/index.php?action=search';
-$src_url        = $baseUrl;
+$baseUrl   = PMF_Link::getSystemUri('/opensearch.php');
+$searchUrl = $baseUrl . '/index.php?action=search';
+$srcUrl    = $baseUrl;
 
 $opensearch     = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG['metaCharset']."\"?>
 <OpenSearchDescription xmlns=\"http://a9.com/-/spec/opensearch/1.1/\">
@@ -38,7 +36,7 @@ $opensearch     = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG['metaCharset']."
 <Language>".$PMF_LANG['metaLanguage']."</Language>
 <OutputEncoding>".$PMF_LANG['metaCharset']."</OutputEncoding>
 <Contact>".$faqconfig->get('main.administrationMail')."</Contact>
-<Image height=\"16\" width=\"16\" type=\"image/png\">".$baseUrl."/images/".$plugin_icon."</Image>
+<Image height=\"16\" width=\"16\" type=\"image/png\">".$baseUrl."/images/pmfsearch.png</Image>
 </OpenSearchDescription>";
 
 header("Content-type: text/xml");

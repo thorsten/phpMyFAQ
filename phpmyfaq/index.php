@@ -5,14 +5,13 @@
  * the templates we need and set all internal variables to the template
  * variables. That's all.
  *
- * @package    phpMyFAQ
- * @subpackage Frontend
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Lars Tiedemann <php@larstiedemann.de>
- * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since      2001-02-12
- * @version    SVN: $Id$
- * @copyright  2001-2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   Frontend
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since     2001-02-12
+ * @copyright 2001-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -495,15 +494,11 @@ if (isset($auth)) {
 } else {
     if (isset($_SERVER['HTTPS']) || !$faqconfig->get('main.useSslForLogins')) {
         $tpl->processTemplate('loginBox', array(
-            'writeLoginPath'  => $_SERVER['PHP_SELF'].'?action=login',
+            'writeLoginPath'  => '?action=login',
             'login'           => $PMF_LANG['ad_auth_ok'],
             'username'        => $PMF_LANG['ad_auth_user'],
             'password'        => $PMF_LANG['ad_auth_passwd'],
-            'msgRegisterUser' => (($faqconfig->get('main.enableRewriteRules'))
-                                 ?
-                                 '<a href="' . $systemUri . 'register.html">'.$PMF_LANG['msgRegisterUser'].'</a>'
-                                 :
-                                 '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=register">'.$PMF_LANG['msgRegisterUser'].'</a>'),
+            'msgRegisterUser' => '<a href="?' . $sids . 'action=register">' . $PMF_LANG['msgRegisterUser'] . '</a>',
             'msgLoginFailed'  => $error));
     } else {
         $tpl->processTemplate('loginBox', array(
