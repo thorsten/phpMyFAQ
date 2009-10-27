@@ -1,11 +1,10 @@
 ##
-# phpMyFAQ 2.5 .htaccess file
+# phpMyFAQ 2.6 .htaccess file
 #
 # @author    Thorsten Rinne <thorsten@phpmyfaq.de>
 # @author    Patrick Preuster <sica@php-q.net>
 # @author    Matteo scaramuccia <matteo@scaramuccia.com>
 # @since     2004-11-13
-# @version   SVN: $Id$
 # @copyright 2004-2009 phpMyFAQ Team
 #
 # The contents of this file are subject to the Mozilla Public License
@@ -17,8 +16,6 @@
 # basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 # License for the specific language governing rights and limitations
 # under the License.
-#
-##
 
 # always follow the symlinks
 Options +FollowSymlinks -MultiViews
@@ -35,9 +32,9 @@ RewriteBase /phpmyfaq/
 #RewriteCond %{REMOTE_ADDR}          !^127.0.0.1$
 # Choose your way of closing the access to PMF:
 # a. you can simply forbid access (HTTP 403 Error)
-#RewriteRule ^(.*)$                  underMaintenance.htm [F,L]
+#RewriteRule ^(.*)$                  underMaintenance.html [F,L]
 # b. return the user an explanation
-#RewriteRule ^(.*)$                  underMaintenance.htm [L]
+#RewriteRule ^(.*)$                  underMaintenance.html [L]
 
 # show all categories
 RewriteCond %{REQUEST_URI}          showcat\.html$ [NC]
