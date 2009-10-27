@@ -45,12 +45,13 @@ $current_groups = array(-1);
 
 $action     = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 $language   = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING, 'en');
-$categoryId = PMF_Filter::filterInput(INPUT_GET, 'categryId', FILTER_VALIDATE_INT);
+$categoryId = PMF_Filter::filterInput(INPUT_GET, 'categoryId', FILTER_VALIDATE_INT);
 $recordId   = PMF_Filter::filterInput(INPUT_GET, 'recordId', FILTER_VALIDATE_INT);
 
 // Get language (default: english)
 $Language = new PMF_Language();
-$LANGCODE = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
+$language = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
+$plr      = new PMF_Language_Plurals($PMF_LANG);
 
 // Set language
 if (PMF_Language::isASupportedLanguage($language)) {
@@ -93,7 +94,8 @@ switch ($action) {
         break;
         
     case 'getFaqs':
-        
+        $faq    = new PMF_Faq($current_user, $current_groups);
+        $result = $faq->getAllRecordPerCategory($categoryId);
     	break;
     	
     case 'getFaq':
