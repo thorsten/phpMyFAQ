@@ -44,7 +44,7 @@ $current_user   = -1;
 $current_groups = array(-1);
 
 $action     = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
-$language   = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING, 'en');
+$language   = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING, 'en');
 $categoryId = PMF_Filter::filterInput(INPUT_GET, 'categryId', FILTER_VALIDATE_INT);
 $recordId   = PMF_Filter::filterInput(INPUT_GET, 'recordId', FILTER_VALIDATE_INT);
 
