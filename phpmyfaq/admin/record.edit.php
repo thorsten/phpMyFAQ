@@ -2,13 +2,12 @@
 /**
  * The FAQ record editor.
  *
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2003-02-23
- * @license    Mozilla Public License 1.1
- * @version    SVN: $Id$
- * @copyright  2003-2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2003-02-23
+ * @license   Mozilla Public License 1.1
+ * @copyright 2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -408,7 +407,11 @@ if($permission['approverec']):
         foreach ($changeEntries as $entry) {
             $user->getUserById($entry['user']);
 ?>
-    <div style="font-size: 10px;"><strong><?php print date("Y-m-d H:i:s", $entry['date']).": ".$user->getUserData('display_name'); ?></strong><br /><?php print PMF_htmlentities($entry['changelog'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?><br /><?php print $PMF_LANG['ad_entry_revision'].' 1.'.$entry['revision_id']; ?></div>
+    <div style="font-size: 10px;">
+        <strong><?php print date("Y-m-d H:i:s", $entry['date']).": ".$user->getUserData('display_name'); ?></strong><br />
+        <?php print $entry['changelog']; ?><br />
+        <?php print $PMF_LANG['ad_entry_revision'].' 1.'.$entry['revision_id']; ?>
+    </div>
 <?php
         }
 ?>

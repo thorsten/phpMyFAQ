@@ -72,13 +72,13 @@ if ($permission["restore"]) {
                 $kg = $db->query($mquery[$i]);
                 if (!$kg) {
                     printf('<div style="font-size: 9px;"><strong>Query</strong>: "%s" <span style="color: red;">failed (Reason: %s)</span></div>%s',
-                        PMF_htmlentities($mquery[$i], ENT_QUOTES, $PMF_LANG['metaCharset']),
+                        PMF_String::htmlspecialchars($mquery[$i], ENT_QUOTES, 'utf-8'),
                         $db->error(),
                         "\n");
                     $k++;
                 } else {
                     printf('<!-- <div style="font-size: 9px;"><strong>Query</strong>: "%s" <span style="color: green;">okay</span></div> -->%s',
-                        PMF_htmlentities($mquery[$i], ENT_QUOTES, $PMF_LANG['metaCharset']),
+                        PMF_String::htmlspecialchars($mquery[$i], ENT_QUOTES, 'utf-8'),
                         "\n");
                     $g++;
                 }

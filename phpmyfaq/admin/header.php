@@ -2,12 +2,11 @@
 /**
  * Header of the admin area
  *
- * @package    phpMyFAQ
- * @subpackage Administraion
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2003-02-26
- * @version    SVN: $Id$
- * @copyright  2003-2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   Administraion
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2003-02-26
+ * @copyright 2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -36,9 +35,9 @@ header("Vary: Negotiate,Accept");
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
 <head>
-    <title><?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?> - powered by phpMyFAQ</title>
+    <title><?php print $faqconfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
     <meta name="copyright" content="(c) 2001-2009 phpMyFAQ Team" />
-    <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <link rel="shortcut icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
     <link rel="icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
