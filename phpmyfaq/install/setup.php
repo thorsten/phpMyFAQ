@@ -618,10 +618,10 @@ foreach ($permLevels as $level => $desc) {
     }
 
     require_once $sql_type . '.sql.php'; // CREATE TABLES
-    require_once 'config.sql.php';       // INSERTs for configiration
+    require_once 'config.sql.php';       // INSERTs for configuration
     require_once 'stopwords.sql.php';    // INSERTs for stopwords
     
-    print "<p class=\"center\">";
+    print '<p class="center">';
     @ob_flush();
     flush();
 
@@ -631,7 +631,6 @@ foreach ($permLevels as $level => $desc) {
     $count = 0;
     while ($each_query = each($query)) {
         $result = @$db->query($each_query[1]);
-        print "| ";
         if (!$result) {
             print "\n<div class=\"error\">\n";
             print "<p><strong>Error:</strong> Please install your version of phpMyFAQ once again or send us a <a href=\"http://bugs.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>";
@@ -647,6 +646,7 @@ foreach ($permLevels as $level => $desc) {
         wait(25);
         $count++;
         if (!($count % 10)) {
+            print '| ';
             @ob_flush();
             flush();
         }
