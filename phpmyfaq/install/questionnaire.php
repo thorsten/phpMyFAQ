@@ -11,7 +11,6 @@
  * @author    Johannes Schlueter <johannes@php.net>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since     2007-03-17
- * @version   git: $Id$
  * @copyright 2007-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -191,13 +190,13 @@ class PMF_Questionnaire_Data
  */
 function data_printer($value, $key, $ident = "\n\t")
 {
-    echo $ident, '<dt>', PMF_htmlentities($key), '</dt>', $ident, "\t", '<dd>';
+    echo $ident, '<dt>', htmlentities($key), '</dt>', $ident, "\t", '<dd>';
     if (is_array($value)) {
         echo '<dl>';
         array_walk($value, 'data_printer', $ident."\t");
         echo $ident, "\t", '</dl>';
     } else {
-        echo PMF_htmlentities($value);
+        echo htmlentities($value);
     }
     echo '</dd>';
 }

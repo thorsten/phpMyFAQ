@@ -2,12 +2,12 @@
 /**
  * The fulltext search page
  *
- * @package   phpMyFAQ
+ * @category  phpMyFAQ
+ * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Periklis Tsirakidis <tsirakidis@phpdevel.de>
  * @since     2002-09-16
- * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: search.php,v 1.28 2008-06-05 19:48:20 thorstenr Exp $
+ * @copyright 2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -106,7 +106,7 @@ $helper->setCategory($category);
 
 $tpl->processTemplate('writeContent', array(
     'msgSearch'                => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgSearch']),
-    'searchString'             => PMF_htmlentities($inputSearchTerm, ENT_QUOTES, $PMF_LANG['metaCharset']),
+    'searchString'             => PMF_String::htmlspecialchars($inputSearchTerm, ENT_QUOTES, 'utf-8'),
     'searchOnAllLanguages'     => $PMF_LANG['msgSearchOnAllLanguages'],
     'checkedAllLanguages'      => $allLanguages ? ' checked="checked"' : '',
     'selectCategories'         => $PMF_LANG['msgSelectCategories'],

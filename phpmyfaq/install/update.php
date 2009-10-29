@@ -536,7 +536,7 @@ if ($step == 4) {
                 print "\n<div class=\"error\">\n";
                 print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
                 print "<div style=\"text-align: left;\"><p>Query:\n";
-                print "<pre>".PMF_htmlentities($current_query)."</pre></p></div>\n";
+                print "<pre>".htmlentities($current_query)."</pre></p></div>\n";
                 print "</div>";
                 die();
             }
@@ -593,7 +593,7 @@ if ($step == 4) {
                 print "\n<div class=\"error\">\n";
                 print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
                 print "<div style=\"text-align: left;\"><p>Query:\n";
-                print "<pre>".PMF_htmlentities($current_query)."</pre></p></div>\n";
+                print "<pre>".htmlentities($current_query)."</pre></p></div>\n";
                 print "</div>";
                 die();
             }

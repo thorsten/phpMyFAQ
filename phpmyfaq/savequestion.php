@@ -2,14 +2,13 @@
 /**
  * Saves the question of a user
  *
- * @package    phpMyFAQ 
- * @subpackage Frontend
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Anatoliy Belsky <anatoliy.belsky@mayflower.de>
- * @author     Jürgen Kuza <kig@bluewin.ch>
- * @since      2002-09-17
- * @version    SVN: $Id$
- * @copyright  2002-2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   Frontend
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
+ * @author    JŸrgen Kuza <kig@bluewin.ch>
+ * @since     2002-09-17
+ * @copyright 2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -103,12 +102,12 @@ if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SE
     $search        = new PMF_Search();
     $search_result = array();
     $counter = 0;
-    foreach($search_stuff as $word) {
+    foreach ($search_stuff as $word) {
         $tmp = getSearchData($word);
-        foreach($tmp as $foundItem) {
-            if(!isset($foundItem->id, $search_result[$foundItem->category_id])) {
+        foreach ($tmp as $foundItem) {
+            if (!isset($foundItem->id, $search_result[$foundItem->category_id])) {
                 $counter++;
-                $foundItem->searchterm = PMF_htmlentities(stripslashes($word), ENT_QUOTES, $PMF_LANG['metaCharset']);
+                $foundItem->searchterm = PMF_String::htmlspecialchars(stripslashes($word), ENT_QUOTES, 'utf-8');
                 $search_result[$foundItem->category_id][$foundItem->id] = $foundItem; 
             }
         }
@@ -117,9 +116,9 @@ if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SE
     if ($search_result) {
         $search_result_html = '<p>'.$plr->GetMsg('plmsgSearchAmount',$num)."</p>\n";
         $counter = 0;
-        foreach($search_result as $cat_id => $cat_contents) {
+        foreach ($search_result as $cat_id => $cat_contents) {
             $tmp_result_html = '';
-            foreach($cat_contents as $cat_content_item) {
+            foreach ($cat_contents as $cat_content_item) {
                 $b_permission = false;
                 //Groups Permission Check
                 if ($faqconfig->get('main.permLevel') == 'medium') {
@@ -145,7 +144,7 @@ if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SE
                     }
                 }
                 
-                if(!$b_permission) {
+                if (!$b_permission) {
                     continue;
                 }
                 

@@ -2,7 +2,8 @@
 /**
  * Contact page
  *
- * @package   phpMyFAQ
+ * @category  phpMyFAQ
+ * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since     2002-09-16
  * @version   SVN: $Id$
@@ -35,7 +36,7 @@ if (!is_null($showCaptcha)) {
 
 $tpl->processTemplate ('writeContent', array(
     'msgContact'         => $PMF_LANG['msgContact'],
-    'msgContactOwnText'  => nl2br(PMF_htmlentities($faqconfig->get('main.contactInformations'), ENT_QUOTES, $PMF_LANG['metaCharset'])),
+    'msgContactOwnText'  => nl2br($faqconfig->get('main.contactInformations')),
     'msgContactEMail'    => $PMF_LANG['msgContactEMail'],
     'writeSendAdress'    => '?' . $sids . 'action=sendmail',
     'msgNewContentName'  => $PMF_LANG['msgNewContentName'],

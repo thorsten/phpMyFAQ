@@ -2,12 +2,11 @@
 /**
  * The send2friend page
  *
- * @package    phpMyFAQ
- * @subpackage Frontend
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2002-09-16
- * @version    SVN: $Id$
- * @copyright  2002-2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   Frontend
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2002-09-16
+ * @copyright 2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -56,7 +55,7 @@ $tpl->processTemplate ('writeContent', array(
     'msgS2FFriends'      => $PMF_LANG['msgS2FFriends'],
     'msgS2FEMails'       => $PMF_LANG['msgS2FEMails'],
     'msgS2FText'         => $PMF_LANG['msgS2FText'],
-    'send2friend_text'   => PMF_htmlentities($PMF_CONF['main.send2friendText'], ENT_QUOTES, $PMF_LANG['metaCharset']),
+    'send2friend_text'   => $faqconfig->get('main.send2friendText'),
     'msgS2FText2'        => $PMF_LANG['msgS2FText2'],
     'send2friendLink'    => $send2friendLink,
     'msgS2FMessage'      => $PMF_LANG['msgS2FMessage'],

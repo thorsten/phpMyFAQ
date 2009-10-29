@@ -44,7 +44,7 @@ $permLevels = array(
     'basic'  => 'Basic (no group support)',
     'medium' => 'Medium (with group support)');
 
-$enabled_extensions = array(
+$enabledExtensions = array(
     'gd',
     'json',
     'xmlwriter',
@@ -73,15 +73,15 @@ function db_check($supported_databases)
 /**
  * Lookup for installed PHP extensions
  *
- * @param  array $enabled_extensions enabled Extensions
+ * @param  array $enabledExtensions enabled Extensions
  * @return boolean
  * @access public
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  */
-function extension_check($enabled_extensions, &$output = NULL)
+function extension_check($enabledExtensions, &$output = NULL)
 {
     $missing_extensions = array();
-    foreach ($enabled_extensions as $extension) {
+    foreach ($enabledExtensions as $extension) {
 
         if (!extension_loaded($extension)) {
             $missing_extensions[] = $extension;
@@ -230,7 +230,7 @@ if (!db_check($supported_databases)) {
 }
 
 $missing = array();
-if (!extension_check($enabled_extensions, $missing)) {
+if (!extension_check($enabledExtensions, $missing)) {
     print "<p class=\"center\">The following extensions are missing! Please enable the PHP extension:</p>\n";
     print "<ul>\n";
     foreach ($missing as $extension) {
@@ -636,7 +636,7 @@ foreach ($permLevels as $level => $desc) {
             print "<p><strong>Error:</strong> Please install your version of phpMyFAQ once again or send us a <a href=\"http://bugs.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>";
             print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
             print "<div style=\"text-align: left;\"><p>Query:\n";
-            print "<pre>".PMF_htmlentities($each_query[1])."</pre></p></div>\n";
+            print "<pre>".htmlentities($each_query[1])."</pre></p></div>\n";
             print "</div>";
             db_uninstall();
             cleanInstallation();

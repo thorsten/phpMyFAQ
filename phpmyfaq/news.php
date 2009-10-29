@@ -1,25 +1,25 @@
 <?php
 /**
-* $Id: news.php,v 1.15 2008-05-23 13:06:06 thorstenr Exp $
-*
-* Shows the page with the news record and - when available - the user
-* comments
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @since        2006-07-23
-* @copyright    (c) 2006-2007 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * Shows the page with the news record and - when available - the user
+ * comments
+ *
+ * @category  phpMyFAQ
+ * @package   Frontend
+ * @author    horsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since     2006-07-23
+ * @copyright 2006-2009 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -45,7 +45,7 @@ if (is_null($news_id)) {
 $faqsession->userTracking('news_view', $id);
 
 // Define the header of the page
-$writeNewsHeader = PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']).$PMF_LANG['msgNews'];
+$writeNewsHeader = $faqconfig->get('main.titleFAQ') . $PMF_LANG['msgNews'];
 $writeNewsRSS    = '&nbsp;<a href="feed/news/rss.php" target="_blank"><img id="newsRSS" src="images/feed.png" width="16" height="16" alt="RSS" /></a>';
 
 // Get all data from the news record

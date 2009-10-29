@@ -2,12 +2,11 @@
 /**
  * The main start page with the Top10 and the latest messages
  *
- * @package    phpMyFAQ
- * @subpackage Frontend
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2002-08-23
- * @version    SVN: $Id$
- * @copyright  2002-2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   Frontend
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2002-08-23
+ * @copyright 2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License""); you may not use this file except in
@@ -30,7 +29,7 @@ require_once('inc/News.php');
 $news = new PMF_News();
 
 $archived        = PMF_Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
-$writeNewsHeader = PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']);
+$writeNewsHeader = $faqconfig->get('main.titleFAQ');
 
 if (!is_null($archived)) {
     $writeNewsHeader .= $PMF_LANG['newsArchive'];

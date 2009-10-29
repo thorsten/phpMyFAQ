@@ -134,8 +134,7 @@ if (isset($oLnk->urlpool['href'])) {
                 $_link = str_replace('&', '&amp;', $_link);
             }
             $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().$_link);
-            $oLink->itemTitle = $_title;
-            $oLink->tooltip   = PMF_htmlentities($_title, ENT_QUOTES, $PMF_LANG['metaCharset']);
+            $oLink->itemTitle = $oLink->tooltip = $_title;
             $newFaqPath       = $oLink->toString();
             $fixedContent     = str_replace($_url, $newFaqPath, $fixedContent);
         }
