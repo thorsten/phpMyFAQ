@@ -1055,6 +1055,7 @@
     <p>You can call the resources with the following URIs:</p>
     <ul>
         <li><strong>getVersion()</strong>
+        <p>This method returns the phpMyFAQ version number as string.</p>
         <ul>
             <li>http://www.example.org/phpmyfaq/api.php?action=getVersion (standard)</li>
             <li>http://www.example.org/phpmyfaq/api/getVersion (rewrite rules enabled)</li>
@@ -1069,7 +1070,8 @@
             <li>http://www.example.org/phpmyfaq/api.php?action=getApiVersion (standard)</li>
             <li>http://www.example.org/phpmyfaq/api/getApiVersion (rewrite rules enabled)</li>
         </ul>
-        <p>The result will be:</p>
+        <p>Returns the version of the API. The version number is incremental and will be incremented every time the API 
+        changes.</p>
         <pre>
         {"apiVersion":1}
         </pre>
@@ -1108,7 +1110,7 @@
             <li>http://www.example.org/phpmyfaq/api.php?action=getCategories (standard)</li>
             <li>http://www.example.org/phpmyfaq/api/getCategories (rewrite rules enabled)</li>
         </ul>
-        <p>The result will be:</p>
+        <p>The result will be a JSON object like the following:</p>
         <pre>
     [
         {
