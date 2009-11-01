@@ -1058,3 +1058,6 @@ $PMF_LANG['msgTransToolNoteFileSaving']  = 'Please note that no files will we wr
 $PMF_LANG['msgTransToolPageBufferRecorded'] = 'Page %d buffer recorded successfully';
 $PMF_LANG['msgTransToolErrorRecordingPageBuffer'] = 'Error recording page %d buffer';
 $PMF_LANG['msgTransToolRecordingPageBuffer'] = 'Recording page %d buffer';
+
+// added 2.6.0-alpha - 2009-11-01 by Anatoliy Belsky
+$PMF_LANG['msgAttachmentInvalid'] = 'The attachment is invalid, please inform admin';

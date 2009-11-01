@@ -29,6 +29,8 @@ if(headers_sent()) {
     die();
 }
 
+$attachmentErrors = array();
+
 /**
  * TODO check if user is allowed to download this file
  */
@@ -36,15 +38,20 @@ if(headers_sent()) {
 $id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $att = PMF_Attachment_Factory::create($id);
 
+
 if($att) {
-    $att->rawOut();
-    exit;
+    try {
+        $att->rawOut();
+        exit(0);
+    } catch (Exception $e) {
+        $attachmentErrors[] = $PMF_LANG['msgAttachmentInvalid'];
+    }
 }
 
 /**
  * If we're here, there was an error with file download
  */
-$tpl->processBlock('writeContent', 'attachmentErrors', array('item' => 'Error'));
+$tpl->processBlock('writeContent', 'attachmentErrors', array('item' => implode('<br>', $attachmentErrors)));
 $tpl->processTemplate('writeContent', array());
 $tpl->includeTemplate('writeContent', 'index');
 
