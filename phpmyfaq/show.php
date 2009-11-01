@@ -30,9 +30,12 @@ $currentCategory = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT
 if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory])) {
 
     $faqsession->userTracking('show_category', $currentCategory);
-    $parent  = $category->categoryName[$currentCategory]['parent_id'];
-    $name    = $category->categoryName[$currentCategory]['name'];
-    $records = $faq->showAllRecords($currentCategory, $faqconfig->get('records.orderby'), $faqconfig->get('records.sortby'));
+    $parent              = $category->categoryName[$currentCategory]['parent_id'];
+    $name                = $category->categoryName[$currentCategory]['name'];
+    $categoryDescription = $category->categoryName[$currentCategory]['description'];
+    $records             = $faq->showAllRecords($currentCategory, 
+                                                $faqconfig->get('records.orderby'), 
+                                                $faqconfig->get('records.sortby'));
     
     if (!$records) {
         $subCategory = new PMF_Category($current_user, $current_groups, true);
@@ -45,24 +48,26 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
         $url = sprintf('%saction=show&amp;cat=%d',
                     $sids,
                     $parent);
-        $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+        $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
         $oLink->itemTitle = $category->categoryName[$parent]['name'];
-        $oLink->text = $PMF_LANG['msgCategoryUp'];
-        $up = $oLink->toHtmlAnchor();
+        $oLink->text      = $PMF_LANG['msgCategoryUp'];
+        $up               = $oLink->toHtmlAnchor();
     }
 
     $tpl->processTemplate('writeContent', array(
-        'writeCategory'     => $PMF_LANG['msgEntriesIn'].$name,
-        'writeThemes'       => $records,
-        'writeOneThemeBack' => $up));
+        'writeCategory'            => $PMF_LANG['msgEntriesIn'].$name,
+        'writeCategoryDescription' => $categoryDescription,
+        'writeThemes'              => $records,
+        'writeOneThemeBack'        => $up));
     $tpl->includeTemplate('writeContent', 'index');
 
 } else {
 
     $faqsession->userTracking('show_all_categories', 0);
     $tpl->processTemplate('writeContent', array(
-        'writeCategory'     => $PMF_LANG['msgFullCategories'],
-        'writeThemes'       => $category->viewTree(),
-        'writeOneThemeBack' => ''));
+        'writeCategory'            => $PMF_LANG['msgFullCategories'],
+        'writeCategoryDescription' => '',
+        'writeThemes'              => $category->viewTree(),
+        'writeOneThemeBack'        => ''));
     $tpl->includeTemplate('writeContent', 'index');
 }
