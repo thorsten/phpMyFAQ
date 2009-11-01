@@ -1,12 +1,10 @@
 <?php
 /**
- * $Id: Link.php,v 1.30 2008-02-29 19:38:35 thorstenr Exp $
- *
  * Link management - Functions and Classes
  *
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since     2005-11-02
- * @copyright 2005-2008 phpMyFAQ Team
+ * @copyright 2005-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -363,7 +361,7 @@ class PMF_Link
             $htmlAnchor .= ' class="'.$this->class.'"';
         }
         if (!empty($this->tooltip)) {
-            $htmlAnchor .= ' title="'.htmlspecialchars($this->tooltip).'"';
+            $htmlAnchor .= ' title="'.addslashes($this->tooltip).'"';
         }
         if (!empty($this->name)) {
                 $htmlAnchor .= ' name="'.$this->name.'"';
