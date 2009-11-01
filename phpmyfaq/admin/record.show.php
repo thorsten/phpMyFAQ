@@ -2,13 +2,12 @@
 /**
  * Shows the list of records ordered by categories
  *
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Minoru TODA <todam@netjapan.co.jp>
- * @since      2003-02-23
- * @version    SVN: $Id$
- * @copyright  2003-2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Minoru TODA <todam@netjapan.co.jp>
+ * @since     2003-02-23
+ * @copyright 2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -361,7 +360,7 @@ foreach($all_ids as $cat_id => $record_ids) {
      */
     function deleteRecord(record_id, record_lang)
     {
-        if (confirm('<?php print $PMF_LANG["ad_entry_del_1"] . " " . $PMF_LANG["ad_entry_del_3"]; ?>')) {
+        if (confirm('<?php print addslashes($PMF_LANG["ad_entry_del_1"] . " " . $PMF_LANG["ad_entry_del_3"]); ?>')) {
             $('#saving_data_indicator').html('<img src="images/indicator.gif" /> deleting ...');
             $.ajax({
                 type:    "POST",
