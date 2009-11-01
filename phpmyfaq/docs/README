@@ -17,8 +17,10 @@ Changes since 2.5.x:
 - added share on Facebook link (Thorsten)
 - added a rest/json API (Thorsten)
 - added secure login if SSL is available (Tobias Hommel)
+- added FAQ entry dependent meta description (Thorsten)
 - improved attachment functionality (Anatoliy)
 - improved install script (Thorsten)
+- improved category view with description (Thorsten)
 - removed Docbook XML export (Thorsten)
 - minor bugfixes (Thorsten)
 
@@ -36,8 +38,10 @@ Version 2.6.0-alpha - 2009-09-
 - added share on Facebook link (Thorsten)
 - added a rest/json API (Thorsten)
 - added secure login if SSL is available (Tobias Hommel)
+- added FAQ entry dependent meta description (Thorsten)
 - improved attachment functionality (Anatoliy)
 - improved install script (Thorsten)
+- improved category view with description (Thorsten)
 - removed Docbook XML export (Thorsten)
 - minor bugfixes (Thorsten)
 

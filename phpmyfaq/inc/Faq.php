@@ -1477,6 +1477,47 @@ class PMF_Faq
             return '';
         }
     }
+    
+    /**
+     * Returns a answer preview of the FAQ record
+     *
+     * @param integer $recordId  FAQ record ID
+     * @param integer $wordCount Number of words, default: 12
+     * 
+     * @return string 
+     */
+    public function getRecordPreview($recordId, $wordCount = 12)
+    {
+    	$answerPreview = '';
+    	
+        if (isset($this->faqRecord['id']) && ($this->faqRecord['id'] == $recordId)) {
+            $answerPreview = $this->faqRecord['content'];
+        }
+        
+        $query = sprintf("
+            SELECT
+                content as answer
+            FROM
+                %sfaqdata
+            WHERE 
+                id = %d 
+            AND 
+                lang = '%s'",
+            SQLPREFIX,
+            $recordId,
+            $this->language);
+
+        $result = $this->db->query($query);
+
+        if ($this->db->num_rows($result) > 0) {
+            $row           = $this->db->fetch_object($result);
+            $answerPreview = strip_tags($row->answer);
+        } else {
+            $answerPreview = PMF_Configuration::getInstance()->get('main.metaDescription');
+        }
+    	
+    	return PMF_Utils::makeShorterText($answerPreview, $wordCount);
+    }
 
     /**
      * Returns the number of activated and not expired records, optionally

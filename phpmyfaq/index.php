@@ -262,12 +262,14 @@ $oTag = new PMF_Tags();
 //
 $id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 if (!is_null($id)) {
-    $title    = ' - ' . $faq->getRecordTitle($id);
-    $keywords = ' ' . $faq->getRecordKeywords($id);
+    $title           = ' - ' . $faq->getRecordTitle($id);
+    $keywords        = ' ' . $faq->getRecordKeywords($id);
+    $metaDescription = $faq->getRecordPreview($id);
 } else {
-    $id       = '';
-    $title    = ' -  powered by phpMyFAQ ' . $faqconfig->get('main.currentVersion');
-    $keywords = '';
+    $id              = '';
+    $title           = ' -  powered by phpMyFAQ ' . $faqconfig->get('main.currentVersion');
+    $keywords        = '';
+    $metaDescription = $faqconfig->get('main.metaDescription');
 }
 
 //
@@ -275,14 +277,15 @@ if (!is_null($id)) {
 //
 $solution_id = PMF_Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
 if (!is_null($solution_id)) {
-    $title       = ' -  powered by phpMyFAQ ' . $faqconfig->get('main.currentVersion');
-    $keywords    = '';
-    $a = $faq->getIdFromSolutionId($solution_id);
-    if (is_array($a)) {
-        $id       = $a['id'];
-        $lang     = $a['lang'];
-        $title    = ' - ' . $faq->getRecordTitle($id);
-        $keywords = ' ' . $faq->getRecordKeywords($id);
+    $title    = ' -  powered by phpMyFAQ ' . $faqconfig->get('main.currentVersion');
+    $keywords = '';
+    $faqData  = $faq->getIdFromSolutionId($solution_id);
+    if (is_array($faqData)) {
+        $id              = $faqData['id'];
+        $lang            = $faqData['lang'];
+        $title           = ' - ' . $faq->getRecordTitle($id);
+        $keywords        = ' ' . $faq->getRecordKeywords($id);
+        $metaDescription = PMF_Utils::makeShorterText($faqData['content'], 12);
     }
 } 
 
@@ -383,7 +386,7 @@ $main_template_vars = array(
     'version'             => $faqconfig->get('main.currentVersion'),
     'header'              => str_replace('"', '', $faqconfig->get('main.titleFAQ')),
     'metaTitle'           => str_replace('"', '', $faqconfig->get('main.titleFAQ')),
-    'metaDescription'     => $faqconfig->get('main.metaDescription'),
+    'metaDescription'     => $metaDescription,
     'metaKeywords'        => $faqconfig->get('main.metaKeywords').$keywords,
     'metaPublisher'       => $faqconfig->get('main.metaPublisher'),
     'metaLanguage'        => $PMF_LANG['metaLanguage'],
