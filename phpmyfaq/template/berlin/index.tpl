@@ -36,11 +36,10 @@
 	<div>
 		<h1><a title="{header}" href="{faqHome}">{header}</a></h1>
 		<ul>
-			<li>{msgContact}</li>
 			<li>{msgHelp}</li>
 			<li>{msgOpenQuestions}</li>
 			<li>{msgQuestion}</li>
-			<li>{msgAddContent}</li>
+			<li>{allCategories}</li>
 			<li>{msgSearch}</li>
 		</ul>
 	</div>
@@ -52,50 +51,22 @@
 				<div id="categories">
 					<ul>
 						<li class="home">{backToHome}</li>
-						<li>{allCategories}</li>
 						{showCategories}
 						<li>{showInstantResponse}</li>
-						<li>{showSitemap}</li>
 					</ul>
 				</div>
 			</div>
 
 			<div class="content">
-				<div id="langform">
-				<form action="{writeLangAdress}" method="post">
-				<label for="language">{languageBox}</label>
-				{switchLanguages}
-				<input type="hidden" name="action" value="" />
-				</form>
-				</div>
-			</div>
-
-			<div class="content">
 				<div id="loginform">
-				{loginBox}
+                    <a href="admin/index.php?action=login">Administrations-Bereich</a>
 				</div>
 			</div>
 
-			<div class="content">
-				<div id="useronline">
-				{userOnline}
-				</div>
-			</div>
 	</div>
 
 	<div class="rightcolumn">
 		{rightBox}
-                
-            <div class="content">
-                <div id="stickyrecords">
-                <h3>{stickyRecordsHeader}</h3>
-                <ul>
-                    [stickyRecordsList]
-                    <li><a href="{stickyRecordsUrl}">{stickyRecordsTitle}</a></li>
-                    [/stickyRecordsList]
-                </ul>
-                </div>
-           </div>
 	</div>
 
 	<div class="main-content">

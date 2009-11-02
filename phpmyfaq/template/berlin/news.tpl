@@ -1,6 +1,6 @@
     <!-- begin news -->
     <div id="news">
-    <h2>{writeNewsHeader}{writeNewsRSS}</h2>
+    <h2>{writeNewsHeader}</h2>
     <h2 id="news_header">{writeHeader}</h2>
 
     <!-- News -->

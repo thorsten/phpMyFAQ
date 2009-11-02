@@ -3,7 +3,7 @@
 # This is the shell script for building:
 # 1. a TAR.GZ package;
 # 2. a ZIP package
-# of phpMyFAQ using what committed into SVN.
+# of phpMyFAQ using what committed into Git.
 # Note: it requires an internet connection.
 #
 # For creating a package simply run:
