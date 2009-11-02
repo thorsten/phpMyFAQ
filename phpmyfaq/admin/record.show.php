@@ -287,7 +287,7 @@ if ($permission['editbt'] || $permission['delbt']) {
             <img src="images/copy.png" alt="<?php print $PMF_LANG['ad_categ_copy']; ?>" title="<?php print $PMF_LANG['ad_categ_copy']; ?>" />
             </a>
         </td>
-        <td class="list" style="width: 56px;"><input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'active');" id="active_record_<?php print $cid . '_' . $record['id'] ?>" <?php $record['active'] ? print 'checked="checked"' : print '    ' ?> /></td>
+        <td class="list" style="width: 56px;"><input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'active');" id="active_record_<?php print $cid . '_' . $record['id'] ?>" <?php 'yes' == $record['active'] ? print 'checked="checked"' : print '    ' ?> /></td>
     </tr>
 <?php
             $old = $cid;
@@ -341,7 +341,7 @@ foreach($all_ids as $cat_id => $record_ids) {
         var data = {action: "ajax", ajax: 'records', ajaxaction: "save_" + type + "_records"};
         
         for (var i = 0; i < ids.length; i++) {
-            data['items[' + i + '][]'] = [ids[i], $('#' + type + '_record_' + cid + '_' + ids[i]).attr('lang'), $('#record_' + cid + '_' + ids[i]).attr('checked')*1];
+            data['items[' + i + '][]'] = [ids[i], $('#' + type + '_record_' + cid + '_' + ids[i]).attr('lang'), $('#' + type + '_record_' + cid + '_' + ids[i]).attr('checked')*1];
 
             // Updating the current record if it's also contained in another category
             var same_records = $('input').filter(function(){return this.id.match(new RegExp(type + '_record_(\\d+)_' + ids[i]));});

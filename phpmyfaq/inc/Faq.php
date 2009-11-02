@@ -2747,30 +2747,58 @@ class PMF_Faq
     }
     
     /**
-     * Set or unset a faq item to be sticky 
+     * Set or unset a faq item flag 
      *
-     * @param  integer $id       Record id
-     * @param  string  $lang     language code which is valid with PMF_Language::isASupportedLanguage
-     * @param  boolean $isSticky weither or not the record is set to sticky
+     * @param integer $id   Record id
+     * @param string  $lang language code which is valid with PMF_Language::isASupportedLanguage
+     * @param boolean $flag weither or not the record is set to sticky
+     * @param string  $type type of the flag to set, use the column name
+     * 
      * @return boolean
      */
-    public function updateRecordSticky($id, $lang, $isSticky)
+    public function updateRecordFlag($id, $lang, $flag, $type)
     {
-        $update = sprintf("
-            UPDATE 
-                %sfaqdata 
-            SET 
-                sticky = %d 
-            WHERE 
-                id = %d 
-            AND 
-                lang = '%s'",
-            SQLPREFIX, 
-            (int)$isSticky, 
-            $id, 
-            $lang);
+        $retval = false;
         
-        return (bool)$this->db->query($update);
+        switch($type) {
+            case 'sticky':
+                $flag = (int)$flag;
+                break;
+                
+            case 'active':
+                $flag = $flag ? "'yes'" : "'no'";
+                break;
+                
+            default:
+                /**
+                 * This is because we would run into unknown db column
+                 */
+                $flag = null;
+                break;
+        }
+        
+        if(null !== $flag) {
+        
+            $update = sprintf("
+                UPDATE 
+                    %sfaqdata 
+                SET 
+                    %s = %s 
+                WHERE 
+                    id = %d 
+                AND 
+                    lang = '%s'",
+                SQLPREFIX,
+                $type,
+                $flag, 
+                $id, 
+                $lang);
+        
+            $retval = (bool)$this->db->query($update);
+        
+        }
+        
+        return $retval;
     }
     
     /**
