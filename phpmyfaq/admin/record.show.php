@@ -2,13 +2,12 @@
 /**
  * Shows the list of records ordered by categories
  *
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Minoru TODA <todam@netjapan.co.jp>
- * @since      2003-02-23
- * @version    SVN: $Id$
- * @copyright  2003-2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Minoru TODA <todam@netjapan.co.jp>
+ * @since     2003-02-23
+ * @copyright 2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -31,7 +30,7 @@ printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 if ($permission['editbt'] || $permission['delbt']) {
     // (re)evaluate the Category object w/o passing the user language
     $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
-    $category->buildTree();
+    $category->transform(0);
     
     $helper = PMF_Helper_Category::getInstance();
     $helper->setCategory($category);
@@ -44,19 +43,15 @@ if ($permission['editbt'] || $permission['delbt']) {
     $comment = new PMF_Comment();
     $faq     = new PMF_Faq();
 
-    $cond             = array();
-    $numCommentsByFaq = array();
-    $active           = 'yes';
-    $internalSearch   = '';
-    $linkState        = '';
-    $searchterm       = '';
-    $searchcat        = 0;
-    $currentcategory  = 0;
-    $orderby          = 1;
-    $sortby           = null;
-    $linkState        = PMF_Filter::filterInput(INPUT_POST, 'linkstate', FILTER_SANITIZE_STRING);
-    $searchcat        = PMF_Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
-    $searchterm       = PMF_Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
+    $cond           = $numCommentsByFaq = array();
+    $active         = 'yes';
+    $internalSearch = $linkState = $searchterm = '';
+    $searchcat      = $currentcategory = 0;
+    $orderby        = 1;
+    $sortby         = null;
+    $linkState      = PMF_Filter::filterInput(INPUT_POST, 'linkstate', FILTER_SANITIZE_STRING);
+    $searchcat      = PMF_Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
+    $searchterm     = PMF_Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
     
     if (!is_null($linkState)) {
         $cond[SQLPREFIX.'faqdata.links_state'] = 'linkbad';
