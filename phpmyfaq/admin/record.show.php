@@ -356,7 +356,7 @@ foreach($all_ids as $cat_id => $record_ids) {
      */
     function deleteRecord(record_id, record_lang)
     {
-        if (confirm('<?php print $PMF_LANG["ad_entry_del_1"] . " " . $PMF_LANG["ad_entry_del_3"]; ?>')) {
+        if (confirm('<?php print addslashes($PMF_LANG["ad_entry_del_1"] . " " . $PMF_LANG["ad_entry_del_3"]); ?>')) {
             $('#saving_data_indicator').html('<img src="images/indicator.gif" /> deleting ...');
             $.ajax({
                 type:    "POST",

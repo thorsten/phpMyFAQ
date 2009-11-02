@@ -19,17 +19,11 @@
  * under the License.
  */
 
-$PMF_LANG["metaCharset"] = "UTF-8";
+$PMF_LANG["metaCharset"] = "iso-8859-1";
 $PMF_LANG["metaLanguage"] = "pt-br";
 $PMF_LANG["language"] = "Brazilian Portuguese";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 $PMF_LANG["dir"] = "ltr";
-
-$PMF_LANG["nplurals"] = "2";
-/**
- * This parameter is used with the function 'plural' from inc/PMF_Language/Plurals.php
- * If this parameter and function are not in sync plural form support will be broken.
- */
 
 // Navigation
 $PMF_LANG["msgCategory"] = "Categorias";
