@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 $ajax_action = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 
-if ('save_sticky_records' == $ajax_action && $permission['editbt']) {
+if (('save_active_records' == $ajax_action ||'save_sticky_records' == $ajax_action) && $permission['editbt']) {
     /**
      * Expected is an array of the structure:
      * array( 0 => array((int)id, (string)langugage, (int) checked)),
@@ -36,16 +36,28 @@ if ('save_sticky_records' == $ajax_action && $permission['editbt']) {
      * )
      */
     $items = isset($_GET['items']) && is_array($_GET['items']) ? $_GET['items'] : array();
-   
-    $faq = new PMF_Faq();
     
-    foreach ($items as $item) {
-        if (is_array($item) && count($item) == 3 && PMF_Language::isASupportedLanguage($item[1])) { 
-            print $faq->updateRecordSticky((int)$item[0], addslashes($item[1]), (int)$item[2]);
+    switch($ajax_action) {
+        case 'save_active_records':
+            $type = 'active';
+            break;
+            
+        case 'save_sticky_records':
+            $type = 'sticky';
+            break;
+    }
+    
+    if(null !== $type && !empty($items)) {
+        $faq = new PMF_Faq();
+        
+        foreach ($items as $item) {
+            if (is_array($item) && count($item) == 3 && PMF_Language::isASupportedLanguage($item[1])) { 
+                print $faq->updateRecordFlag((int)$item[0], addslashes($item[1]), (int)$item[2], $type);
+            }
         }
     }
 }
-
+    
 if ('delete_record' == $ajax_action && $permission['delbt']) {
 	
     $record_id   = PMF_Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
