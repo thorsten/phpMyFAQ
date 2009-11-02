@@ -46,6 +46,10 @@ if ('save_sticky_records' == $ajax_action && $permission['editbt']) {
     }
 }
 
+if ('save_active_records' == $ajax_action && $permission['editbt']) {
+
+}
+    
 if ('delete_record' == $ajax_action && $permission['delbt']) {
 	
     $record_id   = PMF_Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);

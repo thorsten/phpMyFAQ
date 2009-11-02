@@ -258,7 +258,7 @@ if ($permission['editbt'] || $permission['delbt']) {
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=asc">&darr;</a></th>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=asc">&darr;</a></th>
         <th class="listhead" colspan="3">&nbsp;</th>
-        <th class="listhead" style="text-align: left">Active</th>
+        <th class="listhead" style="text-align: left"><input type="checkbox" id="active_category_block_<?php print $cid; ?>" onclick="saveStatusForCategory(<?php print $cid; ?>, 'active')" />&nbsp;<?php print $PMF_LANG['ad_record_active'] ?></th>
     </tr>
     </thead>
     <tbody>
@@ -287,7 +287,7 @@ if ($permission['editbt'] || $permission['delbt']) {
             <img src="images/copy.png" alt="<?php print $PMF_LANG['ad_categ_copy']; ?>" title="<?php print $PMF_LANG['ad_categ_copy']; ?>" />
             </a>
         </td>
-        <td class="list" style="width: 56px;">active</td>
+        <td class="list" style="width: 56px;"><input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'active');" id="active_record_<?php print $cid . '_' . $record['id'] ?>" <?php $record['active'] ? print 'checked="checked"' : print '    ' ?> /></td>
     </tr>
 <?php
             $old = $cid;
