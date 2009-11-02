@@ -46,6 +46,7 @@ if ($permission['editbt'] || $permission['delbt']) {
 
     $cond             = array();
     $numCommentsByFaq = array();
+    $numCommentsByCat = array();
     $active           = 'yes';
     $internalSearch   = '';
     $linkState        = '';
@@ -119,6 +120,7 @@ if ($permission['editbt'] || $permission['delbt']) {
     <legend><?php print ($action == 'accept' ? $PMF_LANG['ad_menu_entry_aprove'] : $PMF_LANG['ad_menu_entry_edit']); ?></legend>
 <?php
     $numCommentsByFaq = $comment->getNumberOfComments();
+    $numRecordsByCat  = $category->getNumberOfRecordsOfCategory($active);
 
     // FIXME: Count "comments"/"entries" for each category also within a search context. Now the count is broken.
     // FIXME: we are not considering 'faqdata.links_state' for filtering the faqs.
@@ -133,10 +135,8 @@ if ($permission['editbt'] || $permission['delbt']) {
                 }
             }
         }
-
-        $numRecordsByCat = $category->getNumberOfRecordsOfCategory($active);
     }
-
+    
     if ($action == 'view' && is_null($searchterm)) {
 
         $faq->getAllRecords($orderby, null, $sortby);
@@ -218,17 +218,18 @@ if ($permission['editbt'] || $permission['delbt']) {
             $isBracketOpened = false;
             $needComma       = false;
             $cid             = $record['category_id'];
+            
             if (isset($numRecordsByCat[$cid]) && ($numRecordsByCat[$cid] > 0)) {
                 if (!$isBracketOpened) {
-                    $catInfo .= ' (';
+                    $catInfo        .= ' (';
                     $isBracketOpened = true;
                 }
-                $catInfo .= sprintf('%d %s', $numRecordsByCat[$cid], $PMF_LANG['msgEntries']);
+                $catInfo  .= sprintf('%d %s', $numRecordsByCat[$cid], $PMF_LANG['msgEntries']);
                 $needComma = true;
             }
             if (isset($numCommentsByCat[$cid]) && ($numCommentsByCat[$cid] > 0) && $laction != 'accept') {
                 if (!$isBracketOpened) {
-                    $catInfo .= ' (';
+                    $catInfo        .= ' (';
                     $isBracketOpened = true;
                 }
                 $catInfo .= sprintf('%s%d %s', ($needComma ? ', ' : ''), $numCommentsByCat[$cid], $PMF_LANG['ad_start_comments']);
