@@ -238,25 +238,15 @@ if ($permission['editbt'] || $permission['delbt']) {
                 if ($old == 0) {
 ?>
     <a name="cat_<?php print $cid; ?>"></a>
-    <div class="categorylisting"><a href="javascript:void(0);" onclick="showhideCategory('category_<?php print $cid; ?>');"><img src="../images/more.gif" width="11" height="11" alt="" /> <?php print $category->getPath($cid); ?></a><?php print $catInfo;?></div>
-    <div id="category_<?php print $cid; ?>" class="categorybox" style="display: <?php print ($currentcategory == $cid) ? 'block' : 'none'; ?>;">
-    <table class="listrecords">
-    <thead>
-    <tr>
-        <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=asc">&darr;</a></th>
-        <th class="listhead">&nbsp;</th>
-        <th class="listhead" style="text-align: left"><input type="checkbox" id="category_block_<?php print $cid; ?>" onclick="saveStickyStatusForCategory(<?php print $cid; ?>)" />&nbsp;<?php print $PMF_LANG['ad_record_sticky'] ?></th>
-        <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=asc">&darr;</a></th>
-        <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=asc">&darr;</a></th>
-        <th class="listhead" colspan="2">&nbsp;</th>
-    </tr>
-    </thead>
 <?php
                 } else {
 ?>
     </tbody>
     </table>
     </div>
+<?php
+                }
+?>
     <div class="categorylisting"><a href="javascript:void(0);" onclick="showhideCategory('category_<?php print $cid; ?>');"><img src="../images/more.gif" width="11" height="11" alt="" /> <?php print $category->getPath($cid); ?></a><?php print $catInfo;?></div>
     <div id="category_<?php print $cid; ?>" class="categorybox" style="display: <?php print ($currentcategory == $cid) ? 'block' : 'none'; ?>;">
     <table class="listrecords">
@@ -264,15 +254,13 @@ if ($permission['editbt'] || $permission['delbt']) {
     <tr>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=asc">&darr;</a></th>
         <th class="listhead">&nbsp;</th>
-        <th class="listhead" style="text-align: left"><input type="checkbox" id="category_block_<?php print $cid; ?>" onclick="saveStickyStatusForCategory(<?php print $cid; ?>)" />&nbsp;<?php print $PMF_LANG['ad_record_sticky'] ?></th>
+        <th class="listhead" style="text-align: left"><input type="checkbox" id="sticky_category_block_<?php print $cid; ?>" onclick="saveStatusForCategory(<?php print $cid; ?>, 'sticky')" />&nbsp;<?php print $PMF_LANG['ad_record_sticky'] ?></th>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=asc">&darr;</a></th>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=asc">&darr;</a></th>
         <th class="listhead" colspan="3">&nbsp;</th>
+        <th class="listhead" style="text-align: left">Active</th>
     </tr>
     </thead>
-<?php
-                }
-?>
     <tbody>
 <?php
             }
@@ -280,7 +268,7 @@ if ($permission['editbt'] || $permission['delbt']) {
     <tr class="record_<?php print $record['id']; ?>_<?php print $record['lang']; ?>">
         <td class="list" style="width: 24px; text-align: right;"><?php print $record['id']; ?></td>
         <td class="list" style="width: 16px;"><?php print $record['lang']; ?></td>
-        <td class="list" style="width: 56px;"><input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStickyStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>);" id="record_<?php print $cid . '_' . $record['id'] ?>" <?php $record['sticky'] ? print 'checked="checked"' : print '    ' ?> /></td>
+        <td class="list" style="width: 56px;"><input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'sticky');" id="sticky_record_<?php print $cid . '_' . $record['id'] ?>" <?php $record['sticky'] ? print 'checked="checked"' : print '    ' ?> /></td>
         <td class="list"><a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><?php print PMF_htmlentities($record['title'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?></a>
 <?php
         if (isset($numCommentsByFaq[$record['id']])) {
@@ -299,6 +287,7 @@ if ($permission['editbt'] || $permission['delbt']) {
             <img src="images/copy.png" alt="<?php print $PMF_LANG['ad_categ_copy']; ?>" title="<?php print $PMF_LANG['ad_categ_copy']; ?>" />
             </a>
         </td>
+        <td class="list" style="width: 56px;">active</td>
     </tr>
 <?php
             $old = $cid;
@@ -318,10 +307,12 @@ if ($permission['editbt'] || $permission['delbt']) {
     /**
      * Saves the sticky record status for the whole category
      *
-     * @param  integer id id
+     * @param integer id id
+     * @param string type status type
+     * 
      * @return void
      */
-    function saveStickyStatusForCategory(id)
+    function saveStatusForCategory(id, type)
     {
     	var id_map = [];
 <?php 
@@ -330,31 +321,32 @@ foreach($all_ids as $cat_id => $record_ids) {
 }
 ?>
         for(var i = 0; i < id_map[id].length; i++) {
-        	$('#record_' + id + '_' + id_map[id][i]).attr('checked', $('#category_block_' + id).attr('checked'));
+        	$('#' + type + '_record_' + id + '_' + id_map[id][i]).attr('checked', $('#' + type + '_category_block_' + id).attr('checked'));
         }
 
-        saveStickyStatus(id, id_map[id]);
+        saveStatus(id, id_map[id], type);
     }
 
     /**
      * Ajax call for saving the sticky record status
      *
-     * @param  integer cid category id
-     * @param  integer ids ids
+     * @param integer cid category id
+     * @param integer ids ids
+     * @param string type status type
      * @return void
      */
-    function saveStickyStatus(cid, ids)
+    function saveStatus(cid, ids, type)
     {
         $('#saving_data_indicator').html('<img src="images/indicator.gif" /> saving ...');
-        var data = {action: "ajax", ajax: 'records', ajaxaction: "save_sticky_records"};
+        var data = {action: "ajax", ajax: 'records', ajaxaction: "save_" + type + "_records"};
         
         for (var i = 0; i < ids.length; i++) {
-            data['items[' + i + '][]'] = [ids[i], $('#record_' + cid + '_' + ids[i]).attr('lang'), $('#record_' + cid + '_' + ids[i]).attr('checked')*1];
+            data['items[' + i + '][]'] = [ids[i], $('#' + type + '_record_' + cid + '_' + ids[i]).attr('lang'), $('#record_' + cid + '_' + ids[i]).attr('checked')*1];
 
             // Updating the current record if it's also contained in another category
-            var same_records = $('input').filter(function(){return this.id.match(new RegExp('record_(\\d+)_' + ids[i]));});
+            var same_records = $('input').filter(function(){return this.id.match(new RegExp(type + '_record_(\\d+)_' + ids[i]));});
             for (var j = 0; j<same_records.length; j++) {
-                $('#' + same_records[j].id).attr('checked', $('#record_' + cid + '_' + ids[i]).attr('checked'));
+                $('#' + same_records[j].id).attr('checked', $('#' + type + '_record_' + cid + '_' + ids[i]).attr('checked'));
             }
         }
     
