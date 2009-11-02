@@ -21,6 +21,7 @@ Changes since 2.5.x:
 - improved attachment functionality (Anatoliy)
 - improved install script (Thorsten)
 - improved category view with description (Thorsten)
+- improved FAQ entry activation (Anatoliy)
 - removed Docbook XML export (Thorsten)
 - minor bugfixes (Thorsten)
 
@@ -42,6 +43,7 @@ Version 2.6.0-alpha - 2009-09-
 - improved attachment functionality (Anatoliy)
 - improved install script (Thorsten)
 - improved category view with description (Thorsten)
+- improved FAQ entry activation (Anatoliy)
 - removed Docbook XML export (Thorsten)
 - minor bugfixes (Thorsten)
 
