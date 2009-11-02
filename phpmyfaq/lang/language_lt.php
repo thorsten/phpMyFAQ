@@ -1034,7 +1034,7 @@ $LANG_CONF["main.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Numatytas
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['ad_menu_upgrade'] = 'Atnaujinti';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Jūs turite naujausią phpMyFAQ versiją. Jums nereikia atnaujinti.';
-$LANG_CONF['main.onlySecureLogins'] = array(0 => 'checkbox', 1 => "Leisti prisijungimus tik per saugujį ryšį? (numatyta r.: išjungta)");
+$LANG_CONF['main.useSslForLogins'] = array(0 => 'checkbox', 1 => "Leisti prisijungimus tik per saugujį ryšį? (numatyta r.: išjungta)");
 $PMF_LANG['msgSecureSwitch'] = "Jei norite prisijungti, persijunkite į saugujį režimą!";
 
 // added 2.6.0-alpha - 2009-10-03 by Anatoliy Belsky
