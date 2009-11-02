@@ -6,6 +6,7 @@
  * @package   Administraion
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since     2003-02-26
+ * @license   Mozilla Public License 1.1
  * @copyright 2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -127,7 +128,6 @@ header("Vary: Negotiate,Accept");
         case 'showcategory':
         case 'editentry':
         case 'insertentry':
-        case 'accept':
         case 'view':
         case 'glossary':
         case 'saveglossary':
@@ -144,7 +144,6 @@ header("Vary: Negotiate,Accept");
             $secLevelEntries .= addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit', $action);
             $secLevelEntries .= addMenuEntry('addbt', 'editentry', 'ad_entry_add', $action);
             $secLevelEntries .= addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit', $action);
-            $secLevelEntries .= addMenuEntry('editbt*approverec', 'accept', 'ad_menu_entry_aprove', $action);
             $secLevelEntries .= addMenuEntry('delcomment', 'comments', 'ad_menu_comments', $action);
             $secLevelEntries .= addMenuEntry('delquestion', 'question', 'ad_menu_open', $action);
             $secLevelEntries .= addMenuEntry('addglossary+editglossary+delglossary', 'glossary', 'ad_menu_glossary', $action);
