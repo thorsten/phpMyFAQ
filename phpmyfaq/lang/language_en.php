@@ -1050,7 +1050,7 @@ $LANG_CONF["main.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Default a
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['ad_menu_upgrade'] = 'Upgrade';
 $PMF_LANG['ad_you_shouldnt_update'] = 'You have the latest version of phpMyFAQ. You do not need to upgrade.';
-$LANG_CONF['main.onlySecureLogins'] = array(0 => 'checkbox', 1 => "Only allow logins over secure connection? (default: disabled)");
+$LANG_CONF['main.useSslForLogins'] = array(0 => 'checkbox', 1 => "Only allow logins over secure connection? (default: disabled)");
 $PMF_LANG['msgSecureSwitch'] = "Switch to secure mode to login!";
 
 // added 2.6.0-alpha - 2009-10-03 by Anatoliy Belsky
@@ -1058,6 +1058,9 @@ $PMF_LANG['msgTransToolNoteFileSaving']  = 'Please note that no files will we wr
 $PMF_LANG['msgTransToolPageBufferRecorded'] = 'Page %d buffer recorded successfully';
 $PMF_LANG['msgTransToolErrorRecordingPageBuffer'] = 'Error recording page %d buffer';
 $PMF_LANG['msgTransToolRecordingPageBuffer'] = 'Recording page %d buffer';
+
+// added 2.6.0-alpha - 2009-11-02 by Anatoliy Belsky
+$PMF_LANG['ad_record_active'] = 'Active';
 
 // added 2.6.0-alpha - 2009-11-01 by Anatoliy Belsky
 $PMF_LANG['msgAttachmentInvalid'] = 'The attachment is invalid, please inform admin';
