@@ -21,6 +21,7 @@ Changes since 2.5.x:
 - improved attachment functionality (Anatoliy)
 - improved install script (Thorsten)
 - improved category view with description (Thorsten)
+- improved FAQ entry activation (Anatoliy)
 - removed Docbook XML export (Thorsten)
 - minor bugfixes (Thorsten)
 
@@ -28,7 +29,7 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.6.0-alpha - 2009-09-
+Version 2.6.0-alpha - 2009-11-
 - moved all language files to UTF-8 (Anatoliy)
 - added TCPDF as replacement for FPDF library (Thorsten)
 - added support for TinyMCE translations (Aurimas Fi≈°eras)
@@ -42,11 +43,15 @@ Version 2.6.0-alpha - 2009-09-
 - improved attachment functionality (Anatoliy)
 - improved install script (Thorsten)
 - improved category view with description (Thorsten)
+- improved FAQ entry activation (Anatoliy)
 - removed Docbook XML export (Thorsten)
 - minor bugfixes (Thorsten)
 
 Version 2.5.4 - 2009-11-
 - Fixed various PostgreSQL related issues (Anatoliy, Thorsten)
+- updated Dutch translation
+- updated Brazilian Portuguese translation
+- many minor bugfixes (Thorsten)
 
 Version 2.5.3 - 2009-10-19
 - switched repository from SVN to git (David Soria Parra, Thorsten)

@@ -5,15 +5,15 @@
  * This script checks the complete environment, writes the database connection
  * parameters into the file config/database.php and the configuration into the database.
  *
- * @package    phpMyFAQ
- * @subpackage Installation
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Tom Rochester <tom.rochester@gmail.com>
- * @author     Johannes Schlueter <johannes@php.net>
- * @author     Uwe Pries <uwe.pries@digartis.de>
- * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since      2002-08-20
- * @copyright  2002-2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   Installation
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Tom Rochester <tom.rochester@gmail.com>
+ * @author    Johannes Schlueter <johannes@php.net>
+ * @author    Uwe Pries <uwe.pries@digartis.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since     2002-08-20
+ * @copyright 2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -247,7 +247,7 @@ if (!phpmyfaq_check()) {
     die();
 }
 
-$dirs       = array('/attachments', '/config', '/data', '/pdf', '/xml',);
+$dirs       = array('/attachments', '/config', '/data');
 $faileddirs = array();
 
 foreach ($dirs as $dir) {

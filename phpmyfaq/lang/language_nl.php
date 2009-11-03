@@ -3,7 +3,7 @@
  * Dutch language file
  *
  * @package   phpMyFAQ
- * @author    RenÃ© de Kat <rdkat@home.nl>
+ * @author    René de Kat <rdkat@home.nl>
  * @since     2004-07-09
  * @copyright 2004-2008 phpMyFAQ Team
  * @version   SVN: $Id$
@@ -19,17 +19,11 @@
  * under the License.
  */
 
-$PMF_LANG["metaCharset"] = "UTF-8";
+$PMF_LANG["metaCharset"] = "iso-8859-1";
 $PMF_LANG["metaLanguage"] = "nl";
 $PMF_LANG["language"] = "Nederland";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 $PMF_LANG["dir"] = "ltr";
-
-$PMF_LANG["nplurals"] = "2";
-/**
- * This parameter is used with the function 'plural' from inc/PMF_Language/Plurals.php
- * If this parameter and function are not in sync plural form support will be broken.
- */
 
 // Navigation
 $PMF_LANG["msgCategory"] = "Categorie&euml;n";
@@ -161,7 +155,7 @@ $PMF_LANG["err_sendMail"] = "Verplichte velden zijn <strong>uw naam</strong>, <s
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Zoek naar records:</strong><br />Met een ingave als <strong style=\"color: Red;\">woord1 woord2</strong> kunt u een zoekactie doen voor twee of meer zoekcriteria met aflopende relevantie.</p><p><strong>Let op:</strong> Uw zoekcriteria moet minstens uit 4 karakters bestaan, anders wordt uw zoekactie gewijgerd.</p>";
 
-// MenÃ¼
+// Menü
 $PMF_LANG["ad"] = "ADMIN AFDELING";
 $PMF_LANG["ad_menu_user_administration"] = "Gebruikers Beheer";
 $PMF_LANG["ad_menu_entry_aprove"] = "Goedkeuren Records";
@@ -811,5 +805,5 @@ $PMF_LANG['ad_entry_intlink'] = 'Selecteer een FAQ record om deze als link toe t
 
 //added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG["ad_categ_paste2"] = "Plakken achter";
-$PMF_LANG["ad_categ_remark_move"] = "Het omwisselen van 2 categoriÃ«n is enkel mogelijk op hetzelfde level.";
-$PMF_LANG["ad_categ_remark_overview"] = "De juiste volgorde van de categoriÃ«n wordt zichtbaar, als alle categoriÃ«n van de actuele taal (eerste kolom) gedefiniÃ«erd zijn.";
+$PMF_LANG["ad_categ_remark_move"] = "Het omwisselen van 2 categoriën is enkel mogelijk op hetzelfde level.";
+$PMF_LANG["ad_categ_remark_overview"] = "De juiste volgorde van de categoriën wordt zichtbaar, als alle categoriën van de actuele taal (eerste kolom) gedefiniëerd zijn.";
