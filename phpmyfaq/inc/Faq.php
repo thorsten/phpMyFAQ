@@ -1588,15 +1588,21 @@ class PMF_Faq
     }
 
     /**
-     * This function generates the Top Ten with the mosted viewed records
-     *
+     * This function generates a list with the mosted voted or most visited records
+     * 
+     * @param  string $type Type definition visits/voted
+     * @access public
+     * @since  2009-11-03
+     * @author Max Köhler <me@max-koehler.de>
      * @return array
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since  2002-05-07
      */
-    public function getTopTen()
+    public function getTopTen($type = 'visits')
     {
-        $result = $this->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN, 0, $this->language);
+        if ('visits' == $type) {
+            $result = $this->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN, 0, $this->language);
+        } else {
+            $result = $this->getTopVotedData(PMF_NUMBER_RECORDS_TOPTEN, 0, $this->language);
+        }
         $output = array();
 
         if (count($result) > 0) {
@@ -1606,9 +1612,18 @@ class PMF_Faq
                                                          ENT_QUOTES,
                                                          $this->pmf_lang['metaCharset']), 8);
 
-                $output['title'][]  = $shortTitle;
-                $output['url'][]    = $row['url'];
-                $output['visits'][] = $this->plr->GetMsg('plmsgViews',$row['visits']);
+                if ('visits' == $type) {
+                    $output['title'][]  = $shortTitle;
+                    $output['url'][]    = $row['url'];
+                    $output['visits'][] = $this->plr->GetMsg('plmsgViews',$row['visits']);
+                } else {
+                    $output['title'][]  = $shortTitle;
+                    $output['url'][]    = $row['url'];
+                    $output['voted'][]  = sprintf('%s %s 5 - %s',
+                                                  round($row['avg'], 2),
+                                                  $this->pmf_lang['msgVoteFrom'],
+                                                  $this->plr->GetMsg('plmsgVotes', $row['user']));
+                }
             }
         } else {
             $output['error'] = $this->pmf_lang['err_noTopTen'];
@@ -1705,8 +1720,8 @@ class PMF_Faq
      * @since   2006-11-04
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-     function setVisibilityOfQuestion($question_id, $is_visible)
-     {
+    function setVisibilityOfQuestion($question_id, $is_visible)
+    {
         $query = sprintf("
             UPDATE
                 %sfaqquestions
@@ -1717,17 +1732,118 @@ class PMF_Faq
             SQLPREFIX,
             $is_visible,
             $question_id);
-
+        
         $this->db->query($query);
         return true;
-     }
+    }
 
-    //
-    //
-    // PRIVATE METHODS
-    //
-    //
+    /**
+     * This function generates a data-set with the mosted voted recors
+     *  
+     * @param  integer $count      Number of records
+     * @param  integer $categoryId Category ID
+     * @param  string  $language   Language
+     * @return array
+     */
+    public function getTopVotedData($count = PMF_NUMBER_RECORDS_TOPTEN, $category = 0, $language = nuLL)
+    {
+        global $sids;
+                    
+        if ($this->groupSupport) {
+            $permPart = sprintf("( fdg.group_id IN (%s)
+            OR
+                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
+                implode(', ', $this->groups),
+                $this->user,
+                implode(', ', $this->groups));
+        } else {
+            $permPart = sprintf("( fdu.user_id = %d OR fdu.user_id = -1 )",
+                $this->user);
+        }
 
+        $now = date('YmdHis');
+        $query =
+'            SELECT
+                fd.id AS id,
+                fd.lang AS lang,
+                fd.thema AS thema,
+                fd.datum AS datum,
+                fcr.category_id AS category_id,
+                (fv.vote/fv.usr) AS avg,
+                fv.usr AS user
+            FROM
+                '.SQLPREFIX.'faqvoting fv,
+                '.SQLPREFIX.'faqdata fd
+            LEFT JOIN
+                '.SQLPREFIX.'faqcategoryrelations fcr
+            ON
+                fd.id = fcr.record_id
+            AND
+                fd.lang = fcr.record_lang
+            LEFT JOIN
+                '.SQLPREFIX.'faqdata_group AS fdg
+            ON
+                fd.id = fdg.record_id
+            LEFT JOIN
+                '.SQLPREFIX.'faqdata_user AS fdu
+            ON
+                fd.id = fdu.record_id
+            WHERE
+                    fd.date_start <= \''.$now.'\'
+                AND fd.date_end   >= \''.$now.'\'
+                AND fd.id = fv.artikel
+                AND fd.active = \'yes\'';
+
+        if (isset($categoryId) && is_numeric($categoryId) && ($categoryId != 0)) {
+            $query .= '
+            AND
+                fcr.category_id = \''.$categoryId.'\'';
+        }
+        if (isset($language) && PMF_Language::isASupportedLanguage($language)) {
+            $query .= '
+            AND
+                fd.lang = \''.$language.'\'';
+        }
+        $query .= '
+            AND
+                '.$permPart.'
+            ORDER BY
+                avg DESC';
+
+        $result = $this->db->query($query);
+        $topten = array();
+        $data = array();
+
+        $i = 1;
+        $oldId = 0;
+        while (($row = $this->db->fetch_object($result)) && $i <= $count) {
+            if ($oldId != $row->id) {
+                $data['avg'] = $row->avg;
+                $data['thema'] = $row->thema;
+                $data['date'] = $row->datum;
+                $data['user'] = $row->user;
+
+                $title = $row->thema;
+                $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                        $sids,
+                        $row->category_id,
+                        $row->id,
+                        $row->lang
+                        );
+                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink->itemTitle = $row->thema;
+                $oLink->tooltip   = $title;
+                $data['url']      = $oLink->toString();
+
+                $topten[] = $data;
+                $i++;
+            }
+            $oldId = $row->id;
+        }
+
+        return $topten;
+    }
+     
     /**
      * This function generates the Top Ten data with the mosted viewed records
      *

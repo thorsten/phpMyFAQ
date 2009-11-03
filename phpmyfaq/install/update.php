@@ -438,7 +438,7 @@ if ($step == 4) {
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.currentApiVersion', '" . APIVERSION . "')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.templateSet', 'default')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.numberSearchTerms', '10')";
-        
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.orderingPopularFaqs', 'visits')";
         /**
          * We did check in the first and second steps,
          * if the $templateDir and its contents are writable,
