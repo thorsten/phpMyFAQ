@@ -134,7 +134,7 @@ if ($permission['editbt']) {
             'author'        => $author,
             'email'         => $email,
             'comment'       => (!is_null($comment) ? 'y' : 'n'),
-            'date'          => empty($date) ? date('YmdHis') : str_replace(':', '', str_replace('-', '', $date)),
+            'date'          => empty($date) ? date('YmdHis') : str_replace(array('-', ':', ' '), '', $date),
             'dateStart'     => (empty($dateStart) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000'),
             'dateEnd'       => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959'),
             'linkState'     => '',

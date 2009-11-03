@@ -362,7 +362,7 @@ if($permission['approverec']):
     <input type="radio" id="userpermission" name="userpermission" class="active" value="all" <?php print ($all_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_all_users']; ?> <input type="radio" name="userpermission" class="active" value="restricted" <?php print ($restricted_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_restricted_users']; ?> <select name="restricted_users" size="1"><?php print $user->getAllUserOptions($user_permission[0]); ?></select><br />
     
 	<label class="left" for="date"><?php echo $PMF_LANG["ad_entry_date"]; ?></label>
-    <input name="date" id="date" class="date-pick" value="<?php print $faqData['date']; ?>" maxlength="10" />
+    <input name="date" id="date" value="<?php print $faqData['date']; ?>" maxlength="20" />
     </fieldset>
 
     <fieldset class="fullwidth">
