@@ -54,6 +54,7 @@ if ($permission['editbt']) {
     $revision      = PMF_Filter::filterInput(INPUT_POST, 'revision', FILTER_SANITIZE_STRING);
     $revision_id   = PMF_Filter::filterInput(INPUT_POST, 'revision_id', FILTER_VALIDATE_INT);
     $changed       = PMF_Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
+    $date          = PMF_Filter::filterInput(INPUT_POST, 'date', FILTER_SANITIZE_STRING);
     
     // Permissions
     $user_permission   = PMF_Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING);
@@ -104,6 +105,7 @@ if ($permission['editbt']) {
     <input type="hidden" name="restricted_users"    value="<?php print $restricted_users; ?>" />
     <input type="hidden" name="grouppermission"     value="<?php print $group_permission; ?>" />
     <input type="hidden" name="restricted_group"    value="<?php print $restricted_groups; ?>" />
+    <input type="hidden" name="date"    value="<?php print $date; ?>" />
     <p align="center"><input type="submit" name="submit" value="<?php print $PMF_LANG["ad_entry_back"]; ?>" /></p>
     </form>
 <?php
@@ -132,7 +134,7 @@ if ($permission['editbt']) {
             'author'        => $author,
             'email'         => $email,
             'comment'       => (!is_null($comment) ? 'y' : 'n'),
-            'date'          => date('YmdHis'),
+            'date'          => empty($date) ? date('YmdHis') : str_replace(':', '', str_replace('-', '', $date)),
             'dateStart'     => (empty($dateStart) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000'),
             'dateEnd'       => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959'),
             'linkState'     => '',
