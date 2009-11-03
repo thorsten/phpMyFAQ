@@ -1013,3 +1013,10 @@ $PMF_LANG['ad_menu_upgrade'] = 'Aktualisieren';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Sie nutzen die aktuelle Version von phpMyFAQ. Eine Aktualisierung ist nicht notwendig.';
 $LANG_CONF['main.useSslForLogins'] = array(0 => 'checkbox', 1 => "Logins nur &uuml;ber sichere Verbindung erlauben? (Voreinstellung: deaktiviert)");
 $PMF_LANG['msgSecureSwitch'] = "Zum sicheren Login wechseln";
+
+// added 2.6.0-alpha - 2009-11-02 by max
+$LANG_CONF['main.numberSearchTerms']   = array(0 => 'input', 1 => 'Anzahl der beliebtesten Suchbegriffe');
+$LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Sortierung der TOP-FAQ");
+
+$PMF_LANG['main.orderingPopularFaqs.visits'] = "nach Anzahl der Besucher";
+$PMF_LANG['main.orderingPopularFaqs.voting'] = "nach Bewerung der Bersucher";

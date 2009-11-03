@@ -63,3 +63,5 @@ $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.attachmentsStorage
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.enableAttachmentEncryption', 'false')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.defaultAttachmentEncKey', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.useSslForLogins', 'false')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.numberSearchTerms', '10')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.orderingPopularFaqs', 'visits')";

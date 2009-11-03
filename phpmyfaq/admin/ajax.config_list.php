@@ -111,6 +111,15 @@ function printInputFieldByType($key, $type)
                                $i, $selected, $item);
                     }
                     break;
+                    
+                case "main.orderingPopularFaqs":
+                    printf('<option value="visits"%s>%s</option>',
+                        ('visits' == $faqconfig->get($key)) ? ' selected="selected"' : '',
+                        $PMF_LANG['main.orderingPopularFaqs.visits']);
+                    printf('<option value="voting"%s>%s</option>',
+                        ('voting' == $faqconfig->get($key)) ? ' selected="selected"' : '',
+                        $PMF_LANG['main.orderingPopularFaqs.voting']);
+                    break;
             }
             
             print "</select>\n<br />\n";

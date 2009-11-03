@@ -220,7 +220,7 @@ class PMF_Search
         if ($result) {
         	$i = 0;
             while ($row = $this->db->fetch_object($result)) {
-            	if ($i < 10) {
+            	if ($i < $numResults) {
             		$searchResult[] = (array) $row;
             	}
             	$i++;
