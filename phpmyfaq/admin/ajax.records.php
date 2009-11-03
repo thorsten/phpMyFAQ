@@ -28,7 +28,8 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 $ajax_action = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 
-if (('save_active_records' == $ajax_action ||'save_sticky_records' == $ajax_action) && $permission['editbt']) {
+if (('save_active_records' == $ajax_action && $permission['approverec'] ||
+     'save_sticky_records' == $ajax_action) && $permission['editbt']) {
     /**
      * Expected is an array of the structure:
      * array( 0 => array((int)id, (string)langugage, (int) checked)),
