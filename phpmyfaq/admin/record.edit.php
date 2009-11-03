@@ -87,6 +87,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
         $tags                   = PMF_Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
         $changed                = PMF_Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
         $faqData['content']     = html_entity_decode($faqData['content']);
+        
         if (isset($_REQUEST['dateStart'])) {
             $faqData['dateStart'] = $_REQUEST['dateStart'];
         }
@@ -359,7 +360,9 @@ if($permission['approverec']):
 ?>
     <label class="left" for="userpermission"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
     <input type="radio" id="userpermission" name="userpermission" class="active" value="all" <?php print ($all_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_all_users']; ?> <input type="radio" name="userpermission" class="active" value="restricted" <?php print ($restricted_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_restricted_users']; ?> <select name="restricted_users" size="1"><?php print $user->getAllUserOptions($user_permission[0]); ?></select><br />
-	
+    
+	<label class="left" for="date"><?php echo $PMF_LANG["ad_entry_date"]; ?></label>
+    <input name="date" id="date" value="<?php print $faqData['date']; ?>" maxlength="20" />
     </fieldset>
 
     <fieldset class="fullwidth">
