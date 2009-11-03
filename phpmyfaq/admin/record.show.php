@@ -208,7 +208,7 @@ if ($permission['editbt'] || $permission['delbt']) {
                     $catInfo .= ' (';
                     $isBracketOpened = true;
                 }
-                $catInfo .= sprintf('%d %s', $numRecordsByCat[$cid], $PMF_LANG['msgEntries']);
+                $catInfo .= sprintf('<span id="category_%d_item_count">%d</span> %s', $cid, $numRecordsByCat[$cid], $PMF_LANG['msgEntries']);
                 $needComma = true;
             }
             if (isset($numCommentsByCat[$cid]) && ($numCommentsByCat[$cid] > 0)) {
@@ -313,8 +313,11 @@ foreach($all_ids as $cat_id => $record_ids) {
     echo "        id_map[$cat_id] = [" . implode(',', $record_ids) . "];\n";
 }
 ?>
+
         for(var i = 0; i < id_map[id].length; i++) {
-        	$('#' + type + '_record_' + id + '_' + id_map[id][i]).attr('checked', $('#' + type + '_category_block_' + id).attr('checked'));
+            var status = $('#' + type + '_category_block_' + id).attr('checked'); 
+            
+        	$('#' + type + '_record_' + id + '_' + id_map[id][i]).attr('checked', status);
         }
 
         saveStatus(id, id_map[id], type);
@@ -334,12 +337,31 @@ foreach($all_ids as $cat_id => $record_ids) {
         var data = {action: "ajax", ajax: 'records', ajaxaction: "save_" + type + "_records"};
         
         for (var i = 0; i < ids.length; i++) {
-            data['items[' + i + '][]'] = [ids[i], $('#' + type + '_record_' + cid + '_' + ids[i]).attr('lang'), $('#' + type + '_record_' + cid + '_' + ids[i]).attr('checked')*1];
+            var status = $('#' + type + '_record_' + cid + '_' + ids[i]).attr('checked');
+            var lang   = $('#' + type + '_record_' + cid + '_' + ids[i]).attr('lang');
+            
+            data['items[' + i + '][]'] = [ids[i], lang, status*1];
 
             // Updating the current record if it's also contained in another category
-            var same_records = $('input').filter(function(){return this.id.match(new RegExp(type + '_record_(\\d+)_' + ids[i]));});
-            for (var j = 0; j<same_records.length; j++) {
-                $('#' + same_records[j].id).attr('checked', $('#' + type + '_record_' + cid + '_' + ids[i]).attr('checked'));
+            var same_records = $('input').filter(function(){
+                return this.id.match(new RegExp(type + '_record_(\\d+)_' + ids[i]));
+            });
+
+            if('active' == type) {
+                for (var j = 0; j<same_records.length; j++) {
+                    $('#' + same_records[j].id).attr('checked', status);
+                    
+                    var catid = same_records[j].id.match(/active_record_(\d+)_\d+/)[1];
+                    var current_item_count = $('#category_' + catid + '_item_count').html();
+    
+                    var delta = status ? 1 : -1;
+    
+                    $('#category_' + catid + '_item_count').html(current_item_count*1 + delta);
+                }
+            } else {
+                for (var j = 0; j<same_records.length; j++) {
+                    $('#' + same_records[j].id).attr('checked', status);
+                }
             }
         }
     
