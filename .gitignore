@@ -2,6 +2,7 @@
 .cache*
 .project
 .settings*
+.buildpath
 
 # phpMyFAQ generated folders
 
