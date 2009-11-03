@@ -93,9 +93,9 @@ $openSearchLink = sprintf('<a class="searchplugin" href="#" onclick="window.exte
     $PMF_LANG['opensearch_plugin_install']);
     
 $mostPopularSearches = '';
-$mostPopularSearchData = $faqsearch->getMostPopularSearches();
+$mostPopularSearchData = $faqsearch->getMostPopularSearches($faqconfig->get('main.numberSearchTerms'));
 foreach ($mostPopularSearchData as $searchItem) {
-    $mostPopularSearches .= sprintf('<a href="?search=%s&submit=Search&action=search">%s</a> (%dx), ',
+    $mostPopularSearches .= sprintf('<li><a href="?search=%s&submit=Search&action=search">%s</a> (%dx)</li>',
         urlencode($searchItem['searchterm']),
         $searchItem['searchterm'],
         $searchItem['number']);
@@ -117,6 +117,6 @@ $tpl->processTemplate('writeContent', array(
     'printResult'              => $printResult,
     'openSearchLink'           => $openSearchLink,
     'msgMostPopularSearches'   => $PMF_LANG['msgMostPopularSearches'],
-    'printMostPopularSearches' => PMF_String::substr($mostPopularSearches, 0, -2)));
+    'printMostPopularSearches' => '<ul class="phpmyfaq_ul">' . $mostPopularSearches . '</ul>'));
 
 $tpl->includeTemplate('writeContent', 'index');
