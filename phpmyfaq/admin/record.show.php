@@ -2,13 +2,13 @@
 /**
  * Shows the list of records ordered by categories
  *
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Minoru TODA <todam@netjapan.co.jp>
- * @since      2003-02-23
- * @version    SVN: $Id$
- * @copyright  2003-2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Minoru TODA <todam@netjapan.co.jp>
+ * @since     2003-02-23
+ * @license   Mozilla Public License 1.1
+ * @copyright 2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -31,7 +31,7 @@ printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 if ($permission['editbt'] || $permission['delbt']) {
     // (re)evaluate the Category object w/o passing the user language
     $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
-    $category->buildTree();
+    $category->transform(0);
     
     $helper = PMF_Helper_Category::getInstance();
     $helper->setCategory($category);
@@ -44,20 +44,15 @@ if ($permission['editbt'] || $permission['delbt']) {
     $comment = new PMF_Comment();
     $faq     = new PMF_Faq();
 
-    $cond             = array();
-    $numCommentsByFaq = array();
-    $numCommentsByCat = array();
-    $active           = 'yes';
-    $internalSearch   = '';
-    $linkState        = '';
-    $searchterm       = '';
-    $searchcat        = 0;
-    $currentcategory  = 0;
-    $orderby          = 1;
-    $sortby           = null;
-    $linkState        = PMF_Filter::filterInput(INPUT_POST, 'linkstate', FILTER_SANITIZE_STRING);
-    $searchcat        = PMF_Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
-    $searchterm       = PMF_Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
+    $cond           = $numCommentsByFaq = array();
+    $active         = 'yes';
+    $internalSearch = $linkState = $searchterm = '';
+    $searchcat      = $currentcategory = 0;
+    $orderby        = 1;
+    $sortby         = null;
+    $linkState      = PMF_Filter::filterInput(INPUT_POST, 'linkstate', FILTER_SANITIZE_STRING);
+    $searchcat      = PMF_Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
+    $searchterm     = PMF_Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
     
     if (!is_null($linkState)) {
         $cond[SQLPREFIX.'faqdata.links_state'] = 'linkbad';
@@ -67,10 +62,6 @@ if ($permission['editbt'] || $permission['delbt']) {
     if (!is_null($searchcat)) {
         $internalSearch .= "&amp;searchcat=" . $searchcat;
         $cond[SQLPREFIX.'faqcategoryrelations.category_id'] = array_merge(array($searchcat), $category->getChildNodes($searchcat));
-    }
-
-    if ($action == 'accept') {
-        $active = 'no';
     }
 
     $currentcategory = PMF_Filter::filterInput(INPUT_GET, 'category', FILTER_VALIDATE_INT);
@@ -117,7 +108,7 @@ if ($permission['editbt'] || $permission['delbt']) {
 
     <form id="recordSelection" name="recordSelection" method="post">
     <fieldset>
-    <legend><?php print ($action == 'accept' ? $PMF_LANG['ad_menu_entry_aprove'] : $PMF_LANG['ad_menu_entry_edit']); ?></legend>
+    <legend><?php print $PMF_LANG['ad_menu_entry_edit']; ?></legend>
 <?php
     $numCommentsByFaq = $comment->getNumberOfComments();
     $numRecordsByCat  = $category->getNumberOfRecordsOfCategory($active);
@@ -199,13 +190,6 @@ if ($permission['editbt'] || $permission['delbt']) {
                 'date'        => PMF_Date::createIsoDate($row->date));
         }
 
-    } elseif ($action == 'accept') {
-
-        $cond['fd.active'] = 'no';
-        $faq->getAllRecords($orderby, $cond, $sortby);
-        $laction        = 'accept';
-        $internalSearch = '';
-
     }
 
     $num = count($faq->faqRecords);
@@ -227,7 +211,7 @@ if ($permission['editbt'] || $permission['delbt']) {
                 $catInfo  .= sprintf('%d %s', $numRecordsByCat[$cid], $PMF_LANG['msgEntries']);
                 $needComma = true;
             }
-            if (isset($numCommentsByCat[$cid]) && ($numCommentsByCat[$cid] > 0) && $laction != 'accept') {
+            if (isset($numCommentsByCat[$cid]) && ($numCommentsByCat[$cid] > 0)) {
                 if (!$isBracketOpened) {
                     $catInfo        .= ' (';
                     $isBracketOpened = true;
@@ -259,7 +243,11 @@ if ($permission['editbt'] || $permission['delbt']) {
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=asc">&darr;</a></th>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=asc">&darr;</a></th>
         <th class="listhead" colspan="3">&nbsp;</th>
-        <th class="listhead" style="text-align: left"><input type="checkbox" id="active_category_block_<?php print $cid; ?>" onclick="saveStatusForCategory(<?php print $cid; ?>, 'active')" />&nbsp;<?php print $PMF_LANG['ad_record_active'] ?></th>
+        <th class="listhead" style="text-align: left">
+            <?php if ($permission['approverec']) { ?>
+            <input type="checkbox" id="active_category_block_<?php print $cid; ?>" onclick="saveStatusForCategory(<?php print $cid; ?>, 'active')" />&nbsp;<?php print $PMF_LANG['ad_record_active'] ?>
+            <?php } ?>
+        </th>
     </tr>
     </thead>
     <tbody>
@@ -288,7 +276,11 @@ if ($permission['editbt'] || $permission['delbt']) {
             <img src="images/copy.png" alt="<?php print $PMF_LANG['ad_categ_copy']; ?>" title="<?php print $PMF_LANG['ad_categ_copy']; ?>" />
             </a>
         </td>
-        <td class="list" style="width: 56px;"><input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'active');" id="active_record_<?php print $cid . '_' . $record['id'] ?>" <?php 'yes' == $record['active'] ? print 'checked="checked"' : print '    ' ?> /></td>
+        <td class="list" style="width: 56px;">
+            <?php if ($permission['approverec']) { ?>
+            <input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'active');" id="active_record_<?php print $cid . '_' . $record['id'] ?>" <?php 'yes' == $record['active'] ? print 'checked="checked"' : print '    ' ?> />
+            <?php } ?>
+        </td>
     </tr>
 <?php
             $old = $cid;
@@ -364,7 +356,7 @@ foreach($all_ids as $cat_id => $record_ids) {
      */
     function deleteRecord(record_id, record_lang)
     {
-        if (confirm('<?php print $PMF_LANG["ad_entry_del_1"] . " " . $PMF_LANG["ad_entry_del_3"]; ?>')) {
+        if (confirm('<?php print addslashes($PMF_LANG["ad_entry_del_1"] . " " . $PMF_LANG["ad_entry_del_3"]); ?>')) {
             $('#saving_data_indicator').html('<img src="images/indicator.gif" /> deleting ...');
             $.ajax({
                 type:    "POST",

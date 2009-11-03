@@ -2,15 +2,16 @@
 /**
  * The main admin backend index file
  *
- * @package     phpMyFAQ
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Bastian Poettner <bastian@poettner.net>
- * @author      Meikel Katzengreis <meikel@katzengreis.com>
- * @author      Minoru TODA <todam@netjapan.co.jp>
- * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since       2002-09-16
- * @version     SVN: $Id$
- * @copyright   (c) 2002-2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Bastian Poettner <bastian@poettner.net>
+ * @author    Meikel Katzengreis <meikel@katzengreis.com>
+ * @author    Minoru TODA <todam@netjapan.co.jp>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since     2002-09-16
+ * @license   Mozilla Public License 1.1
+ * @copyright 2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -253,9 +254,7 @@ if (isset($auth) && in_array(true, $permission)) {
             case 'user':                    require_once 'user.php'; break;
             case 'group':                   require_once 'group.php'; break;
             // functions for record administration
-            case "view":
-            case "accept":
-            case "zeichan":                 require_once 'record.show.php'; break;
+            case "view":                    require_once 'record.show.php'; break;
             case "takequestion":
             case "editentry":
             case 'copyentry':
@@ -326,15 +325,12 @@ if (isset($auth) && in_array(true, $permission)) {
         // start page with some informations about the FAQ
         printf('<h2>%s</h2>', $PMF_LANG['ad_pmf_info']);
         $PMF_TABLE_INFO = $db->getTableStatus();
-        $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, array('fd.active' => 'no'));
 ?>
     <dl class="table-display">
         <dt><strong>&rarr; <a href="?action=viewsessions"><?php print $PMF_LANG["ad_start_visits"]; ?></a></strong></dt>
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqsessions"]; ?></dd>
         <dt><strong>&rarr; <a href="?action=view"><?php print $PMF_LANG["ad_start_articles"]; ?></a></strong></dt>
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqdata"]; ?></dd>
-        <dt><strong>&rarr; <a href="?action=accept"><?php print $PMF_LANG['ad_start_notactive']; ?></a></strong></dt>
-        <dd><?php print count($faq->faqRecords); ?></dd>
         <dt><strong>&rarr; <a href="?action=comments"><?php print $PMF_LANG["ad_start_comments"]; ?></strong></a></dt>
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqcomments"]; ?></dd>
         <dt><strong>&rarr; <a href="?action=question"><?php print $PMF_LANG["msgOpenQuestions"]; ?></strong></a></dt>
