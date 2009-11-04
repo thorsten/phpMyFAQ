@@ -511,17 +511,37 @@ if (isset($auth)) {
 }
 $tpl->includeTemplate('loginBox', 'index');
 
-$toptenParams = $faq->getTopTen();
-if (!isset($toptenParams['error'])) {
-    $tpl->processBlock('rightBox', 'toptenList', array(
-        'toptenUrl'    => $toptenParams['url'],
-        'toptenTitle'  => $toptenParams['title'],
-        'toptenVisits' => $toptenParams['visits'])
-    );
+// generate top ten list
+if ($faqconfig->get('main.orderingPopularFaqs') == 'visits') {
+    
+    // top ten list for most viewed entries
+    $toptenParams = $faq->getTopTen('visits');
+    if (!isset($toptenParams['error'])) {
+        $tpl->processBlock('rightBox', 'toptenList', array(
+            'toptenUrl'    => $toptenParams['url'],
+            'toptenTitle'  => $toptenParams['title'],
+            'toptenVisits' => $toptenParams['visits'])
+        );
+    } else {
+        $tpl->processBlock('rightBox', 'toptenListError', array(
+            'errorMsgTopTen' => $toptenParams['error'])
+        );
+    }
 } else {
-    $tpl->processBlock('rightBox', 'toptenListError', array(
-        'errorMsgTopTen' => $toptenParams['error'])
-    );
+
+    // top ten list for most voted entries
+    $toptenParams = $faq->getTopTen('voted');
+    if (!isset($toptenParams['error'])) {
+        $tpl->processBlock('rightBox', 'toptenList', array(
+            'toptenUrl'    => $toptenParams['url'],
+            'toptenTitle'  => $toptenParams['title'],
+            'toptenVisits' => $toptenParams['voted'])
+        );
+    } else {
+        $tpl->processBlock('rightBox', 'toptenListError', array(
+            'errorMsgTopTen' => $toptenParams['error'])
+        );
+    }
 }
 
 $latestEntriesParams = $faq->getLatest();

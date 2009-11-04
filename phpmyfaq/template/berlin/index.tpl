@@ -59,7 +59,7 @@
 
 			<div class="content">
 				<div id="loginform">
-                    <a href="admin/index.php?action=login">Administrations-Bereich</a>
+                    <a href="admin/index.php">Administrations-Bereich</a>
 				</div>
 			</div>
 

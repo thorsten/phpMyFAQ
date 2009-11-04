@@ -1061,3 +1061,13 @@ $PMF_LANG['msgTransToolRecordingPageBuffer'] = 'Recording page %d buffer';
 
 // added 2.6.0-alpha - 2009-11-02 by Anatoliy Belsky
 $PMF_LANG['ad_record_active'] = 'Active';
+
+// added 2.6.0-alpha - 2009-11-01 by Anatoliy Belsky
+$PMF_LANG['msgAttachmentInvalid'] = 'The attachment is invalid, please inform admin';
+
+// added 2.6.0-alpha - 2009-11-02 by max
+$LANG_CONF['main.numberSearchTerms']   = array(0 => 'input', 1 => 'Number of listed search terms');
+$LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Sorting of the top faq's");
+
+$PMF_LANG['main.orderingPopularFaqs.visits'] = "list most visited entries";
+$PMF_LANG['main.orderingPopularFaqs.voting'] = "list most voted entries";
