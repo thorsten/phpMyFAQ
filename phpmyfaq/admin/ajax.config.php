@@ -2,13 +2,12 @@
 /**
  * AJAX: handling of Ajax configuration calls
  * 
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Anatoliy Belsky <anatoliy.belsky@mayflower.de>
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2009-04-01
- * @copyright  2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2009-04-01
+ * @copyright 2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -26,41 +25,39 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN') || !$permission['editconfig']) {
     exit();
 }
 
-$ajax_action = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$ajaxAction    = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$stopwordId    = PMF_Filter::filterInput(INPUT_GET, 'stopword_id', FILTER_VALIDATE_INT);
+$stopword      = PMF_Filter::filterInput(INPUT_GET, 'stopword', FILTER_SANITIZE_STRING);
+$stopwordsLang = PMF_Filter::filterInput(INPUT_GET, 'stopwords_lang', FILTER_SANITIZE_STRING);
 
-$stopword_id = PMF_Filter::filterInput(INPUT_GET, 'stopword_id', FILTER_VALIDATE_INT);
-$stopword = PMF_Filter::filterInput(INPUT_GET, 'stopword', FILTER_SANITIZE_STRING);
-$stopwords_lang = PMF_Filter::filterInput(INPUT_GET, 'stopwords_lang', FILTER_SANITIZE_STRING);
-
-switch($ajax_action) {
+switch ($ajaxAction) {
     
     case 'load_stop_words_by_lang':
-        if(PMF_Language::isASupportedLanguage($stopwords_lang)) {
-            $stop_words_list = PMF_Stopwords::getInstance()->getByLang($stopwords_lang);
+        if (PMF_Language::isASupportedLanguage($stopwordsLang)) {
+            $stopwordsList = PMF_Stopwords::getInstance()->getByLang($stopwordsLang);
             
             header('Content-Type: application/json');
-            print json_encode($stop_words_list);
+            print json_encode($stopwordsList);
         }
         break;
         
     case 'delete_stop_word':
-        if(null != $stopword_id && PMF_Language::isASupportedLanguage($stopwords_lang)) {
-            $pmf_sw = PMF_Stopwords::getInstance();
-            $pmf_sw->setLanguage($stopwords_lang);
-            $pmf_sw->remove($stopword_id);
+        if (null != $stopwordId && PMF_Language::isASupportedLanguage($stopwordsLang)) {
+            $oStopwords = PMF_Stopwords::getInstance();
+            $oStopwords->setLanguage($stopwordsLang);
+            $oStopwords->remove($stopwordId);
         }
         break;
         
     case 'save_stop_word':
-        if(null != $stopword && PMF_Language::isASupportedLanguage($stopwords_lang)) {
-            $pmf_sw = PMF_Stopwords::getInstance();
-            $pmf_sw->setLanguage($stopwords_lang);
-            if(null !== $stopword_id && -1 < $stopword_id) {
-                $pmf_sw->update($stopword_id, $stopword);
-            } else if(!$pmf_sw->match($stopword)){
-                $pmf_sw->add($stopword);
+        if (null != $stopword && PMF_Language::isASupportedLanguage($stopwordsLang)) {
+            $oStopwords = PMF_Stopwords::getInstance();
+            $oStopwords->setLanguage($stopwordsLang);
+            if (null !== $stopwordId && -1 < $stopwordId) {
+                $oStopwords->update($stopwordId, $stopword);
+            } elseif (!$oStopwords->match($stopword)){
+                $oStopwords->add($stopword);
             }
         }
-        
         break;
 }
