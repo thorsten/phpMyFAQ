@@ -362,11 +362,12 @@ if($permission['approverec']):
     <input type="radio" id="userpermission" name="userpermission" class="active" value="all" <?php print ($all_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_all_users']; ?> <input type="radio" name="userpermission" class="active" value="restricted" <?php print ($restricted_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_restricted_users']; ?> <select name="restricted_users" size="1"><?php print $user->getAllUserOptions($user_permission[0]); ?></select><br />
     
 	<label class="left" for="dateActualize"><?php echo $PMF_LANG["ad_entry_date"]; ?></label>
-<!--    <input type="hidden" id="oldDate" value="<?php print $faqData['date']; ?>">-->
-<!--    <input type="radio" id="dateActualize" checked="checked" name="recordDateHandling" /> actualize-->
-<!--    <input type="radio" id="dateKeep" name="recordDateHandling" /> keep-->
-<!--    <input type="radio" id="dateCustomize" name="recordDateHandling" /> customize-->
-    <input type="text" name="date" id="date" class="date-pick" maxlength="16" value="<?php print $faqData['date']; ?>" />
+    <input type="hidden" id="oldDate" value="<?php print $faqData['date']; ?>">
+    <input type="radio" id="dateActualize" checked="checked" name="recordDateHandling" onchange="showIDContainer(false);" /> actualize
+    <input type="radio" id="dateKeep" name="recordDateHandling" onchange="showIDContainer(false);" /> keep
+    <input type="radio" id="dateCustomize" name="recordDateHandling" onchange="showIDContainer();" /> customize
+    <div id="recordDateInputContainer" style="display: none;"></span><label class="left" for="date">&nbsp;</label>
+    <input type="text" name="date" id="date" class="date-pick" maxlength="16" value="<?php print $faqData['date']; ?>" /></div>
     </fieldset>
 
     <fieldset class="fullwidth">
@@ -440,6 +441,21 @@ if($permission['approverec']):
         });
     });
 
+    /**
+     * Toggle input date container show
+     *
+     * @param boolean show show or hide (optional)
+     *
+     * @return void
+     */
+    function showIDContainer()
+    {
+        
+        var display = 0 == arguments.length || !!arguments[0] ? 'block' : 'none';
+        
+        $('#recordDateInputContainer').attr('style', 'display: ' + display);
+    }
+    
     /* ]]> */
     </script>
 <?php
