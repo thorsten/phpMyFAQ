@@ -23,10 +23,8 @@ Changes since 2.5.x:
 - improved category view with description (Thorsten)
 - improved FAQ entry activation (Anatoliy)
 - removed Docbook XML export (Thorsten)
-- updated to TinyMCE 3.2.7 (Max Köhler)
+- updated bundled TinyMCE editor component to version 3.2.7 (Max Köhler)
 - minor bugfixes (Thorsten)
-
-For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
@@ -46,7 +44,7 @@ Version 2.6.0-alpha - 2009-11-
 - improved category view with description (Thorsten)
 - improved FAQ entry activation (Anatoliy)
 - removed Docbook XML export (Thorsten)
-- updated to TinyMCE 3.2.7 (Max Köhler)
+- updated bundled TinyMCE editor component to version 3.2.7 (Max Köhler)
 - minor bugfixes (Thorsten)
 
 Version 2.5.4 - 2009-11-
