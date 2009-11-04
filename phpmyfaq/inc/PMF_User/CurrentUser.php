@@ -294,9 +294,11 @@ class PMF_User_CurrentUser extends PMF_User
         // renew the session-ID
         $oldSessionId = session_id();
         if (session_regenerate_id(true)) {
-        	$sessionSavePath = session_save_path();
-            $sessionPath     = realpath($sessionSavePath);
-            $sessionFilename = $sessionPath.'/sess_'.$oldSessionId;
+        	$sessionPath = session_save_path();
+            if (strpos ($sessionPath, ';') !== false) {
+                $sessionPath = substr ($sessionPath, strpos ($sessionPath, ';') + 1);
+            }
+            $sessionFilename = $sessionPath . '/sess_' . $oldSessionId;
             if (@file_exists($sessionFilename)) {
                 @unlink($sessionFilename);
             }
