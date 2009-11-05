@@ -126,7 +126,7 @@ th.listhead a { text-decoration: none; font-weight: bold; }
 
 /* datePicker CSS definitions */
 a.dp-choose-date { width: 16px; height: 16px; padding: 0; margin: 5px 3px 0; display: block;
-    text-indent: -2000px; overflow: hidden; background: url(../admin/images/calendar.png) no-repeat; }
+    text-indent: -2000px; overflow: hidden; background: url(../images/calendar.png) no-repeat;}
 a.dp-choose-date.dp-disabled { background-position: 0 -20px; cursor: default; }
 input.dp-applied { width: 140px; float: left; }
 

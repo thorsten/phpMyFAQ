@@ -790,6 +790,41 @@ class PMF_User
     }
 
     /**
+     * Returns an array of all users found in the database. By default, the 
+     * anonymous User will not be returned. The returned array contains the
+     * user ID as key, the values are login name, account status, authentication
+     * source and the user creation date.
+     *
+     * @param  boolean $withoutAnonymous Without anonymous?
+     * @return array
+     */
+    public function getAllUserData($withoutAnonymous = true)
+    {
+        $select = sprintf("
+            SELECT
+                user_id, login, account_status, auth_source, member_since
+            FROM
+                %sfaquser
+            %s
+            ORDER BY
+               login ASC",
+            SQLPREFIX,
+            ($withoutAnonymous ? 'WHERE user_id <> -1' : ''));
+
+        $res = $this->db->query($select);
+        if (!$res) {
+            return array();
+        }
+
+        $result = array();
+        while ($row = $this->db->fetch_assoc($res)) {
+            $result[$row['user_id']] = $row;
+        }
+
+        return $result;
+    }
+    
+    /**
      * Get all users in <option> tags
      *
      * @param  integer $user_id User ID
@@ -797,7 +832,7 @@ class PMF_User
      */
     public function getAllUserOptions($id = 1)
     {
-        $options = '';
+        $options  = '';
         $allUsers = $this->getAllUsers();
         foreach ($allUsers as $user_id) {
             if (-1 != $user_id) {

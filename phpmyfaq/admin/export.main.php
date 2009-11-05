@@ -1,15 +1,14 @@
 <?php
 /**
- * XML, XML DocBook, XHTML and PDF export - main page
+ * XML, XHTML and PDF export - main page
  *
- * @package    phpMyFAQ 
- * @subpackage Administration
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @author     Peter Beauvain <pbeauvain@web.de>
- * @since      2003-04-17
- * @version    SVN: $Id$
- * @copyright  2003-2009 phpMyFAQ Team
+ * @category  phpMyFAQ 
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author    Peter Beauvain <pbeauvain@web.de>
+ * @since     2003-04-17
+ * @copyright 2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -59,10 +58,9 @@ if (!emptyTable(SQLPREFIX."faqdata")) {
         <fieldset><legend><?php print($PMF_LANG['ad_export_type']); ?></legend>
             <p>
                 <label for="export_type"><?php print($PMF_LANG['ad_export_type_choose']); ?></label><br />
-                <input type="radio" name="type" value="<?php print(EXPORT_TYPE_PDF); ?>" checked="checked" />&nbsp;<?php print($PMF_LANG["ad_export_generate_pdf"]); ?><br />
-                <input type="radio" name="type" value="<?php print(EXPORT_TYPE_XML); ?>" />&nbsp;<?php print($PMF_LANG["ad_xml_gen"]); ?><br />
-                <input type="radio" name="type" value="<?php print(EXPORT_TYPE_XHTML); ?>" />&nbsp;<?php print($PMF_LANG['ad_export_gen_xhtml']); ?><br />
-                <input type="radio" name="type" value="<?php print(EXPORT_TYPE_DOCBOOK); ?>" />&nbsp;<?php print($PMF_LANG['ad_export_gen_docbook']); ?>
+                <input type="radio" name="type" value="pdf" checked="checked" />&nbsp;<?php print($PMF_LANG["ad_export_generate_pdf"]); ?><br />
+                <input type="radio" name="type" value="xml" />&nbsp;<?php print($PMF_LANG["ad_xml_gen"]); ?><br />
+                <input type="radio" name="type" value="xhtml" />&nbsp;<?php print($PMF_LANG['ad_export_gen_xhtml']); ?>
             </p>
             <p>
                 <label for="disposition"><?php print($PMF_LANG['ad_export_download_view']); ?></label>
