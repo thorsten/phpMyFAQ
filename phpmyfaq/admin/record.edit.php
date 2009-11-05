@@ -262,13 +262,13 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 ?>
 
     <label class="lefteditor" for="keywords"><?php print $PMF_LANG["ad_entry_keywords"]; ?></label>
-    <input name="keywords" id="keywords" style="width: 390px;" value="<?php if (isset($faqData['keywords'])) { print PMF_String::htmlspecialchars($faqData['keywords']); } ?>" /><br />
+    <input name="keywords" id="keywords" style="width: 390px;" value="<?php if (isset($faqData['keywords'])) { print PMF_String::htmlspecialchars($faqData['keywords']); } ?>" /> <span id="keywordsHelp"></span><br />
 
     <label class="lefteditor" for="tags"><?php print $PMF_LANG['ad_entry_tags']; ?>:</label>
     <input name="tags" id="tags" style="width: 390px;" value="<?php if (isset($tags)) { print PMF_String::htmlspecialchars($tags); } ?>" /><img style="display: none; margin-bottom: -5px;" id="tags_autocomplete_wait" src="images/indicator.gif" alt="waiting..."></img>
     <script type="text/javascript">
         $('#tags').autocomplete("index.php?action=ajax&ajax=tags_list", { width: 260, selectFirst: false, multiple: true } );
-    </script><br />
+    </script><span id="tagsHelp"></span><br />
 
     <label class="lefteditor" for="author"><?php print $PMF_LANG["ad_entry_author"]; ?></label>
     <input name="author" id="author" style="width: 390px;" value="<?php if (isset($faqData['author'])) { print PMF_String::htmlspecialchars($faqData['author']); } else { print $user->getUserData('display_name'); } ?>" /><br />
@@ -436,13 +436,17 @@ if($permission['approverec']):
     $(function()
     {
         $('.date-pick').datePicker();
-
+        
         $('#date').bind('dateSelected', function (e, date, $td, status)
         {
-            if(status) {
+            if (status) {
                 $('#date').val(date.asString() + ' 14:47');
             }
         });
+
+        $('#keywords').focus(function() { showHelp('keywords'); });
+        $('#tags').focus(function() { showHelp('tags'); });
+        
     });
 
     /**
@@ -458,6 +462,19 @@ if($permission['approverec']):
         var display = 0 == arguments.length || !!arguments[0] ? 'block' : 'none';
         
         $('#recordDateInputContainer').attr('style', 'display: ' + display);
+    }
+
+    /**
+     * Shows help for keywords and tags input fields
+     * 
+     * @param string 
+     * 
+     * @return void
+     */
+    function showHelp(option)
+    {
+        $('#' + option + 'Help').prepend('<?php print $PMF_LANG['msgShowHelp']; ?>').fadeIn(500);
+        $('#' + option + 'Help').fadeOut(5000);
     }
     
     /* ]]> */
