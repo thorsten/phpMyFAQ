@@ -451,12 +451,10 @@ if($permission['approverec']):
 
                 var hours   = dt.getHours();
                 var minutes = dt.getMinutes();
-                var seconds = dt.getSeconds();
                 
                 $('#date').val(date.asString() +
                                ' ' + (hours < 10 ? '0' : '') + hours +
-                               ':' + (minutes < 10 ? '0' : '') + minutes +
-                               ':' + (seconds < 10 ? '0' : '') + seconds);
+                               ':' + (minutes < 10 ? '0' : '') + minutes);
             }
         });
 
