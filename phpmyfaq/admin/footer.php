@@ -2,13 +2,12 @@
 /**
  * Footer of the admin area
  *
- * @package    phpMyFAQ 
- * @subpackage Administration
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since      2003-02-26
- * @version    SVN: $Id$
- * @copyright  2003-2009 phpMyFAQ Team
+ * @category  phpMyFAQ 
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since     2003-02-26
+ * @copyright 2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -76,11 +75,11 @@ tinymce.create('tinymce.plugins.internalFaqLinkPlugin', {
           foreach ($faq->faqRecords as $record) {
               $_title = str_replace(array("\n", "\r", "\r\n"), '', $record['title']);
               printf("flb.add('%s', '%d_%d_%s_%s');\n",
-                  str_replace("'", "«", PMF_Utils::makeShorterText($_title, 8)),
+                  str_replace("'", "ï¿½", PMF_Utils::makeShorterText($_title, 8)),
                   $record['category_id'],
                   $record['id'],
                   $record['lang'],
-                  str_replace("'", "«", $_title));
+                  str_replace("'", "ï¿½", $_title));
           }
 ?>
 
@@ -115,6 +114,7 @@ tinyMCE.init({
     theme_advanced_resizing : true,
     relative_urls           : false,
     remove_linebreaks       : false, 
+    use_native_selects      : true,
     extended_valid_elements : "code",
 
     // Ajax-based file manager
