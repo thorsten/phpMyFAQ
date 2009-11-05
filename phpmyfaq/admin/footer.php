@@ -2,12 +2,11 @@
 /**
  * Footer of the admin area
  *
- * @category  phpMyFAQ
+ * @category  phpMyFAQ 
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since     2003-02-26
- * @version   git: $Id$
  * @copyright 2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -70,16 +69,16 @@ tinymce.create('tinymce.plugins.internalFaqLinkPlugin', {
                      }
                 });
 <?php
-            $faq->getAllRecords(FAQ_SORTING_TYPE_FAQTITLE_FAQID);
-            foreach ($faq->faqRecords as $record) {
-                $_title = str_replace(array("\n", "\r", "\r\n"), '', $record['title']);
-                printf("flb.add('%s', '%d_%d_%s_%s');\n",
-                    str_replace("'", "´", PMF_Utils::makeShorterText($_title, 8)),
-                    $record['category_id'],
-                    $record['id'],
-                    $record['lang'],
-                    str_replace("'", "´", $_title));
-            }
+          $faq->getAllRecords(FAQ_SORTING_TYPE_FAQTITLE_FAQID);
+          foreach ($faq->faqRecords as $record) {
+              $_title = str_replace(array("\n", "\r", "\r\n"), '', $record['title']);
+              printf("flb.add('%s', '%d_%d_%s_%s');\n",
+                  str_replace("'", "�", PMF_Utils::makeShorterText($_title, 8)),
+                  $record['category_id'],
+                  $record['id'],
+                  $record['lang'],
+                  str_replace("'", "�", $_title));
+          }
 ?>
 
                 return flb;
@@ -113,6 +112,7 @@ tinyMCE.init({
     theme_advanced_resizing : true,
     relative_urls           : false,
     remove_linebreaks       : false, 
+    use_native_selects      : true,
     extended_valid_elements : "code",
 
     // Ajax-based file manager
