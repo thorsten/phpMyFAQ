@@ -34,7 +34,9 @@
 <div id="content">
 <div class="header" id="header">
 	<div>
-		<h1><a title="{header}" href="{faqHome}">{header}</a></h1>
+		<div id="header-banner"></div>
+      <h1><a title="{header}" href="{faqHome}">{header}</a></h1>
+      <div style="clear: both;"></div>
 		<ul>
 			<li>{msgHelp}</li>
 			<li>{msgOpenQuestions}</li>
@@ -53,13 +55,8 @@
 						<li class="home">{backToHome}</li>
 						{showCategories}
 						<li>{showInstantResponse}</li>
+						<li> <a href="admin/index.php">Administrations-Bereich</a></li>
 					</ul>
-				</div>
-			</div>
-
-			<div class="content">
-				<div id="loginform">
-                    <a href="admin/index.php">Administrations-Bereich</a>
 				</div>
 			</div>
 
