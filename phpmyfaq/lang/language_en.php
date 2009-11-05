@@ -8,7 +8,6 @@
  * @author     Matthias Sommerfeld <mso@bluebirdy.de>
  * @author     Henning Schulzrinne <hgs@cs.columbia.edu>
  * @since      2004-02-19
- * @version    SVN: $Id$
  * @copyright  2004-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -1071,3 +1070,6 @@ $LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Sorting of t
 
 $PMF_LANG['main.orderingPopularFaqs.visits'] = "list most visited entries";
 $PMF_LANG['main.orderingPopularFaqs.voting'] = "list most voted entries";
+
+// added 2.6.0-alpha - 2009-11-05 by Thorsten
+$PMF_LANG['msgShowHelp'] = 'Please seperate words by comma.';

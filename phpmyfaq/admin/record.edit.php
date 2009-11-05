@@ -262,13 +262,13 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 ?>
 
     <label class="lefteditor" for="keywords"><?php print $PMF_LANG["ad_entry_keywords"]; ?></label>
-    <input name="keywords" id="keywords" style="width: 390px;" value="<?php if (isset($faqData['keywords'])) { print PMF_String::htmlspecialchars($faqData['keywords']); } ?>" /><br />
+    <input name="keywords" id="keywords" style="width: 390px;" value="<?php if (isset($faqData['keywords'])) { print PMF_String::htmlspecialchars($faqData['keywords']); } ?>" /> <span id="keywordsHelp"></span><br />
 
     <label class="lefteditor" for="tags"><?php print $PMF_LANG['ad_entry_tags']; ?>:</label>
     <input name="tags" id="tags" style="width: 390px;" value="<?php if (isset($tags)) { print PMF_String::htmlspecialchars($tags); } ?>" /><img style="display: none; margin-bottom: -5px;" id="tags_autocomplete_wait" src="images/indicator.gif" alt="waiting..."></img>
     <script type="text/javascript">
         $('#tags').autocomplete("index.php?action=ajax&ajax=tags_list", { width: 260, selectFirst: false, multiple: true } );
-    </script><br />
+    </script><span id="tagsHelp"></span><br />
 
     <label class="lefteditor" for="author"><?php print $PMF_LANG["ad_entry_author"]; ?></label>
     <input name="author" id="author" style="width: 390px;" value="<?php if (isset($faqData['author'])) { print PMF_String::htmlspecialchars($faqData['author']); } else { print $user->getUserData('display_name'); } ?>" /><br />
@@ -374,25 +374,32 @@ if($permission['approverec']):
     </fieldset>
 
     <fieldset class="fullwidth">
-    <legend><?php print $PMF_LANG['ad_record_expiration_window']; ?></legend>
+    <legend><a href="javascript:void();" onclick="javascript:toggleFieldset('Expiration');"><?php print $PMF_LANG['ad_record_expiration_window']; ?></a></legend>
+    
+    <div id="editExpiration" style="display: none;">
         <label class="lefteditor" for="dateStart"><?php print $PMF_LANG['ad_news_from']; ?></label>
         <input name="dateStart" id="dateStart" class="date-pick" value="<?php print $dateStart; ?>" maxlength="10" />
         <br />
         <label class="lefteditor" for="dateEnd"><?php print $PMF_LANG['ad_news_to']; ?></label>
         <input name="dateEnd" id="dateEnd" class="date-pick" value="<?php print $dateEnd; ?>" maxlength="10" />
+    </div>
+    
     </fieldset>
 
     <fieldset class="fullwidth">
-    <legend><?php print $PMF_LANG['ad_entry_changelog']; ?></legend>
+    <legend><a href="javascript:void();" onclick="javascript:toggleFieldset('Changelog');"><?php print $PMF_LANG['ad_entry_changelog']; ?></a></legend>
 
-    <label class="lefteditor"><?php print $PMF_LANG["ad_entry_date"]; ?></label>
-    <?php if (isset($faqData['date'])) { print $faqData['date']; } else { print PMF_Date::createIsoDate(date("YmdHis")); } ?><br />
+    <div id="editChangelog" style="display: none;">
+        <label class="lefteditor"><?php print $PMF_LANG["ad_entry_date"]; ?></label>
+        <?php if (isset($faqData['date'])) { print $faqData['date']; } else { print PMF_Date::createIsoDate(date("YmdHis")); } ?><br />
 
-    <label class="lefteditor" for="changed"><?php print $PMF_LANG["ad_entry_changed"]; ?></label>
-    <textarea name="changed" id="changed" style="width: 390px; height: 50px;" cols="40" rows="4"><?php if (isset($changed)) { print $changed; } ?></textarea><br />
+        <label class="lefteditor" for="changed"><?php print $PMF_LANG["ad_entry_changed"]; ?></label>
+        <textarea name="changed" id="changed" style="width: 390px; height: 50px;" cols="40" rows="4"><?php if (isset($changed)) { print $changed; } ?></textarea><br />
+    </div>
 
     </fieldset><br />
 
+    <p align="center">
 <?php
     if ($revisionid_selected == $faqData['revision_id']) {
 ?>
@@ -407,7 +414,7 @@ if($permission['approverec']):
 <?php
     }
 ?>
-<br />
+    </p>
 <?php
     if (is_numeric($faqData['id'])) {
 ?>
@@ -435,7 +442,7 @@ if($permission['approverec']):
     $(function()
     {
         $('.date-pick').datePicker();
-
+        
         $('#date').bind('dateSelected', function (e, date, $td, status)
         {
             var dt = new Date();
@@ -447,8 +454,28 @@ if($permission['approverec']):
                                ':' + dt.getSeconds());
             }
         });
+
+        $('#keywords').focus(function() { showHelp('keywords'); });
+        $('#tags').focus(function() { showHelp('tags'); });
+        
     });
 
+    /**
+     * Toggle fieldsets
+     *
+     * @param string fieldset ID of the fieldset
+     *
+     * @return void
+     */
+    function toggleFieldset(fieldset)
+    {
+        if ($('#edit' + fieldset).css('display') == 'none') {
+            $('#edit' + fieldset).fadeIn('fast');
+        } else {
+            $('#edit' + fieldset).fadeOut('fast');
+        }
+    }
+    
     /**
      * Toggle input date container show
      *
@@ -458,7 +485,6 @@ if($permission['approverec']):
      */
     function showIDContainer()
     {
-        
         var display = 0 == arguments.length || !!arguments[0] ? 'block' : 'none';
         
         $('#recordDateInputContainer').attr('style', 'display: ' + display);
@@ -479,6 +505,19 @@ if($permission['approverec']):
         }
     }
         
+    /**
+     * Shows help for keywords and tags input fields
+     * 
+     * @param string 
+     * 
+     * @return void
+     */
+    function showHelp(option)
+    {
+        $('#' + option + 'Help').prepend('<?php print $PMF_LANG['msgShowHelp']; ?>').fadeIn(500);
+        $('#' + option + 'Help').fadeOut(5000);
+    }
+    
     /* ]]> */
     </script>
 <?php

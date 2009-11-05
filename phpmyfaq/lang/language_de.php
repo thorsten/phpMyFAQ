@@ -8,7 +8,6 @@
  * @author     A. Neufang <B_A_F_F@gmx.de>
  * @author     René-Roger Ziesack <rr-phpmyfaq.de@inf99.de>
  * @since      2004-02-19
- * @version    SVN: $Id$
  * @copyright  2004-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -1020,3 +1019,6 @@ $LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Sortierung d
 
 $PMF_LANG['main.orderingPopularFaqs.visits'] = "nach Anzahl der Besucher";
 $PMF_LANG['main.orderingPopularFaqs.voting'] = "nach Bewerung der Bersucher";
+
+// added 2.6.0-alpha - 2009-11-05 by Thorsten
+$PMF_LANG['msgShowHelp'] = 'Bitte Begriffe mit Komma trennen.';
