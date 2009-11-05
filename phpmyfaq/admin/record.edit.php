@@ -346,16 +346,20 @@ if($permission['approverec']):
 <?php   
     }
     
-    if('00000000000000' == $faqData['dateStart']) {
+    if ('00000000000000' == $faqData['dateStart']) {
         $dateStart = '';
     } else {
         $dateStart = preg_replace("/(\d{4})(\d{2})(\d{2}).*/", "$1-$2-$3", $faqData['dateStart']);
     }
     
-    if('99991231235959' == $faqData['dateEnd']) {
+    if ('99991231235959' == $faqData['dateEnd']) {
         $dateEnd = '';
     } else {
         $dateEnd = preg_replace("/(\d{4})(\d{2})(\d{2}).*/", "$1-$2-$3", $faqData['dateEnd']);
+    }
+    
+    if (!isset($faqData['date'])) { 
+    	$faqData['date'] = PMF_Date::createIsoDate(date("YmdHis"));
     }
 ?>
     <label class="left" for="userpermission"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
