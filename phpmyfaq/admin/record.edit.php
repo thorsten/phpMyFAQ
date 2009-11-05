@@ -370,7 +370,7 @@ if($permission['approverec']):
     <input type="radio" id="dateKeep" name="recordDateHandling" onchange="setRecordDate(this.id);" /> keep
     <input type="radio" id="dateCustomize" name="recordDateHandling" onchange="setRecordDate(this.id);" /> customize
     <div id="recordDateInputContainer" style="display: none;"></span><label class="left" for="date">&nbsp;</label>
-    <input type="text" name="date" id="date" class="date-pick" maxlength="16" value="" /></div>
+    <input type="text" name="date" id="date" maxlength="16" value="" /></div>
     </fieldset>
 
     <fieldset class="fullwidth">
@@ -442,16 +442,21 @@ if($permission['approverec']):
     $(function()
     {
         $('.date-pick').datePicker();
-        
+
+        $('#date').datePicker({startDate: '1900-01-01'});
         $('#date').bind('dateSelected', function (e, date, $td, status)
         {
-            var dt = new Date();
-            
             if(status) {
+                var dt = new Date();
+
+                var hours   = dt.getHours();
+                var minutes = dt.getMinutes();
+                var seconds = dt.getSeconds();
+                
                 $('#date').val(date.asString() +
-                               ' ' + dt.getHours() +
-                               ':' + dt.getMinutes() +
-                               ':' + dt.getSeconds());
+                               ' ' + (hours < 10 ? '0' : '') + hours +
+                               ':' + (minutes < 10 ? '0' : '') + minutes +
+                               ':' + (seconds < 10 ? '0' : '') + seconds);
             }
         });
 
