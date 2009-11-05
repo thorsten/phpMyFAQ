@@ -153,6 +153,7 @@ if ($permission['editbt']) {
         if ($record_id) {
             print $PMF_LANG['ad_entry_savedsuc'];
             link_ondemand_javascript($record_id, $record_lang);
+            print '<meta http-equiv="refresh" content="3;index.php?action=view" />';
         } else {
             print $PMF_LANG['ad_entry_savedfail'].$db->error();
         }
