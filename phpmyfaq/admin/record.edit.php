@@ -375,25 +375,32 @@ if($permission['approverec']):
     </fieldset>
 
     <fieldset class="fullwidth">
-    <legend><?php print $PMF_LANG['ad_record_expiration_window']; ?></legend>
+    <legend><a href="javascript:void();" onclick="javascript:toggleFieldset('Expiration');"><?php print $PMF_LANG['ad_record_expiration_window']; ?></a></legend>
+    
+    <div id="editExpiration" style="display: none;">
         <label class="lefteditor" for="dateStart"><?php print $PMF_LANG['ad_news_from']; ?></label>
         <input name="dateStart" id="dateStart" class="date-pick" value="<?php print $dateStart; ?>" maxlength="10" />
         <br />
         <label class="lefteditor" for="dateEnd"><?php print $PMF_LANG['ad_news_to']; ?></label>
         <input name="dateEnd" id="dateEnd" class="date-pick" value="<?php print $dateEnd; ?>" maxlength="10" />
+    </div>
+    
     </fieldset>
 
     <fieldset class="fullwidth">
-    <legend><?php print $PMF_LANG['ad_entry_changelog']; ?></legend>
+    <legend><a href="javascript:void();" onclick="javascript:toggleFieldset('Changelog');"><?php print $PMF_LANG['ad_entry_changelog']; ?></a></legend>
 
-    <label class="lefteditor"><?php print $PMF_LANG["ad_entry_date"]; ?></label>
-    <?php if (isset($faqData['date'])) { print $faqData['date']; } else { print PMF_Date::createIsoDate(date("YmdHis")); } ?><br />
+    <div id="editChangelog" style="display: none;">
+        <label class="lefteditor"><?php print $PMF_LANG["ad_entry_date"]; ?></label>
+        <?php if (isset($faqData['date'])) { print $faqData['date']; } else { print PMF_Date::createIsoDate(date("YmdHis")); } ?><br />
 
-    <label class="lefteditor" for="changed"><?php print $PMF_LANG["ad_entry_changed"]; ?></label>
-    <textarea name="changed" id="changed" style="width: 390px; height: 50px;" cols="40" rows="4"><?php if (isset($changed)) { print $changed; } ?></textarea><br />
+        <label class="lefteditor" for="changed"><?php print $PMF_LANG["ad_entry_changed"]; ?></label>
+        <textarea name="changed" id="changed" style="width: 390px; height: 50px;" cols="40" rows="4"><?php if (isset($changed)) { print $changed; } ?></textarea><br />
+    </div>
 
     </fieldset><br />
 
+    <p align="center">
 <?php
     if ($revisionid_selected == $faqData['revision_id']) {
 ?>
@@ -408,7 +415,7 @@ if($permission['approverec']):
 <?php
     }
 ?>
-<br />
+    </p>
 <?php
     if (is_numeric($faqData['id'])) {
 ?>
@@ -450,6 +457,22 @@ if($permission['approverec']):
     });
 
     /**
+     * Toggle fieldsets
+     *
+     * @param string fieldset ID of the fieldset
+     *
+     * @return void
+     */
+    function toggleFieldset(fieldset)
+    {
+        if ($('#edit' + fieldset).css('display') == 'none') {
+            $('#edit' + fieldset).fadeIn('fast');
+        } else {
+            $('#edit' + fieldset).fadeOut('fast');
+        }
+    }
+    
+    /**
      * Toggle input date container show
      *
      * @param boolean show show or hide (optional)
@@ -458,7 +481,6 @@ if($permission['approverec']):
      */
     function showIDContainer()
     {
-        
         var display = 0 == arguments.length || !!arguments[0] ? 'block' : 'none';
         
         $('#recordDateInputContainer').attr('style', 'display: ' + display);
