@@ -2862,17 +2862,7 @@ class PMF_Faq
             return false;
         }
         
-        $pdfFile = $filename;
         $category = new PMF_Category();
-
-        // Default filename: pdf/<faq_id>.pdf
-        if (empty($pdfFile)) {
-            $pdfFile = 'pdf/'.$this->faqRecord['id'].'.pdf';
-        }
-        // Cleanup any file
-        if (file_exists($pdfFile)) {
-            @unlink($pdfFile);
-        }
 
         $pdf = new PMF_Export_Pdf(
             $currentCategory,
@@ -2905,13 +2895,6 @@ class PMF_Faq
         $pdf->Write(5, html_entity_decode($PMF_LANG['msgLastUpdateArticle']).$this->faqRecord['date']);
         $pdf->SetStyle('I', false);
         // Build it
-        $pdf->Output($pdfFile);
-
-        // Done?
-        if (!file_exists($pdfFile)) {
-            return false;
-        }
-
-        return $pdfFile;
+        return $pdf->Output($this->faqRecord['id'] . '.pdf', 'I');
     }
 }

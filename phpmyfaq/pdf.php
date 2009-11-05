@@ -53,17 +53,6 @@ if (is_null($currentCategory) || is_null($id)) {
 
 $faq = new PMF_Faq();
 $faq->getRecord($id);
-$pdfFile = $faq->buildPDFFile($currentCategory);
-
-// Sanity check: stop here if no PDF has been created
-if (empty($pdfFile) || (!file_exists($pdfFile))) {
-    header('HTTP/1.1 404 Not Found');
-    print 'PDF not available.';
-    exit();
-}
-
-$file = basename($pdfFile);
-$size = filesize($pdfFile);
 
 session_cache_limiter('private');
 header("Pragma: public");
@@ -73,12 +62,9 @@ header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 if (preg_match("/MSIE/i", $_SERVER["HTTP_USER_AGENT"])) {
     header("Content-type: application/pdf");
     header("Content-Transfer-Encoding: binary");
-    header("Content-Length: ".filesize($pdfFile));
     header("Content-Disposition: attachment; filename=".$id.".pdf" );
-    readfile($pdfFile);
 } else {
-    header("Location: ".$pdfFile."");
     header("Content-Type: application/pdf");
-    header("Content-Length: ".filesize($pdfFile));
-    readfile($pdfFile);
 }
+
+$faq->buildPDFFile($currentCategory);
