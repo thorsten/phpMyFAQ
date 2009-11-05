@@ -359,19 +359,18 @@ if($permission['approverec']):
     }
     
     if (!isset($faqData['date'])) { 
-    	$faqData['date'] = PMF_Date::createIsoDate(date("YmdHis"));
+    	$faqData['date'] = PMF_Date::createIsoDate(date("Y-m-d H:i:s"));
     }
 ?>
     <label class="left" for="userpermission"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
     <input type="radio" id="userpermission" name="userpermission" class="active" value="all" <?php print ($all_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_all_users']; ?> <input type="radio" name="userpermission" class="active" value="restricted" <?php print ($restricted_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_restricted_users']; ?> <select name="restricted_users" size="1"><?php print $user->getAllUserOptions($user_permission[0]); ?></select><br />
     
 	<label class="left" for="dateActualize"><?php echo $PMF_LANG["ad_entry_date"]; ?></label>
-    <input type="hidden" id="oldDate" value="<?php print $faqData['date']; ?>">
-    <input type="radio" id="dateActualize" checked="checked" name="recordDateHandling" onchange="showIDContainer(false);" /> actualize
-    <input type="radio" id="dateKeep" name="recordDateHandling" onchange="showIDContainer(false);" /> keep
-    <input type="radio" id="dateCustomize" name="recordDateHandling" onchange="showIDContainer();" /> customize
+    <input type="radio" id="dateActualize" checked="checked" name="recordDateHandling" onchange="setRecordDate(this.id);" /> actualize
+    <input type="radio" id="dateKeep" name="recordDateHandling" onchange="setRecordDate(this.id);" /> keep
+    <input type="radio" id="dateCustomize" name="recordDateHandling" onchange="setRecordDate(this.id);" /> customize
     <div id="recordDateInputContainer" style="display: none;"></span><label class="left" for="date">&nbsp;</label>
-    <input type="text" name="date" id="date" class="date-pick" maxlength="16" value="<?php print $faqData['date']; ?>" /></div>
+    <input type="text" name="date" id="date" maxlength="16" value="" /></div>
     </fieldset>
 
     <fieldset class="fullwidth">
@@ -443,11 +442,19 @@ if($permission['approverec']):
     $(function()
     {
         $('.date-pick').datePicker();
-        
+
+        $('#date').datePicker({startDate: '1900-01-01'});
         $('#date').bind('dateSelected', function (e, date, $td, status)
         {
-            if (status) {
-                $('#date').val(date.asString() + ' 14:47');
+            if(status) {
+                var dt = new Date();
+
+                var hours   = dt.getHours();
+                var minutes = dt.getMinutes();
+                
+                $('#date').val(date.asString() +
+                               ' ' + (hours < 10 ? '0' : '') + hours +
+                               ':' + (minutes < 10 ? '0' : '') + minutes);
             }
         });
 
@@ -486,6 +493,21 @@ if($permission['approverec']):
         $('#recordDateInputContainer').attr('style', 'display: ' + display);
     }
 
+
+    function setRecordDate(how)
+    {
+        if('dateActualize' == how) {
+            showIDContainer(false);
+            $('#date').val('');
+        } else if ('dateKeep' == how) {
+            showIDContainer(false);
+            $('#date').val('<?php print $faqData['date']; ?>');
+        } else if('dateCustomize' == how) {
+            showIDContainer(true);
+            $('#date').val('');
+        }
+    }
+        
     /**
      * Shows help for keywords and tags input fields
      * 
