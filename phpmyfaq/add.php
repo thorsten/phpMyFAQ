@@ -2,12 +2,11 @@
 /**
  * This is the page there a user can add a FAQ record.
  *
- * @package    phpMyFAQ
- * @subpackage Frontend
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2002-09-16
- * @version    SVN: $Id$
- * @copyright  2002-2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   Frontend
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2002-09-16
+ * @copyright 2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -53,23 +52,31 @@ $category->buildTree();
 $helper = PMF_Helper_Category::getInstance();
 $helper->setCategory($category);
 
-$tpl->processTemplate('writeContent', array(
-    'msgNewContentHeader'   => $PMF_LANG['msgNewContentHeader'],
-    'msgNewContentAddon'    => $PMF_LANG['msgNewContentAddon'],
-    'writeSendAdress'       => '?' . $sids . 'action=save',
-    'defaultContentMail'    => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
-    'defaultContentName'    => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
-    'msgNewContentName'     => $PMF_LANG['msgNewContentName'],
-    'msgNewContentMail'     => $PMF_LANG['msgNewContentMail'],
-    'msgNewContentCategory' => $PMF_LANG['msgNewContentCategory'],
-    'printCategoryOptions'  => $helper->renderCategoryOptions($inputCategory),
-    'msgNewContentTheme'    => $PMF_LANG['msgNewContentTheme'],
-    'readonly'              => $readonly,
-    'printQuestion'         => $question,
-    'msgNewContentArticle'  => $PMF_LANG['msgNewContentArticle'],
-    'msgNewContentKeywords' => $PMF_LANG['msgNewContentKeywords'],
-    'msgNewContentLink'     => $PMF_LANG['msgNewContentLink'],
-    'captchaFieldset'       => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('add'), $captcha->caplength),
-    'msgNewContentSubmit'   => $PMF_LANG['msgNewContentSubmit']));
+$tpl->processTemplate(
+    'writeContent', 
+    array(
+        'msgNewContentHeader'   => $PMF_LANG['msgNewContentHeader'],
+        'msgNewContentAddon'    => $PMF_LANG['msgNewContentAddon'],
+        'writeSendAdress'       => '?' . $sids . 'action=save',
+        'defaultContentMail'    => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
+        'defaultContentName'    => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
+        'msgNewContentName'     => $PMF_LANG['msgNewContentName'],
+        'msgNewContentMail'     => $PMF_LANG['msgNewContentMail'],
+        'msgNewContentCategory' => $PMF_LANG['msgNewContentCategory'],
+        'printCategoryOptions'  => $helper->renderCategoryOptions($inputCategory),
+        'msgNewContentTheme'    => $PMF_LANG['msgNewContentTheme'],
+        'readonly'              => $readonly,
+        'printQuestion'         => $question,
+        'msgNewContentArticle'  => $PMF_LANG['msgNewContentArticle'],
+        'msgNewContentKeywords' => $PMF_LANG['msgNewContentKeywords'],
+        'msgNewContentLink'     => $PMF_LANG['msgNewContentLink'],
+        'captchaFieldset'       => printCaptchaFieldset(
+            $PMF_LANG['msgCaptcha'], 
+            $captcha->printCaptcha('add'), 
+            $captcha->caplength
+        ),
+        'msgNewContentSubmit'   => $PMF_LANG['msgNewContentSubmit']
+    )
+);
 
 $tpl->includeTemplate('writeContent', 'index');
