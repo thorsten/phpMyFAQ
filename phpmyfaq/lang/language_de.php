@@ -1017,6 +1017,7 @@ $PMF_LANG['msgSecureSwitch'] = "Zum sicheren Login wechseln";
 // added 2.6.0-alpha - 2009-11-02 by max
 $LANG_CONF['main.numberSearchTerms']   = array(0 => 'input', 1 => 'Anzahl der beliebtesten Suchbegriffe');
 $LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Sortierung der TOP-FAQ");
+$PMF_LANG['list_all_users']            = 'Alle Benutzer anzeigen';
 
 $PMF_LANG['main.orderingPopularFaqs.visits'] = "nach Anzahl der Besucher";
 $PMF_LANG['main.orderingPopularFaqs.voting'] = "nach Bewerung der Bersucher";

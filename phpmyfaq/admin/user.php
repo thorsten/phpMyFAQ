@@ -83,7 +83,8 @@ $text = array(
     'changeRights'               => $PMF_LANG["ad_user_rights"],
     'changeRights_submit'        => $PMF_LANG["ad_gen_save"],
     'changeRights_checkAll'      => $PMF_LANG['ad_user_checkall'],
-    'changeRights_uncheckAll'    => $PMF_LANG['ad_user_uncheckall']);
+    'changeRights_uncheckAll'    => $PMF_LANG['ad_user_uncheckall'],
+    'listAllUsers_link'          => $PMF_LANG['list_all_users']);
 
 // what shall we do?
 // actions defined by url: user_action=
@@ -429,7 +430,10 @@ function updateUser(user_id)
                 </div>
             </form>
         </fieldset>
-        <p>[ <a href="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=add"><?php print $text['addUser_link']; ?></a> ]</p>
+        <p>
+            [ <a href="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=add"><?php print $text['addUser_link']; ?></a> ]<br/>
+            [ <a href="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=listallusers"><?php print $text['listAllUsers_link']; ?></a> ]        
+        </p>
     </div> <!-- end #user_list -->
 </div> <!-- end #user_accounts -->
 <div id="user_data">
@@ -478,4 +482,87 @@ function updateUser(user_id)
 <div class="clear"></div>
 <?php
 } // end if ($userAction == 'list')
+
+// show list of all users
+if ($userAction == 'listallusers') {
+?>
+<script type="text/javascript">
+/* <![CDATA[ */
+
+/**
+ * Returns the user data as JSON object
+ *
+ * @param integer user_id User ID
+ */
+function getUserData(user_id)
+{
+    $('#user_data_table').empty();
+    $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=get_user_data&user_id=" + user_id,
+        function(data) {
+            $('#update_user_id').val(data.user_id);
+            $('#user_status_select').val(data.status);
+            // Append input fields
+            $('#user_data_table').append('<br /><label><?php print $PMF_LANG["ad_user_realname"]; ?></label>');
+            $('#user_data_table').append('<input type="text" class="input_row" name="display_name" value="' + data.display_name + '" />');
+            $('#user_data_table').append('<br /><label><?php print $PMF_LANG["ad_entry_email"]; ?></label>');
+            $('#user_data_table').append('<input type="text" class="input_row" name="email" value="' + data.email + '" />');
+            $('#user_data_table').append('<br /><label><?php print $PMF_LANG["ad_user_lastModified"]; ?></label>');
+            $('#user_data_table').append('<input type="text" class="input_row" name="last_modified" value="' + data.last_modified + '" />');
+            
+        });
+}
+/* ]]> */
+</script>
+<h2><?php print $text['header']; ?></h2>
+<div id="user_message"><?php print $message; ?></div>
+    <table class="listrecords" style="width: 700px; float:left;">
+    <thead>
+        <tr>
+            <th class="listhead"><?php echo $PMF_LANG['ad_entry_id']?>:</th>
+            <th class="listhead"><?php echo $PMF_LANG['msgNewContentName']?></th>
+            <th class="listhead"><?php echo $PMF_LANG['msgNewContentMail']?></th>
+            <th class="listhead"><?php echo $PMF_LANG['ad_entry_action']?></th>
+        </tr>
+    </thead>
+        <tbody>
+        <?php 
+            foreach ($user->getAllUsers() as $userId) {
+                $user->getUserById($userId);
+        ?>
+            <tr>
+                <td class="list"><?php echo $user->getUserData('user_id')?></td>
+                <td class="list"><?php echo $user->getUserData('display_name')?></td>
+                <td class="list"><?php echo $user->getUserData('email')?></td>
+                <td class="list"><a href="javascript:getUserData('<?php echo $user->getUserData('user_id') ?>');"><?php echo $PMF_LANG['ad_user_edit']?></a></td>
+            </tr>
+        <?php
+            }
+            
+        ?>
+        </tbody>
+    </table>
+    
+    <div id="user_data">
+        <fieldset>
+            <legend id="user_data_legend"><?php print $text['changeUser']; ?></legend>
+            <form action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=update_data" method="post">
+                <input id="update_user_id" type="hidden" name="user_id" value="0" />
+                <div class="input_row">
+                    <label for="user_status_select"><?php print $text['changeUser_status']; ?></label>
+                    <select id="user_status_select" name="user_status" >
+                        <option value="active"><?php print $PMF_LANG['ad_user_active']; ?></option>
+                        <option value="blocked"><?php print $PMF_LANG['ad_user_blocked']; ?></option>
+                        <option value="protected"><?php print $PMF_LANG['ad_user_protected']; ?></option>
+                    </select>
+                </div>
+                <div id="user_data_table"></div><!-- end #user_data_table -->
+                <div class="button_row">
+                    <input class="submit" type="submit" value="<?php print $text['changeUser_submit']; ?>" tabindex="6" />
+                </div>
+            </form>
+        </fieldset>
+    </div>
+
+<?php 
+} // end if ($userAction == 'listallusers')
 ?>

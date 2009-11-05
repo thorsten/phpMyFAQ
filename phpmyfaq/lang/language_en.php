@@ -1068,6 +1068,7 @@ $PMF_LANG['msgAttachmentInvalid'] = 'The attachment is invalid, please inform ad
 // added 2.6.0-alpha - 2009-11-02 by max
 $LANG_CONF['main.numberSearchTerms']   = array(0 => 'input', 1 => 'Number of listed search terms');
 $LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Sorting of the top faq's");
+$PMF_LANG['list_all_users']            = 'List all users';
 
 $PMF_LANG['main.orderingPopularFaqs.visits'] = "list most visited entries";
 $PMF_LANG['main.orderingPopularFaqs.voting'] = "list most voted entries";
