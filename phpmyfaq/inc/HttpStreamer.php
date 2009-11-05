@@ -2,12 +2,11 @@
 /**
  * Simple HTTP Streamer
  *
- * @package    phpMyFAQ
- * @subpackage PMF_HttpStreamer
- * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since      2005-11-02
- * @version    SVN: $Id$
- * @copyright  2005-2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   PMF_HttpStreamer
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since     2005-11-02
+ * @copyright 2005-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -26,19 +25,17 @@
  * This class manages the stream of a generic content
  * taking into account the correct http headers settings
  *
- * Currently it supports only 5 content (mime) types:
- * - DocBook: application/docbook+xml
+ * Currently it supports only 4 content (mime) types:
  * - PDF: application/pdf
  * - XHTML: application/xhtml+xml
  * - XML: text/xml
  * - Generic file: application/octet-stream
  *
- * @package    phpMyFAQ
- * @subpackage PMF_HttpStreamer
- * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since      2005-11-02
- * @version    SVN: $Id$
- * @copyright  2005-2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   PMF_HttpStreamer
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since     2005-11-02
+ * @copyright 2005-2009 phpMyFAQ Team
  */
 class PMF_HttpStreamer
 {
@@ -168,18 +165,12 @@ class PMF_HttpStreamer
 
         // Evaluate data upon export type request
         switch ($this->type) {
-            case EXPORT_TYPE_DOCBOOK:
-                $filename    = "phpmyfaq_docbook.xml";
-                $description = "phpMyFaq DocBook export file";
-                // http://www.docbook.org/specs/wd-docbook-docbook-4.5CR1.html#a.mimetype
-                $mimeType    = "application/docbook+xml";
-                break;
-            case EXPORT_TYPE_PDF:
+            case 'pdf':
                 $filename    = "phpmyfaq.pdf";
                 $description = "phpMyFaq PDF export file";
                 $mimeType    = "application/pdf";
                 break;
-            case EXPORT_TYPE_XHTML:
+            case 'xhtml':
                 $filename    = "phpmyfaq.xhtml";
                 $description = "phpMyFaq XHTML export file";
                 $mimeType    = "text/html";
@@ -192,7 +183,7 @@ class PMF_HttpStreamer
                     $mimeType = "application/xhtml+xml";
                 }
                 break;
-            case EXPORT_TYPE_XML:
+            case 'xml':
                 $filename    = "phpmyfaq.xml";
                 $description = "phpMyFaq XML export file";
                 $mimeType    = "text/xml";
