@@ -1,4 +1,4 @@
-<h2>{msgOpenQuestions} <a href="feed/openquestions/rss.php" target="_blank"><img src="images/feed.png" width="16" height="16" alt="RSS" /></a></h2>
+<h2>{msgOpenQuestions}</h2>
 <p>{msgQuestionText}</p>
 
 <table class="openquestions">
