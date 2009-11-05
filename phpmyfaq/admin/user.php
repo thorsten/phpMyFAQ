@@ -411,14 +411,8 @@ function updateUser(user_id)
         <fieldset>
             <legend><?php print $text['selectUser']; ?></legend>
             <form name="user_select" id="user_select" action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=delete_confirm" method="post">
-                <?php 
-                    if (isset($_GET['user_id'])) {
-                        $userId     = PMF_Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT, 0);
-                        $user->getUserByID($userId);
-                    }
-                ?>
                 
-                <input type="text" id="user_list_autocomplete" name="user_list_search" value="<?php echo (isset($userId)) ? $user->getUserData('display_name') : ''?>"/>
+                <input type="text" id="user_list_autocomplete" name="user_list_search" />
                 <script type="text/javascript">
                 //<![CDATA[
                     $('#user_list_autocomplete').autocomplete("index.php?action=ajax&ajax=user&ajaxaction=get_user_list", { width: 180, selectFirst: true } );
@@ -432,7 +426,7 @@ function updateUser(user_id)
                     //]]>
                 </script>
                 <div class="button_row">
-                    <input type="hidden" name="user_list_select" id="user_list_select" value="<?php echo (isset($userId)) ? $user->getUserData('user_id') : ''?>"/>
+                    <input type="hidden" name="user_list_select" id="user_list_select" />
                     <input class="submit" type="submit" value="<?php print $text['delUser_button']; ?>" tabindex="2" />
                 </div>
             </form>
@@ -456,16 +450,7 @@ function updateUser(user_id)
                     <option value="protected"><?php print $PMF_LANG['ad_user_protected']; ?></option>
                 </select>
             </div>
-            <div id="user_data_table">
-                <?php if (isset($userId)) : ?>
-                    <br /><label><?php print $PMF_LANG["ad_user_realname"]; ?></label>
-                    <input type="text" class="input_row" name="display_name" value="<?php echo $user->getUserData('display_name')?>" />
-                    <br /><label><?php print $PMF_LANG["ad_entry_email"]; ?></label>
-                    <input type="text" class="input_row" name="email" value="<?php echo $user->getUserData('email')?>" />
-                    <br /><label><?php print $PMF_LANG["ad_user_lastModified"]; ?></label>
-                    <input type="text" class="input_row" name="last_modified" value="<?php echo $user->getUserData('last_modified')?>" />
-                <?php endif; ?>
-            </div><!-- end #user_data_table -->
+            <div id="user_data_table"></div><!-- end #user_data_table -->
             <div class="button_row">
                 <input class="submit" type="submit" value="<?php print $text['changeUser_submit']; ?>" tabindex="6" />
             </div>
@@ -496,7 +481,12 @@ function updateUser(user_id)
     </fieldset>
 </div> <!-- end #user_rights -->
 <div class="clear"></div>
-<?php
+<?php 
+    if (isset($_GET['user_id'])) {
+        $userId     = PMF_Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT, 0);
+        echo '<script type="text/javascript">updateUser('.$userId.');</script>';
+    }
+
 } // end if ($userAction == 'list')
 
 // show list of all users
