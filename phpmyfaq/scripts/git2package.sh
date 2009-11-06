@@ -55,8 +55,8 @@ gitdir=`git rev-parse --git-dir`
 dir=`dirname ${gitdir}`/phpmyfaq
 cd $dir
 
-(git archive --format=tar --prefix="${PMF_PACKAGE_FOLDER}/" HEAD | gzip -9 > $cwd/"${PMF_PACKAGE_FOLDER}.tar.gz" &&
- git archive --format=zip --prefix="${PMF_PACKAGE_FOLDER}/" --output="$cwd/${PMF_PACKAGE_FOLDER}.zip" HEAD) && 
+(git archive --worktree-attributes --format=tar --prefix="${PMF_PACKAGE_FOLDER}/" HEAD | gzip -9 > $cwd/"${PMF_PACKAGE_FOLDER}.tar.gz" &&
+ git archive --worktree-attributes --format=zip --prefix="${PMF_PACKAGE_FOLDER}/" --output="$cwd/${PMF_PACKAGE_FOLDER}.zip" HEAD) && 
 (cd $cwd && $MD5BIN "${PMF_PACKAGE_FOLDER}.tar.gz" > "${PMF_PACKAGE_FOLDER}.tar.gz.md5" &&
     $MD5BIN "${PMF_PACKAGE_FOLDER}.zip" > "${PMF_PACKAGE_FOLDER}.zip.md5"
 ) # Back to the folder from which the script was called
