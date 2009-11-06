@@ -78,31 +78,31 @@ class PMF_Linkverifier
      *
      * @var mixed
      */
-    var $warnlists = array();
+    protected $warnlists = array();
 
     /* List of URLs not to probe
      *
      * @var mixed
      */
-    var $ignorelists = array();
+    protected $ignorelists = array();
 
     /* List of protocols we do not want to look at
      *
      * @var mixed
      */
-    var $invalid_protocols = array();
+    protected $invalid_protocols = array();
 
     /* Last verify results (we might use it later)
      *
      * @var mixed
      */
-    var $lastResult = array();
+    protected $lastResult = array();
 
     /* List of hosts that are slow to resolve.
      *
      * @var mixed
      */
-    var $slow_hosts = array();
+    protected $slow_hosts = array();
 
     /**
     * DB handle
@@ -116,7 +116,7 @@ class PMF_Linkverifier
      *
      * @var integer
      */
-    var $user = null;
+    protected $user = null;
 
     /**
      * Constructor
