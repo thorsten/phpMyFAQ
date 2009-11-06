@@ -3050,21 +3050,17 @@ class PMF_Faq
         if (empty($this->faqRecord)) {
             return false;
         }
+            
+        // Default filename: pdf/<faq_id>.pdf
+        if (empty($pdfFile)) {
+            $pdfFile = 'pdf' . $this->faqRecord['id'] . '.pdf';
+        }
         
         $faqconfig = PMF_Configuration::getInstance();
         $category  = new PMF_Category();
-
-        // Default filename: pdf/<faq_id>.pdf
-        if (empty($pdfFile)) {
-            $pdfFile = 'pdf/'.$this->faqRecord['id'].'.pdf';
-        }
-        
-        // Cleanup any file
-        if (file_exists($pdfFile)) {
-            @unlink($pdfFile);
-        }
         
         $pdf      = new PMF_Export_Pdf_Wrapper();
+        $category = new PMF_Category();
         $pdf->faq = $this->faqRecord;
         
         $pdf->setCategory($currentCategory);
@@ -3092,13 +3088,6 @@ class PMF_Faq
         $pdf->Ln();
         $pdf->Write(5, $PMF_LANG['msgLastUpdateArticle'].$this->faqRecord['date']);
         // Build it
-        $pdf->Output($pdfFile);
-
-        // Done?
-        if (!file_exists($pdfFile)) {
-            return false;
-        }
-
-        return $pdfFile;
+        return $pdf->Output($pdfFile);
     }
 }

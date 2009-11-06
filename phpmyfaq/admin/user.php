@@ -83,7 +83,8 @@ $text = array(
     'changeRights'               => $PMF_LANG["ad_user_rights"],
     'changeRights_submit'        => $PMF_LANG["ad_gen_save"],
     'changeRights_checkAll'      => $PMF_LANG['ad_user_checkall'],
-    'changeRights_uncheckAll'    => $PMF_LANG['ad_user_uncheckall']);
+    'changeRights_uncheckAll'    => $PMF_LANG['ad_user_uncheckall'],
+    'listAllUsers_link'          => $PMF_LANG['list_all_users']);
 
 // what shall we do?
 // actions defined by url: user_action=
@@ -410,6 +411,7 @@ function updateUser(user_id)
         <fieldset>
             <legend><?php print $text['selectUser']; ?></legend>
             <form name="user_select" id="user_select" action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=delete_confirm" method="post">
+                
                 <input type="text" id="user_list_autocomplete" name="user_list_search" />
                 <script type="text/javascript">
                 //<![CDATA[
@@ -429,7 +431,10 @@ function updateUser(user_id)
                 </div>
             </form>
         </fieldset>
-        <p>[ <a href="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=add"><?php print $text['addUser_link']; ?></a> ]</p>
+        <p>
+            [ <a href="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=add"><?php print $text['addUser_link']; ?></a> ]<br/>
+            [ <a href="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=listallusers"><?php print $text['listAllUsers_link']; ?></a> ]        
+        </p>
     </div> <!-- end #user_list -->
 </div> <!-- end #user_accounts -->
 <div id="user_data">
@@ -476,6 +481,46 @@ function updateUser(user_id)
     </fieldset>
 </div> <!-- end #user_rights -->
 <div class="clear"></div>
-<?php
+<?php 
+    if (isset($_GET['user_id'])) {
+        $userId     = PMF_Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT, 0);
+        echo '<script type="text/javascript">updateUser('.$userId.');</script>';
+    }
+
 } // end if ($userAction == 'list')
+
+// show list of all users
+if ($userAction == 'listallusers') {
+?>
+
+<h2><?php print $text['header']; ?></h2>
+<div id="user_message"><?php print $message; ?></div>
+    <table class="listrecords" style="width: 700px; float:left;">
+    <thead>
+        <tr>
+            <th class="listhead"><?php echo $PMF_LANG['ad_entry_id']?>:</th>
+            <th class="listhead"><?php echo $PMF_LANG['msgNewContentName']?></th>
+            <th class="listhead"><?php echo $PMF_LANG['msgNewContentMail']?></th>
+            <th class="listhead"><?php echo $PMF_LANG['ad_entry_action']?></th>
+        </tr>
+    </thead>
+        <tbody>
+        <?php 
+            foreach ($user->getAllUsers() as $userId) {
+                $user->getUserById($userId);
+        ?>
+            <tr>
+                <td class="list"><?php echo $user->getUserData('user_id')?></td>
+                <td class="list"><?php echo $user->getUserData('display_name')?></td>
+                <td class="list"><?php echo $user->getUserData('email')?></td>
+                <td class="list"><a href="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_id=<?php echo $user->getUserData('user_id')?>"><?php echo $PMF_LANG['ad_user_edit']?></a></td>
+            </tr>
+        <?php
+            }
+            
+        ?>
+        </tbody>
+    </table>
+<?php 
+} // end if ($userAction == 'listallusers')
 ?>

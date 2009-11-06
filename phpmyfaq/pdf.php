@@ -1,17 +1,8 @@
 <?php
 /**
  * PDF export
- *
- * @package    phpMyFAQ
- * @subpackage Frontend 
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Peter Beauvain <pbeauvain@web.de>
- * @author     Olivier Plathey <olivier@fpdf.org>
- * @author     Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
- * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since      2003-02-12
- * @version    SVN: $Id$ 
- * @copyright  2003-2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -22,6 +13,18 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   Frontend 
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Peter Beauvain <pbeauvain@web.de>
+ * @author    Olivier Plathey <olivier@fpdf.org>
+ * @author    Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @copyright 2003-2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2003-02-12 
  */
 
 require_once 'inc/Init.php';
@@ -57,17 +60,6 @@ if (is_null($currentCategory) || is_null($id)) {
 
 $faq = new PMF_Faq();
 $faq->getRecord($id);
-$pdfFile = $faq->buildPDFFile($currentCategory);
-
-// Sanity check: stop here if no PDF has been created
-if (empty($pdfFile) || (!file_exists($pdfFile))) {
-    header('HTTP/1.1 404 Not Found');
-    print 'PDF not available.';
-    exit();
-}
-
-$file = basename($pdfFile);
-$size = filesize($pdfFile);
 
 session_cache_limiter('private');
 header("Pragma: public");
@@ -77,12 +69,9 @@ header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 if (preg_match("/MSIE/i", $_SERVER["HTTP_USER_AGENT"])) {
     header("Content-type: application/pdf");
     header("Content-Transfer-Encoding: binary");
-    header("Content-Length: ".filesize($pdfFile));
     header("Content-Disposition: attachment; filename=".$id.".pdf" );
-    readfile($pdfFile);
 } else {
-    header("Location: ".$pdfFile."");
     header("Content-Type: application/pdf");
-    header("Content-Length: ".filesize($pdfFile));
-    readfile($pdfFile);
 }
+
+$faq->buildPDFFile($currentCategory);
