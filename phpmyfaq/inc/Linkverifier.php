@@ -1057,9 +1057,9 @@ function verifyEntryURL(id, lang)
         getDivElement(id, lang).className = "url-" + XmlRequest.responseText;
         if (typeof(allResponses[XmlRequest.responseText]) == "undefined") {
             getDivElement(id, lang).className = "url-noajax ";
-            target.innerHTML = allResponses['noajax'];
+            target.html(allResponses['noajax']);
         } else {
-            target.innerHTML = allResponses[XmlRequest.responseText];
+            target.html(allResponses[XmlRequest.responseText]);
         }
     }
 
@@ -1067,7 +1067,7 @@ function verifyEntryURL(id, lang)
     {
         //target.src = "images/url-noaccess.png";
         getDivElement(id, lang).className = "url-noaccess";
-        target.innerHTML = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-noaccess']); ?>";
+        target.html("<?php print($PMF_LANG['ad_linkcheck_feedback_url-noaccess']); ?>");
     }
 
 }
@@ -1104,13 +1104,13 @@ function ajaxOnDemandVerify(id, lang)
 
     function ajaxOnDemandVerify_success(XmlRequest)
     {
-        target.innerHTML = XmlRequest.responseText;
+        target.html(XmlRequest.responseText);
     }
 
     function ajaxOnDemandVerify_failure(XmlRequest)
     {
         //TODO: Assign string
-        target.innerHTML = 'LinkVerifier failed (url probe timed out?)';
+        target.html('LinkVerifier failed (url probe timed out?)');
     }
 }
 
