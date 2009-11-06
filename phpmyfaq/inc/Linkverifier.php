@@ -1033,7 +1033,11 @@ function verifyEntryURL(id, lang)
 
     var url = 'index.php';
     var pars = 'action=ajax&ajax=verifyURL&id=' + id + '&lang=' + lang;
-    var myAjax = new Ajax.Request( url, {method: 'get', parameters: pars, onComplete: verifyEntryURL_success, onFailure: verifyEntryURL_failure} );
+    var myAjax = new jQuery.ajax({url: url,
+                                 type: 'get',
+                                 data: pars,
+                                 complete: verifyEntryURL_success,
+                                 error: verifyEntryURL_failure});
 
     function verifyEntryURL_success(XmlRequest)
     {
@@ -1090,7 +1094,11 @@ function ajaxOnDemandVerify(id, lang)
     var target = $('#onDemandVerifyResult');
     var url = 'index.php';
     var pars = 'action=ajax&ajax=onDemandURL&id=' + id + '&lang=' + lang + '&lookup=1';
-    var myAjax = new Ajax.Request( url, {method: 'get', parameters: pars, onComplete: ajaxOnDemandVerify_success, onFailure: ajaxOnDemandVerify_failure} );
+    var myAjax = new jQuery.ajax({url: url,
+                                  type: 'get',
+                                  data: pars,
+                                  complete: ajaxOnDemandVerify_success,
+                                  error: ajaxOnDemandVerify_failure});
     //TODO: Assign string
     target.innerHTML = 'Querying LinkVerifier...';
 
