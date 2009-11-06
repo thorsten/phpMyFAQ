@@ -118,9 +118,9 @@ $oLnk->parse_string($content);
 $fixedContent = $content;
 
 // Search for href attributes only
-if (isset($oLnk->urlpool['href'])) {
-    $linkArray = array_unique($oLnk->urlpool['href']);
-    foreach ($linkArray as $_url) {
+$linkArray = $oLnk->getUrlpool();
+if (isset($linkArray['href'])) {
+    foreach (array_unique($linkArray['href']) as $_url) {
         if (!(strpos($_url, 'index.php?action=artikel') === false)) {
             // Get the Faq link title
             preg_match('/id=([\d]+)/ism', $_url, $matches);

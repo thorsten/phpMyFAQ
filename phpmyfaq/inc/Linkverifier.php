@@ -72,7 +72,7 @@ class PMF_Linkverifier
      *
      * @var mixed
      */
-    var $urlpool = array();
+    protected $urlpool = array();
 
     /* List of prohibited prefixes and messages
      *
@@ -149,6 +149,17 @@ class PMF_Linkverifier
 
         // load list of URLs to ignore / fail
         $this->loadConfigurationFromDB();
+    }
+
+    
+	/**
+	 * Get current urls
+	 * 
+     * @return array $urlpool url list
+     */
+    function getUrlpool()
+    {
+        return $this->urlpool;
     }
 
 
