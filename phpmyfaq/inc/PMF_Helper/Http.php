@@ -108,4 +108,19 @@ class PMF_Helper_Http extends PMF_Helper
         header('Vary: Negotiate,Accept');
         header('Content-type: ' . $this->contentType);
     }
+    
+    /**
+     * Returns a 404 header
+     * 
+     * @return void
+     */
+    public function printHTTPStatus404()
+    {
+        if (('cgi' == PMF_String::substr(PHP_SAPI, 0, 3)) || isset($_SERVER['ALL_HTTP'])) {
+            header('Status: 404 Not Found');
+        } else {
+            header('HTTP/1.0 404 Not Found');
+        }
+        exit();
+    }
 }

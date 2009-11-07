@@ -50,16 +50,6 @@ require PMF_ROOT_DIR .'/inc/Init.php';
 //
 PMF_String::init('utf-8', 'en');
 
-function printHTTPStatus404()
-{
-    if (('cgi' == PMF_String::substr(php_sapi_name(), 0, 3)) || isset($_SERVER['ALL_HTTP'])) {
-        header('Status: 404 Not Found');
-    } else {
-        header('HTTP/1.0 404 Not Found');
-    }
-    exit();
-}
-
 PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
@@ -96,7 +86,7 @@ if (!is_null($getgezip) && (1 == $getgezip)) {
         header('Content-Length: '.strlen($sitemapGz));
         print $sitemapGz;
     } else {
-        printHTTPStatus404();
+        PMF_Helper_Http::getInstance()->printHTTPStatus404();
     }
 } else {
     header('Content-Type: text/plain');
