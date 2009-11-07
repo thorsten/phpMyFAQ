@@ -82,16 +82,6 @@ function buildSitemapNode($location, $lastmod = null, $changeFreq = null, $prior
     return $node;
 }
 
-function printHTTPStatus404()
-{
-    if (('cgi' == PMF_String::substr(php_sapi_name(), 0, 3)) || isset($_SERVER['ALL_HTTP'])) {
-        header('Status: 404 Not Found');
-    } else {
-        header('HTTP/1.0 404 Not Found');
-    }
-    exit();
-}
-
 //
 // Future improvements
 // WHEN a User PMF Sitemap will be:
