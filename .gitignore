@@ -7,6 +7,7 @@
 # phpMyFAQ generated folders
 
 phpmyfaq/config/database.php
+phpmyfaq/config/database.bak.php
 phpmyfaq/config/index.html
 phpmyfaq/data*
 phpmyfaq/pdf*
