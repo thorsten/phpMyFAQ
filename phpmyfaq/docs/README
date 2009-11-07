@@ -1,4 +1,4 @@
-phpMyFAQ 2.6.0-alpha
+phpMyFAQ 2.6.0-beta
 Codename "Portia"
 
 Installation/Update:
@@ -7,30 +7,12 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 2.5.x:
-- moved all language files to UTF-8 (Anatoliy)
-- added TCPDF as replacement for FPDF library (Thorsten)
-- added support for TinyMCE translations (Aurimas Fi≈°eras)
-- added support for multi-language news (Thorsten)
-- added user adjustable template sets and styles (Anatoliy)
-- added support plurals in translations (Aurimas Fi≈°eras)
-- added share on Facebook link (Thorsten)
-- added a rest/json API (Thorsten)
-- added secure login if SSL is available (Tobias Hommel)
-- added FAQ entry dependent meta description (Thorsten)
-- improved attachment functionality (Anatoliy)
-- improved install script (Thorsten)
-- improved category view with description (Thorsten)
-- improved FAQ entry activation (Anatoliy)
-- improved user administration (Max Köhler)
-- improved FAQ entry workflow (Anatoliy, Thorsten)
-- removed Docbook XML export (Thorsten)
-- updated bundled TinyMCE editor component to version 3.2.7 (Max Köhler)
-- minor bugfixes (Thorsten)
+Changes since 2.6.0-alpha:
+- 
 
 CHANGELOG:
 
-Version 2.6.0-alpha - 2009-11-06
+Version 2.6.0-beta - 2009-11-
 - moved all language files to UTF-8 (Anatoliy)
 - added TCPDF as replacement for FPDF library (Thorsten)
 - added support for TinyMCE translations (Aurimas Fi≈°eras)
