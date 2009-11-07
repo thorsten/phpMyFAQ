@@ -129,19 +129,31 @@ if ($step == 2) {
     
     // First backup old inc/data.php, then backup new config/bak.database.php and copy inc/data.php 
     // to config/database.php
-    if (!@copy(PMF_ROOT_DIR . '/inc/data.php', PMF_ROOT_DIR . '/config/bak.database.php') &&
-        !@copy(PMF_ROOT_DIR . '/inc/data.php', PMF_ROOT_DIR . '/config/database.php')) {
-        print "<p class=\"error\"><strong>Error:</strong> The backup file ../config/bak.database.php could " .
-              "not be written. Please correct this!</p>";
-    } else {
-        $checkDatabaseSetupFile = true;
-    }
+	if (file_exists(PMF_ROOT_DIR . '/inc/data.php')) {
+	    if (!copy(PMF_ROOT_DIR . '/inc/data.php', PMF_ROOT_DIR . '/config/database.bak.php') ||
+            !copy(PMF_ROOT_DIR . '/inc/data.php', PMF_ROOT_DIR . '/config/database.php')) {
+            print "<p class=\"error\"><strong>Error:</strong> The backup file ../config/database.bak.php could " .
+                  "not be written. Please correct this!</p>";
+        } else {
+            $checkDatabaseSetupFile = true;
+        }
+	}
+	
+	// The backup an existing config/database.php
+	if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {
+		if (!copy(PMF_ROOT_DIR . '/config/database.php', PMF_ROOT_DIR . '/config/database.bak.php')) {
+            print "<p class=\"error\"><strong>Error:</strong> The backup file ../config/database.bak.php could " .
+                  "not be written. Please correct this!</p>";
+        } else {
+            $checkDatabaseSetupFile = true;
+        }
+	}
     
     // Now backup and move LDAP setup if available
     if (file_exists(PMF_ROOT_DIR . '/inc/dataldap.php')) {
-        if (!@copy(PMF_ROOT_DIR . '/inc/dataldap.php', PMF_ROOT_DIR . '/config/bak.ldap.php') &&
-            !@copy(PMF_ROOT_DIR . '/inc/dataldap.php', PMF_ROOT_DIR . '/config/ldap.php')) {
-            print "<p class=\"error\"><strong>Error:</strong> The backup file ../config/bak.ldap.php could " .
+        if (!copy(PMF_ROOT_DIR . '/inc/dataldap.php', PMF_ROOT_DIR . '/config/ldap.bak.php') ||
+            !copy(PMF_ROOT_DIR . '/inc/dataldap.php', PMF_ROOT_DIR . '/config/ldap.php')) {
+            print "<p class=\"error\"><strong>Error:</strong> The backup file ../config/ldap.bak.php could " .
                   "not be written. Please correct this!</p>";
         } else {
             $checkLdapSetupFile = true;
