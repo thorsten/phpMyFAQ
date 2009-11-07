@@ -106,7 +106,6 @@ if ($step == 1) {
     <li>phpMyFAQ 0.x</li>
     <li>phpMyFAQ 1.x</li>
 </ul>
-<<<<<<< HEAD
 <p><strong>Please make a full backup of your SQL tables before running this update.</strong></p>
 <?php 
 if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable($templateDir)) {
@@ -115,28 +114,6 @@ if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable($templateDir)
 ?>
 <h3 align="center">Your current phpMyFAQ version: <?php print $version; ?></p>
 <input name="version" type="hidden" value="<?php print $version; ?>"/>
-=======
-<p><strong>Please make a full backup of your database before running this update.</strong></p>
-
-<p>Please select your current version:</p>
-<select name="version" size="1">
-    <option value="1.6.0">phpMyFAQ 1.6.0 and later</option>
-    <option value="2.0.0-alpha">phpMyFAQ 2.0.0-alpha</option>
-    <option value="2.0.0-beta">phpMyFAQ 2.0.0-beta</option>
-    <option value="2.0.0-beta2">phpMyFAQ 2.0.0-beta2</option>
-    <option value="2.0.0-RC">phpMyFAQ 2.0.0-RC and later</option>
-    <option value="2.0.2">phpMyFAQ 2.0.2 and later</option>
-    <option value="2.5.0-alpha">phpMyFAQ 2.5.0-alpha</option>
-    <option value="2.5.0-alpha2">phpMyFAQ 2.5.0-alpha2</option>
-    <option value="2.5.0-beta">phpMyFAQ 2.5.0-beta</option>
-    <option value="2.5.0-RC">phpMyFAQ 2.5.0-RC and later</option>
-    <option value="2.5.0-RC3">phpMyFAQ 2.5.0-RC3</option>
-    <option value="2.5.0">phpMyFAQ 2.5.0</option>
-    <option value="2.5.1">phpMyFAQ 2.5.1</option>
-    <option value="2.5.2">phpMyFAQ 2.5.2</option>
-    <option value="2.5.3">phpMyFAQ 2.5.3 and later</option>
-</select>
->>>>>>> af7a825a8506aef520c03d2ae6d97d590b9df803
 
 <p class="center"><input type="submit" value="Go to step 2 of 4" class="button" /></p>
 </fieldset>
