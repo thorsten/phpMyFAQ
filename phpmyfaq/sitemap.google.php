@@ -11,13 +11,8 @@
  * The Google Sitemap protocol is described here:
  * http://www.google.com/webmasters/sitemaps/docs/en/protocol.html
  *
- * @package     phpMyFAQ
- * @access      public
- * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since       2006-06-26
- * @version     SVN: $Id$ 
- * @copyright   (c) 2006-2009 phpMyFAQ Team
- *
+ * PHP Version 5.2.0
+ * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -27,12 +22,16 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   SEO
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @copyright 2006-2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2006-06-26
  */
 
-// {{{ Constants
-/**#@+
-  * Google Sitemap specification related constants
-  */
 define('PMF_SITEMAP_GOOGLE_CHANGEFREQ_ALWAYS', 'always');
 define('PMF_SITEMAP_GOOGLE_CHANGEFREQ_HOURLY', 'hourly');
 define('PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY', 'daily');
@@ -46,28 +45,22 @@ define('PMF_SITEMAP_GOOGLE_MAX_FILE_LENGTH', 10485760); // 10MB
 define('PMF_SITEMAP_GOOGLE_PRIORITY_MIN', '0.0');
 define('PMF_SITEMAP_GOOGLE_PRIORITY_MAX', '1.0');
 define('PMF_SITEMAP_GOOGLE_PRIORITY_DEFAULT', '0.5');
-/**#@-*/
-/**#@+
-  * HTTP parameters
-  */
+
+
 define('PMF_SITEMAP_GOOGLE_GET_GZIP', 'gz');
 define('PMF_SITEMAP_GOOGLE_GET_INDEX', 'idx');
 define('PMF_SITEMAP_GOOGLE_FILENAME', 'sitemap.xml');
 define('PMF_SITEMAP_GOOGLE_FILENAME_GZ', 'sitemap.xml.gz');
 define('PMF_SITEMAP_GOOGLE_INDEX_FILENAME', 'sitemap_index.xml');
-/**#@-*/
-/**#@+
-  * System pages definitions
-  */
-define('PMF_ROOT_DIR', dirname(__FILE__));
-/**#@-*/
-// }}}
 
-// {{{ Includes
-require_once(PMF_ROOT_DIR.'/inc/Init.php');
-require_once(PMF_ROOT_DIR.'/inc/Link.php');
-require_once(PMF_ROOT_DIR.'/inc/Faq.php');
-// }}}
+define('PMF_ROOT_DIR', dirname(__FILE__));
+
+require PMF_ROOT_DIR .'/inc/Init.php';
+
+//
+// Initalizing static string wrapper
+//
+PMF_String::init('utf-8', 'en');
 
 // {{{ Functions
 function buildSitemapNode($location, $lastmod = null, $changeFreq = null, $priority = null)
@@ -80,7 +73,7 @@ function buildSitemapNode($location, $lastmod = null, $changeFreq = null, $prior
     }
     $node =
          '<url>'
-        .'<loc>'.PMF_String::htmlspecialchars(utf8_encode($location)).'</loc>'
+        .'<loc>'.PMF_String::htmlspecialchars($location).'</loc>'
         .'<lastmod>'.$lastmod.'</lastmod>'
         .'<changefreq>'.$changeFreq.'</changefreq>'
         .(isset($priority) ? '<priority>'.$priority.'</priority>' : '')
@@ -91,20 +84,13 @@ function buildSitemapNode($location, $lastmod = null, $changeFreq = null, $prior
 
 function printHTTPStatus404()
 {
-    if (    ('cgi' == PMF_String::substr(php_sapi_name(), 0, 3))
-         || isset($_SERVER['ALL_HTTP'])
-        )
-    {
+    if (('cgi' == PMF_String::substr(php_sapi_name(), 0, 3)) || isset($_SERVER['ALL_HTTP'])) {
         header('Status: 404 Not Found');
-    }
-    else
-    {
+    } else {
         header('HTTP/1.0 404 Not Found');
     }
-
     exit();
 }
-// }}}
 
 //
 // Future improvements
@@ -142,7 +128,7 @@ $sitemap .= buildSitemapNode(PMF_Link::getSystemUri('/sitemap.google.php'),
                 PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY,
                 PMF_SITEMAP_GOOGLE_PRIORITY_MAX
             );
-
+           
 // nth entry: each faq
 foreach ($items as $item) {
     $priority = PMF_SITEMAP_GOOGLE_PRIORITY_DEFAULT;
