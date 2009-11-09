@@ -776,7 +776,7 @@ $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => "checkbox", 1 => "U
 $LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "Rechten level");
 $LANG_CONF['spam.enableSafeEmail'] = array(0 => "checkbox", 1 => "Geef de gebruikers e-mail op een veilige manier weer (standaard: ingesteld).");
 $LANG_CONF['spam.checkBannedWords'] = array(0 => "checkbox", 1 => "Controlleer publiekelijk formulier tegen verboden woorden (standaard: ingesteld).");
-$LANG_CONF['spam.enableCatpchaCode'] = array(0 => "checkbox", 1 => "Gebruik een catpcha code om publiekelijk formulier verzending toe te staan (standaard: ingesteld).");
+$LANG_CONF['spam.enableCaptchaCode'] = array(0 => "checkbox", 1 => "Gebruik een catpcha code om publiekelijk formulier verzending toe te staan (standaard: ingesteld).");
 $LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "aantal verwandte artikelen");
 $LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'Record sorting (according to property)');
 $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Record sorting (descending or ascending)');
