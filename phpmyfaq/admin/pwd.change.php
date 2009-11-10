@@ -2,12 +2,11 @@
 /**
  * Form to change password of the current user
  *
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2003-02-23
- * @version    SVN: $Id$
- * @copyright  2003-2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2003-2009 phpMyFAQ Team
+ * @since     2003-02-23
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -77,7 +76,7 @@ if ($permission["passwd"]) {
     <label class="left" for="bpass"><?php print $PMF_LANG["ad_passwd_con"]; ?></label>
     <input type="password" name="bpass" size="30" /><br />
 
-    <input class="submit" style="margin-left: 190px;" type="submit" value="<?php print $PMF_LANG["ad_passwd_change"]; ?>" /></div>
+    <input class="submit" style="margin-left: 190px;" type="submit" value="<?php print $PMF_LANG["ad_passwd_change"]; ?>" />
     </fieldset>
     </form>
 <?php

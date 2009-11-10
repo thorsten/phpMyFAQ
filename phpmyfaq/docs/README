@@ -33,7 +33,10 @@ Version 2.6.0-beta - 2009-11-
 - updated bundled TinyMCE editor component to version 3.2.7 (Max Köhler)
 - minor bugfixes (Thorsten)
 
-Version 2.5.4 - 2009-11-
+Version 2.5.5 - 2009-12
+-
+
+Version 2.5.4 - 2009-11-10
 - Fixed various PostgreSQL related issues (Anatoliy, Thorsten)
 - updated Dutch translation
 - updated Brazilian Portuguese translation

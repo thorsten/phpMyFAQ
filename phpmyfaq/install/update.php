@@ -8,7 +8,6 @@
  * @author     Thomas Melchinger <t.melchinger@uni.de>
  * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since      2002-01-10
- * @version    SVN: $Id$
  * @copyright  2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
