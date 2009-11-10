@@ -24,7 +24,4 @@
         <input class="submit" type="submit" name="submit" value="{msgNewContentSubmit}" />
     </div>
 
-    <br />
-
-    </fieldset>
 	</form>
