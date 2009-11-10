@@ -17,7 +17,7 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.5.4 - 2009-11-
+Version 2.5.4 - 2009-11-10
 - Fixed various PostgreSQL related issues (Anatoliy, Thorsten)
 - updated Dutch translation
 - updated Brazilian Portuguese translation
