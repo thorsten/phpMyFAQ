@@ -363,7 +363,7 @@ if (!phpmyfaq_check()) {
     die();
 }
 
-$dirs = array('/attachments', '/data', '/images/Image', '/inc', '/pdf', '/xml',);
+$dirs       = array('/attachments', '/data', '/images/Image', '/inc', '/xml');
 $faileddirs = array();
 foreach ($dirs as $dir) {
     if (!@is_dir(PMF_ROOT_DIR.$dir)) {
