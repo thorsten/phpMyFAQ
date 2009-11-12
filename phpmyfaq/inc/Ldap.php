@@ -92,11 +92,13 @@ class PMF_Ldap
         }
 
         // optionally set Bind version
-        foreach ($PMF_LDAP['ldap_options'] as $key => $value) { 
-            if (!ldap_set_option($this->ds, $key, $value)) {
-                $this->error = 'Unable to set LDAP option "'.$key.'" to "'.$value.'" (Error: '.ldap_error($this->ds).')';
-                $this->errno = ldap_errno($this->ds);
-            }
+        if (isset($PMF_LDAP['ldap_options'])) {
+        	foreach ($PMF_LDAP['ldap_options'] as $key => $value) { 
+            	if (!ldap_set_option($this->ds, $key, $value)) {
+           			$this->error = 'Unable to set LDAP option "'.$key.'" to "'.$value.'" (Error: '.ldap_error($this->ds).')';
+                	$this->errno = ldap_errno($this->ds);
+            	}
+        	}
         }
 
         $ldapbind = ldap_bind($this->ds, $ldap_user, $ldap_password);

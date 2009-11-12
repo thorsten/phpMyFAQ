@@ -349,7 +349,7 @@ if (obj.options.length > obj.selectedIndex) {
 <fieldset class="installation">
 <legend class="installation">LDAP information</legend>
 
-    <label class="left">Add LDAP authentication?</label>
+    <label class="left">Enable LDAP support?</label>
     <input class="checkbox" type="checkbox" name="ldap_enabled" value="yes" /><br />
 
     <label class="left">LDAP server host:</label>
