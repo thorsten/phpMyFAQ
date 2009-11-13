@@ -63,16 +63,15 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
     /**
      * Create and return an instance
      * 
-     * @param string $encoding
      * @param string $language
      * 
      * @return PMF_String_Basic
      */
-    public static function getInstance($encoding = null, $language = 'en')
+    public static function getInstance($language = 'en')
     {
         if (!self::$instance) {
             self::$instance = new self;
-            self::$instance->encoding = null == $encoding ? self::DEFAULT_ENCODING : $encoding;
+            self::$instance->encoding = self::DEFAULT_ENCODING;
             self::$instance->language = PMF_Language::isASupportedLanguage($language) ? $language : self::DEFAULT_LANGUAGE;
         }
        

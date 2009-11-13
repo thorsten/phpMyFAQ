@@ -75,7 +75,7 @@ $plr = new PMF_Language_Plurals($PMF_LANG);
 //
 // Initalizing static string wrapper
 //
-PMF_String::init($PMF_LANG["metaCharset"], $LANGCODE);
+PMF_String::init($LANGCODE);
 
 /**
  * Initialize attachment factory

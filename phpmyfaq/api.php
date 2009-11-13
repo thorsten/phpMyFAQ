@@ -60,7 +60,7 @@ if (PMF_Language::isASupportedLanguage($language)) {
     require 'lang/language_en.php';
 }
 
-PMF_String::init('utf-8', $language);
+PMF_String::init($language);
 
 // Set empty result
 $result = array();

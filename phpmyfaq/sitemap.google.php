@@ -60,7 +60,7 @@ require PMF_ROOT_DIR .'/inc/Init.php';
 //
 // Initalizing static string wrapper
 //
-PMF_String::init('utf-8', 'en');
+PMF_String::init('en');
 
 // {{{ Functions
 function buildSitemapNode($location, $lastmod = null, $changeFreq = null, $priority = null)

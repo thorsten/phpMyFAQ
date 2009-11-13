@@ -45,7 +45,7 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
 //
 // Initalizing static string wrapper
 //
-PMF_String::init($PMF_LANG["metaCharset"], $LANGCODE);
+PMF_String::init($LANGCODE);
 
 $category = new PMF_Category();
 

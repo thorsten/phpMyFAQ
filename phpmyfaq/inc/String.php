@@ -1,15 +1,9 @@
 <?php
 /**
- * The string wrapper class. 
+ * The main string wrapper class. 
  *
- * @package    phpMyFAQ
- * @subpackage PMF_String
- * @license    MPL
- * @author     Anatoliy Belsky <ab@php.net>
- * @since      2009-04-06
- * @version    SVN: $Id$
- * @copyright  2009 phpMyFAQ Team
- *
+ * PHP Version 5.2.0
+ * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -19,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_String
+ * @author    Anatoliy Belsky <ab@php.net>
+ * @copyright 2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-04-06
  */
 
 /**
@@ -30,13 +32,13 @@
  * the string methods behaviour is identical to that of the same named 
  * single byte string functions.
  *
- * @package    phpMyFAQ
- * @subpackage PMF_String
- * @license    MPL
- * @author     Anatoliy Belsky <ab@php.net>
- * @since      2009-04-06
- * @version    SVN: $Id$
- * @copyright  2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   PMF_String
+ * @author    Anatoliy Belsky <ab@php.net>
+ * @copyright 2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-04-06
  */
 class PMF_String
 {
@@ -47,7 +49,6 @@ class PMF_String
      */
     private static $instance;
     
-    
     /**
      * Constructor
      *
@@ -55,24 +56,25 @@ class PMF_String
      */
     private final function __construct()
     {
+    	
     }
-    
     
     /** 
      * Initalize myself
      * 
+     * @param string $language Language
+     * 
      * @return void
      */ 
-    public static function init($encoding = null, $language = 'en')
+    public static function init($language = 'en')
     {
         if (!self::$instance) {
-            $encoding = 'utf8' == strtolower($encoding) ? 'utf-8' : $encoding;
             if (extension_loaded('mbstring') && function_exists('mb_regex_encoding')) {
-                self::$instance = PMF_String_Mbstring::getInstance($encoding, $language);
-            } else if($encoding == 'utf-8' && self::isLangUTF8ToLatinConvertable($language)) {
-                self::$instance = PMF_String_UTF8ToLatinConvertable::getInstance($encoding, $language);
+                self::$instance = PMF_String_Mbstring::getInstance($language);
+            } elseif(self::isLangUTF8ToLatinConvertable($language)) {
+                self::$instance = PMF_String_UTF8ToLatinConvertable::getInstance($language);
             } else {
-                self::$instance = PMF_String_Basic::getInstance($encoding, $language);
+                self::$instance = PMF_String_Basic::getInstance($language);
             }
         }
     }
@@ -186,6 +188,7 @@ class PMF_String
     
     /**
 	 * Check if a language could be converted to iso-8859-1
+	 * 
 	 * @param string $language
 	 * 
 	 * @return boolean
@@ -204,6 +207,7 @@ class PMF_String
     
     /**
 	 * Get last occurence of a string within another
+	 * 
 	 * @param string $haystack
 	 * @param string $needle
 	 * 
@@ -216,8 +220,8 @@ class PMF_String
     
     
     /**
-     * 
      * Count substring occurences
+     * 
      * @param string $haystack
      * @param string $needle
      * 
@@ -231,6 +235,7 @@ class PMF_String
     
     /**
 	 * Find position of last occurrence of a char in a string
+	 * 
 	 * @param string $haystack
 	 * @param string $needle
 	 * @param int $offset
@@ -244,8 +249,8 @@ class PMF_String
     
     
     /**
-     * 
      * Match a regexp
+     * 
      * @param string $pattern
      * @param string $subject
      * @param array &$matches
@@ -261,8 +266,8 @@ class PMF_String
     
     
     /**
-     * 
      * Match a regexp globally
+     * 
      * @param string $pattern
      * @param string $subject
      * @param array &$matches
@@ -279,6 +284,7 @@ class PMF_String
     
     /**
      * Split string by a regexp
+     * 
      * @param string $pattern
      * @param string $subject
      * @param int $limit
@@ -294,6 +300,7 @@ class PMF_String
     
     /**
      * Search and replace by a regexp using a callback
+     * 
      * @param string|array $pattern
      * @param function $callback
      * @param string|array $subject
@@ -310,6 +317,7 @@ class PMF_String
     
     /**
      * Search and replace by a regexp
+     * 
      * @param string|array $pattern
      * @param string|array $replacement
      * @param string|array $subject
@@ -337,6 +345,7 @@ class PMF_String
     
     /**
      * Convert special chars to html entities
+     * 
      * @param string $str
      * @param int $quote_stype
      * @param string $charset

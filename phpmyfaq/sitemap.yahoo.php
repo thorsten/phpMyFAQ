@@ -48,7 +48,7 @@ require PMF_ROOT_DIR .'/inc/Init.php';
 //
 // Initalizing static string wrapper
 //
-PMF_String::init('utf-8', 'en');
+PMF_String::init('en');
 
 PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
