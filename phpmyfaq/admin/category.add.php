@@ -1,13 +1,8 @@
 <?php
 /**
  * Adds a category
- *
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2003-12-20
- * @copyright  2003-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * 
+ * PHP Version 5.2
  * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2003-2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2003-12-20
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -52,11 +55,11 @@ if ($permission["addcateg"]) {
     }
 ?>
     <label class="left"><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
-    <input type="text" name="name" size="30" style="width: 250px;" /><br />
+    <input type="text" name="name" size="30" style="width: 300px;" /><br />
 
     <label class="left"><?php print $PMF_LANG["ad_categ_desc"]; ?>:</label>
-    <input type="text" name="description" size="30" style="width: 250px;" /><br />
-
+    <textarea name="description" rows="3" cols="80" style="width: 300px;"></textarea><br />
+    
     <label class="left"><?php print $PMF_LANG["ad_categ_owner"]; ?>:</label>
     <select name="user_id" size="1">
     <?php print $user->getAllUserOptions(1); ?>
