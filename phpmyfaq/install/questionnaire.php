@@ -6,12 +6,7 @@
  * to phpMyFAQ.de. For privacy reasons we try to collect only data which aren't private
  * or don't give any information which might help to identify the user.
  *
- * @category  phpMyFAQ
- * @package   PMF_Questionnaire_Data
- * @author    Johannes Schlueter <johannes@php.net>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2007-03-17
- * @copyright 2007-2009 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -22,6 +17,15 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Questionnaire_Data
+ * @author    Johannes Schlueter <johannes@php.net>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2007-2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2007-03-17
  */
 
 /**
@@ -31,8 +35,10 @@
  * @package   PMF_Questionnaire_Data
  * @author    Johannes Schlueter <johannes@php.net>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2007-03-17
  * @copyright 2007-2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2007-03-17
  */
 class PMF_Questionnaire_Data
 {
@@ -67,7 +73,7 @@ class PMF_Questionnaire_Data
      */
     function __construct(Array $config, $oldversion = '0')
     {
-        $this->config = $config;
+        $this->config               = $config;
         $this->config['oldversion'] = $oldversion;
     }
 
