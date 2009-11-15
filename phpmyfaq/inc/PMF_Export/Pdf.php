@@ -506,11 +506,12 @@ class PMF_Export_Pdf extends FPDF
     *
     * @param  string $url URL
     * @param  string $txt the title of the link
+    * 
     * @return void
     */
     private function PutLink($url, $txt)
     {
-        if (!strpos($url, 'http://')) {
+        if (false === strpos($url, 'http://')) {
             $url = 'http://' . $_SERVER['HTTP_HOST'] . EndSlash(dirname($_SERVER['PHP_SELF'])) . $url;
         }
         if ($this->isFullExport) {
