@@ -1,13 +1,8 @@
 <?php
 /**
  * The main Sitemap class
- *
- * @package    phpMyFAQ
- * @subpackage PMF_Sitemap
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2007-03-30
- * @version    SVN: $Id$
- * @copyright  2007-2008 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,10 +13,29 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_Sitemap
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2007-2008 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2007-03-30
  */
 
 require_once PMF_INCLUDE_DIR . '/Link.php';
 
+/**
+ * PMF_Sitemap 
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Sitemap
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2007-2008 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2007-03-30
+ */
 class PMF_Sitemap
 {
     /**
@@ -69,14 +83,14 @@ class PMF_Sitemap
     /**
      * Constructor
      *
-     * @param  integer $user     User
-     * @param  array   $groups   Groupss
-     * @since  2007-03-30
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param integer $user   User
+     * @param array   $groups Groups
+     * 
+     * @return PMF_Sitemap
      */
     public function __construct($user = null, $groups = null)
     {
-        global $DB, $faqconfig;
+        global $DB;
 
         $this->db       = PMF_Db::getInstance();
         $this->language = PMF_Language::$language;
@@ -92,7 +106,7 @@ class PMF_Sitemap
         } else {
             $this->groups       = $groups;
         }
-        if ($faqconfig->get('main.permLevel') == 'medium') {
+        if (PMF_Configuration::getInstance()->get('main.permLevel') == 'medium') {
             $this->groupSupport = true;
         }
     }
@@ -319,10 +333,10 @@ class PMF_Sitemap
                     $row->id,
                     $row->lang);
 
-                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
                 $oLink->itemTitle = $row->thema;
-                $oLink->text = $title;
-                $oLink->tooltip = $title;
+                $oLink->text      = $title;
+                $oLink->tooltip   = $title;
 
                 $writeMap .= '<li>'.$oLink->toHtmlAnchor().'<br />'."\n";
                 $writeMap .= chopString(strip_tags($row->snap), 25). " ...</li>\n";
