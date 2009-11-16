@@ -515,21 +515,30 @@ if (!function_exists('quoted_printable_encode')) {
 	    $return = PMF_String::preg_replace('!=\ ([A-F0-9])!', '=0\\1', $return);
 	    // Einfuegen von QP-Breaks (=\r\n)
 	    if (PMF_String::strlen($return) > 75) {
-		$length = PMF_String::strlen($return); $offset = 0;
-		do {
-		    $step = 76;
-		    $add_mode = (($offset+$step) < $length) ? 1 : 0;
-		    $auszug = PMF_String::substr($return, $offset, $step);
-		    if (PMF_String::preg_match('!\=$!', $auszug))   $step = 75;
-		    if (PMF_String::preg_match('!\=.$!', $auszug))  $step = 74;
-		    if (PMF_String::preg_match('!\=..$!', $auszug)) $step = 73;
-		    $auszug = PMF_String::substr($return, $offset, $step);
-		    $offset += $step;
-		    $schachtel .= $auszug;
-		    if (1 == $add_mode) $schachtel.= '='."\r\n";
+			$length = PMF_String::strlen($return); $offset = 0;
+			do {
+		    	$step     = 76;
+		    	$add_mode = (($offset+$step) < $length) ? 1 : 0;
+		    	$auszug   = PMF_String::substr($return, $offset, $step);
+		    	if (PMF_String::preg_match('!\=$!', $auszug)) {
+		    	    $step = 75;
+		    	}  
+		    	if (PMF_String::preg_match('!\=.$!', $auszug)) { 
+		    	    $step = 74;
+		    	}
+		    	if (PMF_String::preg_match('!\=..$!', $auszug)) {
+		    	    $step = 73;
+		    	}
+		    			    
+		    	$auszug     = PMF_String::substr($return, $offset, $step);
+		    	$offset    += $step;
+		    	$schachtel .= $auszug;
+		    	if (1 == $add_mode) $schachtel.= '='."\r\n";
 		    } while ($offset < $length);
-		$return = $schachtel;
+		
+		    $return = $schachtel;
 		}
+		
 	    $return = PMF_String::preg_replace('!\.$!', '. ', $return);
 	    return PMF_String::preg_replace('!(\r\n|\r|\n)$!', '', $return)."\r\n";
 	}
