@@ -8,7 +8,8 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.6.0-alpha:
-- 
+- updated Greek translation (Periklis Tsirakidis)
+- fixed some minor issues (Thorsten)
 
 CHANGELOG:
 
@@ -31,6 +32,7 @@ Version 2.6.0-beta - 2009-11-
 - improved FAQ entry workflow (Anatoliy, Thorsten)
 - removed Docbook XML export (Thorsten)
 - updated bundled TinyMCE editor component to version 3.2.7 (Max Köhler)
+- updated Greek translation (Periklis Tsirakidis)
 - minor bugfixes (Thorsten)
 
 Version 2.5.5 - 2009-12
