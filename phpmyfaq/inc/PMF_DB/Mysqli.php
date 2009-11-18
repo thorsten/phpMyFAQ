@@ -68,9 +68,6 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      * @param   string $password
      * @param   string $db_name
      * @return  boolean true, if connected, otherwise false
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-02-21
      */
     public function connect($host, $user, $passwd, $db)
     {
@@ -79,6 +76,12 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
             PMF_Db::errorPage(mysqli_connect_error());
             die();
         }
+        
+        /* change character set to UTF-8 */
+        if (!$this->conn->set_charset('utf8')) {
+        	PMF_Db::errorPage($this->error());
+        }
+        
         return true;
     }
 
