@@ -105,7 +105,7 @@ $tpl->processTemplate ("writeContent", array(
     'editThisEntry'             => $editThisEntry,
     'writeCommentMsg'           => $commentMessage,
     'msgWriteComment'           => $PMF_LANG['newsWriteComment'],
-    'writeSendAdress'           => $_SERVER['PHP_SELF'].'?'.$sids.'action=savecomment',
+    'writeSendAdress'           => '?'.$sids.'action=savecomment',
     'newsId'                    => $news_id,
     'newsLang'                  => $news['lang'],
     'msgCommentHeader'          => $PMF_LANG['msgCommentHeader'],

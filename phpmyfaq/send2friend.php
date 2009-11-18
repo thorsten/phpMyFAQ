@@ -6,7 +6,6 @@
  * @subpackage Frontend
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2002-09-16
- * @version    SVN: $Id$
  * @copyright  2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -32,22 +31,21 @@ if (!is_null($showCaptcha)) {
     exit;
 }
 
-$faqsession->userTracking('send2friend',0);
+$faqsession->userTracking('send2friend', 0);
 
 $cat     = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 $id      = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $artlang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
 
-$send2friendLink = sprintf('http://%s%s?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-    $_SERVER['HTTP_HOST'],
-    $_SERVER['PHP_SELF'],
+$send2friendLink = sprintf('http://%s/index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+    $faqconfig->get('main.referenceURL'),
     $cat,
     $id,
     urlencode($artlang));
 
 $tpl->processTemplate ('writeContent', array(
     'msgSend2Friend'     => $PMF_LANG['msgSend2Friend'],
-    'writeSendAdress'    => $_SERVER['PHP_SELF'].'?'.$sids.'action=mailsend2friend',
+    'writeSendAdress'    => '?'.$sids.'action=mailsend2friend',
     'msgS2FReferrer'     => 'link',
     'msgS2FName'         => $PMF_LANG['msgS2FName'],
     'msgS2FEMail'        => $PMF_LANG['msgS2FEMail'],

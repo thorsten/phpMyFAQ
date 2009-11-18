@@ -308,7 +308,7 @@ $tpl->processTemplate ("writeContent", array(
     'msgVoteSubmit'                 => $PMF_LANG['msgVoteSubmit'],
     'writeCommentMsg'               => $commentMessage,
     'msgWriteComment'               => $PMF_LANG['msgWriteComment'],
-    'writeSendAdress'               => $_SERVER['PHP_SELF'].'?'.$sids.'action=savecomment',
+    'writeSendAdress'               => '?'.$sids.'action=savecomment',
     'id'                            => $record_id,
     'lang'                          => $lang,
     'msgCommentHeader'              => $PMF_LANG['msgCommentHeader'],

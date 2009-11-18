@@ -397,7 +397,7 @@ if (!isset($stickyRecordsParams['error'])) {
 
 if ($faqconfig->get('main.enableRewriteRules')) {
     $links_template_vars = array(
-        "faqHome"             => $_SERVER['PHP_SELF'],
+        "faqHome"             => $faqconfig->get('main.referenceURL'),
         "msgSearch"           => '<a href="' . $systemUri . 'search.html">'.$PMF_LANG["msgAdvancedSearch"].'</a>',
         'msgAddContent'       => '<a href="' . $systemUri . 'addcontent.html">'.$PMF_LANG["msgAddContent"].'</a>',
         "msgQuestion"         => '<a href="' . $systemUri . 'ask.html">'.$PMF_LANG["msgQuestion"].'</a>',
@@ -408,25 +408,23 @@ if ($faqconfig->get('main.enableRewriteRules')) {
         "allCategories"       => '<a href="' . $systemUri . 'showcat.html">'.$PMF_LANG["msgShowAllCategories"].'</a>',
         "writeSendAdress"     => $systemUri . 'search.html',
         'showInstantResponse' => '<a href="' . $systemUri . 'instantresponse.html">'.$PMF_LANG['msgInstantResponse'].'</a>',
-        'showSitemap'         => getLinkHtmlAnchor($_SERVER['PHP_SELF'].'?'.$sids.'action=sitemap&amp;lang='.$LANGCODE, $PMF_LANG['msgSitemap']),
-        'opensearch'          => $systemUri . 'search.html'
-        );
+        'showSitemap'         => getLinkHtmlAnchor('index.php?'.$sids.'action=sitemap&amp;lang='.$LANGCODE, $PMF_LANG['msgSitemap']),
+        'opensearch'          => $systemUri . 'search.html');
 } else {
     $links_template_vars = array(
-        "faqHome"               => $_SERVER['PHP_SELF'],
-        "msgSearch"             => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=search">'.$PMF_LANG["msgAdvancedSearch"].'</a>',
-        "msgAddContent"         => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=add">'.$PMF_LANG["msgAddContent"].'</a>',
-        "msgQuestion"           => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=ask">'.$PMF_LANG["msgQuestion"].'</a>',
-        "msgOpenQuestions"      => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=open">'.$PMF_LANG["msgOpenQuestions"].'</a>',
-        "msgHelp"               => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=help">'.$PMF_LANG["msgHelp"].'</a>',
-        "msgContact"            => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=contact">'.$PMF_LANG["msgContact"].'</a>',
-        "allCategories"         => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=show">'.$PMF_LANG["msgShowAllCategories"].'</a>',
-        "backToHome"            => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'">'.$PMF_LANG["msgHome"].'</a>',
-        "writeSendAdress"       => $_SERVER['PHP_SELF'].'?'.$sids.'action=search',
-        'showInstantResponse'   => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=instantresponse">'.$PMF_LANG['msgInstantResponse'].'</a>',
-        'showSitemap'           => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=sitemap&amp;lang='.$LANGCODE.'">'.$PMF_LANG['msgSitemap'].'</a>',
-        'opensearch'            => $_SERVER['PHP_SELF'].'?'.$sids.'action=search',
-        );
+        "faqHome"             => $faqconfig->get('main.referenceURL'),
+        "msgSearch"           => '<a href="index.php?'.$sids.'action=search">'.$PMF_LANG["msgAdvancedSearch"].'</a>',
+        "msgAddContent"       => '<a href="index.php?'.$sids.'action=add">'.$PMF_LANG["msgAddContent"].'</a>',
+        "msgQuestion"         => '<a href="index.php?'.$sids.'action=ask">'.$PMF_LANG["msgQuestion"].'</a>',
+        "msgOpenQuestions"    => '<a href="index.php?'.$sids.'action=open">'.$PMF_LANG["msgOpenQuestions"].'</a>',
+        "msgHelp"             => '<a href="index.php?'.$sids.'action=help">'.$PMF_LANG["msgHelp"].'</a>',
+        "msgContact"          => '<a href="index.php?'.$sids.'action=contact">'.$PMF_LANG["msgContact"].'</a>',
+        "allCategories"       => '<a href="index.php?'.$sids.'action=show">'.$PMF_LANG["msgShowAllCategories"].'</a>',
+        "backToHome"          => '<a href="index.php?'.$sids.'">'.$PMF_LANG["msgHome"].'</a>',
+        "writeSendAdress"     => '?'.$sids.'action=search',
+        'showInstantResponse' => '<a href="index.php?'.$sids.'action=instantresponse">'.$PMF_LANG['msgInstantResponse'].'</a>',
+        'showSitemap'         => '<a href="index.php?'.$sids.'action=sitemap&amp;lang='.$LANGCODE.'">'.$PMF_LANG['msgSitemap'].'</a>',
+        'opensearch'          => '?'.$sids.'action=search');
 }
 
 //
@@ -472,7 +470,7 @@ if (isset($auth)) {
         'currentuser'       => $user->getUserData('display_name'),
         'printAdminPath'    => (in_array(true, $permission)) ? 'admin/index.php' : '#',
         'adminSection'      => $PMF_LANG['adminSection'],
-        'printLogoutPath'   => $_SERVER['PHP_SELF'].'?action=logout',
+        'printLogoutPath'   => 'index.php?action=logout',
         'logout'            => $PMF_LANG['ad_menu_logout'])
     );
 } else {

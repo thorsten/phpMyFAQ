@@ -37,7 +37,7 @@ $tpl->processTemplate(
         'msgInstantResponse'            => $PMF_LANG['msgInstantResponse'],
         'msgDescriptionInstantResponse' => $PMF_LANG['msgDescriptionInstantResponse'],
         'searchString'                  => $searchString,
-        'writeSendAdress'               => $_SERVER['PHP_SELF'].'?'.$sids.'action=instantresponse',
+        'writeSendAdress'               => '?'.$sids.'action=instantresponse',
         'ajaxlanguage'                  => $LANGCODE,
         'msgSearchWord'                 => $PMF_LANG['msgSearchWord'],
         'printInstantResponse'          => $printInstantResponse));
