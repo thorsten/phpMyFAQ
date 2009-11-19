@@ -529,7 +529,7 @@ if ($step == 4) {
                 print "</div>";
                 die();
             }
-            wait(25);
+            wait(10);
             $count++;
             if (!($count % 10)) {
                 ob_flush();
@@ -586,7 +586,7 @@ if ($step == 4) {
                 print "</div>";
                 die();
             }
-            wait(25);
+            wait(10);
         }
     }
 
