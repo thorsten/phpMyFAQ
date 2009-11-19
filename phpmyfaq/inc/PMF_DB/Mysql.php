@@ -2,15 +2,8 @@
 /**
  * The PMF_DB_Mysql class provides methods and functions for a MySQL 4.0.x
  * and higher database.
- *
- * @package    phpMyFAQ
- * @subpackage PMF_DB
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Meikel Katzengreis <meikel@katzengreis.com>
- * @author     Tom Rochester <tom.rochester@gmail.com>
- * @package    2003-02-24
- * @copyright  2003-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * 
+ * PHP Version 5.2.0
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -21,20 +14,30 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Db
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Meikel Katzengreis <meikel@katzengreis.com>
+ * @author    Tom Rochester <tom.rochester@gmail.com>
+ * @copyright 2003-2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @package   2003-02-24
  */
-
 
 /**
  * PMF_DB_Mysql
  *
- * @package    phpMyFAQ
- * @subpackage PMF_DB
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Meikel Katzengreis <meikel@katzengreis.com>
- * @author     Tom Rochester <tom.rochester@gmail.com>
- * @package    2003-02-24
- * @copyright  2003-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * @category  phpMyFAQ
+ * @package   PMF_Db
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Meikel Katzengreis <meikel@katzengreis.com>
+ * @author    Tom Rochester <tom.rochester@gmail.com>
+ * @copyright 2003-2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @package   2003-02-24
  */
 class PMF_DB_Mysql implements PMF_DB_Driver 
 {
@@ -60,14 +63,13 @@ class PMF_DB_Mysql implements PMF_DB_Driver
     public $tableNames = array();
 
     /**
-     * Connects to the database.
-     *
-     * This function connects to a MySQL database
-     *
-     * @param  string  $host     Hostname
-     * @param  string  $username Username
-     * @param  string  $password Password
-     * @param  string  $db_name  Database name
+     * Connects to the database
+     * 
+     * @param string $host     MySQL Hostname
+     * @param string $username MySQL Username
+     * @param string $password MySQL Password
+     * @param string $db_name  MySQL Database name
+     * 
      * @return boolean TRUE, if connected, otherwise false
      */
     public function connect ($host, $user, $password, $db)
@@ -77,6 +79,13 @@ class PMF_DB_Mysql implements PMF_DB_Driver
             PMF_Db::errorPage($this->error());
             die();
         }
+        
+        if (version_compare(PHP_VERSION, '5.2.3', '>')) {
+        	mysql_set_charset('utf8', $this->conn);
+        } else {
+        	$this->query('SET NAMES utf8');
+        }
+        
         return mysql_select_db($db, $this->conn);
     }
 
