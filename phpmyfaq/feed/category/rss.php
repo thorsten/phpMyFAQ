@@ -44,6 +44,7 @@ $records = $faq->getAllRecordPerCategory($category_id,
 
 $rss = new XMLWriter();
 $rss->openMemory();
+$rss->setIndent(true);
 
 $rss->startDocument('1.0', $PMF_LANG['metaCharset']);
 $rss->startElement('rss');
