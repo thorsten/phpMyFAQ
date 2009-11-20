@@ -48,6 +48,7 @@ $num     = count($rssData);
 
 $rss = new XMLWriter();
 $rss->openMemory();
+$rss->setIndent(true);
 
 $rss->startDocument('1.0', $PMF_LANG['metaCharset']);
 $rss->startElement('rss');
@@ -81,7 +82,7 @@ if ($num > 0) {
         $rss->endElement();
         
         $rss->writeElement('link', utf8_encode(PMF_Link::getSystemUri('/feed/latest/rss.php').$link));
-        $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['datum'], false));
+        $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['datum'], true));
         $rss->endElement();
     }
 }

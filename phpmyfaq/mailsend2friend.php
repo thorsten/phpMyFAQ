@@ -2,11 +2,11 @@
 /**
  * Sends the emails to your friends
  *
- * @package   phpMyFAQ
+ * @category  phpMyFAQ
+ * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2002-09-16
- * @version   SVN: $Id$
  * @copyright 2002-2009 phpMyFAQ Team
+ * @since     2002-09-16
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -67,8 +67,6 @@ if (
     $faq = new PMF_Faq();
     $faq->getRecord($id);
 
-    $pdfFile = $faq->buildPDFFile($cat);
-
     foreach($mailto['mailto'] as $recipient) {
         $recipient = trim(strip_tags($recipient));
         if (!empty($recipient)) {
@@ -78,9 +76,6 @@ if (
             $mail->addTo($recipient);
             $mail->subject = $PMF_LANG["msgS2FMailSubject"].$name;
             $mail->message = $faqconfig->get("main.send2friendText")."\r\n\r\n".$PMF_LANG["msgS2FText2"]."\r\n".$link."\r\n\r\n".$attached;
-            if (!empty($pdfFile) && (file_exists($pdfFile))) {
-                $mail->addAttachment($pdfFile, basename($pdfFile), 'application/pdf');
-            }
             
             // Send the email
             $result = $mail->send();
