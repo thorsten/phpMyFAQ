@@ -81,7 +81,7 @@ if ($num > 0) {
         $rss->endElement();
         
         $rss->writeElement('link', utf8_encode(PMF_Link::getSystemUri('/feed/latest/rss.php').$link));
-        $rss->writeElement('pubDate', makeRFC822Date($item['datum'], false));
+        $rss->writeElement('pubDate', makeRFC822Date($item['datum'], true));
         $rss->endElement();
     }
 }
