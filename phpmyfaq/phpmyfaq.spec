@@ -55,11 +55,7 @@
 # phpMyFAQ
 #
 %define name        phpmyfaq
-<<<<<<< HEAD
-%define version     2.6.0-beta
-=======
-%define version     2.5.5
->>>>>>> ee2605692c53badacf62d32c1ba24d91fbb27ea3
+%define version     2.6.0-RC
 %define release     1
 %define epoch       0
 
@@ -158,6 +154,9 @@ installation script.
 %changelog
 =======
 
+
+* Sun Nov 22 2009 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.6.0.RC-1
+- New upstream version 2.6.0-RC
 
 * Mon Nov 07 2009 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.6.0.beta-1
 - New upstream version 2.6.0-beta
