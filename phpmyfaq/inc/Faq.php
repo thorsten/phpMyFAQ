@@ -2672,8 +2672,7 @@ class PMF_Faq
                 $output .= sprintf('<td valign="top"><strong>%s:</strong><br />%s</td>',
                     $category->categoryName[$row->ask_rubrik]['name'],
                     strip_tags($row->ask_content));
-                $output .= sprintf('<td valign="top"><a href="%s?%saction=add&amp;question=%d&amp;cat=%d">%s</a></td>',
-                    $_SERVER['PHP_SELF'],
+                $output .= sprintf('<td valign="top"><a href="?%saction=add&amp;question=%d&amp;cat=%d">%s</a></td>',
                     $sids,
                     $row->id,
                     $row->ask_rubrik,

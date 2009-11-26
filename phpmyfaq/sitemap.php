@@ -7,7 +7,6 @@
  * @author     Thomas Zeithaml <seo@annatom.de>
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2005-08-21
- * @version    SVN: $Id$
  * @copyright  2005-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -39,8 +38,8 @@ $sitemap = new PMF_Sitemap($current_user, $current_groups);
 
 $tpl->processTemplate (
     'writeContent', array(
-        'writeLetters'          => $sitemap->getAllFirstLetters(),
-        'writeMap'              => $sitemap->getRecordsFromLetter($currentLetter),
-        'writeCurrentLetter'    => $currentLetter));
+        'writeLetters'       => $sitemap->getAllFirstLetters(),
+        'writeMap'           => $sitemap->getRecordsFromLetter($currentLetter),
+        'writeCurrentLetter' => $currentLetter));
 
 $tpl->includeTemplate('writeContent', 'index');

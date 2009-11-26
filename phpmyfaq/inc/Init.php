@@ -369,17 +369,17 @@ class PMF_Init
         self::_getUserAgentLanguage();
 
         // Get language from: _POST, _GET, _COOKIE, phpMyFAQ configuration and the automatic language detection
-        $_lang['post'] = PMF_Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_STRING);
+        $_lang['post'] = PMF_Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_STRIPPED);
         if (!is_null($_lang['post']) && !self::isASupportedLanguage($_lang['post']) ) {
             $_lang['post'] = null;
         }
         // Get the user language
-        $_lang['get'] = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+        $_lang['get'] = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRIPPED);
         if (!is_null($_lang['get']) && !self::isASupportedLanguage($_lang['get']) ) {
             $_lang['get'] = null;
         }
         // Get the faq record language
-        $_lang['artget'] = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
+        $_lang['artget'] = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRIPPED);
         if (!is_null($_lang['artget']) && !self::isASupportedLanguage($_lang['artget']) ) {
             $_lang['get'] = null;
         }

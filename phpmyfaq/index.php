@@ -227,7 +227,7 @@ if ($faqconfig->get('main.enableUserTracking')) {
 //
 // Found a article language?
 //
-$lang = PMF_Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
+$lang = PMF_Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRIPPED);
 if (is_null($lang) && !PMF_Init::isASupportedLanguage($lang) ) {
     $lang = $LANGCODE;
 }
@@ -322,8 +322,8 @@ if (isset($auth)) {
 }
 if ($action != 'main') {
     $inc_tpl         = 'template/' . $action . '.tpl';
-    $inc_php         = $action.".php";
-    $writeLangAdress = "?".str_replace("&", "&amp;",$_SERVER["QUERY_STRING"]);
+    $inc_php         = $action.".php";    
+    $writeLangAdress = "?action=".$action;
 } else {
     if (isset($solution_id) && is_numeric($solution_id)) {
         // show the record with the solution ID
@@ -333,7 +333,7 @@ if ($action != 'main') {
         $inc_tpl = 'template/main.tpl';
         $inc_php = 'main.php';
     }
-    $writeLangAdress = '?'.$sids;
+    $writeLangAdress = '?'.(int)$sids;
 }
 
 //

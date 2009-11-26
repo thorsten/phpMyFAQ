@@ -1001,7 +1001,7 @@ function link_verifier_javascript()
     global $PMF_LANG;
 
     //TODO: ASSIGN STRINGS FOR THE <IMG ALT="">
-    $ajaxphp = $_SERVER["PHP_SELF"].'?';
+    $ajaxphp = 'index.php?';
 ?>
 <script type="text/javascript">
 <!--
