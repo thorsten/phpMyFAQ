@@ -5,9 +5,8 @@
  * @package    phpMyFAQ
  * @subpackage Frontend
  * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since      2006-11-12
- * @version    SVN: $Id$
  * @copyright  2006-2009 phpMyFAQ Team
+ * @since      2006-11-12
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -32,7 +31,11 @@ if (!is_null($showCaptcha)) {
     exit;
 }
 
-$translationLanguage = PMF_Filter::filterInput(INPUT_POST, 'translation', FILTER_SANITIZE_STRING, $LANGCODE);
+$translationLanguage = PMF_Filter::filterInput(INPUT_POST, 'translation', FILTER_SANITIZE_STRIPPED, $LANGCODE);
+
+if (!PMF_Init::isASupportedLanguage($translationLanguage)) {
+	$translationLanguage = $LANGCODE;
+}
 
 $faqSource['id']       = 'writeSourceFaqId';
 $faqSource['lang']     = $translationLanguage;
@@ -43,7 +46,7 @@ $faqSource['keywords'] = 'writeSourceKeywords';
 $faqsession->userTracking('new_translation_entry', 0);
 
 $id      = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$srclang = PMF_Filter::filterInput(INPUT_GET, 'srclang', FILTER_SANITIZE_STRING); 
+$srclang = PMF_Filter::filterInput(INPUT_GET, 'srclang', FILTER_SANITIZE_STRIPPED); 
 
 if (!is_null($id) && !is_null($srclang) && PMF_Init::isASupportedLanguage($srclang)) {
     $oFaq = new PMF_Faq();
@@ -68,7 +71,6 @@ $tpl->processTemplate('writeContent', array(
     'msgNewTranslationKeywords' => $PMF_LANG['msgNewTranslationKeywords'],
     'writeTransFaqLanguage'     => $translationLanguage,
     'captchaFieldset'           => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('translate'), $captcha->caplength),
-    'msgNewTranslationSubmit'   => $PMF_LANG['msgNewTranslationSubmit'])
-    );
+    'msgNewTranslationSubmit'   => $PMF_LANG['msgNewTranslationSubmit']));
 
 $tpl->includeTemplate('writeContent', 'index');
