@@ -320,9 +320,6 @@ class PMF_Init
      * Gets the accepted language from the user agent
      *
      * @return  void
-     * @access  private
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
      */
     private function _getUserAgentLanguage()
     {
@@ -335,7 +332,7 @@ class PMF_Init
             // Simplified language syntax detection: xx[-yy]
             preg_match("/([a-z\-]+)/i", trim($_SERVER['HTTP_ACCEPT_LANGUAGE']), $matches);
             if (isset($matches[1])) {
-                $this->acceptedLanguage = $matches[1];
+                $this->acceptedLanguage = strtolower($matches[1]);
             }
         }
     }
