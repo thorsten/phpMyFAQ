@@ -92,13 +92,16 @@ $openSearchLink = sprintf('<a class="searchplugin" href="#" onclick="window.exte
     PMF_Link::getSystemUri('/index.php'),
     $PMF_LANG['opensearch_plugin_install']);
     
-$mostPopularSearches = '';
+$mostPopularSearches   = '';
 $mostPopularSearchData = $faqsearch->getMostPopularSearches($faqconfig->get('main.numberSearchTerms'));
+
 foreach ($mostPopularSearchData as $searchItem) {
-    $mostPopularSearches .= sprintf('<li><a href="?search=%s&submit=Search&action=search">%s</a> (%dx)</li>',
-        urlencode($searchItem['searchterm']),
-        $searchItem['searchterm'],
-        $searchItem['number']);
+	if (PMF_String::strlen($searchItem['searchterm']) > 0) {
+        $mostPopularSearches .= sprintf('<li><a href="?search=%s&submit=Search&action=search">%s</a> (%dx)</li>',
+            urlencode($searchItem['searchterm']),
+            $searchItem['searchterm'],
+            $searchItem['number']);
+	}
 }
 
 $helper = PMF_Helper_Category::getInstance();
