@@ -10,7 +10,7 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 Changes since 2.6.0-beta:
 - updated Greek translation (Periklis Tsirakidis)
 - improved and fixed update migration process (Thorsten)
-- fixed some minor issues (Thorsten)
+- fixed a lot of minor issues (Thorsten)
 
 CHANGELOG:
 
