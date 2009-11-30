@@ -180,12 +180,10 @@ header("Vary: Negotiate,Accept");
             break;
         default:
             $secLevelHeader   = $PMF_LANG['admin_mainmenu_home'];
-            $secLevelEntries .= addMenuEntry('addcateg+editcateg+delcateg', 'addcategory', 'ad_quick_category');
+            $secLevelEntries .= addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit');
             $secLevelEntries .= addMenuEntry('addbt', 'editentry', 'ad_quick_record');
-            $secLevelEntries .= addMenuEntry('adduser+edituser+deluser', 'user&amp;user_action=add', 'ad_quick_user');
-            if ($groupSupport) {
-                $secLevelEntries .= addMenuEntry('adduser+edituser+deluser', 'group&amp;group_action=add', 'ad_quick_group');
-            }
+            $secLevelEntries .= addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit');
+            $secLevelEntries .= addMenuEntry('delquestion', 'question', 'ad_menu_open');
             break;
     }
 ?>
