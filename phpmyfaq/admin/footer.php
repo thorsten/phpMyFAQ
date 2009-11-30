@@ -73,9 +73,9 @@ tinymce.create('tinymce.plugins.internalFaqLinkPlugin', {
                      }
                 });
 <?php
-          $faq->getAllRecords(FAQ_SORTING_TYPE_FAQTITLE_FAQID);
+          $faq->getAllRecords(FAQ_SORTING_TYPE_FAQID);
           foreach ($faq->faqRecords as $record) {
-              $_title = str_replace(array("\n", "\r", "\r\n"), '', $record['title']);
+              $_title = str_replace(array("\n", "\r", "\r\n"), '', $record['id'] . '. ' . $record['title']);
               printf("flb.add('%s', '%d_%d_%s_%s');\n",
                   str_replace("'", "`", PMF_Utils::makeShorterText($_title, 8)),
                   $record['category_id'],

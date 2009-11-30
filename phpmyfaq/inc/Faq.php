@@ -2,15 +2,7 @@
 /**
  * The main FAQ class
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Faq
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author     Georgi Korchev <korchev@yahoo.com>
- * @author     Adrianna Musiol <musiol@imageaccess.de>
- * @since      2005-12-20
- * @version    SVN: $Id$
- * @copyright  2005-2009 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -21,9 +13,19 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_Faq
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Georgi Korchev <korchev@yahoo.com>
+ * @author    Adrianna Musiol <musiol@imageaccess.de>
+ * @copyright 2005-2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-12-20
  */
 
-// {{{ Constants
 /**
  * SQL constants definitions
  */
@@ -50,8 +52,7 @@ define('FAQ_SORTING_TYPE_NONE', 0);
 define('FAQ_SORTING_TYPE_CATID_FAQID', 1);
 define('FAQ_SORTING_TYPE_FAQTITLE_FAQID', 2);
 define('FAQ_SORTING_TYPE_DATE_FAQID', 3);
-// }}}
-
+define('FAQ_SORTING_TYPE_FAQID', 4);
 
 /**
  * PMF_Faq
@@ -1245,8 +1246,8 @@ class PMF_Faq
         }
 
         $orderBy = '';
-        switch($sortType)
-        {
+        switch ($sortType) {
+        	
             case FAQ_SORTING_TYPE_CATID_FAQID:
                 $orderBy = sprintf("
             ORDER BY
@@ -1255,6 +1256,13 @@ class PMF_Faq
                     $sortOrder);
                 break;
 
+            case FAQ_SORTING_TYPE_FAQID:
+                $orderBy = sprintf("
+            ORDER BY
+                fd.id %s",
+                    $sortOrder);
+                break;
+                
             case FAQ_SORTING_TYPE_FAQTITLE_FAQID:
                 $orderBy = sprintf("
             ORDER BY
