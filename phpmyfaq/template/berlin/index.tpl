@@ -34,8 +34,8 @@
 <div id="content">
 <div class="header" id="header">
 	<div>
-		<div id="header-banner"></div>
-      <h1><a title="{header}" href="{faqHome}">{header}</a></h1>
+		<div id="header-banner"><img src="template/{tplSetName}/hgn_streifen_senstadt_intern.jpg"><img src="template/{tplSetName}/banner.jpg"></div>
+      <h1></h1>
       <div style="clear: both;"></div>
 		<ul>
 			<li>{msgHelp}</li>
@@ -43,6 +43,7 @@
 			<li>{msgQuestion}</li>
 			<li>{allCategories}</li>
 			<li>{msgSearch}</li>
+            <li>{backToHome}</li>
 		</ul>
 	</div>
 </div>
@@ -52,11 +53,11 @@
 			<div class="content">
 				<div id="categories">
 					<ul>
-						<li class="home">{backToHome}</li>
 						{showCategories}
-						<li>{showInstantResponse}</li>
-						<li> <a href="admin/index.php">Administrations-Bereich</a></li>
 					</ul>
+				</div>
+				<div id="adminlink">
+				    <p><a href="admin/index.php">Administrations-Bereich</a></p>
 				</div>
 			</div>
 
