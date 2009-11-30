@@ -172,8 +172,11 @@ class PMF_Search
      */
     public function logSearchTerm($searchterm)
     {
-        $date = new DateTime();
-        
+    	if (PMF_String::strlen($searchterm) == 0) {
+    		return;
+    	}
+    	
+        $date  = new DateTime();
         $query = sprintf("
             INSERT INTO
                 %s
@@ -221,7 +224,7 @@ class PMF_Search
         	$i = 0;
             while ($row = $this->db->fetch_object($result)) {
             	if ($i < $numResults) {
-            		$searchResult[] = (array) $row;
+            		$searchResult[] = (array)$row;
             	}
             	$i++;
             }
