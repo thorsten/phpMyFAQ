@@ -4,14 +4,8 @@
  * language, gets and sets all cookie, post and get informations and includes
  * the templates we need and set all internal variables to the template
  * variables. That's all.
- *
- * @category  phpMyFAQ
- * @package   Frontend
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Lars Tiedemann <php@larstiedemann.de>
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since     2001-02-12
- * @copyright 2001-2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -22,6 +16,16 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Frontend
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @copyright 2001-2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2001-02-12
  */
 
 //
@@ -407,8 +411,10 @@ $main_template_vars = array(
     'copyright'           => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' . 
                              $faqconfig->get('main.currentVersion'));
 
-$tpl->processBlock('index', 'globalSearchBox', array(
-    'searchBox' => $PMF_LANG['msgSearch'],));
+if ('main' == $action || 'show' == $action) {
+    $tpl->processBlock('index', 'globalSearchBox', array(
+        'searchBox' => $PMF_LANG['msgSearch']));
+}
                              
 $stickyRecordsParams = $faq->getStickyRecords();
 if (!isset($stickyRecordsParams['error'])) {
