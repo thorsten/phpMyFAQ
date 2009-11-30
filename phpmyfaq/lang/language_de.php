@@ -1023,3 +1023,8 @@ $PMF_LANG['main.orderingPopularFaqs.voting'] = "nach Bewerung der Bersucher";
 
 // added 2.6.0-alpha - 2009-11-05 by Thorsten
 $PMF_LANG['msgShowHelp'] = 'Bitte Begriffe mit Komma trennen.';
+
+// added 2.6.0-RC - 2009-11-30 by Thorsten
+$PMF_LANG['msgUpdateFaqDate'] = 'aktualisieren';
+$PMF_LANG['msgKeepFaqDate'] = 'behalten'; 
+$PMF_LANG['msgEditFaqDat'] = 'ändern';

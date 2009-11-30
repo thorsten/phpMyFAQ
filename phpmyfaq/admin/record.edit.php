@@ -366,9 +366,9 @@ if($permission['approverec']):
     <input type="radio" id="userpermission" name="userpermission" class="active" value="all" <?php print ($all_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_all_users']; ?> <input type="radio" name="userpermission" class="active" value="restricted" <?php print ($restricted_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_restricted_users']; ?> <select name="restricted_users" size="1"><?php print $user->getAllUserOptions($user_permission[0]); ?></select><br />
     
 	<label class="left" for="dateActualize"><?php echo $PMF_LANG["ad_entry_date"]; ?></label>
-    <input type="radio" id="dateActualize" checked="checked" name="recordDateHandling" onchange="setRecordDate(this.id);" /> actualize
-    <input type="radio" id="dateKeep" name="recordDateHandling" onchange="setRecordDate(this.id);" /> keep
-    <input type="radio" id="dateCustomize" name="recordDateHandling" onchange="setRecordDate(this.id);" /> customize
+    <input type="radio" id="dateActualize" checked="checked" name="recordDateHandling" onchange="setRecordDate(this.id);" /> <?php print $PMF_LANG['msgUpdateFaqDate']; ?>
+    <input type="radio" id="dateKeep" name="recordDateHandling" onchange="setRecordDate(this.id);" /> <?php print $PMF_LANG['msgKeepFaqDate']; ?>
+    <input type="radio" id="dateCustomize" name="recordDateHandling" onchange="setRecordDate(this.id);" /> <?php print $PMF_LANG['msgEditFaqDat']; ?>
     <div id="recordDateInputContainer" style="display: none;"></span><label class="left" for="date">&nbsp;</label>
     <input type="text" name="date" id="date" maxlength="16" value="" /></div>
     </fieldset>

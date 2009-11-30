@@ -1074,3 +1074,8 @@ $PMF_LANG['main.orderingPopularFaqs.voting'] = "list most voted entries";
 
 // added 2.6.0-alpha - 2009-11-05 by Thorsten
 $PMF_LANG['msgShowHelp'] = 'Please seperate words by comma.';
+
+// added 2.6.0-RC - 2009-11-30 by Thorsten
+$PMF_LANG['msgUpdateFaqDate'] = 'update';
+$PMF_LANG['msgKeepFaqDate'] = 'keep'; 
+$PMF_LANG['msgEditFaqDat'] = 'edit';
