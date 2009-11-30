@@ -57,7 +57,7 @@
 					</ul>
 				</div>
 				<div id="adminlink">
-				    <p><a href="admin/index.php">Administrations-Bereich</a></p>
+				    <p><a href="admin/index.php" target="_blank">Administrations-Bereich</a></p>
 				</div>
 			</div>
 
