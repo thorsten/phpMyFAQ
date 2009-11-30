@@ -99,9 +99,11 @@
 	</div>
 
 	<div class="main-content">
+        [globalSearchBox]
 		<form id="search" action="{writeSendAdress}" method="get">
- 			<input type="text" name="search" id="searchfield" size="30" /><input type="submit" name="submit" value="{searchBox}" /><input type="hidden" name="action" value="search" />
+ 			<input type="text" name="search" id="searchfield" size="30" /><input type="submit" name="submit" value="{searchBox}" /> <input type="hidden" name="action" value="search" />
  		</form>
+ 		[/globalSearchBox]
  		{writeContent}
 	</div>
 </div>

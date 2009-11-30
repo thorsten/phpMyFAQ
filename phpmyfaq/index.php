@@ -397,17 +397,19 @@ $main_template_vars = array(
     'dir'                 => $PMF_LANG['dir'],
     'msgCategory'         => $PMF_LANG['msgCategory'],
     'showCategories'      => $helper->renderCategoryNavigation($cat),
-    'searchBox'           => $PMF_LANG['msgSearch'],
     'languageBox'         => $PMF_LANG['msgLangaugeSubmit'],
     'writeLangAdress'     => $writeLangAdress,
     'switchLanguages'     => PMF_Language::selectLanguages($LANGCODE, true),
-    'userOnline'          => $plr->getMsg('plmsgUserOnline',$totUsersOnLine).
-                             $plr->getMsg('plmsgGuestOnline',$usersOnLine[0]).
+    'userOnline'          => $plr->getMsg('plmsgUserOnline', $totUsersOnLine) .
+                             $plr->getMsg('plmsgGuestOnline', $usersOnLine[0]) .
                              $plr->getMsg('plmsgRegisteredOnline',$usersOnLine[1]),
     'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
     'copyright'           => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' . 
                              $faqconfig->get('main.currentVersion'));
 
+$tpl->processBlock('index', 'globalSearchBox', array(
+    'searchBox' => $PMF_LANG['msgSearch'],));
+                             
 $stickyRecordsParams = $faq->getStickyRecords();
 if (!isset($stickyRecordsParams['error'])) {
     $tpl->processBlock('index', 'stickyRecordsList', array(
@@ -446,17 +448,6 @@ if ($faqconfig->get('main.enableRewriteRules')) {
         'showSitemap'         => '<a href="index.php?'.$sids.'action=sitemap&amp;lang='.$LANGCODE.'">'.$PMF_LANG['msgSitemap'].'</a>',
         'opensearch'          => '?'.$sids.'action=search');
 }
-
-//
-// Send headers and print template
-//
-header("Expires: Thu, 07 Apr 1977 14:47:00 GMT");
-header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
-header("Cache-Control: no-store, no-cache, must-revalidate");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
-header("Content-type: text/html; charset=".$PMF_LANG['metaCharset']);
-header("Vary: Negotiate,Accept");
 
 //
 // Add debug info if needed
@@ -569,6 +560,18 @@ $tpl->includeTemplate('rightBox', 'index');
 // Include requested PHP file
 //
 require_once $inc_php;
+
+//
+// Send headers and print template
+//
+header("Expires: Thu, 07 Apr 1977 14:47:00 GMT");
+header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+header("Content-type: text/html; charset=".$PMF_LANG['metaCharset']);
+header("Vary: Negotiate,Accept");
+
 $tpl->printTemplate();
 
 //
