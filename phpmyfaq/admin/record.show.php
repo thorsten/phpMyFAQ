@@ -141,7 +141,6 @@ if ($permission['editbt'] || $permission['delbt']) {
         // Search for:
         // a. solution id
         // b. full text search
-        // TODO: Decide if the search will be performed upon all entries or upon the active ones.
         if (is_numeric($searchterm)) {
             // a. solution id
             $result = $db->search(SQLPREFIX.'faqdata',
@@ -187,6 +186,11 @@ if ($permission['editbt'] || $permission['delbt']) {
         $wasSearch      = true;
 
         while ($row = $db->fetch_object($result)) {
+        	
+        	if ($searchcat != 0 && $searchcat != (int)$row->category_id) {
+        		continue;
+        	}
+        	
             $faq->faqRecords[] = array(
                 'id'          => $row->id,
                 'category_id' => $row->category_id,
