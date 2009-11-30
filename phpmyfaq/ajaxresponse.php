@@ -43,6 +43,14 @@ if (PMF_Language::isASupportedLanguage($ajaxLanguage)) {
     require_once 'lang/language_en.php';
 }
 
+//Load plurals support for selected language
+$plr = new PMF_Language_Plurals($PMF_LANG);
+
+//
+// Initalizing static string wrapper
+//
+PMF_String::init($LANGCODE);
+
 //
 // Get current user and group id - default: -1
 //
