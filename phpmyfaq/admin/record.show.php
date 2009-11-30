@@ -239,6 +239,7 @@ if ($permission['editbt'] || $permission['delbt']) {
     <tr>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=asc">&darr;</a></th>
         <th class="listhead">&nbsp;</th>
+        <th class="listhead">#</th>
         <th class="listhead" style="text-align: left"><input type="checkbox" id="sticky_category_block_<?php print $cid; ?>" onclick="saveStatusForCategory(<?php print $cid; ?>, 'sticky')" />&nbsp;<?php print $PMF_LANG['ad_record_sticky'] ?></th>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=asc">&darr;</a></th>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=asc">&darr;</a></th>
@@ -257,6 +258,7 @@ if ($permission['editbt'] || $permission['delbt']) {
     <tr class="record_<?php print $record['id']; ?>_<?php print $record['lang']; ?>">
         <td class="list" style="width: 24px; text-align: right;"><?php print $record['id']; ?></td>
         <td class="list" style="width: 16px;"><?php print $record['lang']; ?></td>
+        <td class="list" style="width: 24px;"><?php print $record['solution_id']; ?></td>
         <td class="list" style="width: 56px;"><input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'sticky');" id="sticky_record_<?php print $cid . '_' . $record['id'] ?>" <?php $record['sticky'] ? print 'checked="checked"' : print '    ' ?> /></td>
         <td class="list"><a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><?php print PMF_htmlentities($record['title'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?></a>
 <?php
