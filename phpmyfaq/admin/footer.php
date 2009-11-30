@@ -1,13 +1,8 @@
 <?php
 /**
  * Footer of the admin area
- *
- * @category  phpMyFAQ 
- * @package   Administration
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since     2003-02-26
- * @copyright 2003-2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,6 +13,15 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ 
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @copyright 2003-2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2003-02-26
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -73,11 +77,11 @@ tinymce.create('tinymce.plugins.internalFaqLinkPlugin', {
           foreach ($faq->faqRecords as $record) {
               $_title = str_replace(array("\n", "\r", "\r\n"), '', $record['title']);
               printf("flb.add('%s', '%d_%d_%s_%s');\n",
-                  str_replace("'", "�", PMF_Utils::makeShorterText($_title, 8)),
+                  str_replace("'", "`", PMF_Utils::makeShorterText($_title, 8)),
                   $record['category_id'],
                   $record['id'],
                   $record['lang'],
-                  str_replace("'", "�", $_title));
+                  str_replace("'", "`", $_title));
           }
 ?>
 
@@ -179,6 +183,7 @@ function ajaxfilemanager(field_name, url, type, win)
 <script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushJava.js"></script>
 <script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushJScript.js"></script>
 <script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushPhp.js"></script>
+<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushPerl.js"></script>
 <script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushPlain.js"></script>
 <script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushPython.js"></script>
 <script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushRuby.js"></script>
