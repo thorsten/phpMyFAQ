@@ -4398,7 +4398,6 @@ if (!class_exists('TCPDF', false)) {
 					$type = 'jpeg';
 				}
 				$mqr = get_magic_quotes_runtime();
-				set_magic_quotes_runtime(0);
 				// Specific image handlers
 				$mtd = '_parse'.$type;
 				// GD image handler function
@@ -4444,7 +4443,7 @@ if (!class_exists('TCPDF', false)) {
 					//If false, we cannot process image
 					return;
 				}
-				set_magic_quotes_runtime($mqr);
+				
 				if ($ismask) {
 					// force grayscale
 					$info['cs'] = 'DeviceGray';
