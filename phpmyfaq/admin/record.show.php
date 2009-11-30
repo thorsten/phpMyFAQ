@@ -145,7 +145,9 @@ if ($permission['editbt'] || $permission['delbt']) {
                                   array(SQLPREFIX.'faqdata.id AS id',
                                         SQLPREFIX.'faqdata.lang AS lang',
                                         SQLPREFIX.'faqcategoryrelations.category_id AS category_id',
+                                        SQLPREFIX.'faqdata.solution_id AS solution_id',
                                         SQLPREFIX.'faqdata.sticky AS sticky',
+                                        SQLPREFIX.'faqdata.active AS active',
                                         SQLPREFIX.'faqdata.thema AS thema',
                                         SQLPREFIX.'faqdata.content AS content',
                                         SQLPREFIX.'faqdata.datum AS date'),
@@ -160,7 +162,9 @@ if ($permission['editbt'] || $permission['delbt']) {
                                   array(SQLPREFIX.'faqdata.id AS id',
                                         SQLPREFIX.'faqdata.lang AS lang',
                                         SQLPREFIX.'faqcategoryrelations.category_id AS category_id',
+                                        SQLPREFIX.'faqdata.solution_id AS solution_id',
                                         SQLPREFIX.'faqdata.sticky AS sticky',
+                                        SQLPREFIX.'faqdata.active AS active',
                                         SQLPREFIX.'faqdata.thema AS thema',
                                         SQLPREFIX.'faqdata.content AS content',
                                         SQLPREFIX.'faqdata.datum AS date'),
@@ -183,7 +187,9 @@ if ($permission['editbt'] || $permission['delbt']) {
             $faq->faqRecords[] = array(
                 'id'          => $row->id,
                 'category_id' => $row->category_id,
+                'solution_id' => $row->solution_id,
                 'lang'        => $row->lang,
+                'active'      => $row->active,
                 'sticky'      => $row->sticky,
                 'title'       => $row->thema,
                 'content'     => $row->content,
@@ -258,7 +264,7 @@ if ($permission['editbt'] || $permission['delbt']) {
     <tr class="record_<?php print $record['id']; ?>_<?php print $record['lang']; ?>">
         <td class="list" style="width: 24px; text-align: right;"><?php print $record['id']; ?></td>
         <td class="list" style="width: 16px;"><?php print $record['lang']; ?></td>
-        <td class="list" style="width: 24px;"><?php print $record['solution_id']; ?></td>
+        <td class="list" style="width: 24px;"><a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><?php print $record['solution_id']; ?></a></td>
         <td class="list" style="width: 56px;"><input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'sticky');" id="sticky_record_<?php print $cid . '_' . $record['id'] ?>" <?php $record['sticky'] ? print 'checked="checked"' : print '    ' ?> /></td>
         <td class="list"><a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><?php print PMF_htmlentities($record['title'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?></a>
 <?php
