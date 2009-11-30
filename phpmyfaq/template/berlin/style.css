@@ -91,7 +91,6 @@ label { display: block; }
 #tagcloud .relevance5 { font-size: 160%; }
 
 /* Main content */
-
 .main-content { margin: 0; padding: 50px 220px 1em 220px; }
 .main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content h5 { margin-bottom: 0.5em; }
 .main-content pre, .main-content code { white-space: pre; }
@@ -102,10 +101,10 @@ label { display: block; }
 .main-content form br { clear: both; }
 #article_category { font-size: 1.5em; }
 #search { padding: 0; margin: 0; width: auto; }
-#search input { vertical-align: middle; font-size: 1.5em; font-weight: bold; }
+#search input, #instantfield { vertical-align: middle; font-size: 1.5em; font-weight: bold; }
 #content h2, #content h3 { color: #990033; }
-/*		Main columns definitions		*/
 
+/* Main columns definitions	*/
 .leftcolumn { float: left; left: 0px; width: 200px; margin-bottom: 1em; }
 .rightcolumn { position: static; float: right; width: 200px; margin-bottom: 1em; }
 .rightcolumn ol { margin: 0 0 0 25px; padding: 0; }
