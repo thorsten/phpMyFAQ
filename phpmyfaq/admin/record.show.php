@@ -33,9 +33,12 @@ if ($permission['editbt'] || $permission['delbt']) {
     $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $category->transform(0);
     
+    // Set the Category for the helper class
     $helper = PMF_Helper_Category::getInstance();
     $helper->setCategory($category);
 
+    $category->buildTree();
+    
     $linkverifier = new PMF_Linkverifier($user->getLogin());
     if ($linkverifier->isReady()) {
         link_verifier_javascript();
