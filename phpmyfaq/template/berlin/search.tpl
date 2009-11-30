@@ -19,8 +19,6 @@
             {printCategoryOptions}
             </select>
 
-            <p>{openSearchLink}</p>
-
         </fieldset>
         
         <div id="mostpopularsearches">
