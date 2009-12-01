@@ -76,7 +76,7 @@ dt { float: left; width: 200px; }
 dd { margin: 0 0 10px 200px; }
 
 /* Global forms CSS definitions */
-#maincontent textarea { border: 1px solid #BBBBBB; width: 85%;  }
+#maincontent textarea { border: 1px solid #BBBBBB; }
 #main #maincontent fieldset { float: left; width: 95%; border: 1px solid #ccc; padding: 10px 8px; margin: 0 10px 8px 0;
     background: #FFF; color: #000; }
 #main #maincontent fieldset p { width: 95%; }

@@ -220,10 +220,11 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
     <label for="content"><?php print $PMF_LANG["ad_entry_content"]; ?></label>
     <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
-    <textarea id="content" name="content" cols="84" rows="10"><?php if (isset($faqData['content'])) { print trim(PMF_String::htmlspecialchars($faqData['content'])); } ?></textarea><br />
+    <textarea id="content" name="content" cols="84" rows="16" style="width: 720px; height: 480px;">
+        <?php if (isset($faqData['content'])) { print trim(PMF_String::htmlspecialchars($faqData['content'])); } ?>
+    </textarea><br />
 
 <?php
-
     if ($action == 'copyentry') {
         unset($faqData);
         $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
@@ -231,26 +232,15 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
     if ($permission["addatt"]) {
         if (isset($faqData['id']) && $faqData['id'] != "") {
-//            if (isAttachmentDirOk($faqData['id'])) {
-                $attList = PMF_Attachment_Factory::fetchByRecordId($faqData['id']);
-                while (list(,$att) = each($attList)) {
-                    print "<a href=\"../" .
-                          $att->buildUrl() .
-                          "\">" . 
-                          $att->getFilename() .
-                          "</a>";
-                    if ($permission["delatt"]) {
-                        print "&nbsp;[&nbsp;<a href=\"?action=delatt&amp;" .
-                        "record_id=" . $faqData['id'] . "&amp;id=" . 
-                        $att->getId() . "&amp;lang=" . $faqData['lang'] .
-                        "\">" . $PMF_LANG["ad_att_del"] . "</a>&nbsp;]";
-                    }
-                    print "<br />\n";
+            $attList = PMF_Attachment_Factory::fetchByRecordId($faqData['id']);
+            while (list(,$att) = each($attList)) {
+                print "<a href=\"../" . $att->buildUrl() . "\">" . $att->getFilename() . "</a>";
+                if ($permission["delatt"]) {
+                    print "&nbsp;[&nbsp;<a href=\"?action=delatt&amp;" . "record_id=" . $faqData['id'] . "&amp;id=" . 
+                        $att->getId() . "&amp;lang=" . $faqData['lang'] . "\">" . $PMF_LANG["ad_att_del"] . "</a>&nbsp;]";
                 }
-//            } else {
-//                print "<br />\n";
-//                print "<em>".$PMF_LANG["ad_att_none"]."</em> ";
-//            }
+                print "<br />\n";
+            }
             print "<a href=\"#\" onclick=\"Picture('attachment.php?record_id=".$faqData['id']."&amp;record_lang=".$faqData['lang']."&amp;rubrik=".$current_category."', 'Attachment', 400,80)\">".$PMF_LANG["ad_att_add"]."</a>";
         } else {
             print "&nbsp;".$PMF_LANG["ad_att_nope"];
