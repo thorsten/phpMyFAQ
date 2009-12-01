@@ -342,15 +342,9 @@ if (isset($auth)) {
     }
 }
 if ($action != 'main') {
-<<<<<<< HEAD
     $inc_tpl         = $action . '.tpl';
     $inc_php         = $action . '.php';
     $writeLangAdress = '?' . str_replace("&", "&amp;",$_SERVER["QUERY_STRING"]);
-=======
-    $inc_tpl         = 'template/' . $action . '.tpl';
-    $inc_php         = $action.".php";    
-    $writeLangAdress = "?action=".$action;
->>>>>>> 816b6c2e618877d39ff5c6805c2e0edd2c68960a
 } else {
     if (isset($solution_id) && is_numeric($solution_id)) {
         // show the record with the solution ID
@@ -360,11 +354,7 @@ if ($action != 'main') {
         $inc_tpl = 'main.tpl';
         $inc_php = 'main.php';
     }
-<<<<<<< HEAD
-    $writeLangAdress = '?' . $sids;
-=======
     $writeLangAdress = '?'.(int)$sids;
->>>>>>> 816b6c2e618877d39ff5c6805c2e0edd2c68960a
 }
 
 //
