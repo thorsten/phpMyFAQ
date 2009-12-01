@@ -14,7 +14,6 @@
  * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since      2002-08-20
  * @copyright  2002-2009 phpMyFAQ Team
- * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -27,7 +26,7 @@
  * under the License.
  */
 
-define('VERSION', '2.5.5');
+define('VERSION', '2.5.6');
 define('COPYRIGHT', '&copy; 2001-2009 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('SAFEMODE', @ini_get('safe_mode'));
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));

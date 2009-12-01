@@ -1,4 +1,4 @@
-phpMyFAQ 2.5.5
+phpMyFAQ 2.5.6
 Codename "Pandora"
 
 Installation/Update:
@@ -7,13 +7,15 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 2.5.4:
-- fixed IE6/7 only XSS vulnerabilities (Amol Naik, Thorsten)
-- many minor bugfixes (Thorsten)
+Changes since 2.5.5:
+- 
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
+
+Version 2.5.6 - 2010-
+-
 
 Version 2.5.5 - 2009-12-01
 - fixed IE6/7 only XSS vulnerabilities (Amol Naik, Thorsten)
