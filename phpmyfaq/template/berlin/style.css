@@ -43,7 +43,7 @@ ul { list-style: square; }
 acronym { border-bottom: 1px dotted #999; }  
 
 /* Structure */
-#content { max-width: 1400px; margin: auto; }
+#content { min-width: 1024px; _width: 1024px; max-width: 1400px; margin: auto; }
 .columns { padding-top: .5em; }
 #header { height: 100px; -height: 100px; margin: 0; background: #e3ffcf; color: white; border-bottom: 3px solid #777777; }
 #header ul { float: right; margin: 0; padding: 0; list-style: none; font-size: 1em; font-weight: bold; line-height: 1em; height: 1em; float: right; }
