@@ -1,3 +1,31 @@
+CHANGED FILES FROM 2.5.4 -> 2.5.5
+
+./feed/category/rss.php
+./feed/latest/rss.php
+./feed/news/rss.php
+./feed/openquestions/rss.php
+./feed/topten/rss.php
+./inc/Faq.php
+./inc/Init.php
+./inc/Ldap.php
+./inc/Link.php
+./inc/Linkverifier.php
+./inc/PMF_Export/Pdf.php
+./install/installer.php
+./install/update.php
+./instantresponse.php
+./lang/language_hi.php
+./artikel.php
+./index.php
+./mailsend2friend.php
+./news.php
+./send2friend.php
+./show.php
+./sitemap.php
+./translate.php
+
+
+
 CHANGED FILES FROM 2.5.3 -> 2.5.4
 
 ./_.htaccess
