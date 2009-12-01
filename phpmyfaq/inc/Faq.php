@@ -275,8 +275,7 @@ class PMF_Faq
                     $visits = $row->visits;
                 }
 
-                $title = PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']);
-                $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                $url   = sprintf('%saction=artikel&cat=%d&id=%d&artlang=%s',
                             $sids,
                             $row->category_id,
                             $row->id,
@@ -2843,8 +2842,7 @@ class PMF_Faq
                 $output .= sprintf('<td valign="top"><strong>%s:</strong><br />%s</td>',
                     $category->categoryName[$row->ask_rubrik]['name'],
                     strip_tags($row->ask_content));
-                $output .= sprintf('<td valign="top"><a href="%s?%saction=add&amp;question=%d&amp;cat=%d">%s</a></td>',
-                    $_SERVER['PHP_SELF'],
+                $output .= sprintf('<td valign="top"><a href="?%saction=add&amp;question=%d&amp;cat=%d">%s</a></td>',
                     $sids,
                     $row->id,
                     $row->ask_rubrik,

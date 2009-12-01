@@ -6,7 +6,6 @@
  * @subpackage Frontend
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2002-08-27
- * @version    SVN: $Id$
  * @copyright  2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License

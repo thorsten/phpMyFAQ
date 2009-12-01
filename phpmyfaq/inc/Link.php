@@ -340,7 +340,7 @@ class PMF_Link
         if (!empty($this->url)) {
             $parsed = parse_url($this->url);
             if (isset($parsed['query'])) {
-                $query = $parsed['query'];
+                $query = filter_var($parsed['query'], FILTER_SANITIZE_STRIPPED);
             }
         }
 

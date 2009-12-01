@@ -35,12 +35,12 @@ $faqsession->userTracking('send2friend', 0);
 
 $cat     = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 $id      = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$artlang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
+$artlang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRIPPED);
 
 $send2friendLink = sprintf('%s/index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
     $faqconfig->get('main.referenceURL'),
-    $cat,
-    $id,
+    (int)$cat,
+    (int)$id,
     urlencode($artlang));
 
 $tpl->processTemplate ('writeContent', array(
