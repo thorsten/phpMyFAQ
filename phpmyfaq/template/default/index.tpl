@@ -41,6 +41,7 @@
 			<li>{msgOpenQuestions}</li>
 			<li>{msgQuestion}</li>
 			<li>{msgAddContent}</li>
+            <li>{showInstantResponse}</li>
 			<li>{msgSearch}</li>
 		</ul>
 	</div>
@@ -54,7 +55,6 @@
 						<li class="home">{backToHome}</li>
 						<li>{allCategories}</li>
 						{showCategories}
-						<li>{showInstantResponse}</li>
 						<li>{showSitemap}</li>
 					</ul>
 				</div>
@@ -101,7 +101,10 @@
 	<div class="main-content">
         [globalSearchBox]
 		<form id="search" action="{writeSendAdress}" method="get">
- 			<input type="text" name="search" id="searchfield" size="30" /><input type="submit" name="submit" value="{searchBox}" /> <input type="hidden" name="action" value="search" />
+ 			<input type="text" name="search" id="searchfield" size="30" />
+ 			<input type="submit" name="submit" value="{searchBox}" />
+ 			<input type="hidden" name="searchcategory" value="{categoryId}" />
+ 			<input type="hidden" name="action" value="search" />
  		</form>
  		[/globalSearchBox]
  		{writeContent}

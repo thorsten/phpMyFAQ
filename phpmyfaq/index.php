@@ -413,7 +413,9 @@ $main_template_vars = array(
 
 if ('main' == $action || 'show' == $action) {
     $tpl->processBlock('index', 'globalSearchBox', array(
-        'searchBox' => $PMF_LANG['msgSearch']));
+        'writeSendAdress' => '?'.$sids.'action=search',
+        'searchBox'       => $PMF_LANG['msgSearch'],
+        'categoryId'      => $cat));
 }
                              
 $stickyRecordsParams = $faq->getStickyRecords();
@@ -434,7 +436,6 @@ if ($faqconfig->get('main.enableRewriteRules')) {
         "msgContact"          => '<a href="' . $systemUri . 'contact.html">'.$PMF_LANG["msgContact"].'</a>',
         "backToHome"          => '<a href="' . $systemUri . 'index.html">'.$PMF_LANG["msgHome"].'</a>',
         "allCategories"       => '<a href="' . $systemUri . 'showcat.html">'.$PMF_LANG["msgShowAllCategories"].'</a>',
-        "writeSendAdress"     => $systemUri . 'search.html',
         'showInstantResponse' => '<a href="' . $systemUri . 'instantresponse.html">'.$PMF_LANG['msgInstantResponse'].'</a>',
         'showSitemap'         => getLinkHtmlAnchor('index.php?'.$sids.'action=sitemap&amp;lang='.$LANGCODE, $PMF_LANG['msgSitemap']),
         'opensearch'          => $systemUri . 'search.html');
@@ -449,7 +450,6 @@ if ($faqconfig->get('main.enableRewriteRules')) {
         "msgContact"          => '<a href="index.php?'.$sids.'action=contact">'.$PMF_LANG["msgContact"].'</a>',
         "allCategories"       => '<a href="index.php?'.$sids.'action=show">'.$PMF_LANG["msgShowAllCategories"].'</a>',
         "backToHome"          => '<a href="index.php?'.$sids.'">'.$PMF_LANG["msgHome"].'</a>',
-        "writeSendAdress"     => '?'.$sids.'action=search',
         'showInstantResponse' => '<a href="index.php?'.$sids.'action=instantresponse">'.$PMF_LANG['msgInstantResponse'].'</a>',
         'showSitemap'         => '<a href="index.php?'.$sids.'action=sitemap&amp;lang='.$LANGCODE.'">'.$PMF_LANG['msgSitemap'].'</a>',
         'opensearch'          => '?'.$sids.'action=search');
@@ -469,14 +469,7 @@ if (DEBUG) {
 //
 // Get main template, set main variables
 //
-$tpl->processTemplate(
-    'index',
-    array_merge(
-        $main_template_vars,
-        $links_template_vars,
-        $debug_template_vars
-    )
-);
+$tpl->processTemplate('index', array_merge($main_template_vars, $links_template_vars, $debug_template_vars));
 
 //
 // Show login box or logged-in user information
@@ -575,7 +568,7 @@ header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
-header("Content-type: text/html; charset=".$PMF_LANG['metaCharset']);
+header("Content-type: text/html; charset=utf-8");
 header("Vary: Negotiate,Accept");
 
 $tpl->printTemplate();
