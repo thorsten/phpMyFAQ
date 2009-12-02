@@ -1406,10 +1406,9 @@ class PMF_Category
     /**
      * Returns the number of records in each category
      *
-     * @param  string $active Only active records
      * @return array
      */
-    public function getNumberOfRecordsOfCategory($active = 'yes')
+    public function getNumberOfRecordsOfCategory()
     {
         $numRecordsByCat = array();
 
@@ -1423,12 +1422,9 @@ class PMF_Category
                 fcr.record_id = fd.id
             AND
                 fcr.record_lang = fd.lang
-            AND
-                fd.active = '%s'
             GROUP BY fcr.category_id",
             SQLPREFIX,
-            SQLPREFIX,
-            $active);
+            SQLPREFIX);
 
         $result = $this->db->query($query);
         if ($this->db->num_rows($result) > 0) {

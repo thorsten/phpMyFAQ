@@ -2,13 +2,7 @@
 /**
  * Shows the list of records ordered by categories
  *
- * @category  phpMyFAQ
- * @package   Administration
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Minoru TODA <todam@netjapan.co.jp>
- * @since     2003-02-23
- * @license   Mozilla Public License 1.1
- * @copyright 2003-2009 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,6 +13,15 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Minoru TODA <todam@netjapan.co.jp>
+ * @copyright 2003-2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2003-02-23
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -29,6 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 
 if ($permission['editbt'] || $permission['delbt']) {
+	
     // (re)evaluate the Category object w/o passing the user language
     $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $category->transform(0);
@@ -48,7 +52,6 @@ if ($permission['editbt'] || $permission['delbt']) {
     $faq     = new PMF_Faq();
 
     $cond           = $numCommentsByFaq = array();
-    $active         = 'yes';
     $internalSearch = $linkState = $searchterm = '';
     $searchcat      = $currentcategory = 0;
     $orderby        = 1;
@@ -114,7 +117,7 @@ if ($permission['editbt'] || $permission['delbt']) {
     <legend><?php print $PMF_LANG['ad_menu_entry_edit']; ?></legend>
 <?php
     $numCommentsByFaq = $comment->getNumberOfComments();
-    $numRecordsByCat  = $category->getNumberOfRecordsOfCategory($active);
+    $numRecordsByCat  = $category->getNumberOfRecordsOfCategory();
 
     // FIXME: Count "comments"/"entries" for each category also within a search context. Now the count is broken.
     // FIXME: we are not considering 'faqdata.links_state' for filtering the faqs.
