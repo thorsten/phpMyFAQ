@@ -113,6 +113,17 @@ if ($permission['editbt']) {
 
             // Call Link Verification
             link_ondemand_javascript($record_id, $recordData['lang']);
+?>
+    <script type="text/javascript">
+    <!--
+    $(document).ready(function(){
+        setTimeout(function() {
+            window.location = "index.php?action=view";
+            }, 5000);
+        });
+    //-->
+    </script>       
+<?php
         } else {
             print $PMF_LANG['ad_entry_savedfail'].$db->error();
         }
