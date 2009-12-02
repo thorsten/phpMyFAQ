@@ -219,7 +219,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     </select><br />
 
     <label for="thema"><?php print $PMF_LANG["ad_entry_theme"]; ?></label>
-    <input name="thema" id="thema" style="width: 590px; height: 30px; font-size: 24px;" value="<?php if (isset($faqData['title'])) { print $faqData['title']; } ?>" /><br />
+    <input name="thema" id="thema" style="width: 720px; height: 30px; font-size: 24px;" value="<?php if (isset($faqData['title'])) { print PMF_String::htmlspecialchars($faqData['title']); } ?>" /><br />
 
     <label for="content"><?php print $PMF_LANG["ad_entry_content"]; ?></label>
     <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
