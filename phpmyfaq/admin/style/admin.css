@@ -4,7 +4,6 @@
  * @package    phpMyFAQ
  * @subpackage Layout
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @version    SVN: $Id: admin.css 4263 2009-05-11 08:13:12Z thorsten $ 
  * @copyright  2004-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -21,7 +20,7 @@
 /*	General	*/
 * { padding: 0; margin: 0; }
 body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; line-height: 1.6em; color: #19191B;
-    background: url(../images/background.png) repeat-x; }
+    background: url(../../images/background.png) repeat-x; }
 #wrap { margin: 0 auto; max-width: 1200px; }
 
 /* Header */
