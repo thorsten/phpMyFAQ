@@ -2,17 +2,7 @@
 /**
  * Main PDF class for phpMyFAQ based on FPDF by Olivier Plathey
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Export
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Peter Beauvain <pbeauvain@web.de>
- * @author     Olivier Plathey <olivier@fpdf.org>
- * @author     Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
- * @since      2004-11-21
- * @license    Mozilla Public License 1.1
- * @version    SVN: $Id$
- * @copyright  2004-2009 phpMyFAQ Team
- * @copyright  2004-2009 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -23,9 +13,20 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_Export
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Peter Beauvain <pbeauvain@web.de>
+ * @author    Olivier Plathey <olivier@fpdf.org>
+ * @author    Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
+ * @copyright 2004-2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-11-21
  */
 
-define('K_PATH_URL', 'localhost');
+define('K_PATH_URL', '');
 
 /**
  * path to TCPDF
