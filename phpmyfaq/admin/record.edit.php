@@ -1,13 +1,8 @@
 <?php
 /**
  * The FAQ record editor.
- *
- * @category  phpMyFAQ
- * @package   Administration
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2003-02-23
- * @license   Mozilla Public License 1.1
- * @copyright 2003-2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @copyright 2003-2009 phpMyFAQ Team
+ * @since     2003-02-23
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -364,7 +367,7 @@ if($permission['approverec']):
     </fieldset>
 
     <fieldset class="fullwidth">
-    <legend><a href="javascript:void();" onclick="javascript:toggleFieldset('Expiration');"><?php print $PMF_LANG['ad_record_expiration_window']; ?></a></legend>
+    <legend><a href="#" onclick="javascript:toggleFieldset('Expiration');"><?php print $PMF_LANG['ad_record_expiration_window']; ?></a></legend>
     
     <div id="editExpiration" style="display: none;">
         <label class="lefteditor" for="dateStart"><?php print $PMF_LANG['ad_news_from']; ?></label>
@@ -377,7 +380,7 @@ if($permission['approverec']):
     </fieldset>
 
     <fieldset class="fullwidth">
-    <legend><a href="javascript:void();" onclick="javascript:toggleFieldset('Changelog');"><?php print $PMF_LANG['ad_entry_changelog']; ?></a></legend>
+    <legend><a href="#" onclick="javascript:toggleFieldset('Changelog');"><?php print $PMF_LANG['ad_entry_changelog']; ?></a></legend>
 
     <div id="editChangelog" style="display: none;">
         <label class="lefteditor"><?php print $PMF_LANG["ad_entry_date"]; ?></label>
@@ -408,22 +411,24 @@ if($permission['approverec']):
 <?php
     if (is_numeric($faqData['id'])) {
 ?>
-    <h3><?php print $PMF_LANG["ad_entry_changelog"]; ?></h3>
-    <div id="changelog">
+    <fieldset class="fullwidth">
+    <legend><a href="#" onclick="javascript:toggleFieldset('ChangelogHistory');"><?php print $PMF_LANG["ad_entry_changelog"]; ?></a></legend>
+    <div id="editChangelogHistory" style="display: none;">
 <?php
         $changeEntries = $faq->getChangeEntries($faqData['id']);
         foreach ($changeEntries as $entry) {
             $user->getUserById($entry['user']);
 ?>
-    <div style="font-size: 10px;">
-        <strong><?php print date("Y-m-d H:i:s", $entry['date']).": ".$user->getUserData('display_name'); ?></strong><br />
-        <?php print $entry['changelog']; ?><br />
-        <?php print $PMF_LANG['ad_entry_revision'].' 1.'.$entry['revision_id']; ?>
-    </div>
+        <p style="font-size: 10px;">
+            <strong><?php print $PMF_LANG['ad_entry_revision'].' 1.'.$entry['revision_id'] . ' / ' . date("Y-m-d H:i:s", $entry['date']).": ".$user->getUserData('display_name'); ?></strong><br />
+            <?php print $entry['changelog']; ?>
+        </p>
 <?php
         }
 ?>
     </div>
+    </fieldset>
+    
     </form>
     
     <script type="text/javascript">
