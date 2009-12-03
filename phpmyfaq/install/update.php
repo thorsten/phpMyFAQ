@@ -512,6 +512,15 @@ if ($step == 4) {
         }
 
     }
+
+    //
+    // UPDATES FROM 2.6.0-RC
+    //
+    if (version_compare($version, '2.6.0-RC', '<')) {
+    	
+    	$query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.optionalMailAddress', 'true')";
+    	
+    }
     
     // Perform the queries for updating/migrating the database from 2.x
     if (isset($query)) {
