@@ -34,6 +34,7 @@ session_start();
 
 $searchString = PMF_Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
 $ajaxLanguage = PMF_Filter::filterInput(INPUT_POST, 'ajaxlanguage', FILTER_SANITIZE_STRING, 'en');
+$categoryId   = PMF_Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALIDATE_INT, '%');
 
 if (PMF_Language::isASupportedLanguage($ajaxLanguage)) {
     $LANGCODE = trim($ajaxLanguage);
@@ -80,7 +81,7 @@ $faq = new PMF_Faq();
 // Handle the search requests
 //
 if (!is_null($searchString)) {
-    $result = searchEngine($db->escape_string($searchString), '%', false, true, true);
+    $result = searchEngine($db->escape_string($searchString), $categoryId, false, true, true);
     if (strtolower($PMF_LANG['metaCharset']) != 'utf-8') {
         print utf8_encode($result);
     } else {
