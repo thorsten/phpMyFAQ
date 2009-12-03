@@ -2,14 +2,8 @@
 /**
  * Saves the question of a user
  *
- * @category  phpMyFAQ
- * @package   Frontend
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
- * @author    JŸrgen Kuza <kig@bluewin.ch>
- * @since     2002-09-17
- * @copyright 2002-2009 phpMyFAQ Team
- *
+ * PHP Version 5.2.0
+ * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -19,6 +13,16 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   Frontend
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
+ * @author    JÃ¼rgen Kuza <kig@bluewin.ch>
+ * @copyright 2002-2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2002-09-17
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -91,6 +95,11 @@ function sendAskedQuestion($username, $usermail, $usercat, $content)
     }
     
     return $retval;
+}
+
+// If e-mail address is set to optional
+if (PMF_Configuration::getInstance()->get('main.optionalMailAddress')) {
+    $usermail = PMF_Configuration::getInstance()->get('main.administrationMail');
 }
 
 if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SERVER['REMOTE_ADDR']) && 

@@ -2,13 +2,8 @@
 /**
  * The 'send an email from the contact page' page.
  *
- * @package    phpMyFAQ
- * @subpackage Freontend
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2002-09-16
- * version     SVN: $Id$ 
- * @copyright  2002-2009 phpMyFAQ Team
- *
+ * PHP Version 5.2.0
+ * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -18,6 +13,15 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   Freontend
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2002-09-16
+ * @copyright 2002-2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2002-09-17
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -33,6 +37,11 @@ $name     = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
 $email    = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 $question = PMF_Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
 $code     = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
+
+// If e-mail address is set to optional
+if (PMF_Configuration::getInstance()->get('main.optionalMailAddress')) {
+    $email = PMF_Configuration::getInstance()->get('main.administrationMail');
+}
 
 if (!is_null($name) && !is_null($email) && !is_null($question) && IPCheck($_SERVER['REMOTE_ADDR']) && 
     checkBannedWord(PMF_String::htmlspecialchars($question)) && $captcha->checkCaptchaCode($code)) {

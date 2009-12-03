@@ -48,7 +48,7 @@ $categories  = PMF_Filter::filterInputArray(INPUT_POST, array('rubrik' => array(
 
 // If e-mail address is set to optional
 if (PMF_Configuration::getInstance()->get('main.optionalMailAddress')) {
-	$usermail = PMF_Configuration::getInstance()->get('main.optionalMailAddress');
+	$usermail = PMF_Configuration::getInstance()->get('main.administrationMail');
 }
 
 if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($content) && 
