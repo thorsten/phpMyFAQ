@@ -2,15 +2,8 @@
 /**
  * Saves a user FAQ record and sends an email to the user
  *
- * @package    phpMyFAQ 
- * @subpackage Frontend
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Jürgen Kuza <kig@bluewin.ch>
- * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since      2002-09-16
- * @version    SVN: $Id$ 
- * @copyright  2002-2009 phpMyFAQ Team
- *
+ * PHP Version 5.2.0
+ * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -20,6 +13,16 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ 
+ * @package   Frontend
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Jürgen Kuza <kig@bluewin.ch>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @copyright 2002-2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2002-09-16
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -42,6 +45,11 @@ $keywords    = PMF_Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_S
 $code        = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
 $categories  = PMF_Filter::filterInputArray(INPUT_POST, array('rubrik' => array('filter' => FILTER_VALIDATE_INT,
                                                                                 'flags'  => FILTER_REQUIRE_ARRAY)));
+
+// If e-mail address is set to optional
+if (PMF_Configuration::getInstance()->get('main.optionalMailAddress')) {
+	$usermail = PMF_Configuration::getInstance()->get('main.optionalMailAddress');
+}
 
 if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($content) && 
     IPCheck($_SERVER['REMOTE_ADDR']) && checkBannedWord(PMF_String::htmlspecialchars($thema)) && 
@@ -129,32 +137,25 @@ if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($
         }
     }
 
-    $tpl->processTemplate(
-        'writeContent',
+    $tpl->processTemplate('writeContent',
         array('msgNewContentHeader' => $PMF_LANG["msgNewContentHeader"],
               'Message'             => ($isNew ? $PMF_LANG['msgNewContentThanks'] : $PMF_LANG['msgNewTranslationThanks'])));
 } else {
     if (false === IPCheck($_SERVER['REMOTE_ADDR'])) {
-        $tpl->processTemplate(
-            'writeContent',
+        $tpl->processTemplate('writeContent',
             array(
-                'msgNewContentHeader'   => $PMF_LANG['msgNewContentHeader'],
-                'Message'               => $PMF_LANG['err_bannedIP']
-            )
-        );
+                'msgNewContentHeader' => $PMF_LANG['msgNewContentHeader'],
+                'Message'             => $PMF_LANG['err_bannedIP']));
     } else {
         if (is_null($faqid)) {
             $faqsession->userTracking('error_save_entry', 0);
         } else {
             $faqsession->userTracking('error_save_translation_entry', 0);
         }
-        $tpl->processTemplate(
-            'writeContent',
+        $tpl->processTemplate('writeContent',
             array(
-                'msgNewContentHeader'   => $PMF_LANG['msgNewContentHeader'],
-                'Message'               => $PMF_LANG['err_SaveEntries']
-            )
-        );
+                'msgNewContentHeader' => $PMF_LANG['msgNewContentHeader'],
+                'Message'             => $PMF_LANG['err_SaveEntries']));
     }
 }
 
