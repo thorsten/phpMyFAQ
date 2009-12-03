@@ -1079,4 +1079,4 @@ $PMF_LANG['msgShowHelp'] = 'Please seperate words by comma.';
 $PMF_LANG['msgUpdateFaqDate'] = 'update';
 $PMF_LANG['msgKeepFaqDate'] = 'keep'; 
 $PMF_LANG['msgEditFaqDat'] = 'edit';
-$LANG_CONF['main.optionalMailAddress'] = array(0 => 'input', 1 => 'Mail address as mandatory field (default: deactivated)');
+$LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Mail address as mandatory field (default: deactivated)');
