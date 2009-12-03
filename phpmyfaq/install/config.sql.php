@@ -54,7 +54,7 @@ $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.defaultAttachmentE
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.useSslForLogins', 'false')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.numberSearchTerms', '10')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.orderingPopularFaqs', 'visits')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.optionalMailAddress', 'true')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.optionalMailAddress', 'false')";
 
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.defaultActivation', 'false')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.defaultAllowComments', 'false')";
