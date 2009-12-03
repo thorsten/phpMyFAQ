@@ -2,14 +2,8 @@
 /**
  * Shows the page with the FAQ record and - when available - the user
  * comments
- *
- * @category  phpMyFAQ
- * @package   Frontend
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Lars Tiedemann <larstiedemann@yahoo.de>
- * @since     2002-08-27
- * @version   git: $Id$
- * @copyright 2002-2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,6 +14,15 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Frontend
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Lars Tiedemann <larstiedemann@yahoo.de>
+ * @copyright 2002-2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2002-08-27
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -123,12 +126,11 @@ if (isset($linkArray['href'])) {
     foreach (array_unique($linkArray['href']) as $_url) {
         if (!(strpos($_url, 'index.php?action=artikel') === false)) {
             // Get the Faq link title
+            $matches = array();
             preg_match('/id=([\d]+)/ism', $_url, $matches);
-            $_id   = $matches[1];
-            preg_match('/artlang=([a-z\-]+)$/ism', $_url, $matches);
-            $_lang = $matches[1];
+            $_id    = $matches[1];
             $_title = $faq->getRecordTitle($_id, false);
-            $_link = substr($_url, 9);
+            $_link  = substr($_url, 9);
             // Move the link to XHTML
             if (strpos($_url, '&amp;') === false) {
                 $_link = str_replace('&', '&amp;', $_link);
