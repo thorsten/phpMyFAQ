@@ -23,20 +23,21 @@
     <!-- Voting Form -->
     <div id="voting">
     <form action="{saveVotingPATH}" method="post" style="display: inline;">
-    <fieldset>
-    <legend>{msgVoteUseability}</legend>
+    <br/>
+    <h2>{msgVoteUseability}</h2>
     <input type="hidden" name="artikel" value="{saveVotingID}" />
-    <p align="center"><strong>{msgAverageVote}</strong> {printVotings}</p>
-    <p align="center">{msgVoteBad}
+    <p><strong>{msgAverageVote}</strong> {printVotings}</p>
+    <strong>Ihre Bewertung:</strong><br/>
+    <p>{msgVoteBad}
     <input class="radio" type="radio" name="vote" value="1" /> 1
     <input class="radio" type="radio" name="vote" value="2" /> 2
     <input class="radio" type="radio" name="vote" value="3" /> 3
     <input class="radio" type="radio" name="vote" value="4" /> 4
     <input class="radio" type="radio" name="vote" value="5" /> 5
-    {msgVoteGood}<br />
+    {msgVoteGood}
     <input class="submit" type="submit" name="submit" value="{msgVoteSubmit}" />
     </p>
-    </fieldset>
+
     </form>
     </div>
     <!-- /Voting Form -->

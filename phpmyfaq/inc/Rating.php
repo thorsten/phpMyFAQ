@@ -200,12 +200,10 @@ class PMF_Rating
        $result = $this->db->query($query);
        if ($this->db->num_rows($result) > 0) {
             $row = $this->db->fetch_object($result);
-            return sprintf(' %s %s 5 ('.$this->plr->GetMsg('plmsgVotes',$row->usr).')',
-                round($row->voting, 2),
-                $this->pmf_lang['msgVoteFrom']);
+            return sprintf(' %s ('.$this->plr->GetMsg('plmsgVotes',$row->usr).')',
+                round($row->voting, 2));
        } else {
-            return sprintf(' 0 %s 5 ('.$this->plr->GetMsg('plmsgVotes',0).')',
-                $this->pmf_lang['msgVoteFrom']);
+            return '0 ('.$this->plr->GetMsg('plmsgVotes',0).')';
        }
     }
 }
