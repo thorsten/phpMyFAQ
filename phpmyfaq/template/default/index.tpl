@@ -107,8 +107,16 @@
  			<input type="hidden" name="action" value="search" />
  		</form>
  		[/globalSearchBox]
- 		{writeContent}
-	</div>
+ 		[globalSuggestBox]
+        <form id="instantform" action="?action=instantresponse" method="post">
+        <input id="ajaxlanguage" name="ajaxlanguage" type="hidden" value="{ajaxlanguage}" />
+        <input class="inputfield" id="instantfield" type="text" name="search" value="" />
+        </form
+ 		[/globalSuggestBox]
+
+{writeContent}
+    
+    </div>
 </div>
 <div class="clearing"></div>
 <div id="footer" class="footer">

@@ -412,10 +412,15 @@ $main_template_vars = array(
                              $faqconfig->get('main.currentVersion'));
 
 if ('main' == $action || 'show' == $action) {
-    $tpl->processBlock('index', 'globalSearchBox', array(
-        'writeSendAdress' => '?'.$sids.'action=search',
-        'searchBox'       => $PMF_LANG['msgSearch'],
-        'categoryId'      => $cat));
+	if ('main' == $action && PMF_Configuration::getInstance()->get('main.useAjaxSearchOnStartpage')) {
+		$tpl->processBlock('index', 'globalSuggestBox', array(
+            'ajaxlanguage' => $LANGCODE,));
+	} else {
+        $tpl->processBlock('index', 'globalSearchBox', array(
+            'writeSendAdress' => '?'.$sids.'action=search',
+            'searchBox'       => $PMF_LANG['msgSearch'],
+            'categoryId'      => $cat));
+    }
 }
                              
 $stickyRecordsParams = $faq->getStickyRecords();
