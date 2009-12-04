@@ -1029,3 +1029,4 @@ $PMF_LANG['msgUpdateFaqDate'] = 'aktualisieren';
 $PMF_LANG['msgKeepFaqDate'] = 'behalten'; 
 $PMF_LANG['msgEditFaqDat'] = 'ändern';
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Angabe der E-Mailadresse als Pflichtfeld (Standard: deaktiviert)');
+$LANG_CONF['main.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Sofortantwort auf der Startseite (Standard: deaktiviert)');

@@ -519,7 +519,7 @@ if ($step == 4) {
     if (version_compare($version, '2.6.0-RC', '<')) {
     	
     	$query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.optionalMailAddress', 'false')";
-    	
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.useAjaxSearchOnStartpage', 'false')";
     }
     
     // Perform the queries for updating/migrating the database from 2.x
