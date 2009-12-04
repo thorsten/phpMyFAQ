@@ -104,9 +104,9 @@ class PMF_Glossary
         
         while ($row = $this->db->fetch_object($result)) {
             $items[] = array(
-                'id'            => $row->id,
-                'item'          => stripslashes($row->item),
-                'definition'    => stripslashes($row->definition));
+                'id'         => $row->id,
+                'item'       => stripslashes($row->item),
+                'definition' => stripslashes($row->definition));
         }
         return $items;
     }
@@ -129,10 +129,10 @@ class PMF_Glossary
             'onmouseup', 'onmouseover', 'onmousemove', 'onmouseout',
             'onkeypress', 'onkeydown', 'onkeyup');
 
-        foreach($this->getAllGlossaryItems() as $item) {
+        foreach ($this->getAllGlossaryItems() as $item) {
             $this->definition = $item['definition'];
-            $item['item'] = preg_quote($item['item'], '/');
-            $content = PMF_String::preg_replace_callback(
+            $item['item']     = preg_quote($item['item'], '/');
+            $content          = PMF_String::preg_replace_callback(
                 '/'
                 // a. the glossary item could be an attribute name
                 .'('.$item['item'].'="[^"]*")|'
@@ -154,7 +154,7 @@ class PMF_Glossary
      * @param  array $matches Matchings
      * @return string
      */
-    public function _setAcronyms($matches)
+    private function _setAcronyms(Array $matches)
     {
     	if (count($matches) > 4) {
             $prefix  = $matches[4];
@@ -163,9 +163,9 @@ class PMF_Glossary
     	}
 
         if (!empty($item)) {
-            return sprintf('<acronym class="glossary" title="%s">%s</acronym>',
+            return sprintf($prefix .'<acronym class="glossary" title="%s">%s</acronym>'. $postfix,
                 $this->definition,
-                $prefix . $item . $postfix);
+                $item); 
         }
 
         // Fallback: the original matched string

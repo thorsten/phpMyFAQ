@@ -11,31 +11,7 @@
 
     </fieldset>
     </form>
-    <script type="text/javascript">
-    //<![CDATA[
-        $('#instantfield').keyup(function() {
-            
-            var search   = $('#instantfield').val();
-            var language = $('#ajaxlanguage').val();
-            
-            if (search.length > 0) { 
-                $.ajax({ 
-                    type:    "POST", 
-                    url:     "ajaxresponse.php", 
-                    data:    "search=" + search + "&ajaxlanguage=" + language, 
-                    success: function(searchresults) 
-                    { 
-                        $("#instantresponse").empty(); 
-                        if (searchresults.length > 0)  { 
-                            $("#instantresponse").append(searchresults);
-                        } 
-                    } 
-                });
-            }
-            
-        });    
-    //]]>
-    </script>
+    <script type="text/javascript" src="inc/js/suggest.js"></script>
 
     <div id="instantresponse">
     {printInstantResponse}

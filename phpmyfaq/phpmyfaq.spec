@@ -161,6 +161,9 @@ installation script.
 * Mon Nov 07 2009 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.6.0.beta-1
 - New upstream version 2.6.0-beta
 
+* Tue Dec 01 2009 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.5.6-1
+- New upstream version 2.5.6.
+
 * Tue Nov 10 2009 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.5.5-1
 - New upstream version 2.5.5.
 

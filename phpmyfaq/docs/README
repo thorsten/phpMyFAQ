@@ -36,8 +36,9 @@ Version 2.6.0-RC - 2009-12-
 - updated Greek translation (Periklis Tsirakidis)
 - minor bugfixes (Thorsten)
 
-Version 2.5.5 - 2009-12
--
+Version 2.5.5 - 2009-12-01
+- fixed IE6/7 only XSS vulnerabilities (Amol Naik, Thorsten)
+- many minor bugfixes (Thorsten)
 
 Version 2.5.4 - 2009-11-10
 - Fixed various PostgreSQL related issues (Anatoliy, Thorsten)

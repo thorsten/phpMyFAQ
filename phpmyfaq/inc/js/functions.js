@@ -1,14 +1,15 @@
 /**
  * Some JavaScript functions used in the admin backend
  *
+ * @category  phpMyFAQ
+ * @package   JavaScript
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Periklis Tsirakidis <tsirakidis@phpdevel.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @since     2003-11-13
- * @version   SVN: $Id: functions.js,v 1.9 2008-01-20 16:21:43 thorstenr Exp $
  * @copyright 2003-2009 phpMyFAQ Team
+ * @since     2003-11-13
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in

@@ -519,18 +519,20 @@ if ($step == 4) {
     if (version_compare($version, '2.6.0-RC', '<')) {
     	
     	$query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.optionalMailAddress', 'false')";
-    	
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.useAjaxSearchOnStartpage', 'false')";
     }
     
     // Perform the queries for updating/migrating the database from 2.x
     if (isset($query)) {
+    	print '<div class="center">';
         ob_flush();
         flush();
         $count = 0;
         foreach ($query as $current_query) {
             $result = @$db->query($current_query);
-            print '| ';
+            print '.';
             if (!$result) {
+            	print "</div>";
                 print "\n<div class=\"error\">\n";
                 print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
                 print "<div style=\"text-align: left;\"><p>Query:\n";
@@ -547,6 +549,7 @@ if ($step == 4) {
         }
         ob_flush();
         flush();
+        print "</div>";
     }
 
     // Clear the array with the queries
@@ -584,9 +587,10 @@ if ($step == 4) {
 
     // Perform the queries for optimizing the database
     if (isset($query)) {
+        print '<div class="center">';
         foreach ($query as $current_query) {
             $result = $db->query($current_query);
-            printf('<span title="%s">|</span> ', $current_query);
+            printf('<span title="%s">.</span>', $current_query);
             if (!$result) {
                 print "\n<div class=\"error\">\n";
                 print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
@@ -597,6 +601,7 @@ if ($step == 4) {
             }
             wait(10);
         }
+        print "</div>";
     }
 
     print "</p>\n";
