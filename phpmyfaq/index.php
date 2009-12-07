@@ -343,7 +343,7 @@ if (isset($auth)) {
 }
 
 if ($action != 'main') {
-    $inc_tpl         = 'template/' . $action . '.tpl';
+    $inc_tpl         = $action . '.tpl';
     $inc_php         = $action . ".php";
     $writeLangAdress = "?" . PMF_Filter::getFilteredQueryString();
 } else {
