@@ -32,8 +32,10 @@ Version 2.6.0-RC - 2009-12-
 - improved user administration (Max Köhler)
 - improved FAQ entry workflow (Anatoliy, Thorsten)
 - removed Docbook XML export (Thorsten)
-- updated bundled TinyMCE editor component to version 3.2.7 (Max Köhler)
 - updated Greek translation (Periklis Tsirakidis)
+
+Version 2.5.6 - 2010-
+- updated bundled TinyMCE editor component to version 3.2.7 (Thorsten)
 - minor bugfixes (Thorsten)
 
 Version 2.5.5 - 2009-12-01
