@@ -73,5 +73,24 @@ class PMF_Filter
 		$return = filter_var($variable, $filter);
         
         return is_null($return) ? $default : $return;
-	}
+    }
+
+    /**
+     * Filters a query string
+     *
+     * @return string
+     */
+    public static function getFilteredQueryString ()
+    {
+        $queryString = '';
+        $urlData     = $cleanUrlData = array();
+        
+        parse_str($_SERVER['QUERY_STRING'], $urlData);
+        foreach ($urlData as $key => $urlPart) {
+            $cleanUrlData[strip_tags($key)] = strip_tags($urlPart);
+        }
+        $queryString = http_build_query($cleanUrlData);
+        
+        return $queryString;
+    }
 }
