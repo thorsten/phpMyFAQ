@@ -341,10 +341,11 @@ if (isset($auth)) {
         $login_tpl = 'secureswitch.tpl';
     }
 }
+
 if ($action != 'main') {
-    $inc_tpl         = $action . '.tpl';
-    $inc_php         = $action . '.php';
-    $writeLangAdress = '?' . str_replace("&", "&amp;",$_SERVER["QUERY_STRING"]);
+    $inc_tpl         = 'template/' . $action . '.tpl';
+    $inc_php         = $action . ".php";
+    $writeLangAdress = "?" . PMF_Filter::getFilteredQueryString();
 } else {
     if (isset($solution_id) && is_numeric($solution_id)) {
         // show the record with the solution ID
