@@ -2,6 +2,7 @@
 <div id="solution_id">ID #{solution_id}</div>
 <h2>{writeThema}</h2>
 
+    <hr/>
     <!-- Article -->
     <div id="article_content">{writeContent}</div>
     <!-- /Article -->
@@ -9,16 +10,26 @@
     <!-- Article Categories Listing -->
     {writeArticleCategories}
     <!-- /Article Categories Listing -->
+    <hr/>
 
-    <!-- Article Info -->
-    <p><span id="popularity" style="display: none;">{writePopularity}</span>{writeDateMsg}<br />{writeAuthor}<br />{writeRevision}<br />{editThisEntry}</p>
-    <!-- /Article Info -->
-
-    <p>
-    <a href="javascript:window.print();"><img src="images/print.gif" alt="{writePrintMsgTag}" title="{writePrintMsgTag}" width="16" height="16" border="0" class="recordIcons" />{writePrintMsgTag}</a>
-    &nbsp;&nbsp;&nbsp;&nbsp; 
-    <a target="_blank" href="{link_pdf}"><img src="images/pdf.gif" alt="{writePDFTag}" title="{writePDFTag}" width="16" height="16" border="0" class="recordIcons" />{writePDFTag}</a>
-    </p>
+    <div id="faq_information">
+        <div class="first-column">
+            <!-- Article Info -->
+                <span id="popularity" style="display: none;">{writePopularity}</span>
+                {writeDateMsg}<br />
+                {writeAuthor}<br />
+                {writeRevision}<br />
+                {editThisEntry}
+            <!-- /Article Info -->
+        </div>
+        
+        <div class="seconde-column">
+            <a href="javascript:window.print();"><img src="images/print.gif" alt="{writePrintMsgTag}" title="{writePrintMsgTag}" width="16" height="16" border="0" class="recordIcons" />{writePrintMsgTag}</a>
+            <br/> 
+            <a target="_blank" href="{link_pdf}"><img src="images/pdf.gif" alt="{writePDFTag}" title="{writePDFTag}" width="16" height="16" border="0" class="recordIcons" />{writePDFTag}</a>
+        </div>
+    </div>
+    <div style="clear:both; margin-bottom: 20px;"></div>
 
     <!-- Voting Form -->
     <div id="voting">
@@ -27,7 +38,7 @@
     <h2>{msgVoteUseability}</h2>
     <input type="hidden" name="artikel" value="{saveVotingID}" />
     <p><strong>{msgAverageVote}</strong> {printVotings}</p>
-    <strong>Ihre Bewertung:</strong><br/>
+    <p><strong>Ihre Bewertung:</strong><br/></p>
     <p>{msgVoteBad}
     <input class="radio" type="radio" name="vote" value="1" /> 1
     <input class="radio" type="radio" name="vote" value="2" /> 2

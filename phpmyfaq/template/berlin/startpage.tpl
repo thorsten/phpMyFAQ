@@ -1,27 +1,33 @@
                 <div class="content">
                     <div id="topten">
                     <h3>{writeTopTenHeader}</h3>
-                    <ol>
+                    <table>
                         [toptenList]
-                        <li><a href="{toptenUrl}">{toptenTitle}</a> ({toptenVisits})</li>
+                        <tr>
+                            <td><a href="{toptenUrl}">{toptenTitle}</a></td>
+                            <td>{toptenVisits}</td>
+                        </tr>
                         [/toptenList]
                         [toptenListError]
-                        <li>{errorMsgTopTen}</li>
+                        <tr><td colspan="2">{errorMsgTopTen}</td></tr>
                         [/toptenListError]
-                    </ol>
+                    </table>
                     </div>
                 </div>
 
                 <div class="content">
                     <div id="latest">
                     <h3>{writeNewestHeader}</h3>
-                    <ol>
+                    <table>
                         [latestEntriesList]
-                        <li><a href="{latestEntriesUrl}">{latestEntriesTitle}</a> ({latestEntriesDate})</li>
+                        <tr>
+                            <td>{latestEntriesDate}</td>
+                            <td><a href="{latestEntriesUrl}">{latestEntriesTitle}</a></td>
+                        </tr>
                         [/latestEntriesList]
                         [latestEntriesListError]
-                        <li>{errorMsgLatest}</li>
+                        <tr><td colspan="2">{errorMsgLatest}</td></tr>
                         [/latestEntriesListError]
-                    </ol>
+                    </table>
                     </div>
                 </div>

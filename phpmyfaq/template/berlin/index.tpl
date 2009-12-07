@@ -33,23 +33,24 @@
 
 <div id="content">
 <div class="header" id="header">
-	<div>
-		<div id="header-banner"><img src="template/{tplSetName}/hgn_streifen_senstadt_intern.jpg"><img src="template/{tplSetName}/banner.jpg"></div>
-      <h1></h1>
-      <div style="clear: both;"></div>
+    <div>
+        <div id="header-banner"></div>
+        <div style="clear: both;"></div>
+        <ul class="left">
+            <li><a href="http://www.senstadt.verwalt-berlin.de/" title="Zur Startseite der Senstadt"> • Senatsverwaltung für Stadtenwicklung</a></li>
+        </ul>
 		<ul>
 			<li>{msgHelp}</li>
 			<li>{msgOpenQuestions}</li>
 			<li>{msgQuestion}</li>
 			<li>{allCategories}</li>
 			<li>{msgSearch}</li>
-            <li>{backToHome}</li>
 		</ul>
 	</div>
 </div>
 <div class="columns">
 	<div class="leftcolumn">
-			<h2 class="invisible">Navigation</h2>
+           <p>Rubriken:</p>
 			<div class="content">
 				<div id="categories">
 					<ul>
@@ -64,7 +65,7 @@
 	</div>
 
 	<div class="rightcolumn">
-		{rightBox}
+		
 	</div>
 
 	<div class="main-content">
@@ -76,7 +77,10 @@
             <input type="hidden" name="action" value="search" />
         </form>
         [/globalSearchBox]
- 		{writeContent}
+        {writeContent}
+        
+        {rightBox}
+
 	</div>
 </div>
 <div class="clearing"></div>
