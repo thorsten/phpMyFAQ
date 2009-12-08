@@ -1,4 +1,4 @@
-phpMyFAQ 2.6.0-RC
+phpMyFAQ 2.6.0-RC2
 Codename "Portia"
 
 Installation/Update:
@@ -7,14 +7,12 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 2.6.0-beta:
-- updated Greek translation (Periklis Tsirakidis)
-- improved and fixed update migration process (Thorsten)
-- fixed a lot of minor issues (Thorsten)
+Changes since 2.6.0-RC:
+- 
 
 CHANGELOG:
 
-Version 2.6.0-RC - 2009-12-08
+Version 2.6.0-RC2 - 2009-12
 - moved all language files to UTF-8 (Anatoliy)
 - added TCPDF as replacement for FPDF library (Thorsten)
 - added support for TinyMCE translations (Aurimas Fi≈°eras)
