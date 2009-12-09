@@ -8,17 +8,17 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.6.0-RC:
-- 
+- updated Lithuanian translation (Aurimas Fišeras)
 
 CHANGELOG:
 
 Version 2.6.0-RC2 - 2009-12
 - moved all language files to UTF-8 (Anatoliy)
 - added TCPDF as replacement for FPDF library (Thorsten)
-- added support for TinyMCE translations (Aurimas Fi≈°eras)
+- added support for TinyMCE translations (Aurimas Fišeras)
 - added support for multi-language news (Thorsten)
 - added user adjustable template sets and styles (Anatoliy)
-- added support plurals in translations (Aurimas Fi≈°eras)
+- added support plurals in translations (Aurimas Fišeras)
 - added share on Facebook link (Thorsten)
 - added a rest/json API (Thorsten)
 - added secure login if SSL is available (Tobias Hommel)
@@ -31,6 +31,7 @@ Version 2.6.0-RC2 - 2009-12
 - improved FAQ entry workflow (Anatoliy, Thorsten)
 - removed Docbook XML export (Thorsten)
 - updated Greek translation (Periklis Tsirakidis)
+- updated Lithuanian translation (Aurimas Fišeras)
 
 Version 2.5.6 - 2010-
 - updated bundled TinyMCE editor component to version 3.2.7 (Thorsten)

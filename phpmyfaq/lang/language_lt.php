@@ -1042,3 +1042,27 @@ $PMF_LANG['msgTransToolNoteFileSaving']  = 'Pastebėkite, kad jokie failai nebus
 $PMF_LANG['msgTransToolPageBufferRecorded'] = 'Puslapio %d buferis sėkmingai įrašytas';
 $PMF_LANG['msgTransToolErrorRecordingPageBuffer'] = 'Klaida įrašant puslapio %d buferį';
 $PMF_LANG['msgTransToolRecordingPageBuffer'] = 'Įrašomas puslapio %d buferis';
+
+// added 2.6.0-alpha - 2009-11-02 by Anatoliy Belsky
+$PMF_LANG['ad_record_active'] = 'Aktyvus';
+
+// added 2.6.0-alpha - 2009-11-01 by Anatoliy Belsky
+$PMF_LANG['msgAttachmentInvalid'] = 'Priedas yra blogas, informuokite administratorių';
+
+// added 2.6.0-alpha - 2009-11-02 by max
+$LANG_CONF['main.numberSearchTerms']   = array(0 => 'input', 1 => 'Rodomų paieškos raktažodžių skaičius');
+$LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Populiariausių DUK rikiavimas");
+$PMF_LANG['list_all_users']            = 'Rodyti visus naudotojus';
+
+$PMF_LANG['main.orderingPopularFaqs.visits'] = "rodyti dažniausiai peržiūrėtus įrašus";
+$PMF_LANG['main.orderingPopularFaqs.voting'] = "rodyti geriausiai įvertintus įrašus";
+
+// added 2.6.0-alpha - 2009-11-05 by Thorsten
+$PMF_LANG['msgShowHelp'] = 'Prašome atskirti žodžius kableliu.';
+
+// added 2.6.0-RC - 2009-11-30 by Thorsten
+$PMF_LANG['msgUpdateFaqDate'] = 'atnaujinti';
+$PMF_LANG['msgKeepFaqDate'] = 'palikti'; 
+$PMF_LANG['msgEditFaqDat'] = 'redaguoti';
+$LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'El. pašto adresas yra būtinas laukas (numatyta r.: išjungta)');
+$LANG_CONF['main.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Greitas atsakymas pradžios tinklalapyje (numatyta r.: išjungta)');
