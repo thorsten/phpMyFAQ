@@ -862,7 +862,7 @@ function getSearchData($searchterm, $asResource = false, $cat = '%', $allLanguag
     if ($result) {
         $num = $db->num_rows($result);
     }
-
+    
     // Show the record with the solution ID directly
     // Sanity checks: if a valid Solution ID has been provided the result set
     //                will measure 1: this is true ONLY if the faq is not
@@ -934,7 +934,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
     $db          = PMF_Db::getInstance();
     $faqconfig   = PMF_Configuration::getInstance();
 
-    $result = getSearchData($searchterm, true, $cat, $allLanguages);
+    $result = getSearchData(htmlentities($searchterm), true, $cat, $allLanguages);
     $num    = $db->num_rows($result);
 
     if (0 == $num) {
