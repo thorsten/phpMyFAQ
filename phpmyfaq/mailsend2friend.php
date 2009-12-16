@@ -2,11 +2,7 @@
 /**
  * Sends the emails to your friends
  *
- * @category  phpMyFAQ
- * @package   Frontend
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2009 phpMyFAQ Team
- * @since     2002-09-16
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -17,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Frontend
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2002-2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2002-09-16
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -35,15 +39,11 @@ $link     = PMF_Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
 $attached = PMF_Filter::filterInput(INPUT_POST, 'zusatz', FILTER_SANITIZE_STRIPPED);
 $code     = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
 
-if (
-    !is_null($name) && !is_null($mailfrom) && is_array($mailto) && IPCheck($_SERVER['REMOTE_ADDR'])
-    && checkBannedWord(PMF_String::htmlspecialchars($attached)) && $captcha->checkCaptchaCode($code)
-    ) {
+if (!is_null($name) && !is_null($mailfrom) && is_array($mailto) && IPCheck($_SERVER['REMOTE_ADDR'])
+    && checkBannedWord(PMF_String::htmlspecialchars($attached)) && $captcha->checkCaptchaCode($code)) {
 
     // Backward compatibility: extract article info from the link, no template change required
-    $cat = null;
-    $id = null;
-    $artlang = null;
+    $cat = $id = $artlang = null;
     preg_match('`index\.php\?action=artikel&cat=(?<cat>[\d]+)&id=(?<id>[\d]+)&artlang=(?<artlang>[^$]+)$`', $link, $matches);
     if (isset($matches['cat'])) {
         $cat = (int)$matches['cat'];
@@ -61,10 +61,8 @@ if (
         exit();
     }
 
-    // Load categories
     $category = new PMF_Category();
-    // Load the required faq
-    $faq = new PMF_Faq();
+    $faq      = new PMF_Faq();
     $faq->getRecord($id);
 
     foreach($mailto['mailto'] as $recipient) {

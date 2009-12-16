@@ -1,14 +1,8 @@
 <?php
 /**
  * The Ajax powered instant response page.
- *
- * @package    phpMyFAQ
- * @subpackage Frontend
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since      2007-03-18
- * @version    SVN: $Id$
- * @copyright  2007-2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,6 +13,15 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Frontend
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @copyright 2007-2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2007-03-18
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
