@@ -2,17 +2,7 @@
 /**
  * The rest/json application interface
  * 
- * You can call the resource with the following URIs:
- *
- * - http://www.example.org/phpmyfaq/api.php?action=<action>&<...> [parameter list] (standard)
- * - http://www.example.org/phpmyfaq/api/<...>/<...> [parameter list] (rewrite rules enabled)
- *
- * @package    phpMyFAQ 
- * @subpackage PMF_Service
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2009-09-03
- * @version    SVN: $Id$
- * @copyright  2009 phpMyFAQ Team
+ * PHP Version 5.2.0
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -23,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ 
+ * @package   PMF_Service
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-09-03
  */
 
 //

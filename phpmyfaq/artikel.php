@@ -1,7 +1,6 @@
 <?php
 /**
- * Shows the page with the FAQ record and - when available - the user
- * comments
+ * Shows the page with the FAQ record and - when available - the user comments
  * 
  * PHP Version 5.2
  *
