@@ -6,7 +6,7 @@
  * http://alexgorbatchev.com/wiki/SyntaxHighlighter:Donate
  *
  * @version
- * 2.0.320 (May 03 2009)
+ * 2.1.364 (October 15 2009)
  * 
  * @copyright
  * Copyright (C) 2004-2009 Alex Gorbatchev.
@@ -49,9 +49,9 @@ SyntaxHighlighter.brushes.Delphi = function()
 		{ regex: /\{\$[a-zA-Z]+ .+\}/g,								css: 'color1' },		// compiler Directives and Region tags
 		{ regex: /\b[\d\.]+\b/g,									css: 'value' },			// numbers 12345
 		{ regex: /\$[a-zA-Z0-9]+\b/g,								css: 'value' },			// numbers $F5D3
-		{ regex: new RegExp(this.getKeywords(keywords), 'gm'),		css: 'keyword' }		// keyword
+		{ regex: new RegExp(this.getKeywords(keywords), 'gmi'),		css: 'keyword' }		// keyword
 		];
 };
 
 SyntaxHighlighter.brushes.Delphi.prototype	= new SyntaxHighlighter.Highlighter();
-SyntaxHighlighter.brushes.Delphi.aliases	= ['delphi', 'pascal'];
+SyntaxHighlighter.brushes.Delphi.aliases	= ['delphi', 'pascal', 'pas'];

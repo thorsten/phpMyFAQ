@@ -28,30 +28,41 @@
  * along with SyntaxHighlighter.  If not, see <http://www.gnu.org/copyleft/lesser.html>.
  */
 /**
- * Emacs SyntaxHighlighter theme based on theme by Joshua Emmons
- * http://www.skia.net/
+ * Eclipse IDE SyntaxHighlighter color theme
+ * (C) Code-House
+ * http://blog.code-house.org/2009/10/xml-i-adnotacje-kod-ogolnego-przeznaczenia-i-jpa/
  */
-
-/************************************
- * Interface elements.
- ************************************/
 
 .syntaxhighlighter
 {
-	background-color: #000000 !important;
+	background-color: #fff !important;
+}
+
+/* Highlighed line number */
+.syntaxhighlighter .line.highlighted .number
+{
+	background-color: #c3defe !important;
+}
+
+/* Highlighed line */
+.syntaxhighlighter .line.highlighted.alt1,
+.syntaxhighlighter .line.highlighted.alt2
+{
+	background-color: #c3defe !important;
 }
 
 /* Gutter line numbers */
 .syntaxhighlighter .line .number
 {
-	color: #D3D3D3 !important;
+	color: #787878 !important;
+	background-color: #fff !important;
 }
 
 /* Add border to the lines */
 .syntaxhighlighter .line .content
 {
-	border-left: 3px solid #990000 !important;
-	color: #B9BDB6 !important;
+	border-left: 1px solid #d4d0c8 !important;
+	color: #000 !important;
 }
 
 .syntaxhighlighter.printing .line .content 
@@ -62,42 +73,29 @@
 /* First line */
 .syntaxhighlighter .line.alt1
 {
+	background-color: #fff !important;
 }
 
 /* Second line */
 .syntaxhighlighter .line.alt2
 {
-	background-color: #0f0f0f !important;
-}
-
-/* Highlighed line number */
-.syntaxhighlighter .line.highlighted .number
-{
-	background-color: #435A5F !important;
-	color: #fff !important;
-}
-
-/* Highlighed line */
-.syntaxhighlighter .line.highlighted.alt1,
-.syntaxhighlighter .line.highlighted.alt2
-{
-	background-color: #435A5F !important;
+	background-color: #fff !important;
 }
 
 .syntaxhighlighter .toolbar
 {
-	background-color: #000000 !important;
-	border: #000000 solid 1px !important;
+	background-color: #F8F8F8 !important;
+	border: #E7E5DC solid 1px !important;
 }
 
 .syntaxhighlighter .toolbar a
 {
-	color: #646763 !important;
+	color: #a0a0a0 !important;
 }
 
 .syntaxhighlighter .toolbar a:hover
 {
-	color: #9CCFF4 !important;
+	color: red !important;
 }
 
 /************************************
@@ -106,34 +104,35 @@
 .syntaxhighlighter .plain,
 .syntaxhighlighter .plain a
 { 
-	color: #D3D3D3 !important;
+	color: #000 !important;
 }
 
 .syntaxhighlighter .comments,
 .syntaxhighlighter .comments a
 { 
-	color: #FF7D27 !important;
+	color: #3f5fbf !important;
 }
 
 .syntaxhighlighter .string,
 .syntaxhighlighter .string a
 {
-	color: #FF9E7B !important; 
+	color: #2a00ff !important; 
 }
 
 .syntaxhighlighter .keyword
 { 
-	color: #00FFFF !important; 
+	color: #7f0055 !important; 
+	font-weight: bold !important; 
 }
 
 .syntaxhighlighter .preprocessor 
 { 
-	color: #AEC4DE !important; 
+	color: #646464 !important; 
 }
 
 .syntaxhighlighter .variable 
 { 
-	color: #FFAA3E !important; 
+	color: #a70 !important; 
 }
 
 .syntaxhighlighter .value
@@ -143,33 +142,49 @@
 
 .syntaxhighlighter .functions
 { 
-	color: #81CEF9 !important; 
+	color: #ff1493 !important; 
 }
 
 .syntaxhighlighter .constants
 { 
-	color: #FF9E7B !important; 
+	color: #0066CC !important; 
 }
 
 .syntaxhighlighter .script
 { 
-	background-color: #990000 !important;
+	background-color: yellow !important;
 }
 
 .syntaxhighlighter .color1,
 .syntaxhighlighter .color1 a
 { 
-	color: #EBDB8D !important; 
+	color: #808080 !important; 
 }
 
 .syntaxhighlighter .color2,
 .syntaxhighlighter .color2 a
 { 
-	color: #FF7D27 !important; 
+	color: #ff1493 !important; 
 }
 
 .syntaxhighlighter .color3,
 .syntaxhighlighter .color3 a
 { 
-	color: #AEC4DE !important; 
+	color: red !important; 
+}
+
+
+.xml .keyword {
+    color: #3f7f7f !important;
+    font-weight: normal !important;
+}
+
+.xml .color1,
+.xml .color1 a{
+    color: #7f007f !important;
+}
+
+.xml .string {
+    font-style: italic !important;
+    color: #2a00ff !important;
 }

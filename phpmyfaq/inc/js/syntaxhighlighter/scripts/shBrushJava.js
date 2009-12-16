@@ -6,7 +6,7 @@
  * http://alexgorbatchev.com/wiki/SyntaxHighlighter:Donate
  *
  * @version
- * 2.0.320 (May 03 2009)
+ * 2.1.364 (October 15 2009)
  * 
  * @copyright
  * Copyright (C) 2004-2009 Alex Gorbatchev.
@@ -39,7 +39,8 @@ SyntaxHighlighter.brushes.Java = function()
 
 	this.regexList = [
 		{ regex: SyntaxHighlighter.regexLib.singleLineCComments,	css: 'comments' },		// one line comments
-		{ regex: SyntaxHighlighter.regexLib.multiLineCComments,		css: 'comments' },		// multiline comments
+		{ regex: /\/\*([^\*][\s\S]*)?\*\//gm,						css: 'comments' },	 	// multiline comments
+		{ regex: /\/\*(?!\*\/)\*[\s\S]*?\*\//gm,					css: 'preprocessor' },	// documentation comments
 		{ regex: SyntaxHighlighter.regexLib.doubleQuotedString,		css: 'string' },		// strings
 		{ regex: SyntaxHighlighter.regexLib.singleQuotedString,		css: 'string' },		// strings
 		{ regex: /\b([\d]+(\.[\d]+)?|0x[a-f0-9]+)\b/gi,				css: 'value' },			// numbers
@@ -48,7 +49,10 @@ SyntaxHighlighter.brushes.Java = function()
 		{ regex: new RegExp(this.getKeywords(keywords), 'gm'),		css: 'keyword' }		// java keyword
 		];
 
-	this.forHtmlScript(SyntaxHighlighter.regexLib.aspScriptTags);
+	this.forHtmlScript({
+		left	: /(&lt;|<)%[@!=]?/g, 
+		right	: /%(&gt;|>)/g 
+	});
 };
 
 SyntaxHighlighter.brushes.Java.prototype	= new SyntaxHighlighter.Highlighter();

@@ -6,7 +6,7 @@
  * http://alexgorbatchev.com/wiki/SyntaxHighlighter:Donate
  *
  * @version
- * 2.0.320 (May 03 2009)
+ * 2.1.364 (October 15 2009)
  * 
  * @copyright
  * Copyright (C) 2004-2009 Alex Gorbatchev.
@@ -54,4 +54,4 @@ SyntaxHighlighter.brushes.Ruby = function()
 };
 
 SyntaxHighlighter.brushes.Ruby.prototype	= new SyntaxHighlighter.Highlighter();
-SyntaxHighlighter.brushes.Ruby.aliases		= ['ruby', 'rails', 'ror'];
+SyntaxHighlighter.brushes.Ruby.aliases		= ['ruby', 'rails', 'ror', 'rb'];
