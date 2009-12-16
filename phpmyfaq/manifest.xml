@@ -1,0 +1,3 @@
+<msdeploy.iisapp>
+    <iisapp path="phpmyfaq" />
+</msdeploy.iisapp>
