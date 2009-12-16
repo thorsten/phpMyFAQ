@@ -443,7 +443,7 @@ if ($faqconfig->get('main.enableRewriteRules')) {
         "backToHome"          => '<a href="' . $systemUri . 'index.html">'.$PMF_LANG["msgHome"].'</a>',
         "allCategories"       => '<a href="' . $systemUri . 'showcat.html">'.$PMF_LANG["msgShowAllCategories"].'</a>',
         'showInstantResponse' => '<a href="' . $systemUri . 'instantresponse.html">'.$PMF_LANG['msgInstantResponse'].'</a>',
-        'showSitemap'         => getLinkHtmlAnchor('index.php?'.$sids.'action=sitemap&amp;lang='.$LANGCODE, $PMF_LANG['msgSitemap']),
+        'showSitemap'         => '<a href="' . $systemUri . 'sitemap/A/'.$LANGCODE.'.html">'.$PMF_LANG['msgSitemap'].'</a>',
         'opensearch'          => $systemUri . 'search.html');
 } else {
     $links_template_vars = array(
