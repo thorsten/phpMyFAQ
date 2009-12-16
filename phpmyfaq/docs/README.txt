@@ -9,6 +9,8 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.5.5:
 - updated bundled TinyMCE editor component to version 3.2.7 (Thorsten)
+- updated bundled SyntaxHighlighter library to version 2.1.364 (Thorsten)
+- updated bundled SyntaxHighlighter plugin for TinyMCE (Thorsten)
 - updated Brazilian Portuguese translation
 - updated Spanish translation
 - minor bugfixes (Thorsten)
@@ -19,6 +21,8 @@ CHANGELOG:
 
 Version 2.5.6 - 2010-
 - updated bundled TinyMCE editor component to version 3.2.7 (Thorsten)
+- updated bundled SyntaxHighlighter library to version 2.1.364 (Thorsten)
+- updated bundled SyntaxHighlighter plugin for TinyMCE (Thorsten)
 - updated Brazilian Portuguese translation
 - updated Spanish translation
 - minor bugfixes (Thorsten)
