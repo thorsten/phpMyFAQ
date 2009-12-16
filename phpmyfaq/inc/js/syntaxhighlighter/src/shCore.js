@@ -6,7 +6,7 @@
  * http://alexgorbatchev.com/wiki/SyntaxHighlighter:Donate
  *
  * @version
- * 2.0.320 (May 03 2009)
+ * 2.1.364 (October 15 2009)
  * 
  * @copyright
  * Copyright (C) 2004-2009 Alex Gorbatchev.
@@ -43,6 +43,15 @@ var sh = {
 		/** First line number. */
 		'first-line' : 1,
 		
+		/**
+		 * Pads line numbers. Possible values are:
+		 *
+		 *   false - don't pad line numbers.
+		 *   true  - automaticaly pad numbers with minimum required number of leading zeroes.
+		 *   [int] - length up to which pad line numbers.
+		 */
+		'pad-line-numbers' : true,
+		
 		/** Lines to highlight. */
 		'highlight' : null,
 		
@@ -51,9 +60,6 @@ var sh = {
 		
 		/** Gets or sets tab size. */
 		'tab-size' : 4,
-		
-		/** Enables or disables ruler. */
-		'ruler' : false,
 		
 		/** Enables or disables gutter. */
 		'gutter' : true,
@@ -71,10 +77,15 @@ var sh = {
 		'light' : false,
 		
 		/** Enables or disables automatic line wrapping. */
-		'wrap-lines' : true
+		'wrap-lines' : true,
+		
+		'html-script' : false
 	},
 	
 	config : {
+		/** Enables use of <SCRIPT type="syntaxhighlighter" /> tags. */
+		useScriptTags : true,
+		
 		/** Path to the copy to clipboard SWF file. */
 		clipboardSwf : null,
 
@@ -93,7 +104,7 @@ var sh = {
 		tagName : 'pre',
 		
 		strings : {
-			expandSource : 'expand source',
+			expandSource : 'show source',
 			viewSource : 'view source',
 			copyToClipboard : 'copy to clipboard',
 			copyToClipboardConfirmation : 'The code is in your clipboard now',
@@ -104,7 +115,7 @@ var sh = {
 			brushNotHtmlScript : 'Brush wasn\'t configured for html-script option: ',
 			
 			// this is populated by the build script
-			aboutDialog : '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>About SyntaxHighlighter</title></head><body style="font-family:Geneva,Arial,Helvetica,sans-serif;background-color:#fff;color:#000;font-size:1em;text-align:center;"><div style="text-align:center;margin-top:3em;"><div style="font-size:xx-large;">SyntaxHighlighter</div><div style="font-size:.75em;margin-bottom:4em;"><div>version 2.0.320 (May 03 2009)</div><div><a href="http://alexgorbatchev.com" target="_blank" style="color:#0099FF;text-decoration:none;">http://alexgorbatchev.com</a></div></div><div>JavaScript code syntax highlighter.</div><div>Copyright 2004-2009 Alex Gorbatchev.</div></div></body></html>'
+			aboutDialog : '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>About SyntaxHighlighter</title></head><body style="font-family:Geneva,Arial,Helvetica,sans-serif;background-color:#fff;color:#000;font-size:1em;text-align:center;"><div style="text-align:center;margin-top:3em;"><div style="font-size:xx-large;">SyntaxHighlighter</div><div style="font-size:.75em;margin-bottom:4em;"><div>version 2.1.364 (October 15 2009)</div><div><a href="http://alexgorbatchev.com" target="_blank" style="color:#0099FF;text-decoration:none;">http://alexgorbatchev.com</a></div><div>If you like this script, please <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2930402" style="color:#0099FF;text-decoration:none;">donate</a> to keep development active!</div></div><div>JavaScript code syntax highlighter.</div><div>Copyright 2004-2009 Alex Gorbatchev.</div></div></body></html>'
 		},
 
 		/** If true, output will show HTML produces instead. */
@@ -119,7 +130,7 @@ var sh = {
 		highlighters : {}
 	},
 	
-	/** This object is populated by user included external brush files. */		
+	/** This object is populated by user included external brush files. */
 	brushes : {},
 
 	/** Common regular expressions. */
@@ -127,11 +138,12 @@ var sh = {
 		multiLineCComments			: /\/\*[\s\S]*?\*\//gm,
 		singleLineCComments			: /\/\/.*$/gm,
 		singleLinePerlComments		: /#.*$/gm,
-		doubleQuotedString			: /"(?:\.|(\\\")|[^\""\n])*"/g,
-		singleQuotedString			: /'(?:\.|(\\\')|[^\''\n])*'/g,
-		multiLineDoubleQuotedString	: /"(?:\.|(\\\")|[^\""])*"/g,
-		multiLineSingleQuotedString	: /'(?:\.|(\\\')|[^\''])*'/g,
-		url							: /\w+:\/\/[\w-.\/?%&=]*/g,
+		doubleQuotedString			: /"([^\\"\n]|\\.)*"/g,
+		singleQuotedString			: /'([^\\'\n]|\\.)*'/g,
+		multiLineDoubleQuotedString	: /"([^\\"]|\\.)*"/g,
+		multiLineSingleQuotedString	: /'([^\\']|\\.)*'/g,
+		xmlComments					: /(&lt;|<)!--[\s\S]*?--(&gt;|>)/gm,
+		url							: /&lt;\w+:\/\/[\w-.\/?%&=@:;]*&gt;|\w+:\/\/[\w-.\/?%&=@:;]*/g,
 		
 		/** <?= ?> tags. */
 		phpScriptTags 				: { left: /(&lt;|<)\?=?/g, right: /\?(&gt;|>)/g },
@@ -478,6 +490,24 @@ var sh = {
 
 	utils : {
 		/**
+		 * Finds an index of element in the array.
+		 * @ignore
+		 * @param {Object} searchElement
+		 * @param {Number} fromIndex
+		 * @return {Number} Returns index of element if found; -1 otherwise.
+		 */
+		indexOf : function(array, searchElement, fromIndex)
+		{
+			fromIndex = Math.max(fromIndex || 0, 0);
+
+			for (var i = fromIndex; i < array.length; i++)
+				if(array[i] == searchElement)
+					return i;
+
+			return -1;
+		},
+		
+		/**
 		 * Generates a unique element ID.
 		 */
 		guid : function(prefix)
@@ -608,6 +638,9 @@ var sh = {
 					if (aliases == null) 
 						continue;
 					
+					// keep the brush name
+					sh.brushes[brush].name = brush.toLowerCase();
+					
 					for (var i = 0; i < aliases.length; i++) 
 						brushes[aliases[i]] = brush;
 				}
@@ -638,37 +671,6 @@ var sh = {
 			return lines.join('\n');
 		},
 		
-		/**
-		 * Creates rules looking div.
-		 */
-		createRuler: function()
-		{
-			var div = document.createElement('div'),
-				ruler = document.createElement('div'),
-				showEvery = 10,
-				i = 1
-				;
-			
-			while (i <= 150) 
-			{
-				if (i % showEvery === 0) 
-				{
-					div.innerHTML += i;
-					i += (i + '').length;
-				}
-				else 
-				{
-					div.innerHTML += '&middot;';
-					i++;
-				}
-			}
-			
-			ruler.className = 'ruler line';
-			ruler.appendChild(div);
-	
-			return ruler;
-		},
-	
 		/**
 		 * This is a special trim which only removes first and last empty lines
 		 * and doesn't affect valid leading space on the first line.
@@ -942,7 +944,7 @@ var sh = {
 		 */
 		trim: function(str)
 		{
-			return str.replace(/\s*$/g, '').replace(/^\s*/, '');
+			return str.replace(/^\s+|\s+$/g, '');
 		},
 		
 		/**
@@ -1040,10 +1042,79 @@ var sh = {
 		
 		processUrls: function(code)
 		{
+			var lt = '&lt;',
+				gt = '&gt;'
+				;
+			
 			return code.replace(sh.regexLib.url, function(m)
 			{
-				return '<a href="' + m + '">' + m + '</a>';
+				var suffix = '', prefix = '';
+				
+				// We include &lt; and &gt; in the URL for the common cases like <http://google.com>
+				// The problem is that they get transformed into &lt;http://google.com&gt;
+				// Where as &gt; easily looks like part of the URL string.
+				
+				if (m.indexOf(lt) == 0)
+				{
+					prefix = lt;
+					m = m.substring(lt.length);
+				}
+
+				if (m.indexOf(gt) == m.length - gt.length)
+				{
+					m = m.substring(0, m.length - gt.length);
+					suffix = gt;
+				}
+				
+				return prefix + '<a href="' + m + '">' + m + '</a>' + suffix;
 			});
+		},
+		
+		/**
+		 * Finds all <SCRIPT TYPE="syntaxhighlighter" /> elements.
+		 * @return {Array} Returns array of all found SyntaxHighlighter tags.
+		 */
+		getSyntaxHighlighterScriptTags: function()
+		{
+			var tags = document.getElementsByTagName('script'),
+				result = []
+				;
+			
+			for (var i = 0; i < tags.length; i++)
+				if (tags[i].type == 'syntaxhighlighter')
+					result.push(tags[i]);
+					
+			return result;
+		},
+		
+		/**
+		 * Strips <![CDATA[]]> from <SCRIPT /> content because it should be used
+		 * there in most cases for XHTML compliance.
+		 * @param {String} original	Input code.
+		 * @return {String} Returns code without leading <![CDATA[]]> tags.
+		 */
+		stripCData: function(original)
+		{
+			var left = '<![CDATA[',
+				right = ']]>',
+				// for some reason IE inserts some leading blanks here
+				copy = sh.utils.trim(original),
+				changed = false
+				;
+			
+			if (copy.indexOf(left) == 0)
+			{
+				copy = copy.substring(left.length);
+				changed = true;
+			}
+			
+			if (copy.indexOf(right) == copy.length - right.length)
+			{
+				copy = copy.substring(0, copy.length - right.length);
+				changed = true;
+			}
+			
+			return changed ? copy : original;
 		}
 	}, // end of utils
 	
@@ -1072,8 +1143,13 @@ var sh = {
 		
 		var elements = element ? [element] : toArray(document.getElementsByTagName(sh.config.tagName)), 
 			propertyName = 'innerHTML', 
-			highlighter = null
+			highlighter = null,
+			conf = sh.config
 			;
+
+		// support for <SCRIPT TYPE="syntaxhighlighter" /> feature
+		if (conf.useScriptTags)
+			elements = elements.concat(sh.utils.getSyntaxHighlighterScriptTags());
 
 		if (elements.length === 0) 
 			return;
@@ -1082,7 +1158,9 @@ var sh = {
 		{
 			var target = elements[i], 
 				params = sh.utils.parseParams(target.className),
-				brushName
+				brushName,
+				code,
+				result
 				;
 
 			// local params take precedence over globals
@@ -1093,23 +1171,36 @@ var sh = {
 				continue;
 
 			// Instantiate a brush
-			if (params['html-script'] == 'true') 
+			if (params['html-script'] == 'true' || sh.defaults['html-script'] == true) 
 			{
 				highlighter = new sh.HtmlScript(brushName);
+				brushName = 'htmlscript';
 			}
 			else
 			{
 				var brush = sh.utils.findBrush(brushName);
 				
 				if (brush)
+				{
+					brushName = brush.name;
 					highlighter = new brush();
+				}
 				else
+				{
 					continue;
+				}
 			}
 			
-			highlighter.highlight(target[propertyName], params);
+			code = target[propertyName];
 			
-			var result = highlighter.div;
+			// remove CDATA from <SCRIPT/> tags if it's present
+			if (conf.useScriptTags)
+				code = sh.utils.stripCData(code);
+			
+			params['brush-name'] = brushName;
+			highlighter.highlight(code, params);
+			
+			result = highlighter.div;
 			
 			if (sh.config.debug) 
 			{
@@ -1137,13 +1228,16 @@ var sh = {
 	}
 }; // end of sh
 
-/** Match object */
+/**
+ * Match object.
+ */
 sh.Match = function(value, index, css)
 {
 	this.value = value;
 	this.index = index;
 	this.length = value.length;
 	this.css = css;
+	this.brushName = null;
 };
 
 sh.Match.prototype.toString = function()
@@ -1158,15 +1252,16 @@ sh.Match.prototype.toString = function()
  */
 sh.HtmlScript = function(scriptBrushName)
 {
-	var scriptBrush = sh.utils.findBrush(scriptBrushName),
+	var brushClass = sh.utils.findBrush(scriptBrushName),
+		scriptBrush,
 		xmlBrush = new sh.brushes.Xml(),
 		bracketsRegex = null
 		;
 
-	if (scriptBrush == null)
+	if (brushClass == null)
 		return;
-
-	scriptBrush = new scriptBrush();	
+	
+	scriptBrush = new brushClass();
 	this.xmlBrush = xmlBrush;
 	
 	if (scriptBrush.htmlScript == null)
@@ -1195,6 +1290,7 @@ sh.HtmlScript = function(scriptBrushName)
 			result
 			;
 
+		// add all matches from the code
 		for (var i = 0; i < regexList.length; i++)
 		{
 			result = sh.utils.getMatches(code, regexList[i]);
@@ -1202,6 +1298,7 @@ sh.HtmlScript = function(scriptBrushName)
 			matches = matches.concat(result);
 		}
 		
+		// add left script bracket
 		if (htmlScript.left != null && match.left != null)
 		{
 			result = sh.utils.getMatches(match.left, htmlScript.left);
@@ -1209,6 +1306,7 @@ sh.HtmlScript = function(scriptBrushName)
 			matches = matches.concat(result);
 		}
 		
+		// add right script bracket
 		if (htmlScript.right != null && match.right != null)
 		{
 			result = sh.utils.getMatches(match.right, htmlScript.right);
@@ -1216,6 +1314,9 @@ sh.HtmlScript = function(scriptBrushName)
 			matches = matches.concat(result);
 		}
 		
+		for (var j = 0; j < matches.length; j++)
+			matches[j].brushName = brushClass.name;
+
 		return matches;
 	}
 };
@@ -1270,12 +1371,12 @@ sh.Highlighter.prototype = {
 		
 		if (regexList != null)
 			for (var i = 0; i < regexList.length; i++) 
-				result = result.concat(sh.utils.getMatches(code, regexList[i]));
+				// BUG: length returns len+1 for array if methods added to prototype chain (oising@gmail.com)
+				if (typeof (regexList[i]) == "object")
+					result = result.concat(sh.utils.getMatches(code, regexList[i]));
 		
 		// sort the matches
-		result = result.sort(sh.utils.matchesSortCallback);
-	
-		return result;
+		return result.sort(sh.utils.matchesSortCallback);
 	},
 	
 	/**
@@ -1322,19 +1423,25 @@ sh.Highlighter.prototype = {
 	{
 		var lines = code.split(/\n/g),
 			firstLine = parseInt(this.getParam('first-line')),
-			padLength = (firstLine + lines.length).toString().length,
-			highlightedLines = this.getParam('highlight', [])
+			padLength = this.getParam('pad-line-numbers'),
+			highlightedLines = this.getParam('highlight', []),
+			hasGutter = this.getParam('gutter')
 			;
 		
 		code = '';
+		
+		if (padLength == true)
+			padLength = (firstLine + lines.length - 1).toString().length;
+		else if (isNaN(padLength) == true)
+			padLength = 0;
 
 		for (var i = 0; i < lines.length; i++)
 		{
 			var line = lines[i],
 				indent = /^(&nbsp;|\s)+/.exec(line),
-				lineClass = 'line alt' + (i % 2 == 0 ? 1 : 2),
+				lineClass = 'alt' + (i % 2 == 0 ? 1 : 2),
 				lineNumber = sh.utils.padNumber(firstLine + i, padLength),
-				highlighted = highlightedLines.indexOf((firstLine + i).toString()) != -1,
+				highlighted = sh.utils.indexOf(highlightedLines, (firstLine + i).toString()) != -1,
 				spaces = null
 				;
 
@@ -1342,12 +1449,6 @@ sh.Highlighter.prototype = {
 			{
 				spaces = indent[0].toString();
 				line = line.substr(spaces.length);
-				spaces = spaces.replace(/&nbsp;/g, ' ');
-				indent = sh.vars.spaceWidth * spaces.length;
-			}
-			else
-			{
-				indent = 0;
 			}
 
 			line = sh.utils.trim(line);
@@ -1357,16 +1458,20 @@ sh.Highlighter.prototype = {
 			
 			if (highlighted)
 				lineClass += ' highlighted';
-				
+			
 			code += 
-				'<div class="' + lineClass + '">'
-					+ '<code class="number">' + lineNumber + '.</code>'
-					+ '<span class="content">'
-						+ (spaces != null ? '<code class="spaces">' + spaces.replace(/\s/g, '&nbsp;') + '</code>' : '')
-						+ '<span class="block" style="margin-left: ' + indent + 'px !important;">' + line + '</span>'
-					+ '</span>'
+				'<div class="line ' + lineClass + '">'
+					+ '<table>'
+						+ '<tr>'
+							+ (hasGutter ? '<td class="number"><code>' + lineNumber + '</code></td>' : '')
+							+ '<td class="content">'
+								+ (spaces != null ? '<code class="spaces">' + spaces.replace(' ', '&nbsp;') + '</code>' : '')
+								+ line
+							+ '</td>'
+						+ '</tr>'
+					+ '</table>'
 				+ '</div>'
-			;
+				;
 		}
 		
 		return code;
@@ -1382,27 +1487,38 @@ sh.Highlighter.prototype = {
 	{
 		var pos = 0, 
 			result = '',
-			decorate = sh.utils.decorate // make an alias to save some bytes
+			decorate = sh.utils.decorate, // make an alias to save some bytes
+			brushName = this.getParam('brush-name', '')
 			;
+		
+		function getBrushNameCss(match)
+		{
+			var result = match ? (match.brushName || brushName) : brushName;
+			return result ? result + ' ' : '';
+		};
 		
 		// Finally, go through the final list of matches and pull the all
 		// together adding everything in between that isn't a match.
 		for (var i = 0; i < matches.length; i++) 
 		{
-			var match = matches[i];
+			var match = matches[i],
+				matchBrushName
+				;
 			
 			if (match === null || match.length === 0) 
 				continue;
 			
-			result += decorate(code.substr(pos, match.index - pos), 'plain')
-				+ decorate(match.value, match.css)
-				;
+			matchBrushName = getBrushNameCss(match);
+			
+			result += decorate(code.substr(pos, match.index - pos), matchBrushName + 'plain')
+					+ decorate(match.value, matchBrushName + match.css)
+					;
 
 			pos = match.index + match.length;
 		}
 
 		// don't forget to add whatever's remaining in the string
-		result += decorate(code.substr(pos), 'plain');
+		result += decorate(code.substr(pos), getBrushNameCss() + 'plain');
 
 		return result;
 	},
@@ -1436,10 +1552,6 @@ sh.Highlighter.prototype = {
 
 		if (code === null) 
 			code = '';
-
-		// Measure width of a single space.
-		if (vars.spaceWidth === null)
-			vars.spaceWidth = sh.utils.measureSpace();
 		
 		// local params take precedence over defaults
 		this.params = sh.utils.merge(sh.defaults, params || {});
@@ -1469,6 +1581,9 @@ sh.Highlighter.prototype = {
 
 		// add custom user style name
 		className += ' ' + this.getParam('class-name');
+		
+		// add brush alias to the class name for custom CSS
+		className += ' ' + this.getParam('brush-name');
 		
 		div.className = className;
 		
@@ -1502,10 +1617,6 @@ sh.Highlighter.prototype = {
 			div.onmouseout = function() { hide(); }
 		}
 		
-		// add columns ruler
-		if (this.getParam('ruler'))
-			div.appendChild(sh.utils.createRuler());
-	
 		div.appendChild(this.lines);
 	
 		this.matches = this.findMatches(this.regexList, this.code);
@@ -1532,10 +1643,10 @@ sh.Highlighter.prototype = {
 	{
 		str = str
 			.replace(/^\s+|\s+$/g, '')
-			.replace(/\s+/g, '\\b|\\b')
+			.replace(/\s+/g, '|')
 			;
 		
-		return '\\b' + str + '\\b';
+		return '\\b(?:' + str + ')\\b';
 	},
 	
 	/**
@@ -1560,24 +1671,6 @@ sh.Highlighter.prototype = {
 return sh;
 }(); // end of anonymous function
 
-if (!Array.indexOf)
-	/**
-	 * Finds an index of element in the array.
-	 * @ignore
-	 * @param {Object} searchElement
-	 * @param {Number} fromIndex
-	 * @return {Number} Returns index of element if found; -1 otherwise.
-	 */
-	Array.prototype.indexOf = function (searchElement, fromIndex)
-	{
-		fromIndex = Math.max(fromIndex || 0, 0);
-		
-		for (var i = fromIndex; i < this.length; i++)
-			if(this[i] == searchElement)
-				return i;
-				
-		return -1;
-	};
 
 /**
  * XRegExp 0.6.1

@@ -6,7 +6,7 @@
  * http://alexgorbatchev.com/wiki/SyntaxHighlighter:Donate
  *
  * @version
- * 2.0.320 (May 03 2009)
+ * 2.1.364 (October 15 2009)
  * 
  * @copyright
  * Copyright (C) 2004-2009 Alex Gorbatchev.
@@ -60,20 +60,15 @@
 }
 
 /* First line */
-.syntaxhighlighter .line.alt1 .content
+.syntaxhighlighter .line.alt1
 {
 	background-color: #0F192A !important;
 }
 
 /* Second line */
-.syntaxhighlighter .line.alt2 .content
+.syntaxhighlighter .line.alt2
 {
 	background-color: #0F192A !important;
-}
-
-.syntaxhighlighter .line .content .block
-{
-	background: url(wrapping.png) 0 1.1em no-repeat !important;
 }
 
 /* Highlighed line number */
@@ -84,22 +79,10 @@
 }
 
 /* Highlighed line */
-.syntaxhighlighter .line.highlighted.alt1 .content,
-.syntaxhighlighter .line.highlighted.alt2 .content
+.syntaxhighlighter .line.highlighted.alt1,
+.syntaxhighlighter .line.highlighted.alt2
 {
 	background-color: #253E5A !important;
-}
-
-.syntaxhighlighter .ruler
-{
-	color: #38566F !important;
-	background-color: #0F192A !important;
-	border-left: 3px solid #435A5F !important;
-}
-
-.syntaxhighlighter.nogutter .ruler
-{
-	border: 0 !important;
 }
 
 .syntaxhighlighter .toolbar

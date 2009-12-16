@@ -37,6 +37,8 @@ Version 2.6.0-RC2 - 2009-12
 
 Version 2.5.6 - 2010-
 - updated bundled TinyMCE editor component to version 3.2.7 (Thorsten)
+- updated bundled SyntaxHighlighter library to version 2.1.364 (Thorsten)
+- updated bundled SyntaxHighlighter plugin for TinyMCE (Thorsten)
 - updated Brazilian Portuguese translation
 - updated Spanish translation
 - minor bugfixes (Thorsten)

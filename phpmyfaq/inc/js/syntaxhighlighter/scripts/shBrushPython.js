@@ -6,7 +6,7 @@
  * http://alexgorbatchev.com/wiki/SyntaxHighlighter:Donate
  *
  * @version
- * 2.0.320 (May 03 2009)
+ * 2.1.364 (October 15 2009)
  * 
  * @copyright
  * Copyright (C) 2004-2009 Alex Gorbatchev.
@@ -29,26 +29,36 @@
  */
 SyntaxHighlighter.brushes.Python = function()
 {
-	// Contributed by Gheorghe Milas
+	// Contributed by Gheorghe Milas and Ahmad Sherif
 	
-    var keywords =  'and assert break class continue def del elif else ' +
-                    'except exec finally for from global if import in is ' +
-                    'lambda not or pass print raise return try yield while';
+	var keywords =  'and assert break class continue def del elif else ' +
+					'except exec finally for from global if import in is ' +
+					'lambda not or pass print raise return try yield while';
 
-    var special =  'None True False self cls class_';
+	var funcs = '__import__ abs all any apply basestring bin bool buffer callable ' +
+				'chr classmethod cmp coerce compile complex delattr dict dir ' +
+				'divmod enumerate eval execfile file filter float format frozenset ' +
+				'getattr globals hasattr hash help hex id input int intern ' +
+				'isinstance issubclass iter len list locals long map max min next ' +
+				'object oct open ord pow print property range raw_input reduce ' +
+				'reload repr reversed round set setattr slice sorted staticmethod ' +
+				'str sum super tuple type type unichr unicode vars xrange zip';
 
-    this.regexList = [
-        { regex: SyntaxHighlighter.regexLib.singleLinePerlComments, css: 'comments' },
-        { regex: /^\s*@\w+/gm, 										css: 'decorator' },
-        { regex: /(['\"]{3})([^\1])*?\1/gm, 						css: 'comments' },
-        { regex: /"(?!")(?:\.|\\\"|[^\""\n])*"/gm, 					css: 'string' },
-        { regex: /'(?!')(?:\.|(\\\')|[^\''\n])*'/gm, 				css: 'string' },
-        { regex: /\+|\-|\*|\/|\%|=|==/gm, 								css: 'keyword' },
-        { regex: /\b\d+\.?\w*/g, 									css: 'value' },
-        { regex: new RegExp(this.getKeywords(keywords), 'gm'), 		css: 'keyword' },
-        { regex: new RegExp(this.getKeywords(special), 'gm'), 		css: 'color1' }
-        ];
+	var special =  'None True False self cls class_';
 
+	this.regexList = [
+			{ regex: SyntaxHighlighter.regexLib.singleLinePerlComments, css: 'comments' },
+			{ regex: /^\s*@\w+/gm, 										css: 'decorator' },
+			{ regex: /(['\"]{3})([^\1])*?\1/gm, 						css: 'comments' },
+			{ regex: /"(?!")(?:\.|\\\"|[^\""\n])*"/gm, 					css: 'string' },
+			{ regex: /'(?!')(?:\.|(\\\')|[^\''\n])*'/gm, 				css: 'string' },
+			{ regex: /\+|\-|\*|\/|\%|=|==/gm, 							css: 'keyword' },
+			{ regex: /\b\d+\.?\w*/g, 									css: 'value' },
+			{ regex: new RegExp(this.getKeywords(funcs), 'gmi'),		css: 'functions' },
+			{ regex: new RegExp(this.getKeywords(keywords), 'gm'), 		css: 'keyword' },
+			{ regex: new RegExp(this.getKeywords(special), 'gm'), 		css: 'color1' }
+			];
+			
 	this.forHtmlScript(SyntaxHighlighter.regexLib.aspScriptTags);
 };
 
