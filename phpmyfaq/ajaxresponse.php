@@ -57,21 +57,21 @@ PMF_String::init($LANGCODE);
 //
 $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 if (isset($user) && is_object($user)) {
-    $currentUser = $user->getUserId();
+    $current_user = $user->getUserId();
     if ($user->perm instanceof PMF_Perm_PermMedium) {
-        $currentGroups = $user->perm->getUserGroups($currentUser);
+        $current_groups = $user->perm->getUserGroups($current_user);
     } else {
-        $currentGroups = array(-1);
+        $current_groups = array(-1);
     }
-    if (0 == count($currentGroups)) {
-        $currentGroups = array(-1);
+    if (0 == count($current_groups)) {
+        $current_groups = array(-1);
     }
 } else {
-    $currentUser   = -1;
-    $currentGroups = array(-1);
+    $current_user   = -1;
+    $current_groups = array(-1);
 }
 
-$category = new PMF_Category($currentUser, $currentGroups);
+$category = new PMF_Category($current_user, $current_groups);
 $category->transform(0);
 $category->buildTree();
 
