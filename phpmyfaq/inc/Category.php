@@ -648,12 +648,12 @@ class PMF_Category
                 $num_entries = '';
             } else {
                 $totFaqRecords += $number[$parent];
-                $num_entries    = ' ('.$plr->GetMsg('plmsgEntries',$number[$parent]);
+                $num_entries    = '<span id="rssCategoryLink"> ('.$plr->GetMsg('plmsgEntries',$number[$parent]);
                 $num_entries   .= sprintf(' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank"><img id="category_%d_RSS" src="images/feed.png" width="16" height="16" alt="RSS" /></a>',
                                     $parent,
                                     $this->language,
                                     $parent);
-                $num_entries   .= ')';
+                $num_entries   .= ')</span>';
             }
 
             $url              = sprintf('%saction=show&amp;cat=%d', $sids, $parent);
