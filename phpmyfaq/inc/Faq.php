@@ -433,14 +433,16 @@ class PMF_Faq
                             $sids,
                             $row->category_id,
                             $row->id,
-                            $row->lang
-                        );
-                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                            $row->lang);
+                            
+                $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
                 $oLink->itemTitle = $row->thema;
-                $oLink->text = $title;
-                $oLink->tooltip = $title;
-                $listItem = sprintf('<li>%s<br /><span class="little">('.$this->plr->GetMsg('plmsgViews',$visits).')</span>%s</li>',
+                $oLink->text      = $title;
+                $oLink->tooltip   = $title;
+                
+                $listItem = sprintf('<li>%s<span id="viewsPerRecord"><br /><span class="little">(%s)</span>%s</span></li>',
                     $oLink->toHtmlAnchor(),
+                    $this->plr->GetMsg('plmsgViews', $visits),
                     ($row->sticky == 1) ? '<br /><br />' : '');
 
                 $output .= $listItem;
@@ -455,9 +457,9 @@ class PMF_Faq
             $categoryName = $category->categoryName[$category_id]['name'];
         }
         if ($pages > 1) {
-            $output .= "<p align=\"center\"><strong>";
+            $output  .= "<p align=\"center\"><strong>";
             $previous = $page - 1;
-            $next = $page + 1;
+            $next     = $page + 1;
 
             if ($previous != 0) {
                 $title = $this->pmf_lang['msgPrevious'];
@@ -465,11 +467,11 @@ class PMF_Faq
                             $sids,
                             $category_id,
                             $previous);
-                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
                 $oLink->itemTitle = $categoryName;
-                $oLink->text = $title;
-                $oLink->tooltip = $title;
-                $output .= '[ '.$oLink->toHtmlAnchor().' ]';
+                $oLink->text      = $title;
+                $oLink->tooltip   = $title;
+                $output          .= '[ '.$oLink->toHtmlAnchor().' ]';
             }
 
             $output .= ' ';
@@ -480,11 +482,11 @@ class PMF_Faq
                             $sids,
                             $category_id,
                             $i);
-                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
                 $oLink->itemTitle = $categoryName;
-                $oLink->text = $title;
-                $oLink->tooltip = $title;
-                $output .= '[ '.$oLink->toHtmlAnchor().' ]';
+                $oLink->text      = $title;
+                $oLink->tooltip   = $title;
+                $output          .= '[ '.$oLink->toHtmlAnchor().' ]';
             }
 
             $output .= ' ';
@@ -494,13 +496,12 @@ class PMF_Faq
                 $url   = sprintf('%saction=show&amp;cat=%d&amp;seite=%d',
                             $sids,
                             $category_id,
-                            $next
-                        );
-                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                            $next);
+                $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
                 $oLink->itemTitle = $categoryName;
-                $oLink->text = $title;
-                $oLink->tooltip = $title;
-                $output .= '[ '.$oLink->toHtmlAnchor().' ]';
+                $oLink->text      = $title;
+                $oLink->tooltip   = $title;
+                $output          .= '[ '.$oLink->toHtmlAnchor().' ]';
             }
 
             $output .= "</strong></p>";
