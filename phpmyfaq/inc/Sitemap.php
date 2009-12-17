@@ -267,7 +267,7 @@ class PMF_Sitemap
                     WHERE
                         fd.id = fcr.record_id
                     AND
-                        PMF_String::substr(fd.thema, 1, 1) = '%s'
+                        SUBSTR(fd.thema, 1, 1) = '%s'
                     AND
                         fd.lang = '%s'
                     AND
@@ -305,7 +305,7 @@ class PMF_Sitemap
                     WHERE
                         fd.id = fcr.record_id
                     AND
-                        PMF_String::substring(fd.thema, 1, 1) = '%s'
+                        SUBSTRING(fd.thema, 1, 1) = '%s'
                     AND
                         fd.lang = '%s'
                     AND
