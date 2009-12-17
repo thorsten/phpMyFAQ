@@ -4,6 +4,8 @@
     <title>{title}</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="user-scalable=no, width=device-width" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <style type="text/css" media="only screen and (max-device-width: 480px)">@import url(template/mobile/{stylesheet}.css);</style>
     <script type="text/javascript" src="inc/js/jquery.min.js"></script>
     <script type="text/javascript">
@@ -25,26 +27,17 @@
 <section id="wrapper">
     <header id="header">
         <!-- <div class="leftButton" onclick="toggleMenu()">Menu</div> -->
-        <h1><a href="{faqHome}">phpMyFAQ</a></h1>
+        <h1><a href="{faqHome}">{header}</a></h1>
         <nav>
             <ul>
+                <li>{allCategories}</li>
                 <li>{msgSearch}</li>
                 <li>{showInstantResponse}</li>
-                <li>{msgQuestion}</li>
+                <!-- <li>{msgQuestion}</li> -->
             </ul>
         </nav>
     </header>
     <article>
-        <section id="categories">
-            <nav>
-                <ul>
-                    <li class="home">{backToHome}</li>
-                    <li>{allCategories}</li>
-                    {showCategories}
-                    <li>{showSitemap}</li>
-                </ul>
-            </nav>
-        </section>
         <section id="content">
         
             {writeContent}
