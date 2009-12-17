@@ -371,7 +371,15 @@ if ($hasTags && (($action == 'artikel') || ($action == 'show'))) {
 
 //
 // Load template files and set template variables
+// Check on mobile devices first, if iPhone detected, switch to iPhone layout
 //
+/*
+if (stristr($_SERVER['HTTP_USER_AGENT'], 'iPhone')) {
+	$templateSet = 'mobile';
+} else {
+	$templateSet = $faqconfig->get('main.templateSet');
+}
+*/
 $tpl = new PMF_Template(array('index'        => 'index.tpl',
                               'loginBox'     => $login_tpl,
                               'rightBox'     => $right_tpl,
