@@ -45,7 +45,7 @@ $PMF_LANG["msgContact"] = "Contact";
 $PMF_LANG["msgHome"] = "Accueil";
 $PMF_LANG["msgNews"] = "FAQ-News";
 $PMF_LANG["msgUserOnline"] = " utilisateurs en ligne";
-$PMF_LANG["msgXMLExport"] = "Fichier XML";
+######$PMF_LANG["msgXMLExport"] = "Fichier XML";
 $PMF_LANG["msgBack2Home"] = "retour à l'accueil";
 
 // Contentpages
@@ -64,7 +64,7 @@ $PMF_LANG["msgLastUpdateArticle"] = "Dernière mise à jour: ";
 $PMF_LANG["msgAuthor"] = "Auteur: ";
 $PMF_LANG["msgPrinterFriendly"] = "version imprimable";
 $PMF_LANG["msgPrintArticle"] = "Imprimer cet article";
-$PMF_LANG["msgMakeXMLExport"] = "exporter en fichier XML";
+$PMF_LANG["msgMakeXMLExport"] = "Exporter en fichier XML";   //
 $PMF_LANG["msgAverageVote"] = "Moyenne des notes:";
 $PMF_LANG["msgVoteUseability"] = "Merci de noter cette entrée:";
 $PMF_LANG["msgVoteFrom"] = "sur";
@@ -72,7 +72,7 @@ $PMF_LANG["msgVoteBad"] = "complètement inutile";
 $PMF_LANG["msgVoteGood"] = "indispensable";
 $PMF_LANG["msgVotings"] = "Votes";
 $PMF_LANG["msgVoteSubmit"] = "Vote";
-$PMF_LANG["msgVoteThanks"] = "Merci pour votre vote!";
+$PMF_LANG["msgVoteThanks"] = "Merci d'avoir voté !"; ///
 $PMF_LANG["msgYouCan"] = "Vous pouvez ";
 $PMF_LANG["msgWriteComment"] = "commenter cet article";
 $PMF_LANG["msgShowCategory"] = "Affichage du contenu: ";
@@ -117,13 +117,13 @@ $PMF_LANG["msgNewContentThanks"] = "Merci pour votre suggestion!";
 $PMF_LANG["msgNoQuestionsAvailable"] = "Actuellement il n'y a pas de nouvelles questions.";
 
 // ask Question
-$PMF_LANG["msgNewQuestion"] = "Dans cette page, vous pouvez poser vos questions.";
+$PMF_LANG["msgNewQuestion"] = "Poser votre question ci-dessous :";  //
 $PMF_LANG["msgAskCategory"] = "Dans quelle catégorie entre votre article?";
-$PMF_LANG["msgAskYourQuestion"] = "Votre question:";
-$PMF_LANG["msgAskThx4Mail"] = "<h2>Merci pour votre question!</h2>";
+$PMF_LANG["msgAskYourQuestion"] = "Votre question :"; //
+$PMF_LANG["msgAskThx4Mail"] = "<h2>Merci pour votre question !</h2>";
 $PMF_LANG["msgDate_User"] = "Date / Utilisateur";
 $PMF_LANG["msgQuestion2"] = "Question";
-$PMF_LANG["msg2answer"] = "répondre";
+$PMF_LANG["msg2answer"] = "Réponse";
 $PMF_LANG["msgQuestionText"] = "Ici, vous pouvez voir les questions posées par d'autres personnes. Vous pouvez y proposer une réponse, qui sera peut-être insérée dans la FAQ.";
 
 // Help
@@ -143,12 +143,12 @@ $PMF_LANG["msgLatestArticles"] = "Les 5 dernières publications:";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "Merci pour votre proposition pour la FAQ.";
-$PMF_LANG["msgMailCheck"] = "Il y a une nouvelle publication dans la FAQ!Veuillez consulter la section d'administration!";
+$PMF_LANG["msgMailCheck"] = "Il y a une nouvelle publication dans la FAQ! Veuillez consulter la section d'administration!";
 $PMF_LANG["msgMailContact"] = "Votre message a été envoyé à l'administrateur!";
 
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Pas de connection à la base de données!";
-$PMF_LANG["err_noHeaders"] = "Catégorie non trouvée!";
+$PMF_LANG["err_noHeaders"] = "Aucune catégorie trouvée !"; //
 $PMF_LANG["err_noArticles"] = "<p>Aucun résultat.</p>";
 $PMF_LANG["err_badID"] = "<p>Mauvais identifiant!</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Pas de TOP 10 disponible actuellement.</p>";
@@ -183,7 +183,7 @@ $PMF_LANG["ad_menu_startpage"] = "Page de démarrage";
 
 // Nachrichten
 $PMF_LANG["ad_msg_identify"] = "Veuillez vous identifier.";
-$PMF_LANG["ad_msg_passmatch"] = "Les deux mot de passe doivent être <strong>identiques</strong>!";
+$PMF_LANG["ad_msg_passmatch"] = "Les deux mots de passe doivent être <strong>identiques</strong>!"; //
 $PMF_LANG["ad_msg_savedsuc_1"] = "Le profil de";
 $PMF_LANG["ad_msg_savedsuc_2"] = "a été enregistré correctement.";
 $PMF_LANG["ad_msg_mysqlerr"] = "Suite à une erreur de <strong>base de données</strong> le profil n'a pas pu être enregistré.";
@@ -195,7 +195,7 @@ $PMF_LANG["ad_gen_of"] = "de";
 $PMF_LANG["ad_gen_lastpage"] = "Page précédente";
 $PMF_LANG["ad_gen_nextpage"] = "Page suivante";
 $PMF_LANG["ad_gen_save"] = "Enregistrer";
-$PMF_LANG["ad_gen_reset"] = "Reset";
+$PMF_LANG["ad_gen_reset"] = "Réinitialiser"; //
 $PMF_LANG["ad_gen_yes"] = "Oui";
 $PMF_LANG["ad_gen_no"] = "Non";
 $PMF_LANG["ad_gen_top"] = "Début de page";
@@ -206,9 +206,9 @@ $PMF_LANG["ad_gen_delete"] = "Supprimer";
 $PMF_LANG["ad_user"] = "Administration des utilisateurs";
 $PMF_LANG["ad_user_username"] = "Utilisateurs enregistrés";
 $PMF_LANG["ad_user_rights"] = "Droits des utilisateurs";
-$PMF_LANG["ad_user_edit"] = "editer";
+$PMF_LANG["ad_user_edit"] = "éditer"; //
 $PMF_LANG["ad_user_delete"] = "supprimer";
-$PMF_LANG["ad_user_add"] = "Ajouter utilisateur";
+$PMF_LANG["ad_user_add"] = "Ajouter un utilisateur";
 $PMF_LANG["ad_user_profou"] = "Profil de l'utilisateur";
 $PMF_LANG["ad_user_name"] = "Nom";
 $PMF_LANG["ad_user_password"] = "Mot de passe";
@@ -219,7 +219,7 @@ $PMF_LANG["ad_user_del_2"] = "doit être supprimé?";
 $PMF_LANG["ad_user_del_3"] = "Etes vous sûr?";
 $PMF_LANG["ad_user_deleted"] = "L'utilisateur a été supprimé correctement.";
 $PMF_LANG["ad_user_checkall"] = "Tout sélectionner";
-$PMF_LANG["ad_user_loggedin"] = "Connecté :";
+##$PMF_LANG["ad_user_loggedin"] = "Connecté :";
 
 // Beitragsverwaltung
 $PMF_LANG["ad_entry_aor"] = "Administration des articles";
@@ -233,10 +233,10 @@ $PMF_LANG["ad_entry_content"] = "Réponse:";
 $PMF_LANG["ad_entry_keywords"] = "Mots clef:";
 $PMF_LANG["ad_entry_author"] = "Auteur:";
 $PMF_LANG["ad_entry_category"] = "Catégorie:";
-$PMF_LANG["ad_entry_active"] = "Publier:";
+$PMF_LANG["ad_entry_active"] = "Publier ?"; //
 $PMF_LANG["ad_entry_date"] = "Date:";
 $PMF_LANG["ad_entry_changed"] = "Qu'est-ce que vous avez changé?";
-$PMF_LANG["ad_entry_changelog"] = "Changelog:";
+$PMF_LANG["ad_entry_changelog"] = "Historique:"; //
 $PMF_LANG["ad_entry_commentby"] = "Commenté par";
 $PMF_LANG["ad_entry_comment"] = "Commentaires:";
 $PMF_LANG["ad_entry_save"] = "Enregistrer";
@@ -253,7 +253,7 @@ $PMF_LANG["ad_entry_del_2"] = "de ";
 $PMF_LANG["ad_entry_del_3"] = "doit être supprimé?";
 $PMF_LANG["ad_entry_delsuc"] = "Entrée <strong>correctement</strong> supprimé.";
 $PMF_LANG["ad_entry_delfail"] = "Entrée n'a <strong>pas</strong> été supprimée!";
-$PMF_LANG["ad_entry_back"] = "retour";
+$PMF_LANG["ad_entry_back"] = "Retour"; //
 
 
 // Newsverwaltung
@@ -378,8 +378,8 @@ $PMF_LANG["ad_auth_insert"] = "Veuillez entrer votre nom d'utilisateur et votre 
 $PMF_LANG["ad_auth_user"] = "Utilisateur:";
 $PMF_LANG["ad_auth_passwd"] = "Mot de passe:";
 $PMF_LANG["ad_auth_ok"] = "OK";
-$PMF_LANG["ad_auth_reset"] = "Reset";
-$PMF_LANG["ad_auth_fail"] = "Pas de combination d'entrée trouvée.";
+$PMF_LANG["ad_auth_reset"] = "Réinitialiser"; //
+$PMF_LANG["ad_auth_fail"] = "Nom d'utilisateur ou mot de passe incorrect."; //
 $PMF_LANG["ad_auth_sess"] = "La session ID est dépassée.";
 
 // Added v0.8 - 24.05.2001 - Bastian - Admin
@@ -400,14 +400,14 @@ $PMF_LANG["ad_att_delfail"] = "Une erreur est survenue.";
 $PMF_LANG["ad_entry_add"] = "Créer Article";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
-$PMF_LANG["ad_csv_make"] = "Une sauvegarde est une image complète de la base de données.";
+$PMF_LANG["ad_csv_make"] = "Une sauvegarde est une image complète de la base de données. Le format est un script SQL qui peut être importé dans PHPMyAdmin ou en commande SQL. Une sauvegarde devrait être effectué au moins une fois par mois.";
 $PMF_LANG["ad_csv_link"] = "Télécharger la sauvegarde";
 $PMF_LANG["ad_csv_head"] = "Effectuer une sauvegarde";
 $PMF_LANG["ad_att_addto"] = "Ajouter un attachement à un article";
 $PMF_LANG["ad_att_addto_2"] = "";
 $PMF_LANG["ad_att_att"] = "Fichier:";
 $PMF_LANG["ad_att_butt"] = "OK";
-$PMF_LANG["ad_att_suc"] = "Le fichier a été attaché.";
+$PMF_LANG["ad_att_suc"] = "Le fichier a bien été attaché.";
 $PMF_LANG["ad_att_fail"] = "Une erreur est survenue.";
 $PMF_LANG["ad_att_close"] = "Fermer cette fenêtre";
 
@@ -415,11 +415,11 @@ $PMF_LANG["ad_att_close"] = "Fermer cette fenêtre";
 $PMF_LANG["ad_csv_restore"] = "Avec ce formulaire, vous pouvez restaurer le contenu de la base de données, sauvegardé avec phpmyfaq. Veuillez noter que la base actuelle va être écrasée.";
 $PMF_LANG["ad_csv_file"] = "Fichier";
 $PMF_LANG["ad_csv_ok"] = "OK";
-$PMF_LANG["ad_csv_linklog"] = "backup LOGs";
-$PMF_LANG["ad_csv_linkdat"] = "backup data";
+$PMF_LANG["ad_csv_linklog"] = "sauvegarde des journaux (logs)";
+$PMF_LANG["ad_csv_linkdat"] = "sauvegarde des données";
 $PMF_LANG["ad_csv_head2"] = "Restauration";
 $PMF_LANG["ad_csv_no"] = "Ca ne semble pas être une sauvegarde de phpmyfaq.";
-$PMF_LANG["ad_csv_prepare"] = "Préparation de la base de données...";
+$PMF_LANG["ad_csv_prepare"] = "Préparation des requêtes sur la base de données...";
 $PMF_LANG["ad_csv_process"] = "interrogation...";
 $PMF_LANG["ad_csv_of"] = "de";
 $PMF_LANG["ad_csv_suc"] = "effectuée.";
@@ -479,16 +479,16 @@ $PMF_LANG["ad_start_comments"] = "Commentaires";
 $PMF_LANG["ad_categ_paste"] = "coller";
 $PMF_LANG["ad_categ_cut"] = "couper";
 $PMF_LANG["ad_categ_copy"] = "copier";
-$PMF_LANG["ad_categ_process"] = "Traitement de catégories...";
+$PMF_LANG["ad_categ_process"] = "Traitement des catégories...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>Celà ne vous est pas permis.</strong>";
+$PMF_LANG["err_NotAuth"] = "<strong>Vous n'êtes pas autorisé.</strong>";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "page précédente";
 $PMF_LANG["msgNextPage"] = "page suivante";
 $PMF_LANG["msgPageDoublePoint"] = "Page: ";
-$PMF_LANG["msgMainCategory"] = "Catégorie";
+$PMF_LANG["msgMainCategory"] = "Catégorie principale";
 
 // Added v1.2.4 - 30.01.2003 - Thorsten
 $PMF_LANG["ad_passwdsuc"] = "Votre mot de passe a été modifié!";
