@@ -98,7 +98,7 @@ function sendAskedQuestion($username, $usermail, $usercat, $content)
 }
 
 // If e-mail address is set to optional
-if (PMF_Configuration::getInstance()->get('main.optionalMailAddress')) {
+if (!PMF_Configuration::getInstance()->get('main.optionalMailAddress')) {
     $usermail = PMF_Configuration::getInstance()->get('main.administrationMail');
 }
 
