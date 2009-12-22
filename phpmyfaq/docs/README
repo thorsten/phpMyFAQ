@@ -37,7 +37,10 @@ Version 2.6.0-RC2 - 2009-12
 - updated Lithuanian translation (Aurimas Fišeras)
 - updated Japanese translation
 
-Version 2.5.6 - 2010-
+Version 2.5.7 - 2010-
+-
+
+Version 2.5.6 - 2009-12-22
 - updated bundled TinyMCE editor component to version 3.2.7 (Thorsten)
 - updated bundled SyntaxHighlighter library to version 2.1.364 (Thorsten)
 - updated bundled SyntaxHighlighter plugin for TinyMCE (Thorsten)
