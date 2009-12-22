@@ -19,7 +19,7 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.5.6 - 2010-
+Version 2.5.6 - 2009-12-22
 - updated bundled TinyMCE editor component to version 3.2.7 (Thorsten)
 - updated bundled SyntaxHighlighter library to version 2.1.364 (Thorsten)
 - updated bundled SyntaxHighlighter plugin for TinyMCE (Thorsten)
