@@ -1,4 +1,4 @@
-phpMyFAQ 2.6.0-RC2
+phpMyFAQ 2.6.0
 Codename "Portia"
 
 Installation/Update:
@@ -11,10 +11,11 @@ Changes since 2.6.0-RC:
 - added support for Microsoft Windows Web App Gallery (Thorsten)
 - updated Lithuanian translation (Aurimas Fišeras)
 - updated Japanese translation
+- minor bugfixes (Thorsten)
 
 CHANGELOG:
 
-Version 2.6.0-RC2 - 2009-12
+Version 2.6.0 - 2009-12-
 - moved all language files to UTF-8 (Anatoliy)
 - added TCPDF as replacement for FPDF library (Thorsten)
 - added support for TinyMCE translations (Aurimas Fišeras)
