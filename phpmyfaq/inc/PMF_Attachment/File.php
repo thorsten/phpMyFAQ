@@ -6,7 +6,6 @@
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2009-08-21
- * @version    SVN: $Id$
  * @copyright  2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -27,7 +26,6 @@
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2009-08-21
- * @version    SVN: $Id$
  * @copyright  2009 phpMyFAQ Team
  * TODO refactor to move filesystem stuff in more specialized places
  */
@@ -42,15 +40,15 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
      */
     protected function buildFilePath()
     {        
-        $retval = PMF_ATTACHMENTS_DIR;
-        $fsHash = $this->mkVirtualHash();
-        $subDirCount = 3;
+        $retval           = PMF_ATTACHMENTS_DIR;
+        $fsHash           = $this->mkVirtualHash();
+        $subDirCount      = 3;
         $subDirNameLength = 5;
         
-        for($i = 0; $i < $subDirCount; $i++) {
-            $retval .= DIRECTORY_SEPARATOR
-                     . substr($fsHash, $i*$subDirNameLength, $subDirNameLength);
+        for ($i = 0; $i < $subDirCount; $i++) {
+            $retval .= DIRECTORY_SEPARATOR . substr($fsHash, $i*$subDirNameLength, $subDirNameLength);
         }
+        
         $retval .= DIRECTORY_SEPARATOR . substr($fsHash, $i*$subDirNameLength);
         
         return $retval;
@@ -70,7 +68,7 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
         $attDir = dirname($filepath);
         
         return file_exists($attDir) && is_dir($attDir) ||
-               mkdir($attDir, 0700, true);
+               mkdir($attDir, 0777, true);
     }
     
     /**
@@ -107,7 +105,7 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
     {
         $retval = false;
         
-        if(file_exists($filepath)) {
+        if (file_exists($filepath)) {
             
             $this->realHash = md5_file($filepath);
             $this->filesize = filesize($filepath);
@@ -117,12 +115,12 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
             
             $targetFile = $this->buildFilePath();
             
-            if(null !== $this->id && $this->createSubDirs($targetFile)) {   
+            if (null !== $this->id && $this->createSubDirs($targetFile)) {   
                 /**
                  * Doing this check we're sure not to unnecessary 
                  * overwrite existing unencrypted file duplicates.
                  */             
-                if(!$this->linkedRecords()) {
+                if (!$this->linkedRecords()) {
                     $source = new PMF_Attachment_Filesystem_File_Vanilla($filepath);
                     $target = $this->getFile(PMF_Attachment_Filesystem_File::MODE_WRITE);
                     
@@ -131,7 +129,7 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
                     $retval = true;
                 }
                 
-                if($retval) {
+                if ($retval) {
                     $this->postUpdateMeta();
                 } else {
                     /**
@@ -159,7 +157,7 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
          * Won't delete the file if there are still some
          * records hanging on it
          */
-        if(!$this->linkedRecords()) {
+        if (!$this->linkedRecords()) {
             $retval &= $this->getFile()->delete();
         }
         
@@ -191,7 +189,7 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
     {
         $file = $this->getFile();
         
-        if($headers) {
+        if ($headers) {
             $disposition = 'attachment' == $disposition ? 'attachment' : 'inline';
             header('Content-Type: ' . $this->mimeType, true);
             header('Content-Length: ' . $this->filesize, true);
@@ -199,7 +197,7 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
             header("Content-MD5: {$this->realHash}", true);
         }
         
-        while(!$file->eof()) {
+        while (!$file->eof()) {
             echo $file->getChunk();   
         }
     }
@@ -213,7 +211,7 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
      */
     private function getFile($mode = PMF_Attachment_Filesystem_File::MODE_READ)
     {
-        if($this->encrypted) {
+        if ($this->encrypted) {
             $file = new PMF_Attachment_Filesystem_File_Encrypted(
                             $this->buildFilePath(),
                             $mode,
