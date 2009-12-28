@@ -50,12 +50,6 @@ session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')))
 session_start();
 
 //
-// Include the IDNA class
-//
-require_once 'inc/libs/idna_convert.class.php';
-$IDN = new idna_convert;
-
-//
 // Get language (default: english)
 //
 $Language = new PMF_Language();

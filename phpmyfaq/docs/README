@@ -11,6 +11,7 @@ Changes since 2.6.0-RC:
 - added support for Microsoft Windows Web App Gallery (Thorsten)
 - updated Lithuanian translation (Aurimas Fišeras)
 - updated Japanese translation
+- removed Net_IDNA library (Thorsten)
 - minor bugfixes (Thorsten)
 
 CHANGELOG:
@@ -34,6 +35,7 @@ Version 2.6.0 - 2010-01
 - improved user administration (Max Köhler)
 - improved FAQ entry workflow (Anatoliy, Thorsten)
 - removed Docbook XML export (Thorsten)
+- removed Net_IDNA library (Thorsten)
 - updated Greek translation (Periklis Tsirakidis)
 - updated Lithuanian translation (Aurimas Fišeras)
 - updated Japanese translation
