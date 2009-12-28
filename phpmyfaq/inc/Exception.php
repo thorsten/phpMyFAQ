@@ -36,11 +36,11 @@
  */
 class PMF_Exception extends Exception
 {
-	/**
-	 * Converts PMF_Exception to a string
-	 *
-	 * @return string
-	 */
+    /**
+     * Converts PMF_Exception to a string
+     *
+     * @return string
+     */
     public function __toString()
     {
         $exception = sprintf("PMF_Exception %s with message %s in %s: %s\nStack trace:\n%s",
