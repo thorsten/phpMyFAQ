@@ -27,7 +27,7 @@
  * PMF_Faq_Interface
  * 
  * @category  phpMyFAQ
- * @package   PMF_Caetgory
+ * @package   PMF_Category
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
@@ -43,7 +43,7 @@ interface PMF_Category_Interface
      * @param array   $data Array of data
      * 
      * @return boolean
-     * @throws PMF_Faq_Exception
+     * @throws PMF_Category_Exception
      */
     public function create($id, Array $data);
 
@@ -54,7 +54,7 @@ interface PMF_Category_Interface
      * @param array   $data Array of data
      * 
      * @return boolean
-     * @throws PMF_Faq_Exception
+     * @throws PMF_Category_Exception
      */
     public function update($id, Array $data);
 
@@ -64,7 +64,7 @@ interface PMF_Category_Interface
      * @param integer $id ID
      * 
      * @return boolean
-     * @throws PMF_Faq_Exception
+     * @throws PMF_Category_Exception
      */
     public function delete($id);
     
@@ -74,7 +74,7 @@ interface PMF_Category_Interface
      * @param string $language Language
      * 
      * @return boolean
-     * @throws PMF_Faq_Exception
+     * @throws PMF_Category_Exception
      */
     public function setLanguage($language);
     
@@ -82,7 +82,7 @@ interface PMF_Category_Interface
      * Returns the current language
      *
      * @return string
-     * @throws PMF_Faq_Exception
+     * @throws PMF_Category_Exception
      */
     public function getLanguage();
 }
