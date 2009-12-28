@@ -44,7 +44,7 @@ class PMF_Exception extends Exception
     public function __toString()
     {
         $exception = sprintf("PMF_Exception %s with message %s in %s: %s\nStack trace:\n%s",
-            __CLASS__,
+            get_class(),
             $this->getMessage(),
             $this->getFile(),
             $this->getLine(),
