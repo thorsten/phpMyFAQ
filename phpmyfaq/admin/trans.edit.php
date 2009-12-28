@@ -1,13 +1,8 @@
 <?php
 /**
- * Read in files for the translation and show them inside a form.
+ * Handle ajax requests for the interface translation tool
  * 
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Anatoliy Belsky <ab@php.net>
- * @since      2009-05-11
- * @copyright  2003-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * PHP 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,7 +13,18 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Anatoliy Belsky <ab@php.net>
+ * @copyright 2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-05-11
  */
+
+dump($_SESSION);
+
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
@@ -61,12 +67,12 @@ $leftVarsOnly   = array_slice($_SESSION['trans']['leftVarsOnly'],
 $rightVarsOnly  = &$_SESSION['trans']['rightVarsOnly'];
 
 
-$options = array('baseUrl'         => '?' . str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
-                 'total'           => count($_SESSION['trans']['leftVarsOnly']),
-                 'perPage'         => $itemsPerPage,
-                 'linkTpl'         => '<a href="javascript: go(\'{LINK_URL}\');void(0);">{LINK_TEXT}</a>',
-                 'layoutTpl'       => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>',
-                );
+$options = array('baseUrl'   => '?' . str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
+                 'total'     => count($_SESSION['trans']['leftVarsOnly']),
+                 'perPage'   => $itemsPerPage,
+                 'linkTpl'   => '<a href="javascript: go(\'{LINK_URL}\');void(0);">{LINK_TEXT}</a>',
+                 'layoutTpl' => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>');
+
 $pagination = new PMF_Pagination($options);
 $pageBar    = $pagination->render();
 
@@ -75,8 +81,8 @@ $pageBar    = $pagination->render();
  * We use these values to add the correct number of input boxes.
  * Left column will always have 2 boxes, right - 1 to 6+ boxes.
  */
-$leftNPlurals  = intval($_SESSION['trans']['leftVarsOnly']['PMF_LANG[nplurals]']);
-$rightNPlurals = intval($rightVarsOnly['PMF_LANG[nplurals]']);
+$leftNPlurals  = (int)$_SESSION['trans']['leftVarsOnly']['PMF_LANG[nplurals]'];
+$rightNPlurals = (int)$rightVarsOnly['PMF_LANG[nplurals]'];
 
 printf('<h2>%s</h2>', $PMF_LANG['ad_menu_translations']);
 printf('<font color="red">%s</font>', $PMF_LANG['msgTransToolNoteFileSaving']);
@@ -85,7 +91,11 @@ $NPluralsErrorReported = false;
 ?>
 <form id="transDiffForm">
 <table>
-<tr><td><b><?php echo $PMF_LANG['msgVariable'] ?></b></td><td><b>en</b></td><td><b><?php echo $translateLang ?></b></td></tr>
+<tr>
+    <th><?php echo $PMF_LANG['msgVariable'] ?></th>
+    <th>en</th>
+    <th><?php echo $translateLang ?></th>
+</tr>
 <?php while(list($key, $line) = each($leftVarsOnly)): ?>
 <?php
     // These parameters are not real translations, so don't offer to translate them
@@ -112,7 +122,7 @@ $NPluralsErrorReported = false;
             // Report missing plural form support once.
             if (!$NPluralsErrorReported) {
                 echo "<tr>\n";
-                echo '<td align="center" colspan="3">'.sprintf($PMF_LANG['msgTransToolLanguagePluralNotSet'],$translateLang)."</td>\n";
+                echo '<td align="center" colspan="3">'.sprintf($PMF_LANG['msgTransToolLanguagePluralNotSet'], $translateLang)."</td>\n";
                 echo "</tr>\n";
                 $NPluralsErrorReported = true;
             }
@@ -185,7 +195,7 @@ $NPluralsErrorReported = false;
 <td><input type="button" value="<?php echo $PMF_LANG['msgCancel'] ?>" onclick="location.href='?action=translist'" /></td>
 <td><input type="button"
            value="<?php echo $PMF_LANG['msgSave'] ?>"
-           onclick="save()"<?php if(!is_writable(PMF_ROOT_DIR . "/lang/language_$translateLang.php")) {echo ' disabled="disabled"';} ?> /></td>
+           onclick="save()"<?php if (!is_writable(PMF_ROOT_DIR . "/lang/language_$translateLang.php")) { print ' disabled="disabled"'; } ?> /></td>
 </tr>
 </table>
 </form>

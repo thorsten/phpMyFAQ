@@ -2,12 +2,7 @@
 /**
  * Handle ajax requests for the interface translation tool
  * 
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Anatoliy Belsky <ab@php.net>
- * @since      2009-05-12
- * @copyright  2003-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * PHP 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,7 +13,16 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Anatoliy Belsky <ab@php.net>
+ * @copyright 2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-05-12
  */
+
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
@@ -31,8 +35,10 @@ switch($ajax_action) {
     case 'save_page_buffer':
         /**
          * Build language variable definitions
+         * @todo Change input handling using PMF_Filter
          */
         foreach ((array)@$_POST['PMF_LANG'] as $key => $val) {
+        
             if (is_string($val)) {
                 $val = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $val);
                 $val = str_replace("'", "\\'", $val);
@@ -80,9 +86,9 @@ switch($ajax_action) {
         /**
          * Read in the head of the file we're writing to
          */
-        $fh   = fopen($filename, 'r');
+        $fh = fopen($filename, 'r');
         do {
-            $line             = fgets($fh);
+            $line = fgets($fh);
             array_push($tmpLines, rtrim($line));
         }
         while ('*/' != substr(trim($line), -2));
@@ -92,7 +98,7 @@ switch($ajax_action) {
          * Construct lines with variable definitions
          */
         foreach ($_SESSION['trans']['rightVarsOnly'] as $key => $val) {
-            if(0 === strpos($key, 'PMF_LANG')) {
+            if (0 === strpos($key, 'PMF_LANG')) {
                 $val = "'$val'";
             }
             array_push($tmpLines, '$' . str_replace(array('[', ']'), array("['", "']"), $key) . " = $val;");
