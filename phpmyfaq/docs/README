@@ -15,7 +15,7 @@ Changes since 2.6.0-RC:
 
 CHANGELOG:
 
-Version 2.6.0 - 2009-12-
+Version 2.6.0 - 2010-01
 - moved all language files to UTF-8 (Anatoliy)
 - added TCPDF as replacement for FPDF library (Thorsten)
 - added support for TinyMCE translations (Aurimas Fišeras)
@@ -810,4 +810,4 @@ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 License for the specific language governing rights and limitations
 under the License.
 
-(c) 2001-2009 phpMyFAQ Team
+(c) 2001-2010 phpMyFAQ Team

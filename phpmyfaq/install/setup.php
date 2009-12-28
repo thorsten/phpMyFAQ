@@ -4,16 +4,8 @@
  *
  * This script checks the complete environment, writes the database connection
  * parameters into the file config/database.php and the configuration into the database.
- *
- * @category  phpMyFAQ
- * @package   Installation
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Tom Rochester <tom.rochester@gmail.com>
- * @author    Johannes Schlueter <johannes@php.net>
- * @author    Uwe Pries <uwe.pries@digartis.de>
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since     2002-08-20
- * @copyright 2002-2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -24,11 +16,23 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   Setup
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Tom Rochester <tom.rochester@gmail.com>
+ * @author    Johannes Schlueter <johannes@php.net>
+ * @author    Uwe Pries <uwe.pries@digartis.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @copyright 2002-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2002-08-20
  */
 
 define('VERSION', '2.6.0');
 define('APIVERSION', 1);
-define('COPYRIGHT', '&copy; 2001-2009 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('SAFEMODE', @ini_get('safe_mode'));
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
