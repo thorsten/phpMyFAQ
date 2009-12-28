@@ -2,11 +2,7 @@
 /**
  * Bar image generation
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2009-03-30
- * @version   SVN: $Id$
- * @copyright 2009 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -17,16 +13,26 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_Bar
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-03-30
  */
 
 /**
  * PMF_Bar
  *
- * @package   phpMyFAQ
+ * @category  phpMyFAQ
+ * @package   PMF_Bar
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
  * @since     2009-03-30
- * @version   SVN: $Id$
- * @copyright 2009 phpMyFAQ Team
  */
 class PMF_Bar
 {
@@ -212,6 +218,7 @@ class PMF_Bar
             
             $this->textcolor = imagecolorallocate ($this->image, $r1, $g1, $b1);
             $barColor        = imagecolorallocate ($this->image, $r2, $g2, $b2);
+            
             $retval = imagefilledrectangle ($this->image, 0, 0, round(($this->number/100)*50), 15, $barColor);
             $retval = $retval && imagestring($this->image, 2, 1, 1, floor($this->number) . '%', $this->textcolor);
         } else {
