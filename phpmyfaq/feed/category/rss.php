@@ -57,6 +57,15 @@ $rss->writeElement('link', PMF_Link::getSystemUri('/feed/category/rss.php'));
 if (is_array($records)) {
 
     foreach ($records as $item) {
+        
+        $link = str_replace($_SERVER['PHP_SELF'], '/index.php', $item['record_link']);
+        if (PMF_RSS_USE_SEO) {
+            if (isset($item['record_title'])) {
+                $oLink            = new PMF_Link($link);
+                $oLink->itemTitle = $item['record_title'];
+                $link             = $oLink->toString();
+           }
+       } 
 
         $rss->startElement('item');
         $rss->writeElement('title', utf8_encode(html_entity_decode($item['record_title']) .
@@ -66,7 +75,7 @@ if (is_array($records)) {
         $rss->writeCdata(utf8_encode($item['record_preview']));
         $rss->endElement();
         
-        $rss->writeElement('link', utf8_encode($item['record_link']));
+        $rss->writeElement('link', utf8_encode(PMF_Link::getSystemUri('/feed/category/rss.php') . $link)); 
         $rss->writeElement('pubDate', makeRFC822Date($item['record_date'], true));
         $rss->endElement();
     }
