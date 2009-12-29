@@ -537,7 +537,7 @@ class PMF_Export_Pdf extends FPDF
         // Check, if image is stored locally or not
         if ('http' != substr($image, 0, 4)) {
             // Please note that the image must be accessible by HTTP NOT ONLY by HTTPS
-             $image = 'http://' . EndSlash($_SERVER['HTTP_HOST']) . $image; 
+             $image = $_SERVER['DOCUMENT_ROOT'] . $image; 
         }
         // Set a friendly User Agent
         $ua = ini_get('user_agent');

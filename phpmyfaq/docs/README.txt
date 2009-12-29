@@ -9,6 +9,7 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.5.6:
 - Improved glossary detection (Guillaume Le Maout)
+- many minor bugfixes (Thorsten, Guillaume Le Maout)
 
 For known issues please take a look at KNOWNBUGS.txt
 
@@ -16,6 +17,7 @@ CHANGELOG:
 
 Version 2.5.7 - 2010-
 - Improved glossary detection (Guillaume Le Maout)
+- many minor bugfixes (Thorsten, Guillaume Le Maout)
 
 Version 2.5.6 - 2009-12-22
 - updated bundled TinyMCE editor component to version 3.2.7 (Thorsten)
