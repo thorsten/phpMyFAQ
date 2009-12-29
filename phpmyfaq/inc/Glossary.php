@@ -6,8 +6,7 @@
  * @subpackage PMF_Glossary
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2005-09-15
- * @copyright  2005-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * @copyright  2005-2010 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -28,17 +27,6 @@
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2005-09-15
  * @copyright  2005-2009 phpMyFAQ Team
- * @version    SVN: $Id$
- *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
  */
 class PMF_Glossary
 {
@@ -135,12 +123,12 @@ class PMF_Glossary
             $content          = preg_replace_callback(
                 '/'
                 // a. the glossary item could be an attribute name
-                .'('.$item['item'].'="[^"]*")|'
+                . '('.$item['item'].'="[^"]*")|'
                 // b. the glossary item could be inside an attribute value
-                .'(('.implode('|', $attributes).')="[^"]*'.$item['item'].'[^"]*")|'
+                . '(('.implode('|', $attributes).')="[^"]*'.$item['item'].'[^"]*")|'
                 // c. the glossary item could be everywhere as a distinct word
-                .'(\s+)('.$item['item'].')(\s+)'
-                .'/mis',
+                . '(\W?)('.$item['item'].')(\W?)'
+                . '/mis',
                 array($this, '_setAcronyms'),
                 $content);
         }
