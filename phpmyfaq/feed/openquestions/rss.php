@@ -55,7 +55,7 @@ $rss->startElement('rss');
 $rss->writeAttribute('version', '2.0');
 $rss->startElement('channel');
 $rss->writeElement('title', utf8_encode($PMF_CONF['main.titleFAQ']) . ' - ' . utf8_encode($PMF_LANG['msgOpenQuestions']));
-$rss->writeElement('description', utf8_encode($PMF_CONF['main.metaDescription']));
+$rss->writeElement('description', utf8_encode(html_entity_decode($PMF_CONF['main.metaDescription'])));
 $rss->writeElement('link', PMF_Link::getSystemUri('/feed/openquestions/rss.php'));
 
 if ($num > 0) {
@@ -65,7 +65,8 @@ if ($num > 0) {
             $counter++;
 
             $rss->startElement('item');
-            $rss->writeElement('title', utf8_encode(PMF_Utils::makeShorterText($item['question'], 8)." (".$item['user'].")"));
+            $rss->writeElement('title', utf8_encode(PMF_Utils::makeShorterText(html_entity_decode($item['question']), 8) .
+                                        " (".$item['user'].")"));
             
             $rss->startElement('description');
             $rss->writeCdata(utf8_encode($item['question']));

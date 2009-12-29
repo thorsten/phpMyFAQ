@@ -55,7 +55,7 @@ $rss->startElement('rss');
 $rss->writeAttribute('version', '2.0');
 $rss->startElement('channel');
 $rss->writeElement('title', utf8_encode($PMF_CONF['main.titleFAQ']) . ' - ' . utf8_encode($PMF_LANG['msgTopTen']));
-$rss->writeElement('description', utf8_encode($PMF_CONF['main.metaDescription']));
+$rss->writeElement('description', utf8_encode(html_entity_decode($PMF_CONF['main.metaDescription'])));
 $rss->writeElement('link', PMF_Link::getSystemUri('/feed/topten/rss.php'));
 
 if ($num > 0) {
@@ -73,7 +73,8 @@ if ($num > 0) {
         }
 
         $rss->startElement('item');
-        $rss->writeElement('title', utf8_encode(PMF_Utils::makeShorterText($item['thema'], 8)." (".$item['visits']." ".$PMF_LANG['msgViews'].")"));
+        $rss->writeElement('title', utf8_encode(PMF_Utils::makeShorterText(html_entity_decode($item['thema']), 8) .
+                                    " (".$item['visits']." ".$PMF_LANG['msgViews'].")"));
         
         $rss->startElement('description');
         $rss->writeCdata(utf8_encode("[".$i.".] ".$item['thema']." (".$item['visits']." ".$PMF_LANG['msgViews'].")"));

@@ -51,7 +51,7 @@ $rss->startElement('rss');
 $rss->writeAttribute('version', '2.0');
 $rss->startElement('channel');
 $rss->writeElement('title', utf8_encode($PMF_CONF['main.titleFAQ']) . ' - ');
-$rss->writeElement('description', utf8_encode($PMF_CONF['main.metaDescription']));
+$rss->writeElement('description', utf8_encode(html_entity_decode($PMF_CONF['main.metaDescription'])));
 $rss->writeElement('link', PMF_Link::getSystemUri('/feed/category/rss.php'));
 
 if (is_array($records)) {
@@ -59,7 +59,7 @@ if (is_array($records)) {
     foreach ($records as $item) {
 
         $rss->startElement('item');
-        $rss->writeElement('title', utf8_encode($item['record_title'] .
+        $rss->writeElement('title', utf8_encode(html_entity_decode($item['record_title']) .
                                     ' (' . $item['visits'] . ' '.$PMF_LANG['msgViews'].')'));
         
         $rss->startElement('description');

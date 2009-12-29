@@ -54,7 +54,7 @@ $rss->startElement('rss');
 $rss->writeAttribute('version', '2.0');
 $rss->startElement('channel');
 $rss->writeElement('title', utf8_encode($PMF_CONF['main.titleFAQ']) . ' - ' . utf8_encode($PMF_LANG['msgLatestArticles']));
-$rss->writeElement('description', utf8_encode($PMF_CONF['main.metaDescription']));
+$rss->writeElement('description', utf8_encode(html_entity_decode($PMF_CONF['main.metaDescription'])));
 $rss->writeElement('link', PMF_Link::getSystemUri('/feed/latests/rss.php'));
 
 if ($num > 0) {
@@ -74,7 +74,7 @@ if ($num > 0) {
         $content = str_replace("<img src=\"/", "<img src=\"".PMF_Link::getSystemUri('/feed/latest/rss.php')."/", $content);
 
         $rss->startElement('item');
-        $rss->writeElement('title', utf8_encode($item['thema']));
+        $rss->writeElement('title', utf8_encode(html_entity_decode($item['thema'])));
 
         $rss->startElement('description');
         $rss->writeCdata(utf8_encode($content));
