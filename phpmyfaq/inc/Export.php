@@ -75,7 +75,7 @@ class PMF_Export
 				return new PMF_Export_Xhtml($faq, $category);
 				break;
 			default:
-				throw new Exception('Export not implemented!');
+				throw new PMF_Exception('Export not implemented!');
 		}
 	}
 	

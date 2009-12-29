@@ -58,13 +58,14 @@ class PMF_Db
         $file = str_replace('\\', '/', __FILE__);
         $dir  = substr($file, 0, strrpos($file, "/")) . '/PMF_DB/';
         $type = ucfirst($type);
+        
         if (file_exists($dir . $type . '.php')) {
             require_once $dir . $type . '.php';
             $class          = 'PMF_DB_' . $type;
             self::$instance = new $class;
             return self::$instance;
         } else {
-            throw new Exception('Invalid Database Type: ' . $type);
+            throw new PMF_Exception('Invalid Database Type: ' . $type);
         }
     }
 
