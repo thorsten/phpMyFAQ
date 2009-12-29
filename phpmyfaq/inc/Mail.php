@@ -291,12 +291,6 @@ class PMF_Mail
             return false;
         }
 
-        // phpMyFAQ has adopted a class to manage Internationalized Domain Names
-        global $IDN;
-        if (isset($IDN)) {
-            $address = $IDN->encode($address);
-        }
-
         // Add the e-mail address into the target array
         $target[$address] = $name;
         // On Windows, when using PHP built-in mail drop any name, just use the e-mail address
@@ -907,12 +901,6 @@ class PMF_Mail
         $unsafe = array ("\r", "\n");
         if ($address !== str_replace($unsafe, '', $address)) {
             return false;
-        }
-
-        // phpMyFAQ has adopted a class to manage Internationalized Domain Names
-        global $IDN;
-        if (isset($IDN)) {
-            $address = $IDN->decode($address);
         }
 
         // Validate the address as an e-mail address: syntax validation

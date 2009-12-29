@@ -2,13 +2,7 @@
 /**
  * Main update script
  *
- * @package    phpMyFAQ 
- * @subpackage Installation
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Thomas Melchinger <t.melchinger@uni.de>
- * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since      2002-01-10
- * @copyright  2002-2009 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,11 +13,21 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   Setup
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Thomas Melchinger <t.melchinger@uni.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @copyright 2002-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2002-01-10
  */
 
 define('NEWVERSION', '2.6.0');
 define('APIVERSION', 1);
-define('COPYRIGHT', '&copy; 2001-2009 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
 require_once PMF_ROOT_DIR.'/inc/autoLoader.php';

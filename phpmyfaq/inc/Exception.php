@@ -1,9 +1,9 @@
 <?php
 /**
- * Attachment handler class 
- * 
- * PHP version 5.2
+ * phpMyFAQ main exception class
  *
+ * PHP Version 5.2.0
+ * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -13,39 +13,43 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- *
+ * 
  * @category  phpMyFAQ
- * @package   PMF_Attachment
- * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @package   PMF_Exception
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2009 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2009-08-21
+ * @since     2009-12-28
  */
 
 /**
- * PMF_Atachment
+ * PMF_Exception
  * 
  * @category  phpMyFAQ
- * @package   PMF_Attachment
- * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @package   PMF_Exception
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2009 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2009-08-21
+ * @since     2009-12-28
  */
-class PMF_Attachment {
+class PMF_Exception extends Exception
+{
     /**
-     * Storage type filesystem
-     * 
-     * @var integer
+     * Converts PMF_Exception to a string
+     *
+     * @return string
      */
-    const STORAGE_TYPE_FILESYSTEM = 0;
-
-    /**
-     * Storage type database
-     * 
-     * @var integer
-     */
-    const STORAGE_TYPE_DB = 1;
+    public function __toString()
+    {
+        $exception = sprintf("PMF_Exception %s with message %s in %s: %s\nStack trace:\n%s",
+            get_class(),
+            $this->getMessage(),
+            $this->getFile(),
+            $this->getLine(),
+            $this->getTraceAsString());
+        
+        return $exception;
+    }
 }

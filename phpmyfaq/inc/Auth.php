@@ -5,27 +5,19 @@
  * Subclasses of Auth implement authentication functionality with different
  * types. The class AuthLdap for example provides authentication functionality
  * LDAP-database access, AuthDb with database access.
- *
  * Authentication functionality includes creation of a new login-and-password
  * deletion of an existing login-and-password combination and validation of
  * given by a user. These functions are provided by the database-specific
  * see documentation of the database-specific authentication classes AuthMysql,
  * or AuthLdap for further details.
- *
  * Passwords are usually encrypted before stored in a database. For
  * and security, a password encryption method may be chosen. See documentation
  * Enc class for further details.
- *
  * Instead of calling the database-specific subclasses directly, the static
  * selectDb(dbtype) may be called which returns a valid database-specific
  * object. See documentation of the static method selectDb for further details.
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Auth
- * @author     Lars Tiedemann <php@larstiedemann.de>
- * @since      2005-09-30
- * @copyright  2005-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -36,17 +28,26 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_Auth
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-09-30
  */
 
 /**
  * PMF_Auth
  * 
- * @package    phpMyFAQ
- * @subpackage PMF_Auth
- * @author     Lars Tiedemann <php@larstiedemann.de>
- * @since      2005-09-30
- * @copyright  2005-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * @category  phpMyFAQ
+ * @package   PMF_Auth
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-09-30
  */
 class PMF_Auth
 {
@@ -84,15 +85,16 @@ class PMF_Auth
     /**
      * Short description of attribute read_only
      *
-     * @var bool
+     * @var boolean
      */
     private $read_only = false;
 
     /**
      * Constructor
      *
-     * @param  string  $enctype   Type of encoding
-     * @param  boolean $read_only Readonly?
+     * @param string  $enctype   Type of encoding
+     * @param boolean $read_only Readonly?
+     * 
      * @return void
      */
     public function __construct($enctype = 'none', $read_only = false)
@@ -109,12 +111,14 @@ class PMF_Auth
      * method. The specified encryption method enctype is passed to
      * The result is stored in the private container variable enc_container and
      *
-     * @param  string $enctype encryption type
-     * @return PMF_User
+     * @param string $enctype encryption type
+     * 
+     * @return PMF_Enc
      */
     public function selectEncType($enctype)
     {
         $this->enc_container = PMF_Enc::selectEnc($enctype);
+        
         return $this->enc_container;
     }
 
@@ -131,13 +135,16 @@ class PMF_Auth
     public function error()
     {
         $message = '';
+        
         if (!is_array($this->errors)) {
             $this->errors = array((string) $this->errors);
         }
         foreach ($this->errors as $error) {
             $message .= $error."\n";
         }
+        
         $message .= $this->enc_container->error();
+        
         return $message;
     }
 
@@ -151,14 +158,16 @@ class PMF_Auth
      * object without database access and with an error message. See the
      * of the error() method for further details.
      *
-     * @param  string $method Authentication access methods
-     * @return PMF_User
+     * @param string $method Authentication access methods
+     * 
+     * @return PMF_Auth_AuthDriver
      */
     public static function selectAuth($method)
     {
         // verify selected database
         $auth   = new PMF_Auth();
         $method = strtolower($method);
+        
         if (!isset($auth->auth_typemap[$method])) {
             $auth->errors[] = self::PMF_ERROR_USER_NO_AUTHTYPE;
             return $auth;
@@ -178,23 +187,27 @@ class PMF_Auth
     /**
      * Short description of method read_only
      *
-     * @param  bool $read_only boolean flag
-     * @return bool
+     * @param boolean $read_only boolean flag
+     * 
+     * @return boolean
      */
     public function setReadOnly($read_only = null)
     {
         if ($read_only === null) {
             return $this->read_only;
         }
-        $oldread_only = $this->read_only;
+        
+        $oldread_only    = $this->read_only;
         $this->read_only = (bool) $read_only;
+        
         return $oldread_only;
     }
 
     /**
      * Short description of method encrypt
      *
-     * @param  string $str string
+     * @param string $str string
+     * 
      * @return string
      */
     public function encrypt($str)
