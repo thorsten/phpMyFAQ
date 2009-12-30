@@ -54,8 +54,8 @@ $rss->startDocument('1.0', $PMF_LANG['metaCharset']);
 $rss->startElement('rss');
 $rss->writeAttribute('version', '2.0');
 $rss->startElement('channel');
-$rss->writeElement('title', utf8_encode($PMF_CONF['main.titleFAQ']) . ' - ' . utf8_encode($PMF_LANG['msgTopTen']));
-$rss->writeElement('description', utf8_encode($PMF_CONF['main.metaDescription']));
+$rss->writeElement('title', $PMF_CONF['main.titleFAQ'] . ' - ' . $PMF_LANG['msgTopTen']);
+$rss->writeElement('description', html_entity_decode($PMF_CONF['main.metaDescription']));
 $rss->writeElement('link', PMF_Link::getSystemUri('/feed/topten/rss.php'));
 
 if ($num > 0) {
@@ -66,20 +66,21 @@ if ($num > 0) {
         $link = str_replace($_SERVER['PHP_SELF'], '/index.php', $item['url']);
         if (PMF_RSS_USE_SEO) {
             if (isset($item['thema'])) {
-                $oL = new PMF_Link($link);
-                $oL->itemTitle = $item['thema'];
-                $link = $oL->toString();
+                $oLink = new PMF_Link($link);
+                $oLink->itemTitle = $item['thema'];
+                $link = $oLink->toString();
             }
         }
 
         $rss->startElement('item');
-        $rss->writeElement('title', utf8_encode(PMF_Utils::makeShorterText($item['thema'], 8)." (".$item['visits']." ".$PMF_LANG['msgViews'].")"));
+        $rss->writeElement('title', PMF_Utils::makeShorterText(html_entity_decode($item['thema']), 8) .
+                                    " (".$item['visits']." ".$PMF_LANG['msgViews'].")");
         
         $rss->startElement('description');
-        $rss->writeCdata(utf8_encode("[".$i.".] ".$item['thema']." (".$item['visits']." ".$PMF_LANG['msgViews'].")"));
+        $rss->writeCdata("[".$i.".] ".$item['thema']." (".$item['visits']." ".$PMF_LANG['msgViews'].")");
         $rss->endElement();
         
-        $rss->writeElement('link', utf8_encode(PMF_Link::getSystemUri('/feed/topten/rss.php').$link));
+        $rss->writeElement('link', PMF_Link::getSystemUri('/feed/topten/rss.php').$link);
         $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['last_visit'], true));
         $rss->endElement();
     }

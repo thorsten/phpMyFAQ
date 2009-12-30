@@ -58,7 +58,7 @@ $rss->startElement('rss');
 $rss->writeAttribute('version', '2.0');
 $rss->startElement('channel');
 $rss->writeElement('title', utf8_encode($PMF_CONF['main.titleFAQ']) . ' - ' . utf8_encode($PMF_LANG['msgNews']));
-$rss->writeElement('description', utf8_encode($PMF_CONF['main.metaDescription']));
+$rss->writeElement('description', utf8_encode(html_entity_decode($PMF_CONF['main.metaDescription'])));
 $rss->writeElement('link', PMF_Link::getSystemUri('/feed/news/rss.php'));
 
 if ($num > 0) {
@@ -67,17 +67,17 @@ if ($num > 0) {
         $link = '/index.php?action=news&amp;newsid='.$item['id'].'&amp;newslang='.$item['lang'];
         if (PMF_RSS_USE_SEO) {
             if (isset($item['header'])) {
-                $oL = new PMF_Link($link);
-                $oL->itemTitle = $item['header'];
-                $link = $oL->toString();
+                $oLink = new PMF_Link($link);
+                $oLink->itemTitle = $item['header'];
+                $link = $oLink->toString();
             }
         }
 
         $rss->startElement('item');
-        $rss->writeElement('title', utf8_encode($item['header']));
+        $rss->writeElement('title', html_entity_decode($item['header']));
 
         $rss->startElement('description');
-        $rss->writeCdata(utf8_encode($item['content']));
+        $rss->writeCdata($item['content']);
         $rss->endElement();
         
         $rss->writeElement('link', PMF_Link::getSystemUri('/feed/news/rss.php').$link);

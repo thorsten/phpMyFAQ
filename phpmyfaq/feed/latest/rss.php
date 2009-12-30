@@ -54,8 +54,8 @@ $rss->startDocument('1.0', $PMF_LANG['metaCharset']);
 $rss->startElement('rss');
 $rss->writeAttribute('version', '2.0');
 $rss->startElement('channel');
-$rss->writeElement('title', utf8_encode($PMF_CONF['main.titleFAQ']) . ' - ' . utf8_encode($PMF_LANG['msgLatestArticles']));
-$rss->writeElement('description', utf8_encode($PMF_CONF['main.metaDescription']));
+$rss->writeElement('title', $PMF_CONF['main.titleFAQ'] . ' - ' . $PMF_LANG['msgLatestArticles']);
+$rss->writeElement('description', html_entity_decode($PMF_CONF['main.metaDescription']));
 $rss->writeElement('link', PMF_Link::getSystemUri('/feed/latests/rss.php'));
 
 if ($num > 0) {
@@ -64,9 +64,9 @@ if ($num > 0) {
         $link = str_replace($_SERVER['PHP_SELF'], '/index.php', $item['url']);
         if (PMF_RSS_USE_SEO) {
             if (isset($item['thema'])) {
-                $oL = new PMF_Link($link);
-                $oL->itemTitle = $item['thema'];
-                $link = $oL->toString();
+                $oLink = new PMF_Link($link);
+                $oLink->itemTitle = $item['thema'];
+                $link = $oLink->toString();
             }
         }
         // Get the content
@@ -75,13 +75,13 @@ if ($num > 0) {
         $content = str_replace("<img src=\"/", "<img src=\"".PMF_Link::getSystemUri('/feed/latest/rss.php')."/", $content);
 
         $rss->startElement('item');
-        $rss->writeElement('title', utf8_encode($item['thema']));
+        $rss->writeElement('title', html_entity_decode($item['thema']));
 
         $rss->startElement('description');
-        $rss->writeCdata(utf8_encode($content));
+        $rss->writeCdata($content);
         $rss->endElement();
         
-        $rss->writeElement('link', utf8_encode(PMF_Link::getSystemUri('/feed/latest/rss.php').$link));
+        $rss->writeElement('link', PMF_Link::getSystemUri('/feed/latest/rss.php') . $link);
         $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['datum'], true));
         $rss->endElement();
     }

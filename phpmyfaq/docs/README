@@ -16,7 +16,7 @@ Changes since 2.6.0-RC:
 
 CHANGELOG:
 
-Version 2.6.0 - 2010-01
+Version 2.6.0 - 2010-01-
 - moved all language files to UTF-8 (Anatoliy)
 - added TCPDF as replacement for FPDF library (Thorsten)
 - added support for TinyMCE translations (Aurimas Fišeras)
@@ -40,8 +40,9 @@ Version 2.6.0 - 2010-01
 - updated Lithuanian translation (Aurimas Fišeras)
 - updated Japanese translation
 
-Version 2.5.7 - 2010-
--
+Version 2.5.7 - 2010-01-
+- Improved glossary detection (Guillaume Le Maout)
+- many minor bugfixes (Thorsten, Guillaume Le Maout)
 
 Version 2.5.6 - 2009-12-22
 - updated bundled TinyMCE editor component to version 3.2.7 (Thorsten)

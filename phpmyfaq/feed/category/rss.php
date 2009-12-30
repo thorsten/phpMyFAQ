@@ -52,23 +52,33 @@ $rss->startElement('rss');
 $rss->writeAttribute('version', '2.0');
 $rss->startElement('channel');
 $rss->writeElement('title', utf8_encode($PMF_CONF['main.titleFAQ']) . ' - ');
-$rss->writeElement('description', utf8_encode($PMF_CONF['main.metaDescription']));
+$rss->writeElement('description', utf8_encode(html_entity_decode($PMF_CONF['main.metaDescription'])));
 $rss->writeElement('link', PMF_Link::getSystemUri('/feed/category/rss.php'));
 
 if (is_array($records)) {
 
     foreach ($records as $item) {
+        
+        $link = str_replace($_SERVER['PHP_SELF'], '/index.php', $item['record_link']);
+        if (PMF_RSS_USE_SEO) {
+            if (isset($item['record_title'])) {
+                $oLink            = new PMF_Link($link);
+                $oLink->itemTitle = $item['record_title'];
+                $link             = $oLink->toString();
+           }
+       } 
 
         $rss->startElement('item');
-        $rss->writeElement('title', utf8_encode($item['record_title'] .
+        $rss->writeElement('title', html_entity_decode($item['record_title'] .
                                     ' (' . $item['visits'] . ' '.$PMF_LANG['msgViews'].')'));
         
         $rss->startElement('description');
         $rss->writeCdata(utf8_encode($item['record_preview']));
         $rss->endElement();
         
-        $rss->writeElement('link', utf8_encode($item['record_link']));
+        $rss->writeElement('link', PMF_Link::getSystemUri('/feed/category/rss.php') . $link); 
         $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['record_date'], true));
+
         $rss->endElement();
     }
 }
