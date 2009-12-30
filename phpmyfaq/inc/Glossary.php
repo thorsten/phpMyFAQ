@@ -129,7 +129,7 @@ class PMF_Glossary
                 // c. the glossary item could be everywhere as a distinct word
                 . '(\W?)('.$item['item'].')(\W?)'
                 . '/mis',
-                array($this, '_setAcronyms'),
+                array($this, 'setAcronyms'),
                 $content);
         }
 
@@ -142,7 +142,7 @@ class PMF_Glossary
      * @param  array $matches Matchings
      * @return string
      */
-    private function _setAcronyms(Array $matches)
+    public function setAcronyms(Array $matches)
     {
     	if (count($matches) > 4) {
             $prefix  = $matches[4];
