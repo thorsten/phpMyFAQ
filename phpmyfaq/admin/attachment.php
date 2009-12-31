@@ -142,11 +142,16 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission["adda
          * To add user difined key
          * $att->setKey($somekey, false);
          */
-        
-        if ($att->save($_FILES["userfile"]["tmp_name"], $_FILES["userfile"]["name"])) {
-            print "<p>".$PMF_LANG["ad_att_suc"]."</p>";
-        }
-        else {
+        try {
+            $uploaded = $att->save($_FILES["userfile"]["tmp_name"], $_FILES["userfile"]["name"]);
+            
+            if ($uploaded) {
+                print "<p>".$PMF_LANG["ad_att_suc"]."</p>";
+            } else {
+                throw new Exception;
+            }
+        } catch (Exception $e) {
+            $att->delete();
             print "<p>".$PMF_LANG["ad_att_fail"]."</p>";
         }
     } else {
