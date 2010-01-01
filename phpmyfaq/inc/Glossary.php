@@ -123,14 +123,18 @@ class PMF_Glossary
             $content          = preg_replace_callback(
                 '/'
                 // a. the glossary item could be an attribute name
-                . '('.$item['item'].'="[^"]*")|'
+                .'('.$item['item'].'="[^"]*")|'
                 // b. the glossary item could be inside an attribute value
-                . '(('.implode('|', $attributes).')="[^"]*'.$item['item'].'[^"]*")|'
+                .'(('.implode('|', $attributes).')="[^"]*'.$item['item'].'[^"]*")|'
                 // c. the glossary item could be everywhere as a distinct word
-                . '(\W?)('.$item['item'].')(\W?)'
-                . '/mis',
+                .'(\W+)('.$item['item'].')(\W+)|'
+                // d. the glossary item could be at the begining of the string as a distinct word
+                .'^('.$item['item'].')(\W+)|'
+                // e. the glossary item could be at the end of the string as a distinct word
+                .'(\W+)('.$item['item'].')$'
+                .'/mis',
                 array($this, '_setAcronyms'),
-                $content);
+                $content); 
         }
 
         return $content;
@@ -144,18 +148,31 @@ class PMF_Glossary
      */
     private function _setAcronyms(Array $matches)
     {
-    	if (count($matches) > 4) {
+        if (count($matches) > 9) {
+            // if the word is at the end of the string
+            $prefix  = $matches[9];
+            $item    = $matches[10];
+            $postfix = '';
+        } elseif (count($matches) > 7) {
+            // if the word is at the begining of the string
+            $prefix  = '';
+            $item    = $matches[7];
+            $postfix = $matches[8];
+        } elseif (count($matches) > 4) {
+            // if the word is else where in the string
             $prefix  = $matches[4];
             $item    = $matches[5];
             $postfix = $matches[6];
-    	}
-
-        if (!empty($item)) {
-            return sprintf($prefix .'<acronym class="glossary" title="%s">%s</acronym>'. $postfix,
-                $this->definition,
-                $item); 
         }
-
+        
+        if (!empty($item)) {
+            return sprintf('%s<acronym class="glossary" title="%s">%s</acronym>%s',
+                $prefix,
+                $this->definition,
+                $item,
+                $postfix);
+        }
+        
         // Fallback: the original matched string
         return $matches[0];
     }
