@@ -2,7 +2,7 @@ phpMyFAQ Installation
 
 Open your browser and type in the following URL:
 
-http://www.example.com/path/to/your/faq/install/installer.php
+http://www.example.com/path/to/your/faq/install/setup.php
 
 Substitute www.yourdomain.com with your actual domain name. When the
 site is loaded enter the address of your database server
@@ -22,9 +22,6 @@ the button "install" to initialize the tables in your database.
 
 For more information please read the documentation (documentation.en.html)
 carefully.
-
-Found a bug?
-Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 The contents of this file are subject to the Mozilla Public License
 Version 1.1 (the "License"); you may not use this file except in

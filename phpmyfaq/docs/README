@@ -1,20 +1,16 @@
 phpMyFAQ 2.6.0
 Codename "Portia"
 
-Installation/Update:
-Please read the documentation (documentation.en.html) carefully.
-
-Found a bug?
-Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
-
 Changes since 2.6.0-RC:
-- added support for Microsoft Windows Web App Gallery (Thorsten)
+- added experimental support for Microsoft Windows Web App Gallery (Thorsten)
 - updated Lithuanian translation (Aurimas Fišeras)
 - updated Japanese translation
 - removed Net_IDNA library (Thorsten)
 - minor bugfixes (Thorsten)
 
 CHANGELOG:
+
+This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.6.0 - 2010-01-
 - moved all language files to UTF-8 (Anatoliy)
@@ -27,7 +23,7 @@ Version 2.6.0 - 2010-01-
 - added a rest/json API (Thorsten)
 - added secure login if SSL is available (Tobias Hommel)
 - added FAQ entry dependent meta description (Thorsten)
-- added support for Microsoft Windows Web App Gallery (Thorsten)
+- added experimental support for Microsoft Windows Web App Gallery (Thorsten)
 - improved attachment functionality (Anatoliy)
 - improved install script (Thorsten)
 - improved category view with description (Thorsten)
