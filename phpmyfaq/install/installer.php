@@ -13,7 +13,7 @@
  * @author     Uwe Pries <uwe.pries@digartis.de>
  * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since      2002-08-20
- * @copyright  2002-2009 phpMyFAQ Team
+ * @copyright  2002-2010 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -27,7 +27,7 @@
  */
 
 define('VERSION', '2.5.7');
-define('COPYRIGHT', '&copy; 2001-2009 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('SAFEMODE', @ini_get('safe_mode'));
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 

@@ -7,7 +7,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since     2003-02-26
- * @copyright 2003-2009 phpMyFAQ Team
+ * @copyright 2003-2010 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -30,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
     <!-- Footer -->
     <div id="footer">
-        <div class="right"><?php print $faqconfig->get('main.titleFAQ'); ?> is proudly powered by <strong>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></strong> | <a href="http://www.phpmyfaq.de/documentation.2.5.en.php" target="_blank">phpMyFAQ documentation</a> | &copy; 2001-2009 <a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a></div>
+        <div class="right"><?php print $faqconfig->get('main.titleFAQ'); ?> is proudly powered by <strong>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></strong> | <a href="http://www.phpmyfaq.de/documentation.2.5.en.php" target="_blank">phpMyFAQ documentation</a> | &copy; 2001-2010 <a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a></div>
     </div>
 
 </div>

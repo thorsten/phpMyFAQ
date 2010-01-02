@@ -796,4 +796,4 @@ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 License for the specific language governing rights and limitations
 under the License.
 
-(c) 2001-2009 phpMyFAQ Team
+(c) 2001-2010 phpMyFAQ Team

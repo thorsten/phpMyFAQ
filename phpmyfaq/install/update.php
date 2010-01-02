@@ -8,8 +8,7 @@
  * @author     Thomas Melchinger <t.melchinger@uni.de>
  * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since      2002-01-10
- * @version    SVN: $Id$
- * @copyright  2002-2009 phpMyFAQ Team
+ * @copyright  2002-2010 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -23,7 +22,7 @@
  */
 
 define('NEWVERSION', '2.5.7');
-define('COPYRIGHT', '&copy; 2001-2009 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
 if (version_compare(PHP_VERSION, '5.2.0', '<')) {
