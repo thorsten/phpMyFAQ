@@ -211,4 +211,3 @@ function ajaxfilemanager(field_name, url, type, win)
 ?>
 </body>
 </html>
-
