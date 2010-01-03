@@ -48,11 +48,12 @@ class AllTests extends PHPUnit_Framework_TestSuite
 {
     public static function main()
     {
-        $parameters = array(
+        $logDirectory = dirname(__FILE__) . 'phpunit_logs/';
+        $parameters   = array(
             'backupGlobals'          => false,
             'backupStaticAttributes' => false);
         
-        PHPUnit_TextUI_TestRunner::run(self::suite(), $parameters);
+        PHPUnit_TextUI_TestRunner::run(self::suite(), $parameters, $logDirectory);
     }
 
     public static function suite()
