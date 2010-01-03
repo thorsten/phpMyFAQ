@@ -1,1 +1,4 @@
 template/berlin export-ignore
+template/mobile export-ignore
+scripts         export-ignore
+tests           export-ignore
