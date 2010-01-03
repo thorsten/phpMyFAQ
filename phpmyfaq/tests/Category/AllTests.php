@@ -1,6 +1,6 @@
 <?php
 /**
- * Main test suite for phpMyFAQ
+ * Test suite for PMF_Category related classes
  * 
  * PHP Version 5.2
  * 
@@ -19,42 +19,29 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2009-2010 phpMyFAQ Team
- * @since     2009-05-16
+ * @copyright 2010 phpMyFAQ Team
+ * @since     2010-01-03
  */
 
-date_default_timezone_set('Europe/Berlin');
-error_reporting(E_ALL | E_STRICT);
-
-// include PHPUnit
 require_once 'PHPUnit/Framework/TestSuite.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
-// include Testsuites
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Category' . DIRECTORY_SEPARATOR . 'AllTests.php';
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Faq' . DIRECTORY_SEPARATOR . 'AllTests.php';
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Search' . DIRECTORY_SEPARATOR . 'AllTests.php';
-
 /**
- * AllTests
+ * Category_AllTests
  * 
  * @category  phpMyFAQ
  * @package   PMF_Tests
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2009-2010 phpMyFAQ Team
- * @since     2009-05-16
+ * @copyright 2010 phpMyFAQ Team
+ * @since     2010-01-03
  */
-class AllTests
+class Category_AllTests
 {
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('phpMyFAQ AllTests');
-        
-        $suite->addTest(Category_AllTests::suite());
-        $suite->addTest(Faq_AllTests::suite());
-        $suite->addTest(Search_AllTests::suite());
+        $suite = new PHPUnit_Framework_TestSuite('phpMyFAQ PMF_Category');
         
         return $suite;
     }
