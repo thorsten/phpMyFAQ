@@ -103,6 +103,7 @@ if ($step == 1) {
 <ul type="square">
     <li>phpMyFAQ 2.0.x</li>
     <li>phpMyFAQ 2.5.x</li>
+    <li>phpMyFAQ 2.6.x</li>
 </ul>
 <p>This update will <strong>not</strong> work for the following versions:</p>
 <ul type="square">
