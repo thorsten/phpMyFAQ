@@ -1,17 +1,8 @@
 <?php
 /**
  * Some basic functions and PMF_Init class.
- *
- * @package    phpMyFAQ
- * @subpackage PMF_Init
- * @author     Johann-Peter Hartmann <hartmann@mayflower.de>
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Stefan Esser <sesser@php.net>
- * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @author     Christian Stocker <chregu@bitflux.ch>
- * @since      2005-09-24
- * @copyright  2005-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -21,7 +12,22 @@
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
- * under the License.
+ * under the License. 
+ * 
+ * Portions created by Christian Stocker are Copyright (c) 2001-2008 Liip AG.
+ * All Rights Reserved.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Init
+ * @author    Johann-Peter Hartmann <hartmann@mayflower.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Stefan Esser <sesser@php.net>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author    Christian Stocker <chregu@bitflux.ch>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-09-24
  */
 
 //
@@ -44,14 +50,14 @@ if (DEBUG) {
 $foundCurrPath = false;
 $includePaths  = explode(PATH_SEPARATOR, ini_get('include_path'));
 $i             = 0;
-while((!$foundCurrPath) && ($i < count($includePaths))) {
+while ((!$foundCurrPath) && ($i < count($includePaths))) {
     if ('.' == $includePaths[$i]) {
         $foundCurrPath = true;
     }
     $i++;
 }
 if (!$foundCurrPath) {
-    ini_set('include_path', '.'.PATH_SEPARATOR.ini_get('include_path'));
+    ini_set('include_path', '.' . PATH_SEPARATOR . ini_get('include_path'));
 }
 
 //
@@ -120,21 +126,13 @@ if ($faqconfig->get('main.ldapSupport') && file_exists(PMF_CONFIG_DIR . '/ldap.p
  */
 $confAttachmentsPath = trim($faqconfig->get('main.attachmentsPath'));
 if ('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:(\\\\|/)%i', $confAttachmentsPath)) {
-    /**
-     * If we're here, some windows or unix style
-     * absolute path was detected.
-     */
+    // If we're here, some windows or unix style absolute path was detected.
     define('PMF_ATTACHMENTS_DIR', $confAttachmentsPath);
 } else {
-    /**
-     * otherwise build the absolute path
-     *
-     */
+    // otherwise build the absolute path
     $tmp = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . $confAttachmentsPath;
     
-    /**
-     * Check that nobody is traversing
-     */
+    // Check that nobody is traversing
     if (0 === strpos((string)$tmp, dirname(dirname(__FILE__)))) {
         define('PMF_ATTACHMENTS_DIR', $tmp);
     } else {
@@ -149,16 +147,17 @@ if ('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:(\\\\|/)%i', $confAtta
  * variables, unescaped slashes and XSS in the request string. It also detects
  * and sets the current language.
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Init
- * @author     Johann-Peter Hartmann <hartmann@mayflower.de>
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Stefan Esser <sesser@php.net>
- * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @author     Christian Stocker <chregu@bitflux.ch>
- * @since      2005-09-24
- * @copyright  2005-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * @category  phpMyFAQ
+ * @package   PMF_Init
+ * @author    Johann-Peter Hartmann <hartmann@mayflower.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Stefan Esser <sesser@php.net>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author    Christian Stocker <chregu@bitflux.ch>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-09-24
  */
 class PMF_Init
 {
@@ -172,14 +171,14 @@ class PMF_Init
      * - uncorrect filenames when file are uploaded.
      *
      * @return  void
-     * @access  public
-     * @author  Johann-Peter Hartmann <hartmann@mayflower.de>
      */
     public static function cleanRequest()
     {
+        // Check on PHP 6.0.0-dev
         if (version_compare(PHP_VERSION, '6.0.0-dev', '<')) {
             $_SERVER['PHP_SELF'] = strtr(rawurlencode($_SERVER['PHP_SELF']),array( "%2F"=>"/", "%257E"=>"%7E"));
         }
+        
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             $_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
         }
@@ -219,11 +218,9 @@ class PMF_Init
     /**
      * Clean up a filename: if anything goes wrong, an empty string will be returned
      *
-     * @param   string  $filename
-     * @return  string
-     * @access  private
-     * @since   2006-12-29
-     * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
+     * @param string $filename Filename
+     * 
+     * @return string
      */
     private static function _basicFilenameClean($filename)
     {
@@ -270,9 +267,7 @@ class PMF_Init
     * Clean the filename of any uploaded file by the user and force an error
     * when calling is_uploaded_file($_FILES[key]['tmp_name']) if the cleanup goes wrong
     *
-    * @access  private
-    * @since   2006-12-29
-    * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
+    * @return void
     */
    private static function _cleanFilenames()
    {
@@ -307,7 +302,7 @@ class PMF_Init
     /**
      * Gets the accepted language from the user agent
      *
-     * @return  void
+     * @return void
      */
     private function _getUserAgentLanguage()
     {
@@ -331,9 +326,7 @@ class PMF_Init
      *       otherwise each $_SESSION key will be set to NULL because $GLOBALS
      *       has an entry, as copy-by-ref, for each $_SESSION key when 'register_globals = On'.
      *
-     * @return  void
-     * @access  private
-     * @author  Stefan Esser <sesser@php.net>
+     * @return void
      */
     private static function _unregisterGlobalVariables()
     {
@@ -358,12 +351,11 @@ class PMF_Init
     /**
      * This function removes the magic quotes if they are enabled.
      *
-     * @param   array
-     * @return  array
-     * @access  private
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param array $data Array of data
+     * 
+     * @return array
      */
-    private static function _removeMagicQuotesGPC($data)
+    private static function _removeMagicQuotesGPC(Array $data)
     {
         static $recursionCounter = 0;
         // Avoid webserver crashes. For any detail, see: http://www.php-security.org/MOPB/MOPB-02-2007.html
@@ -391,11 +383,9 @@ class PMF_Init
     /**
      * Cleans a html string from some xss issues
      *
-     * @param       string  $string
-     * @return      string
-     * @access      private
-     * @author      Christian Stocker <chregu@bitflux.ch>
-     * @copyright   Copyright (c) 2001-2008 Liip AG
+     * @param string $string String
+     * 
+     * @return string
      */
     private static function _basicXSSClean($string)
     {
@@ -446,13 +436,11 @@ class PMF_Init
     /**
      * Removes xss from an array
      *
-     * @param   array   $data
-     * @return  array
-     * @acces   private
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Johann-Peter Hartmann <hartmann@mayflower.de>
+     * @param array $data Array of data
+     * 
+     * @return array
      */
-    private static function _removeXSSGPC($data)
+    private static function _removeXSSGPC(Array $data)
     {
         static $recursionCounter = 0;
         // Avoid webserver crashes. For any detail, see: http://www.php-security.org/MOPB/MOPB-02-2007.html
