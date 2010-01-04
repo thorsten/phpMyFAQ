@@ -19,7 +19,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
  * @author    Jürgen Kuza <kig@bluewin.ch>
- * @copyright 2002-2009 phpMyFAQ Team
+ * @copyright 2002-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-17
@@ -123,8 +123,8 @@ if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SE
     }
     
     if ($search_result) {
-        $search_result_html = '<p>'.$plr->GetMsg('plmsgSearchAmount',$num)."</p>\n";
-        $counter = 0;
+        $search_result_html = '<p>'.$plr->GetMsg('plmsgSearchAmount', count($search_result))."</p>\n";
+        $counter            = 0;
         foreach ($search_result as $cat_id => $cat_contents) {
             $tmp_result_html = '';
             foreach ($cat_contents as $cat_content_item) {
