@@ -17,6 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Mail
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
@@ -35,6 +36,7 @@ declare(encoding='latin1');
  * @category  phpMyFAQ
  * @package   PMF_Mail
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
@@ -941,6 +943,24 @@ class PMF_Mail
             }
     
             return $wrapped;
+        }
+    }
+    
+    /**
+     * If the email spam protection has been activated from the general 
+     * phpMyFAQ configuration this method converts an email address e.g. 
+     * from "user@example.org" to "user_AT_example_DOT_org". Otherwise 
+     * it will return the plain email address.
+     *
+     * @param  string $email E-mail address
+     * @return string
+     */
+    function safeEmail($email)
+    {
+        if (PMF_Configuration::getInstance ()->get ( 'spam.enableSafeEmail' )) {
+            return str_replace ( array ('@', '.' ), array ('_AT_', '_DOT_' ), $email );
+        } else {
+            return $email;
         }
     }
 }

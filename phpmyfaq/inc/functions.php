@@ -208,24 +208,6 @@ function sortingOptions($current)
 }
 
 /**
- * If the email spam protection has been activated from the general PMF configuration
- * this function converts an email address e.g. from "user@example.org" to "user_AT_example_DOT_org"
- * Otherwise it will return the plain email address.
- *
- * @param  string $email E-mail address
- * @return string
- */
-function safeEmail($email)
-{
-    $faqconfig = PMF_Configuration::getInstance();
-    if ($faqconfig->get('spam.enableSafeEmail')) {
-        return str_replace(array('@', '.'), array('_AT_', '_DOT_'), $email);
-    } else {
-        return $email;
-    }
-}
-
-/**
  * Checks for an address match (IPv4 or Network)
  *
  * @param   string  IP Address

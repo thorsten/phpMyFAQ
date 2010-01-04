@@ -2831,7 +2831,7 @@ class PMF_Faq
                 $output .= '<tr class="openquestions">';
                 $output .= sprintf('<td valign="top" nowrap="nowrap">%s<br /><a href="mailto:%s">%s</a></td>',
                     PMF_Date::createIsoDate($row->ask_date),
-                    safeEmail($row->ask_usermail),
+                    PMF_Mail::safeEmail($row->ask_usermail),
                     $row->ask_username);
                 $output .= sprintf('<td valign="top"><strong>%s:</strong><br />%s</td>',
                     $category->categoryName[$row->ask_rubrik]['name'],
