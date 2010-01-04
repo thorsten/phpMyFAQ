@@ -94,11 +94,26 @@ class PMF_Db
     private function __clone()
     {
     }
-
+    
+    /**
+     * Check if a table is filled with data
+     * 
+     * @param string $tableName Table name
+     * 
+     * @return boolean true, if table is empty, otherwise false
+     */
+    public static function checkOnEmptyTable($tableName)
+    {
+        if (self::$instance->num_rows(self::$instance->query('SELECT * FROM ' . SQLPREFIX . $tableName)) < 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     /**
      * Error page
      *
-     * @access static
      * @return void
      */
     public static function errorPage($method)

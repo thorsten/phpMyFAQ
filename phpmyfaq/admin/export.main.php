@@ -1,14 +1,8 @@
 <?php
 /**
  * XML, XHTML and PDF export - main page
- *
- * @category  phpMyFAQ 
- * @package   Administration
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @author    Peter Beauvain <pbeauvain@web.de>
- * @since     2003-04-17
- * @copyright 2003-2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,6 +13,15 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ 
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @copyright 2003-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2003-04-17
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -31,9 +34,10 @@ require PMF_INCLUDE_DIR . '/Export.php';
     <h2><?php print($PMF_LANG["ad_menu_export"]); ?></h2>
     <form action="?action=exportfile" method="post">
 <?php
-if (!emptyTable(SQLPREFIX."faqdata")) {
 
-    if (!emptyTable(SQLPREFIX."faqcategories")) {
+if (!PMF_Db::checkOnEmptyTable('faqdata')) {
+
+    if (!PMF_Db::checkOnEmptyTable('faqcategories')) {
         $category = new PMF_Category($current_admin_user, $current_admin_groups);
         $category->buildTree();
         

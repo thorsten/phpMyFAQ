@@ -1015,20 +1015,6 @@ function evalPermStr($restrictions)
     return $retval;
 }
 
-/**
- * Checkt, ob eine SQL-Tabelle leer ist | @@ Thorsten 2002-01-10
- * Last Update: @@ Thorsten, 2003-03-24
- */
-function emptyTable($table)
-{
-    global $db;
-    if ($db->num_rows($db->query("SELECT * FROM ".$table)) < 1) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 /******************************************************************************
  * Funktionen fuer den Adminbereich
  ******************************************************************************/

@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 // Re-evaluate $user
 $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
-if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
+if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
     $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $category->buildTree();
@@ -522,8 +522,8 @@ if($permission['approverec']):
     </script>
 <?php
     }
-} elseif ($permission["editbt"] != 1 && !emptyTable(SQLPREFIX."faqcategories")) {
+} elseif ($permission["editbt"] != 1 && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     print $PMF_LANG["err_NotAuth"];
-} elseif ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategories")) {
+} elseif ($permission["editbt"] && PMF_Db::checkOnEmptyTable('faqcategories')) {
     print $PMF_LANG["no_cats"];
 }
