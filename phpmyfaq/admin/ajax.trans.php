@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009 phpMyFAQ Team
+ * @copyright 2009-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-05-12
@@ -210,7 +210,7 @@ FILE;
     case 'send_translated_file':
         
         $lang     = PMF_Filter::filterInput(INPUT_GET, 'translang', FILTER_SANITIZE_STRING);
-        $filename = PMF_ROOT_DIR . "/lang/language_$lang.php";
+        $filename = PMF_ROOT_DIR . "/lang/language_" . $lang . ".php";
         
         if (!file_exists($filename)) {
             print 0;
@@ -219,10 +219,13 @@ FILE;
 
         $letterTpl = '';
         
-        $mail = new PMF_Mail();
+        $mail          = new PMF_Mail();
         $mail->subject = 'New phpMyFAQ language file submitted';
         $mail->message = sprintf('The file below was sent by %s, which is using phpMyFAQ %s on %s',
-                                 $user->userdata->get('email'), $PMF_CONF['main.currentVersion'], $_SERVER['HTTP_HOST']);
+            $user->userdata->get('email'), 
+            PMF_Configuration::getInstance()->get('main.currentVersion'), 
+            $_SERVER['HTTP_HOST']);
+            
         $mail->addTo('thorsten@phpmyfaq.de');
         $mail->addAttachment($filename, null, 'text/plain');
         

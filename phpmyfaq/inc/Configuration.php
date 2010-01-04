@@ -97,14 +97,6 @@ class PMF_Configuration
      */
     public function getAll()
     {
-        global $PMF_LANG, $LANG_CONF;
-        // Load the Configuration Keys
-        if (!isset($LANG_CONF)) {
-            // Hack: avoid circular reference
-            $PMF_CONF['main.maxAttachmentSize'] = 2048000;
-            require_once dirname(dirname(__FILE__)) . '/lang/language_en.php';
-        }
-
         $query = sprintf("
             SELECT
                 config_name, config_value

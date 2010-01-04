@@ -6,14 +6,7 @@
  * using getUserById() or by his nickname (login) using getUserByLogin(). New
  * are created using createNewUser().
  *
- * @package    phpMyFAQ
- * @subpackage PMF_User
- * @author     Lars Tiedemann <php@larstiedemann.de>
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Sarah Hermann <sayh@gmx.de>
- * @since      2005-09-17
- * @copyright  2005-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -24,19 +17,30 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_User
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Sarah Hermann <sayh@gmx.de>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-09-17
  */
 
 /**
  * PMF_User
  *
- * @package    phpMyFAQ
- * @subpackage PMF_User
- * @author     Lars Tiedemann <php@larstiedemann.de>
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Sarah Hermann <sayh@gmx.de>
- * @since      2005-09-17
- * @copyright  2005-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * @category  phpMyFAQ
+ * @package   PMF_User
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Sarah Hermann <sayh@gmx.de>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-09-17
  */
 class PMF_User
 {
@@ -183,8 +187,7 @@ class PMF_User
                 return false;
             }
         } else {
-            global $PMF_CONF;
-            $permLevel = isset($PMF_CONF['main.permLevel']) && ('' != $PMF_CONF['main.permLevel']) ? $PMF_CONF['main.permLevel'] : 'basic';
+            $permLevel = PMF_Configuration::getInstance()->get('main.permLevel');
             $perm      = PMF_Perm::selectPerm($permLevel);
             if (!$this->addPerm($perm)) {
                 return false;

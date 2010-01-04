@@ -1,19 +1,9 @@
 <?php
 /**
  * The PMF_Linkverifier class provides methods and functions for verifying URLs
- *
- * @package    phpMyFAQ
- * @subpackage PMF_Linkverifier
- * @author     Minoru TODA <todam@netjapan.co.jp>
- * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2005-08-01
- * @copyright  2005-2009 NetJapan, Inc. and phpMyFAQ Team
- * @version    SVN: $Id$
- *
- * Note: The package has been improved and fixed by Matteo Scaramuccia <matteo@scaramuccia.com>
- * to best fit with PMF 1.6.x+
- *
+ * 
+ * PHP Version 5.2
+ * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -26,6 +16,16 @@
  *
  * The Initial Developer of the Original Code is released for external use
  * with permission from NetJapan, Inc. IT Administration Group.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Linkverifier
+ * @author    Minoru TODA <todam@netjapan.co.jp>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2005-2010 NetJapan, Inc. and phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-08-01
  */
 
 /* Defines number of times linkverifier follows 302 response before failing.
@@ -66,6 +66,19 @@ if (!defined('LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ')) {
     define('LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ', false);
 }
 
+/**
+ * PMF_LinkVerifier
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Linkverifier
+ * @author    Minoru TODA <todam@netjapan.co.jp>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2005-2010 NetJapan, Inc. and phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-08-01
+ */
 class PMF_Linkverifier
 {
     /* List of protocol and urls
@@ -164,22 +177,13 @@ class PMF_Linkverifier
 
 
     /**
-     * returns whether linkverifier is ready to verify URLs.
+     * Returns whether linkverifier is ready to verify URLs.
      *
-     * @result  boolean true if ready to verify URLs, otherwise false
-     * @access  public
-     * @author  Minoru TODA <todam@netjapan.co.jp>
-     * @since   2005-08-01
+     * @return boolean true if ready to verify URLs, otherwise false
      */
-    function isReady()
+    public function isReady()
     {
-        global $PMF_CONF;
-
-        if (!(isset($PMF_CONF["main.referenceURL"]))) {
-            return false;
-        }
-
-        if ($PMF_CONF["main.referenceURL"] == "") {
+        if (PMF_Configuration::getInstance()->get('main.referenceURL') == '') {
             return false;
         }
 
@@ -657,22 +661,22 @@ class PMF_Linkverifier
     }
 
     /**
-     * retrieves the oldest timestamp for stored link validation result
+     * Retrieves the oldest timestamp for stored link validation result
      *
-     * @result   int
-     * @access   public
-     * @author   Minoru TODA <todam@netjapan.co.jp>
-     * @since    2005-09-29
+     * @return integer
      */
-    function getURLValidateInterval()
+    public function getURLValidateInterval()
     {
-        global $PMF_CONF;
+        $faqconfig   = PMF_Configuration::getInstance();
+        $requestTime = 0;
 
-        if (isset($PMF_CONF['main.urlValidateInterval'])) {
-            return $_SERVER['REQUEST_TIME'] - $PMF_CONF['main.urlValidateInterval'];
+        if ($faqconfig->get('main.urlValidateInterval') != '') {
+            $requestTime = $_SERVER['REQUEST_TIME'] - $faqconfig->get('main.urlValidateInterval');
         } else {
-            return $_SERVER['REQUEST_TIME'] - 86400; // default in recheck links once a day unless explicitly requested.
+            $requestTime = $_SERVER['REQUEST_TIME'] - 86400; // default in recheck links once a day unless explicitly requested.
         }
+        
+        return $requestTime;
     }
 
     /**
@@ -703,16 +707,23 @@ class PMF_Linkverifier
      * @param   string  $artlang
      * @param   boolean $checkDate
      * @result  mixed   false if entry does not exist. true if status expired, otherwise last link state text
-     * @access  public
-     * @author  Minoru TODA <todam@netjapan.co.jp>
-     * @since   2005-09-29
      */
-    function getEntryState($id = 0, $artlang = "", $checkDate = false)
+    function getEntryState($id = 0, $artlang = '', $checkDate = false)
     {
-        global $PMF_CONF;
-
         $interval = $this->getURLValidateInterval();
-        $query = "SELECT links_state, links_check_date FROM ".SQLPREFIX."faqdata WHERE id = ".$id." AND lang='".$artlang."'";
+        $query    = sprintf("
+            SELECT 
+                links_state, links_check_date 
+            FROM 
+                %sfaqdata 
+            WHERE 
+                id = %d 
+            AND 
+                lang = '%s'",
+            SQLPREFIX,
+            $id,
+            $this->db->escape_string($artlang));
+            
         if ($result = $this->db->query($query)) {
             while ($row = $this->db->fetch_object($result)) {
                 $_linkState = $row->links_state;
@@ -840,21 +851,19 @@ class PMF_Linkverifier
     * @param   string  $artlang
     * @param   boolean $cron
     * @result  string  HTML text, if $cron is false (default)
-    * @access  public
-    * @author  Minoru TODA <todam@netjapan.co.jp>
-    * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-    * @since   2005-08-01
     */
-    function verifyArticleURL($contents = '', $id = 0, $artlang = '', $cron = false)
+    public function verifyArticleURL($contents = '', $id = 0, $artlang = '', $cron = false)
     {
-        global $PMF_CONF, $PMF_LANG;
-
-        if (!(isset($PMF_CONF['main.referenceURL']))) {
+        global $PMF_LANG;
+        
+        $faqconfig = PMF_Configuration::getInstance();
+        
+        if (!(isset($faqconfig->get('main.referenceURL')))) {
             $output = $PMF_LANG['ad_linkcheck_noReferenceURL'];
             return ($cron ? '' : '<br /><br />'.$output);
         }
 
-        if (trim('' == $PMF_CONF['main.referenceURL'])) {
+        if (trim('' == $faqconfig->get('main.referenceURL'))) {
             $output = $PMF_LANG['ad_linkcheck_noReferenceURL'];
             return ($cron ? '' : '<br /><br />'.$output);
         }
@@ -866,7 +875,7 @@ class PMF_Linkverifier
 
         // Parse contents and verify URLs
         $this->parse_string($contents);
-        $result = $this->VerifyURLs($PMF_CONF['main.referenceURL']);
+        $result = $this->VerifyURLs($faqconfig->get('main.referenceURL'));
         $this->markEntry($id, $artlang);
 
         // If no URLs found

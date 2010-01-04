@@ -1,12 +1,8 @@
 <?php
 /**
  * The RSS feed for categories.
- *
- * @package    phpMyFAQ
- * @subpackage RSS
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2008-01-25
- * @copyright  2008-2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -17,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Feed
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2008-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2008-01-25
  */
 
 define('PMF_ROOT_DIR', dirname(dirname(dirname(__FILE__))));
@@ -51,8 +55,8 @@ $rss->startDocument('1.0', $PMF_LANG['metaCharset']);
 $rss->startElement('rss');
 $rss->writeAttribute('version', '2.0');
 $rss->startElement('channel');
-$rss->writeElement('title', utf8_encode($PMF_CONF['main.titleFAQ']) . ' - ');
-$rss->writeElement('description', utf8_encode(html_entity_decode($PMF_CONF['main.metaDescription'])));
+$rss->writeElement('title', $faqconfig->get('main.titleFAQ') . ' - ');
+$rss->writeElement('description', html_entity_decode($faqconfig->get('main.metaDescription')));
 $rss->writeElement('link', PMF_Link::getSystemUri('/feed/category/rss.php'));
 
 if (is_array($records)) {

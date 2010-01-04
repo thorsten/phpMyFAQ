@@ -101,7 +101,6 @@ $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
 //
 $faqconfig = PMF_Configuration::getInstance();
 $faqconfig->getAll();
-$PMF_CONF = $faqconfig->config;
 
 //
 // We always need a valid session!

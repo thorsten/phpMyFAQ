@@ -1,12 +1,8 @@
 <?php
 /**
  * The RSS feed with the latest five records.
- *
- * @package     phpMyFAQ
- * @subpackage  RSS
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @version     SVN: $Id$
- * @copyright   2004-2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -17,6 +13,13 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Feed
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @copyright 2004-2010 phpMyFAQ Team
  */
 
 define('PMF_ROOT_DIR', dirname(dirname(dirname(__FILE__))));
@@ -54,8 +57,8 @@ $rss->startDocument('1.0', $PMF_LANG['metaCharset']);
 $rss->startElement('rss');
 $rss->writeAttribute('version', '2.0');
 $rss->startElement('channel');
-$rss->writeElement('title', $PMF_CONF['main.titleFAQ'] . ' - ' . $PMF_LANG['msgLatestArticles']);
-$rss->writeElement('description', html_entity_decode($PMF_CONF['main.metaDescription']));
+$rss->writeElement('title', $faqconfig->get('main.titleFAQ') . ' - ' . $PMF_LANG['msgLatestArticles']);
+$rss->writeElement('description', html_entity_decode($faqconfig->get('main.metaDescription')));
 $rss->writeElement('link', PMF_Link::getSystemUri('/feed/latests/rss.php'));
 
 if ($num > 0) {

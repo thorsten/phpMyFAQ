@@ -2710,7 +2710,7 @@ class PMF_Faq
      */
     function showAllRecordsWoPaging($category) {
 
-        global $sids, $PMF_CONF, $tree;
+        global $sids;
 
         $now = date('YmdHis');
         $query = '

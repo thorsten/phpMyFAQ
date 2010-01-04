@@ -2,13 +2,7 @@
 /**
  * Utilities - Functions and Classes common to the whole phpMyFAQ architecture.
  *
- * @package   phpMyFAQ
- * @license   MPL
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since     2005-11-01
- * @version   SVN: $Id$
- * @copyright 2005-2009 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,6 +13,15 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_Utils
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-11-01
  */
 
 /**
@@ -43,14 +46,14 @@ define('HTTP_PARAMS_GET_TYPE', 'type');
  *
  * This class has only static methods
  * 
- * @package   phpMyFAQ
- * @license   MPL
+ * @category  phpMyFAQ
+ * @package   PMF_Utils
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
  * @since     2005-11-01
- * @copyright 2005-2009 phpMyFAQ Team
- * @version   SVN: $Id$
- *
  */
 class PMF_Utils
 {
@@ -70,17 +73,11 @@ class PMF_Utils
         }
 
         // Create the HTTP options for the HTTP stream context, see below
-        // User Agent + Method
-        $agent = 'phpMyFAQ on PHP/'.phpversion();
-        // Set phpMyFAQ related data
-        global $PMF_CONF;
-        if (isset($PMF_CONF)) {
-            $agent = 'phpMyFAQ/'.$PMF_CONF['main.currentVersion'];
-        }
-        $opts = array(
+        // Set phpMyFAQ agent related data
+        $agent = 'phpMyFAQ/' . PMF_Configuration::getInstance()->get('main.currentVersion') . ' on PHP/'.PHP_VERSION;
+        $opts  = array(
             'header' => 'User-Agent: '.$agent."\r\n",
-            'method' => 'GET'
-        );
+            'method' => 'GET');
         // HTTP 1.1 Virtual Host
         $urlParts = @parse_url($url);
         if (isset($urlParts['host'])) {
@@ -214,12 +211,8 @@ class PMF_Utils
      */
     public static function resolveMarkers($text)
     {
-        global $PMF_CONF;
-
         // Available markers: key and resolving value
-        $markers = array(
-            '%sitename%'    => $PMF_CONF['main.titleFAQ']
-        );
+        $markers = array('%sitename%' => PMF_Configuration::getInstance()->get('main.titleFAQ'));
 
         // Resolve any known pattern
         return str_replace(
@@ -300,6 +293,4 @@ class PMF_Utils
 
         return $output;
     }
-    
-    
 }

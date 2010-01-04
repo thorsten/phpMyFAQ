@@ -1,24 +1,27 @@
 <?php
 /**
  * The main configuration frontend
- *
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since      2005-12-26
- * @copyright  2005-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * 
+ * PHP 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
-  * compliance with the License. You may obtain a copy of the License at
+ * compliance with the License. You may obtain a copy of the License at
  * http://www.mozilla.org/MPL/
  *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-12-26
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -42,22 +45,23 @@ if ('saveConfig' == $userAction) {
     $message    = '';
     $userAction = 'listConfig';
 
-    // Set the new values into $PMF_CONF
-    $forbidden_values = array('{', '}', '$');
+    // Set the new values
+    $forbiddenValues = array('{', '}', '$');
+    $newConfigValues = array();
     foreach ($editData['edit'] as $key => $value) {
-        $PMF_CONF[$key] = str_replace($forbidden_values, '', $value);
+        $newConfigValues[$key] = str_replace($forbiddenValues, '', $value);
     }
     // Hacks
     if (is_array($editData['edit'])) {
-        foreach ($PMF_CONF as $key => $value) {
+        foreach ($newConfigValues as $key => $value) {
             // Fix checkbox values: they are not returned as HTTP POST values...
             if (!array_key_exists($key, $editData['edit'])) {
-                $PMF_CONF[$key] = 'false';
+                $newConfigValues[$key] = 'false';
             }
         }
     }
 
-    $faqconfig->update($PMF_CONF);
+    $faqconfig->update($newConfigValues);
 }
 // Lists the current configuration
 if ('listConfig' == $userAction) {

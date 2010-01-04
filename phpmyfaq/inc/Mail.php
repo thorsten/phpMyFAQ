@@ -2,11 +2,7 @@
 /**
  * MUA (Mail User Agent) implementation.
  *
- * @package   phpMyFAQ
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since     2009-09-11
- * @version   SVN: $Id$
- * @copyright 2009 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -17,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_Mail
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-09-11
  */
 
 /**
@@ -26,10 +30,15 @@
 declare(encoding='latin1');
 
 /**
- * MUA (Mail User Agent) implementation.
+ * PMF_Mail
  *
- * @package     phpMyFAQ 
- * @access      public
+ * @category  phpMyFAQ
+ * @package   PMF_Mail
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-09-11
  */ 
 class PMF_Mail
 {
@@ -67,7 +76,7 @@ class PMF_Mail
      *
      * @var string $charset
      */
-    public $charset = 'iso-8859-1';
+    public $charset = 'utf-8';
 
     /**
      * Content disposition.
@@ -251,14 +260,10 @@ class PMF_Mail
         $this->_to         = array();
 
         // Set phpMyFAQ related data
-        global $PMF_CONF, $PMF_LANG;
-        if (isset($PMF_CONF)) {
-            $this->_mailer = 'phpMyFAQ/'.$PMF_CONF['main.currentVersion'];
-            $this->setFrom($PMF_CONF['main.administrationMail']);
-        }
-        if (isset($PMF_LANG)) {
-            $this->charset = $PMF_LANG['metaCharset'];
-        }
+        $faqconfig     = PMF_Configuration::getInstance();
+        $this->_mailer = 'phpMyFAQ/' . $faqconfig->get('main.currentVersion');
+        $this->setFrom($faqconfig->get('main.administrationMail'));
+        
     }
 
     /**
