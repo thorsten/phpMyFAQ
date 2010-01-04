@@ -1015,42 +1015,6 @@ function evalPermStr($restrictions)
     return $retval;
 }
 
-
-/**
- * Administrator logging
- *
- * @param   string
- * @return  void
- * @access  public
- * @since   2001-02-18
- * @author  Bastian Poettner <bastian@poettner.net>
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- */
-function adminlog($text)
-{
-    global $auth, $user;
-
-    $faqconfig = PMF_Configuration::getInstance();
-    $db        = PMF_Db::getInstance();
-    
-    if ($faqconfig->get('main.enableAdminLog') && $auth && isset($user)) {
-        $query = sprintf(
-                'INSERT INTO
-                    %sfaqadminlog
-                    (id, time, usr, text, ip)
-                VALUES (%d, %d, %d, %s, %s)',
-                    SQLPREFIX,
-                    $db->nextID(SQLPREFIX.'faqadminlog', 'id'),
-                    $_SERVER['REQUEST_TIME'],
-                    $user->userdata->get('user_id'),
-                    "'".nl2br($text)."'",
-                    "'".$_SERVER['REMOTE_ADDR']."'"
-                    );
-
-        $db->query($query);
-    }
-}
-
 /**
  * Checkt, ob eine SQL-Tabelle leer ist | @@ Thorsten 2002-01-10
  * Last Update: @@ Thorsten, 2003-03-24

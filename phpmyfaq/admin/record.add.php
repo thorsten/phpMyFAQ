@@ -2,13 +2,8 @@
 /**
  * Adds a record in the database, handles the preview and checks for missing
  * category entries.
- *
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2003-02-23
- * @version    git: $Id$ 
- * @copyright  2003-2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,6 +14,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2003-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2003-02-23
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -62,7 +65,8 @@ if ($permission['editbt']) {
     
     if (isset($submit['submit'][1]) && !is_null($question) && !is_null($categories['rubrik'])) {
         // new entry
-        adminlog("Beitragcreatesave");
+        $logging = new PMF_Logging();
+        $logging->logAdmin($user, 'Beitragcreatesave');
         printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 
         $category = new PMF_Category($current_admin_user, $current_admin_groups, false);

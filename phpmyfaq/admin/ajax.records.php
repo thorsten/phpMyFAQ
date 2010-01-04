@@ -2,13 +2,7 @@
 /**
  * AJAX: handling of Ajax record calls
  * 
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Anatoliy Belsky <anatoliy.belsky@mayflower.de>
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2009-03-31
- * @copyright  2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,6 +13,15 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-03-31
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -64,7 +67,8 @@ if ('delete_record' == $ajax_action && $permission['delbt']) {
     $record_id   = PMF_Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
     $record_lang = PMF_Filter::filterInput(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
     
-    adminlog('Beitragdel, ' . $record_id);
+    $logging = new PMF_Logging();
+    $logging->logAdmin($user, 'Beitragdel, ' . $record_id);
 
     $path = PMF_ROOT_DIR . '/attachments/' . $record_id . '/';
     if (@is_dir($path)) {

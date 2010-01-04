@@ -1,13 +1,8 @@
 <?php
 /**
  * The database abstraction factory
- *
- * @package   phpMyFAQ
- * @package   PMF_Db
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2003-02-24
- * @version   SVN: $Id$
- * @copyright 2003-2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,24 +13,33 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_Db
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2003-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2003-02-24
  */
 
 /**
  * PMF_Db
  *
- * @package   phpMyFAQ
+ * @category  phpMyFAQ
  * @package   PMF_Db
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2003-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
- * @version   SVN: $Id$
- * @copyright 2003-2009 phpMyFAQ Team
  */
 class PMF_Db
 {
     /**
      * Instance
      * 
-     * @var PMF_Db
+     * @var PMF_Db_Driver
      */
     private static $instance = null;
     
@@ -50,8 +54,7 @@ class PMF_Db
     /**
      * Database factory
      *
-     * @access static
-     * @return object
+     * @return PMF_Db_Driver
      */
 	public static function dbSelect($type)
     {
@@ -72,13 +75,12 @@ class PMF_Db
     /**
      * Returns the single instance
      *
-     * @access static
-     * @return object
+     * @return PMF_Db_Driver
      */
     public static function getInstance()
     {
         if (null == self::$instance) {
-            $className = __CLASS__;
+            $className      = __CLASS__;
             self::$instance = new $className();
         }
         return self::$instance;
@@ -108,7 +110,6 @@ class PMF_Db
         print "    <meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=utf-8\" />\n";
         print "    <style type=\"text/css\" media=\"screen\"> /*<![CDATA[*/ <!--\n";
         print "    @import url(template/default/style.css);\n";
-        print "    @import url(template/default/colors.css);\n";
         print "    --> /*]]>*/ </style>\n";
         print "</head>\n";
         print "<body>\n";

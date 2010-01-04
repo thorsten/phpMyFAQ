@@ -1,33 +1,38 @@
 <?php
 /**
  * The main Logging class
- *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2006-08-15
- * @copyright 2006-2008 phpMyFAQ Team
- * @version   CVS: $Id: Logging.php,v 1.4 2008-05-22 11:22:59 thorstenr Exp $
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
+ *  http://www.mozilla.org/MPL/
  *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_Logging
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2006-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2006-08-15
  */
 
 /**
  * PMF_Logging
  *
- * @package   phpMyFAQ
+ * @category  phpMyFAQ
+ * @package   PMF_Logging
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2006-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
  * @since     2006-08-15
- * @copyright 2006-2008 phpMyFAQ Team
- * @version   CVS: $Id: Logging.php,v 1.4 2008-05-22 11:22:59 thorstenr Exp $
- *
  */
 class PMF_Logging
 {
@@ -41,20 +46,17 @@ class PMF_Logging
     /**
      * Constructor
      *
-     * @param  PMF_Db $db PMF_Db object
-     * @since  2006-08-10
      * @return void
      */
-    public function __construct($db)
+    public function __construct()
     {
-        $this->db = &$db;
+        $this->db = PMF_Db::getInstance();
     }
 
     /**
      * Returns the number of entries
      *
-     * @return  integer
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @return integer
      */
     public function getNumberOfEntries()
     {
@@ -72,7 +74,6 @@ class PMF_Logging
      * Returns all data from the adminlog
      *
      * @return array
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function getAll()
     {
@@ -97,12 +98,42 @@ class PMF_Logging
 
         return $data;
     }
-
+    
+    /**
+     * Adds a new adminlog entry
+     * 
+     * @param PMF_User $user    PMF_User object
+     * @param string   $logText Logged string
+     * 
+     * @return boolean
+     */
+    public function logAdmin(PMF_User $user, $logText = '')
+    {
+        if (PMF_Configuration::getInstance()->get('main.enableAdminLog')) {
+            
+            $query = sprintf("
+                INSERT INTO
+                    %sfaqadminlog
+                (id, time, usr, text, ip)
+                    VALUES 
+                (%d, %d, %d, '%s', '%s')",
+                    SQLPREFIX,
+                    $this->db->nextID(SQLPREFIX.'faqadminlog', 'id'),
+                    $_SERVER['REQUEST_TIME'],
+                    $user->userdata->get('user_id'),
+                    $this->db->escape_string(nl2br($logText)),
+                    $_SERVER['REMOTE_ADDR']);
+            
+            return $this->db->query($query);
+        } else {
+        	return false;
+        }
+    }
+    
     /**
      * Deletes logging data older than 30 days
      *
      * @return boolean
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function delete()
     {

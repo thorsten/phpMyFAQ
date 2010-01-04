@@ -21,7 +21,7 @@
  * @author    Meikel Katzengreis <meikel@katzengreis.com>
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2002-2009 phpMyFAQ Team
+ * @copyright 2002-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-16
@@ -122,7 +122,8 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
         }
     } else {
         // error
-        adminlog('Loginerror\nLogin: '.$faqusername.'\nPass: ********');
+        $logging = new PMF_Logging();
+        $logging->logAdmin($user, 'Loginerror\nLogin: '.$faqusername.'\nPass: ********');
         $error = $PMF_LANG['ad_auth_fail'].' ('.$faqusername.' / *)';
         $user  = null;
     }

@@ -17,9 +17,9 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2003-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2003-2009 phpMyFAQ Team
  * @since     2003-02-23
  */
 
@@ -100,10 +100,11 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
     } elseif ($action == 'editentry') {
 
-    	$id   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    	$lang = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+        $id   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $lang = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
         if ((!isset($current_category) && !isset($faqData['title'])) || !is_null($id)) {
-            adminlog("Beitragedit, " . $id);
+            $logging = new PMF_Logging();
+            $logging->logAdmin($user, 'Beitragedit, ' . $id);
             $faqData['id']   = $id;
             $faqData['lang'] = $lang;
             
@@ -131,7 +132,8 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
         $url_variables = 'insertentry';
 
     } else {
-        adminlog('Beitragcreate');
+        $logging = new PMF_Logging();
+        $logging->logAdmin($user, 'Beitragcreate');
         $url_variables = 'insertentry';
         if (!is_array($categories)) {
             $categories = array();
