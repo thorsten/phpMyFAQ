@@ -388,8 +388,6 @@ class PMF_Init
      */
     private static function _basicXSSClean($string)
     {
-        global  $PMF_LANG;
-
         if (strpos($string, '\0') !== false) {
             return null;
         }
@@ -403,7 +401,7 @@ class PMF_Init
         // fix &entitiy\n;
         $string = preg_replace('#(&\#*\w+)[\x00-\x20]+;#', "$1;", $string);
         $string = preg_replace('#(&\#x*)([0-9A-F]+);*#i', "$1$2;", $string);
-        $string = html_entity_decode($string, ENT_COMPAT, $PMF_LANG['metaCharset']);
+        $string = html_entity_decode($string, ENT_COMPAT, 'utf-8');
         
         // remove any attribute starting with "on" or xmlns
         $string = preg_replace('#(<[^>]+[\x00-\x20\"\'\/])(on|xmlns)[^>]*>#iU', "$1>", $string);
