@@ -66,8 +66,8 @@ interface PMF_Faq_Interface
      * @return boolean
      * @throws PMF_Faq_Exception
      */
-	public function delete($id);
-	
+    public function delete($id);
+    
     /**
      * Fetches one entry
      *
@@ -76,19 +76,19 @@ interface PMF_Faq_Interface
      * @return array
      * @throws PMF_Faq_Exception
      */
-	public function fetch($id);
-	
+    public function fetch($id);
+    
     /**
      * Fetches all entries, if parameter = null, otherwise all from the given
      * array like array(1, 2, 3)
      *
-     * @param integer $id ID
+     * @param array $ids Array of IDs
      * 
      * @return array
      * @throws PMF_Faq_Exception
      */
-	public function fetchAll(Array $ids = null);
-
+    public function fetchAll(Array $ids = null);
+    
     /**
      * Sets the language
      *
@@ -97,13 +97,14 @@ interface PMF_Faq_Interface
      * @return boolean
      * @throws PMF_Faq_Exception
      */
-	public function setLanguage($language);
-	
+    public function setLanguage($language);
+    
     /**
      * Returns the current language
      *
      * @return string
      * @throws PMF_Faq_Exception
      */
-	public function getLanguage();
+    public function getLanguage();
+    
 }
