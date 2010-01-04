@@ -1,13 +1,8 @@
 <?php
 /**
  * Attachment handler class 
- *
- * @package    phpMyFAQ
- * @license    MPL
- * @author     Anatoliy Belsky <ab@php.net>
- * @since      2009-08-21
- * @version    SVN: $Id$
- * @copyright  2009 phpMyFAQ Team
+ * 
+ * PHP version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Attachment
+ * @author    Anatoliy Belsky <ab@php.net>
+ * @since     2009-08-21
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @copyright 2009-2010 phpMyFAQ Team
  */
 
 set_include_path(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'libs' .
@@ -27,14 +30,15 @@ set_include_path(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'libs' .
 require_once 'Crypt' . DIRECTORY_SEPARATOR .'AES.php';
                  
 /**
- * PMF_Atachment 
+ * PMF_Atachment_Factory
  * 
- * @package    phpMyFAQ
- * @license    MPL
- * @author     Anatoliy Belsky <ab@php.net>
- * @since      2009-08-21
- * @version    SVN: $Id$
- * @copyright  2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   PMF_Attachment
+ * @author    Anatoliy Belsky <ab@php.net>
+ * @since     2009-08-21
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @copyright 2009-2010 phpMyFAQ Team
  */
 class PMF_Attachment_Factory
 {
@@ -88,7 +92,7 @@ class PMF_Attachment_Factory
         /**
          * If encryption isn't enabled, just ignoring all keys
          */
-        if(self::$encryptionEnabled) {
+        if (self::$encryptionEnabled) {
             $key = null == $key ? self::$defaultKey : $key;
         } else {
             $key = null;
@@ -102,26 +106,31 @@ class PMF_Attachment_Factory
     /**
      * Fetch all record attachments
      * 
-     * @param int $recordId ID of the record
+     * @param integer $recordId ID of the record
      * 
      * @return array
      */
-    public static function fetchByRecordId($recorId)
+    public static function fetchByRecordId($recordId)
     {
         $retval = array();
+        $db     = PMF_Db::getInstance();
         
-        $db = PMF_Db::getInstance();
+        $sql = sprintf("
+            SELECT
+                id
+            FROM 
+                %sfaqattachment
+            WHERE 
+                record_id = %d
+            AND
+                record_lang = '%s'",
+            SQLPREFIX,
+            $recordId,
+            PMF_Language::$language);
         
-        $sql = sprintf("SELECT
-                              id
-                       FROM %sfaqattachment
-                       WHERE record_id = %d",
-                       SQLPREFIX,
-                       $recorId);
         $result = $db->fetchAll($db->query($sql));
-        
-        if($result) {
-            foreach($result as $item) {
+        if ($result) {
+            foreach ($result as $item) {
                 $retval[] = self::create($item->id);
             }
         }
