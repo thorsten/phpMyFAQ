@@ -384,19 +384,22 @@
 
     <hr style="width: 90%; height: 1px;" />
     <p><strong><a name="2j"></a>2.j. PDF export</strong></p>
-    <p>Not every (X)HTML tag is supported by the PDF export. Currently we're
-    supporting the following tags in the PDFs:</p>
+    <p>Main features of the PDF export:</p>
     <ul>
-        <li>support for bold, italics, underlined text</li>
-        <li>support for images</li>
-        <li>basic support for tables</li>
-        <li>support for lists &lt;li&gt;</li>
-        <li>&lt;pre&gt; will be displayed using Courier font</li>
-        <li>support for &lt;br&gt;, &lt;br /&gt;  and &lt;p&gt;</li>
-        <li>support for &lt;hr&gt; and &lt;hr /&gt;</li>
-        <li>support for &lt;sup&gt; and &lt;sub&gt;</li>
+        <li>supports all ISO page formats;</li>
+        <li>supports custom page formats, margins and units of measure;</li>
+        <li>supports UTF-8 Unicode and Right-To-Left languages;</li>
+        <li>supports TrueTypeUnicode, OpenTypeUnicode, TrueType, OpenType, 
+        Type1 and CID-0 fonts;</li>
+        <li>includes methods to publish some (x)HTML code;</li>
+        <li>includes graphic (geometric) and transformation methods;</li>
+        <li>includes methods to set Bookmarks and print a Table of Content;</li>
+        <li>supports automatic page break;</li>
+        <li>supports automatic page numbering and page groups;</li>
+        <li>supports automatic line break and text justification;</li>
+        <li>supports JPEG and PNG images natively, all images supported by GD 
+        (GD, GD2, GD2PART, GIF, JPEG, PNG, BMP, XBM, XPM)</li>
     </ul>
-    <p>Currently phpMyFAQ doesn't support UTF-8 in PDFs.</p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -500,6 +503,9 @@
     <p>The update script will move your template files to a folder <strong>backup/</strong>
     in the directory <strong>template/</strong>. The default layout will be stored
     in the folder <strong>template/default/</strong>.</p>
+    <p>Note: We changed the character set for all languages and templates to 
+    UTF-8. If you notice problems with e.g. German umlauts you have to convert
+    your templates.</p>
     <p><a href="#top">back to top</a></p>
 
     <hr style="width: 90%; height: 1px;"  />
@@ -522,12 +528,15 @@
     <p>The update script will move your template files to a folder <strong>backup/</strong>
     in the directory <strong>template/</strong>. The default layout will be stored
     in the folder <strong>template/default/</strong>.</p>
+    <p>Note: We changed the character set for all languages and templates to 
+    UTF-8. If you notice problems with e.g. German umlauts you have to convert
+    your templates.</p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="3c"></a><strong>3.c. Upgrading phpMyFAQ 2.6.x</strong></p>
-    <p>Updating phpMyFAQ 2.5.x is fairly simple. Via FTP copy all new files from
+    <p>Updating phpMyFAQ 2.6.x is fairly simple. Via FTP copy all new files from
     the phpMyFAQ package <strong>except</strong>:</p>
     <ul>
         <li>all files in the directory <strong>config/</strong> </li>
@@ -551,6 +560,9 @@
     layout is completely based on CSS, you only have to change the .tpl files listed in 
     <em>docs/CHANGEDFILES</em>. If you need help to integrate phpMyFAQ into your 
     website feel free to contact us.</p>
+    <p>Note: We changed the character set for all languages and templates to 
+    UTF-8. If you notice problems with e.g. German umlauts you have to convert
+    your templates.</p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -776,20 +788,7 @@
     (<strong>W</strong>hat <strong>Y</strong>ou <strong>S</strong>ee <strong>I</strong>s
     <strong>W</strong>hat <strong>Y</strong>ou <strong>G</strong>et) editor when
     JavaScript is enabled. You can place images where you want with the integrated
-    image manager. The editor provides the following key combinations:
-        <ul>
-        <li>CTRL-A - select all</li>
-        <li>CTRL-B - bold</li>
-        <li>CTRL-I - italic</li>
-        <li>CTRL-U - underline</li>
-        <li>CTRL-S - strike-through</li>
-        <li>CTRL-L - justify left</li>
-        <li>CTRL-E - justify center</li>
-        <li>CTRL-R - justify right</li>
-        <li>CTRL-J - justify full</li>
-        <li>CTRL-1 .. CTRL-6 - headings (&lt;h1&gt; .. &lt;h6&gt;)</li>
-        <li>CTRL-0 (zero) - clean content pasted from Word</li>
-        </ul></li>
+    image manager.</li>
 
     <li><strong>Keywords</strong><br />
     Keywords are relevant for searching through the database. In case you didn't
