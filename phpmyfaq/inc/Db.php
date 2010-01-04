@@ -75,7 +75,7 @@ class PMF_Db
     /**
      * Returns the single instance
      *
-     * @return PMF_Db_Driver
+     * @return PMF_DB_Driver
      */
     public static function getInstance()
     {
