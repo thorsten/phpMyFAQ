@@ -44,7 +44,7 @@ class PMF_Category
      *
      * The database handler
      *
-     * @var  object  PMF_Db
+     * @var  object  PMF_Db_Driver
      */
     private $db = null;
 
@@ -150,11 +150,34 @@ class PMF_Category
         } else {
             $this->groups = $groups;
         }
-
+        
         $this->lineTab = $this->getOrderedCategories($withperm);
         for ($i = 0; $i < count($this->lineTab); $i++) {
             $this->lineTab[$i]['level'] = $this->levelOf($this->lineTab[$i]['id']);
         }
+    }
+    
+    /**
+     * Fetches all category entries from database
+     *
+     * @return array
+     */
+    public function fetchAll()
+    {
+        $select = sprintf("
+            SELECT
+                id, lang, parent_id, name, description, user_id
+            FROM
+                %sfaqcategories",
+            SQLPREFIX);
+            
+        $result          = $this->db->query($select);
+        $categories      = $this->db->fetchAll($result);
+        $numOfCategories = count($categories);
+        for ($i = 0; $i < $numOfCategories; $i++) {
+            $categories[$i]->level = $this->levelOf($categories[$i]->id);
+        }
+        return $categories;
     }
 
     /**
