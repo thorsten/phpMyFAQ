@@ -1,12 +1,8 @@
 <?php
 /**
  * The main Stopwords class
- *
- * @category  phpMyFAQ
- * @package   PMF_Stopwords
- * @author    Anatoliy Belsky
- * @since     2009-04-01
- * @copyright 2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -17,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Stopwords
+ * @author    Anatoliy Belsky
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-04-01
  */
 
 /**
@@ -25,8 +29,10 @@
  * @category  phpMyFAQ
  * @package   PMF_Stopwords
  * @author    Anatoliy Belsky
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
  * @since     2009-04-01
- * @copyright 2009 phpMyFAQ Team
  */
 class PMF_Stopwords
 {
@@ -64,7 +70,7 @@ class PMF_Stopwords
     private function __construct()
     {
         $this->db       = PMF_Db::getInstance();
-        $this->language = PMF_Init::$language;
+        $this->language = PMF_Language::$language;
         $this->table_name = SQLPREFIX . "faqstopwords";
     }
     
