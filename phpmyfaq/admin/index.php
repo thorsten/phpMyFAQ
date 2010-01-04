@@ -1,17 +1,8 @@
 <?php
 /**
  * The main admin backend index file
- *
- * @category  phpMyFAQ
- * @package   Administration
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Bastian Poettner <bastian@poettner.net>
- * @author    Meikel Katzengreis <meikel@katzengreis.com>
- * @author    Minoru TODA <todam@netjapan.co.jp>
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since     2002-09-16
- * @license   Mozilla Public License 1.1
- * @copyright 2002-2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -22,6 +13,18 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Administraion
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Bastian Poettner <bastian@poettner.net>
+ * @author    Meikel Katzengreis <meikel@katzengreis.com>
+ * @author    Minoru TODA <todam@netjapan.co.jp>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @copyright 2002-2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2002-09-16
  */
 
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
@@ -86,10 +89,10 @@ $faq = new PMF_Faq();
 // use mbstring extension if available and when possible
 //
 $valid_mb_strings = array('ja', 'en', 'uni');
-$mbLanguage = ('utf-8' == strtolower($PMF_LANG['metaCharset'])) && ($PMF_LANG['metaLanguage'] != 'ja') ? 'uni' : $PMF_LANG['metaLanguage'];
+$mbLanguage = ($PMF_LANG['metaLanguage'] != 'ja') ? 'uni' : $PMF_LANG['metaLanguage'];
 if (function_exists('mb_language') && in_array($mbLanguage, $valid_mb_strings)) {
     mb_language($mbLanguage);
-    mb_internal_encoding($PMF_LANG['metaCharset']);
+    mb_internal_encoding('utf-8');
 }
 
 //

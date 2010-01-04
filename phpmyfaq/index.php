@@ -178,10 +178,10 @@ if (!is_null($user) && $user instanceof PMF_User_CurrentUser) {
 // Use mbstring extension if available and when possible
 //
 $valid_mb_strings = array('ja', 'en', 'uni');
-$mbLanguage       = ('utf-8' == strtolower($PMF_LANG['metaCharset'])) && ($PMF_LANG['metaLanguage'] != 'ja') ? 'uni' : $PMF_LANG['metaLanguage'];
+$mbLanguage       = ($PMF_LANG['metaLanguage'] != 'ja') ? 'uni' : $PMF_LANG['metaLanguage'];
 if (function_exists('mb_language') && in_array($mbLanguage, $valid_mb_strings)) {
     mb_language($mbLanguage);
-    mb_internal_encoding($PMF_LANG['metaCharset']);
+    mb_internal_encoding('utf-8');
 }
 
 //
@@ -397,7 +397,7 @@ $main_template_vars = array(
     'metaKeywords'        => $faqconfig->get('main.metaKeywords').$keywords,
     'metaPublisher'       => $faqconfig->get('main.metaPublisher'),
     'metaLanguage'        => $PMF_LANG['metaLanguage'],
-    'metaCharset'         => $PMF_LANG['metaCharset'],
+    'metaCharset'         => 'utf-8', // backwards compability
     'phpmyfaqversion'     => $faqconfig->get('main.currentVersion'),
     'stylesheet'          => $PMF_LANG['dir'] == 'rtl' ? 'style.rtl' : 'style',
     'action'              => $action,

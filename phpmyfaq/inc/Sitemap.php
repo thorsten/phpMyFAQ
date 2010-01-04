@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Sitemap
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2008 phpMyFAQ Team
+ * @copyright 2007-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-30
@@ -31,7 +31,7 @@ require_once PMF_INCLUDE_DIR . '/Link.php';
  * @category  phpMyFAQ
  * @package   PMF_Sitemap
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2008 phpMyFAQ Team
+ * @copyright 2007-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-30
@@ -326,7 +326,7 @@ class PMF_Sitemap
         $oldId = 0;
         while ($row = $this->db->fetch_object($result)) {
             if ($oldId != $row->id) {
-                $title = PMF_htmlentities($row->thema, ENT_QUOTES, $PMF_LANG['metaCharset']);
+                $title = PMF_htmlentities($row->thema, ENT_QUOTES, 'utf-8');
                 $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     $sids,
                     $row->category_id,

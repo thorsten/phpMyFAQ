@@ -170,11 +170,7 @@ switch($ajax_action) {
 /**
  * %s
  *
- * @package    phpMyFAQ
- * @subpackage i18n
-%s * @since      %s
- * @version    SVN: \$Id: language_%s.php \$
- * @copyright  2004-%d phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -185,6 +181,13 @@ switch($ajax_action) {
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   i18n
+%s * @copyright  2004-%d phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since      %s
  */
 
 \$PMF_LANG['metaCharset'] = '%s';
@@ -195,8 +198,8 @@ switch($ajax_action) {
 FILE;
 
         $authorTpl = '';
-        foreach($author as $authorData) {
-            $authorTpl .= " * @author     $authorData\n";
+        foreach ($author as $authorData) {
+            $authorTpl .= " * @author    $authorData\n";
         }
         
         $fileTpl = sprintf($fileTpl, $langDesc, $authorTpl, date('Y-m-d'), $langCode, date('Y'),

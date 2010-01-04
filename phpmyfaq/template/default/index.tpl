@@ -4,7 +4,7 @@
     <title>{title}</title>
     <base href="{baseHref}" />
     <meta http-equiv="X-UA-Compatible" content="IE=8" />
-    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset={metaCharset}" />
+    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
     <meta name="title" content="{metaTitle}" />
     <meta name="description" content="{metaDescription}" />
     <meta name="keywords" content="{metaKeywords}" />
@@ -12,7 +12,7 @@
     <meta name="publisher" content="{metaPublisher}" />
     <meta name="copyright" content="(c) 2001 - 2010 phpMyFAQ Team" />
     <meta name="generator" content="phpMyFAQ {phpmyfaqversion}" />
-    <meta name="Content-Language" content="{metaCharset}" />
+    <meta name="Content-Language" content="utf-8" />
     <meta name="robots" content="INDEX, FOLLOW" />
     <meta name="revisit-after" content="7 days" />
     <meta name="MSSmartTagsPreventParsing" content="true" />    

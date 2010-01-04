@@ -1,15 +1,8 @@
 <?php
 /**
  * The main Tags class
- *
- * @package    phpMyFAQ
- * @subpackage PMF_Tags
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author     Georgi Korchev <korchev@yahoo.com>
- * @since      2006-08-10
- * @version    SVN: $Id$
- * @copyright  2006-2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,19 +13,30 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_Tags
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Georgi Korchev <korchev@yahoo.com>
+ * @copyright 2006-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2006-08-10
  */
 
 /**
  * PMF_Tags
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Tags
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author     Georgi Korchev <korchev@yahoo.com>
- * @since      2006-08-10
- * @version    SVN: $Id$
- * @copyright  2006-2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   PMF_Tags
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Georgi Korchev <korchev@yahoo.com>
+ * @copyright 2006-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2006-08-10
  */
 class PMF_Tags
 {
@@ -168,11 +172,11 @@ class PMF_Tags
      */
     public function getAllLinkTagsById($record_id)
     {
-        global $sids, $PMF_LANG;
+        global $sids;
         $taglisting = '';
 
         foreach ($this->getAllTagsById($record_id) as $tagging_id => $tagging_name) {
-            $title = PMF_htmlentities($tagging_name, ENT_QUOTES, $PMF_LANG['metaCharset']);
+            $title = PMF_htmlentities($tagging_name, ENT_QUOTES, 'utf-8');
             $url = sprintf(
                 $sids.'action=search&amp;tagging_id=%d',
                 $tagging_id
@@ -391,7 +395,7 @@ class PMF_Tags
      */
     public function printHTMLTagsCloud()
     {
-        global $sids, $PMF_LANG;
+        global $sids;
         $html = '';
         $tags = array();
 
@@ -432,7 +436,7 @@ class PMF_Tags
             }
             $class = 'relevance'.$CSSRelevanceLevel;
             $html .= '<span class="'.$class.'">';
-            $title = PMF_htmlentities($tag['name'].' ('.$tag['count'].')', ENT_QUOTES, $PMF_LANG['metaCharset']);
+            $title = PMF_htmlentities($tag['name'].' ('.$tag['count'].')', ENT_QUOTES, 'utf-8');
             $url = sprintf(
                         $sids.'action=search&amp;tagging_id=%d',
                         $tag['id']

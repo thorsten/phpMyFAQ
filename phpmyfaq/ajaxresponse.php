@@ -82,9 +82,5 @@ $faq = new PMF_Faq();
 //
 if (!is_null($searchString)) {
     $result = searchEngine($db->escape_string($searchString), $categoryId, false, true, true);
-    if (strtolower($PMF_LANG['metaCharset']) != 'utf-8') {
-        print utf8_encode($result);
-    } else {
-        print $result;
-    }
+    print $result;
 }

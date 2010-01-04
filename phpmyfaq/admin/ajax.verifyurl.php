@@ -6,13 +6,8 @@
  *   index.php?uin=<uin>&action=ajax&ajax=verifyURL&id=<id>&lang=<lang>
  *
  * Performs link verification when entries are shown in record.show.php
- *
- * @package    phpMyFAQ
- * @subpackage Administration Ajax
- * @author     Minoru TODA <todam@netjapan.co.jp>
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2005-09-30
- * @copyright  2005-2009 NetJapan, Inc.
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -26,6 +21,15 @@
  *
  * The Initial Developer of the Original Code is released for external use
  * with permission from NetJapan, Inc. IT Administration Group.
+ *
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Minoru TODA <todam@netjapan.co.jp>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2005-2010 NetJapan, Inc. and phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-09-30
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -41,7 +45,7 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 header("Content-type: text/html");
 header("Vary: Negotiate,Accept");
-header("Content-type: text/xml; charset=".$PMF_LANG['metaCharset']);
+header("Content-type: text/xml; charset=utf-8");
 
 $linkverifier = new PMF_Linkverifier($user->getLogin());
 if ($linkverifier->isReady() == false) {

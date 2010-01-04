@@ -2,21 +2,8 @@
 /**
  * This is the main functions file.
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matthias Sommerfeld <phlymail@phlylabs.de>
- * @author    Bastian Poettner <bastian@poettner.net>
- * @author    Meikel Katzengreis <meikel@katzengreis.com>
- * @author    Robin Wood <robin@digininja.org>
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @author    Adrianna Musiol <musiol@imageaccess.de>
- * @since     2001-02-18
- * @version   SVN: $Id$
- * @copyright 2001-2009 phpMyFAQ Team
- *
- * Portions created by Matthias Sommerfeld are Copyright (c) 2001-2004 blue
- * birdy, Berlin (http://bluebirdy.de). All Rights Reserved.
- *
+ * PHP Version 5.2
+ * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -26,6 +13,23 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * Portions created by Matthias Sommerfeld are Copyright (c) 2001-2010 blue
+ * birdy, Berlin (http://bluebirdy.de). All Rights Reserved.
+ * 
+ * @category  phpMyFAQ
+ * @package   Core
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matthias Sommerfeld <phlymail@phlylabs.de>
+ * @author    Bastian Poettner <bastian@poettner.net>
+ * @author    Meikel Katzengreis <meikel@katzengreis.com>
+ * @author    Robin Wood <robin@digininja.org>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author    Adrianna Musiol <musiol@imageaccess.de>
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @copyright 2001-2010 phpMyFAQ Team
+ * @since     2001-02-18
  */
 
 //
@@ -670,7 +674,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
 {
     global $sids, $category, $PMF_LANG, $plr, $LANGCODE, $faq, $current_user, $current_groups;
 
-    $_searchterm = PMF_htmlentities(stripslashes($searchterm), ENT_QUOTES, $PMF_LANG['metaCharset']);
+    $_searchterm = PMF_htmlentities(stripslashes($searchterm), ENT_QUOTES, 'utf-8');
     $seite       = 1;
     $output      = '';
     $num         = 0;
@@ -680,7 +684,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
     $db          = PMF_Db::getInstance();
     $faqconfig   = PMF_Configuration::getInstance();
 
-    $result = getSearchData(htmlentities($searchterm, ENT_COMPAT, $PMF_LANG['metaCharset']), true, $cat, $allLanguages);
+    $result = getSearchData(htmlentities($searchterm, ENT_COMPAT, 'utf-8'), true, $cat, $allLanguages);
     $num    = $db->num_rows($result);
 
     if (0 == $num) {

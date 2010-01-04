@@ -20,7 +20,7 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Georgi Korchev <korchev@yahoo.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
- * @copyright 2005-2009 phpMyFAQ Team
+ * @copyright 2005-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-20
@@ -64,7 +64,7 @@ define('FAQ_SORTING_TYPE_FAQID', 4);
  * @author     Georgi Korchev <korchev@yahoo.com>
  * @author     Adrianna Musiol <musiol@imageaccess.de>
  * @since      2005-12-20
- * @copyright  2005-2009 phpMyFAQ Team
+ * @copyright  2005-2010 phpMyFAQ Team
  * @version    SVN: $Id$
  */
 class PMF_Faq
@@ -1339,7 +1339,7 @@ class PMF_Faq
                 'active'        => $row->active,
                 'sticky'        => $row->sticky,
                 'keywords'      => $row->keywords,
-                'title'         => PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']),
+                'title'         => PMF_htmlentities($row->thema, ENT_QUOTES, 'utf-8'),
                 'content'       => $content,
                 'author'        => $row->author,
                 'email'         => $row->email,
@@ -1480,7 +1480,7 @@ class PMF_Faq
 
         if ($this->db->num_rows($result) > 0) {
             $row = $this->db->fetch_object($result);
-            return PMF_htmlentities($row->keywords, ENT_QUOTES, $this->pmf_lang['metaCharset']);
+            return PMF_htmlentities($row->keywords, ENT_QUOTES, 'utf-8');
         } else {
             return '';
         }
@@ -1616,9 +1616,7 @@ class PMF_Faq
         if (count($result) > 0) {
             foreach ($result as $row) {
 
-                $shortTitle = PMF_Utils::makeShorterText(PMF_htmlentities($row['thema'],
-                                                         ENT_QUOTES,
-                                                         $this->pmf_lang['metaCharset']), 8);
+                $shortTitle = PMF_Utils::makeShorterText(PMF_htmlentities($row['thema'], ENT_QUOTES, 'utf-8'), 8);
 
                 if ('visits' == $type) {
                     $output['title'][]  = $shortTitle;
@@ -1644,8 +1642,6 @@ class PMF_Faq
      * This function generates the list with the latest published records
      *
      * @return array
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since  2002-05-07
      */
     public function getLatest()
     {
@@ -1653,7 +1649,7 @@ class PMF_Faq
 
         if (count ($result) > 0) {
             foreach ($result as $row) {
-                $shortTitle = PMF_Utils::makeShorterText(PMF_htmlentities($row['thema'], ENT_QUOTES, $this->pmf_lang['metaCharset']), 8);
+                $shortTitle = PMF_Utils::makeShorterText(PMF_htmlentities($row['thema'], ENT_QUOTES, 'utf-8'), 8);
                 
                 $output['url'][]   =  $row['url'];
                 $output['title'][] = $shortTitle;
@@ -1671,9 +1667,6 @@ class PMF_Faq
      *
      * @param   integer $question_id
      * @return  boolean
-     * @access  public
-     * @since   2006-11-04
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     function deleteQuestion($question_id)
     {

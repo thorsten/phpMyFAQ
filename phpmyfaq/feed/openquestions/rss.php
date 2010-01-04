@@ -53,7 +53,7 @@ $rss = new XMLWriter();
 $rss->openMemory();
 $rss->setIndent(true);
 
-$rss->startDocument('1.0', $PMF_LANG['metaCharset']);
+$rss->startDocument('1.0', 'utf-8');
 $rss->startElement('rss');
 $rss->writeAttribute('version', '2.0');
 $rss->startElement('channel');

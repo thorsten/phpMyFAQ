@@ -3,15 +3,8 @@
  * A dummy page used within an IFRAME for warning the user about his next
  * session expiration and to give him the contextual possibility for
  * refreshing the session by clicking <OK>
- *
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Uwe Pries <uwe.pries@digartis.de>
- * @since      2006-05-08
- * @copyright  2006-2009 phpMyFAQ Team
- * @version    SVN: $Id$ 
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -22,6 +15,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @package    phpMyFAQ
+ * @subpackage Administration
+ * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Uwe Pries <uwe.pries@digartis.de>
+ * @copyright  2006-2010 phpMyFAQ Team
+ * @since      2006-05-08
  */
 
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
@@ -60,59 +61,56 @@ $refreshTime = (PMF_SESSION_ID_EXPIRES - PMF_SESSION_ID_REFRESH) * 60;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
-    <head>
-        <title>phpMyFAQ - "Welcome to the real world."</title>
-        <meta name="copyright" content="(c) 2001-2009 phpMyFAQ Team" />
-        <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
-        <link rel="shortcut icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
-        <link rel="icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
+<head>
+    <title>phpMyFAQ - "Welcome to the real world."</title>
+    <meta name="copyright" content="(c) 2001-2010 phpMyFAQ Team" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
 <?php
 if (isset($user) && ($refreshTime > 0)) {
 ?>
-        <script type="text/javascript">
-        /*<![CDATA[*/ <!--
-            function _PMFSessionTimeoutWarning()
-            {
-                if (window.confirm('<?php printf($PMF_LANG['ad_session_expiring'], PMF_SESSION_ID_REFRESH); ?>')) {
-                    // Reload this iframe: session refreshed!
-                    location.href = location.href;
-                }
-            }
-            function _PMFSessionTimeoutClock(topRef, expire)
-            {
-                // decrease time
-                expire.setSeconds(expire.getSeconds() - 1);
-                // check if we're out of time and log out if needed
-                if (expire.getFullYear() < 2009) {
-                    parent.location.search = '?action=logout';
-                    return;
-                }
+    <script type="text/javascript">
+    /*<![CDATA[*/ <!--
+    function _PMFSessionTimeoutWarning()
+    {
+        if (window.confirm('<?php printf($PMF_LANG['ad_session_expiring'], PMF_SESSION_ID_REFRESH); ?>')) {
+            // Reload this iframe: session refreshed!
+            location.href = location.href;
+        }
+    }
 
-                // refresh clock in GUI
-                if (topRef) {
-                    topRef.innerHTML = ('' + expire).match(/\d\d:\d\d:\d\d/);
-                }
-            }
+    function _PMFSessionTimeoutClock(topRef, expire)
+    {
+        // decrease time
+        expire.setSeconds(expire.getSeconds() - 1);
+        // check if we're out of time and log out if needed
+        if (expire.getFullYear() < 2009) {
+            parent.location.search = '?action=logout';
+            return;
+        }
 
-            window.onload = function() {
-                var expire = new Date(2009, 0, 1);
-                expire.setSeconds(<?php print PMF_SESSION_ID_EXPIRES; ?> * 60);
-                var topRef = top.document.getElementById('sessioncounter');
+        // refresh clock in GUI
+        if (topRef) {
+            topRef.innerHTML = ('' + expire).match(/\d\d:\d\d:\d\d/);
+        }
+    }
 
-                window.setTimeout(_PMFSessionTimeoutWarning, <?php print $refreshTime; ?> * 1000);
-                window.setInterval(
-                    function() {
-                        _PMFSessionTimeoutClock(topRef, expire);
-                    },
-                    1000
-                );
-            }
-        // --> /*]]>*/
-        </script>
+    window.onload = function() {
+        var expire = new Date(2009, 0, 1);
+        expire.setSeconds(<?php print PMF_SESSION_ID_EXPIRES; ?> * 60);
+        var topRef = top.document.getElementById('sessioncounter');
+
+        window.setTimeout(_PMFSessionTimeoutWarning, <?php print $refreshTime; ?> * 1000);
+        window.setInterval(function() {
+            _PMFSessionTimeoutClock(topRef, expire);
+            }, 1000);
+    }
+    // --> /*]]>*/
+    </script>
 <?php
 }
 ?>
-    </head>
-    <body>
-    </body>
+</head>
+<body></body>
 </html>

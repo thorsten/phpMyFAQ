@@ -1,13 +1,8 @@
 <?php
 /**
  * Header of the admin area
- *
- * @category  phpMyFAQ
- * @package   Administraion
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2003-02-26
- * @license   Mozilla Public License 1.1
- * @copyright 2003-2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Administraion
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2003-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2003-02-26
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -30,7 +33,7 @@ header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
-header("Content-type: text/html; charset=".$PMF_LANG["metaCharset"]);
+header("Content-type: text/html; charset=utf-8");
 header("Vary: Negotiate,Accept");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
