@@ -1,12 +1,8 @@
 <?php
 /**
  * The main glossary class
- *
- * @package    phpMyFAQ
- * @subpackage PMF_Glossary
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2005-09-15
- * @copyright  2005-2010 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -17,16 +13,26 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Glossary
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-09-15
  */
 
 /**
  * PMF_Glossary
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Glossary
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2005-09-15
- * @copyright  2005-2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   PMF_Glossary
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-09-15
  */
 class PMF_Glossary
 {
@@ -133,7 +139,7 @@ class PMF_Glossary
                 // e. the glossary item could be at the end of the string as a distinct word
                 .'(\W+)('.$item['item'].')$'
                 .'/mis',
-                array($this, '_setAcronyms'),
+                array($this, '_setAbbreviations'),
                 $content); 
         }
 
@@ -146,7 +152,7 @@ class PMF_Glossary
      * @param  array $matches Matchings
      * @return string
      */
-    private function _setAcronyms(Array $matches)
+    private function _setAbbreviations(Array $matches)
     {
         if (count($matches) > 9) {
             // if the word is at the end of the string
@@ -166,7 +172,7 @@ class PMF_Glossary
         }
         
         if (!empty($item)) {
-            return sprintf('%s<acronym class="glossary" title="%s">%s</acronym>%s',
+            return sprintf('%s<abbr class="glossary" title="%s">%s</abbr>%s',
                 $prefix,
                 $this->definition,
                 $item,
