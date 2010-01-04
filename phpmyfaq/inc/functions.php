@@ -1030,30 +1030,9 @@ function PageSpan($code, $start, $end, $akt)
     return $out;
 }
 
-/**
- * Bastelt aus den Dateinamen des Tracking einen Timestamp | @@ Bastian, 2002-01-05
- * Last Update: @@ Thorsten, 2002-09-19
- * Last Update: @@ Matteo, 2006-06-13
- */
-function FileToDate($file, $endOfDay = false)
-{
-    if (PMF_String::strlen($file) >= 16) {
-        $tag = PMF_String::substr($file, 8, 2);
-        $mon = PMF_String::substr($file, 10, 2);
-        $yea = PMF_String::substr($file, 12, 4);
-        if (!$endOfDay) {
-            $tim = mktime(0, 0, 0, $mon, $tag, $yea);
-        } else {
-            $tim = mktime(23, 59, 59, $mon, $tag, $yea);
-        }
-        return $tim;
-    } else {
-        return -1;
-    }
-}
 
 //
-// Functions for backup and SQL security
+// Functions for backup
 //
 
 /**

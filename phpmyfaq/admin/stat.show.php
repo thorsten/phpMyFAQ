@@ -1,13 +1,8 @@
 <?php
 /**
  * Show the session
- *
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2003-02-24
- * @version    SVN: $Id$
- * @copyright  2003-2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2003-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2003-02-24
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -37,28 +40,28 @@ if ($permission['viewlog']) {
     $session = new PMF_Session();
     $time    = $session->getTimeFromSessionId($sid);
 
-	$trackingdata = explode("\n", file_get_contents(PMF_ROOT_DIR.'/data/tracking'.date('dmY', $time)));
+    $trackingdata = explode("\n", file_get_contents(PMF_ROOT_DIR.'/data/tracking'.date('dmY', $time)));
 ?>
     <table class="list">
     <tfoot>
 	    <tr>
-            <td colspan="2"><a href="javascript:history.back()"><?php print $PMF_LANG["ad_sess_back"]; ?></a></td>
+            <td colspan="2"><a href="?action=viewsessions"><?php print $PMF_LANG["ad_sess_back"]; ?></a></td>
         </tr>
     </tfoot>
     <tbody>
 <?php
         $num = 0;
         foreach ($trackingdata as $line) {
-        	$data = explode(';', $line);
-			if ($data[0] == $sid) {
-				$num++;
+            $data = explode(';', $line);
+            if ($data[0] == $sid) {
+                $num++;
 ?>
         <tr>
             <td class="list"><?php print date("Y-m-d H:i:s", $data[7]); ?></td>
             <td class="list"><?php print $data[1]; ?> (<?php print $data[2]; ?>)</td>
         </tr>
 <?php
-				if ($num == 1) {
+                if ($num == 1) {
 ?>
         <tr>
             <td class="list"><?php print $PMF_LANG["ad_sess_referer"]; ?></td>

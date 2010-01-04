@@ -1,14 +1,8 @@
 <?php
 /**
  * phpMyFAQ Date class
- *
- * @category  phpMyFAQ
- * @package   PMF_Date
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since     2009-09-24
- * @version   git: $Id$
- * @copyright 2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,6 +13,15 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Date
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-09-24
  */
 
 /**
@@ -28,8 +31,10 @@
  * @package   PMF_Date
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
  * @since     2009-09-24
- * @copyright 2009 phpMyFAQ Team
  */
 class PMF_Date
 {
@@ -42,23 +47,23 @@ class PMF_Date
      *                           Unix timestamp format
      * 
      * @return string
-	 */
-	public static function createIsoDate($date, $format = 'Y-m-d H:i', $pmfFormat = true)
-	{
-		if ($pmfFormat) {
+     */
+    public static function createIsoDate($date, $format = 'Y-m-d H:i', $pmfFormat = true)
+    {
+        if ($pmfFormat) {
             $dateString = strtotime(
                 substr($date, 0, 4) . '-' .
                 substr($date, 4, 2) . '-' .
                 substr($date, 6, 2) . ' ' .
                 substr($date, 8, 2) . ':' .
                 substr($date, 10, 2));
-		} else {
-			$dateString = $date;
-		}
-
+        } else {
+            $dateString = $date;
+        }
+        
         return date($format, $dateString);
-	}
-	
+    }
+
     /**
      * Converts the phpMyFAQ/Unix date format to the RFC 822 format
      *
@@ -74,7 +79,7 @@ class PMF_Date
         if ('+0000' == $rfc822TZ) {
             $rfc822TZ = 'GMT';
         }
-
+        
         return self::createIsoDate($date, 'D, d M Y H:i:s', $pmfFormat) . ' ' . $rfc822TZ;
     }
 
@@ -95,8 +100,35 @@ class PMF_Date
         if ('+00:00' == $iso8601TZD) {
             $iso8601TZD = 'Z';
         }
-
+        
         return self::createIsoDate($date, 'Y-m-d\TH:i:s', $pmfFormat) . $iso8601TZD;
     }
-	
+    
+    /**
+     * Returns the timestamp of a tracking file
+     *
+     * @param string  $file     Filename
+     * @param boolean $endOfDay End of day?
+     * 
+     * @return integer
+     */
+    public static function getTrackingFileDate($file, $endOfDay = false)
+    {
+        if (PMF_String::strlen($file) >= 16) {
+            
+            $day   = PMF_String::substr($file, 8, 2);
+            $month = PMF_String::substr($file, 10, 2);
+            $year  = PMF_String::substr($file, 12, 4);
+            
+            if (!$endOfDay) {
+                $time = mktime(0, 0, 0, $month, $day, $year);
+            } else {
+                $time = mktime(23, 59, 59, $month, $day, $year);
+            }
+            
+            return $time;
+        } else {
+            return -1;
+        }
+    }
 }

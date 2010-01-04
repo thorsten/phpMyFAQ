@@ -1,14 +1,8 @@
 <?php
 /**
  * The main statistics page
- *
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since      2003-02-24
- * @version    SVN: $Id$
- * @copyright  2003-2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,6 +13,15 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @copyright 2003-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2003-02-24
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -42,8 +45,8 @@ if ($permission['viewlog']) {
             // The filename format is: trackingDDMMYYYY
             // e.g.: tracking02042006
             if (($trackingFile != '.') && ($trackingFile != '..') && (10 == strpos($trackingFile, $month))) {
-                $candidateFirst = FileToDate($trackingFile);
-                $candidateLast  = FileToDate($trackingFile, true);
+                $candidateFirst = PMF_Date::getTrackingFileDate($trackingFile);
+                $candidateLast  = PMF_Date::getTrackingFileDate($trackingFile, true);
                 if (($candidateLast > 0) && ($candidateLast > $last)) {
                     $last = $candidateLast;
                 }
@@ -64,19 +67,19 @@ if ($permission['viewlog']) {
     <legend><?php print $PMF_LANG["ad_stat_sess"]; ?></legend>
         <label class="left"><?php print $PMF_LANG["ad_stat_days"]; ?>:</label>
 <?php
-    $danz = 0;
-    $fir  = 9999999999999999999999999;
-    $las  = 0;
-    $dir  = opendir(PMF_ROOT_DIR."/data");
-    while($dat = readdir($dir)) {
+    $danz  = 0;
+    $first = 9999999999999999999999999;
+    $last  = 0;
+    $dir   = opendir(PMF_ROOT_DIR."/data");
+    while ($dat = readdir($dir)) {
         if ($dat != "." && $dat != "..") {
             $danz++;
         }
-        if (FileToDate($dat) > $las) {
-            $las = FileToDate($dat);
+        if (PMF_Date::getTrackingFileDate($dat) > $last) {
+            $last = PMF_Date::getTrackingFileDate($dat);
         }
-        if (FileToDate($dat) < $fir && FileToDate($dat) > 0) {
-            $fir = FileToDate($dat);
+        if (PMF_Date::getTrackingFileDate($dat) < $first && PMF_Date::getTrackingFileDate($dat) > 0) {
+            $first = PMF_Date::getTrackingFileDate($dat);
         }
     }
     closedir($dir);
@@ -92,8 +95,8 @@ if ($permission['viewlog']) {
 
         <label class="left"><?php print $PMF_LANG["ad_stat_fien"]; ?>:</label>
 <?php
-    if (is_file(PMF_ROOT_DIR."/data/tracking".date("dmY", $fir))) {
-        $fp = @fopen(PMF_ROOT_DIR."/data/tracking".date("dmY", $fir), "r");
+    if (is_file(PMF_ROOT_DIR."/data/tracking".date("dmY", $first))) {
+        $fp = @fopen(PMF_ROOT_DIR."/data/tracking".date("dmY", $first), "r");
         list($dummy, $dummy, $dummy, $dummy, $dummy, $dummy, $dummy, $qstamp) = fgetcsv($fp, 1024, ";");
         fclose($fp);
         print date("d.m.Y H:i:s", $qstamp);
@@ -104,8 +107,8 @@ if ($permission['viewlog']) {
         <br />
         <label class="left"><?php print $PMF_LANG["ad_stat_laen"]; ?>:</label>
 <?php
-    if (is_file(PMF_ROOT_DIR."/data/tracking".date("dmY", $las))) {
-        $fp = fopen(PMF_ROOT_DIR."/data/tracking".date("dmY", $las), "r");
+    if (is_file(PMF_ROOT_DIR."/data/tracking".date("dmY", $last))) {
+        $fp = fopen(PMF_ROOT_DIR."/data/tracking".date("dmY", $last), "r");
         while (list($dummy, $dummy, $dummy, $dummy, $dummy, $dummy, $dummy, $tstamp) = fgetcsv($fp, 1024, ";")) {
             $stamp = $tstamp;
         }
@@ -123,7 +126,7 @@ if ($permission['viewlog']) {
     $trackingDates = array();
     while (false !== ($dat = readdir($dir))) {
         if ($dat != "." && $dat != ".." && strlen($dat) == 16 && !is_dir($dat)) {
-            $trackingDates[] = FileToDate($dat);
+            $trackingDates[] = PMF_Date::getTrackingFileDate($dat);
         }
     }
     closedir($dir);
