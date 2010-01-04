@@ -1,16 +1,15 @@
-phpMyFAQ 2.6.0
-Codename "Portia"
+phpMyFAQ 2.7.0-alpha
+Codename "Prospero"
 
-Changes since 2.6.0-RC:
-- added experimental support for Microsoft Windows Web App Gallery (Thorsten)
-- updated Lithuanian translation (Aurimas Fišeras)
-- updated Japanese translation
-- removed Net_IDNA library (Thorsten)
-- minor bugfixes (Thorsten)
+Changes since 2.6.x:
+- 
 
 CHANGELOG:
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.7.0-alpha - 2010-
+-
 
 Version 2.6.0 - 2010-01-
 - moved all language files to UTF-8 (Anatoliy)
