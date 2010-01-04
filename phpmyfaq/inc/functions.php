@@ -245,18 +245,6 @@ function checkForAddrMatchIpv4($ip, $network)
 }
 
 /**
- * Checks for an address match (IPv6 or Network)
- *
- * @param   string $ip      IP Address
- * @param   string $network Network Address (e.g.: a.b.c.d/255.255.255.0 or a.b.c.d/24) or IP Address
- * @return  boolean
- */
-function checkForAddrMatchIpv6($ip, $network)
-{
-    
-}
-
-/**
  * Performs a check if an IPv4 is banned
  * 
  * NOTE: This function does not support IPv6
@@ -269,13 +257,12 @@ function checkForAddrMatchIpv6($ip, $network)
  */
 function IPCheck($ip)
 {
-	if (strstr($ip, '::')) {
-		// currently we cannot handle IPv6
-		return true;
-	}
-	
-    $faqconfig = PMF_Configuration::getInstance();
-    $bannedIPs = explode(' ', $faqconfig->get('main.bannedIPs'));
+    if (strstr($ip, '::')) {
+        // currently we cannot handle IPv6
+        return true;
+    }
+    
+    $bannedIPs = explode(' ', PMF_Configuration::getInstance()->get('main.bannedIPs'));
     
     foreach ($bannedIPs as $oneIPorNetwork) {
         if (checkForAddrMatchIpv4($ip, $oneIPorNetwork)) {
@@ -295,15 +282,16 @@ function IPCheck($ip)
 function getBannedWords()
 {
     $bannedTrimmedWords = array();
-    $bannedWordsFile = dirname(__FILE__).'/blockedwords.txt';
-    $bannedWords     = array();
+    $bannedWordsFile    = dirname(__FILE__).'/blockedwords.txt';
+    $bannedWords        = array();
 
     // Read the dictionary
     if (file_exists($bannedWordsFile) && is_readable($bannedWordsFile)) {
-        $bannedWords = @file($bannedWordsFile);
+        $bannedWords = file_get_contents($bannedWordsFile);
     }
+    
     // Trim it
-    foreach ($bannedWords as $word) {
+    foreach (explode("\n", $bannedWords) as $word) {
         $bannedTrimmedWords[] = trim($word);
     }
 
@@ -324,11 +312,9 @@ function getBannedWords()
  */
 function checkBannedWord($content)
 {
-    $faqconfig = PMF_Configuration::getInstance();
-
     // Sanity checks
     $content = trim($content);
-    if (('' == $content) && (!$faqconfig->get('spam.checkBannedWords'))) {
+    if (('' == $content) && (!PMF_Configuration::getInstance()->get('spam.checkBannedWords'))) {
         return true;
     }
 
@@ -358,10 +344,9 @@ function checkBannedWord($content)
  */
 function printCaptchaFieldset($legend, $img, $length, $error = '')
 {
-    $faqconfig = PMF_Configuration::getInstance();
-    $html      = '';
+    $html = '';
 
-    if ($faqconfig->get('spam.enableCaptchaCode')) {
+    if (PMF_Configuration::getInstance()->get('spam.enableCaptchaCode')) {
         $html = sprintf('<fieldset><legend>%s</legend>', $legend);
         $html .= '<div style="text-align:left;">';
         if ($error != '') {
@@ -386,7 +371,7 @@ function printCaptchaFieldset($legend, $img, $length, $error = '')
 function getHighlightedBannedWords($content)
 {
     $bannedHTMLHiliWords = array();
-    $bannedWords = getBannedWords();
+    $bannedWords         = getBannedWords();
 
     // Build the RegExp array
     foreach ($bannedWords as $word) {
@@ -395,8 +380,7 @@ function getHighlightedBannedWords($content)
     // Use the CSS "highlight" class to highlight the banned words
     if (count($bannedHTMLHiliWords)>0) {
         return PMF_String::preg_replace($bannedHTMLHiliWords, "<span class=\"highlight\">\\1</span>", $content);
-    }
-    else {
+    } else {
         return $content;
     }
 }
@@ -411,7 +395,7 @@ function getHighlightedBannedWords($content)
  */
 function wait($usecs)
 {
-    $temp = gettimeofday();
+    $temp  = gettimeofday();
     $start = (int)$temp["usec"];
     while(1) {
         $temp = gettimeofday();
@@ -433,11 +417,10 @@ function wait($usecs)
  */
 function getUsersOnline($activityTimeWindow = 300)
 {
-    $users     = array(0 ,0);
-    $faqconfig = PMF_Configuration::getInstance();
-    $db        = PMF_Db::getInstance();
+    $users = array(0 ,0);
+    $db    = PMF_Db::getInstance();
 
-    if ($faqconfig->get('main.enableUserTracking')) {
+    if (PMF_Configuration::getInstance()->get('main.enableUserTracking')) {
         $timeNow = ($_SERVER['REQUEST_TIME'] - $activityTimeWindow);
         // Count all sids within the time window
         // TODO: add a new field in faqsessions in order to find out only sids of anonymous users
@@ -543,13 +526,11 @@ if (!function_exists('quoted_printable_encode')) {
  */
 function getSearchData($searchterm, $asResource = false, $cat = '%', $allLanguages = true)
 {
-    global $db, $LANGCODE;
-
-    $result = null;  
-    $num         = 0;
-    $faqconfig   = PMF_Configuration::getInstance();
-
-    $cond = array(SQLPREFIX."faqdata.active" => "'yes'");
+    $db       = PMF_Db::getInstance();
+    $LANGCODE = PMF_Language::$language;
+    $result   = null;  
+    $num      = 0;
+    $cond     = array(SQLPREFIX."faqdata.active" => "'yes'");
 
     if ($cat != '%') {
         $cond = array_merge(array(SQLPREFIX."faqcategoryrelations.category_id" => $cat), $cond);
@@ -602,7 +583,7 @@ function getSearchData($searchterm, $asResource = false, $cat = '%', $allLanguag
     if (is_numeric($searchterm) && ($searchterm >= PMF_SOLUTION_ID_START_VALUE) && ($num > 0)) {
         // Hack: before a redirection we must force the PHP session update for preventing data loss
         session_write_close();
-        if ($faqconfig->get('main.enableRewriteRules')) {
+        if (PMF_Configuration::getInstance()->get('main.enableRewriteRules')) {
             header('Location: '.PMF_Link::getSystemUri('/index.php').'/solution_id_'.$searchterm.'.html');
         } else {
             header('Location: '.PMF_Link::getSystemUri('/index.php').'/index.php?solution_id='.$searchterm);
@@ -673,19 +654,19 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
         $output = $PMF_LANG['err_noArticles'];
     }
 
-    $pages = ceil($num / $faqconfig->get('main.numberOfRecordsPerPage'));
-    $last  = $seite * $faqconfig->get('main.numberOfRecordsPerPage');
-    $first = $last - $faqconfig->get('main.numberOfRecordsPerPage');
+    $confPerPage = $faqconfig->get('main.numberOfRecordsPerPage');
+    
+    $pages = ceil($num / $confPerPage);
+    $last  = $seite * $confPerPage;
+    $first = $last - $confPerPage;
     if ($last > $num) {
         $last = $num;
     }
 
     if ($num > 0) {
-        $output .= '<p>'.$plr->GetMsg('plmsgSearchAmount',$num);
+        $output .= '<p>'.$plr->GetMsg('plmsgSearchAmount', $num);
         if ($hasMore && ($pages > 1)) {
-            $output .= sprintf(
-                $PMF_LANG['msgInstantResponseMaxRecords'],
-                $faqconfig->get('main.numberOfRecordsPerPage'));
+            $output .= sprintf($PMF_LANG['msgInstantResponseMaxRecords'], $confPerPage);
         }
         $output .= "</p>\n";
         if (!$hasMore && ($pages > 1)) {
@@ -695,7 +676,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
 
         $counter = 0;
         $displayedCounter = 0;
-        while (($row = $db->fetch_object($result)) && $displayedCounter < $faqconfig->get('main.numberOfRecordsPerPage')) {
+        while (($row = $db->fetch_object($result)) && $displayedCounter < $confPerPage) {
             $counter ++;
             if ($counter <= $first) {
                 continue;
@@ -703,31 +684,31 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
             $displayedCounter++;
 
             $b_permission = false;
-			//Groups Permission Check
+            //Groups Permission Check
             if ($faqconfig->get('main.permLevel') == 'medium') {
                 $perm_group = $faq->getPermission('group', $row->id);
-				foreach ($current_groups as $index => $value){
-					if (in_array($value, $perm_group)) {
-						$b_permission = true;
-					}
-				}
-			}
-			if ($faqconfig->get('main.permLevel') == 'basic' || $b_permission) {
-				$perm_user = $faq->getPermission('user', $row->id);
-				foreach ($perm_user as $index => $value) {
-					if ($value == -1) {
-						$b_permission = true;
-						break;
-					} elseif (((int)$value == $current_user)) {
-						$b_permission = true;
-						break;
-					} else {
-						$b_permission = false;
-					}
-				}
-			}
-
-			if ($b_permission) {
+                foreach ($current_groups as $index => $value){
+                    if (in_array($value, $perm_group)) {
+                        $b_permission = true;
+                    }
+                }
+            }
+            if ($faqconfig->get('main.permLevel') == 'basic' || $b_permission) {
+                $perm_user = $faq->getPermission('user', $row->id);
+                foreach ($perm_user as $index => $value) {
+                    if ($value == -1) {
+                        $b_permission = true;
+                        break;
+                    } elseif (((int)$value == $current_user)) {
+                        $b_permission = true;
+                        break;
+                    } else {
+                        $b_permission = false;
+                    }
+                }
+            }
+            
+            if ($b_permission) {
                 $rubriktext  = $category->getPath($row->category_id);
                 $thema       = chopString($row->thema, 15);
                 $content     = chopString(strip_tags($row->content), 25);
@@ -770,22 +751,22 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
                 } else {
                     $currentUrl = PMF_Link::getSystemRelativeUri();
                 }
-                $oLink = new PMF_Link($currentUrl.$url);
+                $oLink            = new PMF_Link($currentUrl.$url);
                 $oLink->itemTitle = $row->thema;
-                $oLink->text = $thema;
-                $oLink->tooltip = $row->thema;
+                $oLink->text      = $thema;
+                $oLink->tooltip   = $row->thema;
                 $output .=
                     '<li><strong>'.$rubriktext.'</strong>: '.$oLink->toHtmlAnchor().'<br />'
                     .'<div class="searchpreview"><strong>'.$PMF_LANG['msgSearchContent'].'</strong> '.$content.'...</div>'
                     .'<br /></li>'."\n";
-			}
+            }
         }
         $output .= "</ul>\n";
     } else {
         $output = $PMF_LANG["err_noArticles"];
     }
 
-    if (!$hasMore && ($num > $faqconfig->get('main.numberOfRecordsPerPage'))) {        
+    if (!$hasMore && ($num > $confPerPage)) {        
         if ($faqconfig->get('main.enableRewriteRules')) {
             $baseUrl = sprintf("search.html?search=%s&amp;seite=%d%s&amp;searchcategory=%d",
                             urlencode($_searchterm),
@@ -802,14 +783,14 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
                  
         $options = array('baseUrl'         => $baseUrl,
                          'total'           => $num,
-                         'perPage'         => $faqconfig->get('main.numberOfRecordsPerPage'),
+                         'perPage'         => $confPerPage,
                          'pageParamName'   => 'seite',
                          'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG["msgNext"] . '</a>',
                          'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG["msgPrevious"] . '</a>',
-                         'layoutTpl'       => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>',
-                        );
+                         'layoutTpl'       => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>');
+        
         $pagination = new PMF_Pagination($options);
-        $output .= $pagination->render();
+        $output    .= $pagination->render();
     }
 
     return $output;
@@ -1048,7 +1029,8 @@ function PageSpan($code, $start, $end, $akt)
  */
 function build_insert($query, $table)
 {
-    global $db;
+   $db = PMF_Db::getInstance();
+   
     if (!$result = $db->query($query)) {
         return;
     }
