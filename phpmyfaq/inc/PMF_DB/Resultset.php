@@ -34,7 +34,7 @@
  * @link      http://www.phpmyfaq.de
  * @since     2001-01-04
  */
-class PMF_DB_Resultset
+class PMF_DB_Resultset implements Iterator 
 {
     /**
      * DB handle
@@ -91,6 +91,16 @@ class PMF_DB_Resultset
     }
     
     /**
+     * Returns the key of the current element
+     *
+     * @return integer
+     */
+    public function key()
+    {
+        return key($this->current());
+    }
+    
+    /**
      * Returns next row
      * 
      * @return void
@@ -105,6 +115,15 @@ class PMF_DB_Resultset
         }
     }
     
+    /**
+     * Checks if current element is valid
+     *
+     * @return boolean
+     */
+    public function valid()
+    {
+        return is_array($this->current());
+    }
     
     /**
      * Count rows
