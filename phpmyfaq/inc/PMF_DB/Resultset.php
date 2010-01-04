@@ -39,7 +39,7 @@ class PMF_DB_Resultset
     /**
      * DB handle
      *
-     * @var PMF_DD_Driver
+     * @var PMF_DB_Driver
      */
     private $db;
     
@@ -57,8 +57,8 @@ class PMF_DB_Resultset
      */
     public function __construct($result)
     {
-        $this->db       = PMF_Db::getInstance();
-        $arrayObject    = new ArrayObject();
+        $this->db    = PMF_Db::getInstance();
+        $arrayObject = new ArrayObject();
         while ($row = $this->db->fetch_assoc($result)) {
             $arrayObject[]  = $row;
         }
@@ -72,18 +72,21 @@ class PMF_DB_Resultset
      */
     public function rewind()
     {
-        return $this->iterator->rewind();
+        $this->iterator->rewind();
     }
     
     /**
      * Returns current row
      * 
      * @return array
+     * @throws PMF_Exception
      */
     public function current()
     {
         if ($this->iterator->valid()) {
             return $this->iterator->current();
+        } else {
+            throw new PMF_Exception('Current row not valid!');
         }
     }
     
@@ -91,11 +94,14 @@ class PMF_DB_Resultset
      * Returns next row
      * 
      * @return void
+     * @throws PMF_Exception
      */
     public function next()
     {
         if ($this->iterator->valid()) {
-            return $this->iterator->next();
+            $this->iterator->next();
+        } else {
+            throw new PMF_Exception('Next row not valid!');
         }
     }
     
