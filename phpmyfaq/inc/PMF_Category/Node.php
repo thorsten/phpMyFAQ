@@ -1,6 +1,6 @@
 <?php
 /**
- * Interface for all PMF_Category_* classes
+ * Node class for all phpMyFAQ category
  *
  * PHP Version 5.2.0
  * 
@@ -17,24 +17,24 @@
  * @category  phpMyFAQ
  * @package   PMF_Category
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2009-12-28
+ * @since     2001-01-04
  */
 
 /**
- * PMF_Category_Interface
+ * PMF_Category_Node
  * 
  * @category  phpMyFAQ
  * @package   PMF_Category
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2009-12-28
+ * @since     2001-01-04
  */
-interface PMF_Category_Interface
+class PMF_Category_Node extends PMF_Category_Abstract implements PMF_Category_Interface 
 {
     /**
      * Creates a new entry
@@ -45,8 +45,11 @@ interface PMF_Category_Interface
      * @return boolean
      * @throws PMF_Category_Exception
      */
-    public function create($id, Array $data);
-
+    public function create($id, Array $data)
+    {
+        
+    }
+    
     /**
      * Updates an existing entry
      *
@@ -56,8 +59,11 @@ interface PMF_Category_Interface
      * @return boolean
      * @throws PMF_Category_Exception
      */
-    public function update($id, Array $data);
-
+    public function update($id, Array $data)
+    {
+        
+    }
+    
     /**
      * Deletes an entry
      *
@@ -66,7 +72,10 @@ interface PMF_Category_Interface
      * @return boolean
      * @throws PMF_Category_Exception
      */
-    public function delete($id);
+    public function delete($id)
+    {
+        
+    }
     
     /**
      * Fetches one entry
@@ -76,7 +85,10 @@ interface PMF_Category_Interface
      * @return array
      * @throws PMF_Category_Exception
      */
-    public function fetch($id);
+    public function fetch($id)
+    {
+        
+    }
     
     /**
      * Fetches all entries, if parameter = null, otherwise all from the given
@@ -87,6 +99,8 @@ interface PMF_Category_Interface
      * @return array
      * @throws PMF_Category_Exception
      */
-    public function fetchAll(Array $ids = null);
-    
+    public function fetchAll(Array $ids = null)
+    {
+        
+    }
 }
