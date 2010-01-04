@@ -79,14 +79,11 @@ class PMF_DB_Resultset implements Iterator
      * Returns current row
      * 
      * @return array
-     * @throws PMF_Exception
      */
     public function current()
     {
         if ($this->iterator->valid()) {
             return $this->iterator->current();
-        } else {
-            throw new PMF_Exception('Current row not valid!');
         }
     }
     
@@ -104,14 +101,11 @@ class PMF_DB_Resultset implements Iterator
      * Returns next row
      * 
      * @return void
-     * @throws PMF_Exception
      */
     public function next()
     {
         if ($this->iterator->valid()) {
             $this->iterator->next();
-        } else {
-            throw new PMF_Exception('Next row not valid!');
         }
     }
     
