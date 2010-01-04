@@ -858,7 +858,7 @@ class PMF_Linkverifier
         
         $faqconfig = PMF_Configuration::getInstance();
         
-        if (!(isset($faqconfig->get('main.referenceURL')))) {
+        if ($faqconfig->get('main.referenceURL') == '') {
             $output = $PMF_LANG['ad_linkcheck_noReferenceURL'];
             return ($cron ? '' : '<br /><br />'.$output);
         }
