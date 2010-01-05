@@ -37,17 +37,64 @@
 class PMF_Category_Node extends PMF_Category_Abstract implements PMF_Category_Interface 
 {
     /**
+     * Category ID
+     * 
+     * @var integer
+     */
+    private $_categoryId = null;
+    
+    /**
+     * Data of the node
+     * 
+     * @var object
+     */
+    public $nodeData = null;
+    
+    /**
+     * Constructor
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+    
+    /**
      * Creates a new entry
      *
-     * @param integer $id   ID
      * @param array   $data Array of data
      * 
      * @return boolean
      * @throws PMF_Category_Exception
      */
-    public function create($id, Array $data)
+    public function create(Array $data)
     {
+        if (is_null($data['id'])) {
+            $this->_categoryId = $this->db->nextID(SQLPREFIX.'faqcategories', 'id');
+        }
         
+        $query = sprintf("
+            INSERT INTO
+                %sfaqcategories
+            (id, lang, parent_id, name, description, user_id)
+                VALUES
+            (%d, '%s', %d, '%s', '%s', %d)",
+            SQLPREFIX,
+            $this->_categoryId,
+            $data['lang'],
+            $data['parent_id'],
+            $data['name'],
+            $data['description'],
+            $data['user_id']);
+        
+        $result = $this->db->query($query);
+        
+        if (!$result) {
+            throw new PMF_Exception($this->db->error());
+        }
+        
+        return $result;
     }
     
     /**
@@ -61,7 +108,31 @@ class PMF_Category_Node extends PMF_Category_Abstract implements PMF_Category_In
      */
     public function update($id, Array $data)
     {
+        $query = sprintf("
+            UPDATE
+                %sfaqcategories
+            SET
+                name = '%s',
+                description = '%s',
+                user_id = %d
+            WHERE
+                id = %d
+            AND
+                lang = '%s'",
+            SQLPREFIX,
+            $data['name'],
+            $data['description'],
+            $data['user_id'],
+            (int)$id,
+            $data['lang']);
         
+        $result = $this->db->query($query);
+        
+        if (!$result) {
+            throw new PMF_Exception($this->db->error());
+        }
+        
+        return $result;
     }
     
     /**
@@ -74,7 +145,28 @@ class PMF_Category_Node extends PMF_Category_Abstract implements PMF_Category_In
      */
     public function delete($id)
     {
+        $query = sprintf("
+            DELETE FROM
+                %sfaqcategories
+            WHERE
+                id = %d",
+            SQLPREFIX,
+            $id);
+            
+        if (!is_null($this->language)) {
+            $query .= sprintf(" 
+            AND 
+                lang = '%s'",
+            $this->language);
+        }
         
+        $result = $this->db->query($query);
+        
+        if (!$result) {
+            throw new PMF_Exception($this->db->error());
+        }
+        
+        return $result;
     }
     
     /**
@@ -87,7 +179,32 @@ class PMF_Category_Node extends PMF_Category_Abstract implements PMF_Category_In
      */
     public function fetch($id)
     {
+        $query = sprintf("
+            SELECT
+                id, lang, parent_id, name, description, user_id
+            FROM
+                %sfaqcategories
+            WHERE
+                id = %d",
+            SQLPREFIX,
+            (int)$id);
         
+        if (!is_null($this->language)) {
+            $query .= sprintf("
+            AND 
+                lang = '%s'",
+            $this->language);
+        }
+        
+        $result = $this->db->query($query);
+        
+        if (!$result) {
+            throw new PMF_Exception($this->db->error());
+        } else {
+            $this->nodeData = array_shift($this->db->fetchAll($result));
+        }
+        
+        return $this->nodeData;
     }
     
     /**
@@ -101,6 +218,60 @@ class PMF_Category_Node extends PMF_Category_Abstract implements PMF_Category_In
      */
     public function fetchAll(Array $ids = null)
     {
+        $categories = array();
+        $query      = sprintf("
+            SELECT
+                id, lang, parent_id, name, description, user_id
+            FROM
+                %sfaqcategories
+            WHERE
+                1=1",
+            SQLPREFIX);
         
+        if (!is_null($ids)) {
+            $query .= sprintf("
+            AND 
+                id IN (%s)",
+            implode(', ', $ids));
+        }
+        
+        if (!is_null($this->language)) {
+            $query .= sprintf("
+            AND 
+                lang = '%s'",
+            $this->language);
+        }
+        
+        $result = $this->db->query($query);
+        
+        if (!$result) {
+            throw new PMF_Exception($this->db->error());
+        } else {
+            $categories = $this->db->fetchAll($result);
+        }
+        
+        return $categories;
+    }
+    
+    /**
+     * Setter for category ID
+     *
+     * @param integer $_categoryId Category ID
+     * 
+     * @return void
+     */
+    public function setCategoryId($categoryId)
+    {
+        $this->_categoryId = (int)$categoryId;
+    }
+    
+    /**
+     * Getter for category ID
+     *
+     * @return integer
+     */
+    public function getCategoryId()
+    {
+        return $this->_categoryId;
     }
 }
