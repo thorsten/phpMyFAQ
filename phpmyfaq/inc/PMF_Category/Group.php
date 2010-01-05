@@ -39,13 +39,12 @@ class PMF_Category_Group extends PMF_Category_Abstract implements PMF_Category_I
     /**
      * Creates a new entry
      *
-     * @param integer $id   ID
      * @param array   $data Array of data
      * 
      * @return boolean
      * @throws PMF_Category_Exception
      */
-    public function create($id, Array $data)
+    public function create(Array $data)
     {
         
     }

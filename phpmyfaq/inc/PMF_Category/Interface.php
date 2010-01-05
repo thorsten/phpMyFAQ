@@ -39,13 +39,12 @@ interface PMF_Category_Interface
     /**
      * Creates a new entry
      *
-     * @param integer $id   ID
      * @param array   $data Array of data
      * 
      * @return boolean
      * @throws PMF_Category_Exception
      */
-    public function create($id, Array $data);
+    public function create(Array $data);
 
     /**
      * Updates an existing entry
