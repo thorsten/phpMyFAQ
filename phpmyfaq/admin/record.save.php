@@ -187,14 +187,21 @@ if ($permission['editbt']) {
         // Add user permissions
         $faq->deletePermission('user', $record_id);
         $faq->addPermission('user', $record_id, $restricted_users);
-        $category->deletePermission('user', $categories['rubrik']);
-        $category->addPermission('user', $categories['rubrik'], $restricted_users);
+        $categoryUser    = new PMF_Category_User();
+        $userPermission  = array(
+            'category_id' => $categories['rubrik'],
+            'user_id'     => $restricted_users);
+        $categoryUser->update($categories['rubrik'], $userPermission);
+        
         // Add group permission
         if ($groupSupport) {
+            $categoryGroup   = new PMF_Category_Group();
+            $groupPermission = array(
+                'category_id' => $categories['rubrik'],
+                'group_id'    => $restricted_groups);
             $faq->deletePermission('group', $record_id);
             $faq->addPermission('group', $record_id, $restricted_groups);
-            $category->deletePermission('group', $categories['rubrik']);
-            $category->addPermission('group', $categories['rubrik'], $restricted_groups);
+            $categoryGroup->update($categories['rubrik'], $restricted_groups);
         }
     } elseif (isset($submit['submit'][0])) {
         

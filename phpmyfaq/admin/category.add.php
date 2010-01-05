@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2009 phpMyFAQ Team
+ * @copyright 2003-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-12-20
@@ -32,26 +32,29 @@ print "<h2>".$PMF_LANG["ad_categ_new"]."</h2>\n";
 
 if ($permission["addcateg"]) {
 
-    $category  = new PMF_Category($current_admin_user, $current_admin_groups, false);
-    $parent_id = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
+    $parentId      = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
+    $categoryNode  = new PMF_Category_Node();
+    $categoryUser  = new PMF_Category_User();
+    $categoryGroup = new PMF_Category_Group();
+    $categoryData  = $categoryNode->fetch($parentId);
 ?>
     <form action="?action=savecategory" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG["ad_categ_new"]; ?></legend>
     <input type="hidden" name="lang" value="<?php print $LANGCODE; ?>" />
-    <input type="hidden" name="parent_id" value="<?php print $parent_id; ?>" />
+    <input type="hidden" name="parent_id" value="<?php print $parentId; ?>" />
 <?php
-    if ($parent_id > 0) {
-        $user_allowed  = $category->getPermissions('user', array($parent_id));
-        $group_allowed = $category->getPermissions('group', array($parent_id));
+    if ($parentId > 0) {
+        $userAllowed  = $categoryUser->fetch($parentId);
+        $groupAllowed = $categoryGroup->fetch($parentId);
 ?>
-    <input type="hidden" name="restricted_users" value="<?php print $user_allowed[0]; ?>" />
-    <input type="hidden" name="restricted_groups" value="<?php print $group_allowed[0]; ?>" />
+    <input type="hidden" name="restricted_users" value="<?php print $userAllowed->user_id; ?>" />
+    <input type="hidden" name="restricted_groups" value="<?php print $groupAllowed->group_id; ?>" />
 <?php
-        printf("<p>%s: %s (%s)</p>",
+        printf("    <p>%s: %s (%s)</p>\n",
             $PMF_LANG["msgMainCategory"],
-            $category->categoryName[$parent_id]["name"],
-            $languageCodes[PMF_String::strtoupper($category->categoryName[$parent_id]["lang"])]);
+            $categoryData->name,
+            $languageCodes[PMF_String::strtoupper($categoryData->lang)]);
     }
 ?>
     <label class="left"><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
@@ -66,7 +69,7 @@ if ($permission["addcateg"]) {
     </select><br />
 
 <?php
-    if ($parent_id == 0) {
+    if ($parentId == 0) {
         if ($groupSupport) {
 ?>
     <label class="left" for="grouppermission"><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>

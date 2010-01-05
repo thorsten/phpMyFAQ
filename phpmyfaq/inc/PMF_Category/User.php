@@ -37,6 +37,30 @@
 class PMF_Category_User extends PMF_Category_Abstract implements PMF_Category_Interface 
 {
     /**
+     * Permission information
+     * 
+     * @var object
+     */
+    public $permission = null;
+    
+    /**
+     * Permission container with all informations
+     * 
+     * @var array
+     */
+    public $permissionContainer = null;
+    
+    /**
+     * Constructor
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+    
+    /**
      * Creates a new entry
      *
      * @param array   $data Array of data
@@ -46,7 +70,23 @@ class PMF_Category_User extends PMF_Category_Abstract implements PMF_Category_In
      */
     public function create(Array $data)
     {
+        $query = sprintf("
+            INSERT INTO
+                %sfaqcategory_user
+            (category_id, user_id)
+                VALUES
+            (%d, %d)",
+            SQLPREFIX,
+            (int)$data['category_id'],
+            (int)$data['user_id']);
         
+        $result = $this->db->query($query);
+        
+        if (!$result) {
+            throw new PMF_Exception($this->db->error());
+        }
+        
+        return $result;
     }
     
     /**
@@ -60,7 +100,24 @@ class PMF_Category_User extends PMF_Category_Abstract implements PMF_Category_In
      */
     public function update($id, Array $data)
     {
+        $query = sprintf("
+            UPDATE
+                %sfaqcategory_user
+            SET
+                user_id = %d
+            WHERE
+                category_id = %d",
+            SQLPREFIX,
+            $data['user_id'],
+            (int)$id);
         
+        $result = $this->db->query($query);
+        
+        if (!$result) {
+            throw new PMF_Exception($this->db->error());
+        }
+        
+        return $result;
     }
     
     /**
@@ -73,7 +130,21 @@ class PMF_Category_User extends PMF_Category_Abstract implements PMF_Category_In
      */
     public function delete($id)
     {
+        $query = sprintf("
+            DELETE FROM
+                %sfaqcategory_user
+            WHERE
+                category_id = %d",
+            SQLPREFIX,
+            (int)$id);
         
+        $result = $this->db->query($query);
+        
+        if (!$result) {
+            throw new PMF_Exception($this->db->error());
+        }
+        
+        return $result;
     }
     
     /**
@@ -86,7 +157,25 @@ class PMF_Category_User extends PMF_Category_Abstract implements PMF_Category_In
      */
     public function fetch($id)
     {
+        $query = sprintf("
+            SELECT
+                category_id, user_id
+            FROM
+                %sfaqcategory_user
+            WHERE
+                category_id = %d",
+            SQLPREFIX,
+            (int)$id);
         
+        $result = $this->db->query($query);
+        
+        if (!$result) {
+            throw new PMF_Exception($this->db->error());
+        } else {
+            $this->permission = array_shift($this->db->fetchAll($result));
+        }
+        
+        return $this->permission;
     }
     
     /**

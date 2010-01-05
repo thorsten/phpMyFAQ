@@ -104,13 +104,22 @@ if ($permission['editbt']) {
                 $tagging->saveTags($record_id, explode(',',$tags));
             }
             
+            
             // Add user permissions
+            $categoryUser    = new PMF_Category_User();
+            $userPermission  = array(
+                'category_id' => $categories['rubrik'],
+                'user_id'     => $restricted_users);
             $faq->addPermission('user', $record_id, $restricted_users);
-            $category->addPermission('user', $categories['rubrik'], $restricted_users);
+            $categoryUser->create($userPermission);
             // Add group permission
             if ($groupSupport) {
+                $categoryGroup   = new PMF_Category_Group();
+                $groupPermission = array(
+                    'category_id' => $categories['rubrik'],
+                    'group_id'    => $restricted_groups);
                 $faq->addPermission('group', $record_id, $restricted_groups);
-                $category->addPermission('group', $categories['rubrik'], $restricted_groups);
+                $categoryGroup->create($groupPermission);
             }
 
             print $PMF_LANG['ad_entry_savedsuc'];

@@ -30,28 +30,29 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 if ($permission['editcateg']) {
 
-    $categoryId      = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
-    $category        = new PMF_Category($current_admin_user, $current_admin_groups, false);
-    $categoryNode    = new PMF_Category_Node();
+    $categoryId    = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
+    $category      = new PMF_Category($current_admin_user, $current_admin_groups, false);
+    $categoryNode  = new PMF_Category_Node();
+    $categoryUser  = new PMF_Category_User();
+    $categoryGroup = new PMF_Category_Group();
+    $categoryData  = $categoryNode->fetch($categoryId);
     
-    $categoryData    = $categoryNode->fetch($categoryId);
-    $user_permission = $category->getPermissions('user', array($categoryId));
-
-    if ($user_permission[0] == -1) {
-        $all_users        = true;
-        $restricted_users = false;
+    $userPermission = $categoryUser->fetch($categoryId);
+    if ($userPermission->user_id == -1) {
+        $allUsers        = true;
+        $restrictedUsers = false;
     } else {
-        $all_users        = false;
-        $restricted_users = true;
+        $allUsers        = false;
+        $restrictedUsers = true;
     }
 
-    $group_permission = $category->getPermissions('group', array($categoryId));
-    if ($group_permission[0] == -1) {
-        $all_groups        = true;
-        $restricted_groups = false;
+    $groupPermission = $categoryGroup->fetch($categoryId);
+    if ($groupPermission->group_id == -1) {
+        $allGroups        = true;
+        $restrictedGroups = false;
     } else {
-        $all_groups        = false;
-        $restricted_groups = true;
+        $allGroups        = false;
+        $restrictedGroups = true;
     }
 
     printf("<h2>%s <em>%s</em> %s</h2>\n",
@@ -81,7 +82,7 @@ if ($permission['editcateg']) {
     if ($groupSupport) {
 ?>
         <label class="left" for="grouppermission"><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
-        <input type="radio" name="grouppermission" class="active" value="all" <?php print ($all_groups ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_all_groups']; ?> <input type="radio" name="grouppermission" class="active" value="restricted" <?php print ($restricted_groups ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_restricted_groups']; ?> <select name="restricted_groups" size="1"><?php print $user->perm->getAllGroupsOptions($group_permission[0]); ?></select><br />
+        <input type="radio" name="grouppermission" class="active" value="all" <?php print ($allGroups ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_all_groups']; ?> <input type="radio" name="grouppermission" class="active" value="restricted" <?php print ($restrictedGroups ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_restricted_groups']; ?> <select name="restricted_groups" size="1"><?php print $user->perm->getAllGroupsOptions($group_permission[0]); ?></select><br />
 <?php
     } else {
 ?>
@@ -90,7 +91,7 @@ if ($permission['editcateg']) {
     }
 ?>
         <label class="left" for="userpermission"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
-        <input type="radio" name="userpermission" class="active" value="all" <?php print ($all_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_all_users']; ?> <input type="radio" name="userpermission" class="active" value="restricted" <?php print ($restricted_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_restricted_users']; ?> <select name="restricted_users" size="1"><?php print $user->getAllUserOptions($user_permission[0]); ?></select><br />
+        <input type="radio" name="userpermission" class="active" value="all" <?php print ($allUsers ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_all_users']; ?> <input type="radio" name="userpermission" class="active" value="restricted" <?php print ($restrictedUsers ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_restricted_users']; ?> <select name="restricted_users" size="1"><?php print $user->getAllUserOptions($userPermission->user_id); ?></select><br />
 
         <input class="submit" style="margin-left: 190px;" type="submit" name="submit" value="<?php print $PMF_LANG['ad_categ_updatecateg']; ?>" />
     </fieldset>
