@@ -983,32 +983,6 @@ class PMF_Category
     }
 
     /**
-     * Checks wether a language is already defined for a category id
-     *
-     * @param  integer $category_id   Category id
-     * @param  string  $category_lang Category language
-     * @return boolean
-     */
-    public function checkLanguage($category_id, $category_lang)
-    {
-        $query = sprintf("
-            SELECT
-                lang
-            FROM
-                %sfaqcategories
-            WHERE
-                id = %d
-            AND
-                lang = '%s'",
-            SQLPREFIX,
-            $category_id,
-            $category_lang);
-
-        $result = $this->db->query($query);
-        return $this->db->num_rows($result);
-    }
-
-    /**
      * Swaps two categories
      *
      * @param  integer $category_id_1 First category

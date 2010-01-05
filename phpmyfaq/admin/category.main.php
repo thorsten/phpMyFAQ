@@ -83,9 +83,10 @@ if ($permission['editcateg']) {
     // Updates an existing category
     if ($action == 'updatecategory') {
 
-        $category     = new PMF_Category($current_admin_user, $current_admin_groups, false);
-        $categoryId   = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-        $categoryData = array(
+        $category       = new PMF_Category($current_admin_user, $current_admin_groups, false);
+        $categoryHelper = new PMF_Category_Helper();
+        $categoryId     = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $categoryData   = array(
             'id'          => $categoryId,
             'lang'        => PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING),
             'parent_id'   => PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT),
@@ -98,7 +99,7 @@ if ($permission['editcateg']) {
         $groupperm     = PMF_Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING);
         $groupAllowed = ('all' == $groupperm) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_groups', FILTER_VALIDATE_INT);
         
-        if (!$category->checkLanguage($categoryData['id'], $categoryData['lang'])) {
+        if ($categoryHelper->hasTranslation($categoryData['id'], $categoryData['lang'])) {
             if ($categoryNode->create($categoryData)) {
                 printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_translated']);
             } else {
