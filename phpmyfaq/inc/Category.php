@@ -954,77 +954,6 @@ class PMF_Category
     }
 
     /**
-     * Adds a new category entry
-     *
-     * @param  array   $category_data Array of category data
-     * @param  integer $parent_id     Parent id
-     * @param  integer $id            Category id
-     * @return integer
-     */
-    public function addCategory(Array $category_data, $parent_id = 0, $id = null)
-    {
-        if (!is_array($category_data)) {
-            return false;
-        }
-
-        // If we only need a new language, we don't need a new category id
-        if (is_null($id)) {
-            $id = $this->db->nextID(SQLPREFIX.'faqcategories', 'id');
-        }
-
-        $query = sprintf("
-            INSERT INTO
-                %sfaqcategories
-            (id, lang, parent_id, name, description, user_id)
-                VALUES
-            (%d, '%s', %d, '%s', '%s', %d)",
-            SQLPREFIX,
-            $id,
-            $category_data['lang'],
-            $parent_id,
-            $category_data['name'],
-            $category_data['description'],
-            $category_data['user_id']);
-        $this->db->query($query);
-
-        return $id;
-    }
-
-    /**
-     * Updates an existent category entry
-     *
-     * @param  array   $category_data Array of category data
-     * @return boolean
-     */
-    public function updateCategory(Array $category_data)
-    {
-        if (!is_array($category_data)) {
-            return false;
-        }
-
-        $query = sprintf("
-            UPDATE
-                %sfaqcategories
-            SET
-                name = '%s',
-                description = '%s',
-                user_id = %d
-            WHERE
-                id = %d
-            AND
-                lang = '%s'",
-            SQLPREFIX,
-            $category_data['name'],
-            $category_data['description'],
-            $category_data['user_id'],
-            $category_data['id'],
-            $category_data['lang']);
-        $this->db->query($query);
-
-        return true;
-    }
-
-    /**
      * Move the categories ownership, if any.
      *
      * @param  integer $from Old user id
@@ -1153,30 +1082,6 @@ class PMF_Category
         return true;
     }
 
-    /**
-     * Deletes a category
-     *
-     * @param  integer $category_id   Category id
-     * @param  string  $category_lang Categiry language
-     * @param  boolean $delete_all    Delete all languages?
-     * @return boolean
-     */
-    public function deleteCategory($category_id, $category_lang, $delete_all = false)
-    {
-        $query = sprintf("
-            DELETE FROM
-                %sfaqcategories
-            WHERE
-                id = %d",
-            SQLPREFIX,
-            $category_id);
-        if (!$delete_all) {
-           $query .= " AND lang = '".$category_lang."'";
-        }
-        $this->db->query($query);
-
-        return true;
-    }
     /**
      * Deletes a category relation
      *
