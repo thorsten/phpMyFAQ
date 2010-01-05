@@ -1,14 +1,8 @@
 <?php
 /**
  * build table of all categories in all languages
- *
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Rudi Ferrari <bookcrossers@gmx.de>
- * @since      2006-09-18
- * @copyright  2006-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,6 +13,15 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Rudi Ferrari <bookcrossers@gmx.de>
+ * @copyright 2006-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2006-09-18
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -31,7 +34,7 @@ printf('<h2>%s</h2>', $PMF_LANG['ad_menu_categ_structure']);
 if ($permission['editcateg']) {
 
     $category        = new PMF_Category($current_admin_user, $current_admin_groups, false);
-    $currentLink     = $_SERVER['PHP_SELF'];
+    $categoryNode    = new PMF_Category_Node();
     $actual_language = $languageCodes[strtoupper($LANGCODE)];
     $all_languages   = array();
     $all_lang        = array();
@@ -39,18 +42,16 @@ if ($permission['editcateg']) {
 
     // translate an existing category
     if (!is_null($showcat) && $showcat == 'yes') {
-
-        $parent_id     = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
-        $category_data = array(
+        $categoryData = array(
             'id'          => PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT),
             'lang'        => PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING),
-            'parent_id'   => $parent_id,
+            'parent_id'   => PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT),
             'name'        => PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
             'description' => PMF_Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
             'user_id'     => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT));
 
         // translate.category only returns non-existent languages to translate too
-        if ($category->addCategory($category_data, $parent_id, $category_data['id'])) {
+        if ($categoryNode->create($categoryData)) {
             printf('<p>%s</p>', $PMF_LANG['ad_categ_translated']);
         } else {
             printf('<p>%s</p>', $db->error());
@@ -96,8 +97,7 @@ if ($permission['editcateg']) {
             $desc);
         if ($cat['lang'] != $LANGCODE) {
            // translate category
-           printf('<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><img src="images/translate2.gif" width="13" height="16" border="0" title="%s" alt="%s" /></a>',
-               $currentLink,
+           printf('<a href="index.php?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><img src="images/translate2.gif" width="13" height="16" border="0" title="%s" alt="%s" /></a>',
                $cat['id'],
                $LANGCODE,
                $PMF_LANG['ad_categ_translate'],
@@ -128,8 +128,7 @@ if ($permission['editcateg']) {
            }
            else {
            print "<td class=\"sscDescNA\">";
-           printf('<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><img src="images/translate2.gif" width="13" height="16" border="0" title="%s" alt="%s" /></a>',
-               $currentLink,
+           printf('<a href="index.php?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><img src="images/translate2.gif" width="13" height="16" border="0" title="%s" alt="%s" /></a>',
                $cat['id'],
                $lang,
                $PMF_LANG['ad_categ_translate'],

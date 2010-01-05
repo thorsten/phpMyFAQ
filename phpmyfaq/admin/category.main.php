@@ -1,12 +1,8 @@
 <?php
 /**
  * List all categories in the admin section
- *
- * @category  phpMyFAQ
- * @package   Administration
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2003-12-20
- * @copyright 2003-2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -17,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2003-12-20
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @copyright 2003-2010 phpMyFAQ Team
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -39,10 +43,12 @@ if ($permission['editcateg']) {
     // Save a new category
     if ($action == 'savecategory') {
 
-        $category      = new PMF_Category($current_admin_user, $current_admin_groups, false);
-        $parent_id     = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
-        $category_data = array(
+        $category     = new PMF_Category($current_admin_user, $current_admin_groups, false);
+        $categoryNode = new PMF_Category_Node();
+        $categoryData = array(
+            'id'          => null,
             'lang'        => PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING),
+            'parent_id'   => PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT),
             'name'        => PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
             'description' => PMF_Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
             'user_id'     => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT));
@@ -52,10 +58,9 @@ if ($permission['editcateg']) {
         $groupperm     = PMF_Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING);
         $group_allowed = ('all' == $groupperm) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_groups', FILTER_VALIDATE_INT);
 
-        $category_id = $category->addCategory($category_data, $parent_id);
-        if ($category_id) {
-            $category->addPermission('user', array($category_id), $user_allowed);
-            $category->addPermission('group', array($category_id), $group_allowed);
+        if ($categoryNode->create($categoryData)) {
+            $category->addPermission('user', array($categoryNode->getCategoryId()), $user_allowed);
+            $category->addPermission('group', array($categoryNode->getCategoryId()), $group_allowed);
             printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_added']);
         } else {
             printf('<p class="error">%s</p>', $db->error());
@@ -65,12 +70,13 @@ if ($permission['editcateg']) {
     // Updates an existing category
     if ($action == 'updatecategory') {
 
-        $category      = new PMF_Category($current_admin_user, $current_admin_groups, false);
-        $parent_id     = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
-        $category_data = array(
-            'id'          => PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT),
+        $category     = new PMF_Category($current_admin_user, $current_admin_groups, false);
+        $categoryNode = new PMF_Category_Node();
+        $categoryId   = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $categoryData = array(
+            'id'          => $categoryId,
             'lang'        => PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING),
-            'parent_id'   => $parent_id,
+            'parent_id'   => PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT),
             'name'        => PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
             'description' => PMF_Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
             'user_id'     => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT));
@@ -80,20 +86,20 @@ if ($permission['editcateg']) {
         $groupperm     = PMF_Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING);
         $group_allowed = ('all' == $groupperm) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_groups', FILTER_VALIDATE_INT);
         
-        if (!$category->checkLanguage($category_data['id'], $category_data['lang'])) {
-            if ($category->addCategory($category_data, $parent_id, $category_data['id']) &&
-                $category->addPermission('user', array($category_data['id']), $user_allowed) &&
-                $category->addPermission('group', array($category_data['id']), $group_allowed)) {
+        if (!$category->checkLanguage($categoryData['id'], $categoryData['lang'])) {
+            if ($categoryNode->create($categoryData) &&
+                $category->addPermission('user', array($categoryData['id']), $user_allowed) &&
+                $category->addPermission('group', array($categoryData['id']), $group_allowed)) {
                 printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_translated']);
             } else {
                 printf('<p class="error">%s</p>', $db->error());
             }
         } else {
-            if ($category->updateCategory($category_data)) {
-                $category->deletePermission('user', array($category_data['id']));
-                $category->deletePermission('group', array($category_data['id']));
-                $category->addPermission('user', array($category_data['id']), $user_allowed);
-                $category->addPermission('group', array($category_data['id']), $group_allowed);
+            if ($categoryNode->update($categoryId, $categoryData)) {
+                $category->deletePermission('user', array($categoryData['id']));
+                $category->deletePermission('group', array($categoryData['id']));
+                $category->addPermission('user', array($categoryData['id']), $user_allowed);
+                $category->addPermission('group', array($categoryData['id']), $group_allowed);
                 printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_updated']);
             } else {
                 printf('<p class="error">%s</p>', $db->error());
@@ -104,15 +110,21 @@ if ($permission['editcateg']) {
     // Deletes an existing category
     if ($permission['delcateg'] && $action == 'removecategory') {
 
-        $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
-        $id         = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
-        $lang       = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-        $deleteall  = PMF_Filter::filterInput(INPUT_POST, 'deleteall', FILTER_SANITIZE_STRING);
-        $delete_all = strtolower($deleteall) == 'yes' ? true : false;
-
-        if ($category->deleteCategory($id, $lang, $delete_all) && 
-            $category->deleteCategoryRelation($id, $lang, $delete_all) &&
-            $category->deletePermission('user', array($id)) && $category->deletePermission('group', array($id))) {
+        $category     = new PMF_Category($current_admin_user, $current_admin_groups, false);
+        $categoryNode = new PMF_Category_Node();
+        
+        $categoryId   = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
+        $categoryLang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
+        $deleteAll    = PMF_Filter::filterInput(INPUT_POST, 'deleteall', FILTER_SANITIZE_STRING);
+        
+        if ('yes' == $deleteAll) {
+            $categoryNode->setLanguage($categoryLang);
+        }
+        
+        if ($categoryNode->delete($categoryId) && 
+            $category->deleteCategoryRelation($categoryId, $categoryLang, $deleteAll) &&
+            $category->deletePermission('user', array($categoryId)) && 
+            $category->deletePermission('group', array($categoryId))) {
             printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_deleted']);
         } else {
             printf('<p class="error">%s</p>', $db->error());

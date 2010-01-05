@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2009 phpMyFAQ Team
+ * @copyright 2003-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-03-10
@@ -30,10 +30,12 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 if ($permission['editcateg']) {
 
-    $id              = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
+    $categoryId      = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
     $category        = new PMF_Category($current_admin_user, $current_admin_groups, false);
-    $categories      = $category->getAllCategories();
-    $user_permission = $category->getPermissions('user', array($id));
+    $categoryNode    = new PMF_Category_Node();
+    
+    $categoryData    = $categoryNode->fetch($categoryId);
+    $user_permission = $category->getPermissions('user', array($categoryId));
 
     if ($user_permission[0] == -1) {
         $all_users        = true;
@@ -43,7 +45,7 @@ if ($permission['editcateg']) {
         $restricted_users = true;
     }
 
-    $group_permission = $category->getPermissions('group', array($id));
+    $group_permission = $category->getPermissions('group', array($categoryId));
     if ($group_permission[0] == -1) {
         $all_groups        = true;
         $restricted_groups = false;
@@ -54,26 +56,26 @@ if ($permission['editcateg']) {
 
     printf("<h2>%s <em>%s</em> %s</h2>\n",
         $PMF_LANG['ad_categ_edit_1'],
-        $categories[$id]['name'],
+        $categoryData->name,
         $PMF_LANG['ad_categ_edit_2']);
 ?>
     <form action="?action=updatecategory" method="post">
-    <input type="hidden" name="id" value="<?php print $id; ?>" />
-    <input type="hidden" name="lang" value="<?php print $categories[$id]['lang']; ?>" />
-    <input type="hidden" name="parent_id" value="<?php print $categories[$id]['parent_id']; ?>" />
+    <input type="hidden" name="id" value="<?php print $categoryData->id; ?>" />
+    <input type="hidden" name="lang" value="<?php print $categoryData->lang; ?>" />
+    <input type="hidden" name="parent_id" value="<?php print $categoryData->parent_id; ?>" />
 
     <fieldset>
-    <legend><?php print $PMF_LANG['ad_categ_edit_1']." <em>".$categories[$id]['name']."</em> ".$PMF_LANG['ad_categ_edit_2']; ?></legend>
+    <legend><?php print $PMF_LANG['ad_categ_edit_1']." <em>".$categoryData->name."</em> ".$PMF_LANG['ad_categ_edit_2']; ?></legend>
 
         <label class="left"><?php print $PMF_LANG['ad_categ_titel']; ?>:</label>
-        <input type="text" name="name" size="30" style="width: 300px;" value="<?php print $categories[$id]['name']; ?>" /><br />
+        <input type="text" name="name" size="30" style="width: 300px;" value="<?php print $categoryData->name; ?>" /><br />
 
         <label class="left"><?php print $PMF_LANG['ad_categ_desc']; ?>:</label>
-    	<textarea name="description" rows="3" cols="80" style="width: 300px;"><?php print $categories[$id]['description']; ?></textarea><br />
+    	<textarea name="description" rows="3" cols="80" style="width: 300px;"><?php print $categoryData->description; ?></textarea><br />
 
         <label class="left"><?php print $PMF_LANG['ad_categ_owner']; ?>:</label>
         <select name="user_id" size="1">
-        <?php print $user->getAllUserOptions($categories[$id]['user_id']); ?>
+        <?php print $user->getAllUserOptions($categoryData->user_id); ?>
         </select><br />
 <?php
     if ($groupSupport) {
