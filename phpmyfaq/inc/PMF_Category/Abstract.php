@@ -48,7 +48,7 @@ abstract class PMF_Category_Abstract
      *
      * @var string
      */
-    protected $language;
+    protected $language = null;
     
     /**
      * Constructor
