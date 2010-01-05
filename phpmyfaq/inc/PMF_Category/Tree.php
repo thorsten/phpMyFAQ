@@ -58,13 +58,9 @@ class PMF_Category_Tree extends IteratorIterator implements RecursiveIterator
      */
     public function __construct(PMF_Category $parent = NULL)
     {
-        $db       =  PMF_Db::getInstance();
-        $parentid = $parent ? (int)$parent->getId() : 0;
-
-        /* TODO: Move this to PMF_Category_Tree_DataProvider */
-        $query = 'SELECT a.id as id, a.name as name, a.parent_id as parent_id, (SELECT count(*) FROM faqcategories b WHERE b.parent_id = a.id) as children FROM faqcategories a WHERE a.parent_id = '.$parentid;
-
-        $resultset = new PMF_DB_Resultset($db->query($query));
+        $dataProvider = new PMF_Category_Tree_DataProvider();
+        $parentId     = $parent ? (int)$parent->getId() : 0;
+        $resultset    = $dataProvider->getData($parentId);
         parent::__construct($resultset);
         $this->parent = $parent;
     }
