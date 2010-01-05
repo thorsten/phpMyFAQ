@@ -44,20 +44,39 @@ abstract class PMF_Category_Abstract
     protected $db = null;
     
     /**
-     * Sets the language
+     * Language
      *
-     * @param string $language Language
-     * 
-     * @return boolean
-     * @throws PMF_Category_Exception
+     * @var string
      */
-    abstract protected function setLanguage($language);
+    protected $language;
     
     /**
-     * Returns the current language
-     *
-     * @return string
-     * @throws PMF_Category_Exception
+     * Constructor
+     * 
+     * @return void
      */
-    abstract protected function getLanguage();
+    public function __construct()
+    {
+        $this->db = PMF_Db::getInstance();
+    }
+
+    /**
+     * Returns the current language
+     * 
+     * @return string
+     */
+    public function getLanguage ()
+    {
+        return $this->language;
+    }
+    
+    /**
+     * Sets the current language
+     * 
+     * @param string $language
+     */
+    public function setLanguage ($language)
+    {
+        $this->language = $language;
+    }
 }
