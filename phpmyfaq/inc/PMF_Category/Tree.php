@@ -48,6 +48,13 @@ class PMF_Category_Tree extends IteratorIterator implements RecursiveIterator
      * @var PMF_Category
      */
     private $parent = null;
+
+    /**
+     * The tree data.
+     *
+     * @var PMF_Category_Tree_DataProvider $dataProvider
+     */
+    private $dataProvider;
     
     /**
      * Constructor
@@ -56,13 +63,13 @@ class PMF_Category_Tree extends IteratorIterator implements RecursiveIterator
      * 
      * @return void
      */
-    public function __construct(PMF_Category $parent = NULL)
+    public function __construct(PMF_Category_Tree_DataProvider_Interface $dataProvider, PMF_Category $parent = NULL)
     {
-        $dataProvider = new PMF_Category_Tree_DataProvider();
         $parentId     = $parent ? (int)$parent->getId() : 0;
         $resultset    = $dataProvider->getData($parentId);
         parent::__construct($resultset);
         $this->parent = $parent;
+        $this->dataProvider = $dataProvider;
     }
     
     /**
@@ -138,6 +145,6 @@ class PMF_Category_Tree extends IteratorIterator implements RecursiveIterator
      */
     public function getChildren()
     {
-        return new self($this->current());
+        return new self($this->dataProvider, $this->current());
     }
 }
