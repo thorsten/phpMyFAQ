@@ -1,32 +1,23 @@
 <?php
-error_reporting(E_ALL);
-define('SQLPREFIX' ,'');
-define('PMF_ROOT_DIR', __DIR__);
+require "inc/functions.php";
+require "inc/Exception.php";
+require "inc/Db.php";
+require "inc/PMF_DB/Driver.php";
+require "inc/Language.php";
+require "inc/Category.php";
+require "inc/PMF_DB/Resultset.php";
+require 'inc/PMF_Category/Abstract.php';
+require 'inc/PMF_Category/Tree.php';
+require 'inc/PMF_Category/Path.php';
+require 'inc/PMF_Category/Tree/DataProvider/Interface.php';
+require "inc/PMF_Category/Tree/DataProvider/SingleQuery.php";
+require "inc/PMF_Category/Tree/DataProvider/MultiQuery.php";
+require 'inc/PMF_Category/Tree/Helper.php';
+require 'config/database.php';
 
-$sql_type = 'mysql';
-$sql_server = 'localhost';
-$sql_user = 'root';
-$sql_password = 'filter';
-$sql_db = 'prospero';
-
-require PMF_ROOT_DIR . "/inc/functions.php";
-require PMF_ROOT_DIR . "/inc/Exception.php";
-require PMF_ROOT_DIR . "/inc/Db.php";
-require PMF_ROOT_DIR . "/inc/PMF_DB/Driver.php";
-require PMF_ROOT_DIR . "/inc/Language.php";
-require PMF_ROOT_DIR . "/inc/CategoryNew.php";
-require PMF_ROOT_DIR . "/inc/PMF_DB/Resultset.php";
-require PMF_ROOT_DIR . '/inc/PMF_Category/Abstract.php';
-require PMF_ROOT_DIR . '/inc/PMF_Category/Tree.php';
-require PMF_ROOT_DIR . '/inc/PMF_Category/Path.php';
-require PMF_ROOT_DIR . '/inc/PMF_Category/Tree/DataProvider/Interface.php';
-require PMF_ROOT_DIR . "/inc/PMF_Category/Tree/DataProvider/SingleQuery.php";
-require PMF_ROOT_DIR . "/inc/PMF_Category/Tree/DataProvider/MultiQuery.php";
-
-require PMF_ROOT_DIR . '/inc/PMF_Category/Tree/Helper.php';
-
-$db = PMF_Db::dbSelect($sql_type);
-$db->connect($sql_server, $sql_user, $sql_password, $sql_db);
+define('SQLPREFIX', $DB['prefix']);
+$db = PMF_Db::dbSelect($DB['type']);
+$db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
 
 $providers = array(new PMF_Category_Tree_DataProvider_SingleQuery(), new PMF_Category_Tree_DataProvider_MultiQuery);
 
