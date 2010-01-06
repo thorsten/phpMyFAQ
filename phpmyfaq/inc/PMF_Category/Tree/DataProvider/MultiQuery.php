@@ -82,6 +82,33 @@ class PMF_Category_Tree_DataProvider_MultiQuery
     }
 
     public function getPath($id) {
-        return array(1, 6);
+        $retval = array();
+        while ($id) {
+            array_unshift($retval, $id);
+            $query = sprintf("
+                SELECT
+                    parent_id
+                FROM
+                    %sfaqcategories a
+                WHERE
+                    id = %d",
+                SQLPREFIX,
+                $id);
+
+            $result = $this->db->query($query);
+
+            if (!$result) {
+                throw new PMF_Exception($this->db->error());
+            }
+
+            $row = $this->db->fetch_assoc($result);
+
+            if (!$row) {
+                throw new PMF_Exception("Category not found");
+            }
+
+            $id = $row['parent_id'];
+        }
+        return $retval;
     }
 }
