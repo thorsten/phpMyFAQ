@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+
 require "inc/functions.php";
 require "inc/Exception.php";
 require "inc/Db.php";

@@ -49,9 +49,15 @@ class PMF_Category_Tree_DataProvider_MultiQuery
     }
     
     /**
-     * Fetches all category data from database
+     * Fetches data for categories which are children fromthe given parent
      *
+     * The Iterator to be returned should provide arrays holding the Category
+     * data as needed by the PMF_Category constructor.
+     *
+     * @see   PMF_Category::__construct()
      * @param integer $parentId Parent ID
+     * 
+     * @return Traversable
      */
     public function getData($parentId = 0)
     {
@@ -81,7 +87,46 @@ class PMF_Category_Tree_DataProvider_MultiQuery
         return new PMF_DB_Resultset($result);
     }
 
-    public function getPath($id) {
-        return array(1, 6);
+    /**
+     * Get the path to a Category.
+     *
+     * The array returned provides th ids of the Categories on the way to the
+     * requested one, excluding the root element (0), but including the requested
+     * id.
+     *
+     * @param  integer $id Category ID
+     * @return array
+     */
+    public function getPath($id)
+    {
+        $retval = array();
+        
+        while ($id) {
+            array_unshift($retval, $id);
+            $query = sprintf("
+                SELECT
+                    parent_id
+                FROM
+                    %sfaqcategories a
+                WHERE
+                    id = %d",
+                SQLPREFIX,
+                $id);
+
+            $result = $this->db->query($query);
+
+            if (!$result) {
+                throw new PMF_Exception($this->db->error());
+            }
+
+            $row = $this->db->fetch_assoc($result);
+
+            if (!$row) {
+                throw new PMF_Exception("Category not found");
+            }
+
+            $id = $row['parent_id'];
+        }
+        return $retval;
     }
 }
