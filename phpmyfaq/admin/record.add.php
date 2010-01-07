@@ -92,13 +92,28 @@ if ($permission['editbt']) {
         $record_id = $faq->addRecord($recordData);
 
         if ($record_id) {
+            
             // Create ChangeLog entry
             $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $recordData['lang']);
+            
             // Create the visit entry
             $visits = PMF_Visits::getInstance();
             $visits->add($record_id, $recordData['lang']);
+            
             // Insert the new category relations
-            $faq->addCategoryRelations($categories['rubrik'], $record_id, $recordData['lang']);
+            $categoryRelations = new PMF_Category_Relations();
+            $categoryRelations->setLanguage($recordData['lang']);
+            
+            foreach ($categories['rubrik'] as $categoryId) {
+                $categoryData = array(
+                    'category_id'   => $categoryId,
+                    'category_lang' => $categoryRelations->getLanguage(),
+                    'record_id'     => $record_id,
+                    'record_lang'   => $recordData['lang']);
+                // save or update the category relations
+                $categoryRelations->create($categoryData);
+            }
+            
             // Insert the tags
             if ($tags != '') {
                 $tagging->saveTags($record_id, explode(',',$tags));

@@ -101,10 +101,18 @@ if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($
     }
     
     $recordId = $faq->addRecord($newData, $isNew);
-    $faq->addCategoryRelations($categories, $recordId, $newData['lang']);
+    
+    foreach ($categories as $categoryId) {
+        $categoryData = array(
+            'category_id'   => $categoryId,
+            'category_lang' => $newData['lang'],
+            'record_id'     => $recordId,
+            'record_lang'   => $newData['lang']);
+        // save the category relations
+        $categoryRelations->create($categoryData);
+    }
 
     $sent = array();
-
     // Let the PMF Administrator and the Category Owner to be informed by email of this new entry
     foreach ($categories as $_category) {
 

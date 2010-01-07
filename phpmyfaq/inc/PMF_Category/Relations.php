@@ -99,7 +99,28 @@ class PMF_Category_Relations extends PMF_Category_Abstract implements PMF_Catego
      */
     public function delete($id)
     {
+        $query = sprintf("
+            DELETE FROM
+                %sfaqcategoryrelations
+            WHERE
+                category_id = %d",
+            SQLPREFIX,
+            $id);
+            
+        if (!is_null($this->language)) {
+            $query .= sprintf(" 
+            AND 
+                category_lang = '%s'",
+            $this->language);
+        }
         
+        $result = $this->db->query($query);
+        
+        if (!$result) {
+            throw new PMF_Exception($this->db->error());
+        }
+        
+        return $result;
     }
     
     /**

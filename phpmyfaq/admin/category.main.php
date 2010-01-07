@@ -40,9 +40,10 @@ print "</p>\n";
 
 if ($permission['editcateg']) {
     
-    $categoryNode  = new PMF_Category_Node();
-    $categoryUser  = new PMF_Category_User();
-    $categoryGroup = new PMF_Category_Group();
+    $categoryNode      = new PMF_Category_Node();
+    $categoryUser      = new PMF_Category_User();
+    $categoryGroup     = new PMF_Category_Group();
+    $categoryRelations = new PMF_Category_Relations();
     
     // Save a new category
     if ($action == 'savecategory') {
@@ -136,10 +137,10 @@ if ($permission['editcateg']) {
         
         if ('yes' == $deleteAll) {
             $categoryNode->setLanguage($categoryLang);
+            $categoryRelations->setLanguage($categoryLang);
         }
         
-        if ($categoryNode->delete($categoryId) && 
-            $category->deleteCategoryRelation($categoryId, $categoryLang, $deleteAll) &&
+        if ($categoryNode->delete($categoryId) && $categoryRelations->delete($categoryId) &&
             $categoryUser->delete($categoryId) && $categoryGroup->delete($categoryId)) {
             
             printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_deleted']);

@@ -1059,31 +1059,6 @@ class PMF_Category
     }
 
     /**
-     * Deletes a category relation
-     *
-     * @param  integer $category_id   Category id
-     * @param  string  $category_lang Categiry language
-     * @param  boolean $delete_all    Delete all languages?
-     * @return boolean
-     */
-    public function deleteCategoryRelation($category_id, $category_lang, $delete_all = false)
-    {
-        $query = sprintf("
-            DELETE FROM
-                %sfaqcategoryrelations
-            WHERE
-                category_id = %d",
-            SQLPREFIX,
-            $category_id);
-        if (!$delete_all) {
-           $query .= " AND category_lang = '".$category_lang."'";
-        }
-        $this->db->query($query);
-
-        return true;
-    }
-
-    /**
      * Create array with translated categories
      *
      * @param   integer  $category_id
