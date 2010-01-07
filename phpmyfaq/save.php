@@ -92,8 +92,9 @@ if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($
         'linkState'     => '',
         'linkDateCheck' => 0);
 
+    $categoryNode = new PMF_Category_Node();
     if ($isNew) {
-        $categories = $categories['rubrik'];
+        $categories = $categoryNode->fetchAll($categories['rubrik']);
     } else {
         $newData['id'] = $faqid;
         $category      = new PMF_Category();
@@ -102,9 +103,9 @@ if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($
     
     $recordId = $faq->addRecord($newData, $isNew);
     
-    foreach ($categories as $categoryId) {
+    foreach ($categories as $category) {
         $categoryData = array(
-            'category_id'   => $categoryId,
+            'category_id'   => $category->category_id,
             'category_lang' => $newData['lang'],
             'record_id'     => $recordId,
             'record_lang'   => $newData['lang']);
@@ -114,9 +115,9 @@ if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($
 
     $sent = array();
     // Let the PMF Administrator and the Category Owner to be informed by email of this new entry
-    foreach ($categories as $_category) {
+    foreach ($categories as $category) {
 
-        $userId = $category->getCategoryUser($_category);
+        $userId = $category->user_id;
 
         // Avoid to send multiple emails to the same owner
         if (!isset($sent[$userId])) {

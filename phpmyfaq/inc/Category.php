@@ -944,18 +944,6 @@ class PMF_Category
     }
 
     /**
-     * Returns the admin user of the selected category
-     *
-     * @param   integer $category_id Category id
-     * @return  integer
-     * @todo    Return the name, not the ID
-     */
-    public function getCategoryUser($category_id)
-    {
-        return $this->categoryName[$category_id]['user_id'];
-    }
-
-    /**
      * Move the categories ownership, if any.
      *
      * @param  integer $from Old user id
