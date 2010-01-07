@@ -54,7 +54,7 @@ interface PMF_Category_Tree_DataProvider_Interface
      * requested one, excluding the root element (0), but including the requested
      * id.
      *
-     * @param int $id
+     * @param integer $id Category ID
      * @return array
      */
     public function getPath($id);
