@@ -829,40 +829,6 @@ class PMF_Category
     }
 
     /**
-     * Returns the categories from a record id and language
-     *
-     * @param  integer $record_id   record id
-     * @param  integer $record_lang record language
-     * @return array
-     */
-    public function getCategoryRelationsFromArticle($record_id, $record_lang)
-    {
-        $categories = array();
-
-        $query = sprintf("
-            SELECT
-                category_id, category_lang
-            FROM
-                %sfaqcategoryrelations
-            WHERE
-                record_id = %d
-            AND
-                record_lang = '%s'",
-            SQLPREFIX,
-            $record_id,
-            $record_lang);
-            
-        $result = $this->db->query($query);
-        while ($row = $this->db->fetch_object($result)) {
-            $categories[] = array(
-                'category_id'   => $row->category_id,
-                'category_lang' => $row->category_lang);
-        }
-
-        return $categories;
-    }
-
-    /**
      * Returns all categories that are related to the given article-id and
      * the current language $this->language in an unsorted array which consists
      * of associative arrays with the keys 'name', 'id', 'lang',

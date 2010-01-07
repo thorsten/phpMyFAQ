@@ -36,6 +36,8 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $category->buildTree();
     
+    $categoryRelations = new PMF_Category_Relations();
+    
     $helper = PMF_Helper_Category::getInstance();
     $helper->setCategory($category);
 
@@ -73,9 +75,8 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
         $faqData['lang']  = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
         $current_category = isset($_POST['rubrik']) ? $_POST['rubrik'] : null;
         if (is_array($current_category)) {
-            foreach ($current_category as $cats) {
-                $categories[] = array('category_id' => $cats, 'category_lang' => $faqData['lang']);
-            }
+            $categoryRelations->setLanguage($faqData['lang']);
+            $categories = $categoryRelations->fetchAll($current_category);
         }
         $faqData['active']      = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
         $faqData['keywords']    = PMF_Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRING);
@@ -91,6 +92,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
         $changed                = PMF_Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
         $faqData['content']     = html_entity_decode($faqData['content']);
         
+        // @todo: use PMF_Filter instead of $_REQUEST
         if (isset($_REQUEST['dateStart'])) {
             $faqData['dateStart'] = $_REQUEST['dateStart'];
         }
@@ -109,8 +111,13 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
             $faqData['lang'] = $lang;
             
             $faq->setLanguage($faqData['lang']);
-            $categories = $category->getCategoryRelationsFromArticle($faqData['id'], $faqData['lang']);
-
+            
+            foreach ($categoryRelations->fetchAll() as $relation) {
+                if ($relation->record_id == $faqData['id']) {
+                    $categories[] = get_object_vars($relation);
+                }
+            }
+            
             $faq->getRecord($faqData['id'], null, true);
             $faqData       = $faq->faqRecord;
             $tags          = implode(',', $tagging->getAllTagsById($faqData['id']));
@@ -124,8 +131,13 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
         $faqData['id']   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
         $faq->language   = $faqData['lang'];
-        $categories      = $category->getCategoryRelationsFromArticle($faqData['id'], $faqData['lang']);
-
+        
+        foreach ($categoryRelations->fetchAll() as $relation) {
+            if ($relation->record_id == $faqData['id']) {
+                $categories[] = get_object_vars($relation);
+            }
+        }
+        
         $faq->getRecord($faqData['id'], null, true);
 
         $faqData       = $faq->faqRecord;
@@ -139,7 +151,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
             $categories = array();
         }
     }
-
+    
     // Revisions
     if (isset($_REQUEST['revisionid_selected'])){
         $revisionid_selected = $_REQUEST['revisionid_selected'];
