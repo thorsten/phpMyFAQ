@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+
 require "inc/functions.php";
 require "inc/Exception.php";
 require "inc/Db.php";
@@ -35,8 +37,9 @@ foreach ($providers as $dataProvider) {
 
     $ct = new PMF_Category_Tree($dataProvider);
     $path = $dataProvider->getPath(6);
-    $trii = new PMF_Category_Tree_Helper(new PMF_Category_Path($ct, $path));
+    $trii = new PMF_Category_Tree_Helper(new PMF_CategoryPathFilterIterator($ct, $path));
     foreach ($trii as $key => $category) {
-        echo str_repeat(' ', $trii->indent), $category." ($key)\n";
+	    echo str_repeat(' ', $trii->indent), $category." ($key)\n";
     }
 }
+

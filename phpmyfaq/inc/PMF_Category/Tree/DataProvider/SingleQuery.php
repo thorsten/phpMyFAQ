@@ -103,9 +103,15 @@ class PMF_Category_Tree_DataProvider_SingleQuery
     }
     
     /**
-     * Fetches all category data from database
+     * Fetches data for categories which are children fromthe given parent
      *
+     * The Iterator to be returned should provide arrays holding the Category
+     * data as needed by the PMF_Category constructor.
+     *
+     * @see   PMF_Category::__construct()
      * @param integer $parentId Parent ID
+     * 
+     * @return Traversable
      */
     public function getData($parentId = 0)
     {
@@ -113,10 +119,18 @@ class PMF_Category_Tree_DataProvider_SingleQuery
     }
 
     /**
+     * Get the path to a Category.
+     *
+     * The array returned provides th ids of the Categories on the way to the
+     * requested one, excluding the root element (0), but including the requested
+     * id.
      *
      * @todo Shouldn't the Parameter be an Node?
      * @todo Shouldn't we return a List of nodes, not ids?
-     * @param int $id
+     *
+     * @param integer $id Category ID
+     * 
+     * @return array
      */
     public function getPath($id)
     {
