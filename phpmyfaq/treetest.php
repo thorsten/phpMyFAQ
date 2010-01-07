@@ -19,7 +19,7 @@ define('SQLPREFIX', $DB['prefix']);
 $db = PMF_Db::dbSelect($DB['type']);
 $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
 
-$providers = array(new PMF_Category_Tree_DataProvider_SingleQuery(), new PMF_Category_Tree_DataProvider_MultiQuery);
+$providers = array(new PMF_Category_Tree_DataProvider_SingleQuery(), new PMF_Category_Tree_DataProvider_MultiQuery());
 
 foreach ($providers as $dataProvider) {
     echo "=== ".get_class($dataProvider)." ===\n";

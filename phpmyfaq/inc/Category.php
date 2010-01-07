@@ -48,7 +48,7 @@ class PMF_Category
     {
         $this->id   = $data['id'];
         $this->name = $data['name'];
-        $this->children = $data['children'];
+        $this->children = isset($data['children']) ? $data['children'] : 0;
         $this->parent_id = $data['parent_id'];
         $this->parent = $parent;
     }
@@ -67,6 +67,18 @@ class PMF_Category
         }
 
         return $this->parent;
+    }
+
+    public function setParent(PMF_Category $parent) {
+        $this->parent = $parent;
+    }
+
+    /**
+     *
+     * @param int $count Number of children
+     */
+    public function setChildcount($count) {
+        $this->children = $count;
     }
 
     public function hasChildren() {
