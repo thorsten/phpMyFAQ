@@ -354,6 +354,7 @@ function printCaptchaFieldset($legend, $img, $length, $error = '')
         }
         $html .= $img;
         $html .= '&nbsp; &nbsp;<input class="inputfield" type="text" name="captcha" id="captcha" value="" size="7" style="vertical-align: top; height: 35px; text-valign: middle; font-size: 20pt;" />';
+        $html .= ' refresh '; // @todo: needs to be implemented
         $html .= '</div></fieldset>';
     }
 
