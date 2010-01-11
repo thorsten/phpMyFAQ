@@ -2,11 +2,7 @@
 /**
  * This is the page there a user can add a FAQ record translation.
  *
- * @package    phpMyFAQ
- * @subpackage Frontend
- * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright  2006-2009 phpMyFAQ Team
- * @since      2006-11-12
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -17,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Frontend
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @copyright 2006-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2006-11-12
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -70,7 +74,7 @@ $tpl->processTemplate('writeContent', array(
     'msgNewTranslationMail'     => $PMF_LANG['msgNewTranslationMail'],
     'msgNewTranslationKeywords' => $PMF_LANG['msgNewTranslationKeywords'],
     'writeTransFaqLanguage'     => $translationLanguage,
-    'captchaFieldset'           => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('translate'), $captcha->caplength),
+    'captchaFieldset'           => PMF_Helper_Captcha::getInstance()->renderFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('translate')),
     'msgNewTranslationSubmit'   => $PMF_LANG['msgNewTranslationSubmit'],
     'tinyMCELanguage'           => (PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en')));
 

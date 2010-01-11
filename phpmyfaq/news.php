@@ -19,7 +19,7 @@
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2006-2009 phpMyFAQ Team
+ * @copyright 2006-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-07-23
@@ -119,7 +119,7 @@ $tpl->processTemplate ("writeContent", array(
     'defaultContentName'  => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
     'msgYourComment'      => $PMF_LANG['msgYourComment'],
     'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
-    'captchaFieldset'     => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment'), $captcha->caplength),
+    'captchaFieldset'     => PMF_Helper_Captcha::getInstance()->renderFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment')),
     'writeComments'       => $comment->getComments($news_id, PMF_Comment::COMMENT_TYPE_NEWS)));
 
 $tpl->includeTemplate('writeContent', 'index');

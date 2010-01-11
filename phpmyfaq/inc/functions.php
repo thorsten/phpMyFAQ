@@ -333,34 +333,6 @@ function checkBannedWord($content)
 }
 
 /**
- * Get out the HTML code for the fieldset that insert the captcha code in a (public) form
- *
- * @param   string  Text of the HTML Legend element
- * @param   string  HTML code for the Captcha image
- * @param   string  Length of the Captcha code
- * @return  string
- * @since   2006-04-25
- * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
- */
-function printCaptchaFieldset($legend, $img, $length, $error = '')
-{
-    $html = '';
-
-    if (PMF_Configuration::getInstance()->get('spam.enableCaptchaCode')) {
-        $html = sprintf('<fieldset><legend>%s</legend>', $legend);
-        $html .= '<div style="text-align:left;">';
-        if ($error != '') {
-            $html .= '<div class="error">' . $error . '</div>';
-        }
-        $html .= $img;
-        $html .= '&nbsp; &nbsp;<input class="inputfield" type="text" name="captcha" id="captcha" value="" size="7" style="vertical-align: top; height: 35px; text-valign: middle; font-size: 20pt;" />';
-        $html .= '</div></fieldset>';
-    }
-
-    return $html;
-}
-
-/**
  * This function returns the passed content with HTML hilighted banned words.
  *
  * @param   string  $content
