@@ -12,7 +12,7 @@ CHANGELOG:
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.6.0 - 2010-01-
+Version 2.6.0 - 2010-01-11
 - moved all language files to UTF-8 (Anatoliy)
 - added TCPDF as replacement for FPDF library (Thorsten)
 - added support for TinyMCE translations (Aurimas Fišeras)
