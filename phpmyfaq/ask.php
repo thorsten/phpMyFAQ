@@ -56,7 +56,7 @@ $tpl->processTemplate('writeContent', array(
     'msgAskCategory'       => $PMF_LANG['msgAskCategory'],
     'printCategoryOptions' => $helper->renderCategoryOptions($categoryId),
     'msgAskYourQuestion'   => $PMF_LANG['msgAskYourQuestion'],
-    'captchaFieldset'      => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('ask'), $captcha->caplength),
+    'captchaFieldset'      => PMF_Helper_Captcha::getInstance()->renderFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('ask')),
     'msgNewContentSubmit'  => $PMF_LANG['msgNewContentSubmit']));
 
 $tpl->includeTemplate('writeContent', 'index');

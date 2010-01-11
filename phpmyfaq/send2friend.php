@@ -63,7 +63,7 @@ $tpl->processTemplate ('writeContent', array(
     'msgS2FText2'        => $PMF_LANG['msgS2FText2'],
     'send2friendLink'    => $send2friendLink,
     'msgS2FMessage'      => $PMF_LANG['msgS2FMessage'],
-    'captchaFieldset'    => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('send2friend'), $captcha->caplength),
+    'captchaFieldset'    => PMF_Helper_Captcha::getInstance()->renderFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('send2friend')),
     'msgS2FButton'       => $PMF_LANG['msgS2FButton']));
 
 $tpl->includeTemplate('writeContent', 'index');

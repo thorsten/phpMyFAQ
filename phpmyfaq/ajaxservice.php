@@ -148,7 +148,13 @@ switch ($action) {
                     if ($news['authorEmail'] != '') {
                         $emailTo = $news['authorEmail'];
                     }
-                    $oLink            = new PMF_Link(PMF_Link::getSystemUri().'?action=news&amp;newsid='.$news['id'].'&amp;newslang='.$news['lang']);
+                    $link             = sprintf(
+                        '%s?action=news&amp;newsid=%d&amp;newslang=%s',
+                        PMF_Link::getSystemUri(),
+                        $news['id'],
+                        $news['lang']
+                    );
+                    $oLink            = new PMF_Link($link);
                     $oLink->itemTitle = $news['header'];
                     $urlToContent     = $oLink->toString();
                 }

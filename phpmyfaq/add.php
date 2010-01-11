@@ -52,10 +52,8 @@ if (!is_null($inputQuestion)) {
     }
 }
 
-$category->buildTree();
-
-$helper = PMF_Helper_Category::getInstance();
-$helper->setCategory($category);
+$categoryData   = new PMF_Category_Tree_DataProvider_SingleQuery();
+$categoryLayout = new PMF_Category_Layout(new PMF_Category_Tree_Helper(new PMF_Category_Tree($categoryData)));
 
 $tpl->processTemplate(
     'writeContent', 
@@ -68,18 +66,16 @@ $tpl->processTemplate(
         'msgNewContentName'     => $PMF_LANG['msgNewContentName'],
         'msgNewContentMail'     => $PMF_LANG['msgNewContentMail'],
         'msgNewContentCategory' => $PMF_LANG['msgNewContentCategory'],
-        'printCategoryOptions'  => $helper->renderCategoryOptions($inputCategory),
+        'printCategoryOptions'  => $categoryLayout->renderOptions(array($inputCategory)),
         'msgNewContentTheme'    => $PMF_LANG['msgNewContentTheme'],
         'readonly'              => $readonly,
         'printQuestion'         => $question,
         'msgNewContentArticle'  => $PMF_LANG['msgNewContentArticle'],
         'msgNewContentKeywords' => $PMF_LANG['msgNewContentKeywords'],
         'msgNewContentLink'     => $PMF_LANG['msgNewContentLink'],
-        'captchaFieldset'       => printCaptchaFieldset(
+        'captchaFieldset'       => PMF_Helper_Captcha::getInstance()->renderFieldset(
             $PMF_LANG['msgCaptcha'], 
-            $captcha->printCaptcha('add'), 
-            $captcha->caplength
-        ),
+            $captcha->printCaptcha('add')),
         'msgNewContentSubmit'   => $PMF_LANG['msgNewContentSubmit']
     )
 );

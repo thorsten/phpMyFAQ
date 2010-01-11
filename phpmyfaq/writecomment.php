@@ -1,7 +1,11 @@
 <?php
 /**
  * Snippet for writing a comment
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 5463a8e... Added new PMF_Helper_Captcha::renderFieldset() method
  * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -14,7 +18,11 @@
  * License for the specific language governing rights and limitations
  * under the License.
  *
+<<<<<<< HEAD
  * @category  phpMyFAQ 
+=======
+ * @category  phpMyFAQ
+>>>>>>> 5463a8e... Added new PMF_Helper_Captcha::renderFieldset() method
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2002-2010 phpMyFAQ Team
@@ -53,6 +61,6 @@ $tpl->processTemplate('writeContent', array(
                       'defaultContentName'  => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
                       'msgYourComment'      => $PMF_LANG['msgYourComment'],
                       'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
-                      'captchaFieldset'     => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment'), $captcha->caplength)));
+                      'captchaFieldset'     => PMF_Helper_Captcha::getInstance()->renderFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment'))));
 
 $tpl->includeTemplate('writeContent', 'index');

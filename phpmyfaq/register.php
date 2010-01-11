@@ -49,6 +49,6 @@ $tpl->processTemplate('writeContent', array(
     'realname'                   => $PMF_LANG["ad_user_realname"],
     'email'                      => $PMF_LANG["ad_entry_email"],
     'submitRegister'             => $PMF_LANG['submitRegister'],
-    'captchaFieldset'            => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('add'), $captcha->caplength)));
+    'captchaFieldset'            => PMF_Helper_Captcha::getInstance()->renderFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('add'), isset($captchaError) ? $captchaError : '')));
 
 $tpl->includeTemplate('writeContent', 'index');

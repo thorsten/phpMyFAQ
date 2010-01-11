@@ -125,7 +125,7 @@ $tpl->processTemplate ("writeContent", array(
     'defaultContentName'  => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
     'msgYourComment'      => $PMF_LANG['msgYourComment'],
     'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
-    'captchaFieldset'     => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment'), $captcha->caplength),
+    'captchaFieldset'     => PMF_Helper_Captcha::getInstance()->renderFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment')),
     'writeComments'       => $comment->getComments($newsId, PMF_Comment::COMMENT_TYPE_NEWS)));
 
 $tpl->includeTemplate('writeContent', 'index');

@@ -50,6 +50,6 @@ $tpl->processTemplate ('writeContent', array(
     'msgMessage'         => $PMF_LANG['msgMessage'],
     'msgS2FButton'       => $PMF_LANG['msgS2FButton'],
     'version'            => $faqconfig->get('main.currentVersion'),
-    'captchaFieldset'    => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('contact'), $captcha->caplength)));
+    'captchaFieldset'    => PMF_Helper_Captcha::getInstance()->renderFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('contact'))));
 
 $tpl->includeTemplate('writeContent', 'index');

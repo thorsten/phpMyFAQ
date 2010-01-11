@@ -13,7 +13,7 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- * 
+ *
  * @category  phpMyFAQ 
  * @package   Frontend
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
@@ -77,7 +77,7 @@ $tpl->processTemplate('writeContent', array(
     'msgNewTranslationMail'     => $PMF_LANG['msgNewTranslationMail'],
     'msgNewTranslationKeywords' => $PMF_LANG['msgNewTranslationKeywords'],
     'writeTransFaqLanguage'     => $translationLanguage,
-    'captchaFieldset'           => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('translate'), $captcha->caplength),
+    'captchaFieldset'           => PMF_Helper_Captcha::getInstance()->renderFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('translate')),
     'msgNewTranslationSubmit'   => $PMF_LANG['msgNewTranslationSubmit'],
     'tinyMCELanguage'           => (PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en')));
 
