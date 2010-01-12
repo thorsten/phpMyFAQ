@@ -2,11 +2,7 @@
 /**
  * Frontend for categories or list of records
  *
- * @package    phpMyFAQ
- * @subpackage Frontend
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2002-08-27
- * @copyright  2002-2009 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the 'License'); you may not use this file except in
@@ -17,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   Frontend
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2002-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2002-08-27
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -24,49 +28,45 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$currentCategory = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+$categoryId = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 
-if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory])) {
-
-    $faqsession->userTracking('show_category', $currentCategory);
-    $parent              = $category->categoryName[$currentCategory]['parent_id'];
-    $name                = $category->categoryName[$currentCategory]['name'];
-    $categoryDescription = $category->categoryName[$currentCategory]['description'];
-    $records             = $faq->showAllRecords($currentCategory, 
-                                                $faqconfig->get('records.orderby'), 
-                                                $faqconfig->get('records.sortby'));
+if (!is_null($categoryId)) {
+    
+    $faqsession->userTracking('show_category', $categoryId);
+    
+    $categoryNode = new PMF_Category_Node();
+    $categoryNode->setLanguage($LANGCODE);
+    $selectedCategoryData = $categoryNode->fetch($categoryId);
+    
+    $records = $faq->showAllRecords($categoryId, $faqconfig->get('records.orderby'), $faqconfig->get('records.sortby'));
     
     if (!$records) {
-        $subCategory = new PMF_Category($current_user, $current_groups, true);
-        $subCategory->transform($currentCategory);
-        $records = $subCategory->viewTree();
+        $records = $categoryLayout->renderTree();
     }
 
-    $up = '';
-    if ($parent != 0) {
-        $url = sprintf('%saction=show&amp;cat=%d',
-                    $sids,
-                    $parent);
-        $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-        $oLink->itemTitle = $category->categoryName[$parent]['name'];
-        $oLink->text      = $PMF_LANG['msgCategoryUp'];
-        $up               = $oLink->toHtmlAnchor();
+    $backToParent = '';
+    if ($selectedCategoryData->parent_id != 0) {
+        $url          = sprintf('%saction=show&amp;cat=%d', $sids, $selectedCategoryData->parent_id);
+        $oLink        = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+        $oLink->text  = $PMF_LANG['msgCategoryUp'];
+        $backToParent = $oLink->toHtmlAnchor();
     }
 
     $tpl->processTemplate('writeContent', array(
-        'writeCategory'            => $PMF_LANG['msgEntriesIn'].$name,
-        'writeCategoryDescription' => $categoryDescription,
+        'writeCategory'            => $PMF_LANG['msgEntriesIn'] . $selectedCategoryData->name,
+        'writeCategoryDescription' => $selectedCategoryData->description,
         'writeThemes'              => $records,
-        'writeOneThemeBack'        => $up));
+        'writeOneThemeBack'        => $backToParent));
     $tpl->includeTemplate('writeContent', 'index');
 
 } else {
-
+    $categoryLayout = new PMF_Category_Layout(new PMF_Category_Tree_Helper($categoryTree));
+    
     $faqsession->userTracking('show_all_categories', 0);
     $tpl->processTemplate('writeContent', array(
         'writeCategory'            => $PMF_LANG['msgFullCategories'],
         'writeCategoryDescription' => '',
-        'writeThemes'              => $category->viewTree(),
+        'writeThemes'              => $categoryLayout->renderTree(),
         'writeOneThemeBack'        => ''));
     $tpl->includeTemplate('writeContent', 'index');
 }
