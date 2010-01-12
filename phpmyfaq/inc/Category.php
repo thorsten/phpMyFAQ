@@ -904,34 +904,6 @@ class PMF_Category
     }
 
     /**
-     * Updates the parent category
-     *
-     * @param  integer $category_id Category id
-     * @param  integer $parent_id   Parent category id
-     * @return boolean
-     */
-    public function updateParentCategory($category_id, $parent_id)
-    {
-        if ((!is_numeric($category_id) || !is_numeric($parent_id)) && $category_id != $parent_id) {
-            return false;
-        }
-
-        $query = sprintf("
-            UPDATE
-                %sfaqcategories
-            SET
-                parent_id = %d
-            WHERE
-                id = %d",
-            SQLPREFIX,
-            $parent_id,
-            $category_id);
-        $this->db->query($query);
-
-        return true;
-    }
-
-    /**
      * Gets all categories which are not translated in actual language
      * to add in this->categories (used in admin section)
      *

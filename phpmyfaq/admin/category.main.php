@@ -167,10 +167,13 @@ if ($permission['editcateg']) {
     // Pastes a category
     if ($action == 'pastecategory') {
 
-        $category    = new PMF_Category($current_admin_user, $current_admin_groups, false);
-        $category_id = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
-        $parent_id   = PMF_Filter::filterInput(INPUT_POST, 'after', FILTER_VALIDATE_INT);
-        if ($category->updateParentCategory($category_id, $parent_id)) {
+        $categoryId   = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
+        $parentId     = PMF_Filter::filterInput(INPUT_POST, 'after', FILTER_VALIDATE_INT);
+        $categoryData = $categoryNode->fetch($categoryId);
+        
+        $categoryData->parent_id = $parentId;
+        
+        if ($categoryNode->update($categoryId, (array)$categoryData)) {
             printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_updated']);
         } else {
             printf('<p class="error">%s<br />%s</p>', $PMF_LANG['ad_categ_paste_error'], $db->error());
