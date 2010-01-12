@@ -105,6 +105,39 @@ class PMF_Category_Helper extends PMF_Category_Abstract
     }
     
     /**
+     * Move the categories ownership, if any.
+     *
+     * @param  integer $from Old user id
+     * @param  integer $to   New user id
+     * @return boolean
+     */
+    public function moveOwnership($from, $to)
+    {
+        if (!is_numeric($from) || !is_numeric($to)) {
+            return false;
+        }
+
+        $query = sprintf("
+            UPDATE
+                %sfaqcategories
+            SET
+                user_id = %d
+            WHERE
+                user_id = %d",
+            SQLPREFIX,
+            $to,
+            $from);
+        
+        $result = $this->db->query($query);
+        
+        if (!$result) {
+            throw new PMF_Exception($this->db->error());
+        }
+        
+        return $result;
+    }
+    
+    /**
      * Create all languagess which can be used for translation as <option>
      *
      * @param  integer $categoryId   Category id

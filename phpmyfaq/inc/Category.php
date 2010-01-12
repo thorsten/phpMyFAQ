@@ -829,35 +829,6 @@ class PMF_Category
     }
 
     /**
-     * Move the categories ownership, if any.
-     *
-     * @param  integer $from Old user id
-     * @param  integer $to   New user id
-     * @return boolean
-     */
-    public function moveOwnership($from, $to)
-    {
-        if (!is_numeric($from) || !is_numeric($to)) {
-            return false;
-        }
-
-        $query = sprintf("
-            UPDATE
-                %sfaqcategories
-            SET
-                user_id = %d
-            WHERE
-                user_id = %d",
-            SQLPREFIX,
-            $to,
-            $from
-            );
-        $this->db->query($query);
-
-        return true;
-    }
-
-    /**
      * Swaps two categories
      *
      * @param  integer $category_id_1 First category
