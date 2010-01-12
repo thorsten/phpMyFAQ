@@ -187,7 +187,6 @@ if ($permission['editcateg']) {
         unset($category);
     }
     $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
-    $category->getMissingCategories();
     $category->buildTree();
 
     foreach ($category->catTree as $cat) {
