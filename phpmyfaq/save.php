@@ -98,7 +98,6 @@ if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($
         $categories = $categoryNode->fetchAll($categories['rubrik']);
     } else {
         $newData['id'] = $faqid;
-        $category      = new PMF_Category();
         foreach ($categoryRelation->fetchAll() as $relation) {
             if ($relation->record_id == $newData['id']) {
                 $categories[] = $relation;

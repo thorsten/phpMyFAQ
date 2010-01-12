@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2009 phpMyFAQ Team
+ * @copyright 2002-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-16
@@ -61,11 +61,7 @@ if (!is_null($name) && !is_null($mailfrom) && is_array($mailto) && IPCheck($_SER
         exit();
     }
 
-    $category = new PMF_Category();
-    $faq      = new PMF_Faq();
-    $faq->getRecord($id);
-
-    foreach($mailto['mailto'] as $recipient) {
+    foreach ($mailto['mailto'] as $recipient) {
         $recipient = trim(strip_tags($recipient));
         if (!empty($recipient)) {
             $mail = new PMF_Mail();

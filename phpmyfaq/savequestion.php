@@ -43,12 +43,11 @@ $thankyou = PMF_Filter::filterInput(INPUT_GET, 'thankyou', FILTER_VALIDATE_INT);
 
 function sendAskedQuestion($username, $usermail, $usercat, $content)
 {
-    global $category, $PMF_LANG, $faq;
+    global $PMF_LANG, $faq;
     
-    $retval     = false;
-    $faqconfig  = PMF_Configuration::getInstance();
-    $cat        = new PMF_Category();
-    $categories = $cat->getAllCategories();
+    $retval       = false;
+    $faqconfig    = PMF_Configuration::getInstance();
+    $categoryNode = new PMF_Category_Node();
 
     if ($faqconfig->get('records.enableVisibilityQuestions')) {
         $visibility = 'N';
@@ -69,15 +68,13 @@ function sendAskedQuestion($username, $usermail, $usercat, $content)
     if (PMF_Filter::filterVar($questionData['ask_usermail'], FILTER_VALIDATE_EMAIL) != false) {
 
         $faq->addQuestion($questionData);
-
-        $questionMail = "User: ".$questionData['ask_username'].", mailto:".$questionData['ask_usermail']."\n"
-                        .$PMF_LANG["msgCategory"].": ".$categories[$questionData['ask_category']]["name"]."\n\n"
-                        .wordwrap($content, 72);
         
-        $categoryNode = new PMF_Category_Node();
         $categoryData = $categoryNode->fetch($questionData['ask_category']);
-        $userId       = $categoryData->user_id;
-        
+        $questionMail = "User: ".$questionData['ask_username'].", mailto:".$questionData['ask_usermail']."\n"
+                        .$PMF_LANG["msgCategory"].": ".$categoryData->name."\n\n"
+                        .wordwrap($content, 72);
+                        
+        $userId = $categoryData->user_id;
         $oUser  = new PMF_User();
         $oUser->getUserById($userId);
 
@@ -178,7 +175,8 @@ if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SE
             }
             
             if ($tmp_result_html) {
-                $search_result_html .= '<strong>'.$category->getPath($cat_id).'</strong>: ';
+                // @todo: change code for new category
+                //$search_result_html .= '<strong>'.$category->getPath($cat_id).'</strong>: ';
                 $search_result_html .= '<ul class="phpmyfaq_ul">' . "\n";
                 $search_result_html .= $tmp_result_html;
                 $search_result_html .= '</ul>';

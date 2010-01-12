@@ -44,15 +44,6 @@ if (!is_null($inputLanguage)) {
     $allLanguages = true;
 }
 
-// HACK: (re)evaluate the Category object w/o passing the user language
-//       so the result set of a Search will have the Category Path
-//       for any of the multilanguage faq records and the Category list
-//       on the left pane will not be affected
-if ($allLanguages) {
-    $category = new PMF_Category();
-    $category->transform(0);
-}
-
 $faqsearch           = new PMF_Search();
 $printResult         = '';
 $tagSearch           = false;
@@ -89,8 +80,6 @@ $inputCategory = ('%' == $inputCategory) ? 0 : $inputCategory;
 
 $faqsession->userTracking('fulltext_search', $inputSearchTerm);
 
-$category->buildTree();
-
 $openSearchLink = sprintf('<a class="searchplugin" href="#" onclick="window.external.AddSearchProvider(\'%s/opensearch.php\');">%s</a>',
     PMF_Link::getSystemUri('/index.php'),
     $PMF_LANG['opensearch_plugin_install']);
@@ -107,8 +96,7 @@ foreach ($mostPopularSearchData as $searchItem) {
 	}
 }
 
-$helper = PMF_Helper_Category::getInstance();
-$helper->setCategory($category);
+$categoryLayout = new PMF_Category_Layout(new PMF_Category_Tree_Helper(new PMF_Category_Tree($categoryData)));
 
 $tpl->processTemplate('writeContent', array(
     'msgSearch'                => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgSearch']),
@@ -117,7 +105,7 @@ $tpl->processTemplate('writeContent', array(
     'checkedAllLanguages'      => $allLanguages ? ' checked="checked"' : '',
     'selectCategories'         => $PMF_LANG['msgSelectCategories'],
     'allCategories'            => $PMF_LANG['msgAllCategories'],
-    'printCategoryOptions'     => $helper->renderCategoryOptions($inputCategory),
+    'printCategoryOptions'     => $categoryLayout->renderOptions(array($inputCategory)),
     'writeSendAdress'          => '?'.$sids.'action=search',
     'msgSearchWord'            => $PMF_LANG['msgSearchWord'],
     'printResult'              => $printResult,

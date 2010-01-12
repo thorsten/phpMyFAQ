@@ -148,7 +148,7 @@
             $options .= sprintf('<option value="%d"%s>%s%s</option>',
                 $categoryId,
                 (in_array($categoryId, $categoryIds) ? 'selected="selected"' : ''),
-                str_repeat(' ', $this->categoryTreeHelper->indent),
+                str_repeat('.', $this->categoryTreeHelper->indent),
                 $categoryName) . "\n";
         }
         

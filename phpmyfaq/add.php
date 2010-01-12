@@ -51,7 +51,6 @@ if (!is_null($inputQuestion)) {
     }
 }
 
-$categoryData   = new PMF_Category_Tree_DataProvider_SingleQuery($LANGCODE);
 $categoryLayout = new PMF_Category_Layout(new PMF_Category_Tree_Helper(new PMF_Category_Tree($categoryData)));
 
 $tpl->processTemplate(
