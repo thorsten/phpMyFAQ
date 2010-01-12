@@ -34,7 +34,8 @@ printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 if ($permission['editbt'] || $permission['delbt']) {
 	
     // (re)evaluate the Category object w/o passing the user language
-    $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
+    $category          = new PMF_Category($current_admin_user, $current_admin_groups, false);
+    $categoryRelations = new PMF_Category_Relations();
     $category->transform(0);
     
     // Set the Category for the helper class
@@ -117,19 +118,27 @@ if ($permission['editbt'] || $permission['delbt']) {
     <legend><?php print $PMF_LANG['ad_menu_entry_edit']; ?></legend>
 <?php
     $numCommentsByFaq = $comment->getNumberOfComments();
-    $numRecordsByCat  = $category->getNumberOfRecordsOfCategory();
+    $relationMatrix   = $categoryRelations->fetchAll();
+    
+    // calculate number of records by category
+    $numRecordsByCat = array();
+    foreach ($relationMatrix as $relation) {
+        if (!isset($numRecordsByCat[$relation->category_id])) {
+            $numRecordsByCat[$relation->category_id] = 0;
+        }
+        $numRecordsByCat[$relation->category_id] += 1;
+    }
 
     // FIXME: Count "comments"/"entries" for each category also within a search context. Now the count is broken.
     // FIXME: we are not considering 'faqdata.links_state' for filtering the faqs.
     if (!is_null($searchterm)) {
-
-        $matrix = $category->getCategoryRecordsMatrix();
-        foreach ($matrix as $catkey => $value) {
-            $numCommentsByCat[$catkey] = 0;
-            foreach ($value as $faqkey => $value) {
-                if (isset($numCommentsByFaq[$faqkey])) {
-                    $numCommentsByCat[$catkey] += $numCommentsByFaq[$faqkey];
-                }
+        $numCommentsByCat  = array();
+        foreach ($relationMatrix as $relation) {
+            if (!isset($numCommentsByCat[$relation->category_id])) {
+                $numCommentsByCat[$relation->category_id] = 0;;
+            } 
+            if (isset($numCommentsByFaq[$relation->record_id])) {
+                $numCommentsByCat[$relation->category_id] += $numCommentsByFaq[$relation->record_id];
             }
         }
     }

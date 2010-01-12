@@ -5,12 +5,7 @@
  * User may register but registration is only knowlegded for registration.
  * Admin will receive email and has to activate this user.
  *
- * @package    phpMyFAQ
- * @subpackage Frontend
- * @author     Elger Thiele <elger@phpmyfaq.de>
- * @since      2008-01-25
- * @version    SVN: $Id$
- * @copyright  2008-2009 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -21,6 +16,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Frontend
+ * @author    Elger Thiele <elger@phpmyfaq.de>
+ * @copyright 2008-2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2008-01-25
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -142,7 +145,7 @@ if (!is_null($loginname) && !is_null($lastname) && !is_null($email) && !isset($c
             'lastname_value'          => $lastname,
             'email_value'             => $email,
             'submitRegister'          => $PMF_LANG['submitRegister'],
-            'captchaFieldset'         => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('add'), $captcha->caplength, isset($captchaError) ? $captchaError : '')));
+            'captchaFieldset'         => PMF_Helper_Captcha::getInstance()->renderFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('add'), isset($captchaError) ? $captchaError : '')));
 
         $tpl->includeTemplate('writeContent', 'index');
     }
@@ -162,7 +165,7 @@ if (!is_null($loginname) && !is_null($lastname) && !is_null($email) && !isset($c
         'lastname_value'          => $lastname,
         'email_value'             => $email,
         'submitRegister'          => $PMF_LANG['submitRegister'],
-        'captchaFieldset'         => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('add'), $captcha->caplength, isset($captchaError) ? $captchaError : '')));
+        'captchaFieldset'         => PMF_Helper_Captcha::getInstance()->renderFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('add'), isset($captchaError) ? $captchaError : '')));
 
     $tpl->includeTemplate('writeContent', 'index');
 }

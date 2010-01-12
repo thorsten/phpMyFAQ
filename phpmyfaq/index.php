@@ -302,11 +302,18 @@ if (!is_null($tag_id)) {
 $cat         = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
 $cat_from_id = -1;
 if (is_numeric($id) && $id > 0) {
-    $cat_from_id = $category->getCategoryIdFromArticle($id);
+    $categoryRelations = new PMF_Category_Relations();
+    foreach ($categoryRelations->fetchAll() as $relation) {
+        if ($relation->record_id == $id) {
+            $cat_from_id = $relation->category_id;
+            break;
+        }
+    }
 }
 if ($cat_from_id != -1 && $cat == 0) {
     $cat = $cat_from_id;
 }
+
 $category->transform(0);
 $category->collapseAll();
 if ($cat != 0) {

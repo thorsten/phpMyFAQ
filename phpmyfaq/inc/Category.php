@@ -351,7 +351,7 @@ class PMF_Category
      */
     private function levelOf($id)
     {
-    	$alreadies = array($id);
+        $alreadies = array($id);
         $ret       = 0;
         while ((isset($this->categoryName[$id]['parent_id'])) && ($this->categoryName[$id]['parent_id'] != 0)) {
             $ret++;
@@ -829,133 +829,6 @@ class PMF_Category
     }
 
     /**
-     * Returns the categories from a record id and language
-     *
-     * @param  integer $record_id   record id
-     * @param  integer $record_lang record language
-     * @return array
-     */
-    public function getCategoryRelationsFromArticle($record_id, $record_lang)
-    {
-        $categories = array();
-
-        $query = sprintf("
-            SELECT
-                category_id, category_lang
-            FROM
-                %sfaqcategoryrelations
-            WHERE
-                record_id = %d
-            AND
-                record_lang = '%s'",
-            SQLPREFIX,
-            $record_id,
-            $record_lang);
-            
-        $result = $this->db->query($query);
-        while ($row = $this->db->fetch_object($result)) {
-            $categories[] = array(
-                'category_id'   => $row->category_id,
-                'category_lang' => $row->category_lang);
-        }
-
-        return $categories;
-    }
-
-    /**
-     * Returns all categories that are related to the given article-id and
-     * the current language $this->language in an unsorted array which consists
-     * of associative arrays with the keys 'name', 'id', 'lang',
-     * 'parent_id' and 'description'.
-     *
-     * @param   integer $article_id Record id
-     * @return  array   
-     */
-    public function getCategoriesFromArticle($article_id)
-    {
-        $rel = SQLPREFIX."faqcategoryrelations";
-        $cat = SQLPREFIX."faqcategories";
-        $query = sprintf("
-            SELECT
-                fc.id AS id,
-                fc.lang AS lang,
-                fc.parent_id AS parent_id,
-                fc.name AS name,
-                fc.description AS description
-            FROM
-                %sfaqcategoryrelations fcr,
-                %sfaqcategories fc
-            WHERE
-                fc.id = fcr.category_id
-            AND
-                fcr.record_id = %d
-            AND
-                fcr.category_lang = '%s'
-            AND
-                fc.lang = '%s'",
-            SQLPREFIX, 
-            SQLPREFIX,
-            $article_id,
-            $this->language,
-            $this->language);
-            
-        $result = $this->db->query($query);
-        $num    = $this->db->num_rows($result);
-        $this->categories = array();
-        if ($num > 0) {
-            while ($row = $this->db->fetch_assoc($result)) {
-                $this->categories[] = $row;
-            }
-        }
-        return $this->categories;
-    }
-
-    /**
-     * Returns the ID of a category that associated with the given article.
-     *
-     * @param  integer $article_id Record id
-     * @return integer
-     */
-    public function getCategoryIdFromArticle($article_id)
-    {
-        $cats = $this->getCategoryIdsFromArticle($article_id);
-        if (isset($cats[0])) {
-            return $cats[0];
-        } else {
-            return 0;
-        }
-    }
-
-    /**
-     * Returns an array with the IDs of all categories that are associated with
-     * the given article.
-     *
-     * @param  integer $article_id Record id
-     * @return array
-     */
-    public function getCategoryIdsFromArticle($article_id)
-    {
-        $cats = $this->getCategoriesFromArticle($article_id);
-        $arr  = array();
-        foreach ($cats as $cat) {
-            $arr[] = $cat['id'];
-        }
-        return $arr;
-    }
-
-    /**
-     * Returns the admin user of the selected category
-     *
-     * @param   integer $category_id Category id
-     * @return  integer
-     * @todo    Return the name, not the ID
-     */
-    public function getCategoryUser($category_id)
-    {
-        return $this->categoryName[$category_id]['user_id'];
-    }
-
-    /**
      * Move the categories ownership, if any.
      *
      * @param  integer $from Old user id
@@ -1053,31 +926,6 @@ class PMF_Category
             SQLPREFIX,
             $parent_id,
             $category_id);
-        $this->db->query($query);
-
-        return true;
-    }
-
-    /**
-     * Deletes a category relation
-     *
-     * @param  integer $category_id   Category id
-     * @param  string  $category_lang Categiry language
-     * @param  boolean $delete_all    Delete all languages?
-     * @return boolean
-     */
-    public function deleteCategoryRelation($category_id, $category_lang, $delete_all = false)
-    {
-        $query = sprintf("
-            DELETE FROM
-                %sfaqcategoryrelations
-            WHERE
-                category_id = %d",
-            SQLPREFIX,
-            $category_id);
-        if (!$delete_all) {
-           $query .= " AND category_lang = '".$category_lang."'";
-        }
         $this->db->query($query);
 
         return true;
@@ -1197,72 +1045,4 @@ class PMF_Category
         return $this->db->num_rows($result);
     }
 
-    /**
-     * Returns the number of records in each category
-     *
-     * @return array
-     */
-    public function getNumberOfRecordsOfCategory()
-    {
-        $numRecordsByCat = array();
-
-        $query = sprintf("
-            SELECT
-                fcr.category_id AS category_id,
-                COUNT(fcr.record_id) AS number
-            FROM
-                %sfaqcategoryrelations fcr, %sfaqdata fd
-            WHERE
-                fcr.record_id = fd.id
-            AND
-                fcr.record_lang = fd.lang
-            GROUP BY fcr.category_id",
-            SQLPREFIX,
-            SQLPREFIX);
-
-        $result = $this->db->query($query);
-        if ($this->db->num_rows($result) > 0) {
-            while ($row = $this->db->fetch_object($result)) {
-                $numRecordsByCat[$row->category_id] = $row->number;
-            }
-        }
-
-        return $numRecordsByCat;
-    }
-
-    /**
-     * Create a matrix for representing categories and faq records
-     *
-     * @return array
-     */
-    public function getCategoryRecordsMatrix()
-    {
-        $matrix = array();
-
-        $query = sprintf('
-            SELECT
-                fcr.category_id AS id_cat,
-                fd.id AS id
-            FROM
-                %sfaqdata fd
-            INNER JOIN
-                %sfaqcategoryrelations fcr
-            ON
-                fd.id = fcr.record_id
-            AND
-                fd.lang = fcr.category_lang
-            ORDER BY
-                fcr.category_id, fd.id',
-             SQLPREFIX,
-             SQLPREFIX);
-        $result = $this->db->query($query);
-
-        if ($this->db->num_rows($result) > 0) {
-            while ($row = $this->db->fetch_object($result)) {
-                $matrix[$row->id_cat][$row->id] = true;
-            }
-        }
-
-        return $matrix;
-    }
 }

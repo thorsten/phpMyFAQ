@@ -73,8 +73,11 @@ function sendAskedQuestion($username, $usermail, $usercat, $content)
         $questionMail = "User: ".$questionData['ask_username'].", mailto:".$questionData['ask_usermail']."\n"
                         .$PMF_LANG["msgCategory"].": ".$categories[$questionData['ask_category']]["name"]."\n\n"
                         .wordwrap($content, 72);
-
-        $userId = $category->getCategoryUser($questionData['ask_category']);
+        
+        $categoryNode = new PMF_Category_Node();
+        $categoryData = $categoryNode->fetch($questionData['ask_category']);
+        $userId       = $categoryData->user_id;
+        
         $oUser  = new PMF_User();
         $oUser->getUserById($userId);
 

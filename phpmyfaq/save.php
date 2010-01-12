@@ -19,7 +19,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Jürgen Kuza <kig@bluewin.ch>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2002-2009 phpMyFAQ Team
+ * @copyright 2002-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-16
@@ -92,23 +92,37 @@ if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($
         'linkState'     => '',
         'linkDateCheck' => 0);
 
+    $categoryNode     = new PMF_Category_Node();
+    $categoryRelation = new PMF_Category_Relations();
     if ($isNew) {
-        $categories = $categories['rubrik'];
+        $categories = $categoryNode->fetchAll($categories['rubrik']);
     } else {
         $newData['id'] = $faqid;
         $category      = new PMF_Category();
-        $categories    = $category->getCategoryIdsFromArticle($newData['id']);
+        foreach ($categoryRelation->fetchAll() as $relation) {
+            if ($relation->record_id == $newData['id']) {
+                $categories[] = $relation;
+            }
+        }
     }
     
     $recordId = $faq->addRecord($newData, $isNew);
-    $faq->addCategoryRelations($categories, $recordId, $newData['lang']);
+    
+    foreach ($categories as $category) {
+        $categoryData = array(
+            'category_id'   => $category->category_id,
+            'category_lang' => $newData['lang'],
+            'record_id'     => $recordId,
+            'record_lang'   => $newData['lang']);
+        // save the category relations
+        $categoryRelations->create($categoryData);
+    }
 
     $sent = array();
-
     // Let the PMF Administrator and the Category Owner to be informed by email of this new entry
-    foreach ($categories as $_category) {
+    foreach ($categories as $category) {
 
-        $userId = $category->getCategoryUser($_category);
+        $userId = $category->user_id;
 
         // Avoid to send multiple emails to the same owner
         if (!isset($sent[$userId])) {

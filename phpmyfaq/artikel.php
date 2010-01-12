@@ -18,7 +18,7 @@
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Lars Tiedemann <larstiedemann@yahoo.de>
- * @copyright 2002-2009 phpMyFAQ Team
+ * @copyright 2002-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-27
@@ -187,7 +187,14 @@ if ($faqconfig->get('main.disableAttachments') && 'yes' == $faq->faqRecord['acti
 
 // List all categories for this faq
 $writeMultiCategories = '';
-$multiCategories = $category->getCategoriesFromArticle($record_id);
+$multiCategories      = array();
+$categoryRelations    = new PMF_Category_Relations();
+foreach ($categoryRelations->fetchAll() as $relation) {
+    if ($relation->record_id == $record_id) {
+        $multiCategories[] = $relation->category_id;
+    }
+}
+
 if (count($multiCategories) > 1) {
     $writeMultiCategories .= '        <div id="article_categories">';
     $writeMultiCategories .= '        <fieldset>';
@@ -325,7 +332,7 @@ $tpl->processTemplate ("writeContent", array(
     'defaultContentName'            => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
     'msgYourComment'                => $PMF_LANG['msgYourComment'],
     'msgNewContentSubmit'           => $PMF_LANG['msgNewContentSubmit'],
-    'captchaFieldset'               => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment'), $captcha->caplength),
+    'captchaFieldset'               => PMF_Helper_Captcha::getInstance()->renderFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment')),
     'writeComments'                 => $comment->getComments($record_id, PMF_Comment::COMMENT_TYPE_FAQ)));
 
 $tpl->includeTemplate('writeContent', 'index');

@@ -99,7 +99,28 @@ class PMF_Category_Relations extends PMF_Category_Abstract implements PMF_Catego
      */
     public function delete($id)
     {
+        $query = sprintf("
+            DELETE FROM
+                %sfaqcategoryrelations
+            WHERE
+                category_id = %d",
+            SQLPREFIX,
+            $id);
+            
+        if (!is_null($this->language)) {
+            $query .= sprintf(" 
+            AND 
+                category_lang = '%s'",
+            $this->language);
+        }
         
+        $result = $this->db->query($query);
+        
+        if (!$result) {
+            throw new PMF_Exception($this->db->error());
+        }
+        
+        return $result;
     }
     
     /**
@@ -126,6 +147,31 @@ class PMF_Category_Relations extends PMF_Category_Abstract implements PMF_Catego
      */
     public function fetchAll(Array $ids = null)
     {
+        $relations = array();
+        $query      = sprintf("
+            SELECT
+                category_id, category_lang, record_id, record_lang
+            FROM
+                %sfaqcategoryrelations
+            WHERE
+                1=1",
+            SQLPREFIX);
         
+        if (!is_null($ids)) {
+            $query .= sprintf("
+            AND 
+                category_id IN (%s)",
+            implode(', ', $ids));
+        }
+        
+        $result = $this->db->query($query);
+        
+        if (!$result) {
+            throw new PMF_Exception($this->db->error());
+        } else {
+            $relations = $this->db->fetchAll($result);
+        }
+        
+        return $relations;
     }
 }

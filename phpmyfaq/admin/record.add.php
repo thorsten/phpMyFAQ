@@ -100,6 +100,9 @@ if ($permission['editbt']) {
             $visits = PMF_Visits::getInstance();
             $visits->add($record_id, $recordData['lang']);
             
+            // Insert the new category relations
+            $categoryRelations = new PMF_Category_Relations();
+
             // Insert the tags
             if ($tags != '') {
                 $tagging->saveTags($record_id, explode(',',$tags));
@@ -113,10 +116,13 @@ if ($permission['editbt']) {
             foreach ($categories['rubrik'] as $categoryId) {
                 
                 // Insert the new category relations
-                $relationData = array(
-                    'category_id' => $categoryId,
-                    'record_id'   => $record_id);
-                $categoryRelations->create($relationData);
+                $categoryData = array(
+                    'category_id'   => $categoryId,
+                    'category_lang' => $categoryRelations->getLanguage(),
+                    'record_id'     => $record_id,
+                    'record_lang'   => $recordData['lang']);
+                // save or update the category relations
+                $categoryRelations->create($categoryData);
                 
                 // Add user permissions
                 $userPermission = array(

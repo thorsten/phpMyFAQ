@@ -171,12 +171,22 @@ if ($permission['editbt']) {
         } else {
             print $PMF_LANG['ad_entry_savedfail'].$db->error();
         }
-
-        // delete category relations
-        $faq->deleteCategoryRelations($record_id, $record_lang);
-        // save or update the category relations
-        $faq->addCategoryRelations($categories['rubrik'], $record_id, $record_lang);
-
+        
+        $categoryRelations = new PMF_Category_Relations();
+        $categoryRelations->setLanguage($record_lang);
+        
+        foreach ($categories['rubrik'] as $categoryId) {
+            $categoryData = array(
+                'category_id'   => $categoryId,
+                'category_lang' => $categoryRelations->getLanguage(),
+                'record_id'     => $record_id,
+                'record_lang'   => $record_lang);
+            // delete category relations
+            $categoryRelations->delete($categoryId);
+            // save or update the category relations
+            $categoryRelations->create($categoryData);
+        }
+        
         // Insert the tags
         if ($tags != '') {
             $tagging->saveTags($record_id, explode(',', $tags));
