@@ -153,11 +153,10 @@ if ($permission['editcateg']) {
     // Moves a category
     if ($action == 'changecategory') {
 
-        $category      = new PMF_Category($current_admin_user, $current_admin_groups, false);
-        $category_id_1 = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
-        $category_id_2 = PMF_Filter::filterInput(INPUT_POST, 'change', FILTER_VALIDATE_INT);
+        $firstCategoryId  = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
+        $secondCategoryId = PMF_Filter::filterInput(INPUT_POST, 'change', FILTER_VALIDATE_INT);
 
-        if ($category->swapCategories($category_id_1, $category_id_2)) {
+        if ($categoryHelper->swapCategories($firstCategoryId, $secondCategoryId)) {
             printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_updated']);
         } else {
             printf('<p class="error">%s<br />%s</p>', $PMF_LANG['ad_categ_paste_error'], $db->error());
