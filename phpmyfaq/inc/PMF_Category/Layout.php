@@ -145,11 +145,11 @@
         $options = '';
         
         foreach ($this->categoryTreeHelper as $categoryId => $categoryName) {
-            $options .= sprintf('%s<option value="%d"%s>%s</option>',
-                $this->categoryTreeHelper->indent,
+            $options .= sprintf('<option value="%d"%s>%s%s</option>',
                 $categoryId,
                 (in_array($categoryId, $categoryIds) ? 'selected="selected"' : ''),
-                $categoryName);
+                str_repeat(' ', $this->categoryTreeHelper->indent),
+                $categoryName) . "\n";
         }
         
         return $options;
