@@ -66,17 +66,17 @@ class PMF_Category_Tree_DataProvider_MultiQuery
     {
         $query = sprintf("
             SELECT 
-                a.id AS id,
-                a.lang AS lang,
-                a.parent_id AS parent_id,
-                a.name AS name,
-                a.description AS description,
-                a.user_id AS user_id,
-                (SELECT count(*) FROM %sfaqcategories b WHERE b.parent_id = a.id) as children 
+                fc.id AS id,
+                fc.lang AS lang,
+                fc.parent_id AS parent_id,
+                fc.name AS name,
+                fc.description AS description,
+                fc.user_id AS user_id,
+                (SELECT count(*) FROM %sfaqcategories b WHERE b.parent_id = fc.id) as children 
             FROM 
-                %sfaqcategories a 
+                %sfaqcategories fc. 
             WHERE 
-                a.parent_id = %d",
+                fc..parent_id = %d",
             SQLPREFIX,
             SQLPREFIX,
             (int)$parentId);
@@ -84,9 +84,13 @@ class PMF_Category_Tree_DataProvider_MultiQuery
         if (!is_null($this->language)) {
             $query .= sprintf(" 
             AND 
-                lang = '%s'",
+                fc.lang = '%s'",
             $this->language);
         }
+        
+        $query .= "
+            ORDER BY fc.id";
+        
         $result = $this->db->query($query);
         
         if (!$result) {
