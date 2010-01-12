@@ -48,6 +48,7 @@ class PMF_Category_Tree_DataProvider_MultiQuery
     public function __construct($language = null)
     {
         parent::__construct();
+        $this->setLanguage($language);
     }
     
     /**
