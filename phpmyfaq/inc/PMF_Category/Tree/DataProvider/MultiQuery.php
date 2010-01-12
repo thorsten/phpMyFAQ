@@ -74,7 +74,7 @@ class PMF_Category_Tree_DataProvider_MultiQuery
                 fc.user_id AS user_id,
                 (SELECT count(*) FROM %sfaqcategories b WHERE b.parent_id = fc.id) as children 
             FROM 
-                %sfaqcategories fc. 
+                %sfaqcategories fc
             WHERE 
                 fc..parent_id = %d",
             SQLPREFIX,
