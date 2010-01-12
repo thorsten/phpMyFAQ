@@ -107,7 +107,27 @@ class PMF_Category
     {
         return $this->name;
     }
+    
+    /**
+     * Returns category language
+     *
+     * @return string
+     */
+    public function getLanguage()
+    {
+        return $this->language;
+    }
 
+    /**
+     * Returns current parent ID
+     *
+     * @return integer
+     */
+    public function getParentId()
+    {
+        return $this->parent_id;
+    }
+    
     /**
      * Returns current category ID
      *
