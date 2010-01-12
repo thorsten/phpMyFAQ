@@ -92,38 +92,51 @@ if ($permission['editbt']) {
         $record_id = $faq->addRecord($recordData);
 
         if ($record_id) {
+            
             // Create ChangeLog entry
             $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $recordData['lang']);
+            
             // Create the visit entry
             $visits = PMF_Visits::getInstance();
             $visits->add($record_id, $recordData['lang']);
-            // Insert the new category relations
-            $faq->addCategoryRelations($categories['rubrik'], $record_id, $recordData['lang']);
+            
             // Insert the tags
             if ($tags != '') {
                 $tagging->saveTags($record_id, explode(',',$tags));
             }
             
-            
-            // Add user permissions
-            $categoryUser    = new PMF_Category_User();
-            $userPermission  = array(
-                'category_id' => $categories['rubrik'],
-                'user_id'     => $restricted_users);
-            $faq->addPermission('user', $record_id, $restricted_users);
-            $categoryUser->create($userPermission);
-            // Add group permission
-            if ($groupSupport) {
-                $categoryGroup   = new PMF_Category_Group();
-                $groupPermission = array(
-                    'category_id' => $categories['rubrik'],
-                    'group_id'    => $restricted_groups);
-                $faq->addPermission('group', $record_id, $restricted_groups);
-                $categoryGroup->create($groupPermission);
+            // Loop the categories
+            $categoryUser      = new PMF_Category_User();
+            $categoryGroup     = new PMF_Category_Group();
+            $categoryRelations = new PMF_Category_Relations();
+            $categoryRelations->setLanguage($recordData['lang']);
+            foreach ($categories['rubrik'] as $categoryId) {
+                
+                // Insert the new category relations
+                $relationData = array(
+                    'category_id' => $categoryId,
+                    'record_id'   => $record_id);
+                $categoryRelations->create($relationData);
+                
+                // Add user permissions
+                $userPermission = array(
+                    'category_id' => $categoryId,
+                    'user_id'     => $restricted_users);
+                $faq->addPermission('user', $record_id, $restricted_users);
+                $categoryUser->create($userPermission);
+                
+                // Add group permission
+                if ($groupSupport) {
+                    $groupPermission = array(
+                        'category_id' => $categoryId,
+                        'group_id'    => $restricted_groups);
+                    $faq->addPermission('group', $record_id, $restricted_groups);
+                    $categoryGroup->create($groupPermission);
+                }
             }
-
+            
             print $PMF_LANG['ad_entry_savedsuc'];
-
+            
             // Call Link Verification
             link_ondemand_javascript($record_id, $recordData['lang']);
 ?>
