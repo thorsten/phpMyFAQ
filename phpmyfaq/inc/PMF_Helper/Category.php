@@ -143,7 +143,7 @@ class PMF_Helper_Category extends PMF_Helper
                                 ? 
                                 $name 
                                 : 
-                                $this->Category->categoryName[$this->treeTab[$y]['id']]['name'];
+                                $this->Category->categoryName[$this->Category->treeTab[$y]['id']]['name'];
                         $output .= $this->Category->addCategoryLink($sids, $this->Category->treeTab[$y]['parent_id'], $name, $description, false, $isActive);
                     } else {
                         $output .= $this->Category->addCategoryLink($sids, $categoryId, $name, $description, false, $isActive);
