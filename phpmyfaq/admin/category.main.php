@@ -44,6 +44,7 @@ if ($permission['editcateg']) {
     $categoryUser      = new PMF_Category_User();
     $categoryGroup     = new PMF_Category_Group();
     $categoryRelations = new PMF_Category_Relations();
+    $categoryHelper    = new PMF_Category_Helper();
     
     // Save a new category
     if ($action == 'savecategory') {
@@ -237,7 +238,7 @@ if ($permission['editcateg']) {
                $PMF_LANG['ad_categ_cut'],
                $PMF_LANG['ad_categ_cut']);
 
-           if ($category->numParent($cat['parent_id']) > 1) {
+           if ($categoryHelper->numParent($cat['parent_id']) > 1) {
               // move category (if actual language) AND more than 1 category at the same level)
               printf('<a href="?action=movecategory&amp;cat=%s&amp;parent_id=%s"><img src="images/move.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>',
                   $cat['id'],

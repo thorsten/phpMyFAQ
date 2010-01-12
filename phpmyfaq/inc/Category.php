@@ -1023,26 +1023,4 @@ class PMF_Category
         }
     }
 
-    /**
-     * Get number of nodes at the same parent_id level
-     *
-     * @param  integer $parent_id Parent id
-     * @return integer
-     */
-    public function numParent($parent_id)
-    {
-        $query = sprintf("
-            SELECT distinct
-                id
-            FROM
-                %sfaqcategories
-            WHERE
-                parent_id = %d",
-            SQLPREFIX,
-            $parent_id);
-        $result = $this->db->query($query);
-
-        return $this->db->num_rows($result);
-    }
-
 }

@@ -68,7 +68,6 @@ class PMF_Category_Helper extends PMF_Category_Abstract
             (int)$categoryId,
             $categoryLang);
         
-        
         $result = $this->db->query($query);
         
         if (!$result) {
@@ -76,5 +75,32 @@ class PMF_Category_Helper extends PMF_Category_Abstract
         }
         
         return (bool)$this->db->num_rows($result);
+    }
+    
+    /**
+     * Get number of nodes at the same parent_id level
+     *
+     * @param  integer $parent_id Parent id
+     * @return integer
+     */
+    public function numParent($parent_id)
+    {
+        $query = sprintf("
+            SELECT distinct
+                id
+            FROM
+                %sfaqcategories
+            WHERE
+                parent_id = %d",
+            SQLPREFIX,
+            $parent_id);
+        
+        $result = $this->db->query($query);
+        
+        if (!$result) {
+            throw new PMF_Exception($this->db->error());
+        }
+        
+        return $this->db->num_rows($result);
     }
 }
