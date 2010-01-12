@@ -27,6 +27,9 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 if ($permission["editcateg"]) {
+    
+    $categoryHelper = new PMF_Category_Helper();
+    
     $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $category->getMissingCategories();
     $id     = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
@@ -59,7 +62,7 @@ if ($permission["editcateg"]) {
 
         <label class="left"><?php print $PMF_LANG["ad_categ_lang"]; ?>:</label>
         <select name="lang" size="1">
-        <?php print $category->getCategoryLanguagesToTranslate($id, $selected_lang); ?>
+        <?php print $categoryHelper->renderLanguages($id, $selected_lang); ?>
         </select><br />
 
         <label class="left"><?php print $PMF_LANG["ad_categ_desc"]; ?>:</label>

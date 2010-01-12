@@ -103,4 +103,27 @@ class PMF_Category_Helper extends PMF_Category_Abstract
         
         return $this->db->num_rows($result);
     }
+    
+    /**
+     * Create all languagess which can be used for translation as <option>
+     *
+     * @param  integer $categoryId   Category id
+     * @param  string  $selectedLanguage Selected language
+     * @return string
+     */
+    public function renderLanguages($categoryId, $selectedLanguage)
+    {
+        $existingLanguages = PMF_Utils::languageAvailable($categoryId, 'faqcategories');
+        
+        $options = '';
+        foreach (PMF_Language::getAvailableLanguages() as $lang => $langname) {
+            if (!in_array(strtolower($lang), $existingLanguages)) {
+                $options .= sprintf("\t<option value=\"%s\"%s>%s</option>\n", 
+                    strtolower($lang),
+                    ($lang == $selectedLanguage) ? ' selected="selected"' : '',
+                    $langname);
+           }
+        }
+        return $options;
+    }
 }

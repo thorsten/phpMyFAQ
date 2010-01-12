@@ -971,31 +971,6 @@ class PMF_Category
     }
 
     /**
-     * Create all languagess which can be used for translation as <option>
-     *
-     * @param  integer $category_id   Category id
-     * @param  string  $selected_lang Selected language
-     * @return string
-     */
-    public function getCategoryLanguagesToTranslate($category_id, $selected_lang)
-    {
-        $output       = "";
-        $existcatlang = PMF_Utils::languageAvailable($category_id, 'faqcategories');
-
-        foreach (PMF_Language::getAvailableLanguages() as $lang => $langname) {
-           if (!in_array(strtolower($lang),$existcatlang)) {
-              $output .= "\t<option value=\"".strtolower($lang)."\"";
-              if ($lang == $selected_lang) {
-                 $output .= " selected=\"selected\"";
-              }
-              $output .=  ">".$langname."</option>\n";
-           }
-        }
-
-        return $output;
-    }
-
-    /**
      * Gets all categories which are not translated in actual language
      * to add in this->categories (used in admin section)
      *
