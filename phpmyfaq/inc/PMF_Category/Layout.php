@@ -182,4 +182,24 @@
         
         return $oLink->toHtmlAnchor();
     }
+    
+    /**
+     * Renders a breadcrumb along the given path
+     *
+     * @param array  $path Array of path
+     * @param string $separator Separator
+     * 
+     * @return string
+     */
+    public function renderBreadcrumb(Array $path, $separator = ' &raquo; ')
+    {
+        $breadcrumb = '';
+        
+        foreach ($this->categoryTreeHelper as $categoryId => $categoryName) {
+            if (in_array($categoryId, $path)) {
+                $breadcrumb .= $categoryName . $separator;
+            } 
+        }
+        return $breadcrumb;
+    }
  }

@@ -38,17 +38,15 @@ require PMF_INCLUDE_DIR . '/Export.php';
 if (!PMF_Db::checkOnEmptyTable('faqdata')) {
 
     if (!PMF_Db::checkOnEmptyTable('faqcategories')) {
-        $category = new PMF_Category($current_admin_user, $current_admin_groups);
-        $category->buildTree();
         
-        $helper = PMF_Helper_Category::getInstance();
-        $helper->setCategory($category);
+        $categoryData   = new PMF_Category_Tree_DataProvider_SingleQuery($LANGCODE);
+        $categoryLayout = new PMF_Category_Layout(new PMF_Category_Tree_Helper(new PMF_Category_Tree($categoryData)));
 ?>
         <fieldset><legend><?php print($PMF_LANG['ad_export_which_cat']); ?></legend>
             <label class="left" for="rubrik"><?php print($PMF_LANG["ad_entry_category"]); ?></label>
             <select name="catid" id="catid" size="1">
 <?php
-        print $helper->renderCategoryOptions();
+        print $categoryLayout->renderOptions();
 ?>
             </select>
             <br />
