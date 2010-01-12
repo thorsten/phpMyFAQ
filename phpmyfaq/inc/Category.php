@@ -932,45 +932,6 @@ class PMF_Category
     }
 
     /**
-     * Create array with translated categories
-     *
-     * @param   integer  $category_id
-     * @return  array
-     * @access  public
-     * @since   2006-09-10
-     * @author  Rudi Ferrari <bookcrossers@gmx.de>
-     */
-    public function getCategoryLanguagesTranslated($category_id)
-    {
-        global $languageCodes;
-
-        $existcatlang = PMF_Utils::languageAvailable($category_id, 'faqcategories');
-        $translated   = array();
-
-        foreach ($existcatlang as $language) {
-           $query = sprintf("
-               SELECT
-                  name, description
-               FROM
-                   %sfaqcategories
-               WHERE
-                   id = %d
-               AND
-                   lang = '%s'",
-               SQLPREFIX,
-               $category_id,
-               $language);
-           $result = $this->db->query($query);
-           if ($row = $this->db->fetch_assoc($result)) {
-              $translated[$languageCodes[strtoupper($language)]] = $row['name'].('' == $row['description'] ? '' : '  ('.$row['description'].')');
-           }
-        }
-        ksort($translated);
-
-        return $translated;
-    }
-
-    /**
      * Gets all categories which are not translated in actual language
      * to add in this->categories (used in admin section)
      *
