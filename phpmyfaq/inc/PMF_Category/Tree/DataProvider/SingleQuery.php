@@ -55,11 +55,15 @@ class PMF_Category_Tree_DataProvider_SingleQuery
     /**
      * Constructor
      * 
+     * @param string $language Language
+     * 
      * @return void
      */
-    public function __construct()
+    public function __construct($language = null)
     {
         parent::__construct();
+        $this->setLanguage($language);
+        
         $query = sprintf("
             SELECT
                 a.id AS id,
@@ -70,15 +74,23 @@ class PMF_Category_Tree_DataProvider_SingleQuery
                 a.user_id AS user_id
             FROM
                 %sfaqcategories a
-                ",
+            WHERE
+                1=1",
             SQLPREFIX);
-
+        
+        if (!is_null($this->language)) {
+            $query .= sprintf(" 
+            AND 
+                lang = '%s'",
+            $this->language);
+        }
+        
         $result = $this->db->query($query);
-
+        
         if (!$result) {
             throw new PMF_Exception($this->db->error());
         }
-
+        
         while ($row = $this->db->fetch_assoc($result)) {
             $cat = new PMF_Category($row);
             $this->data[$row['id']] = $cat;

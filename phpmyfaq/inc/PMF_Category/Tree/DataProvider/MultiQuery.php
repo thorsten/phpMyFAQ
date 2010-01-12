@@ -41,9 +41,11 @@ class PMF_Category_Tree_DataProvider_MultiQuery
     /**
      * Constructor
      * 
+     * @param string $language Language
+     * 
      * @return void
      */
-    public function __construct()
+    public function __construct($language = null)
     {
         parent::__construct();
     }
@@ -78,6 +80,12 @@ class PMF_Category_Tree_DataProvider_MultiQuery
             SQLPREFIX,
             (int)$parentId);
         
+        if (!is_null($this->language)) {
+            $query .= sprintf(" 
+            AND 
+                lang = '%s'",
+            $this->language);
+        }
         $result = $this->db->query($query);
         
         if (!$result) {
@@ -101,6 +109,7 @@ class PMF_Category_Tree_DataProvider_MultiQuery
     public function getPath($id)
     {
         $retval = array();
+        
         while ($id) {
             array_unshift($retval, $id);
             $query = sprintf("
@@ -112,19 +121,26 @@ class PMF_Category_Tree_DataProvider_MultiQuery
                     id = %d",
                 SQLPREFIX,
                 $id);
-
+            
+            if (!is_null($this->language)) {
+                $query .= sprintf(" 
+                AND 
+                    lang = '%s'",
+                $this->language);
+            }
+            
             $result = $this->db->query($query);
-
+            
             if (!$result) {
                 throw new PMF_Exception($this->db->error());
             }
-
+            
             $row = $this->db->fetch_assoc($result);
-
+            
             if (!$row) {
                 throw new PMF_Exception("Category not found");
             }
-
+            
             $id = $row['parent_id'];
         }
         return $retval;

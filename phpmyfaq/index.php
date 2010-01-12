@@ -248,7 +248,7 @@ $faq = new PMF_Faq($current_user, $current_groups);
 //
 // Create a new Category data provider
 //
-$categoryData = new PMF_Category_Tree_DataProvider_SingleQuery();
+$categoryData = new PMF_Category_Tree_DataProvider_SingleQuery($LANGCODE);
 
 //
 // Create a new Tags object
