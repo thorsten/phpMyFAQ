@@ -49,7 +49,7 @@ class PMF_Category_Tree_DataProvider_MultiQuery
     }
     
     /**
-     * Fetches data for categories which are children fromthe given parent
+     * Fetches data for categories which are children from the given parent
      *
      * The Iterator to be returned should provide arrays holding the Category
      * data as needed by the PMF_Category constructor.
@@ -94,13 +94,13 @@ class PMF_Category_Tree_DataProvider_MultiQuery
      * requested one, excluding the root element (0), but including the requested
      * id.
      *
-     * @param  integer $id Category ID
+     * @param integer $id Category ID
+     * 
      * @return array
      */
     public function getPath($id)
     {
         $retval = array();
-        
         while ($id) {
             array_unshift($retval, $id);
             $query = sprintf("

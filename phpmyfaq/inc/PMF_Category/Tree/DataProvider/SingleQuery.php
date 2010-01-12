@@ -23,22 +23,6 @@
  * @since     2001-01-05
  */
 
-/* TODO: Rename and move me
- * TODO: Should $allnodes be an iterastor already? (we would have to clone it ...)
- */
-/* private */ class NodeList extends FilterIterator {
-    private $parent_id;
-    public function __construct(array $allnodes, $parent_id) {
-        parent::__construct(new ArrayIterator($allnodes));
-        $this->parent_id = $parent_id;
-    }
-
-    public function accept() {
-        $tmp = $this->current();
-        return $tmp['parent_id'] == $this->parent_id;
-    }
-}
-
 /**
  * PMF_Category_Tree_DataProvider_SingleQuery
  * 
@@ -50,10 +34,22 @@
  * @link      http://www.phpmyfaq.de
  * @since     2001-01-06
  */
-class PMF_Category_Tree_DataProvider_SingleQuery 
+class PMF_Category_Tree_DataProvider_SingleQuery
     extends PMF_Category_Abstract 
     implements PMF_Category_Tree_DataProvider_Interface 
 {
+    /**
+     * Array of children
+     *
+     * @var array
+     */
+    private $children = array();
+    
+    /**
+     * Array of data
+     *
+     * @var array
+     */
     private $data = array();
 
     /**
@@ -83,21 +79,24 @@ class PMF_Category_Tree_DataProvider_SingleQuery
             throw new PMF_Exception($this->db->error());
         }
 
-        $childcount = array();
         while ($row = $this->db->fetch_assoc($result)) {
-            $this->data[$row['id']] = $row;
-            if (!isset($childcount[$row['parent_id']])) {
-                $childcount[$row['parent_id']] = 1;
+            $cat = new PMF_Category($row);
+            $this->data[$row['id']] = $cat;
+            if (!isset($this->children[$row['parent_id']])) {
+                $this->children[$row['parent_id']] = array($cat);
             } else {
-                $childcount[$row['parent_id']]++;
+                $this->children[$row['parent_id']][] = $cat;
             }
         }
 
-        foreach ($this->data as $id => $count) {
-            if (isset($childcount[$id])) {
-                $this->data[$id]['children'] = $childcount[$id];
-            } else {
-                $this->data[$id]['children'] = 0;
+        foreach ($this->children as $parentid => $children) {
+            if (!$parentid) {
+                continue;
+            }
+            $parent = $this->data[$parentid];
+            $parent->setChildcount(sizeof($children));
+            foreach ($children as $child) {
+                $child->setParent($parent);
             }
         }
     }
@@ -115,7 +114,7 @@ class PMF_Category_Tree_DataProvider_SingleQuery
      */
     public function getData($parentId = 0)
     {
-        return new NodeList($this->data, $parentId);
+        return new ArrayIterator($this->children[$parentId]);
     }
 
     /**
@@ -124,10 +123,10 @@ class PMF_Category_Tree_DataProvider_SingleQuery
      * The array returned provides th ids of the Categories on the way to the
      * requested one, excluding the root element (0), but including the requested
      * id.
-     * 
+     *
      * @todo Shouldn't the Parameter be an Node?
      * @todo Shouldn't we return a List of nodes, not ids?
-     * 
+     *
      * @param integer $id Category ID
      * 
      * @return array
@@ -137,7 +136,11 @@ class PMF_Category_Tree_DataProvider_SingleQuery
         $retval = array();
         while ($id) {
             array_unshift($retval, $id);
-            $id = $this->data[$id]['parent_id'];
+            $parent = $this->data[$id]->getParent();
+            if (!$parent) {
+                break;
+            }
+            $id = $parent->getId();
         }
         return $retval;
     }

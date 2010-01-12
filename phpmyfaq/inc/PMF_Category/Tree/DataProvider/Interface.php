@@ -39,10 +39,10 @@ interface PMF_Category_Tree_DataProvider_Interface
     /**
      * Fetches data for categories which are children fromthe given parent
      *
-     * The Iterator to be returned should provide arrays holding the Category
-     * data as needed by the PMF_Category constructor.
+     * The Iterator to be returned should provide PMF_Category instances.
      *
-     * @see   PMF_Category::__construct()
+     * @see PMF_Category::__construct()
+     * 
      * @param integer $parentId Parent ID
      * 
      * @return Traversable
@@ -56,7 +56,7 @@ interface PMF_Category_Tree_DataProvider_Interface
      * requested one, excluding the root element (0), but including the requested
      * id.
      *
-     * @param  integer $id Category ID
+     * @param integer $id Category ID
      * 
      * @return array
      */

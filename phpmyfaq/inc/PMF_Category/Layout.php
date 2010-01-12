@@ -57,7 +57,15 @@
      */
     public function renderNavigation($categoryId = 0)
     {
+        $navigation = '';
         
+        foreach ($this->categoryTreeHelper as $categoryId => $categoryName) {
+            $navigation .= sprintf ("<li><a href=\"?action=show&amp;cat=%d\">%s</a></li>\n",
+                $categoryId,
+                $categoryName);
+        }
+        
+        return $navigation;
     }
     
     /**
