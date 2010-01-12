@@ -112,6 +112,7 @@ class PMF_Category_Node extends PMF_Category_Abstract implements PMF_Category_In
             UPDATE
                 %sfaqcategories
             SET
+                parent_id = %d,
                 name = '%s',
                 description = '%s',
                 user_id = %d
@@ -120,6 +121,7 @@ class PMF_Category_Node extends PMF_Category_Abstract implements PMF_Category_In
             AND
                 lang = '%s'",
             SQLPREFIX,
+            $data['parent_id'],
             $data['name'],
             $data['description'],
             $data['user_id'],
