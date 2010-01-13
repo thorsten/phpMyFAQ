@@ -46,7 +46,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
 		$userdata           = array();
 		$userdata           = $user->userdata->get('*');
         $userdata['status'] = $user->getStatus();
-		print json_encode(array_map('utf8_encode', $userdata));
+		print json_encode($userdata);
 	}
 	
 	// Return the user rights

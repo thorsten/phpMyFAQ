@@ -26,7 +26,7 @@
  */
 
 define('NEWVERSION', '2.7.0-alpha');
-define('APIVERSION', 1);
+define('APIVERSION', 2);
 define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 

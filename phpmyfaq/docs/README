@@ -11,7 +11,11 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 Version 2.7.0-alpha - 2010-
 - added rewritten and enhanced category implementation (Johannes Schlüter, Thorsten)
 
-Version 2.6.0 - 2010-01-
+Version 2.6.1 - 2010-02-
+- minor bugfixes (Thorsten)
+-
+
+Version 2.6.0 - 2010-01-11
 - moved all language files to UTF-8 (Anatoliy)
 - added TCPDF as replacement for FPDF library (Thorsten)
 - added support for TinyMCE translations (Aurimas Fišeras)
