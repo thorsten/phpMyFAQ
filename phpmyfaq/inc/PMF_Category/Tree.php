@@ -73,42 +73,6 @@ class PMF_Category_Tree extends IteratorIterator implements RecursiveIterator
         $this->parent       = $parent;
         $this->dataProvider = $dataProvider;
     }
-    
-    /**
-     * Previous element
-     *
-     * @return void
-     */
-    public function rewind()
-    {
-        parent::rewind();
-        $this->setCurrent();
-    }
-
-    /**
-     * Next element
-     *
-     * @return void
-     */
-    public function next()
-    {
-        parent::next();
-        $this->setCurrent();
-    }
-    
-    /**
-     * Set current element
-     *
-     * @return void
-     */
-    private function setCurrent()
-    {
-        if ($current = parent::current()) {
-            $this->current = new PMF_Category(parent::current(), $this->parent);
-        } else {
-            $this->current = null;
-        }
-    }
 
     /**
      * Returns the key of the element
@@ -119,17 +83,7 @@ class PMF_Category_Tree extends IteratorIterator implements RecursiveIterator
     {
         return $this->current()->getId();
     }
-    
-    /**
-     * Returns current element
-     *
-     * @return mixed
-     */
-    public function current()
-    {
-        return $this->current;
-    }
-    
+        
     /**
      * Returns if an iterator can be created fot the current entry.
      *

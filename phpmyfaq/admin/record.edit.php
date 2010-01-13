@@ -32,18 +32,11 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
 if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
-
-    $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
-    $category->buildTree();
     
     $categoryRelations = new PMF_Category_Relations();
-    
-    $helper = PMF_Helper_Category::getInstance();
-    $helper->setCategory($category);
-
-    $current_category = '';
-    $categories       = array();
-    $faqData          = array(
+    $current_category  = '';
+    $categories        = array();
+    $faqData           = array(
         'id'          => 0,
         'lang'        => $LANGCODE,
         'revision_id' => 0,
@@ -218,6 +211,9 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
             $tags    = implode(',', $tagging->getAllTagsById($faqData['id']));
         }
     }
+    
+    $categoryData   = new PMF_Category_Tree_DataProvider_SingleQuery($LANGCODE);
+    $categoryLayout = new PMF_Category_Layout(new PMF_Category_Tree_Helper(new PMF_Category_Tree($categoryData)));
 ?>
 
     <form id="faqEditor" style="float: left;" action="?action=<?php print $url_variables; ?>" method="post">
@@ -229,7 +225,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
     <label class="lefteditor" for="rubrik"><?php print $PMF_LANG["ad_entry_category"]; ?></label>
     <select name="rubrik[]" id="rubrik" size="5" multiple="multiple">
-<?php print $helper->renderCategoryOptions($categories); ?>
+<?php print $categoryLayout->renderOptions($categories); ?>
     </select><br />
 
     <label for="thema"><?php print $PMF_LANG["ad_entry_theme"]; ?></label>

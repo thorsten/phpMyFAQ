@@ -246,9 +246,9 @@ if (is_null($lang) && !PMF_Language::isASupportedLanguage($lang) ) {
 $faq = new PMF_Faq($current_user, $current_groups);
 
 //
-// Create a new Category object
+// Create a new Category data provider
 //
-$category = new PMF_Category($current_user, $current_groups);
+$categoryData = new PMF_Category_Tree_DataProvider_SingleQuery($LANGCODE);
 
 //
 // Create a new Tags object
@@ -299,8 +299,9 @@ if (!is_null($tag_id)) {
 //
 // Found a category ID?
 //
-$cat         = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
-$cat_from_id = -1;
+$cat          = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
+$cat_from_id  = -1;
+$categoryPath = array(0);
 if (is_numeric($id) && $id > 0) {
     $categoryRelations = new PMF_Category_Relations();
     foreach ($categoryRelations->fetchAll() as $relation) {
@@ -314,14 +315,15 @@ if ($cat_from_id != -1 && $cat == 0) {
     $cat = $cat_from_id;
 }
 
-$category->transform(0);
-$category->collapseAll();
 if ($cat != 0) {
-    $category->expandTo($cat);
+    $categoryPath = $categoryData->getPath($cat);
 }
+
+/* @todo: Fix this old code
 if (isset($cat) && ($cat != 0) && ($id == '') && isset($category->categoryName[$cat]['name'])) {
     $title = ' - '.$category->categoryName[$cat]['name'];
 }
+*/
 
 //
 // Found an action request?
@@ -391,8 +393,10 @@ $usersOnLine    = getUsersOnline();
 $totUsersOnLine = $usersOnLine[0] + $usersOnLine[1];
 $systemUri      = PMF_Link::getSystemUri('index.php');
 
-$helper = PMF_Helper_Category::getInstance();
-$helper->setCategory($category);
+$categoryTree   = new PMF_Category_Tree($categoryData);
+$categoryLayout = new PMF_Category_Layout(
+    new PMF_Category_Tree_Helper(
+        new PMF_Category_Path($categoryTree, $categoryPath)));
 
 $main_template_vars = array(
     'title'               => $faqconfig->get('main.titleFAQ').$title,
@@ -410,7 +414,7 @@ $main_template_vars = array(
     'action'              => $action,
     'dir'                 => $PMF_LANG['dir'],
     'msgCategory'         => $PMF_LANG['msgCategory'],
-    'showCategories'      => $helper->renderCategoryNavigation($cat),
+    'showCategories'      => $categoryLayout->renderNavigation($cat),
     'languageBox'         => $PMF_LANG['msgLangaugeSubmit'],
     'writeLangAdress'     => $writeLangAdress,
     'switchLanguages'     => PMF_Language::selectLanguages($LANGCODE, true),

@@ -44,11 +44,11 @@ if ($permission['editcateg']) {
     $categoryUser      = new PMF_Category_User();
     $categoryGroup     = new PMF_Category_Group();
     $categoryRelations = new PMF_Category_Relations();
+    $categoryHelper    = new PMF_Category_Helper();
     
     // Save a new category
     if ($action == 'savecategory') {
 
-        $category     = new PMF_Category($current_admin_user, $current_admin_groups, false);
         $categoryData = array(
             'id'          => null,
             'lang'        => PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING),
@@ -84,7 +84,6 @@ if ($permission['editcateg']) {
     // Updates an existing category
     if ($action == 'updatecategory') {
 
-        $category       = new PMF_Category($current_admin_user, $current_admin_groups, false);
         $categoryHelper = new PMF_Category_Helper();
         $categoryId     = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         $categoryData   = array(
@@ -128,8 +127,6 @@ if ($permission['editcateg']) {
 
     // Deletes an existing category
     if ($permission['delcateg'] && $action == 'removecategory') {
-
-        $category     = new PMF_Category($current_admin_user, $current_admin_groups, false);
         
         $categoryId   = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
         $categoryLang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
@@ -152,11 +149,10 @@ if ($permission['editcateg']) {
     // Moves a category
     if ($action == 'changecategory') {
 
-        $category      = new PMF_Category($current_admin_user, $current_admin_groups, false);
-        $category_id_1 = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
-        $category_id_2 = PMF_Filter::filterInput(INPUT_POST, 'change', FILTER_VALIDATE_INT);
+        $firstCategoryId  = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
+        $secondCategoryId = PMF_Filter::filterInput(INPUT_POST, 'change', FILTER_VALIDATE_INT);
 
-        if ($category->swapCategories($category_id_1, $category_id_2)) {
+        if ($categoryHelper->swapCategories($firstCategoryId, $secondCategoryId)) {
             printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_updated']);
         } else {
             printf('<p class="error">%s<br />%s</p>', $PMF_LANG['ad_categ_paste_error'], $db->error());
@@ -166,10 +162,13 @@ if ($permission['editcateg']) {
     // Pastes a category
     if ($action == 'pastecategory') {
 
-        $category    = new PMF_Category($current_admin_user, $current_admin_groups, false);
-        $category_id = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
-        $parent_id   = PMF_Filter::filterInput(INPUT_POST, 'after', FILTER_VALIDATE_INT);
-        if ($category->updateParentCategory($category_id, $parent_id)) {
+        $categoryId   = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
+        $parentId     = PMF_Filter::filterInput(INPUT_POST, 'after', FILTER_VALIDATE_INT);
+        $categoryData = $categoryNode->fetch($categoryId);
+        
+        $categoryData->parent_id = $parentId;
+        
+        if ($categoryNode->update($categoryId, (array)$categoryData)) {
             printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_updated']);
         } else {
             printf('<p class="error">%s<br />%s</p>', $PMF_LANG['ad_categ_paste_error'], $db->error());
@@ -179,72 +178,65 @@ if ($permission['editcateg']) {
     // Lists all categories
     $lang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING, $LANGCODE);
 
-    // If we changed the category tree, unset the object
-    if (isset($category)) {
-        unset($category);
-    }
-    $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
-    $category->getMissingCategories();
-    $category->buildTree();
-
-    foreach ($category->catTree as $cat) {
-        $indent = '';
-        for ($i = 0; $i < $cat['indent']; $i++) {
-            $indent .= '&nbsp;&nbsp;&nbsp;';
-        }
-        // category translated in this language?
-        ($cat['lang'] == $lang) ? $catname = $cat['name'] : $catname = $cat['name'].' ('.$languageCodes[strtoupper($cat['lang'])].')';
-
+    $categoryDataProvider = new PMF_Category_Tree_DataProvider_SingleQuery($LANGCODE);
+    $categoryTreeHelper   = new PMF_Category_Tree_Helper(new PMF_Category_Tree($categoryDataProvider));
+    
+    foreach ($categoryTreeHelper as $categoryId => $categoryName) {
+        
+        $indent       = str_repeat('&nbsp;', $categoryTreeHelper->indent);
+        $categoryLang = $categoryTreeHelper->getInnerIterator()->current()->getLanguage();
+        $parentId     = $categoryTreeHelper->getInnerIterator()->current()->getParentId();
+        
         // show category name
         printf("<p>%s<strong style=\"vertical-align: top;\">&middot; %s</strong> ",
             $indent,
-            $catname);
+            $categoryName);
 
-        if ($cat["lang"] == $lang) {
+        if ($categoryLang == $lang) {
            // add sub category (if actual language)
            printf('<a href="?action=addcategory&amp;cat=%s&amp;lang=%s"><img src="images/add.png" width="16" height="16" alt="%s" title="%s" border="0" /></a>&nbsp;',
-               $cat['id'],
-               $cat['lang'],
+               $categoryId,
+               $categoryLang,
                $PMF_LANG['ad_quick_category'],
                $PMF_LANG['ad_quick_category']);
 
            // rename (sub) category (if actual language)
            printf('<a href="?action=editcategory&amp;cat=%s"><img src="images/edit.png" width="16" height="16" border="0" title="%s" alt="%s" /></a>&nbsp;',
-               $cat['id'],
+               $categoryId,
                $PMF_LANG['ad_kateg_rename'],
                $PMF_LANG['ad_kateg_rename']);
         }
 
         // translate category (always)
         printf('<a href="?action=translatecategory&amp;cat=%s"><img src="images/translate.png" width="16" height="16" border="0" title="%s" alt="%s" /></a>&nbsp;',
-            $cat['id'],
+            $categoryId,
             $PMF_LANG['ad_categ_translate'],
             $PMF_LANG['ad_categ_translate']);
 
         // delete (sub) category (if actual language)
-        if (count($category->getChildren($cat['id'])) == 0 && $cat["lang"] == $lang) {
+        if (!$categoryTreeHelper->callHasChildren() && $categoryLang == $lang) {
             printf('<a href="?action=deletecategory&amp;cat=%s&amp;lang=%s"><img src="images/delete.png" width="16" height="16" alt="%s" title="%s" border="0" /></a>&nbsp;',
-                $cat['id'],
-                $cat['lang'],
+                $categoryId,
+                $categoryLang,
                 $PMF_LANG['ad_categ_delete'],
                 $PMF_LANG['ad_categ_delete']);
         }
 
-        if ($cat["lang"] == $lang) {
-           // cut category (if actual language)
-           printf('<a href="?action=cutcategory&amp;cat=%s"><img src="images/cut.png" width="16" height="16" alt="%s" border="0" title="%s" /></a>&nbsp;',
-               $cat['id'],
-               $PMF_LANG['ad_categ_cut'],
-               $PMF_LANG['ad_categ_cut']);
-
-           if ($category->numParent($cat['parent_id']) > 1) {
-              // move category (if actual language) AND more than 1 category at the same level)
-              printf('<a href="?action=movecategory&amp;cat=%s&amp;parent_id=%s"><img src="images/move.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>',
-                  $cat['id'],
-                  $cat['parent_id'],
-                  $PMF_LANG['ad_categ_move'],
-                  $PMF_LANG['ad_categ_move']);
-           }
+        if ($categoryLang == $lang) {
+            // cut category (if actual language)
+            printf('<a href="?action=cutcategory&amp;cat=%s"><img src="images/cut.png" width="16" height="16" alt="%s" border="0" title="%s" /></a>&nbsp;',
+                $categoryId,
+                $PMF_LANG['ad_categ_cut'],
+                $PMF_LANG['ad_categ_cut']);
+            
+            if ($categoryHelper->numParent($parentId) > 1) {
+                // move category (if actual language) AND more than 1 category at the same level)
+                printf('<a href="?action=movecategory&amp;cat=%s&amp;parent_id=%s"><img src="images/move.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>',
+                    $categoryId,
+                    $parentId,
+                    $PMF_LANG['ad_categ_move'],
+                    $PMF_LANG['ad_categ_move']);
+            }
         }
         print "</p>\n";
     }

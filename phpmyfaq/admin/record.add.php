@@ -68,10 +68,7 @@ if ($permission['editbt']) {
         $logging = new PMF_Logging();
         $logging->logAdmin($user, 'Beitragcreatesave');
         printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
-
-        $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
-        $tagging  = new PMF_Tags();
-
+        
         $recordData     = array(
             'lang'          => $record_lang,
             'active'        => $active,
@@ -102,9 +99,21 @@ if ($permission['editbt']) {
             
             // Insert the new category relations
             $categoryRelations = new PMF_Category_Relations();
-            $categoryRelations->setLanguage($recordData['lang']);
+
+            // Insert the tags
+            if ($tags != '') {
+                $tagging = new PMF_Tags();
+                $tagging->saveTags($record_id, explode(',',$tags));
+            }
             
+            // Loop the categories
+            $categoryUser      = new PMF_Category_User();
+            $categoryGroup     = new PMF_Category_Group();
+            $categoryRelations = new PMF_Category_Relations();
+            $categoryRelations->setLanguage($recordData['lang']);
             foreach ($categories['rubrik'] as $categoryId) {
+                
+                // Insert the new category relations
                 $categoryData = array(
                     'category_id'   => $categoryId,
                     'category_lang' => $categoryRelations->getLanguage(),
@@ -112,33 +121,26 @@ if ($permission['editbt']) {
                     'record_lang'   => $recordData['lang']);
                 // save or update the category relations
                 $categoryRelations->create($categoryData);
+                
+                // Add user permissions
+                $userPermission = array(
+                    'category_id' => $categoryId,
+                    'user_id'     => $restricted_users);
+                $faq->addPermission('user', $record_id, $restricted_users);
+                $categoryUser->create($userPermission);
+                
+                // Add group permission
+                if ($groupSupport) {
+                    $groupPermission = array(
+                        'category_id' => $categoryId,
+                        'group_id'    => $restricted_groups);
+                    $faq->addPermission('group', $record_id, $restricted_groups);
+                    $categoryGroup->create($groupPermission);
+                }
             }
             
-            // Insert the tags
-            if ($tags != '') {
-                $tagging->saveTags($record_id, explode(',',$tags));
-            }
-            
-            
-            // Add user permissions
-            $categoryUser    = new PMF_Category_User();
-            $userPermission  = array(
-                'category_id' => $categories['rubrik'],
-                'user_id'     => $restricted_users);
-            $faq->addPermission('user', $record_id, $restricted_users);
-            $categoryUser->create($userPermission);
-            // Add group permission
-            if ($groupSupport) {
-                $categoryGroup   = new PMF_Category_Group();
-                $groupPermission = array(
-                    'category_id' => $categories['rubrik'],
-                    'group_id'    => $restricted_groups);
-                $faq->addPermission('group', $record_id, $restricted_groups);
-                $categoryGroup->create($groupPermission);
-            }
-
             print $PMF_LANG['ad_entry_savedsuc'];
-
+            
             // Call Link Verification
             link_ondemand_javascript($record_id, $recordData['lang']);
 ?>
@@ -158,17 +160,20 @@ if ($permission['editbt']) {
 
     } elseif (isset($submit['submit'][2]) && !is_null($question) && !is_null($categories)) {
         // Preview
-        $cat = new PMF_Category($current_admin_user, $current_admin_groups, false);
-        $cat->transform(0);
+        $categoryDataProvider = new PMF_Category_Tree_DataProvider_SingleQuery($LANGCODE);
+        $categoryTree         = new PMF_Category_Tree($categoryDataProvider);
+        $categoryLayout       = new PMF_Category_Layout(new PMF_Category_Tree_Helper($categoryTree));
+       
         $categorylist = '';
-        foreach ($categories['rubrik'] as $_categories) {
-            $categorylist .= $cat->getPath($_categories).'<br />';
+        foreach ($categories['rubrik'] as $categoryId) {
+            $categoryPath  = $categoryDataProvider->getPath($categoryId);
+            $categorylist .= $categoryLayout->renderBreadcrumb($categoryPath) . '<br />';
         }
 ?>
     <h3><strong><em><?php print $categorylist; ?></em>
     <?php print $question; ?></strong></h3>
     <?php print html_entity_decode($content); ?>
-    <p class="little"><?php print $PMF_LANG["msgLastUpdateArticle"].makeDate(date("YmdHis")); ?><br />
+    <p class="little"><?php print $PMF_LANG["msgLastUpdateArticle"].PMF_Date::createISODate(date("YmdHis")); ?><br />
     <?php print $PMF_LANG["msgAuthor"].' '.$author; ?></p>
 
     <form action="?action=editpreview" method="post">

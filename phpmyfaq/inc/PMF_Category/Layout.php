@@ -51,13 +51,88 @@
     /**
      * Renders the main navigation
      * 
-     * @param integer $categoryId Selected category ID
+     * @param integer $selectedCategoryId Selected category ID
      * 
      * @return string
      */
-    public function renderNavigation($categoryId = 0)
+    public function renderNavigation($selectedCategoryId = 0)
     {
+        global $sids;
         
+        $navigation   = '';
+        $currentDepth = 0;
+        foreach ($this->categoryTreeHelper as $categoryId => $categoryName) {
+            
+            $indent      = str_repeat(' ', $this->categoryTreeHelper->indent);
+            $depth       = $currentDepth - $this->categoryTreeHelper->getDepth();
+            $hasChildren = $this->categoryTreeHelper->callHasChildren();
+            $isActive    = ($selectedCategoryId == $categoryId) ? true : false;
+            
+            if ($depth > 1) {
+                for ($i = $depth; $i > 1; $i--) {
+                   $navigation .= sprintf("\n%s</ul></li>\n", str_repeat(' ', $depth * 4), $indent);
+                }
+            }
+            
+            if ($currentDepth < $this->categoryTreeHelper->getDepth()) {
+                $navigation .= sprintf("\n%s<ul>\n", $indent);
+            } 
+            if ($currentDepth > $this->categoryTreeHelper->getDepth()) {
+                $navigation .= sprintf("%s</ul>\n", $indent);
+            }
+            $navigation .= sprintf ("%s<li>%s%s",
+                $indent,
+                $this->renderLink($sids, $categoryId, $categoryName, $hasChildren, $isActive),
+                $hasChildren ? '' : "</li>\n");
+                
+            $currentDepth = $this->categoryTreeHelper->getDepth();
+        }
+        
+        return $navigation;
+    }
+    
+    /**
+     * Renders the category tree
+     *
+     * @return string
+     */
+    public function renderTree()
+    {
+        global $sids;
+        
+        $tree         = "<ul>\n";
+        $currentDepth = 0;
+        foreach ($this->categoryTreeHelper as $categoryId => $categoryName) {
+            
+            $indent      = str_repeat(' ', $this->categoryTreeHelper->indent);
+            $depth       = $currentDepth - $this->categoryTreeHelper->getDepth();
+            $hasChildren = $this->categoryTreeHelper->callHasChildren();
+            
+            if ($depth > 1) {
+                for ($i = $depth; $i > 1; $i--) {
+                   $tree .= sprintf("\n%s</ul></li>\n", str_repeat(' ', $depth * 4), $indent);
+                }
+            }
+            
+            if ($currentDepth < $this->categoryTreeHelper->getDepth()) {
+                $tree .= sprintf("\n%s<ul>\n", $indent);
+            } 
+            if ($currentDepth > $this->categoryTreeHelper->getDepth()) {
+                $tree .= sprintf("%s</ul>\n", $indent);
+            }
+            
+            $url              = sprintf('%saction=show&amp;cat=%d', $sids, $categoryId);
+            $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri() . '?' . $url);
+            $oLink->itemTitle = $oLink->text = $categoryName;
+            
+            $tree .= "<li>" . $oLink->toHtmlAnchor();
+            $tree .= $hasChildren ? '' : "</li>\n";
+            
+            $currentDepth = $this->categoryTreeHelper->getDepth();
+        }
+        $tree .= "</ul>\n";
+        
+        return $tree;
     }
     
     /**
@@ -70,13 +145,61 @@
         $options = '';
         
         foreach ($this->categoryTreeHelper as $categoryId => $categoryName) {
-            $options .= sprintf('%s<option value="%d"%s>%s</option>',
-                $this->categoryTreeHelper->indent,
+            $options .= sprintf('<option value="%d"%s>%s%s</option>',
                 $categoryId,
-                (in_array($categoryId) ? 'selected="selected"' : ''),
-                $categoryName);
+                (in_array($categoryId, $categoryIds) ? 'selected="selected"' : ''),
+                str_repeat('.', $this->categoryTreeHelper->indent),
+                $categoryName) . "\n";
         }
         
         return $options;
+    }
+    
+    /**
+     * Renders a category link
+     *
+     * @param  string  $sids         Session id
+     * @param  integer $categoryId   Parent category
+     * @param  string  $categoryName Category name
+     * @param  boolean $hasChildren  Child categories available
+     * @param  boolean $isActive     Sets a link active via CSS
+     * @return  string
+     */
+    public function renderLink($sids, $categoryId, $categoryName, $hasChildren = false, $isActive = false)
+    {
+        $url              = sprintf('%saction=show&amp;cat=%d', $sids, $categoryId);
+        $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+        $oLink->itemTitle = $oLink->text = $oLink->tooltip = $categoryName;
+        
+        if ($hasChildren) {
+            $oLink->text .= sprintf(' <img src="images/more.gif" width="11" height="11" alt="%s" style="border: none; vertical-align: middle;" />',
+                $categoryName);
+        }
+        
+        if ($isActive) {
+            $oLink->class = 'active';
+        }
+        
+        return $oLink->toHtmlAnchor();
+    }
+    
+    /**
+     * Renders a breadcrumb along the given path
+     *
+     * @param array  $path Array of path
+     * @param string $separator Separator
+     * 
+     * @return string
+     */
+    public function renderBreadcrumb(Array $path, $separator = ' &raquo; ')
+    {
+        $breadcrumb = '';
+        
+        foreach ($this->categoryTreeHelper as $categoryId => $categoryName) {
+            if (in_array($categoryId, $path)) {
+                $breadcrumb .= $categoryName . $separator;
+            } 
+        }
+        return $breadcrumb;
     }
  }

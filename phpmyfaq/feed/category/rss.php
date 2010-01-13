@@ -40,7 +40,6 @@ $LANGCODE = $Language->setLanguage($faqconfig->get('main.languageDetection'), $f
 require_once PMF_ROOT_DIR . '/lang/language_en.php';
 
 $category_id = PMF_Filter::filterInput(INPUT_GET, 'category_id', FILTER_VALIDATE_INT);
-$category    = new PMF_Category();
 $faq         = new PMF_Faq();
 
 $records = $faq->getAllRecordPerCategory($category_id,

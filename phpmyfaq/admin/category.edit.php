@@ -31,7 +31,6 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 if ($permission['editcateg']) {
 
     $categoryId    = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
-    $category      = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $categoryNode  = new PMF_Category_Node();
     $categoryUser  = new PMF_Category_User();
     $categoryGroup = new PMF_Category_Group();

@@ -68,7 +68,6 @@ class PMF_Category_Helper extends PMF_Category_Abstract
             (int)$categoryId,
             $categoryLang);
         
-        
         $result = $this->db->query($query);
         
         if (!$result) {
@@ -76,5 +75,140 @@ class PMF_Category_Helper extends PMF_Category_Abstract
         }
         
         return (bool)$this->db->num_rows($result);
+    }
+    
+    /**
+     * Get number of nodes at the same parent_id level
+     *
+     * @param  integer $parent_id Parent id
+     * @return integer
+     */
+    public function numParent($parent_id)
+    {
+        $query = sprintf("
+            SELECT distinct
+                id
+            FROM
+                %sfaqcategories
+            WHERE
+                parent_id = %d",
+            SQLPREFIX,
+            $parent_id);
+        
+        $result = $this->db->query($query);
+        
+        if (!$result) {
+            throw new PMF_Exception($this->db->error());
+        }
+        
+        return $this->db->num_rows($result);
+    }
+    
+    /**
+     * Move the categories ownership, if any.
+     *
+     * @param  integer $from Old user id
+     * @param  integer $to   New user id
+     * @return boolean
+     */
+    public function moveOwnership($from, $to)
+    {
+        if (!is_numeric($from) || !is_numeric($to)) {
+            return false;
+        }
+
+        $query = sprintf("
+            UPDATE
+                %sfaqcategories
+            SET
+                user_id = %d
+            WHERE
+                user_id = %d",
+            SQLPREFIX,
+            $to,
+            $from);
+        
+        $result = $this->db->query($query);
+        
+        if (!$result) {
+            throw new PMF_Exception($this->db->error());
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * Swaps two categories
+     *
+     * @param  integer $firstCategoryId  First category
+     * @param  integer $secondCategoryId Second category
+     * @return boolean
+     */
+    public function swapCategories($firstCategoryId, $secondCategoryId)
+    {
+        $temp_cat = rand(200000, 400000);
+
+        $tables = array(
+            array('faqcategories'        => 'id'),
+            array('faqcategories'        => 'parent_id'),
+            array('faqcategoryrelations' => 'category_id'),
+            array('faqquestions'         => 'ask_rubrik'),
+            array('faqcategory_group'    => 'category_id'),
+            array('faqcategory_user'     => 'category_id'));
+
+        $result = true;
+        foreach ($tables as $pair) {
+            foreach ($pair as $_table => $_field) {
+                $result = $result && $this->db->query(sprintf("UPDATE %s SET %s = %d WHERE %s = %d",
+                    SQLPREFIX.$_table,
+                    $_field,
+                    $temp_cat,
+                    $_field,
+                    $secondCategoryId));
+                $result = $result && $this->db->query(sprintf("UPDATE %s SET %s = %d WHERE %s = %d",
+                    SQLPREFIX.$_table,
+                    $_field,
+                    $secondCategoryId,
+                    $_field,
+                    $firstCategoryId));
+                $result = $result && $this->db->query(sprintf("UPDATE %s SET %s = %d WHERE %s = %d",
+                    SQLPREFIX.$_table,
+                    $_field,
+                    $firstCategoryId,
+                    $_field,
+                    $temp_cat));
+            }
+        }
+
+        $result = $this->db->query($query);
+        
+        if (!$result) {
+            throw new PMF_Exception($this->db->error());
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * Create all languagess which can be used for translation as <option>
+     *
+     * @param  integer $categoryId   Category id
+     * @param  string  $selectedLanguage Selected language
+     * @return string
+     */
+    public function renderLanguages($categoryId, $selectedLanguage)
+    {
+        $existingLanguages = PMF_Utils::languageAvailable($categoryId, 'faqcategories');
+        
+        $options = '';
+        foreach (PMF_Language::getAvailableLanguages() as $lang => $langname) {
+            if (!in_array(strtolower($lang), $existingLanguages)) {
+                $options .= sprintf("\t<option value=\"%s\"%s>%s</option>\n", 
+                    strtolower($lang),
+                    ($lang == $selectedLanguage) ? ' selected="selected"' : '',
+                    $langname);
+           }
+        }
+        return $options;
     }
 }

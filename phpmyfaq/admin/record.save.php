@@ -29,8 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 // Re-evaluate $user
-$user     = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
-$category = new PMF_Category($current_admin_user, $current_admin_groups, false);    
+$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
 if ($permission['editbt']) {
     
@@ -66,11 +65,15 @@ if ($permission['editbt']) {
     $restricted_groups = ('all' == $group_permission) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_groups', FILTER_VALIDATE_INT);
     
     if (isset($submit['submit'][2]) && !is_null($question) && !is_null($categories)) {
-    // Preview
-    $category->transform(0);
-    $categorylist = '';
-        foreach ($categories['rubrik'] as $_categories) {
-            $categorylist .= $category->getPath($_categories).'<br />';
+        // Preview
+        $categoryDataProvider = new PMF_Category_Tree_DataProvider_SingleQuery($LANGCODE);
+        $categoryTree         = new PMF_Category_Tree($categoryDataProvider);
+        $categoryLayout       = new PMF_Category_Layout(new PMF_Category_Tree_Helper($categoryTree));
+       
+        $categorylist = '';
+        foreach ($categories['rubrik'] as $categoryId) {
+            $categoryPath  = $categoryDataProvider->getPath($categoryId);
+            $categorylist .= $categoryLayout->renderBreadcrumb($categoryPath) . '<br />';
         }
 ?>
     <h2><?php print $PMF_LANG["ad_entry_preview"]; ?></h2>

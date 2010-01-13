@@ -1,13 +1,8 @@
 <?php
 /**
  * XML, XML DocBook, XHTML and PDF export - streamer page
- *
- * @category   phpMyFAQ
- * @subpackage Administration
- * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2005-11-02
- * @copyright  2005-2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,6 +13,15 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-11-02
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -38,9 +42,7 @@ $downwards         = PMF_Filter::filterInput(INPUT_POST, 'downwards', FILTER_VAL
 $inlineDisposition = PMF_Filter::filterInput(INPUT_POST, 'dispos', FILTER_VALIDATE_BOOLEAN, false);
 $type              = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING, 'none');
 
-$faq      = new PMF_Faq();
-$category = new PMF_Category();
-
+$faq     = new PMF_Faq();
 $export  = PMF_Export::create($faq, $category, $type);
 $content = $export->generate($categoryId, $downwards);
 

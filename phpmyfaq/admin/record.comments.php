@@ -1,13 +1,8 @@
 <?php
 /**
  * Shows all comments in the categories and provides a link to delete comments
- *
- * @param      phpMyFAQ
- * @subpackage Administration
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2007-03-04
- * @copyright  2007-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2007-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2007-03-04
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -31,11 +34,8 @@ print '<div id="returnMessage"></div>';
 
 if ($permission['delcomment']) {
 
-    $comment  = new PMF_Comment();
-    $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
-    $faq      = new PMF_Faq();
-    
-    $category->buildTree();
+    $comment     = new PMF_Comment();
+    $faq         = new PMF_Faq();
     $faqcomments = $comment->getAllComments('faq');
 
     printf("<h3>%s</h3>\n", $PMF_LANG['ad_comment_faqs']);
@@ -131,17 +131,17 @@ if ($permission['delcomment']) {
     $(document).ready(function() {
       $('.submit').click(function () {
         var comments = $('#commentSelection').serialize();
-    	$.ajax({
+        $.ajax({
           type: "POST",
-    	  url:  "index.php?action=ajax&ajax=comment",
-    	  data: comments,
-    	  success: function(msg) {
-    		if (msg == 1) {
-        	  $('#returnMessage').append('<?php print $PMF_LANG['ad_entry_commentdelsuc']; ?>').fadeIn('slow');
-        	  $("tr td input:checked").parent().parent().fadeOut('slow');
-    		  }
-    		}
-    	});
+          url:  "index.php?action=ajax&ajax=comment",
+          data: comments,
+          success: function(msg) {
+            if (msg == 1) {
+                $('#returnMessage').append('<?php print $PMF_LANG['ad_entry_commentdelsuc']; ?>').fadeIn('slow');
+                $("tr td input:checked").parent().parent().fadeOut('slow');
+            }
+          }
+        });
         return false;
       });
     });

@@ -41,15 +41,18 @@ class PMF_Category_Tree_DataProvider_MultiQuery
     /**
      * Constructor
      * 
+     * @param string $language Language
+     * 
      * @return void
      */
-    public function __construct()
+    public function __construct($language = null)
     {
         parent::__construct();
+        $this->setLanguage($language);
     }
     
     /**
-     * Fetches data for categories which are children fromthe given parent
+     * Fetches data for categories which are children from the given parent
      *
      * The Iterator to be returned should provide arrays holding the Category
      * data as needed by the PMF_Category constructor.
@@ -63,20 +66,30 @@ class PMF_Category_Tree_DataProvider_MultiQuery
     {
         $query = sprintf("
             SELECT 
-                a.id AS id,
-                a.lang AS lang,
-                a.parent_id AS parent_id,
-                a.name AS name,
-                a.description AS description,
-                a.user_id AS user_id,
-                (SELECT count(*) FROM %sfaqcategories b WHERE b.parent_id = a.id) as children 
+                fc.id AS id,
+                fc.lang AS lang,
+                fc.parent_id AS parent_id,
+                fc.name AS name,
+                fc.description AS description,
+                fc.user_id AS user_id,
+                (SELECT count(*) FROM %sfaqcategories b WHERE b.parent_id = fc.id) as children 
             FROM 
-                %sfaqcategories a 
+                %sfaqcategories fc
             WHERE 
-                a.parent_id = %d",
+                fc..parent_id = %d",
             SQLPREFIX,
             SQLPREFIX,
             (int)$parentId);
+        
+        if (!is_null($this->language)) {
+            $query .= sprintf(" 
+            AND 
+                fc.lang = '%s'",
+            $this->language);
+        }
+        
+        $query .= "
+            ORDER BY fc.id";
         
         $result = $this->db->query($query);
         
@@ -94,7 +107,8 @@ class PMF_Category_Tree_DataProvider_MultiQuery
      * requested one, excluding the root element (0), but including the requested
      * id.
      *
-     * @param  integer $id Category ID
+     * @param integer $id Category ID
+     * 
      * @return array
      */
     public function getPath($id)
@@ -112,19 +126,26 @@ class PMF_Category_Tree_DataProvider_MultiQuery
                     id = %d",
                 SQLPREFIX,
                 $id);
-
+            
+            if (!is_null($this->language)) {
+                $query .= sprintf(" 
+                AND 
+                    lang = '%s'",
+                $this->language);
+            }
+            
             $result = $this->db->query($query);
-
+            
             if (!$result) {
                 throw new PMF_Exception($this->db->error());
             }
-
+            
             $row = $this->db->fetch_assoc($result);
-
+            
             if (!$row) {
                 throw new PMF_Exception("Category not found");
             }
-
+            
             $id = $row['parent_id'];
         }
         return $retval;

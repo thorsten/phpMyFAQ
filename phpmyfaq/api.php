@@ -87,8 +87,8 @@ switch ($action) {
         break;
         
     case 'getCategories':
-        $category = new PMF_Category($current_user, $current_groups, true);
-        $result   = $category->categories;
+        $categoryNode = new PMF_Category_Node();
+        $result       = $categoryNode->fetchAll();
         break;
         
     case 'getFaqs':

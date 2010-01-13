@@ -1,12 +1,8 @@
 <?php
 /**
- * $Id: stat.ratings.php,v 1.20 2007-04-06 09:52:00 thorstenr Exp $
- *
  * The page with the ratings of the votings
- *
- * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since        2003-02-24
- * @copyright    (c) 2003-2007 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -17,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2003-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2003-02-24
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -27,11 +31,12 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 if ($permission['viewlog']) {
     require_once(PMF_ROOT_DIR.'/inc/Rating.php');
 
-    $category    = new PMF_Category($current_admin_user, $current_admin_groups, false);
-    $ratings     = new PMF_Rating();
-    $ratingdata  = $ratings->getAllRatings();
-    $numratings  = count($ratingdata);
-    $oldcategory = 0;
+    $categoryNode = new PMF_Category_Node();
+    $categoryData = $categoryNode->fetchAll();
+    $ratings      = new PMF_Rating();
+    $ratingdata   = $ratings->getAllRatings();
+    $numratings   = count($ratingdata);
+    $oldcategory  = 0;
 ?>
     <h2><?php print $PMF_LANG["ad_rs"] ?></h2>
     <table class="list">

@@ -32,26 +32,18 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 
 if ($permission['editbt'] || $permission['delbt']) {
-	
-    // (re)evaluate the Category object w/o passing the user language
-    $category          = new PMF_Category($current_admin_user, $current_admin_groups, false);
+    
     $categoryRelations = new PMF_Category_Relations();
-    $category->transform(0);
+    $categoryData      = new PMF_Category_Tree_DataProvider_SingleQuery($LANGCODE);
+    $categoryLayout    = new PMF_Category_Layout(new PMF_Category_Tree_Helper(new PMF_Category_Tree($categoryData)));
+    $linkverifier      = new PMF_Linkverifier($user->getLogin());
+    $comment           = new PMF_Comment();
+    $faq               = new PMF_Faq();
     
-    // Set the Category for the helper class
-    $helper = PMF_Helper_Category::getInstance();
-    $helper->setCategory($category);
-
-    $category->buildTree();
-    
-    $linkverifier = new PMF_Linkverifier($user->getLogin());
     if ($linkverifier->isReady()) {
         link_verifier_javascript();
     }
-
-    $comment = new PMF_Comment();
-    $faq     = new PMF_Faq();
-
+    
     $cond           = $numCommentsByFaq = array();
     $internalSearch = $linkState = $searchterm = '';
     $searchcat      = $currentcategory = 0;
@@ -105,7 +97,7 @@ if ($permission['editbt'] || $permission['delbt']) {
             <td><strong><?php print $PMF_LANG["msgCategory"]; ?>:</strong></td>
             <td><select class="admin" name="searchcat">
             <option value="0"><?php print $PMF_LANG["msgShowAllCategories"]; ?></option>
-            <?php print $helper->renderCategoryOptions($searchcat); ?>
+            <?php print $categoryLayout->renderOptions(array($searchcat)); ?>
             </select></td>
             <td><input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["msgSearch"]; ?>" /></td>
         </tr>
@@ -198,11 +190,11 @@ if ($permission['editbt'] || $permission['delbt']) {
         $wasSearch      = true;
 
         while ($row = $db->fetch_object($result)) {
-        	
-        	if ($searchcat != 0 && $searchcat != (int)$row->category_id) {
-        		continue;
-        	}
-        	
+            
+            if ($searchcat != 0 && $searchcat != (int)$row->category_id) {
+                continue;
+            }
+            
             $faq->faqRecords[] = array(
                 'id'          => $row->id,
                 'category_id' => $row->category_id,
@@ -222,6 +214,7 @@ if ($permission['editbt'] || $permission['delbt']) {
     if ($num > 0) {
         $old = 0;
         $all_ids = array();
+        
         foreach ($faq->faqRecords as $record) {
             $catInfo         =  '';
             $isBracketOpened = false;
@@ -257,7 +250,7 @@ if ($permission['editbt'] || $permission['delbt']) {
 <?php
                 }
 ?>
-    <div class="categorylisting"><a href="javascript:void(0);" onclick="showhideCategory('category_<?php print $cid; ?>');"><img src="../images/more.gif" width="11" height="11" alt="" /> <?php print $category->getPath($cid); ?></a><?php print $catInfo;?></div>
+    <div class="categorylisting"><a href="javascript:void(0);" onclick="showhideCategory('category_<?php print $cid; ?>');"><img src="../images/more.gif" width="11" height="11" alt="" /> <?php print $categoryLayout->renderBreadcrumb($categoryData->getPath($cid)); ?></a><?php print $catInfo;?></div>
     <div id="category_<?php print $cid; ?>" class="categorybox" style="display: <?php print ($currentcategory == $cid) ? 'block' : 'none'; ?>;">
     <table class="listrecords">
     <thead>

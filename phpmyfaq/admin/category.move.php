@@ -1,13 +1,8 @@
 <?php
 /**
  * Select a category to move
- *
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2004-04-29
- * @copyright  2004-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2004-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-04-29
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -26,40 +29,37 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 if ($permission["editcateg"]) {
-    $id         = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
-    $parent_id  = PMF_Filter::filterInput(INPUT_GET, 'parent_id', FILTER_VALIDATE_INT);
-    $category   = new PMF_Category($current_admin_user, $current_admin_groups, false);
-    $categories = $category->getAllCategories();
-    $category->categories = null;
-    unset($category->categories);
-    $category->getCategories($parent_id, false);
-    $category->buildTree($parent_id);
     
-    $header = sprintf('%s: <em>%s</em>',
-        $PMF_LANG['ad_categ_move'],
-        $category->categoryName[$id]['name']);
-
+    $categoryNode         = new PMF_Category_Node();
+    $categoryDataProvider = new PMF_Category_Tree_DataProvider_SingleQuery($LANGCODE);
+    $categoryTreeHelper   = new PMF_Category_Tree_Helper(new PMF_Category_Tree($categoryDataProvider));
+    
+    $categoryId   = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+    $parentId     = PMF_Filter::filterInput(INPUT_GET, 'parent_id', FILTER_VALIDATE_INT);
+    $categoryData = $categoryNode->fetch($categoryId);
+    $header       = sprintf('%s: <em>%s</em>', $PMF_LANG['ad_categ_move'], $categoryData->name);
+    
     printf('<h2>%s</h2>', $header);
 ?>
 	<form action="?action=changecategory" method="post">
     <fieldset>
         <legend><?php print $PMF_LANG["ad_categ_change"]; ?></legend>
-	    <input type="hidden" name="cat" value="<?php print $id; ?>" />
-	    <div class="row">
-               <select name="change" size="1">
+        <input type="hidden" name="cat" value="<?php print $categoryId; ?>" />
+        <div class="row">
+        <select name="change" size="1">
 <?php
-                    foreach ($category->catTree as $cat) {
-                       if ($id != $cat["id"]) {
-                          printf("<option value=\"%s\">%s</option>", $cat['id'], $cat['name']);
-                       }
-                   }
+    foreach ($categoryTreeHelper as $catId => $categoryName) {
+        $parent = $categoryTreeHelper->getInnerIterator()->current()->getParentId();
+        if ($categoryId != $catId && $parentId == $parent) {
+            printf("        <option value=\"%s\">%s</option>\n", $catId, $categoryName);
+        }
+    }
 ?>
-               </select>&nbsp;&nbsp;
-               <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" />
-            </div>
+        </select>&nbsp;&nbsp;
+        <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" />
+        </div>
     </fieldset>
     </form>
-
 <?php
     printf('<p>%s</p>', $PMF_LANG['ad_categ_remark_move']);
 } else {
