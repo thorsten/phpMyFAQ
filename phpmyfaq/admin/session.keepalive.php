@@ -57,7 +57,7 @@ if (!is_null($_language) && PMF_Language::isASupportedLanguage($_language)) {
 PMF_String::init($_language);
 
 $user        = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
-$refreshTime = (PMF_SESSION_ID_EXPIRES - PMF_SESSION_ID_REFRESH) * 60;
+$refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
@@ -74,7 +74,7 @@ if (isset($user) && ($refreshTime > 0)) {
     /*<![CDATA[*/ <!--
     function _PMFSessionTimeoutWarning()
     {
-        if (window.confirm('<?php printf($PMF_LANG['ad_session_expiring'], PMF_SESSION_ID_REFRESH); ?>')) {
+        if (window.confirm('<?php printf($PMF_LANG['ad_session_expiring'], PMF_AUTH_TIMEOUT_WARNING); ?>')) {
             // Reload this iframe: session refreshed!
             location.href = location.href;
         }
@@ -98,7 +98,7 @@ if (isset($user) && ($refreshTime > 0)) {
 
     window.onload = function() {
         var expire = new Date(2009, 0, 1);
-        expire.setSeconds(<?php print PMF_SESSION_ID_EXPIRES; ?> * 60);
+        expire.setSeconds(<?php print PMF_AUTH_TIMEOUT; ?> * 60);
         var topRef = top.document.getElementById('sessioncounter');
 
         window.setTimeout(_PMFSessionTimeoutWarning, <?php print $refreshTime; ?> * 1000);
