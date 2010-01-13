@@ -101,6 +101,28 @@ function cleanInstallation()
     }
 }
 
+/**
+ * Output the data as an HTML Definition List.
+ *
+ * @param  mixed  $value Value
+ * @param  string $key   Key
+ * @param  string $ident Identian
+ * 
+ * @return  void
+ */
+function data_printer($value, $key, $ident = "\n\t")
+{
+    echo $ident, '<dt>', htmlentities($key), '</dt>', $ident, "\t", '<dd>';
+    if (is_array($value)) {
+        echo '<dl>';
+        array_walk($value, 'data_printer', $ident."\t");
+        echo $ident, "\t", '</dl>';
+    } else {
+        echo htmlentities($value);
+    }
+    echo '</dd>';
+}
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -954,10 +976,11 @@ function show(item) {
         <a href="#" onclick="hide('configliste'); return false;">hide again</a>
         <dl>
 <?php
-$q = new PMF_Questionnaire_Data($configs);
-$options = $q->get();
+$questionnaire = new PMF_Helper_Questionnaire($configs);
+$options       = $questionnaire->get();
 array_walk($options, 'data_printer');
-echo '</dl><input type="hidden" name="systemdata" value="'.PMF_String::htmlspecialchars(serialize($q->get()), ENT_QUOTES).'" />';
+echo '</dl><input type="hidden" name="systemdata" value="' . 
+    PMF_String::htmlspecialchars(serialize($questionnaire->get()), ENT_QUOTES) . '" />';
 ?>
     </div>
     <p class="center"><input type="submit" value="Click here to submit the data and fnish the installation process" /></p>
@@ -969,11 +992,6 @@ echo '</dl><input type="hidden" name="systemdata" value="'.PMF_String::htmlspeci
 </div>
 <br />
 <?php
-
-    // Remove 'scripts' folder: no need of prompt anything to the user
-    if (file_exists(PMF_ROOT_DIR."/scripts") && is_dir(PMF_ROOT_DIR."/scripts")) {
-        @rmdir(PMF_ROOT_DIR."/scripts");
-    }
     // Remove 'phpmyfaq.spec' file: no need of prompt anything to the user
     if (file_exists(PMF_ROOT_DIR."/phpmyfaq.spec")) {
         @unlink(PMF_ROOT_DIR."/phpmyfaq.spec");
@@ -993,5 +1011,4 @@ echo '</dl><input type="hidden" name="systemdata" value="'.PMF_String::htmlspeci
     }
     
     HTMLFooter();
-
 }

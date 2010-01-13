@@ -19,8 +19,8 @@
  * under the License.
  *
  * @category  phpMyFAQ
- * @package   PMF_Questionnaire_Data
- * @author    Johannes Schlueter <johannes@php.net>
+ * @package   PMF_Helper
+ * @author    Johannes Schlüter <johannes@php.net>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2009 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
@@ -32,15 +32,15 @@
  * PMF_Questionnaire_Data
  *
  * @category  phpMyFAQ
- * @package   PMF_Questionnaire_Data
- * @author    Johannes Schlueter <johannes@php.net>
+ * @package   PMF_Helper
+ * @author    Johannes Schlüter <johannes@php.net>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2009 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-17
  */
-class PMF_Questionnaire_Data
+class PMF_Helper_Questionnaire
 {
     /**
      * Array with data
@@ -183,26 +183,4 @@ class PMF_Questionnaire_Data
             // - 192.168.0.0/16
             'ip'    => $aIPAddress[0].'.'.$aIPAddress[1].'.XXX.YYY');
     }
-}
-
-/**
- * Output the data as an HTML Definition List.
- *
- * @param  mixed  $value Value
- * @param  string $key   Key
- * @param  string $ident Identian
- * 
- * @return  void
- */
-function data_printer($value, $key, $ident = "\n\t")
-{
-    echo $ident, '<dt>', htmlentities($key), '</dt>', $ident, "\t", '<dd>';
-    if (is_array($value)) {
-        echo '<dl>';
-        array_walk($value, 'data_printer', $ident."\t");
-        echo $ident, "\t", '</dl>';
-    } else {
-        echo htmlentities($value);
-    }
-    echo '</dd>';
 }
