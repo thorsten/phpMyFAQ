@@ -60,7 +60,7 @@ $rss->startDocument('1.0', 'utf-8');
 $rss->startElement('rss');
 $rss->writeAttribute('version', '2.0');
 $rss->startElement('channel');
-$rss->writeElement('title', $faqconfig->get('main.titleFAQ') . ' - ' . utf8_encode($PMF_LANG['msgNews']));
+$rss->writeElement('title', $faqconfig->get('main.titleFAQ') . ' - ' . $PMF_LANG['msgNews']);
 $rss->writeElement('description', html_entity_decode($faqconfig->get('main.metaDescription')));
 $rss->writeElement('link', PMF_Link::getSystemUri('/feed/news/rss.php'));
 

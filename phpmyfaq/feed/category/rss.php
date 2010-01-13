@@ -77,7 +77,7 @@ if (is_array($records)) {
                                     ' (' . $item['visits'] . ' '.$PMF_LANG['msgViews'].')'));
         
         $rss->startElement('description');
-        $rss->writeCdata(utf8_encode($item['record_preview']));
+        $rss->writeCdata($item['record_preview']);
         $rss->endElement();
         
         $rss->writeElement('link', PMF_Link::getSystemUri('/feed/category/rss.php') . $link); 

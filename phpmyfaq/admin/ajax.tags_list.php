@@ -4,11 +4,7 @@
  *
  * @todo Switch code and logic to jQuery and PHP JSON extension
  * 
- * @package    phpMyFAQ
- * @subpackage Administration Ajax
- * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since      2005-12-15
- * @copyright  2005-2009 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,6 +15,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   Ajax
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-12-15
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -50,7 +54,7 @@ if ($permission['editbt']) {
     foreach ($tags as $tagName) {
         $i++;
         if ($i <= PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE) {
-            print utf8_encode($tagName) . "\n";
+            print $tagName . "\n";
         }
     }
 }
