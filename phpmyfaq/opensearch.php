@@ -30,6 +30,8 @@ define('PMF_ROOT_DIR', dirname(__FILE__));
 require PMF_ROOT_DIR . '/inc/Init.php';
 require PMF_ROOT_DIR . '/inc/Link.php';
 
+require_once 'lang/' . $faqconfig->get('main.language');
+
 $baseUrl   = PMF_Link::getSystemUri('/opensearch.php');
 $searchUrl = $baseUrl . '/index.php?action=search';
 $srcUrl    = $baseUrl;
@@ -38,7 +40,7 @@ $opensearch     = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 <OpenSearchDescription xmlns=\"http://a9.com/-/spec/opensearch/1.1/\">
 <ShortName>".$faqconfig->get('main.titleFAQ')."</ShortName>
 <Description>".$faqconfig->get('main.metaDescription')."</Description>
-<Url type=\"text/html\" template=\"".$search_url."&amp;search={searchTerms}\" />
+<Url type=\"text/html\" template=\"".$searchUrl."&amp;search={searchTerms}\" />
 <Language>".$PMF_LANG['metaLanguage']."</Language>
 <OutputEncoding>utf-8</OutputEncoding>
 <Contact>".$faqconfig->get('main.administrationMail')."</Contact>
