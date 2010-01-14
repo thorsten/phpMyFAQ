@@ -5,7 +5,7 @@
  * @package    phpMyFAQ
  * @subpackage Frontend
  * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright  2006-2009 phpMyFAQ Team
+ * @copyright  2006-2010 phpMyFAQ Team
  * @since      2006-11-12
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -33,7 +33,7 @@ if (!is_null($showCaptcha)) {
 
 $translationLanguage = PMF_Filter::filterInput(INPUT_POST, 'translation', FILTER_SANITIZE_STRIPPED, $LANGCODE);
 
-if (!PMF_Init::isASupportedLanguage($translationLanguage)) {
+if (!PMF_Language::isASupportedLanguage($translationLanguage)) {
 	$translationLanguage = $LANGCODE;
 }
 
