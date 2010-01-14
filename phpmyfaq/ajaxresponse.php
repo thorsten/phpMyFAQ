@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Ajax 
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2009 phpMyFAQ Team
+ * @copyright 2007-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-27
@@ -35,6 +35,9 @@ session_start();
 $searchString = PMF_Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
 $ajaxLanguage = PMF_Filter::filterInput(INPUT_POST, 'ajaxlanguage', FILTER_SANITIZE_STRING, 'en');
 $categoryId   = PMF_Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALIDATE_INT, '%');
+
+$Language = new PMF_Language();
+$LANGCODE = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
 
 if (PMF_Language::isASupportedLanguage($ajaxLanguage)) {
     $LANGCODE = trim($ajaxLanguage);
