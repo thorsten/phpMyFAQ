@@ -26,7 +26,7 @@
  */
 
 define('NEWVERSION', '2.7.0-alpha');
-define('APIVERSION', 1);
+define('APIVERSION', 2);
 define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
@@ -55,7 +55,7 @@ function HTMLFooter()
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <title>phpMyFAQ <?php print NEWVERSION; ?> Update</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="shortcut icon" href="../template/default/favicon.ico" type="image/x-icon" />
     <link rel="icon" href="../template/default/favicon.ico" type="image/x-icon" />
     <style media="screen" type="text/css">@import url(style/setup.css);</style>

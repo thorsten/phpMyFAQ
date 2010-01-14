@@ -239,7 +239,6 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
 <?php
     if ($action == 'copyentry') {
-        unset($faqData);
         $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
     }
 

@@ -31,7 +31,7 @@
  */
 
 define('VERSION', '2.7.0-alpha');
-define('APIVERSION', 1);
+define('APIVERSION', 2);
 define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('SAFEMODE', @ini_get('safe_mode'));
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
@@ -53,67 +53,6 @@ $enabledExtensions = array(
     'json',
     'xmlwriter',
     'filter');
-
-/**
- * Lookup for installed database extensions
- * If the first supported extension is enabled, return true.
- *
- * @param  array $supported_databases Array of supported databases
- * @return boolean
- * @access public
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- */
-function db_check($supported_databases)
-{
-    foreach ($supported_databases as $extension => $database) {
-        if (extension_loaded($extension)) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-/**
- * Lookup for installed PHP extensions
- *
- * @param  array $enabledExtensions enabled Extensions
- * @return boolean
- * @access public
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- */
-function extension_check($enabledExtensions, &$output = NULL)
-{
-    $missing_extensions = array();
-    foreach ($enabledExtensions as $extension) {
-
-        if (!extension_loaded($extension)) {
-            $missing_extensions[] = $extension;
-        }
-    }
-
-    if (count($missing_extensions) > 0) {
-        $output = $missing_extensions;
-        return false;
-    }
-    return true;
-}
-
-/**
- * Checks for an installed phpMyFAQ version
- *
- * @return boolean
- * @access public
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- */
-function phpmyfaq_check()
-{
-    if (is_file(PMF_ROOT_DIR.'/inc/data.php') || is_file(PMF_ROOT_DIR . '/config/database.php')) {
-        return false;
-    } else {
-        return true;
-    }
-}
 
 /**
  * Executes the uninstall set of queries
@@ -162,12 +101,34 @@ function cleanInstallation()
     }
 }
 
+/**
+ * Output the data as an HTML Definition List.
+ *
+ * @param  mixed  $value Value
+ * @param  string $key   Key
+ * @param  string $ident Identian
+ * 
+ * @return  void
+ */
+function data_printer($value, $key, $ident = "\n\t")
+{
+    echo $ident, '<dt>', htmlentities($key), '</dt>', $ident, "\t", '<dd>';
+    if (is_array($value)) {
+        echo '<dl>';
+        array_walk($value, 'data_printer', $ident."\t");
+        echo $ident, "\t", '</dl>';
+    } else {
+        echo htmlentities($value);
+    }
+    echo '</dd>';
+}
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <title>phpMyFAQ <?php print VERSION; ?> Setup</title>
-    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=iso-8859-1" />
+    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
     <link rel="shortcut icon" href="../template/default/favicon.ico" type="image/x-icon" />
     <link rel="icon" href="../template/default/favicon.ico" type="image/x-icon" />
     <script language="javascript" type="text/javascript">
@@ -215,13 +176,15 @@ function cleanInstallation()
 
 <?php
 
+$system = new PMF_System();
+
 if (version_compare(PHP_VERSION, '5.2.0', '<')) {
     print "<p class=\"center\">You need PHP 5.2.0 or later!</p>\n";
     HTMLFooter();
     die();
 }
 
-if (!db_check($supported_databases)) {
+if (!$system->checkDatabase($supported_databases)) {
     print '<p class="center">No supported database detected! Please install one of the following' .
           ' database systems and enable the corresponding PHP extension:</p>';
     print '<ul>';
@@ -234,10 +197,10 @@ if (!db_check($supported_databases)) {
 }
 
 $missing = array();
-if (!extension_check($enabledExtensions, $missing)) {
+if (!$system->checkExtension($enabledExtensions)) {
     print "<p class=\"center\">The following extensions are missing! Please enable the PHP extension:</p>\n";
     print "<ul>\n";
-    foreach ($missing as $extension) {
+    foreach ($system->getMissingExtensions() as $extension) {
         printf('    <li>ext/%s</li>', $extension);
     }
     print "</ul>\n";
@@ -245,7 +208,7 @@ if (!extension_check($enabledExtensions, $missing)) {
     die();
 }
 
-if (!phpmyfaq_check()) {
+if (!$system->checkphpMyFAQInstallation()) {
     print '<p class="center">It seems you\'re already running a version of phpMyFAQ.<br />Please use the <a href="update.php">update script</a>.</p>';
     HTMLFooter();
     die();
@@ -283,13 +246,17 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
 <?php
     if (SAFEMODE == 1) {
-        print '<p class="center">The PHP safe mode is enabled. You may have problems when phpMyFAQ writes in some directories.</p>';
+        print '<p class="center">The PHP safe mode is enabled. You may have problems when phpMyFAQ writes in some ' .
+        'directories.</p>';
     }
     if (!extension_loaded('gd')) {
-        print '<p class="center">You don\'t have GD support enabled in your PHP installation. Please enabled GD support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
+        print '<p class="center">You don\'t have GD support enabled in your PHP installation. Please enabled GD ' .
+        'support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
     }
     if (!function_exists('imagettftext')) {
-        print '<p class="center">You don\'t have Freetype support enabled in the GD extension of your PHP installation. Please enabled Freetype support in GD extension otherwise the Captchas for spam protection will be quite easy to break.</p>';
+        print '<p class="center">You don\'t have Freetype support enabled in the GD extension of your PHP ' .
+        'installation. Please enabled Freetype support in GD extension otherwise the Captchas for spam protection ' .
+        'will be quite easy to break.</p>';
     }
 ?>
 <p class="center">
@@ -1009,10 +976,11 @@ function show(item) {
         <a href="#" onclick="hide('configliste'); return false;">hide again</a>
         <dl>
 <?php
-$q = new PMF_Questionnaire_Data($configs);
-$options = $q->get();
+$questionnaire = new PMF_Helper_Questionnaire($configs);
+$options       = $questionnaire->get();
 array_walk($options, 'data_printer');
-echo '</dl><input type="hidden" name="systemdata" value="'.PMF_String::htmlspecialchars(serialize($q->get()), ENT_QUOTES).'" />';
+echo '</dl><input type="hidden" name="systemdata" value="' . 
+    PMF_String::htmlspecialchars(serialize($questionnaire->get()), ENT_QUOTES) . '" />';
 ?>
     </div>
     <p class="center"><input type="submit" value="Click here to submit the data and fnish the installation process" /></p>
@@ -1024,11 +992,6 @@ echo '</dl><input type="hidden" name="systemdata" value="'.PMF_String::htmlspeci
 </div>
 <br />
 <?php
-
-    // Remove 'scripts' folder: no need of prompt anything to the user
-    if (file_exists(PMF_ROOT_DIR."/scripts") && is_dir(PMF_ROOT_DIR."/scripts")) {
-        @rmdir(PMF_ROOT_DIR."/scripts");
-    }
     // Remove 'phpmyfaq.spec' file: no need of prompt anything to the user
     if (file_exists(PMF_ROOT_DIR."/phpmyfaq.spec")) {
         @unlink(PMF_ROOT_DIR."/phpmyfaq.spec");
@@ -1048,5 +1011,4 @@ echo '</dl><input type="hidden" name="systemdata" value="'.PMF_String::htmlspeci
     }
     
     HTMLFooter();
-
 }

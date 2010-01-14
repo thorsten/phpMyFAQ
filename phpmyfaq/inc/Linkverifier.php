@@ -28,44 +28,6 @@
  * @since     2005-08-01
  */
 
-/* Defines number of times linkverifier follows 302 response before failing.
- *
- * Suggested value is above 10 redirects
- */
-
-if (!defined('LINKVERIFIER_MAX_REDIRECT_COUNT')) {
-    define('LINKVERIFIER_MAX_REDIRECT_COUNT', 10);
-}
-
-/* Defines the number of seconds to wait for the remote server to respond
- *
- * Suggested value is 5 seconds
- */
-if (!defined('LINKVERIFIER_CONNECT_TIMEOUT')) {
-    define('LINKVERIFIER_CONNECT_TIMEOUT', 5);
-}
-
-/* Defines the number of seconds to wait for the remote server to send data
- *
- * Suggested value is 10 seconds
- */
-if (!defined('LINKVERIFIER_RESPONSE_TIMEOUT')) {
-    define('LINKVERIFIER_RESPONSE_TIMEOUT', 10);
-}
-
-/* Defines the behaviour when a user click "Edit FAQs" in the backend.
- * Do you want an automatic links verification
- * with live update of each links verification status?
- *
- * Suggested value is:
- * a. false, if you don't use a cron/at entry to call 'cron.verifyurls.php' during each night.
- *           This will avoid browser high load (100% CPU)
- * b. true, if you use a cron/at entry to call 'cron.verifyurls.php' during each night
- */
-if (!defined('LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ')) {
-    define('LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ', false);
-}
-
 /**
  * PMF_LinkVerifier
  *
@@ -81,46 +43,80 @@ if (!defined('LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ')) {
  */
 class PMF_Linkverifier
 {
+    /**
+     * Defines number of times linkverifier follows 302 response before failing.
+     * 
+     * @var integer
+     */
+    private $maxRedirectCount = 10;
+    
+    /** 
+     * Defines the number of seconds to wait for the remote server to respond
+     * 
+     * @var integer
+     */
+    private $connectTimeout = 5;
+    
+    /**
+     * Defines the number of seconds to wait for the remote server to send data
+     *
+     * @var integer
+     */
+    private $responseTimeout = 10;
+    
+    /**
+     * Defines the behaviour when a user click "Edit FAQs" in the backend.
+     * Do you want an automatic links verification
+     * with live update of each links verification status?
+     *
+     * a. false, if you don't use a cron/at entry to call 'cron.verifyurls.php' during each night.
+     *           This will avoid browser high load (100% CPU)
+     * b. true, if you use a cron/at entry to call 'cron.verifyurls.php' during each night
+     * 
+     * @var boolean
+     */
+    private $automaticCallOnEditFaq = false;
+    
     /* List of protocol and urls
      *
-     * @var mixed
+     * @var array
      */
     protected $urlpool = array();
 
     /* List of prohibited prefixes and messages
      *
-     * @var mixed
+     * @var array
      */
     protected $warnlists = array();
 
     /* List of URLs not to probe
      *
-     * @var mixed
+     * @var array
      */
     protected $ignorelists = array();
 
     /* List of protocols we do not want to look at
      *
-     * @var mixed
+     * @var array
      */
     protected $invalid_protocols = array();
 
     /* Last verify results (we might use it later)
      *
-     * @var mixed
+     * @var array
      */
     protected $lastResult = array();
 
     /* List of hosts that are slow to resolve.
      *
-     * @var mixed
+     * @var array
      */
     protected $slow_hosts = array();
 
     /**
     * DB handle
     *
-    * @var  object
+    * @var PMF_Db_Driver
     */
     private $db = null;
 
@@ -135,9 +131,6 @@ class PMF_Linkverifier
      * Constructor
      *
      * @param  string $user User
-     * @author Minoru TODA <todam@netjapan.co.jp>
-     * @author Matteo Scaramuccia <matteo@scaramuccia.com>
-     * @since  2005-08-01
      */
     public function __construct($user = null)
     {
@@ -195,13 +188,11 @@ class PMF_Linkverifier
     /**
      * Resets url pool for next batch of processing.
      *
-     * @access  public
-     * @author  Minoru TODA <todam@netjapan.co.jp>
-     * @since   2005-08-01
+     * @return void
      */
     function resetPool()
     {
-        $this->urlpool = array();
+        $this->urlpool    = array();
         $this->lastResult = array();
     }
 
@@ -446,8 +437,8 @@ class PMF_Linkverifier
         }
 
         // Recursing too much ?
-        if (($redirectCount >= LINKVERIFIER_MAX_REDIRECT_COUNT) || ($url == $redirect)) {
-            return array(false, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_maxredirect'], LINKVERIFIER_MAX_REDIRECT_COUNT));
+        if (($redirectCount >= $this->maxRedirectCount) || ($url == $redirect)) {
+            return array(false, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_maxredirect'], $this->maxRedirectCount));
         }
 
         // If destination is blank, fail.
@@ -518,7 +509,7 @@ class PMF_Linkverifier
         if (@extension_loaded('openssl') && ('https' == $urlParts['scheme'])) {
             $_host = 'ssl://'.$_host;
         }
-        $fp = @fsockopen($_host, $urlParts['port'], $errno, $errstr, LINKVERIFIER_CONNECT_TIMEOUT);
+        $fp = @fsockopen($_host, $urlParts['port'], $errno, $errstr, $this->connectTimeout);
         if (!$fp) {
             // mark this host too slow to verify
             $this->slow_hosts[$urlParts['host']] = true;
@@ -526,7 +517,7 @@ class PMF_Linkverifier
         }
 
         // wait for data with timeout (default: 10secs)
-        stream_set_timeout($fp, LINKVERIFIER_RESPONSE_TIMEOUT, 0);
+        stream_set_timeout($fp, $this->responseTimeout, 0);
         $_url = $urlParts['path'].$urlParts['query'].$urlParts['fragment'];
         fputs($fp, "HEAD ".$_url." HTTP/1.0\r\nHost: ".$urlParts['host']."\r\n");
         // Be polite: let our probe declares itself
@@ -785,7 +776,7 @@ class PMF_Linkverifier
 
         $onLoad = '';
         if ($this->getEntryState($id, $artlang, true) === true) {
-            if (LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ) {
+            if ($this->automaticCallOnEditFaq) {
                 $onLoad = " onload=\"verifyEntryURL(".$id.",'".$artlang."');\"";
             }
         }
