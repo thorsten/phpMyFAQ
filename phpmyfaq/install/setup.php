@@ -30,6 +30,8 @@
  * @since     2002-08-20
  */
 
+set_time_limit(0);
+
 define('VERSION', '2.6.1');
 define('APIVERSION', 1);
 define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
