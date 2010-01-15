@@ -1017,7 +1017,7 @@ array_walk($options, 'data_printer');
 echo '</dl><input type="hidden" name="systemdata" value="'.PMF_String::htmlspecialchars(serialize($q->get()), ENT_QUOTES).'" />';
 ?>
     </div>
-    <p class="center"><input type="submit" value="Click here to submit the data and fnish the installation process" /></p>
+    <p class="center"><input type="submit" value="Click here to submit the data and finish the installation process" /></p>
 </form>
 <div id="questionnaireThanks" style="display:none;">
     <p class="center"><b>Thank you for giving your feedback!</b></p>
