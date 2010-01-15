@@ -43,6 +43,11 @@ require PMF_ROOT_DIR . '/inc/autoLoader.php';
 require PMF_ROOT_DIR . '/inc/functions.php';
 require PMF_ROOT_DIR . '/install/questionnaire.php';
 
+//
+// Initalizing static string wrapper
+//
+PMF_String::init('en');
+
 $query = $uninst = array();
 
 // permission levels
