@@ -66,7 +66,7 @@ class PMF_TransTool
                     if (0 === PMF_String::strpos($tmp, 'array')) {
                         $retval[$key] = PMF_String::substr($tmp, 0, -1);
                     } else {
-                        $retval[$key] = PMF_String::substr($tmp, 1, -2);
+                        $retval[$key] = stripslashes(PMF_String::substr($tmp, 1, -2));
                     }
                 }
             }
