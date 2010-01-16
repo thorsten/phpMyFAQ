@@ -20,6 +20,7 @@ $PMF_LANG['metaCharset'] = 'utf-8';
 $PMF_LANG['metaLanguage'] = 'id';
 $PMF_LANG['language'] = 'indonesian';
 $PMF_LANG['dir'] = 'ltr';
+$PMF_LANG["nplurals"] = "1";
 
 // Navigation
 $PMF_LANG["msgCategory"] = "Kategori";

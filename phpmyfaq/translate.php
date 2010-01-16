@@ -37,7 +37,7 @@ if (!is_null($showCaptcha)) {
 
 $translationLanguage = PMF_Filter::filterInput(INPUT_POST, 'translation', FILTER_SANITIZE_STRIPPED, $LANGCODE);
 
-if (!PMF_Init::isASupportedLanguage($translationLanguage)) {
+if (!PMF_Language::isASupportedLanguage($translationLanguage)) {
 	$translationLanguage = $LANGCODE;
 }
 
