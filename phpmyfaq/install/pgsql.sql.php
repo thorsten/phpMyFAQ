@@ -2,22 +2,14 @@
 /**
  * CREATE TABLE instruction for PostgreSQL database
  *
-<<<<<<< HEAD
  * @package	   phpMyFAQ
  * @subpackage Installation
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author     Tom Rochester <tom.rochester@gmail.com>
  * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since      2004-09-18
- * @version    SVN: $Id$
  * @copyright  2004-2009 phpMyFAQ Team
-=======
- * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author       Tom Rochester <tom.rochester@gmail.com>
- * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since        2004-09-18
- * @copyright    2004-2009 phpMyFAQ Team
->>>>>>> 9739fbd30070b2ae1c13cc77d0b17810fe27de24
+ *
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -58,7 +50,7 @@ $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqsessions CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqstopwords CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqtags CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faquser CASCADE";
-$uninst[] = "DROP SEQUENCE ".$sqltblpre."faquser_user_id_seq";
+$uninst[] = "DROP SEQUENCE IF EXISTS ".$sqltblpre."faquser_user_id_seq";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faquserdata CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faquserlogin CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faquser_group CASCADE";
