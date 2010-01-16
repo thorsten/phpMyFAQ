@@ -140,7 +140,7 @@ class PMF_Glossary
                 .'(\W+)('.$item['item'].')$'
                 .'/mis',
                 array($this, 'setAbbreviations'),
-                $content); 
+                $content);
         }
 
         return $content;

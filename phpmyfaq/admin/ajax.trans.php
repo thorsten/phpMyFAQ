@@ -40,8 +40,6 @@ switch($ajax_action) {
         foreach ((array)@$_POST['PMF_LANG'] as $key => $val) {
         
             if (is_string($val)) {
-                $val = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $val);
-                $val = str_replace("'", "\\'", $val);
                 $_SESSION['trans']['rightVarsOnly']["PMF_LANG[$key]"]  = $val;
             } elseif (is_array($val)) {
                 /**
@@ -99,11 +97,16 @@ switch($ajax_action) {
          */
         foreach ($_SESSION['trans']['rightVarsOnly'] as $key => $val) {
             if (0 === strpos($key, 'PMF_LANG')) {
+                $val = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $val);
+                $val = str_replace("'", "\\'", $val);
                 $val = "'$val'";
+            } else if (0 === strpos($key, 'LANG_CONF')) {
+                
             }
+            
             array_push($tmpLines, '$' . str_replace(array('[', ']'), array("['", "']"), $key) . " = $val;");
         }
-        
+       
         $newFileContents .= implode("\n", $tmpLines);
         
         unset($_SESSION['trans']);
