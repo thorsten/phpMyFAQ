@@ -58,16 +58,13 @@ $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqsessions CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqstopwords CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqtags CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faquser CASCADE";
-$uninst[] = "DROP SEQUENCE ".$sqltblpre."faquser_user_id_seq";
+$uninst[] = "DROP SEQUENCE IF EXISTS ".$sqltblpre."faquser_user_id_seq";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faquserdata CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faquserlogin CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faquser_group CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faquser_right CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqvisits CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqvoting CASCADE";
-
-
-
 
 //faquser
 $query[] = "CREATE SEQUENCE ".$sqltblpre."faquser_user_id_seq START WITH 2";
