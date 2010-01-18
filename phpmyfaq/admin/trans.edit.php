@@ -23,8 +23,6 @@
  * @since     2009-05-11
  */
 
-dump($_SESSION);
-
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();

@@ -30,6 +30,8 @@
  * @since     2002-08-20
  */
 
+set_time_limit(0);
+
 define('VERSION', '2.7.0-alpha');
 define('APIVERSION', 2);
 define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
@@ -40,6 +42,11 @@ require PMF_ROOT_DIR . '/config/constants.php';
 require PMF_ROOT_DIR . '/inc/autoLoader.php';
 require PMF_ROOT_DIR . '/inc/functions.php';
 require PMF_ROOT_DIR . '/install/questionnaire.php';
+
+//
+// Initalizing static string wrapper
+//
+PMF_String::init('en');
 
 $query = $uninst = array();
 
@@ -983,7 +990,7 @@ echo '</dl><input type="hidden" name="systemdata" value="' .
     PMF_String::htmlspecialchars(serialize($questionnaire->get()), ENT_QUOTES) . '" />';
 ?>
     </div>
-    <p class="center"><input type="submit" value="Click here to submit the data and fnish the installation process" /></p>
+    <p class="center"><input type="submit" value="Click here to submit the data and finish the installation process" /></p>
 </form>
 <div id="questionnaireThanks" style="display:none;">
     <p class="center"><b>Thank you for giving your feedback!</b></p>

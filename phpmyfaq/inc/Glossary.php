@@ -139,8 +139,8 @@ class PMF_Glossary
                 // e. the glossary item could be at the end of the string as a distinct word
                 .'(\W+)('.$item['item'].')$'
                 .'/mis',
-                array($this, '_setAbbreviations'),
-                $content); 
+                array($this, 'setAbbreviations'),
+                $content);
         }
 
         return $content;
@@ -152,7 +152,7 @@ class PMF_Glossary
      * @param  array $matches Matchings
      * @return string
      */
-    private function _setAbbreviations(Array $matches)
+    public function setAbbreviations(Array $matches)
     {
         if (count($matches) > 9) {
             // if the word is at the end of the string
