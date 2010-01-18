@@ -7,8 +7,7 @@
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since      2005-01-11
- * @version    SVN: $Id$
- * @copyright  2005-2009 phpMyFAQ Team
+ * @copyright  2005-2010 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,6 +19,7 @@
  * License for the specific language governing rights and limitations
  * under the License.
  */
+
 
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqattachment";
@@ -56,24 +56,20 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faquser_right";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqvisits";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqvoting";
 
+
+//faqdata_user
+$query[] = "CREATE TABLE ".$sqltblpre."faqdata_user (
+record_id integer NOT NULL,
+user_id integer NOT NULL,
+PRIMARY KEY (record_id, user_id))";
+
 //faqadminlog
 $query[] = "CREATE TABLE ".$sqltblpre."faqadminlog (
 id integer NOT NULL,
 time integer NOT NULL,
-usr integer NOT NULL REFERENCES ".$sqltblpre."faquser(user_id),
-text VARCHAR(max) NOT NULL,
+usr integer NOT NULL,
+text VARCHAR(8000) NOT NULL,
 ip varchar(64) NOT NULL,
-PRIMARY KEY (id))";
-
-//faqattachment
-$query[] = "CREATE TABLE " . $sqltblpre . "faqattachment (
-id INTEGER NOT NULL,
-record_id INTEGER NOT NULL,
-record_lang VARCHAR(5) NOT NULL,
-hash CHAR(33) NOT NULL,
-filename VARCHAR(255) NOT NULL,
-file_contents BLOB,
-encrypted BIT,
 PRIMARY KEY (id))";
 
 //faqattachment
@@ -86,14 +82,14 @@ virtual_hash CHAR(32) NOT NULL,
 password_hash CHAR(40) NULL,
 filename VARCHAR(255) NOT NULL,
 filesize INTEGER NOT NULL,
-encrypted INTEGER NOT NULL DEFAULT FALSE,
+encrypted INTEGER NOT NULL DEFAULT 0,
 mime_type VARCHAR(255) NULL,
 PRIMARY KEY (id))";
 
 //faqattachment file
 $query[] = "CREATE TABLE " . $sqltblpre . "faqattachment_file (
 virtual_hash CHAR(32) NOT NULL,
-contents BLOB NOT NULL,
+contents TEXT NOT NULL,
 PRIMARY KEY (virtual_hash))";
 
 //faqcaptcha
@@ -144,9 +140,9 @@ id integer NOT NULL,
 beitrag SMALLINT NOT NULL,
 lang varchar(5) NOT NULL,
 revision_id integer NOT NULL DEFAULT 0,
-usr integer NOT NULL REFERENCES ".$sqltblpre."faquser(user_id),
+usr integer NOT NULL ,
 datum integer NOT NULL,
-what VARCHAR(max) DEFAULT NULL,
+what text DEFAULT NULL,
 PRIMARY KEY (id, lang))";
 
 //faqcomments
@@ -156,9 +152,9 @@ id integer NOT NULL,
 type varchar(10) NOT NULL,
 usr varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
-comment VARCHAR(max) NOT NULL,
+comment text NOT NULL,
 datum varchar(64) NOT NULL,
-helped VARCHAR(max) DEFAULT NULL,
+helped text DEFAULT NULL,
 PRIMARY KEY (id_comment))";
 
 //faqconfig
@@ -175,9 +171,9 @@ solution_id integer NOT NULL,
 revision_id integer NOT NULL DEFAULT 0,
 active char(3) NOT NULL,
 sticky INTEGER NOT NULL,
-keywords VARCHAR(max) DEFAULT NULL,
-thema VARCHAR(max) NOT NULL,
-content VARCHAR(max) DEFAULT NULL,
+keywords text DEFAULT NULL,
+thema text NOT NULL,
+content text DEFAULT NULL,
 author varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment char(1) default 'y',
@@ -196,9 +192,9 @@ solution_id integer NOT NULL,
 revision_id integer NOT NULL DEFAULT 0,
 active char(3) NOT NULL,
 sticky INTEGER NOT NULL,
-keywords VARCHAR(max) DEFAULT NULL,
-thema VARCHAR(max) NOT NULL,
-content VARCHAR(max) DEFAULT NULL,
+keywords text DEFAULT NULL,
+thema text NOT NULL,
+content text DEFAULT NULL,
 author varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment char(1) default 'y',
@@ -222,25 +218,19 @@ tagging_id INTEGER NOT NULL,
 PRIMARY KEY (record_id, tagging_id)
 )";
 
-//faqdata_user
-$query[] = "CREATE TABLE ".$sqltblpre."faqdata_user (
-record_id integer NOT NULL,
-user_id integer NOT NULL,
-PRIMARY KEY (record_id, user_id))";
-
 //faqglossary
 $query[] = "CREATE TABLE ".$sqltblpre."faqglossary (
 id integer NOT NULL ,
 lang varchar(5) NOT NULL ,
 item varchar(255) NOT NULL ,
-definition VARCHAR(max) NOT NULL,
+definition text NOT NULL,
 PRIMARY KEY (id, lang))";
 
 //faqgroup
 $query[] = "CREATE TABLE ".$sqltblpre."faqgroup (
 group_id integer NOT NULL,
 name varchar(25) NULL,
-description VARCHAR(max) NULL,
+description text NULL,
 auto_join integer NULL,
 PRIMARY KEY(group_id)
 )
@@ -272,7 +262,7 @@ $query[] = "CREATE TABLE ".$sqltblpre."faqnews (
 id integer NOT NULL,
 lang varchar(5) NOT NULL,
 header varchar(255) NOT NULL,
-artikel VARCHAR(max) NOT NULL,
+artikel text NOT NULL,
 datum varchar(14) NOT NULL,
 author_name  varchar(255) NULL,
 author_email varchar(255) NULL,
@@ -291,7 +281,7 @@ id integer NOT NULL,
 ask_username varchar(100) NOT NULL,
 ask_usermail varchar(100) NOT NULL,
 ask_rubrik integer NOT NULL,
-ask_content VARCHAR(max) NOT NULL,
+ask_content text NOT NULL,
 ask_date varchar(20) NOT NULL,
 is_visible char(1) default 'Y',
 PRIMARY KEY (id))";
@@ -300,7 +290,7 @@ PRIMARY KEY (id))";
 $query[] = "CREATE TABLE ".$sqltblpre."faqright (
 right_id integer NOT NULL,
 name varchar(50) NULL,
-description VARCHAR(max) NULL,
+description text NULL,
 for_users integer NULL DEFAULT 1,
 for_groups integer NULL DEFAULT 1,
 PRIMARY KEY (right_id)

@@ -45,6 +45,11 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
     $LANGCODE = 'en';
 }
 
+//
+// Initalizing static string wrapper
+//
+PMF_String::init($LANGCODE);
+
 $faq     = new PMF_Faq();
 $rssData = $faq->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN);
 $num     = count($rssData);
