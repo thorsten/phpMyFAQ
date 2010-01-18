@@ -44,6 +44,9 @@ Version 2.5.7 - 2010-01
 - updated Dutch translation
 - updated Indonasian translation
 - updated Chinese (Simplified) translation
+- updated Japanese translation
+- updated Norwegian Bokmal translation
+- many minor bugfixes (Thorsten, Guillaume Le Maout)
 
 Version 2.5.6 - 2009-12-22
 - updated bundled TinyMCE editor component to version 3.2.7 (Thorsten)

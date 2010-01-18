@@ -58,9 +58,6 @@ $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faquser_right CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqvisits CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqvoting CASCADE";
 
-
-
-
 //faquser
 $query[] = "CREATE SEQUENCE ".$sqltblpre."faquser_user_id_seq START WITH 2";
 
