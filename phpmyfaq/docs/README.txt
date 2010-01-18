@@ -12,6 +12,8 @@ Changes since 2.5.6:
 - updated Dutch translation
 - updated Indonasian translation
 - updated Chinese (Simplified) translation
+- updated Japanese translation
+- updated Norwegian Bokmal translation
 - many minor bugfixes (Thorsten, Guillaume Le Maout)
 
 For known issues please take a look at KNOWNBUGS.txt
@@ -23,6 +25,8 @@ Version 2.5.7 - 2010-01
 - updated Dutch translation
 - updated Indonasian translation
 - updated Chinese (Simplified) translation
+- updated Japanese translation
+- updated Norwegian Bokmal translation
 - many minor bugfixes (Thorsten, Guillaume Le Maout)
 
 Version 2.5.6 - 2009-12-22
