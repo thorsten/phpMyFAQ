@@ -46,6 +46,7 @@ header("Vary: Negotiate,Accept");
     <link rel="shortcut icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
     <link rel="icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
     
+    <style type="text/css"> @import url(style/reset.css); </style>
     <style type="text/css"> @import url(style/admin.css); </style>
     <style type="text/css"> @import url(../inc/js/plugins/autocomplete/jquery.autocomplete.css); </style>
     <style type="text/css"> @import url(../inc/js/plugins/datePicker/datePicker.css); </style>
