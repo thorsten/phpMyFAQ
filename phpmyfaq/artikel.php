@@ -66,7 +66,7 @@ $content = $oGlossary->insertItemsIntoContent($content);
 $thema   = $oGlossary->insertItemsIntoContent($thema);
 
 // Set the path of the current category
-$categoryName = $category->getPath($currentCategory, ' &raquo; ', true);
+$categoryName = $categoryLayout->renderBreadcrumb($categoryPath);
 
 $changeLanguagePath = PMF_Link::getSystemRelativeUri().sprintf('?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s', $sids, $currentCategory, $id, $LANGCODE);
 $oLink              = new PMF_Link($changeLanguagePath);
