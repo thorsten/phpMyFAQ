@@ -40,7 +40,7 @@ header("Vary: Negotiate,Accept");
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
 <head>
     <title><?php print $faqconfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
-    <meta name="copyright" content="(c) 2001-2009 phpMyFAQ Team" />
+    <meta name="copyright" content="(c) 2001-2010 phpMyFAQ Team" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <link rel="shortcut icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
@@ -81,7 +81,12 @@ header("Vary: Negotiate,Accept");
         </div>
     </div>
 
-<?php if (isset($auth)) { ?>
+<?php if (isset($auth)) {
+    $user         = new PMF_User();
+    $groupSupport = ($user->perm instanceof PMF_Perm_PermMedium);
+    $adminHelper  = PMF_Helper_Administration::getInstance();
+    $adminHelper->setPermission($permission);
+?>
     <div id="topmenu">
         <div class="rights">
         </div>
@@ -99,22 +104,18 @@ header("Vary: Negotiate,Accept");
         </div>
     </div>
 <?php
-    // check for group support
-    $user            = new PMF_User();
-    $groupSupport    = ($user->perm instanceof PMF_Perm_PermMedium);
     $secLevelEntries = '';
-
     switch ($action) {
         case 'user':
         case 'group':
         case 'passwd':
         case 'cookies':
             $secLevelHeader   = $PMF_LANG['admin_mainmenu_users'];
-            $secLevelEntries .= addMenuEntry('adduser+edituser+deluser', 'user', 'ad_menu_user_administration', $action);
+            $secLevelEntries .= $adminHelper->addMenuEntry('adduser+edituser+deluser', 'user', 'ad_menu_user_administration', $action);
             if ($groupSupport) {
-                $secLevelEntries .= addMenuEntry('adduser+edituser+deluser', 'group', 'ad_menu_group_administration', $action);
+                $secLevelEntries .= $adminHelper->addMenuEntry('adduser+edituser+deluser', 'group', 'ad_menu_group_administration', $action);
             }
-            $secLevelEntries .= addMenuEntry('passwd', 'passwd', 'ad_menu_passwd', $action);
+            $secLevelEntries .= $adminHelper->addMenuEntry('passwd', 'passwd', 'ad_menu_passwd', $action);
             break;
         case 'content':
         case 'category':
@@ -145,13 +146,13 @@ header("Vary: Negotiate,Accept");
         case 'question':
         case 'comments':
             $secLevelHeader   = $PMF_LANG['admin_mainmenu_content'];
-            $secLevelEntries .= addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit', $action);
-            $secLevelEntries .= addMenuEntry('addbt', 'editentry', 'ad_entry_add', $action);
-            $secLevelEntries .= addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit', $action);
-            $secLevelEntries .= addMenuEntry('delcomment', 'comments', 'ad_menu_comments', $action);
-            $secLevelEntries .= addMenuEntry('delquestion', 'question', 'ad_menu_open', $action);
-            $secLevelEntries .= addMenuEntry('addglossary+editglossary+delglossary', 'glossary', 'ad_menu_glossary', $action);
-            $secLevelEntries .= addMenuEntry('addnews+editnews+delnews', 'news', 'ad_menu_news_edit', $action);
+            $secLevelEntries .= $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit', $action);
+            $secLevelEntries .= $adminHelper->addMenuEntry('addbt', 'editentry', 'ad_entry_add', $action);
+            $secLevelEntries .= $adminHelper->addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit', $action);
+            $secLevelEntries .= $adminHelper->addMenuEntry('delcomment', 'comments', 'ad_menu_comments', $action);
+            $secLevelEntries .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open', $action);
+            $secLevelEntries .= $adminHelper->addMenuEntry('addglossary+editglossary+delglossary', 'glossary', 'ad_menu_glossary', $action);
+            $secLevelEntries .= $adminHelper->addMenuEntry('addnews+editnews+delnews', 'news', 'ad_menu_news_edit', $action);
             break;
         case 'statistics':
         case 'viewsessions':
@@ -160,14 +161,14 @@ header("Vary: Negotiate,Accept");
         case 'adminlog':
         case 'searchstats':
             $secLevelHeader   = $PMF_LANG['admin_mainmenu_statistics'];
-            $secLevelEntries .= addMenuEntry('viewlog', 'statistics', 'ad_menu_stat', $action);
-            $secLevelEntries .= addMenuEntry('viewlog', 'viewsessions', 'ad_menu_session', $action);
-            $secLevelEntries .= addMenuEntry('adminlog', 'adminlog', 'ad_menu_adminlog', $action);
-            $secLevelEntries .= addMenuEntry('viewlog', 'searchstats', 'ad_menu_searchstats', $action);
+            $secLevelEntries .= $adminHelper->addMenuEntry('viewlog', 'statistics', 'ad_menu_stat', $action);
+            $secLevelEntries .= $adminHelper->addMenuEntry('viewlog', 'viewsessions', 'ad_menu_session', $action);
+            $secLevelEntries .= $adminHelper->addMenuEntry('adminlog', 'adminlog', 'ad_menu_adminlog', $action);
+            $secLevelEntries .= $adminHelper->addMenuEntry('viewlog', 'searchstats', 'ad_menu_searchstats', $action);
             break;
         case 'export':
             $secLevelHeader   = $PMF_LANG['admin_mainmenu_exports'];
-            $secLevelEntries .= addMenuEntry('', 'export', 'ad_menu_export', $action);
+            $secLevelEntries .= $adminHelper->addMenuEntry('', 'export', 'ad_menu_export', $action);
             break;
         case 'config':
         case 'linkconfig':
@@ -177,17 +178,17 @@ header("Vary: Negotiate,Accept");
         case 'transadd':
         case 'upgrade':
             $secLevelHeader   = $PMF_LANG['admin_mainmenu_configuration'];
-            $secLevelEntries .= addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
-            $secLevelEntries .= addMenuEntry('editconfig+editbt+delbt', 'linkconfig', 'ad_menu_linkconfig', $action);
-            $secLevelEntries .= addMenuEntry('editconfig', 'stopwordsconfig', 'ad_menu_stopwordsconfig', $action);
-            $secLevelEntries .= addMenuEntry('edittranslation+addtranslation+deltranslation', 'translist', 'ad_menu_translations', $action);
+            $secLevelEntries .= $adminHelper->addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
+            $secLevelEntries .= $adminHelper->addMenuEntry('editconfig+editbt+delbt', 'linkconfig', 'ad_menu_linkconfig', $action);
+            $secLevelEntries .= $adminHelper->addMenuEntry('editconfig', 'stopwordsconfig', 'ad_menu_stopwordsconfig', $action);
+            $secLevelEntries .= $adminHelper->addMenuEntry('edittranslation+addtranslation+deltranslation', 'translist', 'ad_menu_translations', $action);
             break;
         default:
             $secLevelHeader   = $PMF_LANG['admin_mainmenu_home'];
-            $secLevelEntries .= addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit');
-            $secLevelEntries .= addMenuEntry('addbt', 'editentry', 'ad_quick_record');
-            $secLevelEntries .= addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit');
-            $secLevelEntries .= addMenuEntry('delquestion', 'question', 'ad_menu_open');
+            $secLevelEntries .= $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit');
+            $secLevelEntries .= $adminHelper->addMenuEntry('addbt', 'editentry', 'ad_quick_record');
+            $secLevelEntries .= $adminHelper->addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit');
+            $secLevelEntries .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open');
             break;
     }
 ?>

@@ -22,10 +22,12 @@
  */
 
 /*	General	*/
-* { padding: 0; margin: 0; }
-body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; line-height: 1.6em; color: #19191B;
-    background: url(../../images/background.png) repeat-x; }
-#wrap { margin: 0 auto; max-width: 1200px; }
+body { 
+    font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; 
+    line-height: 1.6em; 
+    color: #19191B;
+    border-top: 5px solid #FF9900;
+}
 
 /* Header */
 #top { margin: 0 auto; padding: 0; color: #BEC5CD; height: 87px; background-color: #0D2458; }
