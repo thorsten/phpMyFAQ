@@ -1,4 +1,4 @@
-phpMyFAQ 2.5.7
+phpMyFAQ 2.5.8
 Codename "Pandora"
 
 Installation/Update:
@@ -7,18 +7,15 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 2.5.6:
-- improved glossary detection (Guillaume Le Maout)
-- updated Dutch translation
-- updated Indonasian translation
-- updated Chinese (Simplified) translation
-- updated Japanese translation
-- updated Norwegian Bokmal translation
-- many minor bugfixes (Thorsten, Guillaume Le Maout)
+Changes since 2.5.7:
+- 
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
+
+Version 2.5.8 - 2010-
+-
 
 Version 2.5.7 - 2010-01-19
 - improved glossary detection (Guillaume Le Maout)
