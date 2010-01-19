@@ -1,3 +1,26 @@
+CHANGED FILES FROM 2.5.6 -> 2.5.7
+
+./admin/footer.php
+./feed/category/rss.php
+./feed/latest/rss.php
+./feed/news/rss.php
+./feed/openquestions/rss.php
+./feed/topten/rss.php
+./inc/Glossary.php
+./inc/PMF_Export/Pdf.php
+./inc/functions.php
+./install/installer.php
+./install/update.php
+./lang/language_id.php
+./lang/language_ja.php
+./lang/language_nb.php
+./lang/language_nl.php
+./lang/language_zh.php
+./template/contact.tpl
+./template/index.tpl
+
+
+
 CHANGED FILES FROM 2.5.5 -> 2.5.6
 
 ./admin/editor/plugins/ajaxfilemanager/ajax_text_editor.php

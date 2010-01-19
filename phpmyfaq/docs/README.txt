@@ -20,7 +20,7 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.5.7 - 2010-01
+Version 2.5.7 - 2010-01-19
 - improved glossary detection (Guillaume Le Maout)
 - updated Dutch translation
 - updated Indonasian translation
