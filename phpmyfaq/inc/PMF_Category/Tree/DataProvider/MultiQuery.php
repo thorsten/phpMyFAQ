@@ -76,7 +76,7 @@ class PMF_Category_Tree_DataProvider_MultiQuery
             FROM 
                 %sfaqcategories fc
             WHERE 
-                fc..parent_id = %d",
+                fc.parent_id = %d",
             SQLPREFIX,
             SQLPREFIX,
             (int)$parentId);
