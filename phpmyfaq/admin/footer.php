@@ -31,8 +31,11 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 ?>
         </div>
     </div>
+</div>
+<!-- /content -->
 
-    <!-- Footer -->
+<!-- footer -->
+<div id="footerWrapper" class="container_16">
     <div id="footer">
         <div class="right">
         <?php print $faqconfig->get('main.titleFAQ'); ?> is proudly powered by <strong>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></strong> | 
@@ -40,8 +43,8 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
         &copy; 2001-2010 <a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a>
         </div>
     </div>
-
 </div>
+<!-- /footer -->
 
 <?php
 if (isset($auth)) {

@@ -28,6 +28,13 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
+if (isset($auth)) {
+    $user         = new PMF_User();
+    $groupSupport = ($user->perm instanceof PMF_Perm_PermMedium);
+    $adminHelper  = PMF_Helper_Administration::getInstance();
+    $adminHelper->setPermission($permission);
+}
+
 header("Expires: Thu, 7 Apr 1977 14:47:00 GMT");
 header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
@@ -47,6 +54,7 @@ header("Vary: Negotiate,Accept");
     <link rel="icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
     
     <style type="text/css"> @import url(style/reset.css); </style>
+    <style type="text/css"> @import url(style/960.css); </style>
     <style type="text/css"> @import url(style/admin.css); </style>
     <style type="text/css"> @import url(../inc/js/plugins/autocomplete/jquery.autocomplete.css); </style>
     <style type="text/css"> @import url(../inc/js/plugins/datePicker/datePicker.css); </style>
@@ -61,36 +69,19 @@ header("Vary: Negotiate,Accept");
 <body id="body" dir="<?php print $PMF_LANG["dir"]; ?>">
 <a name="top"></a>
 
-<div id="wrap">
-    <div id="top">
-        <div class="rights">
-        </div>
-        <div id="languageselection">
-        <?php if (isset($auth) && is_null($action)) { ?>
-            <form action="index.php<?php print (isset($action) ? '?action=' . $action : ''); ?>" method="post">
-            <label for="language"><?php print $PMF_LANG['msgLangaugeSubmit']; ?>: </label>
-            <?php print PMF_Language::selectLanguages($LANGCODE, true); ?>
-            </form>
+<!-- header -->
+<div id="headerWrapper">
+    <div id="header" class="container_16">
+        
+        <h1><a href="../">phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></a></h1>
+        <?php if (isset($auth)) { ?>
+        <p id="session"><?php print $PMF_LANG['ad_session_expiration']; ?>: <span id="sessioncounter">Loading...</span></p>
         <?php } ?>
-        </div>
-        <div class="lefts">
-            <h1><a class="mainpage" href="../">phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></a></h1>
-            <?php if (isset($auth)) { ?>
-            <h2><?php print $PMF_LANG['ad_session_expiration']; ?>: <span id="sessioncounter">Loading...</span></h2>
-            <?php } ?>
-        </div>
-    </div>
+        
+        
 
-<?php if (isset($auth)) {
-    $user         = new PMF_User();
-    $groupSupport = ($user->perm instanceof PMF_Perm_PermMedium);
-    $adminHelper  = PMF_Helper_Administration::getInstance();
-    $adminHelper->setPermission($permission);
-?>
-    <div id="topmenu">
-        <div class="rights">
-        </div>
-        <div class="lefts">
+        <div id="navigation">
+        <?php if (isset($auth)) { ?>
             <ul>
                 <li><a href="index.php"><?php print $PMF_LANG['admin_mainmenu_home']; ?></a></li>
                 <li><a href="index.php?action=user"><?php print $PMF_LANG['admin_mainmenu_users']; ?></a></li>
@@ -101,9 +92,25 @@ header("Vary: Negotiate,Accept");
                 <li><a href="index.php?action=config"><?php print $PMF_LANG['admin_mainmenu_configuration']; ?></a></li>
                 <li><a class="logout" href="index.php?action=logout"><?php print $PMF_LANG['admin_mainmenu_logout']; ?></a></li>
             </ul>
+        <?php } ?>
         </div>
+        
+        <?php if (isset($auth) && is_null($action)) { ?>
+        <form id="languageSelection" action="index.php<?php print (isset($action) ? '?action=' . $action : ''); ?>" method="post">
+        <p>
+            <label for="language"><?php print $PMF_LANG['msgLangaugeSubmit']; ?>: </label>
+            <?php print PMF_Language::selectLanguages($LANGCODE, true); ?>
+        </p>
+        </form>
+        <?php } ?>
+        
     </div>
-<?php
+</div>
+<!-- /header -->
+
+<!-- content -->
+<?php if (isset($auth)) {
+    
     $secLevelEntries = '';
     switch ($action) {
         case 'user':
@@ -193,8 +200,9 @@ header("Vary: Negotiate,Accept");
     }
 ?>
 
-    <div id="main">
-        <div id="leftmenu">
+<div id="contentWrapper">
+    <div id="mainContent" class="container_16">
+        <div id="leftMenu" class="grid_4">
             <h2><?php print $secLevelHeader; ?></h2>
             <div class="box">
                 <ul>
@@ -207,7 +215,5 @@ header("Vary: Negotiate,Accept");
                 <span id="saving_data_indicator"></span>
             </div>
         </div>
-        
-        <div id="maincontent">
+        <div id="rightContent">
 <?php } ?>
-
