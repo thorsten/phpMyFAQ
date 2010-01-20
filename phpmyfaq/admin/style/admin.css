@@ -28,12 +28,12 @@ body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif;  line-height: 1.6
 /* Header */
 #headerWrapper { width: 100%; background: #ffffff url(../images/headerBackground.png) repeat-x; 
     margin: 0; padding: 0; }
-#header { position: relative; margin: 0 auto; height: 100px; }
+#header { position: relative; margin: 0 auto; height: 111px; }
 #header h1 { margin: 0; padding: 0; }
-#header h1 a { position: absolute; margin: 0; padding: 0 5px 0 0; text-decoration: none; top: 45px; left: 20px; }
+#header h1 a { position: absolute; margin: 0; padding: 0 5px 0 0; text-decoration: none; top: 55px; left: 20px; }
 #header h1 a:hover { border: none; }
 #header p#session { position: absolute; margin: 0; padding: 0; line-height: 1.6em; 
-    font-style: italic; width: 400px; top: 75px; left: 20px; }
+    font-style: italic; top: 85px; left: 20px; }
 
 /* Header language selection */
 #header form#languageSelection { position: absolute; top: 15px; right: 0; padding: 0; margin: 0;
@@ -49,11 +49,11 @@ body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif;  line-height: 1.6
 #header #navigation ul li { float: left; margin: 0; padding: 7px 0 0 10px; }
 #header #navigation ul li a { float: left; padding: 0 5px 7px 5px; margin: 0; 
     color: #666666; font: bold 14px/40px; text-transform: uppercase; border: 1px solid transparent; }
-#header #navigation ul li a:hover, #header #navigation ul li a:active { color: #212121; background: #ffffff; 
-    border-top: 1px solid #666666; border-left: 1px solid #666666; border-right: 1px solid #666666; }
+#header #navigation ul li a:hover, #header #navigation ul li a:active { color: #212121; }
 #header #navigation ul li#current {  }
-#header #navigation ul li#current a { color: #212121; border-top: 1px solid #666666; 
+#header #navigation ul li#current a { color: #212121;  background: #ffffff; border-top: 1px solid #666666; 
     border-left: 1px solid #666666; border-right: 1px solid #666666; }
+#header #navigation ul li a.logout { color: red; font-weight: bold; }
 
 /* Main container */
 #contentWrapper { background: #ffffff; width: 100%; padding: 5px 0; 

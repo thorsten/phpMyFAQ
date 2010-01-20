@@ -83,7 +83,7 @@ header("Vary: Negotiate,Accept");
         <div id="navigation">
         <?php if (isset($auth)) { ?>
             <ul>
-                <li><a href="index.php"><?php print $PMF_LANG['admin_mainmenu_home']; ?></a></li>
+                <li<?php print $action == '' ? print ' id="current"' : ''; ?>><a href="index.php"><?php print $PMF_LANG['admin_mainmenu_home']; ?></a></li>
                 <li><a href="index.php?action=user"><?php print $PMF_LANG['admin_mainmenu_users']; ?></a></li>
                 <li><a href="index.php?action=content"><?php print $PMF_LANG['admin_mainmenu_content']; ?></a></li>
                 <li><a href="index.php?action=statistics"><?php print $PMF_LANG['admin_mainmenu_statistics']; ?></a></li>
