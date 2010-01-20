@@ -186,21 +186,24 @@
     /**
      * Renders a breadcrumb along the given path
      *
-     * @param array  $path Array of path
+     * @param array  $path      Array of path
      * @param string $separator Separator
      * 
      * @return string
      */
     public function renderBreadcrumb(Array $path, $separator = ' &raquo; ')
     {
-        $breadcrumb      = '';
-        $cachingIterator = new CachingIterator($this->categoryTreeHelper, CachingIterator::FULL_CACHE);
+        $breadcrumb = '';
+        $numberItems = count($path);
         
-        foreach ($cachingIterator as $categoryId => $categoryName) {
+        $number = 1;
+        foreach ($this->categoryTreeHelper as $categoryId => $categoryName) {
             if (in_array($categoryId, $path)) {
                 $breadcrumb .= $categoryName;
-                dump($cachingIterator->hasNext());
-                $breadcrumb .= $separator;
+                if ($number < $numberItems) {
+                    $breadcrumb .= $separator;
+                }
+                $number++;
             } 
         }
         return $breadcrumb;
