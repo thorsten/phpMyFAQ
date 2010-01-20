@@ -198,10 +198,11 @@ header("Vary: Negotiate,Accept");
             $secLevelEntries .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open');
             break;
     }
+}
 ?>
-
 <div id="contentWrapper">
     <div id="mainContent" class="container_16">
+<?php if (isset($auth)) { ?>
         <div id="leftMenu" class="grid_4">
             <h2><?php print $secLevelHeader; ?></h2>
             <div class="box">

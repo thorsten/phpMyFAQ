@@ -398,7 +398,6 @@ if (isset($auth) && in_array(true, $permission)) {
 // User is NOT authenticated
 } else {
 ?>
-    <div id="main">
         <div class="centerlogin">
         <form action="index.php" method="post">
         <fieldset class="login">
