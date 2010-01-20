@@ -201,7 +201,7 @@ if (count($multiCategories) > 1) {
     $writeMultiCategories .= '                <legend>'.$PMF_LANG['msgArticleCategories'].'</legend>';
     $writeMultiCategories .= '            <ul>';
     foreach ($multiCategories as $multiCat) {
-        $writeMultiCategories .= sprintf("<li>%s</li>\n", $categoryLayout->renderBreadcrumb(array($multiCat['id'])));
+        $writeMultiCategories .= sprintf("<li>%s</li>\n", $categoryLayout->renderBreadcrumb($multiCat['id']));
     }
     $writeMultiCategories .= '            </ul>';
     $writeMultiCategories .= '        </fieldset>';

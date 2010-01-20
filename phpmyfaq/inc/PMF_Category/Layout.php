@@ -193,11 +193,14 @@
      */
     public function renderBreadcrumb(Array $path, $separator = ' &raquo; ')
     {
-        $breadcrumb = '';
+        $breadcrumb      = '';
+        $cachingIterator = new CachingIterator($this->categoryTreeHelper, CachingIterator::FULL_CACHE);
         
-        foreach ($this->categoryTreeHelper as $categoryId => $categoryName) {
+        foreach ($cachingIterator as $categoryId => $categoryName) {
             if (in_array($categoryId, $path)) {
-                $breadcrumb .= $categoryName . $separator;
+                $breadcrumb .= $categoryName;
+                dump($cachingIterator->hasNext());
+                $breadcrumb .= $separator;
             } 
         }
         return $breadcrumb;
