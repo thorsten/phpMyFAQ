@@ -90,20 +90,21 @@ class PMF_Helper_Administration
      * Adds a menu entry according to user permissions.
      * ',' stands for 'or', '*' stands for 'and'
      *
-     * @param  string  $restrictions Restrictions
-     * @param  string  $action       Action parameter
-     * @param  string  $caption      Caption
-     * @param  string  $active       Active
+     * @param string  $restrictions Restrictions
+     * @param string  $action       Action parameter
+     * @param string  $caption      Caption
+     * @param string  $active       Active
+     * @param boolean $checkPerm    Check permission (default: true)
      * 
      * @return string
      */
-    public function addMenuEntry($restrictions = '', $action = '', $caption = '', $active = '')
+    public function addMenuEntry($restrictions = '', $action = '', $caption = '', $active = '', $checkPerm = true)
     {
         global $PMF_LANG;
         
-        $class = '';
+        $current = '';
         if ($active == $action) {
-            $class = ' class="current"';
+            $current = ' id="current"';
         }
         
         if ($action != '') {
@@ -116,9 +117,13 @@ class PMF_Helper_Administration
             $_caption = 'No string for ' . $caption;
         }
         
-        $output = sprintf('<li%s><a href="?%s">%s</a></li>%s', $class, $action, $_caption, "\n");
+        $output = sprintf('<li%s><a href="?%s">%s</a></li>%s', $current, $action, $_caption, "\n");
         
-        return $this->evaluatePermission($restrictions) ? $output : '';
+        if ($checkPerm) {
+            return $this->evaluatePermission($restrictions) ? $output : '';
+        } else {
+            return $output;
+        }
     }
     
     /**

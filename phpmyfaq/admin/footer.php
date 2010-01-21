@@ -36,11 +36,13 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 <!-- footer -->
 <div id="footerWrapper" class="container_16">
-    <div id="footer">
-        <div class="right">
+    <div id="footerContent">
+        <div id="footer">
+        <p class="right">
         <?php print $faqconfig->get('main.titleFAQ'); ?> is proudly powered by <strong>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></strong> | 
         <a href="http://www.phpmyfaq.de/dokumentation.php" target="_blank">phpMyFAQ documentation</a> | 
         &copy; 2001-2010 <a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a>
+        </p>
         </div>
     </div>
 </div>

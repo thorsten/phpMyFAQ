@@ -21,11 +21,37 @@
  * @link      http://www.phpmyfaq.de
  */
 
-/*	General	*/
-body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif;  line-height: 1.6em; 
-    color: #19191B; }
+/* General CSS definitions */
+body { font: .8em 'Lucida Grande', Verdana, Helvetica, sans-serif; line-height: 1.6em; 
+    color: #19191B; background: #F5F5F5;}
+a { color: #3F4C6B; }
+a:hover { color: #FF7400; }
+h1 { font: bold 2em 'Trebuchet MS', 'Nimbus Sans L', sans-serif }
+h2 { font: bold 1.5em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; }
+h3 { font: bold 1em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; }
+ul, ol { margin: 10px 20px; padding: 0 20px; }
+ul { list-style: disc; }
+ol { list-style: decimal; }
+dt { font-weight: bold; }
+dd { padding-left: 25px; }
 
-/* Header */
+/* General table definitions */
+table { border-collapse: collapse; margin: 10px; }
+tr { background: #fff; }
+th, td { text-align: left; border-width: 1px; border-style: solid; }
+th { color: #212121; background: #DAE3ED; padding: .8em 1em; border-color: #DFF4D5 #D3EFC3 #A7DF8A #D3EFC3; }
+td { border-color: #EFEFEF; padding: .7em 1em; }
+
+/* General form definitions */
+form { margin: 10px; padding: 15px 25px 25px 20px; }
+label { font-weight: bold; }
+input, select, textarea { margin: 5px 0; padding: 5px; color: #6A6969; border-width: 1px; border-style: solid;
+    border-color: #d4d4d4 #ebebeb #ebebeb #d4d4d4; font: 11px 'Lucida Grande', Verdana, Helvetica, sans-serif; }
+input:focus, select:focus, textarea:focus { color: #7BA857; background: #EFFAE6; }
+
+
+
+/* Header layout */
 #headerWrapper { width: 100%; background: #ffffff url(../images/headerBackground.png) repeat-x; 
     margin: 0; padding: 0; }
 #header { position: relative; margin: 0 auto; height: 111px; }
@@ -37,9 +63,9 @@ body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif;  line-height: 1.6
 
 /* Header language selection */
 #header form#languageSelection { position: absolute; top: 15px; right: 0; padding: 0; margin: 0;
-    border: none; width: 230px; height: 33px; z-index: 999999; }
+    border: none; width: 230px; height: 33px; z-index: 999999; background: transparent; }
 #header form#languageSelection p { margin: 0; padding: 0; }
-#header form#languageSelection select { border: none; color: #212121; float: left; margin: 0; }
+#header form#languageSelection select { border: none; color: #212121; float: left; margin: 0; padding: 0; }
 #header form#languageSelection label { display: none; }
 
 /* Top navigation */
@@ -47,13 +73,13 @@ body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif;  line-height: 1.6
     left: 0; background: #efefef; }
 #header #navigation ul { float: left; list-style: none; margin: 0; height: 35px; padding: 0; }
 #header #navigation ul li { float: left; margin: 0; padding: 7px 0 0 10px; }
-#header #navigation ul li a { float: left; padding: 0 5px 7px 5px; margin: 0; 
+#header #navigation ul li a { float: left; padding: 0 5px 7px 5px; margin: 0; text-decoration: none;
     color: #666666; font: bold 14px/40px; text-transform: uppercase; border: 1px solid transparent; }
 #header #navigation ul li a:hover, #header #navigation ul li a:active { color: #212121; }
 #header #navigation ul li#current {  }
 #header #navigation ul li#current a { color: #212121;  background: #ffffff; border-top: 1px solid #666666; 
     border-left: 1px solid #666666; border-right: 1px solid #666666; }
-#header #navigation ul li a.logout { color: red; font-weight: bold; }
+#header #navigation ul li a.logout { color: #B02B2C; font-weight: bold; }
 
 /* Main container */
 #contentWrapper { background: #ffffff; width: 100%; padding: 5px 0; 
@@ -70,33 +96,20 @@ body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif;  line-height: 1.6
 #main #leftmenu h2 { font: bold 1.0em;  height: 18px; padding: 3px; color: #E8EAF6; background-color: #807B77; }
 #main #leftmenu li { padding-bottom: 3px; padding-left: 3px; border-bottom: 1px solid #807B77; }
 
-/* Content */
-#maincontent { color: #19191B; margin-left: 215px; }
-#maincontent h2 { color: #160F17; text-indent: 5px; font-size: 120%; border-bottom: 1px solid #160F17; }
-
 /* Footer */
-#footer { clear: both; height: 46px; font-size: 85%; color: #160F17; border-top: 1px solid #050110; margin-top: 5px; }
-#footer .right { float: right; display: inline; text-align: right; padding-top: 5px; }
+#footerWrapper { clear: both;  margin: 0 auto; text-align: left; }
+#footerWrapper p { padding-left: 0; }
+#footerWrapper a { color: #333; background: transparent; }
+#footerContent { float: left; width: 100%; padding: 0 0 35px 0; margin: 10px 0 0 5px; }
+#footer { clear: both; border-top: 1px solid #dadada; width: 940px; margin: 0 auto; }
+#footer p.right { font-size: 11px; text-align: right; padding-right: 0; }
 
-/* Global CSS definitions */
-a { color: #7A4E69; background: inherit; text-decoration: none }
-h1 { font: bold 1.9em 'Trebuchet MS', 'Nimbus Sans L', sans-serif }
-h2 { font: bold 1.2em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; padding: 0 0 2px; margin: 0 0 10px; }
-ul {  padding: 0; margin: 0}
-li { list-style-type: none }
-form { margin: 0; padding: 0; }
-a img, img { border: 0; }
-pre {	padding: 0.5em; background: #E8EAF6; border: 1px solid #160F17; overflow: auto; }
-dl { margin-bottom: 40px; }
-dt { float: left; width: 200px; }
-dd { margin: 0 0 10px 200px; }
 
-/* Global forms CSS definitions */
-#maincontent textarea { border: 1px solid #BBBBBB;  }
-#main #maincontent fieldset { float: left; width: 95%; border: 1px solid #ccc; padding: 10px 8px; margin: 0 10px 8px 0;
-    background: #FFF; color: #000; }
-#main #maincontent fieldset p { width: 95%; }
-#main input { padding: 3px; margin-bottom: 5px; border: 1px solid #bbb }
+
+
+
+
+
 
 /* User pages */
 #user_accounts { float: left; width: 200px; margin: 0; }
