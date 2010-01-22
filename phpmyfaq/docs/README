@@ -2,6 +2,7 @@ phpMyFAQ 2.6.1
 Codename "Portia"
 
 Changes since 2.6.0:
+- improved cookie handling (Thorsten)
 - minor bugfixes (Thorsten)
 
 CHANGELOG:
@@ -9,6 +10,7 @@ CHANGELOG:
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.6.1 - 2010-02-
+- improved cookie handling (Thorsten)
 - minor bugfixes (Thorsten)
 -
 
