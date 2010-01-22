@@ -315,15 +315,19 @@ class PMF_Session
     /**
      * Store the Session ID into a persistent cookie expiring PMF_SESSION_EXPIRED_TIME seconds after the page request.
      *
-     * @public
-     * @static          
-     * @param   integer     $sessionId Session ID
-     * @return  void
-     * @since   2009-01-08
-     * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
+     * @param integer $sessionId Session ID
+     * 
+     * @return void
      */
     public static function setCookie($sessionId)
     {
-        setcookie(PMF_COOKIE_NAME_SESSIONID, $sessionId, $_SERVER['REQUEST_TIME'] + PMF_SESSION_EXPIRED_TIME);
+        setcookie(
+            PMF_COOKIE_NAME_SESSIONID,
+            $sessionId, 
+            $_SERVER['REQUEST_TIME'] + PMF_SESSION_EXPIRED_TIME,
+            dirname(dirname(__FILE__)),
+            $_SERVER['HTTP_HOST'],
+            false,
+            true);
     }
 }

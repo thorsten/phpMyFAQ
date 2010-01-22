@@ -12,6 +12,7 @@ Version 2.7.0-alpha - 2010-
 - added rewritten and enhanced category implementation (Johannes Schlüter, Thorsten)
 
 Version 2.6.1 - 2010-02-
+- improved cookie handling (Thorsten)
 - minor bugfixes (Thorsten)
 -
 
