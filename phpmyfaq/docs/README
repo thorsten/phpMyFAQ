@@ -3,6 +3,8 @@ Codename "Prospero"
 
 Changes since 2.6.x:
 - added rewritten and enhanced category implementation (Johannes Schlüter, Thorsten)
+- added 960 Grid System CSS Framework (Thorsten)
+- upgraded jQuery to version 1.4 (Thorsten)
 
 CHANGELOG:
 
@@ -10,6 +12,8 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.7.0-alpha - 2010-
 - added rewritten and enhanced category implementation (Johannes Schlüter, Thorsten)
+- added 960 Grid System CSS Framework (Thorsten)
+- upgraded jQuery to version 1.4 (Thorsten)
 
 Version 2.6.1 - 2010-02-
 - improved cookie handling (Thorsten)
