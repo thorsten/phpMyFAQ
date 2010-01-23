@@ -28,7 +28,7 @@ a { color: #3F4C6B; }
 a:hover { color: #FF7400; }
 h1 { font: bold 2em 'Trebuchet MS', 'Nimbus Sans L', sans-serif }
 h2 { font: bold 1.5em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; }
-h3 { font: bold 1em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; }
+h3 { font: bold 1.25em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; }
 ul, ol { margin: 10px 20px; padding: 0 20px; }
 ul { list-style: disc; }
 ol { list-style: decimal; }
@@ -36,20 +36,17 @@ dt { font-weight: bold; }
 dd { padding-left: 25px; }
 
 /* General table definitions */
-table { border-collapse: collapse; margin: 10px; }
+table { border-collapse: collapse; margin: 0; }
 tr { background: #fff; }
 th, td { text-align: left; border-width: 1px; border-style: solid; }
-th { color: #212121; background: #DAE3ED; padding: .8em 1em; border-color: #DFF4D5 #D3EFC3 #A7DF8A #D3EFC3; }
-td { border-color: #EFEFEF; padding: .7em 1em; }
+th { color: #212121; background: #DAE3ED; padding: .8em 1em; border-color: #efefef; }
+td { border-color: #efefef; padding: .2em 0.5em; }
 
 /* General form definitions */
-form { margin: 10px; padding: 15px 25px 25px 20px; }
+form { margin: 0; padding: 0; }
 label { font-weight: bold; }
-input, select, textarea { margin: 5px 0; padding: 5px; color: #6A6969; border-width: 1px; border-style: solid;
-    border-color: #d4d4d4 #ebebeb #ebebeb #d4d4d4; font: 11px 'Lucida Grande', Verdana, Helvetica, sans-serif; }
-input:focus, select:focus, textarea:focus { color: #7BA857; background: #EFFAE6; }
-
-
+input, select, textarea { margin: 5px 0; padding: 5px; color: #6A6969; border-width: 1px; border-style: solid; }
+input:focus, select:focus, textarea:focus { color: #424242; background: #DAE3ED	; }
 
 /* Header layout */
 #headerWrapper { width: 100%; background: #ffffff url(../images/headerBackground.png) repeat-x; 
@@ -69,8 +66,7 @@ input:focus, select:focus, textarea:focus { color: #7BA857; background: #EFFAE6;
 #header form#languageSelection label { display: none; }
 
 /* Top navigation */
-#header #navigation { position: absolute; margin: 5px 0 0 0; padding: 0; width: 880px;
-    left: 0; background: #efefef; }
+#header #navigation { position: absolute; margin: 5px 0 0 0; padding: 0; width: 880px; left: 0; background: #efefef; }
 #header #navigation ul { float: left; list-style: none; margin: 0; height: 35px; padding: 0; }
 #header #navigation ul li { float: left; margin: 0; padding: 7px 0 0 10px; }
 #header #navigation ul li a { float: left; padding: 0 5px 7px 5px; margin: 0; text-decoration: none;
@@ -82,19 +78,16 @@ input:focus, select:focus, textarea:focus { color: #7BA857; background: #EFFAE6;
 #header #navigation ul li a.logout { color: #B02B2C; font-weight: bold; }
 
 /* Main container */
-#contentWrapper { background: #ffffff; width: 100%; padding: 5px 0; 
-    border-bottom: 1px solid #E8E8E8; text-align: left; }
+#contentWrapper { background: #ffffff; width: 100%; padding: 15px 0 5px; border-bottom: 1px solid #E8E8E8; text-align: left; }
 #mainContent { margin: 0 auto; padding-bottom: 35px; padding-top: 5px; overflow: auto; }
-
-
-
-
+#mainContent h2 { background-color: #efefef; padding: 5px 5px 5px 10px; }
 
 /* 2nd level menu */
-#main #leftmenu { width: 200px; margin-left: 0px; float: left; } 
-#main #leftmenu .box { background: #efefef; margin-bottom: 10px; color: #666; border-top: 1px solid #807B77; }
-#main #leftmenu h2 { font: bold 1.0em;  height: 18px; padding: 3px; color: #E8EAF6; background-color: #807B77; }
-#main #leftmenu li { padding-bottom: 3px; padding-left: 3px; border-bottom: 1px solid #807B77; }
+#leftContent { background-color: #efefef; }
+#leftContent .leftMenu ul { text-align: left; padding: 0; border-top: 1px dashed #ebebeb; margin: 0; }
+#leftContent .leftMenu ul li { list-style: none; border-bottom: 1px solid #ebebeb; padding: 0; margin: 0; }
+#leftContent .leftMenu ul li a, .leftMenu ul li a:visited { background-color: #3F4C6B; border: none; padding: 7px 5px; color: #ebebeb; display: block; text-decoration: none; }
+#leftContent .leftMenu ul li a:hover { background-color: #FF7400; color: #212121; }
 
 /* Footer */
 #footerWrapper { clear: both;  margin: 0 auto; text-align: left; }
@@ -104,17 +97,18 @@ input:focus, select:focus, textarea:focus { color: #7BA857; background: #EFFAE6;
 #footer { clear: both; border-top: 1px solid #dadada; width: 940px; margin: 0 auto; }
 #footer p.right { font-size: 11px; text-align: right; padding-right: 0; }
 
-
-
-
-
-
-
+/* Dashboard */
+#pmfInformationBox table, #pmfVersionBox table { margin: 10px; }
 
 /* User pages */
-#user_accounts { float: left; width: 200px; margin: 0; }
-#user_data { float: left; width: 225px; margin: 0; padding-left: 15px; }
-#user_rights { float: left; width: 225px; margin: 0; padding-left: 15px;}
+#userList table { margin: 10px; width:  680px; }
+
+
+
+
+
+
+
 
 #groups { float: left; width: 200px; margin: 0; }
 #group_membership { float: left; width: 225px; margin: 0; padding-left: 5px; }

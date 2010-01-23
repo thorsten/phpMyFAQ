@@ -262,7 +262,8 @@ function IPCheck($ip)
         return true;
     }
     
-    $bannedIPs = explode(' ', PMF_Configuration::getInstance()->get('main.bannedIPs'));
+    $listBannedIPs = PMF_Configuration::getInstance()->get('main.bannedIPs');
+    $bannedIPs     = explode(' ', $listBannedIPs);
     
     foreach ($bannedIPs as $oneIPorNetwork) {
         if (checkForAddrMatchIpv4($ip, $oneIPorNetwork)) {

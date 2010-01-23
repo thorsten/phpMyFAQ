@@ -41,7 +41,6 @@ if (isset($auth)) {
         case 'passwd':
         case 'cookies':
             $menuGroup        = 'user';
-            $secLevelHeader   = $PMF_LANG['admin_mainmenu_users'];
             $secLevelEntries .= $adminHelper->addMenuEntry('adduser+edituser+deluser', 'user', 'ad_menu_user_administration', $action);
             if ($groupSupport) {
                 $secLevelEntries .= $adminHelper->addMenuEntry('adduser+edituser+deluser', 'group', 'ad_menu_group_administration', $action);
@@ -77,7 +76,6 @@ if (isset($auth)) {
         case 'question':
         case 'comments':
             $menuGroup        = 'content';
-            $secLevelHeader   = $PMF_LANG['admin_mainmenu_content'];
             $secLevelEntries .= $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit', $action);
             $secLevelEntries .= $adminHelper->addMenuEntry('addbt', 'editentry', 'ad_entry_add', $action);
             $secLevelEntries .= $adminHelper->addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit', $action);
@@ -93,7 +91,6 @@ if (isset($auth)) {
         case 'adminlog':
         case 'searchstats':
             $menuGroup        = 'statistics';
-            $secLevelHeader   = $PMF_LANG['admin_mainmenu_statistics'];
             $secLevelEntries .= $adminHelper->addMenuEntry('viewlog', 'statistics', 'ad_menu_stat', $action);
             $secLevelEntries .= $adminHelper->addMenuEntry('viewlog', 'viewsessions', 'ad_menu_session', $action);
             $secLevelEntries .= $adminHelper->addMenuEntry('adminlog', 'adminlog', 'ad_menu_adminlog', $action);
@@ -101,7 +98,6 @@ if (isset($auth)) {
             break;
         case 'export':
             $menuGroup        = 'export';
-            $secLevelHeader   = $PMF_LANG['admin_mainmenu_exports'];
             $secLevelEntries .= $adminHelper->addMenuEntry('', 'export', 'ad_menu_export', $action);
             break;
         case 'config':
@@ -112,16 +108,16 @@ if (isset($auth)) {
         case 'transadd':
         case 'upgrade':
             $menuGroup        = 'config';
-            $secLevelHeader   = $PMF_LANG['admin_mainmenu_configuration'];
             $secLevelEntries .= $adminHelper->addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
             $secLevelEntries .= $adminHelper->addMenuEntry('editconfig+editbt+delbt', 'linkconfig', 'ad_menu_linkconfig', $action);
             $secLevelEntries .= $adminHelper->addMenuEntry('editconfig', 'stopwordsconfig', 'ad_menu_stopwordsconfig', $action);
             $secLevelEntries .= $adminHelper->addMenuEntry('edittranslation+addtranslation+deltranslation', 'translist', 'ad_menu_translations', $action);
             break;
         case 'backup':
-            $menuGroup = 'backup';
+            $menuGroup       = 'backup';
+            $secLevelEntries = '';
+            break;
         default:
-            $secLevelHeader   = $PMF_LANG['admin_mainmenu_home'];
             $secLevelEntries .= $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit');
             $secLevelEntries .= $adminHelper->addMenuEntry('addbt', 'editentry', 'ad_quick_record');
             $secLevelEntries .= $adminHelper->addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit');
@@ -209,16 +205,15 @@ header("Vary: Negotiate,Accept");
 <div id="contentWrapper">
     <div id="mainContent" class="container_16">
 <?php if (isset($auth)) { ?>
-        <div id="leftMenu" class="grid_4">
-            <h2><?php print $secLevelHeader; ?></h2>
-            <div class="box">
+        <div id="leftContent" class="grid_4">
+            <div class="leftMenu">
                 <ul>
                 <?php print $secLevelEntries; ?>
                 </ul>
             </div>
 
-            <h2>Admin worklog</h2>
-            <div class="box">
+            <h3>Admin worklog</h3>
+            <div class="leftMenu">
                 <span id="saving_data_indicator"></span>
             </div>
         </div>

@@ -190,6 +190,7 @@ if ($userAction == 'delete_confirm') {
             $message .= '<p class="error">'.$errorMessages['delUser_protectedAccount'].'</p>';
         } else {
 ?>
+
 <h2><?php print $text['header']; ?></h2>
 <div id="user_confirmDelete">
     <fieldset>
@@ -406,10 +407,13 @@ function updateUser(user_id)
 
 /* ]]> */
 </script>
-<h2><?php print $text['header']; ?></h2>
-<div id="user_message"><?php print $message; ?></div>
-<div id="user_accounts">
-    <div id="user_list">
+
+    <h2><?php print $text['header']; ?></h2>
+    
+    <div class="clear"></div>
+    <div id="userAccounts" class="grid_4 alpha">
+        <p id="user_message"><?php print $message; ?></p>
+        <div id="user_list">
         <fieldset>
             <legend><?php print $text['selectUser']; ?></legend>
             <form name="user_select" id="user_select" action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=delete_confirm" method="post">
@@ -434,12 +438,13 @@ function updateUser(user_id)
             </form>
         </fieldset>
         <p>
-            [ <a href="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=add"><?php print $text['addUser_link']; ?></a> ]<br/>
-            [ <a href="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=listallusers"><?php print $text['listAllUsers_link']; ?></a> ]        
+            [ <a href="?action=user&amp;user_action=add"><?php print $text['addUser_link']; ?></a> ]<br/>
+            [ <a href="?action=user&amp;user_action=listallusers"><?php print $text['listAllUsers_link']; ?></a> ]        
         </p>
-    </div> <!-- end #user_list -->
-</div> <!-- end #user_accounts -->
-<div id="user_data">
+    </div>
+    </div>
+    
+    <div id="userData" class="grid_4">
     <fieldset>
         <legend id="user_data_legend"><?php print $text['changeUser']; ?></legend>
         <form action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=update_data" method="post">
@@ -458,8 +463,9 @@ function updateUser(user_id)
             </div>
         </form>
     </fieldset>
-</div> <!-- end #user_details -->
-<div id="user_rights">
+    </div>
+    
+    <div id="userRights" class="grid_4 omega">
     <fieldset>
         <legend id="user_rights_legend"><?php print $text['changeRights']; ?></legend>
         <form id="rightsForm" action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=update_rights" method="post">
@@ -481,8 +487,9 @@ function updateUser(user_id)
             </div>
         </form>
     </fieldset>
-</div> <!-- end #user_rights -->
-<div class="clear"></div>
+    </div>
+    
+    <div class="clear"></div>
 <?php 
     if (isset($_GET['user_id'])) {
         $userId     = PMF_Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT, 0);
@@ -495,15 +502,17 @@ function updateUser(user_id)
 if ($userAction == 'listallusers') {
 ?>
 
-<h2><?php print $text['header']; ?></h2>
-<div id="user_message"><?php print $message; ?></div>
-    <table class="listrecords" style="width: 700px; float:left;">
+    <h2><?php print $text['header']; ?></h2>
+    <p id="user_message"><?php print $message; ?></p>
+    
+    <div id="userList">
+    <table>
     <thead>
         <tr>
-            <th class="listhead"><?php echo $PMF_LANG['ad_entry_id']?>:</th>
-            <th class="listhead"><?php echo $PMF_LANG['msgNewContentName']?></th>
-            <th class="listhead"><?php echo $PMF_LANG['msgNewContentMail']?></th>
-            <th class="listhead"><?php echo $PMF_LANG['ad_entry_action']?></th>
+            <th><?php print $PMF_LANG['ad_entry_id']?>:</th>
+            <th><?php print $PMF_LANG['msgNewContentName']?></th>
+            <th><?php print $PMF_LANG['msgNewContentMail']?></th>
+            <th><?php print $PMF_LANG['ad_entry_action']?></th>
         </tr>
     </thead>
         <tbody>
@@ -512,10 +521,10 @@ if ($userAction == 'listallusers') {
                 $user->getUserById($userId);
         ?>
             <tr>
-                <td class="list"><?php echo $user->getUserData('user_id')?></td>
-                <td class="list"><?php echo $user->getUserData('display_name')?></td>
-                <td class="list"><?php echo $user->getUserData('email')?></td>
-                <td class="list"><a href="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_id=<?php echo $user->getUserData('user_id')?>"><?php echo $PMF_LANG['ad_user_edit']?></a></td>
+                <td><?php print $user->getUserData('user_id')?></td>
+                <td><?php print $user->getUserData('display_name')?></td>
+                <td><?php print $user->getUserData('email')?></td>
+                <td><a href="?action=user&amp;user_id=<?php print $user->getUserData('user_id')?>"><?php print $PMF_LANG['ad_user_edit']?></a></td>
             </tr>
         <?php
             }
@@ -523,5 +532,6 @@ if ($userAction == 'listallusers') {
         ?>
         </tbody>
     </table>
+    </div>
 <?php 
 }
