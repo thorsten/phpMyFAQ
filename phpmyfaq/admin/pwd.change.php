@@ -1,12 +1,8 @@
 <?php
 /**
  * Form to change password of the current user
- *
- * @category  phpMyFAQ
- * @package   Administration
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2009 phpMyFAQ Team
- * @since     2003-02-23
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -17,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2003-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2003-02-23
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -48,15 +52,7 @@ if ($permission["passwd"]) {
             if (!$user->changePassword($npasswd)) {
                 print $PMF_LANG["ad_passwd_fail"]."<br />";
             }
-    
             print $PMF_LANG["ad_passwdsuc"]."<br />";
-
-            // TODO: Manage the 'Rembember me' Cookie also under 2.0.0.
-            if (isset($_COOKIE['cuser'])) {
-                if ($_COOKIE["cuser"] == $user) {
-                    print $PMF_LANG["ad_passwd_remark"]."<br /><a href=\"?action=setcookie\">".$PMF_LANG["ad_cookie_set"]."</a>\n";
-                }
-            }
         } else {
         print $PMF_LANG["ad_passwd_fail"];
         }

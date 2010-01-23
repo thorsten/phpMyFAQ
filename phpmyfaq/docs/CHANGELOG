@@ -1,0 +1,822 @@
+phpMyFAQ 2.6.1
+Codename "Portia"
+
+Changes since 2.6.0:
+- improved cookie handling (Thorsten)
+- minor bugfixes (Thorsten)
+
+CHANGELOG:
+
+This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.6.1 - 2010-02-
+- improved cookie handling (Thorsten)
+- minor bugfixes (Thorsten)
+-
+
+Version 2.6.0 - 2010-01-11
+- moved all language files to UTF-8 (Anatoliy)
+- added TCPDF as replacement for FPDF library (Thorsten)
+- added support for TinyMCE translations (Aurimas Fišeras)
+- added support for multi-language news (Thorsten)
+- added user adjustable template sets and styles (Anatoliy)
+- added support plurals in translations (Aurimas Fišeras)
+- added share on Facebook link (Thorsten)
+- added a rest/json API (Thorsten)
+- added secure login if SSL is available (Tobias Hommel)
+- added FAQ entry dependent meta description (Thorsten)
+- added experimental support for Microsoft Windows Web App Gallery (Thorsten)
+- improved attachment functionality (Anatoliy)
+- improved install script (Thorsten)
+- improved category view with description (Thorsten)
+- improved FAQ entry activation (Anatoliy)
+- improved user administration (Max Köhler)
+- improved FAQ entry workflow (Anatoliy, Thorsten)
+- removed Docbook XML export (Thorsten)
+- removed Net_IDNA library (Thorsten)
+- updated Greek translation (Periklis Tsirakidis)
+- updated Lithuanian translation (Aurimas Fišeras)
+- updated Japanese translation
+
+Version 2.5.8 - 2010-
+-
+
+Version 2.5.7 - 2010-01-19
+- improved glossary detection (Guillaume Le Maout)
+- updated Dutch translation
+- updated Indonasian translation
+- updated Chinese (Simplified) translation
+- updated Japanese translation
+- updated Norwegian Bokmal translation
+- many minor bugfixes (Thorsten, Guillaume Le Maout)
+
+Version 2.5.6 - 2009-12-22
+- updated bundled TinyMCE editor component to version 3.2.7 (Thorsten)
+- updated bundled SyntaxHighlighter library to version 2.1.364 (Thorsten)
+- updated bundled SyntaxHighlighter plugin for TinyMCE (Thorsten)
+- updated Brazilian Portuguese translation
+- updated Spanish translation
+- minor bugfixes (Thorsten)
+
+Version 2.5.5 - 2009-12-01
+- fixed IE6/7 only XSS vulnerabilities (Amol Naik, Thorsten)
+- many minor bugfixes (Thorsten)
+
+Version 2.5.4 - 2009-11-10
+- Fixed various PostgreSQL related issues (Anatoliy, Thorsten)
+- updated Dutch translation
+- updated Brazilian Portuguese translation
+- many minor bugfixes (Thorsten)
+
+Version 2.5.3 - 2009-10-19
+- switched repository from SVN to git (David Soria Parra, Thorsten)
+- added missing Perl syntax hightlighting (Thorsten)
+- fixed missing info link in news (Thorsten)
+- fixed broken group permission check for instant response (Thorsten)
+- fixed broken attachment download (Thorsten)
+- fixed SQLite problems (David Soria Parra)
+- updated Japanese translation
+
+Version 2.5.2 - 2009-09-01
+- fixed IE6/7 only XSS vulnerability (Thorsten)
+- updated Polish language file (Dariusz Grzesista)
+- updated Chinese language file
+- fixed problem with Czech translation (Anatoliy)
+- many minor bugfixes (Thorsten)
+
+Version 2.5.1 - 2009-08-10
+- added support for LDAP-datamapping, e.g. against an Active Directory Server (Lars Scheithauer)
+- added support for multi-domain-authentication, e.g. against an ADS-Global Catalog (Lars Scheithauer)
+- added support for PHP LDAP options (Lars Scheithauer)
+- Added Lithuanian translation (Aurimas Fiseras)
+- fixed LDAP issues (Lars Scheithauer)
+- fixed some Oracle issues (Thorsten)
+- improved svn2package script (Rene Treffer)
+- many minor bugfixes (Thorsten)
+
+Version 2.5.0 - 2009-07-21
+- changed PHP requirement to PHP 5.2 (Thorsten)
+- dropped support for MySQL 4.0 and MaxDB (Thorsten)
+- dropped support for XML-RPC (Thorsten)
+- refactored complete code base to PHP 5.2+ (Thorsten, Matteo)
+- added new and improved new basic layout theme (Charles A. Landemaine)
+- added new administration layout (Thorsten)
+- added new Image Manager in administration backend (Thorsten)
+- added RSS feed for every category (Thorsten)
+- added ability to copy and duplicate FAQ entries (Thorsten)
+- added support for blocks in template engine (Jan Mergler)
+- added public user registration (Elger Thiele)
+- added LDAP authentication (Alberto Cabello Sanchez)
+- added HTTP authentication (Thorsten)
+- added Mail sub system (Matteo)
+- added enable/disable WYSIWYG Editor flag (Thorsten)
+- added most popular searches list (Thorsten)
+- added frontend for search logs statistics (Anatoliy Belsky)
+- added sticky FAQ records (Anatoliy Belsky)
+- added smart answering for user questions (Anatoliy Belsky)
+- added string wrapper for better UTF-8 handling (Anatoliy Belsky)
+- added translation frontend (Anatoliy Belsky)
+- added jQuery 1.3 as replacement for Prototype/Script.aculo.us (Thorsten)
+- added configurable attachment directory (Anatoliy Belsky)
+- added approval permission for FAQs (Anatoliy Belsky)
+- added Hindi translation (Sumeet Raj Aggarwal)
+- improved user administration frontend (Sarah Hermann)
+- improved performance (Thorsten)
+- improved language files (Anatoliy Belsky, Thorsten)
+- ajaxified comment and record administration (Thorsten)
+- updated bundled Net_IDNA to version 0.6.3 (Thorsten)
+- updated bundled TinyMCE editor component to version 3.2.5 (Thorsten)
+- updated bundled FPDF library to version 1.6 (Thorsten)
+- updated Turkish translation (Evren Yurtesen)
+
+Version 2.0.15 - 2009-06-02
+- fixed XSS vulnerability (Thorsten)
+
+Version 2.0.14 - 2009-05-21
+- updated Vietnamese translation (Julien Petitperrin)
+- improved tagging implementation (Thorsten)
+- fixed authentication bypass (Thorsten)
+- fixed content type for RSS feeds (Thorsten)
+- minor bugfixes (Thorsten)
+
+Version 2.0.13 - 2009-04-20
+- added new blocked words for spam protection (Kai)
+- fixed fatal error in PHP 5.3 (David Soria Parra, Thorsten)
+- fixed redirect problem with multiviews in .htaccess (Antonio)
+- fixed problem with visible questions in RSS feed (Thorsten)
+- minor bugfixes (Thorsten)
+
+Version 2.0.12 - 2009-02-17
+- fixed bug with MySQL 6 and ext/mysqli (Johannes)
+- fixed stat call bug in installer on OpenSuse 10.3 (Thorsten)
+- improved SVN checkout script (Rene Treffer)
+- minor bugfixes (Thorsten)
+
+Version 2.0.11 - 2009-01-22
+- updated English and Turkish translation and switched to UTF-8 (Evren Yurtesen)
+- updated Simplified Chinese translation (Techice Young)
+- fixed possible infinity loop bug in categories (Kaoru Izutani)
+- fixed permission bypass issue (Thorsten)
+- many minor bugfixes (Thorsten)
+
+Version 2.0.10 - 2008-11-26
+- fixed image bug in PDF (Thorsten)
+- fixed isses in admin log display (Thorsten)
+- re-added missing XML-RPCS library files (Thorsten)
+- fixed PHP warnings and notices (Thorsten)
+- minor bugfixes (Thorsten, Andreas Hansson)
+
+Version 2.0.9 - 2008-10-17
+- dedicated to my uncle Werner
+- fixed content deletion bug (Thorsten)
+- fixed SVN export script (Thorsten)
+- improved comment spam protection (Thorsten)
+- re-added missing css color file (Thorsten)
+- minor bugfixes (Thorsten)
+
+Version 2.0.8 - 2008-09-11
+- fixed security vulnerability in XSS filter (Alexios Fakos at n.runs.com)
+- switched repository from CVS to SVN (Thorsten)
+- fixed session bug with MS SQL (Simon Stewart)
+- fixed login errors with IBM DB2 (Thorsten, Helmut Tessarek)
+- updated French translation (Julien Ross)
+- updated Serbian translation (Slavisa Milojkovic)
+
+Version 2.0.7 - 2008-05-12
+- added Bengali translation (Md. Masum Billah)
+- added Ukrainian translation (Oleg P. Suvolokin and Denis A. Barybin)
+- updated Czech translation (Petr Silon)
+- minor bugfixes (Thorsten)
+
+Version 2.0.6 - 2008-02-24
+- permission setting related fix (Carlos Eduardo Nogueira Gon�alves)
+- minor bugfixes (Thorsten)
+
+Version 2.0.5 - 2008-01-20
+- fixed lighttpd rewrite rules (Markus Kohlmeyer)
+- minor bugfixes (Thorsten)
+
+Version 2.0.4 - 2007-11-18
+- add Thai translation (Thanadon Somdee)
+- improved DiggIt link (Thorsten
+- fixed French translation (Thorsten)
+- many minor bugfixes (Thorsten)
+
+Version 2.0.3 - 2007-08-18
+- some permission related fixes (Thorsten)
+- some glossary related fixes (Thorsten)
+- many minor bugfixes (Thorsten)
+
+Version 2.0.2 - 2007-07-08
+- some performance improvements (Thorsten)
+- some permission related fixes (Adrianna Musiol)
+- some update fixes (Matteo)
+- updated Danish translation (Tommy Ipsen)
+- some minor bugfixes (Thorsten)
+
+Version 2.0.1 - 2007-06-01
+- fixed broken update script (Thorsten, Matteo)
+- fixed bugs with basic permission level (Thorsten, Matteo)
+- fixed PHP segfaults with Zend Optimizer extension (Thorsten, Matteo)
+- updated Japanese translation (Tadashi Jokagi)
+- many minor bugfixes (Thorsten, Matteo)
+
+Version 2.0.0 - 2007-05-22
+- added rewritten and enhanced user management (Lars)
+- added rewritten and enhanced authorization management (Lars)
+- added user and group based permissions for categories and records (Thorsten)
+- added Ajax support (Thorsten, Matteo)
+- added automatic link verification (Minoru Toda)
+- added user binding to a category (Thorsten)
+- added glossary support (Thorsten)
+- added possibility to delete admin log (Thorsten)
+- added configurable visibility of new questions (Thorsten)
+- added improved and template-based XHTML export (Thorsten)
+- added dynamic related articles (Thorsten, Marco Enders, Thomas Zeithaml)
+- added support for Google, Yahoo!, and MSN sitemaps (Matteo)
+- added improved WYSIWYG editor and Image Manager (Thorsten)
+- added improved News module (Matteo, Thorsten)
+- added tagging (Thorsten)
+- added DiggIt! link (Thorsten)
+- added Microsummaries (Matteo)
+- added OpenSearch support (Thorsten)
+- added "submit translation" link (Matteo)
+- added experimental support for Oracle (Thorsten)
+- added experimental support for Interbase/Firebird (Thorsten)
+- added sorting by id, title and date for records in admin backend (Thorsten)
+- added comment administration frontend (Thorsten)
+- added configurable simple reordering of records (Thorsten)
+- added questionnaire for statistics in installer (Johannes)
+- added Ajax-powered Instant Response (Thorsten)
+- added editable default values for record configuration (Thorsten)
+- added blacklist for search bots (Marco Fester, Thorsten)
+- added stylesheets for right-to-left text-direction (Roy Ronen)
+- improved export functions (Matteo)
+- improved URL rewrite functions (Matteo)
+- improved category management (Thorsten, Rudi Ferrari)
+- improved administration backend (Thorsten, Matteo)
+- updated Arabic translation (Ahmed Shalaby)
+- updated German translation (Thorsten)
+- updated Hewbrew translation (Roy Ronen)
+- updated Italian translation (Matteo)
+- updated Japanese translation (Tadashi Jokagi)
+- updated Spanish translation (Eduardo Polidor)
+
+Version 1.6.11 - 2007-03-31
+- updated Finnish translation
+- fixed problems with unsupported charsets in PHP
+- fixed some minor bugs
+
+Version 1.6.10 - 2007-02-18
+- fixed a serious security issue
+- improved performance
+- fixed some minor bugs
+
+Version 1.6.9 - 2007-01-28
+- updated bundled PHP XMLRPC to version 2.1
+- fixed the backup download permissions
+- fixed some minor bugs
+
+Version 1.6.8 - 2006-12-15
+- fixed a possible security issue
+- fixed the blank dropdown in the installer
+- fixed some minor bugs
+
+Version 1.6.7 - 2006-11-27
+- added Persian (Farsi) translation
+- fixed PHP 5.2.0 related issues
+- fixed some minor bugs
+
+Version 1.6.6 - 2006-10-28
+- updated Arabic translation (also moved to UTF-8)
+- updated bundled Net_IDNA to version 0.4.4
+- fixed some minor bugs
+
+Version 1.6.5 - 2006-09-21
+- added Welsh translation
+- added French documentation
+- updated Czech translation
+- fixed some minor bugs
+
+Version 1.6.4 - 2006-08-19
+- updated Brazilian Portuguese translation
+- updated Dutch translation
+- updated French translation
+- updated Italian translation
+- updated Japanese translation
+- updated Portuguese translation
+- fixed some minor bugs
+
+Version 1.6.3 - 2006-07-16
+- added German documentation
+- updated bundled NET_IDNA class to version 0.4.3
+- released a spec file for building an RPM package of phpMyFAQ
+- updated Simplified Chinese translation (also moved to utf-8)
+- fixed some minor bugs
+
+Version 1.6.2 - 2006-06-17
+- added user tracking data deletion
+- improved PHP 5 support for MySQL and SQLite
+- updated Dutch translation
+- updated French translation
+- updated Italian translation
+- updated Swedish translation
+- fixed some minor bugs
+
+Version 1.6.1 - 2006-05-13
+- added spam control center
+- added mod_rewrite support for lighttpd
+- added Microsoft Internet Explorer 7 search plugin
+- added automatic admin session expiry notice
+- improved record administration
+- improved user administration
+- improved category administration
+- improved highlighting of searched words
+- updated Italian translation
+- updated German translation
+- updated Danish translation
+- fixed some minor bugs
+
+Version 1.6.0 - 2006-04-21
+- fixed PHP security issue
+- added unique solution id
+- added revision system
+- added support for captchas
+- added bad word list blocker
+- added search in one selected category
+- added linked breadcrumb
+- added RSS feed for open questions
+- added Brazilian Portuguese translation
+- improved record administration
+- improved spam protection
+- improved language detection and handling
+- updated Italian translation
+- updated Japanese translation
+- updated Korean translation
+- fixed some minor bugs
+
+Version 1.5.9 - 2006-04-21
+- fixed PHP security issue
+
+Version 1.5.8 - 2006-04-09
+- updated Korean translation
+- fixed some minor bugs
+
+Version 1.5.7 - 2006-03-02
+- fixed some minor bugs
+
+Version 1.5.6 - 2006-01-27
+- added Basque translation
+- improved spam protection
+- fixed some minor bugs
+
+Version 1.5.5 - 2005-12-19
+- added support for MaxDB
+- added keywords into meta keywords
+- added search by record ID
+- improved language detection and handling
+- updated Italian translation
+- fixed some minor bugs
+
+Version 1.5.4 - 2005-11-18
+- fixed security issues
+- full support for IBM DB2 databases
+- added re-ordering of sub-categories
+- added Firefox/Mozilla search plugin
+- updated Hebrew translation
+- updated Simplified Chinese translation
+- updated Spanish translation
+- updated Italian translation
+- updated Japanese translation
+- updated Danish translation
+- some minor improvements
+- many minor bugfixes
+
+Version 1.5.3 - 2005-10-15
+- added several security enhancements
+- added Greek translation
+- improved RSS support
+- improved backup/restore frontend
+- updated Indonasian translation
+- updated bundled Net_IDNA class
+- many minor bugfixes
+
+Version 1.5.2 - 2005-09-23
+- fixed serious security issues
+- full support for SQLite
+- more compliance with phpMyFAQ 1.4.x templates
+- many minor bugfixes
+
+Version 1.5.1 - 2005-09-19
+- added experimental support for SQLite
+- added dynamic Sitemap
+- added Norwegian Bokm�l translation
+- improved image handling in PDF export
+- some minor bugfixes
+
+Version 1.5.0 - 2005-08-20
+- full support for PostgreSQL databases
+- full support for Sybase databases
+- full support for MS SQL databases
+- full support for MySQL 4.1/5.0 databases
+- experimental support for IBM DB2 databases
+- LDAP support as an additional option
+- one entry in various categories
+- mod_rewrite support
+- faster template engine parses PHP code
+- rewritten PDF export
+- complete XML, XHTML and DocBook XML exports
+- many code and performance improvements and code cleanup
+- better RSS support
+- updated bundled htmlArea
+- PHP 5.x compatible
+
+Version 1.4.10 - 2005-08-01
+- compatibility to PHP 4.4.0
+
+Version 1.4.9 - 2005-06-29
+- fixed serious security issue in bundled XML-RPC component
+- some minor bugfixes
+
+Version 1.4.8 - 2005-04-11
+- fixed bug with images in PDFs
+- fixed bug with URLs in export
+- updated Japanese language file
+- updated Korean translation
+- some minor bugfixes
+
+Version 1.4.7 - 2005-03-06
+- fixed possible SQL injection bug
+- some minor bugfixes
+
+Version 1.4.6 - 2005-02-20
+- updated Polish language file
+- updated French language file
+- some minor bugfixes
+
+Version 1.4.5 - 2005-01-21
+- updated Japanese language file
+- updated Chinese (Traditional) translation
+- some minor bugfixes
+
+Version 1.4.4 - 2004-12-06
+- added Romanian translation
+- added Chinese (Traditional) translation
+- many bugfixes
+
+Version 1.4.3 - 2004-11-05
+- added Turkish translation
+- added Indonesian translation
+- updated German language file
+- many bugfixes
+
+Version 1.4.2 - 2004-10-10
+- added Finnish translation
+- added Hebrew translation
+- fulltext search inside admin section
+- some accessibility improvements
+- many bugfixes
+
+Version 1.4.1 - 2004-08-16
+- improved category administration
+- added Swedish translation
+- added Korean translation
+- added Japanese translation
+- custom admin menu according to user permissions
+- easier record deleting
+- session and language stored in a cookie
+- less SQL queries in admin section
+- updated install script
+- updated Chinese language file
+- updated Portoguese language file
+- improved IDN domain support
+- improved accessibility
+- many bugfixes
+
+Version 1.4.0a - 2004-07-27
+- fixed security vulnerability
+
+Version 1.4.0 - 2004-07-22
+- added WYSIWYG Editor
+- added Image Manager
+- added new category module
+- added support for XML-RPC
+- added support for timezones
+- added ISO 639 support in language files
+- added script that converts BBCode in XHTML
+- better PDF export with table of contents
+- new and better installer
+- new XHTML based templates
+- automatic language detection
+- improved IDN domain support
+- password reset function
+- include internal links with dropdown box
+- many code improvements and code cleanup
+- many bug fixes
+
+Version 1.3.14 - 2004-06-09:
+- added Slovenian translation
+- added Serbian translation
+- added Danish translation
+- improved performance on Windows Server 2003 and PHP with ISAPI
+- fixed some bugs
+
+Version 1.3.13 - 2004-05-17:
+- fixed serious security vulnerability (Stefan Esser)
+- fixed some bugs
+
+Version 1.3.12 - 2004-04-21:
+- added Hungarian language file
+- fixed some bugs
+
+Version 1.3.11a - 2004-04-13:
+- fixed some annoying bugs
+
+Version 1.3.11 - 2004-04-07:
+- added Chinese translation
+- added Czech translation
+- added support for IDN domains
+- many bugfixes
+
+Version 1.3.10 - 2004-02-12
+- updated bundled FPDF class
+- added Arabic language file
+- many bugfixes
+
+Version 1.3.9pl1 - 2004-01-02
+- added Vietnamese language file
+- bugfixes
+
+Version 1.3.9 - 2003-11-26
+- improvements at highlighting searched words
+- updated english language file
+- BBCode support for the news
+- better category browsing
+- graphical analysis of votings
+- date informations ISO 8601 compliant
+- some optimized code
+- added Russian language file
+- enhanced BB-Code Editor
+- fixed some multibyte issues
+- improved display of images in PDF export
+- some fixes for PHP5
+- some bug fixes
+
+Version 1.3.8 - 23.10.2003
+- added latvian language file
+- fixed italian language file
+- bugfix in backup module (IE problem)
+- support for MySQL 4.0 full text search
+- some improvements in installer (Bug #0000017)
+- many bugfixes in the backup module
+- better performance in admin area
+- fixed cookie problem
+- fixed a bug in the BB-Code Parser
+- fixed a bug in the language files
+- many, many minor bug fixes
+
+Version 1.3.7 - 19.09.2003
+- dedicated to Johnny Cash
+- added patch against Verisign
+- fixed Windows bug in Send2Friend
+- some improvements in the BB-Code-Parser
+- fixed some layout problems
+- many, many minor bug fixes
+
+Version 1.3.6 - 01.09.2003
+- fixed bug in installer
+
+Version 1.3.5 - 31.08.2003
+- basic internal linking of FAQ records
+- RSS-Feed-Export via Cronjob
+- solved some PDF problems
+- updated english language file
+- some improvements in the BB-Code-Parser
+- some bug fixes
+
+Version 1.3.4 - 03.08.2003
+- improvements at highlighting searched words
+- fixed bug in installer (Bug-ID 0000004)
+- added new BB-Code-Parser
+- added italian translation
+- updated dutch and french language file
+- little changes in the language files
+- many, many minor bug fixes
+
+Version 1.3.3 - 26.06.2003
+- better installation
+- default password removed
+- added IP ban lists
+- added portugues translation
+- added spanish translation
+- selection of default language and setting the password at installation
+- changed default language from german to english
+- better PDF export with support for pictures
+- export all records to one PDF file
+- user management improved
+- added allow/disallow comment function
+- added copyright notice and url in the printer friendly page and the pdf file
+- backup files are called phpmyfaq.<date>.sql instead of attachment.php
+- fixed bug at installation when using MySQL 4
+- fixed bug when deleting news
+- fixed bug when deleting comments
+- many minor bug fixes
+
+Version 1.3.2 - 25.05.2003
+- more verifications in update script
+- added new category sorting
+- added polish language file
+- fixed bug in backup
+- added reload locking in voting module
+- BB-Code help with multi-language support
+- better navigation
+- minor bug fixes
+
+Version 1.3.1 - 02.05.2003
+- added preview at record editing
+- added RSS-Feeds from Top 10, News and latest records
+- better navigation in admin area
+- system informationen in admin area
+- added french language file
+- fixed bug in session search
+- fixed bugs in adding records
+- solved cookie problems
+- fixed problem with send2friend link
+- fixed delimiter bug with Apache2 and PHP 4.3
+- minor bug fixes
+
+Version 1.3.0 - 17.04.2003
+- support for multi language records
+- enhanced security
+- crypted passwords
+- admin area uses modules
+- PDF support
+- more support of XML with XML namespaces and XML schema
+- BBCode editor, support for more bb code
+- PHP syntax highlighting
+- database abstraction layer
+- english documentation
+- many bugfixes
+
+Version 1.2.5b - 24.03.2003
+- bugfixes
+
+Version 1.2.5a - 04.03.2003
+- UBB code bugfixes
+- top ten bugfix
+
+Version 1.2.5 - 02.02.2003
+- bugfixes
+
+Version 1.2.4 - 31.01.2003
+- better checking of variables
+- bugs in admin area fixed
+- better printing function
+
+Version 1.2.3 - 30.11.2002
+- check wether installation oder update script isn't deleted
+- fixed bugs in language files, the news module and open questions
+- automatic langauge detection in admin area
+
+Version 1.2.2 - 04.11.2002
+- minor bug fixes
+
+Version 1.2.1 - 24.10.2002
+- better update function and language selection
+- solved cookie problems
+- many bug fixes, thanks to sascha AT rootforum DOT de
+
+Version 1.2.0 - 09.10.2002
+- Template system for free layouts
+- fully compatible with PHP 4.1, PHP 4.2 and PHP 4.3 (register_globals = off)
+- all color and font definitions with CSS
+- better SQL queries
+- better category navigation
+- better search engine
+- better Send2Friend function
+- better installation script
+- many bugfixes
+
+Version 1.1.5 - 23.06.2002
+- minor bug fixes
+- russian language file
+
+Version 1.1.4a - 08.06.2002
+- minor bug fixes for PHP 4.1.0
+
+Version 1.1.4 - 24.05.2002
+- minor bug fixes
+- rewrite of PHP code for better performance
+- change of the CSS file from style.php to style.css
+- better HTML code
+- voting can be switched off
+
+Version 1.1.3 - 01.05.2002
+- fixed bug in UBB parser
+- fixed bugs in viewing comments
+- rewrite of the PHP code
+
+Version 1.1.2 - 22.03.2002
+- added Send2Friend funktion
+- minor bug fixes
+
+Version 1.1.1 - 06.03.2002
+- minor bug fixes
+
+Version 1.1.0 - 11.02.2002
+- many bugfixes
+- more functions in the attachments module
+- support for sub categories
+- user tracking and admin logging can be switched off
+- better installation script
+- porting to PHP4
+- better PHP code
+- admin area supports Netscape 4.x
+- no actions could be performed without any records
+- better admin logging
+- admin account cannot be deleted (security fix)
+- better documention
+
+Version 1.0.1a - 15.10.2001
+- file ending .php instead of .php3
+
+Version 1.0.1 - 10.10.2001
+- fixed bugs in installation and update script
+
+Version 1.0 - 30.09.2001
+- minor bug fixes
+
+Version 0.95 - 11.09.2001
+- cleaned MySQL table names
+- Documentation
+- phpMyFAQ is HTML 4.0 valid
+- minor bug fixes
+
+Version 0.90 - 23.08.2001
+- added update function for version 0.80
+- added question - answer - system
+- configurable design of the admin area
+- minor bug fixes
+
+Version 0.87 - 20.07.2001
+- Top Ten and newest records can be switched off
+- minor bug fixes
+
+Version 0.86 - 10.07.2001
+- UBB parser fixed
+- minor bug fixes
+
+Version 0.85 - 08.07.2001
+- added backup module (Import and Export)
+- UBB-Code support
+- records can be exported to XML
+- minor bug fixes
+
+Version 0.80a - 07.06.2001
+- minor bug fixes
+
+Version 0.80 - 30.05.2001
+- added form for questions
+- added Top 5 of the newest articles
+- added support fo attachments in reocrds in admin area
+- added support for adding records in admin area
+- configuration editable in admin area
+- showing number of users online
+- print function
+- better support in writing comments
+- bugfix: fixed bad output in comments with HTML
+
+Version 0.70 - 27.04.2001
+- installation script
+- better right management in admin area
+- free designs in configuration possible
+- added support for language files (german, english)
+- bugfix: fixed problem when deleting comments
+
+Version 0.666 - 10.04.2001
+- added support for categories
+- added voting system
+- added support for deleting comments
+- minor bug fixes
+
+Version 0.65 - 18.03.2001
+- added support for comments
+- added support for FAQ news
+- better search engine
+
+Version 0.60 - 22.02.2001
+- first released version
+
+Versions below 0.60 were developer version
+
+The contents of this file are subject to the Mozilla Public License
+Version 1.1 (the "License"); you may not use this file except in
+compliance with the License. You may obtain a copy of the License at
+http://www.mozilla.org/MPL/
+
+Software distributed under the License is distributed on an "AS IS"
+basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+License for the specific language governing rights and limitations
+under the License.
+
+(c) 2001-2010 phpMyFAQ Team

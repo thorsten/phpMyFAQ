@@ -411,9 +411,11 @@ if ($step == 4) {
     //
     if (version_compare($version, '2.6.0-alpha', '<')) {
         
-    	// UTF-8 Migration
-        switch($DB['type']) {
-
+        require '../lang/' . PMF_Configuration::getInstance()->get('main.language');
+        
+        if (isset($PMF_LANG['metaCharset']) && strtolower($PMF_LANG['metaCharset']) != 'utf-8') {
+            // UTF-8 Migration
+            switch($DB['type']) {
             case 'mysql':
                 include 'mysql.utf8migration.php';
                 break;
@@ -425,7 +427,11 @@ if ($step == 4) {
             default:
                 print '<p>Please read <a target="_blank" href="../docs/documentation.en.html">documenation</a> about migration to UTF-8.</p>';
                 break; 
+            }
         }
+        
+        exit;
+        
         
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.enableUpdate', 'false')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.useSslForLogins', 'false')";

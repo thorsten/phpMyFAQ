@@ -89,7 +89,7 @@ function db_check($supported_databases)
  * @access public
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  */
-function extension_check($enabledExtensions, &$output = NULL)
+function extension_check($enabledExtensions, &$output)
 {
     $missing_extensions = array();
     foreach ($enabledExtensions as $extension) {
