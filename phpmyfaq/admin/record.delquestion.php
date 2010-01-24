@@ -34,23 +34,25 @@ if ($permission['delquestion']) {
     $delete         = PMF_Filter::filterInput(INPUT_GET, 'delete', FILTER_SANITIZE_STRING, 'no');
     $categoryData   = new PMF_Category_Tree_DataProvider_SingleQuery($LANGCODE);
     $categoryLayout = new PMF_Category_Layout(new PMF_Category_Tree_Helper(new PMF_Category_Tree($categoryData)));
+    $faqQuestions   = new PMF_Faq_Questions();
     
     if ($delete == 'yes') {
-        $faq->deleteQuestion($questionId);
+        $faqQuestions->delete($questionId);
         print $PMF_LANG['ad_entry_delsuc'];
     } else {
-    	$toggle = PMF_Filter::filterInput(INPUT_GET, 'is_visible', FILTER_SANITIZE_STRING);
-        if ($toggle == 'toggle') {
-            $is_visible = $faq->getVisibilityOfQuestion($questionId);
+    	$toggleQuestion = PMF_Filter::filterInput(INPUT_GET, 'is_visible', FILTER_SANITIZE_STRING);
+        $openQuestions  = $faqQuestions->fetchAll();
+        
+        if ($toggleQuestion == 'toggle') {
+            $is_visible = $faqQuestions->getVisibility($questionId);
             if (!is_null($is_visible)) {
-                $faq->setVisibilityOfQuestion($questionId, ($is_visible == 'N' ? 'Y' : 'N'));
+                $faqQuestions->setVisibility($questionId, ($is_visible == 'N' ? 'Y' : 'N'));
             }
         }
 
         printf("<h2>%s</h2>", $PMF_LANG['msgOpenQuestions']);
 
-        $openquestions = $faq->getAllOpenQuestions();
-        if (count($openquestions) > 0) {
+        if (count($openQuestions) > 0) {
 ?>
     <table id="tableOpenQuestions">
     <thead>
@@ -63,13 +65,13 @@ if ($permission['delquestion']) {
     </thead>
     <tbody>
 <?php
-            foreach ($openquestions as $question) {
+            foreach ($openQuestions as $question) {
 ?>
         <tr>
-            <td><?php print PMF_Date::createIsoDate($question['date']); ?><br /><a href="mailto:<?php print $question['email']; ?>"><?php print $question['user']; ?></a></td>
-            <td><?php print $categoryLayout->renderBreadcrumb($categoryData->getPath($question['category'])) . ":<br />".$question['question']; ?></td>
-            <td><a href="?action=question&amp;id=<?php print $question['id']; ?>&amp;is_visible=toggle"><?php print (('Y' == $question['is_visible']) ? $PMF_LANG['ad_gen_no'] : $PMF_LANG['ad_gen_yes']); ?>!</a><br /></td>
-            <td><a href="?action=question&amp;id=<?php print $question['id']; ?>&amp;delete=yes"><?php print $PMF_LANG['ad_gen_delete']; ?>!</a><br /><a href="?action=takequestion&amp;id=<?php print $question['id']; ?>"><?php print $PMF_LANG['ad_ques_take']; ?></a></td>
+            <td><?php print PMF_Date::createIsoDate($question->date); ?><br /><a href="mailto:<?php print $question->email; ?>"><?php print $question->username; ?></a></td>
+            <td><?php print $categoryLayout->renderBreadcrumb($categoryData->getPath($question->category_id)) . ":<br />".$question->question; ?></td>
+            <td><a href="?action=question&amp;id=<?php print $question->id; ?>&amp;is_visible=toggle"><?php print (('Y' == $question->is_visible) ? $PMF_LANG['ad_gen_no'] : $PMF_LANG['ad_gen_yes']); ?>!</a><br /></td>
+            <td><a href="?action=question&amp;id=<?php print $question->id; ?>&amp;delete=yes"><?php print $PMF_LANG['ad_gen_delete']; ?>!</a><br /><a href="?action=takequestion&amp;id=<?php print $question->id; ?>"><?php print $PMF_LANG['ad_ques_take']; ?></a></td>
         </tr>
 <?php
             }

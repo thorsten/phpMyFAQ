@@ -273,8 +273,8 @@ class PMF_Faq_Record extends PMF_Faq_Abstract implements PMF_Faq_Interface
      */
     public function fetchAll(Array $ids = null)
     {
-        $categories = array();
-        $query      = sprintf("
+        $records = array();
+        $query   = sprintf("
             SELECT
                 id,
                 lang,
@@ -318,10 +318,10 @@ class PMF_Faq_Record extends PMF_Faq_Abstract implements PMF_Faq_Interface
         if (!$result) {
             throw new PMF_Exception($this->db->error());
         } else {
-            $categories = $this->db->fetchAll($result);
+            $records = $this->db->fetchAll($result);
         }
         
-        return $categories;
+        return $records;
     }
     
     /**

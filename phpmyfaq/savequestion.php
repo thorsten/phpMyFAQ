@@ -56,21 +56,23 @@ function sendAskedQuestion($username, $usermail, $usercat, $content)
     }
 
     $questionData = array(
-        'ask_username' => $username,
-        'ask_usermail' => $usermail,
-        'ask_category' => $usercat,
-        'ask_content'  => $content,
-        'ask_date'     => date('YmdHis'),
-        'is_visible'   => $visibility);
+        'id'          => null,
+        'username'    => $username,
+        'email'       => $usermail,
+        'category_id' => $usercat,
+        'question'    => $content,
+        'date'        => date('YmdHis'),
+        'is_visible'  => $visibility);
 
-    list($user, $host) = explode("@", $questionData['ask_usermail']);
+    list($user, $host) = explode("@", $questionData['email']);
     
-    if (PMF_Filter::filterVar($questionData['ask_usermail'], FILTER_VALIDATE_EMAIL) != false) {
-
-        $faq->addQuestion($questionData);
+    if (PMF_Filter::filterVar($questionData['email'], FILTER_VALIDATE_EMAIL) != false) {
         
-        $categoryData = $categoryNode->fetch($questionData['ask_category']);
-        $questionMail = "User: ".$questionData['ask_username'].", mailto:".$questionData['ask_usermail']."\n"
+        $faqQuestions = new PMF_Faq_Questions();
+        $faqQuestions->create($questionData);
+        
+        $categoryData = $categoryNode->fetch($questionData['category_id']);
+        $questionMail = "User: ".$questionData['username'].", mailto:".$questionData['email']."\n"
                         .$PMF_LANG["msgCategory"].": ".$categoryData->name."\n\n"
                         .wordwrap($content, 72);
                         
@@ -83,7 +85,7 @@ function sendAskedQuestion($username, $usermail, $usercat, $content)
         
         $mail = new PMF_Mail();
         $mail->unsetFrom();
-        $mail->setFrom($questionData['ask_usermail'], $questionData['ask_username']);
+        $mail->setFrom($questionData['email'], $questionData['username']);
         $mail->addTo($mainAdminEmail);
         // Let the category owner get a copy of the message
         if ($userEmail && $mainAdminEmail != $userEmail) {

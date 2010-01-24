@@ -47,10 +47,11 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     $tagging = new PMF_Tags();
 
     if ($action == 'takequestion') {
-        $question_id      = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        $question         = $faq->getQuestion($question_id);
-        $current_category = $question['category'];
-        $faqData['title'] = $question['question'];
+        $questionId       = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $faqQuestion      = new PMF_Faq_Questions();
+        $question         = $faqQuestion->fetch($questionId);
+        $current_category = $question->category_id;
+        $faqData['title'] = $question->question;
         $categories       = array(
             'category_id'   => $current_category,
             'category_lang' => $faqData['lang']);

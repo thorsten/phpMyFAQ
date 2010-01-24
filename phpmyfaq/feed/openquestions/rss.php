@@ -45,9 +45,14 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
     $LANGCODE = 'en';
 }
 
-$faq     = new PMF_Faq();
-$rssData = $faq->getAllOpenQuestions(false);
-$num     = count($rssData);
+//
+// Initalizing static string wrapper
+//
+PMF_String::init($LANGCODE);
+
+$faqQuestions = new PMF_Faq_Questions();
+$rssData      = $faqQuestions->fetchAll();
+$num          = count($rssData);
 
 $rss = new XMLWriter();
 $rss->openMemory();
@@ -68,15 +73,15 @@ if ($num > 0) {
             $counter++;
 
             $rss->startElement('item');
-            $rss->writeElement('title', PMF_Utils::makeShorterText(html_entity_decode($item['question']), 8) .
-                                        " (".$item['user'].")");
+            $rss->writeElement('title', PMF_Utils::makeShorterText(html_entity_decode($item->question), 8) .
+                                        " (".$item->username.")");
             
             $rss->startElement('description');
-            $rss->writeCdata($item['question']);
+            $rss->writeCdata($item->question);
             $rss->endElement();
         
-            $rss->writeElement('link', (isset($_SERVER['HTTPS']) ? 's' : '')."://".$_SERVER["HTTP_HOST"].str_replace("feed/openquestions/rss.php", "index.php", $_SERVER["PHP_SELF"])."?action=open#openq_".$item['id']);
-            $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['date'], false));
+            $rss->writeElement('link', (isset($_SERVER['HTTPS']) ? 's' : '')."://".$_SERVER["HTTP_HOST"].str_replace("feed/openquestions/rss.php", "index.php", $_SERVER["PHP_SELF"])."?action=open#openq_".$item->id);
+            $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item->date, false));
             $rss->endElement();
         }
     }

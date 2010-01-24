@@ -140,7 +140,7 @@
      *
      * @param array $categoryIds Array of selected category IDs
      */
-    public function renderOptions(Array $categoryIds = null)
+    public function renderOptions(Array $categoryIds = array())
     {
         $options = '';
         
