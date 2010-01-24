@@ -44,8 +44,8 @@ $inputCategory = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 
 $question = $readonly = '';
 if (!is_null($inputQuestion)) {
-    $faqQuestion = new PMF_Faq_Questions();
-    $question    = $faqQuestion->fetch($inputQuestion);
+    $faqQuestions = new PMF_Faq_Questions();
+    $question    = $faqQuestions->fetch($inputQuestion);
     if (PMF_String::strlen($question->question)) {
         $readonly = ' readonly="readonly"';
     }

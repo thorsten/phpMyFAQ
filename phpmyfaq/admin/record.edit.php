@@ -48,8 +48,8 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
     if ($action == 'takequestion') {
         $questionId       = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        $faqQuestion      = new PMF_Faq_Questions();
-        $question         = $faqQuestion->fetch($questionId);
+        $faqQuestions     = new PMF_Faq_Questions();
+        $question         = $faqQuestions->fetch($questionId);
         $current_category = $question->category_id;
         $faqData['title'] = $question->question;
         $categories       = array(
