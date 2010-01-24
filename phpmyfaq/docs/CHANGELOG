@@ -10,11 +10,10 @@ CHANGELOG:
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.6.1 - 2010-02-
+Version 2.6.1 - 2010-01-24
 - updated bundled TCPDF library to version 4.8.026 (Thorsten)
 - improved cookie handling (Thorsten)
 - minor bugfixes (Thorsten)
--
 
 Version 2.6.0 - 2010-01-11
 - moved all language files to UTF-8 (Anatoliy)
