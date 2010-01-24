@@ -256,10 +256,10 @@ class PMF_Faq_Record extends PMF_Faq_Abstract implements PMF_Faq_Interface
         if (!$result) {
             throw new PMF_Exception($this->db->error());
         } else {
-            $this->nodeData = array_shift($this->db->fetchAll($result));
+            $this->recordData = array_shift($this->db->fetchAll($result));
         }
         
-        return $this->nodeData;
+        return $this->recordData;
     }
     
     /**

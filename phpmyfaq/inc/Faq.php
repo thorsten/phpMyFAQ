@@ -796,59 +796,6 @@ class PMF_Faq
     }
 
     /**
-     * Updates a record
-     *
-     * @param  array   $data Array of FAQ data
-     * @return boolean
-     */
-    public function updateRecord(Array $data)
-    {
-        // Update entry
-        $query = sprintf("
-            UPDATE
-                %sfaqdata
-            SET
-                revision_id = %d,
-                active = '%s',
-                sticky = %d,
-                keywords = '%s',
-                thema = '%s',
-                content = '%s',
-                author = '%s',
-                email = '%s',
-                comment = '%s',
-                datum = '%s',
-                links_state = '%s',
-                links_check_date = %d,
-                date_start = '%s',
-                date_end = '%s'
-            WHERE
-                id = %d
-            AND
-                lang = '%s'",
-            SQLPREFIX,
-            $data['revision_id'],
-            $data['active'],
-            $data['sticky'],
-            $this->db->escape_string($data['keywords']),
-            $this->db->escape_string($data['thema']),
-            $this->db->escape_string($data['content']),
-            $this->db->escape_string($data['author']),
-            $data['email'],
-            $data['comment'],
-            $data['date'],
-            $data['linkState'],
-            $data['linkDateCheck'],
-            $data['dateStart'],
-            $data['dateEnd'],
-            $data['id'],
-            $data['lang']);
-
-        $this->db->query($query);
-        return true;
-    }
-
-    /**
      * Deletes a record and all the dependencies
      *
      * @param  integer $record_id   Record id
@@ -2759,7 +2706,7 @@ class PMF_Faq
     {
         $retval = false;
         
-        switch($type) {
+        switch ($type) {
             case 'sticky':
                 $flag = (int)$flag;
                 break;
@@ -2776,7 +2723,7 @@ class PMF_Faq
                 break;
         }
         
-        if(null !== $flag) {
+        if (null !== $flag) {
         
             $update = sprintf("
                 UPDATE 

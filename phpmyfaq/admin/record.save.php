@@ -151,10 +151,10 @@ if ($permission['editbt']) {
         $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $record_lang, $revision_id);
 
         // save or update the FAQ record
-        if ($faq->isAlreadyTranslated($record_id, $record_lang)) {
-            $faq->updateRecord($recordData);
-        } else {
             $faqRecord = new PMF_Faq_Record();
+        if ($faq->isAlreadyTranslated($record_id, $record_lang)) {
+            $faqRecord->update($record_id, $recordData);
+        } else {
             $faqRecord->create($recordData);
             $record_id = $faqRecord->getRecordId();
         }
