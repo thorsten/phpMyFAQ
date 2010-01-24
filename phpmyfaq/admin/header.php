@@ -70,6 +70,7 @@ if (isset($auth)) {
         case 'deleteglossary':
         case 'addglossary':
         case 'editglossary':
+        case 'news':
         case 'addnews':
         case 'editnews':
         case 'delnews':
@@ -212,8 +213,7 @@ header("Vary: Negotiate,Accept");
                 </ul>
             </div>
 
-            <h3>Admin worklog</h3>
-            <div class="leftMenu">
+            <div class="leftMenu" id="adminWorklog">
                 <span id="saving_data_indicator"></span>
             </div>
         </div>

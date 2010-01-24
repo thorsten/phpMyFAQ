@@ -257,9 +257,10 @@ if (!isset($message))
 // show new group form
 if ($groupAction == 'add') {
 ?>
-<h2><?php print $text['header']; ?></h2>
-<div id="user_message"><?php print $message; ?></div>
-<div id="group_create">
+    <h2><?php print $text['header']; ?></h2>
+    <p id="user_message"><?php print $message; ?></p>
+
+    <div id="groupCreate">
     <form name="group_create" action="?action=group&amp;group_action=addsave" method="post">
         <fieldset>
             <legend><?php print $text['addGroup']; ?></legend>
@@ -283,7 +284,8 @@ if ($groupAction == 'add') {
         </div>
         <div class="clear"></div>
     </form>
-</div> <!-- end #group_create -->
+    </div>
+    
 <script type="text/javascript">
 /* <![CDATA[ */
 document.group_create.group_name.focus();
@@ -307,14 +309,14 @@ var groupList;
  */
 function getGroupList()
 {
-	clearGroupList();
-	$.getJSON("index.php?action=ajax&ajax=group&ajaxaction=get_all_groups",
-	    function(data) {
-		    $.each(data, function(i, val) {
-			    $('#group_list_select').append('<option value="' + val.group_id + '">' + val.name + '</option>');
-	        });
-	    });
-	processGroupList();
+    clearGroupList();
+    $.getJSON("index.php?action=ajax&ajax=group&ajaxaction=get_all_groups",
+        function(data) {
+            $.each(data, function(i, val) {
+                $('#group_list_select').append('<option value="' + val.group_id + '">' + val.name + '</option>');
+            });
+        });
+    processGroupList();
 }
 
 /**
@@ -443,7 +445,7 @@ function getUserList()
 {
     $.getJSON("index.php?action=ajax&ajax=group&ajaxaction=get_all_users",
         function(data) {
-    	$('#group_user_list').empty();
+        $('#group_user_list').empty();
             $.each(data, function(i, val) {
                 $('#group_user_list').append('<option value="' + val.user_id + '">' + val.login + '</option>');
             });
@@ -515,7 +517,7 @@ function addGroupMembers()
             });
 
             if (isMember == false) {
-            	$('#group_member_list').append('<option value="' + $(this).val() + '">' + $(this).text() + '</option>');
+                $('#group_member_list').append('<option value="' + $(this).val() + '">' + $(this).text() + '</option>');
             }
             
         });
@@ -547,10 +549,10 @@ getGroupList();
 /* ]]> */
 </script>
 
-<h2><?php print $text['header']; ?></h2>
-<div id="user_message"><?php print $message; ?></div>
-<div id="groups">
-    <div id="group_list">
+    <h2><?php print $text['header']; ?></h2>
+    <p id="user_message"><?php print $message; ?></p>
+    
+    <div id="groupList" class="grid_4 alpha">
         <fieldset>
             <legend><?php print $text['selectGroup']; ?></legend>
             <form id="group_select" name="group_select" action="?action=group&amp;group_action=delete_confirm" method="post">
@@ -561,9 +563,9 @@ getGroupList();
             </form>
         </fieldset>
         <p>[ <a href="<?php print $_SERVER['PHP_SELF']; ?>?action=group&amp;group_action=add"><?php print $text['addGroup_link']; ?></a> ]</p>
-    </div> <!-- end #group_list -->
-</div> <!-- end #groups -->
-<div id="group_membership">
+    </div>
+
+    <div id="groupMembership" grid="grid_4">
     <form id="group_membership" name="group_membership" action="?action=group&amp;group_action=update_members" method="post" onsubmit="select_selectAll('group_member_list')">
         <input id="update_member_group_id" type="hidden" name="group_id" value="0" />
         <fieldset>
@@ -598,9 +600,10 @@ getGroupList();
             </div>
         </fieldset>
     </form>
-</div> <!-- end #group_membership -->
-<div id="group_details">
-    <div id="group_data">
+    </div>
+    
+    <div id="groupDetails" class="grid_4 omega">
+        <div id="groupData">
         <fieldset>
             <legend id="group_data_legend"><?php print $text['changeGroup']; ?></legend>
             <form action="<?php print $_SERVER['PHP_SELF']; ?>?action=group&amp;group_action=update_data" method="post">
@@ -624,8 +627,9 @@ getGroupList();
                 </div>
             </form>
         </fieldset>
-    </div> <!-- end #user_details -->
-    <div id="group_rights">
+        </div>
+        
+        <div id="groupRights">
         <fieldset>
             <legend id="group_rights_legend"><?php print $text['changeRights']; ?></legend>
             <form id="rightsForm" action="?action=group&amp;group_action=update_rights" method="post">
@@ -647,8 +651,9 @@ getGroupList();
                 </div>
             </form>
         </fieldset>
-    </div> <!-- end #user_rights -->
-</div> <!-- end #user_details -->
-<div class="clear"></div>
+        </div>
+    </div>
+    
+    <div class="clear"></div>
 <?php
 }

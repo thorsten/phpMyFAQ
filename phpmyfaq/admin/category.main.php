@@ -30,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 printf('<h2>%s</h2>', $PMF_LANG['ad_menu_categ_edit']);
 
-print "<p class=\"hr\">\n";
+print "<p>\n";
 printf('<img src="images/arrow.gif" width="11" height="11" alt="" border="0" /> <a href="?action=addcategory">%s</a>',
    $PMF_LANG['ad_kateg_add']);
 print "&nbsp;&nbsp;&nbsp;";

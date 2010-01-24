@@ -36,10 +36,10 @@ dt { font-weight: bold; }
 dd { padding-left: 25px; }
 
 /* General table definitions */
-table { border-collapse: collapse; margin: 0; }
+table { border-collapse: collapse; margin: 10px; }
 tr { background: #fff; }
 th, td { text-align: left; border-width: 1px; border-style: solid; }
-th { color: #212121; background: #DAE3ED; padding: .8em 1em; border-color: #efefef; }
+th { color: #212121; background: #DAE3ED; padding: .3em; border-color: #efefef; }
 td { border-color: #efefef; padding: .2em 0.5em; }
 
 /* General form definitions */
@@ -88,6 +88,7 @@ input:focus, select:focus, textarea:focus { color: #424242; background: #DAE3ED	
 #leftContent .leftMenu ul li { list-style: none; border-bottom: 1px solid #ebebeb; padding: 0; margin: 0; }
 #leftContent .leftMenu ul li a, .leftMenu ul li a:visited { background-color: #3F4C6B; border: none; padding: 7px 5px; color: #ebebeb; display: block; text-decoration: none; }
 #leftContent .leftMenu ul li a:hover { background-color: #FF7400; color: #212121; }
+#leftContent .leftMenu #adminWorklog { margin-top: 15px; }
 
 /* Footer */
 #footerWrapper { clear: both;  margin: 0 auto; text-align: left; }
@@ -101,53 +102,12 @@ input:focus, select:focus, textarea:focus { color: #424242; background: #DAE3ED	
 #pmfInformationBox table, #pmfVersionBox table { margin: 10px; }
 
 /* User pages */
-#userList table { margin: 10px; width:  680px; }
+#userList table { width:  680px; }
+
+/* Content pages */
+td.needsTranslation { background-color: #efefef; color: #B02B2C; }
 
 
-
-
-
-
-
-
-#groups { float: left; width: 200px; margin: 0; }
-#group_membership { float: left; width: 225px; margin: 0; padding-left: 5px; }
-#group_details { float: left; width: 225px; margin: 0 0 0 25px; padding-left: 5px;}
-
-#group_rights {}
-#group_memberList { float: right; width: 35%; height: 220px; }
-#group_userList { float: left; width: 35%; height: 220px; }
-#group_membershipButtons { text-align: center; padding-top: 105px; }
-#group_membership .button_row { padding-top: 10px; }
-.clear { clear: both; }
-
-/* Form CSS definitions */
-form br { clear: both; }
-label { float: left; text-align: right; margin-right: 5px; }
-label.left { width: 185px; }
-label.lefteditor { width: 135px; }
-label.leftconfig { width: 235px; }
-input { padding-bottom: 10px; }
-input[type=text], input[type=password] { float: left; margin-bottom: 10px; }
-input.right { float: left; width: auto; clear: both; margin-left: 200px; margin-right: 5px; margin-bottom: 5px;}
-input[type=checkbox].right, input[type=radio].right, input[type=submit].right { margin-left: 200px; }
-fieldset.login { margin: 30px auto; padding: 30px 30px 10px 30px; width: 400px; }
-fieldset.login label.left { width: 30%; }
-fieldset.login input[type=text] { width: 60%; }
-fieldset.login input[type=submit] { position: relative; left: -50px; width: 50px; }
-fieldset.login input[type=reset] { position: relative; left: -40px; width: 50px; }
-fieldset.login #faqpassword { width: 60%; margin-bottom: 20px; }
-
-/* Table CSS definitions */
-table.list { border: 1px solid #cccccc; border-collapse: collapse; width: 768px; }
-table.listrecords { border: 1px solid #cccccc; border-collapse: collapse; width: 768px; }
-.list thead th, tfoot td { background-color: #EDF2F2; }
-.list tfoot td { text-align: right; }
-th.list, td.list { border: 1px solid #cccccc; padding: 2px; line-height: 20px; text-align: left; }
-th.listhead { border: 1px solid #cccccc; padding: 2px; line-height: 20px; text-align: center; }
-th.listhead a { text-decoration: none; font-weight: bold; }
-
-/* datePicker CSS definitions */
 a.dp-choose-date { width: 16px; height: 16px; padding: 0; margin: 5px 3px 0; display: block;
     text-indent: -2000px; overflow: hidden; background: url(../images/calendar.png) no-repeat;}
 a.dp-choose-date.dp-disabled { background-position: 0 -20px; cursor: default; }
@@ -156,13 +116,6 @@ input.dp-applied { width: 140px; float: left; }
 
 
 /*
-
-
-
-
-.userrights {
-    padding-left: 132px;
-}
 
 
 textarea.admin {
