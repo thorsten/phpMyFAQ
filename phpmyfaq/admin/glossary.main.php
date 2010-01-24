@@ -72,20 +72,20 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
 
     print sprintf('<p>[ <a href="?action=addglossary">%s</a> ]</p>', $PMF_LANG['ad_glossary_add']);
 
-    print '<table class="list">';
-    print sprintf("<thead><tr><th class=\"list\">%s</th><th class=\"list\">%s</th><th>&nbsp;</th></tr></thead>", 
+    print '<table id="tableGlossary">';
+    print sprintf("<thead><tr><th>%s</th><th>%s</th><th>&nbsp;</th></tr></thead>", 
         $PMF_LANG['ad_glossary_item'], 
         $PMF_LANG['ad_glossary_definition']);
 
     foreach ($glossaryItems as $items) {
         print '<tr>';
-        print sprintf('<td class="list"><a href="%s%d">%s</a></td>', 
+        print sprintf('<td><a href="%s%d">%s</a></td>', 
             '?action=editglossary&amp;id=', 
             $items['id'], 
             $items['item']);
-        print sprintf('<td class="list">%s</td>', 
+        print sprintf('<td>%s</td>', 
             $items['definition']);
-        print sprintf('<td class="list"><a href="%s%d"><img src="images/delete.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a></td>', 
+        print sprintf('<td><a href="%s%d"><img src="images/delete.png" width="17" height="18" alt="%s" title="%s" border="0" /></a></td>', 
             '?action=deleteglossary&amp;id=', 
             $items['id'], 
             $PMF_LANG['ad_user_del_3'], 

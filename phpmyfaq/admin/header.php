@@ -74,6 +74,7 @@ if (isset($auth)) {
         case 'addnews':
         case 'editnews':
         case 'delnews':
+        case 'savenews':
         case 'question':
         case 'comments':
             $menuGroup        = 'content';

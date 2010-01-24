@@ -1,27 +1,30 @@
 <?php
 /**
  * Frontend for search log statistics
- *
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Anatoliy Belsky <anatoliy.belsky@mayflower.de>
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2003-03-30
- * @version    SVN: $Id$
- * @copyright  2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
+ *  http://www.mozilla.org/MPL/
  *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-03-30
  */
 
-if(isset($_GET['num']) && !defined('PMF_ROOT_DIR')) {
+if (isset($_GET['num']) && !defined('PMF_ROOT_DIR')) {
     define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
     
     require_once PMF_ROOT_DIR . '/inc/Init.php';
@@ -30,7 +33,7 @@ if(isset($_GET['num']) && !defined('PMF_ROOT_DIR')) {
     session_start();
     
     $num = PMF_Filter::filterInput(INPUT_GET, 'num', FILTER_VALIDATE_FLOAT);
-    if(!is_null($num)) {
+    if (!is_null($num)) {
         $bar = new PMF_Bar($num);
         $bar->renderImage();
         exit;
@@ -42,17 +45,17 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
+printf('<h2>%s</h2>', $PMF_LANG['ad_menu_searchstats']);
+
 if ($permission['viewlog']) {
-	
-	printf('<h2>%s</h2>', $PMF_LANG['ad_menu_searchstats']);
 
     $perpage = 15;
     $pages   = PMF_Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
     $page    = PMF_Filter::filterInput(INPUT_GET, 'page' , FILTER_VALIDATE_INT, 1);
     
-   	$search = new PMF_Search;
-	$searchesList = $search->getMostPopularSearches(0, true);
-	$searchesCount = $search->getSearchesCount();
+   	$search        = new PMF_Search;
+    $searchesCount = $search->getSearchesCount();
+    $searchesList  = $search->getMostPopularSearches($searchesCount + 1, true);
     
     if (is_null($pages)) {
         $pages = round((count($searchesList) + ($perpage / 3)) / $perpage, 0);
@@ -63,29 +66,29 @@ if ($permission['viewlog']) {
 
     $PageSpan = PageSpan("<a href=\"?action=searchstats&amp;pages=".$pages."&amp;page=<NUM>\">", 1, $pages, $page);
 ?>
-<table class="list">
+<table id="tableSearchStats">
 <thead>
 <tr>
-	<th class="list"><?php print $PMF_LANG['ad_searchstats_search_term'] ?></th>
-	<th class="list"><?php print $PMF_LANG['ad_searchstats_search_term_count'] ?></th>
-	<th class="list"><?php print $PMF_LANG['ad_searchstats_search_term_lang'] ?></th>
-	<th class="list"><?php print $PMF_LANG['ad_searchstats_search_term_percentage'] ?></th>
+	<th><?php print $PMF_LANG['ad_searchstats_search_term'] ?></th>
+	<th><?php print $PMF_LANG['ad_searchstats_search_term_count'] ?></th>
+	<th><?php print $PMF_LANG['ad_searchstats_search_term_lang'] ?></th>
+	<th><?php print $PMF_LANG['ad_searchstats_search_term_percentage'] ?></th>
 </tr>
 </thead>
    <tfoot>
        <tr>
-           <td class="list" colspan="4"><?php print $PageSpan; ?></td>
+           <td colspan="4"><?php print $PageSpan; ?></td>
        </tr>
    </tfoot>
 <tbody>
 <?php 
 
-	$counter = $displayedCounter = 0;
+    $counter = $displayedCounter = 0;
 
-	$self = substr(__FILE__, strlen($_SERVER['DOCUMENT_ROOT']));
-	
-	foreach($searchesList as $searchItem) {
-		
+    $self = substr(__FILE__, strlen($_SERVER['DOCUMENT_ROOT']));
+    
+    foreach ($searchesList as $searchItem) {
+        
         if ($displayedCounter >= $perpage) {
             $displayedCounter++;
             continue;
@@ -97,16 +100,16 @@ if ($permission['viewlog']) {
         }
         $displayedCounter++;
         
-        $num = round($searchItem['number']*100/$searchesCount, 2);
+        $num = round($searchItem['number']*100 / $searchesCount, 2);
 ?>
 <tr>
-	<td class="list"><?php print PMF_htmlentities($searchItem['searchterm']);  ?></td>
-	<td class="list"><?php print $searchItem['number'] ?></td>
-	<td class="list"><?php print $languageCodes[PMF_String::strtoupper($searchItem['lang'])] ?></td>
-	<td class="list"><img src="stat.search.php?num=<?php print $num ?>" alt="<?php print $num ?>%" title="<?php print $num ?>%" /></td>
+    <td><?php print PMF_htmlentities($searchItem['searchterm']);  ?></td>
+    <td><?php print $searchItem['number'] ?></td>
+    <td><?php print $languageCodes[PMF_String::strtoupper($searchItem['lang'])] ?></td>
+    <td><img src="stat.search.php?num=<?php print $num ?>" alt="<?php print $num ?>%" title="<?php print $num ?>%" /></td>
 </tr>
 <?php
-	}
+    }
 ?>
 </tbody>
 </table>

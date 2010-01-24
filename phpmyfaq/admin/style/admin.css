@@ -106,12 +106,15 @@ input:focus, select:focus, textarea:focus { color: #424242; background: #DAE3ED	
 
 /* Content pages */
 td.needsTranslation { background-color: #efefef; color: #B02B2C; }
-
-
+table#tableOpenQuestions, table#tableGlossary, table#tableNews { width: 680px; }
 a.dp-choose-date { width: 16px; height: 16px; padding: 0; margin: 5px 3px 0; display: block;
     text-indent: -2000px; overflow: hidden; background: url(../images/calendar.png) no-repeat;}
 a.dp-choose-date.dp-disabled { background-position: 0 -20px; cursor: default; }
 input.dp-applied { width: 140px; float: left; }
+
+/* Statistic pages */
+table#tableUserRatings, table#tableAdminLog, table#tableSearchStats { width: 680px; }
+
 
 
 

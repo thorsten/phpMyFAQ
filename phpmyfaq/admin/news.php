@@ -87,12 +87,12 @@ if ('addnews' == $action && $permission["addnews"]) {
 ?>
     <h2><?php print $PMF_LANG["msgNews"]; ?></h2>
     <p><a href="?action=addnews"><?php print $PMF_LANG["ad_menu_news_add"]; ?></a></p>
-    <table class="list">
+    <table id="tableNews">
     <thead>
         <tr>
-            <th class="list"><?php print $PMF_LANG["ad_news_headline"]; ?></th>
-            <th class="list"><?php print $PMF_LANG["ad_news_date"]; ?></th>
-            <th class="list">&nbsp;</th>
+            <th><?php print $PMF_LANG["ad_news_headline"]; ?></th>
+            <th><?php print $PMF_LANG["ad_news_date"]; ?></th>
+            <th>&nbsp;</th>
         </tr>
     </thead>
     <tbody>
@@ -102,14 +102,14 @@ if ('addnews' == $action && $permission["addnews"]) {
             foreach($newsHeader as $newsItem) {
 ?>
         <tr>
-            <td class="list"><?php print $newsItem['header']; ?></td>
-            <td class="list"><?php print $newsItem['date']; ?></td>
-            <td class="list"><a href="?action=editnews&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_update"]; ?>"><img src="images/edit.gif" width="18" height="18" alt="<?php print $PMF_LANG["ad_news_update"]; ?>" border="0" /></a>&nbsp;&nbsp;<a href="?action=deletenews&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_delete"]; ?>"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_news_delete"]; ?>" border="0" /></a></td>
+            <td><?php print $newsItem['header']; ?></td>
+            <td><?php print $newsItem['date']; ?></td>
+            <td><a href="?action=editnews&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_update"]; ?>"><img src="images/edit.png" width="18" height="18" alt="<?php print $PMF_LANG["ad_news_update"]; ?>" border="0" /></a>&nbsp;&nbsp;<a href="?action=deletenews&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_delete"]; ?>"><img src="images/delete.png" width="17" height="18" alt="<?php print $PMF_LANG["ad_news_delete"]; ?>" border="0" /></a></td>
         </tr>
 <?php
             }
         } else {
-            printf('<tr><td colspan="3" class="list">%s</td></tr>',
+            printf('<tr><td colspan="3">%s</td></tr>',
                 $PMF_LANG['ad_news_nodata']);
         }
 ?>

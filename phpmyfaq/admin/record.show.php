@@ -250,7 +250,11 @@ if ($permission['editbt'] || $permission['delbt']) {
 <?php
                 }
 ?>
-    <div class="categorylisting"><a href="javascript:void(0);" onclick="showhideCategory('category_<?php print $cid; ?>');"><img src="../images/more.gif" width="11" height="11" alt="" /> <?php print $categoryLayout->renderBreadcrumb($categoryData->getPath($cid)); ?></a><?php print $catInfo;?></div>
+    <div class="categorylisting">
+        <img src="../images/more.gif" width="11" height="11" alt="" />
+        <a href="javascript:void(0);" onclick="showhideCategory('category_<?php print $cid; ?>');">
+        <?php print $categoryLayout->renderBreadcrumb($categoryData->getPath($cid)); ?></a><?php print $catInfo;?>
+    </div>
     <div id="category_<?php print $cid; ?>" class="categorybox" style="display: <?php print ($currentcategory == $cid) ? 'block' : 'none'; ?>;">
     <table class="listrecords">
     <thead>

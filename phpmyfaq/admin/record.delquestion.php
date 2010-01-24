@@ -30,34 +30,35 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 if ($permission['delquestion']) {
 
-    $question_id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    $delete      = PMF_Filter::filterInput(INPUT_GET, 'delete', FILTER_SANITIZE_STRING, 'no');
+    $questionId     = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    $delete         = PMF_Filter::filterInput(INPUT_GET, 'delete', FILTER_SANITIZE_STRING, 'no');
+    $categoryData   = new PMF_Category_Tree_DataProvider_SingleQuery($LANGCODE);
+    $categoryLayout = new PMF_Category_Layout(new PMF_Category_Tree_Helper(new PMF_Category_Tree($categoryData)));
     
     if ($delete == 'yes') {
-        $faq->deleteQuestion($question_id);
+        $faq->deleteQuestion($questionId);
         print $PMF_LANG['ad_entry_delsuc'];
     } else {
     	$toggle = PMF_Filter::filterInput(INPUT_GET, 'is_visible', FILTER_SANITIZE_STRING);
         if ($toggle == 'toggle') {
-            $is_visible = $faq->getVisibilityOfQuestion($question_id);
+            $is_visible = $faq->getVisibilityOfQuestion($questionId);
             if (!is_null($is_visible)) {
-                $faq->setVisibilityOfQuestion($question_id, ($is_visible == 'N' ? 'Y' : 'N'));
+                $faq->setVisibilityOfQuestion($questionId, ($is_visible == 'N' ? 'Y' : 'N'));
             }
         }
 
         printf("<h2>%s</h2>", $PMF_LANG['msgOpenQuestions']);
 
         $openquestions = $faq->getAllOpenQuestions();
-
         if (count($openquestions) > 0) {
 ?>
-    <table class="list">
+    <table id="tableOpenQuestions">
     <thead>
         <tr>
-            <th class="list"><?php print $PMF_LANG['ad_entry_author']; ?></th>
-            <th class="list"><?php print $PMF_LANG['ad_entry_theme']; ?></th>
-            <th class="list"><?php print $PMF_LANG['ad_entry_visibility']; ?>?</th>
-            <th class="list"><?php print $PMF_LANG['ad_gen_delete']; ?>?</th>
+            <th><?php print $PMF_LANG['ad_entry_author']; ?></th>
+            <th><?php print $PMF_LANG['ad_entry_theme']; ?></th>
+            <th><?php print $PMF_LANG['ad_entry_visibility']; ?>?</th>
+            <th><?php print $PMF_LANG['ad_gen_delete']; ?>?</th>
         </tr>
     </thead>
     <tbody>
@@ -65,10 +66,10 @@ if ($permission['delquestion']) {
             foreach ($openquestions as $question) {
 ?>
         <tr>
-            <td class="list"><?php print PMF_Date::createIsoDate($question['date']); ?><br /><a href="mailto:<?php print $question['email']; ?>"><?php print $question['user']; ?></a></td>
-            <td class="list"><?php print $category->categoryName[$question['category']]['name'].":<br />".$question['question']; ?></td>
-            <td class="list"><a href="?action=question&amp;id=<?php print $question['id']; ?>&amp;is_visible=toggle"><?php print (('Y' == $question['is_visible']) ? $PMF_LANG['ad_gen_no'] : $PMF_LANG['ad_gen_yes']); ?>!</a><br /></td>
-            <td class="list"><a href="?action=question&amp;id=<?php print $question['id']; ?>&amp;delete=yes"><?php print $PMF_LANG['ad_gen_delete']; ?>!</a><br /><a href="?action=takequestion&amp;id=<?php print $question['id']; ?>"><?php print $PMF_LANG['ad_ques_take']; ?></a></td>
+            <td><?php print PMF_Date::createIsoDate($question['date']); ?><br /><a href="mailto:<?php print $question['email']; ?>"><?php print $question['user']; ?></a></td>
+            <td><?php print $categoryLayout->renderBreadcrumb($categoryData->getPath($question['category'])) . ":<br />".$question['question']; ?></td>
+            <td><a href="?action=question&amp;id=<?php print $question['id']; ?>&amp;is_visible=toggle"><?php print (('Y' == $question['is_visible']) ? $PMF_LANG['ad_gen_no'] : $PMF_LANG['ad_gen_yes']); ?>!</a><br /></td>
+            <td><a href="?action=question&amp;id=<?php print $question['id']; ?>&amp;delete=yes"><?php print $PMF_LANG['ad_gen_delete']; ?>!</a><br /><a href="?action=takequestion&amp;id=<?php print $question['id']; ?>"><?php print $PMF_LANG['ad_ques_take']; ?></a></td>
         </tr>
 <?php
             }
