@@ -2983,17 +2983,16 @@ class PMF_Faq
             $pdfFile = 'pdf' . $this->faqRecord['id'] . '.pdf';
         }
         
-        $faqconfig = PMF_Configuration::getInstance();
-        $category  = new PMF_Category();
+        $faqconfig     = PMF_Configuration::getInstance();
+        $categoryNode  = new PMF_Category_Node();
+        $categoryData  = $categoryNode->fetch($currentCategory);
         
         $pdf      = new PMF_Export_Pdf_Wrapper();
-        $category = new PMF_Category();
         $pdf->faq = $this->faqRecord;
         
-        $pdf->setCategory($currentCategory);
+        $pdf->setCategory($categoryData);
         $pdf->setQuestion($this->faqRecord['title']);
-        $pdf->setCategories($category->categoryName);
-
+        
         // Start building PDF...
         $pdf->Open();
         // Set any item
