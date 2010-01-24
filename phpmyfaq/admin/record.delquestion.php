@@ -40,9 +40,7 @@ if ($permission['delquestion']) {
         $faqQuestions->delete($questionId);
         print $PMF_LANG['ad_entry_delsuc'];
     } else {
-    	$toggleQuestion = PMF_Filter::filterInput(INPUT_GET, 'is_visible', FILTER_SANITIZE_STRING);
-        $openQuestions  = $faqQuestions->fetchAll();
-        
+        $toggleQuestion = PMF_Filter::filterInput(INPUT_GET, 'is_visible', FILTER_SANITIZE_STRING);
         if ($toggleQuestion == 'toggle') {
             $is_visible = $faqQuestions->getVisibility($questionId);
             if (!is_null($is_visible)) {
@@ -52,6 +50,7 @@ if ($permission['delquestion']) {
 
         printf("<h2>%s</h2>", $PMF_LANG['msgOpenQuestions']);
 
+        $openQuestions = $faqQuestions->fetchAll();
         if (count($openQuestions) > 0) {
 ?>
     <table id="tableOpenQuestions">
@@ -68,10 +67,24 @@ if ($permission['delquestion']) {
             foreach ($openQuestions as $question) {
 ?>
         <tr>
-            <td><?php print PMF_Date::createIsoDate($question->date); ?><br /><a href="mailto:<?php print $question->email; ?>"><?php print $question->username; ?></a></td>
-            <td><?php print $categoryLayout->renderBreadcrumb($categoryData->getPath($question->category_id)) . ":<br />".$question->question; ?></td>
-            <td><a href="?action=question&amp;id=<?php print $question->id; ?>&amp;is_visible=toggle"><?php print (('Y' == $question->is_visible) ? $PMF_LANG['ad_gen_no'] : $PMF_LANG['ad_gen_yes']); ?>!</a><br /></td>
-            <td><a href="?action=question&amp;id=<?php print $question->id; ?>&amp;delete=yes"><?php print $PMF_LANG['ad_gen_delete']; ?>!</a><br /><a href="?action=takequestion&amp;id=<?php print $question->id; ?>"><?php print $PMF_LANG['ad_ques_take']; ?></a></td>
+            <td>
+                <?php print PMF_Date::createIsoDate($question->date); ?><br />
+                <a href="mailto:<?php print $question->email; ?>"><?php print $question->username; ?></a>
+            </td>
+            <td>
+                <?php print $categoryLayout->renderBreadcrumb($categoryData->getPath($question->category_id)); ?>:<br />
+                <?php print $question->question; ?>
+            </td>
+            <td>
+                <a href="?action=question&amp;id=<?php print $question->id; ?>&amp;is_visible=toggle">
+                <?php print (('Y' == $question->is_visible) ? $PMF_LANG['ad_gen_no'] : $PMF_LANG['ad_gen_yes']); ?>!</a>
+            </td>
+            <td>
+                <a href="?action=question&amp;id=<?php print $question->id; ?>&amp;delete=yes">
+                <?php print $PMF_LANG['ad_gen_delete']; ?>!</a><br />
+                <a href="?action=takequestion&amp;id=<?php print $question->id; ?>">
+                <?php print $PMF_LANG['ad_ques_take']; ?></a>
+            </td>
         </tr>
 <?php
             }
