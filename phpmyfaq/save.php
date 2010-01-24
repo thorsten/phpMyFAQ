@@ -94,8 +94,10 @@ if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($
 
     $categoryNode     = new PMF_Category_Node();
     $categoryRelation = new PMF_Category_Relations();
+    $faqRecord        = new PMF_Faq_Record();
     if ($isNew) {
-        $categories = $categoryNode->fetchAll($categories['rubrik']);
+        $newData['id'] = null;
+        $categories    = $categoryNode->fetchAll($categories['rubrik']);
     } else {
         $newData['id'] = $faqid;
         foreach ($categoryRelation->fetchAll() as $relation) {
@@ -105,7 +107,8 @@ if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($
         }
     }
     
-    $recordId = $faq->addRecord($newData, $isNew);
+    $faqRecord->create($newData);
+    $recordId = $faqRecord->getSolutionId();
     
     foreach ($categories as $category) {
         $categoryData = array(

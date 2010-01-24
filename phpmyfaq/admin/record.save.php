@@ -154,7 +154,9 @@ if ($permission['editbt']) {
         if ($faq->isAlreadyTranslated($record_id, $record_lang)) {
             $faq->updateRecord($recordData);
         } else {
-            $record_id = $faq->addRecord($recordData, false);
+            $faqRecord = new PMF_Faq_Record();
+            $faqRecord->create($recordData);
+            $record_id = $faqRecord->getRecordId();
         }
 
         if ($record_id) {

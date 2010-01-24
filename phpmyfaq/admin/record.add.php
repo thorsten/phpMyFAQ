@@ -70,6 +70,7 @@ if ($permission['editbt']) {
         printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
         
         $recordData     = array(
+            'id'            => null,
             'lang'          => $record_lang,
             'active'        => $active,
             'sticky'        => (!is_null($sticky) ? 1 : 0),
@@ -86,16 +87,16 @@ if ($permission['editbt']) {
             'linkDateCheck' => 0);
         
         // Add new record and get that ID
-        $record_id = $faq->addRecord($recordData);
-
-        if ($record_id) {
+        $faqRecord = new PMF_Faq_Record();
+        if ($faqRecord->create($recordData)) {
             
+            $recordId = $faqRecord->getRecordId();
             // Create ChangeLog entry
-            $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $recordData['lang']);
+            $faq->createChangeEntry($recordId, $user->getUserId(), nl2br($changed), $recordData['lang']);
             
             // Create the visit entry
             $visits = PMF_Visits::getInstance();
-            $visits->add($record_id, $recordData['lang']);
+            $visits->add($recordId, $recordData['lang']);
             
             // Insert the new category relations
             $categoryRelations = new PMF_Category_Relations();
@@ -103,7 +104,7 @@ if ($permission['editbt']) {
             // Insert the tags
             if ($tags != '') {
                 $tagging = new PMF_Tags();
-                $tagging->saveTags($record_id, explode(',',$tags));
+                $tagging->saveTags($recordId, explode(',',$tags));
             }
             
             // Loop the categories
@@ -117,7 +118,7 @@ if ($permission['editbt']) {
                 $categoryData = array(
                     'category_id'   => $categoryId,
                     'category_lang' => $categoryRelations->getLanguage(),
-                    'record_id'     => $record_id,
+                    'record_id'     => $recordId,
                     'record_lang'   => $recordData['lang']);
                 // save or update the category relations
                 $categoryRelations->create($categoryData);
@@ -126,7 +127,8 @@ if ($permission['editbt']) {
                 $userPermission = array(
                     'category_id' => $categoryId,
                     'user_id'     => $restricted_users);
-                $faq->addPermission('user', $record_id, $restricted_users);
+                $faq->addPermission('user', $recordId, $restricted_users);
+                $categoryUser->delete($categoryId);
                 $categoryUser->create($userPermission);
                 
                 // Add group permission
@@ -134,7 +136,8 @@ if ($permission['editbt']) {
                     $groupPermission = array(
                         'category_id' => $categoryId,
                         'group_id'    => $restricted_groups);
-                    $faq->addPermission('group', $record_id, $restricted_groups);
+                    $faq->addPermission('group', $recordId, $restricted_groups);
+                    $categoryGroup->delete($categoryId);
                     $categoryGroup->create($groupPermission);
                 }
             }
@@ -142,7 +145,7 @@ if ($permission['editbt']) {
             print $PMF_LANG['ad_entry_savedsuc'];
             
             // Call Link Verification
-            link_ondemand_javascript($record_id, $recordData['lang']);
+            link_ondemand_javascript($recordId, $recordData['lang']);
 ?>
     <script type="text/javascript">
     <!--

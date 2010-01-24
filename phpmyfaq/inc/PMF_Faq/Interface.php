@@ -45,7 +45,7 @@ interface PMF_Faq_Interface
 	 * @return boolean
 	 * @throws PMF_Faq_Exception
 	 */
-	public function create($id, Array $data);
+	public function create(Array $data);
 
     /**
      * Updates an existing entry

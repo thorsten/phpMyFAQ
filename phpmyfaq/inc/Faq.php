@@ -796,50 +796,6 @@ class PMF_Faq
     }
 
     /**
-     * Adds a new record
-     *
-     * @param  array   $data       Array of FAQ data
-     * @param  boolean $new_record New record?
-     * @return integer
-     */
-    public function addRecord(Array $data, $new_record = true)
-    {
-        if ($new_record) {
-            $record_id = $this->db->nextID(SQLPREFIX.'faqdata', 'id');
-        } else {
-            $record_id = $data['id'];
-        }
-
-        // Add new entry
-        $query = sprintf(
-            "INSERT INTO
-                %sfaqdata
-            VALUES
-                (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s')",
-            SQLPREFIX,
-            $record_id,
-            $data['lang'],
-            $this->getSolutionId(),
-            0,
-            $data['active'],
-            $data['sticky'],
-            $this->db->escape_string($data['keywords']),
-            $this->db->escape_string($data['thema']),
-            $this->db->escape_string($data['content']),
-            $this->db->escape_string($data['author']),
-            $data['email'],
-            $data['comment'],
-            $data['date'],
-            $data['linkState'],
-            $data['linkDateCheck'],
-            $data['dateStart'],
-            $data['dateEnd']);
-
-        $this->db->query($query);
-        return $record_id;
-    }
-
-    /**
      * Updates a record
      *
      * @param  array   $data Array of FAQ data
