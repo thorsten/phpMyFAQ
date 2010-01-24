@@ -608,7 +608,7 @@ function getSearchData($searchterm, $asResource = false, $cat = '%', $allLanguag
  */
 function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = false, $instantRespnse = false)
 {
-    global $sids, $category, $PMF_LANG, $plr, $LANGCODE, $faq, $current_user, $current_groups;
+    global $sids, $PMF_LANG, $plr, $LANGCODE, $faq, $current_user, $current_groups, $categoryLayout;
 
     $_searchterm = PMF_htmlentities(stripslashes($searchterm), ENT_QUOTES, 'utf-8');
     $seite       = 1;
@@ -682,7 +682,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
             }
             
             if ($b_permission) {
-                $rubriktext  = $category->getPath($row->category_id);
+                $rubriktext  = $categoryLayout->renderBreadcrumb(array($row->category_id));
                 $thema       = chopString($row->thema, 15);
                 $content     = chopString(strip_tags($row->content), 25);
                 $searchterm  = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'), '', $searchterm);
