@@ -17,10 +17,10 @@ Version 2.7.0-alpha - 2010-
 - added new administration layout (Thorsten)
 - upgraded jQuery to version 1.4 (Thorsten)
 
-Version 2.6.1 - 2010-02-
+Version 2.6.1 - 2010-01-24
+- updated bundled TCPDF library to version 4.8.026 (Thorsten)
 - improved cookie handling (Thorsten)
 - minor bugfixes (Thorsten)
--
 
 Version 2.6.0 - 2010-01-11
 - moved all language files to UTF-8 (Anatoliy)
