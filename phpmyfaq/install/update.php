@@ -430,9 +430,6 @@ if ($step == 4) {
             }
         }
         
-        exit;
-        
-        
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.enableUpdate', 'false')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.useSslForLogins', 'false')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.currentApiVersion', '" . APIVERSION . "')";
