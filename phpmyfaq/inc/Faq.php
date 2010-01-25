@@ -2630,13 +2630,13 @@ class PMF_Faq
         $pdf->SetCreator($faqconfig->get('main.titleFAQ').' - powered by phpMyFAQ '.$faqconfig->get('main.currentVersion'));
         $pdf->AliasNbPages();
         $pdf->AddPage();
-        $pdf->SetFont('dejavusans', '', 12);
+        $pdf->SetFont('arialunicid0', '', 12);
         $pdf->SetDisplayMode('real');
         $pdf->Ln();
         $pdf->WriteHTML(str_replace('../', '', $this->faqRecord['content']), true);
         $pdf->Ln();
         $pdf->Ln();
-        $pdf->SetFont('dejavusans', '', 11);
+        $pdf->SetFont('arialunicid0', '', 11);
         $pdf->Write(5, $PMF_LANG['ad_entry_solution_id'].': #'.$this->faqRecord['solution_id']);
         $pdf->SetAuthor($this->faqRecord['author']);
         $pdf->Ln();

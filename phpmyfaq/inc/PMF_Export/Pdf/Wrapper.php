@@ -138,7 +138,7 @@ define('PDF_MARGIN_RIGHT', 15);
 /**
  * default main font name
  */
-define('PDF_FONT_NAME_MAIN', 'DejaVuSans');
+define('PDF_FONT_NAME_MAIN', 'arialunicid0');
 
 /**
  * default main font size
@@ -148,7 +148,7 @@ define('PDF_FONT_SIZE_MAIN', 10);
 /**
  * default data font name
  */
-define('PDF_FONT_NAME_DATA', 'DejaVuSans');
+define('PDF_FONT_NAME_DATA', 'arialunicid0');
 
 /**
  * default data font size
@@ -417,7 +417,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
         $currentTextColor = $this->TextColor;
         
         $this->SetTextColor(0,0,0);
-        $this->SetFont('dejavusans', 'B', 18);
+        $this->SetFont('arialunicid0', 'B', 18);
         $this->MultiCell(0, 9, $title, 0, 'C', 0);
         if ($this->enableBookmarks) {
             $this->Bookmark(PMF_Utils::makeShorterText($this->question, 5));
@@ -441,14 +441,14 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
         $currentTextColor = $this->TextColor;
         $this->SetTextColor(0,0,0);
         $this->SetY(-25);
-        $this->SetFont('dejavusans', '', 10);
+        $this->SetFont('arialunicid0', '', 10);
         $this->Cell(0, 10, $PMF_LANG['ad_gen_page'] . ' ' . $this->PageNo() . ' / ' . $this->getAliasNbPages(), 0, 0, 'C');
         $this->SetY(-20);
-        $this->SetFont('dejavusans', 'B', 8);
+        $this->SetFont('arialunicid0', 'B', 8);
         $this->Cell(0, 10, "(c) ".date("Y")." ".$faqconfig->get('main.metaPublisher')." <".$faqconfig->get('main.administrationMail').">",0,1,"C");
         if ($this->enableBookmarks == false) {
             $this->SetY(-15);
-            $this->SetFont('dejavusans', '', 8);
+            $this->SetFont('arialunicid0', '', 8);
             $baseUrl = '/index.php';
             if (is_array($this->faq) && !empty($this->faq)) {
                 $baseUrl .= '?action=artikel&amp;cat='.$this->category->id;

@@ -99,7 +99,7 @@ class PMF_Export_Pdf extends PMF_Export
             	$this->pdf->setQuestion($questions[$key]);
             	$this->pdf->setCategories($this->category->categoryName);
                 $this->pdf->AddPage();
-                $this->pdf->SetFont('dejavusans', '', 12);
+                $this->pdf->SetFont('arialunicid0', '', 12);
                 $this->pdf->WriteHTML($value);
             }
         }
