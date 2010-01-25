@@ -18,9 +18,10 @@
  * @package   PMF_Feed
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @copyright 2006-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2006-2010 phpMyFAQ Team
+ * @since     2006-06-17
  */
 
 define('PMF_ROOT_DIR', dirname(dirname(dirname(__FILE__))));

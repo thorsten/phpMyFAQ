@@ -17,9 +17,9 @@
  * @category  phpMyFAQ
  * @package   PMF_Feed
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2004-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2004-2010 phpMyFAQ Team
  */
 
 define('PMF_ROOT_DIR', dirname(dirname(dirname(__FILE__))));
@@ -44,6 +44,11 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
 } else {
     $LANGCODE = 'en';
 }
+
+//
+// Initalizing static string wrapper
+//
+PMF_String::init($LANGCODE);
 
 $faq     = new PMF_Faq();
 $rssData = $faq->getLatestData(PMF_NUMBER_RECORDS_LATEST);
