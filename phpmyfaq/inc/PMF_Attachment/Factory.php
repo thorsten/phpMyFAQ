@@ -23,11 +23,8 @@
  * @copyright 2009-2010 phpMyFAQ Team
  */
 
-set_include_path(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'libs' .
-                         DIRECTORY_SEPARATOR . 'phpseclib' . PATH_SEPARATOR .
-                         get_include_path());
-
-require_once 'Crypt' . DIRECTORY_SEPARATOR .'AES.php';
+require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'libs' . DIRECTORY_SEPARATOR . 
+    'phpseclib' . DIRECTORY_SEPARATOR . 'Crypt' . DIRECTORY_SEPARATOR .'AES.php';
                  
 /**
  * PMF_Atachment_Factory
