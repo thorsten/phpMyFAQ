@@ -433,7 +433,16 @@ class PMF_Mail
 
         // From
         foreach($this->_from as $address => $name) {
-            $this->headers['From'] = (empty($name) ? '' : $name.' ').'<'.$address.'>';
+            if (empty($name)) {
+                $this->headers['From'] ='';
+            } else {
+                if (function_exists('mb_encode_mimeheader')) {
+                    $name = mb_encode_mimeheader($name);
+                } else {
+                    $name = encode_iso88591($name);
+                }
+                $this->headers['From'] =  $name .' <'.$address.'>';
+            }
         }
 
         // Message-Id
