@@ -73,13 +73,6 @@ class PMF_CategoryTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * Constructs the test case.
-     */
-    public function __construct ()
-    {
-    }
-    
-    /**
      * Tests PMF_Category->__toString()
      */
     public function test__toString ()
