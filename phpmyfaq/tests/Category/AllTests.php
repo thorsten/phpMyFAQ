@@ -26,6 +26,9 @@
 require_once 'PHPUnit/Framework/TestSuite.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
+// Add Tests
+require_once 'PMF_CategoryTest.php';
+
 /**
  * Category_AllTests
  * 
@@ -42,6 +45,8 @@ class Category_AllTests
     public static function suite()
     {
         $suite = new PHPUnit_Framework_TestSuite('phpMyFAQ PMF_Category');
+        
+        $suite->addTestSuite('PMF_CategoryTest');
         
         return $suite;
     }
