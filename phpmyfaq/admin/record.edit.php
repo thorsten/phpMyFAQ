@@ -89,15 +89,10 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
         $faqData['sticky']      = PMF_Filter::filterInput(INPUT_POST, 'sticky', FILTER_VALIDATE_INT);
         $tags                   = PMF_Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
         $changed                = PMF_Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
+        $faqData['dateStart']   = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
+        $faqData['dateEnd']     = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
         $faqData['content']     = html_entity_decode($faqData['content']);
         
-        if (isset($_REQUEST['dateStart'])) {
-            $faqData['dateStart'] = $_REQUEST['dateStart'];
-        }
-        if (isset($_REQUEST['dateEnd'])) {
-            $faqData['dateEnd'] = $_REQUEST['dateEnd'];
-        }
-
     } elseif ($action == 'editentry') {
 
         $id   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -139,11 +134,10 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
             $categories = array();
         }
     }
-
+    
     // Revisions
-    if (isset($_REQUEST['revisionid_selected'])){
-        $revisionid_selected = $_REQUEST['revisionid_selected'];
-    } elseif (isset($faqData['revision_id'])) {
+    $revisionid_selected = PMF_Filter::filterInput(INPUT_POST, 'revisionid_selected', FILTER_VALIDATE_INT);
+    if (is_null($revisionid_selected)) {
         $revisionid_selected = $faqData['revision_id'];
     }
 
