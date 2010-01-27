@@ -18,7 +18,9 @@ Version 2.7.0-alpha - 2010-
 - upgraded jQuery to version 1.4 (Thorsten)
 
 Version 2.6.2 - 2010-02-
--
+- fixed update script issue (Thorsten)
+- fixed display of Chinese, Japanese and Korean content in PDFs (Thorsten)
+- minor bugfixes (Thorsten)
 
 Version 2.6.1 - 2010-01-24
 - updated bundled TCPDF library to version 4.8.026 (Thorsten)
