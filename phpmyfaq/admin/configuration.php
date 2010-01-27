@@ -39,28 +39,32 @@ $userAction = PMF_Filter::filterInput(INPUT_GET, 'config_action', FILTER_SANITIZ
 // Save the configuration
 if ('saveConfig' == $userAction) {
 	
-	$checks     = array('filter' => FILTER_SANITIZE_STRING,
-	                    'flags'  => FILTER_REQUIRE_ARRAY);
-	$editData   = PMF_Filter::filterInputArray(INPUT_POST, array('edit' => $checks));
-    $message    = '';
-    $userAction = 'listConfig';
-
+	$checks          = array('filter' => FILTER_SANITIZE_STRING,
+	                         'flags'  => FILTER_REQUIRE_ARRAY);
+	$editData        = PMF_Filter::filterInputArray(INPUT_POST, array('edit' => $checks));
+    $message         = '';
+    $userAction      = 'listConfig';
+    $oldConfigValues = $faqconfig->config;
+    
     // Set the new values
     $forbiddenValues = array('{', '}', '$');
     $newConfigValues = array();
     foreach ($editData['edit'] as $key => $value) {
         $newConfigValues[$key] = str_replace($forbiddenValues, '', $value);
     }
-    // Hacks
-    if (is_array($editData['edit'])) {
-        foreach ($newConfigValues as $key => $value) {
-            // Fix checkbox values: they are not returned as HTTP POST values...
-            if (!array_key_exists($key, $editData['edit'])) {
+    
+    foreach ($oldConfigValues as $key => $value) {
+        if (isset($newConfigValues[$key])) {
+            continue;
+        } else {
+            if ($oldConfigValues[$key] == 'true') {
                 $newConfigValues[$key] = 'false';
+            } else {
+                $newConfigValues[$key] = $oldConfigValues[$key];
             }
         }
     }
-
+    
     $faqconfig->update($newConfigValues);
 }
 // Lists the current configuration
