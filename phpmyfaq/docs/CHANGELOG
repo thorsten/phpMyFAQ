@@ -4,6 +4,7 @@ Codename "Portia"
 Changes since 2.6.1:
 - fixed update script issue (Thorsten)
 - fixed display of Chinese, Japanese and Korean content in PDFs (Thorsten)
+- updated French translation (Cédric Frayssinet)
 - minor bugfixes (Thorsten)
 
 CHANGELOG:
@@ -13,6 +14,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 Version 2.6.2 - 2010-02-
 - fixed update script issue (Thorsten)
 - fixed display of Chinese, Japanese and Korean content in PDFs (Thorsten)
+- updated French translation (Cédric Frayssinet)
 - minor bugfixes (Thorsten)
 
 Version 2.6.1 - 2010-01-24
