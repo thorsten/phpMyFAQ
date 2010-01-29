@@ -117,14 +117,14 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
         if ($user->getStatus() != 'blocked') {
             $auth = true;
         } else {
-            $error = $PMF_LANG['ad_auth_fail'].' ('.$faqusername.' / *)';
+            $error = $PMF_LANG['ad_auth_fail'];
             $user  = null;
         }
     } else {
         // error
         $logging = new PMF_Logging();
         $logging->logAdmin($user, 'Loginerror\nLogin: '.$faqusername.'\nPass: ********');
-        $error = $PMF_LANG['ad_auth_fail'].' ('.$faqusername.' / *)';
+        $error = $PMF_LANG['ad_auth_fail'];
         $user  = null;
     }
 } else {
