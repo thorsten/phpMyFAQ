@@ -30,13 +30,15 @@
  * @since     2002-08-20
  */
 
-set_time_limit(0);
-
 define('VERSION', '2.7.0-alpha');
 define('APIVERSION', 2);
 define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('SAFEMODE', @ini_get('safe_mode'));
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
+
+if (SAFEMODE) {
+    set_time_limit(0);
+}
 
 require PMF_ROOT_DIR . '/config/constants.php';
 require PMF_ROOT_DIR . '/inc/autoLoader.php';
