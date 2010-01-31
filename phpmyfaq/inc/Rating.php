@@ -70,7 +70,14 @@ class PMF_Rating
      * @var  PMF_Language_Plurals
      */
     private $plr;
-
+    
+    /**
+     * Voting Data
+     * 
+     * @var array
+     */
+    public $votingData = null;
+    
     /**
      * Constructor
      *
@@ -160,6 +167,46 @@ class PMF_Rating
         
         return $result;
     }
+    
+
+    /**
+     * Fetches one entry
+     *
+     * @param integer $recordId Record ID
+     * 
+     * @return array
+     * @throws PMF_Exception
+     */
+    public function fetch($recordId)
+    {
+        $query = sprintf("
+            SELECT
+                id,
+                artikel as record_id,
+                vote as sumVotings,
+                usr as numVotings,
+                datum as date,
+                ip
+            FROM
+                %sfaqvoting
+            WHERE
+                artikel = %d",
+            SQLPREFIX,
+            (int)$recordId);
+        
+        $result = $this->db->query($query);
+        
+        if (!$result) {
+            throw new PMF_Exception($this->db->error());
+        } else {
+            $this->votingData = array_shift($this->db->fetchAll($result));
+        }
+        
+        return $this->votingData;
+    }
+    
+    
+    
     
     /**
      * Returns all ratings of FAQ records

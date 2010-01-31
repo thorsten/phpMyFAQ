@@ -1837,34 +1837,6 @@ class PMF_Faq
     }
 
     /**
-     * Returns the number of users from the table faqvotings
-     *
-     * @param   integer $record_id
-     * @return  integer
-     * @access  public
-     * @since   2006-06-18
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     */
-    function getNumberOfVotings($record_id)
-    {
-        $query = sprintf(
-            'SELECT
-                usr
-            FROM
-                %sfaqvoting
-            WHERE
-                artikel = %d',
-            SQLPREFIX,
-            $record_id);
-        if ($result = $this->db->query($query)) {
-            if ($row = $this->db->fetch_object($result)) {
-                return $row->usr;
-            }
-        }
-        return 0;
-    }
-
-    /**
      * Adds a new changelog entry in the table faqchanges
      *
      * @param   integer $id

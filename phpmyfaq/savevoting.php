@@ -44,7 +44,7 @@ if (isset($vote) && $faq->votingCheck($recordId, $userIp) && $vote > 0 && $vote 
         'date'      => $_SERVER['REQUEST_TIME'],
         'user_ip'   => $userIp);
 
-    if (!$faq->getNumberOfVotings($recordId)) {
+    if (!$voting->fetch($recordId)) {
         $voting->create($votingData);
     }  else {
         $voting->update($recordId, $votingData);
