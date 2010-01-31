@@ -48,7 +48,7 @@ class PMF_CategoryTest extends PHPUnit_Framework_TestCase
      * 
      * @var array
      */
-    protected $data = array(
+    protected $mockData = array(
             'id'        => 1,
             'lang'      => 'de',
             'name'      => 'PHP4',
@@ -60,7 +60,7 @@ class PMF_CategoryTest extends PHPUnit_Framework_TestCase
     protected function setUp ()
     {
         parent::setUp();
-        $this->PMF_Category = new PMF_Category($this->data);
+        $this->PMF_Category = new PMF_Category($this->mockData);
     }
     
     /**
@@ -124,7 +124,7 @@ class PMF_CategoryTest extends PHPUnit_Framework_TestCase
      */
     public function testSetParent ()
     {
-        $parent = new PMF_Category($this->data, $this->PMF_Category);
+        $parent = new PMF_Category($this->mockData, $this->PMF_Category);
         $this->PMF_Category->setParent($parent);
         $this->assertTrue($this->PMF_Category->getParent() instanceof PMF_Category);
     }
