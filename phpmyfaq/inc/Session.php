@@ -327,7 +327,6 @@ class PMF_Session
             $_SERVER['REQUEST_TIME'] + PMF_SESSION_EXPIRED_TIME,
             dirname(dirname(__FILE__)),
             $_SERVER['HTTP_HOST'],
-            false,
-            true);
+            false);
     }
 }
