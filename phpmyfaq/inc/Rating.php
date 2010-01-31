@@ -123,7 +123,44 @@ class PMF_Rating
         
         return $result;
     }
+    
 
+    /**
+     * Updates an existing entry
+     *
+     * @param integer $id   ID
+     * @param array   $data Array of data
+     * 
+     * @return boolean
+     * @throws PMF_Exception
+     */
+    public function update($recordId, Array $data)
+    {
+        $query = sprintf("
+            UPDATE
+                %sfaqvoting
+            SET
+                vote    = vote + %d,
+                usr     = usr + 1,
+                datum   = %d,
+                ip      = '%s'
+            WHERE
+                artikel = %d",
+            SQLPREFIX,
+            $data['vote'],
+            $data['date'],
+            $data['user_ip'],
+            $recordId);
+        
+        $result = $this->db->query($query);
+        
+        if (!$result) {
+            throw new PMF_Exception($this->db->error());
+        }
+        
+        return $result;
+    }
+    
     /**
      * Returns all ratings of FAQ records
      *

@@ -1865,42 +1865,6 @@ class PMF_Faq
     }
 
     /**
-     * Updates an existing voting record
-     *
-     * @param    array  $votingData
-     * @return   boolean
-     * @access   public
-     * @since    2006-06-18
-     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-     */
-    function updateVoting($votingData)
-    {
-        if (!is_array($votingData)) {
-            return false;
-        }
-
-        $query = sprintf(
-            "UPDATE
-                %sfaqvoting
-            SET
-                vote    = vote + %d,
-                usr     = usr + 1,
-                datum   = %d,
-                ip      = '%s'
-            WHERE
-                artikel = %d",
-            SQLPREFIX,
-            $votingData['vote'],
-            $_SERVER['REQUEST_TIME'],
-            $votingData['user_ip'],
-            $votingData['record_id']);
-        $this->db->query($query);
-
-        return true;
-    }
-
-
-    /**
      * Adds a new changelog entry in the table faqchanges
      *
      * @param   integer $id

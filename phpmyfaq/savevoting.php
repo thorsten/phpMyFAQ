@@ -28,37 +28,38 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$record_id = PMF_Filter::filterInput(INPUT_POST, 'artikel', FILTER_VALIDATE_INT, 0);
-$vote      = PMF_Filter::filterInput(INPUT_POST, 'vote', FILTER_VALIDATE_INT);
-$user_ip   = PMF_Filter::filterVar($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
+$recordId = PMF_Filter::filterInput(INPUT_POST, 'artikel', FILTER_VALIDATE_INT, 0);
+$vote     = PMF_Filter::filterInput(INPUT_POST, 'vote', FILTER_VALIDATE_INT);
+$userIp   = PMF_Filter::filterVar($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
 
-if (isset($vote) && $faq->votingCheck($record_id, $user_ip) && $vote > 0 && $vote < 6) {
-    $faqsession->userTracking('save_voting', $record_id);
-
+if (isset($vote) && $faq->votingCheck($recordId, $userIp) && $vote > 0 && $vote < 6) {
+    
+    $faqsession->userTracking('save_voting', $recordId);
+    
     $voting     = new PMF_Rating();
     $votingData = array(
         'id'        => null,
-        'record_id' => $record_id,
+        'record_id' => $recordId,
         'vote'      => $vote,
         'date'      => $_SERVER['REQUEST_TIME'],
-        'user_ip'   => $user_ip);
+        'user_ip'   => $userIp);
 
-    if (!$faq->getNumberOfVotings($record_id)) {
+    if (!$faq->getNumberOfVotings($recordId)) {
         $voting->create($votingData);
     }  else {
-        $faq->updateVoting($votingData);
+        $voting->update($recordId, $votingData);
     }
 
     $tpl->processTemplate ('writeContent', array(
                            'msgVoteThanks' => $PMF_LANG['msgVoteThanks']));
 
-} elseif (isset($voting) && !$faq->votingCheck($record_id, $user_ip)) {
-    $faqsession->userTracking('error_save_voting', $record_id);
+} elseif (isset($voting) && !$faq->votingCheck($recordId, $userIp)) {
+    $faqsession->userTracking('error_save_voting', $recordId);
     $tpl->processTemplate('writeContent', array(
                           'msgVoteThanks' => $PMF_LANG['err_VoteTooMuch']));
 
 } else {
-    $faqsession->userTracking('error_save_voting', $record_id);
+    $faqsession->userTracking('error_save_voting', $recordId);
     $tpl->processTemplate('writeContent', array(
                            'msgVoteThanks' => $PMF_LANG['err_noVote']));
 
