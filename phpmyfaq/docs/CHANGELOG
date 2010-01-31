@@ -20,6 +20,7 @@ Version 2.7.0-alpha - 2010-
 Version 2.6.2 - 2010-02-
 - fixed update script issue (Thorsten)
 - fixed display of Chinese, Japanese and Korean content in PDFs (Thorsten)
+- fixed issues with RSS feeds (Thorsten)
 - updated French translation (Cédric Frayssinet)
 - minor bugfixes (Thorsten)
 
