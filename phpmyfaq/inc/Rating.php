@@ -1,13 +1,8 @@
 <?php
 /**
- * $Id$
- *
  * The main Rating class
- *
- * @package      phpMyFAQ
- * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since        2007-03-31
- * @copyright    (c) 2007 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,8 +13,27 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Rating
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2007-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2007-03-31
  */
 
+/**
+ * PMF_Rating
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_Rating
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2007-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2007-03-31
+ */
 class PMF_Rating
 {
     /**
@@ -72,6 +86,42 @@ class PMF_Rating
         $this->type     = $DB['type'];
         $this->pmf_lang = $PMF_LANG;
         $this->plr      = $plr;
+    }
+    
+
+    /**
+     * Creates a new entry
+     *
+     * @param array   $data Array of data
+     * 
+     * @return boolean
+     * @throws PMF_Exception
+     */
+    public function create(Array $data)
+    {
+        if (is_null($data['id'])) {
+            $votingId = $this->db->nextID(SQLPREFIX.'faqvoting', 'id');
+        }
+        
+        $query = sprintf("
+            INSERT INTO
+                %sfaqvoting
+            VALUES
+                (%d, %d, %d, 1, %d, '%s')",
+            SQLPREFIX,
+            $votingId,
+            $data['record_id'],
+            $data['vote'],
+            $data['date'],
+            $data['user_ip']);
+        
+        $result = $this->db->query($query);
+        
+        if (!$result) {
+            throw new PMF_Exception($this->db->error());
+        }
+        
+        return $result;
     }
 
     /**

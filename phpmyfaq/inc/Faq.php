@@ -1865,37 +1865,6 @@ class PMF_Faq
     }
 
     /**
-     * Adds a new voting record
-     *
-     * @param    array  $votingData
-     * @return   boolean
-     * @access   public
-     * @since    2006-06-18
-     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-     */
-    function addVoting($votingData)
-    {
-        if (!is_array($votingData)) {
-            return false;
-        }
-
-        $query = sprintf(
-            "INSERT INTO
-                %sfaqvoting
-            VALUES
-                (%d, %d, %d, 1, %d, '%s')",
-            SQLPREFIX,
-            $this->db->nextID(SQLPREFIX.'faqvoting', 'id'),
-            $votingData['record_id'],
-            $votingData['vote'],
-            $_SERVER['REQUEST_TIME'],
-            $votingData['user_ip']);
-        $this->db->query($query);
-
-        return true;
-    }
-
-    /**
      * Updates an existing voting record
      *
      * @param    array  $votingData
