@@ -90,7 +90,7 @@ if ($num > 0) {
         $rss->endElement();
         
         $rss->writeElement('link', PMF_Link::getSystemUri('/feed/news/rss.php').$link);
-        $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['date'], false));
+        $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['date'], true));
         $rss->endElement();
     }
 }
