@@ -88,7 +88,7 @@ class PMF_Category
      * 
      * @return void
      */
-    public function __construct(array $data, PMF_Category $parent = null)
+    public function __construct(Array $data, PMF_Category $parent = null)
     {
         $this->id        = $data['id'];
         $this->language  = $data['lang'];

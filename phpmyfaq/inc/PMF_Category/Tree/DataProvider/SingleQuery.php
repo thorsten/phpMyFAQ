@@ -103,7 +103,17 @@ class PMF_Category_Tree_DataProvider_SingleQuery
                 $this->children[$row['parent_id']][] = $cat;
             }
         }
-
+        
+        if (!count($this->children)) {
+            $emptyCategory     = array(
+                'id'        => -1,
+                'lang'      => $this->language,
+                'name'      => null,
+                'children'  => 0,
+                'parent_id' => 0);
+            $this->children[0] = new PMF_Category($emptyCategory);
+        }
+        
         foreach ($this->children as $parentid => $children) {
             if (!$parentid) {
                 continue;
