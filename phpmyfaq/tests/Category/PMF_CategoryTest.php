@@ -23,7 +23,7 @@
  * @since     2010-01-26
  */
 
-require_once '../../inc/Category.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/Category.php';
 
 /**
  * PMF_Category test case
