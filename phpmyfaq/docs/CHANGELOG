@@ -17,7 +17,10 @@ Version 2.7.0-alpha - 2010-
 - added new administration layout (Thorsten)
 - upgraded jQuery to version 1.4 (Thorsten)
 
-Version 2.6.2 - 2010-02-
+Version 2.6.3 - 2010-03-
+-
+
+Version 2.6.2 - 2010-02-01
 - fixed update script issue (Thorsten)
 - fixed display of Chinese, Japanese and Korean content in PDFs (Thorsten)
 - fixed issues with RSS feeds (Thorsten)
