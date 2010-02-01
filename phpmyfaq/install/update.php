@@ -25,7 +25,7 @@
  * @since     2002-01-10
  */
 
-define('NEWVERSION', '2.6.2');
+define('NEWVERSION', '2.6.3');
 define('APIVERSION', 1);
 define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('SAFEMODE', @ini_get('safe_mode'));
