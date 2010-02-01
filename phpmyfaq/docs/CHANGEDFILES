@@ -1,3 +1,40 @@
+CHANGED FILES FROM 2.6.1 -> 2.6.2
+
+./admin/configuration.php
+./admin/index.php
+./admin/record.edit.php
+./feed/category/rss.php
+./feed/latest/rss.php
+./feed/news/rss.php
+./feed/openquestions/rss.php
+./feed/topten/rss.php
+./inc/Faq.php
+./inc/Mail.php
+./inc/PMF_Attachment/Factory.php
+./inc/PMF_Auth/AuthLdap.php
+./inc/PMF_Export/Pdf.php
+./inc/PMF_Export/Pdf/Wrapper.php
+./inc/Session.php
+./inc/libs/tcpdf/fonts/almohanad.ctg.z
+./inc/libs/tcpdf/fonts/almohanad.php
+./inc/libs/tcpdf/fonts/almohanad.z
+./inc/libs/tcpdf/fonts/arialunicid0.php
+./inc/libs/tcpdf/fonts/hysmyeongjostdmedium.php
+./inc/libs/tcpdf/fonts/kozgopromedium.php
+./inc/libs/tcpdf/fonts/kozminproregular.php
+./inc/libs/tcpdf/fonts/msungstdlight.php
+./inc/libs/tcpdf/fonts/stsongstdlight.php
+./inc/libs/tcpdf/fonts/uni2cid_ac15.php
+./inc/libs/tcpdf/fonts/uni2cid_ag15.php
+./inc/libs/tcpdf/fonts/uni2cid_aj16.php
+./inc/libs/tcpdf/fonts/uni2cid_ak12.php
+./install/setup.php
+./install/update.php
+./lang/language_es.php
+./lang/language_fr.php
+
+
+
 CHANGED FILES FROM 2.6.0 -> 2.6.1
 
 ./admin/ajax.tags_list.php

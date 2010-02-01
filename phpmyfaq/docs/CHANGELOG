@@ -13,7 +13,7 @@ CHANGELOG:
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.6.2 - 2010-02-
+Version 2.6.2 - 2010-02-01
 - fixed update script issue (Thorsten)
 - fixed display of Chinese, Japanese and Korean content in PDFs (Thorsten)
 - fixed issues with RSS feeds (Thorsten)
