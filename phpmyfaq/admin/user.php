@@ -255,7 +255,7 @@ if ($userAction == 'addsave') {
     $user_name             = PMF_Filter::filterInput(INPUT_POST, 'user_name', FILTER_SANITIZE_STRING, '');
     $user_realname         = PMF_Filter::filterInput(INPUT_POST, 'user_realname', FILTER_SANITIZE_STRING, '');
     $user_password         = PMF_Filter::filterInput(INPUT_POST, 'user_password', FILTER_SANITIZE_STRING, '');
-    $user_email            = PMF_Filter::filterInput(INPUT_POST, 'user_email', FILTER_VALIDATE_EMAIL, '');
+    $user_email            = PMF_Filter::filterInput(INPUT_POST, 'user_email', FILTER_VALIDATE_EMAIL);
     $user_password         = PMF_Filter::filterInput(INPUT_POST, 'user_password', FILTER_SANITIZE_STRING, '');
     $user_password_confirm = PMF_Filter::filterInput(INPUT_POST, 'user_password_confirm', FILTER_SANITIZE_STRING, '');
 
@@ -281,6 +281,12 @@ if ($userAction == 'addsave') {
         $user_realname = '';
         $messages[]    = $errorMessages['addUser_noRealName'];
     }
+    // check e-mail
+    if (is_null($user_email)) {
+        $user_email = '';
+        $messages[] = $errorMessages['addUser_noEmail'];
+    }
+    
     // ok, let's go
     if (count($messages) == 0) {
         // create user account (login and password)

@@ -47,8 +47,13 @@ $categories  = PMF_Filter::filterInputArray(INPUT_POST, array('rubrik' => array(
                                                                                 'flags'  => FILTER_REQUIRE_ARRAY)));
 
 // If e-mail address is set to optional
-if (!PMF_Configuration::getInstance()->get('main.optionalMailAddress')) {
-	$usermail = PMF_Configuration::getInstance()->get('main.administrationMail');
+if (!PMF_Configuration::getInstance()->get('main.optionalMailAddress') && is_null($usermail)) {
+    $usermail = PMF_Configuration::getInstance()->get('main.administrationMail');
+}
+
+// Check on translation
+if (is_null($content) && !is_null($tr_content)) {
+    $content = $tr_content;
 }
 
 if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($content) && 
@@ -59,8 +64,7 @@ if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($
 
     $isNew = true;
     if (!is_null($faqid)) {
-        $isNew   = false;
-        $content = $tr_content;
+        $isNew = false;
         $faqsession->userTracking('save_new_translation_entry', 0);
     } else {
         $faqsession->userTracking('save_new_entry', 0);
