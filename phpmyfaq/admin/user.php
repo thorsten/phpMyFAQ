@@ -155,7 +155,6 @@ if ($userAction == 'update_data') {
             $user->changePassword($newPassword);
 
             $mail = new PMF_Mail();
-            $mail->setFrom($faqconfig->get('main.administrationMail'));
             $mail->addTo($userData['email']);
             $mail->subject = '[%sitename%] Username / activation';
             $mail->message = sprintf("\nUsername: %s\nLoginname: %s\nNew Password: %s\n\n",
