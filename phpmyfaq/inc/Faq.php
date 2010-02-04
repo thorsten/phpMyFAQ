@@ -1169,7 +1169,7 @@ class PMF_Faq
                 'active'        => $row->active,
                 'sticky'        => $row->sticky,
                 'keywords'      => $row->keywords,
-                'title'         => PMF_htmlentities($row->thema, ENT_QUOTES, 'utf-8'),
+                'title'         => $row->thema,
                 'content'       => $content,
                 'author'        => $row->author,
                 'email'         => $row->email,
@@ -1445,15 +1445,12 @@ class PMF_Faq
 
         if (count($result) > 0) {
             foreach ($result as $row) {
-
-                $shortTitle = PMF_Utils::makeShorterText(PMF_htmlentities($row['thema'], ENT_QUOTES, 'utf-8'), 8);
-
                 if ('visits' == $type) {
-                    $output['title'][]  = $shortTitle;
+                    $output['title'][]  = PMF_Utils::makeShorterText($row['thema'], 8);
                     $output['url'][]    = $row['url'];
                     $output['visits'][] = $this->plr->GetMsg('plmsgViews',$row['visits']);
                 } else {
-                    $output['title'][]  = $shortTitle;
+                    $output['title'][]  = PMF_Utils::makeShorterText($row['thema'], 8);
                     $output['url'][]    = $row['url'];
                     $output['voted'][]  = sprintf('%s %s 5 - %s',
                                                   round($row['avg'], 2),
@@ -1476,13 +1473,12 @@ class PMF_Faq
     public function getLatest()
     {
         $result = $this->getLatestData(PMF_NUMBER_RECORDS_LATEST, $this->language);
-
+        $output = array();
+        
         if (count ($result) > 0) {
             foreach ($result as $row) {
-                $shortTitle = PMF_Utils::makeShorterText(PMF_htmlentities($row['thema'], ENT_QUOTES, 'utf-8'), 8);
-                
                 $output['url'][]   =  $row['url'];
-                $output['title'][] = $shortTitle;
+                $output['title'][] = PMF_Utils::makeShorterText($row['thema'], 8);
                 $output['date'][]  = PMF_Date::createIsoDate($row['datum']);
             }
         } else {

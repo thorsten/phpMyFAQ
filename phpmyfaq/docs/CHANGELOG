@@ -18,7 +18,8 @@ Version 2.7.0-alpha - 2010-
 - upgraded jQuery to version 1.4 (Thorsten)
 
 Version 2.6.3 - 2010-03-
--
+- Updated Portuguese translation (Fernando G. Monteiro)
+- fixed minor bugs (Thorsten)
 
 Version 2.6.2 - 2010-02-01
 - fixed update script issue (Thorsten)
