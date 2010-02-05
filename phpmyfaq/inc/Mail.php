@@ -432,13 +432,13 @@ class PMF_Mail
         // From
         foreach ($this->_from as $address => $name) {
             if (empty($name)) {
-                $name = PMF_Configuration::getInstance()->get('main.titleFAQ');
+                $this->headers['From'] = (empty($name) ? '' : $name.' ').'<'.$address.'>';
             } else {
                 if (function_exists('mb_encode_mimeheader')) {
                     $name = mb_encode_mimeheader($name);
                 }
+                $this->headers['From'] =  $name .' <'.$address.'>';
             }
-            $this->headers['From'] =  $name .' <'.$address.'>';
         }
 
         // Message-Id
