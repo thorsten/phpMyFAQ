@@ -147,8 +147,7 @@ class PMF_Mail
         2 => 'High',
         3 => 'Normal',
         4 => 'Low',
-        5 => 'Lowest'
-    );
+        5 => 'Lowest');
 
     /**
      * Priority of the e-mail: 1 (Highest), 2 (High), 3 (Normal), 4 (Low), 5 (Lowest).
@@ -265,7 +264,6 @@ class PMF_Mail
         $faqconfig     = PMF_Configuration::getInstance();
         $this->_mailer = 'phpMyFAQ/' . $faqconfig->get('main.currentVersion');
         $this->setFrom($faqconfig->get('main.administrationMail'));
-        
     }
 
     /**
@@ -432,17 +430,15 @@ class PMF_Mail
         }
 
         // From
-        foreach($this->_from as $address => $name) {
+        foreach ($this->_from as $address => $name) {
             if (empty($name)) {
-                $this->headers['From'] ='';
+                $name = PMF_Configuration::getInstance()->get('main.titleFAQ');
             } else {
                 if (function_exists('mb_encode_mimeheader')) {
                     $name = mb_encode_mimeheader($name);
-                } else {
-                    $name = encode_iso88591($name);
                 }
-                $this->headers['From'] =  $name .' <'.$address.'>';
             }
+            $this->headers['From'] =  $name .' <'.$address.'>';
         }
 
         // Message-Id
@@ -767,16 +763,13 @@ class PMF_Mail
 
         // Send the email adopting to the given MUA
         $sent = false;
-        $mua = self::getMUA($this->agent);
+        $mua  = self::getMUA($this->agent);
         switch($this->agent) {
             case 'built-in':
                 $sent = $mua->send($recipients, $this->headers, $this->body);
                 break;
             default:
-                trigger_error(
-                    "<b>PMF_Mail Class</b>: $this->agent has no implementation!",
-                    E_USER_ERROR
-                );
+                trigger_error("<b>PMF_Mail Class</b>: $this->agent has no implementation!", E_USER_ERROR);
                 $sent = false;
         }
 
@@ -898,33 +891,29 @@ class PMF_Mail
     /**
      * Validate an address as an e-mail address.
      *
-     * @static
-     * @param string $address
+     * @param string $address E-Mail address
+     * 
      * @return bool True if the given address is a valid e-mail address, false otherwise.     
-     */          
+     */
     public static function validateEmail($address)
     {
-        // Sanity checks
         if (empty($address)) {
             return false;
         }
+        
         if (PMF_String::strpos($address, '\0') !== false) {
             return false;
         }
-
-        // Always sanitize!
-        // http://www.php-security.org/MOPB/PMOPB-45-2007.html
+        
         $unsafe = array ("\r", "\n");
         if ($address !== str_replace($unsafe, '', $address)) {
             return false;
         }
-
-        // Validate the address as an e-mail address: syntax validation
+        
         if (false === filter_var($address, FILTER_VALIDATE_EMAIL)) {
-          // Invalid e-mail address
           return false;
         }
-
+        
         return true;
     }
 
