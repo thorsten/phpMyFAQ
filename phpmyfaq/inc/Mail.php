@@ -432,13 +432,13 @@ class PMF_Mail
         // From
         foreach ($this->_from as $address => $name) {
             if (empty($name)) {
-                $this->headers['From'] = '';
+                $name = PMF_Configuration::getInstance()->get('main.titleFAQ');
             } else {
                 if (function_exists('mb_encode_mimeheader')) {
                     $name = mb_encode_mimeheader($name);
                 }
-                $this->headers['From'] =  $name .' <'.$address.'>';
             }
+            $this->headers['From'] =  $name .' <'.$address.'>';
         }
 
         // Message-Id
@@ -763,16 +763,13 @@ class PMF_Mail
 
         // Send the email adopting to the given MUA
         $sent = false;
-        $mua = self::getMUA($this->agent);
+        $mua  = self::getMUA($this->agent);
         switch($this->agent) {
             case 'built-in':
                 $sent = $mua->send($recipients, $this->headers, $this->body);
                 break;
             default:
-                trigger_error(
-                    "<b>PMF_Mail Class</b>: $this->agent has no implementation!",
-                    E_USER_ERROR
-                );
+                trigger_error("<b>PMF_Mail Class</b>: $this->agent has no implementation!", E_USER_ERROR);
                 $sent = false;
         }
 
