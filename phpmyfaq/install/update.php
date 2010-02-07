@@ -498,7 +498,7 @@ if ($step == 4) {
                     password_hash char(40) NULL,
                     filename varchar(255) NOT NULL,
                     filesize int NOT NULL,
-                    encrypted tinyint NOT NULL DEFAULT FALSE,
+                    encrypted tinyint NOT NULL DEFAULT 0,
                     mime_type varchar(255) NULL,
                     PRIMARY KEY (id))";
                 

@@ -75,7 +75,7 @@ virtual_hash CHAR(32) NOT NULL,
 password_hash CHAR(40) NULL,
 filename VARCHAR(255) NOT NULL,
 filesize INTEGER NOT NULL,
-encrypted INTEGER NOT NULL DEFAULT FALSE,
+encrypted INTEGER NOT NULL DEFAULT 0,
 mime_type VARCHAR(255) NULL,
 PRIMARY KEY (id))";
 
