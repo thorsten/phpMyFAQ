@@ -176,7 +176,7 @@ function cleanInstallation()
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <title>phpMyFAQ <?php print VERSION; ?> Setup</title>
-    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=iso-8859-1" />
+    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
     <link rel="shortcut icon" href="../template/default/favicon.ico" type="image/x-icon" />
     <link rel="icon" href="../template/default/favicon.ico" type="image/x-icon" />
     <script language="javascript" type="text/javascript">
