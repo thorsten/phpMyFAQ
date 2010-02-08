@@ -2,12 +2,7 @@
 /**
  * AJAX: handling of Ajax user calls
  * 
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2009-04-04
- * @copyright  2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-04-04
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -34,23 +37,24 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     $user = new PMF_User();
     
     if ('get_user_list' == $ajax_action) {
-    	foreach ($user->searchUsers($usersearch) as $single_user) {
-    		print $single_user['login'] . '|' .  $single_user['user_id'] . "\n";
-    	}
+        foreach ($user->searchUsers($usersearch) as $single_user) {
+            print $single_user['login'] . '|' .  $single_user['user_id'] . "\n";
+        }
     }
     
     $user->getUserById($user_id);
     
-	// Return the user data
-	if ('get_user_data' == $ajax_action) {
-		$userdata           = array();
-		$userdata           = $user->userdata->get('*');
+    // Return the user data
+    if ('get_user_data' == $ajax_action) {
+        $userdata           = array();
+        $userdata           = $user->userdata->get('*');
         $userdata['status'] = $user->getStatus();
-		print json_encode($userdata);
-	}
-	
-	// Return the user rights
-	if ('get_user_rights' == $ajax_action) {
+        $userdata['login']  = $user->getLogin();
+        print json_encode($userdata);
+    }
+    
+    // Return the user rights
+    if ('get_user_rights' == $ajax_action) {
         print json_encode($user->perm->getUserRights($user_id));
-	}
+    }
 }

@@ -366,14 +366,15 @@ if ($userAction == 'list') {
  */
 function getUserData(user_id)
 {
-	$('#user_data_table').empty();
+    $('#user_data_table').empty();
     $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=get_user_data&user_id=" + user_id,
-    	function(data) {
-    	    $('#update_user_id').val(data.user_id);
-    	    $('#user_status_select').val(data.status);
-    	    // Append input fields
-    	    $('#user_data_table').append('<br /><label><?php print $PMF_LANG["ad_user_realname"]; ?></label>');
-    	    $('#user_data_table').append('<input type="text" class="input_row" name="display_name" value="' + data.display_name + '" />');
+        function(data) {
+            $('#update_user_id').val(data.user_id);
+            $('#user_status_select').val(data.status);
+            $('#user_list_autocomplete').val(data.login);
+            // Append input fields
+            $('#user_data_table').append('<br /><label><?php print $PMF_LANG["ad_user_realname"]; ?></label>');
+            $('#user_data_table').append('<input type="text" class="input_row" name="display_name" value="' + data.display_name + '" />');
             $('#user_data_table').append('<br /><label><?php print $PMF_LANG["ad_entry_email"]; ?></label>');
             $('#user_data_table').append('<input type="text" class="input_row" name="email" value="' + data.email + '" />');
             $('#user_data_table').append('<br /><label><?php print $PMF_LANG["ad_user_lastModified"]; ?></label>');
