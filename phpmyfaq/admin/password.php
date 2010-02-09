@@ -59,6 +59,11 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
     $LANGCODE = 'en';
 }
 
+//
+// Initalizing static string wrapper
+//
+PMF_String::init($LANGCODE);
+
 /* header of the admin page */
 require_once ("header.php");
 ?>
