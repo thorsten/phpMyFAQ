@@ -223,7 +223,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     </select><br />
 
     <label for="thema"><?php print $PMF_LANG["ad_entry_theme"]; ?></label>
-    <input name="thema" id="thema" style="width: 720px; height: 30px; font-size: 24px;" value="<?php if (isset($faqData['title'])) { print PMF_String::htmlspecialchars($faqData['title']); } ?>" /><br />
+    <input name="thema" id="thema" style="width: 720px; height: 30px; font-size: 24px;" value="<?php if (isset($faqData['title'])) { print PMF_String::htmlspecialchars($faqData['title']); } ?>" maxlength="255" /><br />
 
     <label for="content"><?php print $PMF_LANG["ad_entry_content"]; ?></label>
     <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
@@ -258,10 +258,10 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 ?>
 
     <label class="lefteditor" for="keywords"><?php print $PMF_LANG["ad_entry_keywords"]; ?></label>
-    <input name="keywords" id="keywords" style="width: 390px;" value="<?php if (isset($faqData['keywords'])) { print PMF_String::htmlspecialchars($faqData['keywords']); } ?>" /> <span id="keywordsHelp"></span><br />
+    <input name="keywords" id="keywords" style="width: 390px;" value="<?php if (isset($faqData['keywords'])) { print PMF_String::htmlspecialchars($faqData['keywords']); } ?>" maxlength="255" /> <span id="keywordsHelp"></span><br />
 
     <label class="lefteditor" for="tags"><?php print $PMF_LANG['ad_entry_tags']; ?>:</label>
-    <input name="tags" id="tags" style="width: 390px;" value="<?php if (isset($tags)) { print PMF_String::htmlspecialchars($tags); } ?>" /><img style="display: none; margin-bottom: -5px;" id="tags_autocomplete_wait" src="images/indicator.gif" alt="waiting..."></img>
+    <input name="tags" id="tags" style="width: 390px;" value="<?php if (isset($tags)) { print PMF_String::htmlspecialchars($tags); } ?>" maxlength="255" /><img style="display: none; margin-bottom: -5px;" id="tags_autocomplete_wait" src="images/indicator.gif" alt="waiting..."></img>
     <script type="text/javascript">
         $('#tags').autocomplete("index.php?action=ajax&ajax=tags_list", { width: 260, selectFirst: false, multiple: true } );
     </script><span id="tagsHelp"></span><br />
