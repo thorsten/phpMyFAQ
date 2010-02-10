@@ -991,9 +991,9 @@ class PMF_Faq
      */
     public function getIdFromSolutionId($solution_id)
     {
-        $query = sprintf(
-            "SELECT
-                id, lang
+        $query = sprintf("
+            SELECT
+                id, lang, content
             FROM
                 %sfaqdata
             WHERE
@@ -1004,7 +1004,9 @@ class PMF_Faq
         $result = $this->db->query($query);
 
         if ($row = $this->db->fetch_object($result)) {
-            return array('id' => $row->id, 'lang' => $row->lang);
+            return array('id'      => $row->id,
+                         'lang'    => $row->lang,
+                         'content' => $row->content);
         }
 
         return null;
