@@ -177,9 +177,26 @@ if ($permission['editbt']) {
             print $PMF_LANG['ad_entry_savedfail'].$db->error();
         }
         
+        // Insert the tags
+        if ($tags != '') {
+            $tagging->saveTags($record_id, explode(',', $tags));
+        } else {
+            $tagging->deleteTagsFromRecordId($record_id);
+        }
+
+        // Add record permissions
+        $faqUser = new PMF_Faq_User();
+        $faqUser->update($record_id, array('user_id' => $restricted_users));
+            if ($groupSupport) {
+                $faqGroup = new PMF_Faq_Group();
+                $faqGroup->update($recordId, array('group_id' => $restricted_groups));
+            }
+        
+        // Loop the categories
+        $categoryUser      = new PMF_Category_User();
+        $categoryGroup     = new PMF_Category_Group();
         $categoryRelations = new PMF_Category_Relations();
         $categoryRelations->setLanguage($record_lang);
-        
         foreach ($categories['rubrik'] as $categoryId) {
             $categoryData = array(
                 'category_id'   => $categoryId,
@@ -190,33 +207,18 @@ if ($permission['editbt']) {
             $categoryRelations->delete($categoryId);
             // save or update the category relations
             $categoryRelations->create($categoryData);
-        }
-        
-        // Insert the tags
-        if ($tags != '') {
-            $tagging->saveTags($record_id, explode(',', $tags));
-        } else {
-            $tagging->deleteTagsFromRecordId($record_id);
-        }
-
-        // Add user permissions
-        $faq->deletePermission('user', $record_id);
-        $faq->addPermission('user', $record_id, $restricted_users);
-        $categoryUser    = new PMF_Category_User();
-        $userPermission  = array(
-            'category_id' => $categories['rubrik'],
-            'user_id'     => $restricted_users);
-        $categoryUser->update($categories['rubrik'], $userPermission);
-        
-        // Add group permission
-        if ($groupSupport) {
-            $categoryGroup   = new PMF_Category_Group();
+            
+            // Add user permissions
+            $userPermission = array(
+                'category_id' => $categoryId,
+                'user_id'     => $restricted_users);
+            $categoryUser->update($categoryId, $userPermission);
+            
+            // Add group permission
             $groupPermission = array(
-                'category_id' => $categories['rubrik'],
+                'category_id' => $categoryId,
                 'group_id'    => $restricted_groups);
-            $faq->deletePermission('group', $record_id);
-            $faq->addPermission('group', $record_id, $restricted_groups);
-            $categoryGroup->update($categories['rubrik'], $restricted_groups);
+            $categoryGroup->update($category, $group_permission);
         }
     } elseif (isset($submit['submit'][0])) {
         

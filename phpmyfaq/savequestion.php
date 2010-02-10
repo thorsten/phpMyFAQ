@@ -125,6 +125,8 @@ if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SE
     }
     
     if ($search_result) {
+        $faqUser            = new PMF_Faq_User();
+        $faqGroup           = new PMF_Faq_Group();
         $search_result_html = '<p>'.$plr->GetMsg('plmsgSearchAmount', count($search_result))."</p>\n";
         $counter            = 0;
         foreach ($search_result as $cat_id => $cat_contents) {
@@ -133,16 +135,16 @@ if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SE
                 $b_permission = false;
                 //Groups Permission Check
                 if ($faqconfig->get('main.permLevel') == 'medium') {
-                    $perm_group = $faq->getPermission('group', $cat_content_item->id);
+                    $perm_group = $faqGroup->fetch($cat_content_item->id);
                     foreach ($current_groups as $index => $value){
-                        if (in_array($value, $perm_group)) {
+                        if ($value == $perm_group->group_id) {
                             $b_permission = true;
                         }
                     }
                 }
                 if ($faqconfig->get('main.permLevel') == 'basic' || $b_permission) {
-                    $perm_user = $faq->getPermission('user', $cat_content_item->id);
-                    foreach ($perm_user as $index => $value) {
+                    $perm_user = $faqUser->fetch($cat_content_item->id);
+                    foreach ($perm_user as $value) {
                         if ($value == -1) {
                             $b_permission = true;
                             break;

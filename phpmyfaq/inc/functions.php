@@ -647,8 +647,10 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
         }
         $output .= "<ul class=\"phpmyfaq_ul\">\n";
 
-        $counter = 0;
-        $displayedCounter = 0;
+        $faqUser  = new PMF_Faq_User();
+        $faqGroup = new PMF_Faq_Group();
+        
+        $counter = $displayedCounter = 0;
         while (($row = $db->fetch_object($result)) && $displayedCounter < $confPerPage) {
             $counter ++;
             if ($counter <= $first) {
@@ -659,16 +661,16 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
             $b_permission = false;
             //Groups Permission Check
             if ($faqconfig->get('main.permLevel') == 'medium') {
-                $perm_group = $faq->getPermission('group', $row->id);
-                foreach ($current_groups as $index => $value){
-                    if (in_array($value, $perm_group)) {
+                $perm_group = $faqGroup->fetch($row->id);
+                foreach ($current_groups as $value){
+                    if ($value == $perm_group->group_id) {
                         $b_permission = true;
                     }
                 }
             }
             if ($faqconfig->get('main.permLevel') == 'basic' || $b_permission) {
-                $perm_user = $faq->getPermission('user', $row->id);
-                foreach ($perm_user as $index => $value) {
+                $perm_user = $faqUser->fetch($row->id);
+                foreach ($perm_user as $value) {
                     if ($value == -1) {
                         $b_permission = true;
                         break;

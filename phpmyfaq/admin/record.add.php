@@ -107,6 +107,14 @@ if ($permission['editbt']) {
                 $tagging->saveTags($recordId, explode(',',$tags));
             }
             
+            // Set record permissions
+            $faqUser = new PMF_Faq_User();
+            $faqUser->create(array('record_id' => $recordId, 'user_id' => $restricted_users));
+            if ($groupSupport) {
+                $faqGroup = new PMF_Faq_Group();
+                $faqGroup->create(array('record_id' => $recordId, 'group_id' => $restricted_groups));
+            }
+            
             // Loop the categories
             $categoryUser      = new PMF_Category_User();
             $categoryGroup     = new PMF_Category_Group();
@@ -127,7 +135,6 @@ if ($permission['editbt']) {
                 $userPermission = array(
                     'category_id' => $categoryId,
                     'user_id'     => $restricted_users);
-                $faq->addPermission('user', $recordId, $restricted_users);
                 $categoryUser->delete($categoryId);
                 $categoryUser->create($userPermission);
                 
@@ -136,7 +143,6 @@ if ($permission['editbt']) {
                     $groupPermission = array(
                         'category_id' => $categoryId,
                         'group_id'    => $restricted_groups);
-                    $faq->addPermission('group', $recordId, $restricted_groups);
                     $categoryGroup->delete($categoryId);
                     $categoryGroup->create($groupPermission);
                 }
