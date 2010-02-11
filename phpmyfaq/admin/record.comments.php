@@ -45,23 +45,11 @@ if ($permission['delcomment']) {
     <input type="hidden" name="ajax" value="comment" />
     <input type="hidden" name="ajaxaction" value="delete" />
     <table class="listrecords">
-    <thead>
-    <tr>
-        <th class="listhead" width="20"></th>
-        <th class="listhead">&nbsp;</th>
-    </tr>
-    </thead>
-    <tfoot>
-    <tr>
-        <td colspan="3"><input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit" /></td>
-    </tr>    
-    </tfoot>
-    <tbody>
 <?php
         foreach ($faqcomments as $faqcomment) {
 ?>
     <tr id="comments_<?php print $faqcomment['comment_id']; ?>">
-        <td class="list"><input name="faq_comments[<?php print $faqcomment['record_id']; ?>]" value="<?php print $faqcomment['comment_id']; ?>" type="checkbox" /></td>
+        <td class="list" width="20"><input name="faq_comments[<?php print $faqcomment['record_id']; ?>]" value="<?php print $faqcomment['comment_id']; ?>" type="checkbox" /></td>
         <td class="list">
             <span style="font-weight: bold;">
                 <a href="mailto:<?php print $faqcomment['email']; ?>"><?php print $faqcomment['user']; ?></a>
@@ -74,11 +62,14 @@ if ($permission['delcomment']) {
             <?php print PMF_String::htmlspecialchars($faqcomment['content']); ?>
         </td>
     </tr>
+    <tr>
+        <td colspan="3"><input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit" /></td>
+    </tr>
 <?php
         }
 ?>
-    </tbody>
     </table>
+    </form>
 <?php
     } else {
         print '<p><strong>0</strong></p>';
@@ -89,24 +80,15 @@ if ($permission['delcomment']) {
     printf("<h3>%s</h3>\n", $PMF_LANG['ad_comment_news']);
     if (count($newscomments)) {
 ?>
+    <form id="commentSelection" name="commentSelection" method="post">
+    <input type="hidden" name="ajax" value="comment" />
+    <input type="hidden" name="ajaxaction" value="delete" />
     <table class="listrecords">
-    <thead>
-    <tr>
-        <th class="listhead" width="20"></th>
-        <th class="listhead">&nbsp;</th>
-    </tr>
-    </thead>
-    <tfoot>
-    <tr>
-        <td colspan="3"><input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit" /></td>
-    </tr>    
-    </tfoot>
-    <tbody>
 <?php
         foreach ($newscomments as $newscomment) {
 ?>
     <tr id="comments_<?php print $newscomment['comment_id']; ?>">
-        <td class="list"><input name="news_comments[<?php print $faqcomment['record_id']; ?>]" value="<?php print $faqcomment['comment_id']; ?>" type="checkbox" /></td>
+        <td class="list" width="20"><input name="news_comments[<?php print $newscomment['record_id']; ?>]" value="<?php print $newscomment['comment_id']; ?>" type="checkbox" /></td>
         <td class="list">
             <span style="font-weight: bold;">
                 <a href="mailto:<?php print $newscomment['email']; ?>"><?php print $newscomment['user']; ?></a>
@@ -117,7 +99,9 @@ if ($permission['delcomment']) {
 <?php
         }
 ?>
-    </tbody>
+    <tr>
+        <td colspan="3"><input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit" /></td>
+    </tr>
     </table>
 <?php
     } else {
@@ -129,23 +113,22 @@ if ($permission['delcomment']) {
     <script type="text/javascript">
     /* <![CDATA[ */
     $(document).ready(function() {
-      $('.submit').click(function () {
+    $('.submit').click(function () {
         var comments = $('#commentSelection').serialize();
         $.ajax({
-          type: "POST",
-          url:  "index.php?action=ajax&ajax=comment",
-          data: comments,
-          success: function(msg) {
-            if (msg == 1) {
-                $('#returnMessage').append('<?php print $PMF_LANG['ad_entry_commentdelsuc']; ?>').fadeIn('slow');
-                $("tr td input:checked").parent().parent().fadeOut('slow');
+            type: "POST",
+            url:  "index.php?action=ajax&ajax=comment",
+            data: comments,
+            success: function(msg) {
+                if (msg == 1) {
+                    $('#returnMessage').append('<?php print $PMF_LANG['ad_entry_commentdelsuc']; ?>').fadeIn('slow');
+                    $("tr td input:checked").parent().parent().fadeOut('slow');
+                    }
             }
-          }
         });
         return false;
       });
     });
-    
     /* ]]> */
     </script>
 <?php 
