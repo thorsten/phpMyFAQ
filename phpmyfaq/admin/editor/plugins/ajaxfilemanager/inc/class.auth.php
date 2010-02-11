@@ -15,10 +15,6 @@
 			
 		}
 		
-		function Auth()
-		{
-			$this->__construct();
-		}
 		/**
 		 * check if the user has logged
 		 *
