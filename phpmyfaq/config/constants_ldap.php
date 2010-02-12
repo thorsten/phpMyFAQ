@@ -1,13 +1,8 @@
 <?php
 /**
  * LDAP  constants for phpMyFAQ.
- *
- * @package   phpMyFAQ
- * @author    Lars Scheithauer <lars.scheithauer@googlemail.com>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2009-08-05
- * @version   SVN: $Id$
- * @copyright 2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License Version
  * 1.1 (the "License"); you may not use this file except in compliance with
@@ -18,6 +13,15 @@
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
  * for the specific language governing rights and limitations under the
  * License.
+ *
+ * @category  phpMyFAQ
+ * @package   Configuration
+ * @author    Lars Scheithauer <lars.scheithauer@googlemail.com>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-08-05
  */
 
 // Datamapping - in this example for an ADS
@@ -35,4 +39,4 @@ $PMF_LDAP['ldap_use_domain_prefix'] = true;
 // refer to the documentation of ldap_set_option() for information on available options
 $PMF_LDAP["ldap_options"] = array (
     LDAP_OPT_PROTOCOL_VERSION => 3,
-    LDAP_OPT_REFERRALS        => 0 );
+    LDAP_OPT_REFERRALS        => 0);
