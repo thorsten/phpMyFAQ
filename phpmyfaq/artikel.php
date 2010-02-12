@@ -117,7 +117,8 @@ if (!is_null($highlight) && $highlight != "/" && $highlight != "<" && $highlight
 // Search for href attribute links
 $oLnk->resetPool();
 $oLnk->parse_string($content);
-$fixedContent = $content;
+$fixedContent = str_replace('href="#', sprintf('href="?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s#', 
+    $currentCategory, $id, $LANGCODE), $content); 
 
 // Search for href attributes only
 $linkArray = $oLnk->getUrlpool();
@@ -142,7 +143,7 @@ if (isset($linkArray['href'])) {
     }
 }
 
-$content = str_replace('href="#', 'href="index.php?action=artikel&lang='.$LANGCODE.'&id='.$record_id.'#', $content);
+$content = $fixedContent; 
 
 // Check for the languages for a faq
 $arrLanguage    = PMF_Utils::languageAvailable($record_id);
