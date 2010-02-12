@@ -2,7 +2,8 @@ phpMyFAQ 2.6.3
 Codename "Portia"
 
 Changes since 2.6.2:
-- Updated Portuguese translation (Fernando G. Monteiro)
+- improved links rewriting (Guillaume Le Maout)
+- updated Portuguese translation (Fernando G. Monteiro)
 - fixed minor bugs (Thorsten)
 
 CHANGELOG:
@@ -10,7 +11,8 @@ CHANGELOG:
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.6.3 - 2010-03-
-- Updated Portuguese translation (Fernando G. Monteiro)
+- improved links rewriting (Guillaume Le Maout)
+- updated Portuguese translation (Fernando G. Monteiro)
 - fixed minor bugs (Thorsten)
 
 Version 2.6.2 - 2010-02-01

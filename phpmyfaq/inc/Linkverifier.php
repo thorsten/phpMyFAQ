@@ -396,26 +396,25 @@ class PMF_Linkverifier
     /**
      * This function parses HTML and extracts urls
      *
-     * @param   string $string
-     * @result  mixed  false if URL is not found, otherwise returns the number of URLs found.
-     * @access  public
-     * @author  Minoru TODA <todam@netjapan.co.jp>
-     * @since   2005-08-01
+     * @param string $string String
+     * 
+     * @return mixed  false if URL is not found, otherwise returns the number of URLs found.
      */
-    function parse_string($string = "")
+    public function parse_string($string = "")
     {
         $urlcount = 0;
-        $types = array("href", "src", "url");
+        $types    = array('href', 'src', 'url');
+        $matches  = array();
 
         // Clean $this->urlpool
         $this->urlpool = array();
         while(list(,$type) = each($types)) {
-            preg_match_all("|[^?&]$type\=(\"?'?`?)([[:alnum:]\:%?=;&@/\ \.\_\-\{\}]+)\\1|i", $string, $matches);
-                $sz = sizeof($matches[2]);
-                for ($i=0;$i < $sz;$i++) {
-                    $this->urlpool[$type][] = $matches[2][$i];
-                    $urlcount++;
-                }
+            preg_match_all("|[^?&]$type\=(\"?'?`?)([[:alnum:]\:\#%?=;&@/\ \.\_\-\{\}]+)\\1|i", $string, $matches); 
+            $sz = sizeof($matches[2]);
+            for ($i = 0;$i < $sz; $i++) {
+                $this->urlpool[$type][] = $matches[2][$i];
+                $urlcount++;
+            }
         }
 
         return ($urlcount == 0) ? false : $urlcount;

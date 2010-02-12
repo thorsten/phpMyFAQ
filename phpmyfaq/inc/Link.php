@@ -2,12 +2,7 @@
 /**
  * Link management - Functions and Classes
  *
- * @category  phpMyFAQ
- * @package   PMF_Link  
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2005-11-02
- * @copyright 2005-2009 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,6 +13,15 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_Link  
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-11-02
  */
 
 /**
@@ -46,18 +50,10 @@ function getLinkHtmlAnchor($url, $text = null, $target = null)
  * @package   PMF_Link  
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
  * @since     2005-11-02
- * @copyright 2005-2009 phpMyFAQ Team
- *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
  */
 class PMF_Link
 {
@@ -286,8 +282,7 @@ class PMF_Link
         // Use '_' for some other characters for:
         // 1. avoiding regexp match break;
         // 2. improving the reading.
-        $itemTitle = str_replace(array('-', "'", '/'),
-                                 '_', $itemTitle);
+        $itemTitle = str_replace(array('-', "'", '/', '&#39'), '_', $itemTitle);
         // 1. Remove any CR LF sequence
         // 2. Use a '-' for the words separation
         $itemTitle = PMF_String::preg_replace('/\s/m', '-', $itemTitle);
@@ -316,7 +311,7 @@ class PMF_Link
         $parameters = array();
 
         if (!empty($query)) {
-            $params = explode(self::PMF_LINK_AMPERSAND, $query);
+            $params = explode(self::PMF_LINK_AMPERSAND, $query['main']);
             foreach ($params as $param) {
                 if (!empty($param)) {
                     $couple           = explode(self::PMF_LINK_EQUAL, $param);
@@ -340,10 +335,13 @@ class PMF_Link
         if (!empty($this->url)) {
             $parsed = parse_url($this->url);
             if (isset($parsed['query'])) {
-                $query = filter_var($parsed['query'], FILTER_SANITIZE_STRIPPED);
+                $query['main'] = filter_var($parsed['query'], FILTER_SANITIZE_STRIPPED); 
             }
         }
-
+        if (isset($parsed['fragment'])) {
+            $query['fragment'] = filter_var($parsed['fragment'], FILTER_SANITIZE_STRIPPED);
+        }
+         
         return $query;
     }
 
@@ -558,6 +556,9 @@ class PMF_Link
                     }
                     if (isset($getParams[self::PMF_LINK_GET_SIDS])) {
                         $url = $this->appendSids($url, $getParams[self::PMF_LINK_GET_SIDS]);
+                    }
+                    if (isset($getParams['fragment'])) {
+                        $url .= self::PMF_LINK_FRAGMENT_SEPARATOR.$getParams['fragment'];
                     }
                 }
             }
