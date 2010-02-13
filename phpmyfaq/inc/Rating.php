@@ -205,6 +205,50 @@ class PMF_Rating
         return $this->votingData;
     }
     
+    /**
+     * Fetches all entries, if parameter = null, otherwise all from the given
+     * array like array(1, 2, 3)
+     *
+     * @param array $ids Array of IDs
+     * 
+     * @return array
+     * @throws PMF_Exception
+     */
+    public function fetchAll(Array $ids = null)
+    {
+        $ratings = array();
+        $query   = sprintf("
+            SELECT
+                id,
+                artikel as record_id,
+                vote as sumVotings,
+                usr as numVotings,
+                datum as date,
+                ip
+            FROM
+                %sfaqvoting
+            WHERE
+                1=1",
+            SQLPREFIX);
+        
+        if (!is_null($ids)) {
+            $query .= sprintf("
+            AND 
+                id IN (%s)",
+            implode(', ', $ids));
+        }
+        
+        $result = $this->db->query($query);
+        
+        if (!$result) {
+            throw new PMF_Exception($this->db->error());
+        } else {
+            $ratings = $this->db->fetchAll($result);
+        }
+        
+        return $ratings;
+    }
+    
     
     
     

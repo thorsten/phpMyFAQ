@@ -29,14 +29,21 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 if ($permission['viewlog']) {
-    require_once(PMF_ROOT_DIR.'/inc/Rating.php');
-
+    // Get category data
     $categoryData   = new PMF_Category_Tree_DataProvider_SingleQuery($LANGCODE);
     $categoryLayout = new PMF_Category_Layout(new PMF_Category_Tree_Helper(new PMF_Category_Tree($categoryData)));
+    
+    // Get rating data
     $ratings        = new PMF_Rating();
+    //$ratingData     = $ratings->fetchAll();
     $ratingdata     = $ratings->getAllRatings();
     $numratings     = count($ratingdata);
     $oldcategory    = 0;
+    
+    // Get FAQ record data
+    $faqRecord = new PMF_Faq_Record();
+    $faqRecord->setLanguage($LANGCODE);
+    $faqData = $faqRecord->fetchAll();
 ?>
     <h2><?php print $PMF_LANG["ad_rs"] ?></h2>
     <table id="tableUserRatings">

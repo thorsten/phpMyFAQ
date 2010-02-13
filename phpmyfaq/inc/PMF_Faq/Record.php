@@ -58,6 +58,13 @@ class PMF_Faq_Record extends PMF_Faq_Abstract implements PMF_Faq_Interface
     public $recordData = null;
     
     /**
+     * Data of all records
+     * 
+     * @var array
+     */
+    public $recordContainer = array();
+    
+    /**
      * Constructor
      * 
      * @return void
@@ -273,7 +280,6 @@ class PMF_Faq_Record extends PMF_Faq_Abstract implements PMF_Faq_Interface
      */
     public function fetchAll(Array $ids = null)
     {
-        $records = array();
         $query   = sprintf("
             SELECT
                 id,
@@ -318,10 +324,10 @@ class PMF_Faq_Record extends PMF_Faq_Abstract implements PMF_Faq_Interface
         if (!$result) {
             throw new PMF_Exception($this->db->error());
         } else {
-            $records = $this->db->fetchAll($result);
+            $this->recordContainer = $this->db->fetchAll($result);
         }
         
-        return $records;
+        return $this->recordContainer;
     }
     
     /**
