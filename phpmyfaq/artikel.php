@@ -284,6 +284,16 @@ if (count($arrLanguage) < count(PMF_Language::getAvailableLanguages())) {
         </form>';
 }
 
+// Get rating
+$recordRating = $faqrating->fetch($record_id);
+if (!is_null($recordRating)) {
+    $printVoting = sprintf(' %s (%s)',
+        round($recordRating->sumVotings / $recordRating->numVotings, 2),
+        $plr->GetMsg('plmsgVotes', $recordRating->numVotings));
+} else {
+    $printVoting = sprintf('0 (%s)', $plr->GetMsg('plmsgVotes',0));
+}
+
 // Set the template variables
 $tpl->processTemplate ("writeContent", array(
     'writeRubrik'                   => $categoryName.'<br />',
@@ -315,7 +325,7 @@ $tpl->processTemplate ("writeContent", array(
     'saveVotingID'                  => $record_id,
     'saveVotingIP'                  => $_SERVER['REMOTE_ADDR'],
     'msgAverageVote'                => $PMF_LANG['msgAverageVote'],
-    'printVotings'                  => $faqrating->getVotingResult($record_id),
+    'printVotings'                  => $printVoting,
     'switchLanguage'                => $switchLanguage,
     'msgVoteUseability'             => $PMF_LANG['msgVoteUseability'],
     'msgVoteBad'                    => $PMF_LANG['msgVoteBad'],

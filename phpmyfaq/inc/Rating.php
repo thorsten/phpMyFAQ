@@ -310,34 +310,4 @@ class PMF_Rating
 
         return $ratings;
     }
-
-    /**
-     * Calculates the rating of the user votings
-     *
-     * @param   integer    $id
-     * @return  string
-     * @access  public
-     * @since   2002-08-29
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     */
-    function getVotingResult($id)
-    {
-        $query = sprintf(
-            'SELECT
-                (vote/usr) as voting, usr
-            FROM
-                %sfaqvoting
-            WHERE
-                artikel = %d',
-            SQLPREFIX,
-            $id);
-       $result = $this->db->query($query);
-       if ($this->db->num_rows($result) > 0) {
-            $row = $this->db->fetch_object($result);
-            return sprintf(' %s ('.$this->plr->GetMsg('plmsgVotes',$row->usr).')',
-                round($row->voting, 2));
-       } else {
-            return '0 ('.$this->plr->GetMsg('plmsgVotes',0).')';
-       }
-    }
 }
