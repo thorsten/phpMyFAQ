@@ -18,7 +18,7 @@
  * @package   Freontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since     2002-09-16
- * @copyright 2002-2009 phpMyFAQ Team
+ * @copyright 2002-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-17
@@ -39,7 +39,7 @@ $question = PMF_Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRI
 $code     = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
 
 // If e-mail address is set to optional
-if (!PMF_Configuration::getInstance()->get('main.optionalMailAddress')) {
+if (!PMF_Configuration::getInstance()->get('main.optionalMailAddress') && is_null($usermail)) {
     $email = PMF_Configuration::getInstance()->get('main.administrationMail');
 }
 

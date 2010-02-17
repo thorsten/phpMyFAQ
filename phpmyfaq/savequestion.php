@@ -41,6 +41,11 @@ $code     = (is_null($code) ? PMF_Filter::filterInput(INPUT_GET, 'code', FILTER_
 $domail   = PMF_Filter::filterInput(INPUT_GET, 'domail', FILTER_VALIDATE_INT);
 $thankyou = PMF_Filter::filterInput(INPUT_GET, 'thankyou', FILTER_VALIDATE_INT);
 
+// If e-mail address is set to optional
+if (!PMF_Configuration::getInstance()->get('main.optionalMailAddress') && is_null($usermail)) {
+    $usermail = PMF_Configuration::getInstance()->get('main.administrationMail');
+}
+
 function sendAskedQuestion($username, $usermail, $usercat, $content)
 {
     global $category, $PMF_LANG, $faq;
@@ -81,14 +86,9 @@ function sendAskedQuestion($username, $usermail, $usercat, $content)
         $userEmail      = $oUser->getUserData('email');
         $mainAdminEmail = $faqconfig->get('main.administrationMail');
         
-        dump($questionData);
-        
         $mail = new PMF_Mail();
         $mail->unsetFrom();
-        dump($mail);
         $mail->setFrom($questionData['ask_usermail'], $questionData['ask_username']);
-        dump($mail);
-        die();
         $mail->addTo($mainAdminEmail);
         // Let the category owner get a copy of the message
         if ($userEmail && $mainAdminEmail != $userEmail) {
@@ -100,11 +100,6 @@ function sendAskedQuestion($username, $usermail, $usercat, $content)
     }
     
     return $retval;
-}
-
-// If e-mail address is set to optional
-if (!PMF_Configuration::getInstance()->get('main.optionalMailAddress')) {
-    $usermail = PMF_Configuration::getInstance()->get('main.administrationMail');
 }
 
 if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SERVER['REMOTE_ADDR']) && 
