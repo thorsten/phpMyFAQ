@@ -41,6 +41,11 @@ $code     = (is_null($code) ? PMF_Filter::filterInput(INPUT_GET, 'code', FILTER_
 $domail   = PMF_Filter::filterInput(INPUT_GET, 'domail', FILTER_VALIDATE_INT);
 $thankyou = PMF_Filter::filterInput(INPUT_GET, 'thankyou', FILTER_VALIDATE_INT);
 
+// If e-mail address is set to optional
+if (!PMF_Configuration::getInstance()->get('main.optionalMailAddress') && is_null($usermail)) {
+    $usermail = PMF_Configuration::getInstance()->get('main.administrationMail');
+}
+
 function sendAskedQuestion($username, $usermail, $usercat, $content)
 {
     global $PMF_LANG, $faq;
@@ -97,11 +102,6 @@ function sendAskedQuestion($username, $usermail, $usercat, $content)
     }
     
     return $retval;
-}
-
-// If e-mail address is set to optional
-if (!PMF_Configuration::getInstance()->get('main.optionalMailAddress')) {
-    $usermail = PMF_Configuration::getInstance()->get('main.administrationMail');
 }
 
 if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SERVER['REMOTE_ADDR']) && 
@@ -168,13 +168,9 @@ if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SE
                     $cat_content_item->id,
                     $cat_content_item->lang,
                     urlencode($cat_content_item->searchterm));
-    
-                $currentUrl = PMF_Link::getSystemRelativeUri();
-            
-                $oLink            = new PMF_Link($currentUrl.$url);
-                $oLink->itemTitle = $cat_content_item->thema;
+                
+                $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri() . $url);
                 $oLink->text      = $cat_content_item->thema;
-                $oLink->tooltip   = $cat_content_item->thema;
                 $tmp_result_html .= '<li>' . $oLink->toHtmlAnchor() . '<br /></li>' . "\n";
             }
             

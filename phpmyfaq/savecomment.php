@@ -51,7 +51,7 @@ switch ($type) {
 }
 
 // If e-mail address is set to optional
-if (!PMF_Configuration::getInstance()->get('main.optionalMailAddress')) {
+if (!PMF_Configuration::getInstance()->get('main.optionalMailAddress') && is_null($mail)) {
     $mail = PMF_Configuration::getInstance()->get('main.administrationMail');
 }
 
