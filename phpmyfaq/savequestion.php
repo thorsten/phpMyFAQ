@@ -81,9 +81,14 @@ function sendAskedQuestion($username, $usermail, $usercat, $content)
         $userEmail      = $oUser->getUserData('email');
         $mainAdminEmail = $faqconfig->get('main.administrationMail');
         
+        dump($questionData);
+        
         $mail = new PMF_Mail();
         $mail->unsetFrom();
+        dump($mail);
         $mail->setFrom($questionData['ask_usermail'], $questionData['ask_username']);
+        dump($mail);
+        die();
         $mail->addTo($mainAdminEmail);
         // Let the category owner get a copy of the message
         if ($userEmail && $mainAdminEmail != $userEmail) {
@@ -164,13 +169,9 @@ if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SE
                     $cat_content_item->id,
                     $cat_content_item->lang,
                     urlencode($cat_content_item->searchterm));
-    
-                $currentUrl = PMF_Link::getSystemRelativeUri();
-            
-                $oLink            = new PMF_Link($currentUrl.$url);
-                $oLink->itemTitle = $cat_content_item->thema;
+                
+                $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri() . $url);
                 $oLink->text      = $cat_content_item->thema;
-                $oLink->tooltip   = $cat_content_item->thema;
                 $tmp_result_html .= '<li>' . $oLink->toHtmlAnchor() . '<br /></li>' . "\n";
             }
             
