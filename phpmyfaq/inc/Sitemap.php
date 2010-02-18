@@ -200,14 +200,14 @@ class PMF_Sitemap
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_object($result)) {
             $letters = PMF_String::strtoupper($row->letters);
-            if (PMF_String::preg_match("/^[a-z0-9]/i", $letters)) {
+            if (PMF_String::preg_match("/^[一-龠]+|[ぁ-ん]+|[ァ-ヴー]+|[a-zA-Z0-9]+|[ａ-ｚＡ-Ｚ０-９]/i", $letters)) {
                 $url = sprintf('%saction=sitemap&amp;letter=%s&amp;lang=%s',
                     $sids,
                     $letters,
                     $this->language);
-            $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-            $oLink->text = (string)$letters;
-            $writeLetters .= $oLink->toHtmlAnchor().' ';
+                $oLink         = new PMF_Link(PMF_Link::getSystemRelativeUri() . '?' . $url);
+                $oLink->text   = (string)$letters;
+                $writeLetters .= $oLink->toHtmlAnchor().' ';
             }
         }
         $writeLetters .= '</p>';
