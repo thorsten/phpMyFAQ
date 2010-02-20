@@ -148,7 +148,15 @@ if ($permission['editbt']) {
             'linkDateCheck' => 0);
 
         // Create ChangeLog entry
-        $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $record_lang, $revision_id);
+        $faqChangelog  = new PMF_Faq_Changelog();
+        $changelogData = array(
+                'record_id'   => $record_id,
+                'record_lang' => $record_lang,
+                'revision_id' => $revision_id,
+                'user_id'     => $user->getUserId(),
+                'date'        => $_SERVER['REQUEST_TIME'],
+                'changelog'   => nl2br($changed));
+        $faqChangelog->create($changelogData);
 
         // save or update the FAQ record
         $faqRecord = new PMF_Faq_Record();

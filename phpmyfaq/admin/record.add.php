@@ -87,12 +87,22 @@ if ($permission['editbt']) {
             'linkDateCheck' => 0);
         
         // Add new record and get that ID
-        $faqRecord = new PMF_Faq_Record();
+        $faqRecord    = new PMF_Faq_Record();
+        $faqChangelog = new PMF_Faq_Changelog();
         if ($faqRecord->create($recordData)) {
             
             $recordId = $faqRecord->getRecordId();
+            
             // Create ChangeLog entry
-            $faq->createChangeEntry($recordId, $user->getUserId(), nl2br($changed), $recordData['lang']);
+            $changelogData = array(
+                'record_id'   => $recordId,
+                'record_lang' => $recordData['lang'],
+                'revision_id' => 0,
+                'user_id'     => $user->getUserId(),
+                'date'        => $_SERVER['REQUEST_TIME'],
+                'changelog'   => nl2br($changed));
+            
+            $faqChangelog->create($changelogData);
             
             // Create the visit entry
             $visits = PMF_Visits::getInstance();

@@ -420,13 +420,15 @@ if($permission['approverec']):
     <legend><a href="#" onclick="javascript:toggleFieldset('ChangelogHistory');"><?php print $PMF_LANG["ad_entry_changelog"]; ?></a></legend>
     <div id="editChangelogHistory" style="display: none;">
 <?php
-        $changeEntries = $faq->getChangeEntries($faqData['id']);
-        foreach ($changeEntries as $entry) {
-            $user->getUserById($entry['user']);
+        $faqChangelog  = new PMF_Faq_Changelog();
+        $changelogData = $faqChangelog->fetch($faqData['id']);
+        foreach ($changelogData as $changelog) {
+            $user->getUserById($changelog->user_id);
 ?>
         <p style="font-size: 10px;">
-            <strong><?php print $PMF_LANG['ad_entry_revision'].' 1.'.$entry['revision_id'] . ' / ' . date("Y-m-d H:i:s", $entry['date']).": ".$user->getUserData('display_name'); ?></strong><br />
-            <?php print $entry['changelog']; ?>
+            <strong><?php print $PMF_LANG['ad_entry_revision'].' 1.'.$changelog->revision_id . ' / ' . 
+            date("Y-m-d H:i:s", $changelog->date).": ".$user->getUserData('display_name'); ?></strong><br />
+            <?php print $changelog->changelog; ?>
         </p>
 <?php
         }
