@@ -20,11 +20,11 @@
  * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2001-02-20
+ * @since     2010-02-20
  */
 
 /**
- * PMF_Faq_User
+ * PMF_Faq_Changelog
  * 
  * @category  phpMyFAQ
  * @package   PMF_Faq
@@ -32,7 +32,7 @@
  * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2001-02-20
+ * @since     2010-02-20
  */
 class PMF_Faq_Changelog extends PMF_Faq_Abstract implements PMF_Faq_Interface 
 {
