@@ -1,13 +1,7 @@
 phpMyFAQ 2.7.0-alpha
 Codename "Prospero"
 
-Changes since 2.6.x:
-- added rewritten and enhanced category implementation (Johannes Schlüter, Thorsten)
-- added 960 Grid System CSS Framework (Thorsten)
-- added new administration layout (Thorsten)
-- upgraded jQuery to version 1.4.1 (Thorsten)
-
-CHANGELOG:
+CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
@@ -18,6 +12,7 @@ Version 2.7.0-alpha - 2010-04-
 - upgraded jQuery to version 1.4.1 (Thorsten)
 
 Version 2.6.3 - 2010-03-
+- fixed various mail issues (Thorsten)
 - improved links rewriting (Guillaume Le Maout)
 - improved sitemap for Chinese, Japanese and Korean content (Thorsten)
 - updated Portuguese translation (Fernando G. Monteiro)
