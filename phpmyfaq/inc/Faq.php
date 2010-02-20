@@ -1259,34 +1259,6 @@ class PMF_Faq
     }
 
     /**
-     * Adds a new revision from a given record ID
-     *
-     * @param  integer $record_id   Record id
-     * @param  string  $record_lang Record language
-     * @return array
-     */
-    public function addNewRevision($record_id, $record_lang)
-    {
-        $query = sprintf("
-            INSERT INTO
-                %sfaqdata_revisions
-            SELECT * FROM
-                %sfaqdata
-            WHERE
-                id = %d
-            AND
-                lang = '%s'",
-            SQLPREFIX,
-            SQLPREFIX,
-            $record_id,
-            $record_lang);
-        $this->db->query($query);
-
-        return true;
-    }
-
-
-    /**
      * Returns the keywords of a FAQ record from the ID and language
      *
      * @param  integer $id record id

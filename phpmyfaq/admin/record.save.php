@@ -116,19 +116,19 @@ if ($permission['editbt']) {
     </form>
 <?php
     } elseif (isset($submit['submit'][1]) && !is_null($question) && !is_null($categories)) {
+        
         // Save entry
-        $logging = new PMF_Logging();
-        $logging->logAdmin($user, 'Beitragsave ' . $record_id);
         print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
-
-        $tagging = new PMF_Tags();
+        $logging = new PMF_Logging();
+        $logging->logAdmin($user, 'Saved record ' . $record_id);
         
         if ('yes' == $revision) {
             // Add current version into revision table
-            $faq->addNewRevision($record_id, $record_lang);
+            $revision = new PMF_Faq_Revision();
+            $revision->creat(array('id' => $record_id, 'lang' => $record_lang));
             $revision_id++;
         }
-
+        
         $recordData = array(
             'id'            => $record_id,
             'lang'          => $record_lang,
@@ -151,7 +151,7 @@ if ($permission['editbt']) {
         $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $record_lang, $revision_id);
 
         // save or update the FAQ record
-            $faqRecord = new PMF_Faq_Record();
+        $faqRecord = new PMF_Faq_Record();
         if ($faq->isAlreadyTranslated($record_id, $record_lang)) {
             $faqRecord->update($record_id, $recordData);
         } else {
@@ -178,6 +178,7 @@ if ($permission['editbt']) {
         }
         
         // Insert the tags
+        $tagging = new PMF_Tags();
         if ($tags != '') {
             $tagging->saveTags($record_id, explode(',', $tags));
         } else {
@@ -187,10 +188,10 @@ if ($permission['editbt']) {
         // Add record permissions
         $faqUser = new PMF_Faq_User();
         $faqUser->update($record_id, array('user_id' => $restricted_users));
-            if ($groupSupport) {
-                $faqGroup = new PMF_Faq_Group();
-                $faqGroup->update($recordId, array('group_id' => $restricted_groups));
-            }
+        if ($groupSupport) {
+            $faqGroup = new PMF_Faq_Group();
+            $faqGroup->update($recordId, array('group_id' => $restricted_groups));
+        }
         
         // Loop the categories
         $categoryUser      = new PMF_Category_User();
@@ -222,8 +223,9 @@ if ($permission['editbt']) {
         }
     } elseif (isset($submit['submit'][0])) {
         
-        $logging = new PMF_Logging();
-        $logging->logAdmin($user, 'Beitragdel, ' . $record_id);
+        $faqRecord = new PMF_Faq_Record();
+        $logging   = new PMF_Logging();
+        $logging->logAdmin($user, 'Deleted record ' . $record_id);
 
         $path = PMF_ROOT_DIR . DIRECTORY_SEPARATOR . PMF_ATTACHMENTS_DIR . DIRECTORY_SEPARATOR . $record_id . '/';
         if (@is_dir($path)) {
@@ -235,8 +237,9 @@ if ($permission['editbt']) {
             }
             rmdir($path);
         }
-    
+        
         $faq->deleteRecord($record_id, $record_lang);
+        //$faqRecord->delete($record_id);
         print $PMF_LANG['ad_entry_delsuc'];
     }
 } else {
