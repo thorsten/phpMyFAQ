@@ -133,7 +133,40 @@ class PMF_Category_Relations extends PMF_Category_Abstract implements PMF_Catego
      */
     public function fetch($id)
     {
+        $relation = array();
+        $query    = sprintf("
+            SELECT
+                category_id, category_lang, record_id, record_lang
+            FROM
+                %sfaqcategoryrelations
+            WHERE
+                category_id = %d",
+            SQLPREFIX,
+            (int)$id);
         
+        if (!is_null($this->language)) {
+            $query .= sprintf(" 
+            AND 
+                category_lang = '%s'
+            AND
+                record_lang = '%s'",
+            $this->language,
+            $this->language);
+        }
+        
+        $result = $this->db->query($query);
+        
+        if (!$result) {
+            throw new PMF_Exception($this->db->error());
+        } else {
+            if (!is_null($this->language)) {
+                $relation = array_shift($this->db->fetchAll($result));
+            } else {
+                $relation = $this->db->fetchAll($result);
+            }
+        }
+        
+        return $relation;
     }
     
     /**
@@ -162,6 +195,16 @@ class PMF_Category_Relations extends PMF_Category_Abstract implements PMF_Catego
             AND 
                 category_id IN (%s)",
             implode(', ', $ids));
+        }
+        
+        if (!is_null($this->language)) {
+            $query .= sprintf(" 
+            AND 
+                category_lang = '%s'
+            AND
+                record_lang = '%s'",
+            $this->language,
+            $this->language);
         }
         
         $result = $this->db->query($query);
