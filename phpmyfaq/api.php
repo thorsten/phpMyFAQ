@@ -17,7 +17,7 @@
  * @category  phpMyFAQ 
  * @package   PMF_Service
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009 phpMyFAQ Team
+ * @copyright 2009-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-03
@@ -49,7 +49,6 @@ $recordId   = PMF_Filter::filterInput(INPUT_GET, 'recordId', FILTER_VALIDATE_INT
 // Get language (default: english)
 $Language = new PMF_Language();
 $language = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
-$plr      = new PMF_Language_Plurals($PMF_LANG);
 
 // Set language
 if (PMF_Language::isASupportedLanguage($language)) {
@@ -58,6 +57,7 @@ if (PMF_Language::isASupportedLanguage($language)) {
     require 'lang/language_en.php';
 }
 
+$plr = new PMF_Language_Plurals($PMF_LANG);
 PMF_String::init($language);
 
 // Set empty result
