@@ -1,18 +1,12 @@
 phpMyFAQ 2.6.3
 Codename "Portia"
 
-Changes since 2.6.2:
-- improved links rewriting (Guillaume Le Maout)
-- improved sitemap for Chinese, Japanese and Korean content (Thorsten)
-- updated Portuguese translation (Fernando G. Monteiro)
-- updated French translation
-- fixed minor bugs (Thorsten)
-
-CHANGELOG:
+CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.6.3 - 2010-03-
+- fixed various mail issues (Thorsten)
 - improved links rewriting (Guillaume Le Maout)
 - improved sitemap for Chinese, Japanese and Korean content (Thorsten)
 - updated Portuguese translation (Fernando G. Monteiro)
