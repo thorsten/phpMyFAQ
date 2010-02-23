@@ -40,7 +40,6 @@ $selectSize         = 10;
 $defaultUserAction  = 'list';
 $defaultUserStatus  = 'active';
 $loginMinLength     = 4;
-$loginInvalidRegExp = '/(^[^a-z]{1}|[\W])/i';
 
 $errorMessages = array(
     'addUser_password'           => $PMF_LANG['ad_user_error_password'],
@@ -267,7 +266,6 @@ if ($userAction == 'addsave') {
     
     // check login name
     $user->setLoginMinLength($loginMinLength);
-    $user->setLoginInvalidRegExp($loginInvalidRegExp);
     if (!$user->isValidLogin($user_name)) {
         $user_name  = '';
         $messages[] = $errorMessages['addUser_loginInvalid'];
