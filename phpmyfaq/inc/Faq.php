@@ -57,15 +57,16 @@ define('FAQ_SORTING_TYPE_FAQID', 4);
 /**
  * PMF_Faq
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Faq
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author     Georgi Korchev <korchev@yahoo.com>
- * @author     Adrianna Musiol <musiol@imageaccess.de>
- * @since      2005-12-20
- * @copyright  2005-2010 phpMyFAQ Team
- * @version    SVN: $Id$
+ * @category  phpMyFAQ
+ * @package   PMF_Faq
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Georgi Korchev <korchev@yahoo.com>
+ * @author    Adrianna Musiol <musiol@imageaccess.de>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-12-20
  */
 class PMF_Faq
 {
@@ -132,6 +133,34 @@ class PMF_Faq
      */
     private $groupSupport = false;
 
+    /**
+     * PMF_Category_Releations object
+     * 
+     * @var PMF_Category_Releations
+     */
+    private $categoryRelations = null;
+    
+    /**
+     * PMF_Faq_Record object
+     * 
+     * @var PMF_Faq_Record
+     */
+    //private $faqRecord = null;
+    
+    /**
+     * PMF_Faq_User object
+     * 
+     * @var PMF_Faq_User
+     */
+    private $faqUser = null;
+    
+    /**
+     * PMF_Faq_Group object
+     * 
+     * @var PMF_Faq_Group
+     */
+    private $faqGroup = null;
+    
     /**
      * Constructor
      *
