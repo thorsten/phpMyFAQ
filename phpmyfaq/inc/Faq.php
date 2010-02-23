@@ -391,8 +391,8 @@ class PMF_Faq
             $this->language,
             $permPart,
             $current_table,
-            $this->db->escape_string($orderby),
-            $this->db->escape_string($sortby));
+            $this->db->escapeString($orderby),
+            $this->db->escapeString($sortby));
 
         $result = $this->db->query($query);
 

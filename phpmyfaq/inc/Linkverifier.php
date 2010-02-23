@@ -268,7 +268,7 @@ class PMF_Linkverifier
     {
         $query = "SELECT type, url, reason FROM ".SQLPREFIX."faqlinkverifyrules WHERE enabled = 'y'";
         $result = $this->db->query($query);
-        while ($row = @$this->db->fetch_object($result)) {
+        while ($row = @$this->db->fetchObject($result)) {
             switch (strtolower($row->type)) {
             case 'ignore':      $this->addIgnoreList($row->url, $row->reason);
                                 break;
