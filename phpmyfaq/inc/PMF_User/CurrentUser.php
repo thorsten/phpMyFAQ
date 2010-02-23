@@ -170,7 +170,7 @@ class PMF_User_CurrentUser extends PMF_User
                 WHERE
                     user_id = %d",
                 SQLPREFIX,
-                $this->db->escape_string($name),
+                $this->db->escapeString($name),
                 $this->getUserId());
             $res = $this->db->query($update);
             if (!$res) {
@@ -271,7 +271,7 @@ class PMF_User_CurrentUser extends PMF_User
     	   $this->getUserId());
     	   
         $res = $this->db->query($select);
-        if (!$res or $this->db->num_rows($res) != 1) {
+        if (!$res or $this->db->numRows($res) != 1) {
             return array();
         }
         return $this->db->fetch_assoc($res);

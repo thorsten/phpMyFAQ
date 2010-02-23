@@ -74,7 +74,7 @@ class PMF_Category_Helper extends PMF_Category_Abstract
             throw new PMF_Exception($this->db->error());
         }
         
-        return (bool)$this->db->num_rows($result);
+        return (bool)$this->db->numRows($result);
     }
     
     /**
@@ -101,7 +101,7 @@ class PMF_Category_Helper extends PMF_Category_Abstract
             throw new PMF_Exception($this->db->error());
         }
         
-        return $this->db->num_rows($result);
+        return $this->db->numRows($result);
     }
     
     /**

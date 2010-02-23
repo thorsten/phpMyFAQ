@@ -105,7 +105,7 @@ class PMF_News
             
         $result = $this->db->query($query);
 
-        if ($faqconfig->get('main.numberOfShownNewsEntries') > 0 && $this->db->num_rows($result) > 0) {
+        if ($faqconfig->get('main.numberOfShownNewsEntries') > 0 && $this->db->numRows($result) > 0) {
         	
             while (($row = $this->db->fetch_object($result))) {
             	

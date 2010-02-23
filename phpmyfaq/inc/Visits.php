@@ -112,8 +112,8 @@ class PMF_Visits
             $this->language);
 
         $result = $this->db->query($query);
-        if ($this->db->num_rows($result)) {
-            $row     = $this->db->fetch_object($result);
+        if ($this->db->numRows($result)) {
+            $row     = $this->db->fetchObject($result);
             $nVisits = $row->visits;
         }
         if ($nVisits == 0) {
@@ -200,7 +200,7 @@ class PMF_Visits
             );
         $result = $this->db->query($query);
 
-        while ($row = $this->db->fetch_object($result)) {
+        while ($row = $this->db->fetchObject($result)) {
             $data[] = array('id'         => $row->id,
                             'lang'       => $row->lang,
                             'visits'     => $row->visits,

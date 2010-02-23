@@ -115,7 +115,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
     * @since   2004-12-16
     */
-    public function escape_string($string)
+    public function escapeString($string)
     {
       return $this->conn->real_escape_string($string);
     }
@@ -133,7 +133,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-02-21
      */
-    public function fetch_object($result)
+    public function fetchObject($result)
     {
         return $result->fetch_object();
     }
@@ -169,7 +169,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
             throw new Exception('Error while fetching result: ' . $this->error());
         }
         
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             $ret[] = $row;
         }
         
@@ -185,7 +185,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-02-21
      */
-    public function num_rows($result)
+    public function numRows($result)
     {
         return $result->num_rows;
     }
@@ -219,7 +219,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      */
     public function search($table, Array $assoc, $joinedTable = '', Array $joinAssoc = array(), $match = array(), $string = '', Array $cond = array(), Array $orderBy = array())
     {
-        $string = $this->escape_string(trim($string));
+        $string = $this->escapeString(trim($string));
         $fields = "";
         $joined = "";
         $where = "";
@@ -383,7 +383,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
         $this->tableNames[] = $prefix.'faquser';
 
         $result = $this->query('SHOW TABLES'.(('' == $prefix) ? '' : ' LIKE \''.$prefix.'%\''));
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             foreach ($row as $tableName) {
                 if (!in_array($tableName, $this->tableNames)) {
                     $this->tableNames[] = $tableName;

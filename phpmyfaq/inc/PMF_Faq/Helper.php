@@ -68,7 +68,7 @@ class PMF_Faq_Helper extends PMF_Faq_Abstract
             throw new PMF_Exception($this->db->error());
         }
         
-        if ($row = $this->db->fetch_object($result)) {
+        if ($row = $this->db->fetchObject($result)) {
             $latestId = $row->solution_id;
         }
         

@@ -100,7 +100,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
     * @since   2004-12-16
     */
-    public function escape_string($string)
+    public function escapeString($string)
     {
         return pg_escape_string($this->conn, $string);
     }
@@ -117,7 +117,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2003-02-24
      */
-    public function fetch_object($result)
+    public function fetchObject($result)
     {
         return pg_fetch_object($result);
     }
@@ -154,7 +154,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
             throw new Exception('Error while fetching result: ' . $this->error());
         }
         
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             $ret[] = $row;
         }
         
@@ -171,7 +171,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2003-02-24
      */
-    public function num_rows($result)
+    public function numRows($result)
     {
         return pg_num_rows($result);
     }
@@ -390,7 +390,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
         $this->tableNames[] = $prefix.'faquser';
 
         $result = $this->query('SELECT relname FROM pg_stat_user_tables '.(('' == $prefix) ? '' : 'LIKE \''.$prefix.'%\' ').'ORDER BY relname');
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             foreach ($row as $tableName) {
                 if (!in_array($tableName, $this->tableNames)) {
                     $this->tableNames[] = $tableName;

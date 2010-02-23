@@ -112,7 +112,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
      * @param  string $string String
      * @return string
      */
-    public function escape_string($string)
+    public function escapeString($string)
     {
         return mysql_real_escape_string($string, $this->conn);
     }
@@ -123,7 +123,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
      * @param  mixed $result Resultset
      * @return mixed
      */
-    public function fetch_object($result)
+    public function fetchObject($result)
     {
         return mysql_fetch_object($result);
     }
@@ -151,7 +151,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
             throw new Exception('Error while fetching result: ' . $this->error());
         }
         
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             $ret[] = $row;
         }
         
@@ -164,7 +164,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
      * @param  mixed   $result Resultset
      * @return integer
      */
-    public function num_rows($result)
+    public function numRows($result)
     {
         return mysql_num_rows($result);
     }
@@ -195,7 +195,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
      */
     public function search($table, Array $assoc, $joinedTable = '', Array $joinAssoc = array(), $match = array(), $string = '', Array $cond = array(), Array $orderBy = array())
     {
-        $string = $this->escape_string(trim($string));
+        $string = $this->escapeString(trim($string));
         $fields = "";
         $joined = "";
         $where = "";
@@ -338,7 +338,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
         $this->tableNames[] = $prefix . 'faquser';
 
         $result = $this->query('SHOW TABLES'.(('' == $prefix) ? '' : ' LIKE \''.$prefix.'%\''));
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             foreach ($row as $tableName) {
                 if (!in_array($tableName, $this->tableNames)) {
                     $this->tableNames[] = $tableName;

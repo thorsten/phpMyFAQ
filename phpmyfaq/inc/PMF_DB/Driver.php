@@ -4,7 +4,7 @@
  *
  * @package    phpMyFAQ
  * @subpackage PMF_DB
- * @author     Johannes SchlŸter <johannes@php.net>
+ * @author     Johannes Schlï¿½ter <johannes@php.net>
  * @since      2007-08-19
  * @copyright  2007-2009 phpMyFAQ Team
  * @version    SVN: $Id$
@@ -35,36 +35,36 @@ interface PMF_DB_Driver
     /**
      * Escapes a string for use in a query
      *
-     * @param   string
-     * @return  string
+     * @param string
+     * 
+     * @return string
      */
-    public function escape_string($string);
+    public function escapeString($string);
 
     /**
      * Fetch a result row as an object
      *
-     * This function fetches a result row as an object.
-     *
-     * @param   mixed $result
-     * @return  mixed
+     * @param resource $result
+     * 
+     * @return StdObj
      */
-    public function fetch_object($result);
+    public function fetchObject($result);
 
     /**
-     * Fetch a result row as an object
+     * Fetch a result row as an associative array
      *
-     * This function fetches a result as an associative array.
-     *
-     * @param   mixed $result
-     * @return  array
+     * @param mixed $result
+     * 
+     * @return array
      */
     public function fetch_assoc($result);
     
     /**
      * Fetches a complete result as an object
      *
-     * @param  resource      $result Resultset
-     * @return PMF_DB_Driver
+     * @param  resource $result Resultset
+     * 
+     * @return array
      */
     public function fetchAll($result);
 
@@ -74,7 +74,7 @@ interface PMF_DB_Driver
      * @param   mixed $result
      * @return  integer
      */
-    public function num_rows($result);
+    public function numRows($result);
 
     /**
      * Logs the queries

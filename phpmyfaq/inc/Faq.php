@@ -264,10 +264,10 @@ class PMF_Faq
             $this->db->escape_string($sortby));
 
         $result = $this->db->query($query);
-        $num    = $this->db->num_rows($result);
+        $num    = $this->db->numRows($result);
 
         if ($num > 0) {
-            while (($row = $this->db->fetch_object($result))) {
+            while (($row = $this->db->fetchObject($result))) {
 
                 if (empty($row->visits)) {
                     $visits = 0;
@@ -396,7 +396,7 @@ class PMF_Faq
 
         $result = $this->db->query($query);
 
-        $num   = $this->db->num_rows($result);
+        $num   = $this->db->numRows($result);
         $pages = ceil($num / $faqconfig->get("main.numberOfRecordsPerPage"));
 
         if ($page == 1) {
@@ -415,7 +415,7 @@ class PMF_Faq
             $output .= '<ul class="phpmyfaq_ul">';
             $counter = 0;
             $displayedCounter = 0;
-            while (($row = $this->db->fetch_object($result)) && $displayedCounter < $faqconfig->get("main.numberOfRecordsPerPage")) {
+            while (($row = $this->db->fetchObject($result)) && $displayedCounter < $faqconfig->get("main.numberOfRecordsPerPage")) {
                 $counter ++;
                 if ($counter <= $first) {
                     continue;
@@ -598,7 +598,7 @@ class PMF_Faq
 
         $result = $this->db->query($query);
 
-        $num = $this->db->num_rows($result);
+        $num = $this->db->numRows($result);
         $pages = ceil($num / $faqconfig->get('main.numberOfRecordsPerPage'));
 
         if ($page == 1) {
@@ -617,7 +617,7 @@ class PMF_Faq
             $output .= '<ul class="phpmyfaq_ul">';
             $counter = 0;
             $displayedCounter = 0;
-            while (($row = $this->db->fetch_object($result)) && $displayedCounter < $faqconfig->get('main.numberOfRecordsPerPage')) {
+            while (($row = $this->db->fetchObject($result)) && $displayedCounter < $faqconfig->get('main.numberOfRecordsPerPage')) {
                 $counter ++;
                 if ($counter <= $first) {
                     continue;
@@ -738,7 +738,7 @@ class PMF_Faq
 
         $result = $this->db->query($query);
 
-        if ($row = $this->db->fetch_object($result)) {
+        if ($row = $this->db->fetchObject($result)) {
 
             $content        = $row->content;
             $active         = ('yes' == $row->active);
@@ -859,7 +859,7 @@ class PMF_Faq
 
         $result = $this->db->query($query);
 
-        if ($this->db->num_rows($result)) {
+        if ($this->db->numRows($result)) {
             return true;
         }
 
@@ -898,7 +898,7 @@ class PMF_Faq
 
         $result = $this->db->query($query);
         
-        if ($row = $this->db->fetch_object($result)) {
+        if ($row = $this->db->fetchObject($result)) {
             return ($row->comment === 'y') ? false : true;
         } else {
             return true;
@@ -950,7 +950,7 @@ class PMF_Faq
 
         $result = $this->db->query($query);
 
-        if ($row = $this->db->fetch_object($result)) {
+        if ($row = $this->db->fetchObject($result)) {
             $content        = $row->content;
             $active         = ('yes' == $row->active);
             $expired        = (date('YmdHis') > $row->date_end);
@@ -1003,7 +1003,7 @@ class PMF_Faq
 
         $result = $this->db->query($query);
 
-        if ($row = $this->db->fetch_object($result)) {
+        if ($row = $this->db->fetchObject($result)) {
             return array('id'      => $row->id,
                          'lang'    => $row->lang,
                          'content' => $row->content);
@@ -1030,7 +1030,7 @@ class PMF_Faq
             SQLPREFIX);
         $result = $this->db->query($query);
 
-        if ($result && $row = $this->db->fetch_object($result)) {
+        if ($result && $row = $this->db->fetchObject($result)) {
             $latest_id = $row->solution_id;
         }
 
@@ -1150,7 +1150,7 @@ class PMF_Faq
 
         $result = $this->db->query($query);
 
-        while ($row = $this->db->fetch_object($result)) {
+        while ($row = $this->db->fetchObject($result)) {
             $content        = $row->content;
             $active         = ('yes' == $row->active);
             $expired        = (date('YmdHis') > $row->date_end);
@@ -1207,8 +1207,8 @@ class PMF_Faq
             );
         $result = $this->db->query($query);
 
-        if ($this->db->num_rows($result) > 0) {
-            while ($row = $this->db->fetch_object($result)) {
+        if ($this->db->numRows($result) > 0) {
+            while ($row = $this->db->fetchObject($result)) {
                 $output = $row->thema;
             }
         } else {
@@ -1246,8 +1246,8 @@ class PMF_Faq
 
         $result = $this->db->query($query);
 
-        if ($this->db->num_rows($result) > 0) {
-            while ($row = $this->db->fetch_object($result)) {
+        if ($this->db->numRows($result) > 0) {
+            while ($row = $this->db->fetchObject($result)) {
                 $revision_data[] = array(
                     'revision_id' => $row->revision_id,
                     'datum'       => $row->datum,
@@ -1282,8 +1282,8 @@ class PMF_Faq
 
         $result = $this->db->query($query);
 
-        if ($this->db->num_rows($result) > 0) {
-            $row = $this->db->fetch_object($result);
+        if ($this->db->numRows($result) > 0) {
+            $row = $this->db->fetchObject($result);
             return PMF_htmlentities($row->keywords, ENT_QUOTES, 'utf-8');
         } else {
             return '';
@@ -1321,8 +1321,8 @@ class PMF_Faq
 
         $result = $this->db->query($query);
 
-        if ($this->db->num_rows($result) > 0) {
-            $row           = $this->db->fetch_object($result);
+        if ($this->db->numRows($result) > 0) {
+            $row           = $this->db->fetchObject($result);
             $answerPreview = strip_tags($row->answer);
         } else {
             $answerPreview = PMF_Configuration::getInstance()->get('main.metaDescription');
@@ -1359,7 +1359,7 @@ class PMF_Faq
             $now,
             $now);
 
-        $num = $this->db->num_rows($this->db->query($query));
+        $num = $this->db->numRows($this->db->query($query));
 
         if ($num > 0) {
             return $num;
@@ -1541,7 +1541,7 @@ class PMF_Faq
 
         $i = 1;
         $oldId = 0;
-        while (($row = $this->db->fetch_object($result)) && $i <= $count) {
+        while (($row = $this->db->fetchObject($result)) && $i <= $count) {
             if ($oldId != $row->id) {
                 $data['avg'] = $row->avg;
                 $data['thema'] = $row->thema;
@@ -1649,7 +1649,7 @@ class PMF_Faq
 
         $i = 1;
         $oldId = 0;
-        while (($row = $this->db->fetch_object($result)) && $i <= $count) {
+        while (($row = $this->db->fetchObject($result)) && $i <= $count) {
             if ($oldId != $row->id) {
                 $data['visits'] = $row->visits;
                 $data['thema'] = $row->thema;
@@ -1752,7 +1752,7 @@ class PMF_Faq
 
         $i = 0;
         $oldId = 0;
-        while (($row = $this->db->fetch_object($result)) && $i < $count ) {
+        while (($row = $this->db->fetchObject($result)) && $i < $count ) {
             if ($oldId != $row->id) {
                 $data['datum'] = $row->datum;
                 $data['thema'] = $row->thema;
@@ -1800,7 +1800,7 @@ class PMF_Faq
             $id,
             $ip,
             $check);
-        if ($this->db->num_rows($this->db->query($query))) {
+        if ($this->db->numRows($this->db->query($query))) {
             return false;
         }
         return true;
@@ -1825,9 +1825,9 @@ class PMF_Faq
 
         $result = $this->db->query($this->_getSQLQuery($QueryType, $nCatid, $bDownwards, $lang, $date));
 
-        if ($this->db->num_rows($result) > 0) {
+        if ($this->db->numRows($result) > 0) {
             $i = 0;
-            while ($row = $this->db->fetch_object($result)) {
+            while ($row = $this->db->fetchObject($result)) {
                 $faq = array();
                 $faq['id']             = $row->id;
                 $faq['solution_id']    = $row->solution_id;
@@ -2076,7 +2076,7 @@ class PMF_Faq
 
         $output = '<ul class="phpmyfaq_ul">';
 
-        while (($row = $this->db->fetch_object($result))) {
+        while (($row = $this->db->fetchObject($result))) {
             $title = $row->thema;
             $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                         $sids,
@@ -2238,7 +2238,7 @@ class PMF_Faq
         $data   = array();
 
         $oldId = 0;
-        while (($row = $this->db->fetch_object($result))) {
+        while (($row = $this->db->fetchObject($result))) {
             if ($oldId != $row->id) {
                 $data['thema'] = $row->thema;
 
