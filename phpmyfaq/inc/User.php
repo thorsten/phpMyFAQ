@@ -145,7 +145,7 @@ class PMF_User
      *
      * @var string
      */
-    private $login_invalidRegExp = '/(^[^a-z]{1}|[\W])/i';
+    private $_validRegExp = '/^[a-z][\w]+/i';
     
     /**
      * user ID
@@ -652,7 +652,7 @@ class PMF_User
     public function isValidLogin($login)
     {
         $login = (string) $login;
-        if (strlen($login) < $this->login_minLength || preg_match($this->login_invalidRegExp, $login)) {
+        if (strlen($login) < $this->login_minLength || !preg_match($this->_validRegExp, $login)) {
             $this->errors[] = self::ERROR_USER_LOGIN_INVALID;
             return false;
         }
@@ -860,19 +860,6 @@ class PMF_User
     {
         if (is_int($loginMinLength)) {
             $this->login_minLength = $loginMinLength;
-        }
-    }
-
-    /**
-     * sets the regular expression to check invalid login strings
-     *
-     * @param  string $loginInvalidRegExp Regular Expression for invalid logins
-     * @return void
-     */
-    public function setLoginInvalidRegExp($loginInvalidRegExp)
-    {
-        if (is_string($loginInvalidRegExp)) {
-            $this->login_invalidRegExp = $loginInvalidRegExp;
         }
     }
 }
