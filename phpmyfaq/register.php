@@ -29,11 +29,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 // Settings
-$selectSize         = 10;
-$defaultUserAction  = 'list';
-$defaultUserStatus  = 'blocked';
-$loginMinLength     = 4;
-$loginInvalidRegExp = '/(^[^a-z]{1}|[\W])/i';
+$selectSize        = 10;
+$defaultUserAction = 'list';
+$defaultUserStatus = 'blocked';
+$loginMinLength    = 4;
 
 $errorMessages = array(
     'addUser_password'           => $PMF_LANG['ad_user_error_password'],
@@ -74,7 +73,6 @@ if (!is_null($loginname) && !is_null($lastname) && !is_null($email) && !isset($c
 
     // check login name
     $user->setLoginMinLength($loginMinLength);
-    $user->setLoginInvalidRegExp($loginInvalidRegExp);
     if (!$user->isValidLogin($user_name)) {
         $user_name  = '';
         $messages[] = $errorMessages['addUser_loginInvalid'];
