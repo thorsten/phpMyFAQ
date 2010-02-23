@@ -64,10 +64,10 @@ if (!is_null($inputTag)) {
 //
 if (!is_null($inputSearchTerm) || !is_null($search)) {
     if (!is_null($inputSearchTerm)) {
-        $inputSearchTerm = $db->escape_string(strip_tags($inputSearchTerm));
+        $inputSearchTerm = $db->escapeString(strip_tags($inputSearchTerm));
     }
     if (!is_null($search)) {
-        $inputSearchTerm = $db->escape_string(strip_tags($search));
+        $inputSearchTerm = $db->escapeString(strip_tags($search));
     }
     $printResult      = searchEngine($inputSearchTerm, $inputCategory, $allLanguages);
     $inputSearchTerm  = stripslashes($inputSearchTerm);

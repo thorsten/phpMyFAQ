@@ -106,7 +106,7 @@ class PMF_Tags
            }
         }
 
-        $numberOfItems = $limit ? PMF_TAGS_CLOUD_RESULT_SET_SIZE : $this->db->num_rows($result);
+        $numberOfItems = $limit ? PMF_TAGS_CLOUD_RESULT_SET_SIZE : $this->db->numRows($result);
 
         if (isset($allTags) && ($numberOfItems < count($allTags))) {
         	$keys = array_keys($allTags);
@@ -476,7 +476,7 @@ class PMF_Tags
                 t.tagging_name = '%s'",
             SQLPREFIX,
             SQLPREFIX,
-            $this->db->escape_string($tagName));
+            $this->db->escapeString($tagName));
 
         $records = array();
         $result = $this->db->query($query);

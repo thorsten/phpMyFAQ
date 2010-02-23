@@ -80,6 +80,6 @@ $faq = new PMF_Faq();
 // Handle the search requests
 //
 if (!is_null($searchString)) {
-    $result = searchEngine($db->escape_string($searchString), $categoryId, false, true, true);
+    $result = searchEngine($db->escapeString($searchString), $categoryId, false, true, true);
     print $result;
 }

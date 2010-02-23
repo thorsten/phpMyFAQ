@@ -189,7 +189,7 @@ if ($permission['editbt'] || $permission['delbt']) {
         $internalSearch = '&amp;search='.$searchterm;
         $wasSearch      = true;
 
-        while ($row = $db->fetch_object($result)) {
+        while ($row = $db->fetchObject($result)) {
             
             if ($searchcat != 0 && $searchcat != (int)$row->category_id) {
                 continue;

@@ -260,8 +260,8 @@ class PMF_Faq
             $this->language,
             $permPart,
             $current_table,
-            $this->db->escape_string($orderby),
-            $this->db->escape_string($sortby));
+            $this->db->escapeString($orderby),
+            $this->db->escapeString($sortby));
 
         $result = $this->db->query($query);
         $num    = $this->db->numRows($result);
@@ -593,8 +593,8 @@ class PMF_Faq
             $records,
             $this->language,
             $permPart,
-            $this->db->escape_string($orderby),
-            $this->db->escape_string($sortby));
+            $this->db->escapeString($orderby),
+            $this->db->escapeString($sortby));
 
         $result = $this->db->query($query);
 
@@ -1064,12 +1064,12 @@ class PMF_Faq
                     $where .= " IN (";
                     $separator = "";
                     foreach ($data as $value) {
-                        $where .= $separator."'".$this->db->escape_string($value)."'";
+                        $where .= $separator."'".$this->db->escapeString($value)."'";
                         $separator = ", ";
                     }
                     $where .= ")";
                 } else {
-                    $where .= " = '".$this->db->escape_string($data)."'";
+                    $where .= " = '".$this->db->escapeString($data)."'";
                 }
                 if ($num > 0) {
                     $where .= " AND ";

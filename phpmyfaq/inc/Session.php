@@ -163,7 +163,7 @@ class PMF_Session
         $result = $this->db->query($query);
 
         if ($result) {
-        	$res       = $this->db->fetch_object($result);
+        	$res       = $this->db->fetchObject($result);
         	$timestamp = $res->time;
         }
 
@@ -198,7 +198,7 @@ class PMF_Session
             $lastHour);
 
         $result = $this->db->query($query);
-        while ($row = $this->db->fetch_object($result)) {
+        while ($row = $this->db->fetchObject($result)) {
             $sessions[$row->sid] = array(
                 'ip'   => $row->ip,
                 'time' => $row->time);

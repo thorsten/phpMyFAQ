@@ -79,7 +79,7 @@ class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
             $group_id);
         
         $res = $this->db->query($select);
-        if ($this->db->num_rows($res) == 1) {
+        if ($this->db->numRows($res) == 1) {
             return true;
         }
         return false;
@@ -265,7 +265,7 @@ class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
         $comma        = "";
         
         foreach ($group_data as $key => $val) {
-            $set  .= $comma.$key." = '".$this->db->escape_string($checked_data[$key])."'";
+            $set  .= $comma.$key." = '".$this->db->escapeString($checked_data[$key])."'";
             $comma = ",\n                ";
         }
         
@@ -373,7 +373,7 @@ class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
             $group_id);
         
         $res = $this->db->query($select);
-        if ($this->db->num_rows($res) == 1) {
+        if ($this->db->numRows($res) == 1) {
             return true;
         }
         return false;
@@ -500,10 +500,10 @@ class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
             WHERE
                 name = '%s'",
             SQLPREFIX,
-            $this->db->escape_string($name));
+            $this->db->escapeString($name));
             
         $res = $this->db->query($select);
-        if ($this->db->num_rows($res) != 1) {
+        if ($this->db->numRows($res) != 1) {
             return 0;
         }
         $row = $this->db->fetch_assoc($res);
@@ -537,7 +537,7 @@ class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
             $group_id);
             
         $res = $this->db->query($select);
-        if ($this->db->num_rows($res) != 1) {
+        if ($this->db->numRows($res) != 1) {
             return array();
         }
         return $this->db->fetch_assoc($res);
@@ -667,7 +667,7 @@ class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
             $user_id);
         
         $res = $this->db->query($select);
-        if ($this->db->num_rows($res) == 1) {
+        if ($this->db->numRows($res) == 1) {
             return true;
         }
         return false;
@@ -881,7 +881,7 @@ class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
             $group_id);
             
         $res = $this->db->query($select);
-        if ($this->db->num_rows($res) != 1) {
+        if ($this->db->numRows($res) != 1) {
             return array();
         }
         $row = $this->db->fetch_assoc($res);

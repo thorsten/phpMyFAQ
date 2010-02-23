@@ -712,10 +712,10 @@ class PMF_Linkverifier
                 lang = '%s'",
             SQLPREFIX,
             $id,
-            $this->db->escape_string($artlang));
+            $this->db->escapeString($artlang));
             
         if ($result = $this->db->query($query)) {
-            while ($row = $this->db->fetch_object($result)) {
+            while ($row = $this->db->fetchObject($result)) {
                 $_linkState = $row->links_state;
                 if (trim($_linkState) == "") {
                     $_linkState = true;
@@ -957,12 +957,12 @@ class PMF_Linkverifier
                             (%d, '%s', '%s', '%s', 'y', 'n', '%s', '%s', '%s')",
                         SQLPREFIX,
                         $this->db->nextID(SQLPREFIX."faqlinkverifyrules", "id"),
-                        $this->db->escape_string($type),
-                        $this->db->escape_string($url),
-                        $this->db->escape_string($reason),
-                        $this->db->escape_string($this->user->getLogin()),
-                        $this->db->escape_string(date('YmdHis')),
-                        $this->db->escape_string(date('YmdHis'))
+                        $this->db->escapeString($type),
+                        $this->db->escapeString($url),
+                        $this->db->escapeString($reason),
+                        $this->db->escapeString($this->user->getLogin()),
+                        $this->db->escapeString(date('YmdHis')),
+                        $this->db->escapeString(date('YmdHis'))
                         );
             $this->db->query($query);
         }
