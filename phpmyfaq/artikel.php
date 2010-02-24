@@ -117,8 +117,15 @@ if (!is_null($highlight) && $highlight != "/" && $highlight != "<" && $highlight
 // Search for href attribute links
 $oLnk->resetPool();
 $oLnk->parse_string($content);
-$fixedContent = str_replace('href="#', sprintf('href="?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s#', 
-    $currentCategory, $id, $LANGCODE), $content); 
+$fixedContent = str_replace('href="#', 
+    sprintf('href="index.php?action=artikel&amp;lang=%s&amp;cat=%d&amp;id=%d&amp;artlang=%s#',
+        $LANGCODE,
+        $currentCategory,
+        $record_id,
+        $LANGCODE),
+    $content);
+$oLnk->resetPool();
+$oLnk->parse_string($fixedContent); 
 
 // Search for href attributes only
 $linkArray = $oLnk->getUrlpool();
