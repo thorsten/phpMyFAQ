@@ -406,7 +406,7 @@ function getUsersOnline($activityTimeWindow = 300)
                             user_id = -1
                         AND time > ".$timeNow);
         if (isset($result)) {
-            $row      = $db->fetch_object($result);
+            $row      = $db->fetchObject($result);
             $users[0] = $row->anonymous_users;
         }
         // Count all faquser records within the time window
@@ -418,7 +418,7 @@ function getUsersOnline($activityTimeWindow = 300)
                     WHERE
                         session_timestamp > ".$timeNow);
         if (isset($result)) {
-            $row      = $db->fetch_object($result);
+            $row      = $db->fetchObject($result);
             $users[1] = $row->registered_users;
         }
     }
@@ -546,7 +546,7 @@ function getSearchData($searchterm, $asResource = false, $cat = '%', $allLanguag
     }
 
     if ($result) {
-        $num = $db->num_rows($result);
+        $num = $db->numRows($result);
     }
     
     // Show the record with the solution ID directly
@@ -621,7 +621,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
     $faqconfig   = PMF_Configuration::getInstance();
 
     $result = getSearchData(htmlentities($searchterm, ENT_COMPAT, 'utf-8'), true, $cat, $allLanguages);
-    $num    = $db->num_rows($result);
+    $num    = $db->numRows($result);
 
     if (0 == $num) {
         $output = $PMF_LANG['err_noArticles'];
@@ -651,7 +651,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
         $faqGroup = new PMF_Faq_Group();
         
         $counter = $displayedCounter = 0;
-        while (($row = $db->fetch_object($result)) && $displayedCounter < $confPerPage) {
+        while (($row = $db->fetchObject($result)) && $displayedCounter < $confPerPage) {
             $counter ++;
             if ($counter <= $first) {
                 continue;
@@ -937,7 +937,7 @@ function build_insert($query, $table)
                 if (is_null($val)) {
                     $p2[] = 'NULL';
                 } else {
-                    $p2[] = sprintf("'%s'", $db->escape_string($val));
+                    $p2[] = sprintf("'%s'", $db->escapeString($val));
                 }
             }
         }

@@ -262,10 +262,10 @@ class PMF_Captcha
             WHERE
                 id = '%s'",
             SQLPREFIX,
-            $this->db->escape_string($captchaCode));
+            $this->db->escapeString($captchaCode));
 
         if ($result = $this->db->query($query)) {
-            $num = $this->db->num_rows($result);
+            $num = $this->db->numRows($result);
             if ($num > 0) {
                 $this->code = $captchaCode;
                 $this->removeCaptcha($captchaCode);
@@ -476,7 +476,7 @@ class PMF_Captcha
     	$result = $this->db->query($select);   
     	
         if ($result) {
-            $num = $this->db->num_rows($result);
+            $num = $this->db->numRows($result);
             if ($num > 0) {
                 return false;
             } else {

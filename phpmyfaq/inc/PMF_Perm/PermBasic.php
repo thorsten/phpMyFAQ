@@ -87,7 +87,7 @@ class PMF_Perm_PermBasic extends PMF_Perm
             
         $res = $this->db->query($select);
         // return result
-        if ($this->db->num_rows($res) == 1) {
+        if ($this->db->numRows($res) == 1) {
             return true;
         }
         
@@ -237,7 +237,7 @@ class PMF_Perm_PermBasic extends PMF_Perm
             $right_id);
         
         $res = $this->db->query($select);
-        if ($this->db->num_rows($res) != 1) {
+        if ($this->db->numRows($res) != 1) {
             return false;
         }
         
@@ -410,10 +410,10 @@ class PMF_Perm_PermBasic extends PMF_Perm
             WHERE
                 name = '%s'",
             SQLPREFIX,
-            $this->db->escape_string($name));
+            $this->db->escapeString($name));
         
         $res = $this->db->query($select);
-        if ($this->db->num_rows($res) != 1) {
+        if ($this->db->numRows($res) != 1) {
             return 0;
         }
         $row = $this->db->fetch_assoc($res);

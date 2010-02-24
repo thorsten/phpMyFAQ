@@ -67,7 +67,7 @@ class PMF_Logging
                 %sfaqadminlog',
             SQLPREFIX);
 
-        return $this->db->num_rows($this->db->query($query));
+        return $this->db->numRows($this->db->query($query));
     }
 
     /**
@@ -88,7 +88,7 @@ class PMF_Logging
             SQLPREFIX);
 
         $result = $this->db->query($query);
-        while ($row = $this->db->fetch_object($result)) {
+        while ($row = $this->db->fetchObject($result)) {
             $data[$row->id] = array(
                'time'  => $row->time,
                'usr'   => $row->usr,
@@ -121,7 +121,7 @@ class PMF_Logging
                     $this->db->nextID(SQLPREFIX.'faqadminlog', 'id'),
                     $_SERVER['REQUEST_TIME'],
                     $user->userdata->get('user_id'),
-                    $this->db->escape_string(nl2br($logText)),
+                    $this->db->escapeString(nl2br($logText)),
                     $_SERVER['REMOTE_ADDR']);
             
             return $this->db->query($query);

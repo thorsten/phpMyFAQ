@@ -97,7 +97,7 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2004-12-16
      */
-    public function escape_string($string)
+    public function escapeString($string)
     {
       return sqlite_escape_string($string);
     }
@@ -113,7 +113,7 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-06-27
      */
-    public function fetch_object($result)
+    public function fetchObject($result)
     {
         return sqlite_fetch_object($result);
     }
@@ -149,7 +149,7 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
             throw new Exception('Error while fetching result: ' . $this->error());
         }
         
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             $ret[] = $row;
         }
         
@@ -165,7 +165,7 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-06-27
      */
-    public function num_rows($result)
+    public function numRows($result)
     {
         return sqlite_num_rows($result);
     }
@@ -288,7 +288,7 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
         $result = $this->query("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
         while ($row = $this->fetch_assoc($result)) {
             $num_result = $this->query('SELECT * FROM '.$row['name']);
-            $arr[$row['name']] = $this->num_rows($num_result);
+            $arr[$row['name']] = $this->numRows($num_result);
         }
 
         return $arr;
@@ -373,7 +373,7 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
         $this->tableNames[] = $prefix.'faquser';
 
         $result = $this->query("SELECT name FROM sqlite_master WHERE type='table' ".(('' == $prefix) ? '':  "AND name LIKE '".$prefix."%' ")."ORDER BY name");
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             if (!in_array($row->name, $this->tableNames)) {
                 $this->tableNames[] = $row->name;
             }

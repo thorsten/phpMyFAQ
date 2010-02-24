@@ -81,10 +81,10 @@ class PMF_Faq_Questions extends PMF_Faq_Abstract implements PMF_Faq_Interface
                 (%d, '%s', '%s', %d, '%s', '%s', '%s')",
             SQLPREFIX,
             $this->_questionId,
-            $this->db->escape_string($data['username']),
-            $this->db->escape_string($data['email']),
+            $this->db->escapeString($data['username']),
+            $this->db->escapeString($data['email']),
             $data['category_id'],
-            $this->db->escape_string($data['question']),
+            $this->db->escapeString($data['question']),
             $data['date'],
             $data['is_visible']);
         
@@ -274,7 +274,7 @@ class PMF_Faq_Questions extends PMF_Faq_Abstract implements PMF_Faq_Interface
         if (!$result) {
             throw new PMF_Exception($this->db->error());
         } else {
-            return $this->db->fetch_object($result)->is_visible;
+            return $this->db->fetchObject($result)->is_visible;
         }
         
         return null;

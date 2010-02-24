@@ -1,6 +1,6 @@
 <?php
 /**
- * Helper class for FAQs
+ * Abstract model for phpMyFAQ
  *
  * PHP Version 5.2.0
  * 
@@ -15,27 +15,41 @@
  * under the License.
  * 
  * @category  phpMyFAQ
- * @package   PMF_Faq
+ * @package   PMF_Model
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2001-01-24
+ * @since     2010-02-23
  */
 
 /**
- * PMF_Faq_Helper
+ * PMF_Model
  * 
- * @Faq  phpMyFAQ
- * @package   PMF_Faq
+ * @category  phpMyFAQ
+ * @package   PMF_Model
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2001-01-24
+ * @since     2010-02-23
  */
-class PMF_Faq_Helper extends PMF_Faq_Abstract
+abstract class PMF_Model
 {
+    /**
+     * Database object
+     * 
+     * @var PMF_DB_Driver
+     */
+    protected $db = null;
+    
+    /**
+     * Language
+     *
+     * @var string
+     */
+    protected $language = null;
+    
     /**
      * Constructor
      * 
@@ -43,41 +57,26 @@ class PMF_Faq_Helper extends PMF_Faq_Abstract
      */
     public function __construct()
     {
-        parent::__construct();
+        $this->db = PMF_Db::getInstance();
     }
 
     /**
-     * Gets the latest solution id for a FAQ record
-     *
-     * @return integer
+     * Returns the current language
+     * 
+     * @return string
      */
-    public function getSolutionId()
+    public function getLanguage ()
     {
-        $latestId = $nextSolutionId = 0;
-
-        $query = sprintf("
-            SELECT
-                MAX(solution_id) AS solution_id
-            FROM
-                %sfaqdata",
-            SQLPREFIX);
-        
-        $result = $this->db->query($query);
-        
-        if (!$result) {
-            throw new PMF_Exception($this->db->error());
-        }
-        
-        if ($row = $this->db->fetchObject($result)) {
-            $latestId = $row->solution_id;
-        }
-        
-        if ($latestId < PMF_SOLUTION_ID_START_VALUE) {
-            $nextSolutionId = PMF_SOLUTION_ID_START_VALUE;
-        } else {
-            $nextSolutionId = $latestId + PMF_SOLUTION_ID_INCREMENT_VALUE;
-        }
-        
-        return $nextSolutionId;
+        return $this->language;
+    }
+    
+    /**
+     * Sets the current language
+     * 
+     * @param string $language
+     */
+    public function setLanguage ($language)
+    {
+        $this->language = $language;
     }
 }

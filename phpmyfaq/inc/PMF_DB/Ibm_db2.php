@@ -98,7 +98,7 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-04-16
      */
-    function escape_string($string)
+    function escapeString($string)
     {
       return str_replace("'", "''", $string);
     }
@@ -113,7 +113,7 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
      * @author  Helmut Tessarek <tessus@evermeet.cx>
      * @since   2005-04-16
      */
-    function fetch_object($result)
+    function fetchObject($result)
     {
         $_result = db2_fetch_object($result);
         if (is_object($_result)) {
@@ -155,7 +155,7 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
             throw new Exception('Error while fetching result: ' . $this->error());
         }
         
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             $ret[] = $row;
         }
         
@@ -172,7 +172,7 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-04-16
      */
-    function num_rows($result)
+    function numRows($result)
     {
         return db2_num_rows($result);
     }
@@ -314,7 +314,7 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
     function nextID($table, $id)
     {
         $result = $this->query('SELECT MAX('.$id.') as current_id FROM '.$table);
-        $row = $this->fetch_object($result);
+        $row = $this->fetchObject($result);
         return ($row->current_id + 1);
     }
 

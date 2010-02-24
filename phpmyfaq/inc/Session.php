@@ -1,13 +1,8 @@
 <?php
 /**
  * The main User session class
- *
- * @package    phpMyFAQ
- * @subpackage PMF_Session
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2007-03-31
- * @copyright  2007-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,17 +13,26 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Session
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2007-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2007-03-31
  */
 
 /**
  * PMF_Session
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Session
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2007-03-31
- * @copyright  2007-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * @category  phpMyFAQ
+ * @package   PMF_Session
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2007-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2007-03-31
  */
 class PMF_Session
 {
@@ -63,14 +67,10 @@ class PMF_Session
     /**
      * Tracks the user and log what he did
      * 
-     * @param   string
-     * @param   integer
-     * @return  void
-     * @since   2001-02-18
-     * @since   Bastian Poettner <bastian@poettner.net>
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
-     * @author  Marco Fester <webmaster@marcof.de>
+     * @param string  $action String User action string
+     * @param integer $id     ID
+     *
+     * @return void
      */
     public function userTracking($action, $id = 0)
     {
@@ -78,69 +78,71 @@ class PMF_Session
 
         $faqconfig = PMF_Configuration::getInstance();
         
-        if ($faqconfig->get('main.enableUserTracking')) {
-
-            $bots  = 0;
-            $agent = $_SERVER['HTTP_USER_AGENT'];
-            $sid   = PMF_Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
-            $sidc  = PMF_Filter::filterInput(INPUT_COOKIE, PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
-            
-            if (!is_null($sidc)) {
-                $sid = $sidc;
-            }
-            if ($action == "old_session") {
-                $sid = null;
-            }
-
-            foreach ($botBlacklist as $bot) {
-                if (strpos($agent, $bot)) {
-                    $bots++;
-                }
-            }
-            if (0 == $bots) {
-                if (!isset($sid)) {
-                    $sid = $this->db->nextID(SQLPREFIX."faqsessions", "sid");
-                    // Sanity check: force the session cookie to contains the current $sid
-                    if (!is_null($sidc) && (!$sidc != $sid)) {
-                        self::setCookie($sid);
-                    }
-
-                    $query = sprintf("
-                        INSERT INTO 
-                            %sfaqsessions
-                        (sid, user_id, ip, time)
-                            VALUES
-                        (%d, %d, '%s', %d)",
-                        SQLPREFIX,
-                        $sid,
-                        ($user ? $user->getUserId() : -1),
-                        $_SERVER["REMOTE_ADDR"],
-                        $_SERVER['REQUEST_TIME']
-                    );
-                    $this->db->query($query);
-                }
-
-                $data = $sid.';' . 
-                        str_replace(';', ',', $action) . ';' . 
-                        $id . ';' . 
-                        $_SERVER['REMOTE_ADDR'] . ';' . 
-                        str_replace(';', ',', $_SERVER['QUERY_STRING']) . ';' . 
-                        str_replace(';', ',', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '') . ';' . 
-                        str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])) . ';' . 
-                        $_SERVER['REQUEST_TIME'] . ";\n";
-                $file = './data/tracking'.date('dmY');
-                file_put_contents($file, $data, FILE_APPEND);
+        if (!$faqconfig->get('main.enableUserTracking')) {
+            return;
+        }
+        
+        $bots  = 0;
+        $agent = $_SERVER['HTTP_USER_AGENT'];
+        $sid   = PMF_Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
+        $sidc  = PMF_Filter::filterInput(INPUT_COOKIE, PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
+        
+        if (! is_null($sidc)) {
+            $sid = $sidc;
+        }
+        if ($action == "old_session") {
+            $sid = null;
+        }
+        
+        foreach ($botBlacklist as $bot) {
+            if (strpos($agent, $bot)) {
+                $bots ++;
             }
         }
+        
+        if ($bots > 0) {
+            return;
+        }
+        
+        if (!isset($sid)) {
+            $sid = $this->db->nextID(SQLPREFIX."faqsessions", "sid");
+            // Sanity check: force the session cookie to contains the current $sid
+            if (!is_null($sidc) && (!$sidc != $sid)) {
+                self::setCookie($sid);
+            }
+            
+            $query = sprintf("
+            INSERT INTO 
+                %sfaqsessions
+            (sid, user_id, ip, time)
+                VALUES
+            (%d, %d, '%s', %d)",
+                SQLPREFIX,
+                $sid,
+                ($user ? $user->getUserId() : -1),
+                $_SERVER["REMOTE_ADDR"],
+                $_SERVER['REQUEST_TIME']);
+            $this->db->query($query);
+        }
+        
+        $data = $sid.';' . 
+                str_replace(';', ',', $action) . ';' . 
+                $id . ';' . 
+                $_SERVER['REMOTE_ADDR'] . ';' . 
+                str_replace(';', ',', $_SERVER['QUERY_STRING']) . ';' . 
+                str_replace(';', ',', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '') . ';' . 
+                str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])) . ';' . 
+                $_SERVER['REQUEST_TIME'] . ";\n";
+        
+        file_put_contents('./data/tracking' . date('dmY'), $data, FILE_APPEND);
     }
 
     /**
      * Returns the timestamp of a session
      *
      * @param  integer $sid Session ID
+     * 
      * @return integer
-     * @since  2007-03-31
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function getTimeFromSessionId($sid)
     {
@@ -159,7 +161,7 @@ class PMF_Session
         $result = $this->db->query($query);
 
         if ($result) {
-        	$res       = $this->db->fetch_object($result);
+        	$res       = $this->db->fetchObject($result);
         	$timestamp = $res->time;
         }
 
@@ -170,9 +172,8 @@ class PMF_Session
      * Returns all session from a date
      *
      * @param  integer $timestamp Timestamp
+     * 
      * @return array
-     * @since  2007-03-31
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function getSessionsbyDate($firstHour, $lastHour)
     {
@@ -194,7 +195,7 @@ class PMF_Session
             $lastHour);
 
         $result = $this->db->query($query);
-        while ($row = $this->db->fetch_object($result)) {
+        while ($row = $this->db->fetchObject($result)) {
             $sessions[$row->sid] = array(
                 'ip'   => $row->ip,
                 'time' => $row->time);
@@ -206,9 +207,7 @@ class PMF_Session
     /**
      * Returns the number of sessions
      *
-     * @return  integer
-     * @since   2007-04-21
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @return integer
      */
     public function getNumberOfSessions()
     {
@@ -223,7 +222,7 @@ class PMF_Session
 
         $result = $this->db->query($query);
         if ($result) {
-            $num = $this->db->num_rows($result);
+            $num = $this->db->numRows($result);
         }
 
         return $num;
@@ -232,11 +231,10 @@ class PMF_Session
     /**
      * Deletes the sessions for a given timespan
      *
-     * @param  integer $first Frist session ID
-     * @param  integer $last  Last session ID
+     * @param integer $first Frist session ID
+     * @param integer $last  Last session ID
+     * 
      * @return boolean
-     * @since  2007-04-21
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function deleteSessions($first, $last)
     {
@@ -259,11 +257,10 @@ class PMF_Session
     /**
      * Checks the Session ID
      *
-     * @param  integer $sessionId Session ID
-     * @param  string  $ip  IP
+     * @param integer $sessionId Session ID
+     * @param string  $ip  IP
+     * 
      * @return void
-     * @since  2007-04-22
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function checkSessionId($sessionId, $ip)
     {
@@ -287,7 +284,7 @@ class PMF_Session
         );
         $result = $this->db->query($query);
 
-        if ($this->db->num_rows($result) == 0) {
+        if ($this->db->numRows($result) == 0) {
             $this->userTracking('old_session', $sessionId);
         } else {
             // Update global session id

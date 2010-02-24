@@ -29,7 +29,7 @@ $faqsession->userTracking('sitemap', 0);
 
 $letter = PMF_Filter::filterInput(INPUT_GET, 'letter', FILTER_SANITIZE_STRIPPED);
 if (!is_null($letter) && (1 == PMF_String::strlen($letter))) {
-    $currentLetter = strtoupper($db->escape_string(PMF_String::substr($letter, 0, 1)));
+    $currentLetter = strtoupper($db->escapeString(PMF_String::substr($letter, 0, 1)));
 } else {
     $currentLetter = 'A';
 }

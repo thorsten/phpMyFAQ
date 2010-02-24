@@ -272,7 +272,7 @@ class PMF_User
              (int) $user_id);
              
         $res = $this->db->query($select);
-        if ($this->db->num_rows($res) != 1) {
+        if ($this->db->numRows($res) != 1) {
             $this->errors[] = self::ERROR_USER_NO_USERID . 'error(): ' . $this->db->error();
             return false;
         }
@@ -296,7 +296,7 @@ class PMF_User
                 $this->login);
                 
             $res = $this->db->query($select);
-            if ($this->db->num_rows($res) != 1) {
+            if ($this->db->numRows($res) != 1) {
                 $this->errors[] = self::ERROR_USER_NO_USERLOGINDATA . 'error(): ' . $this->db->error();
                 return false;
             }
@@ -331,10 +331,10 @@ class PMF_User
             WHERE
                 login = '%s'",
             SQLPREFIX,
-            $this->db->escape_string($login));
+            $this->db->escapeString($login));
         
     	$res = $this->db->query($select);
-        if ($this->db->num_rows($res) != 1) {
+        if ($this->db->numRows($res) != 1) {
             if ($raise_error) {
                 $this->errors[] = self::ERROR_USER_INCORRECT_LOGIN;
             }
@@ -370,7 +370,7 @@ class PMF_User
             WHERE 
                 login LIKE '%s'",
             SQLPREFIX,
-            $this->db->escape_string($search.'%'));
+            $this->db->escapeString($search.'%'));
 
         $res = $this->db->query($select);
         if (!$res) {
@@ -429,7 +429,7 @@ class PMF_User
             (%d, '%s', %d, '%s')",
             SQLPREFIX,
             $this->getUserId(),
-            $this->db->escape_string($login),
+            $this->db->escapeString($login),
             $_SERVER['REQUEST_TIME'],
             date('YmdHis', $_SERVER['REQUEST_TIME']));
 
@@ -606,7 +606,7 @@ class PMF_User
             WHERE
                 user_id = %d",
             SQLPREFIX,
-            $this->db->escape_string($status),
+            $this->db->escapeString($status),
             $this->user_id);
         
         $res = $this->db->query($update);

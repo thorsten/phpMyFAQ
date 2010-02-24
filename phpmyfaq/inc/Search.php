@@ -154,7 +154,7 @@ class PMF_Search
         }
 
         if ($result) {
-            $num = $this->db->num_rows($result);
+            $num = $this->db->numRows($result);
         }
         
         if ($num == 0) {
@@ -186,7 +186,7 @@ class PMF_Search
             $this->_table,
             $this->db->nextID($this->_table, 'id'),
             $this->language,
-            $this->db->escape_string($searchterm),
+            $this->db->escapeString($searchterm),
             $date->format('Y-m-d H:i:s'));
         
         $this->db->query($query);
@@ -249,6 +249,6 @@ class PMF_Search
     	
     	$result = $this->db->query($sql);
 
-    	return (int) $this->db->fetch_object($result)->count;
+    	return (int) $this->db->fetchObject($result)->count;
     }
 }

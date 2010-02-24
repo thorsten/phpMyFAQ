@@ -110,7 +110,7 @@ class PMF_Comment
             $id);
 
         $result = $this->db->query($query);
-        if (($this->db->num_rows($result) > 0) && ($row = $this->db->fetch_object($result))) {
+        if (($this->db->numRows($result) > 0) && ($row = $this->db->fetchObject($result))) {
             $item = array(
                 'id'       => $row->id_comment,
                 'recordId' => $row->id,
@@ -149,8 +149,8 @@ class PMF_Comment
             $id);
 
         $result = $this->db->query($query);
-        if ($this->db->num_rows($result) > 0) {
-            while ($row = $this->db->fetch_object($result)) {
+        if ($this->db->numRows($result) > 0) {
+            while ($row = $this->db->fetchObject($result)) {
                 $item = array(
                     'id'      => $row->id_comment,
                     'content' => $row->comment,
@@ -274,8 +274,8 @@ class PMF_Comment
             $type);
 
         $result = $this->db->query($query);
-        if ($this->db->num_rows($result) > 0) {
-            while ($row = $this->db->fetch_object($result)) {
+        if ($this->db->numRows($result) > 0) {
+            while ($row = $this->db->fetchObject($result)) {
                 $num[$row->id] = $row->anz;
             }
         }
@@ -316,8 +316,8 @@ class PMF_Comment
             $type);
             
         $result = $this->db->query($query);
-        if ($this->db->num_rows($result) > 0) {
-            while ($row = $this->db->fetch_object($result)) {
+        if ($this->db->numRows($result) > 0) {
+            while ($row = $this->db->fetchObject($result)) {
                 $comments[] = array(
                     'comment_id'  => $row->comment_id,
                     'record_id'   => $row->record_id,

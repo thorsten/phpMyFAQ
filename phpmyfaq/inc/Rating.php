@@ -342,7 +342,7 @@ class PMF_Rating
         }
 
         $result = $this->db->query($query);
-        while ($row = $this->db->fetch_object($result)) {
+        while ($row = $this->db->fetchObject($result)) {
         	$ratings[] = array(
         	   'id'          => $row->id,
         	   'lang'        => $row->lang,

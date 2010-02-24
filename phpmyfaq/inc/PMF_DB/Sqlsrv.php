@@ -120,7 +120,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      * @param  string $string String
      * @return string
      */
-    public function escape_string($string)
+    public function escapeString($string)
     {
     	return str_replace("'", "''", $string);
     }
@@ -131,7 +131,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      * @param  resource $result Resultset
      * @return resource
      */
-    public function fetch_object($result)
+    public function fetchObject($result)
     {
     	return sqlsrv_fetch_object($result);
     }
@@ -160,7 +160,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
             throw new Exception('Error while fetching result: ' . $this->error());
         }
         
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             $ret[] = $row;
         }
         
@@ -173,7 +173,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      * @param  resource $result Resultset
      * @return integer
      */
-    public function num_rows($result)
+    public function numRows($result)
     {
     	
     }
@@ -226,7 +226,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
             ORDER BY obj.name";
         $result = $this->query($query);
 
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             if ('dtproperties' != $row->table_name) {
                 $tables[$row->table_name] = $row->table_rows;
             }

@@ -181,8 +181,8 @@ showListTypeSelection();
                                 );
                     $row = false;
                     $result = $db->query($query);
-                    if ($db->num_rows($result) > 0) {
-                        $row = $db->fetch_object($result);
+                    if ($db->numRows($result) > 0) {
+                        $row = $db->fetchObject($result);
                         $_owner = ($row->owner == $user->getLogin() ? true : false);
                         // check if chown ?
                         if ((!$_owner) && ($posts['chown'] == 'y') && ($_admin || ($posts['locked'] == 'n'))) {
@@ -299,7 +299,7 @@ showListTypeSelection();
         $icurrent = 0;
         $istart = ($params['page'] - 1) * $entriesPerPage;
         $iend = $istart + $entriesPerPage;
-        while ($row = $db->fetch_object($result) && $iend >= $icurrent && $istart <= $icurrent++) {
+        while ($row = $db->fetchObject($result) && $iend >= $icurrent && $istart <= $icurrent++) {
             $_owner = ($row->owner == $user->getLogin() ? true : false);
     ?>
     <tr>

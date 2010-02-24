@@ -45,7 +45,7 @@ $inputCategory = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 $question = $readonly = '';
 if (!is_null($inputQuestion)) {
     $faqQuestions = new PMF_Faq_Questions();
-    $question    = $faqQuestions->fetch($inputQuestion);
+    $question     = $faqQuestions->fetch($inputQuestion);
     if (PMF_String::strlen($question->question)) {
         $readonly = ' readonly="readonly"';
     }
@@ -67,7 +67,7 @@ $tpl->processTemplate(
         'printCategoryOptions'  => $categoryLayout->renderOptions(array($inputCategory)),
         'msgNewContentTheme'    => $PMF_LANG['msgNewContentTheme'],
         'readonly'              => $readonly,
-        'printQuestion'         => $question->question,
+        'printQuestion'         => ($question instanceof PMF_Faq_Questions ? $question->question : ''),
         'msgNewContentArticle'  => $PMF_LANG['msgNewContentArticle'],
         'msgNewContentKeywords' => $PMF_LANG['msgNewContentKeywords'],
         'msgNewContentLink'     => $PMF_LANG['msgNewContentLink'],

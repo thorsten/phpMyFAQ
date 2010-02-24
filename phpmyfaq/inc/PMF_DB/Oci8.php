@@ -105,7 +105,7 @@ class PMF_DB_Oci8 implements PMF_DB_Driver
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-09-20
      */
-    public function escape_string($string)
+    public function escapeString($string)
     {
         return addslashes($string);
     }
@@ -119,7 +119,7 @@ class PMF_DB_Oci8 implements PMF_DB_Driver
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-09-20
      */
-    public function fetch_object($result)
+    public function fetchObject($result)
     {
         return oci_fetch_object($result);
     }
@@ -151,7 +151,7 @@ class PMF_DB_Oci8 implements PMF_DB_Driver
             throw new Exception('Error while fetching result: ' . $this->error());
         }
         
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             $ret[] = $row;
         }
         
@@ -181,7 +181,7 @@ class PMF_DB_Oci8 implements PMF_DB_Driver
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-09-20
      */
-    public function num_rows($result)
+    public function numRows($result)
     {
         return oci_num_rows($result);
     }
@@ -351,7 +351,7 @@ class PMF_DB_Oci8 implements PMF_DB_Driver
         $this->tableNames[] = $prefix.'faquser';
 
         $result = $this->query('SELECT table_name FROM all_tables');
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             $this->tableNames[] = $row->table_name;
         }
     }

@@ -80,7 +80,7 @@ class PMF_Faq_Changelog extends PMF_Faq_Abstract implements PMF_Faq_Interface
             $data['revision_id'],
             $data['user_id'],
             $data['date'],
-            $this->db->escape_string($data['changelog']));
+            $this->db->escapeString($data['changelog']));
         
         $result = $this->db->query($query);
         
