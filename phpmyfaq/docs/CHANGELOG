@@ -15,6 +15,7 @@ Version 2.6.3 - 2010-03-
 - fixed various mail issues (Thorsten)
 - improved links rewriting (Guillaume Le Maout)
 - improved sitemap for Chinese, Japanese and Korean content (Thorsten)
+- improved meta keyword handling
 - updated Portuguese translation (Fernando G. Monteiro)
 - updated French translation
 - fixed minor bugs (Thorsten)
