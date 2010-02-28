@@ -261,7 +261,7 @@ $oTag = new PMF_Tags();
 $id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 if (!is_null($id)) {
     $title           = ' - ' . $faq->getRecordTitle($id);
-    $keywords        = ' ' . $faq->getRecordKeywords($id);
+    $keywords        = ',' . $faq->getRecordKeywords($id);
     $metaDescription = $faq->getRecordPreview($id);
 } else {
     $id              = '';
@@ -282,7 +282,7 @@ if (!is_null($solution_id)) {
         $id              = $faqData['id'];
         $lang            = $faqData['lang'];
         $title           = ' - ' . $faq->getRecordTitle($id);
-        $keywords        = ' ' . $faq->getRecordKeywords($id);
+        $keywords        = ',' . $faq->getRecordKeywords($id);
         $metaDescription = PMF_Utils::makeShorterText($faqData['content'], 12);
     }
 } 
@@ -387,6 +387,12 @@ $systemUri      = PMF_Link::getSystemUri('index.php');
 $helper = PMF_Helper_Category::getInstance();
 $helper->setCategory($category);
 
+
+$keywordsArray = array_merge(explode(',', $keywords), explode(',', $faqconfig->get('main.metaKeywords')));
+$keywordsArray = array_filter($keywordsArray, 'strlen');
+shuffle($keywordsArray);
+$keywords = implode(',', $keywordsArray);
+
 $main_template_vars = array(
     'title'               => $faqconfig->get('main.titleFAQ').$title,
     'baseHref'            => $systemUri,
@@ -394,7 +400,7 @@ $main_template_vars = array(
     'header'              => str_replace('"', '', $faqconfig->get('main.titleFAQ')),
     'metaTitle'           => str_replace('"', '', $faqconfig->get('main.titleFAQ')),
     'metaDescription'     => $metaDescription,
-    'metaKeywords'        => $faqconfig->get('main.metaKeywords').$keywords,
+    'metaKeywords'        => $keywords,
     'metaPublisher'       => $faqconfig->get('main.metaPublisher'),
     'metaLanguage'        => $PMF_LANG['metaLanguage'],
     'metaCharset'         => 'utf-8', // backwards compability
