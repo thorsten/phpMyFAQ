@@ -1,13 +1,8 @@
 <?php
 /**
  * Attachment migration handler
- *
- * @package    phpMyFAQ
- * @license    MPL
- * @author     Anatoliy Belsky <ab@php.net>
- * @since      2009-09-13
- * @version    SVN: $Id: Migration.php 4885 2009-09-06 20:56:12Z anatoliy $
- * @copyright  2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,17 +13,26 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Attachment
+ * @author    Anatoliy Belsky <ab@php.net>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-09-13
  */
 
 /**
- * PMF_Atachment_Migration
+ * PMF_Attachment_Migration
  * 
- * @package    phpMyFAQ
- * @license    MPL
- * @author     Anatoliy Belsky <ab@php.net>
- * @since      2009-09-13
- * @version    SVN: $Id: Migration.php 4885 2009-09-06 20:56:12Z anatoliy $
- * @copyright  2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   PMF_Attachment
+ * @author    Anatoliy Belsky <ab@php.net>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-09-13
  */
 class PMF_Attachment_Migration
 {
@@ -69,7 +73,13 @@ class PMF_Attachment_Migration
      */
     protected $warning = array();
     
-    
+    /**
+     * Returns the old files
+     * 
+     * @param string $dir Directory
+     * 
+     * @return array
+     */
     protected function getOldFileList($dir)
     {
         $list = array();
@@ -79,14 +89,14 @@ class PMF_Attachment_Migration
         $records = $faq->faqRecords;
         
         reset($records);
-        while(list(,$record) = each($records)) {
+        while (list(,$record) = each($records)) {
             
             $recordDir = "$dir/$record[id]";
-            if(file_exists($recordDir) && is_dir($recordDir)) {
+            if (file_exists($recordDir) && is_dir($recordDir)) {
                 
                 $list[$record['id']]['files'] = array();
-                foreach(new DirectoryIterator($recordDir) as $entry) {
-                    if(!$entry->isDot() && $entry->isFile()) {
+                foreach (new DirectoryIterator($recordDir) as $entry) {
+                    if (!$entry->isDot() && $entry->isFile()) {
                         $list[$record['id']]['files'][] = "$recordDir/{$entry->getFilename()}";
                     }
                 }
@@ -101,26 +111,26 @@ class PMF_Attachment_Migration
     /**
      * Quite simple migration from versions <2.6 
      * 
-     * @return null
+     * @return void
      */
     protected function migrateFromOldFormatToFs()
     {
         $list = $this->getOldFileList(PMF_ATTACHMENTS_DIR);
     
-        foreach($list as $recordId => $item) {
+        foreach ($list as $recordId => $item) {
             $recordLang = $item['lang'];
-            foreach($item['files'] as $file) {
+            foreach ($item['files'] as $file) {
                 $att = PMF_Attachment_Factory::create();
                 $att->setRecordId($recordId);
                 $att->setRecordLang($recordLang);
                 
-                if(!$att->save($file)) {
+                if (!$att->save($file)) {
                     $this->error[] = "File $file couldn't be migrated";
                 }
             }
             
             $recordDir = PMF_ATTACHMENTS_DIR . "/$recordId";
-            if(!@rmdir(PMF_ATTACHMENTS_DIR . "/$file")) {
+            if (!@rmdir(PMF_ATTACHMENTS_DIR . "/$file")) {
                 $this->warning[] = "Couldn't remove dir $recordDir after migration";
             }
         }
@@ -136,15 +146,13 @@ class PMF_Attachment_Migration
      */
     public function doMigrate($migrationType, $options)
     {
-        switch($migrationType) {
+        switch ($migrationType) {
             case PMF_Attachment_Migration::MIGRATION_TYPE1:
                 
                 PMF_Attachment_Factory::init(PMF_Attachment::STORAGE_TYPE_FILESYSTEM,
                                              '',
                                              false);
                 $this->migrateFromOldFormatToFs();
-                // FIXME should attachment settings update be triggered here?
-                
                 break;
               
             case PMF_Attachment_Migration::MIGRATION_TYPE2:
@@ -162,12 +170,10 @@ class PMF_Attachment_Migration
                 break;
                 
             case PMF_Attachment_Migration::MIGRATION_TYPE3:
-                // TODO implement this
                 $this->error[] = 'not implemented';
                 break;
                 
             case PMF_Attachment_Migration::MIGRATION_TYPE4:
-                //TODO implenemt this
                 $this->error[] = 'not implemented';
                 break;
                 
