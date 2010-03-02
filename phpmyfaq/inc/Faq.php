@@ -2128,7 +2128,6 @@ class PMF_Faq
         return $output;
     }
 
-    
     /**
      * Setter for the language
      * 
