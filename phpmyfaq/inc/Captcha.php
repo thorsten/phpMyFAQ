@@ -36,15 +36,8 @@
  * @copyright  2006-2008 phpMyFAQ Team
  * @version    SVN: $Id$
  */
-class PMF_Captcha
+class PMF_Captcha extends PMF_Model
 {
-    /**
-     * The database handle
-     *
-     * @var PMF_DB_Driver
-     */
-    private $db;
-
     /**
      * The phpMyFAQ session id
      *
@@ -116,13 +109,6 @@ class PMF_Captcha
     private $img;
 
     /**
-     * The user agent language
-     *
-     * @var string
-     */
-    private $language;
-
-    /**
      * The user agent string
      *
      * @var string
@@ -145,8 +131,9 @@ class PMF_Captcha
      */
     public function __construct($sids, $caplength = 6)
     {
-        $this->db        = PMF_Db::getInstance();
-        $this->language  = PMF_Language::$language;
+        parent::__construct();
+        
+        $this->setLanguage(PMF_Language::$language);
         if ($sids > 0) {
             $this->sids  = $sids;
         } else {
