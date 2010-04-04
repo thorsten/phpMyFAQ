@@ -283,7 +283,7 @@ if (!is_null($solution_id)) {
         $lang            = $faqData['lang'];
         $title           = ' - ' . $faq->getRecordTitle($id);
         $keywords        = ',' . $faq->getRecordKeywords($id);
-        $metaDescription = PMF_Utils::makeShorterText($faqData['content'], 12);
+        $metaDescription = PMF_Utils::makeShorterText(strip_tags($faqData['content']), 12);
     }
 } 
 
@@ -463,7 +463,7 @@ if ($faqconfig->get('main.enableRewriteRules')) {
         "allCategories"       => '<a href="' . $systemUri . 'showcat.html">'.$PMF_LANG["msgShowAllCategories"].'</a>',
         'showInstantResponse' => '<a href="' . $systemUri . 'instantresponse.html">'.$PMF_LANG['msgInstantResponse'].'</a>',
         'showSitemap'         => '<a href="' . $systemUri . 'sitemap/A/'.$LANGCODE.'.html">'.$PMF_LANG['msgSitemap'].'</a>',
-        'opensearch'          => $systemUri . 'search.html');
+        'opensearch'          => $systemUri . 'opensearch.html');
 } else {
     $links_template_vars = array(
         "faqHome"             => $faqconfig->get('main.referenceURL'),
@@ -477,7 +477,7 @@ if ($faqconfig->get('main.enableRewriteRules')) {
         "backToHome"          => '<a href="index.php?'.$sids.'">'.$PMF_LANG["msgHome"].'</a>',
         'showInstantResponse' => '<a href="index.php?'.$sids.'action=instantresponse">'.$PMF_LANG['msgInstantResponse'].'</a>',
         'showSitemap'         => '<a href="index.php?'.$sids.'action=sitemap&amp;lang='.$LANGCODE.'">'.$PMF_LANG['msgSitemap'].'</a>',
-        'opensearch'          => '?'.$sids.'action=search');
+        'opensearch'          => $systemUri . 'opensearch.php');
 }
 
 //

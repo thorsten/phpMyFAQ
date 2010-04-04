@@ -1,3 +1,44 @@
+CHANGED FILES FROM 2.6.2 -> 2.6.3
+
+./admin/ajax.comment.php
+./admin/ajax.user.php
+./admin/editor/plugins/ajaxfilemanager/ajax_get_file_listing.php
+./admin/editor/plugins/ajaxfilemanager/inc/class.auth.php
+./admin/password.php
+./admin/record.comments.php
+./admin/record.edit.php
+./admin/record.show.php
+./admin/user.php
+./inc/Faq.php
+./inc/Link.php
+./inc/Linkverifier.php
+./inc/Mail.php
+./inc/Session.php
+./inc/Sitemap.php
+./inc/User.php
+./index.php
+./install/attachment.php
+./install/ibase.sql.php
+./install/ibm_db2.sql.php
+./install/mysql.sql.php
+./install/mysqli.sql.php
+./install/oci8.sql.php
+./install/setup.php
+./install/sqlite.sql.php
+./install/sybase.sql.php
+./install/update.php
+./lang/language_fr.php
+./lang/language_pt.php
+./api.php
+./artikel.php
+./register.php
+./save.php
+./savecomment.php
+./savequestion.php
+./sendmail.php
+
+
+
 CHANGED FILES FROM 2.6.1 -> 2.6.2
 
 ./admin/configuration.php

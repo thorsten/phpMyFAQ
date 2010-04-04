@@ -39,7 +39,7 @@ $question = PMF_Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRI
 $code     = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
 
 // If e-mail address is set to optional
-if (!PMF_Configuration::getInstance()->get('main.optionalMailAddress') && is_null($usermail)) {
+if (!PMF_Configuration::getInstance()->get('main.optionalMailAddress') && is_null($email)) {
     $email = PMF_Configuration::getInstance()->get('main.administrationMail');
 }
 

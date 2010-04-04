@@ -11,7 +11,10 @@ Version 2.7.0-alpha - 2010-04-
 - added new administration layout (Thorsten)
 - upgraded jQuery to version 1.4.1 (Thorsten)
 
-Version 2.6.3 - 2010-03-
+Version 2.6.4 - 2010-04-
+- fixed minor bugs (Thorsten)
+
+Version 2.6.3 - 2010-03-03
 - fixed various mail issues (Thorsten)
 - improved links rewriting (Guillaume Le Maout)
 - improved sitemap for Chinese, Japanese and Korean content (Thorsten)
