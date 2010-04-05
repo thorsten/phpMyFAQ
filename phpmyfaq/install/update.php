@@ -171,9 +171,9 @@ if ($step == 2) {
 
     $notWritableFiles = array();
     foreach (new DirectoryIterator($templateDir) as $item) {
-    	if ($item->isFile() && !$item->isWritable()) {
-    		$notWritableFiles[] = "$templateDir/{$item->getFilename()}";
-    	}
+        if ($item->isFile() && !$item->isWritable()) {
+            $notWritableFiles[] = "$templateDir/{$item->getFilename()}";
+        }
     }
 	if (version_compare($version, '2.6.0-alpha', '<') && (!is_writeable($templateDir) || !empty($notWritableFiles))) {
 	    if (!is_writeable($templateDir)) {
