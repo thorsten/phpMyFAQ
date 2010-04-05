@@ -97,9 +97,9 @@ class PMF_Tags
             SQLPREFIX,
             (isset($search) && ($search != '') ? "WHERE tagging_name ".$like." '".$search."%'" : '')
             );
-
+        
         $result = $this->db->query($query);
-
+        
         if ($result) {
            while ($row = $this->db->fetchObject($result)) {
               $allTags[$row->tagging_id] = $row->tagging_name;
@@ -109,22 +109,16 @@ class PMF_Tags
         $numberOfItems = $limit ? PMF_TAGS_CLOUD_RESULT_SET_SIZE : $this->db->numRows($result);
 
         if (isset($allTags) && ($numberOfItems < count($allTags))) {
-        	$keys = array_keys($allTags);
-        	for ($n = 0; $n < $numberOfItems; $n++) {
-                $valid = false;
-                while (!$valid) {
-                    $rand = array_rand($keys);
-                    if (isset($allTags[$rand])) {
-                        $valid       = true;
-                        $tags[$rand] = $allTags[$rand];
-                        unset($keys[$rand]);
-                    }
-                }
+            $keys = array_keys($allTags);
+            shuffle($keys);
+            foreach ($keys as $current_key) {
+                $tags[$current_key] = $allTags[$current_key];
             }
+            $tags = array_slice($tags, 0, $numberOfItems);
         } else {
             $tags = PMF_Utils::shuffleData($allTags);
         }
-
+        
         return $tags;
     }
 

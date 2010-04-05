@@ -324,24 +324,23 @@ if ($permission['editbt'] || $permission['delbt']) {
     /**
      * Saves the sticky record status for the whole category
      *
-     * @param integer id id
-     * @param string type status type
+     * @param integer id   id
+     * @param string  type status type
      * 
      * @return void
      */
     function saveStatusForCategory(id, type)
     {
-    	var id_map = [];
+        var id_map = [];
 <?php 
-foreach($all_ids as $cat_id => $record_ids) {
-    echo "        id_map[$cat_id] = [" . implode(',', $record_ids) . "];\n";
+foreach ($all_ids as $cat_id => $record_ids) {
+    echo "        id_map[" . $cat_id . "] = [" . implode(',', $record_ids) . "];\n";
 }
 ?>
-
-        for(var i = 0; i < id_map[id].length; i++) {
+        for (var i = 0; i < id_map[id].length; i++) {
             var status = $('#' + type + '_category_block_' + id).attr('checked'); 
             
-        	$('#' + type + '_record_' + id + '_' + id_map[id][i]).attr('checked', status);
+            $('#' + type + '_record_' + id + '_' + id_map[id][i]).attr('checked', status);
         }
 
         saveStatus(id, id_map[id], type);
@@ -350,9 +349,10 @@ foreach($all_ids as $cat_id => $record_ids) {
     /**
      * Ajax call for saving the sticky record status
      *
-     * @param integer cid category id
-     * @param integer ids ids
-     * @param string type status type
+     * @param integer cid  category id
+     * @param integer ids  ids
+     * @param string  type status type
+     *
      * @return void
      */
     function saveStatus(cid, ids, type)
@@ -367,23 +367,22 @@ foreach($all_ids as $cat_id => $record_ids) {
             data['items[' + i + '][]'] = [ids[i], lang, status*1];
 
             // Updating the current record if it's also contained in another category
-            var same_records = $('input').filter(function(){
+            var same_records = $('input').filter(function() {
                 return this.id.match(new RegExp(type + '_record_(\\d+)_' + ids[i]));
             });
 
-            if('active' == type) {
-                for (var j = 0; j<same_records.length; j++) {
+            if ('active' == type) {
+                for (var j = 0; j < same_records.length; j++) {
                     $('#' + same_records[j].id).attr('checked', status);
                     
-                    var catid = same_records[j].id.match(/active_record_(\d+)_\d+/)[1];
+                    var catid              = same_records[j].id.match(/active_record_(\d+)_\d+/)[1];
                     var current_item_count = $('#category_' + catid + '_item_count').html();
-    
-                    var delta = status ? 1 : -1;
-    
-                    $('#category_' + catid + '_item_count').html(current_item_count*1 + delta);
+                    var delta              = status ? 1 : -1;
+                    
+                    $('#category_' + catid + '_item_count').html(current_item_count * 1 + delta);
                 }
             } else {
-                for (var j = 0; j<same_records.length; j++) {
+                for (var j = 0; j < same_records.length; j++) {
                     $('#' + same_records[j].id).attr('checked', status);
                 }
             }
