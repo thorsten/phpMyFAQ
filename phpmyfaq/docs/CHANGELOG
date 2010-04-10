@@ -12,6 +12,7 @@ Version 2.7.0-alpha - 2010-04-
 - upgraded jQuery to version 1.4.1 (Thorsten)
 
 Version 2.6.4 - 2010-04-
+- improved FAQ record administration frontend (Thorsten)
 - updated Romanian translation
 - updated Swedish translation
 - fixed minor bugs (Thorsten)

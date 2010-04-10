@@ -43,8 +43,8 @@ if ($permission['editbt'] || $permission['delbt']) {
     if ($linkverifier->isReady()) {
         link_verifier_javascript();
     }
-    
-    $cond           = $numCommentsByFaq = array();
+
+    $cond           = $numCommentsByFaq = $numActiveByCat = array();
     $internalSearch = $linkState = $searchterm = '';
     $searchcat      = $currentcategory = 0;
     $orderby        = 1;
@@ -140,6 +140,13 @@ if ($permission['editbt'] || $permission['delbt']) {
         $faq->getAllRecords($orderby, null, $sortby);
         $laction        = 'view';
         $internalSearch = '';
+        
+        foreach ($faq->faqRecords as $record) {
+            if (!isset($numActiveByCat[$record['category_id']])) {
+                $numActiveByCat[$record['category_id']] = 0;
+            }
+            $numActiveByCat[$record['category_id']] += $record['active'] == 'yes' ? 1 : 0;
+        }
 
     } elseif ($action == "view" && !is_null($searchterm)) {
         // Search for:
@@ -205,6 +212,8 @@ if ($permission['editbt'] || $permission['delbt']) {
                 'title'       => $row->thema,
                 'content'     => $row->content,
                 'date'        => PMF_Date::createIsoDate($row->date));
+            
+            $numActiveByCat[$row->category_id] += $row->active ? 1 : 0;
         }
 
     }
@@ -226,9 +235,14 @@ if ($permission['editbt'] || $permission['delbt']) {
                     $catInfo        .= ' (';
                     $isBracketOpened = true;
                 }
-                $catInfo  .= sprintf('<span id="category_%d_item_count">%d</span> %s', $cid, $numRecordsByCat[$cid], $PMF_LANG['msgEntries']);
+                $catInfo .= sprintf('<span id="category_%d_item_count">%d</span> %s', $cid, $numRecordsByCat[$cid], $PMF_LANG['msgEntries']);
+            }
+            
+            if ($numRecordsByCat[$cid] > $numActiveByCat[$cid]) {
+                $catInfo  .= sprintf(', %d %s', $numActiveByCat[$cid], $PMF_LANG['ad_record_active']);
                 $needComma = true;
             }
+            
             if (isset($numCommentsByCat[$cid]) && ($numCommentsByCat[$cid] > 0)) {
                 if (!$isBracketOpened) {
                     $catInfo        .= ' (';
@@ -300,7 +314,7 @@ if ($permission['editbt'] || $permission['delbt']) {
             <img src="images/copy.png" alt="<?php print $PMF_LANG['ad_categ_copy']; ?>" title="<?php print $PMF_LANG['ad_categ_copy']; ?>" />
             </a>
         </td>
-        <td class="list" style="width: 56px;">
+        <td class="list">
             <?php if ($permission['approverec']) { ?>
             <input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'active');" id="active_record_<?php print $cid . '_' . $record['id'] ?>" <?php 'yes' == $record['active'] ? print 'checked="checked"' : print '    ' ?> />
             <?php } ?>
