@@ -509,7 +509,7 @@ $PMF_LANG["msgPageDoublePoint"] = "Page: ";
 $PMF_LANG["msgMainCategory"] = "Main category";
 
 // Added v1.2.4 - 30.01.2003 - Thorsten
-$PMF_LANG["ad_passwdsuc"] = "Your password have changed.";
+$PMF_LANG["ad_passwdsuc"] = "Your password has been changed.";
 
 // Added v1.3.0 - 04.03.2003 - Thorsten
 $PMF_LANG["msgPDF"] = "Show this as PDF file";

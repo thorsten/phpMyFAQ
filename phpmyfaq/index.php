@@ -297,6 +297,15 @@ if (!is_null($tag_id)) {
 }
 
 //
+// Handle the SiteMap
+//
+$letter = PMF_Filter::filterInput(INPUT_GET, 'letter', FILTER_SANITIZE_STRIPPED);
+if (!is_null($letter) && (1 == PMF_String::strlen($letter))) {
+    $title    = ' - ' . $letter . '...';
+    $keywords = $letter;
+}
+
+//
 // Found a category ID?
 //
 $cat          = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
