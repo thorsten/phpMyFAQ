@@ -163,7 +163,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
             throw new Exception('Error while fetching result: ' . $this->error());
         }
         
-        while ($row = $this->fetchObject($result)) {
+        while ($row = $this->fetch_object($result)) {
             $ret[] = $row;
         }
         
