@@ -6,6 +6,7 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.6.4 - 2010-04-
+- added experimental support for Microsoft SQL Server Driver for PHP (Thorsten)
 - improved FAQ record administration frontend (Thorsten)
 - improved Sitemap titles (Thorsten)
 - updated Romanian translation
