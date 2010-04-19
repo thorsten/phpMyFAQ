@@ -6,7 +6,7 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.6.5 - 2010-05-
--
+- updated Polish translation
 
 Version 2.6.4 - 2010-04-18
 - added experimental support for Microsoft SQL Server Driver for PHP (Thorsten)
