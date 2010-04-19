@@ -11,9 +11,14 @@ Version 2.7.0-alpha - 2010-04-
 - added new administration layout (Thorsten)
 - upgraded jQuery to version 1.4.1 (Thorsten)
 
-Version 2.6.4 - 2010-04-
+Version 2.6.5 - 2010-05-
+-
+
+Version 2.6.4 - 2010-04-18
+- added experimental support for Microsoft SQL Server Driver for PHP (Thorsten)
 - improved FAQ record administration frontend (Thorsten)
 - improved Sitemap titles (Thorsten)
+- updated German translation (Thorsten)
 - updated Romanian translation
 - updated Swedish translation
 - fixed minor bugs (Thorsten)

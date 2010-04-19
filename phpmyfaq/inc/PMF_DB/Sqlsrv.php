@@ -1,15 +1,8 @@
 <?php
 /**
- * The PMF_DB_Sqlsrv class provides methods and functions for SQL Server 2005
- * Driver for PHP from Microsoft
- * databases.
- *
- * @package    phpMyFAQ
- * @subpackage PMF_DB
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2009-02-18
- * @copyright  2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * The PMF_DB_Sqlsrv class provides methods and functions for SQL Server Driver for PHP from Microsoft.
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,17 +13,26 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Db
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-02-18
  */
 
 /**
  * PMF_DB_Sqlsrv
  *
- * @package    phpMyFAQ
- * @subpackage PMF_DB
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2009-02-18
- * @copyright  2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * @category  phpMyFAQ
+ * @package   PMF_Db
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-02-18
  */
 class PMF_DB_Sqlsrv implements PMF_DB_Driver 
 {
@@ -76,8 +78,8 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      */
     public function connect($host, $user, $passwd, $database)
     {
-    	$this->setConnectionOptions($user, $passwd, $database);
-    	
+        $this->setConnectionOptions($user, $passwd, $database);
+        
         $this->conn = sqlsrv_connect($host, $this->connectionOptions);
         if (!$this->conn) {
             PMF_Db::errorPage(sqlsrv_errors());
@@ -97,10 +99,11 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      */
     private function setConnectionOptions($user, $passwd, $database)
     {
-    	$this->connectionOptions = array(
-    	   'UID'      => $user,
-    	   'PWD'      => $passwd,
-    	   'Database' => $database);
+        $this->connectionOptions = array(
+           'UID'          => $user,
+           'PWD'          => $passwd,
+           'Database'     => $database,
+           'CharacterSet' => 'UTF-8');
     }
     
     /**
@@ -111,7 +114,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      */
     public function query($query)
     {
-    	return sqlsrv_query($this->conn, $query);
+        return sqlsrv_query($this->conn, $query);
     }
 
     /**
@@ -122,7 +125,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      */
     public function escapeString($string)
     {
-    	return str_replace("'", "''", $string);
+        return str_replace("'", "''", $string);
     }
 
     /**
@@ -133,7 +136,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      */
     public function fetchObject($result)
     {
-    	return sqlsrv_fetch_object($result);
+        return sqlsrv_fetch_object($result);
     }
 
     /**
@@ -144,7 +147,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      */
     public function fetch_assoc($result)
     {
-    	return sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+        return sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
     }
 
     /**
@@ -175,7 +178,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      */
     public function numRows($result)
     {
-    	
+        return sqlsrv_num_rows($this->conn);
     }
 
     /**
@@ -202,7 +205,79 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      */
     public function search($table, Array $assoc, $joinedTable = '', Array $joinAssoc = array(), $match = array(), $string = '', Array $cond = array(), Array $orderBy = array())
     {
-    	
+        $string = trim($string);
+        $fields = '';
+        $join   = '';
+        $joined = '';
+        $where  = '';
+
+        foreach ($assoc as $field) {
+            if (empty($fields)) {
+                $fields = $field;
+            } else {
+                $fields .= ", ".$field;
+            }
+        }
+
+        if (isset($joinedTable) && $joinedTable != '') {
+            $joined .= ' LEFT JOIN '.$joinedTable.' ON ';
+        }
+
+        if (is_array($joinAssoc)) {
+            foreach ($joinAssoc as $joinedFields) {
+                $join .= $joinedFields.' AND ';
+                }
+            $joined .= PMF_String::substr($join, 0, -4);
+        }
+
+        $keys     = PMF_String::preg_split("/\s+/", $string);
+        $numKeys  = count($keys);
+        $numMatch = count($match);
+
+        for ($i = 0; $i < $numKeys; $i++) {
+            if (strlen($where) != 0 ) {
+                $where = $where." OR";
+            }
+            $where = $where." (";
+            for ($j = 0; $j < $numMatch; $j++) {
+                if ($j != 0) {
+                    $where = $where." OR ";
+                }
+                $where = $where.$match[$j]." LIKE '%".$keys[$i]."%'";
+            }
+
+            $where .= ")";
+        }
+
+        foreach ($cond as $field => $data) {
+            if (empty($where)) {
+                $where .= $field." = ".$data;
+            } else {
+                $where .= " AND ".$field." = ".$data;
+            }
+        }
+
+        $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE";
+
+        if (!empty($where)) {
+            $query .= " (".$where.")";
+        }
+
+        if (is_numeric($string)) {
+            $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE ".$match." = ".$string;
+        }
+
+        $firstOrderBy = true;
+        foreach ($orderBy as $field) {
+            if ($firstOrderBy) {
+                $query .= " ORDER BY ".$field;
+                $firstOrderBy = false;
+            } else {
+                $query .= ", ".$field;
+            }
+        }
+
+        return $this->query($query);
     }
 
     /**
@@ -244,14 +319,14 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      */
     public function nextID($table, $id)
     {
-    	$select = sprintf("
-    	   SELECT 
-    	       max(%d) as current_id 
-    	   FROM 
-    	       %s",
-    	   $id,
-    	   $table);
-    	
+        $select = sprintf("
+           SELECT 
+               max(%d) as current_id 
+           FROM 
+               %s",
+           $id,
+           $table);
+        
         $result = $this->query($select);
         $stmt   = sqlsrv_fetch($result);
         return (sqlsrv_get_field($stmt, 0) + 1);
@@ -266,8 +341,8 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      */
     public function error()
     {
-    	$errors = sqlsrv_errors();
-    	return $errors['SQLSTATE'] . ': ' . $errors['message'];
+        $errors = sqlsrv_errors();
+        return $errors['SQLSTATE'] . ': ' . $errors['message'];
     }
 
     /**
@@ -277,8 +352,8 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      */
     public function client_version()
     {
-    	$client_info = sqlsrv_client_info($this->conn);
-    	return $client_info['DriverODBCVer'] . ' ' . $client_info['DriverVer'];
+        $client_info = sqlsrv_client_info($this->conn);
+        return $client_info['DriverODBCVer'] . ' ' . $client_info['DriverVer'];
     }
 
     /**
@@ -288,8 +363,8 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      */
     public function server_version()
     {
-    	$server_info = sqlsrv_server_info($this->conn);
-    	return $server_info['SQLServerVersion'];
+        $server_info = sqlsrv_server_info($this->conn);
+        return $server_info['SQLServerVersion'];
     }
 
     /**
@@ -299,7 +374,17 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      */
     public function getTableNames($prefix = '')
     {
-    	
+        // First, declare those tables that are referenced by others
+        $this->tableNames[] = $prefix.'faquser';
+
+        $result = $this->query('SELECT name FROM sysobjects WHERE type = \'u\''.(('' == $prefix) ? '' : ' AND name LIKE \''.$prefix.'%\' ORDER BY name'));
+        while ($row = $this->fetch_object($result)) {
+            foreach ($row as $tableName) {
+                if (!in_array($tableName, $this->tableNames)) {
+                    $this->tableNames[] = $tableName;
+                }
+            }
+        }
     }
 
     /**
@@ -309,6 +394,6 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      */
     public function dbclose()
     {
-    	sqlsrv_close($this->conn);
+        sqlsrv_close($this->conn);
     }
 }

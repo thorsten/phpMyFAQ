@@ -31,7 +31,7 @@ define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ
 define('SAFEMODE', @ini_get('safe_mode'));
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
-if (SAFEMODE) {
+if (!SAFEMODE) {
     set_time_limit(0);
 }
 
@@ -621,7 +621,7 @@ if ($step == 4) {
 
     print '<p class="center">The database was updated successfully.</p>';
     print '<p class="center"><a href="../index.php">phpMyFAQ</a></p>';
-    foreach (glob(PMF_ROOT_DIR.'/inc/*.bak.php') as $filename) {
+    foreach (glob(PMF_ROOT_DIR.'/config/*.bak.php') as $filename) {
         if (!@unlink($filename)) {
             print "<p class=\"center\">Please manually remove the backup file '".$filename."'.</p>\n";
         }
