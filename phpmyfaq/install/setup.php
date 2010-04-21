@@ -43,7 +43,6 @@ if (SAFEMODE) {
 require PMF_ROOT_DIR . '/config/constants.php';
 require PMF_ROOT_DIR . '/inc/autoLoader.php';
 require PMF_ROOT_DIR . '/inc/functions.php';
-require PMF_ROOT_DIR . '/install/questionnaire.php';
 
 //
 // Initalizing static string wrapper
@@ -58,6 +57,7 @@ $permLevels = array(
     'medium' => 'Medium (with group support)');
 
 $enabledExtensions = array(
+    'dom',
     'gd',
     'json',
     'xmlwriter',

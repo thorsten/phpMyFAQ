@@ -530,9 +530,17 @@ if ($step == 4) {
     // UPDATES FROM 2.6.0-RC
     //
     if (version_compare($version, '2.6.0-RC', '<')) {
-    	
-    	$query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.optionalMailAddress', 'false')";
+        
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.optionalMailAddress', 'false')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.useAjaxSearchOnStartpage', 'false')";
+    }
+    
+    //
+    // UPDATES FROM 2.7.0-alpha
+    //
+    if (version_compare($version, '2.7.0-alpha', '<')) {
+        
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.useAjaxMenu', 'false')";
     }
     
     // Perform the queries for updating/migrating the database from 2.x

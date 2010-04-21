@@ -9,6 +9,7 @@ Version 2.7.0-alpha - 2010-04-
 - added rewritten and enhanced category implementation (Johannes Schlüter, Thorsten)
 - added 960 Grid System CSS Framework (Thorsten)
 - added new administration layout (Thorsten)
+- added Ajax powered frontend (Guillaume Le Maout)
 - upgraded jQuery to version 1.4.1 (Thorsten)
 
 Version 2.6.5 - 2010-05-

@@ -367,7 +367,12 @@ if ($action != 'main') {
         $inc_tpl = 'main.tpl';
         $inc_php = 'main.php';
     }
-    $writeLangAdress = '?'.(int)$sids;
+	if($faqconfig->get('main.useAjaxMenu')) {
+		$writeLangAdress = "?";
+	}
+	else {
+		$writeLangAdress = '?'.(int)$sids;
+	}
 }
 
 //
@@ -398,15 +403,86 @@ $tpl = new PMF_Template(array('index'        => 'index.tpl',
                               'writeContent' => $inc_tpl),
                               $faqconfig->get('main.templateSet'));
 
+$tpl->ajax_active = $faqconfig->get('main.useAjaxMenu');
+
+if ($tpl->ajax_active) {
+    switch ($_SERVER['REQUEST_METHOD']) {
+        case "GET": 
+            $tpl->ajax_request = PMF_Filter::filterInput(INPUT_GET, 'ajax', FILTER_SANITIZE_STRING);
+            break;
+        case "POST": 
+            $tpl->ajax_request = PMF_Filter::filterInput(INPUT_POST, 'ajax', FILTER_SANITIZE_STRING);
+            break;
+    }
+
+    if ($tpl->ajax_request&&$tpl->ajax_request!='ajax_init'){
+        // If it's not the ajax initialization, set the request
+        switch($_SERVER['REQUEST_METHOD']) {
+            case "GET": 
+                $true_request = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+                break;
+            case "POST": 
+                $true_request = PMF_Filter::filterInput(INPUT_POST, 'action', FILTER_SANITIZE_STRING);
+                break;
+        }
+        
+        //If it's a login or logout request, reload only the login box
+        if ($true_request=="login" || $true_request=="logout") {
+            $tpl->ajax_request=$true_request;
+        } else {
+            $tpl->ajax_request=$action;
+        }
+    }
+
+    if (strstr($writeLangAdress, "&")) {
+        $writeLangAdress.= '&change_lang=true';
+    } elseif (strstr($writeLangAdress, "?")) {
+        $writeLangAdress.= 'change_lang=true';
+    } else{ 
+        $writeLangAdress.= '?change_lang=true';
+    }
+
+    $tpl->change_lang = PMF_Filter::filterInput(INPUT_POST, 'change_lang', FILTER_SANITIZE_STRING);
+
+    //Associate a action request with template blocks
+    $all_action = '(main|'.implode('|', array_keys($allowedVariables)).')';
+    $tpl->varAjax = array('showCategories'	=> 'ajax_init',
+                          'title'			=> $all_action,
+                          'writeContent'	=> $all_action,
+                          'writeLangAdress' => $all_action,
+                          'action' 			=> $all_action,
+                          'userOnline' 		=> $all_action,
+                          'loginBox'		=> '(login|logout)',
+                          'rightBox'		=> 'artikel');
+
+    if (DEBUG) {
+        $tpl->varAjax['debugMessages'] = $all_action;
+        //If debug mode active reload also debug messages
+    }
+
+    //Init the ajax template map and store the data in session for better performance
+    if (isset($_SESSION['parsedTemplates'])&&$tpl->ajax_request) {
+        $tpl->parsedTemplates = $_SESSION['parsedTemplates'];
+    } else {
+        $tpl->TemplateAjaxInit();
+        $_SESSION['parsedTemplates'] = $tpl->parsedTemplates;
+    }
+}
+
 $usersOnLine    = getUsersOnline();
 $totUsersOnLine = $usersOnLine[0] + $usersOnLine[1];
 $systemUri      = PMF_Link::getSystemUri('index.php');
 
 $categoryTree   = new PMF_Category_Tree($categoryData);
-$categoryLayout = new PMF_Category_Layout(
-    new PMF_Category_Tree_Helper(
-        new PMF_Category_Path($categoryTree, $categoryPath)));
 
+// If it's an ajax request , get the whole tree else get the filtered tree
+if ($tpl->ajax_active && $tpl->ajax_request) {
+    $categoryLayout = new PMF_Category_Layout(new PMF_Category_Tree_Helper($categoryTree));
+} else {
+    $categoryLayout = new PMF_Category_Layout(
+        new PMF_Category_Tree_Helper(
+            new PMF_Category_Path($categoryTree, $categoryPath)));
+}
 
 $keywordsArray = array_merge(explode(',', $keywords), explode(',', $faqconfig->get('main.metaKeywords')));
 $keywordsArray = array_filter($keywordsArray, 'strlen');
@@ -441,9 +517,8 @@ $main_template_vars = array(
                              $faqconfig->get('main.currentVersion'));
 
 if ('main' == $action || 'show' == $action) {
-	if ('main' == $action && PMF_Configuration::getInstance()->get('main.useAjaxSearchOnStartpage')) {
-		$tpl->processBlock('index', 'globalSuggestBox', array(
-            'ajaxlanguage' => $LANGCODE,));
+    if ('main' == $action && PMF_Configuration::getInstance()->get('main.useAjaxSearchOnStartpage')) {
+        $tpl->processBlock('index', 'globalSuggestBox', array('ajaxlanguage' => $LANGCODE));
 	} else {
         $tpl->processBlock('index', 'globalSearchBox', array(
             'writeSendAdress' => '?'.$sids.'action=search',
