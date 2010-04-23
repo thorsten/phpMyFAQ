@@ -177,6 +177,9 @@ if ($userAction == 'update_data') {
 if ($userAction == 'delete_confirm') {
     $message    = '';
     $user       = new PMF_User();
+    
+    dump($_POST);
+    
     $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_list_select', FILTER_VALIDATE_INT, 0);
     if ($userId == 0) {
         $message .= '<p class="error">'.$errorMessages['delUser_noId'].'</p>';
@@ -343,11 +346,6 @@ if ($userAction == 'add') {
         </form>
     </fieldset>
 </div> <!-- end #user_create -->
-<script type="text/javascript">
-/* <![CDATA[ */
-document.user_create.user_name.focus();
-/* ]]> */
-</script>
 <?php
 } // end if ($userAction == 'add')
 
@@ -421,7 +419,7 @@ function updateUser(user_id)
         <div id="user_list">
         <fieldset>
             <legend><?php print $text['selectUser']; ?></legend>
-            <form name="user_select" id="user_select" action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=delete_confirm" method="post">
+            <form name="user_select" id="user_select" action="?action=user&amp;user_action=delete_confirm" method="post">
                 
                 <input type="text" id="user_list_autocomplete" name="user_list_search" />
                 <script type="text/javascript">
@@ -437,7 +435,7 @@ function updateUser(user_id)
                     //]]>
                 </script>
                 <div class="button_row">
-                    <input type="hidden" name="user_list_select" id="user_list_select" />
+                    <input type="hidden" id="user_list_select" name="user_list_select" value="" />
                     <input class="submit" type="submit" value="<?php print $text['delUser_button']; ?>" tabindex="2" />
                 </div>
             </form>
@@ -452,7 +450,7 @@ function updateUser(user_id)
     <div id="userData" class="grid_4">
     <fieldset>
         <legend id="user_data_legend"><?php print $text['changeUser']; ?></legend>
-        <form action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=update_data" method="post">
+        <form action="?action=user&amp;user_action=update_data" method="post">
             <input id="update_user_id" type="hidden" name="user_id" value="0" />
             <div class="input_row">
                 <label for="user_status_select"><?php print $text['changeUser_status']; ?></label>
@@ -473,7 +471,7 @@ function updateUser(user_id)
     <div id="userRights" class="grid_4 omega">
     <fieldset>
         <legend id="user_rights_legend"><?php print $text['changeRights']; ?></legend>
-        <form id="rightsForm" action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=update_rights" method="post">
+        <form id="rightsForm" action="?action=user&amp;user_action=update_rights" method="post">
             <input id="rights_user_id" type="hidden" name="user_id" value="0" />
             <div>
                 <span><a href="javascript:form_checkAll('rightsForm')"><?php print $text['changeRights_checkAll']; ?></a></span>

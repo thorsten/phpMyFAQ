@@ -476,7 +476,7 @@ $systemUri      = PMF_Link::getSystemUri('index.php');
 $categoryTree   = new PMF_Category_Tree($categoryData);
 
 // If it's an ajax request , get the whole tree else get the filtered tree
-if ($tpl->ajax_active && $tpl->ajax_request) {
+if ($tpl->ajax_active && $tpl->ajax_request == 'ajax_init') {
     $categoryLayout = new PMF_Category_Layout(new PMF_Category_Tree_Helper($categoryTree));
 } else {
     $categoryLayout = new PMF_Category_Layout(

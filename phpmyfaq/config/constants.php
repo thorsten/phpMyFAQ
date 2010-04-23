@@ -168,7 +168,8 @@ $botBlacklist = array(
     'wget',
     'bot',
     'spider',
-    'Yahoo! Slurp'
+    'Yahoo! Slurp',
+    'htdig'
 );
 
 /****************************************************************************
