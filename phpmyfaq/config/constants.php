@@ -6,8 +6,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since     2003-12-10
- * @version   SVN: $Id$
- * @copyright 2003-2009 phpMyFAQ Team
+ * @copyright 2003-2010 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License Version
  * 1.1 (the "License"); you may not use this file except in compliance with
@@ -164,7 +163,8 @@ $botBlacklist = array(
     'wget',
     'bot',
     'spider',
-    'Yahoo! Slurp'
+    'Yahoo! Slurp',
+    'htdig'
 );
 
 /****************************************************************************
