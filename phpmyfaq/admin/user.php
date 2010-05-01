@@ -178,8 +178,6 @@ if ($userAction == 'delete_confirm') {
     $message    = '';
     $user       = new PMF_User();
     
-    dump($_POST);
-    
     $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_list_select', FILTER_VALIDATE_INT, 0);
     if ($userId == 0) {
         $message .= '<p class="error">'.$errorMessages['delUser_noId'].'</p>';

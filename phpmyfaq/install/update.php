@@ -361,10 +361,10 @@ if ($step == 4) {
                     date_end FROM ".SQLPREFIX."faqdata_revisions_temp";
                 $query[] = "DROP TABLE ".SQLPREFIX."faqdata_revisions_temp";
                 $query[] = "COMMIT";
-        		break;
-        	default:
-                $query[] = "ALTER TABLE ".SQLPREFIX."faqdata ADD sticky INTEGER NOT NULL AFTER active";
-                $query[] = "ALTER TABLE ".SQLPREFIX."faqdata_revisions ADD sticky INTEGER NOT NULL AFTER active";
+        	break;
+            default:
+                $query[] = "ALTER TABLE ".SQLPREFIX."faqdata ADD sticky INTEGER DEFAULT 0 NOT NULL AFTER active";
+                $query[] = "ALTER TABLE ".SQLPREFIX."faqdata_revisions ADD sticky INTEGER DEFAULT 0 NOT NULL AFTER active";
                 break;
         }
     }
