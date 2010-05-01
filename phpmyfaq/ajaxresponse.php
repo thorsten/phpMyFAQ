@@ -38,6 +38,7 @@ $categoryId   = PMF_Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALI
 
 $Language = new PMF_Language();
 $LANGCODE = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
+require_once 'lang/language_en.php';
 
 if (PMF_Language::isASupportedLanguage($ajaxLanguage)) {
     $LANGCODE = trim($ajaxLanguage);
