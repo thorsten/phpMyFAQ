@@ -366,6 +366,7 @@ function getUserData(user_id)
             $('#update_user_id').val(data.user_id);
             $('#user_status_select').val(data.status);
             $('#user_list_autocomplete').val(data.login);
+            $("#user_list_select").val(data.user_id);
             // Append input fields
             $('#user_data_table').append('<br /><label><?php print $PMF_LANG["ad_user_realname"]; ?></label>');
             $('#user_data_table').append('<input type="text" class="input_row" name="display_name" value="' + data.display_name + '" />');
@@ -402,8 +403,8 @@ function getUserRights(user_id)
  */
 function updateUser(user_id)
 {
-	getUserData(user_id);
-	getUserRights(user_id);
+    getUserData(user_id);
+    getUserRights(user_id);
 }
 
 /* ]]> */
