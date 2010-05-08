@@ -108,7 +108,7 @@ tinymce.PluginManager.add('internalfaqlinkbox', tinymce.plugins.internalFaqLinkP
 tinyMCE.init({
     // General options
     mode     : "exact",
-    language : "<?php echo (PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en'); ?>",
+    language : "<?php print (PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en'); ?>",
     elements : "content",
     width    : "720",
     height   : "480",
@@ -134,7 +134,7 @@ tinyMCE.init({
     file_browser_callback : "ajaxfilemanager",
 
     // Example content CSS (should be your site CSS)
-    content_css : "../template/css/<?php echo PMF_Template::getTplSetName(); ?>/style.css",
+    content_css : "../template/css/<?php print PMF_Template::getTplSetName(); ?>/style.css",
 
     // Drop lists for link/image/media/template dialogs
     template_external_list_url : "js/template_list.js",
@@ -154,25 +154,22 @@ function ajaxfilemanager(field_name, url, type, win)
     var ajaxfilemanagerurl = "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
     switch (type) {
         case "image":
-            break;
         case "media":
-            break;
         case "flash": 
-            break;
         case "file":
             break;
         default:
             return false;
     }
     tinyMCE.activeEditor.windowManager.open({
-        url: "editor/plugins/ajaxfilemanager/ajaxfilemanager.php",
-        width: 782,
-        height: 440,
-        inline : "yes",
+        url            : "editor/plugins/ajaxfilemanager/ajaxfilemanager.php",
+        width          : 782,
+        height         : 440,
+        inline         : "yes",
         close_previous : "no"
     },{
         window : win,
-        input : field_name
+        input  : field_name
     });
 }
 

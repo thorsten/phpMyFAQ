@@ -28,24 +28,92 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-if (isset($auth)) {
-    $user         = new PMF_User();
-    $groupSupport = ($user->perm instanceof PMF_Perm_PermMedium);
-    $adminHelper  = PMF_Helper_Administration::getInstance();
-    $adminHelper->setPermission($permission);
+header("Expires: Thu, 7 Apr 1977 14:47:00 GMT");
+header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+header("Content-type: text/html; charset=utf-8");
+header("Vary: Negotiate,Accept");
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
+<head>
+    <title><?php print $faqconfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
+    <meta name="copyright" content="(c) 2001-2009 phpMyFAQ Team" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <link rel="shortcut icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
+    
+    <style type="text/css"> @import url(style/admin.css); </style>
+    <style type="text/css"> @import url(../inc/js/plugins/autocomplete/jquery.autocomplete.css); </style>
+    <style type="text/css"> @import url(../inc/js/plugins/datePicker/datePicker.css); </style>
+    
+    <script type="text/javascript" src="../inc/js/functions.js"></script>
+    <script type="text/javascript" src="../inc/js/jquery.min.js"></script>
+    <script type='text/javascript' src='../inc/js/plugins/autocomplete/jquery.autocomplete.pack.js'></script>
+    <script type="text/javascript" src="../inc/js/plugins/datePicker/date.js"></script>
+    <script type="text/javascript" src="../inc/js/plugins/datePicker/jquery.datePicker.js"></script>
+    <script type="text/javascript" src="editor/tiny_mce.js"></script>
+</head>
+<body id="body" dir="<?php print $PMF_LANG["dir"]; ?>">
+<a name="top"></a>
 
-    $menuGroup = $secLevelEntries = '';
+<div id="wrap">
+    <div id="top">
+        <div class="rights">
+        </div>
+        <div id="languageselection">
+        <?php if (isset($auth) && is_null($action)) { ?>
+            <form action="index.php<?php print (isset($action) ? '?action=' . $action : ''); ?>" method="post">
+            <label for="language"><?php print $PMF_LANG['msgLangaugeSubmit']; ?>: </label>
+            <?php print PMF_Language::selectLanguages($LANGCODE, true); ?>
+            </form>
+        <?php } ?>
+        </div>
+        <div class="lefts">
+            <h1><a class="mainpage" href="../">phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></a></h1>
+            <?php if (isset($auth)) { ?>
+            <h2><?php print $PMF_LANG['ad_session_expiration']; ?>: <span id="sessioncounter">Loading...</span></h2>
+            <?php } ?>
+        </div>
+    </div>
+
+<?php if (isset($auth)) { ?>
+    <div id="topmenu">
+        <div class="rights">
+        </div>
+        <div class="lefts">
+            <ul>
+                <li><a href="index.php"><?php print $PMF_LANG['admin_mainmenu_home']; ?></a></li>
+                <li><a href="index.php?action=user"><?php print $PMF_LANG['admin_mainmenu_users']; ?></a></li>
+                <li><a href="index.php?action=content"><?php print $PMF_LANG['admin_mainmenu_content']; ?></a></li>
+                <li><a href="index.php?action=statistics"><?php print $PMF_LANG['admin_mainmenu_statistics']; ?></a></li>
+                <li><a href="index.php?action=export"><?php print $PMF_LANG['admin_mainmenu_exports']; ?></a></li>
+                <li><a href="index.php?action=backup"><?php print $PMF_LANG['admin_mainmenu_backup']; ?></a></li>
+                <li><a href="index.php?action=config"><?php print $PMF_LANG['admin_mainmenu_configuration']; ?></a></li>
+                <li><a class="logout" href="index.php?action=logout"><?php print $PMF_LANG['admin_mainmenu_logout']; ?></a></li>
+            </ul>
+        </div>
+    </div>
+<?php
+    // check for group support
+    $user            = new PMF_User();
+    $groupSupport    = ($user->perm instanceof PMF_Perm_PermMedium);
+    $secLevelEntries = '';
+
     switch ($action) {
         case 'user':
         case 'group':
         case 'passwd':
         case 'cookies':
-            $menuGroup        = 'user';
-            $secLevelEntries .= $adminHelper->addMenuEntry('adduser+edituser+deluser', 'user', 'ad_menu_user_administration', $action);
+            $secLevelHeader   = $PMF_LANG['admin_mainmenu_users'];
+            $secLevelEntries .= addMenuEntry('adduser+edituser+deluser', 'user', 'ad_menu_user_administration', $action);
             if ($groupSupport) {
-                $secLevelEntries .= $adminHelper->addMenuEntry('adduser+edituser+deluser', 'group', 'ad_menu_group_administration', $action);
+                $secLevelEntries .= addMenuEntry('adduser+edituser+deluser', 'group', 'ad_menu_group_administration', $action);
             }
-            $secLevelEntries .= $adminHelper->addMenuEntry('passwd', 'passwd', 'ad_menu_passwd', $action);
+            $secLevelEntries .= addMenuEntry('passwd', 'passwd', 'ad_menu_passwd', $action);
             break;
         case 'content':
         case 'category':
@@ -70,21 +138,19 @@ if (isset($auth)) {
         case 'deleteglossary':
         case 'addglossary':
         case 'editglossary':
-        case 'news':
         case 'addnews':
         case 'editnews':
         case 'delnews':
-        case 'savenews':
         case 'question':
         case 'comments':
-            $menuGroup        = 'content';
-            $secLevelEntries .= $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('addbt', 'editentry', 'ad_entry_add', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('delcomment', 'comments', 'ad_menu_comments', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('addglossary+editglossary+delglossary', 'glossary', 'ad_menu_glossary', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('addnews+editnews+delnews', 'news', 'ad_menu_news_edit', $action);
+            $secLevelHeader   = $PMF_LANG['admin_mainmenu_content'];
+            $secLevelEntries .= addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit', $action);
+            $secLevelEntries .= addMenuEntry('addbt', 'editentry', 'ad_entry_add', $action);
+            $secLevelEntries .= addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit', $action);
+            $secLevelEntries .= addMenuEntry('delcomment', 'comments', 'ad_menu_comments', $action);
+            $secLevelEntries .= addMenuEntry('delquestion', 'question', 'ad_menu_open', $action);
+            $secLevelEntries .= addMenuEntry('addglossary+editglossary+delglossary', 'glossary', 'ad_menu_glossary', $action);
+            $secLevelEntries .= addMenuEntry('addnews+editnews+delnews', 'news', 'ad_menu_news_edit', $action);
             break;
         case 'statistics':
         case 'viewsessions':
@@ -92,15 +158,15 @@ if (isset($auth)) {
         case 'sessionsuche':
         case 'adminlog':
         case 'searchstats':
-            $menuGroup        = 'statistics';
-            $secLevelEntries .= $adminHelper->addMenuEntry('viewlog', 'statistics', 'ad_menu_stat', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('viewlog', 'viewsessions', 'ad_menu_session', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('adminlog', 'adminlog', 'ad_menu_adminlog', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('viewlog', 'searchstats', 'ad_menu_searchstats', $action);
+            $secLevelHeader   = $PMF_LANG['admin_mainmenu_statistics'];
+            $secLevelEntries .= addMenuEntry('viewlog', 'statistics', 'ad_menu_stat', $action);
+            $secLevelEntries .= addMenuEntry('viewlog', 'viewsessions', 'ad_menu_session', $action);
+            $secLevelEntries .= addMenuEntry('adminlog', 'adminlog', 'ad_menu_adminlog', $action);
+            $secLevelEntries .= addMenuEntry('viewlog', 'searchstats', 'ad_menu_searchstats', $action);
             break;
         case 'export':
-            $menuGroup        = 'export';
-            $secLevelEntries .= $adminHelper->addMenuEntry('', 'export', 'ad_menu_export', $action);
+            $secLevelHeader   = $PMF_LANG['admin_mainmenu_exports'];
+            $secLevelEntries .= addMenuEntry('', 'export', 'ad_menu_export', $action);
             break;
         case 'config':
         case 'linkconfig':
@@ -109,114 +175,37 @@ if (isset($auth)) {
         case 'transedit':
         case 'transadd':
         case 'upgrade':
-            $menuGroup        = 'config';
-            $secLevelEntries .= $adminHelper->addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('editconfig+editbt+delbt', 'linkconfig', 'ad_menu_linkconfig', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('editconfig', 'stopwordsconfig', 'ad_menu_stopwordsconfig', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('edittranslation+addtranslation+deltranslation', 'translist', 'ad_menu_translations', $action);
-            break;
-        case 'backup':
-            $menuGroup       = 'backup';
-            $secLevelEntries = '';
+            $secLevelHeader   = $PMF_LANG['admin_mainmenu_configuration'];
+            $secLevelEntries .= addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
+            $secLevelEntries .= addMenuEntry('editconfig+editbt+delbt', 'linkconfig', 'ad_menu_linkconfig', $action);
+            $secLevelEntries .= addMenuEntry('editconfig', 'stopwordsconfig', 'ad_menu_stopwordsconfig', $action);
+            $secLevelEntries .= addMenuEntry('edittranslation+addtranslation+deltranslation', 'translist', 'ad_menu_translations', $action);
             break;
         default:
-            $secLevelEntries .= $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit');
-            $secLevelEntries .= $adminHelper->addMenuEntry('addbt', 'editentry', 'ad_quick_record');
-            $secLevelEntries .= $adminHelper->addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit');
-            $secLevelEntries .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open');
+            $secLevelHeader   = $PMF_LANG['admin_mainmenu_home'];
+            $secLevelEntries .= addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit');
+            $secLevelEntries .= addMenuEntry('addbt', 'editentry', 'ad_quick_record');
+            $secLevelEntries .= addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit');
+            $secLevelEntries .= addMenuEntry('delquestion', 'question', 'ad_menu_open');
             break;
     }
-    $firstLevelEntries  = $adminHelper->addMenuEntry('', '', 'admin_mainmenu_home', $menuGroup, false);
-    $firstLevelEntries .= $adminHelper->addMenuEntry('', 'user', 'admin_mainmenu_users', $menuGroup, false);
-    $firstLevelEntries .= $adminHelper->addMenuEntry('', 'content', 'admin_mainmenu_content', $menuGroup, false);
-    $firstLevelEntries .= $adminHelper->addMenuEntry('', 'statistics', 'admin_mainmenu_statistics', $menuGroup, false);
-    $firstLevelEntries .= $adminHelper->addMenuEntry('', 'export', 'admin_mainmenu_exports', $menuGroup, false);
-    $firstLevelEntries .= $adminHelper->addMenuEntry('', 'backup', 'admin_mainmenu_backup', $action, false);
-    $firstLevelEntries .= $adminHelper->addMenuEntry('', 'config', 'admin_mainmenu_configuration', $menuGroup, false);
-}
-
-header("Expires: Thu, 7 Apr 1977 14:47:00 GMT");
-header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
-header("Cache-Control: no-store, no-cache, must-revalidate");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
-header("Content-type: text/html; charset=utf-8");
-header("Vary: Negotiate,Accept");
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
-<head>
-    <title><?php print $faqconfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
-    <meta name="copyright" content="(c) 2001-2010 phpMyFAQ Team" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <link rel="shortcut icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
-    <link rel="icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
-    
-    <style type="text/css"> @import url(style/reset.css); </style>
-    <style type="text/css"> @import url(style/960.css); </style>
-    <style type="text/css"> @import url(style/admin.css); </style>
-    <style type="text/css"> @import url(../inc/js/plugins/autocomplete/jquery.autocomplete.css); </style>
-    <style type="text/css"> @import url(../inc/js/plugins/datePicker/datePicker.css); </style>
-    
-    <script type="text/javascript" src="../inc/js/functions.js"></script>
-    <script type="text/javascript" src="../inc/js/jquery.min.js"></script>
-    <script type='text/javascript' src='../inc/js/plugins/autocomplete/jquery.autocomplete.pack.js'></script>
-    <script type="text/javascript" src="../inc/js/plugins/datePicker/date.js"></script>
-    <script type="text/javascript" src="../inc/js/plugins/datePicker/jquery.datePicker.js"></script>
-    <script type="text/javascript" src="editor/tiny_mce.js"></script>
-</head>
-<body id="body" dir="<?php print $PMF_LANG["dir"]; ?>">
-<a name="top"></a>
 
-<!-- header -->
-<div id="headerWrapper">
-    <div id="header" class="container_16">
-        
-        <h1><a href="../">phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></a></h1>
-        <?php if (isset($auth)) { ?>
-        <p id="session"><?php print $PMF_LANG['ad_session_expiration']; ?>: <span id="sessioncounter">Loading...</span></p>
-        <?php } ?>
-        
-        
-
-        <div id="navigation">
-        <?php if (isset($auth)) { ?>
-            <ul>
-                <?php print $firstLevelEntries; ?>
-                <li><a class="logout" href="?action=logout"><?php print $PMF_LANG['admin_mainmenu_logout']; ?></a></li>
-                
-            </ul>
-        <?php } ?>
-        </div>
-        
-        <?php if (isset($auth) && is_null($action)) { ?>
-        <form id="languageSelection" action="index.php<?php print (isset($action) ? '?action=' . $action : ''); ?>" method="post">
-        <p>
-            <label for="language"><?php print $PMF_LANG['msgLangaugeSubmit']; ?>: </label>
-            <?php print PMF_Language::selectLanguages($LANGCODE, true); ?>
-        </p>
-        </form>
-        <?php } ?>
-        
-    </div>
-</div>
-<!-- /header -->
-
-<!-- content -->
-<div id="contentWrapper">
-    <div id="mainContent" class="container_16">
-<?php if (isset($auth)) { ?>
-        <div id="leftContent" class="grid_4">
-            <div class="leftMenu">
+    <div id="main">
+        <div id="leftmenu">
+            <h2><?php print $secLevelHeader; ?></h2>
+            <div class="box">
                 <ul>
                 <?php print $secLevelEntries; ?>
                 </ul>
             </div>
 
-            <div class="leftMenu" id="adminWorklog">
+            <h2>Admin worklog</h2>
+            <div class="box">
                 <span id="saving_data_indicator"></span>
             </div>
         </div>
-        <div id="rightContent" class="grid_12">
+        
+        <div id="maincontent">
 <?php } ?>
+

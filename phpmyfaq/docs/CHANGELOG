@@ -18,6 +18,7 @@ Version 2.6.5 - 2010-05-
 - fixed user deletion in admin backend (Thorsten)
 - updated Polish translation
 - updated Russian translation
+- updated Thai translation
 
 Version 2.6.4 - 2010-04-18
 - added experimental support for Microsoft SQL Server Driver for PHP (Thorsten)
