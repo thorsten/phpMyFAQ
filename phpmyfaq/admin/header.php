@@ -40,11 +40,11 @@ header("Vary: Negotiate,Accept");
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
 <head>
     <title><?php print $faqconfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
-    <meta name="copyright" content="(c) 2001-2009 phpMyFAQ Team" />
+    <meta name="copyright" content="(c) 2001-2010 phpMyFAQ Team" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <link rel="shortcut icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
-    <link rel="icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
     
     <style type="text/css"> @import url(style/admin.css); </style>
     <style type="text/css"> @import url(../inc/js/plugins/autocomplete/jquery.autocomplete.css); </style>
@@ -55,7 +55,7 @@ header("Vary: Negotiate,Accept");
     <script type='text/javascript' src='../inc/js/plugins/autocomplete/jquery.autocomplete.pack.js'></script>
     <script type="text/javascript" src="../inc/js/plugins/datePicker/date.js"></script>
     <script type="text/javascript" src="../inc/js/plugins/datePicker/jquery.datePicker.js"></script>
-    <script type="text/javascript" src="editor/tiny_mce.js"></script>
+    <script type="text/javascript" src="editor/tiny_mce.js?<?php print time(); ?>"></script>
 </head>
 <body id="body" dir="<?php print $PMF_LANG["dir"]; ?>">
 <a name="top"></a>
