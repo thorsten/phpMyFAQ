@@ -212,6 +212,9 @@ if ($permission['editbt'] || $permission['delbt']) {
                 'content'     => $row->content,
                 'date'        => PMF_Date::createIsoDate($row->date));
             
+            if (!isset($numActiveByCat[$row->category_id])) {
+                $numActiveByCat[$row->category_id] = 0;
+            }
             $numActiveByCat[$row->category_id] += $row->active ? 1 : 0;
         }
 
