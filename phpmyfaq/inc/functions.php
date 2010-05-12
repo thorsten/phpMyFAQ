@@ -387,27 +387,6 @@ function getHighlightedBannedWords($content)
 }
 
 /**
- * An OS independent function like usleep
- *
- * @param   integer
- * @return  void
- * @since   2004-05-30
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- */
-function wait($usecs)
-{
-    $temp  = gettimeofday();
-    $start = (int)$temp["usec"];
-    while(1) {
-        $temp = gettimeofday();
-        $stop = (int)$temp["usec"];
-        if ($stop - $start >= $usecs) {
-            break;
-        }
-    }
-}
-
-/**
  * Returns the number of anonymous users and registered ones.
  * These are the numbers of unique users who have perfomed
  * some activities within the last five minutes

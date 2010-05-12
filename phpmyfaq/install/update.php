@@ -552,7 +552,7 @@ if ($step == 4) {
                 print "</div>";
                 die();
             }
-            wait(10);
+            usleep(10000);
             $count++;
             if (!($count % 10)) {
                 ob_flush();
@@ -611,7 +611,7 @@ if ($step == 4) {
                 print "</div>";
                 die();
             }
-            wait(10);
+            usleep(10000);
         }
         print "</div>";
     }
