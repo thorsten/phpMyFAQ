@@ -114,7 +114,7 @@ class PMF_Tags
             foreach ($keys as $current_key) {
                 $tags[$current_key] = $allTags[$current_key];
             }
-            $tags = array_slice($tags, 0, $numberOfItems);
+            $tags = array_slice($tags, 0, $numberOfItems, true);
         } else {
             $tags = PMF_Utils::shuffleData($allTags);
         }
