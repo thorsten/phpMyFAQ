@@ -623,7 +623,7 @@ foreach ($permLevels as $level => $desc) {
             HTMLFooter();
             die();
         }
-        wait(25);
+        usleep(25000);
         $count++;
         if (!($count % 10)) {
             print '| ';
