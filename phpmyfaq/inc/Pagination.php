@@ -2,13 +2,7 @@
 /**
  * Pagination handler class
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Pagination
- * @license    MPL
- * @author     Anatoliy Belsky <ab@php.net>
- * @since      2009-09-27
- * @version    git: $Id$
- * @copyright  2009 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,17 +13,26 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Pagination
+ * @author    Anatoliy Belsky <ab@php.net>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-09-27
  */
 
 /**
  * PMF_Pagination
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Pagination
- * @license    MPL
- * @author     Anatoliy Belsky <ab@php.net>
- * @since      2007-09-27
- * @copyright  2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   PMF_Pagination
+ * @author    Anatoliy Belsky <ab@php.net>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-09-27
  */
 class PMF_Pagination
 {
@@ -165,7 +168,7 @@ class PMF_Pagination
      * 
      * TODO do some checks to params (eq. arguments count for templates etc)
      */
-    public function __construct($options = null)
+    public function __construct(Array $options = null)
     {
         if (isset($options['baseUrl'])) {
             $this->baseUrl = $options['baseUrl'];
@@ -227,22 +230,22 @@ class PMF_Pagination
     {
         $retval = 1;
         
-        if(!empty($url)) {
+        if (!empty($url)) {
             
             $match = array();
             
             switch ($this->urlStyle) {
                 case self::URL_STYLE_REWRITE:
                     $pattern = '$/(' . $this->pageParamName . ')/(\d+)$';
-                break;
+                    break;
                     
                 case self::URL_STYLE_DEFAULT:
                 default:
                     $pattern = '$&(amp;|)' . $this->pageParamName . '=(\d+)$';
-                break;
+                    break;
             }
             
-            if(PMF_String::preg_match($pattern, $url, $match)) {
+            if (PMF_String::preg_match($pattern, $url, $match)) {
                 $retval = isset($match[2]) ? $match[2] : $retval;
             }
         }
@@ -263,7 +266,7 @@ class PMF_Pagination
         for ($i = 0; $i < $this->total; $i += $this->perPage, $page++) {
             $link = $this->renderUrl($this->baseUrl, $page);
 
-            if($page == $this->currentPage) {
+            if ($page == $this->currentPage) {
                 $template = $this->currentPageLinkTpl;
             } else {
                 $template = $this->linkTpl;
@@ -320,7 +323,7 @@ class PMF_Pagination
                                                        "",
                                                        $this->baseUrl);
                 $url = "$cleanedUrl/{$this->pageParamName}/$page";
-            break;
+                break;
                 
             case self::URL_STYLE_DEFAULT:
             default:
@@ -328,7 +331,7 @@ class PMF_Pagination
                                                        "",
                                                        $this->baseUrl);
                 $url = "$cleanedUrl&amp;{$this->pageParamName}=$page";
-            break;
+                break;
         }
         
         return $url;
@@ -363,4 +366,3 @@ class PMF_Pagination
         return str_replace(self::TPL_VAR_LAYOUT_CONTENT, $content, $this->layoutTpl);
     }
 }
- 
