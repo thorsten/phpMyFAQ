@@ -2,13 +2,7 @@
 /**
  * Helper class for phpMyFAQ search
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Helper
- * @license    MPL
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2009-09-07
- * @version    SVN: $Id$
- * @copyright  2009 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,16 +13,26 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Helper
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-09-07
  */
 
 /**
  * PMF_Helper
  * 
- * @package    phpMyFAQ
- * @subpackage PMF_Helper
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2009-09-07
- * @copyright  2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   PMF_Helper
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-09-07
  */
 class PMF_Helper_Search extends PMF_Helper 
 {
@@ -45,6 +49,13 @@ class PMF_Helper_Search extends PMF_Helper
      * @var string
      */
     private $language = null;
+    
+    /**
+     * PMF_Pagination object
+     * 
+     * @var PMF_Pagination
+     */
+    public $pagination = null;
     
     /**
      * Constructor
