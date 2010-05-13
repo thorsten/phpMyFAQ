@@ -60,11 +60,13 @@ class PMF_Helper_Search extends PMF_Helper
     /**
      * Constructor
      * 
-     * @return 
+     * @param PMF_Pagination $pagination PMF_Pagination object
+     * 
+     * @return PMF_Helper_Search
      */
-    private function __construct()
+    private function __construct(PMF_Pagination $pagination)
     {
-        
+        $this->pagination = $pagination;
     }
     
     /**
@@ -91,5 +93,4 @@ class PMF_Helper_Search extends PMF_Helper
     {
         
     }
-       
 }
