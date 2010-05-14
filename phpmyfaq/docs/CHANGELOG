@@ -13,6 +13,7 @@ Version 2.7.0-alpha - 2010-04-
 - upgraded jQuery to version 1.4.2 (Thorsten)
 
 Version 2.6.5 - 2010-05-
+- refactored OpenSearch plugin code base (Thorsten)
 - fixed small update issues in update script (Thorsten)
 - fixed missing language fallback issue in instant response (Thorsten)
 - fixed user deletion in admin backend (Thorsten)

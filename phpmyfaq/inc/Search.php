@@ -2,13 +2,7 @@
 /**
  * The phpMyFAQ Search class
  *
- * @package   phpMyFAQ
- * @license   MPL
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author    Adrianna Musiol <musiol@imageaccess.de>
- * @version   SVN: $Id$
- * @copyright 2008-2009 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,17 +13,30 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_Search
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Adrianna Musiol <musiol@imageaccess.de>
+ * @copyright 2008-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2008-01-26
  */
 
 /**
  * PMF_Search
  *
- * @package   phpMyFAQ
- * @license   MPL
+ * @category  phpMyFAQ
+ * @package   PMF_Search
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
- * @copyright 2008-2009 phpMyFAQ Team
+ * @copyright 2008-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2008-01-26
  */
 class PMF_Search
 {
@@ -172,10 +179,10 @@ class PMF_Search
      */
     public function logSearchTerm($searchterm)
     {
-    	if (PMF_String::strlen($searchterm) == 0) {
-    		return;
-    	}
-    	
+        if (PMF_String::strlen($searchterm) == 0) {
+            return;
+        }
+        
         $date  = new DateTime();
         $query = sprintf("
             INSERT INTO
@@ -221,12 +228,12 @@ class PMF_Search
         $result = $this->db->query($query);
         
         if ($result) {
-        	$i = 0;
+            $i = 0;
             while ($row = $this->db->fetch_object($result)) {
-            	if ($i < $numResults) {
-            		$searchResult[] = (array)$row;
-            	}
-            	$i++;
+                if ($i < $numResults) {
+                    $searchResult[] = (array)$row;
+                }
+                $i++;
             }
         }
         
@@ -240,15 +247,15 @@ class PMF_Search
      */
     public function getSearchesCount()
     {
-    	$sql = sprintf("
-    	   SELECT 
-    	       COUNT(1) AS count 
-    	   FROM 
-    	       %s",
-    	   $this->_table);
-    	
-    	$result = $this->db->query($sql);
-
-    	return (int) $this->db->fetchObject($result)->count;
+        $sql = sprintf("
+            SELECT 
+                COUNT(1) AS count 
+            FROM 
+                %s",
+        $this->_table);
+        
+        $result = $this->db->query($sql);
+        
+        return (int) $this->db->fetchObject($result)->count;
     }
 }
