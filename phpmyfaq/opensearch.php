@@ -2,8 +2,6 @@
 /**
  * This is XML code for OpenSearch
  *
- * @todo Rewrite using XMLWriter
- *
  * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -36,16 +34,29 @@ $baseUrl   = PMF_Link::getSystemUri('/opensearch.php');
 $searchUrl = $baseUrl . '/index.php?action=search';
 $srcUrl    = $baseUrl;
 
-$opensearch     = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
-<OpenSearchDescription xmlns=\"http://a9.com/-/spec/opensearch/1.1/\">
-<ShortName>".$faqconfig->get('main.titleFAQ')."</ShortName>
-<Description>".$faqconfig->get('main.metaDescription')."</Description>
-<Url type=\"text/html\" template=\"".$searchUrl."&amp;search={searchTerms}\" />
-<Language>".$PMF_LANG['metaLanguage']."</Language>
-<OutputEncoding>utf-8</OutputEncoding>
-<Contact>".$faqconfig->get('main.administrationMail')."</Contact>
-<Image height=\"16\" width=\"16\" type=\"image/png\">".$baseUrl."/images/pmfsearch.png</Image>
-</OpenSearchDescription>";
+$opensearchXml = new XMLWriter();
+$opensearchXml->openMemory();
+$opensearchXml->setIndent(true);
+$opensearchXml->startDocument('1.0', 'utf-8');
+$opensearchXml->startElement('OpenSearchDescription');
+$opensearchXml->writeAttribute('xmlns', 'http://a9.com/-/spec/opensearch/1.1/');
+
+$opensearchXml->writeElement('ShortName', $faqconfig->get('main.titleFAQ'));
+$opensearchXml->writeElement('Description', $faqconfig->get('main.metaDescription'));
+$opensearchXml->startElement('Url');
+$opensearchXml->writeAttribute('type', 'text/html');
+$opensearchXml->writeAttribute('template', $searchUrl . '&amp;search={searchTerms}');
+$opensearchXml->endElement();
+$opensearchXml->writeElement('Language', $PMF_LANG['metaLanguage']);
+$opensearchXml->writeElement('OutputEncoding', 'utf-8');
+$opensearchXml->writeElement('Contact', $faqconfig->get('main.administrationMail'));
+$opensearchXml->startElement('Image');
+$opensearchXml->writeAttribute('height', 16);
+$opensearchXml->writeAttribute('width', 16);
+$opensearchXml->writeAttribute('type', 'image/png');
+$opensearchXml->text($baseUrl . '/images/pmfsearch.png');
+
+$opensearchXml->endDocument();
 
 header("Content-type: text/xml");
-print $opensearch;
+print $opensearchXml->outputMemory(true);
