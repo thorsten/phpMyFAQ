@@ -2,13 +2,7 @@
 /**
  * Frontend for search log statistics
  *
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Anatoliy Belsky <anatoliy.belsky@mayflower.de>
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2003-03-30
- * @version    SVN: $Id$
- * @copyright  2009 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,9 +13,18 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2003-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2003-03-30
  */
 
-if(isset($_GET['num']) && !defined('PMF_ROOT_DIR')) {
+if (isset($_GET['num']) && !defined('PMF_ROOT_DIR')) {
     define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
     
     require_once PMF_ROOT_DIR . '/inc/Init.php';
@@ -100,7 +103,7 @@ if ($permission['viewlog']) {
         $num = round($searchItem['number']*100/$searchesCount, 2);
 ?>
 <tr>
-	<td class="list"><?php print PMF_htmlentities($searchItem['searchterm']);  ?></td>
+	<td class="list"><?php print PMF_String::htmlspecialchars($searchItem['searchterm']);  ?></td>
 	<td class="list"><?php print $searchItem['number'] ?></td>
 	<td class="list"><?php print $languageCodes[PMF_String::strtoupper($searchItem['lang'])] ?></td>
 	<td class="list"><img src="stat.search.php?num=<?php print $num ?>" alt="<?php print $num ?>%" title="<?php print $num ?>%" /></td>

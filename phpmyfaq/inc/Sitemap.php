@@ -339,7 +339,7 @@ class PMF_Sitemap
                 $oLink->tooltip   = $title;
 
                 $writeMap .= '<li>'.$oLink->toHtmlAnchor().'<br />'."\n";
-                $writeMap .= chopString(strip_tags($row->snap), 25). " ...</li>\n";
+                $writeMap .= PMF_Utils::chopString(strip_tags($row->snap), 25). " ...</li>\n";
             }
             $oldId = $row->id;
         }

@@ -289,7 +289,7 @@ class PMF_Faq
                     'record_lang'    => $row->lang,
                     'category_id'    => $row->category_id,
                     'record_title'   => $row->thema,
-                    'record_preview' => chopString(strip_tags($row->record_content), 25),
+                    'record_preview' => PMF_Utils::chopString(strip_tags($row->record_content), 25),
                     'record_link'    => $oLink->toString(),
                     'record_date'    => $row->record_date,
                     'visits'         => $visits);
