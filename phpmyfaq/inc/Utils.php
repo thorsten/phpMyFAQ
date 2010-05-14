@@ -293,4 +293,26 @@ class PMF_Utils
 
         return $output;
     }
+    
+    /**
+     * This method chops a string
+     * 
+     * @param string  $string String to chop
+     * @param integer $words  Number of words
+     *
+     * @return string
+     */
+    public static function chopString ($string, $words)
+    {
+        $str    = '';
+        $pieces = explode(' ', $string);
+        $num    = count($pieces);
+        if ($words > $num) {
+            $words = $num;
+        }
+        for ($i = 0; $i < $words; $i ++) {
+            $str .= $pieces[$i] . ' ';
+        }
+        return $str;
+    }
 }

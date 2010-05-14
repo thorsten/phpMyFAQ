@@ -1,7 +1,7 @@
 <?php
 /**
  * Frontend for search log statistics
- * 
+ *
  * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -18,10 +18,10 @@
  * @package   Administration
  * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2003-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2009-03-30
+ * @since     2003-03-30
  */
 
 if (isset($_GET['num']) && !defined('PMF_ROOT_DIR')) {
@@ -103,7 +103,7 @@ if ($permission['viewlog']) {
         $num = round($searchItem['number']*100 / $searchesCount, 2);
 ?>
 <tr>
-    <td><?php print PMF_htmlentities($searchItem['searchterm']);  ?></td>
+    <td><?php print PMF_String::htmlspecialchars($searchItem['searchterm']);  ?></td>
     <td><?php print $searchItem['number'] ?></td>
     <td><?php print $languageCodes[PMF_String::strtoupper($searchItem['lang'])] ?></td>
     <td><img src="stat.search.php?num=<?php print $num ?>" alt="<?php print $num ?>%" title="<?php print $num ?>%" /></td>

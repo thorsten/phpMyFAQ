@@ -60,7 +60,7 @@ if ($permission['viewlog']) {
     <tr>
         <td><?php print $data['id']; ?></td>
         <td><?php print $data['lang']; ?></td>
-        <td><a href="../index.php?action=artikel&amp;cat=<?php print $data['category_id']; ?>&amp;id=<?php print $data['id'];?>&amp;artlang=<?php print $data['lang']; ?>" title="<?php print PMF_String::htmlspecialchars(trim($data['question']), ENT_QUOTES, 'utf-8'); ?>"><?php print PMF_Utils::makeShorterText(PMF_htmlentities(trim($data['question']), ENT_QUOTES, 'utf-8'), 14); ?></a></td>
+        <td><a href="../index.php?action=artikel&amp;cat=<?php print $data['category_id']; ?>&amp;id=<?php print $data['id'];?>&amp;artlang=<?php print $data['lang']; ?>" title="<?php print PMF_String::htmlspecialchars(trim($data['question']), ENT_QUOTES, 'utf-8'); ?>"><?php print PMF_Utils::makeShorterText(PMF_String::htmlspecialchars(trim($data['question']), ENT_QUOTES, 'utf-8'), 14); ?></a></td>
         <td><?php print $data['usr']; ?></td>
         <td style="width: 50px;"><img src="stat.bar.php?num=<?php print $data['num']; ?>" border="0" alt="<?php print round($data['num'] * 20); ?> %" width="50" height="15" title="<?php print round($data['num'] * 20); ?> %" /></td>
     </tr>

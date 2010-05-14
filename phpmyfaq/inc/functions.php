@@ -26,9 +26,9 @@
  * @author    Robin Wood <robin@digininja.org>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
+ * @copyright 2001-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2001-2010 phpMyFAQ Team
  * @since     2001-02-18
  */
 
@@ -423,50 +423,6 @@ function EndSlash($string)
 }
 
 /**
- * Decode MIME header elements in e-mails | @@ Matthias Sommerfeld
- * (c) 2001-2004 blue birdy, Berlin (http://bluebirdy.de)
- * used with permission
- * Last Update: @@ Thorsten, 2004-07-17
- */
-if (!function_exists('quoted_printable_encode')) {
-	function quoted_printable_encode($return = '')
-	{
-	    // Ersetzen der lt. RFC 1521 noetigen Zeichen
-	    $return = PMF_String::preg_replace('/([^\t\x20\x2E\041-\074\076-\176])/ie', "sprintf('=%2X',ord('\\1'))", $return);
-	    $return = PMF_String::preg_replace('!=\ ([A-F0-9])!', '=0\\1', $return);
-	    // Einfuegen von QP-Breaks (=\r\n)
-	    if (PMF_String::strlen($return) > 75) {
-			$length = PMF_String::strlen($return); $offset = 0;
-			do {
-		    	$step     = 76;
-		    	$add_mode = (($offset+$step) < $length) ? 1 : 0;
-		    	$auszug   = PMF_String::substr($return, $offset, $step);
-		    	if (PMF_String::preg_match('!\=$!', $auszug)) {
-		    	    $step = 75;
-		    	}  
-		    	if (PMF_String::preg_match('!\=.$!', $auszug)) { 
-		    	    $step = 74;
-		    	}
-		    	if (PMF_String::preg_match('!\=..$!', $auszug)) {
-		    	    $step = 73;
-		    	}
-		    			    
-		    	$auszug     = PMF_String::substr($return, $offset, $step);
-		    	$offset    += $step;
-		    	$schachtel .= $auszug;
-		    	if (1 == $add_mode) $schachtel.= '='."\r\n";
-		    } while ($offset < $length);
-		
-		    $return = $schachtel;
-		}
-		
-	    $return = PMF_String::preg_replace('!\.$!', '. ', $return);
-	    return PMF_String::preg_replace('!(\r\n|\r|\n)$!', '', $return)."\r\n";
-	}
-}
-
-
-/**
  * Get search data weither as array or resource
  *
  * @param string $searchterm
@@ -664,8 +620,8 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
             
             if ($b_permission) {
                 $rubriktext  = $categoryLayout->renderBreadcrumb(array($row->category_id));
-                $thema       = chopString($row->thema, 15);
-                $content     = chopString(strip_tags($row->content), 25);
+                $thema       = PMF_Utils::chopString($row->thema, 15);
+                $content     = PMF_Utils::chopString(strip_tags($row->content), 25);
                 $searchterm  = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'), '', $searchterm);
                 $searchterm  = preg_quote($searchterm, '/');
                 $searchItems = explode(' ', $searchterm);
@@ -777,24 +733,6 @@ function highlight_no_links(Array $matches)
     return $matches[0];
 }
 
-/**
- * This functions chops a string | @@ Thorsten, 2003-12-16
- * Last Update: @@ Thorsten, 2003-12-16
- */
-function chopString($string, $words)
-{
-    $str = "";
-    $pieces = explode(" ", $string);
-    $num = count($pieces);
-    if ($words > $num) {
-        $words = $num;
-    }
-    for ($i = 0; $i < $words; $i++) {
-        $str .= $pieces[$i]." ";
-    }
-    return $str;
-}
-
 //
 // Various functions
 //
@@ -810,39 +748,6 @@ function chopString($string, $words)
 function PMF_htmlentities($string, $quote_style = ENT_QUOTES, $charset = 'UTF-8')
 {
     return htmlspecialchars($string, $quote_style, $charset);
-}
-
-/**
- * Build url for attachment download
- *
- * @param int $recordId
- * @param int $filename
- * @param bool $forHtml if the url will be used in html
- * @return string
- */
-function buildAttachmentUrl($recordId, $filename, $forHtml = true)
-{
-    $amp = $forHtml ? '&amp;' : '&';
-    
-    return sprintf('index.php?action=attachment%sid=%s%sfile=%s', $amp, $recordId, $amp, $filename);
-}
-
-/**
- * Check if an attachment dir is valid
- *
- * @param int $id
- * @return boolean
- */
-function isAttachmentDirOk($id)
-{
-	if ($id == null) {
-		return false;
-	}
-	
-    $recordAttachmentsDir = PMF_ATTACHMENTS_DIR . DIRECTORY_SEPARATOR . $id; 
-    
-    return false !== PMF_ATTACHMENTS_DIR && file_exists(PMF_ATTACHMENTS_DIR) && is_dir(PMF_ATTACHMENTS_DIR) &&
-           file_exists($recordAttachmentsDir) && is_dir($recordAttachmentsDir);
 }
 
 /******************************************************************************
