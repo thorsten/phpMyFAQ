@@ -389,7 +389,7 @@ $tpl = new PMF_Template(array('index'        => 'index.tpl',
                               'writeContent' => $inc_tpl),
                               $faqconfig->get('main.templateSet'));
 
-$usersOnLine    = getUsersOnline();
+$usersOnLine    = $faqsession->getUsersOnline();
 $totUsersOnLine = $usersOnLine[0] + $usersOnLine[1];
 $systemUri      = PMF_Link::getSystemUri('index.php');
 

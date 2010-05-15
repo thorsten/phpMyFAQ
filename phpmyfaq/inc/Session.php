@@ -2,12 +2,7 @@
 /**
  * The main User session class
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Session
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2007-03-31
- * @copyright  2007-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,17 +13,26 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Session
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2007-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2007-03-31
  */
 
 /**
  * PMF_Session
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Session
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2007-03-31
- * @copyright  2007-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * @category  phpMyFAQ
+ * @package   PMF_Session
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2007-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2007-03-31
  */
 class PMF_Session
 {
@@ -63,14 +67,10 @@ class PMF_Session
     /**
      * Tracks the user and log what he did
      * 
-     * @param   string
-     * @param   integer
-     * @return  void
-     * @since   2001-02-18
-     * @since   Bastian Poettner <bastian@poettner.net>
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
-     * @author  Marco Fester <webmaster@marcof.de>
+     * @param  string  $action Action string
+     * @param  integer $id     Current ID
+     * 
+     * @return void
      */
     public function userTracking($action, $id = 0)
     {
@@ -138,9 +138,8 @@ class PMF_Session
      * Returns the timestamp of a session
      *
      * @param  integer $sid Session ID
+     * 
      * @return integer
-     * @since  2007-03-31
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function getTimeFromSessionId($sid)
     {
@@ -169,10 +168,10 @@ class PMF_Session
     /**
      * Returns all session from a date
      *
-     * @param  integer $timestamp Timestamp
+     * @param integer $firstHour First hour
+     * @param integer $lastHour  Last hour
+     * 
      * @return array
-     * @since  2007-03-31
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function getSessionsbyDate($firstHour, $lastHour)
     {
@@ -206,9 +205,7 @@ class PMF_Session
     /**
      * Returns the number of sessions
      *
-     * @return  integer
-     * @since   2007-04-21
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @return integer
      */
     public function getNumberOfSessions()
     {
@@ -234,9 +231,8 @@ class PMF_Session
      *
      * @param  integer $first Frist session ID
      * @param  integer $last  Last session ID
+     * 
      * @return boolean
-     * @since  2007-04-21
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function deleteSessions($first, $last)
     {
@@ -259,11 +255,10 @@ class PMF_Session
     /**
      * Checks the Session ID
      *
-     * @param  integer $sessionId Session ID
-     * @param  string  $ip  IP
+     * @param integer $sessionId Session ID
+     * @param string  $ip  IP
+     * 
      * @return void
-     * @since  2007-04-22
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function checkSessionId($sessionId, $ip)
     {
@@ -310,6 +305,62 @@ class PMF_Session
             );
             $this->db->query($query);
         }
+    }
+    /**
+     * Returns the number of anonymous users and registered ones.
+     * These are the numbers of unique users who have perfomed
+     * some activities within the last five minutes
+     *
+     * @param  integer $activityTimeWindow Optionally set the time window size in sec. 
+     *                                     Default: 300sec, 5 minutes
+     * 
+     * @return array
+     */
+    public function getUsersOnline($activityTimeWindow = 300)
+    {
+        $users = array(0, 0);
+        
+        if (PMF_Configuration::getInstance()->get('main.enableUserTracking')) {
+            $timeNow = ($_SERVER['REQUEST_TIME'] - $activityTimeWindow);
+            // Count all sids within the time window
+            // TODO: add a new field in faqsessions in order to find out only sids of anonymous users
+            $query = sprintf("
+                SELECT
+                    count(sid) AS anonymous_users
+                FROM
+                    %sfaqsessions
+                WHERE
+                    user_id = -1
+                AND 
+                    time > %d",
+                SQLPREFIX,
+                $timeNow);
+            $result = $this->db->query($query);
+            
+            if (isset($result)) {
+                $row      = $this->db->fetch_object($result);
+                $users[0] = $row->anonymous_users;
+            }
+            
+            // Count all faquser records within the time window
+            $query = sprintf("
+                SELECT
+                    count(session_id) AS registered_users
+                FROM
+                    %sfaquser
+                WHERE
+                    session_timestamp > %d",
+                SQLPREFIX,
+                $timeNow);
+            $result = $this->db->query($query);
+            
+            if (isset($result)) {
+                $row      = $this->db->fetch_object($result);
+                $users[1] = $row->registered_users;
+            }
+        }
+        
+        return $users;
     }
 
     /**
