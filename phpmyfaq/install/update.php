@@ -108,6 +108,7 @@ if ($step == 1) {
 <ul type="square">
     <li>phpMyFAQ 2.0.x</li>
     <li>phpMyFAQ 2.5.x</li>
+    <li>phpMyFAQ 2.6.x</li>
 </ul>
 <p>This update will <strong>not</strong> work for the following versions:</p>
 <ul type="square">
@@ -117,7 +118,7 @@ if ($step == 1) {
 <p><strong>Please make a full backup of your SQL tables before running this update.</strong></p>
 <?php 
 if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable($templateDir)) {
-	echo "<p><strong>Please make the dir $templateDir and its contents writeable (777 on unix).</strong></p>";
+	echo "<p><strong>Please make the dir $templateDir and its contents writeable (777 on Linux/UNIX).</strong></p>";
 }
 ?>
 <h3 align="center">Your current phpMyFAQ version: <?php print $version; ?></p>
