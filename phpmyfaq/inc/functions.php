@@ -525,7 +525,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
 {
     global $sids, $category, $PMF_LANG, $plr, $LANGCODE, $faq, $current_user, $current_groups;
 
-    $_searchterm = PMF_htmlentities(stripslashes($searchterm), ENT_QUOTES, 'utf-8');
+    $_searchterm = PMF_String::htmlspecialchars(stripslashes($searchterm), ENT_QUOTES, 'utf-8');
     $seite       = 1;
     $output      = '';
     $num         = 0;
@@ -714,23 +714,6 @@ function highlight_no_links(Array $matches)
 //
 // Various functions
 //
-
-/**
- * This is a wrapper for htmlspecialchars() with a check on valid charsets.
- *
- * @param  string $string      String
- * @param  string $quote_style Quote style
- * @param  string $charset     Charset
- * @return string
- */
-function PMF_htmlentities($string, $quote_style = ENT_QUOTES, $charset = 'UTF-8')
-{
-    return htmlspecialchars($string, $quote_style, $charset);
-}
-
-/******************************************************************************
- * Funktionen fuer die Benutzerauthentifizierung und Rechtevergabe
- ******************************************************************************/
 
 /**
  * Adds a menu entry according to user permissions.

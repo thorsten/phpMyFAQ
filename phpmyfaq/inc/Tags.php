@@ -170,7 +170,7 @@ class PMF_Tags
         $taglisting = '';
 
         foreach ($this->getAllTagsById($record_id) as $tagging_id => $tagging_name) {
-            $title = PMF_htmlentities($tagging_name, ENT_QUOTES, 'utf-8');
+            $title = PMF_String::htmlspecialchars($tagging_name, ENT_QUOTES, 'utf-8');
             $url = sprintf(
                 $sids.'action=search&amp;tagging_id=%d',
                 $tagging_id
@@ -430,7 +430,7 @@ class PMF_Tags
             }
             $class = 'relevance'.$CSSRelevanceLevel;
             $html .= '<span class="'.$class.'">';
-            $title = PMF_htmlentities($tag['name'].' ('.$tag['count'].')', ENT_QUOTES, 'utf-8');
+            $title = PMF_String::htmlspecialchars($tag['name'].' ('.$tag['count'].')', ENT_QUOTES, 'utf-8');
             $url = sprintf(
                         $sids.'action=search&amp;tagging_id=%d',
                         $tag['id']

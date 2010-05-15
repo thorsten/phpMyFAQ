@@ -1482,7 +1482,7 @@ class PMF_Faq
 
         if ($this->db->num_rows($result) > 0) {
             $row = $this->db->fetch_object($result);
-            return PMF_htmlentities($row->keywords, ENT_QUOTES, 'utf-8');
+            return PMF_String::htmlspecialchars($row->keywords, ENT_QUOTES, 'utf-8');
         } else {
             return '';
         }

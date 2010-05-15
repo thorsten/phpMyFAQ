@@ -326,7 +326,7 @@ class PMF_Sitemap
         $oldId = 0;
         while ($row = $this->db->fetch_object($result)) {
             if ($oldId != $row->id) {
-                $title = PMF_htmlentities($row->thema, ENT_QUOTES, 'utf-8');
+                $title = PMF_String::htmlspecialchars($row->thema, ENT_QUOTES, 'utf-8');
                 $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     $sids,
                     $row->category_id,
