@@ -1,12 +1,8 @@
 <?php
 /**
  * The export function to import the phpMyFAQ backups
- *
- * @category  phpMyFAQ 
- * @package   Administration
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2009-08-18
- * @copyright 2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -17,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ 
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-08-18
  */
 
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
@@ -67,47 +71,53 @@ header('Content-Type: application/octet-stream');
 header('Pragma: no-cache');
 
 if ($permission['backup']) {
-	
-	$db->getTableNames ( SQLPREFIX );
-	$tablenames   = '';
+
+    $db->getTableNames ( SQLPREFIX );
+    $tablenames   = '';
     $majorVersion = substr($faqconfig->get('main.currentVersion'), 0, 3);
-	
-	$text[] = "-- pmf" . $majorVersion . ": " . $tablenames;
-	$text[] = "-- DO NOT REMOVE THE FIRST LINE!";
-	$text[] = "-- pmftableprefix: " . SQLPREFIX;
-	$text[] = "-- DO NOT REMOVE THE LINES ABOVE!";
-	$text[] = "-- Otherwise this backup will be broken.";
-	
-	switch ($action) {
-		
-		case 'backup_content' :
-			header('Content-Disposition: attachment; filename="phpmyfaq-data.'.date("Y-m-d-H-i-s").'.sql');
-			foreach ($db->tableNames as $table) {
-				$tablenames .= $table . ' ';
-			}
-			foreach ($db->tableNames as $table) {
-				print implode("\r\n", $text);
-				$text = build_insert("SELECT * FROM " . $table, $table);
-			}
-            
-			break;
-		
-		case 'backup_logs' :
+
+    switch ($action) {
+        case 'backup_content' :
+            foreach ($db->tableNames as $table) {
+                if (SQLPREFIX . 'faqadminlog' != $table || SQLPREFIX . 'faqsessions' != $table) {
+                    $tablenames .= $table . ' ';
+                }
+            }
+            break;
+        case 'backup_logs' :
+            foreach ($db->tableNames as $table) {
+                if (SQLPREFIX . 'faqadminlog' == $table || SQLPREFIX . 'faqsessions' == $table) {
+                    $tablenames .= $table . ' ';
+                }
+            }
+            break;
+    }
+    
+    $text[] = "-- pmf" . $majorVersion . ": " . $tablenames;
+    $text[] = "-- DO NOT REMOVE THE FIRST LINE!";
+    $text[] = "-- pmftableprefix: " . SQLPREFIX;
+    $text[] = "-- DO NOT REMOVE THE LINES ABOVE!";
+    $text[] = "-- Otherwise this backup will be broken.";
+
+    switch ($action) {
+        case 'backup_content' :
+            header('Content-Disposition: attachment; filename="phpmyfaq-data.'.date("Y-m-d-H-i-s").'.sql');
+            foreach ($db->tableNames as $table) {
+                print implode("\r\n", $text);
+                $text = build_insert("SELECT * FROM " . $table, $table);
+            }
+            break;
+        case 'backup_logs' :
             header('Content-Disposition: attachment; filename="phpmyfaq-logs.'.date("Y-m-d-H-i-s").'.sql');
-			foreach ( $db->tableNames as $table ) {
-				if (SQLPREFIX . 'faqadminlog' == $table || SQLPREFIX . 'faqsessions' == $table) {
-					$tablenames .= $table . ' ';
-				}
-			}
-			foreach ($db->tableNames as $table) {
-				if (SQLPREFIX . 'faqadminlog' == $table || SQLPREFIX . 'faqsessions' == $table) {
-					print implode("\r\n", $text);
-					$text = build_insert("SELECT * FROM " . $table, $table);
-				}
-			}
-			break;
-	}
-	
+            foreach ($db->tableNames as $table) {
+                if (SQLPREFIX . 'faqadminlog' == $table || SQLPREFIX . 'faqsessions' == $table) {
+                    print implode("\r\n", $text);
+                    $text = build_insert("SELECT * FROM " . $table, $table);
+                }
+            }
+            break;
+    }
+
 } else {
     print $PMF_LANG['err_NotAuth'];
 }

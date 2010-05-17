@@ -1,12 +1,8 @@
 <?php
 /**
  * The import function to import the phpMyFAQ backups
- *
- * @category  phpMyFAQ 
- * @package   Administration
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2003-02-24
- * @copyright 2003-2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -17,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ 
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2003-2009 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2003-02-24
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -35,7 +39,7 @@ if ($permission["restore"]) {
         $majorVersion = substr($faqconfig->get('main.currentVersion'), 0, 3);
 
         if (PMF_String::substr($dat, 0, 9) != '-- pmf' . $majorVersion) {
-            print $PMF_LANG["ad_csv_no"];
+            print $PMF_LANG["ad_csv_no"] . ' (Version mismatch)';
             $ok = 0;
         } else {
             $dat = trim(PMF_String::substr($dat, 11));
@@ -66,10 +70,10 @@ if ($permission["restore"]) {
             $g = 0;
             printf("<p>%s</p>\n", $PMF_LANG['ad_csv_process']);
             $anz = count($mquery);
-            $kg = "";
+            $kg  = "";
             for ($i = 0; $i < $anz; $i++) {
                 $mquery[$i] = alignTablePrefix($mquery[$i], $table_prefix, SQLPREFIX);
-                $kg = $db->query($mquery[$i]);
+                $kg         = $db->query($mquery[$i]);
                 if (!$kg) {
                     printf('<div style="font-size: 9px;"><strong>Query</strong>: "%s" <span style="color: red;">failed (Reason: %s)</span></div>%s',
                         PMF_String::htmlspecialchars($mquery[$i], ENT_QUOTES, 'utf-8'),
@@ -86,7 +90,7 @@ if ($permission["restore"]) {
             print "<p>".$g." ".$PMF_LANG["ad_csv_of"]." ".$anz." ".$PMF_LANG["ad_csv_suc"]."</p>\n";
         }
     } else {
-        print "<p>".$PMF_LANG["ad_csv_no"]."</p>";
+        print "<p>".$PMF_LANG["ad_csv_no"]." (Wrong filetype)</p>";
     }
 } else {
     print $PMF_LANG["err_NotAuth"];
