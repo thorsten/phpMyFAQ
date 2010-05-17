@@ -69,7 +69,7 @@ class PMF_Session
      * 
      * @param string  $action String User action string
      * @param integer $id     ID
-     *
+     * 
      * @return void
      */
     public function userTracking($action, $id = 0)
@@ -171,7 +171,8 @@ class PMF_Session
     /**
      * Returns all session from a date
      *
-     * @param  integer $timestamp Timestamp
+     * @param integer $firstHour First hour
+     * @param integer $lastHour  Last hour
      * 
      * @return array
      */
@@ -231,7 +232,7 @@ class PMF_Session
     /**
      * Deletes the sessions for a given timespan
      *
-     * @param integer $first Frist session ID
+     * @param integer $first First session ID
      * @param integer $last  Last session ID
      * 
      * @return boolean
@@ -307,6 +308,62 @@ class PMF_Session
             );
             $this->db->query($query);
         }
+    }
+    /**
+     * Returns the number of anonymous users and registered ones.
+     * These are the numbers of unique users who have perfomed
+     * some activities within the last five minutes
+     *
+     * @param  integer $activityTimeWindow Optionally set the time window size in sec. 
+     *                                     Default: 300sec, 5 minutes
+     * 
+     * @return array
+     */
+    public function getUsersOnline($activityTimeWindow = 300)
+    {
+        $users = array(0, 0);
+        
+        if (PMF_Configuration::getInstance()->get('main.enableUserTracking')) {
+            $timeNow = ($_SERVER['REQUEST_TIME'] - $activityTimeWindow);
+            // Count all sids within the time window
+            // TODO: add a new field in faqsessions in order to find out only sids of anonymous users
+            $query = sprintf("
+                SELECT
+                    count(sid) AS anonymous_users
+                FROM
+                    %sfaqsessions
+                WHERE
+                    user_id = -1
+                AND 
+                    time > %d",
+                SQLPREFIX,
+                $timeNow);
+            $result = $this->db->query($query);
+            
+            if (isset($result)) {
+                $row      = $this->db->fetchObject($result);
+                $users[0] = $row->anonymous_users;
+            }
+            
+            // Count all faquser records within the time window
+            $query = sprintf("
+                SELECT
+                    count(session_id) AS registered_users
+                FROM
+                    %sfaquser
+                WHERE
+                    session_timestamp > %d",
+                SQLPREFIX,
+                $timeNow);
+            $result = $this->db->query($query);
+            
+            if (isset($result)) {
+                $row      = $this->db->fetchObject($result);
+                $users[1] = $row->registered_users;
+            }
+        }
+        
+        return $users;
     }
 
     /**

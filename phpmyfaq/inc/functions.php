@@ -358,54 +358,6 @@ function getHighlightedBannedWords($content)
     }
 }
 
-/**
- * Returns the number of anonymous users and registered ones.
- * These are the numbers of unique users who have perfomed
- * some activities within the last five minutes
- *
- * @param  integer $activityTimeWindow Optionally set the time window size in sec. 
- *                                     Default: 300sec, 5 minutes
- * @return array
- */
-function getUsersOnline($activityTimeWindow = 300)
-{
-    $users = array(0 ,0);
-    $db    = PMF_Db::getInstance();
-
-    if (PMF_Configuration::getInstance()->get('main.enableUserTracking')) {
-        $timeNow = ($_SERVER['REQUEST_TIME'] - $activityTimeWindow);
-        // Count all sids within the time window
-        // TODO: add a new field in faqsessions in order to find out only sids of anonymous users
-        $result = $db->query("
-                    SELECT
-                        count(sid) AS anonymous_users
-                    FROM
-                        ".SQLPREFIX."faqsessions
-                    WHERE
-                            user_id = -1
-                        AND time > ".$timeNow);
-        if (isset($result)) {
-            $row      = $db->fetchObject($result);
-            $users[0] = $row->anonymous_users;
-        }
-        // Count all faquser records within the time window
-        $result = $db->query("
-                    SELECT
-                        count(session_id) AS registered_users
-                    FROM
-                        ".SQLPREFIX."faquser
-                    WHERE
-                        session_timestamp > ".$timeNow);
-        if (isset($result)) {
-            $row      = $db->fetchObject($result);
-            $users[1] = $row->registered_users;
-        }
-    }
-
-    return $users;
-}
-
-
 /******************************************************************************
  * Funktionen fuer Artikelseiten
  ******************************************************************************/
@@ -545,7 +497,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
 {
     global $sids, $PMF_LANG, $plr, $LANGCODE, $faq, $current_user, $current_groups, $categoryLayout;
 
-    $_searchterm = PMF_htmlentities(stripslashes($searchterm), ENT_QUOTES, 'utf-8');
+    $_searchterm = PMF_String::htmlspecialchars(stripslashes($searchterm), ENT_QUOTES, 'utf-8');
     $seite       = 1;
     $output      = '';
     $num         = 0;
@@ -738,16 +690,86 @@ function highlight_no_links(Array $matches)
 //
 
 /**
- * This is a wrapper for htmlspecialchars() with a check on valid charsets.
+ * Adds a menu entry according to user permissions.
+ * ',' stands for 'or', '*' stands for 'and'
  *
- * @param  string $string      String
- * @param  string $quote_style Quote style
- * @param  string $charset     Charset
+ * @param  string  $restrictions Restrictions
+ * @param  string  $action       Action parameter
+ * @param  string  $caption      Caption
+ * @param  string  $active       Active
+ * @access public
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * 
  * @return string
  */
-function PMF_htmlentities($string, $quote_style = ENT_QUOTES, $charset = 'UTF-8')
+function addMenuEntry($restrictions = '', $action = '', $caption = '', $active = '')
 {
-    return htmlspecialchars($string, $quote_style, $charset);
+    global $PMF_LANG;
+
+    $class = '';
+    if ($active == $action) {
+        $class = ' class="current"';
+    }
+
+    if ($action != '') {
+        $action = "action=".$action;
+    }
+
+    if (isset($PMF_LANG[$caption])) {
+        $_caption = $PMF_LANG[$caption];
+    } else {
+        $_caption = 'No string for '.$caption;
+    }
+
+    $output = sprintf('        <li><a%s href="?%s">%s</a></li>%s',
+        $class,
+        $action,
+        $_caption,
+        "\n");
+           
+    return evalPermStr($restrictions) ? $output : '';
+}
+
+/**
+ * Parse and check a permission string
+ * 
+ * Permissions are glued with each other as follows
+ * - '+' stands for 'or'
+ * - '*' stands for 'and'
+ * 
+ * No braces will be parsed, only simple expressions
+ * @example right1*right2+right3+right4*right5
+ * 
+ * @author Anatoliy Belsky <anatoliy.belsky@mayflower.de>
+ * @param string $restrictions
+ * 
+ * @return boolean
+ */
+function evalPermStr($restrictions)
+{
+    global $permission;
+    
+    if(false !== strpos($restrictions, '+')) {
+    	$retval = false;
+        foreach (explode('+', $restrictions) as $_restriction) {
+			$retval = $retval || evalPermStr($_restriction);
+			if($retval) {
+				break;
+			}
+        }        
+    } else if(false !== strpos($restrictions, '*')) {
+    	$retval = true;
+        foreach (explode('*', $restrictions) as $_restriction) {
+            if(!isset($permission[$_restriction]) || !$permission[$_restriction]) {
+                $retval = false;
+                break;   
+            }
+        }  
+    } else {
+    	$retval = strlen($restrictions) > 0 && isset($permission[$restrictions]) && $permission[$restrictions];
+    }
+    
+    return $retval;
 }
 
 /******************************************************************************

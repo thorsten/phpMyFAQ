@@ -469,7 +469,7 @@ if ($tpl->ajax_active) {
     }
 }
 
-$usersOnLine    = getUsersOnline();
+$usersOnLine    = $faqsession->getUsersOnline();
 $totUsersOnLine = $usersOnLine[0] + $usersOnLine[1];
 $systemUri      = PMF_Link::getSystemUri('index.php');
 
