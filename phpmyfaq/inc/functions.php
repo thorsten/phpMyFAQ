@@ -732,14 +732,14 @@ function PageSpan($code, $start, $end, $akt)
  */
 function build_insert($query, $table)
 {
-   $db = PMF_Db::getInstance();
+    $db = PMF_Db::getInstance();
    
     if (!$result = $db->query($query)) {
         return;
     }
     $ret = array();
 
-    $ret[] = "\n-- Table: ".$table;
+    $ret[] = "\r\n-- Table: ".$table;
 
     while ($row = $db->fetch_assoc($result)) {
         $p1 = array();

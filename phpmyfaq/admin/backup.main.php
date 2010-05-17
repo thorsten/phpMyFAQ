@@ -1,13 +1,8 @@
 <?php
 /**
  * Frontend for Backup and Restore
- *
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2003-02-24
- * @version    SVN: $Id$
- * @copyright  2003-2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2003-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2003-02-24
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -29,10 +32,13 @@ printf('<h2>%s</h2>', $PMF_LANG['ad_csv_backup']);
 
 if ($permission['backup']) {
 ?>
-	<fieldset>
+    <fieldset>
         <legend><?php print $PMF_LANG["ad_csv_head"]; ?></legend>
         <p><?php print $PMF_LANG["ad_csv_make"]; ?></p>
-        <p align="center"><a href="backup.export.php?action=backup_content"><?php print $PMF_LANG["ad_csv_linkdat"]; ?></a> | <a href="backup.export.php?action=backup_logs"><?php print $PMF_LANG["ad_csv_linklog"]; ?></a></p>
+        <p align="center">
+            <a href="backup.export.php?action=backup_content"><?php print $PMF_LANG["ad_csv_linkdat"]; ?></a> | 
+            <a href="backup.export.php?action=backup_logs"><?php print $PMF_LANG["ad_csv_linklog"]; ?></a>
+        </p>
     </fieldset>
 
     <form method="post" action="?action=restore" enctype="multipart/form-data">
