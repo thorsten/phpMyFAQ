@@ -33,10 +33,9 @@
 define('VERSION', '2.6.5');
 define('APIVERSION', 1);
 define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
-define('SAFEMODE', @ini_get('safe_mode'));
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
-if (SAFEMODE) {
+if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     set_time_limit(0);
 }
 
@@ -291,7 +290,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 <p class="center">Your PHP version: <strong>PHP <?php print PHP_VERSION; ?></strong></p>
 
 <?php
-    if (SAFEMODE == 1) {
+    if ((@ini_get('safe_mode') == 'On' || @ini_get('safe_mode') === 1)) {
         print '<p class="center">The PHP safe mode is enabled. You may have problems when phpMyFAQ writes in some directories.</p>';
     }
     if (!extension_loaded('gd')) {
