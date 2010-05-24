@@ -1,9 +1,12 @@
-phpMyFAQ 2.6.5
+phpMyFAQ 2.6.6
 Codename "Portia"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.6.6 - 2010-06-
+-
 
 Version 2.6.5 - 2010-05-24
 - updated bundled TCPDF library to version 5.0.009 (Thorsten)
