@@ -29,48 +29,45 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-if (!$permission['editconfig']) {
-    exit();
-}
+if ($permission['editconfig']) {
+    // actions defined by url: user_action=
+    $userAction = PMF_Filter::filterInput(INPUT_GET, 'config_action', FILTER_SANITIZE_STRING, 'listConfig');
 
-// actions defined by url: user_action=
-$userAction = PMF_Filter::filterInput(INPUT_GET, 'config_action', FILTER_SANITIZE_STRING, 'listConfig');
+    // Save the configuration
+    if ('saveConfig' == $userAction) {
 
-// Save the configuration
-if ('saveConfig' == $userAction) {
-	
-	$checks          = array('filter' => FILTER_SANITIZE_STRING,
-	                         'flags'  => FILTER_REQUIRE_ARRAY);
-	$editData        = PMF_Filter::filterInputArray(INPUT_POST, array('edit' => $checks));
-    $message         = '';
-    $userAction      = 'listConfig';
-    $oldConfigValues = $faqconfig->config;
-    
-    // Set the new values
-    $forbiddenValues = array('{', '}', '$');
-    $newConfigValues = array();
-    foreach ($editData['edit'] as $key => $value) {
-        $newConfigValues[$key] = str_replace($forbiddenValues, '', $value);
-    }
-    
-    foreach ($oldConfigValues as $key => $value) {
-        if (isset($newConfigValues[$key])) {
-            continue;
-        } else {
-            if ($oldConfigValues[$key] == 'true') {
-                $newConfigValues[$key] = 'false';
+        $checks          = array('filter' => FILTER_SANITIZE_STRING,
+                                 'flags'  => FILTER_REQUIRE_ARRAY);
+        $editData        = PMF_Filter::filterInputArray(INPUT_POST, array('edit' => $checks));
+        $message         = '';
+        $userAction      = 'listConfig';
+        $oldConfigValues = $faqconfig->config;
+
+        // Set the new values
+        $forbiddenValues = array('{', '}', '$');
+        $newConfigValues = array();
+        foreach ($editData['edit'] as $key => $value) {
+            $newConfigValues[$key] = str_replace($forbiddenValues, '', $value);
+        }
+
+        foreach ($oldConfigValues as $key => $value) {
+            if (isset($newConfigValues[$key])) {
+                continue;
             } else {
-                $newConfigValues[$key] = $oldConfigValues[$key];
+                if ($oldConfigValues[$key] == 'true') {
+                    $newConfigValues[$key] = 'false';
+                } else {
+                    $newConfigValues[$key] = $oldConfigValues[$key];
+                }
             }
         }
+
+        $faqconfig->update($newConfigValues);
     }
-    
-    $faqconfig->update($newConfigValues);
-}
-// Lists the current configuration
-if ('listConfig' == $userAction) {
-    $message    = '';
-    $userAction = 'listConfig';
+    // Lists the current configuration
+    if ('listConfig' == $userAction) {
+        $message    = '';
+        $userAction = 'listConfig';
 ?>
 
 <h2><?php print $PMF_LANG['ad_config_edit']; ?></h2>
@@ -112,4 +109,7 @@ getConfigList();
 </script>
 
 <?php
+    }
+} else {
+    print $PMF_LANG['err_NotAuth'];
 }
