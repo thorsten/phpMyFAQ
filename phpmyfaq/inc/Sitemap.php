@@ -141,7 +141,7 @@ class PMF_Sitemap
         case 'sqlite':
             $query = sprintf("
                     SELECT
-                        DISTINCT PMF_String::substr(fd.thema, 1, 1) AS letters
+                        DISTINCT UPPER(SUBSTR(fd.thema, 1, 1)) AS letters
                     FROM
                         %sfaqdata fd
                     LEFT JOIN
@@ -170,7 +170,7 @@ class PMF_Sitemap
         default:
             $query = sprintf("
                     SELECT
-                        DISTINCT substring(fd.thema, 1, 1) AS letters
+                        DISTINCT UPPER(SUBSTRING(fd.thema, 1, 1)) AS letters
                     FROM
                         %sfaqdata fd
                     LEFT JOIN
