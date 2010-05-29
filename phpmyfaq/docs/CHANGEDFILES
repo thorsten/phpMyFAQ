@@ -1,3 +1,43 @@
+CHANGED FILES FROM 2.6.4 -> 2.6.5
+
+./admin/backup.export.php
+./admin/backup.import.php
+./admin/backup.main.php
+./admin/editor/
+./admin/footer.php
+./admin/header.php
+./admin/js/user.js
+./admin/news.php
+./admin/record.show.php
+./admin/stat.ratings.php
+./admin/stat.search.php
+./admin/user.php
+./ajaxresponse.php
+./config/constants.php
+./inc/Faq.php
+./inc/Filter.php
+./inc/PMF_Helper/Search.php
+./inc/Pagination.php
+./inc/Search.php
+./inc/Session.php
+./inc/Sitemap.php
+./inc/Tags.php
+./inc/Utils.php
+./inc/functions.php
+./inc/libs/tcpdf/htmlcolors.php
+./inc/libs/tcpdf/tcpdf.php
+./index.php
+./install/pgsql.sql.php
+./install/setup.php
+./install/update.php
+./instantresponse.php
+./lang/language_pl.php
+./lang/language_ru.php
+./lang/language_th.php
+./opensearch.php
+
+
+
 CHANGED FILES FROM 2.6.3 -> 2.6.4
 
 ./admin/record.show.php

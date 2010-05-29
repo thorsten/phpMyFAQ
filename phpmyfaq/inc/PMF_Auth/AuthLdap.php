@@ -49,14 +49,15 @@ class PMF_Auth_AuthLdap extends PMF_Auth implements PMF_Auth_AuthDriver
     /**
      * Constructor
      *
-     * @param  string  $enctype   Type of encoding
-     * @param  boolean $read_only Readonly?
-     * @return void
+     * @param string  $enctype   Type of encoding
+     * @param boolean $read_only Readonly?
+     * 
+     * @return PMF_Auth_AuthLdap
      */
     public function __construct($enctype = 'none', $read_only = false)
     {
-    	global $PMF_LDAP;
-    	
+        global $PMF_LDAP;
+        
         parent::__construct($enctype, $read_only);
         
         $this->ldap = new PMF_Ldap($PMF_LDAP['ldap_server'],
@@ -64,7 +65,7 @@ class PMF_Auth_AuthLdap extends PMF_Auth implements PMF_Auth_AuthDriver
                                    $PMF_LDAP['ldap_base'],
                                    $PMF_LDAP['ldap_user'], 
                                    $PMF_LDAP['ldap_password']);
-
+        
         if ($this->ldap->error) {
             $this->errors[] = $this->ldap->error;
         } 
@@ -85,7 +86,7 @@ class PMF_Auth_AuthLdap extends PMF_Auth implements PMF_Auth_AuthDriver
         $result = $user->createUser($login, null);
         
         // Update user information from LDAP
-		$user->setUserData(array('display_name' => $this->ldap->getCompleteName($login),
+        $user->setUserData(array('display_name' => $this->ldap->getCompleteName($login),
                                  'email'        => $this->ldap->getMail($login)));
         return $result;
     }
@@ -93,26 +94,28 @@ class PMF_Auth_AuthLdap extends PMF_Auth implements PMF_Auth_AuthDriver
     /**
      * Does nothing. A function required to be a valid auth.
      *
-     * @param  string $login Loginname
-     * @param  string $pass  Password
+     * @param string $login Loginname
+     * @param string $pass  Password
+     * 
      * @return boolean
     */
     public function changePassword($login, $pass)
     {
-    	return true;
+        return true;
     }
-    
+
     /**
      * Does nothing. A function required to be a valid auth.
      *
-     * @param  string $login Loginname
+     * @param string $login Loginname
+     * 
      * @return bool
      */
     public function delete($login)
     {
-    	return true;
+        return true;
     }
-    
+
     /**
      * Checks the password for the given user account.
      *
@@ -123,22 +126,34 @@ class PMF_Auth_AuthLdap extends PMF_Auth implements PMF_Auth_AuthDriver
 	 * This function is only called when local authentication has failed, so
 	 * we are about to create user account.
      *
-     * @param  string $login        Loginname
-     * @param  string $pass         Password
-     * @param  array  $optionslData Optional data
+     * @param string $login        Loginname
+     * @param string $pass         Password
+     * @param array  $optionslData Optional data
+     * 
      * @return boolean
      */
     public function checkPassword($login, $pass, Array $optionalData = null)
     {
         global $PMF_LDAP;
         
-       $bindLogin = $login;
-       if ($PMF_LDAP['ldap_use_domain_prefix']) {
-           if (array_key_exists('domain', $optionalData)) {
-               $bindLogin = $optionalData['domain']."\\".$login;
-           }
-       }
-
+        $bindLogin = $login;
+        if ($PMF_LDAP['ldap_use_domain_prefix']) {
+            if (array_key_exists('domain', $optionalData)) {
+                $bindLogin = $optionalData['domain']."\\".$login;
+            }
+        } else {
+            $this->ldap = new PMF_Ldap($PMF_LDAP['ldap_server'],
+                                       $PMF_LDAP['ldap_port'],
+                                       $PMF_LDAP['ldap_base'],
+                                       $PMF_LDAP['ldap_user'],
+                                       $PMF_LDAP['ldap_password']);
+            if ($this->ldap->error) {
+                $this->errors[] = $this->ldap->error;
+            }
+            
+            $bindLogin = $this->ldap->getDn($login);
+        }
+        
         $this->ldap = new PMF_Ldap($PMF_LDAP['ldap_server'],
                                    $PMF_LDAP['ldap_port'],
                                    $PMF_LDAP['ldap_base'],
@@ -156,13 +171,13 @@ class PMF_Auth_AuthLdap extends PMF_Auth implements PMF_Auth_AuthDriver
     /**
      * Does nothing. A function required to be a valid auth.
      *
-     * @param  string $login        Loginname
-     * @param  array  $optionslData Optional data
+     * @param string $login        Loginname
+     * @param array  $optionslData Optional data
+     * 
      * @return integer
      */
     public function checkLogin($login, Array $optionalData = null)
     {
         return $this->ldap->getCompleteName($login);
     }
-
 }

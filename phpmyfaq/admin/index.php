@@ -254,7 +254,9 @@ if (isset($auth) && in_array(true, $permission)) {
             case 'user':                    require_once 'user.php'; break;
             case 'group':                   require_once 'group.php'; break;
             // functions for record administration
-            case "view":                    require_once 'record.show.php'; break;
+            case 'viewinactive':
+            case 'viewactive':
+            case 'view':                    require_once 'record.show.php'; break;
             case "takequestion":
             case "editentry":
             case 'copyentry':

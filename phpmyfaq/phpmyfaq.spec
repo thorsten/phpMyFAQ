@@ -157,6 +157,9 @@ installation script.
 * Mon Jan 04 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0.alpha-1
 - New upstream version 2.7.0-alpha
 
+* Mon May 24 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.6.6-1
+- New upstream version 2.6.6
+
 * Sun Apr 18 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.6.5-1
 - New upstream version 2.6.5
 

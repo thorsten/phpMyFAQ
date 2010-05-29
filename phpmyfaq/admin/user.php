@@ -31,164 +31,161 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-if (!$permission['edituser'] && !$permission['deluser'] && !$permission['adduser']) {
-    exit();
-}
+if ($permission['edituser'] || $permission['deluser'] || $permission['adduser']) {
+    // set some parameters
+    $selectSize         = 10;
+    $defaultUserAction  = 'list';
+    $defaultUserStatus  = 'active';
+    $loginMinLength     = 4;
 
-// set some parameters
-$selectSize         = 10;
-$defaultUserAction  = 'list';
-$defaultUserStatus  = 'active';
-$loginMinLength     = 4;
+    $errorMessages = array(
+        'addUser_password'           => $PMF_LANG['ad_user_error_password'],
+        'addUser_passwordsDontMatch' => $PMF_LANG['ad_user_error_passwordsDontMatch'],
+        'addUser_loginExists'        => $PMF_LANG["ad_adus_exerr"],
+        'addUser_loginInvalid'       => $PMF_LANG['ad_user_error_loginInvalid'],
+        'addUser_noEmail'            => $PMF_LANG['ad_user_error_noEmail'],
+        'addUser_noRealName'         => $PMF_LANG['ad_user_error_noRealName'],
+        'delUser'                    => $PMF_LANG['ad_user_error_delete'],
+        'delUser_noId'               => $PMF_LANG['ad_user_error_noId'],
+        'delUser_protectedAccount'   => $PMF_LANG['ad_user_error_protectedAccount'],
+        'updateUser'                 => $PMF_LANG['ad_msg_mysqlerr'],
+        'updateUser_noId'            => $PMF_LANG['ad_user_error_noId'],
+        'updateRights'               => $PMF_LANG['ad_msg_mysqlerr'],
+        'updateRights_noId'          => $PMF_LANG['ad_user_error_noId']);
 
-$errorMessages = array(
-    'addUser_password'           => $PMF_LANG['ad_user_error_password'],
-    'addUser_passwordsDontMatch' => $PMF_LANG['ad_user_error_passwordsDontMatch'],
-    'addUser_loginExists'        => $PMF_LANG["ad_adus_exerr"],
-    'addUser_loginInvalid'       => $PMF_LANG['ad_user_error_loginInvalid'],
-    'addUser_noEmail'            => $PMF_LANG['ad_user_error_noEmail'],
-    'addUser_noRealName'         => $PMF_LANG['ad_user_error_noRealName'],
-    'delUser'                    => $PMF_LANG['ad_user_error_delete'],
-    'delUser_noId'               => $PMF_LANG['ad_user_error_noId'],
-    'delUser_protectedAccount'   => $PMF_LANG['ad_user_error_protectedAccount'],
-    'updateUser'                 => $PMF_LANG['ad_msg_mysqlerr'],
-    'updateUser_noId'            => $PMF_LANG['ad_user_error_noId'],
-    'updateRights'               => $PMF_LANG['ad_msg_mysqlerr'],
-    'updateRights_noId'          => $PMF_LANG['ad_user_error_noId']);
+    $successMessages = array(
+        'addUser'                    => $PMF_LANG["ad_adus_suc"],
+        'delUser'                    => $PMF_LANG["ad_user_deleted"],
+        'updateUser'                 => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
+        'updateRights'               => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2']);
 
-$successMessages = array(
-    'addUser'                    => $PMF_LANG["ad_adus_suc"],
-    'delUser'                    => $PMF_LANG["ad_user_deleted"],
-    'updateUser'                 => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
-    'updateRights'               => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2']);
+    $text = array(
+        'header'                     => $PMF_LANG['ad_user'],
+        'selectUser'                 => $PMF_LANG["ad_user_username"],
+        'addUser'                    => $PMF_LANG["ad_adus_adduser"],
+        'addUser_confirm'            => $PMF_LANG["ad_gen_save"],
+        'addUser_cancel'             => $PMF_LANG['ad_gen_cancel'],
+        'addUser_link'               => $PMF_LANG["ad_user_add"],
+        'addUser_name'               => $PMF_LANG["ad_adus_name"],
+        'addUser_displayName'        => $PMF_LANG["ad_user_realname"],
+        'addUser_email'              => $PMF_LANG["ad_entry_email"],
+        'addUser_password'           => $PMF_LANG["ad_adus_password"],
+        'addUser_password2'          => $PMF_LANG["ad_passwd_con"],
+        'delUser'                    => $PMF_LANG['ad_user_deleteUser'],
+        'delUser_button'             => $PMF_LANG['ad_gen_delete'],
+        'delUser_question'           => $PMF_LANG["ad_user_del_3"]." ".$PMF_LANG["ad_user_del_1"]." ".$PMF_LANG["ad_user_del_2"],
+        'delUser_confirm'            => $PMF_LANG["ad_gen_yes"],
+        'delUser_cancel'             => $PMF_LANG["ad_gen_no"],
+        'changeUser'                 => $PMF_LANG["ad_user_profou"],
+        'changeUser_submit'          => $PMF_LANG["ad_gen_save"],
+        'changeUser_status'          => $PMF_LANG['ad_user_status'],
+        'changeRights'               => $PMF_LANG["ad_user_rights"],
+        'changeRights_submit'        => $PMF_LANG["ad_gen_save"],
+        'changeRights_checkAll'      => $PMF_LANG['ad_user_checkall'],
+        'changeRights_uncheckAll'    => $PMF_LANG['ad_user_uncheckall'],
+        'listAllUsers_link'          => $PMF_LANG['list_all_users']);
 
-$text = array(
-    'header'                     => $PMF_LANG['ad_user'],
-    'selectUser'                 => $PMF_LANG["ad_user_username"],
-    'addUser'                    => $PMF_LANG["ad_adus_adduser"],
-    'addUser_confirm'            => $PMF_LANG["ad_gen_save"],
-    'addUser_cancel'             => $PMF_LANG['ad_gen_cancel'],
-    'addUser_link'               => $PMF_LANG["ad_user_add"],
-    'addUser_name'               => $PMF_LANG["ad_adus_name"],
-    'addUser_displayName'        => $PMF_LANG["ad_user_realname"],
-    'addUser_email'              => $PMF_LANG["ad_entry_email"],
-    'addUser_password'           => $PMF_LANG["ad_adus_password"],
-    'addUser_password2'          => $PMF_LANG["ad_passwd_con"],
-    'delUser'                    => $PMF_LANG['ad_user_deleteUser'],
-    'delUser_button'             => $PMF_LANG['ad_gen_delete'],
-    'delUser_question'           => $PMF_LANG["ad_user_del_3"]." ".$PMF_LANG["ad_user_del_1"]." ".$PMF_LANG["ad_user_del_2"],
-    'delUser_confirm'            => $PMF_LANG["ad_gen_yes"],
-    'delUser_cancel'             => $PMF_LANG["ad_gen_no"],
-    'changeUser'                 => $PMF_LANG["ad_user_profou"],
-    'changeUser_submit'          => $PMF_LANG["ad_gen_save"],
-    'changeUser_status'          => $PMF_LANG['ad_user_status'],
-    'changeRights'               => $PMF_LANG["ad_user_rights"],
-    'changeRights_submit'        => $PMF_LANG["ad_gen_save"],
-    'changeRights_checkAll'      => $PMF_LANG['ad_user_checkall'],
-    'changeRights_uncheckAll'    => $PMF_LANG['ad_user_uncheckall'],
-    'listAllUsers_link'          => $PMF_LANG['list_all_users']);
-
-// what shall we do?
-// actions defined by url: user_action=
-$userAction = PMF_Filter::filterInput(INPUT_GET, 'user_action', FILTER_SANITIZE_STRING, $defaultUserAction);
-// actions defined by submit button
-if (isset($_POST['user_action_deleteConfirm'])) {
-    $userAction = 'delete_confirm';
-}
-if (isset($_POST['cancel'])) {
-    $userAction = $defaultUserAction;
-}
-
-// update user rights
-if ($userAction == 'update_rights') {
-    $message    = '';
-    $userAction = $defaultUserAction;
-    $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
-    if ($userId == 0) {
-        $message .= '<p class="error">'.$errorMessages['updateRights_noId'].'</p>';
-    } else {
-        $user       = new PMF_User();
-        $perm       = $user->perm;
-        // @todo: Add PMF_Filter::filterInputArray()
-        $userRights = isset($_POST['user_rights']) ? $_POST['user_rights'] : array();
-        if (!$perm->refuseAllUserRights($userId)) {
-            $message .= '<p class="error">'.$errorMessages['updateRights'].'</p>';
-        }
-        foreach ($userRights as $rightId) {
-            $perm->grantUserRight($userId, $rightId);
-        }
-        $idUser   = $user->getUserById($userId);
-        $message .= '<p class="success">'.sprintf($successMessages['updateRights'], $user->getLogin()).'</p>';
-        $message .= '<script type="text/javascript">updateUser('.$userId.');</script>';
+    // what shall we do?
+    // actions defined by url: user_action=
+    $userAction = PMF_Filter::filterInput(INPUT_GET, 'user_action', FILTER_SANITIZE_STRING, $defaultUserAction);
+    // actions defined by submit button
+    if (isset($_POST['user_action_deleteConfirm'])) {
+        $userAction = 'delete_confirm';
     }
-}
+    if (isset($_POST['cancel'])) {
+        $userAction = $defaultUserAction;
+    }
 
-// update user data
-if ($userAction == 'update_data') {
-    $message    = '';
-    $userAction = $defaultUserAction;
-    $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
-    if ($userId == 0) {
-        $message .= '<p class="error">'.$errorMessages['updateUser_noId'].'</p>';
-    } else {
-        $userData                  = array();
-        $userData['display_name']  = PMF_Filter::filterInput(INPUT_POST, 'display_name', FILTER_SANITIZE_STRING, '');
-        $userData['email']         = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL, '');
-        $userData['last_modified'] = PMF_Filter::filterInput(INPUT_POST, 'last_modified', FILTER_SANITIZE_STRING, '');
-        $userStatus                = PMF_Filter::filterInput(INPUT_POST, 'user_status', FILTER_SANITIZE_STRING, $defaultUserStatus);
-        
-        $user = new PMF_User();
-        $user->getUserById($userId);
-
-        $stats = $user->getStatus();
-        // set new password an send email if user is switched to active
-        if ($stats == 'blocked' && $userStatus == 'active') {
-            $consonants  = array("b","c","d","f","g","h","j","k","l","m","n","p","r","s","t","v","w","x","y","z");
-            $vowels      = array("a","e","i","o","u");
-            $newPassword = '';
-            srand((double)microtime()*1000000);
-            for ($i = 1; $i <= 4; $i++) {
-                $newPassword .= $consonants[rand(0,19)];
-                $newPassword .= $vowels[rand(0,4)];
-            }
-            $user->changePassword($newPassword);
-
-            $mail = new PMF_Mail();
-            $mail->addTo($userData['email']);
-            $mail->subject = '[%sitename%] Username / activation';
-            $mail->message = sprintf("\nUsername: %s\nLoginname: %s\nNew Password: %s\n\n",
-                $userData['display_name'],
-                $user->getLogin(),
-                $newPassword);
-            $result = $mail->send();
-            unset($mail);
-        }
-
-        if (!$user->userdata->set(array_keys($userData), array_values($userData)) or !$user->setStatus($userStatus)) {
-            $message .= '<p class="error">'.$errorMessages['updateUser'].'</p>';
+    // update user rights
+    if ($userAction == 'update_rights') {
+        $message    = '';
+        $userAction = $defaultUserAction;
+        $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
+        if ($userId == 0) {
+            $message .= '<p class="error">'.$errorMessages['updateRights_noId'].'</p>';
         } else {
-            $message .= '<p class="success">'.sprintf($successMessages['updateUser'], $user->getLogin()).'</p>';
+            $user       = new PMF_User();
+            $perm       = $user->perm;
+            // @todo: Add PMF_Filter::filterInputArray()
+            $userRights = isset($_POST['user_rights']) ? $_POST['user_rights'] : array();
+            if (!$perm->refuseAllUserRights($userId)) {
+                $message .= '<p class="error">'.$errorMessages['updateRights'].'</p>';
+            }
+            foreach ($userRights as $rightId) {
+                $perm->grantUserRight($userId, $rightId);
+            }
+            $idUser   = $user->getUserById($userId);
+            $message .= '<p class="success">'.sprintf($successMessages['updateRights'], $user->getLogin()).'</p>';
             $message .= '<script type="text/javascript">updateUser('.$userId.');</script>';
         }
     }
-}
 
-// delete user confirmation
-if ($userAction == 'delete_confirm') {
-    $message    = '';
-    $user       = new PMF_User();
-    
-    $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_list_select', FILTER_VALIDATE_INT, 0);
-    if ($userId == 0) {
-        $message .= '<p class="error">'.$errorMessages['delUser_noId'].'</p>';
+    // update user data
+    if ($userAction == 'update_data') {
+        $message    = '';
         $userAction = $defaultUserAction;
-    } else {
-        $user->getUserById($userId);
-        // account is protected
-        if ($user->getStatus() == 'protected' || $userId == 1) {
-            $userAction = $defaultUserAction;
-            $message .= '<p class="error">'.$errorMessages['delUser_protectedAccount'].'</p>';
+        $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
+        if ($userId == 0) {
+            $message .= '<p class="error">'.$errorMessages['updateUser_noId'].'</p>';
         } else {
+            $userData                  = array();
+            $userData['display_name']  = PMF_Filter::filterInput(INPUT_POST, 'display_name', FILTER_SANITIZE_STRING, '');
+            $userData['email']         = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL, '');
+            $userData['last_modified'] = PMF_Filter::filterInput(INPUT_POST, 'last_modified', FILTER_SANITIZE_STRING, '');
+            $userStatus                = PMF_Filter::filterInput(INPUT_POST, 'user_status', FILTER_SANITIZE_STRING, $defaultUserStatus);
+
+            $user = new PMF_User();
+            $user->getUserById($userId);
+
+            $stats = $user->getStatus();
+            // set new password an send email if user is switched to active
+            if ($stats == 'blocked' && $userStatus == 'active') {
+                $consonants  = array("b","c","d","f","g","h","j","k","l","m","n","p","r","s","t","v","w","x","y","z");
+                $vowels      = array("a","e","i","o","u");
+                $newPassword = '';
+                srand((double)microtime()*1000000);
+                for ($i = 1; $i <= 4; $i++) {
+                    $newPassword .= $consonants[rand(0,19)];
+                    $newPassword .= $vowels[rand(0,4)];
+                }
+                $user->changePassword($newPassword);
+
+                $mail = new PMF_Mail();
+                $mail->addTo($userData['email']);
+                $mail->subject = '[%sitename%] Username / activation';
+                $mail->message = sprintf("\nUsername: %s\nLoginname: %s\nNew Password: %s\n\n",
+                $userData['display_name'],
+                $user->getLogin(),
+                $newPassword);
+                $result = $mail->send();
+                unset($mail);
+            }
+
+            if (!$user->userdata->set(array_keys($userData), array_values($userData)) or !$user->setStatus($userStatus)) {
+                $message .= '<p class="error">'.$errorMessages['updateUser'].'</p>';
+            } else {
+                $message .= '<p class="success">'.sprintf($successMessages['updateUser'], $user->getLogin()).'</p>';
+                $message .= '<script type="text/javascript">updateUser('.$userId.');</script>';
+            }
+        }
+    }
+
+    // delete user confirmation
+    if ($userAction == 'delete_confirm') {
+        $message    = '';
+        $user       = new PMF_User();
+
+        $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_list_select', FILTER_VALIDATE_INT, 0);
+        if ($userId == 0) {
+            $message .= '<p class="error">'.$errorMessages['delUser_noId'].'</p>';
+            $userAction = $defaultUserAction;
+        } else {
+            $user->getUserById($userId);
+            // account is protected
+            if ($user->getStatus() == 'protected' || $userId == 1) {
+                $userAction = $defaultUserAction;
+                $message .= '<p class="error">'.$errorMessages['delUser_protectedAccount'].'</p>';
+            } else {
 ?>
 
 <h2><?php print $text['header']; ?></h2>
@@ -207,24 +204,18 @@ if ($userAction == 'delete_confirm') {
     </fieldset>
 </div>
 <?php
+            }
         }
     }
-}
 
-// delete user
-if ($userAction == 'delete') {
-    $message    = '';
-    $user       = new PMF_User();
-    $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
-    $userAction = $defaultUserAction;
-    if ($userId == 0) {
-        $message .= '<p class="error">'.$errorMessages['delUser_noId'].'</p>';
-    } else {
-        if (!$user->getUserById($userId)) {
+    // delete user
+    if ($userAction == 'delete') {
+        $message    = '';
+        $user       = new PMF_User();
+        $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
+        $userAction = $defaultUserAction;
+        if ($userId == 0) {
             $message .= '<p class="error">'.$errorMessages['delUser_noId'].'</p>';
-        }
-        if (!$user->deleteUser()) {
-            $message .= '<p class="error">'.$errorMessages['delUser'].'</p>';
         } else {
             // Move the categories ownership to admin (id == 1)
             $categoryHelper = new PMF_Category_Helper();
@@ -235,88 +226,102 @@ if ($userAction == 'delete') {
                 $oPerm = PMF_Perm::selectPerm('medium');
                 $oPerm->removeFromAllGroups($userId);
             }
+            if (!$user->getUserById($userId)) {
+                $message .= '<p class="error">'.$errorMessages['delUser_noId'].'</p>';
+            }
+            if (!$user->deleteUser()) {
+                $message .= '<p class="error">'.$errorMessages['delUser'].'</p>';
+            } else {
+                // Move the categories ownership to admin (id == 1)
+                $oCat = new PMF_Category($current_admin_user, $current_admin_groups, false);
+                $oCat->moveOwnership($userId, 1);
 
-            $message .= '<p class="success">'.$successMessages['delUser'].'</p>';
+                // Remove the user from groups
+                if ('medium' == PMF_Configuration::getInstance()->get('main.permLevel')) {
+                    $oPerm = PMF_Perm::selectPerm('medium');
+                    $oPerm->removeFromAllGroups($userId);
+                }
+
+                $message .= '<p class="success">'.$successMessages['delUser'].'</p>';
+            }
+            $userError = $user->error();
+            if ($userError != "") {
+                $message .= '<p>ERROR: '.$userError.'</p>';
+            }
         }
-        $userError = $user->error();
-        if ($userError != "") {
-            $message .= '<p>ERROR: '.$userError.'</p>';
+    }
+
+    // save new user
+    if ($userAction == 'addsave') {
+        $user     = new PMF_User();
+        $message  = '';
+        $messages = array();
+        // check input data
+        $user_name             = PMF_Filter::filterInput(INPUT_POST, 'user_name', FILTER_SANITIZE_STRING, '');
+        $user_realname         = PMF_Filter::filterInput(INPUT_POST, 'user_realname', FILTER_SANITIZE_STRING, '');
+        $user_password         = PMF_Filter::filterInput(INPUT_POST, 'user_password', FILTER_SANITIZE_STRING, '');
+        $user_email            = PMF_Filter::filterInput(INPUT_POST, 'user_email', FILTER_VALIDATE_EMAIL);
+        $user_password         = PMF_Filter::filterInput(INPUT_POST, 'user_password', FILTER_SANITIZE_STRING, '');
+        $user_password_confirm = PMF_Filter::filterInput(INPUT_POST, 'user_password_confirm', FILTER_SANITIZE_STRING, '');
+
+        if ($user_password != $user_password_confirm) {
+            $user_password         = '';
+            $user_password_confirm = '';
+            $messages[]            = $errorMessages['addUser_passwordsDontMatch'];
         }
-    }
 
-}
+        // check login name
+        $user->setLoginMinLength($loginMinLength);
+        if (!$user->isValidLogin($user_name)) {
+            $user_name  = '';
+            $messages[] = $errorMessages['addUser_loginInvalid'];
+        }
+        if ($user->getUserByLogin($user_name)) {
+            $user_name  = '';
+            $messages[] = $errorMessages['addUser_loginExists'];
+        }
+        // check realname
+        if ($user_realname == "") {
+            $user_realname = '';
+            $messages[]    = $errorMessages['addUser_noRealName'];
+        }
+        // check e-mail
+        if (is_null($user_email)) {
+            $user_email = '';
+            $messages[] = $errorMessages['addUser_noEmail'];
+        }
 
-// save new user
-if ($userAction == 'addsave') {
-    $user     = new PMF_User();
-    $message  = '';
-    $messages = array();
-    // check input data
-    $user_name             = PMF_Filter::filterInput(INPUT_POST, 'user_name', FILTER_SANITIZE_STRING, '');
-    $user_realname         = PMF_Filter::filterInput(INPUT_POST, 'user_realname', FILTER_SANITIZE_STRING, '');
-    $user_password         = PMF_Filter::filterInput(INPUT_POST, 'user_password', FILTER_SANITIZE_STRING, '');
-    $user_email            = PMF_Filter::filterInput(INPUT_POST, 'user_email', FILTER_VALIDATE_EMAIL);
-    $user_password         = PMF_Filter::filterInput(INPUT_POST, 'user_password', FILTER_SANITIZE_STRING, '');
-    $user_password_confirm = PMF_Filter::filterInput(INPUT_POST, 'user_password_confirm', FILTER_SANITIZE_STRING, '');
-
-    if ($user_password != $user_password_confirm) {
-        $user_password         = '';
-        $user_password_confirm = '';
-        $messages[]            = $errorMessages['addUser_passwordsDontMatch'];
-    }
-    
-    // check login name
-    $user->setLoginMinLength($loginMinLength);
-    if (!$user->isValidLogin($user_name)) {
-        $user_name  = '';
-        $messages[] = $errorMessages['addUser_loginInvalid'];
-    }
-    if ($user->getUserByLogin($user_name)) {
-        $user_name  = '';
-        $messages[] = $errorMessages['addUser_loginExists'];
-    }
-    // check realname
-    if ($user_realname == "") {
-        $user_realname = '';
-        $messages[]    = $errorMessages['addUser_noRealName'];
-    }
-    // check e-mail
-    if (is_null($user_email)) {
-        $user_email = '';
-        $messages[] = $errorMessages['addUser_noEmail'];
-    }
-    
-    // ok, let's go
-    if (count($messages) == 0) {
-        // create user account (login and password)
-        if (!$user->createUser($user_name, $user_password)) {
-            $messages[] = $user->error();
+        // ok, let's go
+        if (count($messages) == 0) {
+            // create user account (login and password)
+            if (!$user->createUser($user_name, $user_password)) {
+                $messages[] = $user->error();
+            } else {
+                // set user data (realname, email)
+                $user->userdata->set(array('display_name', 'email'), array($user_realname, $user_email));
+                // set user status
+                $user->setStatus($defaultUserStatus);
+            }
+        }
+        // no errors, show list
+        if (count($messages) == 0) {
+            $userAction = $defaultUserAction;
+            $message = '<p class="success">'.$successMessages['addUser'].'</p>';
+            // display error messages and show form again
         } else {
-            // set user data (realname, email)
-            $user->userdata->set(array('display_name', 'email'), array($user_realname, $user_email));
-            // set user status
-            $user->setStatus($defaultUserStatus);
+            $userAction = 'add';
+            foreach ($messages as $err) {
+                $message .= '<p class="error">'.$err.'</p>';
+            }
         }
     }
-    // no errors, show list
-    if (count($messages) == 0) {
-        $userAction = $defaultUserAction;
-        $message = '<p class="success">'.$successMessages['addUser'].'</p>';
-    // display error messages and show form again
-    } else {
-        $userAction = 'add';
-        foreach ($messages as $err) {
-            $message .= '<p class="error">'.$err.'</p>';
-        }
+
+    if (!isset($message)) {
+        $message = '';
     }
-}
 
-if (!isset($message)) {
-    $message = '';
-}
-
-// show new user form
-if ($userAction == 'add') {
+    // show new user form
+    if ($userAction == 'add') {
 ?>
 <h2><?php print $text['header']; ?></h2>
 <div id="user_message"><?php print $message; ?></div>
@@ -345,10 +350,10 @@ if ($userAction == 'add') {
     </fieldset>
 </div> <!-- end #user_create -->
 <?php
-} // end if ($userAction == 'add')
+    }
 
-// show list of users
-if ($userAction == 'list') {
+    // show list of users
+    if ($userAction == 'list') {
 ?>
 <script type="text/javascript" src="js/user.js"></script>
 <script type="text/javascript">
@@ -463,15 +468,14 @@ function getUserData(user_id)
     
     <div class="clear"></div>
 <?php 
-    if (isset($_GET['user_id'])) {
-        $userId     = PMF_Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT, 0);
-        echo '<script type="text/javascript">updateUser('.$userId.');</script>';
+        if (isset($_GET['user_id'])) {
+            $userId     = PMF_Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT, 0);
+            echo '<script type="text/javascript">updateUser('.$userId.');</script>';
+        }
     }
 
-} // end if ($userAction == 'list')
-
-// show list of all users
-if ($userAction == 'listallusers') {
+    // show list of all users
+    if ($userAction == 'listallusers') {
 ?>
 
     <h2><?php print $text['header']; ?></h2>
@@ -505,4 +509,7 @@ if ($userAction == 'listallusers') {
     </table>
     </div>
 <?php 
+    }
+} else {
+    print $PMF_LANG['err_NotAuth'];
 }

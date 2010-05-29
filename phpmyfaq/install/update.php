@@ -28,10 +28,9 @@
 define('NEWVERSION', '2.7.0-alpha');
 define('APIVERSION', 2);
 define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
-define('SAFEMODE', @ini_get('safe_mode'));
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
-if (!SAFEMODE) {
+if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     set_time_limit(0);
 }
 
@@ -46,9 +45,7 @@ $templateDir = '../template';
 /**
  * Print out the HTML Footer
  *
- * @return   void
- * @access   public
- * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @return void
  */
 function HTMLFooter()
 {
@@ -82,14 +79,13 @@ if (version_compare(PHP_VERSION, '5.2.0', '<')) {
 }
 
 if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
-	// before 2.6.0-alpha
-	require PMF_ROOT_DIR . '/inc/data.php';
+    // before 2.6.0-alpha
+    require PMF_ROOT_DIR . '/inc/data.php';
 } else {
-	// after 2.6.0-alpha
-	require PMF_ROOT_DIR . '/config/database.php';
+    // after 2.6.0-alpha
+    require PMF_ROOT_DIR . '/config/database.php';
 }
 require PMF_ROOT_DIR . '/inc/functions.php';
-
 
 define('SQLPREFIX', $DB['prefix']);
 $db = PMF_Db::dbSelect($DB["type"]);
