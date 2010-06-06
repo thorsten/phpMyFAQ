@@ -24,6 +24,8 @@
  */
 
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Database.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Driver.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Sqlite.php';
 
 /**
  * PMF_Category test case
@@ -31,18 +33,23 @@ require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Database.php
  * @category  phpMyFAQ
  * @package   PMF_Tests
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2010 phpMyFAQ Team
  * @since     2010-01-26
  */
 class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
 {
     /**
      * 
-     * @var PMF_Category
+     * @var PMF_Search_Database
      */
     private $PMF_Search_Database;
+    
+    /**
+     * 
+     */
+    private $dbHandle;
     
     /**
      * Prepares the environment before running a test.
@@ -51,6 +58,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->PMF_Search_Database = new PMF_Search_Database();
+        $this->dbHandle            = new PMF_DB_Sqlite();
     }
     
     /**
@@ -58,8 +66,29 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown ()
     {
-        $this->PMF_Category = null;
+        $this->PMF_Search_Database = null;
         parent::tearDown();
     }
     
+    public function testSetDatabaseHandle()
+    {
+        $this->PMF_Search_Database->setDatabaseHandle($this->dbHandle);
+        $this->assertEquals(new PMF_DB_Sqlite(), $this->PMF_Search_Database->getDatabaseHandle());
+    }
+    
+    public function testSetDatabaseHandleWrongParameter()
+    {
+        $this->setExpectedException('Exception');
+        try {
+            $this->PMF_Search_Database->setDatabaseHandle('wrongParameter');
+        } catch (Exception $expected) {
+            throw new Exception($expected);
+        }
+    }
+    
+    public function testGetDatabaseHandleType()
+    {
+        $this->PMF_Search_Database->setDatabaseHandle($this->dbHandle);
+        $this->assertType('PMF_DB_Sqlite', $this->PMF_Search_Database->getDatabaseHandle());
+    }
 }

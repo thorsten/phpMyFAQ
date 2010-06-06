@@ -36,5 +36,31 @@
  */
 class PMF_Search_Database
 {
+    /**
+     * Database connection handle
+     * 
+     * @var PMF_DB_Driver
+     */
+    private $dbHandle = null;
     
+    /**
+     * Setter for the database handle
+     * 
+     * @param PMF_DB_Driver $dbHandle Database Handle
+     * 
+     * @return void
+     */
+    public function setDatabaseHandle(PMF_DB_Driver $dbHandle)
+    {
+        $this->dbHandle = $dbHandle;
+    }
+    /**
+     * Getter for the database handle
+     * 
+     * @return PMF_DB_Driver
+     */
+    public function getDatabaseHandle()
+    {
+        return $this->dbHandle;
+    }
 }

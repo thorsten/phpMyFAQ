@@ -17,24 +17,25 @@
  * @category  phpMyFAQ
  * @package   PMF_Tests
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2010 phpMyFAQ Team
  * @since     2010-01-03
  */
 
 require_once 'PHPUnit/Framework/TestSuite.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
+require_once 'PMF_Search_DatabaseTest.php';
 /**
  * Search_AllTests
  * 
  * @category  phpMyFAQ
  * @package   PMF_Tests
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2010 phpMyFAQ Team
  * @since     2010-01-03
  */
 class Search_AllTests
@@ -42,6 +43,8 @@ class Search_AllTests
     public static function suite()
     {
         $suite = new PHPUnit_Framework_TestSuite('phpMyFAQ PMF_Search');
+        
+        $suite->addTestSuite('PMF_Search_DatabaseTest');
         
         return $suite;
     }
