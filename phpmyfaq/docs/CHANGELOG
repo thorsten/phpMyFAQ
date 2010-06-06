@@ -6,10 +6,11 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.6.6 - 2010-06-
-- Fixed OpenLDAP authentication (Franky)
-- Fixed issue with duplicate sitemap characters (Aaron Burgie)
-- Fixed solution ID issues (Thorsten)
+- fixed OpenLDAP authentication (Franky)
+- fixed issue with duplicate sitemap characters (Aaron Burgie)
+- fixed solution ID issues (Thorsten)
 - Improved Glossary deletion workflow (Thorsten)
+- updated Brazilian Portuguese translation
 
 Version 2.6.5 - 2010-05-24
 - updated bundled TCPDF library to version 5.0.009 (Thorsten)
