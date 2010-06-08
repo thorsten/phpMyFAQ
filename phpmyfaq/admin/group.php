@@ -370,6 +370,8 @@ function getGroupData(group_id)
             $('#update_group_description').val(data.description);
             if (data.auto_join == 1) {
                 $('#update_group_auto_join').attr('checked', true);
+            } else {
+                $('#update_group_auto_join').attr('checked', false);
             }
         });
 }
