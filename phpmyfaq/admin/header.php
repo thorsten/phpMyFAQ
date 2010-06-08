@@ -75,7 +75,8 @@ header("Vary: Negotiate,Accept");
         <div class="lefts">
             <h1><a class="mainpage" href="../">phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></a></h1>
             <?php if (isset($auth)) { ?>
-            <h2><?php print $PMF_LANG['ad_session_expiration']; ?>: <span id="sessioncounter">Loading...</span></h2>
+            <h2><?php print $PMF_LANG['ad_user_loggedin'] . $user->getUserData('display_name') . ' (' . $user->getLogin(); ?>)<br />
+            <?php print $PMF_LANG['ad_session_expiration']; ?>: <span id="sessioncounter">Loading...</span></h2>
             <?php } ?>
         </div>
     </div>
@@ -99,7 +100,7 @@ header("Vary: Negotiate,Accept");
     </div>
 <?php
     // check for group support
-    $user            = new PMF_User();
+    //$user            = new PMF_User();
     $groupSupport    = ($user->perm instanceof PMF_Perm_PermMedium);
     $secLevelEntries = '';
 
