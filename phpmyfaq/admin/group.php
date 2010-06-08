@@ -365,7 +365,6 @@ function getGroupData(group_id)
 {
     $.getJSON("index.php?action=ajax&ajax=group&ajaxaction=get_group_data&group_id=" + group_id,
         function(data) {
-            console.log(data);
             $('#update_group_id').val(data.group_id);
             $('#update_group_name').val(data.name);
             $('#update_group_description').val(data.description);
