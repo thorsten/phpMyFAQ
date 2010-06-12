@@ -24,6 +24,19 @@
  * @link      http://www.phpmyfaq.de
  * @since     2005-04-16
  */
+
+/**
+ * PMF_DB_Ibm_db2
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_DB
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Helmut Tessarek <tessus@evermeet.cx>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-04-16
+ */
 class PMF_DB_Ibm_db2 implements PMF_DB_Driver
 {
     /**
@@ -62,9 +75,6 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
      * @param   string $password
      * @param   string $db_name
      * @return  boolean TRUE, if connected, otherwise FALSE
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-04-16
      */
     function connect($host, $user, $passwd, $db)
     {
@@ -81,9 +91,6 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
      *
      * @param   string $query
      * @return  mixed $result
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-04-16
      */
     function query($query)
     {
@@ -96,9 +103,6 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
      *
      * @param   string
      * @return  string
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-04-16
      */
     function escape_string($string)
     {
@@ -110,10 +114,6 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
      *
      * @param   mixed $result
      * @return  mixed
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Helmut Tessarek <tessus@evermeet.cx>
-     * @since   2005-04-16
      */
     function fetch_object($result)
     {
@@ -130,9 +130,6 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
      *
      * @param   mixed $result
      * @return  array
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-04-16
      */
     function fetch_assoc($result)
     {
@@ -170,9 +167,6 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
      *
      * @param   mixed $result
      * @return  integer
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-04-16
      */
     function num_rows($result)
     {
@@ -184,9 +178,6 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
      *
      * @param   mixed $result
      * @return  integer
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-04-16
      */
     function sqllog()
     {
@@ -197,10 +188,6 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
      * This function returns the table status.
      *
      * @return void
-     * @access public
-     * @author Matteo Scaramuccia <matteo@scaramuccia.com>
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since  2006-08-26
      */
     public function getTableStatus()
     {
@@ -219,12 +206,16 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
 
 
     /**
-     * This function generates a result set based on a search string.
-     *
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo scaramuccia <matteo@scaramuccia.com>
-     * @since   2005-04-16
+     * Generates a result based on search a search string.
+     * 
+     * @param  string $table       Table for search
+     * @param  array  $assoc       Associative array with columns for the resulset
+     * @param  string $joinedTable Table to do a JOIN, e.g. for faqcategoryrelations
+     * @param  array  $joinAssoc   Associative array with comlumns for the JOIN
+     * @param  string $string      Search term
+     * @param  array  $cond        Conditions
+     * @param  array  $orderBy     ORDER BY columns
+     * @return mixed
      */
     function search($table, Array $assoc, $joinedTable = '', Array $joinAssoc = array(), $match = array(), $string = '', Array $cond = array(), Array $orderBy = array())
     {
@@ -309,9 +300,6 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
      * @param   string      the name of the table
      * @param   string      the name of the ID column
      * @return  int
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-04-16
      */
     function nextID($table, $id)
     {
@@ -323,9 +311,7 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
     /**
      * This function returns the last error string.
      *
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-04-16
+     * @return string
      */
     function error()
     {
@@ -335,9 +321,7 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
     /**
      * This function returns the version string.
      *
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-04-16
+     * @return string
      */
     function client_version()
     {
@@ -351,9 +335,7 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
     /**
      * This function returns the version string.
      *
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-04-16
+     * @return string
      */
     function server_version()
     {
@@ -368,10 +350,6 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
      * Creates an array with all table names
      *
      * @return  void
-     * @access  public
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2006-08-26
      */
     function getTableNames($prefix = '')
     {
@@ -403,9 +381,7 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
     /**
      * This function closes the connection to the database.
      *
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-04-16
+     * @return boolean
      */
     function dbclose()
     {
