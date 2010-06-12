@@ -24,6 +24,18 @@
  * @since     2007-08-19
  */
 
+/**
+ * PMF_DB_Driver
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_DB
+ * @author    Johannes Schlüter <johannes@php.net>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2007-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2007-08-19
+ */
 interface PMF_DB_Driver
 {
     /**
