@@ -3,13 +3,7 @@
  * The db_db2 class provides methods and functions for IBM DB2 Version 8.2 or
  * 9.1 databases. This will only work with the PECL extension ext/ibm_db2.
  *
- * @package    phpMyFAQ
- * @subpackage PMF_DB
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Helmut Tessarek <tessus@evermeet.cx>
- * @since      2005-04-16
- * @copyright  2005-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,8 +14,16 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_DB
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Helmut Tessarek <tessus@evermeet.cx>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-04-16
  */
-
 class PMF_DB_Ibm_db2 implements PMF_DB_Driver
 {
     /**
@@ -382,6 +384,22 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
         }
     }
 
+    /**
+     * Move internal result pointer
+     *
+     * Moves the pointer within the query result to a specified location, or
+     * to the beginning if nothing is specified.
+     *
+     * @param resource $result    Resultset
+     * @param integer  $rowNumber Row number
+     * 
+     * @return boolean
+     */
+    public function resultSeek($result, $rowNumber)
+    {
+        return db2_result($result, $rowNumber);
+    }
+    
     /**
      * This function closes the connection to the database.
      *
