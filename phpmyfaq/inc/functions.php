@@ -433,7 +433,6 @@ function getUsersOnline($activityTimeWindow = 300)
     return $users;
 }
 
-
 /******************************************************************************
  * Funktionen fuer Artikelseiten
  ******************************************************************************/
@@ -573,17 +572,17 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
 {
     global $sids, $category, $PMF_LANG, $plr, $LANGCODE, $faq, $current_user, $current_groups;
 
-    $_searchterm = PMF_htmlentities(stripslashes($searchterm), ENT_QUOTES, 'utf-8');
-    $seite       = 1;
-    $output      = '';
-    $num         = 0;
-    $searchItems = array();
-    $langs       = (true == $allLanguages) ? '&amp;langs=all' : '';
-    $seite       = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
-    $db          = PMF_Db::getInstance();
-    $faqconfig   = PMF_Configuration::getInstance();
+    $_searchterm   = PMF_String::htmlspecialchars(stripslashes($searchterm), ENT_QUOTES, 'utf-8');
+    $seite         = 1;
+    $output        = '';
+    $num           = 0;
+    $duplicateFAQs = $searchItems = array();
+    $langs         = (true == $allLanguages) ? '&amp;langs=all' : '';
+    $seite         = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
+    $db            = PMF_Db::getInstance();
+    $faqconfig     = PMF_Configuration::getInstance();
 
-    $result = getSearchData(htmlentities($searchterm, ENT_COMPAT, 'utf-8'), true, $cat, $allLanguages);
+    $result = getSearchData(PMF_String::htmlspecialchars($searchterm, ENT_COMPAT, 'utf-8'), true, $cat, $allLanguages);
     $num    = $db->num_rows($result);
 
     if (0 == $num) {
@@ -592,6 +591,19 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
 
     $confPerPage = $faqconfig->get('main.numberOfRecordsPerPage');
     
+    while ($row = $db->fetch_object($result)) {
+        if (!isset($dupeFAQs[$row->id])) {
+            $duplicateFAQs[$row->id] = 1;
+        } else {
+            ++$duplicateFAQs[$row->id];
+            continue;
+        }
+    }
+
+    $num           = count(array_keys($duplicateFAQs));
+    $duplicateFAQs = array();
+    $db->resultSeek($result, 0);
+
     $pages = ceil($num / $confPerPage);
     $last  = $seite * $confPerPage;
     $first = $last - $confPerPage;
@@ -613,6 +625,13 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
         $counter = 0;
         $displayedCounter = 0;
         while (($row = $db->fetch_object($result)) && $displayedCounter < $confPerPage) {
+            if (!isset($duplicateFAQs[$row->id])) {
+                $duplicateFAQs[$row->id] = 1;
+            } else {
+                ++$duplicateFAQs[$row->id];
+                continue;
+            }
+
             $counter ++;
             if ($counter <= $first) {
                 continue;
@@ -689,7 +708,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
                 }
                 $oLink            = new PMF_Link($currentUrl.$url);
                 $oLink->itemTitle = $row->thema;
-                $oLink->text      = $thema;
+                $oLink->text      = $row->thema;
                 $oLink->tooltip   = $row->thema;
                 $output .=
                     '<li><strong>'.$rubriktext.'</strong>: '.$oLink->toHtmlAnchor().'<br />'
@@ -775,10 +794,6 @@ function PMF_htmlentities($string, $quote_style = ENT_QUOTES, $charset = 'UTF-8'
 {
     return htmlspecialchars($string, $quote_style, $charset);
 }
-
-/******************************************************************************
- * Funktionen fuer die Benutzerauthentifizierung und Rechtevergabe
- ******************************************************************************/
 
 /**
  * Adds a menu entry according to user permissions.
@@ -914,14 +929,14 @@ function PageSpan($code, $start, $end, $akt)
  */
 function build_insert($query, $table)
 {
-   $db = PMF_Db::getInstance();
+    $db = PMF_Db::getInstance();
    
     if (!$result = $db->query($query)) {
         return;
     }
     $ret = array();
 
-    $ret[] = "\n-- Table: ".$table;
+    $ret[] = "\r\n-- Table: ".$table;
 
     while ($row = $db->fetch_assoc($result)) {
         $p1 = array();
