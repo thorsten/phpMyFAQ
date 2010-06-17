@@ -1,9 +1,9 @@
 <?php
 /**
- * Test suite for PMF_Search related classes
- * 
+ * phpMyFAQ database based search classes
+ *
  * PHP Version 5.2
- * 
+ *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -15,37 +15,52 @@
  * under the License.
  * 
  * @category  phpMyFAQ
- * @package   PMF_Tests
+ * @package   PMF_Search
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2010-01-03
+ * @since     2010-06-06
  */
 
-require_once 'PHPUnit/Framework/TestSuite.php';
-require_once 'PHPUnit/TextUI/TestRunner.php';
-
-require_once 'PMF_Search_DatabaseTest.php';
 /**
- * Search_AllTests
- * 
+ * PMF_Search_Database
+ *
  * @category  phpMyFAQ
- * @package   PMF_Tests
+ * @package   PMF_Search
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2010-01-03
+ * @since     2010-06-06
  */
-class Search_AllTests
+class PMF_Search_Database
 {
-    public static function suite()
+    /**
+     * Database connection handle
+     * 
+     * @var PMF_DB_Driver
+     */
+    private $dbHandle = null;
+    
+    /**
+     * Setter for the database handle
+     * 
+     * @param PMF_DB_Driver $dbHandle Database Handle
+     * 
+     * @return void
+     */
+    public function setDatabaseHandle(PMF_DB_Driver $dbHandle)
     {
-        $suite = new PHPUnit_Framework_TestSuite('phpMyFAQ PMF_Search');
-        
-        $suite->addTestSuite('PMF_Search_DatabaseTest');
-        
-        return $suite;
+        $this->dbHandle = $dbHandle;
+    }
+    /**
+     * Getter for the database handle
+     * 
+     * @return PMF_DB_Driver
+     */
+    public function getDatabaseHandle()
+    {
+        return $this->dbHandle;
     }
 }

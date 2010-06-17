@@ -1,9 +1,9 @@
 <?php
 /**
- * Test suite for PMF_Search related classes
- * 
+ * Implements resultsets for phpMyFAQ search classes
+ *
  * PHP Version 5.2
- * 
+ *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -15,37 +15,26 @@
  * under the License.
  * 
  * @category  phpMyFAQ
- * @package   PMF_Tests
+ * @package   PMF_Search
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2010-01-03
+ * @since     2010-06-06
  */
 
-require_once 'PHPUnit/Framework/TestSuite.php';
-require_once 'PHPUnit/TextUI/TestRunner.php';
-
-require_once 'PMF_Search_DatabaseTest.php';
 /**
- * Search_AllTests
- * 
+ * PMF_Search_Resultset
+ *
  * @category  phpMyFAQ
- * @package   PMF_Tests
+ * @package   PMF_Search
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2010-01-03
+ * @since     2010-06-06
  */
-class Search_AllTests
+class PMF_Search_Resultset
 {
-    public static function suite()
-    {
-        $suite = new PHPUnit_Framework_TestSuite('phpMyFAQ PMF_Search');
-        
-        $suite->addTestSuite('PMF_Search_DatabaseTest');
-        
-        return $suite;
-    }
+    
 }
