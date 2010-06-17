@@ -827,8 +827,9 @@ class PMF_Faq
     /**
      * Deletes a record and all the dependencies
      *
-     * @param  integer $record_id   Record id
-     * @param  string  $record_lang Record language
+     * @param integer $record_id   Record id
+     * @param string  $record_lang Record language
+     * 
      * @return boolean
      */
     public function deleteRecord($record_id, $record_lang)
@@ -844,9 +845,9 @@ class PMF_Faq
                 SQLPREFIX, $record_id, $record_lang),
             sprintf("DELETE FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
                 SQLPREFIX, $record_id, $record_lang),
-            sprintf("DELETE FROM %sfaqdata_user WHERE record_id = %d AND record_lang = '%s'",
+            sprintf("DELETE FROM %sfaqdata_user WHERE record_id = %d",
                 SQLPREFIX, $record_id, $record_lang),
-            sprintf("DELETE FROM %sfaqdata_group WHERE record_id = %d AND record_lang = '%s'",
+            sprintf("DELETE FROM %sfaqdata_group WHERE record_id = %d",
                 SQLPREFIX, $record_id, $record_lang),
             sprintf("DELETE FROM %sfaqdata_tags WHERE record_id = %d",
                 SQLPREFIX, $record_id),

@@ -1,13 +1,8 @@
 <?php
 /**
  * The PMF_DB_Oci8 class provides methods and functions for a Oracle database
- *
- * @package    phpMyFAQ
- * @subpackage PMF_DB
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @package    2005-09-20
- * @version    SVN: $Id$
- * @copyright  2005-2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,17 +13,26 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_DB
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @package   2005-09-20
  */
 
 /**
  * PMF_DB_Oci8
  *
- * @package    phpMyFAQ
- * @subpackage PMF_DB
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @package    2005-09-20
- * @version    SVN: $Id$
- * @copyright  2005-2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   PMF_DB
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @package   2005-09-20
  */
 class PMF_DB_Oci8 implements PMF_DB_Driver
 {
@@ -63,9 +67,6 @@ class PMF_DB_Oci8 implements PMF_DB_Driver
      * @param   string $password
      * @param   string $db_name
      * @return  boolean TRUE, if connected, otherwise FALSE
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-09-20
      */
     public function connect($host, $user, $passwd, $db)
     {
@@ -83,9 +84,6 @@ class PMF_DB_Oci8 implements PMF_DB_Driver
      *
      * @param   string $query
      * @return  mixed $result
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-09-20
      */
     public function query($query)
     {
@@ -101,9 +99,6 @@ class PMF_DB_Oci8 implements PMF_DB_Driver
      *
      * @param   string
      * @return  string
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-09-20
      */
     public function escapeString($string)
     {
@@ -115,9 +110,6 @@ class PMF_DB_Oci8 implements PMF_DB_Driver
      *
      * @param   mixed $result
      * @return  mixed
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-09-20
      */
     public function fetchObject($result)
     {
@@ -129,9 +121,6 @@ class PMF_DB_Oci8 implements PMF_DB_Driver
      *
      * @param   mixed $result
      * @return  mixed
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-09-20
      */
     public function fetch_row($result)
     {
@@ -163,9 +152,6 @@ class PMF_DB_Oci8 implements PMF_DB_Driver
      *
      * @param   mixed $result
      * @return  array
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-09-20
      */
     public function fetch_assoc($result)
     {
@@ -177,9 +163,6 @@ class PMF_DB_Oci8 implements PMF_DB_Driver
      *
      * @param   mixed $result
      * @return  integer
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-09-20
      */
     public function numRows($result)
     {
@@ -191,9 +174,6 @@ class PMF_DB_Oci8 implements PMF_DB_Driver
      *
      * @param   mixed $result
      * @return  integer
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-09-20
      */
     public function sqllog()
     {
@@ -203,10 +183,14 @@ class PMF_DB_Oci8 implements PMF_DB_Driver
     /**
      * Generates a result based on search a search string.
      *
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo scaramuccia <matteo@scaramuccia.com>
-     * @since   2005-09-20
+     * @param  string $table       Table for search
+     * @param  array  $assoc       Associative array with columns for the resulset
+     * @param  string $joinedTable Table to do a JOIN, e.g. for faqcategoryrelations
+     * @param  array  $joinAssoc   Associative array with comlumns for the JOIN
+     * @param  string $string      Search term
+     * @param  array  $cond        Conditions
+     * @param  array  $orderBy     ORDER BY columns
+     * @return mixed
      */
     public function search($table, Array $assoc, $joinedTable = '', Array $joinAssoc = array(), $match = array(), $string = '', Array $cond = array(), Array $orderBy = array())
     {
@@ -266,17 +250,13 @@ class PMF_DB_Oci8 implements PMF_DB_Driver
     /**
      * Returns the error string.
      *
-     * This function returns the table status.
-     *
      * TODO: Implement this function
      *
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-09-20
+     * @return array
      */
     public function getTableStatus()
     {
-        return null;
+        return array();
     }
 
     /**
@@ -285,9 +265,6 @@ class PMF_DB_Oci8 implements PMF_DB_Driver
      * @param   string      the name of the table
      * @param   string      the name of the ID column
      * @return  int
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-09-20
      */
     public function nextID($table, $id)
     {
@@ -300,10 +277,7 @@ class PMF_DB_Oci8 implements PMF_DB_Driver
     /**
      * Returns the error string.
      *
-     * @return  string
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-09-20
+     * @return string
      */
     public function error()
     {
@@ -314,10 +288,7 @@ class PMF_DB_Oci8 implements PMF_DB_Driver
     /**
      * Returns the client version string.
      *
-     * @return  string
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-09-20
+     * @return string
      */
     public function client_version()
     {
@@ -327,10 +298,7 @@ class PMF_DB_Oci8 implements PMF_DB_Driver
     /**
      * Returns the server version string.
      *
-     * @return  string
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-09-20
+     * @return string
      */
     public function server_version()
     {
@@ -340,10 +308,7 @@ class PMF_DB_Oci8 implements PMF_DB_Driver
     /**
      * Returns an array with all table names
      *
-     * @access  public
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2006-08-26
+     * @return array
      */
     public function getTableNames($prefix = '')
     {
@@ -357,13 +322,25 @@ class PMF_DB_Oci8 implements PMF_DB_Driver
     }
 
     /**
+     * Move internal result pointer
+     *
+     * Moves the pointer within the query result to a specified location, or
+     * to the beginning if nothing is specified.
+     *
+     * @param resource $result    Resultset
+     * @param integer  $rowNumber Row number
+     * 
+     * @return boolean
+     */
+    public function resultSeek($result, $rowNumber)
+    {
+        return oci_result($result, $rowNumber);
+    }
+    
+    /**
      * Closes the connection to the database.
-     *
-     * This function closes the connection to the database.
-     *
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-09-20
+     * 
+     * @return boolean
      */
     public function dbclose()
     {

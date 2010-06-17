@@ -86,11 +86,11 @@ tinymce.create('tinymce.plugins.internalFaqLinkPlugin', {
           foreach ($faq->faqRecords as $record) {
               $_title = str_replace(array("\n", "\r", "\r\n"), '', '(' .$record['id'] . ') ' . $record['title']);
               printf("flb.add('%s', '%d_%d_%s_%s');\n",
-                  str_replace("'", "`", PMF_Utils::makeShorterText($_title, 8)),
+                  trim(str_replace("'", "`", PMF_Utils::makeShorterText($_title, 8))),
                   $record['category_id'],
                   $record['id'],
                   $record['lang'],
-                  str_replace("'", "`", $record['title']));
+                  trim(str_replace("'", "`", str_replace(array("\n", "\r", "\r\n"), '', $record['title']))));
           }
 ?>
 

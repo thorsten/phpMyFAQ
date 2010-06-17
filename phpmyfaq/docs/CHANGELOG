@@ -13,9 +13,11 @@ Version 2.7.0-alpha - 2010-04-
 - upgraded jQuery to version 1.4.2 (Thorsten)
 
 Version 2.6.6 - 2010-06-
-- Fixed OpenLDAP authentication (Franky)
-- Fixed issue with duplicate sitemap characters (Aaron Burgie) 
+- fixed OpenLDAP authentication (Franky)
+- fixed issue with duplicate sitemap characters (Aaron Burgie)
+- fixed solution ID issues (Thorsten)
 - Improved Glossary deletion workflow (Thorsten)
+- updated Brazilian Portuguese translation
 
 Version 2.6.5 - 2010-05-24
 - updated bundled TCPDF library to version 5.0.009 (Thorsten)

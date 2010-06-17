@@ -175,7 +175,8 @@ header("Vary: Negotiate,Accept");
         
         <h1><a href="../">phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></a></h1>
         <?php if (isset($auth)) { ?>
-        <p id="session"><?php print $PMF_LANG['ad_session_expiration']; ?>: <span id="sessioncounter">Loading...</span></p>
+        <p id="session"><?php print $PMF_LANG['ad_user_loggedin'] . $user->getUserData('display_name') . ' (' . $user->getLogin(); ?>)<br />
+	<?php print $PMF_LANG['ad_session_expiration']; ?>: <span id="sessioncounter">Loading...</span></p>
         <?php } ?>
         
         

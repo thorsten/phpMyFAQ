@@ -2,13 +2,8 @@
 /**
  * The db_ibase class provides methods and functions for Firebird/InterBase
  * databases.
- *
- * @package    phpMyFAQ
- * @subpackage PMF_DB
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2005-11-28
- * @copyright  2005-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,48 +14,60 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_DB
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-11-28
  */
 
+/**
+ * PMF_DB_Ibase
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_DB
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-11-28
+ */
 class PMF_DB_Ibase implements PMF_DB_Driver
 {
     /**
-    * The connection object
-    *
-    * @var  mixed
-    * @see  connect(), query(), dbclose()
-    */
+     * The connection object
+     *
+     * @var resource
+     */
     private $conn = false;
 
     /**
-    * The query log string
-    *
-    * @var  string
-    * @see  query()
-    */
+     * The query log string
+     *
+     * @var string
+     */
     private $sqllog = '';
 
     /**
      * Tables
      *
-     * @var     array
+     * @var array
      */
     public $tableNames = array();
 
     /**
-    * Connects to the database.
-    *
-    * This function connects to a ibase database
-    *
-    * @param   string $host
-    * @param   string $username
-    * @param   string $password
-    * @param   string $db_name
-    * @return  boolean true, if connected, otherwise false
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
-    */
-    function connect($host, $user, $passwd, $db)
+     * Connects to the database.
+     *
+     * @param   string $host
+     * @param   string $username
+     * @param   string $password
+     * @param   string $db_name
+     * @return  boolean true, if connected, otherwise false
+     */
+    public function connect($host, $user, $passwd, $db)
     {
         $this->conn = ibase_connect($db, $user, $passwd);
         if (false == $this->conn) {
@@ -71,88 +78,60 @@ class PMF_DB_Ibase implements PMF_DB_Driver
     }
 
     /**
-    * Sends a query to the database.
-    *
-    * This function sends a query to the database.
-    *
-    * @param   string $query
-    * @return  mixed $result
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
-    */
-    function query($query)
+     * Sends a query to the database.
+     *
+     * @param   string $query
+     * @return resource
+     */
+    public function query($query)
     {
         $this->sqllog .= pmf_debug($query);
         return ibase_query($this->conn, $query);
     }
 
     /**
-    * Escapes a string for use in a query
-    *
-    * @param   string
-    * @return  string
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
-    */
-    function escapeString($string)
+     * Escapes a string for use in a query
+     *
+     * @param   string
+     * @return  string
+     */
+    public function escapeString($string)
     {
       return str_replace("'", "''", $string);
     }
 
     /**
-    * Fetch a result row as an object
-    *
-    * This function fetches a result row as an object.
-    *
-    * @param   mixed $result
-    * @return  mixed
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @author  Helmut Tessarek <tessus@evermeet.cx>
-    * @since   2005-04-16
-    */
-    function fetchObject($result)
+     * Fetch a result row as an object
+     *
+     * @param   mixed $result
+     * @return  mixed
+     */
+    public function fetchObject($result)
     {
         return ibase_fetch_object($result);
     }
 
 
     /**
-    * fetch_row()
-    *
-    * This function returns the number of rows in a result.
-    *
-    * @param   mixed $result
-    * @return  mixed
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
-    */
-    function fetch_row($result)
+     * This function returns the number of rows in a result.
+     *
+     * @param   mixed $result
+     * @return  mixed
+     */
+    public function fetch_row($result)
     {
         return ibase_fetch_row($result);
     }
 
     /**
-    * fetch_assoc()
-    *
-    * This function fetches a result as an associative array.
-    *
-    * @param   mixed $result
-    * @return  array
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
-    */
+     * This function fetches a result as an associative array.
+     *
+     * @param   mixed $result
+     * @return  array
+     */
     function fetch_assoc($result)
     {
-        if (function_exists('ibase_fetch_assoc')) {
-            return ibase_fetch_assoc($result);
-        } else {
-            return get_object_vars(ibase_fetch_object($result));
-        }
+        return ibase_fetch_assoc($result);
     }
 
     /**
@@ -177,38 +156,32 @@ class PMF_DB_Ibase implements PMF_DB_Driver
     
 
     /**
-    * Number of rows in a result
-    *
-    * @param   mixed $result
-    * @return  integer
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
-    */
-    function numRows($result)
+     * Number of rows in a result
+     *
+     * @param   mixed $result
+     * @return  integer
+     */
+    public function numRows($result)
     {
         return ibase_num_rows($result);
     }
 
     /**
-    * Logs the queries
-    *
-    * @param   mixed $result
-    * @return  integer
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
-    */
-    function sqllog()
+     * Logs the queries
+     *
+     * @param   mixed $result
+     * @return  integer
+     */
+    public function sqllog()
     {
         return $this->sqllog;
     }
 
 
     /**
-    * TODO: Implement this function
-    */
-    function version_check($target = "")
+     * TODO: Implement this function
+     */
+    public function version_check($target = "")
     {
         return false;
     }
@@ -216,15 +189,16 @@ class PMF_DB_Ibase implements PMF_DB_Driver
     /**
      * Generates a result based on search a search string.
      *
-     * This function generates a result set based on a search string.
-     * FIXME: can extend to handle operands like google
-     *
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo scaramuccia <matteo@scaramuccia.com>
-     * @since   2005-04-16
+     * @param  string $table       Table for search
+     * @param  array  $assoc       Associative array with columns for the resulset
+     * @param  string $joinedTable Table to do a JOIN, e.g. for faqcategoryrelations
+     * @param  array  $joinAssoc   Associative array with comlumns for the JOIN
+     * @param  string $string      Search term
+     * @param  array  $cond        Conditions
+     * @param  array  $orderBy     ORDER BY columns
+     * @return mixed
      */
-    function search($table, Array $assoc, $joinedTable = '', Array $joinAssoc = array(), $match = array(), $string = '', Array $cond = array(), Array $orderBy = array())
+    public function search($table, Array $assoc, $joinedTable = '', Array $joinAssoc = array(), $match = array(), $string = '', Array $cond = array(), Array $orderBy = array())
     {
         $string = trim($string);
         $fields = '';
@@ -303,16 +277,12 @@ class PMF_DB_Ibase implements PMF_DB_Driver
 
     /**
     * Returns the error string.
-    *
-    * This function returns the table status.
-    *
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
+    * 
+    * @return array
     */
     function getTableStatus()
     {
-        return;
+        return array();
     }
 
     /**
@@ -321,25 +291,18 @@ class PMF_DB_Ibase implements PMF_DB_Driver
     * @param   string      the name of the table
     * @param   string      the name of the ID column
     * @return  int
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
     */
-    function nextID($table, $id)
+    public function nextID($table, $id)
     {
         $result = $this->query('SELECT max('.$id.') as current_id FROM '.$table);
-        $row = $this->fetchObject($result);
+        $row    = $this->fetchObject($result);
         return ($row->current_id + 1);
     }
 
     /**
     * Returns the error string.
     *
-    * This function returns the last error string.
-    *
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
+    * @return string
     */
     function error()
     {
@@ -349,25 +312,17 @@ class PMF_DB_Ibase implements PMF_DB_Driver
     /**
     * Returns the client version string.
     *
-    * This function returns the version string.
-    *
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
+    * @return string
     */
     function client_version()
     {
-        return;
+        return '';
     }
 
     /**
     * Returns the server version string.
-    *
-    * This function returns the version string.
-    *
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
+    * 
+    * @return string
     */
     function server_version()
     {
@@ -377,11 +332,7 @@ class PMF_DB_Ibase implements PMF_DB_Driver
     /**
      * Returns an array with all table names
      *
-     * FIXME: Implement it.
-     *
-     * @access  public
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-     * @since   2006-08-26
+     * @return void
      */
     function getTableNames($prefix = '')
     {
@@ -390,13 +341,25 @@ class PMF_DB_Ibase implements PMF_DB_Driver
     }
 
     /**
+     * Move internal result pointer
+     *
+     * Moves the pointer within the query result to a specified location, or
+     * to the beginning if nothing is specified.
+     *
+     * @param resource $result    Resultset
+     * @param integer  $rowNumber Row number
+     * 
+     * @return boolean
+     */
+    public function resultSeek($result, $rowNumber)
+    {
+        return true;
+    }
+    
+    /**
     * Closes the connection to the database.
     *
-    * This function closes the connection to the database.
-    *
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
+    * @return boolean
     */
     function dbclose()
     {

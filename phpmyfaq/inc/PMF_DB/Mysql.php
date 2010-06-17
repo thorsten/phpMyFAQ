@@ -16,11 +16,11 @@
  * under the License.
  *
  * @category  phpMyFAQ
- * @package   PMF_Db
+ * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Meikel Katzengreis <meikel@katzengreis.com>
  * @author    Tom Rochester <tom.rochester@gmail.com>
- * @copyright 2003-2009 phpMyFAQ Team
+ * @copyright 2003-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @package   2003-02-24
@@ -30,11 +30,11 @@
  * PMF_DB_Mysql
  *
  * @category  phpMyFAQ
- * @package   PMF_Db
+ * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Meikel Katzengreis <meikel@katzengreis.com>
  * @author    Tom Rochester <tom.rochester@gmail.com>
- * @copyright 2003-2009 phpMyFAQ Team
+ * @copyright 2003-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @package   2003-02-24
@@ -347,6 +347,22 @@ class PMF_DB_Mysql implements PMF_DB_Driver
         }
     }
 
+    /**
+     * Move internal result pointer
+     *
+     * Moves the pointer within the query result to a specified location, or
+     * to the beginning if nothing is specified.
+     *
+     * @param resource $result    Resultset
+     * @param integer  $rowNumber Row number
+     * 
+     * @return boolean
+     */
+    public function resultSeek($result, $rowNumber)
+    {
+        return mysql_data_seek($result, $rowNumber);
+    }
+    
     /**
      * Closes the connection to the database.
      *

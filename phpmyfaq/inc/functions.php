@@ -358,6 +358,53 @@ function getHighlightedBannedWords($content)
     }
 }
 
+/**
+ * Returns the number of anonymous users and registered ones.
+ * These are the numbers of unique users who have perfomed
+ * some activities within the last five minutes
+ *
+ * @param  integer $activityTimeWindow Optionally set the time window size in sec. 
+ *                                     Default: 300sec, 5 minutes
+ * @return array
+ */
+function getUsersOnline($activityTimeWindow = 300)
+{
+    $users = array(0 ,0);
+    $db    = PMF_Db::getInstance();
+
+    if (PMF_Configuration::getInstance()->get('main.enableUserTracking')) {
+        $timeNow = ($_SERVER['REQUEST_TIME'] - $activityTimeWindow);
+        // Count all sids within the time window
+        // TODO: add a new field in faqsessions in order to find out only sids of anonymous users
+        $result = $db->query("
+                    SELECT
+                        count(sid) AS anonymous_users
+                    FROM
+                        ".SQLPREFIX."faqsessions
+                    WHERE
+                            user_id = -1
+                        AND time > ".$timeNow);
+        if (isset($result)) {
+            $row      = $db->fetch_object($result);
+            $users[0] = $row->anonymous_users;
+        }
+        // Count all faquser records within the time window
+        $result = $db->query("
+                    SELECT
+                        count(session_id) AS registered_users
+                    FROM
+                        ".SQLPREFIX."faquser
+                    WHERE
+                        session_timestamp > ".$timeNow);
+        if (isset($result)) {
+            $row      = $db->fetch_object($result);
+            $users[1] = $row->registered_users;
+        }
+    }
+
+    return $users;
+}
+
 /******************************************************************************
  * Funktionen fuer Artikelseiten
  ******************************************************************************/
@@ -497,17 +544,17 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
 {
     global $sids, $PMF_LANG, $plr, $LANGCODE, $faq, $current_user, $current_groups, $categoryLayout;
 
-    $_searchterm = PMF_String::htmlspecialchars(stripslashes($searchterm), ENT_QUOTES, 'utf-8');
-    $seite       = 1;
-    $output      = '';
-    $num         = 0;
-    $searchItems = array();
-    $langs       = (true == $allLanguages) ? '&amp;langs=all' : '';
-    $seite       = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
-    $db          = PMF_Db::getInstance();
-    $faqconfig   = PMF_Configuration::getInstance();
+    $_searchterm   = PMF_String::htmlspecialchars(stripslashes($searchterm), ENT_QUOTES, 'utf-8');
+    $seite         = 1;
+    $output        = '';
+    $num           = 0;
+    $duplicateFAQs = $searchItems = array();
+    $langs         = (true == $allLanguages) ? '&amp;langs=all' : '';
+    $seite         = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
+    $db            = PMF_Db::getInstance();
+    $faqconfig     = PMF_Configuration::getInstance();
 
-    $result = getSearchData(htmlentities($searchterm, ENT_COMPAT, 'utf-8'), true, $cat, $allLanguages);
+    $result = getSearchData(PMF_String::htmlspecialchars($searchterm, ENT_COMPAT, 'utf-8'), true, $cat, $allLanguages);
     $num    = $db->numRows($result);
 
     if (0 == $num) {
@@ -516,6 +563,19 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
 
     $confPerPage = $faqconfig->get('main.numberOfRecordsPerPage');
     
+    while ($row = $db->fetch_object($result)) {
+        if (!isset($dupeFAQs[$row->id])) {
+            $duplicateFAQs[$row->id] = 1;
+        } else {
+            ++$duplicateFAQs[$row->id];
+            continue;
+        }
+    }
+
+    $num           = count(array_keys($duplicateFAQs));
+    $duplicateFAQs = array();
+    $db->resultSeek($result, 0);
+
     $pages = ceil($num / $confPerPage);
     $last  = $seite * $confPerPage;
     $first = $last - $confPerPage;
@@ -539,6 +599,14 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
         
         $counter = $displayedCounter = 0;
         while (($row = $db->fetchObject($result)) && $displayedCounter < $confPerPage) {
+
+            if (!isset($duplicateFAQs[$row->id])) {
+                $duplicateFAQs[$row->id] = 1;
+            } else {
+                ++$duplicateFAQs[$row->id];
+                continue;
+            }
+
             $counter ++;
             if ($counter <= $first) {
                 continue;
@@ -615,7 +683,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
                 }
                 $oLink            = new PMF_Link($currentUrl.$url);
                 $oLink->itemTitle = $row->thema;
-                $oLink->text      = $thema;
+                $oLink->text      = $row->thema;
                 $oLink->tooltip   = $row->thema;
                 $output .=
                     '<li><strong>'.$rubriktext.'</strong>: '.$oLink->toHtmlAnchor().'<br />'
@@ -684,6 +752,7 @@ function highlight_no_links(Array $matches)
     // Fallback: the original matched string
     return $matches[0];
 }
+
 
 /**
  * Funktion zum generieren vom "Umblaettern" | @@ Bastian, 2002-01-03

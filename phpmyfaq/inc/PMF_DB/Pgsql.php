@@ -3,13 +3,7 @@
  * The db_pgsql class provides methods and functions for a PostgreSQL
  * database.
  *
- * @package    phpMyFAQ
- * @subpackage PMF_DB
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Tom Rochester <tom.rochester@gmail.com>
- * @package    2003-02-24
- * @copyright  2003-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,8 +14,29 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_DB
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Tom Rochester <tom.rochester@gmail.com>
+ * @copyright 2003-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @package   2003-02-24
  */
 
+/**
+ * PMF_DB_Pgsql
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_DB
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Tom Rochester <tom.rochester@gmail.com>
+ * @copyright 2003-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @package   2003-02-24
+ */
 class PMF_DB_Pgsql implements PMF_DB_Driver
 {
     /**
@@ -48,17 +63,11 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     /**
      * Connects to the database.
      *
-     * This function connects to a MySQL database
-     *
      * @param   string $host
      * @param   string $username
      * @param   string $password
      * @param   string $db_name
      * @return  boolean true, if connected, otherwise false
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Tom Rochester <tom.rochester@gmail.com>
-     * @since   2003-02-24
      */
     public function connect ($host, $user, $passwd, $db)
     {
@@ -76,14 +85,8 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     /**
      * Sends a query to the database.
      *
-     * This function sends a query to the database.
-     *
      * @param   string $query
      * @return  mixed $result
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Tom Rochester <tom.rochester@gmail.com>
-     * @since   2003-02-24
      */
     public function query($query)
     {
@@ -96,9 +99,6 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     *
     * @param   string
     * @return  string
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2004-12-16
     */
     public function escapeString($string)
     {
@@ -108,14 +108,8 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     /**
      * Fetch a result row as an object
      *
-     * This function fetches a result row as an object.
-     *
      * @param   mixed $result
      * @return  mixed
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Tom Rochester <tom.rochester@gmail.com>
-     * @since   2003-02-24
      */
     public function fetchObject($result)
     {
@@ -127,14 +121,8 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     /**
      * Fetch a result row as an object
      *
-     * This function fetches a result as an associative array.
-     *
      * @param   mixed $result
      * @return  array
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Tom Rochester <tom.rochester@gmail.com>
-     * @since   2003-02-24
      */
     public function fetch_assoc($result)
     {
@@ -166,10 +154,6 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      *
      * @param   mixed $result
      * @return  integer
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Tom Rochester <tom.rochester@gmail.com>
-     * @since   2003-02-24
      */
     public function numRows($result)
     {
@@ -181,9 +165,6 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      *
      * @param   mixed $result
      * @return  integer
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2003-02-24
      */
     public function sqllog()
     {
@@ -191,25 +172,10 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     }
 
     /**
-     * Closes the connection to the database.
-     *
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Tom Rochester <tom.rochester@gmail.com>
-     * @since   2003-02-24
-     */
-    public function dbclose()
-    {
-        return pg_close($this->conn);
-    }
-
-    /**
      * Returns just one row
      *
      * @param  string
      * @return string
-     * @author Tom Rochester <tom.rochester@gmail.com>
-     * @since  2004-08-06
      */
     private function getOne($query)
     {
@@ -220,9 +186,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     /**
      * This function returns the table status.
      *
-     * @access  public
-     * @author  Tom Rochester <tom.rochester@gmail.com>
-     * @since   2004-08-06
+     * @return array
      */
     public function getTableStatus()
     {
@@ -239,13 +203,14 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     /**
      * Generates a result based on search a search string.
      *
-     * This function generates a result set based on a search string.
-     * FIXME: can extend to handle operands like google
-     *
-     * @access  public
-     * @author  Tom Rochester <tom.rochester@gmail.com>
-     * @author  Matteo scaramuccia <matteo@scaramuccia.com>
-     * @since   2004-08-06
+     * @param  string $table       Table for search
+     * @param  array  $assoc       Associative array with columns for the resulset
+     * @param  string $joinedTable Table to do a JOIN, e.g. for faqcategoryrelations
+     * @param  array  $joinAssoc   Associative array with comlumns for the JOIN
+     * @param  string $string      Search term
+     * @param  array  $cond        Conditions
+     * @param  array  $orderBy     ORDER BY columns
+     * @return mixed
      */
     public function search($table, Array $assoc, $joinedTable = '', Array $joinAssoc = array(), $match = array(), $string = '', Array $cond = array(), Array $orderBy = array())
     {
@@ -311,15 +276,11 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     }
 
     /**
-     * This function is a replacement for MySQL's auto-increment so that
-     * we don't need it anymore.
+     * Returns the next ID of a table
      *
-     * @param   string      the name of the table
-     * @param   string      the name of the ID column
+     * @param string $table the name of the table
+     * @param string $id    the name of the ID column
      * @return  int
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2004-11-30
      */
     public function nextID($table, $id)
     {
@@ -330,12 +291,8 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
 
     /**
      * Returns the error string.
-     *
-     * This function returns the last error string.
-     *
-     * @access  public
-     * @author  Tom Rochester <tom.rochester@gmail.com>
-     * @since   2004-08-06
+     * 
+     * @return string
      */
     public function error()
     {
@@ -345,9 +302,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     /**
      * This function returns the client version string.
      *
-     * @access  public
-     * @author  Tom Rochester <tom.rochester@gmail.com>
-     * @since   2004-08-06
+     * @return string
      */
     public function client_version()
     {
@@ -362,9 +317,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     /**
      * Returns the server version string.
      *
-     * @access  public
-     * @author  Thorsten Rinne
-     * @since   2004-11-12
+     * @return string
      */
     public function server_version()
     {
@@ -379,10 +332,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     /**
      * Returns an array with all table names
      *
-     * @access  public
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-     * @author  Tom Rochester <tom.rochester@gmail.com>
-     * @since   2006-08-25
+     * @return array
      */
     public function getTableNames($prefix = '')
     {
@@ -398,4 +348,31 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
             }
         }
     }
+    
+    /**
+     * Move internal result pointer
+     *
+     * Moves the pointer within the query result to a specified location, or
+     * to the beginning if nothing is specified.
+     *
+     * @param resource $result    Resultset
+     * @param integer  $rowNumber Row number
+     * 
+     * @return boolean
+     */
+    public function resultSeek($result, $rowNumber)
+    {
+        return pg_result_seek($result, $rowNumber);
+    }
+    
+    /**
+     * Closes the connection to the database.
+     *
+     * @return boolean
+     */
+    public function dbclose()
+    {
+        return pg_close($this->conn);
+    }
+    
 }

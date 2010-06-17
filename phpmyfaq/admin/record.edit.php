@@ -372,7 +372,7 @@ if($permission['approverec']):
     </fieldset>
 
     <fieldset class="fullwidth">
-    <legend><a href="#" onclick="javascript:toggleFieldset('Expiration');"><?php print $PMF_LANG['ad_record_expiration_window']; ?></a></legend>
+    <legend><a href="javascript:void(0);" onclick="javascript:toggleFieldset('Expiration');"><?php print $PMF_LANG['ad_record_expiration_window']; ?></a></legend>
     
     <div id="editExpiration" style="display: none;">
         <label class="lefteditor" for="dateStart"><?php print $PMF_LANG['ad_news_from']; ?></label>
@@ -385,7 +385,7 @@ if($permission['approverec']):
     </fieldset>
 
     <fieldset class="fullwidth">
-    <legend><a href="#" onclick="javascript:toggleFieldset('Changelog');"><?php print $PMF_LANG['ad_entry_changelog']; ?></a></legend>
+    <legend><a href="javascript:void(0);" onclick="javascript:toggleFieldset('Changelog');"><?php print $PMF_LANG['ad_entry_changelog']; ?></a></legend>
 
     <div id="editChangelog" style="display: none;">
         <label class="lefteditor"><?php print $PMF_LANG["ad_entry_date"]; ?></label>
@@ -417,7 +417,7 @@ if($permission['approverec']):
     if (is_numeric($faqData['id'])) {
 ?>
     <fieldset class="fullwidth">
-    <legend><a href="#" onclick="javascript:toggleFieldset('ChangelogHistory');"><?php print $PMF_LANG["ad_entry_changelog"]; ?></a></legend>
+    <legend><a href="javascript:void(0);" onclick="javascript:toggleFieldset('ChangelogHistory');"><?php print $PMF_LANG["ad_entry_changelog"]; ?></a></legend>
     <div id="editChangelogHistory" style="display: none;">
 <?php
         $faqChangelog  = new PMF_Faq_Changelog();
