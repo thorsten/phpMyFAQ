@@ -400,7 +400,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      */
     public function resultSeek($result, $rowNumber)
     {
-        return true;
+        return sqlsrv_fetch($result, SQLSRV_SCROLL_ABSOLUTE, $rowNumber); 
     }
     
     /**
