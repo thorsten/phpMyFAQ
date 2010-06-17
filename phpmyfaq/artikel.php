@@ -354,12 +354,8 @@ $tpl->processTemplate ("writeContent", array(
     'defaultContentName'            => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
     'msgYourComment'                => $PMF_LANG['msgYourComment'],
     'msgNewContentSubmit'           => $PMF_LANG['msgNewContentSubmit'],
-<<<<<<< HEAD
     'captchaFieldset'               => PMF_Helper_Captcha::getInstance()->renderFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment')),
-    'writeComments'                 => $comment->getComments($record_id, PMF_Comment::COMMENT_TYPE_FAQ)));
-=======
-    'captchaFieldset'               => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment'), $captcha->caplength),
     'writeComments'                 => $comment->getComments($faq->faqRecord['id'], PMF_Comment::COMMENT_TYPE_FAQ)));
->>>>>>> 4dfd5286f15c09e909644b04dea458be7ae30d9b
+
 
 $tpl->includeTemplate('writeContent', 'index');
