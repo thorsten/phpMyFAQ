@@ -6,7 +6,9 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.6.6 - 2010-06-
+- refactored database abstraction (Thorsten)
 - fixed OpenLDAP authentication (Franky)
+- fixed duplication of search results (Aaron Burgie)
 - fixed issue with duplicate sitemap characters (Aaron Burgie)
 - fixed solution ID issues (Thorsten)
 - Improved Glossary deletion workflow (Thorsten)

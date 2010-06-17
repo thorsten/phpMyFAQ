@@ -1,13 +1,8 @@
 <?php
 /**
  * Base interface for database drivers.
- *
- * @package    phpMyFAQ
- * @subpackage PMF_DB
- * @author     Johannes Schl�ter <johannes@php.net>
- * @since      2007-08-19
- * @copyright  2007-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,8 +13,29 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_DB
+ * @author    Johannes Schlüter <johannes@php.net>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2007-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2007-08-19
  */
 
+/**
+ * PMF_DB_Driver
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_DB
+ * @author    Johannes Schlüter <johannes@php.net>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2007-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2007-08-19
+ */
 interface PMF_DB_Driver
 {
     /**
@@ -152,6 +168,19 @@ interface PMF_DB_Driver
      */
     public function getTableNames($prefix = '');
 
+    /**
+     * Move internal result pointer
+     *
+     * Moves the pointer within the query result to a specified location, or
+     * to the beginning if nothing is specified.
+     *
+     * @param resource $result    Resultset
+     * @param integer  $rowNumber Row number
+     * 
+     * @return boolean
+     */
+    public function resultSeek($result, $rowNumber);
+    
     /**
      * Closes the connection to the database.
      *

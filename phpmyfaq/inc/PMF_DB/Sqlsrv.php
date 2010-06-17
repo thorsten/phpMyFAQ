@@ -388,6 +388,22 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
     }
 
     /**
+     * Move internal result pointer
+     *
+     * Moves the pointer within the query result to a specified location, or
+     * to the beginning if nothing is specified.
+     *
+     * @param resource $result    Resultset
+     * @param integer  $rowNumber Row number
+     * 
+     * @return boolean
+     */
+    public function resultSeek($result, $rowNumber)
+    {
+        return sqlsrv_fetch($result, SQLSRV_SCROLL_ABSOLUTE, $rowNumber); 
+    }
+    
+    /**
      * Closes the connection to the database.
      *
      * @return void

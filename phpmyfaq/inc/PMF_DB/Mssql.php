@@ -3,13 +3,7 @@
  * The db_mssql class provides methods and functions for a Microsoft SQL Server
  * database.
  *
- * @package    phpMyFAQ
- * @subpackage PMF_DB
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Daniel Hoechst <dhoechst@petzl.com>
- * @package    2005-01-11
- * @copyright  2005-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,8 +14,29 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_DB
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Daniel Hoechst <dhoechst@petzl.com>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @package   2005-01-11
  */
 
+/**
+ * PMF_DB_Mssql
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_DB
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Daniel Hoechst <dhoechst@petzl.com>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @package   2005-01-11
+ */
 class PMF_DB_Mssql implements PMF_DB_Driver 
 {
     /**
@@ -50,16 +65,11 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     /**
      * Connects to the database.
      *
-     * This function connects to a MySQL database
-     *
      * @param   string $host
      * @param   string $username
      * @param   string $password
      * @param   string $db_name
      * @return  boolean TRUE, if connected, otherwise FALSE
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-01-11
      */
     function connect ($host, $user, $passwd, $db)
     {
@@ -74,18 +84,14 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     /**
      * Sends a query to the database.
      *
-     * This function sends a query to the database.
-     *
-     * @param   string $query
-     * @return  mixed $result
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-01-11
+     * @param string $query Query
+     * 
+     * @return resource
      */
     function query($query)
     {
         $this->sqllog .= pmf_debug($query);
-        return @mssql_query($query, $this->conn);
+        return mssql_query($query, $this->conn);
     }
 
     /**
@@ -93,9 +99,6 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     *
     * @param   string
     * @return  string
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-01-11
     */
     function escape_string($string)
     {
@@ -105,17 +108,12 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     /**
      * Fetch a result row as an object
      *
-     * This function fetches a result row as an object.
-     *
      * @param   mixed $result
-     * @return  mixed
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-01-11
+     * @return  object
      */
     function fetch_object($result)
     {
-        return @mssql_fetch_object($result);
+        return mssql_fetch_object($result);
     }
 
 
@@ -123,17 +121,12 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     /**
      * Fetch a result row as an object
      *
-     * This function fetches a result as an associative array.
-     *
      * @param   mixed $result
      * @return  array
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-01-11
      */
     function fetch_assoc($result)
     {
-        return @mssql_fetch_assoc($result);
+        return mssql_fetch_assoc($result);
     }
 
     /**
@@ -162,23 +155,16 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      *
      * @param   mixed $result
      * @return  integer
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-01-11
      */
     function num_rows($result)
     {
-        return @mssql_num_rows($result);
+        return mssql_num_rows($result);
     }
 
     /**
      * Logs the queries
      *
-     * @param   mixed $result
-     * @return  integer
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-01-11
+     * @return string
      */
     function sqllog()
     {
@@ -188,16 +174,12 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     /**
      * This function returns the table status.
      *
-     * @access  public
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-     * @since   2006-08-24
+     * @return array
      */
     function getTableStatus()
     {
         $tables = array();
 
-        // Note: An update from a previous PMF version, e.g. 1.6.x -> 2.0.0,
-        // may alter the tables order (~alphabetical) as expected with a fresh installation
         $query = "
             SELECT
                 obj.name AS table_name,
@@ -310,18 +292,12 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     }
 
     /**
-    * Returns the next ID of a table
-    *
-    * This function is a replacement for MySQL's auto-increment so that
-    * we don't need it anymore.
-    *
-    * @param   string      the name of the table
-    * @param   string      the name of the ID column
-    * @return  int
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-01-11
-    */
+     * Returns the next ID of a table
+     *
+     * @param   string      the name of the table
+     * @param   string      the name of the ID column
+     * @return  int
+     */
     function nextID($table, $id)
     {
         $result = $this->query('SELECT max('.$id.') as current_id FROM '.$table);
@@ -330,14 +306,10 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     }
 
     /**
-    * Returns the error string.
-    *
-    * This function returns the last error string.
-    *
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-01-11
-    */
+     * Returns the error string.
+     *
+     * @return string
+     */
     function error()
     {
         $result = $this->query('SELECT @@ERROR AS ErrorCode');
@@ -348,28 +320,20 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     }
 
     /**
-    * Returns the client version string.
-    *
-    * This function returns the last error string.
-    * NOTE: Is this correct?
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-01-11
-    */
+     * Returns the client version string.
+     *
+     * @return string
+     */
     function client_version()
     {
-         return;
+         return '';
     }
 
     /**
-    * Returns the server version string.
-    *
-    * This function returns the last error string.
-    *
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-01-11
-    */
+     * Returns the server version string.
+     *
+     * @return string
+     */
     function server_version()
     {
         $result = $this->query('SELECT @@version AS SERVER_VERSION');
@@ -382,9 +346,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     /**
      * Returns an array with all table names
      *
-     * @access  public
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-     * @since   2006-08-23
+     * @return void
      */
     function getTableNames($prefix = '')
     {
@@ -402,16 +364,28 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     }
 
     /**
+     * Move internal result pointer
+     *
+     * Moves the pointer within the query result to a specified location, or
+     * to the beginning if nothing is specified.
+     *
+     * @param resource $result    Resultset
+     * @param integer  $rowNumber Row number
+     * 
+     * @return boolean
+     */
+    public function resultSeek($result, $rowNumber)
+    {
+        return mssql_data_seek($result, $rowNumber);
+    }
+    
+    /**
      * Closes the connection to the database.
      *
-     * This function closes the connection to the database.
-     *
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-01-11
+     * @return boolean
      */
     function dbclose()
     {
-        return @mssql_close($this->conn);
+        return mssql_close($this->conn);
     }
 }
