@@ -2517,7 +2517,7 @@ class PMF_Faq
             AND
                 fd.lang = fv.lang";
         $needAndOp = true;
-        if ((!empty($nCatid)) && (PMF_Utils::isInteger($nCatid)) && ($nCatid > 0)) {
+        if ((!empty($nCatid)) && is_int($nCatid) && $nCatid > 0) {
             if ($needAndOp) {
                 $query .= " AND";
             }

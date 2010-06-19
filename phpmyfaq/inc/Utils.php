@@ -132,17 +132,6 @@ class PMF_Utils
     }
 
     /**
-     * Check if a given digit is an integer
-     *
-     * @param  string $digits Digits
-     * @return boolean
-     */
-    public static function isInteger($digits)
-    {
-        return preg_match('/^[0-9]+$/', $digits);
-    }
-
-    /**
      * Check if a given string could be a language
      *
      * @param  string $lang Language
@@ -172,7 +161,7 @@ class PMF_Utils
             $testdate = substr($testdate, 0, strlen($testdate)-1);
         }
         // PMF date consists of numbers only: YYYYMMDDhhmmss
-        return (PMF_Utils::isInteger($testdate));
+        return is_int($testdate);
     }
 
     /**
