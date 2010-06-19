@@ -2,14 +2,8 @@
 /**
  * The PMF_Template class provides methods and functions for the
  * template parser
- *
- * @package    phpMyFAQ
- * @subpackage PMF_Template
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Jan Mergler <jan.mergler@gmx.de>
- * @since      2002-08-22
- * @version    SVN: $Id$
- * @copyright  2002-2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,18 +14,28 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Template
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Jan Mergler <jan.mergler@gmx.de>
+ * @copyright 2002-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2002-08-22
  */
 
 /**
  * PMF_Template
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Template
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Jan Mergler <jan.mergler@gmx.de>
- * @since      2002-08-22
- * @version    SVN: $Id$
- * @copyright  2002-2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   PMF_Template
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Jan Mergler <jan.mergler@gmx.de>
+ * @copyright 2002-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2002-08-22
  */
 class PMF_Template
 {
@@ -78,12 +82,12 @@ class PMF_Template
      * @param array  $myTemplate Templates
      * @param string $tplSetName active template set name
      * 
-     * @return void
+     * @return PMF_Template
      */
     public function __construct(Array $myTemplate, $tplSetName = 'default')
     {
-    	self::$tplSetName = $tplSetName;
-    	
+        self::$tplSetName = $tplSetName;
+        
         foreach ($myTemplate as $templateName => $filename) {
             $this->templates[$templateName] = $this->readTemplate("template/$tplSetName/$filename", $templateName);
         }
@@ -92,8 +96,9 @@ class PMF_Template
     /**
      * This function merges two templates
      *
-     * @param  string $name   Name of the template to include
-     * @param  string $toname Name of the new template
+     * @param string $name   Name of the template to include
+     * @param string $toname Name of the new template
+     * 
      * @return void
      */
     public function includeTemplate($name, $toname)
@@ -107,8 +112,9 @@ class PMF_Template
     /**
      * Parses the template
      *
-     * @param  string $templateName    Name of the template
-     * @param  array  $templateContent Content of the template
+     * @param string $templateName    Name of the template
+     * @param array  $templateContent Content of the template
+     * 
      * @return void
      */
     public function processTemplate($templateName, Array $templateContent)
@@ -153,7 +159,7 @@ class PMF_Template
     /**
      * This function prints the whole parsed template file.
      *
-     * @return  void
+     * @return void
      */
     public function printTemplate()
     {
@@ -165,11 +171,12 @@ class PMF_Template
     /**
      * This function adds two template outputs.
      *
-     * @param  array $name   Name of the template to add
-     * @param  array $toname Name of the new template
+     * @param array $name   Name of the template to add
+     * @param array $toname Name of the new template
+     * 
      * @return void
      */
-    public function addTemplate($name, $toname)
+    public function addTemplate(Array $name, Array $toname)
     {
         $this->outputs[$toname] .= $this->outputs[$name];
         $this->outputs[$name] = '';
@@ -178,8 +185,9 @@ class PMF_Template
     /**
      * This function reads a template file.
      *
-     * @param  string $filename     Filename
-     * @param  string $templateName Name of the template
+     * @param string $filename     Filename
+     * @param string $templateName Name of the template
+     * 
      * @return string
      */
     public function readTemplate($filename, $templateName)
@@ -196,9 +204,10 @@ class PMF_Template
     /**
      * This function processes the block
      *
-     * @param  string $templateName Name of the template
-     * @param  string $blockName    Block name
-     * @param  array  $blockContent Content of the block
+     * @param string $templateName Name of the template
+     * @param string $blockName    Block name
+     * @param array  $blockContent Content of the block
+     * 
      * @return void
      */
     public function processBlock($templateName, $blockName, Array $blockContent)
@@ -224,6 +233,28 @@ class PMF_Template
         }
     }
 
+    /**
+     * Set the template set name to use
+     * 
+     * @param $tplSetName
+     * 
+     * @return void
+     */
+    public static function setTplSetName($tplSetName)
+    {
+        self::$tplSetName = $tplSetName;
+    }
+    
+    /**
+     * Get name of the actual template set
+     * 
+     * @return string
+     */
+    public static function getTplSetName()
+    {
+        return self::$tplSetName;   
+    }
+    
     //
     // Private Functions
     //
@@ -233,12 +264,12 @@ class PMF_Template
      *
      * @param  string $block        Blockname
      * @param  array  $blockContent Content of block
+     * 
      * @return string implode('', $tmpBlock)
      */
     private function _multiplyBlock($block, $blockContent)
     {
-
-        $multiplyTimes = null;
+        $multiplyTimes = 0;
 
         //create the replacement array
         foreach ($blockContent as $var => $val) {
@@ -259,17 +290,15 @@ class PMF_Template
                     $replace[$var][] = $val;
                 }
             }
-
         }
 
         //do the replacement
-        for ($i=0; $i<$multiplyTimes; $i++) {
+        for ($i = 0; $i < $multiplyTimes; $i++) {
             $tmpBlock[$i] = $block;
             foreach ($replace as $var => $val) {
                 $tmpBlock[$i] = str_replace('{'.$var.'}', $val[$i], $tmpBlock[$i]);
             }
         }
-
 
         return implode('',$tmpBlock);
 
@@ -279,6 +308,7 @@ class PMF_Template
      * This function reads the block
      *
      * @param  string $tpl Block to read
+     * 
      * @return string
      */
     private function _readBlocks($tpl)
@@ -321,6 +351,7 @@ class PMF_Template
      * This function checks the content
      *
      * @param  string $content Content to check
+     * 
      * @return string
      */
     private function _checkContent($content)
@@ -345,27 +376,5 @@ class PMF_Template
         }
 
         return $content;
-    }
-    
-    /**
-     * Set the template set name to use
-     * 
-     * @param $tplSetName
-     * 
-     * @return null
-     */
-    public static function setTplSetName($tplSetName)
-    {
-    	self::$tplSetName = $tplSetName;
-    }
-    
-    /**
-     * Get name of the actual template set
-     * 
-     * @return string
-     */
-    public static function getTplSetName()
-    {
-    	return self::$tplSetName;	
     }
 }
