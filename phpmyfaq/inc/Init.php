@@ -173,11 +173,6 @@ class PMF_Init
      */
     public static function cleanRequest()
     {
-        // Check on PHP 6.0.0-dev
-        if (version_compare(PHP_VERSION, '6.0.0-dev', '<')) {
-            $_SERVER['PHP_SELF'] = strtr(rawurlencode($_SERVER['PHP_SELF']),array( "%2F"=>"/", "%257E"=>"%7E"));
-        }
-        
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             $_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
         }

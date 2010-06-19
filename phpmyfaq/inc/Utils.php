@@ -97,9 +97,6 @@ class PMF_Utils
             )
         );
 
-        // Be kind with PHP 6
-        $flags = (version_compare(PHP_VERSION, '6.0.0-dev', '<') ? false : FILE_BINARY);
-
         return file_get_contents($url, $flags, $ctx);
     }
 
