@@ -95,7 +95,7 @@ class PMF_Auth
      * @param string  $enctype   Type of encoding
      * @param boolean $read_only Readonly?
      * 
-     * @return void
+     * @return PMF_Auth
      */
     public function __construct($enctype = 'none', $read_only = false)
     {
