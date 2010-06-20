@@ -25,21 +25,6 @@
  */
 
 /**
- * PHP 6 script encoding
- *
- */
-declare(encoding='latin1');
-
-// {{{ Functions
-function getLinkHtmlAnchor($url, $text = null, $target = null)
-{
-    $link = new PMF_Link($url, $text, $target);
-    return $link->toHtmlAnchor();
-}
-// }}}
-
-// {{{ Classes
-/**
  * PMF_Link Class
  *
  * This class wrap the needs for managing an HTML anchor
@@ -119,12 +104,11 @@ class PMF_Link
     const PMF_LINK_HTML_SEARCH = 'search.html';
     const PMF_LINK_HTML_SHOWCAT = 'showcat.html';
 
-	
-	/**
-	 * URL
-	 * 
-	 * @var string
-	 */
+    /**
+     * URL
+     * 
+     * @var string
+     */
     public $url = '';
     
     /**
@@ -176,7 +160,7 @@ class PMF_Link
      * @param string $text   Text
      * @param string $target Target
      * 
-     * @return void
+     * @return PMF_Link
      */
     public function __construct($url, $text = '', $target = '')
     {
