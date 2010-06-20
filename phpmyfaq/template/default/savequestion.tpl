@@ -1,29 +1,29 @@
     <h2>{msgQuestion}</h2>
-	
-	[adequateAnswers]
-	{answers}
-	[/adequateAnswers]
-	
-	[messageSaveQuestion]
-	<div id="message_save_question">
-	<p>{Message}</p>
-	</div>
-	[/messageSaveQuestion]
-	
-	[messageQuestionFound]
-	<script>
-	function mailQuestion()
-	{
-	    $.get("index.php",
-	          {action: 'savequestion', domail: 1, code: '{Code}'},
-	          function() {
-	              document.location = 'index.php?action=savequestion&thankyou=1';
-	          }
-	    );
-	}
-	</script>
+    
+    [adequateAnswers]
+    {answers}
+    [/adequateAnswers]
+    
+    [messageSaveQuestion]
+    <div id="message_save_question">
+    <p>{Message}</p>
+    </div>
+    [/messageSaveQuestion]
+    
+    [messageQuestionFound]
+    <script>
+    function mailQuestion()
+    {
+        $.get("index.php",
+              {action: 'savequestion', domail: 1, code: '{Code}'},
+              function() {
+                  document.location = 'index.php?action=savequestion&thankyou=1';
+              }
+        );
+    }
+    </script>
     <div id="message_save_question">
     <p>{Message}</p>
     <input type="button" value="{BtnText}" onclick="mailQuestion()" />
     </div>
-	[/messageQuestionFound]
+    [/messageQuestionFound]
