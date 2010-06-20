@@ -1,15 +1,8 @@
 <?php
 /**
  * Manages all language stuff
- *
- * @package    phpMyFAQ
- * @subpackage PMF_Language
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Matteo scaramuccia <matteo@phpmyfaq.de>
- * @author     Aurimas Fišeras <aurimas@gmail.com>
- * @since      2009-05-14
- * @version    SVN: $Id$
- * @copyright  2009 phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,19 +13,30 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Language
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo scaramuccia <matteo@phpmyfaq.de>
+ * @author    Aurimas Fišeras <aurimas@gmail.com>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-05-14
  */
 
 /**
  * PMF_Language
  * 
- * @package    phpMyFAQ
- * @subpackage PMF_Language
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Matteo scaramuccia <matteo@phpmyfaq.de>
- * @author     Aurimas Fišeras <aurimas@gmail.com>
- * @since      2009-05-14
- * @version    SVN: $Id$
- * @copyright  2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   PMF_Language
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo scaramuccia <matteo@phpmyfaq.de>
+ * @author    Aurimas Fišeras <aurimas@gmail.com>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-05-14
  */
 class PMF_Language
 {
@@ -53,18 +57,18 @@ class PMF_Language
     /**
      * Constructor
      * 
-     * @return void
+     * @return PMF_Language
      */
     public function __construct()
     {
-        
     }
     
     /**
      * Sets the current language for phpMyFAQ user session
      *
-     * @param   bool    $config_detection Configuration detection
-     * @param   string  $config_language  Language from configuration
+     * @param bool   $config_detection Configuration detection
+     * @param string $config_language  Language from configuration
+     * 
      * @return  string
      */
     public function setLanguage($config_detection, $config_language)
@@ -130,6 +134,7 @@ class PMF_Language
         
         return $_SESSION['pmf_lang'] = self::$language;
     }
+    
     /**
      * This function returns the available languages
      *
@@ -196,6 +201,7 @@ class PMF_Language
         $output .= "</select>\n";
         return $output;
     }
+    
     /**
      * Function for displaying all languages in <option>
      *
@@ -204,7 +210,7 @@ class PMF_Language
      * @param  bool   $fileLanguageValue print the <language file> instead of the <language code> as value?
      * @return string
      */
-    public static function languageOptions ($lang = "", $onlyThisLang = false, $fileLanguageValue = false)
+    public static function languageOptions($lang = "", $onlyThisLang = false, $fileLanguageValue = false)
     {
         $output = "";
         foreach (self::getAvailableLanguages() as $key => $value) {
@@ -248,20 +254,21 @@ class PMF_Language
     
     /**
      * True if the language is supported by the bundled TinyMCE editor
+     * 
+     * TinyMCE Language is supported if there is a language file present in
+     * PMF_ROOT/admin/editor/langs/$langcode.js
+     * 
+     * TinyMCE language packs can be downloaded from 
+     * http://tinymce.moxiecode.com/download_i18n.php
+     * and extracted to PMF_ROOT/admin/editor
      *
      * @param  string $langcode Language code
+     * 
      * @return boolean
      */
     public static function isASupportedTinyMCELanguage($langcode)
     {
-        // TinyMCE Language is supported if there is a language file present in
-        // PMF_ROOT/admin/editor/langs/$langcode.js
-
-        // TinyMCE language packs can be downloaded from
-        // http://tinymce.moxiecode.com/download_i18n.php
-        // and extracted to PMF_ROOT/admin/editor
-
-        return file_exists(dirname(dirname(__FILE__)).'/admin/editor/langs/'.$langcode.'.js');
+        return file_exists(dirname(dirname(__FILE__)) . '/admin/editor/langs/' . $langcode . '.js');
     }
     
 
