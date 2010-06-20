@@ -25,12 +25,6 @@
  */
 
 /**
- * PHP 6 script encoding
- *
- */
-declare(encoding='latin1');
-
-/**
  * PMF_Mail
  *
  * @category  phpMyFAQ
