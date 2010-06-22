@@ -263,6 +263,7 @@ class PMF_Pagination
         $content = array();
         
         $page = 1;
+        
         for ($i = 0; $i < $this->total; $i += $this->perPage, $page++) {
             $link = $this->renderUrl($this->baseUrl, $page);
 
@@ -275,7 +276,7 @@ class PMF_Pagination
             $content[] = $this->renderLink($template, $link, $page);
         }
         
-        if(1 < $this->currentPage) {
+        if (1 < $this->currentPage) {
             array_unshift($content,
                           $this->renderLink($this->prevPageLinkTpl,
                                             $this->renderUrl($this->baseUrl, $this->currentPage - 1),
@@ -289,7 +290,7 @@ class PMF_Pagination
                           
         }
         
-        if($page - 1 > $this->currentPage) {
+        if ($page - 1 > $this->currentPage) {
             array_push($content,
                        $this->renderLink($this->nextPageLinkTpl,
                                          $this->renderUrl($this->baseUrl, $this->currentPage + 1),
