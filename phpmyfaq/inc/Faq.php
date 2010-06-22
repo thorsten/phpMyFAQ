@@ -466,10 +466,10 @@ class PMF_Faq
             
             $options = array('baseUrl'        => $baseUrl,
                             'total'           => $num,
-                            'perPage'         => $faqconfig->get("main.numberOfRecordsPerPage"),
+                            'perPage'         => $faqconfig->get('main.numberOfRecordsPerPage'),
                             'pageParamName'   => 'seite',
-                            'nextPageLinkTpl' => '[ <a href="{LINK_URL}">' . $this->pmf_lang["msgNext"] . '</a> ]',
-                            'prevPageLinkTpl' => '[ <a href="{LINK_URL}">' . $this->pmf_lang["msgPrevious"] . '</a> ]',
+                            'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $this->pmf_lang['msgNext'] . '</a>',
+                            'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $this->pmf_lang['msgPrevious'] . '</a>',
                             'layoutTpl'       => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>');
         
             $pagination = new PMF_Pagination($options);
