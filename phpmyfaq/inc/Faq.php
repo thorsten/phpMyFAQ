@@ -464,13 +464,13 @@ class PMF_Faq
                      . 'action=show&amp;cat=' . $category_id
                      . '&amp;seite=' . $page;
             
-            $options = array('baseUrl'        => $baseUrl,
-                            'total'           => $num,
-                            'perPage'         => $faqconfig->get('main.numberOfRecordsPerPage'),
-                            'pageParamName'   => 'seite',
-                            'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $this->pmf_lang['msgNext'] . '</a>',
-                            'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $this->pmf_lang['msgPrevious'] . '</a>',
-                            'layoutTpl'       => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>');
+            $options = array('baseUrl'         => $baseUrl,
+                             'total'           => $num,
+                             'perPage'         => $faqconfig->get('main.numberOfRecordsPerPage'),
+                             'pageParamName'   => 'seite',
+                             'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $this->pmf_lang['msgNext'] . '</a>',
+                             'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $this->pmf_lang['msgPrevious'] . '</a>',
+                             'layoutTpl'       => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>');
         
             $pagination = new PMF_Pagination($options);
             $output    .= $pagination->render();
