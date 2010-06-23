@@ -73,6 +73,13 @@ class PMF_Pagination
     protected $perPage = 0;
     
     /**
+     * Number of adjacent links
+     * 
+     * @var integer
+     */
+    protected $adjacents = 1;
+    
+    /**
      * Default link template. 
      * Possible variables are {LINK}, {TITLE}, {TEXT}
      * 
@@ -267,12 +274,26 @@ class PMF_Pagination
      */
     public function render()
     {
-        $content = array();
-        $page    = 1;
+        $content   = array();
+        $pages     = ceil($this->total / $this->perPage);
+        $adjacents = floor($this->adjacents / 2) >= 1 ? floor($this->adjacents / 2) : 1;
         
-        for ($i = 0; $i < $this->total; $i += $this->perPage, $page++) {
+        for ($page = 1; $page <= $pages; $page++) {
+            
+            if ($page > $this->adjacents && $page < $this->currentPage - $adjacents) {
+                $content[] = '&hellip;';
+                $page      = $this->currentPage - $adjacents - 1;
+                continue;
+            }
+            
+            if ($page > $this->currentPage + $adjacents && $page <= $pages - $this->adjacents) {
+                $content[] = '&hellip;';
+                $page      = $pages - $this->adjacents;
+                continue;
+            }
+            
             $link = $this->renderUrl($this->baseUrl, $page);
-
+            
             if ($page == $this->currentPage) {
                 $template = $this->currentPageLinkTpl;
             } else {
