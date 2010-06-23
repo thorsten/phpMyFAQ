@@ -602,8 +602,11 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
 
     $num           = count(array_keys($duplicateFAQs));
     $duplicateFAQs = array();
-    $db->resultSeek($result, 0);
-
+    
+    if ($num > 0) {
+        $db->resultSeek($result, 0);
+    }
+    
     $pages = ceil($num / $confPerPage);
     $last  = $seite * $confPerPage;
     $first = $last - $confPerPage;
