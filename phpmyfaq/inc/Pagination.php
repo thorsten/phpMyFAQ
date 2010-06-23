@@ -79,7 +79,7 @@ class PMF_Pagination
      * 
      * @var integer
      */
-    protected $adjacents = 1;
+    protected $adjacents = 4;
     
     /**
      * Default link template. 
@@ -327,7 +327,7 @@ class PMF_Pagination
                                          $page - 1));
         }
         
-        return $this->renderLayout(implode('&nbsp;', $content));
+        return $this->renderLayout(implode('&nbsp;&nbsp;', $content));
     }
     
     /**
