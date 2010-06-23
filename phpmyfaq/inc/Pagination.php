@@ -226,6 +226,13 @@ class PMF_Pagination
         
     }
     
+    /**
+     * Returns the current page URL
+     * 
+     * @param string $url URL
+     * 
+     * @return string
+     */
     protected function getCurrentPageFromUrl($url)
     {
         $retval = 1;
@@ -261,8 +268,7 @@ class PMF_Pagination
     public function render()
     {
         $content = array();
-        
-        $page = 1;
+        $page    = 1;
         
         for ($i = 0; $i < $this->total; $i += $this->perPage, $page++) {
             $link = $this->renderUrl($this->baseUrl, $page);
@@ -280,28 +286,22 @@ class PMF_Pagination
             array_unshift($content,
                           $this->renderLink($this->prevPageLinkTpl,
                                             $this->renderUrl($this->baseUrl, $this->currentPage - 1),
-                                            $this->currentPage - 1)
-                          );
+                                            $this->currentPage - 1));
             array_unshift($content,
                           $this->renderLink($this->firstPageLinkTpl,
                                             $this->renderUrl($this->baseUrl, 1),
-                                            1)
-                          );                          
-                          
+                                            1));
         }
         
         if ($page - 1 > $this->currentPage) {
             array_push($content,
                        $this->renderLink($this->nextPageLinkTpl,
                                          $this->renderUrl($this->baseUrl, $this->currentPage + 1),
-                                         $this->currentPage + 1)
-                       );
-                          
+                                         $this->currentPage + 1));
             array_push($content,
                        $this->renderLink($this->lastPageLinkTpl,
                                          $this->renderUrl($this->baseUrl, $page - 1),
-                                         $page - 1)
-                       );
+                                         $page - 1));
         }
         
         return $this->renderLayout(implode('&nbsp;', $content));
