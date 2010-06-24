@@ -17,6 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Pagination
  * @author    Anatoliy Belsky <ab@php.net>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
@@ -29,6 +30,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Pagination
  * @author    Anatoliy Belsky <ab@php.net>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
@@ -71,6 +73,13 @@ class PMF_Pagination
      * @var integer
      */
     protected $perPage = 0;
+    
+    /**
+     * Number of adjacent links
+     * 
+     * @var integer
+     */
+    protected $adjacents = 4;
     
     /**
      * Default link template. 
@@ -226,6 +235,13 @@ class PMF_Pagination
         
     }
     
+    /**
+     * Returns the current page URL
+     * 
+     * @param string $url URL
+     * 
+     * @return string
+     */
     protected function getCurrentPageFromUrl($url)
     {
         $retval = 1;
@@ -260,12 +276,26 @@ class PMF_Pagination
      */
     public function render()
     {
-        $content = array();
+        $content   = array();
+        $pages     = ceil($this->total / $this->perPage);
+        $adjacents = floor($this->adjacents / 2) >= 1 ? floor($this->adjacents / 2) : 1;
         
-        $page = 1;
-        for ($i = 0; $i < $this->total; $i += $this->perPage, $page++) {
+        for ($page = 1; $page <= $pages; $page++) {
+            
+            if ($page > $this->adjacents && $page < $this->currentPage - $adjacents) {
+                $content[] = '&hellip;';
+                $page      = $this->currentPage - $adjacents - 1;
+                continue;
+            }
+            
+            if ($page > $this->currentPage + $adjacents && $page <= $pages - $this->adjacents) {
+                $content[] = '&hellip;';
+                $page      = $pages - $this->adjacents;
+                continue;
+            }
+            
             $link = $this->renderUrl($this->baseUrl, $page);
-
+            
             if ($page == $this->currentPage) {
                 $template = $this->currentPageLinkTpl;
             } else {
@@ -275,35 +305,29 @@ class PMF_Pagination
             $content[] = $this->renderLink($template, $link, $page);
         }
         
-        if(1 < $this->currentPage) {
+        if (1 < $this->currentPage) {
             array_unshift($content,
                           $this->renderLink($this->prevPageLinkTpl,
                                             $this->renderUrl($this->baseUrl, $this->currentPage - 1),
-                                            $this->currentPage - 1)
-                          );
+                                            $this->currentPage - 1));
             array_unshift($content,
                           $this->renderLink($this->firstPageLinkTpl,
                                             $this->renderUrl($this->baseUrl, 1),
-                                            1)
-                          );                          
-                          
+                                            1));
         }
         
-        if($page - 1 > $this->currentPage) {
+        if ($page - 1 > $this->currentPage) {
             array_push($content,
                        $this->renderLink($this->nextPageLinkTpl,
                                          $this->renderUrl($this->baseUrl, $this->currentPage + 1),
-                                         $this->currentPage + 1)
-                       );
-                          
+                                         $this->currentPage + 1));
             array_push($content,
                        $this->renderLink($this->lastPageLinkTpl,
                                          $this->renderUrl($this->baseUrl, $page - 1),
-                                         $page - 1)
-                       );
+                                         $page - 1));
         }
         
-        return $this->renderLayout(implode('&nbsp;', $content));
+        return $this->renderLayout(implode('&nbsp;&nbsp;', $content));
     }
     
     /**

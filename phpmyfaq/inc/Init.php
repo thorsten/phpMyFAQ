@@ -173,11 +173,6 @@ class PMF_Init
      */
     public static function cleanRequest()
     {
-        // Check on PHP 6.0.0-dev
-        if (version_compare(PHP_VERSION, '6.0.0-dev', '<')) {
-            $_SERVER['PHP_SELF'] = strtr(rawurlencode($_SERVER['PHP_SELF']),array( "%2F"=>"/", "%257E"=>"%7E"));
-        }
-        
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             $_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
         }
@@ -296,27 +291,6 @@ class PMF_Init
             }
         }
         reset($_FILES);
-    }
-
-    /**
-     * Gets the accepted language from the user agent
-     *
-     * @return void
-     */
-    private function _getUserAgentLanguage()
-    {
-        $matches = array();
-        // $_SERVER['HTTP_ACCEPT_LANGUAGE'] could be like the text below:
-        // it,pt-br;q=0.8,en-us;q=0.5,en;q=0.3
-        // TODO: (ENH) get an array of accepted languages and cycle through it in self::setLanguage
-        if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-            // ISO Language Codes, 2-letters: ISO 639-1, <Country tag>[-<Country subtag>]
-            // Simplified language syntax detection: xx[-yy]
-            preg_match("/([a-z\-]+)/i", trim($_SERVER['HTTP_ACCEPT_LANGUAGE']), $matches);
-            if (isset($matches[1])) {
-                $this->acceptedLanguage = strtolower($matches[1]);
-            }
-        }
     }
 
     /**

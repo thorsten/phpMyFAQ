@@ -1,13 +1,8 @@
 <?php
 /**
  * The main class for fetching the configuration, update and delete items.
- *
- * @package    phpMyFAQ
- * @subpackage PMF_Configuration   
- * @since      2006-01-04
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright  2006-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,17 +13,26 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Configuration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2006-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2006-01-04
  */
 
 /**
  * PMF_Configuration
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Configuration   
- * @since      2006-01-04
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright  2006-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * @category  phpMyFAQ
+ * @package   PMF_Configuration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2006-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2006-01-04
  */
 class PMF_Configuration
 {
@@ -56,8 +60,7 @@ class PMF_Configuration
     /**
      * Constructor
      *
-     * @return void
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @return PMF_Configuration
      */
     private function __construct()
     {
@@ -67,7 +70,6 @@ class PMF_Configuration
     /**
      * Returns the single instance
      *
-     * @access static
      * @return PMF_Configuration
      */
     public static function getInstance()
@@ -92,8 +94,6 @@ class PMF_Configuration
      * Fetches all configuration items into an array
      *
      * @return void
-     * @access public
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function getAll()
     {
@@ -117,6 +117,7 @@ class PMF_Configuration
      * Returns a configuration item
      *
      * @param  string $item Configuration item
+     * 
      * @return mixed
      */
     public function get($item)
@@ -126,14 +127,14 @@ class PMF_Configuration
         }
         switch ($this->config[$item]) {
             case 'true':
-        		return true;
-        		break;
-        	case 'false':
-        	    return false;
-        	    break;
-        	default:
-        	    return $this->config[$item];
-        		break;
+                return true;
+                break;
+            case 'false':
+                return false;
+                break;
+            default:
+                return $this->config[$item];
+                break;
         }
     }
 
@@ -141,6 +142,7 @@ class PMF_Configuration
      * Updates all configuration items
      *
      * @param  array $newconfig Array with new configuration values
+     * 
      * @return bool
      */
     public function update(Array $newconfig)
@@ -148,7 +150,6 @@ class PMF_Configuration
         if (is_array($newconfig)) {
             foreach ($newconfig as $name => $value) {
                 if ($name != 'main.phpMyFAQToken') {
-                	
                     $update = sprintf("
                         UPDATE
                             %sfaqconfig

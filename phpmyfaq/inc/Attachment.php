@@ -34,7 +34,8 @@
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-21
  */
-class PMF_Attachment {
+class PMF_Attachment
+{
     /**
      * Storage type filesystem
      * 

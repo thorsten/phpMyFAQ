@@ -53,6 +53,8 @@ class PMF_Db
     
     /**
      * Database factory
+     * 
+     * @param string $type Database management system type
      *
      * @return PMF_Db_Driver
      */

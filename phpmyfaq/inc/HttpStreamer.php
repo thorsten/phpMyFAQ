@@ -1,12 +1,8 @@
 <?php
 /**
  * Simple HTTP Streamer
- *
- * @category  phpMyFAQ
- * @package   PMF_HttpStreamer
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since     2005-11-02
- * @copyright 2005-2009 phpMyFAQ Team
+ * 
+ * PHP version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -17,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  *  License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_HttpStreamer
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-11-02
  */
 
 /**
@@ -34,8 +38,10 @@
  * @category  phpMyFAQ
  * @package   PMF_HttpStreamer
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
  * @since     2005-11-02
- * @copyright 2005-2009 phpMyFAQ Team
  */
 class PMF_HttpStreamer
 {
@@ -107,6 +113,8 @@ class PMF_HttpStreamer
      *
      * @param string $type    Type
      * @param string $content Content
+     * 
+     * @return PMF_HttpStreamer
      */
     function __construct($type, $content)
     {
@@ -120,6 +128,7 @@ class PMF_HttpStreamer
      * Sends data
      *
      * @param  string $disposition Disposition
+     * 
      * @return void
      */
     public function send($disposition)
@@ -129,7 +138,7 @@ class PMF_HttpStreamer
         }
 
         // Sanity checks
-        if(headers_sent()) {
+        if (headers_sent()) {
             die("<b>PMF_HttpStreamer Class</b> error: unable to send my headers: someone already sent other headers!");
         }
         if (self::EXPORT_BUFFER_ENABLE) {
@@ -159,9 +168,7 @@ class PMF_HttpStreamer
      */
     private function _setHttpHeaders()
     {
-        $filename    = "";
-        $description = "";
-        $mimeType    = "";
+        $filename = $description = $mimeType = '';
 
         // Evaluate data upon export type request
         switch ($this->type) {
@@ -199,7 +206,7 @@ class PMF_HttpStreamer
 
         // Set the correct HTTP headers:
         // 1. Prevent proxies&browsers caching
-        header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+        header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
         header("Expires: 0");
         header("Cache-Control: private, no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
         header("Pragma: no-cache");
@@ -211,14 +218,13 @@ class PMF_HttpStreamer
             header("Content-Type: application/force-download");
         }
         // RFC2616, �19.5.1: $filename must be a quoted-string
-        header("Content-Disposition: ".$this->disposition."; filename=\"".PMF_Export::getExportTimestamp()."_".$filename."\"");
+        header("Content-Disposition: " . $this->disposition."; filename=\"" . PMF_Export::getExportTimestamp() . "_" . $filename."\"");
         if (!empty($description)) {
-            header("Content-Description: ".$description);
+            header("Content-Description: " . $description);
         }
         header("Content-Transfer-Encoding: binary");
-        // Deny partial downloads (opposite to: "Accept-Ranges: bytes")
         header("Accept-Ranges: none");
-        header("Content-Length: ".$this->size);
+        header("Content-Length: " . $this->size);
     }
 
     /**
@@ -228,6 +234,6 @@ class PMF_HttpStreamer
      */
     private function _streamContent()
     {
-        print($this->content);
+        print $this->content;
     }
 }

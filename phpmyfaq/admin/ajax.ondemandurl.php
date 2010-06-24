@@ -6,13 +6,8 @@
  *   index.php?action=ajax&ajax=onDemandURL&id=<id>&lang=<lang>[&lookup=1]
  *
  * Performs link verification at demand of the user.
- *
- * @category  phpMyFAQ
- * @package   Administration
- * @author    Minoru TODA <todam@netjapan.co.jp>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2005-09-30
- * @copyright 2005-2009 NetJapan, Inc.
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -26,6 +21,13 @@
  *
  * The Initial Developer of the Original Code is released for external use
  * with permission from NetJapan, Inc. IT Administration Group.
+ *
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Minoru TODA <todam@netjapan.co.jp>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2005-09-30
+ * @copyright 2005-2010 NetJapan, Inc.
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -64,7 +66,7 @@ if (count(ob_list_handlers()) > 0) {
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
 <head>
     <title><?php print $faqconfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
-    <meta name="copyright" content="(c) 2001-2009 phpMyFAQ Team" />
+    <meta name="copyright" content="(c) 2001-2010 phpMyFAQ Team" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style type="text/css"> @import url(../template/<?php echo PMF_Template::getTplSetName(); ?>/admin.css); </style>
     <script type="text/javascript" src="../inc/js/jquery.min.js"></script>

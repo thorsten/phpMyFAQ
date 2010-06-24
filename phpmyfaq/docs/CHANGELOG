@@ -1,23 +1,32 @@
 phpMyFAQ 2.7.0-alpha
 Codename "Prospero"
 
+
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.7.0-alpha - 2010-04-
+
+Version 2.7.0-alpha - 2010-
 - added rewritten and enhanced category implementation (Johannes Schlüter, Thorsten)
 - added 960 Grid System CSS Framework (Thorsten)
 - added new administration layout (Thorsten)
 - added Ajax powered frontend (Guillaume Le Maout)
 - upgraded jQuery to version 1.4.2 (Thorsten)
 
-Version 2.6.6 - 2010-06-
+Version 2.6.7 - 2010-07-
+- improved pagination functionality (Thorsten)
+
+Version 2.6.6 - 2010-06-21
+- refactored database abstraction (Thorsten)
 - fixed OpenLDAP authentication (Franky)
+- fixed duplication of search results (Aaron Burgie)
 - fixed issue with duplicate sitemap characters (Aaron Burgie)
 - fixed solution ID issues (Thorsten)
 - Improved Glossary deletion workflow (Thorsten)
 - updated Brazilian Portuguese translation
+- updated Norwegian Bokmål translation
+- fixed minor bugs (Thorsten, Philip Mikas)
 
 Version 2.6.5 - 2010-05-24
 - updated bundled TCPDF library to version 5.0.009 (Thorsten)

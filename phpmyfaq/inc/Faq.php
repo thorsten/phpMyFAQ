@@ -485,57 +485,27 @@ class PMF_Faq
         if (isset($category)) {
             $categoryName = $category->categoryName[$category_id]['name'];
         }
+        
         if ($pages > 1) {
-            $output  .= "<p align=\"center\"><strong>";
-            $previous = $page - 1;
-            $next     = $page + 1;
-
-            if ($previous != 0) {
-                $title = $this->pmf_lang['msgPrevious'];
-                $url   = sprintf('%saction=show&amp;cat=%d&amp;seite=%d',
-                            $sids,
-                            $category_id,
-                            $previous);
-                $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-                $oLink->itemTitle = $categoryName;
-                $oLink->text      = $title;
-                $oLink->tooltip   = $title;
-                $output          .= '[ '.$oLink->toHtmlAnchor().' ]';
-            }
-
-            $output .= ' ';
-
-            for ($i = 1; $i <= $pages; $i++) {
-                $title = $i;
-                $url   = sprintf('%saction=show&amp;cat=%d&amp;seite=%d',
-                            $sids,
-                            $category_id,
-                            $i);
-                $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-                $oLink->itemTitle = $categoryName;
-                $oLink->text      = $title;
-                $oLink->tooltip   = $title;
-                $output          .= '[ '.$oLink->toHtmlAnchor().' ]';
-            }
-
-            $output .= ' ';
-
-            if ($next <= $pages) {
-                $title = $this->pmf_lang['msgNext'];
-                $url   = sprintf('%saction=show&amp;cat=%d&amp;seite=%d',
-                            $sids,
-                            $category_id,
-                            $next);
-                $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-                $oLink->itemTitle = $categoryName;
-                $oLink->text      = $title;
-                $oLink->tooltip   = $title;
-                $output          .= '[ '.$oLink->toHtmlAnchor().' ]';
-            }
-
-            $output .= "</strong></p>";
+            
+            $baseUrl = PMF_Link::getSystemRelativeUri() . '?'
+                     . (empty($sids) ? '' : "$sids&amp;")
+                     . 'action=show&amp;cat=' . $category_id
+                     . '&amp;seite=' . $page;
+            
+            $options = array('baseUrl'         => $baseUrl,
+                             'total'           => $num,
+                             'perPage'         => $faqconfig->get('main.numberOfRecordsPerPage'),
+                             'pageParamName'   => 'seite',
+                             'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $this->pmf_lang['msgNext'] . '</a>',
+                             'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $this->pmf_lang['msgPrevious'] . '</a>',
+                             'layoutTpl'       => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>');
+        
+            $pagination = new PMF_Pagination($options);
+            $output    .= $pagination->render();
         }
-       return $output;
+        
+        return $output;
     }
 
     /**
@@ -1973,7 +1943,7 @@ class PMF_Faq
             AND
                 fd.lang = fv.lang";
         $needAndOp = true;
-        if ((!empty($nCatid)) && (PMF_Utils::isInteger($nCatid)) && ($nCatid > 0)) {
+        if ((!empty($nCatid)) && is_int($nCatid) && $nCatid > 0) {
             if ($needAndOp) {
                 $query .= " AND";
             }

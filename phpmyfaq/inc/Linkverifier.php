@@ -582,10 +582,8 @@ class PMF_Linkverifier
      * Perform link validation to each URLs found
      *
      * @param   string $referenceuri
+     * 
      * @result  mixed  array of [protocol][url][info] = value
-     * @access  public
-     * @author  Minoru TODA <todam@netjapan.co.jp>
-     * @since   2005-08-01
      */
     function VerifyURLs($referenceuri = '')
     {
@@ -594,12 +592,13 @@ class PMF_Linkverifier
         foreach ($this->urlpool as $_type => $_value) {
             foreach ($_value as $_key => $_url) {
                 if (!(isset($result[$_type][$_url]))) {
-                    $_result = array();
-                    $_result['type'] = $_type;
-                    $_result['rawurl'] = $_url;
+                    $_result              = array();
+                    $_result['type']      = $_type;
+                    $_result['rawurl']    = $_url;
                     $_result['reference'] = $referenceuri;
+                    
                     // Expand uri into absolute URL.
-                    $_absurl = $this->makeAbsoluteURL($_url, $referenceuri);
+                    $_absurl           = $this->makeAbsoluteURL($_url, $referenceuri);
                     $_result['absurl'] = $_absurl;
                     // If we should disallow this URL, mark as failed.
                     if (($_result['reason'] = $this->checkIfForceErrorLink($_absurl)) !== false) {
@@ -624,25 +623,37 @@ class PMF_Linkverifier
     /**
      * logs the current state of link to the specified entry
      *
-     * @param   int    $id
-     * @param   string $artlang
-     * @param   string $state (optional)
-     * @result  boolean true if operation successful, otherwise false
-     * @access  public
-     * @author  Minoru TODA <todam@netjapan.co.jp>
-     * @since   2005-09-29
+     * @param integer $id
+     * @param string  $artlang
+     * @param string  $state (optional)
+     * 
+     * @return boolean true if operation successful, otherwise false
      */
-    function markEntry($id = 0, $artlang = "", $state = "")
+    public function markEntry($id = 0, $artlang = '', $state = '')
     {
         if (($id < 1) || (trim($artlang) == "")) {
             return false;
         }
 
-        if ($state == "") {
+        if ($state == '') {
             $state = $this->getLinkStateString();
         }
 
-        $query = "UPDATE ".SQLPREFIX."faqdata SET links_state = '".$state."', links_check_date = ".$_SERVER['REQUEST_TIME']." WHERE id = ".$id." AND lang='".$artlang."'";
+        $query = sprintf("
+            UPDATE 
+                %sfaqdata 
+            SET 
+                links_state = '%s', links_check_date = %d 
+            WHERE 
+                id = %d 
+            AND 
+                lang='%s'",
+            SQLPREFIX,
+            $state,
+            $_SERVER['REQUEST_TIME'],
+            $id,
+            $artlang);
+        
         if ($this->db->query($query)) {
             return true;
         } else {
@@ -840,6 +851,7 @@ class PMF_Linkverifier
     * @param   integer $id
     * @param   string  $artlang
     * @param   boolean $cron
+    * 
     * @result  string  HTML text, if $cron is false (default)
     */
     public function verifyArticleURL($contents = '', $id = 0, $artlang = '', $cron = false)
@@ -870,22 +882,22 @@ class PMF_Linkverifier
 
         // If no URLs found
         if ($result == false) {
-            $output  = '<h2>'.$PMF_LANG['ad_linkcheck_checkResult'].'</h2>';
-            $output .= '<br />'.$PMF_LANG['ad_linkcheck_noLinksFound'];
-            return ($cron ? '' : $output);
+            $output = sprintf('<h2>%s</h2><br />%s',
+                $PMF_LANG['ad_linkcheck_checkResult'],
+                $PMF_LANG['ad_linkcheck_noLinksFound']);
+            return ($cron ? '' : utf8_decode($output));
         }
 
         //uncomment to see the result structure
         //print str_replace("\n","<br />",PMF_String::htmlspecialchars(print_r($result, true)));
 
-        $failreasons = array();
-        $inforeasons = array();
-        $output = "    <h2>".$PMF_LANG['ad_linkcheck_checkResult']."</h2>\n";
-        $output .= '    <table class="verifyArticleURL">'."\n";
+        $failreasons = $inforeasons = array();
+        $output      = "    <h2>".$PMF_LANG['ad_linkcheck_checkResult']."</h2>\n";
+        $output     .= '    <table class="verifyArticleURL">'."\n";
         foreach ($result as $type => $_value) {
             $output .= "        <tr><td><strong>".PMF_String::htmlspecialchars($type)."</strong></td></tr>\n";
             foreach ($_value as $url => $value) {
-                $_output  = '            <td /><td>'.PMF_String::htmlspecialchars($value['rawurl'])."</td>\n";
+                $_output  = '            <td />';
                 $_output .= '            <td><a href="'.$value['absurl'].'" target="_blank">'.PMF_String::htmlspecialchars($value['absurl'])."</a></td>\n";
                 $_output .= '            <td>';
                 if (isset($value['redirects']) && ($value['redirects'] > 0)) {
@@ -932,7 +944,7 @@ class PMF_Linkverifier
         if ($cron) {
             return '';
         } else {
-            return $output;
+            return utf8_decode($output);
         }
     }
 

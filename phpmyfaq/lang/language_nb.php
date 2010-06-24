@@ -1,23 +1,28 @@
 <?php
 /**
-* $Id: language_nb.php,v 1.22 2007-03-29 19:31:55 thorstenr Exp $
-*
-* Norwegian Bokmål language file
-*
-* @author       Hans Fredrik Nordhaug <hans@nordhaug.priv.no>
-* @since        2005-08-31
-* @copyright    (c) 2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * Norwegian Bokmål language file
+ * 
+ * PHP Version 5.2
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Translation
+ * @author    Hans Fredrik Nordhaug <hans@nordhaug.priv.no>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-08-31
+ */
+
 $PMF_LANG['metaCharset'] = 'utf-8';
 $PMF_LANG['metaLanguage'] = 'nb';
 $PMF_LANG['language'] = 'Norsk bokmål';
@@ -45,7 +50,7 @@ $PMF_LANG['msgPage'] = 'Side ';
 $PMF_LANG['msgPages'] = 'Sider';
 $PMF_LANG['msgPrevious'] = 'foregående';
 $PMF_LANG['msgNext'] = 'neste';
-$PMF_LANG['msgCategoryUp'] = 'one category up';
+$PMF_LANG['msgCategoryUp'] = 'en kategori opp';
 $PMF_LANG['msgLastUpdateArticle'] = 'Siste oppdatering: ';
 $PMF_LANG['msgAuthor'] = 'Forfatter: ';
 $PMF_LANG['msgPrinterFriendly'] = 'Utskriftsvennligversjon';
@@ -315,7 +320,7 @@ $PMF_LANG['ad_auth_reset'] = 'Tøm';
 $PMF_LANG['ad_auth_fail'] = 'Brukernavn eller passord ikke korrekt.';
 $PMF_LANG['ad_auth_sess'] = 'ID for økten er ok.';
 $PMF_LANG['ad_config_edit'] = 'Rediger konfigurasjon';
-$PMF_LANG['ad_config_save'] = 'Gem konfigurasjon';
+$PMF_LANG['ad_config_save'] = 'Lagre konfigurasjon';
 $PMF_LANG['ad_config_reset'] = 'Tøm';
 $PMF_LANG['ad_config_saved'] = 'Konfiguration blev gemt.';
 $PMF_LANG['ad_menu_editconfig'] = 'Rediger konfigurasjon';
@@ -451,7 +456,7 @@ $PMF_LANG['ad_user_realname'] = 'Virkelig navn:';
 $PMF_LANG['ad_export_generate_pdf'] = 'generer PDF-fil';
 $PMF_LANG['ad_export_full_faq'] = 'Din FAQ som en PDF-fil: ';
 $PMF_LANG['err_bannedIP'] = 'Din IP-address nektes adgang.';
-$PMF_LANG['err_SaveQuestion'] = 'Nødvendige felter: <strong>ditt navn</strong>, <strong>din e-postadresse</strong> og <strong>ditt spørsmål</strong>.<br /><br /><a href="javascript:history.back();">En side tilbake</a><br /><br />';
+$PMF_LANG['err_SaveQuestion'] = 'Nødvendige felter: <strong>ditt navn</strong>, <strong>din e-postadresse</strong> og <strong>ditt spørsmål</strong>.<br /><br /><a href="nojavascript...history.back();">En side tilbake</a><br /><br />';
 $PMF_LANG['ad_entry_fontcolor'] = 'Skrifttype farve: ';
 $PMF_LANG['ad_entry_fontsize'] = 'Skrifttype størrelse: ';
 $PMF_LANG['ad_categ_new_main_cat'] = 'som ny hovedkategori';
@@ -481,9 +486,9 @@ $PMF_LANG['ad_changerev'] = 'Select Revision';
 $PMF_LANG['msgCaptcha'] = 'Please enter the characters you\'re reading in the image';
 $PMF_LANG['msgSelectCategories'] = 'Søk i ...';
 $PMF_LANG['msgAllCategories'] = '... alle kategorier';
-$PMF_LANG['ad_you_should_update'] = 'Your phpMyFAQ installation is outdated. You should update to the latest available version.';
+$PMF_LANG['ad_you_should_update'] = 'Din phpMyFAQ installasjon er utdatert. Du bør oppdatere.';
 $PMF_LANG['msgAdvancedSearch'] = 'Avansert søk';
-$PMF_LANG['spamControlCenter'] = 'Spam control center';
+$PMF_LANG['spamControlCenter'] = 'Spam kontrollsenter';
 $PMF_LANG['ad_session_expiring'] = 'Your session will expire in %d minutes: would you like to go on working?';
 $PMF_LANG['ad_stat_management'] = 'Sessions management';
 $PMF_LANG['ad_stat_choose'] = 'Velg måned';
@@ -505,7 +510,7 @@ $PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Automatic link verification disabled
 $PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Automatic link verification disabled (PHP option allow_url_fopen not Enabled)';
 $PMF_LANG['ad_linkcheck_checkResult'] = 'Automatic link verification result';
 $PMF_LANG['ad_linkcheck_checkSuccess'] = 'OK';
-$PMF_LANG['ad_linkcheck_checkFailed'] = 'Failed';
+$PMF_LANG['ad_linkcheck_checkFailed'] = 'Feilet';
 $PMF_LANG['ad_linkcheck_failReason'] = 'Reason(s) failed:';
 $PMF_LANG['ad_linkcheck_noLinksFound'] = 'No URLs compatible with link verifier feature found.';
 $PMF_LANG['ad_linkcheck_searchbadonly'] = 'Only with bad links';
@@ -570,8 +575,8 @@ $PMF_LANG['ad_group_members'] = 'Medlemmer';
 $PMF_LANG['ad_group_addMember'] = '+';
 $PMF_LANG['ad_group_removeMember'] = '-';
 $PMF_LANG['ad_export_which_cat'] = 'Limit the FAQ data to be exported (optional)';
-$PMF_LANG['ad_export_cat_downwards'] = 'Downwards?';
-$PMF_LANG['ad_export_type'] = 'Format of the export';
+$PMF_LANG['ad_export_cat_downwards'] = 'Nedover?';
+$PMF_LANG['ad_export_type'] = 'Eksportfilens format';
 $PMF_LANG['ad_export_type_choose'] = 'Choose one of the supported formats:';
 $PMF_LANG['ad_export_download_view'] = 'Download or view in-line?';
 $PMF_LANG['ad_export_download'] = 'last ned';
@@ -579,26 +584,26 @@ $PMF_LANG['ad_export_view'] = 'view in-line';
 $PMF_LANG['ad_export_gen_xhtml'] = 'Make XHTML file';
 $PMF_LANG['ad_export_gen_docbook'] = 'Make Docbook file';
 $PMF_LANG['ad_news_data'] = 'News data';
-$PMF_LANG['ad_news_author_name'] = 'Author name:';
-$PMF_LANG['ad_news_author_email'] = 'Author email:';
+$PMF_LANG['ad_news_author_name'] = 'Forfatter:';
+$PMF_LANG['ad_news_author_email'] = 'Forfatterens e-post:';
 $PMF_LANG['ad_news_set_active'] = 'Aktiver:';
-$PMF_LANG['ad_news_allowComments'] = 'Allow comments:';
+$PMF_LANG['ad_news_allowComments'] = 'Tillat kommentarer:';
 $PMF_LANG['ad_news_expiration_window'] = 'News expiration time window (optional)';
 $PMF_LANG['ad_news_from'] = 'Fra:';
 $PMF_LANG['ad_news_to'] = 'Til:';
 $PMF_LANG['ad_news_insertfail'] = 'An error occurred inserting the news item into the database.';
 $PMF_LANG['ad_news_updatefail'] = 'An error occurred updating the news item into the database.';
-$PMF_LANG['newsShowCurrent'] = 'Show current news.';
-$PMF_LANG['newsShowArchive'] = 'Show archived news.';
+$PMF_LANG['newsShowCurrent'] = 'Vis nyheter.';
+$PMF_LANG['newsShowArchive'] = 'Vis arkiverte nyheter.';
 $PMF_LANG['newsArchive'] = 'Nyhetsarkiv';
 $PMF_LANG['newsWriteComment'] = 'comment on this entry';
-$PMF_LANG['newsCommentDate'] = 'Added at: ';
+$PMF_LANG['newsCommentDate'] = 'Lagt til: ';
 $PMF_LANG['ad_record_expiration_window'] = 'Record expiration time window (optional)';
-$PMF_LANG['admin_mainmenu_home'] = 'Dashboard';
+$PMF_LANG['admin_mainmenu_home'] = 'Dashbord';
 $PMF_LANG['admin_mainmenu_users'] = 'Brukere';
 $PMF_LANG['admin_mainmenu_content'] = 'Innhold';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statistikk';
-$PMF_LANG['admin_mainmenu_exports'] = 'Exports';
+$PMF_LANG['admin_mainmenu_exports'] = 'Eksport';
 $PMF_LANG['admin_mainmenu_backup'] = 'Backup';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Konfigurasjon';
 $PMF_LANG['admin_mainmenu_logout'] = 'Logg ut';
@@ -630,7 +635,7 @@ $PMF_LANG['ad_categ_transalready'] = 'Already translated in: ';
 $PMF_LANG['ad_categ_deletealllang'] = 'Delete in all languages?';
 $PMF_LANG['ad_categ_deletethislang'] = 'Delete in this language only?';
 $PMF_LANG['ad_categ_translated'] = 'The category has been translated.';
-$PMF_LANG['ad_categ_show'] = 'Overview';
+$PMF_LANG['ad_categ_show'] = 'Oversikt';
 $PMF_LANG['ad_menu_categ_structure'] = 'Category Overview including its languages';
 $PMF_LANG['ad_entry_userpermission'] = 'User permissions:';
 $PMF_LANG['ad_entry_grouppermission'] = 'Group permissions:';
@@ -651,7 +656,7 @@ $PMF_LANG['ad_adminlog_del_older_30d'] = 'Delete immediately logs older than 30 
 $PMF_LANG['ad_adminlog_delete_success'] = 'Older logs successfully deleted.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'No logs deleted: an error occurred performing the request.';
 $PMF_LANG['opensearch_plugin_install'] = 'add search plugin';
-$PMF_LANG['ad_quicklinks'] = 'Quicklinks';
+$PMF_LANG['ad_quicklinks'] = 'Hurtiglinker';
 $PMF_LANG['ad_quick_category'] = 'Add new category';
 $PMF_LANG['ad_quick_record'] = 'Add new FAQ record';
 $PMF_LANG['ad_quick_user'] = 'Legg til bruker';
@@ -660,29 +665,29 @@ $PMF_LANG['msgNewTranslationHeader'] = 'Translation proposal';
 $PMF_LANG['msgNewTranslationAddon'] = 'Your proposal will not be published right away, but will be released by the administrator upon receipt. Required  fields are <strong>your Name</strong>, <strong>your email address</strong>, <strong>your headline translation</strong> and <strong>your faq translation</strong>. Please separate the keywords with space only.';
 $PMF_LANG['msgNewTransSourcePane'] = 'Source pane';
 $PMF_LANG['msgNewTranslationPane'] = 'Translation pane';
-$PMF_LANG['msgNewTranslationName'] = 'Your Name:';
-$PMF_LANG['msgNewTranslationMail'] = 'Your email address:';
-$PMF_LANG['msgNewTranslationKeywords'] = 'Keywords:';
+$PMF_LANG['msgNewTranslationName'] = 'Ditt navn:';
+$PMF_LANG['msgNewTranslationMail'] = 'Din e-post:';
+$PMF_LANG['msgNewTranslationKeywords'] = 'Stikkord:';
 $PMF_LANG['msgNewTranslationSubmit'] = 'Submit your proposal';
 $PMF_LANG['msgTranslate'] = 'Propose a translation for';
 $PMF_LANG['msgTranslateSubmit'] = 'Start translation...';
 $PMF_LANG['msgNewTranslationThanks'] = 'Thank you for your translation proposal!';
 $PMF_LANG['ad_news_link_parent'] = 'Link opens in parent window';
-$PMF_LANG['ad_menu_comments'] = 'Comments';
+$PMF_LANG['ad_menu_comments'] = 'Kommentarer';
 $PMF_LANG['ad_comment_administration'] = 'Comments administration';
 $PMF_LANG['ad_comment_faqs'] = 'Comments in FAQ records:';
 $PMF_LANG['ad_comment_news'] = 'Comments in News records:';
 $PMF_LANG['ad_groups'] = 'Grupper';
 $PMF_LANG['ad_conf_order_id'] = 'ID (default)';
 $PMF_LANG['ad_conf_order_thema'] = 'Tittel';
-$PMF_LANG['ad_conf_order_visits'] = 'Number of visitors';
+$PMF_LANG['ad_conf_order_visits'] = 'Antall besøkende';
 $PMF_LANG['ad_conf_order_datum'] = 'Dato';
 $PMF_LANG['ad_conf_order_author'] = 'Author';
 $PMF_LANG['ad_conf_desc'] = 'descending';
 $PMF_LANG['ad_conf_asc'] = 'ascending';
 $PMF_LANG['mainControlCenter'] = 'Main configuration';
 $PMF_LANG['recordsControlCenter'] = 'FAQ records configuration';
-$PMF_LANG['msgInstantResponse'] = 'Instant Response';
+$PMF_LANG['msgInstantResponse'] = 'Hurtigsvar';
 $PMF_LANG['msgInstantResponseMaxRecords'] = '. Find below the first %d records.';
 $PMF_LANG['msgAllCatArticles'] = 'Records in this category';
 $PMF_LANG['msgDescriptionInstantResponse'] = 'Just type and find the answers ...';
@@ -690,25 +695,25 @@ $PMF_LANG['msgTagSearch'] = 'Tagged entries';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
 $PMF_LANG['ad_online_info'] = 'Online version check';
 $PMF_LANG['ad_system_info'] = 'System Information';
-$PMF_LANG['msgRegisterUser'] = 'Do you want to register?';
-$PMF_LANG['ad_user_loginname'] = 'Login name:';
-$PMF_LANG['errorRegistration'] = 'This field is required!';
+$PMF_LANG['msgRegisterUser'] = 'Vil du registrere deg?';
+$PMF_LANG['ad_user_loginname'] = 'Brukernavn:';
+$PMF_LANG['errorRegistration'] = 'Dette feltet er obligatorisk!';
 $PMF_LANG['submitRegister'] = 'Registrer';
 $PMF_LANG['msgUserData'] = 'User information required for registration';
 $PMF_LANG['captchaError'] = 'Please enter the right captcha code!';
 $PMF_LANG['msgRegError'] = 'Following errors occured. Please correct them:';
 $PMF_LANG['successMessage'] = 'Your registration was successful. You will soon receive a confirmation mail with your login data!';
-$PMF_LANG['msgRegThankYou'] = 'Thank you for your registration';
+$PMF_LANG['msgRegThankYou'] = 'Takk for at du registrerte deg';
 $PMF_LANG['emailRegSubject'] = '[%sitename%] Registration: new user';
 $PMF_LANG['msgMostPopularSearches'] = 'The most popular searches are:';
 $PMF_LANG['ad_menu_searchstats'] = 'Search Statistics';
 $PMF_LANG['ad_searchstats_search_term'] = 'Nøkkelord';
-$PMF_LANG['ad_searchstats_search_term_count'] = 'Count';
-$PMF_LANG['ad_searchstats_search_term_lang'] = 'Language';
-$PMF_LANG['ad_searchstats_search_term_percentage'] = 'Percentage';
-$PMF_LANG['ad_record_sticky'] = 'Sticky';
-$PMF_LANG['ad_entry_sticky'] = 'Sticky';
-$PMF_LANG['stickyRecordsHeader'] = 'Sticky FAQs';
+$PMF_LANG['ad_searchstats_search_term_count'] = 'Teller';
+$PMF_LANG['ad_searchstats_search_term_lang'] = 'Språk';
+$PMF_LANG['ad_searchstats_search_term_percentage'] = 'Prosent';
+$PMF_LANG['ad_record_sticky'] = 'Klistre';
+$PMF_LANG['ad_entry_sticky'] = 'Klistre';
+$PMF_LANG['stickyRecordsHeader'] = 'Klistre FAQs';
 $PMF_LANG['ad_menu_stopwordsconfig'] = 'Stop Words';
 $PMF_LANG['ad_config_stopword_input'] = 'Add new stop word';
 $PMF_LANG['msgSendMailDespiteEverything'] = 'No, there is still no adequate answer (will send the mail)';
@@ -728,7 +733,7 @@ $PMF_LANG['msgNo'] = 'nei';
 $PMF_LANG['msgTransToolSureDeleteFile'] = 'Are you sure this language file must be deleted?';
 $PMF_LANG['msgTransToolFileRemoved'] = 'Language file successfully removed';
 $PMF_LANG['msgTransToolErrorRemovingFile'] = 'Error removing the language file';
-$PMF_LANG['msgVariable'] = 'Variable';
+$PMF_LANG['msgVariable'] = 'Variabel';
 $PMF_LANG['msgCancel'] = 'Avbryt';
 $PMF_LANG['msgSave'] = 'Lagre';
 $PMF_LANG['msgSaving3Dots'] = 'lagrer ...';
@@ -785,3 +790,53 @@ $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Activate 
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Allow comments for new records (default: disallowed)");
 $LANG_CONF['main.enableWysiwygEditor'] = array(0 => "checkbox", 1 => "Enable bundled WYSIWYG editor (default: enabled)");
 $LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "Path where attachments will be saved.<br /><small>Relative path means a folder within web root</small>");
+$PMF_LANG['msgTransToolNoteFileSaving'] = 'Please note that no files will we written until you click save button';
+$PMF_LANG['msgTransToolPageBufferRecorded'] = 'Page %d buffer recorded successfully';
+$PMF_LANG['msgTransToolErrorRecordingPageBuffer'] = 'Error recording page %d buffer';
+$PMF_LANG['msgTransToolRecordingPageBuffer'] = 'Recording page %d buffer';
+$PMF_LANG['ad_record_active'] = 'Aktiv';
+$PMF_LANG['msgAttachmentInvalid'] = 'The attachment is invalid, please inform admin';
+$PMF_LANG['list_all_users'] = 'Se alle brukere';
+$PMF_LANG['main.orderingPopularFaqs.visits'] = 'list most visited entries';
+$PMF_LANG['main.orderingPopularFaqs.voting'] = 'list most voted entries';
+$PMF_LANG['msgShowHelp'] = 'Please seperate words by comma.';
+$PMF_LANG['msgUpdateFaqDate'] = 'oppdater';
+$PMF_LANG['msgKeepFaqDate'] = 'behold';
+$PMF_LANG['msgEditFaqDat'] = 'endre';
+$LANG_CONF['main.numberSearchTerms'] = array(0 => 'input', 1 => 'Number of listed search terms');
+$LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Sorting of the top faq's");
+$LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Mail address as mandatory field (default: deactivated)');
+$LANG_CONF['main.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Instant Response on startpage (default: deactivated)');
+$PMF_LANG['msgTransToolRemove'] = 'Fjern';
+$PMF_LANG['msgTransToolLanguageNumberOfPlurals'] = 'Number of plural forms';
+$PMF_LANG['msgTransToolLanguageOnePlural'] = 'This language has only one plural form';
+$PMF_LANG['msgTransToolLanguagePluralNotSet'] = 'Plural form support for language %s is disabled (nplurals not set)';
+$PMF_LANG['plmsgHomeArticlesOnline']['0'] = 'Det er %d FAQ online';
+$PMF_LANG['plmsgHomeArticlesOnline']['1'] = 'Det er %d FAQs online';
+$PMF_LANG['plmsgViews']['0'] = '%d view';
+$PMF_LANG['plmsgViews']['1'] = '%d views';
+$PMF_LANG['plmsgGuestOnline']['0'] = ' :: %d Gjest';
+$PMF_LANG['plmsgGuestOnline']['1'] = ' :: %d Gjester';
+$PMF_LANG['plmsgRegisteredOnline']['0'] = ' og %d Registrert';
+$PMF_LANG['plmsgRegisteredOnline']['1'] = ' og %d Registrerte';
+$PMF_LANG['plmsgSearchAmount']['0'] = '%d søkeresultat';
+$PMF_LANG['plmsgSearchAmount']['1'] = '%d søkeresultater';
+$PMF_LANG['plmsgPagesTotal']['0'] = ' %d Side';
+$PMF_LANG['plmsgPagesTotal']['1'] = ' %d Sider';
+$PMF_LANG['plmsgVotes']['0'] = '%d Stemme';
+$PMF_LANG['plmsgVotes']['1'] = '%d Stemmer';
+$PMF_LANG['plmsgEntries']['0'] = '%d FAQ';
+$PMF_LANG['plmsgEntries']['1'] = '%d FAQs';
+$PMF_LANG['rightsLanguage']['addtranslation'] = 'add translation';
+$PMF_LANG['rightsLanguage']['edittranslation'] = 'edit translation';
+$PMF_LANG['rightsLanguage']['deltranslation'] = 'delete translation';
+$PMF_LANG['rightsLanguage']['approverec'] = 'approve records';
+$PMF_LANG['ad_menu_upgrade'] = 'Upgrade';
+$PMF_LANG['ad_you_shouldnt_update'] = 'You have the latest version of phpMyFAQ. You do not need to upgrade.';
+$PMF_LANG['msgSecureSwitch'] = 'Switch to secure mode to login!';
+$LANG_CONF['main.templateSet'] = array(0 => "select", 1 => "Template set to be used");
+$LANG_CONF['main.enableAttachmentEncryption'] = array(0 => "checkbox", 1 => "Enable attachment encryption <br><small>Ignored when attachments is disabled</small>");
+$LANG_CONF['main.defaultAttachmentEncKey'] = array(0 => "input", 1 => 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>');
+$LANG_CONF['main.useSslForLogins'] = array(0 => 'checkbox', 1 => "Only allow logins over secure connection? (default: disabled)");
+$PMF_LANG['plmsgUserOnline']['0'] = '%d bruker online';
+$PMF_LANG['plmsgUserOnline']['1'] = '';
