@@ -73,8 +73,6 @@ class PMF_Language
      */
     public function setLanguage($config_detection, $config_language)
     {
-        global $sid;
-
         $_lang = array();
         self::_getUserAgentLanguage();
 
@@ -133,6 +131,16 @@ class PMF_Language
         }
         
         return $_SESSION['pmf_lang'] = self::$language;
+    }
+    
+    /**
+     * Returns the current language
+     * 
+     * @return string
+     */
+    public function getLanguage()
+    {
+        return self::$language;
     }
     
     /**
