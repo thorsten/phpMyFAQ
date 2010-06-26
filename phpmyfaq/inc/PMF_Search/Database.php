@@ -58,6 +58,27 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     protected $joinedTable = '';
     
     /**
+     * Columns for the resultset
+     * 
+     * @var string
+     */
+    protected $resultColumns = '';
+    
+    /**
+     * Columns for the joined table
+     * 
+     * @var string
+     */
+    protected $joinedColumns = '';
+    
+    /**
+     * Matching columns for the search
+     * 
+     * @var string
+     */
+    protected $matchingColumns = '';
+    
+    /**
      * Constructor
      * 
      * @param PMF_Language $language Language
@@ -145,7 +166,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      * 
      * @return void
      */
-    public function setJoinedTable($joinedTable)
+    public function setJoinedTable($joinedTable = '')
     {
         $this->joinedTable = $joinedTable;
     }
@@ -158,5 +179,59 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     public function getJoinedTable()
     {
         return $this->joinedTable;
+    }
+    
+    /**
+     * Sets the part of the SQL query with the columns for the resultset
+     * 
+     * @param array $columns Array of columns
+     * 
+     * @return void
+     */
+    public function setResultColumns(Array $columns)
+    {
+        foreach ($columns as $column) {
+            if (empty($this->resultColumns)) {
+                $this->resultColumns = $column;
+            } else {
+                $this->resultColumns .= ', ' . $column;
+            }
+        }
+    }
+    
+    /**
+     * Returns the part of the SQL query with the columns for the resultset
+     * 
+     * @return string
+     */
+    public function getResultColumns()
+    {
+        return $this->resultColumns;
+    }
+    
+    /**
+     * Sets the part of the SQL query with the columns for the join
+     * 
+     * @param array $columns Array of columns
+     * 
+     * @return void
+     */
+    public function setJoinedColumns(Array $joinedColumns)
+    {
+        foreach ($joinedColumns as $column) {
+            $this->joinedColumns .= $column . ' AND ';
+        }
+        
+        $this->joinedColumns = PMF_String::substr($this->joinedColumns, 0, -4);
+    }
+    
+    /**
+     * Returns the part of the SQL query with the columns for the join
+     * 
+     * @return string
+     */
+    public function getJoinedColumns()
+    {
+        return $this->joinedColumns;
     }
 }

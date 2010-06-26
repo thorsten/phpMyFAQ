@@ -29,6 +29,9 @@ require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Database.php
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Driver.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Sqlite.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/Language.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/String.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_String/Abstract.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_String/Mbstring.php';
 
 /**
  * PMF_Category test case
@@ -55,6 +58,9 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
     protected function setUp ()
     {
         parent::setUp();
+        
+        PMF_String::init('en');
+        
         $this->PMF_Language        = new PMF_Language();
         $this->PMF_Search_Database = new PMF_Search_Database($this->PMF_Language);
         $this->dbHandle            = new PMF_DB_Sqlite();
@@ -103,5 +109,27 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
         $this->PMF_Search_Database->setJoinedTable('faqcategoryrelations');
         $this->assertEquals('faqcategoryrelations', $this->PMF_Search_Database->getJoinedTable());
         $this->assertType('string', $this->PMF_Search_Database->getJoinedTable());
+    }
+    
+    public function testSetAndGetResultColumns()
+    {
+        $resultColumns = array('faqdata.id AS id',
+                               'faqdata.lang AS lang',
+                               'faqdata.thema AS question',
+                               'faqdata.content AS answer');
+        
+        $this->PMF_Search_Database->setResultColumns($resultColumns);
+        $this->assertEquals('faqdata.id AS id, faqdata.lang AS lang, faqdata.thema AS question, faqdata.content AS answer', $this->PMF_Search_Database->getResultColumns());
+        $this->assertType('string', $this->PMF_Search_Database->getResultColumns());
+    }
+    
+    public function testSetAndGetJoinedColumns()
+    {
+        $joinedColumns = array('faqdata.id = faqcategoryrelations.record_id',
+                               'faqdata.lang = faqcategoryrelations.record_lang');
+        
+        $this->PMF_Search_Database->setJoinedColumns($joinedColumns);
+        $this->assertEquals('faqdata.id = faqcategoryrelations.record_id AND faqdata.lang = faqcategoryrelations.record_lang ', $this->PMF_Search_Database->getJoinedColumns());
+        $this->assertType('string', $this->PMF_Search_Database->getJoinedColumns());
     }
 }
