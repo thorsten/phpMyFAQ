@@ -23,9 +23,12 @@
  * @since     2010-06-06
  */
 
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Abstract.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Interface.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Database.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Driver.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Sqlite.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/Language.php';
 
 /**
  * PMF_Category test case
@@ -40,15 +43,10 @@ require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Sqlite.php';
  */
 class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * 
-     * @var PMF_Search_Database
-     */
     private $PMF_Search_Database;
     
-    /**
-     * 
-     */
+    private $PMF_Language;
+    
     private $dbHandle;
     
     /**
@@ -57,7 +55,8 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
     protected function setUp ()
     {
         parent::setUp();
-        $this->PMF_Search_Database = new PMF_Search_Database();
+        $this->PMF_Language        = new PMF_Language();
+        $this->PMF_Search_Database = new PMF_Search_Database($this->PMF_Language);
         $this->dbHandle            = new PMF_DB_Sqlite();
     }
     
@@ -90,5 +89,19 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
     {
         $this->PMF_Search_Database->setDatabaseHandle($this->dbHandle);
         $this->assertType('PMF_DB_Sqlite', $this->PMF_Search_Database->getDatabaseHandle());
+    }
+    
+    public function testSetAndGetTable()
+    {
+        $this->PMF_Search_Database->setTable('faqdata');
+        $this->assertEquals('faqdata', $this->PMF_Search_Database->getTable());
+        $this->assertType('string', $this->PMF_Search_Database->getTable());
+    }
+
+    public function testSetAndGetJoinedTable()
+    {
+        $this->PMF_Search_Database->setJoinedTable('faqcategoryrelations');
+        $this->assertEquals('faqcategoryrelations', $this->PMF_Search_Database->getJoinedTable());
+        $this->assertType('string', $this->PMF_Search_Database->getJoinedTable());
     }
 }

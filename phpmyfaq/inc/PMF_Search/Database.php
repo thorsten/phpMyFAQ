@@ -34,14 +34,66 @@
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
  */
-class PMF_Search_Database
+class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Interface
 {
     /**
      * Database connection handle
      * 
      * @var PMF_DB_Driver
      */
-    private $dbHandle = null;
+    protected $dbHandle = null;
+
+    /**
+     * Searching database table
+     * 
+     * @var string
+     */
+    protected $table = '';
+    
+    /**
+     * Joined searching database table
+     * 
+     * @var string
+     */
+    protected $joinedTable = '';
+    
+    /**
+     * Constructor
+     * 
+     * @param PMF_Language $language Language
+     * 
+     * @return PMF_Search_Abstract
+     */
+    public function __construct(PMF_Language $language)
+    {
+        parent::__construct($language);
+    }
+    
+    /**
+     * Prepares the search and executes it
+     * 
+     * @param string $searchTerm Search term
+     * 
+     * @return boolean
+     * 
+     * @throws PMF_Search_Exception
+     */
+    public function search($searchTerm)
+    {
+        
+    }
+    
+    /**
+     * Returns the result of the search
+     * 
+     * @return PMF_Search_Resultset
+     * 
+     * @throws PMF_Search_Exception
+     */
+    public function getResult()
+    {
+        
+    }
     
     /**
      * Setter for the database handle
@@ -62,5 +114,49 @@ class PMF_Search_Database
     public function getDatabaseHandle()
     {
         return $this->dbHandle;
+    }
+    
+    /**
+     * Sets search table
+     * 
+     * @param string $table Table where search should be performed
+     * 
+     * @return void
+     */
+    public function setTable($table)
+    {
+        $this->table = $table;
+    }
+    
+    /**
+     * Returns the search table
+     * 
+     * @return string
+     */
+    public function getTable()
+    {
+        return $this->table;
+    }
+    
+    /**
+     * Sets joined search table
+     * 
+     * @param string $joinedTable Joined table where search should be performed
+     * 
+     * @return void
+     */
+    public function setJoinedTable($joinedTable)
+    {
+        $this->joinedTable = $joinedTable;
+    }
+    
+    /**
+     * Returns the joined table
+     * 
+     * @return string
+     */
+    public function getJoinedTable()
+    {
+        return $this->joinedTable;
     }
 }
