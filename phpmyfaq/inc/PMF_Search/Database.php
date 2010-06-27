@@ -101,7 +101,20 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      */
     public function search($searchTerm)
     {
+        $query = sprintf("
+            SELECT
+                %s
+            FROM 
+                %s %s
+            WHERE
+                %s = %d",
+            $this->getResultColumns(),
+            $this->getTable(),
+            $this->getJoinedTable(),
+            $this->getMatchingColumns(),
+            $searchTerm);
         
+        $this->resultSet = $this->dbHandle->query($query);
     }
     
     /**
@@ -113,7 +126,6 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      */
     public function getResult()
     {
-        
     }
     
     /**
@@ -212,7 +224,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     /**
      * Sets the part of the SQL query with the columns for the join
      * 
-     * @param array $columns Array of columns
+     * @param array $joinedColumns Array of columns
      * 
      * @return void
      */
@@ -233,5 +245,27 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     public function getJoinedColumns()
     {
         return $this->joinedColumns;
+    }
+    
+    /**
+     * Sets the part of the SQL query with the matching columns
+     * 
+     * @param array $matchingColumns Array of columns
+     * 
+     * @return void
+     */
+    public function setMatchingColumns(Array $matchingColumns)
+    {
+        $this->matchingColumns = implode(', ', $matchingColumns);
+    }
+    
+    /**
+     * Returns the part of the SQL query with the matching columns
+     * 
+     * @return string
+     */
+    public function getMatchingColumns()
+    {
+        return $this->matchingColumns;
     }
 }

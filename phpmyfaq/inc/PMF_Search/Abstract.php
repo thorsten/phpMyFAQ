@@ -44,6 +44,13 @@ class PMF_Search_Abstract
     protected $language = null;
     
     /**
+     * Resultset
+     * 
+     * @var resource
+     */
+    protected $resultSet = false;
+    
+    /**
      * Constructor
      * 
      * @param PMF_Language $language Language

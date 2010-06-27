@@ -44,7 +44,7 @@ if (!is_null($inputLanguage)) {
     $allLanguages = true;
 }
 
-$faqsearch           = new PMF_Search();
+$faqsearch           = new PMF_Search($db, $Language);
 $printResult         = '';
 $tagSearch           = false;
 $mostPopularSearches = 'n/a'; // to be implemented

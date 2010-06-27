@@ -71,11 +71,15 @@ class PMF_Search
     /**
      * Constructor
      *
+     * @param PMF_DB_Driver $database Database connection
+     * @param PMF_Language  $language Language object
+     * 
+     * @return PMF_Search
      */
-    public function __construct()
+    public function __construct(PMF_DB_Driver $database, PMF_Language $language)
     {
-        $this->db       = PMF_Db::getInstance();
-        $this->language = PMF_Language::$language;
+        $this->db       = $database;
+        $this->language = $language->getLanguage();
         $this->_table   = SQLPREFIX . 'faqsearches';
     }
     
@@ -87,7 +91,7 @@ class PMF_Search
      */
     public function setCategory($categoryId)
     {
-    	$this->categoryId = (int)$categoryId;
+        $this->categoryId = (int)$categoryId;
     }
     
     /**
@@ -227,7 +231,7 @@ class PMF_Search
         
         $result = $this->db->query($query);
         
-        if ($result) {
+        if (is_resource($result)) {
             $i = 0;
             while ($row = $this->db->fetch_object($result)) {
                 if ($i < $numResults) {

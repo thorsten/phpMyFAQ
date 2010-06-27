@@ -188,9 +188,8 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
     {
         $string = trim($string);
         $fields = '';
-        $join = '';
         $joined = '';
-        $where = '';
+        $where  = '';
 
         foreach ($assoc as $field) {
             if (empty($fields)) {
@@ -206,13 +205,13 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
 
         if (is_array($joinAssoc)) {
             foreach ($joinAssoc as $joinedFields) {
-                $join .= $joinedFields.' AND ';
+                $joined .= $joinedFields.' AND ';
                 }
-            $joined .= PMF_String::substr($join, 0, -4);
+            $joined .= PMF_String::substr($joined, 0, -4);
         }
 
-        $keys = PMF_String::preg_split("/\s+/", $string);
-        $numKeys = count($keys);
+        $keys     = PMF_String::preg_split("/\s+/", $string);
+        $numKeys  = count($keys);
         $numMatch = count($match);
 
         for ($i = 0; $i < $numKeys; $i++) {
@@ -226,7 +225,6 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
                 }
                 $where = $where.$match[$j]." LIKE '%".$keys[$i]."%'";
             }
-
             $where .= ")";
         }
 
