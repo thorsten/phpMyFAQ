@@ -132,4 +132,15 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('faqdata.id = faqcategoryrelations.record_id AND faqdata.lang = faqcategoryrelations.record_lang ', $this->PMF_Search_Database->getJoinedColumns());
         $this->assertType('string', $this->PMF_Search_Database->getJoinedColumns());
     }
+    
+    public function testSetAndGetMatchingColumns()
+    {
+        $matchingColumns = array('faqdata.thema',
+                                 'faqdata.content',
+                                 'faqdata.keywords');
+        
+        $this->PMF_Search_Database->setMatchingColumns($matchingColumns);
+        $this->assertEquals('faqdata.thema, faqdata.content, faqdata.keywords', $this->PMF_Search_Database->getMatchingColumns());
+        $this->assertType('string', $this->PMF_Search_Database->getMatchingColumns());
+    }
 }
