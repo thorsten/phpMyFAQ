@@ -101,6 +101,20 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      */
     public function search($searchTerm)
     {
+        $query = sprintf("
+            SELECT
+                %s
+            FROM 
+                %s %s
+            WHERE
+                %s = %d",
+            $this->getResultColumns(),
+            $this->getTable(),
+            $this->getJoinedTable(),
+            $this->getMatchingColumns(),
+            $searchTerm);
+        
+        $this->resultSet = $this->dbHandle->query($query);
     }
     
     /**
