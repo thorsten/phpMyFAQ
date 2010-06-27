@@ -215,27 +215,23 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     public function search($table, Array $assoc, $joinedTable = '', Array $joinAssoc = array(), $match = array(), $string = '', Array $cond = array(), Array $orderBy = array())
     {
         $string = pg_escape_string(trim($string));
-        $fields = "";
-        $joined = "";
-        $where = "";
+        $fields = '';
+        $joined = '';
+        $where  = '';
+        
         foreach ($assoc as $field) {
-
             if (empty($fields)) {
-
                 $fields = $field;
             } else {
-
                 $fields .= ", ".$field;
             }
         }
 
         if (isset($joinedTable) && $joinedTable != '') {
-
             $joined .= ' LEFT JOIN '.$joinedTable.' ON ';
         }
 
         if (is_array($joinAssoc)) {
-
             foreach ($joinAssoc as $joinedFields) {
                 $joined .= $joinedFields.' AND ';
                 }
@@ -256,7 +252,6 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
             $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE ".$match." = ".$string;
         } else {
             $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE (".$match.") ILIKE ('%".$string."%')";
-
             if (!empty($where)) {
                 $query .= " AND (".$where.")";
             }
