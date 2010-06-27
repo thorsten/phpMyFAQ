@@ -53,7 +53,7 @@ if ($allLanguages) {
     $category->transform(0);
 }
 
-$faqsearch           = new PMF_Search();
+$faqsearch           = new PMF_Search($db, $Language);
 $printResult         = '';
 $tagSearch           = false;
 $mostPopularSearches = 'n/a'; // to be implemented

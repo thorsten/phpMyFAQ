@@ -34,8 +34,8 @@ session_start();
 
 // Send headers
 $http = PMF_Helper_Http::getInstance();
-$http->setContentType('application/json');
-$http->addHeader();
+#$http->setContentType('application/json');
+#$http->addHeader();
 
 // Set user permissions
 $current_user   = -1;
@@ -74,7 +74,7 @@ switch ($action) {
         break;
         
     case 'search':
-        $search       = new PMF_Search();
+        $search       = new PMF_Search($db, $Language);
         $searchString = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
         $result       = $search->search($searchString, false, true, false);
         $url          = $faqconfig->get('main.referenceURL') . '/index.php?action=artikel&cat=%d&id=%d&artlang=%s';
