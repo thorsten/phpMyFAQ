@@ -34,8 +34,8 @@ session_start();
 
 // Send headers
 $http = PMF_Helper_Http::getInstance();
-#$http->setContentType('application/json');
-#$http->addHeader();
+$http->setContentType('application/json');
+$http->addHeader();
 
 // Set user permissions
 $current_user   = -1;
@@ -80,9 +80,9 @@ switch ($action) {
         $url          = $faqconfig->get('main.referenceURL') . '/index.php?action=artikel&cat=%d&id=%d&artlang=%s';
         
         foreach ($result as &$data) {
-        	$data->answer = html_entity_decode(strip_tags($data->answer), ENT_COMPAT, 'utf-8');
-        	$data->answer = PMF_Utils::makeShorterText($data->answer, 12);
-        	$data->link   = sprintf($url, $data->category_id, $data->id, $data->lang);
+            $data->answer = html_entity_decode(strip_tags($data->answer), ENT_COMPAT, 'utf-8');
+            $data->answer = PMF_Utils::makeShorterText($data->answer, 12);
+            $data->link   = sprintf($url, $data->category_id, $data->id, $data->lang);
         }
         break;
         
@@ -94,8 +94,8 @@ switch ($action) {
     case 'getFaqs':
         $faq    = new PMF_Faq($current_user, $current_groups);
         $result = $faq->getAllRecordPerCategory($categoryId);
-    	break;
-    	
+        break;
+        
     case 'getFaq':
         $faq = new PMF_Faq($current_user, $current_groups);
         $faq->getRecord($recordId);
