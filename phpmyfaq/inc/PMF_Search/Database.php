@@ -34,14 +34,99 @@
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
  */
-class PMF_Search_Database
+class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Interface
 {
     /**
      * Database connection handle
      * 
      * @var PMF_DB_Driver
      */
-    private $dbHandle = null;
+    protected $dbHandle = null;
+
+    /**
+     * Searching database table
+     * 
+     * @var string
+     */
+    protected $table = '';
+    
+    /**
+     * Joined searching database table
+     * 
+     * @var string
+     */
+    protected $joinedTable = '';
+    
+    /**
+     * Columns for the resultset
+     * 
+     * @var string
+     */
+    protected $resultColumns = '';
+    
+    /**
+     * Columns for the joined table
+     * 
+     * @var string
+     */
+    protected $joinedColumns = '';
+    
+    /**
+     * Matching columns for the search
+     * 
+     * @var string
+     */
+    protected $matchingColumns = '';
+    
+    /**
+     * Constructor
+     * 
+     * @param PMF_Language $language Language
+     * 
+     * @return PMF_Search_Abstract
+     */
+    public function __construct(PMF_Language $language)
+    {
+        parent::__construct($language);
+    }
+    
+    /**
+     * Prepares the search and executes it
+     * 
+     * @param string $searchTerm Search term
+     * 
+     * @return boolean
+     * 
+     * @throws PMF_Search_Exception
+     */
+    public function search($searchTerm)
+    {
+        $query = sprintf("
+            SELECT
+                %s
+            FROM 
+                %s %s
+            WHERE
+                %s = %d",
+            $this->getResultColumns(),
+            $this->getTable(),
+            $this->getJoinedTable(),
+            $this->getMatchingColumns(),
+            $searchTerm);
+        
+        $this->resultSet = $this->dbHandle->query($query);
+    }
+    
+    /**
+     * Returns the result of the search
+     * 
+     * @return PMF_Search_Resultset
+     * 
+     * @throws PMF_Search_Exception
+     */
+    public function getResult()
+    {
+    }
     
     /**
      * Setter for the database handle
@@ -62,5 +147,125 @@ class PMF_Search_Database
     public function getDatabaseHandle()
     {
         return $this->dbHandle;
+    }
+    
+    /**
+     * Sets search table
+     * 
+     * @param string $table Table where search should be performed
+     * 
+     * @return void
+     */
+    public function setTable($table)
+    {
+        $this->table = $table;
+    }
+    
+    /**
+     * Returns the search table
+     * 
+     * @return string
+     */
+    public function getTable()
+    {
+        return $this->table;
+    }
+    
+    /**
+     * Sets joined search table
+     * 
+     * @param string $joinedTable Joined table where search should be performed
+     * 
+     * @return void
+     */
+    public function setJoinedTable($joinedTable = '')
+    {
+        $this->joinedTable = $joinedTable;
+    }
+    
+    /**
+     * Returns the joined table
+     * 
+     * @return string
+     */
+    public function getJoinedTable()
+    {
+        return $this->joinedTable;
+    }
+    
+    /**
+     * Sets the part of the SQL query with the columns for the resultset
+     * 
+     * @param array $columns Array of columns
+     * 
+     * @return void
+     */
+    public function setResultColumns(Array $columns)
+    {
+        foreach ($columns as $column) {
+            if (empty($this->resultColumns)) {
+                $this->resultColumns = $column;
+            } else {
+                $this->resultColumns .= ', ' . $column;
+            }
+        }
+    }
+    
+    /**
+     * Returns the part of the SQL query with the columns for the resultset
+     * 
+     * @return string
+     */
+    public function getResultColumns()
+    {
+        return $this->resultColumns;
+    }
+    
+    /**
+     * Sets the part of the SQL query with the columns for the join
+     * 
+     * @param array $joinedColumns Array of columns
+     * 
+     * @return void
+     */
+    public function setJoinedColumns(Array $joinedColumns)
+    {
+        foreach ($joinedColumns as $column) {
+            $this->joinedColumns .= $column . ' AND ';
+        }
+        
+        $this->joinedColumns = PMF_String::substr($this->joinedColumns, 0, -4);
+    }
+    
+    /**
+     * Returns the part of the SQL query with the columns for the join
+     * 
+     * @return string
+     */
+    public function getJoinedColumns()
+    {
+        return $this->joinedColumns;
+    }
+    
+    /**
+     * Sets the part of the SQL query with the matching columns
+     * 
+     * @param array $matchingColumns Array of columns
+     * 
+     * @return void
+     */
+    public function setMatchingColumns(Array $matchingColumns)
+    {
+        $this->matchingColumns = implode(', ', $matchingColumns);
+    }
+    
+    /**
+     * Returns the part of the SQL query with the matching columns
+     * 
+     * @return string
+     */
+    public function getMatchingColumns()
+    {
+        return $this->matchingColumns;
     }
 }

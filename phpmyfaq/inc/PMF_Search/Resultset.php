@@ -34,7 +34,12 @@
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
  */
-class PMF_Search_Resultset
+class PMF_Search_Resultset extends PMF_Search_Abstract
 {
-    
+    /**
+     * Ordering of resultset
+     * 
+     * @var unknown_type
+     */
+    protected $ordering;
 }

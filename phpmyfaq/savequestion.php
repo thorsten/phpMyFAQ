@@ -108,7 +108,7 @@ if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SE
     $pmf_sw       = PMF_Stopwords::getInstance();
     $search_stuff = $pmf_sw->clean($content);       
 
-    $search        = new PMF_Search();
+    $search        = new PMF_Search($db, $Language);
     $search_result = array();
     $counter = 0;
     foreach ($search_stuff as $word) {

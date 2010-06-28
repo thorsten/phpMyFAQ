@@ -36,5 +36,29 @@
  */
 class PMF_Search_Abstract
 {
+    /**
+     * Language
+     * 
+     * @var PMF_Language
+     */
+    protected $language = null;
     
+    /**
+     * Resultset
+     * 
+     * @var resource
+     */
+    protected $resultSet = false;
+    
+    /**
+     * Constructor
+     * 
+     * @param PMF_Language $language Language
+     * 
+     * @return PMF_Search_Abstract
+     */
+    public function __construct(PMF_Language $language)
+    {
+        $this->language = $language->getLanguage();
+    }
 }

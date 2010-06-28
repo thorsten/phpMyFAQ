@@ -41,7 +41,7 @@ if (('save_active_records' == $ajax_action && $permission['approverec'] ||
      */
     $items = isset($_GET['items']) && is_array($_GET['items']) ? $_GET['items'] : array();
     
-    switch($ajax_action) {
+    switch ($ajax_action) {
         case 'save_active_records':
             $type = 'active';
             break;
@@ -51,7 +51,7 @@ if (('save_active_records' == $ajax_action && $permission['approverec'] ||
             break;
     }
     
-    if(null !== $type && !empty($items)) {
+    if (null !== $type && !empty($items)) {
         $faq = new PMF_Faq();
         
         foreach ($items as $item) {
@@ -61,7 +61,14 @@ if (('save_active_records' == $ajax_action && $permission['approverec'] ||
         }
     }
 }
+
+if ('search_records' == $ajax_action && $permission['editbt']) {
     
+    $searchString = PMF_Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
+    $ajaxLanguage = PMF_Filter::filterInput(INPUT_POST, 'ajaxlanguage', FILTER_SANITIZE_STRING, 'en');
+    
+}
+
 if ('delete_record' == $ajax_action && $permission['delbt']) {
 	
     $record_id   = PMF_Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
