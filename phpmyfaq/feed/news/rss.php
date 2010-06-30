@@ -73,12 +73,12 @@ $rss->writeElement('link', PMF_Link::getSystemUri('/feed/news/rss.php'));
 if ($num > 0) {
     foreach ($rssData as $item) {
         // Get the url
-        $link = '/index.php?action=news&amp;newsid='.$item['id'].'&amp;newslang='.$item['lang'];
+        $link = '/index.php?action=news&newsid=' . $item['id'] . '&newslang=' . $item['lang'];
         if (PMF_RSS_USE_SEO) {
             if (isset($item['header'])) {
-                $oLink = new PMF_Link($link);
+                $oLink            = new PMF_Link($link);
                 $oLink->itemTitle = $item['header'];
-                $link = $oLink->toString();
+                $link             = $oLink->toString();
             }
         }
 
