@@ -59,6 +59,6 @@ class PMF_Search_Abstract
      */
     public function __construct(PMF_Language $language)
     {
-        $this->language = $language->getLanguage();
+        $this->language = $language;
     }
 }

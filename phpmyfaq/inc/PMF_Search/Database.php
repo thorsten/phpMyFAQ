@@ -138,6 +138,27 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     public function setDatabaseHandle(PMF_DB_Driver $dbHandle)
     {
         $this->dbHandle = $dbHandle;
+        
+        switch ($this->dbHandle) {
+            
+            case $this->dbHandle instanceof PMF_DB_Mysql:
+                $this->dbHandle = new PMF_Search_Database_Mysql($this->language);
+                break;
+                
+            case $this->dbHandle instanceof PMF_DB_Mysqli:
+                $this->dbHandle = new PMF_Search_Database_Mysqli($this->language);
+                break;
+                
+            case $this->dbHandle instanceof PMF_DB_Pgsql:
+                $this->dbHandle = new PMF_Search_Database_Pgsql($this->language);
+                break;
+                
+            case $this->dbHandle instanceof PMF_DB_Sqlite:
+                $this->dbHandle = new PMF_Search_Database_Sqlite($this->language);
+                break;
+            
+        }
+        
     }
     /**
      * Getter for the database handle

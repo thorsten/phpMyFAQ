@@ -26,6 +26,7 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Abstract.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Interface.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Database.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Database/Sqlite.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Driver.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Sqlite.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/Language.php';
@@ -78,7 +79,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
     public function testSetDatabaseHandle()
     {
         $this->PMF_Search_Database->setDatabaseHandle($this->dbHandle);
-        $this->assertEquals(new PMF_DB_Sqlite(), $this->PMF_Search_Database->getDatabaseHandle());
+        $this->assertEquals(new PMF_Search_Database_Sqlite($this->PMF_Language), $this->PMF_Search_Database->getDatabaseHandle());
     }
     
     public function testSetDatabaseHandleWrongParameter()
@@ -94,7 +95,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
     public function testGetDatabaseHandleType()
     {
         $this->PMF_Search_Database->setDatabaseHandle($this->dbHandle);
-        $this->assertType('PMF_DB_Sqlite', $this->PMF_Search_Database->getDatabaseHandle());
+        $this->assertType('PMF_Search_Database_Sqlite', $this->PMF_Search_Database->getDatabaseHandle());
     }
     
     public function testSetAndGetTable()
