@@ -520,28 +520,6 @@ function getSearchData($searchterm, $asResource = false, $cat = '%', $allLanguag
         exit();
     }
     
-    if (0 == $num) {
-        $keys = PMF_String::preg_split("/\s+/", $searchterm);
-        $numKeys = count($keys);
-        $where = '';
-        for ($i = 0; $i < $numKeys; $i++) {
-            if (PMF_String::strlen($where) != 0 ) {
-                $where = $where." OR ";
-            }
-            $where = $where.'('.SQLPREFIX."faqdata.thema LIKE '%".$keys[$i]."%' OR ".SQLPREFIX."faqdata.content LIKE '%".$keys[$i]."%' OR ".SQLPREFIX."faqdata.keywords LIKE '%".$keys[$i]."%')";
-            if (is_numeric($cat)) {
-                $where .= ' AND '.SQLPREFIX.'faqcategoryrelations.category_id = '.$cat;
-            }
-            if (!$allLanguages) {
-                $where .= ' AND '.SQLPREFIX."faqdata.lang = '".$LANGCODE."'";
-            }
-        }
-
-        $where = " WHERE (".$where.") AND ".SQLPREFIX."faqdata.active = 'yes'";
-        $query = 'SELECT '.SQLPREFIX.'faqdata.id AS id, '.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqdata.thema AS thema, '.SQLPREFIX.'faqdata.content AS content FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang '.$where;
-        $result = $db->query($query);
-    }
-
     return $asResource ? $result : $db->fetchAll($result);
 }
 

@@ -79,6 +79,25 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
                 $this->dbHandle->escape_string($searchTerm),
                 $this->getConditions());
             
+            // Fallback for searches with less than three characters
+            if (0 == $this->dbHandle->num_rows($this->resultSet)) {
+                
+                $query = sprintf("
+                    SELECT
+                        %s
+                    FROM 
+                        %s %s %s
+                    WHERE
+                        %s
+                        %s",
+                    $this->getResultColumns(),
+                    $this->getTable(),
+                    $this->getJoinedTable(),
+                    $this->getJoinedColumns(),
+                    $this->getMatchClause($searchTerm),
+                    $this->getConditions());
+            }
+            
             $this->resultSet = $this->dbHandle->query($query);
         }
         
