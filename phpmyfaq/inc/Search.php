@@ -50,7 +50,7 @@ class PMF_Search
     /**
      * Language
      *
-     * @var string
+     * @var PMF_Language
      */
     private $language;
     
@@ -79,7 +79,7 @@ class PMF_Search
     public function __construct(PMF_DB_Driver $database, PMF_Language $language)
     {
         $this->db       = $database;
-        $this->language = $language->getLanguage();
+        $this->language = $language;
         $this->_table   = SQLPREFIX . 'faqsearches';
     }
     
@@ -118,7 +118,8 @@ class PMF_Search
         $fdTable   = SQLPREFIX . 'faqdata';
         $fcrTable  = SQLPREFIX . 'faqcategoryrelations';
         $condition = array($fdTable . '.active' => "'yes'");
-
+        $search    = PMF_Search_Factory::create($this->language, array('database' => PMF_Db::getType()));
+        
         // Search in all or one category?
         if (!is_null($this->categoryId)) {
             $selectedCategory = array($fcrTable . '.category_id' => $searchcategory);
@@ -126,44 +127,35 @@ class PMF_Search
         }
 
         if ((!$allLanguages) && (!is_numeric($searchterm))) {
-            $selectedLanguage = array($fdTable . '.lang' => "'" . $this->language . "'");
+            $selectedLanguage = array($fdTable . '.lang' => "'" . $this->language->getLanguage() . "'");
             $condition        = array_merge($selectedLanguage, $condition);
         }
-
+        
+        $search->setDatabaseHandle($this->db)
+               ->setTable($fdTable)
+               ->setResultColumns(array(
+                    $fdTable . '.id AS id',
+                    $fdTable . '.lang AS lang',
+                    $fdTable . '.solution_id AS solution_id',
+                    $fcrTable . '.category_id AS category_id',
+                    $fdTable . '.thema AS question',
+                    $fdTable . '.content AS answer'))
+               ->setJoinedTable($fcrTable)
+               ->setJoinedColumns(array(
+                    $fdTable . '.id = ' . $fcrTable . '.record_id',
+                    $fdTable . '.lang = ' . $fcrTable . '.record_lang'))
+               ->setConditions($condition);
+        
         if (is_numeric($searchterm)) {
-            // search for the solution_id
-            $result = $this->db->search($fdTable,
-                array(
-                $fdTable . '.id AS id',
-                $fdTable . '.lang AS lang',
-                $fdTable . '.solution_id AS solution_id',
-                $fcrTable . '.category_id AS category_id',
-                $fdTable . '.thema AS question',
-                $fdTable . '.content AS answer'),
-                $fcrTable,
-                array($fdTable . '.id = ' . $fcrTable . '.record_id',
-                      $fdTable . '.lang = ' . $fcrTable . '.record_lang'),
-                array($fdTable . '.solution_id'),
-                $searchterm,
-                $condition);
+            $search->setMatchingColumns(array($fdTable . '.solution_id'));
         } else {
-            $result = $this->db->search($fdTable,
-                array(
-                $fdTable . '.id AS id',
-                $fdTable . '.lang AS lang',
-                $fcrTable . '.category_id AS category_id',
-                $fdTable . '.thema AS question',
-                $fdTable . '.content AS answer'),
-                $fcrTable,
-                array($fdTable . '.id = ' . $fcrTable . '.record_id', 
-                      $fdTable . '.lang = ' . $fcrTable . '.record_lang'),
-                array($fdTable . '.thema',
-                      $fdTable . '.content',
-                      $fdTable . '.keywords'),
-                $searchterm,
-                $condition);
+            $search->setMatchingColumns(array($fdTable . '.thema', $fdTable . '.content', $fdTable . '.keywords'));
         }
-
+        
+        $search->search($searchterm);
+        
+        $result = $search->getResult();
+        
         if ($result) {
             $num = $this->db->num_rows($result);
         }
@@ -196,7 +188,7 @@ class PMF_Search
             (%d, '%s', '%s', '%s')",
             $this->_table,
             $this->db->nextID($this->_table, 'id'),
-            $this->language,
+            $this->language->getLanguage(),
             $this->db->escape_string($searchterm),
             $date->format('Y-m-d H:i:s'));
         

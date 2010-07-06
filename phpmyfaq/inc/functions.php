@@ -461,52 +461,46 @@ function EndSlash($string)
  */
 function getSearchData($searchterm, $asResource = false, $cat = '%', $allLanguages = true)
 {
+    global $Language;
+    
     $db       = PMF_Db::getInstance();
     $LANGCODE = PMF_Language::$language;
     $result   = null;  
     $num      = 0;
-    $cond     = array(SQLPREFIX."faqdata.active" => "'yes'");
-
+    $cond     = array('fd.active' => "'yes'");
+    
+    $search = PMF_Search_Factory::create($Language, array('database' => PMF_Db::getType()));
+    
     if ($cat != '%') {
-        $cond = array_merge(array(SQLPREFIX."faqcategoryrelations.category_id" => $cat), $cond);
+        $cond = array_merge(array('fcr.category_id' => $cat), $cond);
     }
 
     if ((!$allLanguages) && (!is_numeric($searchterm))) {
-        $cond = array_merge(array(SQLPREFIX."faqdata.lang" => "'".$LANGCODE."'"), $cond);
+        $cond = array_merge(array('fd.lang' => "'" . $LANGCODE . "'"), $cond);
     }
-
+    
+    $search->setDatabaseHandle($db)
+           ->setTable(SQLPREFIX.'faqdata AS fd')
+           ->setResultColumns(array('fd.id AS id',
+                                    'fd.lang AS lang',
+                                    'fd.solution_id AS solution_id',
+                                    'fcr.category_id AS category_id',
+                                    'fd.thema AS thema',
+                                    'fd.content AS content'))
+           ->setJoinedTable(SQLPREFIX.'faqcategoryrelations AS fcr')
+           ->setJoinedColumns(array('fd.id = fcr.record_id', 'fd.lang = fcr.record_lang'))
+           ->setConditions($cond);
+    
     if (is_numeric($searchterm)) {
-        // search for the solution_id
-        $result = $db->search(SQLPREFIX.'faqdata',
-                        array(SQLPREFIX.'faqdata.id AS id',
-                              SQLPREFIX.'faqdata.lang AS lang',
-                              SQLPREFIX.'faqdata.solution_id AS solution_id',
-                              SQLPREFIX.'faqcategoryrelations.category_id AS category_id',
-                              SQLPREFIX.'faqdata.thema AS thema',
-                              SQLPREFIX.'faqdata.content AS content'),
-                        SQLPREFIX.'faqcategoryrelations',
-                        array(SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id',
-                              SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang'),
-                        array(SQLPREFIX.'faqdata.solution_id'),
-                        $searchterm,
-                        $cond);
+        $search->setMatchingColumns(array('fd.solution_id'));
     } else {
-        $result = $db->search(SQLPREFIX."faqdata",
-                        array(SQLPREFIX."faqdata.id AS id",
-                              SQLPREFIX."faqdata.lang AS lang",
-                              SQLPREFIX."faqcategoryrelations.category_id AS category_id",
-                              SQLPREFIX."faqdata.thema AS thema",
-                              SQLPREFIX."faqdata.content AS content"),
-                        SQLPREFIX."faqcategoryrelations",
-                        array(SQLPREFIX."faqdata.id = ".SQLPREFIX."faqcategoryrelations.record_id",
-                              SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqcategoryrelations.record_lang"),
-                        array(SQLPREFIX."faqdata.thema",
-                              SQLPREFIX."faqdata.content",
-                              SQLPREFIX."faqdata.keywords"),
-                        $searchterm,
-                        $cond);
+        $search->setMatchingColumns(array('fd.thema', 'fd.content', 'fd.keywords'));
     }
 
+    $search->search($searchterm);
+    
+    $result = $search->getResult();
+    
     if ($result) {
         $num = $db->num_rows($result);
     }
@@ -525,7 +519,7 @@ function getSearchData($searchterm, $asResource = false, $cat = '%', $allLanguag
         }
         exit();
     }
-
+    
     if (0 == $num) {
         $keys = PMF_String::preg_split("/\s+/", $searchterm);
         $numKeys = count($keys);
