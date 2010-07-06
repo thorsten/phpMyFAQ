@@ -60,23 +60,23 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     /**
      * Columns for the resultset
      * 
-     * @var string
+     * @var array
      */
-    protected $resultColumns = '';
+    protected $resultColumns = array();
     
     /**
      * Columns for the joined table
      * 
-     * @var string
+     * @var array
      */
-    protected $joinedColumns = '';
+    protected $joinedColumns = array();
     
     /**
      * Matching columns for the search
      * 
-     * @var string
+     * @var array
      */
-    protected $matchingColumns = '';
+    protected $matchingColumns = array();
     
     /**
      * Constructor
@@ -223,13 +223,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      */
     public function setResultColumns(Array $columns)
     {
-        foreach ($columns as $column) {
-            if (empty($this->resultColumns)) {
-                $this->resultColumns = $column;
-            } else {
-                $this->resultColumns .= ', ' . $column;
-            }
-        }
+        $this->resultColumns = $columns;
     }
     
     /**
@@ -239,7 +233,17 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      */
     public function getResultColumns()
     {
-        return $this->resultColumns;
+        $resultColumns = '';
+        
+        foreach ($this->resultColumns as $column) {
+            if (empty($resultColumns)) {
+                $resultColumns = $column;
+            } else {
+                $resultColumns .= ', ' . $column;
+            }
+        }
+        
+        return $resultColumns;
     }
     
     /**
@@ -251,11 +255,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      */
     public function setJoinedColumns(Array $joinedColumns)
     {
-        foreach ($joinedColumns as $column) {
-            $this->joinedColumns .= $column . ' AND ';
-        }
-        
-        $this->joinedColumns = PMF_String::substr($this->joinedColumns, 0, -4);
+        $this->joinedColumns = $joinedColumns;
     }
     
     /**
@@ -265,7 +265,13 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      */
     public function getJoinedColumns()
     {
-        return $this->joinedColumns;
+        $joinedColumns = '';
+        
+        foreach ($this->joinedColumns as $column) {
+            $joinedColumns .= $column . ' AND ';
+        }
+        
+        return PMF_String::substr($joinedColumns, 0, -4);
     }
     
     /**
@@ -277,7 +283,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      */
     public function setMatchingColumns(Array $matchingColumns)
     {
-        $this->matchingColumns = implode(', ', $matchingColumns);
+        $this->matchingColumns = $matchingColumns;
     }
     
     /**
@@ -287,6 +293,6 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      */
     public function getMatchingColumns()
     {
-        return $this->matchingColumns;
+        return implode(', ', $this->matchingColumns);
     }
 }
