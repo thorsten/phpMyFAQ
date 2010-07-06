@@ -39,7 +39,9 @@ class PMF_Search_Resultset extends PMF_Search_Abstract
     /**
      * Ordering of resultset
      * 
-     * @var unknown_type
+     * @var string
      */
     protected $ordering;
+    
+    
 }
