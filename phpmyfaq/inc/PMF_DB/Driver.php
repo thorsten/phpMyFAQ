@@ -101,20 +101,6 @@ interface PMF_DB_Driver
     public function sqllog();
 
     /**
-     * Generates a result based on search a search string.
-     *
-     * @param  string $table       Table for search
-     * @param  array  $assoc       Associative array with columns for the resulset
-     * @param  string $joinedTable Table to do a JOIN, e.g. for faqcategoryrelations
-     * @param  array  $joinAssoc   Associative array with comlumns for the JOIN
-     * @param  string $string      Search term
-     * @param  array  $cond        Conditions
-     * @param  array  $orderBy     ORDER BY columns
-     * @return mixed
-     */
-    public function search($table, Array $assoc, $joinedTable = '', Array $joinAssoc = array(), $match = array(), $string = '', Array $cond = array(), Array $orderBy = array());
-
-    /**
      * This function returns the table status.
      *
      * @access  public
