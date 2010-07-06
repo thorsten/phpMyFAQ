@@ -18,9 +18,9 @@
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Periklis Tsirakidis <tsirakidis@phpdevel.de>
+ * @copyright 2002-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2002-2009 phpMyFAQ Team
  * @since     2002-09-16
  */
 
@@ -91,24 +91,12 @@ $faqsession->userTracking('fulltext_search', $inputSearchTerm);
 
 $category->buildTree();
 
-$openSearchLink = sprintf('<a class="searchplugin" href="#" onclick="window.external.AddSearchProvider(\'%s/opensearch.php\');">%s</a>',
-    PMF_Link::getSystemUri('/index.php'),
-    $PMF_LANG['opensearch_plugin_install']);
-    
-$mostPopularSearches   = '';
 $mostPopularSearchData = $faqsearch->getMostPopularSearches($faqconfig->get('main.numberSearchTerms'));
 
-foreach ($mostPopularSearchData as $searchItem) {
-	if (PMF_String::strlen($searchItem['searchterm']) > 0) {
-        $mostPopularSearches .= sprintf('<li><a href="?search=%s&submit=Search&action=search">%s</a> (%dx)</li>',
-            urlencode($searchItem['searchterm']),
-            $searchItem['searchterm'],
-            $searchItem['number']);
-	}
-}
+$categoryHelper = PMF_Helper_Category::getInstance();
+$categoryHelper->setCategory($category);
 
-$helper = PMF_Helper_Category::getInstance();
-$helper->setCategory($category);
+$searchHelper = PMF_Helper_Search::getInstance();
 
 $tpl->processTemplate('writeContent', array(
     'msgSearch'                => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgSearch']),
@@ -117,12 +105,12 @@ $tpl->processTemplate('writeContent', array(
     'checkedAllLanguages'      => $allLanguages ? ' checked="checked"' : '',
     'selectCategories'         => $PMF_LANG['msgSelectCategories'],
     'allCategories'            => $PMF_LANG['msgAllCategories'],
-    'printCategoryOptions'     => $helper->renderCategoryOptions($inputCategory),
+    'printCategoryOptions'     => $categoryHelper->renderCategoryOptions($inputCategory),
     'writeSendAdress'          => '?'.$sids.'action=search',
     'msgSearchWord'            => $PMF_LANG['msgSearchWord'],
     'printResult'              => $printResult,
-    'openSearchLink'           => $openSearchLink,
+    'openSearchLink'           => $searchHelper->renderOpenSearchLink(),
     'msgMostPopularSearches'   => $PMF_LANG['msgMostPopularSearches'],
-    'printMostPopularSearches' => '<ul class="phpmyfaq_ul">' . $mostPopularSearches . '</ul>'));
+    'printMostPopularSearches' => $searchHelper->renderMostPopularSearches($mostPopularSearchData)));
 
 $tpl->includeTemplate('writeContent', 'index');

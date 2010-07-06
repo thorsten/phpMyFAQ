@@ -56,6 +56,13 @@ abstract class PMF_Helper
      * @var PMF_Template
      */
     protected $Template = null;
+    
+    /**
+     * Array with all translations
+     * 
+     * @var array
+     */
+    protected $translation = array();
 
     /**
      * Category Setter
@@ -91,5 +98,17 @@ abstract class PMF_Helper
     public function setTemplate(PMF_Template $Template)
     {
         $this->Template = $Template;
+    }
+    
+    /**
+     * Loads all translation strings
+     * 
+     * @return void
+     */
+    public function getTranslations()
+    {
+        global $PMF_LANG;
+        
+        $this->translation = $PMF_LANG;
     }
 }
