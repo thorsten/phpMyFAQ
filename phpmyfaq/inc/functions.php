@@ -478,7 +478,6 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
     $langs         = (true == $allLanguages) ? '&amp;langs=all' : '';
     $seite         = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
     $db            = PMF_Db::getInstance();
-    $faqconfig     = PMF_Configuration::getInstance();
     $search        = new PMF_Search(PMF_Db::getInstance(), $Language);
     
     if ('%' != $cat) {
@@ -506,7 +505,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
         $output = $PMF_LANG['err_noArticles'];
     }
 
-    $confPerPage = $faqconfig->get('main.numberOfRecordsPerPage');
+    $confPerPage = PMF_Configuration::getInstance()->get('main.numberOfRecordsPerPage');
     
     foreach ($result as $row) {
         if (!isset($dupeFAQs[$row->id])) {
@@ -559,7 +558,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
 
             $b_permission = false;
             //Groups Permission Check
-            if ($faqconfig->get('main.permLevel') == 'medium') {
+            if (PMF_Configuration::getInstance()->get('main.permLevel') == 'medium') {
                 $perm_group = $faq->getPermission('group', $row->id);
                 foreach ($current_groups as $index => $value){
                     if (in_array($value, $perm_group)) {
@@ -567,7 +566,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
                     }
                 }
             }
-            if ($faqconfig->get('main.permLevel') == 'basic' || $b_permission) {
+            if (PMF_Configuration::getInstance()->get('main.permLevel') == 'basic' || $b_permission) {
                 $perm_user = $faq->getPermission('user', $row->id);
                 foreach ($perm_user as $index => $value) {
                     if ($value == -1) {
@@ -641,7 +640,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
     }
 
     if (!$hasMore && ($num > $confPerPage)) {        
-        if ($faqconfig->get('main.enableRewriteRules')) {
+        if (PMF_Configuration::getInstance()->get('main.enableRewriteRules')) {
             $baseUrl = sprintf("search.html?search=%s&amp;seite=%d%s&amp;searchcategory=%d",
                             urlencode($_searchterm),
                             $seite,
