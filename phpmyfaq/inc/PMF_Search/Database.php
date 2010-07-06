@@ -322,14 +322,10 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      */
     public function getConditions()
     {
-        $conditions = '';
+        $conditions = ' 1=1';
         
         foreach ($this->conditions as $column => $value) {
-            if (empty($conditions)) {
-                $conditions .= $column . " = " . $value;
-            } else {
-                $conditions .= " AND " . $column . " = " . $value;
-            }
+            $conditions .= " AND " . $column . " = " . $value;
         }
         
         return $conditions;

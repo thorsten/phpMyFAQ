@@ -1,6 +1,6 @@
 <?php
 /**
- * phpMyFAQ SQlite based search classes
+ * phpMyFAQ IBM DB2 based search classes
  *
  * PHP Version 5.2
  *
@@ -20,11 +20,11 @@
  * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2010-07-05
+ * @since     2010-07-06
  */
 
 /**
- * PMF_Search_Database_Sqlite
+ * PMF_Search_Database_Ibm_db2
  *
  * @category  phpMyFAQ
  * @package   PMF_Search_Database
@@ -32,9 +32,9 @@
  * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2010-07-05
+ * @since     2010-07-06
  */
-class PMF_Search_Database_Sqlite extends PMF_Search_Database
+class PMF_Search_Database_Ibm_db2 extends PMF_Search_Database
 {
     /**
      * Constructor

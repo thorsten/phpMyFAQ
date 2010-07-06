@@ -1,6 +1,6 @@
 <?php
 /**
- * phpMyFAQ SQlite based search classes
+ * phpMyFAQ Oracle based search classes
  *
  * PHP Version 5.2
  *
@@ -24,7 +24,7 @@
  */
 
 /**
- * PMF_Search_Database_Sqlite
+ * PMF_Search_Database_Oci8
  *
  * @category  phpMyFAQ
  * @package   PMF_Search_Database
@@ -34,7 +34,7 @@
  * @link      http://www.phpmyfaq.de
  * @since     2010-07-05
  */
-class PMF_Search_Database_Sqlite extends PMF_Search_Database
+class PMF_Search_Database_Oci8 extends PMF_Search_Database
 {
     /**
      * Constructor

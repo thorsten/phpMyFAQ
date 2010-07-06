@@ -36,5 +36,74 @@
  */
 class PMF_Search_Database_Pgsql extends PMF_Search_Database
 {
+    /**
+     * Constructor
+     * 
+     * @param PMF_Language $language Language
+     * 
+     * @return PMF_Search_Abstract
+     */
+    public function __construct(PMF_Language $language)
+    {
+        parent::__construct($language);
+    }
+    
+    /**
+     * Prepares the search and executes it
+     * 
+     * @param string $searchTerm Search term
+     * 
+     * @return boolean
+     * 
+     * @throws PMF_Search_Exception
+     */
+    public function search($searchTerm)
+    {
+        if (is_numeric($searchTerm)) {
+            parent::search($searchTerm);
+        } else {
+            $query = sprintf("
+                SELECT
+                    %s
+                FROM 
+                    %s %s %s
+                WHERE
+                    (%s) ILIKE ('%%%s%%')
+                    %s",
+                $this->getResultColumns(),
+                $this->getTable(),
+                $this->getJoinedTable(),
+                $this->getJoinedColumns(),
+                $this->getMatchingColumns(),
+                $this->dbHandle->escape_string($searchTerm),
+                $this->getConditions());
+            
+            $this->resultSet = $this->dbHandle->query($query);
+        }
+        
+        return $this->resultSet;
+    }
+    
+    /**
+     * Returns the result of the search
+     * 
+     * @return PMF_Search_Resultset
+     * 
+     * @throws PMF_Search_Exception
+     */
+    public function getResult()
+    {
+        return $this->resultSet;
+    }
+    
+    /**
+     * Returns the part of the SQL query with the matching columns
+     * 
+     * @return string
+     */
+    public function getMatchingColumns()
+    {
+        return implode("|| ' ' ||", $this->matchingColumns);
+    }
     
 }
