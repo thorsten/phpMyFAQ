@@ -66,13 +66,14 @@ class PMF_Search_Database_Sqlite extends PMF_Search_Database
                 SELECT
                     %s
                 FROM 
-                    %s %s
+                    %s %s %s
                 WHERE
                     %s
                     %s",
                 $this->getResultColumns(),
                 $this->getTable(),
                 $this->getJoinedTable(),
+                $this->getJoinedColumns(),
                 $this->getMatchClause($searchTerm),
                 $this->getConditions());
             
