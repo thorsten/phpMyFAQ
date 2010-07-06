@@ -68,12 +68,14 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
                 FROM 
                     %s %s
                 WHERE
-                    MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE)",
+                    MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE)
+                %s",
                 $this->getResultColumns(),
                 $this->getTable(),
                 $this->getJoinedTable(),
                 $this->getMatchingColumns(),
-                $this->dbHandle->escape_string($searchTerm));
+                $this->dbHandle->escape_string($searchTerm),
+                $this->getConditions());
             
             $this->resultSet = $this->dbHandle->query($query);
         }

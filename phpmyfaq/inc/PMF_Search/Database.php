@@ -79,6 +79,13 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     protected $matchingColumns = array();
     
     /**
+     * Conditions columns with their values
+     * 
+     * @var array
+     */
+    protected $conditions = array();
+    
+    /**
      * Constructor
      * 
      * @param PMF_Language $language Language
@@ -294,5 +301,68 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     public function getMatchingColumns()
     {
         return implode(', ', $this->matchingColumns);
+    }
+    
+    /**
+     * Sets the part of the SQL query with the condisions
+     * 
+     * @param array $conditions Array of columns
+     * 
+     * @return void
+     */
+    public function setConditions(Array $conditions)
+    {
+        $this->conditions = $conditions;
+    }
+    
+    /**
+     * Returns the part of the SQL query with the conditions
+     * 
+     * @return string
+     */
+    public function getConditions()
+    {
+        $conditions = '';
+        
+        foreach ($this->conditions as $column => $value) {
+            if (empty($conditions)) {
+                $conditions .= $column . " = " . $value;
+            } else {
+                $conditions .= " AND " . $column . " = " . $value;
+            }
+        }
+        
+        return $conditions;
+    }
+    
+    /**
+     * Creates the part for the WHERE clause
+     * 
+     * @param string $searchTerm Search term
+     * 
+     * @return string
+     */
+    public function getMatchClause($searchTerm = '')
+    {
+        $keys     = PMF_String::preg_split("/\s+/", $searchTerm);
+        $numKeys  = count($keys);
+        $numMatch = count($this->matchingColumns);
+        $where    = '';
+        
+        for ($i = 0; $i < $numKeys; $i++) {
+            if (strlen($where) != 0 ) {
+                $where = $where . " OR";
+            }
+            $where = $where . " (";
+            for ($j = 0; $j < $numMatch; $j++) {
+                if ($j != 0) {
+                    $where = $where." OR ";
+                }
+                $where = sprintf("%s%s LIKE '%%%s%%'", $where, $this->matchingColumns[$j], $keys[$i]);
+            }
+            $where .= ")";
+        }
+        
+        return $where;
     }
 }
