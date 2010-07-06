@@ -97,6 +97,7 @@ $categoryHelper = PMF_Helper_Category::getInstance();
 $categoryHelper->setCategory($category);
 
 $searchHelper = PMF_Helper_Search::getInstance();
+$searchHelper->setPlurals($plr);
 
 $tpl->processTemplate('writeContent', array(
     'msgSearch'                => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgSearch']),
