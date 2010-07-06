@@ -185,7 +185,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
                             'faqcategoryrelations.category_id' => 1);
         
         $this->PMF_Search_Database->setConditions($conditions);
-        $this->assertEquals(" 1=1 AND faqdata.active = 'yes' AND faqcategoryrelations.category_id = 1", 
+        $this->assertEquals(" AND faqdata.active = 'yes' AND faqcategoryrelations.category_id = 1", 
             $this->PMF_Search_Database->getConditions());
         $this->assertType('string', 
             $this->PMF_Search_Database->getConditions());
@@ -194,7 +194,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
     public function testSetAndGetConditionsWithoutConditions()
     {
         $this->PMF_Search_Database->setConditions(array());
-        $this->assertEquals(' 1=1', $this->PMF_Search_Database->getConditions());
+        $this->assertEquals('', $this->PMF_Search_Database->getConditions());
     }
     
     public function testGetMatchClause()
