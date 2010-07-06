@@ -1,6 +1,6 @@
 <?php
 /**
- * Test case for PMF_Category
+ * Test case for PMF_Search_Database
  * 
  * PHP Version 5.2
  * 
