@@ -112,15 +112,17 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
             SELECT
                 %s
             FROM 
-                %s %s
+                %s %s %s
             WHERE
                 %s = %d",
             $this->getResultColumns(),
             $this->getTable(),
             $this->getJoinedTable(),
+            $this->getJoinedColumns(),
             $this->getMatchingColumns(),
             $searchTerm);
         
+        dump($query);
         $this->resultSet = $this->dbHandle->query($query);
     }
     
@@ -133,6 +135,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      */
     public function getResult()
     {
+        return $this->resultSet;
     }
     
     /**
@@ -140,32 +143,13 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      * 
      * @param PMF_DB_Driver $dbHandle Database Handle
      * 
-     * @return void
+     * @return PMF_Search_Database
      */
     public function setDatabaseHandle(PMF_DB_Driver $dbHandle)
     {
         $this->dbHandle = $dbHandle;
         
-        switch ($this->dbHandle) {
-            
-            case $this->dbHandle instanceof PMF_DB_Mysql:
-                $this->dbHandle = new PMF_Search_Database_Mysql($this->language);
-                break;
-                
-            case $this->dbHandle instanceof PMF_DB_Mysqli:
-                $this->dbHandle = new PMF_Search_Database_Mysqli($this->language);
-                break;
-                
-            case $this->dbHandle instanceof PMF_DB_Pgsql:
-                $this->dbHandle = new PMF_Search_Database_Pgsql($this->language);
-                break;
-                
-            case $this->dbHandle instanceof PMF_DB_Sqlite:
-                $this->dbHandle = new PMF_Search_Database_Sqlite($this->language);
-                break;
-            
-        }
-        
+        return $this;
     }
     /**
      * Getter for the database handle
@@ -182,11 +166,13 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      * 
      * @param string $table Table where search should be performed
      * 
-     * @return void
+     * @return PMF_Search_Database
      */
     public function setTable($table)
     {
         $this->table = $table;
+        
+        return $this;
     }
     
     /**
@@ -204,11 +190,13 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      * 
      * @param string $joinedTable Joined table where search should be performed
      * 
-     * @return void
+     * @return PMF_Search_Database
      */
     public function setJoinedTable($joinedTable = '')
     {
         $this->joinedTable = $joinedTable;
+        
+        return $this;
     }
     
     /**
@@ -218,7 +206,11 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      */
     public function getJoinedTable()
     {
-        return $this->joinedTable;
+        if (empty($this->joinedTable)) {
+            return '';
+        } else {
+            return ' LEFT JOIN ' . $this->joinedTable . ' ON ';
+        }
     }
     
     /**
@@ -226,11 +218,13 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      * 
      * @param array $columns Array of columns
      * 
-     * @return void
+     * @return PMF_Search_Database
      */
     public function setResultColumns(Array $columns)
     {
         $this->resultColumns = $columns;
+        
+        return $this;
     }
     
     /**
@@ -258,11 +252,13 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      * 
      * @param array $joinedColumns Array of columns
      * 
-     * @return void
+     * @return PMF_Search_Database
      */
     public function setJoinedColumns(Array $joinedColumns)
     {
         $this->joinedColumns = $joinedColumns;
+        
+        return $this;
     }
     
     /**
@@ -286,11 +282,13 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      * 
      * @param array $matchingColumns Array of columns
      * 
-     * @return void
+     * @return PMF_Search_Database
      */
     public function setMatchingColumns(Array $matchingColumns)
     {
         $this->matchingColumns = $matchingColumns;
+        
+        return $this;
     }
     
     /**
@@ -308,11 +306,13 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      * 
      * @param array $conditions Array of columns
      * 
-     * @return void
+     * @return PMF_Search_Database
      */
     public function setConditions(Array $conditions)
     {
         $this->conditions = $conditions;
+        
+        return $this;
     }
     
     /**
@@ -358,7 +358,10 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
                 if ($j != 0) {
                     $where = $where." OR ";
                 }
-                $where = sprintf("%s%s LIKE '%%%s%%'", $where, $this->matchingColumns[$j], $keys[$i]);
+                $where = sprintf("%s%s LIKE '%%%s%%'", 
+                    $where, 
+                    $this->matchingColumns[$j], 
+                    $this->dbHandle->escape_string($keys[$i]));
             }
             $where .= ")";
         }
