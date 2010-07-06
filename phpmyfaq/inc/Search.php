@@ -107,10 +107,11 @@ class PMF_Search
     /**
      * The main search function for the full text search
      *
-     * @param   string  $searchterm     Text/Number (solution id)
-     * @param   boolean $allLanguages   true to search over all languages
-     * @param   boolean $hasMore        true to disable the results paging
-     * @param   boolean $instantRespnse true to use it for Instant Response
+     * @param string  $searchterm     Text/Number (solution id)
+     * @param boolean $allLanguages   true to search over all languages
+     * @param boolean $hasMore        true to disable the results paging
+     * @param boolean $instantRespnse true to use it for Instant Response
+     * 
      * @return  array
      */
     public function search($searchterm, $allLanguages = true, $hasMore = false, $instantResponse = false)
@@ -122,7 +123,7 @@ class PMF_Search
         
         // Search in all or one category?
         if (!is_null($this->categoryId)) {
-            $selectedCategory = array($fcrTable . '.category_id' => $searchcategory);
+            $selectedCategory = array($fcrTable . '.category_id' => $this->categoryId);
             $condition        = array_merge($selectedCategory, $condition);
         }
 
