@@ -79,7 +79,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
     public function testSetDatabaseHandle()
     {
         $this->PMF_Search_Database->setDatabaseHandle($this->dbHandle);
-        $this->assertEquals(new PMF_Search_Database_Sqlite($this->PMF_Language), $this->PMF_Search_Database->getDatabaseHandle());
+        $this->assertEquals(new PMF_DB_Sqlite(), $this->PMF_Search_Database->getDatabaseHandle());
     }
     
     public function testSetDatabaseHandleWrongParameter()
@@ -95,7 +95,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
     public function testGetDatabaseHandleType()
     {
         $this->PMF_Search_Database->setDatabaseHandle($this->dbHandle);
-        $this->assertType('PMF_Search_Database_Sqlite', $this->PMF_Search_Database->getDatabaseHandle());
+        $this->assertType('PMF_DB_Sqlite', $this->PMF_Search_Database->getDatabaseHandle());
     }
     
     public function testSetAndGetTable()
@@ -113,7 +113,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
     public function testSetAndGetJoinedTable()
     {
         $this->PMF_Search_Database->setJoinedTable('faqcategoryrelations');
-        $this->assertEquals('faqcategoryrelations', $this->PMF_Search_Database->getJoinedTable());
+        $this->assertEquals(' LEFT JOIN faqcategoryrelations ON ', $this->PMF_Search_Database->getJoinedTable());
         $this->assertType('string', $this->PMF_Search_Database->getJoinedTable());
     }
     
@@ -199,6 +199,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
     
     public function testGetMatchClause()
     {
+        $this->PMF_Search_Database->setDatabaseHandle($this->dbHandle);
         $this->PMF_Search_Database->setMatchingColumns(array('faqdata.author'));
         $this->assertEquals(" (faqdata.author LIKE '%Thorsten%')", 
             $this->PMF_Search_Database->getMatchClause('Thorsten'));
@@ -208,6 +209,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
     
     public function testGetMatchClauseWithTwoSearchTerms()
     {
+        $this->PMF_Search_Database->setDatabaseHandle($this->dbHandle);
         $this->PMF_Search_Database->setMatchingColumns(array('faqdata.author'));
         $this->assertEquals(" (faqdata.author LIKE '%Thorsten%') OR (faqdata.author LIKE '%Rinne%')", 
             $this->PMF_Search_Database->getMatchClause('Thorsten Rinne'));
@@ -217,6 +219,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
     
     public function testGetMatchClauseWithTwoColumns()
     {
+        $this->PMF_Search_Database->setDatabaseHandle($this->dbHandle);
         $this->PMF_Search_Database->setMatchingColumns(array('faqdata.author', 'faqdata.thema'));
         $this->assertEquals(" (faqdata.author LIKE '%Thorsten%' OR faqdata.thema LIKE '%Thorsten%')", 
             $this->PMF_Search_Database->getMatchClause('Thorsten'));

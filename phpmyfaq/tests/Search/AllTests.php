@@ -27,6 +27,7 @@ require_once 'PHPUnit/Framework/TestSuite.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
 require_once 'PMF_Search_DatabaseTest.php';
+
 /**
  * Search_AllTests
  * 
