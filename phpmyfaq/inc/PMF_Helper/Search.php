@@ -123,9 +123,48 @@ class PMF_Helper_Search extends PMF_Helper
             $this->translation['opensearch_plugin_install']);
     }
     
+    /**
+     * Renders the result page for Instant Response
+     * 
+     * @param PMF_Search_Resultset $resultSet PMF_Search_Resultset object
+     * 
+     * @return string
+     */
+    public function renderInstantResponseResult(PMF_Search_Resultset $resultSet)
+    {
+        
+    }
+    
+    /**
+     * Renders the result page for the main search page
+     * 
+     * @param PMF_Search_Resultset $resultSet PMF_Search_Resultset object
+     * 
+     * @return string
+     */
+    public function renderSearchResult(PMF_Search_Resultset $resultSet)
+    {
+        $html = '';
+        
+        /*
+        $html .= '<p>' . $this->plurals->GetMsg('plmsgSearchAmount', $num);
+        
+        $html .= '</p>';
+        */
+        
+        return $html;
+    }
+    
+    /**
+     * Renders the list of the most popular search terms
+     * 
+     * @param array $mostPopularSearches Array with popular search terms
+     * 
+     * @return string
+     */
     public function renderMostPopularSearches(Array $mostPopularSearches)
     {
-        $html = '<ul class="mostpupularsearches">';
+        $html = '<ul class="mostpupularsearcheslist">';
         
         foreach ($mostPopularSearches as $searchItem) {
             if (PMF_String::strlen($searchItem['searchterm']) > 0) {
