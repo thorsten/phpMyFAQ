@@ -154,9 +154,9 @@ class PMF_Relation
                ->setConditions(array('fd.active' => "'yes'"))
                ->setMatchingColumns(array('fd.thema', 'fd.content', 'fd.keywords'));
         
-        $search->search($begriffe);
+        $result = $search->search($begriffe);
         
-        while (($row = $this->db->fetch_object($search->getResult())) && 
+        while (($row = $this->db->fetch_object($result)) && 
                ($i < PMF_Configuration::getInstance()->get('records.numberOfRelatedArticles'))) {
             
              if ($row->id == $record_id || $row->id == $last_id) {

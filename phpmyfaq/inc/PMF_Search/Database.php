@@ -102,7 +102,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      * 
      * @param string $searchTerm Search term
      * 
-     * @return boolean
+     * @return resource
      * 
      * @throws PMF_Search_Exception
      */
@@ -122,20 +122,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
             $this->getMatchingColumns(),
             $searchTerm);
         
-        dump($query);
         $this->resultSet = $this->dbHandle->query($query);
-    }
-    
-    /**
-     * Returns the result of the search
-     * 
-     * @return PMF_Search_Resultset
-     * 
-     * @throws PMF_Search_Exception
-     */
-    public function getResult()
-    {
-        return $this->resultSet;
     }
     
     /**

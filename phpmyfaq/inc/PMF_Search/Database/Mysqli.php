@@ -53,7 +53,7 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
      * 
      * @param string $searchTerm Search term
      * 
-     * @return boolean
+     * @return resource
      * 
      * @throws PMF_Search_Exception
      */
@@ -102,17 +102,5 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
         }
         
         return $this->resultSet;
-    }
-    
-    /**
-     * Returns the result of the search
-     * 
-     * @return PMF_Search_Resultset
-     * 
-     * @throws PMF_Search_Exception
-     */
-    public function getResult()
-    {
-        parent::getResult();
     }
 }

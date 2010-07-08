@@ -37,6 +37,7 @@ $inputCategory   = PMF_Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_V
 $inputTag        = PMF_Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_VALIDATE_INT);
 $inputSearchTerm = PMF_Filter::filterInput(INPUT_GET, 'suchbegriff', FILTER_SANITIZE_STRIPPED);
 $search          = PMF_Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_STRIPPED);
+$page            = PMF_Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);;
 
 // Search only on current language (default)
 $allLanguages = false;
@@ -53,6 +54,16 @@ if ($allLanguages) {
     $category->transform(0);
 }
 
+// Pagination options
+$options = array('baseUrl'         => '',
+                 'total'           => 0,
+                 'perPage'         => PMF_Configuration::getInstance()->get('main.numberOfRecordsPerPage'),
+                 'pageParamName'   => 'seite',
+                 'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgNext'] . '</a>',
+                 'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgPrevious'] . '</a>',
+                 'layoutTpl'       => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>');
+        
+$pagination          = new PMF_Pagination($options);
 $faqsearch           = new PMF_Search($db, $Language);
 $printResult         = '';
 $tagSearch           = false;
@@ -97,6 +108,7 @@ $categoryHelper = PMF_Helper_Category::getInstance();
 $categoryHelper->setCategory($category);
 
 $searchHelper = PMF_Helper_Search::getInstance();
+$searchHelper->setPagination($pagination);
 $searchHelper->setPlurals($plr);
 
 $tpl->processTemplate('writeContent', array(

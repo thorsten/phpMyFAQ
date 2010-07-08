@@ -178,9 +178,7 @@ if ($permission['editbt'] || $permission['delbt']) {
             $search->setMatchingColumns(array($fdTable . '.thema', $fdTable . '.content', $fdTable . '.keywords'));
         }
         
-        $search->search($searchterm);
-        
-        $result         = $search->getResult(); // @todo add missing ordering!
+        $result         = $search->search($searchterm);; // @todo add missing ordering!
         $laction        = 'view';
         $internalSearch = '&amp;search='.$searchterm;
         $wasSearch      = true;

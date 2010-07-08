@@ -41,18 +41,9 @@ interface PMF_Search_Interface
      * 
      * @param string $searchTerm Search term
      * 
-     * @return boolean
+     * @return resource
      * 
      * @throws PMF_Search_Exception
      */
     public function search($searchTerm);
-    
-    /**
-     * Returns the result of the search
-     * 
-     * @return PMF_Search_Resultset
-     * 
-     * @throws PMF_Search_Exception
-     */
-    public function getResult();
 }

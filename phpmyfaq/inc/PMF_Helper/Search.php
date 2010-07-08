@@ -144,13 +144,17 @@ class PMF_Helper_Search extends PMF_Helper
      */
     public function renderSearchResult(PMF_Search_Resultset $resultSet)
     {
-        $html = '';
+        $html        = '';
+        $confPerPage = PMF_Configuration::getInstance()->get('main.numberOfRecordsPerPage');
         
         /*
         $html .= '<p>' . $this->plurals->GetMsg('plmsgSearchAmount', $num);
         
         $html .= '</p>';
         */
+        
+        
+        $html .= $this->pagination->render();
         
         return $html;
     }
@@ -177,4 +181,5 @@ class PMF_Helper_Search extends PMF_Helper
         
         return $html . '</ul>';
     }
+    
 }

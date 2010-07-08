@@ -153,9 +153,7 @@ class PMF_Search
             $search->setMatchingColumns(array($fdTable . '.thema', $fdTable . '.content', $fdTable . '.keywords'));
         }
         
-        $search->search($searchterm);
-        
-        $result = $search->getResult();
+        $result = $search->search($searchterm);
         
         if ($result) {
             $num = $this->db->num_rows($result);
