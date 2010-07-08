@@ -89,6 +89,8 @@ if (!is_null($inputSearchTerm) || !is_null($search)) {
     if (!is_null($search)) {
         $inputSearchTerm = $db->escape_string(strip_tags($search));
     }
+    
+    //$result           = $search->search($inputSearchTerm, $allLanguages);
     $printResult      = searchEngine($inputSearchTerm, $inputCategory, $allLanguages);
     $inputSearchTerm  = stripslashes($inputSearchTerm);
     
