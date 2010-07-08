@@ -34,7 +34,7 @@
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
  */
-class PMF_Search_Resultset extends PMF_Search_Abstract
+class PMF_Search_Resultset
 {
     /**
      * Ordering of resultset
@@ -43,5 +43,22 @@ class PMF_Search_Resultset extends PMF_Search_Abstract
      */
     protected $ordering;
     
+    /**
+     * PMF_User object
+     * 
+     * @var PMF_User
+     */
+    protected $user = null;
     
+    /**
+     * Constructor
+     * 
+     * @param PMF_User $user PMF_User object
+     * 
+     * @return PMF_Search_Resultset
+     */
+    public function __construct(PMF_User $user)
+    {
+        $this->user = $user;
+    }
 }
