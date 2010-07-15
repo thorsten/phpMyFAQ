@@ -4,7 +4,9 @@
  * @category  phpMyFAQ
  * @package   JavaScript
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009 phpMyFAQ Team
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
  * @since     2009-12-04
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -38,4 +40,9 @@ $('#instantfield').keyup(function()
             } 
         });
     }
+});
+
+$('#instantform').submit(function()
+{
+    return false;
 });
