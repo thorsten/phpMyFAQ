@@ -112,7 +112,7 @@ if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SE
     $search_result = array();
     $counter = 0;
     foreach ($search_stuff as $word) {
-        $tmp = getSearchData($word);
+        $tmp = $search->search($word);
         foreach ($tmp as $foundItem) {
             if (!isset($foundItem->id, $search_result[$foundItem->category_id])) {
                 $counter++;
