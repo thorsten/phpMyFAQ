@@ -8,6 +8,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 Version 2.6.7 - 2010-07-
 - improved pagination functionality (Thorsten)
 - refactored search backend (Thorsten)
+- fixed various problems with Microsoft SQL Server Driver for PHP (Thorsten)
 - fixed minor bugs (Thorsten, Aaron Burgie)
 
 Version 2.6.6 - 2010-06-21

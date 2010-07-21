@@ -174,11 +174,12 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      * Number of rows in a result
      *
      * @param  resource $result Resultset
+     * 
      * @return integer
      */
     public function num_rows($result)
     {
-        return sqlsrv_num_rows($this->conn);
+        return sqlsrv_num_rows($result);
     }
 
     /**
