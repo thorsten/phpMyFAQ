@@ -1,7 +1,7 @@
 <?php
 /**
- * LDAP  constants for phpMyFAQ.
- * 
+ * LDAP constants for phpMyFAQ.
+ *
  * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License Version
@@ -15,7 +15,7 @@
  * License.
  *
  * @category  phpMyFAQ
- * @package   Configuration
+ * @package   PMF_Ldap
  * @author    Lars Scheithauer <lars.scheithauer@googlemail.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2010 phpMyFAQ Team
@@ -40,3 +40,7 @@ $PMF_LDAP['ldap_use_domain_prefix'] = true;
 $PMF_LDAP["ldap_options"] = array (
     LDAP_OPT_PROTOCOL_VERSION => 3,
     LDAP_OPT_REFERRALS        => 0);
+    
+// Option for binding to LDAP directory using SASL
+// Default: false
+$PMF_LDAP['ldap_use_sasl'] = false;

@@ -56,6 +56,20 @@ abstract class PMF_Helper
      * @var PMF_Template
      */
     protected $Template = null;
+    
+    /**
+     * Plurals class
+     * 
+     * @var PMF_Language_Plurals
+     */
+    protected $plurals = null;
+    
+    /**
+     * Array with all translations
+     * 
+     * @var array
+     */
+    protected $translation = array();
 
     /**
      * Category Setter
@@ -91,5 +105,27 @@ abstract class PMF_Helper
     public function setTemplate(PMF_Template $Template)
     {
         $this->Template = $Template;
+    }
+    
+    /**
+     * Plurals setter
+     * 
+     * @param PMF_Language_Plurals $plurals PMF_Language_Plurals object
+     */
+    public function setPlurals(PMF_Language_Plurals $plurals)
+    {
+        $this->plurals = $plurals;
+    }
+    
+    /**
+     * Loads all translation strings
+     * 
+     * @return void
+     */
+    public function getTranslations()
+    {
+        global $PMF_LANG;
+        
+        $this->translation = $PMF_LANG;
     }
 }

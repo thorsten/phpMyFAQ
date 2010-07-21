@@ -41,14 +41,14 @@ class PMF_Relation
     /**
     * DB handle
     *
-    * @var PMF_Db
+    * @var PMF_DD_Driver
     */
     private $db;
 
     /**
     * Language
     *
-    * @var  string
+    * @var PMF_Language
     */
     private $language;
 
@@ -63,12 +63,12 @@ class PMF_Relation
     * Constructor
     *
     */
-    function __construct()
+    function __construct(PMF_DB_Driver $database, PMF_Language $language)
     {
         global $PMF_LANG;
 
-        $this->db       = PMF_Db::getInstance();
-        $this->language = PMF_Language::$language;
+        $this->db       = $database;
+        $this->language = $language;
         $this->pmf_lang = $PMF_LANG;
     }
 
@@ -124,35 +124,39 @@ class PMF_Relation
     /**
      * Returns all relevant Articles for a FAQ record
      *
-     * @param   integer $record_id
-     * @param   string  $thema
-     * @return   string
-     * @since   2006-08-29
-     * @author  Thomas Zeithaml <info@spider-trap.de>
+     * @param integer $record_id FAQ ID
+     * @param string  $thema     FAQ title
+     * 
+     * @return string
      */
     public function getAllRelatedById($record_id, $article_name, $keywords)
     {
         global $sids;
+        
         $relevantslisting = '';
-        $begriffe = str_replace('-', ' ', $article_name) . $keywords;
+        $begriffe         = str_replace('-', ' ', $article_name) . $keywords;
+        $search           = PMF_Search_Factory::create($this->language, array('database' => PMF_Db::getType()));
+        
         $i = $last_id = 0;
 
-        $result = $this->db->search(SQLPREFIX."faqdata",
-                          array(SQLPREFIX."faqdata.id AS id",
-                                SQLPREFIX."faqdata.lang AS lang",
-                                SQLPREFIX."faqcategoryrelations.category_id AS category_id",
-                                SQLPREFIX."faqdata.thema AS thema",
-                                SQLPREFIX."faqdata.content AS content"),
-                          SQLPREFIX."faqcategoryrelations",
-                          array(SQLPREFIX."faqdata.id = ".SQLPREFIX."faqcategoryrelations.record_id",
-                                SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqcategoryrelations.record_lang"),
-                          array(SQLPREFIX."faqdata.thema",
-                                SQLPREFIX."faqdata.content",
-                                SQLPREFIX."faqdata.keywords"),
-                          $begriffe,
-                          array(SQLPREFIX."faqdata.active" => "'yes'"));
-
-        while (($row = $this->db->fetchObject($result)) && 
+        $search->setDatabaseHandle($this->db)
+               ->setTable(SQLPREFIX . 'faqdata AS fd')
+               ->setResultColumns(array(
+                    'fd.id AS id',
+                    'fd.lang AS lang',
+                    'fcr.category_id AS category_id',
+                    'fd.thema AS thema',
+                    'fd.content AS content'))
+               ->setJoinedTable(SQLPREFIX . 'faqcategoryrelations AS fcr')
+               ->setJoinedColumns(array(
+                    'fd.id = fcr.record_id', 
+                    'fd.lang = fcr.record_lang'))
+               ->setConditions(array('fd.active' => "'yes'"))
+               ->setMatchingColumns(array('fd.thema', 'fd.content', 'fd.keywords'));
+        
+        $result = $search->search($begriffe);
+        
+        while (($row = $this->db->fetch_object($result)) && 
                ($i < PMF_Configuration::getInstance()->get('records.numberOfRelatedArticles'))) {
             
              if ($row->id == $record_id || $row->id == $last_id) {

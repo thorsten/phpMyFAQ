@@ -187,111 +187,22 @@ class PMF_DB_Ibase implements PMF_DB_Driver
     }
 
     /**
-     * Generates a result based on search a search string.
-     *
-     * @param  string $table       Table for search
-     * @param  array  $assoc       Associative array with columns for the resulset
-     * @param  string $joinedTable Table to do a JOIN, e.g. for faqcategoryrelations
-     * @param  array  $joinAssoc   Associative array with comlumns for the JOIN
-     * @param  string $string      Search term
-     * @param  array  $cond        Conditions
-     * @param  array  $orderBy     ORDER BY columns
-     * @return mixed
+     * Returns the error string.
+     * 
+     * @return array
      */
-    public function search($table, Array $assoc, $joinedTable = '', Array $joinAssoc = array(), $match = array(), $string = '', Array $cond = array(), Array $orderBy = array())
-    {
-        $string = trim($string);
-        $fields = '';
-        $join = '';
-        $joined = '';
-        $where = '';
-
-        foreach ($assoc as $field) {
-            if (empty($fields)) {
-                $fields = $field;
-            } else {
-                $fields .= ", ".$field;
-            }
-        }
-
-        if (isset($joinedTable) && $joinedTable != '') {
-            $joined .= ' LEFT JOIN '.$joinedTable.' ON ';
-        }
-
-        if (is_array($joinAssoc)) {
-            foreach ($joinAssoc as $joinedFields) {
-                $join .= $joinedFields.' AND ';
-                }
-            $joined .= PMF_String::substr($join, 0, -4);
-        }
-
-        $keys = PMF_String::preg_split("/\s+/", $string);
-        $numKeys = count($keys);
-        $numMatch = count($match);
-
-        for ($i = 0; $i < $numKeys; $i++) {
-            if (strlen($where) != 0 ) {
-                $where = $where;
-            }
-            $where = $where." (";
-            for ($j = 0; $j < $numMatch; $j++) {
-                if ($j != 0) {
-                    $where = $where." OR ";
-                }
-                $where = $where.$match[$j]." LIKE '%".$keys[$i]."%'";
-            }
-
-            $where .= ")";
-        }
-
-        foreach($cond as $field => $data) {
-            if (empty($where)) {
-                $where .= $field." = '".$data."'";
-            } else {
-                $where .= " AND ".$field." = '".$data."'";
-            }
-        }
-
-        $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE";
-
-        if (!empty($where)) {
-            $query .= " (".$where.")";
-        }
-
-        if (is_numeric($string)) {
-            $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE ".$match." = ".$string;
-        }
-
-        $firstOrderBy = true;
-        foreach ($orderBy as $field) {
-            if ($firstOrderBy) {
-                $query .= " ORDER BY ".$field;
-                $firstOrderBy = false;
-            } else {
-                $query .= ", ".$field;
-            }
-        }
-
-        return $this->query($query);
-    }
-
-    /**
-    * Returns the error string.
-    * 
-    * @return array
-    */
     function getTableStatus()
     {
         return array();
     }
 
     /**
-    * Returns the next ID of a table
-    *
-    * @param   string      the name of the table
-    * @param   string      the name of the ID column
-    * @return  int
-    */
+     * Returns the next ID of a table
+     *
+     * @param   string      the name of the table
+     * @param   string      the name of the ID column
+     * @return  int
+     */
     public function nextID($table, $id)
     {
         $result = $this->query('SELECT max('.$id.') as current_id FROM '.$table);
@@ -300,30 +211,30 @@ class PMF_DB_Ibase implements PMF_DB_Driver
     }
 
     /**
-    * Returns the error string.
-    *
-    * @return string
-    */
+     * Returns the error string.
+     *
+     * @return string
+     */
     function error()
     {
         return ibase_errmsg();
     }
 
     /**
-    * Returns the client version string.
-    *
-    * @return string
-    */
+     * Returns the client version string.
+     *
+     * @return string
+     */
     function client_version()
     {
         return '';
     }
 
     /**
-    * Returns the server version string.
-    * 
-    * @return string
-    */
+     * Returns the server version string.
+     * 
+     * @return string
+     */
     function server_version()
     {
         return ibase_server_info();

@@ -90,7 +90,7 @@ tinymce.create('tinymce.plugins.internalFaqLinkPlugin', {
                   $record['category_id'],
                   $record['id'],
                   $record['lang'],
-                  trim(str_replace("'", "`", str_replace(array("\n", "\r", "\r\n"), '', $record['title']))));
+                  trim(str_replace("'", "`", addslashes(str_replace(array("\n", "\r", "\r\n"), '', $record['title'])))));
           }
 ?>
 
@@ -138,9 +138,6 @@ tinyMCE.init({
 
     // Drop lists for link/image/media/template dialogs
     template_external_list_url : "js/template_list.js",
-    external_link_list_url     : "js/link_list.js",
-    external_image_list_url    : "js/image_list.js",
-    media_external_list_url    : "js/media_list.js",
 
     // Replace values for the template plugin
     template_replace_values : {

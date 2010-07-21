@@ -422,6 +422,7 @@ function EndSlash($string)
 }
 
 /**
+<<<<<<< HEAD
  * Get search data weither as array or resource
  *
  * @param string $searchterm
@@ -524,6 +525,8 @@ function getSearchData($searchterm, $asResource = false, $cat = '%', $allLanguag
 }
 
 /**
+=======
+>>>>>>> a15ea5aec4c6573d47240e03287ad1ac046200ec
  * The main search function for the full text search
  *
  * TODO: add filter for (X)HTML tag names and attributes!
@@ -540,9 +543,9 @@ function getSearchData($searchterm, $asResource = false, $cat = '%', $allLanguag
  * @author  Adrianna Musiol <musiol@imageaccess.de>
  * @since   2002-09-16
  */
-function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = false, $instantRespnse = false)
+function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = false, $instantResponse = false)
 {
-    global $sids, $PMF_LANG, $plr, $LANGCODE, $faq, $current_user, $current_groups, $categoryLayout;
+    global $sids, $category, $PMF_LANG, $plr, $LANGCODE, $faq, $current_user, $current_groups, $Language;
 
     $_searchterm   = PMF_String::htmlspecialchars(stripslashes($searchterm), ENT_QUOTES, 'utf-8');
     $seite         = 1;
@@ -552,18 +555,36 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
     $langs         = (true == $allLanguages) ? '&amp;langs=all' : '';
     $seite         = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
     $db            = PMF_Db::getInstance();
-    $faqconfig     = PMF_Configuration::getInstance();
+    $search        = new PMF_Search(PMF_Db::getInstance(), $Language);
+    
+    if ('%' != $cat) {
+        $search->setCategory($cat);
+    }
+    $result = $search->search($_searchterm, $allLanguages, $hasMore, $instantResponse);
+    $num    = count($result);
 
-    $result = getSearchData(PMF_String::htmlspecialchars($searchterm, ENT_COMPAT, 'utf-8'), true, $cat, $allLanguages);
-    $num    = $db->numRows($result);
-
+    // Show the record with the solution ID directly
+    // Sanity checks: if a valid Solution ID has been provided the result set
+    //                will measure 1: this is true ONLY if the faq is not
+    //                classified among more than 1 category
+    if (is_numeric($searchterm) && ($searchterm >= PMF_SOLUTION_ID_START_VALUE) && ($num > 0)) {
+        // Hack: before a redirection we must force the PHP session update for preventing data loss
+        session_write_close();
+        if (PMF_Configuration::getInstance()->get('main.enableRewriteRules')) {
+            header('Location: '.PMF_Link::getSystemUri('/index.php').'/solution_id_'.$searchterm.'.html');
+        } else {
+            header('Location: '.PMF_Link::getSystemUri('/index.php').'/index.php?solution_id='.$searchterm);
+        }
+        exit();
+    }
+    
     if (0 == $num) {
         $output = $PMF_LANG['err_noArticles'];
     }
 
-    $confPerPage = $faqconfig->get('main.numberOfRecordsPerPage');
+    $confPerPage = PMF_Configuration::getInstance()->get('main.numberOfRecordsPerPage');
     
-    while ($row = $db->fetch_object($result)) {
+    foreach ($result as $row) {
         if (!isset($dupeFAQs[$row->id])) {
             $duplicateFAQs[$row->id] = 1;
         } else {
@@ -574,10 +595,6 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
 
     $num           = count(array_keys($duplicateFAQs));
     $duplicateFAQs = array();
-    
-    if ($num > 0) {
-        $db->resultSeek($result, 0);
-    }
     
     $pages = ceil($num / $confPerPage);
     $last  = $seite * $confPerPage;
@@ -601,15 +618,18 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
         $faqGroup = new PMF_Faq_Group();
         
         $counter = $displayedCounter = 0;
-        while (($row = $db->fetchObject($result)) && $displayedCounter < $confPerPage) {
-
+        foreach ($result as $row) {
             if (!isset($duplicateFAQs[$row->id])) {
                 $duplicateFAQs[$row->id] = 1;
             } else {
                 ++$duplicateFAQs[$row->id];
                 continue;
             }
-
+            
+            if ($displayedCounter >= $confPerPage) {
+                continue;
+            }
+            
             $counter ++;
             if ($counter <= $first) {
                 continue;
@@ -643,8 +663,8 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
             
             if ($b_permission) {
                 $rubriktext  = $categoryLayout->renderBreadcrumb(array($row->category_id));
-                $thema       = PMF_Utils::chopString($row->thema, 15);
-                $content     = PMF_Utils::chopString(strip_tags($row->content), 25);
+                $thema       = PMF_Utils::chopString($row->question, 15);
+                $content     = PMF_Utils::chopString(strip_tags($row->answer), 25);
                 $searchterm  = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'), '', $searchterm);
                 $searchterm  = preg_quote($searchterm, '/');
                 $searchItems = explode(' ', $searchterm);
@@ -679,15 +699,15 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
                     $row->lang,
                     urlencode($_searchterm));
 
-                if ($instantRespnse) {
+                if ($instantResponse) {
                     $currentUrl = PMF_Link::getSystemRelativeUri('ajaxresponse.php').'index.php';
                 } else {
                     $currentUrl = PMF_Link::getSystemRelativeUri();
                 }
                 $oLink            = new PMF_Link($currentUrl.$url);
-                $oLink->itemTitle = $row->thema;
-                $oLink->text      = $row->thema;
-                $oLink->tooltip   = $row->thema;
+                $oLink->itemTitle = $row->question;
+                $oLink->text      = $row->question;
+                $oLink->tooltip   = $row->question;
                 $output .=
                     '<li><strong>'.$rubriktext.'</strong>: '.$oLink->toHtmlAnchor().'<br />'
                     .'<div class="searchpreview"><strong>'.$PMF_LANG['msgSearchContent'].'</strong> '.$content.'...</div>'
@@ -700,7 +720,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
     }
 
     if (!$hasMore && ($num > $confPerPage)) {        
-        if ($faqconfig->get('main.enableRewriteRules')) {
+        if (PMF_Configuration::getInstance()->get('main.enableRewriteRules')) {
             $baseUrl = sprintf("search.html?search=%s&amp;seite=%d%s&amp;searchcategory=%d",
                             urlencode($_searchterm),
                             $seite,

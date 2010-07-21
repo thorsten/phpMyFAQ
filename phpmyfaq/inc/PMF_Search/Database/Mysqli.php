@@ -36,5 +36,71 @@
  */
 class PMF_Search_Database_Mysqli extends PMF_Search_Database
 {
+    /**
+     * Constructor
+     * 
+     * @param PMF_Language $language Language
+     * 
+     * @return PMF_Search_Abstract
+     */
+    public function __construct(PMF_Language $language)
+    {
+        parent::__construct($language);
+    }
     
+    /**
+     * Prepares the search and executes it
+     * 
+     * @param string $searchTerm Search term
+     * 
+     * @return resource
+     * 
+     * @throws PMF_Search_Exception
+     */
+    public function search($searchTerm)
+    {
+        if (is_numeric($searchTerm)) {
+            parent::search($searchTerm);
+        } else {
+            $query = sprintf("
+                SELECT
+                    %s
+                FROM 
+                    %s %s %s
+                WHERE
+                    MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE)
+                AND
+                    %s",
+                $this->getResultColumns(),
+                $this->getTable(),
+                $this->getJoinedTable(),
+                $this->getJoinedColumns(),
+                $this->getMatchingColumns(),
+                $this->dbHandle->escape_string($searchTerm),
+                $this->getConditions());
+            
+            // Fallback for searches with less than three characters
+            if (0 == $this->dbHandle->num_rows($this->resultSet)) {
+                
+                $query = sprintf("
+                    SELECT
+                        %s
+                    FROM 
+                        %s %s %s
+                    WHERE
+                        %s
+                        %s",
+                    $this->getResultColumns(),
+                    $this->getTable(),
+                    $this->getJoinedTable(),
+                    $this->getJoinedColumns(),
+                    $this->getMatchClause($searchTerm),
+                    $this->getConditions());
+            }
+            
+            $this->resultSet = $this->dbHandle->query($query);
+        }
+        
+        return $this->resultSet;
+    }
 }

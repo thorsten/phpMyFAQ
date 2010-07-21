@@ -18,9 +18,9 @@
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Periklis Tsirakidis <tsirakidis@phpdevel.de>
+ * @copyright 2002-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2002-2009 phpMyFAQ Team
  * @since     2002-09-16
  */
 
@@ -37,6 +37,7 @@ $inputCategory   = PMF_Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_V
 $inputTag        = PMF_Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_VALIDATE_INT);
 $inputSearchTerm = PMF_Filter::filterInput(INPUT_GET, 'suchbegriff', FILTER_SANITIZE_STRIPPED);
 $search          = PMF_Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_STRIPPED);
+$page            = PMF_Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);;
 
 // Search only on current language (default)
 $allLanguages = false;
@@ -44,6 +45,16 @@ if (!is_null($inputLanguage)) {
     $allLanguages = true;
 }
 
+// Pagination options
+$options = array('baseUrl'         => '',
+                 'total'           => 0,
+                 'perPage'         => PMF_Configuration::getInstance()->get('main.numberOfRecordsPerPage'),
+                 'pageParamName'   => 'seite',
+                 'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgNext'] . '</a>',
+                 'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgPrevious'] . '</a>',
+                 'layoutTpl'       => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>');
+        
+$pagination          = new PMF_Pagination($options);
 $faqsearch           = new PMF_Search($db, $Language);
 $printResult         = '';
 $tagSearch           = false;
@@ -69,6 +80,8 @@ if (!is_null($inputSearchTerm) || !is_null($search)) {
     if (!is_null($search)) {
         $inputSearchTerm = $db->escapeString(strip_tags($search));
     }
+    
+    //$result           = $search->search($inputSearchTerm, $allLanguages);
     $printResult      = searchEngine($inputSearchTerm, $inputCategory, $allLanguages);
     $inputSearchTerm  = stripslashes($inputSearchTerm);
     
@@ -80,23 +93,13 @@ $inputCategory = ('%' == $inputCategory) ? 0 : $inputCategory;
 
 $faqsession->userTracking('fulltext_search', $inputSearchTerm);
 
-$openSearchLink = sprintf('<a class="searchplugin" href="#" onclick="window.external.AddSearchProvider(\'%s/opensearch.php\');">%s</a>',
-    PMF_Link::getSystemUri('/index.php'),
-    $PMF_LANG['opensearch_plugin_install']);
-    
-$mostPopularSearches   = '';
 $mostPopularSearchData = $faqsearch->getMostPopularSearches($faqconfig->get('main.numberSearchTerms'));
 
-foreach ($mostPopularSearchData as $searchItem) {
-	if (PMF_String::strlen($searchItem['searchterm']) > 0) {
-        $mostPopularSearches .= sprintf('<li><a href="?search=%s&submit=Search&action=search">%s</a> (%dx)</li>',
-            urlencode($searchItem['searchterm']),
-            $searchItem['searchterm'],
-            $searchItem['number']);
-	}
-}
-
 $categoryLayout = new PMF_Category_Layout(new PMF_Category_Tree_Helper(new PMF_Category_Tree($categoryData)));
+
+$searchHelper = PMF_Helper_Search::getInstance();
+$searchHelper->setPagination($pagination);
+$searchHelper->setPlurals($plr);
 
 $tpl->processTemplate('writeContent', array(
     'msgSearch'                => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgSearch']),
@@ -109,8 +112,8 @@ $tpl->processTemplate('writeContent', array(
     'writeSendAdress'          => '?'.$sids.'action=search',
     'msgSearchWord'            => $PMF_LANG['msgSearchWord'],
     'printResult'              => $printResult,
-    'openSearchLink'           => $openSearchLink,
+    'openSearchLink'           => $searchHelper->renderOpenSearchLink(),
     'msgMostPopularSearches'   => $PMF_LANG['msgMostPopularSearches'],
-    'printMostPopularSearches' => '<ul class="phpmyfaq_ul">' . $mostPopularSearches . '</ul>'));
+    'printMostPopularSearches' => $searchHelper->renderMostPopularSearches($mostPopularSearchData)));
 
 $tpl->includeTemplate('writeContent', 'index');

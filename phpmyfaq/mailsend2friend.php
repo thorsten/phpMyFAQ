@@ -44,7 +44,7 @@ if (!is_null($name) && !is_null($mailfrom) && is_array($mailto) && IPCheck($_SER
 
     // Backward compatibility: extract article info from the link, no template change required
     $cat = $id = $artlang = null;
-    preg_match('`index\.php\?action=artikel&cat=(?<cat>[\d]+)&id=(?<id>[\d]+)&artlang=(?<artlang>[^$]+)$`', $link, $matches);
+    PMF_String::preg_match('`index\.php\?action=artikel&cat=(?<cat>[\d]+)&id=(?<id>[\d]+)&artlang=(?<artlang>[^$]+)$`', $link, $matches);
     if (isset($matches['cat'])) {
         $cat = (int)$matches['cat'];
     }

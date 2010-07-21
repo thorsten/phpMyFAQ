@@ -53,7 +53,7 @@ if ($permission['viewlog']) {
     $pages   = PMF_Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
     $page    = PMF_Filter::filterInput(INPUT_GET, 'page' , FILTER_VALIDATE_INT, 1);
     
-   	$search        = new PMF_Search($db, $Language);
+    $search        = new PMF_Search($db, $Language);
     $searchesCount = $search->getSearchesCount();
     $searchesList  = $search->getMostPopularSearches($searchesCount + 1, true);
     

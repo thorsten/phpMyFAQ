@@ -149,49 +149,37 @@ if ($permission['editbt'] || $permission['delbt']) {
         }
 
     } elseif ($action == "view" && !is_null($searchterm)) {
+        
+        $fdTable   = SQLPREFIX . 'faqdata';
+        $fcrTable  = SQLPREFIX . 'faqcategoryrelations';
+        $search    = PMF_Search_Factory::create($Language, array('database' => PMF_Db::getType()));
         // Search for:
         // a. solution id
         // b. full text search
+        $search->setDatabaseHandle($db)
+               ->setTable($fdTable)
+               ->setResultColumns(array(
+                    $fdTable . '.id AS id',
+                    $fdTable . '.lang AS lang',
+                    $fdTable . '.solution_id AS solution_id',
+                    $fcrTable . '.category_id AS category_id',
+                    $fdTable . '.sticky AS sticky',
+                    $fdTable . '.active AS active',
+                    $fdTable . '.thema AS thema',
+                    $fdTable . '.content AS content',
+                    $fdTable . '.datum AS date'))
+               ->setJoinedTable($fcrTable)
+               ->setJoinedColumns(array(
+                    $fdTable . '.id = ' . $fcrTable . '.record_id',
+                    $fdTable . '.lang = ' . $fcrTable . '.record_lang'));
+        
         if (is_numeric($searchterm)) {
-            // a. solution id
-            $result = $db->search(SQLPREFIX.'faqdata',
-                                  array(SQLPREFIX.'faqdata.id AS id',
-                                        SQLPREFIX.'faqdata.lang AS lang',
-                                        SQLPREFIX.'faqcategoryrelations.category_id AS category_id',
-                                        SQLPREFIX.'faqdata.solution_id AS solution_id',
-                                        SQLPREFIX.'faqdata.sticky AS sticky',
-                                        SQLPREFIX.'faqdata.active AS active',
-                                        SQLPREFIX.'faqdata.thema AS thema',
-                                        SQLPREFIX.'faqdata.content AS content',
-                                        SQLPREFIX.'faqdata.datum AS date'),
-                                  SQLPREFIX.'faqcategoryrelations',
-                                  array(SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id',
-                                        SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang'),
-                                  array(SQLPREFIX.'faqdata.solution_id'),
-                                  $searchterm);
+            $search->setMatchingColumns(array($fdTable . '.solution_id'));
         } else {
-            // b. full text search
-            $result = $db->search(SQLPREFIX."faqdata",
-                                  array(SQLPREFIX.'faqdata.id AS id',
-                                        SQLPREFIX.'faqdata.lang AS lang',
-                                        SQLPREFIX.'faqcategoryrelations.category_id AS category_id',
-                                        SQLPREFIX.'faqdata.solution_id AS solution_id',
-                                        SQLPREFIX.'faqdata.sticky AS sticky',
-                                        SQLPREFIX.'faqdata.active AS active',
-                                        SQLPREFIX.'faqdata.thema AS thema',
-                                        SQLPREFIX.'faqdata.content AS content',
-                                        SQLPREFIX.'faqdata.datum AS date'),
-                                  SQLPREFIX.'faqcategoryrelations',
-                                  array(SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id',
-                                        SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang'),
-                                  array(SQLPREFIX.'faqdata.thema',
-                                        SQLPREFIX.'faqdata.content',
-                                        SQLPREFIX.'faqdata.keywords'),
-                                  $searchterm,
-                                  array(),
-                                  array(SQLPREFIX.'faqcategoryrelations.category_id',  SQLPREFIX.'faqdata.id'));
+            $search->setMatchingColumns(array($fdTable . '.thema', $fdTable . '.content', $fdTable . '.keywords'));
         }
         
+        $result         = $search->search($searchterm);; // @todo add missing ordering!
         $laction        = 'view';
         $internalSearch = '&amp;search='.$searchterm;
         $wasSearch      = true;

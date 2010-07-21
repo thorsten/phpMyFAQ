@@ -44,6 +44,13 @@ class PMF_Db
     private static $instance = null;
     
     /**
+     * Database type
+     * 
+     * @var string
+     */
+    private static $dbType = null;
+    
+    /**
      * Constructor
      * 
      */
@@ -60,6 +67,8 @@ class PMF_Db
      */
 	public static function dbSelect($type)
     {
+        self::$dbType = $type;
+        
         $file = str_replace('\\', '/', __FILE__);
         $dir  = substr($file, 0, strrpos($file, "/")) . '/PMF_DB/';
         $type = ucfirst($type);
@@ -95,6 +104,16 @@ class PMF_Db
      */
     private function __clone()
     {
+    }
+    
+    /**
+     * Returns the database type
+     * 
+     * @return string
+     */
+    public static function getType()
+    {
+        return self::$dbType;
     }
     
     /**

@@ -336,13 +336,13 @@ if (obj.options.length > obj.selectedIndex) {
     <label class="left">LDAP server port:</label>
     <input class="input" type="text" name="ldap_port" value="389" title="Please enter the port of your LDAP server here." /><br />
 
-    <label class="left">LDAP username:</label>
+    <label class="left">LDAP user DN:</label>
     <input class="input" type="text" name="ldap_user" title="Please enter your specified RDN username here." /><br />
 
     <label class="left">LDAP password:</label>
     <input class="input" name="ldap_password" type="password" title="Please enter your LDAP password here." /><br />
 
-    <label class="left">Distinguished name (dn):</label>
+    <label class="left">LDAP base search DN:</label>
     <input class="input" type="text" name="ldap_base" title="Please enter your distinguished name, e.g. 'cn=John Smith,ou=Accounts,o=My Company,c=US' here." />
 
 </fieldset>
@@ -502,7 +502,7 @@ foreach ($permLevels as $level => $desc) {
         
         $ldap_user = PMF_Filter::filterInput(INPUT_POST, 'ldap_user', FILTER_SANITIZE_STRING);
         if (is_null($ldap_user)) {
-            print "<p class=\"error\"><strong>Error:</strong> There's no LDAP username input.</p>\n";
+            print "<p class=\"error\"><strong>Error:</strong> There's no LDAP user DN input.</p>\n";
             HTMLFooter();
             die();
         }
@@ -516,7 +516,7 @@ foreach ($permLevels as $level => $desc) {
         
         $ldap_base = PMF_Filter::filterInput(INPUT_POST, 'ldap_base', FILTER_SANITIZE_STRING);
         if (is_null($ldap_base)) {
-            print "<p class=\"error\"><strong>Error:</strong> There's no distinguished name input for LDAP.</p>\n";
+            print "<p class=\"error\"><strong>Error:</strong> There's no LDAP base search DN input.</p>\n";
             HTMLFooter();
             die();
         }
@@ -566,7 +566,7 @@ foreach ($permLevels as $level => $desc) {
     $datafile = PMF_ROOT_DIR . '/config/database.php';
     $ret = file_put_contents($datafile, "<?php\n\$DB[\"server\"] = '".$sql_server."';\n\$DB[\"user\"] = '".$sql_user."';\n\$DB[\"password\"] = '".$sql_passwort."';\n\$DB[\"db\"] = '".$sql_db."';\n\$DB[\"prefix\"] = '".$sqltblpre."';\n\$DB[\"type\"] = '".$sql_type."';", LOCK_EX);
     if (!$ret) {
-        print "<p class=\"error\"><strong>Error:</strong> Cannot write to data.php.</p>";
+        print "<p class=\"error\"><strong>Error:</strong> Cannot write to ./config/database.php.</p>";
         HTMLFooter();
         cleanInstallation();
         die();
@@ -577,7 +577,7 @@ foreach ($permLevels as $level => $desc) {
         $datafile = PMF_ROOT_DIR . '/config/ldap.php';
         $ret = file_put_contents($datafile, "<?php\n\$PMF_LDAP[\"ldap_server\"] = '".$ldap_server."';\n\$PMF_LDAP[\"ldap_port\"] = '".$ldap_port."';\n\$PMF_LDAP[\"ldap_user\"] = '".$ldap_user."';\n\$PMF_LDAP[\"ldap_password\"] = '".$ldap_password."';\n\$PMF_LDAP[\"ldap_base\"] = '".$ldap_base."';", LOCK_EX);
         if (!$ret) {
-            print "<p class=\"error\"><strong>Error:</strong> Cannot write to dataldap.php.</p>";
+            print "<p class=\"error\"><strong>Error:</strong> Cannot write to ./config/ldap.php.</p>";
             HTMLFooter();
             cleanInstallation();
             die();

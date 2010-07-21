@@ -27,6 +27,8 @@ require_once 'PHPUnit/Framework/TestSuite.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
 require_once 'PMF_Search_DatabaseTest.php';
+require_once 'PMF_Search_FactoryTest.php';
+
 /**
  * Search_AllTests
  * 
@@ -45,6 +47,7 @@ class Search_AllTests
         $suite = new PHPUnit_Framework_TestSuite('phpMyFAQ PMF_Search');
         
         $suite->addTestSuite('PMF_Search_DatabaseTest');
+        $suite->addTestSuite('PMF_Search_FactoryTest');
         
         return $suite;
     }

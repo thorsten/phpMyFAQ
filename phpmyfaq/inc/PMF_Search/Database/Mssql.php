@@ -1,6 +1,6 @@
 <?php
 /**
- * phpMyFAQ MySQL (ext/mysql) search classes
+ * phpMyFAQ MS SQL Server based search classes
  *
  * PHP Version 5.2
  *
@@ -20,11 +20,11 @@
  * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2010-06-06
+ * @since     2010-07-06
  */
 
 /**
- * PMF_Search_Database_Mysql
+ * PMF_Search_Database_Mssql
  *
  * @category  phpMyFAQ
  * @package   PMF_Search_Database
@@ -32,9 +32,9 @@
  * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2010-06-06
+ * @since     2010-07-06
  */
-class PMF_Search_Database_Mysql extends PMF_Search_Database
+class PMF_Search_Database_Mssql extends PMF_Search_Database
 {
     /**
      * Constructor
@@ -68,36 +68,14 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
                 FROM 
                     %s %s %s
                 WHERE
-                    MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE)
+                    %s
                     %s",
                 $this->getResultColumns(),
                 $this->getTable(),
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
-                $this->getMatchingColumns(),
-                $this->dbHandle->escape_string($searchTerm),
+                $this->getMatchClause($searchTerm),
                 $this->getConditions());
-            
-            $this->resultSet = $this->dbHandle->query($query);
-            
-            // Fallback for searches with less than three characters
-            if (0 == $this->dbHandle->num_rows($this->resultSet)) {
-                
-                $query = sprintf("
-                    SELECT
-                        %s
-                    FROM 
-                        %s %s %s
-                    WHERE
-                        %s
-                        %s",
-                    $this->getResultColumns(),
-                    $this->getTable(),
-                    $this->getJoinedTable(),
-                    $this->getJoinedColumns(),
-                    $this->getMatchClause($searchTerm),
-                    $this->getConditions());
-            }
             
             $this->resultSet = $this->dbHandle->query($query);
         }

@@ -46,7 +46,7 @@ class PMF_Helper_Search extends PMF_Helper
     /**
      * Language
      * 
-     * @var string
+     * @var PMF_Language
      */
     private $language = null;
     
@@ -55,18 +55,16 @@ class PMF_Helper_Search extends PMF_Helper
      * 
      * @var PMF_Pagination
      */
-    public $pagination = null;
+    private $pagination = null;
     
     /**
      * Constructor
      * 
-     * @param PMF_Pagination $pagination PMF_Pagination object
-     * 
      * @return PMF_Helper_Search
      */
-    private function __construct(PMF_Pagination $pagination)
+    private function __construct()
     {
-        $this->pagination = $pagination;
+        $this->pmfLang = $this->getTranslations();
     }
     
     /**
@@ -91,6 +89,97 @@ class PMF_Helper_Search extends PMF_Helper
      */
     private function __clone()
     {
+    }
+    
+    /**
+     * PMF_Language setter
+     * 
+     * @param PMF_Language $language PMF_Language
+     */
+    public function setLanguage(PMF_Language $language)
+    {
+        $this->language = $language;
+    }
+    
+    /**
+     * PMF_Pagination setter
+     * 
+     * @param PMF_Pagination $pagination PMF_Pagination
+     */
+    public function setPagination(PMF_Pagination $pagination)
+    {
+        $this->pagination = $pagination;
+    }
+    
+    /**
+     * Renders the OpenSearchLink
+     * 
+     * @return string
+     */
+    public function renderOpenSearchLink()
+    {
+        return sprintf('<a class="searchplugin" href="#" onclick="window.external.AddSearchProvider(\'%s/opensearch.php\');">%s</a>',
+            PMF_Link::getSystemUri('/index.php'),
+            $this->translation['opensearch_plugin_install']);
+    }
+    
+    /**
+     * Renders the result page for Instant Response
+     * 
+     * @param PMF_Search_Resultset $resultSet PMF_Search_Resultset object
+     * 
+     * @return string
+     */
+    public function renderInstantResponseResult(PMF_Search_Resultset $resultSet)
+    {
         
     }
+    
+    /**
+     * Renders the result page for the main search page
+     * 
+     * @param PMF_Search_Resultset $resultSet PMF_Search_Resultset object
+     * 
+     * @return string
+     */
+    public function renderSearchResult(PMF_Search_Resultset $resultSet)
+    {
+        $html        = '';
+        $confPerPage = PMF_Configuration::getInstance()->get('main.numberOfRecordsPerPage');
+        
+        /*
+        $html .= '<p>' . $this->plurals->GetMsg('plmsgSearchAmount', $num);
+        
+        $html .= '</p>';
+        */
+        
+        
+        $html .= $this->pagination->render();
+        
+        return $html;
+    }
+    
+    /**
+     * Renders the list of the most popular search terms
+     * 
+     * @param array $mostPopularSearches Array with popular search terms
+     * 
+     * @return string
+     */
+    public function renderMostPopularSearches(Array $mostPopularSearches)
+    {
+        $html = '<ul class="mostpupularsearcheslist">';
+        
+        foreach ($mostPopularSearches as $searchItem) {
+            if (PMF_String::strlen($searchItem['searchterm']) > 0) {
+                $html .= sprintf('<li><a href="?search=%s&submit=Search&action=search">%s</a> (%dx)</li>',
+                    urlencode($searchItem['searchterm']),
+                    $searchItem['searchterm'],
+                    $searchItem['number']);
+            }
+        }
+        
+        return $html . '</ul>';
+    }
+    
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Test case for PMF_Category
+ * Test case for PMF_Search_Database
  * 
  * PHP Version 5.2
  * 
@@ -26,6 +26,7 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Abstract.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Interface.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Database.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Database/Sqlite.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Driver.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Sqlite.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/Language.php';
@@ -103,12 +104,22 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('faqdata', $this->PMF_Search_Database->getTable());
         $this->assertType('string', $this->PMF_Search_Database->getTable());
     }
-
+    
+    public function testSetAndGetTableWithoutTable()
+    {
+        $this->assertEquals('', $this->PMF_Search_Database->getTable());
+    }
+    
     public function testSetAndGetJoinedTable()
     {
         $this->PMF_Search_Database->setJoinedTable('faqcategoryrelations');
-        $this->assertEquals('faqcategoryrelations', $this->PMF_Search_Database->getJoinedTable());
+        $this->assertEquals(' LEFT JOIN faqcategoryrelations ON ', $this->PMF_Search_Database->getJoinedTable());
         $this->assertType('string', $this->PMF_Search_Database->getJoinedTable());
+    }
+    
+    public function testSetAndGetJoinedTableWithoutJoinedTable()
+    {
+        $this->assertEquals('', $this->PMF_Search_Database->getJoinedTable());
     }
     
     public function testSetAndGetResultColumns()
@@ -119,8 +130,16 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
                                'faqdata.content AS answer');
         
         $this->PMF_Search_Database->setResultColumns($resultColumns);
-        $this->assertEquals('faqdata.id AS id, faqdata.lang AS lang, faqdata.thema AS question, faqdata.content AS answer', $this->PMF_Search_Database->getResultColumns());
-        $this->assertType('string', $this->PMF_Search_Database->getResultColumns());
+        $this->assertEquals('faqdata.id AS id, faqdata.lang AS lang, faqdata.thema AS question, faqdata.content AS answer', 
+            $this->PMF_Search_Database->getResultColumns());
+        $this->assertType('string', 
+            $this->PMF_Search_Database->getResultColumns());
+    }
+    
+    public function testSetAndGetResultColumnsWithoutResultColumns()
+    {
+        $this->PMF_Search_Database->setResultColumns(array());
+        $this->assertEquals('', $this->PMF_Search_Database->getResultColumns());
     }
     
     public function testSetAndGetJoinedColumns()
@@ -129,8 +148,16 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
                                'faqdata.lang = faqcategoryrelations.record_lang');
         
         $this->PMF_Search_Database->setJoinedColumns($joinedColumns);
-        $this->assertEquals('faqdata.id = faqcategoryrelations.record_id AND faqdata.lang = faqcategoryrelations.record_lang ', $this->PMF_Search_Database->getJoinedColumns());
-        $this->assertType('string', $this->PMF_Search_Database->getJoinedColumns());
+        $this->assertEquals('faqdata.id = faqcategoryrelations.record_id AND faqdata.lang = faqcategoryrelations.record_lang ', 
+            $this->PMF_Search_Database->getJoinedColumns());
+        $this->assertType('string', 
+            $this->PMF_Search_Database->getJoinedColumns());
+    }
+    
+    public function testSetAndGetJoinedColumnsWithoutJoinedColumns()
+    {
+        $this->PMF_Search_Database->setJoinedColumns(array());
+        $this->assertEquals('', $this->PMF_Search_Database->getJoinedColumns());
     }
     
     public function testSetAndGetMatchingColumns()
@@ -140,7 +167,63 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
                                  'faqdata.keywords');
         
         $this->PMF_Search_Database->setMatchingColumns($matchingColumns);
-        $this->assertEquals('faqdata.thema, faqdata.content, faqdata.keywords', $this->PMF_Search_Database->getMatchingColumns());
-        $this->assertType('string', $this->PMF_Search_Database->getMatchingColumns());
+        $this->assertEquals('faqdata.thema, faqdata.content, faqdata.keywords', 
+            $this->PMF_Search_Database->getMatchingColumns());
+        $this->assertType('string', 
+            $this->PMF_Search_Database->getMatchingColumns());
+    }
+    
+    public function testSetAndGetMatchingColumnsWithoutColums()
+    {
+        $this->PMF_Search_Database->setMatchingColumns(array());
+        $this->assertEquals('', $this->PMF_Search_Database->getMatchingColumns());
+    }
+    
+    public function testSetAndGetConditions()
+    {
+        $conditions = array('faqdata.active' => "'yes'",
+                            'faqcategoryrelations.category_id' => 1);
+        
+        $this->PMF_Search_Database->setConditions($conditions);
+        $this->assertEquals(" AND faqdata.active = 'yes' AND faqcategoryrelations.category_id = 1", 
+            $this->PMF_Search_Database->getConditions());
+        $this->assertType('string', 
+            $this->PMF_Search_Database->getConditions());
+    }
+    
+    public function testSetAndGetConditionsWithoutConditions()
+    {
+        $this->PMF_Search_Database->setConditions(array());
+        $this->assertEquals('', $this->PMF_Search_Database->getConditions());
+    }
+    
+    public function testGetMatchClause()
+    {
+        $this->PMF_Search_Database->setDatabaseHandle($this->dbHandle);
+        $this->PMF_Search_Database->setMatchingColumns(array('faqdata.author'));
+        $this->assertEquals(" (faqdata.author LIKE '%Thorsten%')", 
+            $this->PMF_Search_Database->getMatchClause('Thorsten'));
+        $this->assertType('string', 
+            $this->PMF_Search_Database->getMatchClause('Thorsten'));
+    }
+    
+    public function testGetMatchClauseWithTwoSearchTerms()
+    {
+        $this->PMF_Search_Database->setDatabaseHandle($this->dbHandle);
+        $this->PMF_Search_Database->setMatchingColumns(array('faqdata.author'));
+        $this->assertEquals(" (faqdata.author LIKE '%Thorsten%') OR (faqdata.author LIKE '%Rinne%')", 
+            $this->PMF_Search_Database->getMatchClause('Thorsten Rinne'));
+        $this->assertType('string', 
+            $this->PMF_Search_Database->getMatchClause('Thorsten'));
+    }
+    
+    public function testGetMatchClauseWithTwoColumns()
+    {
+        $this->PMF_Search_Database->setDatabaseHandle($this->dbHandle);
+        $this->PMF_Search_Database->setMatchingColumns(array('faqdata.author', 'faqdata.thema'));
+        $this->assertEquals(" (faqdata.author LIKE '%Thorsten%' OR faqdata.thema LIKE '%Thorsten%')", 
+            $this->PMF_Search_Database->getMatchClause('Thorsten'));
+        $this->assertType('string', 
+            $this->PMF_Search_Database->getMatchClause('Thorsten'));
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Implements resultsets for phpMyFAQ search classes
+ * Factory class for phpMyFAQ search classes
  *
  * PHP Version 5.2
  *
@@ -20,11 +20,11 @@
  * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2010-06-06
+ * @since     2010-07-06
  */
 
 /**
- * PMF_Search_Resultset
+ * PMF_Search_Factory
  *
  * @category  phpMyFAQ
  * @package   PMF_Search
@@ -32,33 +32,26 @@
  * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2010-06-06
+ * @since     2010-07-06
  */
-class PMF_Search_Resultset
+class PMF_Search_Factory
 {
     /**
-     * Ordering of resultset
+     * Factory for generating search instances
      * 
-     * @var string
+     * @param PMF_Language $language      Language object
+     * @param array        $searchHandler Array with informations about search
+     *                                    handlers, e.g.
+     *                                    array('database' => 'mysql')
+     * 
+     * @return PMF_Search_Abstract
      */
-    protected $ordering;
-    
-    /**
-     * PMF_User object
-     * 
-     * @var PMF_User
-     */
-    protected $user = null;
-    
-    /**
-     * Constructor
-     * 
-     * @param PMF_User $user PMF_User object
-     * 
-     * @return PMF_Search_Resultset
-     */
-    public function __construct(PMF_User $user)
+    public static function create(PMF_Language $language, Array $searchHandler)
     {
-        $this->user = $user;
+        $searchClass = sprintf('PMF_Search_%s_%s',
+            ucfirst(key($searchHandler)),
+            ucfirst(current($searchHandler)));
+        
+        return new $searchClass($language);
     }
 }

@@ -60,23 +60,30 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     /**
      * Columns for the resultset
      * 
-     * @var string
+     * @var array
      */
-    protected $resultColumns = '';
+    protected $resultColumns = array();
     
     /**
      * Columns for the joined table
      * 
-     * @var string
+     * @var array
      */
-    protected $joinedColumns = '';
+    protected $joinedColumns = array();
     
     /**
      * Matching columns for the search
      * 
-     * @var string
+     * @var array
      */
-    protected $matchingColumns = '';
+    protected $matchingColumns = array();
+    
+    /**
+     * Conditions columns with their values
+     * 
+     * @var array
+     */
+    protected $conditions = array();
     
     /**
      * Constructor
@@ -95,7 +102,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      * 
      * @param string $searchTerm Search term
      * 
-     * @return boolean
+     * @return resource
      * 
      * @throws PMF_Search_Exception
      */
@@ -105,12 +112,13 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
             SELECT
                 %s
             FROM 
-                %s %s
+                %s %s %s
             WHERE
                 %s = %d",
             $this->getResultColumns(),
             $this->getTable(),
             $this->getJoinedTable(),
+            $this->getJoinedColumns(),
             $this->getMatchingColumns(),
             $searchTerm);
         
@@ -118,26 +126,17 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     }
     
     /**
-     * Returns the result of the search
-     * 
-     * @return PMF_Search_Resultset
-     * 
-     * @throws PMF_Search_Exception
-     */
-    public function getResult()
-    {
-    }
-    
-    /**
      * Setter for the database handle
      * 
      * @param PMF_DB_Driver $dbHandle Database Handle
      * 
-     * @return void
+     * @return PMF_Search_Database
      */
     public function setDatabaseHandle(PMF_DB_Driver $dbHandle)
     {
         $this->dbHandle = $dbHandle;
+        
+        return $this;
     }
     /**
      * Getter for the database handle
@@ -154,11 +153,13 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      * 
      * @param string $table Table where search should be performed
      * 
-     * @return void
+     * @return PMF_Search_Database
      */
     public function setTable($table)
     {
         $this->table = $table;
+        
+        return $this;
     }
     
     /**
@@ -176,11 +177,13 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      * 
      * @param string $joinedTable Joined table where search should be performed
      * 
-     * @return void
+     * @return PMF_Search_Database
      */
     public function setJoinedTable($joinedTable = '')
     {
         $this->joinedTable = $joinedTable;
+        
+        return $this;
     }
     
     /**
@@ -190,7 +193,11 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      */
     public function getJoinedTable()
     {
-        return $this->joinedTable;
+        if (empty($this->joinedTable)) {
+            return '';
+        } else {
+            return ' LEFT JOIN ' . $this->joinedTable . ' ON ';
+        }
     }
     
     /**
@@ -198,17 +205,13 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      * 
      * @param array $columns Array of columns
      * 
-     * @return void
+     * @return PMF_Search_Database
      */
     public function setResultColumns(Array $columns)
     {
-        foreach ($columns as $column) {
-            if (empty($this->resultColumns)) {
-                $this->resultColumns = $column;
-            } else {
-                $this->resultColumns .= ', ' . $column;
-            }
-        }
+        $this->resultColumns = $columns;
+        
+        return $this;
     }
     
     /**
@@ -218,7 +221,17 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      */
     public function getResultColumns()
     {
-        return $this->resultColumns;
+        $resultColumns = '';
+        
+        foreach ($this->resultColumns as $column) {
+            if (empty($resultColumns)) {
+                $resultColumns = $column;
+            } else {
+                $resultColumns .= ', ' . $column;
+            }
+        }
+        
+        return $resultColumns;
     }
     
     /**
@@ -226,15 +239,13 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      * 
      * @param array $joinedColumns Array of columns
      * 
-     * @return void
+     * @return PMF_Search_Database
      */
     public function setJoinedColumns(Array $joinedColumns)
     {
-        foreach ($joinedColumns as $column) {
-            $this->joinedColumns .= $column . ' AND ';
-        }
+        $this->joinedColumns = $joinedColumns;
         
-        $this->joinedColumns = PMF_String::substr($this->joinedColumns, 0, -4);
+        return $this;
     }
     
     /**
@@ -244,7 +255,13 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      */
     public function getJoinedColumns()
     {
-        return $this->joinedColumns;
+        $joinedColumns = '';
+        
+        foreach ($this->joinedColumns as $column) {
+            $joinedColumns .= $column . ' AND ';
+        }
+        
+        return PMF_String::substr($joinedColumns, 0, -4);
     }
     
     /**
@@ -252,11 +269,13 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      * 
      * @param array $matchingColumns Array of columns
      * 
-     * @return void
+     * @return PMF_Search_Database
      */
     public function setMatchingColumns(Array $matchingColumns)
     {
-        $this->matchingColumns = implode(', ', $matchingColumns);
+        $this->matchingColumns = $matchingColumns;
+        
+        return $this;
     }
     
     /**
@@ -266,6 +285,72 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      */
     public function getMatchingColumns()
     {
-        return $this->matchingColumns;
+        return implode(', ', $this->matchingColumns);
+    }
+    
+    /**
+     * Sets the part of the SQL query with the condisions
+     * 
+     * @param array $conditions Array of columns
+     * 
+     * @return PMF_Search_Database
+     */
+    public function setConditions(Array $conditions)
+    {
+        $this->conditions = $conditions;
+        
+        return $this;
+    }
+    
+    /**
+     * Returns the part of the SQL query with the conditions
+     * 
+     * @return string
+     */
+    public function getConditions()
+    {
+        $conditions = '';
+        
+        if (count($this->conditions)) {
+            foreach ($this->conditions as $column => $value) {
+                $conditions .= " AND " . $column . " = " . $value;
+            }
+        }
+        
+        return $conditions;
+    }
+    
+    /**
+     * Creates the part for the WHERE clause
+     * 
+     * @param string $searchTerm Search term
+     * 
+     * @return string
+     */
+    public function getMatchClause($searchTerm = '')
+    {
+        $keys     = PMF_String::preg_split("/\s+/", $searchTerm);
+        $numKeys  = count($keys);
+        $numMatch = count($this->matchingColumns);
+        $where    = '';
+        
+        for ($i = 0; $i < $numKeys; $i++) {
+            if (strlen($where) != 0 ) {
+                $where = $where . " OR";
+            }
+            $where = $where . " (";
+            for ($j = 0; $j < $numMatch; $j++) {
+                if ($j != 0) {
+                    $where = $where." OR ";
+                }
+                $where = sprintf("%s%s LIKE '%%%s%%'", 
+                    $where, 
+                    $this->matchingColumns[$j], 
+                    $this->dbHandle->escape_string($keys[$i]));
+            }
+            $where .= ")";
+        }
+        
+        return $where;
     }
 }

@@ -163,17 +163,21 @@ class PMF_Utils
 
     /**
      * Shortens a string for a given number of words
-     *
+     * 
      * @param  string  $str  String  
-     * @param  integer $char Character
+     * @param  integer $char Characters
+     * 
      * @return string
+     * 
+     * @todo This function doesn't work with Chinese, Japanese and Korean
+     *       because they don't have spaces as word delimiters
      */
     public static function makeShorterText($str, $char)
     {
-        $str = PMF_String::preg_replace('/\s+/', ' ', $str);
-        $arrStr = explode(' ', $str);
+        $str      = PMF_String::preg_replace('/\s+/u', ' ', $str);
+        $arrStr   = explode(' ', $str);
         $shortStr = '';
-        $num = count($arrStr);
+        $num      = count($arrStr);
 
         if ($num > $char) {
             for ($j = 0; $j <= $char; $j++) {
