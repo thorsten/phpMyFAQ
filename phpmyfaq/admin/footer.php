@@ -85,7 +85,7 @@ tinymce.create('tinymce.plugins.internalFaqLinkPlugin', {
                   $record['category_id'],
                   $record['id'],
                   $record['lang'],
-                  trim(str_replace("'", "`", str_replace(array("\n", "\r", "\r\n"), '', $record['title']))));
+                  trim(str_replace("'", "`", addslashes(str_replace(array("\n", "\r", "\r\n"), '', $record['title'])))));
           }
 ?>
 
