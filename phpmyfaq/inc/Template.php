@@ -478,28 +478,6 @@ class PMF_Template
     }
     
     /**
-     * Set the template set name to use
-     * 
-     * @param $tplSetName
-     * 
-     * @return null
-     */
-    public static function setTplSetName($tplSetName)
-    {
-        self::$tplSetName = $tplSetName;
-    }
-    
-    /**
-     * Get name of the actual template set
-     * 
-     * @return string
-     */
-    public static function getTplSetName()
-    {
-        return self::$tplSetName;	
-    }
-    
-    /**
      * Init ajax output
      *
      * @return void
