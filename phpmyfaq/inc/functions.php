@@ -545,7 +545,7 @@ function getSearchData($searchterm, $asResource = false, $cat = '%', $allLanguag
  */
 function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = false, $instantResponse = false)
 {
-    global $sids, $category, $PMF_LANG, $plr, $LANGCODE, $faq, $current_user, $current_groups, $Language;
+    global $sids, $category, $PMF_LANG, $plr, $LANGCODE, $faq, $current_user, $current_groups, $Language, $categoryLayout;
 
     $_searchterm   = PMF_String::htmlspecialchars(stripslashes($searchterm), ENT_QUOTES, 'utf-8');
     $seite         = 1;
@@ -638,7 +638,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
 
             $b_permission = false;
             //Groups Permission Check
-            if ($faqconfig->get('main.permLevel') == 'medium') {
+            if (PMF_Configuration::getInstance()->get('main.permLevel') == 'medium') {
                 $perm_group = $faqGroup->fetch($row->id);
                 foreach ($current_groups as $value){
                     if ($value == $perm_group->group_id) {
@@ -646,7 +646,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
                     }
                 }
             }
-            if ($faqconfig->get('main.permLevel') == 'basic' || $b_permission) {
+            if (PMF_Configuration::getInstance()->get('main.permLevel') == 'basic' || $b_permission) {
                 $perm_user = $faqUser->fetch($row->id);
                 foreach ($perm_user as $value) {
                     if ($value == -1) {

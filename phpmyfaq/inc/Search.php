@@ -224,7 +224,7 @@ class PMF_Search
         
         if (is_resource($result)) {
             $i = 0;
-            while ($row = $this->db->fetch_object($result)) {
+            while ($row = $this->db->fetchObject($result)) {
                 if ($i < $numResults) {
                     $searchResult[] = (array)$row;
                 }

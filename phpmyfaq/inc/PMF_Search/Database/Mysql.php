@@ -62,6 +62,7 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
         if (is_numeric($searchTerm)) {
             parent::search($searchTerm);
         } else {
+    
             $query = sprintf("
                 SELECT
                     %s
@@ -75,13 +76,13 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
                 $this->getMatchingColumns(),
-                $this->dbHandle->escape_string($searchTerm),
+                $this->dbHandle->escapeString($searchTerm),
                 $this->getConditions());
             
             $this->resultSet = $this->dbHandle->query($query);
             
             // Fallback for searches with less than three characters
-            if (0 == $this->dbHandle->num_rows($this->resultSet)) {
+            if (0 == $this->dbHandle->numRows($this->resultSet)) {
                 
                 $query = sprintf("
                     SELECT
@@ -95,7 +96,7 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
                     $this->getTable(),
                     $this->getJoinedTable(),
                     $this->getJoinedColumns(),
-                    $this->getMatchClause($searchTerm),
+                    $this->getMatchClause($this->dbHandle->escapeString($searchTerm)),
                     $this->getConditions());
             }
             

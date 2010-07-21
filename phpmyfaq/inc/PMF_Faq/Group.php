@@ -171,7 +171,8 @@ class PMF_Faq_Group extends PMF_Faq_Abstract implements PMF_Faq_Interface
         if (!$result) {
             throw new PMF_Exception($this->db->error());
         } else {
-            $this->permission = array_shift($this->db->fetchAll($result));
+            $res              = $this->db->fetchAll($result);
+            $this->permission = array_shift($res);
         }
         
         return $this->permission;
