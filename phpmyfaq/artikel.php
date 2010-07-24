@@ -83,35 +83,10 @@ if (!is_null($highlight) && $highlight != "/" && $highlight != "<" && $highlight
     $highlight   = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']'), '', $highlight);
     $highlight   = preg_quote($highlight, '/');
     $searchItems = explode(' ', $highlight);
-    $attributes  = array(
-        'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name', 'face',
-        'size', 'dir', 'onclick', 'ondblclick', 'onmousedown', 'onmouseup',
-        'onmouseover', 'onmousemove', 'onmouseout', 'onkeypress', 'onkeydown',
-        'onkeyup');
 
     foreach ($searchItems as $item) {
-        $thema = PMF_String::preg_replace_callback(
-            '/'
-            // a. the glossary item could be an attribute name
-            .'('.$item.'="[^"]*")|'
-            // b. the glossary item could be inside an attribute value
-            .'(('.implode('|', $attributes).')="[^"]*'.$item.'[^"]*")|'
-            // c. the glossary item could be everywhere as a distinct word
-            .'(\s+)('.$item.')(\s+)'
-            .'/mis',
-            'highlight_no_links',
-            $thema);
-        $content = PMF_String::preg_replace_callback(
-            '/'
-            // a. the glossary item could be an attribute name
-            .'('.$item.'="[^"]*")|'
-            // b. the glossary item could be inside an attribute value
-            .'(('.implode('|', $attributes).')="[^"]*'.$item.'[^"]*")|'
-            // c. the glossary item could be everywhere as a distinct word
-            .'(\s+)('.$item.')(\s+)'
-            .'/mis',
-            'highlight_no_links',
-            $content);
+        $thema   = PMF_Utils::setHighlightedString($thema, $item);
+        $content = PMF_Utils::setHighlightedString($content, $item);
     }
 }
 

@@ -79,12 +79,23 @@ $category = new PMF_Category($current_user, $current_groups);
 $category->transform(0);
 $category->buildTree();
 
-$faq = new PMF_Faq();
+$faq             = new PMF_Faq();
+$faqSearch       = new PMF_Search($db, $Language);
+$faqSearchResult = new PMF_Search_Resultset($user, $faq);
 
 //
 // Handle the search requests
 //
 if (!is_null($searchString)) {
-    $result = searchEngine($db->escape_string($searchString), $categoryId, false, true, true);
-    print $result;
+    $faqSearch->setCategory($categoryId);
+    $searchResult = $faqSearch->search($searchString, false);
+    
+    $faqSearchResult->reviewResultset($searchResult);
+    
+    $faqSearchHelper = PMF_Helper_Search::getInstance();
+    $faqSearchHelper->setSearchterm($searchString);
+    $faqSearchHelper->setCategory($category);
+    $faqSearchHelper->setPlurals($plr);
+    
+    print $faqSearchHelper->renderInstantResponseResult($faqSearchResult);
 }
