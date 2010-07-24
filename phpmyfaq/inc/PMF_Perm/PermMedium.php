@@ -548,12 +548,13 @@ class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
      * the user $user_id is a member.
      *
      * @param  integer $user_id User ID
+     * 
      * @return array
      */
     public function getUserGroups($user_id)
     {
         if ($user_id <= 0 || !is_numeric($user_id)) {
-            return false;
+            return array(-1);
         }
         
         $select = sprintf("

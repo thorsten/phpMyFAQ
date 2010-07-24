@@ -2656,7 +2656,7 @@ class PMF_Faq
         $result = $this->db->query($query);
         if ($this->db->num_rows($result) > 0) {
             $row = $this->db->fetch_object($result);
-            $permissions[] = $row->permission;
+            $permissions[] = (int)$row->permission;
         }
         return $permissions;
     }
