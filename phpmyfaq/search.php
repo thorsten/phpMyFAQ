@@ -99,6 +99,19 @@ $inputCategory = ('%' == $inputCategory) ? 0 : $inputCategory;
 
 $faqsession->userTracking('fulltext_search', $inputSearchTerm);
 
+if (is_numeric($inputSearchTerm) && PMF_SOLUTION_ID_START_VALUE <= $inputSearchTerm && 
+    0 < $faqSearchResult->getNumberOfResults()) {
+    
+    // Before a redirection we must force the PHP session update for preventing data loss
+    session_write_close();
+    if (PMF_Configuration::getInstance()->get('main.enableRewriteRules')) {
+        header('Location: '.PMF_Link::getSystemUri('/index.php') . '/solution_id_' . $inputSearchTerm . '.html');
+    } else {
+        header('Location: '.PMF_Link::getSystemUri('/index.php') . '/index.php?solution_id=' . $inputSearchTerm);
+    }
+    exit();
+}
+
 $category->buildTree();
 
 $mostPopularSearchData = $faqSearch->getMostPopularSearches($faqconfig->get('main.numberSearchTerms'));
