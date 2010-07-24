@@ -107,14 +107,12 @@ class PMF_Search
     /**
      * The main search function for the full text search
      *
-     * @param string  $searchterm     Text/Number (solution id)
-     * @param boolean $allLanguages   true to search over all languages
-     * @param boolean $hasMore        true to disable the results paging
-     * @param boolean $instantRespnse true to use it for Instant Response
+     * @param string  $searchterm   Text/Number (solution id)
+     * @param boolean $allLanguages true to search over all languages
      * 
      * @return  array
      */
-    public function search($searchterm, $allLanguages = true, $hasMore = false, $instantResponse = false)
+    public function search($searchterm, $allLanguages = true)
     {
         $fdTable   = SQLPREFIX . 'faqdata';
         $fcrTable  = SQLPREFIX . 'faqcategoryrelations';
@@ -122,7 +120,7 @@ class PMF_Search
         $search    = PMF_Search_Factory::create($this->language, array('database' => PMF_Db::getType()));
         
         // Search in all or one category?
-        if (!is_null($this->categoryId)) {
+        if (!is_null($this->categoryId) && 0 < $this->categoryId) {
             $selectedCategory = array($fcrTable . '.category_id' => $this->categoryId);
             $condition        = array_merge($selectedCategory, $condition);
         }
@@ -155,11 +153,7 @@ class PMF_Search
         
         $result = $search->search($searchterm);
         
-        if ($result) {
-            $num = $this->db->num_rows($result);
-        }
-        
-        if ($num == 0) {
+        if (!$this->db->num_rows($result)) {
             return array();
         } else {
             return $this->db->fetchAll($result);

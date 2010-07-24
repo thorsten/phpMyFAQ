@@ -76,7 +76,7 @@ switch ($action) {
     case 'search':
         $search       = new PMF_Search($db, $Language);
         $searchString = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
-        $result       = $search->search($searchString, false, true, false);
+        $result       = $search->search($searchString, false);
         $url          = $faqconfig->get('main.referenceURL') . '/index.php?action=artikel&cat=%d&id=%d&artlang=%s';
         
         foreach ($result as &$data) {
