@@ -71,6 +71,7 @@ if (isset($user) && is_object($user)) {
         $current_groups = array(-1);
     }
 } else {
+    $user           = new PMF_User_CurrentUser();
     $current_user   = -1;
     $current_groups = array(-1);
 }
