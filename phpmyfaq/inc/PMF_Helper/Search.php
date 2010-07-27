@@ -165,7 +165,12 @@ class PMF_Helper_Search extends PMF_Helper
             $html .= sprintf($this->translation['msgInstantResponseMaxRecords'], $confPerPage);
             $html .= "<ul class=\"phpmyfaq_ul\">\n";
             
+            $i = 0;
             foreach ($resultSet->getResultset() as $result) {
+                
+                if ($i > $confPerPage) {
+                    continue;
+                }
                 
                 $categoryName  = $this->Category->getPath($result->category_id);
                 $question      = PMF_Utils::chopString($result->question, 15);
@@ -188,6 +193,7 @@ class PMF_Helper_Search extends PMF_Helper
                     $oLink->toHtmlAnchor(),
                     $this->translation['msgSearchContent'],
                     $answerPreview);
+                $i++;
             }
             
             $html .= "</ul>\n";

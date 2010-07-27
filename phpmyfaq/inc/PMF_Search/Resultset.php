@@ -115,7 +115,7 @@ class PMF_Search_Resultset
             // check permissions for groups
             if ('medium' == PMF_Configuration::getInstance()->get('main.permLevel')) {
                 $groupPermission = $this->faq->getPermission('group', $result->id);
-                if (in_array($groupPermission[0], $currentGroupIds)) {
+                if (count($groupPermission) && in_array($groupPermission[0], $currentGroupIds)) {
                     $permission = true;
                 }
             }
