@@ -1,11 +1,14 @@
-phpMyFAQ 2.6.7
+phpMyFAQ 2.6.8
 Codename "Portia"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.6.7 - 2010-07-30
+Version 2.6.8 - 2010-08-
+-
+
+Version 2.6.7 - 2010-07-29
 - refactored search backend (Thorsten)
 - improved pagination functionality (Thorsten)
 - fixed various problems with Microsoft SQL Server Driver for PHP (Thorsten)

@@ -55,7 +55,7 @@
 # phpMyFAQ
 #
 %define name        phpmyfaq
-%define version     2.6.7
+%define version     2.6.8
 %define release     1
 %define epoch       0
 
@@ -154,6 +154,9 @@ installation script.
 %changelog
 =======
 
+
+* Wed Jul 29 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.6.8-1
+- New upstream version 2.6.8
 
 * Mon Jun 21 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.6.7-1
 - New upstream version 2.6.7
