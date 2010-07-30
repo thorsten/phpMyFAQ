@@ -6,7 +6,8 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.6.8 - 2010-08-
--
+- fixed XML rendering issue (Thorsten)
+- 
 
 Version 2.6.7 - 2010-07-29
 - refactored search backend (Thorsten)

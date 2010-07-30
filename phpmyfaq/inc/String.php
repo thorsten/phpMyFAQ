@@ -366,4 +366,29 @@ class PMF_String
                                     null == $charset ? self::$instance->getEncoding() : $charset);
         }
     }
+    
+    /**
+     * Convert all applicable characters to HTML entities
+     * 
+     * @param string  $string        The input string. 
+     * @param integer $quote_style   Quote style
+     * @param string  $charset       Character set, UTF-8 by default
+     * @param boolean $double_encode If set to false, no encoding of existing entities
+     * 
+     * @return string
+     */
+    public static function htmlentities($string, $quote_style = ENT_COMPAT, $charset = null, $double_encode = true)
+    {
+    
+        if (version_compare(PHP_VERSION, '5.2.3', '>=')) {
+            return htmlentities($string, 
+                                $quote_style,
+                                null == $charset ? self::$instance->getEncoding() : $charset,
+                                $double_encode);
+        } else {
+            return htmlentities($string, 
+                                $quote_style,
+                                null == $charset ? self::$instance->getEncoding() : $charset);
+        }
+    }
 }

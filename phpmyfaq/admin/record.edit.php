@@ -220,7 +220,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     <label for="content"><?php print $PMF_LANG["ad_entry_content"]; ?></label>
     <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
     <textarea id="content" name="content" cols="84" rows="16" style="width: 720px; height: 480px;">
-        <?php if (isset($faqData['content'])) { print trim(PMF_String::htmlspecialchars($faqData['content'])); } ?>
+        <?php if (isset($faqData['content'])) { print trim(PMF_String::htmlentities($faqData['content'])); } ?>
     </textarea><br />
 
 <?php
