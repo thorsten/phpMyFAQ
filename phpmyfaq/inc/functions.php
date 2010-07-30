@@ -454,19 +454,6 @@ function EndSlash($string)
 //
 
 /**
- * This is a wrapper for htmlspecialchars() with a check on valid charsets.
- *
- * @param  string $string      String
- * @param  string $quote_style Quote style
- * @param  string $charset     Charset
- * @return string
- */
-function PMF_htmlentities($string, $quote_style = ENT_QUOTES, $charset = 'UTF-8')
-{
-    return htmlspecialchars($string, $quote_style, $charset);
-}
-
-/**
  * Adds a menu entry according to user permissions.
  * ',' stands for 'or', '*' stands for 'and'
  *
