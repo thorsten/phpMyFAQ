@@ -6,8 +6,10 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.6.8 - 2010-08-
+- HTML5 powered administration backend (Thorsten) 
 - updated bundled TCPDF library to version 5.6.000 (Thorsten)
 - updated bundled TinyMCE editor component to version 3.3.8 (Thorsten)
+- updated bundled phpseclib to version 0.2.1 (Thorsten)
 - fixed XML rendering issue (Thorsten)
 - updated Russian translation
     

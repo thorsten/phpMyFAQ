@@ -36,19 +36,21 @@ header("Pragma: no-cache");
 header("Content-type: text/html; charset=utf-8");
 header("Vary: Negotiate,Accept");
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
+<!DOCTYPE html>
+<html lang="<?php print $PMF_LANG['metaLanguage']; ?>">
 <head>
     <title><?php print $faqconfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
-    <meta name="copyright" content="(c) 2001-2010 phpMyFAQ Team" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta http-equiv="content-language" content="<?php print $PMF_LANG['metaLanguage']; ?>">
+    <meta name="application-name" content="phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?>">
+    <meta name="copyright" content="(c) 2001-2010 phpMyFAQ Team">
     
-    <link rel="shortcut icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
-    <link rel="icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
-    
-    <style type="text/css"> @import url(style/admin.css); </style>
-    <style type="text/css"> @import url(../inc/js/plugins/autocomplete/jquery.autocomplete.css); </style>
-    <style type="text/css"> @import url(../inc/js/plugins/datePicker/datePicker.css); </style>
+    <link rel="shortcut icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="style/admin.css" type="text/css">
+    <link rel="stylesheet" href="../inc/js/plugins/autocomplete/jquery.autocomplete.css" type="text/css">
+    <link rel="stylesheet" href="../inc/js/plugins/datePicker/datePicker.css" type="text/css">
     
     <script type="text/javascript" src="../inc/js/functions.js"></script>
     <script type="text/javascript" src="../inc/js/jquery.min.js"></script>
@@ -58,7 +60,6 @@ header("Vary: Negotiate,Accept");
     <script type="text/javascript" src="editor/tiny_mce.js?<?php print time(); ?>"></script>
 </head>
 <body id="body" dir="<?php print $PMF_LANG["dir"]; ?>">
-<a name="top"></a>
 
 <div id="wrap">
     <div id="top">
