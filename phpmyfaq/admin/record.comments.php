@@ -55,7 +55,7 @@ if ($permission['delcomment']) {
         <td class="list" width="20"><input name="faq_comments[<?php print $faqcomment['record_id']; ?>]" value="<?php print $faqcomment['comment_id']; ?>" type="checkbox" /></td>
         <td class="list">
             <span style="font-weight: bold;">
-                <a href="mailto:<?php print $faqcomment['email']; ?>"><?php print $faqcomment['user']; ?></a>
+                <a href="mailto:<?php print $faqcomment['email']; ?>"><?php print $faqcomment['username']; ?></a>
                 | <?php print date("Y-m-d", $faqcomment['date']); ?>
                 | <a href="<?php printf("../?action=artikel&cat=%d&id=%d&artlang=%s", 
                    $faqcomment['category_id'],
@@ -94,7 +94,7 @@ if ($permission['delcomment']) {
         <td class="list" width="20"><input name="news_comments[<?php print $newscomment['record_id']; ?>]" value="<?php print $newscomment['comment_id']; ?>" type="checkbox" /></td>
         <td class="list">
             <span style="font-weight: bold;">
-                <a href="mailto:<?php print $newscomment['email']; ?>"><?php print $newscomment['user']; ?></a>
+                <a href="mailto:<?php print $newscomment['email']; ?>"><?php print $newscomment['username']; ?></a>
             </span><br/>
             <?php print PMF_String::htmlspecialchars($newscomment['content']); ?>
         </td>
