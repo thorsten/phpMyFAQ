@@ -347,7 +347,7 @@ if($permission['approverec']):
     }
     
     if (!isset($faqData['date'])) { 
-    	$faqData['date'] = PMF_Date::createIsoDate(date("Y-m-d H:i:s"));
+    	$faqData['date'] = PMF_Date::createIsoDate(date('YmdHis'));
     }
 ?>
     <label class="left" for="userpermission"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
