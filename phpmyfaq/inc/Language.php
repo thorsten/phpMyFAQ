@@ -296,7 +296,7 @@ class PMF_Language
             // Simplified language syntax detection: xx[-yy]
             preg_match("/([a-z\-]+)/i", trim($_SERVER['HTTP_ACCEPT_LANGUAGE']), $matches);
             if (isset($matches[1])) {
-                $this->acceptedLanguage = PMF_String::strtolower($matches[1]);
+                $this->acceptedLanguage = strtolower($matches[1]);
             }
         }
     }
