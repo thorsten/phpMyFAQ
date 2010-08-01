@@ -392,7 +392,6 @@ if($permission['approverec']):
     if ($revisionid_selected == $faqData['revision_id']) {
 ?>
     <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_save"]; ?>" name="submit[1]" />
-    <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_preview"]; ?>" name="submit[2]" />
     <input class="submit" type="reset" value="<?php print $PMF_LANG["ad_gen_reset"]; ?>" />
 <?php
     }
