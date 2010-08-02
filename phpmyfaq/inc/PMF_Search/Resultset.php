@@ -107,7 +107,9 @@ class PMF_Search_Resultset
         
         $duplicateResults = array();
         $currentUserId    = $this->user->getUserId();
-        $currentGroupIds  = $this->user->perm->getUserGroups($currentUserId);
+        if ('medium' == PMF_Configuration::getInstance()->get('main.permLevel')) {
+            $currentGroupIds = $this->user->perm->getUserGroups($currentUserId);
+        }
 
         foreach ($this->rawResultset as $index => $result) {
             
