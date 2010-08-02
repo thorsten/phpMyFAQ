@@ -227,7 +227,7 @@ if ($permission['editbt'] || $permission['delbt']) {
                 $catInfo .= sprintf('<span id="category_%d_item_count">%d</span> %s', $cid, $numRecordsByCat[$cid], $PMF_LANG['msgEntries']);
             }
             
-            if ($numRecordsByCat[$cid] > $numActiveByCat[$cid]) {
+            if (isset($numRecordsByCat[$cid]) && $numRecordsByCat[$cid] > $numActiveByCat[$cid]) {
                 $catInfo  .= sprintf(', %d %s', $numActiveByCat[$cid], $PMF_LANG['ad_record_active']);
                 $needComma = true;
             }
