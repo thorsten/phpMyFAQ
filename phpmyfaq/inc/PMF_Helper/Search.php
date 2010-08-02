@@ -206,6 +206,47 @@ class PMF_Helper_Search extends PMF_Helper
     }
     
     /**
+     * Renders the result page for Instant Response
+     * 
+     * @param PMF_Search_Resultset $resultSet PMF_Search_Resultset object
+     * 
+     * @return string
+     */
+    public function renderAdminSuggestionResult(PMF_Search_Resultset $resultSet)
+    {
+        $html         = '';
+        $confPerPage  = PMF_Configuration::getInstance()->get('main.numberOfRecordsPerPage');
+        $numOfResults = $resultSet->getNumberOfResults();
+        
+        if (0 < $numOfResults) {
+            $i = 0;
+            foreach ($resultSet->getResultset() as $result) {
+                
+                if ($i > $confPerPage) {
+                    continue;
+                }
+                
+                // Build the link to the faq record
+                $currentUrl = sprintf('%s?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    PMF_Link::getSystemRelativeUri('ajaxresponse.php').'index.php',
+                    $result->category_id,
+                    $result->id,
+                    $result->lang);
+                
+                $html .= sprintf('<input type="radio" name="faqURL" value="%s"> %s<br />', 
+                    $currentUrl, 
+                    $result->question);
+                $i++;
+            }
+            
+        } else {
+            $html = $this->translation['err_noArticles'];
+        }
+        
+        return $html;
+    }
+    
+    /**
      * Renders the result page for the main search page
      * 
      * @param PMF_Search_Resultset $resultSet   PMF_Search_Resultset object
