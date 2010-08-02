@@ -1,11 +1,23 @@
 /**
- * editor_plugin_src.js
+ * TinyMCE plugin for inserting internal FAQ links from a suggest search
  *
- * Copyright 2009, Moxiecode Systems AB
- * Released under LGPL License.
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
  *
- * License: http://tinymce.moxiecode.com/license
- * Contributing: http://tinymce.moxiecode.com/contributing
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2010-08-02
  */
 
 (function() {
@@ -13,16 +25,7 @@
     tinymce.PluginManager.requireLangPack('phpmyfaq');
 
     tinymce.create('tinymce.plugins.phpmyfaqPlugin', {
-        /**
-         * Initializes the plugin, this will be executed after the plugin has been created.
-         * This call is done before the editor instance has finished it's initialization so use the onInit event
-         * of the editor instance to intercept that event.
-         *
-         * @param {tinymce.Editor} ed Editor instance that the plugin is initialized in.
-         * @param {string} url Absolute URL to where the plugin is located.
-         */
         init : function(ed, url) {
-            // Register the command so that it can be invoked by using tinyMCE.activeEditor.execCommand('mcephpmyfaq');
             ed.addCommand('mcePhpmyfaq', function() {
                 ed.windowManager.open({
                     file   : url + '/dialog.html',
@@ -46,20 +49,6 @@
             ed.onNodeChange.add(function(ed, cm, n) {
                 cm.setActive('phpmyfaq', n.nodeName == 'IMG');
             });
-        },
-
-        /**
-         * Creates control instances based in the incomming name. This method is normally not
-         * needed since the addButton method of the tinymce.Editor class is a more easy way of adding buttons
-         * but you sometimes need to create more complex controls like listboxes, split buttons etc then this
-         * method can be used to create those.
-         *
-         * @param {String} n Name of the control to create.
-         * @param {tinymce.ControlManager} cm Control manager to use inorder to create new control.
-         * @return {tinymce.ui.Control} New control instance or null if no control was created.
-         */
-        createControl : function(n, cm) {
-            return null;
         },
 
         /**
