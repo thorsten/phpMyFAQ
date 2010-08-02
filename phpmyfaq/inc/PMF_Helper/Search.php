@@ -227,8 +227,7 @@ class PMF_Helper_Search extends PMF_Helper
                 }
                 
                 // Build the link to the faq record
-                $currentUrl = sprintf('%s?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    PMF_Link::getSystemRelativeUri('ajaxresponse.php').'index.php',
+                $currentUrl = sprintf('index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     $result->category_id,
                     $result->id,
                     $result->lang);
