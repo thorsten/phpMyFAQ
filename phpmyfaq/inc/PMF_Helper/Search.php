@@ -232,7 +232,9 @@ class PMF_Helper_Search extends PMF_Helper
                     $result->id,
                     $result->lang);
                 
-                $html .= sprintf('<input type="radio" name="faqURL" value="%s"> %s<br />', 
+                $html .= sprintf('<label for="%d"><input id="%d" type="radio" name="faqURL" value="%s"> %s</label><br />',
+                    $result->id,
+                    $result->id,
                     $currentUrl, 
                     $result->question);
                 $i++;
