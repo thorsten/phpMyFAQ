@@ -295,7 +295,7 @@ class PMF_Comment
 
         $query = sprintf("
             SELECT
-                DISTINCT fc.id_comment AS comment_id,
+                fc.id_comment AS comment_id,
                 fc.id AS record_id,
                 %s
                 fc.usr AS username,
