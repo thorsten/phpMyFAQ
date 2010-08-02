@@ -111,7 +111,7 @@
         <form id="instantform" action="?action=instantresponse" method="post">
         <input id="ajaxlanguage" name="ajaxlanguage" type="hidden" value="{ajaxlanguage}" />
         <input class="inputfield" id="instantfield" type="text" name="search" value="" />
-        </form
+        </form>
         [/globalSuggestBox]
 
     {writeContent}
