@@ -134,7 +134,8 @@ class PMF_Tags
 
         $query = sprintf("
             SELECT
-                dt.tagging_id, t.tagging_name
+                dt.tagging_id AS tagging_id, 
+                t.tagging_name AS tagging_name
             FROM
                 %sfaqdata_tags dt, %sfaqtags t
             WHERE
