@@ -216,7 +216,7 @@ class PMF_Search
         
         $result = $this->db->query($query);
         
-        if (is_resource($result)) {
+        if (false !== $result) {
             $i = 0;
             while ($row = $this->db->fetch_object($result)) {
                 if ($i < $numResults) {
