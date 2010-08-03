@@ -295,6 +295,9 @@ class PMF_Link
         $parameters = array();
 
         if (!empty($query)) {
+            if (isset($query['fragment']) ) {
+                $parameters[self::PMF_LINK_FRAGMENT_SEPARATOR] = urldecode($query['fragment']);
+            }
             $params = explode(self::PMF_LINK_AMPERSAND, $query['main']);
             foreach ($params as $param) {
                 if (!empty($param)) {
@@ -470,77 +473,127 @@ class PMF_Link
                 if (isset($getParams[self::PMF_LINK_GET_ACTION])) {
                     // Get the part of the url 'till the '/' just before the pattern
                     $url = substr($url, 0, strpos($url, self::PMF_LINK_INDEX_HOME) + 1);
+                    
                     // Build the Url according to .htaccess rules
                     switch($getParams[self::PMF_LINK_GET_ACTION]) {
+                        
                         case self::PMF_LINK_GET_ACTION_ADD:
                             $url .= self::PMF_LINK_HTML_ADDCONTENT;
                             break;
+                            
                         case self::PMF_LINK_GET_ACTION_ARTIKEL:
-                            $url .= self::PMF_LINK_CONTENT.$getParams[self::PMF_LINK_GET_CATEGORY].self::PMF_LINK_HTML_SLASH.$getParams[self::PMF_LINK_GET_ID].self::PMF_LINK_HTML_SLASH.$getParams[self::PMF_LINK_GET_ARTLANG].self::PMF_LINK_SLASH.$this->getSEOItemTitle().self::PMF_LINK_HTML_EXTENSION;
+                            $url .= self::PMF_LINK_CONTENT . 
+                                    $getParams[self::PMF_LINK_GET_CATEGORY] . 
+                                    self::PMF_LINK_HTML_SLASH . 
+                                    $getParams[self::PMF_LINK_GET_ID] . 
+                                    self::PMF_LINK_HTML_SLASH . 
+                                    $getParams[self::PMF_LINK_GET_ARTLANG] . 
+                                    self::PMF_LINK_SLASH . 
+                                    $this->getSEOItemTitle() . 
+                                    self::PMF_LINK_HTML_EXTENSION;
                             if (isset($getParams[self::PMF_LINK_GET_HIGHLIGHT])) {
-                                $url .= self::PMF_LINK_SEARCHPART_SEPARATOR.self::PMF_LINK_GET_HIGHLIGHT.'='.$getParams[self::PMF_LINK_GET_HIGHLIGHT];
+                                $url .= self::PMF_LINK_SEARCHPART_SEPARATOR . 
+                                        self::PMF_LINK_GET_HIGHLIGHT . '=' . 
+                                        $getParams[self::PMF_LINK_GET_HIGHLIGHT];
+                            }
+                            if (isset($getParams[self::PMF_LINK_FRAGMENT_SEPARATOR])) {
+                                $url .= self::PMF_LINK_FRAGMENT_SEPARATOR . 
+                                        $getParams[self::PMF_LINK_FRAGMENT_SEPARATOR];
                             }
                             break;
+                            
                         case self::PMF_LINK_GET_ACTION_ASK:
                             $url .= self::PMF_LINK_HTML_ASK;
                             break;
+                            
                         case self::PMF_LINK_GET_ACTION_CONTACT:
                             $url .= self::PMF_LINK_HTML_CONTACT;
                             break;
+                            
                         case self::PMF_LINK_GET_ACTION_HELP:
                             $url .= self::PMF_LINK_HTML_HELP;
                             break;
+                            
                         case self::PMF_LINK_GET_ACTION_OPEN:
                             $url .= self::PMF_LINK_HTML_OPEN;
                             break;
+                            
                         case self::PMF_LINK_GET_ACTION_SEARCH:
-                            if (!isset($getParams[self::PMF_LINK_GET_ACTION_SEARCH]) && isset($getParams[self::PMF_LINK_GET_TAGGING_ID])) {
+                            if (!isset($getParams[self::PMF_LINK_GET_ACTION_SEARCH]) && 
+                                isset($getParams[self::PMF_LINK_GET_TAGGING_ID])) {
                                 $url .= self::PMF_LINK_TAGS.$getParams[self::PMF_LINK_GET_TAGGING_ID];
                                 if (isset($getParams[self::PMF_LINK_GET_PAGE])) {
                                     $url .= self::PMF_LINK_HTML_SLASH.$getParams[self::PMF_LINK_GET_PAGE];
                                 }
-                                $url .= self::PMF_LINK_SLASH.$this->getSEOItemTitle().self::PMF_LINK_HTML_EXTENSION; 
+                                $url .= self::PMF_LINK_SLASH . 
+                                        $this->getSEOItemTitle() . 
+                                        self::PMF_LINK_HTML_EXTENSION; 
                             } elseif (isset($getParams[self::PMF_LINK_GET_ACTION_SEARCH])) {
                                 $url .= self::PMF_LINK_HTML_SEARCH;
-                                $url .= self::PMF_LINK_SEARCHPART_SEPARATOR.self::PMF_LINK_GET_ACTION_SEARCH.'='.$getParams[self::PMF_LINK_GET_ACTION_SEARCH];
+                                $url .= self::PMF_LINK_SEARCHPART_SEPARATOR . 
+                                        self::PMF_LINK_GET_ACTION_SEARCH . '=' . 
+                                        $getParams[self::PMF_LINK_GET_ACTION_SEARCH];
                                 if (isset($getParams[self::PMF_LINK_GET_PAGE])) {
-                                    $url .= self::PMF_LINK_AMPERSAND.self::PMF_LINK_GET_PAGE.'='.$getParams[self::PMF_LINK_GET_PAGE];
+                                    $url .= self::PMF_LINK_AMPERSAND.self::PMF_LINK_GET_PAGE . '=' . 
+                                            $getParams[self::PMF_LINK_GET_PAGE];
                                 }
                             }
                             if (isset($getParams[self::PMF_LINK_GET_LANGS])) {
-                                $url .= self::PMF_LINK_AMPERSAND.self::PMF_LINK_GET_LANGS.'='.$getParams[self::PMF_LINK_GET_LANGS];
+                                $url .= self::PMF_LINK_AMPERSAND . 
+                                        self::PMF_LINK_GET_LANGS . '=' . 
+                                        $getParams[self::PMF_LINK_GET_LANGS];
                             }
                             break;
+                            
                         case self::PMF_LINK_GET_ACTION_SITEMAP:
                             if (isset($getParams[self::PMF_LINK_GET_LETTER])) {
-                                $url .= self::PMF_LINK_SITEMAP.$getParams[self::PMF_LINK_GET_LETTER].self::PMF_LINK_HTML_SLASH.$getParams[self::PMF_LINK_GET_LANG].self::PMF_LINK_HTML_EXTENSION;
+                                $url .= self::PMF_LINK_SITEMAP . 
+                                        $getParams[self::PMF_LINK_GET_LETTER] . 
+                                        self::PMF_LINK_HTML_SLASH . 
+                                        $getParams[self::PMF_LINK_GET_LANG] . 
+                                        self::PMF_LINK_HTML_EXTENSION;
                             } else {
-                                $url .= self::PMF_LINK_SITEMAP.'A'.self::PMF_LINK_HTML_SLASH.$getParams[self::PMF_LINK_GET_LANG].self::PMF_LINK_HTML_EXTENSION;
+                                $url .= self::PMF_LINK_SITEMAP . 'A' . 
+                                        self::PMF_LINK_HTML_SLASH . 
+                                        $getParams[self::PMF_LINK_GET_LANG] . 
+                                        self::PMF_LINK_HTML_EXTENSION;
                             }
                             break;
+                            
                         case self::PMF_LINK_GET_ACTION_SHOW:
-                            if (    !isset($getParams[self::PMF_LINK_GET_CATEGORY])
-                                 || (isset($getParams[self::PMF_LINK_GET_CATEGORY]) && (0 == $getParams[self::PMF_LINK_GET_CATEGORY]))
-                                ) {
+                            if (!isset($getParams[self::PMF_LINK_GET_CATEGORY]) || 
+                                (isset($getParams[self::PMF_LINK_GET_CATEGORY]) && 
+                                (0 == $getParams[self::PMF_LINK_GET_CATEGORY]))) {
                                 $url .= self::PMF_LINK_HTML_SHOWCAT;
                             }
                             else {
-                                $url .= self::PMF_LINK_CATEGORY.$getParams[self::PMF_LINK_GET_CATEGORY];
+                                $url .= self::PMF_LINK_CATEGORY . 
+                                        $getParams[self::PMF_LINK_GET_CATEGORY];
                                 if (isset($getParams[self::PMF_LINK_GET_PAGE])) {
-                                    $url .= self::PMF_LINK_HTML_SLASH.$getParams[self::PMF_LINK_GET_PAGE];
+                                    $url .= self::PMF_LINK_HTML_SLASH . 
+                                            $getParams[self::PMF_LINK_GET_PAGE];
                                 }
-                                $url .= self::PMF_LINK_HTML_SLASH.$this->getSEOItemTitle().self::PMF_LINK_HTML_EXTENSION;
+                                $url .= self::PMF_LINK_HTML_SLASH . 
+                                        $this->getSEOItemTitle() . 
+                                        self::PMF_LINK_HTML_EXTENSION;
                             }
                             break;
+                            
                         case self::PMF_LINK_GET_ACTION_NEWS:
-                            $url .= self::PMF_LINK_NEWS.$getParams[self::PMF_LINK_GET_NEWS_ID].self::PMF_LINK_HTML_SLASH.$getParams[self::PMF_LINK_GET_NEWS_LANG].self::PMF_LINK_SLASH.$this->getSEOItemTitle().self::PMF_LINK_HTML_EXTENSION;
-                            break;
-                        default:
+                            $url .= self::PMF_LINK_NEWS . 
+                                    $getParams[self::PMF_LINK_GET_NEWS_ID] . 
+                                    self::PMF_LINK_HTML_SLASH .
+                                    $getParams[self::PMF_LINK_GET_NEWS_LANG] .
+                                    self::PMF_LINK_SLASH .
+                                    $this->getSEOItemTitle() .
+                                    self::PMF_LINK_HTML_EXTENSION;
                             break;
                     }
+                    
                     if (isset($getParams[self::PMF_LINK_GET_SIDS])) {
                         $url = $this->appendSids($url, $getParams[self::PMF_LINK_GET_SIDS]);
                     }
+                    
                     if (isset($getParams['fragment'])) {
                         $url .= self::PMF_LINK_FRAGMENT_SEPARATOR.$getParams['fragment'];
                     }
