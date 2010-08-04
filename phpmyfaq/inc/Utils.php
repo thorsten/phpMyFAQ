@@ -305,4 +305,51 @@ class PMF_Utils
         }
         return $str;
     }
+    
+    /**
+     * Adds a highlighted word to a string
+     * 
+     * @param string $string    String
+     * @param string $highlight Given word for highlighting
+     * 
+     * @return string
+     */
+    public static function setHighlightedString($string, $highlight)
+    {
+        $attributes  = array(
+            'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name', 'face',
+            'size', 'dir', 'onclick', 'ondblclick', 'onmousedown', 'onmouseup',
+            'onmouseover', 'onmousemove', 'onmouseout', 'onkeypress', 'onkeydown',
+            'onkeyup');
+        
+        return PMF_String::preg_replace_callback(
+            '/(' . $highlight . '="[^"]*")|' .
+            '((' . implode('|', $attributes) . ')="[^"]*' . $highlight . '[^"]*")|' .
+            '(' . $highlight . ')/mis',
+            array('PMF_Utils', 'highlightNoLinks'),
+            $string);
+    }
+    
+    /**
+     * Callback function for filtering HTML from URLs and images
+     *
+     * @param array $matches Array of matches from regex pattern
+     * 
+     * @return string
+     */
+    public static function highlightNoLinks(Array $matches)
+    {
+        $itemAsAttrName  = $matches[1];
+        $itemInAttrValue = $matches[2]; // $matches[3] is the attribute name
+        $prefix          = isset($matches[3]) ? $matches[3] : '';
+        $item            = isset($matches[4]) ? $matches[4] : '';
+        $postfix         = isset($matches[5]) ? $matches[5] : '';
+        
+        if (!empty($item)) {
+            return '<span class="highlight">'.$prefix.$item.$postfix.'</span>';
+        }
+        
+        // Fallback: the original matched string
+        return $matches[0];
+    }
 }

@@ -59,7 +59,7 @@ if (is_null($content) && !is_null($tr_content)) {
 if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($content) && 
     IPCheck($_SERVER['REMOTE_ADDR']) && checkBannedWord(PMF_String::htmlspecialchars($thema)) && 
     checkBannedWord(PMF_String::htmlspecialchars($content)) && $captcha->checkCaptchaCode($code) && 
-    ((is_null($faqid) && !is_null($categories)) || (!is_null($faqid) && !is_null($faqlanguage) && 
+    ((is_null($faqid) && !is_null($categories['rubrik'])) || (!is_null($faqid) && !is_null($faqlanguage) && 
     PMF_Language::isASupportedLanguage($faqlanguage)))) {
 
     $isNew = true;

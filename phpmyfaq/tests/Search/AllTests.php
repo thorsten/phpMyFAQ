@@ -28,6 +28,7 @@ require_once 'PHPUnit/TextUI/TestRunner.php';
 
 require_once 'PMF_Search_DatabaseTest.php';
 require_once 'PMF_Search_FactoryTest.php';
+require_once 'PMF_Search_ResultsetTest.php';
 
 /**
  * Search_AllTests
@@ -48,6 +49,7 @@ class Search_AllTests
         
         $suite->addTestSuite('PMF_Search_DatabaseTest');
         $suite->addTestSuite('PMF_Search_FactoryTest');
+        $suite->addTestSuite('PMF_Search_ResultsetTest');
         
         return $suite;
     }

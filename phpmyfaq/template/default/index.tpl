@@ -34,58 +34,58 @@
 
 <div id="content">
 <div class="header" id="header">
-	<div>
-		<h1><a title="{header}" href="{faqHome}">{header}</a></h1>
-		<ul>
-			<li>{msgContact}</li>
-			<li>{msgHelp}</li>
-			<li>{msgOpenQuestions}</li>
-			<li>{msgQuestion}</li>
-			<li>{msgAddContent}</li>
+    <div>
+        <h1><a title="{header}" href="{faqHome}">{header}</a></h1>
+        <ul>
+            <li>{msgContact}</li>
+            <li>{msgHelp}</li>
+            <li>{msgOpenQuestions}</li>
+            <li>{msgQuestion}</li>
+            <li>{msgAddContent}</li>
             <li>{showInstantResponse}</li>
-			<li>{msgSearch}</li>
-		</ul>
-	</div>
+            <li>{msgSearch}</li>
+        </ul>
+    </div>
 </div>
 <div class="columns">
-	<div class="leftcolumn">
-			<h2 class="invisible">Navigation</h2>
-			<div class="content">
-				<div id="categories">
-					<ul>
-						<li class="home">{backToHome}</li>
-						<li>{allCategories}</li>
-						{showCategories}
-						<li>{showSitemap}</li>
-					</ul>
-				</div>
-			</div>
+    <div class="leftcolumn">
+            <h2 class="invisible">Navigation</h2>
+            <div class="content">
+                <div id="categories">
+                    <ul>
+                        <li class="home">{backToHome}</li>
+                        <li>{allCategories}</li>
+                        {showCategories}
+                        <li>{showSitemap}</li>
+                    </ul>
+                </div>
+            </div>
 
-			<div class="content">
-				<div id="langform">
-				<form action="{writeLangAdress}" method="post">
-				<label for="language">{languageBox}</label>
-				{switchLanguages}
-				<input type="hidden" name="action" value="" />
-				</form>
-				</div>
-			</div>
+            <div class="content">
+                <div id="langform">
+                <form action="{writeLangAdress}" method="post">
+                <label for="language">{languageBox}</label>
+                {switchLanguages}
+                <input type="hidden" name="action" value="" />
+                </form>
+                </div>
+            </div>
 
-			<div class="content">
-				<div id="loginform">
-				{loginBox}
-				</div>
-			</div>
+            <div class="content">
+                <div id="loginform">
+                {loginBox}
+                </div>
+            </div>
 
-			<div class="content">
-				<div id="useronline">
-				{userOnline}
-				</div>
-			</div>
-	</div>
+            <div class="content">
+                <div id="useronline">
+                {userOnline}
+                </div>
+            </div>
+    </div>
 
-	<div class="rightcolumn">
-		{rightBox}
+    <div class="rightcolumn">
+        {rightBox}
                 
             <div class="content">
                 <div id="stickyrecords">
@@ -97,33 +97,36 @@
                 </ul>
                 </div>
            </div>
-	</div>
+    </div>
 
-	<div class="main-content">
+    <div class="main-content">
         [globalSearchBox]
-		<form id="search" action="{writeSendAdress}" method="get">
- 			<input type="text" name="search" id="searchfield" size="30" />
- 			<input type="submit" name="submit" value="{searchBox}" />
- 			<input type="hidden" name="searchcategory" value="{categoryId}" />
- 			<input type="hidden" name="action" value="search" />
- 		</form>
- 		[/globalSearchBox]
- 		[globalSuggestBox]
+        <form id="search" action="{writeSendAdress}" method="get">
+             <input type="text" name="search" id="searchfield" size="30" />
+             <input type="submit" name="submit" value="{searchBox}" />
+             <input type="hidden" name="searchcategory" value="{categoryId}" />
+             <input type="hidden" name="action" value="search" />
+         </form>
+        [/globalSearchBox]
+        [globalSuggestBox]
         <form id="instantform" action="?action=instantresponse" method="post">
         <input id="ajaxlanguage" name="ajaxlanguage" type="hidden" value="{ajaxlanguage}" />
         <input class="inputfield" id="instantfield" type="text" name="search" value="" />
         </form>
- 		[/globalSuggestBox]
+        [/globalSuggestBox]
 
-{writeContent}
+    {writeContent}
     
     </div>
 </div>
+
 <div class="clearing"></div>
 <div id="footer" class="footer">
-<p id="copyrightnote">{copyright}</p>
+    <p id="copyrightnote">{copyright}</p>
 </div>
+
 {debugMessages}
 </div>
+
 </body>
 </html>

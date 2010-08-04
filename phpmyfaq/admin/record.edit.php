@@ -221,7 +221,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
     <label class="lefteditor" for="rubrik"><?php print $PMF_LANG["ad_entry_category"]; ?></label>
     <select name="rubrik[]" id="rubrik" size="5" multiple="multiple">
-<?php print $categoryLayout->renderOptions($categories); ?>
+    <?php print $categoryLayout->renderOptions($categories); ?>
     </select><br />
 
     <label for="thema"><?php print $PMF_LANG["ad_entry_theme"]; ?></label>
@@ -230,7 +230,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     <label for="content"><?php print $PMF_LANG["ad_entry_content"]; ?></label>
     <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
     <textarea id="content" name="content" cols="84" rows="16" style="width: 720px; height: 480px;">
-        <?php if (isset($faqData['content'])) { print trim(PMF_String::htmlspecialchars($faqData['content'])); } ?>
+    <?php if (isset($faqData['content'])) { print trim(PMF_String::htmlentities($faqData['content'])); } ?>
     </textarea><br />
 
 <?php
@@ -357,7 +357,7 @@ if($permission['approverec']):
     }
     
     if (!isset($faqData['date'])) { 
-    	$faqData['date'] = PMF_Date::createIsoDate(date("Y-m-d H:i:s"));
+    	$faqData['date'] = PMF_Date::createIsoDate(date('YmdHis'));
     }
 ?>
     <label class="left" for="userpermission"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
@@ -402,7 +402,6 @@ if($permission['approverec']):
     if ($revisionid_selected == $faqData['revision_id']) {
 ?>
     <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_save"]; ?>" name="submit[1]" />
-    <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_preview"]; ?>" name="submit[2]" />
     <input class="submit" type="reset" value="<?php print $PMF_LANG["ad_gen_reset"]; ?>" />
 <?php
     }

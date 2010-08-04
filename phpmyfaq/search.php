@@ -17,7 +17,6 @@
  * @category  phpMyFAQ
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Periklis Tsirakidis <tsirakidis@phpdevel.de>
  * @copyright 2002-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
@@ -37,28 +36,24 @@ $inputCategory   = PMF_Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_V
 $inputTag        = PMF_Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_VALIDATE_INT);
 $inputSearchTerm = PMF_Filter::filterInput(INPUT_GET, 'suchbegriff', FILTER_SANITIZE_STRIPPED);
 $search          = PMF_Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_STRIPPED);
-$page            = PMF_Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);;
+$page            = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
 
 // Search only on current language (default)
-$allLanguages = false;
 if (!is_null($inputLanguage)) {
     $allLanguages = true;
+    $languages    = '&amp;langs=all';
+} else {
+    $allLanguages = false;
+    $languages    = '';
 }
 
-// Pagination options
-$options = array('baseUrl'         => '',
-                 'total'           => 0,
-                 'perPage'         => PMF_Configuration::getInstance()->get('main.numberOfRecordsPerPage'),
-                 'pageParamName'   => 'seite',
-                 'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgNext'] . '</a>',
-                 'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgPrevious'] . '</a>',
-                 'layoutTpl'       => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>');
-        
-$pagination          = new PMF_Pagination($options);
-$faqsearch           = new PMF_Search($db, $Language);
-$printResult         = '';
-$tagSearch           = false;
-$mostPopularSearches = 'n/a'; // to be implemented
+if (is_null($user)) {
+    $user = new PMF_User_CurrentUser();
+}
+
+$faqSearch       = new PMF_Search($db, $Language);
+$faqSearchResult = new PMF_Search_Resultset($user, $faq);
+$tagSearch       = false;
 
 //
 // Handle the Tagging ID
@@ -68,6 +63,8 @@ if (!is_null($inputTag)) {
     $tagging     = new PMF_Tags();
     $record_ids  = $tagging->getRecordsByTagId($inputTag);
     $printResult = $faq->showAllRecordsByIds($record_ids);
+} else {
+    $printResult = '';
 }
 
 //
@@ -81,11 +78,13 @@ if (!is_null($inputSearchTerm) || !is_null($search)) {
         $inputSearchTerm = $db->escapeString(strip_tags($search));
     }
     
-    //$result           = $search->search($inputSearchTerm, $allLanguages);
-    $printResult      = searchEngine($inputSearchTerm, $inputCategory, $allLanguages);
-    $inputSearchTerm  = stripslashes($inputSearchTerm);
+    $faqSearch->setCategory($inputCategory);
+    $searchResult = $faqSearch->search($inputSearchTerm, $allLanguages);
     
-    $faqsearch->logSearchTerm($inputSearchTerm);
+    $faqSearchResult->reviewResultset($searchResult);
+    
+    $inputSearchTerm = stripslashes($inputSearchTerm);
+    $faqSearch->logSearchTerm($inputSearchTerm);
 }
 
 // Change a little bit the $searchCategory value;
@@ -95,11 +94,61 @@ $faqsession->userTracking('fulltext_search', $inputSearchTerm);
 
 $mostPopularSearchData = $faqsearch->getMostPopularSearches($faqconfig->get('main.numberSearchTerms'));
 
-$categoryLayout = new PMF_Category_Layout(new PMF_Category_Tree_Helper(new PMF_Category_Tree($categoryData)));
+if (is_numeric($inputSearchTerm) && PMF_SOLUTION_ID_START_VALUE <= $inputSearchTerm && 
+    0 < $faqSearchResult->getNumberOfResults()) {
+    
+    // Before a redirection we must force the PHP session update for preventing data loss
+    session_write_close();
+    if (PMF_Configuration::getInstance()->get('main.enableRewriteRules')) {
+        header('Location: '.PMF_Link::getSystemUri('/index.php') . '/solution_id_' . $inputSearchTerm . '.html');
+    } else {
+        header('Location: '.PMF_Link::getSystemUri('/index.php') . '/index.php?solution_id=' . $inputSearchTerm);
+    }
+    exit();
+}
 
-$searchHelper = PMF_Helper_Search::getInstance();
-$searchHelper->setPagination($pagination);
-$searchHelper->setPlurals($plr);
+// Set base URL scheme
+if (PMF_Configuration::getInstance()->get('main.enableRewriteRules')) {
+    $baseUrl = sprintf("search.html?search=%s&amp;seite=%d%s&amp;searchcategory=%d",
+        urlencode($inputSearchTerm),
+        $page,
+        $languages,
+        $inputCategory);
+} else {
+    $baseUrl = sprintf('%s?%saction=search&amp;search=%s&amp;seite=%d%s&amp;searchcategory=%d',
+        PMF_Link::getSystemRelativeUri(),
+        empty($sids) ? '' : '$sids&amp;',
+        urlencode($inputSearchTerm),
+        $page,
+        $languages,
+        $inputCategory);
+}
+
+// Pagination options
+$options = array(
+    'baseUrl'         => $baseUrl,
+    'total'           => $faqSearchResult->getNumberOfResults(),
+    'perPage'         => PMF_Configuration::getInstance()->get('main.numberOfRecordsPerPage'),
+    'pageParamName'   => 'seite',
+    'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgNext'] . '</a>',
+    'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgPrevious'] . '</a>',
+    'layoutTpl'       => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>');
+
+$categoryLayout    = new PMF_Category_Layout(new PMF_Category_Tree_Helper(new PMF_Category_Tree($categoryData)));
+$faqPagination     = new PMF_Pagination($options);
+$faqCategoryHelper = PMF_Helper_Category::getInstance();
+$faqCategoryHelper->setCategory($category);
+
+$faqSearchHelper = PMF_Helper_Search::getInstance();
+$faqSearchHelper->setSearchterm($inputSearchTerm);
+$faqSearchHelper->setCategory($category);
+$faqSearchHelper->setPagination($faqPagination);
+$faqSearchHelper->setPlurals($plr);
+$faqSearchHelper->setSessionId($sids);
+
+if ('' == $printResult && !is_null($inputSearchTerm)) {
+    $printResult = $faqSearchHelper->renderSearchResult($faqSearchResult, $page);
+}
 
 $tpl->processTemplate('writeContent', array(
     'msgSearch'                => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgSearch']),
@@ -112,8 +161,8 @@ $tpl->processTemplate('writeContent', array(
     'writeSendAdress'          => '?'.$sids.'action=search',
     'msgSearchWord'            => $PMF_LANG['msgSearchWord'],
     'printResult'              => $printResult,
-    'openSearchLink'           => $searchHelper->renderOpenSearchLink(),
+    'openSearchLink'           => $faqSearchHelper->renderOpenSearchLink(),
     'msgMostPopularSearches'   => $PMF_LANG['msgMostPopularSearches'],
-    'printMostPopularSearches' => $searchHelper->renderMostPopularSearches($mostPopularSearchData)));
+    'printMostPopularSearches' => $faqSearchHelper->renderMostPopularSearches($mostPopularSearchData)));
 
 $tpl->includeTemplate('writeContent', 'index');

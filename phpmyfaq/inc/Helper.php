@@ -65,6 +65,13 @@ abstract class PMF_Helper
     protected $plurals = null;
     
     /**
+     * phpMyFAQ's session ID
+     * 
+     * @var onteger
+     */
+    protected $sessionId = null;
+    
+    /**
      * Array with all translations
      * 
      * @var array
@@ -115,6 +122,16 @@ abstract class PMF_Helper
     public function setPlurals(PMF_Language_Plurals $plurals)
     {
         $this->plurals = $plurals;
+    }
+    
+    /**
+     * Session ID setter
+     * 
+     * @param integer $sid Session id
+     */
+    public function setSessionId($sid)
+    {
+        $this->sessionId = $sid;
     }
     
     /**

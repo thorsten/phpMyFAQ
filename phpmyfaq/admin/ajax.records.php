@@ -64,9 +64,22 @@ if (('save_active_records' == $ajax_action && $permission['approverec'] ||
 
 if ('search_records' == $ajax_action && $permission['editbt']) {
     
-    $searchString = PMF_Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
-    $ajaxLanguage = PMF_Filter::filterInput(INPUT_POST, 'ajaxlanguage', FILTER_SANITIZE_STRING, 'en');
-    
+    $faq             = new PMF_Faq();
+    $faqSearch       = new PMF_Search($db, $Language);
+    $faqSearchResult = new PMF_Search_Resultset($user, $faq);
+    $searchResult    = '';
+    $searchString    = PMF_Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
+
+    if (!is_null($searchString)) {
+        $searchResult = $faqSearch->search($searchString, false);
+        
+        $faqSearchResult->reviewResultset($searchResult);
+        
+        $faqSearchHelper = PMF_Helper_Search::getInstance();
+        $faqSearchHelper->setSearchterm($searchString);
+        
+        print $faqSearchHelper->renderAdminSuggestionResult($faqSearchResult);
+    }
 }
 
 if ('delete_record' == $ajax_action && $permission['delbt']) {

@@ -150,12 +150,10 @@ if ($permission['editbt'] || $permission['delbt']) {
 
     } elseif ($action == "view" && !is_null($searchterm)) {
         
-        $fdTable   = SQLPREFIX . 'faqdata';
-        $fcrTable  = SQLPREFIX . 'faqcategoryrelations';
-        $search    = PMF_Search_Factory::create($Language, array('database' => PMF_Db::getType()));
-        // Search for:
-        // a. solution id
-        // b. full text search
+        $fdTable  = SQLPREFIX . 'faqdata';
+        $fcrTable = SQLPREFIX . 'faqcategoryrelations';
+        $search   = PMF_Search_Factory::create($Language, array('database' => PMF_Db::getType()));
+
         $search->setDatabaseHandle($db)
                ->setTable($fdTable)
                ->setResultColumns(array(
@@ -212,7 +210,7 @@ if ($permission['editbt'] || $permission['delbt']) {
     $num = count($faq->faqRecords);
 
     if ($num > 0) {
-        $old = 0;
+        $old     = 0;
         $all_ids = array();
         
         foreach ($faq->faqRecords as $record) {
@@ -226,11 +224,16 @@ if ($permission['editbt'] || $permission['delbt']) {
                     $catInfo        .= ' (';
                     $isBracketOpened = true;
                 }
-                $catInfo .= sprintf('<span id="category_%d_item_count">%d</span> %s', $cid, $numRecordsByCat[$cid], $PMF_LANG['msgEntries']);
+                $catInfo .= sprintf('<span id="category_%d_item_count">%d</span> %s', 
+                    $cid, 
+                    $numRecordsByCat[$cid], 
+                    $PMF_LANG['msgEntries']);
             }
             
-            if ($numRecordsByCat[$cid] > $numActiveByCat[$cid]) {
-                $catInfo  .= sprintf(', %d %s', $numActiveByCat[$cid], $PMF_LANG['ad_record_active']);
+            if (isset($numRecordsByCat[$cid]) && $numRecordsByCat[$cid] > $numActiveByCat[$cid]) {
+                $catInfo .= sprintf(', <span style="color: red;">%d %s</span>', 
+                    $numActiveByCat[$cid], 
+                    $PMF_LANG['ad_record_active']);
                 $needComma = true;
             }
             
@@ -242,17 +245,12 @@ if ($permission['editbt'] || $permission['delbt']) {
                 $catInfo .= sprintf('%s%d %s', ($needComma ? ', ' : ''), $numCommentsByCat[$cid], $PMF_LANG['ad_start_comments']);
             }
             $catInfo .= $isBracketOpened ? ')' : '';
+            
             if ($cid != $old) {
                 if ($old == 0) {
-?>
-    <a name="cat_<?php print $cid; ?>"></a>
-<?php
+                    printf('<a name="cat_%d"></a>', $cid);
                 } else {
-?>
-    </tbody>
-    </table>
-    </div>
-<?php
+                    print "    </tbody>\n    </table>\n    </div>";
                 }
 ?>
     <div class="categorylisting">

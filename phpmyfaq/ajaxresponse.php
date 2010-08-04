@@ -71,16 +71,28 @@ if (isset($user) && is_object($user)) {
         $current_groups = array(-1);
     }
 } else {
+    $user           = new PMF_User_CurrentUser();
     $current_user   = -1;
     $current_groups = array(-1);
 }
 
-$faq = new PMF_Faq();
+$faq             = new PMF_Faq();
+$faqSearch       = new PMF_Search($db, $Language);
+$faqSearchResult = new PMF_Search_Resultset($user, $faq);
 
 //
 // Handle the search requests
 //
 if (!is_null($searchString)) {
-    $result = searchEngine($db->escapeString($searchString), $categoryId, false, true, true);
-    print $result;
+    $faqSearch->setCategory($categoryId);
+    $searchResult = $faqSearch->search($searchString, false);
+    
+    $faqSearchResult->reviewResultset($searchResult);
+    
+    $faqSearchHelper = PMF_Helper_Search::getInstance();
+    $faqSearchHelper->setSearchterm($searchString);
+    $faqSearchHelper->setCategory($category);
+    $faqSearchHelper->setPlurals($plr);
+    
+    print $faqSearchHelper->renderInstantResponseResult($faqSearchResult);
 }

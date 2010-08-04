@@ -63,48 +63,6 @@ if (isset($auth)) {
 <script type="text/javascript">
 /*<![CDATA[*/ //<!--
  
-//Creates a new plugin class and a custom listbox
-tinymce.create('tinymce.plugins.internalFaqLinkPlugin', {
-    createControl: function(n, cm) {
-        switch (n) {
-            case 'faqlistbox':
-                var flb = cm.createListBox('faqlistbox', {
-                     title    : '<?php print $PMF_LANG['ad_entry_intlink']; ?>',
-                     onselect : function(value) {
-                         var elements = value.split('_');
-                         var faqLink  = '<a class="intfaqlink" href="index.php?action=artikel&amp;cat=' + elements[0] + 
-                                        '&amp;id=' + elements[1] + 
-                                        '&amp;artlang=' + elements[2] + 
-                                        '">' + elements[3] + '</a>';
-                         tinyMCE.execCommand('mceBeginUndoLevel');
-                         tinyMCE.execCommand('mceInsertContent', false, faqLink);
-                         tinyMCE.execCommand('mceEndUndoLevel');
-                     }
-                });
-<?php
-          $faq->getAllRecords(FAQ_SORTING_TYPE_FAQID);
-          foreach ($faq->faqRecords as $record) {
-              $_title = str_replace(array("\n", "\r", "\r\n"), '', '(' .$record['id'] . ') ' . $record['title']);
-              printf("flb.add('%s', '%d_%d_%s_%s');\n",
-                  trim(str_replace("'", "`", PMF_Utils::makeShorterText($_title, 8))),
-                  $record['category_id'],
-                  $record['id'],
-                  $record['lang'],
-                  trim(str_replace("'", "`", addslashes(str_replace(array("\n", "\r", "\r\n"), '', $record['title'])))));
-          }
-?>
-
-                return flb;
-        }
-
-        return null;
-    }
-});
-
-// Register plugin with a short name
-tinymce.PluginManager.add('internalfaqlinkbox', tinymce.plugins.internalFaqLinkPlugin);
-
-
 tinyMCE.init({
     // General options
     mode     : "exact",
@@ -113,14 +71,13 @@ tinyMCE.init({
     width    : "720",
     height   : "480",
     theme    : "advanced",
-    plugins  : "spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,syntaxhl,-internalfaqlinkbox",
+    plugins  : "spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,syntaxhl,phpmyfaq",
     theme_advanced_blockformats : "p,div,h1,h2,h3,h4,h5,h6,blockquote,dt,dd,code,samp",
 
     // Theme options
     theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
-    theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,code,syntaxhl,|,insertdate,inserttime,preview,|,forecolor,backcolor",
+    theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,phpmyfaq,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,code,syntaxhl,|,insertdate,inserttime,preview,|,forecolor,backcolor",
     theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen,help",
-    theme_advanced_buttons4 : "faqlistbox",
     theme_advanced_toolbar_location : "top",
     theme_advanced_toolbar_align : "left",
     theme_advanced_statusbar_location : "bottom",

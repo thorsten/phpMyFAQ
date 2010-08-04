@@ -64,59 +64,7 @@ if ($permission['editbt']) {
     $group_permission  = PMF_Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING);
     $restricted_groups = ('all' == $group_permission) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_groups', FILTER_VALIDATE_INT);
     
-    if (isset($submit['submit'][2]) && !is_null($question) && !is_null($categories)) {
-        // Preview
-        $categoryDataProvider = new PMF_Category_Tree_DataProvider_SingleQuery($LANGCODE);
-        $categoryTree         = new PMF_Category_Tree($categoryDataProvider);
-        $categoryLayout       = new PMF_Category_Layout(new PMF_Category_Tree_Helper($categoryTree));
-       
-        $categorylist = '';
-        foreach ($categories['rubrik'] as $categoryId) {
-            $categoryPath  = $categoryDataProvider->getPath($categoryId);
-            $categorylist .= $categoryLayout->renderBreadcrumb($categoryPath) . '<br />';
-        }
-?>
-    <h2><?php print $PMF_LANG["ad_entry_preview"]; ?></h2>
-
-    <h3><strong><em><?php print $categorylist; ?></em>
-    <?php print $question; ?></strong></h3>
-    <?php print html_entity_decode($content); ?>
-    <p class="little"><?php print $PMF_LANG["msgLastUpdateArticle"].PMF_Date::createIsoDate(date("YmdHis")); ?><br />
-    <?php print $PMF_LANG["msgAuthor"].' '.$author; ?></p>
-
-    <form action="?action=editpreview" method="post">
-    <input type="hidden" name="id"                  value="<?php print $record_id; ?>" />
-    <input type="hidden" name="thema"               value="<?php print $question; ?>" />
-    <input type="hidden" name="content" class="mceNoEditor" value="<?php print $content; ?>" />
-    <input type="hidden" name="lang"                value="<?php print $record_lang; ?>" />
-    <input type="hidden" name="keywords"            value="<?php print $keywords; ?>" />
-    <input type="hidden" name="tags"                value="<?php print $tags; ?>" />
-    <input type="hidden" name="author"              value="<?php print $author; ?>" />
-    <input type="hidden" name="email"               value="<?php print $email; ?>" />
-    <input type="hidden" name="sticky"              value="<?php print (!is_null($sticky) ? $sticky : ''); ?>" />
-<?php
-        foreach ($categories['rubrik'] as $key => $_categories) {
-            print '    <input type="hidden" name="rubrik['.$key.']" value="'.$_categories.'" />';
-        }
-?>
-
-    <input type="hidden" name="solution_id"         value="<?php print $solution_id; ?>" />
-    <input type="hidden" name="revision"            value="<?php print $revision_id; ?>" />
-    <input type="hidden" name="active"              value="<?php print $active; ?>" />
-    <input type="hidden" name="changed"             value="<?php print $changed; ?>" />
-    <input type="hidden" name="comment"             value="<?php print $comment; ?>" />
-    <input type="hidden" name="dateStart"           value="<?php print $dateStart; ?>" />
-    <input type="hidden" name="dateEnd"             value="<?php print $dateEnd; ?>" />
-    <input type="hidden" name="userpermission"      value="<?php print $user_permission; ?>" />
-    <input type="hidden" name="restricted_users"    value="<?php print $restricted_users; ?>" />
-    <input type="hidden" name="grouppermission"     value="<?php print $group_permission; ?>" />
-    <input type="hidden" name="restricted_group"    value="<?php print $restricted_groups; ?>" />
-    <input type="hidden" name="date"    value="<?php print $date; ?>" />
-    <p align="center"><input type="submit" name="submit" value="<?php print $PMF_LANG["ad_entry_back"]; ?>" /></p>
-    </form>
-<?php
-    } elseif (isset($submit['submit'][1]) && !is_null($question) && !is_null($categories)) {
-        
+    if (isset($submit['submit'][1]) && !is_null($question) && !is_null($categories)) {
         // Save entry
         print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
         $logging = new PMF_Logging();

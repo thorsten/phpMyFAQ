@@ -58,6 +58,13 @@ class PMF_Helper_Search extends PMF_Helper
     private $pagination = null;
     
     /**
+     * Search term
+     * 
+     * @var string
+     */
+    private $searchterm = '';
+    
+    /**
      * Constructor
      * 
      * @return PMF_Helper_Search
@@ -95,6 +102,8 @@ class PMF_Helper_Search extends PMF_Helper
      * PMF_Language setter
      * 
      * @param PMF_Language $language PMF_Language
+     * 
+     * @return void
      */
     public function setLanguage(PMF_Language $language)
     {
@@ -105,10 +114,24 @@ class PMF_Helper_Search extends PMF_Helper
      * PMF_Pagination setter
      * 
      * @param PMF_Pagination $pagination PMF_Pagination
+     * 
+     * @return void
      */
     public function setPagination(PMF_Pagination $pagination)
     {
         $this->pagination = $pagination;
+    }
+    
+    /**
+     * Searchterm setter
+     * 
+     * @param string $searchterm Searchterm
+     * 
+     * @return void
+     */
+    public function setSearchterm($searchterm)
+    {
+        $this->searchterm = $searchterm;
     }
     
     /**
@@ -132,29 +155,183 @@ class PMF_Helper_Search extends PMF_Helper
      */
     public function renderInstantResponseResult(PMF_Search_Resultset $resultSet)
     {
+        $html         = '';
+        $confPerPage  = PMF_Configuration::getInstance()->get('main.numberOfRecordsPerPage');
+        $numOfResults = $resultSet->getNumberOfResults();
         
+        if (0 < $numOfResults) {
+            
+            $html .= sprintf("<p>%s", $this->plurals->GetMsg('plmsgSearchAmount', $numOfResults));
+            $html .= sprintf($this->translation['msgInstantResponseMaxRecords'], $confPerPage);
+            $html .= "<ul class=\"phpmyfaq_ul\">\n";
+            
+            $i = 0;
+            foreach ($resultSet->getResultset() as $result) {
+                
+                if ($i > $confPerPage) {
+                    continue;
+                }
+                
+                $categoryName  = $this->Category->getPath($result->category_id);
+                $question      = PMF_Utils::chopString($result->question, 15);
+                $answerPreview = PMF_Utils::chopString(strip_tags($result->answer), 25);
+                
+                // Build the link to the faq record
+                $currentUrl = sprintf('%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
+                    PMF_Link::getSystemRelativeUri('ajaxresponse.php').'index.php',
+                    $this->sessionId,
+                    $result->category_id,
+                    $result->id,
+                    $result->lang,
+                    urlencode($this->searchterm));
+
+                $oLink       = new PMF_Link($currentUrl);
+                $oLink->text = $oLink->itemTitle = $oLink->tooltip = $result->question;
+                
+                $html .= sprintf("<li><strong>%s</strong>: %s<br /><div class=\"searchpreview\"><strong>%s</strong> %s...</div><br /></li>\n",
+                    $categoryName,
+                    $oLink->toHtmlAnchor(),
+                    $this->translation['msgSearchContent'],
+                    $answerPreview);
+                $i++;
+            }
+            
+            $html .= "</ul>\n";
+            
+        } else {
+            $html = $this->translation['err_noArticles'];
+        }
+        
+        return $html;
     }
     
     /**
-     * Renders the result page for the main search page
+     * Renders the result page for Instant Response
      * 
      * @param PMF_Search_Resultset $resultSet PMF_Search_Resultset object
      * 
      * @return string
      */
-    public function renderSearchResult(PMF_Search_Resultset $resultSet)
+    public function renderAdminSuggestionResult(PMF_Search_Resultset $resultSet)
     {
-        $html        = '';
-        $confPerPage = PMF_Configuration::getInstance()->get('main.numberOfRecordsPerPage');
+        $html         = '';
+        $confPerPage  = PMF_Configuration::getInstance()->get('main.numberOfRecordsPerPage');
+        $numOfResults = $resultSet->getNumberOfResults();
         
-        /*
-        $html .= '<p>' . $this->plurals->GetMsg('plmsgSearchAmount', $num);
+        if (0 < $numOfResults) {
+            $i = 0;
+            foreach ($resultSet->getResultset() as $result) {
+                
+                if ($i > $confPerPage) {
+                    continue;
+                }
+                
+                // Build the link to the faq record
+                $currentUrl = sprintf('index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    $result->category_id,
+                    $result->id,
+                    $result->lang);
+                
+                $html .= sprintf('<label for="%d"><input id="%d" type="radio" name="faqURL" value="%s"> %s</label><br />',
+                    $result->id,
+                    $result->id,
+                    $currentUrl, 
+                    $result->question);
+                $i++;
+            }
+            
+        } else {
+            $html = $this->translation['err_noArticles'];
+        }
         
-        $html .= '</p>';
-        */
+        return $html;
+    }
+    
+    /**
+     * Renders the result page for the main search page
+     * 
+     * @param PMF_Search_Resultset $resultSet   PMF_Search_Resultset object
+     * @param integer              $currentPage Current page number
+     * 
+     * @return string
+     */
+    public function renderSearchResult(PMF_Search_Resultset $resultSet, $currentPage)
+    {
+        $html         = '';
+        $confPerPage  = PMF_Configuration::getInstance()->get('main.numberOfRecordsPerPage');
+        $numOfResults = $resultSet->getNumberOfResults();
         
+        $totalPages = ceil($numOfResults / $confPerPage);
+        $lastPage   = $currentPage * $confPerPage;
+        $firstPage  = $lastPage - $confPerPage;
+        if ($lastPage > $numOfResults) {
+            $lastPage = $numOfResults;
+        }
         
-        $html .= $this->pagination->render();
+        if (0 < $numOfResults) {
+            
+            $html .= sprintf("<p>%s</p>\n", 
+                $this->plurals->GetMsg('plmsgSearchAmount', $numOfResults));
+            
+            if (1 < $totalPages) {
+                $html .= sprintf("<p><strong>%s%d %s %s</strong></p>\n",
+                    $this->translation['msgPage'],
+                    $currentPage,
+                    $this->translation['msgVoteFrom'],
+                    $this->plurals->GetMsg('plmsgPagesTotal',$totalPages));
+            }
+            
+            $html .= "<ul class=\"phpmyfaq_ul\">\n";
+            
+            foreach ($resultSet->getResultset() as $result) {
+                
+                $categoryName  = $this->Category->getPath($result->category_id);
+                $question      = PMF_Utils::chopString($result->question, 15);
+                $answerPreview = PMF_Utils::chopString(strip_tags($result->answer), 25);
+                $searchterm    = str_replace(
+                                    array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'), '', 
+                                    $this->searchterm
+                                    );
+                $searchterm    = preg_quote($searchterm, '/');
+                $searchItems   = explode(' ', $searchterm);
+                
+                if (PMF_String::strlen($searchItems[0]) > 1) {
+                    foreach ($searchItems as $item) {
+                         if (PMF_String::strlen($item) > 2) {
+                             $question      = PMF_Utils::setHighlightedString($question, $item);
+                             $answerPreview = PMF_Utils::setHighlightedString($answerPreview, $item);
+                         }
+                    }
+                }
+                
+                // Build the link to the faq record
+                $currentUrl = sprintf('%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
+                    PMF_Link::getSystemRelativeUri(),
+                    $this->sessionId,
+                    $result->category_id,
+                    $result->id,
+                    $result->lang,
+                    urlencode($searchterm));
+
+                $oLink       = new PMF_Link($currentUrl);
+                $oLink->text = $oLink->itemTitle = $oLink->tooltip = $result->question;
+                
+                $html .= sprintf("<li><strong>%s</strong>: %s<br /><div class=\"searchpreview\"><strong>%s</strong> %s...</div><br /></li>\n",
+                    $categoryName,
+                    $oLink->toHtmlAnchor(),
+                    $this->translation['msgSearchContent'],
+                    $answerPreview);
+            }
+            
+            $html .= "</ul>\n";
+            
+            if (1 > $totalPages) {
+                $html .= $this->pagination->render();
+            }
+            
+        } else {
+            $html = $this->translation['err_noArticles'];
+        }
         
         return $html;
     }

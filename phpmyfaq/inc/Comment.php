@@ -295,10 +295,10 @@ class PMF_Comment
 
         $query = sprintf("
             SELECT
-                DISTINCT fc.id_comment AS comment_id,
+                fc.id_comment AS comment_id,
                 fc.id AS record_id,
                 %s
-                fc.usr AS user,
+                fc.usr AS username,
                 fc.email AS email,
                 fc.comment AS comment,
                 fc.datum AS comment_date
@@ -324,7 +324,7 @@ class PMF_Comment
                     'category_id' => (isset($row->category_id) ? $row->category_id : null),
                     'content'     => $row->comment,
                     'date'        => $row->comment_date,
-                    'user'        => $row->user,
+                    'username'    => $row->user,
                     'email'       => $row->email);
             }
         }

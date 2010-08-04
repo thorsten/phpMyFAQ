@@ -604,7 +604,9 @@ foreach ($permLevels as $level => $desc) {
     flush();
 
     // Erase any table before starting creating the required ones
-    db_uninstall();
+    if ('sqlite' != $sql_type) {
+        db_uninstall();
+    }
     // Start creating the required tables
     $count = 0;
     while ($each_query = each($query)) {

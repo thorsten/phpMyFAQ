@@ -152,7 +152,7 @@ class PMF_User
      *
      * @var integer
      */
-    private $user_id = 0;
+    private $user_id = -1;
     
     /**
      * Status of user
@@ -236,7 +236,7 @@ class PMF_User
     }
 
     /**
-     * Returns the user-ID of the user.
+     * Returns the User ID of the user.
      *
      * @return integer
      */
@@ -245,9 +245,10 @@ class PMF_User
         if (isset($this->user_id) && is_int($this->user_id)) {
             return (int)$this->user_id;
         }
-        $this->user_id  = 0;
+        $this->user_id  = -1;
         $this->errors[] = self::ERROR_USER_NO_USERID;
-        return 0;
+        
+        return -1;
     }
 
     /**

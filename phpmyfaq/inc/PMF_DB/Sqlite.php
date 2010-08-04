@@ -80,15 +80,16 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
     /**
      * Sends a query to the database.
      *
-     * @param   string $query
-     * @return  mixed $result
+     * @param string $query SQL query
+     * 
+     * @return mixed $result
      */
     public function query($query)
     {
         $this->sqllog .= pmf_debug($query);
         $result = sqlite_query($this->conn, $query);
         if (!$result) {
-           $this->sqllog .= $this->error();
+            $this->sqllog .= $this->error();
         }
         return $result;
     }

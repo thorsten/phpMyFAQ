@@ -69,7 +69,6 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
                     %s %s %s
                 WHERE
                     MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE)
-                AND
                     %s",
                 $this->getResultColumns(),
                 $this->getTable(),
@@ -78,6 +77,8 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
                 $this->getMatchingColumns(),
                 $this->dbHandle->escape_string($searchTerm),
                 $this->getConditions());
+            
+            $this->resultSet = $this->dbHandle->query($query);
             
             // Fallback for searches with less than three characters
             if (0 == $this->dbHandle->numRows($this->resultSet)) {
