@@ -36,7 +36,7 @@ $inputCategory   = PMF_Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_V
 $inputTag        = PMF_Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_VALIDATE_INT);
 $inputSearchTerm = PMF_Filter::filterInput(INPUT_GET, 'suchbegriff', FILTER_SANITIZE_STRIPPED);
 $search          = PMF_Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_STRIPPED);
-$page            = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);;
+$page            = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
 
 // Search only on current language (default)
 if (!is_null($inputLanguage)) {
@@ -72,6 +72,8 @@ if (!is_null($inputTag)) {
     $tagging     = new PMF_Tags();
     $record_ids  = $tagging->getRecordsByTagId($inputTag);
     $printResult = $faq->showAllRecordsByIds($record_ids);
+} else {
+    $printResult = '';
 }
 
 //
@@ -90,7 +92,7 @@ if (!is_null($inputSearchTerm) || !is_null($search)) {
     
     $faqSearchResult->reviewResultset($searchResult);
     
-    $inputSearchTerm  = stripslashes($inputSearchTerm);
+    $inputSearchTerm = stripslashes($inputSearchTerm);
     $faqSearch->logSearchTerm($inputSearchTerm);
 }
 
@@ -154,6 +156,10 @@ $faqSearchHelper->setPagination($faqPagination);
 $faqSearchHelper->setPlurals($plr);
 $faqSearchHelper->setSessionId($sids);
 
+if ('' == $printResult && !is_null($inputSearchTerm)) {
+    $printResult = $faqSearchHelper->renderSearchResult($faqSearchResult, $page);
+}
+
 $tpl->processTemplate('writeContent', array(
     'msgSearch'                => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgSearch']),
     'searchString'             => PMF_String::htmlspecialchars($inputSearchTerm, ENT_QUOTES, 'utf-8'),
@@ -164,7 +170,7 @@ $tpl->processTemplate('writeContent', array(
     'printCategoryOptions'     => $faqCategoryHelper->renderCategoryOptions($inputCategory),
     'writeSendAdress'          => '?'.$sids.'action=search',
     'msgSearchWord'            => $PMF_LANG['msgSearchWord'],
-    'printResult'              => $faqSearchHelper->renderSearchResult($faqSearchResult, $page),
+    'printResult'              => $printResult,
     'openSearchLink'           => $faqSearchHelper->renderOpenSearchLink(),
     'msgMostPopularSearches'   => $PMF_LANG['msgMostPopularSearches'],
     'printMostPopularSearches' => $faqSearchHelper->renderMostPopularSearches($mostPopularSearchData)));

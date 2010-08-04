@@ -487,7 +487,7 @@ class PMF_Faq
      * @param   string  $sortby     Sort by
      * @return  string
      */
-    public function showAllRecordsByIds(Array $record_ids, $orderby = 'id', $sortby = 'ASC')
+    public function showAllRecordsByIds(Array $record_ids, $orderby = 'fd.id', $sortby = 'ASC')
     {
         global $sids;
 
