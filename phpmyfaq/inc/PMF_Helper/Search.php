@@ -65,6 +65,13 @@ class PMF_Helper_Search extends PMF_Helper
     private $searchterm = '';
     
     /**
+     * PMF_Category_Layout object
+     * 
+     * @var PMF_Category_Layout
+     */
+    private $categoryLayout = null;
+    
+    /**
      * Constructor
      * 
      * @return PMF_Helper_Search
@@ -123,6 +130,18 @@ class PMF_Helper_Search extends PMF_Helper
     }
     
     /**
+     * PMF_Category_Layout setter
+     * 
+     * @param PMF_Category_Layout $categoryLayout PMF_Category_Layout
+     * 
+     * @return void
+     */
+    public function setCategoryLayout(PMF_Category_Layout $categoryLayout)
+    {
+        $this->categoryLayout = $categoryLayout;
+    }
+    
+    /**
      * Searchterm setter
      * 
      * @param string $searchterm Searchterm
@@ -172,7 +191,7 @@ class PMF_Helper_Search extends PMF_Helper
                     continue;
                 }
                 
-                $categoryName  = $this->Category->getPath($result->category_id);
+                $categoryName  = $this->categoryLayout->renderBreadcrumb(array($result->category_id));
                 $question      = PMF_Utils::chopString($result->question, 15);
                 $answerPreview = PMF_Utils::chopString(strip_tags($result->answer), 25);
                 
@@ -285,7 +304,7 @@ class PMF_Helper_Search extends PMF_Helper
             
             foreach ($resultSet->getResultset() as $result) {
                 
-                $categoryName  = $this->Category->getPath($result->category_id);
+                $categoryName  = $this->categoryLayout->renderBreadcrumb(array($result->category_id));
                 $question      = PMF_Utils::chopString($result->question, 15);
                 $answerPreview = PMF_Utils::chopString(strip_tags($result->answer), 25);
                 $searchterm    = str_replace(

@@ -79,7 +79,8 @@ if (isset($user) && is_object($user)) {
 $faq             = new PMF_Faq();
 $faqSearch       = new PMF_Search($db, $Language);
 $faqSearchResult = new PMF_Search_Resultset($user, $faq);
-
+$categoryData    = new PMF_Category_Tree_DataProvider_SingleQuery($LANGCODE);
+$categoryLayout  = new PMF_Category_Layout(new PMF_Category_Tree_Helper(new PMF_Category_Tree($categoryData)));
 //
 // Handle the search requests
 //
@@ -91,7 +92,7 @@ if (!is_null($searchString)) {
     
     $faqSearchHelper = PMF_Helper_Search::getInstance();
     $faqSearchHelper->setSearchterm($searchString);
-    $faqSearchHelper->setCategory($category);
+    $faqSearchHelper->setCategoryLayout($categoryLayout);
     $faqSearchHelper->setPlurals($plr);
     
     print $faqSearchHelper->renderInstantResponseResult($faqSearchResult);

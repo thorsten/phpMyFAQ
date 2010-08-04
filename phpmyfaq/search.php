@@ -92,7 +92,7 @@ $inputCategory = ('%' == $inputCategory) ? 0 : $inputCategory;
 
 $faqsession->userTracking('fulltext_search', $inputSearchTerm);
 
-$mostPopularSearchData = $faqsearch->getMostPopularSearches($faqconfig->get('main.numberSearchTerms'));
+$mostPopularSearchData = $faqSearch->getMostPopularSearches($faqconfig->get('main.numberSearchTerms'));
 
 if (is_numeric($inputSearchTerm) && PMF_SOLUTION_ID_START_VALUE <= $inputSearchTerm && 
     0 < $faqSearchResult->getNumberOfResults()) {
@@ -136,13 +136,11 @@ $options = array(
 
 $categoryLayout    = new PMF_Category_Layout(new PMF_Category_Tree_Helper(new PMF_Category_Tree($categoryData)));
 $faqPagination     = new PMF_Pagination($options);
-$faqCategoryHelper = PMF_Helper_Category::getInstance();
-$faqCategoryHelper->setCategory($category);
 
 $faqSearchHelper = PMF_Helper_Search::getInstance();
 $faqSearchHelper->setSearchterm($inputSearchTerm);
-$faqSearchHelper->setCategory($category);
 $faqSearchHelper->setPagination($faqPagination);
+$faqSearchHelper->setCategoryLayout($categoryLayout);
 $faqSearchHelper->setPlurals($plr);
 $faqSearchHelper->setSessionId($sids);
 

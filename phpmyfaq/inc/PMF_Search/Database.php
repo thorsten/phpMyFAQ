@@ -346,7 +346,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
                 $where = sprintf("%s%s LIKE '%%%s%%'", 
                     $where, 
                     $this->matchingColumns[$j], 
-                    $this->dbHandle->escape_string($keys[$i]));
+                    $this->dbHandle->escapeString($keys[$i]));
             }
             $where .= ")";
         }
