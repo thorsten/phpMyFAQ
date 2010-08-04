@@ -14,7 +14,7 @@
  <!-- Run unit tests and generate junit.xml and clover.xml -->
  <target name="phpunit">
   <exec executable="phpunit" failonerror="true">
-    <arg line="--coverage-clover ${basedir}/build/logs/clover.xml --log-junit ${basedir}/build/logs/junit.xml Test" />
+    <arg line="--coverage-clover ${basedir}/build/logs/clover.xml --log-junit ${basedir}/build/logs/junit.xml phpmyfaq/tests" />
   </exec>
  </target>
 
