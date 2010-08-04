@@ -301,7 +301,7 @@ $query[] = "CREATE TABLE ".$sqltblpre."faqsearches (
 id INTEGER NOT NULL ,
 lang VARCHAR(5) NOT NULL ,
 searchterm VARCHAR(255) NOT NULL ,
-searchdate TIMESTAMP,
+searchdate DATETIME,
 PRIMARY KEY (id, lang)
 )";
 
