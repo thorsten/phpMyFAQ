@@ -324,7 +324,7 @@ class PMF_Comment
                     'category_id' => (isset($row->category_id) ? $row->category_id : null),
                     'content'     => $row->comment,
                     'date'        => $row->comment_date,
-                    'username'    => $row->user,
+                    'username'    => $row->username,
                     'email'       => $row->email);
             }
         }
