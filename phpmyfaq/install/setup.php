@@ -30,7 +30,7 @@
  * @since     2002-08-20
  */
 
-define('VERSION', '2.7.0-alpha');
+define('VERSION', '3.0.0-dev');
 define('APIVERSION', 2);
 define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
@@ -186,8 +186,8 @@ function data_printer($value, $key, $ident = "\n\t")
 
 $system = new PMF_System();
 
-if (version_compare(PHP_VERSION, '5.2.0', '<')) {
-    print "<p class=\"center\">You need PHP 5.2.0 or later!</p>\n";
+if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+    print "<p class=\"center\">You need PHP 5.3.0 or later!</p>\n";
     HTMLFooter();
     die();
 }

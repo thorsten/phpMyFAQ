@@ -55,7 +55,7 @@
 # phpMyFAQ
 #
 %define name        phpmyfaq
-%define version     2.7.0-alpha
+%define version     3.0.0-dev
 %define release     1
 %define epoch       0
 
@@ -130,7 +130,7 @@ Requires:           apache
 %else
 Requires:           httpd
 %endif
-Requires:           php >= 5.2.0
+Requires:           php >= 5.3.0
 # GD is bundled into PHP starting from PHP 4.3.0
 Requires:           php-gd
 # We do not require MySQL but one among the several DB supported by phpMyFAQ.
@@ -142,7 +142,7 @@ Provides:           %{name}-%{version}
 
 %description
 phpMyFAQ is a multilingual, completely database-driven FAQ-system.
-It supports various databases to store all data, PHP 5.2.0 (or higher)
+It supports various databases to store all data, PHP 5.3.0 (or higher)
 is needed in order to access this data.
 phpMyFAQ also offers a Content Management-System with a WYSIWYG editor
 and an Image Manager, flexible multi-user support with LDAP support,
@@ -154,8 +154,8 @@ installation script.
 %changelog
 =======
 
-* Mon Jan 04 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0.alpha-1
-- New upstream version 2.7.0-alpha
+* Sun Aug 08 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 3.0.0.dev-1
+- New upstream version 3.0.0-dev
 
 * Wed Jul 29 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.6.8-1
 - New upstream version 2.6.8

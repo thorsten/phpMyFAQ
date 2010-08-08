@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <title>Documentation for phpMyFAQ 2.7.x</title>
+    <title>Documentation for phpMyFAQ 3.0.x</title>
     <style type="text/css"><!--
     body { font: normal normal 14px "Trebuchet MS", Verdana, Geneva, Arial, Helvetica, sans-serif; line-height: 20px; }
     pre { background-color: #FAFAD2; padding: 5px; }
@@ -17,7 +17,7 @@
 <!-- start of documentation -->
 <div id="doc">
     <a id="top"></a>
-    <h3>[ phpMyFAQ 2.7.x Documentation ]</h3>
+    <h3>[ phpMyFAQ 3.0.x Documentation ]</h3>
     <ol class="main">
         <li><strong><a href="#1">Introduction</a></strong>
         <ol class="alpha">
@@ -47,8 +47,8 @@
             <li><a href="#3a">Upgrading from phpMyFAQ 2.0.x</a></li>
             <li><a href="#3b">Upgrading from phpMyFAQ 2.5.x</a></li>
             <li><a href="#3c">Upgrading from phpMyFAQ 2.6.x</a></li>
-            <li><a href="#3d">Upgrading phpMyFAQ 2.7.x versions</a></li>
-            <li><a href="#3e">Modifying templates for phpMyFAQ 2.7.x</a></li>
+            <li><a href="#3d">Upgrading phpMyFAQ 3.0.x versions</a></li>
+            <li><a href="#3e">Modifying templates for phpMyFAQ 3.0.x</a></li>
         </ol></li>
         <li><strong><a href="#4">Front-end</a></strong>
         <ol class="alpha">
@@ -474,7 +474,7 @@
 
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="3"></a><strong>3. Upgrading</strong></p>
-    <p>Upgrading to phpMyFAQ 2.7.x is possible from the following versions:</p>
+    <p>Upgrading to phpMyFAQ 3.0.x is possible from the following versions:</p>
     <ul>
         <li>phpMyFAQ 2.0.x</li>
         <li>phpMyFAQ 2.5.x</li>
@@ -487,7 +487,7 @@
 
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="3a"></a><strong>3.a. Upgrading from phpMyFAQ 2.0.x</strong></p>
-    <p>Upgrading from 2.0.x to 2.7.x is a major upgrade. Please make a full backup
+    <p>Upgrading from 2.0.x to 3.0.x is a major upgrade. Please make a full backup
     before you run the upgrade! Nevertheless the update from phpMyFAQ 2.0.x to the
     current release is fairly simple. First you have to delete all files
     <strong>except</strong>:</p>
@@ -514,7 +514,7 @@
 
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="3b"></a><strong>3.b. Upgrading from phpMyFAQ 2.5.x</strong></p>
-    <p>Upgrading from 2.5.x to 2.7.x is a minor upgrade. Please make a full backup
+    <p>Upgrading from 2.5.x to 3.0.x is a minor upgrade. Please make a full backup
     before you run the upgrade! First you have to delete all files
     <strong>except</strong>:</p>
     <ul>
@@ -540,7 +540,7 @@
 
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="3c"></a><strong>3.c. Upgrading from phpMyFAQ 2.6.x</strong></p>
-    <p>Upgrading from 2.6.x to 2.7.x is a minor upgrade. Please make a full backup
+    <p>Upgrading from 2.6.x to 3.0.x is a minor upgrade. Please make a full backup
     before you run the upgrade! First you have to delete all files
     <strong>except</strong>:</p>
     <ul>
@@ -558,8 +558,8 @@
     <p><a href="#top">back to top</a></p>
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><a name="3d"></a><strong>3.d. Upgrading phpMyFAQ 2.7.x</strong></p>
-    <p>Updating phpMyFAQ 2.7.x is fairly simple. Via FTP copy all new files from
+    <p><a name="3d"></a><strong>3.d. Upgrading phpMyFAQ 3.0.x</strong></p>
+    <p>Updating phpMyFAQ 3.0.x is fairly simple. Via FTP copy all new files from
     the phpMyFAQ package <strong>except</strong>:</p>
     <ul>
         <li>all files in the directory <strong>config/</strong> </li>
@@ -572,13 +572,13 @@
     <pre>http://www.example.com/faq/install/update.php</pre>
     <p>Choose your installed phpMyFAQ version and click the button of the update
     script, your version will automatically be updated.</p>
-    <p>You can find the changed files between the 2.7.x versions in the file
+    <p>You can find the changed files between the 3.0.x versions in the file
     <em>docs/CHANGEDFILES</em>.</p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><a name="3d"></a><strong>3.d. Modifying templates for phpMyFAQ 2.7.x</strong></p>
+    <p><a name="3d"></a><strong>3.d. Modifying templates for phpMyFAQ 3.0.x</strong></p>
     <p>The 2.0.x and 2.5.x templates are mostly compatible with phpMyFAQ 2.7, if your 
     layout is completely based on CSS, you only have to change the .tpl files listed in 
     <em>docs/CHANGEDFILES</em>. If you need help to integrate phpMyFAQ into your 
@@ -1005,7 +1005,7 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="6"></a>6. Customizing phpMyFAQ 2.7.x</strong></p>
+    <p><strong><a name="6"></a>6. Customizing phpMyFAQ 3.0.x</strong></p>
     <p>In phpMyFAQ code and layout are separated. The layout is based on several
     templates, that you can modify to suit your own needs. The most important files
     for phpMyFAQ's layout can be found in the directory <em>template/default/</em>. 
@@ -1046,8 +1046,8 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="7"></a>7. Customizing phpMyFAQ 2.7.x</strong></p>
-    <p>With phpMyFAQ 2.7.x users have even more customization opportunities. The
+    <p><strong><a name="7"></a>7. Customizing phpMyFAQ 3.0.x</strong></p>
+    <p>With phpMyFAQ 3.0.x users have even more customization opportunities. The
     key feature is the user selectable template sets. From version 2.6.x there is
     a templates/default directory where the default layouts get shipped.</p>
     <p><a href="#top">back to top</a></p>

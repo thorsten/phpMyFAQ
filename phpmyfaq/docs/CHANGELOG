@@ -1,11 +1,11 @@
-phpMyFAQ 2.7.0-alpha
-Codename "Prospero"
+phpMyFAQ 3.0.0-dev
+Codename "Poseidon"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.7.0-alpha - 2010-
+Version 3.0.0 - 201?-
 - added rewritten and enhanced category implementation (Johannes Schlüter, Thorsten)
 - added 960 Grid System CSS Framework (Thorsten)
 - added new administration layout (Thorsten)
