@@ -1,9 +1,12 @@
-phpMyFAQ 2.6.8
-Codename "Portia"
+phpMyFAQ 2.7.0-alpha
+Codename "Prospero"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.7.0-alpha - 2010-09-
+-
 
 Version 2.6.8 - 2010-08-
 - HTML5 powered administration backend (Thorsten) 
