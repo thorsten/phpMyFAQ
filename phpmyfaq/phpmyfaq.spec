@@ -157,6 +157,9 @@ installation script.
 * Sun Aug 08 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 3.0.0.dev-1
 - New upstream version 3.0.0-dev
 
+* Mon Aug 08 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0.alpha-1
+- New upstream version 2.7-0-alpha
+
 * Wed Jul 29 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.6.8-1
 - New upstream version 2.6.8
 

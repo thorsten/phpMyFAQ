@@ -47,8 +47,9 @@
             <li><a href="#3a">Upgrading from phpMyFAQ 2.0.x</a></li>
             <li><a href="#3b">Upgrading from phpMyFAQ 2.5.x</a></li>
             <li><a href="#3c">Upgrading from phpMyFAQ 2.6.x</a></li>
-            <li><a href="#3d">Upgrading phpMyFAQ 3.0.x versions</a></li>
-            <li><a href="#3e">Modifying templates for phpMyFAQ 3.0.x</a></li>
+            <li><a href="#3d">Upgrading phpMyFAQ 2.7.x versions</a></li>
+            <li><a href="#3e">Upgrading phpMyFAQ 3.0.x versions</a></li>
+            <li><a href="#3f">Modifying templates for phpMyFAQ 3.0.x</a></li>
         </ol></li>
         <li><strong><a href="#4">Front-end</a></strong>
         <ol class="alpha">
@@ -78,13 +79,13 @@
             <li><a href="#5j">Backup</a></li>
             <li><a href="#5k">Configuration</a></li>
         </ol></li>
-        <li><strong><a href="#6">Customizing phpMyFAQ 2.5.x</a></strong>
+        <li><strong><a href="#6">Customizing phpMyFAQ 2.7.x</a></strong>
         <ol class="alpha">
             <li><a href="#6a">The file template/default/index.tpl</a></li>
             <li><a href="#6b">The file template/default/style.css</a></li>
             <li><a href="#6c">More Templates</a></li>
         </ol></li>
-        <li><strong><a href="#7">Customizing phpMyFAQ 2.6.x</a></strong>
+        <li><strong><a href="#7">Customizing phpMyFAQ 2.7.x</a></strong>
         <ol class="alpha">
             <li><a href="#7a">Creating custom layout</a></li>
         </ol></li>
@@ -479,6 +480,7 @@
         <li>phpMyFAQ 2.0.x</li>
         <li>phpMyFAQ 2.5.x</li>
         <li>phpMyFAQ 2.6.x</li>
+        <li>phpMyFAQ 2.7.x</li>
     </ul>
     <p>If you're running an older version of phpMyFAQ we recommend a new and fresh
     install. </p>
@@ -557,8 +559,27 @@
     your template files due to the new, enhanced template engine.</p>
     <p><a href="#top">back to top</a></p>
 
+
     <hr style="width: 90%; height: 1px;"  />
-    <p><a name="3d"></a><strong>3.d. Upgrading phpMyFAQ 3.0.x</strong></p>
+    <p><a name="3d"></a><strong>3.d. Upgrading from phpMyFAQ 2.7.x</strong></p>
+    <p>Upgrading from 2.7.x to 3.0.x is fairly simple. Via FTP copy all new files from
+    the phpMyFAQ package <strong>except</strong>:</p>
+    <ul>
+        <li>all files in the directory <strong>config/</strong> </li>
+        <li>all files in the directory <strong>template/</strong></li>
+        <li>the directory <strong>attachments/</strong></li>
+        <li>the directory <strong>data/</strong></li>
+        <li>the directory <strong>images/</strong></li>
+    </ul>
+    <p>Open the following URL in your browser:</p>
+    <pre>http://www.example.com/faq/install/update.php</pre>
+    <p>Choose your installed phpMyFAQ version and click the button of the update
+    script, your version will automatically be updated.</p>
+    <p><a href="#top">back to top</a></p>
+
+
+    <hr style="width: 90%; height: 1px;"  />
+    <p><a name="3e"></a><strong>3.d. Upgrading phpMyFAQ 3.0.x</strong></p>
     <p>Updating phpMyFAQ 3.0.x is fairly simple. Via FTP copy all new files from
     the phpMyFAQ package <strong>except</strong>:</p>
     <ul>
@@ -573,19 +594,17 @@
     <p>Choose your installed phpMyFAQ version and click the button of the update
     script, your version will automatically be updated.</p>
     <p>You can find the changed files between the 3.0.x versions in the file
-    <em>docs/CHANGEDFILES</em>.</p>
     <p><a href="#top">back to top</a></p>
-
 
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="3d"></a><strong>3.d. Modifying templates for phpMyFAQ 3.0.x</strong></p>
-    <p>The 2.0.x and 2.5.x templates are mostly compatible with phpMyFAQ 2.7, if your 
+    <p>The 2.x templates are mostly compatible with phpMyFAQ 3.0, if your 
     layout is completely based on CSS, you only have to change the .tpl files listed in 
     <em>docs/CHANGEDFILES</em>. If you need help to integrate phpMyFAQ into your 
     website feel free to contact us.</p>
     <p>Note: We changed the character set for all languages and templates to 
-    UTF-8. If you notice problems with e.g. German umlauts you have to convert
-    your templates.</p>
+    UTF-8 with phpMyFAQ 2.6. If you notice problems with e.g. German umlauts you have to 
+    convert your templates.</p>
     <p><a href="#top">back to top</a></p>
 
 

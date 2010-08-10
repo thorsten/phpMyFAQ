@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * $Id: language_he.php,v 1.28 2007-04-29 14:25:30 thorstenr Exp $
  *
