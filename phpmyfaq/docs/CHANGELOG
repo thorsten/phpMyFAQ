@@ -9,7 +9,8 @@ Version 2.7.0-alpha - 2010-09-
 - changed PHP requirement to PHP 5.2.3 (Thorsten)
 
 Version 2.6.8 - 2010-08-
-- HTML5 powered administration backend (Thorsten) 
+- added new TinyMCE plugin for adding internal links by a suggest search (Thorsten)
+- added basic HTML5 powered administration backend (Thorsten) 
 - updated bundled TCPDF library to version 5.6.000 (Thorsten)
 - updated bundled TinyMCE editor component to version 3.3.8 (Thorsten)
 - updated bundled phpseclib to version 0.2.1 (Thorsten)

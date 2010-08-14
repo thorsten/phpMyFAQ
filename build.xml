@@ -33,8 +33,8 @@
  <target name="pdepend">
   <exec executable="pdepend">
    <arg line="--jdepend-xml=${basedir}/build/logs/jdepend.xml
---jdepend-chart=${basedir}/build/pdepend/dependencies.svg
---overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg
+              --jdepend-chart=${basedir}/build/pdepend/dependencies.svg
+              --overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg
 ./" />
   </exec>
  </target>
@@ -56,10 +56,11 @@
  <!-- Generate checkstyle.xml -->
  <target name="phpcs">
   <exec executable="phpcs" output="/dev/null">
-   <arg line="--report=checkstyle
---report-file=${basedir}/build/logs/checkstyle.xml
---standard=Zend
-./" />
+   <arg line="--report=checkstyle 
+              --report-file=${basedir}/build/logs/checkstyle.xml 
+              --standard=Zend 
+              --ignore=${basedir}/phpmyfaq/inc/libs/
+              ./" />
   </exec>
  </target>
 

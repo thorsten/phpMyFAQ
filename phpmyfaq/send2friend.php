@@ -24,7 +24,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new PMF_Captcha($sids);
+$captcha = new PMF_Captcha($db, $Language);
+$captcha->setSessionId($sids);
 
 if (!is_null($showCaptcha)) {
     $captcha->showCaptchaImg();
