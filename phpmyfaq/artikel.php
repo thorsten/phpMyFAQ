@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha   = new PMF_Captcha($sids);
+$captcha   = new PMF_Captcha($db, $Language);
 $oGlossary = new PMF_Glossary();
 $oLnk      = new PMF_Linkverifier();
 $tagging   = new PMF_Tags();
@@ -37,6 +37,7 @@ $relevant  = new PMF_Relation($db, $Language);
 $faqrating = new PMF_Rating();
 $comment   = new PMF_Comment();
 
+$captcha->setSessionId($sids);
 if (!is_null($showCaptcha)) {
     $captcha->showCaptchaImg();
     exit;

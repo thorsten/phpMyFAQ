@@ -2,12 +2,8 @@
 /**
  * This is the page there a user can add a FAQ record translation.
  *
- * @package    phpMyFAQ
- * @subpackage Frontend
- * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright  2006-2010 phpMyFAQ Team
- * @since      2006-11-12
- *
+ * PHP Version 5.2.0
+ * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -17,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ 
+ * @package   Frontend
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @copyright 2006-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2006-11-12
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -24,7 +28,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new PMF_Captcha($sids);
+$captcha = new PMF_Captcha($db, $Language);
+$captcha->setSessionId($sids);
 
 if (!is_null($showCaptcha)) {
     $captcha->showCaptchaImg();
