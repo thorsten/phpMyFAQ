@@ -72,8 +72,8 @@ if (!is_readable(PMF_ROOT_DIR.'/inc/data.php') && !is_readable(PMF_ROOT_DIR.'/co
     HTMLFooter();
     die();
 }
-if (version_compare(PHP_VERSION, '5.2.0', '<')) {
-    print '<p class="center">You need PHP 5.2.0 or later!</p>';
+if (version_compare(PHP_VERSION, '5.2.3', '<')) {
+    print '<p class="center">You need PHP 5.2.3 or later!</p>';
     HTMLFooter();
     die();
 }

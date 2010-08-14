@@ -1,7 +1,7 @@
 <?php
 /**
  * Attachment migration handler
- * 
+ *
  * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License

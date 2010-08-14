@@ -355,16 +355,10 @@ class PMF_String
      */
     public static function htmlspecialchars($str, $quote_style = ENT_COMPAT, $charset = null, $double_encode = false)
     {
-        if (version_compare(PHP_VERSION, '5.2.3', '>=')) {
-            return htmlspecialchars($str,
-                                    $quote_style,
-                                    null == $charset ? self::$instance->getEncoding() : $charset,
-                                    $double_encode);
-        } else {
-            return htmlspecialchars($str,
-                                    $quote_style,
-                                    null == $charset ? self::$instance->getEncoding() : $charset);
-        }
+        return htmlspecialchars($str,
+                                $quote_style,
+                                null == $charset ? self::$instance->getEncoding() : $charset,
+                                $double_encode);
     }
     
     /**
@@ -380,15 +374,9 @@ class PMF_String
     public static function htmlentities($string, $quote_style = ENT_COMPAT, $charset = null, $double_encode = true)
     {
     
-        if (version_compare(PHP_VERSION, '5.2.3', '>=')) {
-            return htmlentities($string, 
-                                $quote_style,
-                                null == $charset ? self::$instance->getEncoding() : $charset,
-                                $double_encode);
-        } else {
-            return htmlentities($string, 
-                                $quote_style,
-                                null == $charset ? self::$instance->getEncoding() : $charset);
-        }
+        return htmlentities($string, 
+                            $quote_style,
+                            null == $charset ? self::$instance->getEncoding() : $charset,
+                            $double_encode);
     }
 }

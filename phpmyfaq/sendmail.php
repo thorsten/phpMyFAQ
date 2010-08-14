@@ -31,7 +31,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $faqsession->userTracking('sendmail_contact', 0);
 
-$captcha = new PMF_Captcha($sids);
+$captcha = new PMF_Captcha($db, $Language);
+$captcha->setSessionId($sids);
 
 $name     = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
 $email    = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);

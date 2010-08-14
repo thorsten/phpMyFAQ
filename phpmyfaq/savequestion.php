@@ -30,7 +30,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new PMF_Captcha($sids);
+$captcha = new PMF_Captcha($db, $Language);
+$captcha->setSessionId($sids);
 
 $username = PMF_Filter::filterInput(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
 $usermail = PMF_Filter::filterInput(INPUT_POST, 'usermail', FILTER_VALIDATE_EMAIL);

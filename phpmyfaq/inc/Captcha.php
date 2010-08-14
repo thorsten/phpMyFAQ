@@ -1,16 +1,8 @@
 <?php
 /**
  * The phpMyFAQ Captcha class
- *
- * @package    phpMyFAQ
- * @subpackage PMF_Captcha
- * @license    MPL
- * @author     Thomas Zeithaml <seo@annatom.de>
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since      2006-02-04
- * @copyright  2006-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -21,22 +13,32 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Captcha
+ * @author    Thomas Zeithaml <seo@annatom.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @copyright 2006-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2006-02-04
  */
 
 /**
  * PMF_Captcha
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Captcha
- * @license    MPL
- * @author     Thomas Zeithaml <seo@annatom.de>
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since      2006-02-04
- * @copyright  2006-2008 phpMyFAQ Team
- * @version    SVN: $Id$
+ * @category  phpMyFAQ
+ * @package   PMF_Captcha
+ * @author    Thomas Zeithaml <seo@annatom.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @copyright 2006-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2006-02-04
  */
-class PMF_Captcha extends PMF_Model
+class PMF_Captcha
 {
     /**
      * The phpMyFAQ session id
@@ -57,42 +59,45 @@ class PMF_Captcha extends PMF_Model
      *
      * @var string
      */
-    private $code;
+    private $code = '';
 
     /**
      * Array of characters
      *
      * @var array
      */
-    private $letters;
+    private $letters = array('1', '2', '3', '4', '5', '6', '7', '8', '9',
+                             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
+                             'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+                             'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' );
 
     /**
      * Length of the captcha code
      *
      * @var integer
      */
-    public $caplength;
+    public $caplength = 6;
 
     /**
      * Width of the image
      *
      * @var integer
      */
-    private $width;
+    private $width = 200;
 
     /**
      * Height of the image
      *
      * @var integer
      */
-    private $height;
+    private $height = 40;
 
     /**
      * JPEG quality in percents
      *
      * @var integer
      */
-    private $quality;
+    private $quality = 60;
 
     /**
      * Random background color RGB components
@@ -107,6 +112,13 @@ class PMF_Captcha extends PMF_Model
      * @var resource
      */
     private $img;
+
+    /**
+     * The user agent language
+     *
+     * @var PMF_Language
+     */
+    private $language;
 
     /**
      * The user agent string
@@ -125,39 +137,49 @@ class PMF_Captcha extends PMF_Model
     /**
      * Constructor
      *
-     * @param   string  $sids      Session ID
-     * @param   integer $caplength Length of captch code
-     * @return  void
+     * @param PMF_DB_Driver $database Database connection
+     * @param PMF_Language  $language Language object
+     * 
+     * @return PMF_Captcha
      */
-    public function __construct($sids, $caplength = 6)
+    public function __construct(PMF_DB_Driver $database, PMF_Language $language)
     {
-        parent::__construct();
-        
-        $this->setLanguage(PMF_Language::$language);
-        if ($sids > 0) {
-            $this->sids  = $sids;
-        } else {
-            $this->sids  = '';
-        }
+        $this->db        = $database;
+        $this->language  = $language;
         $this->userAgent = $_SERVER['HTTP_USER_AGENT'];
         $this->ip        = $_SERVER['REMOTE_ADDR'];
-        $this->caplength = $caplength;
-        $this->letters   = array('1', '2', '3', '4', '5', '6', '7', '8', '9',
-                                    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
-                                    'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
-                                    'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' );
-        $this->code      = '';
-        $this->quality   = 60;
         $this->fonts     = $this->getFonts();
-        $this->width     = 200;
-        $this->height    = 40;
         $this->timestamp = $_SERVER['REQUEST_TIME'];
     }
 
     //
     // public functions
     //
-
+    
+    /**
+     * Setter for session id
+     * 
+     * @param integer $sid session id
+     * 
+     * @return void
+     */
+    public function setSessionId($sid)
+    {
+        $this->sids = $sid;
+    }
+    
+    /**
+     * Setter for the captcha code length
+     * 
+     * @param integer $caplength Length of captch code
+     * 
+     * @return void
+     */
+    public function setCodeLength($length = 6)
+    {
+        $this->caplength = $length;
+    }
+    
     /**
      * Gives the HTML output code for the Captcha
      *
@@ -211,7 +233,7 @@ class PMF_Captcha extends PMF_Model
      */
     public function getCaptchaCode()
     {
-        $query = sprintf('SELECT id FROM %sfaqcaptcha', SQLPREFIX);
+        $query  = sprintf('SELECT id FROM %sfaqcaptcha', SQLPREFIX);
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_assoc($result)) {
             $this->code = $row['id'];
@@ -272,8 +294,7 @@ class PMF_Captcha extends PMF_Model
      */
     public function checkCaptchaCode($code)
     {
-        $faqconfig = PMF_Configuration::getInstance();
-        if ($faqconfig->get('spam.enableCaptchaCode')) {
+        if (PMF_Configuration::getInstance()->get('spam.enableCaptchaCode')) {
             return $this->validateCaptchaCode($code);
         } else {
             return true;
@@ -450,18 +471,18 @@ class PMF_Captcha extends PMF_Model
     */
     private function saveCaptcha()
     {
-    	$select = sprintf("
-    	   SELECT 
-    	       id 
-    	   FROM 
-    	       %sfaqcaptcha 
-    	   WHERE 
-    	       id = '%s'",
-    	   SQLPREFIX,
-    	   $this->code);
-    	
-    	$result = $this->db->query($select);   
-    	
+        $select = sprintf("
+           SELECT 
+               id 
+           FROM 
+               %sfaqcaptcha 
+           WHERE 
+               id = '%s'",
+           SQLPREFIX,
+           $this->code);
+        
+        $result = $this->db->query($select);   
+        
         if ($result) {
             $num = $this->db->numRows($result);
             if ($num > 0) {
@@ -476,7 +497,7 @@ class PMF_Captcha extends PMF_Model
                     SQLPREFIX, 
                     $this->code, 
                     $this->userAgent, 
-                    $this->language, 
+                    $this->language->getLanguage(), 
                     $this->ip, 
                     $this->timestamp);
                     

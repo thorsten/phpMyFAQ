@@ -52,7 +52,9 @@ $errorMessages = array(
     'updateRights'               => $PMF_LANG['ad_msg_mysqlerr'],
     'updateRights_noId'          => $PMF_LANG['ad_user_error_noId']);
 
-$captcha   = new PMF_Captcha($sids);
+$captcha = new PMF_Captcha($db, $Language);
+$captcha->setSessionId($sids);
+
 $loginname = PMF_Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_STRING);
 $lastname  = PMF_Filter::filterInput(INPUT_POST, 'lastname', FILTER_SANITIZE_STRING);
 $email     = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);

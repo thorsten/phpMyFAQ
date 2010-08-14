@@ -28,7 +28,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new PMF_Captcha($sids);
+$captcha = new PMF_Captcha($db, $Language);
+$captcha->setSessionId($sids);
 
 $type    = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
 $code    = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
