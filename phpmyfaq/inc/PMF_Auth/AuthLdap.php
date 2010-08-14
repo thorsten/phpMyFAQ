@@ -24,7 +24,6 @@
  * @since     2009-03-01
  */
 
-
 /**
  * PMF_Auth_AuthLdap
  *

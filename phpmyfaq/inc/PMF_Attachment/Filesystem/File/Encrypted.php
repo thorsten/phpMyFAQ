@@ -2,12 +2,7 @@
 /**
  * Unencrypted file handler class
  *
- * @package    phpMyFAQ
- * @license    MPL
- * @author     Anatoliy Belsky <ab@php.net>
- * @since      2009-08-21
- * @version    SVN: $Id: Vanilla.php 4872 2009-09-06 10:54:06Z anatoliy $
- * @copyright  2009 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,17 +13,26 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Attachment
+ * @author    Anatoliy Belsky <ab@php.net>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-08-21
  */
 
 /**
- * PMF_Atachment_File
+ * PMF_Atachment_Abstract
  * 
- * @package    phpMyFAQ
- * @license    MPL
- * @author     Anatoliy Belsky <ab@php.net>
- * @since      2009-08-21
- * @version    SVN: $Id: Vanilla.php 4872 2009-09-06 10:54:06Z anatoliy $
- * @copyright  2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   PMF_Attachment
+ * @author    Anatoliy Belsky <ab@php.net>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-08-21
  */
 class PMF_Attachment_Filesystem_File_Encrypted extends PMF_Attachment_Filesystem_File
 {

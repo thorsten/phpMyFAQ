@@ -15,7 +15,7 @@
  * under the License.
  * 
  * @category  phpMyFAQ
- * @package   Filter
+ * @package   PMF_Filter
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
@@ -27,7 +27,7 @@
  * PMF_Filter
  *
  * @category  phpMyFAQ
- * @package   Filter
+ * @package   PMF_Filter
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
@@ -43,6 +43,7 @@ class PMF_Filter
      * @param  string  $variable_name Variable name
      * @param  integer $filter        Filter 
      * @param  mixed   $default       Default value
+     * 
      * @return mixed
      */
     public static function filterInput ($type, $variable_name, $filter, $default = null)
