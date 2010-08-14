@@ -223,8 +223,8 @@ function cleanInstallation()
 
 <?php
 
-if (version_compare(PHP_VERSION, '5.2.0', '<')) {
-    print "<p class=\"center\">You need PHP 5.2.0 or later!</p>\n";
+if (version_compare(PHP_VERSION, '5.2.3', '<')) {
+    print "<p class=\"center\">You need PHP 5.2.3 or later!</p>\n";
     HTMLFooter();
     die();
 }

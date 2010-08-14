@@ -80,11 +80,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
             die();
         }
         
-        if (version_compare(PHP_VERSION, '5.2.3', '>')) {
-        	mysql_set_charset('utf8', $this->conn);
-        } else {
-        	$this->query('SET NAMES utf8');
-        }
+        mysql_set_charset('utf8', $this->conn);
         
         return mysql_select_db($db, $this->conn);
     }

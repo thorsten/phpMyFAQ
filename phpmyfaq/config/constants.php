@@ -1,12 +1,8 @@
 <?php
 /**
- * Constants for phpMyFAQ.
- *
- * @package   phpMyFAQ 
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since     2003-12-10
- * @copyright 2003-2010 phpMyFAQ Team
+ * Constants for phpMyFAQ
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License Version
  * 1.1 (the "License"); you may not use this file except in compliance with
@@ -17,13 +13,16 @@
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
  * for the specific language governing rights and limitations under the
  * License.
- */
-
-/**
- * PHP 6 script encoding
  *
+ * @category  phpMyFAQ
+ * @package   Setup
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since     2003-12-10
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @copyright 2003-2010 phpMyFAQ Team
  */
-declare(encoding='latin1');
 
 /**
  * Set the string below according to your users (main) timezone.
@@ -177,11 +176,11 @@ $botBlacklist = array(
  * @var  array
  */
 $supported_databases = array(
-    'mysql'   => array('5.2.0', 'MySQL 4.1.x / 5.x / 6.x (ext/mysql)'),
-    'pgsql'   => array('5.2.0', 'PostgreSQL 7.x / 8.x'),
+    'mysql'   => array('5.2.0', 'MySQL 5.x (ext/mysql)'),
+    'pgsql'   => array('5.2.0', 'PostgreSQL 8.x'),
     'sybase'  => array('5.2.0', 'Sybase'),
-    'mssql'   => array('5.2.0', 'MS SQL Server 2000 / 2005'),
-    'mysqli'  => array('5.2.0', 'MySQL 4.1.x / 5.x / 6.x (ext/mysqli)'),
+    'mssql'   => array('5.2.0', 'MS SQL Server 2005 / 2008'),
+    'mysqli'  => array('5.2.0', 'MySQL 5.x (ext/mysqli)'),
     'sqlite'  => array('5.2.0', 'SQLite'),
     'ibm_db2' => array('5.2.0', 'IBM DB2 Universal Database 8.2 / 9.1'),
     'sqlsrv'  => array('5.2.0', 'SQL Server Driver for PHP (experimental)'),
