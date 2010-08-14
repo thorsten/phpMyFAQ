@@ -37,7 +37,7 @@ if ($permission['delcomment']) {
     $comment     = new PMF_Comment();
     $faq         = new PMF_Faq();
     $faqcomments = $comment->getAllComments('faq');
-
+    
     printf("<h3>%s</h3>\n", $PMF_LANG['ad_comment_faqs']);
     if (count($faqcomments)) {
 ?>
@@ -46,7 +46,11 @@ if ($permission['delcomment']) {
     <input type="hidden" name="ajaxaction" value="delete" />
     <table class="listrecords">
 <?php
+        $lastCommentId = 0;
         foreach ($faqcomments as $faqcomment) {
+            if ($faqcomment['comment_id'] == $lastCommentId) {
+                continue;
+            }
 ?>
     <tr id="comments_<?php print $faqcomment['comment_id']; ?>">
         <td class="list" width="20"><input name="faq_comments[<?php print $faqcomment['record_id']; ?>]" value="<?php print $faqcomment['comment_id']; ?>" type="checkbox" /></td>
@@ -62,12 +66,13 @@ if ($permission['delcomment']) {
             <?php print PMF_String::htmlspecialchars($faqcomment['content']); ?>
         </td>
     </tr>
-    <tr>
-        <td colspan="3"><input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit" /></td>
-    </tr>
 <?php
+            $lastCommentId = $faqcomment['comment_id'];
         }
 ?>
+    <tr>
+        <td colspan="3"><input class="submit records" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit" /></td>
+    </tr>
     </table>
     </form>
 <?php
@@ -100,7 +105,7 @@ if ($permission['delcomment']) {
         }
 ?>
     <tr>
-        <td colspan="3"><input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit" /></td>
+        <td colspan="3"><input class="submit news" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit" /></td>
     </tr>
     </table>
 <?php
@@ -121,9 +126,10 @@ if ($permission['delcomment']) {
             data: comments,
             success: function(msg) {
                 if (msg == 1) {
-                    $('#returnMessage').append('<?php print $PMF_LANG['ad_entry_commentdelsuc']; ?>').fadeIn('slow');
-                    $("tr td input:checked").parent().parent().fadeOut('slow');
-                    }
+                    $('#saving_data_indicator').html('<img src="images/indicator.gif" /> deleting ...');
+                    $('tr td input:checked').parent().parent().fadeOut('slow');
+                    $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_commentdelsuc']; ?>');
+                }
             }
         });
         return false;
