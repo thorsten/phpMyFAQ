@@ -2,12 +2,7 @@
 /**
  * The plurals class provides support for plural forms in PMF translations.
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Language
- * @author     Aurimas Fišeras <aurimas@gmail.com>
- * @since      2009-07-30
- * @version    SVN: $Id$
- * @copyright  2009 Aurimas Fišeras and phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,17 +13,26 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Language
+ * @author    Aurimas Fišeras <aurimas@gmail.com>
+ * @copyright 2009-2010 Aurimas Fišeras and phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-07-30
  */
 
 /**
  * PMF_Language_Plurals
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Language
- * @author     Aurimas Fišeras <aurimas@gmail.com>
- * @since      2009-07-30
- * @version    SVN: $Id$
- * @copyright  2009 Aurimas Fišeras and phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   PMF_Language
+ * @author    Aurimas Fišeras <aurimas@gmail.com>
+ * @copyright 2009-2010 Aurimas Fišeras and phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-07-30
  */
 class PMF_Language_Plurals
 {

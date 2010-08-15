@@ -26,13 +26,8 @@
  * a single permission-object is allowed for each user. The permission-object is
  * in the user's $perm variable. Permission methods are performed using the
  * variable (e.g. $user->perm->method() ).
- *
- * @package    phpMyFAQ 
- * @subpackage PMF_Perm
- * @author     Lars Tiedemann <php@larstiedemann.de>
- * @since      2005-09-17
- * @copyright  2005-2009 phpMyFAQ Team
- * @version    SVN: $Id$ 
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -43,17 +38,26 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ 
+ * @package   PMF_Perm
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-09-17
  */
 
 /**
  * PMF_Perm
  * 
- * @package    phpMyFAQ 
- * @subpackage PMF_Perm
- * @author     Lars Tiedemann <php@larstiedemann.de>
- * @since      2005-09-17
- * @copyright  2005-2009 phpMyFAQ Team
- * @version    SVN: $Id$ 
+ * @category  phpMyFAQ 
+ * @package   PMF_Perm
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-09-17
  */
 class PMF_Perm
 {
@@ -81,7 +85,7 @@ class PMF_Perm
      */
     protected function __construct()
     {
-    	$this->db = PMF_Db::getInstance(); 
+        $this->db = PMF_Db::getInstance(); 
     }
     
     /**
