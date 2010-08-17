@@ -180,8 +180,6 @@ class PMF_Category_Helper extends PMF_Category_Abstract
             }
         }
 
-        $result = $this->db->query($query);
-        
         if (!$result) {
             throw new PMF_Exception($this->db->error());
         }
