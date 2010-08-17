@@ -144,8 +144,9 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     // Permissions
     $user_permission = $faq->getPermission('user', $faqData['id']);
     if (count($user_permission) == 0 || $user_permission[0] == -1) {
-        $all_users        = true;
-        $restricted_users = false;
+        $all_users          = true;
+        $restricted_users   = false;
+        $user_permission[0] = -1;
     } else {
         $all_users        = false;
         $restricted_users = true;
@@ -153,8 +154,9 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
     $group_permission = $faq->getPermission('group', $faqData['id']);
     if (count($group_permission) == 0 || $group_permission[0] == -1) {
-        $all_groups        = true;
-        $restricted_groups = false;
+        $all_groups          = true;
+        $restricted_groups   = false;
+        $group_permission[0] = -1;
     } else {
         $all_groups        = false;
         $restricted_groups = true;

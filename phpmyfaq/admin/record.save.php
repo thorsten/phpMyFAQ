@@ -124,7 +124,11 @@ if ($permission['editbt']) {
         } else {
             print $PMF_LANG['ad_entry_savedfail'].$db->error();
         }
-
+        
+        if (!isset($categories['rubrik'])) {
+            $categories['rubrik'] = array();
+        }
+        
         // delete category relations
         $faq->deleteCategoryRelations($record_id, $record_lang);
         // save or update the category relations
@@ -164,7 +168,7 @@ if ($permission['editbt']) {
             }
             rmdir($path);
         }
-    
+        
         $faq->deleteRecord($record_id, $record_lang);
         print $PMF_LANG['ad_entry_delsuc'];
     }

@@ -2,13 +2,7 @@
 /**
  * build table of all categories in all languages
  *
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Rudi Ferrari <bookcrossers@gmx.de>
- * @since      2006-09-18
- * @copyright  2006-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,6 +13,15 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Rudi Ferrari <bookcrossers@gmx.de>
+ * @copyright 2006-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2006-09-18
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {

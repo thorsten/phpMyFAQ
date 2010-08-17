@@ -167,7 +167,7 @@ if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SE
                     urlencode($cat_content_item->searchterm));
                 
                 $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri() . $url);
-                $oLink->text      = $cat_content_item->thema;
+                $oLink->text      = $cat_content_item->question;
                 $tmp_result_html .= '<li>' . $oLink->toHtmlAnchor() . '<br /></li>' . "\n";
             }
             

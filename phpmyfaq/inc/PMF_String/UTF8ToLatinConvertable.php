@@ -2,14 +2,8 @@
 /**
  * The string wrapper class using single byte string functions.
  *
- * @package    phpMyFAQ
- * @subpackage PMF_String
- * @license    MPL
- * @author     Anatoliy Belsky <ab@php.net>
- * @since      2009-04-08
- * @version    SVN: $Id: Basic.php 4153 2009-04-08 05:54:08Z thorsten $
- * @copyright  2009 phpMyFAQ Team
- *
+ * PHP Version 5.2.0
+ * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -19,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_String
+ * @author    Anatoliy Belsky <ab@php.net>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-04-08
  */
 
 /**
@@ -32,13 +34,13 @@
  * TODO Cover also nearly complete supported charsets, languages and chars
  *      Notice this article: http://en.wikipedia.org/wiki/ISO_8859-1
  * 
- * @package    phpMyFAQ
- * @subpackage PMF_String
- * @license    MPL
- * @author     Anatoliy Belsky <ab@php.net>
- * @since      2009-04-08
- * @version    SVN: $Id: Basic.php 4153 2009-04-08 05:54:08Z thorsten $
- * @copyright  2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   PMF_String
+ * @author    Anatoliy Belsky <ab@php.net>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-04-06
  */
 class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
 {

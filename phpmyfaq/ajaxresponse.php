@@ -36,15 +36,15 @@ $searchString = PMF_Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_ST
 $ajaxLanguage = PMF_Filter::filterInput(INPUT_POST, 'ajaxlanguage', FILTER_SANITIZE_STRING, 'en');
 $categoryId   = PMF_Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALIDATE_INT, '%');
 
-$Language = new PMF_Language();
-$LANGCODE = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
+$language     = new PMF_Language();
+$languageCode = $language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
 require_once 'lang/language_en.php';
 
 if (PMF_Language::isASupportedLanguage($ajaxLanguage)) {
-    $LANGCODE = trim($ajaxLanguage);
-    require_once 'lang/language_'.$LANGCODE.'.php';
+    $languageCode = trim($ajaxLanguage);
+    require_once 'lang/language_' . $languageCode . '.php';
 } else {
-    $LANGCODE = 'en';
+    $languageCode = 'en';
     require_once 'lang/language_en.php';
 }
 
@@ -54,7 +54,7 @@ $plr = new PMF_Language_Plurals($PMF_LANG);
 //
 // Initalizing static string wrapper
 //
-PMF_String::init($LANGCODE);
+PMF_String::init($languageCode);
 
 //
 // Get current user and group id - default: -1
@@ -81,7 +81,7 @@ $category->transform(0);
 $category->buildTree();
 
 $faq             = new PMF_Faq();
-$faqSearch       = new PMF_Search($db, $Language);
+$faqSearch       = new PMF_Search($db, $language);
 $faqSearchResult = new PMF_Search_Resultset($user, $faq);
 
 //
