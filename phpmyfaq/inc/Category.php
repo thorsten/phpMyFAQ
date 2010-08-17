@@ -1071,7 +1071,6 @@ class PMF_Category
             array('faqcategories'        => 'id'),
             array('faqcategories'        => 'parent_id'),
             array('faqcategoryrelations' => 'category_id'),
-            array('faqquestions'         => 'ask_rubrik'),
             array('faqcategory_group'    => 'category_id'),
             array('faqcategory_user'     => 'category_id'));
 
@@ -1098,7 +1097,32 @@ class PMF_Category
                     $temp_cat));
             }
         }
+        
+        $tables2 = array(array('faqquestions' => 'ask_rubrik'));
 
+        foreach ($tables2 as $pair) {
+            foreach ($pair as $_table => $_field) {
+                $result = $result && $this->db->query(sprintf("UPDATE %s SET %s = '%d' WHERE %s = '%d'",
+                    SQLPREFIX.$_table,
+                    $_field,
+                    $temp_cat,
+                    $_field,
+                    $category_id_2));
+                $result = $result && $this->db->query(sprintf("UPDATE %s SET %s = '%d' WHERE %s = '%d'",
+                    SQLPREFIX.$_table,
+                    $_field,
+                    $category_id_2,
+                    $_field,
+                    $category_id_1));
+                $result = $result && $this->db->query(sprintf("UPDATE %s SET %s = '%d' WHERE %s = '%d'",
+                    SQLPREFIX.$_table,
+                    $_field,
+                    $category_id_1,
+                    $_field,
+                    $temp_cat));
+            }
+        }
+        
         return $result;
     }
 
