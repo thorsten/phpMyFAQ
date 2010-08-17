@@ -15,6 +15,7 @@ Version 2.6.8 - 2010-08-
 - fixed XML rendering issue (Thorsten)
 - updated Russian translation
 - updated Portuguese translation
+- fixed many bugs (Thorsten, Bram)
     
 Version 2.6.7 - 2010-07-29
 - refactored search backend (Thorsten)
