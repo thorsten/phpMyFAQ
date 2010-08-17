@@ -40,8 +40,7 @@ if (DEBUG) {
     error_reporting(E_ALL & E_STRICT);
     ini_set('display_errors', 1);
 } else {
-	error_reporting(E_ALL);
-    ini_set('display_errors', 0);
+    error_reporting(E_ALL);
 }
 
 //
