@@ -242,12 +242,25 @@ if ($step == 4) {
     // UPDATES FROM 2.5.0-alpha2
     //
     if (version_compare($version, '2.5.0-alpha2', '<')) {
-        $query[] = "CREATE TABLE ".SQLPREFIX."faqsearches (
-                    id INTEGER NOT NULL ,
-                    lang VARCHAR(5) NOT NULL ,
-                    searchterm VARCHAR(255) NOT NULL ,
-                    searchdate TIMESTAMP,
-                    PRIMARY KEY (id, lang))";
+        switch($DB['type']) {
+            case 'pgsql':
+                $query[] = "CREATE TABLE ".SQLPREFIX."faqsearches (
+                            id SERIAL NOT NULL ,
+                            lang VARCHAR(5) NOT NULL ,
+                            searchterm VARCHAR(255) NOT NULL ,
+                            searchdate TIMESTAMP,
+                            PRIMARY KEY (id, lang))";
+                break;
+
+            default:
+                $query[] = "CREATE TABLE ".SQLPREFIX."faqsearches (
+                            id INTEGER NOT NULL ,
+                            lang VARCHAR(5) NOT NULL ,
+                            searchterm VARCHAR(255) NOT NULL ,
+                            searchdate TIMESTAMP,
+                            PRIMARY KEY (id, lang))";
+                break;
+        }
         $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.enableWysiwygEditor', 'true')";
     }
     
@@ -358,6 +371,100 @@ if ($step == 4) {
                 $query[] = "DROP TABLE ".SQLPREFIX."faqdata_revisions_temp";
                 $query[] = "COMMIT";
         	break;
+            case 'pgsql':
+                $query[] = "CREATE TEMPORARY TABLE ".SQLPREFIX."faqdata_temp (
+                    id SERIAL NOT NULL,
+                    lang varchar(5) NOT NULL,
+                    solution_id int4 NOT NULL,
+                    revision_id int4 NOT NULL DEFAULT 0,
+                    active char(3) NOT NULL,
+                    keywords text DEFAULT NULL,
+                    thema text NOT NULL,
+                    content text DEFAULT NULL,
+                    author varchar(255) NOT NULL,
+                    email varchar(255) NOT NULL,
+                    comment char(1) NOT NULL default 'y',
+                    datum varchar(15) NOT NULL,
+                    links_state varchar(7) DEFAULT NULL,
+                    links_check_date int4 DEFAULT 0 NOT NULL,
+                    date_start varchar(14) NOT NULL DEFAULT '00000000000000',
+                    date_end varchar(14) NOT NULL DEFAULT '99991231235959',
+                    PRIMARY KEY (id, lang))";
+                $query[] = "INSERT INTO ".SQLPREFIX."faqdata_temp SELECT * FROM ".SQLPREFIX."faqdata";
+                $query[] = "DROP TABLE ".SQLPREFIX."faqdata";
+                $query[] = "CREATE TABLE ".SQLPREFIX."faqdata (
+                    id SERIAL NOT NULL,
+                    lang varchar(5) NOT NULL,
+                    solution_id int4 NOT NULL,
+                    revision_id int4 NOT NULL DEFAULT 0,
+                    active char(3) NOT NULL,
+                    sticky INTEGER NOT NULL DEFAULT 0,
+                    keywords text DEFAULT NULL,
+                    thema text NOT NULL,
+                    content text DEFAULT NULL,
+                    author varchar(255) NOT NULL,
+                    email varchar(255) NOT NULL,
+                    comment char(1) NOT NULL default 'y',
+                    datum varchar(15) NOT NULL,
+                    links_state varchar(7) DEFAULT NULL,
+                    links_check_date int4 DEFAULT 0 NOT NULL,
+                    date_start varchar(14) NOT NULL DEFAULT '00000000000000',
+                    date_end varchar(14) NOT NULL DEFAULT '99991231235959',
+                    PRIMARY KEY (id, lang))";
+                $query[] = "INSERT INTO ".SQLPREFIX."faqdata SELECT id, lang, solution_id, revision_id, active, 0,
+                    keywords, thema, content, author, email, comment, datum, links_state, links_check_date, date_start,
+                    date_end FROM ".SQLPREFIX."faqdata_temp";
+                $query[] = "DROP TABLE ".SQLPREFIX."faqdata_temp";
+                $query[] = "SELECT setval('".SQLPREFIX."faqdata_id_seq', (SELECT MAX(id) FROM ".SQLPREFIX."faqdata)+1)";
+
+                
+                $query[] = "CREATE TEMPORARY TABLE ".SQLPREFIX."faqdata_revisions_temp (
+                    id SERIAL NOT NULL,
+                    lang varchar(5) NOT NULL,
+                    solution_id int4 NOT NULL,
+                    revision_id int4 NOT NULL DEFAULT 0,
+                    active char(3) NOT NULL,
+                    keywords text DEFAULT NULL,
+                    thema text NOT NULL,
+                    content text DEFAULT NULL,
+                    author varchar(255) NOT NULL,
+                    email varchar(255) NOT NULL,
+                    comment char(1) default 'y',
+                    datum varchar(15) NOT NULL,
+                    links_state varchar(7) DEFAULT NULL,
+                    links_check_date int4 DEFAULT 0 NOT NULL,
+                    date_start varchar(14) NOT NULL DEFAULT '00000000000000',
+                    date_end varchar(14) NOT NULL DEFAULT '99991231235959',
+                    PRIMARY KEY (id, lang, solution_id, revision_id))";
+
+                $query[] = "INSERT INTO ".SQLPREFIX."faqdata_revisions_temp SELECT * FROM ".SQLPREFIX."faqdata_revisions";
+                $query[] = "DROP TABLE ".SQLPREFIX."faqdata_revisions";
+                $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_revisions (
+                    id SERIAL NOT NULL,
+                    lang varchar(5) NOT NULL,
+                    solution_id int4 NOT NULL,
+                    revision_id int4 NOT NULL DEFAULT 0,
+                    active char(3) NOT NULL,
+                    sticky INTEGER NOT NULL  DEFAULT 0,
+                    keywords text DEFAULT NULL,
+                    thema text NOT NULL,
+                    content text DEFAULT NULL,
+                    author varchar(255) NOT NULL,
+                    email varchar(255) NOT NULL,
+                    comment char(1) default 'y',
+                    datum varchar(15) NOT NULL,
+                    links_state varchar(7) DEFAULT NULL,
+                    links_check_date int4 DEFAULT 0 NOT NULL,
+                    date_start varchar(14) NOT NULL DEFAULT '00000000000000',
+                    date_end varchar(14) NOT NULL DEFAULT '99991231235959',
+                    PRIMARY KEY (id, lang, solution_id, revision_id))";
+                $query[] = "INSERT INTO ".SQLPREFIX."faqdata_revisions SELECT id, lang, solution_id, revision_id, active, 0,
+                    keywords, thema, content, author, email, comment, datum, links_state, links_check_date, date_start,
+                    date_end FROM ".SQLPREFIX."faqdata_revisions_temp";
+                $query[] = "DROP TABLE ".SQLPREFIX."faqdata_revisions_temp";
+                $query[] = "SELECT setval('".SQLPREFIX."faqdata_revisions_id_seq', (SELECT MAX(id) FROM ".SQLPREFIX."faqdata_revisions)+1)";
+        	break;
+
             default:
                 $query[] = "ALTER TABLE ".SQLPREFIX."faqdata ADD sticky INTEGER DEFAULT 0 NOT NULL AFTER active";
                 $query[] = "ALTER TABLE ".SQLPREFIX."faqdata_revisions ADD sticky INTEGER DEFAULT 0 NOT NULL AFTER active";
