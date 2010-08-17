@@ -1,14 +1,8 @@
 <?php
 /**
  * Translates a category
- *
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Rudi Ferrari <bookcrossers@gmx.de>
- * @since      2006-09-10
- * @copyright  2006-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,6 +13,15 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Rudi Ferrari <bookcrossers@gmx.de>
+ * @copyright 2006-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2006-09-10
  */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
@@ -67,7 +70,7 @@ if ($permission["editcateg"]) {
 
         <label class="left"><?php print $PMF_LANG["ad_categ_owner"]; ?>:</label>
         <select name="user_id" size="1">
-        <?php print $user->getAllUserOptions($cat->categoryName[$id]['user_id']); ?>
+        <?php print $user->getAllUserOptions($category->categoryName[$id]['user_id']); ?>
         </select><br />
 
         <input class="submit" style="margin-left: 190px;" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_translatecateg"]; ?>" />
