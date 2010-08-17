@@ -173,6 +173,9 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      */
     public function numRows($result)
     {
+        if (!is_object($result)) {
+            debug_print_backtrace();
+        }
         return $result->num_rows;
     }
 

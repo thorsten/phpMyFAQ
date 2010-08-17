@@ -16,6 +16,7 @@ Version 2.7.0-alpha - 2010-09-
 - changed PHP requirement to PHP 5.2.3 (Thorsten)
 
 Version 2.6.8 - 2010-08-
+- dropped Oracle database support (Thorsten)
 - added new TinyMCE plugin for adding internal links by a suggest search (Thorsten)
 - added basic HTML5 powered administration backend (Thorsten) 
 - updated bundled TCPDF library to version 5.6.000 (Thorsten)
