@@ -265,6 +265,18 @@ class PMF_Perm_PermBasic extends PMF_Perm
     }
 
     /**
+     * Dummy function; this function is only relevant when the
+     * permission mode is set to Medium.
+     *
+     * @param  integer $user_id User ID
+     * @return boolean
+     */
+    public function autoJoin($user_id)
+    {
+        return true;
+    }
+
+    /**
      * Adds a new right into the database. Returns the ID of the
      * new right. The associative array right_data contains the right 
      * data stored in the rights table. 
