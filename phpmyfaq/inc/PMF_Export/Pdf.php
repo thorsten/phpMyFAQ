@@ -77,27 +77,28 @@ class PMF_Export_Pdf extends PMF_Export
         $this->category->transform($categoryId);
         
         $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
+        $this->pdf->setCategory($categoryId);
+        $this->pdf->setCategories($this->category->categoryName);
         
         if (count($faqdata)) {
-        	
-        	$categories = $questions = $answers = $authors = $dates = array();
+            
+            $categories = $questions = $answers = $authors = $dates = array();
 
-        	$i = 0;
-        	foreach ($faqdata as $data) {
+            $i = 0;
+            foreach ($faqdata as $data) {
                 $categories[$i] = $data['category_id'];
                 $questions[$i]  = $data['topic'];
                 $answers[$i]    = $data['content'];
                 $authors[$i]    = $data['author_name'];
                 $dates[$i]      = $data['lastmodified'];
                 $i++;
-        	}
-        	
+            }
+            
             // Create the PDF
             foreach ($answers as $key => $value) {
-            	
-            	$this->pdf->setCategory($categories[$key]);
-            	$this->pdf->setQuestion($questions[$key]);
-            	$this->pdf->setCategories($this->category->categoryName);
+                $this->pdf->setCategory($categories[$key]);
+                $this->pdf->setQuestion($questions[$key]);
+                $this->pdf->setCategories($this->category->categoryName);
                 $this->pdf->AddPage();
                 $this->pdf->SetFont('arialunicid0', '', 12);
                 $this->pdf->WriteHTML($value);

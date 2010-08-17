@@ -413,7 +413,11 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
      */
     public function Header()
     {
-        $title            = $this->categories[$this->category]['name'].': '.$this->question;
+        if (array_key_exists($this->category, $this->categories)) {
+            $title = $this->categories[$this->category]['name'].': '.$this->question;
+        } else {
+            $title = $this->question;
+        }
         $currentTextColor = $this->TextColor;
         
         $this->SetTextColor(0,0,0);
@@ -451,7 +455,12 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
             $this->SetFont('arialunicid0', '', 8);
             $baseUrl = '/index.php';
             if (is_array($this->faq) && !empty($this->faq)) {
-                $baseUrl .= '?action=artikel&amp;cat='.$this->categories[$this->category]['id'];
+                $baseUrl .= '?action=artikel&amp;';
+                if (array_key_exists($this->category, $this->categories)) {
+                    $baseUrl .= 'cat=' . $this->categories[$this->category]['id'];
+                } else {
+                    $baseUrl .= 'cat=0';
+                }
                 $baseUrl .= '&amp;id='.$this->faq['id'];
                 $baseUrl .= '&amp;artlang='.$this->faq['lang'];
             }
