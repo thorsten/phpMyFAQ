@@ -463,6 +463,7 @@ class PMF_User
             return false;
         }
 
+        $this->perm->autoJoin($this->user_id);
         return $this->getUserByLogin($login, false);
     }
 

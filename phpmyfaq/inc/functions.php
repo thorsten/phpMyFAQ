@@ -149,6 +149,17 @@ function pmf_error_handler($level, $message, $filename, $line, $context)
 <b>phpMyFAQ $errorType</b> [$level]: $message in <b>$filename</b> on line <b>$line</b><br />
 EOD;
 
+    if (ini_get('display_errors')) {
+        printf ($errorMessage);
+    }
+    if (ini_get('log_errors')) {
+        error_log(sprintf('phpMyFAQ %s:  %s in %s on line %d', 
+            $errorType, 
+            $message, 
+            $filename, 
+            $line));
+    }
+
     switch ($level) {
         // Blocking errors
         case E_ERROR:
@@ -156,21 +167,11 @@ EOD;
         case E_CORE_ERROR:
         case E_COMPILE_ERROR:
         case E_USER_ERROR:
-            // Clear any output that has already been generated
-            // TBD: it generally seems not useful unless when errors appear on
-            //      coded HTTP streaming e.g. when creating PDF to be sent to users
-            if (ob_get_length()) {
-                //ob_clean();
-            }
-            // Output the error message
-            echo $errorMessage;
             // Prevent processing any more PHP scripts
             exit();
             break;
         // Not blocking errors
         default:
-            // Output the error message
-            echo $errorMessage;
             break;
     }
     

@@ -1,7 +1,7 @@
 <?php
 /**
  * Translation frontend for categories
- *
+ * 
  * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -13,7 +13,7 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- * 
+ *
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>

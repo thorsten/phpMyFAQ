@@ -81,7 +81,7 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
             $this->resultSet = $this->dbHandle->query($query);
             
             // Fallback for searches with less than three characters
-            if (0 == $this->dbHandle->numRows($this->resultSet)) {
+            if (false == $this->resultSet) {
                 
                 $query = sprintf("
                     SELECT

@@ -40,8 +40,7 @@ if (DEBUG) {
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
 } else {
-	error_reporting(E_ALL);
-    ini_set('display_errors', 0);
+    error_reporting(E_ALL);
 }
 
 //
@@ -232,7 +231,7 @@ class PMF_Init
         if (isset($path_parts['extension']) && ($path_parts['basename'] == '.'.$path_parts['extension'])) {
             return '';
         }
-        if (!isset($path_parts['extension']) && (PMF_String::strlen($path_parts['basename']) == 0)) {
+        if (!isset($path_parts['extension']) && (PMF_String_Basic::strlen($path_parts['basename']) == 0)) {
             return '';
         }
 

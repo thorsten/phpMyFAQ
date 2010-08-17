@@ -1,7 +1,7 @@
 <?php
 /**
  * build table of all categories in all languages
- * 
+ *
  * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
