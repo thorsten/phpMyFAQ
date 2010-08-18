@@ -204,7 +204,6 @@ if (!$system->checkDatabase($supported_databases)) {
     die();
 }
 
-$missing = array();
 if (!$system->checkExtension($enabledExtensions)) {
     print "<p class=\"center\">The following extensions are missing! Please enable the PHP extension:</p>\n";
     print "<ul>\n";
@@ -623,7 +622,7 @@ foreach ($permLevels as $level => $desc) {
             HTMLFooter();
             die();
         }
-        usleep(25000);
+        usleep(2500);
         $count++;
         if (!($count % 10)) {
             print '| ';
