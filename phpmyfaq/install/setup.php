@@ -63,67 +63,6 @@ $enabledExtensions = array(
     'filter');
 
 /**
- * Lookup for installed database extensions
- * If the first supported extension is enabled, return true.
- *
- * @param  array $supported_databases Array of supported databases
- * @return boolean
- * @access public
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- */
-function db_check($supported_databases)
-{
-    foreach ($supported_databases as $extension => $database) {
-        if (extension_loaded($extension)) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-/**
- * Lookup for installed PHP extensions
- *
- * @param  array $enabledExtensions enabled Extensions
- * @return boolean
- * @access public
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- */
-function extension_check($enabledExtensions, &$output)
-{
-    $missing_extensions = array();
-    foreach ($enabledExtensions as $extension) {
-
-        if (!extension_loaded($extension)) {
-            $missing_extensions[] = $extension;
-        }
-    }
-
-    if (count($missing_extensions) > 0) {
-        $output = $missing_extensions;
-        return false;
-    }
-    return true;
-}
-
-/**
- * Checks for an installed phpMyFAQ version
- *
- * @return boolean
- * @access public
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- */
-function phpmyfaq_check()
-{
-    if (is_file(PMF_ROOT_DIR.'/inc/data.php') || is_file(PMF_ROOT_DIR . '/config/database.php')) {
-        return false;
-    } else {
-        return true;
-    }
-}
-
-/**
  * Executes the uninstall set of queries
  *
  * @return void
@@ -223,13 +162,15 @@ function cleanInstallation()
 
 <?php
 
+$system = new PMF_System();
+
 if (version_compare(PHP_VERSION, '5.2.3', '<')) {
     print "<p class=\"center\">You need PHP 5.2.3 or later!</p>\n";
     HTMLFooter();
     die();
 }
 
-if (!db_check($supported_databases)) {
+if (!$system->checkDatabase($supported_databases)) {
     print '<p class="center">No supported database detected! Please install one of the following' .
           ' database systems and enable the corresponding PHP extension:</p>';
     print '<ul>';
@@ -241,11 +182,10 @@ if (!db_check($supported_databases)) {
     die();
 }
 
-$missing = array();
-if (!extension_check($enabledExtensions, $missing)) {
+if (!$system->checkExtension($enabledExtensions)) {
     print "<p class=\"center\">The following extensions are missing! Please enable the PHP extension:</p>\n";
     print "<ul>\n";
-    foreach ($missing as $extension) {
+    foreach ($system->getMissingExtensions() as $extension) {
         printf('    <li>ext/%s</li>', $extension);
     }
     print "</ul>\n";
@@ -253,7 +193,7 @@ if (!extension_check($enabledExtensions, $missing)) {
     die();
 }
 
-if (!phpmyfaq_check()) {
+if (!$system->checkphpMyFAQInstallation()) {
     print '<p class="center">It seems you\'re already running a version of phpMyFAQ.<br />Please use the <a href="update.php">update script</a>.</p>';
     HTMLFooter();
     die();
