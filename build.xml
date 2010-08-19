@@ -42,14 +42,14 @@
  <!-- Generate pmd.xml -->
  <target name="phpmd">
   <exec executable="phpmd">
-   <arg line="./ xml codesize,design,naming,unusedcode --reportfile ${basedir}/build/logs/pmd.xml" />
+   <arg line="./ xml codesize,design,naming,unusedcode --reportfile ${basedir}/build/logs/pmd.xml --ignore tests,libs,editor" />
   </exec>
  </target>
 
  <!-- Generate pmd-cpd.xml -->
  <target name="phpcpd">
   <exec executable="phpcpd">
-   <arg line="--log-pmd ${basedir}/build/logs/pmd-cpd.xml ./" />
+   <arg line="--log-pmd ${basedir}/build/logs/pmd-cpd.xml --ignore tests,libs,editor ./" />
   </exec>
  </target>
 
@@ -59,7 +59,7 @@
    <arg line="--report=checkstyle 
               --report-file=${basedir}/build/logs/checkstyle.xml 
               --standard=Zend 
-              --ignore=${basedir}/phpmyfaq/inc/libs/
+              --ignore=tests,libs,editor
               ./" />
   </exec>
  </target>
@@ -75,7 +75,8 @@
   <exec executable="phpcb">
    <arg line="--log ${basedir}/build/logs
               --source ${basedir}
-              --output ${basedir}/build/code-browser" />
+              --output ${basedir}/build/code-browser
+              --exclude tests,libs,editor" />
   </exec>
  </target>
 

@@ -2,16 +2,7 @@
 /**
  * The main category class
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Category
- * @license    MPL
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Lars Tiedemann <larstiedemann@yahoo.de>
- * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author     Rudi Ferrari <bookcrossers@gmx.de>
- * @since      2004-02-16
- * @copyright  2004-2009 phpMyFAQ Team
- * @version    SVN: $Id: Category.php,v 1.56 2008-01-26 01:02:56 thorstenr Exp $
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -22,21 +13,32 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_Category
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Lars Tiedemann <larstiedemann@yahoo.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Rudi Ferrari <bookcrossers@gmx.de>
+ * @copyright 2004-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-02-16
  */
 
 /**
  * PMF_Category
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Category
- * @license    MPL
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Lars Tiedemann <larstiedemann@yahoo.de>
- * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author     Rudi Ferrari <bookcrossers@gmx.de>
- * @since      2004-02-16
- * @copyright  2004-2009 phpMyFAQ Team
- * @version    SVN: $Id: Category.php,v 1.56 2008-01-26 01:02:56 thorstenr Exp $
+ * @category  phpMyFAQ
+ * @package   PMF_Category
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Lars Tiedemann <larstiedemann@yahoo.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Rudi Ferrari <bookcrossers@gmx.de>
+ * @copyright 2004-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-02-16
  */
 class PMF_Category
 {
@@ -774,9 +776,12 @@ class PMF_Category
         $temp = $catid = $desc = $breadcrumb = array();
 
         for ($i = 0; $i < $num; $i++) {
-            $temp[]  = $this->treeTab[$this->getLineCategory($ids[$i])]['name'];
-            $catid[] = $this->treeTab[$this->getLineCategory($ids[$i])]['id'];
-            $desc[]  = $this->treeTab[$this->getLineCategory($ids[$i])]['description'];
+            $t = $this->getLineCategory($ids[$i]);
+            if (array_key_exists($t, $this->treeTab)) {
+                $temp[]  = $this->treeTab[$this->getLineCategory($ids[$i])]['name'];
+                $catid[] = $this->treeTab[$this->getLineCategory($ids[$i])]['id'];
+                $desc[]  = $this->treeTab[$this->getLineCategory($ids[$i])]['description'];
+            }
         }
         if (isset($this->treeTab[$this->getLineCategory($id)]['name'])) {
             $temp[]  = $this->treeTab[$this->getLineCategory($id)]['name'];
