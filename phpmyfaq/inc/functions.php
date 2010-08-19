@@ -150,7 +150,7 @@ function pmf_error_handler($level, $message, $filename, $line, $context)
 EOD;
 
     if (ini_get('display_errors')) {
-        printf ($errorMessage);
+        print $errorMessage;
     }
     if (ini_get('log_errors')) {
         error_log(sprintf('phpMyFAQ %s:  %s in %s on line %d', 
