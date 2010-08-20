@@ -286,7 +286,7 @@ abstract class PMF_Attachment_Abstract
                 (id, record_id, record_lang, real_hash, virtual_hash,
                 password_hash, filename, filesize, encrypted, mime_type)
                     VALUES
-                (%d, %d, '%s', '%s', '%s', '%s', '%s', %d, %s, '%s')",
+                (%d, %d, '%s', '%s', '%s', '%s', '%s', %d, %d, '%s')",
                     $faqattTableName,
                     $this->id,
                     $this->recordId,
@@ -296,7 +296,7 @@ abstract class PMF_Attachment_Abstract
                     $this->passwordHash,
                     $this->filename,
                     $this->filesize,
-                    $this->encrypted ? 'TRUE' : 'FALSE',
+                    $this->encrypted ? 1 : 0,
                     $this->mimeType);
             
             $result = $this->db->query($sql);
