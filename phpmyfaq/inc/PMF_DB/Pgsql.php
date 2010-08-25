@@ -79,6 +79,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
             PMF_Db::errorPage(pg_last_error($this->conn));
             die();
         }
+        $this->query("SET standard_conforming_strings=on");
         return true;
     }
 
