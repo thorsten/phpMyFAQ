@@ -27,11 +27,34 @@
 
 define('NEWVERSION', '3.0.0-dev');
 define('APIVERSION', 2);
+define('MINIMUM_PHP_VERSION', '5.3.0');
 define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
 if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     set_time_limit(0);
+}
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>phpMyFAQ <?php print NEWVERSION; ?> Update</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="../template/default/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="../template/default/favicon.ico" type="image/x-icon" />
+    <style media="screen" type="text/css">@import url(style/setup.css);</style>
+</head>
+<body>
+
+<h1 id="header">phpMyFAQ <?php print NEWVERSION; ?> Update</h1>
+
+<?php
+
+if (version_compare(PHP_VERSION, MINIMUM_PHP_VERSION, '<')) {
+    printf("<p class=\"center\">Sorry, but you need PHP %s or later!</p>\n", MINIMUM_PHP_VERSION);
+    HTMLFooter();
+    die();
 }
 
 require_once PMF_ROOT_DIR.'/inc/autoLoader.php';
@@ -52,28 +75,9 @@ function HTMLFooter()
     printf('<p class="center">%s</p></body></html>', COPYRIGHT);
 }
 
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <title>phpMyFAQ <?php print NEWVERSION; ?> Update</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="shortcut icon" href="../template/default/favicon.ico" type="image/x-icon" />
-    <link rel="icon" href="../template/default/favicon.ico" type="image/x-icon" />
-    <style media="screen" type="text/css">@import url(style/setup.css);</style>
-</head>
-<body>
-
-<h1 id="header">phpMyFAQ <?php print NEWVERSION; ?> Update</h1>
-<?php
 if (!is_readable(PMF_ROOT_DIR.'/inc/data.php') && !is_readable(PMF_ROOT_DIR.'/config/database.php')) {
     print '<p class="center">It seems you never run a version of phpMyFAQ.<br />' .
           'Please use the <a href="setup.php">install script</a>.</p>';
-    HTMLFooter();
-    die();
-}
-if (version_compare(PHP_VERSION, '5.2.3', '<')) {
-    print '<p class="center">You need PHP 5.2.3 or later!</p>';
     HTMLFooter();
     die();
 }
@@ -114,7 +118,8 @@ if ($step == 1) {
 <p><strong>Please make a full backup of your SQL tables before running this update.</strong></p>
 <?php 
 if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable($templateDir)) {
-	echo "<p><strong>Please make the dir $templateDir and its contents writeable (777 on Linux/UNIX).</strong></p>";
+    printf("<p><strong>Please make the dir %s and its contents writeable (777 on Linux/UNIX).</strong></p>",
+        $templateDir);
 }
 ?>
 <h3 align="center">Your current phpMyFAQ version: <?php print $version; ?></p>
@@ -134,25 +139,25 @@ if ($step == 2) {
     
     // First backup old inc/data.php, then backup new config/bak.database.php and copy inc/data.php 
     // to config/database.php
-	if (file_exists(PMF_ROOT_DIR . '/inc/data.php')) {
-	    if (!copy(PMF_ROOT_DIR . '/inc/data.php', PMF_ROOT_DIR . '/config/database.bak.php') ||
+    if (file_exists(PMF_ROOT_DIR . '/inc/data.php')) {
+        if (!copy(PMF_ROOT_DIR . '/inc/data.php', PMF_ROOT_DIR . '/config/database.bak.php') ||
             !copy(PMF_ROOT_DIR . '/inc/data.php', PMF_ROOT_DIR . '/config/database.php')) {
             print "<p class=\"error\"><strong>Error:</strong> The backup file ../config/database.bak.php could " .
                   "not be written. Please correct this!</p>";
         } else {
             $checkDatabaseSetupFile = true;
         }
-	}
-	
-	// The backup an existing config/database.php
-	if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {
-		if (!copy(PMF_ROOT_DIR . '/config/database.php', PMF_ROOT_DIR . '/config/database.bak.php')) {
+    }
+    
+    // The backup an existing config/database.php
+    if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {
+        if (!copy(PMF_ROOT_DIR . '/config/database.php', PMF_ROOT_DIR . '/config/database.bak.php')) {
             print "<p class=\"error\"><strong>Error:</strong> The backup file ../config/database.bak.php could " .
                   "not be written. Please correct this!</p>";
         } else {
             $checkDatabaseSetupFile = true;
         }
-	}
+    }
     
     // Now backup and move LDAP setup if available
     if (file_exists(PMF_ROOT_DIR . '/inc/dataldap.php')) {
@@ -172,19 +177,19 @@ if ($step == 2) {
             $notWritableFiles[] = "$templateDir/{$item->getFilename()}";
         }
     }
-	if (version_compare($version, '2.6.0-alpha', '<') && (!is_writeable($templateDir) || !empty($notWritableFiles))) {
-	    if (!is_writeable($templateDir)) {
-			printf("<p><strong>The dir %s isn't writeable.</strong></p>\n", $templateDir);
-	    }
-	    if (!empty($notWritableFiles)) {
-	    	foreach ($notWritableFiles as $item) {
-	    		printf("<p><strong>The file %s isn't writeable.</strong></p>\n", $item);
-	    	}
-	    }
-	    
-	} else {
-		$checkTemplateDirectory = true;
-	}
+    if (version_compare($version, '2.6.0-alpha', '<') && (!is_writeable($templateDir) || !empty($notWritableFiles))) {
+        if (!is_writeable($templateDir)) {
+            printf("<p><strong>The dir %s isn't writeable.</strong></p>\n", $templateDir);
+        }
+        if (!empty($notWritableFiles)) {
+            foreach ($notWritableFiles as $item) {
+                printf("<p><strong>The file %s isn't writeable.</strong></p>\n", $item);
+            }
+        }
+        
+    } else {
+        $checkTemplateDirectory = true;
+    }
     
     // is everything is okay?
     if ($checkDatabaseSetupFile && $checkTemplateDirectory) {
@@ -278,7 +283,7 @@ if ($step == 4) {
         require 'stopwords.sql.php';
 
         switch($DB['type']) {
-        	case 'sqlite':
+            case 'sqlite':
                 $query[] = "BEGIN TRANSACTION";
                 $query[] = "CREATE TEMPORARY TABLE ".SQLPREFIX."faqdata_temp (
                     id int(11) NOT NULL,
@@ -370,7 +375,7 @@ if ($step == 4) {
                     date_end FROM ".SQLPREFIX."faqdata_revisions_temp";
                 $query[] = "DROP TABLE ".SQLPREFIX."faqdata_revisions_temp";
                 $query[] = "COMMIT";
-        	break;
+            break;
             case 'pgsql':
                 $query[] = "CREATE TEMPORARY TABLE ".SQLPREFIX."faqdata_temp (
                     id SERIAL NOT NULL,
@@ -463,7 +468,7 @@ if ($step == 4) {
                     date_end FROM ".SQLPREFIX."faqdata_revisions_temp";
                 $query[] = "DROP TABLE ".SQLPREFIX."faqdata_revisions_temp";
                 $query[] = "SELECT setval('".SQLPREFIX."faqdata_revisions_id_seq', (SELECT MAX(id) FROM ".SQLPREFIX."faqdata_revisions)+1)";
-        	break;
+            break;
 
             default:
                 $query[] = "ALTER TABLE ".SQLPREFIX."faqdata ADD sticky INTEGER DEFAULT 0 NOT NULL AFTER active";
@@ -550,19 +555,19 @@ if ($step == 4) {
          */
         $templateBackupDir = "$templateDir/backup";
         while (file_exists($templateBackupDir)) {
-        	$templateBackupDir = $templateBackupDir . mt_rand();
+            $templateBackupDir = $templateBackupDir . mt_rand();
         }
 
         if (!mkdir($templateBackupDir, 0777)) {
-        	die("Couldn't create the templates backup dir.");
+            die("Couldn't create the templates backup dir.");
         }
         
         foreach (new DirectoryIterator($templateDir) as $item) {
-	    	if ($item->isFile() && $item->isWritable()) {
-	    		rename("$templateDir/{$item->getFilename()}", "$templateBackupDir/{$item->getFilename()}");
-	    	}
-    	}
-    	
+            if ($item->isFile() && $item->isWritable()) {
+                rename("$templateDir/{$item->getFilename()}", "$templateBackupDir/{$item->getFilename()}");
+            }
+        }
+        
         /**
          * Attachments stuff
          */
@@ -654,7 +659,7 @@ if ($step == 4) {
     
     // Perform the queries for updating/migrating the database from 2.x
     if (isset($query)) {
-    	print '<div class="center">';
+        print '<div class="center">';
         ob_flush();
         flush();
         $count = 0;
@@ -662,7 +667,7 @@ if ($step == 4) {
             $result = @$db->query($current_query);
             print '.';
             if (!$result) {
-            	print "</div>";
+                print "</div>";
                 print "\n<div class=\"error\">\n";
                 print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
                 print "<div style=\"text-align: left;\"><p>Query:\n";
