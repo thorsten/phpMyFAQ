@@ -32,11 +32,71 @@
 
 define('VERSION', '2.7.0-alpha');
 define('APIVERSION', 1);
+define('MINIMUM_PHP_VERSION', '5.2.3');
 define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
 if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     set_time_limit(0);
+}
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>phpMyFAQ <?php print VERSION; ?> Setup</title>
+    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+    <link rel="shortcut icon" href="../template/default/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="../template/default/favicon.ico" type="image/x-icon" />
+    <script language="javascript" type="text/javascript">
+    /*<![CDATA[*/
+    // <!--
+    function cssAddClass(ele, className) {
+        if (typeof ele == 'string') {
+            ele = document.getElementById(ele);
+        }
+
+        ele.className += ' ' + className;
+    }
+
+    function cssDelClass(ele, className) {
+        if (typeof ele == 'string') {
+            ele = document.getElementById(ele);
+        }
+
+        var regexp = new RegExp(
+            '^'+className+'\\b\\s*|\\s*\\b'+className+'\\b', 'ig'
+        );
+        ele.className = ele.className.replace(regexp, '');
+    }
+
+    function select_database(field) {
+        switch (field.value) {
+            case 'sqlite':
+                cssDelClass('dbsqlite', 'collapsed');
+                cssAddClass('dbdatafull', 'collapsed');
+                break;
+            default:
+                cssAddClass('dbsqlite', 'collapsed');
+                cssDelClass('dbdatafull', 'collapsed');
+                break;
+        }
+    }
+    // -->
+    /*]]>*/
+    </script>
+    <style media="screen" type="text/css">@import url(style/setup.css);</style>
+</head>
+<body>
+
+<h1 id="header">phpMyFAQ <?php print VERSION; ?> Setup</h1>
+
+<?php
+
+if (version_compare(PHP_VERSION, MINIMUM_PHP_VERSION, '<')) {
+    printf("<p class=\"center\">Sorry, but you need PHP %s or later!</p>\n", MINIMUM_PHP_VERSION);
+    HTMLFooter();
+    die();
 }
 
 require PMF_ROOT_DIR . '/config/constants.php';
@@ -109,68 +169,10 @@ function cleanInstallation()
     }
 }
 
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <title>phpMyFAQ <?php print VERSION; ?> Setup</title>
-    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
-    <link rel="shortcut icon" href="../template/default/favicon.ico" type="image/x-icon" />
-    <link rel="icon" href="../template/default/favicon.ico" type="image/x-icon" />
-    <script language="javascript" type="text/javascript">
-    /*<![CDATA[*/
-    // <!--
-    function cssAddClass(ele, className) {
-        if (typeof ele == 'string') {
-            ele = document.getElementById(ele);
-        }
-
-        ele.className += ' ' + className;
-    }
-
-    function cssDelClass(ele, className) {
-        if (typeof ele == 'string') {
-            ele = document.getElementById(ele);
-        }
-
-        var regexp = new RegExp(
-            '^'+className+'\\b\\s*|\\s*\\b'+className+'\\b', 'ig'
-        );
-        ele.className = ele.className.replace(regexp, '');
-    }
-
-    function select_database(field) {
-        switch (field.value) {
-            case 'sqlite':
-                cssDelClass('dbsqlite', 'collapsed');
-                cssAddClass('dbdatafull', 'collapsed');
-                break;
-            default:
-                cssAddClass('dbsqlite', 'collapsed');
-                cssDelClass('dbdatafull', 'collapsed');
-                break;
-        }
-    }
-    // -->
-    /*]]>*/
-    </script>
-    <style media="screen" type="text/css">@import url(style/setup.css);</style>
-</head>
-<body>
-
-<h1 id="header">phpMyFAQ <?php print VERSION; ?> Setup</h1>
-
-<?php
-
 $system = new PMF_System();
 
-if (version_compare(PHP_VERSION, '5.2.3', '<')) {
-    print "<p class=\"center\">You need PHP 5.2.3 or later!</p>\n";
-    HTMLFooter();
-    die();
-}
-
 if (!$system->checkDatabase($supported_databases)) {
+
     print '<p class="center">No supported database detected! Please install one of the following' .
           ' database systems and enable the corresponding PHP extension:</p>';
     print '<ul>';
@@ -587,7 +589,7 @@ foreach ($permLevels as $level => $desc) {
         $result = @$db->query($each_query[1]);
         if (!$result) {
             print "\n<div class=\"error\">\n";
-            print "<p><strong>Error:</strong> Please install your version of phpMyFAQ once again or send us a <a href=\"http://bugs.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>";
+            print "<p><strong>Error:</strong> Please install your version of phpMyFAQ once again or send us a <a href=\"http://www.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>";
             print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
             print "<div style=\"text-align: left;\"><p>Query:\n";
             print "<pre>".htmlentities($each_query[1])."</pre></p></div>\n";
