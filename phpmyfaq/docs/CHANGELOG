@@ -9,12 +9,13 @@ Version 2.6.8 - 2010-08-
 - dropped Oracle database support (Thorsten)
 - added new TinyMCE plugin for adding internal links by a suggest search (Thorsten)
 - added basic HTML5 powered administration backend (Thorsten) 
+- improved setup and update functionality (Thorsten, Bram)
 - updated bundled TCPDF library to version 5.6.000 (Thorsten)
 - updated bundled TinyMCE editor component to version 3.3.8 (Thorsten)
 - updated bundled phpseclib to version 0.2.1 (Thorsten)
-- fixed XML rendering issue (Thorsten)
 - updated Russian translation
 - updated Portuguese translation
+- fixed XML rendering issue (Thorsten)
 - fixed many bugs (Thorsten, Bram)
     
 Version 2.6.7 - 2010-07-29
