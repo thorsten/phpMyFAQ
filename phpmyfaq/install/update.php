@@ -638,10 +638,6 @@ if ($step == 4) {
     // UPDATES FROM 2.6.0-RC
     //
     if (version_compare($version, '2.6.0-RC', '<')) {
-<<<<<<< HEAD
-=======
-        
->>>>>>> 223c4c61717a71f0e61e2b657454ba7cd820bbac
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.optionalMailAddress', 'false')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.useAjaxSearchOnStartpage', 'false')";
     }
