@@ -10,7 +10,10 @@ Version 2.7.0-alpha - 2010-09-
 - dropped support for MySQL 4.1 (Thorsten)
 - added new HTML5 based layout (Thorsten)
 
-Version 2.6.8 - 2010-08-
+Version 2.6.9 - 2010-09-
+- 
+
+Version 2.6.8 - 2010-08-31
 - dropped Oracle database support (Thorsten)
 - added new TinyMCE plugin for adding internal links by a suggest search (Thorsten)
 - added basic HTML5 powered administration backend (Thorsten) 
