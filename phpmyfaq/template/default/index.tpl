@@ -1,40 +1,46 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{metaLanguage}" lang="{metaLanguage}">
+<!doctype html>
+<html lang="{metaLanguage}" class="no-js">
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
     <title>{title}</title>
     <base href="{baseHref}" />
-    <meta http-equiv="X-UA-Compatible" content="IE=8" />
-    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
-    <meta name="title" content="{metaTitle}" />
-    <meta name="description" content="{metaDescription}" />
-    <meta name="keywords" content="{metaKeywords}" />
-    <meta name="author" content="{metaPublisher}" />
-    <meta name="publisher" content="{metaPublisher}" />
-    <meta name="copyright" content="(c) 2001 - 2010 phpMyFAQ Team" />
-    <meta name="generator" content="phpMyFAQ {phpmyfaqversion}" />
-    <meta name="Content-Language" content="utf-8" />
-    <meta name="robots" content="INDEX, FOLLOW" />
-    <meta name="revisit-after" content="7 days" />
-    <meta name="MSSmartTagsPreventParsing" content="true" />    
-    <style type="text/css" media="screen">@import url(template/{tplSetName}/{stylesheet}.css);</style>
-    <style type="text/css" media="print">@import url(template/{tplSetName}/print.css);</style>
-    <script type="text/javascript" src="inc/js/functions.js"></script>
-    <script type="text/javascript" src="inc/js/jquery.min.js"></script>
-    <link rel="shortcut icon" href="template/{tplSetName}/favicon.ico" type="image/x-icon" />
-    <link rel="icon" href="template/{tplSetName}/favicon.ico" type="image/x-icon" />
-    <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="feed/news/rss.php" />
-    <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="feed/topten/rss.php" />
-    <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml" href="feed/latest/rss.php" />
-    <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml" href="feed/openquestions/rss.php" />
-    <link rel="microsummary" href="microsummary.php?action={action}" />
-    <link rel="search" type="application/opensearchdescription+xml" title="{metaTitle}" href="{opensearch}" />
+    
+    <meta name="description" content="{metaDescription}">
+    <meta name="author" content="{metaPublisher}">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+    <meta name="application-name" content="phpMyFAQ {phpmyfaqversion}">
+    <meta name="copyright" content="(c) 2001-2010 phpMyFAQ Team">
+    <meta name="publisher" content="{metaPublisher}">
+    <meta name="robots" content="INDEX, FOLLOW">
+    <meta name="revisit-after" content="7 days">
+    <meta name="MSSmartTagsPreventParsing" content="true">
+    
+    <link rel="stylesheet" href="template/{tplSetName}/css/{stylesheet}.css?v=1">
+    <link rel="stylesheet" media="handheld" href="template/{tplSetName}/css/handheld.css?v=1">
+    <link rel="stylesheet" media="print" href="template/{tplSetName}/css/print.css?v=1">
+
+    <script src="inc/js/modernizr-1.5.min.js"></script>
+    <script src="inc/js/functions.js"></script>
+    <script src="inc/js/jquery.min.js"></script>
+    
+    <link rel="shortcut icon" href="template/{tplSetName}/favicon.ico">
+    <link rel="apple-touch-icon" href="template/{tplSetName}/apple-touch-icon.png">
+    
+    <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="feed/news/rss.php">
+    <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="feed/topten/rss.php">
+    <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml" href="feed/latest/rss.php">
+    <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml" href="feed/openquestions/rss.php">
+    <link rel="microsummary" href="microsummary.php?action={action}">
+    <link rel="search" type="application/opensearchdescription+xml" title="{metaTitle}" href="{opensearch}">
 </head>
 <body dir="{dir}" onload="javascript:focusOnSearchField();">
 
-<div id="content">
-<div class="header" id="header">
-    <div>
+<div id="container">
+    <header>
         <h1><a title="{header}" href="{faqHome}">{header}</a></h1>
+        <nav>
         <ul>
             <li>{msgContact}</li>
             <li>{msgHelp}</li>
@@ -44,19 +50,22 @@
             <li>{showInstantResponse}</li>
             <li>{msgSearch}</li>
         </ul>
-    </div>
-</div>
-<div class="columns">
-    <div class="leftcolumn">
+        <nav>
+    </header>
+
+    <section>
+        <div class="leftcolumn">
             <h2 class="invisible">Navigation</h2>
             <div class="content">
                 <div id="categories">
+                    <nav>
                     <ul>
                         <li class="home">{backToHome}</li>
                         <li>{allCategories}</li>
                         {showCategories}
                         <li>{showSitemap}</li>
                     </ul>
+                    </nav>
                 </div>
             </div>
 
@@ -81,9 +90,9 @@
                 {userOnline}
                 </div>
             </div>
-    </div>
-
-    <div class="rightcolumn">
+        </div>
+        
+        <div class="rightcolumn">
         {rightBox}
                 
             <div class="content">
@@ -96,9 +105,9 @@
                 </ul>
                 </div>
            </div>
-    </div>
-
-    <div class="main-content">
+        </div>
+        
+        <div class="main-content">
         [globalSearchBox]
         <form id="search" action="{writeSendAdress}" method="get">
              <input type="text" name="search" id="searchfield" size="30" />
@@ -113,18 +122,19 @@
         <input class="inputfield" id="instantfield" type="text" name="search" value="" />
         </form>
         [/globalSuggestBox]
-
-    {writeContent}
+        
+        {writeContent}
     
+        </div>
     </div>
-</div>
+    
+    <div class="clearing"></div>
+    <footer>
+        <p id="copyrightnote">{copyright}</p>
+    </footer>
+    
+    {debugMessages}
 
-<div class="clearing"></div>
-<div id="footer" class="footer">
-    <p id="copyrightnote">{copyright}</p>
-</div>
-
-{debugMessages}
 </div>
 
 </body>

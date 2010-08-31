@@ -8,6 +8,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 Version 2.7.0-alpha - 2010-09-
 - changed PHP requirement to PHP 5.2.3 (Thorsten)
 - dropped support for MySQL 4.1 (Thorsten)
+- added new HTML5 based layout (Thorsten)
 
 Version 2.6.8 - 2010-08-
 - dropped Oracle database support (Thorsten)
