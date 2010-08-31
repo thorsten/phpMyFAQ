@@ -21,7 +21,7 @@
     <link rel="stylesheet" media="handheld" href="template/{tplSetName}/css/handheld.css?v=1">
     <link rel="stylesheet" media="print" href="template/{tplSetName}/css/print.css?v=1">
 
-    <script src="inc/js/modernizr-1.5.min.js"></script>
+    <script src="inc/js/modernizr.min.js"></script>
     <script src="inc/js/functions.js"></script>
     <script src="inc/js/jquery.min.js"></script>
     
