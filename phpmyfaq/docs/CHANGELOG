@@ -1,9 +1,12 @@
-phpMyFAQ 2.6.8
+phpMyFAQ 2.6.9
 Codename "Portia"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.6.9 - 2010-09-
+- 
 
 Version 2.6.8 - 2010-08-31
 - dropped Oracle database support (Thorsten)
