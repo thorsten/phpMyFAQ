@@ -36,13 +36,15 @@ body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; line-height: 1.6e
 
 /* Top menu */
 #topmenu { margin: 0; padding: 0; height: 35px; background-color: #1A3878; border-top: 1px solid #E8EAF6;}
-#topmenu .lefts { height: 35px; padding-left: 5px; }
+#topmenu .lefts { height: 35px; }
 #topmenu .rights { float: right; height: 35px; width: 8px; }
 #topmenu li a { color: #FFF; text-align: left; padding-left: 10px; padding-right: 15px; text-decoration: none;
     font-weight: bold } 
 #topmenu li { padding: 0px; float: left; margin: 0; font-size: 14px; line-height: 35px; white-space: nowrap;
     list-style-type: none; width: auto; border-right: 1px solid #E8EAF6; }
+#topmenu li.active { background: lightgrey; }
 #topmenu li a.logout { color: red; }
+#topmenu li.active a { color: #1A3878 }
 
 /* Main container */
 #main { margin: 5px 0 5px; padding: ;color: #19191B; padding-top: 5px; }
