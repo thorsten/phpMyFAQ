@@ -147,7 +147,7 @@ if ($permission['editbt']) {
         $category->deletePermission('user', $categories['rubrik']);
         $category->addPermission('user', $categories['rubrik'], $restricted_users);
         // Add group permission
-        if ($groupSupport) {
+        if ($faqconfig->get('main.permLevel') != 'basic') {
             $faq->deletePermission('group', $record_id);
             $faq->addPermission('group', $record_id, $restricted_groups);
             $category->deletePermission('group', $categories['rubrik']);

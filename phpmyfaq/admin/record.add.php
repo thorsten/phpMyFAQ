@@ -112,7 +112,7 @@ if ($permission['editbt']) {
             $faq->addPermission('user', $record_id, $restricted_users);
             $category->addPermission('user', $categories['rubrik'], $restricted_users);
             // Add group permission
-            if ($groupSupport) {
+            if ($faqconfig->get('main.permLevel') != 'basic') {
                 $faq->addPermission('group', $record_id, $restricted_groups);
                 $category->addPermission('group', $categories['rubrik'], $restricted_groups);
             }
