@@ -5,10 +5,11 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.7.0-alpha - 2010-09-
+Version 2.7.0-alpha - 2010-10-
 - changed PHP requirement to PHP 5.2.3 (Thorsten)
 - dropped support for MySQL 4.1 (Thorsten)
 - added new HTML5 based layout with Modernizr library (Thorsten)
+- updated bundled jQuery to version 1.4.2 (Thorsten)
 
 Version 2.6.9 - 2010-09-
 - added Slovak translation (Tibor)

@@ -22,8 +22,6 @@
     <link rel="stylesheet" media="print" href="template/{tplSetName}/css/print.css?v=1">
 
     <script src="inc/js/modernizr.min.js"></script>
-    <script src="inc/js/jquery.min.js"></script>
-    <script src="inc/js/functions.js"></script>
     
     <link rel="shortcut icon" href="template/{tplSetName}/favicon.ico">
     <link rel="apple-touch-icon" href="template/{tplSetName}/apple-touch-icon.png">
@@ -136,6 +134,10 @@
     {debugMessages}
 
 </div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script>!window.jQuery && document.write('<script src="inc/js/jquery.min.js"><\/script>')</script>
+<script src="inc/js/functions.js"></script>
 
 </body>
 </html>
