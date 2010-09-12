@@ -67,7 +67,7 @@ if ($permission["addcateg"]) {
 
 <?php
     if ($parent_id == 0) {
-        if ($groupSupport) {
+        if ($faqconfig->get('main.permLevel') != 'basic') {
 ?>
     <label class="left" for="grouppermission"><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
     <input type="radio" name="grouppermission" class="active" value="all" checked="checked" /> <?php print $PMF_LANG['ad_entry_all_groups']; ?> 

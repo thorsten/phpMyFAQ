@@ -11,7 +11,9 @@ Version 2.7.0-alpha - 2010-09-
 - added new HTML5 based layout with Modernizr library (Thorsten)
 
 Version 2.6.9 - 2010-09-
-- 
+- added Slovak translation (Tibor)
+- added minor usability improvement in administration backend (Thorsten)
+
 
 Version 2.6.8 - 2010-08-31
 - dropped Oracle database support (Thorsten)

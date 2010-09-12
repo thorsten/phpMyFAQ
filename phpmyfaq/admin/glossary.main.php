@@ -92,8 +92,8 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
             '?action=deleteglossary&amp;id=', 
             $items['id']);
         printf('<img src="images/delete.png" width="16" height="16" alt="%s" title="%s" border="0" /></a></td>', 
-            $PMF_LANG['ad_user_del_3'], 
-            $PMF_LANG['ad_user_del_3']);
+            $PMF_LANG['ad_entry_delete'], 
+            $PMF_LANG['ad_entry_delete']);
         print '</tr>';
     }
     print '</table>';
