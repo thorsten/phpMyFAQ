@@ -10,7 +10,7 @@
     <input class="inputfield" type="text" name="username" id="username" value="{defaultContentName}" size="50" /><br />
 
     <label for="usermail" class="left">{msgNewContentMail}</label>
-    <input class="inputfield" type="text" name="usermail" id="usermail" value="{defaultContentMail}" size="50" /><br />
+    <input class="inputfield" type="email" name="usermail" id="usermail" value="{defaultContentMail}" size="50" /><br />
 
     <label for="rubrik" class="left">{msgAskCategory}</label>
     <select name="rubrik" id="rubrik">

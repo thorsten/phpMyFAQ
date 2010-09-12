@@ -6,7 +6,7 @@
         <fieldset>
             <legend>{msgSearchWord}</legend>
 
-            <input class="inputfield" id="searchfield" type="text" name="search" size="50" value="{searchString}" />
+            <input class="inputfield" id="searchfield" type="search" name="search" size="50" value="{searchString}" />
             <input class="submit" type="submit" name="submit" value="{msgSearch}" />
             <input type="hidden" name="action" value="search" /><br />
 

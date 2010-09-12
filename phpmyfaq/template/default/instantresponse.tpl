@@ -6,7 +6,7 @@
     <input id="ajaxlanguage" name="ajaxlanguage" type="hidden" value="{ajaxlanguage}" />
     <fieldset>
         <legend>{msgSearchWord}</legend>
-        <input class="inputfield" id="instantfield" type="text" name="search" value="{searchString}" />
+        <input class="inputfield" id="instantfield" type="search" name="search" value="{searchString}" />
     </fieldset>
     </form>
 

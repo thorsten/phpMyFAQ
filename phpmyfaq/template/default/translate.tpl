@@ -28,7 +28,7 @@
     <input class="inputfield" type="text" name="username" id="username" value="{defaultContentName}" size="37" /><br />
 
     <label for="usermail" class="left">{msgNewTranslationMail}</label>
-    <input class="inputfield" type="text" name="usermail" id="usermail" value="{defaultContentMail}" size="37" /><br />
+    <input class="inputfield" type="email" name="usermail" id="usermail" value="{defaultContentMail}" size="37" /><br />
 
     <input type="hidden" name="faqid" id="faqid" value="{writeSourceFaqId}" />
     <input type="hidden" name="faqlanguage" id="faqlanguage" value="{writeTransFaqLanguage}" />

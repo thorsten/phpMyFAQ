@@ -11,7 +11,7 @@
     <input class="inputfield" type="text" name="user" value="{defaultContentName}" size="50" /><br />
 
     <label for="mail" class="left">{msgNewContentMail}</label>
-    <input class="inputfield" type="text" name="mail" value="{defaultContentMail}" size="50" /><br />
+    <input class="inputfield" type="email" name="mail" value="{defaultContentMail}" size="50" /><br />
 
     <label for="comment" class="left">{msgYourComment}</label>
     <textarea class="inputarea" cols="37" rows="10" name="comment"></textarea><br />

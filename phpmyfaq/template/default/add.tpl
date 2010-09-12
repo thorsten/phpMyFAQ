@@ -9,7 +9,7 @@
     <input class="inputfield" type="text" name="username" id="username" value="{defaultContentName}" size="37" /><br />
 
     <label for="usermail" class="left">{msgNewContentMail}</label>
-    <input class="inputfield" type="text" name="usermail" id="usermail" value="{defaultContentMail}" size="37" /><br />
+    <input class="inputfield" type="email" name="usermail" id="usermail" value="{defaultContentMail}" size="37" /><br />
 
     <label for="rubrik" class="left">{msgNewContentCategory}</label>
     <select name="rubrik[]" id="rubrik" multiple="multiple" size="3">
@@ -26,7 +26,7 @@
     <input class="inputfield" type="text" name="keywords" id="keywords" size="37" /><br />
 
     <label for="contentlink" class="left">{msgNewContentLink}</label>
-    <input class="inputfield" type="text" name="contentlink" id="contentlink" size="37" value="http://" /><br />
+    <input class="inputfield" type="url" name="contentlink" id="contentlink" size="37" value="http://" /><br />
     </fieldset>
 
     {captchaFieldset}

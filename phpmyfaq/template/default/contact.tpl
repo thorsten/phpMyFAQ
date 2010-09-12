@@ -9,7 +9,7 @@
     <input class="inputfield" type="text" name="name" value="{defaultContentName}" size="40" /><br />
 
     <label for="email" class="left">{msgNewContentMail}</label>
-    <input class="inputfield" type="text" name="email" value="{defaultContentMail}" size="40" /><br />
+    <input class="inputfield" type="email" name="email" value="{defaultContentMail}" size="40" /><br />
 
     <label for="question" class="left">{msgMessage}</label>
     <textarea class="inputarea" cols="37" rows="5" name="question"></textarea><br />
