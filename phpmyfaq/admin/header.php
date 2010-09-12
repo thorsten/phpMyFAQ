@@ -82,6 +82,7 @@ switch ($action) {
     case 'deleteglossary':
     case 'addglossary':
     case 'editglossary':
+    case 'news';
     case 'addnews':
     case 'editnews':
     case 'delnews':
