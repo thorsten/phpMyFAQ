@@ -35,6 +35,15 @@ if (isset($auth)) {
     $adminHelper->setPermission($permission);
 
     $menuGroup = $secLevelEntries = '';
+    
+    $dashboardPage     = true;
+    $contentPage       = false;
+    $userPage          = false;
+    $statisticsPage    = false;
+    $exportsPage       = false;
+    $backupPage        = false;
+    $configurationPage = false;
+    
     switch ($action) {
         case 'user':
         case 'group':
@@ -46,6 +55,8 @@ if (isset($auth)) {
                 $secLevelEntries .= $adminHelper->addMenuEntry('adduser+edituser+deluser', 'group', 'ad_menu_group_administration', $action);
             }
             $secLevelEntries .= $adminHelper->addMenuEntry('passwd', 'passwd', 'ad_menu_passwd', $action);
+            $dashboardPage    = false;
+            $userPage         = true;
             break;
         case 'content':
         case 'category':
@@ -85,6 +96,8 @@ if (isset($auth)) {
             $secLevelEntries .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open', $action);
             $secLevelEntries .= $adminHelper->addMenuEntry('addglossary+editglossary+delglossary', 'glossary', 'ad_menu_glossary', $action);
             $secLevelEntries .= $adminHelper->addMenuEntry('addnews+editnews+delnews', 'news', 'ad_menu_news_edit', $action);
+            $dashboardPage    = false;
+            $contentPage      = true;
             break;
         case 'statistics':
         case 'viewsessions':
@@ -97,10 +110,14 @@ if (isset($auth)) {
             $secLevelEntries .= $adminHelper->addMenuEntry('viewlog', 'viewsessions', 'ad_menu_session', $action);
             $secLevelEntries .= $adminHelper->addMenuEntry('adminlog', 'adminlog', 'ad_menu_adminlog', $action);
             $secLevelEntries .= $adminHelper->addMenuEntry('viewlog', 'searchstats', 'ad_menu_searchstats', $action);
+            $dashboardPage    = false;
+            $statisticsPage   = true;
             break;
         case 'export':
             $menuGroup        = 'export';
             $secLevelEntries .= $adminHelper->addMenuEntry('', 'export', 'ad_menu_export', $action);
+            $dashboardPage    = false;
+            $exportsPage      = true;
             break;
         case 'config':
         case 'linkconfig':
@@ -109,21 +126,26 @@ if (isset($auth)) {
         case 'transedit':
         case 'transadd':
         case 'upgrade':
-            $menuGroup        = 'config';
-            $secLevelEntries .= $adminHelper->addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('editconfig+editbt+delbt', 'linkconfig', 'ad_menu_linkconfig', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('editconfig', 'stopwordsconfig', 'ad_menu_stopwordsconfig', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('edittranslation+addtranslation+deltranslation', 'translist', 'ad_menu_translations', $action);
+            $menuGroup         = 'config';
+            $secLevelEntries  .= $adminHelper->addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
+            $secLevelEntries  .= $adminHelper->addMenuEntry('editconfig+editbt+delbt', 'linkconfig', 'ad_menu_linkconfig', $action);
+            $secLevelEntries  .= $adminHelper->addMenuEntry('editconfig', 'stopwordsconfig', 'ad_menu_stopwordsconfig', $action);
+            $secLevelEntries  .= $adminHelper->addMenuEntry('edittranslation+addtranslation+deltranslation', 'translist', 'ad_menu_translations', $action);
+            $dashboardPage     = false;
+            $configurationPage = true;
             break;
         case 'backup':
             $menuGroup       = 'backup';
             $secLevelEntries = '';
+            $dashboardPage   = false;
+            $backupPage      = true;
             break;
         default:
             $secLevelEntries .= $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit');
             $secLevelEntries .= $adminHelper->addMenuEntry('addbt', 'editentry', 'ad_quick_record');
             $secLevelEntries .= $adminHelper->addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit');
             $secLevelEntries .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open');
+            $dashboardPage    = true;
             break;
     }
     $firstLevelEntries  = $adminHelper->addMenuEntry('', '', 'admin_mainmenu_home', $menuGroup, false);
@@ -143,12 +165,15 @@ header("Pragma: no-cache");
 header("Content-type: text/html; charset=utf-8");
 header("Vary: Negotiate,Accept");
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
+<!DOCTYPE html>
+<html lang="<?php print $PMF_LANG['metaLanguage']; ?>">
 <head>
     <title><?php print $faqconfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
-    <meta name="copyright" content="(c) 2001-2010 phpMyFAQ Team" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta http-equiv="content-language" content="<?php print $PMF_LANG['metaLanguage']; ?>">
+    <meta name="application-name" content="phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?>">
+    <meta name="copyright" content="(c) 2001-2010 phpMyFAQ Team">
     
     <link rel="shortcut icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
     <link rel="icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
@@ -167,6 +192,7 @@ header("Vary: Negotiate,Accept");
     <script type="text/javascript" src="editor/tiny_mce.js?<?php print time(); ?>"></script>
 </head>
 <body id="body" dir="<?php print $PMF_LANG["dir"]; ?>">
+
 <a name="top"></a>
 
 <!-- header -->
@@ -220,4 +246,4 @@ header("Vary: Negotiate,Accept");
             </div>
         </div>
         <div id="rightContent" class="grid_12">
-<?php } ?>
+<?php }

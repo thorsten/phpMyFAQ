@@ -124,7 +124,7 @@ if ($permission['editbt']) {
             // Set record permissions
             $faqUser = new PMF_Faq_User();
             $faqUser->create(array('record_id' => $recordId, 'user_id' => $restricted_users));
-            if ($groupSupport) {
+            if ($faqconfig->get('main.permLevel') != 'basic') {
                 $faqGroup = new PMF_Faq_Group();
                 $faqGroup->create(array('record_id' => $recordId, 'group_id' => $restricted_groups));
             }

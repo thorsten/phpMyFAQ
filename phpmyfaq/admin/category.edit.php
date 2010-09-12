@@ -78,7 +78,7 @@ if ($permission['editcateg']) {
         <?php print $user->getAllUserOptions($categoryData->user_id); ?>
         </select><br />
 <?php
-    if ($groupSupport) {
+    if ($faqconfig->get('main.permLevel') != 'basic') {
 ?>
         <label class="left" for="grouppermission"><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
         <input type="radio" name="grouppermission" class="active" value="all" <?php print ($allGroups ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_all_groups']; ?> <input type="radio" name="grouppermission" class="active" value="restricted" <?php print ($restrictedGroups ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_restricted_groups']; ?> <select name="restricted_groups" size="1"><?php print $user->perm->getAllGroupsOptions($group_permission[0]); ?></select><br />

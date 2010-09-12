@@ -21,7 +21,7 @@
  * @package   Setup
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Tom Rochester <tom.rochester@gmail.com>
- * @author    Johannes Schlueter <johannes@php.net>
+ * @author    Johannes Schlüter <johannes@php.net>
  * @author    Uwe Pries <uwe.pries@digartis.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2002-2010 phpMyFAQ Team
@@ -95,6 +95,12 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
 
 if (version_compare(PHP_VERSION, MINIMUM_PHP_VERSION, '<')) {
     printf("<p class=\"center\">Sorry, but you need PHP %s or later!</p>\n", MINIMUM_PHP_VERSION);
+    HTMLFooter();
+    die();
+}
+
+if (!function_exists('date_default_timezone_set')) {
+    print "<p class=\"center\">Sorry, but setting a default timezone doesn't work in your environment!</p>\n";
     HTMLFooter();
     die();
 }
