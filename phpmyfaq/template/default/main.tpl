@@ -1,5 +1,3 @@
-        <script type="text/javascript" src="inc/js/suggest.js"></script>
-    
         <!-- Instant Response -->
         <div id="instantresponse">
     

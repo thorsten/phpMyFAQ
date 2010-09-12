@@ -1,5 +1,9 @@
 <!doctype html>
-<html lang="{metaLanguage}" class="no-js">
+<!--[if lt IE 7 ]> <html lang="{metaLanguage}" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]> <html lang="{metaLanguage}" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]> <html lang="{metaLanguage}" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]> <html lang="{metaLanguage}" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="{metaLanguage}" class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -21,8 +25,6 @@
     <link rel="stylesheet" media="print" href="template/{tplSetName}/css/print.css?v=1">
 
     <script src="inc/js/modernizr.min.js"></script>
-    <script src="inc/js/functions.js"></script>
-    <script src="inc/js/jquery.min.js"></script>
     
     <link rel="shortcut icon" href="template/{tplSetName}/favicon.ico">
     <link rel="apple-touch-icon" href="template/{tplSetName}/apple-touch-icon.png">
@@ -34,7 +36,7 @@
     <link rel="microsummary" href="microsummary.php?action={action}">
     <link rel="search" type="application/opensearchdescription+xml" title="{metaTitle}" href="{opensearch}">
 </head>
-<body dir="{dir}" onload="javascript:focusOnSearchField();">
+<body dir="{dir}">
 
 <div id="container">
     <header>
@@ -135,6 +137,10 @@
     {debugMessages}
 
 </div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script>!window.jQuery && document.write('<script src="inc/js/jquery.min.js"><\/script>')</script>
+<script src="inc/js/functions.js"></script>
 
 </body>
 </html>

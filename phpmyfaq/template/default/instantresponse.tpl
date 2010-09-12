@@ -9,7 +9,6 @@
         <input class="inputfield" id="instantfield" type="text" name="search" value="{searchString}" />
     </fieldset>
     </form>
-    <script type="text/javascript" src="inc/js/suggest.js"></script>
 
     <div id="instantresponse">
     {printInstantResponse}
