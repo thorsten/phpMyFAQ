@@ -22,8 +22,8 @@
     <link rel="stylesheet" media="print" href="template/{tplSetName}/css/print.css?v=1">
 
     <script src="inc/js/modernizr.min.js"></script>
-    <script src="inc/js/functions.js"></script>
     <script src="inc/js/jquery.min.js"></script>
+    <script src="inc/js/functions.js"></script>
     
     <link rel="shortcut icon" href="template/{tplSetName}/favicon.ico">
     <link rel="apple-touch-icon" href="template/{tplSetName}/apple-touch-icon.png">
@@ -35,7 +35,7 @@
     <link rel="microsummary" href="microsummary.php?action={action}">
     <link rel="search" type="application/opensearchdescription+xml" title="{metaTitle}" href="{opensearch}">
 </head>
-<body dir="{dir}" onload="javascript:focusOnSearchField();">
+<body dir="{dir}">
 
 <div id="container">
     <header>

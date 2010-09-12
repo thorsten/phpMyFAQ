@@ -127,10 +127,12 @@ class PMF_Template
             foreach ($rawBlocks as $key => $rawBlock) {
                 if (in_array($key, $this->blocksTouched) && $key != 'unblocked') {
                     $tmp = str_replace($rawBlock, $this->blocks[$templateName][$key], $tmp);
-                    $tmp = PMF_String::preg_replace('/\[.+\]/', '', $tmp);
+                    $tmp = PMF_String::preg_replace('/\[[[:alpha:]]+\]/', '', $tmp);
+                    $tmp = PMF_String::preg_replace('/\[\/[[:alpha:]]+\]/', '', $tmp);
                 } elseif ($key != 'unblocked') {
                     $tmp = str_replace($rawBlock, '', $tmp);
-                    $tmp = PMF_String::preg_replace('/\[.+\]/', '', $tmp);
+                    $tmp = PMF_String::preg_replace('/\[[[:alpha:]]+\]/', '', $tmp);
+                    $tmp = PMF_String::preg_replace('/\[\/[[:alpha:]]+\]/', '', $tmp);
                 }
             }
         }
@@ -186,16 +188,16 @@ class PMF_Template
      * This function reads a template file.
      *
      * @param string $filename     Filename
-     * @param string $templateName Name of the template
+     * @param string $tplName Name of the template
      * 
      * @return string
      */
-    public function readTemplate($filename, $templateName)
+    public function readTemplate($filename, $tplName)
     {
         if (file_exists($filename)) {
-            $tpl = file_get_contents($filename);
-            $this->blocks[$templateName] = $this->_readBlocks($tpl);
-            return $tpl;
+            $tplContent             = file_get_contents($filename);
+            $this->blocks[$tplName] = $this->_readBlocks($tplContent);
+            return $tplContent;
         } else {
             return '<p><span style="color: red;">Error:</span> Cannot open the file '.$filename.'.</p>';
         }
@@ -316,7 +318,8 @@ class PMF_Template
         $tmpBlocks = array();
         
         // read all blocks into $tmpBlocks
-        PMF_String::preg_match_all('/\[.+\]\s*[\W\w\s\{\}\<\>\=\"\/]*?\s*\[\/.+\]/', $tpl, $tmpBlocks);
+        PMF_String::preg_match_all('/\[[[:alpha:]]+\]\s*[\W\w\s\{\}\<\>\=\"\/]*?\s*\[\/[[:alpha:]]+\]/', $tpl, $tmpBlocks);
+        
         $unblocked = $tpl;
         if (isset($tmpBlocks)) {
             $blockCount = count($tmpBlocks[0]);

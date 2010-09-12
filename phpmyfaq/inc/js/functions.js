@@ -1,16 +1,6 @@
 /**
  * Some JavaScript functions used in the admin backend
  *
- * @category  phpMyFAQ
- * @package   JavaScript
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Periklis Tsirakidis <tsirakidis@phpdevel.de>
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author    Minoru TODA <todam@netjapan.co.jp>
- * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2003-2009 phpMyFAQ Team
- * @since     2003-11-13
- *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -20,6 +10,18 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   JavaScript
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Periklis Tsirakidis <tsirakidis@phpdevel.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Minoru TODA <todam@netjapan.co.jp>
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @since     2003-11-13
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @copyright 2003-2010 phpMyFAQ Team
  */
 
 function Picture(pic,title,width,height)
@@ -46,18 +48,6 @@ function addEngine(uri, name, ext, cat)
     } else {
         alert('Mozilla Firefox, Mozilla or Netscape 6 or later is needed to install the search plugin!');
     }
-}
-
-/**
- * Sets the focus on the search input field for better usability
- * 
- * @return void
- */
-function focusOnSearchField()
-{
-    $('#searchfield').focus();
-    $('#suchbegriff').focus();
-    $('#instantfield').focus();
 }
 
 /**
@@ -268,3 +258,30 @@ function table_addRow(table, rowNumber, col1, col2)
     tr.appendChild(td1);
     tr.appendChild(td2);
 }
+
+$('#instantfield').keyup(function() 
+{
+    var search   = $('#instantfield').val();
+    var language = $('#ajaxlanguage').val();
+    var category = $('#searchcategory').val();
+            
+    if (search.length > 0) { 
+        $.ajax({ 
+            type:    "POST", 
+            url:     "ajaxresponse.php", 
+            data:    "search=" + search + "&ajaxlanguage=" + language + "&searchcategory=" + category, 
+            success: function(searchresults) 
+            { 
+                $("#instantresponse").empty(); 
+                if (searchresults.length > 0)  { 
+                    $("#instantresponse").append(searchresults);
+                } 
+            } 
+        });
+    }
+});
+
+$('#instantform').submit(function()
+{
+    return false;
+});
