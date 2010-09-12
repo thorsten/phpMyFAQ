@@ -127,12 +127,12 @@ class PMF_Template
             foreach ($rawBlocks as $key => $rawBlock) {
                 if (in_array($key, $this->blocksTouched) && $key != 'unblocked') {
                     $tmp = str_replace($rawBlock, $this->blocks[$templateName][$key], $tmp);
-                    $tmp = PMF_String::preg_replace('/\[[[:alpha:]]+\]/', '', $tmp);
-                    $tmp = PMF_String::preg_replace('/\[\/[[:alpha:]]+\]/', '', $tmp);
+                    $tmp = str_replace('[' . $key . ']', '', $tmp);
+                    $tmp = str_replace('[/' . $key . ']', '', $tmp);
                 } elseif ($key != 'unblocked') {
                     $tmp = str_replace($rawBlock, '', $tmp);
-                    $tmp = PMF_String::preg_replace('/\[[[:alpha:]]+\]/', '', $tmp);
-                    $tmp = PMF_String::preg_replace('/\[\/[[:alpha:]]+\]/', '', $tmp);
+                    $tmp = str_replace('[' . $key . ']', '', $tmp);
+                    $tmp = str_replace('[/' . $key . ']', '', $tmp);
                 }
             }
         }
@@ -318,7 +318,7 @@ class PMF_Template
         $tmpBlocks = array();
         
         // read all blocks into $tmpBlocks
-        PMF_String::preg_match_all('/\[[[:alpha:]]+\]\s*[\W\w\s\{\}\<\>\=\"\/]*?\s*\[\/[[:alpha:]]+\]/', $tpl, $tmpBlocks);
+        PMF_String::preg_match_all('/\[([[:alpha:]]+)\]\s*[\W\w\s\{\}\<\>\=\"\/]*?\s*\[\/\1\]/', $tpl, $tmpBlocks);
         
         $unblocked = $tpl;
         if (isset($tmpBlocks)) {
