@@ -210,7 +210,11 @@ if ($permission['editbt'] || $permission['delbt']) {
 
     if ($num > 0) {
         $old     = 0;
-        $all_ids = array();
+        $all_ids = $visits = array();
+        
+        foreach (PMF_Visits::getInstance()->getAllData() as $visit) {
+            $visits[$visit['id']] = $visit['lang'];
+        }
         
         foreach ($faq->faqRecords as $record) {
             $catInfo         =  '';
@@ -299,7 +303,7 @@ if ($permission['editbt'] || $permission['delbt']) {
             </a>
         </td>
         <td class="list">
-            <?php if ($permission['approverec']) { ?>
+            <?php if ($permission['approverec'] && isset($visits[$record['id']])) { ?>
             <input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'active');" id="active_record_<?php print $cid . '_' . $record['id'] ?>" <?php 'yes' == $record['active'] ? print 'checked="checked"' : print '    ' ?> />
             <?php } ?>
         </td>
