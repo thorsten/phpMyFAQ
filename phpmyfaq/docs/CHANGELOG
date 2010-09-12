@@ -8,7 +8,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 Version 2.6.9 - 2010-09-
 - added Slovak translation (Tibor)
 - added minor usability improvement in administration backend (Thorsten)
-
+- fixed issue with embedded Google Analytics code (Thorsten)
 
 Version 2.6.8 - 2010-08-31
 - dropped Oracle database support (Thorsten)

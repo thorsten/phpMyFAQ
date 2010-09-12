@@ -127,10 +127,12 @@ class PMF_Template
             foreach ($rawBlocks as $key => $rawBlock) {
                 if (in_array($key, $this->blocksTouched) && $key != 'unblocked') {
                     $tmp = str_replace($rawBlock, $this->blocks[$templateName][$key], $tmp);
-                    $tmp = PMF_String::preg_replace('/\[.+\]/', '', $tmp);
+                    $tmp = PMF_String::preg_replace('/\[[[:alpha:]]+\]/', '', $tmp);
+                    $tmp = PMF_String::preg_replace('/\[\/[[:alpha:]]+\]/', '', $tmp);
                 } elseif ($key != 'unblocked') {
                     $tmp = str_replace($rawBlock, '', $tmp);
-                    $tmp = PMF_String::preg_replace('/\[.+\]/', '', $tmp);
+                    $tmp = PMF_String::preg_replace('/\[[[:alpha:]]+\]/', '', $tmp);
+                    $tmp = PMF_String::preg_replace('/\[\/[[:alpha:]]+\]/', '', $tmp);
                 }
             }
         }
