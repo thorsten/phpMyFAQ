@@ -40,23 +40,33 @@
 <body dir="{dir}">
 
 <div id="container">
-    <header>
+    <header id="header">
+        
+        <div>
         <h1><a title="{header}" href="{faqHome}">{header}</a></h1>
+        </div>
+        
+        <div id="loginBox">
+            <div id="loginSelection">Login | Register</div>
+            <div id="loginForm">
+            {loginBox}
+            </div>
+        </div>
+        
         <nav>
         <ul>
-            <li>{msgContact}</li>
-            <li>{msgOpenQuestions}</li>
-            <li>{msgQuestion}</li>
-            <li>{msgAddContent}</li>
-            <li>{showInstantResponse}</li>
             <li>{msgSearch}</li>
+            <li>{showInstantResponse}</li>
+            <li>{msgAddContent}</li>
+            <li>{msgQuestion}</li>
+            <li>{msgOpenQuestions}</li>
+            <li>{msgContact}</li>
         </ul>
-        <nav>
+        </nav>
     </header>
 
-    <section>
+    <section ="maincontent">
         <div class="leftcolumn">
-            <h2 class="invisible">Navigation</h2>
             <div class="content">
                 <div id="categories">
                     <nav>
@@ -77,12 +87,6 @@
                 {switchLanguages}
                 <input type="hidden" name="action" value="" />
                 </form>
-                </div>
-            </div>
-
-            <div class="content">
-                <div id="loginform">
-                {loginBox}
                 </div>
             </div>
 
@@ -129,10 +133,10 @@
             </section>
         
         </div>
-    </div>
+    </section>
     
     <div class="clearing"></div>
-    <footer>
+    <footer id="footer">
         <p id="copyrightnote">{copyright}</p>
     </footer>
     
