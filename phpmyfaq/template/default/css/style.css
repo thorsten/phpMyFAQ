@@ -72,7 +72,8 @@ input, select {
 
 /* basic styles */
 body {  
-    font: 13px/1.231 sans-serif; *font-size: small; background: #f5f4ef; }
+    font: 13px/1.231 sans-serif; *font-size: small; background: #f5f4ef url(../images/background.png) repeat-x;
+}
 select, input, textarea, button {  
     font: 99% sans-serif; }
 pre, code, kbd, samp {  
@@ -172,7 +173,7 @@ button {
 #header h1 {
     padding-top: 5px; line-height: .6; }
 #header h1 a:link, #header h1 a:visited { 
-    color: #1E4262; display: block; margin: 0 0 .6em .2em; text-decoration: none; }
+    color: #1E4262; display: block; margin: 0 0 .6em 0; text-decoration: none; }
 #header h1 a:hover, #header h1 a:active { 
     background: none; color: #335370; text-shadow: none; }
 #header #loginBox {
@@ -191,7 +192,7 @@ button {
 #header nav ul {
     list-style: none; margin: 0 auto; width: 100%; }
 #header nav li {
-    float: left; display: inline; margin: 0; border-right: 1px solid #1A3857; }
+    float: left; display: inline; margin: 0; border-right: 2px solid #f5f4ef; }
 #header nav a:link, #header nav a:visited {
     color: #fff; display: inline-block; height: 30px; padding: 5px 0.8em; text-decoration: none; font-weight: bold; }
 #header nav a:hover, #header nav a:active, #header nav .active a:link, #header nav .active a:visited {
