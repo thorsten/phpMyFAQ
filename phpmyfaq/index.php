@@ -403,6 +403,8 @@ shuffle($keywordsArray);
 $keywords = implode(',', $keywordsArray);
 
 $main_template_vars = array(
+    'msgRegisterUser'     => '<a href="?' . $sids . 'action=register">' . $PMF_LANG['msgRegisterUser'] . '</a>',
+    'msgLoginUser'        => $PMF_LANG['msgLoginUser'],
     'title'               => $faqconfig->get('main.titleFAQ').$title,
     'baseHref'            => $systemUri,
     'version'             => $faqconfig->get('main.currentVersion'),

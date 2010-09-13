@@ -887,7 +887,7 @@ $PMF_LANG['ad_online_info'] = 'Online Versionsüberprüfung';
 $PMF_LANG['ad_system_info'] = 'System Information';
 
 // added 2.5.0-alpha - 2008-01-25 by Elger
-$PMF_LANG['msgRegisterUser'] = 'Möchten Sie sich anmelden?';
+$PMF_LANG['msgRegisterUser'] = 'Anmelden';
 $PMF_LANG["ad_user_loginname"] = 'Benutzername:';
 $PMF_LANG['errorRegistration'] = 'Dieses Feld muss ausgefüllt sein!';
 $PMF_LANG['submitRegister'] = 'Anmelden';

@@ -916,7 +916,7 @@ $PMF_LANG['ad_online_info'] = 'Online version check';
 $PMF_LANG['ad_system_info'] = 'System Information';
 
 // added 2.5.0-alpha - 2008-01-25 by Elger
-$PMF_LANG['msgRegisterUser'] = 'Do you want to register?';
+$PMF_LANG['msgRegisterUser'] = 'Register';
 $PMF_LANG["ad_user_loginname"] = 'Login name:';
 $PMF_LANG['errorRegistration'] = 'This field is required!';
 $PMF_LANG['submitRegister'] = 'Register';
@@ -1081,3 +1081,6 @@ $PMF_LANG['msgKeepFaqDate'] = 'keep';
 $PMF_LANG['msgEditFaqDat'] = 'edit';
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Mail address as mandatory field (default: deactivated)');
 $LANG_CONF['main.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Instant Response on startpage (default: deactivated)');
+
+// added 2.7.0-alpha - 2010-09-13 by Thorsten
+$PMF_LANG['msgLoginUser'] = 'Login';

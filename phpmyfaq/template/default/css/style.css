@@ -176,9 +176,15 @@ button {
 #header h1 a:hover, #header h1 a:active { 
     background: none; color: #335370; text-shadow: none; }
 #header #loginBox {
-	position: relative; top: 0; right: 0; }
-#header #loginBox #loginForm {
-    display: none; }
+	float: right; top: 0; width: 150px; margin-top: -2.5em; padding: 5px; background: #D1480B; color: #fff;
+	border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px; 
+	border-bottom-right-radius: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; }
+#header #loginSelection {
+    text-align: center; }
+#header #loginSelection a:link, #header #loginSelection a:visited {
+    color: #fff; }
+#header #loginForm {
+    display: none; margin: auto; padding: 0.5em; }
 #header nav {
     background: #1E4262; font-size: 1.143em; height: 40px; line-height: 30px; margin: 0 auto 2em auto; padding: 0;
     text-align: center; width: 100%; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }

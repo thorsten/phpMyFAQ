@@ -42,16 +42,16 @@
 <div id="container">
     <header id="header">
         
-        <div>
-        <h1><a title="{header}" href="{faqHome}">{header}</a></h1>
-        </div>
-        
         <div id="loginBox">
-            <div id="loginSelection">Login | Register</div>
+            <div id="loginSelection">
+                <a href="#" onclick="javascript:loginForm();">{msgLoginUser}</a> | {msgRegisterUser}
+            </div>
             <div id="loginForm">
-            {loginBox}
+                {loginBox}
             </div>
         </div>
+        
+        <h1><a title="{header}" href="{faqHome}">{header}</a></h1>
         
         <nav>
         <ul>
