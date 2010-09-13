@@ -66,14 +66,14 @@
     <fieldset>
     <legend>{msgWriteComment}</legend>
 
-        <label for="user" class="left">{msgNewContentName}</label>
-        <input class="inputfield" type="text" id="user" name="user" value="{defaultContentName}" size="50" /><br />
+        <label for="user">{msgNewContentName}</label>
+        <input type="text" id="user" name="user" value="{defaultContentName}" size="50" required="true"><br />
 
-        <label for="mail" class="left">{msgNewContentMail}</label>
-        <input class="inputfield" type="email" id="mail" name="mail" value="{defaultContentMail}" size="50" /><br />
+        <label for="mail">{msgNewContentMail}</label>
+        <input type="email" id="mail" name="mail" value="{defaultContentMail}" size="50" required="true"><br />
 
-        <label for="comment_text" class="left">{msgYourComment}</label>
-        <textarea class="inputarea" cols="37" rows="10" id="comment_text" name="comment"></textarea><br />
+        <label for="comment_text">{msgYourComment}</label>
+        <textarea cols="37" rows="10" id="comment_text" name="comment" required="true"></textarea><br />
 
     </fieldset>
 

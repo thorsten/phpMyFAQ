@@ -5,28 +5,28 @@
     <fieldset>
     <legend>{msgNewContentHeader}</legend>
 
-    <label for="username" class="left">{msgNewContentName}</label>
-    <input class="inputfield" type="text" name="username" id="username" value="{defaultContentName}" size="37" /><br />
+    <label for="username">{msgNewContentName}</label>
+    <input type="text" name="username" id="username" value="{defaultContentName}" size="37" required="true"><br />
 
-    <label for="usermail" class="left">{msgNewContentMail}</label>
-    <input class="inputfield" type="email" name="usermail" id="usermail" value="{defaultContentMail}" size="37" /><br />
+    <label for="usermail">{msgNewContentMail}</label>
+    <input type="email" name="usermail" id="usermail" value="{defaultContentMail}" size="37" required="true"><br />
 
-    <label for="rubrik" class="left">{msgNewContentCategory}</label>
-    <select name="rubrik[]" id="rubrik" multiple="multiple" size="3">
+    <label for="rubrik">{msgNewContentCategory}</label>
+    <select name="rubrik[]" id="rubrik" multiple="multiple" size="3" required="true">
     {printCategoryOptions}
     </select><br />
 
-    <label for="thema" class="left">{msgNewContentTheme}</label>
-    <textarea class="inputarea" cols="37" rows="3" name="thema" id="thema">{printQuestion}</textarea><br />
+    <label for="thema">{msgNewContentTheme}</label>
+    <textarea cols="37" rows="3" name="thema" id="thema" required="true">{printQuestion}</textarea><br />
 
-    <label for="content" class="left">{msgNewContentArticle}</label>
-    <textarea class="inputarea" cols="37" rows="10" name="content" id="content"></textarea><br />
+    <label for="content">{msgNewContentArticle}</label>
+    <textarea cols="37" rows="10" name="content" id="content" required="true"></textarea><br />
 
-    <label for="keywords" class="left">{msgNewContentKeywords}</label>
-    <input class="inputfield" type="text" name="keywords" id="keywords" size="37" /><br />
+    <label for="keywords">{msgNewContentKeywords}</label>
+    <input type="text" name="keywords" id="keywords" size="37" /><br />
 
-    <label for="contentlink" class="left">{msgNewContentLink}</label>
-    <input class="inputfield" type="url" name="contentlink" id="contentlink" size="37" value="http://" /><br />
+    <label for="contentlink">{msgNewContentLink}</label>
+    <input type="url" name="contentlink" id="contentlink" size="37" value="http://" /><br />
     </fieldset>
 
     {captchaFieldset}

@@ -45,7 +45,6 @@
         <nav>
         <ul>
             <li>{msgContact}</li>
-            <li>{msgHelp}</li>
             <li>{msgOpenQuestions}</li>
             <li>{msgQuestion}</li>
             <li>{msgAddContent}</li>

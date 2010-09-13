@@ -5,14 +5,14 @@
     <fieldset>
     <legend>{msgContact}</legend>
 
-    <label for="name" class="left">{msgNewContentName}</label>
-    <input class="inputfield" type="text" name="name" value="{defaultContentName}" size="40" /><br />
+    <label for="name">{msgNewContentName}</label>
+    <input type="text" name="name" value="{defaultContentName}" size="40" required="true"><br />
 
-    <label for="email" class="left">{msgNewContentMail}</label>
-    <input class="inputfield" type="email" name="email" value="{defaultContentMail}" size="40" /><br />
+    <label for="email">{msgNewContentMail}</label>
+    <input type="email" name="email" value="{defaultContentMail}" size="40" required="true"><br />
 
-    <label for="question" class="left">{msgMessage}</label>
-    <textarea class="inputarea" cols="37" rows="5" name="question"></textarea><br />
+    <label for="question">{msgMessage}</label>
+    <textarea cols="37" rows="5" name="question" required="true"></textarea><br />
     </fieldset>
 
     {captchaFieldset}

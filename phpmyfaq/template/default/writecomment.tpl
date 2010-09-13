@@ -7,14 +7,14 @@
     <fieldset>
     <legend>{writeThema}</legend>
 
-    <label for="user" class="left">{msgNewContentName}</label>
-    <input class="inputfield" type="text" name="user" value="{defaultContentName}" size="50" /><br />
+    <label for="user">{msgNewContentName}</label>
+    <input type="text" name="user" value="{defaultContentName}" size="50" required="true"><br />
 
-    <label for="mail" class="left">{msgNewContentMail}</label>
-    <input class="inputfield" type="email" name="mail" value="{defaultContentMail}" size="50" /><br />
+    <label for="mail">{msgNewContentMail}</label>
+    <input type="email" name="mail" value="{defaultContentMail}" size="50" required="true"><br />
 
-    <label for="comment" class="left">{msgYourComment}</label>
-    <textarea class="inputarea" cols="37" rows="10" name="comment"></textarea><br />
+    <label for="comment">{msgYourComment}</label>
+    <textarea cols="37" rows="10" name="comment" required="true"></textarea><br />
 
     </fieldset>
 

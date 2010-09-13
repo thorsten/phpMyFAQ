@@ -6,12 +6,12 @@
         <fieldset>
             <legend>{msgSearchWord}</legend>
 
-            <input class="inputfield" id="searchfield" type="search" name="search" size="50" value="{searchString}" />
+            <input id="searchfield" type="search" name="search" size="50" value="{searchString}" autofocus="true">
             <input class="submit" type="submit" name="submit" value="{msgSearch}" />
             <input type="hidden" name="action" value="search" /><br />
 
             <label>{searchOnAllLanguages}</label>
-            <input class="inputfield" type="checkbox"{checkedAllLanguages} name="langs" value="all" />
+            <input type="checkbox"{checkedAllLanguages} name="langs" value="all" />
 
             <label>{selectCategories}</label>
             <select name="searchcategory" size="1">
