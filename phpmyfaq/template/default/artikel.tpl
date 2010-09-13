@@ -1,41 +1,44 @@
-<h2 id="article_category">{writeRubrik}</h2>
-<div id="solution_id">ID #{solution_id}</div>
-<h2>{writeThema}</h2>
 
-    <!-- Article -->
-    <div id="article_content">{writeContent}</div>
-    <!-- /Article -->
+            <header>
+                <h2 id="article_category">{writeRubrik}</h2>
+                <div id="solution_id">ID #{solution_id}</div>
+                <h2>{writeThema}</h2>
+            </header>
+            
+            <article>
+            {writeContent}
+            </article>
+            
+            <!-- Article Categories Listing -->
+            {writeArticleCategories}
+            <!-- /Article Categories Listing -->
+            
+            <!-- Tags -->
+            <p><strong>{writeTagHeader}</strong> {writeArticleTags}</p>
+            <!-- /Tags -->
 
-    <!-- Article Categories Listing -->
-    {writeArticleCategories}
-    <!-- /Article Categories Listing -->
+            <!-- Related Articles -->
+            <p><strong>{writeRelatedArticlesHeader}</strong>{writeRelatedArticles}</p>
+            <!-- / Related Articles -->
 
-    <!-- Tags -->
-    <p><strong>{writeTagHeader}</strong> {writeArticleTags}</p>
-    <!-- /Tags -->
+            <!-- Article Info -->
+            <p><span id="popularity" style="display: none;">{writePopularity}</span>{writeDateMsg}<br />{writeAuthor}<br />{writeRevision}<br />{editThisEntry}</p>
+            <!-- /Article Info -->
 
-    <!-- Related Articles -->
-    <p><strong>{writeRelatedArticlesHeader}</strong>{writeRelatedArticles}</p>
-    <!-- / Related Articles -->
+            {switchLanguage}
+            <div id="action">
+            <a href="{link_digg}" target="_blank"><img src="images/digg.png" alt="{writeDiggMsgTag}" title="{writeDiggMsgTag}" width="16" height="16" border="0" class="recordIcons" /></a> 
+            <a href="{link_facebook}" target="_blank"><img src="images/facebook.png" alt="{writeFacebookMsgTag}" title="{writeFacebookMsgTag}" width="16" height="16" border="0" class="recordIcons" /></a> 
+            <a href="javascript:window.print();"><img src="images/print.gif" alt="{writePrintMsgTag}" title="{writePrintMsgTag}" width="16" height="16" border="0" class="recordIcons" /></a> 
+            <a href="{link_email}"><img src="images/email.gif" alt="{writeSend2FriendMsgTag}" title="{writeSend2FriendMsgTag}" width="16" height="16" border="0" class="recordIcons" /></a> 
+            <a target="_blank" href="{link_pdf}"><img src="images/pdf.gif" alt="{writePDFTag}" title="{writePDFTag}" width="16" height="16" border="0" class="recordIcons" /></a>
+            </div>
 
-    <!-- Article Info -->
-    <p><span id="popularity" style="display: none;">{writePopularity}</span>{writeDateMsg}<br />{writeAuthor}<br />{writeRevision}<br />{editThisEntry}</p>
-    <!-- /Article Info -->
-
-    {switchLanguage}
-    <div id="action">
-    <a href="{link_digg}" target="_blank"><img src="images/digg.png" alt="{writeDiggMsgTag}" title="{writeDiggMsgTag}" width="16" height="16" border="0" class="recordIcons" /></a> 
-    <a href="{link_facebook}" target="_blank"><img src="images/facebook.png" alt="{writeFacebookMsgTag}" title="{writeFacebookMsgTag}" width="16" height="16" border="0" class="recordIcons" /></a> 
-    <a href="javascript:window.print();"><img src="images/print.gif" alt="{writePrintMsgTag}" title="{writePrintMsgTag}" width="16" height="16" border="0" class="recordIcons" /></a> 
-    <a href="{link_email}"><img src="images/email.gif" alt="{writeSend2FriendMsgTag}" title="{writeSend2FriendMsgTag}" width="16" height="16" border="0" class="recordIcons" /></a> 
-    <a target="_blank" href="{link_pdf}"><img src="images/pdf.gif" alt="{writePDFTag}" title="{writePDFTag}" width="16" height="16" border="0" class="recordIcons" /></a>
-    </div>
-
-    <!-- Translation Form -->
-    <div class="translation">
-    {translationForm}
-    </div>
-    <!-- /Translation Form -->
+            <!-- Translation Form -->
+            <div class="translation">
+            {translationForm}
+            </div>
+            <!-- /Translation Form -->
 
     <!-- Voting Form -->
     <div id="voting">

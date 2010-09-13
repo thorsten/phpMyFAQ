@@ -124,8 +124,10 @@
         </form>
         [/globalSuggestBox]
         
-        {writeContent}
-    
+            <section>
+            {writeContent}
+            </section>
+        
         </div>
     </div>
     
