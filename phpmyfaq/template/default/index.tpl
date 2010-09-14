@@ -65,77 +65,69 @@
         </nav>
     </header>
 
-    <section ="maincontent">
-        <div class="leftcolumn">
-            <div class="content">
-                <div id="categories">
-                    <nav>
+    <section id="maincolumns">
+        <aside id="leftcolumn">
+            <div id="categories">
+                <nav>
                     <ul>
                         <li class="home">{backToHome}</li>
                         <li>{allCategories}</li>
                         {showCategories}
                         <li>{showSitemap}</li>
                     </ul>
-                    </nav>
-                </div>
+                </nav>
             </div>
-
-            <div class="content">
-                <div id="langform">
+            <div id="langform">
                 <form action="{writeLangAdress}" method="post">
-                <label for="language">{languageBox}</label>
-                {switchLanguages}
-                <input type="hidden" name="action" value="" />
+                    <label for="language">{languageBox}</label>
+                    {switchLanguages}
+                    <input type="hidden" name="action" value="" />
                 </form>
-                </div>
             </div>
-
-            <div class="content">
-                <div id="useronline">
+            <div id="useronline">
                 {userOnline}
-                </div>
             </div>
-        </div>
+        </aside>
         
-        <div class="rightcolumn">
-        {rightBox}
-                
-            <div class="content">
-                <div id="stickyrecords">
-                <h3>{stickyRecordsHeader}</h3>
-                <ul>
-                    [stickyRecordsList]
-                    <li><a href="{stickyRecordsUrl}">{stickyRecordsTitle}</a></li>
-                    [/stickyRecordsList]
-                </ul>
-                </div>
-           </div>
-        </div>
-        
-        <div class="main-content">
-        [globalSearchBox]
-        <form id="search" action="{writeSendAdress}" method="get">
-             <input type="text" name="search" id="searchfield" size="30" />
-             <input type="submit" name="submit" value="{searchBox}" />
-             <input type="hidden" name="searchcategory" value="{categoryId}" />
-             <input type="hidden" name="action" value="search" />
-         </form>
-        [/globalSearchBox]
-        [globalSuggestBox]
-        <form id="instantform" action="?action=instantresponse" method="post">
-        <input id="ajaxlanguage" name="ajaxlanguage" type="hidden" value="{ajaxlanguage}" />
-        <input class="inputfield" id="instantfield" type="text" name="search" value="" />
-        </form>
-        [/globalSuggestBox]
-        
-            <section>
+        <section id="maincontent">
+            <aside id="searchBox">
+            [globalSearchBox]
+            <form id="search" action="{writeSendAdress}" method="get">
+                <input type="text" name="search" id="searchfield" size="30">
+                <input type="hidden" name="searchcategory" value="{categoryId}">
+                <input type="hidden" name="action" value="search">
+                <input type="submit" name="submit" value="{searchBox}">
+            </form>
+            [/globalSearchBox]
+            [globalSuggestBox]
+            <form id="instantform" action="?action=instantresponse" method="post">
+                <input type="hidden" name="ajaxlanguage" id="ajaxlanguage" value="{ajaxlanguage}">
+                <input type="text" name="search" id="instantfield" value="">
+            </form>
+            [/globalSuggestBox]
+            </aside>
+            
             {writeContent}
-            </section>
+        </section>
         
-        </div>
+        <aside id="rightcolumn">
+            
+            {rightBox}
+            
+            <div id="stickyrecords">
+            <h3>{stickyRecordsHeader}</h3>
+            <ul>
+                [stickyRecordsList]
+                <li><a href="{stickyRecordsUrl}">{stickyRecordsTitle}</a></li>
+                [/stickyRecordsList]
+            </ul>
+            </div>
+            
+        </aside>
+    
     </section>
     
-    <div class="clearing"></div>
+    <div class="clearfix"></div>
     <footer id="footer">
         <p id="copyrightnote">{copyright}</p>
     </footer>

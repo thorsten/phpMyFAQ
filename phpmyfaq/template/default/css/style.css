@@ -201,6 +201,17 @@ button {
     border-top-left-radius: 5px; -moz-border-radius-topleft: 5px; -webkit-border-top-left-radius: 5px;
     border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px; }
 
+#leftcolumn {
+    float: left; width: 175px; }
+#maincontent {
+    float: left; width: 610px; }
+#searchBox {
+    background: #fff; margin-bottom: 2em; overflow: hidden; padding: 20px; width: 550px; 
+    border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; }
+#searchBox input[type=text] {
+    width: 400px; height: 30px; }
+#rightcolumn {
+    float: right; width: 175px; }
 
 #footer {
     background: #1A3857; height: 30px; line-height: 30px; margin: 0 auto 2em auto; padding: 0; width: 100%; 
