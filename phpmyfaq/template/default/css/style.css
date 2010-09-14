@@ -209,7 +209,7 @@ button {
     background: #fff; margin-bottom: 2em; overflow: hidden; padding: 20px; width: 550px; 
     border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; }
 #searchBox input[type=text] {
-    width: 400px; height: 30px; }
+    width: 400px; height: 1.66em; font-size: 1.33em;}
 #rightcolumn {
     float: right; width: 175px; }
 

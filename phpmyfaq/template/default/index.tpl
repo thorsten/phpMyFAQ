@@ -77,35 +77,30 @@
                     </ul>
                 </nav>
             </div>
-            <div id="langform">
-                <form action="{writeLangAdress}" method="post">
-                    <label for="language">{languageBox}</label>
-                    {switchLanguages}
-                    <input type="hidden" name="action" value="" />
-                </form>
-            </div>
             <div id="useronline">
                 {userOnline}
             </div>
         </aside>
         
         <section id="maincontent">
-            <aside id="searchBox">
             [globalSearchBox]
+            <aside id="searchBox">
             <form id="search" action="{writeSendAdress}" method="get">
                 <input type="text" name="search" id="searchfield" size="30">
                 <input type="hidden" name="searchcategory" value="{categoryId}">
                 <input type="hidden" name="action" value="search">
                 <input type="submit" name="submit" value="{searchBox}">
             </form>
+            </aside>
             [/globalSearchBox]
             [globalSuggestBox]
+            <aside id="searchBox">
             <form id="instantform" action="?action=instantresponse" method="post">
                 <input type="hidden" name="ajaxlanguage" id="ajaxlanguage" value="{ajaxlanguage}">
                 <input type="text" name="search" id="instantfield" value="">
             </form>
-            [/globalSuggestBox]
             </aside>
+            [/globalSuggestBox]
             
             {writeContent}
         </section>
@@ -129,7 +124,11 @@
     
     <div class="clearfix"></div>
     <footer id="footer">
-        <p id="copyrightnote">{copyright}</p>
+        <form action="{writeLangAdress}" method="post">
+        <p id="copyrightnote">
+            {copyright} | {switchLanguages} <input type="hidden" name="action" value="" />
+        </p>
+        </form>
     </footer>
     
     {debugMessages}
