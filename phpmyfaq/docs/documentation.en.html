@@ -217,7 +217,7 @@
     installation-script checks which version of PHP is installed on your server.
     Should you not meet the requirements, you cannot start the installation
     process.</p>
-    <p>In case you have PHP below 5.2.3 installed you cannot use phpMyFAQ 2.5.</p>
+    <p>In case you have PHP below 5.2.3 installed you cannot use phpMyFAQ 2.7.</p>
     <p>phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers 
     are Mozilla Firefox 3.x and later (Windows/MacOS X/Linux), Safari 4.x or later
     (MacOS X/Windows/iOS), Chrome 5.x or later (Windows/MacOS X/Linux), Opera 10.0
@@ -405,11 +405,11 @@
 
     <hr style="width: 90%; height: 1px;" />
     <p><strong><a name="2k"></a>2.k. Firefox and IE7 search plugins</strong></p>
-    <p>phpMyFAQ 2.5.x provides search plugins for Mozilla Firefox 2 and later and
-    Microsoft Internet Explorer 7 and later based on the OpenSearch specification.
-    Every user in the front-end can install it. With an installed search plugin you
-    can search through the phpMyFAQ installation with the search box in upper
-    right corner of Mozilla Firefox or Microsoft Internet Explorer.</p>
+    <p>phpMyFAQ 2.7 provides search plugins for Mozilla Firefox and Internet Explorer 
+    7 and later based on the OpenSearch specification. Every user in the front-end 
+    can install it. With an installed search plugin you can search through the 
+    phpMyFAQ installation with the search box in upper right corner of Mozilla 
+    Firefox or Internet Explorer.</p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -428,7 +428,7 @@
 
     <hr style="width: 90%; height: 1px;" />
     <p><strong><a name="2m"></a>2.m. Spam protection</strong></p>
-    <p>phpMyFAQ 2.5 performs these three checks on public forms:</p>
+    <p>phpMyFAQ 2.7 performs these three checks on public forms:</p>
     <ol>
         <li>Check against IP/Network address</li>
         <li>Check against banned words</li>
@@ -444,27 +444,27 @@
     <p><strong><a name="2n"></a>2.n. Attachments</strong></p>
     <p>Starting with version 2.6 phpMyFAQ supports encrypted attachments. The 
     encrypton is done using the <a href="http://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a>
-    algorythm implemented in mcrypt extension (if
-    avaliable) or with native PHP Rijndael implementation. The key size vary
-    depending on implementation used and can be max 256 bits long. Use of
-    mcrypt extension is strongly recommended because of performance reasons, its avaliability is checked
+    algorythm implemented in mcrypt extension (if avaliable) or with native 
+    PHP Rijndael implementation. The key size vary depending on implementation 
+    used and can be max 256 bits long. Use of mcrypt extension is strongly 
+    recommended because of performance reasons, its avaliability is checked
     automatically at the run time.</p>
     <p>See the migration section if you're migrating from earlier versions.</p>
-    <p>Pleale be aware:
+    <p>Please be aware:
     <ul>
-    <li>Disabling encryption will cause all files be saved unencrypted. In this
-    case you'll benefit sparing disk space, because identical files will be
-    saved only once.</li>
-    <li>Do not change the default attachment encryption key once files was uploaded. 
-        Doing so will cause all the previously uploaded files to be 
-        wrong decrypted. If you need to change the default key, you will have to
-        reupload all files. <!-- Or use the migration script --></li>
-    <li>Always memorize your encryption keys. There is no way to 
-    decrypt files without a correct key. </li>
-    <li>Files are always saved with names based on a virtual hash generated from several
-    tokens (just like key and issue id etc), so there is no way to asses a file
-    directly using the name it was uploaded under.</li>
-    <li>Download continuation isn't (yet?) supported.</li>
+        <li>Disabling encryption will cause all files be saved unencrypted. In this
+        case you'll benefit sparing disk space, because identical files will be
+        saved only once.</li>
+        <li>Do not change the default attachment encryption key once files 
+        was uploaded. Doing so will cause all the previously uploaded files 
+        to be wrong decrypted. If you need to change the default key, you will 
+        have to reupload all files.</li>
+        <li>Always memorize your encryption keys. There is no way to  ecrypt files 
+        without a correct key.</li>
+        <li>Files are always saved with names based on a virtual hash generated 
+        from several tokens (just like key and issue id etc), so there is no way 
+        to asses a file directly using the name it was uploaded under.</li>
+        <li>Download continuation isn't (yet?) supported.</li>
     </ul>
     </p>
     <p><a href="#top">back to top</a></p>
