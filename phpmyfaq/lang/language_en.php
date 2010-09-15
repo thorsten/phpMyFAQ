@@ -2,13 +2,7 @@
 /**
  * The English language file - try to be the best of British and American English
  *
- * @package    phpMyFAQ
- * @subpackage i18n
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Matthias Sommerfeld <mso@bluebirdy.de>
- * @author     Henning Schulzrinne <hgs@cs.columbia.edu>
- * @since      2004-02-19
- * @copyright  2004-2009 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,6 +13,16 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   Translation
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matthias Sommerfeld <mso@bluebirdy.de>
+ * @author    Henning Schulzrinne <hgs@cs.columbia.edu>
+ * @copyright 2004-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-02-19
  */
 
 /**
@@ -58,12 +62,12 @@ $PMF_LANG["msgCategory"] = "Categories";
 $PMF_LANG["msgShowAllCategories"] = "All categories";
 $PMF_LANG["msgSearch"] = "Search";
 $PMF_LANG["msgAddContent"] = "Add FAQ";
-$PMF_LANG["msgQuestion"] = "Ask question";
+$PMF_LANG["msgQuestion"] = "Add question";
 $PMF_LANG["msgOpenQuestions"] = "Open questions";
 $PMF_LANG["msgHelp"] = "Help";
 $PMF_LANG["msgContact"] = "Contact";
 $PMF_LANG["msgHome"] = "FAQ Home";
-$PMF_LANG["msgNews"] = "FAQ news";
+$PMF_LANG["msgNews"] = "FAQ News";
 $PMF_LANG["msgUserOnline"] = " Users online";
 $PMF_LANG["msgBack2Home"] = "Back to main page";
 
@@ -123,13 +127,13 @@ $PMF_LANG["msgSearchContent"] = "Answer: ";
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Proposal for a new FAQ";
 $PMF_LANG["msgNewContentAddon"] = "Your proposal will not be published right away, but will be released by the administrator upon receipt. Required  fields are <strong>your Name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>headline</strong> and <strong>your record</strong>. Please separate the keywords with space only.";
-$PMF_LANG["msgNewContentName"] = "Your Name:";
+$PMF_LANG["msgNewContentName"] = "Your name:";
 $PMF_LANG["msgNewContentMail"] = "Your email address:";
 $PMF_LANG["msgNewContentCategory"] = "Category:";
-$PMF_LANG["msgNewContentTheme"] = "Question:";
-$PMF_LANG["msgNewContentArticle"] = "Answer:";
+$PMF_LANG["msgNewContentTheme"] = "Your question:";
+$PMF_LANG["msgNewContentArticle"] = "Your answer:";
 $PMF_LANG["msgNewContentKeywords"] = "Keywords:";
-$PMF_LANG["msgNewContentLink"] = "Link for this record:";
+$PMF_LANG["msgNewContentLink"] = "Link for this FAQ:";
 $PMF_LANG["msgNewContentSubmit"] = "submit";
 $PMF_LANG["msgInfo"] = "More information: ";
 $PMF_LANG["msgNewContentThanks"] = "Thank you for your suggestion!";
@@ -138,7 +142,7 @@ $PMF_LANG["msgNoQuestionsAvailable"] = "Currently there are no pending questions
 // ask Question
 $PMF_LANG["msgNewQuestion"] = "Ask your question below:";
 $PMF_LANG["msgAskCategory"] = "Category:";
-$PMF_LANG["msgAskYourQuestion"] = "Question:";
+$PMF_LANG["msgAskYourQuestion"] = "Your question:";
 $PMF_LANG["msgAskThx4Mail"] = "<h2>Thanks for your question!</h2>";
 $PMF_LANG["msgDate_User"] = "Date / User";
 $PMF_LANG["msgQuestion2"] = "Question";
@@ -187,10 +191,10 @@ $PMF_LANG["ad"] = "ADMIN SECTION";
 $PMF_LANG["ad_menu_user_administration"] = "Users";
 $PMF_LANG["ad_menu_entry_aprove"] = "Approve FAQs";
 $PMF_LANG["ad_menu_entry_edit"] = "Edit FAQs";
-$PMF_LANG["ad_menu_categ_add"] = "Add Category";
-$PMF_LANG["ad_menu_categ_edit"] = "Edit Category";
-$PMF_LANG["ad_menu_news_add"] = "Add News";
-$PMF_LANG["ad_menu_news_edit"] = "Edit News";
+$PMF_LANG["ad_menu_categ_add"] = "Add category";
+$PMF_LANG["ad_menu_categ_edit"] = "Edit category";
+$PMF_LANG["ad_menu_news_add"] = "Add news";
+$PMF_LANG["ad_menu_news_edit"] = "Edit news";
 $PMF_LANG["ad_menu_open"] = "Open questions";
 $PMF_LANG["ad_menu_stat"] = "Statistics";
 $PMF_LANG["ad_menu_cookie"] = "Set cookies";
@@ -211,8 +215,8 @@ $PMF_LANG["ad_msg_noauth"] = "You are not authorized.";
 // Allgemein
 $PMF_LANG["ad_gen_page"] = "Page";
 $PMF_LANG["ad_gen_of"] = "of";
-$PMF_LANG["ad_gen_lastpage"] = "Previous Page";
-$PMF_LANG["ad_gen_nextpage"] = "Next Page";
+$PMF_LANG["ad_gen_lastpage"] = "Previous page";
+$PMF_LANG["ad_gen_nextpage"] = "Next page";
 $PMF_LANG["ad_gen_save"] = "Save";
 $PMF_LANG["ad_gen_reset"] = "Reset";
 $PMF_LANG["ad_gen_yes"] = "Yes";
@@ -222,12 +226,12 @@ $PMF_LANG["ad_gen_ncf"] = "No category found!";
 $PMF_LANG["ad_gen_delete"] = "Delete";
 
 // Benutzerverwaltung
-$PMF_LANG["ad_user"] = "User Administration";
+$PMF_LANG["ad_user"] = "User administration";
 $PMF_LANG["ad_user_username"] = "Registered users";
-$PMF_LANG["ad_user_rights"] = "User Rights";
+$PMF_LANG["ad_user_rights"] = "User rights";
 $PMF_LANG["ad_user_edit"] = "edit";
 $PMF_LANG["ad_user_delete"] = "delete";
-$PMF_LANG["ad_user_add"] = "Add User";
+$PMF_LANG["ad_user_add"] = "Add user";
 $PMF_LANG["ad_user_profou"] = "Profile of the user";
 $PMF_LANG["ad_user_name"] = "Name";
 $PMF_LANG["ad_user_password"] = "Password";
@@ -240,7 +244,7 @@ $PMF_LANG["ad_user_deleted"] = "The user was successfully deleted.";
 $PMF_LANG["ad_user_checkall"] = "Select all";
 
 // Beitragsverwaltung
-$PMF_LANG["ad_entry_aor"] = "Administration of Records";
+$PMF_LANG["ad_entry_aor"] = "FAQ administration";
 $PMF_LANG["ad_entry_id"] = "ID";
 $PMF_LANG["ad_entry_topic"] = "Topic";
 $PMF_LANG["ad_entry_action"] = "Action";
@@ -251,7 +255,7 @@ $PMF_LANG["ad_entry_content"] = "Answer:";
 $PMF_LANG["ad_entry_keywords"] = "Keywords:";
 $PMF_LANG["ad_entry_author"] = "Author:";
 $PMF_LANG["ad_entry_category"] = "Category:";
-$PMF_LANG["ad_entry_active"] = "Active?";
+$PMF_LANG["ad_entry_active"] = "Visible:";
 $PMF_LANG["ad_entry_date"] = "Date:";
 $PMF_LANG["ad_entry_changed"] = "Changed?";
 $PMF_LANG["ad_entry_changelog"] = "Changelog:";
@@ -299,12 +303,12 @@ $PMF_LANG["ad_news_updatenews"] = "News item updated.";
 
 // Kategorieverwaltung
 $PMF_LANG["ad_categ_new"] = "Add new category";
-$PMF_LANG["ad_categ_catnum"] = "Category Number:";
-$PMF_LANG["ad_categ_subcatnum"] = "Subcategory Number:";
+$PMF_LANG["ad_categ_catnum"] = "Category number:";
+$PMF_LANG["ad_categ_subcatnum"] = "Subcategory number:";
 $PMF_LANG["ad_categ_nya"] = "<em>not yet available!</em>";
-$PMF_LANG["ad_categ_titel"] = "Category Title:";
-$PMF_LANG["ad_categ_add"] = "Add Category";
-$PMF_LANG["ad_categ_existing"] = "Existing Categories";
+$PMF_LANG["ad_categ_titel"] = "Category title:";
+$PMF_LANG["ad_categ_add"] = "Add category";
+$PMF_LANG["ad_categ_existing"] = "Existing categories";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "Category";
 $PMF_LANG["ad_categ_subcateg"] = "Subcategory";
