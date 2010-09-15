@@ -400,11 +400,13 @@ if (isset($auth) && in_array(true, $permission)) {
 // User is NOT authenticated
 } else {
 ?>
-    <div id="main">
-        <div class="centerlogin">
-        <form action="index.php" method="post">
-        <fieldset class="login">
-            <legend class="login">phpMyFAQ Login</legend>
+        
+        <section id="maincontent">
+            <div class="centerlogin">
+            
+            <form action="index.php" method="post">
+                <fieldset class="login">
+                <legend class="login">phpMyFAQ Login</legend>
 <?php
     if ($action == 'logout') {
         printf("<p>%s</p>\n", $PMF_LANG['ad_logout']);
@@ -416,19 +418,19 @@ if (isset($auth) && in_array(true, $permission)) {
     }
     if (isset($_SERVER['HTTPS']) || !$faqconfig->get('main.useSslForLogins')) {
 ?>
-            <label class="left" for="faqusername"><?php print $PMF_LANG["ad_auth_user"]; ?></label>
-            <input type="text" name="faqusername" id="faqusername" size="20" /><br />
-
-            <label class="left" for="faqpassword"><?php print $PMF_LANG["ad_auth_passwd"]; ?></label>
-            <input type="password" size="20" name="faqpassword" id="faqpassword" /><br />
-
-            <input class="submit" style="margin-left: 190px;" type="submit" value="<?php print $PMF_LANG["ad_auth_ok"]; ?>" />
-            <input class="submit" type="reset" value="<?php print $PMF_LANG["ad_auth_reset"]; ?>" />
-
-            <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_LANG["lostPassword"]; ?>" border="0" /> <a href="password.php" title="<?php print $PMF_LANG["lostPassword"]; ?>">
+                    <label class="left" for="faqusername"><?php print $PMF_LANG["ad_auth_user"]; ?></label><br>
+                    <input type="text" name="faqusername" id="faqusername" size="20" /><br>
+                    
+                    <label class="left" for="faqpassword"><?php print $PMF_LANG["ad_auth_passwd"]; ?></label><br>
+                    <input type="password" size="20" name="faqpassword" id="faqpassword" /><br>
+                    
+                    <input class="submit" style="margin-left: 190px;" type="submit" value="<?php print $PMF_LANG["ad_auth_ok"]; ?>" />
+                    <input class="submit" type="reset" value="<?php print $PMF_LANG["ad_auth_reset"]; ?>" />
+                    
+                    <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_LANG["lostPassword"]; ?>" border="0" /> <a href="password.php" title="<?php print $PMF_LANG["lostPassword"]; ?>">
 <?php print $PMF_LANG["lostPassword"]; ?>
 </a></p>
-            <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $faqconfig->get('main.titleFAQ'); ?>" border="0" /> <a href="../index.php" title="<?php print $faqconfig->get('main.titleFAQ'); ?>"><?php print $faqconfig->get('main.titleFAQ'); ?></a></p>
+                    <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $faqconfig->get('main.titleFAQ'); ?>" border="0" /> <a href="../index.php" title="<?php print $faqconfig->get('main.titleFAQ'); ?>"><?php print $faqconfig->get('main.titleFAQ'); ?></a></p>
 <?php
     } else {
         printf('<p><a href="https://%s%s">%s</a></p>',
@@ -437,14 +439,15 @@ if (isset($auth) && in_array(true, $permission)) {
             $PMF_LANG['msgSecureSwitch']);
     }
 ?>
-        </fieldset>
-        </form>
+                </fieldset>
+            </form>
+            </div>
 <?php
 }
 
 if (DEBUG) {
     print "\n";
-    print '<div id="debug_main">DEBUG INFORMATION:<br />'.$db->sqllog().'</div>';
+    print '<div id="debug_main">DEBUG INFORMATION:<br>'.$db->sqllog().'</div>';
 }
 
 require 'footer.php';

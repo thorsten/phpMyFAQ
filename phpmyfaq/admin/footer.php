@@ -29,18 +29,18 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 ?>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <div id="footer">
-        <div class="right">
+        
+        </section>
+    </section>
+    
+    <div class="clearfix"></div>
+    <footer id="footer">
+        <p id="copyrightnote">
         Proudly powered by <strong>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></strong> | 
         <a href="http://www.phpmyfaq.de/dokumentation.php" target="_blank">phpMyFAQ documentation</a> | 
         &copy; 2001-2010 <a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a>
-        </div>
-    </div>
-
+        </p>
+    </footer>
 </div>
 
 <?php
@@ -48,6 +48,13 @@ if (isset($auth)) {
 ?>
 <iframe id="keepPMFSessionAlive" src="session.keepalive.php?lang=<?php print $LANGCODE; ?>" style="border: none;" width="0" height="0"></iframe>
 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script>!window.jQuery && document.write('<script src="inc/js/jquery.min.js"><\/script>')</script>
+<script src="../inc/js/functions.js"></script>
+<script src='../inc/js/plugins/autocomplete/jquery.autocomplete.pack.js'></script>
+<script src="../inc/js/plugins/datePicker/date.js"></script>
+<script src="../inc/js/plugins/datePicker/jquery.datePicker.js"></script>
+<script src="editor/tiny_mce.js?<?php print time(); ?>"></script>
 <?php
     if (isset($auth) && (('takequestion' == $action) || ('editentry'    == $action) || ('editpreview'  == $action) ||
                          ('addnews'      == $action) || ('editnews'     == $action) || ('copyentry'  == $action))) {
@@ -129,25 +136,25 @@ function ajaxfilemanager(field_name, url, type, win)
 <!-- /tinyMCE -->
 
 <!-- SyntaxHighlighter -->
-<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shCore.js"></script>
-<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushBash.js"></script>
-<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushCpp.js"></script>
-<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushCSharp.js"></script>
-<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushCss.js"></script>
-<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushDelphi.js"></script>
-<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushDiff.js"></script>
-<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushGroovy.js"></script>
-<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushJava.js"></script>
-<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushJScript.js"></script>
-<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushPhp.js"></script>
-<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushPerl.js"></script>
-<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushPlain.js"></script>
-<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushPython.js"></script>
-<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushRuby.js"></script>
-<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushScala.js"></script>
-<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushSql.js"></script>
-<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushVb.js"></script>
-<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushXml.js"></script>
+<script src="../inc/js/syntaxhighlighter/scripts/shCore.js"></script>
+<script src="../inc/js/syntaxhighlighter/scripts/shBrushBash.js"></script>
+<script src="../inc/js/syntaxhighlighter/scripts/shBrushCpp.js"></script>
+<script src="../inc/js/syntaxhighlighter/scripts/shBrushCSharp.js"></script>
+<script src="../inc/js/syntaxhighlighter/scripts/shBrushCss.js"></script>
+<script src="../inc/js/syntaxhighlighter/scripts/shBrushDelphi.js"></script>
+<script src="../inc/js/syntaxhighlighter/scripts/shBrushDiff.js"></script>
+<script src="../inc/js/syntaxhighlighter/scripts/shBrushGroovy.js"></script>
+<script src="../inc/js/syntaxhighlighter/scripts/shBrushJava.js"></script>
+<script src="../inc/js/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+<script src="../inc/js/syntaxhighlighter/scripts/shBrushPhp.js"></script>
+<script src="../inc/js/syntaxhighlighter/scripts/shBrushPerl.js"></script>
+<script src="../inc/js/syntaxhighlighter/scripts/shBrushPlain.js"></script>
+<script src="../inc/js/syntaxhighlighter/scripts/shBrushPython.js"></script>
+<script src="../inc/js/syntaxhighlighter/scripts/shBrushRuby.js"></script>
+<script src="../inc/js/syntaxhighlighter/scripts/shBrushScala.js"></script>
+<script src="../inc/js/syntaxhighlighter/scripts/shBrushSql.js"></script>
+<script src="../inc/js/syntaxhighlighter/scripts/shBrushVb.js"></script>
+<script src="../inc/js/syntaxhighlighter/scripts/shBrushXml.js"></script>
 <link type="text/css" rel="stylesheet" href="../inc/js/syntaxhighlighter/styles/shCore.css"/>
 <link type="text/css" rel="stylesheet" href="../inc/js/syntaxhighlighter/styles/shThemeDefault.css"/>
 <script type="text/javascript">
