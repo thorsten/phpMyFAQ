@@ -60,6 +60,7 @@
             <li>{msgAddContent}</li>
             <li>{msgQuestion}</li>
             <li>{msgOpenQuestions}</li>
+            <li>{showSitemap}</li>
             <li>{msgContact}</li>
         </ul>
         </nav>
@@ -73,7 +74,6 @@
                         <li class="home">{backToHome}</li>
                         <li>{allCategories}</li>
                         {showCategories}
-                        <li>{showSitemap}</li>
                     </ul>
                 </nav>
             </div>
