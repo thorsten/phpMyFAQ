@@ -39,99 +39,95 @@
 <body dir="{dir}">
 
 <div id="container">
-    <header>
+    <header id="header">
+        
+        <div id="loginBox">
+            <div id="loginSelection">
+                <a href="#" onclick="javascript:loginForm();">{msgLoginUser}</a> | {msgRegisterUser}
+            </div>
+            <div id="loginForm">
+                {loginBox}
+            </div>
+        </div>
+        
         <h1><a title="{header}" href="{faqHome}">{header}</a></h1>
+        
         <nav>
         <ul>
-            <li>{msgContact}</li>
-            <li>{msgHelp}</li>
-            <li>{msgOpenQuestions}</li>
-            <li>{msgQuestion}</li>
-            <li>{msgAddContent}</li>
-            <li>{showInstantResponse}</li>
             <li>{msgSearch}</li>
+            <li>{showInstantResponse}</li>
+            <li>{msgAddContent}</li>
+            <li>{msgQuestion}</li>
+            <li>{msgOpenQuestions}</li>
+            <li>{showSitemap}</li>
+            <li>{msgContact}</li>
         </ul>
-        <nav>
+        </nav>
     </header>
 
-    <section>
-        <div class="leftcolumn">
-            <h2 class="invisible">Navigation</h2>
-            <div class="content">
-                <div id="categories">
-                    <nav>
+    <section id="maincolumns">
+        <aside id="leftcolumn">
+            <div id="categories">
+                <nav>
                     <ul>
                         <li class="home">{backToHome}</li>
                         <li>{allCategories}</li>
                         {showCategories}
-                        <li>{showSitemap}</li>
                     </ul>
-                    </nav>
-                </div>
+                </nav>
             </div>
-
-            <div class="content">
-                <div id="langform">
-                <form action="{writeLangAdress}" method="post">
-                <label for="language">{languageBox}</label>
-                {switchLanguages}
-                <input type="hidden" name="action" value="" />
-                </form>
-                </div>
-            </div>
-
-            <div class="content">
-                <div id="loginform">
-                {loginBox}
-                </div>
-            </div>
-
-            <div class="content">
-                <div id="useronline">
+            <div id="useronline">
                 {userOnline}
-                </div>
             </div>
-        </div>
+        </aside>
         
-        <div class="rightcolumn">
-        {rightBox}
-                
-            <div class="content">
-                <div id="stickyrecords">
-                <h3>{stickyRecordsHeader}</h3>
-                <ul>
-                    [stickyRecordsList]
-                    <li><a href="{stickyRecordsUrl}">{stickyRecordsTitle}</a></li>
-                    [/stickyRecordsList]
-                </ul>
-                </div>
-           </div>
-        </div>
+        <section id="maincontent">
+            [globalSearchBox]
+            <aside id="searchBox">
+            <form id="search" action="{writeSendAdress}" method="get">
+                <input type="text" name="search" id="searchfield" size="30">
+                <input type="hidden" name="searchcategory" value="{categoryId}">
+                <input type="hidden" name="action" value="search">
+                <input type="submit" name="submit" value="{searchBox}">
+            </form>
+            </aside>
+            [/globalSearchBox]
+            [globalSuggestBox]
+            <aside id="searchBox">
+            <form id="instantform" action="?action=instantresponse" method="post">
+                <input type="hidden" name="ajaxlanguage" id="ajaxlanguage" value="{ajaxlanguage}">
+                <input type="text" name="search" id="instantfield" value="">
+            </form>
+            </aside>
+            [/globalSuggestBox]
+            
+            {writeContent}
+        </section>
         
-        <div class="main-content">
-        [globalSearchBox]
-        <form id="search" action="{writeSendAdress}" method="get">
-             <input type="text" name="search" id="searchfield" size="30" />
-             <input type="submit" name="submit" value="{searchBox}" />
-             <input type="hidden" name="searchcategory" value="{categoryId}" />
-             <input type="hidden" name="action" value="search" />
-         </form>
-        [/globalSearchBox]
-        [globalSuggestBox]
-        <form id="instantform" action="?action=instantresponse" method="post">
-        <input id="ajaxlanguage" name="ajaxlanguage" type="hidden" value="{ajaxlanguage}" />
-        <input class="inputfield" id="instantfield" type="text" name="search" value="" />
+        <aside id="rightcolumn">
+            
+            {rightBox}
+            
+            <div id="stickyrecords">
+            <h3>{stickyRecordsHeader}</h3>
+            <ul>
+                [stickyRecordsList]
+                <li><a href="{stickyRecordsUrl}">{stickyRecordsTitle}</a></li>
+                [/stickyRecordsList]
+            </ul>
+            </div>
+            
+        </aside>
+    
+    </section>
+    
+    <div class="clearfix"></div>
+    <footer id="footer">
+        <form action="{writeLangAdress}" method="post">
+        <p id="copyrightnote">
+            {copyright} | {switchLanguages} <input type="hidden" name="action" value="" />
+        </p>
         </form>
-        [/globalSuggestBox]
-        
-        {writeContent}
-    
-        </div>
-    </div>
-    
-    <div class="clearing"></div>
-    <footer>
-        <p id="copyrightnote">{copyright}</p>
     </footer>
     
     {debugMessages}

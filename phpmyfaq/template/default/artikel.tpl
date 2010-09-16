@@ -1,41 +1,44 @@
-<h2 id="article_category">{writeRubrik}</h2>
-<div id="solution_id">ID #{solution_id}</div>
-<h2>{writeThema}</h2>
 
-    <!-- Article -->
-    <div id="article_content">{writeContent}</div>
-    <!-- /Article -->
+            <header>
+                <h2 id="article_category">{writeRubrik}</h2>
+                <div id="solution_id">ID #{solution_id}</div>
+                <h2>{writeThema}</h2>
+            </header>
+            
+            <article>
+            {writeContent}
+            </article>
+            
+            <!-- Article Categories Listing -->
+            {writeArticleCategories}
+            <!-- /Article Categories Listing -->
+            
+            <!-- Tags -->
+            <p><strong>{writeTagHeader}</strong> {writeArticleTags}</p>
+            <!-- /Tags -->
 
-    <!-- Article Categories Listing -->
-    {writeArticleCategories}
-    <!-- /Article Categories Listing -->
+            <!-- Related Articles -->
+            <p><strong>{writeRelatedArticlesHeader}</strong>{writeRelatedArticles}</p>
+            <!-- / Related Articles -->
 
-    <!-- Tags -->
-    <p><strong>{writeTagHeader}</strong> {writeArticleTags}</p>
-    <!-- /Tags -->
+            <!-- Article Info -->
+            <p><span id="popularity" style="display: none;">{writePopularity}</span>{writeDateMsg}<br />{writeAuthor}<br />{writeRevision}<br />{editThisEntry}</p>
+            <!-- /Article Info -->
 
-    <!-- Related Articles -->
-    <p><strong>{writeRelatedArticlesHeader}</strong>{writeRelatedArticles}</p>
-    <!-- / Related Articles -->
+            {switchLanguage}
+            <div id="action">
+            <a href="{link_digg}" target="_blank"><img src="images/digg.png" alt="{writeDiggMsgTag}" title="{writeDiggMsgTag}" width="16" height="16" border="0" class="recordIcons" /></a> 
+            <a href="{link_facebook}" target="_blank"><img src="images/facebook.png" alt="{writeFacebookMsgTag}" title="{writeFacebookMsgTag}" width="16" height="16" border="0" class="recordIcons" /></a> 
+            <a href="javascript:window.print();"><img src="images/print.gif" alt="{writePrintMsgTag}" title="{writePrintMsgTag}" width="16" height="16" border="0" class="recordIcons" /></a> 
+            <a href="{link_email}"><img src="images/email.gif" alt="{writeSend2FriendMsgTag}" title="{writeSend2FriendMsgTag}" width="16" height="16" border="0" class="recordIcons" /></a> 
+            <a target="_blank" href="{link_pdf}"><img src="images/pdf.gif" alt="{writePDFTag}" title="{writePDFTag}" width="16" height="16" border="0" class="recordIcons" /></a>
+            </div>
 
-    <!-- Article Info -->
-    <p><span id="popularity" style="display: none;">{writePopularity}</span>{writeDateMsg}<br />{writeAuthor}<br />{writeRevision}<br />{editThisEntry}</p>
-    <!-- /Article Info -->
-
-    {switchLanguage}
-    <div id="action">
-    <a href="{link_digg}" target="_blank"><img src="images/digg.png" alt="{writeDiggMsgTag}" title="{writeDiggMsgTag}" width="16" height="16" border="0" class="recordIcons" /></a> 
-    <a href="{link_facebook}" target="_blank"><img src="images/facebook.png" alt="{writeFacebookMsgTag}" title="{writeFacebookMsgTag}" width="16" height="16" border="0" class="recordIcons" /></a> 
-    <a href="javascript:window.print();"><img src="images/print.gif" alt="{writePrintMsgTag}" title="{writePrintMsgTag}" width="16" height="16" border="0" class="recordIcons" /></a> 
-    <a href="{link_email}"><img src="images/email.gif" alt="{writeSend2FriendMsgTag}" title="{writeSend2FriendMsgTag}" width="16" height="16" border="0" class="recordIcons" /></a> 
-    <a target="_blank" href="{link_pdf}"><img src="images/pdf.gif" alt="{writePDFTag}" title="{writePDFTag}" width="16" height="16" border="0" class="recordIcons" /></a>
-    </div>
-
-    <!-- Translation Form -->
-    <div class="translation">
-    {translationForm}
-    </div>
-    <!-- /Translation Form -->
+            <!-- Translation Form -->
+            <div class="translation">
+            {translationForm}
+            </div>
+            <!-- /Translation Form -->
 
     <!-- Voting Form -->
     <div id="voting">
@@ -45,11 +48,7 @@
     <input type="hidden" name="artikel" value="{saveVotingID}" />
     <p align="center"><strong>{msgAverageVote}</strong> {printVotings}</p>
     <p align="center">{msgVoteBad}
-    <input class="radio" type="radio" name="vote" value="1" /> 1
-    <input class="radio" type="radio" name="vote" value="2" /> 2
-    <input class="radio" type="radio" name="vote" value="3" /> 3
-    <input class="radio" type="radio" name="vote" value="4" /> 4
-    <input class="radio" type="radio" name="vote" value="5" /> 5
+    <input name="vote" type="range" min="0" max="5" step="1" value="5">
     {msgVoteGood}<br />
     <input class="submit" type="submit" name="submit" value="{msgVoteSubmit}" />
     </p>
@@ -70,14 +69,14 @@
     <fieldset>
     <legend>{msgWriteComment}</legend>
 
-        <label for="user" class="left">{msgNewContentName}</label>
-        <input class="inputfield" type="text" id="user" name="user" value="{defaultContentName}" size="50" /><br />
+        <label for="user">{msgNewContentName}</label>
+        <input type="text" id="user" name="user" value="{defaultContentName}" size="50" required="true"><br />
 
-        <label for="mail" class="left">{msgNewContentMail}</label>
-        <input class="inputfield" type="text" id="mail" name="mail" value="{defaultContentMail}" size="50" /><br />
+        <label for="mail">{msgNewContentMail}</label>
+        <input type="email" id="mail" name="mail" value="{defaultContentMail}" size="50" required="true"><br />
 
-        <label for="comment_text" class="left">{msgYourComment}</label>
-        <textarea class="inputarea" cols="37" rows="10" id="comment_text" name="comment"></textarea><br />
+        <label for="comment_text">{msgYourComment}</label>
+        <textarea cols="37" rows="10" id="comment_text" name="comment" required="true"></textarea><br />
 
     </fieldset>
 

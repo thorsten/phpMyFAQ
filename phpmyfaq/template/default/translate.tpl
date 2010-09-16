@@ -16,19 +16,19 @@
     <fieldset>
     <legend>{msgNewTranslationPane}</legend>
 
-    <textarea class="inputarea" cols="60" rows="3" name="thema" id="thema">{writeSourceTitle}</textarea><br />
+    <textarea cols="60" rows="3" name="thema" id="thema" required="true">{writeSourceTitle}</textarea><br />
     <br />
-    <textarea class="inputarea" cols="60" rows="10" name="translated_content" id="translated_content">{writeSourceContent}</textarea><br />
+    <textarea cols="60" rows="10" name="translated_content" id="translated_content" required="true">{writeSourceContent}</textarea><br />
 
-    <label for="keywords" class="left">{msgNewTranslationKeywords}</label>
-    <input class="inputfield" type="text" name="keywords" id="keywords" size="37" value="{writeSourceKeywords}"/><br />
+    <label for="keywords">{msgNewTranslationKeywords}</label>
+    <input type="text" name="keywords" id="keywords" size="37" value="{writeSourceKeywords}"/><br />
 
     <br />
-    <label for="username" class="left">{msgNewTranslationName}</label>
-    <input class="inputfield" type="text" name="username" id="username" value="{defaultContentName}" size="37" /><br />
+    <label for="username">{msgNewTranslationName}</label>
+    <input type="text" name="username" id="username" value="{defaultContentName}" size="37" required="true"><br />
 
-    <label for="usermail" class="left">{msgNewTranslationMail}</label>
-    <input class="inputfield" type="text" name="usermail" id="usermail" value="{defaultContentMail}" size="37" /><br />
+    <label for="usermail">{msgNewTranslationMail}</label>
+    <input type="email" name="usermail" id="usermail" value="{defaultContentMail}" size="37" required="true"><br />
 
     <input type="hidden" name="faqid" id="faqid" value="{writeSourceFaqId}" />
     <input type="hidden" name="faqlanguage" id="faqlanguage" value="{writeTransFaqLanguage}" />

@@ -59,11 +59,27 @@ function addEngine(uri, name, ext, cat)
 function showhideCategory(id)
 {
     if ($('#' + id).css('display') == 'none') {
-    	$('#' + id).fadeIn("slow");
+        $('#' + id).fadeIn("slow");
     } else {
         $('#' + id).fadeOut("slow");
     }
 }
+
+
+/**
+ * Displays or hides the login form
+ *
+ * @return void
+ */
+function loginForm()
+{
+    if ($('#loginForm').css('display') == 'none') {
+        $('#loginForm').fadeIn();
+    } else {
+        $('#loginForm').fadeOut();
+    }
+}
+
  
 /**
  * Displays or hides a configuration block

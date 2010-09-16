@@ -169,7 +169,7 @@
     <ul type="square">
         <li><strong><a href="http://www.php.net">PHP</a></strong>
         <ul type="circle">
-            <li>from version 5.2.0 (recommended: latest PHP 5.x)</li>
+            <li>from version 5.2.3 (recommended: latest PHP 5.x)</li>
             <li>register_globals = off (recommended)</li>
             <li>safe_mode = off (recommended)</li>
             <li>memory_limit = 64M</li>
@@ -184,11 +184,11 @@
         <a href="http://www.microsoft.com/">IIS</a> 5.0+)</li>
         <li><strong>Database server</strong>
         <ul>
-            <li><a href="http://www.mysql.com">MySQL</a> 4.1.x, 5.x, 6.x with the
-            MySQL extension  (recommended: 5.1.x)</li>
-            <li><a href="http://www.mysql.com">MySQL</a> 4.1.x, 5.x, 6.x with the
-            MySQLi extension (recommended: 5.1.x)</li>
-            <li><a href="http://www.postgresql.org">PostgreSQL</a> 7.2+, 8.x
+            <li><a href="http://www.mysql.com">MySQL</a> 5.x with the MySQL extension
+            (recommended: 5.1.x)</li>
+            <li><a href="http://www.mysql.com">MySQL</a> 5.x with the MySQLi extension
+            (recommended: 5.1.x)</li>
+            <li><a href="http://www.postgresql.org">PostgreSQL</a> 8.x
             (recommended: latest 8.x)</li>
             <li><a href="http://www.sybase.com">Sybase</a></li>
             <li><a href="http://www.microsoft.com/sql/">Microsoft SQL Server</a>
@@ -218,13 +218,12 @@
     installation-script checks which version of PHP is installed on your server.
     Should you not meet the requirements, you cannot start the installation
     process.</p>
-    <p>In case you have PHP below 5.2.0 installed you cannot use phpMyFAQ 2.5.</p>
-    <p>phpMyFAQ uses a WYSIWYG on-line editor. It uses a non-standard feature
-    based on JavaScript implemented in Mozilla Firefox 0.7+ (any platform),
-    Mozilla 1.3+ (any platform), Opera 9.0+ (any platform), Safari 3.0+ (Mac OS X
-    and Windows), and Internet Explorer 6.0+ for Windows, therefore the editor
-    will only work in one of these browsers. You have to enable JavaScript for
-    the Ajax based functions as well.</p>
+    <p>In case you have PHP below 5.2.3 installed you cannot use phpMyFAQ 2.7.</p>
+    <p>phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers 
+    are Mozilla Firefox 3.x and later (Windows/MacOS X/Linux), Safari 4.x or later
+    (MacOS X/Windows/iOS), Chrome 5.x or later (Windows/MacOS X/Linux), Opera 10.0
+    or later (Windows/MacOS X/Linux) and Internet Explorer 7 or later for Windows. 
+    You have to enable JavaScript for the Ajax based functions as well.</p>
     <p>If you're using <em>lighttpd</em> you have to set the following configuration:</p>
     <pre>cgi.fix_pathinfo 1</pre>
     <p><a href="#top">back to top</a></p>
@@ -393,7 +392,7 @@
         <li>supports UTF-8 Unicode and Right-To-Left languages;</li>
         <li>supports TrueTypeUnicode, OpenTypeUnicode, TrueType, OpenType, 
         Type1 and CID-0 fonts;</li>
-        <li>includes methods to publish some (x)HTML code;</li>
+        <li>includes methods to publish some HTML code;</li>
         <li>includes graphic (geometric) and transformation methods;</li>
         <li>includes methods to set Bookmarks and print a Table of Content;</li>
         <li>supports automatic page break;</li>
@@ -407,11 +406,11 @@
 
     <hr style="width: 90%; height: 1px;" />
     <p><strong><a name="2k"></a>2.k. Firefox and IE7 search plugins</strong></p>
-    <p>phpMyFAQ 2.5.x provides search plugins for Mozilla Firefox 2 and later and
-    Microsoft Internet Explorer 7 and later based on the OpenSearch specification.
-    Every user in the front-end can install it. With an installed search plugin you
-    can search through the phpMyFAQ installation with the search box in upper
-    right corner of Mozilla Firefox or Microsoft Internet Explorer.</p>
+    <p>phpMyFAQ 2.7 provides search plugins for Mozilla Firefox and Internet Explorer 
+    7 and later based on the OpenSearch specification. Every user in the front-end 
+    can install it. With an installed search plugin you can search through the 
+    phpMyFAQ installation with the search box in upper right corner of Mozilla 
+    Firefox or Internet Explorer.</p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -430,7 +429,7 @@
 
     <hr style="width: 90%; height: 1px;" />
     <p><strong><a name="2m"></a>2.m. Spam protection</strong></p>
-    <p>phpMyFAQ 2.5 performs these three checks on public forms:</p>
+    <p>phpMyFAQ 2.7 performs these three checks on public forms:</p>
     <ol>
         <li>Check against IP/Network address</li>
         <li>Check against banned words</li>
@@ -446,27 +445,27 @@
     <p><strong><a name="2n"></a>2.n. Attachments</strong></p>
     <p>Starting with version 2.6 phpMyFAQ supports encrypted attachments. The 
     encrypton is done using the <a href="http://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a>
-    algorythm implemented in mcrypt extension (if
-    avaliable) or with native PHP Rijndael implementation. The key size vary
-    depending on implementation used and can be max 256 bits long. Use of
-    mcrypt extension is strongly recommended because of performance reasons, its avaliability is checked
+    algorythm implemented in mcrypt extension (if avaliable) or with native 
+    PHP Rijndael implementation. The key size vary depending on implementation 
+    used and can be max 256 bits long. Use of mcrypt extension is strongly 
+    recommended because of performance reasons, its avaliability is checked
     automatically at the run time.</p>
     <p>See the migration section if you're migrating from earlier versions.</p>
-    <p>Pleale be aware:
+    <p>Please be aware:
     <ul>
-    <li>Disabling encryption will cause all files be saved unencrypted. In this
-    case you'll benefit sparing disk space, because identical files will be
-    saved only once.</li>
-    <li>Do not change the default attachment encryption key once files was uploaded. 
-        Doing so will cause all the previously uploaded files to be 
-        wrong decrypted. If you need to change the default key, you will have to
-        reupload all files. <!-- Or use the migration script --></li>
-    <li>Always memorize your encryption keys. There is no way to 
-    decrypt files without a correct key. </li>
-    <li>Files are always saved with names based on a virtual hash generated from several
-    tokens (just like key and issue id etc), so there is no way to asses a file
-    directly using the name it was uploaded under.</li>
-    <li>Download continuation isn't (yet?) supported.</li>
+        <li>Disabling encryption will cause all files be saved unencrypted. In this
+        case you'll benefit sparing disk space, because identical files will be
+        saved only once.</li>
+        <li>Do not change the default attachment encryption key once files 
+        was uploaded. Doing so will cause all the previously uploaded files 
+        to be wrong decrypted. If you need to change the default key, you will 
+        have to reupload all files.</li>
+        <li>Always memorize your encryption keys. There is no way to  ecrypt files 
+        without a correct key.</li>
+        <li>Files are always saved with names based on a virtual hash generated 
+        from several tokens (just like key and issue id etc), so there is no way 
+        to asses a file directly using the name it was uploaded under.</li>
+        <li>Download continuation isn't (yet?) supported.</li>
     </ul>
     </p>
     <p><a href="#top">back to top</a></p>
@@ -972,6 +971,7 @@
     <ul>
         <li>a XML file</li>
         <li>a plain XHTML file</li>
+        <li>a plain HTML5 file</li>
         <li>a PDF file with a table of contents</li>
     </ul>
     <p><a href="#top">back to top</a></p>
@@ -1027,8 +1027,8 @@
     <p>In phpMyFAQ code and layout are separated. The layout is based on several
     templates, that you can modify to suit your own needs. The most important files
     for phpMyFAQ's layout can be found in the directory <em>template/default/</em>. 
-    All original templates are valid XHTML 1.0 Transitional and we don't use tables 
-    for layout reasons.</p>
+    All original templates are valid HTML5 and we don't use tables for layout 
+    reasons.</p>
     <p><strong>Note:</strong> You can change the layout of the admin area using the
     CSS file <em>admin/style/admin.css</em>.</p>
     <p><a href="#top">back to top</a></p>
@@ -1037,7 +1037,7 @@
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="6a"></a>6.a. The file template/default/index.tpl</strong></p>
     <p>The default layout of phpMyFAQ is saved in the <strong>index.tpl</strong> file.
-    This is a normal HTML-file including some variables in curly brackets, serving
+    This is a normal HTML5 file including some variables in curly brackets, serving
     as placeholders for content.</p>
     <p>Example:</p>
     <pre>&lt;span class="useronline"&gt;{userOnline}&lt;/span&gt;</pre>
@@ -1049,7 +1049,7 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="6b"></a>6.b. The file template/default/style.css</strong></p>
+    <p><strong><a name="6b"></a>6.b. The file template/default/css/style.css</strong></p>
     <p>All formatting such as fonts and the like can be modified in the CSS-file
     <strong>style.css</strong> for left-to-right languages and in <strong>style.rtl.css</strong>
     for left-to-right languages.</p>
@@ -1058,7 +1058,7 @@
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="6c"></a>6.c. More Templates</strong></p>
-    <p>You need an other template design or more XHTML/CSS features? Then write us
+    <p>You need an other template design or more HTML5/CSS3 features? Then write us
     an email and we can talk about it.</p>
     <p><a href="#top">back to top</a></p>
 
@@ -1243,7 +1243,7 @@
     Author: <a href="mailto:thorsten AT phpmyfaq DOT de">Thorsten Rinne</a><br />
     Co-Authors: <a href="mailto:stephan AT yauh DOT de">Stephan Hochhaus</a>,
     <a href="mailto:mgl-mail AT t-online DOT de">Markus Gläser</a><br />
-    Last update: 2010-01-03</p>
+    Last update: 2010-09-15</p>
     <p>&copy; 2001-2010 phpMyFAQ Team</p>
     <p>This documentation is licensed under a <a href="http://creativecommons.org/licenses/by/2.0/" class="subfoot">Creative 
     Commons License</a>.</p>

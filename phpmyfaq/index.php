@@ -356,8 +356,8 @@ if (isset($auth)) {
 
 if ($action != 'main') {
     $inc_tpl         = $action . '.tpl';
-    $inc_php         = $action . ".php";
-    $writeLangAdress = "?" . PMF_Filter::getFilteredQueryString();
+    $inc_php         = $action . '.php';
+    $writeLangAdress = '?sid=' . $sid;
 } else {
     if (isset($solution_id) && is_numeric($solution_id)) {
         // show the record with the solution ID
@@ -367,12 +367,11 @@ if ($action != 'main') {
         $inc_tpl = 'main.tpl';
         $inc_php = 'main.php';
     }
-	if($faqconfig->get('main.useAjaxMenu')) {
-		$writeLangAdress = "?";
-	}
-	else {
-		$writeLangAdress = '?'.(int)$sids;
-	}
+    if ($faqconfig->get('main.useAjaxMenu')) {
+        $writeLangAdress = '?';
+    } else {
+        $writeLangAdress = '?sid=' . $sid;
+    }
 }
 
 //
@@ -490,6 +489,8 @@ shuffle($keywordsArray);
 $keywords = implode(',', $keywordsArray);
 
 $main_template_vars = array(
+    'msgRegisterUser'     => '<a href="?' . $sids . 'action=register">' . $PMF_LANG['msgRegisterUser'] . '</a>',
+    'msgLoginUser'        => $PMF_LANG['msgLoginUser'],
     'title'               => $faqconfig->get('main.titleFAQ').$title,
     'baseHref'            => $systemUri,
     'version'             => $faqconfig->get('main.currentVersion'),

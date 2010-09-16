@@ -16,15 +16,15 @@
         <fieldset><legend>{msgUserData}</legend>
         <div class="required">
             <label for="lastname">{lastname} {name_errorRegistration}</label>
-            <input type="textfield" name="lastname" id="lastname" value="{lastname_value}" class="inputfield" />
+            <input type="text" name="lastname" id="lastname" value="{lastname_value}" required="true">
         </div><br />
         <div class="required">
             <label for="loginname">{loginname} {login_errorRegistration}</label>
-            <input type="textfield" name="loginname" id="loginname" value="{loginname_value}" class="inputfield" />
+            <input type="text" name="loginname" id="loginname" value="{loginname_value}" required="true">
         </div><br />
         <div class="required">
             <label for="email">{email} {email_errorRegistration}</label>
-            <input type="textfield" name="email" id="email" value="{email_value}" class="inputfield" />
+            <input type="email" name="email" id="email" value="{email_value}" required="true">
         </div>
         </fieldset>
 
