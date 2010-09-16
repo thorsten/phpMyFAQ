@@ -347,8 +347,8 @@ if (isset($auth)) {
 
 if ($action != 'main') {
     $inc_tpl         = $action . '.tpl';
-    $inc_php         = $action . ".php";
-    $writeLangAdress = "?" . PMF_Filter::getFilteredQueryString();
+    $inc_php         = $action . '.php';
+    $writeLangAdress = '?sid=' . $sid;
 } else {
     if (isset($solution_id) && is_numeric($solution_id)) {
         // show the record with the solution ID
@@ -358,7 +358,7 @@ if ($action != 'main') {
         $inc_tpl = 'main.tpl';
         $inc_php = 'main.php';
     }
-    $writeLangAdress = '?'.(int)$sids;
+    $writeLangAdress = '?sid=' . $sid;
 }
 
 //
