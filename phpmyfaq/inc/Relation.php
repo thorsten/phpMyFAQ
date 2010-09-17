@@ -66,60 +66,11 @@ class PMF_Relation
     function __construct(PMF_DB_Driver $database, PMF_Language $language)
     {
         global $PMF_LANG;
-
+        
         $this->db       = $database;
         $this->language = $language;
         $this->pmf_lang = $PMF_LANG;
     }
-
-    /**
-     * Verlinkt einen Artikel dynamisch mit der Suche �ber die �bergebenen Schl�sselw�rter
-     *
-     * @param    string     $strHighlight
-     * @param    string     $strSource
-     * @param    integer    $intCount
-     * @return   string
-     * @author   Marco Enders <marco@minimarco.de>
-     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-     */
-    public function setRelationLinks($strHighlight, $strSource, $intCount = 0)
-    {
-        global $in_content;
-        $x = 0;
-        $arrMatch = array();
-
-        PMF_String::preg_match_all(
-            '/(<a[^<>]*?>.*?<\/a>)|(<.*?>)/is',
-            $strSource,
-            $arrMatch);
-        $strSource = PMF_String::preg_replace(
-            '/(<a[^<>]*?>.*?<\/a>)|(<.*?>)/is',
-            '~+*# replaced html #*+~',
-            $strSource);
-        $x = $x + PMF_String::preg_match(
-            '/('.preg_quote($strHighlight).')/ims',
-            $strSource);
-        $strSource = PMF_String::preg_replace(
-            '/('.preg_quote($strHighlight).')/ims',
-            '<a href="index.php?action=search&search='.$strHighlight.'" title="Insgesamt '.$intCount.' Artikel zu diesem Schlagwort ('.$strHighlight.') vorhanden. Jetzt danach suchen..." class="relation">$1</a>',
-            $strSource);
-
-        foreach($arrMatch[0] as $html) {
-            $strSource = PMF_String::preg_replace(
-                '/'.preg_quote('~+*# replaced html #*+~').'/',
-                $html,
-                $strSource,
-                1);
-        }
-
-        if ($x == 0) {
-            $in_content = false;
-        } else {
-            $in_content = true;
-        }
-        return $strSource;
-    }
-
 
     /**
      * Returns all relevant articles for a FAQ record with the same language
@@ -179,9 +130,7 @@ class PMF_Relation
             $last_id = $row->id;
         }
         $relevantslisting .= ($i > 0 ? '</ul>' : '');
-
+        
         return ('' == $relevantslisting ? '-' : $relevantslisting);
     }
-
-
 }
