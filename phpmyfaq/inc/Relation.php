@@ -122,7 +122,7 @@ class PMF_Relation
 
 
     /**
-     * Returns all relevant Articles for a FAQ record
+     * Returns all relevant articles for a FAQ record with the same language
      *
      * @param integer $record_id FAQ ID
      * @param string  $thema     FAQ title
@@ -151,7 +151,8 @@ class PMF_Relation
                ->setJoinedColumns(array(
                     'fd.id = fcr.record_id', 
                     'fd.lang = fcr.record_lang'))
-               ->setConditions(array('fd.active' => "'yes'"))
+               ->setConditions(array('fd.active' => "'yes'",
+                                     'fd.lang'   => "'" . $this->language->getLanguage() . "'"))
                ->setMatchingColumns(array('fd.thema', 'fd.content', 'fd.keywords'));
         
         $result = $search->search($begriffe);
