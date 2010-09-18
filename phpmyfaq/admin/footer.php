@@ -38,6 +38,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
         <p id="copyrightnote">
         Proudly powered by <strong>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></strong> | 
         <a href="http://www.phpmyfaq.de/dokumentation.php" target="_blank">phpMyFAQ documentation</a> | 
+        Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | 
         &copy; 2001-2010 <a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a>
         </p>
     </footer>
