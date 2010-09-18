@@ -227,7 +227,8 @@ if (sizeof($faileddirs)) {
     foreach ($faileddirs as $dir) {
         print "<li>$dir</li>\n";
     }
-    print '</ul><p class="center">Please create it manually and/or change access to chmod 755 (or greater if necessary).</p>';
+    print '</ul><p class="center">Please create it manually and/or change access to chmod 755 (or greater if ' .
+          'necessary).</p>';
     HTMLFooter();
     die();
 }
@@ -239,13 +240,21 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
 <?php
     if ((@ini_get('safe_mode') == 'On' || @ini_get('safe_mode') === 1)) {
-        print '<p class="center">The PHP safe mode is enabled. You may have problems when phpMyFAQ writes in some directories.</p>';
+        print '<p class="center">The PHP safe mode is enabled. You may have problems when phpMyFAQ writes in some ' .
+              'directories.</p>';
     }
     if (!extension_loaded('gd')) {
-        print '<p class="center">You don\'t have GD support enabled in your PHP installation. Please enabled GD support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
+        print '<p class="center">You don\'t have GD support enabled in your PHP installation. Please enabled GD ' .
+              'support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
     }
     if (!function_exists('imagettftext')) {
-        print '<p class="center">You don\'t have Freetype support enabled in the GD extension of your PHP installation. Please enabled Freetype support in GD extension otherwise the Captchas for spam protection will be quite easy to break.</p>';
+        print '<p class="center">You don\'t have Freetype support enabled in the GD extension of your PHP ' .
+              'installation. Please enabled Freetype support in GD extension otherwise the Captchas for spam ' .
+              'protection will be quite easy to break.</p>';
+    }
+    if (!extension_loaded('curl')) {
+        print '<p class="center">You don\'t have cURL support enabled in your PHP installation. Please enabled cUrL ' .
+              'support in your php.ini file otherwise you can\'t use the Twitter support.</p>';
     }
 ?>
 <p class="center">
