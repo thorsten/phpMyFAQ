@@ -252,9 +252,10 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
               'installation. Please enabled Freetype support in GD extension otherwise the Captchas for spam ' .
               'protection will be quite easy to break.</p>';
     }
-    if (!extension_loaded('curl')) {
-        print '<p class="center">You don\'t have cURL support enabled in your PHP installation. Please enabled cUrL ' .
-              'support in your php.ini file otherwise you can\'t use the Twitter support.</p>';
+    if (!extension_loaded('curl') || !extension_loaded('openssl')) {
+        print '<p class="center">You don\'t have cURL and/or OpenSSl support enabled in your PHP installation. ' .
+              'Please enabled cUrL and/or OpenSSL support in your php.ini file otherwise you can\'t use the Twitter ' .
+              ' support.</p>';
     }
 ?>
 <p class="center">
