@@ -81,7 +81,7 @@ function issueURL($optparams = array()) {
         }
     }
 
-    $_url = $_SERVER['PHP_SELF'];
+    $_url = $_SERVER['SCRIPT_NAME'];
     $_separator = '?';
 
     foreach ($_params as $_key => $_value) {

@@ -68,7 +68,7 @@ if (is_array($records)) {
 
     foreach ($records as $item) {
         
-        $link = str_replace($_SERVER['PHP_SELF'], '/index.php', $item['record_link']);
+        $link = str_replace($_SERVER['SCRIPT_NAME'], '/index.php', $item['record_link']);
         if (PMF_RSS_USE_SEO) {
             if (isset($item['record_title'])) {
                 $oLink            = new PMF_Link($link);

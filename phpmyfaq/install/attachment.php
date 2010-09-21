@@ -2,12 +2,7 @@
 /**
  * Attachment migration script
  *
- * @package    phpMyFAQ 
- * @subpackage Installation
- * @author    Anatoliy Belsky <ab@php.net>
- * @since      2009-09-13
- * @version    SVN: $Id: attachment.php 4946 2009-09-11 14:06:09Z anatoliy $
- * @copyright  2002-2009 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   Setup
+ * @author    Anatoliy Belsky <ab@php.net>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-09-13
  */
 
 set_time_limit(0);
@@ -28,7 +31,7 @@ define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 // Check if config/database.php exist -> if not, redirect to installer
 //
 if (!file_exists(PMF_ROOT_DIR . '/config/database.php')) {
-    header("Location: ".str_replace('admin/index.php', '', $_SERVER['PHP_SELF']).'install/setup.php');
+    header("Location: ".str_replace('admin/index.php', '', $_SERVER['SCRIPT_NAME']).'install/setup.php');
     exit();
 }
 

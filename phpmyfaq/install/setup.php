@@ -1052,7 +1052,7 @@ echo '</dl><input type="hidden" name="systemdata" value="'.PMF_String::htmlspeci
     }
     
     // Remove 'setup.php' file
-    if (@unlink(basename($_SERVER["PHP_SELF"]))) {
+    if (@unlink(basename($_SERVER['SCRIPT_NAME']))) {
         print "<p class=\"center\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";
     } else {
         print "<p class=\"center\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
