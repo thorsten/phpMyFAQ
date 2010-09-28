@@ -561,7 +561,7 @@ getGroupList();
                 <input class="submit" type="submit" value="<?php print $text['delGroup_button']; ?>" tabindex="2" />
             </form>
         </fieldset>
-        <p>[ <a href="<?php print $_SERVER['PHP_SELF']; ?>?action=group&amp;group_action=add"><?php print $text['addGroup_link']; ?></a> ]</p>
+        <p>[ <a href="?action=group&amp;group_action=add"><?php print $text['addGroup_link']; ?></a> ]</p>
     </div> <!-- end #group_list -->
 </div> <!-- end #groups -->
 <div id="group_membership">
@@ -604,7 +604,7 @@ getGroupList();
     <div id="group_data">
         <fieldset>
             <legend id="group_data_legend"><?php print $text['changeGroup']; ?></legend>
-            <form action="<?php print $_SERVER['PHP_SELF']; ?>?action=group&amp;group_action=update_data" method="post">
+            <form action="?action=group&amp;group_action=update_data" method="post">
                 <input id="update_group_id" type="hidden" name="group_id" value="0" />
                 <div id="group_data_table">
                     <div class="input_row">

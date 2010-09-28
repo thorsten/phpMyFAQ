@@ -368,10 +368,10 @@ class PMF_Link
     public static function getSystemRelativeUri($path = null)
     {
         if (isset($path)) {
-            return str_replace($path, '', $_SERVER['PHP_SELF']);
+            return str_replace($path, '', $_SERVER['SCRIPT_NAME']);
         }
-
-        return str_replace('/inc/Link.php', '', $_SERVER['PHP_SELF']);
+        
+        return str_replace('/inc/Link.php', '', $_SERVER['SCRIPT_NAME']);
     }
 
     /**

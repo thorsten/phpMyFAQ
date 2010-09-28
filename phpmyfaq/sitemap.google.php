@@ -26,7 +26,7 @@
  * @category  phpMyFAQ
  * @package   SEO
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2006-2009 phpMyFAQ Team
+ * @copyright 2006-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-06-26
@@ -126,7 +126,7 @@ foreach ($items as $item) {
         $priority = sprintf('%.1f', PMF_SITEMAP_GOOGLE_PRIORITY_DEFAULT * (1 + (($item['visits'] - $visitMin)/($visitsMax - $visitMin))));
     }
     // a. We use plain PMF urls w/o any SEO schema
-    $link = str_replace($_SERVER['PHP_SELF'], '/index.php', $item['url']);
+    $link = str_replace($_SERVER['SCRIPT_NAME'], '/index.php', $item['url']);
     // b. We use SEO PMF urls
     if (PMF_SITEMAP_GOOGLE_USE_SEO) {
         if (isset($item['thema'])) {
