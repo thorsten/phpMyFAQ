@@ -206,7 +206,7 @@ class PMF_Ldap
         
         $entryId = ldap_first_entry($this->ds, $sr);
         
-        if (!$entryId) {
+        if (!is_resource($entryId)) {
             $this->errno = ldap_errno($this->ds);
             $this->error = sprintf('Cannot get the value(s). Error: %s',
                 ldap_error($this->ds));
