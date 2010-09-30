@@ -25,6 +25,10 @@
  * @since     2005-04-16
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * PMF_DB_Ibm_db2
  * 

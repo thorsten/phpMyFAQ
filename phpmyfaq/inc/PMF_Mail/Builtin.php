@@ -2,11 +2,11 @@
 /**
  * MUA (Mail User Agent) implementation using the PHP built-in mail() function.
  *
- * @package   phpMyFAQ
+ * @category  phpMyFAQ
+ * @package   PMF_Mail
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @copyright 2009-2010 phpMyFAQ Team
  * @since     2009-09-11
- * @version   SVN: $Id$
- * @copyright 2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,11 +19,9 @@
  * under the License.
  */
  
-/**
- * PHP 6 script encoding
- *
- */
-declare(encoding='latin1');
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
 
  /**
   * MUA (Mail User Agent) implementation using the PHP built-in mail() function.

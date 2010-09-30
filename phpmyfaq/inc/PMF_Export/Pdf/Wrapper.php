@@ -26,6 +26,10 @@
  * @since     2004-11-21
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 define('K_PATH_URL', '');
 
 /**

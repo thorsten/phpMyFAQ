@@ -24,6 +24,10 @@
  * @since     2009-03-01
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * PMF_Auth_AuthLdap
  *

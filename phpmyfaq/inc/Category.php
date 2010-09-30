@@ -26,6 +26,10 @@
  * @since     2004-02-16
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * PMF_Category
  *

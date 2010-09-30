@@ -23,6 +23,10 @@
  * @since     2009-03-30
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * PMF_Bar
  *

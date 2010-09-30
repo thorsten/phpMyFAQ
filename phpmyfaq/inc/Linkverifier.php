@@ -28,6 +28,10 @@
  * @since     2005-08-01
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /* Defines number of times linkverifier follows 302 response before failing.
  *
  * Suggested value is above 10 redirects

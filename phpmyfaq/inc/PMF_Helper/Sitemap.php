@@ -23,6 +23,10 @@
  * @since     2009-11-16
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * PMF_Helper_Sitemap 
  *

@@ -23,6 +23,10 @@
  * @since     2006-01-04
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * PMF_Configuration
  *

@@ -23,6 +23,10 @@
  * @since     2007-03-30
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 require_once PMF_INCLUDE_DIR . '/Link.php';
 
 /**
