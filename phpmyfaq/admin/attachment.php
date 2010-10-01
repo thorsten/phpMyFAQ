@@ -25,7 +25,7 @@ define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 //
 // Define the named constant used as a check by any included PHP file
 //
-define('IS_VALID_PHPMYFAQ_ADMIN', null);
+define('IS_VALID_PHPMYFAQ', null);
 
 //
 // Autoload classes, prepend and start the PHP session

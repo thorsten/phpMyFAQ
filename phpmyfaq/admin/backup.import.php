@@ -17,13 +17,13 @@
  * @category  phpMyFAQ 
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2009 phpMyFAQ Team
+ * @copyright 2003-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
  */
 
-if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
@@ -31,7 +31,11 @@ if ($permission["restore"]) {
 ?>
     <h2><?php print $PMF_LANG["ad_csv_rest"]; ?></h2>
 <?php
-    if (isset($_FILES["userfile"]["type"]) && ($_FILES["userfile"]["type"] == "application/octet-stream" || $_FILES["userfile"]["type"] == "text/plain" || $_FILES["userfile"]["type"] == "text/x-sql")) {
+    if (isset($_FILES["userfile"]["type"]) && (
+        $_FILES["userfile"]["type"] == "application/octet-stream" || 
+        $_FILES["userfile"]["type"] == "text/plain" || 
+        $_FILES["userfile"]["type"] == "text/x-sql")) {
+        
         $ok  = 1;
         // @todo: Add check if file is utf-8 encoded
         $handle       = fopen($_FILES['userfile']['tmp_name'], 'r');
