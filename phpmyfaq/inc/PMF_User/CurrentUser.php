@@ -34,13 +34,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /* user defined constants */
-@define('PMF_SESSION_CURRENT_USER', 'PMF_CURRENT_USER');
-@define('PMF_SESSION_ID_TIMESTAMP', 'PMF_SESSION_TIMESTAMP');
-@define('PMF_SESSION_ID_EXPIRES', PMF_AUTH_TIMEOUT);
-@define('PMF_SESSION_ID_REFRESH', PMF_AUTH_TIMEOUT_WARNING);
-@define('PMF_LOGIN_BY_SESSION', true);
-@define('PMF_LOGIN_BY_SESSION_FAILED', 'Could not login user from session. ');
-@define('PMF_LOGIN_BY_AUTH_FAILED', 'Could not login with login and password. ');
+define('PMF_SESSION_CURRENT_USER', 'PMF_CURRENT_USER');
+define('PMF_SESSION_ID_TIMESTAMP', 'PMF_SESSION_TIMESTAMP');
+define('PMF_SESSION_ID_EXPIRES', PMF_AUTH_TIMEOUT);
+define('PMF_SESSION_ID_REFRESH', PMF_AUTH_TIMEOUT_WARNING);
+define('PMF_LOGIN_BY_SESSION', true);
+define('PMF_LOGIN_BY_SESSION_FAILED', 'Could not login user from session. ');
+define('PMF_LOGIN_BY_AUTH_FAILED', 'Could not login with login and password. ');
 
 /**
  * PMF_User_CurrentUser
@@ -89,6 +89,13 @@ class PMF_User_CurrentUser extends PMF_User
      * @var int
      */
     private $session_id_timeout = 1;
+    
+    /**
+     * Token to prevent Cross-Site Request Forgery
+     * 
+     * @var string
+     */
+    private $csrfToken = '';
 
     /**
      * constructor
@@ -456,5 +463,15 @@ class PMF_User_CurrentUser extends PMF_User
     public function setSessionIdTimeout($timeout)
     {
         $this->session_id_timeout = abs($timeout);
+    }
+    
+    /**
+     * Creates a CSRF token
+     * 
+     * @return void
+     */
+    private function createCsrfToken()
+    {
+        $this->csrfToken = sha1(microtime() . $this->getLogin());
     }
 }
