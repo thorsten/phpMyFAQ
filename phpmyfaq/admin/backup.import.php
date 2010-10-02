@@ -27,7 +27,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
-if ($permission["restore"]) {
+
+$csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+    $permission['restore'] = false; 
+}
+
+if ($permission['restore']) {
 ?>
     <h2><?php print $PMF_LANG["ad_csv_rest"]; ?></h2>
 <?php

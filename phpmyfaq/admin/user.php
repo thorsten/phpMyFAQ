@@ -195,6 +195,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         <p><?php print $text['delUser_question']; ?></p>
         <form action ="?action=user&amp;user_action=delete" method="post">
             <input type="hidden" name="user_id" value="<?php print $userId; ?>" />
+            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
             <div class="button_row">
                 <input class="reset" type="submit" name="cancel" value="<?php print $text['delUser_cancel']; ?>" />
                 <input class="submit" type="submit" value="<?php print $text['delUser_confirm']; ?>" />
@@ -212,8 +213,13 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         $message    = '';
         $user       = new PMF_User();
         $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
+        $csrfOkay   = true;
+        $csrfToken  = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+            $csrfOkay = false; 
+        }
         $userAction = $defaultUserAction;
-        if ($userId == 0) {
+        if ($userId == 0 && !$csrfOkay) {
             $message .= '<p class="error">'.$errorMessages['delUser_noId'].'</p>';
         } else {
             if (!$user->getUserById($userId)) {
@@ -243,16 +249,20 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
 
     // save new user
     if ($userAction == 'addsave') {
-        $user     = new PMF_User();
-        $message  = '';
-        $messages = array();
-        // check input data
+        $user                  = new PMF_User();
+        $message               = '';
+        $messages              = array();
         $user_name             = PMF_Filter::filterInput(INPUT_POST, 'user_name', FILTER_SANITIZE_STRING, '');
         $user_realname         = PMF_Filter::filterInput(INPUT_POST, 'user_realname', FILTER_SANITIZE_STRING, '');
         $user_password         = PMF_Filter::filterInput(INPUT_POST, 'user_password', FILTER_SANITIZE_STRING, '');
         $user_email            = PMF_Filter::filterInput(INPUT_POST, 'user_email', FILTER_VALIDATE_EMAIL);
         $user_password         = PMF_Filter::filterInput(INPUT_POST, 'user_password', FILTER_SANITIZE_STRING, '');
         $user_password_confirm = PMF_Filter::filterInput(INPUT_POST, 'user_password_confirm', FILTER_SANITIZE_STRING, '');
+        $csrfOkay              = true;
+        $csrfToken             = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+            $csrfOkay = false; 
+        }
 
         if ($user_password != $user_password_confirm) {
             $user_password         = '';
@@ -282,7 +292,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         }
 
         // ok, let's go
-        if (count($messages) == 0) {
+        if (count($messages) == 0 && $csrfOkay) {
             // create user account (login and password)
             if (!$user->createUser($user_name, $user_password)) {
                 $messages[] = $user->error();
@@ -296,7 +306,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         // no errors, show list
         if (count($messages) == 0) {
             $userAction = $defaultUserAction;
-            $message = '<p class="success">'.$successMessages['addUser'].'</p>';
+            $message    = '<p class="success">'.$successMessages['addUser'].'</p>';
             // display error messages and show form again
         } else {
             $userAction = 'add';
@@ -319,6 +329,8 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     <fieldset>
         <legend><?php print $text['addUser']; ?></legend>
         <form action="?action=user&amp;user_action=addsave" method="post">
+        <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
+        
             <label class="left" for="user_name"><?php print $text['addUser_name']; ?></label>
             <input type="text" name="user_name" value="<?php print (isset($user_name) ? $user_name : ''); ?>" tabindex="1" /><br />
 

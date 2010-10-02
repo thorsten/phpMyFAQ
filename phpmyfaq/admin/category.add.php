@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2009 phpMyFAQ Team
+ * @copyright 2003-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-12-20
@@ -40,6 +40,7 @@ if ($permission["addcateg"]) {
     <legend><?php print $PMF_LANG["ad_categ_new"]; ?></legend>
     <input type="hidden" name="lang" value="<?php print $LANGCODE; ?>" />
     <input type="hidden" name="parent_id" value="<?php print $parent_id; ?>" />
+    <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
 <?php
     if ($parent_id > 0) {
         $user_allowed  = $category->getPermissions('user', array($parent_id));

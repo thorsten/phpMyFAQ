@@ -181,6 +181,7 @@ if ($groupAction == 'delete_confirm') {
         <p><?php print $text['delGroup_question']; ?></p>
         <form action ="?action=group&amp;group_action=delete" method="post">
             <input type="hidden" name="group_id" value="<?php print $groupId; ?>" />
+            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
             <div class="button_row">
                 <input class="reset" type="submit" name="cancel" value="<?php print $text['delGroup_cancel']; ?>" />
                 <input class="submit" type="submit" value="<?php print $text['delGroup_confirm']; ?>" />
@@ -190,18 +191,22 @@ if ($groupAction == 'delete_confirm') {
 </div>
 <?php
     }
-} // end if ($groupAction == 'delete_confirm')
-// delete group
+}
+
 if ($groupAction == 'delete') {
-    $message = '';
-    $user    = new PMF_User();
-    $perm    = $user->perm;
-    $groupId = PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
+    $message   = '';
+    $user      = new PMF_User();
+    $groupId   = PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
+    $csrfOkay  = true;
+    $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+    if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+        $csrfOkay = false; 
+    }
     $groupAction = $defaultGroupAction;
     if ($groupId <= 0) {
         $message .= '<p class="error">'.$errorMessages['delGroup_noId'].'</p>';
     } else {
-        if (!$perm->deleteGroup($groupId)) {
+        if (!$user->perm->deleteGroup($groupId) && !$csrfOkay) {
             $message .= '<p class="error">'.$errorMessages['delGroup'].'</p>';
         } else {
             $message .= '<p class="success">'.$successMessages['delGroup'].'</p>';
@@ -212,22 +217,26 @@ if ($groupAction == 'delete') {
         }
     }
 
-} // end if ($groupAction == 'delete')
-// save new group
+}
+
 if ($groupAction == 'addsave') {
-    $user     = new PMF_User();
-    $message  = '';
-    $messages = array();
-    // check input data
+    $user              = new PMF_User();
+    $message           = '';
+    $messages          = array();
     $group_name        = PMF_Filter::filterInput(INPUT_POST, 'group_name', FILTER_SANITIZE_STRING, '');
     $group_description = PMF_Filter::filterInput(INPUT_POST, 'group_description', FILTER_SANITIZE_STRING, '');
     $group_auto_join   = PMF_Filter::filterInput(INPUT_POST, 'group_auto_join', FILTER_SANITIZE_STRING, '');
+    $csrfOkay          = true;
+    $csrfToken         = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+    if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+        $csrfOkay = false; 
+    }
     // check group name
-    if ($group_name == "") {
+    if ($group_name == '') {
         $messages[] = $errorMessages['addGroup_noName'];
     }
     // ok, let's go
-    if (count($messages) == 0) {
+    if (count($messages) == 0 && $csrfOkay) {
         // create group
         $group_data = array(
             'name'        => $group_name,
@@ -261,6 +270,7 @@ if ($groupAction == 'add') {
 <div id="user_message"><?php print $message; ?></div>
 <div id="group_create">
     <form name="group_create" action="?action=group&amp;group_action=addsave" method="post">
+    <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
         <fieldset>
             <legend><?php print $text['addGroup']; ?></legend>
                 <div class="input_row">
@@ -307,14 +317,14 @@ var groupList;
  */
 function getGroupList()
 {
-	clearGroupList();
-	$.getJSON("index.php?action=ajax&ajax=group&ajaxaction=get_all_groups",
-	    function(data) {
-		    $.each(data, function(i, val) {
-			    $('#group_list_select').append('<option value="' + val.group_id + '">' + val.name + '</option>');
-	        });
-	    });
-	processGroupList();
+    clearGroupList();
+    $.getJSON("index.php?action=ajax&ajax=group&ajaxaction=get_all_groups",
+        function(data) {
+            $.each(data, function(i, val) {
+                $('#group_list_select').append('<option value="' + val.group_id + '">' + val.name + '</option>');
+            });
+        });
+    processGroupList();
 }
 
 /**

@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2009 phpMyFAQ Team
+ * @copyright 2003-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-03-10
@@ -61,6 +61,7 @@ if ($permission['editcateg']) {
     <input type="hidden" name="id" value="<?php print $id; ?>" />
     <input type="hidden" name="lang" value="<?php print $categories[$id]['lang']; ?>" />
     <input type="hidden" name="parent_id" value="<?php print $categories[$id]['parent_id']; ?>" />
+    <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
 
     <fieldset>
     <legend><?php print $PMF_LANG['ad_categ_edit_1']." <em>".$categories[$id]['name']."</em> ".$PMF_LANG['ad_categ_edit_2']; ?></legend>

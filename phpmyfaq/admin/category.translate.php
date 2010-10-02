@@ -56,6 +56,7 @@ if ($permission["editcateg"]) {
         <input type="hidden" name="id" value="<?php print $id; ?>" />
         <input type="hidden" name="parent_id" value="<?php print $category->categoryName[$id]["parent_id"]; ?>" />
         <input type="hidden" name="showcat" value="<?php print $showcat; ?>" />
+        <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
 
         <label class="left"><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
         <input type="text" name="name" size="30" style="width: 250px;" value="" /><br />

@@ -1,14 +1,9 @@
 <?php
 /**
  * Select a category to move
- *
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2004-04-29
- * @copyright  2004-2009 phpMyFAQ Team
- * @version    SVN: $Id$
- *
+ * 
+ * PHP Version 5.2
+ * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -18,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2004-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-04-29
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -41,11 +44,12 @@ if ($permission["editcateg"]) {
 
     printf('<h2>%s</h2>', $header);
 ?>
-	<form action="?action=changecategory" method="post">
+    <form action="?action=changecategory" method="post">
     <fieldset>
         <legend><?php print $PMF_LANG["ad_categ_change"]; ?></legend>
-	    <input type="hidden" name="cat" value="<?php print $id; ?>" />
-	    <div class="row">
+        <input type="hidden" name="cat" value="<?php print $id; ?>" />
+        <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
+        <div class="row">
                <select name="change" size="1">
 <?php
                     foreach ($category->catTree as $cat) {
