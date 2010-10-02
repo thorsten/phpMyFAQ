@@ -23,6 +23,7 @@
  * @category  phpMyFAQ
  * @package   PMF_User
  * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
@@ -48,6 +49,7 @@ define('PMF_LOGIN_BY_AUTH_FAILED', 'Could not login with login and password. ');
  * @category  phpMyFAQ
  * @package   PMF_User
  * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
@@ -95,7 +97,7 @@ class PMF_User_CurrentUser extends PMF_User
      * 
      * @var string
      */
-    private $csrfToken = '';
+    private $csrfToken = null;
 
     /**
      * constructor
@@ -176,6 +178,7 @@ class PMF_User_CurrentUser extends PMF_User
             // update last login info, session-id and save to session
             $this->updateSessionId(true);
             $this->saveToSession();
+            $this->saveCrsfTokenToSession();
             
             // remember the auth container for administration
             $update = sprintf("
@@ -365,6 +368,9 @@ class PMF_User_CurrentUser extends PMF_User
      */
     public function deleteFromSession()
     {
+        // delete CSRF Token
+        $this->deleteCsrfTokenFromSession();
+        
         // delete CurrentUser object from session
         $_SESSION[PMF_SESSION_CURRENT_USER] = null;
         unset($_SESSION[PMF_SESSION_CURRENT_USER]);
@@ -437,6 +443,8 @@ class PMF_User_CurrentUser extends PMF_User
         $user->logged_in = true;
         // save current user to session and return the instance
         $user->saveToSession();
+        $user->saveCrsfTokenToSession();
+        
         return $user;
     }
 
@@ -463,6 +471,30 @@ class PMF_User_CurrentUser extends PMF_User
     public function setSessionIdTimeout($timeout)
     {
         $this->session_id_timeout = abs($timeout);
+    }
+    
+    /**
+     * Save CSRF token to session
+     * 
+     * @return void
+     */
+    protected function saveCrsfTokenToSession()
+    {
+        if (is_null($this->csrfToken) && !isset($_SESSION['phpmyfaq_csrf_token'])) {
+            $this->createCsrfToken();
+        }
+        $_SESSION['phpmyfaq_csrf_token'] = $this->csrfToken;
+    }
+    
+    /**
+     * Deletes CSRF token from session
+     * 
+     * @return void
+     */
+    protected function deleteCsrfTokenFromSession()
+    {
+        unset($this->csrfToken);
+        unset($_SESSION['phpmyfaq_csrf_token']);
     }
     
     /**
