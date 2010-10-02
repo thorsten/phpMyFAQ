@@ -91,13 +91,6 @@ class PMF_User_CurrentUser extends PMF_User
      * @var int
      */
     private $session_id_timeout = 1;
-    
-    /**
-     * Token to prevent Cross-Site Request Forgery
-     * 
-     * @var string
-     */
-    private $csrfToken = null;
 
     /**
      * constructor
@@ -443,7 +436,6 @@ class PMF_User_CurrentUser extends PMF_User
         $user->logged_in = true;
         // save current user to session and return the instance
         $user->saveToSession();
-        $user->saveCrsfTokenToSession();
         
         return $user;
     }
@@ -474,16 +466,26 @@ class PMF_User_CurrentUser extends PMF_User
     }
     
     /**
+     * Returns the CSRF token from session
+     * 
+     * @return string
+     */
+    public function getCsrfTokenFromSession()
+    {
+        return $_SESSION['phpmyfaq_csrf_token'];
+    }
+    
+    /**
      * Save CSRF token to session
      * 
      * @return void
      */
     protected function saveCrsfTokenToSession()
     {
-        if (is_null($this->csrfToken) && !isset($_SESSION['phpmyfaq_csrf_token'])) {
-            $this->createCsrfToken();
+        if (!isset($_SESSION['phpmyfaq_csrf_token'])) {
+            $csrfToken = $this->createCsrfToken();
         }
-        $_SESSION['phpmyfaq_csrf_token'] = $this->csrfToken;
+        $_SESSION['phpmyfaq_csrf_token'] = $csrfToken;
     }
     
     /**
@@ -493,17 +495,16 @@ class PMF_User_CurrentUser extends PMF_User
      */
     protected function deleteCsrfTokenFromSession()
     {
-        unset($this->csrfToken);
         unset($_SESSION['phpmyfaq_csrf_token']);
     }
     
     /**
      * Creates a CSRF token
      * 
-     * @return void
+     * @return string
      */
     private function createCsrfToken()
     {
-        $this->csrfToken = sha1(microtime() . $this->getLogin());
+        return sha1(microtime() . $this->getLogin());
     }
 }
