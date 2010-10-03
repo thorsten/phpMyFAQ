@@ -25,6 +25,10 @@
  * @package   2005-02-21
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * PMF_DB_Mysqli
  *

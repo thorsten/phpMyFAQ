@@ -23,7 +23,7 @@
  * @since     2003-02-23
  */
 
-if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
@@ -207,6 +207,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     <form id="faqEditor" style="float: left;" action="?action=<?php print $url_variables; ?>" method="post">
     <input type="hidden" name="revision_id" id="revision_id" value="<?php print $faqData['revision_id']; ?>" />
     <input type="hidden" name="record_id" id="record_id" value="<?php print $faqData['id']; ?>" />
+    <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
 
     <fieldset class="fullwidth">
     <legend><?php print $PMF_LANG['ad_entry_faq_record']; ?></legend>

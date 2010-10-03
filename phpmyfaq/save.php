@@ -86,7 +86,7 @@ if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($
         'thema'         => $thema,
         'active'        => FAQ_SQL_ACTIVE_NO,
         'sticky'        => 0,
-        'content'       => $content,
+        'content'       => nl2br($content),
         'keywords'      => $keywords,
         'author'        => $username,
         'email'         => $usermail,

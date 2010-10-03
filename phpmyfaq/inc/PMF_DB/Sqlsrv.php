@@ -23,6 +23,10 @@
  * @since     2009-02-18
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * PMF_DB_Sqlsrv
  *

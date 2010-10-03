@@ -20,7 +20,7 @@
  * License for the specific language governing rights and limitations
  * under the License.
  */
-if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }

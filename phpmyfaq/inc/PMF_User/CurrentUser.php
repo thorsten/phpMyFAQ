@@ -4,12 +4,11 @@
  *
  * The CurrentUser class is an extension of the User class. It provides methods
  * manage user authentication using multiple database accesses.
- *
- * @package    phpMyFAQ
- * @subpackage PMF_User
- * @author     Lars Tiedemann <php@larstiedemann.de>
- * @copyright  2005-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * There are three ways of making a new current user object, using
+ * the login() method, getFromSession() method or manually.
+ * login() and getFromSession() may be combined.
+ * 
+ * PHP version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,31 +19,41 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_User
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-09-28
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /* user defined constants */
-@define('PMF_SESSION_CURRENT_USER', 'PMF_CURRENT_USER');
-@define('PMF_SESSION_ID_TIMESTAMP', 'PMF_SESSION_TIMESTAMP');
-@define('PMF_SESSION_ID_EXPIRES', PMF_AUTH_TIMEOUT);
-@define('PMF_SESSION_ID_REFRESH', PMF_AUTH_TIMEOUT_WARNING);
-@define('PMF_LOGIN_BY_SESSION', true);
-@define('PMF_LOGIN_BY_SESSION_FAILED', 'Could not login user from session. ');
-@define('PMF_LOGIN_BY_AUTH_FAILED', 'Could not login with login and password. ');
+define('PMF_SESSION_CURRENT_USER', 'PMF_CURRENT_USER');
+define('PMF_SESSION_ID_TIMESTAMP', 'PMF_SESSION_TIMESTAMP');
+define('PMF_SESSION_ID_EXPIRES', PMF_AUTH_TIMEOUT);
+define('PMF_SESSION_ID_REFRESH', PMF_AUTH_TIMEOUT_WARNING);
+define('PMF_LOGIN_BY_SESSION', true);
+define('PMF_LOGIN_BY_SESSION_FAILED', 'Could not login user from session. ');
+define('PMF_LOGIN_BY_AUTH_FAILED', 'Could not login with login and password. ');
 
 /**
- * Manages authentication process using php sessions.
+ * PMF_User_CurrentUser
  *
- * The CurrentUser class is an extension of the User class. It provides methods
- * manage user authentication using multiple database accesses.
- * There are three ways of making a new current user object, using
- * the login() method, getFromSession() method or manually.
- * login() and getFromSession() may be combined.
- *
- * @package    phpMyFAQ
- * @subpackage PMF_User
- * @author     Lars Tiedemann <php@larstiedemann.de>
- * @copyright  2005-2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * @category  phpMyFAQ
+ * @package   PMF_User
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2005-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-09-28
  */
 class PMF_User_CurrentUser extends PMF_User
 {
@@ -162,6 +171,7 @@ class PMF_User_CurrentUser extends PMF_User
             // update last login info, session-id and save to session
             $this->updateSessionId(true);
             $this->saveToSession();
+            $this->saveCrsfTokenToSession();
             
             // remember the auth container for administration
             $update = sprintf("
@@ -351,6 +361,9 @@ class PMF_User_CurrentUser extends PMF_User
      */
     public function deleteFromSession()
     {
+        // delete CSRF Token
+        $this->deleteCsrfTokenFromSession();
+        
         // delete CurrentUser object from session
         $_SESSION[PMF_SESSION_CURRENT_USER] = null;
         unset($_SESSION[PMF_SESSION_CURRENT_USER]);
@@ -423,6 +436,7 @@ class PMF_User_CurrentUser extends PMF_User
         $user->logged_in = true;
         // save current user to session and return the instance
         $user->saveToSession();
+        
         return $user;
     }
 
@@ -449,5 +463,48 @@ class PMF_User_CurrentUser extends PMF_User
     public function setSessionIdTimeout($timeout)
     {
         $this->session_id_timeout = abs($timeout);
+    }
+    
+    /**
+     * Returns the CSRF token from session
+     * 
+     * @return string
+     */
+    public function getCsrfTokenFromSession()
+    {
+        return $_SESSION['phpmyfaq_csrf_token'];
+    }
+    
+    /**
+     * Save CSRF token to session
+     * 
+     * @return void
+     */
+    protected function saveCrsfTokenToSession()
+    {
+        if (!isset($_SESSION['phpmyfaq_csrf_token'])) {
+            $csrfToken = $this->createCsrfToken();
+        }
+        $_SESSION['phpmyfaq_csrf_token'] = $csrfToken;
+    }
+    
+    /**
+     * Deletes CSRF token from session
+     * 
+     * @return void
+     */
+    protected function deleteCsrfTokenFromSession()
+    {
+        unset($_SESSION['phpmyfaq_csrf_token']);
+    }
+    
+    /**
+     * Creates a CSRF token
+     * 
+     * @return string
+     */
+    private function createCsrfToken()
+    {
+        return sha1(microtime() . $this->getLogin());
     }
 }

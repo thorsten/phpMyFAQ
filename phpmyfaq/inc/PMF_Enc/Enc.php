@@ -23,6 +23,10 @@
  * @since     2009-09-04
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * PMF_Enc_Enc
  *

@@ -14,8 +14,9 @@ Version 2.7.0-alpha - 2010-10-
 - updated bundled jQuery to version 1.4.2 (Thorsten)
 
 Version 2.6.10 - 2010-10-
+- added several security enhancements (Thorsten)
 - updated Chinese (Simplified) translation
-
+- fixed minor bugs (Thorsten)
 
 Version 2.6.9 - 2010-09-28
 - fixed XSS vulnerability (Yam Mesicka, Thorsten)

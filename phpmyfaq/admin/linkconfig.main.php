@@ -1,12 +1,8 @@
 <?php
 /**
  * LinkVerifier configuration.
- *
- * @author     Minoru TODA <todam@netjapan.co.jp>
- * @since      2005-11-07
- * @todo       Move all queries and functions into the class PMF_Linkverifier
- * @version    SVN: $Id$ 
- * @copyright (c) 2005-2009 NetJapan, Inc. and phpMyFAQ Team
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,9 +16,19 @@
  *
  * The Initial Developer of the Original Code is released for external use
  * with permission from NetJapan, Inc. IT Administration Group.
+ *
+ * @category  phpMyFAQ
+ * @package   Administraion
+ * @author    Minoru TODA <todam@netjapan.co.jp>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @todo      Move all queries and functions into the class PMF_Linkverifier
+ * @copyright 2005-2010 NetJapan, Inc. and phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-11-07
  */
 
-if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }

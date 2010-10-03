@@ -26,6 +26,10 @@
  * @since     2009-01-07
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * phpMyFAQ __autoload() implementation
  * 

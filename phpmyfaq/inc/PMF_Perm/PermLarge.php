@@ -23,6 +23,10 @@
  * @since     2005-09-17
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * The large permission class is not yet implemented in phpMyFAQ.
  *

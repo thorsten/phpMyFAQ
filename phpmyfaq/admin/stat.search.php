@@ -33,14 +33,14 @@ if (isset($_GET['num']) && !defined('PMF_ROOT_DIR')) {
     session_start();
     
     $num = PMF_Filter::filterInput(INPUT_GET, 'num', FILTER_VALIDATE_FLOAT);
-    if(!is_null($num)) {
+    if (!is_null($num)) {
         $bar = new PMF_Bar($num);
         $bar->renderImage();
         exit;
     }
 }
 
-if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }

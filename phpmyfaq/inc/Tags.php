@@ -25,6 +25,10 @@
  * @since     2006-08-10
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * PMF_Tags
  *

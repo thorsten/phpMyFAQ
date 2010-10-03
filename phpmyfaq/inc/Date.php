@@ -24,6 +24,10 @@
  * @since     2009-09-24
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * PMF_Date
  *

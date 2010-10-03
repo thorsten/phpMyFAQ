@@ -16,13 +16,15 @@
  * License for the specific language governing rights and limitations
  * under the License.
  *
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Uwe Pries <uwe.pries@digartis.de>
- * @copyright  2006-2010 phpMyFAQ Team
- * @since      2006-05-08
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Uwe Pries <uwe.pries@digartis.de>
+ * @copyright 2006-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2006-05-08
  */
 
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
@@ -30,7 +32,7 @@ define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 //
 // Define the named constant used as a check by any included PHP file
 //
-define('IS_VALID_PHPMYFAQ_ADMIN', null);
+define('IS_VALID_PHPMYFAQ', null);
 
 //
 // Autoload classes, prepend and start the PHP session

@@ -32,9 +32,8 @@
  * @since     2005-09-30
  */
 
-if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
-    header("HTTP/1.0 401 Unauthorized");
-    header("Status: 401 Unauthorized");
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

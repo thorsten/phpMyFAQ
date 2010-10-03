@@ -24,6 +24,10 @@
  * @since     2006-06-18
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * PMF_Relation
  * 

@@ -23,7 +23,7 @@
  * @since     2003-02-24
  */
 
-if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
@@ -47,6 +47,7 @@ if ($permission['backup']) {
         <p><?php print $PMF_LANG["ad_csv_restore"]; ?></p>
         <div align="center">
         <?php print $PMF_LANG["ad_csv_file"]; ?>:
+            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
             <input type="file" name="userfile" size="30" />&nbsp;
             <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_csv_ok"]; ?>" />
         </div>
