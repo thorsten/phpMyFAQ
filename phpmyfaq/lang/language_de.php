@@ -980,7 +980,7 @@ $PMF_LANG['msgTransToolLanguageOnePlural'] = 'Diese Sprache hat nur eine Pluralf
 $PMF_LANG['msgTransToolLanguagePluralNotSet'] = "Für %s ist die Unterstützung für Pluralformen deaktiviert (nplurals nicht gesetzt).";
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras - Plural messages
-$PMF_LANG["plmsgHomeArticlesOnline"][0] = "Es ist %d FAQ-Eintrag online-";
+$PMF_LANG["plmsgHomeArticlesOnline"][0] = "Es ist %d FAQ-Eintrag online";
 $PMF_LANG["plmsgHomeArticlesOnline"][1] = "Es sind %d FAQ-Einträge online";
 $PMF_LANG["plmsgViews"][0] = "%d mal gesehen";
 $PMF_LANG["plmsgViews"][1] = "%d mal gesehen";
@@ -994,7 +994,7 @@ $PMF_LANG["plmsgSearchAmount"][0] = "%d Suchergebnis";
 $PMF_LANG["plmsgSearchAmount"][1] = "%d Suchergebnisse";
 $PMF_LANG["plmsgPagesTotal"][0] = " %d Seite";
 $PMF_LANG["plmsgPagesTotal"][1] = " %d Seiten";
-$PMF_LANG["plmsgVotes"][0] = "%d Abstimung";
+$PMF_LANG["plmsgVotes"][0] = "%d Abstimmung";
 $PMF_LANG["plmsgVotes"][1] = "%d Abstimmungen";
 $PMF_LANG["plmsgEntries"][0] = "%d FAQ";
 $PMF_LANG["plmsgEntries"][1] = "%d FAQs";
