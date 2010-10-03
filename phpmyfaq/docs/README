@@ -64,6 +64,10 @@ Bundled software:
                 TCPDF
                 http://www.tcpdf.org
                 Licensed under the terms of the GNU Lesser General Public License
+                
+                TwitterOAuth
+                http://github.com/abraham/twitteroauth
+                Licensed under the terms of the MIT License
 
 
 Copyright (c) 2001-2010 phpMyFAQ Team

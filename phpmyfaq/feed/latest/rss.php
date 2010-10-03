@@ -69,7 +69,7 @@ $rss->writeElement('link', PMF_Link::getSystemUri('/feed/latests/rss.php'));
 if ($num > 0) {
     foreach ($rssData as $item) {
         // Get the url
-        $link = str_replace($_SERVER['PHP_SELF'], '/index.php', $item['url']);
+        $link = str_replace($_SERVER['SCRIPT_NAME'], '/index.php', $item['url']);
         if (PMF_RSS_USE_SEO) {
             if (isset($item['thema'])) {
                 $oLink            = new PMF_Link($link);

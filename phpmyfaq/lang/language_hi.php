@@ -125,7 +125,7 @@ $PMF_LANG["msg2answer"] = "ऊत्तर";
 $PMF_LANG["msgQuestionText"] = "इस पृष्ट पर आप अन्य प्रयोगकर्त्ताओं द्वारा पुचा गया प्रश्न देख सकते हैं. यदि आप इन प्रश्नों का ऊत्तर देते हैं तो हो सकता है की आपका ऊत्तर सहायता केंद्र में जोड़ दिया जाए.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>FAQ का संरचना (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) बहुत ही आसान. या तो आप <strong><a href=\"?action=show\">वर्गों</a></strong> में खोज सकते हैं या फिर <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=search\">सहायता केंद्र खोजक </a></strong> को कुंजी शब्दों के लिए खोजने दें .</p>";
+$PMF_LANG["msgHelpText"] = "<p>FAQ का संरचना (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) बहुत ही आसान. या तो आप <strong><a href=\"?action=show\">वर्गों</a></strong> में खोज सकते हैं या फिर <strong><a href=\"?action=search\">सहायता केंद्र खोजक </a></strong> को कुंजी शब्दों के लिए खोजने दें .</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "प्रबंधक को सन्देश भेजें:";

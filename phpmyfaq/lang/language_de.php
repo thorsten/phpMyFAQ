@@ -2,13 +2,7 @@
 /**
  * German language file
  *
- * @package    phpMyFAQ
- * @subpackage Translation
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     A. Neufang <B_A_F_F@gmx.de>
- * @author     René-Roger Ziesack <rr-phpmyfaq.de@inf99.de>
- * @since      2004-02-19
- * @copyright  2004-2009 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,19 +13,23 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ * 
+ * @category  phpMyFAQ
+ * @package   Translation
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    A. Neufang <B_A_F_F@gmx.de>
+ * @author    René-Roger Ziesack <rr-phpmyfaq.de@inf99.de>
+ * @copyright 2004-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-02-19
  */
 
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "de";
 $PMF_LANG["language"] = "deutsch";
-// ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 $PMF_LANG["dir"] = "ltr";
-
 $PMF_LANG["nplurals"] = "2";
-/**
- * This parameter is used with the function 'plural' from inc/PMF_Language/Plurals.php
- * If this parameter and function are not in sync plural form support will be broken.
- */
 
 // Navigation
 $PMF_LANG["msgCategory"] = "Kategorien";
@@ -1033,3 +1031,11 @@ $PMF_LANG['msgKeepFaqDate'] = 'behalten';
 $PMF_LANG['msgEditFaqDat'] = 'ändern';
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Angabe der E-Mailadresse als Pflichtfeld (Standard: deaktiviert)');
 $LANG_CONF['main.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Sofortantwort auf der Startseite (Standard: deaktiviert)');
+
+// added 2.7.0-alpha - 2010-09-13 by Thorsten
+$PMF_LANG['msgLoginUser'] = 'Einloggen';
+$PMF_LANG['socialNetworksControlCenter'] = 'Social Networks Konfiguration';
+$LANG_CONF['socialnetworks.enableTwitterSupport'] = array(0 => 'checkbox', 1 => 'Twitter support (default: deactivated)');
+$LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => 'input', 1 => 'Twitter Consumer Key');
+$LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'Twitter Consumer Secret');
+$LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Facebook support (default: deactivated)');

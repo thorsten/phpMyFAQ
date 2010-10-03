@@ -191,6 +191,13 @@ header("Vary: Negotiate,Accept");
     <link rel="stylesheet" href="../inc/js/plugins/datePicker/datePicker.css" type="text/css">
     
     <script src="../inc/js/modernizr.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script>!window.jQuery && document.write('<script src="../inc/js/jquery.min.js"><\/script>')</script>
+    <script src="../inc/js/functions.js"></script>
+    <script src="../inc/js/plugins/autocomplete/jquery.autocomplete.pack.js"></script>
+    <script src="../inc/js/plugins/datePicker/date.js"></script>
+    <script src="../inc/js/plugins/datePicker/jquery.datePicker.js"></script>
+    <script src="editor/tiny_mce.js?<?php print time(); ?>"></script>
     
     <link rel="shortcut icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico">
     <link rel="apple-touch-icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/apple-touch-icon.png">

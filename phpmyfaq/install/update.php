@@ -28,7 +28,7 @@
 define('NEWVERSION', '3.0.0-dev');
 define('APIVERSION', 2);
 define('MINIMUM_PHP_VERSION', '5.3.0');
-define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
 if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {

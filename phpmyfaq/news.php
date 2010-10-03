@@ -90,7 +90,7 @@ $expired = (date('YmdHis') > $news['dateEnd']);
 if ((!$news['active']) || (!$news['allowComments']) || $expired) {
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
-    $oLink            = new PMF_Link($_SERVER['PHP_SELF'].'?'.str_replace('&', '&amp;',$_SERVER['QUERY_STRING']));
+    $oLink            = new PMF_Link($_SERVER['SCRIPT_NAME'].'?'.str_replace('&', '&amp;', $_SERVER['QUERY_STRING']));
     $oLink->itemTitle = $header;
     $commentHref      = $oLink->toString().'#comment';
     $commentMessage   = sprintf(

@@ -72,7 +72,7 @@ if ($num > 0) {
     foreach ($rssData as $item) {
         $i++;
         // Get the url
-        $link = str_replace($_SERVER['PHP_SELF'], '/index.php', $item['url']);
+        $link = str_replace($_SERVER['SCRIPT_NAME'], '/index.php', $item['url']);
         if (PMF_RSS_USE_SEO) {
             if (isset($item['thema'])) {
                 $oLink            = new PMF_Link($link);

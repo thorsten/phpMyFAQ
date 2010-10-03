@@ -1,3 +1,41 @@
+CHANGED FILES FROM 2.6.8 -> 2.6.9
+
+./admin/category.add.php
+./admin/category.edit.php
+./admin/category.showstructure.php
+./admin/footer.php
+./admin/glossary.main.php
+./admin/group.php
+./admin/header.php
+./admin/index.php
+./admin/linkconfig.main.php
+./admin/password.php
+./admin/record.add.php
+./admin/record.edit.php
+./admin/record.save.php
+./admin/record.show.php
+./admin/style/admin.css
+./admin/style/admin.rtl.css
+./admin/user.php
+./feed/category/rss.php
+./feed/latest/rss.php
+./feed/openquestions/rss.php
+./feed/topten/rss.php
+./inc/Ldap.php
+./inc/Link.php
+./inc/Relation.php
+./inc/Template.php
+./install/attachment.php
+./install/setup.php
+./install/update.php
+./lang/language_hi.php
+./lang/language_sk.php
+./index.php
+./news.php
+./sitemap.google.php
+
+
+
 CHANGED FILES FROM 2.6.7 -> 2.6.8
 
 ./admin/ajax.records.php

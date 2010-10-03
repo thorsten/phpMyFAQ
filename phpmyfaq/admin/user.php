@@ -328,7 +328,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
 <div id="user_create">
     <fieldset>
         <legend><?php print $text['addUser']; ?></legend>
-        <form action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=addsave" method="post">
+        <form action="?action=user&amp;user_action=addsave" method="post">
             <label class="left" for="user_name"><?php print $text['addUser_name']; ?></label>
             <input type="text" name="user_name" value="<?php print (isset($user_name) ? $user_name : ''); ?>" tabindex="1" /><br />
 

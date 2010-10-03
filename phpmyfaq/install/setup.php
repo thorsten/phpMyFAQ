@@ -33,7 +33,7 @@
 define('VERSION', '3.0.0-dev');
 define('APIVERSION', 2);
 define('MINIMUM_PHP_VERSION', '5.3.0');
-define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
 if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
@@ -249,7 +249,8 @@ if (sizeof($faileddirs)) {
     foreach ($faileddirs as $dir) {
         print "<li>$dir</li>\n";
     }
-    print '</ul><p class="center">Please create it manually and/or change access to chmod 755 (or greater if necessary).</p>';
+    print '</ul><p class="center">Please create it manually and/or change access to chmod 755 (or greater if ' .
+          'necessary).</p>';
     HTMLFooter();
     die();
 }
@@ -261,16 +262,22 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
 <?php
     if ((@ini_get('safe_mode') == 'On' || @ini_get('safe_mode') === 1)) {
-        print '<p class="center">The PHP safe mode is enabled. You may have problems when phpMyFAQ writes in some directories.</p>';
+        print '<p class="center">The PHP safe mode is enabled. You may have problems when phpMyFAQ writes in some ' .
+              'directories.</p>';
     }
     if (!extension_loaded('gd')) {
         print '<p class="center">You don\'t have GD support enabled in your PHP installation. Please enabled GD ' .
-        'support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
+              'support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
     }
     if (!function_exists('imagettftext')) {
         print '<p class="center">You don\'t have Freetype support enabled in the GD extension of your PHP ' .
-        'installation. Please enabled Freetype support in GD extension otherwise the Captchas for spam protection ' .
-        'will be quite easy to break.</p>';
+              'installation. Please enabled Freetype support in GD extension otherwise the Captchas for spam ' .
+              'protection will be quite easy to break.</p>';
+    }
+    if (!extension_loaded('curl') || !extension_loaded('openssl')) {
+        print '<p class="center">You don\'t have cURL and/or OpenSSl support enabled in your PHP installation. ' .
+              'Please enabled cUrL and/or OpenSSL support in your php.ini file otherwise you can\'t use the Twitter ' .
+              ' support.</p>';
     }
 ?>
 <p class="center">
@@ -1014,7 +1021,7 @@ echo '</dl><input type="hidden" name="systemdata" value="' .
     }
     
     // Remove 'setup.php' file
-    if (@unlink(basename($_SERVER["PHP_SELF"]))) {
+    if (@unlink(basename($_SERVER['SCRIPT_NAME']))) {
         print "<p class=\"center\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";
     } else {
         print "<p class=\"center\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
