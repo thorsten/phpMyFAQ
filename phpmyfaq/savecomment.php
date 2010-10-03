@@ -2,7 +2,7 @@
 /**
  * Saves the posted comment
  *
- * PHP Version 5.2.0
+ * PHP Version 5.2
  * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -17,7 +17,7 @@
  * @copyright phpMyFAQ
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2009 phpMyFAQ Team
+ * @copyright 2002-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-29
@@ -38,14 +38,15 @@ $newsid  = PMF_Filter::filterInput(INPUT_POST, 'newsid', FILTER_VALIDATE_INT);
 $user    = PMF_Filter::filterInput(INPUT_POST, 'user', FILTER_SANITIZE_STRING);
 $mail    = PMF_Filter::filterInput(INPUT_POST, 'mail', FILTER_VALIDATE_EMAIL);
 $comment = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRIPPED);
+$message = '';
 
 switch ($type) {
-	case 'news':
-		$id              = $newsid;
-		$msgWriteComment = $PMF_LANG['newsWriteComment'];
-		break;
-	case 'faq';
-	default:
+    case 'news':
+        $id              = $newsid;
+        $msgWriteComment = $PMF_LANG['newsWriteComment'];
+        break;
+    case 'faq';
+    default:
         $id = $faqid;
         $msgWriteComment = $PMF_LANG['msgWriteComment'];
         break;
@@ -117,42 +118,22 @@ if (!is_null($user) && !is_null($mail) && !is_null($comment) && checkBannedWord(
         $result = $mail->send();
         unset($mail);
 
-        $tpl->processTemplate(
-            'writeContent',
-            array(
-                'msgCommentHeader'  => $msgWriteComment,
-                'Message'           => $PMF_LANG['msgCommentThanks']
-            )
-        );
+        $message = $PMF_LANG['msgCommentThanks'];
     } else {
         $faqsession->userTracking('error_save_comment', $id);
-        $tpl->processTemplate(
-            'writeContent',
-            array(
-                'msgCommentHeader'  => $msgWriteComment,
-                'Message'           => $PMF_LANG['err_SaveComment']
-            )
-        );
+        $message = $PMF_LANG['err_SaveComment'];
     }
 } else {
     if (!IPCheck($_SERVER['REMOTE_ADDR'])) {
-        $tpl->processTemplate(
-            'writeContent',
-            array(
-                'msgCommentHeader'  => $msgWriteComment,
-                'Message'           => $PMF_LANG['err_bannedIP']
-            )
-        );
+        $message = $PMF_LANG['err_bannedIP'];
     } else {
         $faqsession->userTracking('error_save_comment', $id);
-        $tpl->processTemplate(
-            'writeContent',
-            array(
-                'msgCommentHeader'  => $msgWriteComment,
-                'Message'           => $PMF_LANG['err_SaveComment']
-            )
-        );
+        $message = $PMF_LANG['err_SaveComment'];
     }
 }
+
+$tpl->processTemplate('writeContent',
+                      array('msgCommentHeader'  => $msgWriteComment,
+                            'Message'           => $message));
 
 $tpl->includeTemplate('writeContent', 'index');
