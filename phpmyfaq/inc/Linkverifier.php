@@ -28,6 +28,48 @@
  * @since     2005-08-01
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
+/* Defines number of times linkverifier follows 302 response before failing.
+ *
+ * Suggested value is above 10 redirects
+ */
+
+if (!defined('LINKVERIFIER_MAX_REDIRECT_COUNT')) {
+    define('LINKVERIFIER_MAX_REDIRECT_COUNT', 10);
+}
+
+/* Defines the number of seconds to wait for the remote server to respond
+ *
+ * Suggested value is 5 seconds
+ */
+if (!defined('LINKVERIFIER_CONNECT_TIMEOUT')) {
+    define('LINKVERIFIER_CONNECT_TIMEOUT', 5);
+}
+
+/* Defines the number of seconds to wait for the remote server to send data
+ *
+ * Suggested value is 10 seconds
+ */
+if (!defined('LINKVERIFIER_RESPONSE_TIMEOUT')) {
+    define('LINKVERIFIER_RESPONSE_TIMEOUT', 10);
+}
+
+/* Defines the behaviour when a user click "Edit FAQs" in the backend.
+ * Do you want an automatic links verification
+ * with live update of each links verification status?
+ *
+ * Suggested value is:
+ * a. false, if you don't use a cron/at entry to call 'cron.verifyurls.php' during each night.
+ *           This will avoid browser high load (100% CPU)
+ * b. true, if you use a cron/at entry to call 'cron.verifyurls.php' during each night
+ */
+if (!defined('LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ')) {
+    define('LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ', false);
+}
+
 /**
  * PMF_LinkVerifier
  *

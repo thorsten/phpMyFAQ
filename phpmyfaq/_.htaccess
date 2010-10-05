@@ -15,12 +15,12 @@
 # @author    Patrick Preuster <sica@php-q.net>
 # @author    Matteo Scaramuccia <matteo@scaramuccia.com>
 # @copyright 2004-2010 phpMyFAQ Team
-# @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
-# @link      http://www.phpmyfaq.de
+#  @license  http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+#  @link     http://www.phpmyfaq.de
 # @since     2004-11-13
 
 # always follow the symlinks
-Options +FollowSymlinks -MultiViews
+Options +FollowSymlinks -MultiViews -Indexes 
 
 # if you want to use mod_rewrite, set this 'On'
 RewriteEngine On

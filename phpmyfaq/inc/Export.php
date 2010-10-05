@@ -24,6 +24,10 @@
  * @since     2005-11-02
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 require_once PMF_CONFIG_DIR . '/constants.php';
 
 /**

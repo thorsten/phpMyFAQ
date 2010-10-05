@@ -23,6 +23,10 @@
  * @since     2009-08-21
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * PMF_Atachment_Abstract
  * 

@@ -23,6 +23,10 @@
  * @since     2010-06-06
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * PMF_Search_Resultset
  *

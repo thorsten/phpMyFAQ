@@ -25,6 +25,10 @@
  * @since     2009-05-14
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * PMF_Language
  * 

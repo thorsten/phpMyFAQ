@@ -54,7 +54,7 @@
         
         <nav>
         <ul>
-            <li>{msgSearch}</li>
+            <li>{allCategories}</li>
             <li>{showInstantResponse}</li>
             <li>{msgAddContent}</li>
             <li>{msgQuestion}</li>
@@ -71,7 +71,6 @@
                 <nav>
                     <ul>
                         <li class="home">{backToHome}</li>
-                        <li>{allCategories}</li>
                         {showCategories}
                     </ul>
                 </nav>
@@ -90,6 +89,7 @@
                 <input type="hidden" name="action" value="search">
                 <input type="submit" name="submit" value="{searchBox}">
             </form>
+            {msgSearch}
             </aside>
             [/globalSearchBox]
             [globalSuggestBox]
@@ -98,6 +98,7 @@
                 <input type="hidden" name="ajaxlanguage" id="ajaxlanguage" value="{ajaxlanguage}">
                 <input type="text" name="search" id="instantfield" value="">
             </form>
+            {msgSearch}
             </aside>
             [/globalSuggestBox]
             

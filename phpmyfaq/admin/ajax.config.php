@@ -20,7 +20,7 @@
  * under the License.
  */
 
-if (!defined('IS_VALID_PHPMYFAQ_ADMIN') || !$permission['editconfig']) {
+if (!defined('IS_VALID_PHPMYFAQ') || !$permission['editconfig']) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }

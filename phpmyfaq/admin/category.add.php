@@ -23,7 +23,7 @@
  * @since     2003-12-20
  */
 
-if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
@@ -42,7 +42,8 @@ if ($permission["addcateg"]) {
     <fieldset>
     <legend><?php print $PMF_LANG["ad_categ_new"]; ?></legend>
     <input type="hidden" name="lang" value="<?php print $LANGCODE; ?>" />
-    <input type="hidden" name="parent_id" value="<?php print $parentId; ?>" />
+    <input type="hidden" name="parent_id" value="<?php print $parent_id; ?>" />
+    <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
 <?php
     if ($parentId > 0) {
         $userAllowed  = $categoryUser->fetch($parentId);

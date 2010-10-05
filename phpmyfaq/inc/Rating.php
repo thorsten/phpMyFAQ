@@ -23,6 +23,10 @@
  * @since     2007-03-31
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * PMF_Rating
  * 
@@ -343,13 +347,13 @@ class PMF_Rating
 
         $result = $this->db->query($query);
         while ($row = $this->db->fetchObject($result)) {
-        	$ratings[] = array(
-        	   'id'          => $row->id,
-        	   'lang'        => $row->lang,
-        	   'category_id' => $row->category_id,
-        	   'question'    => $row->question,
-        	   'num'         => $row->num,
-        	   'usr'         => $row->usr);
+            $ratings[] = array(
+               'id'          => $row->id,
+               'lang'        => $row->lang,
+               'category_id' => $row->category_id,
+               'question'    => $row->question,
+               'num'         => $row->num,
+               'usr'         => $row->usr);
         }
 
         return $ratings;

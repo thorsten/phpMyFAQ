@@ -26,6 +26,10 @@
  * @since     2005-12-20
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * SQL constants definitions
  */

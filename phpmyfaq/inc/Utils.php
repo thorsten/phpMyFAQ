@@ -24,11 +24,9 @@
  * @since     2005-11-01
  */
 
-/**
- * PHP 6 script encoding
- *
- */
-declare(encoding='latin1');
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
 
 /**#@+
   * HTTP GET Parameters PMF accepted keys definitions

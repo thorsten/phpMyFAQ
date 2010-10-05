@@ -1,13 +1,8 @@
 <?php
 /**
  * Handles all the stuff for visits
- *
- * @package    phpMyFAQ
- * @subpackage PMF_Visits
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2009-03-08
- * @copyright  2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * 
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,17 +13,30 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Visits
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-03-08
  */
+
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
 
 /**
  * PMF_Visits
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Visits
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2009-03-08
- * @copyright  2009 phpMyFAQ Team
- * @version    SVN: $Id$
+ * @category  phpMyFAQ
+ * @package   PMF_Visits
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-03-08
  */
 class PMF_Visits
 {

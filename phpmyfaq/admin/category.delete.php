@@ -3,7 +3,7 @@
  * Frontend to delete a category
  * 
  * PHP Version 5.2
- *
+ * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -17,13 +17,13 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2003-12-20
+ * @copyright 2003-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2003-2010 phpMyFAQ Team
+ * @since     2003-12-20
  */
 
-if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
@@ -40,6 +40,7 @@ if ($permission['delcateg']) {
     <legend><?php print $PMF_LANG['ad_categ_deletesure']; ?></legend>
         <input type="hidden" name="cat" value="<?php print $categoryId; ?>" />
         <input type="hidden" name="lang" value="<?php print $categoryData->lang; ?>" />
+        <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
 
         <label class="left"><?php print $PMF_LANG['ad_categ_titel']; ?>:</label>
         <?php print $categoryData->name; ?> <br />

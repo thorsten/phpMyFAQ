@@ -25,6 +25,10 @@
  * @package   2003-02-24
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * PMF_DB_Pgsql
  * 

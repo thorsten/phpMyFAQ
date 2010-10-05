@@ -23,6 +23,10 @@
  * @since     2009-04-08
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * PMF_String_UTF8ToLatinConvertable
  *

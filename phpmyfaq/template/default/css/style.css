@@ -206,10 +206,15 @@ button {
 #maincontent {
     float: left; width: 610px; }
 #searchBox {
-    background: #fff; margin-bottom: 2em; overflow: hidden; padding: 20px; width: 550px; 
+    background: #6a6b6a; margin-bottom: 2em; overflow: hidden; padding: 20px; width: 550px; color: #fff;
     border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; }
 #searchBox input[type=text] {
-    width: 400px; height: 1.66em; font-size: 1.33em;}
+    width: 400px; height: 1.66em; font-size: 1.33em; margin-bottom: 5px;
+    border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#searchBox a {
+    color: #cbcbcb; text-decoration: none; }
+#searchBox a.help {
+    margin-right: 10px; padding: 0 12px 0 0; background: url(../images/arrow.gif) no-repeat scroll right 55% transparent; }
 #rightcolumn {
     float: right; width: 175px; }
 

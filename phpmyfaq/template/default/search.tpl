@@ -1,4 +1,4 @@
-            <h2>{msgSearch}</h2>
+            <h2>{msgAdvancedSearch}</h2>
             
             {printResult}
             
@@ -20,11 +20,12 @@
                 {printCategoryOptions}
                 </select>
                 
-                <p>{openSearchLink}</p>
                 </fieldset>
                 
                 <div id="mostpopularsearches">
                 <p>{msgMostPopularSearches} {printMostPopularSearches}</p>
                 </div>
+                
+                <p>{openSearchLink}</p>
             </form>
             </aside>

@@ -24,6 +24,10 @@
  * @copyright 2005-2010 phpMyFAQ Team
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * PMF_DB_Sqlite
  * 

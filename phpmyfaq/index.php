@@ -524,7 +524,8 @@ if ('main' == $action || 'show' == $action) {
         $tpl->processBlock('index', 'globalSearchBox', array(
             'writeSendAdress' => '?'.$sids.'action=search',
             'searchBox'       => $PMF_LANG['msgSearch'],
-            'categoryId'      => ($cat === 0) ? '%' : (int)$cat));
+            'categoryId'      => ($cat === 0) ? '%' : (int)$cat,
+            'msgSearch'       => '<a class="help" href="index.php?'.$sids.'action=search">'.$PMF_LANG["msgAdvancedSearch"].'</a>'));
     }
 }
                              

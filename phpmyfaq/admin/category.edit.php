@@ -23,7 +23,7 @@
  * @since     2003-03-10
  */
 
-if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
@@ -63,6 +63,7 @@ if ($permission['editcateg']) {
     <input type="hidden" name="id" value="<?php print $categoryData->id; ?>" />
     <input type="hidden" name="lang" value="<?php print $categoryData->lang; ?>" />
     <input type="hidden" name="parent_id" value="<?php print $categoryData->parent_id; ?>" />
+    <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
 
     <fieldset>
     <legend><?php print $PMF_LANG['ad_categ_edit_1']." <em>".$categoryData->name."</em> ".$PMF_LANG['ad_categ_edit_2']; ?></legend>

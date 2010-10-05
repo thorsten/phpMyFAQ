@@ -23,7 +23,7 @@
  * @since     2004-04-29
  */
 
-if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
@@ -41,12 +41,13 @@ if ($permission["editcateg"]) {
     
     printf('<h2>%s</h2>', $header);
 ?>
-	<form action="?action=changecategory" method="post">
+    <form action="?action=changecategory" method="post">
     <fieldset>
         <legend><?php print $PMF_LANG["ad_categ_change"]; ?></legend>
         <input type="hidden" name="cat" value="<?php print $categoryId; ?>" />
+        <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
         <div class="row">
-        <select name="change" size="1">
+               <select name="change" size="1">
 <?php
     foreach ($categoryTreeHelper as $catId => $categoryName) {
         $parent = $categoryTreeHelper->getInnerIterator()->current()->getParentId();

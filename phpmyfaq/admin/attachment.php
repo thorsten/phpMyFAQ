@@ -25,7 +25,7 @@ define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 //
 // Define the named constant used as a check by any included PHP file
 //
-define('IS_VALID_PHPMYFAQ_ADMIN', null);
+define('IS_VALID_PHPMYFAQ', null);
 
 //
 // Autoload classes, prepend and start the PHP session
@@ -42,8 +42,9 @@ PMF_Attachment_Factory::init($faqconfig->get('main.attachmentsStorageType'),
                              $faqconfig->get('main.defaultAttachmentEncKey'),
                              $faqconfig->get('main.enableAttachmentEncryption'));
 
-$currentSave   = filter_input(INPUT_POST, 'save',   FILTER_SANITIZE_STRING);
+$currentSave   = PMF_Filter::filterInput(INPUT_POST, 'save',   FILTER_SANITIZE_STRING);
 $currentAction = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+$currentToken  = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 
 $Language = new PMF_Language();
 $LANGCODE = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
@@ -86,14 +87,17 @@ if ($auth === true) {
 
 if (is_null($currentAction) || !is_null($currentSave)) {
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
+<!DOCTYPE html>
+<html lang="<?php print $PMF_LANG['metaLanguage']; ?>">
 <head>
     <title><?php print $faqconfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
-    <meta name="copyright" content="(c) 2001-2009 phpMyFAQ Team" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="shortcut icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
-    <link rel="icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta http-equiv="content-language" content="<?php print $PMF_LANG['metaLanguage']; ?>">
+    <meta name="application-name" content="phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?>">
+    <meta name="copyright" content="(c) 2001-2010 phpMyFAQ Team">
+    <link rel="shortcut icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon">
     <style type="text/css">
     @import url(style/admin.css);
     body { margin: 5px; }
@@ -114,6 +118,7 @@ if (is_null($currentAction) && $auth && $permission["addatt"]) {
         <input type="hidden" name="record_id" value="<?php print $recordId; ?>" />
         <input type="hidden" name="record_lang" value="<?php print $recordLang; ?>" />
         <input type="hidden" name="save" value="TRUE" />
+        <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
         <?php print $PMF_LANG["ad_att_att"]; ?> <input name="userfile" type="file" />
         <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_att_butt"]; ?>" />
     </fieldset>
@@ -121,12 +126,15 @@ if (is_null($currentAction) && $auth && $permission["addatt"]) {
 <?php
 }
 
-if (!is_null($currentAction) && $auth && !$permission["addatt"]) {
-    print $PMF_LANG["err_NotAuth"];
-    die();
+if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $currentToken) {
+    $auth = false;
 }
 
-if (!is_null($currentSave) && $currentSave == true && $auth && $permission["addatt"]) {
+if (!is_null($currentAction) && $auth && !$permission['addatt']) {
+    print $PMF_LANG['err_NotAuth'];
+}
+
+if (!is_null($currentSave) && $currentSave == true && $auth && $permission['addatt']) {
     $recordId   = filter_input(INPUT_POST, 'record_id',   FILTER_VALIDATE_INT);
     $recordLang = filter_input(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
 ?>
@@ -161,15 +169,13 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission["adda
 }
 if (!is_null($currentSave) && $currentSave == true && $auth && !$permission["addatt"]) {
     print $PMF_LANG["err_NotAuth"];
-    die();
 }
 
 if (DEBUG) {
     print "\n\n-- Debug information:\n<p>".$db->sqllog()."</p>";
 }
 
-if (!is_null($currentSave) && $currentAction != 'savedcontent' && $currentAction != 'savedlogs') {
-    print "</body></html>";
-}
-
 $db->dbclose();
+?>
+</body>
+</html>

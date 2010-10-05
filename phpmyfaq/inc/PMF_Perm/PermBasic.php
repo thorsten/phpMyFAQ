@@ -23,6 +23,10 @@
  * @since     2005-09-17
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * PMF_Perm_PermBasic
  *
