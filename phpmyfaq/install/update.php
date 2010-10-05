@@ -657,9 +657,12 @@ if ($step == 4) {
         ob_flush();
         flush();
         $count = 0;
-        foreach ($query as $current_query) {
+        foreach ($query as $key => $current_query) {
             $result = @$db->query($current_query);
             print '.';
+            if (!($key % 100)) {
+                print '<br />';
+            }
             if (!$result) {
                 print "</div>";
                 print "\n<div class=\"error\">\n";
