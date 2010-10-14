@@ -77,3 +77,6 @@ $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('socialnetworks.enab
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('spam.checkBannedWords', 'true')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('spam.enableCaptchaCode', 'true')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('spam.enableSafeEmail', 'true')";
+
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('socialnetworks.twitterAccessTokenKey', '')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('socialnetworks.twitterAccessTokenSecret', '')";
