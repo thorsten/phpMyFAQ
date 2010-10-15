@@ -29,6 +29,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+require_once PMF_ROOT_DIR . '/inc/libs/twitteroauth/twitteroauth.php';
+
+
 // Re-evaluate $user
 $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
@@ -72,9 +75,11 @@ if ($permission['editbt']) {
         $logging = new PMF_Logging();
         $logging->logAdmin($user, 'Beitragcreatesave');
         printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
-        
+
+        $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
+        $tagging  = new PMF_Tags();
+
         $recordData     = array(
-            'id'            => null,
             'lang'          => $record_lang,
             'active'        => $active,
             'sticky'        => (!is_null($sticky) ? 1 : 0),
@@ -91,81 +96,61 @@ if ($permission['editbt']) {
             'linkDateCheck' => 0);
         
         // Add new record and get that ID
-        $faqRecord    = new PMF_Faq_Record();
-        $faqChangelog = new PMF_Faq_Changelog();
-        if ($faqRecord->create($recordData)) {
-            
-            $recordId = $faqRecord->getRecordId();
-            
+        $record_id = $faq->addRecord($recordData);
+
+        if ($record_id) {
             // Create ChangeLog entry
-            $changelogData = array(
-                'record_id'   => $recordId,
-                'record_lang' => $recordData['lang'],
-                'revision_id' => 0,
-                'user_id'     => $user->getUserId(),
-                'date'        => $_SERVER['REQUEST_TIME'],
-                'changelog'   => nl2br($changed));
-            
-            $faqChangelog->create($changelogData);
-            
+            $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $recordData['lang']);
             // Create the visit entry
             $visits = PMF_Visits::getInstance();
-            $visits->add($recordId, $recordData['lang']);
-            
+            $visits->add($record_id, $recordData['lang']);
             // Insert the new category relations
-            $categoryRelations = new PMF_Category_Relations();
-
+            $faq->addCategoryRelations($categories['rubrik'], $record_id, $recordData['lang']);
             // Insert the tags
             if ($tags != '') {
-                $tagging = new PMF_Tags();
-                $tagging->saveTags($recordId, explode(',',$tags));
+                $tagging->saveTags($record_id, explode(',',$tags));
             }
             
-            // Set record permissions
-            $faqUser = new PMF_Faq_User();
-            $faqUser->create(array('record_id' => $recordId, 'user_id' => $restricted_users));
+            // Add user permissions
+            $faq->addPermission('user', $record_id, $restricted_users);
+            $category->addPermission('user', $categories['rubrik'], $restricted_users);
+            // Add group permission
             if ($faqconfig->get('main.permLevel') != 'basic') {
-                $faqGroup = new PMF_Faq_Group();
-                $faqGroup->create(array('record_id' => $recordId, 'group_id' => $restricted_groups));
+                $faq->addPermission('group', $record_id, $restricted_groups);
+                $category->addPermission('group', $categories['rubrik'], $restricted_groups);
             }
-            
-            // Loop the categories
-            $categoryUser      = new PMF_Category_User();
-            $categoryGroup     = new PMF_Category_Group();
-            $categoryRelations = new PMF_Category_Relations();
-            $categoryRelations->setLanguage($recordData['lang']);
-            foreach ($categories['rubrik'] as $categoryId) {
-                
-                // Insert the new category relations
-                $categoryData = array(
-                    'category_id'   => $categoryId,
-                    'category_lang' => $categoryRelations->getLanguage(),
-                    'record_id'     => $recordId,
-                    'record_lang'   => $recordData['lang']);
-                // save or update the category relations
-                $categoryRelations->create($categoryData);
-                
-                // Add user permissions
-                $userPermission = array(
-                    'category_id' => $categoryId,
-                    'user_id'     => $restricted_users);
-                $categoryUser->delete($categoryId);
-                $categoryUser->create($userPermission);
-                
-                // Add group permission
-                if ($groupSupport) {
-                    $groupPermission = array(
-                        'category_id' => $categoryId,
-                        'group_id'    => $restricted_groups);
-                    $categoryGroup->delete($categoryId);
-                    $categoryGroup->create($groupPermission);
-                }
-            }
-            
+
             print $PMF_LANG['ad_entry_savedsuc'];
-            
+
             // Call Link Verification
-            link_ondemand_javascript($recordId, $recordData['lang']);
+            link_ondemand_javascript($record_id, $recordData['lang']);
+            
+			// Post to Twitter Status 
+            if ($faqconfig->get('socialnetworks.enableTwitterSupport') == '1') {			
+				$connection = new TwitterOAuth($faqconfig->get('socialnetworks.twitterConsumerKey'),
+                               $faqconfig->get('socialnetworks.twitterConsumerSecret'),
+                               $faqconfig->get('socialnetworks.twitterAccessTokenKey'),
+                               $faqconfig->get('socialnetworks.twitterAccessTokenSecret'));
+				if ($connection) {
+		            if ($tags != '') {
+                		$hashtags = "#" . str_replace(',',' #',$tags);
+            		}
+					$message = html_entity_decode($question);
+					$message .= " " . $hashtags;
+					$link = PMF_Link::getSystemRelativeUri().sprintf('?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s', 
+    					null, 
+    					$category, 
+    					$record_id, 
+    					$record_lang);
+    				$link = $faqconfig->get('main.referenceURL') . str_replace('/admin/','/',$link);
+					$oLink = new PMF_Link($link);
+					$oLink->itemTitle   = $faq->getRecordTitle($question, false);
+					$link = $oLink->toString();
+
+           			$message .= " " . $link;
+					$connection->post('statuses/update', array('status' => $message));
+				}
+            }
 ?>
     <script type="text/javascript">
     <!--
@@ -180,6 +165,7 @@ if ($permission['editbt']) {
         } else {
             print $PMF_LANG['ad_entry_savedfail'].$db->error();
         }
+
     } else {
         printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
         printf("<p>%s</p>", $PMF_LANG['ad_entryins_fail']);
