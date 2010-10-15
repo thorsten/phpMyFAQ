@@ -29,10 +29,28 @@
 define('PMF_ROOT_DIR', dirname(dirname(dirname(__FILE__))));
 define('IS_VALID_PHPMYFAQ', null);
 require_once PMF_ROOT_DIR . '/inc/Init.php';
+require_once PMF_ROOT_DIR . '/inc/libs/twitteroauth/twitteroauth.php';
 
 PMF_Init::cleanRequest();
+
 session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
-session_destroy();
 
-header('Location: ./connect.php');
+$connection = new TwitterOAuth($faqconfig->get('socialnetworks.twitterConsumerKey'),
+                               $faqconfig->get('socialnetworks.twitterConsumerSecret'));
+                               
+$requestToken = $connection->getRequestToken($faqconfig->get('main.referenceURL') . 
+                                             '/services/twitter/callback.php');
+
+$_SESSION['oauth_token']        = $requestToken['oauth_token'];
+$_SESSION['oauth_token_secret'] = $requestToken['oauth_token_secret'];
+
+switch ($connection->http_code) {
+    case 200:
+        $url = $connection->getAuthorizeURL($requestToken['oauth_token']);
+        header('Location: ' . $url);
+        break;
+    default:
+        print 'Could not connect to Twitter. Refresh the page or try again later.';
+        break;
+}
