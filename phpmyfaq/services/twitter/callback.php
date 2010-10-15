@@ -28,10 +28,11 @@
 // Prepend and start the PHP session
 //
 define('PMF_ROOT_DIR', dirname(dirname(dirname(__FILE__))));
+define('IS_VALID_PHPMYFAQ', null);
 
 require_once PMF_ROOT_DIR . '/inc/Init.php';
 require_once PMF_ROOT_DIR . '/inc/libs/twitteroauth/twitteroauth.php';
-define('IS_VALID_PHPMYFAQ', null);
+
 PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
@@ -57,7 +58,7 @@ unset($_SESSION['oauth_token_secret']);
 
 if (200 === $connection->http_code) {
   $_SESSION['status'] = 'verified';
-  header('Location: ./index.php');
+  header('Location: http://seaseo.de/admin/index.php?action=config');
 } else {
   header('Location: ./clearsessions.php');
 }
