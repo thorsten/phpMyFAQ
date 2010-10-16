@@ -17,6 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Thomas Zeithaml <tom@annatom.de>
  * @copyright 2005-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
@@ -29,12 +30,24 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 require_once PMF_ROOT_DIR . '/lang/language_en.php';
+require_once PMF_ROOT_DIR . '/inc/libs/twitteroauth/twitteroauth.php';
+
+if (!empty($_SESSION['access_token'])) {
+    $connection = new TwitterOAuth($faqconfig->get('socialnetworks.twitterConsumerKey'),
+                                   $faqconfig->get('socialnetworks.twitterConsumerSecret'),
+                                   $_SESSION['access_token']['oauth_token'],
+                                   $_SESSION['access_token']['oauth_token_secret']);
+    $content = $connection->get('account/verify_credentials');
+}
 
 $configMode           = PMF_Filter::filterInput(INPUT_GET, 'conf', FILTER_SANITIZE_STRING, 'main');
 $availableConfigModes = array(
-        'main'      => 1,
-        'records'   => 1,
-        'spam'      => 1);
+        'main'    => 1,
+        'records' => 1,
+        'spam'    => 1,
+        'social'  => 1);
+
+
 
 function printInputFieldByType($key, $type)
 {
