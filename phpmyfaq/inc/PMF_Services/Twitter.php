@@ -36,5 +36,42 @@
  */
 class PMF_Services_Twitter extends PMF_Services
 {
-    
+    /**
+     * @var TwitterOAuth
+     */
+    protected $connection = null;
+
+    /**
+     * Constructor
+     * 
+     * @param TwitterOAuth $connection
+     *
+     * @return PMF_Services_Twitter
+     */
+    public function __construct(TwitterOAuth $connection)
+    {
+        $this->connection = $connection;
+    }
+
+    /**
+     * @param string $question
+     * @param string $tags
+     * @param string $link
+     * 
+     * @return void
+     */
+    public function addPost($question, $tags, $link)
+    {
+        $hashtags = $message = '';
+        
+        if ($tags != '') {
+            $hashtags = '#' . str_replace(',', ' #', $tags);
+        }
+
+        $message  = PMF_String::htmlspecialchars($question);
+        $message .= " " . $hashtags;
+        $message .= " " . $link;
+
+        $this->connection->post('statuses/update', array('status' => $message));
+    }
 }
