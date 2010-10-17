@@ -26,6 +26,7 @@
 set_time_limit(0);
 
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
+define('IS_VALID_PHPMYFAQ', null);
 
 //
 // Check if config/database.php exist -> if not, redirect to installer
@@ -42,10 +43,9 @@ require_once PMF_ROOT_DIR.'/inc/Init.php';
 PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH.trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
-
-
-?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+?>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>phpMyFAQ Attachment Migration</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -64,7 +64,7 @@ session_start();
     
     $options = array();
     
-    switch($migrationType) {
+    switch ($migrationType) {
         case PMF_Attachment_Migration::MIGRATION_TYPE1:
             //TODO implenemt this
             break;
@@ -78,35 +78,23 @@ session_start();
             break;
             
         default:
-            echo '<center><h2><font color="red">BACKUP YOUR FILES BEFORE ',
-                 'PROCEED!!!</font></h2></center>';
+            echo '<h2 style="color: red;">BACKUP YOUR FILES BEFORE PROCEED!!!</h2>';
             showForm();
             break;
             
     }
     
-    if(!empty($migrationType))
-    {
-        if($migration->doMigrate($migrationType, $options)) {
-            echo '<br><center><h2><font color="green">Success</font></h2></center>';
+    if (!empty($migrationType)) {
+        if ($migration->doMigrate($migrationType, $options)) {
+            print '<br><h2 style="color: green;">Success</h2>';
         } else {
-            echo '<center>',
-                 '<font color="red">',
-                 'Errors:',
-                 '</font><br>',
-                 implode('<br>', $migration->getErrors()),
-                 '</center>';
+            print '<span style="color: red">Errors:</span><br>' . implode('<br>', $migration->getErrors());
             showForm();
         }
         
         $warnings = $migration->getWarnings();
         if(!empty($warnings)) {
-            echo '<center>',
-                 '<font color="yellow">',
-                 'Warnings:',
-                 '</font><br>',
-                 implode('<br>', $migration->getWarnings()),
-                 '</center>';
+            echo '<span style="color: yellow">Warnings:</span><br>' . implode('<br>', $migration->getWarnings());
         }
     }
     
@@ -140,7 +128,6 @@ function showOptions(migrationType)
     document.getElementById('optionFields').innerHTML = html
 }
 </script>
-<center>
 <form method="post">
     <table>
         <tr>
@@ -170,7 +157,6 @@ function showOptions(migrationType)
         <tr><td><input type="submit"></td></tr>
     </table>
 </form>
-</center>
 <?php     
 }   
     
