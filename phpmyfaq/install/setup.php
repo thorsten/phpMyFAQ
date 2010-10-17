@@ -42,13 +42,16 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
 }
 
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<!doctype html>
+<html lang="en" class="no-js">
 <head>
-    <title>phpMyFAQ <?php print VERSION; ?> Setup</title>
-    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
-    <link rel="shortcut icon" href="../template/default/favicon.ico" type="image/x-icon" />
-    <link rel="icon" href="../template/default/favicon.ico" type="image/x-icon" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>phpMyFAQ <?php print NEWVERSION; ?> Setup</title>
+    <link rel="shortcut icon" href="../template/default/favicon.ico">
+    <link rel="apple-touch-icon" href="../template/default/apple-touch-icon.png">
+    <link rel="stylesheet" href="style/setup.css?v=1">
     <script language="javascript" type="text/javascript">
     /*<![CDATA[*/
     // <!--
@@ -86,7 +89,6 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     // -->
     /*]]>*/
     </script>
-    <style media="screen" type="text/css">@import url(style/setup.css);</style>
 </head>
 <body>
 

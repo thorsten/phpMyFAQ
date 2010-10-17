@@ -37,14 +37,15 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
 }
 
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!doctype html>
+<html lang="en" class="no-js">
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>phpMyFAQ <?php print NEWVERSION; ?> Update</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="shortcut icon" href="../template/default/favicon.ico" type="image/x-icon" />
-    <link rel="icon" href="../template/default/favicon.ico" type="image/x-icon" />
-    <style media="screen" type="text/css">@import url(style/setup.css);</style>
+    <link rel="shortcut icon" href="../template/default/favicon.ico">
+    <link rel="apple-touch-icon" href="../template/default/apple-touch-icon.png">
+    <link rel="stylesheet" href="style/setup.css?v=1">
 </head>
 <body>
 
@@ -123,7 +124,7 @@ if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable($templateDir)
         $templateDir);
 }
 ?>
-<h3 align="center">Your current phpMyFAQ version: <?php print $version; ?></p>
+<p align="center">Your current phpMyFAQ version: <?php print $version; ?></p>
 <input name="version" type="hidden" value="<?php print $version; ?>"/>
 
 <p class="center"><input type="submit" value="Go to step 2 of 4" class="button" /></p>
@@ -648,6 +649,10 @@ if ($step == 4) {
     //
     if (version_compare($version, '2.7.0-alpha', '<')) {
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.enableTwitterSupport', 'false')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.twitterConsumerKey', '')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.twitterConsumerSecret', '')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.twitterAccessTokenKey', '')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.twitterAccessTokenSecret', '')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.enableFacebookSupport', 'false')";
     }
     
