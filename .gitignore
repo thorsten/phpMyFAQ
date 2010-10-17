@@ -4,6 +4,9 @@
 .settings*
 .buildpath
 
+# PhpStorm folder
+.idea*
+
 # phpMyFAQ generated folders
 
 phpmyfaq/config/database.php
