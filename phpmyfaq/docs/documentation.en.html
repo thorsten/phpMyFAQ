@@ -1,6 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Documentation for phpMyFAQ 2.7.x</title>
     <style type="text/css"><!--
     body { font: normal normal 14px "Trebuchet MS", Verdana, Geneva, Arial, Helvetica, sans-serif; line-height: 20px; }
@@ -11,7 +13,6 @@
     ol.alpha { list-style-type: lower-alpha; }
     -->
     </style>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body>
 <!-- start of documentation -->
@@ -41,6 +42,7 @@
             <li><a href="#2l">Static solution ID</a></li>
             <li><a href="#2m">Spam protection</a></li>
             <li><a href="#2n">Attachments</a></li>
+            <li><a href="#2o">Twitter</a></li>
         </ol></li>
         <li><strong><a href="#3">Upgrading</a></strong>
         <ol class="alpha">
@@ -106,8 +108,8 @@
     revision feature, a news system, user-tracking, language modules, enhanced
     automatic content negotiation, templates, extensive XML-support, PDF-support,
     a backup-system, a dynamic site map, related articles, tagging, RSS feeds,
-    built-in spam protection systems, LDAP support, and an easy to use installation
-    script.</p>
+    built-in spam protection systems, LDAP support, Twitter support, and an easy
+    to use installation script.</p>
     <p>This documentation should help you with installing and administrating
     phpMyFAQ.</p>
     <p><a href="#top">back to top</a></p>
@@ -154,7 +156,7 @@
 
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="1c"></a><strong>1.c. Copyright</strong></p>
-    <p>&copy; 2001-2009 by Thorsten Rinne and phpMyFAQ Team under the
+    <p>&copy; 2001-2010 by Thorsten Rinne and phpMyFAQ Team under the
     <a href="http://www.mozilla.org/MPL/MPL-1.1.html">Mozilla Public License</a>.
     All rights reserved.</p>
     <p><a href="#top">back to top</a></p>
@@ -196,7 +198,7 @@
             Database</a> 8.2.x, 9.1.x, <a href="http://www-306.ibm.com/software/data/cloudscape/">
             IBM Cloudscape</a>, and <a href="http://db.apache.org/derby/">
             Apache Derby</a></li>
-            <li><a href="http://www.sqlite.org">SQLite</a></li>
+            <li><a href="http://www.sqlite.org">SQLite</a>
             (experimental)</li>
             <li><a href="http://www.firebirdsql.org">Firebird</a> /
             <a href="http://www.codegear.com/products/interbase">Interbase</a>
@@ -440,6 +442,7 @@
     one word per line.</p>
     <p><a href="#top">back to top</a></p>
 
+
     <hr style="width: 90%; height: 1px;" />
     <p><strong><a name="2n"></a>2.n. Attachments</strong></p>
     <p>Starting with version 2.6 phpMyFAQ supports encrypted attachments. The 
@@ -467,6 +470,16 @@
         <li>Download continuation isn't (yet?) supported.</li>
     </ul>
     </p>
+    <p><a href="#top">back to top</a></p>
+
+
+    <hr style="width: 90%; height: 1px;" />
+    <p><strong><a name="2o"></a>2.o. Twitter</strong></p>
+    <p>Starting with version 2.7 phpMyFAQ supports Twitter via OAuth. If you enable
+    Twitter support in the social network configuration and add phpMyFAQ as a
+    Twitter application on twitter.com, all new FAQ additions in the administration
+    backend will also post the question of the FAQ, the URL of the FAQ and all
+    tags as hashtags to Twitter.</p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -712,7 +725,7 @@
    
    
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4k">4.k. Public user registration</strong></p>
+    <p><strong><a name="4k"></a>4.k. Public user registration</strong></p>
     <p>On the left column of the default layout the users of the FAQ also have the
     possibility to register themselves. The user generated accounts are unactivated
     by default and the administrator has to activate them.</p>
@@ -978,9 +991,9 @@
     <p><strong><a name="5k"></a>5.k. Configuration</strong></p>
     <ul>
         <li><strong>Main FAQ configuration</strong><br />
-        Here you can edit the general, the record and spam protection settings of
-        phpMyFAQ. Should you want to enter multiple email addresses in the configuration
-        separate them by a comma (",").</li>
+        Here you can edit the general, the record, spam protection and social networks
+        settings of phpMyFAQ. Should you want to enter multiple email addresses in the
+        configuration separate them by a comma (",").</li>
         <li><strong>URL Verifier configuration</strong><br />
         The URL Verifier works in the back while you save a new FAQ. It checks your added
         FAQ for links and tests the accessibility of all links in your document. In the
@@ -1223,7 +1236,7 @@
     Author: <a href="mailto:thorsten AT phpmyfaq DOT de">Thorsten Rinne</a><br />
     Co-Authors: <a href="mailto:stephan AT yauh DOT de">Stephan Hochhaus</a>,
     <a href="mailto:mgl-mail AT t-online DOT de">Markus Gläser</a><br />
-    Last update: 2010-09-15</p>
+    Last update: 2010-10-17</p>
     <p>&copy; 2001-2010 phpMyFAQ Team</p>
     <p>This documentation is licensed under a <a href="http://creativecommons.org/licenses/by/2.0/" class="subfoot">Creative 
     Commons License</a>.</p>
