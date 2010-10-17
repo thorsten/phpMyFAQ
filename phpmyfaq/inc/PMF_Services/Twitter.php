@@ -16,7 +16,7 @@
  *
  * @category  phpMyFAQ
  * @package   PMF_Services
- * @author    Thorsten Rinne
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
@@ -28,7 +28,7 @@
  * 
  * @category  phpMyFAQ
  * @package   PMF_Services
- * @author    Thorsten Rinne
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
@@ -54,9 +54,11 @@ class PMF_Services_Twitter extends PMF_Services
     }
 
     /**
-     * @param string $question
-     * @param string $tags
-     * @param string $link
+     * Adds a post to Twitter
+     * 
+     * @param string $question Question
+     * @param string $tags     String of tags
+     * @param string $link     URL to FAQ
      * 
      * @return void
      */
