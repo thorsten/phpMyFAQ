@@ -143,9 +143,9 @@ input:invalid, textarea:invalid {
 .no-boxshadow input:invalid, .no-boxshadow textarea:invalid { 
     background-color: #f0dddd; }
 ::-moz-selection{ 
-    background: #FF5E99; color: #fff; text-shadow: none; }
+    background: #e46305; color: #fff; text-shadow: none; }
 ::selection { 
-    background: #FF5E99; color: #fff; text-shadow: none; } 
+    background: #e46305; color: #fff; text-shadow: none; } 
 a:link { 
     -webkit-tap-highlight-color: #FF5E99; } 
 button { 

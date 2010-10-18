@@ -43,12 +43,7 @@
     <header id="header">
         
         <div id="loginBox">
-            <div id="loginSelection">
-                <a href="#" onclick="javascript:loginForm();">{msgLoginUser}</a> | {msgRegisterUser}
-            </div>
-            <div id="loginForm">
-                {loginBox}
-            </div>
+            {loginBox}
         </div>
         
         <h1><a title="{header}" href="{faqHome}">{header}</a></h1>

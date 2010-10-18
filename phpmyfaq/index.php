@@ -511,6 +511,7 @@ if (isset($auth)) {
 } else {
     if (isset($_SERVER['HTTPS']) || !$faqconfig->get('main.useSslForLogins')) {
         $tpl->processTemplate('loginBox', array(
+            'msgLoginUser'    => $PMF_LANG['msgLoginUser'],
             'writeLoginPath'  => '?action=login',
             'login'           => $PMF_LANG['ad_auth_ok'],
             'username'        => $PMF_LANG['ad_auth_user'],
@@ -527,35 +528,22 @@ $tpl->includeTemplate('loginBox', 'index');
 
 // generate top ten list
 if ($faqconfig->get('main.orderingPopularFaqs') == 'visits') {
-    
-    // top ten list for most viewed entries
-    $toptenParams = $faq->getTopTen('visits');
-    if (!isset($toptenParams['error'])) {
-        $tpl->processBlock('rightBox', 'toptenList', array(
-            'toptenUrl'    => $toptenParams['url'],
-            'toptenTitle'  => $toptenParams['title'],
-            'toptenVisits' => $toptenParams['visits'])
-        );
-    } else {
-        $tpl->processBlock('rightBox', 'toptenListError', array(
-            'errorMsgTopTen' => $toptenParams['error'])
-        );
-    }
+    $param = 'visits';
 } else {
-
-    // top ten list for most voted entries
-    $toptenParams = $faq->getTopTen('voted');
-    if (!isset($toptenParams['error'])) {
-        $tpl->processBlock('rightBox', 'toptenList', array(
-            'toptenUrl'    => $toptenParams['url'],
-            'toptenTitle'  => $toptenParams['title'],
-            'toptenVisits' => $toptenParams['voted'])
-        );
-    } else {
-        $tpl->processBlock('rightBox', 'toptenListError', array(
-            'errorMsgTopTen' => $toptenParams['error'])
-        );
-    }
+    $param = 'voted';
+}
+    
+$toptenParams = $faq->getTopTen($param);
+if (!isset($toptenParams['error'])) {
+    $tpl->processBlock('rightBox', 'toptenList', array(
+        'toptenUrl'    => $toptenParams['url'],
+        'toptenTitle'  => $toptenParams['title'],
+        'toptenVisits' => $toptenParams[$param])
+    );
+} else {
+    $tpl->processBlock('rightBox', 'toptenListError', array(
+        'errorMsgTopTen' => $toptenParams['error'])
+    );
 }
 
 $latestEntriesParams = $faq->getLatest();
@@ -578,7 +566,8 @@ $tpl->processTemplate('rightBox', array(
     'writeTags'           => $oTag->printHTMLTagsCloud(),
     'msgAllCatArticles'   => $PMF_LANG['msgAllCatArticles'],
     'allCatArticles'      => $faq->showAllRecordsWoPaging($cat))
-);
+    );
+
 $tpl->includeTemplate('rightBox', 'index');
 
 //
