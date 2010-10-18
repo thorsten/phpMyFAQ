@@ -239,6 +239,8 @@ button {
     color: #cbcbcb; text-decoration: none; }
 #searchBox a.help {
     margin-right: 10px; padding: 0 12px 0 0; background: url(../images/arrow.gif) no-repeat scroll right 55% transparent; }
+#searchBox a.help:hover {
+	color: #fff; }
 #rightcolumn {
     float: right; width: 200px; }
 
