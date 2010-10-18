@@ -1021,8 +1021,8 @@ $PMF_LANG["plmsgViews"][0] = "%d 回の閲覧";
 $PMF_LANG["plmsgViews"][1] = "%d 回の閲覧";
 
 // added 2.6.0-alpha - 2009-08-30 by Aurimas Fišeras - Plural messages
-$PMF_LANG['plmsgGuestOnline'][0] = ' :: %d 人のゲスト';
-$PMF_LANG['plmsgGuestOnline'][1] = ' :: %d 人のゲスト';
+$PMF_LANG['plmsgGuestOnline'][0] = '%d 人のゲスト';
+$PMF_LANG['plmsgGuestOnline'][1] = '%d 人のゲスト';
 $PMF_LANG['plmsgRegisteredOnline'][0] = ' and %d Registered';
 $PMF_LANG['plmsgRegisteredOnline'][1] = ' and %d Registered';
 $PMF_LANG["plmsgSearchAmount"][0] = "%d 件の検索結果";

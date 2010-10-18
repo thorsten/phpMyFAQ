@@ -999,9 +999,9 @@ $PMF_LANG["plmsgViews"][1] = "%d peržiūros";
 $PMF_LANG["plmsgViews"][2] = "%d peržiūrų";
 
 // added 2.6.0-alpha - 2009-08-30 by Aurimas Fišeras - Plural messages
-$PMF_LANG['plmsgGuestOnline'][0] = ' :: %d svečias';
-$PMF_LANG['plmsgGuestOnline'][1] = ' :: %d svečiai';
-$PMF_LANG['plmsgGuestOnline'][2] = ' :: %d svečių';
+$PMF_LANG['plmsgGuestOnline'][0] = '%d svečias';
+$PMF_LANG['plmsgGuestOnline'][1] = '%d svečiai';
+$PMF_LANG['plmsgGuestOnline'][2] = '%d svečių';
 $PMF_LANG['plmsgRegisteredOnline'][0] = ' ir %d registruotas';
 $PMF_LANG['plmsgRegisteredOnline'][1] = ' ir %d registruoti';
 $PMF_LANG['plmsgRegisteredOnline'][2] = ' ir %d registruotų';
