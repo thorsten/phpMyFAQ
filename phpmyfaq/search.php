@@ -162,6 +162,7 @@ if ('' == $printResult && !is_null($inputSearchTerm)) {
 
 $tpl->processTemplate('writeContent', array(
     'msgAdvancedSearch'        => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgAdvancedSearch']),
+    'msgSearch'                => $PMF_LANG['msgSearch'],
     'searchString'             => PMF_String::htmlspecialchars($inputSearchTerm, ENT_QUOTES, 'utf-8'),
     'searchOnAllLanguages'     => $PMF_LANG['msgSearchOnAllLanguages'],
     'checkedAllLanguages'      => $allLanguages ? ' checked="checked"' : '',
