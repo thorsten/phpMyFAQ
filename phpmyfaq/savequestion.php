@@ -70,8 +70,6 @@ function sendAskedQuestion($username, $usermail, $usercat, $content)
         'ask_date'     => date('YmdHis'),
         'is_visible'   => $visibility);
 
-    list($user, $host) = explode("@", $questionData['ask_usermail']);
-    
     if (PMF_Filter::filterVar($questionData['ask_usermail'], FILTER_VALIDATE_EMAIL) != false) {
 
         $faq->addQuestion($questionData);
