@@ -143,9 +143,9 @@ input:invalid, textarea:invalid {
 .no-boxshadow input:invalid, .no-boxshadow textarea:invalid { 
     background-color: #f0dddd; }
 ::-moz-selection{ 
-    background: #FF5E99; color: #fff; text-shadow: none; }
+    background: #e46305; color: #fff; text-shadow: none; }
 ::selection { 
-    background: #FF5E99; color: #fff; text-shadow: none; } 
+    background: #e46305; color: #fff; text-shadow: none; } 
 a:link { 
     -webkit-tap-highlight-color: #FF5E99; } 
 button { 
@@ -202,11 +202,35 @@ button {
     border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px; }
 
 #leftcolumn {
-    float: left; width: 175px; }
+    float: left; width: 200px; }
+#categories {
+    margin-bottom: 2em; width: 190px; border-left: 1px dotted #444; }
+#categories ul {
+    list-style: none; border-top: 1px dotted #444; margin: 0 auto; }
+#categories ul ul, #categories ul ul ul, #categories ul ul ul ul, #categories ul ul ul ul ul { border-top: 0; }
+#categories li { 
+	margin: 0; padding: 0; }
+#categories li a {
+    display: block; border-bottom: 1px dotted #444; text-decoration: none; height: 100%; padding: .5em 0 .5em .5em; 
+    font-size: 110%; color: #1E4262; }
+#categories li ul a { padding-left: 1em; }
+#categories ul ul ul a { padding-left: 2em; }
+#categories ul ul ul ul a { padding-left: 3em; }
+#categories ul ul ul ul ul a { padding-left: 4em; }
+#categories a:hover {
+    background: #fff; }
+#categories .active { 
+	font-weight: bold; }
+#categories .subcat .active {}
+#useronline { 
+	margin-top: 1em; margin-bottom: 1em;  text-align: center; }
+
+/* My Comment */
+
 #maincontent {
-    float: left; width: 610px; }
+    float: left; width: 560px; }
 #searchBox {
-    background: #6a6b6a; margin-bottom: 2em; overflow: hidden; padding: 20px; width: 550px; color: #fff;
+    background: #6a6b6a; margin-bottom: 2em; overflow: hidden; padding: 20px; width: 500px; color: #fff;
     border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; }
 #searchBox input[type=text] {
     width: 400px; height: 1.66em; font-size: 1.33em; margin-bottom: 5px;
@@ -215,8 +239,10 @@ button {
     color: #cbcbcb; text-decoration: none; }
 #searchBox a.help {
     margin-right: 10px; padding: 0 12px 0 0; background: url(../images/arrow.gif) no-repeat scroll right 55% transparent; }
+#searchBox a.help:hover {
+	color: #fff; }
 #rightcolumn {
-    float: right; width: 175px; }
+    float: right; width: 200px; }
 
 #footer {
     background: #1A3857; height: 30px; line-height: 30px; margin: 0 auto 2em auto; padding: 0; width: 100%; 

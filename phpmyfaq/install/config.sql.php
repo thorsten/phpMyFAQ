@@ -71,6 +71,8 @@ $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.sortby', 'D
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('socialnetworks.enableTwitterSupport', 'false')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('socialnetworks.twitterConsumerKey', '')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('socialnetworks.twitterConsumerSecret', '')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('socialnetworks.twitterAccessTokenKey', '')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('socialnetworks.twitterAccessTokenSecret', '')";
 
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('socialnetworks.enableFacebookSupport', 'false')";
         

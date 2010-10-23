@@ -41,7 +41,7 @@ if ($permission['delcomment']) {
     printf("<h3>%s</h3>\n", $PMF_LANG['ad_comment_faqs']);
     if (count($faqcomments)) {
 ?>
-    <form id="commentSelection" name="commentSelection" method="post">
+    <form id="faqCommentSelection" name="faqCommentSelection" method="post">
     <input type="hidden" name="ajax" value="comment" />
     <input type="hidden" name="ajaxaction" value="delete" />
     <table class="listrecords">
@@ -77,7 +77,7 @@ if ($permission['delcomment']) {
     </form>
 <?php
     } else {
-        print '<p><strong>0</strong></p>';
+        print '<p><strong>n/a</strong></p>';
     }
 
     $newscomments = $comment->getAllComments('news');
@@ -85,7 +85,7 @@ if ($permission['delcomment']) {
     printf("<h3>%s</h3>\n", $PMF_LANG['ad_comment_news']);
     if (count($newscomments)) {
 ?>
-    <form id="commentSelection" name="commentSelection" method="post">
+    <form id="newsCommentSelection" name="newsCommentSelection" method="post">
     <input type="hidden" name="ajax" value="comment" />
     <input type="hidden" name="ajaxaction" value="delete" />
     <table class="listrecords">
@@ -110,7 +110,7 @@ if ($permission['delcomment']) {
     </table>
 <?php
     } else {
-        print '<p><strong>0</strong></p>';
+        print '<p><strong>n/a</strong></p>';
     }
 ?>
     </form>
@@ -119,7 +119,16 @@ if ($permission['delcomment']) {
     /* <![CDATA[ */
     $(document).ready(function() {
     $('.submit').click(function () {
-        var comments = $('#commentSelection').serialize();
+        var comments     = '';
+        var faqComments  = $('#faqCommentSelection').serialize();
+        var newsComments = $('#newsCommentSelection').serialize();
+        
+        if ('' != faqComments) {
+            comments = faqComments;
+        } else {
+            comments = newsComments;
+        }
+        
         $.ajax({
             type: "POST",
             url:  "index.php?action=ajax&ajax=comment",

@@ -166,6 +166,29 @@ if ($permission['editbt']) {
             
             // Call Link Verification
             link_ondemand_javascript($recordId, $recordData['lang']);
+
+            // Callback to Twitter if enabled
+            if ($faqconfig->get('socialnetworks.enableTwitterSupport')) {
+                $connection = new TwitterOAuth($faqconfig->get('socialnetworks.twitterConsumerKey'),
+                                               $faqconfig->get('socialnetworks.twitterConsumerSecret'),
+                                               $faqconfig->get('socialnetworks.twitterAccessTokenKey'),
+                                               $faqconfig->get('socialnetworks.twitterAccessTokenSecret'));
+
+                $link = PMF_Link::getSystemRelativeUri() .
+                        sprintf('?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                            $category,
+                            $record_id,
+                            $record_lang);
+                $link             = $faqconfig->get('main.referenceURL') . str_replace('/admin/','/', $link);
+                $oLink            = new PMF_Link($link);
+                $oLink->itemTitle = $question;
+                $link             = $oLink->toString();
+                
+                if ($connection) {
+                    $twitter = new PMF_Services_Twitter($connection);
+                    $twitter->addPost($question, $tags, $link);
+                }
+            }
 ?>
     <script type="text/javascript">
     <!--

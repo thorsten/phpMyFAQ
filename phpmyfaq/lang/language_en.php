@@ -1024,8 +1024,8 @@ $PMF_LANG["plmsgViews"][0] = "%d view";
 $PMF_LANG["plmsgViews"][1] = "%d views";
 
 // added 2.6.0-alpha - 2009-08-30 by Aurimas Fišeras - Plural messages
-$PMF_LANG['plmsgGuestOnline'][0] = ' :: %d Guest';
-$PMF_LANG['plmsgGuestOnline'][1] = ' :: %d Guests';
+$PMF_LANG['plmsgGuestOnline'][0] = '%d Guest';
+$PMF_LANG['plmsgGuestOnline'][1] = '%d Guests';
 $PMF_LANG['plmsgRegisteredOnline'][0] = ' and %d Registered';
 $PMF_LANG['plmsgRegisteredOnline'][1] = ' and %d Registered';
 $PMF_LANG["plmsgSearchAmount"][0] = "%d search result";
@@ -1092,7 +1092,11 @@ $PMF_LANG['socialNetworksControlCenter'] = 'Social networks configuration';
 $LANG_CONF['socialnetworks.enableTwitterSupport'] = array(0 => 'checkbox', 1 => 'Twitter support (default: deactivated)');
 $LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => 'input', 1 => 'Twitter Consumer Key');
 $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'Twitter Consumer Secret');
+
+// added 2.7.0-alpha - 2010-10-14 by Tom Zeithaml
+$LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => 'Twitter Access Token Key');
+$LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'Twitter Access Token Secret');
 $LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Facebook support (default: deactivated)');
 
-// added 3.0.0-alpha 
+// added 3.0.0-alpha
 $LANG_CONF['main.useAjaxMenu'] = array(0 => 'checkbox', 1 => 'Ajax powered frontend (default: deactivated)');

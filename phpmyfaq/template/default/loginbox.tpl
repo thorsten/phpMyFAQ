@@ -1,4 +1,8 @@
-                
+
+            <div id="loginSelection">
+                <a href="#" onclick="javascript:loginForm();">{msgLoginUser}</a> | {msgRegisterUser}
+            </div>
+            <div id="loginForm">                
                 <form action="{writeLoginPath}" method="post">
                     <label for="faqusername">{username}</label><br>
                     <input type="text" name="faqusername" id="faqusername" size="16" required="true"><br>
@@ -7,3 +11,4 @@
                     <input type="submit" value="{login}">
                 </form>
                 <span class="error">{msgLoginFailed}</span>
+            </div>

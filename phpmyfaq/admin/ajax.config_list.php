@@ -17,6 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Thomas Zeithaml <tom@annatom.de>
  * @copyright 2005-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
@@ -29,12 +30,24 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 require_once PMF_ROOT_DIR . '/lang/language_en.php';
+require_once PMF_ROOT_DIR . '/inc/libs/twitteroauth/twitteroauth.php';
+
+if (!empty($_SESSION['access_token'])) {
+    $connection = new TwitterOAuth($faqconfig->get('socialnetworks.twitterConsumerKey'),
+                                   $faqconfig->get('socialnetworks.twitterConsumerSecret'),
+                                   $_SESSION['access_token']['oauth_token'],
+                                   $_SESSION['access_token']['oauth_token_secret']);
+    $content = $connection->get('account/verify_credentials');
+}
 
 $configMode           = PMF_Filter::filterInput(INPUT_GET, 'conf', FILTER_SANITIZE_STRING, 'main');
 $availableConfigModes = array(
-        'main'      => 1,
-        'records'   => 1,
-        'spam'      => 1);
+        'main'    => 1,
+        'records' => 1,
+        'spam'    => 1,
+        'social'  => 1);
+
+
 
 function printInputFieldByType($key, $type)
 {
@@ -52,9 +65,16 @@ function printInputFieldByType($key, $type)
             break;
 
         case 'input':
+            if ('' == $faqconfig->get($key) && 'socialnetworks.twitterAccessTokenKey' == $key) {
+                $value = $_SESSION['access_token']['oauth_token'];
+            } elseif ('' == $faqconfig->get($key) && 'socialnetworks.twitterAccessTokenSecret' == $key) {
+                $value = $_SESSION['access_token']['oauth_token_secret'];
+            } else {
+                $value = str_replace('"', '&quot;', $faqconfig->get($key));
+            }
             printf('<input type="text" name="edit[%s]" size="75" value="%s" style="width: 500px;" />',
                     $key,
-                    str_replace('"', '&quot;', $faqconfig->get($key)));
+                    $value);
             printf("<br />\n");
             break;
 
@@ -91,7 +111,7 @@ function printInputFieldByType($key, $type)
                     
                 case "main.templateSet":
                     /**
-                     * TODO: do get availiable template sets in the PMF_Template
+                     * TODO: do get available template sets in the PMF_Template
                      */
                     foreach (new DirectoryIterator('../template') as $item) {
                         if (!$item->isDot() && $item->isDir()) {
@@ -149,7 +169,31 @@ foreach ($LANG_CONF as $key => $value) {
     if (strpos($key, $configMode) === 0) {
 ?>
     <label class="leftconfig"><?php
-        if ($key == 'main.maxAttachmentSize') {
+        if ('socialnetworks.twitterConsumerKey' == $key) {
+            if ('' == $faqconfig->get('socialnetworks.twitterConsumerKey') ||
+                '' == $faqconfig->get('socialnetworks.twitterConsumerSecret')) {
+
+                print '<a taget="_blank" href="http://dev.twitter.com/apps/new">Create Twitter APP for your site</a>';
+                print "<br />\n";
+                print "Your Callback URL is: " .$faqconfig->get('main.referenceURL') . "/services/twitter/callback.php";
+            }
+            if ('' == $faqconfig->get('socialnetworks.twitterAccessTokenKey') ||
+                '' == $faqconfig->get('socialnetworks.twitterAccessTokenSecret')) {
+
+                print '<a href="../services/twitter/redirect.php"><img src="../images/twitter.signin.png" alt="Sign in with Twitter"/></a>';
+                print "<br />\n<br />\n";
+            } else {
+
+                print $content->screen_name . "<br />\n";
+                print "<img src='" . $content->profile_image_url . "'><br />\n";
+                print "Follower: " . $content->followers_count . "<br />\n";
+                print "Status Count: " . $content->statuses_count . "<br />\n";
+                print "Following: " . $content->following . "<br />\n";
+                print "Status: " . $content->status->text . "<br />\n";
+                print "<br />\n";
+            }
+        }
+        if ('main.maxAttachmentSize' == $key) {
             printf($value[1], ini_get('upload_max_filesize'));
         } else {
             print $value[1];

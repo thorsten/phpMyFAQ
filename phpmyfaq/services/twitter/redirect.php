@@ -17,6 +17,7 @@
  * @category  phpMyFAQ
  * @package   Services
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Thomas Zeithaml <tom@annatom.de>
  * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
@@ -27,10 +28,11 @@
 // Prepend and start the PHP session
 //
 define('PMF_ROOT_DIR', dirname(dirname(dirname(__FILE__))));
+define('IS_VALID_PHPMYFAQ', null);
 
 require_once PMF_ROOT_DIR . '/inc/Init.php';
 require_once PMF_ROOT_DIR . '/inc/libs/twitteroauth/twitteroauth.php';
-define('IS_VALID_PHPMYFAQ', null);
+
 PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
@@ -38,7 +40,7 @@ session_start();
 $connection = new TwitterOAuth($faqconfig->get('socialnetworks.twitterConsumerKey'),
                                $faqconfig->get('socialnetworks.twitterConsumerSecret'));
 
-$requestToken = $connection->getRequestToken($faqconfig->get('main.referenceURL') . 
+$requestToken = $connection->getRequestToken($faqconfig->get('main.referenceURL') .
                                              '/services/twitter/callback.php');
 
 $_SESSION['oauth_token']        = $requestToken['oauth_token'];

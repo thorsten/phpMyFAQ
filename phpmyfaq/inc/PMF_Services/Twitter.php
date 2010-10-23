@@ -16,7 +16,7 @@
  *
  * @category  phpMyFAQ
  * @package   PMF_Services
- * @author    Thorsten Rinne
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
@@ -28,7 +28,7 @@
  * 
  * @category  phpMyFAQ
  * @package   PMF_Services
- * @author    Thorsten Rinne
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
@@ -36,5 +36,44 @@
  */
 class PMF_Services_Twitter extends PMF_Services
 {
-    
+    /**
+     * @var TwitterOAuth
+     */
+    protected $connection = null;
+
+    /**
+     * Constructor
+     * 
+     * @param TwitterOAuth $connection
+     *
+     * @return PMF_Services_Twitter
+     */
+    public function __construct(TwitterOAuth $connection)
+    {
+        $this->connection = $connection;
+    }
+
+    /**
+     * Adds a post to Twitter
+     * 
+     * @param string $question Question
+     * @param string $tags     String of tags
+     * @param string $link     URL to FAQ
+     * 
+     * @return void
+     */
+    public function addPost($question, $tags, $link)
+    {
+        $hashtags = $message = '';
+        
+        if ($tags != '') {
+            $hashtags = '#' . str_replace(',', ' #', $tags);
+        }
+
+        $message  = PMF_String::htmlspecialchars($question);
+        $message .= " " . $hashtags;
+        $message .= " " . $link;
+
+        $this->connection->post('statuses/update', array('status' => $message));
+    }
 }

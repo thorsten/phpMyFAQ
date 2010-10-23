@@ -70,8 +70,6 @@ function sendAskedQuestion($username, $usermail, $usercat, $content)
         'date'        => date('YmdHis'),
         'is_visible'  => $visibility);
 
-    list($user, $host) = explode("@", $questionData['email']);
-    
     if (PMF_Filter::filterVar($questionData['email'], FILTER_VALIDATE_EMAIL) != false) {
         
         $faqQuestions = new PMF_Faq_Questions();
@@ -80,7 +78,7 @@ function sendAskedQuestion($username, $usermail, $usercat, $content)
         $categoryData = $categoryNode->fetch($questionData['category_id']);
         $questionMail = "User: ".$questionData['username'].", mailto:".$questionData['email']."\n"
                         .$PMF_LANG["msgCategory"].": ".$categoryData->name."\n\n"
-                        .wordwrap($content, 72);
+                       .wordwrap($content, 72);
                         
         $userId = $categoryData->user_id;
         $oUser  = new PMF_User();

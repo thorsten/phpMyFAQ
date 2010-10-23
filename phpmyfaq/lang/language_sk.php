@@ -996,8 +996,8 @@ $PMF_LANG["plmsgViews"][0] = "%d zobrazenie";
 $PMF_LANG["plmsgViews"][1] = "%d zobrazenia";
 
 // added 2.6.0-alpha - 2009-08-30 by Aurimas Fišeras - Plural messages
-$PMF_LANG['plmsgGuestOnline'][0] = ' :: %d Hosť';
-$PMF_LANG['plmsgGuestOnline'][1] = ' :: %d Hostia';
+$PMF_LANG['plmsgGuestOnline'][0] = '%d Hosť';
+$PMF_LANG['plmsgGuestOnline'][1] = '%d Hostia';
 $PMF_LANG['plmsgRegisteredOnline'][0] = ' a %d Registrovaný';
 $PMF_LANG['plmsgRegisteredOnline'][1] = ' a %d Registrovaní';
 $PMF_LANG["plmsgSearchAmount"][0] = "%d výsledok hľadania";

@@ -30,20 +30,22 @@ define('APIVERSION', 2);
 define('MINIMUM_PHP_VERSION', '5.3.0');
 define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
+define('IS_VALID_PHPMYFAQ', null);
 
 if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     set_time_limit(0);
 }
 
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!doctype html>
+<html lang="en" class="no-js">
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>phpMyFAQ <?php print NEWVERSION; ?> Update</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="shortcut icon" href="../template/default/favicon.ico" type="image/x-icon" />
-    <link rel="icon" href="../template/default/favicon.ico" type="image/x-icon" />
-    <style media="screen" type="text/css">@import url(style/setup.css);</style>
+    <link rel="shortcut icon" href="../template/default/favicon.ico">
+    <link rel="apple-touch-icon" href="../template/default/apple-touch-icon.png">
+    <link rel="stylesheet" href="style/setup.css?v=1">
 </head>
 <body>
 
@@ -122,7 +124,7 @@ if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable($templateDir)
         $templateDir);
 }
 ?>
-<h3 align="center">Your current phpMyFAQ version: <?php print $version; ?></p>
+<p align="center">Your current phpMyFAQ version: <?php print $version; ?></p>
 <input name="version" type="hidden" value="<?php print $version; ?>"/>
 
 <p class="center"><input type="submit" value="Go to step 2 of 4" class="button" /></p>
@@ -647,6 +649,10 @@ if ($step == 4) {
     //
     if (version_compare($version, '2.7.0-alpha', '<')) {
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.enableTwitterSupport', 'false')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.twitterConsumerKey', '')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.twitterConsumerSecret', '')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.twitterAccessTokenKey', '')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.twitterAccessTokenSecret', '')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.enableFacebookSupport', 'false')";
     }
     
@@ -663,9 +669,12 @@ if ($step == 4) {
         ob_flush();
         flush();
         $count = 0;
-        foreach ($query as $current_query) {
+        foreach ($query as $key => $current_query) {
             $result = @$db->query($current_query);
             print '.';
+            if (!($key % 100)) {
+                print '<br />';
+            }
             if (!$result) {
                 print "</div>";
                 print "\n<div class=\"error\">\n";
