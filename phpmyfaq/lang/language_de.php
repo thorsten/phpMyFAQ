@@ -908,9 +908,9 @@ $PMF_LANG['ad_searchstats_search_term_lang'] = 'Sprache';
 $PMF_LANG['ad_searchstats_search_term_percentage'] = 'Anteil';
 
 // added 2.5.0-beta - 2009-03-31 by Anatoliy
-$PMF_LANG['ad_record_sticky'] = 'Sticky';
-$PMF_LANG['ad_entry_sticky'] = 'Sticky';
-$PMF_LANG['stickyRecordsHeader'] = 'Sticky FAQs';
+$PMF_LANG['ad_record_sticky'] = 'Wichtig';
+$PMF_LANG['ad_entry_sticky'] = 'Wichtig';
+$PMF_LANG['stickyRecordsHeader'] = 'Wichtige FAQs';
 
 // added 2.5.0-beta - 2009-04-01 by Anatoliy
 $PMF_LANG['ad_menu_stopwordsconfig'] = 'Stoppw&ouml;rter';
@@ -980,8 +980,8 @@ $PMF_LANG['msgTransToolLanguageOnePlural'] = 'Diese Sprache hat nur eine Pluralf
 $PMF_LANG['msgTransToolLanguagePluralNotSet'] = "F&uuml;r %s ist die Unterst&uuml;tzung f&uuml;r Pluralformen deaktiviert (nplurals nicht gesetzt).";
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras - Plural messages
-$PMF_LANG["plmsgHomeArticlesOnline"][0] = "Es ist %d FAQ-Eintrag online-";
-$PMF_LANG["plmsgHomeArticlesOnline"][1] = "Es sind %d FAQ-Eintr&auml;ge online";
+$PMF_LANG["plmsgHomeArticlesOnline"][0] = "Es ist %d FAQ-Eintrag online.";
+$PMF_LANG["plmsgHomeArticlesOnline"][1] = "Es sind %d FAQ-Eintr&auml;ge online.";
 $PMF_LANG["plmsgViews"][0] = "%d mal gesehen";
 $PMF_LANG["plmsgViews"][1] = "%d mal gesehen";
 
