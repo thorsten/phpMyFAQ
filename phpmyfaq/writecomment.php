@@ -49,8 +49,8 @@ $tpl->processTemplate('writeContent', array(
                       'writeThema'          => $faq->getRecordTitle($id),
                       'msgNewContentName'   => $PMF_LANG['msgNewContentName'],
                       'msgNewContentMail'   => $PMF_LANG['msgNewContentMail'],
-                      'defaultContentMail'  => getEmailAddress(),
-                      'defaultContentName'  => getFullUserName(),
+                      'defaultContentMail'  => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
+                      'defaultContentName'  => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
                       'msgYourComment'      => $PMF_LANG['msgYourComment'],
                       'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
                       'captchaFieldset'     => PMF_Helper_Captcha::getInstance()->renderFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment'))));

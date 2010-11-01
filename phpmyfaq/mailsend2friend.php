@@ -35,32 +35,19 @@ $captcha->setSessionId($sids);
 
 $name     = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
 $mailfrom = PMF_Filter::filterInput(INPUT_POST, 'mailfrom', FILTER_VALIDATE_EMAIL);
-$mailto   = PMF_Filter::filterInputArray(INPUT_POST, array('mailto' => array('filter' => FILTER_VALIDATE_EMAIL, 'flags' => FILTER_REQUIRE_ARRAY | FILTER_NULL_ON_FAILURE)));
 $link     = PMF_Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
 $attached = PMF_Filter::filterInput(INPUT_POST, 'zusatz', FILTER_SANITIZE_STRIPPED);
 $code     = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
+$mailto   = PMF_Filter::filterInputArray(INPUT_POST,
+    array('mailto' =>
+        array('filter' => FILTER_VALIDATE_EMAIL,
+              'flags'  => FILTER_REQUIRE_ARRAY | FILTER_NULL_ON_FAILURE
+        )
+    )
+);
 
 if (!is_null($name) && !is_null($mailfrom) && is_array($mailto) && IPCheck($_SERVER['REMOTE_ADDR'])
     && checkBannedWord(PMF_String::htmlspecialchars($attached)) && $captcha->checkCaptchaCode($code)) {
-
-    // Backward compatibility: extract article info from the link, no template change required
-    $cat = $id = $artlang = null;
-    PMF_String::preg_match('`index\.php\?action=artikel&cat=(?<cat>[\d]+)&id=(?<id>[\d]+)&artlang=(?<artlang>[^$]+)$`', $link, $matches);
-    if (isset($matches['cat'])) {
-        $cat = (int)$matches['cat'];
-    }
-    if (isset($matches['id'])) {
-        $id = (int)$matches['id'];
-    }
-    if (isset($matches['artlang'])) {
-        $artlang = $matches['artlang'];
-    }
-    // Sanity check
-    if (is_null($cat) || is_null($id) || is_null($artlang)) {
-        header('HTTP/1.1 403 Forbidden');
-        print 'Invalid FAQ link.';
-        exit();
-    }
 
     foreach ($mailto['mailto'] as $recipient) {
         $recipient = trim(strip_tags($recipient));
@@ -70,7 +57,11 @@ if (!is_null($name) && !is_null($mailfrom) && is_array($mailto) && IPCheck($_SER
             $mail->setFrom($mailfrom, $name);
             $mail->addTo($recipient);
             $mail->subject = $PMF_LANG["msgS2FMailSubject"].$name;
-            $mail->message = $faqconfig->get("main.send2friendText")."\r\n\r\n".$PMF_LANG["msgS2FText2"]."\r\n".$link."\r\n\r\n".$attached;
+            $mail->message = sprintf("%s\r\n\r\n%s\r\n%s\r\n\r\n%s",
+                $faqconfig->get('main.send2friendText'),
+                $PMF_LANG['msgS2FText2'],
+                $link,
+                $attached);
             
             // Send the email
             $result = $mail->send();

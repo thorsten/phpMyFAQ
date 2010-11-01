@@ -2,7 +2,7 @@
 /**
  * The Ajax driven response page.
  *
- * PHP Version 5.2.0
+ * PHP Version 5.2
  * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -23,11 +23,12 @@
  * @since     2007-03-27
  */
 
+define('IS_VALID_PHPMYFAQ', null);
+
 //
 // Prepend and start the PHP session
 //
 require_once 'inc/Init.php';
-define('IS_VALID_PHPMYFAQ', null);
 PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();

@@ -76,7 +76,7 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
     public static function getInstance($language = 'en')
     {
         if (!self::$instance) {
-            self::$instance = new self;
+            self::$instance           = new self;
             self::$instance->encoding = self::DEFAULT_ENCODING;
             self::$instance->language = PMF_Language::isASupportedLanguage($language) ? $language : self::DEFAULT_LANGUAGE;
         }
@@ -306,7 +306,7 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
      */
     public function preg_replace_callback($pattern, $callback, $subject, $limit= -1, &$count = 0)
     {
-        if(is_array($pattern)) {
+        if (is_array($pattern)) {
             foreach($pattern as &$p) {
                 $p = self::appendU($p);
             }
@@ -330,7 +330,7 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
      */
     public function preg_replace($pattern, $replacement, $subject, $limit= -1, &$count = 0)
     {
-        if(is_array($pattern)) {
+        if (is_array($pattern)) {
             foreach($pattern as &$p) {
                 $p = self::appendU($p);
             }

@@ -100,7 +100,9 @@ if ($permission['restore']) {
             print "<p>".$g." ".$PMF_LANG["ad_csv_of"]." ".$anz." ".$PMF_LANG["ad_csv_suc"]."</p>\n";
         }
     } else {
-        print "<p>".$PMF_LANG["ad_csv_no"]." (Wrong filetype)</p>";
+        printf("<p>%s (Wrong filetype: %s)</p>",
+            $PMF_LANG['ad_csv_no'],
+            $_FILES['userfile']['type']);
     }
 } else {
     print $PMF_LANG["err_NotAuth"];
