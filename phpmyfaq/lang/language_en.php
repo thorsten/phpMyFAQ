@@ -418,9 +418,9 @@ $PMF_LANG["ad_att_delfail"] = "An error occurred while deleting the attachment."
 $PMF_LANG["ad_entry_add"] = "Add FAQ";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
-$PMF_LANG["ad_csv_make"] = "A backup is a complete image of the database content. The format of the backup is a SQL transaction file, which can be imported using tools like phpMyAdmin or the commandline sql client. A backup should be performed at least once a month.";
+$PMF_LANG["ad_csv_make"] = "A backup is a complete image of the database content. The format of the backup is a SQL transaction file, which can be imported using tools like phpMyAdmin or the commandline SQL client. A backup should be performed at least once a month.";
 $PMF_LANG["ad_csv_link"] = "Download the backup";
-$PMF_LANG["ad_csv_head"] = "Make a backup";
+$PMF_LANG["ad_csv_head"] = "Create a backup";
 $PMF_LANG["ad_att_addto"] = "Add an attachment to the issue";
 $PMF_LANG["ad_att_addto_2"] = "";
 $PMF_LANG["ad_att_att"] = "File:";
@@ -430,13 +430,13 @@ $PMF_LANG["ad_att_fail"] = "An error occurred while attaching the file.";
 $PMF_LANG["ad_att_close"] = "Close this window";
 
 // Added v0.85 - 08.07.2001 - Bastian - Admin
-$PMF_LANG["ad_csv_restore"] = "With this form you can restore the content of the database, using a backup made with phpmyfaq. Please note that the existing data will be overwritten.";
+$PMF_LANG["ad_csv_restore"] = "With this form you can restore the content of the database, using a backup made with phpMyFAQ. Please note that the existing data will be overwritten.";
 $PMF_LANG["ad_csv_file"] = "File";
 $PMF_LANG["ad_csv_ok"] = "OK";
-$PMF_LANG["ad_csv_linklog"] = "backup LOGs";
+$PMF_LANG["ad_csv_linklog"] = "backup logfiles";
 $PMF_LANG["ad_csv_linkdat"] = "backup data";
 $PMF_LANG["ad_csv_head2"] = "Restore";
-$PMF_LANG["ad_csv_no"] = "This does not seem to be a backup of phpmyfaq.";
+$PMF_LANG["ad_csv_no"] = "This does not seem to be a backup of phpMyFAQ.";
 $PMF_LANG["ad_csv_prepare"] = "Preparing the database queries...";
 $PMF_LANG["ad_csv_process"] = "Querying...";
 $PMF_LANG["ad_csv_of"] = "of";
