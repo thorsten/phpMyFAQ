@@ -357,17 +357,17 @@ class PMF_String
      * 
      * @return string
      */
-    public static function htmlspecialchars($str, $quote_style = ENT_COMPAT, $charset = null, $double_encode = false)
+    public static function htmlspecialchars($str, $quote_style = ENT_QUOTE, $charset = 'utf-8', $double_encode = false)
     {
         if (version_compare(PHP_VERSION, '5.2.3', '>=')) {
             return htmlspecialchars($str,
                                     $quote_style,
-                                    null == $charset ? self::$instance->getEncoding() : $charset,
+                                    $charset,
                                     $double_encode);
         } else {
             return htmlspecialchars($str,
                                     $quote_style,
-                                    null == $charset ? self::$instance->getEncoding() : $charset);
+                                    $charset);
         }
     }
     
@@ -381,18 +381,18 @@ class PMF_String
      * 
      * @return string
      */
-    public static function htmlentities($string, $quote_style = ENT_COMPAT, $charset = null, $double_encode = true)
+    public static function htmlentities($string, $quote_style = ENT_QUOTE, $charset = 'utf-8', $double_encode = true)
     {
     
         if (version_compare(PHP_VERSION, '5.2.3', '>=')) {
             return htmlentities($string, 
                                 $quote_style,
-                                null == $charset ? self::$instance->getEncoding() : $charset,
+                                $charset,
                                 $double_encode);
         } else {
             return htmlentities($string, 
                                 $quote_style,
-                                null == $charset ? self::$instance->getEncoding() : $charset);
+                                $charset);
         }
     }
 }
