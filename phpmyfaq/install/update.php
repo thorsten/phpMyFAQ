@@ -25,7 +25,7 @@
  * @since     2002-01-10
  */
 
-define('NEWVERSION', '2.6.10');
+define('NEWVERSION', '2.6.11');
 define('APIVERSION', 1);
 define('MINIMUM_PHP_VERSION', '5.2.0');
 define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
@@ -123,7 +123,7 @@ if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable($templateDir)
         $templateDir);
 }
 ?>
-<h3 align="center">Your current phpMyFAQ version: <?php print $version; ?></p>
+<p align="center">Your current phpMyFAQ version: <?php print $version; ?></p>
 <input name="version" type="hidden" value="<?php print $version; ?>"/>
 
 <p class="center"><input type="submit" value="Go to step 2 of 4" class="button" /></p>

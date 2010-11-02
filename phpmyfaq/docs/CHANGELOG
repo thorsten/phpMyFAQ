@@ -1,9 +1,12 @@
-phpMyFAQ 2.6.10
+phpMyFAQ 2.6.11
 Codename "Portia"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.6.11 - 2010-
+- 
 
 Version 2.6.10 - 2010-11-02
 - added several security enhancements (Thorsten)
