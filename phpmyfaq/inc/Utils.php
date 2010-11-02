@@ -58,10 +58,9 @@ class PMF_Utils
     /**
      * Get the content at the given URL using an HTTP GET call.
      *
-     * @access public
-     * @static
-     * @param $url URL of the content.               
-     * @return string Content at the given URL, false otherwise.
+     * @param string $url URL of the content
+     *
+     * @return string
      */
     public static function getHTTPContent($url)
     {
@@ -349,5 +348,22 @@ class PMF_Utils
         
         // Fallback: the original matched string
         return $matches[0];
+    }
+
+    /**
+     * Returns the MIME type of a file according to the used PHP version
+     *
+     * @param string $filename Filename 
+     *
+     * @return string
+     */
+    public static function getMimeType($filename)
+    {
+        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+            return mime_content_type($filename);
+        } else {
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            return $finfo->file($filename);
+        }
     }
 }
