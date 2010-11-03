@@ -39,7 +39,7 @@ printf('<img src="images/arrow.gif" width="11" height="11" alt="" border="0" /> 
 print "</p>\n";
 
 $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
-if ('category' != $action && 
+if ('category' != $action && 'content' != $action && 
     (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken)) {
     $permission['editcateg'] = false; 
 }

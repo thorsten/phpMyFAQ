@@ -13,7 +13,13 @@ Version 2.7.0-alpha - 2010-10-
 - added Twitter support (Thorsten, Thomas Zeithaml)
 - updated bundled jQuery to version 1.4.2 (Thorsten)
 
-Version 2.6.10 - 2010-10-
+Version 2.6.12 - 2010-
+- 
+
+Version 2.6.11 - 2010-11-03
+- fixed some bugs introduced with phpMyFAQ 2.6.10 (Thorsten)
+
+Version 2.6.10 - 2010-11-02
 - added several security enhancements (Thorsten)
 - updated Chinese (Simplified) translation
 - updated German translation (Thorsten)

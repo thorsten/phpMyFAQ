@@ -357,7 +357,7 @@ class PMF_String
      * 
      * @return string
      */
-    public static function htmlspecialchars($str, $quote_style = ENT_QUOTE, $charset = 'utf-8', $double_encode = false)
+    public static function htmlspecialchars($str, $quote_style = ENT_COMPAT, $charset = 'utf-8', $double_encode = false)
     {
         return htmlspecialchars($str,
                                 $quote_style,
@@ -375,7 +375,7 @@ class PMF_String
      * 
      * @return string
      */
-    public static function htmlentities($string, $quote_style = ENT_QUOTE, $charset = 'utf-8', $double_encode = true)
+    public static function htmlentities($string, $quote_style = ENT_COMPAT, $charset = 'utf-8', $double_encode = true)
     {
         return htmlentities($string,
                             $quote_style,
