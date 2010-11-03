@@ -55,7 +55,7 @@
 # phpMyFAQ
 #
 %define name        phpmyfaq
-%define version     2.6.11
+%define version     2.6.12
 %define release     1
 %define epoch       0
 
@@ -154,6 +154,9 @@ installation script.
 %changelog
 =======
 
+
+* Wed Nov 03 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.6.12-1
+- New upstream version 2.6.12
 
 * Tue Nov 02 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.6.11-1
 - New upstream version 2.6.11
