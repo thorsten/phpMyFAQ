@@ -1,3 +1,12 @@
+CHANGED FILES FROM 2.6.10 -> 2.6.11
+
+./admin/category.main.php
+./inc/String.php
+./install/setup.php
+./install/update.php
+
+
+
 CHANGED FILES FROM 2.6.9 -> 2.6.10
 
 ./admin/adminlog.php
