@@ -48,7 +48,7 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>phpMyFAQ <?php print NEWVERSION; ?> Setup</title>
+    <title>phpMyFAQ <?php print VERSION; ?> Setup</title>
     <link rel="shortcut icon" href="../template/default/favicon.ico">
     <link rel="apple-touch-icon" href="../template/default/apple-touch-icon.png">
     <link rel="stylesheet" href="style/setup.css?v=1">
