@@ -176,15 +176,17 @@ $botBlacklist = array(
  * @var  array
  */
 $supported_databases = array(
-    'mysql'   => array('5.2.0', 'MySQL 4.1.x / 5.x / 6.x (ext/mysql)'),
+    'mysql'   => array('5.2.0', 'MySQL 4.1.x / 5.x (ext/mysql)'),
     'pgsql'   => array('5.2.0', 'PostgreSQL 7.x / 8.x'),
     'sybase'  => array('5.2.0', 'Sybase'),
     'mssql'   => array('5.2.0', 'MS SQL Server 2000 / 2005'),
-    'mysqli'  => array('5.2.0', 'MySQL 4.1.x / 5.x / 6.x (ext/mysqli)'),
+    'mysqli'  => array('5.2.0', 'MySQL 4.1.x / 5.x (ext/mysqli)'),
+    'mysqli'  => array('5.2.0', 'MariaDB 5.2 (experimental)'),
     'sqlite'  => array('5.2.0', 'SQLite'),
     'ibm_db2' => array('5.2.0', 'IBM DB2 Universal Database 8.2 / 9.1'),
     'sqlsrv'  => array('5.2.0', 'SQL Server Driver for PHP (experimental)'),
-    'ibase'   => array('5.2.0', 'Interbase/Firebird (experimental)')
+    'ibase'   => array('5.2.0', 'Interbase/Firebird (experimental)'),
+    'mysqli'  => array('5.2.0', 'MariaDB 5.x (experimental)')
 );
 
 /**
