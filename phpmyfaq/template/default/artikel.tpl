@@ -2,6 +2,7 @@
             <header>
                 <h2 id="article_category">{writeRubrik}</h2>
                 <div id="solution_id">ID #{solution_id}</div>
+                {facebookeLikeButton}
                 <h2>{writeThema}</h2>
             </header>
             
@@ -22,10 +23,11 @@
             <!-- / Related Articles -->
 
             <!-- Article Info -->
-            <p><span id="popularity" style="display: none;">{writePopularity}</span>{writeDateMsg}<br />{writeAuthor}<br />{writeRevision}<br />{editThisEntry}</p>
+            <p>{writeDateMsg}<br />{writeAuthor}<br />{writeRevision}<br />{editThisEntry}</p>
             <!-- /Article Info -->
 
             {switchLanguage}
+            
             <div id="action">
             <a href="{link_digg}" target="_blank"><img src="images/digg.png" alt="{writeDiggMsgTag}" title="{writeDiggMsgTag}" width="16" height="16" border="0" class="recordIcons" /></a> 
             <a href="{link_facebook}" target="_blank"><img src="images/facebook.png" alt="{writeFacebookMsgTag}" title="{writeFacebookMsgTag}" width="16" height="16" border="0" class="recordIcons" /></a> 

@@ -264,10 +264,13 @@ if (count($arrLanguage) < count(PMF_Language::getAvailableLanguages())) {
         </form>';
 }
 
+$faqHelper = PMF_Helper_Faq::getInstance();
+
 // Set the template variables
 $tpl->processTemplate ("writeContent", array(
     'writeRubrik'                   => $categoryName.'<br />',
     'solution_id'                   => $faq->faqRecord['solution_id'],
+    'facebookeLikeButton'           => $faqHelper->renderFacebookLikeButton($facebookUrl),
     'writeThema'                    => $thema,
     'writeArticleCategoryHeader'    => $PMF_LANG['msgArticleCategories'],
     'writeArticleCategories'        => $writeMultiCategories,
