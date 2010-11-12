@@ -14,7 +14,10 @@
  <!-- Run unit tests and generate junit.xml and clover.xml -->
  <target name="phpunit">
   <exec executable="phpunit" failonerror="true">
-    <arg line="--coverage-clover ${basedir}/build/logs/clover.xml --log-junit ${basedir}/build/logs/junit.xml phpmyfaq/tests" />
+    <arg line="--coverage-clover ${basedir}/build/logs/clover.xml
+               --coverage-html ${basedir}/build/coverage/
+               --log-junit ${basedir}/build/logs/junit.xml
+               ${basedir}/phpmyfaq/tests" />
   </exec>
  </target>
 
@@ -33,23 +36,27 @@
  <target name="pdepend">
   <exec executable="pdepend">
    <arg line="--jdepend-xml=${basedir}/build/logs/jdepend.xml
-              --jdepend-chart=${basedir}/build/pdepend/dependencies.svg
-              --overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg
-./" />
+              --ignore=${basedir}/phpmyfaq/inc/libs ./" />
   </exec>
  </target>
 
  <!-- Generate pmd.xml -->
  <target name="phpmd">
   <exec executable="phpmd">
-   <arg line="./ xml codesize,design,naming,unusedcode --reportfile ${basedir}/build/logs/pmd.xml --ignore tests,libs,editor" />
+   <arg line="./ xml codesize,design,naming,unusedcode
+              --reportfile ${basedir}/build/logs/pmd.xml
+              --exclude    ${basedir}/phpmyfaq/inc/libs,
+                           ${basedir}/phpmyfaq/tests" />
   </exec>
  </target>
 
  <!-- Generate pmd-cpd.xml -->
  <target name="phpcpd">
   <exec executable="phpcpd">
-   <arg line="--log-pmd ${basedir}/build/logs/pmd-cpd.xml --ignore tests,libs,editor ./" />
+   <arg line="--log-pmd  ${basedir}/build/logs/pmd-cpd.xml
+              --suffixes php
+              --exclude  ${basedir}/phpmyfaq/inc/libs
+              --exclude  ${basedir}/phpmyfaq/tests ./" />
   </exec>
  </target>
 
@@ -58,8 +65,10 @@
   <exec executable="phpcs" output="/dev/null">
    <arg line="--report=checkstyle 
               --report-file=${basedir}/build/logs/checkstyle.xml 
-              --standard=Zend 
-              --ignore=tests,libs,editor
+              --standard=Zend
+              --extensions=php
+              --ignore=${basedir}/phpmyfaq/inc/libs,
+                       ${basedir}/phpmyfaq/tests
               ./" />
   </exec>
  </target>
@@ -73,10 +82,10 @@
  
  <target name="phpcb">
   <exec executable="phpcb">
-   <arg line="--log ${basedir}/build/logs
-              --source ${basedir}
-              --output ${basedir}/build/code-browser
-              --exclude tests,libs,editor" />
+   <arg line="--log         ${basedir}/build/logs
+              --source      ${basedir}
+              --output      ${basedir}/build/code-browser
+              --excludePCRE %(${basedir}/phpmyfaq/inc/libs/.*)|(${basedir}/build/.*)|(${basedir}/phpmyfaq/scripts/.*)|(${basedir}/phpmyfaq/tests/.*)%" />
   </exec>
  </target>
 

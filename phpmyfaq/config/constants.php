@@ -184,7 +184,8 @@ $supported_databases = array(
     'sqlite'  => array('5.2.0', 'SQLite'),
     'ibm_db2' => array('5.2.0', 'IBM DB2 Universal Database 8.2 / 9.1'),
     'sqlsrv'  => array('5.2.0', 'SQL Server Driver for PHP (experimental)'),
-    'ibase'   => array('5.2.0', 'Interbase/Firebird (experimental)')
+    'ibase'   => array('5.2.0', 'Interbase/Firebird (experimental)'),
+    'mysqli'  => array('5.2.0', 'MariaDB 5.x (experimental)')
 );
 
 /**
