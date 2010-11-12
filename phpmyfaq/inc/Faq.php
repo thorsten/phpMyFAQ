@@ -2161,11 +2161,11 @@ class PMF_Faq
     {
         $question = array(
             'id'            => 0,
-            'user'          => '',
+            'username'      => '',
             'email'         => '',
-            'category'      => '',
+            'category_id'   => '',
             'question'      => '',
-            'date'          => '',
+            'created'       => '',
             'is_visible'    => '');
 
         if (!is_int($id_question)) {
@@ -2176,7 +2176,7 @@ class PMF_Faq
 
         $query = sprintf('
             SELECT
-                 id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date, is_visible
+                 id, username, email, category_id, question, created, is_visible
             FROM
                 %sfaqquestions
             WHERE
@@ -2188,11 +2188,11 @@ class PMF_Faq
             if ($row = $this->db->fetch_object($result)) {
                 $question = array(
                     'id'            => $row->id,
-                    'user'          => $row->ask_username,
-                    'email'         => $row->ask_usermail,
-                    'category'      => $row->ask_rubrik,
-                    'question'      => $row->ask_content,
-                    'date'          => $row->ask_date,
+                    'user'          => $row->username,
+                    'email'         => $row->email,
+                    'category_id'   => $row->category_id,
+                    'question'      => $row->question,
+                    'created'       => $row->created,
                     'is_visible'    => $row->is_visible);
             }
         }
@@ -2212,25 +2212,25 @@ class PMF_Faq
 
         $query = sprintf("
             SELECT
-                id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date, is_visible
+                id, username, email, category_id, question, created, is_visible
             FROM
                 %sfaqquestions
             %s
             ORDER BY 
-                ask_date ASC",
+                created ASC",
             SQLPREFIX,
             ($all == false ? "WHERE is_visible = 'Y'" : ''));
 
         if ($result = $this->db->query($query)) {
             while ($row = $this->db->fetch_object($result)) {
                 $questions[] = array(
-                    'id'         => $row->id,
-                    'user'       => $row->ask_username,
-                    'email'      => $row->ask_usermail,
-                    'category'   => $row->ask_rubrik,
-                    'question'   => $row->ask_content,
-                    'date'       => $row->ask_date,
-                    'is_visible' => $row->is_visible);
+                    'id'          => $row->id,
+                    'username'    => $row->username,
+                    'email'       => $row->email,
+                    'category_id' => $row->category_id,
+                    'question'    => $row->question,
+                    'created'     => $row->created,
+                    'is_visible'  => $row->is_visible);
             }
         }
         return $questions;
@@ -2783,18 +2783,13 @@ class PMF_Faq
 
         $query = sprintf("
             SELECT
-                id,
-                ask_username,
-                ask_usermail,
-                ask_rubrik,
-                ask_content,
-                ask_date
+                *
             FROM
                 %sfaqquestions
             WHERE
                 is_visible = 'Y'
             ORDER BY
-                ask_date ASC",
+                created ASC",
             SQLPREFIX);
 
         $result = $this->db->query($query);
@@ -2803,16 +2798,16 @@ class PMF_Faq
             while ($row = $this->db->fetch_object($result)) {
                 $output .= '<tr class="openquestions">';
                 $output .= sprintf('<td valign="top" nowrap="nowrap">%s<br /><a href="mailto:%s">%s</a></td>',
-                    PMF_Date::createIsoDate($row->ask_date),
-                    PMF_Mail::safeEmail($row->ask_usermail),
-                    $row->ask_username);
+                    PMF_Date::createIsoDate($row->created),
+                    PMF_Mail::safeEmail($row->email),
+                    $row->username);
                 $output .= sprintf('<td valign="top"><strong>%s:</strong><br />%s</td>',
-                    isset($category->categoryName[$row->ask_rubrik]['name']) ? $category->categoryName[$row->ask_rubrik]['name'] : '',
-                    strip_tags($row->ask_content));
+                    isset($category->categoryName[$row->category_id]['name']) ? $category->categoryName[$row->category_id]['name'] : '',
+                    strip_tags($row->question));
                 $output .= sprintf('<td valign="top"><a href="?%saction=add&amp;question=%d&amp;cat=%d">%s</a></td>',
                     $sids,
                     $row->id,
-                    $row->ask_rubrik,
+                    $row->category_id,
                     $this->pmf_lang['msg2answer']);
                 $output .= '</tr>';
             }

@@ -2,12 +2,7 @@
 /**
  * CREATE TABLE instruction for Interbase/Firebird databases
  *
- * @package    phpMyFAQ
- * @subpackage Installation
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2007-02-24
- * @version	   SVN: $Id$
- * @copyright  2007-2009 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Setup
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2007-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2007-02-24
  */
 
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog";
@@ -276,11 +279,11 @@ PRIMARY KEY (id))";
 //faqquestions
 $query[] = "CREATE TABLE ".$sqltblpre."faqquestions (
 id INTEGER NOT NULL,
-ask_username VARCHAR(100) NOT NULL,
-ask_usermail VARCHAR(100) NOT NULL,
-ask_rubrik INTEGER NOT NULL,
-ask_content BLOB SUB_TYPE TEXT NOT NULL,
-ask_date VARCHAR(20) NOT NULL,
+username VARCHAR(100) NOT NULL,
+email VARCHAR(100) NOT NULL,
+category_id INTEGER NOT NULL,
+question BLOB SUB_TYPE TEXT NOT NULL,
+created VARCHAR(20) NOT NULL,
 is_visible CHAR(1) default 'Y',
 PRIMARY KEY (id))";
 
