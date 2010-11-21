@@ -337,7 +337,7 @@ class PMF_Utils
     public static function highlightNoLinks(Array $matches)
     {
         $itemAsAttrName  = $matches[1];
-        $itemInAttrValue = $matches[2]; // $matches[3] is the attribute name
+        $itemInAttrValue = isset($matches[2]) ? $matches[2] : ''; // $matches[3] is the attribute name
         $prefix          = isset($matches[3]) ? $matches[3] : '';
         $item            = isset($matches[4]) ? $matches[4] : '';
         $postfix         = isset($matches[5]) ? $matches[5] : '';
