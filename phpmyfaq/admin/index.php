@@ -123,7 +123,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     } else {
         // error
         $logging = new PMF_Logging();
-        $logging->logAdmin($user, 'Loginerror\nLogin: '.$faqusername.'\nPass: ********');
+        $logging->logAdmin($user, 'Loginerror\nLogin: '.$faqusername.'\nErrors: ' . implode(', ', $user->errors));
         $error = $PMF_LANG['ad_auth_fail'];
         $user  = null;
     }
