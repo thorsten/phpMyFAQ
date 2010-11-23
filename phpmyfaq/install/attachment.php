@@ -26,6 +26,7 @@
 set_time_limit(0);
 
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
+define('IS_VALID_PHPMYFAQ', null);
 
 //
 // Check if config/database.php exist -> if not, redirect to installer
