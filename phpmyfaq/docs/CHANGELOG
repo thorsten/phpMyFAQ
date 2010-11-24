@@ -16,6 +16,9 @@ Version 2.7.0-alpha - 2010-10-
 
 Version 2.6.12 - 2010-
 - added experimental support for MariaDB (Thorsten)
+- added empty LDAP configuration file as example (Thorsten)
+- updated Norwegian Bokmål translation (harald@delelisten.no)
+- updated Dutch translation (Werner Helmich)
 - fixed minor bugs (Thorsten)
 
 Version 2.6.11 - 2010-11-03

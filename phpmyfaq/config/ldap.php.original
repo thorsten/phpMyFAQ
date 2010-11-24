@@ -1,0 +1,6 @@
+<?php
+$PMF_LDAP["ldap_server"] = '';
+$PMF_LDAP["ldap_port"] = '';
+$PMF_LDAP["ldap_user"] = '';
+$PMF_LDAP["ldap_password"] = '';
+$PMF_LDAP["ldap_base"] = '';
