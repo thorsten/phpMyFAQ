@@ -281,10 +281,13 @@ if (!is_null($recordRating)) {
     $printVoting = sprintf('0 (%s)', $plr->GetMsg('plmsgVotes',0));
 }
 
+$faqHelper = PMF_Helper_Faq::getInstance();
+
 // Set the template variables
 $tpl->processTemplate ("writeContent", array(
     'writeRubrik'                   => $categoryName.'<br />',
     'solution_id'                   => $faq->faqRecord['solution_id'],
+    'facebookeLikeButton'           => $faqHelper->renderFacebookLikeButton($facebookUrl),
     'writeThema'                    => $thema,
     'writeArticleCategoryHeader'    => $PMF_LANG['msgArticleCategories'],
     'writeArticleCategories'        => $writeMultiCategories,

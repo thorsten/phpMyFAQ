@@ -173,7 +173,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     // delete user confirmation
     if ($userAction == 'delete_confirm') {
         $message    = '';
-        $user       = new PMF_User();
+        $user       = new PMF_User_CurrentUser();
 
         $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_list_select', FILTER_VALIDATE_INT, 0);
         if ($userId == 0) {
@@ -191,8 +191,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
 <h2><?php print $text['header']; ?></h2>
 <div id="user_confirmDelete">
     <fieldset>
-        <legend><?php print $text['delUser']; ?></legend>
-        <strong><?php print $user->getLogin(); ?></strong>
+        <legend><?php print $text['delUser']; ?> <strong><?php print $user->getLogin(); ?></strong></legend>
         <p><?php print $text['delUser_question']; ?></p>
         <form action ="?action=user&amp;user_action=delete" method="post">
             <input type="hidden" name="user_id" value="<?php print $userId; ?>" />

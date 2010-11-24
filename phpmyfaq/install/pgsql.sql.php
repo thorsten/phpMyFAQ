@@ -2,13 +2,7 @@
 /**
  * CREATE TABLE instruction for PostgreSQL database
  *
- * @category  phpMyFAQ
- * @package   Installation
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Tom Rochester <tom.rochester@gmail.com>
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since     2004-09-18
- * @copyright 2004-2010 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,6 +13,16 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Setup
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Tom Rochester <tom.rochester@gmail.com>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @copyright 2004-2010 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-09-18
  */
 
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqadminlog CASCADE";
@@ -274,11 +278,11 @@ PRIMARY KEY (id))";
 //faqquestions
 $query[] = "CREATE TABLE ".$sqltblpre."faqquestions (
 id SERIAL NOT NULL,
-ask_username varchar(100) NOT NULL,
-ask_usermail varchar(100) NOT NULL,
-ask_rubrik varchar(100) NOT NULL,
-ask_content text NOT NULL,
-ask_date varchar(20) NOT NULL,
+username varchar(100) NOT NULL,
+email varchar(100) NOT NULL,
+category_id int4 NOT NULL,
+question text NOT NULL,
+created varchar(20) NOT NULL,
 is_visible char(1) default 'Y',
 PRIMARY KEY (id))";
 

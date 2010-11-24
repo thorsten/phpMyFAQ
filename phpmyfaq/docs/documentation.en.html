@@ -186,24 +186,19 @@
         <a href="http://www.microsoft.com/">IIS</a> 5.0+)</li>
         <li><strong>Database server</strong>
         <ul>
-            <li><a href="http://www.mysql.com">MySQL</a> 5.x with the MySQL extension
-            (recommended: 5.1.x)</li>
-            <li><a href="http://www.mysql.com">MySQL</a> 5.x with the MySQLi extension
-            (recommended: 5.1.x)</li>
-            <li><a href="http://www.postgresql.org">PostgreSQL</a> 8.x
-            (recommended: latest 8.x)</li>
+            <li><a href="http://www.mysql.com">MySQL</a> 5.x with the MySQL extension (recommended: 5.1.x)</li>
+            <li><a href="http://www.mysql.com">MySQL</a> 5.x with the MySQLi extension (recommended: 5.1.x)</li>
+            <li><a href="http://www.postgresql.org">PostgreSQL</a> 8.x (recommended: latest 8.x)</li>
             <li><a href="http://www.sybase.com">Sybase</a></li>
-            <li><a href="http://www.microsoft.com/sql/">Microsoft SQL Server</a>
-            2000, 2005, 2008</li>
+            <li><a href="http://www.microsoft.com/sql/">Microsoft SQL Server</a> 2000, 2005, 2008</li>
             <li><a href="http://www-306.ibm.com/software/data/db2/">IBM DB2 Universal
             Database</a> 8.2.x, 9.1.x, <a href="http://www-306.ibm.com/software/data/cloudscape/">
             IBM Cloudscape</a>, and <a href="http://db.apache.org/derby/">
             Apache Derby</a></li>
-            <li><a href="http://www.sqlite.org">SQLite</a>
-            (experimental)</li>
+            <li><a href="http://www.sqlite.org">SQLite</a></li>
+            <li><a href="http://montyprogram.com/mariadb/">MariaDB</a> 5.x (experimental)</li>
             <li><a href="http://www.firebirdsql.org">Firebird</a> /
-            <a href="http://www.codegear.com/products/interbase">Interbase</a>
-            (experimental)</li>
+            <a href="http://www.codegear.com/products/interbase">Interbase</a> (experimental)</li>
         </ul></li>
         <li>correctly set: access permissions, owner, group</li>
     </ul>
@@ -266,11 +261,12 @@
     <p>Substitute <strong>www.example.com</strong> with your actual domain name.
     When the site is loaded enter the address of your database server (e.g.
     db.provider.com), your database username and password as well as the database
-    name. The database must be available before running the installation script.
-    You can leave the prefix-field empty. If you are planning on using multiple
-    FAQs in one database you will have to use a table prefix, though (i.e.
-    <em>sport</em> for a sports-FAQ, <em>weather</em> for a weather-FAQ, etc.).
-    Please note that only letters and an underline: "_" can be used as the prefix.</p>
+    name. The database have to be created with UTF-8 chraracter set before
+    running the installation script. You can leave the prefix-field empty. If
+    you are planning on using multiple FAQs in one database you will have to
+    use a table prefix, though (i.e. <em>sport</em> for a sports-FAQ,
+    <em>weather</em> for a weather-FAQ, etc.). Please note that only letters
+    and an underline: "_" can be used as the prefix.</p>
     <p>If your PHP was compiled with the LDAP extension you can add your LDAP
     information, too. You have to insert your LDAP information, too.</p>
     <p>When using multiple FAQs you need to install them independently into

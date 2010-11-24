@@ -648,12 +648,81 @@ if ($step == 4) {
     // UPDATES FROM 2.7.0-alpha
     //
     if (version_compare($version, '2.7.0-alpha', '<')) {
+        // Add new config values
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.enableTwitterSupport', 'false')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.twitterConsumerKey', '')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.twitterConsumerSecret', '')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.twitterAccessTokenKey', '')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.twitterAccessTokenSecret', '')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.enableFacebookSupport', 'false')";
+
+        // Migrate faqquestion table to new structure
+
+        switch($DB['type']) {
+
+            case 'ibase':
+                $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions ALTER ask_username TO username";
+                $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions ALTER ask_usermail TO email";
+                $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions ALTER ask_rubrik TO category_id";
+                $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions ALTER ask_content TO question";
+                $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions ALTER ask_date TO created";
+                break;
+
+            case 'ibm_db2':
+            case 'pgsql':
+                $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions RENAME COLUMN ask_username TO username";
+                $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions RENAME COLUMN ask_usermail TO email";
+                $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions RENAME COLUMN ask_rubrik TO category_id";
+                $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions RENAME COLUMN ask_content TO question";
+                $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions RENAME COLUMN ask_date TO created";
+                break;
+
+            case 'mssql':
+            case 'sqlsrv':
+            case 'sybase':
+                $query[] = "EXEC sp_RENAME '" . SQLPREFIX . "faqquestions.ask_username', 'username', 'COLUMN'";
+                $query[] = "EXEC sp_RENAME '" . SQLPREFIX . "faqquestions.ask_usermail', 'email', 'COLUMN'";
+                $query[] = "EXEC sp_RENAME '" . SQLPREFIX . "faqquestions.ask_rubrik', 'category_id', 'COLUMN'";
+                $query[] = "EXEC sp_RENAME '" . SQLPREFIX . "faqquestions.ask_content', 'question', 'COLUMN'";
+                $query[] = "EXEC sp_RENAME '" . SQLPREFIX . "faqquestions.ask_date', 'created', 'COLUMN'";
+                break;
+
+            case 'mysql':
+            case 'mysqli':
+                $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions CHANGE ask_username username VARCHAR(100) NOT NULL";
+                $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions CHANGE ask_usermail email VARCHAR(100) NOT NULL";
+                $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions CHANGE ask_rubrik category_id INT(11) NOT NULL";
+                $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions CHANGE ask_content question TEXT NOT NULL";
+                $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions CHANGE ask_date created VARCHAR(20) NOT NULL";
+                break;
+           
+            case 'sqlite':
+                $query[] = "BEGIN TRANSACTION";
+                $query[] = "CREATE TEMPORORY TABLE " . SQLPREFIX . "faqquestions_temp (
+                                id int(11) NOT NULL,
+                                username varchar(100) NOT NULL,
+                                email varchar(100) NOT NULL,
+                                category_id int(11) NOT NULL,
+                                question text NOT NULL,
+                                created varchar(20) NOT NULL,
+                                is_visible char(1) default 'Y',
+                                PRIMARY KEY (id))";
+                $query[] = "INSERT INTO " . SQLPREFIX . "faqquestions_temp SELECT * FROM " . SQLPREFIX . "faqquestions";
+                $query[] = "DROP TABLE " . SQLPREFIX . "faqquestions";
+                $query[] = "CREATE TABLE " . SQLPREFIX . "faqquestions (
+                                id int(11) NOT NULL,
+                                username varchar(100) NOT NULL,
+                                email varchar(100) NOT NULL,
+                                category_id int(11) NOT NULL,
+                                question text NOT NULL,
+                                created varchar(20) NOT NULL,
+                                is_visible char(1) default 'Y',
+                                PRIMARY KEY (id))";
+                $query[] = "INSERT INTO " . SQLPREFIX . "faqquestions SELECT * FROM " . SQLPREFIX . "faqquestions_temp";
+                $query[] = "DROP TABLE " . SQLPREFIX . "faqquestions_temp";
+                $query[] = "COMMIT";
+                break;
+        }
     }
     
     //

@@ -1474,7 +1474,7 @@ class PMF_Faq
      * @param  string  $language   Language
      * @return array
      */
-    public function getTopVotedData($count = PMF_NUMBER_RECORDS_TOPTEN, $category = 0, $language = nuLL)
+    public function getTopVotedData($count = PMF_NUMBER_RECORDS_TOPTEN, $categoryId = 0, $language = nuLL)
     {
         global $sids;
                     
@@ -2104,6 +2104,80 @@ class PMF_Faq
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Prints the open questions as a XHTML table
+     *
+     * @return  string
+     * @access  public
+     * @since   2002-09-17
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function printOpenQuestions()
+    {
+        global $sids, $category;
+
+        $query = sprintf("
+            SELECT
+                COUNT(*) AS num
+            FROM
+                %sfaqquestions
+            WHERE
+                is_visible != 'Y'",
+            SQLPREFIX);
+
+        $result = $this->db->query($query);
+        $row = $this->db->fetch_object($result);
+        $numOfInvisibles = $row->num;
+
+        if ($numOfInvisibles > 0) {
+            $extraout = sprintf('<tr><td colspan="3"><hr />%s%s</td></tr>',
+                $this->pmf_lang['msgQuestionsWaiting'],
+                $numOfInvisibles);
+        } else {
+            $extraout = '';
+        }
+
+        $query = sprintf("
+            SELECT
+                *
+            FROM
+                %sfaqquestions
+            WHERE
+                is_visible = 'Y'
+            ORDER BY
+                created ASC",
+            SQLPREFIX);
+
+        $result = $this->db->query($query);
+        $output = '';
+        if ($this->db->num_rows($result) > 0) {
+            while ($row = $this->db->fetch_object($result)) {
+                $output .= '<tr class="openquestions">';
+                $output .= sprintf('<td valign="top" nowrap="nowrap">%s<br /><a href="mailto:%s">%s</a></td>',
+                    PMF_Date::createIsoDate($row->created),
+                    PMF_Mail::safeEmail($row->email),
+                    $row->username);
+                $output .= sprintf('<td valign="top"><strong>%s:</strong><br />%s</td>',
+                    isset($category->categoryName[$row->category_id]['name']) ? $category->categoryName[$row->category_id]['name'] : '',
+                    strip_tags($row->question));
+                $output .= sprintf('<td valign="top"><a href="?%saction=add&amp;question=%d&amp;cat=%d">%s</a></td>',
+                    $sids,
+                    $row->id,
+                    $row->category_id,
+                    $this->pmf_lang['msg2answer']);
+                $output .= '</tr>';
+            }
+        } else {
+            $output = sprintf('<tr><td colspan="3">%s</td></tr>',
+                $this->pmf_lang['msgNoQuestionsAvailable']);
+        }
+
+        return $output.$extraout;
+    }
+    
+    /**
+>>>>>>> 0370324a35e7dde612fb6c49d7ae2b5aa9c19925
      * Setter for the language
      * 
      * @param  string $language Language
