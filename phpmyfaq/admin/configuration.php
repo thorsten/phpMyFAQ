@@ -87,6 +87,10 @@ if ($permission['editconfig']) {
         <legend><a href="javascript:void(0);" onclick="javascript:toggleConfig('Spam');"><?php print $PMF_LANG['spamControlCenter']; ?></a></legend>
         <div id="configSpam" style="display: none;"></div>
     </fieldset>
+    <fieldset>
+        <legend><a href="javascript:void(0);" onclick="javascript:toggleConfig('Search');"><?php print $PMF_LANG['searchControlCenter']; ?></a></legend>
+        <div id="configSearch" style="display: none;"></div>
+    </fieldset>
     <p align="center">
         <input class="submit" type="submit" value="<?php print $PMF_LANG['ad_config_save']; ?>" />
         <input class="submit" type="reset" value="<?php print $PMF_LANG['ad_config_reset']; ?>" />
@@ -101,6 +105,7 @@ function getConfigList()
     $.get("index.php", {action: "ajax", ajax: "config_list", conf: "main" }, function(data) { $('#configMain').append(data); });
     $.get("index.php", {action: "ajax", ajax: "config_list", conf: "records" }, function(data) { $('#configRecords').append(data); });
     $.get("index.php", {action: "ajax", ajax: "config_list", conf: "spam" }, function(data) { $('#configSpam').append(data); });
+    $.get("index.php", {action: "ajax", ajax: "config_list", conf: "search" }, function(data) { $('#configSearch').append(data); });
 }
 
 getConfigList();
