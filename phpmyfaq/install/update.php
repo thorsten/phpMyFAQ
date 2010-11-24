@@ -643,7 +643,14 @@ if ($step == 4) {
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.optionalMailAddress', 'false')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.useAjaxSearchOnStartpage', 'false')";
     }
-    
+
+    //
+    // UPDATES FROM 2.6.99
+    //
+    if (version_compare($version, '2.6.99', '<')) {
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('search.relevance', 'thema,content,keywords')";
+    }
+
     // Perform the queries for updating/migrating the database from 2.x
     if (isset($query)) {
         print '<div class="center">';
