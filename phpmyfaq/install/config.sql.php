@@ -69,3 +69,4 @@ $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('spam.enableCaptchaCode'
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('spam.enableSafeEmail', 'true')";
 
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('search.relevance', 'thema,content,keywords')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('search.enableRelevance', 'false')";

@@ -1084,6 +1084,7 @@ $LANG_CONF['main.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Insta
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
 $LANG_CONF['search.relevance'] = array(0 => 'select', 1 => 'Sort by relevance');
+$LANG_CONF["search.enableRelevance"] = array(0 => "checkbox", 1 => "Activate relevance support? (default: disabled)");
 $PMF_LANG['searchControlCenter'] = 'Search';
 $PMF_LANG['search.relevance.thema-content-keywords'] = 'Question - Answer - Keywords';
 $PMF_LANG['search.relevance.thema-keywords-content'] = 'Question - Keywords - Answer';

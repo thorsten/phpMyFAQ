@@ -649,6 +649,7 @@ if ($step == 4) {
     //
     if (version_compare($version, '2.6.99', '<')) {
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('search.relevance', 'thema,content,keywords')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('search.enableRelevance', 'false')";
     }
 
     // Perform the queries for updating/migrating the database from 2.x

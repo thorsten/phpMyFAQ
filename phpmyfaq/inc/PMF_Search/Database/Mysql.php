@@ -66,6 +66,13 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
         if (is_numeric($searchTerm)) {
             parent::search($searchTerm);
         } else {
+            $enableRelevance = PMF_Configuration::getInstance()->get('search.enableRelevance');                    
+
+            $columns  =  $this->getResultColumns();
+            $columns .= ($enableRelevance) ? $this->getMatchingColumnsAsResult($searchTerm) : '';
+
+            $orderBy = ($enableRelevance) ? 'ORDER BY ' . $this->getMatchingOrder() : '';
+
             $query = sprintf("
                 SELECT
                     %s
@@ -74,15 +81,15 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
                 WHERE
                     MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE)
                     %s
-                ORDER BY %s",
-                $this->getResultColumns() . $this->getMatchingColumnsAsResult($searchTerm),
+                    %s",
+                $columns,
                 $this->getTable(),
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
                 $this->getMatchingColumns(),
                 $this->dbHandle->escape_string($searchTerm),
                 $this->getConditions(),
-                $this->getMatchingOrder());
+                $orderBy);
 
             $this->resultSet = $this->dbHandle->query($query);
             
