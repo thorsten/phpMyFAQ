@@ -97,6 +97,12 @@ class PMF_Ldap
             return false;
         }
 
+        if (empty($ldap_password)) {
+            $this->error = 'Unable to connect to LDAP server (Error: '.ldap_error($this->ds).')';
+            $this->errno = ldap_errno($this->ds);
+            return false;
+        }
+
         $this->ds = ldap_connect($ldap_server, $ldap_port);
         if (!$this->ds) {
             $this->error = 'Unable to connect to LDAP server (Error: '.ldap_error($this->ds).')';
