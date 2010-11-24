@@ -73,15 +73,17 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
                     %s %s %s
                 WHERE
                     MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE)
-                    %s",
-                $this->getResultColumns(),
+                    %s
+                ORDER BY %s",
+                $this->getResultColumns() . $this->getMatchingColumnsAsResult($searchTerm),
                 $this->getTable(),
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
                 $this->getMatchingColumns(),
                 $this->dbHandle->escape_string($searchTerm),
-                $this->getConditions());
-            
+                $this->getConditions(),
+                $this->getMatchingOrder());
+
             $this->resultSet = $this->dbHandle->query($query);
             
             // Fallback for searches with less than three characters
@@ -107,5 +109,53 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
         }
         
         return $this->resultSet;
+    }
+
+    /**
+     * Add the matching columns into the columns for the resultset
+     *
+     * @return PMF_Search_Database
+     */
+    public function getMatchingColumnsAsResult($searchterm)
+    {
+        $resultColumns = '';
+
+        foreach ($this->matchingColumns as $matchColumn) {
+            $column = sprintf("MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE) AS rel_%s",
+                $matchColumn,
+                $this->dbHandle->escape_string($searchterm),
+                substr(strstr($matchColumn, '.'), 1));
+
+                $resultColumns .= ', ' . $column;
+        }
+
+        return $resultColumns;
+    }
+
+    /**
+     * Returns the part of the SQL query with the order by
+     *
+     * The order is calculate by weight depend on the search.relevance order
+     *
+     * @return string
+     */
+    public function getMatchingOrder()
+    {
+        $config = PMF_Configuration::getInstance()->get('search.relevance');
+        $list   = array_reverse(explode(",", $config));
+        $count  = count($list);
+        $order  = '';
+
+        foreach ($list as $field) {
+            $string = '(rel_' . $field . '*' . $count .')';
+            if (empty($order)) {
+                $order .= $string;
+            } else {
+                $order .= '+' . $string;
+            }
+            $count--;
+        }
+
+        return $order;
     }
 }
