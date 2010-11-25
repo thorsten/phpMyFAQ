@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+    <faqdata id="1" lang="en" solution_id="1000" revision_id="0" active="yes" sticky="0"
+        keywords="key 1" thema="Pregunta 1" content="&lt;p\>Respuesta 1&lt;/p&gt;" author="Gustavo"
+        email="gustavo.solt@gmail.com" comment="n" datum="20101124131949" links_state="nolinks"
+        links_check_date="1290601190" date_start="00000000000000" date_end="99991231235959" />
+    <faqdata id="2" lang="en" solution_id="1001" revision_id="0" active="yes" sticky="0"
+        keywords="Pregunta 1" thema="&lt;p&gt;Respuesta 1&lt;/p&gt;" content="key 1" author="Gustavo"
+        email="gustavo.solt@gmail.com" comment="n" datum="20101124131949" links_state="nolinks"
+        links_check_date="1290601190" date_start="00000000000000" date_end="99991231235959" />
+    <faqdata id="3" lang="en" solution_id="1002" revision_id="0" active="yes" sticky="0"
+        keywords="&lt;p&gt;Respuesta 1&lt;/p&gt;" thema="key 1" content="Pregunta 1" author="Gustavo"
+        email="gustavo.solt@gmail.com" comment="n" datum="20101124131949" links_state="nolinks"
+        links_check_date="1290601190" date_start="00000000000000" date_end="99991231235959" />        
+    <faqcategoryrelations category_id="1" category_lang="en" record_id="1" record_lang="en" />
+    <faqcategoryrelations category_id="1" category_lang="en" record_id="2" record_lang="en" />
+    <faqcategoryrelations category_id="1" category_lang="en" record_id="3" record_lang="en" />
+    <faqconfig config_name="search.enableRelevance" config_value="true" />
+    <faqconfig config_name="search.relevance" config_value="keywords,thema,content" />
+</dataset>
