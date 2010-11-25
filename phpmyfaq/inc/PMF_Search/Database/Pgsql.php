@@ -66,28 +66,38 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
         if (is_numeric($searchTerm)) {
             parent::search($searchTerm);
         } else {
+            $enableRelevance = PMF_Configuration::getInstance()->get('search.enableRelevance');                    
+
+            $columns  =  $this->getResultColumns();
+            $columns .= ($enableRelevance) ? $this->getMatchingColumnsAsResult($searchTerm) : '';
+
+            $orderBy = ($enableRelevance) ? 'ORDER BY ' . $this->getMatchingOrder() : '';
+            
             $query = sprintf("
                 SELECT
                     %s
                 FROM 
-                    %s %s %s
+                    %s %s %s %s
                 WHERE
                     (%s) ILIKE ('%%%s%%')
+                    %s
                     %s",
-                $this->getResultColumns(),
+                $columns,
                 $this->getTable(),
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
+                ($enableRelevance) ? ", to_tsquery('" . $this->dbHandle->escape_string($searchTerm) . "') query " : '',
                 $this->getMatchingColumns(),
                 $this->dbHandle->escape_string($searchTerm),
-                $this->getConditions());
-            
+                $this->getConditions(),
+                $orderBy);
+
             $this->resultSet = $this->dbHandle->query($query);
         }
-        
+
         return $this->resultSet;
     }
-    
+
     /**
      * Returns the part of the SQL query with the matching columns
      * 
@@ -97,5 +107,49 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
     {
         return implode("|| ' ' ||", $this->matchingColumns);
     }
-    
+
+    /**
+     * Add the matching columns into the columns for the resultset
+     *
+     * @return PMF_Search_Database
+     */
+    public function getMatchingColumnsAsResult()
+    {
+        $resultColumns = '';
+
+        foreach ($this->matchingColumns as $matchColumn) {
+            $column = sprintf("ts_rank_cd(to_tsvector(%s), query) AS rel_%s",
+                $matchColumn,
+                substr(strstr($matchColumn, '.'), 1));
+
+            $resultColumns .= ', ' . $column;
+        }
+
+        return $resultColumns;
+    }    
+
+    /**
+     * Returns the part of the SQL query with the order by
+     *
+     * The order is calculate by weight depend on the search.relevance order
+     *
+     * @return string
+     */
+    public function getMatchingOrder()
+    {
+        $config = PMF_Configuration::getInstance()->get('search.relevance');
+        $list   = explode(",", $config);
+        $order  = '';
+
+        foreach ($list as $field) {
+            $string = 'rel_' . $field . ' DESC';
+            if (empty($order)) {
+                $order .= $string;
+            } else {
+                $order .= ', ' . $string;
+            }
+        }
+
+        return $order;
+    }
 }
