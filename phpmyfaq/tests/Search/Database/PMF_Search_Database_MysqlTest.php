@@ -158,15 +158,15 @@ class PMF_Search_Database_MysqlTest extends Database_MysqlTest
 
         $faqconfig->update(array('search.relevance' => 'thema,content,keywords'));
         $result = $this->PMF_Search_Mysql->getMatchingOrder('pregunta');
-        $this->assertEquals("(rel_keywords*3)+(rel_content*2)+(rel_thema*1)", $result);
+        $this->assertEquals("(rel_thema*3)+(rel_content*2)+(rel_keywords*1)", $result);
 
         $faqconfig->update(array('search.relevance' => 'thema,content'));
         $result = $this->PMF_Search_Mysql->getMatchingOrder('pregunta');
-        $this->assertEquals("(rel_content*2)+(rel_thema*1)", $result);
+        $this->assertEquals("(rel_thema*2)+(rel_content*1)", $result);
 
         $faqconfig->update(array('search.relevance' => 'thema,content,field1,field2'));
         $result = $this->PMF_Search_Mysql->getMatchingOrder('pregunta');
-        $this->assertEquals("(rel_field2*4)+(rel_field1*3)+(rel_content*2)+(rel_thema*1)", $result);
+        $this->assertEquals("(rel_thema*4)+(rel_content*3)+(rel_field1*2)+(rel_field2*1)", $result);
 
         $faqconfig->update(array('search.relevance' => ''));
         $result = $this->PMF_Search_Mysql->getMatchingOrder('pregunta');

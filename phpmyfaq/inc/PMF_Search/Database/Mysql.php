@@ -71,7 +71,7 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
             $columns  =  $this->getResultColumns();
             $columns .= ($enableRelevance) ? $this->getMatchingColumnsAsResult($searchTerm) : '';
 
-            $orderBy = ($enableRelevance) ? 'ORDER BY ' . $this->getMatchingOrder() : '';
+            $orderBy = ($enableRelevance) ? 'ORDER BY ' . $this->getMatchingOrder() . ' DESC' : '';
 
             $query = sprintf("
                 SELECT
@@ -149,7 +149,7 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
     public function getMatchingOrder()
     {
         $config = PMF_Configuration::getInstance()->get('search.relevance');
-        $list   = array_reverse(explode(",", $config));
+        $list   = explode(",", $config);
         $count  = count($list);
         $order  = '';
 
