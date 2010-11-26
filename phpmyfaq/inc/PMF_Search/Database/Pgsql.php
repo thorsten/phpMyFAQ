@@ -13,7 +13,7 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- * 
+ *
  * @category  phpMyFAQ
  * @package   PMF_Search_Database
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -42,23 +42,23 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
 {
     /**
      * Constructor
-     * 
+     *
      * @param PMF_Language $language Language
-     * 
+     *
      * @return PMF_Search_Abstract
      */
     public function __construct(PMF_Language $language)
     {
         parent::__construct($language);
     }
-    
+
     /**
      * Prepares the search and executes it
-     * 
+     *
      * @param string $searchTerm Search term
-     * 
+     *
      * @return resource
-     * 
+     *
      * @throws PMF_Search_Exception
      */
     public function search($searchTerm)
@@ -66,17 +66,17 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
         if (is_numeric($searchTerm)) {
             parent::search($searchTerm);
         } else {
-            $enableRelevance = PMF_Configuration::getInstance()->get('search.enableRelevance');                    
+            $enableRelevance = PMF_Configuration::getInstance()->get('search.enableRelevance');
 
             $columns  =  $this->getResultColumns();
             $columns .= ($enableRelevance) ? $this->getMatchingColumnsAsResult($searchTerm) : '';
 
             $orderBy = ($enableRelevance) ? 'ORDER BY ' . $this->getMatchingOrder() : '';
-            
+
             $query = sprintf("
                 SELECT
                     %s
-                FROM 
+                FROM
                     %s %s %s %s
                 WHERE
                     (%s) ILIKE ('%%%s%%')
@@ -86,7 +86,9 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
                 $this->getTable(),
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
-                ($enableRelevance) ? ", to_tsquery('" . $this->dbHandle->escape_string($searchTerm) . "') query " : '',
+                ($enableRelevance)
+                    ? ", plainto_tsquery('" . $this->dbHandle->escape_string($searchTerm) . "') query "
+                    : '',
                 $this->getMatchingColumns(),
                 $this->dbHandle->escape_string($searchTerm),
                 $this->getConditions(),
@@ -100,12 +102,32 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
 
     /**
      * Returns the part of the SQL query with the matching columns
-     * 
+     *
      * @return string
      */
     public function getMatchingColumns()
     {
-        return implode("|| ' ' ||", $this->matchingColumns);
+        $enableRelevance = PMF_Configuration::getInstance()->get('search.enableRelevance');
+
+        if ($enableRelevance) {
+            $machColumns = '';
+
+            foreach ($this->matchingColumns as $matchColumn) {
+                $match = sprintf("to_tsvector(coalesce(%s,''))", $matchColumn);
+                if (empty($machColumns)) {
+                    $machColumns .= '(' . $match;
+                } else {
+                    $machColumns .= ' || ' . $match;
+                }
+            }
+
+            // Add the ILIKE since the FULLTEXT looks for the exact phrase only
+            $machColumns .= ') @@ query) OR (' . implode(" || ' ' || ", $this->matchingColumns);
+        } else {
+            $machColumns = implode(" || ' ' || ", $this->matchingColumns);
+        }
+
+        return $machColumns;
     }
 
     /**
@@ -116,17 +138,31 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
     public function getMatchingColumnsAsResult()
     {
         $resultColumns = '';
+        $config        = PMF_Configuration::getInstance()->get('search.relevance');
+        $list          = explode(",", $config);
+
+        // Set weight
+        $weights = array('A', 'B', 'C', 'D');
+        $weight  = array();
+        foreach ($list as $columnName) {
+            $weight[$columnName] = array_shift($weights);
+        }
 
         foreach ($this->matchingColumns as $matchColumn) {
-            $column = sprintf("ts_rank_cd(to_tsvector(%s), query) AS rel_%s",
-                $matchColumn,
-                substr(strstr($matchColumn, '.'), 1));
+            $columnName = substr(strstr($matchColumn, '.'), 1);
 
-            $resultColumns .= ', ' . $column;
+            if (isset($weight[$columnName])) {
+                $column = sprintf("ts_rank_cd(setweight(to_tsvector(coalesce(%s,'')), '" . $weight[$columnName]
+                    . "'), query) AS rel_%s",
+                    $matchColumn,
+                    $columnName);
+
+                $resultColumns .= ', ' . $column;
+            }
         }
 
         return $resultColumns;
-    }    
+    }
 
     /**
      * Returns the part of the SQL query with the order by
