@@ -79,27 +79,27 @@ class PMF_Search_Database_PgsqlTest extends Database_PostgressTest
 
         $faqconfig->update(array('search.relevance' => 'thema,content,keywords'));
         $data = $this->PMF_Search->search('pregunta');
-        $this->assertEquals(array('1','3','2'), array($data[0]->id, $data[1]->id, $data[2]->id));
+        $this->assertEquals(array('1','3','2','4'), array($data[0]->id, $data[1]->id, $data[2]->id, $data[3]->id));
 
         $faqconfig->update(array('search.relevance' => 'thema,keywords,content'));
         $data = $this->PMF_Search->search('pregunta');
-        $this->assertEquals(array('1','2','3'), array($data[0]->id, $data[1]->id, $data[2]->id));
+        $this->assertEquals(array('1','2','3','4'), array($data[0]->id, $data[1]->id, $data[2]->id, $data[3]->id));
 
         $faqconfig->update(array('search.relevance' => 'content,thema,keywords'));
         $data = $this->PMF_Search->search('pregunta');
-        $this->assertEquals(array('3','1','2'), array($data[0]->id, $data[1]->id, $data[2]->id));
+        $this->assertEquals(array('3','1','2','4'), array($data[0]->id, $data[1]->id, $data[2]->id, $data[3]->id));
 
         $faqconfig->update(array('search.relevance' => 'content,keywords,thema'));
         $data = $this->PMF_Search->search('pregunta');
-        $this->assertEquals(array('3','2','1'), array($data[0]->id, $data[1]->id, $data[2]->id));
+        $this->assertEquals(array('3','2','1','4'), array($data[0]->id, $data[1]->id, $data[2]->id, $data[3]->id));
 
         $faqconfig->update(array('search.relevance' => 'keywords,content,thema'));
         $data = $this->PMF_Search->search('pregunta');
-        $this->assertEquals(array('2','3','1'), array($data[0]->id, $data[1]->id, $data[2]->id));
+        $this->assertEquals(array('2','3','1','4'), array($data[0]->id, $data[1]->id, $data[2]->id, $data[3]->id));
 
         $faqconfig->update(array('search.relevance' => 'keywords,thema,content'));
         $data = $this->PMF_Search->search('pregunta');
-        $this->assertEquals(array('2','1','3'), array($data[0]->id, $data[1]->id, $data[2]->id));
+        $this->assertEquals(array('2','1','3','4'), array($data[0]->id, $data[1]->id, $data[2]->id, $data[3]->id));
     }
 
     /**
@@ -108,8 +108,8 @@ class PMF_Search_Database_PgsqlTest extends Database_PostgressTest
      */
     public function testSearchRelevanceShortWords()
     {    
-        $data = $this->PMF_Search->search('preg');
-        $this->assertEquals(array('1','2','3'), array($data[0]->id, $data[1]->id, $data[2]->id));
+        $data = $this->PMF_Search->search('p');
+        $this->assertEquals(array('1','2','3','4'), array($data[0]->id, $data[1]->id, $data[2]->id, $data[3]->id));
     }
 
     /**
@@ -122,11 +122,11 @@ class PMF_Search_Database_PgsqlTest extends Database_PostgressTest
         $faqconfig->update(array('search.relevance'       => 'thema,content,keywords',
                                  'search.enableRelevance' => 'true'));
         $data = $this->PMF_Search->search('pregunta');
-        $this->assertEquals(array('1','3','2'), array($data[0]->id, $data[1]->id, $data[2]->id));
+        $this->assertEquals(array('1','3','2','4'), array($data[0]->id, $data[1]->id, $data[2]->id, $data[3]->id));
 
         $faqconfig->update(array('search.enableRelevance' => 'false'));
         $data = $this->PMF_Search->search('pregunta');
-        $this->assertEquals(array('1','2','3'), array($data[0]->id, $data[1]->id, $data[2]->id));
+        $this->assertEquals(array('1','2','3','4'), array($data[0]->id, $data[1]->id, $data[2]->id, $data[3]->id));
     }
 
     /**
@@ -136,13 +136,17 @@ class PMF_Search_Database_PgsqlTest extends Database_PostgressTest
     {
         $this->PMF_Search_Pgsql->setMatchingColumns(array('faqdata.thema', 'faqdata.content', 'faqdata.keywords'));
         $result = $this->PMF_Search_Pgsql->getMatchingColumnsAsResult('pregunta');
-        $this->assertEquals(", ts_rank_cd(to_tsvector(faqdata.thema), query) AS rel_thema, "
-            . "ts_rank_cd(to_tsvector(faqdata.content), query) AS rel_content, "
-            . "ts_rank_cd(to_tsvector(faqdata.keywords), query) AS rel_keywords", $result);
+        $this->assertEquals(", "
+            . "ts_rank_cd(setweight(to_tsvector(coalesce(faqdata.thema,'')), 'A'), query) AS rel_thema, "
+            . "ts_rank_cd(setweight(to_tsvector(coalesce(faqdata.content,'')), 'B'), query) AS rel_content, "
+            . "ts_rank_cd(setweight(to_tsvector(coalesce(faqdata.keywords,'')), 'C'), query) AS rel_keywords",
+            $result);
 
         $this->PMF_Search_Pgsql->setMatchingColumns(array('faqdata.thema'));
         $result = $this->PMF_Search_Pgsql->getMatchingColumnsAsResult('pregunta');
-        $this->assertEquals(", ts_rank_cd(to_tsvector(faqdata.thema), query) AS rel_thema", $result);
+        $this->assertEquals(", "
+            . "ts_rank_cd(setweight(to_tsvector(coalesce(faqdata.thema,'')), 'A'), query) AS rel_thema",
+            $result);
 
         $this->PMF_Search_Pgsql->setMatchingColumns(array());
         $result = $this->PMF_Search_Pgsql->getMatchingColumnsAsResult('pregunta');
