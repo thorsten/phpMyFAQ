@@ -79,7 +79,7 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
                 FROM 
                     %s %s %s
                 WHERE
-                    MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE)
+                    MATCH (%s) AGAINST ('*%s*' IN BOOLEAN MODE)
                     %s
                     %s",
                 $columns,
@@ -91,28 +91,7 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
                 $this->getConditions(),
                 $orderBy);
 
-            $this->resultSet = $this->dbHandle->query($query);
-            
-            // Fallback for searches with less than three characters
-            if (0 == $this->dbHandle->num_rows($this->resultSet)) {
-                
-                $query = sprintf("
-                    SELECT
-                        %s
-                    FROM 
-                        %s %s %s
-                    WHERE
-                        %s
-                        %s",
-                    $this->getResultColumns(),
-                    $this->getTable(),
-                    $this->getJoinedTable(),
-                    $this->getJoinedColumns(),
-                    $this->getMatchClause($searchTerm),
-                    $this->getConditions());
-            }
-            
-            $this->resultSet = $this->dbHandle->query($query);
+            $this->resultSet = $this->dbHandle->query($query);                        
         }
         
         return $this->resultSet;
@@ -128,7 +107,7 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
         $resultColumns = '';
 
         foreach ($this->matchingColumns as $matchColumn) {
-            $column = sprintf("MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE) AS rel_%s",
+            $column = sprintf("MATCH (%s) AGAINST ('*%s*' IN BOOLEAN MODE) AS rel_%s",
                 $matchColumn,
                 $this->dbHandle->escape_string($searchterm),
                 substr(strstr($matchColumn, '.'), 1));
