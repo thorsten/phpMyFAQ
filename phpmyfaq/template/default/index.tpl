@@ -19,7 +19,12 @@
     <meta name="robots" content="INDEX, FOLLOW">
     <meta name="revisit-after" content="7 days">
     <meta name="MSSmartTagsPreventParsing" content="true">
-    
+
+    <!-- Share on Facebook -->
+    <meta property="og:title" content="{title}" />
+    <meta property="og:description" content="{metaDescription}" />
+    <meta property="og:image" content="" />
+
     <link rel="stylesheet" href="template/{tplSetName}/css/{stylesheet}.css?v=1">
     <link rel="stylesheet" media="handheld" href="template/{tplSetName}/css/handheld.css?v=1">
     <link rel="stylesheet" media="print" href="template/{tplSetName}/css/print.css?v=1">

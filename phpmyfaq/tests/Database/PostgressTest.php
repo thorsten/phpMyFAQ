@@ -1,6 +1,6 @@
 <?php
 /**
- * Test suite for PMF_Search related classes
+ * Postgress connector.
  * 
  * PHP Version 5.2
  * 
@@ -16,43 +16,41 @@
  * 
  * @category  phpMyFAQ
  * @package   PMF_Tests
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Gustavo Solt <gustavo.solt@mayflower.de>
  * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-03
  */
 
-require_once 'PHPUnit/Framework/TestSuite.php';
-require_once 'PHPUnit/TextUI/TestRunner.php';
-
-require_once 'PMF_Search_DatabaseTest.php';
-require_once 'PMF_Search_FactoryTest.php';
-require_once 'PMF_Search_ResultsetTest.php';
-require_once 'Database' . DIRECTORY_SEPARATOR . 'AllTests.php';
+require_once 'AbstractTest.php';
 
 /**
- * Search_AllTests
+ * Database_PostgressTest
  * 
  * @category  phpMyFAQ
  * @package   PMF_Tests
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
+ * @author    Gustavo Solt <gustavo.solt@mayflower.de>
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2010-01-03
+ * @copyright 2009-2010 phpMyFAQ Team
+ * @since     2009-05-16
  */
-class Search_AllTests
+abstract class Database_PostgressTest extends Database_AbstractTest 
 {
-    public static function suite()
+    /**
+     * Return the Postgress server settings.
+     *
+     * @return array
+     */    
+    protected function getDbData()
     {
-        $suite = new PHPUnit_Framework_TestSuite('phpMyFAQ PMF_Search');
-        
-        $suite->addTestSuite('PMF_Search_DatabaseTest');
-        $suite->addTestSuite('PMF_Search_FactoryTest');
-        $suite->addTestSuite('PMF_Search_ResultsetTest');
-        $suite->addTest(PMF_Search_Database_AllTests::suite());
-        
-        return $suite;
+        return array(
+            "server"   => 'localhost',
+            "user"     => 'postgres',
+            "password" => '-',
+            "db"       => 'phpmyfaqtest',
+            "prefix"   => '',
+            "type"     => 'pgsql');
     }
 }

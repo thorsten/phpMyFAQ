@@ -68,14 +68,16 @@ $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.numberOfRel
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.orderby', 'id')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.sortby', 'DESC')";
 
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('spam.checkBannedWords', 'true')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('spam.enableCaptchaCode', 'true')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('spam.enableSafeEmail', 'true')";
+
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('socialnetworks.enableTwitterSupport', 'false')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('socialnetworks.twitterConsumerKey', '')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('socialnetworks.twitterConsumerSecret', '')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('socialnetworks.twitterAccessTokenKey', '')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('socialnetworks.twitterAccessTokenSecret', '')";
-
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('socialnetworks.enableFacebookSupport', 'false')";
-        
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('spam.checkBannedWords', 'true')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('spam.enableCaptchaCode', 'true')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('spam.enableSafeEmail', 'true')";
+
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('search.relevance', 'thema,content,keywords')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('search.enableRelevance', 'false')";

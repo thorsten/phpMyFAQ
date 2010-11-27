@@ -1086,6 +1086,17 @@ $PMF_LANG['msgEditFaqDat'] = 'edit';
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Mail address as mandatory field (default: deactivated)');
 $LANG_CONF['main.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Instant Response on startpage (default: deactivated)');
 
+// added v2.6.99 - 2010-11-24 by Gustavo Solt
+$LANG_CONF['search.relevance'] = array(0 => 'select', 1 => 'Sort by relevance');
+$LANG_CONF["search.enableRelevance"] = array(0 => "checkbox", 1 => "Activate relevance support? (default: disabled)");
+$PMF_LANG['searchControlCenter'] = 'Search';
+$PMF_LANG['search.relevance.thema-content-keywords'] = 'Question - Answer - Keywords';
+$PMF_LANG['search.relevance.thema-keywords-content'] = 'Question - Keywords - Answer';
+$PMF_LANG['search.relevance.content-thema-keywords'] = 'Answer - Question - Keywords';
+$PMF_LANG['search.relevance.content-keywords-thema'] = 'Answer - Keywords - Question';
+$PMF_LANG['search.relevance.keywords-content-thema'] = 'Keywords - Answer - Question';
+$PMF_LANG['search.relevance.keywords-thema-content'] = 'Keywords - Question - Answer';
+
 // added 2.7.0-alpha - 2010-09-13 by Thorsten
 $PMF_LANG['msgLoginUser'] = 'Login';
 $PMF_LANG['socialNetworksControlCenter'] = 'Social networks configuration';
