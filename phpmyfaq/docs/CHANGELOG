@@ -10,6 +10,7 @@ Version 2.7.0-alpha - 2011-01-
 - dropped support for MySQL 4.1 (Thorsten)
 - dropped support for Internet Explorer 6 (Thorsten)
 - added new HTML5 powered layout and administration backend (Thorsten)
+- added configurable search relevance functionality (Gustavo Solt)
 - added Twitter support (Thorsten, Thomas Zeithaml)
 - added Facebook Like Button support (Thorsten)
 - updated bundled jQuery to version 1.4.4 (Thorsten)

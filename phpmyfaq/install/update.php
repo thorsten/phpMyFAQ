@@ -643,7 +643,15 @@ if ($step == 4) {
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.optionalMailAddress', 'false')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.useAjaxSearchOnStartpage', 'false')";
     }
-    
+
+    //
+    // UPDATES FROM 2.6.99
+    //
+    if (version_compare($version, '2.6.99', '<')) {
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('search.relevance', 'thema,content,keywords')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('search.enableRelevance', 'false')";
+    }
+
     //
     // UPDATES FROM 2.7.0-alpha
     //
