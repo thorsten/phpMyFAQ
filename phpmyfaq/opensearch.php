@@ -24,6 +24,7 @@
  */
 
 define('PMF_ROOT_DIR', dirname(__FILE__));
+define('IS_VALID_PHPMYFAQ', null);
 
 require PMF_ROOT_DIR . '/inc/Init.php';
 require PMF_ROOT_DIR . '/inc/Link.php';
