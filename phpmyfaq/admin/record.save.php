@@ -143,8 +143,9 @@ if ($permission['editbt']) {
             $category->addPermission('group', $categories['rubrik'], $restricted_groups);
         }
 
-        if ($faqconfig->get('main.enableGoogleTranslation') === true) {        
-            // All the other translations
+        // All the other translations        
+        $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);            
+        if ($faqconfig->get('main.enableGoogleTranslation') === true && !empty($languages)) {
             $linkverifier = new PMF_Linkverifier($user->getLogin());
     
             $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
