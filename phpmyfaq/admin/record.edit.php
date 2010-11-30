@@ -540,7 +540,7 @@ if($permission['approverec']):
     google.load("language", "1");
 
     var langFromSelect = $("#language");
-    var langToSelect = $("#langTo");
+    var langToSelect   = $("#langTo");
         
     // Add a onChange to the faq language select
     langFromSelect.change(
@@ -563,72 +563,46 @@ if($permission['approverec']):
                 } else {
                     $('#used_translated_languages').val(languages + ',' + langTo);
                 }
-
-                var fieldset = document.createElement("FIELDSET");
-                var legend = document.createElement("LEGEND");
-                legend.innerHTML = $("#langTo option:selected").text();
-                fieldset.appendChild(legend);
-
-                // Label
-                var label = document.createElement('LABEL');
-                label.setAttribute('class', 'lefteditor');
-                label.setAttribute('for', 'thema_translated_' + langTo);
-                label.appendChild(document.createTextNode('<?php print $PMF_LANG["ad_entry_theme"]; ?>'));
-                fieldset.appendChild(label);
+               
+                var fieldset = $('<fieldset></fieldset>')
+                    .append($('<legend></legend>').html($("#langTo option:selected").text()));
 
                 // Text for thema
-                var thema = document.createElement('INPUT');
-                thema.setAttribute('id', 'thema_translated_' + langTo);
-                thema.setAttribute('name', 'thema_translated_' + langTo);
-                thema.setAttribute('readonly', 'readonly');
-                thema.setAttribute('maxlength', '255');
-                thema.setAttribute('style', 'width: 720px; height: 30px; font-size: 24px;');
-                fieldset.appendChild(thema);
-
-                // BR
-                var br = document.createElement('BR');
-                fieldset.appendChild(br);
-
-                // Label
-                var label = document.createElement('LABEL');
-                label.setAttribute('class', 'lefteditor');
-                label.setAttribute('for', 'content_translated_' + langTo);
-                label.appendChild(document.createTextNode('<?php print $PMF_LANG["ad_entry_content"]; ?>'));
-                fieldset.appendChild(label);
+                fieldset
+                    .append($('<label></label>').attr({for: 'thema_translated_' + langTo}).addClass('left')
+                        .append('<?php print $PMF_LANG["ad_entry_theme"]; ?>'))
+                    .append($('<input></input>')
+                        .attr({id:        'thema_translated_' + langTo,
+                               name:      'thema_translated_' + langTo,
+                               readonly:  'readonly',
+                               maxlength: '255',
+                               style:     'width: 390px;'}))
+                    .append($('<br></br>'));
 
                 // Textarea for content
-                var content = document.createElement('TEXTAREA');
-                content.setAttribute('id', 'content_translated_' + langTo);
-                content.setAttribute('name', 'content_translated_' + langTo);
-                content.setAttribute('readonly', 'readonly');
-                content.setAttribute('cols','40');
-                content.setAttribute('rows','4');
-                content.setAttribute('style', 'width: 390px; height: 50px;');
-                fieldset.appendChild(content);
-
-                // BR
-                var br = document.createElement('BR');
-                fieldset.appendChild(br);
-
-                // Label
-                var label = document.createElement('LABEL');
-                label.setAttribute('class', 'lefteditor');
-                label.setAttribute('for', 'keywords_translated_' + langTo);
-                label.appendChild(document.createTextNode('<?php print $PMF_LANG["ad_entry_keywords"]; ?>'));
-                fieldset.appendChild(label);
+                fieldset
+                    .append($('<label></label>').attr({for: 'content_translated_' + langTo}).addClass('left')
+                        .append('<?php print $PMF_LANG["ad_entry_content"]; ?>'))                
+                    .append($('<textarea></textarea>')
+                        .attr({id:       'content_translated_' + langTo,
+                               name:     'content_translated_' + langTo,
+                               readonly: 'readonly',
+                               cols:     '40',
+                               rows:     '4',
+                               style:    'width: 396px; height: 50px; margin-bottom: 4px;'}))
+                    .append($('<br></br>'));
 
                 // Text for thema
-                var keywords = document.createElement('INPUT');
-                keywords.setAttribute('id', 'keywords_translated_' + langTo);
-                keywords.setAttribute('name', 'keywords_translated_' + langTo);
-                keywords.setAttribute('readonly', 'readonly');
-                keywords.setAttribute('maxlength', '255');
-                keywords.setAttribute('style', 'width: 720px; height: 30px; font-size: 24px;');
-                fieldset.appendChild(keywords);
-
-                // BR
-                var br = document.createElement('BR');
-                fieldset.appendChild(br);
+                fieldset
+                    .append($('<label></label>').attr({for: 'keywords_translated_' + langTo}).addClass('left')
+                        .append('<?php print $PMF_LANG["ad_entry_keywords"]; ?>'))
+                    .append($('<input></input>')
+                        .attr({id:       'keywords_translated_' + langTo,
+                               name:     'keywords_translated_' + langTo,
+                               readonly: 'readonly',
+                               maxlength: '255',
+                               style:     'width: 390px;'}))
+                    .append($('<br></br>'));
 
                 $('#getedTranslations').append(fieldset);
             }
@@ -639,10 +613,9 @@ if($permission['approverec']):
 
             // Keywords must be translated separately
             $('#keywords_translated_' + langTo).val('');
-            var string = new String($('#keywords').val());
-            var words  = string.split(',');
+            var words = new String($('#keywords').val()).split(',');
             for (var i = 0; i < words.length; i++) {
-                var word = words[i].replace(/^\s*|\s*$/g,"");
+                var word = $.trim(words[i]);
                 getGoogleTranslation('#keywords_translated_' + langTo, word, langTo, 'add', ',');
             }
         }
