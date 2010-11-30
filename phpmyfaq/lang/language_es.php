@@ -1070,3 +1070,7 @@ $PMF_LANG['search.relevance.content-thema-keywords'] = 'Respuesta - Pregunta - P
 $PMF_LANG['search.relevance.content-keywords-thema'] = 'Respuesta - Palabras clave - Pregunta';
 $PMF_LANG['search.relevance.keywords-content-thema'] = 'Palabras clave - Respuesta - Pregunta';
 $PMF_LANG['search.relevance.keywords-thema-content'] = 'Palabras clave - Pregunta - Respuesta';
+
+// added v2.6.99 - 2010-11-30 by Gustavo Solt
+$LANG_CONF['main.googleTranslationKey'] = array(0 => 'input', 1 => 'Clave API de Google');
+$LANG_CONF["main.enableGoogleTranslation"] = array(0 => "checkbox", 1 => "Activar las traducciones de Google? (Por defecto: desactivadas)'");

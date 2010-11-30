@@ -56,6 +56,8 @@ $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.numberSearchTerms'
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.orderingPopularFaqs', 'visits')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.optionalMailAddress', 'false')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.useAjaxSearchOnStartpage', 'false')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.enableGoogleTranslation', 'false')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.googleTranslationKey', 'INSERT-YOUR-KEY')";
 
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.defaultActivation', 'false')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.defaultAllowComments', 'false')";
