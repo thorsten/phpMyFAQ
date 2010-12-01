@@ -66,46 +66,82 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
         if (is_numeric($searchTerm)) {
             parent::search($searchTerm);
         } else {
+            $enableRelevance = PMF_Configuration::getInstance()->get('search.enableRelevance');                    
+
+            $columns  =  $this->getResultColumns();
+            $columns .= ($enableRelevance) ? $this->getMatchingColumnsAsResult($searchTerm) : '';
+
+            $orderBy = ($enableRelevance) ? 'ORDER BY ' . $this->getMatchingOrder() . ' DESC' : '';
+
             $query = sprintf("
                 SELECT
                     %s
                 FROM 
                     %s %s %s
                 WHERE
-                    MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE)
+                    MATCH (%s) AGAINST ('*%s*' IN BOOLEAN MODE)
+                    %s
                     %s",
-                $this->getResultColumns(),
+                $columns,
                 $this->getTable(),
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
                 $this->getMatchingColumns(),
                 $this->dbHandle->escape_string($searchTerm),
-                $this->getConditions());
-            
-            $this->resultSet = $this->dbHandle->query($query);
-            
-            // Fallback for searches with less than three characters
-            if (0 == $this->dbHandle->num_rows($this->resultSet)) {
-                
-                $query = sprintf("
-                    SELECT
-                        %s
-                    FROM 
-                        %s %s %s
-                    WHERE
-                        %s
-                        %s",
-                    $this->getResultColumns(),
-                    $this->getTable(),
-                    $this->getJoinedTable(),
-                    $this->getJoinedColumns(),
-                    $this->getMatchClause($searchTerm),
-                    $this->getConditions());
-            }
-            
-            $this->resultSet = $this->dbHandle->query($query);
+                $this->getConditions(),
+                $orderBy);
+
+            $this->resultSet = $this->dbHandle->query($query);                        
         }
         
         return $this->resultSet;
+    }
+
+    /**
+     * Add the matching columns into the columns for the resultset
+     *
+     * @return PMF_Search_Database
+     */
+    public function getMatchingColumnsAsResult($searchterm)
+    {
+        $resultColumns = '';
+
+        foreach ($this->matchingColumns as $matchColumn) {
+            $column = sprintf("MATCH (%s) AGAINST ('*%s*' IN BOOLEAN MODE) AS rel_%s",
+                $matchColumn,
+                $this->dbHandle->escape_string($searchterm),
+                substr(strstr($matchColumn, '.'), 1));
+
+                $resultColumns .= ', ' . $column;
+        }
+
+        return $resultColumns;
+    }
+
+    /**
+     * Returns the part of the SQL query with the order by
+     *
+     * The order is calculate by weight depend on the search.relevance order
+     *
+     * @return string
+     */
+    public function getMatchingOrder()
+    {
+        $config = PMF_Configuration::getInstance()->get('search.relevance');
+        $list   = explode(",", $config);
+        $count  = count($list);
+        $order  = '';
+
+        foreach ($list as $field) {
+            $string = '(rel_' . $field . '*' . $count .')';
+            if (empty($order)) {
+                $order .= $string;
+            } else {
+                $order .= '+' . $string;
+            }
+            $count--;
+        }
+
+        return $order;
     }
 }

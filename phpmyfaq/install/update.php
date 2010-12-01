@@ -25,7 +25,7 @@
  * @since     2002-01-10
  */
 
-define('NEWVERSION', '2.6.12');
+define('NEWVERSION', '2.6.99');
 define('APIVERSION', 1);
 define('MINIMUM_PHP_VERSION', '5.2.0');
 define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
@@ -643,7 +643,15 @@ if ($step == 4) {
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.optionalMailAddress', 'false')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.useAjaxSearchOnStartpage', 'false')";
     }
-    
+
+    //
+    // UPDATES FROM 2.6.99
+    //
+    if (version_compare($version, '2.6.99', '<')) {
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('search.relevance', 'thema,content,keywords')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('search.enableRelevance', 'false')";
+    }
+
     // Perform the queries for updating/migrating the database from 2.x
     if (isset($query)) {
         print '<div class="center">';

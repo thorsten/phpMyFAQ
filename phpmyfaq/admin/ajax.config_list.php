@@ -34,7 +34,8 @@ $configMode           = PMF_Filter::filterInput(INPUT_GET, 'conf', FILTER_SANITI
 $availableConfigModes = array(
         'main'      => 1,
         'records'   => 1,
-        'spam'      => 1);
+        'spam'      => 1,
+        'search'    => 1);
 
 function printInputFieldByType($key, $type)
 {
@@ -120,6 +121,27 @@ function printInputFieldByType($key, $type)
                     printf('<option value="voting"%s>%s</option>',
                         ('voting' == $faqconfig->get($key)) ? ' selected="selected"' : '',
                         $PMF_LANG['main.orderingPopularFaqs.voting']);
+                    break;
+
+                case "search.relevance":
+                    printf('<option value="thema,content,keywords"%s>%s</option>',
+                        ('thema,content,keywords' == $faqconfig->get($key)) ? ' selected="selected"' : '',
+                        $PMF_LANG['search.relevance.thema-content-keywords']);
+                    printf('<option value="thema,keywords,content"%s>%s</option>',
+                        ('thema,keywords,content' == $faqconfig->get($key)) ? ' selected="selected"' : '',
+                        $PMF_LANG['search.relevance.thema-keywords-content']);
+                    printf('<option value="content,thema,keywords"%s>%s</option>',
+                        ('content,thema,keywords' == $faqconfig->get($key)) ? ' selected="selected"' : '',
+                        $PMF_LANG['search.relevance.content-thema-keywords']);
+                    printf('<option value="content,keywords,thema"%s>%s</option>',
+                        ('content,keywords,thema' == $faqconfig->get($key)) ? ' selected="selected"' : '',
+                        $PMF_LANG['search.relevance.content-keywords-thema']);
+                    printf('<option value="keywords,content,thema"%s>%s</option>',
+                        ('keywords,content,thema' == $faqconfig->get($key)) ? ' selected="selected"' : '',
+                        $PMF_LANG['search.relevance.keywords-content-thema']);
+                    printf('<option value="keywords,thema,content"%s>%s</option>',
+                        ('keywords,thema,content' == $faqconfig->get($key)) ? ' selected="selected"' : '',
+                        $PMF_LANG['search.relevance.keywords-thema-content']);
                     break;
             }
             
