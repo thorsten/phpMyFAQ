@@ -158,6 +158,86 @@ function ajaxfilemanager(field_name, url, type, win)
 <!-- /SyntaxHighlighter -->
 <?php
         }
+    } 
+
+    if (isset($auth) && (('addcategory'    == $action) || ('editcategory' == $action) || 
+                         ('updatecategory' == $action) || ('editentry' == $action)   )) {
+        if ($faqconfig->get('main.enableGoogleTranslation') == true) {
+?>
+<!-- Google API functions -->
+<script type="text/javascript">
+/*<![CDATA[*/ //<!--
+/**
+ * Call the google API and fill the field with the result.
+ *
+ * @param string div       id of the input to fill.
+ * @param string text      Text to translate.
+ * @param string langFrom  Current language. 
+ * @param string langTo    Wanted language.
+ * @param string action    Action for fill the field (add | reeplace)
+ * @param string separator Separator for add data into the field.
+ *
+ * @return string $code Language code used in Google.
+ */
+function getGoogleTranslation(div, text, langFrom, langTo, action, separator)
+{
+    langFrom = convertCodeForGoogle(langFrom);
+    langTo   = convertCodeForGoogle(langTo);
+    google.language.translate(text, langFrom, langTo, function(result) {
+        if (result.translation) {
+             if (!action) {
+                $(div).val(result.translation);
+             } else {
+                if (!separator) {
+                    separator = ' ';
+                }
+                if ($(div).val() == '') {
+                    $(div).val(result.translation);
+                } else {
+                    $(div).val($(div).val() + separator + result.translation);
+                }
+            }
+        }
+    });
+}
+
+/**
+ * Change some phpMyFAQ language code to the Google ones.
+ *
+ * @param string $code Language code used in phpMyFAQ.
+ *
+ * @return string $code Language code used in Google.
+ */
+function convertCodeForGoogle(code)
+{
+    switch (code) {
+        case 'zh':
+            code = 'zh-CN';
+            break;
+        case 'tw':
+            code = 'zh-TW';
+            break;
+        case 'pt-br':
+            code = 'pt';
+            break;
+        case 'pt':
+            code = 'pt-PT';
+            break;
+        case 'nb':
+            code = 'no';
+            break;
+        case 'he':
+            code = 'iw';
+            break;
+    }
+
+    return code;
+}
+// --> /*]]>*/
+</script>
+<!-- /Google API functions -->    
+<?php            
+        }
     }
 }
 ?>
