@@ -47,6 +47,9 @@ if ($permission["editcateg"]) {
         $showcat = "no";
     }
 
+    $user_permission  = $category->getPermissions('user', array($id));
+    $group_permission = $category->getPermissions('group', array($id));
+    
     printf('<h2>%s</h2>', $header);
 ?>
     <form action="?action=updatecategory" method="post">
@@ -56,6 +59,12 @@ if ($permission["editcateg"]) {
         <input type="hidden" name="id" value="<?php print $id; ?>" />
         <input type="hidden" name="parent_id" value="<?php print $category->categoryName[$id]["parent_id"]; ?>" />
         <input type="hidden" name="showcat" value="<?php print $showcat; ?>" />
+        <?php if ($faqconfig->get('main.permLevel') != 'basic') { ?>
+        <input type="hidden" name="restricted_groups" value="<?php print $group_permission[0]; ?>" />
+        <?php } else { ?>
+        <input type="hidden" name="restricted_groups" value="-1" />
+        <?php } ?>
+        <input type="hidden" name="restricted_users" value="<?php print $user_permission[0]; ?>" />
         <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
 
         <label class="left"><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
