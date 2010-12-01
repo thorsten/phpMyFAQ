@@ -77,13 +77,13 @@ if ($num > 0) {
         if (PMF_RSS_USE_SEO) {
             if (isset($item['thema'])) {
                 $oLink            = new PMF_Link($link);
-                $oLink->itemTitle = $item['thema'];
-                $link             = html_entity_decode($oLink->toString());
+                $oLink->itemTitle = html_entity_decode($item['thema'], ENT_COMPAT, 'UTF-8');
+                $link             = html_entity_decode($oLink->toString(), ENT_COMPAT, 'UTF-8');
             }
         }
 
         $rss->startElement('item');
-        $rss->writeElement('title', PMF_Utils::makeShorterText(html_entity_decode($item['thema']), 8) .
+        $rss->writeElement('title', PMF_Utils::makeShorterText(html_entity_decode($item['thema']), ENT_COMPAT, 'UTF-8', 8) .
                                     " (".$item['visits']." ".$PMF_LANG['msgViews'].")");
         
         $rss->startElement('description');
