@@ -144,6 +144,50 @@ if ($permission['editbt']) {
                     $twitter->addPost($question, $tags, $link);
                 }
             }
+
+            // All the other translations
+            $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);            
+            if ($faqconfig->get('main.enableGoogleTranslation') === true && !empty($languages)) {
+                $linkverifier = new PMF_Linkverifier($user->getLogin());
+    
+                $languages = explode(",", $languages);
+                foreach ($languages as $translated_lang) {
+                    if ($translated_lang == $record_lang) {
+                        continue;
+                    }
+                    $translated_question = PMF_Filter::filterInput(INPUT_POST, 'thema_translated_' . $translated_lang, FILTER_SANITIZE_STRING);
+                    $translated_content  = PMF_Filter::filterInput(INPUT_POST, 'content_translated_' . $translated_lang, FILTER_SANITIZE_SPECIAL_CHARS);
+                    $translated_keywords = PMF_Filter::filterInput(INPUT_POST, 'keywords_translated_' . $translated_lang, FILTER_SANITIZE_STRING);
+    
+                    $recordData = array_merge($recordData, array(
+                        'id'            => $record_id,
+                        'lang'          => $translated_lang,
+                        'thema'         => html_entity_decode($translated_question),
+                        'content'       => html_entity_decode($translated_content),
+                        'keywords'      => $translated_keywords,
+                        'author'        => 'Google',
+                        'email'         => $faqconfig->get('main.administrationMail')));
+    
+                    // Create ChangeLog entry
+                    $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $translated_lang);
+    
+                    // save or update the FAQ record
+                    if ($faq->isAlreadyTranslated($record_id, $translated_lang)) {
+                        $faq->updateRecord($recordData);
+                    } else {
+                        $faq->addRecord($recordData, false);
+                    }
+    
+                    // delete category relations
+                    $faq->deleteCategoryRelations($record_id, $translated_lang);
+    
+                    // save or update the category relations
+                    $faq->addCategoryRelations($categories['rubrik'], $record_id, $translated_lang);
+    
+                    // Copy Link Verification
+                    $linkverifier->markEntry($record_id, $translated_lang);
+                }
+            }
 ?>
     <script type="text/javascript">
     <!--

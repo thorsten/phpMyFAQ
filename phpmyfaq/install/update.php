@@ -650,6 +650,8 @@ if ($step == 4) {
     if (version_compare($version, '2.6.99', '<')) {
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('search.relevance', 'thema,content,keywords')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('search.enableRelevance', 'false')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.enableGoogleTranslation', 'false')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.googleTranslationKey', 'INSERT-YOUR-KEY')";
     }
 
     //

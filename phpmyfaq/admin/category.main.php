@@ -67,6 +67,36 @@ if ($permission['editcateg']) {
             $category->addPermission('user', array($category_id), $user_allowed);
             $category->addPermission('group', array($category_id), $group_allowed);
             printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_added']);
+                        
+            // All the other translations            
+            $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
+            if ($faqconfig->get('main.enableGoogleTranslation') === true && !empty($languages)) {
+
+                $languages     = explode(",", $languages);
+                $category_lang = $category_data['lang'];
+                $user_id       = $category_data['user_id'];                
+                foreach ($languages as $translated_lang) {
+                    if ($translated_lang == $category_lang) {
+                        continue;
+                    }
+                    $translated_name        = PMF_Filter::filterInput(INPUT_POST, 'name_translated_' . $translated_lang, FILTER_SANITIZE_STRING);
+                    $translated_description = PMF_Filter::filterInput(INPUT_POST, 'description_translated_' . $translated_lang, FILTER_SANITIZE_STRING);
+
+                    $category_data = array_merge($category_data, array(
+                        'id'          => $category_id,
+                        'lang'        => $translated_lang,
+                        'parent_id'   => $parent_id,
+                        'name'        => $translated_name,
+                        'description' => $translated_description,
+                        'user_id'     => $user_id));
+
+                    if (!$category->checkLanguage($category_id, $translated_lang)) {
+                        $category->addCategory($category_data, $parent_id, $category_id);
+                    } else {
+                        $category->updateCategory($category_data);
+                    }
+                }
+            }
         } else {
             printf('<p class="error">%s</p>', $db->error());
         }
@@ -107,6 +137,37 @@ if ($permission['editcateg']) {
                 printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_updated']);
             } else {
                 printf('<p class="error">%s</p>', $db->error());
+            }
+        }
+        
+        // All the other translations            
+        $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
+        if ($faqconfig->get('main.enableGoogleTranslation') === true && !empty($languages)) {
+
+            $languages     = explode(",", $languages);
+            $category_lang = $category_data['lang'];
+            $category_id   = $category_data['id'];
+            $user_id       = $category_data['user_id'];
+            foreach ($languages as $translated_lang) {
+                if ($translated_lang == $category_lang) {
+                    continue;
+                }
+                $translated_name        = PMF_Filter::filterInput(INPUT_POST, 'name_translated_' . $translated_lang, FILTER_SANITIZE_STRING);
+                $translated_description = PMF_Filter::filterInput(INPUT_POST, 'description_translated_' . $translated_lang, FILTER_SANITIZE_STRING);
+
+                $category_data = array_merge($category_data, array(
+                    'id'          => $category_id,
+                    'lang'        => $translated_lang,
+                    'parent_id'   => $parent_id,
+                    'name'        => $translated_name,
+                    'description' => $translated_description,
+                    'user_id'     => $user_id));
+
+                if (!$category->checkLanguage($category_id, $translated_lang)) {
+                    $category->addCategory($category_data, $parent_id, $category_id);
+                } else {
+                    $category->updateCategory($category_data);
+                }
             }
         }
     }

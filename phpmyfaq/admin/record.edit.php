@@ -272,9 +272,19 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     <fieldset class="fullwidth">
     <legend><?php print $PMF_LANG['ad_entry_record_administration']; ?></legend>
 
+<?php
+    if ($faqconfig->get('main.enableGoogleTranslation') === true) {
+?>       
+    <input type="hidden" id="language" name="language" value="<?php print $LANGCODE; ?>" />
+<?php
+    } else {
+?>           
     <label class="left" for="language"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
     <?php print PMF_Language::selectLanguages($faqData['lang']); ?><br />
 
+<?php
+    }
+?>           
     <label class="left" for="solution_id"><?php print $PMF_LANG['ad_entry_solution_id']; ?>:</label>
     <input name="solution_id" id="solution_id" style="width: 50px; text-align: right;" value="<?php print (isset($faqData['solution_id']) ? $faqData['solution_id'] : $faq->getSolutionId()); ?>" size="5" readonly="readonly" /><br />
 
@@ -363,7 +373,24 @@ if($permission['approverec']):
     <div id="recordDateInputContainer" style="display: none;"></span><label class="left" for="date">&nbsp;</label>
     <input type="text" name="date" id="date" maxlength="16" value="" /></div>
     </fieldset>
+<?php
+    if ($faqconfig->get('main.enableGoogleTranslation') === true) {
+?>    
+    <fieldset class="fullwidth">
+    <legend><a href="javascript:void(0);" onclick="javascript:toggleFieldset('Translations');"><?php print $PMF_LANG["ad_menu_translations"]; ?></a></legend>
 
+    <div id="editTranslations" style="display: none;">
+        <label class="left" for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
+        <?php print PMF_Language::selectLanguages($faqData['lang'], false, array(), 'langTo'); ?><br />
+
+        <input type="hidden" name="used_translated_languages" id="used_translated_languages" value="" />
+        <div id="getedTranslations">
+        </div>
+    </div>
+    </fieldset>
+<?php
+    }
+?>
     <fieldset class="fullwidth">
     <legend><a href="javascript:void(0);" onclick="javascript:toggleFieldset('Expiration');"><?php print $PMF_LANG['ad_record_expiration_window']; ?></a></legend>
     
@@ -512,10 +539,103 @@ if($permission['approverec']):
         $('#' + option + 'Help').prepend('<?php print $PMF_LANG['msgShowHelp']; ?>').fadeIn(500);
         $('#' + option + 'Help').fadeOut(5000);
     }
+    /* ]]> */
+    </script>
+<?php    
+        if ($faqconfig->get('main.enableGoogleTranslation') === true) {
+?>        
+    <script src="https://www.google.com/jsapi?key=<?php echo $faqconfig->get('main.googleTranslationKey')?>" type="text/javascript"></script>
+    <script type="text/javascript">
+    /* <![CDATA[ */
+    google.load("language", "1");
+
+    var langFromSelect = $("#language");
+    var langToSelect   = $("#langTo");
+        
+    // Add a onChange to the faq language select
+    langFromSelect.change(
+        function() {
+            $("#langTo").val($(this).val());
+        }
+    );
     
+    // Add a onChange to the translation select
+    langToSelect.change(
+        function() {
+            var langTo = $(this).val();
+
+            if (!document.getElementById('thema_translated_' + langTo)) {
+
+                // Add language value
+                var languages = $('#used_translated_languages').val();
+                if (languages == '') {
+                    $('#used_translated_languages').val(langTo);
+                } else {
+                    $('#used_translated_languages').val(languages + ',' + langTo);
+                }
+               
+                var fieldset = $('<fieldset></fieldset>')
+                    .append($('<legend></legend>').html($("#langTo option:selected").text()));
+
+                // Text for thema
+                fieldset
+                    .append($('<label></label>').attr({for: 'thema_translated_' + langTo}).addClass('left')
+                        .append('<?php print $PMF_LANG["ad_entry_theme"]; ?>'))
+                    .append($('<input></input>')
+                        .attr({id:        'thema_translated_' + langTo,
+                               name:      'thema_translated_' + langTo,
+                               readonly:  'readonly',
+                               maxlength: '255',
+                               style:     'width: 390px;'}))
+                    .append($('<br></br>'));
+
+                // Textarea for content
+                fieldset
+                    .append($('<label></label>').attr({for: 'content_translated_' + langTo}).addClass('left')
+                        .append('<?php print $PMF_LANG["ad_entry_content"]; ?>'))                
+                    .append($('<textarea></textarea>')
+                        .attr({id:       'content_translated_' + langTo,
+                               name:     'content_translated_' + langTo,
+                               readonly: 'readonly',
+                               cols:     '40',
+                               rows:     '4',
+                               style:    'width: 396px; height: 50px; margin-bottom: 4px;'}))
+                    .append($('<br></br>'));
+
+                // Text for thema
+                fieldset
+                    .append($('<label></label>').attr({for: 'keywords_translated_' + langTo}).addClass('left')
+                        .append('<?php print $PMF_LANG["ad_entry_keywords"]; ?>'))
+                    .append($('<input></input>')
+                        .attr({id:       'keywords_translated_' + langTo,
+                               name:     'keywords_translated_' + langTo,
+                               readonly: 'readonly',
+                               maxlength: '255',
+                               style:     'width: 390px;'}))
+                    .append($('<br></br>'));
+
+                $('#getedTranslations').append(fieldset);
+            }
+
+            var langFrom = $('#language').val();
+            
+            // Set the translated text
+            getGoogleTranslation('#thema_translated_' + langTo, $('#thema').val(), langFrom, langTo);
+            getGoogleTranslation('#content_translated_' + langTo, tinymce.get('content').getContent(), langFrom, langTo);
+
+            // Keywords must be translated separately
+            $('#keywords_translated_' + langTo).val('');
+            var words = new String($('#keywords').val()).split(',');
+            for (var i = 0; i < words.length; i++) {
+                var word = $.trim(words[i]);
+                getGoogleTranslation('#keywords_translated_' + langTo, word, langFrom, langTo, 'add', ',');
+            }
+        }
+    );
     /* ]]> */
     </script>
 <?php
+        }
     }
 } elseif ($permission["editbt"] != 1 && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     print $PMF_LANG["err_NotAuth"];
