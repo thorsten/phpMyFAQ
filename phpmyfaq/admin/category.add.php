@@ -149,7 +149,6 @@ if ($permission["addcateg"]) {
                     .append($('<input></input>')
                         .attr({id:        'name_translated_' + langTo,
                                name:      'name_translated_' + langTo,
-                               readonly:  'readonly',
                                maxlength: '255',
                                size:      '30',
                                style:     'width: 300px;'}))
@@ -160,12 +159,11 @@ if ($permission["addcateg"]) {
                     .append($('<label></label>').attr({for: 'description_translated_' + langTo}).addClass('left')
                         .append('<?php print $PMF_LANG["ad_categ_desc"]; ?>'))                
                     .append($('<textarea></textarea>')
-                        .attr({id:       'description_translated_' + langTo,
-                               name:     'description_translated_' + langTo,
-                               readonly: 'readonly',
-                               cols:     '80',
-                               rows:     '3',
-                               style:    'width: 300px;'}))
+                        .attr({id:    'description_translated_' + langTo,
+                               name:  'description_translated_' + langTo,
+                               cols:  '80',
+                               rows:  '3',
+                               style: 'width: 300px;'}))
 
                 $('#getedTranslations').append(fieldset);
             }
