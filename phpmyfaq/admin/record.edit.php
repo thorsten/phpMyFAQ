@@ -380,12 +380,20 @@ if($permission['approverec']):
     <legend><a href="javascript:void(0);" onclick="javascript:toggleFieldset('Translations');"><?php print $PMF_LANG["ad_menu_translations"]; ?></a></legend>
 
     <div id="editTranslations" style="display: none;">
+        <?php
+        if ($faqconfig->get('main.googleTranslationKey') == '') {
+            print $PMF_LANG["msgNoGoogleApiKeyFound"];
+        } else {
+        ?>
         <label class="left" for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
         <?php print PMF_Language::selectLanguages($faqData['lang'], false, array(), 'langTo'); ?><br />
 
         <input type="hidden" name="used_translated_languages" id="used_translated_languages" value="" />
         <div id="getedTranslations">
         </div>
+        <?php
+        }
+        ?>
     </div>
     </fieldset>
 <?php

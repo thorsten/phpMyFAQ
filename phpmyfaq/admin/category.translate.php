@@ -75,12 +75,20 @@ if ($permission["editcateg"]) {
         <input type="hidden" id="description" name="description" value="<?php print $category->categoryName[$id]['description']; ?>" />
         
         <div id="editTranslations">
+            <?php
+            if ($faqconfig->get('main.googleTranslationKey') == '') {
+                print $PMF_LANG["msgNoGoogleApiKeyFound"];
+            } else {
+            ?>        
             <label class="left" for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
             <?php print PMF_Language::selectLanguages($faqData['lang'], false, array(), 'langTo'); ?>
             <br />
             <input type="hidden" name="used_translated_languages" id="used_translated_languages" value="" />
             <div id="getedTranslations">
             </div>
+            <?php
+            }
+            ?>
         </div>
         <br />
 <?php
