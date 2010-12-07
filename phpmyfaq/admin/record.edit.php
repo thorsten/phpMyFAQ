@@ -70,7 +70,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
             $url_variables = 'insertentry';
         }
         
-        $faqData['lang']  = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
+        $faqData['lang']  = PMF_Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
         $current_category = isset($_POST['rubrik']) ? $_POST['rubrik'] : null;
         if (is_array($current_category)) {
             foreach ($current_category as $cats) {
@@ -96,7 +96,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     } elseif ($action == 'editentry') {
 
         $id   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        $lang = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+        $lang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
         if ((!isset($current_category) && !isset($faqData['title'])) || !is_null($id)) {
             $logging = new PMF_Logging();
             $logging->logAdmin($user, 'Beitragedit, ' . $id);
@@ -117,7 +117,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     } elseif ($action == 'copyentry') {
 
         $faqData['id']   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+        $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
         $faq->language   = $faqData['lang'];
         $categories      = $category->getCategoryRelationsFromArticle($faqData['id'], $faqData['lang']);
 
@@ -177,7 +177,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
         if (count($revisions)) {
 ?>
 
-    <form id="selectRevision" name="selectRevision" action="?action=editentry&amp;id=<?php print $faqData['id']; ?>&amp;lang=<?php print $faqData['lang']; ?>" method="post">
+    <form id="selectRevision" name="selectRevision" action="?action=editentry&amp;id=<?php print $faqData['id']; ?>&amp;artlang=<?php print $faqData['lang']; ?>" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG['ad_changerev']; ?></legend>
         <select name="revisionid_selected" onchange="selectRevision.submit();">
@@ -228,7 +228,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
 <?php
     if ($action == 'copyentry') {
-        $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+        $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
     }
 
     if ($permission["addatt"]) {
@@ -238,7 +238,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                 print "<a href=\"../" . $att->buildUrl() . "\">" . $att->getFilename() . "</a>";
                 if ($permission["delatt"]) {
                     print "&nbsp;[&nbsp;<a href=\"?action=delatt&amp;" . "record_id=" . $faqData['id'] . "&amp;id=" . 
-                        $att->getId() . "&amp;lang=" . $faqData['lang'] . "\">" . $PMF_LANG["ad_att_del"] . "</a>&nbsp;]";
+                        $att->getId() . "&amp;artlang=" . $faqData['lang'] . "\">" . $PMF_LANG["ad_att_del"] . "</a>&nbsp;]";
                 }
                 print "<br />\n";
             }
@@ -275,12 +275,12 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 <?php
     if ($faqconfig->get('main.enableGoogleTranslation') === true) {
 ?>       
-    <input type="hidden" id="language" name="language" value="<?php print $LANGCODE; ?>" />
+    <input type="hidden" id="artlang" name="artlang" value="<?php print $faqData['lang']; ?>" />
 <?php
     } else {
 ?>           
-    <label class="left" for="language"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
-    <?php print PMF_Language::selectLanguages($faqData['lang']); ?><br />
+    <label class="left" for="artlang"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
+    <?php print PMF_Language::selectLanguages($faqData['lang'], false, array(), 'artlang'); ?><br />
 
 <?php
     }
@@ -380,12 +380,20 @@ if($permission['approverec']):
     <legend><a href="javascript:void(0);" onclick="javascript:toggleFieldset('Translations');"><?php print $PMF_LANG["ad_menu_translations"]; ?></a></legend>
 
     <div id="editTranslations" style="display: none;">
+        <?php
+        if ($faqconfig->get('main.googleTranslationKey') == '') {
+            print $PMF_LANG["msgNoGoogleApiKeyFound"];
+        } else {
+        ?>
         <label class="left" for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
         <?php print PMF_Language::selectLanguages($faqData['lang'], false, array(), 'langTo'); ?><br />
 
         <input type="hidden" name="used_translated_languages" id="used_translated_languages" value="" />
         <div id="getedTranslations">
         </div>
+        <?php
+        }
+        ?>
     </div>
     </fieldset>
 <?php
@@ -549,7 +557,7 @@ if($permission['approverec']):
     /* <![CDATA[ */
     google.load("language", "1");
 
-    var langFromSelect = $("#language");
+    var langFromSelect = $("#artlang");
     var langToSelect   = $("#langTo");
         
     // Add a onChange to the faq language select
@@ -584,7 +592,6 @@ if($permission['approverec']):
                     .append($('<input></input>')
                         .attr({id:        'thema_translated_' + langTo,
                                name:      'thema_translated_' + langTo,
-                               readonly:  'readonly',
                                maxlength: '255',
                                style:     'width: 390px;'}))
                     .append($('<br></br>'));
@@ -596,7 +603,6 @@ if($permission['approverec']):
                     .append($('<textarea></textarea>')
                         .attr({id:       'content_translated_' + langTo,
                                name:     'content_translated_' + langTo,
-                               readonly: 'readonly',
                                cols:     '40',
                                rows:     '4',
                                style:    'width: 396px; height: 50px; margin-bottom: 4px;'}))
@@ -609,29 +615,81 @@ if($permission['approverec']):
                     .append($('<input></input>')
                         .attr({id:       'keywords_translated_' + langTo,
                                name:     'keywords_translated_' + langTo,
-                               readonly: 'readonly',
                                maxlength: '255',
                                style:     'width: 390px;'}))
                     .append($('<br></br>'));
 
                 $('#getedTranslations').append(fieldset);
+                
+                // Call the init for a new tinyMCE
+                createTinyMCE('content_translated_' + langTo);
             }
 
-            var langFrom = $('#language').val();
+            var langFrom = $('#artlang').val();
             
             // Set the translated text
             getGoogleTranslation('#thema_translated_' + langTo, $('#thema').val(), langFrom, langTo);
-            getGoogleTranslation('#content_translated_' + langTo, tinymce.get('content').getContent(), langFrom, langTo);
+            getGoogleTranslation('content_translated_' + langTo, tinymce.get('content').getContent(), langFrom, langTo, 'content');
 
             // Keywords must be translated separately
             $('#keywords_translated_' + langTo).val('');
             var words = new String($('#keywords').val()).split(',');
             for (var i = 0; i < words.length; i++) {
                 var word = $.trim(words[i]);
-                getGoogleTranslation('#keywords_translated_' + langTo, word, langFrom, langTo, 'add', ',');
+                getGoogleTranslation('#keywords_translated_' + langTo, word, langFrom, langTo, 'keywords');
             }
         }
     );
+
+    /**
+     * Call the init for a new tinyMCE
+     *
+     * @param string field  id of the input to fill.
+     *
+     * @return void
+     */
+    function createTinyMCE(field)
+    {
+        tinyMCE.init({
+            // General options
+            mode     : "exact",
+            language : "<?php print (PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en'); ?>",
+            elements : field,
+            width    : "720",
+            height   : "480",
+            theme    : "advanced",
+            plugins  : "spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,syntaxhl,phpmyfaq",
+            theme_advanced_blockformats : "p,div,h1,h2,h3,h4,h5,h6,blockquote,dt,dd,code,samp",
+                
+            // Theme options
+            theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
+            theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,phpmyfaq,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,code,syntaxhl,|,insertdate,inserttime,preview,|,forecolor,backcolor",
+            theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen,help",
+            theme_advanced_toolbar_location : "top",
+            theme_advanced_toolbar_align : "left",
+            theme_advanced_statusbar_location : "bottom",
+            relative_urls           : false,
+            convert_urls            : false,
+            remove_linebreaks       : false, 
+            use_native_selects      : true,
+            extended_valid_elements : "code",
+                
+            // Ajax-based file manager
+            file_browser_callback : "ajaxfilemanager",
+                
+            // Example content CSS (should be your site CSS)
+            content_css : "../template/<?php print PMF_Template::getTplSetName(); ?>/style.css",
+                
+            // Drop lists for link/image/media/template dialogs
+            template_external_list_url : "js/template_list.js",
+                
+            // Replace values for the template plugin
+            template_replace_values : {
+                username : "<?php print $user->userdata->get('display_name'); ?>",
+                user_id  : "<?php print $user->userdata->get('user_id'); ?>"
+            }
+        });
+    }    
     /* ]]> */
     </script>
 <?php

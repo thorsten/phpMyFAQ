@@ -3,7 +3,7 @@
  * AJAX: onDemandURL
  * 
  * Usage:
- *   index.php?action=ajax&ajax=onDemandURL&id=<id>&lang=<lang>[&lookup=1]
+ *   index.php?action=ajax&ajax=onDemandURL&id=<id>&artlang=<lang>[&lookup=1]
  *
  * Performs link verification at demand of the user.
  * 
@@ -52,11 +52,12 @@ if ($linkverifier->isReady() == false) {
     exit();
 }
 
+
 $linkverifier->loadConfigurationFromDB();
 
-$id     = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$lang   = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
-$lookup = PMF_Filter::filterInput(INPUT_GET, 'lookup', FILTER_VALIDATE_INT);
+$id      = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$artlang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
+$lookup  = PMF_Filter::filterInput(INPUT_GET, 'lookup', FILTER_VALIDATE_INT);
 
 if (count(ob_list_handlers()) > 0) {
     ob_clean();
@@ -74,7 +75,7 @@ if (count(ob_list_handlers()) > 0) {
 <body id="body" dir="<?php print $PMF_LANG["dir"]; ?>">
 <?php
 
-if (!(isset($id) && isset($lang))) {
+if (!(isset($id) && isset($artlang))) {
 ?>
     Error: Entry ID and Language needs to be specified.
 </body>
@@ -88,7 +89,7 @@ $faq->getRecord($id);
 
 if (!isset($faq->faqRecord['content'])) {
 ?>
-    Error: No entry for #<?php print $id; ?>(<?php print $lang; ?>) available.
+    Error: No entry for #<?php print $id; ?>(<?php print $artlang; ?>) available.
 </body>
 </html>
 <?php
@@ -99,11 +100,12 @@ if (!is_null($lookup)) {
     if (count(ob_list_handlers()) > 0) {
         ob_clean();
     }
-    print $linkverifier->verifyArticleURL($faq->faqRecord['content'], $id, $lang);
+
+    print $linkverifier->verifyArticleURL($faq->faqRecord['content'], $id, $artlang);
     exit();
 }
 
 ?>
-<?php link_ondemand_javascript($id, $lang); ?>
+<?php link_ondemand_javascript($id, $artlang); ?>
 </body>
 </html>

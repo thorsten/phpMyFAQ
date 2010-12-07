@@ -23,6 +23,8 @@
  * @since     2010-06-06
  */
 
+define('IS_VALID_PHPMYFAQ', null);
+
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Abstract.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Interface.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Database.php';

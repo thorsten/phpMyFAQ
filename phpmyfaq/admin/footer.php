@@ -173,28 +173,34 @@ function ajaxfilemanager(field_name, url, type, win)
  * @param string text      Text to translate.
  * @param string langFrom  Current language. 
  * @param string langTo    Wanted language.
- * @param string action    Action for fill the field (add | reeplace)
- * @param string separator Separator for add data into the field.
+ * @param string fieldType Name of the field for the switch.
  *
  * @return string $code Language code used in Google.
  */
-function getGoogleTranslation(div, text, langFrom, langTo, action, separator)
+function getGoogleTranslation(div, text, langFrom, langTo, fieldType)
 {
     langFrom = convertCodeForGoogle(langFrom);
     langTo   = convertCodeForGoogle(langTo);
     google.language.translate(text, langFrom, langTo, function(result) {
         if (result.translation) {
-             if (!action) {
-                $(div).val(result.translation);
-             } else {
-                if (!separator) {
-                    separator = ' ';
-                }
-                if ($(div).val() == '') {
+            switch(fieldType) {
+                case 'content':
+                    tinymce.get(div).setContent(result.translation);
+                    break;
+                case 'keywords':
+                    separator = ',';
+                    if ($(div).val() == '') {
+                        $(div).val(result.translation);
+                    } else {
+                        $(div).val($(div).val() + separator + result.translation);
+                    }
+                    break;
+                case 'name':
+                case 'description':
+                case 'thema':
+                default:
                     $(div).val(result.translation);
-                } else {
-                    $(div).val($(div).val() + separator + result.translation);
-                }
+                    break;
             }
         }
     });

@@ -59,7 +59,7 @@ if ($permission['editcateg']) {
 ?>
     <form action="?action=updatecategory" method="post">
     <input type="hidden" name="id" value="<?php print $id; ?>" />
-    <input type="hidden" id="lang" name="lang" value="<?php print $categories[$id]['lang']; ?>" />
+    <input type="hidden" id="catlang" name="catlang" value="<?php print $categories[$id]['lang']; ?>" />
     <input type="hidden" name="parent_id" value="<?php print $categories[$id]['parent_id']; ?>" />
     <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
 
@@ -97,12 +97,20 @@ if ($permission['editcateg']) {
     <fieldset class="fullwidth">
         <legend><?php print $PMF_LANG["ad_menu_translations"]; ?></legend>
         <div id="editTranslations">
+            <?php
+            if ($faqconfig->get('main.googleTranslationKey') == '') {
+                print $PMF_LANG["msgNoGoogleApiKeyFound"];
+            } else {
+            ?>        
             <label class="left" for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
             <?php print PMF_Language::selectLanguages($faqData['lang'], false, array(), 'langTo'); ?>
             <br />
             <input type="hidden" name="used_translated_languages" id="used_translated_languages" value="" />
             <div id="getedTranslations">
             </div>
+            <?php
+            }
+            ?>
         </div>
     </fieldset>        
 <?php
@@ -119,10 +127,10 @@ if ($permission['editcateg']) {
     /* <![CDATA[ */
     google.load("language", "1");
 
-    var langFromSelect = $("#lang");
+    var langFromSelect = $("#catlang");
     var langToSelect   = $("#langTo");       
     
-    $("#langTo").val($("#lang").val());
+    $("#langTo").val($("#catlang").val());
         
     // Add a onChange to the translation select
     langToSelect.change(
@@ -149,7 +157,6 @@ if ($permission['editcateg']) {
                     .append($('<input></input>')
                         .attr({id:        'name_translated_' + langTo,
                                name:      'name_translated_' + langTo,
-                               readonly:  'readonly',
                                maxlength: '255',
                                size:      '30',
                                style:     'width: 300px;'}))
@@ -160,18 +167,17 @@ if ($permission['editcateg']) {
                     .append($('<label></label>').attr({for: 'description_translated_' + langTo}).addClass('left')
                         .append('<?php print $PMF_LANG["ad_categ_desc"]; ?>'))                
                     .append($('<textarea></textarea>')
-                        .attr({id:       'description_translated_' + langTo,
-                               name:     'description_translated_' + langTo,
-                               readonly: 'readonly',
-                               cols:     '80',
-                               rows:     '3',
-                               style:    'width: 300px;'}))
+                        .attr({id:    'description_translated_' + langTo,
+                               name:  'description_translated_' + langTo,
+                               cols:  '80',
+                               rows:  '3',
+                               style: 'width: 300px;'}))
 
                 $('#getedTranslations').append(fieldset);
             }
 
             // Set the translated text
-            var langFrom = $('#lang').val();
+            var langFrom = $('#catlang').val();
             getGoogleTranslation('#name_translated_' + langTo, $('#name').val(), langFrom, langTo);
             getGoogleTranslation('#description_translated_' + langTo, $('#description').val(), langFrom, langTo);
         }
