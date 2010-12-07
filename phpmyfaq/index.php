@@ -237,7 +237,10 @@ if ($faqconfig->get('main.enableUserTracking')) {
 //
 $lang = PMF_Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
 if (is_null($lang) && !PMF_Language::isASupportedLanguage($lang) ) {
-    $lang = $LANGCODE;
+    $lang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
+    if (is_null($lang) && !PMF_Language::isASupportedLanguage($lang) ) {
+        $lang = $LANGCODE;
+    }
 }
 
 //

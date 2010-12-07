@@ -48,6 +48,9 @@ $record_id       = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT)
 $solution_id     = PMF_Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
 $highlight       = PMF_Filter::filterInput(INPUT_GET, 'highlight', FILTER_SANITIZE_STRIPPED);
 
+// Set the art language
+$faq->setLanguage($lang);
+
 // Get all data from the FAQ record
 if (0 == $solution_id) {
     $faq->getRecord($record_id);
@@ -147,7 +150,7 @@ if ($num > 1) {
     $switchLanguage .= "<fieldset>\n";
     $switchLanguage .= "<legend>".$PMF_LANG["msgLangaugeSubmit"]."</legend>\n";
     $switchLanguage .= "<form action=\"".$changeLanguagePath."\" method=\"post\" style=\"display: inline;\">\n";
-    $switchLanguage .= "<select name=\"language\" size=\"1\">\n";
+    $switchLanguage .= "<select name=\"artlang\" size=\"1\">\n";
     $switchLanguage .= $check4Lang;
     $switchLanguage .= "</select>\n";
     $switchLanguage .= "&nbsp;\n";
