@@ -70,7 +70,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
             $url_variables = 'insertentry';
         }
         
-        $faqData['lang']  = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
+        $faqData['lang']  = PMF_Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
         $current_category = isset($_POST['rubrik']) ? $_POST['rubrik'] : null;
         if (is_array($current_category)) {
             foreach ($current_category as $cats) {
@@ -96,7 +96,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     } elseif ($action == 'editentry') {
 
         $id   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        $lang = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+        $lang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
         if ((!isset($current_category) && !isset($faqData['title'])) || !is_null($id)) {
             $logging = new PMF_Logging();
             $logging->logAdmin($user, 'Beitragedit, ' . $id);
@@ -117,7 +117,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     } elseif ($action == 'copyentry') {
 
         $faqData['id']   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+        $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
         $faq->language   = $faqData['lang'];
         $categories      = $category->getCategoryRelationsFromArticle($faqData['id'], $faqData['lang']);
 
@@ -177,7 +177,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
         if (count($revisions)) {
 ?>
 
-    <form id="selectRevision" name="selectRevision" action="?action=editentry&amp;id=<?php print $faqData['id']; ?>&amp;lang=<?php print $faqData['lang']; ?>" method="post">
+    <form id="selectRevision" name="selectRevision" action="?action=editentry&amp;id=<?php print $faqData['id']; ?>&amp;artlang=<?php print $faqData['lang']; ?>" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG['ad_changerev']; ?></legend>
         <select name="revisionid_selected" onchange="selectRevision.submit();">
@@ -228,7 +228,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
 <?php
     if ($action == 'copyentry') {
-        $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+        $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
     }
 
     if ($permission["addatt"]) {
@@ -238,7 +238,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                 print "<a href=\"../" . $att->buildUrl() . "\">" . $att->getFilename() . "</a>";
                 if ($permission["delatt"]) {
                     print "&nbsp;[&nbsp;<a href=\"?action=delatt&amp;" . "record_id=" . $faqData['id'] . "&amp;id=" . 
-                        $att->getId() . "&amp;lang=" . $faqData['lang'] . "\">" . $PMF_LANG["ad_att_del"] . "</a>&nbsp;]";
+                        $att->getId() . "&amp;artlang=" . $faqData['lang'] . "\">" . $PMF_LANG["ad_att_del"] . "</a>&nbsp;]";
                 }
                 print "<br />\n";
             }
@@ -275,12 +275,12 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 <?php
     if ($faqconfig->get('main.enableGoogleTranslation') === true) {
 ?>       
-    <input type="hidden" id="language" name="language" value="<?php print $LANGCODE; ?>" />
+    <input type="hidden" id="artlang" name="artlang" value="<?php print $faqData['lang']; ?>" />
 <?php
     } else {
 ?>           
-    <label class="left" for="language"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
-    <?php print PMF_Language::selectLanguages($faqData['lang']); ?><br />
+    <label class="left" for="artlang"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
+    <?php print PMF_Language::selectLanguages($faqData['lang'], false, array(), 'artlang'); ?><br />
 
 <?php
     }
@@ -549,7 +549,7 @@ if($permission['approverec']):
     /* <![CDATA[ */
     google.load("language", "1");
 
-    var langFromSelect = $("#language");
+    var langFromSelect = $("#artlang");
     var langToSelect   = $("#langTo");
         
     // Add a onChange to the faq language select
@@ -617,7 +617,7 @@ if($permission['approverec']):
                 createTinyMCE('content_translated_' + langTo);
             }
 
-            var langFrom = $('#language').val();
+            var langFrom = $('#artlang').val();
             
             // Set the translated text
             getGoogleTranslation('#thema_translated_' + langTo, $('#thema').val(), langFrom, langTo);

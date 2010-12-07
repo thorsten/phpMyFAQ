@@ -1037,7 +1037,7 @@ function onDemandVerifyURL(id, lang, target)
     var heigthPx = 450;
     var leftPx   = (screen.width  - widthPx)/2;
     var topPx    = (screen.height - heigthPx)/2;
-    Fenster = window.open('<?php print $ajaxphp; ?>&action=ajax&ajax=onDemandURL&id=' + id + '&lang=' + lang, 'onDemandURLVerification', 'toolbar=no, location=no, status=no, menubar=no, width=' + widthPx + ', height=' + heigthPx + ', left=' + leftPx + ', top=' + topPx + ', resizable=yes, scrollbars=yes');
+    Fenster = window.open('<?php print $ajaxphp; ?>&action=ajax&ajax=onDemandURL&id=' + id + '&artlang=' + lang, 'onDemandURLVerification', 'toolbar=no, location=no, status=no, menubar=no, width=' + widthPx + ', height=' + heigthPx + ', left=' + leftPx + ', top=' + topPx + ', resizable=yes, scrollbars=yes');
     Fenster.focus();
 
     verifyEntryURL(id, lang);
@@ -1056,7 +1056,7 @@ function verifyEntryURL(id, lang)
     target.innerHTML = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-checking']); ?>";
 
     var url = 'index.php';
-    var pars = 'action=ajax&ajax=verifyURL&id=' + id + '&lang=' + lang;
+    var pars = 'action=ajax&ajax=verifyURL&id=' + id + '&artlang=' + lang;
     var myAjax = new jQuery.ajax({url: url,
                                  type: 'get',
                                  data: pars,
@@ -1117,7 +1117,7 @@ function ajaxOnDemandVerify(id, lang)
 {
     var target = $('#onDemandVerifyResult');
     var url = 'index.php';
-    var pars = 'action=ajax&ajax=onDemandURL&id=' + id + '&lang=' + lang + '&lookup=1';
+    var pars = 'action=ajax&ajax=onDemandURL&id=' + id + '&artlang=' + lang + '&lookup=1';
     var myAjax = new jQuery.ajax({url: url,
                                   type: 'get',
                                   data: pars,
