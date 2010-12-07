@@ -59,7 +59,7 @@ if ($permission['editcateg']) {
 ?>
     <form action="?action=updatecategory" method="post">
     <input type="hidden" name="id" value="<?php print $id; ?>" />
-    <input type="hidden" id="lang" name="lang" value="<?php print $categories[$id]['lang']; ?>" />
+    <input type="hidden" id="catlang" name="catlang" value="<?php print $categories[$id]['lang']; ?>" />
     <input type="hidden" name="parent_id" value="<?php print $categories[$id]['parent_id']; ?>" />
     <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
 
@@ -119,10 +119,10 @@ if ($permission['editcateg']) {
     /* <![CDATA[ */
     google.load("language", "1");
 
-    var langFromSelect = $("#lang");
+    var langFromSelect = $("#catlang");
     var langToSelect   = $("#langTo");       
     
-    $("#langTo").val($("#lang").val());
+    $("#langTo").val($("#catlang").val());
         
     // Add a onChange to the translation select
     langToSelect.change(
@@ -169,7 +169,7 @@ if ($permission['editcateg']) {
             }
 
             // Set the translated text
-            var langFrom = $('#lang').val();
+            var langFrom = $('#catlang').val();
             getGoogleTranslation('#name_translated_' + langTo, $('#name').val(), langFrom, langTo);
             getGoogleTranslation('#description_translated_' + langTo, $('#description').val(), langFrom, langTo);
         }

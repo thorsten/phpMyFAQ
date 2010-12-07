@@ -71,7 +71,7 @@ if ($permission["editcateg"]) {
     if ($faqconfig->get('main.enableGoogleTranslation') === true) {
 ?>    
         <input type="hidden" id="name" name="name" value="<?php print $category->categoryName[$id]['name']; ?>" />
-        <input type="hidden" id="lang" name="lang" value="<?php print $selected_lang; ?>" />
+        <input type="hidden" id="catlang" name="lang" value="<?php print $selected_lang; ?>" />
         <input type="hidden" id="description" name="description" value="<?php print $category->categoryName[$id]['description']; ?>" />
         
         <div id="editTranslations">
@@ -90,12 +90,12 @@ if ($permission["editcateg"]) {
         <input type="text" name="name" size="30" style="width: 250px;" value="" /><br />
 
         <label class="left"><?php print $PMF_LANG["ad_categ_lang"]; ?>:</label>
-        <select name="lang" size="1">
+        <select name="catlang" size="1">
         <?php print $category->getCategoryLanguagesToTranslate($id, $selected_lang); ?>
         </select><br />
 
         <label class="left"><?php print $PMF_LANG["ad_categ_desc"]; ?>:</label>
-        <input type="text" name="description" size="30" style="width: 250px;" value="" /><br />
+        <textarea id="description" name="description" rows="3" cols="80" style="width: 300px;"></textarea><br />
 
 <?php
     }
@@ -123,10 +123,10 @@ if ($permission["editcateg"]) {
     /* <![CDATA[ */
     google.load("language", "1");
 
-    var langFromSelect = $("#lang");
+    var langFromSelect = $("#catlang");
     var langToSelect   = $("#langTo");       
     
-    $("#langTo").val($("#lang").val());
+    $("#langTo").val($("#catlang").val());
         
     // Add a onChange to the translation select
     langToSelect.change(
@@ -173,7 +173,7 @@ if ($permission["editcateg"]) {
             }
 
             // Set the translated text
-            var langFrom = $('#lang').val();
+            var langFrom = $('#catlang').val();
             getGoogleTranslation('#name_translated_' + langTo, $('#name').val(), langFrom, langTo);
             getGoogleTranslation('#description_translated_' + langTo, $('#description').val(), langFrom, langTo);
         }

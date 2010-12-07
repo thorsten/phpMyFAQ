@@ -109,7 +109,7 @@ if ($permission['editcateg']) {
         $parent_id     = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
         $category_data = array(
             'id'          => PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT),
-            'lang'        => PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING),
+            'lang'        => PMF_Filter::filterInput(INPUT_POST, 'catlang', FILTER_SANITIZE_STRING),
             'parent_id'   => $parent_id,
             'name'        => PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
             'description' => PMF_Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
@@ -243,7 +243,7 @@ if ($permission['editcateg']) {
 
         if ($cat["lang"] == $lang) {
            // add sub category (if actual language)
-           printf('<a href=?action=addcategory&amp;cat=%s&amp;lang=%s"><img src="images/add.png" width="16" height="16" alt="%s" title="%s" border="0" /></a>&nbsp;',
+           printf('<a href="?action=addcategory&amp;cat=%s&amp;lang=%s"><img src="images/add.png" width="16" height="16" alt="%s" title="%s" border="0" /></a>&nbsp;',
                $cat['id'],
                $cat['lang'],
                $PMF_LANG['ad_quick_category'],
@@ -264,7 +264,7 @@ if ($permission['editcateg']) {
 
         // delete (sub) category (if actual language)
         if (count($category->getChildren($cat['id'])) == 0 && $cat["lang"] == $lang) {
-            printf('<a href="?action=deletecategory&amp;cat=%s&amp;lang=%s"><img src="images/delete.png" width="16" height="16" alt="%s" title="%s" border="0" /></a>&nbsp;',
+            printf('<a href="?action=deletecategory&amp;cat=%s&amp;catlang=%s"><img src="images/delete.png" width="16" height="16" alt="%s" title="%s" border="0" /></a>&nbsp;',
                 $cat['id'],
                 $cat['lang'],
                 $PMF_LANG['ad_categ_delete'],
