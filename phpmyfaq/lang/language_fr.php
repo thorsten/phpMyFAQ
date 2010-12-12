@@ -13,13 +13,13 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- * 
+ *
  * @category  phpMyFAQ
  * @package   Translation
  * @author    Sylvain Corvaisier <cocky@cocky.fr>
  * @author    Thomas Bassetto <tbassetto@gmail.com>
  * @author    Laurent J.V. Dubois <laurent.dubois@ljvd.com>
- * @author    Cédric Frayssinet 
+ * @author    Cédric Frayssinet
  * @copyright 2004-2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
@@ -47,7 +47,7 @@ $PMF_LANG['msgFullCategoriesIn'] = 'Catégories avec entrées en ';
 $PMF_LANG['msgSubCategories'] = 'Sous catégories';
 $PMF_LANG['msgEntries'] = 'entrées';
 $PMF_LANG['msgEntriesIn'] = 'Entrées dans la catégorie ';
-$PMF_LANG['msgViews'] = 'affichages';
+$PMF_LANG['msgViews'] = 'affichage';
 $PMF_LANG['msgPage'] = 'Page ';
 $PMF_LANG['msgPages'] = ' Pages';
 $PMF_LANG['msgPrevious'] = 'précédent';
