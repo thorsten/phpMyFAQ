@@ -320,6 +320,8 @@ if (isset($auth) && in_array(true, $permission)) {
             case "transedit":               require_once 'trans.edit.php'; break;
             case "translist":               require_once 'trans.list.php'; break;
             case "transadd":                require_once 'trans.add.php'; break;
+            // attachment administration 
+            case "attachments":             require_once "att.main.php"; break;
             
             default:                        print "Error"; break;
         }

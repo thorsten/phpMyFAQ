@@ -1111,3 +1111,4 @@ $LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 =>
 
 // added 3.0.0-alpha
 $LANG_CONF['main.useAjaxMenu'] = array(0 => 'checkbox', 1 => 'Ajax powered frontend (default: deactivated)');
+$PMF_LANG["ad_menu_attachments"] = "Attachments";
