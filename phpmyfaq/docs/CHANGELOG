@@ -1,9 +1,12 @@
-phpMyFAQ 2.6.11
+phpMyFAQ 2.6.13
 Codename "Portia"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.6.13 - 2011-01-
+- 
 
 Version 2.6.12 - 2010-12-13
 - added experimental support for MariaDB (Thorsten)
