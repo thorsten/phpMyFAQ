@@ -16,12 +16,14 @@ Version 2.7.0-alpha - 2011-01-
 - added Facebook Like Button support (Thorsten)
 - updated bundled jQuery to version 1.4.4 (Thorsten)
 
-Version 2.6.12 - 2010-
+Version 2.6.12 - 2010-12-13
 - added experimental support for MariaDB (Thorsten)
 - added empty LDAP configuration file as example (Thorsten)
-- updated Norwegian Bokmål translation (harald@delelisten.no)
+- updated Arabic translation
 - updated Dutch translation (Werner Helmich)
-- fixed minor bugs (Thorsten)
+- updated French translation
+- updated Norwegian Bokmål translation (harald@delelisten.no)
+- fixed minor bugs (Thorsten, Gustavo Solt)
 
 Version 2.6.11 - 2010-11-03
 - fixed some bugs introduced with phpMyFAQ 2.6.10 (Thorsten)
