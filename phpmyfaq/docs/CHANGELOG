@@ -5,7 +5,7 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.6.12 - 2010-12-
+Version 2.6.12 - 2010-12-13
 - added experimental support for MariaDB (Thorsten)
 - added empty LDAP configuration file as example (Thorsten)
 - updated Arabic translation
