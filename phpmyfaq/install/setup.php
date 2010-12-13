@@ -30,11 +30,7 @@
  * @since     2002-08-20
  */
 
-<<<<<<< HEAD
 define('VERSION', '2.7.0-alpha');
-=======
-define('VERSION', '2.6.13');
->>>>>>> 77e7d0684cae8c7261fd59fa1473ea3d75a7c8eb
 define('APIVERSION', 1);
 define('MINIMUM_PHP_VERSION', '5.2.3');
 define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
