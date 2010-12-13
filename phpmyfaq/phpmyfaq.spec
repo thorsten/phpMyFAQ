@@ -55,7 +55,11 @@
 # phpMyFAQ
 #
 %define name        phpmyfaq
+<<<<<<< HEAD
 %define version     2.7.0-alpha
+=======
+%define version     2.6.13
+>>>>>>> 77e7d0684cae8c7261fd59fa1473ea3d75a7c8eb
 %define release     1
 %define epoch       0
 
@@ -156,6 +160,9 @@ installation script.
 
 * Mon Aug 08 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0.alpha-1
 - New upstream version 2.7-0-alpha
+
+* Wed Dec 13 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.6.13-1
+- New upstream version 2.6.13
 
 * Wed Nov 03 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.6.12-1
 - New upstream version 2.6.12

@@ -1,10 +1,16 @@
+<<<<<<< HEAD
 phpMyFAQ 2.7.0-alpha
 Codename "Prospero"
+=======
+phpMyFAQ 2.6.13
+Codename "Portia"
+>>>>>>> 77e7d0684cae8c7261fd59fa1473ea3d75a7c8eb
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
+<<<<<<< HEAD
 Version 2.7.0-alpha - 2011-01-
 - changed PHP requirement to PHP 5.2.3 (Thorsten)
 - dropped support for MySQL 4.1 (Thorsten)
@@ -15,6 +21,10 @@ Version 2.7.0-alpha - 2011-01-
 - added Twitter support (Thorsten, Thomas Zeithaml)
 - added Facebook Like Button support (Thorsten)
 - updated bundled jQuery to version 1.4.4 (Thorsten)
+=======
+Version 2.6.13 - 2011-01-
+- 
+>>>>>>> 77e7d0684cae8c7261fd59fa1473ea3d75a7c8eb
 
 Version 2.6.12 - 2010-12-13
 - added experimental support for MariaDB (Thorsten)
