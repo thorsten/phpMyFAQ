@@ -1,9 +1,12 @@
-phpMyFAQ 2.6.13
+phpMyFAQ 2.6.14
 Codename "Portia"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.6.14 - 2011-
+-
 
 Version 2.6.13 - 2010-12-15
 - clean package after compromised server (Thorsten)
@@ -909,4 +912,4 @@ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 License for the specific language governing rights and limitations
 under the License.
 
-(c) 2001-2010 phpMyFAQ Team
+(c) 2001-2011 phpMyFAQ Team
