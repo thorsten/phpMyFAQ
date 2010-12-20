@@ -67,13 +67,15 @@ printf('<h2>%s</h2>', $PMF_LANG['ad_menu_attachment_admin']);
 <?php
     foreach($crumbs as $item) {
         print <<<ROW
- 		<tr>
+ 		<tr class="att_{$item->id}">
  			<td>{$item->filename}</td>
  			<td>{$item->record_lang}</td>
  			<td>{$item->filesize}</td>
  			<td>{$item->mime_type}</td>
  			<td>
- 				
+ 				<a href="javascript:deleteAttachment({$item->id});void(0);">
+ 					Delete
+ 				</a>
  			</td>
  		</tr>
 ROW;
@@ -90,24 +92,23 @@ ROW;
 /**
  * Ajax call for deleting attachments
  *
- * @param  integer record_id   Record id
- * @param  string  record_lang Record language
+ * @param  integer att_id Attachment id
  * @return void
  */
-function deleteRecord(record_id, record_lang)
+function deleteAttachment(att_id)
 {
-/*    if (confirm('Are you sure that the topic should be deleted?')) {
+    if (confirm('Are you sure you wanna delete this attachment?')) {
         $('#saving_data_indicator').html('<img src="images/indicator.gif" /> deleting ...');
         $.ajax({
-            type:    "POST",
-            url:     "index.php?action=ajax&ajax=records&ajaxaction=delete_record",
-            data:    "record_id=" + record_id + "&record_lang=" + record_lang,
+            type:    "GET",
+            url:     "index.php?action=ajax&ajax=att&ajaxaction=delete",
+            data:    {attId: att_id},
             success: function(msg) {
-                $('.record_' + record_id + '_' + record_lang).fadeOut('slow');
-                $('.record_' + record_id + '_' + record_lang).after('<tr><td colspan="8">' + msg + '</td></tr>');
-                $('#saving_data_indicator').html('Issue <strong>successfully</strong> deleted.');
+                $('.att_' + att_id).fadeOut('slow');
+                $('.att_' + att_id).after('<tr><td colspan="5">' + msg + '</td></tr>');
+                $('#saving_data_indicator').html('Attachment <strong>successfully</strong> deleted.');
             }
         });
-    }*/
+    }
 } 
 </script>

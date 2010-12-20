@@ -230,6 +230,10 @@ if (isset($auth) && in_array(true, $permission)) {
             case 'trans':
                 require 'ajax.trans.php';
                 break;
+                
+            case 'att':
+                require 'ajax.attachment.php';
+                break;
             }
         exit();
         }

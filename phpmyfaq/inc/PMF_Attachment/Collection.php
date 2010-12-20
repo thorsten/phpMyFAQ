@@ -76,7 +76,8 @@ class PMF_Attachment_Collection
                 SQLPREFIX . "faqattachment",
                 SQLPREFIX . "faqdata"
             ),
-			"SELECT 
+			"SELECT
+			    _t1_.id,
                 _t1_.record_id, _t1_.record_lang,
                 _t1_.filename, _t1_.filesize, _t1_.mime_type,
                 _t2_.thema
