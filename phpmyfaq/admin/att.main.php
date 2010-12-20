@@ -32,25 +32,33 @@ printf('<h2>%s</h2>', $PMF_LANG['ad_menu_attachment_admin']);
 
 $fa = new PMF_Attachment_Collection;
 
-$c = $fa->getMeta();
+$c = $fa->getBreadcrumbs();
 ?>
 <table cellspacing="30">
-	<tr>
-		<td>Filename</td>
-		<td>Language</td>
-		<td>Filesize</td>
-		<td>Mime type</td>
-	</tr>
+	<thead>
+   		<tr>
+   			<th>Filename</th>
+   			<th>Language</th>
+   			<th>Filesize</th>
+   			<th>Mime type</th>
+   			<th>Actions</th>
+   		</tr>
+	</thead>
+	<tbody>
 <?php
     foreach($c as $item) {
         print <<<ROW
-	<tr>
-		<td>{$item->filename}</td>
-		<td>{$item->record_lang}</td>
-		<td>{$item->filesize}</td>
-		<td>{$item->mime_type}</td>
-	</tr>
+ 		<tr>
+ 			<td>{$item->filename}</td>
+ 			<td>{$item->record_lang}</td>
+ 			<td>{$item->filesize}</td>
+ 			<td>{$item->mime_type}</td>
+ 			<td>
+ 				
+ 			</td>
+ 		</tr>
 ROW;
     }
 ?>
+	</tbody>
 </table>

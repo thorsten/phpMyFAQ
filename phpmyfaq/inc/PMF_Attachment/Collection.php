@@ -66,7 +66,7 @@ class PMF_Attachment_Collection
      * 
      * @return array
      */
-    public function getMeta($start = 0, $limit = 0)
+    public function getBreadcrumbs($start = 0, $limit = 0)
     {
         $retval = array();
         
