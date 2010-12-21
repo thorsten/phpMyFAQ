@@ -733,6 +733,20 @@ if ($step == 4) {
                 $query[] = "COMMIT";
                 break;
         }
+
+
+        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES
+            (34, 'addattachment', 'Right to add attachments', 1, 1)";
+        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES
+            (35, 'editattachment', 'Right to edit attachments', 1, 1)";
+        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES
+            (36, 'delattachment', 'Right to delete attachments', 1, 1)";
+        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES
+            (37, 'dlattachment', 'Right to download attachments', 1, 1)";
+        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 34)";
+        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 35)";
+        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 36)";
+        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 37)";
     }
     
     // Perform the queries for updating/migrating the database from 2.x
