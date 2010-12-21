@@ -88,6 +88,7 @@ switch ($action) {
     case 'delnews':
     case 'question':
     case 'comments':
+    case 'attachments':
         $secLevelHeader = $PMF_LANG['admin_mainmenu_content'];
         $secLevelEntries .= addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit', $action);
         $secLevelEntries .= addMenuEntry('addbt', 'editentry', 'ad_entry_add', $action);
@@ -96,6 +97,7 @@ switch ($action) {
         $secLevelEntries .= addMenuEntry('delquestion', 'question', 'ad_menu_open', $action);
         $secLevelEntries .= addMenuEntry('addglossary+editglossary+delglossary', 'glossary', 'ad_menu_glossary', $action);
         $secLevelEntries .= addMenuEntry('addnews+editnews+delnews', 'news', 'ad_menu_news_edit', $action);
+        $secLevelEntries .= addMenuEntry('addattachment+editattachment+delattachment', 'attachments', 'ad_menu_attachments', $action);
         $dashboardPage    = false;
         $contentPage      = true;
         break;

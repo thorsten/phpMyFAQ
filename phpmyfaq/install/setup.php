@@ -871,6 +871,34 @@ foreach ($permLevels as $level => $desc) {
             'for_users' => 1,
             'for_groups' => 1
         ),
+        // 34 => 'addattachment'
+        array(
+            'name' => 'addattachment',
+            'description' => 'Right to add attachments',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        // 35 => 'editattachment'
+        array(
+            'name' => 'editattachment',
+            'description' => 'Right to edit attachments',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        // 36 => 'delattachment'
+        array(
+            'name' => 'delattachment',
+            'description' => 'Right to delete attachments',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        // 37 => 'dlattachment'
+        array(
+            'name' => 'dlattachment',
+            'description' => 'Right to download attachments',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
     );
     foreach ($rights as $right) {
         $rightID = $admin->perm->addRight($right);

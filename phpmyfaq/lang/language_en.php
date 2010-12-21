@@ -1113,3 +1113,7 @@ $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'T
 $LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => 'Twitter Access Token Key');
 $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'Twitter Access Token Secret');
 $LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Facebook support (default: deactivated)');
+
+// added 3.0.0-alpha
+$PMF_LANG["ad_menu_attachments"] = "Attachments";
+$PMF_LANG["ad_menu_attachment_admin"] = "Attachment administration";
