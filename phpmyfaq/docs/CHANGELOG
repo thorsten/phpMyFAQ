@@ -16,6 +16,7 @@ Version 2.7.0-alpha - 2011-01-
 - added Twitter support (Thorsten, Thomas Zeithaml)
 - added Facebook Like Button support (Thorsten)
 - added attachment administration frontend (Anatoliy)
+- added basic authentication support for LDAP groups (Thorsten)
 - updated bundled jQuery to version 1.4.4 (Thorsten)
 
 Version 2.6.13 - 2011-01-

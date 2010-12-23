@@ -135,8 +135,6 @@ $enabledExtensions = array(
  * Executes the uninstall set of queries
  *
  * @return void
- * @access public
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  */
 function db_uninstall()
 {
@@ -148,23 +146,19 @@ function db_uninstall()
 }
 
 /**
- * Print out the XHTML Footer
+ * Print out the HTML5 Footer
  *
  * @return void
- * @access public
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  */
 function HTMLFooter()
 {
-    printf('<p class="center">%s</p></body></html>', COPYRIGHT);
+    printf('<footer><p class="center">%s</p></footer></body></html>', COPYRIGHT);
 }
 
 /**
  * Removes the data.php and the dataldap.php if an installation failed
  *
  * @return void
- * @access public
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  */
 function cleanInstallation()
 {
@@ -340,6 +334,7 @@ if (obj.options.length > obj.selectedIndex) {
     <label class="left">LDAP base search DN:</label>
     <input class="input" type="text" name="ldap_base" title="Please enter your distinguished name, e.g. 'cn=John Smith,ou=Accounts,o=My Company,c=US' here." />
 
+    <p>You can add additional LDAP configuration informations in the file config/constants_ldap.php.</p>
 </fieldset>
 <br />
 <?php

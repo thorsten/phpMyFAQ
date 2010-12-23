@@ -198,12 +198,15 @@ class PMF_Ldap
         $values = array();
 
         if (!array_key_exists($data, $PMF_LDAP['ldap_mapping'])) {
-            $this->error = sprintf('requested datafield "%s" does not exist in $PMF_LDAP["ldap_mapping"].',
+            $this->error = sprintf('The requested datafield "%s" does not exist in $PMF_LDAP["ldap_mapping"].',
                 $data);
             return '';
         }
 
-        $filter = "(" . $PMF_LDAP['ldap_mapping']['username'] . "=" . $username . ")";
+        $filter = sprintf('(%s=%s)', $PMF_LDAP['ldap_mapping']['username'], $username);
+        if (true === $PMF_LDAP['ldap_use_memberOf']) {
+            $filter .= sprintf('(%s)', $PMF_LDAP['ldap_mapping']['memberOf']);
+        }
         $fields = array($PMF_LDAP['ldap_mapping'][$data]);
         $sr     = ldap_search($this->ds, $this->base, $filter, $fields);
 
