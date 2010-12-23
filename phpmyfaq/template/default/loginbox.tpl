@@ -1,6 +1,6 @@
 
             <div id="loginSelection">
-                <a href="#" onclick="javascript:loginForm();">{msgLoginUser}</a> | {msgRegisterUser}
+                <a href="#" onclick="javascript:loginForm(); return false;">{msgLoginUser}</a> | {msgRegisterUser}
             </div>
             <div id="loginForm">                
                 <form action="{writeLoginPath}" method="post">
