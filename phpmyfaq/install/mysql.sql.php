@@ -176,7 +176,7 @@ links_check_date INT(11) DEFAULT 0 NOT NULL,
 date_start varchar(14) NOT NULL DEFAULT '00000000000000',
 date_end varchar(14) NOT NULL DEFAULT '99991231235959',
 FULLTEXT (keywords,thema,content),
-PRIMARY KEY (id, lang)) TYPE = MYISAM";
+PRIMARY KEY (id, lang)) ENGINE = MYISAM";
 
 //faqdata_revisions
 $query[] = "CREATE TABLE ".$sqltblpre."faqdata_revisions (
