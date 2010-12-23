@@ -98,8 +98,7 @@ class PMF_Ldap
         }
 
         if (empty($ldap_password)) {
-            $this->error = 'Unable to connect to LDAP server (Error: '.ldap_error($this->ds).')';
-            $this->errno = ldap_errno($this->ds);
+            $this->error = 'No password set.';
             return false;
         }
 
@@ -114,7 +113,7 @@ class PMF_Ldap
             foreach ($PMF_LDAP['ldap_options'] as $key => $value) {
                 if (!ldap_set_option($this->ds, $key, $value)) {
                     $this->errno = ldap_errno($this->ds);
-                    $this->error = sprintf('Unable to set LDAP option "%s" to "%s" (Error: %s)',
+                    $this->error = sprintf('Unable to set LDAP option "%s" to "%s" (Error: %s).',
                         $key,
                         $value,
                         ldap_error($this->ds));
@@ -126,7 +125,7 @@ class PMF_Ldap
 
         if (!$ldapbind) {
             $this->errno = ldap_errno($this->ds);
-            $this->error = sprintf('Unable to bind to LDAP server (Error: %s)',
+            $this->error = sprintf('Unable to bind to LDAP server (Error: %s).',
                 ldap_error($this->ds));
             $this->ds    = false;
          }
