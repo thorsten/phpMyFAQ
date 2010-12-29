@@ -18,8 +18,9 @@ Version 2.7.0-alpha - 2011-01-
 - added basic authentication support for LDAP groups (Thorsten)
 - updated bundled jQuery to version 1.4.4 (Thorsten)
 
-Version 2.6.14 - 2011-
+Version 2.6.14 - 2011-01-
 - Added compatibility for MySQL 5.5 with ext/mysql (Thorsten)
+- Improved restore functionality (Thorsten)
 
 Version 2.6.13 - 2010-12-15
 - clean package after compromised server (Thorsten)

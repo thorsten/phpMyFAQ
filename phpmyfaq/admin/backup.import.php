@@ -34,24 +34,27 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
 }
 
 if ($permission['restore']) {
-?>
-    <h2><?php print $PMF_LANG["ad_csv_rest"]; ?></h2>
-<?php
-    if (isset($_FILES["userfile"]["type"]) && (
-        $_FILES["userfile"]["type"] == "application/octet-stream" || 
-        $_FILES["userfile"]["type"] == "text/plain" || 
-        $_FILES["userfile"]["type"] == "text/x-sql")) {
+
+    printf("<h2>%s</h2>\n", $PMF_LANG['ad_csv_rest']);
+
+    if (isset($_FILES['userfile']) && 0 == $_FILES['userfile']['error']) {
         
         $ok  = 1;
         // @todo: Add check if file is utf-8 encoded
-        $handle       = fopen($_FILES['userfile']['tmp_name'], 'r');
-        $dat          = fgets($handle, 65536);
-        $majorVersion = substr($faqconfig->get('main.currentVersion'), 0, 3);
+        $handle          = fopen($_FILES['userfile']['tmp_name'], 'r');
+        $dat             = fgets($handle, 65536);
+        $versionFound    = PMF_String::substr($dat, 0, 9);
+        $versionExpected = '-- pmf' . substr($faqconfig->get('main.currentVersion'), 0, 3);
 
-        if (PMF_String::substr($dat, 0, 9) != '-- pmf' . $majorVersion) {
-            print $PMF_LANG["ad_csv_no"] . ' (Version mismatch)';
+        if ($versionFound != $versionExpected) {
+            printf('%s (Version check failure: "%s" found, "%s" expected)',
+                $PMF_LANG['ad_csv_no'],
+                $versionFound,
+                $versionExpected
+            );
             $ok = 0;
         } else {
+            // @todo: Start transaction for better recovery if something really bad happens
             $dat = trim(PMF_String::substr($dat, 11));
             $tbl = explode(' ', $dat);
             $num = count($tbl);
@@ -79,9 +82,9 @@ if ($permission['restore']) {
             $k = 0;
             $g = 0;
             printf("<p>%s</p>\n", $PMF_LANG['ad_csv_process']);
-            $anz = count($mquery);
-            $kg  = "";
-            for ($i = 0; $i < $anz; $i++) {
+            $num = count($mquery);
+            $kg  = '';
+            for ($i = 0; $i < $num; $i++) {
                 $mquery[$i] = alignTablePrefix($mquery[$i], $table_prefix, SQLPREFIX);
                 $kg         = $db->query($mquery[$i]);
                 if (!$kg) {
@@ -97,13 +100,42 @@ if ($permission['restore']) {
                     $g++;
                 }
             }
-            print "<p>".$g." ".$PMF_LANG["ad_csv_of"]." ".$anz." ".$PMF_LANG["ad_csv_suc"]."</p>\n";
+            printf("<p>%d %s %d %s</p>\n",
+                $g,
+                $PMF_LANG['ad_csv_of'],
+                $num,
+                $PMF_LANG['ad_csv_suc']
+            );
         }
     } else {
-        printf("<p>%s (Wrong filetype: %s)</p>",
-            $PMF_LANG['ad_csv_no'],
-            $_FILES['userfile']['type']);
+        switch ($_FILES['userfile']['error']) {
+            case 1:
+                $errorMessage = 'The uploaded file exceeds the upload_max_filesize directive in php.ini.';
+                break;
+            case 2:
+                $errorMessage = 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.';
+                break;
+            case 3:
+                $errorMessage = 'The uploaded file was only partially uploaded.';
+                break;
+            case 4:
+                $errorMessage = 'No file was uploaded.';
+                break;
+            case 6:
+                $errorMessage = 'Missing a temporary folder.';
+                break;
+            case 7:
+                $errorMessage = 'Failed to write file to disk.';
+                break;
+            case 8:
+                $errorMessage = 'A PHP extension stopped the file upload.';
+                break;
+            default:
+                $errorMessage = 'Undefined error.';
+                break;
+        }
+        printf("<p>%s (%s)</p>", $PMF_LANG['ad_csv_no'], $errorMessage);
     }
 } else {
-    print $PMF_LANG["err_NotAuth"];
+    print $PMF_LANG['err_NotAuth'];
 }
