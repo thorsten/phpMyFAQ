@@ -1,0 +1,211 @@
+<application xmlns="http://apstandard.com/ns/1" version="1.2">
+    <id>http://www.phpmyfaq.de</id>
+    <name>phpMyFAQ</name>
+    <version>2.6.14</version>
+    <release>1</release>
+    <homepage>http://www.phpmyfaq.de</homepage>
+
+    <vendor>
+        <name>phpMyFAQ Team</name>
+        <homepage>http://www.phpmyfaq.de</homepage>
+        <icon path="images/phpmyfaq.png"/>
+    </vendor>
+
+    <packager>
+        <name>phpMyFAQ Team</name>
+        <homepage>http://www.phpmyfaq.de</homepage>
+        <uri>uuid:714f0a7b-85d6-4eb8-b68e-40f9acbb3103</uri>
+    </packager>
+
+    <presentation>
+        <summary>phpMyFAQ</summary>
+        <description>
+            phpMyFAQ is a multilingual, completely database-driven FAQ-system.
+            It supports various databases to store all data, PHP 5.2 (or
+            higher) is needed in order to access this data. phpMyFAQ also
+            offers a multi-language Content Management-System with a WYSIWYG
+            editor and an Image Manager, flexible multi-user support with user
+            and group based permissions on categories and records, a wiki-like
+            revision feature, a news system, user-tracking, language modules,
+            enhanced automatic content negotiation, templates, PDF-support, a
+            backup-system, a dynamic sitemap, related articles, tagging, RSS
+            feeds, built-in spam protection systems, LDAP and Microsoft Active
+            Directory support, and an easy to use installation script.
+        </description>
+
+        <changelog>
+            <version version="2.6.14" release="1">
+                <entry>Added compatibility for MySQL 5.5 with ext/mysql</entry>
+                <entry>Improved restore functionality</entry>
+            </version>
+        </changelog>
+
+        <categories>
+            <category>Web/Content management</category>
+        </categories>
+
+        <languages>
+            <language>en</language>
+            <language>ar</language>
+            <language>bn</language>
+            <language>cs</language>
+            <language>cy</language>
+            <language>da</language>
+            <language>de</language>
+            <language>el</language>
+            <language>es</language>
+            <language>eu</language>
+            <language>fa</language>
+            <language>fr</language>
+            <language>he</language>
+            <language>hi</language>
+            <language>hu</language>
+            <language>id</language>
+            <language>it</language>
+            <language>ja</language>
+            <language>ko</language>
+            <language>lt</language>
+            <language>lv</language>
+            <language>nb</language>
+            <language>nl</language>
+            <language>pl</language>
+            <language>pt-br</language>
+            <language>pt</language>
+            <language>ro</language>
+            <language>ru</language>
+            <language>sk</language>
+            <language>sl</language>
+            <language>sv</language>
+            <language>th</language>
+            <language>tr</language>
+            <language>tw</language>
+            <language>uk</language>
+            <language>vi</language>
+            <language>zh</language>
+        </languages>
+
+    </presentation>
+
+    <service id="instance">
+        <license>
+            <text>
+                <name>MPL 1.1</name>
+                <url>http://www.mozilla.org/MPL/MPL-1.1.txt</url>
+            </text>
+        </license>
+
+        <presentation>
+            <infolinks>
+                <link xml:lang="en" class="official" href="http://www.phpmyfaq.de">
+                    Official phpMyFAQ homepage
+                </link>
+                <link xml:lang="en" class="community" href="http://forum.phpmyfaq.de">
+                    phpMyFAQ support forum
+                </link>
+                <link xml:lang="en" class="howto" href="http://faq.phpmyfaq.de">
+                    phpMyFAQ FAQ
+                </link>
+                <link xml:lang="en" class="support" href="http://www.phpmyfaq.de/support.php">
+                    phpMyFAQ support resources
+                </link>
+
+            </infolinks>
+        </presentation>
+
+        <requirements
+            xmlns:php="http://apstandard.com/ns/1/php"
+            xmlns:db="http://apstandard.com/ns/1/db"
+            xmlns:apache="http://apstandard.com/ns/1/apache">
+
+            <php:version min="5.2.0"/>
+
+                <php:extension>gd</php:extension>
+                <php:extension>json</php:extension>
+                <php:extension>xmlwriter</php:extension>
+                <php:extension>filter</php:extension>
+
+                <php:file-uploads>true</php:file-uploads>
+                <php:register-globals>false</php:register-globals>
+                <php:safe-mode>false</php:safe-mode>
+                <php:allow-url-fopen>true</php:allow-url-fopen>
+                <php:memory-limit>67108864</php:memory-limit>
+
+            <choice>
+                <requirements id="mysql">
+                    <php:extension>mysql</php:extension>
+                    <db:db>
+                        <db:id>main</db:id>
+                        <db:default-name>phpmyfaq</db:default-name>
+                        <db:can-use-tables-prefix>true</db:can-use-tables-prefix>
+                        <db:server-type>mysql</db:server-type>
+                        <db:server-min-version>4.1.2</db:server-min-version>
+                    </db:db>
+                </requirements>
+
+                <requirements id="postgresql">
+                    <php:extension>postgresql</php:extension>
+                    <db:db>
+                        <db:id>main</db:id>
+                        <db:default-name>phpmyfaq</db:default-name>
+                        <db:can-use-tables-prefix>true</db:can-use-tables-prefix>
+                        <db:server-type>postgresql</db:server-type>
+                        <db:server-min-version>8.0.0</db:server-min-version>
+                    </db:db>
+                </requirements>
+
+                <requirements id="sqlite">
+                    <php:extension>sqlite</php:extension>
+                    <db:db>
+                        <db:id>main</db:id>
+                        <db:default-name>phpmyfaq</db:default-name>
+                        <db:can-use-tables-prefix>true</db:can-use-tables-prefix>
+                        <db:server-type>sqlite</db:server-type>
+                        <db:server-min-version>2.8.0</db:server-min-version>
+                    </db:db>
+                </requirements>
+
+                <requirements id="microsoft:sqlserver">
+                    <php:extension>microsoft:sqlserver</php:extension>
+                    <db:db>
+                        <db:id>main</db:id>
+                        <db:default-name>phpmyfaq</db:default-name>
+                        <db:can-use-tables-prefix>true</db:can-use-tables-prefix>
+                        <db:server-type>microsoft:sqlserver</db:server-type>
+                        <db:server-min-version>2005</db:server-min-version>
+                    </db:db>
+                </requirements>
+
+                <!--
+                Missing databases:
+                - Interbase/Firebird
+                - IBM DB2
+                - Sybase
+                -->
+
+            </choice>
+        </requirements>
+
+        <provision>
+            <url-mapping>
+                <default-prefix>phpmyfaq</default-prefix>
+                <installed-size>11337251</installed-size>
+                <mapping url="/" path="htdocs" xmlns:php="http://apstandard.com/ns/1/php">
+                    <php:handler>
+                        <php:extension>php</php:extension>
+                    </php:handler>
+                    <mapping url="attachments">
+                        <php:permissions writable="true"/>
+                    </mapping>
+                    <mapping url="config">
+                        <php:permissions writable="true"/>
+                    </mapping>
+                    <mapping url="data">
+                        <php:permissions writable="true"/>
+                    </mapping>
+                </mapping>
+            </url-mapping>
+        </provision>
+
+    </service>
+
+</application>

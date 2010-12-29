@@ -42,7 +42,7 @@ if ($permission['editbt']) {
     $question      = PMF_Filter::filterInput(INPUT_POST, 'thema', FILTER_SANITIZE_STRING);
     $categories    = PMF_Filter::filterInputArray(INPUT_POST, array('rubrik' => array('filter' => FILTER_VALIDATE_INT,
                                                                                       'flags'  => FILTER_REQUIRE_ARRAY)));
-    $record_lang   = PMF_Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_STRING);
+    $record_lang   = PMF_Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
     $tags          = PMF_Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
     $active        = 'yes' == PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING) && $permission['approverec'] ? 'yes' : 'no';
     $sticky        = PMF_Filter::filterInput(INPUT_POST, 'sticky', FILTER_SANITIZE_STRING);
@@ -118,17 +118,6 @@ if ($permission['editbt']) {
         if ($record_id) {
             print $PMF_LANG['ad_entry_savedsuc'];
             link_ondemand_javascript($record_id, $record_lang);
-?>
-    <script type="text/javascript">
-    <!--
-    $(document).ready(function(){
-        setTimeout(function() {
-            window.location = "index.php?action=view";
-            }, 5000);
-        });
-    //-->
-    </script>       
-<?php
         } else {
             print $PMF_LANG['ad_entry_savedfail'].$db->error();
         }
@@ -177,8 +166,63 @@ if ($permission['editbt']) {
                 'group_id'    => $restricted_groups);
             $categoryGroup->update($category, $group_permission);
         }
+
+        // All the other translations        
+        $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);            
+        if ($faqconfig->get('main.enableGoogleTranslation') === true && !empty($languages)) {
+            $linkverifier = new PMF_Linkverifier($user->getLogin());
+    
+            $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
+            $languages = explode(",", $languages);
+            foreach ($languages as $translated_lang) {
+                if ($translated_lang == $record_lang) {
+                    continue;
+                }
+                $translated_question = PMF_Filter::filterInput(INPUT_POST, 'thema_translated_' . $translated_lang, FILTER_SANITIZE_STRING);
+                $translated_content  = PMF_Filter::filterInput(INPUT_POST, 'content_translated_' . $translated_lang, FILTER_SANITIZE_SPECIAL_CHARS);
+                $translated_keywords = PMF_Filter::filterInput(INPUT_POST, 'keywords_translated_' . $translated_lang, FILTER_SANITIZE_STRING);
+    
+                $recordData = array_merge($recordData, array(
+                    'lang'          => $translated_lang,
+                    'thema'         => utf8_encode(html_entity_decode($translated_question)),
+                    'content'       => utf8_encode(html_entity_decode($translated_content)),
+                    'keywords'      => utf8_encode($translated_keywords),
+                    'author'        => 'Google',
+                    'email'         => $faqconfig->get('main.administrationMail')));
+    
+                // Create ChangeLog entry
+                $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $translated_lang, $revision_id);
+    
+                // save or update the FAQ record
+                if ($faq->isAlreadyTranslated($record_id, $translated_lang)) {
+                    $faq->updateRecord($recordData);
+                } else {
+                    $faq->addRecord($recordData, false);
+                }
+    
+                // delete category relations
+                $faq->deleteCategoryRelations($record_id, $translated_lang);
+    
+                // save or update the category relations
+                $faq->addCategoryRelations($categories['rubrik'], $record_id, $translated_lang);
+    
+                // Copy Link Verification
+                $linkverifier->markEntry($record_id, $translated_lang);
+            }
+        }
+?>
+    <script type="text/javascript">
+    <!--
+    $(document).ready(function(){
+        setTimeout(function() {
+            window.location = "index.php?action=view";
+            }, 5000);
+        });
+    //-->
+    </script>
+<?php
     } elseif (isset($submit['submit'][0])) {
-        
+
         $faqRecord = new PMF_Faq_Record();
         $logging   = new PMF_Logging();
         $logging->logAdmin($user, 'Deleted record ' . $record_id);

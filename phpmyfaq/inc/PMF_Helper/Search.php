@@ -209,7 +209,7 @@ class PMF_Helper_Search extends PMF_Helper
                     urlencode($this->searchterm));
 
                 $oLink       = new PMF_Link($currentUrl);
-                $oLink->text = $oLink->itemTitle = $oLink->tooltip = $result->question;
+                $oLink->text = $oLink->itemTitle = $oLink->tooltip = $question;
                 
                 $html .= sprintf("<li><strong>%s</strong>: %s<br /><div class=\"searchpreview\"><strong>%s</strong> %s...</div><br /></li>\n",
                     $categoryName,
@@ -290,7 +290,7 @@ class PMF_Helper_Search extends PMF_Helper
         if ($lastPage > $numOfResults) {
             $lastPage = $numOfResults;
         }
-        
+
         if (0 < $numOfResults) {
             
             $html .= sprintf("<p>%s</p>\n", 
@@ -305,8 +305,17 @@ class PMF_Helper_Search extends PMF_Helper
             }
             
             $html .= "<ul class=\"phpmyfaq_ul\">\n";
-            
+
+            $counter = $displayedCounter = 0;
             foreach ($resultSet->getResultset() as $result) {
+                if ($displayedCounter >= $confPerPage) {
+                    continue;
+                }
+                $counter++;
+                if ($counter <= $firstPage) {
+                    continue;
+                }
+                $displayedCounter++;
                 
                 $categoryName  = $this->categoryLayout->renderBreadcrumb(array($result->category_id));
                 $question      = PMF_Utils::chopString($result->question, 15);
@@ -338,17 +347,20 @@ class PMF_Helper_Search extends PMF_Helper
 
                 $oLink       = new PMF_Link($currentUrl);
                 $oLink->text = $oLink->itemTitle = $oLink->tooltip = $result->question;
-                
-                $html .= sprintf("<li><strong>%s</strong>: %s<br /><div class=\"searchpreview\"><strong>%s</strong> %s...</div><br /></li>\n",
+
+                $html .= "<li>";
+                $html .= sprintf("<strong>%s</strong>: %s<br />",
                     $categoryName,
-                    $oLink->toHtmlAnchor(),
+                    $oLink->toHtmlAnchor());
+                $html .= sprintf("<div class=\"searchpreview\"><strong>%s</strong> %s...</div><br />\n",
                     $this->translation['msgSearchContent'],
                     $answerPreview);
+                $html .= "</li>";
             }
             
             $html .= "</ul>\n";
             
-            if (1 > $totalPages) {
+            if (1 < $totalPages) {
                 $html .= $this->pagination->render();
             }
             
@@ -368,7 +380,7 @@ class PMF_Helper_Search extends PMF_Helper
      */
     public function renderMostPopularSearches(Array $mostPopularSearches)
     {
-        $html = '<ul class="mostpupularsearcheslist">';
+        $html = '<ul class="mostpopularsearcheslist">';
         
         foreach ($mostPopularSearches as $searchItem) {
             if (PMF_String::strlen($searchItem['searchterm']) > 0) {
@@ -381,5 +393,4 @@ class PMF_Helper_Search extends PMF_Helper
         
         return $html . '</ul>';
     }
-    
 }

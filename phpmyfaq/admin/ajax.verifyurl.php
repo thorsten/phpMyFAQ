@@ -3,7 +3,7 @@
  * AJAX: verifyurl
  *
  * Usage:
- *   index.php?uin=<uin>&action=ajax&ajax=verifyURL&id=<id>&lang=<lang>
+ *   index.php?uin=<uin>&action=ajax&ajax=verifyURL&id=<id>&artlang=<lang>
  *
  * Performs link verification when entries are shown in record.show.php
  * 

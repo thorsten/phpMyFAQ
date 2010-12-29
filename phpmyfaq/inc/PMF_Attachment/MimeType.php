@@ -189,6 +189,7 @@ abstract class PMF_Attachment_MimeType
                 'odp'     => 'application/vnd.oasis.opendocument.presentation ',
                 'sxc'     => 'application/vnd.sun.xml.calc',
                 'odt'     => 'application/vnd.oasis.opendocument.text',
+                'log'     => 'text/plain',
     );
     
     /**

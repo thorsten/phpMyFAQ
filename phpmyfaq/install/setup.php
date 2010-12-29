@@ -24,7 +24,7 @@
  * @author    Johannes Schlüter <johannes@php.net>
  * @author    Uwe Pries <uwe.pries@digartis.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2002-2010 phpMyFAQ Team
+ * @copyright 2002-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-20
@@ -33,7 +33,7 @@
 define('VERSION', '3.0.0-dev');
 define('APIVERSION', 2);
 define('MINIMUM_PHP_VERSION', '5.3.0');
-define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2011 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
 
@@ -135,8 +135,6 @@ $enabledExtensions = array(
  * Executes the uninstall set of queries
  *
  * @return void
- * @access public
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  */
 function db_uninstall()
 {
@@ -148,23 +146,19 @@ function db_uninstall()
 }
 
 /**
- * Print out the XHTML Footer
+ * Print out the HTML5 Footer
  *
  * @return void
- * @access public
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  */
 function HTMLFooter()
 {
-    printf('<p class="center">%s</p></body></html>', COPYRIGHT);
+    printf('<footer><p class="center">%s</p></footer></body></html>', COPYRIGHT);
 }
 
 /**
  * Removes the data.php and the dataldap.php if an installation failed
  *
  * @return void
- * @access public
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  */
 function cleanInstallation()
 {
@@ -362,6 +356,7 @@ if (obj.options.length > obj.selectedIndex) {
     <label class="left">LDAP base search DN:</label>
     <input class="input" type="text" name="ldap_base" title="Please enter your distinguished name, e.g. 'cn=John Smith,ou=Accounts,o=My Company,c=US' here." />
 
+    <p>You can add additional LDAP configuration informations in the file config/constants_ldap.php.</p>
 </fieldset>
 <br />
 <?php
@@ -890,6 +885,34 @@ foreach ($permLevels as $level => $desc) {
         array(
             'name' => 'approverec',
             'description' => 'Right to approve records',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        // 34 => 'addattachment'
+        array(
+            'name' => 'addattachment',
+            'description' => 'Right to add attachments',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        // 35 => 'editattachment'
+        array(
+            'name' => 'editattachment',
+            'description' => 'Right to edit attachments',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        // 36 => 'delattachment'
+        array(
+            'name' => 'delattachment',
+            'description' => 'Right to delete attachments',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        // 37 => 'dlattachment'
+        array(
+            'name' => 'dlattachment',
+            'description' => 'Right to download attachments',
             'for_users' => 1,
             'for_groups' => 1
         ),

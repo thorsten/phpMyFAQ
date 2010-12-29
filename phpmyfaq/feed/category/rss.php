@@ -79,7 +79,7 @@ if (is_array($records)) {
 
         $rss->startElement('item');
         $rss->writeElement('title', html_entity_decode($item['record_title'] .
-                                    ' (' . $item['visits'] . ' '.$PMF_LANG['msgViews'].')'));
+                                    ' (' . $item['visits'] . ' '.$PMF_LANG['msgViews'].')', ENT_COMPAT, 'UTF-8'));
         
         $rss->startElement('description');
         $rss->writeCdata($item['record_preview']);

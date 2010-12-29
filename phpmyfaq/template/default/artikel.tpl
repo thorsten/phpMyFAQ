@@ -2,7 +2,6 @@
             <header>
                 <h2 id="article_category">{writeRubrik}</h2>
                 <div id="solution_id">ID #{solution_id}</div>
-                {facebookeLikeButton}
                 <h2>{writeThema}</h2>
             </header>
             
@@ -34,6 +33,7 @@
             <a href="javascript:window.print();"><img src="images/print.gif" alt="{writePrintMsgTag}" title="{writePrintMsgTag}" width="16" height="16" border="0" class="recordIcons" /></a> 
             <a href="{link_email}"><img src="images/email.gif" alt="{writeSend2FriendMsgTag}" title="{writeSend2FriendMsgTag}" width="16" height="16" border="0" class="recordIcons" /></a> 
             <a target="_blank" href="{link_pdf}"><img src="images/pdf.gif" alt="{writePDFTag}" title="{writePDFTag}" width="16" height="16" border="0" class="recordIcons" /></a>
+            {facebookeLikeButton}
             </div>
 
             <!-- Translation Form -->

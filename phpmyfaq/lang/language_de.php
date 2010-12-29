@@ -58,7 +58,7 @@ $PMF_LANG["msgPages"] = " Seiten";
 $PMF_LANG["msgPrevious"] = "Vorherige";
 $PMF_LANG["msgNext"] = "Weitere";
 $PMF_LANG["msgCategoryUp"] = "zur n&auml;chst h&ouml;heren Kategorien zurück";
-$PMF_LANG["msgLastUpdateArticle"] = "Letzte &auml;nderung des Artikels: ";
+$PMF_LANG["msgLastUpdateArticle"] = "Letzte &Auml;nderung: ";
 $PMF_LANG["msgAuthor"] = "Verfasser des Artikels: ";
 $PMF_LANG["msgPrinterFriendly"] = "Druckerfreundliche Version";
 $PMF_LANG["msgPrintArticle"] = "Artikel ausdrucken";
@@ -692,7 +692,7 @@ $PMF_LANG['ad_user_error_noId'] =  "Keine ID ausgew&auml;hlt. ";
 $PMF_LANG['ad_user_error_protectedAccount'] =  "Der Benutzeraccount ist gesch&uuml;tzt. ";
 $PMF_LANG['ad_user_deleteUser'] = "L&ouml;sche Benutzer";
 $PMF_LANG['ad_user_status'] = "Status:";
-$PMF_LANG['ad_user_lastModified'] = "Letzte &auml;nderung:";
+$PMF_LANG['ad_user_lastModified'] = "Letzte &Auml;nderung:";
 $PMF_LANG['ad_gen_cancel'] = "Abbrechen";
 $PMF_LANG["rightsLanguage"]['addglossary'] = "W&ouml;rterbucheintr&auml;ge hinzuf&uuml;gen";
 $PMF_LANG["rightsLanguage"]['editglossary'] = "W&ouml;rterbucheintr&auml;ge bearbeiten";
@@ -730,8 +730,8 @@ $PMF_LANG['ad_export_gen_docbook'] = 'Erstelle eine DocBook XML Datei';
 
 // added v2.0.0 - 2006-07-22 by Matteo
 $PMF_LANG['ad_news_data'] = 'Nachricht';
-$PMF_LANG['ad_news_author_name'] = 'Autor:';
-$PMF_LANG['ad_news_author_email'] = 'E-Mail des Autors:';
+$PMF_LANG['ad_news_author_name'] = 'Verfasser:';
+$PMF_LANG['ad_news_author_email'] = 'E-Mail des Verfassers:';
 $PMF_LANG['ad_news_set_active'] = 'Aktivieren:';
 $PMF_LANG['ad_news_allowComments'] = 'Erlaube Kommentare:';
 $PMF_LANG['ad_news_expiration_window'] = 'Nachricht Abblaufdatum (optional)';
@@ -949,8 +949,8 @@ $PMF_LANG['msgLanguage'] = 'Sprache';
 $PMF_LANG['msgTransToolLanguageCharset'] = 'Zeichensatz';
 $PMF_LANG['msgTransToolLanguageDir'] = 'Schriftrichtung';
 $PMF_LANG['msgTransToolLanguageDesc'] = 'Sprachbeschreibung';
-$PMF_LANG['msgAuthor'] = 'Autor';
-$PMF_LANG['msgTransToolAddAuthor'] = 'Autor hinzuf&uuml;gen';
+$PMF_LANG['msgAuthor'] = 'Verfasser';
+$PMF_LANG['msgTransToolAddAuthor'] = 'Verfasser hinzuf&uuml;gen';
 $PMF_LANG['msgTransToolCreateTranslation'] = 'Neue &uuml;bersetzung hinzuf&uuml;gen';
 $PMF_LANG['msgTransToolTransCreated'] = 'Neue &uuml;bersetzung erfolgreich erstellt.';
 $PMF_LANG['msgTransToolCouldntCreateTrans'] = 'Neue &uuml;bersetzung konnte nicht erstellt werden.';
@@ -1042,6 +1042,10 @@ $PMF_LANG['search.relevance.content-thema-keywords'] = 'Antwort - Frage - Schlü
 $PMF_LANG['search.relevance.content-keywords-thema'] = 'Antwort - Schlüsselwörter - Frage';
 $PMF_LANG['search.relevance.keywords-content-thema'] = 'Schlüsselwörter - Antwort - Frage';
 $PMF_LANG['search.relevance.keywords-thema-content'] = 'Schlüsselwörter - Question - Antwort';
+
+// added v2.6.99 - 2010-11-30 by Gustavo Solt
+$LANG_CONF['main.googleTranslationKey'] = array(0 => 'input', 1 => 'Google APIs key');
+$LANG_CONF["main.enableGoogleTranslation"] = array(0 => "checkbox", 1 => "Google Übersetzung aktivieren? (Standard: deaktiviert)");
 
 // added 2.7.0-alpha - 2010-09-13 by Thorsten
 $PMF_LANG['msgLoginUser'] = 'Einloggen';

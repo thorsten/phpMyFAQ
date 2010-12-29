@@ -27,6 +27,8 @@
  * @since     2003-02-12 
  */
 
+define('IS_VALID_PHPMYFAQ', null);
+
 require_once 'inc/Init.php';
 PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));

@@ -81,10 +81,12 @@ if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($
         $content = $content."<br />".$PMF_LANG["msgInfo"]."<a href=\"http://".PMF_String::substr($contentlink,7)."\" target=\"_blank\">".$contentlink."</a>";
     }
 
+    $autoActivate = PMF_Configuration::getInstance()->get('records.defaultActivation');
+
     $newData = array(
         'lang'          => ($isTranslation == true ? $newLanguage : $LANGCODE),
         'thema'         => $thema,
-        'active'        => FAQ_SQL_ACTIVE_NO,
+        'active'        => ($autoActivate ? FAQ_SQL_ACTIVE_YES : FAQ_SQL_ACTIVE_NO),
         'sticky'        => 0,
         'content'       => nl2br($content),
         'keywords'      => $keywords,
@@ -111,7 +113,7 @@ if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($
             }
         }
     }
-    
+
     $faqRecord->create($newData);
     $recordId = $faqRecord->getSolutionId();
     
@@ -123,6 +125,21 @@ if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($
             'record_lang'   => $newData['lang']);
         // save the category relations
         $categoryRelations->create($categoryData);
+    }
+
+    if ($autoActivate) {
+        // Activate visits
+        $visits = PMF_Visits::getInstance();
+        $visits->add($recordId, $newData['lang']);
+
+        // Add user permissions
+        $faq->addPermission('user', -1);
+        $category->addPermission('user', $categories['rubrik'], array(-1));
+        // Add group permission
+        if ($faqconfig->get('main.permLevel') != 'basic') {
+            $faq->addPermission('group', $recordId, -1);
+            $category->addPermission('group', $categories['rubrik'], array(-1));
+        }
     }
 
     $sent = array();

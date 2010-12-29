@@ -88,6 +88,7 @@ if (isset($auth)) {
         case 'savenews':
         case 'question':
         case 'comments':
+        case 'attachments':
             $menuGroup        = 'content';
             $secLevelEntries .= $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit', $action);
             $secLevelEntries .= $adminHelper->addMenuEntry('addbt', 'editentry', 'ad_entry_add', $action);
@@ -96,6 +97,7 @@ if (isset($auth)) {
             $secLevelEntries .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open', $action);
             $secLevelEntries .= $adminHelper->addMenuEntry('addglossary+editglossary+delglossary', 'glossary', 'ad_menu_glossary', $action);
             $secLevelEntries .= $adminHelper->addMenuEntry('addnews+editnews+delnews', 'news', 'ad_menu_news_edit', $action);
+            $secLevelEntries .= $adminHelper->addMenuEntry('addattachment+editattachment+delattachment', 'attachments', 'ad_menu_attachments', $action);
             $dashboardPage    = false;
             $contentPage      = true;
             break;
@@ -119,6 +121,12 @@ if (isset($auth)) {
             $dashboardPage    = false;
             $exportsPage      = true;
             break;
+        case 'backup':
+            $menuGroup       = 'backup';
+            $secLevelEntries = $adminHelper->addMenuEntry('', 'backup', 'ad_menu_export', $action);
+            $dashboardPage   = false;
+            $backupPage      = true;
+            break;
         case 'config':
         case 'linkconfig':
         case 'stopwordsconfig':
@@ -134,12 +142,6 @@ if (isset($auth)) {
             $dashboardPage     = false;
             $configurationPage = true;
             break;
-        case 'backup':
-            $menuGroup       = 'backup';
-            $secLevelEntries = '';
-            $dashboardPage   = false;
-            $backupPage      = true;
-            break;
         default:
             $secLevelEntries .= $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit');
             $secLevelEntries .= $adminHelper->addMenuEntry('addbt', 'editentry', 'ad_quick_record');
@@ -153,7 +155,7 @@ if (isset($auth)) {
     $firstLevelEntries .= $adminHelper->addMenuEntry('', 'content', 'admin_mainmenu_content', $menuGroup, false);
     $firstLevelEntries .= $adminHelper->addMenuEntry('', 'statistics', 'admin_mainmenu_statistics', $menuGroup, false);
     $firstLevelEntries .= $adminHelper->addMenuEntry('', 'export', 'admin_mainmenu_exports', $menuGroup, false);
-    $firstLevelEntries .= $adminHelper->addMenuEntry('', 'backup', 'admin_mainmenu_backup', $action, false);
+    $firstLevelEntries .= $adminHelper->addMenuEntry('', 'backup', 'admin_mainmenu_backup', $menuGroup, false);
     $firstLevelEntries .= $adminHelper->addMenuEntry('', 'config', 'admin_mainmenu_configuration', $menuGroup, false);
 }
 
@@ -164,6 +166,7 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 header("Content-type: text/html; charset=utf-8");
 header("Vary: Negotiate,Accept");
+
 ?>
 <!DOCTYPE html>
 <!--[if lt IE 7 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie6"> <![endif]-->

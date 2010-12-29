@@ -75,9 +75,9 @@ if ($num > 0) {
             $counter++;
 
             $rss->startElement('item');
-            $rss->writeElement('title', PMF_Utils::makeShorterText(html_entity_decode($item->question), 8) .
+            $rss->writeElement('title', PMF_Utils::makeShorterText(html_entity_decode($item->question, ENT_COMPAT, 'UTF-8'), 8) .
                                         " (".$item->username.")");
-            
+
             $rss->startElement('description');
             $rss->writeCdata($item->question);
             $rss->endElement();

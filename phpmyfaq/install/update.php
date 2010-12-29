@@ -19,7 +19,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Thomas Melchinger <t.melchinger@uni.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2002-2010 phpMyFAQ Team
+ * @copyright 2002-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-01-10
@@ -28,7 +28,7 @@
 define('NEWVERSION', '3.0.0-dev');
 define('APIVERSION', 2);
 define('MINIMUM_PHP_VERSION', '5.3.0');
-define('COPYRIGHT', '&copy; 2001-2010 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2011 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
 
@@ -650,6 +650,8 @@ if ($step == 4) {
     if (version_compare($version, '2.6.99', '<')) {
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('search.relevance', 'thema,content,keywords')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('search.enableRelevance', 'false')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.enableGoogleTranslation', 'false')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.googleTranslationKey', 'INSERT-YOUR-KEY')";
     }
 
     //
@@ -731,6 +733,20 @@ if ($step == 4) {
                 $query[] = "COMMIT";
                 break;
         }
+
+
+        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES
+            (34, 'addattachment', 'Right to add attachments', 1, 1)";
+        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES
+            (35, 'editattachment', 'Right to edit attachments', 1, 1)";
+        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES
+            (36, 'delattachment', 'Right to delete attachments', 1, 1)";
+        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES
+            (37, 'dlattachment', 'Right to download attachments', 1, 1)";
+        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 34)";
+        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 35)";
+        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 36)";
+        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 37)";
     }
     
     //

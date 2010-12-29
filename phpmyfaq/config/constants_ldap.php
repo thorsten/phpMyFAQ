@@ -28,7 +28,8 @@
 $PMF_LDAP['ldap_mapping'] = array (
     'name'     => 'cn',
     'username' => 'samAccountName',
-    'mail'     => 'mail');
+    'mail'     => 'mail'
+);
 
 // In a multi-domain environment, users may enter a prefix as domain, e.g. "DOMAIN\username"
 // If possible, you should use the Microsoft Glocal Catalog as LDAP-Server, which comes
@@ -40,7 +41,12 @@ $PMF_LDAP['ldap_use_domain_prefix'] = true;
 $PMF_LDAP["ldap_options"] = array (
     LDAP_OPT_PROTOCOL_VERSION => 3,
     LDAP_OPT_REFERRALS        => 0);
-    
+
+// Option for adding a check on LDAP groups
+// Default: false
+$PMF_LDAP['ldap_use_memberOf'] = false;
+$PMF_LDAP['ldap_mapping']['memberOf'] = '';
+
 // Option for binding to LDAP directory using SASL
 // Default: false
 $PMF_LDAP['ldap_use_sasl'] = false;

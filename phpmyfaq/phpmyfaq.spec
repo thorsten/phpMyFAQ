@@ -39,7 +39,7 @@
 #
 # @author    Matteo Scaramuccia <matteo@scaramuccia.com>
 # @since     2006-07-05
-# @copyright 2006-2010 phpMyFAQ Team
+# @copyright 2006-2011 phpMyFAQ Team
 #
 # The contents of this file are subject to the Mozilla Public License
 # Version 1.1 (the "License"); you may not use this file except in
@@ -159,6 +159,12 @@ installation script.
 
 * Mon Aug 08 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0.alpha-1
 - New upstream version 2.7-0-alpha
+
+* Sat Dec 18 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.6.14-1
+- New upstream version 2.6.14
+
+* Wed Dec 13 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.6.13-1
+- New upstream version 2.6.13
 
 * Wed Nov 03 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.6.12-1
 - New upstream version 2.6.12

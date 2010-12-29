@@ -1097,6 +1097,11 @@ $PMF_LANG['search.relevance.content-keywords-thema'] = 'Answer - Keywords - Ques
 $PMF_LANG['search.relevance.keywords-content-thema'] = 'Keywords - Answer - Question';
 $PMF_LANG['search.relevance.keywords-thema-content'] = 'Keywords - Question - Answer';
 
+// added v2.6.99 - 2010-11-30 by Gustavo Solt
+$LANG_CONF['main.googleTranslationKey'] = array(0 => 'input', 1 => 'Google APIs key');
+$LANG_CONF["main.enableGoogleTranslation"] = array(0 => "checkbox", 1 => "Activate google translations? (default: deactivated)");
+$PMF_LANG["msgNoGoogleApiKeyFound"] = 'The Google APIs key is empty, please provide one in the configuration section';
+
 // added 2.7.0-alpha - 2010-09-13 by Thorsten
 $PMF_LANG['msgLoginUser'] = 'Login';
 $PMF_LANG['socialNetworksControlCenter'] = 'Social networks configuration';
@@ -1108,6 +1113,10 @@ $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'T
 $LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => 'Twitter Access Token Key');
 $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'Twitter Access Token Secret');
 $LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Facebook support (default: deactivated)');
+
+// added 2.7.0-alpha - 2010-12-21 by Anatoliy Belsky
+$PMF_LANG["ad_menu_attachments"] = "Attachments";
+$PMF_LANG["ad_menu_attachment_admin"] = "Attachment administration";
 
 // added 3.0.0-alpha
 $LANG_CONF['main.useAjaxMenu'] = array(0 => 'checkbox', 1 => 'Ajax powered frontend (default: deactivated)');
