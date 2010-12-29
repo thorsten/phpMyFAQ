@@ -116,7 +116,7 @@ if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($
         $visits->add($recordId, $newData['lang']);
 
         // Add user permissions
-        $faq->addPermission('user', -1);
+        $faq->addPermission('user', $recordId, -1);
         $category->addPermission('user', $categories['rubrik'], array(-1));
         // Add group permission
         if ($faqconfig->get('main.permLevel') != 'basic') {
