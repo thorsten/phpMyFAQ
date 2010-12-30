@@ -84,10 +84,11 @@ class PMF_Session
         
         if ($faqconfig->get('main.enableUserTracking')) {
 
-            $bots  = 0;
-            $agent = $_SERVER['HTTP_USER_AGENT'];
-            $sid   = PMF_Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
-            $sidc  = PMF_Filter::filterInput(INPUT_COOKIE, PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
+            $bots   = 0;
+            $banned = false;
+            $agent  = $_SERVER['HTTP_USER_AGENT'];
+            $sid    = PMF_Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
+            $sidc   = PMF_Filter::filterInput(INPUT_COOKIE, PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
             
             if (!is_null($sidc)) {
                 $sid = $sidc;
@@ -101,7 +102,12 @@ class PMF_Session
                     $bots++;
                 }
             }
-            if (0 == $bots) {
+
+            if (IPCheck($_SERVER['REMOTE_ADDR'])) {
+                $banned = true;
+            }
+
+            if (0 == $bots && false == $banned) {
                 if (!isset($sid)) {
                     $sid = $this->db->nextID(SQLPREFIX."faqsessions", "sid");
                     // Sanity check: force the session cookie to contains the current $sid
@@ -118,7 +124,7 @@ class PMF_Session
                         SQLPREFIX,
                         $sid,
                         ($user ? $user->getUserId() : -1),
-                        $_SERVER["REMOTE_ADDR"],
+                        $_SERVER['REMOTE_ADDR'],
                         $_SERVER['REQUEST_TIME']
                     );
                     $this->db->query($query);
