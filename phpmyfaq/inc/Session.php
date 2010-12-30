@@ -62,29 +62,26 @@ class PMF_Session
     
     /**
      * Tracks the user and log what he did
-     * 
-     * @param   string
-     * @param   integer
-     * @return  void
-     * @since   2001-02-18
-     * @since   Bastian Poettner <bastian@poettner.net>
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
-     * @author  Marco Fester <webmaster@marcof.de>
+     *
+     * @param  string  $action Action string
+     * @param  integer $id     Current ID
+     *
+     * @return void
      */
     public function userTracking($action, $id = 0)
     {
         global $sid, $user, $botBlacklist;
 
         $faqconfig = PMF_Configuration::getInstance();
-        
+
         if ($faqconfig->get('main.enableUserTracking')) {
 
-            $bots  = 0;
-            $agent = $_SERVER['HTTP_USER_AGENT'];
-            $sid   = PMF_Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
-            $sidc  = PMF_Filter::filterInput(INPUT_COOKIE, PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
-            
+            $bots   = 0;
+            $banned = false;
+            $agent  = $_SERVER['HTTP_USER_AGENT'];
+            $sid    = PMF_Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
+            $sidc   = PMF_Filter::filterInput(INPUT_COOKIE, PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
+
             if (!is_null($sidc)) {
                 $sid = $sidc;
             }
@@ -97,7 +94,12 @@ class PMF_Session
                     $bots++;
                 }
             }
-            if (0 == $bots) {
+
+            if (IPCheck($_SERVER['REMOTE_ADDR'])) {
+                $banned = true;
+            }
+
+            if (0 == $bots && false == $banned) {
                 if (!isset($sid)) {
                     $sid = $this->db->nextID(SQLPREFIX."faqsessions", "sid");
                     // Sanity check: force the session cookie to contains the current $sid
@@ -106,7 +108,7 @@ class PMF_Session
                     }
 
                     $query = sprintf("
-                        INSERT INTO 
+                        INSERT INTO
                             %sfaqsessions
                         (sid, user_id, ip, time)
                             VALUES
@@ -114,19 +116,19 @@ class PMF_Session
                         SQLPREFIX,
                         $sid,
                         ($user ? $user->getUserId() : -1),
-                        $_SERVER["REMOTE_ADDR"],
+                        $_SERVER['REMOTE_ADDR'],
                         $_SERVER['REQUEST_TIME']
                     );
                     $this->db->query($query);
                 }
 
-                $data = $sid.';' . 
-                        str_replace(';', ',', $action) . ';' . 
-                        $id . ';' . 
-                        $_SERVER['REMOTE_ADDR'] . ';' . 
-                        str_replace(';', ',', $_SERVER['QUERY_STRING']) . ';' . 
-                        str_replace(';', ',', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '') . ';' . 
-                        str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])) . ';' . 
+                $data = $sid.';' .
+                        str_replace(';', ',', $action) . ';' .
+                        $id . ';' .
+                        $_SERVER['REMOTE_ADDR'] . ';' .
+                        str_replace(';', ',', $_SERVER['QUERY_STRING']) . ';' .
+                        str_replace(';', ',', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '') . ';' .
+                        str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])) . ';' .
                         $_SERVER['REQUEST_TIME'] . ";\n";
                 $file = './data/tracking'.date('dmY');
                 file_put_contents($file, $data, FILE_APPEND);
