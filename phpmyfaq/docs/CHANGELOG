@@ -6,8 +6,9 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.6.14 - 2011-01-
-- Added compatibility for MySQL 5.5 with ext/mysql (Thorsten)
-- Improved restore functionality (Thorsten)
+- added compatibility for MySQL 5.5 with ext/mysql (Thorsten)
+- added support to ban IPs from user tracking files (Thorsten)
+- improved restore functionality (Thorsten)
 
 Version 2.6.13 - 2010-12-15
 - clean package after compromised server (Thorsten)
