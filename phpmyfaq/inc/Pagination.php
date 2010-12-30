@@ -45,18 +45,10 @@ class PMF_Pagination
     /**
      * Template vars
      */
-    const TPL_VAR_LINK_URL        = '{LINK_URL}';
-    const TPL_VAR_LINK_TEXT       = '{LINK_TEXT}';
-    const TPL_VAR_LAYOUT_CONTENT  = '{LAYOUT_CONTENT}';
-    
-    /**
-     * Url style variants
-     * - URL_STYLE_DEFAULT is a normal query string style
-     * - URL_STYLE_REWRITE is the style of host/param0/val0/param1/val1
-     */
-    const URL_STYLE_DEFAULT = 0;
-    const URL_STYLE_REWRITE = 1;
-    
+    const TPL_VAR_LINK_URL       = '{LINK_URL}';
+    const TPL_VAR_LINK_TEXT      = '{LINK_TEXT}';
+    const TPL_VAR_LAYOUT_CONTENT = '{LAYOUT_CONTENT}';
+
     /**
      * Base url used for links
      * 
@@ -134,14 +126,7 @@ class PMF_Pagination
      * @var string
      */
     protected $layoutTpl = '<div>{LAYOUT_CONTENT}</div>';
-    
-    /**
-     * Url style 
-     * 
-     * @var string
-     */
-    protected $urlStyle = self::URL_STYLE_DEFAULT;
-    
+
     /**
      * Current page index
      * 
@@ -155,6 +140,13 @@ class PMF_Pagination
      * @var string
      */
     protected $pageParamName = 'page';
+
+    /**
+     * SEO name
+     *
+     * @var string
+     */
+    protected $seoName = '';
     
     /**
      * Constructor
@@ -171,7 +163,6 @@ class PMF_Pagination
      * - firstPageLinkTpl
      * - lastPageLinkTpl
      * - layoutTpl
-     * - urlStyle
      * - pageParamName (default "page")
      * 
      * NOTE we read in the current page from the baseUrl, so if it contains
@@ -223,12 +214,12 @@ class PMF_Pagination
            $this->layoutTpl = $options['layoutTpl'];
         }
         
-        if (isset($options['urlStyle'])) {
-           $this->urlStyle = $options['urlStyle'];
-        }
-        
         if (isset($options['pageParamName'])) {
            $this->pageParamName = $options['pageParamName'];
+        }
+
+        if (isset($options['seoName'])) {
+           $this->seoName = $options['seoName'];
         }
         
         /**
@@ -244,33 +235,20 @@ class PMF_Pagination
      * 
      * @param string $url URL
      * 
-     * @return string
+     * @return integer
      */
     protected function getCurrentPageFromUrl($url)
     {
-        $retval = 1;
+        $page = 1;
         
         if (!empty($url)) {
-            
             $match = array();
-            
-            switch ($this->urlStyle) {
-                case self::URL_STYLE_REWRITE:
-                    $pattern = '$/(' . $this->pageParamName . ')/(\d+)$';
-                    break;
-                    
-                case self::URL_STYLE_DEFAULT:
-                default:
-                    $pattern = '$&(amp;|)' . $this->pageParamName . '=(\d+)$';
-                    break;
-            }
-            
-            if (PMF_String::preg_match($pattern, $url, $match)) {
-                $retval = isset($match[2]) ? $match[2] : $retval;
+            if (PMF_String::preg_match('$&(amp;|)' . $this->pageParamName . '=(\d+)$', $url, $match)) {
+                $page = isset($match[2]) ? $match[2] : $page;
             }
         }
 
-        return $retval;
+        return $page;
     }
     
     /**
@@ -344,25 +322,17 @@ class PMF_Pagination
      */
     protected function renderUrl($url, $page)
     {
-        switch ($this->urlStyle) {
-            case self::URL_STYLE_REWRITE:
-                $cleanedUrl = PMF_String::preg_replace(array('$/' . $this->pageParamName . '/(\d+)$',
-                                                             '$//$'),
-                                                       "",
-                                                       $this->baseUrl);
-                $url = "$cleanedUrl/{$this->pageParamName}/$page";
-                break;
-                
-            case self::URL_STYLE_DEFAULT:
-            default:
-                $cleanedUrl = PMF_String::preg_replace(array('$&(amp;|)' . $this->pageParamName . '=(\d+)$'),
-                                                       "",
-                                                       $this->baseUrl);
-                $url = "$cleanedUrl&amp;{$this->pageParamName}=$page";
-                break;
-        }
+        $cleanedUrl = PMF_String::preg_replace(
+            array('$&(amp;|)' . $this->pageParamName . '=(\d+)$'),
+            '',
+            $url
+        );
         
-        return $url;
+        $url             = sprintf('%s&amp;%s=%d', $cleanedUrl, $this->pageParamName, $page);
+        $link            = new PMF_Link($url);
+        $link->itemTitle = $this->seoName;
+
+        return $link->toString();
     }
     
     /**
