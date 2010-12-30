@@ -3,11 +3,8 @@
             <aside id="searchBox">
                 <p>{msgDescriptionInstantResponse}</p>
                 <form id="instantform" action="?action=instantresponse" method="post">
-                    <fieldset>
-                    <legend>{msgSearchWord}</legend>
-                        <input id="instantfield" type="search" name="search" value="{searchString}" />
-                        <input id="ajaxlanguage" name="ajaxlanguage" type="hidden" value="{ajaxlanguage}" />
-                    </fieldset>
+                    <input id="instantfield" type="search" name="search" value="{searchString}" />
+                    <input id="ajaxlanguage" name="ajaxlanguage" type="hidden" value="{ajaxlanguage}" />
                 </form>
                 
                 <div id="instantresponse">
