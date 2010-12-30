@@ -173,11 +173,11 @@ button {
 #header h1 {
     padding-top: 5px; line-height: .6; }
 #header h1 a:link, #header h1 a:visited { 
-    color: #1E4262; display: block; margin: 0 0 .6em 0; text-decoration: none; }
+    color: #444; display: block; margin: 0 0 .6em 0; text-decoration: none; }
 #header h1 a:hover, #header h1 a:active { 
-    background: none; color: #335370; text-shadow: none; }
+    background: none; text-shadow: none; }
 #header #loginBox {
-	float: right; top: 0; width: 175px; margin-top: -2.5em; padding: 5px; background: #D1480B; color: #fff;
+	float: right; top: 0; width: 175px; margin-top: -2.5em; padding: 5px; background: #F67600; color: #fff;
 	border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px; 
 	border-bottom-right-radius: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; }
 #header #loginSelection {
@@ -187,16 +187,17 @@ button {
 #header #loginForm {
     position: relative; display: none; margin: auto; padding: 5px; width: 170px; z-index: 999; }
 #header nav {
-    background: #1E4262; font-size: 1.143em; height: 40px; line-height: 30px; margin: 0 auto 2em auto; padding: 0;
-    text-align: center; width: 100%; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+    background: url(../images/nav_background.png); font-size: 1.143em; height: 40px; line-height: 30px;
+    margin: 0 auto 2em auto; padding: 0; text-align: center; width: 100%; border-radius: 5px; -moz-border-radius: 5px;
+    -webkit-border-radius: 5px; }
 #header nav ul {
     list-style: none; margin: 0 auto; width: 100%; }
 #header nav li {
-    float: left; display: inline; margin: 0; border-right: 2px solid #f5f4ef; }
+    float: left; display: inline; margin: 0; }
 #header nav a:link, #header nav a:visited {
-    color: #fff; display: inline-block; height: 30px; padding: 5px 0.8em; text-decoration: none; font-weight: bold; }
+    color: #F67600; display: inline-block; height: 30px; padding: 5px 0.8em; text-decoration: none; }
 #header nav a:hover, #header nav a:active, #header nav .active a:link, #header nav .active a:visited {
-    background: #335370; color: #fff; text-shadow: none !important; }
+    color: #fff; text-shadow: none !important; }
 #header nav li:first-child a {
     border-top-left-radius: 5px; -moz-border-radius-topleft: 5px; -webkit-border-top-left-radius: 5px;
     border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px; }
@@ -212,7 +213,7 @@ button {
 	margin: 0; padding: 0; }
 #categories li a {
     display: block; border-bottom: 1px dotted #444; text-decoration: none; height: 100%; padding: .5em 0 .5em .5em; 
-    font-size: 110%; color: #1E4262; }
+    font-size: 110%; color: #222; }
 #categories li ul a { padding-left: 1em; }
 #categories ul ul ul a { padding-left: 2em; }
 #categories ul ul ul ul a { padding-left: 3em; }
@@ -230,23 +231,23 @@ button {
 #maincontent {
     float: left; width: 560px; }
 #searchBox {
-    background: #6a6b6a; margin-bottom: 2em; overflow: hidden; padding: 20px; width: 500px; color: #fff;
-    border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; }
+    background: url(../images/search_background.png) repeat-x; margin-bottom: 2em; overflow: hidden; padding: 20px; 
+    width: 500px; color: #222; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; }
 #searchBox input[type=text] {
     width: 400px; height: 1.66em; font-size: 1.33em; margin-bottom: 5px;
     border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 #searchBox a {
-    color: #cbcbcb; text-decoration: none; }
+    color: #222; text-decoration: none; }
 #searchBox a.help {
     margin-right: 10px; padding: 0 12px 0 0; background: url(../images/arrow.gif) no-repeat scroll right 55% transparent; }
 #searchBox a.help:hover {
-	color: #fff; }
+	text-decoration: underline; }
 #rightcolumn {
     float: right; width: 200px; }
 
 #footer {
-    background: #1A3857; height: 30px; line-height: 30px; margin: 0 auto 2em auto; padding: 0; width: 100%; 
-    border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+    background: url(../images/nav_background.png); height: 40px; line-height: 40px; margin: 0 auto 2em auto; padding: 0;
+    width: 100%; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 #copyrightnote {
     color: #fff; margin: auto; padding-bottom: 2em; text-align: right; padding-right: 10px; }
 #copyrightnote a {
