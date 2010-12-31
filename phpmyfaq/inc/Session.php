@@ -80,9 +80,7 @@ class PMF_Session
     {
         global $sid, $user, $botBlacklist;
 
-        $faqconfig = PMF_Configuration::getInstance();
-        
-        if ($faqconfig->get('main.enableUserTracking')) {
+        if (PMF_Configuration::getInstance()->get('main.enableUserTracking')) {
 
             $bots   = 0;
             $banned = false;
@@ -93,23 +91,23 @@ class PMF_Session
             if (!is_null($sidc)) {
                 $sid = $sidc;
             }
-            if ($action == "old_session") {
+            if ($action == 'old_session') {
                 $sid = null;
             }
 
             foreach ($botBlacklist as $bot) {
-                if (strpos($agent, $bot)) {
+                if ((bool)PMF_String::strstr($agent, $bot)) {
                     $bots++;
                 }
             }
 
-            if (IPCheck($_SERVER['REMOTE_ADDR'])) {
+            if (!IPCheck($_SERVER['REMOTE_ADDR'])) {
                 $banned = true;
             }
 
             if (0 == $bots && false == $banned) {
                 if (!isset($sid)) {
-                    $sid = $this->db->nextID(SQLPREFIX."faqsessions", "sid");
+                    $sid = $this->db->nextID(SQLPREFIX . 'faqsessions', 'sid');
                     // Sanity check: force the session cookie to contains the current $sid
                     if (!is_null($sidc) && (!$sidc != $sid)) {
                         self::setCookie($sid);
@@ -138,7 +136,7 @@ class PMF_Session
                         str_replace(';', ',', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '') . ';' . 
                         str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])) . ';' . 
                         $_SERVER['REQUEST_TIME'] . ";\n";
-                $file = './data/tracking'.date('dmY');
+                $file = './data/tracking' . date('dmY');
                 file_put_contents($file, $data, FILE_APPEND);
             }
         }
