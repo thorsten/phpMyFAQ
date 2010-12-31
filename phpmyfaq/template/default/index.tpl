@@ -44,46 +44,41 @@
 </head>
 <body dir="{dir}">
 
-<div id="container">
-    <header id="header">
-        
-        <div id="loginBox">
-            {loginBox}
-        </div>
-        
-        <h1><a title="{header}" href="{faqHome}">{header}</a></h1>
-        
-        <nav>
-        <ul>
-            <li>{allCategories}</li>
-            <li>{showInstantResponse}</li>
-            <li>{msgAddContent}</li>
-            <li>{msgQuestion}</li>
-            <li>{msgOpenQuestions}</li>
-            <li>{showSitemap}</li>
-            <li>{msgContact}</li>
-        </ul>
-        </nav>
-    </header>
+<header id="header">
+    <div id="loginBox">
+        {loginBox}
+    </div>
+    <h1>
+        <a title="{header}" href="{faqHome}">{header}</a>
+    </h1>
+</header>
 
-    <section id="maincolumns">
-        <aside id="leftcolumn">
-            <div id="categories">
-                <nav>
-                    <ul>
-                        <li class="home">{backToHome}</li>
-                        {showCategories}
-                    </ul>
-                </nav>
-            </div>
-            <div id="useronline">
-                {userOnline}
-            </div>
-        </aside>
+<nav>
+    <ul>
+        <li>{allCategories}</li>
+        <li>{showInstantResponse}</li>
+        <li>{msgAddContent}</li>
+        <li>{msgQuestion}</li>
+        <li>{msgOpenQuestions}</li>
+        <li>{showSitemap}</li>
+        <li>{msgContact}</li>
+    </ul>
+</nav>
+
+<a id="top"></a>
+
+<div id="content">
+    <div id="mainContent">
+        <section>
+        <menu id="leftContent">
+            <ul>
+                <li class="home">{backToHome}</li>
+                {showCategories}
+            </ul>
+        </menu>
         
-        <section id="maincontent">
-            [globalSearchBox]
-            <aside id="searchBox">
+        [globalSearchBox]
+        <div id="searchBox">
             <form id="search" action="{writeSendAdress}" method="get">
                 <input type="text" name="search" id="searchfield" size="30">
                 <input type="hidden" name="searchcategory" value="{categoryId}">
@@ -91,52 +86,55 @@
                 <input type="submit" name="submit" value="{searchBox}">
             </form>
             {msgSearch}
-            </aside>
-            [/globalSearchBox]
-            [globalSuggestBox]
-            <aside id="searchBox">
+        </div>
+        [/globalSearchBox]
+        [globalSuggestBox]
+        <div id="searchBox">
             <form id="instantform" action="?action=instantresponse" method="post">
                 <input type="hidden" name="ajaxlanguage" id="ajaxlanguage" value="{ajaxlanguage}">
                 <input type="text" name="search" id="instantfield" value="">
             </form>
             {msgSearch}
-            </aside>
-            [/globalSuggestBox]
-            
-            {writeContent}
+        </div>
+        [/globalSuggestBox]
+
+        {writeContent}
         </section>
-        
-        <aside id="rightcolumn">
-            
-            {rightBox}
-            
-            <div id="stickyrecords">
-            <h3>{stickyRecordsHeader}</h3>
+    </div>
+
+    <aside>
+        {rightBox}
+        <section>
+            <header>
+                <h3>{stickyRecordsHeader}</h3>
+            </header>
             <ul>
                 [stickyRecordsList]
                 <li><a href="{stickyRecordsUrl}">{stickyRecordsTitle}</a></li>
                 [/stickyRecordsList]
             </ul>
-            </div>
-            
-        </aside>
-    
-    </section>
-    
-    <div class="clearfix"></div>
-    <footer id="footer">
-        <form action="{writeLangAdress}" method="post">
-        <p id="copyrightnote">
-            {copyright} | {switchLanguages} <input type="hidden" name="action" value="" />
-        </p>
-        </form>
-    </footer>
-    
-    {debugMessages}
-
+        </section>
+    </aside>
 </div>
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<footer id="footer">
+    <div>
+        <section id="userOnline">
+            <p>{userOnline}</p>
+        </section>
+        <section>
+            <form action="{writeLangAdress}" method="post">
+            <p id="copyrightnote">
+                {copyright} | {switchLanguages} <input type="hidden" name="action" value="" />
+            </p>
+            </form>
+        </section>
+    </div>
+</footer>
+
+{debugMessages}
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
 <script>!window.jQuery && document.write('<script src="inc/js/jquery.min.js"><\/script>')</script>
 <script src="inc/js/functions.js"></script>
 

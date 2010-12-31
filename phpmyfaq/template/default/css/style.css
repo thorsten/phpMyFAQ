@@ -72,8 +72,7 @@ input, select {
 
 /* basic styles */
 body {  
-    font: 13px/1.231 sans-serif; *font-size: small; background: #f0f0f0;
-}
+    font: 13px/1.231 sans-serif; *font-size: small; }
 select, input, textarea, button {  
     font: 99% sans-serif; }
 pre, code, kbd, samp {  
@@ -166,53 +165,54 @@ button {
     zoom: 1; }
 
 /* phpMyFAQ layout */
-#container { 
-    width: 960px; margin: auto; }
+body {
+    margin: 0 auto; width: 960px; font: 13px/22px Helvetica, Arial, sans-serif; background-color: #F0F0F0; }
+code {
+    display: block; font-size: 16px; background-color: black; color: white; padding: 10px; width: 600px;
+    margin-bottom: 22px; }
+/* Header */
 #header {
     width: 960px; margin: 0 auto; padding: 2.5em 0 0 0; }
 #header h1 {
-    padding-top: 5px; line-height: .6; }
-#header h1 a:link, #header h1 a:visited { 
-    color: #444; display: block; margin: 0 0 .6em 0; text-decoration: none; }
-#header h1 a:hover, #header h1 a:active { 
+    font-size: 48px; padding-top: 5px; line-height: .6; }
+#header h1 a:link, header h1 a:visited {
+    color: #444; display: block; margin: 0; text-decoration: none; }
+#header h1 a:hover, header h1 a:active {
     background: none; text-shadow: none; }
 #header #loginBox {
 	float: right; top: 0; width: 175px; margin-top: -2.5em; padding: 5px; background: #F67600; color: #fff;
-	border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px; 
+	border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; }
 #header #loginSelection {
     text-align: center; }
-#header #loginSelection a:link, #header #loginSelection a:visited {
+#header #loginSelection a:link, header #loginSelection a:visited {
     color: #fff; }
 #header #loginForm {
     position: relative; display: none; margin: auto; padding: 5px; width: 170px; z-index: 999; }
-#header nav {
-    background: url(../images/nav_background.png); font-size: 1.143em; height: 40px; line-height: 30px;
-    margin: 0 auto 2em auto; padding: 0; text-align: center; width: 100%; border-radius: 5px; -moz-border-radius: 5px;
-    -webkit-border-radius: 5px; }
-#header nav ul {
-    list-style: none; margin: 0 auto; width: 100%; }
-#header nav li {
-    float: left; display: inline; margin: 0; }
-#header nav a:link, #header nav a:visited {
-    color: #F67600; display: inline-block; height: 30px; padding: 5px 0.8em; text-decoration: none; }
-#header nav a:hover, #header nav a:active, #header nav .active a:link, #header nav .active a:visited {
-    color: #fff; text-shadow: none !important; }
-#header nav li:first-child a {
-    border-top-left-radius: 5px; -moz-border-radius-topleft: 5px; -webkit-border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px; }
-
-#leftcolumn {
-    float: left; width: 200px; }
+/* Navigation */
+nav {
+    position: absolute; left: 0; top: 108px; width: 100%; background: url(../images/nav_background.png); }
+nav ul {
+    margin: 0 auto; width: 960px; list-style: none; }
+nav ul li {
+    float: left; }
+nav ul li a, nav ul li a:visited {
+    display: block; margin-right: 30px; font: 16px/44px Helvetica, Arial, sans-serif; text-align: center;
+    text-decoration: none; color: #F67600; }
+nav ul li a:hover {
+    color: #fff; }
+nav ul li.selected a {
+    color: #fff; }
+/* Categories */
 #categories {
     margin-bottom: 2em; width: 190px; border-left: 1px dotted #444; }
 #categories ul {
     list-style: none; border-top: 1px dotted #444; margin: 0 auto; }
 #categories ul ul, #categories ul ul ul, #categories ul ul ul ul, #categories ul ul ul ul ul { border-top: 0; }
-#categories li { 
+#categories li {
 	margin: 0; padding: 0; }
 #categories li a {
-    display: block; border-bottom: 1px dotted #444; text-decoration: none; height: 100%; padding: .5em 0 .5em .5em; 
+    display: block; border-bottom: 1px dotted #444; text-decoration: none; height: 100%; padding: .5em 0 .5em .5em;
     font-size: 110%; color: #222; }
 #categories li ul a { padding-left: 1em; }
 #categories ul ul ul a { padding-left: 2em; }
@@ -220,16 +220,38 @@ button {
 #categories ul ul ul ul ul a { padding-left: 4em; }
 #categories a:hover {
     background: #fff; }
-#categories .active { 
+#categories .active {
 	font-weight: bold; }
 #categories .subcat .active {}
-#useronline { 
-	margin-top: 1em; margin-bottom: 1em;  text-align: center; }
+/* Content */
+#content {
+    display: table; margin-top: 88px; }
+#mainContent {
+    display: table-cell; width: 620px; padding-right: 22px; }
+#mainContent a:hover {
+    color: #777; }
 
-/* My Comment */
+form p {
+    display: table; margin-bottom: 11px; padding: 0 11px; }
+form label {
+    display: table-cell; width: 160px; padding-right: 10px; text-align: right; font-weight: bold; vertical-align: top; }
+form input[type="text"], form input[type="email"], form input[type="url"] {
+    display: table-cell; width: 300px; height: 20px; border: 1px solid #d7d7d7; }
+form input[type="submit"] {
+    margin-left: 162px; }
 
-#maincontent {
-    float: left; width: 560px; }
+aside {
+    display: table-cell; width: 300px; background: url(../images/sidebar_background.png) top left; }
+aside section {
+    margin: 11px 0 0 11px; padding: 6px 11px; background: url(../images/search_background.png) repeat-x;
+    border-radius: 11px; -moz-border-radius: 11px; -webkit-border-radius: 11px; }
+aside section ul {
+    margin: 0; list-style: none; }
+aside section ul li a, aside section ul li a:visited {
+    display: block; text-decoration: none; color: #000; }
+aside section ul li a:hover {
+    text-decoration: underline; }
+
 #searchBox {
     background: url(../images/search_background.png) repeat-x; margin-bottom: 2em; overflow: hidden; padding: 20px; 
     width: 500px; color: #222; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; }
@@ -242,12 +264,11 @@ button {
     margin-right: 10px; padding: 0 12px 0 0; background: url(../images/arrow.gif) no-repeat scroll right 55% transparent; }
 #searchBox a.help:hover {
 	text-decoration: underline; }
-#rightcolumn {
-    float: right; width: 200px; }
-
-#footer {
-    background: url(../images/nav_background.png); height: 40px; line-height: 40px; margin: 0 auto 2em auto; padding: 0;
-    width: 100%; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+/* Footer */
+footer {
+    position: absolute; left: 0; width: 100%; background: #222; }
+footer div {
+    display: table; margin: 0 auto; padding: 44px 0; width: 960px; color: #777; }
 #copyrightnote {
     color: #fff; margin: auto; padding-bottom: 2em; text-align: right; padding-right: 10px; }
 #copyrightnote a:link, #copyrightnote a:visited {
