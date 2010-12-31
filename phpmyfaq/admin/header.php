@@ -202,13 +202,12 @@ switch ($action) {
                 <?php print PMF_Language::selectLanguages($LANGCODE, true); ?>
                 </form>
             </div>
+
         </div>
         <?php } ?>
         
         <h1><a class="mainpage" href="../"><?php print $faqconfig->get('main.titleFAQ'); ?></a></h1>
         <?php if (isset($auth)) { ?>
-        <h2><?php print $PMF_LANG['ad_user_loggedin'] . $user->getUserData('display_name') . ' (' . $user->getLogin(); ?>)<br />
-        <?php print $PMF_LANG['ad_session_expiration']; ?>: <span id="sessioncounter">Loading...</span></h2>
 
         <nav>
         <ul>
@@ -221,7 +220,12 @@ switch ($action) {
             <li<?php print ($configurationPage ? ' class="active"' : ''); ?>><a href="index.php?action=config"><?php print $PMF_LANG['admin_mainmenu_configuration']; ?></a></li>
             <li><a class="logout" href="index.php?action=logout"><?php print $PMF_LANG['admin_mainmenu_logout']; ?></a></li>
         </ul>
-        </nav><?php } ?>
+        </nav>
+        
+        <p><?php print $PMF_LANG['ad_user_loggedin'] . $user->getUserData('display_name') . ' (' . $user->getLogin(); ?>)<br />
+        <?php print $PMF_LANG['ad_session_expiration']; ?>: <span id="sessioncounter">Loading...</span></p>
+
+        <?php } ?>
         
     </header>
     
@@ -229,7 +233,7 @@ switch ($action) {
         <?php if (isset($auth)) { ?>
         <aside id="leftcolumn">
             <div id="leftMenu">
-                <h2><?php print $secLevelHeader; ?></h2>
+                <h3><?php print $secLevelHeader; ?></h3>
                 <nav>
                     <ul>
                     <?php print $secLevelEntries; ?>
@@ -238,7 +242,7 @@ switch ($action) {
                 </nav>
             </div>
             <div id="adminWorkLog">
-                <h2>Admin worklog</h2>
+                <h3>Admin worklog</h3>
                 <span id="saving_data_indicator"></span>
             </div>
         </aside>
