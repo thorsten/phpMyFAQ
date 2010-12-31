@@ -61,7 +61,7 @@ input, select {
 
 /* basic styles */
 body {  
-    font: 13px/1.231 sans-serif; *font-size: small; background: #f5f4ef url(../images/background.png) repeat-x;
+    font: 13px/1.231 sans-serif; *font-size: small; background: #f0f0f0;
 }
 select, input, textarea, button {  
     font: 99% sans-serif; }
