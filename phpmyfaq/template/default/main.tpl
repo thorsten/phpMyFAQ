@@ -1,12 +1,14 @@
-        <!-- Instant Response -->
+<!-- Instant Response -->
         <div id="instantresponse">
     
         </div>
     
         <!-- News -->
-        <div id="news">
-            <h2>{writeNewsHeader}{writeNewsRSS}</h2>
+        <section>
+            <header>
+                <h2>{writeNewsHeader} {writeNewsRSS}</h2>
+            </header>
             {writeNews}
             <p>{showAllNews}</p>
             <p align="center">{writeNumberOfArticles}</p>
-        </div>
+        </section>

@@ -1,14 +1,16 @@
-                <div class="content">
-                    <div id="allcategoryarticles">
-                    <h3>{msgAllCatArticles}</h3>
-                        <div id="allCategoryArticles-content">
-                        {allCatArticles}
-                        </div>
-                    </div>
-                    <div id="tagcloud">
-                    <h3>{writeTagCloudHeader}</h3>
-                        <div id = "tagcloud-content">
-                        {writeTags}
-                        </div>
-                    </div>
-                </div>
+<section>
+            <header>
+                <h3>{msgAllCatArticles}</h3>
+            </header>
+            <div id="allCategoryArticles-content">
+            {allCatArticles}
+            </div>
+        </section>
+        <section>
+            <header>
+                <h3>{writeTagCloudHeader}</h3>
+            </header>
+            <div id = "tagcloud-content">
+            {writeTags}
+            </div>
+        </section>

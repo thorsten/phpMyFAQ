@@ -3,28 +3,32 @@
             <p>{msgNewQuestion}</p>
             
             <form action="{writeSendAdress}" method="post" style="display: inline">
-                <fieldset>
-                <legend>{msgQuestion}</legend>
-                
-                <label for="username">{msgNewContentName}</label><br>
-                <input type="text" name="username" id="username" value="{defaultContentName}" size="50" required="true"><br>
-                
-                <label for="usermail">{msgNewContentMail}</label><br>
-                <input type="email" name="usermail" id="usermail" value="{defaultContentMail}" size="50" required="true"><br>
-                
-                <label for="rubrik">{msgAskCategory}</label><br>
-                <select name="rubrik" id="rubrik" required="true">
-                {printCategoryOptions}
-                </select><br>
-                
-                <label for="content">{msgAskYourQuestion}</label><br>
-                <textarea cols="45" rows="10" name="content" id="content" required="true"></textarea><br>
-                
-                </fieldset>
-                
-                {captchaFieldset}
-                
-                <div style="text-align:center;">
+
+                <p>
+                    <label for="username">{msgNewContentName}</label>
+                    <input type="text" name="username" id="username" value="{defaultContentName}" size="50" required="required" />
+                </p>
+
+                <p>
+                    <label for="usermail">{msgNewContentMail}</label>
+                    <input type="email" name="usermail" id="usermail" value="{defaultContentMail}" size="50" required="required" />
+                </p>
+
+                <p>
+                    <label for="category">{msgAskCategory}</label>
+                    <select name="category" id="category" required="required" />
+                    {printCategoryOptions}
+                    </select>
+                </p>
+
+                <p>
+                    <label for="question">{msgAskYourQuestion}</label>
+                    <textarea cols="45" rows="10" name="question" id="question" required="required" /></textarea>
+                </p>
+
+                <p>
+                    {captchaFieldset}
+                <p>
                     <input class="submit" type="submit" name="submit" value="{msgNewContentSubmit}">
-                </div>
+                </p>
             </form>

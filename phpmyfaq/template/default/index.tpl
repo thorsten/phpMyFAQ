@@ -68,15 +68,17 @@
 <a id="top"></a>
 
 <div id="content">
-    <div id="mainContent">
-        <section>
-        <menu id="leftContent">
+    
+    <div id="leftContent">
+        <menu id="categories">
             <ul>
                 <li class="home">{backToHome}</li>
                 {showCategories}
             </ul>
         </menu>
-        
+    </div>
+
+    <div id="mainContent">
         [globalSearchBox]
         <div id="searchBox">
             <form id="search" action="{writeSendAdress}" method="get">
@@ -99,7 +101,6 @@
         [/globalSuggestBox]
 
         {writeContent}
-        </section>
     </div>
 
     <aside>

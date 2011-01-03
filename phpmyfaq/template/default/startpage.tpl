@@ -1,4 +1,4 @@
-        <section>
+<section>
             <header>
                 <h3>{writeTopTenHeader} <a href="feed/topten/rss.php" target="_blank"><img src="images/feed.png" width="16" height="16" alt="RSS" /></a></h3>
             </header>

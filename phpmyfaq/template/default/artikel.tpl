@@ -44,52 +44,55 @@
 
     <!-- Voting Form -->
     <div id="voting">
-    <form action="{saveVotingPATH}" method="post" style="display: inline;">
-    <fieldset>
-    <legend>{msgVoteUseability}</legend>
-    <input type="hidden" name="artikel" value="{saveVotingID}" />
-    <p align="center"><strong>{msgAverageVote}</strong> {printVotings}</p>
-    <p align="center">{msgVoteBad}
-    <input name="vote" type="range" min="0" max="5" step="1" value="5">
-    {msgVoteGood}<br />
-    <input class="submit" type="submit" name="submit" value="{msgVoteSubmit}" />
-    </p>
-    </fieldset>
-    </form>
+        <form action="{saveVotingPATH}" method="post" style="display: inline;">
+        <fieldset>
+            <legend>{msgVoteUseability}</legend>
+            <input type="hidden" name="artikel" value="{saveVotingID}" />
+
+            <p align="center"><strong>{msgAverageVote}</strong> {printVotings}</p>
+            <p align="center">{msgVoteBad}
+            <input name="vote" type="range" min="0" max="5" step="1" value="5">
+            {msgVoteGood}<br />
+            <input class="submit" type="submit" name="submit" value="{msgVoteSubmit}" />
+            </p>
+        </fieldset>
+        </form>
     </div>
     <!-- /Voting Form -->
 
     <p>{writeCommentMsg}</p>
 
     <!-- Comment Form -->
-    <div id="comment" style="display: none;"><a name="comment"></a>
-    <form action="{writeSendAdress}" method="post">
-    <input type="hidden" name="id" value="{id}" />
-    <input type="hidden" name="lang" value="{lang}" />
-    <input type="hidden" name="type" value="faq" />
+    <a name="comment"></a>
+    <div id="comment" style="display: none;">
+        <form action="{writeSendAdress}" method="post">
+            <input type="hidden" name="id" value="{id}" />
+            <input type="hidden" name="lang" value="{lang}" />
+            <input type="hidden" name="type" value="faq" />
+            
+            <p>
+                <label for="user">{msgNewContentName}</label>
+                <input type="text" id="user" name="user" value="{defaultContentName}" size="50" required="required" />
+            </p>
 
-    <fieldset>
-    <legend>{msgWriteComment}</legend>
+            <p>
+                <label for="mail">{msgNewContentMail}</label>
+                <input type="email" id="mail" name="mail" value="{defaultContentMail}" size="50" required="required" />
+            </p>
 
-        <label for="user">{msgNewContentName}</label>
-        <input type="text" id="user" name="user" value="{defaultContentName}" size="50" required="true"><br />
+            <p>
+                <label for="comment_text">{msgYourComment}</label>
+                <textarea cols="37" rows="10" id="comment_text" name="comment" required="required" /></textarea>
+            </p>
 
-        <label for="mail">{msgNewContentMail}</label>
-        <input type="email" id="mail" name="mail" value="{defaultContentMail}" size="50" required="true"><br />
-
-        <label for="comment_text">{msgYourComment}</label>
-        <textarea cols="37" rows="10" id="comment_text" name="comment" required="true"></textarea><br />
-
-    </fieldset>
-
+            <p>
     {captchaFieldset}
+            </p>
 
-    <div style="text-align: center;">
-        <input class="submit" type="submit" name="submit" value="{msgNewContentSubmit}" />
-    </div>
-    <br />
-
-    </form>
+            <p>
+                <input class="submit" type="submit" name="submit" value="{msgNewContentSubmit}" />
+            </p>
+        </form>
     </div>
     <!-- /Comment Form -->
 

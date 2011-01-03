@@ -170,6 +170,7 @@ body {
 code {
     display: block; font-size: 16px; background-color: black; color: white; padding: 10px; width: 600px;
     margin-bottom: 22px; }
+
 /* Header */
 #header {
     width: 960px; margin: 0 auto; padding: 2.5em 0 0 0; }
@@ -189,6 +190,10 @@ code {
     color: #fff; }
 #header #loginForm {
     position: relative; display: none; margin: auto; padding: 5px; width: 170px; z-index: 999; }
+#header #loginForm form input[type="text"], #header #loginForm form input[type="password"] {
+    display: table-cell; height: 14px; border: 1px solid #d7d7d7; font-size: 14px; border-radius: 5px;
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+
 /* Navigation */
 nav {
     position: absolute; left: 0; top: 108px; width: 100%; background: url(../images/nav_background.png); }
@@ -203,6 +208,7 @@ nav ul li a:hover {
     color: #fff; }
 nav ul li.selected a {
     color: #fff; }
+
 /* Categories */
 #categories {
     margin-bottom: 2em; width: 190px; border-left: 1px dotted #444; }
@@ -223,32 +229,37 @@ nav ul li.selected a {
 #categories .active {
 	font-weight: bold; }
 #categories .subcat .active {}
+
 /* Content */
 #content {
     display: table; margin-top: 88px; }
+#leftContent {
+    display: table-cell; width: 200px; }
 #mainContent {
-    display: table-cell; width: 620px; padding-right: 22px; }
-#mainContent a:hover {
-    color: #777; }
+    display: table-cell; width: 560px; padding-right: 22px; }
 
-form p {
+/* phpMyFAQ forms */
+#mainContent form p {
     display: table; margin-bottom: 11px; padding: 0 11px; }
-form label {
-    display: table-cell; width: 160px; padding-right: 10px; text-align: right; font-weight: bold; vertical-align: top; }
-form input[type="text"], form input[type="email"], form input[type="url"] {
-    display: table-cell; width: 300px; height: 20px; border: 1px solid #d7d7d7; }
-form input[type="submit"] {
-    margin-left: 162px; }
+#mainContent form label {
+    display: table-cell; width: 150px; padding-right: 10px; text-align: right; font-weight: bold; vertical-align: top; }
+#mainContent form input[type="text"], #mainContent form input[type="email"], #mainContent form input[type="url"],
+#mainContent form input[type="search"], #mainContent form input[type="password"] {
+    display: table-cell; width: 300px; height: 20px; border: 1px solid #d7d7d7; font-size: 14px; border-radius: 5px;
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#mainContent form textarea {
+    display: table-cell; width: 300px; border: 1px solid #d7d7d7; font-size: 14px; border-radius: 5px;
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#mainContent form input[type="submit"] {
+    }
 
 aside {
-    display: table-cell; width: 300px; background: url(../images/sidebar_background.png) top left; }
+    display: table-cell; width: 200px; background: url(../images/sidebar_background.png) top left; }
 aside section {
     margin: 11px 0 0 11px; padding: 6px 11px; background: url(../images/search_background.png) repeat-x;
     border-radius: 11px; -moz-border-radius: 11px; -webkit-border-radius: 11px; }
-aside section ul {
-    margin: 0; list-style: none; }
 aside section ul li a, aside section ul li a:visited {
-    display: block; text-decoration: none; color: #000; }
+    display: block; }
 aside section ul li a:hover {
     text-decoration: underline; }
 
@@ -264,6 +275,7 @@ aside section ul li a:hover {
     margin-right: 10px; padding: 0 12px 0 0; background: url(../images/arrow.gif) no-repeat scroll right 55% transparent; }
 #searchBox a.help:hover {
 	text-decoration: underline; }
+
 /* Footer */
 footer {
     position: absolute; left: 0; width: 100%; background: #222; }
