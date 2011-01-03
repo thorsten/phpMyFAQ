@@ -29,20 +29,19 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 ?>
-        
-        </section>
-    </section>
-    
-    <div class="clearfix"></div>
-    <footer id="footer">
+
+</div>
+
+<footer id="footer">
+    <div>
         <p id="copyrightnote">
         Proudly powered by <strong>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></strong> | 
         <a href="http://www.phpmyfaq.de/documentation.php" target="_blank">phpMyFAQ documentation</a> |
         Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | 
         &copy; 2001-2011 <a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a>
         </p>
-    </footer>
-</div>
+    </div>
+</footer>
 
 <?php
 if (isset($auth)) {

@@ -331,112 +331,136 @@ if (isset($auth) && in_array(true, $permission)) {
         }
     } else {
         // start page with some informations about the FAQ
-        printf('<h2>%s</h2>', $PMF_LANG['ad_pmf_info']);
         $PMF_TABLE_INFO = $db->getTableStatus();
 ?>
-    <dl class="table-display">
-        <dt><strong>&rarr; <a href="?action=viewsessions"><?php print $PMF_LANG["ad_start_visits"]; ?></a></strong></dt>
-        <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqsessions"]; ?></dd>
-        <dt><strong>&rarr; <a href="?action=view"><?php print $PMF_LANG["ad_start_articles"]; ?></a></strong></dt>
-        <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqdata"]; ?></dd>
-        <dt><strong>&rarr; <a href="?action=comments"><?php print $PMF_LANG["ad_start_comments"]; ?></strong></a></dt>
-        <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqcomments"]; ?></dd>
-        <dt><strong>&rarr; <a href="?action=question"><?php print $PMF_LANG["msgOpenQuestions"]; ?></strong></a></dt>
-        <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqquestions"]; ?></dd>
-    </dl>
-    
-    <?php printf('<h2>%s</h2>', $PMF_LANG['ad_online_info']); ?>
-    <div id="versioncheck">
+
+            <header>
+                <h2><?php print $PMF_LANG['ad_pmf_info']; ?></h2>
+            </header>
+            <dl class="table-display">
+                <dt><strong>&rarr; <a href="?action=viewsessions"><?php print $PMF_LANG["ad_start_visits"]; ?></a></strong></dt>
+                <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqsessions"]; ?></dd>
+                <dt><strong>&rarr; <a href="?action=view"><?php print $PMF_LANG["ad_start_articles"]; ?></a></strong></dt>
+                <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqdata"]; ?></dd>
+                <dt><strong>&rarr; <a href="?action=comments"><?php print $PMF_LANG["ad_start_comments"]; ?></strong></a></dt>
+                <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqcomments"]; ?></dd>
+                <dt><strong>&rarr; <a href="?action=question"><?php print $PMF_LANG["msgOpenQuestions"]; ?></strong></a></dt>
+                <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqquestions"]; ?></dd>
+            </dl>
+        </section>
+
+        <section>
+            <header>
+                <h3><?php print $PMF_LANG['ad_online_info']; ?></h3>
+            </header>
+            <p>
 <?php
         $version = PMF_Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_STRING);        
         if (!is_null($version) && $version == 'version') {
             $json   = file_get_contents('http://www.phpmyfaq.de/json/version.php');
             $result = json_decode($json);
             if ($result instanceof stdClass) {
-                printf('<p>%s <a href="http://www.phpmyfaq.de" target="_blank">www.phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>', 
+                printf('%s <a href="http://www.phpmyfaq.de" target="_blank">www.phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>',
                     $PMF_LANG['ad_xmlrpc_latest'], 
                     $result->stable);
                 // Installed phpMyFAQ version is outdated
                 if (-1 == version_compare($faqconfig->get('main.currentVersion'), $result->stable)) {
                     print '<br /><a href="?action=upgrade">' . $PMF_LANG['ad_you_should_update'] - '</a>';
                 }
-                print '</p>';
             }
         } else {
 ?>
-    <form action="index.php" method="post">
-    <input type="hidden" name="param" value="version" />
-    <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_xmlrpc_button"]; ?>" />
-    </form>
+
+                <form action="index.php" method="post">
+                    <input type="hidden" name="param" value="version" />
+                    <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_xmlrpc_button"]; ?>" />
+                </form>
 <?php
         }
 ?>
-    <br />
-    </div>
+            
+            </p>
+        </section>
 
-    <?php printf('<h2>%s</h2>', $PMF_LANG['ad_system_info']); ?>
-    <dl>
-        <dt><strong>phpMyFAQ Version</strong></dt>
-        <dd>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></dd>
-        <dt><strong>Server Software</strong></dt>
-        <dd><?php print $_SERVER["SERVER_SOFTWARE"]; ?></dd>
-        <dt><strong>PHP Version</strong></dt>
-        <dd>PHP <?php print phpversion(); ?></dd>
-        <dt><strong>Register Globals</strong></dt>
-        <dd><?php print ini_get('register_globals') == 1 ? 'on' : 'off'; ?></dd>
-        <dt><strong>Safe Mode</strong></dt>
-        <dd><?php print ini_get('safe_mode') == 1 ? 'on' : 'off'; ?></dd>
-        <dt><strong>Open Basedir</strong></dt>
-        <dd><?php print ini_get('open_basedir') == 1 ? 'on' : 'off'; ?></dd>
-        <dt><strong>Database Server</strong></dt>
-        <dd><?php print ucfirst($DB['type']); ?></dd>
-        <dt><strong>Database Client Version</strong></dt>
-        <dd><?php print $db->client_version(); ?></dd>
-        <dt><strong>Database Server Version</strong></dt>
-        <dd><?php print $db->server_version(); ?></dd>
-        <dt><strong>Webserver Interface</strong></dt>
-        <dd><?php print strtoupper(@php_sapi_name()); ?></dd>
-        <dt><strong>PHP Extensions</strong></dt>
-        <dd><?php print implode(', ', get_loaded_extensions()); ?></dd>
-    </dl>
+        <section>
+            <header>
+                <h3><?php print $PMF_LANG['ad_system_info']; ?></h3>
+            </header>
+            <dl>
+                <dt><strong>phpMyFAQ Version</strong></dt>
+                <dd>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></dd>
+                <dt><strong>Server Software</strong></dt>
+                <dd><?php print $_SERVER["SERVER_SOFTWARE"]; ?></dd>
+                <dt><strong>PHP Version</strong></dt>
+                <dd>PHP <?php print phpversion(); ?></dd>
+                <dt><strong>Register Globals</strong></dt>
+                <dd><?php print ini_get('register_globals') == 1 ? 'on' : 'off'; ?></dd>
+                <dt><strong>Safe Mode</strong></dt>
+                <dd><?php print ini_get('safe_mode') == 1 ? 'on' : 'off'; ?></dd>
+                <dt><strong>Open Basedir</strong></dt>
+                <dd><?php print ini_get('open_basedir') == 1 ? 'on' : 'off'; ?></dd>
+                <dt><strong>Database Server</strong></dt>
+                <dd><?php print ucfirst($DB['type']); ?></dd>
+                <dt><strong>Database Client Version</strong></dt>
+                <dd><?php print $db->client_version(); ?></dd>
+                <dt><strong>Database Server Version</strong></dt>
+                <dd><?php print $db->server_version(); ?></dd>
+                <dt><strong>Webserver Interface</strong></dt>
+                <dd><?php print strtoupper(@php_sapi_name()); ?></dd>
+                <dt><strong>PHP Extensions</strong></dt>
+                <dd><?php print implode(', ', get_loaded_extensions()); ?></dd>
+            </dl>
 
-    <div style="font-size: 5px; text-align: right; color: #f5f5f5">NOTE: Art is resistance.</div>
+            <div style="font-size: 5px; text-align: right; color: #f5f5f5">NOTE: Art is resistance.</div>
+        </section>
 <?php
     }
 // User is NOT authenticated
 } else {
 ?>
-        
-        <section id="maincontent">
-            <div class="centerlogin">
-            
+
+            <header>
+                <h2>phpMyFAQ Login</h2>
+            </header>
             <form action="index.php" method="post">
-                <fieldset class="login">
-                <legend class="login">phpMyFAQ Login</legend>
 <?php
     if ($action == 'logout') {
-        printf("<p>%s</p>\n", $PMF_LANG['ad_logout']);
+        printf("            <p>%s</p>\n", $PMF_LANG['ad_logout']);
     }
     if (isset($error)) {
-        print "<p><strong>".$error."</strong></p>\n";
+        printf("            <p><strong>%s</strong></p>\n", $error);
     } else {
-        print "<p><strong>".$PMF_LANG["ad_auth_insert"]."</strong></p>\n";
+        printf("            <p><strong>%s</strong></p>\n", $PMF_LANG['ad_auth_insert']);
     }
     if (isset($_SERVER['HTTPS']) || !$faqconfig->get('main.useSslForLogins')) {
 ?>
-                    <label class="left" for="faqusername"><?php print $PMF_LANG["ad_auth_user"]; ?></label><br>
-                    <input type="text" name="faqusername" id="faqusername" size="20" /><br>
-                    
-                    <label class="left" for="faqpassword"><?php print $PMF_LANG["ad_auth_passwd"]; ?></label><br>
-                    <input type="password" size="20" name="faqpassword" id="faqpassword" /><br>
-                    
+                <p>
+                    <label for="faqusername"><?php print $PMF_LANG["ad_auth_user"]; ?></label>
+                    <input type="text" name="faqusername" id="faqusername" size="20" required="required" />
+                </p>
+
+                <p>
+                    <label for="faqpassword"><?php print $PMF_LANG["ad_auth_passwd"]; ?></label>
+                    <input type="password" size="20" name="faqpassword" id="faqpassword" required="required" />
+                </p>
+
+                <p>
                     <input class="submit" style="margin-left: 190px;" type="submit" value="<?php print $PMF_LANG["ad_auth_ok"]; ?>" />
                     <input class="submit" type="reset" value="<?php print $PMF_LANG["ad_auth_reset"]; ?>" />
+                </p>
                     
-                    <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_LANG["lostPassword"]; ?>" border="0" /> <a href="password.php" title="<?php print $PMF_LANG["lostPassword"]; ?>">
-<?php print $PMF_LANG["lostPassword"]; ?>
-</a></p>
-                    <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $faqconfig->get('main.titleFAQ'); ?>" border="0" /> <a href="../index.php" title="<?php print $faqconfig->get('main.titleFAQ'); ?>"><?php print $faqconfig->get('main.titleFAQ'); ?></a></p>
+                <p>
+                    <img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_LANG["lostPassword"]; ?>" border="0" />
+                    <a href="password.php" title="<?php print $PMF_LANG["lostPassword"]; ?>">
+                        <?php print $PMF_LANG["lostPassword"]; ?>
+                    </a>
+                </p>
+                <p>
+                    <img src="images/arrow.gif" width="11" height="11" alt="<?php print $faqconfig->get('main.titleFAQ'); ?>" border="0" />
+                    <a href="../index.php" title="<?php print $faqconfig->get('main.titleFAQ'); ?>">
+                        <?php print $faqconfig->get('main.titleFAQ'); ?>
+                    </a>
+                </p>
 <?php
     } else {
         printf('<p><a href="https://%s%s">%s</a></p>',
@@ -445,9 +469,8 @@ if (isset($auth) && in_array(true, $permission)) {
             $PMF_LANG['msgSecureSwitch']);
     }
 ?>
-                </fieldset>
             </form>
-            </div>
+        </section>
 <?php
 }
 
@@ -455,6 +478,9 @@ if (DEBUG) {
     print "\n";
     print '<div id="debug_main">DEBUG INFORMATION:<br>'.$db->sqllog().'</div>';
 }
+?>
+    </div>
+<?php
 
 require 'footer.php';
 
