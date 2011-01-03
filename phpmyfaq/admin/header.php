@@ -2,7 +2,7 @@
 /**
  * Header of the admin area
  * 
- * PHP Version 5.2
+ * PHP Version 5.2.3
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administraion
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-26
@@ -197,17 +197,21 @@ switch ($action) {
     <div id="loginBox">
         <div id="languageSelection">
             <p>
-                Hello, <span title="<?php print $user->getLogin(); ?>"> <?php print $user->getUserData('display_name'); ?>!</span>
+                Hello, <span title="<?php print $PMF_LANG['ad_user_loggedin'] . $user->getLogin(); ?>">
+                    <?php print $user->getUserData('display_name'); ?>!
+                </span>
             </p>
             <?php if (is_null($action)) { ?>
                 <form action="index.php<?php print (isset($action) ? '?action=' . $action : ''); ?>" method="post">
                 <?php print PMF_Language::selectLanguages($LANGCODE, true); ?>
                 </form>
             <?php } else { ?>
+
             <p>
                 <?php print $PMF_LANG['ad_session_expiration']; ?>: <span id="sessioncounter">Loading...</span>
             </p>
             <?php } ?>
+            
         </div>
     </div>
     <?php } ?>

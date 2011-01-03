@@ -2,7 +2,7 @@
 /**
  * The main admin backend index file
  * 
- * PHP Version 5.2
+ * PHP Version 5.2.3
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -21,7 +21,7 @@
  * @author    Meikel Katzengreis <meikel@katzengreis.com>
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2002-2010 phpMyFAQ Team
+ * @copyright 2002-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-16
