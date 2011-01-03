@@ -18,7 +18,7 @@
  * @package   PMF_News
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2006-2010 phpMyFAQ Team
+ * @copyright 2006-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-06-25
@@ -149,7 +149,7 @@ class PMF_News
     }
 
     /**
-     * Function for generating the HTML fro the current news
+     * Function for generating the HTML5 code for the current news
      *
      * @param boolean $showArchive Show archived news
      * @param boolean $active      Show active news
@@ -159,27 +159,27 @@ class PMF_News
     public function getNews($showArchive = false, $active = true)
     {
         $output = '';
-
-        $news = $this->getLatestData($showArchive, $active);
+        $news   = $this->getLatestData($showArchive, $active);
 
         foreach ($news as $item) {
-        	
-        	$url = sprintf('%s?action=news&amp;newsid=%d&amp;newslang=%s',
-        	   PMF_Link::getSystemRelativeUri(),
-        	   $item['id'],
-        	   $item['lang']);
+
+            $url = sprintf('%s?action=news&amp;newsid=%d&amp;newslang=%s',
+                           PMF_Link::getSystemRelativeUri(),
+                           $item['id'],
+                           $item['lang']);
             $oLink = new PMF_Link($url);
             
             if (isset($item['header'])) {
                 $oLink->itemTitle =$item['header'];
             }
-            $output .= sprintf('<h3><a name="news_%d" href="%s">%s <img class="goNews" src="images/more.gif" width="11" height="11" alt="%s" /></a></h3><div class="block">%s',
+            $output .= sprintf('<header><h3><a name="news_%d" href="%s">%s <img class="goNews" src="images/more.gif" width="11" height="11" alt="%s" /></a></h3></header>',
                 $item['id'],
                 $oLink->toString(),
-                $item['header'],
-                $item['header'],
-                $item['content']);
-            
+                $item['header']
+                );
+
+            $output .= sprintf('<article>%s', $item['content']);
+
             if (strlen($item['link']) > 1) {
                 $output .= sprintf('<br />%s <a href="%s" target="_%s">%s</a>',
                     $this->pmf_lang['msgInfo'],
@@ -188,7 +188,7 @@ class PMF_News
                     $item['linkTitle']);
             }
             
-            $output .= sprintf('</div><div class="date">%s</div>', PMF_Date::createIsoDate($item['date']));
+            $output .= sprintf('</article><div class="date">%s</div>', PMF_Date::createIsoDate($item['date']));
         }
 
         return ('' == $output) ? $this->pmf_lang['msgNoNews'] : $output;
