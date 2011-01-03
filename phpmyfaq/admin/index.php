@@ -337,16 +337,24 @@ if (isset($auth) && in_array(true, $permission)) {
             <header>
                 <h2><?php print $PMF_LANG['ad_pmf_info']; ?></h2>
             </header>
-            <dl class="table-display">
-                <dt><strong>&rarr; <a href="?action=viewsessions"><?php print $PMF_LANG["ad_start_visits"]; ?></a></strong></dt>
-                <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqsessions"]; ?></dd>
-                <dt><strong>&rarr; <a href="?action=view"><?php print $PMF_LANG["ad_start_articles"]; ?></a></strong></dt>
-                <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqdata"]; ?></dd>
-                <dt><strong>&rarr; <a href="?action=comments"><?php print $PMF_LANG["ad_start_comments"]; ?></strong></a></dt>
-                <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqcomments"]; ?></dd>
-                <dt><strong>&rarr; <a href="?action=question"><?php print $PMF_LANG["msgOpenQuestions"]; ?></strong></a></dt>
-                <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqquestions"]; ?></dd>
-            </dl>
+            <table>
+                <tr>
+                    <td><strong><a href="?action=viewsessions"><?php print $PMF_LANG["ad_start_visits"]; ?></a></strong></td>
+                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX."faqsessions"]; ?></td>
+                </tr>
+                <tr>
+                    <td><strong><a href="?action=view"><?php print $PMF_LANG["ad_start_articles"]; ?></a></strong></td>
+                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX."faqdata"]; ?></td>
+                </tr>
+                <tr>
+                    <td><strong><a href="?action=comments"><?php print $PMF_LANG["ad_start_comments"]; ?></strong></a></td>
+                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX."faqcomments"]; ?></td>
+                </tr>
+                <tr>
+                    <td><strong><a href="?action=question"><?php print $PMF_LANG["msgOpenQuestions"]; ?></strong></a></td>
+                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX."faqquestions"]; ?></td>
+                </tr>
+            </table>
         </section>
 
         <section>
@@ -386,30 +394,52 @@ if (isset($auth) && in_array(true, $permission)) {
             <header>
                 <h3><?php print $PMF_LANG['ad_system_info']; ?></h3>
             </header>
-            <dl>
-                <dt><strong>phpMyFAQ Version</strong></dt>
-                <dd>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></dd>
-                <dt><strong>Server Software</strong></dt>
-                <dd><?php print $_SERVER["SERVER_SOFTWARE"]; ?></dd>
-                <dt><strong>PHP Version</strong></dt>
-                <dd>PHP <?php print phpversion(); ?></dd>
-                <dt><strong>Register Globals</strong></dt>
-                <dd><?php print ini_get('register_globals') == 1 ? 'on' : 'off'; ?></dd>
-                <dt><strong>Safe Mode</strong></dt>
-                <dd><?php print ini_get('safe_mode') == 1 ? 'on' : 'off'; ?></dd>
-                <dt><strong>Open Basedir</strong></dt>
-                <dd><?php print ini_get('open_basedir') == 1 ? 'on' : 'off'; ?></dd>
-                <dt><strong>Database Server</strong></dt>
-                <dd><?php print ucfirst($DB['type']); ?></dd>
-                <dt><strong>Database Client Version</strong></dt>
-                <dd><?php print $db->client_version(); ?></dd>
-                <dt><strong>Database Server Version</strong></dt>
-                <dd><?php print $db->server_version(); ?></dd>
-                <dt><strong>Webserver Interface</strong></dt>
-                <dd><?php print strtoupper(@php_sapi_name()); ?></dd>
-                <dt><strong>PHP Extensions</strong></dt>
-                <dd><?php print implode(', ', get_loaded_extensions()); ?></dd>
-            </dl>
+            <table>
+                <tr>
+                    <td><strong>phpMyFAQ Version</strong></td>
+                    <td>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></td>
+                </tr>
+                <tr>
+                    <td><strong>Server Software</strong></td>
+                    <td><?php print $_SERVER["SERVER_SOFTWARE"]; ?></td>
+                </tr>
+                <tr>
+                    <td><strong>PHP Version</strong></td>
+                    <td>PHP <?php print phpversion(); ?></td>
+                </tr>
+                <tr>
+                    <td><strong>Register Globals</strong></td>
+                    <td><?php print ini_get('register_globals') == 1 ? 'on' : 'off'; ?></td>
+                </tr>
+                <tr>
+                    <td><strong>Safe Mode</strong></td>
+                    <td><?php print ini_get('safe_mode') == 1 ? 'on' : 'off'; ?></td>
+                </tr>
+                <tr>
+                    <td><strong>Open Basedir</strong></td>
+                    <td><?php print ini_get('open_basedir') == 1 ? 'on' : 'off'; ?></td>
+                </tr>
+                <tr>
+                    <td><strong>Database Server</strong></td>
+                    <td><?php print ucfirst($DB['type']); ?></td>
+                </tr>
+                <tr>
+                    <td><strong>Database Client Version</strong></td>
+                    <td><?php print $db->client_version(); ?></td>
+                </tr>
+                <tr>
+                    <td><strong>Database Server Version</strong></td>
+                    <td><?php print $db->server_version(); ?></td>
+                </tr>
+                <tr>
+                    <td><strong>Webserver Interface</strong></td>
+                    <td><?php print strtoupper(@php_sapi_name()); ?></td>
+                </tr>
+                <tr>
+                    <td><strong>PHP Extensions</strong></td>
+                    <td><?php print implode(', ', get_loaded_extensions()); ?></td>
+                </tr>
+            </table>
 
             <div style="font-size: 5px; text-align: right; color: #f5f5f5">NOTE: Art is resistance.</div>
         </section>

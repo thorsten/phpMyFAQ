@@ -200,7 +200,9 @@ nav ul li.selected a {
 #leftContent {
     display: table-cell; width: 200px; }
 #mainContent {
-    display: table-cell; width: 560px; padding-right: 22px; }
+    display: table-cell; width: 760px; padding-right: 22px; }
+#mainContent p, ul, ol, table {
+    padding-bottom: 22px; }
 
 /* phpMyFAQ forms */
 #mainContent form p {
