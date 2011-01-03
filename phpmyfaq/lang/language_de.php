@@ -828,13 +828,13 @@ $PMF_LANG['ad_quick_user'] = 'Neuen Benutzer anlegen';
 $PMF_LANG['ad_quick_group'] = 'Neue Benutzergruppe anlegen';
 
 // added v2.0.0 - 2006-12-30 by Matteo
-$PMF_LANG['msgNewTranslationHeader'] = '&uuml;bersetzung vorschlagen';
+$PMF_LANG['msgNewTranslationHeader'] = '&Uuml;bersetzung vorschlagen';
 $PMF_LANG['msgNewTranslationAddon'] = 'Die &uuml;bersetzung erscheint nicht sofort, sondern wird vor der Ver&ouml;ffentlichung von uns &uuml;berpr&uuml;ft. Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong>, <strong>Kategorie</strong>, <strong>Frage</strong> und <strong>Antwort</strong>. Die Keywords bitte nur mit Leerzeichen trennen.';
 $PMF_LANG['msgNewTransSourcePane'] = 'Ursprungsbeitrag';
-$PMF_LANG['msgNewTranslationPane'] = '&uuml;bersetzung';
-$PMF_LANG['msgNewTranslationName'] = "Your Name:";
-$PMF_LANG['msgNewTranslationMail'] = "Your email address:";
-$PMF_LANG['msgNewTranslationKeywords'] = "Keywords:";
+$PMF_LANG['msgNewTranslationPane'] = '&Uuml;bersetzung';
+$PMF_LANG['msgNewTranslationName'] = "Name:";
+$PMF_LANG['msgNewTranslationMail'] = "E-Mailadresse:";
+$PMF_LANG['msgNewTranslationKeywords'] = "Suchwörter:";
 $PMF_LANG['msgNewTranslationSubmit'] = 'Vorschlag absenden';
 $PMF_LANG['msgTranslate'] = '&uuml;bersetzungsvorschlag f&uuml;r';
 $PMF_LANG['msgTranslateSubmit'] = 'Beginne die &uuml;bersetzung ...';
