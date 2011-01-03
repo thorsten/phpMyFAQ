@@ -171,11 +171,11 @@ code {
 #header h1 a:hover, header h1 a:active {
     background: none; text-shadow: none; }
 #header #loginBox {
-	float: right; top: 0; width: 175px; margin-top: -2.5em; padding: 5px; background: #F67600; color: #fff;
+	float: right; top: 0; width: 185px; margin-top: -2.5em; background: #F67600; color: #fff;
 	border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; }
 #header #languageSelection {
-    text-align: center; }
+    text-align: center; padding: 5px; }
 #header #languageSelection a:link, #header #languageSelection a:visited {
     color: #fff; }
 

@@ -181,15 +181,16 @@ code {
 #header h1 a:hover, header h1 a:active {
     background: none; text-shadow: none; }
 #header #loginBox {
-	float: right; top: 0; width: 175px; margin-top: -2.5em; padding: 5px; background: #F67600; color: #fff;
+	float: right; top: 0; width: 185px; margin-top: -2.5em; background: #F67600; color: #fff;
 	border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; }
 #header #loginSelection {
-    text-align: center; }
+    text-align: center; padding: 5px; }
 #header #loginSelection a:link, #header #loginSelection a:visited {
     color: #fff; }
 #header #loginForm {
-    position: relative; display: none; margin: auto; padding: 5px; width: 170px; z-index: 999; }
+    position: fixed; display: none; width: 175px; z-index: 100; background: #F67600; padding: 5px;
+    border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 #header #loginForm form input[type="text"], #header #loginForm form input[type="password"] {
     display: table-cell; height: 14px; border: 1px solid #d7d7d7; font-size: 14px; border-radius: 5px;
     -moz-border-radius: 5px; -webkit-border-radius: 5px; }
