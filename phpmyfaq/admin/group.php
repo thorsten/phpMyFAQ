@@ -2,13 +2,7 @@
 /**
  * Displays the user managment frontend
  *
- * @package    phpMyFAQ
- * @subpackage Administration
- * @author     Lars Tiedemann <php@larstiedemann.de>
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2005-12-15
- * @version    SVN: $Id$
- * @copyright  2005-2009 phpMyFAQ Team
+ * PHP 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,6 +13,15 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2005-2011 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-12-15
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -164,7 +167,7 @@ if ($groupAction == 'update_data') {
 // delete group confirmation
 if ($groupAction == 'delete_confirm') {
     $message = '';
-    $user    = new PMF_User();
+    $user    = new PMF_User_CurrentUser();
     $perm    = $user->perm;
     $groupId = PMF_Filter::filterInput(INPUT_POST, 'group_list_select', FILTER_VALIDATE_INT, 0);
     if ($groupId <= 0) {
