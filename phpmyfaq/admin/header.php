@@ -158,7 +158,7 @@ switch ($action) {
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta http-equiv="content-language" content="<?php print $PMF_LANG['metaLanguage']; ?>">
     <meta name="application-name" content="phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?>">
-    <meta name="copyright" content="(c) 2001-2010 phpMyFAQ Team">
+    <meta name="copyright" content="(c) 2001-2011 phpMyFAQ Team">
 
     <link rel="shortcut icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon">
     <link rel="icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon">
