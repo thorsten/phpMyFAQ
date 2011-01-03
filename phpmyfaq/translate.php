@@ -2,7 +2,7 @@
 /**
  * This is the page there a user can add a FAQ record translation.
  *
- * PHP Version 5.2.0
+ * PHP Version 5.2.3
  * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -17,7 +17,7 @@
  * @category  phpMyFAQ 
  * @package   Frontend
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2006-2010 phpMyFAQ Team
+ * @copyright 2006-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-11-12
@@ -71,6 +71,8 @@ $tpl->processTemplate('writeContent', array(
     'writeSendAdress'           => '?'.$sids.'action=save',
     'defaultContentName'        => ($user ? $user->getUserData('display_name') : ''),
     'defaultContentMail'        => ($user ? $user->getUserData('email') : ''),
+    'msgNewTranslationQuestion' => $PMF_LANG['msgNewContentTheme'],
+    'msgNewTranslationAnswer'   => $PMF_LANG['msgNewContentArticle'],
     'msgNewTranslationName'     => $PMF_LANG['msgNewTranslationName'],
     'msgNewTranslationMail'     => $PMF_LANG['msgNewTranslationMail'],
     'msgNewTranslationKeywords' => $PMF_LANG['msgNewTranslationKeywords'],
