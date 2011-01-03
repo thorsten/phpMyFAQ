@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-12-25
@@ -37,17 +37,16 @@ if ($permission["editcateg"]) {
     $header    = sprintf('%s: <em>%s</em>',
                     $PMF_LANG['ad_categ_move'],
                     $category->categoryName[$id]['name']);
-
-    printf('<h2>%s</h2>', $header);
 ?>
-
-    <form action="?action=pastecategory" method="post">
-    <fieldset>
-        <legend><?php print $PMF_LANG["ad_categ_paste2"]; ?></legend>
-        <input type="hidden" name="cat" value="<?php print $id; ?>" />
-        <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
-        <div class="row">
-            <select name="after" size="1">
+        <header>
+            <h2><?php print $header ?></h2>
+        </header>
+        <form action="?action=pastecategory" method="post">
+            <input type="hidden" name="cat" value="<?php print $id; ?>" />
+            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
+            <p>
+                <label><?php print $PMF_LANG["ad_categ_paste2"]; ?></label>
+                <select name="after" size="1">
 <?php
 
     foreach ($category->catTree as $cat) {
@@ -65,11 +64,12 @@ if ($permission["editcateg"]) {
     }
 
 ?>
-            </select>&nbsp;&nbsp;
-            <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" />
-        </div>
-    </fieldset>
-    </form>
+                </select>
+            </p>
+            <p>
+                <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" />
+            </p>
+        </form>
 <?php
 } else {
 	print $PMF_LANG["err_NotAuth"];

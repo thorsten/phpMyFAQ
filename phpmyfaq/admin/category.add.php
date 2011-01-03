@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-12-20
@@ -27,27 +27,29 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
+?>
 
-print "<h2>".$PMF_LANG["ad_categ_new"]."</h2>\n";
+        <header>
+            <h2><?php print $PMF_LANG['ad_categ_new']; ?></h2>
+        </header>
 
+<?php
 if ($permission["addcateg"]) {
 
     $category  = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $parent_id = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
 ?>
-    <form action="?action=savecategory" method="post">
-    <fieldset>
-    <legend><?php print $PMF_LANG["ad_categ_new"]; ?></legend>
-    <input type="hidden" id="lang" name="lang" value="<?php print $LANGCODE; ?>" />
-    <input type="hidden" name="parent_id" value="<?php print $parent_id; ?>" />
-    <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
+        <form action="?action=savecategory" method="post">
+            <input type="hidden" id="lang" name="lang" value="<?php print $LANGCODE; ?>" />
+            <input type="hidden" name="parent_id" value="<?php print $parent_id; ?>" />
+            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
 <?php
     if ($parent_id > 0) {
         $user_allowed  = $category->getPermissions('user', array($parent_id));
         $group_allowed = $category->getPermissions('group', array($parent_id));
 ?>
-    <input type="hidden" name="restricted_users" value="<?php print $user_allowed[0]; ?>" />
-    <input type="hidden" name="restricted_groups" value="<?php print $group_allowed[0]; ?>" />
+            <input type="hidden" name="restricted_users" value="<?php print $user_allowed[0]; ?>" />
+            <input type="hidden" name="restricted_groups" value="<?php print $group_allowed[0]; ?>" />
 <?php
         printf("<p>%s: %s (%s)</p>",
             $PMF_LANG["msgMainCategory"],
@@ -55,69 +57,79 @@ if ($permission["addcateg"]) {
             $languageCodes[PMF_String::strtoupper($category->categoryName[$parent_id]["lang"])]);
     }
 ?>
-    <label class="left"><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
-    <input type="text" id="name" name="name" size="30" style="width: 300px;" /><br />
 
-    <label class="left"><?php print $PMF_LANG["ad_categ_desc"]; ?>:</label>
-    <textarea id="description" name="description" rows="3" cols="80" style="width: 300px;"></textarea><br />
-    
-    <label class="left"><?php print $PMF_LANG["ad_categ_owner"]; ?>:</label>
-    <select name="user_id" size="1">
-    <?php print $user->getAllUserOptions(1); ?>
-    </select><br />
+            <p>
+                <label><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
+                <input type="text" id="name" name="name" size="30" style="width: 300px;" />
+            </p>
+
+            <p>
+                <label><?php print $PMF_LANG["ad_categ_desc"]; ?>:</label>
+                <textarea id="description" name="description" rows="3" cols="80" style="width: 300px;"></textarea>
+            </p>
+
+            <p>
+                <label><?php print $PMF_LANG["ad_categ_owner"]; ?>:</label>
+                <select name="user_id" size="1">
+                <?php print $user->getAllUserOptions(1); ?>
+                </select>
+            </p>
 
 <?php
     if ($parent_id == 0) {
         if ($faqconfig->get('main.permLevel') != 'basic') {
 ?>
-    <label class="left" for="grouppermission"><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
-    <input type="radio" name="grouppermission" class="active" value="all" checked="checked" /> <?php print $PMF_LANG['ad_entry_all_groups']; ?> 
-    <input type="radio" name="grouppermission" class="active" value="restricted" /> <?php print $PMF_LANG['ad_entry_restricted_groups']; ?> 
-    <select name="restricted_groups" size="1"><?php print $user->perm->getAllGroupsOptions(1); ?></select><br />
+            <p>
+                <label><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
+                <input type="radio" name="grouppermission" class="active" value="all" checked="checked" /> <?php print $PMF_LANG['ad_entry_all_groups']; ?>
+                <input type="radio" name="grouppermission" class="active" value="restricted" /> <?php print $PMF_LANG['ad_entry_restricted_groups']; ?>
+                <select name="restricted_groups" size="1"><?php print $user->perm->getAllGroupsOptions(1); ?></select>
+            </p>
 
 <?php
         } else {
 ?>
-    <input type="hidden" name="grouppermission" class="active" value="all" />
-<?php	
+                <input type="hidden" name="grouppermission" class="active" value="all" />
+<?php
         }
 ?>
-    <label class="left" for="userpermission"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
-    <input type="radio" name="userpermission" class="active" value="all" checked="checked" /> <?php print $PMF_LANG['ad_entry_all_users']; ?> 
-    <input type="radio" name="userpermission" class="active" value="restricted" /> <?php print $PMF_LANG['ad_entry_restricted_users']; ?> 
-    <select name="restricted_users" size="1"><?php print $user->getAllUserOptions(1); ?></select><br />
+            <p>
+                <label><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
+                <input type="radio" name="userpermission" class="active" value="all" checked="checked" /> <?php print $PMF_LANG['ad_entry_all_users']; ?>
+                <input type="radio" name="userpermission" class="active" value="restricted" /> <?php print $PMF_LANG['ad_entry_restricted_users']; ?>
+                <select name="restricted_users" size="1"><?php print $user->getAllUserOptions(1); ?></select>
+            </p>
 
 <?php
     }
 
     if ($faqconfig->get('main.enableGoogleTranslation') === true) {
 ?>    
-    <fieldset class="fullwidth">
-        <legend><?php print $PMF_LANG["ad_menu_translations"]; ?></legend>
-        <div id="editTranslations">
+            <header>
+                <h3><?php print $PMF_LANG["ad_menu_translations"]; ?></h3>
+            </header>
+            <div id="editTranslations">
             <?php
             if ($faqconfig->get('main.googleTranslationKey') == '') {
                 print $PMF_LANG["msgNoGoogleApiKeyFound"];
             } else {
-            ?>        
-            <label class="left" for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
-            <?php print PMF_Language::selectLanguages($faqData['lang'], false, array(), 'langTo'); ?>
-            <br />
-            <input type="hidden" name="used_translated_languages" id="used_translated_languages" value="" />
+            ?>
+            <p>
+                <label for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
+                <?php print PMF_Language::selectLanguages($faqData['lang'], false, array(), 'langTo'); ?>
+            </p>
+                <input type="hidden" name="used_translated_languages" id="used_translated_languages" value="" />
             <div id="getedTranslations">
             </div>
-            <?php
-            }
-            ?>
+            <?php } ?>
         </div>
-    </fieldset>        
 <?php
     }
 ?>
-    <input class="submit" style="margin-left: 190px;" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_add"]; ?>" />
-
-    </fieldset>
-    </form>
+            <p>
+                <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_add"]; ?>" />
+            </p>
+        </form>
     
 <?php    
     if ($faqconfig->get('main.enableGoogleTranslation') === true) {

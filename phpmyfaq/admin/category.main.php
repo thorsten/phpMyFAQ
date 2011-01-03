@@ -2,7 +2,7 @@
 /**
  * List all categories in the admin section
  * 
- * PHP Version 5.2
+ * PHP Version 5.2.3
  * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-12-20
@@ -27,16 +27,16 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
-
-printf('<h2>%s</h2>', $PMF_LANG['ad_menu_categ_edit']);
-
-print "<p class=\"hr\">\n";
-printf('<img src="images/arrow.gif" width="11" height="11" alt="" border="0" /> <a href="?action=addcategory">%s</a>',
-   $PMF_LANG['ad_kateg_add']);
-print "&nbsp;&nbsp;&nbsp;";
-printf('<img src="images/arrow.gif" width="11" height="11" alt="" border="0" /> <a href="?action=showcategory">%s</a>',
-   $PMF_LANG['ad_categ_show']);
-print "</p>\n";
+?>
+    
+        <header>
+            <h2><?php print $PMF_LANG['ad_menu_categ_edit']; ?></h2>
+        </header>
+        <ul>
+            <li><a href="?action=addcategory"><?php print $PMF_LANG['ad_kateg_add']; ?></a></li>
+            <li><a href="?action=showcategory"><?php print $PMF_LANG['ad_categ_show'];?></a></li>
+        </ul>
+<?php
 
 $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 if ('category' != $action && 'content' != $action && 
@@ -66,7 +66,6 @@ if ($permission['editcateg']) {
         if ($category_id) {
             $category->addPermission('user', array($category_id), $user_allowed);
             $category->addPermission('group', array($category_id), $group_allowed);
-            printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_added']);
                         
             // All the other translations            
             $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
@@ -97,6 +96,7 @@ if ($permission['editcateg']) {
                     }
                 }
             }
+            printf('<p class="succes">%s</p>', $PMF_LANG['ad_categ_added']);
         } else {
             printf('<p class="error">%s</p>', $db->error());
         }
@@ -124,7 +124,7 @@ if ($permission['editcateg']) {
             if ($category->addCategory($category_data, $parent_id, $category_data['id']) &&
                 $category->addPermission('user', array($category_data['id']), $user_allowed) &&
                 $category->addPermission('group', array($category_data['id']), $group_allowed)) {
-                printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_translated']);
+                printf('<p class="success">%s</p>', $PMF_LANG['ad_categ_translated']);
             } else {
                 printf('<p class="error">%s</p>', $db->error());
             }
@@ -134,7 +134,7 @@ if ($permission['editcateg']) {
                 $category->deletePermission('group', array($category_data['id']));
                 $category->addPermission('user', array($category_data['id']), $user_allowed);
                 $category->addPermission('group', array($category_data['id']), $group_allowed);
-                printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_updated']);
+                printf('<p class="succes">%s</p>', $PMF_LANG['ad_categ_updated']);
             } else {
                 printf('<p class="error">%s</p>', $db->error());
             }
@@ -184,7 +184,7 @@ if ($permission['editcateg']) {
         if ($category->deleteCategory($id, $lang, $delete_all) && 
             $category->deleteCategoryRelation($id, $lang, $delete_all) &&
             $category->deletePermission('user', array($id)) && $category->deletePermission('group', array($id))) {
-            printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_deleted']);
+            printf('<p class="success">%s</p>', $PMF_LANG['ad_categ_deleted']);
         } else {
             printf('<p class="error">%s</p>', $db->error());
         }
@@ -198,7 +198,7 @@ if ($permission['editcateg']) {
         $category_id_2 = PMF_Filter::filterInput(INPUT_POST, 'change', FILTER_VALIDATE_INT);
 
         if ($category->swapCategories($category_id_1, $category_id_2)) {
-            printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_updated']);
+            printf('<p class="success">%s</p>', $PMF_LANG['ad_categ_updated']);
         } else {
             printf('<p class="error">%s<br />%s</p>', $PMF_LANG['ad_categ_paste_error'], $db->error());
         }
@@ -211,7 +211,7 @@ if ($permission['editcateg']) {
         $category_id = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
         $parent_id   = PMF_Filter::filterInput(INPUT_POST, 'after', FILTER_VALIDATE_INT);
         if ($category->updateParentCategory($category_id, $parent_id)) {
-            printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_updated']);
+            printf('<p class="success">%s</p>', $PMF_LANG['ad_categ_updated']);
         } else {
             printf('<p class="error">%s<br />%s</p>', $PMF_LANG['ad_categ_paste_error'], $db->error());
         }
@@ -237,7 +237,7 @@ if ($permission['editcateg']) {
         ($cat['lang'] == $lang) ? $catname = $cat['name'] : $catname = $cat['name'].' ('.$languageCodes[strtoupper($cat['lang'])].')';
 
         // show category name
-        printf("<p>%s<strong style=\"vertical-align: top;\">&middot; %s</strong> ",
+        printf("<div>%s<strong style=\"vertical-align: top;\">&middot; %s</strong> ",
             $indent,
             $catname);
 
@@ -287,7 +287,7 @@ if ($permission['editcateg']) {
                   $PMF_LANG['ad_categ_move']);
            }
         }
-        print "</p>\n";
+        print "</div>\n";
     }
 
     printf('<p>%s</p>', $PMF_LANG['ad_categ_remark']);
