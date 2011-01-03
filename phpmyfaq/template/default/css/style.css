@@ -186,7 +186,7 @@ code {
 	border-bottom-right-radius: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; }
 #header #loginSelection {
     text-align: center; }
-#header #loginSelection a:link, header #loginSelection a:visited {
+#header #loginSelection a:link, #header #loginSelection a:visited {
     color: #fff; }
 #header #loginForm {
     position: relative; display: none; margin: auto; padding: 5px; width: 170px; z-index: 999; }
