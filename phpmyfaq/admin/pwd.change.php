@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-23
@@ -27,18 +27,22 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
+?>
 
-printf('<h2>%s</h2>', $PMF_LANG['ad_passwd_cop']);
+        <header>
+            <h2><?php print $PMF_LANG['ad_passwd_cop']; ?></h2>
+        </header>
 
+<?php
 if ($permission["passwd"]) {
-	
-	// If we have to save a new password, do that first
-	$save = PMF_Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);
-	if (!is_null($save)) {
-		
-		// Re-evaluate $user
+    
+    // If we have to save a new password, do that first
+    $save = PMF_Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);
+    if (!is_null($save)) {
+
+        // Re-evaluate $user
         $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
-		
+
         // Define the (Local/Current) Authentication Source
         $_authSource = PMF_Auth::selectAuth($user->auth_data['authSource']['name']);
         $_authSource->selectEncType($user->auth_data['encType']);
@@ -48,33 +52,38 @@ if ($permission["passwd"]) {
         $npasswd = PMF_Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
         $bpasswd = PMF_Filter::filterInput(INPUT_POST, 'bpass', FILTER_SANITIZE_STRING);
         
-	   if (($_authSource->encrypt($opasswd) == $user->encrypted_password) && ($npasswd == $bpasswd)) {
+        if (($_authSource->encrypt($opasswd) == $user->encrypted_password) && ($npasswd == $bpasswd)) {
             if (!$user->changePassword($npasswd)) {
-                print $PMF_LANG["ad_passwd_fail"]."<br />";
+                printf('<p class="error">%s</p>', $PMF_LANG["ad_passwd_fail"]);
             }
-            print $PMF_LANG["ad_passwdsuc"]."<br />";
+            sprintf('<p class="success">%s</p>', $PMF_LANG["ad_passwdsuc"]);
         } else {
-        print $PMF_LANG["ad_passwd_fail"];
+            printf('<p class="error">%s</p>', $PMF_LANG["ad_passwd_fail"]);
         }
-	}
+    }
 ?>
-    <form action="?action=passwd" method="post">
-    <fieldset>
-    <legend><?php print $PMF_LANG["ad_passwd_cop"]; ?></legend>
-    <input type="hidden" name="save" value="newpassword" />
 
-    <label class="left" for="opass"><?php print $PMF_LANG["ad_passwd_old"]; ?></label>
-    <input type="password" name="opass" size="30" /><br />
+        <form action="?action=passwd" method="post">
+        <input type="hidden" name="save" value="newpassword" />
+            <p>
+                <label for="opass"><?php print $PMF_LANG["ad_passwd_old"]; ?></label>
+                <input type="password" name="opass" id="opass" size="30" />
+            </p>
 
-    <label class="left" for="npass"><?php print $PMF_LANG["ad_passwd_new"]; ?></label>
-    <input type="password" name="npass" size="30" /><br />
+            <p>
+                <label for="npass"><?php print $PMF_LANG["ad_passwd_new"]; ?></label>
+                <input type="password" name="npass" id="npass" size="30" />
+            </p>
 
-    <label class="left" for="bpass"><?php print $PMF_LANG["ad_passwd_con"]; ?></label>
-    <input type="password" name="bpass" size="30" /><br />
+            <p>
+                <label for="bpass"><?php print $PMF_LANG["ad_passwd_con"]; ?></label>
+                <input type="password" name="bpass" id="bpass" size="30" />
+            </p>
 
-    <input class="submit" style="margin-left: 190px;" type="submit" value="<?php print $PMF_LANG["ad_passwd_change"]; ?>" />
-    </fieldset>
-    </form>
+            <p>
+                <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_passwd_change"]; ?>" />
+            </p>
+        </form>
 <?php
 } else {
     print $PMF_LANG["err_NotAuth"];

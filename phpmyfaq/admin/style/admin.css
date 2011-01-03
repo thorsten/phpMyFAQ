@@ -209,15 +209,40 @@ nav ul li.selected a {
     display: table; margin-bottom: 11px; padding: 0 11px; }
 #mainContent form label {
     display: table-cell; width: 150px; padding-right: 10px; text-align: right; font-weight: bold; vertical-align: top; }
+#mainContent form label.small {
+    display: table-cell; width: 100px; padding-right: 10px; text-align: right; font-weight: bold; vertical-align: top; }
 #mainContent form input[type="text"], #mainContent form input[type="email"], #mainContent form input[type="url"],
 #mainContent form input[type="search"], #mainContent form input[type="password"] {
-    display: table-cell; width: 300px; height: 20px; border: 1px solid #d7d7d7; font-size: 14px; border-radius: 5px;
+    display: table-cell; height: 20px; border: 1px solid #d7d7d7; font-size: 14px; border-radius: 5px;
     -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 #mainContent form textarea {
-    display: table-cell; width: 300px; border: 1px solid #d7d7d7; font-size: 14px; border-radius: 5px;
+    display: table-cell; border: 1px solid #d7d7d7; font-size: 14px; border-radius: 5px;
     -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 #mainContent form input[type="submit"] {
     }
+#mainContent form input[type="submit"].submit, #mainContent form input[type="submit"].reset  {
+    margin-left: 160px; }
+#mainContent fieldset {
+    border: 1px solid #d7d7d7; font-size: 14px; margin-right: 10px; padding: 5px; border-radius: 5px;
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#mainContent legend {
+    padding: 5px; }
+
+/* User and Group administration */
+#userInterface, #groupInterface {
+    display: table; width: 760px; }
+#userAccounts {
+    display: table-cell; width: 200px; vertical-align: top; }
+#userDetails {
+    display: table-cell; width: 310px; vertical-align: top; }
+#userRights {
+    display: table-cell; width: 200px; vertical-align: top; }
+#groupsAvailable {
+    display: table-cell; width: 200px; vertical-align: top; }
+#groupMemberships {
+    display: table-cell; width: 200px; vertical-align: top; }
+#groupDetails {
+    display: table-cell; width: 360px; vertical-align: top; }
 
 /* Footer */
 footer {
