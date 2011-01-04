@@ -18,7 +18,7 @@
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Thomas Zeithaml <tom@annatom.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-26
@@ -57,10 +57,10 @@ function printInputFieldByType($key, $type)
     switch ($type) {
 
         case 'area':
-            printf('<textarea name="edit[%s]" cols="60" rows="6" style="width: 500px;">%s</textarea>',
+            printf('<textarea name="edit[%s]" cols="60" rows="6" style="width: 300px;">%s</textarea>',
                     $key,
                     str_replace('<', '&lt;', str_replace('>', '&gt;', $faqconfig->get($key))));
-            printf("<br />\n");
+            printf("</p>\n");
             break;
 
         case 'input':
@@ -71,14 +71,14 @@ function printInputFieldByType($key, $type)
             } else {
                 $value = str_replace('"', '&quot;', $faqconfig->get($key));
             }
-            printf('<input type="text" name="edit[%s]" size="75" value="%s" style="width: 500px;" />',
+            printf('<input type="text" name="edit[%s]" size="75" value="%s" style="width: 300px;" />',
                     $key,
                     $value);
-            printf("<br />\n");
+            printf("</p>\n");
             break;
 
         case 'select':
-            printf('<select name="edit[%s]" size="1" style="width: 500px;">', $key);
+            printf('<select name="edit[%s]" size="1" style="width: 300px;">', $key);
             
             switch ($key) {
                 
@@ -163,7 +163,7 @@ function printInputFieldByType($key, $type)
                     break;
             }
             
-            print "</select>\n<br />\n";
+            print "</select>\n</p>\n";
             break;
 
         case 'checkbox':
@@ -171,11 +171,11 @@ function printInputFieldByType($key, $type)
             if ($faqconfig->get($key)) {
                 print ' checked="checked"';
             }
-            print " /><br />\n";
+            print " /></p>\n";
             break;
             
         case 'print':
-            printf('<input type="hidden" name="edit[%s]" size="80" value="%s" />%s<br />',
+            printf('<input type="hidden" name="edit[%s]" size="80" value="%s" />%s</p>',
                     $key,
                     str_replace('"', '&quot;', $faqconfig->get($key)),
                     $faqconfig->get($key));
@@ -188,7 +188,8 @@ header("Content-type: text/html; charset=utf-8");
 foreach ($LANG_CONF as $key => $value) {
     if (strpos($key, $configMode) === 0) {
 ?>
-    <label class="leftconfig"><?php
+            <p class="config">
+                <label class="config"><?php
         if ('socialnetworks.twitterConsumerKey' == $key) {
             if ('' == $faqconfig->get('socialnetworks.twitterConsumerKey') ||
                 '' == $faqconfig->get('socialnetworks.twitterConsumerSecret')) {

@@ -234,8 +234,10 @@ nav ul li a.logout {
     display: table; margin-bottom: 11px; padding: 0 11px; }
 #mainContent form label {
     display: table-cell; width: 150px; padding-right: 10px; text-align: right; font-weight: bold; vertical-align: top; }
+#mainContent form label.config {
+    width: 250px; }
 #mainContent form label.small {
-    display: table-cell; width: 100px; padding-right: 10px; text-align: right; font-weight: bold; vertical-align: top; }
+    width: 100px; }
 #mainContent form input[type="text"], #mainContent form input[type="email"], #mainContent form input[type="url"],
 #mainContent form input[type="search"], #mainContent form input[type="password"] {
     display: table-cell; height: 20px; border: 1px solid #d7d7d7; font-size: 14px; border-radius: 5px;

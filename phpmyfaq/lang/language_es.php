@@ -18,7 +18,7 @@
  * @package   Translation
  * @author    Eduardo Polidor
  * @author    Ivan Gil
- * @copyright 2004-2010 phpMyFAQ Team
+ * @copyright 2004-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-06-24
@@ -1072,6 +1072,6 @@ $PMF_LANG['search.relevance.keywords-content-thema'] = 'Palabras clave - Respues
 $PMF_LANG['search.relevance.keywords-thema-content'] = 'Palabras clave - Pregunta - Respuesta';
 
 // added v2.6.99 - 2010-11-30 by Gustavo Solt
-$LANG_CONF['main.googleTranslationKey'] = array(0 => 'input', 1 => 'Clave API de Google');
 $LANG_CONF["main.enableGoogleTranslation"] = array(0 => "checkbox", 1 => "Activar las traducciones de Google? (Por defecto: desactivadas)'");
+$LANG_CONF['main.googleTranslationKey'] = array(0 => 'input', 1 => 'Clave API de Google');
 $PMF_LANG["msgNoGoogleApiKeyFound"] = 'La clave API de Google está vacía, por favor provea una en la sección de configuración';
