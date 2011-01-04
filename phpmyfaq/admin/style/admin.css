@@ -277,7 +277,7 @@ footer {
 footer div {
     display: table; margin: 0 auto; padding: 44px 0; width: 960px; color: #777; }
 #copyrightnote {
-    color: #fff; margin: auto; padding-bottom: 2em; text-align: right; padding-right: 10px; }
+    color: #fff; margin: auto; text-align: right; padding-right: 10px; }
 #copyrightnote a:link, #copyrightnote a:visited {
     color: #F67600; }
 #copyrightnote a:hover {
