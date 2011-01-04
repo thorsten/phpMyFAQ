@@ -166,7 +166,7 @@ button {
 
 /* phpMyFAQ layout */
 body {
-    margin: 0 auto; width: 960px; font: 13px/22px Helvetica, Arial, sans-serif; background-color: #F0F0F0; }
+    margin: 0 auto; font: 13px/22px Helvetica, Arial, sans-serif; background-color: #F0F0F0; }
 code {
     display: block; font-size: 16px; background-color: black; color: white; padding: 10px; width: 600px;
     margin-bottom: 22px; }
@@ -233,7 +233,7 @@ nav ul li.selected a {
 
 /* Content */
 #content {
-    display: table; margin-top: 88px; }
+    display: table; width: 960px; margin: 88px auto 0; }
 #leftContent {
     display: table-cell; width: 200px; vertical-align: top; padding-top: 10px; }
 #mainContent {
