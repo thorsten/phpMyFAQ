@@ -332,6 +332,11 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     // show list of users
     if ($userAction == 'list') {
 ?>
+        
+        <header>
+            <h2><?php print $PMF_LANG['ad_user']; ?></h2>
+        </header>
+
         <script type="text/javascript" src="js/user.js"></script>
         <script type="text/javascript">
 /* <![CDATA[ */
@@ -367,10 +372,6 @@ function getUserData(user_id)
 }
         /* ]]> */
         </script>
-        <header>
-            <h2><?php print $PMF_LANG['ad_user']; ?></h2>
-        </header>
-
         <div id="user_message"><?php print $message; ?></div>
         <div id="userInterface">
             <div id="userAccounts">

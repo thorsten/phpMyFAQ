@@ -261,6 +261,11 @@ if ($groupAction == 'add') {
 // show list of users
 if ($groupAction == 'list') {
 ?>
+
+        <header>
+            <h2><?php print $PMF_LANG['ad_menu_group_administration']; ?></h2>
+        </header>
+    
         <script type="text/javascript">
         /* <![CDATA[ */
 
@@ -513,10 +518,6 @@ getGroupList();
 
         /* ]]> */
         </script>
-
-        <header>
-            <h2><?php print $PMF_LANG['ad_menu_group_administration']; ?></h2>
-        </header>
 
         <div id="user_message"><?php print $message; ?></div>
         <div id="groupInterface">
