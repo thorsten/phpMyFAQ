@@ -227,7 +227,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                 <p>
                     <label for="question"><?php print $PMF_LANG["ad_entry_theme"]; ?></label>
                     <input type="text" name="question" id="question" maxlength="255"
-                           style="width: 556px; height: 30px; font-size: 24px;"
+                           style="width: 536px; height: 30px; font-size: 24px;"
                            value="<?php if (isset($faqData['title'])) { print PMF_String::htmlspecialchars($faqData['title']); } ?>" />
                 </p>
 

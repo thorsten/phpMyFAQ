@@ -61,7 +61,7 @@ tinyMCE.init({
     // General options
     mode     : "exact",
     language : "<?php print (PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en'); ?>",
-    elements : "answer",
+    elements : "<?php print ('addnews' == $action || 'editnews' == $action) ? 'news' : 'answer' ?>",
     width    : "640",
     height   : "480",
     theme    : "advanced",
