@@ -473,7 +473,7 @@ function addMenuEntry($restrictions = '', $action = '', $caption = '', $active =
 
     $class = '';
     if ($active == $action) {
-        $class = ' class="current"';
+        $class = ' class="active"';
     }
 
     if ($action != '') {
