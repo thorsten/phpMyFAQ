@@ -212,32 +212,28 @@ nav ul li.selected a {
 
 /* Categories */
 #categories {
-    margin-bottom: 2em; width: 190px; border-left: 1px dotted #444; }
+    width: 190px; background: url(../images/category_background.png); color: #f0f0f0;
+    border: 1px solid #d7d7d7; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 #categories ul {
-    list-style: none; border-top: 1px dotted #444; margin: 0 auto; }
-#categories ul ul, #categories ul ul ul, #categories ul ul ul ul, #categories ul ul ul ul ul { border-top: 0; }
-#categories li {
-	margin: 0; padding: 0; }
-#categories li a {
-    display: block; border-bottom: 1px dotted #444; text-decoration: none; height: 100%; padding: .5em 0 .5em .5em;
-    font-size: 110%; color: #222; }
-#categories li ul a { padding-left: 1em; }
-#categories ul ul ul a { padding-left: 2em; }
-#categories ul ul ul ul a { padding-left: 3em; }
-#categories ul ul ul ul ul a { padding-left: 4em; }
-#categories a:hover {
-    background: #fff; }
+	}
+#categories ul li {
+	}
+#categories ul li a {
+	}
+#categories ul li a:hover {
+    }
 #categories .active {
-	font-weight: bold; }
-#categories .subcat .active {}
+	}
+#categories .subcat .active {
+	}
 
 /* Content */
 #content {
     display: table; margin-top: 88px; }
 #leftContent {
-    display: table-cell; width: 200px; }
+    display: table-cell; width: 200px; vertical-align: top; padding-top: 10px; }
 #mainContent {
-    display: table-cell; width: 560px; padding-right: 22px; }
+    display: table-cell; width: 560px; padding-right: 22px; vertical-align: top; padding-top: 10px; }
 
 /* phpMyFAQ forms */
 #mainContent form p {
