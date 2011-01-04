@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-15
@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-printf('<h2>%s</h2>', $PMF_LANG['ad_menu_glossary']);
+printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_glossary']);
 
 if ($permission['addglossary'] || $permission['editglossary'] || $permission['delglossary']) {
 
@@ -38,9 +38,9 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
         $item       = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_STRIPPED);
         $definition = PMF_Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_STRIPPED);
         if ($glossary->addGlossaryItem($item, $definition)) {
-            print '<p>' . $PMF_LANG['ad_glossary_save_success'] . '</p>';
+            print '<p class="success">' . $PMF_LANG['ad_glossary_save_success'] . '</p>';
         } else {
-            print '<p>' . $PMF_LANG['ad_glossary_save_error'];
+            print '<p class="error">' . $PMF_LANG['ad_glossary_save_error'];
             print '<br />'.$PMF_LANG["ad_adus_dberr"].'<br />';
             print $db->error() . '</p>';
         }
@@ -51,9 +51,9 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
         $item       = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_STRIPPED);
         $definition = PMF_Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_STRIPPED);
         if ($glossary->updateGlossaryItem($id, $item, $definition)) {
-            print '<p>' . $PMF_LANG['ad_glossary_update_success'] . '</p>';
+            print '<p class="success">' . $PMF_LANG['ad_glossary_update_success'] . '</p>';
         } else {
-            print '<p>' . $PMF_LANG['ad_glossary_update_error'];
+            print '<p class="error">' . $PMF_LANG['ad_glossary_update_error'];
             print '<br />'.$PMF_LANG["ad_adus_dberr"].'<br />';
             print $db->error() . '</p>';
         }
@@ -62,9 +62,9 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
     if ('deleteglossary' == $action && $permission['editglossary']) {
         $id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         if ($glossary->deleteGlossaryItem($id)) {
-            print '<p>' . $PMF_LANG['ad_glossary_delete_success'] . '</p>';
+            print '<p class="success">' . $PMF_LANG['ad_glossary_delete_success'] . '</p>';
         } else {
-            print '<p>' . $PMF_LANG['ad_glossary_delete_error'];
+            print '<p class="error">' . $PMF_LANG['ad_glossary_delete_error'];
             print '<br />'.$PMF_LANG["ad_adus_dberr"].'<br />';
             print $db->error() . '</p>';
         }
@@ -74,20 +74,20 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
 
     print sprintf('<p>[ <a href="?action=addglossary">%s</a> ]</p>', $PMF_LANG['ad_glossary_add']);
 
-    print '<table class="list">';
+    print '<table>';
     print sprintf("<thead><tr><th class=\"list\">%s</th><th class=\"list\">%s</th><th style=\"width: 16px\">&nbsp;</th></tr></thead>", 
         $PMF_LANG['ad_glossary_item'], 
         $PMF_LANG['ad_glossary_definition']);
 
     foreach ($glossaryItems as $items) {
         print '<tr>';
-        printf('<td class="list"><a href="%s%d">%s</a></td>', 
+        printf('<td><a href="%s%d">%s</a></td>', 
             '?action=editglossary&amp;id=', 
             $items['id'], 
             $items['item']);
-        printf('<td class="list">%s</td>', 
+        printf('<td>%s</td>', 
             $items['definition']);
-        printf('<td class="list"><a onclick="return confirm(\'%s\');" href="%s%d">',
+        printf('<td><a onclick="return confirm(\'%s\'); return false;" href="%s%d">',
             $PMF_LANG['ad_user_del_3'],
             '?action=deleteglossary&amp;id=', 
             $items['id']);
