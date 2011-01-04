@@ -2,10 +2,7 @@
 /**
  * Dutch language file
  *
- * @package   phpMyFAQ
- * @author    René de Kat <rdkat@home.nl>
- * @since     2004-07-09
- * @copyright 2004-2010 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -16,19 +13,28 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Translation
+ * @author    René de Kat <rdkat@home.nl>
+ * @author    Hans <hans@hansbosnl.nl>
+ * @copyright 2004-2011 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-07-09
  */
 $PMF_LANG['metaCharset'] = 'utf-8';
 $PMF_LANG['metaLanguage'] = 'nl';
 $PMF_LANG['language'] = 'Nederland';
 $PMF_LANG['dir'] = 'ltr';
-$PMF_LANG["nplurals"] = "2";
+$PMF_LANG['nplurals'] = '2';
 $PMF_LANG['msgCategory'] = 'Categorieën';
 $PMF_LANG['msgShowAllCategories'] = 'Toon alle categorieën';
 $PMF_LANG['msgSearch'] = 'Zoeken';
 $PMF_LANG['msgAddContent'] = 'Record toevoegen';
 $PMF_LANG['msgQuestion'] = 'Vraag stellen';
 $PMF_LANG['msgOpenQuestions'] = 'Open vragen';
-$PMF_LANG['msgHelp'] = 'Help';
+$PMF_LANG['msgHelp'] = 'Hulp';
 $PMF_LANG['msgContact'] = 'Contact';
 $PMF_LANG['msgHome'] = 'Home';
 $PMF_LANG['msgNews'] = 'Nieuws';
@@ -37,7 +43,7 @@ $PMF_LANG['msgBack2Home'] = 'Terug naar de home page';
 $PMF_LANG['msgFullCategories'] = 'Categorieën met records';
 $PMF_LANG['msgFullCategoriesIn'] = 'Verdere categorieën in ';
 $PMF_LANG['msgSubCategories'] = 'Subcategorieën';
-$PMF_LANG['msgEntries'] = 'records';
+$PMF_LANG['msgEntries'] = 'Vragen';
 $PMF_LANG['msgEntriesIn'] = 'Vragen in ';
 $PMF_LANG['msgViews'] = 'weergaven';
 $PMF_LANG['msgPage'] = 'Pagina';
@@ -48,7 +54,7 @@ $PMF_LANG['msgCategoryUp'] = 'een categorie omhoog';
 $PMF_LANG['msgLastUpdateArticle'] = 'Laatste update:';
 $PMF_LANG['msgAuthor'] = 'Auteur:';
 $PMF_LANG['msgPrinterFriendly'] = 'printer-vriendelijke versie';
-$PMF_LANG['msgPrintArticle'] = 'Print dit record';
+$PMF_LANG['msgPrintArticle'] = 'Print deze vraag';
 $PMF_LANG['msgMakeXMLExport'] = 'Exporteer naar XML-bestand';
 $PMF_LANG['msgAverageVote'] = 'Gemiddelde beoordeling:';
 $PMF_LANG['msgVoteUseability'] = 'Beoordeel dit record:';
@@ -109,7 +115,7 @@ $PMF_LANG['msgContactEMail'] = 'E-mail naar de webmaster:';
 $PMF_LANG['msgMessage'] = 'Uw bericht:';
 $PMF_LANG['msgTopTen'] = 'Top 10';
 $PMF_LANG['msgHomeThereAre'] = 'Er zijn';
-$PMF_LANG['msgHomeArticlesOnline'] = 'records online';
+$PMF_LANG['msgHomeArticlesOnline'] = 'Actuele vragen';
 $PMF_LANG['msgNoNews'] = 'Geen nieuws is goed nieuws.';
 $PMF_LANG['msgLatestArticles'] = 'De meest recent gestelde vragen:';
 $PMF_LANG['msgMailThanks'] = 'Vriendelijk bedankt voor uw voorstel voor de FAQ.';
@@ -117,7 +123,7 @@ $PMF_LANG['msgMailCheck'] = 'Er zijn nieuwe records in de FAQ! Controleer het be
 $PMF_LANG['msgMailContact'] = 'Uw bericht is naar de beheerder verstuurt.';
 $PMF_LANG['err_noDatabase'] = 'Geen database verbinding beschikbaar.';
 $PMF_LANG['err_noHeaders'] = 'Geen categorie gevonden.';
-$PMF_LANG['err_noArticles'] = '<p>Geen records beschikbaar.</p>';
+$PMF_LANG['err_noArticles'] = '<p>Geen vragen beschikbaar.</p>';
 $PMF_LANG['err_badID'] = '<p>Verkeerd ID.</p>';
 $PMF_LANG['err_noTopTen'] = '<p>Er is nog geen top 10 beschikbaar.</p>';
 $PMF_LANG['err_nothingFound'] = '<p>Geen record gevonden.</p>';
@@ -131,7 +137,7 @@ $PMF_LANG['help_search'] = '<p><strong>Zoek naar records:</strong><br />Met een 
 $PMF_LANG['ad'] = 'ADMIN AFDELING';
 $PMF_LANG['ad_menu_user_administration'] = 'Gebruikers';
 $PMF_LANG['ad_menu_entry_aprove'] = 'Goedkeuren records';
-$PMF_LANG['ad_menu_entry_edit'] = 'Bewerken records';
+$PMF_LANG['ad_menu_entry_edit'] = 'Vragen bewerken';
 $PMF_LANG['ad_menu_categ_add'] = 'Toevoegen categorie';
 $PMF_LANG['ad_menu_categ_edit'] = 'Categoriebeheer';
 $PMF_LANG['ad_menu_news_add'] = 'Toevoegen nieuws';
@@ -172,11 +178,11 @@ $PMF_LANG['ad_user_name'] = 'Naam';
 $PMF_LANG['ad_user_password'] = 'Wachtwoord';
 $PMF_LANG['ad_user_confirm'] = 'Bevestigen';
 $PMF_LANG['ad_user_del_1'] = 'De gebruiker';
-$PMF_LANG['ad_user_del_2'] = 'moet worden verwijderd?';
+$PMF_LANG['ad_user_del_2'] = 'zal worden verwijderd?';
 $PMF_LANG['ad_user_del_3'] = 'Weet u het zeker?';
 $PMF_LANG['ad_user_deleted'] = 'De gebruiker is succesvol verwijderd.';
 $PMF_LANG['ad_user_checkall'] = 'Selecteer alles';
-$PMF_LANG['ad_entry_aor'] = 'Beheer van de records';
+$PMF_LANG['ad_entry_aor'] = 'Beheer van de vragen';
 $PMF_LANG['ad_entry_id'] = 'ID';
 $PMF_LANG['ad_entry_topic'] = 'Onderwerp';
 $PMF_LANG['ad_entry_action'] = 'Actie';
@@ -205,8 +211,8 @@ $PMF_LANG['ad_entry_savedfail'] = 'Helaas, er is een <strong>database fout</stro
 $PMF_LANG['ad_entry_del_1'] = 'Weet u zeker dat het onderwerp';
 $PMF_LANG['ad_entry_del_2'] = 'van';
 $PMF_LANG['ad_entry_del_3'] = 'moet worden verwijderd?';
-$PMF_LANG['ad_entry_delsuc'] = 'Record <strong>succesvol</strong> verwijderd.';
-$PMF_LANG['ad_entry_delfail'] = 'Record is <strong>niet verwijderd</strong>!';
+$PMF_LANG['ad_entry_delsuc'] = 'Vraag <strong>succesvol</strong> verwijderd.';
+$PMF_LANG['ad_entry_delfail'] = 'Vraag is <strong>niet verwijderd</strong>!';
 $PMF_LANG['ad_news_header'] = 'Titel:';
 $PMF_LANG['ad_news_text'] = 'Tekst:';
 $PMF_LANG['ad_news_link_url'] = 'Link: (<strong>zonder http://</strong>)!';
@@ -251,7 +257,7 @@ $PMF_LANG['ad_categ_updated'] = 'De categorie is bijgewerkt.';
 $PMF_LANG['ad_categ_del_yes'] = 'ja, verwijderen!';
 $PMF_LANG['ad_categ_del_no'] = 'nee!';
 $PMF_LANG['ad_categ_deletesure'] = 'Weet u zeker dat u deze categorie wilt verwijderen?';
-$PMF_LANG['ad_categ_deleted'] = 'Categorie verwijderd.';
+$PMF_LANG['ad_categ_deleted'] = 'Categorie is verwijderd.';
 $PMF_LANG['ad_cookie_cookiesuc'] = 'Cookie <strong>succesvol</strong> geplaatst.';
 $PMF_LANG['ad_cookie_already'] = 'Er is reeds een cookie aanwezig. U heeft de volgende keuzes:';
 $PMF_LANG['ad_cookie_again'] = 'Cookie opnieuw plaatsen';
@@ -260,11 +266,11 @@ $PMF_LANG['ad_cookie_no'] = 'Er is nog geen cookie opgeslagen. Met een cookie ku
 $PMF_LANG['ad_cookie_set'] = 'Cookie plaatsen';
 $PMF_LANG['ad_cookie_deleted'] = 'Cookie succesvol verwijderd.';
 $PMF_LANG['ad_adminlog'] = 'Beheerderslog';
-$PMF_LANG['ad_passwd_cop'] = 'Wijzig wachtwoord';
-$PMF_LANG['ad_passwd_old'] = 'Oud wachtwoord:';
-$PMF_LANG['ad_passwd_new'] = 'Nieuw wachtwoord:';
+$PMF_LANG['ad_passwd_cop'] = 'Wachtwoord wijzigen';
+$PMF_LANG['ad_passwd_old'] = 'Oude wachtwoord:';
+$PMF_LANG['ad_passwd_new'] = 'Nieuwe wachtwoord:';
 $PMF_LANG['ad_passwd_con'] = 'Bevestigen:';
-$PMF_LANG['ad_passwd_change'] = 'Wijzig wachtwoord';
+$PMF_LANG['ad_passwd_change'] = 'Wijzigen wachtwoord';
 $PMF_LANG['ad_passwd_suc'] = 'Wachtwoord succesvol gewijzigd.';
 $PMF_LANG['ad_passwd_remark'] = '<strong>LET OP:</strong><br />Cookie moet opnieuw worden geplaatst!';
 $PMF_LANG['ad_passwd_fail'] = 'Het oude wachtwoord <strong>moet</strong> correct worden ingevoerd en beide nieuwe wachtwoorden moeten <strong>overeen komen</strong>.';
@@ -294,7 +300,7 @@ $PMF_LANG['ad_sess_r'] = 'Zoekresultaten voor';
 $PMF_LANG['ad_sess_referer'] = 'Verwijzer:';
 $PMF_LANG['ad_sess_browser'] = 'Browser:';
 $PMF_LANG['ad_sess_ai_rubrik'] = 'Categorie:';
-$PMF_LANG['ad_sess_ai_artikel'] = 'Record:';
+$PMF_LANG['ad_sess_ai_artikel'] = 'Vraag:';
 $PMF_LANG['ad_sess_ai_sb'] = 'Zoek-criteria:';
 $PMF_LANG['ad_sess_ai_sid'] = 'Sessie ID:';
 $PMF_LANG['ad_sess_back'] = 'Terug';
@@ -321,17 +327,17 @@ $PMF_LANG['ad_menu_editconfig'] = 'Bewerk configuratie';
 $PMF_LANG['ad_att_none'] = 'Geen bijlagen beschikbaar';
 $PMF_LANG['ad_att_att'] = 'Bestand:';
 $PMF_LANG['ad_att_add'] = 'Bijlage toevoegen';
-$PMF_LANG['ad_entryins_suc'] = 'Record succesvol opgeslagen.';
+$PMF_LANG['ad_entryins_suc'] = 'Vraag succesvol opgeslagen.';
 $PMF_LANG['ad_entryins_fail'] = 'Er is een fout opgetreden.';
 $PMF_LANG['ad_att_del'] = 'Verwijderen';
 $PMF_LANG['ad_att_nope'] = 'Bijlagen kunnen alleen tijdens het bewerken worden toegevoegd.';
 $PMF_LANG['ad_att_delsuc'] = 'De bijlage is succesvol verwijderd.';
 $PMF_LANG['ad_att_delfail'] = 'Er is een fout opgetreden tijdens het verwijderen van de bijlage.';
-$PMF_LANG['ad_entry_add'] = 'record aanmaken';
+$PMF_LANG['ad_entry_add'] = 'vraag aanmaken';
 $PMF_LANG['ad_csv_make'] = 'Een backup is een volledige kopie van de database inhoud. Een backup moet minstens 1 maal per maand worden uitgevoerd. Het formaat van de backup is een MySQL transactie-bestand, die met behulp van tools als phpMyAdmin of de commandline mysql client kan worden geïporteerd.';
 $PMF_LANG['ad_csv_link'] = 'Download de backup';
 $PMF_LANG['ad_csv_head'] = 'Maak een backup';
-$PMF_LANG['ad_att_addto'] = 'Voeg een bijlage toe aan het record';
+$PMF_LANG['ad_att_addto'] = 'Voeg een bijlage toe aan het onderwerp';
 $PMF_LANG['ad_att_addto_2'] = '';
 $PMF_LANG['ad_att_butt'] = 'OK';
 $PMF_LANG['ad_att_suc'] = 'Het bestand is succesvol toegevoegd.';
@@ -438,9 +444,9 @@ $PMF_LANG['rightsLanguage']['changebtrevs'] = 'wijzig revisies';
 $PMF_LANG['rightsLanguage']['addglossary'] = 'verklarendewoordenlijst-record toevoegen';
 $PMF_LANG['rightsLanguage']['editglossary'] = 'verklarendewoordenlijst-record bewerken';
 $PMF_LANG['rightsLanguage']['delglossary'] = 'verklarendewoordenlijst-record verwijderen';
-$PMF_LANG['rightsLanguage']['addgroup'] = 'voeg groep accounts toe';
-$PMF_LANG['rightsLanguage']['editgroup'] = 'wijzig groep accounts';
-$PMF_LANG['rightsLanguage']['delgroup'] = 'verwijder groep accounts';
+$PMF_LANG['rightsLanguage']['addgroup'] = 'voeg groep gebruikers toe';
+$PMF_LANG['rightsLanguage']['editgroup'] = 'wijzig groep gebruikers';
+$PMF_LANG['rightsLanguage']['delgroup'] = 'verwijder groep gebruikers';
 $PMF_LANG['msgAttachedFiles'] = 'bijgevoegde bestanden:';
 $PMF_LANG['ad_user_action'] = 'actie';
 $PMF_LANG['ad_entry_email'] = 'E-mailadres:';
@@ -490,7 +496,7 @@ $PMF_LANG['ad_stat_delete'] = 'Verwijder geselecteerde sessies direct';
 $PMF_LANG['ad_menu_glossary'] = 'Verklarendewoordenlijst';
 $PMF_LANG['ad_glossary_add'] = 'Verklarendewoordenlijst-record toevoegen';
 $PMF_LANG['ad_glossary_edit'] = 'Verklarendewoordenlijst bewerken';
-$PMF_LANG['ad_glossary_item'] = 'Stuk';
+$PMF_LANG['ad_glossary_item'] = 'Onderwerp';
 $PMF_LANG['ad_glossary_definition'] = 'Definitie';
 $PMF_LANG['ad_glossary_save'] = 'Bewaar invoer';
 $PMF_LANG['ad_glossary_save_success'] = 'Verklarendewoordenlijst-record succesvol opgeslagen.';
@@ -652,7 +658,7 @@ $PMF_LANG['ad_adminlog_delete_failure'] = 'Geen logs verwijderd: er heeft zich e
 $PMF_LANG['opensearch_plugin_install'] = 'voeg zoek plugin toe';
 $PMF_LANG['ad_quicklinks'] = 'Quick-links';
 $PMF_LANG['ad_quick_category'] = 'Voeg nieuwe categorie toe';
-$PMF_LANG['ad_quick_record'] = 'Voeg nieuwe FAQ record toe';
+$PMF_LANG['ad_quick_record'] = 'Nieuwe vraag toevoegen';
 $PMF_LANG['ad_quick_user'] = 'Voeg nieuwe gebruiker toe';
 $PMF_LANG['ad_quick_group'] = 'Voeg nieuwe groep toe';
 $PMF_LANG['msgNewTranslationHeader'] = 'Vertaal voorstel';
@@ -670,7 +676,7 @@ $PMF_LANG['ad_news_link_parent'] = 'Link opent in een bovenliggend venster';
 $PMF_LANG['ad_menu_comments'] = 'Opmerkingen';
 $PMF_LANG['ad_comment_administration'] = 'Opmerkingen administratie';
 $PMF_LANG['ad_comment_faqs'] = 'Opmerkingen in FAQ records:';
-$PMF_LANG['ad_comment_news'] = 'Opmerkingen  in Nieuws records:';
+$PMF_LANG['ad_comment_news'] = 'Opmerkingen  in Nieuws vragen:';
 $PMF_LANG['ad_groups'] = 'Groepen';
 $PMF_LANG['ad_conf_order_id'] = 'ID (standaard)';
 $PMF_LANG['ad_conf_order_thema'] = 'Titel';
@@ -683,11 +689,11 @@ $PMF_LANG['mainControlCenter'] = 'Hoofdconfiguratie';
 $PMF_LANG['recordsControlCenter'] = 'FAQ records configuratie';
 $PMF_LANG['msgInstantResponse'] = 'Directe Reactie';
 $PMF_LANG['msgInstantResponseMaxRecords'] = '. Zoek onder de eerste %d records.';
-$PMF_LANG['msgAllCatArticles'] = 'Records in deze categorie';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Type en vind uw antwoord ...';
+$PMF_LANG['msgAllCatArticles'] = 'Vragen in deze categorie';
+$PMF_LANG['msgDescriptionInstantResponse'] = 'Type en vind het antwoord ...';
 $PMF_LANG['msgTagSearch'] = 'Gelabelde items';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ informatie';
-$PMF_LANG['ad_online_info'] = 'Online versie check';
+$PMF_LANG['ad_online_info'] = 'Online versie controleren';
 $PMF_LANG['ad_system_info'] = 'Systeem informatie';
 $PMF_LANG['msgRegisterUser'] = 'Wilt u registreren?';
 $PMF_LANG['ad_user_loginname'] = 'Login naam:';
@@ -784,3 +790,53 @@ $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Activeer 
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Opmerkingen toestaan voor nieuwe record (standaard: uitgeschakeld)");
 $LANG_CONF['main.enableWysiwygEditor'] = array(0 => "checkbox", 1 => "Inschakelen WYSIWYG editor (standaard: ingeschakeld)");
 $LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "Pad waar de bijlagen worden opgeslagen.<br /><small>Relatief path betekend een map in de web root</small>");
+$PMF_LANG['msgTransToolNoteFileSaving'] = 'Please note that no files will we written until you click save button';
+$PMF_LANG['msgTransToolPageBufferRecorded'] = 'Page %d buffer recorded successfully';
+$PMF_LANG['msgTransToolErrorRecordingPageBuffer'] = 'Error recording page %d buffer';
+$PMF_LANG['msgTransToolRecordingPageBuffer'] = 'Recording page %d buffer';
+$PMF_LANG['ad_record_active'] = 'Geactiveerd';
+$PMF_LANG['msgAttachmentInvalid'] = 'De bijlage is niet geldig, informeer de beheerder.';
+$PMF_LANG['list_all_users'] = 'Lijst met alle gebruikers';
+$PMF_LANG['main.orderingPopularFaqs.visits'] = 'lijst meest bezochte bijdragen';
+$PMF_LANG['main.orderingPopularFaqs.voting'] = 'lijst meest gestemde bijdragen';
+$PMF_LANG['msgShowHelp'] = 'aub. woorden scheiden met een komma';
+$PMF_LANG['msgUpdateFaqDate'] = 'actualiseren';
+$PMF_LANG['msgKeepFaqDate'] = 'houden';
+$PMF_LANG['msgEditFaqDat'] = 'bewerk';
+$LANG_CONF['main.numberSearchTerms'] = array(0 => 'input', 1 => 'Number of listed search terms');
+$LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Sorting of the top faq's");
+$LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Mail address as mandatory field (default: deactivated)');
+$LANG_CONF['main.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Instant Response on startpage (default: deactivated)');
+$PMF_LANG['msgTransToolRemove'] = 'Verwijder';
+$PMF_LANG['msgTransToolLanguageNumberOfPlurals'] = 'Number of plural forms';
+$PMF_LANG['msgTransToolLanguageOnePlural'] = 'Deze taal kent slechts een meervoudsvorm';
+$PMF_LANG['msgTransToolLanguagePluralNotSet'] = 'Plural form support for language %s is disabled (nplurals not set)';
+$PMF_LANG['plmsgHomeArticlesOnline']['0'] = 'Er is %d FAQ online';
+$PMF_LANG['plmsgHomeArticlesOnline']['1'] = 'Er zijn %d FAQs online';
+$PMF_LANG['plmsgViews']['0'] = '%d view';
+$PMF_LANG['plmsgViews']['1'] = '%d views';
+$PMF_LANG['plmsgGuestOnline']['0'] = ' :: %d Gast';
+$PMF_LANG['plmsgGuestOnline']['1'] = ' :: %d Gasten';
+$PMF_LANG['plmsgRegisteredOnline']['0'] = ' en %d Geregistreerde';
+$PMF_LANG['plmsgRegisteredOnline']['1'] = ' en %d Geregistreerde';
+$PMF_LANG['plmsgSearchAmount']['0'] = '%d zoek resultaat';
+$PMF_LANG['plmsgSearchAmount']['1'] = '%d zoek resultaten';
+$PMF_LANG['plmsgPagesTotal']['0'] = ' %d Pagina';
+$PMF_LANG['plmsgPagesTotal']['1'] = ' %d Pages';
+$PMF_LANG['plmsgVotes']['0'] = '%d Vote';
+$PMF_LANG['plmsgVotes']['1'] = '%d Votes';
+$PMF_LANG['plmsgEntries']['0'] = '%d FAQ';
+$PMF_LANG['plmsgEntries']['1'] = '%d FAQs';
+$PMF_LANG['rightsLanguage']['addtranslation'] = 'toevoegen vertaling';
+$PMF_LANG['rightsLanguage']['edittranslation'] = 'bewerken vertaling';
+$PMF_LANG['rightsLanguage']['deltranslation'] = 'verwijder vertaling';
+$PMF_LANG['rightsLanguage']['approverec'] = 'bijdragen goedkeuren';
+$PMF_LANG['ad_menu_upgrade'] = 'Upgrade';
+$PMF_LANG['ad_you_shouldnt_update'] = 'De laatste versie van phpMyFAQ is reeds geinstalleerd.';
+$PMF_LANG['msgSecureSwitch'] = 'Switch to secure mode to login!';
+$LANG_CONF['main.templateSet'] = array(0 => "select", 1 => "Template set to be used");
+$LANG_CONF['main.enableAttachmentEncryption'] = array(0 => "checkbox", 1 => "Enable attachment encryption <br><small>Ignored when attachments is disabled</small>");
+$LANG_CONF['main.defaultAttachmentEncKey'] = array(0 => "input", 1 => 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>');
+$LANG_CONF['main.useSslForLogins'] = array(0 => 'checkbox', 1 => "Only allow logins over secure connection? (default: disabled)");
+$PMF_LANG['plmsgUserOnline']['0'] = '%d gebruiker online';
+$PMF_LANG['plmsgUserOnline']['1'] = '';
