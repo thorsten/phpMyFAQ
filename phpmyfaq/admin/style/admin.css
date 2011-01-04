@@ -187,12 +187,14 @@ nav ul {
 nav ul li {
     float: left; }
 nav ul li a, nav ul li a:visited {
-    display: block; padding-right: 15px; padding-left: 15px; font: 16px/44px Helvetica, Arial, sans-serif; text-align: center;
-    text-decoration: none; color: #F67600; }
+    display: block; padding-right: 15px; padding-left: 15px; font: 16px/44px Helvetica, Arial, sans-serif; 
+    text-align: center; text-decoration: none; color: #F67600; }
 nav ul li a:hover {
     color: #fff; }
 nav ul li.active a {
     background-color: #333; }
+nav ul li a.logout {
+    color: #f71e1b; }
 
 /* Categories */
 #categories, #worklog {
