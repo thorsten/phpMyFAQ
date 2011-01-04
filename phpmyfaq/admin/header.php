@@ -241,18 +241,20 @@ switch ($action) {
     <?php if (isset($auth)) { ?>
 
     <div id="leftContent">
-        <header>
-            <h3><?php print $secLevelHeader; ?></h3>
-        </header>
-        <menu>
+        <menu id="categories">
+            <header>
+                <h3><?php print $secLevelHeader; ?></h3>
+            </header>
             <ul>
                 <?php print $secLevelEntries; ?>
             </ul>
         </menu>
-        <header>
-            <h3>Admin worklog</h3>
-        </header>
-        <span id="saving_data_indicator"></span>
+        <div id="worklog">
+            <header>
+                <h3>Admin worklog</h3>
+            </header>
+            <span id="saving_data_indicator"></span>
+        </div>
     </div>
 
     <?php } ?>

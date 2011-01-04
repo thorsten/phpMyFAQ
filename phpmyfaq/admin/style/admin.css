@@ -194,13 +194,36 @@ nav ul li a:hover {
 nav ul li.selected a {
     color: #fff; }
 
+/* Categories */
+#categories, #worklog {
+    width: 190px; background: #f0f0f0 url(../images/category_background.png) repeat-x; margin-bottom: 15px;
+    border: 1px solid #d7d7d7; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#categories h3, #worklog h3 {
+    padding-top: 5px; padding-left: 10px; padding-bottom: 5px; }
+#categories ul {
+	margin: 0 1px 0 1px; list-style: none outside none; padding: 0; }
+#categories ul li {
+	}
+#categories ul li a {
+	padding-left: 10px; line-height: 30px; font-size: 14px; text-decoration: none; display: block; color: #222; }
+#categories ul li a:hover {
+	color: #F67600; }
+#categories a.active {
+	background-color: #fff; font-weight: bold; }
+#categories .subcat li a {
+    padding-left: 20px; }
+#categories .subcat li li a {
+    padding-left: 30px; }
+#categories .subcat .active {
+	}
+
 /* Content */
 #content {
     display: table; margin-top: 88px; }
 #leftContent {
     display: table-cell; width: 200px; vertical-align: top; padding-top: 10px; }
 #mainContent {
-    display: table-cell; width: 560px; padding-right: 22px; vertical-align: top; padding-top: 10px; }
+    display: table-cell; width: 760px; padding-right: 22px; vertical-align: top; padding-top: 10px; }
 #mainContent p, ul, ol, table {
     padding-bottom: 22px; }
 
@@ -215,6 +238,9 @@ nav ul li.selected a {
 #mainContent form input[type="search"], #mainContent form input[type="password"] {
     display: table-cell; height: 20px; border: 1px solid #d7d7d7; font-size: 14px; border-radius: 5px;
     -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#mainContent form select {
+    display: table-cell; border: 1px solid #d7d7d7; font-size: 14px; border-radius: 5px; -moz-border-radius: 5px; 
+    -webkit-border-radius: 5px; }
 #mainContent form textarea {
     display: table-cell; border: 1px solid #d7d7d7; font-size: 14px; border-radius: 5px;
     -moz-border-radius: 5px; -webkit-border-radius: 5px; }
@@ -230,11 +256,11 @@ nav ul li.selected a {
 
 /* User and Group administration */
 #userInterface, #groupInterface {
-    display: table; width: 760px; }
+    display: table; width: 700px; }
 #userAccounts {
     display: table-cell; width: 200px; vertical-align: top; }
 #userDetails {
-    display: table-cell; width: 310px; vertical-align: top; }
+    display: table-cell; width: 300px; vertical-align: top; }
 #userRights {
     display: table-cell; width: 200px; vertical-align: top; }
 #groupsAvailable {
@@ -242,7 +268,7 @@ nav ul li.selected a {
 #groupMemberships {
     display: table-cell; width: 200px; vertical-align: top; }
 #groupDetails {
-    display: table-cell; width: 360px; vertical-align: top; }
+    display: table-cell; width: 300px; vertical-align: top; }
 
 /* Footer */
 footer {
