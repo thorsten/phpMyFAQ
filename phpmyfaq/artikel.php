@@ -211,7 +211,7 @@ if (($faq->faqRecord['active'] != 'yes') || ('n' == $faq->faqRecord['comment']) 
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
     $commentMessage = sprintf(
-        "%s<a href=\"javascript:void(0);\" onclick=\"javascript:$('#comment').show();\">%s</a>",
+        "%s<a href=\"javascript:void(0);\" onclick=\"javascript:$('#commentForm').show();\">%s</a>",
         $PMF_LANG['msgYouCan'],
         $PMF_LANG['msgWriteComment']);
 }

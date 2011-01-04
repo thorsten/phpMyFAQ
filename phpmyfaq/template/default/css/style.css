@@ -242,7 +242,11 @@ nav ul li.selected a {
     display: block; padding-bottom: 22px; }
 #mainContent p, ul, ol, table {
     padding-bottom: 11px; }
-
+#mainContent p.comment {
+    margin: 5px; padding: 5px; background-color: #fff; border: 1px solid #d7d7d7; border-radius: 5px; 
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#mainContent p.comment img {
+    float: right; }
 
 /* phpMyFAQ forms */
 #mainContent form p {
@@ -258,6 +262,8 @@ nav ul li.selected a {
     -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 #mainContent form input[type="submit"] {
     }
+#mainContent form input[type="submit"].submit, #mainContent form input[type="submit"].reset  {
+    margin-left: 160px; }
 
 /* FAQs */
 #breadcrumbs span[itemtype] {

@@ -743,6 +743,7 @@ $PMF_LANG['newsShowCurrent'] = 'Zeige aktuelle News.';
 $PMF_LANG['newsShowArchive'] = 'Zeige archivierte News.';
 $PMF_LANG['newsArchive'] = ' News Archiv';
 $PMF_LANG['newsWriteComment'] = 'Diesen Eintrag kommentieren';
+$PMF_LANG['newsCommentDate'] = 'Geschrieben am: ';
 
 // added v2.0.0 - 2006-07-29 by Matteo & Thorsten
 $PMF_LANG['ad_record_expiration_window'] = 'Abblaufdatum des Eintrags (optional)';
