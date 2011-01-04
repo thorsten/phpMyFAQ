@@ -238,6 +238,11 @@ nav ul li.selected a {
     display: table-cell; width: 200px; vertical-align: top; padding-top: 10px; }
 #mainContent {
     display: table-cell; width: 560px; padding-right: 22px; vertical-align: top; padding-top: 10px; }
+#mainContent h2 {
+    display: block; padding-bottom: 22px; }
+#mainContent p, ul, ol, table {
+    padding-bottom: 11px; }
+
 
 /* phpMyFAQ forms */
 #mainContent form p {
@@ -253,6 +258,14 @@ nav ul li.selected a {
     -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 #mainContent form input[type="submit"] {
     }
+
+/* FAQs */
+#breadcrumbs span[itemtype] {
+    display: -moz-inline-stack; display: inline-block; margin: 0 0 5px; zoom: 1; *display: inline; font-size: 15px; 
+    font-weight: bold; }
+#solution_id {
+    float: right; padding: 2px; background-color: #fff; border: 1px solid #d7d7d7; border-radius: 5px; 
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 
 aside {
     display: table-cell; width: 200px; background: url(../images/sidebar_background.png) top left; }

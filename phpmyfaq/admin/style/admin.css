@@ -226,8 +226,10 @@ nav ul li a.logout {
     display: table-cell; width: 200px; vertical-align: top; padding-top: 10px; }
 #mainContent {
     display: table-cell; width: 760px; padding-right: 22px; vertical-align: top; padding-top: 10px; }
+#mainContent h2 {
+    display: block; margin-bottom: 11px; }
 #mainContent p, ul, ol, table {
-    padding-bottom: 22px; }
+    padding-bottom: 11px; }
 
 /* phpMyFAQ forms */
 #mainContent form p {

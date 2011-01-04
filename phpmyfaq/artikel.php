@@ -18,7 +18,7 @@
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Lars Tiedemann <larstiedemann@yahoo.de>
- * @copyright 2002-2010 phpMyFAQ Team
+ * @copyright 2002-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-27
@@ -271,7 +271,7 @@ $faqHelper = PMF_Helper_Faq::getInstance();
 
 // Set the template variables
 $tpl->processTemplate ("writeContent", array(
-    'writeRubrik'                   => $categoryName.'<br />',
+    'writeRubrik'                   => $categoryName,
     'solution_id'                   => $faq->faqRecord['solution_id'],
     'facebookeLikeButton'           => $faqHelper->renderFacebookLikeButton($facebookUrl),
     'writeThema'                    => $thema,

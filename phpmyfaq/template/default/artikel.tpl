@@ -1,9 +1,12 @@
-
+            <div id="breadcrumbs">
+                {writeRubrik}
+            </div>
+            
             <header>
-                <h2 id="article_category">{writeRubrik}</h2>
                 <div id="solution_id">ID #{solution_id}</div>
                 <h2>{writeThema}</h2>
             </header>
+
             
             <article>
             {writeContent}
