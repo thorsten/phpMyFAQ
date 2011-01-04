@@ -763,14 +763,14 @@ class PMF_Category
     }
 
     /**
-     * Gets the path from root to child as breadcrumb
+     * Gets the path from root to child as breadcrumbs
      *
-     * @param  integer $id        Category id
-     * @param  string  $separator Path separator
-     * @param  bool    $showlinks Show links?
+     * @param integer $id                Category ID
+     * @param string  $separator         Path separator
+     * @param boolean $renderAsMicroData Renders breadcrumbs as HTML5 microdata
      * @return string
      */
-    public function getPath($id, $separator = ' &raquo; ', $showlinks = false)
+    public function getPath($id, $separator = ' &raquo; ', $renderAsMicroData = false)
     {
         global $sids;
 
@@ -793,23 +793,27 @@ class PMF_Category
             $desc[]  = $this->treeTab[$this->getLineCategory($id)]['description'];
         }
 
-        foreach ($temp as $k => $category) {
-            $url = sprintf('%saction=show&amp;cat=%d',
-                        $sids,
-                        $catid[$k]
-                    );
-            $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-            $oLink->itemTitle = $category;
-            $oLink->text      = $category;
-            $oLink->tooltip   = $desc[$k];
-            $breadcrumb[]     = $oLink->toHtmlAnchor();
-        }
+        // @todo Maybe this should be done somewhere else ...
+        if ($renderAsMicroData) {
 
-        if ($showlinks) {
-            return implode($separator, $breadcrumb);
-        } else {
-            return implode($separator, $temp);
+            foreach ($temp as $k => $category) {
+                $url            = sprintf('%saction=show&amp;cat=%d', $sids, $catid[$k]);
+                $oLink          = new PMF_Link(PMF_Link::getSystemRelativeUri().'?' . $url);
+                $oLink->text    = sprintf('<span itemprop="title">%s</span>', $category);
+                $oLink->tooltip = $desc[$k];
+                $oLink->setItemProperty('url');
+                if (0 == $k) {
+                    $oLink->setRelation('index');
+                }
+
+                $breadcrumb[] = sprintf('<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">%s</span>',
+                    $oLink->toHtmlAnchor());
+            }
+            
+            $temp = $breadcrumb;
         }
+        
+        return implode($separator, $temp);
     }
 
     /**

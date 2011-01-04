@@ -18,7 +18,7 @@
  * @package   PMF_Link  
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-02
@@ -39,7 +39,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_Link  
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-02
@@ -158,6 +158,20 @@ class PMF_Link
     public $itemTitle = '';
 
     /**
+     * Item property for HTML5 microdata
+     *
+     * @var string
+     */
+    protected $itemprop = '';
+
+    /**
+     * rel property
+     *
+     * @var string
+     */
+    protected $rel = '';
+
+    /**
      * Constructor
      * 
      * @param string $url    URL
@@ -243,6 +257,26 @@ class PMF_Link
         }
         // $_SERVER['HTTP_HOST'] is the name of the website or virtual host name
         return !(false === strpos($this->url, $_SERVER['HTTP_HOST']));
+    }
+
+    /**
+     * @param string $itemprop Item property
+     *
+     * @return void
+     */
+    public function setItemProperty($itemprop)
+    {
+        $this->itemprop = $itemprop;
+    }
+
+    /**
+     * @param string $rel rel property
+     *
+     * @return void
+     */
+    public function setRelation($rel)
+    {
+        $this->rel = $rel;
     }
 
     /**
@@ -410,20 +444,26 @@ class PMF_Link
         // Prepare HTML anchor element
         $htmlAnchor = '<a';
         if (!empty($this->class)) {
-            $htmlAnchor .= ' class="'.$this->class.'"';
+            $htmlAnchor .= sprintf(' class="%s"', $this->class);
         }
         if (!empty($this->tooltip)) {
-            $htmlAnchor .= ' title="'.addslashes($this->tooltip).'"';
+            $htmlAnchor .= sprintf(' title="%s"', addslashes($this->tooltip));
         }
         if (!empty($this->name)) {
-                $htmlAnchor .= ' name="'.$this->name.'"';
+                $htmlAnchor .= sprintf(' name="%s"', $this->name);
         } else {
             if (!empty($this->url)) {
-                $htmlAnchor .= ' href="'.$url.'"';
+                $htmlAnchor .= sprintf(' href="%s"', $url);
             }
             if (!empty($this->target)) {
-                $htmlAnchor .= ' target="'.$this->target.'"';
+                $htmlAnchor .= sprintf(' target="%s"', $this->target);
             }
+        }
+        if (!empty($this->itemprop)) {
+            $htmlAnchor .= sprintf(' itemprop="%s"', $this->itemprop);
+        }
+        if (!empty($this->rel)) {
+            $htmlAnchor .= sprintf(' rel="%s"', $this->rel);
         }
         $htmlAnchor .= '>';
         if (('0' == $this->text) || (!empty($this->text))) {
