@@ -569,8 +569,7 @@ class PMF_Link
                                 (isset($getParams[self::PMF_LINK_GET_CATEGORY]) && 
                                 (0 == $getParams[self::PMF_LINK_GET_CATEGORY]))) {
                                 $url .= self::PMF_LINK_HTML_SHOWCAT;
-                            }
-                            else {
+                            } else {
                                 $url .= self::PMF_LINK_CATEGORY . 
                                         $getParams[self::PMF_LINK_GET_CATEGORY];
                                 if (isset($getParams[self::PMF_LINK_GET_PAGE])) {
@@ -578,7 +577,7 @@ class PMF_Link
                                             $getParams[self::PMF_LINK_GET_PAGE];
                                 }
                                 $url .= self::PMF_LINK_HTML_SLASH . 
-                                        $this->getSEOItemTitle() . 
+                                        $this->getSEOItemTitle() .
                                         self::PMF_LINK_HTML_EXTENSION;
                             }
                             break;

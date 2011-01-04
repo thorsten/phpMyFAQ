@@ -15,7 +15,7 @@
  * under the License.
  *
  * @category  phpMyFAQ
- * @package   Administraion
+ * @package   Administration
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2011 phpMyFAQ Team
