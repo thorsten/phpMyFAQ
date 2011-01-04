@@ -18,7 +18,7 @@
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
@@ -60,12 +60,16 @@ if ($permission['viewlog']) {
         $session->deleteSessions($first, $last);
     }
 ?>
-    <h2><?php print $PMF_LANG["ad_stat_sess"]; ?></h2>
+        <header>
+            <h2><?php print $PMF_LANG["ad_stat_sess"]; ?></h2>
+        </header>
 
-    <form action="?action=sessionbrowse" method="post" style="display: inline;">
-    <fieldset>
-    <legend><?php print $PMF_LANG["ad_stat_sess"]; ?></legend>
-        <label class="left"><?php print $PMF_LANG["ad_stat_days"]; ?>:</label>
+        <form action="?action=sessionbrowse" method="post" style="display: inline;">
+        <fieldset>
+            <legend><?php print $PMF_LANG["ad_stat_sess"]; ?></legend>
+            
+            <p>
+                <label><?php print $PMF_LANG["ad_stat_days"]; ?>:</label>
 <?php
     $danz  = 0;
     $first = 9999999999999999999999999;
@@ -86,14 +90,20 @@ if ($permission['viewlog']) {
 
     print $danz;
 ?>
-        <br />
-        <label class="left"><?php print $PMF_LANG["ad_stat_vis"]; ?>:</label>
-        <?php print $vanz = $session->getNumberOfSessions(); ?><br />
+            </p>
 
-        <label class="left"><?php print $PMF_LANG["ad_stat_vpd"]; ?>:</label>
-        <?php print (($danz != 0) ? round(($vanz / $danz),2) : 0); ?><br />
+            <p>
+                <label><?php print $PMF_LANG["ad_stat_vis"]; ?>:</label>
+                <?php print $vanz = $session->getNumberOfSessions(); ?>
+            </p>
 
-        <label class="left"><?php print $PMF_LANG["ad_stat_fien"]; ?>:</label>
+            <p>
+                <label><?php print $PMF_LANG["ad_stat_vpd"]; ?>:</label>
+                <?php print (($danz != 0) ? round(($vanz / $danz),2) : 0); ?>
+            </p>
+
+            <p>
+                <label><?php print $PMF_LANG["ad_stat_fien"]; ?>:</label>
 <?php
     if (is_file(PMF_ROOT_DIR."/data/tracking".date("dmY", $first))) {
         $fp = @fopen(PMF_ROOT_DIR."/data/tracking".date("dmY", $first), "r");
@@ -104,8 +114,10 @@ if ($permission['viewlog']) {
         print $PMF_LANG["ad_sess_noentry"];
     }
 ?>
-        <br />
-        <label class="left"><?php print $PMF_LANG["ad_stat_laen"]; ?>:</label>
+            </p>
+
+            <p>
+                <label><?php print $PMF_LANG["ad_stat_laen"]; ?>:</label>
 <?php
     if (is_file(PMF_ROOT_DIR."/data/tracking".date("dmY", $last))) {
         $fp = fopen(PMF_ROOT_DIR."/data/tracking".date("dmY", $last), "r");
@@ -132,8 +144,11 @@ if ($permission['viewlog']) {
     closedir($dir);
     sort($trackingDates);
 ?>
-        <label class="left"><?php print $PMF_LANG["ad_stat_browse"]; ?>:</label>
-        <select name="day" size="1">
+            </p>
+
+            <p>
+                <label><?php print $PMF_LANG["ad_stat_browse"]; ?>:</label>
+                <select name="day" size="1">
 <?php
     foreach ($trackingDates as $trackingDate) {
         printf('<option value="%d"', $trackingDate);
@@ -145,20 +160,23 @@ if ($permission['viewlog']) {
         print "</option>\n";
     }
 ?>
-        </select><br />
+                </select>
+            </p>
 
-        <div align="center">
-        <input class="submit" type="submit" name="statbrowse" value="<?php print $PMF_LANG["ad_stat_ok"]; ?>" />
-        </div>
+            <p>
+                <input class="submit" type="submit" name="statbrowse" value="<?php print $PMF_LANG["ad_stat_ok"]; ?>" />
+            </p>
 
-    </fieldset>
-    </form>
+        </fieldset>
+        </form>
 
-    <form action="?action=viewsessions" method="post" style="display: inline;">
-    <fieldset>
-    <legend><?php print $PMF_LANG['ad_stat_management']; ?></legend>
-        <label class="left"><?php print $PMF_LANG['ad_stat_choose']; ?>:</label>
-        <select name="month" size="1">
+        <form action="?action=viewsessions" method="post" style="display: inline;">
+        <fieldset>
+            <legend><?php print $PMF_LANG['ad_stat_management']; ?></legend>
+
+            <p>
+                <label><?php print $PMF_LANG['ad_stat_choose']; ?>:</label>
+                <select name="month" size="1">
 <?php
     $oldValue = mktime(0, 0, 0, 1, 1, 1970);
     $isFirstDate = true;
@@ -179,14 +197,14 @@ if ($permission['viewlog']) {
         }
     }
 ?>
-        </select><br />
+                </select>
+            </p>
 
-        <div align="center">
-        <input class="submit" type="submit" name="statdelete" value="<?php print $PMF_LANG['ad_stat_delete']; ?>" />
-        </div>
-
-    </fieldset>
-    </form>
+            <p>
+            <input class="submit" type="submit" name="statdelete" value="<?php print $PMF_LANG['ad_stat_delete']; ?>" />
+            </p>
+        </fieldset>
+        </form>
 <?php
 } else {
     print $PMF_LANG["err_NotAuth"];

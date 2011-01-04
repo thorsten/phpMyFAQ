@@ -18,7 +18,7 @@
  * @package   Administration
  * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-03-30
@@ -46,8 +46,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($permission['viewlog']) {
-	
-	printf('<h2>%s</h2>', $PMF_LANG['ad_menu_searchstats']);
+
+    printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_searchstats']);
 
     $perpage = 15;
     $pages   = PMF_Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
@@ -66,29 +66,28 @@ if ($permission['viewlog']) {
 
     $PageSpan = PageSpan("<a href=\"?action=searchstats&amp;pages=".$pages."&amp;page=<NUM>\">", 1, $pages, $page);
 ?>
-<table class="list">
-<thead>
-<tr>
-	<th class="list"><?php print $PMF_LANG['ad_searchstats_search_term'] ?></th>
-	<th class="list"><?php print $PMF_LANG['ad_searchstats_search_term_count'] ?></th>
-	<th class="list"><?php print $PMF_LANG['ad_searchstats_search_term_lang'] ?></th>
-	<th class="list"><?php print $PMF_LANG['ad_searchstats_search_term_percentage'] ?></th>
-</tr>
-</thead>
-   <tfoot>
-       <tr>
-           <td class="list" colspan="4"><?php print $PageSpan; ?></td>
-       </tr>
-   </tfoot>
-<tbody>
+        <table>
+        <thead>
+        <tr>
+            <th><?php print $PMF_LANG['ad_searchstats_search_term'] ?></th>
+            <th><?php print $PMF_LANG['ad_searchstats_search_term_count'] ?></th>
+            <th><?php print $PMF_LANG['ad_searchstats_search_term_lang'] ?></th>
+            <th><?php print $PMF_LANG['ad_searchstats_search_term_percentage'] ?></th>
+        </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <td colspan="4"><?php print $PageSpan; ?></td>
+            </tr>
+        </tfoot>
+        <tbody>
 <?php 
 
-	$counter = $displayedCounter = 0;
+    $counter = $displayedCounter = 0;
+    $self    = substr(__FILE__, strlen($_SERVER['DOCUMENT_ROOT']));
 
-	$self = substr(__FILE__, strlen($_SERVER['DOCUMENT_ROOT']));
-	
-	foreach($searchesList as $searchItem) {
-		
+    foreach($searchesList as $searchItem) {
+
         if ($displayedCounter >= $perpage) {
             $displayedCounter++;
             continue;
@@ -102,17 +101,17 @@ if ($permission['viewlog']) {
         
         $num = round($searchItem['number']*100/$searchesCount, 2);
 ?>
-<tr>
-	<td class="list"><?php print PMF_String::htmlspecialchars($searchItem['searchterm']);  ?></td>
-	<td class="list"><?php print $searchItem['number'] ?></td>
-	<td class="list"><?php print $languageCodes[PMF_String::strtoupper($searchItem['lang'])] ?></td>
-	<td class="list"><img src="stat.search.php?num=<?php print $num ?>" alt="<?php print $num ?>%" title="<?php print $num ?>%" /></td>
-</tr>
+        <tr>
+            <td><?php print PMF_String::htmlspecialchars($searchItem['searchterm']);  ?></td>
+            <td><?php print $searchItem['number'] ?></td>
+            <td><?php print $languageCodes[PMF_String::strtoupper($searchItem['lang'])] ?></td>
+            <td><img src="stat.search.php?num=<?php print $num ?>" alt="<?php print $num ?>%" title="<?php print $num ?>%" /></td>
+        </tr>
 <?php
 	}
 ?>
-</tbody>
-</table>
+        </tbody>
+        </table>
 <?php 
 
 } else {
