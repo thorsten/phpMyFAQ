@@ -235,9 +235,9 @@ nav ul li.selected a {
 #content {
     display: table; width: 960px; margin: 88px auto 0; }
 #leftContent {
-    display: table-cell; width: 200px; vertical-align: top; padding-top: 10px; }
+    display: table-cell; width: 200px; vertical-align: top; padding-top: 11px; }
 #mainContent {
-    display: table-cell; width: 560px; padding-right: 22px; vertical-align: top; padding-top: 10px; }
+    display: table-cell; width: 560px; vertical-align: top; padding: 11px 22px 0 11px; }
 #mainContent h2 {
     display: block; padding-bottom: 22px; }
 #mainContent p, ul, ol, table {
@@ -278,6 +278,8 @@ aside {
 aside section {
     margin: 11px 0 0 11px; padding: 6px 11px; background: url(../images/search_background.png) repeat-x;
     border-radius: 11px; -moz-border-radius: 11px; -webkit-border-radius: 11px; }
+aside section h3 {
+    font-size: 16px; }
 aside section ul li a, aside section ul li a:visited {
     display: block; }
 aside section ul li a:hover {
