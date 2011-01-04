@@ -61,8 +61,8 @@ tinyMCE.init({
     // General options
     mode     : "exact",
     language : "<?php print (PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en'); ?>",
-    elements : "content",
-    width    : "720",
+    elements : "answer",
+    width    : "640",
     height   : "480",
     theme    : "advanced",
     plugins  : "spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,syntaxhl,phpmyfaq",
@@ -85,7 +85,7 @@ tinyMCE.init({
     file_browser_callback : "ajaxfilemanager",
 
     // Example content CSS (should be your site CSS)
-    content_css : "../template/<?php print PMF_Template::getTplSetName(); ?>/style.css",
+    content_css : "../template/<?php print PMF_Template::getTplSetName(); ?>/css/style.css",
 
     // Drop lists for link/image/media/template dialogs
     template_external_list_url : "js/template_list.js",

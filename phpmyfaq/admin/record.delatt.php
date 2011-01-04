@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
+printf("<header><h2>%s</h2></header>\n", $PMF_LANG['ad_entry_aor']);
 
 if ($permission["delatt"]) {
 

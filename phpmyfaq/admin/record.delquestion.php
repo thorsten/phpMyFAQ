@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
@@ -46,36 +46,36 @@ if ($permission['delquestion']) {
             }
         }
 
-        printf("<h2>%s</h2>", $PMF_LANG['msgOpenQuestions']);
+        printf("<header><h2>%s</h2></header>", $PMF_LANG['msgOpenQuestions']);
 
         $openquestions = $faq->getAllOpenQuestions();
 
         if (count($openquestions) > 0) {
 ?>
-    <table class="list">
-    <thead>
-        <tr>
-            <th class="list"><?php print $PMF_LANG['ad_entry_author']; ?></th>
-            <th class="list"><?php print $PMF_LANG['ad_entry_theme']; ?></th>
-            <th class="list"><?php print $PMF_LANG['ad_entry_visibility']; ?>?</th>
-            <th class="list"><?php print $PMF_LANG['ad_gen_delete']; ?>?</th>
-        </tr>
-    </thead>
-    <tbody>
+        <table>
+        <thead>
+            <tr>
+                <th><?php print $PMF_LANG['ad_entry_author']; ?></th>
+                <th><?php print $PMF_LANG['ad_entry_theme']; ?></th>
+                <th><?php print $PMF_LANG['ad_entry_visibility']; ?>?</th>
+                <th><?php print $PMF_LANG['ad_gen_delete']; ?>?</th>
+            </tr>
+        </thead>
+        <tbody>
 <?php
             foreach ($openquestions as $question) {
 ?>
         <tr>
-            <td class="list"><?php print PMF_Date::createIsoDate($question['date']); ?><br /><a href="mailto:<?php print $question['email']; ?>"><?php print $question['user']; ?></a></td>
-            <td class="list"><?php print $category->categoryName[$question['category']]['name'].":<br />".$question['question']; ?></td>
-            <td class="list"><a href="?action=question&amp;id=<?php print $question['id']; ?>&amp;is_visible=toggle"><?php print (('Y' == $question['is_visible']) ? $PMF_LANG['ad_gen_no'] : $PMF_LANG['ad_gen_yes']); ?>!</a><br /></td>
-            <td class="list"><a href="?action=question&amp;id=<?php print $question['id']; ?>&amp;delete=yes"><?php print $PMF_LANG['ad_gen_delete']; ?>!</a><br /><a href="?action=takequestion&amp;id=<?php print $question['id']; ?>"><?php print $PMF_LANG['ad_ques_take']; ?></a></td>
+            <td><?php print PMF_Date::createIsoDate($question['date']); ?><br /><a href="mailto:<?php print $question['email']; ?>"><?php print $question['user']; ?></a></td>
+            <td><?php print $category->categoryName[$question['category']]['name'].":<br />".$question['question']; ?></td>
+            <td><a href="?action=question&amp;id=<?php print $question['id']; ?>&amp;is_visible=toggle"><?php print (('Y' == $question['is_visible']) ? $PMF_LANG['ad_gen_no'] : $PMF_LANG['ad_gen_yes']); ?>!</a><br /></td>
+            <td><a href="?action=question&amp;id=<?php print $question['id']; ?>&amp;delete=yes"><?php print $PMF_LANG['ad_gen_delete']; ?>!</a><br /><a href="?action=takequestion&amp;id=<?php print $question['id']; ?>"><?php print $PMF_LANG['ad_ques_take']; ?></a></td>
         </tr>
 <?php
             }
 ?>
-    </tbody>
-    </table>
+        </tbody>
+        </table>
 <?php
         } else {
             print $PMF_LANG['msgNoQuestionsAvailable'];
