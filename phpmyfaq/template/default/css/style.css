@@ -231,9 +231,9 @@ nav ul li.selected a {
     display: block; padding-bottom: 22px; }
 #mainContent p {
     padding-bottom: 11px; }
-#mainContent p.comment {
-    margin: 5px; padding: 5px; background-color: #fff; border: 1px solid #d7d7d7; border-radius: 5px; 
-    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#mainContent p.comment { 
+	padding: 5px; background-color: #fff; border: 1px solid #d7d7d7; border-radius: 5px; 
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; margin: 5px 0; }
 #mainContent p.comment img {
     float: right; }
 
@@ -263,7 +263,28 @@ nav ul li.selected a {
     -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 #social {
     margin: auto; }
+#faqTabs {
+	width: 100%; margin-bottom: 11px; }
+#faqTabs ul.faqTabNav {
+	list-style-type: none; margin: 0; padding: 0; width: 100%; overflow: hidden; border-bottom: 2px solid #d7d7d7; }
+#faqTabs ul.faqTabNav a {
+	display: block; width: 100%; margin-right: 5px; font-size: 12px; text-decoration: none; color: #333; }
+#faqTabs ul.faqTabNav li {
+	float: left; margin: 0 4px 0 0; padding: 1px; text-align: center; background-color: #fff; 
+	border-top: 1px solid #d7d7d7; border-left: 1px solid #d7d7d7; border-right: 1px solid #d7d7d7; 
+	border-top-left-radius: 3px; -moz-border-radius-topleft: 3px; border-top-right-radius: 3px; 
+	-moz-border-radius-topright: 3px; }
+#faqTabs ul.faqTabNav li:hover {
+    background: #d7d7d7; }
+.faqTabContent {
+    position: fixed; display: none; z-index: 100; background-color: #d7d7d7; padding: 5px; width: 444px; 
+    opacity:0.9; color: #222; border: 1px solid transparent;
+    border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; border-bottom-right-radius: 5px; 
+	-moz-border-radius-bottomright: 5px; }
 
+
+
+/* Right panel */
 aside {
     display: table-cell; width: 300px; padding-top: 5px; background: url(../images/sidebar_background.png) top left; }
 aside section {

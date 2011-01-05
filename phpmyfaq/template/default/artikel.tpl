@@ -6,7 +6,6 @@
                 <div id="solution_id">ID #{solution_id}</div>
                 <h2>{writeThema}</h2>
             </header>
-
             
             <article>
             {writeContent}
@@ -14,50 +13,75 @@
             
             <!-- Article Categories Listing -->
             {writeArticleCategories}
-            <!-- /Article Categories Listing -->
             
             <!-- Tags -->
             <p><strong>{writeTagHeader}</strong> {writeArticleTags}</p>
-            <!-- /Tags -->
 
             <!-- Related Articles -->
             <p><strong>{writeRelatedArticlesHeader}</strong>{writeRelatedArticles}</p>
-            <!-- / Related Articles -->
 
-            <!-- Article Info -->
-            <p>{writeDateMsg}<br />{writeAuthor}<br />{writeRevision}<br />{editThisEntry}</p>
-            <!-- /Article Info -->
+            <div id="faqTabs">
+                <ul class="faqTabNav">
+                    <li>
+                        <a href="javascript:void(0);" onmouseover="showFaqPopup('authorInfo')"
+                           onmouseout="hideFaqPopup('authorInfo')">
+                            About this FAQ
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" onmouseover="showFaqPopup('votingForm')"
+                           onmouseout="hideFaqPopup('votingForm')">
+                            Rate this FAQ
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" onmouseover="showFaqPopup('switchAvailableLanguage')"
+                           onmouseout="hideFaqPopup('switchAvailableLanguage')">
+                            Change language
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" onmouseover="showFaqPopup('addTranslation')"
+                           onmouseout="hideFaqPopup('addTranslation')">
+                            Translate this FAQ
+                        </a>
+                    </li>
+                </ul>
+                <div class="faqTabContent" id="authorInfo" onmouseover="showFaqPopup('authorInfo')"
+                     onmouseout="hideFaqPopup('authorInfo')" style="display: none;">
+                    {writeDateMsg}<br />{writeAuthor}<br />{writeRevision}<br />{editThisEntry}
+                </div>
+                <div class="faqTabContent" id="votingForm" style="display: none;">
+                    <form action="{saveVotingPATH}" method="post" style="display: inline;">
+                    <fieldset>
+                        <legend>{msgVoteUseability}</legend>
+                        <input type="hidden" name="artikel" value="{saveVotingID}" />
 
-            {switchLanguage}
-            
-            <!-- Translation Form -->
-            <div class="translation">
-            {translationForm}
+                        <p align="center"><strong>{msgAverageVote}</strong> {printVotings}</p>
+                        <p align="center">{msgVoteBad}
+                        <input class="radio" type="radio" name="vote" value="1" /> 1
+                        <input class="radio" type="radio" name="vote" value="2" /> 2
+                        <input class="radio" type="radio" name="vote" value="3" /> 3
+                        <input class="radio" type="radio" name="vote" value="4" /> 4
+                        <input class="radio" type="radio" name="vote" value="5" /> 5
+                        {msgVoteGood}<br />
+                        <input class="submit voting" type="submit" name="submit" value="{msgVoteSubmit}" />
+                        </p>
+                    </fieldset>
+                    </form>
+                </div>
+                <div class="faqTabContent" id="switchAvailableLanguage" style="display: none;">
+                    {switchLanguage}
+                </div>
+                <div class="faqTabContent" id="addTranslation" style="display: none;">
+                    {msgTranslate}
+                    <form action="{translationUrl}" method="post">
+                        {languageSelection}
+                        <input type="submit" name="submit" value="{msgTranslateSubmit}" />
+                    </form>
+                </div>
             </div>
-            <!-- /Translation Form -->
 
-            <!-- Voting Form -->
-            <div id="voting">
-                <form action="{saveVotingPATH}" method="post" style="display: inline;">
-                <fieldset>
-                    <legend>{msgVoteUseability}</legend>
-                    <input type="hidden" name="artikel" value="{saveVotingID}" />
-
-                    <p align="center"><strong>{msgAverageVote}</strong> {printVotings}</p>
-                    <p align="center">{msgVoteBad}
-                    <input class="radio" type="radio" name="vote" value="1" /> 1
-                    <input class="radio" type="radio" name="vote" value="2" /> 2
-                    <input class="radio" type="radio" name="vote" value="3" /> 3
-                    <input class="radio" type="radio" name="vote" value="4" /> 4
-                    <input class="radio" type="radio" name="vote" value="5" /> 5
-                    {msgVoteGood}<br />
-                    <input class="submit voting" type="submit" name="submit" value="{msgVoteSubmit}" />
-                    </p>
-                </fieldset>
-                </form>
-            </div>
-            <!-- /Voting Form -->
-        
             <p>{writeCommentMsg}</p>
 
             <!-- Comment Form -->

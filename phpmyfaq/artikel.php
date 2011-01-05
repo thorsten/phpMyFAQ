@@ -243,14 +243,13 @@ if ($maxVisits - $minVisits > 0) {
 }
 $faqPopularity = $currVisits.'/'.(int)$percentage.'%';
 
-$translationForm = '';
-if (count($arrLanguage) < count(PMF_Language::getAvailableLanguages())) {
-    $translationUrl = sprintf(str_replace('%', '%%', PMF_Link::getSystemRelativeUri('index.php')).'index.php?%saction=translate&amp;cat=%s&amp;id=%d&amp;srclang=%s', $sids, $currentCategory, $faq->faqRecord['id'], $lang);
-    $translationForm = '
-        <form action="'.$translationUrl.'" method="post" style="display: inline;">
-            <img src="images/translate.gif" alt="'.$PMF_LANG['msgTranslate'].'" title="'.$PMF_LANG['msgTranslate'].'" width="16" height="16" border="0" /> '.$PMF_LANG['msgTranslate'].' '.PMF_Language::selectLanguages($LANGCODE, false, $arrLanguage, 'translation').' <input class="submit" type="submit" name="submit" value="'.$PMF_LANG['msgTranslateSubmit'].'" />
-        </form>';
-}
+$translationUrl = sprintf(
+    str_replace( '%', '%%', PMF_Link::getSystemRelativeUri('index.php')) . 'index.php?%saction=translate&amp;cat=%s&amp;id=%d&amp;srclang=%s',
+        $sids,
+        $currentCategory,
+        $faq->faqRecord['id'],
+        $lang);
+
 
 
 // Set the template variables
@@ -270,7 +269,10 @@ $tpl->processTemplate ("writeContent", array(
     'writeRevision'                 => $PMF_LANG['ad_entry_revision'] . ': 1.' . $faq->faqRecord['revision_id'],
     'writeAuthor'                   => $PMF_LANG['msgAuthor'] . ': ' . $faq->faqRecord['author'],
     'editThisEntry'                 => $editThisEntry,
-    'translationForm'               => $translationForm,
+    'msgTranslate'                  => $PMF_LANG['msgTranslate'],
+    'translationUrl'                => $translationUrl,
+    'languageSelection'             => PMF_Language::selectLanguages($LANGCODE, false, $arrLanguage, 'translation'),
+    'msgTranslateSubmit'            => $PMF_LANG['msgTranslateSubmit'],
     'saveVotingPATH'                => sprintf(str_replace('%', '%%', PMF_Link::getSystemRelativeUri('index.php')).'index.php?%saction=savevoting', $sids),
     'saveVotingID'                  => $faq->faqRecord['id'],
     'saveVotingIP'                  => $_SERVER['REMOTE_ADDR'],

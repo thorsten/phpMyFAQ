@@ -301,3 +301,19 @@ $('#instantform').submit(function()
 {
     return false;
 });
+
+/**
+ *
+ */
+function showFaqPopup(div)
+{
+    $('#' + div).fadeIn('slow');
+}
+
+/**
+ *
+ */
+function hideFaqPopup(div)
+{
+    $('#' + div).hide();
+}
