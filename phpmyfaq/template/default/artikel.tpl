@@ -45,7 +45,11 @@
 
                     <p align="center"><strong>{msgAverageVote}</strong> {printVotings}</p>
                     <p align="center">{msgVoteBad}
-                    <input name="vote" type="range" min="0" max="5" step="1" value="5">
+                    <input class="radio" type="radio" name="vote" value="1" /> 1
+                    <input class="radio" type="radio" name="vote" value="2" /> 2
+                    <input class="radio" type="radio" name="vote" value="3" /> 3
+                    <input class="radio" type="radio" name="vote" value="4" /> 4
+                    <input class="radio" type="radio" name="vote" value="5" /> 5
                     {msgVoteGood}<br />
                     <input class="submit voting" type="submit" name="submit" value="{msgVoteSubmit}" />
                     </p>
