@@ -367,7 +367,8 @@ if ($action != 'main') {
 //
 // Set right column
 //
-// Check in any tags with at leat one entry exist
+// Check in any tags with at least one entry exist
+//
 $hasTags = $oTag->existTagRelations();
 if ($hasTags && (($action == 'artikel') || ($action == 'show'))) {
     $right_tpl = $action == 'artikel' ? 'catandtag.tpl' : 'tagcloud.tpl';
@@ -377,15 +378,7 @@ if ($hasTags && (($action == 'artikel') || ($action == 'show'))) {
 
 //
 // Load template files and set template variables
-// Check on mobile devices first, if iPhone detected, switch to iPhone layout
 //
-/*
-if (stristr($_SERVER['HTTP_USER_AGENT'], 'iPhone')) {
-	$templateSet = 'mobile';
-} else {
-	$templateSet = $faqconfig->get('main.templateSet');
-}
-*/
 $tpl = new PMF_Template(array('index'        => 'index.tpl',
                               'loginBox'     => $login_tpl,
                               'rightBox'     => $right_tpl,
@@ -562,14 +555,46 @@ if (!isset($latestEntriesParams['error'])) {
     );
 }
 
-$tpl->processTemplate('rightBox', array(
-    'writeTopTenHeader'   => $PMF_LANG['msgTopTen'],
-    'writeNewestHeader'   => $PMF_LANG['msgLatestArticles'],
-    'writeTagCloudHeader' => $PMF_LANG['msg_tags'],
-    'writeTags'           => $oTag->printHTMLTagsCloud(),
-    'msgAllCatArticles'   => $PMF_LANG['msgAllCatArticles'],
-    'allCatArticles'      => $faq->showAllRecordsWoPaging($cat))
+if ('artikel' == $action || 'show' == $action) {
+    // We need some Links from social networks
+    $faqServices = new PMF_Services();
+    $faqServices->setCategoryId($cat);
+    $faqServices->setFaqId($id);
+    $faqServices->setLanguage($lang);
+    $faqServices->setQuestion($title);
+
+    $faqHelper = PMF_Helper_Faq::getInstance();
+    
+    $tpl->processBlock(
+        'rightBox', 'socialLinks', array(
+            'writeDiggMsgTag'        => 'Digg it!',
+            'writeFacebookMsgTag'    => 'Share on Facebook',
+            'writeTwitterMsgTag'     => 'Share on Twitter',
+            'writeDeliciousMsgTag'   => 'Bookmark this on Delicious',
+            'writePDFTag'            => $PMF_LANG['msgPDF'],
+            'writePrintMsgTag'       => $PMF_LANG['msgPrintArticle'],
+            'writeSend2FriendMsgTag' => $PMF_LANG['msgSend2Friend'],
+            'link_digg'              => $faqServices->getDiggLink(),
+            'link_facebook'          => $faqServices->getShareOnFacebookLink(),
+            'link_twitter'           => $faqServices->getShareOnTwitterLink(),
+            'link_delicious'         => $faqServices->getBookmarkOnDeliciousLink(),
+            'link_email'             => $faqServices->getSuggestLink(),
+            'link_pdf'               => $faqServices->getPdfLink(),
+            'facebookeLikeButton'    => $faqHelper->renderFacebookLikeButton($faqServices->getShareOnFacebookLink()),
+        )
     );
+}
+
+$tpl->processTemplate(
+    'rightBox', array(
+        'writeTopTenHeader'   => $PMF_LANG['msgTopTen'],
+        'writeNewestHeader'   => $PMF_LANG['msgLatestArticles'],
+        'writeTagCloudHeader' => $PMF_LANG['msg_tags'],
+        'writeTags'           => $oTag->printHTMLTagsCloud(),
+        'msgAllCatArticles'   => $PMF_LANG['msgAllCatArticles'],
+        'allCatArticles'      => $faq->showAllRecordsWoPaging($cat)
+    )
+);
 
 $tpl->includeTemplate('rightBox', 'index');
 

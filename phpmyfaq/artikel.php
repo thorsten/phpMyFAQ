@@ -216,21 +216,6 @@ if (($faq->faqRecord['active'] != 'yes') || ('n' == $faq->faqRecord['comment']) 
         $PMF_LANG['msgWriteComment']);
 }
 
-// Build Digg it! URL
-$diggItUrl = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s&amp;title=%s',
-    PMF_Link::getSystemUri(),
-    $currentCategory,
-    $faq->faqRecord['id'],
-    $lang,
-    urlencode($thema));
-
-// Build Facebook URL
-$facebookUrl = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s',
-    PMF_Link::getSystemUri(),
-    $currentCategory,
-    $faq->faqRecord['id'],
-    $lang);
-
 // Create commented out HTML for microsummary
 $allVisitsData  = $faqvisits->getAllData();
 $faqPopularity  = '';
@@ -267,13 +252,11 @@ if (count($arrLanguage) < count(PMF_Language::getAvailableLanguages())) {
         </form>';
 }
 
-$faqHelper = PMF_Helper_Faq::getInstance();
 
 // Set the template variables
 $tpl->processTemplate ("writeContent", array(
     'writeRubrik'                   => $categoryName,
     'solution_id'                   => $faq->faqRecord['solution_id'],
-    'facebookeLikeButton'           => $faqHelper->renderFacebookLikeButton($facebookUrl),
     'writeThema'                    => $thema,
     'writeArticleCategoryHeader'    => $PMF_LANG['msgArticleCategories'],
     'writeArticleCategories'        => $writeMultiCategories,
@@ -287,15 +270,6 @@ $tpl->processTemplate ("writeContent", array(
     'writeRevision'                 => $PMF_LANG['ad_entry_revision'] . ': 1.' . $faq->faqRecord['revision_id'],
     'writeAuthor'                   => $PMF_LANG['msgAuthor'] . ': ' . $faq->faqRecord['author'],
     'editThisEntry'                 => $editThisEntry,
-    'writeDiggMsgTag'               => 'Digg it!',
-    'link_digg'                     => sprintf('http://digg.com/submit?phase=2&amp;url=%s', urlencode($diggItUrl)),
-    'writeFacebookMsgTag'           => 'Share on Facebook',
-    'link_facebook'                 => sprintf('http://www.facebook.com/sharer.php?u=%s', urlencode($facebookUrl)),
-    'link_email'                    => sprintf(str_replace('%', '%%', PMF_Link::getSystemRelativeUri('index.php')).'index.php?%saction=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s', $sids, $currentCategory, $faq->faqRecord['id'], $lang),
-    'link_pdf'                      => sprintf(str_replace('%', '%%', PMF_Link::getSystemRelativeUri('index.php')).'pdf.php?cat=%d&amp;id=%d&amp;artlang=%s', $currentCategory, $faq->faqRecord['id'], $lang),
-    'writePDFTag'                   => $PMF_LANG['msgPDF'],
-    'writePrintMsgTag'              => $PMF_LANG['msgPrintArticle'],
-    'writeSend2FriendMsgTag'        => $PMF_LANG['msgSend2Friend'],
     'translationForm'               => $translationForm,
     'saveVotingPATH'                => sprintf(str_replace('%', '%%', PMF_Link::getSystemRelativeUri('index.php')).'index.php?%saction=savevoting', $sids),
     'saveVotingID'                  => $faq->faqRecord['id'],

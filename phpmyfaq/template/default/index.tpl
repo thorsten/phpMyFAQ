@@ -85,7 +85,7 @@
         [globalSearchBox]
         <div id="searchBox">
             <form id="search" action="{writeSendAdress}" method="get">
-                <input type="text" name="search" id="searchfield" size="30">
+                <input type="search" name="search" id="searchfield" size="30">
                 <input type="hidden" name="searchcategory" value="{categoryId}">
                 <input type="hidden" name="action" value="search">
                 <input type="submit" name="submit" value="{searchBox}">
@@ -97,7 +97,7 @@
         <div id="searchBox">
             <form id="instantform" action="?action=instantresponse" method="post">
                 <input type="hidden" name="ajaxlanguage" id="ajaxlanguage" value="{ajaxlanguage}">
-                <input type="text" name="search" id="instantfield" value="">
+                <input type="search" name="search" id="instantfield" value="">
             </form>
             {msgSearch}
         </div>
