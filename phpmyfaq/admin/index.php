@@ -456,30 +456,35 @@ if (isset($auth) && in_array(true, $permission)) {
             <header>
                 <h2>phpMyFAQ Login</h2>
             </header>
-            <form action="index.php" method="post">
 <?php
-    if ($action == 'logout') {
-        printf("            <p>%s</p>\n", $PMF_LANG['ad_logout']);
-    }
-    if (isset($error)) {
-        printf("            <p><strong>%s</strong></p>\n", $error);
+    if (isset($error) && 0 < strlen($error)) {
+        $message = sprintf('<p class="error">%s</p>', $error);
     } else {
-        printf("            <p><strong>%s</strong></p>\n", $PMF_LANG['ad_auth_insert']);
+        $message = sprintf('<p>%s</p>', $PMF_LANG['ad_auth_insert']);
     }
+    if ($action == 'logout') {
+        $message = sprintf('<p class="success">%s</p>', $PMF_LANG['ad_logout']);
+    }
+    
     if (isset($_SERVER['HTTPS']) || !$faqconfig->get('main.useSslForLogins')) {
 ?>
+
+            <?php print $message ?>
+
+            <form action="index.php" method="post">
+
                 <p>
                     <label for="faqusername"><?php print $PMF_LANG["ad_auth_user"]; ?></label>
-                    <input type="text" name="faqusername" id="faqusername" size="20" required="required" />
+                    <input type="text" name="faqusername" id="faqusername" size="30" required="required" />
                 </p>
 
                 <p>
                     <label for="faqpassword"><?php print $PMF_LANG["ad_auth_passwd"]; ?></label>
-                    <input type="password" size="20" name="faqpassword" id="faqpassword" required="required" />
+                    <input type="password" size="30" name="faqpassword" id="faqpassword" required="required" />
                 </p>
 
                 <p>
-                    <input class="submit" style="margin-left: 190px;" type="submit" value="<?php print $PMF_LANG["ad_auth_ok"]; ?>" />
+                    <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_auth_ok"]; ?>" />
                     <input class="submit" type="reset" value="<?php print $PMF_LANG["ad_auth_reset"]; ?>" />
                 </p>
                     
