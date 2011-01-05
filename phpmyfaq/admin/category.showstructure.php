@@ -37,7 +37,7 @@ if ($permission['editcateg']) {
 
     $category        = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $currentLink     = $_SERVER['SCRIPT_NAME'];
-    $actual_language = $languageCodes[strtoupper($LANGCODE)];
+    $currentLanguage = $languageCodes[strtoupper($LANGCODE)];
     $all_languages   = array();
     $all_lang        = array();
     $showcat         = PMF_Filter::filterInput(INPUT_POST, 'showcat', FILTER_SANITIZE_STRING);
@@ -64,26 +64,28 @@ if ($permission['editcateg']) {
 
     $category->getMissingCategories();
     $category->buildTree();
-
-    print "\n\n<table class=\"ssc\">\n";
-
-    print "<tr>\n";
-    print "<td class=\"sscTitle\">" . $actual_language . "</th>\n";
-
-    // get languages in use for all categories
-    $all_languages = PMF_Utils::languageAvailable(0, $table='faqcategories');
-    foreach ($all_languages as $lang) {
-       $all_lang[$lang] = $languageCodes[strtoupper($lang)];
-    }
-    asort($all_lang);
-    foreach($all_lang as $lang => $language) {
-       if ($language != $actual_language) {
-          print "<td class=\"sscTitle\">" . $language . "</td>\n";
-       }
-    }
-
-    print "</tr>\n";
-
+?>
+        <table class="list">
+        <thead>
+            <tr>
+                <th><?php print $currentLanguage ?></th>
+                <?php
+                // get languages in use for all categories
+                $all_languages = PMF_Utils::languageAvailable(0, $table='faqcategories');
+                foreach ($all_languages as $lang) {
+                   $all_lang[$lang] = $languageCodes[strtoupper($lang)];
+                }
+                asort($all_lang);
+                foreach($all_lang as $lang => $language) {
+                   if ($language != $currentLanguage) {
+                      printf("<th>" . $language . "</th>\n", $language);
+                   }
+                }
+                ?>
+            </tr>
+        </thead>
+        <tbody>
+<?php
     foreach ($category->catTree as $cat) {
 
         print "<tr>\n";
@@ -94,11 +96,9 @@ if ($permission['editcateg']) {
         }
         // category translated in this language?
         ($cat['lang'] == $LANGCODE) ? $catname = $cat['name'] : $catname = $cat['name'].' ('.$languageCodes[strtoupper($cat['lang'])].')';
-        ($cat['lang'] == $LANGCODE) ? $desc = "sscDesc" : $desc = "sscDescNA";
 
         // show category name in actual language
-        printf("<td class=\"%s\">",
-            $desc);
+        print '<td>';
         if ($cat['lang'] != $LANGCODE) {
            // translate category
            printf('<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><img src="images/translate2.gif" width="13" height="16" border="0" title="%s" alt="%s" /></a>',
@@ -119,33 +119,37 @@ if ($permission['editcateg']) {
         $id_languages = $category->getCategoryLanguagesTranslated($cat["id"]);
 
         foreach($all_lang as $lang => $language) {
-           if ($language == $actual_language) {
-              continue;
-           }
-           if (array_key_exists($language,$id_languages)) {
-              printf("<td class=\"sscDesc\" title=\"%s: %s\"><img src=\"images/ok.gif\" width=\"22\" height=\"18\" border=\"0\" title=\"%s: %s\" alt=\"%s: %s\" /></td>\n",
-                  $PMF_LANG["ad_categ_titel"],
-                  PMF_String::preg_replace('/\(.*\)/','',$id_languages[$language]),
-                  $PMF_LANG["ad_categ_titel"],
-                  PMF_String::preg_replace('/\(.*\)/','',$id_languages[$language]),
-                  $PMF_LANG["ad_categ_titel"],
-                  PMF_String::preg_replace('/\(.*\)/','',$id_languages[$language]));
-           }
-           else {
-           print "<td class=\"sscDescNA\">";
-           printf('<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><img src="images/translate2.gif" width="13" height="16" border="0" title="%s" alt="%s" /></a>',
-               $currentLink,
-               $cat['id'],
-               $lang,
-               $PMF_LANG['ad_categ_translate'],
-               $PMF_LANG['ad_categ_translate'],
-               $PMF_LANG['ad_categ_translate']);
-           }
-           print "</td>\n";
+            if ($language == $currentLanguage) {
+                continue;
+            }
+            $spokenLanguage = PMF_String::preg_replace('/\(.*\)/','',$id_languages[$language]);
+            if (array_key_exists($language,$id_languages)) {
+                printf('<td title="%s: %s">',
+                    $PMF_LANG['ad_categ_titel'],
+                    $spokenLanguage);
+                printf('<img src="images/ok.gif" width="22" height="18" border="0" title="%s: %s" alt=%s: %s\" /></td>',
+                    $PMF_LANG['ad_categ_titel'],
+                    $spokenLanguage,
+                    $PMF_LANG['ad_categ_titel'],
+                    $spokenLanguage);
+            } else {
+                printf('<td><a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s">',
+                    $currentLink,
+                    $cat['id'],
+                    $lang,
+                    $PMF_LANG['ad_categ_translate']);
+                printf('<img src="images/translate2.gif" width="13" height="16" border="0" title="%s" alt="%s" /></a>',
+                    $PMF_LANG['ad_categ_translate'],
+                    $PMF_LANG['ad_categ_translate']);
+            }
+            print "</td>\n";
         }
         print "</tr>\n";
     }
-    print "</table>\n";
+?>
+        </tbody>
+        </table>
+<?php
     printf('<p>%s</p>', $PMF_LANG['ad_categ_remark_overview']);
 } else {
     print $PMF_LANG['err_NotAuth'];

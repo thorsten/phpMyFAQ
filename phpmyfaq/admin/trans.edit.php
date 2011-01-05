@@ -88,7 +88,7 @@ printf('<p style="color: red;">%s</p>', $PMF_LANG['msgTransToolNoteFileSaving'])
 $NPluralsErrorReported = false;
 ?>
         <form id="transDiffForm">
-        <table>
+        <table class="list" style="width: 100%">
         <tr>
             <th><?php print $PMF_LANG['msgVariable'] ?></th>
             <th>en</th>

@@ -42,7 +42,7 @@ if ($permission['viewlog']) {
 
     $trackingdata = explode("\n", file_get_contents(PMF_ROOT_DIR.'/data/tracking'.date('dmY', $time)));
 ?>
-        <table>
+        <table class="list" style="width: 100%">
         <tfoot>
             <tr>
                 <td colspan="2"><a href="?action=viewsessions"><?php print $PMF_LANG["ad_sess_back"]; ?></a></td>

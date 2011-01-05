@@ -197,7 +197,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             }
             $userError = $user->error();
             if ($userError != "") {
-                $message .= '<p>ERROR: '.$userError.'</p>';
+                $message .= sprintf('<p class="error">%s</p>', $userError);
             }
         }
     }
@@ -462,14 +462,14 @@ function getUserData(user_id)
             <h2><?php print $PMF_LANG['ad_user']; ?></h2>
         </header>
         <div id="user_message"><?php print $message; ?></div>
-        <table style="width: 760px;">
+        <table class="list" style="width: 100%">
         <thead>
             <tr>
-                <th><?php print $PMF_LANG['ad_entry_id']?>:</th>
-                <th><?php print $PMF_LANG['msgNewContentName']?></th>
+                <th><?php print $PMF_LANG['ad_entry_id'] ?></th>
+                <th><?php print $PMF_LANG['msgNewContentName'] ?></th>
                 <th><?php print $PMF_LANG['ad_user_username'] ?></th>
-                <th><?php print $PMF_LANG['msgNewContentMail']?></th>
-                <th><?php print $PMF_LANG['ad_entry_action']?></th>
+                <th><?php print $PMF_LANG['msgNewContentMail'] ?></th>
+                <th><?php print $PMF_LANG['ad_entry_action'] ?></th>
             </tr>
         </thead>
         <tbody>
@@ -479,8 +479,12 @@ function getUserData(user_id)
                 <td><?php print $user->getUserData('user_id')?></td>
                 <td><?php print $user->getUserData('display_name')?></td>
                 <td><?php print $user->getLogin() ?></td>
-                <td><?php print $user->getUserData('email')?></td>
-                <td><a href="?action=user&amp;user_id=<?php echo $user->getUserData('user_id')?>"><?php echo $PMF_LANG['ad_user_edit']?></a></td>
+                <td>
+                    <a href="mailto:<?php print $user->getUserData('email')?>"><?php print $user->getUserData('email')?></a>
+                </td>
+                <td>
+                    <a href="?action=user&amp;user_id=<?php print $user->getUserData('user_id')?>"><?php print $PMF_LANG['ad_user_edit']?></a>
+                </td>
             </tr>
             <?php } ?>
         

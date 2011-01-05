@@ -66,7 +66,7 @@ if ($permission['viewlog']) {
 
     $PageSpan = PageSpan("<a href=\"?action=searchstats&amp;pages=".$pages."&amp;page=<NUM>\">", 1, $pages, $page);
 ?>
-        <table>
+        <table class="list" style="width: 100%">
         <thead>
         <tr>
             <th><?php print $PMF_LANG['ad_searchstats_search_term'] ?></th>

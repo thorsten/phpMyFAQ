@@ -41,7 +41,7 @@ if ($permission['viewlog']) {
             <h2><?php print "Session ".date("Y-m-d", $day); ?></h2>
         </header>
 
-        <table>
+        <table class="list" style="width: 100%">
         <thead>
             <tr>
                 <th>IP</th>

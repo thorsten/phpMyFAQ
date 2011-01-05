@@ -42,23 +42,27 @@ printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_translations']);
 ?>
         <p><?php print $PMF_LANG['msgChooseLanguageToTranslate'] ?>:</p>
 
-        <table>
-            <?php if(!$isTransDirWritable):
-            print '<tr><td colspan="5"><font color="red">'. $PMF_LANG['msgLangDirIsntWritable'] . "</font></tr></td>";
-            endif; ?>
+        <?php if(!$isTransDirWritable):
+            print '<p class="error">'. $PMF_LANG['msgLangDirIsntWritable'] . "</p>";
+        endif; ?>
+
+        <table class="list" style="width: 100%">
+        <thead>
             <?php if($permission["addtranslation"] && $isTransDirWritable): ?>
             <tr>
-                <td colspan="6">
+                <th colspan="6">
                     <a href="?action=transadd"><?php print $PMF_LANG['msgTransToolAddNewTranslation'] ?></a>
-                </td>
+                </th>
             </tr>
             <?php endif; ?>
             <tr>
-                <td><?php print $PMF_LANG['msgTransToolLanguage'] ?></td>
-                <td colspan="3"><?php print $PMF_LANG['msgTransToolActions'] ?></td>
-                <td><?php print $PMF_LANG['msgTransToolWritable'] ?></td>
-                <td><?php print $PMF_LANG['msgTransToolPercent'] ?></td>
+                <th><?php print $PMF_LANG['msgTransToolLanguage'] ?></th>
+                <th colspan="3"><?php print $PMF_LANG['msgTransToolActions'] ?></th>
+                <th><?php print $PMF_LANG['msgTransToolWritable'] ?></th>
+                <th><?php print $PMF_LANG['msgTransToolPercent'] ?></th>
             </tr>
+        </thead>
+        <tbody>
 <?php
     $sortedLangList = array();
     
@@ -111,6 +115,7 @@ printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_translations']);
         <?php 
     }
 ?>
+        </tbody>
         </table>
         <script>
         /**

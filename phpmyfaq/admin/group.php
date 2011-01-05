@@ -171,7 +171,7 @@ if ($groupAction == 'delete') {
         }
         $userError = $user->error();
         if ($userError != "") {
-            $message .= '<p>ERROR: '.$userError.'</p>';
+            $message .= sprintf('<p class="error">%s</p>', $userError);
         }
     }
 
@@ -211,9 +211,11 @@ if ($groupAction == 'addsave') {
     // display error messages and show form again
     } else {
         $groupAction = 'add';
+        $message = '<p class="error">';
         foreach ($messages as $err) {
-            $message .= '<p class="error">'.$err.'</p>';
+            $message .= $err . '<br />';
         }
+        $message .= '</p>';
     }
 } // end if ($groupAction == 'addsave')
 

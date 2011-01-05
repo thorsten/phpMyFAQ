@@ -74,7 +74,7 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
 
     print sprintf('<p>[ <a href="?action=addglossary">%s</a> ]</p>', $PMF_LANG['ad_glossary_add']);
 
-    print '<table>';
+    print '<table class="list" style="width: 100%">';
     print sprintf("<thead><tr><th class=\"list\">%s</th><th class=\"list\">%s</th><th style=\"width: 16px\">&nbsp;</th></tr></thead>", 
         $PMF_LANG['ad_glossary_item'], 
         $PMF_LANG['ad_glossary_definition']);

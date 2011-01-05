@@ -39,7 +39,7 @@ if (isset($_SESSION['trans'])) {
 printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_translations']);
 ?>
         <form id="newTranslationForm">
-        <table>
+        <table class="list" style="width: 100%">
         <tr>
             <td><?php print $PMF_LANG['msgLanguage'] ?></td>
             <td><select name="translang" id="translang">

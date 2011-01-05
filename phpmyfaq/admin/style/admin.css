@@ -201,7 +201,7 @@ nav ul li a.logout {
     width: 180px; background: #f0f0f0 url(../images/category_background.png) repeat-x; margin-bottom: 15px;
     border: 1px solid #d7d7d7; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 #categories h3, #worklog h3 {
-    padding-top: 5px; padding-left: 10px; padding-bottom: 5px; }
+    padding-top: 5px; padding-left: 5px; padding-bottom: 5px; font-size: 16px; }
 #categories ul {
 	margin: 0 1px 0 1px; list-style: none outside none; padding: 0; }
 #categories ul li {
@@ -226,11 +226,17 @@ nav ul li a.logout {
     display: table-cell; width: 180px; vertical-align: top; padding-top: 11px; }
 #mainContent {
     display: table-cell; width: 800px; vertical-align: top; padding: 11px 22px 0; }
-#mainContent h2 {
+#mainContent section h2, #mainContent section h3 {
     display: block; margin-bottom: 11px; }
 #mainContent p, ul, ol, table {
     padding-bottom: 11px; }
-
+#mainContent p.error { 
+    margin: 10px auto; padding: 10px; background-color: #f97c7c; color: #222; border-radius: 5px; 
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#mainContent p.success { 
+    margin: 10px auto; padding: 10px; background-color: #7dfd77; color: #222; border-radius: 5px; 
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+    
 /* phpMyFAQ forms */
 #mainContent form p {
     display: table; margin-bottom: 11px; padding: 0 11px; }
@@ -258,6 +264,17 @@ nav ul li a.logout {
     -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 #mainContent legend {
     padding: 5px; }
+    
+/* Tables */
+#mainContent table.list {
+    border-collapse: collapse; margin-bottom: 22px; }
+#mainContent table.list th {
+	padding: 8px; background-color: #333; border-top: 2px solid #222; border-bottom: 2px solid #f0f0f0; color: #F67600; 
+	font-size: 14px; text-align: left; }
+#mainContent table.list tr:nth-child(odd) {
+    background-color: #fdfdfd; }
+#mainContent table.list td { 
+	padding: 8px; border-top: 1px solid transparent; border-bottom: 1px solid #333; }
 
 /* User and Group administration */
 #userInterface, #groupInterface {

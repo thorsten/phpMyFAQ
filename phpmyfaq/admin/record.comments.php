@@ -47,7 +47,7 @@ if ($permission['delcomment']) {
         <form id="faqCommentSelection" name="faqCommentSelection" method="post">
         <input type="hidden" name="ajax" value="comment" />
         <input type="hidden" name="ajaxaction" value="delete" />
-        <table>
+        <table class="list" style="width: 100%">
 <?php
         $lastCommentId = 0;
         foreach ($faqcomments as $faqcomment) {
@@ -73,10 +73,10 @@ if ($permission['delcomment']) {
             $lastCommentId = $faqcomment['comment_id'];
         }
 ?>
-        <tr>
-            <td colspan="3"><input class="submit records" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit" /></td>
-        </tr>
         </table>
+        <p>
+            <input class="submit records" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit" />
+        </p>
         </form>
 <?php
     } else {
@@ -91,7 +91,7 @@ if ($permission['delcomment']) {
         <form id="newsCommentSelection" name="newsCommentSelection" method="post">
         <input type="hidden" name="ajax" value="comment" />
         <input type="hidden" name="ajaxaction" value="delete" />
-        <table>
+        <table class="list" style="width: 100%">
 <?php
         foreach ($newscomments as $newscomment) {
 ?>
@@ -107,10 +107,11 @@ if ($permission['delcomment']) {
 <?php
         }
 ?>
-        <tr>
-            <td colspan="3"><input class="submit news" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit" /></td>
-        </tr>
         </table>
+        <p>
+            <input class="submit news" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit" />
+        </p>
+        </form>
 <?php
     } else {
         print '<p><strong>n/a</strong></p>';

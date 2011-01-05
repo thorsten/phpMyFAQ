@@ -337,7 +337,8 @@ if (isset($auth) && in_array(true, $permission)) {
             <header>
                 <h2><?php print $PMF_LANG['ad_pmf_info']; ?></h2>
             </header>
-            <table>
+            <table class="list" style="width: 300px;">
+            <tbody>
                 <tr>
                     <td><strong><a href="?action=viewsessions"><?php print $PMF_LANG["ad_start_visits"]; ?></a></strong></td>
                     <td><?php print $PMF_TABLE_INFO[SQLPREFIX."faqsessions"]; ?></td>
@@ -354,6 +355,7 @@ if (isset($auth) && in_array(true, $permission)) {
                     <td><strong><a href="?action=question"><?php print $PMF_LANG["msgOpenQuestions"]; ?></strong></a></td>
                     <td><?php print $PMF_TABLE_INFO[SQLPREFIX."faqquestions"]; ?></td>
                 </tr>
+            </tbody>
             </table>
         </section>
 
@@ -394,9 +396,10 @@ if (isset($auth) && in_array(true, $permission)) {
             <header>
                 <h3><?php print $PMF_LANG['ad_system_info']; ?></h3>
             </header>
-            <table>
+            <table class="list" style="width: 750px;">
+            <tbody>
                 <tr>
-                    <td><strong>phpMyFAQ Version</strong></td>
+                    <td style="width: 150px;"><strong>phpMyFAQ Version</strong></td>
                     <td>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></td>
                 </tr>
                 <tr>
@@ -420,15 +423,15 @@ if (isset($auth) && in_array(true, $permission)) {
                     <td><?php print ini_get('open_basedir') == 1 ? 'on' : 'off'; ?></td>
                 </tr>
                 <tr>
-                    <td><strong>Database Server</strong></td>
+                    <td><strong>DB Server</strong></td>
                     <td><?php print ucfirst($DB['type']); ?></td>
                 </tr>
                 <tr>
-                    <td><strong>Database Client Version</strong></td>
+                    <td><strong>DB Client Version</strong></td>
                     <td><?php print $db->client_version(); ?></td>
                 </tr>
                 <tr>
-                    <td><strong>Database Server Version</strong></td>
+                    <td><strong>DB Server Version</strong></td>
                     <td><?php print $db->server_version(); ?></td>
                 </tr>
                 <tr>
@@ -439,6 +442,7 @@ if (isset($auth) && in_array(true, $permission)) {
                     <td><strong>PHP Extensions</strong></td>
                     <td><?php print implode(', ', get_loaded_extensions()); ?></td>
                 </tr>
+            </tbody>
             </table>
 
             <div style="font-size: 5px; text-align: right; color: #f5f5f5">NOTE: Art is resistance.</div>

@@ -1,16 +1,5 @@
 /**
- * To change the look and feel, search for the following selectors (Ctrl-F) in this style sheet:
- * 
- * - Font, background color/image: body
- * - Link colors: a:link, a:visited
- * - Hover links color: a:hover
- * - Code color: pre
- * - Title color: #header h1 a
- * - Separation color of navigation menu: #categories li a
- * - Footer color and separator: #footer
- * - Footer link color: #footer a:link, #footer a:visited
- * - RSS button color: a.rss:link, a.rss:visited
- * - Text highlight color: .highlight
+ * phpMyFAQ 2.7 default layout
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -25,10 +14,10 @@
  * @category  phpMyFAQ
  * @package   Layout
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2004-2010 phpMyFAQ Team
+ * @copyright 2010-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2004
+ * @since     2010-01-17
  */
 
 /* extended HTML5 reset */

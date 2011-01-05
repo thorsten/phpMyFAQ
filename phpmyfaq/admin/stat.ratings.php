@@ -41,13 +41,13 @@ if ($permission['viewlog']) {
             <h2><?php print $PMF_LANG["ad_rs"] ?></h2>
         </header>
 
-        <table>
+        <table class="list" style="width: 100%">
 <?php
     foreach ($ratingdata as $data) {
         if ($data['category_id'] != $oldcategory) {
 ?>
         <tr>
-            <th colspan="5"><strong><?php print $category->categoryName[$data['category_id']]['name']; ?></strong></th>
+            <th colspan="5" style="text-align: left;"><strong><?php print $category->categoryName[$data['category_id']]['name']; ?></strong></th>
         </tr>
 <?php
         }
