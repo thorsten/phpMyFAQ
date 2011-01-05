@@ -173,7 +173,7 @@ code {
 
 /* Header */
 #header {
-    width: 960px; margin: 0 auto; padding: 2.5em 0 0 0; }
+    width: 980px; margin: 0 auto; padding: 2.5em 0 0 0; }
 #header h1 {
     font-size: 48px; padding-top: 5px; line-height: .6; }
 #header h1 a:link, header h1 a:visited {
@@ -199,7 +199,7 @@ code {
 nav {
     position: absolute; left: 0; top: 108px; width: 100%; background: url(../images/nav_background.png); }
 nav ul {
-    margin: 0 auto; width: 960px; list-style: none; }
+    margin: 0 auto; width: 980px; list-style: none; }
 nav ul li {
     float: left; }
 nav ul li a, nav ul li a:visited {
@@ -212,35 +212,35 @@ nav ul li.selected a {
 
 /* Categories */
 #categories {
-    width: 190px; background: #f0f0f0 url(../images/category_background.png) repeat-x; margin-bottom: 15px;
+    width: 180px; background: #f0f0f0 url(../images/category_background.png) repeat-x; margin-bottom: 15px;
     border: 1px solid #d7d7d7; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 #categories ul {
 	margin: 0 1px 0 1px; list-style: none outside none; padding: 0; }
 #categories ul li {
 	}
 #categories ul li a {
-	padding-left: 10px; line-height: 30px; font-size: 14px; text-decoration: none; display: block; color: #222; }
+	padding-left: 5px; line-height: 30px; text-decoration: none; display: block; color: #222; }
 #categories ul li a:hover {
 	color: #F67600; }
 #categories a.active {
 	background-color: #fff; font-weight: bold; }
 #categories .subcat li a {
-    padding-left: 20px; }
+    padding-left: 10px; }
 #categories .subcat li li a {
-    padding-left: 30px; }
+    padding-left: 15px; }
 #categories .subcat .active {
 	}
 
 /* Content */
 #content {
-    display: table; width: 960px; margin: 88px auto 0; }
+    display: table; width: 980px; margin: 88px auto 0; }
 #leftContent {
-    display: table-cell; width: 200px; vertical-align: top; padding-top: 11px; }
+    display: table-cell; width: 180px; vertical-align: top; padding-top: 11px; }
 #mainContent {
-    display: table-cell; width: 560px; vertical-align: top; padding: 11px 22px 0 11px; }
+    display: table-cell; width: 500px; vertical-align: top; padding: 11px 22px 0; }
 #mainContent h2 {
     display: block; padding-bottom: 22px; }
-#mainContent p, ul, ol, table {
+#mainContent p {
     padding-bottom: 11px; }
 #mainContent p.comment {
     margin: 5px; padding: 5px; background-color: #fff; border: 1px solid #d7d7d7; border-radius: 5px; 
@@ -274,9 +274,9 @@ nav ul li.selected a {
     -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 
 aside {
-    display: table-cell; width: 200px; background: url(../images/sidebar_background.png) top left; }
+    display: table-cell; width: 300px; padding-top: 5px; background: url(../images/sidebar_background.png) top left; }
 aside section {
-    margin: 11px 0 0 11px; padding: 6px 11px; background: url(../images/search_background.png) repeat-x;
+    margin: 5px 0 0 5px; padding: 5px 11px; background: url(../images/search_background.png) repeat-x;
     border-radius: 11px; -moz-border-radius: 11px; -webkit-border-radius: 11px; }
 aside section h3 {
     font-size: 16px; }

@@ -525,10 +525,11 @@ getGroupList();
                 <div id="group_list">
                 <fieldset>
                     <legend><?php print $PMF_LANG['ad_groups']; ?></legend>
-                    <form id="group_select" name="group_select" action="?action=group&amp;group_action=delete_confirm" method="post">
+                    <form id="group_select" name="group_select" action="?action=group&amp;group_action=delete_confirm"
+                          method="post">
                         <p>
-                            <select name="group_list_select" id="group_list_select" onchange="groupSelect(event)"
-                                    size="<?php print $groupSelectSize; ?>" tabindex="1">
+                            <select name="group_list_select" id="group_list_select" style="width: 150px;"
+                                    onchange="groupSelect(event)" size="<?php print $groupSelectSize; ?>" tabindex="1">
                             </select>
                         </p>
                         <p>
@@ -540,31 +541,52 @@ getGroupList();
                 </div> <!-- end #group_list -->
             </div> <!-- end #groups -->
             <div id="groupMemberships">
-            <form id="group_membership" name="group_membership" action="?action=group&amp;group_action=update_members" method="post" onsubmit="select_selectAll('group_member_list')">
+            <form id="group_membership" name="group_membership" action="?action=group&amp;group_action=update_members"
+                  method="post" onsubmit="select_selectAll('group_member_list')">
                 <input id="update_member_group_id" type="hidden" name="group_id" value="0" />
                 <fieldset>
                     <legend><?php print $PMF_LANG['ad_group_membership']; ?></legend>
                     <fieldset id="group_userList">
                         <legend><?php print $PMF_LANG['ad_user_username']; ?></legend>
                         <p>
-                            <span class="select_all"><a href="javascript:select_selectAll('group_user_list')"><?php print $PMF_LANG['ad_user_checkall']; ?></a></span>
-                            <span class="unselect_all"><a href="javascript:select_unselectAll('group_user_list')"><?php print $PMF_LANG['ad_user_uncheckall']; ?></a></span>
+                            <span class="select_all">
+                                <a href="javascript:select_selectAll('group_user_list')">
+                                    <?php print $PMF_LANG['ad_user_checkall']; ?>
+                                </a>
+                            </span>
+                            <span class="unselect_all">
+                                <a href="javascript:select_unselectAll('group_user_list')">
+                                    <?php print $PMF_LANG['ad_user_uncheckall']; ?>
+                                </a>
+                            </span>
                         </p>
-                        <select id="group_user_list" multiple="multiple" size="<?php print $memberSelectSize; ?>">
+                        <select id="group_user_list" multiple="multiple" style="width: 150px;"
+                                size="<?php print $memberSelectSize; ?>">
                             <option value="0">...user list...</option>
                         </select>
                     </fieldset>
                     <div id="group_membershipButtons">
-                        <input type="button" value="<?php print $PMF_LANG['ad_group_addMember']; ?>" onclick="addGroupMembers()" />
-                        <input type="button" value="<?php print $PMF_LANG['ad_group_removeMember']; ?>" onclick="removeGroupMembers()" />
+                        <input type="button" value="<?php print $PMF_LANG['ad_group_addMember']; ?>"
+                               onclick="addGroupMembers()" />
+                        <input type="button" value="<?php print $PMF_LANG['ad_group_removeMember']; ?>"
+                               onclick="removeGroupMembers()" />
                     </div>
                     <fieldset id="group_memberList">
                         <legend><?php print $PMF_LANG['ad_group_members']; ?></legend>
                         <p>
-                            <span class="select_all"><a href="javascript:select_selectAll('group_member_list')"><?php print $PMF_LANG['ad_user_checkall']; ?></a></span>
-                            <span class="unselect_all"><a href="javascript:select_unselectAll('group_member_list')"><?php print $PMF_LANG['ad_user_uncheckall']; ?></a></span>
+                            <span class="select_all">
+                                <a href="javascript:select_selectAll('group_member_list')">
+                                    <?php print $PMF_LANG['ad_user_checkall']; ?>
+                                </a>
+                            </span>
+                            <span class="unselect_all">
+                                <a href="javascript:select_unselectAll('group_member_list')">
+                                    <?php print $PMF_LANG['ad_user_uncheckall']; ?>
+                                </a>
+                            </span>
                         </p>
-                        <select id="group_member_list" name="group_members[]" multiple="multiple" size="<?php print $memberSelectSize; ?>">
+                        <select id="group_member_list" name="group_members[]" multiple="multiple" style="width: 150px;"
+                                size="<?php print $memberSelectSize; ?>">
                             <option value="0">...member list...</option>
                         </select>
                     </fieldset>
@@ -583,15 +605,19 @@ getGroupList();
                             <div id="group_data_table">
                                 <p>
                                     <label for="update_group_name" class="small"><?php print $PMF_LANG['ad_group_name']; ?></label>
-                                    <input id="update_group_name" type="text" name="name" value="<?php print (isset($group_name) ? $group_name : ''); ?>" tabindex="1" />
+                                    <input id="update_group_name" type="text" name="name" style="width: 150px;"
+                                           tabindex="1" value="<?php print (isset($group_name) ? $group_name : ''); ?>" />
                                 </p>
                                 <p>
                                     <label for="update_group_description" class="small"><?php print $PMF_LANG['ad_group_description']; ?></label>
-                                    <textarea id="update_group_description" name="description" cols="<?php print $descriptionCols; ?>" rows="<?php print $descriptionRows; ?>" tabindex="2"><?php print (isset($group_description) ? $group_description : ''); ?></textarea>
+                                    <textarea id="update_group_description" name="description" cols="<?php print $descriptionCols; ?>"
+                                              rows="<?php print $descriptionRows; ?>" style="width: 150px;"
+                                              tabindex="2"><?php print (isset($group_description) ? $group_description : ''); ?></textarea>
                                 </p>
                                 <p>
-                                    <label for="update_group_auto_join" class="small"></label>
-                                    <input id="update_group_auto_join" type="checkbox" name="auto_join" value="1" tabindex="3"<?php print ((isset($group_auto_join) && $group_auto_join) ? ' checked="checked"' : ''); ?> />
+                                    <label for="update_group_auto_join" class="small"><?php print $PMF_LANG['ad_group_autoJoin'] ?></label>
+                                    <input id="update_group_auto_join" type="checkbox" name="auto_join" value="1"
+                                           tabindex="3"<?php print ((isset($group_auto_join) && $group_auto_join) ? ' checked="checked"' : ''); ?> />
                                 </p>
                             </div><!-- end #group_data_table -->
                             <p>
@@ -606,16 +632,29 @@ getGroupList();
                         <form id="rightsForm" action="?action=group&amp;group_action=update_rights" method="post">
                             <input id="rights_group_id" type="hidden" name="group_id" value="0" />
                             <div>
-                                <span class="select_all"><a href="javascript:form_checkAll('rightsForm')"><?php print $PMF_LANG['ad_user_checkall']; ?></a></span>
-                                <span class="unselect_all"><a href="javascript:form_uncheckAll('rightsForm')"><?php print $PMF_LANG['ad_user_uncheckall']; ?></a></span>
+                                <span class="select_all">
+                                    <a href="javascript:form_checkAll('rightsForm')">
+                                        <?php print $PMF_LANG['ad_user_checkall']; ?>
+                                    </a>
+                                </span>
+                                <span class="unselect_all">
+                                    <a href="javascript:form_uncheckAll('rightsForm')">
+                                        <?php print $PMF_LANG['ad_user_uncheckall']; ?>
+                                    </a>
+                                </span>
                             </div>
                             <table id="group_rights_table">
-            <?php foreach ($user->perm->getAllRightsData() as $right) { ?>
+                            <?php foreach ($user->perm->getAllRightsData() as $right) { ?>
                             <tr>
-                                <td><input id="group_right_<?php print $right['right_id']; ?>" type="checkbox" name="group_rights[]" value="<?php print $right['right_id']; ?>"/></td>
-                                <td><?php print (isset($PMF_LANG['rightsLanguage'][$right['name']]) ? $PMF_LANG['rightsLanguage'][$right['name']] : $right['description']); ?></td>
+                                <td><input id="group_right_<?php print $right['right_id']; ?>" type="checkbox"
+                                           name="group_rights[]" value="<?php print $right['right_id']; ?>"/></td>
+                                <td><?php print (isset($PMF_LANG['rightsLanguage'][$right['name']])
+                                                 ?
+                                                 $PMF_LANG['rightsLanguage'][$right['name']]
+                                                 :
+                                                 $right['description']); ?></td>
                             </tr>
-            <?php } ?>
+                            <?php } ?>
                             </table>
                             <p>
                                 <input type="submit" value="<?php print $PMF_LANG['ad_gen_save']; ?>" />
