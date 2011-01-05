@@ -5,8 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Documentation for phpMyFAQ 2.7.x</title>
     <style type="text/css"><!--
-    body { font: normal normal 14px "Trebuchet MS", Verdana, Geneva, Arial, Helvetica, sans-serif; line-height: 20px; }
-    pre { background-color: #FAFAD2; padding: 5px; }
+    body { margin: 0 auto; width: 960px; font: 14px/22px Helvetica, Arial, sans-serif; background-color: #F0F0F0; }
+    code { display: block; font-size: 16px; background-color: black; color: white; padding: 10px; width: 600px;
+           margin-bottom: 22px; }
     a { color: #0000ff; }
     a:hover { color: #ff0000; }
     #doc { width: 70%; min-width: 550px; max-width:700px; }
@@ -59,7 +60,7 @@
             <li><a href="#4c">Advanced search</a></li>
             <li><a href="#4d">Instant Response</a></li>
             <li><a href="#4e">Add FAQ</a></li>
-            <li><a href="#4f">Ask questions</a></li>
+            <li><a href="#4f">Add questions</a></li>
             <li><a href="#4g">Open questions</a></li>
             <li><a href="#4h">Submit translation</a></li>
             <li><a href="#4i">"Digg it!" and "Share on Facebook"</a></li>
@@ -100,18 +101,18 @@
 
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="1"></a><strong>1. Introduction</strong></p>
-    <p>phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports
-    various databases to store all data, PHP 5.2.0 (or higher) is needed in order
-    to access this data. phpMyFAQ also offers a multi-language Content Management-System
-    with a WYSIWYG editor and an Image Manager, flexible multi-user support with
-    user and group based permissions on categories and records, a wiki-like
-    revision feature, a news system, user-tracking, language modules, enhanced
-    automatic content negotiation, templates, extensive XML-support, PDF-support,
-    a backup-system, a dynamic site map, related articles, tagging, RSS feeds,
-    built-in spam protection systems, LDAP support, Twitter support, and an easy
-    to use installation script.</p>
-    <p>This documentation should help you with installing and administrating
-    phpMyFAQ.</p>
+    <p>
+        phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports various databases to store all
+        data, PHP 5.2.3 (or higher) is needed in order to access this data. phpMyFAQ also offers a multi-language
+        Content Management-System with a WYSIWYG editor and an Image Manager, flexible multi-user support with user and
+        group based permissions on categories and records, a wiki-like revision feature, a news system, user-tracking,
+        language modules, enhanced automatic content negotiation, templates, extensive XML-support, PDF-support, a
+        backup-system, a dynamic site map, related articles, tagging, RSS feeds, built-in spam protection systems, LDAP
+        support, Twitter and Facebook support and an easy to use installation script.
+    </p>
+    <p>
+        This documentation should help you with installing, administrating and using phpMyFAQ.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -209,7 +210,7 @@
     by the Apache user.</p>
     <p>You can determine which versions your web server is running by creating a
     file called <strong>info.php</strong> with the following content:</p>
-    <pre>&lt;?php phpinfo(); ?&gt;</pre>
+    <code>&lt;?php phpinfo(); ?&gt;</code>
     <p>Upload this file to your webspace and open it using your browser. The
     installation-script checks which version of PHP is installed on your server.
     Should you not meet the requirements, you cannot start the installation
@@ -218,10 +219,10 @@
     <p>phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers 
     are Mozilla Firefox 3.x and later (Windows/MacOS X/Linux), Safari 4.x or later
     (MacOS X/Windows/iOS), Chrome 5.x or later (Windows/MacOS X/Linux), Opera 10.0
-    or later (Windows/MacOS X/Linux) and Internet Explorer 7 or later for Windows. 
+    or later (Windows/MacOS X/Linux) and Internet Explorer 8 or later for Windows.
     You have to enable JavaScript for the Ajax based functions as well.</p>
     <p>If you're using <em>lighttpd</em> you have to set the following configuration:</p>
-    <pre>cgi.fix_pathinfo 1</pre>
+    <code>cgi.fix_pathinfo 1</code>
     <p><a href="#top">back to top</a></p>
 
 
@@ -256,7 +257,7 @@
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="2c"></a>2.c. Install-Script</strong></p>
     <p>Open your browser and type in the following URL:</p>
-    <pre>http://www.example.com/faq/install/setup.php</pre>
+    <code>http://www.example.com/faq/install/setup.php</code>
     <p>Substitute <strong>www.example.com</strong> with your actual domain name.
     When the site is loaded enter the address of your database server (e.g.
     db.provider.com), your database username and password as well as the database
@@ -281,11 +282,11 @@
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="2d"></a>2.d. First Steps</strong></p>
     <p>You can enter the public area of your FAQ by entering</p>
-    <pre>http://www.example.com/faq/index.php</pre>
+    <code>http://www.example.com/faq/index.php</code>
     <p>into your browser's address field. Your FAQ will be empty and presented
     in the the standard layout.</p>
     <p>To configure phpMyFAQ point your browser to</p>
-    <pre>http://www.example.com/faq/admin/index.php</pre>
+    <code>http://www.example.com/faq/admin/index.php</code>
     <p>Use the username <strong>admin</strong> and your selected password for your
     first login into the admin section.</p>
     <p>Some variables that doesn't change regularly, they can be edited in the file
@@ -327,13 +328,13 @@
     you are using.</p>
     <ul>
         <li>Mozilla Firefox<br />Tools -> Options -> Advanced -> Edit Languages</li>
-        <li>Mozilla Seamonkey and later versions<pre>Edit -> Preferences ->
-        Navigator -> Languages</pre></li>
+        <li>Mozilla Seamonkey and later versions<code>Edit -> Preferences ->
+        Navigator -> Languages</code></li>
         <li>Safari<br />Safari uses the MacOS X system preferences to determine
-        your preferred language:<pre>System preferences -> International -> Language</pre></li>
-        <li>Opera<br />Most versions:<pre>File -> Preferences -> Languages</pre>
-        Linux/*BSD versions 5.x and 6.x:<pre>File -> Preferences -> Document -> Languages</pre></li>
-        <li>Internet Explorer<br />Windows:<pre>Tools or View or Extras -> Internet Options -> (General) Languages</pre></li>
+        your preferred language:<code>System preferences -> International -> Language</code></li>
+        <li>Opera<br />Most versions:<code>File -> Preferences -> Languages</code>
+        Linux/*BSD versions 5.x and 6.x:<code>File -> Preferences -> Document -> Languages</code></li>
+        <li>Internet Explorer<br />Windows:<code>Tools or View or Extras -> Internet Options -> (General) Languages</code></li>
     </ul>
     <p><a href="#top">back to top</a></p>
 
@@ -387,8 +388,7 @@
         <li>supports all ISO page formats;</li>
         <li>supports custom page formats, margins and units of measure;</li>
         <li>supports UTF-8 Unicode and Right-To-Left languages;</li>
-        <li>supports TrueTypeUnicode, OpenTypeUnicode, TrueType, OpenType, 
-        Type1 and CID-0 fonts;</li>
+        <li>supports TrueTypeUnicode, OpenTypeUnicode, TrueType, OpenType, Type1 and CID-0 fonts;</li>
         <li>includes methods to publish some HTML code;</li>
         <li>includes graphic (geometric) and transformation methods;</li>
         <li>includes methods to set Bookmarks and print a Table of Content;</li>
@@ -471,11 +471,12 @@
 
     <hr style="width: 90%; height: 1px;" />
     <p><strong><a name="2o"></a>2.o. Twitter</strong></p>
-    <p>Starting with version 2.7 phpMyFAQ supports Twitter via OAuth. If you enable
-    Twitter support in the social network configuration and add phpMyFAQ as a
-    Twitter application on twitter.com, all new FAQ additions in the administration
-    backend will also post the question of the FAQ, the URL of the FAQ and all
-    tags as hashtags to Twitter.</p>
+    <p>
+        Starting with version 2.7 phpMyFAQ supports Twitter via OAuth. If you enable Twitter support in the social
+        network configuration and add phpMyFAQ as a Twitter application on twitter.com, all new FAQ additions in the
+        administration backend will also post the question of the FAQ, the URL of the FAQ and all tags as hashtags to
+        Twitter.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -494,10 +495,11 @@
 
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="3a"></a><strong>3.a. Upgrading from phpMyFAQ 2.0.x</strong></p>
-    <p>Upgrading from 2.0.x to 2.7.x is a major upgrade. Please make a full backup
-    before you run the upgrade! Nevertheless the update from phpMyFAQ 2.0.x to the
-    current release is fairly simple. First you have to delete all files
-    <strong>except</strong>:</p>
+    <p>
+        Upgrading from 2.0.x to 2.7.x is a major upgrade. Please create a full backup before you run the upgrade!
+        Nevertheless the update from phpMyFAQ 2.0.x to the current release is fairly simple. First you have to delete
+        all files <strong>except</strong>:
+    </p>
     <ul>
         <li>the files <strong>data.php</strong> in the directory <strong>inc/</strong> </li>
         <li>all files in the <strong>template/</strong> directory</li>
@@ -505,24 +507,31 @@
         <li>the directory <strong>data/</strong></li>
         <li>the directory <strong>images/</strong></li>
     </ul>
-    <p>Open the following URL in your browser:</p>
-    <pre>http://www.example.com/faq/install/update.php</pre>
-    <p>Choose your installed phpMyFAQ version and click the button of the update
-    script, your version will automatically be updated. You have to update some of
-    your template files due to the new, enhanced template engine.</p>
-    <p>The update script will move your template files to a folder <strong>backup/</strong>
-    in the directory <strong>template/</strong>. The default layout will be stored
-    in the folder <strong>template/default/</strong>.</p>
-    <p>Note: We changed the character set for all languages and templates to 
-    UTF-8. If you notice problems with e.g. German umlauts you have to convert
-    your templates.</p>
+    <p>
+        Open the following URL in your browser:
+    </p>
+    <code>http://www.example.com/faq/install/update.php</code>
+    <p>
+        Choose your installed phpMyFAQ version and click the button of the update script, your version will
+        automatically be updated. You have to update a lot of your template files due to the new, enhanced template
+        engine.
+    </p>
+    <p>
+        The update script will move your template files to a folder <strong>backup/</strong> in the directory
+        <strong>template/</strong>. The default layout will be stored in the folder <strong>template/default/</strong>.
+    </p>
+    <p>
+        Note: We changed the character set for all languages and templates to UTF-8. If you notice problems with e.g.
+        German umlauts you have to convert your templates to UTF-8 encoding.
+    </p>
     <p><a href="#top">back to top</a></p>
 
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="3b"></a><strong>3.b. Upgrading from phpMyFAQ 2.5.x</strong></p>
-    <p>Upgrading from 2.5.x to 2.7.x is a minor upgrade. Please make a full backup
-    before you run the upgrade! First you have to delete all files
-    <strong>except</strong>:</p>
+    <p>
+        Upgrading from 2.5.x to 2.7.x is a minor upgrade. Please make a full backup before you run the upgrade! First
+        you have to delete all files <strong>except</strong>:
+    </p>
     <ul>
         <li>the file <strong>data.php</strong> in the directory <strong>inc/</strong> </li>
         <li>all files in the <strong>template/</strong> directory</li>
@@ -530,17 +539,23 @@
         <li>the directory <strong>data/</strong></li>
         <li>the directory <strong>images/</strong></li>
     </ul>
-    <p>Open the following URL in your browser:</p>
-    <pre>http://www.example.com/faq/install/update.php</pre>
-    <p>Choose your installed phpMyFAQ version and click the button of the update
-    script, your version will automatically be updated. You have to update some of
-    your template files due to the new, enhanced template engine.</p>
-    <p>The update script will move your template files to a folder <strong>backup/</strong>
-    in the directory <strong>template/</strong>. The default layout will be stored
-    in the folder <strong>template/default/</strong>.</p>
-    <p>Note: We changed the character set for all languages and templates to 
-    UTF-8. If you notice problems with e.g. German umlauts you have to convert
-    your templates.</p>
+    <p>
+        Open the following URL in your browser:
+    </p>
+    <code>http://www.example.com/faq/install/update.php</code>
+    <p>
+        Choose your installed phpMyFAQ version and click the button of the update script, your version will
+        automatically be updated. You have to update a lot of your template files due to the new, enhanced template
+        engine.
+    </p>
+    <p>
+        The update script will move your template files to a folder <strong>backup/</strong> in the directory
+        <strong>template/</strong>. The default layout will be stored in the folder <strong>template/default/</strong>.
+    </p>
+    <p>
+        Note: We changed the character set for all languages and templates to UTF-8. If you notice problems with e.g.
+        German umlauts you have to convert your templates to UTF-8 encoding.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -555,17 +570,24 @@
         <li>the directory <strong>data/</strong></li>
         <li>the directory <strong>images/</strong></li>
     </ul>
-    <p>Open the following URL in your browser:</p>
-    <pre>http://www.example.com/faq/install/update.php</pre>
-    <p>Choose your installed phpMyFAQ version and click the button of the update
-    script, your version will automatically be updated.</p>
+    <p>
+        Open the following URL in your browser:
+    </p>
+    <code>http://www.example.com/faq/install/update.php</code>
+    <p>
+        Choose your installed phpMyFAQ version and click the button of the update script, your version will
+        automatically be updated. You have to update a lot of your template files due to our markup change from XHTML
+        1.0 to HTML5.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="3d"></a><strong>3.c. Upgrading phpMyFAQ 2.7.x</strong></p>
-    <p>Updating phpMyFAQ 2.7.x is fairly simple. Via FTP copy all new files from
-    the phpMyFAQ package <strong>except</strong>:</p>
+    <p>
+        Updating phpMyFAQ 2.7.x is fairly simple. Via FTP copy all new files from the phpMyFAQ package
+        <strong>except</strong>:
+    </p>
     <ul>
         <li>all files in the directory <strong>config/</strong> </li>
         <li>all files in the directory <strong>template/</strong></li>
@@ -573,87 +595,98 @@
         <li>the directory <strong>data/</strong></li>
         <li>the directory <strong>images/</strong></li>
     </ul>
-    <p>Open the following URL in your browser:</p>
-    <pre>http://www.example.com/faq/install/update.php</pre>
-    <p>Choose your installed phpMyFAQ version and click the button of the update
-    script, your version will automatically be updated.</p>
-    <p>You can find the changed files between the 2.7.x versions in the file
-    <em>docs/CHANGEDFILES</em>.</p>
+    <p>
+        Open the following URL in your browser:
+    </p>
+    <code>http://www.example.com/faq/install/update.php</code>
+    <p>
+        Choose your installed phpMyFAQ version and click the button of the update script, your version will
+        automatically be updated.
+    </p>
+    <p>
+        You can find the changed files between the 2.7.x versions in the file <em>docs/CHANGEDFILES</em>.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="3e"></a><strong>3.d. Modifying templates for phpMyFAQ 2.7.x</strong></p>
-    <p>The 2.0.x, 2.5.x and 2.6.x templates are mostly compatible with phpMyFAQ 2.7, if your 
-    layout is completely based on CSS, you only have to change the .tpl files listed in 
-    <em>docs/CHANGEDFILES</em>. If you need help to integrate phpMyFAQ into your 
-    website feel free to contact us.</p>
-    <p>Note: We changed the character set for all languages and templates to 
-    UTF-8 with phpMyFAQ 2.6. If you notice problems with e.g. German umlauts you have to 
-    convert your templates.</p>
+    <p>
+        Your current 2.0.x, 2.5.x and 2.6.x templates are <strong>barely</strong> compatible with phpMyFAQ 2.7 because
+        we changed the complete markup from XHTML 1.0 to HTML5. We also using now a lot of Ajax in the frontend.
+    </p>
+    <p>
+        
+    </p>
+    <p>
+        Note: We changed the character set for all languages and templates to UTF-8. If you notice problems with e.g.
+        German umlauts you have to convert your templates to UTF-8 encoding.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="4"></a>4. Front-end</strong></p>
-    <p>The phpMyFAQ front-end has a quite simple default layout. The header has the
-    main links for the advanced search, add content, ask questions, open questions,
-    help and contact. On the left side you see the main categories, the instant
-    response page and the site map. You can also change the current language of the
-    FAQ, use the search form or the login box if you have a valid user account. On
-    the right side you see a list of the most popular FAQ records, the latest records,
-    and the sticky FAQ records. On the pages with the FAQ records you'll see the other
-    records of the current category and the tag cloud if you're using tagging.</p>
+    <p>
+        The public phpMyFAQ frontend has a simple default layout. The header has the main links for the all categories,
+        instant response, add FAQs, add questions, open questions, sitemap and contact. On the left side you only see
+        the main categories. You can also change the current language at the bottom of the FAQ, use the global search
+        in the center of the FAQ or use the login box in the upper right if you have a valid user account. On the right
+        side you see a list of the most popular FAQ records, the latest records, and the sticky FAQ records. On the
+        pages with the FAQ records you'll see the other records of the current category and the tag cloud if you're
+        using tagging.</p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="4a"></a>4.a. Change languages</strong></p>
-    <p>As written above there's a select box for changing the current language. If
-    you're visiting a phpMyFAQ powered FAQ, the current language will be the one
-    you're browser is using or the language which was selected by the administrator
-    of the FAQ. If you change the language you'll see the categories and records of
-    your chosen language. If there are no entries in this language you'll see no
-    entries. If you're switching to languages with right to left text direction
-    (for example Arabic, Hebrew or Farsi) the whole layout will be switching
-    according to the text direction.</p>
-    <p><strong>Note:</strong> phpMyFAQ uses a WYSIWYG on-line editor that has support
-    for multiple languages. However, phpMyFAQ comes only with English language pack
-    installed so changing the current language will not change the language of
-    WYSIWYG editor. If you would like to have WYSIWYG editor in another language, just
-    download the latest <a href="http://tinymce.moxiecode.com/download_i18n.php">language pack</a>,
-    extract it and upload the extracted files to admin/editor directory under your
-    phpMyFAQ's installation directory on your web server.
+    <p>
+        As written above there's a select box for changing the current language. If you're visiting a phpMyFAQ powered
+        FAQ, the current language will be the one you're browser is using or the language which was selected by the
+        administrator of the FAQ. If you change the language you'll see the categories and records of your chosen
+        language. If there are no entries in this language you'll see no entries. If you're switching to languages with
+        right to left text direction (for example Arabic, Hebrew or Farsi) the whole default layout will be switching
+        according to the text direction.
+    </p>
+    <p>
+        <strong>Note:</strong> phpMyFAQ uses a WYSIWYG on-line editor that has support for multiple languages. However,
+        phpMyFAQ comes only with English language pack installed so changing the current language will not change the
+        language of WYSIWYG editor. If you would like to have WYSIWYG editor in another language, just download the
+        latest <a href="http://tinymce.moxiecode.com/download_i18n.php">language pack</a>, extract it and upload the
+        extracted files to admin/editor directory under your phpMyFAQ's installation directory on your web server.
     </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="4b"></a>4.b. RSS Feeds</strong></p>
-    <p>On the start page you can subscribe to three RSS feeds with the news of the
-    FAQ, the most popular FAQs, all records per requested category and the latest
-    records available in the FAQ. On the page with the open user questions you can
-    subscribe to the RSS feed with these questions. All feeds are valid and compatible
-    to the RSS 2.0 specification.</p>
+    <p>
+        On the start page you can subscribe to three RSS feeds with the news of the FAQ, the most popular FAQs, all
+        records per requested category and the latest records available in the FAQ. On the page with the open user
+        questions you can subscribe to the RSS feed with these questions. All feeds are valid and compatible to the RSS
+        2.0 specification.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="4c"></a>4.c. Advanced search</strong></p>
-    <p>On the page with the advanced search you have more possibilities to find an
-    entry. You can search over all language if you want to. It's also possible to
-    search only in one selected category. Additionally the link for the OpenSearch
-    plugin is below the main search box. At the bottom of the search box you'll see
-    a list of the most popular search terms.</p>
+    <p>
+        On the page with the advanced search you have more possibilities to find an entry. You can search over all
+        language if you want to. It's also possible to search only in one selected category. Additionally the link for
+        the OpenSearch plugin is below the main search box. At the bottom of the search box you'll see a list of the
+        most popular search terms.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="4d"></a>4.d. Instant Response</strong></p>
-    <p>The Instant Response is an Ajax-powered page with direct access to the whole
-    FAQ database and the page will return the search results while you're typing
-    into the input form. For performance reasons only the first 10 results will be
-    displayed on the page.</p>
+    <p>
+        The Instant Response is an Ajax-powered page with direct access to the whole FAQ database and the page will
+        return the search results while you're typing into the input form. For performance reasons only the first 10
+        results will be displayed on the page.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -668,7 +701,7 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4f"></a>4.f. Ask questions</strong></p>
+    <p><strong><a name="4f"></a>4.f. Add questions</strong></p>
     <p>On the <em>ask question</em> page it's possible for all users to add a new
     question without an answer. If the question is submitted, phpMyFAQ checks the
     words for the question and will do a full text search on the database with the
@@ -732,7 +765,7 @@
     <p><strong><a name="5"></a>5. Administration</strong></p>
     <p>The administration of phpMyFAQ is completely browser-based. The admin area
     can be found under this URL:</p>
-    <pre>http://www.example.com/faq/admin/index.php</pre>
+    <code>http://www.example.com/faq/admin/index.php</code>
     <p>You can also login in the public front-end and after the successful login you'll
     see a link to administration back-end, too.</p>
     <p>If you have lost your password you can reset it. A new random password will
@@ -1012,69 +1045,87 @@
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="6"></a>6. Customizing phpMyFAQ 2.7.x</strong></p>
-    <p>In phpMyFAQ code and layout are separated. The layout is based on several
-    templates, that you can modify to suit your own needs. The most important files
-    for phpMyFAQ's layout can be found in the directory <em>template/default/</em>. 
-    All original templates are valid HTML5 and we don't use tables for layout 
-    reasons.</p>
-    <p><strong>Note:</strong> You can change the layout of the admin area using the
-    CSS file <em>admin/style/admin.css</em>.</p>
+    <p>
+        In phpMyFAQ code and layout are separated. The layout is based on several template files, that you can modify
+        to suit your own needs. The most important files for phpMyFAQ's default layout can be found in the directory
+        <em>template/default/</em>. All original templates are valid HTML5 and we don't use tables for layout reasons.
+    </p>
+    <p>
+        <strong>Note:</strong> You can change the layout of the admin area using the CSS file
+        <em>admin/style/admin.css</em>.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="6a"></a>6.a. The file template/default/index.tpl</strong></p>
-    <p>The default layout of phpMyFAQ is saved in the <strong>index.tpl</strong> file.
-    This is a normal HTML5 file including some variables in curly brackets, serving
-    as placeholders for content.</p>
+    <p>
+        The default layout of phpMyFAQ is saved in the <strong>index.tpl</strong> file. This is a normal HTML5 file
+        including some variables in curly brackets, serving as placeholders for content.
+    </p>
     <p>Example:</p>
-    <pre>&lt;span class="useronline"&gt;{userOnline}&lt;/span&gt;</pre>
-    <p>The template-parser of the FAQ converts the placeholder <em>{userOnline}</em>
-    to the actual number of visitors on-line.</p>
-    <p>You can change the template as you wish, but you may want to keep the original
-    template in case something goes wrong.</p>
+    <code>&lt;span class="useronline"&gt;{userOnline}&lt;/span&gt;</code>
+    <p>
+        The template-parser of the FAQ converts the placeholder <em>{userOnline}</em> to the actual number of visitors
+        online.
+    </p>
+    <p>
+        You can change the template as you wish, but you may want to keep the original template in case something goes
+        wrong.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="6b"></a>6.b. The file template/default/css/style.css</strong></p>
-    <p>All formatting such as fonts and the like can be modified in the CSS-file
-    <strong>style.css</strong> for left-to-right languages and in <strong>style.rtl.css</strong>
-    for left-to-right languages.</p>
+    <p>
+        All formatting such as fonts and the like can be modified in the CSS-file <strong>style.css</strong> for
+        left-to-right languages and in <strong>style.rtl.css</strong> for left-to-right languages.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="6c"></a>6.c. More Templates</strong></p>
-    <p>You need an other template design or more HTML5/CSS3 features? Then write us
-    an email and we can talk about it.</p>
+    <p>
+        You need an other template design or more HTML5/CSS3 features? Then write us an email and we can talk about it.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="7"></a>7. Customizing phpMyFAQ 2.7.x</strong></p>
-    <p>Beginning with phpMyFAQ 2.6.x users have even more customization opportunities. 
-    The key feature is the user selectable template sets. From version 2.6.x there is
-    a templates/default directory where the default layouts get shipped.</p>
+    <p>
+        Beginning with phpMyFAQ 2.6.x users have even more customization opportunities. The key feature is the user
+        selectable template sets. From version 2.6.x there is a templates/default directory where the default layouts
+        get shipped.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="7a"></a>7.a. Creating a custom layout</strong></p>
-    Follow these steps to create a custom template set:<ul>
-    <li>copy the directory templates/default to templates/&lt;custom_template_set&gt;</li>
-    <li>adjust template files in templates/&lt;custom_template_set&gt; to fit your needs</li>
-    <li>activate &lt;custom_template_set&gt; within Admin->Config->Main</li>
+    <p>
+        Follow these steps to create a custom template set:
+    </p>
+    <ul>
+        <li>copy the directory templates/default to templates/&lt;custom_template_set&gt;</li>
+        <li>adjust template files in templates/&lt;custom_template_set&gt; to fit your needs</li>
+        <li>activate &lt;custom_template_set&gt; within Admin->Config->Main</li>
     </ul>   
-    <p><strong>Note:</strong> There is a magic variable <em>{tplSetName}</em> containing the name
-    of the actual layout available in each template file.</p>
+    <p>
+        <strong>Note:</strong> There is a magic variable <em>{tplSetName}</em> containing the name of the actual layout
+        available in each template file.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="8"></a>8. Developer documentation</strong></p>
-    <p>Beginning with version 2.6 phpMyFAQ will offer more and more interfaces to access phpMyFAQ installations with 
-    other clients like the iPhone.</p>
+    <p>
+        Beginning with version 2.6 phpMyFAQ will offer more and more interfaces to access phpMyFAQ installations with
+        other clients like the iPhone.
+    </p>
     <p><a href="#top">back to top</a></p>
 
     <hr style="width: 90%; height: 1px;"  />
@@ -1091,9 +1142,9 @@
             <li>http://www.example.org/phpmyfaq/api/getVersion (rewrite rules enabled)</li>
         </ul>
         <p>The result will be a string value like this:</p>
-        <pre>
+        <code>
         {"version":"2.6.0"}
-        </pre></li>
+        </code></li>
         
         <li><strong>getApiVersion()</strong>
         <ul>
@@ -1102,9 +1153,9 @@
         </ul>
         <p>Returns the version of the API as an integer value. The version number is incremental and will be incremented 
         every time the API changes.</p>
-        <pre>
+        <code>
         {"apiVersion":1}
-        </pre></li>
+        </code></li>
         
         <li><strong>search()</strong>
         <ul>
@@ -1113,7 +1164,7 @@
         </ul>
         <p>You have two variables, <em>lang</em> for the language and <em>q</em> for the search term. You'll 
         get an JSON object as result with the follwing structure:</p>
-        <pre>
+        <code>
     [
         {
         "id":"1",
@@ -1132,7 +1183,7 @@
         "link":"http://faq.phpmyfaq.de/index.php?action=artikel&cat=5&id=13&artlang=en"
         }
     ]
-        </pre></li>
+        </code></li>
         
         <li><strong>getCategories()</strong>
         <ul>
@@ -1140,7 +1191,7 @@
             <li>http://www.example.org/phpmyfaq/api/getCategories (rewrite rules enabled)</li>
         </ul>
         <p>The result will be a JSON object like the following:</p>
-        <pre>
+        <code>
     [
         {
         "id":"1",
@@ -1160,7 +1211,7 @@
         "user_id":"1",
         "level":0}
     ]
-        </pre></li>
+        </code></li>
         
         <li><strong>getFaqs()</strong>
         <ul>
@@ -1169,7 +1220,7 @@
         </ul>
         <p>You have two variables, <em>lang</em> for the language and <em>categoryId</em> for the category id. You'll 
         get an JSON object as result with the follwing structure:</p>
-        <pre>
+        <code>
     [
         {
         "record_id":"1",
@@ -1191,7 +1242,7 @@
         "visits":"10"
         }
     ]
-        </pre></li>
+        </code></li>
         
         <li><strong>getFaq()</strong>
         <ul>
@@ -1200,7 +1251,7 @@
         </ul>
         <p>You have two variables, <em>lang</em> for the language and <em>recordId</em> for the record id. You'll 
         get an JSON object as result with the follwing structure:</p>
-        <pre>
+        <code>
         {
         "id":"1",
         "lang":"en",
@@ -1220,7 +1271,7 @@
         "linkState":"",
         "linkCheckDate":"0"
         }
-        </pre></li>
+        </code></li>
         
     </ul>    
     <p><a href="#top">back to top</a></p>
@@ -1232,7 +1283,7 @@
     Author: <a href="mailto:thorsten AT phpmyfaq DOT de">Thorsten Rinne</a><br />
     Co-Authors: <a href="mailto:stephan AT yauh DOT de">Stephan Hochhaus</a>,
     <a href="mailto:mgl-mail AT t-online DOT de">Markus Gläser</a><br />
-    Last update: 2010-10-17</p>
+    Last update: 2011-01-05</p>
     <p>&copy; 2001-2011 phpMyFAQ Team</p>
     <p>This documentation is licensed under a <a href="http://creativecommons.org/licenses/by/2.0/" class="subfoot">Creative
     Commons License</a>.</p>
