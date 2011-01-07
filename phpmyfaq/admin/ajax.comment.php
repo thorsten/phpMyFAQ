@@ -2,7 +2,7 @@
 /**
  * AJAX: deletes comments with the given id
  * 
- * PHP Version 5.2
+ * PHP Version 5.2.3
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-20
@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $ajax_action = PMF_Filter::filterInput(INPUT_POST, 'ajaxaction', FILTER_SANITIZE_STRING);
 
 if ('delete' == $ajax_action && $permission['delcomment']) {
-    
+
     $comment = new PMF_Comment();
     $checks  = array('filter' => FILTER_VALIDATE_INT, 'flags'  => FILTER_REQUIRE_ARRAY);
     $ret     = false;
@@ -52,4 +52,6 @@ if ('delete' == $ajax_action && $permission['delcomment']) {
     }
     
     print $ret;
+} else {
+    print 0;
 }

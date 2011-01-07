@@ -56,7 +56,11 @@ if ($permission['delcomment']) {
             }
 ?>
         <tr id="comments_<?php print $faqcomment['comment_id']; ?>">
-            <td width="20"><input name="faq_comments[<?php print $faqcomment['record_id']; ?>]" value="<?php print $faqcomment['comment_id']; ?>" type="checkbox" /></td>
+            <td width="20">
+                <input die="faq_comments[<?php print $faqcomment['record_id']; ?>]"
+                       name="faq_comments[<?php print $faqcomment['record_id']; ?>]"
+                       value="<?php print $faqcomment['comment_id']; ?>" type="checkbox" />
+            </td>
             <td>
                 <span style="font-weight: bold;">
                     <a href="mailto:<?php print $faqcomment['email']; ?>"><?php print $faqcomment['username']; ?></a>
@@ -75,7 +79,8 @@ if ($permission['delcomment']) {
 ?>
         </table>
         <p>
-            <input class="submit records" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit" />
+            <input class="submit" id="submitFaqComments" type="submit" name="submit"
+                   value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" />
         </p>
         </form>
 <?php
@@ -96,7 +101,11 @@ if ($permission['delcomment']) {
         foreach ($newscomments as $newscomment) {
 ?>
         <tr id="comments_<?php print $newscomment['comment_id']; ?>">
-            <td width="20"><input name="news_comments[<?php print $newscomment['record_id']; ?>]" value="<?php print $newscomment['comment_id']; ?>" type="checkbox" /></td>
+            <td width="20">
+                <input id="name="news_comments[<?php print $newscomment['record_id']; ?>]"
+                       name="news_comments[<?php print $newscomment['record_id']; ?>]"
+                       value="<?php print $newscomment['comment_id']; ?>" type="checkbox" />
+            </td>
             <td>
                 <span style="font-weight: bold;">
                     <a href="mailto:<?php print $newscomment['email']; ?>"><?php print $newscomment['username']; ?></a>
@@ -109,7 +118,8 @@ if ($permission['delcomment']) {
 ?>
         </table>
         <p>
-            <input class="submit news" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit" />
+            <input class="submit" id="submitNewsComments" type="submit" name="submit"
+                   value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" />
         </p>
         </form>
 <?php
@@ -121,33 +131,30 @@ if ($permission['delcomment']) {
 
         <script type="text/javascript">
         /* <![CDATA[ */
-        $(document).ready(function() {
-        $('.submit').click(function () {
-            var comments     = '';
-            var faqComments  = $('#faqCommentSelection').serialize();
-            var newsComments = $('#newsCommentSelection').serialize();
+        $('#submitFaqComments').click(function() { deleteComments('faq'); return false; });
+        $('#submitNewsComments').click(function() { deleteComments('news'); return false; });
 
-            if ('' != faqComments) {
-                comments = faqComments;
-            } else {
-                comments = newsComments;
-            }
+        function deleteComments(type)
+        {
+            var comments = $('#' + type + 'CommentSelection').serialize();
 
             $.ajax({
-                type: "POST",
-                url:  "index.php?action=ajax&ajax=comment",
+                type: 'POST',
+                url:  'index.php?action=ajax&ajax=comment',
                 data: comments,
                 success: function(msg) {
                     if (msg == 1) {
                         $('#saving_data_indicator').html('<img src="images/indicator.gif" /> deleting ...');
                         $('tr td input:checked').parent().parent().fadeOut('slow');
                         $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_commentdelsuc']; ?>');
+                    } else {
+                        $('#returnMessage').html('<p class="error"><?php print $PMF_LANG["ad_entry_commentdelfail"] ?></p>');
                     }
                 }
             });
             return false;
-          });
-        });
+        }
+
         /* ]]> */
         </script>
 <?php 
