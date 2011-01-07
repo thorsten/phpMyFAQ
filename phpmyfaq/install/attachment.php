@@ -51,7 +51,7 @@ session_start();
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="shortcut icon" href="../template/default/favicon.ico" type="image/x-icon" />
     <link rel="icon" href="../template/default/favicon.ico" type="image/x-icon" />
-    <style media="screen" type="text/css">@import url(style/setup.css);</style>
+    <style media="screen" type="text/css">@import url(css/setup.css);</style>
 </head>
 <body>
 <h1 id="header">phpMyFAQ Attachment Migration</h1>

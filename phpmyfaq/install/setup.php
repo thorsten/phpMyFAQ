@@ -42,16 +42,25 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
 }
 
 ?>
-
 <!doctype html>
-<html lang="en" class="no-js">
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]> <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]> <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]> <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
     <title>phpMyFAQ <?php print VERSION; ?> Setup</title>
+
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+    <meta name="application-name" content="phpMyFAQ <?php print VERSION; ?>">
+    <meta name="copyright" content="(c) 2001-2011 phpMyFAQ Team">
+    
     <link rel="shortcut icon" href="../template/default/favicon.ico">
     <link rel="apple-touch-icon" href="../template/default/apple-touch-icon.png">
-    <link rel="stylesheet" href="style/setup.css?v=1">
+    <link rel="stylesheet" href="css/setup.css?v=1">
     <script language="javascript" type="text/javascript">
     /*<![CDATA[*/
     // <!--
@@ -92,18 +101,33 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
 </head>
 <body>
 
-<h1 id="header">phpMyFAQ <?php print VERSION; ?> Setup</h1>
+<header id="header">
+    <h1>
+        <h1>phpMyFAQ <?php print VERSION; ?> Setup</h1>
+    </h1>
+</header>
 
+<nav>
+    <ul>
+        <li><a href="http://www.phpmyfaq.de//documentation.php">Documentation</a></li>
+        <li><a href="http://www.phpmyfaq.de//support.php">Support</a></li>
+        <li><a href="http://forum.phpmyfaq.de/">Forums</a></li>
+        <li><a href="http://faq.phpmyfaq.de/">FAQ</a></li>
+    </ul>
+</nav>
+
+<div id="content">
+    <div id="mainContent">
 <?php
 
 if (version_compare(PHP_VERSION, MINIMUM_PHP_VERSION, '<')) {
-    printf("<p class=\"center\">Sorry, but you need PHP %s or later!</p>\n", MINIMUM_PHP_VERSION);
+    printf('<p class="error">Sorry, but you need PHP %s or later!</p>', MINIMUM_PHP_VERSION);
     HTMLFooter();
     die();
 }
 
 if (!function_exists('date_default_timezone_set')) {
-    print "<p class=\"center\">Sorry, but setting a default timezone doesn't work in your environment!</p>\n";
+    print '<p class="error">Sorry, but setting a default timezone doesn\'t work in your environment!</p>';
     HTMLFooter();
     die();
 }
@@ -152,7 +176,7 @@ function db_uninstall()
  */
 function HTMLFooter()
 {
-    printf('<footer><p class="center">%s</p></footer></body></html>', COPYRIGHT);
+    printf('<footer><div><p id="copyrightnote">%s</p><div></footer></body></html>', COPYRIGHT);
 }
 
 /**
@@ -176,7 +200,7 @@ $system = new PMF_System();
 
 if (!$system->checkDatabase($supported_databases)) {
 
-    print '<p class="center">No supported database detected! Please install one of the following' .
+    print '<p class="error">No supported database detected! Please install one of the following' .
           ' database systems and enable the corresponding PHP extension:</p>';
     print '<ul>';
     foreach ($supported_databases as $database) {

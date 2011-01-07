@@ -38,23 +38,49 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
 
 ?>
 <!doctype html>
-<html lang="en" class="no-js">
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]> <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]> <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]> <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>phpMyFAQ <?php print NEWVERSION; ?> Update</title>
+
+    <title>phpMyFAQ <?php print VERSION; ?> Update</title>
+
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+    <meta name="application-name" content="phpMyFAQ <?php print VERSION; ?>">
+    <meta name="copyright" content="(c) 2001-2011 phpMyFAQ Team">
+
     <link rel="shortcut icon" href="../template/default/favicon.ico">
     <link rel="apple-touch-icon" href="../template/default/apple-touch-icon.png">
-    <link rel="stylesheet" href="style/setup.css?v=1">
+    <link rel="stylesheet" href="css/setup.css?v=1">
 </head>
 <body>
 
-<h1 id="header">phpMyFAQ <?php print NEWVERSION; ?> Update</h1>
+<header id="header">
+    <h1>
+        <h1>phpMyFAQ <?php print VERSION; ?>  Update</h1>
+    </h1>
+</header>
 
+<nav>
+    <ul>
+        <li><a href="http://www.phpmyfaq.de//documentation.php">documentation</a></li>
+        <li><a href="http://www.phpmyfaq.de//support.php">support</a></li>
+        <li><a href="http://forum.phpmyfaq.de/">forums</a></li>
+        <li><a href="http://devblog.phpmyfaq.de/">devblog</a></li>
+        <li><a href="http://faq.phpmyfaq.de/">faq</a></li>
+    </ul>
+</nav>
+
+<div id="content">
+    <div id="mainContent">
 <?php
 
 if (version_compare(PHP_VERSION, MINIMUM_PHP_VERSION, '<')) {
-    printf("<p class=\"center\">Sorry, but you need PHP %s or later!</p>\n", MINIMUM_PHP_VERSION);
+    printf("<p>Sorry, but you need PHP %s or later!</p>\n", MINIMUM_PHP_VERSION);
     HTMLFooter();
     die();
 }
@@ -74,11 +100,11 @@ $templateDir = '../template';
  */
 function HTMLFooter()
 {
-    printf('<p class="center">%s</p></body></html>', COPYRIGHT);
+    printf('<footer><div><p id="copyrightnote">%s</p><div></footer></body></html>', COPYRIGHT);
 }
 
 if (!is_readable(PMF_ROOT_DIR.'/inc/data.php') && !is_readable(PMF_ROOT_DIR.'/config/database.php')) {
-    print '<p class="center">It seems you never run a version of phpMyFAQ.<br />' .
+    print '<p>It seems you never run a version of phpMyFAQ.<br />' .
           'Please use the <a href="setup.php">install script</a>.</p>';
     HTMLFooter();
     die();
