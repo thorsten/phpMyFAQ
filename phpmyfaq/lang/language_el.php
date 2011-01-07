@@ -128,7 +128,7 @@ $PMF_LANG['err_SaveComment'] = 'Τα απαραίτητα πεδία είναι:
 $PMF_LANG['err_VoteTooMuch'] = '<p>Δεν μετρούμε διπλές ψήφους. <a href="nojavascript...history.back();">κλικ</a>, για επιστροφή.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>Δε βαθμολογήσατε αυτή την ερώτηση</strong> <a href="nojavascript...history.back();">κλικ εδώ</a>, για επιστροφή στη βαθμολόγηση.</p>';
 $PMF_LANG['err_noMailAdress'] = 'Λανθασμένη καταχώρηση διεύθυνσης email.<br /><a href="nojavascript...history.back();">Επιστροφή</a>';
-$PMF_LANG['err_sendMail'] = 'Τα απαραίτητα πεδία είναι: <strong>Το όνομά σας</strong>, <strong>το email σας</strong> και <strong>η ερώτησή σας</strong>!<br /><br />\n<a href="nojavascript...history.back();">πίσω μια σελίδα</a><br /><br />\n';
+$PMF_LANG['err_sendMail'] = 'Τα απαραίτητα πεδία είναι: <strong>Το όνομά σας</strong>, <strong>το email σας</strong> και <strong>η ερώτησή σας</strong>!';
 $PMF_LANG['help_search'] = '<p><strong>Αναζήτηση καταχωρήσεων:</strong><br />Συμπληρώνοντας το πιο κάτω πεδίο με τη μορφή <strong style="color: Red;">κλειδί1 κλειδί2</strong> μπορείτε να κάνετε μία σχεσιακή αναζήτηση στη βάση για δύο ή περισσότερες λέξεις κλειδιά.</p><p><strong>Σημείωση:</strong> Το κριτήριο αναζήτησης, θα πρέπει να είναι τουλάχιστο 4 γραμμάτα σε μήκος διαφορετικά το σύστημα θα την απορρίψει.</p>';
 $PMF_LANG['ad'] = 'ΠΕΡΙΟΧΗ ΔΙΑΧΕΙΡΙΣΗΣ';
 $PMF_LANG['ad_menu_user_administration'] = 'Διαχείριση χρηστών';

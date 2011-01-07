@@ -1,7 +1,7 @@
 <h2>{msgNewContentHeader}</h2>
             
             <p>{msgNewContentAddon}</p>
-            <form action="{writeSendAdress}" method="post" style="display: inline">
+            <form id="formValues" action="#" method="post">
                 <p>
                     <label for="username">{msgNewContentName}</label>
                     <input type="text" name="username" id="username" value="{defaultContentName}" size="37" required="required" />
@@ -43,6 +43,18 @@
                 </p>
 
                 <p>
-                    <input class="submit" type="submit" name="submit" value="{msgNewContentSubmit}" />
+                    <input class="submit" type="submit" id="submitfaq" value="{msgNewContentSubmit}" />
                 </p>
             </form>
+
+            <div id="loader"></div>
+            <div id="faqs"></div>
+
+            <script type="text/javascript" >
+            $(function() {
+                $('#submitfaq').click(function() {
+                    saveFormValues('savefaq', 'faq');
+                });
+                $('form#formValues').submit(function() { return false; });
+            });
+            </script>

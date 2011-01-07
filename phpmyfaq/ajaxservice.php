@@ -38,7 +38,6 @@ $action   = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING)
 $ajaxlang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
 $code     = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
 
-
 $language     = new PMF_Language();
 $languageCode = $language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
 require_once 'lang/language_en.php';
@@ -180,24 +179,62 @@ switch ($action) {
         break;
 
     case 'savefaq':
-        
+
+        $message = array('error' => 'not implemented yet');
         break;
+
     case 'savequestion':
-        
+
+        $message = array('error' => 'not implemented yet');
         break;
+
     case 'saveregistration':
-        
+
+        $message = array('error' => 'not implemented yet');
         break;
+
     case 'savevoting':
-        
+
+        $message = array('error' => 'not implemented yet');
         break;
+
     // Send user generated mails
     case 'sendcontact':
-        
+
+        $name     = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $email    = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $question = PMF_Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
+        $code     = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
+
+        // If e-mail address is set to optional
+        if (!PMF_Configuration::getInstance()->get('main.optionalMailAddress') && is_null($email)) {
+            $email = PMF_Configuration::getInstance()->get('main.administrationMail');
+        }
+
+        if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) && !is_null($question) &&
+            !empty($question) && checkBannedWord(PMF_String::htmlspecialchars($question))) {
+
+            $mail = new PMF_Mail();
+            $mail->unsetFrom();
+            $mail->setFrom($email, $name);
+            $mail->addTo($faqconfig->get('main.administrationMail'));
+            $mail->subject = 'Feedback: %sitename%';;
+            $mail->message = $question;
+            $result = $mail->send();
+            unset($mail);
+
+            $message = array('success' => $PMF_LANG['msgMailContact']);
+
+        } else {
+            $message = array('error' => $PMF_LANG['err_sendMail']);
+        }
         break;
+
     case 'sendtofriends':
-        
+
+        $message = array('error' => 'not implemented yet');
         break;
+    
 }
 
 print json_encode($message);

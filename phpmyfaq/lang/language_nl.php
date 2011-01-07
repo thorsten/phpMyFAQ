@@ -132,7 +132,7 @@ $PMF_LANG['err_SaveComment'] = 'Verplichte velden zijn <strong>uw naam</strong>,
 $PMF_LANG['err_VoteTooMuch'] = '<p>Dubbele stemmen worden niet geteld. <a href="nojavascript...history.back();">Klik hier</a> om terug te gaan.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>Er werd geen beoordeling afgegeven!</strong> <a href="nojavascript...history.back();">Klik hier</a> om te stemmen.</p>';
 $PMF_LANG['err_noMailAdress'] = 'Uw emailadres is niet correct.<br /><a href="nojavascript...history.back();">terug</a>';
-$PMF_LANG['err_sendMail'] = 'Verplichte velden zijn <strong>uw naam</strong>, <strong>uw emailadres</strong> en <strong>uw vraag</strong>!<br /><br /><a href="nojavascript...history.back();">één pagina terug</a><br /><br />';
+$PMF_LANG['err_sendMail'] = 'Verplichte velden zijn <strong>uw naam</strong>, <strong>uw emailadres</strong> en <strong>uw vraag</strong>!';
 $PMF_LANG['help_search'] = '<p><strong>Zoek naar records:</strong><br />Met een ingave als <strong style="color: Red;">woord1 woord2</strong> kunt u een zoekactie doen voor twee of meer zoekcriteria met aflopende relevantie.</p><p><strong>Let op:</strong> Uw zoekcriteria moet minstens uit 4 karakters bestaan, anders wordt uw zoekactie gewijgerd.</p>';
 $PMF_LANG['ad'] = 'ADMIN AFDELING';
 $PMF_LANG['ad_menu_user_administration'] = 'Gebruikers';

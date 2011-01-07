@@ -129,7 +129,7 @@ $PMF_LANG['err_SaveComment'] = 'Campuri obligatorii <strong>numele tau</strong>,
 $PMF_LANG['err_VoteTooMuch'] = '<p>Nu contorizam votarile multiple. <a href="nojavascript...history.back();">Click aici</a>, pentru a merge inapoi.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>Inca nu ai apreciat aceasta intrebare!</strong> <a href="nojavascript...history.back();">Click aici</a>, pentru a aprecia!</p>';
 $PMF_LANG['err_noMailAdress'] = 'Adresa ta de email nu este corecta!<br /><a href="nojavascript...history.back();">back</a>';
-$PMF_LANG['err_sendMail'] = 'Campuri obligatorii <strong>numele tau</strong>, <strong>adresa ta de email</strong> si <strong>intrebarea ta</strong>!<br /><br /><a href="nojavascript...history.back();">inapoi</a><br /><br />';
+$PMF_LANG['err_sendMail'] = 'Campuri obligatorii <strong>numele tau</strong>, <strong>adresa ta de email</strong> si <strong>intrebarea ta</strong>!';
 $PMF_LANG['help_search'] = '<p><strong>Cauta inregistrarile:</strong><br />care contin cuvintele <strong style="color: Red;">cuvant1 cuvant2</strong> poti avea ordonarea dupa relevanta pentru doua sa mai multe criterii de cautare.</p><p><strong>Nota:</strong> Criteriile tale de cautare rtebuie sa fie de minimum 4 caractere, in caz contrar cautarea nu poate fi efectuata.</p>';
 $PMF_LANG['ad'] = 'ADMIN SECTION';
 $PMF_LANG['ad_menu_user_administration'] = 'Administrare useri';

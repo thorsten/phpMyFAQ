@@ -157,7 +157,7 @@ $PMF_LANG["err_SaveComment"] = "Vaadittavat kentät ovat <strong>Nimesi</strong>
 $PMF_LANG["err_VoteTooMuch"] = "<p>Emme laske kuin yhden arvostelun. <a href=\"javascript:history.back();\">Klikkaa tästä</a>, päästäksesi takaisin.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Et arvostellut kysymystä!</strong> <a href=\"javascript:history.back();\">Ole hyvä ja klikkaa tästä</a>, arvostellaksesi.</p>";
 $PMF_LANG["err_noMailAdress"] = "Sähköpostiosoitteesi ei ole oikein.<br /><a href=\"javascript:history.back();\">takaisin</a>";
-$PMF_LANG["err_sendMail"] = "Vaadittavat kentät ovat <strong>nimesi</strong>, <strong>sähköposti osoitteesi</strong> ja <strong>kysymyksesi</strong>!<br /><br />\n<a href=\"javascript:history.back();\">yksi sivu takaisin</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "Vaadittavat kentät ovat <strong>nimesi</strong>, <strong>sähköposti osoitteesi</strong> ja <strong>kysymyksesi</strong>!";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Etsi tietueita:</strong><br />Tietueella kuten <strong style=\"color: Red;\">sana1 sana2</strong> voit tehdä asiaan kuuluvan laskevan haun kahdella tai useammalla hakukriteerillä.</p><p><strong>Huomaa:</strong> Haku kriteerisi tulee olla ainakin 4 merkkiä pitkä tai muuten hakusi hylätään.</p>";

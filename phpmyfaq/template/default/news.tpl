@@ -69,35 +69,10 @@
 
             <script type="text/javascript" >
             $(function() {
-                $('#submitComment').click(function() {
-
-                    var formValues = $('#formValues');
-
-                    $("#loader").show();
-                    $("#loader").fadeIn(400).html('<img src="images/ajax-loader.gif" />Saving comment...');
-
-                    $.ajax({
-                        type:     'post',
-                        url:      'ajaxservice.php?action=savecomment',
-                        data:     formValues.serialize(),
-                        dataType: 'json',
-                        cache:    false,
-                        success: function(json) {
-                            if (json.success == undefined) {
-                                $("#comments").html('<p class="error">' + json.error + '</p>');
-                                $("#loader").hide();
-                            } else {
-                                $("#comments").html('<p class="success">' + json.success + '</p>');
-                                $("#comments").fadeIn("slow");
-                                $("#loader").hide();
-                                $('#commentForm').hide();
-                                // @todo add reload of #comments
-                            }
-                        }
-                    });
-
-                    return false;
+                $('#submitcomment').click(function() {
+                    saveFormValues('savecomment', 'comment');
                 });
+                $('form#formValues').submit(function() { return false; });
             });
             </script>
 

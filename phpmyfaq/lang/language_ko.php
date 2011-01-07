@@ -156,7 +156,7 @@ $PMF_LANG["err_SaveComment"] = "<strong>이름</strong>, <strong>메일주소</s
 $PMF_LANG["err_VoteTooMuch"] = "<p>중복 평가 하실 수 없습니다. 되돌아 가시려면<a href=\"javascript:history.back();\">여기</a>를 클릭하세요.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>평점을 선택하지 않으셨습니다.</strong> 평가를  다시 하시려면<a href=\"javascript:history.back();\">여기</a>를 클릭하세요.</p>";
 $PMF_LANG["err_noMailAdress"] = "메일주소가 바르지 않습니다.<br /><a href=\"javascript:history.back();\">되돌아 가기</a>";
-$PMF_LANG["err_sendMail"] = "<strong>이름</strong>, <strong>메일주소</strong>, <strong>질문 내용</strong>은 필수 입력 항목입니다.<br /><br />\n<a href=\"javascript:history.back();\">되돌아 가기</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "<strong>이름</strong>, <strong>메일주소</strong>, <strong>질문 내용</strong>은 필수 입력 항목입니다.";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>내용 검색:</strong><br /><strong style=\"color: Red;\">단어1 단어2</strong>로 검색하시면, 2개 이상의 검색 결과를 관련이 높은 순서대로 찾으실 수 있습니다.</p><p><strong>주의:</strong> 검색시에는 적어도 영문 4자 이상을 입력하셔야 합니다.</p>";

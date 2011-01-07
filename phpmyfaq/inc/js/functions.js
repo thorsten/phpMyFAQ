@@ -316,3 +316,43 @@ function infoBox(infobox_id)
         $('#' + infobox_id).hide();
     }
 }
+
+/**
+ * Saves all content from the given form via Ajax
+ *
+ * @param string action   Actions: savecomment, savefaq, savequestion,
+ *                        saveregistration, savevoting, sendcontact,
+ *                        sendtofriends
+ * @param string formName Name of the current form
+ * 
+ * @return void
+ */
+function saveFormValues(action, formName)
+{
+    var formValues = $('#formValues');
+
+    $('#loader').show();
+    $('#loader').fadeIn(400).html('<img src="images/ajax-loader.gif" />Saving ...');
+
+    $.ajax({
+        type:     'post',
+        url:      'ajaxservice.php?action=' + action,
+        data:     formValues.serialize(),
+        dataType: 'json',
+        cache:    false,
+        success:  function(json) {
+            if (json.success == undefined) {
+                $('#' + formName + 's').html('<p class="error">' + json.error + '</p>');
+                $('#loader').hide();
+            } else {
+                $('#' + formName + 's').html('<p class="success">' + json.success + '</p>');
+                $('#' + formName + 's').fadeIn("slow");
+                $('#loader').hide();
+                $('#' + formName + 'Form').hide();
+                // @todo add reload of content
+            }
+        }
+    });
+    
+    return false;
+}

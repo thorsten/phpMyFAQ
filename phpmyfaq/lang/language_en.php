@@ -181,7 +181,7 @@ $PMF_LANG["err_SaveComment"] = "Required fields are <strong>your name</strong>, 
 $PMF_LANG["err_VoteTooMuch"] = "<p>We do not count double votings. <a href=\"javascript:history.back();\">Click here</a>, to go back.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>You did not rate the question!</strong> <a href=\"javascript:history.back();\">Please click here</a>, to vote.</p>";
 $PMF_LANG["err_noMailAdress"] = "Your email address is not correct.<br /><a href=\"javascript:history.back();\">back</a>";
-$PMF_LANG["err_sendMail"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br /><a href=\"javascript:history.back();\">one page back</a><br /><br />";
+$PMF_LANG["err_sendMail"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Search for records:</strong><br />With an entry like <strong style=\"color: Red;\">word1 word2</strong> you can do a relevance descending search for two or more search criterion.</p><p><strong>Notice:</strong> Your search criterion has to be at least 4 letters long otherwise your request will be rejected.</p>";

@@ -157,7 +157,7 @@ $PMF_LANG["err_SaveComment"] = "N&oslash;dvendige felter: <strong>dit navn</stro
 $PMF_LANG["err_VoteTooMuch"] = "<p>Vi t&aelig;ller ikke dobbelt stemmer. <a href=\"javascript:history.back();\">Klik her</a>, for at g&aring; tilbage.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Du vurderede ikke sp&oslash;rgsm&aring;let!</strong> <a href=\"javascript:history.back();\">Klik venligst her</a>, for at stemme.</p>";
 $PMF_LANG["err_noMailAdress"] = "din e-mail-adresse er ikke korrekt.<br /><a href=\"javascript:history.back();\">tilbage</a>";
-$PMF_LANG["err_sendMail"] = "N&oslash;dvendige felter: <strong>dit navn</strong>, <strong>din e-mail-adresse</strong> og <strong>dit sp&oslash;rgsm&aring;l</strong>!<br /><br /><a href=\"javascript:history.back();\">En side tilbage</a><br /><br />";
+$PMF_LANG["err_sendMail"] = "N&oslash;dvendige felter: <strong>dit navn</strong>, <strong>din e-mail-adresse</strong> og <strong>dit sp&oslash;rgsm&aring;l</strong>!";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Fundne indl&aelig;g:</strong><br /></p>";

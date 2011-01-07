@@ -156,7 +156,7 @@ $PMF_LANG["err_SaveComment"] = "Pflichtfelder sind <strong>Name</strong>, <stron
 $PMF_LANG["err_VoteTooMuch"] = "<p>Leider konnte die Bewertung nicht gespeichert werden, da mit der IP bereits bewertet wurde. <a href=\"javascript:history.go(-1);\">Hier klicken</a>, um zum Artikel zur&uuml;ckzukehren.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Es wurde keine Bewertung abgegeben!</strong> <a href=\"javascript:history.go(-1);\">Hier klicken</a>, um dies nachzuholen.</p>";
 $PMF_LANG["err_noMailAdress"] = "Die angegebene E-Mail-Adresse ist nicht korrekt.<br /><a href=\"javascript:history.go(-1);\">Eine Seite zur&uuml;ck</a>";
-$PMF_LANG["err_sendMail"] = "Pflichtfelder sind u.a. <strong>Name</strong> und <strong>E-Mail-Adresse</strong>!<br /><br /><a href=\"javascript:history.go(-1);\">eine Seite zur&uuml;ck</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "Pflichtfelder sind u.a. <strong>Name</strong> und <strong>E-Mail-Adresse</strong>!";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Artikel finden:</strong><br />Mit der Eingabe <strong style=\"color: Red;\">Begriff1 Begriff2</strong> k&ouml;nnen zwei oder mehrere Suchbegriffe nach der Relevanz absteigend suchen lassen.</p><p><strong>Hinweis:</strong> Suchbegriff muss mindestens 4 Zeichen lang sein, k&uuml;rzere Anfragen werden automatisch abgewiesen.</p>";

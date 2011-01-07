@@ -1,7 +1,12 @@
 <h2>{msgContact}</h2>
             <p>{msgContactOwnText}</p>
             <p><strong>{msgContactEMail}</strong></p>
-            <form action="{writeSendAdress}" method="post" style="display: inline">
+
+            <div id="loader"></div>
+            <div id="contacts"></div>
+
+            <form id="formValues" action="#" method="post">
+                <input type="hidden" name="lang" id="lang" value="{lang}" />
             
                 <p>
                     <label for="name">{msgNewContentName}</label>
@@ -23,9 +28,17 @@
                 </p>
 
                 <p>
-                    <input class="submit" type="submit" name="submit" value="{msgS2FButton}" />
+                    <input class="submit" type="submit" id="submitcontact" value="{msgS2FButton}" />
                 </p>
             </form>
+            <script type="text/javascript" >
+            $(function() {
+                $('#submitcontact').click(function() {
+                    saveFormValues('sendcontact', 'contact');
+                });
+                $('form#formValues').submit(function() { return false; });
+            });
+            </script>
             
             <!-- DO NOT REMOVE THE COPYRIGHT NOTICE -->
             <div id="version"><a href="http://www.phpmyfaq.de"><img src="images/logo.png" width="88" height="31" alt="powered by phpMyFAQ {version}" title="powered by phpMyFAQ {version}" /></a></div>

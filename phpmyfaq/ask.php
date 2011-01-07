@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2010 phpMyFAQ Team
+ * @copyright 2002-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-17
@@ -46,7 +46,6 @@ $helper->setCategory($category);
 $tpl->processTemplate('writeContent', array(
     'msgQuestion'          => $PMF_LANG['msgQuestion'],
     'msgNewQuestion'       => $PMF_LANG['msgNewQuestion'],
-    'writeSendAdress'      => '?' . $sids . 'action=savequestion',
     'msgNewContentName'    => $PMF_LANG['msgNewContentName'],
     'msgNewContentMail'    => $PMF_LANG['msgNewContentMail'],
     'defaultContentMail'   => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',

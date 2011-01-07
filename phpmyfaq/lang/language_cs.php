@@ -162,7 +162,7 @@ $PMF_LANG["err_SaveComment"] = "Povinná pole jsou <strong>jméno</strong>, <str
 $PMF_LANG["err_VoteTooMuch"] = "<p>Opakované hlasování se nepočítá. <a href=\"javascript:history.back();\">Klikněte zde</a> pro návrat.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Není hodnocení!</strong> <a href=\"javascript:history.back();\">Prosím klikněte zde</a> pro hlasování.</p>";
 $PMF_LANG["err_noMailAdress"] = "Adresa není správná.<br /><a href=\"javascript:history.back();\">zpět</a>";
-$PMF_LANG["err_sendMail"] = "Povinná pole jsou <strong>jméno</strong>, <strong>email adresa</strong> a <strong>dotaz</strong>!<br /><br />\n<a href=\"javascript:history.back();\">O stránku zpět</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "Povinná pole jsou <strong>jméno</strong>, <strong>email adresa</strong> a <strong>dotaz</strong>!";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "Prohledávejte databázi FAQ - Často Kladených Dotazů, tak jak jste zvyklí z běžných vyhledávačů. <br />Pro zvýšení relevance nalezených odpovědí přispěje použití více klíčových slov ve vašem dotazu (např. KlíčovéSlovo1 KlíčovéSlovo2).<br /><br />";

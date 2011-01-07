@@ -131,7 +131,7 @@ $PMF_LANG['err_SaveComment'] = 'Campos obrigatórios são <strong>Nome</strong>,
 $PMF_LANG['err_VoteTooMuch'] = '<p>Já fez o voto. <a href="nojavascript...history.back();">Clique aqui</a>, para voltar.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>Não avaliou!</strong> <a href="nojavascript...history.back();">Clique aqui</a>, para votar.</p>';
 $PMF_LANG['err_noMailAdress'] = 'E-mail incorreto.<br /><a href="nojavascript...history.back();">voltar</a>';
-$PMF_LANG['err_sendMail'] = 'Campos obrigatórios são <strong>nome</strong>, <strong>e-mail</strong> and <strong>questï¿½o</strong>!<br /><br /><a href="nojavascript...history.back();">voltar</a><br /><br />';
+$PMF_LANG['err_sendMail'] = 'Campos obrigatórios são <strong>nome</strong>, <strong>e-mail</strong> and <strong>questï¿½o</strong>!';
 $PMF_LANG['help_search'] = '<p><strong>Pesquisar registros:</strong><br /></p>';
 $PMF_LANG['ad'] = 'Seção Administração';
 $PMF_LANG['ad_menu_user_administration'] = 'Administração de Usuários';

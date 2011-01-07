@@ -2,7 +2,7 @@
             
             <p>{msgNewQuestion}</p>
             
-            <form action="{writeSendAdress}" method="post" style="display: inline">
+            <form id="formValues" action="#" method="post">
 
                 <p>
                     <label for="username">{msgNewContentName}</label>
@@ -29,6 +29,18 @@
                 <p>
                     {captchaFieldset}
                 <p>
-                    <input class="submit" type="submit" name="submit" value="{msgNewContentSubmit}">
+                    <input class="submit" type="submit" id="submitquestion" value="{msgNewContentSubmit}">
                 </p>
             </form>
+
+            <div id="loader"></div>
+            <div id="questions"></div>
+
+            <script type="text/javascript" >
+            $(function() {
+                $('#submitquestion').click(function() {
+                    saveFormValues('savequestion', 'question');
+                });
+                $('form#formValues').submit(function() { return false; });
+            });
+            </script>

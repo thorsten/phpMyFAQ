@@ -132,7 +132,7 @@ $PMF_LANG['err_SaveComment'] = '必須輸入的是<strong>姓名</strong>, <stro
 $PMF_LANG['err_VoteTooMuch'] = '<p>您已經評分了. <a href="nojavascript...history.back();">點擊這裡</a>, 返回.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>您沒有給此問題評分!</strong> <a href="nojavascript...history.back();">請點擊這裡</a>, 進行評分.</p>';
 $PMF_LANG['err_noMailAdress'] = '您輸入的電郵不正確.<br /><a href="nojavascript...history.back();">返回</a>';
-$PMF_LANG['err_sendMail'] = '必須輸入的是 <strong>姓名</strong>, <strong>電郵</strong> 和 <strong>問題</strong>!<br /><br /><a href="nojavascript...history.back();">返回前頁</a><br /><br />';
+$PMF_LANG['err_sendMail'] = '必須輸入的是 <strong>姓名</strong>, <strong>電郵</strong> 和 <strong>問題</strong>!';
 $PMF_LANG['help_search'] = '<p><strong>搜尋記錄:</strong><br />包快 <strong style="color: Red;">word1 word2</strong> 您可以進行兩個或兩個以上條件的關連查詢.</p><p><strong>注意:</strong> 您的搜尋條件必須至少包括4個字符,否則將不能進行查詢.</p>';
 $PMF_LANG['ad'] = '管理員介面';
 $PMF_LANG['ad_menu_user_administration'] = '用戶管理';
