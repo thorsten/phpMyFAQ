@@ -264,7 +264,7 @@ nav ul li.selected a {
 #social {
     margin: auto; }
 #faqTabs {
-	width: 100%; margin-bottom: 11px; }
+	width: 100%; margin-bottom: 11px; margin-top: 11px; }
 #faqTabs ul.faqTabNav {
 	list-style-type: none; margin: 0; padding: 0; width: 100%; overflow: hidden; border-bottom: 2px solid #d7d7d7; }
 #faqTabs ul.faqTabNav a {

@@ -307,6 +307,7 @@ $('#instantform').submit(function()
  */
 function showFaqPopup(div)
 {
+    $('.faqTabContent').hide();
     $('#' + div).fadeIn('slow');
 }
 
@@ -315,5 +316,5 @@ function showFaqPopup(div)
  */
 function hideFaqPopup(div)
 {
-    $('#' + div).hide();
+    setTimeout("$('#' + div).hide()", 500);
 }
