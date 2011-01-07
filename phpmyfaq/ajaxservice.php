@@ -91,7 +91,7 @@ switch ($action) {
         $newsid   = PMF_Filter::filterInput(INPUT_POST, 'newsid', FILTER_VALIDATE_INT);
         $username = PMF_Filter::filterInput(INPUT_POST, 'user', FILTER_SANITIZE_STRING);
         $mail     = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $comment  = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_SPECIAL_CHARS);
+        $comment  = PMF_Filter::filterInput(INPUT_POST, 'comment_text', FILTER_SANITIZE_SPECIAL_CHARS);
 
         switch ($type) {
             case 'news':
@@ -107,8 +107,8 @@ switch ($action) {
             $mail = PMF_Configuration::getInstance()->get('main.administrationMail');
         }
 
-        if (!is_null($username) && !is_null($mail) && !is_null($comment) && checkBannedWord($comment) &&
-            !$faq->commentDisabled($id, $languageCode, $type)) {
+        if (!is_null($username) && !empty($username) && !empty($mail) && !is_null($mail) && !is_null($comment) &&
+            !empty($comment) && checkBannedWord($comment) && !$faq->commentDisabled($id, $languageCode, $type)) {
 
             $faqsession->userTracking("save_comment", $id);
             $commentData = array(
@@ -119,6 +119,7 @@ switch ($action) {
                 'comment'   => nl2br($comment),
                 'date'      => $_SERVER['REQUEST_TIME'],
                 'helped'    => '');
+
             if ($faq->addComment($commentData)) {
                 $emailTo = $faqconfig->get('main.administrationMail');
                 $urlToContent = '';
@@ -148,6 +149,7 @@ switch ($action) {
                     $oLink->itemTitle = $news['header'];
                     $urlToContent     = $oLink->toString();
                 }
+                
                 $commentMail =
                     'User: ' . $commentData['username'] . ', mailto:'. $commentData['usermail'] . "\n".
                     'New comment posted on: ' . $urlToContent .
@@ -172,6 +174,8 @@ switch ($action) {
                 $faqsession->userTracking('error_save_comment', $id);
                 $message = array('error' => $PMF_LANG['err_SaveComment']);
             }
+        } else {
+            $message = array('error' => 'Please add your name, your e-mail address and a comment!');
         }
         break;
 

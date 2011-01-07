@@ -23,32 +23,27 @@
             <div id="faqTabs">
                 <ul class="faqTabNav">
                     <li>
-                        <a href="javascript:void(0);" onmouseover="showFaqPopup('authorInfo')"
-                           onmouseout="hideFaqPopup('authorInfo')">
+                        <a href="javascript:void(0);" onclick="infoBox('authorInfo')">
                             About this FAQ
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);" onmouseover="showFaqPopup('votingForm')"
-                           onmouseout="hideFaqPopup('votingForm')">
+                        <a href="javascript:void(0);" onclick="infoBox('votingForm')">
                             Rate this FAQ
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);" onmouseover="showFaqPopup('switchAvailableLanguage')"
-                           onmouseout="hideFaqPopup('switchAvailableLanguage')">
+                        <a href="javascript:void(0);" onclick="infoBox('switchAvailableLanguage')">
                             Change language
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);" onmouseover="showFaqPopup('addTranslation')"
-                           onmouseout="hideFaqPopup('addTranslation')">
+                        <a href="javascript:void(0);" onclick="infoBox('addTranslation')">
                             Translate this FAQ
                         </a>
                     </li>
                 </ul>
-                <div class="faqTabContent" id="authorInfo" onmouseover="showFaqPopup('authorInfo')"
-                     onmouseout="hideFaqPopup('authorInfo')" style="display: none;">
+                <div class="faqTabContent" id="authorInfo" style="display: none;">
                     {writeDateMsg}<br />{writeAuthor}<br />{writeRevision}<br />{editThisEntry}
                 </div>
                 <div class="faqTabContent" id="votingForm" style="display: none;">
@@ -87,7 +82,7 @@
             <!-- Comment Form -->
             <a name="comment"></a>
             <div id="commentForm" style="display: none;">
-                <form action="#" method="post">
+                <form id="formValues" action="#" method="post">
                     <input type="hidden" name="id" id="id" value="{id}" />
                     <input type="hidden" name="lang" id="lang" value="{lang}" />
                     <input type="hidden" name="type" id="type" value="faq" />
@@ -112,7 +107,7 @@
                     </p>
 
                     <p>
-                        <input class="submit submitcomment" type="submit" value="{msgNewContentSubmit}" />
+                        <input class="submit" id="submitComment" type="submit" value="{msgNewContentSubmit}" />
                     </p>
                 </form>
             </div>
@@ -125,39 +120,32 @@
 
             <script type="text/javascript" >
             $(function() {
-                $('.submitcomment').click(function() {
-                    var id      = $("#id").val();
-                    var lang    = $("#lang").val();
-                    var type    = $("#type").val();
-                    var user    = $("#user").val();
-                    var email   = $("#mail").val();
-                    var comment = $("#comment_text").val();
+                $('#submitComment').click(function() {
+            
+                    var formValues = $('#formValues');
 
-                    var dataString = 'user='+ user + '&email=' + email + '&comment=' + comment +
-                                     '&id=' + id + '&lang=' + lang + '&type=' + type;
+                    $("#loader").show();
+                    $("#loader").fadeIn(400).html('<img src="images/ajax-loader.gif" />Saving comment...');
 
-
-                    if (user == '' || email == '' || comment == '') {
-                        alert('please add something more');
-                    } else {
-                        $("#loader").show();
-                        $("#loader").fadeIn(400).html('<img src="images/ajax-loader.gif" />Loading Comment...');
-
-                        $.ajax({
-                            type:     'post',
-                            url:      'ajaxservice.php?action=savecomment',
-                            data:     dataString,
-                            dataType: 'json',
-                            cache:   false,
-                            success: function(json) {
-                                // @todo add missing check on json.error and json.success
-                                $("#comments").html('<p>' + json.success + '</p>');
+                    $.ajax({
+                        type:     'post',
+                        url:      'ajaxservice.php?action=savecomment',
+                        data:     formValues.serialize(),
+                        dataType: 'json',
+                        cache:   false,
+                        success: function(json) {
+                            if (json.success == undefined) {
+                                $("#comments").html('<p class="error">' + json.error + '</p>');
+                                $("#loader").hide();
+                            } else {
+                                $("#comments").html('<p class="success">' + json.success + '</p>');
                                 $("#comments").fadeIn("slow");
                                 $("#loader").hide();
+                                $('#commentForm').hide();
                                 // @todo add reload of #comments
                             }
-                        });
-                    }
+                        }
+                    });
 
                     return false;
                 });

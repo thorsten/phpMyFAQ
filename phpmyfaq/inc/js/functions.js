@@ -18,10 +18,10 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @since     2003-11-13
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2003-2010 phpMyFAQ Team
+ * @since     2003-11-13
  */
 
 function Picture(pic,title,width,height)
@@ -303,18 +303,16 @@ $('#instantform').submit(function()
 });
 
 /**
+ * Displays or hides the info boxes
  *
+ * @return void
  */
-function showFaqPopup(div)
+function infoBox(infobox_id)
 {
-    $('.faqTabContent').hide();
-    $('#' + div).fadeIn('slow');
-}
-
-/**
- *
- */
-function hideFaqPopup(div)
-{
-    setTimeout("$('#' + div).hide()", 500);
+    if ($('#' + infobox_id).css('display') == 'none') {
+        $('.faqTabContent').hide();
+        $('#' + infobox_id).show();
+    } else {
+        $('#' + infobox_id).hide();
+    }
 }

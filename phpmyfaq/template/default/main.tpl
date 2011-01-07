@@ -8,7 +8,9 @@
             <header>
                 <h2>{writeNewsHeader} {writeNewsRSS}</h2>
             </header>
-            {writeNews}
+            <article>
+                {writeNews}
+            </article>
             <p>{showAllNews}</p>
             <p align="center">{writeNumberOfArticles}</p>
         </section>

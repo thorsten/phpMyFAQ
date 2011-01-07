@@ -170,15 +170,19 @@ class PMF_News
             $oLink = new PMF_Link($url);
             
             if (isset($item['header'])) {
-                $oLink->itemTitle =$item['header'];
+                $oLink->itemTitle = $item['header'];
             }
+
+
+
             $output .= sprintf('<header><h3><a name="news_%d" href="%s">%s <img class="goNews" src="images/more.gif" width="11" height="11" alt="%s" /></a></h3></header>',
                 $item['id'],
                 $oLink->toString(),
+                $item['header'],
                 $item['header']
                 );
 
-            $output .= sprintf('<article>%s', $item['content']);
+            $output .= sprintf('%s', $item['content']);
 
             if (strlen($item['link']) > 1) {
                 $output .= sprintf('<br />%s <a href="%s" target="_%s">%s</a>',
@@ -188,7 +192,7 @@ class PMF_News
                     $item['linkTitle']);
             }
             
-            $output .= sprintf('</article><div class="date">%s</div>', PMF_Date::createIsoDate($item['date']));
+            $output .= sprintf('<div class="date">%s</div>', PMF_Date::createIsoDate($item['date']));
         }
 
         return ('' == $output) ? $this->pmf_lang['msgNoNews'] : $output;

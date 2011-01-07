@@ -236,6 +236,12 @@ nav ul li.selected a {
     -moz-border-radius: 5px; -webkit-border-radius: 5px; margin: 5px 0; }
 #mainContent p.comment img {
     float: right; }
+#mainContent p.error { 
+    margin: 10px auto; padding: 10px; background-color: #f97c7c; color: #222; border-radius: 5px; 
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#mainContent p.success { 
+    margin: 10px auto; padding: 10px; background-color: #7dfd77; color: #222; border-radius: 5px; 
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 
 /* phpMyFAQ forms */
 #mainContent form p {
@@ -262,11 +268,11 @@ nav ul li.selected a {
     float: right; padding: 2px; background-color: #fff; border: 1px solid #d7d7d7; border-radius: 5px; 
     -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 #social {
-    margin: auto; }
+    margin: 0 auto; }
 #faqTabs {
 	width: 100%; margin-bottom: 11px; margin-top: 11px; }
 #faqTabs ul.faqTabNav {
-	list-style-type: none; margin: 0; padding: 0; width: 100%; overflow: hidden; border-bottom: 2px solid #d7d7d7; }
+	list-style-type: none; margin: 0; padding: 0; width: 456px; overflow: hidden; border-bottom: 2px solid #d7d7d7; }
 #faqTabs ul.faqTabNav a {
 	display: block; width: 100%; margin-right: 5px; font-size: 12px; text-decoration: none; color: #333; }
 #faqTabs ul.faqTabNav li {
@@ -277,12 +283,10 @@ nav ul li.selected a {
 #faqTabs ul.faqTabNav li:hover {
     background: #d7d7d7; }
 .faqTabContent {
-    position: fixed; display: none; z-index: 100; background-color: #d7d7d7; padding: 5px; width: 444px; 
+    position: absolute; display: none; z-index: 100; background-color: #d7d7d7; padding: 5px; width: 444px; 
     opacity:0.9; color: #222; border: 1px solid transparent;
     border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; border-bottom-right-radius: 5px; 
 	-moz-border-radius-bottomright: 5px; }
-
-
 
 /* Right panel */
 aside {
