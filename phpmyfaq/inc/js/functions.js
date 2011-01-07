@@ -275,33 +275,6 @@ function table_addRow(table, rowNumber, col1, col2)
     tr.appendChild(td2);
 }
 
-$('#instantfield').keyup(function() 
-{
-    var search   = $('#instantfield').val();
-    var language = $('#ajaxlanguage').val();
-    var category = $('#searchcategory').val();
-            
-    if (search.length > 0) { 
-        $.ajax({ 
-            type:    "POST", 
-            url:     "ajaxresponse.php", 
-            data:    "search=" + search + "&ajaxlanguage=" + language + "&searchcategory=" + category, 
-            success: function(searchresults) 
-            { 
-                $("#instantresponse").empty(); 
-                if (searchresults.length > 0)  { 
-                    $("#instantresponse").append(searchresults);
-                } 
-            } 
-        });
-    }
-});
-
-$('#instantform').submit(function()
-{
-    return false;
-});
-
 /**
  * Displays or hides the info boxes
  *
@@ -355,4 +328,39 @@ function saveFormValues(action, formName)
     });
     
     return false;
+}
+
+/**
+ * Auto-suggest function for instant response
+ *
+ * @return void
+ */
+function autoSuggest()
+{
+    $('input#instantfield').bind('keyup', function()
+    {
+        var search   = $('#instantfield').val();
+        var language = $('#ajaxlanguage').val();
+        var category = $('#searchcategory').val();
+
+        if (search.length > 0) {
+            $.ajax({
+                type:    "POST",
+                url:     "ajaxresponse.php",
+                data:    "search=" + search + "&ajaxlanguage=" + language + "&searchcategory=" + category,
+                success: function(searchresults)
+                {
+                    $("#instantresponse").empty();
+                    if (searchresults.length > 0)  {
+                        $("#instantresponse").append(searchresults);
+                    }
+                }
+            });
+        }
+    });
+
+    $('#instantform').submit(function()
+    {
+        return false;
+    });
 }
