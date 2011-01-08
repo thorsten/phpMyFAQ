@@ -61,7 +61,8 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     <link rel="shortcut icon" href="../template/default/favicon.ico">
     <link rel="apple-touch-icon" href="../template/default/apple-touch-icon.png">
     <link rel="stylesheet" href="css/setup.css?v=1">
-    <script language="javascript" type="text/javascript">
+    <script type="text/javascript" src="../inc/js/jquery.min.js"></script>
+    <script type="text/javascript">
     /*<![CDATA[*/
     // <!--
     function cssAddClass(ele, className) {
@@ -961,10 +962,11 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
     $oConf->update($configs);
     
-    print "</p>\n";
-    print "<p class=\"success\">All database tables were successfully created.</p>\n";
-    print "<p class=\"success\">Congratulation! Everything seems to be okay.</p>\n";
 ?>
+        </p>
+        <p class="success">
+            All database tables were successfully created.<br />Congratulation! Everything seems to be okay.
+        </p>
         <script type="text/javascript">
         //<![CDATA[
         var iframect = 0;

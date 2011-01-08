@@ -56,6 +56,7 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     <link rel="shortcut icon" href="../template/default/favicon.ico">
     <link rel="apple-touch-icon" href="../template/default/apple-touch-icon.png">
     <link rel="stylesheet" href="css/setup.css?v=1">
+    <script type="text/javascript" src="../inc/js/jquery.min.js"></script>
 </head>
 <body>
 

@@ -175,7 +175,7 @@ class PMF_Questionnaire_Data
         return array(
             'os'    => PHP_OS,
             'httpd' => $_SERVER['SERVER_SOFTWARE'],
-            // we don't want the real IP address (for privacy policy reasons) but only
+            // we don't want the real IPv4 address (for privacy policy reasons) but only
             // a network address to see whether your phpMyFAQ is running on a private or public network.
             // IANA reserved addresses for private networks (RFC 1918) are:
             // - 10.0.0.0/8
