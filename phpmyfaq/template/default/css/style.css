@@ -318,7 +318,9 @@ aside section ul li a:hover {
 footer {
     position: absolute; left: 0; width: 100%; background: #222; }
 footer div {
-    display: table; margin: 0 auto; padding: 44px 0; width: 960px; color: #777; }
+    display: table; margin: 0 auto; padding: 44px 0; width: 980px; color: #777; }
+footer div section {
+    display: table-cell; width: 50%; }
 #copyrightnote {
     color: #fff; margin: auto; text-align: right; padding-right: 10px; }
 #copyrightnote a:link, #copyrightnote a:visited {

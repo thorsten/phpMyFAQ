@@ -420,7 +420,7 @@ $main_template_vars = array(
     'languageBox'         => $PMF_LANG['msgLangaugeSubmit'],
     'writeLangAdress'     => $writeLangAdress,
     'switchLanguages'     => PMF_Language::selectLanguages($LANGCODE, true),
-    'userOnline'          => $plr->getMsg('plmsgUserOnline', $totUsersOnLine) . '<br />' .
+    'userOnline'          => $plr->getMsg('plmsgUserOnline', $totUsersOnLine) . ' | ' .
                              $plr->getMsg('plmsgGuestOnline', $usersOnLine[0]) .
                              $plr->getMsg('plmsgRegisteredOnline',$usersOnLine[1]),
     'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
