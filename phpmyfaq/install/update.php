@@ -100,11 +100,11 @@ $templateDir = '../template';
  */
 function HTMLFooter()
 {
-    printf('<footer><div><p id="copyrightnote">%s</p><div></footer></body></html>', COPYRIGHT);
+    printf('</div></div><footer><div><p id="copyrightnote">%s</p><div></footer></body></html>', COPYRIGHT);
 }
 
 if (!is_readable(PMF_ROOT_DIR.'/inc/data.php') && !is_readable(PMF_ROOT_DIR.'/config/database.php')) {
-    print '<p>It seems you never run a version of phpMyFAQ.<br />' .
+    print '<p class="error">It seems you never run a version of phpMyFAQ.<br />' .
           'Please use the <a href="setup.php">install script</a>.</p>';
     HTMLFooter();
     die();
@@ -129,33 +129,36 @@ if ($step == 1) {
     $faqconfig = PMF_Configuration::getInstance();
     $version   = $faqconfig->get('main.currentVersion');
 ?>
-<form action="update.php?step=2" method="post">
-<fieldset class="installation">
-<legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 1 of 4)</strong></legend>
-<p>This update will work <strong>only</strong> for the following versions:</p>
-<ul type="square">
-    <li>phpMyFAQ 2.0.x</li>
-    <li>phpMyFAQ 2.5.x</li>
-    <li>phpMyFAQ 2.6.x</li>
-</ul>
-<p>This update will <strong>not</strong> work for the following versions:</p>
-<ul type="square">
-    <li>phpMyFAQ 0.x</li>
-    <li>phpMyFAQ 1.x</li>
-</ul>
-<p><strong>Please make a full backup of your SQL tables before running this update.</strong></p>
-<?php 
-if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable($templateDir)) {
-    printf("<p><strong>Please make the dir %s and its contents writeable (777 on Linux/UNIX).</strong></p>",
-        $templateDir);
-}
-?>
-<p align="center">Your current phpMyFAQ version: <?php print $version; ?></p>
-<input name="version" type="hidden" value="<?php print $version; ?>"/>
+        <form action="update.php?step=2" method="post">
+            <input name="version" type="hidden" value="<?php print $version; ?>"/>
+            <fieldset>
+            <legend><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 1 of 4)</strong></legend>
+            <p class="hint">This update will work <strong>only</strong> for the following versions:</p>
+            <ul type="square">
+                <li>phpMyFAQ 2.0.x</li>
+                <li>phpMyFAQ 2.5.x</li>
+                <li>phpMyFAQ 2.6.x</li>
+            </ul>
+            <p>This update will <strong>not</strong> work for the following versions:</p>
+            <ul type="square">
+                <li>phpMyFAQ 0.x</li>
+                <li>phpMyFAQ 1.x</li>
+            </ul>
+            <p><strong>Please make a full backup of your SQL tables before running this update.</strong></p>
+            <?php
+            if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable($templateDir)) {
+                printf('<p class="error"><strong>Please make the dir %s and its contents writeable (777 on Linux/UNIX).</strong></p>',
+                    $templateDir);
+            }
+            ?>
+            <p align="hint">Your current phpMyFAQ version: <?php print $version; ?></p>
 
-<p class="center"><input type="submit" value="Go to step 2 of 4" class="button" /></p>
-</fieldset>
-</form>
+
+            <p>
+                <input class="submit" type="submit" value="Go to step 2 of 4" />
+            </p>
+            </fieldset>
+        </form>
 <?php
     HTMLFooter();
 }
@@ -222,14 +225,16 @@ if ($step == 2) {
     // is everything is okay?
     if ($checkDatabaseSetupFile && $checkTemplateDirectory) {
 ?>
-<form action="update.php?step=3" method="post">
-<input type="hidden" name="version" value="<?php print $version; ?>" />
-<fieldset class="installation">
-    <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 2 of 4)</strong></legend>
-    <p>A backup of your database configuration file has been made.</p>
-    <p class="center"><input type="submit" value="Go to step 3 of 4" class="button" /></p>
-</fieldset>
-</form>
+        <form action="update.php?step=3" method="post">
+        <input type="hidden" name="version" value="<?php print $version; ?>" />
+        <fieldset>
+            <legend><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 2 of 4)</strong></legend>
+            <p>A backup of your database configuration file has been made.</p>
+            <p>
+                <input class="submit" type="submit" value="Go to step 3 of 4" />
+            </p>
+        </fieldset>
+        </form>
 <?php
         HTMLFooter();
     } else {
@@ -242,14 +247,16 @@ if ($step == 2) {
 /**************************** STEP 3 OF 4 ***************************/
 if ($step == 3) {
 ?>
-<form action="update.php?step=4" method="post">
-<input type="hidden" name="version" value="<?php print $version; ?>" />
-<fieldset class="installation">
-<legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 3 of 4)</strong></legend>
-<p class="center">The configuration will be updated after the next step.</p>
-<p class="center"><input type="submit" value="Go to step 4 of 4" class="button" /></p>
-</fieldset>
-</form>
+        <form action="update.php?step=4" method="post">
+        <input type="hidden" name="version" value="<?php print $version; ?>" />
+        <fieldset>
+            <legend><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 3 of 4)</strong></legend>
+            <p>The configuration will be updated after the next step.</p>
+            <p>
+                <input class="submit" type="submit" value="Go to step 4 of 4" />
+            </p>
+        </fieldset>
+        </form>
 <?php
     HTMLFooter();
 }
@@ -565,7 +572,7 @@ if ($step == 4) {
                 break;
                 
             default:
-                print '<p>Please read <a target="_blank" href="../docs/documentation.en.html">documenation</a> about migration to UTF-8.</p>';
+                print '<p class="hint">Please read <a target="_blank" href="../docs/documentation.en.html">documenation</a> about migration to UTF-8.</p>';
                 break; 
             }
         }
@@ -587,7 +594,8 @@ if ($step == 4) {
         }
 
         if (!mkdir($templateBackupDir, 0777)) {
-            die("Couldn't create the templates backup dir.");
+            die('<p class="error">Couldn\'t create the templates backup directory.</p>');
+            HTMLFooter();
         }
         
         foreach (new DirectoryIterator($templateDir) as $item) {
@@ -789,11 +797,11 @@ if ($step == 4) {
             }
             if (!$result) {
                 print "</div>";
-                print "\n<div class=\"error\">\n";
-                print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
-                print "<div style=\"text-align: left;\"><p>Query:\n";
-                print "<pre>".htmlentities($current_query)."</pre></p></div>\n";
-                print "</div>";
+                print '<p class="error"><strong>Error:</strong> Please install your version of phpMyFAQ once again or send
+                us a <a href=\"http://www.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
+                printf('<p class="error"><strong>DB error:</strong> %s</p>', $db->error());
+                printf('<code>%s</code>', htmlentities($each_query[1]));
+                HTMLFooter();
                 die();
             }
             usleep(10000);
@@ -848,11 +856,11 @@ if ($step == 4) {
             $result = $db->query($current_query);
             printf('<span title="%s">.</span>', $current_query);
             if (!$result) {
-                print "\n<div class=\"error\">\n";
-                print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
-                print "<div style=\"text-align: left;\"><p>Query:\n";
-                print "<pre>".htmlentities($current_query)."</pre></p></div>\n";
-                print "</div>";
+                print '<p class="error"><strong>Error:</strong> Please install your version of phpMyFAQ once again or send
+                us a <a href=\"http://www.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
+                printf('<p class="error"><strong>DB error:</strong> %s</p>', $db->error());
+                printf('<code>%s</code>', htmlentities($current_query));
+                HTMLFooter();
                 die();
             }
             usleep(10000);
@@ -862,11 +870,11 @@ if ($step == 4) {
 
     print "</p>\n";
 
-    print '<p class="center">The database was updated successfully.</p>';
-    print '<p class="center"><a href="../index.php">phpMyFAQ</a></p>';
+    print '<p class="success">The database was updated successfully.</p>';
+    print '<p><a href="../index.php">phpMyFAQ</a></p>';
     foreach (glob(PMF_ROOT_DIR.'/config/*.bak.php') as $filename) {
         if (!@unlink($filename)) {
-            print "<p class=\"center\">Please manually remove the backup file '".$filename."'.</p>\n";
+            print "<p class=\"hint\">Please manually remove the backup file '".$filename."'.</p>\n";
         }
     }
 
@@ -880,15 +888,15 @@ if ($step == 4) {
     }
     // Remove 'setup.php' file
     if (@unlink(dirname($_SERVER['PATH_TRANSLATED']).'/setup.php')) {
-        print "<p class=\"center\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";
+        print "<p class=\"success\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";
     } else {
-        print "<p class=\"center\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
+        print "<p class=\"hint\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
     }
     // Remove 'update.php' file
     if (@unlink(dirname($_SERVER['PATH_TRANSLATED']).'/update.php')) {
-        print "<p class=\"center\">The file <em>./install/update.php</em> was deleted automatically.</p>\n";
+        print "<p class=\"success\">The file <em>./install/update.php</em> was deleted automatically.</p>\n";
     } else {
-        print "<p class=\"center\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
+        print "<p class=\"hint\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
     }
 
     HTMLFooter();
