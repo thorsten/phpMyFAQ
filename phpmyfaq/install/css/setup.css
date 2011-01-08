@@ -162,7 +162,7 @@ code {
 
 /* Header */
 #header {
-    width: 980px; margin: 0 auto; padding: 2.5em 0 0 0; }
+    width: 720px; margin: 0 auto; padding: 2.5em 0 0 0; }
 #header h1 {
     font-size: 48px; padding-top: 5px; line-height: .6; }
 #header h1 a:link, header h1 a:visited {
@@ -174,7 +174,7 @@ code {
 nav {
     position: absolute; left: 0; top: 108px; width: 100%; background: url(../../admin/images/nav_background.png); }
 nav ul {
-    margin: 0 auto; width: 980px; list-style: none; }
+    margin: 0 auto; width: 720px; list-style: none; }
 nav ul li {
     float: left; }
 nav ul li a, nav ul li a:visited {
@@ -185,30 +185,9 @@ nav ul li a:hover {
 nav ul li.selected a {
     color: #fff; }
 
-/* Categories */
-#categories {
-    width: 180px; background: #f0f0f0 url(../images/category_background.png) repeat-x; margin-bottom: 15px;
-    border: 1px solid #d7d7d7; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
-#categories ul {
-	margin: 0 1px 0 1px; list-style: none outside none; padding: 0; }
-#categories ul li {
-	}
-#categories ul li a {
-	padding-left: 5px; line-height: 30px; text-decoration: none; display: block; color: #222; }
-#categories ul li a:hover {
-	color: #F67600; }
-#categories a.active {
-	background-color: #fff; font-weight: bold; }
-#categories .subcat li a {
-    padding-left: 10px; }
-#categories .subcat li li a {
-    padding-left: 15px; }
-#categories .subcat .active {
-	}
-
 /* Content */
 #content {
-    display: table; width: 980px; margin: 88px auto 0; }
+    display: table; width: 720px; margin: 88px auto 0; }
 #leftContent {
     display: table-cell; width: 180px; vertical-align: top; padding-top: 11px; }
 #mainContent {
@@ -248,69 +227,20 @@ nav ul li.selected a {
     }
 #mainContent form input[type="submit"].submit, #mainContent form input[type="submit"].reset  {
     margin-left: 160px; }
+#mainContent fieldset {
+    border: 1px solid #d7d7d7; font-size: 14px; margin-right: 10px; padding: 5px; border-radius: 5px;
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#mainContent legend {
+    padding: 5px; }
 #mainContent .collapsed {
     display: none;
 }
-
-/* FAQs */
-#breadcrumbs span[itemtype] {
-    display: -moz-inline-stack; display: inline-block; margin: 0 0 5px; zoom: 1; *display: inline; font-size: 15px;
-    font-weight: bold; }
-#solution_id {
-    float: right; padding: 2px; background-color: #fff; border: 1px solid #d7d7d7; border-radius: 5px;
-    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
-#social {
-    margin: 0 auto; }
-#faqTabs {
-	width: 100%; margin-bottom: 11px; margin-top: 11px; }
-#faqTabs ul.faqTabNav {
-	list-style-type: none; margin: 0; padding: 0; width: 456px; overflow: hidden; border-bottom: 2px solid #d7d7d7; }
-#faqTabs ul.faqTabNav a {
-	display: block; width: 100%; margin-right: 5px; font-size: 12px; text-decoration: none; color: #333; }
-#faqTabs ul.faqTabNav li {
-	float: left; margin: 0 4px 0 0; padding: 1px; text-align: center; background-color: #fff;
-	border-top: 1px solid #d7d7d7; border-left: 1px solid #d7d7d7; border-right: 1px solid #d7d7d7;
-	border-top-left-radius: 3px; -moz-border-radius-topleft: 3px; border-top-right-radius: 3px;
-	-moz-border-radius-topright: 3px; }
-#faqTabs ul.faqTabNav li:hover {
-    background: #d7d7d7; }
-.faqTabContent {
-    position: absolute; display: none; z-index: 100; background-color: #d7d7d7; padding: 5px; width: 444px;
-    opacity:0.9; color: #222; border: 1px solid transparent;
-    border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; border-bottom-right-radius: 5px;
-	-moz-border-radius-bottomright: 5px; }
-
-/* Right panel */
-aside {
-    display: table-cell; width: 300px; padding-top: 5px; background: url(../images/sidebar_background.png) top left; }
-aside section {
-    margin: 5px 0 0 5px; padding: 5px 11px; background: url(../images/search_background.png) repeat-x;
-    border-radius: 11px; -moz-border-radius: 11px; -webkit-border-radius: 11px; }
-aside section h3 {
-    font-size: 16px; }
-aside section ul li a, aside section ul li a:visited {
-    display: block; }
-aside section ul li a:hover {
-    text-decoration: underline; }
-
-#searchBox {
-    background: url(../images/search_background.png) repeat-x; overflow: hidden; padding: 20px; margin-bottom: 22px;
-    width: 90%; color: #222; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; }
-#searchBox input[type=search] {
-    width: 300px; height: 1.66em; font-size: 1.33em; margin-bottom: 5px;
-    border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
-#searchBox a {
-    color: #222; text-decoration: none; }
-#searchBox a.help {
-    margin-right: 10px; padding: 0 12px 0 0; background: url(../images/arrow.gif) no-repeat scroll right 55% transparent; }
-#searchBox a.help:hover {
-	text-decoration: underline; }
 
 /* Footer */
 footer {
     position: absolute; left: 0; width: 100%; background: #222; }
 footer div {
-    display: table; margin: 0 auto; padding: 44px 0; width: 960px; color: #777; }
+    display: table; margin: 0 auto; padding: 44px 0; width: 720px; color: #777; }
 #copyrightnote {
     color: #fff; margin: auto; text-align: right; padding-right: 10px; }
 #copyrightnote a:link, #copyrightnote a:visited {

@@ -109,10 +109,10 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
 
 <nav>
     <ul>
-        <li><a href="http://www.phpmyfaq.de//documentation.php">Documentation</a></li>
-        <li><a href="http://www.phpmyfaq.de//support.php">Support</a></li>
-        <li><a href="http://forum.phpmyfaq.de/">Forums</a></li>
-        <li><a href="http://faq.phpmyfaq.de/">FAQ</a></li>
+        <li><a target="_blank" href="http://www.phpmyfaq.de//documentation.php">Documentation</a></li>
+        <li><a target="_blank" href="http://www.phpmyfaq.de//support.php">Support</a></li>
+        <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
+        <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
     </ul>
 </nav>
 
@@ -433,12 +433,12 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                 <label>Retype password:</label>
                 <input type="password" name="password_retyped" title="Please retype your password for checkup." />
             </p>
-        </fieldset>
+            </fieldset>
 
-        <p class="hint"><strong>Do not use it if you're already running a version of phpMyFAQ!</strong></p>
-
-        <input class="submit" type="submit" value="Click to install phpMyFAQ <?php print VERSION; ?>" class="button" /></p>
-
+            <p class="hint"><strong>Do not use it if you're already running a version of phpMyFAQ!</strong></p>
+            <p>
+                <input class="submit" type="submit" value="Click to install phpMyFAQ <?php print VERSION; ?>" />
+            </p>
         </form>
 <?php
     HTMLFooter();
