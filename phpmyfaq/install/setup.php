@@ -176,7 +176,7 @@ function db_uninstall()
  */
 function HTMLFooter()
 {
-    printf('<footer><div><p id="copyrightnote">%s</p><div></footer></body></html>', COPYRIGHT);
+    printf('</div></div><footer><div><p id="copyrightnote">%s</p><div></footer></body></html>', COPYRIGHT);
 }
 
 /**
