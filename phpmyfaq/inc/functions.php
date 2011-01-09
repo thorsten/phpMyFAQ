@@ -26,7 +26,7 @@
  * @author    Robin Wood <robin@digininja.org>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
- * @copyright 2001-2010 phpMyFAQ Team
+ * @copyright 2001-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2001-02-18
@@ -41,33 +41,29 @@
  *
  * NOTE: Just for debugging!
  *
- * @param   object
- * @return  void
- * @access  public
- * @since   2004-11-27
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @param mixed $var Various stuff
+ *
+ * @return void
  */
 function dump($var)
 {
-    print '<pre>';
+    print '<code>';
     var_dump($var);
-    print '</pre>';
+    print '</code>';
 }
 
 /**
  * debug_backtrace() wrapper function
  *
- * @param   $string
- * @return  string
- * @access  public
- * @since   2006-06-24
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @param $string
+ *
+ * @return string
  */
 function pmf_debug($string)
 {
     // sometimes Zend Optimizer causes segfaults with debug_backtrace()
     if (extension_loaded('Zend Optimizer')) {
-        $ret = "<pre>" . $string . "</pre><br />\n";
+        $ret = "<code>" . $string . "</code><br />\n";
     } else {
         $debug = debug_backtrace();
         $ret   = '';
@@ -75,7 +71,7 @@ function pmf_debug($string)
         	$ret  = $debug[2]['file'] . ":<br />";
             $ret .= $debug[2]['class'].$debug[1]['type'];
             $ret .= $debug[2]['function'] . '() in line ' . $debug[2]['line'];
-            $ret .= ": <pre>" . $string . "</pre><br />\n";
+            $ret .= ": <code>" . $string . "</code><br />\n";
         }
     }
     return $ret;

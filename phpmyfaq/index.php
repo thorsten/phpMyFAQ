@@ -482,10 +482,12 @@ if ($faqconfig->get('main.enableRewriteRules')) {
 //
 if (DEBUG) {
     $debug_template_vars = array(
-        'debugMessages' => "\n".'<div id="debug_main">DEBUG INFORMATION:<br />'.$db->sqllog().'</div>'
+        'debugMessages' => '<div id="debug_main"><h2>DEBUG INFORMATION:</h2>' . $db->sqllog() . '</div>'
     );
 } else {
-    $debug_template_vars = array('debugMessages' => '');
+    $debug_template_vars = array(
+        'debugMessages' => ''
+    );
 }
 
 //
@@ -618,4 +620,3 @@ ob_start('ob_gzhandler');
 $tpl->printTemplate();
 
 $db->dbclose();
-ob_end_clean();

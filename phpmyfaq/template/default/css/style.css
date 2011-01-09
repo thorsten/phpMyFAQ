@@ -314,6 +314,11 @@ aside section ul li a:hover {
 #searchBox a.help:hover {
 	text-decoration: underline; }
 
+#debug_main {
+    margin: auto; width: 720px; background-color: #fff;
+    padding: 150px 10px 10px;
+}
+
 /* Footer */
 footer {
     position: absolute; left: 0; width: 100%; background: #222; }
