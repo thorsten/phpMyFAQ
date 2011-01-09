@@ -636,8 +636,6 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     require_once 'stopwords.sql.php';    // INSERTs for stopwords
 
     print '<p>';
-    @ob_flush();
-    flush();
 
     // Erase any table before starting creating the required ones
     if ('sqlite' != $sql_type) {
@@ -661,12 +659,8 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         $count++;
         if (!($count % 10)) {
             print '| ';
-            @ob_flush();
-            flush();
         }
     }
-    @ob_flush();
-    flush();
 
     // add admin account and rights
     $admin = new PMF_User();

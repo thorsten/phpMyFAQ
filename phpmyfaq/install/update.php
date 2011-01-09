@@ -786,8 +786,6 @@ if ($step == 4) {
     // Perform the queries for updating/migrating the database from 2.x
     if (isset($query)) {
         print '<div class="center">';
-        ob_flush();
-        flush();
         $count = 0;
         foreach ($query as $key => $current_query) {
             $result = @$db->query($current_query);
@@ -808,11 +806,8 @@ if ($step == 4) {
             $count++;
             if (!($count % 10)) {
                 ob_flush();
-                flush();
             }
         }
-        ob_flush();
-        flush();
         print "</div>";
     }
 

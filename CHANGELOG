@@ -19,6 +19,7 @@ Version 2.7.0-alpha - 2011-01-
 - added attachment administration frontend (Anatoliy)
 - added basic authentication support for LDAP groups (Thorsten)
 - added basic support for HTML5 microdata (Thorsten)
+- enabling Gzip compression by default (Thorsten)
 - updated bundled jQuery to version 1.4.4 (Thorsten)
 
 Version 2.6.14 - 2011-01-
