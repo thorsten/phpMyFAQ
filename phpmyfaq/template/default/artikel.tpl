@@ -47,20 +47,26 @@
                     {writeDateMsg}<br />{writeAuthor}<br />{writeRevision}<br />{editThisEntry}
                 </div>
                 <div class="faqTabContent" id="votingForm" style="display: none;">
-                    <form action="{saveVotingPATH}" method="post" style="display: inline;">
+                    <form action="#" method="post" style="display: inline;">
                     <fieldset>
                         <legend>{msgVoteUseability}</legend>
                         <input type="hidden" name="artikel" value="{saveVotingID}" />
 
                         <p align="center"><strong>{msgAverageVote}</strong> {printVotings}</p>
-                        <p align="center">{msgVoteBad}
-                        <input class="radio" type="radio" name="vote" value="1" /> 1
-                        <input class="radio" type="radio" name="vote" value="2" /> 2
-                        <input class="radio" type="radio" name="vote" value="3" /> 3
-                        <input class="radio" type="radio" name="vote" value="4" /> 4
-                        <input class="radio" type="radio" name="vote" value="5" /> 5
-                        {msgVoteGood}<br />
-                        <input class="submit voting" type="submit" name="submit" value="{msgVoteSubmit}" />
+                        <div id="votings"></div>
+                        <p align="center">
+                            <div class="votingStars">
+                                <label><input class="radio" id="voting-1" type="radio" name="vote" value="1" /> 1</label>
+                                <label><input class="radio" id="voting-2" type="radio" name="vote" value="1.5" /> 1.5</label>
+                                <label><input class="radio" id="voting-3" type="radio" name="vote" value="2" /> 2</label>
+                                <label><input class="radio" id="voting-4" type="radio" name="vote" value="2.5" /> 2.5</label>
+                                <label><input class="radio" id="voting-5" type="radio" name="vote" value="3" /> 3</label>
+                                <label><input class="radio" id="voting-6" type="radio" name="vote" value="3.5" /> 3.5</label>
+                                <label><input class="radio" id="voting-7" type="radio" name="vote" value="4" /> 4</label>
+                                <label><input class="radio" id="voting-8" type="radio" name="vote" value="4.5" /> 4.5</label>
+                                <label><input class="radio" id="voting-9" type="radio" name="vote" value="5" /> 5</label>
+                            </div>
+                            <input class="submit" id="submitvoting" type="submit" name="submit" value="{msgVoteSubmit}" />
                         </p>
                     </fieldset>
                     </form>

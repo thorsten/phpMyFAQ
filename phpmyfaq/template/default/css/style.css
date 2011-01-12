@@ -286,7 +286,21 @@ nav ul li.selected a {
     position: absolute; display: none; z-index: 100; background-color: #d7d7d7; padding: 5px; width: 444px; 
     opacity:0.9; color: #222; border: 1px solid transparent;
     border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; border-bottom-right-radius: 5px; 
-	-moz-border-radius-bottomright: 5px; }
+    -moz-border-radius-bottomright: 5px; }
+.votingStars div a {
+    background: transparent url(../../../images/voting_sprite.png) 0 0 no-repeat; display: inline-block;
+    height: 23px; width: 12px; text-indent: -999em; overflow: hidden; }
+.votingStars a.rating-right {
+    background-position: 0 -23px; padding-right: 6px; }
+.votingStars a.rating-over {
+    background-position: 0 -46px; }
+.votingStars a.rating-over.rating-right {
+    background-position: 0 -69px; }
+.votingStars a.rating {
+    background-position: 0 -92px; }
+.votingStars a.rating.rating-right {
+    background-position: 0 -115px; }
+
 
 /* Right panel */
 aside {
