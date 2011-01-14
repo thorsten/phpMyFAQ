@@ -47,6 +47,7 @@
  */
 function dump($var)
 {
+    ob_flush();
     print '<code>';
     var_dump($var);
     print '</code>';
