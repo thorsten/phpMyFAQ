@@ -17,7 +17,7 @@
  * @copyright phpMyFAQ
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2010 phpMyFAQ Team
+ * @copyright 2002-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-29
@@ -105,14 +105,36 @@ if (!is_null($user) && !is_null($mail) && !is_null($comment) && checkBannedWord(
             "\n\n" .
             wordwrap($comment, 72);
 
+        $send = array();
         $mail = new PMF_Mail();
         $mail->unsetFrom();
         $mail->setFrom($commentData['usermail']);
         $mail->addTo($emailTo);
-        // Let the category owner get a copy of the message
-        if ($emailTo != $faqconfig->get('main.administrationMail')) {
+        $send[$emailTo] = 1;
+
+        // Let the admin get a copy of the message
+        if (!isset($send[$faqconfig->get('main.administrationMail')])) {
             $mail->addCc($faqconfig->get('main.administrationMail'));
+            $send[$faqconfig->get('main.administrationMail')] = 1;
         }
+
+        // Let the category owner get a copy of the message
+        $category = new PMF_Category();
+        $categories = $category->getCategoryIdsFromArticle($faq->faqRecord['id']);
+        foreach ($categories as $_category) {
+            $userId = $category->getCategoryUser($_category);
+            $catUser = new PMF_User();
+            $catUser->getUserById($userId);
+            $catOwnerEmail = $catUser->getUserData('email');
+
+            if ($catOwnerEmail != '') {
+                if (!isset($send[$catOwnerEmail])) {
+                    $mail->addCc($catOwnerEmail);
+                    $send[$catOwnerEmail] = 1;
+                }
+            }
+        }
+
         $mail->subject = '%sitename%';
         $mail->message = strip_tags($commentMail);
         $result = $mail->send();
