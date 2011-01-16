@@ -154,14 +154,36 @@ switch ($action) {
                     "\n\n" .
                     wordwrap($comment, 72);
 
+                $send = array();
                 $mail = new PMF_Mail();
                 $mail->unsetFrom();
                 $mail->setFrom($commentData['usermail']);
                 $mail->addTo($emailTo);
-                // Let the category owner get a copy of the message
-                if ($emailTo != $faqconfig->get('main.administrationMail')) {
+                $send[$emailTo] = 1;
+
+                // Let the admin get a copy of the message
+                if (!isset($send[$faqconfig->get('main.administrationMail')])) {
                     $mail->addCc($faqconfig->get('main.administrationMail'));
+                    $send[$faqconfig->get('main.administrationMail')] = 1;
                 }
+
+                // Let the category owner get a copy of the message
+                $category = new PMF_Category();
+                $categories = $category->getCategoryIdsFromArticle($faq->faqRecord['id']);
+                foreach ($categories as $_category) {
+                    $userId = $category->getCategoryUser($_category);
+                    $catUser = new PMF_User();
+                    $catUser->getUserById($userId);
+                    $catOwnerEmail = $catUser->getUserData('email');
+
+                    if ($catOwnerEmail != '') {
+                        if (!isset($send[$catOwnerEmail])) {
+                            $mail->addCc($catOwnerEmail);
+                            $send[$catOwnerEmail] = 1;
+                        }
+                    }
+                }
+
                 $mail->subject = '%sitename%';
                 $mail->message = strip_tags($commentMail);
                 $result = $mail->send();

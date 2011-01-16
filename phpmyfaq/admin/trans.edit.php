@@ -65,7 +65,7 @@ $leftVarsOnly   = array_slice($_SESSION['trans']['leftVarsOnly'],
 $rightVarsOnly  = &$_SESSION['trans']['rightVarsOnly'];
 
 
-$options = array('baseUrl'   => '?' . str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
+$options = array('baseUrl'   => PMF_Link::getSystemRelativeUri() . '?' . str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
                  'total'     => count($_SESSION['trans']['leftVarsOnly']),
                  'perPage'   => $itemsPerPage,
                  'linkTpl'   => '<a href="javascript: go(\'{LINK_URL}\');void(0);">{LINK_TEXT}</a>',

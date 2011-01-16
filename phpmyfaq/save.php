@@ -2,7 +2,7 @@
 /**
  * Saves a user FAQ record and sends an email to the user
  *
- * PHP Version 5.2.0
+ * PHP Version 5.2
  * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,7 +19,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Jürgen Kuza <kig@bluewin.ch>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2002-2010 phpMyFAQ Team
+ * @copyright 2002-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-16
@@ -125,39 +125,40 @@ if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($
         }
     }
 
-    $sent = array();
-
     // Let the PMF Administrator and the Category Owner to be informed by email of this new entry
+    $send = array();
+    $mail = new PMF_Mail();
+    $mail->setFrom($usermail);
+    $mail->addTo($faqconfig->get('main.administrationMail'));
+    $send[$faqconfig->get('main.administrationMail')] = 1;
+
     foreach ($categories as $_category) {
 
         $userId = $category->getCategoryUser($_category);
 
+        // @todo Move this code to Category.php
+        $oUser = new PMF_User();
+        $oUser->getUserById($userId);
+        $catOwnerEmail = $oUser->getUserData('email');
+
         // Avoid to send multiple emails to the same owner
-        if (!isset($sent[$userId])) {
-            // TODO: Move this code to Category.php
-            $oUser = new PMF_User();
-            $oUser->getUserById($userId);
-            $catOwnerEmail = $oUser->getUserData('email');
-
-            $mail = new PMF_Mail();
-            $mail->unsetFrom();
-            $mail->setFrom($usermail);
-            $mail->addTo($faqconfig->get('main.administrationMail'));
-            // Let the category owner get a copy of the message
-            if ($faqconfig->get('main.administrationMail') != $catOwnerEmail) {
-                $mail->addCc($catOwnerEmail);
-            }
-            $mail->subject = '%sitename%';
-            // TODO: let the email contains the faq article both as plain text and as HTML
-            $mail->message = html_entity_decode($PMF_LANG['msgMailCheck']) .
-                "\n\n" . $faqconfig->get('main.titleFAQ') . ": " .
-                PMF_Link::getSystemUri('/index.php').'/admin';
-            $result = $mail->send();
-            unset($mail);
-
-            $sent[$userId] = $catOwnerEmail;
+        if (!isset($send[$catOwnerEmail])) {
+            $mail->addCc($catOwnerEmail);
+            $send[$catOwnerEmail] = 1;
         }
     }
+
+    $mail->subject = '%sitename%';
+
+    // @todo let the email contains the faq article both as plain text and as HTML
+    $mail->message = html_entity_decode(
+        $PMF_LANG['msgMailCheck']) .
+        "\n\n" .
+        $faqconfig->get('main.titleFAQ') .
+        ": " .
+        PMF_Link::getSystemUri('/index.php').'/admin';
+    $result = $mail->send();
+    unset($mail);
 
     $tpl->processTemplate('writeContent',
         array('msgNewContentHeader' => $PMF_LANG["msgNewContentHeader"],

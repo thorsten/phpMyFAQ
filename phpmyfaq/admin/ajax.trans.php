@@ -48,12 +48,16 @@ switch($ajax_action) {
                  * Here we deal with a two dimensional array
                  */
                 foreach ($val as $key2 => $val2) {
+                    $val2 = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $val2);
+                    $val2 = str_replace("'", "\\'", $val2);
                     $_SESSION['trans']['rightVarsOnly']["PMF_LANG[$key][$key2]"] = $val2;
                 }
             }
         }
         
         foreach ((array)@$_POST['LANG_CONF'] as $key => $val) {
+            $val = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $val);
+            $val = str_replace("'", "\\'", $val);
             $_SESSION['trans']['rightVarsOnly']["LANG_CONF[$key]"] = $val;
         }
         
