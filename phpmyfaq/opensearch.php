@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2006-2010 phpMyFAQ Team
+ * @copyright 2006-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-11-19
@@ -46,7 +46,7 @@ $opensearchXml->writeElement('ShortName', $faqconfig->get('main.titleFAQ'));
 $opensearchXml->writeElement('Description', $faqconfig->get('main.metaDescription'));
 $opensearchXml->startElement('Url');
 $opensearchXml->writeAttribute('type', 'text/html');
-$opensearchXml->writeAttribute('template', $searchUrl . '&amp;search={searchTerms}');
+$opensearchXml->writeAttribute('template', $searchUrl . '&search={searchTerms}');
 $opensearchXml->endElement();
 $opensearchXml->writeElement('Language', $PMF_LANG['metaLanguage']);
 $opensearchXml->writeElement('OutputEncoding', 'utf-8');
