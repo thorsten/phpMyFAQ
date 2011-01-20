@@ -57,14 +57,10 @@
                         <p align="center">
                             <div class="votingStars">
                                 <label><input class="radio" id="voting-1" type="radio" name="vote" value="1" /> 1</label>
-                                <label><input class="radio" id="voting-2" type="radio" name="vote" value="1.5" /> 1.5</label>
-                                <label><input class="radio" id="voting-3" type="radio" name="vote" value="2" /> 2</label>
-                                <label><input class="radio" id="voting-4" type="radio" name="vote" value="2.5" /> 2.5</label>
-                                <label><input class="radio" id="voting-5" type="radio" name="vote" value="3" /> 3</label>
-                                <label><input class="radio" id="voting-6" type="radio" name="vote" value="3.5" /> 3.5</label>
-                                <label><input class="radio" id="voting-7" type="radio" name="vote" value="4" /> 4</label>
-                                <label><input class="radio" id="voting-8" type="radio" name="vote" value="4.5" /> 4.5</label>
-                                <label><input class="radio" id="voting-9" type="radio" name="vote" value="5" /> 5</label>
+                                <label><input class="radio" id="voting-2" type="radio" name="vote" value="2" /> 2</label>
+                                <label><input class="radio" id="voting-3" type="radio" name="vote" value="3" /> 3</label>
+                                <label><input class="radio" id="voting-4" type="radio" name="vote" value="4" /> 4</label>
+                                <label><input class="radio" id="voting-5" type="radio" name="vote" value="5" /> 5</label>
                             </div>
                             <input class="submit" id="submitvoting" type="submit" name="submit" value="{msgVoteSubmit}" />
                         </p>
