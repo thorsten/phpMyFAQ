@@ -1,3 +1,42 @@
+CHANGED FILES FROM 2.6.13 -> 2.6.14
+
+./_.htaccess
+./_nginx.conf
+./admin/ajax.trans.php
+./admin/backup.import.php
+./admin/footer.php
+./admin/group.php
+./admin/header.php
+./admin/trans.edit.php
+./inc/Faq.php
+./inc/Ldap.php
+./inc/Link.php
+./inc/PMF_Export/Pdf/Wrapper.php
+./inc/Pagination.php
+./inc/Session.php
+./inc/functions.php
+./install/mysql.sql.php
+./install/setup.php
+./install/update.php
+./lang/language_de.php
+./lang/language_nl.php
+./opensearch.php
+./pdf.php
+./phpmyfaq.spec
+./save.php
+./savecomment.php
+./template/default/contact.tpl
+./template/default/index.tpl
+APP-META.xml
+
+
+
+CHANGED FILES FROM 2.6.12 -> 2.6.13
+
+n/a
+
+
+
 CHANGED FILES FROM 2.6.11 -> 2.6.12
 
 ./admin/category.translate.php
