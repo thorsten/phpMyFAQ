@@ -2,14 +2,7 @@
 /**
  * CREATE TABLE instruction for MySQL database
  *
- * @package	   phpMyFAQ
- * @subpackage Installation
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Tom Rochester <tom.rochester@gmail.com>
- * @author     Lars Tiedemann <php@larstiedemann.de>
- * @since      2004-09-18
- * @version    SVN: $Id$
- * @copyright  2004-2009 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,6 +13,16 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Installation
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Tom Rochester <tom.rochester@gmail.com>
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @copyright 2004-2011 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-09-18
  */
 
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog";
@@ -347,7 +350,7 @@ UNIQUE INDEX login(login)
 //faquserdata
 $query[] = "CREATE TABLE ".$sqltblpre."faquserdata (
 user_id INT(11) NOT NULL,
-last_modified TIMESTAMP(14) NULL,
+last_modified TIMESTAMP NULL,
 display_name VARCHAR(50) NULL,
 email VARCHAR(100) NULL
 )";
