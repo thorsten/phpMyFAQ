@@ -519,7 +519,7 @@ $PMF_LANG["ad_passwdsuc"] = "Your password has been changed.";
 $PMF_LANG["msgPDF"] = "Show this as PDF file";
 $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Save all records of your FAQ in one XML file.";
-$PMF_LANG["ad_xml_gen"] = "make XML file";
+$PMF_LANG["ad_xml_gen"] = "create XML file";
 $PMF_LANG["ad_entry_locale"] = "Language";
 $PMF_LANG["msgLangaugeSubmit"] = "Select language:";
 
@@ -571,7 +571,7 @@ $PMF_LANG["ad_entry_email"] = "Email address:";
 $PMF_LANG["ad_entry_allowComments"] = "Allow comments:";
 $PMF_LANG["msgWriteNoComment"] = "You cannot comment on this entry";
 $PMF_LANG["ad_user_realname"] = "real name:";
-$PMF_LANG["ad_export_generate_pdf"] = "generate PDF file";
+$PMF_LANG["ad_export_generate_pdf"] = "create PDF file";
 $PMF_LANG["ad_export_full_faq"] = "Your FAQ as a PDF file: ";
 $PMF_LANG["err_bannedIP"] = "Your IP address has been banned.";
 $PMF_LANG["err_SaveQuestion"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>.<br /><br /><a href=\"javascript:history.back();\">one page back</a><br /><br />";
@@ -752,12 +752,11 @@ $PMF_LANG['ad_group_removeMember'] = "-";
 $PMF_LANG['ad_export_which_cat'] = 'Limit the FAQ data to be exported (optional)';
 $PMF_LANG['ad_export_cat_downwards'] = 'Downwards?';
 $PMF_LANG['ad_export_type'] = 'Format of the export';
-$PMF_LANG['ad_export_type_choose'] = 'Choose one of the supported formats:';
-$PMF_LANG['ad_export_download_view'] = 'Download or view in-line?';
+$PMF_LANG['ad_export_type_choose'] = 'Supported formats:';
+$PMF_LANG['ad_export_download_view'] = 'Download or view inline?';
 $PMF_LANG['ad_export_download'] = 'download';
 $PMF_LANG['ad_export_view'] = 'view in-line';
-$PMF_LANG['ad_export_gen_xhtml'] = 'Make XHTML file';
-$PMF_LANG['ad_export_gen_docbook'] = 'Make Docbook file';
+$PMF_LANG['ad_export_gen_xhtml'] = 'create XHTML file';
 
 // added v2.0.0 - 2006-07-22 by Matteo
 $PMF_LANG['ad_news_data'] = 'News data';
@@ -957,7 +956,7 @@ $PMF_LANG['msgSendMailIfNothingIsFound'] = 'Is the wanted answer listed in the r
 
 // added 2.5.0-RC - 2009-05-11 by Anatoliy & Thorsten
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'Please choose the language for translation';
-$PMF_LANG['msgLangDirIsntWritable'] = 'Translations dir isn\'t writable';
+$PMF_LANG['msgLangDirIsntWritable'] = 'The folder <strong>/lang</strong> for the translation files isn\'t writable.';
 $PMF_LANG['ad_menu_translations'] = 'Interface Translation';
 $PMF_LANG['ad_start_notactive'] = 'Waiting for activation';
 
