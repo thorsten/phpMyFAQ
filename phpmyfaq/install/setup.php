@@ -30,7 +30,7 @@
  * @since     2002-08-20
  */
 
-define('VERSION', '2.6.14');
+define('VERSION', '2.6.15');
 define('APIVERSION', 1);
 define('MINIMUM_PHP_VERSION', '5.2.0');
 define('COPYRIGHT', '&copy; 2001-2011 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');

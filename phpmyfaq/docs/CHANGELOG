@@ -1,9 +1,12 @@
-phpMyFAQ 2.6.14
+phpMyFAQ 2.6.15
 Codename "Portia"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.6.15 - 2011-02
+- fixed minor bugs (Thorsten)
 
 Version 2.6.14 - 2011-01-24
 - added rewrite rules for nginx (Florian Anderiasch)
