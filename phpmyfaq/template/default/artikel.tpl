@@ -51,19 +51,15 @@
                     <fieldset>
                         <legend>{msgVoteUseability}</legend>
                         <input type="hidden" name="artikel" value="{saveVotingID}" />
-
-                        <p align="center"><strong>{msgAverageVote}</strong> {printVotings}</p>
                         <div id="votings"></div>
-                        <p align="center">
-                            <div class="votingStars">
-                                <label><input class="radio" id="voting-1" type="radio" name="vote" value="1" /> 1</label>
-                                <label><input class="radio" id="voting-2" type="radio" name="vote" value="2" /> 2</label>
-                                <label><input class="radio" id="voting-3" type="radio" name="vote" value="3" /> 3</label>
-                                <label><input class="radio" id="voting-4" type="radio" name="vote" value="4" /> 4</label>
-                                <label><input class="radio" id="voting-5" type="radio" name="vote" value="5" /> 5</label>
-                            </div>
-                            <input class="submit" id="submitvoting" type="submit" name="submit" value="{msgVoteSubmit}" />
-                        </p>
+                        <div id="votingstars">
+                            <input class="voting" type="radio" name="vote" value="1" />
+                            <input class="voting" type="radio" name="vote" value="2" />
+                            <input class="voting" type="radio" name="vote" value="3" />
+                            <input class="voting" type="radio" name="vote" value="4" />
+                            <input class="voting" type="radio" name="vote" value="5" />
+                            <span><strong>{msgAverageVote}</strong> {printVotings}</span>
+                        </div>
                     </fieldset>
                     </form>
                 </div>
@@ -120,12 +116,12 @@
                 {writeComments}
             </div>
 
-            <script type="text/javascript" >
-            $(function() {
-                $('#submitcomment').click(function() {
-                    saveFormValues('savecomment', 'comment');
-                });
-                $('form#formValues').submit(function() { return false; });
+            <script src="inc/js/plugins/rating/jquery.rating.pack.js"></script>
+            <script>
+            $('.voting').rating({
+                callback: function(value, link){
+                    saveVoting('faq', {id}, value);
+                }
             });
             </script>
             <script type="text/javascript" src="inc/js/syntaxhighlighter/scripts/shCore.js"></script>

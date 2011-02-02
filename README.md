@@ -12,15 +12,18 @@ dynamic sitemap, related articles, tagging, RSS feeds, built-in spam protection
 systems, LDAP and Microsoft Active Directory support, and an easy to use
 installation script.
 
+
 Installation
 ------------
 
 See documentation/documentation.en.html for more information.
 
+
 License
 -------
 
 Mozilla Public License 1.1, see LICENSE for more information.
+
 
 Bundled libraries
 -----------------
@@ -50,6 +53,10 @@ Licensed under the terms of the MIT License
 
 jQuery datePicker plugin
 http://www.kelvinluck.com/
+Licensed under the terms of the MIT License
+
+jQuery Star Rating Plugin
+http://www.fyneworks.com/
 Licensed under the terms of the MIT License
 
 modernizr

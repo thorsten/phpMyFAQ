@@ -283,23 +283,28 @@ nav ul li.selected a {
 #faqTabs ul.faqTabNav li:hover {
     background: #d7d7d7; }
 .faqTabContent {
-    position: absolute; display: none; z-index: 100; background-color: #d7d7d7; padding: 5px; width: 444px; 
+    position: absolute; display: none; z-index: 100; background-color: #fff; padding: 5px; width: 444px;
     opacity:0.9; color: #222; border: 1px solid transparent;
     border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; border-bottom-right-radius: 5px; 
     -moz-border-radius-bottomright: 5px; }
-.votingStars div a {
-    background: transparent url(../../../images/voting_sprite.png) 0 0 no-repeat; display: inline-block;
-    height: 23px; width: 12px; text-indent: -999em; overflow: hidden; }
-.votingStars a.rating-right {
-    background-position: 0 -23px; padding-right: 6px; }
-.votingStars a.rating-over {
-    background-position: 0 -46px; }
-.votingStars a.rating-over.rating-right {
-    background-position: 0 -69px; }
-.votingStars a.rating {
-    background-position: 0 -92px; }
-.votingStars a.rating.rating-right {
-    background-position: 0 -115px; }
+div.rating-cancel, div.star-rating {
+    float: left; width: 17px; height: 15px; text-indent: -999em; cursor: pointer; display: block;
+    background: transparent; overflow: hidden }
+div.rating-cancel, div.rating-cancel a {
+    background: url(../../../images/delete.gif) no-repeat 0 -16px }
+div.star-rating, div.star-rating a {
+    background: url(../../../images/star.gif) no-repeat 0 0px }
+div.rating-cancel a, div.star-rating a {
+    display:block; width:16px; height:100%; background-position:0 0px; border:0 }
+div.star-rating-on a {
+    background-position:0 -16px !important }
+div.star-rating-hover a {
+    background-position:0 -32px }
+#votingstars {
+    margin: auto; }
+#votingstars span {
+    padding-left: 11px; }
+
 
 
 /* Right panel */

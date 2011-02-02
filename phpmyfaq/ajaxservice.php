@@ -216,7 +216,38 @@ switch ($action) {
 
     case 'savevoting':
 
-        $message = array('error' => 'not implemented yet');
+        $faq      = new PMF_Faq();
+        $type     = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING, 'faq');
+        $recordId = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
+        $vote     = PMF_Filter::filterInput(INPUT_POST, 'vote', FILTER_VALIDATE_INT);
+        $userIp   = PMF_Filter::filterVar($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
+
+        var_dump($faq->votingCheck($recordId, $userIp));
+
+
+        if (isset($vote) && $faq->votingCheck($recordId, $userIp) && $vote > 0 && $vote < 6) {
+            $faqsession->userTracking('save_voting', $recordId);
+
+            $votingData = array(
+                'record_id' => $recordId,
+                'vote'      => $vote,
+                'user_ip'   => $userIp);
+
+            if (!$faq->getNumberOfVotings($recordId)) {
+                $faq->addVoting($votingData);
+            }  else {
+                $faq->updateVoting($votingData);
+            }
+            $message = array('success' => $PMF_LANG['msgVoteThanks']);
+        } elseif (!$faq->votingCheck($recordId, $userIp)) {
+            $faqsession->userTracking('error_save_voting', $recordId);
+            $message = array('error' => $PMF_LANG['err_VoteTooMuch']);
+
+        } else {
+            $faqsession->userTracking('error_save_voting', $recordId);
+            $message = array('error' => $PMF_LANG['err_noVote']);
+        }
+
         break;
 
     // Send user generated mails
