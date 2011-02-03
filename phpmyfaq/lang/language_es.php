@@ -988,3 +988,21 @@ $LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "Usar codigo 
 $PMF_LANG["ad_user_error_password"] = "Por favor registre su contraseña.";
 $PMF_LANG["ad_user_error_passwordsDontMatch"] = "La contraseña no coincide.";
 $PMF_LANG["admin_mainmenu_backup"] = "Respaldo";
+
+// 2011-02-03 by Martin Schenk - Plural messages
+$PMF_LANG["plmsgHomeArticlesOnline"][0] = "hay %d FAQ online";
+$PMF_LANG["plmsgHomeArticlesOnline"][1] = "hay %d FAQs online";
+$PMF_LANG["plmsgViews"][0] = "%d vista";
+$PMF_LANG["plmsgViews"][1] = "%d vistas";
+$PMF_LANG['plmsgGuestOnline'][0] = ' :: %d invitado';
+$PMF_LANG['plmsgGuestOnline'][1] = ' :: %d invitados';
+$PMF_LANG['plmsgRegisteredOnline'][0] = ' y %d registrado';
+$PMF_LANG['plmsgRegisteredOnline'][1] = ' y %d registrados';
+$PMF_LANG["plmsgSearchAmount"][0] = "%d resultado";
+$PMF_LANG["plmsgSearchAmount"][1] = "%d resultados";
+$PMF_LANG["plmsgPagesTotal"][0] = " %d página";
+$PMF_LANG["plmsgPagesTotal"][1] = " %d páginas";
+$PMF_LANG["plmsgVotes"][0] = "%d voto";
+$PMF_LANG["plmsgVotes"][1] = "%d votos";
+$PMF_LANG["plmsgEntries"][0] = "%d FAQ";
+$PMF_LANG["plmsgEntries"][1] = "%d FAQs";
