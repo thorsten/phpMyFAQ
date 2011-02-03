@@ -54,7 +54,7 @@ if (isset($auth)) {
         if ($faqconfig->get('main.enableWysiwygEditor') == true) {
 ?>
 <!-- tinyMCE -->
-<script type="text/javascript">
+<script>
 /*<![CDATA[*/ //<!--
  
 tinyMCE.init({
@@ -69,7 +69,7 @@ tinyMCE.init({
     theme_advanced_blockformats : "p,div,h1,h2,h3,h4,h5,h6,blockquote,dt,dd,code,samp",
 
     // Theme options
-    theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
+    theme_advanced_buttons1 : "save,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
     theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,phpmyfaq,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,code,syntaxhl,|,insertdate,inserttime,preview,|,forecolor,backcolor",
     theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen,help",
     theme_advanced_toolbar_location : "top",
@@ -83,6 +83,9 @@ tinyMCE.init({
 
     // Ajax-based file manager
     file_browser_callback : "ajaxfilemanager",
+
+    // Save function
+    save_onsavecallback : "phpMyFAQSave",
 
     // Example content CSS (should be your site CSS)
     content_css : "../template/<?php print PMF_Template::getTplSetName(); ?>/css/style.css",
@@ -121,7 +124,15 @@ function ajaxfilemanager(field_name, url, type, win)
     });
 }
 
-
+function phpMyFAQSave()
+{
+    // Create an input field with the save button name
+    var input = document.createElement("input");
+    input.setAttribute("name", $('input:submit')[0].name);
+    $('#answer')[0].parentNode.appendChild(input);
+    // Submit the form
+    $('#answer')[0].parentNode.parentNode.submit();
+}
 
 // --> /*]]>*/
 </script>
