@@ -47,10 +47,10 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title>phpMyFAQ <?php print VERSION; ?> Update</title>
+    <title>phpMyFAQ <?php print NEWVERSION; ?> Update</title>
 
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
-    <meta name="application-name" content="phpMyFAQ <?php print VERSION; ?>">
+    <meta name="application-name" content="phpMyFAQ <?php print NEWVERSION; ?>">
     <meta name="copyright" content="(c) 2001-2011 phpMyFAQ Team">
 
     <link rel="shortcut icon" href="../template/default/favicon.ico">
@@ -62,7 +62,7 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
 
 <header id="header">
     <h1>
-        <h1>phpMyFAQ <?php print VERSION; ?>  Update</h1>
+        <h1>phpMyFAQ <?php print NEWVERSION; ?>  Update</h1>
     </h1>
 </header>
 
