@@ -310,7 +310,9 @@ if (isset($auth) && in_array(true, $permission)) {
             case "sessionbrowse":           require_once 'stat.browser.php'; break;
             case "viewsession":             require_once 'stat.show.php'; break;
             case "statistics":              require_once 'stat.ratings.php'; break;
-            case "searchstats": 			require_once 'stat.search.php'; break;
+            case "searchstats":             require_once 'stat.search.php'; break;
+            case 'reports':                 require_once 'report.main.php'; break;
+            case 'reportview':              require_once 'report.view.php'; break;
             // functions for config administration
             case 'config':                  require_once 'configuration.php'; break;
             case 'linkconfig':              require_once 'linkconfig.main.php'; break;
@@ -330,7 +332,7 @@ if (isset($auth) && in_array(true, $permission)) {
             default:                        print "Error"; break;
         }
     } else {
-        // start page with some informations about the FAQ
+        // start page with some information about the FAQ
         $PMF_TABLE_INFO = $db->getTableStatus();
 ?>
 

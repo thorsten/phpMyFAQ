@@ -107,11 +107,14 @@ switch ($action) {
     case 'sessionsuche':
     case 'adminlog':
     case 'searchstats':
+    case 'reports':
+    case 'reportview':
         $secLevelHeader   = $PMF_LANG['admin_mainmenu_statistics'];
         $secLevelEntries .= addMenuEntry('viewlog', 'statistics', 'ad_menu_stat', $action);
         $secLevelEntries .= addMenuEntry('viewlog', 'viewsessions', 'ad_menu_session', $action);
         $secLevelEntries .= addMenuEntry('adminlog', 'adminlog', 'ad_menu_adminlog', $action);
         $secLevelEntries .= addMenuEntry('viewlog', 'searchstats', 'ad_menu_searchstats', $action);
+        $secLevelEntries .= addMenuEntry('reports', 'reports', 'ad_menu_reports', $action);
         $dashboardPage    = false;
         $statisticsPage   = true;
         break;
