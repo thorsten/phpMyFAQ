@@ -228,6 +228,8 @@ if ($permission['editcateg']) {
     $category->getMissingCategories();
     $category->buildTree();
 
+    $level    = -1;
+    $lastOpen = false;
     foreach ($category->catTree as $cat) {
         $indent = '';
         for ($i = 0; $i < $cat['indent']; $i++) {
@@ -236,10 +238,24 @@ if ($permission['editcateg']) {
         // category translated in this language?
         ($cat['lang'] == $lang) ? $catname = $cat['name'] : $catname = $cat['name'].' ('.$languageCodes[strtoupper($cat['lang'])].')';
 
-        // show category name
-        printf("<div>%s<strong style=\"vertical-align: top;\">&middot; %s</strong> ",
-            $indent,
-            $catname);
+        if ($cat['indent'] < $level) {
+            // Close the last div open
+            print '</div>';
+            $level    = $cat['level'];
+            $lastOpen = false;
+        }
+
+        if (count($category->getChildren($cat['id'])) != 0) {
+            // Show name and icon for expand the sub-categories
+            printf("<p><strong style=\"vertical-align: top;\">&middot; <a href=\"javascript:void(0);\" onclick=\"javascript:toggleFieldset('%d');\">%s</strong> ",
+                $cat['id'],
+                $catname);
+        } else {
+            // Show just the name
+            printf("<p>%s<strong style=\"vertical-align: top;\">&middot; %s</strong> ",
+                $indent,
+                $catname);
+        }
 
         if ($cat["lang"] == $lang) {
            // add sub category (if actual language)
@@ -287,10 +303,41 @@ if ($permission['editcateg']) {
                   $PMF_LANG['ad_categ_move']);
            }
         }
-        print "</div>\n";
+
+        if (count($category->getChildren($cat['id'])) != 0) {
+            // Open a div for content all the children
+            printf("<div id=\"div_%d\" style=\"display: none;\">", $cat['id']);
+            $lastOpen = true;
+        }
+
+        $level = $cat['indent'];
+    }
+
+    if ($lastOpen) {
+        // Close the last div open if is any
+        printf("</div>");
     }
 
     printf('<p>%s</p>', $PMF_LANG['ad_categ_remark']);
+?>
+<script>
+    /**
+     * Toggle fieldsets
+     *
+     * @param string fieldset ID of the fieldset
+     *
+     * @return void
+     */
+    function toggleFieldset(fieldset)
+    {
+        if ($('#div_' + fieldset).css('display') == 'none') {
+            $('#div_' + fieldset).fadeIn('fast');
+        } else {
+            $('#div_' + fieldset).fadeOut('fast');
+        }
+    }
+</script>
+<?php
 } else {
     print $PMF_LANG['err_NotAuth'];
 }
