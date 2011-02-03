@@ -782,7 +782,17 @@ if ($step == 4) {
         $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 36)";
         $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 37)";
     }
-    
+
+
+    //
+    // UPDATES FROM 2.7.0-alpha2
+    //
+    if (version_compare($version, '2.7.0-alpha2', '<')) {
+        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES
+            (38, 'reports', 'Right to generate reports', 1, 1)";
+        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 38)";
+    }
+
     // Perform the queries for updating/migrating the database from 2.x
     if (isset($query)) {
         print '<div class="center">';

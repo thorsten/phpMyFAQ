@@ -932,6 +932,13 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             'for_users' => 1,
             'for_groups' => 1
         ),
+        // 38 => 'dlattachment'
+        array(
+            'name' => 'reports',
+            'description' => 'Right to generate reports',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
     );
     foreach ($rights as $right) {
         $rightID = $admin->perm->addRight($right);
