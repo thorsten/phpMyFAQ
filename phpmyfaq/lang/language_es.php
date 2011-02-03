@@ -977,6 +977,18 @@ $LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "Ruta donde se gua
 $PMF_LANG['msgAttachmentNotFound'] = "	El archivo que está intentando descargar no se encontró en este servidor";
 $PMF_LANG['ad_sess_noentry'] = "Sin entradas";
 
+// added 2.5.3 2009-11-03 by Ivan Gil
+$PMF_LANG["ad_adus_password"] = "Contraseña";
+$PMF_LANG["ad_csv_backup"] = "Respaldo";
+$PMF_LANG["ad_menu_backup"] = "Respaldo";
+$PMF_LANG["rightsLanguage"]["backup"] = "crear respaldo";
+$LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Muestra email de usuario de forma segura (default: habilitado).");
+$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Comparar contenido publico contra palabras bloqueadas (default: habilitado).");
+$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "Usar codigo captcha para hablitar enviar contenido del publico (default: habilitado).");
+$PMF_LANG["ad_user_error_password"] = "Por favor registre su contraseña.";
+$PMF_LANG["ad_user_error_passwordsDontMatch"] = "La contraseña no coincide.";
+$PMF_LANG["admin_mainmenu_backup"] = "Respaldo";
+
 // added 2.6.0-alpha - 2009-07-30 by Aurimas FiÅ¡eras
 //P.S. "One User online" is also possible, since sprintf just ignores extra args
 $PMF_LANG["plmsgUserOnline"][0] = "%d usuario conectado";

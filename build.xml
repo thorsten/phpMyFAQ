@@ -23,7 +23,7 @@
 
  <!-- Run pdepend, phpmd, phpcpd, and phpcs in parallel -->
  <target name="parallelTasks">
-  <parallel>
+  <parallel threadCount="2">
    <antcall target="pdepend"/>
    <antcall target="phpmd"/>
    <antcall target="phpcpd"/>
@@ -67,16 +67,14 @@
               --report-file=${basedir}/build/logs/checkstyle.xml 
               --standard=Zend
               --extensions=php
-              --ignore=${basedir}/phpmyfaq/inc/libs,
-                       ${basedir}/phpmyfaq/tests
-              ./" />
+              --ignore=${basedir}/phpmyfaq/inc/libs,${basedir}/phpmyfaq/tests ./" />
   </exec>
  </target>
 
  <!-- Generate API documentation -->
  <target name="phpdoc">
   <exec executable="phpdoc">
-   <arg line="-d ./ -t build/api" />
+   <arg line="-d ${basedir}/phpmyfaq/inc -t ${basedir}/build/api" />
   </exec>
  </target>
  
