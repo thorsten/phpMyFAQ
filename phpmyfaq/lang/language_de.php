@@ -1021,7 +1021,7 @@ $LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Sortierung d
 $PMF_LANG['list_all_users']            = 'Alle Benutzer anzeigen';
 
 $PMF_LANG['main.orderingPopularFaqs.visits'] = "nach Anzahl der Besucher";
-$PMF_LANG['main.orderingPopularFaqs.voting'] = "nach Bewerung der Besucher";
+$PMF_LANG['main.orderingPopularFaqs.voting'] = "nach Bewertung der Besucher";
 
 // added 2.6.0-alpha - 2009-11-05 by Thorsten
 $PMF_LANG['msgShowHelp'] = 'Bitte Begriffe mit Komma trennen.';
@@ -1059,3 +1059,21 @@ $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'T
 $LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => 'Twitter Access Token Key');
 $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'Twitter Access Token Secret');
 $LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Facebook support (Standard: deaktiviert)');
+
+// added v2.7.0-alpha2 - 2010-01-12 by Gustavo Solt
+$PMF_LANG['ad_menu_reports'] = 'Reports';
+$PMF_LANG["ad_stat_report_fields"] = "Felder";
+$PMF_LANG["ad_stat_report_category"] = "Kategorie";
+$PMF_LANG["ad_stat_report_sub_category"] = "Unterkategorie";
+$PMF_LANG["ad_stat_report_id_linked"] = "Id (linked articles)";
+$PMF_LANG["ad_stat_report_language"] = "Sprache";
+$PMF_LANG["ad_stat_report_id"] = "ID";
+$PMF_LANG["ad_stat_report_sticky"] = "Wichtige FAQs";
+$PMF_LANG["ad_stat_report_title"] = "Frage";
+$PMF_LANG["ad_stat_report_creadtion_date"] = "Datum";
+$PMF_LANG["ad_stat_report_owner"] = "Autor";
+$PMF_LANG["ad_stat_report_last_modified_person"] = "Last modified person";
+$PMF_LANG["ad_stat_report_url"] = "URL der FAQ";
+$PMF_LANG["ad_stat_report_connections"] = "Zahl der Verbindungen";
+$PMF_LANG["ad_stat_report_make_report"] = "Erstelle Report";
+$PMF_LANG["ad_stat_report_make_csv"] = "CSV-Export";

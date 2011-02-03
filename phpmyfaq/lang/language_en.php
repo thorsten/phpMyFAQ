@@ -1121,3 +1121,21 @@ $PMF_LANG['msgAttachmentsFilesize'] = 'Filensize';
 $PMF_LANG['msgAttachmentsMimeType'] = 'MIME Type';
 $PMF_LANG['msgAttachmentsWannaDelete'] = 'Are you sure you want to delete this attachment?';
 $PMF_LANG['msgAttachmentsDeleted'] = 'Attachment <strong>successfully</strong> deleted.';
+
+// added v2.7.0-alpha2 - 2010-01-12 by Gustavo Solt
+$PMF_LANG['ad_menu_reports'] = 'Reports';
+$PMF_LANG["ad_stat_report_fields"] = "Fields";
+$PMF_LANG["ad_stat_report_category"] = "Category";
+$PMF_LANG["ad_stat_report_sub_category"] = "Sub Category";
+$PMF_LANG["ad_stat_report_id_linked"] = "Id (linked articles)";
+$PMF_LANG["ad_stat_report_language"] = "Language";
+$PMF_LANG["ad_stat_report_id"] = "Id";
+$PMF_LANG["ad_stat_report_sticky"] = "Sticky FAQs";
+$PMF_LANG["ad_stat_report_title"] = "Title";
+$PMF_LANG["ad_stat_report_creadtion_date"] = "Creation Date";
+$PMF_LANG["ad_stat_report_owner"] = "Owner";
+$PMF_LANG["ad_stat_report_last_modified_person"] = "Last modified person";
+$PMF_LANG["ad_stat_report_url"] = "URL of the article";
+$PMF_LANG["ad_stat_report_connections"] = "Number of connections";
+$PMF_LANG["ad_stat_report_make_report"] = "Generate Report";
+$PMF_LANG["ad_stat_report_make_csv"] = "Export to CSV";
