@@ -347,12 +347,12 @@ function printCaptchaFieldset($legend, $img, $length, $error = '')
 
     if (PMF_Configuration::getInstance()->get('spam.enableCaptchaCode')) {
         $html = sprintf('<fieldset><legend>%s</legend>', $legend);
-        $html .= '<div style="text-align:left;">';
+        $html .= '<div style="text-align: center;">';
         if ($error != '') {
             $html .= '<div class="error">' . $error . '</div>';
         }
         $html .= $img;
-        $html .= '&nbsp; &nbsp;<input class="inputfield" type="text" name="captcha" id="captcha" value="" size="7" style="vertical-align: top; height: 35px; text-valign: middle; font-size: 20pt;" />';
+        $html .= '&nbsp; &nbsp;<input type="text" name="captcha" id="captcha" class="captcha" size="7" />';
         $html .= '</div></fieldset>';
     }
 

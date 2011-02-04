@@ -3,7 +3,10 @@
                 <h2>{msgSend2Friend}</h2>
             </header>
 
-            <form action="{writeSendAdress}" method="post">
+            <div id="loader"></div>
+            <div id="send2friends"></div>
+
+            <form id="formValues" action="#" method="post">
                 <input type="hidden" name="{msgS2FReferrer}" value="{send2friendLink}" />
 
                 <p>
@@ -42,14 +45,18 @@
                     <input type="email" name="mailto[4]" id="mailto[4]" size="50" />
                 </p>
 
-                <p>{msgS2FText}</p>
-                <p><em>{send2friend_text}</em></p>
-                <p>{msgS2FText2}</p>
-                <p><em>{send2friendLink}</em></p>
+                <p>
+                    {msgS2FText}<br/>
+                    <em>{send2friend_text}</em>
+                </p>
+                <p>
+                    {msgS2FText2}<br/>
+                    <em>{send2friendLink}</em>
+                </p>
 
                 <p>
-                    <label for="zusatz">{msgS2FMessage}</label>
-                    <textarea name="zusatz" id="zusatz" cols="37" rows="5"></textarea>
+                    <label for="message">{msgS2FMessage}</label>
+                    <textarea name="message" id="message" cols="37" rows="5"></textarea>
                 </p>
 
                 <p>
@@ -57,7 +64,16 @@
                 </p>
 
                 <p>
-                    <input class="submit" type="submit" name="submit" value="{msgS2FButton}" />
+                    <input class="submit" type="submit" id="submitfriends" value="{msgS2FButton}" />
                 </p>
             </form>
+            <script type="text/javascript" >
+            $(function() {
+                $('#submitfriends').click(function() {
+                    saveFormValues('sendtofriends', 'send2friends');
+                });
+                $('form#formValues').submit(function() { return false; });
+            });
+            </script>
+    
         </section>

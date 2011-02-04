@@ -333,6 +333,8 @@ aside section ul li a:hover {
 #searchBox a.help:hover {
 	text-decoration: underline; }
 
+#mainContent form input.captcha {
+    vertical-align: top; height: 40px; width: 120px; text-valign: middle; font-size: 1.571em; }
 #debug_main {
     margin: auto; width: 720px; background-color: #fff;
     padding: 150px 10px 10px;
