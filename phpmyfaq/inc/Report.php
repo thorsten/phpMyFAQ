@@ -17,6 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Report
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Gustavo Solt <gustavo.solt@mayflower.de>
  * @copyright 2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
@@ -33,6 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Report
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Gustavo Solt <gustavo.solt@mayflower.de>
  * @copyright 2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
@@ -149,5 +151,28 @@ class PMF_Report
         }
         
         return $report;
+    }
+
+    /**
+     * Convert string to the correct encoding
+     *
+     * @param string $outputString String to encode.
+     *
+     * @return string Encoded string.
+     */
+    public function convertEncoding($outputString)
+    {
+        $outputString = html_entity_decode($outputString, ENT_QUOTES, 'utf-8');
+        $outputString = str_replace(',', ' ', $outputString);
+
+        if (extension_loaded('mbstring')) {
+            $detected = mb_detect_encoding($outputString);
+
+            if ($detected !== 'ASCII') {
+                $outputString = mb_convert_encoding($outputString, 'UTF-16', $detected);
+            }
+        }
+
+        return $outputString;
     }
 }
