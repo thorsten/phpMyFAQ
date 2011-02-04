@@ -112,9 +112,10 @@ if ($permission['reports']) {
         }
         if ($useUrl) {
             $url = sprintf('<a href="../index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s">Link</a>',
-                $row->category_id,
-                $row->id,
-                $row->lang);
+                $data['category_id'],
+                $data['faq_id'],
+                $data['faq_language']
+            );
             printf('<td>%s</td>', $url);
         }
         if ($useVisits) {
@@ -126,7 +127,7 @@ if ($permission['reports']) {
         </tbody>
     </table>
     <br />
-    <form action="report.export.php" method="post" style="display: inline;">
+    <form action="?action=reportexport" method="post" style="display: inline;">
         <input type="hidden" name="report_category" id="report_category" value="<?php print $useCategory; ?>" /></td>
         <input type="hidden" name="report_sub_category" id="report_sub_category" value="<?php print $useSubcategory; ?>" /></td>
         <input type="hidden" name="report_translations" id="report_translations" value="<?php print $useTranslation; ?>" /></td>
