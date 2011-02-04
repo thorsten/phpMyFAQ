@@ -241,12 +241,18 @@ if (isset($auth) && in_array(true, $permission)) {
 }
 
 // are we running a PMF export file request?
-if ($action == "exportfile") {
-    require 'export.file.php';
-    exit();
+switch($action) {
+    case 'exportfile':
+        require 'export.file.php';
+        exit();
+        break;
+    case 'reportexport':
+        require 'report.export.php';
+        exit();
+        break;
 }
 
-// Header of the admin page inlcuding the navigation
+// Header of the admin page including the navigation
 require_once 'header.php';
 
 // User is authenticated
