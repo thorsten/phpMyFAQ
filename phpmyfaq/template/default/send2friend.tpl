@@ -3,11 +3,9 @@
                 <h2>{msgSend2Friend}</h2>
             </header>
 
-            <div id="loader"></div>
-            <div id="send2friends"></div>
-
             <form id="formValues" action="#" method="post">
                 <input type="hidden" name="{msgS2FReferrer}" value="{send2friendLink}" />
+                <input type="hidden" name="lang" id="lang" value="{lang}" />
 
                 <p>
                     <label for="name">{msgS2FName}</label>
@@ -15,8 +13,8 @@
                 </p>
 
                 <p>
-                    <label for="mailfrom">{msgS2FEMail}</label>
-                    <input type="email" name="mailfrom" id="mailfrom" value="{defaultContentMail}" size="50" required="required" />
+                    <label for="email">{msgS2FEMail}</label>
+                    <input type="email" name="email" id="email" value="{defaultContentMail}" size="50" required="required" />
                 </p>
 
                 <p>{msgS2FFriends}</p>
@@ -63,6 +61,9 @@
                     {captchaFieldset}
                 </p>
 
+                <div id="loader"></div>
+                <div id="send2friends"></div>
+
                 <p>
                     <input class="submit" type="submit" id="submitfriends" value="{msgS2FButton}" />
                 </p>
@@ -70,7 +71,7 @@
             <script type="text/javascript" >
             $(function() {
                 $('#submitfriends').click(function() {
-                    saveFormValues('sendtofriends', 'send2friends');
+                    saveFormValues('sendtofriends', 'send2friend');
                 });
                 $('form#formValues').submit(function() { return false; });
             });

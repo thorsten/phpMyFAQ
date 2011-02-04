@@ -278,9 +278,49 @@ switch ($action) {
         }
         break;
 
+    // Send mails to friends
     case 'sendtofriends':
 
-        $message = array('error' => 'not implemented yet');
+        $name     = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $email    = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $link     = PMF_Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
+        $attached = PMF_Filter::filterInput(INPUT_POST, 'message', FILTER_SANITIZE_STRIPPED);
+        $mailto   = PMF_Filter::filterInputArray(INPUT_POST,
+            array('mailto' =>
+                array('filter' => FILTER_VALIDATE_EMAIL,
+                      'flags'  => FILTER_REQUIRE_ARRAY | FILTER_NULL_ON_FAILURE
+                )
+            )
+        );
+
+        if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) &&
+            is_array($mailto) && !empty($mailto[0]) && checkBannedWord(PMF_String::htmlspecialchars($attached))) {
+
+            foreach($mailto['mailto'] as $recipient) {
+                $recipient = trim(strip_tags($recipient));
+                if (!empty($recipient)) {
+                    $mail = new PMF_Mail();
+                    $mail->unsetFrom();
+                    $mail->setFrom($email, $name);
+                    $mail->addTo($recipient);
+                    $mail->subject = $PMF_LANG["msgS2FMailSubject"].$name;
+                    $mail->message = sprintf("%s\r\n\r\n%s\r\n%s\r\n\r\n%s",
+                        $faqconfig->get('main.send2friendText'),
+                        $PMF_LANG['msgS2FText2'],
+                        $link,
+                        $attached);
+
+                    // Send the email
+                    $result = $mail->send();
+                    unset($mail);
+                    usleep(250);
+                }
+            }
+
+            $message = array('success' => $PMF_LANG['msgS2FThx']);
+        } else {
+            $message = array('error' => $PMF_LANG['err_sendMail']);
+        }
         break;
     
 }

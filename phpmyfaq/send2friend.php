@@ -49,6 +49,7 @@ $send2friendLink = sprintf('%s/index.php?action=artikel&amp;cat=%d&amp;id=%d&amp
     urlencode($artlang));
 
 $tpl->processTemplate ('writeContent', array(
+    'lang'               => $artlang,
     'msgSend2Friend'     => $PMF_LANG['msgSend2Friend'],
     'msgS2FReferrer'     => 'link',
     'msgS2FName'         => $PMF_LANG['msgS2FName'],
