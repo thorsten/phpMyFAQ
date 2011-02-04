@@ -33,7 +33,7 @@ if ($permission['reports']) {
 ?>
     <h2><?php print $PMF_LANG['ad_menu_reports']; ?></h2>
 
-    <form action="?action=reportshow" method="post">
+    <form action="?action=reportview" method="post">
     <fieldset>
         <legend><?php print $PMF_LANG["ad_stat_report_fields"]; ?></legend>
 
@@ -44,6 +44,10 @@ if ($permission['reports']) {
         <p>
             <label><?php print $PMF_LANG["ad_stat_report_sub_category"]; ?>:</label>
             <input type="checkbox" name="report_sub_category" id="report_sub_category" class="radio" checked="checked" value="1" />
+        </p>
+        <p>
+            <label><?php print $PMF_LANG["ad_stat_report_translations"]; ?>:</label>
+            <input type="checkbox" name="report_translations" id="report_translations" class="radio" checked="checked" value="1" />
         </p>
         <p>
             <label><?php print $PMF_LANG["ad_stat_report_language"]; ?>:</label>
@@ -62,8 +66,8 @@ if ($permission['reports']) {
             <input type="checkbox" name="report_title" id="report_title" class="radio" checked="checked" value="1" />
         </p>
         <p>
-            <label><?php print $PMF_LANG["ad_stat_report_creadtion_date"]; ?>:</label>
-            <input type="checkbox" name="report_creadtion_date" id="report_creadtion_date" class="radio" checked="checked" value="1" />
+            <label><?php print $PMF_LANG["ad_stat_report_creation_date"]; ?>:</label>
+            <input type="checkbox" name="report_creation_date" id="report_creation_date" class="radio" checked="checked" value="1" />
         </p>
         <p>
             <label><?php print $PMF_LANG["ad_stat_report_owner"]; ?>:</label>
@@ -78,8 +82,8 @@ if ($permission['reports']) {
             <input type="checkbox" name="report_url" id="report_url" class="radio" checked="checked" value="1" />
         </p>
         <p>
-            <label><?php print $PMF_LANG["ad_stat_report_connections"]; ?>:</label>
-            <input type="checkbox" name="report_connections" id="report_connections" class="radio" checked="checked" value="1" />
+            <label><?php print $PMF_LANG["ad_stat_report_visits"]; ?>:</label>
+            <input type="checkbox" name="report_visits" id="report_visits" class="radio" checked="checked" value="1" />
         </p>
 
         <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_stat_report_make_report"]; ?>" />
