@@ -20,6 +20,7 @@ Version 2.7.0-alpha2 - 2011-
 - added basic authentication support for LDAP groups (Thorsten)
 - added basic support for HTML5 microdata (Thorsten)
 - added functionality of the TinyMCE save button (Gustavo Solt)
+- added basic reporting functionality (Gustavo Solt, Thorsten)
 - enabling Gzip compression by default (Thorsten)
 - updated bundled jQuery to version 1.4.4 (Thorsten)
 
