@@ -46,6 +46,7 @@ $helper->setCategory($category);
 $tpl->processTemplate('writeContent', array(
     'msgQuestion'          => $PMF_LANG['msgQuestion'],
     'msgNewQuestion'       => $PMF_LANG['msgNewQuestion'],
+    'lang'                 => $Language->getLanguage(),
     'msgNewContentName'    => $PMF_LANG['msgNewContentName'],
     'msgNewContentMail'    => $PMF_LANG['msgNewContentMail'],
     'defaultContentMail'   => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',

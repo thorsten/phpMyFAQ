@@ -3,15 +3,16 @@
             <p>{msgNewQuestion}</p>
             
             <form id="formValues" action="#" method="post">
+                <input type="hidden" name="lang" id="lang" value="{lang}" />
 
                 <p>
-                    <label for="username">{msgNewContentName}</label>
-                    <input type="text" name="username" id="username" value="{defaultContentName}" size="50" required="required" />
+                    <label for="name">{msgNewContentName}</label>
+                    <input type="text" name="name" id="name" value="{defaultContentName}" size="50" required="required" />
                 </p>
 
                 <p>
-                    <label for="usermail">{msgNewContentMail}</label>
-                    <input type="email" name="usermail" id="usermail" value="{defaultContentMail}" size="50" required="required" />
+                    <label for="email">{msgNewContentMail}</label>
+                    <input type="email" name="email" id="email" value="{defaultContentMail}" size="50" required="required" />
                 </p>
 
                 <p>
@@ -23,18 +24,20 @@
 
                 <p>
                     <label for="question">{msgAskYourQuestion}</label>
-                    <textarea cols="45" rows="10" name="question" id="question" required="required" /></textarea>
+                    <textarea cols="45" rows="5" name="question" id="question" required="required" /></textarea>
                 </p>
 
                 <p>
                     {captchaFieldset}
-                <p>
-                    <input class="submit" type="submit" id="submitquestion" value="{msgNewContentSubmit}">
                 </p>
+                
+                <div id="loader"></div>
+                <div id="questions"></div>
+
+                <input class="submit" type="submit" id="submitquestion" value="{msgNewContentSubmit}">
+
             </form>
 
-            <div id="loader"></div>
-            <div id="questions"></div>
 
             <script type="text/javascript" >
             $(function() {
