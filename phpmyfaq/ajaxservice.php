@@ -206,7 +206,76 @@ switch ($action) {
 
     case 'savequestion':
 
-        $message = array('error' => 'not implemented yet');
+        $name     = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $email    = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $category = PMF_Filter::filterInput(INPUT_POST, 'category', FILTER_VALIDATE_INT);
+        $question = PMF_Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
+        $save     = PMF_Filter::filterInput(INPUT_POST, 'save', FILTER_VALIDATE_INT);
+
+        // If e-mail address is set to optional
+        if (!PMF_Configuration::getInstance()->get('main.optionalMailAddress') && is_null($email)) {
+            $email = PMF_Configuration::getInstance()->get('main.administrationMail');
+        }
+
+        if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) &&
+            !is_null($question) && !empty($question) && checkBannedWord(PMF_String::htmlspecialchars($question))) {
+
+            if (1 != $save) {
+
+                $question = PMF_Stopwords::getInstance()->clean($question);
+
+                $faq             = new PMF_Faq();
+                $user            = new PMF_User_CurrentUser();
+                $faqSearch       = new PMF_Search($db, $Language);
+                $faqSearchResult = new PMF_Search_Resultset($user, $faq);
+                $searchResult    = array();
+                $mergedResult    = array();
+
+                foreach ($question as $word) {
+                    $searchResult[] = $faqSearch->search($word);
+                }
+                foreach($searchResult as $resultSet) {
+                    foreach($resultSet as $result) {
+                        $mergedResult[] = $result;
+                    }
+                }
+                $faqSearchResult->reviewResultset($mergedResult);
+
+                if (0 < $faqSearchResult->getNumberOfResults()) {
+
+                    $response = sprintf('<p>%s</p>',
+                        $plr->GetMsg('plmsgSearchAmount', $faqSearchResult->getNumberOfResults()));
+
+                    $response .= '<ul>';
+
+                    foreach($faqSearchResult->getResultset() as $result) {
+                        $url = sprintf('/index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
+                            $result->category_id,
+                            $result->id,
+                            $result->lang,
+                            urlencode($result->searchterm));
+                        $oLink       = new PMF_Link(PMF_Configuration::getInstance()->get('main.referenceURL') . $url);
+                        $oLink->text = PMF_Utils::chopString($result->question, 15);
+                        $response   .= sprintf('<li>%s<br /><div class="searchpreview">%s...</div></li>',
+                            $oLink->toHtmlAnchor(),
+                            PMF_Utils::chopString(strip_tags($result->answer), 10)
+                        );
+                    }
+                    $response .= '</ul>';
+
+                    $message = array('result' => $response);
+                } else {
+                    $message = array('error' => 'not implemented yet: ' . $save);
+                }
+                
+            } else {
+                $message = array('error' => 'not implemented yet: ' . $save);
+            }
+
+        } else {
+            $message = array('error' => $PMF_LANG['err_SaveQuestion']);
+        }
+
         break;
 
     case 'saveregistration':

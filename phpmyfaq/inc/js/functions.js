@@ -374,7 +374,6 @@ function autoSuggest()
  */
 function saveVoting(type, id, value)
 {
-
     $.ajax({
         type:     'post',
         url:      'ajaxservice.php?action=savevoting',
@@ -390,6 +389,44 @@ function saveVoting(type, id, value)
                 $('#votings').fadeIn("slow");
                 $('#loader').hide();
                 $('#votingForm').hide();
+            }
+        }
+    });
+
+    return false;
+}
+
+/**
+ * Checks the content of a question by Ajax
+ *
+ * @param type
+ * @param id
+ * @param value
+ */
+function checkQuestion()
+{
+    var formValues = $('#formValues');
+
+    $('#loader').show();
+    $('#loader').fadeIn(400).html('<img src="images/ajax-loader.gif" />Saving ...');
+
+    $.ajax({
+        type:     'post',
+        url:      'ajaxservice.php?action=savequestion',
+        data:     formValues.serialize(),
+        dataType: 'json',
+        cache:    false,
+        success:  function(json) {
+            if (json.result == undefined) {
+                $('#qerror').html('<p class="error">' + json.error + '</p>');
+                $('#loader').hide();
+            } else {
+                $('#qerror').empty();
+                $('#questionForm').fadeOut('slow');
+                $('#answerForm').html(json.result);
+                $('#answerForm').fadeIn("slow");
+                $('#loader').hide();
+                $('#formValues').append('<input type="hidden" name="save" value="1" />');
             }
         }
     });

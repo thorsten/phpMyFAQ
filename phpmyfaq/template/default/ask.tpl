@@ -1,7 +1,12 @@
 <h2>{msgQuestion}</h2>
-            
-            <p>{msgNewQuestion}</p>
-            
+
+            <div id="questionForm">
+                <p>{msgNewQuestion}</p>
+            </div>
+            <div id="answerForm">
+
+            </div>
+
             <form id="formValues" action="#" method="post">
                 <input type="hidden" name="lang" id="lang" value="{lang}" />
 
@@ -30,19 +35,18 @@
                 <p>
                     {captchaFieldset}
                 </p>
-                
+
                 <div id="loader"></div>
-                <div id="questions"></div>
+                <div id="qerror"></div>
 
                 <input class="submit" type="submit" id="submitquestion" value="{msgNewContentSubmit}">
 
             </form>
 
-
             <script type="text/javascript" >
             $(function() {
                 $('#submitquestion').click(function() {
-                    saveFormValues('savequestion', 'question');
+                    checkQuestion();
                 });
                 $('form#formValues').submit(function() { return false; });
             });
