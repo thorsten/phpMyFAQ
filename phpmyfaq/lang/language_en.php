@@ -1139,3 +1139,8 @@ $PMF_LANG["ad_stat_report_url"] = "URL";
 $PMF_LANG["ad_stat_report_visits"] = "Visits";
 $PMF_LANG["ad_stat_report_make_report"] = "Generate Report";
 $PMF_LANG["ad_stat_report_make_csv"] = "Export to CSV";
+
+// added v2.7.0-alpha2 - 2010-02-05 by Thorsten Rinne
+$PMF_LANG['msgRegistration'] = 'Registration';
+$PMF_LANG['msgRegistrationCredentials'] = 'To register please enter your name, your loginname and a valid email address!';
+$PMF_LANG['msgRegistrationNote'] = 'After successful registration you will receive an answer soon after Administration has authorized your registration.';

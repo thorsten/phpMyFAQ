@@ -1077,3 +1077,8 @@ $PMF_LANG["ad_stat_report_url"] = "URL";
 $PMF_LANG["ad_stat_report_visits"] = "Anzahl Besuche";
 $PMF_LANG["ad_stat_report_make_report"] = "Erstelle Report";
 $PMF_LANG["ad_stat_report_make_csv"] = "CSV-Export";
+
+// added v2.7.0-alpha2 - 2010-02-05 by Thorsten Rinne
+$PMF_LANG['msgRegistration'] = 'Anmelden';
+$PMF_LANG['msgRegistrationCredentials'] = 'Um sich anzumelden, muss der Name, ein Loginname und eine korrekte E-Mailadresse eingegeben werden.';
+$PMF_LANG['msgRegistrationNote'] = 'Nach der erfolgreichen Anmeldung erhälst du eine Antwort über Freischaltung deiner Anmeldung.';
