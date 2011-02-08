@@ -121,22 +121,28 @@ class PMF_Network
     public function checkForAddrMatchIpv6($ip, $network)
     {
         if (false === strpos($network, '/')) {
-            return false;
+            throw new InvalidArgumentException("Not a valid IPv6 subnet.");
         }
 
-        list($addr, $network) = explode('/', $network);
-        
-        $in6_addr = inet_pton($addr);
-        $in6_test = inet_pton($ip);
+        list($addr, $preflen) = explode('/', $network);
+        if (!is_numeric($preflen)) {
+            throw new InvalidArgumentException("Not a valid IPv6 preflen.");
+        }
 
-        $bytes_addr = unpack("n*", $in6_addr);
-        $bytes_test = unpack("n*", $in6_test);
+        if (!filter_var($addr, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+            throw new InvalidArgumentException("Not a valid IPv6 subnet.");
+        }
 
-        for ($i = 1; $i <= ceil($network / 16); $i++) {
-            $bits = pow(2, 16) - 1;
-            $left = $network - 16 * ($i-1);
-            $mask = ~($bits >> $left) & $bits;
-            if ($bytes_addr[$i] != $bytes_test[$i] & $mask) {
+        $bytes_addr = unpack("n*", inet_pton($addr));
+        $bytes_test = unpack("n*", inet_pton($ip));
+
+        for ($i = 1; $i <= ceil($preflen / 16); $i++) {
+            $left = $preflen - 16 * ($i-1);
+            if ($left > 16) {
+                $left = 16;
+            }
+            $mask = ~(0xffff >> $left) & 0xffff;
+            if (($bytes_addr[$i] & $mask) != ($bytes_test[$i] & $mask)) {
                 return false;
             }
         }
