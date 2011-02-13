@@ -20,6 +20,7 @@ Version 2.7.0-alpha2 - 2011-
 - added basic support for HTML5 microdata (Thorsten)
 - added functionality of the TinyMCE save button (Gustavo Solt)
 - added basic reporting functionality (Gustavo Solt, Thorsten)
+- added IPv6 support (David Soria Parra)
 - improved usability in frontend and administration backend (Thorsten)
 - enabling Gzip compression by default (Thorsten)
 - updated bundled jQuery to version 1.5.0 (Thorsten)
