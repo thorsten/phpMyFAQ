@@ -91,6 +91,10 @@ if ('addnews' == $action && $permission["addnews"]) {
                 <input type="radio" name="target" value="self" /><?php print $PMF_LANG['ad_news_link_faq'] ?>
                 <input type="radio" name="target" value="parent" /><?php print $PMF_LANG['ad_news_link_parent'] ?>
             </p>
+            <p>
+                <label for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
+                <?php print PMF_Language::selectLanguages($LANGCODE, false, array(), 'langTo'); ?>
+            </p>
         </fieldset>
             
         <fieldset>
@@ -208,6 +212,10 @@ if ('addnews' == $action && $permission["addnews"]) {
                 <input type="radio" name="target" value="self" <?php if ('self' == $newsData['target']) { ?> checked="checked"<?php } ?> /><?php print $PMF_LANG['ad_news_link_faq'] ?>
                 <input type="radio" name="target" value="parent" <?php if ('parent' == $newsData['target']) { ?> checked="checked"<?php } ?> /><?php print $PMF_LANG['ad_news_link_parent'] ?>
             </p>
+            <p>
+                <label for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
+                <?php print PMF_Language::selectLanguages($newsData['lang'], false, array(), 'langTo'); ?>
+            </p>
         </fieldset>
             
         <fieldset>
@@ -254,10 +262,11 @@ if ('addnews' == $action && $permission["addnews"]) {
     $comment   = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
     $link      = PMF_Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
     $linktitle = PMF_Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_STRIPPED);
+    $newslang  = PMF_Filter::filterInput(INPUT_POST, 'langTo', FILTER_SANITIZE_STRING);
     $target    = PMF_Filter::filterInput(INPUT_POST, 'target', FILTER_SANITIZE_STRIPPED);
     
     $newsData = array(
-        'lang'          => $LANGCODE,
+        'lang'          => $newslang,
         'header'        => $header,
         'content'       => html_entity_decode($content),
         'authorName'    => $author,
@@ -288,10 +297,11 @@ if ('addnews' == $action && $permission["addnews"]) {
     $comment   = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
     $link      = PMF_Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
     $linktitle = PMF_Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_STRIPPED);
+    $newslang  = PMF_Filter::filterInput(INPUT_POST, 'langTo', FILTER_SANITIZE_STRING);
     $target    = PMF_Filter::filterInput(INPUT_POST, 'target', FILTER_SANITIZE_STRIPPED);
     
     $newsData = array(
-        'lang'          => $LANGCODE,
+        'lang'          => $newslang,
         'header'        => $header,
         'content'       => html_entity_decode($content),
         'authorName'    => $author,
