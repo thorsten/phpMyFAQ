@@ -82,7 +82,7 @@ RewriteCond %{REQUEST_URI}              category([0-9]+)\.html$ [NC]
 RewriteRule ^category(.*)\.html$        index.php?action=show&cat=$1 [L,QSA]
 
 # start page
-RewriteRule index.html$                 index.php [PT]
+RewriteRule ^index.html$                 index.php [PT]
 
 # sitemap (backward compatibility)
 RewriteCond %{REQUEST_URI}              sitemap-([a-zA-Z0-9]*)_([a-z\-]+)\.html$ [NC]
