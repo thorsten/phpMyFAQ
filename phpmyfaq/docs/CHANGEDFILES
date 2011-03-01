@@ -1,3 +1,15 @@
+CHANGED FILES FROM 2.6.14 -> 2.6.15
+
+./_.htaccess
+./install/mysql.sql.php
+./install/mysqli.sql.php
+./lang/language_da.php
+./lang/language_es.php
+./lang/language_ms.php
+./lang/language_pt-br.php
+
+
+
 CHANGED FILES FROM 2.6.13 -> 2.6.14
 
 ./_.htaccess
