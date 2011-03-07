@@ -164,26 +164,21 @@ if ($permission["addcateg"]) {
 
                 // Text for title
                 fieldset
-                    .append($('<label></label>').attr({for: 'name_translated_' + langTo}).addClass('left')
-                        .append('<?php print $PMF_LANG["ad_categ_titel"]; ?>'))
-                    .append($('<input></input>')
-                        .attr({id:        'name_translated_' + langTo,
-                               name:      'name_translated_' + langTo,
-                               maxlength: '255',
-                               size:      '30',
-                               style:     'width: 300px;'}))
-                    .append($('<br></br>'));
-                    
+                    .append('<p>' +
+                            '<label for="name_translated_' + langTo + '">' +
+                            '<?php print $PMF_LANG["ad_categ_titel"]; ?>:' +
+                            '</label>' +
+                            '<input type="text" id="name_translated_' + langTo + '" name="name_translated_' + langTo + '" maxlength="255" style="width: 300px;">' +
+                            '</p>');
+
                 // Textarea for description
                 fieldset
-                    .append($('<label></label>').attr({for: 'description_translated_' + langTo}).addClass('left')
-                        .append('<?php print $PMF_LANG["ad_categ_desc"]; ?>'))                
-                    .append($('<textarea></textarea>')
-                        .attr({id:    'description_translated_' + langTo,
-                               name:  'description_translated_' + langTo,
-                               cols:  '80',
-                               rows:  '3',
-                               style: 'width: 300px;'}))
+                    .append('<p>' +
+                            '<label for="description_translated_' + langTo + '">' +
+                            '<?php print $PMF_LANG["ad_categ_desc"]; ?>:' +
+                            '</label>' +
+                            '<textarea id="description_translated_' + langTo + '" name="description_translated_' + langTo + '" cols="80" rows="3" style="width: 300px;"></textarea>' +
+                            '</p>');
 
                 $('#getedTranslations').append(fieldset);
             }

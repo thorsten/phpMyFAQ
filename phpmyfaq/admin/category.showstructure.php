@@ -101,7 +101,7 @@ if ($permission['editcateg']) {
         print '<td>';
         if ($cat['lang'] != $LANGCODE) {
            // translate category
-           printf('<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><img src="images/translate2.gif" width="13" height="16" border="0" title="%s" alt="%s" /></a>',
+           printf('<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><img src="images/translate.png" width="16" height="16" border="0" title="%s" alt="%s" /></a>',
                $currentLink,
                $cat['id'],
                $LANGCODE,
@@ -138,7 +138,7 @@ if ($permission['editcateg']) {
                     $cat['id'],
                     $lang,
                     $PMF_LANG['ad_categ_translate']);
-                printf('<img src="images/translate2.gif" width="13" height="16" border="0" title="%s" alt="%s" /></a>',
+                printf('<img src="images/translate.png" width="16" height="16" border="0" title="%s" alt="%s" /></a>',
                     $PMF_LANG['ad_categ_translate'],
                     $PMF_LANG['ad_categ_translate']);
             }
