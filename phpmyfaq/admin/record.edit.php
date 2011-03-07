@@ -70,7 +70,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
             $url_variables = 'insertentry';
         }
         
-        $faqData['lang']  = PMF_Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
+        $faqData['lang']  = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
         $current_category = isset($_POST['rubrik']) ? $_POST['rubrik'] : null;
         if (is_array($current_category)) {
             foreach ($current_category as $cats) {
@@ -96,7 +96,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     } elseif ($action == 'editentry') {
 
         $id   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        $lang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
+        $lang = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
         if ((!isset($current_category) && !isset($faqData['title'])) || !is_null($id)) {
             $logging = new PMF_Logging();
             $logging->logAdmin($user, 'Beitragedit, ' . $id);
@@ -117,7 +117,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     } elseif ($action == 'copyentry') {
 
         $faqData['id']   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
+        $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
         $faq->language   = $faqData['lang'];
         $categories      = $category->getCategoryRelationsFromArticle($faqData['id'], $faqData['lang']);
 
@@ -177,7 +177,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
         if (count($revisions)) {
 ?>
 
-        <form id="selectRevision" name="selectRevision" action="?action=editentry&amp;id=<?php print $faqData['id']; ?>&amp;artlang=<?php print $faqData['lang']; ?>" method="post">
+        <form id="selectRevision" name="selectRevision" action="?action=editentry&amp;id=<?php print $faqData['id']; ?>&amp;lang=<?php print $faqData['lang']; ?>" method="post">
         <fieldset>
             <p>
                 <legend><?php print $PMF_LANG['ad_changerev']; ?></legend>
@@ -240,7 +240,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                 </textarea>
 <?php
     if ($action == 'copyentry') {
-        $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
+        $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
     }
 
     if ($permission["addatt"]) {
@@ -254,7 +254,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                 print "<a href=\"../" . $att->buildUrl() . "\">" . $att->getFilename() . "</a>";
                 if ($permission["delatt"]) {
                     print "&nbsp;[&nbsp;<a href=\"?action=delatt&amp;" . "record_id=" . $faqData['id'] . "&amp;id=" . 
-                        $att->getId() . "&amp;artlang=" . $faqData['lang'] . "\">" . $PMF_LANG["ad_att_del"] . "</a>&nbsp;]";
+                        $att->getId() . "&amp;lang=" . $faqData['lang'] . "\">" . $PMF_LANG["ad_att_del"] . "</a>&nbsp;]";
                 }
                 print "<br />\n";
             }
@@ -303,11 +303,11 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                 <legend><?php print $PMF_LANG['ad_entry_record_administration']; ?></legend>
 
 <?php if ($faqconfig->get('main.enableGoogleTranslation') === true): ?>
-                <input type="hidden" id="artlang" name="artlang" value="<?php print $faqData['lang']; ?>" />
+                <input type="hidden" id="lang" name="lang" value="<?php print $faqData['lang']; ?>" />
 <?php else: ?>
                 <p>
-                    <label for="artlang"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
-                    <?php print PMF_Language::selectLanguages($faqData['lang'], false, array(), 'artlang'); ?>
+                    <label for="lang"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
+                    <?php print PMF_Language::selectLanguages($faqData['lang'], false, array(), 'lang'); ?>
                 </p>
 <?php endif; ?>
                 <p>
@@ -451,12 +451,12 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                     ?>
                     <p>
                         <label for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
+                        <?php print PMF_Language::selectLanguages($faqData['lang'], false, array(), 'langTo'); ?>
                     </p>
-                    <?php print PMF_Language::selectLanguages($faqData['lang'], false, array(), 'langTo'); ?><br />
 
                         <input type="hidden" name="used_translated_languages" id="used_translated_languages" value="" />
-                    <div id="getedTranslations">
-                    </div>
+                        <div id="getedTranslations">
+                        </div>
                     <?php
                     }
                     ?>
@@ -630,7 +630,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     /* <![CDATA[ */
     google.load("language", "1");
 
-    var langFromSelect = $("#artlang");
+    var langFromSelect = $("#lang");
     var langToSelect   = $("#langTo");
         
     // Add a onChange to the faq language select
@@ -658,51 +658,46 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                 var fieldset = $('<fieldset></fieldset>')
                     .append($('<legend></legend>').html($("#langTo option:selected").text()));
 
-                // Text for thema
+                // Text for question
                 fieldset
-                    .append($('<label></label>').attr({for: 'thema_translated_' + langTo}).addClass('left')
-                        .append('<?php print $PMF_LANG["ad_entry_theme"]; ?>'))
-                    .append($('<input></input>')
-                        .attr({id:        'thema_translated_' + langTo,
-                               name:      'thema_translated_' + langTo,
-                               maxlength: '255',
-                               style:     'width: 390px;'}))
-                    .append($('<br></br>'));
+                    .append('<p>' +
+                            '<label for="question_translated_' + langTo + '">' +
+                            '<?php print $PMF_LANG["ad_entry_theme"]; ?>' +
+                            '</label>' +
+                            '<input type="text" id="question_translated_' + langTo + '" name="question_translated_' + langTo + '" maxlength="255" style="width: 300px;">' +
+                            '</p>');
 
-                // Textarea for content
-                fieldset
-                    .append($('<label></label>').attr({for: 'content_translated_' + langTo}).addClass('left')
-                        .append('<?php print $PMF_LANG["ad_entry_content"]; ?>'))                
-                    .append($('<textarea></textarea>')
-                        .attr({id:       'content_translated_' + langTo,
-                               name:     'content_translated_' + langTo,
-                               cols:     '40',
-                               rows:     '4',
-                               style:    'width: 396px; height: 50px; margin-bottom: 4px;'}))
-                    .append($('<br></br>'));
 
-                // Text for thema
+                // Textarea for answer
                 fieldset
-                    .append($('<label></label>').attr({for: 'keywords_translated_' + langTo}).addClass('left')
-                        .append('<?php print $PMF_LANG["ad_entry_keywords"]; ?>'))
-                    .append($('<input></input>')
-                        .attr({id:       'keywords_translated_' + langTo,
-                               name:     'keywords_translated_' + langTo,
-                               maxlength: '255',
-                               style:     'width: 390px;'}))
-                    .append($('<br></br>'));
+                    .append('<p>' +
+                            '<label for="answer_translated_' + langTo + '">' +
+                            '<?php print $PMF_LANG["ad_entry_content"]; ?>' +
+                            '</label>' +
+                            '<textarea id="answer_translated_' + langTo + '" name="answer_translated_' + langTo + '" cols="80" rows="3" style="width: 300px;"></textarea>' +
+                            '</p>');
+
+
+                // Textarea for keywords
+                fieldset
+                    .append('<p>' +
+                            '<label for="keywords_translated_' + langTo + '">' +
+                            '<?php print $PMF_LANG["ad_entry_keywords"]; ?>' +
+                            '</label>' +
+                            '<textarea id="keywords_translated_' + langTo + '" name="keywords_translated_' + langTo + '" cols="80" rows="3" style="width: 300px;"></textarea>' +
+                            '</p>');
 
                 $('#getedTranslations').append(fieldset);
                 
                 // Call the init for a new tinyMCE
-                createTinyMCE('content_translated_' + langTo);
+                createTinyMCE('answer_translated_' + langTo);
             }
 
-            var langFrom = $('#artlang').val();
+            var langFrom = $('#lang').val();
             
             // Set the translated text
-            getGoogleTranslation('#thema_translated_' + langTo, $('#thema').val(), langFrom, langTo);
-            getGoogleTranslation('content_translated_' + langTo, tinymce.get('content').getContent(), langFrom, langTo, 'content');
+            getGoogleTranslation('#question_translated_' + langTo, $('#question').val(), langFrom, langTo);
+            getGoogleTranslation('#answer_translated_' + langTo, tinymce.get('answer').getContent(), langFrom, langTo, 'answer');
 
             // Keywords must be translated separately
             $('#keywords_translated_' + langTo).val('');
