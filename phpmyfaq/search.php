@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2010 phpMyFAQ Team
+ * @copyright 2002-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-16
@@ -120,7 +120,8 @@ $mostPopularSearchData = $faqSearch->getMostPopularSearches($faqconfig->get('mai
 
 // Set base URL scheme
 if (PMF_Configuration::getInstance()->get('main.enableRewriteRules')) {
-    $baseUrl = sprintf("search.html?search=%s&amp;seite=%d%s&amp;searchcategory=%d",
+    $baseUrl = sprintf("%ssearch.html?search=%s&amp;seite=%d%s&amp;searchcategory=%d",
+        PMF_Link::getSystemRelativeUri('index.php'),
         urlencode($inputSearchTerm),
         $page,
         $languages,
