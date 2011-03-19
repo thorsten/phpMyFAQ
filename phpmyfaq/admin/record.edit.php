@@ -258,7 +258,12 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                 }
                 print "<br />\n";
             }
-            print "<a href=\"#\" onclick=\"Picture('attachment.php?record_id=".$faqData['id']."&amp;record_lang=".$faqData['lang']."&amp;rubrik=".$current_category."', 'Attachment', 400,80)\">".$PMF_LANG["ad_att_add"]."</a>";
+            printf('<a href="javascript:void();" onclick="Picture(\'attachment.php?record_id=%d&amp;record_lang=%s&amp;rubrik=%d\', \'Attachment\', 400,80); return false;">%s</a>',
+                $faqData['id'],
+                $faqData['lang'],
+                $current_category,
+                $PMF_LANG['ad_att_add']
+                );
         } else {
             printf("%s", $PMF_LANG['ad_att_nope']);
         }
@@ -267,7 +272,6 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 <?php
     }
 ?>
-
                 <p>
                     <label for="keywords"><?php print $PMF_LANG["ad_entry_keywords"]; ?></label>
                     <input type="text" name="keywords" id="keywords" style="width: 300px;" maxlength="255"

@@ -283,9 +283,9 @@ if ($permission['editbt'] || $permission['delbt']) {
         <tr class="record_<?php print $record['id']; ?>_<?php print $record['lang']; ?>">
             <td style="width: 24px; text-align: right;"><?php print $record['id']; ?></td>
             <td style="width: 16px;"><?php print $record['lang']; ?></td>
-            <td style="width: 24px;"><a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;artlang=<?php print $record['lang']; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><?php print $record['solution_id']; ?></a></td>
+            <td style="width: 24px;"><a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><?php print $record['solution_id']; ?></a></td>
             <td style="width: 56px;"><input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'sticky');" id="sticky_record_<?php print $cid . '_' . $record['id'] ?>" <?php $record['sticky'] ? print 'checked="checked"' : print '    ' ?> /></td>
-            <td><a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;artlang=<?php print $record['lang']; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><?php print $record['title']; ?></a>
+            <td><a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><?php print $record['title']; ?></a>
 <?php
         if (isset($numCommentsByFaq[$record['id']])) {
             print " (".$numCommentsByFaq[$record['id']]." ".$PMF_LANG["ad_start_comments"].")";
@@ -299,7 +299,7 @@ if ($permission['editbt'] || $permission['delbt']) {
                 </a>
             </td>
             <td style="width: 16px;">
-                <a href="?action=copyentry&amp;id=<?php print $record['id']; ?>&amp;artlang=<?php print $record['lang']; ?>">
+                <a href="?action=copyentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>">
                 <img src="images/copy.png" alt="<?php print $PMF_LANG['ad_categ_copy']; ?>" title="<?php print $PMF_LANG['ad_categ_copy']; ?>" />
                 </a>
             </td>
