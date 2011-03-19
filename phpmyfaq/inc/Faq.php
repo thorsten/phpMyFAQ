@@ -43,7 +43,6 @@ define('FAQ_SQL_ACTIVE_NO',  'no');
  */
 define('FAQ_QUERY_TYPE_DEFAULT',        'faq_default');
 define('FAQ_QUERY_TYPE_APPROVAL',       'faq_approval');
-define('FAQ_QUERY_TYPE_EXPORT_DOCBOOK', 'faq_export_docbook');
 define('FAQ_QUERY_TYPE_EXPORT_PDF',     'faq_export_pdf');
 define('FAQ_QUERY_TYPE_EXPORT_XHTML',   'faq_export_xhtml');
 define('FAQ_QUERY_TYPE_EXPORT_XML',     'faq_export_xml');
@@ -2345,15 +2344,13 @@ class PMF_Faq
     /**
      * Retrieve faq records according to the constraints provided
      *
-     * @param   $QueryType
-     * @param   $nCatid
-     * @param   $bDownwards
-     * @param   $lang
-     * @param   $date
+     * @param string  $QueryType
+     * @param integer $nCatid
+     * @param string  $bDownwards
+     * @param string  $lang
+     * @param string  $date
+     * 
      * @return  array
-     * @access  public
-     * @since   2005-11-02
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
     function get($QueryType = FAQ_QUERY_TYPE_DEFAULT, $nCatid = 0, $bDownwards = true, $lang = '', $date = '')
     {
@@ -2512,7 +2509,6 @@ class PMF_Faq
                 $query .= " fd.active = '".FAQ_SQL_ACTIVE_NO."'";
                 $needAndOp = true;
                 break;
-            case FAQ_QUERY_TYPE_EXPORT_DOCBOOK:
             case FAQ_QUERY_TYPE_EXPORT_PDF:
             case FAQ_QUERY_TYPE_EXPORT_XHTML:
             case FAQ_QUERY_TYPE_EXPORT_XML:
@@ -2532,7 +2528,6 @@ class PMF_Faq
         }
         // Sort criteria
         switch ($QueryType) {
-            case FAQ_QUERY_TYPE_EXPORT_DOCBOOK:
             case FAQ_QUERY_TYPE_EXPORT_PDF:
             case FAQ_QUERY_TYPE_EXPORT_XHTML:
             case FAQ_QUERY_TYPE_EXPORT_XML:
