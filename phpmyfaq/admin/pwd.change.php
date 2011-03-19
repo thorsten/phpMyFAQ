@@ -56,7 +56,7 @@ if ($permission["passwd"]) {
             if (!$user->changePassword($npasswd)) {
                 printf('<p class="error">%s</p>', $PMF_LANG["ad_passwd_fail"]);
             }
-            sprintf('<p class="success">%s</p>', $PMF_LANG["ad_passwdsuc"]);
+            printf('<p class="success">%s</p>', $PMF_LANG["ad_passwdsuc"]);
         } else {
             printf('<p class="error">%s</p>', $PMF_LANG["ad_passwd_fail"]);
         }
