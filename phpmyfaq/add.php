@@ -62,6 +62,7 @@ $tpl->processTemplate(
     array(
         'msgNewContentHeader'   => $PMF_LANG['msgNewContentHeader'],
         'msgNewContentAddon'    => $PMF_LANG['msgNewContentAddon'],
+        'lang'                  => $Language->getLanguage(),
         'defaultContentMail'    => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
         'defaultContentName'    => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
         'msgNewContentName'     => $PMF_LANG['msgNewContentName'],

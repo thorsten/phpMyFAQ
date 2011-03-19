@@ -201,7 +201,141 @@ switch ($action) {
 
     case 'savefaq':
 
-        $message = array('error' => 'not implemented yet');
+        $faq         = new PMF_Faq();
+        $category    = new PMF_Category();
+        $name        = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $email       = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $faqid       = PMF_Filter::filterInput(INPUT_POST, 'faqid', FILTER_VALIDATE_INT);
+        $faqlanguage = PMF_Filter::filterInput(INPUT_POST, 'faqlanguage', FILTER_SANITIZE_STRING);
+        $question    = PMF_Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
+        $answer      = PMF_Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_STRIPPED);
+        $translation = PMF_Filter::filterInput(INPUT_POST, 'translated_answer', FILTER_SANITIZE_STRING);
+        $link        = PMF_Filter::filterInput(INPUT_POST, 'contentlink', FILTER_VALIDATE_URL);
+        $keywords    = PMF_Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRIPPED);
+        $categories  = PMF_Filter::filterInputArray(INPUT_POST, array(
+            'rubrik' => array(
+                'filter' => FILTER_VALIDATE_INT,
+                'flags'  => FILTER_REQUIRE_ARRAY)));
+
+        // Check on translation
+        if (is_null($answer) && !is_null($translation)) {
+            $answer = $translation;
+        }
+
+        if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) &&
+            !is_null($question) && !empty($question) && checkBannedWord(PMF_String::htmlspecialchars($question)) &&
+            !is_null($answer) && !empty($answer) && checkBannedWord(PMF_String::htmlspecialchars($answer)) &&
+            ((is_null($faqid) && !is_null($categories['rubrik'])) || (!is_null($faqid) && !is_null($faqlanguage) &&
+            PMF_Language::isASupportedLanguage($faqlanguage)))) {
+
+            $isNew = true;
+            if (!is_null($faqid)) {
+                $isNew = false;
+                $faqsession->userTracking('save_new_translation_entry', 0);
+            } else {
+                $faqsession->userTracking('save_new_entry', 0);
+            }
+
+            $isTranslation = false;
+            if (!is_null($faqlanguage)) {
+                $isTranslation = true;
+                $newLanguage   = $faqlanguage;
+            }
+
+            if (PMF_String::substr($contentlink,7) != "") {
+                $answer = sprintf('%s<br />%s<a href="http://%s" target="_blank">%s</a>',
+                    $answer,
+                    $PMF_LANG['msgInfo'],
+                    PMF_String::substr($contentlink,7),
+                    $contentlink
+                );
+            }
+
+            $autoActivate = PMF_Configuration::getInstance()->get('records.defaultActivation');
+
+            $newData = array(
+                'lang'          => ($isTranslation == true ? $newLanguage : $languageCode),
+                'thema'         => $question,
+                'active'        => ($autoActivate ? FAQ_SQL_ACTIVE_YES : FAQ_SQL_ACTIVE_NO),
+                'sticky'        => 0,
+                'content'       => nl2br($answer),
+                'keywords'      => $keywords,
+                'author'        => $name,
+                'email'         => $email,
+                'comment'       => FAQ_SQL_YES,
+                'date'          => date('YmdHis'),
+                'dateStart'     => '00000000000000',
+                'dateEnd'       => '99991231235959',
+                'linkState'     => '',
+                'linkDateCheck' => 0);
+
+            if ($isNew) {
+                $categories = $categories['rubrik'];
+            } else {
+                $newData['id'] = $faqid;
+                $categories    = $category->getCategoryIdsFromArticle($newData['id']);
+            }
+
+            $recordId = $faq->addRecord($newData, $isNew);
+
+            $faq->addCategoryRelations($categories, $recordId, $newData['lang']);
+
+            if ($autoActivate) {
+                // Activate visits
+                $visits = PMF_Visits::getInstance();
+                $visits->add($recordId, $newData['lang']);
+
+                // Add user permissions
+                $faq->addPermission('user', $recordId, -1);
+                $category->addPermission('user', $categories['rubrik'], array(-1));
+                // Add group permission
+                if ($faqconfig->get('main.permLevel') != 'basic') {
+                    $faq->addPermission('group', $recordId, -1);
+                    $category->addPermission('group', $categories['rubrik'], array(-1));
+                }
+            }
+
+            // Let the PMF Administrator and the Category Owner to be informed by email of this new entry
+            $send = array();
+            $mail = new PMF_Mail();
+            $mail->setFrom($usermail);
+            $mail->addTo($faqconfig->get('main.administrationMail'));
+            $send[$faqconfig->get('main.administrationMail')] = 1;
+
+            foreach ($categories as $_category) {
+
+                $userId = $category->getCategoryUser($_category);
+
+                // @todo Move this code to Category.php
+                $oUser = new PMF_User();
+                $oUser->getUserById($userId);
+                $catOwnerEmail = $oUser->getUserData('email');
+
+                // Avoid to send multiple emails to the same owner
+                if (!isset($send[$catOwnerEmail])) {
+                    $mail->addCc($catOwnerEmail);
+                    $send[$catOwnerEmail] = 1;
+                }
+            }
+
+            $mail->subject = '%sitename%';
+
+            // @todo let the email contains the faq article both as plain text and as HTML
+            $mail->message = html_entity_decode(
+                $PMF_LANG['msgMailCheck']) .
+                "\n\n" .
+                $faqconfig->get('main.titleFAQ') .
+                ": " .
+                PMF_Link::getSystemUri('/index.php').'/admin';
+            $result = $mail->send();
+            unset($mail);
+
+            $message = array('success' => ($isNew ? $PMF_LANG['msgNewContentThanks'] : $PMF_LANG['msgNewTranslationThanks']));
+
+        } else {
+            $message = array('error' => $PMF_LANG['err_SaveEntries']);
+        }
+
         break;
 
     case 'savequestion':
