@@ -335,9 +335,9 @@ function saveFormValues(action, formName)
  *
  * @return void
  */
-function autoSuggest()
-{
-    $('input#instantfield').bind('keyup', function()
+//function autoSuggest()
+//{
+    $('input#instantfield').keyup(function()
     {
         var search   = $('#instantfield').val();
         var language = $('#ajaxlanguage').val();
@@ -363,7 +363,7 @@ function autoSuggest()
     {
         return false;
     });
-}
+//}
 
 /**
  * Saves the voting by Ajax

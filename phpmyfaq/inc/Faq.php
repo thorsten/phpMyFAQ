@@ -20,7 +20,7 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Georgi Korchev <korchev@yahoo.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-20
@@ -2111,18 +2111,12 @@ class PMF_Faq
     /**
      * Adds a new question
      *
-     * @param    array  $questionData
-     * @return   boolean
-     * @access   public
-     * @since    2006-09-09
-     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  array $questionData
+     *
+     * @return boolean
      */
-    function addQuestion($questionData)
+    function addQuestion(Array $questionData)
     {
-        if (!is_array($questionData)) {
-            return false;
-        }
-
         $query = sprintf("
             INSERT INTO
                 %sfaqquestions
@@ -2130,11 +2124,11 @@ class PMF_Faq
                 (%d, '%s', '%s', %d, '%s', '%s', '%s')",
             SQLPREFIX,
             $this->db->nextID(SQLPREFIX.'faqquestions', 'id'),
-            $this->db->escape_string($questionData['ask_username']),
-            $this->db->escape_string($questionData['ask_usermail']),
-            $questionData['ask_category'],
-            $this->db->escape_string($questionData['ask_content']),
-            $questionData['ask_date'],
+            $this->db->escape_string($questionData['username']),
+            $this->db->escape_string($questionData['email']),
+            $questionData['category_id'],
+            $this->db->escape_string($questionData['question']),
+            date('YmdHis'),
             $questionData['is_visible']);
         $this->db->query($query);
 
