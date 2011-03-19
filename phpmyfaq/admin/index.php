@@ -177,7 +177,10 @@ if (isset($user) && is_object($user)) {
 
 //
 // Get action from _GET and _POST first
-$_ajax   = PMF_Filter::filterInput(INPUT_GET, 'ajax', FILTER_SANITIZE_STRING);
+$_ajax = PMF_Filter::filterInput(INPUT_GET, 'ajax', FILTER_SANITIZE_STRING);
+if (!$_ajax) {
+    $_ajax = PMF_Filter::filterInput(INPUT_POST, 'ajax', FILTER_SANITIZE_STRING);
+}
 
 // if performing AJAX operation, needs to branch before header.php
 if (isset($auth) && in_array(true, $permission)) {
@@ -208,14 +211,22 @@ if (isset($auth) && in_array(true, $permission)) {
                 
             // Comments
             case 'comment':
-            	require 'ajax.comment.php';
-            	break;
-            	
+                require 'ajax.comment.php';
+                break;
+            
             // Records
             case 'records':	
                 require 'ajax.records.php';
                 break;
-                
+
+            case 'recordSave':
+                require 'record.save.php';
+                break;
+
+            case 'recordAdd':
+                require 'record.add.php';
+                break;
+
             // Users
             case 'user': 
                 require 'ajax.user.php';
