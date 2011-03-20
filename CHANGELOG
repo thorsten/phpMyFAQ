@@ -5,7 +5,7 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.7.0-alpha2 - 2011-
+Version 2.7.0-alpha2 - 2011-03-
 - changed PHP requirement to PHP 5.2.3 (Thorsten)
 - dropped support for MySQL 4.1 (Thorsten)
 - dropped support for Internet Explorer 6 (Thorsten)
@@ -23,7 +23,7 @@ Version 2.7.0-alpha2 - 2011-
 - added IPv6 support (David Soria Parra)
 - improved usability in frontend and administration backend (Thorsten)
 - enabling Gzip compression by default (Thorsten)
-- updated bundled jQuery to version 1.5.0 (Thorsten)
+- updated bundled jQuery to version 1.5.1 (Thorsten)
 - updated bundled Modernizr to version 1.7 (Thorsten)
 
 Version 2.6.16 - 2011-03
