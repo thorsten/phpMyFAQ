@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Search_Database
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
+ * @copyright 2010-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Search_Database
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
+ * @copyright 2010-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
@@ -68,10 +68,10 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
         } else {
             $enableRelevance = PMF_Configuration::getInstance()->get('search.enableRelevance');                    
 
-            $columns  =  $this->getResultColumns();
-            $columns .= ($enableRelevance) ? $this->getMatchingColumnsAsResult($searchTerm) : '';
-
-            $orderBy = ($enableRelevance) ? 'ORDER BY ' . $this->getMatchingOrder() . ' DESC' : '';
+            $columns    =  $this->getResultColumns();
+            $columns   .= ($enableRelevance) ? $this->getMatchingColumnsAsResult($searchTerm) : '';
+            $orderBy    = ($enableRelevance) ? 'ORDER BY ' . $this->getMatchingOrder() . ' DESC' : '';
+            $searchTerm = stripslashes (str_replace ('&quot;', "\"", ($searchTerm)));
 
             $query = sprintf("
                 SELECT
