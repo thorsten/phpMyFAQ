@@ -304,7 +304,11 @@ div.star-rating-hover a {
     margin: auto; }
 #votingstars span {
     padding-left: 11px; }
-
+#tagcloud-content .relevance1 { font-size: 80%; }
+#tagcloud-content .relevance2 { font-size: 100%; }
+#tagcloud-content .relevance3 { font-size: 120%; }
+#tagcloud-content .relevance4 { font-size: 140%; }
+#tagcloud-content .relevance5 { font-size: 160%; }
 
 
 /* Right panel */
