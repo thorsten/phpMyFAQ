@@ -229,6 +229,10 @@ nav ul li.selected a {
     display: table-cell; width: 500px; vertical-align: top; padding: 11px 22px 0; }
 #mainContent h2 {
     display: block; padding-bottom: 22px; }
+#mainContent h3 {
+    font-size: 16px; }
+#mainContent h3 a {
+    text-decoration: none; }
 #mainContent p {
     padding-bottom: 11px; }
 #mainContent p.comment { 
@@ -242,6 +246,7 @@ nav ul li.selected a {
 #mainContent p.success { 
     margin: 10px auto; padding: 10px; background-color: #7dfd77; color: #222; border-radius: 5px; 
     -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#mainContent .date { margin-bottom: 11px; font-size: 11px; }
 
 /* phpMyFAQ forms */
 #mainContent form p {
