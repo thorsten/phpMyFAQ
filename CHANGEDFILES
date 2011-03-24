@@ -1,3 +1,9 @@
+CHANGED FILES FROM 2.7.0-alpha2 -> 2.7.0-beta
+
+
+
+CHANGED FILES FROM 2.7.0-alpha -> 2.7.0-alpha2
+
 ./_.htaccess
 ./_nginx.conf
 ./admin/ajax.config_list.php

@@ -1,11 +1,11 @@
-phpMyFAQ 2.7.0-alpha2
+phpMyFAQ 2.7.0-beta
 Codename "Prospero"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.7.0-alpha2 - 2011-03-23
+Version 2.7.0-beta - 2011-04-
 - changed PHP requirement to PHP 5.2.3 (Thorsten)
 - dropped support for MySQL 4.1 (Thorsten)
 - dropped support for Internet Explorer 6 (Thorsten)
