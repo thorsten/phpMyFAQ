@@ -18,7 +18,7 @@
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-04-17
@@ -45,15 +45,16 @@ if (!PMF_Db::checkOnEmptyTable('faqdata')) {
         $helper->setCategory($category);
 ?>
         <fieldset><legend><?php print($PMF_LANG['ad_export_which_cat']); ?></legend>
-            <label class="left" for="rubrik"><?php print($PMF_LANG["ad_entry_category"]); ?></label>
+            <label class="left" for="catid"><?php print($PMF_LANG["ad_entry_category"]); ?></label>
             <select name="catid" id="catid" size="1">
+                <option><?php print $PMF_LANG["msgShowAllCategories"] ?></option>
 <?php
         print $helper->renderCategoryOptions();
 ?>
             </select>
             <br />
             <label class="left" for="downwards"><?php print($PMF_LANG['ad_export_cat_downwards']); ?></label>
-            <input type="checkbox" name="downwards" value="1" checked="checked"></input>
+            <input type="checkbox" name="downwards" id="downwards" value="1" checked="checked"></input>
         </fieldset>
         <br />
 <?php
@@ -61,13 +62,13 @@ if (!PMF_Db::checkOnEmptyTable('faqdata')) {
 ?>
         <fieldset><legend><?php print($PMF_LANG['ad_export_type']); ?></legend>
             <p>
-                <label for="export_type"><?php print($PMF_LANG['ad_export_type_choose']); ?></label><br />
+                <label><?php print($PMF_LANG['ad_export_type_choose']); ?></label><br />
                 <input type="radio" name="type" value="pdf" checked="checked" />&nbsp;<?php print($PMF_LANG["ad_export_generate_pdf"]); ?><br />
                 <input type="radio" name="type" value="xml" />&nbsp;<?php print($PMF_LANG["ad_xml_gen"]); ?><br />
                 <input type="radio" name="type" value="xhtml" />&nbsp;<?php print($PMF_LANG['ad_export_gen_xhtml']); ?>
             </p>
             <p>
-                <label for="disposition"><?php print($PMF_LANG['ad_export_download_view']); ?></label>
+                <label><?php print($PMF_LANG['ad_export_download_view']); ?></label>
                 <input type="radio" name="dispos" value="<?php print PMF_HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT; ?>" checked="checked"><?php print($PMF_LANG['ad_export_download']); ?></input>
                 <input type="radio" name="dispos" value="<?php print PMF_HttpStreamer::EXPORT_DISPOSITION_INLINE; ?>"><?php print($PMF_LANG['ad_export_view']); ?></input>
             </p>
