@@ -466,6 +466,7 @@ function getUserData(user_id)
         <thead>
             <tr>
                 <th><?php print $PMF_LANG['ad_entry_id'] ?></th>
+                <th><?php print $PMF_LANG['ad_user_status'] ?></th>
                 <th><?php print $PMF_LANG['msgNewContentName'] ?></th>
                 <th><?php print $PMF_LANG['ad_user_username'] ?></th>
                 <th><?php print $PMF_LANG['msgNewContentMail'] ?></th>
@@ -477,6 +478,7 @@ function getUserData(user_id)
 
             <tr>
                 <td><?php print $user->getUserData('user_id')?></td>
+                <td><?php print $user->getStatus(); ?></td>
                 <td><?php print $user->getUserData('display_name')?></td>
                 <td><?php print $user->getLogin() ?></td>
                 <td>
