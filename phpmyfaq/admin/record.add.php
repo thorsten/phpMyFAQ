@@ -43,7 +43,7 @@ if ($permission['editbt']) {
     $question      = PMF_Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRING);
     $categories    = PMF_Filter::filterInputArray(INPUT_POST, array('rubrik' => array('filter' => FILTER_VALIDATE_INT,
                                                                                       'flags'  => FILTER_REQUIRE_ARRAY)));
-    $record_lang   = PMF_Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
+    $record_lang   = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
     $tags          = PMF_Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
     $active        = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
     $sticky        = PMF_Filter::filterInput(INPUT_POST, 'sticky', FILTER_SANITIZE_STRING);
