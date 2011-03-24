@@ -340,14 +340,14 @@ aside section ul li a:hover {
 #searchBox a.help {
     margin-right: 10px; padding: 0 12px 0 0; background: url(../images/arrow.gif) no-repeat scroll right 55% transparent; }
 #searchBox a.help:hover {
-	text-decoration: underline; }
+    text-decoration: underline; }
 
+#mainContent form #captchaImage, #mainContent form div.captchaInfo {
+    margin-left: 170px; }
 #mainContent form input.captcha {
-    vertical-align: top; height: 40px; width: 120px; text-valign: middle; font-size: 1.571em; }
+    vertical-align: top; height: 40px; width: 120px; text-valign: middle; font-size: 30px; }
 #debug_main {
-    margin: auto; width: 720px; background-color: #fff;
-    padding: 150px 10px 10px;
-}
+    margin: auto; width: 720px; background-color: #fff; padding: 150px 10px 10px; }
 
 /* Footer */
 footer {

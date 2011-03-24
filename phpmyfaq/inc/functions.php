@@ -346,14 +346,14 @@ function printCaptchaFieldset($legend, $img, $length, $error = '')
     $html = '';
 
     if (PMF_Configuration::getInstance()->get('spam.enableCaptchaCode')) {
-        $html = sprintf('<fieldset><legend>%s</legend>', $legend);
-        $html .= '<div style="text-align: center;">';
+        $html = '<p>';
         if ($error != '') {
             $html .= '<div class="error">' . $error . '</div>';
         }
+        $html .= '<div class="captchaInfo">' . $legend . ':</div>';
         $html .= $img;
-        $html .= '&nbsp; &nbsp;<input type="text" name="captcha" id="captcha" class="captcha" size="7" />';
-        $html .= '</div></fieldset>';
+        $html .= '&nbsp; &nbsp;<input type="text" name="captcha" id="captcha" class="captcha" size="' . $length . '" /><br />';
+        $html .= '</p>';
     }
 
     return $html;
