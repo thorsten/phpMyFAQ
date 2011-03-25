@@ -322,6 +322,7 @@ function saveFormValues(action, formName)
                 $('#' + formName + 's').fadeIn("slow");
                 $('#loader').hide();
                 $('#' + formName + 'Form').hide();
+                $('#formValues')[0].reset();
                 // @todo add reload of content
             }
         }
