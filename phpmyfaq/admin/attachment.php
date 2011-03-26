@@ -88,21 +88,35 @@ if ($auth === true) {
 if (is_null($currentAction) || !is_null($currentSave)) {
 ?>
 <!DOCTYPE html>
-<html lang="<?php print $PMF_LANG['metaLanguage']; ?>">
+<!--[if lt IE 7 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js"> <!--<![endif]-->
 <head>
-    <title><?php print $faqconfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
     <meta charset="utf-8">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta http-equiv="content-language" content="<?php print $PMF_LANG['metaLanguage']; ?>">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title><?php print $faqconfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
+    <base href="<?php print PMF_Link::getSystemUri('index.php'); ?>" />
+    
+    <meta name="description" content="Only Chuck Norris can divide by zero.">
+    <meta name="author" content="phpMyFAQ Team">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
     <meta name="application-name" content="phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?>">
-    <meta name="copyright" content="(c) 2001-2010 phpMyFAQ Team">
-    <link rel="shortcut icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon">
-    <style type="text/css">
-    @import url(style/admin.css);
-    body { margin: 5px; }
-    </style>
-    <script type="text/javascript" src="../inc/js/functions.js"></script>
+    <meta name="copyright" content="(c) 2001-2011 phpMyFAQ Team">
+    <meta name="publisher" content="phpMyFAQ Team">
+    <meta name="MSSmartTagsPreventParsing" content="true">
+
+    <link rel="stylesheet" href="style/admin.css?v=1">
+
+    <script src="../inc/js/modernizr.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+    <script>!window.jQuery && document.write('<script src="../inc/js/jquery.min.js"><\/script>')</script>
+    <script src="../inc/js/functions.js"></script>
+    
+    <link rel="shortcut icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico">
+    <link rel="apple-touch-icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/apple-touch-icon.png">
 </head>
 <body>
 <?php

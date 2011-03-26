@@ -294,7 +294,7 @@ if ($permission['editbt'] || $permission['delbt']) {
             <td style="width: 48px;"><?php print PMF_String::substr($record['date'], 0, 10); ?></td>
             <td style="width: 96px;"><?php print $linkverifier->getEntryStateHTML($record['id'], $record['lang']); ?></td>
             <td style="width: 16px;">
-                <a href="#" onclick="javascript:deleteRecord(<?php print $record['id']; ?>, '<?php print $record['lang']; ?>'); return false;" title="<?php print $PMF_LANG["ad_user_delete"]; ?>">
+                <a href="javascript:void()" onclick="javascript:deleteRecord(<?php print $record['id']; ?>, '<?php print $record['lang']; ?>'); return false;" title="<?php print $PMF_LANG["ad_user_delete"]; ?>">
                     <img src="images/delete.png" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" />
                 </a>
             </td>
