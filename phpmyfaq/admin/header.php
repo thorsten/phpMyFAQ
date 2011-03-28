@@ -203,17 +203,9 @@ switch ($action) {
                     <?php print $user->getUserData('display_name'); ?>!
                 </span>
             </p>
-            <?php if (is_null($action)) { ?>
-                <form action="index.php<?php print (isset($action) ? '?action=' . $action : ''); ?>" method="post">
-                <?php print PMF_Language::selectLanguages($LANGCODE, true); ?>
-                </form>
-            <?php } else { ?>
-
             <p>
                 <?php print $PMF_LANG['ad_session_expiration']; ?>: <span id="sessioncounter">Loading...</span>
             </p>
-            <?php } ?>
-            
         </div>
     </div>
     <?php } ?>
@@ -235,6 +227,9 @@ switch ($action) {
         <li<?php print ($configurationPage ? ' class="active"' : ''); ?>><a href="index.php?action=config"><?php print $PMF_LANG['admin_mainmenu_configuration']; ?></a></li>
         <li><a class="logout" href="index.php?action=logout"><?php print $PMF_LANG['admin_mainmenu_logout']; ?></a></li>
     </ul>
+    <form action="index.php<?php print (isset($action) ? '?action=' . $action : ''); ?>" method="post">
+    <?php print PMF_Language::selectLanguages($LANGCODE, true); ?>
+    </form>
 </nav>
 <?php } ?>
 
