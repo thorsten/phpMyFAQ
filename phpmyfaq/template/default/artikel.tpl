@@ -123,6 +123,12 @@
                     saveVoting('faq', {id}, value);
                 }
             });
+            $(function() {
+                $('#submitcomment').click(function() {
+                    saveFormValues('savecomment', 'comment');
+                });
+                $('form#formValues').submit(function() { return false; });
+            });
             </script>
             <script type="text/javascript" src="inc/js/syntaxhighlighter/scripts/shCore.js"></script>
             <script type="text/javascript" src="inc/js/syntaxhighlighter/scripts/shBrushBash.js"></script>
