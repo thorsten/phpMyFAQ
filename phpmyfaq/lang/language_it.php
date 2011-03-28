@@ -36,9 +36,9 @@ $PMF_LANG["nplurals"] = "2";
 
 // Navigation
 $PMF_LANG["msgCategory"] = "Categorie";
-$PMF_LANG["msgShowAllCategories"] = "Mostra tutte le categorie";
+$PMF_LANG["msgShowAllCategories"] = "Categorie";
 $PMF_LANG["msgSearch"] = "Ricerca";
-$PMF_LANG["msgAddContent"] = "Proposta per una FAQ";
+$PMF_LANG["msgAddContent"] = "Proposta FAQ";
 $PMF_LANG["msgQuestion"] = "Fai una domanda";
 $PMF_LANG["msgOpenQuestions"] = "Domande aperte";
 $PMF_LANG["msgHelp"] = "Aiuto";
@@ -605,7 +605,7 @@ $PMF_LANG["ad_xmlrpc_latest"] = "Questa &egrave; l'ultima versione disponibile p
 $PMF_LANG['ad_categ_select'] = 'Selezione la lingua della categoria';
 
 // added v1.5.1 - 2005-09-06 by Thorsten
-$PMF_LANG['msgSitemap'] = 'Mappa del sito';
+$PMF_LANG['msgSitemap'] = 'Mappa sito';
 
 // added v1.5.2 - 2005-09-23 by Lars
 $PMF_LANG['err_inactiveArticle'] = 'Questa FAQ &egrave; in revisione e non pu&ograve; essere visualizzata.';
@@ -882,7 +882,7 @@ $PMF_LANG['mainControlCenter'] = 'Configurazione principale';
 $PMF_LANG['recordsControlCenter'] = 'Configurazione delle FAQ';
 
 // added v2.0.0 - 2007-03-17 by Thorsten
-$PMF_LANG['msgInstantResponse'] = 'Ricerca a risposta immediata';
+$PMF_LANG['msgInstantResponse'] = 'Ricerca veloce';
 $PMF_LANG['msgInstantResponseMaxRecords'] = '. Qui sotto trovi le prime %d faq.';
 
 // added v2.0.0 - 2007-03-29 by Thorsten
