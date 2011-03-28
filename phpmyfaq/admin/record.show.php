@@ -411,9 +411,9 @@ foreach ($all_ids as $cat_id => $record_ids) {
                     url:     "index.php?action=ajax&ajax=records&ajaxaction=delete_record",
                     data:    "record_id=" + record_id + "&record_lang=" + record_lang,
                     success: function(msg) {
-                        $('.record_' + record_id + '_' + record_lang).fadeOut('slow');
-                        $('.record_' + record_id + '_' + record_lang).after('<tr><td colspan="8">' + msg + '</td></tr>');
                         $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_delsuc']; ?>');
+                        $('.record_' + record_id + '_' + record_lang).fadeOut('slow');
+                        $('.record_' + record_id + '_' + record_lang).after('<tr><td colspan="10">' + msg + '</td></tr>');
                     }
                 });
             }
