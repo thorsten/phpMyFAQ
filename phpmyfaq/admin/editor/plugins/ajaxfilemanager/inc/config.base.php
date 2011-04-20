@@ -109,7 +109,7 @@ error_reporting(E_ALL);
 		 */
 		
 
-	define('CONFIG_WEBSITE_DOCUMENT_ROOT', '');	
+	define('CONFIG_WEBSITE_DOCUMENT_ROOT', $_SERVER['DOCUMENT_ROOT']);
 	//theme related setting
 			/*
 			*	options avaialbe for CONFIG_EDITOR_NAME are:
