@@ -158,6 +158,13 @@ class PMF_Link
     public $itemTitle = '';
 
     /**
+     * id selector
+     * 
+     * @var string
+     */
+    public $id = '';
+
+    /**
      * Constructor
      * 
      * @param string $url    URL
@@ -411,6 +418,9 @@ class PMF_Link
         $htmlAnchor = '<a';
         if (!empty($this->class)) {
             $htmlAnchor .= ' class="'.$this->class.'"';
+        }
+        if (!empty($this->id)) {
+            $htmlAnchor .= ' id="'.$this->id.'"';
         }
         if (!empty($this->tooltip)) {
             $htmlAnchor .= ' title="'.addslashes($this->tooltip).'"';
