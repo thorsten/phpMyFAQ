@@ -2116,15 +2116,30 @@ class PMF_Faq
     function printOpenQuestions()
     {
         global $sids, $category;
-
+        
+        if ($this->groupSupport) {
+            $permPart = sprintf("AND ( fdg.group_id IN (%s))",
+                implode(', ', $this->groups),
+                $this->user,
+                implode(', ', $this->groups));
+			$permPartLeftJoin = sprintf("LEFT JOIN %sfaqcategory_group AS fdg ON fq.ask_rubrik = fdg.category_id", $SQLPREFIX);
+			
+        } else {
+			$permPart = '';
+			$permPartLeftJoin = '';
+        }
         $query = sprintf("
             SELECT
                 COUNT(*) AS num
             FROM
-                %sfaqquestions
+                %sfaqquestions 
+			%s
             WHERE
-                is_visible != 'Y'",
-            SQLPREFIX);
+                is_visible != 'Y'
+			%s ",
+            SQLPREFIX, 
+	    $permPartLeftJoin,
+	    $permPart);
 
         $result = $this->db->query($query);
         $row = $this->db->fetch_object($result);
@@ -2140,14 +2155,23 @@ class PMF_Faq
 
         $query = sprintf("
             SELECT
-                *
+                fq.id,
+                fq.ask_username,
+                fq.ask_usermail,
+                fq.ask_rubrik,
+                fq.ask_content,
+                fq.ask_date
             FROM
-                %sfaqquestions
-            WHERE
-                is_visible = 'Y'
-            ORDER BY
-                created ASC",
-            SQLPREFIX);
+                %sfaqquestions as fq
+            %s
+			WHERE
+                fq.is_visible = 'Y'
+			 %s
+			ORDER BY
+                ask_date ASC",
+            SQLPREFIX, 
+	    $permPartLeftJoin,
+	    $permPart);
 
         $result = $this->db->query($query);
         $output = '';
