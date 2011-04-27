@@ -65,6 +65,23 @@ class PMF_Services
     protected $question;
 
     /**
+     * Returns the current URL
+     *
+     * @return string
+     */
+    public function getLink()
+    {
+        $url = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s',
+            PMF_Link::getSystemUri(),
+            $this->getCategoryId(),
+            $this->getFaqId(),
+            $this->getLanguage()
+        );
+
+        return urlencode($url);
+    }
+
+    /**
      * Returns the current "Digg It!" URL
      *
      * @return string

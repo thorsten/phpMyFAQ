@@ -583,7 +583,7 @@ if ('artikel' == $action || 'show' == $action) {
             'link_delicious'         => $faqServices->getBookmarkOnDeliciousLink(),
             'link_email'             => $faqServices->getSuggestLink(),
             'link_pdf'               => $faqServices->getPdfLink(),
-            'facebookeLikeButton'    => $faqHelper->renderFacebookLikeButton($faqServices->getShareOnFacebookLink()),
+            'facebookeLikeButton'    => $faqHelper->renderFacebookLikeButton($faqServices->getLink()),
         )
     );
 }
