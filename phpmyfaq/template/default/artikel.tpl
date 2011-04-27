@@ -32,11 +32,13 @@
                             Rate this FAQ
                         </a>
                     </li>
+                    [switchLanguage]
                     <li>
                         <a href="javascript:void(0);" onclick="infoBox('switchAvailableLanguage')">
                             Change language
                         </a>
                     </li>
+                    [/switchLanguage]
                     <li>
                         <a href="javascript:void(0);" onclick="infoBox('addTranslation')">
                             Translate this FAQ

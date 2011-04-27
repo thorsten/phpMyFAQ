@@ -146,7 +146,6 @@ if ($num > 1) {
         $check4Lang .= ($lang == $language ? ' selected="selected"' : '');
         $check4Lang .= ">".$languageCodes[strtoupper($language)]."</option>\n";
     }
-    $switchLanguage .= "<p>\n";
     $switchLanguage .= "<fieldset>\n";
     $switchLanguage .= "<legend>".$PMF_LANG["msgLangaugeSubmit"]."</legend>\n";
     $switchLanguage .= "<form action=\"".$changeLanguagePath."\" method=\"post\" style=\"display: inline;\">\n";
@@ -157,7 +156,6 @@ if ($num > 1) {
     $switchLanguage .= "<input class=\"submit\" type=\"submit\" name=\"submit\" value=\"".$PMF_LANG["msgLangaugeSubmit"]."\" />\n";
     $switchLanguage .= "</fieldset>\n";
     $switchLanguage .= "</form>\n";
-    $switchLanguage .= "</p>\n";
 }
 
 // List all faq attachments
@@ -250,7 +248,9 @@ $translationUrl = sprintf(
         $faq->faqRecord['id'],
         $lang);
 
-
+if (!empty($switchLanguage)) {
+    $tpl->processBlock('writeContent', 'switchLanguage', array());
+}
 
 // Set the template variables
 $tpl->processTemplate ("writeContent", array(
