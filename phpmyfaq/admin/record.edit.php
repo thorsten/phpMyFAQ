@@ -276,7 +276,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                     <label for="keywords"><?php print $PMF_LANG["ad_entry_keywords"]; ?></label>
                     <input type="text" name="keywords" id="keywords" style="width: 300px;" maxlength="255"
                            value="<?php if (isset($faqData['keywords'])) { print PMF_String::htmlspecialchars($faqData['keywords']); } ?>" />
-                    <span id="keywordsHelp"></span>
+                    <span id="keywordsHelp" style="display: none;"><?php print $PMF_LANG['msgShowHelp']; ?></span>
                 </p>
 
                 <p>
@@ -286,7 +286,8 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                     <img style="display: none; margin-bottom: -5px;" id="tags_autocomplete_wait" src="images/indicator.gif" alt="waiting..." />
                     <script type="text/javascript">
                         $('#tags').autocomplete("index.php?action=ajax&ajax=tags_list", { width: 260, selectFirst: false, multiple: true } );
-                    </script><span id="tagsHelp"></span>
+                    </script>
+                    <span id="tagsHelp" style="display: none;"><?php print $PMF_LANG['msgShowHelp']; ?></span>
                 </p>
 
                 <p>
@@ -621,8 +622,8 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
      */
     function showHelp(option)
     {
-        $('#' + option + 'Help').prepend('<?php print $PMF_LANG['msgShowHelp']; ?>').fadeIn(500);
-        $('#' + option + 'Help').fadeOut(5000);
+        $('#' + option + 'Help').fadeIn(500);
+        $('#' + option + 'Help').fadeOut(2500);
     }
     /* ]]> */
     </script>
