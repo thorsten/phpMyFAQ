@@ -159,7 +159,7 @@ button {
 body {
     margin: 0 auto; font: 13px/22px Helvetica, Arial, sans-serif; background-color: #F0F0F0; }
 body.mceContentBody {
-    background: #FFF; }
+    margin: 5px; background: #FFF; }
 code {
     display: block; font-size: 16px; background-color: black; color: white; padding: 10px; width: 100%;
     margin-bottom: 22px; }
