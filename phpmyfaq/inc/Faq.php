@@ -279,7 +279,7 @@ class PMF_Faq
                     $visits = $row->visits;
                 }
 
-                $url   = sprintf('%saction=artikel&cat=%d&id=%d&artlang=%s',
+                $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                             $sids,
                             $row->category_id,
                             $row->id,
