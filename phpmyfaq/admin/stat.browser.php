@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2009 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
@@ -37,13 +37,13 @@ if ($permission['viewlog']) {
 	$session     = new PMF_Session();
     $sessiondata = $session->getSessionsbyDate($firstHour, $lastHour);
 ?>
-	<h2><?php print "Session ".date("Y-m-d", $day); ?></h2>
+	<h2><?php print $PMF_LANG['ad_sess_session'] . ' ' . date("Y-m-d", $day); ?></h2>
     <table class="list">
     <thead>
         <tr>
-            <th class="list">IP</th>
-            <th class="list">&nbsp;</th>
-            <th class="list">Session</th>
+            <th class="list"><?php print $PMF_LANG['ad_sess_ip']; ?></th>
+            <th class="list"><?php print $PMF_LANG['ad_sess_s_date']; ?></th>
+            <th class="list"><?php print $PMF_LANG['ad_sess_session']; ?></th>
         </tr>
     </thead>
     <tbody>
