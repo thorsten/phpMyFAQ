@@ -46,10 +46,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  */
 class PMF_Link
 {
-	/**
-	 * class constants
-	 * 
-	 */
+    /**
+     * class constants
+     *
+     */
     const PMF_LINK_AMPERSAND = '&amp;';
     const PMF_LINK_CATEGORY = 'category/';
     const PMF_LINK_CONTENT = 'content/';
@@ -170,6 +170,13 @@ class PMF_Link
      * @var string
      */
     protected $rel = '';
+
+    /**
+     * id selector
+     * 
+     * @var string
+     */
+    public $id = '';
 
     /**
      * Constructor
@@ -357,16 +364,18 @@ class PMF_Link
     protected function getQuery()
     {
         $query = '';
+        
         if (!empty($this->url)) {
             $parsed = parse_url($this->url);
+
             if (isset($parsed['query'])) {
                 $query['main'] = filter_var($parsed['query'], FILTER_SANITIZE_STRIPPED); 
             }
+            if (isset($parsed['fragment'])) {
+                $query['fragment'] = filter_var($parsed['fragment'], FILTER_SANITIZE_STRIPPED);
+            }
         }
-        if (isset($parsed['fragment'])) {
-            $query['fragment'] = filter_var($parsed['fragment'], FILTER_SANITIZE_STRIPPED);
-        }
-         
+
         return $query;
     }
 
@@ -446,6 +455,9 @@ class PMF_Link
         if (!empty($this->class)) {
             $htmlAnchor .= sprintf(' class="%s"', $this->class);
         }
+        if (!empty($this->id)) {
+            $htmlAnchor .= ' id="'.$this->id.'"';
+        }
         if (!empty($this->tooltip)) {
             $htmlAnchor .= sprintf(' title="%s"', addslashes($this->tooltip));
         }
@@ -512,14 +524,15 @@ class PMF_Link
         // Check mod_rewrite support and 'rewrite' the passed (system) uri
         // according to the rewrite rules written in .htaccess
         if ((!$forceNoModrewriteSupport) && ($faqconfig->get('main.enableRewriteRules'))) {
+
             if ($this->isHomeIndex()) {
+
                 $getParams = $this->getHttpGetParameters();
                 if (isset($getParams[self::PMF_LINK_GET_ACTION])) {
                     // Get the part of the url 'till the '/' just before the pattern
                     $url = substr($url, 0, strpos($url, self::PMF_LINK_INDEX_HOME) + 1);
-                    
                     // Build the Url according to .htaccess rules
-                    switch($getParams[self::PMF_LINK_GET_ACTION]) {
+                    switch ($getParams[self::PMF_LINK_GET_ACTION]) {
                         
                         case self::PMF_LINK_GET_ACTION_ADD:
                             $url .= self::PMF_LINK_HTML_ADDCONTENT;

@@ -745,6 +745,7 @@ class PMF_Category
     {
         $url              = sprintf('%saction=show&amp;cat=%d', $sids, $categoryId);
         $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+        $oLink->id        = 'category_' . $categoryId;
         $oLink->itemTitle = $categoryName;
         $oLink->text      = $categoryName;
         

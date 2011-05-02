@@ -26,8 +26,10 @@ Version 2.7.0-beta - 2011-04-
 - updated bundled jQuery to version 1.5.1 (Thorsten)
 - updated bundled Modernizr to version 1.7 (Thorsten)
 
-Version 2.6.16 - 2011-03
-- 
+Version 2.6.16 - 2011-04-
+- updated Portuguese translation
+- updated Dutch translation
+- fixed minor bugs (Thorsten)
 
 Version 2.6.15 - 2011-02-23
 - added Malay translation (Ahmad Kamil Zailani)
