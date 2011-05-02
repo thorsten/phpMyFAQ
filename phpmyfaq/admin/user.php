@@ -444,7 +444,7 @@ function getUserData(user_id)
         <form id="rightsForm" action="?action=user&amp;user_action=update_rights" method="post">
             <input id="rights_user_id" type="hidden" name="user_id" value="0" />
             <div>
-                <span><a href="javascript:form_checkAll('rightsForm')"><?php print $text['changeRights_checkAll']; ?></a></span>
+                <span><a href="javascript:form_checkAll('rightsForm')"><?php print $text['changeRights_checkAll']; ?></a></span> |
                 <span><a href="javascript:form_uncheckAll('rightsForm')"><?php print $text['changeRights_uncheckAll']; ?></a></span>
             </div>
             <table id="user_rights_table">

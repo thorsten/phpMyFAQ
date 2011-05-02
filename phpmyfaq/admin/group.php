@@ -585,7 +585,7 @@ getGroupList();
             <fieldset id="group_userList">
                 <legend><?php print $text['groupMembership_userList']; ?></legend>
                 <div>
-                    <span class="select_all"><a href="javascript:select_selectAll('group_user_list')"><?php print $text['groupMembership_selectAll']; ?></a></span>
+                    <span class="select_all"><a href="javascript:select_selectAll('group_user_list')"><?php print $text['groupMembership_selectAll']; ?></a></span> |
                     <span class="unselect_all"><a href="javascript:select_unselectAll('group_user_list')"><?php print $text['groupMembership_unselectAll']; ?></a></span>
                 </div>
                 <select id="group_user_list" multiple="multiple" size="<?php print $memberSelectSize; ?>">
@@ -599,7 +599,7 @@ getGroupList();
             <fieldset id="group_memberList">
                 <legend><?php print $text['groupMembership_memberList']; ?></legend>
                 <div>
-                    <span class="select_all"><a href="javascript:select_selectAll('group_member_list')"><?php print $text['groupMembership_selectAll']; ?></a></span>
+                    <span class="select_all"><a href="javascript:select_selectAll('group_member_list')"><?php print $text['groupMembership_selectAll']; ?></a></span> |
                     <span class="unselect_all"><a href="javascript:select_unselectAll('group_member_list')"><?php print $text['groupMembership_unselectAll']; ?></a></span>
                 </div>
                 <select id="group_member_list" name="group_members[]" multiple="multiple" size="<?php print $memberSelectSize; ?>">
@@ -645,7 +645,7 @@ getGroupList();
             <form id="rightsForm" action="?action=group&amp;group_action=update_rights" method="post">
                 <input id="rights_group_id" type="hidden" name="group_id" value="0" />
                 <div>
-                    <span class="select_all"><a href="javascript:form_checkAll('rightsForm')"><?php print $text['changeRights_checkAll']; ?></a></span>
+                    <span class="select_all"><a href="javascript:form_checkAll('rightsForm')"><?php print $text['changeRights_checkAll']; ?></a></span> |
                     <span class="unselect_all"><a href="javascript:form_uncheckAll('rightsForm')"><?php print $text['changeRights_uncheckAll']; ?></a></span>
                 </div>
                 <table id="group_rights_table">
