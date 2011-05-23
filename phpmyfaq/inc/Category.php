@@ -223,7 +223,7 @@ class PMF_Category
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_assoc($result)) {
             $this->categoryName[$row['id']] = $row;
-            $this->categories[] =& $this->categoryName[$row['id']];
+            $this->categories[] = $this->categoryName[$row['id']];
             $this->children[$row['parent_id']][$row['id']] =& $this->categoryName[$row['id']];
         }
 
@@ -251,7 +251,7 @@ class PMF_Category
         if (true == $parent_id) {
             $query .= 'parent_id = 0';
         }
-        foreach (explode(';', $categories) as $cats) {
+        foreach (explode(',', $categories) as $cats) {
             $_query .= ' OR parent_id = '.$cats;
         }
         if (false == $parent_id && 0 < PMF_String::strlen($_query)) {
