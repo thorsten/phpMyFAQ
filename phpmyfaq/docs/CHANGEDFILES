@@ -1,3 +1,28 @@
+CHANGED FILES FROM 2.6.15 -> 2.6.16
+
+./_.htaccess
+./admin/backup.main.php
+./admin/editor/plugins/ajaxfilemanager/inc/config.base.php
+./admin/export.main.php
+./admin/group.php
+./admin/index.php
+./admin/stat.browser.php
+./admin/stat.search.php
+./admin/user.php
+./feed/category/rss.php
+./inc/Bar.php
+./inc/Category.php
+./inc/Faq.php
+./inc/Link.php
+./install/setup.php
+./install/update.php
+./lang/language_nl.php
+./lang/language_pt.php
+./pdf.php
+./search.php
+
+
+
 CHANGED FILES FROM 2.6.14 -> 2.6.15
 
 ./_.htaccess
