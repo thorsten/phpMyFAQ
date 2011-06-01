@@ -223,7 +223,7 @@ class PMF_Category
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_assoc($result)) {
             $this->categoryName[$row['id']] = $row;
-            $this->categories[] = $this->categoryName[$row['id']];
+            $this->categories[] =& $this->categoryName[$row['id']];
             $this->children[$row['parent_id']][$row['id']] =& $this->categoryName[$row['id']];
         }
 
