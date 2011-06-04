@@ -1016,7 +1016,7 @@ $PMF_LANG['msgSecureSwitch'] = "Zum sicheren Login wechseln";
 $PMF_LANG['ad_record_active'] = 'aktiviert';
 
 // added 2.6.0-alpha - 2009-11-02 by max
-$LANG_CONF['main.numberSearchTerms']   = array(0 => 'input', 1 => 'Anzahl der beliebtesten Suchbegriffe');
+$LANG_CONF['search.numberSearchTerms']   = array(0 => 'input', 1 => 'Anzahl der beliebtesten Suchbegriffe');
 $LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Sortierung der TOP-FAQ");
 $PMF_LANG['list_all_users']            = 'Alle Benutzer anzeigen';
 
@@ -1031,7 +1031,7 @@ $PMF_LANG['msgUpdateFaqDate'] = 'aktualisieren';
 $PMF_LANG['msgKeepFaqDate'] = 'behalten'; 
 $PMF_LANG['msgEditFaqDat'] = 'ändern';
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Angabe der E-Mailadresse als Pflichtfeld (Standard: deaktiviert)');
-$LANG_CONF['main.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Sofortantwort auf der Startseite (Standard: deaktiviert)');
+$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Sofortantwort auf der Startseite (Standard: deaktiviert)');
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
 $LANG_CONF['search.relevance'] = array(0 => 'select', 1 => 'Sortierung nach Relevanz');

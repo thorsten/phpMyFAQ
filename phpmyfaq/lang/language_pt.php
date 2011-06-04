@@ -825,7 +825,7 @@ $PMF_LANG['msgTransToolErrorRecordingPageBuffer'] = 'Ocorreu um erro durante a g
 $PMF_LANG['msgTransToolRecordingPageBuffer'] = 'A gravar a página %d do <em>buffer<em>.';
 $PMF_LANG['ad_record_active'] = 'Activo';
 $PMF_LANG['msgAttachmentInvalid'] = 'O anexo não é válido: informe, p.f., o administrador.';
-$LANG_CONF['main.numberSearchTerms'] = array(0 => 'input', 1 => 'Número de termos de pesquisa listados');
+$LANG_CONF['search.numberSearchTerms'] = array(0 => 'input', 1 => 'Número de termos de pesquisa listados');
 $LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Ordenação do TOP 10");
 $PMF_LANG['list_all_users'] = 'Listar todos os utilizadores';
 $PMF_LANG['main.orderingPopularFaqs.visits'] = 'Listar as entradas mais visitadas';
@@ -835,6 +835,6 @@ $PMF_LANG['msgUpdateFaqDate'] = 'Actualizar';
 $PMF_LANG['msgKeepFaqDate'] = 'Manter';
 $PMF_LANG['msgEditFaqDat'] = 'Editar';
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Marcar como obrigatório o campo do endereço de <em>e-mail</em> <small>(pré-definição: desactivada)</small>');
-$LANG_CONF['main.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Resposta Imediata na página inicial <small>(pré-definição: desactivada)</small>');
+$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Resposta Imediata na página inicial <small>(pré-definição: desactivada)</small>');
 $PMF_LANG['err_SaveQuestion'] = 'Campos obrigatórios: <strong>Nome</strong>, <strong><em>E-mail</em></strong>, <strong>A sua questão</strong> e, quando exigido, o código <strong><a href="http://en.wikipedia.org/wiki/Captcha" title="Informação sobre Captcha na Wikipedia - versão em inglês" target="_blank">Captcha</a></strong>.<br /><br /><a href="nojavascript...history.back();">Página anterior</a><br /><br />';
 $PMF_LANG['err_inactiveNews'] = 'Esta notícia está a ser revista pelo que não pode ser mostrada.';

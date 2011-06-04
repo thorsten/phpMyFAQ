@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Setup
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2006-2010 phpMyFAQ Team
+ * @copyright 2006-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-07-02
@@ -55,10 +55,8 @@ $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.attachmentsSto
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.enableAttachmentEncryption', 'false')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.defaultAttachmentEncKey', '')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.useSslForLogins', 'false')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.numberSearchTerms', '10')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.orderingPopularFaqs', 'visits')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.optionalMailAddress', 'false')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.useAjaxSearchOnStartpage', 'false')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.enableGoogleTranslation', 'false')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.googleTranslationKey', '')";
 
@@ -80,5 +78,7 @@ $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('socialnetworks.twit
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('socialnetworks.twitterAccessTokenSecret', '')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('socialnetworks.enableFacebookSupport', 'false')";
 
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('search.useAjaxSearchOnStartpage', 'false')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('search.numberSearchTerms', '10')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('search.relevance', 'thema,content,keywords')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('search.enableRelevance', 'false')";

@@ -116,7 +116,7 @@ if (is_numeric($inputSearchTerm) && PMF_SOLUTION_ID_START_VALUE <= $inputSearchT
 
 $category->buildTree();
 
-$mostPopularSearchData = $faqSearch->getMostPopularSearches($faqconfig->get('main.numberSearchTerms'));
+$mostPopularSearchData = $faqSearch->getMostPopularSearches($faqconfig->get('search.numberSearchTerms'));
 
 // Set base URL scheme
 if (PMF_Configuration::getInstance()->get('main.enableRewriteRules')) {

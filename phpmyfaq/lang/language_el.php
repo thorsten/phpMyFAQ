@@ -832,5 +832,5 @@ $PMF_LANG['list_all_users'] = 'List all users';
 $PMF_LANG['main.orderingPopularFaqs.visits'] = 'list most visited entries';
 $PMF_LANG['main.orderingPopularFaqs.voting'] = 'list most voted entries';
 $PMF_LANG['msgShowHelp'] = 'Please seperate words by comma.';
-$LANG_CONF['main.numberSearchTerms'] = array(0 => 'input', 1 => 'Number of listed search terms');
+$LANG_CONF['search.numberSearchTerms'] = array(0 => 'input', 1 => 'Number of listed search terms');
 $LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Sorting of the top faq's");

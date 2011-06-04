@@ -828,7 +828,7 @@ $PMF_LANG['msgTransToolErrorRecordingPageBuffer'] = 'Ralat merekodkan buffer lam
 $PMF_LANG['msgTransToolRecordingPageBuffer'] = 'Merekodkan buffer laman %d';
 $PMF_LANG['ad_record_active'] = 'Aktif';
 $PMF_LANG['msgAttachmentInvalid'] = 'Lampiran tidak sah, sila maklumkan pentadbir';
-$LANG_CONF['main.numberSearchTerms'] = array(0 => "input", 1 => "Jumlah senarai carian istilah");
+$LANG_CONF['search.numberSearchTerms'] = array(0 => "input", 1 => "Jumlah senarai carian istilah");
 $LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Susunan dari atas FAQ");
 $PMF_LANG['list_all_users'] = 'Senaraikan semua pengguna';
 $PMF_LANG['main.orderingPopularFaqs.visits'] = 'senarai entri terbanyak dikunjungi';
@@ -838,4 +838,4 @@ $PMF_LANG['msgUpdateFaqDate'] = 'kemaskini';
 $PMF_LANG['msgKeepFaqDate'] = 'pegang';
 $PMF_LANG['msgEditFaqDat'] = 'edit';
 $LANG_CONF['main.optionalMailAddress'] = array(0 => "checkbox", 1 => "Alamat surat menyurat sebagai ruangan mandatori (lalai: tidak aktif)");
-$LANG_CONF['main.useAjaxSearchOnStartpage'] = array(0 => "checkbox", 1 => "Respon Pantas di laman permulaan (lalai: tidak aktif)");
+$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => "checkbox", 1 => "Respon Pantas di laman permulaan (lalai: tidak aktif)");

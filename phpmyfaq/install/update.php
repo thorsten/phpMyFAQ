@@ -793,6 +793,16 @@ if ($step == 4) {
         $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 38)";
     }
 
+    //
+    // UPDATES FROM 2.7.0-beta
+    //
+    if (version_compare($version, '2.7.0-beta', '<')) {
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'search.numberSearchTerms'
+            WHERE config_name = 'main.numberSearchTerms'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'search.useAjaxSearchOnStartpage'
+            WHERE config_name = 'main.useAjaxSearchOnStartpage'";
+    }
+
     // Perform the queries for updating/migrating the database from 2.x
     if (isset($query)) {
         print '<div class="center">';

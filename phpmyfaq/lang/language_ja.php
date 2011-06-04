@@ -1066,7 +1066,7 @@ $PMF_LANG['ad_record_active'] = 'Active';
 $PMF_LANG['msgAttachmentInvalid'] = 'The attachment is invalid, please inform admin';
 
 // added 2.6.0-alpha - 2009-11-02 by max
-$LANG_CONF['main.numberSearchTerms']   = array(0 => 'input', 1 => '一覧に出す検索件数');
+$LANG_CONF['search.numberSearchTerms']   = array(0 => 'input', 1 => '一覧に出す検索件数');
 $LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "トップ FAQ の並び替え方法");
 $PMF_LANG['list_all_users']            = '全ユーザーの一覧';
 
@@ -1081,4 +1081,4 @@ $PMF_LANG['msgUpdateFaqDate'] = '更新';
 $PMF_LANG['msgKeepFaqDate'] = '維持'; 
 $PMF_LANG['msgEditFaqDat'] = '編集';
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Mail address as mandatory field (default: deactivated)');
-$LANG_CONF['main.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Instant Response on startpage (default: deactivated)');
+$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Instant Response on startpage (default: deactivated)');

@@ -1041,7 +1041,7 @@ $PMF_LANG['ad_record_active'] = 'Aktívny';
 $PMF_LANG['msgAttachmentInvalid'] = 'Príloha je chybná, prosím informujte administrátora';
 
 // added 2.6.0-alpha - 2009-11-02 by max
-$LANG_CONF['main.numberSearchTerms']   = array(0 => 'vstup', 1 => 'Počet nájdených položiek');
+$LANG_CONF['search.numberSearchTerms']   = array(0 => 'vstup', 1 => 'Počet nájdených položiek');
 $LANG_CONF['main.orderingPopularFaqs'] = array(0 => "zvoľte", 1 => "Triedenie top FAQ");
 $PMF_LANG['list_all_users']            = 'Zobraziť všetkých užívateľov';
 
@@ -1056,4 +1056,4 @@ $PMF_LANG['msgUpdateFaqDate'] = 'aktualizovať';
 $PMF_LANG['msgKeepFaqDate'] = 'ponechať'; 
 $PMF_LANG['msgEditFaqDat'] = 'upraviť';
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'E-mailová adresa ako povinné pole (prednastavené: deaktivované)');
-$LANG_CONF['main.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Okamžité presmerovanie na úvodnú stránku (prednastavené: deaktivované)');
+$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Okamžité presmerovanie na úvodnú stránku (prednastavené: deaktivované)');

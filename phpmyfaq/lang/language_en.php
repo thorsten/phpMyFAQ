@@ -1068,7 +1068,7 @@ $PMF_LANG['ad_record_active'] = 'Active';
 $PMF_LANG['msgAttachmentInvalid'] = 'The attachment is invalid, please inform admin';
 
 // added 2.6.0-alpha - 2009-11-02 by max
-$LANG_CONF['main.numberSearchTerms']   = array(0 => 'input', 1 => 'Number of listed search terms');
+$LANG_CONF['search.numberSearchTerms']   = array(0 => 'input', 1 => 'Number of listed search terms');
 $LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Sorting of the top faq's");
 $PMF_LANG['list_all_users']            = 'List all users';
 
@@ -1083,7 +1083,7 @@ $PMF_LANG['msgUpdateFaqDate'] = 'update';
 $PMF_LANG['msgKeepFaqDate'] = 'keep'; 
 $PMF_LANG['msgEditFaqDat'] = 'edit';
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Mail address as mandatory field (default: deactivated)');
-$LANG_CONF['main.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Instant Response on startpage (default: deactivated)');
+$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Instant Response on startpage (default: deactivated)');
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
 $LANG_CONF['search.relevance'] = array(0 => 'select', 1 => 'Sort by relevance');

@@ -428,7 +428,7 @@ $main_template_vars = array(
                              $faqconfig->get('main.currentVersion'));
 
 if ('main' == $action || 'show' == $action) {
-    if ('main' == $action && PMF_Configuration::getInstance()->get('main.useAjaxSearchOnStartpage')) {
+    if ('main' == $action && PMF_Configuration::getInstance()->get('search.useAjaxSearchOnStartpage')) {
         $tpl->processBlock('index', 'globalSuggestBox', array(
             'ajaxlanguage'                  => $LANGCODE,
             'msgDescriptionInstantResponse' => $PMF_LANG['msgDescriptionInstantResponse'],
