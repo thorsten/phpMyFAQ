@@ -1046,7 +1046,8 @@ $PMF_LANG['search.relevance.keywords-thema-content'] = 'Schlüsselwörter - Ques
 
 // added v2.6.99 - 2010-11-30 by Gustavo Solt
 $LANG_CONF["main.enableGoogleTranslation"] = array(0 => "checkbox", 1 => "Google Übersetzung aktivieren? (Standard: deaktiviert)");
-$LANG_CONF['main.googleTranslationKey'] = array(0 => 'input', 1 => 'Google APIs key');
+$LANG_CONF['main.googleTranslationKey'] = array(0 => 'input', 1 => 'Google API key');
+$PMF_LANG["msgNoGoogleApiKeyFound"] = 'Es wurde kein Google API Key gefunden, bitte in der Konfiguration eintragen.';
 
 // added 2.7.0-alpha - 2010-09-13 by Thorsten
 $PMF_LANG['msgLoginUser'] = 'Einloggen';
