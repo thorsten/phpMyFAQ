@@ -430,8 +430,14 @@ $main_template_vars = array(
 if ('main' == $action || 'show' == $action) {
     if ('main' == $action && PMF_Configuration::getInstance()->get('main.useAjaxSearchOnStartpage')) {
         $tpl->processBlock('index', 'globalSuggestBox', array(
-            'ajaxlanguage' => $LANGCODE,
-            'msgSearch'    => '<a class="help" href="index.php?'.$sids.'action=search">'.$PMF_LANG["msgAdvancedSearch"].'</a>'));
+            'ajaxlanguage'                  => $LANGCODE,
+            'msgDescriptionInstantResponse' => $PMF_LANG['msgDescriptionInstantResponse'],
+            'msgSearch'                     => sprintf('<a class="help" href="index.php?%daction=search">%s</a>',
+                                                   $sids,
+                                                   $PMF_LANG["msgAdvancedSearch"]
+                                                   )
+           )
+        );
     } else {
         $tpl->processBlock('index', 'globalSearchBox', array(
             'writeSendAdress' => '?'.$sids.'action=search',
