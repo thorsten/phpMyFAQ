@@ -515,14 +515,18 @@ if (isset($auth)) {
         'logout'          => $PMF_LANG['ad_menu_logout']));
 } else {
     if (isset($_SERVER['HTTPS']) || !$faqconfig->get('main.useSslForLogins')) {
-        $tpl->processTemplate('loginBox', array(
-            'msgLoginUser'    => $PMF_LANG['msgLoginUser'],
-            'writeLoginPath'  => '?action=login',
-            'login'           => $PMF_LANG['ad_auth_ok'],
-            'username'        => $PMF_LANG['ad_auth_user'],
-            'password'        => $PMF_LANG['ad_auth_passwd'],
-            'msgRegisterUser' => '<a href="?' . $sids . 'action=register">' . $PMF_LANG['msgRegisterUser'] . '</a>',
-            'msgLoginFailed'  => $error));
+        $tpl->processTemplate('loginBox',
+            array(
+                'msgLoginUser'    => $PMF_LANG['msgLoginUser'],
+                'writeLoginPath'  => '?action=login',
+                'login'           => $PMF_LANG['ad_auth_ok'],
+                'username'        => $PMF_LANG['ad_auth_user'],
+                'password'        => $PMF_LANG['ad_auth_passwd'],
+                'msgRegisterUser' => '<a href="?' . $sids . 'action=register">' . $PMF_LANG['msgRegisterUser'] . '</a>',
+                'msgLoginFailed'  => $error,
+                'msgLostPassword' => $PMF_LANG['lostPassword']
+            )
+        );
     } else {
         $tpl->processTemplate('loginBox', array(
             'secureloginurl'  => sprintf('https://%s%s', $_SERVER['HTTP_HOST'], $_SERVER['REQUEST_URI']),

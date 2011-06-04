@@ -586,7 +586,7 @@ $PMF_LANG["ad_categ_lang"] = "Sprache";
 $PMF_LANG["ad_categ_desc"] = "Beschreibung";
 $PMF_LANG["ad_categ_change"] = "Austauschen mit";
 
-$PMF_LANG["lostPassword"] = "Passwort vergessen? Bitte hier klicken.";
+$PMF_LANG["lostPassword"] = "Passwort vergessen?";
 $PMF_LANG["lostpwd_err_1"] = "Fehler: Benutzername und E-Mailadresse nicht gefunden.";
 $PMF_LANG["lostpwd_err_2"] = "Fehler: Falsche Eingaben!";
 $PMF_LANG["lostpwd_text_1"] = "Vielen Dank für die Abfrage deiner Account Informationen.";

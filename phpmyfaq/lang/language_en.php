@@ -613,7 +613,7 @@ $PMF_LANG["ad_categ_lang"] = "Language";
 $PMF_LANG["ad_categ_desc"] = "Description";
 $PMF_LANG["ad_categ_change"] = "Change with";
 
-$PMF_LANG["lostPassword"] = "Password forgotten? Click here.";
+$PMF_LANG["lostPassword"] = "Password forgotten?";
 $PMF_LANG["lostpwd_err_1"] = "Error: Username and e-mail address not found.";
 $PMF_LANG["lostpwd_err_2"] = "Error: Wrong entries!";
 $PMF_LANG["lostpwd_text_1"] = "Thank you for requesting your account information.";

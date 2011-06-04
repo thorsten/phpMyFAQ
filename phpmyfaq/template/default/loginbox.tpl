@@ -11,4 +11,5 @@
                     <input type="submit" value="{login}">
                 </form>
                 <span class="error">{msgLoginFailed}</span>
+                <p><a href="admin/password.php" title="{msgLostPassword}">{msgLostPassword}</a></p>
             </div>
