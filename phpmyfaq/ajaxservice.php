@@ -326,7 +326,7 @@ switch ($action) {
                 "\n\n" .
                 $faqconfig->get('main.titleFAQ') .
                 ": " .
-                PMF_Link::getSystemUri('/index.php').'/admin';
+                PMF_Link::getSystemRelativeUri('/ajaxservice.php') . 'admin/';
             $result = $mail->send();
             unset($mail);
 
@@ -345,7 +345,7 @@ switch ($action) {
         $categories = $cat->getAllCategories();
         $name       = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $email      = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $ucategory   = PMF_Filter::filterInput(INPUT_POST, 'category', FILTER_VALIDATE_INT);
+        $ucategory  = PMF_Filter::filterInput(INPUT_POST, 'category', FILTER_VALIDATE_INT);
         $question   = PMF_Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
         $save       = PMF_Filter::filterInput(INPUT_POST, 'save', FILTER_VALIDATE_INT);
 
