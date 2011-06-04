@@ -517,7 +517,6 @@ function removeGroupMembers()
 }
 
 getGroupList();
-
         /* ]]> */
         </script>
 
@@ -556,6 +555,7 @@ getGroupList();
                                     <?php print $PMF_LANG['ad_user_checkall']; ?>
                                 </a>
                             </span>
+                            |
                             <span class="unselect_all">
                                 <a href="javascript:select_unselectAll('group_user_list')">
                                     <?php print $PMF_LANG['ad_user_uncheckall']; ?>
@@ -581,6 +581,7 @@ getGroupList();
                                     <?php print $PMF_LANG['ad_user_checkall']; ?>
                                 </a>
                             </span>
+                            |
                             <span class="unselect_all">
                                 <a href="javascript:select_unselectAll('group_member_list')">
                                     <?php print $PMF_LANG['ad_user_uncheckall']; ?>
@@ -639,6 +640,7 @@ getGroupList();
                                         <?php print $PMF_LANG['ad_user_checkall']; ?>
                                     </a>
                                 </span>
+                                |
                                 <span class="unselect_all">
                                     <a href="javascript:form_uncheckAll('rightsForm')">
                                         <?php print $PMF_LANG['ad_user_uncheckall']; ?>

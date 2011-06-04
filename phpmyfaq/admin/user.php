@@ -431,6 +431,7 @@ function getUserData(user_id)
                         <input id="rights_user_id" type="hidden" name="user_id" value="0" />
                         <div>
                             <span><a href="javascript:form_checkAll('rightsForm')"><?php print $PMF_LANG['ad_user_checkall']; ?></a></span>
+                            |
                             <span><a href="javascript:form_uncheckAll('rightsForm')"><?php print $PMF_LANG['ad_user_uncheckall']; ?></a></span>
                         </div>
                         <table id="user_rights_table">
@@ -448,7 +449,7 @@ function getUserData(user_id)
                 </fieldset>
             </div> <!-- end #userRights -->
         </div>
-<?php 
+<?php
         if (isset($_GET['user_id'])) {
             $userId     = PMF_Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT, 0);
             echo '<script type="text/javascript">updateUser('.$userId.');</script>';

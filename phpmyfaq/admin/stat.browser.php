@@ -38,20 +38,20 @@ if ($permission['viewlog']) {
     $sessiondata = $session->getSessionsbyDate($firstHour, $lastHour);
 ?>
         <header>
-            <h2><?php print "Session ".date("Y-m-d", $day); ?></h2>
+            <h2><?php print $PMF_LANG['ad_sess_session'] . ' ' . date("Y-m-d", $day); ?></h2>
         </header>
 
         <table class="list" style="width: 100%">
         <thead>
             <tr>
-                <th>IP</th>
-                <th>&nbsp;</th>
-                <th>Session</th>
+                <th><?php print $PMF_LANG['ad_sess_ip']; ?></th>
+                <th><?php print $PMF_LANG['ad_sess_s_date']; ?></th>
+                <th><?php print $PMF_LANG['ad_sess_session']; ?></th>
             </tr>
         </thead>
         <tbody>
 <?php
-	foreach ($sessiondata as $sid => $data) {
+    foreach ($sessiondata as $sid => $data) {
 ?>
             <tr>
                 <td><?php print $data['ip']; ?></td>

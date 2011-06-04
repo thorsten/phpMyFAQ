@@ -251,7 +251,7 @@ class PMF_Category
         if (true == $parent_id) {
             $query .= 'parent_id = 0';
         }
-        foreach (explode(';', $categories) as $cats) {
+        foreach (explode(',', $categories) as $cats) {
             $_query .= ' OR parent_id = '.$cats;
         }
         if (false == $parent_id && 0 < PMF_String::strlen($_query)) {
