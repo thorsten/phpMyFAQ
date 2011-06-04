@@ -96,7 +96,8 @@
         <div id="searchBox">
             <form id="instantform" action="?action=instantresponse" method="post">
                 <input type="hidden" name="ajaxlanguage" id="ajaxlanguage" value="{ajaxlanguage}" />
-                <input type="search" name="search" id="instantfield" value="" placeholder="{msgDescriptionInstantResponse}" />
+                <input type="search" name="search" id="instantfield" value=""
+                       placeholder="{msgDescriptionInstantResponse}" onfocus="autoSuggest(); return false;" />
             </form>
             {msgSearch}
         </div>
