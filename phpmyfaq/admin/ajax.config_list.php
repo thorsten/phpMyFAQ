@@ -201,7 +201,6 @@ foreach ($LANG_CONF as $key => $value) {
                 print '<a target="_blank" href="../services/twitter/redirect.php"><img src="../images/twitter.signin.png" alt="Sign in with Twitter"/></a>';
                 print "<br />\n<br />\n";
             } else {
-                print_r($content);
                 print $content->screen_name . "<br />\n";
                 print "<img src='" . $content->profile_image_url . "'><br />\n";
                 print "Follower: " . $content->followers_count . "<br />\n";
