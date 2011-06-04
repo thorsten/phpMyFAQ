@@ -187,6 +187,7 @@ header("Content-type: text/html; charset=utf-8");
 
 foreach ($LANG_CONF as $key => $value) {
     if (strpos($key, $configMode) === 0) {
+        
         if ('socialnetworks.twitterConsumerKey' == $key) {
             print '<p>';
             if ('' == $faqconfig->get('socialnetworks.twitterConsumerKey') ||
@@ -214,12 +215,24 @@ foreach ($LANG_CONF as $key => $value) {
             <p class="config">
                 <label class="config">
 <?php
-        if ('main.maxAttachmentSize' == $key) {
-            printf($value[1], ini_get('upload_max_filesize'));
-        } else {
-            print $value[1];
-        } ?></label>
-    <?php printInputFieldByType($key, $value[0]); ?><br />
+        switch ($key) {
+
+            case 'main.maxAttachmentSize':
+                printf($value[1], ini_get('upload_max_filesize'));
+                break;
+
+            case 'main.googleTranslationKey':
+                printf('<a target="_blank" href="http://code.google.com/apis/loader/signup.html">%s</a>', $value[1]);
+                break;
+
+            default:
+                print $value[1];
+                break;
+        }
+?>
+                </label>
+                <?php printInputFieldByType($key, $value[0]); ?>
+                <br />
 <?php
     }
 }
