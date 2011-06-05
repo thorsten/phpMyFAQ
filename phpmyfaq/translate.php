@@ -62,7 +62,7 @@ if (!is_null($id) && !is_null($srclang) && PMF_Language::isASupportedLanguage($s
 $tpl->processTemplate('writeContent', array(
     'writeSourceFaqId'          => $faqSource['id'],
     'writeSourceTitle'          => $faqSource['title'],
-    'writeSourceContent'        => $faqSource['content'],
+    'writeSourceContent'        => strip_tags($faqSource['content']),
     'writeSourceKeywords'       => $faqSource['keywords'],
     'msgNewTranslationHeader'   => $PMF_LANG['msgNewTranslationHeader'],
     'msgNewTranslationAddon'    => $PMF_LANG['msgNewTranslationAddon'],

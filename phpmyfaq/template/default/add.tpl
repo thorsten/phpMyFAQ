@@ -6,28 +6,28 @@
                 
                 <p>
                     <label for="name">{msgNewContentName}</label>
-                    <input type="text" name="name" id="name" value="{defaultContentName}" size="37" required="required" />
+                    <input type="text" name="name" id="name" value="{defaultContentName}" size="37" required="true" />
                 </p>
 
                 <p>
                 <label for="email">{msgNewContentMail}</label>
-                <input type="email" name="email" id="email" value="{defaultContentMail}" size="37" required="required" />
+                <input type="email" name="email" id="email" value="{defaultContentMail}" size="37" required="true" />
 
                 <p>
                 <label for="rubrik">{msgNewContentCategory}</label>
-                <select name="rubrik[]" id="rubrik" multiple="multiple" size="5" required="required" />
+                <select name="rubrik[]" id="rubrik" multiple="multiple" size="5" required="true" />
                 {printCategoryOptions}
                 </select>
                 </p>
 
                 <p>
                 <label for="question">{msgNewContentTheme}</label>
-                <textarea cols="37" rows="3" name="question" id="question" required="required" />{printQuestion}</textarea>
+                <textarea cols="37" rows="3" name="question" id="question" required="true" />{printQuestion}</textarea>
                 </p>
 
                 <p>
                 <label for="answer">{msgNewContentArticle}</label>
-                <textarea cols="37" rows="10" name="answer" id="answer" required="required" /></textarea>
+                <textarea cols="37" rows="10" name="answer" id="answer" required="true" /></textarea>
                 </p>
 
                 <p>

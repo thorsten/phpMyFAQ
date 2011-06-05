@@ -51,9 +51,7 @@
                 </p>
                 <!-- end user article translation -->
 
-                <p>
                 {captchaFieldset}
-                </p>
 
                 <p>
                 <input class="submit" type="submit" name="submit" value="{msgNewTranslationSubmit}" />
