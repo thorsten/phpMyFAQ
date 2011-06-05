@@ -5,16 +5,6 @@
 
             <p>{msgNewTranslationAddon}</p>
 
-            <!-- start source article -->
-            <div>
-                <header>
-                    <h3>{msgNewTransSourcePane}</h3>
-                </header>
-                <p><strong>{writeSourceTitle}</strong></p>
-                <p>{writeSourceContent}</p>
-            </div>
-            <!-- end source article -->
-
             <!-- start user article translation -->
             <header>
                 <h3>{msgNewTranslationPane}</h3>
