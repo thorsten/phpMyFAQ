@@ -127,12 +127,12 @@ if ($action == "sendmail") {
 
                 <p>
                     <label><?php print $PMF_LANG["ad_auth_user"]; ?></label>
-                    <input type="text" name="username" size="30" />
+                    <input type="text" name="username" size="30" required="true" />
                 </p>
 
                 <p>
                     <label><?php print $PMF_LANG["ad_entry_email"]; ?></label>
-                    <input type="email"  name="email" size="30" />
+                    <input type="email" name="email" size="30" required="true" />
                 </p>
 
                 <p>
