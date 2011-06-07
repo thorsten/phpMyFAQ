@@ -25,6 +25,8 @@ Version 2.7.0-beta - 2011-06-
 - enabling Gzip compression by default (Thorsten)
 - updated bundled jQuery to version 1.5.1 (Thorsten)
 - updated bundled Modernizr to version 1.7 (Thorsten)
+- updated bundled TinyMCE to version 3.4.2 (Thorsten)
+- fixed a lot of bugs (Thorsten)
 
 Version 2.6.17 - 2011-
 - 
