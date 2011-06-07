@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2004-2010 phpMyFAQ Team
+ * @copyright 2004-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-04-29
@@ -33,6 +33,7 @@ if ($permission["editcateg"]) {
     $parent_id  = PMF_Filter::filterInput(INPUT_GET, 'parent_id', FILTER_VALIDATE_INT);
     $category   = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $categories = $category->getAllCategories();
+
     $category->categories = null;
     unset($category->categories);
     $category->getCategories($parent_id, false);
@@ -40,9 +41,11 @@ if ($permission["editcateg"]) {
     
     $header = sprintf('%s: <em>%s</em>',
         $PMF_LANG['ad_categ_move'],
-        $category->categoryName[$id]['name']);
+        $category->categories[$id]['name']);
 
     printf('<h2>%s</h2>', $header);
+
+
 ?>
     <form action="?action=changecategory" method="post">
     <fieldset>
@@ -52,7 +55,7 @@ if ($permission["editcateg"]) {
         <div class="row">
                <select name="change" size="1">
 <?php
-                    foreach ($category->catTree as $cat) {
+                    foreach ($category->categories as $cat) {
                        if ($id != $cat["id"]) {
                           printf("<option value=\"%s\">%s</option>", $cat['id'], $cat['name']);
                        }
