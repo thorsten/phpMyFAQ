@@ -1,35 +1,33 @@
 /**
  * SyntaxHighlighter
- * http://alexgorbatchev.com/
+ * http://alexgorbatchev.com/SyntaxHighlighter
  *
  * SyntaxHighlighter is donationware. If you are using it, please donate.
- * http://alexgorbatchev.com/wiki/SyntaxHighlighter:Donate
+ * http://alexgorbatchev.com/SyntaxHighlighter/donate.html
  *
  * @version
- * 2.1.364 (October 15 2009)
+ * 3.0.83 (July 02 2010)
  * 
  * @copyright
- * Copyright (C) 2004-2009 Alex Gorbatchev.
+ * Copyright (C) 2004-2010 Alex Gorbatchev.
  *
  * @license
- * This file is part of SyntaxHighlighter.
- * 
- * SyntaxHighlighter is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * SyntaxHighlighter is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with SyntaxHighlighter.  If not, see <http://www.gnu.org/copyleft/lesser.html>.
+ * Dual licensed under the MIT and GPL licenses.
  */
-SyntaxHighlighter.brushes.Plain = function()
+;(function()
 {
-};
+	// CommonJS
+	typeof(require) != 'undefined' ? SyntaxHighlighter = require('shCore').SyntaxHighlighter : null;
 
-SyntaxHighlighter.brushes.Plain.prototype = new SyntaxHighlighter.Highlighter();
-SyntaxHighlighter.brushes.Plain.aliases = ['text', 'plain'];
+	function Brush()
+	{
+	};
+
+	Brush.prototype	= new SyntaxHighlighter.Highlighter();
+	Brush.aliases	= ['text', 'plain'];
+
+	SyntaxHighlighter.brushes.Plain = Brush;
+
+	// CommonJS
+	typeof(exports) != 'undefined' ? exports.Brush = Brush : null;
+})();

@@ -103,9 +103,7 @@ sub {
     vertical-align: sub; font-size: smaller; }
 sup {  
     vertical-align: super; font-size: smaller; }
-pre {  
-    padding: 15px; white-space: pre; white-space: pre-wrap; white-space: pre-line; word-wrap: break-word; }
-textarea {  
+textarea {
     overflow: auto; }
 .ie6 legend, .ie7 legend {  
     margin-left: -7px; }
@@ -156,9 +154,6 @@ button {
 /* phpMyFAQ layout */
 body {
     margin: 0 auto; font: 13px/22px Helvetica, Arial, sans-serif; background-color: #F0F0F0; }
-code {
-    display: block; font-size: 16px; background-color: black; color: white; padding: 10px; width: 600px;
-    margin-bottom: 22px; }
 
 /* Header */
 #header {
