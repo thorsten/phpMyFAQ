@@ -5,8 +5,9 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.6.17 - 2011-
-- 
+Version 2.6.17 - 2011-06-
+- updated Portuguese translation
+- fixed minor bugs (Thorsten)
 
 Version 2.6.16 - 2011-05-31
 - updated Portuguese translation
