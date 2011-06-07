@@ -471,22 +471,33 @@ function getUserData(user_id)
                 <th><?php print $PMF_LANG['msgNewContentName'] ?></th>
                 <th><?php print $PMF_LANG['ad_user_username'] ?></th>
                 <th><?php print $PMF_LANG['msgNewContentMail'] ?></th>
-                <th><?php print $PMF_LANG['ad_entry_action'] ?></th>
+                <th colspan="2"><?php print $PMF_LANG['ad_entry_action'] ?></th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($user->getAllUsers() as $userId) { $user->getUserById($userId); ?>
 
             <tr>
-                <td><?php print $user->getUserData('user_id')?></td>
-                <td><?php print $user->getStatus(); ?></td>
-                <td><?php print $user->getUserData('display_name')?></td>
+                <td><?php print $user->getUserData('user_id') ?></td>
+                <td><?php print $user->getStatus() ?></td>
+                <td><?php print $user->getUserData('display_name') ?></td>
                 <td><?php print $user->getLogin() ?></td>
                 <td>
-                    <a href="mailto:<?php print $user->getUserData('email')?>"><?php print $user->getUserData('email')?></a>
+                    <a href="mailto:<?php print $user->getUserData('email') ?>">
+                        <?php print $user->getUserData('email') ?>
+                    </a>
                 </td>
                 <td>
-                    <a href="?action=user&amp;user_id=<?php print $user->getUserData('user_id')?>"><?php print $PMF_LANG['ad_user_edit']?></a>
+                    <a href="?action=user&amp;user_id=<?php print $user->getUserData('user_id')?>">
+                        <?php print $PMF_LANG['ad_user_edit'] ?>
+                    </a>
+                </td>
+                <td>
+                    <?php if ($user->getStatus() !== 'protected'): ?>
+                    <a onclick="javascript:alert('Not implemented yet!'); return false;" href="javascript:void();">
+                        <?php print $PMF_LANG['ad_user_delete'] ?>
+                    </a>
+                    <?php endif; ?>
                 </td>
             </tr>
             <?php } ?>
