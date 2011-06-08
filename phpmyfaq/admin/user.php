@@ -478,8 +478,8 @@ function getUserData(user_id)
     <table class="listrecords" style="width: 700px; float:left;">
     <thead>
         <tr>
-            <th class="listhead"><?php print $PMF_LANG['ad_entry_id']?>:</th>
-            <th class="listhead"><?php print $PMF_LANG['msgNewContentName']?></th>
+            <th class="listhead"><?php print $PMF_LANG['ad_entry_id']?></th>
+            <th class="listhead"><?php print $PMF_LANG['ad_user_name']?></th>
             <th class="listhead"><?php print $PMF_LANG['msgNewContentMail']?></th>
             <th class="listhead"><?php print $PMF_LANG['ad_entry_action']?></th>
         </tr>
