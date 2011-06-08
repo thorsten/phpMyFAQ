@@ -66,8 +66,8 @@ if ($permission['delquestion']) {
             foreach ($openquestions as $question) {
 ?>
         <tr>
-            <td><?php print PMF_Date::createIsoDate($question['date']); ?><br /><a href="mailto:<?php print $question['email']; ?>"><?php print $question['user']; ?></a></td>
-            <td><?php print $category->categoryName[$question['category']]['name'].":<br />".$question['question']; ?></td>
+            <td><?php print PMF_Date::createIsoDate($question['created']); ?><br /><a href="mailto:<?php print $question['email']; ?>"><?php print $question['user']; ?></a></td>
+            <td><?php print $category->categoryName[$question['category_id']]['name'].":<br />".$question['question']; ?></td>
             <td><a href="?action=question&amp;id=<?php print $question['id']; ?>&amp;is_visible=toggle"><?php print (('Y' == $question['is_visible']) ? $PMF_LANG['ad_gen_no'] : $PMF_LANG['ad_gen_yes']); ?>!</a><br /></td>
             <td><a href="?action=question&amp;id=<?php print $question['id']; ?>&amp;delete=yes"><?php print $PMF_LANG['ad_gen_delete']; ?>!</a><br /><a href="?action=takequestion&amp;id=<?php print $question['id']; ?>"><?php print $PMF_LANG['ad_ques_take']; ?></a></td>
         </tr>
