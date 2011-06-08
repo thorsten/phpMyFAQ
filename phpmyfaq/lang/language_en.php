@@ -478,7 +478,7 @@ $PMF_LANG["ad_sess_time"] = "Time";
 $PMF_LANG["ad_sess_sid"] = "Session-ID";
 $PMF_LANG["ad_sess_ip"] = "IP-Address";
 
-$PMF_LANG["ad_ques_take"] = "Take question and edit";
+$PMF_LANG["ad_ques_take"] = "Answer the question";
 $PMF_LANG["no_cats"] = "No Categories found.";
 
 // Added v1.1 - 17.01.2002 - Bastian

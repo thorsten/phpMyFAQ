@@ -451,7 +451,7 @@ $PMF_LANG["ad_stat_ok"] = "OK";
 $PMF_LANG["ad_sess_time"] = "Zeit";
 $PMF_LANG["ad_sess_sid"] = "Session-ID";
 $PMF_LANG["ad_sess_ip"] = "IP-Adresse";
-$PMF_LANG["ad_ques_take"] = "Frage übernehmen und bearbeiten";
+$PMF_LANG["ad_ques_take"] = "Frage beantworten";
 $PMF_LANG["no_cats"] = "Keine Kategorien gefunden!";
 
 // Added v1.1 - 17.01.2002 - Bastian
