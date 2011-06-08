@@ -521,9 +521,22 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     if (is_numeric($faqData['id'])) {
 ?>
             <fieldset>
-                <legend><a href="javascript:void(0);" onclick="javascript:toggleFieldset('ChangelogHistory');"><?php print $PMF_LANG["ad_entry_changelog"]; ?></a></legend>
-                
-                <div id="editChangelogHistory" style="display: none;">
+                <legend><a href="javascript:void(0);" onclick="javascript:toggleFieldset('Changelog');"><?php print $PMF_LANG['ad_entry_changelog']; ?></a></legend>
+
+                <div id="editChangelog" style="display: none;">
+                    </p>
+                    <p>
+                        <label><?php print $PMF_LANG["ad_entry_date"]; ?></label>
+                        <?php if (isset($faqData['date'])) { print $faqData['date']; } else { print PMF_Date::createIsoDate(date("YmdHis")); } ?>
+                    </p>
+                    <p>
+                        <label for="changed"><?php print $PMF_LANG["ad_entry_changed"]; ?></label>
+                        <textarea name="changed" id="changed" style="width: 390px; height: 50px;" cols="40" rows="4"><?php if (isset($changed)) { print $changed; } ?></textarea>
+                    </p>
+                    <p>
+                </div>
+
+            </fieldset>
 <?php
         $changeEntries = $faq->getChangeEntries($faqData['id']);
         foreach ($changeEntries as $entry) {
@@ -772,4 +785,3 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     print $PMF_LANG["err_NotAuth"];
 } elseif ($permission["editbt"] && PMF_Db::checkOnEmptyTable('faqcategories')) {
     print $PMF_LANG["no_cats"];
-}
