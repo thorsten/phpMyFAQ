@@ -1,3 +1,15 @@
+CHANGED FILES FROM 2.6.16 -> 2.6.17
+
+./admin/category.move.php
+./admin/stat.main.php
+./admin/user.php
+./inc/Category.php
+./install/setup.php
+./install/update.php
+./lang/language_pt.php
+
+
+
 CHANGED FILES FROM 2.6.15 -> 2.6.16
 
 ./_.htaccess
