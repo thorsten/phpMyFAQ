@@ -101,7 +101,7 @@ $PMF_LANG["msgSearchContent"] = "Antwort: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Vorschlag für neue FAQ";
-$PMF_LANG["msgNewContentAddon"] = "Ihr Vorschlag erscheint nicht sofort, sondern wird vor der Veröffentlichung von uns überprüft. Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong>, <strong>Kategorie</strong>, <strong>Frage</strong> und <strong>Antwort</strong>. Die Keywords bitte nur mit Leerzeichen trennen.";
+$PMF_LANG["msgNewContentAddon"] = "Ihr Vorschlag erscheint nicht sofort, sondern wird vor der Veröffentlichung von uns überprüft. Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong>, <strong>Kategorie</strong>, <strong>Frage</strong> und <strong>Antwort</strong>. Die Keywords bitte nur Kommas trennen.";
 $PMF_LANG["msgNewContentName"] = "Name:";
 $PMF_LANG["msgNewContentMail"] = "E-Mail:";
 $PMF_LANG["msgNewContentCategory"] = "Kategorie:";
