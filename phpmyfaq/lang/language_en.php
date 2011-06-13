@@ -1144,3 +1144,6 @@ $PMF_LANG["ad_stat_report_make_csv"] = "Export to CSV";
 $PMF_LANG['msgRegistration'] = 'Registration';
 $PMF_LANG['msgRegistrationCredentials'] = 'To register please enter your name, your loginname and a valid email address!';
 $PMF_LANG['msgRegistrationNote'] = 'After successful registration you will receive an answer soon after Administration has authorized your registration.';
+
+// added v2.7.0-beta - 2011-06-13 by Thorsten
+$PMF_LANG['ad_entry_changelog_history'] = "Changelog history";

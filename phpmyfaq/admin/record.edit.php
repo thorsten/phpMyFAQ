@@ -521,7 +521,11 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     if (is_numeric($faqData['id'])) {
 ?>
             <fieldset>
-                <legend><a href="javascript:void(0);" onclick="javascript:toggleFieldset('ChangelogHistory');"><?php print $PMF_LANG["ad_entry_changelog"]; ?></a></legend>
+                <legend>
+                    <a href="javascript:void(0);" onclick="javascript:toggleFieldset('ChangelogHistory');">
+                        <?php print $PMF_LANG['ad_entry_changelog_history']; ?>
+                    </a>
+                </legend>
                 
                 <div id="editChangelogHistory" style="display: none;">
 <?php
@@ -530,7 +534,14 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
             $user->getUserById($entry['user']);
 ?>
                     <p style="font-size: 10px;">
-                        <label><?php print $PMF_LANG['ad_entry_revision'].' 1.'.$entry['revision_id'] . ' / ' . date("Y-m-d H:i:s", $entry['date']).": ".$user->getUserData('display_name'); ?></label>
+                        <label>
+                            <?php printf('%s  1.%d<br/>%s<br/>%s: %s',
+                                $PMF_LANG['ad_entry_revision'],
+                                $entry['revision_id'],
+                                date("Y-m-d H:i:s", $entry['date']),
+                                $PMF_LANG['ad_entry_author'],
+                                $user->getUserData('display_name')); ?>
+                        </label>
                         <?php print $entry['changelog']; ?>
                     </p>
 <?php

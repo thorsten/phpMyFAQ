@@ -225,17 +225,17 @@ $PMF_LANG["ad_entry_topic"] = "Frage";
 $PMF_LANG["ad_entry_action"] = "Aktion";
 $PMF_LANG["ad_entry_edit_1"] = "Beitrag";
 $PMF_LANG["ad_entry_edit_2"] = "bearbeiten";
-$PMF_LANG["ad_entry_theme"] = "Frage:";
-$PMF_LANG["ad_entry_content"] = "Antwort:";
-$PMF_LANG["ad_entry_keywords"] = "Keywords:";
-$PMF_LANG["ad_entry_author"] = "Verfasser:";
-$PMF_LANG["ad_entry_category"] = "Kategorie:";
+$PMF_LANG["ad_entry_theme"] = "Frage";
+$PMF_LANG["ad_entry_content"] = "Antwort";
+$PMF_LANG["ad_entry_keywords"] = "Keywords";
+$PMF_LANG["ad_entry_author"] = "Verfasser";
+$PMF_LANG["ad_entry_category"] = "Kategorie";
 $PMF_LANG["ad_entry_active"] = "Aktiviert?";
-$PMF_LANG["ad_entry_date"] = "Datum:";
+$PMF_LANG["ad_entry_date"] = "Datum";
 $PMF_LANG["ad_entry_changed"] = "Geändert?";
-$PMF_LANG["ad_entry_changelog"] = "Änderungen:";
+$PMF_LANG["ad_entry_changelog"] = "Änderungen";
 $PMF_LANG["ad_entry_commentby"] = "Kommentar von";
-$PMF_LANG["ad_entry_comment"] = "Kommentare:";
+$PMF_LANG["ad_entry_comment"] = "Kommentare";
 $PMF_LANG["ad_entry_save"] = "Speichern";
 $PMF_LANG["ad_entry_delete"] = "Löschen";
 $PMF_LANG["ad_entry_delcom_1"] = "Sicher, dass der Kommentar des Benutzers";
@@ -1061,7 +1061,7 @@ $LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => 'T
 $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'Twitter Access Token Secret');
 $LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Facebook support (Standard: deaktiviert)');
 
-// added v2.7.0-alpha2 - 2010-01-12 by Gustavo Solt
+// added v2.7.0-alpha2 - 2011-01-12 by Gustavo Solt
 $PMF_LANG['ad_menu_reports'] = 'Reports';
 $PMF_LANG["ad_stat_report_fields"] = "Felder";
 $PMF_LANG["ad_stat_report_category"] = "Kategorie";
@@ -1079,7 +1079,10 @@ $PMF_LANG["ad_stat_report_visits"] = "Anzahl Besuche";
 $PMF_LANG["ad_stat_report_make_report"] = "Erstelle Report";
 $PMF_LANG["ad_stat_report_make_csv"] = "CSV-Export";
 
-// added v2.7.0-alpha2 - 2010-02-05 by Thorsten Rinne
+// added v2.7.0-alpha2 - 2011-02-05 by Thorsten Rinne
 $PMF_LANG['msgRegistration'] = 'Anmelden';
 $PMF_LANG['msgRegistrationCredentials'] = 'Um sich anzumelden, muss der Name, ein Loginname und eine korrekte E-Mailadresse eingegeben werden.';
 $PMF_LANG['msgRegistrationNote'] = 'Nach der erfolgreichen Anmeldung erhälst du eine Antwort über Freischaltung deiner Anmeldung.';
+
+// added v2.7.0-beta - 2011-06-13 by Thorsten
+$PMF_LANG['ad_entry_changelog_history'] = "Änderungshistorie";
