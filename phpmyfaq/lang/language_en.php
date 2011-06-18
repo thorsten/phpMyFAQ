@@ -345,15 +345,15 @@ $PMF_LANG["ad_adminlog"] = "AdminLog";
 $PMF_LANG["ad_passwd_cop"] = "Change your Password";
 $PMF_LANG["ad_passwd_old"] = "Old password:";
 $PMF_LANG["ad_passwd_new"] = "New password:";
-$PMF_LANG["ad_passwd_con"] = "Confirm:";
+$PMF_LANG["ad_passwd_con"] = "Retype password:";
 $PMF_LANG["ad_passwd_change"] = "Change password";
 $PMF_LANG["ad_passwd_suc"] = "Password changed successfully.";
 $PMF_LANG["ad_passwd_remark"] = "<strong>ATTENTION:</strong><br />Cookie have to be set again!";
 $PMF_LANG["ad_passwd_fail"] = "The old password <strong>must</strong> be entered correctly and both new ones have to <strong>match</strong>.";
 
 // Adduser
-$PMF_LANG["ad_adus_adduser"] = "Add user";
-$PMF_LANG["ad_adus_name"] = "Name:";
+$PMF_LANG["ad_adus_adduser"] = "Add new user account";
+$PMF_LANG["ad_adus_name"] = "Username:";
 $PMF_LANG["ad_adus_password"] = "Password:";
 $PMF_LANG["ad_adus_add"] = "Add user";
 $PMF_LANG["ad_adus_suc"] = "User <strong>successfully</strong> added.";
@@ -567,10 +567,10 @@ $PMF_LANG["msgAttachedFiles"] = "attached files:";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "action";
-$PMF_LANG["ad_entry_email"] = "Email address:";
+$PMF_LANG["ad_entry_email"] = "E-mail address:";
 $PMF_LANG["ad_entry_allowComments"] = "Allow comments:";
 $PMF_LANG["msgWriteNoComment"] = "You cannot comment on this entry";
-$PMF_LANG["ad_user_realname"] = "real name:";
+$PMF_LANG["ad_user_realname"] = "Real name:";
 $PMF_LANG["ad_export_generate_pdf"] = "create PDF file";
 $PMF_LANG["ad_export_full_faq"] = "Your FAQ as a PDF file: ";
 $PMF_LANG["err_bannedIP"] = "Your IP address has been banned.";
