@@ -23,7 +23,7 @@
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Sarah Hermann <sayh@gmx.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
@@ -41,7 +41,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Sarah Hermann <sayh@gmx.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
@@ -145,11 +145,11 @@ class PMF_User
 
     /**
      * regular expression to find invalid login strings
-     * (default: /(^[^a-z]{1}|[\W])/i )
+     * (default: /^[a-z0-9][\w]+/i )
      *
      * @var string
      */
-    private $_validRegExp = '/^[a-z][\w]+/i';
+    private $_validRegExp = '/^[a-z0-9][\w]+/i';
     
     /**
      * user ID
