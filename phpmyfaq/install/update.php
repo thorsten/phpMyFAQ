@@ -822,7 +822,7 @@ if ($step == 4) {
             if (!$result) {
                 print "</div>";
                 print '<p class="error"><strong>Error:</strong> Please install your version of phpMyFAQ once again or send
-                us a <a href=\"http://www.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
+                us a <a href=\"http://bugs.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
                 printf('<p class="error"><strong>DB error:</strong> %s</p>', $db->error());
                 printf('<code>%s</code>', htmlentities($each_query[1]));
                 HTMLFooter();
@@ -892,7 +892,7 @@ if ($step == 4) {
     print "</p>\n";
 
     print '<p class="success">The database was updated successfully.</p>';
-    print '<p><a href="../index.php">phpMyFAQ</a></p>';
+    print '<p>Back to your <a href="../index.php">phpMyFAQ installation.</a></p>';
     foreach (glob(PMF_ROOT_DIR.'/config/*.bak.php') as $filename) {
         if (!@unlink($filename)) {
             print "<p class=\"hint\">Please manually remove the backup file '".$filename."'.</p>\n";
@@ -900,21 +900,25 @@ if ($step == 4) {
     }
 
     // Remove 'scripts' folder: no need of prompt anything to the user
-    if (file_exists(PMF_ROOT_DIR.'/scripts') && is_dir(PMF_ROOT_DIR.'/scripts')) {
-        @rmdir(PMF_ROOT_DIR.'/scripts');
+    if (file_exists(PMF_ROOT_DIR . '/scripts') && is_dir(PMF_ROOT_DIR . '/scripts')) {
+        @rmdir(PMF_ROOT_DIR . '/scripts');
+    } else {
+        print "<p class=\"hint\">Please delete the folder <em>./scripts</em> manually.</p>\n";
     }
     // Remove 'phpmyfaq.spec' file: no need of prompt anything to the user
-    if (file_exists(PMF_ROOT_DIR.'/phpmyfaq.spec')) {
-        @unlink(PMF_ROOT_DIR.'/phpmyfaq.spec');
+    if (file_exists(PMF_ROOT_DIR . '/phpmyfaq.spec')) {
+        @unlink(PMF_ROOT_DIR . '/phpmyfaq.spec');
+    } else {
+        print "<p class=\"hint\">Please delete the file <em>./phpmyfaq.spec</em> manually.</p>\n";
     }
     // Remove 'setup.php' file
-    if (@unlink(dirname($_SERVER['PATH_TRANSLATED']).'/setup.php')) {
+    if (@unlink(dirname($_SERVER['PATH_TRANSLATED']) . '/setup.php')) {
         print "<p class=\"success\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";
     } else {
         print "<p class=\"hint\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
     }
     // Remove 'update.php' file
-    if (@unlink(dirname($_SERVER['PATH_TRANSLATED']).'/update.php')) {
+    if (@unlink(dirname($_SERVER['PATH_TRANSLATED']) . '/update.php')) {
         print "<p class=\"success\">The file <em>./install/update.php</em> was deleted automatically.</p>\n";
     } else {
         print "<p class=\"hint\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
