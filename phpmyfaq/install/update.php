@@ -157,8 +157,14 @@ if ($step == 1) {
                     printf('<p class="error"><strong>Please make the dir %s and its contents writeable (777 on Linux/UNIX).</strong></p>',
                         $templateDir);
                 }
+                if (version_compare($version, '2.0.0', '>')) {
+                    printf('<p class="success">Your current phpMyFAQ version: %s</p>',
+                        $version);
+                } else {
+                    printf('<p class="error">Your current phpMyFAQ version: %s</p>',
+                        $version);
+                }
                 ?>
-                <p align="hint">Your current phpMyFAQ version: <?php print $version; ?></p>
 
                 <p>
                     <input class="submit" type="submit" value="Go to step 2 of 4" />
