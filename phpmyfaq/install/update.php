@@ -111,11 +111,9 @@ if (!is_readable(PMF_ROOT_DIR.'/inc/data.php') && !is_readable(PMF_ROOT_DIR.'/co
 }
 
 if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
-    // before 2.6.0-alpha
-    require PMF_ROOT_DIR . '/inc/data.php';
+    require PMF_ROOT_DIR . '/inc/data.php'; // before 2.6.0-alpha
 } else {
-    // after 2.6.0-alpha
-    require PMF_ROOT_DIR . '/config/database.php';
+    require PMF_ROOT_DIR . '/config/database.php'; // after 2.6.0-alpha
 }
 require PMF_ROOT_DIR . '/inc/functions.php';
 
@@ -132,31 +130,39 @@ if ($step == 1) {
         <form action="update.php?step=2" method="post">
             <input name="version" type="hidden" value="<?php print $version; ?>"/>
             <fieldset>
-            <legend><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 1 of 4)</strong></legend>
-            <p class="hint">This update will work <strong>only</strong> for the following versions:</p>
-            <ul type="square">
-                <li>phpMyFAQ 2.0.x</li>
-                <li>phpMyFAQ 2.5.x</li>
-                <li>phpMyFAQ 2.6.x</li>
-            </ul>
-            <p>This update will <strong>not</strong> work for the following versions:</p>
-            <ul type="square">
-                <li>phpMyFAQ 0.x</li>
-                <li>phpMyFAQ 1.x</li>
-            </ul>
-            <p><strong>Please make a full backup of your SQL tables before running this update.</strong></p>
-            <?php
-            if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable($templateDir)) {
-                printf('<p class="error"><strong>Please make the dir %s and its contents writeable (777 on Linux/UNIX).</strong></p>',
-                    $templateDir);
-            }
-            ?>
-            <p align="hint">Your current phpMyFAQ version: <?php print $version; ?></p>
+                <legend>
+                    <strong>
+                        phpMyFAQ <?php print NEWVERSION; ?> Update (Step 1 of 4)
+                    </strong>
+                </legend>
 
+                <p>This update will work <strong>only</strong> for the following versions</p>
+                <ul type="square">
+                    <li>phpMyFAQ 2.0.x</li>
+                    <li>phpMyFAQ 2.5.x</li>
+                    <li>phpMyFAQ 2.6.x</li>
+                    <li>phpMyFAQ 2.67.x</li>
+                </ul>
 
-            <p>
-                <input class="submit" type="submit" value="Go to step 2 of 4" />
-            </p>
+                <p>This update <strong>will not</strong> work for the following versions.</p>
+                <ul type="square">
+                    <li>phpMyFAQ 0.x</li>
+                    <li>phpMyFAQ 1.x</li>
+                </ul>
+                <p class="hint">
+                    <strong>Please make a full backup of your SQL tables before running this update.</strong>
+                </p>
+                <?php
+                if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable($templateDir)) {
+                    printf('<p class="error"><strong>Please make the dir %s and its contents writeable (777 on Linux/UNIX).</strong></p>',
+                        $templateDir);
+                }
+                ?>
+                <p align="hint">Your current phpMyFAQ version: <?php print $version; ?></p>
+
+                <p>
+                    <input class="submit" type="submit" value="Go to step 2 of 4" />
+                </p>
             </fieldset>
         </form>
 <?php
