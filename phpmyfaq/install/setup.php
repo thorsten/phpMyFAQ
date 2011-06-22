@@ -224,7 +224,7 @@ if (!$system->checkExtension($enabledExtensions)) {
 }
 
 if (!$system->checkphpMyFAQInstallation()) {
-    print '<p class="error">It seems you\'re already running a version of phpMyFAQ.<br />Please use the <a href="update.php">update script</a>.</p>';
+    print '<p class="error">It seems you\'re already running a version of phpMyFAQ. Please use the <a href="update.php">update script</a>.</p>';
     HTMLFooter();
     die();
 }
