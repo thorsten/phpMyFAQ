@@ -1059,7 +1059,7 @@ $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'T
 // added 2.7.0-alpha - 2010-10-14 by Tom Zeithaml
 $LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => 'Twitter Access Token Key');
 $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'Twitter Access Token Secret');
-$LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Facebook support (Standard: deaktiviert)');
+$LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Facebook Support (Standard: deaktiviert)');
 
 // added v2.7.0-alpha2 - 2011-01-12 by Gustavo Solt
 $PMF_LANG['ad_menu_reports'] = 'Reports';
@@ -1086,3 +1086,6 @@ $PMF_LANG['msgRegistrationNote'] = 'Nach der erfolgreichen Anmeldung erhälst du
 
 // added v2.7.0-beta - 2011-06-13 by Thorsten
 $PMF_LANG['ad_entry_changelog_history'] = "Änderungshistorie";
+
+// added v2.7.0-beta2 - 2011-06-22 by Thorsten
+$LANG_CONF['main.ssoSupport'] = array(0 => 'checkbox', 1 => 'SSO Support (Standard: deaktiviert)');

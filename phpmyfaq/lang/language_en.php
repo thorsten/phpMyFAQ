@@ -1147,3 +1147,6 @@ $PMF_LANG['msgRegistrationNote'] = 'After successful registration you will recei
 
 // added v2.7.0-beta - 2011-06-13 by Thorsten
 $PMF_LANG['ad_entry_changelog_history'] = "Changelog history";
+
+// added v2.7.0-beta2 - 2011-06-22 by Thorsten
+$LANG_CONF['main.ssoSupport'] = array(0 => 'checkbox', 1 => 'SSO Support (default: deactivated)');

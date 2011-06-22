@@ -94,11 +94,19 @@ $auth        = null;
 $error       = '';
 $faqusername = PMF_Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
 $faqpassword = PMF_Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
+if ($faqconfig->get('main.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
+    $faqusername = trim($_SERVER['REMOTE_USER']);
+    $faqpassword = '';
+}
 if (!is_null($faqusername) && !is_null($faqpassword)) {
     $user = new PMF_User_CurrentUser();
     if ($faqconfig->get('main.ldapSupport')) {
         $authLdap = new PMF_Auth_AuthLdap();
         $user->addAuth($authLdap, 'ldap');
+    }
+    if ($faqconfig->get('main.ssoSupport')) {
+        $authSso = new PMF_Auth_AuthSso();
+        $user->addAuth($authSso, 'sso');
     }
     if ($user->login($faqusername, $faqpassword)) {
         if ($user->getStatus() != 'blocked') {

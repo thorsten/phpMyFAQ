@@ -36,6 +36,7 @@ $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.ipCheck', 'fal
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.language', '".$language."')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.languageDetection', 'true')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.ldapSupport', 'false')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.ssoSupport', 'false')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.maxAttachmentSize', '100000')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.metaDescription', 'phpMyFAQ should be the answer for all questions in life')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.metaKeywords', '')";

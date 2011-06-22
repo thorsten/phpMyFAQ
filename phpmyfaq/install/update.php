@@ -795,7 +795,6 @@ if ($step == 4) {
         $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 37)";
     }
 
-
     //
     // UPDATES FROM 2.7.0-alpha2
     //
@@ -814,6 +813,15 @@ if ($step == 4) {
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'search.useAjaxSearchOnStartpage'
             WHERE config_name = 'main.useAjaxSearchOnStartpage'";
     }
+
+    //
+    // UPDATES FROM 2.7.0-beta
+    //
+    if (version_compare($version, '2.7.0-beta2', '<')) {
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.ssoSupport', 'false')";
+    }
+
+
 
     // Perform the queries for updating/migrating the database from 2.x
     if (isset($query)) {
