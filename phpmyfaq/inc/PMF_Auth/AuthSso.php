@@ -51,7 +51,7 @@ class PMF_Auth_AuthSso extends PMF_Auth implements PMF_Auth_AuthDriver
      */
     public function add($login, $pass)
     {
-        
+        return true;
     }
 
     /**
@@ -67,7 +67,7 @@ class PMF_Auth_AuthSso extends PMF_Auth implements PMF_Auth_AuthDriver
     */
     public function changePassword($login, $pass)
     {
-        
+        return true;
     }
     
     /**
@@ -82,7 +82,7 @@ class PMF_Auth_AuthSso extends PMF_Auth implements PMF_Auth_AuthDriver
      */
     public function delete($login)
     {
-        
+        return true;
     }
     
     /**

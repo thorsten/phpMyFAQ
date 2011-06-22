@@ -18,7 +18,7 @@
  * @package   PMF_Auth
  * @author    Alberto Cabello <alberto@unex.es>
  * @author    Lars Scheithauer <larsscheithauer@googlemail.com>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-01
@@ -35,18 +35,18 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_Auth
  * @author    Alberto Cabello <alberto@unex.es>
  * @author    Lars Scheithauer <larsscheithauer@googlemail.com>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-01
  */
 class PMF_Auth_AuthLdap extends PMF_Auth implements PMF_Auth_AuthDriver
 {
-	/**
-	 * LDAP connection handle
-	 *
-	 * @var PMF_Ldap
-	 */
+    /**
+     * LDAP connection handle
+     *
+     * @var PMF_Ldap
+     */
     private $ldap = null;
     
     /**
@@ -125,9 +125,9 @@ class PMF_Auth_AuthLdap extends PMF_Auth implements PMF_Auth_AuthDriver
      * Returns true if the given password for the user account specified by
      * is correct, otherwise false.
      * Error messages are added to the array errors.
-	 *
-	 * This function is only called when local authentication has failed, so
-	 * we are about to create user account.
+     *
+     * This function is only called when local authentication has failed, so
+     * we are about to create user account.
      *
      * @param string $login        Loginname
      * @param string $pass         Password
