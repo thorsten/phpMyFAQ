@@ -823,7 +823,7 @@ $PMF_LANG["ad_categ_remark_move"] = "Dviejų grupių sukeitimas įmanomas tik ta
 $PMF_LANG["ad_categ_remark_overview"] = "Grupės bus rodomos teisinga tvarka, jei visos grupės yra apibrėžtos dabartinėje kalboje (pirmas stulpelis).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
-$PMF_LANG['msgUsersOnline'] = ' :: %d svečių ir %d registruotų';
+$PMF_LANG['msgUsersOnline'] = '%d svečių ir %d registruotų';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Iš karto šalinti žurnalo įrašus senesnius kaip 30 dienų';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Senesni žurnalo įrašai sėkmingai pašalinti.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Žurnalo įrašai nepašalinti: įvyko klaida vykdant užklausą.';

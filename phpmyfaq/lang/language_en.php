@@ -848,7 +848,7 @@ $PMF_LANG["ad_categ_remark_move"] = "The exchange of 2 categories is only possib
 $PMF_LANG["ad_categ_remark_overview"] = "The correct order of categories will be shown, if all categories are defined for the actual language (first column).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
-$PMF_LANG['msgUsersOnline'] = ' :: %d Guests and %d Registered';
+$PMF_LANG['msgUsersOnline'] = '%d Guests and %d Registered';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Delete immediately logs older than 30 days';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Older logs successfully deleted.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'No logs deleted: an error occurred performing the request.';

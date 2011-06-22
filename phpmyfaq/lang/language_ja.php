@@ -846,7 +846,7 @@ $PMF_LANG["ad_categ_remark_move"] = "ふたつのカテゴリーの交換は同�
 $PMF_LANG["ad_categ_remark_overview"] = "カテゴリーがすべて実際の言語に対して定義された場合、カテゴリーの順序は正しく表示されるでしょう。 (はじめのカラム).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
-$PMF_LANG['msgUsersOnline'] = ' :: %d 人のゲストと %d 人の登録者です';
+$PMF_LANG['msgUsersOnline'] = '%d 人のゲストと %d 人の登録者です';
 $PMF_LANG['ad_adminlog_del_older_30d'] = '30日より古いログをすぐに削除する';
 $PMF_LANG['ad_adminlog_delete_success'] = 'より古いログの削除に成功しました。';
 $PMF_LANG['ad_adminlog_delete_failure'] = '削除したログはありません: 要求の実行時にエラーが発生しました。';

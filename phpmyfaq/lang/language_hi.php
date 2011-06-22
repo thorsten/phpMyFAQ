@@ -825,7 +825,7 @@ $PMF_LANG["ad_categ_remark_move"] = "दो वर्गों का आपस 
 $PMF_LANG["ad_categ_remark_overview"] = "वर्गों का सही क्रम दिखाया जाएगा, यदि उस भाषा के लिए सभी वर्ग बताये गए हैं तो (पहला स्तम्भ).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
-$PMF_LANG['msgUsersOnline'] = ' :: %d अतिथि तथा %d पंजीकृत';
+$PMF_LANG['msgUsersOnline'] = '%d अतिथि तथा %d पंजीकृत';
 $PMF_LANG['ad_adminlog_del_older_30d'] = '३० दिन से अधिक पुराने लॉग तुंरत मिटा दें';
 $PMF_LANG['ad_adminlog_delete_success'] = 'पुराने लॉग सफलतापूर्वक मिटा दिए गए हैं.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'कोई भी लॉग नहीं मिटाया गया.';

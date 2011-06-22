@@ -825,7 +825,7 @@ $PMF_LANG["ad_categ_remark_move"] = "Việc hoán đổi giữa 2 mục chỉ đ
 $PMF_LANG["ad_categ_remark_overview"] = "Thứ tự đúng của các mục sẽ hiện ra, nếu tất cả các mục đều hiện có trong ngôn ngữ này (cột đầu).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
-$PMF_LANG['msgUsersOnline'] = ' :: %d Khách và %d Thành viên';
+$PMF_LANG['msgUsersOnline'] = '%d Khách và %d Thành viên';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Xóa ngay các nội dung lưu quá 30 ngày';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Các nội dung cũ đã được xóa.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Không có nội dung nào được xóa: có lỗi xảy ra trong quá trình thực hiện lệnh.';

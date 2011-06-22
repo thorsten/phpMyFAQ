@@ -821,7 +821,7 @@ $PMF_LANG["ad_categ_remark_move"] = "2 kategorinin yer değiştirmesi sadece ayn
 $PMF_LANG["ad_categ_remark_overview"] = "The correct order of categories will be shown, if all categories are defined for the actual language (first column).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
-$PMF_LANG['msgUsersOnline'] = ' :: %d Misafir ve %d Kayıtlı';
+$PMF_LANG['msgUsersOnline'] = '%d Misafir ve %d Kayıtlı';
 $PMF_LANG['ad_adminlog_del_older_30d'] = '30 günden eski kütükleri sil';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Eski kütükler başarı ile silindi.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Kütükler silinmedi: istek işlenirken bir hata oluştu.';

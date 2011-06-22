@@ -827,7 +827,7 @@ $PMF_LANG["ad_categ_remark_move"] = 'Lo scambio di due categorie è possibile so
 $PMF_LANG["ad_categ_remark_overview"] = "Viene mostrato l'ordine corretto delle categorie se sono state definite tutte le categorie per la lingua corrente (vedi prima colonna).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
-$PMF_LANG['msgUsersOnline'] = ' :: %d Ospiti e %d Registrati';
+$PMF_LANG['msgUsersOnline'] = '%d Ospiti e %d Registrati';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Cancella immediatamente i dati pi&ugrave; vecchi di 30 giorni';
 $PMF_LANG['ad_adminlog_delete_success'] = 'I dati sono stati cancellati.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'I dati non sono stati cancellati: si &egrave; verificato un errore.';

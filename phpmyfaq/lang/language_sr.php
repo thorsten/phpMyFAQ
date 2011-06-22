@@ -818,7 +818,7 @@ $PMF_LANG["ad_categ_remark_move"] = "Razmena 2 kategorije je mogu&#263;a samo na
 $PMF_LANG["ad_categ_remark_overview"] = "Ta&#269;an red kategorija &#269;e biti prikazan, ako su sve kategorije definisane za odre&#273;eni jezik (prva kolona).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
-$PMF_LANG['msgUsersOnline'] = ' :: %d Gostiju i %d Registrovanih';
+$PMF_LANG['msgUsersOnline'] = '%d Gostiju i %d Registrovanih';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Obrii odmah logove starije od 30 dana';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Stariji logovi obrisani.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Pojavila se greka.';

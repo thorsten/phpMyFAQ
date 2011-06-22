@@ -823,7 +823,7 @@ $PMF_LANG["ad_categ_remark_move"] = "El intercambio de 2 categorías es sólo po
 $PMF_LANG["ad_categ_remark_overview"] = "Las categorías serán mostradas en el orden correcto si todas las categorias estan definidas en el lenguaje actual (primera columna).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
-$PMF_LANG['msgUsersOnline'] = ' :: %d usuarios anónimos y %d registrados';
+$PMF_LANG['msgUsersOnline'] = '%d usuarios anónimos y %d registrados';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Borrar inmediatamente los logs anteriores a 30 días';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Logs antiguos borrados correctamente.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Los logs no fueron borrados: un error ocurrió cuando se estaba procesando el pedido.';
@@ -1010,8 +1010,8 @@ $PMF_LANG["plmsgViews"][0] = "%d visita";
 $PMF_LANG["plmsgViews"][1] = "%d visitas";
 
 // added 2.6.0-alpha - 2009-08-30 by Aurimas FiÅ¡eras - Plural messages
-$PMF_LANG['plmsgGuestOnline'][0] = ' :: %d Invitado';
-$PMF_LANG['plmsgGuestOnline'][1] = ' :: %d Invitados';
+$PMF_LANG['plmsgGuestOnline'][0] = '%d Invitado';
+$PMF_LANG['plmsgGuestOnline'][1] = '%d Invitados';
 $PMF_LANG['plmsgRegisteredOnline'][0] = ' y %d Registrado';
 $PMF_LANG['plmsgRegisteredOnline'][1] = ' y %d Registrados';
 $PMF_LANG["plmsgSearchAmount"][0] = "%d resultado de búsqueda";

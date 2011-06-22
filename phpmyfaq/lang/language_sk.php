@@ -821,7 +821,7 @@ $PMF_LANG["ad_categ_remark_move"] = "Výmena 2 kategórií je možná iba v rám
 $PMF_LANG["ad_categ_remark_overview"] = "Správne poradie kategórií bude zobrazené vtedy, keď budú všetky kategórie definované pre aktuálny jazyk (prvý stĺpec).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
-$PMF_LANG['msgUsersOnline'] = ' :: %d Hostia a %d Registrovaní';
+$PMF_LANG['msgUsersOnline'] = '%d Hostia a %d Registrovaní';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Vymazať prihlásenia staršie ako 30 dní';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Staré prihlásenia úspešne vymazané.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Vyskytla sa chyba. Prihlásenia nevymazané.';

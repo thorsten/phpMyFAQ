@@ -828,7 +828,7 @@ $PMF_LANG["ad_categ_remark_move"] = "החלפה בין שתי קטגוריות �
 $PMF_LANG["ad_categ_remark_overview"] = "הקטגוריות יוצגו בסדר נכון רק אם הוגדרו עבור אותה שפה (תור ראשון).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
-$PMF_LANG['msgUsersOnline'] = ' :: %d אורחים ו %d רשומים';
+$PMF_LANG['msgUsersOnline'] = '%d אורחים ו %d רשומים';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'מחק רישומים בני יותר מ 30 יום';
 $PMF_LANG['ad_adminlog_delete_success'] = 'רישומים ישנים נמחקו בהצלחה.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'לא נמחקו רישומים: ארעה תקלה בביצוע הבקשה.';
