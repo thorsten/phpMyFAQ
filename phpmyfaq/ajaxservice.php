@@ -156,8 +156,7 @@ switch ($action) {
 
                 $send = array();
                 $mail = new PMF_Mail();
-                $mail->unsetFrom();
-                $mail->setFrom($commentData['usermail']);
+                $mail->setReplyTo($commentData['usermail'], $commentData['username']);
                 $mail->addTo($emailTo);
                 $send[$emailTo] = 1;
 
@@ -298,7 +297,7 @@ switch ($action) {
             // Let the PMF Administrator and the Category Owner to be informed by email of this new entry
             $send = array();
             $mail = new PMF_Mail();
-            $mail->setFrom($usermail);
+            $mail->setReplyTo($email, $name);
             $mail->addTo($faqconfig->get('main.administrationMail'));
             $send[$faqconfig->get('main.administrationMail')] = 1;
 
@@ -432,8 +431,7 @@ switch ($action) {
                 $mainAdminEmail = PMF_Configuration::getInstance()->get('main.administrationMail');
 
                 $mail = new PMF_Mail();
-                $mail->unsetFrom();
-                $mail->setFrom($questionData['email'], $questionData['username']);
+                $mail->setReplyTo($questionData['email'], $questionData['username']);
                 $mail->addTo($mainAdminEmail);
                 // Let the category owner get a copy of the message
                 if ($userEmail && $mainAdminEmail != $userEmail) {
@@ -494,8 +492,7 @@ switch ($action) {
                                     $loginname);
 
                     $mail = new PMF_Mail();
-                    $mail->unsetFrom();
-                    $mail->setFrom($email);
+                    $mail->setReplyTo($email, $realname);
                     $mail->addTo($faqconfig->get('main.administrationMail'));
                     $mail->subject = PMF_Utils::resolveMarkers($PMF_LANG['emailRegSubject']);
                     $mail->message = $text;
@@ -560,8 +557,7 @@ switch ($action) {
             !empty($question) && checkBannedWord(PMF_String::htmlspecialchars($question))) {
 
             $mail = new PMF_Mail();
-            $mail->unsetFrom();
-            $mail->setFrom($email, $name);
+            $mail->setReplyTo($email, $name);
             $mail->addTo($faqconfig->get('main.administrationMail'));
             $mail->subject = 'Feedback: %sitename%';;
             $mail->message = $question;
@@ -597,8 +593,7 @@ switch ($action) {
                 $recipient = trim(strip_tags($recipient));
                 if (!empty($recipient)) {
                     $mail = new PMF_Mail();
-                    $mail->unsetFrom();
-                    $mail->setFrom($email, $name);
+                    $mail->setReplyTo($email, $name);
                     $mail->addTo($recipient);
                     $mail->subject = $PMF_LANG["msgS2FMailSubject"].$name;
                     $mail->message = sprintf("%s\r\n\r\n%s\r\n%s\r\n\r\n%s",
