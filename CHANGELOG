@@ -5,7 +5,7 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.7.0-beta - 2011-06-22
+Version 2.7.0-beta2 - 2011-06-22
 - changed PHP requirement to PHP 5.2.3 (Thorsten)
 - dropped support for MySQL 4.1 (Thorsten)
 - dropped support for Internet Explorer 6 + 7 (Thorsten)
@@ -29,8 +29,12 @@ Version 2.7.0-beta - 2011-06-22
 - updated bundled SyntaxHighlighter to version 3.0.83 (Thorsten)
 - fixed a lot of bugs (Thorsten)
 
-Version 2.6.17 - 2011-
+Version 2.6.18 - 2011-07-
 - 
+
+Version 2.6.17 - 2011-06-08
+- updated Portuguese translation
+- fixed minor bugs (Thorsten)
 
 Version 2.6.16 - 2011-05-31
 - updated Portuguese translation

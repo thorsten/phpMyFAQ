@@ -263,7 +263,7 @@ class PMF_Category
         $query .= " ORDER BY id";
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_assoc($result)) {
-            $this->categories[] = $row;
+            $this->categories[$row['id']] = $row;
         }
         return $this->categories;
     }

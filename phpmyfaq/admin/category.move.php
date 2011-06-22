@@ -33,6 +33,7 @@ if ($permission["editcateg"]) {
     $parent_id  = PMF_Filter::filterInput(INPUT_GET, 'parent_id', FILTER_VALIDATE_INT);
     $category   = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $categories = $category->getAllCategories();
+
     $category->categories = null;
     unset($category->categories);
     $category->getCategories($parent_id, false);
@@ -40,7 +41,9 @@ if ($permission["editcateg"]) {
     
     $header = sprintf('%s: <em>%s</em>',
         $PMF_LANG['ad_categ_move'],
-        $category->categoryName[$id]['name']);
+        $category->categories[$id]['name']);
+
+    printf('<h2>%s</h2>', $header);
 ?>
         <header>
             <h2><?php print $header ?></h2>
@@ -52,7 +55,7 @@ if ($permission["editcateg"]) {
                 <label><?php print $PMF_LANG["ad_categ_change"]; ?></label>
                    <select name="change" size="1">
 <?php
-                    foreach ($category->catTree as $cat) {
+                    foreach ($category->categories as $cat) {
                        if ($id != $cat["id"]) {
                           printf("<option value=\"%s\">%s</option>", $cat['id'], $cat['name']);
                        }

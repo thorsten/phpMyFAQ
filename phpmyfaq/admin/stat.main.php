@@ -109,7 +109,7 @@ if ($permission['viewlog']) {
         $fp = @fopen(PMF_ROOT_DIR."/data/tracking".date("dmY", $first), "r");
         list($dummy, $dummy, $dummy, $dummy, $dummy, $dummy, $dummy, $qstamp) = fgetcsv($fp, 1024, ";");
         fclose($fp);
-        print date("d.m.Y H:i:s", $qstamp);
+        print date("Y-m-d H:i:s", $qstamp);
     } else {
         print $PMF_LANG["ad_sess_noentry"];
     }
@@ -129,7 +129,7 @@ if ($permission['viewlog']) {
         if (empty($stamp)) {
             $stamp = $_SERVER['REQUEST_TIME'];
         }
-        print date("d.m.Y H:i:s", $stamp).'<br />';
+        print date("Y-m-d H:i:s", $stamp).'<br />';
     } else {
         print $PMF_LANG["ad_sess_noentry"].'<br />';
     }

@@ -494,7 +494,7 @@ function getUserData(user_id)
                 </td>
                 <td>
                     <?php if ($user->getStatus() !== 'protected'): ?>
-                    <a onclick="javascript:alert('Not implemented yet!'); return false;" href="javascript:void();">
+                    <a onclick="javascript:alert('Not implemented yet!'); return false;" href="#;">
                         <?php print $PMF_LANG['ad_user_delete'] ?>
                     </a>
                     <?php endif; ?>
