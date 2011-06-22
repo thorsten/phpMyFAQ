@@ -247,18 +247,25 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 ?>
                 <p>
                     <label><?php print $PMF_LANG['ad_menu_attachments'] ?>:</label>
+                    <ul class="adminAttachments">
 <?php
         if (isset($faqData['id']) && $faqData['id'] != "") {
             $attList = PMF_Attachment_Factory::fetchByRecordId($faqData['id']);
-            while (list(,$att) = each($attList)) {
-                print "<a href=\"../" . $att->buildUrl() . "\">" . $att->getFilename() . "</a>";
+            foreach ($attList as $att) {
+                printf('<li><a href="../%s">%s</a> ',
+                    $att->buildUrl(),
+                    $att->getFilename());
                 if ($permission["delatt"]) {
-                    print "&nbsp;[&nbsp;<a href=\"?action=delatt&amp;" . "record_id=" . $faqData['id'] . "&amp;id=" . 
-                        $att->getId() . "&amp;lang=" . $faqData['lang'] . "\">" . $PMF_LANG["ad_att_del"] . "</a>&nbsp;]";
+                    printf('[ <a href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s">%s</a> ]',
+                        $faqData['id'],
+                        $att->getId(),
+                        $faqData['lang'],
+                        $PMF_LANG['ad_att_del']);
                 }
-                print "<br />\n";
+                print "</li>\n";
             }
-            printf('<a href="javascript:void();" onclick="Picture(\'attachment.php?record_id=%d&amp;record_lang=%s&amp;rubrik=%d\', \'Attachment\', 400,80); return false;">%s</a>',
+            print '                    </ul>';
+            printf('<div><a href="#;" onclick="addAttachment(\'attachment.php?record_id=%d&amp;record_lang=%s&amp;rubrik=%d\', \'Attachment\', 400,80); return false;">%s</a></div>',
                 $faqData['id'],
                 $faqData['lang'],
                 $current_category,
