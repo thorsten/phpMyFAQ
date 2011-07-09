@@ -10,7 +10,7 @@
                 <h3>{msgNewTranslationPane}</h3>
             </header>
 
-            <form action="{writeSendAdress}" method="post" style="display: inline">
+            <form action="{writeSendAdress}" method="post">
                 <input type="hidden" name="faqid" id="faqid" value="{writeSourceFaqId}" />
                 <input type="hidden" name="faqlanguage" id="faqlanguage" value="{writeTransFaqLanguage}" />
                 <input type="hidden" name="contentlink" id="contentlink" value="http://" />
