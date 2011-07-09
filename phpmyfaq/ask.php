@@ -40,6 +40,8 @@ $faqsession->userTracking('ask_question', 0);
 
 $category->buildTree();
 
+$categoryId = PMF_Filter::filterInput(INPUT_GET, 'category_id', FILTER_VALIDATE_INT, 0);
+
 $helper = PMF_Helper_Category::getInstance();
 $helper->setCategory($category);
 
@@ -52,7 +54,7 @@ $tpl->processTemplate('writeContent', array(
     'defaultContentMail'   => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
     'defaultContentName'   => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
     'msgAskCategory'       => $PMF_LANG['msgAskCategory'],
-    'printCategoryOptions' => $helper->renderCategoryOptions(),
+    'printCategoryOptions' => $helper->renderCategoryOptions($categoryId),
     'msgAskYourQuestion'   => $PMF_LANG['msgAskYourQuestion'],
     'captchaFieldset'      => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('ask'), $captcha->caplength),
     'msgNewContentSubmit'  => $PMF_LANG['msgNewContentSubmit']));
