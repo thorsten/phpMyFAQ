@@ -205,7 +205,7 @@ function getGoogleTranslation(div, text, langFrom, langTo, fieldType)
     google.language.translate(text, langFrom, langTo, function(result) {
         if (result.translation) {
             switch(fieldType) {
-                case 'content':
+                case 'answer':
                     tinymce.get(div).setContent(result.translation);
                     break;
                 case 'keywords':
@@ -218,7 +218,7 @@ function getGoogleTranslation(div, text, langFrom, langTo, fieldType)
                     break;
                 case 'name':
                 case 'description':
-                case 'thema':
+                case 'question':
                 default:
                     $(div).val(result.translation);
                     break;

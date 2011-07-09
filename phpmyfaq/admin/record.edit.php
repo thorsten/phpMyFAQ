@@ -668,7 +668,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
         function() {
             var langTo = $(this).val();
 
-            if (!document.getElementById('thema_translated_' + langTo)) {
+            if (! $('#question_translated_' + langTo).val()) {
 
                 // Add language value
                 var languages = $('#used_translated_languages').val();
@@ -720,7 +720,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
             
             // Set the translated text
             getGoogleTranslation('#question_translated_' + langTo, $('#question').val(), langFrom, langTo);
-            getGoogleTranslation('#answer_translated_' + langTo, tinymce.get('answer').getContent(), langFrom, langTo, 'answer');
+            getGoogleTranslation('answer_translated_' + langTo, tinymce.get('answer').getContent(), langFrom, langTo, 'answer');
 
             // Keywords must be translated separately
             $('#keywords_translated_' + langTo).val('');
@@ -769,7 +769,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
             file_browser_callback : "ajaxfilemanager",
                 
             // Example content CSS (should be your site CSS)
-            content_css : "../template/<?php print PMF_Template::getTplSetName(); ?>/style.css",
+            content_css : "../template/<?php print PMF_Template::getTplSetName(); ?>/css/style.css",
                 
             // Drop lists for link/image/media/template dialogs
             template_external_list_url : "js/template_list.js",
