@@ -176,7 +176,7 @@ $PMF_LANG["err_noArticles"] = "<p>No FAQs available.</p>";
 $PMF_LANG["err_badID"] = "<p>Wrong ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>No popular FAQs available yet.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>No entry found.</p>";
-$PMF_LANG["err_SaveEntries"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>headline</strong>, <strong>your Record</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br /><a href=\"javascript:history.back();\">one page back</a><br /><br />";
+$PMF_LANG["err_SaveEntries"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>question</strong>, <strong>your Record</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br /><a href=\"javascript:history.back();\">one page back</a><br /><br />";
 $PMF_LANG["err_SaveComment"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your comments</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br /><a href=\"javascript:history.back();\">one page back</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "We do not count double votings.";
 $PMF_LANG["err_noVote"] = "You did not rate the question!";
@@ -863,7 +863,7 @@ $PMF_LANG['ad_quick_group'] = 'Add new group';
 
 // added v2.0.0 - 2006-12-30 by Matteo
 $PMF_LANG['msgNewTranslationHeader'] = 'Translation proposal';
-$PMF_LANG['msgNewTranslationAddon'] = 'Your proposal will not be published right away, but will be released by the administrator upon receipt. Required  fields are <strong>your Name</strong>, <strong>your email address</strong>, <strong>your headline translation</strong> and <strong>your faq translation</strong>. Please separate the keywords with space only.';
+$PMF_LANG['msgNewTranslationAddon'] = 'Your proposal will not be published right away, but will be released by the administrator upon receipt. Required  fields are <strong>your Name</strong>, <strong>your email address</strong>, <strong>your question translation</strong> and <strong>your answer translation</strong>. Please separate the keywords with space only.';
 $PMF_LANG['msgNewTransSourcePane'] = 'Source pane';
 $PMF_LANG['msgNewTranslationPane'] = 'Translation pane';
 $PMF_LANG['msgNewTranslationName'] = "Your Name:";
