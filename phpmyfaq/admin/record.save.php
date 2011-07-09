@@ -154,14 +154,14 @@ if ($permission['editbt']) {
                 if ($translated_lang == $record_lang) {
                     continue;
                 }
-                $translated_question = PMF_Filter::filterInput(INPUT_POST, 'thema_translated_' . $translated_lang, FILTER_SANITIZE_STRING);
-                $translated_content  = PMF_Filter::filterInput(INPUT_POST, 'content_translated_' . $translated_lang, FILTER_SANITIZE_SPECIAL_CHARS);
+                $translated_question = PMF_Filter::filterInput(INPUT_POST, 'question_translated_' . $translated_lang, FILTER_SANITIZE_STRING);
+                $translated_answer   = PMF_Filter::filterInput(INPUT_POST, 'answer_translated_' . $translated_lang, FILTER_SANITIZE_SPECIAL_CHARS);
                 $translated_keywords = PMF_Filter::filterInput(INPUT_POST, 'keywords_translated_' . $translated_lang, FILTER_SANITIZE_STRING);
     
                 $recordData = array_merge($recordData, array(
                     'lang'          => $translated_lang,
                     'thema'         => utf8_encode(html_entity_decode($translated_question)),
-                    'content'       => utf8_encode(html_entity_decode($translated_content)),
+                    'content'       => utf8_encode(html_entity_decode($translated_answer)),
                     'keywords'      => utf8_encode($translated_keywords),
                     'author'        => 'Google',
                     'email'         => $faqconfig->get('main.administrationMail')));
