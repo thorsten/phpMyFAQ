@@ -422,6 +422,9 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
         } else {
             $title = $this->question;
         }
+
+        $title = html_entity_decode($title, ENT_QUOTES, 'utf-8');
+
         $currentTextColor = $this->TextColor;
         
         $this->SetTextColor(0,0,0);
