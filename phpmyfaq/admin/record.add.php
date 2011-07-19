@@ -189,6 +189,9 @@ if ($permission['editbt']) {
                     // Copy Link Verification
                     $linkverifier->markEntry($record_id, $translated_lang);
 
+                    // add faqvisit entry
+                    $visits->add($record_id, $translated_lang);
+
                     // Set attachment relations
                     $attachments = PMF_Attachment_Factory::fetchByRecordId($record_id);
                     foreach ($attachments as $attachment) {

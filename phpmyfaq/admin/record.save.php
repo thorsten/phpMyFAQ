@@ -146,7 +146,9 @@ if ($permission['editbt']) {
         // All the other translations        
         $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);            
         if ($faqconfig->get('main.enableGoogleTranslation') === true && !empty($languages)) {
+            
             $linkverifier = new PMF_Linkverifier($user->getLogin());
+            $visits       = PMF_Visits::getInstance();
     
             $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
             $languages = explode(",", $languages);
@@ -184,6 +186,9 @@ if ($permission['editbt']) {
     
                 // Copy Link Verification
                 $linkverifier->markEntry($record_id, $translated_lang);
+
+                // add faqvisit entry
+                $visits->add($record_id, $translated_lang);
 
                 // Set attachment relations
                 $attachments = PMF_Attachment_Factory::fetchByRecordId($record_id);
