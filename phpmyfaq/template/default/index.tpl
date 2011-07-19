@@ -46,6 +46,13 @@
 </head>
 <body dir="{dir}">
 
+<!--[if lt IE 8 ]>
+<div class="internet-explorer-error">
+    Did you know that your Internet Explorer is out of date?<br/>
+    Please use Internet Explorer 8+, Mozilla Firefox 4+, Google Chrome, Apple Safari 5+ or Opera 11+
+</div>
+ <![endif]-->
+
 <header id="header">
     <div id="loginBox">
         {loginBox}
@@ -70,7 +77,7 @@
 <a id="top"></a>
 
 <div id="content">
-    
+
     <div id="leftContent">
         <menu id="categories">
             <ul>

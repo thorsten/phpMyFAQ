@@ -216,6 +216,8 @@ nav ul li.selected a {
 	}
 
 /* Content */
+.internet-explorer-error {
+    margin: auto; padding: 10px; background-color: #f97c7c; color: #222; font-size: 1.571em; text-align: center; }
 #content {
     display: table; width: 980px; margin: 88px auto 0; }
 #leftContent {
