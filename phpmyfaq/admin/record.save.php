@@ -184,6 +184,16 @@ if ($permission['editbt']) {
     
                 // Copy Link Verification
                 $linkverifier->markEntry($record_id, $translated_lang);
+
+                // Set attachment relations
+                $attachments = PMF_Attachment_Factory::fetchByRecordId($record_id);
+                foreach ($attachments as $attachment) {
+                    if ($attachment instanceof PMF_Attachment_Abstract) {
+                        $attachment->setId(null);
+                        $attachment->setRecordLang($translated_lang);
+                        $attachment->saveMeta();
+                    }
+                }
             }
         }
 ?>

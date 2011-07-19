@@ -33,8 +33,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
 if ($permission['editbt']) {
-	
-	// Get submit action
+
+    // Get submit action
     $submit        = PMF_Filter::filterInputArray(INPUT_POST, array('submit' => array('filter' => FILTER_VALIDATE_INT,
                                                                                       'flags'  => FILTER_REQUIRE_ARRAY)));
     // FAQ data
@@ -149,6 +149,7 @@ if ($permission['editbt']) {
             // All the other translations
             $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);            
             if ($faqconfig->get('main.enableGoogleTranslation') === true && !empty($languages)) {
+                
                 $linkverifier = new PMF_Linkverifier($user->getLogin());
     
                 $languages = explode(",", $languages);
@@ -187,6 +188,17 @@ if ($permission['editbt']) {
     
                     // Copy Link Verification
                     $linkverifier->markEntry($record_id, $translated_lang);
+
+                    // Set attachment relations
+                    $attachments = PMF_Attachment_Factory::fetchByRecordId($record_id);
+                    foreach ($attachments as $attachment) {
+                        if ($attachment instanceof PMF_Attachment_Abstract) {
+                            $attachment->setId(null);
+                            $attachment->setRecordLang($translated_lang);
+                            $attachment->saveMeta();
+                        }
+                    }
+
                 }
             }
 ?>

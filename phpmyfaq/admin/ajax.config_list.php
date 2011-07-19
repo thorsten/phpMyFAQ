@@ -33,10 +33,12 @@ require_once PMF_ROOT_DIR . '/lang/language_en.php';
 require_once PMF_ROOT_DIR . '/inc/libs/twitteroauth/twitteroauth.php';
 
 if (!empty($_SESSION['access_token'])) {
-    $connection = new TwitterOAuth($faqconfig->get('socialnetworks.twitterConsumerKey'),
-                                   $faqconfig->get('socialnetworks.twitterConsumerSecret'),
-                                   $_SESSION['access_token']['oauth_token'],
-                                   $_SESSION['access_token']['oauth_token_secret']);
+    $connection = new TwitterOAuth(
+        $faqconfig->get('socialnetworks.twitterConsumerKey'),
+        $faqconfig->get('socialnetworks.twitterConsumerSecret'),
+        $_SESSION['access_token']['oauth_token'],
+        $_SESSION['access_token']['oauth_token_secret']
+    );
     $content = $connection->get('account/verify_credentials');
 }
 
@@ -48,6 +50,11 @@ $availableConfigModes = array(
         'search'  => 1,
         'social'  => 1);
 
+/**
+ * @param  $key
+ * @param  $type
+ * @return void
+ */
 function printInputFieldByType($key, $type)
 {
     global $PMF_LANG;
@@ -85,7 +92,18 @@ function printInputFieldByType($key, $type)
                 case 'main.language':
                     $languages = PMF_Language::getAvailableLanguages();
                     if (count($languages) > 0) {
-                        print PMF_Language::languageOptions(str_replace(array("language_", ".php"), "", $faqconfig->get('main.language')), false, true);
+                        print PMF_Language::languageOptions(
+                            str_replace(
+                                array(
+                                     'language_',
+                                     '.php'
+                                ),
+                                '',
+                                $faqconfig->get('main.language')
+                            ),
+                            false,
+                            true
+                        );
                     } else {
                         print '<option value="language_en.php">English</option>';
                     }
@@ -198,7 +216,8 @@ foreach ($LANG_CONF as $key => $value) {
                 print "Your Callback URL is: " .$faqconfig->get('main.referenceURL') . "/services/twitter/callback.php";
             }
             if (is_null($content)) {
-                print '<a target="_blank" href="../services/twitter/redirect.php"><img src="../images/twitter.signin.png" alt="Sign in with Twitter"/></a>';
+                print '<a target="_blank" href="../services/twitter/redirect.php">';
+                print '<img src="../images/twitter.signin.png" alt="Sign in with Twitter"/></a>';
                 print "<br />\n<br />\n";
             } else {
                 print $content->screen_name . "<br />\n";
