@@ -287,20 +287,36 @@ class PMF_Language
     /**
      * Gets the accepted language from the user agent
      *
+     * $_SERVER['HTTP_ACCEPT_LANGUAGE'] could be like the text below:
+     * it,pt-br;q=0.8,en-us;q=0.5,en;q=0.3
+     * 
      * @return void
      */
     private function _getUserAgentLanguage()
     {
-        $matches = array();
-        // $_SERVER['HTTP_ACCEPT_LANGUAGE'] could be like the text below:
-        // it,pt-br;q=0.8,en-us;q=0.5,en;q=0.3
-        // TODO: (ENH) get an array of accepted languages and cycle through it in self::setLanguage
+        $matches = $languages = array();
+
         if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
             // ISO Language Codes, 2-letters: ISO 639-1, <Country tag>[-<Country subtag>]
             // Simplified language syntax detection: xx[-yy]
-            preg_match("/([a-z\-]+)/i", trim($_SERVER['HTTP_ACCEPT_LANGUAGE']), $matches);
-            if (isset($matches[1])) {
-                $this->acceptedLanguage = strtolower($matches[1]);
+            preg_match_all(
+                '/([a-z]{1,8}(-[a-z]{1,8})?)\s*(;\s*q\s*=\s*(1|0\.[0-9]+))?/i',
+                $_SERVER['HTTP_ACCEPT_LANGUAGE'],
+                $matches
+            );
+
+            if (count($matches[1])) {
+                $languages = array_combine($matches[1], $matches[4]);
+                foreach ($languages as $lang => $val) {
+                    if ($val === '') $languages[$lang] = 1;
+                }
+                arsort($languages, SORT_NUMERIC);
+            }
+            foreach ($languages as $lang => $val) {
+                if (self::isASupportedLanguage(strtoupper($lang))) {
+                    $this->acceptedLanguage = $lang;
+                    break;
+                }
             }
         }
     }
