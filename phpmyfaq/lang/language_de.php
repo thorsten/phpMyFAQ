@@ -377,7 +377,7 @@ $PMF_LANG["ad_auth_user"] = "Benutzername:";
 $PMF_LANG["ad_auth_passwd"] = "Passwort:";
 $PMF_LANG["ad_auth_ok"] = "OK";
 $PMF_LANG["ad_auth_reset"] = "Reset";
-$PMF_LANG["ad_auth_fail"] = "Keine solche Loginkombination gefunden.";
+$PMF_LANG["ad_auth_fail"] = "Falscher Benutzername oder Passwort.";
 $PMF_LANG["ad_auth_sess"] = "Diese Session-ID ist ungültig/ausgelaufen.";
 
 // Added v0.8 - 24.05.2001 - Bastian - Admin

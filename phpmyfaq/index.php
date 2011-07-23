@@ -90,8 +90,9 @@ $action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING, '
 //
 // Authenticate current user
 //
-$auth        = null;
-$error       = '';
+$auth            = null;
+$error           = '';
+$loginVisibility = 'hidden';
 $faqusername = PMF_Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
 $faqpassword = PMF_Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
 if ($faqconfig->get('main.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
@@ -113,16 +114,13 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
             $auth = true;
         } else {
             $error = $PMF_LANG["ad_auth_fail"]." (".$faqusername." / *)";
-            $user  = null;
+            $loginVisibility = '';
+            $user = null;
         }
     } else {
         // error
-        $error = sprintf(
-            '%s<br /><a href="admin/password.php" title="%s">%s</a>',
-            $PMF_LANG['ad_auth_fail'],
-            $PMF_LANG['lostPassword'],
-            $PMF_LANG['lostPassword']
-        );
+        $error = $PMF_LANG['ad_auth_fail'];
+        $loginVisibility = '';
         $user = null;
     }
     $action = 'main';
@@ -514,16 +512,21 @@ $tpl->processTemplate('index', array_merge($main_template_vars, $links_template_
 // Show login box or logged-in user information
 //
 if (isset($auth)) {
-    $tpl->processTemplate('loginBox', array(
-        'loggedinas'      => $PMF_LANG['ad_user_loggedin'],
-        'currentuser'     => $user->getUserData('display_name'),
-        'printAdminPath'  => (in_array(true, $permission)) ? 'admin/index.php' : '#',
-        'adminSection'    => $PMF_LANG['adminSection'],
-        'printLogoutPath' => '?action=logout',
-        'logout'          => $PMF_LANG['ad_menu_logout']));
+    $tpl->processTemplate(
+        'loginBox',
+        array(
+            'loggedinas'      => $PMF_LANG['ad_user_loggedin'],
+            'currentuser'     => $user->getUserData('display_name'),
+            'printAdminPath'  => (in_array(true, $permission)) ? 'admin/index.php' : '#',
+            'adminSection'    => $PMF_LANG['adminSection'],
+            'printLogoutPath' => '?action=logout',
+            'logout'          => $PMF_LANG['ad_menu_logout']
+        )
+    );
 } else {
     if (isset($_SERVER['HTTPS']) || !$faqconfig->get('main.useSslForLogins')) {
-        $tpl->processTemplate('loginBox',
+        $tpl->processTemplate(
+            'loginBox',
             array(
                 'msgLoginUser'    => $PMF_LANG['msgLoginUser'],
                 'writeLoginPath'  => '?action=login',
@@ -532,13 +535,18 @@ if (isset($auth)) {
                 'password'        => $PMF_LANG['ad_auth_passwd'],
                 'msgRegisterUser' => '<a href="?' . $sids . 'action=register">' . $PMF_LANG['msgRegisterUser'] . '</a>',
                 'msgLoginFailed'  => $error,
-                'msgLostPassword' => $PMF_LANG['lostPassword']
+                'msgLostPassword' => $PMF_LANG['lostPassword'],
+            'loginVisibility' => $loginVisibility
             )
         );
     } else {
-        $tpl->processTemplate('loginBox', array(
-            'secureloginurl'  => sprintf('https://%s%s', $_SERVER['HTTP_HOST'], $_SERVER['REQUEST_URI']),
-            'securelogintext' => $PMF_LANG['msgSecureSwitch']));
+        $tpl->processTemplate(
+            'loginBox',
+            array(
+                'secureloginurl'  => sprintf('https://%s%s', $_SERVER['HTTP_HOST'], $_SERVER['REQUEST_URI']),
+                'securelogintext' => $PMF_LANG['msgSecureSwitch']
+            )
+        );
     }
 }
 $tpl->includeTemplate('loginBox', 'index');

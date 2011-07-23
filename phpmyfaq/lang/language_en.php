@@ -401,7 +401,7 @@ $PMF_LANG["ad_auth_user"] = "Username:";
 $PMF_LANG["ad_auth_passwd"] = "Password:";
 $PMF_LANG["ad_auth_ok"] = "OK";
 $PMF_LANG["ad_auth_reset"] = "Reset";
-$PMF_LANG["ad_auth_fail"] = "User or password not valid.";
+$PMF_LANG["ad_auth_fail"] = "Wrong username or password.";
 $PMF_LANG["ad_auth_sess"] = "The Sessions ID is passed.";
 
 // Added v0.8 - 24.05.2001 - Bastian - Admin

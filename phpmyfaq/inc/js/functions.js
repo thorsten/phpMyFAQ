@@ -24,12 +24,23 @@
  * @since     2003-11-13
  */
 
+/**
+ * 
+ * @param pic
+ * @param title
+ * @param width
+ * @param height
+ */
 function addAttachment(pic,title,width,height)
 {
     popup = window.open(pic, title, 'width='+width+', height='+height+', toolbar=no, directories=no, status=no, scrollbars=no, resizable=yes, menubar=no');
     popup.focus();
 }
 
+/**
+ * 
+ * @param checkBox
+ */
 function checkAll(checkBox)
 {
     var v = checkBox.checked;
@@ -41,6 +52,13 @@ function checkAll(checkBox)
         }
 }
 
+/**
+ * 
+ * @param uri
+ * @param name
+ * @param ext
+ * @param cat
+ */
 function addEngine(uri, name, ext, cat)
 {
     if ((typeof window.sidebar == "object") && (typeof window.sidebar.addSearchEngine == "function")) {
@@ -73,7 +91,8 @@ function showhideCategory(id)
  */
 function loginForm()
 {
-    if ($('#loginForm').css('display') == 'none') {
+    if ($('#loginForm').hasClass('hidden')) {
+        $('#loginForm').removeClass('hidden');
         $('#loginForm').fadeIn();
     } else {
         $('#loginForm').fadeOut();

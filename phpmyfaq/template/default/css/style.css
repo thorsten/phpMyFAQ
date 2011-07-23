@@ -173,11 +173,14 @@ body {
 #header #loginSelection a:link, #header #loginSelection a:visited {
     color: #fff; }
 #header #loginForm {
-    position: fixed; display: none; width: 175px; z-index: 50; background: #F67600; padding: 5px; margin-top: -5px;
-    border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+    position: fixed; width: 175px; z-index: 50; background: #F67600; padding: 5px; margin-top: -5px; border-radius: 5px;
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 #header #loginForm form input[type="text"], #header #loginForm form input[type="password"] {
     display: table-cell; height: 14px; border: 1px solid #d7d7d7; font-size: 14px; border-radius: 3px;
     -moz-border-radius: 3px; -webkit-border-radius: 3px; }
+#header #loginForm .error {
+    color: #8b0000; padding: 2px; background-color: #d3d3d3; border-radius: 3px; -moz-border-radius: 3px;
+    -webkit-border-radius: 3px; font-weight: bold; }
 
 /* Navigation */
 nav {
