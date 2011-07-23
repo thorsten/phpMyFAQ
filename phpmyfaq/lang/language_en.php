@@ -581,27 +581,27 @@ $PMF_LANG["ad_entry_fontcolor"] = "Font color: ";
 $PMF_LANG["ad_entry_fontsize"] = "Font size: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF['main.language'] = array(0 => "select", 1 => "Language-File");
-$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Enable automatic content negotiation");
-$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Title of the FAQ");
-$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "FAQ Version");
-$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Description of the Page");
+$LANG_CONF['main.language'] = array(0 => "select", 1 => "Language");
+$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Enable automatic language detection");
+$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Title of your FAQ");
+$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "phpMyFAQ Version");
+$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Description");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Name of the Publisher");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Email address of the Admin");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Contact information");
-$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Text for the send2friend page");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. %sByte)");
-$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Link the attachments below the entries?");
-$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "use Tracking?");
+$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Text for the send to friend page");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Maximum size for attachments in Bytes (max. %sByte)");
+$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Enable visibilty of attachments");
+$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Enable user tracking");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "use Adminlog?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Do you want the IP to be checked when checking the UINs in admin.php?");
+$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Check the IP in administration");
 $LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
 $LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Number of news articles");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
-$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
-$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Base URL for link verification (e.g.: http://www.example.org/faq)");
+$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Enable URL rewrite support? (default: disabled)");
+$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Enable LDAP support? (default: disabled)");
+$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "URL for link verification (e.g.: http://www.example.org/faq)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Interval between AJAX link verification (in seconds)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Disable visibility of new questions?");
 $LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "Permission level");
@@ -1052,7 +1052,7 @@ $LANG_CONF["main.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Default a
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['ad_menu_upgrade'] = 'Upgrade';
 $PMF_LANG['ad_you_shouldnt_update'] = 'You have the latest version of phpMyFAQ. You do not need to upgrade.';
-$LANG_CONF['main.useSslForLogins'] = array(0 => 'checkbox', 1 => "Only allow logins over secure connection? (default: disabled)");
+$LANG_CONF['main.useSslForLogins'] = array(0 => 'checkbox', 1 => "Only allow logins over SSL connection? (default: disabled)");
 $PMF_LANG['msgSecureSwitch'] = "Switch to secure mode to login!";
 
 // added 2.6.0-alpha - 2009-10-03 by Anatoliy Belsky
@@ -1069,7 +1069,7 @@ $PMF_LANG['msgAttachmentInvalid'] = 'The attachment is invalid, please inform ad
 
 // added 2.6.0-alpha - 2009-11-02 by max
 $LANG_CONF['search.numberSearchTerms']   = array(0 => 'input', 1 => 'Number of listed search terms');
-$LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Sorting of the top faq's");
+$LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Sorting of the top FAQ's");
 $PMF_LANG['list_all_users']            = 'List all users';
 
 $PMF_LANG['main.orderingPopularFaqs.visits'] = "list most visited entries";
@@ -1097,7 +1097,7 @@ $PMF_LANG['search.relevance.keywords-content-thema'] = 'Keywords - Answer - Ques
 $PMF_LANG['search.relevance.keywords-thema-content'] = 'Keywords - Question - Answer';
 
 // added v2.6.99 - 2010-11-30 by Gustavo Solt
-$LANG_CONF["main.enableGoogleTranslation"] = array(0 => "checkbox", 1 => "Activate google translations? (default: deactivated)");
+$LANG_CONF["main.enableGoogleTranslation"] = array(0 => "checkbox", 1 => "Activate Google translations (default: deactivated)");
 $LANG_CONF['main.googleTranslationKey'] = array(0 => 'input', 1 => 'Google API key');
 $PMF_LANG["msgNoGoogleApiKeyFound"] = 'The Google API key is empty, please provide one in the configuration section';
 
@@ -1149,4 +1149,4 @@ $PMF_LANG['msgRegistrationNote'] = 'After successful registration you will recei
 $PMF_LANG['ad_entry_changelog_history'] = "Changelog history";
 
 // added v2.7.0-beta2 - 2011-06-22 by Thorsten
-$LANG_CONF['main.ssoSupport'] = array(0 => 'checkbox', 1 => 'SSO Support (default: deactivated)');
+$LANG_CONF['main.ssoSupport'] = array(0 => 'checkbox', 1 => 'Single Sign On Support (default: deactivated)');

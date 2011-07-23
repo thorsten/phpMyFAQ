@@ -554,7 +554,7 @@ $PMF_LANG["ad_entry_fontcolor"] = "Schriftfarbe: ";
 $PMF_LANG["ad_entry_fontsize"] = "Schriftgröße: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten
-$LANG_CONF['main.language'] = array(0 => "select", 1 => "Sprachdatei");
+$LANG_CONF['main.language'] = array(0 => "select", 1 => "Sprache");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Automatische Spracherkennung");
 $LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Titel der FAQ");
 $LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "phpMyFAQ Version");
@@ -1006,6 +1006,13 @@ $PMF_LANG["rightsLanguage"]['edittranslation'] = "Übersetzung bearbeiten";
 $PMF_LANG["rightsLanguage"]['deltranslation'] = "Übersetzung löschen";
 $PMF_LANG["rightsLanguage"]['approverec'] = "Eintrag freigeben";
 
+// added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
+$LANG_CONF["main.enableAttachmentEncryption"] = array(0 => "checkbox", 1 => "Verschlüsselung der Anhänge");
+$LANG_CONF["main.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Standardschlüssel für Verschlüsselung<br/><small style="color: red">Warnung: Nach dem Aktivieren der Verschlüsselung nicht mehr ändern!</small>');
+//$LANG_CONF["main.attachmentsStorageType"] = array(0 => "select", 1 => "Attachment storage type");
+//$PMF_LANG['att_storage_type'][0] = 'Filesystem';
+//$PMF_LANG['att_storage_type'][1] = 'Database';
+
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['ad_menu_upgrade'] = 'Aktualisieren';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Sie nutzen die aktuelle Version von phpMyFAQ. Eine Aktualisierung ist nicht notwendig.';
@@ -1088,4 +1095,4 @@ $PMF_LANG['msgRegistrationNote'] = 'Nach der erfolgreichen Anmeldung erhälst du
 $PMF_LANG['ad_entry_changelog_history'] = "Änderungshistorie";
 
 // added v2.7.0-beta2 - 2011-06-22 by Thorsten
-$LANG_CONF['main.ssoSupport'] = array(0 => 'checkbox', 1 => 'SSO Support (Standard: deaktiviert)');
+$LANG_CONF['main.ssoSupport'] = array(0 => 'checkbox', 1 => 'Single Sign On Support (Standard: deaktiviert)');
