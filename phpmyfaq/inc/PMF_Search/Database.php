@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Search
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
+ * @copyright 2010-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Search
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
+ * @copyright 2010-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
@@ -205,7 +205,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     }
     
     /**
-     * Sets the part of the SQL query with the columns for the resultset
+     * Sets the part of the SQL query with the columns for the result set
      * 
      * @param array $columns Array of columns
      * 
@@ -219,7 +219,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     }
     
     /**
-     * Returns the part of the SQL query with the columns for the resultset
+     * Returns the part of the SQL query with the columns for the result set
      * 
      * @return string
      */
@@ -293,7 +293,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     }
     
     /**
-     * Sets the part of the SQL query with the condisions
+     * Sets the part of the SQL query with the conditions
      * 
      * @param array $conditions Array of columns
      * 

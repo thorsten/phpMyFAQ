@@ -91,7 +91,28 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
                 $this->getConditions(),
                 $orderBy);
 
-            $this->resultSet = $this->dbHandle->query($query);                        
+            $this->resultSet = $this->dbHandle->query($query);
+
+            // Fallback for searches with less than three characters
+            if (false == $this->resultSet) {
+
+                $query = sprintf("
+                    SELECT
+                        %s
+                    FROM
+                        %s %s %s
+                    WHERE
+                        %s
+                        %s",
+                    $this->getResultColumns(),
+                    $this->getTable(),
+                    $this->getJoinedTable(),
+                    $this->getJoinedColumns(),
+                    $this->getMatchClause($searchTerm),
+                    $this->getConditions());
+            }
+
+            $this->resultSet = $this->dbHandle->query($query);
         }
         
         return $this->resultSet;
