@@ -1096,3 +1096,4 @@ $PMF_LANG['ad_entry_changelog_history'] = "Änderungshistorie";
 
 // added v2.7.0-beta2 - 2011-06-22 by Thorsten
 $LANG_CONF['main.ssoSupport'] = array(0 => 'checkbox', 1 => 'Single Sign On Support (Standard: deaktiviert)');
+$LANG_CONF['main.dateFormat'] = array(0 => 'checkbox', 1 => 'Datumsformat (Standard: Y-m-d H:i:s)');

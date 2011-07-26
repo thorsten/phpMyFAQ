@@ -60,6 +60,7 @@ $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.orderingPopula
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.optionalMailAddress', 'false')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.enableGoogleTranslation', 'false')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.googleTranslationKey', '')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.dateFormat', 'Y-m-d H:i:s')";
 
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.defaultActivation', 'false')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.defaultAllowComments', 'false')";
