@@ -23,7 +23,7 @@ Version 2.7.0-beta2 - 2011-06-22
 - added IPv6 support (David Soria Parra)
 - added support for Single Sign On authentication (Thorsten)
 - improved usability in frontend and administration backend (Thorsten)
-- enabling Gzip compression by default (Thorsten)
+- enabling Gzip compression by default (Thorsten, Lorenzo Milesi)
 - updated bundled jQuery to version 1.5.1 (Thorsten)
 - updated bundled Modernizr to version 1.7 (Thorsten)
 - updated bundled TinyMCE to version 3.4.2 (Thorsten)
