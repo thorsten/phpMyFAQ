@@ -819,6 +819,7 @@ if ($step == 4) {
     //
     if (version_compare($version, '2.7.0-beta2', '<')) {
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.ssoSupport', 'false')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.ssoLogoutRedirect', '')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.dateFormat', 'Y-m-d H:i:s')";
     }
 
