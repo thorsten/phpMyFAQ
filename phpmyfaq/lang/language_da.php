@@ -1,24 +1,30 @@
 <?php
 /**
-* $Id: language_da.php,v 1.27 2007-07-06 19:06:10 thorstenr Exp $
-*
-* Danish language file
-*
-* @author       Max Andersen <max@militant.dk>
-* @author       Poul Melgaard <pcm@surfray.com>
-* @since        2004-06-24
-* @copyright    (c) 2004-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ *
+ * Danish language file
+ *
+ * PHP Version 5.2
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Translation
+ * @author    Max Andersen <max@militant.dk>
+ * @author    Poul Melgaard <pcm@surfray.com>
+ * @copyright 2004-2011 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-06-24
+ */
+
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'da';
 $PMF_LANG['language'] = 'Danish';
@@ -470,7 +476,7 @@ $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "Aktiver underst&oslash;ttelse af mod_rewrite? (standard: sl&aring;et fra)");
 $LANG_CONF['main.ldapSupport'] = array(0 => "checkbox", 1 => "Aktiver underst&oslash;ttelse af LDAP? (standard: sl&aring;et fra)");
 $PMF_LANG['ad_categ_new_main_cat'] = 'as new main category';
-$PMF_LANG['ad_categ_paste_error'] = 'Moving this category isn't possible.';
+$PMF_LANG['ad_categ_paste_error'] = 'Moving this category isn\'t possible.';
 $PMF_LANG['ad_categ_move'] = 'Flyt kategori';
 $PMF_LANG['ad_categ_lang'] = 'Sprog';
 $PMF_LANG['ad_categ_desc'] = 'Beskrivelse';
