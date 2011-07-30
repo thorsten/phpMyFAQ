@@ -21,7 +21,7 @@
  * @author    Meikel Katzengreis <meikel@katzengreis.com>
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2002-2010 phpMyFAQ Team
+ * @copyright 2002-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-16
@@ -352,7 +352,7 @@ if (isset($auth) && in_array(true, $permission)) {
                     $result->stable);
                 // Installed phpMyFAQ version is outdated
                 if (-1 == version_compare($faqconfig->get('main.currentVersion'), $result->stable)) {
-                    print '<br /><a href="?action=upgrade">' . $PMF_LANG['ad_you_should_update'] - '</a>';
+                    print '<br />' . $PMF_LANG['ad_you_should_update'];
                 }
                 print '</p>';
             }
