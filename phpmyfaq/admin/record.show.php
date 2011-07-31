@@ -67,7 +67,10 @@ if ($permission['editbt'] || $permission['delbt']) {
     }
     if (!is_null($searchcat)) {
         $internalSearch .= "&amp;searchcat=" . $searchcat;
-        $cond[SQLPREFIX.'faqcategoryrelations.category_id'] = array_merge(array($searchcat), $category->getChildNodes($searchcat));
+        $cond[SQLPREFIX.'faqcategoryrelations.category_id'] = array_merge(
+            array($searchcat),
+            $category->getChildNodes($searchcat)
+        );
     }
 
     $currentcategory = PMF_Filter::filterInput(INPUT_GET, 'category', FILTER_VALIDATE_INT);
@@ -246,7 +249,11 @@ if ($permission['editbt'] || $permission['delbt']) {
                     $catInfo        .= ' (';
                     $isBracketOpened = true;
                 }
-                $catInfo .= sprintf('%s%d %s', ($needComma ? ', ' : ''), $numCommentsByCat[$cid], $PMF_LANG['ad_start_comments']);
+                $catInfo .= sprintf('%s%d %s',
+                    ($needComma ? ', ' : ''),
+                    $numCommentsByCat[$cid],
+                    $PMF_LANG['ad_start_comments']
+                );
             }
             $catInfo .= $isBracketOpened ? ')' : '';
             
@@ -257,21 +264,64 @@ if ($permission['editbt'] || $permission['delbt']) {
                     print "        </tbody>\n        </table>\n        </div>";
                 }
 ?>
-        <div class="categorylisting"><a href="javascript:void(0);" onclick="showhideCategory('category_<?php print $cid; ?>');"><img src="../images/more.gif" width="11" height="11" alt="" /> <?php print $category->getPath($cid); ?></a><?php print $catInfo;?></div>
-        <div id="category_<?php print $cid; ?>" class="categorybox" style="display: <?php print ($currentcategory == $cid) ? 'block' : 'none'; ?>;">
+        <div class="categorylisting">
+            <a href="javascript:void(0);"
+               onclick="showhideCategory('category_<?php print $cid; ?>');">
+                <img src="../images/more.gif" width="11" height="11" alt="" />
+                <?php print $category->getPath($cid); ?>
+            </a>
+            <?php print $catInfo;?>
+        </div>
+        <div id="category_<?php print $cid; ?>" class="categorybox"
+             style="display: <?php print ($currentcategory == $cid) ? 'block' : 'none'; ?>;">
         <table class="list" style="width: 100%">
         <thead>
         <tr>
-            <th><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=asc">&darr;</a></th>
-            <th>&nbsp;</th>
-            <th>#</th>
-            <th style="text-align: left"><input type="checkbox" id="sticky_category_block_<?php print $cid; ?>" onclick="saveStatusForCategory(<?php print $cid; ?>, 'sticky')" />&nbsp;<?php print $PMF_LANG['ad_record_sticky'] ?></th>
-            <th><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=asc">&darr;</a></th>
-            <th><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=asc">&darr;</a></th>
-            <th colspan="3">&nbsp;</th>
+            <th>
+                <a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=desc">
+                    &uarr;
+                </a>
+                &nbsp;
+                <a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=asc">
+                    &darr;
+                </a>
+            </th>
+            <th>
+                &nbsp;
+            </th>
+            <th>
+                #
+            </th>
+            <th style="text-align: left">
+                <input type="checkbox" id="sticky_category_block_<?php print $cid; ?>"
+                       onclick="saveStatusForCategory(<?php print $cid; ?>, 'sticky')" />
+                &nbsp;<?php print $PMF_LANG['ad_record_sticky'] ?>
+            </th>
+            <th>
+                <a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=desc">
+                    &uarr;
+                </a>
+                &nbsp;
+                <a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=asc">
+                    &darr;
+                </a>
+            </th>
+            <th>
+                <a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=desc">
+                    &uarr;
+                </a>
+                &nbsp;
+                <a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=asc">
+                    &darr;
+                </a>
+            </th>
+            <th colspan="3">
+                &nbsp;
+            </th>
             <th style="text-align: left">
                 <?php if ($permission['approverec']) { ?>
-                <input type="checkbox" id="active_category_block_<?php print $cid; ?>" onclick="saveStatusForCategory(<?php print $cid; ?>, 'active')" />&nbsp;<?php print $PMF_LANG['ad_record_active'] ?>
+                <input type="checkbox" id="active_category_block_<?php print $cid; ?>" onclick="saveStatusForCategory(<?php print $cid; ?>, 'active')" />
+                &nbsp;<?php print $PMF_LANG['ad_record_active'] ?>
                 <?php } ?>
             </th>
         </tr>
@@ -281,31 +331,59 @@ if ($permission['editbt'] || $permission['delbt']) {
             }
 ?>
         <tr class="record_<?php print $record['id']; ?>_<?php print $record['lang']; ?>">
-            <td style="width: 24px; text-align: right;"><?php print $record['id']; ?></td>
-            <td style="width: 16px;"><?php print $record['lang']; ?></td>
-            <td style="width: 24px;"><a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><?php print $record['solution_id']; ?></a></td>
-            <td style="width: 56px;"><input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'sticky');" id="sticky_record_<?php print $cid . '_' . $record['id'] ?>" <?php $record['sticky'] ? print 'checked="checked"' : print '    ' ?> /></td>
-            <td><a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><?php print $record['title']; ?></a>
+            <td style="width: 24px; text-align: right;">
+                <?php print $record['id']; ?>
+            </td>
+            <td style="width: 16px;">
+                <?php print $record['lang']; ?>
+            </td>
+            <td style="width: 24px;">
+                <a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>"
+                   title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'">
+                    <?php print $record['solution_id']; ?>
+                </a>
+            </td>
+            <td style="width: 56px;">
+                <input type="checkbox" lang="<?php print $record['lang'] ?>"
+                       onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'sticky');"
+                       id="sticky_record_<?php print $cid . '_' . $record['id'] ?>"
+                    <?php $record['sticky'] ? print 'checked="checked"' : print '    ' ?> />
+            </td>
+            <td>
+                <a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>"
+                   title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'">
+                    <?php print $record['title']; ?>
+                </a>
 <?php
         if (isset($numCommentsByFaq[$record['id']])) {
-            print " (".$numCommentsByFaq[$record['id']]." ".$PMF_LANG["ad_start_comments"].")";
+            printf('<br/>(<a href="?action=comments#record_id_%d">%d %s</a>)',
+                $record['id'],
+                $numCommentsByFaq[$record['id']],
+                $PMF_LANG['ad_start_comments']
+                );
         }
 ?></td>
-            <td style="width: 48px;"><?php print PMF_String::substr($record['date'], 0, 10); ?></td>
-            <td style="width: 96px;"><?php print $linkverifier->getEntryStateHTML($record['id'], $record['lang']); ?></td>
+            <td style="width: 48px;">
+                <?php print PMF_String::substr($record['date'], 0, 10); ?>
+            </td>
+            <td style="width: 96px;">
+                <?php print $linkverifier->getEntryStateHTML($record['id'], $record['lang']); ?>
+            </td>
             <td style="width: 16px;">
-                <a href="javascript:void()" onclick="javascript:deleteRecord(<?php print $record['id']; ?>, '<?php print $record['lang']; ?>'); return false;" title="<?php print $PMF_LANG["ad_user_delete"]; ?>">
+                <a href="javascript:void(0);" onclick="javascript:deleteRecord(<?php print $record['id']; ?>, '<?php print $record['lang']; ?>'); return false;"
+                   title="<?php print $PMF_LANG["ad_user_delete"]; ?>">
                     <img src="images/delete.png" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" />
                 </a>
             </td>
             <td style="width: 16px;">
                 <a href="?action=copyentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>">
-                <img src="images/copy.png" alt="<?php print $PMF_LANG['ad_categ_copy']; ?>" title="<?php print $PMF_LANG['ad_categ_copy']; ?>" />
+                    <img src="images/copy.png" alt="<?php print $PMF_LANG['ad_categ_copy']; ?>" title="<?php print $PMF_LANG['ad_categ_copy']; ?>" />
                 </a>
             </td>
             <td>
                 <?php if ($permission['approverec'] && isset($visits[$record['id']])) { ?>
-                <input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'active');" id="active_record_<?php print $cid . '_' . $record['id'] ?>" <?php 'yes' == $record['active'] ? print 'checked="checked"' : print '    ' ?> />
+                    <input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'active');"
+                           id="active_record_<?php print $cid . '_' . $record['id'] ?>" <?php 'yes' == $record['active'] ? print 'checked="checked"' : print '    ' ?> />
                 <?php } ?>
             </td>
         </tr>
