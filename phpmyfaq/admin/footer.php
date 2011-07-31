@@ -124,6 +124,9 @@ function ajaxfilemanager(field_name, url, type, win)
     });
 }
 
+/**
+ * 
+ */
 function phpMyFAQSave()
 {
     $('#saving_data_indicator').html('<img src="images/indicator.gif" /> Saving ...');
@@ -138,7 +141,7 @@ function phpMyFAQSave()
     var data = {action: "ajax", ajax: 'recordSave'};
     <?php endif; ?>
     var id = $('#answer')[0].parentNode.parentNode.id;
-    $.each($('#'+id).serializeArray(), function(i, field) {
+    $.each($('#' + id).serializeArray(), function(i, field) {
         data[field.name] = field.value;
     });
     $.post("index.php", data, null);
