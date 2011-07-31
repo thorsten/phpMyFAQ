@@ -364,8 +364,8 @@ $PMF_LANG["ad_rs_rating_1"] = "Safle";
 $PMF_LANG["ad_rs_rating_2"] = "defnyddwyr yn dangos:";
 $PMF_LANG["ad_rs_red"] = "Coch";
 $PMF_LANG["ad_rs_green"] = "Gwyrdd";
-$PMF_LANG["ad_rs_altt"] = "gyda chyfartaledd is na 2";
-$PMF_LANG["ad_rs_ahtf"] = "gyda chyfartaledd uwch na 4";
+$PMF_LANG["ad_rs_altt"] = "gyda chyfartaledd is na 20%";
+$PMF_LANG["ad_rs_ahtf"] = "gyda chyfartaledd uwch na 80%";
 $PMF_LANG["ad_rs_no"] = "Does dim safle ar gael";
 
 // Auth

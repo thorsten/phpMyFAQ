@@ -365,8 +365,8 @@ $PMF_LANG["ad_rs_rating_1"] = "Ocenitev za";
 $PMF_LANG["ad_rs_rating_2"] = "prikaz uporabnikov:";
 $PMF_LANG["ad_rs_red"] = "Rde&egrave;e";
 $PMF_LANG["ad_rs_green"] = "Zeleno";
-$PMF_LANG["ad_rs_altt"] = "z powpre&egrave;jem manj kot 2";
-$PMF_LANG["ad_rs_ahtf"] = "z povpre&egrave;jem ve&egrave; kot 4";
+$PMF_LANG["ad_rs_altt"] = "z powpre&egrave;jem manj kot 20%";
+$PMF_LANG["ad_rs_ahtf"] = "z povpre&egrave;jem ve&egrave; kot 80%";
 $PMF_LANG["ad_rs_no"] = "Ni ocenitev";
 
 // Auth

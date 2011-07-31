@@ -372,8 +372,8 @@ $PMF_LANG["ad_rs_rating_1"] = "The ranking of";
 $PMF_LANG["ad_rs_rating_2"] = "users shows:";
 $PMF_LANG["ad_rs_red"] = "Red";
 $PMF_LANG["ad_rs_green"] = "Green";
-$PMF_LANG["ad_rs_altt"] = "with an average lower than 2";
-$PMF_LANG["ad_rs_ahtf"] = "with an average higher than 4";
+$PMF_LANG["ad_rs_altt"] = "with an average lower than 20%";
+$PMF_LANG["ad_rs_ahtf"] = "with an average higher than 80%";
 $PMF_LANG["ad_rs_no"] = "No ranking available";
 
 // Auth

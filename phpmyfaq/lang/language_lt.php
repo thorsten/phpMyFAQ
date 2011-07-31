@@ -365,8 +365,8 @@ $PMF_LANG["ad_rs_rating_1"] = "Įverčiai iš";
 $PMF_LANG["ad_rs_rating_2"] = "naudotojų rodo:";
 $PMF_LANG["ad_rs_red"] = "Raudona";
 $PMF_LANG["ad_rs_green"] = "Žalia";
-$PMF_LANG["ad_rs_altt"] = "vidurkis mažesnis už 2";
-$PMF_LANG["ad_rs_ahtf"] = "vidurkis didesnis už 4";
+$PMF_LANG["ad_rs_altt"] = "vidurkis mažesnis už 20%";
+$PMF_LANG["ad_rs_ahtf"] = "vidurkis didesnis už 80%";
 $PMF_LANG["ad_rs_no"] = "Nėra įverčių";
 
 // Auth

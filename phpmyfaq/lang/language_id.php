@@ -356,8 +356,8 @@ $PMF_LANG["ad_rs_rating_1"] = "Penilaian";
 $PMF_LANG["ad_rs_rating_2"] = "pengguna menampilkan:";
 $PMF_LANG["ad_rs_red"] = "Merah";
 $PMF_LANG["ad_rs_green"] = "Hijau";
-$PMF_LANG["ad_rs_altt"] = "dengan rata-rata lebih rendah dari 2";
-$PMF_LANG["ad_rs_ahtf"] = "dengan rata-rata lebih tinggi dari 4";
+$PMF_LANG["ad_rs_altt"] = "dengan rata-rata lebih rendah dari 20%";
+$PMF_LANG["ad_rs_ahtf"] = "dengan rata-rata lebih tinggi dari 80%";
 $PMF_LANG["ad_rs_no"] = "Penilaian tidak tersedia";
 
 // Auth

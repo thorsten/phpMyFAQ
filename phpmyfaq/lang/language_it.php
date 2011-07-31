@@ -369,8 +369,8 @@ $PMF_LANG["ad_rs_rating_1"] = "La classifica di";
 $PMF_LANG["ad_rs_rating_2"] = "Mostra utenti:";
 $PMF_LANG["ad_rs_red"] = "Rosso";
 $PMF_LANG["ad_rs_green"] = "Verde";
-$PMF_LANG["ad_rs_altt"] = "con una media piu bassa di 2";
-$PMF_LANG["ad_rs_ahtf"] = "con una media piu alta di 4";
+$PMF_LANG["ad_rs_altt"] = "con una media piu bassa di 20%";
+$PMF_LANG["ad_rs_ahtf"] = "con una media piu alta di 80%";
 $PMF_LANG["ad_rs_no"] = "Nessuna statistica disponibile";
 
 // Auth

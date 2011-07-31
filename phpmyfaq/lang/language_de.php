@@ -367,8 +367,8 @@ $PMF_LANG["ad_rs_rating_1"] = "Die Bewertung von";
 $PMF_LANG["ad_rs_rating_2"] = "Benutzern sagt:";
 $PMF_LANG["ad_rs_red"] = "Rot";
 $PMF_LANG["ad_rs_green"] = "Grün";
-$PMF_LANG["ad_rs_altt"] = "mit einem Durchschnitt kleiner 2";
-$PMF_LANG["ad_rs_ahtf"] = "mit einem Durchschnitt größer 4";
+$PMF_LANG["ad_rs_altt"] = "mit einem Durchschnitt kleiner 20%";
+$PMF_LANG["ad_rs_ahtf"] = "mit einem Durchschnitt größer 80%";
 $PMF_LANG["ad_rs_no"] = "Keine Bewertungen verfügbar.";
 
 // Auth

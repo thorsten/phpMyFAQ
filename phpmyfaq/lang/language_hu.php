@@ -365,8 +365,8 @@ $PMF_LANG["ad_rs_rating_1"] = "Az osztályzata: ";
 $PMF_LANG["ad_rs_rating_2"] = "users shows:";
 $PMF_LANG["ad_rs_red"] = "Vörös";
 $PMF_LANG["ad_rs_green"] = "Zöld";
-$PMF_LANG["ad_rs_altt"] = "az átlaga kisebb mint 2";
-$PMF_LANG["ad_rs_ahtf"] = "az átlaga nagyobb mint 4";
+$PMF_LANG["ad_rs_altt"] = "az átlaga kisebb mint 20%";
+$PMF_LANG["ad_rs_ahtf"] = "az átlaga nagyobb mint 80%";
 $PMF_LANG["ad_rs_no"] = "Nincs osztályzat";
 
 // Auth

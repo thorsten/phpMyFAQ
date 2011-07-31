@@ -363,8 +363,8 @@ $PMF_LANG["ad_rs_rating_1"] = "Poradie";
 $PMF_LANG["ad_rs_rating_2"] = "users shows:";
 $PMF_LANG["ad_rs_red"] = "Červená";
 $PMF_LANG["ad_rs_green"] = "Zelená";
-$PMF_LANG["ad_rs_altt"] = "s priemerom nižším ako 2";
-$PMF_LANG["ad_rs_ahtf"] = "s priemerom vyšším ako 4";
+$PMF_LANG["ad_rs_altt"] = "s priemerom nižším ako 20%";
+$PMF_LANG["ad_rs_ahtf"] = "s priemerom vyšším ako 80%";
 $PMF_LANG["ad_rs_no"] = "Žiadne poradie";
 
 // Auth

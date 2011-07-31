@@ -365,8 +365,8 @@ $PMF_LANG["ad_rs_rating_1"] = "Rejting";
 $PMF_LANG["ad_rs_rating_2"] = "users shows:";
 $PMF_LANG["ad_rs_red"] = "Crveno";
 $PMF_LANG["ad_rs_green"] = "Zeleno";
-$PMF_LANG["ad_rs_altt"] = "sa prose&#269;nom ocenom manjom od 2";
-$PMF_LANG["ad_rs_ahtf"] = "sa prose&#269;nom ocenom ve&#263;om od 4";
+$PMF_LANG["ad_rs_altt"] = "sa prose&#269;nom ocenom manjom od 20%";
+$PMF_LANG["ad_rs_ahtf"] = "sa prose&#269;nom ocenom ve&#263;om od 80%";
 $PMF_LANG["ad_rs_no"] = "Nema rejtinga";
 
 // Auth

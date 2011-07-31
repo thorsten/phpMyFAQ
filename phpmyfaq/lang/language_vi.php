@@ -368,8 +368,8 @@ $PMF_LANG["ad_rs_rating_1"] = "Xếp hạng của ";
 $PMF_LANG["ad_rs_rating_2"] = "Thành viên nói:";
 $PMF_LANG["ad_rs_red"] = "Đỏ";
 $PMF_LANG["ad_rs_green"] = "Xanh";
-$PMF_LANG["ad_rs_altt"] = "với trung bình nhỏ hơn 2";
-$PMF_LANG["ad_rs_ahtf"] = "với trung bình lớn hơn 4";
+$PMF_LANG["ad_rs_altt"] = "với trung bình nhỏ hơn 20%";
+$PMF_LANG["ad_rs_ahtf"] = "với trung bình lớn hơn 80%";
 $PMF_LANG["ad_rs_no"] = "Hiện tại chưa có xếp hạng";
 
 // Auth

@@ -372,8 +372,8 @@ $PMF_LANG["ad_rs_rating_1"] = "Klasifikace ";
 $PMF_LANG["ad_rs_rating_2"] = "uživatelů ukazuje:";
 $PMF_LANG["ad_rs_red"] = "Červenou";
 $PMF_LANG["ad_rs_green"] = "Zelenou";
-$PMF_LANG["ad_rs_altt"] = "s průměrem nižším než 2";
-$PMF_LANG["ad_rs_ahtf"] = "s průměrem vyšším než 4";
+$PMF_LANG["ad_rs_altt"] = "s průměrem nižším než 20%";
+$PMF_LANG["ad_rs_ahtf"] = "s průměrem vyšším než 80%";
 $PMF_LANG["ad_rs_no"] = "Klasifikace není k dispozici";
 
 // Auth

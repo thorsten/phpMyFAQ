@@ -368,8 +368,8 @@ $PMF_LANG["ad_rs_rating_1"] = "The ranking of";
 $PMF_LANG["ad_rs_rating_2"] = "users shows:";
 $PMF_LANG["ad_rs_red"] = "Червоний";
 $PMF_LANG["ad_rs_green"] = "Зелений";
-$PMF_LANG["ad_rs_altt"] = "- середній бал нижче 2";
-$PMF_LANG["ad_rs_ahtf"] = "- середній бал більше 4";
+$PMF_LANG["ad_rs_altt"] = "- середній бал нижче 20%";
+$PMF_LANG["ad_rs_ahtf"] = "- середній бал більше 40%";
 $PMF_LANG["ad_rs_no"] = "No ranking available";
 
 // Auth

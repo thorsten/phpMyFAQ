@@ -367,8 +367,8 @@ $PMF_LANG["ad_rs_rating_1"] = "V&ccedil;rt&ccedil;jums ierakstam";
 $PMF_LANG["ad_rs_rating_2"] = "";
 $PMF_LANG["ad_rs_red"] = "Sarkans";
 $PMF_LANG["ad_rs_green"] = "Za&iuml;&eth;";
-$PMF_LANG["ad_rs_altt"] = "- vid&ccedil;jais v&ccedil;rt&ccedil;jums maz&acirc;ks par 2";
-$PMF_LANG["ad_rs_ahtf"] = "- vid&ccedil;jais v&ccedil;rt&ccedil;jums liel&acirc;ks par 4";
+$PMF_LANG["ad_rs_altt"] = "- vid&ccedil;jais v&ccedil;rt&ccedil;jums maz&acirc;ks par 20%";
+$PMF_LANG["ad_rs_ahtf"] = "- vid&ccedil;jais v&ccedil;rt&ccedil;jums liel&acirc;ks par 80%";
 $PMF_LANG["ad_rs_no"] = "V&ccedil;rt&ccedil;juma nav";
 
 // Auth
