@@ -509,19 +509,6 @@ if (isset($auth) && in_array(true, $permission)) {
                     <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_auth_ok"]; ?>" />
                     <input class="submit" type="reset" value="<?php print $PMF_LANG["ad_auth_reset"]; ?>" />
                 </p>
-                    
-                <p>
-                    <img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_LANG["lostPassword"]; ?>" border="0" />
-                    <a href="password.php" title="<?php print $PMF_LANG["lostPassword"]; ?>">
-                        <?php print $PMF_LANG["lostPassword"]; ?>
-                    </a>
-                </p>
-                <p>
-                    <img src="images/arrow.gif" width="11" height="11" alt="<?php print $faqconfig->get('main.titleFAQ'); ?>" border="0" />
-                    <a href="../index.php" title="<?php print $faqconfig->get('main.titleFAQ'); ?>">
-                        <?php print $faqconfig->get('main.titleFAQ'); ?>
-                    </a>
-                </p>
 <?php
     } else {
         printf('<p><a href="https://%s%s">%s</a></p>',

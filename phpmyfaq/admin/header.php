@@ -215,8 +215,8 @@ switch ($action) {
     </h1>
 </header>
 
-<?php if (isset($auth)) { ?>
 <nav>
+    <?php if (isset($auth)): ?>
     <ul>
         <li<?php print ($dashboardPage ? ' class="active"' : ''); ?>><a href="index.php"><?php print $PMF_LANG['admin_mainmenu_home']; ?></a></li>
         <li<?php print ($userPage ? ' class="active"' : ''); ?>><a href="index.php?action=user"><?php print $PMF_LANG['admin_mainmenu_users']; ?></a></li>
@@ -230,8 +230,21 @@ switch ($action) {
     <form action="index.php<?php print (isset($action) ? '?action=' . $action : ''); ?>" method="post">
     <?php print PMF_Language::selectLanguages($LANGCODE, true); ?>
     </form>
+    <?php else: ?>
+    <ul>
+        <li>
+            <a href="../index.php">
+                <?php print $PMF_LANG['msgHome']; ?>
+            </a>
+        </li>
+        <li>
+            <a href="password.php" title="<?php print $PMF_LANG["lostPassword"]; ?>">
+                <?php print $PMF_LANG["lostPassword"]; ?>
+            </a>
+        </li>
+    </ul>
+    <?php endif; ?>
 </nav>
-<?php } ?>
 
 <div id="content">
 
