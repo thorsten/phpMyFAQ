@@ -79,7 +79,7 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
                 FROM 
                     %s %s %s
                 WHERE
-                    MATCH (%s) AGAINST ('*%s*' IN BOOLEAN MODE)
+                    MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE)
                     %s
                     %s",
                 $columns,
@@ -89,7 +89,8 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
                 $this->getMatchingColumns(),
                 $this->dbHandle->escape_string($searchTerm),
                 $this->getConditions(),
-                $orderBy);
+                $orderBy
+            );
 
             $this->resultSet = $this->dbHandle->query($query);
 
