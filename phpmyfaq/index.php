@@ -441,10 +441,9 @@ if ('main' == $action || 'show' == $action) {
         $tpl->processBlock('index', 'globalSuggestBox', array(
             'ajaxlanguage'                  => $LANGCODE,
             'msgDescriptionInstantResponse' => $PMF_LANG['msgDescriptionInstantResponse'],
-            'msgSearch'                     => sprintf('<a class="help" href="index.php?%daction=search">%s</a>',
-                                                   $sids,
+            'msgSearch'                     => sprintf('<a class="help" href="index.php?action=search">%s</a>',
                                                    $PMF_LANG["msgAdvancedSearch"]
-                                                   )
+                                               )
            )
         );
     } else {
