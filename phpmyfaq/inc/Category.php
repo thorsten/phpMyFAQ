@@ -798,10 +798,11 @@ class PMF_Category
         if ($renderAsMicroData) {
 
             foreach ($temp as $k => $category) {
-                $url            = sprintf('%saction=show&amp;cat=%d', $sids, $catid[$k]);
-                $oLink          = new PMF_Link(PMF_Link::getSystemRelativeUri().'?' . $url);
-                $oLink->text    = sprintf('<span itemprop="title">%s</span>', $category);
-                $oLink->tooltip = $desc[$k];
+                $url              = sprintf('%saction=show&amp;cat=%d', $sids, $catid[$k]);
+                $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?' . $url);
+                $oLink->text      = sprintf('<span itemprop="title">%s</span>', $category);
+                $oLink->itemTitle = $category;
+                $oLink->tooltip   = $desc[$k];
                 $oLink->setItemProperty('url');
                 if (0 == $k) {
                     $oLink->setRelation('index');
