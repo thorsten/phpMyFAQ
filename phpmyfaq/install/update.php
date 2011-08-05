@@ -821,6 +821,7 @@ if ($step == 4) {
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.ssoSupport', 'false')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.ssoLogoutRedirect', '')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.dateFormat', 'Y-m-d H:i:s')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.enableLoginOnly', 'false')";
     }
 
 

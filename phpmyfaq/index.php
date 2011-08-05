@@ -348,27 +348,27 @@ if (!isset($allowedVariables[$action])) {
 // Select the template for the requested page
 //
 if (isset($auth)) {
-    $login_tpl = 'loggedin.tpl';
+    $loginTemplate = 'loggedin.tpl';
 } else {
     if (isset($_SERVER['HTTPS']) || !$faqconfig->get('main.useSslForLogins')) {
-        $login_tpl = 'loginbox.tpl';
+        $loginTemplate = 'loginbox.tpl';
     } else {
-        $login_tpl = 'secureswitch.tpl';
+        $loginTemplate = 'secureswitch.tpl';
     }
 }
 
 if ($action != 'main') {
-    $inc_tpl         = $action . '.tpl';
-    $inc_php         = $action . '.php';
+    $includeTemplate = $action . '.tpl';
+    $includePhp      = $action . '.php';
     $writeLangAdress = '?sid=' . $sid;
 } else {
     if (isset($solution_id) && is_numeric($solution_id)) {
         // show the record with the solution ID
-        $inc_tpl = 'artikel.tpl';
-        $inc_php = 'artikel.php';
+        $includeTemplate = 'artikel.tpl';
+        $includePhp      = 'artikel.php';
     } else {
-        $inc_tpl = 'main.tpl';
-        $inc_php = 'main.php';
+        $includeTemplate = 'main.tpl';
+        $includePhp      = 'main.php';
     }
     $writeLangAdress = '?sid=' . $sid;
 }
@@ -380,18 +380,36 @@ if ($action != 'main') {
 //
 $hasTags = $oTag->existTagRelations();
 if ($hasTags && (($action == 'artikel') || ($action == 'show'))) {
-    $right_tpl = $action == 'artikel' ? 'catandtag.tpl' : 'tagcloud.tpl';
+    $rightSidebarTemplate = $action == 'artikel' ? 'catandtag.tpl' : 'tagcloud.tpl';
 } else {
-    $right_tpl = 'startpage.tpl';
+    $rightSidebarTemplate = 'startpage.tpl';
+}
+
+
+//
+// Check if FAQ should be secured
+//
+if ($faqconfig->get('main.enableLoginOnly')) {
+    if ($auth) {
+        $indexSet = 'index.tpl';
+    } else {
+        if ('register' == $action || 'thankyou' == $action) {
+            $indexSet = 'indexNewUser.tpl';
+        } else {
+            $indexSet = 'indexLogin.tpl';
+        }
+    }
+} else {
+    $indexSet = 'index.tpl';
 }
 
 //
 // Load template files and set template variables
 //
-$tpl = new PMF_Template(array('index'        => 'index.tpl',
-                              'loginBox'     => $login_tpl,
-                              'rightBox'     => $right_tpl,
-                              'writeContent' => $inc_tpl),
+$tpl = new PMF_Template(array('index'        => $indexSet,
+                              'loginBox'     => $loginTemplate,
+                              'rightBox'     => $rightSidebarTemplate,
+                              'writeContent' => $includeTemplate),
                               $faqconfig->get('main.templateSet'));
 
 $usersOnLine    = $faqsession->getUsersOnline();
@@ -434,7 +452,15 @@ $main_template_vars = array(
                              $plr->getMsg('plmsgRegisteredOnline',$usersOnLine[1]),
     'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
     'copyright'           => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' . 
-                             $faqconfig->get('main.currentVersion'));
+                             $faqconfig->get('main.currentVersion'),
+    'registerUser'        => '<a href="?action=register">' . $PMF_LANG['msgRegistration'] . '</a>',
+    'sendPassword'        => '<a href="./admin/password.php">' . $PMF_LANG['lostPassword'] . '</a>',
+    'loginMessage'        => $PMF_LANG['msgLoginUser'],
+    'writeLoginPath'      => '?action=login',
+    'login'               => $PMF_LANG['ad_auth_ok'],
+    'username'            => $PMF_LANG['ad_auth_user'],
+    'password'            => $PMF_LANG['ad_auth_passwd']
+);
 
 if ('main' == $action || 'show' == $action) {
     if ('main' == $action && PMF_Configuration::getInstance()->get('search.useAjaxSearchOnStartpage')) {
@@ -632,7 +658,7 @@ $tpl->includeTemplate('rightBox', 'index');
 //
 // Include requested PHP file
 //
-require_once $inc_php;
+require_once $includePhp;
 
 //
 // Send headers and print template

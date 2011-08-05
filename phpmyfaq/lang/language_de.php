@@ -1098,3 +1098,4 @@ $PMF_LANG['ad_entry_changelog_history'] = "Änderungshistorie";
 $LANG_CONF['main.ssoSupport'] = array(0 => 'checkbox', 1 => 'Single Sign On Support (Standard: deaktiviert)');
 $LANG_CONF['main.ssoLogoutRedirect'] = array(0 => 'input', 1 => 'Single Sign On Weiterleitungs-Service URL beim Logout');
 $LANG_CONF['main.dateFormat'] = array(0 => 'checkbox', 1 => 'Datumsformat (Standard: Y-m-d H:i:s)');
+$LANG_CONF['main.enableLoginOnly'] = array(0 => 'checkbox', 1 => 'Komplett geschützte FAQ (Standard: deaktiviert)');
