@@ -1619,7 +1619,7 @@ class PMF_Faq
             foreach ($result as $row) {
                 $output['url'][]   =  $row['url'];
                 $output['title'][] = PMF_Utils::makeShorterText($row['thema'], 8);
-                $output['date'][]  = PMF_Date::createIsoDate($row['datum']);
+                $output['date'][]  = PMF_Date::format(PMF_Date::createIsoDate($row['datum']));
             }
         } else {
             $output['error'] = $this->pmf_lang["err_noArticles"];
@@ -1996,10 +1996,10 @@ class PMF_Faq
         $oldId = 0;
         while (($row = $this->db->fetch_object($result)) && $i < $count ) {
             if ($oldId != $row->id) {
-                $data['datum'] = $row->datum;
-                $data['thema'] = $row->thema;
+                $data['datum']   = $row->datum;
+                $data['thema']   = $row->thema;
                 $data['content'] = $row->content;
-                $data['visits'] = $row->visits;
+                $data['visits']  = $row->visits;
 
                 $title = $row->thema;
                 $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
@@ -2781,7 +2781,7 @@ class PMF_Faq
             while ($row = $this->db->fetch_object($result)) {
                 $output .= '<tr class="openquestions">';
                 $output .= sprintf('<td valign="top" nowrap="nowrap">%s<br /><a href="mailto:%s">%s</a></td>',
-                    PMF_Date::createIsoDate($row->created),
+                    PMF_Date::format(PMF_Date::createIsoDate($row->created)),
                     PMF_Mail::safeEmail($row->email),
                     $row->username);
                 $output .= sprintf('<td valign="top"><strong>%s:</strong><br />%s</td>',

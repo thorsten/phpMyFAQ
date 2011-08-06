@@ -265,7 +265,7 @@ $tpl->processTemplate ("writeContent", array(
     'writeRelatedArticlesHeader'    => $PMF_LANG['msg_related_articles'] . ': ',
     'writeRelatedArticles'          => $relevant->getAllRelatedById($faq->faqRecord['id'], $faq->faqRecord['title'], $faq->faqRecord['keywords']),
     'writePopularity'               => $faqPopularity,
-    'writeDateMsg'                  => $PMF_LANG['msgLastUpdateArticle'] . $faq->faqRecord['date'],
+    'writeDateMsg'                  => $PMF_LANG['msgLastUpdateArticle'] . PMF_Date::format($faq->faqRecord['date']),
     'writeRevision'                 => $PMF_LANG['ad_entry_revision'] . ': 1.' . $faq->faqRecord['revision_id'],
     'writeAuthor'                   => $PMF_LANG['msgAuthor'] . ': ' . $faq->faqRecord['author'],
     'editThisEntry'                 => $editThisEntry,

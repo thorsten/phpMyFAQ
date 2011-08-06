@@ -188,7 +188,9 @@ class PMF_Comment
                 PMF_Mail::safeEmail($item['email']),
                 $item['user'],
                 $item['content'],
-                $this->pmf_lang['newsCommentDate'].PMF_Date::createIsoDate($item['date'], 'Y-m-d H:i', false));
+                $this->pmf_lang['newsCommentDate'] .
+                    PMF_Date::format(PMF_Date::createIsoDate($item['date'], 'Y-m-d H:i', false))
+            );
         }
 
         return $output;

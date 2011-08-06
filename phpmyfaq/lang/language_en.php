@@ -1151,5 +1151,5 @@ $PMF_LANG['ad_entry_changelog_history'] = "Changelog history";
 // added v2.7.0-beta2 - 2011-06-22 by Thorsten
 $LANG_CONF['main.ssoSupport'] = array(0 => 'checkbox', 1 => 'Single Sign On Support (default: deactivated)');
 $LANG_CONF['main.ssoLogoutRedirect'] = array(0 => 'input', 1 => 'Single Sign On logout redirect service URL');
-$LANG_CONF['main.dateFormat'] = array(0 => 'input', 1 => 'Date format (default: Y-m-d H:i:s)');
+$LANG_CONF['main.dateFormat'] = array(0 => 'input', 1 => 'Date format (default: Y-m-d H:i)');
 $LANG_CONF['main.enableLoginOnly'] = array(0 => 'checkbox', 1 => 'Complete secured FAQ (default: deactivated)');
