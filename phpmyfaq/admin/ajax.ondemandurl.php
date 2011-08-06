@@ -26,8 +26,10 @@
  * @package   Administration
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2005-2011 NetJapan, Inc.
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
  * @since     2005-09-30
- * @copyright 2005-2010 NetJapan, Inc.
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -63,16 +65,34 @@ if (count(ob_list_handlers()) > 0) {
     ob_clean();
 }
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js"> <!--<![endif]-->
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
     <title><?php print $faqconfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
-    <meta name="copyright" content="(c) 2001-2010 phpMyFAQ Team" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <style type="text/css"> @import url(../template/<?php echo PMF_Template::getTplSetName(); ?>/admin.css); </style>
-    <script type="text/javascript" src="../inc/js/jquery.min.js"></script>
+    <base href="<?php print PMF_Link::getSystemUri('index.php'); ?>" />
+
+    <meta name="description" content="Only Chuck Norris can divide by zero.">
+    <meta name="author" content="phpMyFAQ Team">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+    <meta name="application-name" content="phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?>">
+    <meta name="copyright" content="(c) 2001-2011 phpMyFAQ Team">
+    <meta name="publisher" content="phpMyFAQ Team">
+    <meta name="MSSmartTagsPreventParsing" content="true">
+
+    <link rel="stylesheet" href="style/admin.css?v=1">
+
+    <script src="../inc/js/modernizr.min.js"></script>
+    <script src="../inc/js/jquery.min.js"></script>
+    <script src="../inc/js/functions.js"></script>
 </head>
-<body id="body" dir="<?php print $PMF_LANG["dir"]; ?>">
+<body dir="<?php print $PMF_LANG["dir"]; ?>">
 <?php
 
 if (!(isset($id) && isset($artlang))) {
