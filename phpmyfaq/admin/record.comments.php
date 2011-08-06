@@ -64,7 +64,7 @@ if ($permission['delcomment']) {
             <td>
                 <span style="font-weight: bold;">
                     <a href="mailto:<?php print $faqcomment['email']; ?>"><?php print $faqcomment['username']; ?></a>
-                    | <?php print date("Y-m-d", $faqcomment['date']); ?>
+                    | <?php print PMF_Date::format(date('Y-m-d H:i', $faqcomment['date'])); ?>
                     | <a href="<?php printf("../?action=artikel&cat=%d&id=%d&artlang=%s",
                        $faqcomment['category_id'],
                        $faqcomment['record_id'],

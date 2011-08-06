@@ -67,7 +67,7 @@ if ($permission['delquestion']) {
 ?>
         <tr>
             <td>
-                <?php print PMF_Date::createIsoDate($question['created']); ?>
+                <?php print PMF_Date::format(PMF_Date::createIsoDate($question['created'])); ?>
                 <br />
                 <a href="mailto:<?php print $question['email']; ?>">
                     <?php print $question['user']; ?>

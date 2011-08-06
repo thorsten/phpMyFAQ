@@ -499,7 +499,13 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                     </p>
                     <p>
                         <label><?php print $PMF_LANG["ad_entry_date"]; ?></label>
-                        <?php if (isset($faqData['date'])) { print $faqData['date']; } else { print PMF_Date::createIsoDate(date("YmdHis")); } ?>
+                        <?php
+                        if (isset($faqData['date'])) {
+                            print PMF_Date::format($faqData['date']);
+                        } else {
+                            print PMF_Date::format(date('Y-m-d H:i'));
+                        }
+                        ?>
                     </p>
                     <p>
                         <label for="changed"><?php print $PMF_LANG["ad_entry_changed"]; ?></label>
@@ -545,7 +551,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                             <?php printf('%s  1.%d<br/>%s<br/>%s: %s',
                                 $PMF_LANG['ad_entry_revision'],
                                 $entry['revision_id'],
-                                date("Y-m-d H:i:s", $entry['date']),
+                                PMF_Date::format(date('Y-m-d H:i', $entry['date'])),
                                 $PMF_LANG['ad_entry_author'],
                                 $user->getUserData('display_name')); ?>
                         </label>

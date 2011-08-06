@@ -55,7 +55,7 @@ if ($permission['viewlog']) {
 ?>
             <tr>
                 <td><?php print $data['ip']; ?></td>
-                <td><?php print date("Y-m-d H:i:s", $data['time']); ?></td>
+                <td><?php print PMF_Date::format(date("Y-m-d H:i", $data['time'])); ?></td>
                 <td><a href="?action=viewsession&amp;id=<?php print $sid; ?>"><?php print $sid; ?></a></td>
             </tr>
 <?php

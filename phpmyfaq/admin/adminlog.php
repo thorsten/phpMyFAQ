@@ -83,7 +83,7 @@ if ($permission['adminlog'] && 'adminlog' == $action) {
 ?>
         <tr class="cell">
             <td class="list"><?php print $logging_id; ?></td>
-            <td class="list"><?php print date("Y-m-d H:i:s", $logging_value['time']); ?></td>
+            <td class="list"><?php print PMF_Date::format(date('Y-m-d H:i', $logging_value['time'])); ?></td>
             <td class="list"><?php print $user->getLogin(); ?></td>
             <td class="list"><?php print $logging_value['ip']; ?></td>
         </tr>
