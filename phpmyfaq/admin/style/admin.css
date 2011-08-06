@@ -174,9 +174,9 @@ code {
 #header h1 a:hover, header h1 a:active {
     background: none; text-shadow: none; }
 #header #loginBox {
-	float: right; top: 0; width: 185px; margin-top: -2.5em; background: #F67600; color: #fff;
-	border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px;
-	border-bottom-right-radius: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; }
+    float: right; top: 0; width: 185px; margin-top: -2.5em; background: #F67600; color: #fff;
+    border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; }
 #header #languageSelection {
     text-align: center; padding: 5px; }
 #header #languageSelection a:link, #header #languageSelection a:visited {
@@ -200,27 +200,30 @@ nav ul li a.logout {
     color: #f71e1b; }
 
 /* Categories */
-#categories, #worklog {
+#categories, #worklog, #bugreport {
     width: 180px; background: #f0f0f0 url(../images/category_background.png) repeat-x; margin-bottom: 15px;
     border: 1px solid #d7d7d7; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
-#categories h3, #worklog h3 {
+#categories h3, #worklog h3, #bugreport h3 {
     padding-top: 5px; padding-left: 5px; padding-bottom: 5px; font-size: 16px; }
 #categories ul {
-	margin: 0 1px 0 1px; list-style: none outside none; padding: 0; }
+    margin: 0 1px 0 1px; list-style: none outside none; padding: 0; }
 #categories ul li {
-	}
+    }
 #categories ul li a {
-	padding-left: 5px; line-height: 30px; text-decoration: none; display: block; color: #222; }
+    padding-left: 5px; line-height: 30px; text-decoration: none; display: block; color: #222; }
 #categories ul li a:hover {
-	color: #F67600; }
+    color: #F67600; }
 #categories a.active {
-	background-color: #fff; font-weight: bold; }
+    background-color: #fff; font-weight: bold; }
 #categories .subcat li a {
     padding-left: 10px; }
 #categories .subcat li li a {
     padding-left: 15px; }
 #categories .subcat .active {
-	}
+    }
+#bugreport p {
+    padding: 5px;
+    }
 
 /* Content */
 #content {
@@ -272,12 +275,12 @@ nav ul li a.logout {
 #mainContent table.list {
     border-collapse: collapse; margin-bottom: 22px; }
 #mainContent table.list th {
-	padding: 8px; background-color: #333; border-top: 2px solid #222; border-bottom: 2px solid #f0f0f0; color: #F67600; 
-	font-size: 14px; text-align: left; }
+    padding: 8px; background-color: #333; border-top: 2px solid #222; border-bottom: 2px solid #f0f0f0; color: #F67600; 
+    font-size: 14px; text-align: left; }
 #mainContent table.list tr:nth-child(odd) {
     background-color: #fdfdfd; }
 #mainContent table.list td { 
-	padding: 8px; border-top: 1px solid transparent; border-bottom: 1px solid #333; }
+    padding: 8px; border-top: 1px solid transparent; border-bottom: 1px solid #333; }
 
 /* User and Group administration */
 #userInterface, #groupInterface {

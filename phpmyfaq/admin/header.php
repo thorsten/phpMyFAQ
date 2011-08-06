@@ -265,6 +265,17 @@ switch ($action) {
             </header>
             <span id="saving_data_indicator"></span>
         </div>
+
+        <!-- maybe we'll hide this after the final release ... -->
+        <div id="bugreport">
+            <header>
+                <h3>Found an issue?</h3>
+            </header>
+            <p>
+                <a href="https://github.com/thorsten/phpMyFAQ/issues/" target="_blank">Please report it here</a>.<br/>
+                Thanks!
+            </p>
+        </div>
     </div>
 
     <?php } ?>
