@@ -377,7 +377,11 @@ if (isset($auth) && in_array(true, $permission)) {
                     <td><strong><a href="?action=question"><?php print $PMF_LANG["msgOpenQuestions"]; ?></strong></a></td>
                     <td><?php print $PMF_TABLE_INFO[SQLPREFIX."faqquestions"]; ?></td>
                 </tr>
-            </tbody>
+            <tr>
+                    <td><strong><a href="?action=news"><?php print $PMF_LANG["msgNews"]; ?></strong></a></td>
+                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX."faqnews"]; ?></td>
+                </tr>
+			</tbody>
             </table>
         </section>
 
