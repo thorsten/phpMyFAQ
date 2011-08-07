@@ -74,7 +74,7 @@ function sendAskedQuestion($username, $usermail, $usercat, $content)
 
         $faq->addQuestion($questionData);
 
-        $questionMail = "User: ".$questionData['ask_username'].", mailto:".$questionData['ask_usermail']."\n"
+        $questionMail = "User: ".$questionData['ask_username'].", mailto:".htmlentities($questionData['ask_usermail'], ENT_QUOTES)."\n"
                         .$PMF_LANG["msgCategory"].": ".$categories[$questionData['ask_category']]["name"]."\n\n"
                         .wordwrap($content, 72);
 
@@ -87,14 +87,14 @@ function sendAskedQuestion($username, $usermail, $usercat, $content)
         
         $mail = new PMF_Mail();
         $mail->unsetFrom();
-        $mail->setFrom($questionData['ask_usermail'], $questionData['ask_username']);
+        $mail->setFrom($questionData['ask_usermail'], html_entity_decode($questionData['ask_username'], ENT_QUOTES));
         $mail->addTo($mainAdminEmail);
         // Let the category owner get a copy of the message
         if ($userEmail && $mainAdminEmail != $userEmail) {
             $mail->addCc($userEmail);
         }
         $mail->subject = '%sitename%';
-        $mail->message = $questionMail;
+        $mail->message = html_entity_decode($questionMail, ENT_QUOTES);
         $retval = $mail->send();
     }
     
