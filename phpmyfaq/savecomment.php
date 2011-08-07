@@ -108,7 +108,7 @@ if (!is_null($user) && !is_null($mail) && !is_null($comment) && checkBannedWord(
         $send = array();
         $mail = new PMF_Mail();
         $mail->unsetFrom();
-        $mail->setFrom($commentData['usermail']);
+        $mail->setFrom($commentData['usermail'], html_entity_decode($commentData['username'], ENT_QUOTES));
         $mail->addTo($emailTo);
         $send[$emailTo] = 1;
 
