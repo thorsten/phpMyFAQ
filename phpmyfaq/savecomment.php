@@ -135,7 +135,7 @@ if (!is_null($user) && !is_null($mail) && !is_null($comment) && checkBannedWord(
             }
         }
 
-        $mail->subject = '%sitename%';
+        $mail->subject = '%sitename% Comment';
         $mail->message = $commentMail;
         $result = $mail->send();
         unset($mail);

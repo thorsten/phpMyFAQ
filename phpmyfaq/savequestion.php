@@ -93,7 +93,7 @@ function sendAskedQuestion($username, $usermail, $usercat, $content)
         if ($userEmail && $mainAdminEmail != $userEmail) {
             $mail->addCc($userEmail);
         }
-        $mail->subject = '%sitename%';
+        $mail->subject = '%sitename% Question';
         $mail->message = html_entity_decode($questionMail, ENT_QUOTES);
         $retval = $mail->send();
     }
