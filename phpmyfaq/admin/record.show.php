@@ -364,7 +364,7 @@ if ($permission['editbt'] || $permission['delbt']) {
         }
 ?></td>
             <td style="width: 48px;">
-                <?php print PMF_String::substr(PMF_Date::format($record['date']), 0, 10); ?>
+                <?php print PMF_Date::format($record['date']); ?>
             </td>
             <td style="width: 96px;">
                 <?php print $linkverifier->getEntryStateHTML($record['id'], $record['lang']); ?>
