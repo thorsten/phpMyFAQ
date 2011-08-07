@@ -39,7 +39,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     $helper = PMF_Helper_Category::getInstance();
     $helper->setCategory($category);
 
-    $current_category = '';
+    $selectedCategory = '';
     $categories       = array();
     $faqData          = array(
         'id'          => 0,
@@ -52,12 +52,12 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     $tagging = new PMF_Tags();
 
     if ($action == 'takequestion') {
-        $question_id      = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        $question         = $faq->getQuestion($question_id);
-        $current_category = $question['category'];
+        $questionId       = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $question         = $faq->getQuestion($questionId);
+        $selectedCategory = $question['category'];
         $faqData['title'] = $question['question'];
         $categories       = array(
-            'category_id'   => $current_category,
+            'category_id'   => $selectedCategory,
             'category_lang' => $faqData['lang']);
     }
 
@@ -65,15 +65,15 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
     	$faqData['id'] = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         if (!is_null($faqData['id'])) {
-            $url_variables = 'saveentry&amp;id='.$faqData['id'];
+            $queryString = 'saveentry&amp;id='.$faqData['id'];
         } else {
-            $url_variables = 'insertentry';
+            $queryString = 'insertentry';
         }
         
         $faqData['lang']  = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-        $current_category = isset($_POST['rubrik']) ? $_POST['rubrik'] : null;
-        if (is_array($current_category)) {
-            foreach ($current_category as $cats) {
+        $selectedCategory = isset($_POST['rubrik']) ? $_POST['rubrik'] : null;
+        if (is_array($selectedCategory)) {
+            foreach ($selectedCategory as $cats) {
                 $categories[] = array('category_id' => $cats, 'category_lang' => $faqData['lang']);
             }
         }
@@ -97,7 +97,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
         $id   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $lang = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
-        if ((!isset($current_category) && !isset($faqData['title'])) || !is_null($id)) {
+        if ((!isset($selectedCategory) && !isset($faqData['title'])) || !is_null($id)) {
             $logging = new PMF_Logging();
             $logging->logAdmin($user, 'Beitragedit, ' . $id);
             $faqData['id']   = $id;
@@ -109,9 +109,9 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
             $faq->getRecord($faqData['id'], null, true);
             $faqData       = $faq->faqRecord;
             $tags          = implode(',', $tagging->getAllTagsById($faqData['id']));
-            $url_variables = 'saveentry&amp;id='.$faqData['id'];
+            $queryString = 'saveentry&amp;id='.$faqData['id'];
         } else {
-            $url_variables = 'insertentry';
+            $queryString = 'insertentry';
         }
 
     } elseif ($action == 'copyentry') {
@@ -124,42 +124,42 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
         $faq->getRecord($faqData['id'], null, true);
 
         $faqData       = $faq->faqRecord;
-        $url_variables = 'insertentry';
+        $queryString = 'insertentry';
 
     } else {
         $logging = new PMF_Logging();
         $logging->logAdmin($user, 'Beitragcreate');
-        $url_variables = 'insertentry';
+        $queryString = 'insertentry';
         if (!is_array($categories)) {
             $categories = array();
         }
     }
     
     // Revisions
-    $revisionid_selected = PMF_Filter::filterInput(INPUT_POST, 'revisionid_selected', FILTER_VALIDATE_INT);
-    if (is_null($revisionid_selected)) {
-        $revisionid_selected = $faqData['revision_id'];
+    $selectedRevisionId = PMF_Filter::filterInput(INPUT_POST, 'revisionid_selected', FILTER_VALIDATE_INT);
+    if (is_null($selectedRevisionId)) {
+        $selectedRevisionId = $faqData['revision_id'];
     }
 
     // Permissions
-    $user_permission = $faq->getPermission('user', $faqData['id']);
-    if (count($user_permission) == 0 || $user_permission[0] == -1) {
-        $all_users          = true;
-        $restricted_users   = false;
-        $user_permission[0] = -1;
+    $userPermission = $faq->getPermission('user', $faqData['id']);
+    if (count($userPermission) == 0 || $userPermission[0] == -1) {
+        $allUsers          = true;
+        $restrictedUsers   = false;
+        $userPermission[0] = -1;
     } else {
-        $all_users        = false;
-        $restricted_users = true;
+        $allUsers        = false;
+        $restrictedUsers = true;
     }
 
-    $group_permission = $faq->getPermission('group', $faqData['id']);
-    if (count($group_permission) == 0 || $group_permission[0] == -1) {
-        $all_groups          = true;
-        $restricted_groups   = false;
-        $group_permission[0] = -1;
+    $groupPermission = $faq->getPermission('group', $faqData['id']);
+    if (count($groupPermission) == 0 || $groupPermission[0] == -1) {
+        $allGroups          = true;
+        $restrictedGroups   = false;
+        $groupPermission[0] = -1;
     } else {
-        $all_groups        = false;
-        $restricted_groups = true;
+        $allGroups        = false;
+        $restrictedGroups = true;
     }
 
     print '<header><h2>'.$PMF_LANG["ad_entry_edit_1"];
@@ -167,7 +167,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
         printf(' <span style="color: Red;">%d (%s 1.%d) </span> ',
             $faqData['id'],
             $PMF_LANG['ad_entry_revision'],
-            $revisionid_selected);
+            $selectedRevisionId);
     }
     print ' '.$PMF_LANG["ad_entry_edit_2"].'</h2></header>';
 
@@ -186,7 +186,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                         <?php print $PMF_LANG['ad_changerev']; ?>
                     </option>
 <?php foreach ($revisions as $_revision_id => $_revision_data) { ?>
-                    <option value="<?php print $_revision_data['revision_id']; ?>" <?php if ($revisionid_selected == $_revision_data['revision_id']) { print 'selected="selected"'; } ?> >
+                    <option value="<?php print $_revision_data['revision_id']; ?>" <?php if ($selectedRevisionId == $_revision_data['revision_id']) { print 'selected="selected"'; } ?> >
                         <?php print $PMF_LANG['ad_entry_revision'].' 1.'.$_revision_data['revision_id'].': '.PMF_Date::createIsoDate($_revision_data['datum'])." - ".$_revision_data['author']; ?>
                     </option>
 <?php } ?>
@@ -197,19 +197,19 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 <?php
         }
 
-        if (isset($revisionid_selected) &&
+        if (isset($selectedRevisionId) &&
             isset($faqData['revision_id']) &&
-            $revisionid_selected != $faqData['revision_id']) {
+            $selectedRevisionId != $faqData['revision_id']) {
 
             $faq->language = $faqData['lang'];
-            $faq->getRecord($faqData['id'], $revisionid_selected, true);
+            $faq->getRecord($faqData['id'], $selectedRevisionId, true);
             $faqData = $faq->faqRecord;
             $tags    = implode(',', $tagging->getAllTagsById($faqData['id']));
         }
     }
 ?>
 
-        <form id="faqEditor" action="?action=<?php print $url_variables; ?>" method="post">
+        <form id="faqEditor" action="?action=<?php print $queryString; ?>" method="post">
             <input type="hidden" name="revision_id" id="revision_id" value="<?php print $faqData['revision_id']; ?>" />
             <input type="hidden" name="record_id" id="record_id" value="<?php print $faqData['id']; ?>" />
             <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
@@ -268,7 +268,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
             printf('<div><a href="#;" onclick="addAttachment(\'attachment.php?record_id=%d&amp;record_lang=%s&amp;rubrik=%d\', \'Attachment\', 400,80); return false;">%s</a></div>',
                 $faqData['id'],
                 $faqData['lang'],
-                $current_category,
+                $selectedCategory,
                 $PMF_LANG['ad_att_add']
                 );
         } else {
@@ -324,24 +324,24 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 <?php endif; ?>
                 <p>
                     <label for="solution_id"><?php print $PMF_LANG['ad_entry_solution_id']; ?>:</label>
-                    <input name="solution_id" id="solution_id" style="width: 50px; text-align: right;" size="5" readonly="readonly"
-                           value="<?php print (isset($faqData['solution_id']) ? $faqData['solution_id'] : $faq->getSolutionId()); ?>"  />
+                    <input name="solution_id" id="solution_id" style="width: 50px; text-align: right;" size="5"
+                           readonly="readonly" value="<?php print (isset($faqData['solution_id']) ? $faqData['solution_id'] : $faq->getSolutionId()); ?>"  />
                 </p>
                 
                 <p>
                     <label for="active"><?php print $PMF_LANG["ad_entry_active"]; ?></label>
-<?php if($permission['approverec']):
-    if (isset($faqData['active']) && $faqData['active'] == 'yes') {
-        $suf = ' checked="checked"';
-        $sul = null;
-    } elseif ($faqconfig->get('records.defaultActivation')) {
-        $suf = ' checked="checked"';
-        $sul = null;
-    } else {
-        $suf = null;
-        $sul = ' checked="checked"';
-    }
-?>
+                    <?php if($permission['approverec']):
+                        if (isset($faqData['active']) && $faqData['active'] == 'yes') {
+                            $suf = ' checked="checked"';
+                            $sul = null;
+                        } elseif ($faqconfig->get('records.defaultActivation')) {
+                            $suf = ' checked="checked"';
+                            $sul = null;
+                        } else {
+                            $suf = null;
+                            $sul = ' checked="checked"';
+                        }
+                    ?>
                     <input type="radio" id="active" name="active" class="active" value="yes"<?php if (isset($suf)) { print $suf; } ?> />
                     <?php print $PMF_LANG['ad_gen_yes']; ?>
                     <input type="radio" name="active" class="active" value="no"<?php if (isset($sul)) { print $sul; } ?> />
@@ -356,22 +356,22 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                     <label for="sticky"><?php print $PMF_LANG['ad_entry_sticky']; ?>:</label>
                     <input type="checkbox" id="sticky" name="sticky" <?php print (isset($faqData['sticky']) && $faqData['sticky'] ? 'checked="checked"' : '') ?> />
                 </p>
-<?php
-    if (isset($faqData['comment']) && $faqData['comment'] == 'y') {
-        $suf = ' checked="checked"';
-    } elseif ($faqconfig->get('records.defaultAllowComments')) {
-        $suf = ' checked="checked"';
-    } else {
-        $suf = null;
-    }
-?>
+                <?php
+                    if (isset($faqData['comment']) && $faqData['comment'] == 'y') {
+                        $suf = ' checked="checked"';
+                    } elseif ($faqconfig->get('records.defaultAllowComments')) {
+                        $suf = ' checked="checked"';
+                    } else {
+                        $suf = null;
+                    }
+                ?>
                 <p>
                     <label for="comment"><?php print $PMF_LANG["ad_entry_allowComments"]; ?></label>
                     <input type="checkbox" name="comment" id="comment" value="y"<?php if (isset($suf)) { print $suf; } ?> />
                     <?php print $PMF_LANG['ad_gen_yes']; ?>
                 </p>
 <?php
-    if ($url_variables != 'insertentry') {
+    if ($queryString != 'insertentry') {
         $rev_yes = ' checked="checked"';
         $rev_no  = null;
     }
@@ -379,7 +379,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
         $rev_no  = ' checked="checked"';
         $rev_yes = null;
     }
-    if ($url_variables != 'insertentry'):
+    if ($queryString != 'insertentry'):
 ?>
                 <p>
                     <label for="revision"><?php print $PMF_LANG['ad_entry_new_revision']; ?></label>
@@ -395,12 +395,12 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
                 <p>
                     <label for="grouppermission"><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
-                    <input type="radio" id="grouppermission" name="grouppermission" class="active" value="all" <?php print ($all_groups ? 'checked="checked"' : ''); ?>/>
+                    <input type="radio" id="grouppermission" name="grouppermission" class="active" value="all" <?php print ($allGroups ? 'checked="checked"' : ''); ?>/>
                     <?php print $PMF_LANG['ad_entry_all_groups']; ?>
-                    <input type="radio" name="grouppermission" class="active" value="restricted" <?php print ($restricted_groups ? 'checked="checked"' : ''); ?>/>
+                    <input type="radio" name="grouppermission" class="active" value="restricted" <?php print ($restrictedGroups ? 'checked="checked"' : ''); ?>/>
                     <?php print $PMF_LANG['ad_entry_restricted_groups']; ?>
                     <select name="restricted_groups" size="1">
-                        <?php print $user->perm->getAllGroupsOptions($group_permission[0]); ?>
+                        <?php print $user->perm->getAllGroupsOptions($groupPermission[0]); ?>
                     </select>
                 </p>
 
@@ -426,12 +426,12 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 ?>
                 <p>
                     <label for="userpermission"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
-                    <input type="radio" id="userpermission" name="userpermission" class="active" value="all" <?php print ($all_users ? 'checked="checked"' : ''); ?>/>
+                    <input type="radio" id="userpermission" name="userpermission" class="active" value="all" <?php print ($allUsers ? 'checked="checked"' : ''); ?>/>
                     <?php print $PMF_LANG['ad_entry_all_users']; ?>
-                    <input type="radio" name="userpermission" class="active" value="restricted" <?php print ($restricted_users ? 'checked="checked"' : ''); ?>/>
+                    <input type="radio" name="userpermission" class="active" value="restricted" <?php print ($restrictedUsers ? 'checked="checked"' : ''); ?>/>
                     <?php print $PMF_LANG['ad_entry_restricted_users']; ?>
                     <select name="restricted_users" size="1">
-                        <?php print $user->getAllUserOptions($user_permission[0]); ?>
+                        <?php print $user->getAllUserOptions($userPermission[0]); ?>
                     </select>
                 </p>
 
@@ -517,13 +517,13 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
             </fieldset>
 
 <?php
-    if ($revisionid_selected == $faqData['revision_id']) {
+    if ($selectedRevisionId == $faqData['revision_id']) {
 ?>
             <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_save"]; ?>" name="submit[1]" />
             <input class="submit" type="reset" value="<?php print $PMF_LANG["ad_gen_reset"]; ?>" />
 <?php
     }
-    if ($url_variables != "insertentry") {
+    if ($queryString != "insertentry") {
 ?>
             <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit[0]" />
 <?php
