@@ -141,7 +141,7 @@ if ($step == 1) {
                     <li>phpMyFAQ 2.0.x</li>
                     <li>phpMyFAQ 2.5.x</li>
                     <li>phpMyFAQ 2.6.x</li>
-                    <li>phpMyFAQ 2.67.x</li>
+                    <li>phpMyFAQ 2.7.x</li>
                 </ul>
 
                 <p>This update <strong>will not</strong> work for the following versions.</p>
