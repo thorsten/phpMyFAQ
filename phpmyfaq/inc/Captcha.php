@@ -261,6 +261,11 @@ class PMF_Captcha
      */
     public function validateCaptchaCode($captchaCode)
     {
+        // Sanity check
+        if (0 == PMF_String::strlen($captchaCode)) {
+            return false;
+        }
+
         $captchaCode = PMF_String::strtoupper($captchaCode);
         // Help the user: treat "0" (ASCII 48) like "O" (ASCII 79)
         //                if "0" is not in the realm of captcha code letters

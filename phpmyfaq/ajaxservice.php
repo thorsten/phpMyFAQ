@@ -72,8 +72,14 @@ $faqsession = new PMF_Session();
 if (!IPCheck($_SERVER['REMOTE_ADDR'])) {
     $message = array('error' => $PMF_LANG['err_bannedIP']);
 }
+
 if (!$captcha->checkCaptchaCode($code)) {
-    $message = array('error' => $PMF_LANG['err_SaveComment']);
+    $message = array('error' => $PMF_LANG['msgCaptcha']);
+}
+
+if (isset($message['error'])) {
+    print json_encode($message);
+    exit();
 }
 
 // Save user generated content
