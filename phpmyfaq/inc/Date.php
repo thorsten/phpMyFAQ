@@ -137,6 +137,8 @@ class PMF_Date
     }
 
     /**
+     * Returns date formatted according to user defined format
+     * 
      * @static
      * @param string $date
      * @return string
@@ -144,7 +146,7 @@ class PMF_Date
     public static function format($unformattedDate)
     {
         $format = PMF_Configuration::getInstance()->get('main.dateFormat');
-        $date   = DateTime::createFromFormat('Y-m-d H:i', $unformattedDate);
+        $date   = new DateTime($unformattedDate);
 
         return $date->format($format);
     }
