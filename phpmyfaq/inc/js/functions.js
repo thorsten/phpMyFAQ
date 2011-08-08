@@ -96,6 +96,7 @@ function loginForm()
         $('#loginForm').fadeIn();
     } else {
         $('#loginForm').fadeOut();
+        $('#loginForm').addClass('hidden');
     }
 }
 
