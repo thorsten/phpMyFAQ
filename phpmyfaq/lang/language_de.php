@@ -151,15 +151,15 @@ $PMF_LANG["err_noArticles"] = "<p>Es gibt noch keine Einträge.</p>";
 $PMF_LANG["err_badID"] = "<p>Fehlerhafte ID!</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Derzeit sind keine beliebten FAQs verfügbar.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Es wurde kein Eintrag gefunden.</p>";
-$PMF_LANG["err_SaveEntries"] = "Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong>, <strong>Kategorie</strong>, <strong>Themenüberschrift</strong> und <strong>Artikel</strong>!<br /><br /><a href=\"javascript:history.go(-1);\">eine Seite zurück</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong> und <strong>Kommentar</strong>!<br /><br /><a href=\"javascript:history.go(-1);\">eine Seite zurück</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong>, <strong>Kategorie</strong>, <strong>Frage</strong> und <strong>Antwort</strong>!";
+$PMF_LANG["err_SaveComment"] = "Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong> und <strong>Kommentar</strong>!";
 $PMF_LANG["err_VoteTooMuch"] = "Leider konnte die Bewertung nicht gespeichert werden, da mit der IP bereits bewertet wurde.";
 $PMF_LANG["err_noVote"] = "Es wurde keine Bewertung abgegeben!";
-$PMF_LANG["err_noMailAdress"] = "Die angegebene E-Mail-Adresse ist nicht korrekt.<br /><a href=\"javascript:history.go(-1);\">Eine Seite zurück</a>";
-$PMF_LANG["err_sendMail"] = "Pflichtfelder sind u.a. <strong>Name</strong> und <strong>E-Mail-Adresse</strong>!<br /><br /><a href=\"javascript:history.go(-1);\">eine Seite zurück</a><br /><br />\n";
+$PMF_LANG["err_noMailAdress"] = "Die angegebene E-Mail-Adresse ist nicht korrekt.";
+$PMF_LANG["err_sendMail"] = "Pflichtfelder sind u.a. <strong>Name</strong> und <strong>E-Mail-Adresse</strong>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong>Artikel finden:</strong><br />Mit der Eingabe <strong style=\"color: Red;\">Begriff1 Begriff2</strong> können zwei oder mehrere Suchbegriffe nach der Relevanz absteigend suchen lassen.</p><p><strong>Hinweis:</strong> Suchbegriff muss mindestens 4 Zeichen lang sein, kürzere Anfragen werden automatisch abgewiesen.</p>";
+$PMF_LANG["help_search"] = "<p><strong>Antwort finden:</strong><br />Mit der Eingabe <strong style=\"color: Red;\">Begriff1 Begriff2</strong> können zwei oder mehrere Suchbegriffe nach der Relevanz absteigend suchen lassen.</p><p><strong>Hinweis:</strong> Suchbegriff muss mindestens 4 Zeichen lang sein, kürzere Anfragen werden automatisch abgewiesen.</p>";
 
 // Menü
 $PMF_LANG["ad"] = "ADMIN-BEREICH";
@@ -547,7 +547,7 @@ $PMF_LANG["ad_user_realname"] = "Realname:";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF-Datei generieren";
 $PMF_LANG["ad_export_full_faq"] = "Die FAQ als PDF-Datei: ";
 $PMF_LANG["err_bannedIP"] = "Diese IP ist gesperrt.";
-$PMF_LANG["err_SaveQuestion"] = "Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong> und <strong>Frage</strong>!<br /><br /><a href=\"javascript:history.go(-1);\">eine Seite zurück</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong> und <strong>Frage</strong>!";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Schriftfarbe: ";
