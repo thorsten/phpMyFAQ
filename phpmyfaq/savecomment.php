@@ -100,15 +100,15 @@ if (!is_null($user) && !is_null($mail) && !is_null($comment) && checkBannedWord(
             $urlToContent     = $oLink->toString();
         }
         $commentMail =
-            'User: ' . $commentData['username'] . ', mailto:'. $commentData['usermail'] . "\n".
-            'New comment posted on: ' . $urlToContent .
+            'User: ' . html_entity_decode($commentData['username'], ENT_QUOTES) . ', mailto:'. $commentData['usermail'] . "\n".
+            'New comment posted on: ' . html_entity_decode($urlToContent, ENT_QUOTES) .
             "\n\n" .
-            wordwrap($comment, 72);
+            wordwrap(html_entity_decode($comment, ENT_QUOTES), 72);
 
         $send = array();
         $mail = new PMF_Mail();
         $mail->unsetFrom();
-        $mail->setFrom($commentData['usermail']);
+        $mail->setFrom($commentData['usermail'], html_entity_decode($commentData['username'], ENT_QUOTES));
         $mail->addTo($emailTo);
         $send[$emailTo] = 1;
 
@@ -135,8 +135,8 @@ if (!is_null($user) && !is_null($mail) && !is_null($comment) && checkBannedWord(
             }
         }
 
-        $mail->subject = '%sitename%';
-        $mail->message = strip_tags($commentMail);
+        $mail->subject = '%sitename% Comment';
+        $mail->message = $commentMail;
         $result = $mail->send();
         unset($mail);
 
