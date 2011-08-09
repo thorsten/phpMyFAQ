@@ -95,6 +95,7 @@ $error           = '';
 $loginVisibility = 'hidden';
 $faqusername = PMF_Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
 $faqpassword = PMF_Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
+$faqaction   = PMF_Filter::filterInput(INPUT_POST, 'faqloginaction', FILTER_SANITIZE_STRING);
 if ($faqconfig->get('main.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
     $faqusername = trim($_SERVER['REMOTE_USER']);
     $faqpassword = '';
@@ -111,19 +112,22 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     }
     if ($user->login($faqusername, $faqpassword)) {
         if ($user->getStatus() != 'blocked') {
-            $auth = true;
+            $auth   = true;
+            $action = $faqaction;
         } else {
-            $error = $PMF_LANG["ad_auth_fail"]." (".$faqusername." / *)";
+            $error           = $PMF_LANG['ad_auth_fail'] . ' (' . $faqusername . ')';
             $loginVisibility = '';
-            $user = null;
+            $user            = null;
+            $action          = 'main';
         }
     } else {
         // error
-        $error = $PMF_LANG['ad_auth_fail'];
+        $error           = $PMF_LANG['ad_auth_fail'];
         $loginVisibility = '';
-        $user = null;
+        $user            = null;
+        $action          = 'main';
     }
-    $action = 'main';
+
 } else {
     // authenticate with session information
     $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
@@ -558,6 +562,7 @@ if (isset($auth)) {
             array(
                 'msgLoginUser'    => $PMF_LANG['msgLoginUser'],
                 'writeLoginPath'  => '?action=login',
+                'faqloginaction'  => $action,
                 'login'           => $PMF_LANG['ad_auth_ok'],
                 'username'        => $PMF_LANG['ad_auth_user'],
                 'password'        => $PMF_LANG['ad_auth_passwd'],
