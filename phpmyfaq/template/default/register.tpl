@@ -6,6 +6,8 @@
             <p>{msgRegistrationCredentials}</p>
             <p>{msgRegistrationNote}</p>
 
+            <div id="registrations"></div>
+
             <form id="formValues" method="post" action="#>
                 <input type="hidden" name="lang" id="lang" value="{lang}" />
                 <p>
@@ -26,7 +28,6 @@
                 </p>
 
                 <div id="loader"></div>
-                <div id="registrations"></div>
 
                 <p>
                     <input class="submit" type="submit"  id="submitregistration" value="{submitRegister}" />

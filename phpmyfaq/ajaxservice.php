@@ -470,7 +470,7 @@ switch ($action) {
             $user->setLoginMinLength(4);
 
             // check login name
-            if (!$user->isValidLogin($loginname)) {
+            if (! $user->isValidLogin($loginname)) {
                 $message = array('error' => $PMF_LANG['ad_user_error_loginInvalid']);
             }
             if ($user->getUserByLogin($loginname)) {

@@ -338,7 +338,7 @@ class PMF_User
             SQLPREFIX,
             $this->db->escape_string($login));
         
-    	$res = $this->db->query($select);
+        $res = $this->db->query($select);
         if ($this->db->num_rows($res) != 1) {
             if ($raise_error) {
                 $this->errors[] = self::ERROR_USER_INCORRECT_LOGIN;
