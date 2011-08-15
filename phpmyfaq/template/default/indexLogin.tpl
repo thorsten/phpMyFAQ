@@ -79,6 +79,7 @@
             </header>
 
             <form action="{writeLoginPath}" method="post">
+                <input type="hidden" name="faqloginaction" value="{faqloginaction}"/>
 
                 <p>
                     <label for="faqusername">{username}</label>

@@ -461,6 +461,7 @@ $main_template_vars = array(
     'sendPassword'        => '<a href="./admin/password.php">' . $PMF_LANG['lostPassword'] . '</a>',
     'loginMessage'        => $PMF_LANG['msgLoginUser'],
     'writeLoginPath'      => '?action=login',
+    'faqloginaction'      => $action,
     'login'               => $PMF_LANG['ad_auth_ok'],
     'username'            => $PMF_LANG['ad_auth_user'],
     'password'            => $PMF_LANG['ad_auth_passwd']
@@ -569,7 +570,7 @@ if (isset($auth)) {
                 'msgRegisterUser' => '<a href="?' . $sids . 'action=register">' . $PMF_LANG['msgRegisterUser'] . '</a>',
                 'msgLoginFailed'  => $error,
                 'msgLostPassword' => $PMF_LANG['lostPassword'],
-            'loginVisibility' => $loginVisibility
+                'loginVisibility' => $loginVisibility
             )
         );
     } else {
