@@ -477,7 +477,7 @@ function getUserData(user_id)
         <tbody>
             <?php foreach ($user->getAllUsers() as $userId) { $user->getUserById($userId); ?>
 
-            <tr>
+            <tr class="row_user_id_<?php print $user->getUserData('user_id') ?>">
                 <td><?php print $user->getUserData('user_id') ?></td>
                 <td><?php print $user->getStatus() ?></td>
                 <td><?php print $user->getUserData('display_name') ?></td>
@@ -494,7 +494,8 @@ function getUserData(user_id)
                 </td>
                 <td>
                     <?php if ($user->getStatus() !== 'protected'): ?>
-                    <a onclick="javascript:alert('Not implemented yet!'); return false;" href="#;">
+                    <a onclick="deleteUser(<?php print $user->getUserData('user_id') ?>); return false;"
+                       href="javascript:;">
                         <?php print $PMF_LANG['ad_user_delete'] ?>
                     </a>
                     <?php endif; ?>
@@ -504,6 +505,25 @@ function getUserData(user_id)
         
         </tbody>
         </table>
+<script type="text/javascript">
+/* <![CDATA[ */
+/**
+ * Ajax call to delete user
+ * 
+ * @param userId
+ */
+function deleteUser(userId)
+{
+    if (confirm('<?php print $PMF_LANG["ad_user_del_1"] . $PMF_LANG["ad_user_del_2"] ?>')) {
+        $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=delete_user&user_id=" + userId,
+        function(response) {
+            $('#user_message').html(response);
+            $('.row_user_id_' + userId).fadeOut('slow');
+        });
+    }
+}
+/* ]]> */
+</script>
 <?php 
     }
 } else {
