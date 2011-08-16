@@ -99,6 +99,9 @@ if (function_exists('mb_language') && in_array($mbLanguage, $valid_mb_strings)) 
 // Get user action
 //
 $action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+if (is_null($action)) {
+    $action = PMF_Filter::filterInput(INPUT_POST, 'action', FILTER_SANITIZE_STRING);
+}
 
 // authenticate current user
 $auth        = null;
@@ -181,7 +184,7 @@ if (isset($user) && is_object($user)) {
 //
 // Get action from _GET and _POST first
 $_ajax = PMF_Filter::filterInput(INPUT_GET, 'ajax', FILTER_SANITIZE_STRING);
-if (!$_ajax) {
+if (is_null($_ajax)) {
     $_ajax = PMF_Filter::filterInput(INPUT_POST, 'ajax', FILTER_SANITIZE_STRING);
 }
 
@@ -189,6 +192,7 @@ if (!$_ajax) {
 if (isset($auth) && in_array(true, $permission)) {
     if (isset($action) && isset($_ajax)) {
         if ($action == 'ajax') {
+
             switch ($_ajax) {
             // Link verification
             case 'verifyURL':
