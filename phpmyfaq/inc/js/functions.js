@@ -454,3 +454,18 @@ function checkQuestion()
 
     return false;
 }
+
+/**
+ * Refreshes a captcha image
+ * 
+ * @param string action
+ */
+function refreshCaptcha(action)
+{
+    $.ajax({
+        url: 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime(),
+        success: function(result) {
+            $("#captchaImage").attr('src', 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime());
+        }
+    });
+}

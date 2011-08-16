@@ -38,18 +38,26 @@ if (!is_null($showCaptcha)) {
     exit;
 }
 
-$tpl->processTemplate ('writeContent', array(
-    'msgContact'         => $PMF_LANG['msgContact'],
-    'msgContactOwnText'  => nl2br($faqconfig->get('main.contactInformations')),
-    'msgContactEMail'    => $PMF_LANG['msgContactEMail'],
-    'msgNewContentName'  => $PMF_LANG['msgNewContentName'],
-    'msgNewContentMail'  => $PMF_LANG['msgNewContentMail'],
-    'lang'               => $Language->getLanguage(),
-    'defaultContentMail' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
-    'defaultContentName' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
-    'msgMessage'         => $PMF_LANG['msgMessage'],
-    'msgS2FButton'       => $PMF_LANG['msgS2FButton'],
-    'version'            => $faqconfig->get('main.currentVersion'),
-    'captchaFieldset'    => PMF_Helper_Captcha::getInstance()->renderFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('contact'))));
+$tpl->processTemplate (
+    'writeContent',
+    array(
+        'msgContact'         => $PMF_LANG['msgContact'],
+        'msgContactOwnText'  => nl2br($faqconfig->get('main.contactInformations')),
+        'msgContactEMail'    => $PMF_LANG['msgContactEMail'],
+        'msgNewContentName'  => $PMF_LANG['msgNewContentName'],
+        'msgNewContentMail'  => $PMF_LANG['msgNewContentMail'],
+        'lang'               => $Language->getLanguage(),
+        'defaultContentMail' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
+        'defaultContentName' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
+        'msgMessage'         => $PMF_LANG['msgMessage'],
+        'msgS2FButton'       => $PMF_LANG['msgS2FButton'],
+        'version'            => $faqconfig->get('main.currentVersion'),
+        'captchaFieldset'    => PMF_Helper_Captcha::getInstance()->renderCaptcha(
+            $captcha,
+            'contact',
+            $PMF_LANG['msgCaptcha']
+        )
+    )
+);
 
 $tpl->includeTemplate('writeContent', 'index');

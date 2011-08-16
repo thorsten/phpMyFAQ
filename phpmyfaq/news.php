@@ -106,26 +106,34 @@ if ($news['active'] && (!$expired)) {
 }
 
 // Set the template variables
-$tpl->processTemplate ("writeContent", array(
-    'writeNewsHeader'     => $newsMainHeader,
-    'writeNewsRSS'        => $newsFeed,
-    'writeHeader'         => $newsHeader,
-    'writeContent'        => $newsContent,
-    'writeDateMsg'        => $newsDate,
-    'writeAuthor'         => ($news['active'] && (!$expired)) ? $PMF_LANG['msgAuthor'] . ': ' . $news['authorName'] : '',
-    'editThisEntry'       => $editThisEntry,
-    'writeCommentMsg'     => $commentMessage,
-    'msgWriteComment'     => $PMF_LANG['newsWriteComment'],
-    'newsId'              => $newsId,
-    'newsLang'            => $news['lang'],
-    'msgCommentHeader'    => $PMF_LANG['msgCommentHeader'],
-    'msgNewContentName'   => $PMF_LANG['msgNewContentName'],
-    'msgNewContentMail'   => $PMF_LANG['msgNewContentMail'],
-    'defaultContentMail'  => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
-    'defaultContentName'  => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
-    'msgYourComment'      => $PMF_LANG['msgYourComment'],
-    'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
-    'captchaFieldset'     => PMF_Helper_Captcha::getInstance()->renderFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment')),
-    'writeComments'       => $comment->getComments($newsId, PMF_Comment::COMMENT_TYPE_NEWS)));
+$tpl->processTemplate (
+    'writeContent',
+    array(
+        'writeNewsHeader'     => $newsMainHeader,
+        'writeNewsRSS'        => $newsFeed,
+        'writeHeader'         => $newsHeader,
+        'writeContent'        => $newsContent,
+        'writeDateMsg'        => $newsDate,
+        'writeAuthor'         => ($news['active'] && (!$expired)) ? $PMF_LANG['msgAuthor'] . ': ' . $news['authorName'] : '',
+        'editThisEntry'       => $editThisEntry,
+        'writeCommentMsg'     => $commentMessage,
+        'msgWriteComment'     => $PMF_LANG['newsWriteComment'],
+        'newsId'              => $newsId,
+        'newsLang'            => $news['lang'],
+        'msgCommentHeader'    => $PMF_LANG['msgCommentHeader'],
+        'msgNewContentName'   => $PMF_LANG['msgNewContentName'],
+        'msgNewContentMail'   => $PMF_LANG['msgNewContentMail'],
+        'defaultContentMail'  => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
+        'defaultContentName'  => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
+        'msgYourComment'      => $PMF_LANG['msgYourComment'],
+        'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
+        'captchaFieldset'     => PMF_Helper_Captcha::getInstance()->renderCaptcha(
+            $captcha,
+            'writecomment',
+            $PMF_LANG['msgCaptcha']
+        ),
+        'writeComments'       => $comment->getComments($newsId, PMF_Comment::COMMENT_TYPE_NEWS)
+    )
+);
 
 $tpl->includeTemplate('writeContent', 'index');

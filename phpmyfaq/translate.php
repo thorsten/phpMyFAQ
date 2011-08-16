@@ -59,27 +59,35 @@ if (!is_null($id) && !is_null($srclang) && PMF_Language::isASupportedLanguage($s
     $faqSource = $oFaq->faqRecord;
 }
 
-$tpl->processTemplate('writeContent', array(
-    'writeSourceFaqId'          => $faqSource['id'],
-    'writeSourceTitle'          => $faqSource['title'],
-    'writeSourceContent'        => strip_tags($faqSource['content']),
-    'writeSourceKeywords'       => $faqSource['keywords'],
-    'msgNewTranslationHeader'   => $PMF_LANG['msgNewTranslationHeader'],
-    'msgNewTranslationAddon'    => $PMF_LANG['msgNewTranslationAddon'],
-    'msgNewTransSourcePane'     => $PMF_LANG['msgNewTransSourcePane'],
-    'msgNewTranslationPane'     => $PMF_LANG['msgNewTranslationPane'],
-    'writeSendAdress'           => '?'.$sids.'action=save',
-    'defaultContentName'        => ($user ? $user->getUserData('display_name') : ''),
-    'defaultContentMail'        => ($user ? $user->getUserData('email') : ''),
-    'msgNewTranslationQuestion' => $PMF_LANG['msgNewContentTheme'],
-    'msgNewTranslationAnswer'   => $PMF_LANG['msgNewContentArticle'],
-    'msgNewTranslationName'     => $PMF_LANG['msgNewTranslationName'],
-    'msgNewTranslationMail'     => $PMF_LANG['msgNewTranslationMail'],
-    'msgNewTranslationKeywords' => $PMF_LANG['msgNewTranslationKeywords'],
-    'writeTransFaqLanguage'     => $translationLanguage,
-    'captchaFieldset'           => PMF_Helper_Captcha::getInstance()->renderFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('translate')),
-    'msgNewTranslationSubmit'   => $PMF_LANG['msgNewTranslationSubmit'],
-    'tinyMCELanguage'           => (PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en')));
+$tpl->processTemplate(
+    'writeContent',
+    array(
+        'writeSourceFaqId'          => $faqSource['id'],
+        'writeSourceTitle'          => $faqSource['title'],
+        'writeSourceContent'        => strip_tags($faqSource['content']),
+        'writeSourceKeywords'       => $faqSource['keywords'],
+        'msgNewTranslationHeader'   => $PMF_LANG['msgNewTranslationHeader'],
+        'msgNewTranslationAddon'    => $PMF_LANG['msgNewTranslationAddon'],
+        'msgNewTransSourcePane'     => $PMF_LANG['msgNewTransSourcePane'],
+        'msgNewTranslationPane'     => $PMF_LANG['msgNewTranslationPane'],
+        'writeSendAdress'           => '?' . $sids . 'action=save',
+        'defaultContentName'        => ($user ? $user->getUserData('display_name') : ''),
+        'defaultContentMail'        => ($user ? $user->getUserData('email') : ''),
+        'msgNewTranslationQuestion' => $PMF_LANG['msgNewContentTheme'],
+        'msgNewTranslationAnswer'   => $PMF_LANG['msgNewContentArticle'],
+        'msgNewTranslationName'     => $PMF_LANG['msgNewTranslationName'],
+        'msgNewTranslationMail'     => $PMF_LANG['msgNewTranslationMail'],
+        'msgNewTranslationKeywords' => $PMF_LANG['msgNewTranslationKeywords'],
+        'writeTransFaqLanguage'     => $translationLanguage,
+        'captchaFieldset'           => PMF_Helper_Captcha::getInstance()->renderCaptcha(
+            $captcha,
+            'translate',
+            $PMF_LANG['msgCaptcha']
+        ),
+        'msgNewTranslationSubmit'   => $PMF_LANG['msgNewTranslationSubmit'],
+        'tinyMCELanguage'           => (PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en')
+    )
+);
 
 $tpl->includeTemplate('writeContent', 'index');
 

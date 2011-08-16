@@ -45,18 +45,26 @@ $categoryId = PMF_Filter::filterInput(INPUT_GET, 'category_id', FILTER_VALIDATE_
 $helper = PMF_Helper_Category::getInstance();
 $helper->setCategory($category);
 
-$tpl->processTemplate('writeContent', array(
-    'msgQuestion'          => $PMF_LANG['msgQuestion'],
-    'msgNewQuestion'       => $PMF_LANG['msgNewQuestion'],
-    'lang'                 => $Language->getLanguage(),
-    'msgNewContentName'    => $PMF_LANG['msgNewContentName'],
-    'msgNewContentMail'    => $PMF_LANG['msgNewContentMail'],
-    'defaultContentMail'   => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
-    'defaultContentName'   => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
-    'msgAskCategory'       => $PMF_LANG['msgAskCategory'],
-    'printCategoryOptions' => $helper->renderCategoryOptions($categoryId),
-    'msgAskYourQuestion'   => $PMF_LANG['msgAskYourQuestion'],
-    'captchaFieldset'      => PMF_Helper_Captcha::getInstance()->renderFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('ask')),
-    'msgNewContentSubmit'  => $PMF_LANG['msgNewContentSubmit']));
+$tpl->processTemplate(
+    'writeContent',
+    array(
+        'msgQuestion'          => $PMF_LANG['msgQuestion'],
+        'msgNewQuestion'       => $PMF_LANG['msgNewQuestion'],
+        'lang'                 => $Language->getLanguage(),
+        'msgNewContentName'    => $PMF_LANG['msgNewContentName'],
+        'msgNewContentMail'    => $PMF_LANG['msgNewContentMail'],
+        'defaultContentMail'   => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
+        'defaultContentName'   => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
+        'msgAskCategory'       => $PMF_LANG['msgAskCategory'],
+        'printCategoryOptions' => $helper->renderCategoryOptions($categoryId),
+        'msgAskYourQuestion'   => $PMF_LANG['msgAskYourQuestion'],
+        'captchaFieldset'      => PMF_Helper_Captcha::getInstance()->renderCaptcha(
+            $captcha,
+            'ask',
+            $PMF_LANG['msgCaptcha']
+        ),
+        'msgNewContentSubmit'  => $PMF_LANG['msgNewContentSubmit']
+    )
+);
 
 $tpl->includeTemplate('writeContent', 'index');

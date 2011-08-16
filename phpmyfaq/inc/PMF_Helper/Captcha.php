@@ -87,7 +87,7 @@ class PMF_Helper_Captcha extends PMF_Helper
      * 
      * @return string
      */
-    public function renderFieldset($legend, $img, $length, $error = '')
+    public function renderCaptcha(PMF_Captcha $captcha, $action, $legend, $error = '')
     {
         $html = '';
         
@@ -97,8 +97,12 @@ class PMF_Helper_Captcha extends PMF_Helper
                 $html .= '<div class="error">' . $error . '</div>';
             }
             $html .= '<div class="captchaInfo">' . $legend . ':</div>';
-            $html .= $img;
-            $html .= '&nbsp; &nbsp;<input type="text" id="captcha"  name="captcha" id="captcha" size="' . $length . '" /><br/>';
+            $html .= '<a href="javascript:;" onclick="refreshCaptcha(\'' . $action . '\');">';
+            $html .= $captcha->printCaptcha($action);
+            $html .= '</a>&nbsp; &nbsp;' . sprintf(
+                '<input type="text" name="captcha" id="captcha" class="captcha" size="%d" required="required" /><br/>',
+                $captcha->caplength
+            );
             $html .= '</p>';
         }
         

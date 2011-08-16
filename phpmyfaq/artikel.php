@@ -253,7 +253,7 @@ if (!empty($switchLanguage)) {
 }
 
 // Set the template variables
-$tpl->processTemplate ("writeContent", array(
+$tpl->processTemplate ('writeContent', array(
     'writeRubrik'                   => $categoryName,
     'solution_id'                   => $faq->faqRecord['solution_id'],
     'writeThema'                    => $thema,
@@ -295,7 +295,11 @@ $tpl->processTemplate ("writeContent", array(
     'defaultContentName'            => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
     'msgYourComment'                => $PMF_LANG['msgYourComment'],
     'msgNewContentSubmit'           => $PMF_LANG['msgNewContentSubmit'],
-    'captchaFieldset'               => PMF_Helper_Captcha::getInstance()->renderFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment')),
+    'captchaFieldset'               => PMF_Helper_Captcha::getInstance()->renderCaptcha(
+        $captcha,
+        'writecomment',
+        $PMF_LANG['msgCaptcha']
+    ),
     'writeComments'                 => $comment->getComments($faq->faqRecord['id'], PMF_Comment::COMMENT_TYPE_FAQ)));
 
 
