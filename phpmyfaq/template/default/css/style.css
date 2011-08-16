@@ -165,9 +165,9 @@ body {
 #header h1 a:hover, header h1 a:active {
     background: none; text-shadow: none; }
 #header #loginBox {
-	float: right; top: 0; width: 185px; margin-top: -2.5em; background: #F67600; color: #fff;
-	border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px;
-	border-bottom-right-radius: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; }
+    float: right; top: 0; width: 185px; margin-top: -2.5em; background: #F67600; color: #fff;
+    border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; }
 #header #loginSelection {
     text-align: center; padding: 5px; }
 #header #loginSelection a:link, #header #loginSelection a:visited {
@@ -345,7 +345,7 @@ aside section ul li a:hover {
 #mainContent form #captchaImage, #mainContent form div.captchaInfo {
     margin-left: 170px; }
 #mainContent form input.captcha {
-    vertical-align: top; height: 40px; width: 120px; text-valign: middle; font-size: 30px; }
+    vertical-align: top; height: 40px; width: 120px; text-valign: middle; font-size: 30px; float: right; }
 #debug_main {
     margin: auto; width: 720px; background-color: #fff; padding: 150px 10px 10px; }
 
