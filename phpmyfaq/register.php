@@ -46,7 +46,7 @@ $tpl->processTemplate(
         'msgRegistration'            => $PMF_LANG['msgRegistration'],
         'msgRegistrationCredentials' => $PMF_LANG['msgRegistrationCredentials'],
         'msgRegistrationNote'        => $PMF_LANG['msgRegistrationNote'],
-        'lang'                       => $PMF_LANG['msgUserData'],
+        'lang'                       => $LANGCODE,
         'loginname'                  => $PMF_LANG["ad_user_loginname"],
         'realname'                   => $PMF_LANG["ad_user_realname"],
         'email'                      => $PMF_LANG["ad_entry_email"],

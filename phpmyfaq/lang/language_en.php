@@ -927,7 +927,7 @@ $PMF_LANG['msgUserData'] = 'User information required for registration';
 $PMF_LANG['captchaError'] = 'Please enter the right captcha code!';
 $PMF_LANG['msgRegError'] = 'Following errors occured. Please correct them:';
 $PMF_LANG['successMessage'] = 'Your registration was successful. You will soon receive a confirmation mail with your login data!';
-$PMF_LANG['msgRegThankYou'] = 'Thank you for your registration';
+$PMF_LANG['msgRegThankYou'] = 'Thank you for your registration!';
 $PMF_LANG['emailRegSubject'] = '[%sitename%] Registration: new user';
 
 // added 2.5.0-alpha2 - 2009-01-24 by Thorsten

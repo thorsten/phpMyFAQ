@@ -339,8 +339,9 @@ class PMF_User
             $this->db->escape_string($login));
         
         $res = $this->db->query($select);
-        if ($this->db->num_rows($res) != 1) {
+        if ($this->db->num_rows($res) !== 1) {
             if ($raise_error) {
+
                 $this->errors[] = self::ERROR_USER_INCORRECT_LOGIN;
             }
             return false;
@@ -658,6 +659,7 @@ class PMF_User
     public function isValidLogin($login)
     {
         $login = (string) $login;
+
         if (strlen($login) < $this->login_minLength || !preg_match($this->_validRegExp, $login)) {
             $this->errors[] = self::ERROR_USER_LOGIN_INVALID;
             return false;

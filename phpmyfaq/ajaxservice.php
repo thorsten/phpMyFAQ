@@ -475,45 +475,34 @@ switch ($action) {
             $user    = new PMF_User();
             $user->setLoginMinLength(4);
 
-            // check login name
-            if (! $user->isValidLogin($loginname)) {
-                $message = array('error' => $PMF_LANG['ad_user_error_loginInvalid']);
+            // Create user account (login and password)
+            // Note: password be automatically generated and sent by email as soon if admin switch user to "active"
+            if (!$user->createUser($loginname, '')) {
+                $message = array('error' => $user->error());
+            } else {
+                $user->userdata->set(
+                    array('display_name', 'email'),
+                    array($realname, $email)
+                );
+                // set user status
+                $user->setStatus('blocked');
+
+                $text = sprintf("New user has been registrated:\n\nUsername: %s\nLoginname: %s\n\n" .
+                                "To activate this user do please use the administration interface.",
+                                $realname,
+                                $loginname);
+
+                $mail = new PMF_Mail();
+                $mail->setReplyTo($email, $realname);
+                $mail->addTo($faqconfig->get('main.administrationMail'));
+                $mail->subject = PMF_Utils::resolveMarkers($PMF_LANG['emailRegSubject']);
+                $mail->message = $text;
+                $result = $mail->send();
+                unset($mail);
+
+                $message = array('success' => $PMF_LANG['successMessage'] . $PMF_LANG['msgRegThankYou']);
             }
-            if ($user->getUserByLogin($loginname)) {
-                $message = array('error' => $PMF_LANG['ad_adus_exerr']);
-            }
 
-            // ok, let's go
-            if (count($message) == 0) {
-                // Create user account (login and password)
-                // Note: password be automatically generated and sent by email as soon if admin switch user to "active"
-                if (!$user->createUser($user_name, '')) {
-                    $message = array('error' => $user->error());
-                } else {
-                    $user->userdata->set(
-                        array('display_name', 'email'),
-                        array($realname, $email)
-                    );
-                    // set user status
-                    $user->setStatus('blocked');
-
-                    $text = sprintf("New user has been registrated:\n\nUsername: %s\nLoginname: %s\n\n" .
-                                    "To activate this user do please use the administration interface.",
-                                    $realname,
-                                    $loginname);
-
-                    $mail = new PMF_Mail();
-                    $mail->setReplyTo($email, $realname);
-                    $mail->addTo($faqconfig->get('main.administrationMail'));
-                    $mail->subject = PMF_Utils::resolveMarkers($PMF_LANG['emailRegSubject']);
-                    $mail->message = $text;
-                    $result = $mail->send();
-                    unset($mail);
-
-                    $message = array('success' => $PMF_LANG['successMessage'] . $PMF_LANG['msgRegThankYou']);
-                }
-            }
-            
         } else {
             $message = array('error' => $PMF_LANG['err_sendMail']);
         }
