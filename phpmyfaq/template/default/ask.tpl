@@ -38,6 +38,7 @@
 
                 <div id="loader"></div>
                 <div id="qerror"></div>
+                <div id="answers"></div>
 
                 <input class="submit" type="submit" id="submitquestion" value="{msgNewContentSubmit}">
 

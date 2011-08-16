@@ -411,7 +411,7 @@ switch ($action) {
 
                     $message = array('result' => $response);
                 } else {
-                    $message = array('error' => 'not implemented yet: ' . $save);
+                    $message = array('error' => $PMF_LANG['err_SaveQuestion']);
                 }
                 
             } else {

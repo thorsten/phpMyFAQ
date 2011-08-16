@@ -438,16 +438,21 @@ function checkQuestion()
         dataType: 'json',
         cache:    false,
         success:  function(json) {
-            if (json.result == undefined) {
+            if (json.result == undefined && json.success == undefined) {
                 $('#qerror').html('<p class="error">' + json.error + '</p>');
                 $('#loader').hide();
-            } else {
+            } else if (json.success == undefined) {
                 $('#qerror').empty();
                 $('#questionForm').fadeOut('slow');
                 $('#answerForm').html(json.result);
                 $('#answerForm').fadeIn("slow");
                 $('#loader').hide();
                 $('#formValues').append('<input type="hidden" name="save" value="1" />');
+            } else {
+                $('#answers').html('<p class="success">' + json.success + '</p>');
+                $('#answers').fadeIn("slow");
+                $('#loader').hide();
+                $('#formValues').hide();
             }
         }
     });
