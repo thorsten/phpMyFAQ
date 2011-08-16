@@ -466,6 +466,7 @@ function refreshCaptcha(action)
         url: 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime(),
         success: function(result) {
             $("#captchaImage").attr('src', 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime());
+            $("#captcha").val('');
         }
     });
 }
