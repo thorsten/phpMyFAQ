@@ -132,7 +132,8 @@ function phpMyFAQSave()
     $('#saving_data_indicator').html('<img src="images/indicator.gif" /> Saving ...');
     // Create an input field with the save button name
     var input = document.createElement("input");
-    input.setAttribute("name", $('input:submit')[0].name);
+    input.setAttribute('name', $('input:submit')[0].name);
+    input.setAttribute('id', 'temporarySaveButton');
     $('#answer')[0].parentNode.appendChild(input);
     // Submit the form by an ajax request
     <?php if ($faqData['id'] == 0): ?>
@@ -146,6 +147,7 @@ function phpMyFAQSave()
     });
     $.post("index.php", data, null);
     $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_savedsuc']; ?>');
+    $('#temporarySaveButton').remove();
 }
 
 // --> /*]]>*/
