@@ -79,7 +79,7 @@ class PMF_Tags
      * @param  boolean $limit  Limit the returned result set
      * @return array
      */
-    public function getAllTags($search = null, $limit = false)
+    public function getAllTags($search = null, $limit = false, $showInactive = false)
     {
         global $DB;
         $tags = $allTags = array();
@@ -96,15 +96,29 @@ class PMF_Tags
 
         $query = sprintf("
             SELECT
-                tagging_id, tagging_name
+                t.tagging_id AS tagging_id, t.tagging_name AS tagging_name
             FROM
-                %sfaqtags
+                %sfaqtags t
+            LEFT JOIN
+                %sfaqdata_tags dt
+            ON
+                dt.tagging_id = t.tagging_id
+            LEFT JOIN
+                %sfaqdata d
+            ON
+                d.id = dt.record_id
+            WHERE
+                1=1
+                %s
                 %s
             ORDER BY tagging_name",
             SQLPREFIX,
-            (isset($search) && ($search != '') ? "WHERE tagging_name ".$like." '".$search."%'" : '')
-            );
-        
+            SQLPREFIX,
+            SQLPREFIX,
+            ($showInactive ? '' : "AND d.active = 'yes'"),
+            (isset($search) && ($search != '') ? "AND tagging_name ".$like." '".$search."%'" : '')
+        );
+
         $result = $this->db->query($query);
         
         if ($result) {
@@ -215,7 +229,8 @@ class PMF_Tags
         foreach ($tags as $tagging_name) {
             $tagging_name = trim($tagging_name);
             if (PMF_String::strlen($tagging_name) > 0) {
-                if (!in_array(PMF_String::strtolower($tagging_name), array_map(array('PMF_String', 'strtolower'), $current_tags))) {
+                if (!in_array(PMF_String::strtolower($tagging_name),
+                              array_map(array('PMF_String', 'strtolower'), $current_tags))) {
                     // Create the new tag
                     $new_tagging_id = $this->db->nextID(SQLPREFIX.'faqtags', 'tagging_id');
                     $query = sprintf("
@@ -469,13 +484,18 @@ class PMF_Tags
 
         $query = sprintf("
             SELECT
-                d.record_id AS record_id
+                dt.record_id AS record_id
             FROM
-                %sfaqdata_tags d, %sfaqtags t
+                %sfaqtags t, %sfaqdata_tags dt
+            LEFT JOIN
+                %sfaqdata d
+            ON
+                d.id = dt.record_id
             WHERE
-                t.tagging_id = d.tagging_id
+                t.tagging_id = dt.tagging_id
             AND 
                 t.tagging_name = '%s'",
+            SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
             $this->db->escape_string($tagName));
