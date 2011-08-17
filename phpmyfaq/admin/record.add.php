@@ -206,14 +206,13 @@ if ($permission['editbt']) {
             }
 ?>
     <script type="text/javascript">
-    <!--
     $(document).ready(function(){
         setTimeout(function() {
-            window.location = "index.php?action=view";
+            window.location = "index.php?action=editentry&id=<?php print $record_id; ?>&lang=<?php print $recordData['lang'] ?>";
             }, 5000);
         });
-    //-->
-    </script>       
+    </script>
+
 <?php
         } else {
             print $PMF_LANG['ad_entry_savedfail'].$db->error();

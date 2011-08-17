@@ -298,6 +298,16 @@ nav ul li a.logout {
 #groupDetails {
     display: table-cell; width: 300px; vertical-align: top; }
 
+/* Misc */
+/* datePicker CSS definitions */
+a.dp-choose-date {
+    width: 16px; height: 16px; padding: 0; margin: 5px 3px 0; display: block; text-indent: -2000px; overflow: hidden;
+    background: url(../images/calendar.png) no-repeat; float: left; }
+a.dp-choose-date.dp-disabled {
+    background-position: 0 -20px; cursor: default; }
+input.dp-applied {
+    width: 140px; float: left; }
+
 /* Footer */
 footer {
     position: absolute; left: 0; width: 100%; background: #222; }

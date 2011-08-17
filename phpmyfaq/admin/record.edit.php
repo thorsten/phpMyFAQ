@@ -179,8 +179,8 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
         <form id="selectRevision" name="selectRevision" action="?action=editentry&amp;id=<?php print $faqData['id']; ?>&amp;lang=<?php print $faqData['lang']; ?>" method="post">
         <fieldset>
+            <legend><?php print $PMF_LANG['ad_changerev']; ?></legend>
             <p>
-                <legend><?php print $PMF_LANG['ad_changerev']; ?></legend>
                 <select name="revisionid_selected" onchange="selectRevision.submit();">
                     <option value="<?php print $faqData['revision_id']; ?>">
                         <?php print $PMF_LANG['ad_changerev']; ?>
@@ -397,6 +397,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                     <label for="grouppermission"><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
                     <input type="radio" id="grouppermission" name="grouppermission" class="active" value="all" <?php print ($allGroups ? 'checked="checked"' : ''); ?>/>
                     <?php print $PMF_LANG['ad_entry_all_groups']; ?>
+                    <br />
                     <input type="radio" name="grouppermission" class="active" value="restricted" <?php print ($restrictedGroups ? 'checked="checked"' : ''); ?>/>
                     <?php print $PMF_LANG['ad_entry_restricted_groups']; ?>
                     <select name="restricted_groups" size="1">
@@ -428,6 +429,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                     <label for="userpermission"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
                     <input type="radio" id="userpermission" name="userpermission" class="active" value="all" <?php print ($allUsers ? 'checked="checked"' : ''); ?>/>
                     <?php print $PMF_LANG['ad_entry_all_users']; ?>
+                    <br />
                     <input type="radio" name="userpermission" class="active" value="restricted" <?php print ($restrictedUsers ? 'checked="checked"' : ''); ?>/>
                     <?php print $PMF_LANG['ad_entry_restricted_users']; ?>
                     <select name="restricted_users" size="1">
