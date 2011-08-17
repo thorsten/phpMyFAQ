@@ -43,7 +43,7 @@ if ($permission["delatt"]) {
     } else {
         printf("<p>%s</p>\n", $PMF_LANG['ad_att_delfail']);
     }
-    printf('<p><a href="?action=editentry&amp;id=%d&amp;artlang=%s">%s</a></p>',
+    printf('<p><a href="?action=editentry&amp;id=%d&amp;lang=%s">%s</a></p>',
         $recordId, $recordLang, $PMF_LANG['ad_entry_back']);
 } else {
     print $PMF_LANG['err_NotAuth'];
