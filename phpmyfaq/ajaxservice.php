@@ -67,9 +67,11 @@ $http->setContentType('application/json');
 $http->addHeader();
 
 // Set session
-$faqsession = new PMF_Session();
+$faqsession = new PMF_Session($db, $Language);
 
-if (!IPCheck($_SERVER['REMOTE_ADDR'])) {
+$network = new PMF_Network();
+
+if (!$network->checkIp($_SERVER['REMOTE_ADDR'])) {
     $message = array('error' => $PMF_LANG['err_bannedIP']);
 }
 

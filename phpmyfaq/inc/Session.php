@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Session
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2010 phpMyFAQ Team
+ * @copyright 2007-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-31
@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Session
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2010 phpMyFAQ Team
+ * @copyright 2007-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-31
@@ -57,15 +57,15 @@ class PMF_Session
     /**
      * Constructor
      *
-     * @param   object  PMF_Db
-     * @param   string  $language
-     * @since   2007-03-31
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param PMF_DB_Driver $database Database connection
+     * @param PMF_Language  $language Language object
+     *
+     * @return PMF_Session
      */
-    public function __construct()
+    public function __construct(PMF_DB_Driver $database, PMF_Language $language)
     {
-        $this->db       = PMF_Db::getInstance();
-        $this->language = PMF_Language::$language;
+        $this->db       = $database;
+        $this->language = $language;
     }
     
     /**
@@ -101,7 +101,9 @@ class PMF_Session
                 }
             }
 
-            if (!IPCheck($_SERVER['REMOTE_ADDR'])) {
+            $network = new PMF_Network();
+
+            if (!$network->checkIp($_SERVER['REMOTE_ADDR'])) {
                 $banned = true;
             }
 

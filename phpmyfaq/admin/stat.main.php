@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 if ($permission['viewlog']) {
 	
-    $session    = new PMF_Session();
+    $session    = new PMF_Session($db, $Language);
     $statdelete = PMF_Filter::filterInput(INPUT_POST, 'statdelete', FILTER_SANITIZE_STRING);
     $month      = PMF_Filter::filterInput(INPUT_POST, 'month', FILTER_SANITIZE_STRING);
 
