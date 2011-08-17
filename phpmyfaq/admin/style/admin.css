@@ -242,6 +242,8 @@ nav ul li a.logout {
 #mainContent p.success { 
     margin: 10px auto; padding: 10px; background-color: #7dfd77; color: #222; border-radius: 5px; 
     -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#mainContent ul.adminAttachments {
+    margin-left: 190px; }
     
 /* phpMyFAQ forms */
 #mainContent form p {

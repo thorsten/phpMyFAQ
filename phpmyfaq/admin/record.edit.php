@@ -255,7 +255,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                 printf('<li><a href="../%s">%s</a> ',
                     $att->buildUrl(),
                     $att->getFilename());
-                if ($permission["delatt"]) {
+                if ($permission['delatt']) {
                     printf('[ <a href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s">%s</a> ]',
                         $faqData['id'],
                         $att->getId(),
@@ -264,13 +264,15 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                 }
                 print "</li>\n";
             }
-            print '                    </ul>';
-            printf('<div><a href="#;" onclick="addAttachment(\'attachment.php?record_id=%d&amp;record_lang=%s&amp;rubrik=%d\', \'Attachment\', 400,80); return false;">%s</a></div>',
+            printf('<li><a href="#;" onclick="addAttachment(\'attachment.php?record_id=%d&amp;record_lang=%s&amp;rubrik=%d\', \'Attachment\', 550, 130); return false;">%s</a></li>',
                 $faqData['id'],
                 $faqData['lang'],
                 $selectedCategory,
                 $PMF_LANG['ad_att_add']
                 );
+?>
+                    </ul>
+<?php
         } else {
             printf("%s", $PMF_LANG['ad_att_nope']);
         }

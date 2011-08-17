@@ -2,23 +2,29 @@
 /**
  * Select an attachment and save it or create the SQL backup files
  *
- * @category  phpMyFAQ
- * @package   Administration
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Anatoliy Belsky <ab@php.net>
- * @since     2002-09-17 
- * @copyright 2002-2009 phpMyFAQ
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
+ *  http://www.mozilla.org/MPL/
  *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Anatoliy Belsky <ab@php.net>
+ * @copyright 2002-2011 phpMyFAQ
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2002-09-17 
  */
+
+error_reporting(E_ALL);
 
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
@@ -42,7 +48,7 @@ PMF_Attachment_Factory::init($faqconfig->get('main.attachmentsStorageType'),
                              $faqconfig->get('main.defaultAttachmentEncKey'),
                              $faqconfig->get('main.enableAttachmentEncryption'));
 
-$currentSave   = PMF_Filter::filterInput(INPUT_POST, 'save',   FILTER_SANITIZE_STRING);
+$currentSave   = PMF_Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);
 $currentAction = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 $currentToken  = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 
@@ -117,25 +123,27 @@ if (is_null($currentAction) || !is_null($currentSave)) {
     <link rel="shortcut icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico">
     <link rel="apple-touch-icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/apple-touch-icon.png">
 </head>
-<body>
+<body class="attachments">
+
+    <div id="mainContent">
 <?php
 }
 if (is_null($currentAction) && $auth && $permission["addatt"]) {
     $recordId   = filter_input(INPUT_GET, 'record_id',   FILTER_VALIDATE_INT);
     $recordLang = filter_input(INPUT_GET, 'record_lang', FILTER_SANITIZE_STRING);
 ?>
-    <form action="?action=save" enctype="multipart/form-data" method="post">
-    <fieldset>
-    <legend><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></legend>
-        <input type="hidden" name="MAX_FILE_SIZE" value="<?php print $faqconfig->get('main.maxAttachmentSize'); ?>" />
-        <input type="hidden" name="record_id" value="<?php print $recordId; ?>" />
-        <input type="hidden" name="record_lang" value="<?php print $recordLang; ?>" />
-        <input type="hidden" name="save" value="TRUE" />
-        <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
-        <?php print $PMF_LANG["ad_att_att"]; ?> <input name="userfile" type="file" />
-        <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_att_butt"]; ?>" />
-    </fieldset>
-    </form>
+        <form action="?action=save" enctype="multipart/form-data" method="post">
+            <fieldset>
+            <legend><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></legend>
+                <input type="hidden" name="MAX_FILE_SIZE" value="<?php print $faqconfig->get('main.maxAttachmentSize'); ?>" />
+                <input type="hidden" name="record_id" value="<?php print $recordId; ?>" />
+                <input type="hidden" name="record_lang" value="<?php print $recordLang; ?>" />
+                <input type="hidden" name="save" value="TRUE" />
+                <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
+                <?php print $PMF_LANG["ad_att_att"]; ?> <input name="userfile" type="file" />
+                <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_att_butt"]; ?>" />
+            </fieldset>
+        </form>
 <?php
 }
 
@@ -175,10 +183,31 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission['adda
             $att->delete();
             print "<p>".$PMF_LANG["ad_att_fail"]."</p>";
         }
+
+        printf(
+            '<p align="center"><a href="javascript:;" onclick="addAttachmentLink(%d, \'%s\');">%s</a></p>',
+            $att->getId(),
+            $att->getFilename(),
+            $PMF_LANG['ad_att_close']
+        );
+
     } else {
-        printf("<p>%s</p>", sprintf($PMF_LANG['ad_attach_4'], $faqconfig->get('main.maxAttachmentSize')));
+        printf(
+            '<p>%s</p>',
+            sprintf(
+                $PMF_LANG['ad_attach_4'],
+                $faqconfig->get('main.maxAttachmentSize')
+            )
+        );
+
+        printf(
+            '<p align="center"><a href="javascript:;" onclick="closeWindow();">%s</a></p>',
+            $PMF_LANG['ad_att_close']
+        );
+
     }
-    print "<p align=\"center\"><a href=\"javascript:window.close()\">".$PMF_LANG["ad_att_close"]."</a></p>";
+
+
 }
 if (!is_null($currentSave) && $currentSave == true && $auth && !$permission["addatt"]) {
     print $PMF_LANG["err_NotAuth"];
@@ -190,5 +219,31 @@ if (DEBUG) {
 
 $db->dbclose();
 ?>
+    </div>
+
+    <script type="text/javascript">
+        /**
+         * Adds the link to the attachment in the main FAQ window
+         * @param integer attachmentId
+         * @param string
+         */
+        function addAttachmentLink(attachmentId, fileName)
+        {
+            window.opener.
+                $('.adminAttachments').
+                append('<li><a href="../index.php?action=attachment&id=' + attachmentId +'">' + fileName + '</a></li>');
+            window.close();
+        }
+
+        /**
+         * Closes the current window
+         *
+         */
+        function closeWindow()
+        {
+            window.close();
+        }
+    </script>
+
 </body>
 </html>
