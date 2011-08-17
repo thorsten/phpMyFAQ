@@ -392,9 +392,9 @@ $PMF_LANG["ad_att_add"] = "Attachment anhängen";
 $PMF_LANG["ad_entryins_suc"] = "Eintrag erfolgreich erstellt.";
 $PMF_LANG["ad_entryins_fail"] = "Leider ist ein Fehler aufgetreten.";
 $PMF_LANG["ad_att_del"] = "Löschen";
-$PMF_LANG["ad_att_nope"] = "Attachments sind erst beim bearbeiten möglich.";
-$PMF_LANG["ad_att_delsuc"] = "Das Attachment wurde erfolgreich gelöscht.";
-$PMF_LANG["ad_att_delfail"] = "Leider ist ein Fehler beim Löschen des Attachments aufgetreten.";
+$PMF_LANG["ad_att_nope"] = "Anhänge sind erst beim Bearbeiten möglich.";
+$PMF_LANG["ad_att_delsuc"] = "Der Anhang wurde erfolgreich gelöscht.";
+$PMF_LANG["ad_att_delfail"] = "Leider ist ein Fehler beim Löschen des Anhangs aufgetreten.";
 $PMF_LANG["ad_entry_add"] = "FAQ erstellen";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin
@@ -408,13 +408,13 @@ $PMF_LANG["ad_sess_head"] = "Sessions ansehen";
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "Eine Sicherung stellt im Grunde ein komplettes Abbild der SQL-Tabellen der FAQ dar. Diese Sicherung stellt immer eine Momentaufnahme dar und sollte mindestens einmal monatlich gemacht werden. Das Format der Sicherung ist eine normale SQL-Transaktionsdatei, man kann eine Rücksicherung also notfalls auch mit Hilfe von Tools wie phpMyAdmin oder ähnlichen Tools vornehmen.";
 $PMF_LANG["ad_csv_head"] = "Sicherung erstellen";
-$PMF_LANG["ad_att_addto"] = "Attachment zum Artikel";
+$PMF_LANG["ad_att_addto"] = "Anhang zur FAQ";
 $PMF_LANG["ad_att_addto_2"] = "hinzufügen";
-$PMF_LANG["ad_att_att"] = "Attachment:";
-$PMF_LANG["ad_att_butt"] = "OK";
-$PMF_LANG["ad_att_suc"] = "Das Attachment wurde erfolgreich hinzugefügt.";
-$PMF_LANG["ad_att_fail"] = "Leider ist ein Fehler beim Hinzufügen des Attachments aufgetreten.";
-$PMF_LANG["ad_att_close"] = "Fenster schließen";
+$PMF_LANG["ad_att_att"] = "Anhang auswählen:";
+$PMF_LANG["ad_att_butt"] = "Hochladen";
+$PMF_LANG["ad_att_suc"] = "Der Anhang wurde erfolgreich hochgeladen.";
+$PMF_LANG["ad_att_fail"] = "Leider ist ein Fehler beim Hochladen des Anhangs aufgetreten.";
+$PMF_LANG["ad_att_close"] = "Dieses Fenster schließen";
 
 // Added v0.85 - 08.07.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_restore"] = "Hiermit kann eine zuvor erstellte Sicherung wiederhergestellt werden. Es gilt zu beachten, dass das Wiedereinspielen einer Sicherung die FAQ auf den Stand zurücksetzt, der beim Erstellen der Sicherung geherscht hat (die Daten werden ersetzt).";
