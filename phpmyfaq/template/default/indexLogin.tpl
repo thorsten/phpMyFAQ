@@ -75,8 +75,10 @@
         <section>
 
             <header>
-                <h2>{loginMessage}</h2>
+                <h2>{loginHeader}</h2>
             </header>
+
+            {loginMessage}
 
             <form action="{writeLoginPath}" method="post">
                 <input type="hidden" name="faqloginaction" value="{faqloginaction}"/>
