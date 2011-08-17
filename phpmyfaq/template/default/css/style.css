@@ -343,9 +343,9 @@ aside section ul li a:hover {
     text-decoration: underline; }
 
 #mainContent form .captchaImage, #mainContent form .captchaInfo {
-    margin-left: 170px; }
+    margin-left: 170px; position: relative; }
 #mainContent form .captchaRefresh {
-    position: absolute; width: 100px; height: 20px; bottom: -28px; left: 490px; z-index: 2; opacity: 0.8;
+    position: absolute; width: 100px; height: 20px; bottom: 5px; z-index: 2; opacity: 0.8;
     background-color: #eeeeee; text-align: center; line-height: 20px; display: none; cursor: pointer; }
 #mainContent form .captchaImage:hover .captchaRefresh {
     display: block; }
