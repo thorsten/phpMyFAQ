@@ -46,12 +46,49 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
     $LANGCODE = 'en';
 }
 
+if ($faqconfig->get('main.enableLoginOnly')) {
+    if (!isset($_SERVER['PHP_AUTH_USER'])) {
+        header('WWW-Authenticate: Basic realm="phpMyFAQ RSS Feeds"');
+        header('HTTP/1.0 401 Unauthorized');
+        exit;
+    } else {
+        $user = new PMF_User_CurrentUser();
+        if ($user->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) {
+            if ($user->getStatus() != 'blocked') {
+                $auth = true;
+            } else {
+                $user = null;
+            }
+        } else {
+            $user = null;
+        }
+    }
+}
+
+//
+// Get current user and group id - default: -1
+//
+if (!is_null($user) && $user instanceof PMF_User_CurrentUser) {
+    $current_user = $user->getUserId();
+    if ($user->perm instanceof PMF_Perm_PermMedium) {
+        $current_groups = $user->perm->getUserGroups($current_user);
+    } else {
+        $current_groups = array(-1);
+    }
+    if (0 == count($current_groups)) {
+        $current_groups = array(-1);
+    }
+} else {
+    $current_user   = -1;
+    $current_groups = array(-1);
+}
+
 //
 // Initalizing static string wrapper
 //
 PMF_String::init($LANGCODE);
 
-$faq     = new PMF_Faq();
+$faq     = new PMF_Faq($current_user, $current_groups);
 $rssData = $faq->getLatestData(PMF_NUMBER_RECORDS_LATEST);
 $num     = count($rssData);
 
