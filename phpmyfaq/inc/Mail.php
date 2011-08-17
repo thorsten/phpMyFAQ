@@ -294,6 +294,20 @@ class PMF_Mail
             return false;
         }
 
+        if (!empty($name)) {
+            // Remove CR and LF characters to prevent header injection
+            $name = str_replace(array("\n", "\r"), '', $name);
+            
+            if (function_exists('mb_encode_mimeheader')) {
+                // Encode any special characters in the displayed name
+                $name = mb_encode_mimeheader($name);
+            }
+            
+            // Wrap the displayed name in quotes (to fix problems with commas etc),
+            // and escape any existing quotes
+            $name = '"' . str_replace('"', '\"', $name) . '"';
+        }
+
         // Add the e-mail address into the target array
         $target[$address] = $name;
         // On Windows, when using PHP built-in mail drop any name, just use the e-mail address
@@ -429,14 +443,7 @@ class PMF_Mail
 
         // From
         foreach ($this->_from as $address => $name) {
-            if (empty($name)) {
-                $this->headers['From'] = (empty($name) ? '' : $name.' ').'<'.$address.'>';
-            } else {
-                if (function_exists('mb_encode_mimeheader')) {
-                    $name = mb_encode_mimeheader($name);
-                }
-                $this->headers['From'] =  $name .' <'.$address.'>';
-            }
+            $this->headers['From'] = (empty($name) ? '' : $name.' ').'<'.$address.'>';
         }
 
         // Message-Id

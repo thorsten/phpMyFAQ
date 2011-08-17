@@ -186,6 +186,7 @@ if ($groupAction == 'addsave') {
     $group_auto_join   = PMF_Filter::filterInput(INPUT_POST, 'group_auto_join', FILTER_SANITIZE_STRING, '');
     $csrfOkay          = true;
     $csrfToken         = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+
     if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
         $csrfOkay = false; 
     }
@@ -201,6 +202,7 @@ if ($groupAction == 'addsave') {
             'description' => $group_description,
             'auto_join'   => $group_auto_join
         );
+
         if ($user->perm->addGroup($group_data) <= 0)
             $messages[] = $PMF_LANG['ad_adus_dberr'];
     }
@@ -225,6 +227,7 @@ if (!isset($message))
 
 // show new group form
 if ($groupAction == 'add') {
+    $user = new PMF_User_CurrentUser();
 ?>
         <header>
             <h2><?php print $PMF_LANG['ad_group_add']; ?></h2>

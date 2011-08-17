@@ -405,7 +405,7 @@ if (isset($auth) && in_array(true, $permission)) {
                     $result->stable);
                 // Installed phpMyFAQ version is outdated
                 if (-1 == version_compare($faqconfig->get('main.currentVersion'), $result->stable)) {
-                    print '<br /><a href="?action=upgrade">' . $PMF_LANG['ad_you_should_update'] - '</a>';
+                    print '<br />' . $PMF_LANG['ad_you_should_update'];
                 }
             }
         } else {
