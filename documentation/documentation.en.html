@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Documentation for phpMyFAQ 2.7.x</title>
     <style type="text/css"><!--
-    body { margin: 0 auto; width: 960px; font: 14px/22px Helvetica, Arial, sans-serif; background-color: #F0F0F0; }
+    body { margin: 0 auto; width: 960px; font: 15px/24px Helvetica, Arial, sans-serif; background-color: #F0F0F0; }
     code { display: block; font-size: 16px; background-color: black; color: white; padding: 10px; width: 600px;
            margin-bottom: 22px; }
     a { color: #0000ff; }
@@ -39,7 +39,7 @@
             <li><a href="#2h">Enabling mod_rewrite support</a></li>
             <li><a href="#2i">Enabling LDAP support</a></li>
             <li><a href="#2j">PDF export</a></li>
-            <li><a href="#2k">Firefox and IE7 search plugins</a></li>
+            <li><a href="#2k">Mozilla Firefox, Google Chrome and IE8+ search plugins</a></li>
             <li><a href="#2l">Static solution ID</a></li>
             <li><a href="#2m">Spam protection</a></li>
             <li><a href="#2n">Attachments</a></li>
@@ -63,9 +63,10 @@
             <li><a href="#4f">Add questions</a></li>
             <li><a href="#4g">Open questions</a></li>
             <li><a href="#4h">Submit translation</a></li>
-            <li><a href="#4i">"Digg it!" and "Share on Facebook"</a></li>
+            <li><a href="#4i">Social networks</a></li>
             <li><a href="#4j">Internal references</a></li>
             <li><a href="#4k">Public user registration</a></li>
+            <li><a href="#4l">Complete secured FAQ</a></li>
         </ol></li>
         <li><strong><a href="#5">Administration</a></strong>
         <ol class="alpha">
@@ -74,12 +75,13 @@
             <li><a href="#5c">Category Administration</a></li>
             <li><a href="#5d">Record Administration</a></li>
             <li><a href="#5e">Comment Administration</a></li>
-            <li><a href="#5f">News Administration</a></li>
-            <li><a href="#5g">Glossary</a></li>
-            <li><a href="#5h">Statistics</a></li>
-            <li><a href="#5i">Exports</a></li>
-            <li><a href="#5j">Backup</a></li>
-            <li><a href="#5k">Configuration</a></li>
+            <li><a href="#5f">Glossary</a></li>
+            <li><a href="#5g">News Administration</a></li>
+            <li><a href="#5h">Attachment Administration</a></li>
+            <li><a href="#5i">Statistics</a></li>
+            <li><a href="#5j">Exports</a></li>
+            <li><a href="#5k">Backup</a></li>
+            <li><a href="#5l">Configuration</a></li>
         </ol></li>
         <li><strong><a href="#6">Customizing phpMyFAQ 2.7.x</a></strong>
         <ol class="alpha">
@@ -181,13 +183,17 @@
             <li>Filter support</li>
             <li>SPL support</li>
         </ul></li>
-        <li><strong>Web server</strong> (<a href="http://httpd.apache.org">Apache</a>
-        1.3/2.0/2.2 or <a href="http://www.lighttpd.net">lighttpd</a> 1.0+ or
-        <a href="http://www.microsoft.com/">IIS</a> 5.0+)</li>
+        <li>
+            <strong>Web server</strong> (
+            <a href="http://httpd.apache.org">Apache</a> 2.x or
+            <a href="http://www.nginx.net/">nginx</a> 0.7+ or
+            <a href="http://www.lighttpd.net">lighttpd</a> 1.0+ or
+            <a href="http://www.microsoft.com/">IIS</a> 7.0+)
+        </li>
         <li><strong>Database server</strong>
         <ul>
-            <li><a href="http://www.mysql.com">MySQL</a> 5.x with the MySQL extension (recommended: 5.1.x)</li>
-            <li><a href="http://www.mysql.com">MySQL</a> 5.x with the MySQLi extension (recommended: 5.1.x)</li>
+            <li><a href="http://www.mysql.com">MySQL</a> 5.x with the MySQL extension (recommended: 5.5.x)</li>
+            <li><a href="http://www.mysql.com">MySQL</a> 5.x with the MySQLi extension (recommended: 5.5.x)</li>
             <li><a href="http://www.postgresql.org">PostgreSQL</a> 8.x (recommended: latest 8.x)</li>
             <li><a href="http://www.sybase.com">Sybase</a></li>
             <li><a href="http://www.microsoft.com/sql/">Microsoft SQL Server</a> 2000, 2005, 2008</li>
@@ -217,8 +223,8 @@
     process.</p>
     <p>In case you have PHP below 5.2.3 installed you cannot use phpMyFAQ 2.7.</p>
     <p>phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers 
-    are Mozilla Firefox 3.x and later (Windows/MacOS X/Linux), Safari 4.x or later
-    (MacOS X/Windows/iOS), Chrome 5.x or later (Windows/MacOS X/Linux), Opera 10.0
+    are Mozilla Firefox 3.6 and later (Windows/MacOS X/Linux), Safari 5.x or later
+    (MacOS X/Windows/iOS), Chrome 5 or later (Windows/MacOS X/Linux), Opera 11.0
     or later (Windows/MacOS X/Linux) and Internet Explorer 8 or later for Windows.
     You have to enable JavaScript for the Ajax based functions as well.</p>
     <p>If you're using <em>lighttpd</em> you have to set the following configuration:</p>
@@ -227,30 +233,39 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="2b"></a>2.b. Preparations</strong></p>
-    <p>Please unzip the downloaded archive on your hard disk.</p>
-    <p>You can modify the layout of phpMyFAQ using templates. A description of
-    how this is done can be found <a href="#6">below</a>. Copy all unzipped files
-    to your web server in a directory using FTP. A good choice would be the
-    directory <strong>faq/</strong>.<br />
-    <strong>Important:</strong><br />
-    Writing permission for your script is needed in this directory to be able to
-    configure the file <strong>database.php</strong> during installation. This is the
-    case if you're running PHP as CGI or as mod_php with disabled safe-mode. The
-    installation script will stop when your web server isn't configured as needed.</p>
-    <p>It might help to set chmod 777 to the whole phpMyFAQ directory to avoid
-    problems during the installation. If you're running a very restrictive mod_php
-    installation you should keep the chmod 777 for the following files and
-    directories even after the successful installation:</p>
+    <p>
+        <strong><a name="2b"></a>2.b. Preparations</strong>
+    </p>
+    <p>
+        Please unzip the downloaded archive on your hard disk.
+    </p>
+    <p>
+        You can modify the layout of phpMyFAQ using templates. A description of how this is done can be found
+        <a href="#6">below</a>. Copy all unzipped files to your web server in a directory using FTP. A good choice
+        would be the directory <strong>faq/</strong>.<br />
+        <strong>Important:</strong><br />
+        Writing permission for your script is needed in this directory to be able to write the file
+        <strong>config/database.php</strong> during installation. This is the case if you're running PHP as CGI or as
+        mod_php with disabled safe-mode. The installation script will stop when your web server isn't configured as
+        needed.
+    </p>
+    <p>
+        It might help to set chmod 777 to the whole phpMyFAQ directory to avoid problems during the installation. If
+        you're running a very restrictive mod_php installation you should keep the chmod 777 for the following files
+        and directories even after the successful installation:
+    </p>
     <ul>
-      <li>the file <strong>database.php</strong> in the directory <strong>config/</strong> </li>
+      <li>the directory <strong>config/</strong></li>
       <li>the directory <strong>attachments/</strong></li>
-      <li>the directory <strong>data/</strong></li>
       <li>the directory <strong>images/</strong></li>
     </ul>
-    <p>All other directories shouldn't be world-writable for your own security.</p>
-    <p>The database user needs the permissions for CREATE, DROP, ALTER, INDEX,
-    INSERT, UPDATE, DELETE and SELECT on all tables in the database.</p>
+    <p>
+        All other directories shouldn't be world-writable for your own security.
+    </p>
+    <p>
+        The database user needs the permissions for CREATE, DROP, ALTER, INDEX, INSERT, UPDATE, DELETE and SELECT on all
+        tables in the database.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -360,24 +375,39 @@
     <p><em>IIS Web server</em></p>
     <p>If you want to enable the search engine optimization you have to rename
     the file _httpd.ini to httpd.ini in the root directory where your FAQ is located.
-    Then you have to activate the mod_rewrite support in the admin back-end in the
+    Then you have to activate the URL rewrite support in the admin back-end in the
+    configuration page.</p>
+    <p><em>nginx Web server</em></p>
+    <p>If you want to enable the search engine optimization you have to copy the
+    rewrite rules in the file _nginx.conf to your nginx.conf. Then you
+    have to activate the URL rewrite support in the admin back-end in the
     configuration page.</p>
     <p><em>lighttpd Web server</em></p>
     <p>If you want to enable the search engine optimization you have to copy the
     rewrite rules in the file _lighttpd.conf to your lighttpd.conf. Then you
-    have to activate the mod_rewrite support in the admin back-end in the
+    have to activate the URL rewrite support in the admin back-end in the
     configuration page.</p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;" />
-    <p><strong><a name="2i"></a>2.i. Enabling LDAP support</strong></p>
-    <p>If you're entered the correct LDAP information during the installation you
-    have to enable the LDAP support in the configuration in the admin backend. Now
-    your user can authenticate themselves in phpMyFAQ against your LDAP server or
-    even an Microsoft Active Directory.</p>
-    <p>If you need special options for your LDAP or ADS configuration you have to 
-    edit the LDAP constants in the file <strong>config/constants_ldap.php</strong>.</p>
+    <p>
+        <strong><a name="2i"></a>2.i. Enabling LDAP support</strong>
+    </p>
+    <p>
+        If you're entered the correct LDAP information during the installation you have to enable the LDAP support
+        in the configuration in the admin backend. Now your user can authenticate themselves in phpMyFAQ against
+        your LDAP server or even an Microsoft Active Directory.
+    </p>
+    <p>
+        If you need special options for your LDAP or ADS configuration you have to edit the LDAP constants in the
+        file <strong>config/constants_ldap.php</strong>.
+    </p>
+    <p>
+        If you want to add LDAP support later, you can use the file <strong>config/ldap.php.original</strong> as
+        template and if you rename it to <strong>config/ldap.php</strong> you can use the LDAP features as well after
+        you enabled it in the administration backend.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -402,75 +432,95 @@
 
 
     <hr style="width: 90%; height: 1px;" />
-    <p><strong><a name="2k"></a>2.k. Firefox and IE7 search plugins</strong></p>
-    <p>phpMyFAQ 2.7 provides search plugins for Mozilla Firefox and Internet Explorer 
-    7 and later based on the OpenSearch specification. Every user in the front-end 
-    can install it. With an installed search plugin you can search through the 
-    phpMyFAQ installation with the search box in upper right corner of Mozilla 
-    Firefox or Internet Explorer.</p>
+    <p>
+        <strong><a name="2k"></a>2.k. Mozilla Firefox, Google Chrome and IE8+ search plugins</strong>
+    </p>
+    <p>
+        phpMyFAQ 2.7 provides search plugins for Mozilla Firefox, Google Chrome and Internet Explorer 8 and later
+        based on the OpenSearch specification. Every user in the front-end can install it. With an installed search
+        plugin you can search through the phpMyFAQ installation with the search box in upper right corner of Mozilla
+        Firefox, Google Chrome or Internet Explorer.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;" />
-    <p><strong><a name="2l"></a>2.l. Static solution ID</strong></p>
-    <p>phpMyFAQ implements a static solution ID which never changes. This ID is
-    displayed next to the question on a FAQ record page. You may think why do
-    you need such an ID? If you have a record ID <em>1042</em> it is now possible
-    to enter only the ID <em>1024</em> in the input field of the full-text search
-    box and you'll be automatically redirected to the FAQ record with the ID
-    <em>1024</em>. By default the numbers start at ID <em>1000</em> but you can
-    change this value in the file <em>inc/constants.php</em>. You can also
-    change the value of the incrementation of the static IDs.</p>
+    <p>
+        <strong><a name="2l"></a>2.l. Static solution ID</strong>
+    </p>
+    <p>
+        phpMyFAQ implements a static solution ID which never changes. This ID is displayed next to the question on a
+        FAQ record page. You may think why do you need such an ID? If you have a record ID <em>1042</em> it is now
+        possible to enter only the ID <em>1024</em> in the input field of the full-text search box and you'll be
+        automatically redirected to the FAQ record with the ID <em>1024</em>. By default the numbers start at ID
+        <em>1000</em> but you can change this value in the file <em>inc/constants.php</em>. You can also change the
+        value of the incrementation of the static IDs.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;" />
     <p><strong><a name="2m"></a>2.m. Spam protection</strong></p>
-    <p>phpMyFAQ 2.7 performs these three checks on public forms:</p>
+    <p>
+        phpMyFAQ 2.7 performs these three checks on public forms:
+    </p>
     <ol>
-        <li>Check against IP/Network address</li>
+        <li>Check against IPv4 and IPv6 Network address</li>
         <li>Check against banned words</li>
         <li>Check against the captcha code</li>
     </ol>
-    <p>The IP/Network addresses can be added or removed in the configuration panel
-    in the administration back-end. If you want to add banned words to phpMyFAQ,
-    then you have to edit the file <em>inc/blockedwords.txt</em>. Please add only
-    one word per line.</p>
+    <p>
+        The IPv4 and IPv6 Network addresses can be added or removed in the configuration panel in the administration
+        back-end. If you want to add banned words to phpMyFAQ, then you have to edit the file
+        <em>inc/blockedwords.txt</em>. Please add only one word per line.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;" />
     <p><strong><a name="2n"></a>2.n. Attachments</strong></p>
-    <p>Starting with version 2.6 phpMyFAQ supports encrypted attachments. The 
-    encrypton is done using the <a href="http://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a>
-    algorythm implemented in mcrypt extension (if avaliable) or with native 
-    PHP Rijndael implementation. The key size vary depending on implementation 
-    used and can be max 256 bits long. Use of mcrypt extension is strongly 
-    recommended because of performance reasons, its avaliability is checked
-    automatically at the run time.</p>
-    <p>See the migration section if you're migrating from earlier versions.</p>
-    <p>Please be aware:
+    <p>
+        phpMyFAQ 2.7 supports encrypted attachments. The  encryption is done using the
+        <a href="http://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a> algorithm implemented in mcrypt
+        extension (if avaliable) or with native PHP Rijndael implementation. The key size vary depending on
+        implementation used and can be max 256 bits long. Use of mcrypt extension is strongly recommended because of
+        performance reasons, its avaliability is checked automatically at the run time.
+    </p>
+    <p>
+        See the migration section if you're migrating from earlier versions.
+    </p>
+    <p>
+        Please be aware:
+    </p>
     <ul>
-        <li>Disabling encryption will cause all files be saved unencrypted. In this
-        case you'll benefit sparing disk space, because identical files will be
-        saved only once.</li>
-        <li>Do not change the default attachment encryption key once files 
-        was uploaded. Doing so will cause all the previously uploaded files 
-        to be wrong decrypted. If you need to change the default key, you will 
-        have to reupload all files.</li>
-        <li>Always memorize your encryption keys. There is no way to  ecrypt files 
-        without a correct key.</li>
-        <li>Files are always saved with names based on a virtual hash generated 
-        from several tokens (just like key and issue id etc), so there is no way 
-        to asses a file directly using the name it was uploaded under.</li>
-        <li>Download continuation isn't (yet?) supported.</li>
+        <li>
+            Disabling encryption will cause all files be saved unencrypted. In this case you'll benefit sparing disk
+            space, because identical files will be saved only once.
+        </li>
+        <li>
+            Do not change the default attachment encryption key once files was uploaded. Doing so will cause all the
+            previously uploaded files to be wrong decrypted. If you need to change the default key, you will have to
+            re-upload all files.
+        </li>
+        <li>
+            Always memorize your encryption keys. There is no way to encrypt files without a correct key.
+        </li>
+        <li>
+            Files are always saved with names based on a virtual hash generated from several tokens (just like key
+            and issue id etc), so there is no way to asses a file directly using the name it was uploaded under.
+        </li>
+        <li>
+            Download continuation isn't (yet?) supported.
+        </li>
     </ul>
     </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;" />
-    <p><strong><a name="2o"></a>2.o. Twitter</strong></p>
+    <p>
+        <strong><a name="2o"></a>2.o. Twitter</strong>
+    </p>
     <p>
         Starting with version 2.7 phpMyFAQ supports Twitter via OAuth. If you enable Twitter support in the social
         network configuration and add phpMyFAQ as a Twitter application on twitter.com, all new FAQ additions in the
@@ -481,15 +531,22 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><a name="3"></a><strong>3. Upgrading</strong></p>
-    <p>Upgrading to phpMyFAQ 2.7.x is possible from the following versions:</p>
+    <p>
+        <a name="3"></a><strong>3. Upgrading</strong>
+    </p>
+    <p>
+        Upgrading to phpMyFAQ 2.7.x is possible from the following versions:
+    </p>
     <ul>
         <li>phpMyFAQ 2.0.x</li>
         <li>phpMyFAQ 2.5.x</li>
         <li>phpMyFAQ 2.6.x</li>
+        <li>phpMyFAQ 2.7.x</li>
     </ul>
-    <p>If you're running an older version of phpMyFAQ we recommend a new and fresh
-    install. </p>
+    <p>
+        If you're running an older version of phpMyFAQ we recommend a new and fresh install. If you need support for
+        updating an old FAQ from the 1.x series, please send us an <a href="http://www.phpmyfaq.de/support.php">e-mail</a>.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -567,7 +624,6 @@
         <li>all files in the directory <strong>config/</strong> </li>
         <li>all files in the directory <strong>template/</strong></li>
         <li>the directory <strong>attachments/</strong></li>
-        <li>the directory <strong>data/</strong></li>
         <li>the directory <strong>images/</strong></li>
     </ul>
     <p>
@@ -583,7 +639,7 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><a name="3d"></a><strong>3.c. Upgrading phpMyFAQ 2.7.x</strong></p>
+    <p><a name="3d"></a><strong>3.d. Upgrading phpMyFAQ 2.7.x</strong></p>
     <p>
         Updating phpMyFAQ 2.7.x is fairly simple. Via FTP copy all new files from the phpMyFAQ package
         <strong>except</strong>:
@@ -592,7 +648,6 @@
         <li>all files in the directory <strong>config/</strong> </li>
         <li>all files in the directory <strong>template/</strong></li>
         <li>the directory <strong>attachments/</strong></li>
-        <li>the directory <strong>data/</strong></li>
         <li>the directory <strong>images/</strong></li>
     </ul>
     <p>
@@ -604,42 +659,49 @@
         automatically be updated.
     </p>
     <p>
-        You can find the changed files between the 2.7.x versions in the file <em>docs/CHANGEDFILES</em>.
+        You can find the changed files between the 2.7.x versions in the file <em>CHANGEDFILES</em>.
     </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><a name="3e"></a><strong>3.d. Modifying templates for phpMyFAQ 2.7.x</strong></p>
+    <p>
+        <a name="3e"></a><strong>3.d. Modifying templates for phpMyFAQ 2.7.x</strong>
+    </p>
     <p>
         Your current 2.0.x, 2.5.x and 2.6.x templates are <strong>barely</strong> compatible with phpMyFAQ 2.7 because
         we changed the complete markup from XHTML 1.0 to HTML5. We also using now a lot of Ajax in the frontend.
     </p>
     <p>
-        
     </p>
     <p>
         Note: We changed the character set for all languages and templates to UTF-8. If you notice problems with e.g.
-        German umlauts you have to convert your templates to UTF-8 encoding.
+        German umlauts you have to convert your templates to UTF-8 encoding. Please use UNIX file endings \n instead of
+        Windows file endings with \r\n.
     </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4"></a>4. Front-end</strong></p>
     <p>
-        The public phpMyFAQ frontend has a simple default layout. The header has the main links for the all categories,
-        instant response, add FAQs, add questions, open questions, sitemap and contact. On the left side you only see
-        the main categories. You can also change the current language at the bottom of the FAQ, use the global search
-        in the center of the FAQ or use the login box in the upper right if you have a valid user account. On the right
-        side you see a list of the most popular FAQ records, the latest records, and the sticky FAQ records. On the
-        pages with the FAQ records you'll see the other records of the current category and the tag cloud if you're
-        using tagging.</p>
+        <strong><a name="4"></a>4. Front-end</strong>
+    </p>
+    <p>
+        The public phpMyFAQ frontend has a simple, HTML5 based default layout. The header has the main links for the
+        all categories, instant response, add FAQs, add questions, open questions, sitemap and contact. On the left side
+        you only see the main categories. You can also change the current language at the bottom of the FAQ, use the
+        global search in the center of the FAQ or use the login box in the upper right if you have a valid user account.
+        On the right side you see a list of the most popular FAQ records, the latest records, and the sticky FAQ
+        records. On the pages with the FAQ records you'll see the other records of the current category and the tag
+        cloud if you're using tagging.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4a"></a>4.a. Change languages</strong></p>
+    <p>
+        <strong><a name="4a"></a>4.a. Change languages</strong>
+    </p>
     <p>
         As written above there's a select box for changing the current language. If you're visiting a phpMyFAQ powered
         FAQ, the current language will be the one you're browser is using or the language which was selected by the
@@ -649,7 +711,7 @@
         according to the text direction.
     </p>
     <p>
-        <strong>Note:</strong> phpMyFAQ uses a WYSIWYG on-line editor that has support for multiple languages. However,
+        <strong>Note:</strong> phpMyFAQ uses a WYSIWYG online editor that has support for multiple languages. However,
         phpMyFAQ comes only with English language pack installed so changing the current language will not change the
         language of WYSIWYG editor. If you would like to have WYSIWYG editor in another language, just download the
         latest <a href="http://tinymce.moxiecode.com/download_i18n.php">language pack</a>, extract it and upload the
@@ -659,7 +721,9 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4b"></a>4.b. RSS Feeds</strong></p>
+    <p>
+        <strong><a name="4b"></a>4.b. RSS Feeds</strong>
+    </p>
     <p>
         On the start page you can subscribe to three RSS feeds with the news of the FAQ, the most popular FAQs, all
         records per requested category and the latest records available in the FAQ. On the page with the open user
@@ -670,7 +734,9 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4c"></a>4.c. Advanced search</strong></p>
+    <p>
+        <strong><a name="4c"></a>4.c. Advanced search</strong>
+    </p>
     <p>
         On the page with the advanced search you have more possibilities to find an entry. You can search over all
         language if you want to. It's also possible to search only in one selected category. Additionally the link for
@@ -681,7 +747,9 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4d"></a>4.d. Instant Response</strong></p>
+    <p>
+        <strong><a name="4d"></a>4.d. Instant Response</strong>
+    </p>
     <p>
         The Instant Response is an Ajax-powered page with direct access to the whole FAQ database and the page will
         return the search results while you're typing into the input form. For performance reasons only the first 10
@@ -691,99 +759,153 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4e"></a>4.e. Add FAQ</strong></p>
-    <p>On the <em>Add FAQ</em> page it's possible for all users to add a new
-    FAQ record. The users have to add a FAQ question, select a category, add an
-    answer, and they have to insert their name and e-mail address. If the spam
-    protection is enabled they have to enter the correct captcha code, too. New
-    FAQ entries won't be displayed and have to be activated by an administrator.</p>
+    <p>
+        <strong><a name="4e"></a>4.e. Add FAQ</strong>
+    </p>
+    <p>
+        On the <em>Add FAQ</em> page it's possible for all users to add a new FAQ record. The users have to add a FAQ
+        question, select a category, add an answer, and they have to insert their name and e-mail address. If the spam
+        protection is enabled they have to enter the correct captcha code, too. New FAQ entries won't be displayed and
+        have to be activated by an administrator.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4f"></a>4.f. Add questions</strong></p>
-    <p>On the <em>ask question</em> page it's possible for all users to add a new
-    question without an answer. If the question is submitted, phpMyFAQ checks the
-    words for the question and will do a full text search on the database with the
-    existing FAQs. If we found some matches the user will get some recommendations
-    depending on the question he submitted.
-    <p>The users have to add a question, select a category, and they have to insert
-    their name and e-mail address. If the spam protection is enabled they have
-    to enter the correct captcha code, too. By default new questions won't be
-    displayed and have to be activated by an administrator.</p>
+    <p>
+        <strong><a name="4f"></a>4.f. Add questions</strong>
+    </p>
+    <p>
+        On the <em>Add question</em> page it's possible for all users to add a new question without an answer. If the
+        question is submitted, phpMyFAQ checks the words for the question and will do a full text search on the
+        database with the existing FAQs. If we found some matches the user will get some recommendations depending on
+        the question he submitted.
+    </p>
+    <p>
+        The users have to add a question, select a category, and they have to insert their name and e-mail address. If
+        the spam protection is enabled they have to enter the correct captcha code, too. By default new questions won't
+        be displayed and have to be activated by an administrator.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4g"></a>4.g. Open questions</strong></p>
-    <p>This page displays all open questions and it's possible for all users to add
-    an answer for this question. The user will be directed to the <a href="#4e">add
-    content</a> page If the spam protection is enabled they have to enter the correct
-    captcha code, too.</p>
+    <p>
+        <strong><a name="4g"></a>4.g. Open questions</strong>
+    </p>
+    <p>
+        This page displays all open questions and it's possible for all users to add an answer for this question. The
+        user will be directed to the <a href="#4e">add FAQ</a> page. If the spam protection is enabled they have to
+        enter the correct captcha code, too.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4h"></a>4.h. Submit translation</strong></p>
-    <p>On every FAQ record page there's a select box for languages and a button to
-    translate an existing FAQ record to another language. The translating user will
-    be directed to a special <a href="#4e">add content</a> page with the original
-    entry and a stripped down WYSIWYG editor component. If the spam protection is
-    enabled they have to enter the correct captcha code, too.</p>
-    <p>Please do not forget to add also a translated category, otherwise you won't
-    be able to activate the translated entry.</p>
+    <p>
+        <strong><a name="4h"></a>4.h. Submit translation</strong>
+    </p>
+    <p>
+        On every FAQ record page there's a select box for languages and a button to translate an existing FAQ record
+        to another language. The translating user will be directed to a special <a href="#4e">add content</a> page with
+        the original entry and a stripped down WYSIWYG editor component. If the spam protection is enabled they have
+        to enter the correct captcha code, too.
+    </p>
+    <p>
+        Note: Please do not forget to add also a translated category, otherwise you won't be able to activate the
+        translated entry.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4i"></a>4.i. "Digg it!" and "Share on Facebook"</strong></p>
-    <p>On every FAQ record page there are a direct links to <a href="http://www.digg.com">digg.com</a> 
-    and <a href="http://www.facebook.com">Facebook</a> there you can submit and share
-    the FAQ entry with the world.</p>
+    <p>
+        <strong><a name="4i"></a>4.i. Social networks</strong>
+    </p>
+    <p>
+        On every FAQ page there are a direct links to various social networks to share the current FAQ page. The
+        supported social networks are:
+    </p>
+    <ul>
+        <li><a href="http://www.facebook.com">Facebook</a></li>
+        <li><a href="http://www.twitter.com">Twitter</a></li>
+        <li><a href="http://www.delicious.com/">delicious</a></li>
+        <li><a href="http://www.digg.com">digg.com</a></li>
+    </ul>
+    <p>
+        You can also click on a Facebook Like button or send the FAQ page URL up to 5 friends by e-mail. A PDF export
+        and a button to print the FAQ is also available.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4j"></a>4.j. Internal references</strong></p>
-    <p>For better usability there are some helpful links below every FAQ record.
-    If the administrator added tags to the records they will be displayed next to
-    five (or more) related articles. The related articles are based on the content
-    of the current FAQ entry. On the right side you'll see links to all entries of
-    the current category and the complete tag cloud of the whole FAQ.</p>
+    <p>
+        <strong><a name="4j"></a>4.j. Internal references</strong>
+    </p>
+    <p>
+        For better usability there are some helpful links below every FAQ record. If the administrator added tags
+        to the records they will be displayed next to five (or more) related articles. The related articles are based
+        on the content of the current FAQ entry. On the right side you'll see links to all entries of the current
+        category and the complete tag cloud of the whole FAQ.
+    </p>
     <p><a href="#top">back to top</a></p>
    
    
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4k"></a>4.k. Public user registration</strong></p>
-    <p>On the left column of the default layout the users of the FAQ also have the
-    possibility to register themselves. The user generated accounts are unactivated
-    by default and the administrator has to activate them.</p>
+    <p>
+        <strong><a name="4k"></a>4.k. Public user registration</strong>
+    </p>
+    <p>
+        On the upper right border of the default layout the users of the FAQ also have the possibility to register
+        themselves. The user generated accounts are unactivated by default and the administrator has to activate them.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="5"></a>5. Administration</strong></p>
-    <p>The administration of phpMyFAQ is completely browser-based. The admin area
-    can be found under this URL:</p>
+    <p>
+        <strong><a name="4l"></a>4.l. Complete secured FAQ</strong>
+    </p>
+    <p>
+        If enabled by the administrator a phpMyFAQ installation can be completely secured. This means all content is
+        only available after a successful login. For RSS feeds we provide a simple HTTP auth logic within the feeds
+        to access for registered users.
+    </p>
+    <p><a href="#top">back to top</a></p>
+
+
+    <hr style="width: 90%; height: 1px;"  />
+    <p>
+        <strong><a name="5"></a>5. Administration</strong>
+    </p>
+    <p>
+        The administration of phpMyFAQ is completely browser-based. The admin area can be found under this URL:
+    </p>
     <code>http://www.example.com/faq/admin/index.php</code>
-    <p>You can also login in the public front-end and after the successful login you'll
-    see a link to administration back-end, too.</p>
-    <p>If you have lost your password you can reset it. A new random password will
-    be generated and sent to you via e-mail. Please change it after your successful
-    login with the generated password.</p>
-    <p>After entering your username and password you can log into the system. On
-    the start page you can see the admin menu on the top, some statistics about visits,
-    entries and comments in the middle of the page. At the bottom of the main admin
-    page you'll see a button for version information. If you click on that button
-    your version of phpMyFAQ will check the latest version number from our website
-    www.phpmyfaq.de. We do not log anything in this process! You can switch the
-    current language in the administration back-end and you have an info box about
-    the session timeout.</p>
+    <p>
+        You can also login in the public front-end and after the successful login you'll see a link to administration
+        back-end, too.
+    </p>
+    <p>
+        If you have lost your password you can reset it. A new random password will be generated and sent to you via
+        e-mail. Please change it after your successful login with the generated password.
+    </p>
+    <p>
+        After entering your username and password you can log into the system. On the start page you can see the
+        administration menu on the top, some statistics about visits, entries, news and comments in the middle of the
+        page. At the bottom of the main admin page you'll see a button for version information. If you click on that
+        button your version of phpMyFAQ will check the latest version number from our website phpmyfaq.de. We do not
+        log anything in this process! You can switch the current language in the administration back-end and you have
+        an info box about the session timeout.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="5a"></a>5.a. User Administration</strong></p>
+    <p>
+        <strong><a name="5a"></a>5.a. User Administration</strong>
+    </p>
     <p>phpMyFAQ offers a flexible management of privileges (or rights) for different
     users in the admin area. To search for a certain user just start typing the username
     in the input form and you'll get a list of hits for usernames. It is possible to assign
@@ -939,112 +1061,162 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="5e"></a>5.e. Comment Administration</strong></p>
-    <p>In this straight front-end you can see all comments that have been posted in
-    the FAQs and the news. You cannot edit comments but you can delete them with
-    one easy click.</p>
+    <p>
+        <strong><a name="5e"></a>5.e. Comment Administration</strong>
+    </p>
+    <p>
+        In this straight front-end you can see all comments that have been posted in the FAQs and the news. You cannot
+        edit comments but you can delete them with one easy click.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="5f"></a>5.f. News Administration</strong></p>
-    <p>phpMyFAQ offers the ability to post news on the starting page of your FAQ.
-    In the administration area you can create new items, edit existing news or delete
-    them. </p>
+    <p>
+        <strong><a name="5f"></a>5.f. Glossary</strong>
+    </p>
+    <p>
+        A glossary is a list of terms in a particular domain of knowledge with the definitions for those terms. You can
+        add, edit and delete glossary items here. The items will be automatically displayed in &lt;abbr&gt; tags in
+        the front-end.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="5g"></a>5.g. Glossary</strong></p>
-    <p>A glossary is a list of terms in a particular domain of knowledge with the
-    definitions for those terms. You can add, edit and delete glossary items here.
-    The items will be automatically displayed in &lt;abbr&gt; tags in the front-end.</p>
+    <p>
+        <strong><a name="5g"></a>5.g. News Administration</strong></p>
+    <p>
+        phpMyFAQ offers the ability to post news on the starting page of your FAQ. In the administration area you can
+        create new items, edit existing news or delete them.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="5h"></a>5.h. Statistics</strong></p>
-    <p>Below every entry visitors have the chance to rate the overall quality of
-    an article by giving ratings from 1 to 5 (whereas 1 is the worst, 5 the best
-    rating). In the statistics the average rating and number of votes becomes visible
-    for every rated entry. To give you a quick overview entries with an average rating
-    of 2 or worse are displayed in red, an average above 4 results in a green number.</p>
-    <p><strong>View Sessions</strong><br />
-    This functions lets you keep track of your visitors. Every visitor is assigned an
-    id when coming to your starting page, that identifies him during his whole visit.
-    Using the information gathered here you could reconstruct the way visitors use your
-    FAQ and make necessary adjustments to your categories, content or keywords.</p>
-    <p><strong>View Adminlog</strong><br />
-    The adminlog allows you to track any actions taken by users in the admin area
-    of phpMyFAQ. If you feel you have an intruder in the system you can find out
-    for sure by checking the admin log.</p>
-    <p><strong>Search statistics</strong><br />
-    On the search statistics page you'll get a report about which keywords and how
-    often your users are searching. This information is split into keywords, the
-    number of searches for this term, the language and the overall percentage.</p>
+    <p>
+        <strong><a name="5h"></a>5.h. Attachment Administration</strong>
+    </p>
+    <p>
+        In the attachment administration you can see an overview of all all attachments with their filename, file size,
+        language and MIME type. You can delete them, too.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="5i"></a>5.i. Exports</strong></p>
-    <p>You can export your contents of your whole FAQ or just some selected categories
-    into four formats:</p>
+    <p>
+        <strong><a name="5i"></a>5.i. Statistics</strong>
+    </p>
+    <p>
+        Below every entry visitors have the chance to rate the overall quality of a FAQ by giving ratings from
+        1 to 5 (whereas 1 is the worst, 5 the best rating). In the statistics the average rating and number of votes
+        becomes visible for every rated entry. To give you a quick overview entries with an average rating of 2 or
+        worse are displayed in red, an average above 4 results in a green number.
+    </p>
+    <p>
+        <strong>View Sessions</strong><br />
+        This functions lets you keep track of your visitors. Every visitor is assigned an ID when coming to your
+        starting page, that identifies him during his whole visit. Using the information gathered here you could
+        reconstruct the way visitors use your FAQ and make necessary adjustments to your categories, content or
+        keywords.
+    </p>
+    <p>
+        <strong>View Adminlog</strong><br />
+        The adminlog allows you to track any actions taken by users in the admin area of phpMyFAQ. If you feel you
+        have an intruder in the system you can find out for sure by checking the admin log.
+    </p>
+    <p>
+        <strong>Search statistics</strong><br />
+        On the search statistics page you'll get a report about which keywords and how often your users are searching.
+        This information is split into keywords, the number of searches for this term, the language and the overall
+        percentage.
+    </p>
+    <p>
+        <strong>Reports</strong><br />
+        On the reports page you can select various data columns to generate a report about content and usage of your
+        FAQ installation. You can export the report then a CSV file.
+    </p>
+    <p><a href="#top">back to top</a></p>
+
+
+    <hr style="width: 90%; height: 1px;"  />
+    <p>
+        <strong><a name="5j"></a>5.j. Exports</strong>
+    </p>
+    <p>
+        You can export your contents of your whole FAQ or just some selected categories into four formats:
+    </p>
     <ul>
         <li>a XML file</li>
         <li>a plain XHTML file</li>
-        <li>a plain HTML5 file</li>
         <li>a PDF file with a table of contents</li>
     </ul>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="5j"></a>5.j. Backup</strong></p>
-    <p>Using the backup function it is possible to create a copy of the database to
-    a single file. This makes it possible to restore the FAQ after a possible "crash"
-    or to move the FAQ from one server to another. It is recommended to make regular
-    backups of your FAQ.</p>
+    <p>
+        <strong><a name="5k"></a>5.k. Backup</strong>
+    </p>
+    <p>
+        Using the backup function it is possible to create a copy of the database to a single file. This makes it
+        possible to restore the FAQ after a possible "crash" or to move the FAQ from one server to another. It is
+        recommended to make regular backups of your FAQ.
+    </p>
     <ul>
-    <li><strong>backup data</strong><br />
-    A backup of all <strong>data</strong> will include all entries, users, comments,
-    etc.</li>
-    <li><strong>backup logs</strong><br />
-    The sessions of visits and the adminlog will be saved (i.e. all <strong>LOG</strong>
-    files). This information is not necessary for running phpMyFAQ, they serve only
-    statistical purposes.</li>
+        <li>
+            <strong>backup data</strong><br />
+            A backup of all <strong>data</strong> will include all entries, users, comments, etc.
+        </li>
+        <li>
+            <strong>backup logs</strong><br />
+            The sessions of visits and the adminlog will be saved (i.e. all <strong>log</strong> files). This
+            information is not necessary for running phpMyFAQ, they serve only statistical purposes.
+        </li>
     </ul>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="5k"></a>5.k. Configuration</strong></p>
+    <p>
+        <strong><a name="5l"></a>5.l. Configuration</strong>
+    </p>
     <ul>
-        <li><strong>Main FAQ configuration</strong><br />
-        Here you can edit the general, the record, spam protection and social networks
-        settings of phpMyFAQ. Should you want to enter multiple email addresses in the
-        configuration separate them by a comma (",").</li>
-        <li><strong>URL Verifier configuration</strong><br />
-        The URL Verifier works in the back while you save a new FAQ. It checks your added
-        FAQ for links and tests the accessibility of all links in your document. In the
-        URL Verifier configuration you can add, edit and delete special URLs. You can add
-        a ignore list of URLs and a list of URLs which always return a warning message.</li>
-        <li><strong>Stop Words configuration</strong><br />
-        We need stop words for the smart answering feature. If an user is adding a new
-        question to your FAQ the words will be checked against all FAQs in your database
-        but without the stop words. Stop words are words with a very low relevance like
-        the English word "the".</li>
-        <li><strong>Interface translation</strong><br />
-        With this interface it is possible to edit all available translations of phpMyFAQ.
-        You only can edit translations when the language file is writable. The interface
-        checks that for you. If you like you can also send your improved translation to
-        the phpMyFAQ Team. You cannot change the English translation because this is the
-        main language file.</li>
+        <li>
+            <strong>Main FAQ configuration</strong><br />
+            Here you can edit the general, the record, spam protection, search and social networks settings of
+            phpMyFAQ. Should you want to enter multiple email addresses in the configuration separate them by a
+            comma (",").
+        </li>
+        <li>
+            <strong>URL Verifier configuration</strong><br />
+            The URL Verifier works in the back while you save a new FAQ. It checks your added FAQ for links and tests
+            the accessibility of all links in your document. In the URL Verifier configuration you can add, edit and
+            delete special URLs. You can add an ignore list of URLs and a list of URLs which always return a warning
+            message.
+        </li>
+        <li>
+            <strong>Stop Words configuration</strong><br />
+            We need stop words for the smart answering feature. If an user is adding a new question to your FAQ the
+            words will be checked against all FAQs in your database but without the stop words. Stop words are words
+            with a very low relevance like the English word "the".
+        </li>
+        <li>
+            <strong>Interface translation</strong><br />
+            With this interface it is possible to edit all available translations of phpMyFAQ. You only can edit
+            translations when the language file is writable. The interface checks that for you. If you like you can
+            also send your improved translation to the phpMyFAQ Team. You cannot change the English translation because
+            this is the main language file.
+        </li>
     </ul>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="6"></a>6. Customizing phpMyFAQ 2.7.x</strong></p>
+    <p>
+        <strong><a name="6"></a>6. Customizing phpMyFAQ 2.7.x</strong>
+    </p>
     <p>
         In phpMyFAQ code and layout are separated. The layout is based on several template files, that you can modify
         to suit your own needs. The most important files for phpMyFAQ's default layout can be found in the directory
@@ -1058,7 +1230,9 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="6a"></a>6.a. The file template/default/index.tpl</strong></p>
+    <p>
+        <strong><a name="6a"></a>6.a. The file template/default/index.tpl</strong>
+    </p>
     <p>
         The default layout of phpMyFAQ is saved in the <strong>index.tpl</strong> file. This is a normal HTML5 file
         including some variables in curly brackets, serving as placeholders for content.
@@ -1077,7 +1251,9 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="6b"></a>6.b. The file template/default/css/style.css</strong></p>
+    <p>
+        <strong><a name="6b"></a>6.b. The file template/default/css/style.css</strong>
+    </p>
     <p>
         All formatting such as fonts and the like can be modified in the CSS-file <strong>style.css</strong> for
         left-to-right languages and in <strong>style.rtl.css</strong> for left-to-right languages.
@@ -1086,7 +1262,9 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="6c"></a>6.c. More Templates</strong></p>
+    <p>
+        <strong><a name="6c"></a>6.c. More Templates</strong>
+    </p>
     <p>
         You need an other template design or more HTML5/CSS3 features? Then write us an email and we can talk about it.
     </p>
@@ -1094,11 +1272,12 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="7"></a>7. Customizing phpMyFAQ 2.7.x</strong></p>
     <p>
-        Beginning with phpMyFAQ 2.6.x users have even more customization opportunities. The key feature is the user
-        selectable template sets. From version 2.6.x there is a templates/default directory where the default layouts
-        get shipped.
+        <strong><a name="7"></a>7. Customizing phpMyFAQ 2.7.x</strong>
+    </p>
+    <p>
+        phpMyFAQ 2.7 users have even more customization opportunities. The key feature is the user selectable template
+        sets. Version 2.7 there is a templates/default directory where the default layouts get shipped.
     </p>
     <p><a href="#top">back to top</a></p>
 
@@ -1109,9 +1288,15 @@
         Follow these steps to create a custom template set:
     </p>
     <ul>
-        <li>copy the directory templates/default to templates/&lt;custom_template_set&gt;</li>
-        <li>adjust template files in templates/&lt;custom_template_set&gt; to fit your needs</li>
-        <li>activate &lt;custom_template_set&gt; within Admin->Config->Main</li>
+        <li>
+            copy the directory templates/default to templates/&lt;custom_template_set&gt;
+        </li>
+        <li>
+            adjust template files in templates/&lt;custom_template_set&gt; to fit your needs
+        </li>
+        <li>
+            activate &lt;custom_template_set&gt; within Admin->Config->Main
+        </li>
     </ul>   
     <p>
         <strong>Note:</strong> There is a magic variable <em>{tplSetName}</em> containing the name of the actual layout
@@ -1121,7 +1306,9 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="8"></a>8. Developer documentation</strong></p>
+    <p>
+        <strong><a name="8"></a>8. Developer documentation</strong>
+    </p>
     <p>
         Beginning with version 2.6 phpMyFAQ will offer more and more interfaces to access phpMyFAQ installations with
         other clients like the iPhone.
@@ -1129,11 +1316,17 @@
     <p><a href="#top">back to top</a></p>
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="8a"></a>8.a. rest/json API</strong></p>
-    <p>The rest/json API is included since phpMyFAQ 2.6.0 and offers an API for various services like fetching the
-    phpMyFAQ version and the phpMyFAQ API version. Currently we implemented an interface for the search, the possibility 
-    to fetch all categories, all FAQ entries for a selected category and a FAQ entry.</p>
-    <p>You can call the resources with the following URIs:</p>
+    <p>
+        <strong><a name="8a"></a>8.a. rest/json API</strong>
+    </p>
+    <p>
+        phpMyFAQ includes a rest/json interface and offers an API for various services like fetching the phpMyFAQ
+        version and the phpMyFAQ API version. Currently we implemented an interface for the search, the possibility
+        to fetch all categories, all FAQ entries for a selected category and a FAQ entry.
+    </p>
+    <p>
+        You can call the resources with the following URIs:
+    </p>
     <ul>
         <li><strong>getVersion()</strong>
         <p>This method returns the phpMyFAQ version number as string.</p>
@@ -1143,7 +1336,7 @@
         </ul>
         <p>The result will be a string value like this:</p>
         <code>
-        {"version":"2.6.0"}
+        {"version":"2.7.0"}
         </code></li>
         
         <li><strong>getApiVersion()</strong>
@@ -1151,8 +1344,10 @@
             <li>http://www.example.org/phpmyfaq/api.php?action=getApiVersion (standard)</li>
             <li>http://www.example.org/phpmyfaq/api/getApiVersion (rewrite rules enabled)</li>
         </ul>
-        <p>Returns the version of the API as an integer value. The version number is incremental and will be incremented 
-        every time the API changes.</p>
+        <p>
+            Returns the version of the API as an integer value. The version number is incremental and will be incremented
+            every time the API changes.
+        </p>
         <code>
         {"apiVersion":1}
         </code></li>
@@ -1197,8 +1392,8 @@
         "id":"1",
         "lang":"en",
         "parent_id":"0",
-        "name":"phpMyFAQ 2.5",
-        "description":"Everything about phpMyFAQ 2.5",
+        "name":"phpMyFAQ 2.6",
+        "description":"Everything about phpMyFAQ 2.6",
         "user_id":"1",
         "level":0
         },
@@ -1206,8 +1401,8 @@
         "id":"2",
         "lang":"en",
         "parent_id":"0",
-        "name":"phpMyFAQ 2.6",
-        "description":"Everything about phpMyFAQ 2.6",
+        "name":"phpMyFAQ 2.7",
+        "description":"Everything about phpMyFAQ 2.7",
         "user_id":"1",
         "level":0}
     ]
@@ -1277,17 +1472,27 @@
     <p><a href="#top">back to top</a></p>
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="9"></a>9. One more thing</strong></p>
-    <p>Thank you for using phpMyFAQ! :-)</p>
     <p>
-    Author: <a href="mailto:thorsten AT phpmyfaq DOT de">Thorsten Rinne</a><br />
-    Co-Authors: <a href="mailto:stephan AT yauh DOT de">Stephan Hochhaus</a>,
-    <a href="mailto:mgl-mail AT t-online DOT de">Markus Gläser</a><br />
-    Last update: 2011-01-05</p>
-    <p>&copy; 2001-2011 phpMyFAQ Team</p>
-    <p>This documentation is licensed under a <a href="http://creativecommons.org/licenses/by/2.0/" class="subfoot">Creative
-    Commons License</a>.</p>
+        <strong><a name="9"></a>9. One more thing</strong>
+    </p>
+    <p>
+        Thank you for using phpMyFAQ! :-)
+    </p>
+    <p>
+        Author: <a href="mailto:thorsten AT phpmyfaq DOT de">Thorsten Rinne</a><br />
+        Co-Authors: <a href="mailto:stephan AT yauh DOT de">Stephan Hochhaus</a>,
+        <a href="mailto:mgl-mail AT t-online DOT de">Markus Gläser</a><br />
+        Last update: 2011-08-17
+    </p>
+    <p>
+        &copy; 2001-2011 phpMyFAQ Team
+    </p>
+    <p>
+        This documentation is licensed under a
+        <a href="http://creativecommons.org/licenses/by/2.0/" class="subfoot">Creative Commons License</a>.
+    </p>
     <p><a href="#top">back to top</a></p>
+
 </div>
 <!-- end of documentation -->
 </body>
