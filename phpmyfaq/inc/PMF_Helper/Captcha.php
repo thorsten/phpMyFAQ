@@ -94,16 +94,18 @@ class PMF_Helper_Captcha extends PMF_Helper
         if (PMF_Configuration::getInstance()->get('spam.enableCaptchaCode')) {
             $html = '<p>';
             if ($error != '') {
-                $html .= '<div class="error">' . $error . '</div>';
+                $html .= sprintf('<div class="error">%s</div>', $error);
             }
-            $html .= '<div class="captchaInfo">' . $legend . ':</div>';
-            $html .= '<a href="javascript:;" onclick="refreshCaptcha(\'' . $action . '\');">';
-            $html .= $captcha->printCaptcha($action);
-            $html .= '</a>&nbsp; &nbsp;' . sprintf(
+            $html .= sprintf('<div class="captchaInfo">%s:</div>', $legend);
+            $html .= sprintf('<div class="captchaImage">%s', $captcha->printCaptcha($action));
+            $html .= sprintf('<div class="captchaRefresh"><a href="javascript:;" onclick="refreshCaptcha(\'%s\');">%s</a></div>',
+                $action,
+                'click to refresh');
+            $html .= '&nbsp; &nbsp;' . sprintf(
                 '<input type="text" name="captcha" id="captcha" class="captcha" size="%d" required="required" /><br/>',
                 $captcha->caplength
             );
-            $html .= '</p>';
+            $html .= '</div></p>';
         }
         
         return $html;

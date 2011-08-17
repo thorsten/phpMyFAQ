@@ -342,8 +342,15 @@ aside section ul li a:hover {
 #searchBox a.help:hover {
     text-decoration: underline; }
 
-#mainContent form #captchaImage, #mainContent form div.captchaInfo {
+#mainContent form .captchaImage, #mainContent form .captchaInfo {
     margin-left: 170px; }
+#mainContent form .captchaRefresh {
+    position: absolute; width: 100px; height: 20px; bottom: -28px; left: 490px; z-index: 2; opacity: 0.8;
+    background-color: #eeeeee; text-align: center; line-height: 20px; display: none; cursor: pointer; }
+#mainContent form .captchaImage:hover .captchaRefresh {
+    display: block; }
+#mainContent form .captchaRefresh a {
+    text-decoration: none; color: #000000; }
 #mainContent form input.captcha {
     vertical-align: top; height: 40px; width: 120px; text-valign: middle; font-size: 30px; float: right; }
 #debug_main {
