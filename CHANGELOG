@@ -26,7 +26,7 @@ Version 2.7.0-beta3 - 2011-08-
 - added user configurable date formatting (Thorsten)
 - improved usability in frontend and administration backend (Thorsten)
 - enabling Gzip compression by default (Thorsten, Lorenzo Milesi)
-- updated bundled jQuery to version 1.5.1 (Thorsten)
+- updated bundled jQuery to version 1.6.2 (Thorsten)
 - updated bundled Modernizr to version 1.7 (Thorsten)
 - updated bundled TinyMCE to version 3.4.2 (Thorsten)
 - updated bundled SyntaxHighlighter to version 3.0.83 (Thorsten)
