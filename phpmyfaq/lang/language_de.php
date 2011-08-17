@@ -386,9 +386,9 @@ $PMF_LANG["ad_config_save"] = "Konfiguration speichern";
 $PMF_LANG["ad_config_reset"] = "Zurücksetzen";
 $PMF_LANG["ad_config_saved"] = "Die Konfiguration wurde erfolgreich gespeichert.";
 $PMF_LANG["ad_menu_editconfig"] = "FAQ-Konfiguration";
-$PMF_LANG["ad_att_none"] = "Keine Attachments vorhanden";
+$PMF_LANG["ad_att_none"] = "Keine Anhänge vorhanden";
 $PMF_LANG["ad_att_att"] = "Anhang:";
-$PMF_LANG["ad_att_add"] = "Attachment anhängen";
+$PMF_LANG["ad_att_add"] = "Neuen Anhang hinzufügen";
 $PMF_LANG["ad_entryins_suc"] = "Eintrag erfolgreich erstellt.";
 $PMF_LANG["ad_entryins_fail"] = "Leider ist ein Fehler aufgetreten.";
 $PMF_LANG["ad_att_del"] = "Löschen";
@@ -1067,6 +1067,15 @@ $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'T
 $LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => 'Twitter Access Token Key');
 $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'Twitter Access Token Secret');
 $LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Facebook Support (Standard: deaktiviert)');
+
+// added 2.7.0-alpha - 2010-12-21 by Anatoliy Belsky
+$PMF_LANG["ad_menu_attachments"] = "Anhänge";
+$PMF_LANG["ad_menu_attachment_admin"] = "Anhang Administration";
+$PMF_LANG['msgAttachmentsFilename'] = 'Dateiname';
+$PMF_LANG['msgAttachmentsFilesize'] = 'Dateigröße';
+$PMF_LANG['msgAttachmentsMimeType'] = 'MIME Typ';
+$PMF_LANG['msgAttachmentsWannaDelete'] = 'Sind Sie sicher, dass Sie diesen Anhang löschen wollen?';
+$PMF_LANG['msgAttachmentsDeleted'] = 'Anhang <strong>erfolgreich</strong> gelöscht.';
 
 // added v2.7.0-alpha2 - 2011-01-12 by Gustavo Solt
 $PMF_LANG['ad_menu_reports'] = 'Reports';
