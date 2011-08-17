@@ -49,7 +49,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
         'dateStart'   => '',
         'dateEnd'     => '');
 
-    $tagging = new PMF_Tags();
+    $tagging = new PMF_Tags($db, $Language);
 
     if ($action == 'takequestion') {
         $questionId       = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -63,7 +63,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
     if ($action == 'editpreview') {
 
-    	$faqData['id'] = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $faqData['id'] = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         if (!is_null($faqData['id'])) {
             $queryString = 'saveentry&amp;id='.$faqData['id'];
         } else {

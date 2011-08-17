@@ -69,7 +69,7 @@ $tagSearch       = false;
 //
 if (!is_null($inputTag)) {
     $tagSearch   = true;
-    $tagging     = new PMF_Tags();
+    $tagging     = new PMF_Tags($db, $Language);
     $record_ids  = $tagging->getRecordsByTagId($inputTag);
     $printResult = $faq->showAllRecordsByIds($record_ids);
 } else {

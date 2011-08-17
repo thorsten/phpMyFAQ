@@ -74,7 +74,7 @@ if ($permission['editbt']) {
         printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 
         $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
-        $tagging  = new PMF_Tags();
+        $tagging  = new PMF_Tags($db, $Language);
 
         $recordData     = array(
             'lang'          => $record_lang,

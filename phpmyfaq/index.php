@@ -268,7 +268,7 @@ $category = new PMF_Category($current_user, $current_groups);
 //
 // Create a new Tags object
 //
-$oTag = new PMF_Tags();
+$oTag = new PMF_Tags($db, $Language);
 
 //
 // Found a record ID?

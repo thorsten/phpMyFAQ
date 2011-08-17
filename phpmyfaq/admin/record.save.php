@@ -71,7 +71,7 @@ if ($permission['editbt']) {
         $logging->logAdmin($user, 'Beitragsave ' . $record_id);
         print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
 
-        $tagging = new PMF_Tags();
+        $tagging = new PMF_Tags($db, $Language);
         
         if ('yes' == $revision) {
             // Add current version into revision table

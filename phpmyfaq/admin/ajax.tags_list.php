@@ -19,7 +19,7 @@
  * @category  phpMyFAQ
  * @package   Ajax
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-15
@@ -37,7 +37,7 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 header("Vary: Negotiate,Accept");
 
-$oTag              = new PMF_Tags();
+$oTag              = new PMF_Tags($db, $Language);
 $autoCompleteValue = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
 if (!is_null($autoCompleteValue)) {
     $tags = $oTag->getAllTags($autoCompleteValue);

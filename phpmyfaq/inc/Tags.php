@@ -61,12 +61,15 @@ class PMF_Tags
     /**
      * Constructor
      *
-     * @return void
+     * @param PMF_DB_Driver $database Database connection
+     * @param PMF_Language  $language Language object
+     *
+     * @return PMF_Tags
      */
-    function __construct()
+    public function __construct(PMF_DB_Driver $database, PMF_Language $language)
     {
-        $this->db       = PMF_Db::getInstance();
-        $this->language = PMF_Language::$language;
+        $this->db       = $database;
+        $this->language = $language;
     }
 
     /**
