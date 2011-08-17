@@ -320,7 +320,8 @@ if ($permission['editbt'] || $permission['delbt']) {
             </th>
             <th style="text-align: left">
                 <?php if ($permission['approverec']) { ?>
-                <input type="checkbox" id="active_category_block_<?php print $cid; ?>" onclick="saveStatusForCategory(<?php print $cid; ?>, 'active')" />
+                <input type="checkbox" id="active_category_block_<?php print $cid; ?>"
+                       onclick="saveStatusForCategory(<?php print $cid; ?>, 'active')" />
                 &nbsp;<?php print $PMF_LANG['ad_record_active'] ?>
                 <?php } ?>
             </th>
@@ -370,20 +371,24 @@ if ($permission['editbt'] || $permission['delbt']) {
                 <?php print $linkverifier->getEntryStateHTML($record['id'], $record['lang']); ?>
             </td>
             <td style="width: 16px;">
-                <a href="javascript:void(0);" onclick="javascript:deleteRecord(<?php print $record['id']; ?>, '<?php print $record['lang']; ?>'); return false;"
+                <a href="javascript:void(0);"
+                   onclick="javascript:deleteRecord(<?php print $record['id']; ?>, '<?php print $record['lang']; ?>'); return false;"
                    title="<?php print $PMF_LANG["ad_user_delete"]; ?>">
                     <img src="images/delete.png" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" />
                 </a>
             </td>
             <td style="width: 16px;">
                 <a href="?action=copyentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>">
-                    <img src="images/copy.png" alt="<?php print $PMF_LANG['ad_categ_copy']; ?>" title="<?php print $PMF_LANG['ad_categ_copy']; ?>" />
+                    <img src="images/copy.png" alt="<?php print $PMF_LANG['ad_categ_copy']; ?>"
+                         title="<?php print $PMF_LANG['ad_categ_copy']; ?>" />
                 </a>
             </td>
             <td>
                 <?php if ($permission['approverec'] && isset($visits[$record['id']])) { ?>
-                    <input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'active');"
-                           id="active_record_<?php print $cid . '_' . $record['id'] ?>" <?php 'yes' == $record['active'] ? print 'checked="checked"' : print '    ' ?> />
+                    <input type="checkbox" lang="<?php print $record['lang'] ?>"
+                           onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'active');"
+                           id="active_record_<?php print $cid . '_' . $record['id'] ?>"
+                           <?php 'yes' == $record['active'] ? print 'checked="checked"' : print '    ' ?> />
                 <?php } ?>
             </td>
         </tr>

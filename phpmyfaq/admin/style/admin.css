@@ -256,6 +256,8 @@ nav ul li a.logout {
 #mainContent form input[type="search"], #mainContent form input[type="password"] {
     display: table-cell; height: 20px; border: 1px solid #d7d7d7; font-size: 14px; border-radius: 5px;
     -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#mainContent form input[readonly] {
+    color: #d3d3d3; }
 #mainContent form select {
     display: table-cell; border: 1px solid #d7d7d7; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 #mainContent form textarea {
@@ -276,7 +278,11 @@ nav ul li a.logout {
     border-collapse: collapse; margin-bottom: 22px; }
 #mainContent table.list th {
     padding: 8px; background-color: #333; border-top: 2px solid #222; border-bottom: 2px solid #f0f0f0; color: #F67600; 
-    font-size: 14px; text-align: left; }
+    font-size: 14px; text-align: left; word-wrap: normal; }
+#mainContent table.list th a {
+    text-decoration: none; color: #F67600; float: left; }
+#mainContent table.list th a:hover {
+    text-decoration: none; color: #FFFFFF; }
 #mainContent table.list tr:nth-child(odd) {
     background-color: #fdfdfd; }
 #mainContent table.list td { 
