@@ -514,7 +514,7 @@ function getUserData(user_id)
  */
 function deleteUser(userId)
 {
-    if (confirm('<?php print $PMF_LANG["ad_user_del_1"] . $PMF_LANG["ad_user_del_2"] ?>')) {
+    if (confirm('<?php print $PMF_LANG['ad_user_del_3'] ?>')) {
         $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=delete_user&user_id=" + userId,
         function(response) {
             $('#user_message').html(response);

@@ -214,7 +214,7 @@ $PMF_LANG["ad_user_confirm"] = "Bestätigung";
 $PMF_LANG["ad_user_rights"] = "Rechte";
 $PMF_LANG["ad_user_del_1"] = "Soll der Benutzer ";
 $PMF_LANG["ad_user_del_2"] = " gelöscht werden?";
-$PMF_LANG["ad_user_del_3"] = "Wirklich sicher?";
+$PMF_LANG["ad_user_del_3"] = "Sind Sie sicher?";
 $PMF_LANG["ad_user_deleted"] = "Der Benutzer wurde erfolgreich gelöscht.";
 $PMF_LANG["ad_user_checkall"] = "Alle auswählen";
 
