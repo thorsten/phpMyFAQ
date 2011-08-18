@@ -570,8 +570,8 @@ $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "내용의 �
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "추적기능 사용 여부");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "관리로그 사용 여부");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "admin.php에서 UINs를 체크할 때 IP주소를 체크할지의 여부");
-$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "페이지당 표시할 글의 수");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "공지사항 표시 개수");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "페이지당 표시할 글의 수");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "공지사항 표시 개수");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "해당 IP주소로 부터 사용 금지");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite 기능을 사용하시겠습니까? (기본값: 사용안함)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP을 지원하도록 하시겠습니까? (기본값: 사용안함)");

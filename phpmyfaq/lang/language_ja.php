@@ -593,8 +593,8 @@ $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "エント�
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "追跡機能を使用する");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "管理ログを使用する");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "admin.php で UIN のチェック時に IP アドレスを確認するか");
-$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "ページ毎に表示するトピック数");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "お知らせの表示数");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "ページ毎に表示するトピック数");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "お知らせの表示数");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "拒否する IP アドレス");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite のサポートを使用しますか? (初期値: 無効)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP のサポートを有効にしますか? (初期値: 無効)");
@@ -1067,11 +1067,11 @@ $PMF_LANG['msgAttachmentInvalid'] = 'The attachment is invalid, please inform ad
 
 // added 2.6.0-alpha - 2009-11-02 by max
 $LANG_CONF['search.numberSearchTerms']   = array(0 => 'input', 1 => '一覧に出す検索件数');
-$LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "トップ FAQ の並び替え方法");
+$LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "トップ FAQ の並び替え方法");
 $PMF_LANG['list_all_users']            = '全ユーザーの一覧';
 
-$PMF_LANG['main.orderingPopularFaqs.visits'] = "最も訪問があるエントリーの一覧";
-$PMF_LANG['main.orderingPopularFaqs.voting'] = "最も投票のあるエントリーの一覧";
+$PMF_LANG['records.orderingPopularFaqs.visits'] = "最も訪問があるエントリーの一覧";
+$PMF_LANG['records.orderingPopularFaqs.voting'] = "最も投票のあるエントリーの一覧";
 
 // added 2.6.0-alpha - 2009-11-05 by Thorsten
 $PMF_LANG['msgShowHelp'] = '単語をカンマで区切ってください。';

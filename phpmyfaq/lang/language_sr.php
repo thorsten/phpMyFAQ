@@ -569,8 +569,8 @@ $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Linkuj pril
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Koristi pra&#263;enje?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Koristi Adminlog?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Da li &#382;elite da se IP proverava kada se proverava UINs u admin.php?");
-$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Broj prikazanih tema po stranici");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Broj &#269;lanaka vesti");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Broj prikazanih tema po stranici");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Broj &#269;lanaka vesti");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Banuj ove IP");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Uklju&#269;i mod_rewrite podr&#269;ku? (isklju&#269;eno)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Da li &#382;elite LDAP podr&scaron;ku? (isklju&#269;eno)");

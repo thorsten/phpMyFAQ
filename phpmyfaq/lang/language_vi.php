@@ -566,8 +566,8 @@ $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Hiện đư
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "sử dụng Tracking?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "sử dụng Adminlog?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Bạn có muốn kiểm tra IP khi xác nhận UINs trong admin.php?");
-$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Số lượng nội dung hiện trên mỗi trang");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Số lượng bài mới");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Số lượng nội dung hiện trên mỗi trang");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Số lượng bài mới");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Loại bỏ các IP này");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Kích hoạt hỗ trợ mod_rewrite? (mặc định: không kích hoạt)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Bạn có muốn kích hoạt hỗ trợ LDAP? (mặc định: không kích hoạt)");

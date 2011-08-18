@@ -572,8 +572,8 @@ $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Sarrera azp
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Monitorizazioa erabili?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Adminlog-a erabili?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Nahi al duzu IP-ak aztertzea UIN-ak egiaztatzean?");
-$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Erakutsitako item-en kopurua orriko");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Artikulu berrien kopurua");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Erakutsitako item-en kopurua orriko");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Artikulu berrien kopurua");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "IP hauek blokeatu");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Mod_rewrite-rentzat euskarria aktibatu? (besterik esan ezean, desaktibatua)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "LDAPrentzat euskarria gaitu nahi al duzu? (besterik esan ezean, desaktibatua)");

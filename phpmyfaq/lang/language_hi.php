@@ -572,8 +572,8 @@ $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "फाइ�
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "लेखा जोखा रखें?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "प्रबंधक लॉग का प्रयोग करें?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "admin.php में UINs देखते समय IP भी देखें?");
-$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "एक पृष्ठ पर कितने विषय दिखायें");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "समाचार लेखों की संख्या");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "एक पृष्ठ पर कितने विषय दिखायें");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "समाचार लेखों की संख्या");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "इन IPs को प्रतिबंधित करें");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite को सक्रिय करें? (पूर्वनिर्धारित: असक्रिय)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "क्या आप LDAP को सक्रिय करना चाहते हैं? (पूर्वनिर्धारित: असक्रिय)");

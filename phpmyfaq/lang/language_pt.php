@@ -465,8 +465,8 @@ $LANG_CONF['main.disableAttachments'] = array(0 => "checkbox", 1 => "Colocar <em
 $LANG_CONF['main.enableUserTracking'] = array(0 => "checkbox", 1 => "Usar <em>Tracking</em>?");
 $LANG_CONF['main.enableAdminLog'] = array(0 => "checkbox", 1 => "Usar o <em>Adminlog</em>?");
 $LANG_CONF['main.ipCheck'] = array(0 => "checkbox", 1 => "Conferir o IP ao verificar o UINs no <em>admin.php</em> ?");
-$LANG_CONF['main.numberOfRecordsPerPage'] = array(0 => "input", 1 => "Número de tópicos mostrados por página");
-$LANG_CONF['main.numberOfShownNewsEntries'] = array(0 => "input", 1 => "Número de notícias");
+$LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "Número de tópicos mostrados por página");
+$LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "Número de notícias");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Barrar estes IPs");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "Activar o suporte de <em>mod_rewrite</em> ? <small>(pré-definição: desactivado)</small>");
 $LANG_CONF['main.ldapSupport'] = array(0 => "checkbox", 1 => "Activar o suporte para LDAP? <small>(pré-definição: desactivado)</small>");
@@ -826,10 +826,10 @@ $PMF_LANG['msgTransToolRecordingPageBuffer'] = 'A gravar a página %d do <em>b
 $PMF_LANG['ad_record_active'] = 'Activo';
 $PMF_LANG['msgAttachmentInvalid'] = 'O anexo não é válido: informe, p.f., o administrador.';
 $LANG_CONF['main.numberSearchTerms'] = array(0 => 'input', 1 => 'Número de termos de pesquisa listados');
-$LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Ordenação do TOP 10");
+$LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "Ordenação do TOP 10");
 $PMF_LANG['list_all_users'] = 'Listar todos os utilizadores';
-$PMF_LANG['main.orderingPopularFaqs.visits'] = 'Listar as entradas mais visitadas';
-$PMF_LANG['main.orderingPopularFaqs.voting'] = 'Listar as entradas com maior número de avaliações';
+$PMF_LANG['records.orderingPopularFaqs.visits'] = 'Listar as entradas mais visitadas';
+$PMF_LANG['records.orderingPopularFaqs.voting'] = 'Listar as entradas com maior número de avaliações';
 $PMF_LANG['msgShowHelp'] = 'Separe as palavras por vírgulas.';
 $PMF_LANG['msgUpdateFaqDate'] = 'Actualizar';
 $PMF_LANG['msgKeepFaqDate'] = 'Manter';

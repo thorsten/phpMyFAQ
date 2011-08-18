@@ -400,12 +400,12 @@ class PMF_Faq
         $result = $this->db->query($query);
 
         $num   = $this->db->num_rows($result);
-        $pages = ceil($num / $faqconfig->get("main.numberOfRecordsPerPage"));
+        $pages = ceil($num / $faqconfig->get("records.numberOfRecordsPerPage"));
 
         if ($page == 1) {
             $first = 0;
         } else {
-            $first = ($page * $faqconfig->get("main.numberOfRecordsPerPage")) - $faqconfig->get("main.numberOfRecordsPerPage");
+            $first = ($page * $faqconfig->get("records.numberOfRecordsPerPage")) - $faqconfig->get("records.numberOfRecordsPerPage");
         }
 
         if ($num > 0) {
@@ -418,7 +418,7 @@ class PMF_Faq
             $output .= '<ul class="phpmyfaq_ul">';
             $counter = 0;
             $displayedCounter = 0;
-            while (($row = $this->db->fetch_object($result)) && $displayedCounter < $faqconfig->get("main.numberOfRecordsPerPage")) {
+            while (($row = $this->db->fetch_object($result)) && $displayedCounter < $faqconfig->get("records.numberOfRecordsPerPage")) {
                 $counter ++;
                 if ($counter <= $first) {
                     continue;
@@ -462,7 +462,7 @@ class PMF_Faq
 
             $options = array('baseUrl'         => $baseUrl,
                              'total'           => $num,
-                             'perPage'         => $faqconfig->get('main.numberOfRecordsPerPage'),
+                             'perPage'         => $faqconfig->get('records.numberOfRecordsPerPage'),
                              'pageParamName'   => 'seite',
                              'seoName'         => $title,
                              'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $this->pmf_lang['msgNext'] . '</a>',
@@ -566,12 +566,12 @@ class PMF_Faq
         $result = $this->db->query($query);
 
         $num = $this->db->num_rows($result);
-        $pages = ceil($num / $faqconfig->get('main.numberOfRecordsPerPage'));
+        $pages = ceil($num / $faqconfig->get('records.numberOfRecordsPerPage'));
 
         if ($page == 1) {
             $first = 0;
         } else {
-            $first = ($page * $faqconfig->get('main.numberOfRecordsPerPage')) - $faqconfig->get('main.numberOfRecordsPerPage');
+            $first = ($page * $faqconfig->get('records.numberOfRecordsPerPage')) - $faqconfig->get('records.numberOfRecordsPerPage');
         }
 
         if ($num > 0) {
@@ -584,7 +584,7 @@ class PMF_Faq
             $output .= '<ul class="phpmyfaq_ul">';
             $counter = 0;
             $displayedCounter = 0;
-            while (($row = $this->db->fetch_object($result)) && $displayedCounter < $faqconfig->get('main.numberOfRecordsPerPage')) {
+            while (($row = $this->db->fetch_object($result)) && $displayedCounter < $faqconfig->get('records.numberOfRecordsPerPage')) {
                 $counter ++;
                 if ($counter <= $first) {
                     continue;
@@ -618,7 +618,7 @@ class PMF_Faq
             return false;
         }
 
-        if ($num > $faqconfig->get('main.numberOfRecordsPerPage')) {
+        if ($num > $faqconfig->get('records.numberOfRecordsPerPage')) {
             $output .= "<p align=\"center\"><strong>";
             if (!isset($page)) {
                 $page = 1;

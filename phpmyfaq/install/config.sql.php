@@ -49,15 +49,15 @@ $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.googleTranslat
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.dateFormat', 'Y-m-d H:i')";
 
 // Records
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.numberOfRecordsPerPage', '10')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.numberOfShownNewsEntries', '3')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.numberOfRecordsPerPage', '10')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.numberOfShownNewsEntries', '3')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.defaultActivation', 'false')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.defaultAllowComments', 'false')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.enableVisibilityQuestions', 'false')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.numberOfRelatedArticles', '5')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.orderby', 'id')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.sortby', 'DESC')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.orderingPopularFaqs', 'visits')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.orderingPopularFaqs', 'visits')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.disableAttachments', 'true')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.maxAttachmentSize', '100000')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.attachmentsPath', 'attachments')";

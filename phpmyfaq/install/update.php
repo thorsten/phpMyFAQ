@@ -594,7 +594,7 @@ if ($step == 4) {
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.currentApiVersion', '" . APIVERSION . "')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.templateSet', 'default')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.numberSearchTerms', '10')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.orderingPopularFaqs', 'visits')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('records.orderingPopularFaqs', 'visits')";
         /**
          * We did check in the first and second steps,
          * if the $templateDir and its contents are writable,
@@ -828,7 +828,16 @@ if ($step == 4) {
     // UPDATES FROM 2.7.0-RC
     //
     if (version_compare($version, '2.7.0-RC', '<')) {
-        
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.numberOfRecordsPerPage'
+            WHERE config_name = 'main.numberOfRecordsPerPage'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.numberOfShownNewsEntries'
+            WHERE config_name = 'main.numberOfShownNewsEntries'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.orderingPopularFaqs'
+            WHERE config_name = 'main.orderingPopularFaqs'";
+
+
+
+
     }
 
 

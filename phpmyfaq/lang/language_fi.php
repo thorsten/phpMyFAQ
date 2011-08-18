@@ -571,8 +571,8 @@ $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Linkitä li
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "käytä lokia?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "käytä ylläpitolokia?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Haluatko, että admin.php:ssa IP tarkastetaan samalla kun UIN?");
-$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Näytettyjen tietueiden määrä per sivu");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Uutisten määrä");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Näytettyjen tietueiden määrä per sivu");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Uutisten määrä");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Estä käyttö näistä IP-osoitteista");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktivoi mod_rewrite tuki? (oletus: ei käytössä)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Haluatko laittaa LDAP tuen päälle(enabled)? (oletus: ei käytössä)");

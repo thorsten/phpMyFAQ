@@ -570,8 +570,8 @@ $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Rodyti prie
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Naudoti sekimą?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Naudoti administravimo žurnalą?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Ar norite, kad būtų tikrinamas IP, kai tikrinami UIN tinklalapyje „admin.php“?");
-$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Puslapyje rodomų temų skaičius");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Naujienų straipsnių skaičius");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Puslapyje rodomų temų skaičius");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Naujienų straipsnių skaičius");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Drausti šiuos IP adresus");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktyvinti „mod_rewrite“ palaikymą? (numatyta r.: išjungta)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Ar įjungti LDAP palaikymą? (numatyta r.: išjungta)");
@@ -1051,11 +1051,11 @@ $PMF_LANG['msgAttachmentInvalid'] = 'Priedas yra blogas, informuokite administra
 
 // added 2.6.0-alpha - 2009-11-02 by max
 $LANG_CONF['search.numberSearchTerms']   = array(0 => 'input', 1 => 'Rodomų paieškos raktažodžių skaičius');
-$LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Populiariausių DUK rikiavimas");
+$LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "Populiariausių DUK rikiavimas");
 $PMF_LANG['list_all_users']            = 'Rodyti visus naudotojus';
 
-$PMF_LANG['main.orderingPopularFaqs.visits'] = "rodyti dažniausiai peržiūrėtus įrašus";
-$PMF_LANG['main.orderingPopularFaqs.voting'] = "rodyti geriausiai įvertintus įrašus";
+$PMF_LANG['records.orderingPopularFaqs.visits'] = "rodyti dažniausiai peržiūrėtus įrašus";
+$PMF_LANG['records.orderingPopularFaqs.voting'] = "rodyti geriausiai įvertintus įrašus";
 
 // added 2.6.0-alpha - 2009-11-05 by Thorsten
 $PMF_LANG['msgShowHelp'] = 'Prašome atskirti žodžius kableliu.';

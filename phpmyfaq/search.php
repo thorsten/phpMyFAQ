@@ -140,7 +140,7 @@ if (PMF_Configuration::getInstance()->get('main.enableRewriteRules')) {
 $options = array(
     'baseUrl'         => $baseUrl,
     'total'           => $faqSearchResult->getNumberOfResults(),
-    'perPage'         => PMF_Configuration::getInstance()->get('main.numberOfRecordsPerPage'),
+    'perPage'         => PMF_Configuration::getInstance()->get('records.numberOfRecordsPerPage'),
     'pageParamName'   => 'seite',
     'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgNext'] . '</a>',
     'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgPrevious'] . '</a>',

@@ -542,8 +542,8 @@ $LANG_CONF['main.disableAttachments'] = array(0 => 'checkbox', 1 => 'Lier les pi
 $LANG_CONF['main.enableUserTracking'] = array(0 => 'checkbox', 1 => 'Utiliser le Tracking?');
 $LANG_CONF['main.enableAdminLog'] = array(0 => 'checkbox', 1 => 'Utiliser l\'Adminlog?');
 $LANG_CONF['main.ipCheck'] = array(0 => 'checkbox', 1 => 'Désirez vous vérifier l\'adresse IP afin d\'identifier le UINs dans admin.php?');
-$LANG_CONF['main.numberOfRecordsPerPage'] = array(0 => 'input', 1 => 'Nombre de topics affichés par page');
-$LANG_CONF['main.numberOfShownNewsEntries'] = array(0 => 'input', 1 => 'Nombre de nouveaux articles');
+$LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => 'input', 1 => 'Nombre de topics affichés par page');
+$LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => 'input', 1 => 'Nombre de nouveaux articles');
 $LANG_CONF['main.bannedIPs'] = array(0 => 'area', 1 => 'Bannir ces adresses IP');
 $LANG_CONF['main.enableRewriteRules'] = array(0 => 'checkbox', 1 => 'Activer le support du mod_rewrite? (défault : désactivé)');
 $LANG_CONF['main.ldapSupport'] = array(0 => 'checkbox', 1 => 'Voulez vous activer le support de LDAP? (défault : désactivé)');
@@ -712,14 +712,14 @@ $PMF_LANG['msgTransToolRecordingPageBuffer'] = 'Enregistrement de la page %d tam
 $PMF_LANG['ad_record_active'] = 'Active';
 $PMF_LANG['msgAttachmentInvalid'] = 'Le fichier attaché est invalide, merci d\'en informer l\'administrateur';
 $PMF_LANG['list_all_users'] = 'Lister tous les utilisateurs';
-$PMF_LANG['main.orderingPopularFaqs.visits'] = 'Lister par FAQ les plus consultées';
-$PMF_LANG['main.orderingPopularFaqs.voting'] = 'Lister par FAQ les mieux notées';
+$PMF_LANG['records.orderingPopularFaqs.visits'] = 'Lister par FAQ les plus consultées';
+$PMF_LANG['records.orderingPopularFaqs.voting'] = 'Lister par FAQ les mieux notées';
 $PMF_LANG['msgShowHelp'] = 'Merci de séparer avec une virgule.';
 $PMF_LANG['msgUpdateFaqDate'] = 'mise à jour';
 $PMF_LANG['msgKeepFaqDate'] = 'conserver';
 $PMF_LANG['msgEditFaqDat'] = 'édition';
 $LANG_CONF['search.numberSearchTerms'] = array(0 => 'input', 1 => 'Nombre de termes trouvés');
-$LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Trié par Faq les plus populaires");
+$LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "Trié par Faq les plus populaires");
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Adresse email comme champ obligatoire (default : désactivé)');
 $LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Réponse instantanée en page d\'accueil (défaut : désactivée)');
 $PMF_LANG['msgInstantResponse'] = 'J\'ai de la chance';

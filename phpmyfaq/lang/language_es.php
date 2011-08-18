@@ -469,8 +469,8 @@ $LANG_CONF['main.disableAttachments'] = array(0 => "checkbox", 1 => "¿Poner un 
 $LANG_CONF['main.enableUserTracking'] = array(0 => "checkbox", 1 => "¿Usar monitorización?");
 $LANG_CONF['main.enableAdminLog'] = array(0 => "checkbox", 1 => "¿Usar el Adminlog?");
 $LANG_CONF['main.ipCheck'] = array(0 => "checkbox", 1 => "¿Quieres que las IP sean chequeadas cuando se comprueben las UINs");
-$LANG_CONF['main.numberOfRecordsPerPage'] = array(0 => "input", 1 => "Numero de temar por página");
-$LANG_CONF['main.numberOfShownNewsEntries'] = array(0 => "input", 1 => "Número de nuevos artículos");
+$LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "Numero de temar por página");
+$LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "Número de nuevos artículos");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Bloquear estas IPs");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "Activar soporte para mod_rewrite? (por omisión: deshabilitado)");
 $LANG_CONF['main.ldapSupport'] = array(0 => "checkbox", 1 => "Quiere activar soporte para LDAP? (por omisión: deshabilitado)");
@@ -810,10 +810,10 @@ $PMF_LANG['msgTransToolRecordingPageBuffer'] = 'Grabando la página %d del búfe
 $PMF_LANG['ad_record_active'] = 'Activo';
 $PMF_LANG['msgAttachmentInvalid'] = 'El archivo adjunto es inválido, por favor, informar al administrador';
 $LANG_CONF['search.numberSearchTerms']   = array(0 => 'input', 1 => 'Número de resultados de búsqueda');
-$LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Orden del ranking de FAQs");
+$LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "Orden del ranking de FAQs");
 $PMF_LANG['list_all_users']            = 'Listar todos los usuarios';
-$PMF_LANG['main.orderingPopularFaqs.visits'] = "Listar las entradas más visitadas";
-$PMF_LANG['main.orderingPopularFaqs.voting'] = "Listar las entradas más votadas";
+$PMF_LANG['records.orderingPopularFaqs.visits'] = "Listar las entradas más visitadas";
+$PMF_LANG['records.orderingPopularFaqs.voting'] = "Listar las entradas más votadas";
 $PMF_LANG['msgShowHelp'] = 'Por favor separar las palabras por comas.';
 $PMF_LANG['msgUpdateFaqDate'] = 'actualización';
 $PMF_LANG['msgKeepFaqDate'] = 'mantener'; 

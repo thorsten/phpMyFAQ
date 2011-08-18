@@ -568,8 +568,8 @@ $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Ekleri gird
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "İzleme kullan?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Yönetici kütüğü kullan?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "admin.php'de UIN'leri kontrol ederken IP kontrolü de yapılmasını istiyor musunuz?");
-$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Sayfa başına gösterilen konu sayısı");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Haber yazılarının sayısı");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Sayfa başına gösterilen konu sayısı");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Haber yazılarının sayısı");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Bu IP'leri karalistele");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite desteğini etkinleştir? (varsayılan: kapalı)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP desteğini etkinleştir? (varsayılan: kapalı)");

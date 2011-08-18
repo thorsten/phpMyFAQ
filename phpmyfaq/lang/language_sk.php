@@ -568,8 +568,8 @@ $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Pripojiť p
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "použiť stopovač?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "použiť Adminlog?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Chcete aby bola IP skontrolovaná pri kontrole UINs v admin.php?");
-$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "vstup", 1 => "Počet tém na stránku");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "vstup", 1 => "Počet článkov");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "vstup", 1 => "Počet tém na stránku");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "vstup", 1 => "Počet článkov");
 $LANG_CONF['main.bannedIPs'] = array(0 => "pole", 1 => "Zakázať tieto IP");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktivovať mód_podporu prepisovania? (prednastavené: nepovoliť)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Chcete povoliť LDAP podporu? (Prednastavené: nepovoliť)");
@@ -1042,11 +1042,11 @@ $PMF_LANG['msgAttachmentInvalid'] = 'Príloha je chybná, prosím informujte adm
 
 // added 2.6.0-alpha - 2009-11-02 by max
 $LANG_CONF['search.numberSearchTerms']   = array(0 => 'vstup', 1 => 'Počet nájdených položiek');
-$LANG_CONF['main.orderingPopularFaqs'] = array(0 => "zvoľte", 1 => "Triedenie top FAQ");
+$LANG_CONF['records.orderingPopularFaqs'] = array(0 => "zvoľte", 1 => "Triedenie top FAQ");
 $PMF_LANG['list_all_users']            = 'Zobraziť všetkých užívateľov';
 
-$PMF_LANG['main.orderingPopularFaqs.visits'] = "zobraziť najnavštevovanejšie položky";
-$PMF_LANG['main.orderingPopularFaqs.voting'] = "zobraziť najviac hodnotené položky";
+$PMF_LANG['records.orderingPopularFaqs.visits'] = "zobraziť najnavštevovanejšie položky";
+$PMF_LANG['records.orderingPopularFaqs.voting'] = "zobraziť najviac hodnotené položky";
 
 // added 2.6.0-alpha - 2009-11-05 by Thorsten
 $PMF_LANG['msgShowHelp'] = 'Prosím oddeľte slová čiarkou.';

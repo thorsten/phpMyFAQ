@@ -114,14 +114,14 @@ class PMF_News
             
         $result = $this->db->query($query);
 
-        if ($faqconfig->get('main.numberOfShownNewsEntries') > 0 && $this->db->num_rows($result) > 0) {
+        if ($faqconfig->get('records.numberOfShownNewsEntries') > 0 && $this->db->num_rows($result) > 0) {
         	
             while (($row = $this->db->fetch_object($result))) {
             	
                 $counter++;
-                if (($showArchive  && ($counter > $faqconfig->get('main.numberOfShownNewsEntries'))) || 
+                if (($showArchive  && ($counter > $faqconfig->get('records.numberOfShownNewsEntries'))) ||
                    ((!$showArchive) && (!$forceConfLimit) && 
-                   ($counter <= $faqconfig->get('main.numberOfShownNewsEntries'))) || 
+                   ($counter <= $faqconfig->get('records.numberOfShownNewsEntries'))) ||
                    ((!$showArchive) && $forceConfLimit)) {
                    	
                     $item = array(

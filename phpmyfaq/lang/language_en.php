@@ -596,8 +596,8 @@ $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Enable visi
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Enable user tracking");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "use Adminlog?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Check the IP in administration");
-$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Number of news articles");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Number of news articles");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Enable URL rewrite support? (default: disabled)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Enable LDAP support? (default: disabled)");
@@ -1069,11 +1069,11 @@ $PMF_LANG['msgAttachmentInvalid'] = 'The attachment is invalid, please inform ad
 
 // added 2.6.0-alpha - 2009-11-02 by max
 $LANG_CONF['search.numberSearchTerms']   = array(0 => 'input', 1 => 'Number of listed search terms');
-$LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Sorting of the top FAQ's");
+$LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "Sorting of the top FAQ's");
 $PMF_LANG['list_all_users']            = 'List all users';
 
-$PMF_LANG['main.orderingPopularFaqs.visits'] = "list most visited entries";
-$PMF_LANG['main.orderingPopularFaqs.voting'] = "list most voted entries";
+$PMF_LANG['records.orderingPopularFaqs.visits'] = "list most visited entries";
+$PMF_LANG['records.orderingPopularFaqs.voting'] = "list most voted entries";
 
 // added 2.6.0-alpha - 2009-11-05 by Thorsten
 $PMF_LANG['msgShowHelp'] = 'Please seperate words by comma.';

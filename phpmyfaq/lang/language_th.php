@@ -463,8 +463,8 @@ $LANG_CONF['main.disableAttachments'] = array(0 => "checkbox", 1 => "เปิ�
 $LANG_CONF['main.enableUserTracking'] = array(0 => "checkbox", 1 => "เปิดใช้ระบบติดตามผู้ใช้");
 $LANG_CONF['main.enableAdminLog'] = array(0 => "checkbox", 1 => "เปิดใช้ระบบบันทึกการใช้งานผู้ดูแล");
 $LANG_CONF['main.ipCheck'] = array(0 => "checkbox", 1 => "เปิดใช้ระบบตรวจสอบไอพีในส่วนของผู้ดูแล");
-$LANG_CONF['main.numberOfRecordsPerPage'] = array(0 => "input", 1 => "จำนวนเรื่องที่แสดงในหนึ่งหน้า");
-$LANG_CONF['main.numberOfShownNewsEntries'] = array(0 => "input", 1 => "จำนวนประกาศข่าว");
+$LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "จำนวนเรื่องที่แสดงในหนึ่งหน้า");
+$LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "จำนวนประกาศข่าว");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "ห้ามการใช้งานจากหมายเลขที่อยู่ไอพี");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "เปิดใช้งาน mod_rewrite (ค่าเริ่มต้น: ปิด)");
 $LANG_CONF['main.ldapSupport'] = array(0 => "checkbox", 1 => "เปิดใช้งาน LDAP (ค่าเริ่มต้น: ปิด)");
@@ -816,13 +816,13 @@ $PMF_LANG['msgTransToolRecordingPageBuffer'] = 'บันทึกข้อม�
 $PMF_LANG['ad_record_active'] = 'เ้ปิดใช้งาน';
 $PMF_LANG['msgAttachmentInvalid'] = 'เอกสารแนบผิดพลาด โปรดแจ้งผู้ดูแลระบบ';
 $PMF_LANG['list_all_users'] = 'แสดงทั้งหมด';
-$PMF_LANG['main.orderingPopularFaqs.visits'] = 'ลำดับจากการเปิดดู';
-$PMF_LANG['main.orderingPopularFaqs.voting'] = 'ลำดับจากการโหวต';
+$PMF_LANG['records.orderingPopularFaqs.visits'] = 'ลำดับจากการเปิดดู';
+$PMF_LANG['records.orderingPopularFaqs.voting'] = 'ลำดับจากการโหวต';
 $PMF_LANG['msgShowHelp'] = 'โปรดแยกแต่ละคำด้วย เครื่องหมาย คอมม่า (,)';
 $PMF_LANG['msgUpdateFaqDate'] = 'ปรับปรุง';
 $PMF_LANG['msgKeepFaqDate'] = 'เก็บไว้';
 $PMF_LANG['msgEditFaqDat'] = 'แก้ไข';
 $LANG_CONF['search.numberSearchTerms'] = array(0 => 'input', 1 => 'จำนวนของผลการค้นที่จะแสดง');
-$LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "เรียงลำดับเรื่องของ faq");
+$LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "เรียงลำดับเรื่องของ faq");
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'ช่องอีเมล์เป็นช่องที่จำเป็นต้องกรอก (ค่าเริ่มต้น: ปิด)');
 $LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'เปิดการค้นหาด่วนในหน้าแรก (ค่าเริ่มต้น: ปิด)');

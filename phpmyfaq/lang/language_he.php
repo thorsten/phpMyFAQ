@@ -575,8 +575,8 @@ $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "קשר לק
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "אפשר רישום של פעילות המשתמשים?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "אפשר רישום של פעילות המנהל ?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "האם הנך רוצה שהIP יבדק כאשר נבדקים פרטי המשתמשים בadmin.php?");
-$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "מספר ערכים מוצגים בכל עמוד");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "מספר קטעי חדשות");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "מספר ערכים מוצגים בכל עמוד");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "מספר קטעי חדשות");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "חסום את IP זה");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "הפעל mod_rewrite? (ברירת מחדל: לא פעיל)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "הפעל LDAP? (ברירת מחדל: לא פעיל)");

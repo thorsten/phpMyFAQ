@@ -586,7 +586,7 @@ if (isset($auth)) {
 $tpl->includeTemplate('loginBox', 'index');
 
 // generate top ten list
-if ($faqconfig->get('main.orderingPopularFaqs') == 'visits') {
+if ($faqconfig->get('records.orderingPopularFaqs') == 'visits') {
     $param = 'visits';
 } else {
     $param = 'voted';

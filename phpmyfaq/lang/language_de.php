@@ -569,8 +569,8 @@ $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Attachments
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Tracking aktiviert?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Adminlog aktiviert?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Soll die IP zur Überprüfung im Administrationsbereich herangezogen werden?");
-$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Anzahl der FAQs pro Seite");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Anzahl der angezeigten News");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Anzahl der FAQs pro Seite");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Anzahl der angezeigten News");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Gesperrte IPs (Bitte mit Leerzeichen trennen)");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite Support aktivieren? (Voreinstellung: deaktiviert)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP Support aktivieren? (Voreinstellung: deaktiviert)");
@@ -1024,11 +1024,11 @@ $PMF_LANG['ad_record_active'] = 'aktiviert';
 
 // added 2.6.0-alpha - 2009-11-02 by max
 $LANG_CONF['search.numberSearchTerms']   = array(0 => 'input', 1 => 'Anzahl der beliebtesten Suchbegriffe');
-$LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Sortierung der TOP-FAQ");
+$LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "Sortierung der TOP-FAQ");
 $PMF_LANG['list_all_users']            = 'Alle Benutzer anzeigen';
 
-$PMF_LANG['main.orderingPopularFaqs.visits'] = "nach Anzahl der Besucher";
-$PMF_LANG['main.orderingPopularFaqs.voting'] = "nach Bewertung der Besucher";
+$PMF_LANG['records.orderingPopularFaqs.visits'] = "nach Anzahl der Besucher";
+$PMF_LANG['records.orderingPopularFaqs.voting'] = "nach Bewertung der Besucher";
 
 // added 2.6.0-alpha - 2009-11-05 by Thorsten
 $PMF_LANG['msgShowHelp'] = 'Bitte Begriffe mit Komma trennen.';

@@ -574,8 +574,8 @@ $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Mostra il l
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Abilito il tracciamento per le attivit&agrave; dell'Utente?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Abilito il tracciamento per le attivit&agrave; di Amministrazione?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Vuoi controllare l'IP quando verifico l'<em>UIN</em> in <em>admin.php</em>?");
-$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Numero di elementi visualizzati per pagina");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Numero di elementi visualizzati per la sezione News");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Numero di elementi visualizzati per pagina");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Numero di elementi visualizzati per la sezione News");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Vieta l'accesso a questi indirizzi IP");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Attivare il supporto a <em>mod_rewrite</em>? (predefinito: disabilitato)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Attivare il supporto LDAP? (predefinito: disabilitato)");

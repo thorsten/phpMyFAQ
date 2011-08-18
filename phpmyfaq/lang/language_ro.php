@@ -464,8 +464,8 @@ $LANG_CONF['main.disableAttachments'] = array(0 => "checkbox", 1 => "Linkul atas
 $LANG_CONF['main.enableUserTracking'] = array(0 => "checkbox", 1 => "utilizeaza monitorizarea?");
 $LANG_CONF['main.enableAdminLog'] = array(0 => "checkbox", 1 => "utilizeaza monitorizarea activitatii de admin?");
 $LANG_CONF['main.ipCheck'] = array(0 => "checkbox", 1 => "Vrei sa fie verificat IP-ul cand se verifica  UIN in admin.php?");
-$LANG_CONF['main.numberOfRecordsPerPage'] = array(0 => "input", 1 => "Numarul topicurilor afisate per pagina");
-$LANG_CONF['main.numberOfShownNewsEntries'] = array(0 => "input", 1 => "Numarul stirilor per pagina");
+$LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "Numarul topicurilor afisate per pagina");
+$LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "Numarul stirilor per pagina");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Restrictioneaza urmatoarele IP-uri");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "Activezi suportul mod_rewrite? (normal:dezactivat)");
 $LANG_CONF['main.ldapSupport'] = array(0 => "checkbox", 1 => "Vrei sa activezi suportul LDAP ? (normal:dezactivat)");
@@ -575,14 +575,14 @@ $PMF_LANG['msgTransToolRecordingPageBuffer'] = 'Pagina de inregistrare %d buffer
 $PMF_LANG['ad_record_active'] = 'Activ';
 $PMF_LANG['msgAttachmentInvalid'] = 'Atasamentul este invalid,te rugam sa informezi un administrator!';
 $PMF_LANG['list_all_users'] = 'Lista userilor';
-$PMF_LANG['main.orderingPopularFaqs.visits'] = 'lista celor mai vizitate articole';
-$PMF_LANG['main.orderingPopularFaqs.voting'] = 'lista celor mai votate articole';
+$PMF_LANG['records.orderingPopularFaqs.visits'] = 'lista celor mai vizitate articole';
+$PMF_LANG['records.orderingPopularFaqs.voting'] = 'lista celor mai votate articole';
 $PMF_LANG['msgShowHelp'] = 'Te rugam seapara cuvintele prin virgula.';
 $PMF_LANG['msgUpdateFaqDate'] = 'updateaza';
 $PMF_LANG['msgKeepFaqDate'] = 'pastreaza';
 $PMF_LANG['msgEditFaqDat'] = 'editeaza';
 $LANG_CONF['search.numberSearchTerms'] = array(0 => 'input', 1 => 'Numarul listei de termeni cautati');
-$LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Sorteaza  topul intrebarilor");
+$LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "Sorteaza  topul intrebarilor");
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Adresa de email camp obligatoriu (normal:dezactivat)');
 $LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Raspuns instant pe pagina de start (normal: dezactivat)');
 $PMF_LANG['msgTransToolRemove'] = 'Sterge';

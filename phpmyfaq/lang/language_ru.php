@@ -771,8 +771,8 @@ $LANG_CONF['main.disableAttachments'] = array(0 => "checkbox", 1 => "Помещ�
 $LANG_CONF['main.enableUserTracking'] = array(0 => "checkbox", 1 => "включить отслеживание?");
 $LANG_CONF['main.enableAdminLog'] = array(0 => "checkbox", 1 => "включить журнал администратора?");
 $LANG_CONF['main.ipCheck'] = array(0 => "checkbox", 1 => "Активировать проверку IP-адреса при проверке UIN-ов для admin.php?");
-$LANG_CONF['main.numberOfRecordsPerPage'] = array(0 => "input", 1 => "Количество статей на страницу");
-$LANG_CONF['main.numberOfShownNewsEntries'] = array(0 => "input", 1 => "Количество новостных статей");
+$LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "Количество статей на страницу");
+$LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "Количество новостных статей");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Заблокировать эти IP-Адреса");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "Активировать mod_rewrite? (по умолчанию отключено)");
 $LANG_CONF['main.ldapSupport'] = array(0 => "checkbox", 1 => "Активировать LDAP? (по умолчанию отключено)");
@@ -797,14 +797,14 @@ $PMF_LANG['msgTransToolRecordingPageBuffer'] = 'Запись страницы %d
 $PMF_LANG['ad_record_active'] = 'Активное';
 $PMF_LANG['msgAttachmentInvalid'] = 'Некорректное вложение, пожалуйста, свяжитесь с админом';
 $PMF_LANG['list_all_users'] = 'Список всех пользователей';
-$PMF_LANG['main.orderingPopularFaqs.visits'] = 'список самых посещаемых статей';
-$PMF_LANG['main.orderingPopularFaqs.voting'] = 'список самых высоко оцененных статей';
+$PMF_LANG['records.orderingPopularFaqs.visits'] = 'список самых посещаемых статей';
+$PMF_LANG['records.orderingPopularFaqs.voting'] = 'список самых высоко оцененных статей';
 $PMF_LANG['msgShowHelp'] = 'Разделяйте слова запятой.';
 $PMF_LANG['msgUpdateFaqDate'] = 'обновить';
 $PMF_LANG['msgKeepFaqDate'] = 'сохранить';
 $PMF_LANG['msgEditFaqDat'] = 'редактировать';
 $LANG_CONF['search.numberSearchTerms'] = array(0 => 'input', 1 => 'Число результатов поиска');
-$LANG_CONF['main.orderingPopularFaqs'] = array(0 => "select", 1 => "Сортировка популярных ответов");
+$LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "Сортировка популярных ответов");
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Адрес e-mail как обязательное поле (по умолчанию: отключено)');
 $LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Мгновенный поиск на главной странице (по умолчанию: отключено)');
 $PMF_LANG['msgTransToolRemove'] = 'Убрать';

@@ -470,8 +470,8 @@ $LANG_CONF['main.disableAttachments'] = array(0 => "checkbox", 1 => "Link the at
 $LANG_CONF['main.enableUserTracking'] = array(0 => "checkbox", 1 => "benyt Tracking?");
 $LANG_CONF['main.enableAdminLog'] = array(0 => "checkbox", 1 => "benyt administratorlog?");
 $LANG_CONF['main.ipCheck'] = array(0 => "checkbox", 1 => "Do you want the IP to be checked when checking the UINs in admin.php?");
-$LANG_CONF['main.numberOfRecordsPerPage'] = array(0 => "input", 1 => "Antal viste indlæg pr. side");
-$LANG_CONF['main.numberOfShownNewsEntries'] = array(0 => "input", 1 => "Antal nyhedsartikler");
+$LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "Antal viste indlæg pr. side");
+$LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "Antal nyhedsartikler");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "Aktiver underst&oslash;ttelse af mod_rewrite? (standard: sl&aring;et fra)");
 $LANG_CONF['main.ldapSupport'] = array(0 => "checkbox", 1 => "Aktiver underst&oslash;ttelse af LDAP? (standard: sl&aring;et fra)");

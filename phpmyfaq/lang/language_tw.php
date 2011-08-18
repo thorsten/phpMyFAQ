@@ -770,8 +770,8 @@ $LANG_CONF['main.disableAttachments'] = array(0 => "checkbox", 1 => "連接記�
 $LANG_CONF['main.enableUserTracking'] = array(0 => "checkbox", 1 => "啟用跟蹤？");
 $LANG_CONF['main.enableAdminLog'] = array(0 => "checkbox", 1 => "啟用管理員日誌？");
 $LANG_CONF['main.ipCheck'] = array(0 => "checkbox", 1 => "您希望admin.php在檢查UIN的時候也檢查IP使用嗎？");
-$LANG_CONF['main.numberOfRecordsPerPage'] = array(0 => "input", 1 => "每頁顯示主題數目");
-$LANG_CONF['main.numberOfShownNewsEntries'] = array(0 => "input", 1 => "新文章數量");
+$LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "每頁顯示主題數目");
+$LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "新文章數量");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "禁止這些IP使用訪問");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "您希望開啟mod_rewrite支援嗎連 (預設: 關閉)");
 $LANG_CONF['main.ldapSupport'] = array(0 => "checkbox", 1 => "您希望開啟LDAP支援嗎連 (預設: 關閉)");
