@@ -85,8 +85,8 @@ if (version_compare(PHP_VERSION, MINIMUM_PHP_VERSION, '<')) {
     die();
 }
 
-require_once PMF_ROOT_DIR.'/inc/autoLoader.php';
-require_once PMF_ROOT_DIR.'/config/constants.php';
+require_once PMF_ROOT_DIR . '/inc/autoLoader.php';
+require_once PMF_ROOT_DIR . '/config/constants.php';
 
 $step        = PMF_Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
 $version     = PMF_Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);
@@ -824,6 +824,12 @@ if ($step == 4) {
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.enableLoginOnly', 'false')";
     }
 
+    //
+    // UPDATES FROM 2.7.0-RC
+    //
+    if (version_compare($version, '2.7.0-RC', '<')) {
+        
+    }
 
 
     // Perform the queries for updating/migrating the database from 2.x

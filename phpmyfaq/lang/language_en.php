@@ -1153,3 +1153,6 @@ $LANG_CONF['main.ssoSupport'] = array(0 => 'checkbox', 1 => 'Single Sign On Supp
 $LANG_CONF['main.ssoLogoutRedirect'] = array(0 => 'input', 1 => 'Single Sign On logout redirect service URL');
 $LANG_CONF['main.dateFormat'] = array(0 => 'input', 1 => 'Date format (default: Y-m-d H:i)');
 $LANG_CONF['main.enableLoginOnly'] = array(0 => 'checkbox', 1 => 'Complete secured FAQ (default: deactivated)');
+
+// added v2.7.0-RC - 2011-08-18 by Thorsten
+$PMF_LANG['securityControlCenter'] = 'Security configuration';
