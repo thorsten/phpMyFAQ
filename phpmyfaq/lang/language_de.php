@@ -609,7 +609,7 @@ $PMF_LANG['msgArticleCategories'] = 'Kategorien zu diesem Artikel';
 // added v1.6.0 - 2006-02-02 by Thorsten
 $PMF_LANG['ad_entry_solution_id'] = 'Eindeutige ID';
 $PMF_LANG['ad_entry_faq_record'] = 'FAQ Eintrag';
-$PMF_LANG['ad_entry_new_revision'] = 'Neue Revision erstellen?';
+$PMF_LANG['ad_entry_new_revision'] = 'Neue Revision:';
 $PMF_LANG['ad_entry_record_administration'] = 'FAQ Bearbeitung';
 $PMF_LANG['ad_entry_revision'] = 'Revision';
 $PMF_LANG['ad_changerev'] = 'Revisionsauswahl';
@@ -798,8 +798,8 @@ $PMF_LANG["ad_categ_show"] = "Übersicht";
 $PMF_LANG['ad_menu_categ_structure'] = "Übersicht der Kategorien mitsamt ihre Sprachen";
 
 // added v2.0.0 - 2006-09-26 by Thorsten
-$PMF_LANG['ad_entry_userpermission'] = 'Benutzerberechtigungen:';
-$PMF_LANG['ad_entry_grouppermission'] = 'Gruppenberechtigungen:';
+$PMF_LANG['ad_entry_userpermission'] = 'Benutzerrechte:';
+$PMF_LANG['ad_entry_grouppermission'] = 'Gruppenrechte:';
 $PMF_LANG['ad_entry_all_users'] = 'Zugriff für alle Benutzer';
 $PMF_LANG['ad_entry_restricted_users'] = 'Eingeschränkter Zugriff für';
 $PMF_LANG['ad_entry_all_groups'] = 'Zugriff für alle Gruppen';
@@ -923,7 +923,7 @@ $PMF_LANG['msgSendMailIfNothingIsFound'] = 'Ist die gesuchte Antwort oben gelist
 
 // added 2.5.0-RC - 2009-05-11 by Anatoliy & Thorsten
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'Bitte wählen Sie die zu übersetzende Sprache aus';
-$PMF_LANG['msgLangDirIsntWritable'] = 'Das Verzeichnis mit den übersetzungen ist nicht beschreibbar';
+$PMF_LANG['msgLangDirIsntWritable'] = 'Das Verzeichnis mit den Übersetzungsdateien ist nicht beschreibbar.';
 $PMF_LANG['ad_menu_translations'] = 'Übersetzung';
 $PMF_LANG['ad_start_notactive'] = 'Wartend auf Freischaltung';
 
