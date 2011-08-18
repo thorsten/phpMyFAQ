@@ -576,7 +576,7 @@ $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP Support aktivieren? (Voreinstellung: deaktiviert)");
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Basis-Adresse für die Linküberprüfung (Adresse der Startseite)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Zeitintervall zwischen den Ajax-Linküberprüfungen (in Sekunden)");
-$LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Sichtbarkeit neuer Fragen unterdrücken?");
+$LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Neue Fragen sofort sichtbar?");
 $LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "Berechtigungsebene");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "Als neue Hauptkategorie";
@@ -621,9 +621,9 @@ $PMF_LANG['msgAdvancedSearch'] = 'Erweiterte Suche';
 
 // added v1.6.1 - 2006-04-25 by Matteo and Thorsten
 $PMF_LANG['spamControlCenter'] = 'Spamschutz-Konfiguration';
-$LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Sichere Darstellung der E-Mailadresse (Voreinstellung: aktiviert)");
-$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Testen fremder Inhalte gegen die Bad-Word-Liste (Voreinstellung: aktiviert)");
-$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "Zeige Captcha-Grafiken für Formulare (Voreinstellung: aktiviert)");
+$LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Sichere E-Mailadresse anzeigen? (Voreinstellung: aktiviert)");
+$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Bad-Word-Liste aktivieren? (Voreinstellung: aktiviert)");
+$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "Captcha-Grafiken anzeigen? (Voreinstellung: aktiviert)");
 $PMF_LANG['ad_session_expiring'] = 'Die Session wird in %d Minuten enden: Wollen Sie weiterarbeiten?';
 
 // added v1.6.2 - 2006-06-13 by Matteo
@@ -858,7 +858,7 @@ $PMF_LANG['ad_groups'] = 'Gruppen';
 
 // added v2.0.0 - 2007-03-10 by Thorsten
 $LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'Sortierung (nach Eigenschaft)');
-$LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Sortierung (absteigend oder aufsteigend)');
+$LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Sortierung (absteigend/aufsteigend)');
 $PMF_LANG['ad_conf_order_id'] = 'ID (Standard)';
 $PMF_LANG['ad_conf_order_thema'] = 'Frage';
 $PMF_LANG['ad_conf_order_visits'] = 'Anzahl der Besucher';
@@ -874,8 +874,8 @@ $PMF_LANG['msgInstantResponse'] = 'Sofortantwort';
 $PMF_LANG['msgInstantResponseMaxRecords'] = '. Nachfolgend werden die ersten %d FAQs aufgelistet.';
 
 // added v2.0.0 - 2007-03-29 by Thorsten
-$LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Neue FAQs sind sofort sichtbar (Voreinstellung: unsichtbar)");
-$LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Erlaube Kommentare bei neuen FAQs (Voreinstellung: nicht erlaubt)");
+$LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Neue FAQs sofort sichtbar? (Voreinstellung: unsichtbar)");
+$LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Kommentare bei FAQs erlaubt? (Voreinstellung: nicht erlaubt)");
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'FAQs in dieser Kategorie';
@@ -1042,14 +1042,14 @@ $LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Sof
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
 $LANG_CONF['search.relevance'] = array(0 => 'select', 1 => 'Sortierung nach Relevanz');
-$LANG_CONF["search.enableRelevance"] = array(0 => "checkbox", 1 => "Support für Relevanz? (Voreinstellung: deaktiviert)");
+$LANG_CONF['search.enableRelevance'] = array(0 => "checkbox", 1 => "Support für Relevanz? (Voreinstellung: deaktiviert)");
 $PMF_LANG['searchControlCenter'] = 'Suchkonfiguration';
 $PMF_LANG['search.relevance.thema-content-keywords'] = 'Frage - Antwort - Schlüsselwörter';
 $PMF_LANG['search.relevance.thema-keywords-content'] = 'Frage - Schlüsselwörter - Antwort';
 $PMF_LANG['search.relevance.content-thema-keywords'] = 'Antwort - Frage - Schlüsselwörter';
 $PMF_LANG['search.relevance.content-keywords-thema'] = 'Antwort - Schlüsselwörter - Frage';
 $PMF_LANG['search.relevance.keywords-content-thema'] = 'Schlüsselwörter - Antwort - Frage';
-$PMF_LANG['search.relevance.keywords-thema-content'] = 'Schlüsselwörter - Question - Antwort';
+$PMF_LANG['search.relevance.keywords-thema-content'] = 'Schlüsselwörter - Frage - Antwort';
 
 // added v2.6.99 - 2010-11-30 by Gustavo Solt
 $LANG_CONF["main.enableGoogleTranslation"] = array(0 => "checkbox", 1 => "Google Übersetzung aktivieren? (Standard: deaktiviert)");
