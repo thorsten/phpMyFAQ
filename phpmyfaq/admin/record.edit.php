@@ -247,9 +247,11 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 ?>
                 <p>
                     <label><?php print $PMF_LANG['ad_menu_attachments'] ?>:</label>
-                    <ul class="adminAttachments">
 <?php
         if (isset($faqData['id']) && $faqData['id'] != "") {
+?>
+                    <ul class="adminAttachments">
+<?php
             $attList = PMF_Attachment_Factory::fetchByRecordId($faqData['id']);
             foreach ($attList as $att) {
                 printf('<li><a href="../%s">%s</a> ',
@@ -274,7 +276,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                     </ul>
 <?php
         } else {
-            printf("%s", $PMF_LANG['ad_att_nope']);
+            print $PMF_LANG['ad_att_nope'];
         }
 ?>
                 </p>
