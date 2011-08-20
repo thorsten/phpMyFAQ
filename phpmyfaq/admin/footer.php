@@ -52,6 +52,13 @@ if (isset($auth)) {
                          ('addnews'      == $action) || ('editnews'     == $action) || ('copyentry'  == $action))) {
     
         if ($faqconfig->get('main.enableWysiwygEditor') == true) {
+
+            if (('addnews' == $action || 'editnews' == $action)) {
+                $tinyMceSave = '';
+            } else {
+                $tinyMceSave = 'save,|,';
+            }
+
 ?>
 <!-- tinyMCE -->
 <script>
@@ -69,7 +76,7 @@ tinyMCE.init({
     theme_advanced_blockformats : "p,div,h1,h2,h3,h4,h5,h6,blockquote,dt,dd,code,samp",
 
     // Theme options
-    theme_advanced_buttons1 : "save,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
+    theme_advanced_buttons1 : "<?php print $tinyMceSave ?>bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
     theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,phpmyfaq,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,code,syntaxhl,|,insertdate,inserttime,preview,|,forecolor,backcolor",
     theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen,help",
     theme_advanced_toolbar_location : "top",
