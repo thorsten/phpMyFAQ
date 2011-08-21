@@ -139,7 +139,8 @@ foreach ($items as $item) {
     $sitemap .= buildSitemapNode(
                     PMF_Link::getSystemUri('/sitemap.google.php').$link,
                     PMF_Date::createISO8601Date($item['date']),
-                    // TODO: manage changefreq node with the info provided by faqchanges, IF this will not add a big load to the server (+1 query/faq)
+                    // @todo: manage changefreq node with the info provided by faqchanges,
+                    // if this will not add a big load to the server (+1 query/faq)
                     PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY,
                     $priority
                 );

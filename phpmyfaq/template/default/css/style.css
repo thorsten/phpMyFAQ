@@ -315,6 +315,11 @@ div.star-rating-hover a {
 #tagcloud-content .relevance4 { font-size: 140%; }
 #tagcloud-content .relevance5 { font-size: 160%; }
 
+/* Tables */
+table.openquestions {
+    border-collapse: collapse; margin-bottom: 22px; }
+table.openquestions td {
+    padding: 4px; border-top: 1px solid transparent; border-bottom: 1px solid #333; }
 
 /* Right panel */
 aside {
