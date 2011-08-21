@@ -334,11 +334,10 @@ switch ($action) {
 
             // @todo let the email contains the faq article both as plain text and as HTML
             $mail->message = html_entity_decode(
-                $PMF_LANG['msgMailCheck']) .
-                "\n\n" .
-                $faqconfig->get('main.titleFAQ') .
-                ": " .
-                PMF_Link::getSystemRelativeUri('/ajaxservice.php') . 'admin/';
+                $PMF_LANG['msgMailCheck']) . "\n\n" .
+                $faqconfig->get('main.titleFAQ') . ": " .
+                $faqconfig->get('main.referenceURL') .
+                PMF_Link::getSystemRelativeUri('/ajaxservice.php') . '/admin/';
             $result = $mail->send();
             unset($mail);
 
