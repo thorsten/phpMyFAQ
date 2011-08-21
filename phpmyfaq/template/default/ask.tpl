@@ -7,6 +7,8 @@
 
             </div>
 
+            <div id="answers"></div>
+
             <form id="formValues" action="#" method="post">
                 <input type="hidden" name="lang" id="lang" value="{lang}" />
 
@@ -38,8 +40,7 @@
 
                 <div id="loader"></div>
                 <div id="qerror"></div>
-                <div id="answers"></div>
-
+                
                 <input class="submit" type="submit" id="submitquestion" value="{msgNewContentSubmit}">
 
             </form>

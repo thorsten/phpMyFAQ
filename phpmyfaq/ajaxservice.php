@@ -334,11 +334,10 @@ switch ($action) {
 
             // @todo let the email contains the faq article both as plain text and as HTML
             $mail->message = html_entity_decode(
-                $PMF_LANG['msgMailCheck']) .
-                "\n\n" .
-                $faqconfig->get('main.titleFAQ') .
-                ": " .
-                PMF_Link::getSystemRelativeUri('/ajaxservice.php') . 'admin/';
+                $PMF_LANG['msgMailCheck']) . "\n\n" .
+                $faqconfig->get('main.titleFAQ') . ": " .
+                $faqconfig->get('main.referenceURL') .
+                PMF_Link::getSystemRelativeUri('/ajaxservice.php') . '/admin/';
             $result = $mail->send();
             unset($mail);
 
@@ -413,7 +412,45 @@ switch ($action) {
 
                     $message = array('result' => $response);
                 } else {
-                    $message = array('error' => $PMF_LANG['err_SaveQuestion']);
+
+                    if (PMF_Configuration::getInstance()->get('records.enableVisibilityQuestions')) {
+                        $visibility = 'N';
+                    } else {
+                        $visibility = 'Y';
+                    }
+                    $questionData = array(
+                        'username'    => $name,
+                        'email'       => $email,
+                        'category_id' => $ucategory,
+                        'question'    => $question,
+                        'is_visible'  => $visibility);
+
+                    $faq->addQuestion($questionData);
+
+                    $questionMail = "User: ".$questionData['username'].", mailto:".$questionData['email']."\n"
+                                    .$PMF_LANG["msgCategory"].": ".$categories[$questionData['category_id']]["name"]."\n\n"
+                                    .wordwrap($content, 72);
+
+                    $userId = $cat->getCategoryUser($questionData['category_id']);
+                    $oUser  = new PMF_User();
+                    $oUser->getUserById($userId);
+
+                    $userEmail      = $oUser->getUserData('email');
+                    $mainAdminEmail = PMF_Configuration::getInstance()->get('main.administrationMail');
+
+                    $mail = new PMF_Mail();
+                    $mail->setReplyTo($questionData['email'], $questionData['username']);
+                    $mail->addTo($mainAdminEmail);
+                    // Let the category owner get a copy of the message
+                    if ($userEmail && $mainAdminEmail != $userEmail) {
+                        $mail->addCc($userEmail);
+                    }
+                    $mail->subject = '%sitename%';
+                    $mail->message = $questionMail;
+                    $mail->send();
+                    unset($mail);
+
+                    $message = array('success' => $PMF_LANG['msgAskThx4Mail']);
                 }
                 
             } else {

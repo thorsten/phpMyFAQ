@@ -451,6 +451,7 @@ function checkQuestion()
             } else {
                 $('#answers').html('<p class="success">' + json.success + '</p>');
                 $('#answers').fadeIn("slow");
+                $('#answerForm').fadeOut('slow');
                 $('#loader').hide();
                 $('#formValues').hide();
             }

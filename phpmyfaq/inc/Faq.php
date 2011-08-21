@@ -2777,7 +2777,8 @@ class PMF_Faq
 
         $result = $this->db->query($query);
         $output = '';
-        if ($this->db->num_rows($result) > 0) {
+
+        if ($result && $this->db->num_rows($result) > 0) {
             while ($row = $this->db->fetch_object($result)) {
                 $output .= '<tr class="openquestions">';
                 $output .= sprintf('<td valign="top" nowrap="nowrap">%s<br /><a href="mailto:%s">%s</a></td>',
