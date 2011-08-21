@@ -42,8 +42,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  */
 class PMF_Date
 {
-	/**
-	 * Converts the phpMyFAQ date format to a format similar to ISO 8601 standard
+    /**
+     * Converts the phpMyFAQ date format to a format similar to ISO 8601 standard
      *
      * @param string  $date      Date string
      * @param string  $format    Date format
