@@ -489,10 +489,13 @@ switch ($action) {
                 // set user status
                 $user->setStatus('blocked');
 
-                $text = sprintf("New user has been registrated:\n\nUsername: %s\nLoginname: %s\n\n" .
-                                "To activate this user do please use the administration interface.",
-                                $realname,
-                                $loginname);
+                $text = sprintf(
+                    "New user has been registrated:\n\nUsername: %s\nLoginname: %s\n\n" .
+                    "To activate this user do please use the administration interface at %s.",
+                    $realname,
+                    $loginname,
+                    $faqconfig->get('main.referenceURL')
+                );
 
                 $mail = new PMF_Mail();
                 $mail->setReplyTo($email, $realname);
