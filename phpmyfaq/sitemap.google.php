@@ -11,7 +11,7 @@
  * The Google Sitemap protocol is described here:
  * http://www.google.com/webmasters/sitemaps/docs/en/protocol.html
  *
- * PHP Version 5.2.0
+ * PHP Version 5.2.3
  * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -26,7 +26,7 @@
  * @category  phpMyFAQ
  * @package   SEO
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2006-2010 phpMyFAQ Team
+ * @copyright 2006-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-06-26
@@ -67,7 +67,7 @@ PMF_String::init('en');
 function buildSitemapNode($location, $lastmod = null, $changeFreq = null, $priority = null)
 {
     if (!isset($lastmod)) {
-        $lastmod = PMF_Date::createISO8601Date($_SERVER['REQUEST_TIME'], false);
+        $lastmod = PMF_Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_ISO8601, false);
     }
     if (!isset($changeFreq)) {
         $changeFreq = PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY;
@@ -115,7 +115,7 @@ $sitemap =
     .' http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">';
 // 1st entry: the faq server itself
 $sitemap .= buildSitemapNode(PMF_Link::getSystemUri('/sitemap.google.php'),
-                PMF_Date::createISO8601Date($_SERVER['REQUEST_TIME'], false),
+                PMF_Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_ISO8601, false),
                 PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY,
                 PMF_SITEMAP_GOOGLE_PRIORITY_MAX
             );
@@ -138,7 +138,7 @@ foreach ($items as $item) {
     }
     $sitemap .= buildSitemapNode(
                     PMF_Link::getSystemUri('/sitemap.google.php').$link,
-                    PMF_Date::createISO8601Date($item['date']),
+                    PMF_Date::createIsoDate($item['date'], DATE_ISO8601),
                     // TODO: manage changefreq node with the info provided by faqchanges, IF this will not add a big load to the server (+1 query/faq)
                     PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY,
                     $priority
