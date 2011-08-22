@@ -677,7 +677,9 @@ header("Pragma: no-cache");
 header("Content-type: text/html; charset=utf-8");
 header("Vary: Negotiate,Accept");
 
-ob_start('ob_gzhandler');
+if (!DEBUG) {
+    ob_start('ob_gzhandler');
+}
 $tpl->printTemplate();
 
 $db->dbclose();
