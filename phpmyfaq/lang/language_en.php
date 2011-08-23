@@ -286,7 +286,7 @@ $PMF_LANG["ad_news_link_title"] = "Title of the link:";
 $PMF_LANG["ad_news_link_target"] = "Target of the link:";
 $PMF_LANG["ad_news_link_window"] = "Link opens new window";
 $PMF_LANG["ad_news_link_faq"] = "Link within the FAQ";
-$PMF_LANG["ad_news_add"] = "Add News";
+$PMF_LANG["ad_news_add"] = "Add News entry";
 $PMF_LANG["ad_news_id"] = "#";
 $PMF_LANG["ad_news_headline"] = "Headline";
 $PMF_LANG["ad_news_date"] = "Date";
@@ -294,11 +294,11 @@ $PMF_LANG["ad_news_action"] = "Action";
 $PMF_LANG["ad_news_update"] = "update";
 $PMF_LANG["ad_news_delete"] = "delete";
 $PMF_LANG["ad_news_nodata"] = "No data found in database";
-$PMF_LANG["ad_news_updatesuc"] = "The News were updated.";
+$PMF_LANG["ad_news_updatesuc"] = "The news has been successfully updated.";
 $PMF_LANG["ad_news_del"] = "Are you sure that you want to delete this news item?";
 $PMF_LANG["ad_news_yesdelete"] = "yes, delete!";
-$PMF_LANG["ad_news_nodelete"] = "no!";
-$PMF_LANG["ad_news_delsuc"] = "News item deleted.";
+$PMF_LANG["ad_news_nodelete"] = "no";
+$PMF_LANG["ad_news_delsuc"] = "The news has been successfully deleted.";
 $PMF_LANG["ad_news_updatenews"] = "News item updated.";
 
 // Kategorieverwaltung

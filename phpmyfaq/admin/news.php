@@ -281,10 +281,11 @@ if ('addnews' == $action && $permission["addnews"]) {
         'target'        => (is_null($target)) ? '' : $target);
 
     if ($news->addNewsEntry($newsData)) {
-        printf("<p>%s</p>", $PMF_LANG['ad_news_updatesuc']);
+        printf('<p class="success">%s</p>', $PMF_LANG['ad_news_updatesuc']);
     } else {
-        printf("<p>%s</p>", $PMF_LANG['ad_news_insertfail']);
+        printf('<p class="error">%s</p>', $PMF_LANG['ad_news_insertfail']);
     }
+    printf('<p>&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
 } elseif ('updatenews' == $action && $permission["editnews"]) {
 
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING, '00000000000000');
@@ -317,15 +318,16 @@ if ('addnews' == $action && $permission["addnews"]) {
     
     $newsId = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     if ($news->updateNewsEntry($newsId, $newsData)) {
-        printf("<p>%s</p>", $PMF_LANG['ad_news_updatesuc']);
+        printf('<p class="success">%s</p>', $PMF_LANG['ad_news_updatesuc']);
     } else {
-        printf("<p>%s</p>", $PMF_LANG['ad_news_updatefail']);
+        printf('<p class="error">%s</p>', $PMF_LANG['ad_news_updatefail']);
     }
+    printf('<p>&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
 } elseif ('deletenews' == $action && $permission["delnews"]) {
-	
-	$precheck  = PMF_Filter::filterInput(INPUT_POST, 'really', FILTER_SANITIZE_STRING, 'no');
-	$delete_id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-	
+
+    $precheck  = PMF_Filter::filterInput(INPUT_POST, 'really', FILTER_SANITIZE_STRING, 'no');
+    $delete_id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    
     if ('no' == $precheck) {
 ?>
     <p><?php print $PMF_LANG["ad_news_del"]; ?></p>
@@ -340,20 +342,18 @@ if ('addnews' == $action && $permission["addnews"]) {
     
     <script type="text/javascript">
     /* <![CDATA[ */
-
     $(function()
     {
         $('.date-pick').datePicker();
     });
-    
     /* ]]> */
     </script>
-    
 <?php
     } else {
-    	$delete_id = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $delete_id = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         $news->deleteNews($delete_id);
-        print "<p>".$PMF_LANG["ad_news_delsuc"]."</p>";
+        printf('<p class="success">%s</p>', $PMF_LANG['ad_news_delsuc']);
+        printf('<p>&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
     }
 } else {
     print $PMF_LANG["err_NotAuth"];

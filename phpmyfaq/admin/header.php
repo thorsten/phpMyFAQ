@@ -85,6 +85,8 @@ switch ($action) {
     case 'news';
     case 'addnews':
     case 'editnews':
+    case 'savenews':
+    case 'updatenews';
     case 'delnews':
     case 'question':
     case 'comments':
