@@ -67,7 +67,7 @@ PMF_String::init('en');
 function buildSitemapNode($location, $lastmod = null, $changeFreq = null, $priority = null)
 {
     if (!isset($lastmod)) {
-        $lastmod = PMF_Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_ISO8601, false);
+        $lastmod = PMF_Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_W3C, false);
     }
     if (!isset($changeFreq)) {
         $changeFreq = PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY;
@@ -115,7 +115,7 @@ $sitemap =
     .' http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">';
 // 1st entry: the faq server itself
 $sitemap .= buildSitemapNode(PMF_Link::getSystemUri('/sitemap.google.php'),
-                PMF_Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_ISO8601, false),
+                PMF_Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_W3C, false),
                 PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY,
                 PMF_SITEMAP_GOOGLE_PRIORITY_MAX
             );
