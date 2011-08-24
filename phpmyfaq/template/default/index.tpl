@@ -82,6 +82,7 @@
         <menu id="categories">
             <ul>
                 <li class="home">{backToHome}</li>
+                <li>{allCategories}</li>
                 {showCategories}
             </ul>
         </menu>
