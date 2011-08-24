@@ -75,7 +75,7 @@ h1,h2,h3,h4,h5,h6 {
 h1 {  
     font-size: 3.571em; }
 h2 {  
-    font-size: 1.571em; }
+    font-size: 1.571em;color: #000000; text-decoration:underline;text-align:center }
 h3 {  
     font-size: 1.429em; }
 h4 {  
