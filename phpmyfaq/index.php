@@ -627,6 +627,7 @@ if ('artikel' == $action || 'show' == $action) {
     $faqServices->setQuestion($title);
 
     $faqHelper = PMF_Helper_Faq::getInstance();
+    $faqHelper->setSsl($_SERVER['HTTPS']);
     
     $tpl->processBlock(
         'rightBox', 'socialLinks', array(
@@ -643,7 +644,7 @@ if ('artikel' == $action || 'show' == $action) {
             'link_delicious'         => $faqServices->getBookmarkOnDeliciousLink(),
             'link_email'             => $faqServices->getSuggestLink(),
             'link_pdf'               => $faqServices->getPdfLink(),
-            'facebookeLikeButton'    => $faqHelper->renderFacebookLikeButton($faqServices->getLink()),
+            'facebookLikeButton'    => $faqHelper->renderFacebookLikeButton($faqServices->getLink()),
         )
     );
 }

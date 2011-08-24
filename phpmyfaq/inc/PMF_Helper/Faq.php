@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Helper
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
+ * @copyright 2010-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2010-11-12
@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Helper
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
+ * @copyright 2010-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2010-11-12
@@ -53,6 +53,13 @@ class PMF_Helper_Faq extends PMF_Helper
      * @var PMF_Language
      */
     private $language = null;
+
+    /**
+     * SSL enabled
+     *
+     * @var boolean
+     */
+    private $_ssl = false;
 
     /**
      * Returns the single instance
@@ -79,6 +86,27 @@ class PMF_Helper_Faq extends PMF_Helper
     }
 
     /**
+     * Sets SSL mode
+     *
+     * @param boolean $ssl
+     * @return void
+     */
+    public function setSsl($ssl)
+    {
+        $this->_ssl = $ssl;
+    }
+
+    /**
+     * Returns current SSL mode
+     *
+     * @return boolean
+     */
+    public function getSsl()
+    {
+        return $this->_ssl;
+    }
+
+    /**
      * @return string
      */
     public function renderFacebookLikeButton($url)
@@ -86,8 +114,16 @@ class PMF_Helper_Faq extends PMF_Helper
         if (empty($url)) {
             return '';
         }
+
+        if ($this->_ssl) {
+            $http = 'http://';
+        } else {
+            $http = 'https://';
+        }
                 
-        return sprintf('<iframe src="http://www.facebook.com/plugins/like.php?href=%s&amp;layout=standard&amp;show_faces=true&amp;width=250&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=30" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:250px; height:30px;" allowTransparency="true"></iframe>',
-            urlencode($url));
+        return sprintf('<iframe src="%sfacebook.com/plugins/like.php?href=%s&amp;layout=standard&amp;show_faces=true&amp;width=250&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=30" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:250px; height:30px;" allowTransparency="true"></iframe>',
+            $http,
+            urlencode($url)
+        );
     }
 }
