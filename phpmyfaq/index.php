@@ -627,7 +627,7 @@ if ('artikel' == $action || 'show' == $action) {
     $faqServices->setQuestion($title);
 
     $faqHelper = PMF_Helper_Faq::getInstance();
-    $faqHelper->setSsl($_SERVER['HTTPS']);
+    $faqHelper->setSsl((is_null($_SERVER['HTTPS']) ? false : true));
     
     $tpl->processBlock(
         'rightBox', 'socialLinks', array(

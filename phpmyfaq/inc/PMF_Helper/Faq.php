@@ -116,9 +116,9 @@ class PMF_Helper_Faq extends PMF_Helper
         }
 
         if ($this->_ssl) {
-            $http = 'http://';
-        } else {
             $http = 'https://';
+        } else {
+            $http = 'http://';
         }
                 
         return sprintf('<iframe src="%sfacebook.com/plugins/like.php?href=%s&amp;layout=standard&amp;show_faces=true&amp;width=250&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=30" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:250px; height:30px;" allowTransparency="true"></iframe>',
