@@ -19,7 +19,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
- * @copyright 2008-2010 phpMyFAQ Team
+ * @copyright 2008-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2008-01-26
@@ -37,7 +37,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
- * @copyright 2008-2010 phpMyFAQ Team
+ * @copyright 2008-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2008-01-26
@@ -191,6 +191,26 @@ class PMF_Search
         
         $this->db->query($query);
     }
+
+    /**
+     * Deletes a searchterm
+     *
+     * @param string $searchterm
+     * @return boolean
+     */
+    public function deleteSearchTerm($searchterm)
+    {
+        $query = sprintf("
+            DELETE FROM
+                %s
+            WHERE
+                searchterm = '%s'",
+            $this->_table,
+            $searchterm
+        );
+
+        return $this->db->query($query);
+    }
     
     /**
      * Returns the most popular searches
@@ -206,7 +226,7 @@ class PMF_Search
         $byLang = $withLang ? ', lang' : '';
         $query  = sprintf("
             SELECT 
-                searchterm, COUNT(searchterm) AS number %s
+                id, searchterm, COUNT(searchterm) AS number %s
             FROM
                 %s
             GROUP BY

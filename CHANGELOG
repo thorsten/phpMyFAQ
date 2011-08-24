@@ -24,6 +24,7 @@ Version 2.7.0-beta3 - 2011-08-17
 - added support for Single Sign On authentication (Thorsten)
 - added support for complete secured FAQ installations (Thorsten)
 - added user configurable date formatting (Thorsten)
+- added possibility to delete user generated search terms (Thorsten)
 - improved usability in frontend and administration backend (Thorsten)
 - enabling Gzip compression by default (Thorsten, Lorenzo Milesi)
 - updated bundled jQuery to version 1.6.2 (Thorsten)

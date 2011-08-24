@@ -234,6 +234,11 @@ if (isset($auth) && in_array(true, $permission)) {
                 require 'record.add.php';
                 break;
 
+            // Search
+            case 'search':
+                require 'ajax.search.php';
+                break;
+
             // Users
             case 'user': 
                 require 'ajax.user.php';

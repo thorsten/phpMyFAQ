@@ -1111,3 +1111,5 @@ $LANG_CONF['main.enableLoginOnly'] = array(0 => 'checkbox', 1 => 'Komplett gesch
 
 // added v2.7.0-RC - 2011-08-18 by Thorsten
 $PMF_LANG['securityControlCenter'] = 'Sicherheitskonfiguration';
+$PMF_LANG['ad_search_delsuc'] = 'Der Suchbegriff wurde erfolgreich gelöscht';
+$PMF_LANG['ad_search_delfail'] = 'Der Suchbegriff konnte nicht gelöscht werden.';
