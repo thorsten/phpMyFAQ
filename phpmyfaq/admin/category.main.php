@@ -96,7 +96,7 @@ if ($permission['editcateg']) {
                     }
                 }
             }
-            printf('<p class="succes">%s</p>', $PMF_LANG['ad_categ_added']);
+            printf('<p class="success">%s</p>', $PMF_LANG['ad_categ_added']);
         } else {
             printf('<p class="error">%s</p>', $db->error());
         }
@@ -134,7 +134,7 @@ if ($permission['editcateg']) {
                 $category->deletePermission('group', array($category_data['id']));
                 $category->addPermission('user', array($category_data['id']), $user_allowed);
                 $category->addPermission('group', array($category_data['id']), $group_allowed);
-                printf('<p class="succes">%s</p>', $PMF_LANG['ad_categ_updated']);
+                printf('<p class="success">%s</p>', $PMF_LANG['ad_categ_updated']);
             } else {
                 printf('<p class="error">%s</p>', $db->error());
             }
