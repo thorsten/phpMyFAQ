@@ -97,7 +97,7 @@ $faqpassword = PMF_Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZ
 $faqaction   = PMF_Filter::filterInput(INPUT_POST, 'faqloginaction', FILTER_SANITIZE_STRING);
 if ($faqconfig->get('main.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
     $faqusername = trim($_SERVER['REMOTE_USER']);
-    $faqpassword = null;
+    $faqpassword = '';
 }
 if (!is_null($faqusername) && !is_null($faqpassword)) {
     $user = new PMF_User_CurrentUser();
@@ -112,7 +112,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     if ($user->login($faqusername, $faqpassword)) {
         if ($user->getStatus() != 'blocked') {
             $auth   = true;
-            $action = $faqaction;
+            if (empty($action)) $action = $faqaction; // SSO logins don't have $faqaction 
         } else {
             $error           = $PMF_LANG['ad_auth_fail'] . ' (' . $faqusername . ')';
             $loginVisibility = '';
