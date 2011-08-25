@@ -358,7 +358,7 @@ switch ($action) {
         $email      = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $ucategory  = PMF_Filter::filterInput(INPUT_POST, 'category', FILTER_VALIDATE_INT);
         $question   = PMF_Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
-        $save       = PMF_Filter::filterInput(INPUT_POST, 'save', FILTER_VALIDATE_INT);
+        $save       = PMF_Filter::filterInput(INPUT_POST, 'save', FILTER_VALIDATE_INT, 0);
 
         // If e-mail address is set to optional
         if (!PMF_Configuration::getInstance()->get('main.optionalMailAddress') && is_null($email)) {
@@ -368,9 +368,15 @@ switch ($action) {
         if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) &&
             !is_null($question) && !empty($question) && checkBannedWord(PMF_String::htmlspecialchars($question))) {
 
+            if (PMF_Configuration::getInstance()->get('records.enableVisibilityQuestions')) {
+                $visibility = 'N';
+            } else {
+                $visibility = 'Y';
+            }
+
             if (1 != $save) {
 
-                $question = PMF_Stopwords::getInstance()->clean($question);
+                $cleanQuestion = PMF_Stopwords::getInstance()->clean($question);
 
                 $user            = new PMF_User_CurrentUser();
                 $faqSearch       = new PMF_Search($db, $Language);
@@ -378,10 +384,10 @@ switch ($action) {
                 $searchResult    = array();
                 $mergedResult    = array();
 
-                foreach ($question as $word) {
+                foreach ($cleanQuestion as $word) {
                     $searchResult[] = $faqSearch->search($word);
                 }
-                foreach($searchResult as $resultSet) {
+                foreach ($searchResult as $resultSet) {
                     foreach($resultSet as $result) {
                         $mergedResult[] = $result;
                     }
@@ -411,13 +417,9 @@ switch ($action) {
                     $response .= '</ul>';
 
                     $message = array('result' => $response);
+                    
                 } else {
 
-                    if (PMF_Configuration::getInstance()->get('records.enableVisibilityQuestions')) {
-                        $visibility = 'N';
-                    } else {
-                        $visibility = 'Y';
-                    }
                     $questionData = array(
                         'username'    => $name,
                         'email'       => $email,
@@ -457,11 +459,6 @@ switch ($action) {
                 
             } else {
 
-                if (PMF_Configuration::getInstance()->get('records.enableVisibilityQuestions')) {
-                    $visibility = 'N';
-                } else {
-                    $visibility = 'Y';
-                }
                 $questionData = array(
                     'username'    => $name,
                     'email'       => $email,
