@@ -146,9 +146,11 @@ if ($permission['delcomment']) {
                     if (msg == 1) {
                         $('#saving_data_indicator').html('<img src="images/indicator.gif" /> deleting ...');
                         $('tr td input:checked').parent().parent().fadeOut('slow');
-                        $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_commentdelsuc']; ?>');
+                        $('#saving_data_indicator').
+                            html('<p class="success"><?php print $PMF_LANG['ad_entry_commentdelsuc']; ?></p>');
                     } else {
-                        $('#returnMessage').html('<p class="error"><?php print $PMF_LANG["ad_entry_commentdelfail"] ?></p>');
+                        $('#returnMessage').
+                            html('<p class="error"><?php print $PMF_LANG["ad_entry_commentdelfail"] ?></p>');
                     }
                 }
             });
