@@ -117,7 +117,7 @@ if ($permission['editbt']) {
                 $category->addPermission('group', $categories['rubrik'], $restricted_groups);
             }
 
-            print $PMF_LANG['ad_entry_savedsuc'];
+            printf('<p class="success">%s</p>', $PMF_LANG['ad_entry_savedsuc']);
 
             // Call Link Verification
             link_ondemand_javascript($record_id, $recordData['lang']);
@@ -220,7 +220,7 @@ if ($permission['editbt']) {
 
     } else {
         printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
-        printf("<p>%s</p>", $PMF_LANG['ad_entryins_fail']);
+        printf('<p class="error">%s</p>', $PMF_LANG['ad_entryins_fail']);
 ?>
     <form action="?action=editpreview" method="post">
     <input type="hidden" name="question"            value="<?php print PMF_String::htmlspecialchars($question); ?>" />

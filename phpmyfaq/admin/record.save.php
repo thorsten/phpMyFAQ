@@ -108,10 +108,10 @@ if ($permission['editbt']) {
         }
 
         if ($record_id) {
-            print $PMF_LANG['ad_entry_savedsuc'];
+            printf('<p class="success">%s</p>', $PMF_LANG['ad_entry_savedsuc']);
             link_ondemand_javascript($record_id, $record_lang);
         } else {
-            print $PMF_LANG['ad_entry_savedfail'].$db->error();
+            printf('<p class="error">%s</p>', print $PMF_LANG['ad_entry_savedfail'] . $db->error());
         }
         
         if (!isset($categories['rubrik'])) {
@@ -227,7 +227,7 @@ if ($permission['editbt']) {
         }
         
         $faq->deleteRecord($record_id, $record_lang);
-        print $PMF_LANG['ad_entry_delsuc'];
+        printf('<p class="success">%s</p>', $PMF_LANG['ad_entry_delsuc']);
     }
 } else {
     print $PMF_LANG['err_NotAuth'];
