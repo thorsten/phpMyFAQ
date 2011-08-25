@@ -112,7 +112,9 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     if ($user->login($faqusername, $faqpassword)) {
         if ($user->getStatus() != 'blocked') {
             $auth   = true;
-            if (empty($action)) $action = $faqaction; // SSO logins don't have $faqaction 
+            if (empty($action)) {
+                $action = $faqaction; // SSO logins don't have $faqaction
+            }
         } else {
             $error           = $PMF_LANG['ad_auth_fail'] . ' (' . $faqusername . ')';
             $loginVisibility = '';
