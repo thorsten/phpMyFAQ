@@ -9,7 +9,7 @@
             <form action="{writeSendAdress}" method="get">
 
                 <input id="searchfield" type="search" name="search" size="50" value="{searchString}" autofocus="true">
-                <input class="submit" type="submit" name="submit" value="{msgSearch}" />
+                <input type="submit" name="submit" value="{msgSearch}" />
                 <input type="hidden" name="action" value="search" />
 
                 <p>
@@ -26,7 +26,8 @@
                 </p>
                 
                 <div id="mostpopularsearches">
-                    <p>{msgMostPopularSearches} {printMostPopularSearches}</p>
+                    <p><strong>{msgMostPopularSearches}</strong></p>
+                    {printMostPopularSearches}
                 </div>
                 
                 <p>{openSearchLink}</p>
