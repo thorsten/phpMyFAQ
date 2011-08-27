@@ -85,7 +85,8 @@
 
                 <p>
                     <label for="faqusername">{username}</label>
-                    <input type="text" name="faqusername" id="faqusername" size="16" required="required">
+                    <input type="text" name="faqusername" id="faqusername" size="16" required="required"
+                           autofocus="autofocus">
                 </p>
                 <p>
                     <label for="faqpassword">{password}</label>

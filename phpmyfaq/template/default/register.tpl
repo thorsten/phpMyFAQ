@@ -12,7 +12,7 @@
                 <input type="hidden" name="lang" id="lang" value="{lang}" />
                 <p>
                     <label for="realname">{realname}</label>
-                    <input type="text" name="realname" id="realname" required="required" />
+                    <input type="text" name="realname" id="realname" required="required" autofocus="autofocus" />
                 </p>
                 <p>
                     <label for="name">{loginname}</label>

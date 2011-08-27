@@ -17,12 +17,16 @@
 
                 <p>
                     <label for="question">{msgNewTranslationQuestion}</label>
-                    <textarea cols="60" rows="3" name="question" id="question" required="true" />{writeSourceTitle}</textarea>
+                    <textarea cols="60" rows="3" name="question" id="question" required="required" />
+                    {writeSourceTitle}
+                    </textarea>
                 </p>
 
                 <p>
                     <label for="translated_answer">{msgNewTranslationAnswer}</label>
-                    <textarea cols="60" rows="10" name="translated_answer" id="translated_answer" required="true" />{writeSourceContent}</textarea>
+                    <textarea cols="60" rows="10" name="translated_answer" id="translated_answer" required="required" />
+                    {writeSourceContent}
+                    </textarea>
                 </p>
 
                 <p>
@@ -32,12 +36,14 @@
 
                 <p>
                     <label for="username">{msgNewTranslationName}</label>
-                    <input type="text" name="username" id="username" value="{defaultContentName}" size="37" required="true" />
+                    <input type="text" name="username" id="username" value="{defaultContentName}" size="37"
+                           required="required" />
                 </p>
 
                 <p>
                     <label for="usermail">{msgNewTranslationMail}</label>
-                    <input type="email" name="usermail" id="usermail" value="{defaultContentMail}" size="37" required="true" />
+                    <input type="email" name="usermail" id="usermail" value="{defaultContentMail}" size="37"
+                           required="required" />
                 </p>
                 <!-- end user article translation -->
 

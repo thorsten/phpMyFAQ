@@ -8,7 +8,8 @@
             <aside id="searchBox">
             <form action="{writeSendAdress}" method="get">
 
-                <input id="searchfield" type="search" name="search" size="50" value="{searchString}" autofocus="true">
+                <input id="searchfield" type="search" name="search" size="50" value="{searchString}"
+                       autofocus="autofocus">
                 <input type="submit" name="submit" value="{msgSearch}" />
                 <input type="hidden" name="action" value="search" />
 

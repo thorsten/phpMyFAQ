@@ -6,12 +6,14 @@
                 
                 <p>
                     <label for="name">{msgNewContentName}</label>
-                    <input type="text" name="name" id="name" value="{defaultContentName}" size="37" required="true" />
+                    <input type="text" name="name" id="name" value="{defaultContentName}" size="37"
+                           required="required" autofocus="autofocus" />
                 </p>
 
                 <p>
                 <label for="email">{msgNewContentMail}</label>
-                <input type="email" name="email" id="email" value="{defaultContentMail}" size="37" required="true" />
+                <input type="email" name="email" id="email" value="{defaultContentMail}" size="37"
+                       required="required" />
 
                 <p>
                 <label for="rubrik">{msgNewContentCategory}</label>
@@ -22,12 +24,14 @@
 
                 <p>
                 <label for="question">{msgNewContentTheme}</label>
-                <textarea cols="37" rows="3" name="question" id="question" required="true" />{printQuestion}</textarea>
+                <textarea cols="37" rows="3" name="question" id="question" required="required" />
+                    {printQuestion}
+                    </textarea>
                 </p>
 
                 <p>
                 <label for="answer">{msgNewContentArticle}</label>
-                <textarea cols="37" rows="10" name="answer" id="answer" required="true" /></textarea>
+                <textarea cols="37" rows="10" name="answer" id="answer" required="required" /></textarea>
                 </p>
 
                 <p>

@@ -60,7 +60,7 @@ if ($permission["addcateg"]) {
 
             <p>
                 <label><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
-                <input type="text" id="name" name="name" size="30" style="width: 300px;" />
+                <input type="text" id="name" name="name" size="30" style="width: 300px;" autofocus="autofocus" />
             </p>
 
             <p>

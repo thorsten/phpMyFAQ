@@ -46,7 +46,7 @@ if ('addnews' == $action && $permission["addnews"]) {
 
             <p>
                 <label for="newsheader"><?php print $PMF_LANG['ad_news_header']; ?></label>
-                <input type="text" name="newsheader" id="newsheader" style="width: 300px;" value="" />
+                <input type="text" name="newsheader" id="newsheader" style="width: 300px;" autofocus="autofocus" />
             </p>
 
             <p>
@@ -166,7 +166,9 @@ if ('addnews' == $action && $permission["addnews"]) {
 
             <p>
                 <label for="newsheader"><?php print $PMF_LANG['ad_news_header']; ?></label>
-                <input type="text" name="newsheader" id="newsheader" style="width: 300px;" value="<?php if (isset($newsData['header'])) { print $newsData['header']; } ?>" />
+                <input type="text" name="newsheader" id="newsheader" style="width: 300px;"
+                       value="<?php if (isset($newsData['header'])) { print $newsData['header']; } ?>"
+                       autofocus="autofocus" />
             </p>
 
             <p>

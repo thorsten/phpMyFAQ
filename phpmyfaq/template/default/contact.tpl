@@ -10,12 +10,14 @@
             
                 <p>
                     <label for="name">{msgNewContentName}</label>
-                    <input type="text" name="name" id="name" value="{defaultContentName}" size="40" required="required" />
+                    <input type="text" name="name" id="name" value="{defaultContentName}" size="40"
+                           required="required" autofocus="autofocus" />
                 </p>
 
                 <p>
                     <label for="email">{msgNewContentMail}</label>
-                    <input type="email" name="email" id="email" value="{defaultContentMail}" size="40" required="required" />
+                    <input type="email" name="email" id="email" value="{defaultContentMail}" size="40"
+                           required="required" />
                 </p>
 
                 <p>

@@ -510,7 +510,8 @@ if (isset($auth) && in_array(true, $permission)) {
 
                 <p>
                     <label for="faqusername"><?php print $PMF_LANG["ad_auth_user"]; ?></label>
-                    <input type="text" name="faqusername" id="faqusername" size="30" required="required" />
+                    <input type="text" name="faqusername" id="faqusername" size="30" required="required"
+                           autofocus="autofocus" />
                 </p>
 
                 <p>

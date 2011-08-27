@@ -96,7 +96,7 @@ if ($permission['editbt'] || $permission['delbt']) {
 
         <p>
             <label><?php print $PMF_LANG["msgSearchWord"]; ?>:</label>
-            <input type="text" name="searchterm" size="50" value="<?php print $searchterm; ?>" />
+            <input type="text" name="searchterm" size="50" value="<?php print $searchterm; ?>" autofocus="autofocus" />
             <?php if ($linkverifier->isReady() == true): ?>
             <br />
             <input type="checkbox" name="linkstate" value="linkbad" <?php print $linkState; ?> />
@@ -450,14 +450,22 @@ foreach ($all_ids as $cat_id => $record_ids) {
                 var status = $('#' + type + '_record_' + cid + '_' + ids[i]).attr('checked');
                 var lang   = $('#' + type + '_record_' + cid + '_' + ids[i]).attr('lang');
 
-                data['items[' + i + '][]'] = [ids[i], lang, status*1];
+                if (status === 'undefined') {
+                    datastatus = 0;
+                } else {
+                    datastatus = 1;
+                }
+
+                alert(datastatus);
+
+                data['items[' + i + '][]'] = [ids[i], lang, datastatus];
 
                 // Updating the current record if it's also contained in another category
                 var same_records = $('input').filter(function() {
                     return this.id.match(new RegExp(type + '_record_(\\d+)_' + ids[i]));
                 });
 
-                if ('active' == type) {
+                if ('active' === type) {
                     for (var j = 0; j < same_records.length; j++) {
                         $('#' + same_records[j].id).attr('checked', status);
 

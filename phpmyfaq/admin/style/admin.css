@@ -249,7 +249,8 @@ nav ul li a.logout {
 #mainContent form p {
     display: table; margin-bottom: 11px; padding: 0 11px; }
 #mainContent form label {
-    display: table-cell; width: 150px; padding-right: 10px; text-align: right; font-weight: bold; vertical-align: top; }
+    display: table-cell; width: 150px; padding-right: 10px; text-align: right; font-weight: bold;
+    vertical-align: top; }
 #mainContent form label.config {
     width: 250px; }
 #mainContent form label.small {
@@ -257,14 +258,15 @@ nav ul li a.logout {
 #mainContent form input[type="text"], #mainContent form input[type="email"], #mainContent form input[type="url"],
 #mainContent form input[type="search"], #mainContent form input[type="password"] {
     display: table-cell; height: 20px; border: 1px solid #d7d7d7; font-size: 14px; border-radius: 5px;
-    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; padding-left: 4px; }
 #mainContent form input[readonly] {
     color: #d3d3d3; }
 #mainContent form select {
-    display: table-cell; border: 1px solid #d7d7d7; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+    display: table-cell; border: 1px solid #d7d7d7; border-radius: 5px; -moz-border-radius: 5px;
+    -webkit-border-radius: 5px; }
 #mainContent form textarea {
-    display: table-cell; border: 1px solid #d7d7d7; font-size: 14px; border-radius: 5px;
-    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+    display: table-cell; border: 1px solid #d7d7d7; font-size: 14px; border-radius: 5px; overflow: auto;
+    padding-left: 4px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 #mainContent form input[type="submit"] {
     }
 #mainContent form input[type="submit"].submit, #mainContent form input[type="submit"].reset  {

@@ -292,32 +292,36 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
 
             <p>
                 <label for="user_name"><?php print $PMF_LANG["ad_adus_name"]; ?></label>
-                <input type="text" name="user_name" id="user_name"
-                       value="<?php print (isset($user_name) ? $user_name : ''); ?>" required="required" tabindex="1" />
+                <input type="text" name="user_name" id="user_name" required="required" tabindex="1"
+                       value="<?php print (isset($user_name) ? $user_name : ''); ?>" autofocus="autofocus" />
             </p>
 
             <p>
                 <label for="user_realname"><?php print $PMF_LANG["ad_user_realname"]; ?></label>
                 <input type="text" name="user_realname" id="user_realname"
-                       value="<?php print (isset($user_realname) ? $user_realname : ''); ?>" required="required" tabindex="2" />
+                       value="<?php print (isset($user_realname) ? $user_realname : ''); ?>" required="required"
+                       tabindex="2" />
             </p>
 
             <p>
                 <label for="user_email"><?php print $PMF_LANG["ad_entry_email"]; ?></label>
                 <input type="email" name="user_email" id="user_email"
-                       value="<?php print (isset($user_email) ? $user_email : ''); ?>" required="required" tabindex="3" />
+                       value="<?php print (isset($user_email) ? $user_email : ''); ?>" required="required"
+                       tabindex="3" />
             </p>
 
             <p>
                 <label for="password"><?php print $PMF_LANG["ad_adus_password"]; ?></label>
                 <input type="password" name="user_password" id="password"
-                       value="<?php print (isset($user_password) ? $user_password : ''); ?>" required="required" tabindex="4" />
+                       value="<?php print (isset($user_password) ? $user_password : ''); ?>" required="required"
+                       tabindex="4" />
             </p>
 
             <p>
                 <label for="password_confirm"><?php print $PMF_LANG["ad_passwd_con"]; ?></label>
                 <input type="password" name="user_password_confirm" id="password_confirm"
-                       value="<?php print (isset($user_password_confirm) ? $user_password_confirm : ''); ?>" required="required" tabindex="5" />
+                       value="<?php print (isset($user_password_confirm) ? $user_password_confirm : ''); ?>"
+                       required="required" tabindex="5" />
             </p>
 
             <p>
@@ -378,12 +382,17 @@ function getUserData(user_id)
                 <div id="userList">
                 <fieldset>
                     <legend><?php print $PMF_LANG["ad_user_username"]; ?></legend>
-                    <form name="user_select" id="user_select" action="?action=user&amp;user_action=delete_confirm" method="post">
+                    <form name="user_select" id="user_select" action="?action=user&amp;user_action=delete_confirm"
+                          method="post">
 
-                        <input type="text" id="user_list_autocomplete" name="user_list_search" />
+                        <input type="text" id="user_list_autocomplete" name="user_list_search" autofocus="autofocus" />
                         <script type="text/javascript">
                         //<![CDATA[
-                            $('#user_list_autocomplete').autocomplete("index.php?action=ajax&ajax=user&ajaxaction=get_user_list", { width: 180, selectFirst: true } );
+                            $('#user_list_autocomplete').
+                                autocomplete("index.php?action=ajax&ajax=user&ajaxaction=get_user_list", {
+                                    width: 180,
+                                    selectFirst: true
+                                });
                             $('#user_list_autocomplete').result(function(event, data, formatted) {
                                 var user_id = data[1];
                                 $("#user_list_select").val(user_id);
@@ -410,7 +419,9 @@ function getUserData(user_id)
                     <form action="?action=user&amp;user_action=update_data" method="post">
                         <input id="update_user_id" type="hidden" name="user_id" value="0" />
                         <p>
-                            <label for="user_status_select" class="small"><?php print $PMF_LANG['ad_user_status']; ?></label>
+                            <label for="user_status_select" class="small">
+                                <?php print $PMF_LANG['ad_user_status']; ?>
+                            </label>
                             <select id="user_status_select" name="user_status" >
                                 <option value="active"><?php print $PMF_LANG['ad_user_active']; ?></option>
                                 <option value="blocked"><?php print $PMF_LANG['ad_user_blocked']; ?></option>
@@ -430,14 +441,20 @@ function getUserData(user_id)
                     <form id="rightsForm" action="?action=user&amp;user_action=update_rights" method="post">
                         <input id="rights_user_id" type="hidden" name="user_id" value="0" />
                         <div>
-                            <span><a href="javascript:form_checkAll('rightsForm')"><?php print $PMF_LANG['ad_user_checkall']; ?></a></span>
-                            |
-                            <span><a href="javascript:form_uncheckAll('rightsForm')"><?php print $PMF_LANG['ad_user_uncheckall']; ?></a></span>
+                            <span><a href="javascript:form_checkAll('rightsForm')">
+                                <?php print $PMF_LANG['ad_user_checkall']; ?></a>
+                            </span> |
+                            <span>
+                                <a href="javascript:form_uncheckAll('rightsForm')">
+                                    <?php print $PMF_LANG['ad_user_uncheckall']; ?>
+                                </a>
+                            </span>
                         </div>
                         <table id="user_rights_table">
             <?php foreach ($user->perm->getAllRightsData() as $right) { ?>
                             <tr>
-                                <td><input id="user_right_<?php print $right['right_id']; ?>" type="checkbox" name="user_rights[]" value="<?php print $right['right_id']; ?>"/></td>
+                                <td><input id="user_right_<?php print $right['right_id']; ?>" type="checkbox"
+                                           name="user_rights[]" value="<?php print $right['right_id']; ?>"/></td>
                                 <td>&nbsp;<?php print (isset($PMF_LANG['rightsLanguage'][$right['name']]) ? $PMF_LANG['rightsLanguage'][$right['name']] : $right['description']); ?></td>
                             </tr>
             <?php } ?>

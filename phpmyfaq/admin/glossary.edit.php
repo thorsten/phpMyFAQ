@@ -40,12 +40,15 @@ if ($permission['editglossary']) {
             <input type="hidden" name="id" value="<?php print $glossaryItem['id']; ?>" />
             <p>
                 <label for="item"><?php print $PMF_LANG['ad_glossary_item']; ?>:</label>
-                <input type="text" name="item" id="item" size="50" value="<?php print $glossaryItem['item']; ?>" />
+                <input type="text" name="item" id="item" size="50" value="<?php print $glossaryItem['item']; ?>"
+                       autofocus="autofocus" />
             </p>
 
             <p>
                 <label for="definition"><?php print $PMF_LANG['ad_glossary_definition']; ?>:</label>
-                <textarea name="definition" id="definition" cols="50" rows="3"><?php print $glossaryItem['definition']; ?></textarea>
+                <textarea name="definition" id="definition" cols="50" rows="3">
+                    <?php print $glossaryItem['definition']; ?>
+                </textarea>
             </p>
 
             <p>
