@@ -150,9 +150,8 @@ switch ($action) {
                     if ($news['authorEmail'] != '') {
                         $emailTo = $news['authorEmail'];
                     }
-                    $link             = sprintf(
-                        '%s?action=news&amp;newsid=%d&amp;newslang=%s',
-                        PMF_Link::getSystemUri(),
+                    $link = sprintf('%s?action=news&amp;newsid=%d&amp;newslang=%s',
+                        PMF_Link::getSystemUri('/ajaxservice.php'),
                         $news['id'],
                         $news['lang']
                     );
