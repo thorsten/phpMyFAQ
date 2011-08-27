@@ -484,6 +484,16 @@ if (isset($auth) && in_array(true, $permission)) {
         </section>
 <?php
     }
+// User is authenticated, but has no rights
+} elseif (isset($auth) && !in_array(true, $permission)) {
+?>
+            <header>
+                <h2><?php print $PMF_LANG['ad_pmf_info']; ?></h2>
+            </header>
+
+            <p class="error"><?php print $PMF_LANG['err_NotAuth'] ?></p>
+
+<?php
 // User is NOT authenticated
 } else {
 ?>

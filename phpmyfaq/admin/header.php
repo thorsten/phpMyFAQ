@@ -218,7 +218,7 @@ switch ($action) {
 </header>
 
 <nav>
-    <?php if (isset($auth)): ?>
+    <?php if (isset($auth) && in_array(true, $permission)): ?>
     <ul>
         <li<?php print ($dashboardPage ? ' class="active"' : ''); ?>><a href="index.php"><?php print $PMF_LANG['admin_mainmenu_home']; ?></a></li>
         <li<?php print ($userPage ? ' class="active"' : ''); ?>><a href="index.php?action=user"><?php print $PMF_LANG['admin_mainmenu_users']; ?></a></li>
@@ -250,7 +250,7 @@ switch ($action) {
 
 <div id="content">
 
-    <?php if (isset($auth)) { ?>
+    <?php if (isset($auth) && in_array(true, $permission)) { ?>
 
     <div id="leftContent">
         <menu id="categories">

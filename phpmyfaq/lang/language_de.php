@@ -477,7 +477,7 @@ $PMF_LANG["ad_categ_copy"] = "kopieren";
 $PMF_LANG["ad_categ_process"] = "Bearbeite Kategorien...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>Keine Berechtigung hierfür.</strong>";
+$PMF_LANG["err_NotAuth"] = "<strong>Sie haben keine ausreichende Berechtigung hierfür.</strong>";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "vorherige Seite";
