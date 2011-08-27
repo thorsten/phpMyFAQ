@@ -63,12 +63,16 @@ if ($permission['delcomment']) {
             </td>
             <td>
                 <span style="font-weight: bold;">
-                    <a href="mailto:<?php print $faqcomment['email']; ?>"><?php print $faqcomment['username']; ?></a>
-                    | <?php print PMF_Date::format(date('Y-m-d H:i', $faqcomment['date'])); ?>
-                    | <a href="<?php printf("../?action=artikel&cat=%d&id=%d&artlang=%s",
+                    <a href="mailto:<?php print $faqcomment['email']; ?>">
+                        <?php print $faqcomment['username']; ?>
+                    </a> |
+                    <?php print PMF_Date::format(date('Y-m-d H:i', $faqcomment['date'])); ?> |
+                    <a href="<?php printf("../?action=artikel&cat=%d&id=%d&artlang=%s",
                        $faqcomment['category_id'],
                        $faqcomment['record_id'],
-                       $LANGCODE); ?>"><?php print $faq->getRecordTitle($faqcomment['record_id']); ?></a>
+                       $LANGCODE); ?>">
+                        <?php print $faq->getRecordTitle($faqcomment['record_id']); ?>
+                    </a>
                 </span><br/>
                 <?php print PMF_String::htmlspecialchars($faqcomment['content']); ?>
             </td>
@@ -108,7 +112,9 @@ if ($permission['delcomment']) {
             </td>
             <td>
                 <span style="font-weight: bold;">
-                    <a href="mailto:<?php print $newscomment['email']; ?>"><?php print $newscomment['username']; ?></a>
+                    <a href="mailto:<?php print $newscomment['email']; ?>">
+                        <?php print $newscomment['username']; ?>
+                    </a>
                 </span><br/>
                 <?php print PMF_String::htmlspecialchars($newscomment['content']); ?>
             </td>
@@ -138,6 +144,7 @@ if ($permission['delcomment']) {
         {
             var comments = $('#' + type + 'CommentSelection').serialize();
 
+            $('#returnMessage').empty();
             $.ajax({
                 type: 'POST',
                 url:  'index.php?action=ajax&ajax=comment',
@@ -146,7 +153,7 @@ if ($permission['delcomment']) {
                     if (msg == 1) {
                         $('#saving_data_indicator').html('<img src="images/indicator.gif" /> deleting ...');
                         $('tr td input:checked').parent().parent().fadeOut('slow');
-                        $('#saving_data_indicator').
+                        $('#returnMessage').
                             html('<p class="success"><?php print $PMF_LANG['ad_entry_commentdelsuc']; ?></p>');
                     } else {
                         $('#returnMessage').
