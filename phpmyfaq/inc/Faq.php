@@ -2828,7 +2828,7 @@ class PMF_Faq
     {
         $retval = false;
         
-        switch($type) {
+        switch ($type) {
             case 'sticky':
                 $flag = (int)$flag;
                 break;
@@ -2845,7 +2845,7 @@ class PMF_Faq
                 break;
         }
         
-        if(null !== $flag) {
+        if (null !== $flag) {
         
             $update = sprintf("
                 UPDATE 
