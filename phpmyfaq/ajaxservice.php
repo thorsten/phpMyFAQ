@@ -140,7 +140,7 @@ switch ($action) {
                         $faq->faqRecord['id'],
                         $faq->faqRecord['lang']
                     );
-                    $oLink            = new PMF_Link(PMF_Link::getSystemUri().'?'.$_faqUrl);
+                    $oLink            = new PMF_Link(PMF_Link::getSystemUri('/ajaxservice.php') . '?' . $_faqUrl);
                     $oLink->itemTitle = $faq->faqRecord['title'];
                     $urlToContent     = $oLink->toString();
                 } else {

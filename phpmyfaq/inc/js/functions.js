@@ -448,6 +448,7 @@ function checkQuestion()
                 $('#answerForm').fadeIn("slow");
                 $('#loader').hide();
                 $('#formValues').append('<input type="hidden" name="save" value="1" />');
+                $('#captcha').val('');
             } else {
                 $('#answers').html('<p class="success">' + json.success + '</p>');
                 $('#answers').fadeIn("slow");
