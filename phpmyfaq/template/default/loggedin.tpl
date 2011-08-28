@@ -1,3 +1,3 @@
             <div id="loginSelection">
-                <a href="{printAdminPath}">{adminSection}</a> | <a href="{printLogoutPath}">{logout}</a>
+                {adminSection} | <a href="?action=logout">{logout}</a>
             </div>

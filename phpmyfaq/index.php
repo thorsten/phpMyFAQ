@@ -547,15 +547,21 @@ $tpl->processTemplate('index', array_merge($main_template_vars, $links_template_
 // Show login box or logged-in user information
 //
 if (isset($auth)) {
+    if (in_array(true, $permission)) {
+        $adminSection = sprintf('<a href="%s">%s</a>',
+            'admin/index.php',
+            $PMF_LANG['adminSection']
+        );
+    } else {
+        $adminSection = $PMF_LANG['adminSection'];
+    }
     $tpl->processTemplate(
         'loginBox',
         array(
-            'loggedinas'      => $PMF_LANG['ad_user_loggedin'],
-            'currentuser'     => $user->getUserData('display_name'),
-            'printAdminPath'  => (in_array(true, $permission)) ? 'admin/index.php' : '#',
-            'adminSection'    => $PMF_LANG['adminSection'],
-            'printLogoutPath' => '?action=logout',
-            'logout'          => $PMF_LANG['ad_menu_logout']
+            'loggedinas'   => $PMF_LANG['ad_user_loggedin'],
+            'currentuser'  => $user->getUserData('display_name'),
+            'adminSection' => $adminSection,
+            'logout'       => $PMF_LANG['ad_menu_logout']
         )
     );
 } else {
