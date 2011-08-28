@@ -45,7 +45,7 @@ PMF_String::init($LANGCODE);
 // Preload English strings
 require_once PMF_ROOT_DIR . '/lang/language_en.php';
 
-if ($faqconfig->get('main.enableLoginOnly')) {
+if ($faqconfig->get('security.enableLoginOnly')) {
     if (!isset($_SERVER['PHP_AUTH_USER'])) {
         header('WWW-Authenticate: Basic realm="phpMyFAQ RSS Feeds"');
         header('HTTP/1.0 401 Unauthorized');

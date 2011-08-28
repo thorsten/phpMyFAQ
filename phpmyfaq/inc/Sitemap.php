@@ -110,7 +110,7 @@ class PMF_Sitemap
         } else {
             $this->groups       = $groups;
         }
-        if (PMF_Configuration::getInstance()->get('main.permLevel') == 'medium') {
+        if (PMF_Configuration::getInstance()->get('security.permLevel') == 'medium') {
             $this->groupSupport = true;
         }
     }

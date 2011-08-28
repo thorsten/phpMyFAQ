@@ -568,16 +568,16 @@ $LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "Maximalgrö�
 $LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Attachments unter den Beiträgen anzeigen?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Tracking aktiviert?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Adminlog aktiviert?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Soll die IP zur Überprüfung im Administrationsbereich herangezogen werden?");
+$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Soll die IP zur Überprüfung im Administrationsbereich herangezogen werden?");
 $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Anzahl der FAQs pro Seite");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Anzahl der angezeigten News");
-$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Gesperrte IPs (Bitte mit Leerzeichen trennen)");
+$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Gesperrte IPs (Bitte mit Leerzeichen trennen)");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite Support aktivieren? (Voreinstellung: deaktiviert)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP Support aktivieren? (Voreinstellung: deaktiviert)");
+$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP Support aktivieren? (Voreinstellung: deaktiviert)");
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Basis-Adresse für die Linküberprüfung (Adresse der Startseite)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Zeitintervall zwischen den Ajax-Linküberprüfungen (in Sekunden)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Neue Fragen sofort sichtbar?");
-$LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "Berechtigungsebene");
+$LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Berechtigungsebene");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "Als neue Hauptkategorie";
 $PMF_LANG["ad_categ_paste_error"] = "Diese Kategorie kann hier nicht eingefügt werden.";
@@ -1016,7 +1016,7 @@ $LANG_CONF["records.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Standa
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['ad_menu_upgrade'] = 'Aktualisieren';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Sie nutzen die aktuelle Version von phpMyFAQ. Eine Aktualisierung ist nicht notwendig.';
-$LANG_CONF['main.useSslForLogins'] = array(0 => 'checkbox', 1 => "Logins nur über sichere Verbindung erlauben? (Voreinstellung: deaktiviert)");
+$LANG_CONF['security.useSslForLogins'] = array(0 => 'checkbox', 1 => "Logins nur über sichere Verbindung erlauben? (Voreinstellung: deaktiviert)");
 $PMF_LANG['msgSecureSwitch'] = "Zum sicheren Login wechseln";
 
 // added 2.6.0-alpha - 2009-11-02 by Anatoliy Belsky
@@ -1104,10 +1104,10 @@ $PMF_LANG['msgRegistrationNote'] = 'Nach der erfolgreichen Anmeldung erhälst du
 $PMF_LANG['ad_entry_changelog_history'] = "Änderungshistorie";
 
 // added v2.7.0-beta2 - 2011-06-22 by Thorsten
-$LANG_CONF['main.ssoSupport'] = array(0 => 'checkbox', 1 => 'Single Sign On Support (Standard: deaktiviert)');
-$LANG_CONF['main.ssoLogoutRedirect'] = array(0 => 'input', 1 => 'Single Sign On Weiterleitungs-Service URL beim Logout');
+$LANG_CONF['security.ssoSupport'] = array(0 => 'checkbox', 1 => 'Single Sign On Support (Standard: deaktiviert)');
+$LANG_CONF['security.ssoLogoutRedirect'] = array(0 => 'input', 1 => 'Single Sign On Weiterleitungs-Service URL beim Logout');
 $LANG_CONF['main.dateFormat'] = array(0 => 'input', 1 => 'Datumsformat (Standard: Y-m-d H:i)');
-$LANG_CONF['main.enableLoginOnly'] = array(0 => 'checkbox', 1 => 'Komplett geschützte FAQ (Standard: deaktiviert)');
+$LANG_CONF['security.enableLoginOnly'] = array(0 => 'checkbox', 1 => 'Komplett geschützte FAQ (Standard: deaktiviert)');
 
 // added v2.7.0-RC - 2011-08-18 by Thorsten
 $PMF_LANG['securityControlCenter'] = 'Sicherheitskonfiguration';

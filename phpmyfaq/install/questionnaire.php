@@ -116,9 +116,9 @@ class PMF_Questionnaire_Data
             'main.currentVersion',
             'oldversion',
             'main.language',
-            'main.permLevel',
+            'security.permLevel',
             'main.languageDetection',
-            'main.ldapSupport');
+            'security.ldapSupport');
 
         return array_intersect_key($this->config, array_flip($settings));
     }

@@ -463,16 +463,16 @@ $LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "添付ファ
 $LANG_CONF['records.disableAttachments'] = array(0 => "checkbox", 1 => "エントリーの下に添付のリンクを表示する");
 $LANG_CONF['main.enableUserTracking'] = array(0 => "checkbox", 1 => "追跡機能を使用する");
 $LANG_CONF['main.enableAdminLog'] = array(0 => "checkbox", 1 => "管理ログを使用する");
-$LANG_CONF['main.ipCheck'] = array(0 => "checkbox", 1 => "admin.php で UIN のチェック時に IP アドレスを確認するか");
+$LANG_CONF['security.ipCheck'] = array(0 => "checkbox", 1 => "admin.php で UIN のチェック時に IP アドレスを確認するか");
 $LANG_CONF['main.numberOfRecordsPerPage'] = array(0 => "input", 1 => "ページ毎に表示するトピック数");
 $LANG_CONF['main.numberOfShownNewsEntries'] = array(0 => "input", 1 => "お知らせの表示数");
-$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "拒否する IP アドレス");
+$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "拒否する IP アドレス");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "mod_rewrite のサポートを使用しますか? (初期値: 無効)");
-$LANG_CONF['main.ldapSupport'] = array(0 => "checkbox", 1 => "LDAP のサポートを有効にしますか? (初期値: 無効)");
+$LANG_CONF['security.ldapSupport'] = array(0 => "checkbox", 1 => "LDAP のサポートを有効にしますか? (初期値: 無効)");
 $LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "リンク確認の基準 URL (例: http://www.example.org/faq)");
 $LANG_CONF['main.urlValidateInterval'] = array(0 => "input", 1 => "AJAX リンクの確認間隔 (秒単位)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => "checkbox", 1 => "新しい質問の表示を無効にする");
-$LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "パーミッションレベル");
+$LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "パーミッションレベル");
 $PMF_LANG['ad_categ_new_main_cat'] = 'ROOT の下位カテゴリーへ';
 $PMF_LANG['ad_categ_paste_error'] = 'このカテゴリーは移動できません。';
 $PMF_LANG['ad_categ_move'] = 'カテゴリー移動';
@@ -817,7 +817,7 @@ $LANG_CONF['records.enableAttachmentEncryption'] = array(0 => "checkbox", 1 => "
 $LANG_CONF['records.defaultAttachmentEncKey'] = array(0 => "input", 1 => "標準の添付暗号化鍵 <br><small>添付の暗号化が無効の場合は無視</small><br><small><font color=&quot;red&quot;>警告: 一度設定しファイルが暗号化されている場合、既存設定の変更はしないでください!!!</font></small>");
 $PMF_LANG['ad_menu_upgrade'] = 'アップグレード';
 $PMF_LANG['ad_you_shouldnt_update'] = 'phpMyFAQ のバージョンは最新です。アップグレードの必要はありません。';
-$LANG_CONF['main.useSslForLogins'] = array(0 => "checkbox", 1 => "セキュア接続のログインのみ許可しますか? (初期値: 無効)");
+$LANG_CONF['security.useSslForLogins'] = array(0 => "checkbox", 1 => "セキュア接続のログインのみ許可しますか? (初期値: 無効)");
 $PMF_LANG['msgSecureSwitch'] = 'セキュア モードのログインに切り替えます!';
 $PMF_LANG['msgTransToolNoteFileSaving'] = '保存ボタンを押さない限り、変更内容はファイルに書き込まれませんのでご注意ください';
 $PMF_LANG['msgTransToolPageBufferRecorded'] = 'ページ %d バッファの格納に成功しました';
@@ -884,8 +884,8 @@ $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => "input", 1 => "T
 $LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => "input", 1 => "Twitter アクセス・トークン・キー");
 $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => "input", 1 => "Twitter Access Token Secret");
 $LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => "checkbox", 1 => "Facebook サポート (初期値:無効)");
-$LANG_CONF['main.ssoSupport'] = array(0 => "checkbox", 1 => "シングルサインオンサポート (初期値:無効)");
-$LANG_CONF['main.ssoLogoutRedirect'] = array(0 => "input", 1 => "シングルサインオン ログアウトのリダイレクトサービスURL");
+$LANG_CONF['security.ssoSupport'] = array(0 => "checkbox", 1 => "シングルサインオンサポート (初期値:無効)");
+$LANG_CONF['security.ssoLogoutRedirect'] = array(0 => "input", 1 => "シングルサインオン ログアウトのリダイレクトサービスURL");
 $LANG_CONF['main.dateFormat'] = array(0 => "input", 1 => "日付フォーマット (初期値: Y-m-d H:i)");
-$LANG_CONF['main.enableLoginOnly'] = array(0 => "checkbox", 1 => "FAQ閲覧にログインを必要とする (初期値: 無効)");
+$LANG_CONF['security.enableLoginOnly'] = array(0 => "checkbox", 1 => "FAQ閲覧にログインを必要とする (初期値: 無効)");
 

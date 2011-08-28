@@ -567,16 +567,16 @@ $LANG_CONF['records.maxAttachmentSize'] = array(0 => "vstup", 1 => "maximumálna
 $LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Pripojiť prílohu k položkám?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "použiť stopovač?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "použiť Adminlog?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Chcete aby bola IP skontrolovaná pri kontrole UINs v admin.php?");
+$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Chcete aby bola IP skontrolovaná pri kontrole UINs v admin.php?");
 $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "vstup", 1 => "Počet tém na stránku");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "vstup", 1 => "Počet článkov");
-$LANG_CONF['main.bannedIPs'] = array(0 => "pole", 1 => "Zakázať tieto IP");
+$LANG_CONF['security.bannedIPs'] = array(0 => "pole", 1 => "Zakázať tieto IP");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktivovať mód_podporu prepisovania? (prednastavené: nepovoliť)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Chcete povoliť LDAP podporu? (Prednastavené: nepovoliť)");
+$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Chcete povoliť LDAP podporu? (Prednastavené: nepovoliť)");
 $LANG_CONF["main.referenceURL"] = array(0 => "vstup", 1 => "Overiť URL (e.g.: http://www.example.org/faq)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "vstup", 1 => "Interval medzi AJAX overením (v sekundách)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Vypnúť viditeľnosť nových otázok?");
-$LANG_CONF['main.permLevel'] = array(0 => "vyberte", 1 => "Úroveň povolenia");
+$LANG_CONF['security.permLevel'] = array(0 => "vyberte", 1 => "Úroveň povolenia");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "ako novú hlavnú kategóriu";
 $PMF_LANG["ad_categ_paste_error"] = "Presunúť túto kategóriu nie je možné.";
@@ -1025,7 +1025,7 @@ $LANG_CONF["records.defaultAttachmentEncKey"] = array(0 => "vstup", 1 => 'Predvo
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['ad_menu_upgrade'] = 'Upgrade';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Máte najnovšiu verziu phpMyFAQ. Teraz nepotrebujete upgrade.';
-$LANG_CONF['main.useSslForLogins'] = array(0 => 'checkbox', 1 => "Povoliť iba prihlásenia cez zabezpečené pripojenie? (prednastavené: nepovoliť)");
+$LANG_CONF['security.useSslForLogins'] = array(0 => 'checkbox', 1 => "Povoliť iba prihlásenia cez zabezpečené pripojenie? (prednastavené: nepovoliť)");
 $PMF_LANG['msgSecureSwitch'] = "Prepnúť na bezpečný mód pre prihlásenie!";
 
 // added 2.6.0-alpha - 2009-10-03 by Anatoliy Belsky

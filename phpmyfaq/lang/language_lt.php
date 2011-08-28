@@ -569,16 +569,16 @@ $LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "Maksimalus p
 $LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Rodyti priedų nuorodas po įrašais?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Naudoti sekimą?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Naudoti administravimo žurnalą?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Ar norite, kad būtų tikrinamas IP, kai tikrinami UIN tinklalapyje „admin.php“?");
+$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Ar norite, kad būtų tikrinamas IP, kai tikrinami UIN tinklalapyje „admin.php“?");
 $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Puslapyje rodomų temų skaičius");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Naujienų straipsnių skaičius");
-$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Drausti šiuos IP adresus");
+$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Drausti šiuos IP adresus");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktyvinti „mod_rewrite“ palaikymą? (numatyta r.: išjungta)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Ar įjungti LDAP palaikymą? (numatyta r.: išjungta)");
+$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Ar įjungti LDAP palaikymą? (numatyta r.: išjungta)");
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Bazinis URL saitų tikrinimui (pvz., http://www.example.org/faq)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Intervalas tarp AJAX saitų tikrinimo (sekundėmis)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Išjungti naujų klausimų matomumą?");
-$LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "Leidimų lygis");
+$LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Leidimų lygis");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "kaip naują pagrindinę grupę";
 $PMF_LANG["ad_categ_paste_error"] = "Šios grupės perkelti neįmanoma.";
@@ -1034,7 +1034,7 @@ $LANG_CONF["records.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Numaty
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['ad_menu_upgrade'] = 'Atnaujinti';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Jūs turite naujausią phpMyFAQ versiją. Jums nereikia atnaujinti.';
-$LANG_CONF['main.useSslForLogins'] = array(0 => 'checkbox', 1 => "Leisti prisijungimus tik per saugujį ryšį? (numatyta r.: išjungta)");
+$LANG_CONF['security.useSslForLogins'] = array(0 => 'checkbox', 1 => "Leisti prisijungimus tik per saugujį ryšį? (numatyta r.: išjungta)");
 $PMF_LANG['msgSecureSwitch'] = "Jei norite prisijungti, persijunkite į saugujį režimą!";
 
 // added 2.6.0-alpha - 2009-10-03 by Anatoliy Belsky

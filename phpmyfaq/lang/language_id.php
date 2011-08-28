@@ -560,16 +560,16 @@ $LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "ukuran maksi
 $LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Buat Link ke lampiran di bawah entri?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "gunakan Penelusuran?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "gunakan Log Admin?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Apakah anda ingin alamat IP dicek saat memeriksa UIN dalam admin.php?");
+$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Apakah anda ingin alamat IP dicek saat memeriksa UIN dalam admin.php?");
 $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Jumlah topik yang ditampilkan per halaman");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Jumlah artikel berita");
-$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Blokir IP ini");
+$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Blokir IP ini");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktifkan dukungan mod_rewrite? (default: non-aktif)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Aktifkan dukungan LDAP? (default: non-aktif)");
+$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Aktifkan dukungan LDAP? (default: non-aktif)");
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "URL dasar untuk verifikasi link (mis.: http://www.situsanda.com/faq)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Interval antara verifikasi link AJAX (dalam detik)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Nonaktifkan link untuk membuat Pertanyaan Baru?");
-$LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "Level Hak Akses");
+$LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Level Hak Akses");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "sebagai kategori utama baru";
 $PMF_LANG["ad_categ_paste_error"] = "Memidahkan kategori ini tidak dimungkinkan.";

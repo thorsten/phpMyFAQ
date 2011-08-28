@@ -571,16 +571,16 @@ $LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "फाइल
 $LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "फाइलों को एंट्री के निचे जोडें?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "लेखा जोखा रखें?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "प्रबंधक लॉग का प्रयोग करें?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "admin.php में UINs देखते समय IP भी देखें?");
+$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "admin.php में UINs देखते समय IP भी देखें?");
 $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "एक पृष्ठ पर कितने विषय दिखायें");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "समाचार लेखों की संख्या");
-$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "इन IPs को प्रतिबंधित करें");
+$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "इन IPs को प्रतिबंधित करें");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite को सक्रिय करें? (पूर्वनिर्धारित: असक्रिय)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "क्या आप LDAP को सक्रिय करना चाहते हैं? (पूर्वनिर्धारित: असक्रिय)");
+$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "क्या आप LDAP को सक्रिय करना चाहते हैं? (पूर्वनिर्धारित: असक्रिय)");
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "कड़ी सत्यापन के लिए आधार URL (e.g.: http://www.example.org/faq)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "AJAX कड़ी सत्यापन के मध्य समय अवधि (in seconds)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "नए सवाल न दिखायें?");
-$LANG_CONF['main.permLevel'] = array(0 => "input", 1 => "आज्ञा समतल");
+$LANG_CONF['security.permLevel'] = array(0 => "input", 1 => "आज्ञा समतल");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "नए मुख्य वर्ग के रूप में";
 $PMF_LANG["ad_categ_paste_error"] = "इस वर्ग को यहाँ से हटाना संभव नहीं है.";

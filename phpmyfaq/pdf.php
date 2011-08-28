@@ -50,7 +50,7 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
 PMF_String::init($LANGCODE);
 
 // authenticate with session information
-$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
 if ($user) {
     $auth = true;
 } else {

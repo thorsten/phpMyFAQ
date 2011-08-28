@@ -55,7 +55,7 @@ class PMF_Network
      */
     public function checkIp($ip)
     {
-        $bannedList = PMF_Configuration::getInstance()->get('main.bannedIPs');
+        $bannedList = PMF_Configuration::getInstance()->get('security.bannedIPs');
         $bannedIps  = explode(' ', $bannedList);
 
         foreach ($bannedIps as $ipAddress) {

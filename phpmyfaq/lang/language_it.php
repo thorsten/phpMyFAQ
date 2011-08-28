@@ -573,16 +573,16 @@ $LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "Massima dime
 $LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Mostra il link agli allegati");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Abilito il tracciamento per le attivit&agrave; dell'Utente?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Abilito il tracciamento per le attivit&agrave; di Amministrazione?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Vuoi controllare l'IP quando verifico l'<em>UIN</em> in <em>admin.php</em>?");
+$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Vuoi controllare l'IP quando verifico l'<em>UIN</em> in <em>admin.php</em>?");
 $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Numero di elementi visualizzati per pagina");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Numero di elementi visualizzati per la sezione News");
-$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Vieta l'accesso a questi indirizzi IP");
+$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Vieta l'accesso a questi indirizzi IP");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Attivare il supporto a <em>mod_rewrite</em>? (predefinito: disabilitato)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Attivare il supporto LDAP? (predefinito: disabilitato)");
+$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Attivare il supporto LDAP? (predefinito: disabilitato)");
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "<em>Base URL</em> dell'installazione di phpMyFAQ, es: http://www.example.org/faq (&egrave; necessaria per la verifica dei links)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Intervallo della verifica asincrona dei links (in secondi)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Disabilitare la visibilit&agrave; delle domande appena inserite?");
-$LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "Configurazione della Permessistica");
+$LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Configurazione della Permessistica");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "come nuova categoria principale";
 $PMF_LANG["ad_categ_paste_error"] = "Non &egrave; possibile spostare questa categoria.";

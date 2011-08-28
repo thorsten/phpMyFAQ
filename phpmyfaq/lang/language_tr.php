@@ -567,16 +567,16 @@ $LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "Maksimum ek 
 $LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Ekleri girdilerin altına linkle?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "İzleme kullan?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Yönetici kütüğü kullan?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "admin.php'de UIN'leri kontrol ederken IP kontrolü de yapılmasını istiyor musunuz?");
+$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "admin.php'de UIN'leri kontrol ederken IP kontrolü de yapılmasını istiyor musunuz?");
 $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Sayfa başına gösterilen konu sayısı");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Haber yazılarının sayısı");
-$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Bu IP'leri karalistele");
+$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Bu IP'leri karalistele");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite desteğini etkinleştir? (varsayılan: kapalı)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP desteğini etkinleştir? (varsayılan: kapalı)");
+$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP desteğini etkinleştir? (varsayılan: kapalı)");
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Link kontrolü için baz URL (örn.: http://www.example.org/faq)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "AJAX link kontrolü zaman aralığı (saniye olarak)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Yeni soruların görünürlüğünü kapat?");
-$LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "İzin düzeyi");
+$LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "İzin düzeyi");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "yeni ana kategori olarak";
 $PMF_LANG["ad_categ_paste_error"] = "Bu kategori taşınamaz.";

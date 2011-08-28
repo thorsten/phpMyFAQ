@@ -95,17 +95,17 @@ $loginVisibility = 'hidden';
 $faqusername = PMF_Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
 $faqpassword = PMF_Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
 $faqaction   = PMF_Filter::filterInput(INPUT_POST, 'faqloginaction', FILTER_SANITIZE_STRING);
-if ($faqconfig->get('main.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
+if ($faqconfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
     $faqusername = trim($_SERVER['REMOTE_USER']);
     $faqpassword = '';
 }
 if (!is_null($faqusername) && !is_null($faqpassword)) {
     $user = new PMF_User_CurrentUser();
-    if ($faqconfig->get('main.ldapSupport')) {
+    if ($faqconfig->get('security.ldapSupport')) {
         $authLdap = new PMF_Auth_AuthLdap();
         $user->addAuth($authLdap, 'ldap');
     }
-    if ($faqconfig->get('main.ssoSupport')) {
+    if ($faqconfig->get('security.ssoSupport')) {
         $authSso = new PMF_Auth_AuthSso();
         $user->addAuth($authSso, 'sso');
     }
@@ -131,7 +131,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
 
 } else {
     // authenticate with session information
-    $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+    $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
     if ($user) {
         $auth = true;
     } else {
@@ -165,8 +165,8 @@ if ('logout' === $action && isset($auth)) {
     $user   = null;
     $auth   = null;
     $action = 'main';
-    $ssoLogout = $faqconfig->get('main.ssoLogoutRedirect');
-    if ($faqconfig->get('main.ssoSupport') && !empty ($ssoLogout))
+    $ssoLogout = $faqconfig->get('security.ssoLogoutRedirect');
+    if ($faqconfig->get('security.ssoSupport') && !empty ($ssoLogout))
         header ("Location:$ssoLogout");
 }
 
@@ -355,7 +355,7 @@ if (!isset($allowedVariables[$action])) {
 if (isset($auth)) {
     $loginTemplate = 'loggedin.tpl';
 } else {
-    if (isset($_SERVER['HTTPS']) || !$faqconfig->get('main.useSslForLogins')) {
+    if (isset($_SERVER['HTTPS']) || !$faqconfig->get('security.useSslForLogins')) {
         $loginTemplate = 'loginbox.tpl';
     } else {
         $loginTemplate = 'secureswitch.tpl';
@@ -394,7 +394,7 @@ if ($hasTags && (($action == 'artikel') || ($action == 'show'))) {
 //
 // Check if FAQ should be secured
 //
-if ($faqconfig->get('main.enableLoginOnly')) {
+if ($faqconfig->get('security.enableLoginOnly')) {
     if ($auth) {
         $indexSet = 'index.tpl';
     } else {
@@ -565,7 +565,7 @@ if (isset($auth)) {
         )
     );
 } else {
-    if (isset($_SERVER['HTTPS']) || !$faqconfig->get('main.useSslForLogins')) {
+    if (isset($_SERVER['HTTPS']) || !$faqconfig->get('security.useSslForLogins')) {
         $tpl->processTemplate(
             'loginBox',
             array(

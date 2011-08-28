@@ -590,7 +590,7 @@ if ($step == 4) {
         }
         
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.enableUpdate', 'false')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.useSslForLogins', 'false')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('security.useSslForLogins', 'false')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.currentApiVersion', '" . APIVERSION . "')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.templateSet', 'default')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.numberSearchTerms', '10')";
@@ -818,10 +818,10 @@ if ($step == 4) {
     // UPDATES FROM 2.7.0-beta2
     //
     if (version_compare($version, '2.7.0-beta2', '<')) {
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.ssoSupport', 'false')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.ssoLogoutRedirect', '')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('security.ssoSupport', 'false')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('security.ssoLogoutRedirect', '')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.dateFormat', 'Y-m-d H:i')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.enableLoginOnly', 'false')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('security.enableLoginOnly', 'false')";
     }
 
     //
@@ -846,10 +846,22 @@ if ($step == 4) {
             WHERE config_name = 'main.enableAttachmentEncryption'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.defaultAttachmentEncKey'
             WHERE config_name = 'main.defaultAttachmentEncKey'";
-
-
-
-
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'security.permLevel'
+            WHERE config_name = 'main.permLevel'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'security.ipCheck'
+            WHERE config_name = 'main.ipCheck'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'security.enableLoginOnly'
+            WHERE config_name = 'main.enableLoginOnly'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'security.ldapSupport'
+            WHERE config_name = 'main.ldapSupport'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'security.bannedIPs'
+            WHERE config_name = 'main.bannedIPs'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'security.ssoSupport'
+            WHERE config_name = 'main.ssoSupport'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'security.ssoLogoutRedirect'
+            WHERE config_name = 'main.ssoLogoutRedirect'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'security.useSslForLogins'
+            WHERE config_name = 'main.useSslForLogins'";
     }
 
 

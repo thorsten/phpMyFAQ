@@ -568,12 +568,12 @@ $LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "maximalna ve
 $LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Linkuj priloge ispod unosa?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Koristi pra&#263;enje?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Koristi Adminlog?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Da li &#382;elite da se IP proverava kada se proverava UINs u admin.php?");
+$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Da li &#382;elite da se IP proverava kada se proverava UINs u admin.php?");
 $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Broj prikazanih tema po stranici");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Broj &#269;lanaka vesti");
-$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Banuj ove IP");
+$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Banuj ove IP");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Uklju&#269;i mod_rewrite podr&#269;ku? (isklju&#269;eno)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Da li &#382;elite LDAP podr&scaron;ku? (isklju&#269;eno)");
+$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Da li &#382;elite LDAP podr&scaron;ku? (isklju&#269;eno)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "kao nova glavna kategorija";
 $PMF_LANG["ad_categ_paste_error"] = "Preme&scaron;tanje ove kategorije nije mogu&#263;e.";

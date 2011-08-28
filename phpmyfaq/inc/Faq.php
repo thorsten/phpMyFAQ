@@ -163,7 +163,7 @@ class PMF_Faq
         }
         
         $faqconfig = PMF_Configuration::getInstance();
-        if ($faqconfig->get('main.permLevel') == 'medium') {
+        if ($faqconfig->get('security.permLevel') == 'medium') {
             $this->groupSupport = true;
         }
     }

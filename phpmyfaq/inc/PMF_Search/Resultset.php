@@ -111,7 +111,7 @@ class PMF_Search_Resultset
         
         $duplicateResults = array();
         $currentUserId    = $this->user->getUserId();
-        if ('medium' == PMF_Configuration::getInstance()->get('main.permLevel')) {
+        if ('medium' == PMF_Configuration::getInstance()->get('security.permLevel')) {
             $currentGroupIds = $this->user->perm->getUserGroups($currentUserId);
         }
 
@@ -119,14 +119,14 @@ class PMF_Search_Resultset
             
             $permission = false;
             // check permissions for groups
-            if ('medium' == PMF_Configuration::getInstance()->get('main.permLevel')) {
+            if ('medium' == PMF_Configuration::getInstance()->get('security.permLevel')) {
                 $groupPermission = $this->faq->getPermission('group', $result->id);
                 if (count($groupPermission) && in_array($groupPermission[0], $currentGroupIds)) {
                     $permission = true;
                 }
             }
             // check permission for user
-            if ($permission || 'basic' == PMF_Configuration::getInstance()->get('main.permLevel')) {
+            if ($permission || 'basic' == PMF_Configuration::getInstance()->get('security.permLevel')) {
                 $userPermission = $this->faq->getPermission('user', $result->id);
                 if (in_array(-1, $userPermission) || in_array($this->user->getUserId(), $userPermission)) {
                     $permission = true;

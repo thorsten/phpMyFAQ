@@ -41,7 +41,7 @@ session_start();
 $action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 
 $auth = false;
-$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
 if ($user) {
     $auth = true;
 } else {

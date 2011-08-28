@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 // Re-evaluate $user
-$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
 
 if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
@@ -395,7 +395,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
 <?php
     endif;
-    if ($faqconfig->get('main.permLevel') != 'basic'): ?>
+    if ($faqconfig->get('security.permLevel') != 'basic'): ?>
 
                 <p>
                     <label for="grouppermission"><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>

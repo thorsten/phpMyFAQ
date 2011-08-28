@@ -111,7 +111,7 @@ $faqpassword = PMF_Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZ
 if (!is_null($faqusername) && !is_null($faqpassword)) {
     // login with username and password
     $user = new PMF_User_CurrentUser();
-    if ($faqconfig->get('main.ldapSupport')) {
+    if ($faqconfig->get('security.ldapSupport')) {
         $authLdap = new PMF_Auth_AuthLdap();
         $user->addAuth($authLdap, 'ldap');
     }
@@ -132,7 +132,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     }
 } else {
     // authenticate with session information
-    $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+    $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
     if ($user) {
         $auth = true;
     } else {
@@ -161,8 +161,8 @@ if ($action == 'logout' && $auth) {
     $user->deleteFromSession();
     $user = null;
     $auth = null;
-    $ssoLogout = $faqconfig->get('main.ssoLogoutRedirect');
-    if ($faqconfig->get('main.ssoSupport') && !empty ($ssoLogout))
+    $ssoLogout = $faqconfig->get('security.ssoLogoutRedirect');
+    if ($faqconfig->get('security.ssoSupport') && !empty ($ssoLogout))
         header ("Location:$ssoLogout");
 }
 
@@ -511,7 +511,7 @@ if (isset($auth) && in_array(true, $permission)) {
         $message = sprintf('<p class="success">%s</p>', $PMF_LANG['ad_logout']);
     }
     
-    if (isset($_SERVER['HTTPS']) || !$faqconfig->get('main.useSslForLogins')) {
+    if (isset($_SERVER['HTTPS']) || !$faqconfig->get('security.useSslForLogins')) {
 ?>
 
             <?php print $message ?>

@@ -57,7 +57,7 @@ if ($permission["editcateg"]) {
             <input type="hidden" name="id" value="<?php print $id; ?>" />
             <input type="hidden" name="parent_id" value="<?php print $category->categoryName[$id]["parent_id"]; ?>" />
             <input type="hidden" name="showcat" value="<?php print $showcat; ?>" />
-            <?php if ($faqconfig->get('main.permLevel') != 'basic') { ?>
+            <?php if ($faqconfig->get('security.permLevel') != 'basic') { ?>
             <input type="hidden" name="restricted_groups" value="<?php print $group_permission[0]; ?>" />
             <?php } else { ?>
             <input type="hidden" name="restricted_groups" value="-1" />

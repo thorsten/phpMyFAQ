@@ -58,7 +58,7 @@ if (!is_null($_language) && PMF_Language::isASupportedLanguage($_language)) {
 //
 PMF_String::init($_language);
 
-$user        = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+$user        = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
 $refreshTime = (PMF_SESSION_ID_EXPIRES - PMF_SESSION_ID_REFRESH) * 60;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">

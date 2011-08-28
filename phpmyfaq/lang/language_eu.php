@@ -571,12 +571,12 @@ $LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "Eranskinetak
 $LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Sarrera azpian eranskinei estekaren bat ipini?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Monitorizazioa erabili?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Adminlog-a erabili?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Nahi al duzu IP-ak aztertzea UIN-ak egiaztatzean?");
+$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Nahi al duzu IP-ak aztertzea UIN-ak egiaztatzean?");
 $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Erakutsitako item-en kopurua orriko");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Artikulu berrien kopurua");
-$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "IP hauek blokeatu");
+$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "IP hauek blokeatu");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Mod_rewrite-rentzat euskarria aktibatu? (besterik esan ezean, desaktibatua)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "LDAPrentzat euskarria gaitu nahi al duzu? (besterik esan ezean, desaktibatua)");
+$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "LDAPrentzat euskarria gaitu nahi al duzu? (besterik esan ezean, desaktibatua)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "Atal nagusi berri gisa";
 $PMF_LANG["ad_categ_paste_error"] = "Ezinezkoa da atal hau mugitzea.";

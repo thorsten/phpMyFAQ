@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 // Re-evaluate $user
-$user     = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+$user     = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
 $category = new PMF_Category($current_admin_user, $current_admin_groups, false);    
 
 if ($permission['editbt']) {
@@ -136,7 +136,7 @@ if ($permission['editbt']) {
         $category->deletePermission('user', $categories['rubrik']);
         $category->addPermission('user', $categories['rubrik'], $restricted_users);
         // Add group permission
-        if ($faqconfig->get('main.permLevel') != 'basic') {
+        if ($faqconfig->get('security.permLevel') != 'basic') {
             $faq->deletePermission('group', $record_id);
             $faq->addPermission('group', $record_id, $restricted_groups);
             $category->deletePermission('group', $categories['rubrik']);

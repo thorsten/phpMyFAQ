@@ -72,14 +72,14 @@ $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('search.relevance', 
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('search.enableRelevance', 'false')";
 
 // Security
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.permLevel', '".$permLevel."')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.ipCheck', 'false')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.enableLoginOnly', 'false')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.ldapSupport', 'false')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.bannedIPs', '')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.ssoSupport', 'false')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.ssoLogoutRedirect', '')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.useSslForLogins', 'false')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('security.permLevel', '".$permLevel."')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('security.ipCheck', 'false')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('security.enableLoginOnly', 'false')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('security.ldapSupport', 'false')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('security.bannedIPs', '')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('security.ssoSupport', 'false')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('security.ssoLogoutRedirect', '')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('security.useSslForLogins', 'false')";
 
 // Spam
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('spam.checkBannedWords', 'true')";

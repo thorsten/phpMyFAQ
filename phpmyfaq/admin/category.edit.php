@@ -83,7 +83,7 @@ if ($permission['editcateg']) {
                 </select>
             </p>
 <?php
-    if ($faqconfig->get('main.permLevel') != 'basic') {
+    if ($faqconfig->get('security.permLevel') != 'basic') {
 ?>
             <p>
                 <label><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>

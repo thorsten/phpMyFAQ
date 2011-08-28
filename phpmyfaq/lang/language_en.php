@@ -595,16 +595,16 @@ $LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "Maximum size
 $LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Enable visibilty of attachments");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Enable user tracking");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "use Adminlog?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Check the IP in administration");
+$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Check the IP in administration");
 $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Number of news articles");
-$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
+$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Enable URL rewrite support? (default: disabled)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Enable LDAP support? (default: disabled)");
+$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Enable LDAP support? (default: disabled)");
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "URL for link verification (e.g.: http://www.example.org/faq)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Interval between AJAX link verification (in seconds)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Disable visibility of new questions?");
-$LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "Permission level");
+$LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Permission level");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "as new main category";
 $PMF_LANG["ad_categ_paste_error"] = "Moving this category isn't possible.";
@@ -1052,7 +1052,7 @@ $LANG_CONF["records.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Defaul
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['ad_menu_upgrade'] = 'Upgrade';
 $PMF_LANG['ad_you_shouldnt_update'] = 'You have the latest version of phpMyFAQ. You do not need to upgrade.';
-$LANG_CONF['main.useSslForLogins'] = array(0 => 'checkbox', 1 => "Only allow logins over SSL connection? (default: disabled)");
+$LANG_CONF['security.useSslForLogins'] = array(0 => 'checkbox', 1 => "Only allow logins over SSL connection? (default: disabled)");
 $PMF_LANG['msgSecureSwitch'] = "Switch to secure mode to login!";
 
 // added 2.6.0-alpha - 2009-10-03 by Anatoliy Belsky
@@ -1149,10 +1149,10 @@ $PMF_LANG['msgRegistrationNote'] = 'After successful registration you will recei
 $PMF_LANG['ad_entry_changelog_history'] = "Changelog history";
 
 // added v2.7.0-beta2 - 2011-06-22 by Thorsten
-$LANG_CONF['main.ssoSupport'] = array(0 => 'checkbox', 1 => 'Single Sign On Support (default: deactivated)');
-$LANG_CONF['main.ssoLogoutRedirect'] = array(0 => 'input', 1 => 'Single Sign On logout redirect service URL');
+$LANG_CONF['security.ssoSupport'] = array(0 => 'checkbox', 1 => 'Single Sign On Support (default: deactivated)');
+$LANG_CONF['security.ssoLogoutRedirect'] = array(0 => 'input', 1 => 'Single Sign On logout redirect service URL');
 $LANG_CONF['main.dateFormat'] = array(0 => 'input', 1 => 'Date format (default: Y-m-d H:i)');
-$LANG_CONF['main.enableLoginOnly'] = array(0 => 'checkbox', 1 => 'Complete secured FAQ (default: deactivated)');
+$LANG_CONF['security.enableLoginOnly'] = array(0 => 'checkbox', 1 => 'Complete secured FAQ (default: deactivated)');
 
 // added v2.7.0-RC - 2011-08-18 by Thorsten
 $PMF_LANG['securityControlCenter'] = 'Security configuration';

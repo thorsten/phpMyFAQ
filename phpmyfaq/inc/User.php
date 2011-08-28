@@ -191,7 +191,7 @@ class PMF_User
                 return false;
             }
         } else {
-            $permLevel = PMF_Configuration::getInstance()->get('main.permLevel');
+            $permLevel = PMF_Configuration::getInstance()->get('security.permLevel');
             $perm      = PMF_Perm::selectPerm($permLevel);
             if (!$this->addPerm($perm)) {
                 return false;

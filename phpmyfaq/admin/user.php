@@ -188,7 +188,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                 $oCat->moveOwnership($userId, 1);
 
                 // Remove the user from groups
-                if ('medium' == PMF_Configuration::getInstance()->get('main.permLevel')) {
+                if ('medium' == PMF_Configuration::getInstance()->get('security.permLevel')) {
                     $oPerm = PMF_Perm::selectPerm('medium');
                     $oPerm->removeFromAllGroups($userId);
                 }

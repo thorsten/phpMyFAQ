@@ -555,7 +555,7 @@ $PMF_LANG["err_SaveQuestion"] = "Vaadittavat kentät ovat <strong>nimesi</strong
 $PMF_LANG["ad_entry_fontcolor"] = "Tekstin väri: ";
 $PMF_LANG["ad_entry_fontsize"] = "Tekstin koko: ";
 
-/* added v1.4.0 - 2003-12-04 by Thorsten / Mathias - Translation of main.metaKeywords, mod_rewrite & main.ldapSupport msg by Matti Kröger*/
+/* added v1.4.0 - 2003-12-04 by Thorsten / Mathias - Translation of main.metaKeywords, mod_rewrite & security.ldapSupport msg by Matti Kröger*/
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "Kieli-Tiedosto");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Salli automaattinen sisällön kätteleminen");
 $LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "FAQ Otsikko");
@@ -570,12 +570,12 @@ $LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "suurin salli
 $LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Linkitä liitteet tietueiden alpuolelle?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "käytä lokia?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "käytä ylläpitolokia?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Haluatko, että admin.php:ssa IP tarkastetaan samalla kun UIN?");
+$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Haluatko, että admin.php:ssa IP tarkastetaan samalla kun UIN?");
 $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Näytettyjen tietueiden määrä per sivu");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Uutisten määrä");
-$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Estä käyttö näistä IP-osoitteista");
+$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Estä käyttö näistä IP-osoitteista");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktivoi mod_rewrite tuki? (oletus: ei käytössä)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Haluatko laittaa LDAP tuen päälle(enabled)? (oletus: ei käytössä)");
+$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Haluatko laittaa LDAP tuen päälle(enabled)? (oletus: ei käytössä)");
 
 /*Correction to ad_categ_desc & ad_categ_paste_error msg by Matti Kröger*/
 $PMF_LANG["ad_categ_new_main_cat"] = "uutena pää-kategoriana";

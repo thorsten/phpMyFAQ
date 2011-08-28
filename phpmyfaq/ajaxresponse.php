@@ -60,7 +60,7 @@ PMF_String::init($languageCode);
 //
 // Get current user and group id - default: -1
 //
-$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
 if (isset($user) && is_object($user)) {
     $current_user = $user->getUserId();
     if ($user->perm instanceof PMF_Perm_PermMedium) {

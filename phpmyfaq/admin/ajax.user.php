@@ -70,7 +70,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
                     $category->moveOwnership($userId, 1);
 
                     // Remove the user from groups
-                    if ('medium' == PMF_Configuration::getInstance()->get('main.permLevel')) {
+                    if ('medium' == PMF_Configuration::getInstance()->get('security.permLevel')) {
                         $permissions = PMF_Perm::selectPerm('medium');
                         $permissions->removeFromAllGroups($userId);
                     }

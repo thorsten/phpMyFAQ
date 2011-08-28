@@ -563,12 +563,12 @@ $LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "maximum Size
 $LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Link the attachments below the entries?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "use Tracking?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "use Adminlog?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Do you want the IP to be checked when checking the UINs in admin.php?");
+$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Do you want the IP to be checked when checking the UINs in admin.php?");
 $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Number of news articles");
-$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
+$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
+$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "as new main category";
 $PMF_LANG["ad_categ_paste_error"] = "Moving this category isn't possible.";

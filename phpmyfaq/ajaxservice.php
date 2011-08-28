@@ -300,7 +300,7 @@ switch ($action) {
                 $faq->addPermission('user', $recordId, -1);
                 $category->addPermission('user', $categories['rubrik'], array(-1));
                 // Add group permission
-                if ($faqconfig->get('main.permLevel') != 'basic') {
+                if ($faqconfig->get('security.permLevel') != 'basic') {
                     $faq->addPermission('group', $recordId, -1);
                     $category->addPermission('group', $categories['rubrik'], array(-1));
                 }

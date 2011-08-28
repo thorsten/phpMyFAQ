@@ -567,12 +567,12 @@ $LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => " Uchafswm ma
 $LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => " Cysylltur atodiadau islawr cofnodion?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => " Defnyddio tracio?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => " defnyddio cofnod gweinyddol?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => " Ydych chi am ir IP gael ei wirio wrth wirio UINs yn admin.php?");
+$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => " Ydych chi am ir IP gael ei wirio wrth wirio UINs yn admin.php?");
 $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => " Nifer y pynciau a ddangosir fesul tudalen");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => " Nifer yr erthyglau newyddion");
-$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => " Gwahardd yr Ips hyn");
+$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => " Gwahardd yr Ips hyn");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => " Actifadu mod_ailysgrifennur gefnogaeth? (diofyn: analluogi)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => " Hoffech chi osod cefnogaeth LDAP? (default: disabled)");
+$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => " Hoffech chi osod cefnogaeth LDAP? (default: disabled)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "fel prif gategori newydd";
 $PMF_LANG["ad_categ_paste_error"] = "Nid yw'n bosibl symud y categori hwn.";
