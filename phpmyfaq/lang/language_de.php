@@ -564,8 +564,8 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Name des Veröffent
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "E-Mailadresse des Administrators");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Kontakt oder Impressum");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Text für die Empfehlungs-Seite");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Maximalgröße von Anhängen in Bytes (max. %sByte)");
-$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Attachments unter den Beiträgen anzeigen?");
+$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "Maximalgröße von Anhängen in Bytes (max. %sByte)");
+$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Attachments unter den Beiträgen anzeigen?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Tracking aktiviert?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Adminlog aktiviert?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Soll die IP zur Überprüfung im Administrationsbereich herangezogen werden?");
@@ -963,7 +963,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = 'Beim Versenden der Sprachdatei ist 
 $PMF_LANG['msgTransToolPercent'] = 'Vollständigkeit';
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "Pfad zum Speichern der Anhänge.<br /><small>Relativer Pfad wird ab Webroot gesucht.</small>");
+$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Pfad zum Speichern der Anhänge.<br /><small>Relativer Pfad wird ab Webroot gesucht.</small>");
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "Die Datei wurde auf dem Server nicht gefunden";
@@ -1007,9 +1007,9 @@ $PMF_LANG["rightsLanguage"]['deltranslation'] = "Übersetzung löschen";
 $PMF_LANG["rightsLanguage"]['approverec'] = "Eintrag freigeben";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
-$LANG_CONF["main.enableAttachmentEncryption"] = array(0 => "checkbox", 1 => "Verschlüsselung der Anhänge");
-$LANG_CONF["main.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Standardschlüssel für Verschlüsselung<br/><small style="color: red">Warnung: Nach dem Aktivieren der Verschlüsselung nicht mehr ändern!</small>');
-//$LANG_CONF["main.attachmentsStorageType"] = array(0 => "select", 1 => "Attachment storage type");
+$LANG_CONF["records.enableAttachmentEncryption"] = array(0 => "checkbox", 1 => "Verschlüsselung der Anhänge");
+$LANG_CONF["records.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Standardschlüssel für Verschlüsselung<br/><small style="color: red">Warnung: Nach dem Aktivieren der Verschlüsselung nicht mehr ändern!</small>');
+//$LANG_CONF["records.attachmentsStorageType"] = array(0 => "select", 1 => "Attachment storage type");
 //$PMF_LANG['att_storage_type'][0] = 'Filesystem';
 //$PMF_LANG['att_storage_type'][1] = 'Database';
 

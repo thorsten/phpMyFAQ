@@ -126,7 +126,7 @@ if ($faqconfig->get('main.ldapSupport') && file_exists(PMF_CONFIG_DIR . '/ldap.p
 /**
  * Build attachments path
  */
-$confAttachmentsPath = trim($faqconfig->get('main.attachmentsPath'));
+$confAttachmentsPath = trim($faqconfig->get('records.attachmentsPath'));
 if ('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:(\\\\|/)%i', $confAttachmentsPath)) {
     // If we're here, some windows or unix style absolute path was detected.
     define('PMF_ATTACHMENTS_DIR', $confAttachmentsPath);

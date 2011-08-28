@@ -44,9 +44,9 @@ session_start();
 /**
  * Initialize attachment factory
  */
-PMF_Attachment_Factory::init($faqconfig->get('main.attachmentsStorageType'),
-                             $faqconfig->get('main.defaultAttachmentEncKey'),
-                             $faqconfig->get('main.enableAttachmentEncryption'));
+PMF_Attachment_Factory::init($faqconfig->get('records.attachmentsStorageType'),
+                             $faqconfig->get('records.defaultAttachmentEncKey'),
+                             $faqconfig->get('records.enableAttachmentEncryption'));
 
 $currentSave   = PMF_Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);
 $currentAction = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
@@ -135,7 +135,7 @@ if (is_null($currentAction) && $auth && $permission["addatt"]) {
         <form action="?action=save" enctype="multipart/form-data" method="post">
             <fieldset>
             <legend><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></legend>
-                <input type="hidden" name="MAX_FILE_SIZE" value="<?php print $faqconfig->get('main.maxAttachmentSize'); ?>" />
+                <input type="hidden" name="MAX_FILE_SIZE" value="<?php print $faqconfig->get('records.maxAttachmentSize'); ?>" />
                 <input type="hidden" name="record_id" value="<?php print $recordId; ?>" />
                 <input type="hidden" name="record_lang" value="<?php print $recordLang; ?>" />
                 <input type="hidden" name="save" value="TRUE" />
@@ -161,7 +161,7 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission['adda
 ?>
 <p><strong><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></strong></p>
 <?php
-    if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && !(filesize($_FILES["userfile"]["tmp_name"]) > $faqconfig->get('main.maxAttachmentSize'))) {
+    if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && !(filesize($_FILES["userfile"]["tmp_name"]) > $faqconfig->get('records.maxAttachmentSize'))) {
 
         $att = PMF_Attachment_Factory::create();
         $att->setRecordId($recordId);
@@ -196,7 +196,7 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission['adda
             '<p>%s</p>',
             sprintf(
                 $PMF_LANG['ad_attach_4'],
-                $faqconfig->get('main.maxAttachmentSize')
+                $faqconfig->get('records.maxAttachmentSize')
             )
         );
 

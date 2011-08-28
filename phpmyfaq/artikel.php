@@ -159,7 +159,7 @@ if ($num > 1) {
 }
 
 // List all faq attachments
-if ($faqconfig->get('main.disableAttachments') && 'yes' == $faq->faqRecord['active']) {
+if ($faqconfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['active']) {
     
     $attList = PMF_Attachment_Factory::fetchByRecordId($faq->faqRecord['id']);
     $outstr  = "";

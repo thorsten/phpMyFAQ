@@ -765,8 +765,8 @@ $LANG_CONF['main.metaPublisher'] = array(0 => "input", 1 => "發佈者姓名");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "管理員電子郵件");
 $LANG_CONF['main.contactInformations'] = array(0 => "area", 1 => "連絡資料");
 $LANG_CONF['main.send2friendText'] = array(0 => "area", 1 => "傳遞到朋友頁面的文字");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "附件最大限制是%s位元組");
-$LANG_CONF['main.disableAttachments'] = array(0 => "checkbox", 1 => "連接記錄下的附件？");
+$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "附件最大限制是%s位元組");
+$LANG_CONF['records.disableAttachments'] = array(0 => "checkbox", 1 => "連接記錄下的附件？");
 $LANG_CONF['main.enableUserTracking'] = array(0 => "checkbox", 1 => "啟用跟蹤？");
 $LANG_CONF['main.enableAdminLog'] = array(0 => "checkbox", 1 => "啟用管理員日誌？");
 $LANG_CONF['main.ipCheck'] = array(0 => "checkbox", 1 => "您希望admin.php在檢查UIN的時候也檢查IP使用嗎？");
@@ -788,5 +788,5 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => '記錄排序 (降序�
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "啟動一個新的記錄 (預設: deactivated)");
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "允許評論的新紀錄 (預設: disallowed)");
 $LANG_CONF['main.enableWysiwygEditor'] = array(0 => "checkbox", 1 => "啟用WYSIWYG 編輯 (預設: enabled)");
-$LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "儲存附件的路徑.<br /><small>相對路徑於網站上的根目錄</small>");
+$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "儲存附件的路徑.<br /><small>相對路徑於網站上的根目錄</small>");
 

@@ -140,7 +140,7 @@ function printInputFieldByType($key, $type)
                     }
                     break;
                     
-                case "main.attachmentsStorageType":
+                case "records.attachmentsStorageType":
                     foreach($PMF_LANG['att_storage_type'] as $i => $item) {
                         $selected = $faqconfig->get($key) == $i
                                   ? ' selected="selected"'
@@ -235,7 +235,7 @@ foreach ($LANG_CONF as $key => $value) {
 <?php
         switch ($key) {
 
-            case 'main.maxAttachmentSize':
+            case 'records.maxAttachmentSize':
                 printf($value[1], ini_get('upload_max_filesize'));
                 break;
 

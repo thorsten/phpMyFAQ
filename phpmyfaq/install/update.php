@@ -547,7 +547,7 @@ if ($step == 4) {
             (33, 'approverec', 'Right to approve records', 1, 1)";
         $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 33)";
         
-        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.attachmentsPath', 'attachments')";
+        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('records.attachmentsPath', 'attachments')";
     }
     
     //
@@ -619,9 +619,9 @@ if ($step == 4) {
         /**
          * Attachments stuff
          */
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.attachmentsStorageType', '0')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.enableAttachmentEncryption', 'false')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.defaultAttachmentEncKey', '')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('records.attachmentsStorageType', '0')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('records.enableAttachmentEncryption', 'false')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('records.defaultAttachmentEncKey', '')";
         switch($DB['type']) {
             case 'pgsql':
                 $query[] = "CREATE TABLE " . SQLPREFIX . "faqattachment (
@@ -834,6 +834,18 @@ if ($step == 4) {
             WHERE config_name = 'main.numberOfShownNewsEntries'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.orderingPopularFaqs'
             WHERE config_name = 'main.orderingPopularFaqs'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.disableAttachments'
+            WHERE config_name = 'main.disableAttachments'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.maxAttachmentSize'
+            WHERE config_name = 'main.maxAttachmentSize'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.attachmentsPath'
+            WHERE config_name = 'main.attachmentsPath'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.attachmentsStorageType'
+            WHERE config_name = 'main.attachmentsStorageType'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.enableAttachmentEncryption'
+            WHERE config_name = 'main.enableAttachmentEncryption'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.defaultAttachmentEncKey'
+            WHERE config_name = 'main.defaultAttachmentEncKey'";
 
 
 

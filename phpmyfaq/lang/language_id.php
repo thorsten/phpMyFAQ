@@ -556,8 +556,8 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Nama Penerbit");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Alamat Email Admin");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Informasi Kontak");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Teks untuk halaman send2friend");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "ukuran maksimal untuk lampiran dalam Bytes (maks. %sByte)");
-$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Buat Link ke lampiran di bawah entri?");
+$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "ukuran maksimal untuk lampiran dalam Bytes (maks. %sByte)");
+$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Buat Link ke lampiran di bawah entri?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "gunakan Penelusuran?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "gunakan Log Admin?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Apakah anda ingin alamat IP dicek saat memeriksa UIN dalam admin.php?");
@@ -962,7 +962,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = 'terjadi kesalahan saat mengirim ber
 $PMF_LANG['msgTransToolPercent'] = 'Persentase';
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "Lokasi dimana lampiran akan disimpan.<br /><small>Lokasi relatif berarti folder dalam web root</small>");
+$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Lokasi dimana lampiran akan disimpan.<br /><small>Lokasi relatif berarti folder dalam web root</small>");
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "berkas yang ingin anda unduh tidak ditemukan dalam server ini";

@@ -569,8 +569,8 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Nome dell'Editore")
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Indirizzo email dell'Amministratore");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Testo per la pagina dei <em>Contatti</em>");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Testo per la pagina <em>Invia ad un amico</em>");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Massima dimensione per gli allegati, in Bytes (max. %sByte)");
-$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Mostra il link agli allegati");
+$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "Massima dimensione per gli allegati, in Bytes (max. %sByte)");
+$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Mostra il link agli allegati");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Abilito il tracciamento per le attivit&agrave; dell'Utente?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Abilito il tracciamento per le attivit&agrave; di Amministrazione?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Vuoi controllare l'IP quando verifico l'<em>UIN</em> in <em>admin.php</em>?");

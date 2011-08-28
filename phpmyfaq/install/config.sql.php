@@ -58,12 +58,12 @@ $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.numberOfRel
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.orderby', 'id')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.sortby', 'DESC')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.orderingPopularFaqs', 'visits')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.disableAttachments', 'true')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.maxAttachmentSize', '100000')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.attachmentsPath', 'attachments')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.attachmentsStorageType', '0')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.enableAttachmentEncryption', 'false')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.defaultAttachmentEncKey', '')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.disableAttachments', 'true')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.maxAttachmentSize', '100000')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.attachmentsPath', 'attachments')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.attachmentsStorageType', '0')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.enableAttachmentEncryption', 'false')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.defaultAttachmentEncKey', '')";
 
 // Search
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('search.useAjaxSearchOnStartpage', 'false')";

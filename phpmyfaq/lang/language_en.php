@@ -591,8 +591,8 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Name of the Publish
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Email address of the Admin");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Contact information");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Text for the send to friend page");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Maximum size for attachments in Bytes (max. %sByte)");
-$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Enable visibilty of attachments");
+$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "Maximum size for attachments in Bytes (max. %sByte)");
+$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Enable visibilty of attachments");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Enable user tracking");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "use Adminlog?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Check the IP in administration");
@@ -996,7 +996,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = 'There was an error while sending th
 $PMF_LANG['msgTransToolPercent'] = 'Percentage';
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "Path where attachments will be saved.<br /><small>Relative path means a folder within web root</small>");
+$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Path where attachments will be saved.<br /><small>Relative path means a folder within web root</small>");
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "The file you're trying to download was not found on this server";
@@ -1043,9 +1043,9 @@ $PMF_LANG["rightsLanguage"]['deltranslation'] = "delete translation";
 $PMF_LANG["rightsLanguage"]['approverec'] = "approve records";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
-$LANG_CONF["main.enableAttachmentEncryption"] = array(0 => "checkbox", 1 => "Enable attachment encryption <br><small>Ignored when attachments is disabled</small>");
-$LANG_CONF["main.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>');
-//$LANG_CONF["main.attachmentsStorageType"] = array(0 => "select", 1 => "Attachment storage type");
+$LANG_CONF["records.enableAttachmentEncryption"] = array(0 => "checkbox", 1 => "Enable attachment encryption <br><small>Ignored when attachments is disabled</small>");
+$LANG_CONF["records.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>');
+//$LANG_CONF["records.attachmentsStorageType"] = array(0 => "select", 1 => "Attachment storage type");
 //$PMF_LANG['att_storage_type'][0] = 'Filesystem';
 //$PMF_LANG['att_storage_type'][1] = 'Database';
 

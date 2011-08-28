@@ -78,9 +78,9 @@ PMF_String::init($LANGCODE);
 /**
  * Initialize attachment factory
  */
-PMF_Attachment_Factory::init($faqconfig->get('main.attachmentsStorageType'),
-                             $faqconfig->get('main.defaultAttachmentEncKey'),
-                             $faqconfig->get('main.enableAttachmentEncryption'));
+PMF_Attachment_Factory::init($faqconfig->get('records.attachmentsStorageType'),
+                             $faqconfig->get('records.defaultAttachmentEncKey'),
+                             $faqconfig->get('records.enableAttachmentEncryption'));
 
 //
 // Get user action

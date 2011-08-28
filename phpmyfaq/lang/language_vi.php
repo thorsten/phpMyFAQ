@@ -561,8 +561,8 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Tên của Publishe
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Địa chỉ email của Quản trị viên");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Thông tin liên lạc");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Nội dung của trang send2friend");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum cỡ tối đa cho tập tin đính kèm (max. %sByte)");
-$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Hiện đường dẫn đến tài liệu đính kèm ở cuối trang?");
+$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "maximum cỡ tối đa cho tập tin đính kèm (max. %sByte)");
+$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Hiện đường dẫn đến tài liệu đính kèm ở cuối trang?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "sử dụng Tracking?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "sử dụng Adminlog?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Bạn có muốn kiểm tra IP khi xác nhận UINs trong admin.php?");

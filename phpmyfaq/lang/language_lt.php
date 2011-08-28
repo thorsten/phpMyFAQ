@@ -565,8 +565,8 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Leidėjo pavadinima
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Administratoriaus el. pašto adresas");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Kontaktinė informacija");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Tekstas tinklalapiui „siųsti draugui“");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Maksimalus priedo dydis baitais (maks. %sB)");
-$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Rodyti priedų nuorodas po įrašais?");
+$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "Maksimalus priedo dydis baitais (maks. %sB)");
+$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Rodyti priedų nuorodas po įrašais?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Naudoti sekimą?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Naudoti administravimo žurnalą?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Ar norite, kad būtų tikrinamas IP, kai tikrinami UIN tinklalapyje „admin.php“?");
@@ -971,7 +971,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = 'Įvyko klaida siunčiant kalbos fai
 $PMF_LANG['msgTransToolPercent'] = 'Procentai';
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "Kelias, kur bus saugomi priedai.<br /><small>Santykinis kelias reiškia katalogą žiniatinklio šakniniame kataloge</small>");
+$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Kelias, kur bus saugomi priedai.<br /><small>Santykinis kelias reiškia katalogą žiniatinklio šakniniame kataloge</small>");
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "Failas, kurį mėginate atsisiųsti buvo nerastas serveryje";
@@ -1025,9 +1025,9 @@ $PMF_LANG["rightsLanguage"]['deltranslation'] = "šalinti vertimą";
 $PMF_LANG["rightsLanguage"]['approverec'] = "patvirtinti įrašus";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
-$LANG_CONF["main.enableAttachmentEncryption"] = array(0 => "checkbox", 1 => "Įjungti priedų užšifravimą <br><small>Ignoruojama, kai priedai išjungti</small>");
-$LANG_CONF["main.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Numatytasis priedų užšifravimo raktas <br><small>Ignoruojama, jei priedų užšifravimas išjungtas</small><br><small><font color="red">ĮSPĖJIMAS: Nekeiskite šio rakto, kai užšifravimas jau įjungtas!!!</font></small>');
-//$LANG_CONF["main.attachmentsStorageType"] = array(0 => "select", 1 => "Attachment storage type");
+$LANG_CONF["records.enableAttachmentEncryption"] = array(0 => "checkbox", 1 => "Įjungti priedų užšifravimą <br><small>Ignoruojama, kai priedai išjungti</small>");
+$LANG_CONF["records.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Numatytasis priedų užšifravimo raktas <br><small>Ignoruojama, jei priedų užšifravimas išjungtas</small><br><small><font color="red">ĮSPĖJIMAS: Nekeiskite šio rakto, kai užšifravimas jau įjungtas!!!</font></small>');
+//$LANG_CONF["records.attachmentsStorageType"] = array(0 => "select", 1 => "Attachment storage type");
 //$PMF_LANG['att_storage_type'][0] = 'Failų sistema';
 //$PMF_LANG['att_storage_type'][1] = 'Duomenų bazė';
 

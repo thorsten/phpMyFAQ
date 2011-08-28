@@ -563,8 +563,8 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => " Enwr Cyhoeddwr")
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => " Cyfeiriad e-bost Gweinyddol");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => " Gwybodaeth gyswllt");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => " Testun ar gyfer y dudalen anfonatffrind");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => " Uchafswm maint ar gyfer atodiadau mewn Beitiau(max. %sByte)");
-$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => " Cysylltur atodiadau islawr cofnodion?");
+$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => " Uchafswm maint ar gyfer atodiadau mewn Beitiau(max. %sByte)");
+$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => " Cysylltur atodiadau islawr cofnodion?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => " Defnyddio tracio?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => " defnyddio cofnod gweinyddol?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => " Ydych chi am ir IP gael ei wirio wrth wirio UINs yn admin.php?");

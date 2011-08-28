@@ -563,8 +563,8 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "vstup", 1 => "Meno vydavateľa");
 $LANG_CONF['main.administrationMail'] = array(0 => "vstup", 1 => "E-mailová adresa administrátora");
 $LANG_CONF["main.contactInformations"] = array(0 => "pole", 1 => "Kontaktné informácie");
 $LANG_CONF["main.send2friendText"] = array(0 => "pole", 1 => "Text pre odkaz poslať známemu");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "vstup", 1 => "maximumálna veľkosť prílohy v Bytoch (max. %sByte)");
-$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Pripojiť prílohu k položkám?");
+$LANG_CONF['records.maxAttachmentSize'] = array(0 => "vstup", 1 => "maximumálna veľkosť prílohy v Bytoch (max. %sByte)");
+$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Pripojiť prílohu k položkám?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "použiť stopovač?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "použiť Adminlog?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Chcete aby bola IP skontrolovaná pri kontrole UINs v admin.php?");
@@ -969,7 +969,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = 'Počas posielania jazykového súbo
 $PMF_LANG['msgTransToolPercent'] = 'Percento';
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['main.attachmentsPath'] = array(0 => "vstup", 1 => "Cesta k uloženým prílohám.<br /><small>Relative path means a folder within web root</small>");
+$LANG_CONF['records.attachmentsPath'] = array(0 => "vstup", 1 => "Cesta k uloženým prílohám.<br /><small>Relative path means a folder within web root</small>");
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "Súbor, ktorý sa pokúšate stiahnuť nebol na tomto serveri nájdený.";
@@ -1016,9 +1016,9 @@ $PMF_LANG["rightsLanguage"]['deltranslation'] = "vymazať preklad";
 $PMF_LANG["rightsLanguage"]['approverec'] = "schváliť záznamy";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
-$LANG_CONF["main.enableAttachmentEncryption"] = array(0 => "checkbox", 1 => "Povoliť šifrovanie príloh <br><small>Ignorovať, keď sú prílohy nepovolené</small>");
-$LANG_CONF["main.defaultAttachmentEncKey"] = array(0 => "vstup", 1 => 'Predvolený šifrovací kľúč príloh <br><small>Ignorovať, keď je šifrovanie príloh nepovolené</small><br><small><font color="red">WARNING: Toto nastavenie nemeňte, pokiaľ ste už povolili šifrovanie súborov!!!</font></small>');
-//$LANG_CONF["main.attachmentsStorageType"] = array(0 => "select", 1 => "Attachment storage type");
+$LANG_CONF["records.enableAttachmentEncryption"] = array(0 => "checkbox", 1 => "Povoliť šifrovanie príloh <br><small>Ignorovať, keď sú prílohy nepovolené</small>");
+$LANG_CONF["records.defaultAttachmentEncKey"] = array(0 => "vstup", 1 => 'Predvolený šifrovací kľúč príloh <br><small>Ignorovať, keď je šifrovanie príloh nepovolené</small><br><small><font color="red">WARNING: Toto nastavenie nemeňte, pokiaľ ste už povolili šifrovanie súborov!!!</font></small>');
+//$LANG_CONF["records.attachmentsStorageType"] = array(0 => "select", 1 => "Attachment storage type");
 //$PMF_LANG['att_storage_type'][0] = 'Filesystem';
 //$PMF_LANG['att_storage_type'][1] = 'Database';
 
