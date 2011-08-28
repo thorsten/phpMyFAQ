@@ -153,6 +153,7 @@ if ($permission['delcomment']) {
                     if (msg == 1) {
                         $('#saving_data_indicator').html('<img src="images/indicator.gif" /> deleting ...');
                         $('tr td input:checked').parent().parent().fadeOut('slow');
+                        $('#saving_data_indicator').fadeOut('slow');
                         $('#returnMessage').
                             html('<p class="success"><?php print $PMF_LANG['ad_entry_commentdelsuc']; ?></p>');
                     } else {
