@@ -37,8 +37,8 @@ $action   = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING)
 $ajaxlang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
 $code     = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
 
-$language     = new PMF_Language();
-$languageCode = $language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
+$Language     = new PMF_Language();
+$languageCode = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
 require_once 'lang/language_en.php';
 
 if (PMF_Language::isASupportedLanguage($ajaxlang)) {
@@ -59,7 +59,7 @@ PMF_String::init($languageCode);
 
 // Check captcha
 $captcha = new PMF_Captcha($db, $Language);
-$captcha->setSessionId($sids);
+//$captcha->setSessionId($sids);
 
 // Send headers
 $http = PMF_Helper_Http::getInstance();
@@ -400,12 +400,12 @@ switch ($action) {
 
                     $response .= '<ul>';
 
-                    foreach($faqSearchResult->getResultset() as $result) {
-                        $url = sprintf('/index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
+                    foreach ($faqSearchResult->getResultset() as $result) {
+                        $url = sprintf('/index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                             $result->category_id,
                             $result->id,
-                            $result->lang,
-                            urlencode($result->searchterm));
+                            $result->lang
+                        );
                         $oLink       = new PMF_Link(PMF_Configuration::getInstance()->get('main.referenceURL') . $url);
                         $oLink->text = PMF_Utils::chopString($result->question, 15);
                         $response   .= sprintf('<li>%s<br /><div class="searchpreview">%s...</div></li>',
