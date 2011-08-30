@@ -40,7 +40,11 @@ if (('save_active_records' == $ajax_action && $permission['approverec'] ||
      * )
      */
     $items = isset($_GET['items']) && is_array($_GET['items']) ? $_GET['items'] : array();
-    
+
+    if (!isset($items[0][2])) {
+        $items[0][2] = 0;
+    }
+
     switch ($ajax_action) {
         case 'save_active_records':
             $type = 'active';
@@ -50,10 +54,10 @@ if (('save_active_records' == $ajax_action && $permission['approverec'] ||
             $type = 'sticky';
             break;
     }
-    
+
     if (null !== $type && !empty($items)) {
         $faq = new PMF_Faq();
-        
+
         foreach ($items as $item) {
             if (is_array($item) && count($item) == 3 && PMF_Language::isASupportedLanguage($item[1])) { 
                 print $faq->updateRecordFlag((int)$item[0], addslashes($item[1]), (int)$item[2], $type);

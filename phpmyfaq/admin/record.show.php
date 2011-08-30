@@ -450,15 +450,7 @@ foreach ($all_ids as $cat_id => $record_ids) {
                 var status = $('#' + type + '_record_' + cid + '_' + ids[i]).attr('checked');
                 var lang   = $('#' + type + '_record_' + cid + '_' + ids[i]).attr('lang');
 
-                if (status === 'undefined') {
-                    datastatus = 0;
-                } else {
-                    datastatus = 1;
-                }
-
-                alert(datastatus);
-
-                data['items[' + i + '][]'] = [ids[i], lang, datastatus];
+                data['items[' + i + '][]'] = [ids[i], lang, status];
 
                 // Updating the current record if it's also contained in another category
                 var same_records = $('input').filter(function() {
