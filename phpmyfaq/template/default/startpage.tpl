@@ -24,7 +24,7 @@
                 </a>
             </div>
             <div id="facebookLikeButton">
-                {facebookeLikeButton}
+                {facebookLikeButton}
             </div>
         </section>
 [/socialLinks]
