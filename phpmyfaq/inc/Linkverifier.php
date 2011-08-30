@@ -901,9 +901,6 @@ class PMF_Linkverifier
             return ($cron ? '' : utf8_decode($output));
         }
 
-        //uncomment to see the result structure
-        //print str_replace("\n","<br />",PMF_String::htmlspecialchars(print_r($result, true)));
-
         $failreasons = $inforeasons = array();
         $output      = "    <h2>".$PMF_LANG['ad_linkcheck_checkResult']."</h2>\n";
         $output     .= '    <table class="verifyArticleURL">'."\n";
@@ -922,7 +919,10 @@ class PMF_Linkverifier
                     $_classname = "urlsuccess";
                     $_output .= '<td class="'.$_classname.'">'.$PMF_LANG['ad_linkcheck_checkSuccess'].$_redirects.'</td>';
                     if ($value['reason'] != "") {
-                        $inforeasons[] = sprintf($PMF_LANG['ad_linkcheck_openurl_infoprefix'],PMF_String::htmlspecialchars($value['absurl'])).$value['reason'];
+                        $inforeasons[] = sprintf(
+                            $PMF_LANG['ad_linkcheck_openurl_infoprefix'],
+                            PMF_String::htmlspecialchars($value['absurl'])
+                         ) . $value['reason'];
                     }
                 } else {
                     $_classname = "urlfail";
@@ -957,7 +957,7 @@ class PMF_Linkverifier
         if ($cron) {
             return '';
         } else {
-            return utf8_decode($output);
+            return $output;
         }
     }
 
@@ -1143,7 +1143,7 @@ function ajaxOnDemandVerify(id, lang)
 </script>
 
 <div id="onDemandVerifyResult">
-<NOSCRIPT>LinkVerifier feature disabled (Reason: Javascript not enabled)</NOSCRIPT>
+<noscript>LinkVerifier feature disabled (Reason: Javascript not enabled)</noscript>
 </div>
 <script type="text/javascript">
 <!--
