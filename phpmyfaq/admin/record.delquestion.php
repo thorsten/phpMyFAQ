@@ -85,7 +85,7 @@ if ($permission['delquestion']) {
                 </a>
             </td>
             <td>
-                <a href="?action=question&amp;id=<?php print $question['id']; ?>&amp;delete=yes">
+                <a onclick="return confirm('<?php print $PMF_LANG['ad_user_del_3'] ?>'); return false;" href="?action=question&amp;id=<?php print $question['id']; ?>&amp;delete=yes">
                     <?php print $PMF_LANG['ad_gen_delete']; ?>
                 </a>
                 <br />
