@@ -30,27 +30,28 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 if ($permission['delquestion']) {
 
-    $category    = new PMF_Category($current_admin_user, $current_admin_groups, false);
-    $question_id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    $delete      = PMF_Filter::filterInput(INPUT_GET, 'delete', FILTER_SANITIZE_STRING, 'no');
+    $category   = new PMF_Category($current_admin_user, $current_admin_groups, false);
+    $questionId = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    $delete     = PMF_Filter::filterInput(INPUT_GET, 'delete', FILTER_SANITIZE_STRING, 'no');
     
-    if ($delete == 'yes') {
-        $faq->deleteQuestion($question_id);
-        print $PMF_LANG['ad_entry_delsuc'];
-    } else {
-    	$toggle = PMF_Filter::filterInput(INPUT_GET, 'is_visible', FILTER_SANITIZE_STRING);
-        if ($toggle == 'toggle') {
-            $is_visible = $faq->getVisibilityOfQuestion($question_id);
-            if (!is_null($is_visible)) {
-                $faq->setVisibilityOfQuestion($question_id, ($is_visible == 'N' ? 'Y' : 'N'));
-            }
+    $toggle = PMF_Filter::filterInput(INPUT_GET, 'is_visible', FILTER_SANITIZE_STRING);
+    if ($toggle == 'toggle') {
+        $is_visible = $faq->getVisibilityOfQuestion($questionId);
+        if (!is_null($is_visible)) {
+            $faq->setVisibilityOfQuestion($questionId, ($is_visible == 'N' ? 'Y' : 'N'));
         }
+    }
 
-        printf("<header><h2>%s</h2></header>", $PMF_LANG['msgOpenQuestions']);
+    printf("<header><h2>%s</h2></header>", $PMF_LANG['msgOpenQuestions']);
 
-        $openquestions = $faq->getAllOpenQuestions();
+    if ($delete == 'yes') {
+        $faq->deleteQuestion($questionId);
+        printf('<p class="success">%s</p>', $PMF_LANG['ad_entry_delsuc']);
+    }
 
-        if (count($openquestions) > 0) {
+    $openquestions = $faq->getAllOpenQuestions();
+
+    if (count($openquestions) > 0) {
 ?>
         <table class="list" style="width: 100%">
         <thead>
@@ -63,14 +64,14 @@ if ($permission['delquestion']) {
         </thead>
         <tbody>
 <?php
-            foreach ($openquestions as $question) {
+        foreach ($openquestions as $question) {
 ?>
         <tr>
             <td>
                 <?php print PMF_Date::format(PMF_Date::createIsoDate($question['created'])); ?>
                 <br />
                 <a href="mailto:<?php print $question['email']; ?>">
-                    <?php print $question['user']; ?>
+                    <?php print $question['username']; ?>
                 </a>
             </td>
             <td>
@@ -94,14 +95,13 @@ if ($permission['delquestion']) {
             </td>
         </tr>
 <?php
-            }
+        }
 ?>
         </tbody>
         </table>
 <?php
-        } else {
-            print $PMF_LANG['msgNoQuestionsAvailable'];
-        }
+    } else {
+        print $PMF_LANG['msgNoQuestionsAvailable'];
     }
 } else {
     print $PMF_LANG['err_NotAuth'];
