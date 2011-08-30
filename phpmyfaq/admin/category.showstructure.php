@@ -122,8 +122,9 @@ if ($permission['editcateg']) {
             if ($language == $currentLanguage) {
                 continue;
             }
-            $spokenLanguage = PMF_String::preg_replace('/\(.*\)/','',$id_languages[$language]);
-            if (array_key_exists($language,$id_languages)) {
+
+            if (array_key_exists($language, $id_languages)) {
+                $spokenLanguage = PMF_String::preg_replace('/\(.*\)/', '', $id_languages[$language]);
                 printf('<td title="%s: %s">',
                     $PMF_LANG['ad_categ_titel'],
                     $spokenLanguage);

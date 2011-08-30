@@ -116,7 +116,7 @@ if ($permission["addcateg"]) {
             ?>
             <p>
                 <label for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
-                <?php print PMF_Language::selectLanguages($faqData['lang'], false, array(), 'langTo'); ?>
+                <?php print PMF_Language::selectLanguages($LANGCODE, false, array(), 'langTo'); ?>
             </p>
                 <input type="hidden" name="used_translated_languages" id="used_translated_languages" value="" />
             <div id="getedTranslations">
