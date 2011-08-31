@@ -36,12 +36,12 @@ if ($permission["delatt"]) {
     $recordLang = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
     $id         = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     
-    $att        = PMF_Attachment_Factory::create($id);
+    $att = PMF_Attachment_Factory::create($id);
     
     if ($att && $att->delete()) {
-        printf("<p>%s</p>\n", $PMF_LANG['ad_att_delsuc']);
+        printf('<p class="success">%s</p>', $PMF_LANG['ad_att_delsuc']);
     } else {
-        printf("<p>%s</p>\n", $PMF_LANG['ad_att_delfail']);
+        printf('<p class="error">%s</p>', $PMF_LANG['ad_att_delfail']);
     }
     printf('<p><a href="?action=editentry&amp;id=%d&amp;lang=%s">%s</a></p>',
         $recordId, $recordLang, $PMF_LANG['ad_entry_back']);
