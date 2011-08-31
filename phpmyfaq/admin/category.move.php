@@ -41,9 +41,8 @@ if ($permission["editcateg"]) {
     
     $header = sprintf('%s: <em>%s</em>',
         $PMF_LANG['ad_categ_move'],
-        $category->categories[$id]['name']);
-
-    printf('<h2>%s</h2>', $header);
+        $category->categories[$id]['name']
+    );
 ?>
         <header>
             <h2><?php print $header ?></h2>
