@@ -31,6 +31,7 @@ define('IS_VALID_PHPMYFAQ', null);
 require_once 'inc/Init.php';
 PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
+session_cache_expire(PMF_AUTH_TIMEOUT);
 session_start();
 
 $searchString = PMF_Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);

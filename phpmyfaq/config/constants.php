@@ -43,7 +43,7 @@ define('PMF_DATETIME_TIMEZONE_DEFAULT', 'Europe/Berlin');
  *
  * @var integer
  */
-define('PMF_AUTH_TIMEOUT', 30);
+define('PMF_AUTH_TIMEOUT', 60);
 
 /**
  * Timeout for the warning about session timeout for the admin section, in minutes

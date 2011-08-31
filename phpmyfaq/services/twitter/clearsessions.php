@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Services
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
+ * @copyright 2010-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2010-09-18
@@ -33,6 +33,7 @@ require_once PMF_ROOT_DIR . '/inc/Init.php';
 
 PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
+session_cache_expire(PMF_AUTH_TIMEOUT);
 session_start();
 session_destroy();
 

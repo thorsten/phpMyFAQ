@@ -40,6 +40,7 @@ define('IS_VALID_PHPMYFAQ', null);
 require PMF_ROOT_DIR.'/inc/Init.php';
 PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
+session_cache_expire(PMF_AUTH_TIMEOUT);
 session_start();
 
 // Preload English strings
