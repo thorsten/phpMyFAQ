@@ -898,7 +898,7 @@ class PMF_Linkverifier
             $output = sprintf('<h2>%s</h2><br />%s',
                 $PMF_LANG['ad_linkcheck_checkResult'],
                 $PMF_LANG['ad_linkcheck_noLinksFound']);
-            return ($cron ? '' : utf8_decode($output));
+            return ($cron ? '' : $output);
         }
 
         $failreasons = $inforeasons = array();
