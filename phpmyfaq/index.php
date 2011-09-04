@@ -430,6 +430,12 @@ $keywordsArray = array_filter($keywordsArray, 'strlen');
 shuffle($keywordsArray);
 $keywords = implode(',', $keywordsArray);
 
+if (is_null($error)) {
+    $loginMessage = '<p>' . $PMF_LANG['ad_auth_insert'] . '</p>';
+} else {
+    $loginMessage = '<p class="error">' . $error . '</p>';
+}
+
 $main_template_vars = array(
     'msgRegisterUser'     => '<a href="?' . $sids . 'action=register">' . $PMF_LANG['msgRegisterUser'] . '</a>',
     'msgLoginUser'        => $PMF_LANG['msgLoginUser'],
@@ -461,7 +467,7 @@ $main_template_vars = array(
     'registerUser'        => '<a href="?action=register">' . $PMF_LANG['msgRegistration'] . '</a>',
     'sendPassword'        => '<a href="./admin/password.php">' . $PMF_LANG['lostPassword'] . '</a>',
     'loginHeader'         => $PMF_LANG['msgLoginUser'],
-    'loginMessage'        => (is_null($error) ? '' : '<p class="error">' . $error . '</p>'),
+    'loginMessage'        => $loginMessage,
     'writeLoginPath'      => '?action=login',
     'faqloginaction'      => $action,
     'login'               => $PMF_LANG['ad_auth_ok'],
