@@ -335,8 +335,7 @@ switch ($action) {
             $mail->message = html_entity_decode(
                 $PMF_LANG['msgMailCheck']) . "\n\n" .
                 $faqconfig->get('main.titleFAQ') . ": " .
-                $faqconfig->get('main.referenceURL') .
-                PMF_Link::getSystemRelativeUri('/ajaxservice.php') . '/admin/';
+                $faqconfig->get('main.referenceURL') . '/admin/';
             $result = $mail->send();
             unset($mail);
 
