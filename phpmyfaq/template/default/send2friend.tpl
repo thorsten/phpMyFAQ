@@ -46,11 +46,11 @@
                 </p>
 
                 <p>
-                    {msgS2FText}<br/>
+                    <strong>{msgS2FText}</strong><br/>
                     <em>{send2friend_text}</em>
                 </p>
                 <p>
-                    {msgS2FText2}<br/>
+                    <strong>{msgS2FText2}</strong><br/>
                     <em>{send2friendLink}</em>
                 </p>
 
