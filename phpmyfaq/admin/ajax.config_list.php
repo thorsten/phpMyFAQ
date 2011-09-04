@@ -39,6 +39,7 @@ if (!empty($_SESSION['access_token'])) {
         $_SESSION['access_token']['oauth_token'],
         $_SESSION['access_token']['oauth_token_secret']
     );
+
     $content = $connection->get('account/verify_credentials');
 }
 
@@ -215,7 +216,8 @@ foreach ($LANG_CONF as $key => $value) {
                 print "<br />\n";
                 print "Your Callback URL is: " .$faqconfig->get('main.referenceURL') . "/services/twitter/callback.php";
             }
-            if (isset($content) && is_null($content)) {
+
+            if (!isset($content)) {
                 print '<a target="_blank" href="../services/twitter/redirect.php">';
                 print '<img src="../images/twitter.signin.png" alt="Sign in with Twitter"/></a>';
                 print "<br />\n<br />\n";
