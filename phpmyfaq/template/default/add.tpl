@@ -24,9 +24,7 @@
 
                 <p>
                 <label for="question">{msgNewContentTheme}</label>
-                <textarea cols="37" rows="3" name="question" id="question" required="required" />
-                    {printQuestion}
-                    </textarea>
+                <textarea cols="37" rows="3" name="question" id="question" required="required" />{printQuestion}</textarea>
                 </p>
 
                 <p>
