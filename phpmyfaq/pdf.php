@@ -38,10 +38,19 @@ session_start();
 $Language = new PMF_Language();
 $LANGCODE = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
 
-if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
-    require_once "lang/language_".$LANGCODE.".php";
+// Found an article language?
+$lang = PMF_Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
+if (is_null($lang) && !PMF_Language::isASupportedLanguage($lang) ) {
+    $lang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
+    if (is_null($lang) && !PMF_Language::isASupportedLanguage($lang) ) {
+        $lang = $LANGCODE;
+    }
+}
+
+if (isset($lang) && PMF_Language::isASupportedLanguage($lang)) {
+    require_once "lang/language_".$lang.".php";
 } else {
-    $LANGCODE = "en";
+    $lang = "en";
     require_once "lang/language_en.php";
 }
 //
@@ -101,6 +110,7 @@ if (is_null($currentCategory) || is_null($id)) {
 }
 
 $faq = new PMF_Faq($current_user, $current_groups);
+$faq->setLanguage($lang);
 $faq->getRecord($id);
 
 session_cache_limiter('private');
