@@ -214,7 +214,7 @@ function getGoogleTranslation(div, text, langFrom, langTo, fieldType)
 {
     langFrom = convertCodeForGoogle(langFrom);
     langTo   = convertCodeForGoogle(langTo);
-    google.language.translate(text, langFrom, langTo, function(result) {
+    google.language.translate({text: text, type: 'html'}, langFrom, langTo, function(result) {
         if (result.translation) {
             switch(fieldType) {
                 case 'answer':
