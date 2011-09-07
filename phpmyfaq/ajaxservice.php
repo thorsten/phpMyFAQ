@@ -75,7 +75,7 @@ if (!$network->checkIp($_SERVER['REMOTE_ADDR'])) {
     $message = array('error' => $PMF_LANG['err_bannedIP']);
 }
 
-if (!$captcha->checkCaptchaCode($code)) {
+if ('savevoting' !== $action && !$captcha->checkCaptchaCode($code)) {
     $message = array('error' => $PMF_LANG['msgCaptcha']);
 }
 
