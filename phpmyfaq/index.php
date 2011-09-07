@@ -166,8 +166,12 @@ if ('logout' === $action && isset($auth)) {
     $auth   = null;
     $action = 'main';
     $ssoLogout = $faqconfig->get('security.ssoLogoutRedirect');
-    if ($faqconfig->get('security.ssoSupport') && !empty ($ssoLogout))
-        header ("Location:$ssoLogout");
+    if ($faqconfig->get('security.ssoSupport') && !empty ($ssoLogout)) {
+        header ('Location: ' . $ssoLogout);
+    } else {
+        header ('Location: ' . $faqconfig->get('main.referenceURL'));
+    }
+
 }
 
 //
