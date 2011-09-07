@@ -628,7 +628,7 @@ switch ($action) {
         );
 
         if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) &&
-            is_array($mailto) && !empty($mailto[0]) && checkBannedWord(PMF_String::htmlspecialchars($attached))) {
+            is_array($mailto) && !empty($mailto['mailto'][0]) && checkBannedWord(PMF_String::htmlspecialchars($attached))) {
 
             foreach($mailto['mailto'] as $recipient) {
                 $recipient = trim(strip_tags($recipient));
