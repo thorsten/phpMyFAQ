@@ -468,7 +468,7 @@ $main_template_vars = array(
     'sendPassword'        => '<a href="./admin/password.php">' . $PMF_LANG['lostPassword'] . '</a>',
     'loginHeader'         => $PMF_LANG['msgLoginUser'],
     'loginMessage'        => $loginMessage,
-    'writeLoginPath'      => '?action=login',
+    'writeLoginPath'      => '?' . PMF_Filter::getFilteredQueryString(),
     'faqloginaction'      => $action,
     'login'               => $PMF_LANG['ad_auth_ok'],
     'username'            => $PMF_LANG['ad_auth_user'],

@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Filter
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-01-28
@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Filter
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-01-28
@@ -87,10 +87,9 @@ class PMF_Filter
      *
      * @return string
      */
-    public static function getFilteredQueryString ()
+    public static function getFilteredQueryString()
     {
-        $queryString = '';
-        $urlData     = $cleanUrlData = array();
+        $urlData = $cleanUrlData = array();
         
         parse_str($_SERVER['QUERY_STRING'], $urlData);
         
@@ -98,8 +97,6 @@ class PMF_Filter
             $cleanUrlData[strip_tags($key)] = strip_tags($urlPart);
         }
         
-        $queryString = http_build_query($cleanUrlData);
-        
-        return $queryString;
+        return http_build_query($cleanUrlData);
     }
 }
