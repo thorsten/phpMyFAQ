@@ -148,13 +148,15 @@ $query = $uninst = array();
 // permission levels
 $permLevels = array(
     'basic'  => 'Basic (no group support)',
-    'medium' => 'Medium (with group support)');
+    'medium' => 'Medium (with group support)'
+);
 
 $enabledExtensions = array(
     'gd',
     'json',
     'xmlwriter',
-    'filter');
+    'filter'
+);
 
 /**
  * Executes the uninstall set of queries
@@ -224,7 +226,8 @@ if (!$system->checkExtension($enabledExtensions)) {
 }
 
 if (!$system->checkphpMyFAQInstallation()) {
-    print '<p class="error">It seems you\'re already running a version of phpMyFAQ. Please use the <a href="update.php">update script</a>.</p>';
+    print '<p class="error">It seems you\'re already running a version of phpMyFAQ. Please use the ' .
+          '<a href="update.php">update script</a>.</p>';
     HTMLFooter();
     die();
 }
@@ -338,7 +341,8 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
             <p>
                 <label>Table prefix:</label>
-                <input type="text" name="sqltblpre" title="Please enter a table prefix here if you want to install more phpMyFAQ installations on one database." />
+                <input type="text" name="sqltblpre"
+                       title="Please enter a table prefix here if you want to install more phpMyFAQ installations on one database." />
             </p>
 
         </fieldset>
@@ -375,7 +379,8 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             </p>
             <p>
                 <label>LDAP base search DN:</label>
-                <input type="text" name="ldap_base" title="Please enter your distinguished name, e.g. 'cn=John Smith,ou=Accounts,o=My Company,c=US' here." />
+                <input type="text" name="ldap_base"
+                       title="Please enter your distinguished name, e.g. 'cn=John Smith,ou=Accounts,o=My Company,c=US' here." />
             </p>
             <p>You can add additional LDAP configuration informations in the file config/constants_ldap.php.</p>
 
@@ -409,7 +414,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                 <label>Permission level:</label>
                 <select name="permLevel" size="1" title="Complexity of user and right administration. Basic: users may
                 have user-rights. Medium: users may have user-rights; group administration; groups may have group-rights;
-                user have group-rights via group-memberships.">
+                user have group-rights via group-memberships." required="required">
                 <?php foreach ($permLevels as $level => $desc) {
                     printf('    <option value="%s">%s</option>', $level, $desc);
                 } ?>
@@ -417,23 +422,26 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             </p>
             <p>
                 <label>Admin's real name:</label>
-                <input type="text" name="realname" title="Please enter your real name here." />
+                <input type="text" name="realname" title="Please enter your real name here." required="required" />
             </p>
             <p>
-                <label>Admin's e-mail address:</label>
-                <input type="email" name="email" title="Please enter your email adress here." />
+                <label>E-mail address:</label>
+                <input type="email" name="email" title="Please enter your email adress here." required="required" />
             </p>
             <p>
                 <label>Admin's username:</label>
-                <input type="text" name="username" title="You don't have to do anything here." value="admin" readonly="readonly" />
+                <input type="text" name="username" title="You don't have to do anything here." value="admin"
+                       readonly="readonly" />
             </p>
             <p>
                 <label>Admin's password:</label>
-                <input type="password" name="password" title="Please enter your password for the admin area." />
+                <input type="password" name="password" title="Please enter your password for the admin area."
+                       required="required" />
             </p>
             <p>
                 <label>Retype password:</label>
-                <input type="password" name="password_retyped" title="Please retype your password for checkup." />
+                <input type="password" name="password_retyped" title="Please retype your password for checkup."
+                       required="required" />
             </p>
             </fieldset>
 
@@ -571,25 +579,29 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     // check user entries
     $password = PMF_Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
     if (is_null($password)) {
-        print "<p class=\"error\"><strong>Error:</strong> There's no password for the administrator's account. Please set your password.</p>\n";
+        print '<p class="error"><strong>Error:</strong> There\'s no password for the administrator\'s account.' .
+              ' Please set your password.</p>';
         HTMLFooter();
         die();
     }
     
     $password_retyped = PMF_Filter::filterInput(INPUT_POST, 'password_retyped', FILTER_SANITIZE_STRING);
     if (is_null($password_retyped)) {
-        print "<p class=\"error\"><strong>Error:</strong> There's no retyped password. Please set your retyped password.</p>\n";
+        print '<p class="error"><strong>Error:</strong> There\'s no retyped password.' .
+              ' Please set your retyped password.</p>';
         HTMLFooter();
         die();
     }
     
     if (strlen($password) <= 5 || strlen($password_retyped) <= 5) {
-        print "<p class=\"error\"><strong>Error:</strong> Your password and retyped password are too short. Please set your password and your retyped password with a minimum of 6 characters.</p>\n";
+        print '<p class="error"><strong>Error:</strong> Your password and retyped password are too short.' .
+              ' Please set your password and your retyped password with a minimum of 6 characters.</p>';
         HTMLFooter();
         die();
     }
     if ($password != $password_retyped) {
-        print "<p class=\"error\"><strong>Error:</strong> Your password and retyped password are not equal. Please check your password and your retyped password.</p>\n";
+        print '<p class="error"><strong>Error:</strong> Your password and retyped password are not equal.' .
+              ' Please check your password and your retyped password.</p>';
         HTMLFooter();
         die();
     }
@@ -601,7 +613,17 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     
     // Write the DB variables in database.php
     $datafile = PMF_ROOT_DIR . '/config/database.php';
-    $ret = file_put_contents($datafile, "<?php\n\$DB[\"server\"] = '".$sql_server."';\n\$DB[\"user\"] = '".$sql_user."';\n\$DB[\"password\"] = '".$sql_passwort."';\n\$DB[\"db\"] = '".$sql_db."';\n\$DB[\"prefix\"] = '".$sqltblpre."';\n\$DB[\"type\"] = '".$sql_type."';", LOCK_EX);
+    $ret = file_put_contents(
+        $datafile,
+        "<?php\n\$DB[\"server\"] = '" . $sql_server . "';\n" .
+        "\$DB[\"user\"] = '" . $sql_user . "';\n" .
+        "\$DB[\"password\"] = '" . $sql_passwort . "';\n" .
+        "\$DB[\"db\"] = '" . $sql_db . "';\n" .
+        "\$DB[\"prefix\"] = '" . $sqltblpre . "';\n" .
+        "\$DB[\"type\"] = '" . $sql_type . "';",
+        LOCK_EX
+    );
+    
     if (!$ret) {
         print "<p class=\"error\"><strong>Error:</strong> Cannot write to ./config/database.php.</p>";
         HTMLFooter();
@@ -612,7 +634,15 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     // check LDAP if available
     if (extension_loaded('ldap') && !is_null($ldap_enabled)) {
         $datafile = PMF_ROOT_DIR . '/config/ldap.php';
-        $ret = file_put_contents($datafile, "<?php\n\$PMF_LDAP[\"ldap_server\"] = '".$ldap_server."';\n\$PMF_LDAP[\"ldap_port\"] = '".$ldap_port."';\n\$PMF_LDAP[\"ldap_user\"] = '".$ldap_user."';\n\$PMF_LDAP[\"ldap_password\"] = '".$ldap_password."';\n\$PMF_LDAP[\"ldap_base\"] = '".$ldap_base."';", LOCK_EX);
+        $ret = file_put_contents(
+            $datafile,
+            "<?php\n\$PMF_LDAP[\"ldap_server\"] = '" . $ldap_server . "';\n" .
+            "\$PMF_LDAP[\"ldap_port\"] = '" . $ldap_port . "';\n" .
+            "\$PMF_LDAP[\"ldap_user\"] = '" . $ldap_user . "';\n" .
+            "\$PMF_LDAP[\"ldap_password\"] = '" . $ldap_password . "';\n" .
+            "\$PMF_LDAP[\"ldap_base\"] = '" . $ldap_base . "';",
+            LOCK_EX
+        );
         if (!$ret) {
             print "<p class=\"error\"><strong>Error:</strong> Cannot write to ./config/ldap.php.</p>";
             HTMLFooter();
@@ -992,7 +1022,8 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         //]]>
         </script>
         <iframe onload="iframeUpdated();" name="questionaireResult" style="display:none"></iframe>
-        <form action="http://www.phpmyfaq.de/stats/getstatdata.php" method="post" target="questionaireResult" id="questionnaireForm">
+        <form action="http://www.phpmyfaq.de/stats/getstatdata.php" method="post" target="questionaireResult"
+              id="questionnaireForm">
 
             <p>
                 For further development we would like to get some feedback from our users.<br />
@@ -1109,5 +1140,4 @@ echo '</dl><input type="hidden" name="systemdata" value="'.PMF_String::htmlspeci
     }
     
     HTMLFooter();
-
 }
