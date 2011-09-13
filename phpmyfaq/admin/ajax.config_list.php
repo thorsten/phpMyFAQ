@@ -212,7 +212,7 @@ foreach ($LANG_CONF as $key => $value) {
             if ('' == $faqconfig->get('socialnetworks.twitterConsumerKey') ||
                 '' == $faqconfig->get('socialnetworks.twitterConsumerSecret')) {
 
-                print '<a target="_blank" href="http://dev.twitter.com/apps/new">Create Twitter APP for your site</a>';
+                print '<a target="_blank" href="https://dev.twitter.com/apps/new">Create Twitter APP for your site</a>';
                 print "<br />\n";
                 print "Your Callback URL is: " .$faqconfig->get('main.referenceURL') . "/services/twitter/callback.php";
             }
