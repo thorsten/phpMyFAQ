@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Language
  * @author    Aurimas Fišeras <aurimas@gmail.com>
- * @copyright 2009-2010 Aurimas Fišeras and phpMyFAQ Team
+ * @copyright 2009-2011 Aurimas Fišeras and phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-07-30
