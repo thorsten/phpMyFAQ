@@ -105,7 +105,7 @@ class PMF_Search
      */
     public function getCategory()
     {
-    	return $this->categoryId;
+        return $this->categoryId;
     }
 
     /**
