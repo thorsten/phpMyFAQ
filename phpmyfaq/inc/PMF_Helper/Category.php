@@ -8,7 +8,7 @@
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2009-09-07
  * @version    SVN: $Id$
- * @copyright  2009 phpMyFAQ Team
+ * @copyright  2009-2011 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
