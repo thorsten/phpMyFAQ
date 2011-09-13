@@ -20,7 +20,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Meikel Katzengreis <meikel@katzengreis.com>
  * @author    Tom Rochester <tom.rochester@gmail.com>
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @package   2003-02-24
