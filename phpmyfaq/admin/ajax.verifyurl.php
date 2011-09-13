@@ -26,7 +26,7 @@
  * @package   Administration
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2010 NetJapan, Inc. and phpMyFAQ Team
+ * @copyright 2005-2011 NetJapan, Inc. and phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-30
