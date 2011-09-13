@@ -19,7 +19,7 @@
 # @author    Rene Treffer <treffer+phpmyfaq@measite.de>
 # @author    David Soria Parra <dsp@php.net>
 # @since     2008-09-10
-# @copyright 2008-2009 phpMyFAQ Team
+# @copyright 2008-2011 phpMyFAQ Team
 # @version   Since 2.5
 #
 # The contents of this file are subject to the Mozilla Public License
