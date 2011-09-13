@@ -105,7 +105,7 @@ class PMF_Search
      */
     public function getCategory()
     {
-        return $this->categoryId;
+    	return $this->categoryId;
     }
 
     /**
@@ -176,9 +176,6 @@ class PMF_Search
             return;
         }
         
-		$chars      = array (chr(150), chr(147), chr(148), chr(146), chr(34), '&quot;', '&#34;', '&#39;');
-        $replace    = array ("-", "\"", "\"", "'", "\"" , "\"", "\"", "'");
-		$searchterm = str_replace ($chars, $replace, $searchterm);
         $date  = new DateTime();
         $query = sprintf("
             INSERT INTO
