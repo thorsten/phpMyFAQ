@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Category
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-12-28
