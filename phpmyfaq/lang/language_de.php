@@ -818,7 +818,7 @@ $PMF_LANG["ad_categ_remark_overview"] = "Die richtige Reihenfolge der Kategorien
 $PMF_LANG['msgUsersOnline'] = '%d Gäste und %d Angemeldete';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Automatisches Löschen von Logs älter als 30 Tage';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Die alten Logdateien wurden erfolgreich gelöscht.';
-$PMF_LANG['ad_adminlog_delete_failure'] = 'Es wurden keine Logs gelöscht, da ein Fehler aufgfetreten ist.';
+$PMF_LANG['ad_adminlog_delete_failure'] = 'Es wurden keine Logs gelöscht, da ein Fehler aufgetreten ist.';
 
 // added 2.0.0 - 2006-11-19 by Thorsten
 $PMF_LANG['opensearch_plugin_install'] = 'Suchplugin installieren';
