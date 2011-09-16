@@ -29,8 +29,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_stat_sess']);
+
 if ($permission['viewlog']) {
-	
+    
     $session    = new PMF_Session($db, $Language);
     $statdelete = PMF_Filter::filterInput(INPUT_POST, 'statdelete', FILTER_SANITIZE_STRING);
     $month      = PMF_Filter::filterInput(INPUT_POST, 'month', FILTER_SANITIZE_STRING);
@@ -58,12 +60,10 @@ if ($permission['viewlog']) {
         }
         closedir($dir);
         $session->deleteSessions($first, $last);
+
+        printf('<p class="success">%s</p>', $PMF_LANG['ad_adminlog_delete_success']);
     }
 ?>
-        <header>
-            <h2><?php print $PMF_LANG["ad_stat_sess"]; ?></h2>
-        </header>
-
         <form action="?action=sessionbrowse" method="post" style="display: inline;">
         <fieldset>
             <legend><?php print $PMF_LANG["ad_stat_sess"]; ?></legend>
