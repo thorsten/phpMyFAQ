@@ -157,7 +157,6 @@ $PMF_LANG["msgContactEMail"] = "Email to the webmaster:";
 $PMF_LANG["msgMessage"] = "Your message:";
 
 // Startseite
-$PMF_LANG["msgNews"] = " News";
 $PMF_LANG["msgTopTen"] = "Most popular FAQs";
 $PMF_LANG["msgHomeThereAre"] = "There are ";
 $PMF_LANG["msgHomeArticlesOnline"] = " FAQs online";
