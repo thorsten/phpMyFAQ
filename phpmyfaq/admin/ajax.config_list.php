@@ -223,7 +223,7 @@ foreach ($LANG_CONF as $key => $value) {
                 print "<br />\n<br />\n";
             } elseif (isset($content)) {
                 print $content->screen_name . "<br />\n";
-                print "<img src='" . $content->profile_image_url . "'><br />\n";
+                print "<img src='" . $content->profile_image_url_https . "'><br />\n";
                 print "Follower: " . $content->followers_count . "<br />\n";
                 print "Status Count: " . $content->statuses_count . "<br />\n";
                 print "Status: " . $content->status->text . "<br />\n";
