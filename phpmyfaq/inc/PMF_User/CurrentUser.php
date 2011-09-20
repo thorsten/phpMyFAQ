@@ -402,7 +402,8 @@ class PMF_User_CurrentUser extends PMF_User
      * returned.
      *
      * @param  boolean $ip_check Check th IP address
-     * @return mixed
+     * 
+     * @return PMF_User_CurrentUser
      */
     public static function getFromSession($ip_check = false)
     {
