@@ -323,10 +323,10 @@ table.openquestions td {
 
 /* Right panel */
 aside {
-    display: table-cell; width: 300px; padding-top: 5px; background: url(../images/sidebar_background.png) top left; }
+    display: table-cell; width: 300px; padding-top: 5px; }
 aside section {
     margin: 5px 0 0 5px; padding: 5px 11px; background: url(../images/search_background.png) repeat-x;
-    border-radius: 11px; -moz-border-radius: 11px; -webkit-border-radius: 11px; }
+    border: 1px solid #d7d7d7; border-radius: 11px; -moz-border-radius: 11px; -webkit-border-radius: 11px; }
 aside section h3 {
     font-size: 16px; }
 aside section ul li a, aside section ul li a:visited {
