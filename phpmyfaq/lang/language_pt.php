@@ -641,10 +641,10 @@ $PMF_LANG['ad_entry_record_administration'] = 'Administração de Registos';
 $PMF_LANG['ad_entry_changelog'] = '<em>Changelog</em>';
 $PMF_LANG['ad_entry_revision'] = 'Revisão';
 $PMF_LANG['ad_changerev'] = 'Selecione uma Revisão';
-$PMF_LANG['msgCaptcha'] = 'Por favor insira os caracteres que aparecem na imagem';
+$PMF_LANG['msgCaptcha'] = 'Por favor insira os carateres que aparecem na imagem';
 $PMF_LANG['msgSelectCategories'] = 'A pesquisar em …';
 $PMF_LANG['msgAllCategories'] = '… todas as categorias';
-$PMF_LANG['ad_you_should_update'] = 'Possui um phpMyFAQ antigo. Deve actualizá-lo para a versão mais recente.';
+$PMF_LANG['ad_you_should_update'] = 'Possui um phpMyFAQ antigo. Deve atualizá-lo para a versão mais recente.';
 $PMF_LANG['msgAdvancedSearch'] = 'Pesquisa avançada';
 
 // added v1.6.1 - 2006-04-25 by Matteoï¿½andï¿½Thorsten
