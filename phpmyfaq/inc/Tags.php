@@ -444,7 +444,7 @@ class PMF_Tags
         $CSSRelevanceMaxLevel = $CSSRelevanceLevels - $CSSRelevanceMinLevel;
         $CSSRelevanceLevel    = 3;
 
-        $html = '<div class="tagscloud">';
+        $html = '<div id="tagcloud-content">';
         $i    = 0;
         foreach ($tags as $tag) {
             $i++;
