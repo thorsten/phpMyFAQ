@@ -212,9 +212,9 @@ nav ul li.selected a {
 #categories a.active {
     background-color: #fff; font-weight: bold; }
 #categories .subcat li a {
-    padding-left: 10px; }
+    padding-left: 10px; background: #f5f5f5; }
 #categories .subcat li li a {
-    padding-left: 15px; }
+    padding-left: 15px; background: #ffffff; }
 #categories .subcat .active {
     }
 
