@@ -133,6 +133,14 @@ if ($permission['editconfig']) {
                 </legend>
                 <div id="configSocialNetworks" style="display: none;"></div>
             </fieldset>
+            <fieldset>
+                <legend>
+                    <a href="javascript:void(0);" onclick="javascript:toggleConfig('Cache');">
+                        <?php print $PMF_LANG['cacheControlCenter']; ?>
+                    </a>
+                </legend>
+                <div id="configCache" style="display: none;"></div>
+            </fieldset>
             <p>
                 <input class="submit" type="submit" value="<?php print $PMF_LANG['ad_config_save']; ?>" />
                 <input class="submit" type="reset" value="<?php print $PMF_LANG['ad_config_reset']; ?>" />
@@ -161,6 +169,9 @@ if ($permission['editconfig']) {
             });
             $.get("index.php", {action: "ajax", ajax: "config_list", conf: "socialnetworks" }, function(data) {
                 $('#configSocialNetworks').append(data);
+            });
+            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "cache" }, function(data) {
+                $('#configCache').append(data);
             });
         }
 
