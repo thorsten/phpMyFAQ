@@ -12,6 +12,7 @@
     a:hover { color: #ff0000; }
     #doc { width: 70%; min-width: 550px; max-width:700px; }
     ol.alpha { list-style-type: lower-alpha; }
+	pre { font: 15px monospace; border: 1px solid gray; padding: 5px; }
     -->
     </style>
 </head>
@@ -44,6 +45,7 @@
             <li><a href="#2m">Spam protection</a></li>
             <li><a href="#2n">Attachments</a></li>
             <li><a href="#2o">Twitter</a></li>
+            <li><a href="#2p">Caching</a></li>
         </ol></li>
         <li><strong><a href="#3">Upgrading</a></strong>
         <ol class="alpha">
@@ -526,6 +528,65 @@
         network configuration and add phpMyFAQ as a Twitter application on twitter.com, all new FAQ additions in the
         administration backend will also post the question of the FAQ, the URL of the FAQ and all tags as hashtags to
         Twitter.
+    </p>
+    <p><a href="#top">back to top</a></p>
+
+
+    <hr style="width: 90%; height: 1px;" />
+    <p>
+        <strong><a name="2p"></a>2.p. Caching</strong>
+    </p>
+    <p>
+	Starting with version 2.7 phpMyFAQ supports Caching. Supported cache services are:
+	<ul>
+		<li>
+		<strong>Varnish</strong>
+		<p>
+		Required are Varnish Cache accelerator &gt;=3.0 and Varnish PECL extension &gt;= 0.9.1 
+		</p>
+		<p>
+		VCL sample, merge it with yours:
+		</p>
+		<pre>
+backend default {
+        .host = "127.0.0.1";
+        .port = "8070";
+}
+
+sub vcl_recv {
+        if (!(req.url ~ "^/admin.*")) {
+                unset req.http.cookie;
+        }
+}
+
+sub vcl_fetch {
+        if (!(req.url ~ "^/admin.*")) {
+                unset beresp.http.set-cookie;
+                unset beresp.http.expires;
+                unset beresp.http.cache-control;
+                unset beresp.http.pragma;
+                unset beresp.http.last-modified;
+
+                set beresp.ttl = 86000s;
+        }
+
+        if (req.url ~ "/.*(action=add|action=contact|action=ask).*") {
+                set beresp.ttl = 0s;
+        }
+}
+		</pre>
+		<p>
+		As you can see, all cookie are deleted except the admin area, which allows the cache to perform on the frontend, but work as admin in the backend.
+		Also for the non admin area all the cache related backend headers get deleted, and ttl is set to one day.
+		There is almost much room for improvement. Please notify us, if you have discovered some essential VCL improvements to this sample, so we can improve
+		this documentation.
+		</p>
+		<p>
+		Once an article is saved, its cache and all related items cache is cleared.
+		</p>
+		</li>
+
+	</ul>
     </p>
     <p><a href="#top">back to top</a></p>
 
