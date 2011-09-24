@@ -78,7 +78,12 @@ PMF_Template::setTplSetName($faqconfig->get('main.templateSet'));
  */
 PMF_Attachment_Factory::init($faqconfig->get('records.attachmentsStorageType'),
                              $faqconfig->get('records.defaultAttachmentEncKey'),
-                             $faqconfig->get('records.enableAttachmentEncryption'));
+							 $faqconfig->get('records.enableAttachmentEncryption'));
+
+/*
+ * Initiazile caching
+ */
+PMF_Cache::init($faqconfig);
 
 //
 // Create a new FAQ object

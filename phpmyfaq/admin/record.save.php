@@ -229,6 +229,12 @@ if ($permission['editbt']) {
         $faq->deleteRecord($record_id, $record_lang);
         printf('<p class="success">%s</p>', $PMF_LANG['ad_entry_delsuc']);
     }
+
+	/*
+	 * For now clear the whole cache
+	 * XXX clear inteliggent
+	 */ 
+	PMF_Cache::getInstance()->clearAll();
 } else {
     print $PMF_LANG['err_NotAuth'];
 }

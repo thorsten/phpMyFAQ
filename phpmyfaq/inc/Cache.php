@@ -53,7 +53,12 @@ class PMF_Cache
 
 			self::$instance = new PMF_Cache_Varnish($config);
 		} else {
-//			throw new Exception("Unknown cache service");
+			self::$instance = new PMF_CacheDummy($config);
 		}
+	}
+
+	public static function getInstance()
+	{
+		return self::$instance;
 	}
 }

@@ -57,4 +57,11 @@ abstract class PMF_Cache_Service
 	 * @return void
 	 */
 	abstract function clearArticle($id);
+
+	/**
+	 * Children must implement this to be able to clear all the cache contents at once.
+	 *
+	 * @return void
+	 */
+	abstract function clearAll();
 }

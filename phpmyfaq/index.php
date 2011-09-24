@@ -82,6 +82,8 @@ PMF_Attachment_Factory::init($faqconfig->get('records.attachmentsStorageType'),
                              $faqconfig->get('records.defaultAttachmentEncKey'),
                              $faqconfig->get('records.enableAttachmentEncryption'));
 
+PMF_Cache::init($faqconfig);
+
 //
 // Get user action
 //

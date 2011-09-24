@@ -81,4 +81,10 @@ class PMF_Cache_Varnish extends PMF_Cache_Service
 	{
 
 	}
+
+	public function clearAll()
+	{
+		$this->instance->banUrl(".*");
+	}
+
 }
