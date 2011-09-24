@@ -53,7 +53,7 @@ class PMF_Cache
 
 			self::$instance = new PMF_Cache_Varnish($config);
 		} else {
-			self::$instance = new PMF_CacheDummy($config);
+			self::$instance = new PMF_Cache_Dummy($config);
 		}
 	}
 
