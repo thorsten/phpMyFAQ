@@ -148,7 +148,7 @@ if ($action == "sendmail") {
             <p>
                 <img src="images/arrow.gif" width="11" height="11" alt="<?php print $faqconfig->get('main.titleFAQ'); ?> FAQ" border="0" />
                 <a href="../index.php" title="<?php print $faqconfig->get('main.titleFAQ'); ?> FAQ">
-                    <?php print $faqconfig->get('main.titleFAQ'); ?> FAQ
+                    <?php print $faqconfig->get('main.titleFAQ'); ?>
                 </a>
             </p>
         </section>
