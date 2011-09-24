@@ -79,7 +79,7 @@ class PMF_Cache_Varnish extends PMF_Cache_Service
 	 */
 	public function clearArticle($id)
 	{
-
+		$this->clearAll();
 	}
 
 	public function clearAll()

@@ -231,10 +231,9 @@ if ($permission['editbt']) {
     }
 
 	/*
-	 * For now clear the whole cache
-	 * XXX clear inteliggent
+	 * Clear the article cache and the related stuff
 	 */ 
-	PMF_Cache::getInstance()->clearAll();
+	PMF_Cache::getInstance()->clearArticle($record_id);
 } else {
     print $PMF_LANG['err_NotAuth'];
 }
