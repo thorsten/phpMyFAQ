@@ -111,7 +111,7 @@ class PMF_Helper_Faq extends PMF_Helper
      */
     public function renderFacebookLikeButton($url)
     {
-        if (empty($url)) {
+        if (empty($url) || PMF_Configuration::getInstance()->get('socialnetworks.enableFacebookSupport') == false) {
             return '';
         }
 

@@ -7,7 +7,10 @@
 	 *
 	 */
 	
-
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    header('Location: http://'.$_SERVER['HTTP_HOST']);
+    exit();
+}
 error_reporting(E_ALL);	
 //error_reporting(E_ALL ^ E_NOTICE);	
 	
