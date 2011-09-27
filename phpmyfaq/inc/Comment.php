@@ -114,7 +114,7 @@ class PMF_Comment
             $id);
 
         $result = $this->db->query($query);
-        if (($this->db->num_rows($result) > 0) && ($row = $this->db->fetch_object($result))) {
+        if (($this->db->numRows($result) > 0) && ($row = $this->db->fetchObject($result))) {
             $item = array(
                 'id'       => $row->id_comment,
                 'recordId' => $row->id,
@@ -153,8 +153,8 @@ class PMF_Comment
             $id);
 
         $result = $this->db->query($query);
-        if ($this->db->num_rows($result) > 0) {
-            while ($row = $this->db->fetch_object($result)) {
+        if ($this->db->numRows($result) > 0) {
+            while ($row = $this->db->fetchObject($result)) {
                 $item = array(
                     'id'      => $row->id_comment,
                     'content' => $row->comment,
@@ -210,7 +210,7 @@ class PMF_Comment
             VALUES
                 (%d, %d, '%s', '%s', '%s', '%s', %d, '%s')",
             SQLPREFIX,
-            $this->db->nextID(SQLPREFIX.'faqcomments', 'id_comment'),
+            $this->db->nextId(SQLPREFIX.'faqcomments', 'id_comment'),
             $commentData['record_id'],
             $commentData['type'],
             $commentData['username'],
@@ -281,8 +281,8 @@ class PMF_Comment
             $type);
 
         $result = $this->db->query($query);
-        if ($this->db->num_rows($result) > 0) {
-            while ($row = $this->db->fetch_object($result)) {
+        if ($this->db->numRows($result) > 0) {
+            while ($row = $this->db->fetchObject($result)) {
                 $num[$row->id] = $row->anz;
             }
         }
@@ -323,8 +323,8 @@ class PMF_Comment
             $type);
             
         $result = $this->db->query($query);
-        if ($this->db->num_rows($result) > 0) {
-            while ($row = $this->db->fetch_object($result)) {
+        if ($this->db->numRows($result) > 0) {
+            while ($row = $this->db->fetchObject($result)) {
                 $comments[] = array(
                     'comment_id'  => $row->comment_id,
                     'record_id'   => $row->record_id,

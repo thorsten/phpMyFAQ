@@ -701,4 +701,4 @@ if (!DEBUG) {
 }
 $tpl->printTemplate();
 
-$db->dbclose();
+$db->close();

@@ -151,7 +151,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
             throw new Exception('Error while fetching result: ' . $this->error());
         }
         
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             $ret[] = $row;
         }
         
@@ -188,7 +188,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
     {
         $arr = array();
         $result = $this->query("SHOW TABLE STATUS");
-        while ($row = $this->fetch_assoc($result)) {
+        while ($row = $this->fetchArray($result)) {
             $arr[$row["Name"]] = $row["Rows"];
         }
         return $arr;
@@ -259,7 +259,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
         $this->tableNames[] = $prefix . 'faquser';
 
         $result = $this->query('SHOW TABLES'.(('' == $prefix) ? '' : ' LIKE \''.$prefix.'%\''));
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             foreach ($row as $tableName) {
                 if (!in_array($tableName, $this->tableNames)) {
                     $this->tableNames[] = $tableName;

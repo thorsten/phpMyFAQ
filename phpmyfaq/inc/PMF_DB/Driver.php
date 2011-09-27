@@ -55,8 +55,6 @@ interface PMF_DB_Driver
     /**
      * Escapes a string for use in a query
      *
-     * @deprecated
-     *
      * @param   string
      * @return  string
      */

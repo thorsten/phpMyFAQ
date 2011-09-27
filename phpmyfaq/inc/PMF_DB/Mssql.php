@@ -47,7 +47,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      * The connection object
      *
      * @var   mixed
-     * @see   connect(), query(), dbclose()
+     * @see   connect(), query(), close()
      */
     private $conn = false;
 

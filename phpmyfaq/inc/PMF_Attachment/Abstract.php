@@ -260,7 +260,7 @@ abstract class PMF_Attachment_Abstract
         $result = $this->db->query($sql);
         
         if ($result) {
-            $assoc = $this->db->fetch_assoc($result);
+            $assoc = $this->db->fetchArray($result);
             if (!empty($assoc)) {
                 $this->recordId     = $assoc['record_id'];
                 $this->recordLang   = $assoc['record_lang'];
@@ -292,7 +292,7 @@ abstract class PMF_Attachment_Abstract
 
         if (null == $this->id) {
             
-            $this->id = $this->db->nextID($faqattTableName, 'id');
+            $this->id = $this->db->nextId($faqattTableName, 'id');
             
             $sql = sprintf("
                 INSERT INTO 
@@ -408,7 +408,7 @@ abstract class PMF_Attachment_Abstract
         $result = $this->db->query($sql);
         
         if ($result) {
-            $assoc = $this->db->fetch_assoc($result);
+            $assoc = $this->db->fetchArray($result);
         }
                         
         return $assoc['count'] > 1;

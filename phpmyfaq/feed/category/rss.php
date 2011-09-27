@@ -140,4 +140,4 @@ header('Content-Length: '.strlen($rssData));
 
 print $rssData;
 
-$db->dbclose();
+$db->close();

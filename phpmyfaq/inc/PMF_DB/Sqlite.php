@@ -46,7 +46,7 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
      * The connection object
      *
      * @var   mixed
-     * @see   connect(), query(), dbclose()
+     * @see   connect(), query(), close()
      */
     private $conn = false;
 
@@ -185,9 +185,9 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
         $arr = array();
 
         $result = $this->query("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
-        while ($row = $this->fetch_assoc($result)) {
+        while ($row = $this->fetchArray($result)) {
             $num_result = $this->query('SELECT * FROM '.$row['name']);
-            $arr[$row['name']] = $this->num_rows($num_result);
+            $arr[$row['name']] = $this->numRows($num_result);
         }
 
         return $arr;
@@ -251,7 +251,7 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
         $this->tableNames[] = $prefix.'faquser';
 
         $result = $this->query("SELECT name FROM sqlite_master WHERE type='table' ".(('' == $prefix) ? '':  "AND name LIKE '".$prefix."%' ")."ORDER BY name");
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             if (!in_array($row->name, $this->tableNames)) {
                 $this->tableNames[] = $row->name;
             }

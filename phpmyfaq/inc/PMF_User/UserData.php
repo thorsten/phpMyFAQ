@@ -100,10 +100,10 @@ class PMF_User_UserData
             $this->user_id);
         
         $res = $this->db->query($select);
-        if ($this->db->num_rows($res) != 1) {
+        if ($this->db->numRows($res) != 1) {
             return false;
         }
-        $arr = $this->db->fetch_assoc($res);
+        $arr = $this->db->fetchArray($res);
         if ($single_return and $field != '*') {
             return $arr[$field];
         }
@@ -166,10 +166,10 @@ class PMF_User_UserData
             $this->user_id);
             
         $res = $this->db->query($select);
-        if ($this->db->num_rows($res) != 1) {
+        if ($this->db->numRows($res) != 1) {
             return false;
         }
-        $this->data = $this->db->fetch_assoc($res);
+        $this->data = $this->db->fetchArray($res);
         return true;
     }
 
@@ -192,8 +192,8 @@ class PMF_User_UserData
                 user_id = %d",
             SQLPREFIX,
             date('YmdHis', $_SERVER['REQUEST_TIME']),
-            $this->db->escape_string($this->data['display_name']),
-            $this->db->escape_string($this->data['email']),
+            $this->db->escape($this->data['display_name']),
+            $this->db->escape($this->data['email']),
             $this->user_id);
             
         $res = $this->db->query($update);

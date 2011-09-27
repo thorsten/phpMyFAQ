@@ -217,7 +217,7 @@ if (DEBUG) {
     print "\n\n-- Debug information:\n<p>".$db->sqllog()."</p>";
 }
 
-$db->dbclose();
+$db->close();
 ?>
     </div>
 

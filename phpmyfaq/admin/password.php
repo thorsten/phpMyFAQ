@@ -161,4 +161,4 @@ if (DEBUG) {
 }
 
 require 'footer.php';
-$db->dbclose();
+$db->close();

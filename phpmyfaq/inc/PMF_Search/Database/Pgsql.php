@@ -87,10 +87,10 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
                 ($enableRelevance)
-                    ? ", plainto_tsquery('" . $this->dbHandle->escape_string($searchTerm) . "') query "
+                    ? ", plainto_tsquery('" . $this->dbHandle->escape($searchTerm) . "') query "
                     : '',
                 $this->getMatchingColumns(),
-                $this->dbHandle->escape_string($searchTerm),
+                $this->dbHandle->escape($searchTerm),
                 $this->getConditions(),
                 $orderBy);
 

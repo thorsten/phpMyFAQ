@@ -112,7 +112,7 @@ class PMF_Relation
         
         $result = $search->search($begriffe);
         
-        while (($row = $this->db->fetch_object($result)) && 
+        while (($row = $this->db->fetchObject($result)) &&
                ($i < PMF_Configuration::getInstance()->get('records.numberOfRelatedArticles'))) {
             
              if ($row->id == $record_id || $row->id == $last_id) {

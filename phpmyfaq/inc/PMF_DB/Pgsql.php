@@ -270,7 +270,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
         $this->tableNames[] = $prefix.'faquser';
 
         $result = $this->query('SELECT relname FROM pg_stat_user_tables '.(('' == $prefix) ? '' : 'LIKE \''.$prefix.'%\' ').'ORDER BY relname');
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             foreach ($row as $tableName) {
                 if (!in_array($tableName, $this->tableNames)) {
                     $this->tableNames[] = $tableName;

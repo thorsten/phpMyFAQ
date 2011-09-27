@@ -271,8 +271,8 @@ class PMF_Utils
         
             $result = $db->query($query);
 
-            if ($db->num_rows($result) > 0) {
-                while ($row = $db->fetch_object($result)) {
+            if ($db->numRows($result) > 0) {
+                while ($row = $db->fetchObject($result)) {
                     $output[] = $row->lang;
                 }
             }

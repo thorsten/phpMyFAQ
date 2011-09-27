@@ -129,7 +129,7 @@ class PMF_Db
      */
     public static function checkOnEmptyTable($tableName)
     {
-        if (self::$instance->num_rows(self::$instance->query('SELECT * FROM ' . SQLPREFIX . $tableName)) < 1) {
+        if (self::$instance->numRows(self::$instance->query('SELECT * FROM ' . SQLPREFIX . $tableName)) < 1) {
             return true;
         } else {
             return false;

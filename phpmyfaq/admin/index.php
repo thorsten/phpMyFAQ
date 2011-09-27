@@ -463,11 +463,11 @@ if (isset($auth) && in_array(true, $permission)) {
                 </tr>
                 <tr>
                     <td><strong>DB Client Version</strong></td>
-                    <td><?php print $db->client_version(); ?></td>
+                    <td><?php print $db->clientVersion(); ?></td>
                 </tr>
                 <tr>
                     <td><strong>DB Server Version</strong></td>
-                    <td><?php print $db->server_version(); ?></td>
+                    <td><?php print $db->serverVersion(); ?></td>
                 </tr>
                 <tr>
                     <td><strong>Webserver Interface</strong></td>
@@ -556,4 +556,4 @@ if (DEBUG) {
 
 require 'footer.php';
 
-$db->dbclose();
+$db->close();

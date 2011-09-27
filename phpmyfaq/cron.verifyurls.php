@@ -125,4 +125,4 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/config/database.php')) {
 //
 // Disconnect from database
 //
-$db->dbclose();
+$db->close();

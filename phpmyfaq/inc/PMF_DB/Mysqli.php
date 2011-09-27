@@ -47,7 +47,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      * The connection object
      *
      * @var   mixed
-     * @see   connect(), query(), dbclose()
+     * @see   connect(), query(), close()
      */
     private $conn = false;
 
@@ -132,7 +132,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      */
     public function fetchObject($result)
     {
-        return $result->fetch_object();
+        return $result->fetchObject();
     }
 
 
@@ -146,7 +146,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      */
     public function fetchArray($result)
     {
-        return $result->fetch_assoc();
+        return $result->fetchArray();
     }
 
     /**
@@ -200,7 +200,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     {
         $arr = array();
         $result = $this->query("SHOW TABLE STATUS");
-        while ($row = $this->fetch_assoc($result)) {
+        while ($row = $this->fetchArray($result)) {
             $arr[$row["Name"]] = $row["Rows"];
         }
         return $arr;
@@ -270,7 +270,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
         $this->tableNames[] = $prefix.'faquser';
 
         $result = $this->query('SHOW TABLES'.(('' == $prefix) ? '' : ' LIKE \''.$prefix.'%\''));
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             foreach ($row as $tableName) {
                 if (!in_array($tableName, $this->tableNames)) {
                     $this->tableNames[] = $tableName;

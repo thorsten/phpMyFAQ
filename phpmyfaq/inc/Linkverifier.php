@@ -281,7 +281,7 @@ class PMF_Linkverifier
     {
         $query = "SELECT type, url, reason FROM ".SQLPREFIX."faqlinkverifyrules WHERE enabled = 'y'";
         $result = $this->db->query($query);
-        while ($row = @$this->db->fetch_object($result)) {
+        while ($row = @$this->db->fetchObject($result)) {
             switch (strtolower($row->type)) {
             case 'ignore':      $this->addIgnoreList($row->url, $row->reason);
                                 break;
@@ -736,10 +736,10 @@ class PMF_Linkverifier
                 lang = '%s'",
             SQLPREFIX,
             $id,
-            $this->db->escape_string($artlang));
+            $this->db->escape($artlang));
             
         if ($result = $this->db->query($query)) {
-            while ($row = $this->db->fetch_object($result)) {
+            while ($row = $this->db->fetchObject($result)) {
                 $_linkState = $row->links_state;
                 if (trim($_linkState) == "") {
                     $_linkState = true;
@@ -981,13 +981,13 @@ class PMF_Linkverifier
                         VALUES
                             (%d, '%s', '%s', '%s', 'y', 'n', '%s', '%s', '%s')",
                         SQLPREFIX,
-                        $this->db->nextID(SQLPREFIX."faqlinkverifyrules", "id"),
-                        $this->db->escape_string($type),
-                        $this->db->escape_string($url),
-                        $this->db->escape_string($reason),
-                        $this->db->escape_string($this->user->getLogin()),
-                        $this->db->escape_string(date('YmdHis')),
-                        $this->db->escape_string(date('YmdHis'))
+                        $this->db->nextId(SQLPREFIX."faqlinkverifyrules", "id"),
+                        $this->db->escape($type),
+                        $this->db->escape($url),
+                        $this->db->escape($reason),
+                        $this->db->escape($this->user->getLogin()),
+                        $this->db->escape(date('YmdHis')),
+                        $this->db->escape(date('YmdHis'))
                         );
             $this->db->query($query);
         }

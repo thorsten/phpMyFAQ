@@ -245,7 +245,7 @@ class PMF_Captcha
     {
         $query  = sprintf('SELECT id FROM %sfaqcaptcha', SQLPREFIX);
         $result = $this->db->query($query);
-        while ($row = $this->db->fetch_assoc($result)) {
+        while ($row = $this->db->fetchArray($result)) {
             $this->code = $row['id'];
         }
 
@@ -286,10 +286,10 @@ class PMF_Captcha
             WHERE
                 id = '%s'",
             SQLPREFIX,
-            $this->db->escape_string($captchaCode));
+            $this->db->escape($captchaCode));
 
         if ($result = $this->db->query($query)) {
-            $num = $this->db->num_rows($result);
+            $num = $this->db->numRows($result);
             if ($num > 0) {
                 $this->code = $captchaCode;
                 $this->removeCaptcha($captchaCode);
@@ -499,7 +499,7 @@ class PMF_Captcha
         $result = $this->db->query($select);   
         
         if ($result) {
-            $num = $this->db->num_rows($result);
+            $num = $this->db->numRows($result);
             if ($num > 0) {
                 return false;
             } else {

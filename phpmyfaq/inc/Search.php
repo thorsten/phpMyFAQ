@@ -157,7 +157,7 @@ class PMF_Search
         
         $result = $search->search($searchterm);
         
-        if (!$this->db->num_rows($result)) {
+        if (!$this->db->numRows($result)) {
             return array();
         } else {
             return $this->db->fetchAll($result);
@@ -184,9 +184,9 @@ class PMF_Search
                 VALUES
             (%d, '%s', '%s', '%s')",
             $this->_table,
-            $this->db->nextID($this->_table, 'id'),
+            $this->db->nextId($this->_table, 'id'),
             $this->language->getLanguage(),
-            $this->db->escape_string($searchterm),
+            $this->db->escape($searchterm),
             $date->format('Y-m-d H:i:s'));
         
         $this->db->query($query);
@@ -242,7 +242,7 @@ class PMF_Search
         
         if (false !== $result) {
             $i = 0;
-            while ($row = $this->db->fetch_object($result)) {
+            while ($row = $this->db->fetchObject($result)) {
                 if ($i < $numResults) {
                     $searchResult[] = (array)$row;
                 }
@@ -269,6 +269,6 @@ class PMF_Search
     
         $result = $this->db->query($sql);
 
-        return (int)$this->db->fetch_object($result)->count;
+        return (int)$this->db->fetchObject($result)->count;
     }
 }

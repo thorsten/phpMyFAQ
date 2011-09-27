@@ -277,11 +277,11 @@ class PMF_User
              (int) $user_id);
              
         $res = $this->db->query($select);
-        if ($this->db->num_rows($res) != 1) {
+        if ($this->db->numRows($res) != 1) {
             $this->errors[] = self::ERROR_USER_NO_USERID . 'error(): ' . $this->db->error();
             return false;
         }
-        $user          = $this->db->fetch_assoc($res);
+        $user          = $this->db->fetchArray($res);
         $this->user_id = (int)   $user['user_id'];
         $this->login   = (string)$user['login'];
         $this->status  = (string)$user['account_status'];
@@ -301,11 +301,11 @@ class PMF_User
                 $this->login);
                 
             $res = $this->db->query($select);
-            if ($this->db->num_rows($res) != 1) {
+            if ($this->db->numRows($res) != 1) {
                 $this->errors[] = self::ERROR_USER_NO_USERLOGINDATA . 'error(): ' . $this->db->error();
                 return false;
             }
-            $loginData                = $this->db->fetch_assoc($res);
+            $loginData                = $this->db->fetchArray($res);
             $this->encrypted_password = (string) $loginData['pass'];
         }
         // get user-data
@@ -336,17 +336,17 @@ class PMF_User
             WHERE
                 login = '%s'",
             SQLPREFIX,
-            $this->db->escape_string($login));
+            $this->db->escape($login));
         
         $res = $this->db->query($select);
-        if ($this->db->num_rows($res) !== 1) {
+        if ($this->db->numRows($res) !== 1) {
             if ($raise_error) {
 
                 $this->errors[] = self::ERROR_USER_INCORRECT_LOGIN;
             }
             return false;
         }
-        $user = $this->db->fetch_assoc($res);
+        $user = $this->db->fetchArray($res);
         $this->user_id = (int)    $user['user_id'];
         $this->login   = (string) $user['login'];
         $this->status  = (string) $user['account_status'];
@@ -376,7 +376,7 @@ class PMF_User
             WHERE 
                 login LIKE '%s'",
             SQLPREFIX,
-            $this->db->escape_string($search.'%'));
+            $this->db->escape($search.'%'));
 
         $res = $this->db->query($select);
         if (!$res) {
@@ -384,7 +384,7 @@ class PMF_User
         }
 
         $result = array();
-        while ($row = $this->db->fetch_assoc($res)) {
+        while ($row = $this->db->fetchArray($res)) {
             $result[] = $row;
         }
 
@@ -421,7 +421,7 @@ class PMF_User
         
         // set user-ID
         if (0 == $user_id) {
-            $this->user_id = (int) $this->db->nextID(SQLPREFIX.'faquser', 'user_id');
+            $this->user_id = (int) $this->db->nextId(SQLPREFIX.'faquser', 'user_id');
         } else {
             $this->user_id = $user_id;
         }
@@ -435,7 +435,7 @@ class PMF_User
             (%d, '%s', %d, '%s')",
             SQLPREFIX,
             $this->getUserId(),
-            $this->db->escape_string($login),
+            $this->db->escape($login),
             $_SERVER['REQUEST_TIME'],
             date('YmdHis', $_SERVER['REQUEST_TIME']));
 
@@ -613,7 +613,7 @@ class PMF_User
             WHERE
                 user_id = %d",
             SQLPREFIX,
-            $this->db->escape_string($status),
+            $this->db->escape($status),
             $this->user_id);
         
         $res = $this->db->query($update);
@@ -793,7 +793,7 @@ class PMF_User
         }
 
         $result = array();
-        while ($row = $this->db->fetch_assoc($res)) {
+        while ($row = $this->db->fetchArray($res)) {
             $result[] = $row['user_id'];
         }
 
@@ -828,7 +828,7 @@ class PMF_User
         }
 
         $result = array();
-        while ($row = $this->db->fetch_assoc($res)) {
+        while ($row = $this->db->fetchArray($res)) {
             $result[$row['user_id']] = $row;
         }
 

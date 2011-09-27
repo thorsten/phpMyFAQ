@@ -127,7 +127,7 @@ class PMF_Report
         $result = $this->db->query($query);
 
         $lastId = 0;
-        while ($row = $this->db->fetch_object($result)) {
+        while ($row = $this->db->fetchObject($result)) {
 
             if ($row->id == $lastId) {
                 $report[$row->id]['faq_translations'] += 1;

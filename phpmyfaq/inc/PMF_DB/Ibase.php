@@ -210,7 +210,7 @@ class PMF_DB_Ibase implements PMF_DB_Driver
     function nextId($table, $id)
     {
         $result = $this->query('SELECT max('.$id.') as current_id FROM '.$table);
-        $row    = $this->fetch_object($result);
+        $row    = $this->fetchObject($result);
         return ($row->current_id + 1);
     }
 
