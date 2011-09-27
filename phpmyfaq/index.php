@@ -662,7 +662,7 @@ if ('artikel' == $action || 'show' == $action) {
             'link_delicious'         => $faqServices->getBookmarkOnDeliciousLink(),
             'link_email'             => $faqServices->getSuggestLink(),
             'link_pdf'               => $faqServices->getPdfLink(),
-            'facebookLikeButton'    => $faqHelper->renderFacebookLikeButton($faqServices->getLink()),
+            'facebookLikeButton'     => $faqHelper->renderFacebookLikeButton($faqServices->getLink()),
         )
     );
 }

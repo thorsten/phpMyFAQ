@@ -333,6 +333,8 @@ aside section ul li a, aside section ul li a:visited {
     display: block; }
 aside section ul li a:hover {
     text-decoration: underline; }
+aside section #social {
+    width: 250px; }
 
 #searchBox {
     background: url(../images/search_background.png) repeat-x; overflow: hidden; padding: 20px; margin-bottom: 22px;
