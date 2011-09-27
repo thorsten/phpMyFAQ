@@ -879,7 +879,8 @@
     <p>
         If enabled by the administrator a phpMyFAQ installation can be completely secured. This means all content is
         only available after a successful login. For RSS feeds we provide a simple HTTP auth logic within the feeds
-        to access for registered users.
+        to access for registered users. To avoid crawled content on search engines you should change the meta tags in
+        index.tpl file from <em>INDEX, FOLLOW</em> to <em>NOINDEX, NOFOLLOW</em>.
     </p>
     <p><a href="#top">back to top</a></p>
 
