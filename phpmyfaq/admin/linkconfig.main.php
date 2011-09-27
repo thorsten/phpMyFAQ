@@ -182,13 +182,13 @@ showListTypeSelection();
                                         type='%s'
                                     AND id=%d",
                                 SQLPREFIX,
-                                $db->escape_string($params['type']),
+                                $db->escape($params['type']),
                                 $posts['id']
                                 );
                     $row = false;
                     $result = $db->query($query);
-                    if ($db->num_rows($result) > 0) {
-                        $row = $db->fetch_object($result);
+                    if ($db->numRows($result) > 0) {
+                        $row = $db->fetchObject($result);
                         $_owner = ($row->owner == $user->getLogin() ? true : false);
                         // check if chown ?
                         if ((!$_owner) && ($posts['chown'] == 'y') && ($_admin || ($posts['locked'] == 'n'))) {
@@ -200,8 +200,8 @@ showListTypeSelection();
                                             dtUpdateDate = '%s'
                                             WHERE id = %d",
                                         SQLPREFIX,
-                                        $db->escape_string($user->getLogin()),
-                                        $db->escape_string(date('YmdHis')),
+                                        $db->escape($user->getLogin()),
+                                        $db->escape(date('YmdHis')),
                                         $posts['id']
                                         );
                             $db->query($query);
@@ -237,11 +237,11 @@ showListTypeSelection();
                                         WHERE
                                             id=%d",
                                         SQLPREFIX,
-                                        $db->escape_string($posts['url']),
-                                        $db->escape_string($posts['reason']),
-                                        $db->escape_string($posts['enabled']),
-                                        $db->escape_string($posts['locked']),
-                                        $db->escape_string(date('YmdHis')),
+                                        $db->escape($posts['url']),
+                                        $db->escape($posts['reason']),
+                                        $db->escape($posts['enabled']),
+                                        $db->escape($posts['locked']),
+                                        $db->escape(date('YmdHis')),
                                         $posts['id']
                                         );
                             $db->query($query);
@@ -274,12 +274,12 @@ showListTypeSelection();
                 ORDER BY
                     %s %s",
                 SQLPREFIX,
-                $db->escape_string($params['type']),
+                $db->escape($params['type']),
                 $params['sortby'],
                 $params['sortorder']
                 );
     $result = $db->query($query);
-    $pages = ceil($db->num_rows($result) / $entriesPerPage);
+    $pages = ceil($db->numRows($result) / $entriesPerPage);
     $page = $params['page'] = max(1,min($pages,$params['page']));
     $result = $db->query($query);
 
@@ -304,7 +304,7 @@ showListTypeSelection();
         $icurrent = 0;
         $istart = ($params['page'] - 1) * $entriesPerPage;
         $iend = $istart + $entriesPerPage;
-        while ($row = $db->fetch_object($result) && $iend >= $icurrent && $istart <= $icurrent++) {
+        while ($row = $db->fetchObject($result) && $iend >= $icurrent && $istart <= $icurrent++) {
             $_owner = ($row->owner == $user->getLogin() ? true : false);
     ?>
             <tr>

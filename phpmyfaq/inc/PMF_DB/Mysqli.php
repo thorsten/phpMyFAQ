@@ -132,7 +132,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      */
     public function fetchObject($result)
     {
-        return $result->fetchObject();
+        return $result->fetch_object();
     }
 
 
@@ -146,7 +146,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      */
     public function fetchArray($result)
     {
-        return $result->fetchArray();
+        return $result->fetch_assoc();
     }
 
     /**

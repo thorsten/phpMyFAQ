@@ -540,7 +540,7 @@ if ($faqconfig->get('main.enableRewriteRules')) {
 //
 if (DEBUG) {
     $debug_template_vars = array(
-        'debugMessages' => '<div id="debug_main"><h2>DEBUG INFORMATION:</h2>' . $db->sqllog() . '</div>'
+        'debugMessages' => '<div id="debug_main"><h2>DEBUG INFORMATION:</h2>' . $db->log() . '</div>'
     );
 } else {
     $debug_template_vars = array(

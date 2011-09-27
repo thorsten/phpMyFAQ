@@ -548,7 +548,7 @@ if (isset($auth) && in_array(true, $permission)) {
 
 if (DEBUG) {
     print "\n";
-    print '<div id="debug_main">DEBUG INFORMATION:<br>'.$db->sqllog().'</div>';
+    print '<div id="debug_main">DEBUG INFORMATION:<br>'.$db->log().'</div>';
 }
 ?>
     </div>

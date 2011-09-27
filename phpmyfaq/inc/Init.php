@@ -35,10 +35,11 @@
 // - false      debug mode disabled
 // - true       debug mode enabled
 //
-define('DEBUG', false);
+define('DEBUG', true);
 if (DEBUG) {
-    error_reporting(E_ALL & E_STRICT);
     ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL | E_STRICT);
 } else {
     error_reporting(0);
 }

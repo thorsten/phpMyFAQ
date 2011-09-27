@@ -180,12 +180,12 @@ if ($permission['editbt'] || $permission['delbt']) {
             $search->setMatchingColumns(array($fdTable . '.thema', $fdTable . '.content', $fdTable . '.keywords'));
         }
         
-        $result         = $search->search($searchterm);; // @todo add missing ordering!
+        $result         = $search->search($searchterm); // @todo add missing ordering!
         $laction        = 'view';
         $internalSearch = '&amp;search='.$searchterm;
         $wasSearch      = true;
 
-        while ($row = $db->fetch_object($result)) {
+        while ($row = $db->fetchObject($result)) {
             
             if ($searchcat != 0 && $searchcat != (int)$row->category_id) {
                 continue;
