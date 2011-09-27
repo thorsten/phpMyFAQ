@@ -518,7 +518,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     // check database connection
     require PMF_ROOT_DIR . "/inc/Db.php";
     require PMF_ROOT_DIR . "/inc/PMF_DB/Driver.php";
-    $db = PMF_Db::dbSelect($sql_type);
+    $db = PMF_Db::factory($sql_type);
     $db->connect($sql_server, $sql_user, $sql_passwort, $sql_db);
     if (!$db) {
         print "<p class=\"error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
@@ -653,7 +653,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
     // connect to the database using inc/data.php
     require PMF_ROOT_DIR . '/config/database.php';
-    $db = PMF_Db::dbSelect($sql_type);
+    $db = PMF_Db::factory($sql_type);
     $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
     if (!$db) {
         print "<p class=\"error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";

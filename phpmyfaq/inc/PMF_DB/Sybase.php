@@ -100,7 +100,7 @@ class PMF_DB_Sybase implements PMF_DB_Driver
      */
     function connect($host, $user, $passwd, $db)
     {
-        $this->conn = @sybase_pconnect($host, $user, $passwd);
+        $this->conn = sybase_pconnect($host, $user, $passwd);
         if (empty($db) || $this->conn === false) {
             PMF_Db::errorPage('An unspecified error occurred.');
             die();
@@ -128,7 +128,7 @@ class PMF_DB_Sybase implements PMF_DB_Driver
     * @param   string
     * @return  string
     */
-    function escape_string($string)
+    function escape($string)
     {
         return str_replace("'", "''", $string);
     }
@@ -139,7 +139,7 @@ class PMF_DB_Sybase implements PMF_DB_Driver
      * @param   mixed $result
      * @return  mixed
      */
-    function fetch_object($result)
+    function fetchObject($result)
     {
         return sybase_fetch_object($result);
     }
@@ -150,7 +150,7 @@ class PMF_DB_Sybase implements PMF_DB_Driver
      * @param   mixed $result
      * @return  array
      */
-    function fetch_assoc($result)
+    function fetchArray($result)
     {
       return sybase_fetch_assoc($result);
     }
@@ -168,7 +168,7 @@ class PMF_DB_Sybase implements PMF_DB_Driver
             throw new Exception('Error while fetching result: ' . $this->error());
         }
         
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             $ret[] = $row;
         }
         
@@ -182,7 +182,7 @@ class PMF_DB_Sybase implements PMF_DB_Driver
      * @param   mixed $result
      * @return  integer
      */
-    function num_rows($result)
+    function numRows($result)
     {
         return sybase_num_rows($result);
     }
@@ -193,7 +193,7 @@ class PMF_DB_Sybase implements PMF_DB_Driver
      * @param   mixed $result
      * @return  integer
      */
-    function sqllog()
+    function log()
     {
         return $this->sqllog;
     }
@@ -219,7 +219,7 @@ class PMF_DB_Sybase implements PMF_DB_Driver
                 AND obj.xtype = 'u'";
         $result = $this->query($query);
 
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             if ('dtproperties' != $row->table_name) {
                 $tables[$row->table_name] = $row->table_rows;
             }
@@ -233,14 +233,11 @@ class PMF_DB_Sybase implements PMF_DB_Driver
     /**
     * Returns the next ID of a table
     *
-    * This function is a replacement for MySQL's auto-increment so that
-    * we don't need it anymore.
-    *
     * @param   string      the name of the table
     * @param   string      the name of the ID column
     * @return  int
     */
-    function nextID($table, $id)
+    function nextId($table, $id)
     {
         $result = $this->query('SELECT max('.$id.') as current_id FROM '.$table);
         $currentID = sybase_result($result, 0, 'current_id');
@@ -262,7 +259,7 @@ class PMF_DB_Sybase implements PMF_DB_Driver
      * 
      * @return string
      */
-    function client_version()
+    function clientVersion()
     {
         return '';
     }
@@ -272,9 +269,9 @@ class PMF_DB_Sybase implements PMF_DB_Driver
      * 
      * @return string
      */
-    function server_version()
+    function serverVersion()
     {
-        $result   = $this->query('SELECT @@version AS SERVER_VERSION');
+        $result  = $this->query('SELECT @@version AS SERVER_VERSION');
         $version = sybase_result($result, 0, 'SERVER_VERSION');
         if (isset($version)) {
             return $version;
@@ -292,7 +289,7 @@ class PMF_DB_Sybase implements PMF_DB_Driver
         $this->tableNames[] = $prefix.'faquser';
 
         $result = $this->query('SELECT name FROM sysobjects WHERE type = \'u\''.(('' == $prefix) ? '' : ' AND name LIKE \''.$prefix.'%\''));
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             foreach ($row as $tableName) {
                 if (!in_array($tableName, $this->tableNames)) {
                     $this->tableNames[] = $tableName;
@@ -322,7 +319,7 @@ class PMF_DB_Sybase implements PMF_DB_Driver
      * 
      * @return boolean
      */
-    function dbclose()
+    function close()
     {
         return sybase_close($this->conn);
     }

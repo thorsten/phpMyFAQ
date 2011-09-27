@@ -3,7 +3,7 @@
  * The PMF_DB_Mysql class provides methods and functions for a MySQL 4.0.x
  * and higher database.
  * 
- * PHP Version 5.2.0
+ * PHP Version 5.2.3
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -38,7 +38,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Meikel Katzengreis <meikel@katzengreis.com>
  * @author    Tom Rochester <tom.rochester@gmail.com>
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @package   2003-02-24
@@ -112,7 +112,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
      * @param  string $string String
      * @return string
      */
-    public function escape_string($string)
+    public function escape($string)
     {
         return mysql_real_escape_string($string, $this->conn);
     }
@@ -123,7 +123,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
      * @param  mixed $result Resultset
      * @return mixed
      */
-    public function fetch_object($result)
+    public function fetchObject($result)
     {
         return mysql_fetch_object($result);
     }
@@ -133,7 +133,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
      * @param  mixed $result Resultset
      * @return mixed
      */
-    public function fetch_assoc($result)
+    public function fetchArray($result)
     {
         return mysql_fetch_assoc($result);
     }
@@ -164,7 +164,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
      * @param  mixed   $result Resultset
      * @return integer
      */
-    public function num_rows($result)
+    public function numRows($result)
     {
         return mysql_num_rows($result);
     }
@@ -174,7 +174,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
      *
      * @return string
      */
-    public function sqllog()
+    public function log()
     {
         return $this->sqllog;
     }
@@ -204,17 +204,17 @@ class PMF_DB_Mysql implements PMF_DB_Driver
      */
     public function nextID($table, $id)
     {
-    	$select = sprintf("
-    	   SELECT
-    	       MAX(%s) AS current_id
-    	   FROM
-    	       %s",
-    	   $id,
-    	   $table);
-    	   
+        $select = sprintf("
+         SELECT
+             MAX(%s) AS current_id
+         FROM
+             %s",
+           $id,
+           $table);
+           
         $result    = $this->query($select);
-        $currentID = mysql_result($result, 0, 'current_id');
-        return ($currentID + 1);
+        $currentId = mysql_result($result, 0, 'current_id');
+        return ($currentId + 1);
     }
 
      /**
@@ -232,7 +232,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
      * 
      * @return void
      */
-    public function client_version()
+    public function clientVersion()
     {
         return mysql_get_client_info();
     }
@@ -242,7 +242,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
      *
      * @return void
      */
-    public function server_version()
+    public function serverVersion()
     {
         return mysql_get_server_info();
     }
@@ -289,7 +289,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
      *
      * @return void
      */
-    public function dbclose()
+    public function close()
     {
         if (is_resource($this->conn)) {
             mysql_close($this->conn);

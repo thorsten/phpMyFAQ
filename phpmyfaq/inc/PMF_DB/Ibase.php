@@ -1,6 +1,6 @@
 <?php
 /**
- * The db_ibase class provides methods and functions for Firebird/InterBase
+ * The PMF_DB_Ibase class provides methods and functions for Firebird/InterBase
  * databases.
  * 
  * PHP Version 5.2
@@ -34,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-28
@@ -71,7 +71,7 @@ class PMF_DB_Ibase implements PMF_DB_Driver
      * @param   string $db_name
      * @return  boolean true, if connected, otherwise false
      */
-    function connect($host, $user, $passwd, $db)
+    public function connect($host, $user, $passwd, $db)
     {
         $this->conn = ibase_connect($db, $user, $passwd);
         if (false == $this->conn) {
@@ -87,7 +87,7 @@ class PMF_DB_Ibase implements PMF_DB_Driver
      * @param   string $query
      * @return resource
      */
-    function query($query)
+    public function query($query)
     {
         $this->sqllog .= pmf_debug($query);
         return ibase_query($this->conn, $query);
@@ -99,7 +99,7 @@ class PMF_DB_Ibase implements PMF_DB_Driver
      * @param   string
      * @return  string
      */
-    function escape_string($string)
+    public function escape($string)
     {
       return str_replace("'", "''", $string);
     }
@@ -110,7 +110,7 @@ class PMF_DB_Ibase implements PMF_DB_Driver
      * @param   mixed $result
      * @return  mixed
      */
-    function fetch_object($result)
+    public function fetchObject($result)
     {
         return ibase_fetch_object($result);
     }
@@ -122,7 +122,7 @@ class PMF_DB_Ibase implements PMF_DB_Driver
      * @param   mixed $result
      * @return  mixed
      */
-    function fetch_row($result)
+    public function fetch_row($result)
     {
         return ibase_fetch_row($result);
     }
@@ -133,7 +133,7 @@ class PMF_DB_Ibase implements PMF_DB_Driver
      * @param   mixed $result
      * @return  array
      */
-    function fetch_assoc($result)
+    public function fetchArray($result)
     {
         return ibase_fetch_assoc($result);
     }
@@ -151,7 +151,7 @@ class PMF_DB_Ibase implements PMF_DB_Driver
             throw new Exception('Error while fetching result: ' . $this->error());
         }
         
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             $ret[] = $row;
         }
         
@@ -165,7 +165,7 @@ class PMF_DB_Ibase implements PMF_DB_Driver
      * @param   mixed $result
      * @return  integer
      */
-    function num_rows($result)
+    public function numRows($result)
     {
         return ibase_num_rows($result);
     }
@@ -176,7 +176,7 @@ class PMF_DB_Ibase implements PMF_DB_Driver
      * @param   mixed $result
      * @return  integer
      */
-    function sqllog()
+    public function log()
     {
         return $this->sqllog;
     }
@@ -207,7 +207,7 @@ class PMF_DB_Ibase implements PMF_DB_Driver
     * @param   string      the name of the ID column
     * @return  int
     */
-    function nextID($table, $id)
+    function nextId($table, $id)
     {
         $result = $this->query('SELECT max('.$id.') as current_id FROM '.$table);
         $row    = $this->fetch_object($result);
@@ -229,7 +229,7 @@ class PMF_DB_Ibase implements PMF_DB_Driver
     *
     * @return string
     */
-    function client_version()
+    function clientVersion()
     {
         return '';
     }
@@ -239,9 +239,9 @@ class PMF_DB_Ibase implements PMF_DB_Driver
     * 
     * @return string
     */
-    function server_version()
+    function serverVersion()
     {
-        return ibase_server_info();
+        return ibase_server_info($this->conn, IBASE_SVC_SERVER_VERSION);
     }
 
     /**
@@ -276,7 +276,7 @@ class PMF_DB_Ibase implements PMF_DB_Driver
     *
     * @return boolean
     */
-    function dbclose()
+    function close()
     {
         return ibase_close($this->conn);
     }

@@ -74,7 +74,7 @@ abstract class Database_AbstractTest extends PHPUnit_Extensions_Database_TestCas
         $this->data = $this->getDbData();
 
         // phpMyFAQ connection
-        $db = PMF_Db::dbSelect($this->data["type"]);
+        $db = PMF_Db::factory($this->data["type"]);
         $db->connect($this->data["server"], $this->data["user"], $this->data["password"], $this->data["db"]);
         $this->db = $db;
 
