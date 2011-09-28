@@ -597,8 +597,14 @@ if ($step == 4) {
             WHERE config_name = 'main.useSslForLogins'";
     }
 
+    //
+    // UPDATES FROM 2.8.0-alpha
+    //
+    if (version_compare($version, '2.8.0-alpha', '<')) {
 
-    // Perform the queries for updating/migrating the database from 2.x
+    }
+
+    // Perform the queries for updating/migrating the database
     if (isset($query)) {
         print '<div class="center">';
         $count = 0;
