@@ -1,14 +1,18 @@
-phpMyFAQ 2.7.0
-Codename "Prospero"
+phpMyFAQ 2.8.0-dev
+Codename "Perdita"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
+Version 2.8.0-dev - 2011-
+- 
+
 Version 2.7.0 - 2011-09-
 - changed PHP requirement to PHP 5.2.3 (Thorsten)
 - dropped support for MySQL 4.1 (Thorsten)
 - dropped support for Internet Explorer 6 + 7 (Thorsten)
+- dropped support for obsolete Microsummaries (Thorsten)
 - added new HTML5/CSS3 powered layout and administration backend (Thorsten)
 - added configurable search relevance functionality (Gustavo Solt)
 - added automatic translations with Google Translate (Gustavo Solt)

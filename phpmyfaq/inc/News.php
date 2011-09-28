@@ -114,9 +114,9 @@ class PMF_News
             
         $result = $this->db->query($query);
 
-        if ($faqconfig->get('records.numberOfShownNewsEntries') > 0 && $this->db->num_rows($result) > 0) {
+        if ($faqconfig->get('records.numberOfShownNewsEntries') > 0 && $this->db->numRows($result) > 0) {
         	
-            while (($row = $this->db->fetch_object($result))) {
+            while (($row = $this->db->fetchObject($result))) {
             	
                 $counter++;
                 if (($showArchive  && ($counter > $faqconfig->get('records.numberOfShownNewsEntries'))) ||
@@ -225,8 +225,8 @@ class PMF_News
             
         $result = $this->db->query($query);
 
-        if ($this->db->num_rows($result) > 0) {
-            while ($row = $this->db->fetch_object($result)) {
+        if ($this->db->numRows($result) > 0) {
+            while ($row = $this->db->fetchObject($result)) {
                 $expired = ($now > $row->date_end);
                 $headers[] = array(
                     'id'        => $row->id,
@@ -268,8 +268,8 @@ class PMF_News
             
         $result = $this->db->query($query);
 
-        if ($this->db->num_rows($result) > 0) {
-            if ($row = $this->db->fetch_object($result)) {
+        if ($this->db->numRows($result) > 0) {
+            if ($row = $this->db->fetchObject($result)) {
                 $content        = $row->artikel;
                 $active         = ('y' == $row->active);
                 $allowComments  = ('y' == $row->comment);
@@ -349,7 +349,7 @@ class PMF_News
                 VALUES
             (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
             SQLPREFIX,
-            $this->db->nextID(SQLPREFIX.'faqnews', 'id'),
+            $this->db->nextId(SQLPREFIX.'faqnews', 'id'),
             $data['date'],
             $data['lang'],
             $data['header'],

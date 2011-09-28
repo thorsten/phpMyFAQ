@@ -33,20 +33,20 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Enc
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-18
  */ 
 class PMF_Enc
 {
-	/**
-	 * Error constant
-	 * 
-	 * @const
-	 */
-	const PMF_ERROR_USER_NO_ENCTYPE = 'Specified encryption method could not be found.';
-	
+    /**
+     * Error constant
+     * 
+     * @const
+     */
+    const PMF_ERROR_USER_NO_ENCTYPE = 'Specified encryption method could not be found.';
+    
     /**
      * Encryption methods
      *
@@ -100,19 +100,19 @@ class PMF_Enc
         $enc     = new PMF_Enc();
         $enctype = strtolower($enctype);
         if (!isset($enc->enc_typemap[$enctype])) {
-        	$enc->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
-        	return $enc;
+            $enc->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
+            return $enc;
         }
         $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'PMF_Enc' . DIRECTORY_SEPARATOR . $enc->enc_typemap[$enctype].".php";
         if (!file_exists($classfile)) {
-        	$enc->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
-        	return $enc;
+            $enc->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
+            return $enc;
         }
         
         $newclass = "PMF_Enc_".$enc->enc_typemap[$enctype];
         if (!class_exists($newclass)) {
-        	$enc->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
-        	return $enc;
+            $enc->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
+            return $enc;
         }
         $enc = new $newclass();
         return $enc;
@@ -131,11 +131,11 @@ class PMF_Enc
     public function error()
     {
         if (!is_array($this->errors)) {
-        	$this->errors = array((string) $this->errors);
+            $this->errors = array((string) $this->errors);
         }
         $message = '';
         foreach ($this->errors as $error) {
-        	$message .= $error."\n";
+            $message .= $error."\n";
         }
         return $message;
     }

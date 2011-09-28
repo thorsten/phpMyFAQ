@@ -118,7 +118,7 @@ if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
 require PMF_ROOT_DIR . '/inc/functions.php';
 
 define('SQLPREFIX', $DB['prefix']);
-$db = PMF_Db::dbSelect($DB["type"]);
+$db = PMF_Db::factory($DB["type"]);
 $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
     
 /**************************** STEP 1 OF 4 ***************************/

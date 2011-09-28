@@ -162,7 +162,7 @@ class PMF_Configuration
                         WHERE
                             config_name = '%s'",
                         SQLPREFIX,
-                        $this->db->escape_string(trim($value)),
+                        $this->db->escape(trim($value)),
                         $name);
                         
                     $this->db->query($update);

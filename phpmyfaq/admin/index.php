@@ -468,11 +468,11 @@ if (isset($auth) && in_array(true, $permission)) {
                 </tr>
                 <tr>
                     <td><strong>DB Client Version</strong></td>
-                    <td><?php print $db->client_version(); ?></td>
+                    <td><?php print $db->clientVersion(); ?></td>
                 </tr>
                 <tr>
                     <td><strong>DB Server Version</strong></td>
-                    <td><?php print $db->server_version(); ?></td>
+                    <td><?php print $db->serverVersion(); ?></td>
                 </tr>
                 <tr>
                     <td><strong>Webserver Interface</strong></td>
@@ -553,7 +553,7 @@ if (isset($auth) && in_array(true, $permission)) {
 
 if (DEBUG) {
     print "\n";
-    print '<div id="debug_main">DEBUG INFORMATION:<br>'.$db->sqllog().'</div>';
+    print '<div id="debug_main">DEBUG INFORMATION:<br>'.$db->log().'</div>';
 }
 ?>
     </div>
@@ -561,4 +561,4 @@ if (DEBUG) {
 
 require 'footer.php';
 
-$db->dbclose();
+$db->close();

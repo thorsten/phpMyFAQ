@@ -1,3 +1,9 @@
+<?php
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    header('Location: http://'.$_SERVER['HTTP_HOST']);
+    exit();
+}
+?>
 <div id="content">
 <?php 
 

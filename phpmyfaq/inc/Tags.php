@@ -122,12 +122,12 @@ class PMF_Tags
         $result = $this->db->query($query);
         
         if ($result) {
-           while ($row = $this->db->fetch_object($result)) {
+           while ($row = $this->db->fetchObject($result)) {
               $allTags[$row->tagging_id] = $row->tagging_name;
            }
         }
         
-        $numberOfItems = $limit ? PMF_TAGS_CLOUD_RESULT_SET_SIZE : $this->db->num_rows($result);
+        $numberOfItems = $limit ? PMF_TAGS_CLOUD_RESULT_SET_SIZE : $this->db->numRows($result);
         
         if (isset($allTags) && ($numberOfItems < count($allTags))) {
             $keys = array_keys($allTags);
@@ -172,7 +172,7 @@ class PMF_Tags
 
         $result = $this->db->query($query);
         if ($result) {
-            while ($row = $this->db->fetch_object($result)) {
+            while ($row = $this->db->fetchObject($result)) {
                 $tags[$row->tagging_id] = $row->tagging_name;
             }
         }
@@ -232,7 +232,7 @@ class PMF_Tags
                 if (!in_array(PMF_String::strtolower($tagging_name),
                               array_map(array('PMF_String', 'strtolower'), $current_tags))) {
                     // Create the new tag
-                    $new_tagging_id = $this->db->nextID(SQLPREFIX.'faqtags', 'tagging_id');
+                    $new_tagging_id = $this->db->nextId(SQLPREFIX.'faqtags', 'tagging_id');
                     $query = sprintf("
                         INSERT INTO
                             %sfaqtags
@@ -333,7 +333,7 @@ class PMF_Tags
 
         $records = array();
         $result  = $this->db->query($query);
-        while ($row = $this->db->fetch_object($result)) {
+        while ($row = $this->db->fetchObject($result)) {
             $records[] = $row->record_id;
         }
 
@@ -370,7 +370,7 @@ class PMF_Tags
 
         $records = array();
         $result  = $this->db->query($query);
-        while ($row = $this->db->fetch_object($result)) {
+        while ($row = $this->db->fetchObject($result)) {
             $records[] = $row->record_id;
         }
         return $records;
@@ -400,7 +400,7 @@ class PMF_Tags
         );
 
         $result = $this->db->query($query);
-        if ($row = $this->db->fetch_object($result)) {
+        if ($row = $this->db->fetchObject($result)) {
             return $row->tagging_name;
         }
     }
@@ -498,11 +498,11 @@ class PMF_Tags
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
-            $this->db->escape_string($tagName));
+            $this->db->escape($tagName));
 
         $records = array();
         $result = $this->db->query($query);
-        while ($row = $this->db->fetch_object($result)) {
+        while ($row = $this->db->fetchObject($result)) {
             $records[] = $row->record_id;
         }
 
@@ -538,7 +538,7 @@ class PMF_Tags
 
         $records = array();
         $result  = $this->db->query($query);
-        while ($row = $this->db->fetch_object($result)) {
+        while ($row = $this->db->fetchObject($result)) {
             $records[] = $row->record_id;
         }
 
@@ -561,7 +561,7 @@ class PMF_Tags
         );
 
         $result = $this->db->query($query);
-        if ($row = $this->db->fetch_object($result)) {
+        if ($row = $this->db->fetchObject($result)) {
             return ($row->n > 0);
         }
 

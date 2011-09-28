@@ -166,4 +166,4 @@ if (!is_null($getgezip) && (1 == $getgezip)) {
     print $sitemap;
 }
 
-$db->dbclose();
+$db->close();

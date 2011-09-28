@@ -89,7 +89,7 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
                 $this->getMatchingColumns(),
-                $this->dbHandle->escape_string($searchTerm),
+                $this->dbHandle->escape($searchTerm),
                 $this->getConditions(),
                 $orderBy
             );
@@ -133,7 +133,7 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
         foreach ($this->matchingColumns as $matchColumn) {
             $column = sprintf("MATCH (%s) AGAINST ('*%s*' IN BOOLEAN MODE) AS rel_%s",
                 $matchColumn,
-                $this->dbHandle->escape_string($searchterm),
+                $this->dbHandle->escape($searchterm),
                 substr(strstr($matchColumn, '.'), 1));
 
                 $resultColumns .= ', ' . $column;

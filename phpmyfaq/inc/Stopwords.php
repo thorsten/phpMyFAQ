@@ -137,7 +137,7 @@ class PMF_Stopwords
     {
         if (!$this->match($word)) {
             $sql = "INSERT INTO $this->table_name VALUES(%d, '%s', '%s')";
-            $sql = sprintf($sql, $this->db->nextID($this->table_name, 'id'), $this->language, $word);
+            $sql = sprintf($sql, $this->db->nextId($this->table_name, 'id'), $this->language, $word);
             
             $this->db->query($sql);
             
@@ -193,7 +193,7 @@ class PMF_Stopwords
         
         $result = $this->db->query($sql);
         
-        return $this->db->num_rows($result) > 0;
+        return $this->db->numRows($result) > 0;
     }
     
     
@@ -215,7 +215,7 @@ class PMF_Stopwords
         $retval = array();
         
         if($wordsOnly) {
-            while(($row = $this->db->fetch_object($result)) == true) {
+            while(($row = $this->db->fetchObject($result)) == true) {
                 $retval[] = $row->stopword; 
             }
         } else {

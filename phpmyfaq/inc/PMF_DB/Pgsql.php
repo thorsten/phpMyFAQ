@@ -1,6 +1,6 @@
 <?php
 /**
- * The db_pgsql class provides methods and functions for a PostgreSQL
+ * The PMF_DB_Pgsql class provides methods and functions for a PostgreSQL
  * database.
  *
  * PHP Version 5.2
@@ -36,7 +36,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Tom Rochester <tom.rochester@gmail.com>
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @package   2003-02-24
@@ -73,7 +73,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      * @param   string $db_name
      * @return  boolean true, if connected, otherwise false
      */
-    public function connect ($host, $user, $passwd, $db)
+    public function connect($host, $user, $passwd, $db)
     {
         /* if you use mysql_pconnect(), remove the next line: */
         $this->conn = pg_pconnect('host='.$host.' port=5432 dbname='.$db.' user='.$user.' password='.$passwd);
@@ -105,7 +105,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     * @param   string
     * @return  string
     */
-    public function escape_string($string)
+    public function escape($string)
     {
         return pg_escape_string($this->conn, $string);
     }
@@ -116,7 +116,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      * @param   mixed $result
      * @return  mixed
      */
-    public function fetch_object($result)
+    public function fetchObject($result)
     {
         return pg_fetch_object($result);
     }
@@ -129,7 +129,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      * @param   mixed $result
      * @return  array
      */
-    public function fetch_assoc($result)
+    public function fetchArray($result)
     {
         return pg_fetch_array($result, NULL, PGSQL_ASSOC);
     }
@@ -147,7 +147,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
             throw new Exception('Error while fetching result: ' . $this->error());
         }
         
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             $ret[] = $row;
         }
         
@@ -160,7 +160,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      * @param   mixed $result
      * @return  integer
      */
-    public function num_rows($result)
+    public function numRows($result)
     {
         return pg_num_rows($result);
     }
@@ -171,7 +171,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      * @param   mixed $result
      * @return  integer
      */
-    public function sqllog()
+    public function log()
     {
         return $this->sqllog;
     }
@@ -198,7 +198,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
         $select = "SELECT relname FROM pg_stat_user_tables ORDER BY relname;";
         $arr = array();
         $result = $this->query($select);
-        while ($row = $this->fetch_assoc($result)) {
+        while ($row = $this->fetchArray($result)) {
             $count = $this->getOne("SELECT count(1) FROM ".$row["relname"].";");
             $arr[$row["relname"]] = $count;
         }
@@ -212,7 +212,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      * @param string $id    the name of the ID column
      * @return  int
      */
-    public function nextID($table, $id)
+    public function nextId($table, $id)
     {
         $result = $this->query("SELECT nextval('".$table."_".$id."_seq') as current_id;");
         $currentID = pg_result($result, 0, 'current_id');
@@ -234,7 +234,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      *
      * @return string
      */
-    public function client_version()
+    public function clientVersion()
     {
         $pg_version = pg_version($this->conn);
         if (isset($pg_version['client'])) {
@@ -249,7 +249,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      *
      * @return string
      */
-    public function server_version()
+    public function serverVersion()
     {
         $pg_version = pg_version($this->conn);
         if (isset($pg_version['server_version'])) {
@@ -270,7 +270,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
         $this->tableNames[] = $prefix.'faquser';
 
         $result = $this->query('SELECT relname FROM pg_stat_user_tables '.(('' == $prefix) ? '' : 'LIKE \''.$prefix.'%\' ').'ORDER BY relname');
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             foreach ($row as $tableName) {
                 if (!in_array($tableName, $this->tableNames)) {
                     $this->tableNames[] = $tableName;
@@ -300,7 +300,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      *
      * @return boolean
      */
-    public function dbclose()
+    public function close()
     {
         return pg_close($this->conn);
     }

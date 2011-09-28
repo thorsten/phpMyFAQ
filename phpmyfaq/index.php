@@ -542,7 +542,7 @@ if ($faqconfig->get('main.enableRewriteRules')) {
 //
 if (DEBUG) {
     $debug_template_vars = array(
-        'debugMessages' => '<div id="debug_main"><h2>DEBUG INFORMATION:</h2>' . $db->sqllog() . '</div>'
+        'debugMessages' => '<div id="debug_main"><h2>DEBUG INFORMATION:</h2>' . $db->log() . '</div>'
     );
 } else {
     $debug_template_vars = array(
@@ -664,7 +664,7 @@ if ('artikel' == $action || 'show' == $action) {
             'link_delicious'         => $faqServices->getBookmarkOnDeliciousLink(),
             'link_email'             => $faqServices->getSuggestLink(),
             'link_pdf'               => $faqServices->getPdfLink(),
-            'facebookLikeButton'    => $faqHelper->renderFacebookLikeButton($faqServices->getLink()),
+            'facebookLikeButton'     => $faqHelper->renderFacebookLikeButton($faqServices->getLink()),
         )
     );
 }
@@ -703,4 +703,4 @@ if (!DEBUG) {
 }
 $tpl->printTemplate();
 
-$db->dbclose();
+$db->close();

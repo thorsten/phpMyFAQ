@@ -214,10 +214,10 @@ if (!is_null($currentSave) && $currentSave == true && $auth && !$permission["add
 }
 
 if (DEBUG) {
-    print "\n\n-- Debug information:\n<p>".$db->sqllog()."</p>";
+    print "\n\n-- Debug information:\n<p>".$db->log()."</p>";
 }
 
-$db->dbclose();
+$db->close();
 ?>
     </div>
 

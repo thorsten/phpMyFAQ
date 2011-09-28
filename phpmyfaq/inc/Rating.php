@@ -182,7 +182,7 @@ class PMF_Rating
         }
 
         $result = $this->db->query($query);
-        while ($row = $this->db->fetch_object($result)) {
+        while ($row = $this->db->fetchObject($result)) {
         	$ratings[] = array(
         	   'id'          => $row->id,
         	   'lang'        => $row->lang,
@@ -216,8 +216,8 @@ class PMF_Rating
             SQLPREFIX,
             $id);
        $result = $this->db->query($query);
-       if ($this->db->num_rows($result) > 0) {
-            $row = $this->db->fetch_object($result);
+       if ($this->db->numRows($result) > 0) {
+            $row = $this->db->fetchObject($result);
             return sprintf(' %s ('.$this->plr->GetMsg('plmsgVotes',$row->usr).')',
                 round($row->voting, 2));
        } else {

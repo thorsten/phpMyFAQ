@@ -109,7 +109,7 @@ class PMF_Session
 
             if (0 == $bots && false == $banned) {
                 if (!isset($sid)) {
-                    $sid = $this->db->nextID(SQLPREFIX . 'faqsessions', 'sid');
+                    $sid = $this->db->nextId(SQLPREFIX . 'faqsessions', 'sid');
                     // Sanity check: force the session cookie to contains the current $sid
                     if (!is_null($sidc) && (!$sidc != $sid)) {
                         self::setCookie($sid);
@@ -168,7 +168,7 @@ class PMF_Session
         $result = $this->db->query($query);
 
         if ($result) {
-        	$res       = $this->db->fetch_object($result);
+        	$res       = $this->db->fetchObject($result);
         	$timestamp = $res->time;
         }
 
@@ -203,7 +203,7 @@ class PMF_Session
             $lastHour);
 
         $result = $this->db->query($query);
-        while ($row = $this->db->fetch_object($result)) {
+        while ($row = $this->db->fetchObject($result)) {
             $sessions[$row->sid] = array(
                 'ip'   => $row->ip,
                 'time' => $row->time);
@@ -230,7 +230,7 @@ class PMF_Session
 
         $result = $this->db->query($query);
         if ($result) {
-            $num = $this->db->num_rows($result);
+            $num = $this->db->numRows($result);
         }
 
         return $num;
@@ -292,7 +292,7 @@ class PMF_Session
         );
         $result = $this->db->query($query);
 
-        if ($this->db->num_rows($result) == 0) {
+        if ($this->db->numRows($result) == 0) {
             $this->userTracking('old_session', $sessionId);
         } else {
             // Update global session id
@@ -348,7 +348,7 @@ class PMF_Session
             $result = $this->db->query($query);
             
             if (isset($result)) {
-                $row      = $this->db->fetch_object($result);
+                $row      = $this->db->fetchObject($result);
                 $users[0] = $row->anonymous_users;
             }
             
@@ -365,7 +365,7 @@ class PMF_Session
             $result = $this->db->query($query);
             
             if (isset($result)) {
-                $row      = $this->db->fetch_object($result);
+                $row      = $this->db->fetchObject($result);
                 $users[1] = $row->registered_users;
             }
         }

@@ -317,7 +317,7 @@ function getUsersOnline($activityTimeWindow = 300)
                             user_id = -1
                         AND time > ".$timeNow);
         if (isset($result)) {
-            $row      = $db->fetch_object($result);
+            $row      = $db->fetchObject($result);
             $users[0] = $row->anonymous_users;
         }
         // Count all faquser records within the time window
@@ -329,7 +329,7 @@ function getUsersOnline($activityTimeWindow = 300)
                     WHERE
                         session_timestamp > ".$timeNow);
         if (isset($result)) {
-            $row      = $db->fetch_object($result);
+            $row      = $db->fetchObject($result);
             $users[1] = $row->registered_users;
         }
     }
@@ -500,7 +500,7 @@ function build_insert($query, $table)
 
     $ret[] = "\r\n-- Table: ".$table;
 
-    while ($row = $db->fetch_assoc($result)) {
+    while ($row = $db->fetchArray($result)) {
         $p1 = array();
         $p2 = array();
         foreach ($row as $key => $val) {
@@ -511,7 +511,7 @@ function build_insert($query, $table)
                 if (is_null($val)) {
                     $p2[] = 'NULL';
                 } else {
-                    $p2[] = sprintf("'%s'", $db->escape_string($val));
+                    $p2[] = sprintf("'%s'", $db->escape($val));
                 }
             }
         }

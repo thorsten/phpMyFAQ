@@ -100,7 +100,7 @@ class PMF_Glossary
             
         $result = $this->db->query($query);
         
-        while ($row = $this->db->fetch_object($result)) {
+        while ($row = $this->db->fetchObject($result)) {
             $items[] = array(
                 'id'         => $row->id,
                 'item'       => stripslashes($row->item),
@@ -210,7 +210,7 @@ class PMF_Glossary
             
         $result = $result = $this->db->query($query);
            
-        while ($row = $this->db->fetch_object($result)) {
+        while ($row = $this->db->fetchObject($result)) {
             $item = array(
                 'id'         => $row->id,
                 'item'       => stripslashes($row->item),
@@ -228,8 +228,8 @@ class PMF_Glossary
      */
     public function addGlossaryItem($item, $definition)
     {
-        $this->item       = $this->db->escape_string($item);
-        $this->definition = $this->db->escape_string($definition);
+        $this->item       = $this->db->escape($item);
+        $this->definition = $this->db->escape($definition);
 
         $query = sprintf("
             INSERT INTO
@@ -238,10 +238,10 @@ class PMF_Glossary
                 VALUES
             (%d, '%s', '%s', '%s')",
             SQLPREFIX,
-            $this->db->nextID(SQLPREFIX.'faqglossary', 'id'),
+            $this->db->nextId(SQLPREFIX.'faqglossary', 'id'),
             $this->language,
-            $this->db->escape_string($this->item),
-            $this->db->escape_string($this->definition));
+            $this->db->escape($this->item),
+            $this->db->escape($this->definition));
 
         if ($this->db->query($query)) {
             return true;
@@ -259,8 +259,8 @@ class PMF_Glossary
      */
     public function updateGlossaryItem($id, $item, $definition)
     {
-        $this->item       = $this->db->escape_string($item);
-        $this->definition = $this->db->escape_string($definition);
+        $this->item       = $this->db->escape($item);
+        $this->definition = $this->db->escape($definition);
 
         $query = sprintf("
             UPDATE
@@ -271,8 +271,8 @@ class PMF_Glossary
             WHERE
                 id = %d AND lang = '%s'",
             SQLPREFIX,
-            $this->db->escape_string($this->item),
-            $this->db->escape_string($this->definition),
+            $this->db->escape($this->item),
+            $this->db->escape($this->definition),
             (int)$id,
             $this->language);
 

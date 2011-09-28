@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Db
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
@@ -69,7 +69,7 @@ class PMF_Db
      *
      * @return PMF_Db_Driver
      */
-	public static function dbSelect($type)
+    public static function factory($type)
     {
         self::$dbType = $type;
         
@@ -129,7 +129,7 @@ class PMF_Db
      */
     public static function checkOnEmptyTable($tableName)
     {
-        if (self::$instance->num_rows(self::$instance->query('SELECT * FROM ' . SQLPREFIX . $tableName)) < 1) {
+        if (self::$instance->numRows(self::$instance->query('SELECT * FROM ' . SQLPREFIX . $tableName)) < 1) {
             return true;
         } else {
             return false;
@@ -139,23 +139,23 @@ class PMF_Db
     /**
      * Error page
      *
-     * @return void
+     * @return string
      */
     public static function errorPage($method)
     {
-        print "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
-        print "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n";
-        print "<head>\n";
-        print "    <title>phpMyFAQ Error</title>\n";
-        print "    <meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=utf-8\" />\n";
-        print "    <style type=\"text/css\" media=\"screen\"> /*<![CDATA[*/ <!--\n";
-        print "    @import url(template/default/style.css);\n";
-        print "    --> /*]]>*/ </style>\n";
-        print "</head>\n";
-        print "<body>\n";
-        print "<p align=\"center\">The connection to the database server could not be established.</p>\n";
-        print "<p align=\"center\">The error message of the database server:<br />".$method."</p>\n";
-        print "</body>\n";
-        print "</html>";
+        print '<!DOCTYPE html>
+            <html lang="en" class="no-js">
+            <head>
+                <meta charset="utf-8">
+                <title>Fatal phpMyFAQ Error</title>
+                <style type="text/css">
+                @import url(template/default/style.css);
+                </style>
+            </head>
+            <body>
+                <p class="error">The connection to the database server could not be established.</p>
+                <p class="error">The error message of the database server:<br />$method</p>
+            </body>
+            </html>';
     }
 }

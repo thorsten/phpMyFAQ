@@ -157,8 +157,8 @@ if ($action == "sendmail") {
 
 if (DEBUG) {
     print "\n<p>DEBUG INFORMATION:</p>\n";
-    print "<p>".$db->sqllog()."</p>";
+    print "<p>".$db->log()."</p>";
 }
 
 require 'footer.php';
-$db->dbclose();
+$db->close();

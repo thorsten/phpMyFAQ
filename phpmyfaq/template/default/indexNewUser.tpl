@@ -41,7 +41,6 @@
     <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="feed/topten/rss.php">
     <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml" href="feed/latest/rss.php">
     <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml" href="feed/openquestions/rss.php">
-    <link rel="microsummary" href="microsummary.php?action={action}">
     <link rel="search" type="application/opensearchdescription+xml" title="{metaTitle}" href="{opensearch}">
 </head>
 <body dir="{dir}">
