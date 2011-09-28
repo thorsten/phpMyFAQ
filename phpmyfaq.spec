@@ -55,7 +55,7 @@
 # phpMyFAQ
 #
 %define name        phpmyfaq
-%define version     2.7.0
+%define version     2.8.0
 %define release     1
 %define epoch       0
 
@@ -130,7 +130,7 @@ Requires:           apache
 %else
 Requires:           httpd
 %endif
-Requires:           php >= 5.2.0
+Requires:           php >= 5.2.3
 # GD is bundled into PHP starting from PHP 4.3.0
 Requires:           php-gd
 # We do not require MySQL but one among the several DB supported by phpMyFAQ.
@@ -152,24 +152,28 @@ XML-support, PDF-support, a backup-system and an easy to use
 installation script.
 
 %changelog
-=======
+=========
+
+* Wed Sep 28 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0.alpha-1
+- New upstream version 2.8.0-alpha
+
 * Tue Sep 20 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0-1
-- New upstream version 2.7-0
+- New upstream version 2.7.0
 
 * Sun Aug 17 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0.RC-1
-- New upstream version 2.7-0-RC
+- New upstream version 2.7.0-RC
 
 * Sun Aug 07 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0.beta3-1
-- New upstream version 2.7-0-beta3
+- New upstream version 2.7.0-beta3
 
 * Thu Mar 24 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0.beta-1
-- New upstream version 2.7-0-beta
+- New upstream version 2.7.0-beta
 
 * Sat Jan 28 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0.alpha2-1
-- New upstream version 2.7-0-alpha2
+- New upstream version 2.7.0-alpha2
 
 * Mon Aug 08 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0.alpha-1
-- New upstream version 2.7-0-alpha
+- New upstream version 2.7.0-alpha
 
 * Wed Jun 22 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.6.18-1
 - New upstream version 2.6.18
