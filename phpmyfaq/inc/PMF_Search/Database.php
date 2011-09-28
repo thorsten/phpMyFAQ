@@ -125,7 +125,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
             $this->getJoinedColumns(),
             $this->getMatchingColumns(),
             $searchTerm);
-        
+
         $this->resultSet = $this->dbHandle->query($query);
     }
     
@@ -317,7 +317,11 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
         
         if (count($this->conditions)) {
             foreach ($this->conditions as $column => $value) {
-                $conditions .= " AND " . $column . " = " . $value;
+                if (is_array($value)) {
+                    $conditions .= ' AND ' . $column . ' IN (' . implode(', ', $value) . ')';
+                } else {
+                    $conditions .= ' AND ' . $column . ' = ' . $value;
+                }
             }
         }
         

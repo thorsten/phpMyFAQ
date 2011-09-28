@@ -81,13 +81,14 @@ if (!is_null($inputTag)) {
 //
 if (!is_null($inputSearchTerm) || !is_null($search)) {
     if (!is_null($inputSearchTerm)) {
-        $inputSearchTerm = $db->escape_string(strip_tags($inputSearchTerm));
+        $inputSearchTerm = $db->escape(strip_tags($inputSearchTerm));
     }
     if (!is_null($search)) {
-        $inputSearchTerm = $db->escape_string(strip_tags($search));
+        $inputSearchTerm = $db->escape(strip_tags($search));
     }
-    
-    $faqSearch->setCategory($inputCategory);
+
+    $faqSearch->setCategory($category);
+    $faqSearch->setCategoryId($inputCategory);
     $searchResult = $faqSearch->search($inputSearchTerm, $allLanguages);
     
     $faqSearchResult->reviewResultset($searchResult);
