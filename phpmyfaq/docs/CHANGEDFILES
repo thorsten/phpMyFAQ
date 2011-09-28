@@ -1,6 +1,25 @@
 CHANGED FILES FROM 2.6.17 -> 2.6.18
 
-
+./admin/editor/plugins/ajaxfilemanager/_ajax_get_details_listing.php
+./admin/editor/plugins/ajaxfilemanager/_ajax_get_thumbnail_listing.php
+./admin/editor/plugins/ajaxfilemanager/inc/class.search.php
+./admin/editor/plugins/ajaxfilemanager/inc/config.base.php
+./admin/editor/plugins/ajaxfilemanager/inc/config.tinymce.php
+./admin/group.php
+./admin/index.php
+./cron.verifyurls.php
+./inc/Language.php
+./inc/Mail.php
+./inc/PMF_Export/Pdf/Wrapper.php
+./inc/Tags.php
+./install/setup.php
+./install/update.php
+./lang/language_da.php
+./lang/language_es.php
+./lang/language_hi.php
+./lang/language_uk.php
+./savecomment.php
+./savequestion.php
 
 
 
