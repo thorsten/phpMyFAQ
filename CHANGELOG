@@ -6,6 +6,7 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.8.0-dev - 2011-
+- added improved advanced search in subcategories (Thorsten)
 - 
 
 Version 2.7.0 - 2011-09-
