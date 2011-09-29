@@ -496,7 +496,6 @@ foreach ($all_ids as $cat_id => $record_ids) {
                     success: function(msg) {
                         $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_delsuc']; ?>');
                         $('.record_' + record_id + '_' + record_lang).fadeOut('slow');
-                        $('.record_' + record_id + '_' + record_lang).after('<tr><td colspan="10">' + msg + '</td></tr>');
                     }
                 });
             }
