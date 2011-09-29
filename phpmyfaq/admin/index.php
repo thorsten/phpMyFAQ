@@ -290,6 +290,7 @@ if (isset($auth) && in_array(true, $permission)) {
             case 'viewinactive':
             case 'viewactive':
             case 'view':                    require_once 'record.show.php'; break;
+            case 'searchfaqs':              require_once 'record.search.php'; break;
             case "takequestion":
             case "editentry":
             case 'copyentry':
