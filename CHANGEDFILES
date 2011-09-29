@@ -1,3 +1,42 @@
+CHANGED FILES FROM 2.7.0-RC -> 2.7.0
+
+./admin/adminlog.php
+./admin/ajax.config_list.php
+./admin/category.main.php
+./admin/editor/plugins/ajaxfilemanager/_ajax_get_details_listing.php
+./admin/editor/plugins/ajaxfilemanager/_ajax_get_thumbnail_listing.php
+./admin/editor/plugins/ajaxfilemanager/inc/class.search.php
+./admin/editor/plugins/ajaxfilemanager/inc/config.base.php
+./admin/editor/plugins/ajaxfilemanager/inc/config.tinymce.php
+./admin/password.php
+./admin/session.keepalive.php
+./admin/stat.main.php
+./admin/stat.show.php
+./inc/PMF_Helper/Faq.php
+./inc/PMF_Search/Database/Mysqli.php
+./inc/PMF_User/CurrentUser.php
+./inc/Tags.php
+./install/setup.php
+./install/update.php
+./lang/language_de.php
+./lang/language_en.php
+./lang/language_hi.php
+./lang/language_pt.php
+./lang/language_ru.php
+./lang/language_uk.php
+./template/default/css/style.css
+./template/default/index.tpl
+./template/default/indexLogin.tpl
+./template/default/indexNewUser.tpl
+./ajaxservice.php
+./attachment.php
+./cron.verifyurls.php
+./index.php
+./microsummary.php
+
+
+
+
 CHANGED FILES FROM 2.7.0-beta3 -> 2.7.0-RC
 
 ./_.htaccess
