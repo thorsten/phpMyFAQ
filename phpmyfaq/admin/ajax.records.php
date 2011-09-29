@@ -31,80 +31,93 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $ajax_action = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 
-if (('save_active_records' == $ajax_action && $permission['approverec'] ||
-     'save_sticky_records' == $ajax_action) && $permission['editbt']) {
-    /**
-     * Expected is an array of the structure:
-     * array( 0 => array((int)id, (string)langugage, (int) checked)),
-     * 	      1 => .....
-     * )
-     */
-    $items = isset($_GET['items']) && is_array($_GET['items']) ? $_GET['items'] : array();
+// Expected is an array of the structure:
+// array( 0 => array((int)id, (string)langugage, (int) checked)),
+//        1 => .....
+// )
+$items = isset($_GET['items']) && is_array($_GET['items']) ? $_GET['items'] : array();
 
-    if (!isset($items[0][2])) {
-        $items[0][2] = 0;
-    }
+if (!isset($items[0][2])) {
+    $items[0][2] = 0;
+}
 
-    switch ($ajax_action) {
-        case 'save_active_records':
-            $type = 'active';
-            break;
+switch($ajax_action) {
+
+    // save active FAQs
+    case 'save_active_records':
+        if ($permission['approverec']) {
+            if (!empty($items)) {
+                $faq = new PMF_Faq();
+
+                foreach ($items as $item) {
+                    if (is_array($item) && count($item) == 3 && PMF_Language::isASupportedLanguage($item[1])) {
+                        print $faq->updateRecordFlag((int)$item[0], addslashes($item[1]), (int)$item[2], 'active');
+                    }
+                }
+            }
+        } else {
+            print $PMF_LANG['err_NotAuth'];
+        }
+        break;
+
+    // save sticky FAQs
+    case 'save_sticky_records':
+        if ($permission['editbt']) {
+            if (!empty($items)) {
+                $faq = new PMF_Faq();
+
+                foreach ($items as $item) {
+                    if (is_array($item) && count($item) == 3 && PMF_Language::isASupportedLanguage($item[1])) {
+                        print $faq->updateRecordFlag((int)$item[0], addslashes($item[1]), (int)$item[2], 'sticky');
+                    }
+                }
+            }
+        } else {
+            print $PMF_LANG['err_NotAuth'];
+        }
+        break;
+
+    // search FAQs for suggestions
+    case 'search_records':
+        if ($permission['editbt']) {
+
+            $faq             = new PMF_Faq();
+            $faqSearch       = new PMF_Search($db, $Language);
+            $faqSearchResult = new PMF_Search_Resultset($user, $faq);
+            $searchResult    = '';
+            $searchString    = PMF_Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
+
+            if (!is_null($searchString)) {
+                $searchResult = $faqSearch->search($searchString, false);
+
+                $faqSearchResult->reviewResultset($searchResult);
+
+                $faqSearchHelper = PMF_Helper_Search::getInstance();
+                $faqSearchHelper->setSearchterm($searchString);
+
+                print $faqSearchHelper->renderAdminSuggestionResult($faqSearchResult);
+            }
             
-        case 'save_sticky_records':
-            $type = 'sticky';
-            break;
-    }
-
-    if (null !== $type && !empty($items)) {
-        $faq = new PMF_Faq();
-
-        foreach ($items as $item) {
-            if (is_array($item) && count($item) == 3 && PMF_Language::isASupportedLanguage($item[1])) { 
-                print $faq->updateRecordFlag((int)$item[0], addslashes($item[1]), (int)$item[2], $type);
-            }
+        } else {
+            print $PMF_LANG['err_NotAuth'];
         }
-    }
-}
+        break;
 
-if ('search_records' == $ajax_action && $permission['editbt']) {
-    
-    $faq             = new PMF_Faq();
-    $faqSearch       = new PMF_Search($db, $Language);
-    $faqSearchResult = new PMF_Search_Resultset($user, $faq);
-    $searchResult    = '';
-    $searchString    = PMF_Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
+    // delete FAQs
+    case 'delete_record':
+        if ($permission['delbt']) {
 
-    if (!is_null($searchString)) {
-        $searchResult = $faqSearch->search($searchString, false);
-        
-        $faqSearchResult->reviewResultset($searchResult);
-        
-        $faqSearchHelper = PMF_Helper_Search::getInstance();
-        $faqSearchHelper->setSearchterm($searchString);
-        
-        print $faqSearchHelper->renderAdminSuggestionResult($faqSearchResult);
-    }
-}
+            $record_id   = PMF_Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
+            $record_lang = PMF_Filter::filterInput(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
 
-if ('delete_record' == $ajax_action && $permission['delbt']) {
-	
-    $record_id   = PMF_Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
-    $record_lang = PMF_Filter::filterInput(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
-    
-    $logging = new PMF_Logging();
-    $logging->logAdmin($user, 'Beitragdel, ' . $record_id);
+            $logging = new PMF_Logging();
+            $logging->logAdmin($user, 'Deleted FAQ ID ' . $record_id);
 
-    $path = PMF_ROOT_DIR . '/attachments/' . $record_id . '/';
-    if (@is_dir($path)) {
-        $do = dir($path);
-        while ($dat = $do->read()) {
-            if ($dat != "." && $dat != "..") {
-                unlink($path . $dat);
-            }
+            $faq->deleteRecord($record_id, $record_lang);
+            print $PMF_LANG['ad_entry_delsuc'];
+            
+        } else {
+            print $PMF_LANG['err_NotAuth'];
         }
-        rmdir($path);
-    }
-    
-    $faq->deleteRecord($record_id, $record_lang);
-    print $PMF_LANG['ad_entry_delsuc'];
+        break;
 }
