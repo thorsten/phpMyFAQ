@@ -293,7 +293,7 @@ switch ($action) {
 
             if ($autoActivate) {
                 // Activate visits
-                $visits = PMF_Visits::getInstance();
+                $visits = PMF_Visits::getInstance($db, $Language);
                 $visits->add($recordId, $newData['lang']);
 
                 // Add user permissions

@@ -145,7 +145,7 @@ if ($permission['editbt']) {
         if ($faqconfig->get('main.enableGoogleTranslation') === true && !empty($languages)) {
             
             $linkverifier = new PMF_Linkverifier($user->getLogin());
-            $visits       = PMF_Visits::getInstance();
+            $visits       = PMF_Visits::getInstance($db, $Language);
     
             $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
             $languages = explode(",", $languages);

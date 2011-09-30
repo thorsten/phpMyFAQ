@@ -190,7 +190,7 @@ if ($permission['editbt'] || $permission['delbt']) {
         $old     = 0;
         $all_ids = $visits = array();
         
-        foreach (PMF_Visits::getInstance()->getAllData() as $visit) {
+        foreach (PMF_Visits::getInstance($db, $Language)->getAllData() as $visit) {
             $visits[$visit['id']] = $visit['lang'];
         }
         

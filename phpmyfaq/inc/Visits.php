@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Visits
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-08
@@ -46,14 +46,14 @@ class PMF_Visits
      * @var PMF_DB_Driver
      */
     private $db = null;
-	
+    
     /**
      * The user agent language
      *
      * @var string
      */
     private $language;
-	
+    
     /**
      * Instance
      * 
@@ -61,29 +61,36 @@ class PMF_Visits
      */
     private static $instance = null;
     
-	/**
-	 * Constructor
-	 * 
-	 * @return void
-	 */
-	private function __construct()
-	{
-		$this->db       = PMF_Db::getInstance();
-		$this->language = PMF_Language::$language;
-	}
+    /**
+     * Constructor
+     *
+     * @param PMF_DB_Driver $database Database connection
+     * @param PMF_Language  $language Language object
+     *
+     * @return PMF_Visits
+     */
+    private function __construct(PMF_DB_Driver $database, PMF_Language $language)
+    {
+        $this->db       = $database;
+        $this->language = $language;
+    }
 
 
     /**
      * Returns the single instance
      *
      * @access static
+     *
+     * @param PMF_DB_Driver $database Database connection
+     * @param PMF_Language  $language Language object
+     *
      * @return PMF_Visits
      */
-    public static function getInstance()
+    public static function getInstance(PMF_DB_Driver $database, PMF_Language $language)
     {
         if (null == self::$instance) {
             $className = __CLASS__;
-            self::$instance = new $className();
+            self::$instance = new $className($database, $language);
         }
         return self::$instance;
     }
@@ -117,7 +124,8 @@ class PMF_Visits
                 lang = '%s'",
             SQLPREFIX,
             $id,
-            $this->language);
+            $this->language->getLanguage()
+        );
 
         $result = $this->db->query($query);
         if ($this->db->numRows($result)) {
@@ -151,9 +159,10 @@ class PMF_Visits
                 (%d, '%s', %d, %d)",
             SQLPREFIX,
             $id,
-            $this->language,
+            $this->language->getLanguage(),
             1,
-            $_SERVER['REQUEST_TIME']);
+            $_SERVER['REQUEST_TIME']
+        );
         $this->db->query($query);
 
         return true;
@@ -182,7 +191,8 @@ class PMF_Visits
             SQLPREFIX,
             $_SERVER['REQUEST_TIME'],
             $id,
-            $this->language);
+            $this->language->getLanguage()
+        );
         $this->db->query($query);
 
         return true;
@@ -193,7 +203,7 @@ class PMF_Visits
      *
      * @return array
      */
-    function getAllData()
+    public function getAllData()
     {
         $data = array();
 
@@ -209,10 +219,12 @@ class PMF_Visits
         $result = $this->db->query($query);
 
         while ($row = $this->db->fetchObject($result)) {
-            $data[] = array('id'         => $row->id,
-                            'lang'       => $row->lang,
-                            'visits'     => $row->visits,
-                            'last_visit' => $row->last_visit);
+            $data[] = array(
+                'id'         => $row->id,
+                'lang'       => $row->lang,
+                'visits'     => $row->visits,
+                'last_visit' => $row->last_visit
+            );
         }
 
         return $data;

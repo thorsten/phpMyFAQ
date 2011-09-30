@@ -60,7 +60,7 @@ if (0 == $solution_id) {
 
 $faqsession->userTracking('article_view', $faq->faqRecord['id']);
 
-$faqvisits = PMF_Visits::getInstance();
+$faqvisits = PMF_Visits::getInstance($db, $Language);
 $faqvisits->logViews($faq->faqRecord['id']);
 
 $content = $faq->faqRecord['content'];
