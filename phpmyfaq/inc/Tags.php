@@ -265,7 +265,11 @@ class PMF_Tags
                         (%d, %d)",
                         SQLPREFIX,
                         $record_id,
-                        array_search(PMF_String::strtolower($tagging_name), array_map(array('PMF_String', 'strtolower'), $current_tags)));
+                        array_search(
+                            PMF_String::strtolower($tagging_name),
+                            array_map(array('PMF_String', 'strtolower'), $current_tags)
+                        )
+                    );
                     $this->db->query($query);
                 }
             }
@@ -449,7 +453,8 @@ class PMF_Tags
         foreach ($tags as $tag) {
             $i++;
             if ($max - $min > 0) {
-                $CSSRelevanceLevel = (int)($CSSRelevanceMinLevel + $CSSRelevanceMaxLevel*($tag['count'] - $min)/($max - $min));
+                $CSSRelevanceLevel =
+                    (int)($CSSRelevanceMinLevel + $CSSRelevanceMaxLevel * ($tag['count'] - $min) / ($max - $min));
             }
             $class = 'relevance'.$CSSRelevanceLevel;
             $html .= '<span class="'.$class.'">';
