@@ -106,7 +106,7 @@ if ($news['active'] && (!$expired)) {
 }
 
 // Set the template variables
-$tpl->processTemplate (
+$tpl->parse(
     'writeContent',
     array(
         'writeNewsHeader'     => $newsMainHeader,
@@ -136,4 +136,4 @@ $tpl->processTemplate (
     )
 );
 
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->merge('writeContent', 'index');

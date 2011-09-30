@@ -36,7 +36,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_Template
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Jan Mergler <jan.mergler@gmx.de>
- * @copyright 2002-2010 phpMyFAQ Team
+ * @copyright 2002-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-22
@@ -93,24 +93,25 @@ class PMF_Template
         self::$tplSetName = $tplSetName;
         
         foreach ($myTemplate as $templateName => $filename) {
-            $this->templates[$templateName] = $this->readTemplate("template/$tplSetName/$filename", $templateName);
+            $this->templates[$templateName] = $this->_include(
+                'template/' . $tplSetName . '/' . $filename,
+                $templateName
+            );
         }
     }
 
     /**
      * This function merges two templates
      *
-     * @param string $name   Name of the template to include
-     * @param string $toname Name of the new template
+     * @param string $from Name of the template to include
+     * @param string $into Name of the new template
      * 
      * @return void
      */
-    public function includeTemplate($name, $toname)
+    public function merge($from, $into)
     {
-        $this->outputs[$toname] = str_replace('{'.$name.'}', 
-                                              $this->outputs[$name], 
-                                              $this->outputs[$toname]);
-        $this->outputs[$name]   = '';
+        $this->outputs[$into] = str_replace('{' . $from . '}', $this->outputs[$from], $this->outputs[$into]);
+        $this->outputs[$from] = null;
     }
 
     /**
@@ -121,7 +122,7 @@ class PMF_Template
      * 
      * @return void
      */
-    public function processTemplate($templateName, Array $templateContent)
+    public function parse($templateName, Array $templateContent)
     {
         $tmp       = $this->templates[$templateName];
         $rawBlocks = $this->_readBlocks($tmp);
@@ -163,11 +164,11 @@ class PMF_Template
     }
 
     /**
-     * This function prints the whole parsed template file.
+     * This function renders the whole parsed templates and returns it.
      *
-     * @return void
+     * @return string
      */
-    public function printTemplate()
+    public function render()
     {
         foreach ($this->outputs as $val) {
             print str_replace("\n\n", "\n", $val);
@@ -175,36 +176,17 @@ class PMF_Template
     }
 
     /**
-     * This function adds two template outputs.
+     * This function adds two parsed templates
      *
-     * @param array $name   Name of the template to add
-     * @param array $toname Name of the new template
+     * @param array $from Name of the template to add
+     * @param array $into Name of the new template
      * 
      * @return void
      */
-    public function addTemplate(Array $name, Array $toname)
+    public function add(Array $from, Array $into)
     {
-        $this->outputs[$toname] .= $this->outputs[$name];
-        $this->outputs[$name] = '';
-    }
-
-    /**
-     * This function reads a template file.
-     *
-     * @param string $filename     Filename
-     * @param string $tplName Name of the template
-     * 
-     * @return string
-     */
-    public function readTemplate($filename, $tplName)
-    {
-        if (file_exists($filename)) {
-            $tplContent             = file_get_contents($filename);
-            $this->blocks[$tplName] = $this->_readBlocks($tplContent);
-            return $tplContent;
-        } else {
-            return '<p><span style="color: red;">Error:</span> Cannot open the file '.$filename.'.</p>';
-        }
+        $this->outputs[$into] .= $this->outputs[$from];
+        $this->outputs[$from]  = null;
     }
 
     /**
@@ -216,7 +198,7 @@ class PMF_Template
      * 
      * @return void
      */
-    public function processBlock($templateName, $blockName, Array $blockContent)
+    public function parseBlock($templateName, $blockName, Array $blockContent)
     {
         if (isset($this->blocks[$templateName][$blockName])) {
             $block = $this->blocks[$templateName][$blockName];
@@ -262,8 +244,27 @@ class PMF_Template
     }
     
     //
-    // Private Functions
+    // Protected and private methods
     //
+
+    /**
+     * This function reads a template file.
+     *
+     * @param string $filename     Filename
+     * @param string $tplName Name of the template
+     *
+     * @return string
+     */
+    protected function _include($filename, $tplName)
+    {
+        if (file_exists($filename)) {
+            $tplContent             = file_get_contents($filename);
+            $this->blocks[$tplName] = $this->_readBlocks($tplContent);
+            return $tplContent;
+        } else {
+            return '<p><span style="color: red;">Error:</span> Cannot open the file '.$filename.'.</p>';
+        }
+    }
 
     /**
      * This function multiplies blocks

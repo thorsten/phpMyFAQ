@@ -59,7 +59,7 @@ if (!is_null($id) && !is_null($srclang) && PMF_Language::isASupportedLanguage($s
     $faqSource = $oFaq->faqRecord;
 }
 
-$tpl->processTemplate(
+$tpl->parse(
     'writeContent',
     array(
         'writeSourceFaqId'          => $faqSource['id'],
@@ -89,5 +89,5 @@ $tpl->processTemplate(
     )
 );
 
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->merge('writeContent', 'index');
 

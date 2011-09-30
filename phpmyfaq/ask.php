@@ -45,7 +45,7 @@ $categoryId = PMF_Filter::filterInput(INPUT_GET, 'category_id', FILTER_VALIDATE_
 $helper = PMF_Helper_Category::getInstance();
 $helper->setCategory($category);
 
-$tpl->processTemplate(
+$tpl->parse(
     'writeContent',
     array(
         'msgQuestion'          => $PMF_LANG['msgQuestion'],
@@ -67,4 +67,4 @@ $tpl->processTemplate(
     )
 );
 
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->merge('writeContent', 'index');

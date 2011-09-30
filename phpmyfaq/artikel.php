@@ -248,7 +248,7 @@ $translationUrl = sprintf(
         $lang);
 
 if (!empty($switchLanguage)) {
-    $tpl->processBlock(
+    $tpl->parseBlock(
         'writeContent',
         'switchLanguage',
         array(
@@ -258,7 +258,7 @@ if (!empty($switchLanguage)) {
 }
 
 // Set the template variables
-$tpl->processTemplate('writeContent', array(
+$tpl->parse('writeContent', array(
     'writeRubrik'                   => $categoryName,
     'solution_id'                   => $faq->faqRecord['solution_id'],
     'writeThema'                    => $thema,
@@ -311,4 +311,4 @@ $tpl->processTemplate('writeContent', array(
 );
 
 
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->merge('writeContent', 'index');

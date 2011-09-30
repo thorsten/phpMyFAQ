@@ -36,10 +36,10 @@ if (!is_null($letter) && (1 == PMF_String::strlen($letter))) {
 
 $sitemap = new PMF_Sitemap($current_user, $current_groups);
 
-$tpl->processTemplate (
+$tpl->parse (
     'writeContent', array(
         'writeLetters'       => $sitemap->getAllFirstLetters(),
         'writeMap'           => $sitemap->getRecordsFromLetter($currentLetter),
         'writeCurrentLetter' => $currentLetter));
 
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->merge('writeContent', 'index');

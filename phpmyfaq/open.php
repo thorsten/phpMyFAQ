@@ -30,11 +30,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $faqsession->userTracking('open_questions', 0);
 
-$tpl->processTemplate ('writeContent', array(
+$tpl->parse ('writeContent', array(
     'msgOpenQuestions'   => $PMF_LANG['msgOpenQuestions'],
     'msgQuestionText'    => $PMF_LANG['msgQuestionText'],
     'msgDate_User'       => $PMF_LANG['msgDate_User'],
     'msgQuestion2'       => $PMF_LANG['msgQuestion2'],
     'printOpenQuestions' => $faq->printOpenQuestions()));
 
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->merge('writeContent', 'index');

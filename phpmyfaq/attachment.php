@@ -68,6 +68,6 @@ if ($att) {
 }
 
 // If we're here, there was an error with file download
-$tpl->processBlock('writeContent', 'attachmentErrors', array('item' => implode('<br/>', $attachmentErrors)));
-$tpl->processTemplate('writeContent', array());
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->parseBlock('writeContent', 'attachmentErrors', array('item' => implode('<br/>', $attachmentErrors)));
+$tpl->parse('writeContent', array());
+$tpl->merge('writeContent', 'index');

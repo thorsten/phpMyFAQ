@@ -162,7 +162,7 @@ if ('' == $printResult && !is_null($inputSearchTerm)) {
     $printResult = $faqSearchHelper->renderSearchResult($faqSearchResult, $page);
 }
 
-$tpl->processTemplate('writeContent', array(
+$tpl->parse('writeContent', array(
     'msgAdvancedSearch'        => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgAdvancedSearch']),
     'msgSearch'                => $PMF_LANG['msgSearch'],
     'searchString'             => PMF_String::htmlspecialchars($inputSearchTerm, ENT_QUOTES, 'utf-8'),
@@ -178,4 +178,4 @@ $tpl->processTemplate('writeContent', array(
     'msgMostPopularSearches'   => $PMF_LANG['msgMostPopularSearches'],
     'printMostPopularSearches' => $faqSearchHelper->renderMostPopularSearches($mostPopularSearchData)));
 
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->merge('writeContent', 'index');

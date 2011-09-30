@@ -33,7 +33,7 @@ $faqsession->userTracking('instantresponse', 0);
 
 $searchString = $printInstantResponse = '';
 
-$tpl->processTemplate(
+$tpl->parse(
     'writeContent',
     array(
         'msgInstantResponse'            => $PMF_LANG['msgInstantResponse'],
@@ -43,4 +43,4 @@ $tpl->processTemplate(
         'ajaxlanguage'                  => $LANGCODE,
         'printInstantResponse'          => $printInstantResponse));
 
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->merge('writeContent', 'index');

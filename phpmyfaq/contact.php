@@ -38,7 +38,7 @@ if (!is_null($showCaptcha)) {
     exit;
 }
 
-$tpl->processTemplate (
+$tpl->parse (
     'writeContent',
     array(
         'msgContact'         => $PMF_LANG['msgContact'],
@@ -60,4 +60,4 @@ $tpl->processTemplate (
     )
 );
 
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->merge('writeContent', 'index');
