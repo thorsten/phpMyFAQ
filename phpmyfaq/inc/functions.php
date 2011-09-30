@@ -180,32 +180,6 @@ EOD;
 //
 
 /**
- * Returns all sorting possibilities for FAQ records
- *
- * @param   string  $current
- * @return  string
- * @access  public
- * @since   2007-03-10
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- */
-function sortingOptions($current)
-{
-    global $PMF_LANG;
-
-    $options = array('id', 'thema', 'visits', 'datum', 'author');
-    $output = '';
-
-    foreach ($options as $value) {
-        printf('<option value="%s"%s>%s</option>',
-            $value,
-            ($value == $current) ? ' selected="selected"' : '',
-            $PMF_LANG['ad_conf_order_'.$value]);
-    }
-
-    return $output;
-}
-
-/**
  * This function returns the banned words dictionary as an array.
  *
  * @return  array
@@ -266,31 +240,6 @@ function checkBannedWord($content)
 }
 
 /**
- * This function returns the passed content with HTML hilighted banned words.
- *
- * @param   string  $content
- * @return  string
- * @access  public
- * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
- */
-function getHighlightedBannedWords($content)
-{
-    $bannedHTMLHiliWords = array();
-    $bannedWords         = getBannedWords();
-
-    // Build the RegExp array
-    foreach ($bannedWords as $word) {
-        $bannedHTMLHiliWords[] = "/(".quotemeta($word).")/ism";
-    }
-    // Use the CSS "highlight" class to highlight the banned words
-    if (count($bannedHTMLHiliWords)>0) {
-        return PMF_String::preg_replace($bannedHTMLHiliWords, "<span class=\"highlight\">\\1</span>", $content);
-    } else {
-        return $content;
-    }
-}
-
-/**
  * Returns the number of anonymous users and registered ones.
  * These are the numbers of unique users who have perfomed
  * some activities within the last five minutes
@@ -335,22 +284,6 @@ function getUsersOnline($activityTimeWindow = 300)
     }
 
     return $users;
-}
-
-/******************************************************************************
- * Funktionen fuer Artikelseiten
- ******************************************************************************/
-
-/**
- * Macht an den String nen / dran, falls keiner da ist
- * @@ Bastian, 2002-01-06
- */
-function EndSlash($string)
-{
-    if (PMF_String::substr($string, PMF_String::strlen($string)-1, 1) != "/" ) {
-        $string .= "/";
-    }
-    return $string;
 }
 
 //
