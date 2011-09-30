@@ -24,24 +24,24 @@
                 <ul class="faqTabNav">
                     <li>
                         <a href="javascript:void(0);" onclick="infoBox('authorInfo')">
-                            About this FAQ
+                            {msg_about_faq}
                         </a>
                     </li>
                     <li>
                         <a href="javascript:void(0);" onclick="infoBox('votingForm')">
-                            Rate this FAQ
+                            {msgVoteUseability}
                         </a>
                     </li>
                     [switchLanguage]
                     <li>
                         <a href="javascript:void(0);" onclick="infoBox('switchAvailableLanguage')">
-                            Change language
+                            {msgChangeLanguage}
                         </a>
                     </li>
                     [/switchLanguage]
                     <li>
                         <a href="javascript:void(0);" onclick="infoBox('addTranslation')">
-                            Translate this FAQ
+                            {msgTranslate}
                         </a>
                     </li>
                 </ul>

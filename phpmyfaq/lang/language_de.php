@@ -64,7 +64,7 @@ $PMF_LANG["msgPrinterFriendly"] = "Druckerfreundliche Version";
 $PMF_LANG["msgPrintArticle"] = "FAQ ausdrucken";
 $PMF_LANG["msgMakeXMLExport"] = "als XML-Datei exportieren";
 $PMF_LANG["msgAverageVote"] = "Durchschnittliche Bewertung:";
-$PMF_LANG["msgVoteUseability"] = "Bewertung der Nützlichkeit dieser FAQ:";
+$PMF_LANG["msgVoteUseability"] = "Bewertung der FAQ";
 $PMF_LANG["msgVoteFrom"] = "von";
 $PMF_LANG["msgVoteBad"] = "vollkommen überflüssig";
 $PMF_LANG["msgVoteGood"] = "sehr wertvoll";
@@ -837,7 +837,7 @@ $PMF_LANG['msgNewTranslationName'] = "Name:";
 $PMF_LANG['msgNewTranslationMail'] = "E-Mailadresse:";
 $PMF_LANG['msgNewTranslationKeywords'] = "Schlüsselwörter:";
 $PMF_LANG['msgNewTranslationSubmit'] = 'Vorschlag absenden';
-$PMF_LANG['msgTranslate'] = 'Übersetzungsvorschlag für';
+$PMF_LANG['msgTranslate'] = 'Übersetzungsvorschlag';
 $PMF_LANG['msgTranslateSubmit'] = 'Beginne die Übersetzung ...';
 $PMF_LANG['msgNewTranslationThanks'] = "Vielen Dank für den Übersetzungsvorschlag!";
 
@@ -1113,3 +1113,6 @@ $LANG_CONF['security.enableLoginOnly'] = array(0 => 'checkbox', 1 => 'Komplett g
 $PMF_LANG['securityControlCenter'] = 'Sicherheitskonfiguration';
 $PMF_LANG['ad_search_delsuc'] = 'Der Suchbegriff wurde erfolgreich gelöscht';
 $PMF_LANG['ad_search_delfail'] = 'Der Suchbegriff konnte nicht gelöscht werden.';
+
+// added 2.7.1 - 2011-09-30 by Thorsten
+$PMF_LANG['msg_about_faq'] = 'Über diese FAQ';

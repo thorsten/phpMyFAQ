@@ -89,7 +89,7 @@ $PMF_LANG["msgPrinterFriendly"] = "printer-friendly version";
 $PMF_LANG["msgPrintArticle"] = "Print this record";
 $PMF_LANG["msgMakeXMLExport"] = "Export as XML-File";
 $PMF_LANG["msgAverageVote"] = "Average rating:";
-$PMF_LANG["msgVoteUseability"] = "Please rate this FAQ:";
+$PMF_LANG["msgVoteUseability"] = "Rate this FAQ";
 $PMF_LANG["msgVoteFrom"] = "out of";
 $PMF_LANG["msgVoteBad"] = "completely useless";
 $PMF_LANG["msgVoteGood"] = "most valuable";
@@ -520,7 +520,7 @@ $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Save all records of your FAQ in one XML file.";
 $PMF_LANG["ad_xml_gen"] = "create XML file";
 $PMF_LANG["ad_entry_locale"] = "Language";
-$PMF_LANG["msgLangaugeSubmit"] = "Select language:";
+$PMF_LANG["msgLangaugeSubmit"] = "Change language";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Preview";
@@ -869,7 +869,7 @@ $PMF_LANG['msgNewTranslationName'] = "Your Name:";
 $PMF_LANG['msgNewTranslationMail'] = "Your email address:";
 $PMF_LANG['msgNewTranslationKeywords'] = "Keywords:";
 $PMF_LANG['msgNewTranslationSubmit'] = 'Submit your proposal';
-$PMF_LANG['msgTranslate'] = 'Propose a translation for';
+$PMF_LANG['msgTranslate'] = 'Translate this FAQ';
 $PMF_LANG['msgTranslateSubmit'] = 'Start translation...';
 $PMF_LANG['msgNewTranslationThanks'] = "Thank you for your translation proposal!";
 
@@ -1157,3 +1157,6 @@ $LANG_CONF['security.enableLoginOnly'] = array(0 => 'checkbox', 1 => 'Complete s
 $PMF_LANG['securityControlCenter'] = 'Security configuration';
 $PMF_LANG['ad_search_delsuc'] = 'The searchterm was successfully deleted.';
 $PMF_LANG['ad_search_delfail'] = 'The seachterm was not deleted.';
+
+// added 2.7.1 - 2011-09-30 by Thorsten
+$PMF_LANG['msg_about_faq'] = 'About this FAQ';
