@@ -152,10 +152,13 @@ XML-support, PDF-support, a backup-system and an easy to use
 installation script.
 
 %changelog
-=========
+==========
 
 * Wed Sep 28 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0.alpha-1
 - New upstream version 2.8.0-alpha
+
+* Fri Sep 30 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.1-1
+- New upstream version 2.7.1
 
 * Tue Sep 20 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0-1
 - New upstream version 2.7.0

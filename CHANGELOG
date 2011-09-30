@@ -9,7 +9,11 @@ Version 2.8.0-dev - 2011-
 - added improved advanced search in subcategories (Thorsten)
 - improved usability of administration backend (Thorsten)
 
-Version 2.7.0 - 2011-09-
+Version 2.7.1 - 2011-10-
+- added missing translations (Thorsten)
+- 
+
+Version 2.7.0 - 2011-09-30
 - changed PHP requirement to PHP 5.2.3 (Thorsten)
 - dropped support for MySQL 4.1 (Thorsten)
 - dropped support for Internet Explorer 6 + 7 (Thorsten)
@@ -45,7 +49,7 @@ Version 2.7.0 - 2011-09-
 - updated Spanish translation (Jason)
 - fixed a lot of bugs (Thorsten)
 
-Version 2.6.18 - 2011-09-
+Version 2.6.18 - 2011-09-28
 - updated Spanish translation
 - fixed Danish translation
 - fixed minor bugs (Thorsten, Matthew Robinson)

@@ -430,7 +430,7 @@ switch ($action) {
                     $questionMail = "User: " . $questionData['username'] .
                                 ", mailto:".$questionData['email'] . "\n" . $PMF_LANG["msgCategory"] .
                                 ": " . $categories[$questionData['category_id']]["name"] . "\n\n" .
-                                wordwrap($content, 72) . "\n\n" .
+                                wordwrap($question, 72) . "\n\n" .
                                 $faqconfig->get('main.referenceURL') . '/admin/';
 
                     $userId = $cat->getCategoryUser($questionData['category_id']);
@@ -469,7 +469,7 @@ switch ($action) {
                 $questionMail = "User: " . $questionData['username'] .
                                 ", mailto:".$questionData['email'] . "\n" . $PMF_LANG["msgCategory"] .
                                 ": " . $categories[$questionData['category_id']]["name"] . "\n\n" .
-                                wordwrap($content, 72) . "\n\n" .
+                                wordwrap($question, 72) . "\n\n" .
                                 $faqconfig->get('main.referenceURL') . '/admin/';
 
                 $userId = $cat->getCategoryUser($questionData['category_id']);
