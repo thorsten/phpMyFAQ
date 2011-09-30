@@ -38,7 +38,7 @@ switch ($ajaxAction) {
     
     case 'load_stop_words_by_lang':
         if (PMF_Language::isASupportedLanguage($stopwordsLang)) {
-            $stopwordsList = PMF_Stopwords::getInstance()->getByLang($stopwordsLang);
+            $stopwordsList = PMF_Stopwords::getInstance($db, $Language)->getByLang($stopwordsLang);
             
             header('Content-Type: application/json');
             print json_encode($stopwordsList);
@@ -47,7 +47,7 @@ switch ($ajaxAction) {
         
     case 'delete_stop_word':
         if (null != $stopwordId && PMF_Language::isASupportedLanguage($stopwordsLang)) {
-            $oStopwords = PMF_Stopwords::getInstance();
+            $oStopwords = PMF_Stopwords::getInstance($db, $Language);
             $oStopwords->setLanguage($stopwordsLang);
             $oStopwords->remove($stopwordId);
         }
@@ -55,7 +55,7 @@ switch ($ajaxAction) {
         
     case 'save_stop_word':
         if (null != $stopword && PMF_Language::isASupportedLanguage($stopwordsLang)) {
-            $oStopwords = PMF_Stopwords::getInstance();
+            $oStopwords = PMF_Stopwords::getInstance($db, $Language);
             $oStopwords->setLanguage($stopwordsLang);
             if (null !== $stopwordId && -1 < $stopwordId) {
                 $oStopwords->update($stopwordId, $stopword);

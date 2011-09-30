@@ -374,7 +374,7 @@ switch ($action) {
 
             if (1 != $save) {
 
-                $cleanQuestion = PMF_Stopwords::getInstance()->clean($question);
+                $cleanQuestion = PMF_Stopwords::getInstance($db, $Language)->clean($question);
 
                 $user            = new PMF_User_CurrentUser();
                 $faqSearch       = new PMF_Search($db, $Language);

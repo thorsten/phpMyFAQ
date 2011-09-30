@@ -34,7 +34,7 @@ $oGlossary = new PMF_Glossary();
 $oLnk      = new PMF_Linkverifier();
 $tagging   = new PMF_Tags($db, $Language);
 $relevant  = new PMF_Relation($db, $Language);
-$faqrating = new PMF_Rating();
+$faqrating = new PMF_Rating($db, $Language);
 $comment   = new PMF_Comment();
 
 $captcha->setSessionId($sids);
