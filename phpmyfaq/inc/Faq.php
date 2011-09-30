@@ -2830,21 +2830,19 @@ class PMF_Faq
         
         switch ($type) {
             case 'sticky':
-                $flag = (int)$flag;
+                $flag = ($flag === 'checked' ? 1 : 0);
                 break;
                 
             case 'active':
-                $flag = $flag ? "'yes'" : "'no'";
+                $flag = ($flag === 'checked' ? "'yes'" : "'no'");
                 break;
                 
             default:
-                /**
-                 * This is because we would run into unknown db column
-                 */
+                // This is because we would run into unknown db column
                 $flag = null;
                 break;
         }
-        
+
         if (null !== $flag) {
         
             $update = sprintf("

@@ -60,7 +60,7 @@ if (('save_active_records' == $ajax_action && $permission['approverec'] ||
 
         foreach ($items as $item) {
             if (is_array($item) && count($item) == 3 && PMF_Language::isASupportedLanguage($item[1])) { 
-                print $faq->updateRecordFlag((int)$item[0], addslashes($item[1]), (int)$item[2], $type);
+                print $faq->updateRecordFlag((int)$item[0], addslashes($item[1]), $item[2], $type);
             }
         }
     }
