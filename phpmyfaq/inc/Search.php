@@ -59,11 +59,18 @@ class PMF_Search
     private $language;
     
     /**
-     * Category
+     * Category ID
      * 
      * @var integer
      */
     private $categoryId = null;
+
+    /**
+     * Category object
+     * 
+     * @var PMF_Category
+     */
+    private $category = null;
     
     /**
      * Search table
@@ -93,7 +100,7 @@ class PMF_Search
      * @param  integer $categoryId Category ID
      * @return void
      */
-    public function setCategory($categoryId)
+    public function setCategoryId($categoryId)
     {
         $this->categoryId = (int)$categoryId;
     }
@@ -103,9 +110,9 @@ class PMF_Search
      * 
      * @return integer
      */
-    public function getCategory()
+    public function getCategoryId()
     {
-    	return $this->categoryId;
+        return $this->categoryId;
     }
 
     /**
@@ -123,10 +130,18 @@ class PMF_Search
         $condition = array($fdTable . '.active' => "'yes'");
         $search    = PMF_Search_Factory::create($this->language, array('database' => PMF_Db::getType()));
         
-        // Search in all or one category?
-        if (!is_null($this->categoryId) && 0 < $this->categoryId) {
-            $selectedCategory = array($fcrTable . '.category_id' => $this->categoryId);
-            $condition        = array_merge($selectedCategory, $condition);
+        if (!is_null($this->getCategoryId()) && 0 < $this->getCategoryId()) {
+            if ($this->getCategory() instanceof PMF_Category) {
+                $children = $this->getCategory()->getChildNodes($this->getCategoryId());
+                $selectedCategory = array(
+                    $fcrTable . '.category_id' => array_merge((array)$this->getCategoryId(), $children)
+                );
+            } else {
+                $selectedCategory = array(
+                    $fcrTable . '.category_id' => $this->getCategoryId()
+                );
+            }
+            $condition = array_merge($selectedCategory, $condition);
         }
 
         if ((!$allLanguages) && (!is_numeric($searchterm))) {
@@ -270,5 +285,25 @@ class PMF_Search
         $result = $this->db->query($sql);
 
         return (int)$this->db->fetchObject($result)->count;
+    }
+
+    /**
+     * Sets the PMF_Category object
+     * 
+     * @param PMF_Category $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+    }
+
+    /**
+     * Returns the PMF_Category object
+     * 
+     * @return PMF_Category
+     */
+    public function getCategory()
+    {
+        return $this->category;
     }
 }

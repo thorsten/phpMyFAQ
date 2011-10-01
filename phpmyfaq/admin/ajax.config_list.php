@@ -111,7 +111,7 @@ function printInputFieldByType($key, $type)
                    break;
                 
                 case 'records.orderby':
-                    print sortingOptions($faqconfig->get($key));
+                    print PMF_Configuration::sortingOptions($faqconfig->get($key));
                     break;
                     
                 case 'records.sortby':

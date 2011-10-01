@@ -180,32 +180,6 @@ EOD;
 //
 
 /**
- * Returns all sorting possibilities for FAQ records
- *
- * @param   string  $current
- * @return  string
- * @access  public
- * @since   2007-03-10
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- */
-function sortingOptions($current)
-{
-    global $PMF_LANG;
-
-    $options = array('id', 'thema', 'visits', 'datum', 'author');
-    $output = '';
-
-    foreach ($options as $value) {
-        printf('<option value="%s"%s>%s</option>',
-            $value,
-            ($value == $current) ? ' selected="selected"' : '',
-            $PMF_LANG['ad_conf_order_'.$value]);
-    }
-
-    return $output;
-}
-
-/**
  * This function returns the banned words dictionary as an array.
  *
  * @return  array
@@ -266,31 +240,6 @@ function checkBannedWord($content)
 }
 
 /**
- * This function returns the passed content with HTML hilighted banned words.
- *
- * @param   string  $content
- * @return  string
- * @access  public
- * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
- */
-function getHighlightedBannedWords($content)
-{
-    $bannedHTMLHiliWords = array();
-    $bannedWords         = getBannedWords();
-
-    // Build the RegExp array
-    foreach ($bannedWords as $word) {
-        $bannedHTMLHiliWords[] = "/(".quotemeta($word).")/ism";
-    }
-    // Use the CSS "highlight" class to highlight the banned words
-    if (count($bannedHTMLHiliWords)>0) {
-        return PMF_String::preg_replace($bannedHTMLHiliWords, "<span class=\"highlight\">\\1</span>", $content);
-    } else {
-        return $content;
-    }
-}
-
-/**
  * Returns the number of anonymous users and registered ones.
  * These are the numbers of unique users who have perfomed
  * some activities within the last five minutes
@@ -336,113 +285,6 @@ function getUsersOnline($activityTimeWindow = 300)
 
     return $users;
 }
-
-/******************************************************************************
- * Funktionen fuer Artikelseiten
- ******************************************************************************/
-
-/**
- * Macht an den String nen / dran, falls keiner da ist
- * @@ Bastian, 2002-01-06
- */
-function EndSlash($string)
-{
-    if (PMF_String::substr($string, PMF_String::strlen($string)-1, 1) != "/" ) {
-        $string .= "/";
-    }
-    return $string;
-}
-
-//
-// Various functions
-//
-
-/**
- * Adds a menu entry according to user permissions.
- * ',' stands for 'or', '*' stands for 'and'
- *
- * @param  string  $restrictions Restrictions
- * @param  string  $action       Action parameter
- * @param  string  $caption      Caption
- * @param  string  $active       Active
- * @access public
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * 
- * @return string
- */
-function addMenuEntry($restrictions = '', $action = '', $caption = '', $active = '')
-{
-    global $PMF_LANG;
-
-    $class = '';
-    if ($active == $action) {
-        $class = ' class="active"';
-    }
-
-    if ($action != '') {
-        $action = "action=".$action;
-    }
-
-    if (isset($PMF_LANG[$caption])) {
-        $_caption = $PMF_LANG[$caption];
-    } else {
-        $_caption = 'No string for '.$caption;
-    }
-
-    $output = sprintf('        <li><a%s href="?%s">%s</a></li>%s',
-        $class,
-        $action,
-        $_caption,
-        "\n");
-           
-    return evalPermStr($restrictions) ? $output : '';
-}
-
-/**
- * Parse and check a permission string
- * 
- * Permissions are glued with each other as follows
- * - '+' stands for 'or'
- * - '*' stands for 'and'
- * 
- * No braces will be parsed, only simple expressions
- * @example right1*right2+right3+right4*right5
- * 
- * @author Anatoliy Belsky <anatoliy.belsky@mayflower.de>
- * @param string $restrictions
- * 
- * @return boolean
- */
-function evalPermStr($restrictions)
-{
-    global $permission;
-    
-    if(false !== strpos($restrictions, '+')) {
-    	$retval = false;
-        foreach (explode('+', $restrictions) as $_restriction) {
-			$retval = $retval || evalPermStr($_restriction);
-			if($retval) {
-				break;
-			}
-        }        
-    } else if(false !== strpos($restrictions, '*')) {
-    	$retval = true;
-        foreach (explode('*', $restrictions) as $_restriction) {
-            if(!isset($permission[$_restriction]) || !$permission[$_restriction]) {
-                $retval = false;
-                break;   
-            }
-        }  
-    } else {
-    	$retval = strlen($restrictions) > 0 && isset($permission[$restrictions]) && $permission[$restrictions];
-    }
-    
-    return $retval;
-}
-
-/******************************************************************************
- * Funktionen fuer den Adminbereich
- ******************************************************************************/
 
 /**
  * Funktion zum generieren vom "Umblaettern" | @@ Bastian, 2002-01-03

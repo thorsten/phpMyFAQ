@@ -40,7 +40,7 @@ if (!is_null($showCaptcha)) {
     exit;
 }
 
-$tpl->processTemplate(
+$tpl->parse(
     'writeContent',
     array(
         'msgRegistration'            => $PMF_LANG['msgRegistration'],
@@ -59,4 +59,4 @@ $tpl->processTemplate(
     )
 );
 
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->merge('writeContent', 'index');

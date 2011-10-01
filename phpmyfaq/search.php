@@ -81,13 +81,14 @@ if (!is_null($inputTag)) {
 //
 if (!is_null($inputSearchTerm) || !is_null($search)) {
     if (!is_null($inputSearchTerm)) {
-        $inputSearchTerm = $db->escape_string(strip_tags($inputSearchTerm));
+        $inputSearchTerm = $db->escape(strip_tags($inputSearchTerm));
     }
     if (!is_null($search)) {
-        $inputSearchTerm = $db->escape_string(strip_tags($search));
+        $inputSearchTerm = $db->escape(strip_tags($search));
     }
-    
-    $faqSearch->setCategory($inputCategory);
+
+    $faqSearch->setCategory($category);
+    $faqSearch->setCategoryId($inputCategory);
     $searchResult = $faqSearch->search($inputSearchTerm, $allLanguages);
     
     $faqSearchResult->reviewResultset($searchResult);
@@ -161,7 +162,7 @@ if ('' == $printResult && !is_null($inputSearchTerm)) {
     $printResult = $faqSearchHelper->renderSearchResult($faqSearchResult, $page);
 }
 
-$tpl->processTemplate('writeContent', array(
+$tpl->parse('writeContent', array(
     'msgAdvancedSearch'        => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgAdvancedSearch']),
     'msgSearch'                => $PMF_LANG['msgSearch'],
     'searchString'             => PMF_String::htmlspecialchars($inputSearchTerm, ENT_QUOTES, 'utf-8'),
@@ -177,4 +178,4 @@ $tpl->processTemplate('writeContent', array(
     'msgMostPopularSearches'   => $PMF_LANG['msgMostPopularSearches'],
     'printMostPopularSearches' => $faqSearchHelper->renderMostPopularSearches($mostPopularSearchData)));
 
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->merge('writeContent', 'index');

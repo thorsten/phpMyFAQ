@@ -48,7 +48,7 @@ $send2friendLink = sprintf('%s/index.php?action=artikel&amp;cat=%d&amp;id=%d&amp
     (int)$id,
     urlencode($artlang));
 
-$tpl->processTemplate (
+$tpl->parse (
     'writeContent',
     array(
         'lang'               => $artlang,
@@ -74,4 +74,4 @@ $tpl->processTemplate (
     )
 );
 
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->merge('writeContent', 'index');

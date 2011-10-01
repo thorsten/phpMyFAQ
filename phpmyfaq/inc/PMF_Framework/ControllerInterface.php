@@ -1,6 +1,6 @@
 <?php
 /**
- * Open questions frontend
+ * Controller Interface for phpMyFAQ Framework
  *
  * PHP Version 5.2
  *
@@ -15,26 +15,38 @@
  * under the License.
  *
  * @category  phpMyFAQ
- * @package   Frontend
+ * @package   PMF_Framework
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2011 phpMyFAQ Team
+ * @copyright 2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2002-09-17
+ * @since     2011-09-30
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
-$faqsession->userTracking('open_questions', 0);
-
-$tpl->parse ('writeContent', array(
-    'msgOpenQuestions'   => $PMF_LANG['msgOpenQuestions'],
-    'msgQuestionText'    => $PMF_LANG['msgQuestionText'],
-    'msgDate_User'       => $PMF_LANG['msgDate_User'],
-    'msgQuestion2'       => $PMF_LANG['msgQuestion2'],
-    'printOpenQuestions' => $faq->printOpenQuestions()));
-
-$tpl->merge('writeContent', 'index');
+/**
+ * PMF_Framework_ControllerInterface
+ * 
+ * @category  phpMyFAQ
+ * @package   PMF_Framework
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2011 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2011-09-30
+ */
+interface PMF_Framework_ControllerInterface
+{
+    /**
+     * @abstract
+     *
+     * @param PMF_Framework_Request $request
+     * @param PMF_Framework_Response $response
+     *
+     * @return void
+     */
+    public function run(PMF_Framework_Request $request, PMF_Framework_Response $response);
+}

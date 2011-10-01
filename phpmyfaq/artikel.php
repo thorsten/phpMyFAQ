@@ -34,7 +34,7 @@ $oGlossary = new PMF_Glossary();
 $oLnk      = new PMF_Linkverifier();
 $tagging   = new PMF_Tags($db, $Language);
 $relevant  = new PMF_Relation($db, $Language);
-$faqrating = new PMF_Rating();
+$faqrating = new PMF_Rating($db, $Language);
 $comment   = new PMF_Comment();
 
 $captcha->setSessionId($sids);
@@ -60,7 +60,7 @@ if (0 == $solution_id) {
 
 $faqsession->userTracking('article_view', $faq->faqRecord['id']);
 
-$faqvisits = PMF_Visits::getInstance();
+$faqvisits = PMF_Visits::getInstance($db, $Language);
 $faqvisits->logViews($faq->faqRecord['id']);
 
 $content = $faq->faqRecord['content'];
@@ -147,7 +147,6 @@ if ($num > 1) {
         $check4Lang .= ">".$languageCodes[strtoupper($language)]."</option>\n";
     }
     $switchLanguage .= "<fieldset>\n";
-    $switchLanguage .= "<legend>".$PMF_LANG["msgLangaugeSubmit"]."</legend>\n";
     $switchLanguage .= "<form action=\"".$changeLanguagePath."\" method=\"post\" style=\"display: inline;\">\n";
     $switchLanguage .= "<select name=\"artlang\" size=\"1\">\n";
     $switchLanguage .= $check4Lang;
@@ -249,11 +248,17 @@ $translationUrl = sprintf(
         $lang);
 
 if (!empty($switchLanguage)) {
-    $tpl->processBlock('writeContent', 'switchLanguage', array());
+    $tpl->parseBlock(
+        'writeContent',
+        'switchLanguage',
+        array(
+            'msgChangeLanguage' => $PMF_LANG['msgLangaugeSubmit']
+        )
+    );
 }
 
 // Set the template variables
-$tpl->processTemplate ('writeContent', array(
+$tpl->parse('writeContent', array(
     'writeRubrik'                   => $categoryName,
     'solution_id'                   => $faq->faqRecord['solution_id'],
     'writeThema'                    => $thema,
@@ -300,7 +305,10 @@ $tpl->processTemplate ('writeContent', array(
         'writecomment',
         $PMF_LANG['msgCaptcha']
     ),
-    'writeComments'                 => $comment->getComments($faq->faqRecord['id'], PMF_Comment::COMMENT_TYPE_FAQ)));
+    'writeComments'                 => $comment->getComments($faq->faqRecord['id'], PMF_Comment::COMMENT_TYPE_FAQ),
+    'msg_about_faq'                 => $PMF_LANG['msg_about_faq']
+    )
+);
 
 
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->merge('writeContent', 'index');

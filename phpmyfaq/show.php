@@ -53,20 +53,20 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
         $up               = $oLink->toHtmlAnchor();
     }
 
-    $tpl->processTemplate('writeContent', array(
+    $tpl->parse('writeContent', array(
         'writeCategory'            => $PMF_LANG['msgEntriesIn'].$name,
         'writeCategoryDescription' => $categoryDescription,
         'writeThemes'              => $records,
         'writeOneThemeBack'        => $up));
-    $tpl->includeTemplate('writeContent', 'index');
+    $tpl->merge('writeContent', 'index');
 
 } else {
 
     $faqsession->userTracking('show_all_categories', 0);
-    $tpl->processTemplate('writeContent', array(
+    $tpl->parse('writeContent', array(
         'writeCategory'            => $PMF_LANG['msgFullCategories'],
         'writeCategoryDescription' => '',
         'writeThemes'              => $category->viewTree(),
         'writeOneThemeBack'        => ''));
-    $tpl->includeTemplate('writeContent', 'index');
+    $tpl->merge('writeContent', 'index');
 }

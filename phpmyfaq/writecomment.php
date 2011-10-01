@@ -41,7 +41,7 @@ $artlang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRIPPE
 
 $faqsession->userTracking('write_comment', $id);
 
-$tpl->processTemplate(
+$tpl->parse(
     'writeContent',
     array(
         'msgCommentHeader'    => $PMF_LANG['msgWriteComment'],
@@ -63,4 +63,4 @@ $tpl->processTemplate(
     )
 );
 
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->merge('writeContent', 'index');

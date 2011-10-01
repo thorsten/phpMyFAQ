@@ -62,7 +62,7 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
 
 <header id="header">
     <h1>
-        <h1>phpMyFAQ <?php print NEWVERSION; ?>  Update</h1>
+        <h1>phpMyFAQ <?php print NEWVERSION; ?> Update</h1>
     </h1>
 </header>
 
@@ -136,21 +136,24 @@ if ($step == 1) {
                     </strong>
                 </legend>
 
-                <p>This update will work <strong>only</strong> for the following versions</p>
+                <p>This update script will work <strong>only</strong> for the following versions:</p>
                 <ul type="square">
                     <li>phpMyFAQ 2.5.x</li>
                     <li>phpMyFAQ 2.6.x</li>
                     <li>phpMyFAQ 2.7.x</li>
                 </ul>
 
-                <p>This update <strong>will not</strong> work for the following versions.</p>
+                <p>This update script <strong>will not</strong> work for the following versions:</p>
                 <ul type="square">
                     <li>phpMyFAQ 0.x</li>
                     <li>phpMyFAQ 1.x</li>
                     <li>phpMyFAQ 2.0.x</li>
                 </ul>
                 <p class="hint">
-                    <strong>Please make a full backup of your SQL tables before running this update.</strong>
+                    <strong>
+                        Please make a full backup of your SQL tables, your templates, attachments and uploaded images
+                        before running this update.
+                    </strong>
                 </p>
                 <?php
                 if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable($templateDir)) {
@@ -603,8 +606,14 @@ if ($step == 4) {
 		$query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishTimeout', '500')";
     }
 
+    //
+    // UPDATES FROM 2.8.0-alpha
+    //
+    if (version_compare($version, '2.8.0-alpha', '<')) {
 
-    // Perform the queries for updating/migrating the database from 2.x
+    }
+
+    // Perform the queries for updating/migrating the database
     if (isset($query)) {
         print '<div class="center">';
         $count = 0;
@@ -686,11 +695,11 @@ if ($step == 4) {
 
     print "</p>\n";
 
-    print '<p class="success">The database was updated successfully.</p>';
-    print '<p>Back to your <a href="../index.php">phpMyFAQ installation.</a></p>';
+    print '<p class="success">The database was updated successfully. Thank you very much for updating.</p>';
+    print '<p>Back to your <a href="../index.php">phpMyFAQ installation</a> and have fun! :-)</p>';
     foreach (glob(PMF_ROOT_DIR.'/config/*.bak.php') as $filename) {
         if (!@unlink($filename)) {
-            print "<p class=\"hint\">Please manually remove the backup file '".$filename."'.</p>\n";
+            printf("<p class=\"hint\">Please remove the backup file %s manually.</p>\n", $filename);
         }
     }
 

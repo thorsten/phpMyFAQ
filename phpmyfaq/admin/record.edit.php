@@ -522,19 +522,10 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
             </fieldset>
 
-<?php
-    if ($selectedRevisionId == $faqData['revision_id']) {
-?>
-            <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_save"]; ?>" name="submit[1]" />
+            <?php if ($selectedRevisionId == $faqData['revision_id']): ?>
+            <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_save"]; ?>" name="submit" />
             <input class="submit" type="reset" value="<?php print $PMF_LANG["ad_gen_reset"]; ?>" />
-<?php
-    }
-    if ($queryString != "insertentry") {
-?>
-            <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit[0]" />
-<?php
-    }
-?>
+            <?php endif; ?>
     </p>
 <?php
     if (is_numeric($faqData['id'])) {

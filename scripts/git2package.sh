@@ -10,7 +10,7 @@
 #
 #   ./git2package.sh
 #
-# The script will download the source code from branch CVS_TAG and
+# The script will download the source code from branch and
 # it will create the 2 packages plus their MD5 hashes.
 #
 # @package   phpMyFAQ

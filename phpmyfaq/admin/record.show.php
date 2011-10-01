@@ -32,7 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 printf("<header><h2>%s</h2><header>\n", $PMF_LANG['ad_entry_aor']);
 
 if ($permission['editbt'] || $permission['delbt']) {
-	
+    
     // (re)evaluate the Category object w/o passing the user language
     $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $category->transform(0);
@@ -90,32 +90,6 @@ if ($permission['editbt'] || $permission['delbt']) {
         }
     }
 ?>
-    <form action="?action=view" method="post">
-    <fieldset>
-        <legend><?php print $PMF_LANG["msgSearch"]; ?></legend>
-
-        <p>
-            <label><?php print $PMF_LANG["msgSearchWord"]; ?>:</label>
-            <input type="text" name="searchterm" size="50" value="<?php print $searchterm; ?>" autofocus="autofocus" />
-            <?php if ($linkverifier->isReady() == true): ?>
-            <br />
-            <input type="checkbox" name="linkstate" value="linkbad" <?php print $linkState; ?> />
-            <?php print $PMF_LANG['ad_linkcheck_searchbadonly']; ?>
-            <?php endif; ?>
-        </p>
-        <p>
-            <label><?php print $PMF_LANG["msgCategory"]; ?>:</label>
-            <select name="searchcat">
-                <option value="0"><?php print $PMF_LANG["msgShowAllCategories"]; ?></option>
-                <?php print $helper->renderCategoryOptions($searchcat); ?>
-            </select>
-        </p>
-        <p>
-            <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["msgSearch"]; ?>" />
-        </p>
-    </fieldset>
-    </form>
-
     <form id="recordSelection" name="recordSelection" method="post">
     <fieldset>
         <legend><?php print $PMF_LANG['ad_menu_entry_edit']; ?></legend>
@@ -216,7 +190,7 @@ if ($permission['editbt'] || $permission['delbt']) {
         $old     = 0;
         $all_ids = $visits = array();
         
-        foreach (PMF_Visits::getInstance()->getAllData() as $visit) {
+        foreach (PMF_Visits::getInstance($db, $Language)->getAllData() as $visit) {
             $visits[$visit['id']] = $visit['lang'];
         }
         
@@ -496,7 +470,6 @@ foreach ($all_ids as $cat_id => $record_ids) {
                     success: function(msg) {
                         $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_delsuc']; ?>');
                         $('.record_' + record_id + '_' + record_lang).fadeOut('slow');
-                        $('.record_' + record_id + '_' + record_lang).after('<tr><td colspan="10">' + msg + '</td></tr>');
                     }
                 });
             }

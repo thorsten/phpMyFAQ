@@ -57,7 +57,7 @@ $category->buildTree();
 $helper = PMF_Helper_Category::getInstance();
 $helper->setCategory($category);
 
-$tpl->processTemplate(
+$tpl->parse(
     'writeContent', 
     array(
         'msgNewContentHeader'   => $PMF_LANG['msgNewContentHeader'],
@@ -84,4 +84,4 @@ $tpl->processTemplate(
     )
 );
 
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->merge('writeContent', 'index');

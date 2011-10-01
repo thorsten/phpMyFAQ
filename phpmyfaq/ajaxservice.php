@@ -293,7 +293,7 @@ switch ($action) {
 
             if ($autoActivate) {
                 // Activate visits
-                $visits = PMF_Visits::getInstance();
+                $visits = PMF_Visits::getInstance($db, $Language);
                 $visits->add($recordId, $newData['lang']);
 
                 // Add user permissions
@@ -374,7 +374,7 @@ switch ($action) {
 
             if (1 != $save) {
 
-                $cleanQuestion = PMF_Stopwords::getInstance()->clean($question);
+                $cleanQuestion = PMF_Stopwords::getInstance($db, $Language)->clean($question);
 
                 $user            = new PMF_User_CurrentUser();
                 $faqSearch       = new PMF_Search($db, $Language);
@@ -430,7 +430,7 @@ switch ($action) {
                     $questionMail = "User: " . $questionData['username'] .
                                 ", mailto:".$questionData['email'] . "\n" . $PMF_LANG["msgCategory"] .
                                 ": " . $categories[$questionData['category_id']]["name"] . "\n\n" .
-                                wordwrap($content, 72) . "\n\n" .
+                                wordwrap($question, 72) . "\n\n" .
                                 $faqconfig->get('main.referenceURL') . '/admin/';
 
                     $userId = $cat->getCategoryUser($questionData['category_id']);
@@ -469,7 +469,7 @@ switch ($action) {
                 $questionMail = "User: " . $questionData['username'] .
                                 ", mailto:".$questionData['email'] . "\n" . $PMF_LANG["msgCategory"] .
                                 ": " . $categories[$questionData['category_id']]["name"] . "\n\n" .
-                                wordwrap($content, 72) . "\n\n" .
+                                wordwrap($question, 72) . "\n\n" .
                                 $faqconfig->get('main.referenceURL') . '/admin/';
 
                 $userId = $cat->getCategoryUser($questionData['category_id']);

@@ -78,9 +78,11 @@ PMF_String::init($LANGCODE);
 /**
  * Initialize attachment factory
  */
-PMF_Attachment_Factory::init($faqconfig->get('records.attachmentsStorageType'),
-                             $faqconfig->get('records.defaultAttachmentEncKey'),
-                             $faqconfig->get('records.enableAttachmentEncryption'));
+PMF_Attachment_Factory::init(
+    $faqconfig->get('records.attachmentsStorageType'),
+    $faqconfig->get('records.defaultAttachmentEncKey'),
+    $faqconfig->get('records.enableAttachmentEncryption')
+);
 
 PMF_Cache::init($faqconfig);
 
@@ -483,28 +485,41 @@ $main_template_vars = array(
 
 if ('main' == $action || 'show' == $action) {
     if ('main' == $action && PMF_Configuration::getInstance()->get('search.useAjaxSearchOnStartpage')) {
-        $tpl->processBlock('index', 'globalSuggestBox', array(
-            'ajaxlanguage'                  => $LANGCODE,
-            'msgDescriptionInstantResponse' => $PMF_LANG['msgDescriptionInstantResponse'],
-            'msgSearch'                     => sprintf('<a class="help" href="index.php?action=search">%s</a>',
-                                                   $PMF_LANG["msgAdvancedSearch"]
-                                               )
-           )
+        $tpl->parseBlock(
+            'index',
+            'globalSuggestBox',
+            array(
+                'ajaxlanguage'                  => $LANGCODE,
+                'msgDescriptionInstantResponse' => $PMF_LANG['msgDescriptionInstantResponse'],
+                'msgSearch'                     => sprintf('<a class="help" href="index.php?action=search">%s</a>',
+                                                       $PMF_LANG["msgAdvancedSearch"]
+                                                   )
+            )
         );
     } else {
-        $tpl->processBlock('index', 'globalSearchBox', array(
-            'writeSendAdress' => '?'.$sids.'action=search',
-            'searchBox'       => $PMF_LANG['msgSearch'],
-            'categoryId'      => ($cat === 0) ? '%' : (int)$cat,
-            'msgSearch'       => '<a class="help" href="index.php?'.$sids.'action=search">'.$PMF_LANG["msgAdvancedSearch"].'</a>'));
+        $tpl->parseBlock(
+            'index',
+            'globalSearchBox',
+            array(
+                'writeSendAdress' => '?'.$sids.'action=search',
+                'searchBox'       => $PMF_LANG['msgSearch'],
+                'categoryId'      => ($cat === 0) ? '%' : (int)$cat,
+                'msgSearch'       => '<a class="help" href="index.php?'.$sids.'action=search">'.$PMF_LANG["msgAdvancedSearch"].'</a>'
+            )
+        );
     }
 }
                              
 $stickyRecordsParams = $faq->getStickyRecords();
 if (!isset($stickyRecordsParams['error'])) {
-    $tpl->processBlock('index', 'stickyRecordsList', array(
-        'stickyRecordsUrl'   => $stickyRecordsParams['url'],
-        'stickyRecordsTitle' => $stickyRecordsParams['title']));
+    $tpl->parseBlock(
+        'index',
+        'stickyRecordsList',
+        array(
+            'stickyRecordsUrl'   => $stickyRecordsParams['url'],
+            'stickyRecordsTitle' => $stickyRecordsParams['title']
+        )
+    );
 }
 
 if ($faqconfig->get('main.enableRewriteRules')) {
@@ -553,7 +568,7 @@ if (DEBUG) {
 //
 // Get main template, set main variables
 //
-$tpl->processTemplate('index', array_merge($main_template_vars, $links_template_vars, $debug_template_vars));
+$tpl->parse('index', array_merge($main_template_vars, $links_template_vars, $debug_template_vars));
 
 //
 // Show login box or logged-in user information
@@ -567,7 +582,7 @@ if (isset($auth)) {
     } else {
         $adminSection = $PMF_LANG['adminSection'];
     }
-    $tpl->processTemplate(
+    $tpl->parse(
         'loginBox',
         array(
             'loggedinas'   => $PMF_LANG['ad_user_loggedin'],
@@ -578,7 +593,7 @@ if (isset($auth)) {
     );
 } else {
     if (isset($_SERVER['HTTPS']) || !$faqconfig->get('security.useSslForLogins')) {
-        $tpl->processTemplate(
+        $tpl->parse(
             'loginBox',
             array(
                 'msgLoginUser'    => $PMF_LANG['msgLoginUser'],
@@ -594,7 +609,7 @@ if (isset($auth)) {
             )
         );
     } else {
-        $tpl->processTemplate(
+        $tpl->parse(
             'loginBox',
             array(
                 'secureloginurl'  => sprintf('https://%s%s', $_SERVER['HTTP_HOST'], $_SERVER['REQUEST_URI']),
@@ -603,7 +618,7 @@ if (isset($auth)) {
         );
     }
 }
-$tpl->includeTemplate('loginBox', 'index');
+$tpl->merge('loginBox', 'index');
 
 // generate top ten list
 if ($faqconfig->get('records.orderingPopularFaqs') == 'visits') {
@@ -614,26 +629,38 @@ if ($faqconfig->get('records.orderingPopularFaqs') == 'visits') {
     
 $toptenParams = $faq->getTopTen($param);
 if (!isset($toptenParams['error'])) {
-    $tpl->processBlock('rightBox', 'toptenList', array(
-        'toptenUrl'    => $toptenParams['url'],
-        'toptenTitle'  => $toptenParams['title'],
-        'toptenVisits' => $toptenParams[$param])
+    $tpl->parseBlock(
+        'rightBox',
+        'toptenList',
+        array(
+            'toptenUrl'    => $toptenParams['url'],
+            'toptenTitle'  => $toptenParams['title'],
+            'toptenVisits' => $toptenParams[$param]
+        )
     );
 } else {
-    $tpl->processBlock('rightBox', 'toptenListError', array(
-        'errorMsgTopTen' => $toptenParams['error'])
+    $tpl->parseBlock(
+        'rightBox',
+        'toptenListError',
+        array(
+            'errorMsgTopTen' => $toptenParams['error']
+        )
     );
 }
 
 $latestEntriesParams = $faq->getLatest();
 if (!isset($latestEntriesParams['error'])) {
-    $tpl->processBlock('rightBox', 'latestEntriesList', array(
-        'latestEntriesUrl'   => $latestEntriesParams['url'],
-        'latestEntriesTitle' => $latestEntriesParams['title'],
-        'latestEntriesDate'  => $latestEntriesParams['date'])
+    $tpl->parseBlock(
+        'rightBox',
+        'latestEntriesList',
+        array(
+            'latestEntriesUrl'   => $latestEntriesParams['url'],
+            'latestEntriesTitle' => $latestEntriesParams['title'],
+            'latestEntriesDate'  => $latestEntriesParams['date']
+        )
     );
 } else {
-    $tpl->processBlock('rightBox', 'latestEntriesListError', array(
+    $tpl->parseBlock('rightBox', 'latestEntriesListError', array(
         'errorMsgLatest' => $latestEntriesParams['error'])
     );
 }
@@ -649,8 +676,10 @@ if ('artikel' == $action || 'show' == $action) {
     $faqHelper = PMF_Helper_Faq::getInstance();
     $faqHelper->setSsl((isset($_SERVER['HTTPS']) && is_null($_SERVER['HTTPS']) ? false : true));
     
-    $tpl->processBlock(
-        'rightBox', 'socialLinks', array(
+    $tpl->parseBlock(
+        'rightBox',
+        'socialLinks',
+        array(
             'writeDiggMsgTag'        => 'Digg it!',
             'writeFacebookMsgTag'    => 'Share on Facebook',
             'writeTwitterMsgTag'     => 'Share on Twitter',
@@ -669,8 +698,9 @@ if ('artikel' == $action || 'show' == $action) {
     );
 }
 
-$tpl->processTemplate(
-    'rightBox', array(
+$tpl->parse(
+    'rightBox',
+    array(
         'writeTopTenHeader'   => $PMF_LANG['msgTopTen'],
         'writeNewestHeader'   => $PMF_LANG['msgLatestArticles'],
         'writeTagCloudHeader' => $PMF_LANG['msg_tags'],
@@ -680,7 +710,7 @@ $tpl->processTemplate(
     )
 );
 
-$tpl->includeTemplate('rightBox', 'index');
+$tpl->merge('rightBox', 'index');
 
 //
 // Include requested PHP file
@@ -701,6 +731,6 @@ header("Vary: Negotiate,Accept");
 if (!DEBUG) {
     ob_start('ob_gzhandler');
 }
-$tpl->printTemplate();
+$tpl->render();
 
 $db->close();

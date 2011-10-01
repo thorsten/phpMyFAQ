@@ -34,9 +34,6 @@ $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck')
 
 if ($permission['editbt']) {
 
-    // Get submit action
-    $submit        = PMF_Filter::filterInputArray(INPUT_POST, array('submit' => array('filter' => FILTER_VALIDATE_INT,
-                                                                                      'flags'  => FILTER_REQUIRE_ARRAY)));
     // FAQ data
     $dateStart     = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
     $dateEnd       = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
@@ -67,7 +64,7 @@ if ($permission['editbt']) {
         $categories['rubrik'] = array();
     }
     
-    if (isset($submit['submit'][1]) && !is_null($question) && !is_null($categories['rubrik'])) {
+    if (!is_null($question) && !is_null($categories['rubrik'])) {
         // new entry
         $logging = new PMF_Logging();
         $logging->logAdmin($user, 'Beitragcreatesave');
@@ -99,7 +96,7 @@ if ($permission['editbt']) {
             // Create ChangeLog entry
             $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $recordData['lang']);
             // Create the visit entry
-            $visits = PMF_Visits::getInstance();
+            $visits = PMF_Visits::getInstance($db, $Language);
             $visits->add($record_id, $recordData['lang']);
             // Insert the new category relations
             $faq->addCategoryRelations($categories['rubrik'], $record_id, $recordData['lang']);
@@ -215,7 +212,7 @@ if ($permission['editbt']) {
 
 <?php
         } else {
-            print $PMF_LANG['ad_entry_savedfail'].$db->error();
+            printf('<p class="error">%s</p>',$PMF_LANG['ad_entry_savedfail'] . $db->error());
         }
 
     } else {
