@@ -782,8 +782,7 @@ class PMF_User
             FROM
                 %sfaquser
             %s
-            ORDER BY
-               login ASC",
+            ORDER BY user_id ASC",
             SQLPREFIX,
             ($withoutAnonymous ? 'WHERE user_id <> -1' : ''));
 
