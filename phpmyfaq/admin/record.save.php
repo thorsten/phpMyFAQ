@@ -208,6 +208,11 @@ if ($permission['editbt']) {
     </script>
 <?php
     }
+
+	/*
+	 * Clear the article cache and the related stuff
+	 */ 
+	PMF_Cache::getInstance()->clearArticle($record_id);
 } else {
     print $PMF_LANG['err_NotAuth'];
 }

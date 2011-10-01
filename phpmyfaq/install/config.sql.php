@@ -93,3 +93,11 @@ $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('socialnetworks.twit
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('socialnetworks.twitterAccessTokenKey', '')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('socialnetworks.twitterAccessTokenSecret', '')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('socialnetworks.enableFacebookSupport', 'false')";
+
+// Cache
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('cache.varnishEnable', 'false')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('cache.varnishHost', '127.0.0.1')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('cache.varnishPort', '2000')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('cache.varnishSecret', '')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('cache.varnishTimeout', '500')";
+

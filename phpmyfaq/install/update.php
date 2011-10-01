@@ -598,6 +598,12 @@ if ($step == 4) {
             WHERE config_name = 'main.ssoLogoutRedirect'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'security.useSslForLogins'
             WHERE config_name = 'main.useSslForLogins'";
+
+		$query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishEnable', 'false')";
+		$query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishHost', '127.0.0.1')";
+		$query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishPort', '2000')";
+		$query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishSecret', '')";
+		$query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishTimeout', '500')";
     }
 
     //
