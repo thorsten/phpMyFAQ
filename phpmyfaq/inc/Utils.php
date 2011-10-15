@@ -199,7 +199,9 @@ class PMF_Utils
     public static function resolveMarkers($text)
     {
         // Available markers: key and resolving value
-        $markers = array('%sitename%' => PMF_Configuration::getInstance()->get('main.titleFAQ'));
+        $markers = array(
+            '%sitename%' => PMF_Configuration::getInstance()->get('main.titleFAQ')
+        );
 
         // Resolve any known pattern
         return str_replace(
