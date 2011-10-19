@@ -246,8 +246,7 @@ if ($groupAction == 'add') {
                     <label for="group_description"><?php print $PMF_LANG['ad_group_description']; ?></label>
                     <textarea name="group_description" id="group_description" cols="<?php print $descriptionCols; ?>"
                               rows="<?php print $descriptionRows; ?>" tabindex="2"
-                        ><?php print (isset($group_description) ? $group_description : ''); ?>
-                    </textarea>
+                        ><?php print (isset($group_description) ? $group_description : ''); ?></textarea>
                 </p>
                 <p>
                     <label for="group_auto_join"><?php print $PMF_LANG['ad_group_autoJoin']; ?></label>
