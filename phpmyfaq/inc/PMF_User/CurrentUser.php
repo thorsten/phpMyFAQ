@@ -123,7 +123,7 @@ class PMF_User_CurrentUser extends PMF_User
      */
     public function login($login, $pass)
     {
-    	// ToDo: the option should be in the configuration of the DB
+        // ToDo: the option should be in the configuration of the DB
         //   instead of inc/dataldap.php
         global $PMF_LDAP;
         
@@ -137,7 +137,7 @@ class PMF_User_CurrentUser extends PMF_User
                 $login = substr($login, $pos+1);
             }
         }
-    	
+        
         // authenticate user by login and password
         $login_error = 0;
         $pass_error  = 0;

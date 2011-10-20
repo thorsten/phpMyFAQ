@@ -288,6 +288,14 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             before starting the phpMyFAQ setup?
         </p>
 
+        <p class="hint">
+            Your password will be saved using the
+            <strong>
+                <?php print PMF_ENCRYPTION_TYPE; ?>
+            </strong>
+            encryption. You can change this in <em>config/constants.php</em>.
+        </p>
+
         <form action="setup.php" method="post">
         <fieldset>
         <legend>Please add your database connection setup information</legend>

@@ -105,7 +105,7 @@ class PMF_User
      */
     public $auth_data = array('authSource' => array('name' => 'db', 
                                                     'type' => 'local'),
-                              'encType'    => 'md5',
+                              'encType'    => PMF_ENCRYPTION_TYPE,
                               'readOnly'   => false);
 
     /**
