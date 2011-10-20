@@ -8,7 +8,8 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 Version 2.7.1 - 2011-10-
 - added missing translations (Thorsten)
 - added configurable encryption type for passwords (Thorsten)
-- 
+- added support for anonymous LDAP logins (Thorsten)
+- fixed some bugs (Thorsten)
 
 Version 2.7.0 - 2011-09-30
 - changed PHP requirement to PHP 5.2.3 (Thorsten)
