@@ -7,6 +7,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.7.1 - 2011-10-
 - added missing translations (Thorsten)
+- added configurable encryption type for passwords (Thorsten)
 - 
 
 Version 2.7.0 - 2011-09-30

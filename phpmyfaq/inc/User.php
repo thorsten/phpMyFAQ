@@ -33,6 +33,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+if (!defined('PMF_ENCRYPTION_TYPE')) {
+    define('PMF_ENCRYPTION_TYPE', 'md5'); // Fallback to md5()
+}
+
 /**
  * PMF_User
  *
