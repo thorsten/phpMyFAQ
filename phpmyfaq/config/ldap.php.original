@@ -1,6 +1,21 @@
 <?php
-$PMF_LDAP["ldap_server"] = '';
-$PMF_LDAP["ldap_port"] = '';
-$PMF_LDAP["ldap_user"] = '';
-$PMF_LDAP["ldap_password"] = '';
-$PMF_LDAP["ldap_base"] = '';
+// Main LDAP server
+$PMF_LDAP['ldap_server'] = '';
+$PMF_LDAP['ldap_port'] = '';
+$PMF_LDAP['ldap_user'] = '';
+$PMF_LDAP['ldap_password'] = '';
+$PMF_LDAP['ldap_base'] = '';
+
+// More LDAP servers
+// You can as much as you like, please activate them in config/constants_ldap.php
+$PMF_LDAP['ldap_server'][0] = '';
+$PMF_LDAP['ldap_port'][0] = '';
+$PMF_LDAP['ldap_user'][0] = '';
+$PMF_LDAP['ldap_password'][0] = '';
+$PMF_LDAP['ldap_base'][0] = '';
+
+$PMF_LDAP['ldap_server'][1] = '';
+$PMF_LDAP['ldap_port'][1] = '';
+$PMF_LDAP['ldap_user'][1] = '';
+$PMF_LDAP['ldap_password'][1] = '';
+$PMF_LDAP['ldap_base'][1] = '';
