@@ -448,6 +448,14 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
         global $PMF_LANG;
         
         $faqconfig = PMF_Configuration::getInstance();
+
+        $footer = sprintf(
+            '(c) %d %s <%s> | %s',
+            date('Y'),
+            $faqconfig->get('main.metaPublisher'),
+            $faqconfig->get('main.administrationMail'),
+            PMF_Date::format(date('Y-m-d H:i'))
+        );
         
         $currentTextColor = $this->TextColor;
         $this->SetTextColor(0,0,0);
@@ -456,7 +464,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
         $this->Cell(0, 10, $PMF_LANG['ad_gen_page'] . ' ' . $this->PageNo() . ' / ' . $this->getAliasNbPages(), 0, 0, 'C');
         $this->SetY(-20);
         $this->SetFont('arialunicid0', 'B', 8);
-        $this->Cell(0, 10, "(c) ".date("Y")." ".$faqconfig->get('main.metaPublisher')." <".$faqconfig->get('main.administrationMail').">",0,1,"C");
+        $this->Cell(0, 10, $footer,0,1,"C");
         if ($this->enableBookmarks == false) {
             $this->SetY(-15);
             $this->SetFont('arialunicid0', '', 8);
@@ -481,12 +489,11 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
     }
 
     /**
-    * Set the specific style according to the (X)HTML tag
+    * Set the specific style according to the HTML tag
     *
     * @param    string
     * @param    boolean
     * @return   void
-    * @access   private
     */
     function SetStyle($tag, $enable)
     {
@@ -505,7 +512,6 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
     *
     * @param    string  path to the image
     * @return   void
-    * @access   private
     */
     function AddImage($image)
     {
