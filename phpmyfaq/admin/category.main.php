@@ -228,6 +228,7 @@ if ($permission['editcateg']) {
     $category->buildTree();
 
     $lastLevel = 0;
+    $openDiv = false;
     foreach ($category->catTree as $cat) {
         $indent = '';
         for ($i = 0; $i < $cat['indent']; $i++) {
@@ -237,6 +238,7 @@ if ($permission['editcateg']) {
         ($cat['lang'] == $lang) ? $catname = $cat['name'] : $catname = $cat['name'].' ('.$languageCodes[strtoupper($cat['lang'])].')';
 
         if ($lastLevel > $cat['level']) {
+            $openDiv = false;
             print str_repeat("</div>\n", $lastLevel - $cat['level']);
         }
 
@@ -320,12 +322,17 @@ if ($permission['editcateg']) {
 
         if (count($category->getChildren($cat['id'])) !== 0) {
             // Open a div for content all the children
+            $openDiv = true;
             printf('<div id="div_%d" style="display: none;">', $cat['id']);
         }
-
+        
         $lastLevel = $cat['level'];
     }
 
+    if ($openDiv) {
+        print '</div>';
+    }
+    
     printf('<p>%s</p>', $PMF_LANG['ad_categ_remark']);
 ?>
 <script>
