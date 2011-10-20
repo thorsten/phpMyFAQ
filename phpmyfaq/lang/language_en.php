@@ -1160,3 +1160,4 @@ $PMF_LANG['ad_search_delfail'] = 'The seachterm was not deleted.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
 $PMF_LANG['msg_about_faq'] = 'About this FAQ';
+$LANG_CONF['security.useSslOnly'] = array(0 => 'checkbox', 1 => 'FAQ with SSL only (default: deactivated)');

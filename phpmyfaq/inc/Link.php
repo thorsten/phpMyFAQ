@@ -401,6 +401,10 @@ class PMF_Link
      */
     public static function getSystemScheme()
     {
+        if (PMF_Configuration::getInstance()->get('security.useSslOnly')) {
+            return 'https://';
+        }
+        
         $scheme = 'http' . (((!PMF_Link::isIISServer()) && isset($_SERVER['HTTPS'])) || 
                            ((PMF_Link::isIISServer()) && ('on' == strtolower($_SERVER['HTTPS']))) ? 's' : '') . '://';
 

@@ -867,6 +867,13 @@ if ($step == 4) {
             WHERE config_name = 'main.useSslForLogins'";
     }
 
+    //
+    // UPDATES FROM 2.7.1
+    //
+    if (version_compare($version, '2.7.1', '<')) {
+        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('security.useSslOnly', 'false')";
+    }
+
 
     // Perform the queries for updating/migrating the database from 2.x
     if (isset($query)) {
