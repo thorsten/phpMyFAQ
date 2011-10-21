@@ -371,7 +371,11 @@
     the file _.htaccess to .htaccess in the root directory where your FAQ is located.
     Then you have to activate the mod_rewrite support in the admin back-end in the
     configuration page. You also have to edit the path information for the
-    "RewriteBase".</p>
+    "RewriteBase". If you installed phpMyFAQ on root directory "/" you should set in
+    </p>
+    <code>
+    RewriteBase /
+    </code>
     <p><em>IIS Web server</em></p>
     <p>If you want to enable the search engine optimization you have to rename
     the file _httpd.ini to httpd.ini in the root directory where your FAQ is located.
