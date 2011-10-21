@@ -407,7 +407,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
      */
     public function setCategories(Array $categories)
     {
-    	$this->categories = $categories;
+        $this->categories = $categories;
     }
     
     /**
@@ -461,7 +461,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
         $this->SetTextColor(0,0,0);
         $this->SetY(-25);
         $this->SetFont('arialunicid0', '', 10);
-        $this->Cell(0, 10, $PMF_LANG['ad_gen_page'] . ' ' . $this->PageNo() . ' / ' . $this->getAliasNbPages(), 0, 0, 'C');
+        $this->Cell(0, 10, $PMF_LANG['ad_gen_page'] . ' ' . $this->getAliasNumPage() . ' / ' . $this->getAliasNbPages(), 0, 0, 'C');
         $this->SetY(-20);
         $this->SetFont('arialunicid0', 'B', 8);
         $this->Cell(0, 10, $footer,0,1,"C");
@@ -576,5 +576,32 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
 
         // Unset the friendly User Agent restoring the original UA
         ini_set('user_agent', $ua);
+    }
+
+    /**
+     * Adds a table of content for exports of the complete FAQ
+     * 
+     * @return void
+     */
+    public function addFaqToc()
+    {
+        global $PMF_LANG;
+        
+        $this->addTOCPage();
+
+        // Title
+        $this->SetFont('arialunicid0', 'B', 24);
+        $this->MultiCell(0, 0, PMF_Configuration::getInstance()->get('main.titleFAQ'), 0, 'C', 0, 1, '', '', true, 0);
+        $this->Ln();
+
+        // TOC
+        $this->SetFont('arialunicid0', 'B', 16);
+        $this->MultiCell(0, 0, $PMF_LANG['msgTableOfContent'], 0, 'C', 0, 1, '', '', true, 0);
+        $this->Ln();
+        $this->SetFont('arialunicid0', '', 12);
+
+        // Render TOC
+        $this->addTOC(1, 'arialunicid0', '.', $PMF_LANG['msgTableOfContent'], 'B', array(128,0,0));
+        $this->endTOCPage();
     }
 }

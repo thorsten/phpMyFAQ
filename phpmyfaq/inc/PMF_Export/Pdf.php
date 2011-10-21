@@ -61,8 +61,10 @@ class PMF_Export_Pdf extends PMF_Export
         $this->pdf->enableBookmarks = true;
         $this->pdf->isFullExport    = true;
         $this->pdf->Open();
-        $this->pdf->AliasNbPages();
         $this->pdf->SetDisplayMode('real');
+        $this->pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $this->pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $this->pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
     }
     
     /**
@@ -106,6 +108,10 @@ class PMF_Export_Pdf extends PMF_Export
                 $this->pdf->SetFont('arialunicid0', '', 12);
                 $this->pdf->WriteHTML($value);
             }
+
+            // remove default header/footer
+            $this->pdf->setPrintHeader(false);
+            $this->pdf->addFaqToc();
         }
         
         return $this->pdf->Output('', 'S');
