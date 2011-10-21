@@ -31,7 +31,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 print sprintf('<header><h2>%s</h2></header>', $PMF_LANG['ad_glossary_edit']);
 
 if ($permission['editglossary']) {
-
     $id           = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $glossary     = new PMF_Glossary();
     $glossaryItem = $glossary->getGlossaryItem($id);
@@ -46,9 +45,7 @@ if ($permission['editglossary']) {
 
             <p>
                 <label for="definition"><?php print $PMF_LANG['ad_glossary_definition']; ?>:</label>
-                <textarea name="definition" id="definition" cols="50" rows="3">
-                    <?php print $glossaryItem['definition']; ?>
-                </textarea>
+                <textarea name="definition" id="definition" cols="50" rows="3"><?php print $glossaryItem['definition']; ?></textarea>
             </p>
 
             <p>

@@ -495,7 +495,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
     * @param    boolean
     * @return   void
     */
-    function SetStyle($tag, $enable)
+    public function SetStyle($tag, $enable)
     {
         $this->$tag += ($enable ? 1 : -1);
         $style = "";
@@ -513,12 +513,11 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
     * @param    string  path to the image
     * @return   void
     */
-    function AddImage($image)
+    public function AddImage($image)
     {
         // Check, if image is stored locally or not
         if ('http' != PMF_String::substr($image, 0, 4)) {
-            // Please note that the image must be accessible by HTTP NOT ONLY by HTTPS
-             $image = 'http://' . EndSlash($_SERVER['HTTP_HOST']) . $image; 
+             $image = PMF_Configuration::getInstance()->get('main.referenceURL') . '/' . $image;
         }
         // Set a friendly User Agent
         $ua = ini_get('user_agent');

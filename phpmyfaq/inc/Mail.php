@@ -474,7 +474,9 @@ class PMF_Mail
 
         // Subject. Note: it must be RFC 2047 compliant
         // TODO: wrap mb_encode_mimeheader() to add other content encodings
-        $this->headers['Subject'] = PMF_Utils::resolveMarkers($this->subject);
+        $this->headers['Subject'] = PMF_Utils::resolveMarkers(
+            html_entity_decode($this->subject, ENT_COMPAT, 'UTF-8')
+        );
 
         // X-Mailer
         $this->headers['X-Mailer'] = $this->_mailer;
