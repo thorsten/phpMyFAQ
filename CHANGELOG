@@ -5,7 +5,8 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.7.1 - 2011-10-
+Version 2.7.1 - 2011-10-25
+- fixed security issue in bundled ImageManager library (Thorsten)
 - added missing translations (Thorsten)
 - added configurable encryption type for passwords (Thorsten)
 - added support for anonymous login for LDAP servers (Thorsten)
