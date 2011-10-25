@@ -8,9 +8,7 @@
 	 */
 
 	require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");	
-	@ob_start();
-	displayArray($_POST);
-	writeInfo(@ob_get_clean());	
+
 	echo "{";
 	$error = "";
 	$info = "";	
