@@ -1,9 +1,12 @@
-phpMyFAQ 2.6.18
+phpMyFAQ 2.6.19
 Codename "Portia"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.6.19 - 2011-10-25
+- fixed security issue in bundled ImageManager library (Thorsten)
 
 Version 2.6.18 - 2011-09-28
 - fixed information disclosure vulnerability (Thorsten)

@@ -1,3 +1,11 @@
+CHANGED FILES FROM 2.6.18 -> 2.6.19
+
+./admin/editor/plugins/ajaxfilemanager/ajax_create_folder.php
+./install/setup.php
+./install/update.php
+
+
+
 CHANGED FILES FROM 2.6.17 -> 2.6.18
 
 ./admin/editor/plugins/ajaxfilemanager/_ajax_get_details_listing.php
