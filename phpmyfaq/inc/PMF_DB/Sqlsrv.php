@@ -244,8 +244,8 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
            $table);
         
         $result = $this->query($select);
-        $stmt   = sqlsrv_fetch($result);
-        return (sqlsrv_get_field($stmt, 0) + 1);
+        sqlsrv_fetch($result);
+        return (sqlsrv_get_field($result, 0) + 1);
     }
 
     /**
