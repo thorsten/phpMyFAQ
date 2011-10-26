@@ -114,14 +114,14 @@ $oLnk->parse_string($fixedContent);
 $linkArray = $oLnk->getUrlpool();
 if (isset($linkArray['href'])) {
     foreach (array_unique($linkArray['href']) as $_url) {
-        if (!(strpos($_url, 'index.php?action=artikel') === false)) {
+        $xpos = strpos($_url, 'index.php?action=artikel');
+        if (!($xpos === false)) {
             // Get the Faq link title
             $matches = array();
             preg_match('/id=([\d]+)/ism', $_url, $matches);
             $_id    = $matches[1];
             $_title = $faq->getRecordTitle($_id, false);
-            $_link  = substr($_url, 9);
-            // Move the link to XHTML
+            $_link  = substr($_url, $xpos + 9);
             if (strpos($_url, '&amp;') === false) {
                 $_link = str_replace('&', '&amp;', $_link);
             }
@@ -213,33 +213,6 @@ if (($faq->faqRecord['active'] != 'yes') || ('n' == $faq->faqRecord['comment']) 
         $PMF_LANG['msgWriteComment']);
 }
 
-// Create commented out HTML for microsummary
-$allVisitsData  = $faqvisits->getAllData();
-$faqPopularity  = '';
-$maxVisits      = 0;
-$minVisits      = 0;
-$currVisits     = 0;
-$faqVisitsCount = count($allVisitsData);
-$percentage     = 0;
-if ($faqVisitsCount > 0) {
-    $percentage = 100/$faqVisitsCount;
-}
-foreach ($allVisitsData as $_r) {
-    if ($minVisits > $_r['visits']) {
-        $minVisits = $_r['visits'];
-    }
-    if ($maxVisits < $_r['visits']) {
-        $maxVisits = $_r['visits'];
-    }
-    if (($faq->faqRecord['id'] == $_r['id']) && ($lang == $_r['lang'])) {
-        $currVisits = $_r['visits'];
-    }
-}
-if ($maxVisits - $minVisits > 0) {
-    $percentage = 100*($currVisits - $minVisits)/($maxVisits - $minVisits);
-}
-$faqPopularity = $currVisits.'/'.(int)$percentage.'%';
-
 $translationUrl = sprintf(
     str_replace( '%', '%%', PMF_Link::getSystemRelativeUri('index.php')) . 'index.php?%saction=translate&amp;cat=%s&amp;id=%d&amp;srclang=%s',
         $sids,
@@ -269,7 +242,6 @@ $tpl->processTemplate('writeContent', array(
     'writeArticleTags'              => $tagging->getAllLinkTagsById($faq->faqRecord['id']),
     'writeRelatedArticlesHeader'    => $PMF_LANG['msg_related_articles'] . ': ',
     'writeRelatedArticles'          => $relevant->getAllRelatedById($faq->faqRecord['id'], $faq->faqRecord['title'], $faq->faqRecord['keywords']),
-    'writePopularity'               => $faqPopularity,
     'writeDateMsg'                  => $PMF_LANG['msgLastUpdateArticle'] . PMF_Date::format($faq->faqRecord['date']),
     'writeRevision'                 => $PMF_LANG['ad_entry_revision'] . ': 1.' . $faq->faqRecord['revision_id'],
     'writeAuthor'                   => $PMF_LANG['msgAuthor'] . ': ' . $faq->faqRecord['author'],
