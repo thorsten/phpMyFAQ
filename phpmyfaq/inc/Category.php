@@ -750,7 +750,8 @@ class PMF_Category
         $oLink->text      = $categoryName;
         
         if ($hasChildren) {
-            $oLink->text .= sprintf(' <img src="images/more.gif" width="11" height="11" alt="%s" style="border: none; vertical-align: middle;" />',
+            $oLink->text .= sprintf(' <img src="%s/images/more.gif" width="11" height="11" alt="%s" style="border: none; vertical-align: middle;" />',
+                PMF_Configuration::getInstance()->get('main.referenceURL'),
                 $categoryName);
         }
         
