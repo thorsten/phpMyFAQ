@@ -443,7 +443,7 @@ if (is_null($error)) {
 $main_template_vars = array(
     'msgRegisterUser'     => '<a href="?' . $sids . 'action=register">' . $PMF_LANG['msgRegisterUser'] . '</a>',
     'msgLoginUser'        => $PMF_LANG['msgLoginUser'],
-    'title'               => $faqconfig->get('main.titleFAQ').$title,
+    'title'               => $faqconfig->get('main.titleFAQ') . $title,
     'baseHref'            => $systemUri,
     'version'             => $faqconfig->get('main.currentVersion'),
     'header'              => str_replace('"', '', $faqconfig->get('main.titleFAQ')),
@@ -481,20 +481,30 @@ $main_template_vars = array(
 
 if ('main' == $action || 'show' == $action) {
     if ('main' == $action && PMF_Configuration::getInstance()->get('search.useAjaxSearchOnStartpage')) {
-        $tpl->processBlock('index', 'globalSuggestBox', array(
-            'ajaxlanguage'                  => $LANGCODE,
-            'msgDescriptionInstantResponse' => $PMF_LANG['msgDescriptionInstantResponse'],
-            'msgSearch'                     => sprintf('<a class="help" href="index.php?action=search">%s</a>',
-                                                   $PMF_LANG["msgAdvancedSearch"]
-                                               )
-           )
+        $tpl->processBlock('index', 'globalSuggestBox',
+            array(
+                'ajaxlanguage'                  => $LANGCODE,
+                'msgDescriptionInstantResponse' => $PMF_LANG['msgDescriptionInstantResponse'],
+                'msgSearch'                     => sprintf(
+                    '<a class="help" href="%sindex.php?action=search">%s</a>',
+                    $systemUri,
+                    $PMF_LANG["msgAdvancedSearch"]
+                 )
+            )
         );
     } else {
-        $tpl->processBlock('index', 'globalSearchBox', array(
-            'writeSendAdress' => '?'.$sids.'action=search',
-            'searchBox'       => $PMF_LANG['msgSearch'],
-            'categoryId'      => ($cat === 0) ? '%' : (int)$cat,
-            'msgSearch'       => '<a class="help" href="index.php?'.$sids.'action=search">'.$PMF_LANG["msgAdvancedSearch"].'</a>'));
+        $tpl->processBlock('index', 'globalSearchBox',
+            array(
+                'writeSendAdress' => '?'.$sids.'action=search',
+                'searchBox'       => $PMF_LANG['msgSearch'],
+                'categoryId'      => ($cat === 0) ? '%' : (int)$cat,
+                'msgSearch'       => sprintf(
+                    '<a class="help" href="%sindex.php?action=search">%s</a>',
+                    $systemUri,
+                    $PMF_LANG["msgAdvancedSearch"]
+                )
+            )
+        );
     }
 }
                              
