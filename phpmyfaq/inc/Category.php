@@ -655,10 +655,13 @@ class PMF_Category
             } else {
                 $totFaqRecords += $number[$parent];
                 $num_entries    = '<span id="rssCategoryLink"> ('.$plr->GetMsg('plmsgEntries',$number[$parent]);
-                $num_entries   .= sprintf(' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank"><img id="category_%d_RSS" src="images/feed.png" width="16" height="16" alt="RSS" /></a>',
-                                    $parent,
-                                    $this->language,
-                                    $parent);
+                $num_entries   .= sprintf(
+                    ' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank"><img id="category_%d_RSS" src="%s/images/feed.png" width="16" height="16" alt="RSS" border="0" /></a>',
+                    $parent,
+                    $this->language,
+                    $parent,
+                    PMF_Configuration::getInstance()->get('main.referenceURL')
+                );
                 $num_entries   .= ')</span>';
             }
 
@@ -750,7 +753,8 @@ class PMF_Category
         $oLink->text      = $categoryName;
         
         if ($hasChildren) {
-            $oLink->text .= sprintf(' <img src="images/more.gif" width="11" height="11" alt="%s" style="border: none; vertical-align: middle;" />',
+            $oLink->text .= sprintf(' <img src="%s/images/more.gif" width="11" height="11" alt="%s" style="border: none; vertical-align: middle;" />',
+                PMF_Configuration::getInstance()->get('main.referenceURL'),
                 $categoryName);
         }
         

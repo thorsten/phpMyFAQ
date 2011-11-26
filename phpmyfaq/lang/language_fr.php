@@ -20,7 +20,7 @@
  * @author    Thomas Bassetto <tbassetto@gmail.com>
  * @author    Laurent J.V. Dubois <laurent.dubois@ljvd.com>
  * @author    Cédric Frayssinet
- * @copyright 2004-2010 phpMyFAQ Team
+ * @copyright 2004-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-19
@@ -52,7 +52,7 @@ $PMF_LANG['msgPage'] = 'Page ';
 $PMF_LANG['msgPages'] = ' Pages';
 $PMF_LANG['msgPrevious'] = 'précédent';
 $PMF_LANG['msgNext'] = 'suivant';
-$PMF_LANG['msgCategoryUp'] = 'une catégorie plus haut';
+$PMF_LANG['msgCategoryUp'] = 'Revenir à la catégorie parente';
 $PMF_LANG['msgLastUpdateArticle'] = 'Dernière mise à jour : ';
 $PMF_LANG['msgAuthor'] = 'Auteur ';
 $PMF_LANG['msgPrinterFriendly'] = 'version imprimable';
@@ -148,7 +148,7 @@ $PMF_LANG['ad_menu_open'] = 'Editer les questions ouvertes';
 $PMF_LANG['ad_menu_stat'] = 'Statistiques';
 $PMF_LANG['ad_menu_cookie'] = 'Cookies';
 $PMF_LANG['ad_menu_session'] = 'Voir les sessions';
-$PMF_LANG['ad_menu_adminlog'] = 'Voir l\'Adminlog';
+$PMF_LANG['ad_menu_adminlog'] = 'Voir les log sur l\'interface d\'administration';
 $PMF_LANG['ad_menu_passwd'] = 'Modifier mon mot de passe';
 $PMF_LANG['ad_menu_logout'] = 'Déconnexion';
 $PMF_LANG['ad_menu_startpage'] = 'Page de démarrage';
@@ -267,7 +267,7 @@ $PMF_LANG['ad_cookie_delete'] = 'supprimer le cookie';
 $PMF_LANG['ad_cookie_no'] = 'Il n\'y a pas de cookie enregistré. Avec un cookie vous pouvez enregistrer votre entrée au script, sans devoir retaper le mot de passe. Vous avez les options suivantes :';
 $PMF_LANG['ad_cookie_set'] = 'Placer un cookie';
 $PMF_LANG['ad_cookie_deleted'] = 'Cookie supprimé.';
-$PMF_LANG['ad_adminlog'] = 'AdminLog';
+$PMF_LANG['ad_adminlog'] = 'Journal des logs...';
 $PMF_LANG['ad_passwd_cop'] = 'Modifier votre mot de passe';
 $PMF_LANG['ad_passwd_old'] = 'Ancien  mot de passe :';
 $PMF_LANG['ad_passwd_new'] = 'Nouveau  mot de passe :';
@@ -323,7 +323,7 @@ $PMF_LANG['ad_auth_fail'] = 'Nom d\'utilisateur ou mot de passe incorrect.';
 $PMF_LANG['ad_auth_sess'] = 'La session ID est dépassée.';
 $PMF_LANG['ad_config_edit'] = 'Editer configuration';
 $PMF_LANG['ad_config_save'] = 'Sauver configuration';
-$PMF_LANG['ad_config_reset'] = 'Reset';
+$PMF_LANG['ad_config_reset'] = 'Réinitialiser';
 $PMF_LANG['ad_config_saved'] = 'La configuration a bien été enregistrée.';
 $PMF_LANG['ad_menu_editconfig'] = 'Editer configuration';
 $PMF_LANG['ad_att_none'] = 'Pas de fichiers attachés';
@@ -733,7 +733,7 @@ $PMF_LANG['opensearch_plugin_install'] = 'Ajouter ce moteur de recherche dans vo
 $PMF_LANG['msgMostPopularSearches'] = 'Les recherches les plus populaires sont :';
 $PMF_LANG['msg_related_articles'] = 'Questions - Réponses en relation ';
 $PMF_LANG['msgAllCatArticles'] = 'Enregistrements dans cette catégorie...';
-$PMF_LANG['msg_tags'] = 'Nuage de tags';
+$PMF_LANG['msg_tags'] = 'Nuage de tags ';
 $PMF_LANG['ad_online_info'] = 'Vérification en ligne de la version';
 $PMF_LANG['ad_system_info'] = 'Informations sur votre système';
 $PMF_LANG['ad_entry_userpermission'] = 'Permissions des utilisateurs :';
@@ -770,46 +770,46 @@ $PMF_LANG['errorRegistration'] = 'Ce champ est obligatoire!';
 $PMF_LANG['submitRegister'] = 'Inscrire';
 $PMF_LANG['msgUserData'] = 'Information requise pour l\'inscription';
 $PMF_LANG['captchaError'] = 'Veuillez entrer le code CAPTCHA correct!';
-$PMF_LANG['msgRegError'] = 'Les erreurs suivantes se sont produites. Veuillez les corriger:';
-$PMF_LANG['successMessage'] = 'Votre inscription a réussi. Vous allez bientôt recevoir un email de confirmation avec vos données de connexion!';
+$PMF_LANG['msgRegError'] = 'Les erreurs suivantes se sont produites. Veuillez les corriger :';
+$PMF_LANG['successMessage'] = 'Votre inscription a réussi. Vous allez bientôt recevoir un email de confirmation avec vos données de connexion !';
 $PMF_LANG['msgRegThankYou'] = 'Nous vous remercions de votre inscription';
 $PMF_LANG['emailRegSubject'] = 'Inscription [%sitename%] : nouvel utilisateur';
-$PMF_LANG['ad_menu_stopwordsconfig'] = 'Stop Words';
-$PMF_LANG['ad_config_stopword_input'] = 'Ajouter un nouveau stop word';
-$PMF_LANG['msgSendMailDespiteEverything'] = 'Non, il n\'ya toujours pas de réponse adéquate (envoie d\'un email)';
-$PMF_LANG['msgSendMailIfNothingIsFound'] = 'Est-ce que la réponse recherchée se trouve dans les résultats énumérés ci-dessus?';
+$PMF_LANG['ad_menu_stopwordsconfig'] = 'Mots ignorés';
+$PMF_LANG['ad_config_stopword_input'] = 'Ajouter un nouveau mot ignoré';
+$PMF_LANG['msgSendMailDespiteEverything'] = 'Non, il n\'ya toujours pas de réponse adéquate (envoi d\'un email)';
+$PMF_LANG['msgSendMailIfNothingIsFound'] = 'Est-ce que la réponse recherchée se trouve dans les résultats énumérés ci-dessus ?';
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'Veuillez choisir la langue de traduction';
-$PMF_LANG['msgLangDirIsntWritable'] = 'Translations dir isn\'t writable';
-$PMF_LANG['ad_menu_translations'] = 'Interface Translation';
+$PMF_LANG['msgLangDirIsntWritable'] = 'Le dossier de langues n\'est pas modifiable';
+$PMF_LANG['ad_menu_translations'] = 'Interface de traduction';
 $PMF_LANG['ad_start_notactive'] = 'Attente d\'activation';
-$PMF_LANG['msgTransToolAddNewTranslation'] = 'Add new translation';
+$PMF_LANG['msgTransToolAddNewTranslation'] = 'Ajouter une nouvelle langue à PhpMyFaq';
 $PMF_LANG['msgTransToolLanguage'] = 'Langue';
 $PMF_LANG['msgTransToolActions'] = 'Actions';
-$PMF_LANG['msgTransToolWritable'] = 'Writable';
-$PMF_LANG['msgTranslateSubmit'] = 'Start translation...';
-$PMF_LANG['msgNewTranslationThanks'] = 'Thank you for your translation proposal!';
+$PMF_LANG['msgTransToolWritable'] = 'Modifiable';
+$PMF_LANG['msgTranslateSubmit'] = 'Démarrer la traduction...';
+$PMF_LANG['msgNewTranslationThanks'] = 'Merci pour votre proposition de traduction !';
 $PMF_LANG['ad_news_link_parent'] = 'Ce lien s\'ouvrira dans la fenêtre parent';
 $PMF_LANG['ad_groups'] = 'Groupes';
-$PMF_LANG['msgTagSearch'] = 'Entrées tagged';
+$PMF_LANG['msgTagSearch'] = 'Entrées avec le mot-clé sélectionné';
 $PMF_LANG['ad_session_expiration'] = 'Le temps de votre expiration de session';
 $PMF_LANG['ad_user_active'] = 'actif';
-$PMF_LANG['ad_user_blocked'] = 'blocked';
-$PMF_LANG['ad_user_protected'] = 'protected';
-$PMF_LANG['ad_entry_intlink'] = 'Sélectionnez un FAQ  à insérer comme un lien ...';
+$PMF_LANG['ad_user_blocked'] = 'bloqué';
+$PMF_LANG['ad_user_protected'] = 'protégé';
+$PMF_LANG['ad_entry_intlink'] = 'Sélectionnez un FAQ à insérer comme un lien...';
 $PMF_LANG['ad_categ_paste2'] = 'Coller après';
 $PMF_LANG['ad_categ_remark_move'] = 'L\'échange de 2 catégories est seulement possible au même niveau.';
 $PMF_LANG['msgUsersOnline'] = '%d Invités and %d Inscrits';
-$PMF_LANG['ad_adminlog_del_older_30d'] = 'Delete immediately logs older than 30 days';
-$PMF_LANG['ad_adminlog_delete_success'] = 'Older logs successfully deleted.';
-$PMF_LANG['ad_adminlog_delete_failure'] = 'No logs deleted: an error occurred performing the request.';
+$PMF_LANG['ad_adminlog_del_older_30d'] = 'Effacer immédiatement tous les fichiers de log supérieurs à 30 jours.';
+$PMF_LANG['ad_adminlog_delete_success'] = 'Les vieux journaux de log ont été supprimés !';
+$PMF_LANG['ad_adminlog_delete_failure'] = 'Aucun fichier de log supprimé : une erreur est survenue pendant le traitement.';
 $PMF_LANG['ad_quick_group'] = 'Ajouter un nouveau groupe';
-$PMF_LANG['msgNewTranslationHeader'] = 'Translation proposal';
-$PMF_LANG['msgNewTranslationAddon'] = 'Your proposal will not be published right away, but will be released by the administrator upon receipt. Required  fields are <strong>your Name</strong>, <strong>your email address</strong>, <strong>your headline translation</strong> and <strong>your faq translation</strong>. Please separate the keywords with space only.';
+$PMF_LANG['msgNewTranslationHeader'] = 'Proposition de traduction';
+$PMF_LANG['msgNewTranslationAddon'] = 'Votre proposition ne sera pas publiée immédiatement, mais ce sera fait suite à la réception par un administrateur. Les champs requis sont <strong>votre Nom</strong>, <strong>votre adresse email</strong>, <strong>votre titre de traduction</strong> and <strong>la traduction de la faq</strong>. Merci de séparer les mots-clés par des espaces seulement.';
 $PMF_LANG['msgNewTransSourcePane'] = 'Volet source';
 $PMF_LANG['msgNewTranslationPane'] = 'Volet traduction';
 $PMF_LANG['msgNewTranslationName'] = 'Votre nom :';
 $PMF_LANG['msgNewTranslationMail'] = 'Votre adresse email :';
-$PMF_LANG['msgNewTranslationKeywords'] = 'Mots clés :';
+$PMF_LANG['msgNewTranslationKeywords'] = 'Mots-clés :';
 $PMF_LANG['msgNewTranslationSubmit'] = 'Soumettre votre proposition';
 $PMF_LANG['msgTranslate'] = 'Proposer une traduction pour';
 $PMF_LANG['ad_categ_owner'] = 'Propriétaire de la catégorie';
@@ -820,8 +820,8 @@ $PMF_LANG['err_inactiveNews'] = 'Cette news est en cours de révision ne peut ê
 $PMF_LANG['ad_categ_trans_1'] = 'Traduire';
 $PMF_LANG['ad_categ_trans_2'] = 'Catégorie';
 $PMF_LANG['ad_categ_translatecateg'] = 'Traduire la catégorie';
-$PMF_LANG['ad_categ_translate'] = 'Traduitre';
-$PMF_LANG['ad_categ_transalready'] = 'Déjà traduit en:';
+$PMF_LANG['ad_categ_translate'] = 'Traduire';
+$PMF_LANG['ad_categ_transalready'] = 'Déjà traduit en :';
 $PMF_LANG['ad_categ_deletealllang'] = 'Supprimer dans toutes les langues?';
 $PMF_LANG['ad_categ_deletethislang'] = 'Supprimer seulement dans cette langue?';
 $PMF_LANG['ad_categ_translated'] = 'La catégorie a été traduite.';
@@ -835,22 +835,22 @@ $PMF_LANG['ad_linkcheck_noLinksFound'] = 'Aucune URL compatible avec la fonction
 $PMF_LANG['ad_linkcheck_infoReason'] = 'Information supplémentaires :';
 $PMF_LANG['ad_linkcheck_openurl_infoprefix'] = 'Trouvé lors de tests <strong>%s</strong>: ';
 $PMF_LANG['ad_linkcheck_openurl_notready'] = 'Vérificateur d\'URL pas prêt.';
-$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Maximum redirect count <strong>%d</strong> exceeded.';
-$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'Resolved to blank URL.';
-$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'Host <strong>%s</strong> is slow or not responding.';
-$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'DNS resolution of host <strong>%s</strong> is slow or is failed due to DNS issues, local or remote.';
-$PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL was redirected to <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Ambiguous HTTP status <strong>%s</strong> returned.';
+$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Le nombre maximal de redirection <strong>%d</strong> est dépassé.';
+$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'Résolu sur une URL vide.';
+$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'L\'hôte <strong>%s</strong> est lent ou ne répond pas.';
+$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'La résolution DNS de l\'hôte <strong>%s</strong> est lente ou est en panne à cause d\'un problème de DNS, local ou distant.';
+$PMF_LANG['ad_linkcheck_openurl_redirected'] = 'L\'URL a été redirigée sur <strong>%s</strong>.';
+$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'HTTP statut ambiguë <strong>%s</strong> retourné.';
 $PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'The <em>HEAD</em> method is not supported by the host <strong>%s</strong>, allowed methods: <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_not_found'] = 'This resource cannot be found at host <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protocol unsupported by Automatic link verification.';
+$PMF_LANG['ad_linkcheck_openurl_not_found'] = 'Cette ressource ne peut-être trouvée sur l\'hôte <strong>%s</strong>.';
+$PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protocole non supporté par la vérification automatique des liens.';
 $PMF_LANG['ad_menu_linkconfig'] = 'Vérificateur d\'URL';
 $PMF_LANG['ad_linkcheck_config_title'] = 'Configuration du Vérificateur d\'URL';
 $PMF_LANG['ad_linkcheck_config_disabled'] = 'Fonctionnalité du Vérificateur d\'URL désactivée';
 $PMF_LANG['ad_linkcheck_config_warnlist'] = 'URLs à avertir';
 $PMF_LANG['ad_linkcheck_config_ignorelist'] = 'URLs à ignorer';
-$PMF_LANG['ad_linkcheck_config_warnlist_description'] = 'URLs prefixed with items below will be issued warning regardless of whether it is valid.<br />Use this feature to detect soon-to-be defunct URLs';
-$PMF_LANG['ad_linkcheck_config_ignorelist_description'] = 'Exact URLs listed below will be assumed valid without validation.<br />Use this feature to omit URLs that fail to validate using URL Verifier';
+$PMF_LANG['ad_linkcheck_config_warnlist_description'] = 'Les URLs préfixées avec des éléments ci-dessous auront des avertissement indépendamment du fait qu\'elles soient valides.<br />Utilisez cette fonctionnalité pour prévenir des futures URLS brisées.';
+$PMF_LANG['ad_linkcheck_config_ignorelist_description'] = 'Les URLs ci-dessous seront considérées comme valides sans être validées par le système.<br />Utilisez cette fonctionnalité lorsque des URLs posent problème avec le système automatique';
 $PMF_LANG['ad_linkcheck_config_th_id'] = 'ID#';
 $PMF_LANG['ad_linkcheck_config_th_url'] = 'URL à correspondre';
 $PMF_LANG['ad_linkcheck_config_th_reason'] = 'Raison de la correspondance';
@@ -864,3 +864,82 @@ $PMF_LANG['ad_entry_visibility'] = 'Publier?';
 $PMF_LANG['ad_user_error_password'] = 'Veuillez entrer un mot de passe.';
 $PMF_LANG['ad_user_error_passwordsDontMatch'] = 'Les mots de passe ne correspondent pas.';
 $PMF_LANG['ad_user_error_loginInvalid'] = 'Le nom d\'utilisateur spécifié n\'est pas valide.';
+
+// added v2.6.99 - 2010-11-24 by Cédric Frayssinet
+$LANG_CONF['search.relevance'] = array(0 => 'select', 1 => 'Tri par pertinence');
+$LANG_CONF["search.enableRelevance"] = array(0 => "checkbox", 1 => "Activer la prise en charge de la pertinence ? (défaut : désactivé)");
+$PMF_LANG['searchControlCenter'] = 'Recherche';
+$PMF_LANG['search.relevance.thema-content-keywords'] = 'Question - Réponse - Mots-Clés';
+$PMF_LANG['search.relevance.thema-keywords-content'] = 'Question - Mots-Clés - Réponse';
+$PMF_LANG['search.relevance.content-thema-keywords'] = 'Réponse - Question - Mots-Clés';
+$PMF_LANG['search.relevance.content-keywords-thema'] = 'Réponse - Mots-Clés - Question';
+$PMF_LANG['search.relevance.keywords-content-thema'] = 'Mots-Clés - Réponse - Question';
+$PMF_LANG['search.relevance.keywords-thema-content'] = 'Mots-Clés - Question - Réponse';
+
+// added v2.6.99 - 2010-11-30 by Cédric Frayssinet
+$LANG_CONF["main.enableGoogleTranslation"] = array(0 => "checkbox", 1 => "Activer la traduction Google (défaut : désactivé)");
+$LANG_CONF['main.googleTranslationKey'] = array(0 => 'input', 1 => 'Clé API Google');
+$PMF_LANG["msgNoGoogleApiKeyFound"] = 'La clé API Google est vide, merci de la préciser dans la configuration générale';
+
+// added 2.7.0-alpha - 2010-09-13 by Cédric Frayssinet
+$PMF_LANG['msgLoginUser'] = 'Identifiantion';
+$PMF_LANG['socialNetworksControlCenter'] = 'Configuration des réseaux sociaux';
+$LANG_CONF['socialnetworks.enableTwitterSupport'] = array(0 => 'checkbox', 1 => 'Support de Twitter (défaut : désactivé)');
+$LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => 'input', 1 => 'Clé utilisateur Twitter');
+$LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'Code secret Utilisateur Twitter');
+
+// added 2.7.0-alpha - 2010-10-14 by Cédric Frayssinet
+$LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => 'Clé jeton d\'accès Twitter');
+$LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'Code d\'accès secret Twitter');
+$LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Support de Facebook (défaut : désactivé)');
+
+// added 2.7.0-alpha - 2010-12-21 by Cédric Frayssinet
+$PMF_LANG["ad_menu_attachments"] = "Pièces jointes";
+$PMF_LANG["ad_menu_attachment_admin"] = "Administration des pièces jointes";
+$PMF_LANG['msgAttachmentsFilename'] = 'Nom de fichier';
+$PMF_LANG['msgAttachmentsFilesize'] = 'Taille du fichier';
+$PMF_LANG['msgAttachmentsMimeType'] = 'Type MIME';
+$PMF_LANG['msgAttachmentsWannaDelete'] = 'Etes-vous sûr de vouloir supprimer ce fichier ?';
+$PMF_LANG['msgAttachmentsDeleted'] = 'Fichier supprimé <strong>avec succès</strong>.';
+
+// added v2.7.0-alpha2 - 2010-01-12 by Cédric Frayssinet
+$PMF_LANG['ad_menu_reports'] = 'Rapports';
+$PMF_LANG["ad_stat_report_fields"] = "Domaines";
+$PMF_LANG["ad_stat_report_category"] = "Catégories";
+$PMF_LANG["ad_stat_report_sub_category"] = "Sous-Catégories";
+$PMF_LANG["ad_stat_report_translations"] = "Traductions";
+$PMF_LANG["ad_stat_report_language"] = "Langues";
+$PMF_LANG["ad_stat_report_id"] = "FAQ ID";
+$PMF_LANG["ad_stat_report_sticky"] = "FAQ épinglées";
+$PMF_LANG["ad_stat_report_title"] = "Question";
+$PMF_LANG["ad_stat_report_creation_date"] = "Date";
+$PMF_LANG["ad_stat_report_owner"] = "Auteur original";
+$PMF_LANG["ad_stat_report_last_modified_person"] = "Dernier auteur";
+$PMF_LANG["ad_stat_report_url"] = "URL";
+$PMF_LANG["ad_stat_report_visits"] = "Visites";
+$PMF_LANG["ad_stat_report_make_report"] = "Générer le rapport";
+$PMF_LANG["ad_stat_report_make_csv"] = "Exporter en .csv";
+
+// added v2.7.0-alpha2 - 2010-02-05 by Cédric Frayssinet
+$PMF_LANG['msgRegistration'] = 'Enregistrement';
+$PMF_LANG['msgRegistrationCredentials'] = 'Pour s\'enregistrer, merci d\'entrer votre nom, votre identifiant et une adresse email valide !';
+$PMF_LANG['msgRegistrationNote'] = 'Après l\'enregistrement, vous recevrez une réponse suite à la validation d\'un administrateur.';
+
+// added v2.7.0-beta - 2011-06-13 by Cédric Frayssinet
+$PMF_LANG['ad_entry_changelog_history'] = "Historique des changements";
+
+// added v2.7.0-beta2 - 2011-06-22 by Cédric Frayssinet
+$LANG_CONF['security.ssoSupport'] = array(0 => 'checkbox', 1 => 'Support du SSO (défaut : désactivé)');
+$LANG_CONF['security.ssoLogoutRedirect'] = array(0 => 'input', 1 => 'URL de redirection lors de la déconnexion du SSO');
+$LANG_CONF['main.dateFormat'] = array(0 => 'input', 1 => 'Format de la date (défaut: Y-m-d H:i)');
+$LANG_CONF['security.enableLoginOnly'] = array(0 => 'checkbox', 1 => 'FAQ complètement sécurisée (défaut : désactivé)');
+
+// added v2.7.0-RC - 2011-08-18 by Cédric Frayssinet
+$PMF_LANG['securityControlCenter'] = 'Configuration de la sécurité';
+$PMF_LANG['ad_search_delsuc'] = 'Le terme cherché a été supprimé avec succès.';
+$PMF_LANG['ad_search_delfail'] = 'Le terme cherché n\'a pas été supprimé.';
+
+// added 2.7.1 - 2011-09-30 by Cédric Frayssinet
+$PMF_LANG['msg_about_faq'] = 'A propos de cette entrée :';
+$LANG_CONF['security.useSslOnly'] = array(0 => 'checkbox', 1 => 'FAQ avec le support SSL seulement ? (défaut : désactivé)');
+$PMF_LANG['msgTableOfContent'] = 'Sommaire des articles';
