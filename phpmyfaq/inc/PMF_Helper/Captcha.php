@@ -92,7 +92,6 @@ class PMF_Helper_Captcha extends PMF_Helper
         $html = '';
         
         if (PMF_Configuration::getInstance()->get('spam.enableCaptchaCode')) {
-            $html = '<p>';
             if ($error != '') {
                 $html .= sprintf('<div class="error">%s</div>', $error);
             }
@@ -105,7 +104,7 @@ class PMF_Helper_Captcha extends PMF_Helper
                 '<input type="text" name="captcha" id="captcha" class="captcha" size="%d" required="required" /><br/>',
                 $captcha->caplength
             );
-            $html .= '</div></p>';
+            $html .= '</div>';
         }
         
         return $html;
