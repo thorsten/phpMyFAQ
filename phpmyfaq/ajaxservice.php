@@ -407,6 +407,7 @@ switch ($action) {
                         );
                         $oLink       = new PMF_Link(PMF_Configuration::getInstance()->get('main.referenceURL') . $url);
                         $oLink->text = PMF_Utils::chopString($result->question, 15);
+                        $oLink->itemTitle = $result->question;
                         $response   .= sprintf('<li>%s<br /><div class="searchpreview">%s...</div></li>',
                             $oLink->toHtmlAnchor(),
                             PMF_Utils::chopString(strip_tags($result->answer), 10)
