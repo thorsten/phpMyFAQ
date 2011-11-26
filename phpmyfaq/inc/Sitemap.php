@@ -245,7 +245,7 @@ class PMF_Sitemap
 
         $letter = PMF_String::strtoupper($this->db->escape_string(PMF_String::substr($letter, 0, 1)));
 
-        $writeMap = '<ul>';
+        $writeMap = '';
 
         switch($this->type) {
             case 'db2':
@@ -348,7 +348,7 @@ class PMF_Sitemap
             $oldId = $row->id;
         }
 
-        $writeMap .= '</ul>';
+        $writeMap = empty($writeMap) ? '' : '<ul>' . $writeMap . '</ul>';
 
         return $writeMap;
     }
