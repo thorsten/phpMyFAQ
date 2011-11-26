@@ -146,14 +146,12 @@ if ($num > 1) {
         $check4Lang .= ($lang == $language ? ' selected="selected"' : '');
         $check4Lang .= ">".$languageCodes[strtoupper($language)]."</option>\n";
     }
-    $switchLanguage .= "<fieldset>\n";
     $switchLanguage .= "<form action=\"".$changeLanguagePath."\" method=\"post\" style=\"display: inline;\">\n";
     $switchLanguage .= "<select name=\"artlang\" size=\"1\">\n";
     $switchLanguage .= $check4Lang;
     $switchLanguage .= "</select>\n";
     $switchLanguage .= "&nbsp;\n";
     $switchLanguage .= "<input class=\"submit\" type=\"submit\" name=\"submit\" value=\"".$PMF_LANG["msgLangaugeSubmit"]."\" />\n";
-    $switchLanguage .= "</fieldset>\n";
     $switchLanguage .= "</form>\n";
 }
 
