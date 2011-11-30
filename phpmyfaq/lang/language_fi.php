@@ -556,24 +556,24 @@ $PMF_LANG["ad_entry_fontcolor"] = "Tekstin väri: ";
 $PMF_LANG["ad_entry_fontsize"] = "Tekstin koko: ";
 
 /* added v1.4.0 - 2003-12-04 by Thorsten / Mathias - Translation of main.metaKeywords, mod_rewrite & security.ldapSupport msg by Matti Kröger*/
-$LANG_CONF['main.language'] = array(0 => "select", 1 => "Kieli-Tiedosto");
+$LANG_CONF["main.language"] = array(0 => "select", 1 => "Kieli-Tiedosto");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Salli automaattinen sisällön kätteleminen");
-$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "FAQ Otsikko");
-$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "FAQ Versio");
+$LANG_CONF["main.titleFAQ"] = array(0 => "input", 1 => "FAQ Otsikko");
+$LANG_CONF["main.currentVersion"] = array(0 => "print", 1 => "FAQ Versio");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Sivun Kuvaus");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Avainsanat hakukoneille");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Julkaisijan nimi");
-$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Ylläpitäjän sähköposti osoite");
+$LANG_CONF["main.administrationMail"] = array(0 => "input", 1 => "Ylläpitäjän sähköposti osoite");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Yhteystiedot");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Teksti lähetä tuttavalle sivulle");
-$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "suurin sallittu koko liitetiedostoille tavuina on  (max. %stavua)");
+$LANG_CONF["records.maxAttachmentSize"] = array(0 => "input", 1 => "suurin sallittu koko liitetiedostoille tavuina on  (max. %stavua)");
 $LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Linkitä liitteet tietueiden alpuolelle?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "käytä lokia?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "käytä ylläpitolokia?");
 $LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Haluatko, että admin.php:ssa IP tarkastetaan samalla kun UIN?");
 $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Näytettyjen tietueiden määrä per sivu");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Uutisten määrä");
-$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Estä käyttö näistä IP-osoitteista");
+$LANG_CONF["security.bannedIPs"] = array(0 => "area", 1 => "Estä käyttö näistä IP-osoitteista");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktivoi mod_rewrite tuki? (oletus: ei käytössä)");
 $LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Haluatko laittaa LDAP tuen päälle(enabled)? (oletus: ei käytössä)");
 
@@ -597,52 +597,52 @@ $PMF_LANG["ad_xmlrpc_button"] = "Saa viimeisin phpMyFAQ versio numero webistä";
 $PMF_LANG["ad_xmlrpc_latest"] = "Viimeisin saatavilla oleva versio on";
 
 /* added v1.5.0 - 2005-07-31 by Thorsten - Translation of ad_categ_select msg by Matti Kröger*/
-$PMF_LANG['ad_categ_select'] = 'Valitse kategorian kieli';
+$PMF_LANG["ad_categ_select"] = 'Valitse kategorian kieli';
 
 /* added v1.5.1 - 2005-09-06 by Thorsten - Translation of msgSitemap msg by Matti Kröger*/
-$PMF_LANG['msgSitemap'] = 'Sivukartta';
+$PMF_LANG["msgSitemap"] = 'Sivukartta';
 
 // added v1.5.2 - 2005-09-23 by Lars - Translation to Finnish by Matti Kröger
-$PMF_LANG['err_inactiveArticle'] = 'Tämä artikkeli on päivityksen alaisena ja sitä ei voida näyttää tällä hetkellä';
-$PMF_LANG['msgArticleCategories'] = 'Kategoriat tälle artikkelille';
+$PMF_LANG["err_inactiveArticle"] = 'Tämä artikkeli on päivityksen alaisena ja sitä ei voida näyttää tällä hetkellä';
+$PMF_LANG["msgArticleCategories"] = 'Kategoriat tälle artikkelille';
 
 /* added v1.5.3 - 2005-10-04 by Thorsten and Periklis - Translation to Finnish by Matti Kröger*/
-$PMF_LANG['ad_menu_searchplugin'] = 'Firefox haku -lisäosa';
-$PMF_LANG['ad_search_plugin_install'] = 'Asenna Firefox haku -lisäosa';
-$PMF_LANG['ad_search_plugin_title'] = 'Luo Firefoxin haun lisäosa';
-$PMF_LANG['ad_search_plugin_ttitle'] = 'Otsikko Firefoxin hakukentälle';
-$PMF_LANG['ad_search_plugin_tdesc'] = 'Kuvaus';
-$PMF_LANG['ad_search_plugin_create'] = 'Luo Firefoxin haun lisäosa';
-$PMF_LANG['ad_search_plugin_success'] = 'Mozilla Firefox haku -lisäosa luotu onnistuneesti!';
+$PMF_LANG["ad_menu_searchplugin"] = 'Firefox haku -lisäosa';
+$PMF_LANG["ad_search_plugin_install"] = 'Asenna Firefox haku -lisäosa';
+$PMF_LANG["ad_search_plugin_title"] = 'Luo Firefoxin haun lisäosa';
+$PMF_LANG["ad_search_plugin_ttitle"] = 'Otsikko Firefoxin hakukentälle';
+$PMF_LANG["ad_search_plugin_tdesc"] = 'Kuvaus';
+$PMF_LANG["ad_search_plugin_create"] = 'Luo Firefoxin haun lisäosa';
+$PMF_LANG["ad_search_plugin_success"] = 'Mozilla Firefox haku -lisäosa luotu onnistuneesti!';
 
 /* added v1.6.0 - 2006-02-02 by Thorsten - Translation to Finnish by Matti Kröger*/
-$PMF_LANG['ad_entry_solution_id'] = 'Ainutkertainen ratkaisu ID';
-$PMF_LANG['ad_entry_faq_record'] = 'FAQ tietue';
-$PMF_LANG['ad_entry_new_revision'] = 'Luo uusi tarkistettu versio, revisio?';
-$PMF_LANG['ad_entry_record_administration'] = 'Tietueen ylläpito';
-$PMF_LANG['ad_entry_changelog'] = 'Muutosrekisteri';
-$PMF_LANG['ad_entry_revision'] = 'Revisio';
-$PMF_LANG['ad_changerev'] = 'Valitse revisio';
-$PMF_LANG['msgCaptcha'] = 'Kirjoita merkit kuvassa';
-$PMF_LANG['msgSelectCategories'] = 'Etsi...';
-$PMF_LANG['msgAllCategories'] = '... kaikissa kategorioissa';
-$PMF_LANG['ad_you_should_update'] = 'Teidän phpMyFAQ-asennuksenne on vanhentunut. Teidän tulisi päivittää uusimpaan versioon';
-$PMF_LANG['msgAdvancedSearch'] = 'Tarkennettu haku';
+$PMF_LANG["ad_entry_solution_id"] = 'Ainutkertainen ratkaisu ID';
+$PMF_LANG["ad_entry_faq_record"] = 'FAQ tietue';
+$PMF_LANG["ad_entry_new_revision"] = 'Luo uusi tarkistettu versio, revisio?';
+$PMF_LANG["ad_entry_record_administration"] = 'Tietueen ylläpito';
+$PMF_LANG["ad_entry_changelog"] = 'Muutosrekisteri';
+$PMF_LANG["ad_entry_revision"] = 'Revisio';
+$PMF_LANG["ad_changerev"] = 'Valitse revisio';
+$PMF_LANG["msgCaptcha"] = 'Kirjoita merkit kuvassa';
+$PMF_LANG["msgSelectCategories"] = 'Etsi...';
+$PMF_LANG["msgAllCategories"] = '... kaikissa kategorioissa';
+$PMF_LANG["ad_you_should_update"] = 'Teidän phpMyFAQ-asennuksenne on vanhentunut. Teidän tulisi päivittää uusimpaan versioon';
+$PMF_LANG["msgAdvancedSearch"] = 'Tarkennettu haku';
 
 /* added v1.6.1 - 2006-04-25 by Matteo and Thorsten - Translation to Finnish by Matti Kröger*/
-$PMF_LANG['spamControlCenter'] = 'Roskapostin hallinta keskus';
+$PMF_LANG["spamControlCenter"] = 'Roskapostin hallinta keskus';
 $LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Tulosta käyttäjän email turvallisessa muodossa (oletus: aktiivinen).");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Tarkista julkaistavien lomakkeiden sisältö kiellettyjen sanojen listaan (oletus: aktiivinen).");
 $LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "Käytä captcha koodia julkisten lomakkeiden t&#228;ytön yhteydessä varmistamaan henkilön aitous (oletus: aktiivinen).");
-$PMF_LANG['ad_firefoxsearch_plugin_title'] = 'Luo Firefoxin haun lisäosa';
-$PMF_LANG['ad_msiesearch_plugin_install'] = 'Asenna Microsoft Internet Explorer 7 haun lisäosa';
-$PMF_LANG['ad_msiesearch_plugin_title'] = 'Luo Microsoft Internet Explorer 7 haun lisäosa';
-$PMF_LANG['ad_msiesearch_plugin_ttitle'] = 'Otsikko MSIE 7 hakukentälle:';
-$PMF_LANG['ad_msiesearch_plugin_create'] = 'Luo Microsoft Internet Explorer 7 haun lisäosa.';
-$PMF_LANG['ad_msiesearch_plugin_success'] = 'Microsoft Internet Explorer 7 haun lisäosa luotiin onnistuneesti!';
-$PMF_LANG['ad_session_expiring'] = 'Istuntosi er&#228;&#228;ntyy %d minuutin p&#228;&#228;st&#228;: haluatko kuitenkin jatkaa ty&#246;skentely&#228;?';
+$PMF_LANG["ad_firefoxsearch_plugin_title"] = 'Luo Firefoxin haun lisäosa';
+$PMF_LANG["ad_msiesearch_plugin_install"] = 'Asenna Microsoft Internet Explorer 7 haun lisäosa';
+$PMF_LANG["ad_msiesearch_plugin_title"] = 'Luo Microsoft Internet Explorer 7 haun lisäosa';
+$PMF_LANG["ad_msiesearch_plugin_ttitle"] = 'Otsikko MSIE 7 hakukentälle:';
+$PMF_LANG["ad_msiesearch_plugin_create"] = 'Luo Microsoft Internet Explorer 7 haun lisäosa.';
+$PMF_LANG["ad_msiesearch_plugin_success"] = 'Microsoft Internet Explorer 7 haun lisäosa luotiin onnistuneesti!';
+$PMF_LANG["ad_session_expiring"] = 'Istuntosi er&#228;&#228;ntyy %d minuutin p&#228;&#228;st&#228;: haluatko kuitenkin jatkaa ty&#246;skentely&#228;?';
 
 // added v1.6.2 - 2006-06-13 by Matteo
-$PMF_LANG['ad_stat_management'] = 'Istuntojen hallinta';
-$PMF_LANG['ad_stat_choose'] = 'Valitse kuukaus';
-$PMF_LANG['ad_stat_delete'] = 'Tuhoa valitut istunnot välittömästi';
+$PMF_LANG["ad_stat_management"] = 'Istuntojen hallinta';
+$PMF_LANG["ad_stat_choose"] = 'Valitse kuukaus';
+$PMF_LANG["ad_stat_delete"] = 'Tuhoa valitut istunnot välittömästi';
