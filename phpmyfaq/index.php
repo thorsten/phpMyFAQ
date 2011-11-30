@@ -472,7 +472,7 @@ $main_template_vars = array(
     'sendPassword'        => '<a href="./admin/password.php">' . $PMF_LANG['lostPassword'] . '</a>',
     'loginHeader'         => $PMF_LANG['msgLoginUser'],
     'loginMessage'        => $loginMessage,
-    'writeLoginPath'      => '?' . PMF_Filter::getFilteredQueryString(),
+    'writeLoginPath'      => $systemUri . '?' . PMF_Filter::getFilteredQueryString(),
     'faqloginaction'      => $action,
     'login'               => $PMF_LANG['ad_auth_ok'],
     'username'            => $PMF_LANG['ad_auth_user'],
@@ -569,7 +569,7 @@ $tpl->processTemplate('index', array_merge($main_template_vars, $links_template_
 if (isset($auth)) {
     if (in_array(true, $permission)) {
         $adminSection = sprintf('<a href="%s">%s</a>',
-            'admin/index.php',
+            $systemUri . 'admin/index.php',
             $PMF_LANG['adminSection']
         );
     } else {
@@ -590,7 +590,7 @@ if (isset($auth)) {
             'loginBox',
             array(
                 'msgLoginUser'    => $PMF_LANG['msgLoginUser'],
-                'writeLoginPath'  => '?action=login',
+                'writeLoginPath'  => $systemUri . '?action=login',
                 'faqloginaction'  => $action,
                 'login'           => $PMF_LANG['ad_auth_ok'],
                 'username'        => $PMF_LANG['ad_auth_user'],
