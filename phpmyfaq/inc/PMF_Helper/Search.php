@@ -318,7 +318,8 @@ class PMF_Helper_Search extends PMF_Helper
                 }
                 
                 // Build the link to the faq record
-                $currentUrl = sprintf('%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
+                $currentUrl = sprintf(
+                    '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
                     PMF_Link::getSystemRelativeUri(),
                     $this->sessionId,
                     $result->category_id,
@@ -327,13 +328,15 @@ class PMF_Helper_Search extends PMF_Helper
                     urlencode($searchterm));
 
                 $oLink       = new PMF_Link($currentUrl);
-                $oLink->text = $oLink->itemTitle = $oLink->tooltip = $result->question;
+                $oLink->text = $question;
+                $oLink->itemTitle = $oLink->tooltip = $result->question;
 
                 $html .= "<li>";
                 $html .= sprintf("<strong>%s</strong>: %s<br />",
                     $categoryName,
                     $oLink->toHtmlAnchor());
-                $html .= sprintf("<div class=\"searchpreview\"><strong>%s</strong> %s...</div><br />\n",
+                $html .= sprintf(
+                    "<div class=\"searchpreview\"><strong>%s</strong> %s...</div><br />\n",
                     $this->translation['msgSearchContent'],
                     $answerPreview);
                 $html .= "</li>";

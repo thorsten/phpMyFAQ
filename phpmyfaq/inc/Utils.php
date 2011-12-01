@@ -343,9 +343,9 @@ class PMF_Utils
         $prefix          = isset($matches[3]) ? $matches[3] : '';
         $item            = isset($matches[4]) ? $matches[4] : '';
         $postfix         = isset($matches[5]) ? $matches[5] : '';
-        
+
         if (!empty($item)) {
-            return '<span class="highlight">'.$prefix.$item.$postfix.'</span>';
+            return '<span class="highlight">' . $prefix . $item . $postfix . '</span>';
         }
         
         // Fallback: the original matched string

@@ -150,6 +150,8 @@ button {
     content: "\0020"; display: block; height: 0; clear: both; visibility: hidden; }
 .clearfix { 
     zoom: 1; }
+.highlight {
+    text-decoration: dotted; background-color: orange; color: #000000; padding: 1px; }
 
 /* phpMyFAQ layout */
 body {
