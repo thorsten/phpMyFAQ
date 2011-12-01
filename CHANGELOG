@@ -5,8 +5,9 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.7.2 - 2011-11-
+Version 2.7.2 - 2011-12-
 - updated French translation (Cédric Frayssinet)
+- updated bundled TCPDF library to version 5.9.136 (Thorsten)
 - fixed some bugs (Thorsten)
 
 Version 2.7.1 - 2011-10-25
