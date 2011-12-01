@@ -140,7 +140,8 @@
                 'applescript            inc/js/syntaxhighlighter/scripts/shBrushAppleScript.js',
                 'xml xhtml xslt html    inc/js/syntaxhighlighter/scripts/shBrushXml.js',
                 'bash shell             inc/js/syntaxhighlighter/scripts/shBrushBash.js',
-                'php                    inc/js/syntaxhighlighter/scripts/shBrushPhp.js'
+                'php                    inc/js/syntaxhighlighter/scripts/shBrushPhp.js',
+                'sql                    inc/js/syntaxhighlighter/scripts/shBrushSql.js'
             );
             SyntaxHighlighter.all();
             </script>
