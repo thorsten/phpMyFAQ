@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_TransTool
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-05-12
@@ -57,18 +57,18 @@ class PMF_TransTool
             
             while (list(,$line) = each($orig)) {
                 $line = rtrim($line);
-                /**
-                 * Bypass all but variable definitions
-                 */
+                // Bypass all but variable definitions
                 if (strlen($line) && '$' == $line[0]) {
-                    /**
-                     * $PMF_LANG["key"] = "val";
-                     * or
-                     * $PMF_LANG["key"] = array(0 => "something", 1 => ...);
-                     * turns to something like  array('$PMF_LANG["key"]', '"val";')
-                     */
+                    // $PMF_LANG["key"] = "val";
+                    // or
+                    // $PMF_LANG["key"] = array(0 => "something", 1 => ...);
+                    // turns to something like  array('$PMF_LANG["key"]', '"val";')
                     $m   = explode("=", $line, 2);
-                    $key = str_replace(array('["', '"]', '[\'', '\']'), array('[', ']', '[', ']'), PMF_String::substr(trim($m[0]), 1));
+                    $key = str_replace(
+                        array('["', '"]', '[\'', '\']'),
+                        array('[', ']', '[', ']'),
+                        PMF_String::substr(trim($m[0]), 1)
+                    );
                     $tmp = trim(@$m[1]);
                     
                     if (0 === PMF_String::strpos($tmp, 'array')) {
@@ -149,11 +149,13 @@ class PMF_TransTool
      */
     public function isKeyIgnorable($key)
     {
-        $keyIgnore = array('PMF_LANG[metaCharset]',
-                           'PMF_LANG[metaLanguage]',
-                           'PMF_LANG[language]',
-                           'PMF_LANG[dir]',
-                           'PMF_LANG[nplurals]');
+        $keyIgnore = array(
+            'PMF_LANG[metaCharset]',
+            'PMF_LANG[metaLanguage]',
+            'PMF_LANG[language]',
+            'PMF_LANG[dir]',
+            'PMF_LANG[nplurals]'
+        );
 
         return in_array($key, $keyIgnore);
     }
