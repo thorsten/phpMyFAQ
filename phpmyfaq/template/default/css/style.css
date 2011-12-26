@@ -276,6 +276,8 @@ nav ul li.selected a {
     -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 #social {
     margin: 0 auto; }
+#social a:link {
+    text-decoration: none; }
 #faqTabs {
     width: 100%; margin-bottom: 11px; margin-top: 11px; }
 #faqTabs ul.faqTabNav {
