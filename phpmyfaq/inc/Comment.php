@@ -171,8 +171,11 @@ class PMF_Comment
     /**
      * Returns all user comments (HTML formatted) from a record by type
      *
-     * @param  integer $id   record id
-     * @param  integer $type record type: {faq|news}
+     * @todo Move this code to a helper class
+     *
+     * @param integer $id   Comment ID
+     * @param integer $type Comment type: {faq|news}
+     *
      * @return string
      */
     public function getComments($id, $type)
@@ -187,7 +190,7 @@ class PMF_Comment
                 $this->pmf_lang['msgCommentBy'],
                 PMF_Mail::safeEmail($item['email']),
                 $item['user'],
-                $item['content'],
+                nl2br($item['content'], true),
                 $this->pmf_lang['newsCommentDate'] .
                     PMF_Date::format(PMF_Date::createIsoDate($item['date'], 'Y-m-d H:i', false))
             );
