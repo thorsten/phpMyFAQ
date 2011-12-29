@@ -67,7 +67,7 @@ time int(11) NOT NULL,
 usr int(11) NOT NULL,
 text text NOT NULL,
 ip text NOT NULL,
-PRIMARY KEY (id))";
+PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqattachment
 $query[] = "CREATE TABLE " . $sqltblpre . "faqattachment (
@@ -81,13 +81,13 @@ filename varchar(255) NOT NULL,
 filesize int NOT NULL,
 encrypted tinyint NOT NULL DEFAULT 0,
 mime_type varchar(255) NULL,
-PRIMARY KEY (id))";
+PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqattachment file
 $query[] = "CREATE TABLE " . $sqltblpre . "faqattachment_file (
 virtual_hash char(32) NOT NULL,
 contents blob NOT NULL,
-PRIMARY KEY (virtual_hash))";
+PRIMARY KEY (virtual_hash)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqcaptcha
 $query[] = "CREATE TABLE ".$sqltblpre."faqcaptcha (
@@ -96,7 +96,7 @@ useragent varchar(255) NOT NULL,
 language varchar(5) NOT NULL,
 ip varchar(64) NOT NULL,
 captcha_time int(11) NOT NULL,
-PRIMARY KEY (id))";
+PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqcategories
 $query[] = "CREATE TABLE ".$sqltblpre."faqcategories (
@@ -106,7 +106,7 @@ parent_id INT(11) NOT NULL,
 name VARCHAR(255) NOT NULL,
 description VARCHAR(255) DEFAULT NULL,
 user_id INT(11) NOT NULL,
-PRIMARY KEY (id, lang))";
+PRIMARY KEY (id, lang)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqcategoryrelations
 $query[] = "CREATE TABLE ".$sqltblpre."faqcategoryrelations (
@@ -115,20 +115,19 @@ category_lang VARCHAR(5) NOT NULL default '',
 record_id INT(11) NOT NULL,
 record_lang VARCHAR(5) NOT NULL default '',
 PRIMARY KEY  (category_id, category_lang, record_id, record_lang),
-KEY idx_records (record_id, record_lang)
-)";
+KEY idx_records (record_id, record_lang)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqcategory_group
 $query[] = "CREATE TABLE ".$sqltblpre."faqcategory_group (
 category_id INT(11) NOT NULL,
 group_id INT(11) NOT NULL,
-PRIMARY KEY (category_id, group_id))";
+PRIMARY KEY (category_id, group_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqcategory_user
 $query[] = "CREATE TABLE ".$sqltblpre."faqcategory_user (
 category_id INT(11) NOT NULL,
 user_id INT(11) NOT NULL,
-PRIMARY KEY (category_id, user_id))";
+PRIMARY KEY (category_id, user_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqchanges
 $query[] = "CREATE TABLE ".$sqltblpre."faqchanges (
@@ -139,7 +138,7 @@ revision_id integer NOT NULL DEFAULT 0,
 usr int(11) NOT NULL,
 datum int(11) NOT NULL,
 what text DEFAULT NULL,
-PRIMARY KEY (id, lang))";
+PRIMARY KEY (id, lang)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqcomments
 $query[] = "CREATE TABLE ".$sqltblpre."faqcomments (
@@ -151,13 +150,13 @@ email varchar(255) NOT NULL,
 comment text NOT NULL,
 datum int(15) NOT NULL,
 helped text DEFAULT NULL,
-PRIMARY KEY (id_comment))";
+PRIMARY KEY (id_comment)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqconfig
 $query[] = "CREATE TABLE ".$sqltblpre."faqconfig (
 config_name varchar(255) NOT NULL default '',
 config_value varchar(255) DEFAULT NULL,
-PRIMARY KEY (config_name))";
+PRIMARY KEY (config_name)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqdata
 $query[] = "CREATE TABLE ".$sqltblpre."faqdata (
@@ -179,7 +178,7 @@ links_check_date INT(11) DEFAULT 0 NOT NULL,
 date_start varchar(14) NOT NULL DEFAULT '00000000000000',
 date_end varchar(14) NOT NULL DEFAULT '99991231235959',
 FULLTEXT (keywords,thema,content),
-PRIMARY KEY (id, lang)) ENGINE = MYISAM";
+PRIMARY KEY (id, lang)) ENGINE = MYISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqdata_revisions
 $query[] = "CREATE TABLE ".$sqltblpre."faqdata_revisions (
@@ -200,26 +199,25 @@ links_state VARCHAR(7) DEFAULT NULL,
 links_check_date INT(11) DEFAULT 0 NOT NULL,
 date_start varchar(14) NOT NULL DEFAULT '00000000000000',
 date_end varchar(14) NOT NULL DEFAULT '99991231235959',
-PRIMARY KEY (id, lang, solution_id, revision_id))";
+PRIMARY KEY (id, lang, solution_id, revision_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqdata_group
 $query[] = "CREATE TABLE ".$sqltblpre."faqdata_group (
 record_id INT(11) NOT NULL,
 group_id INT(11) NOT NULL,
-PRIMARY KEY (record_id, group_id))";
+PRIMARY KEY (record_id, group_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqdata_tags
 $query[] = "CREATE TABLE ".$sqltblpre."faqdata_tags (
 record_id INT(11) NOT NULL,
 tagging_id INT(11) NOT NULL,
-PRIMARY KEY (record_id, tagging_id)
-)";
+PRIMARY KEY (record_id, tagging_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqdata__user
 $query[] = "CREATE TABLE ".$sqltblpre."faqdata_user (
 record_id INT(11) NOT NULL,
 user_id INT(11) NOT NULL,
-PRIMARY KEY (record_id, user_id))";
+PRIMARY KEY (record_id, user_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqglossary
 $query[] = "CREATE TABLE ".$sqltblpre."faqglossary (
@@ -227,7 +225,7 @@ id INT(11) NOT NULL ,
 lang VARCHAR(5) NOT NULL ,
 item VARCHAR(255) NOT NULL ,
 definition TEXT NOT NULL,
-PRIMARY KEY (id, lang))";
+PRIMARY KEY (id, lang)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqgroup
 $query[] = "CREATE TABLE ".$sqltblpre."faqgroup (
@@ -236,15 +234,13 @@ name VARCHAR(25) NULL,
 description TEXT NULL,
 auto_join INT(1) UNSIGNED NULL,
 PRIMARY KEY (group_id),
-UNIQUE INDEX name(name)
-)";
+UNIQUE INDEX name(name)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqgroup_right
 $query[] = "CREATE TABLE ".$sqltblpre."faqgroup_right (
 group_id INT(11) NOT NULL,
 right_id INT(11) UNSIGNED NOT NULL,
-PRIMARY KEY (group_id, right_id)
-)";
+PRIMARY KEY (group_id, right_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqlinkverifyrules
 $query[] = "CREATE TABLE ".$sqltblpre."faqlinkverifyrules (
@@ -257,8 +253,7 @@ locked enum('y','n') NOT NULL default 'n',
 owner varchar(255) NOT NULL default '',
 dtInsertDate varchar(15) NOT NULL default '',
 dtUpdateDate varchar(15) NOT NULL default '',
-PRIMARY KEY (id)
-)";
+PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqnews
 $query[] = "CREATE TABLE ".$sqltblpre."faqnews (
@@ -276,7 +271,7 @@ date_end varchar(14) NOT NULL DEFAULT '99991231235959',
 link varchar(255) DEFAULT NULL,
 linktitel varchar(255) DEFAULT NULL,
 target varchar(255) NOT NULL,
-PRIMARY KEY (id))";
+PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqquestions
 $query[] = "CREATE TABLE ".$sqltblpre."faqquestions (
@@ -287,7 +282,7 @@ category_id int(11) NOT NULL,
 question text NOT NULL,
 created varchar(20) NOT NULL,
 is_visible char(1) default 'Y',
-PRIMARY KEY (id))";
+PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqright
 $query[] = "CREATE TABLE ".$sqltblpre."faqright (
@@ -296,8 +291,7 @@ name VARCHAR(50) NULL,
 description TEXT NULL,
 for_users INT(1) NULL DEFAULT 1,
 for_groups INT(1) NULL DEFAULT 1,
-PRIMARY KEY (right_id)
-)";
+PRIMARY KEY (right_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqsearches
 $query[] = "CREATE TABLE ".$sqltblpre."faqsearches (
@@ -305,8 +299,7 @@ id INT(11) NOT NULL ,
 lang VARCHAR(5) NOT NULL ,
 searchterm VARCHAR(255) NOT NULL ,
 searchdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-PRIMARY KEY (id, lang)
-)";
+PRIMARY KEY (id, lang)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqsessions
 $query[] = "CREATE TABLE ".$sqltblpre."faqsessions (
@@ -314,22 +307,20 @@ sid int(11) NOT NULL,
 user_id int(11) NOT NULL,
 ip text NOT NULL,
 time int(11) NOT NULL,
-PRIMARY KEY (sid)
-)";
+PRIMARY KEY (sid)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqstopwords
 $query[] = "CREATE TABLE ".$sqltblpre."faqstopwords (
 id INTEGER NOT NULL,
 lang VARCHAR(5) NOT NULL,
 stopword VARCHAR(64) NOT NULL,
-PRIMARY KEY (id, lang))";
+PRIMARY KEY (id, lang)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqtags
 $query[] = "CREATE TABLE ".$sqltblpre."faqtags (
 tagging_id INT(11) NOT NULL,
 tagging_name VARCHAR(255) NOT NULL ,
-PRIMARY KEY (tagging_id, tagging_name)
-)";
+PRIMARY KEY (tagging_id, tagging_name)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faquser
 $query[] = "CREATE TABLE ".$sqltblpre."faquser (
@@ -344,37 +335,32 @@ auth_source VARCHAR(100) NULL,
 member_since VARCHAR(14) NULL,
 PRIMARY KEY (user_id),
 UNIQUE INDEX session(session_id),
-UNIQUE INDEX login(login)
-)";
+UNIQUE INDEX login(login)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faquserdata
 $query[] = "CREATE TABLE ".$sqltblpre."faquserdata (
 user_id INT(11) NOT NULL,
 last_modified TIMESTAMP NULL,
 display_name VARCHAR(50) NULL,
-email VARCHAR(100) NULL
-)";
+email VARCHAR(100) NULL) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faquserlogin
 $query[] = "CREATE TABLE ".$sqltblpre."faquserlogin (
 login VARCHAR(25) NOT NULL,
 pass VARCHAR(150) NULL,
-PRIMARY KEY (login)
-)";
+PRIMARY KEY (login)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faquser_group
 $query[] = "CREATE TABLE ".$sqltblpre."faquser_group (
 user_id INT(11) NOT NULL,
 group_id INT(11) NOT NULL,
-PRIMARY KEY (user_id, group_id)
-)";
+PRIMARY KEY (user_id, group_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faquser_right
 $query[] = "CREATE TABLE ".$sqltblpre."faquser_right (
 user_id INT(11) NOT NULL,
 right_id INT(11) NOT NULL,
-PRIMARY KEY (user_id, right_id)
-)";
+PRIMARY KEY (user_id, right_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqvisits
 $query[] = "CREATE TABLE ".$sqltblpre."faqvisits (
@@ -382,7 +368,7 @@ id int(11) NOT NULL,
 lang varchar(5) NOT NULL,
 visits int(11) NOT NULL,
 last_visit int(15) NOT NULL,
-PRIMARY KEY (id, lang))";
+PRIMARY KEY (id, lang)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqvoting
 $query[] = "CREATE TABLE ".$sqltblpre."faqvoting (
@@ -392,4 +378,4 @@ vote int(11) unsigned NOT NULL,
 usr int(11) unsigned NOT NULL,
 datum varchar(20) NOT NULL default '',
 ip varchar(15) NOT NULL default '',
-PRIMARY KEY (id))";
+PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
