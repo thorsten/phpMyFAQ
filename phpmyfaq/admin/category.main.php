@@ -338,7 +338,7 @@ if ($permission['editcateg']) {
     }
 
     if ($open > 0) {
-        print '</div>';
+        print str_repeat('</div>', $open);
     }
     
     printf('<p>%s</p>', $PMF_LANG['ad_categ_remark']);
