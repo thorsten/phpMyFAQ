@@ -1514,4 +1514,14 @@ class PMF_Category
 
         return $matrix;
     }
+
+    /**
+     * Sets language
+     *
+     * @param string $language
+     */
+    public function setLanguage($language)
+    {
+        $this->language = $language;
+    }
 }
