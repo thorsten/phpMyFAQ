@@ -57,9 +57,9 @@ if ($permission['delcomment']) {
 ?>
         <tr id="comments_<?php print $faqcomment['comment_id']; ?>">
             <td width="20">
-                <input die="faq_comments[<?php print $faqcomment['record_id']; ?>]"
-                       name="faq_comments[<?php print $faqcomment['record_id']; ?>]"
-                       value="<?php print $faqcomment['comment_id']; ?>" type="checkbox" />
+                <input id="faq_comments[<?php print $faqcomment['comment_id']; ?>]"
+                       name="faq_comments[<?php print $faqcomment['comment_id']; ?>]"
+                       value="<?php print $faqcomment['record_id']; ?>" type="checkbox" />
             </td>
             <td>
                 <span style="font-weight: bold;">
@@ -106,9 +106,9 @@ if ($permission['delcomment']) {
 ?>
         <tr id="comments_<?php print $newscomment['comment_id']; ?>">
             <td width="20">
-                <input id="name="news_comments[<?php print $newscomment['record_id']; ?>]"
-                       name="news_comments[<?php print $newscomment['record_id']; ?>]"
-                       value="<?php print $newscomment['comment_id']; ?>" type="checkbox" />
+                <input id="news_comments[<?php print $newscomment['comment_id']; ?>]"
+                       name="news_comments[<?php print $newscomment['comment_id']; ?>]"
+                       value="<?php print $newscomment['record_id']; ?>" type="checkbox" />
             </td>
             <td>
                 <span style="font-weight: bold;">
