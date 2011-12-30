@@ -191,6 +191,18 @@ define('K_SMALL_RATIO', 2 / 3);
 
 require K_PATH_MAIN . '/tcpdf.php';
 
+/**
+ * @category  phpMyFAQ
+ * @package   PMF_Export
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Peter Beauvain <pbeauvain@web.de>
+ * @author    Olivier Plathey <olivier@fpdf.org>
+ * @author    Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
+ * @copyright 2004-2011 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-11-21
+ */
 class PMF_Export_Pdf_Wrapper extends TCPDF
 {
     /**
@@ -346,6 +358,26 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
     private $question = '';
 
     /**
+     * Font files
+     *
+     * @var array
+     */
+    private $fontFiles = array(
+        'zh' => 'cid0cs',
+        'tw' => 'cid0ct',
+        'ja' => 'cid0jp',
+        'ko' => 'cid0kr',
+        'default' => 'arialunicid0'
+    );
+
+    /**
+     * Current font
+     *
+     * @var string
+     */
+    private $currentFont = 'arialunicid0';
+
+    /**
      * Constructor
      *
      * @param  array  $category    Current category
@@ -372,9 +404,14 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
         $this->tdheight = 0;
         $this->tdalign = "L";
         $this->tdbgcolor = false;
+        $this->setFontSubsetting(false);
         // Check on RTL
         if ('rtl' == $PMF_LANG['dir']) {
             $this->setRTL(true);
+        }
+        // Set font
+        if (array_key_exists($PMF_LANG['metaLanguage'], $this->fontFiles)) {
+            $this->currentFont = (string)$this->fontFiles[$PMF_LANG['metaLanguage']];
         }
     }
     
@@ -387,7 +424,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
      */
     public function setCategory($category)
     {
-    	$this->category = $category;
+        $this->category = $category;
     }
     
     /**
@@ -397,7 +434,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
      */
     public function setQuestion($question = '')
     {
-    	$this->question = $question;
+        $this->question = $question;
     }
     
     /**
@@ -407,7 +444,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
      */
     public function setCategories(Array $categories)
     {
-    	$this->categories = $categories;
+        $this->categories = $categories;
     }
     
     /**
@@ -417,6 +454,8 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
      */
     public function Header()
     {
+        global $PMF_LANG;
+
         if (array_key_exists($this->category, $this->categories)) {
             $title = $this->categories[$this->category]['name'].': '.$this->question;
         } else {
@@ -428,7 +467,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
         $currentTextColor = $this->TextColor;
         
         $this->SetTextColor(0,0,0);
-        $this->SetFont('arialunicid0', 'B', 18);
+        $this->SetFont('arialunicid0', 'B', 18, '', 'false');
         $this->MultiCell(0, 9, $title, 0, 'C', 0);
         if ($this->enableBookmarks) {
             $this->Bookmark(PMF_Utils::makeShorterText($this->question, 5));
@@ -448,18 +487,26 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
         global $PMF_LANG;
         
         $faqconfig = PMF_Configuration::getInstance();
+
+        $footer = sprintf(
+            '(c) %d %s <%s> | %s',
+            date('Y'),
+            $faqconfig->get('main.metaPublisher'),
+            $faqconfig->get('main.administrationMail'),
+            PMF_Date::format(date('Y-m-d H:i'))
+        );
         
         $currentTextColor = $this->TextColor;
         $this->SetTextColor(0,0,0);
         $this->SetY(-25);
-        $this->SetFont('arialunicid0', '', 10);
-        $this->Cell(0, 10, $PMF_LANG['ad_gen_page'] . ' ' . $this->PageNo() . ' / ' . $this->getAliasNbPages(), 0, 0, 'C');
+        $this->SetFont('arialunicid0', '', 10, '', 'false');
+        $this->Cell(0, 10, $PMF_LANG['ad_gen_page'] . ' ' . $this->getAliasNumPage() . ' / ' . $this->getAliasNbPages(), 0, 0, 'C');
         $this->SetY(-20);
-        $this->SetFont('arialunicid0', 'B', 8);
-        $this->Cell(0, 10, "(c) ".date("Y")." ".$faqconfig->get('main.metaPublisher')." <".$faqconfig->get('main.administrationMail').">",0,1,"C");
+        $this->SetFont('arialunicid0', 'B', 8, '', 'false');
+        $this->Cell(0, 10, $footer,0,1,"C");
         if ($this->enableBookmarks == false) {
             $this->SetY(-15);
-            $this->SetFont('arialunicid0', '', 8);
+            $this->SetFont('arialunicid0', '', 8, '', 'false');
             $baseUrl = 'index.php';
             if (is_array($this->faq) && !empty($this->faq)) {
                 $baseUrl .= '?action=artikel&amp;';
@@ -471,7 +518,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
                 $baseUrl .= '&amp;id='.$this->faq['id'];
                 $baseUrl .= '&amp;artlang='.$this->faq['lang'];
             }
-            $url = PMF_Link::getSystemUri('pdf.php').$baseUrl;
+            $url    = PMF_Link::getSystemUri('pdf.php') . $baseUrl;
             $urlObj = new PMF_Link($url);
             $urlObj->itemTitle = $this->question;
             $_url = str_replace('&amp;', '&', $urlObj->toString());
@@ -481,14 +528,13 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
     }
 
     /**
-    * Set the specific style according to the (X)HTML tag
+    * Set the specific style according to the HTML tag
     *
     * @param    string
     * @param    boolean
     * @return   void
-    * @access   private
     */
-    function SetStyle($tag, $enable)
+    public function SetStyle($tag, $enable)
     {
         $this->$tag += ($enable ? 1 : -1);
         $style = "";
@@ -501,75 +547,29 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
     }
 
     /**
-    * Adds a image
-    *
-    * @param    string  path to the image
-    * @return   void
-    * @access   private
-    */
-    function AddImage($image)
+     * Adds a table of content for exports of the complete FAQ
+     * 
+     * @return void
+     */
+    public function addFaqToc()
     {
-        // Check, if image is stored locally or not
-        if ('http' != PMF_String::substr($image, 0, 4)) {
-            // Please note that the image must be accessible by HTTP NOT ONLY by HTTPS
-             $image = 'http://' . $_SERVER['HTTP_HOST'] . '/' . $image;
-        }
-        // Set a friendly User Agent
-        $ua = ini_get('user_agent');
-        ini_set('user_agent', 'phpMyFAQ PDF Builder');
-        if (!$info = getimagesize($image)) {
-            return;
-        }
+        global $PMF_LANG;
         
-        if ($info[0] > 555 ) {
-            $w = $info[0] / 144 * 25.4;
-            $h = $info[1] / 144 * 25.4;
+        $this->addTOCPage();
 
-        } else {
-            $w = $info[0] / 72 * 25.4;
-            $h = $info[1] / 72 * 25.4;
-        }
+        // Title
+        $this->SetFont('arialunicid0', 'B', 24, '', 'false');
+        $this->MultiCell(0, 0, PMF_Configuration::getInstance()->get('main.titleFAQ'), 0, 'C', 0, 1, '', '', true, 0);
+        $this->Ln();
 
-        // Check for the fpdf image type support
-        if (isset($this->mimetypes[$info[2]])) {
-            $type = $this->mimetypes[$info[2]];
-        } else {
-            return;
-        }
+        // TOC
+        $this->SetFont('arialunicid0', 'B', 16, '', 'false');
+        $this->MultiCell(0, 0, $PMF_LANG['msgTableOfContent'], 0, 'C', 0, 1, '', '', true, 0);
+        $this->Ln();
+        $this->SetFont('arialunicid0', '', 12, '', 'false');
 
-        $hw_ratio = $h / $w;
-        $this->Write(5,' ');
-
-        if ($info[0] > $this->wPt) {
-            $info[0] = $this->wPt - $this->lMargin - $this->rMargin;
-            if ($w > $this->w) {
-                $w = $this->w - $this->lMargin - $this->rMargin;
-                $h = $w*$hw_ratio;
-            }
-        }
-
-        $x = $this->GetX();
-
-        if ($this->GetY() + $h > $this->h) {
-            $this->AddPage();
-        }
-
-        $y = $this->GetY();
-        $this->Image($image, $x, $y, $w, $h, $type);
-        $this->Write(5,' ');
-        $y = $this->GetY();
-        $this->Image($image, $x, $y, $w, $h, $type);
-
-        if ($y + $h > $this->hPt) {
-            $this->AddPage();
-        } else {
-            if ($info[1] > 20 ) {
-                $this->SetY($y+$h);
-            }
-            $this->SetX($x+$w);
-        }
-
-        // Unset the friendly User Agent restoring the original UA
-        ini_set('user_agent', $ua);
+        // Render TOC
+        $this->addTOC(1, 'arialunicid0', '.', $PMF_LANG['msgTableOfContent'], 'B', array(128,0,0));
+        $this->endTOCPage();
     }
 }

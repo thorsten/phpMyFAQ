@@ -2830,21 +2830,19 @@ class PMF_Faq
         
         switch ($type) {
             case 'sticky':
-                $flag = (int)$flag;
+                $flag = ($flag === 'checked' ? 1 : 0);
                 break;
                 
             case 'active':
-                $flag = $flag ? "'yes'" : "'no'";
+                $flag = ($flag === 'checked' ? "'yes'" : "'no'");
                 break;
                 
             default:
-                /**
-                 * This is because we would run into unknown db column
-                 */
+                // This is because we would run into unknown db column
                 $flag = null;
                 break;
         }
-        
+
         if (null !== $flag) {
         
             $update = sprintf("
@@ -3009,7 +3007,6 @@ class PMF_Faq
         }
         
         $faqconfig = PMF_Configuration::getInstance();
-        $category  = new PMF_Category();
         
         $pdf      = new PMF_Export_Pdf_Wrapper();
         $category = new PMF_Category();
@@ -3024,15 +3021,14 @@ class PMF_Faq
         // Set any item
         $pdf->SetTitle($this->faqRecord['title']);
         $pdf->SetCreator($faqconfig->get('main.titleFAQ').' - powered by phpMyFAQ '.$faqconfig->get('main.currentVersion'));
-        $pdf->AliasNbPages();
         $pdf->AddPage();
-        $pdf->SetFont('arialunicid0', '', 12);
+        $pdf->SetFont('arialunicid0', '', 12, '', 'false');
         $pdf->SetDisplayMode('real');
         $pdf->Ln();
         $pdf->WriteHTML(str_replace('../', '', $this->faqRecord['content']), true);
         $pdf->Ln();
         $pdf->Ln();
-        $pdf->SetFont('arialunicid0', '', 11);
+        $pdf->SetFont('arialunicid0', '', 11, '', 'false');
         $pdf->Write(5, $PMF_LANG['ad_entry_solution_id'].': #'.$this->faqRecord['solution_id']);
         $pdf->SetAuthor($this->faqRecord['author']);
         $pdf->Ln();

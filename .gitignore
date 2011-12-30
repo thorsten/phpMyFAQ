@@ -7,6 +7,9 @@
 # PhpStorm folder
 .idea*
 
+# Mac OS X crap
+.DS_Store
+
 # phpMyFAQ generated folders
 
 phpmyfaq/config/database.php

@@ -297,8 +297,11 @@ class PMF_Helper_Search extends PMF_Helper
                     continue;
                 }
                 $displayedCounter++;
-                
-                $categoryName  = $this->Category->getPath($result->category_id);
+
+                // Set language for current category to fetch the correct category name
+                $this->Category->setLanguage($result->lang);
+
+                $categoryInfo  = $this->Category->getCategoriesFromArticle($result->id);
                 $question      = PMF_Utils::chopString($result->question, 15);
                 $answerPreview = PMF_Utils::chopString(strip_tags($result->answer), 25);
                 $searchterm    = str_replace(
@@ -318,7 +321,8 @@ class PMF_Helper_Search extends PMF_Helper
                 }
                 
                 // Build the link to the faq record
-                $currentUrl = sprintf('%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
+                $currentUrl = sprintf(
+                    '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
                     PMF_Link::getSystemRelativeUri(),
                     $this->sessionId,
                     $result->category_id,
@@ -327,13 +331,15 @@ class PMF_Helper_Search extends PMF_Helper
                     urlencode($searchterm));
 
                 $oLink       = new PMF_Link($currentUrl);
-                $oLink->text = $oLink->itemTitle = $oLink->tooltip = $result->question;
+                $oLink->text = $question;
+                $oLink->itemTitle = $oLink->tooltip = $result->question;
 
                 $html .= "<li>";
                 $html .= sprintf("<strong>%s</strong>: %s<br />",
-                    $categoryName,
+                    $categoryInfo[0]['name'],
                     $oLink->toHtmlAnchor());
-                $html .= sprintf("<div class=\"searchpreview\"><strong>%s</strong> %s...</div><br />\n",
+                $html .= sprintf(
+                    "<div class=\"searchpreview\"><strong>%s</strong> %s...</div><br />\n",
                     $this->translation['msgSearchContent'],
                     $answerPreview);
                 $html .= "</li>";

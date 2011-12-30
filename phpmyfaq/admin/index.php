@@ -378,23 +378,27 @@ if (isset($auth) && in_array(true, $permission)) {
             <tbody>
                 <tr>
                     <td><strong><a href="?action=viewsessions"><?php print $PMF_LANG["ad_start_visits"]; ?></a></strong></td>
-                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX."faqsessions"]; ?></td>
+                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX . "faqsessions"]; ?></td>
                 </tr>
                 <tr>
                     <td><strong><a href="?action=view"><?php print $PMF_LANG["ad_start_articles"]; ?></a></strong></td>
-                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX."faqdata"]; ?></td>
+                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX . "faqdata"]; ?></td>
                 </tr>
                 <tr>
                     <td><strong><a href="?action=comments"><?php print $PMF_LANG["ad_start_comments"]; ?></strong></a></td>
-                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX."faqcomments"]; ?></td>
+                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX . "faqcomments"]; ?></td>
                 </tr>
                 <tr>
                     <td><strong><a href="?action=question"><?php print $PMF_LANG["msgOpenQuestions"]; ?></strong></a></td>
-                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX."faqquestions"]; ?></td>
+                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX . "faqquestions"]; ?></td>
                 </tr>
                 <tr>
                     <td><strong><a href="?action=news"><?php print $PMF_LANG["msgNews"]; ?></strong></a></td>
-                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX."faqnews"]; ?></td>
+                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX . "faqnews"]; ?></td>
+                </tr>
+                <tr>
+                    <td><strong><a href="?action=user&user_action=listallusers"><?php print $PMF_LANG['admin_mainmenu_users']; ?></strong></a></td>
+                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX . 'faquser'] - 1; ?></td>
                 </tr>
             </tbody>
             </table>
@@ -411,7 +415,8 @@ if (isset($auth) && in_array(true, $permission)) {
             $json   = file_get_contents('http://www.phpmyfaq.de/json/version.php');
             $result = json_decode($json);
             if ($result instanceof stdClass) {
-                printf('%s <a href="http://www.phpmyfaq.de" target="_blank">www.phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>',
+                printf(
+                    '%s <a href="http://www.phpmyfaq.de" target="_blank">phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>',
                     $PMF_LANG['ad_xmlrpc_latest'], 
                     $result->stable);
                 // Installed phpMyFAQ version is outdated

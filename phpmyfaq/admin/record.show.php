@@ -32,7 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 printf("<header><h2>%s</h2><header>\n", $PMF_LANG['ad_entry_aor']);
 
 if ($permission['editbt'] || $permission['delbt']) {
-    
+
     // (re)evaluate the Category object w/o passing the user language
     $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $category->transform(0);
@@ -132,40 +132,46 @@ if ($permission['editbt'] || $permission['delbt']) {
         $search   = PMF_Search_Factory::create($Language, array('database' => PMF_Db::getType()));
 
         $search->setDatabaseHandle($db)
-               ->setTable($fdTable)
-               ->setResultColumns(array(
-                    $fdTable . '.id AS id',
-                    $fdTable . '.lang AS lang',
-                    $fdTable . '.solution_id AS solution_id',
-                    $fcrTable . '.category_id AS category_id',
-                    $fdTable . '.sticky AS sticky',
-                    $fdTable . '.active AS active',
-                    $fdTable . '.thema AS thema',
-                    $fdTable . '.content AS content',
-                    $fdTable . '.datum AS date'))
-               ->setJoinedTable($fcrTable)
-               ->setJoinedColumns(array(
-                    $fdTable . '.id = ' . $fcrTable . '.record_id',
-                    $fdTable . '.lang = ' . $fcrTable . '.record_lang'));
+            ->setTable($fdTable)
+            ->setResultColumns(array(
+                $fdTable . '.id AS id',
+                $fdTable . '.lang AS lang',
+                $fdTable . '.solution_id AS solution_id',
+                $fcrTable . '.category_id AS category_id',
+                $fdTable . '.sticky AS sticky',
+                $fdTable . '.active AS active',
+                $fdTable . '.thema AS thema',
+                $fdTable . '.content AS content',
+                $fdTable . '.datum AS date'))
+            ->setJoinedTable($fcrTable)
+            ->setJoinedColumns(array(
+                $fdTable . '.id = ' . $fcrTable . '.record_id',
+                $fdTable . '.lang = ' . $fcrTable . '.record_lang'));
         
         if (is_numeric($searchterm)) {
             $search->setMatchingColumns(array($fdTable . '.solution_id'));
         } else {
             $search->setMatchingColumns(array($fdTable . '.thema', $fdTable . '.content', $fdTable . '.keywords'));
         }
-        
-        $result         = $search->search($searchterm); // @todo add missing ordering!
+
+        $result         = $search->search($searchterm);
         $laction        = 'view';
         $internalSearch = '&amp;search='.$searchterm;
         $wasSearch      = true;
+        $idsFound       = array();
+        $faqsFound      = array();
 
         while ($row = $db->fetchObject($result)) {
             
             if ($searchcat != 0 && $searchcat != (int)$row->category_id) {
                 continue;
             }
-            
-            $faq->faqRecords[] = array(
+
+            if (in_array($row->id, $idsFound)) {
+                continue; // only show one entry if FAQ is in mulitple categories
+            }
+
+            $faqsFound[$row->category_id][$row->id] = array(
                 'id'          => $row->id,
                 'category_id' => $row->category_id,
                 'solution_id' => $row->solution_id,
@@ -174,19 +180,28 @@ if ($permission['editbt'] || $permission['delbt']) {
                 'sticky'      => $row->sticky,
                 'title'       => $row->thema,
                 'content'     => $row->content,
-                'date'        => PMF_Date::createIsoDate($row->date));
+                'date'        => PMF_Date::createIsoDate($row->date)
+            );
             
             if (!isset($numActiveByCat[$row->category_id])) {
                 $numActiveByCat[$row->category_id] = 0;
             }
+
             $numActiveByCat[$row->category_id] += $row->active ? 1 : 0;
+
+            $idsFound[] = $row->id;
         }
 
+        // Sort search result ordered by category ID
+        ksort($faqsFound);
+        foreach ($faqsFound as $categoryId => $faqFound) {
+            foreach ($faqFound as $singleFaq) {
+                $faq->faqRecords[] = $singleFaq;
+            }
+        }
     }
 
-    $num = count($faq->faqRecords);
-
-    if ($num > 0) {
+    if (count($faq->faqRecords) > 0) {
         $old     = 0;
         $all_ids = $visits = array();
         

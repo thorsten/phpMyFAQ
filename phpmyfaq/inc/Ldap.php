@@ -80,8 +80,8 @@ class PMF_Ldap
      * @param string  $ldap_server   Server name
      * @param integer $ldap_port     Port number
      * @param string  $ldap_base     Base DN
-     * @param string  $ldap_user     LDAP user
-     * @param string  $ldap_password LDAP password
+     * @param string  $ldap_user     optional LDAP user
+     * @param string  $ldap_password optional LDAP password
      *
      * @return PMF_Ldap
      */
@@ -93,18 +93,16 @@ class PMF_Ldap
 
         if (!isset($ldap_user) || !isset($ldap_server) || $ldap_server == "" ||
             !isset($ldap_port) || $ldap_port == "" || !isset($ldap_base) ||
-            $ldap_base == "" || !isset($ldap_password)) {
-            return false;
-        }
-
-        if (empty($ldap_password)) {
-            $this->error = 'No password set.';
+            $ldap_base == "") {
             return false;
         }
 
         $this->ds = ldap_connect($ldap_server, $ldap_port);
         if (!$this->ds) {
-            $this->error = 'Unable to connect to LDAP server (Error: '.ldap_error($this->ds).')';
+            $this->error = sprintf(
+                'Unable to connect to LDAP server (Error: %s)',
+                ldap_error($this->ds)
+            );
             $this->errno = ldap_errno($this->ds);
         }
 
@@ -113,7 +111,8 @@ class PMF_Ldap
             foreach ($PMF_LDAP['ldap_options'] as $key => $value) {
                 if (!ldap_set_option($this->ds, $key, $value)) {
                     $this->errno = ldap_errno($this->ds);
-                    $this->error = sprintf('Unable to set LDAP option "%s" to "%s" (Error: %s).',
+                    $this->error = sprintf(
+                        'Unable to set LDAP option "%s" to "%s" (Error: %s).',
                         $key,
                         $value,
                         ldap_error($this->ds));
@@ -121,11 +120,16 @@ class PMF_Ldap
             }
         }
 
-        $ldapbind = ldap_bind($this->ds, $ldap_user, $ldap_password);
+        if ($PMF_LDAP['ldap_use_anonymous_login']) {
+            $ldapbind = ldap_bind($this->ds); // Anonymous LDAP login
+        } else {
+            $ldapbind = ldap_bind($this->ds, $ldap_user, $ldap_password);
+        }
 
         if (!$ldapbind) {
             $this->errno = ldap_errno($this->ds);
-            $this->error = sprintf('Unable to bind to LDAP server (Error: %s).',
+            $this->error = sprintf(
+                'Unable to bind to LDAP server (Error: %s).',
                 ldap_error($this->ds));
             $this->ds    = false;
          }

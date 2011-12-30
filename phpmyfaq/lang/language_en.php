@@ -1158,16 +1158,18 @@ $PMF_LANG['securityControlCenter'] = 'Security configuration';
 $PMF_LANG['ad_search_delsuc'] = 'The searchterm was successfully deleted.';
 $PMF_LANG['ad_search_delfail'] = 'The seachterm was not deleted.';
 
-// added v2.7.0-RC - 2011-09-22 by Anatoliy
+// added 2.7.1 - 2011-09-30 by Thorsten
+$PMF_LANG['msg_about_faq'] = 'About this FAQ';
+$LANG_CONF['security.useSslOnly'] = array(0 => 'checkbox', 1 => 'FAQ with SSL only (default: deactivated)');
+$PMF_LANG['msgTableOfContent'] = 'Table of Content';
+
+// added v2.8.0-alpha - 2011-09-22 by Anatoliy
 $PMF_LANG['cacheControlCenter'] = 'Cache configuration';
 $LANG_CONF['cache.varnishEnable'] = array(0 => 'checkbox', 1 => 'Enable Varnish >=3.0 support<br><small>You will need varnish PECL extension</small>');
 $LANG_CONF['cache.varnishHost'] = array(0 => 'input', 1 => 'Varnish host');
 $LANG_CONF['cache.varnishPort'] = array(0 => 'input', 1 => 'Varnish port');
 $LANG_CONF['cache.varnishSecret'] = array(0 => 'input', 1 => 'Varnish secret');
 $LANG_CONF['cache.varnishTimeout'] = array(0 => 'input', 1 => 'Varnish timeout');
-
-// added 2.7.1 - 2011-09-30 by Thorsten
-$PMF_LANG['msg_about_faq'] = 'About this FAQ';
 
 // added v2.8.0-alpha - 2011-09-29 by Thorsten
 $PMF_LANG['ad_menu_searchfaqs'] = 'Search FAQs';

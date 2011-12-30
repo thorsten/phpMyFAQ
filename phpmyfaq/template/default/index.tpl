@@ -47,7 +47,7 @@
 
 <!--[if lt IE 8 ]>
 <div class="internet-explorer-error">
-    Did you know that your Internet Explorer is out of date?<br/>
+    Do you know that your Internet Explorer is out of date?<br/>
     Please use Internet Explorer 8+, Mozilla Firefox 4+, Google Chrome, Apple Safari 5+ or Opera 11+
 </div>
  <![endif]-->

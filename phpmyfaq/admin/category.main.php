@@ -227,23 +227,34 @@ if ($permission['editcateg']) {
     $category->getMissingCategories();
     $category->buildTree();
 
-    $lastLevel = 0;
+    $open = 0;
     foreach ($category->catTree as $cat) {
+
         $indent = '';
         for ($i = 0; $i < $cat['indent']; $i++) {
             $indent .= '&nbsp;&nbsp;&nbsp;';
         }
-        // category translated in this language?
-        ($cat['lang'] == $lang) ? $catname = $cat['name'] : $catname = $cat['name'].' ('.$languageCodes[strtoupper($cat['lang'])].')';
 
-        if ($lastLevel > $cat['level']) {
-            print str_repeat("</div>\n", $lastLevel - $cat['level']);
+        // Category translated in this language?
+        if ($cat['lang'] == $lang) {
+            $catname = $cat['name'];
+        } else {
+            $catname = $cat['name'] . ' (' . $languageCodes[strtoupper($cat['lang'])] . ')';
+        }
+
+        // Check open <div>'s
+        $levelDiff = $open - $cat['level'];
+        if ($levelDiff > 1) {
+            print '</div>' . str_repeat('</div>', $levelDiff - 2);
+        }
+        if ($cat['level'] < $open) {
+            print '</div>';
         }
 
         if (count($category->getChildren($cat['id'])) != 0) {
             // Show name and icon for expand the sub-categories
             printf(
-                "<p>%s<strong style=\"vertical-align: top;\">&middot; <a href=\"javascript:void(0);\" onclick=\"javascript:toggleFieldset('%d');\">%s</strong> ",
+                "<p>%s<strong style=\"vertical-align: top;\">&middot; <a href=\"javascript:;\" onclick=\"toggleFieldset('%d');\">%s</strong> ",
                 $indent,
                 $cat['id'],
                 $catname
@@ -322,10 +333,14 @@ if ($permission['editcateg']) {
             // Open a div for content all the children
             printf('<div id="div_%d" style="display: none;">', $cat['id']);
         }
-
-        $lastLevel = $cat['level'];
+        
+        $open = $cat['level'];
     }
 
+    if ($open > 0) {
+        print str_repeat('</div>', $open);
+    }
+    
     printf('<p>%s</p>', $PMF_LANG['ad_categ_remark']);
 ?>
 <script>

@@ -50,3 +50,11 @@ $PMF_LDAP['ldap_mapping']['memberOf'] = '';
 // Option for binding to LDAP directory using SASL
 // Default: false
 $PMF_LDAP['ldap_use_sasl'] = false;
+
+// Option to use multiple LDAP servers
+// Default: false
+$PMF_LDAP['ldap_use_multiple_servers'] = false;
+
+// Option to use anonymous LDAP connection (without username and password)
+// Default: false
+$PMF_LDAP['ldap_use_anonymous_login'] = false;

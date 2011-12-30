@@ -33,6 +33,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+if (!defined('PMF_ENCRYPTION_TYPE')) {
+    define('PMF_ENCRYPTION_TYPE', 'md5'); // Fallback to md5()
+}
+
 /**
  * PMF_User
  *
@@ -105,7 +109,7 @@ class PMF_User
      */
     public $auth_data = array('authSource' => array('name' => 'db', 
                                                     'type' => 'local'),
-                              'encType'    => 'md5',
+                              'encType'    => PMF_ENCRYPTION_TYPE,
                               'readOnly'   => false);
 
     /**
@@ -782,8 +786,7 @@ class PMF_User
             FROM
                 %sfaquser
             %s
-            ORDER BY
-               login ASC",
+            ORDER BY user_id ASC",
             SQLPREFIX,
             ($withoutAnonymous ? 'WHERE user_id <> -1' : ''));
 

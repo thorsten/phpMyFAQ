@@ -5,13 +5,26 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.8.0-dev - 2011-
+Version 2.8.0-dev - 2012-
 - added improved advanced search in subcategories (Thorsten)
 - improved usability of administration backend (Thorsten)
 
-Version 2.7.1 - 2011-10-
+Version 2.7.2 - 2011-12-
+- improved install script (Thorsten)
+- updated Finnish translation (Petteri Hirvonen, Niklas Lampén)
+- updated French translation (Cédric Frayssinet)
+- updated Chinese (Simplified) translation
+- updated bundled TCPDF library to version 5.9.136 (Thorsten)
+- updated bundled jQuery datePicker plugin (Thorsten)
+- fixed some bugs (Thorsten)
+
+Version 2.7.1 - 2011-10-25
+- fixed security issue in bundled ImageManager library (Thorsten)
 - added missing translations (Thorsten)
-- 
+- added configurable encryption type for passwords (Thorsten)
+- added support for anonymous login for LDAP servers (Thorsten)
+- added table of contents in PDF exports (Thorsten)
+- fixed some bugs (Thorsten)
 
 Version 2.7.0 - 2011-09-30
 - changed PHP requirement to PHP 5.2.3 (Thorsten)

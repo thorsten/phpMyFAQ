@@ -447,7 +447,7 @@ if (is_null($error)) {
 $main_template_vars = array(
     'msgRegisterUser'     => '<a href="?' . $sids . 'action=register">' . $PMF_LANG['msgRegisterUser'] . '</a>',
     'msgLoginUser'        => $PMF_LANG['msgLoginUser'],
-    'title'               => $faqconfig->get('main.titleFAQ').$title,
+    'title'               => $faqconfig->get('main.titleFAQ') . $title,
     'baseHref'            => $systemUri,
     'version'             => $faqconfig->get('main.currentVersion'),
     'header'              => str_replace('"', '', $faqconfig->get('main.titleFAQ')),
@@ -476,7 +476,7 @@ $main_template_vars = array(
     'sendPassword'        => '<a href="./admin/password.php">' . $PMF_LANG['lostPassword'] . '</a>',
     'loginHeader'         => $PMF_LANG['msgLoginUser'],
     'loginMessage'        => $loginMessage,
-    'writeLoginPath'      => '?' . PMF_Filter::getFilteredQueryString(),
+    'writeLoginPath'      => $systemUri . '?' . PMF_Filter::getFilteredQueryString(),
     'faqloginaction'      => $action,
     'login'               => $PMF_LANG['ad_auth_ok'],
     'username'            => $PMF_LANG['ad_auth_user'],
@@ -485,26 +485,32 @@ $main_template_vars = array(
 
 if ('main' == $action || 'show' == $action) {
     if ('main' == $action && PMF_Configuration::getInstance()->get('search.useAjaxSearchOnStartpage')) {
-        $tpl->parseBlock(
+        $tpl->processBlock(
             'index',
             'globalSuggestBox',
             array(
                 'ajaxlanguage'                  => $LANGCODE,
                 'msgDescriptionInstantResponse' => $PMF_LANG['msgDescriptionInstantResponse'],
-                'msgSearch'                     => sprintf('<a class="help" href="index.php?action=search">%s</a>',
-                                                       $PMF_LANG["msgAdvancedSearch"]
-                                                   )
+                'msgSearch'                     => sprintf(
+                    '<a class="help" href="%sindex.php?action=search">%s</a>',
+                    $systemUri,
+                    $PMF_LANG["msgAdvancedSearch"]
+                 )
             )
         );
     } else {
-        $tpl->parseBlock(
+        $tpl->processBlock(
             'index',
             'globalSearchBox',
             array(
                 'writeSendAdress' => '?'.$sids.'action=search',
                 'searchBox'       => $PMF_LANG['msgSearch'],
                 'categoryId'      => ($cat === 0) ? '%' : (int)$cat,
-                'msgSearch'       => '<a class="help" href="index.php?'.$sids.'action=search">'.$PMF_LANG["msgAdvancedSearch"].'</a>'
+                'msgSearch'       => sprintf(
+                    '<a class="help" href="%sindex.php?action=search">%s</a>',
+                    $systemUri,
+                    $PMF_LANG["msgAdvancedSearch"]
+                )
             )
         );
     }
@@ -576,7 +582,7 @@ $tpl->parse('index', array_merge($main_template_vars, $links_template_vars, $deb
 if (isset($auth)) {
     if (in_array(true, $permission)) {
         $adminSection = sprintf('<a href="%s">%s</a>',
-            'admin/index.php',
+            $systemUri . 'admin/index.php',
             $PMF_LANG['adminSection']
         );
     } else {
@@ -597,7 +603,7 @@ if (isset($auth)) {
             'loginBox',
             array(
                 'msgLoginUser'    => $PMF_LANG['msgLoginUser'],
-                'writeLoginPath'  => '?action=login',
+                'writeLoginPath'  => $systemUri . '?action=login',
                 'faqloginaction'  => $action,
                 'login'           => $PMF_LANG['ad_auth_ok'],
                 'username'        => $PMF_LANG['ad_auth_user'],

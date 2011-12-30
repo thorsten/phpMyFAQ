@@ -39,7 +39,7 @@ if (!is_null($showCaptcha)) {
 $translationLanguage = PMF_Filter::filterInput(INPUT_POST, 'translation', FILTER_SANITIZE_STRIPPED, $LANGCODE);
 
 if (!PMF_Language::isASupportedLanguage($translationLanguage)) {
-	$translationLanguage = $LANGCODE;
+    $translationLanguage = $LANGCODE;
 }
 
 $faqSource['id']       = 'writeSourceFaqId';
@@ -50,8 +50,9 @@ $faqSource['keywords'] = 'writeSourceKeywords';
 
 $faqsession->userTracking('new_translation_entry', 0);
 
-$id      = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$srclang = PMF_Filter::filterInput(INPUT_GET, 'srclang', FILTER_SANITIZE_STRIPPED); 
+$id         = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$categoryId = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+$srclang    = PMF_Filter::filterInput(INPUT_GET, 'srclang', FILTER_SANITIZE_STRIPPED);
 
 if (!is_null($id) && !is_null($srclang) && PMF_Language::isASupportedLanguage($srclang)) {
     $oFaq = new PMF_Faq();
@@ -66,6 +67,7 @@ $tpl->parse(
         'writeSourceTitle'          => $faqSource['title'],
         'writeSourceContent'        => strip_tags($faqSource['content']),
         'writeSourceKeywords'       => $faqSource['keywords'],
+        'categoryId'                => $categoryId,
         'msgNewTranslationHeader'   => $PMF_LANG['msgNewTranslationHeader'],
         'msgNewTranslationAddon'    => $PMF_LANG['msgNewTranslationAddon'],
         'msgNewTransSourcePane'     => $PMF_LANG['msgNewTransSourcePane'],

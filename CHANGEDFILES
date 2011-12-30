@@ -1,3 +1,38 @@
+CHANGED FILES FROM 2.7.0 -> 2.7.1
+
+./admin/ajax.records.php
+./admin/category.main.php
+./admin/editor/plugins/ajaxfilemanager/ajax_create_folder.php
+./admin/glossary.edit.php
+./admin/group.php
+./config/constants.php
+./config/constants_ldap.php
+./config/ldap.php.original
+./inc/Faq.php
+./inc/Ldap.php
+./inc/Link.php
+./inc/Mail.php
+./inc/Network.php
+./inc/PMF_Auth/AuthLdap.php
+./inc/PMF_Export/Pdf.php
+./inc/PMF_Export/Pdf/Wrapper.php
+./inc/PMF_User/CurrentUser.php
+./inc/User.php
+./inc/Utils.php
+./install/config.sql.php
+./install/setup.php
+./install/update.php
+./lang/language_de.php
+./lang/language_en.php
+./lang/language_es.php
+./template/default/artikel.tpl
+./template/default/index.tpl
+./template/default/translate.tpl
+./artikel.php
+./translate.php
+
+
+
 CHANGED FILES FROM 2.7.0-RC -> 2.7.0
 
 ./admin/adminlog.php

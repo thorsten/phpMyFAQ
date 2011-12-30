@@ -607,11 +607,20 @@ if ($step == 4) {
     }
 
     //
+<<<<<<< HEAD
     // UPDATES FROM 2.8.0-alpha
     //
     if (version_compare($version, '2.8.0-alpha', '<')) {
 
     }
+=======
+    // UPDATES FROM 2.7.1
+    //
+    if (version_compare($version, '2.7.1', '<')) {
+        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('security.useSslOnly', 'false')";
+    }
+
+>>>>>>> 184d46111a15d57bee97c6657a2f82a8ed5c17e8
 
     // Perform the queries for updating/migrating the database
     if (isset($query)) {

@@ -57,16 +57,12 @@ class PMF_TransTool
             
             while (list(,$line) = each($orig)) {
                 $line = rtrim($line);
-                /**
-                 * Bypass all but variable definitions
-                 */
+                // Bypass all but variable definitions
                 if (strlen($line) && '$' == $line[0]) {
-                    /**
-                     * $PMF_LANG["key"] = "val";
-                     * or
-                     * $PMF_LANG["key"] = array(0 => "something", 1 => ...);
-                     * turns to something like  array('$PMF_LANG["key"]', '"val";')
-                     */
+                    // $PMF_LANG["key"] = "val";
+                    // or
+                    // $PMF_LANG["key"] = array(0 => "something", 1 => ...);
+                    // turns to something like  array('$PMF_LANG["key"]', '"val";')
                     $m   = explode("=", $line, 2);
                     $key = str_replace(
                         array('["', '"]', '[\'', '\']'),

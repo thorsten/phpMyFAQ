@@ -123,6 +123,17 @@ define("PMF_TAGS_CLOUD_RESULT_SET_SIZE", 50);
 define("PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE", 20);
 
 /**
+ * This is the flag for choosing the encryption type for passwords. Currently
+ * you can choose
+ * - md5 (default)
+ * - sha1
+ * - crypt
+ *
+ * @var const
+ */
+define('PMF_ENCRYPTION_TYPE', 'md5');
+
+/**
  * List of denied extensions when uploading a file.
  * 
  * Here is an example:

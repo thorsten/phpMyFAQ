@@ -80,6 +80,8 @@ $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('security.bannedIPs'
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('security.ssoSupport', 'false')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('security.ssoLogoutRedirect', '')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('security.useSslForLogins', 'false')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('security.useSslOnly', 'false')";
+
 
 // Spam
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('spam.checkBannedWords', 'true')";
