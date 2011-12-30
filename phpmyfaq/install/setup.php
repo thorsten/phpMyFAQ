@@ -269,17 +269,17 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
               'directories.</p>';
     }
     if (!extension_loaded('gd')) {
-        print '<p class="error">You don\'t have GD support enabled in your PHP installation. Please enabled GD ' .
+        print '<p class="error">You don\'t have GD support enabled in your PHP installation. Please enable GD ' .
               'support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
     }
     if (!function_exists('imagettftext')) {
         print '<p class="error">You don\'t have Freetype support enabled in the GD extension of your PHP ' .
-              'installation. Please enabled Freetype support in GD extension otherwise the Captchas for spam ' .
+              'installation. Please enable Freetype support in GD extension otherwise the Captchas for spam ' .
               'protection will be quite easy to break.</p>';
     }
     if (!extension_loaded('curl') || !extension_loaded('openssl')) {
-        print '<p class="error">You don\'t have cURL and/or OpenSSl support enabled in your PHP installation. ' .
-              'Please enabled cUrL and/or OpenSSL support in your php.ini file otherwise you can\'t use the Twitter ' .
+        print '<p class="error">You don\'t have cURL and/or OpenSSL support enabled in your PHP installation. ' .
+              'Please enable cURL and/or OpenSSL support in your php.ini file otherwise you can\'t use the Twitter ' .
               ' support.</p>';
     }
 ?>
