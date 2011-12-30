@@ -949,9 +949,11 @@ class PMF_Mail
      * it will return the plain email address.
      *
      * @param  string $email E-mail address
+     * @static
+     * 
      * @return string
      */
-    function safeEmail($email)
+    public static function safeEmail($email)
     {
         if (PMF_Configuration::getInstance ()->get ( 'spam.enableSafeEmail' )) {
             return str_replace ( array ('@', '.' ), array ('_AT_', '_DOT_' ), $email );

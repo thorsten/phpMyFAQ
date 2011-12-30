@@ -18,7 +18,7 @@
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Minoru TODA <todam@netjapan.co.jp>
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-23
@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
+printf("<header><h2>%s</h2><header>\n", $PMF_LANG['ad_entry_aor']);
 
 if ($permission['editbt'] || $permission['delbt']) {
     
@@ -82,32 +82,33 @@ if ($permission['editbt'] || $permission['delbt']) {
 ?>
     <form action="?action=view" method="post">
     <fieldset>
-    <legend><?php print $PMF_LANG["msgSearch"]; ?></legend>
-        <table class="admin">
-        <tr>
-            <td><strong><?php print $PMF_LANG["msgSearchWord"]; ?>:</strong></td>
-            <td><input class="admin" type="text" name="searchterm" size="50" value="<?php print $searchterm; ?>" /></td>
-            <td>
-            <?php if ($linkverifier->isReady() == true) { ?>
-            <input class="admin" type="checkbox" name="linkstate" value="linkbad" <?php print $linkState; ?> /><?php print $PMF_LANG['ad_linkcheck_searchbadonly']; ?>
-            <?php } ?>
-            </td>
-        </tr>
-        <tr>
-            <td><strong><?php print $PMF_LANG["msgCategory"]; ?>:</strong></td>
-            <td><select class="admin" name="searchcat">
-            <option value="0"><?php print $PMF_LANG["msgShowAllCategories"]; ?></option>
-            <?php print $categoryLayout->renderOptions(array($searchcat)); ?>
-            </select></td>
-            <td><input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["msgSearch"]; ?>" /></td>
-        </tr>
-        </table>
+        <legend><?php print $PMF_LANG["msgSearch"]; ?></legend>
+
+        <p>
+            <label><?php print $PMF_LANG["msgSearchWord"]; ?>:</label>
+            <input type="text" name="searchterm" size="50" value="<?php print $searchterm; ?>" />
+            <?php if ($linkverifier->isReady() == true): ?>
+            <br />
+            <input type="checkbox" name="linkstate" value="linkbad" <?php print $linkState; ?> />
+            <?php print $PMF_LANG['ad_linkcheck_searchbadonly']; ?>
+            <?php endif; ?>
+        </p>
+        <p>
+            <label><?php print $PMF_LANG["msgCategory"]; ?>:</label>
+            <select name="searchcat">
+                <option value="0"><?php print $PMF_LANG["msgShowAllCategories"]; ?></option>
+                <?php print $categoryLayout->renderOptions(array($searchcat)); ?>
+            </select>
+        </p>
+        <p>
+            <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["msgSearch"]; ?>" />
+        </p>
     </fieldset>
     </form>
 
     <form id="recordSelection" name="recordSelection" method="post">
     <fieldset>
-    <legend><?php print $PMF_LANG['ad_menu_entry_edit']; ?></legend>
+        <legend><?php print $PMF_LANG['ad_menu_entry_edit']; ?></legend>
 <?php
     $numCommentsByFaq = $comment->getNumberOfComments();
     $relationMatrix   = $categoryRelations->fetchAll();
@@ -254,9 +255,10 @@ if ($permission['editbt'] || $permission['delbt']) {
                 if ($old == 0) {
                     printf('<a name="cat_%d"></a>', $cid);
                 } else {
-                    print "    </tbody>\n    </table>\n    </div>";
+                    print "        </tbody>\n        </table>\n        </div>";
                 }
 ?>
+<<<<<<< HEAD
     <div class="categorylisting">
         <img src="../images/more.gif" width="11" height="11" alt="" />
         <a href="javascript:void(0);" onclick="showhideCategory('category_<?php print $cid; ?>');">
@@ -281,150 +283,172 @@ if ($permission['editbt'] || $permission['delbt']) {
     </tr>
     </thead>
     <tbody>
+=======
+        <div class="categorylisting"><a href="javascript:void(0);" onclick="showhideCategory('category_<?php print $cid; ?>');"><img src="../images/more.gif" width="11" height="11" alt="" /> <?php print $category->getPath($cid); ?></a><?php print $catInfo;?></div>
+        <div id="category_<?php print $cid; ?>" class="categorybox" style="display: <?php print ($currentcategory == $cid) ? 'block' : 'none'; ?>;">
+        <table class="list" style="width: 100%">
+        <thead>
+        <tr>
+            <th><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=asc">&darr;</a></th>
+            <th>&nbsp;</th>
+            <th>#</th>
+            <th style="text-align: left"><input type="checkbox" id="sticky_category_block_<?php print $cid; ?>" onclick="saveStatusForCategory(<?php print $cid; ?>, 'sticky')" />&nbsp;<?php print $PMF_LANG['ad_record_sticky'] ?></th>
+            <th><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=asc">&darr;</a></th>
+            <th><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=asc">&darr;</a></th>
+            <th colspan="3">&nbsp;</th>
+            <th style="text-align: left">
+                <?php if ($permission['approverec']) { ?>
+                <input type="checkbox" id="active_category_block_<?php print $cid; ?>" onclick="saveStatusForCategory(<?php print $cid; ?>, 'active')" />&nbsp;<?php print $PMF_LANG['ad_record_active'] ?>
+                <?php } ?>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+>>>>>>> 3c9295794d076bc80af3ee7a7c81d79b94d916fe
 <?php
             }
 ?>
-    <tr class="record_<?php print $record['id']; ?>_<?php print $record['lang']; ?>">
-        <td class="list" style="width: 24px; text-align: right;"><?php print $record['id']; ?></td>
-        <td class="list" style="width: 16px;"><?php print $record['lang']; ?></td>
-        <td class="list" style="width: 24px;"><a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;artlang=<?php print $record['lang']; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><?php print $record['solution_id']; ?></a></td>
-        <td class="list" style="width: 56px;"><input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'sticky');" id="sticky_record_<?php print $cid . '_' . $record['id'] ?>" <?php $record['sticky'] ? print 'checked="checked"' : print '    ' ?> /></td>
-        <td class="list"><a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;artlang=<?php print $record['lang']; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><?php print $record['title']; ?></a>
+        <tr class="record_<?php print $record['id']; ?>_<?php print $record['lang']; ?>">
+            <td style="width: 24px; text-align: right;"><?php print $record['id']; ?></td>
+            <td style="width: 16px;"><?php print $record['lang']; ?></td>
+            <td style="width: 24px;"><a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><?php print $record['solution_id']; ?></a></td>
+            <td style="width: 56px;"><input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'sticky');" id="sticky_record_<?php print $cid . '_' . $record['id'] ?>" <?php $record['sticky'] ? print 'checked="checked"' : print '    ' ?> /></td>
+            <td><a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><?php print $record['title']; ?></a>
 <?php
         if (isset($numCommentsByFaq[$record['id']])) {
             print " (".$numCommentsByFaq[$record['id']]." ".$PMF_LANG["ad_start_comments"].")";
         }
 ?></td>
-        <td class="list" style="width: 48px;"><?php print PMF_String::substr($record['date'], 0, 10); ?></td>
-        <td class="list" style="width: 96px;"><?php print $linkverifier->getEntryStateHTML($record['id'], $record['lang']); ?></td>
-        <td class="list" style="width: 16px;">
-            <a href="#" onclick="javascript:deleteRecord(<?php print $record['id']; ?>, '<?php print $record['lang']; ?>');" title="<?php print $PMF_LANG["ad_user_delete"]; ?>">
-                <img src="images/delete.png" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" />
-            </a>
-        </td>
-        <td class="list" style="width: 16px;">
-            <a href="?action=copyentry&amp;id=<?php print $record['id']; ?>&amp;artlang=<?php print $record['lang']; ?>">
-            <img src="images/copy.png" alt="<?php print $PMF_LANG['ad_categ_copy']; ?>" title="<?php print $PMF_LANG['ad_categ_copy']; ?>" />
-            </a>
-        </td>
-        <td class="list">
-            <?php if ($permission['approverec'] && isset($visits[$record['id']])) { ?>
-            <input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'active');" id="active_record_<?php print $cid . '_' . $record['id'] ?>" <?php 'yes' == $record['active'] ? print 'checked="checked"' : print '    ' ?> />
-            <?php } ?>
-        </td>
-    </tr>
+            <td style="width: 48px;"><?php print PMF_String::substr($record['date'], 0, 10); ?></td>
+            <td style="width: 96px;"><?php print $linkverifier->getEntryStateHTML($record['id'], $record['lang']); ?></td>
+            <td style="width: 16px;">
+                <a href="#" onclick="javascript:deleteRecord(<?php print $record['id']; ?>, '<?php print $record['lang']; ?>'); return false;" title="<?php print $PMF_LANG["ad_user_delete"]; ?>">
+                    <img src="images/delete.png" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" />
+                </a>
+            </td>
+            <td style="width: 16px;">
+                <a href="?action=copyentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>">
+                <img src="images/copy.png" alt="<?php print $PMF_LANG['ad_categ_copy']; ?>" title="<?php print $PMF_LANG['ad_categ_copy']; ?>" />
+                </a>
+            </td>
+            <td>
+                <?php if ($permission['approverec'] && isset($visits[$record['id']])) { ?>
+                <input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'active');" id="active_record_<?php print $cid . '_' . $record['id'] ?>" <?php 'yes' == $record['active'] ? print 'checked="checked"' : print '    ' ?> />
+                <?php } ?>
+            </td>
+        </tr>
 <?php
             $old = $cid;
             
             $all_ids[$cid][] = $record['id'];
         }
 ?>
-    </tbody>
-    </table>
-    </div>
-    </fieldset>
-    </form>
+        </tbody>
+        </table>
+        </div>
+        </fieldset>
+        </form>
     
-    <script type="text/javascript">
-    /* <![CDATA[ */
+        <script type="text/javascript">
+        /* <![CDATA[ */
 
-    /**
-     * Saves the sticky record status for the whole category
-     *
-     * @param integer id   id
-     * @param string  type status type
-     * 
-     * @return void
-     */
-    function saveStatusForCategory(id, type)
-    {
-        var id_map = [];
+        /**
+         * Saves the sticky record status for the whole category
+         *
+         * @param integer id   id
+         * @param string  type status type
+         *
+         * @return void
+         */
+        function saveStatusForCategory(id, type)
+        {
+            var id_map = [];
 <?php 
 foreach ($all_ids as $cat_id => $record_ids) {
     echo "        id_map[" . $cat_id . "] = [" . implode(',', $record_ids) . "];\n";
 }
 ?>
         for (var i = 0; i < id_map[id].length; i++) {
-            var status = $('#' + type + '_category_block_' + id).attr('checked'); 
-            
-            $('#' + type + '_record_' + id + '_' + id_map[id][i]).attr('checked', status);
+                var status = $('#' + type + '_category_block_' + id).attr('checked');
+
+                $('#' + type + '_record_' + id + '_' + id_map[id][i]).attr('checked', status);
+            }
+
+            saveStatus(id, id_map[id], type);
         }
 
-        saveStatus(id, id_map[id], type);
-    }
+        /**
+         * Ajax call for saving the sticky record status
+         *
+         * @param integer cid  category id
+         * @param integer ids  ids
+         * @param string  type status type
+         *
+         * @return void
+         */
+        function saveStatus(cid, ids, type)
+        {
+            $('#saving_data_indicator').html('<img src="images/indicator.gif" /> saving ...');
+            var data = {action: "ajax", ajax: 'records', ajaxaction: "save_" + type + "_records"};
 
-    /**
-     * Ajax call for saving the sticky record status
-     *
-     * @param integer cid  category id
-     * @param integer ids  ids
-     * @param string  type status type
-     *
-     * @return void
-     */
-    function saveStatus(cid, ids, type)
-    {
-        $('#saving_data_indicator').html('<img src="images/indicator.gif" /> saving ...');
-        var data = {action: "ajax", ajax: 'records', ajaxaction: "save_" + type + "_records"};
-        
-        for (var i = 0; i < ids.length; i++) {
-            var status = $('#' + type + '_record_' + cid + '_' + ids[i]).attr('checked');
-            var lang   = $('#' + type + '_record_' + cid + '_' + ids[i]).attr('lang');
-            
-            data['items[' + i + '][]'] = [ids[i], lang, status*1];
+            for (var i = 0; i < ids.length; i++) {
+                var status = $('#' + type + '_record_' + cid + '_' + ids[i]).attr('checked');
+                var lang   = $('#' + type + '_record_' + cid + '_' + ids[i]).attr('lang');
 
-            // Updating the current record if it's also contained in another category
-            var same_records = $('input').filter(function() {
-                return this.id.match(new RegExp(type + '_record_(\\d+)_' + ids[i]));
-            });
+                data['items[' + i + '][]'] = [ids[i], lang, status*1];
 
-            if ('active' == type) {
-                for (var j = 0; j < same_records.length; j++) {
-                    $('#' + same_records[j].id).attr('checked', status);
-                    
-                    var catid              = same_records[j].id.match(/active_record_(\d+)_\d+/)[1];
-                    var current_item_count = $('#category_' + catid + '_item_count').html();
-                    var delta              = status ? 1 : -1;
-                    
-                    $('#category_' + catid + '_item_count').html(current_item_count * 1 + delta);
-                }
-            } else {
-                for (var j = 0; j < same_records.length; j++) {
-                    $('#' + same_records[j].id).attr('checked', status);
+                // Updating the current record if it's also contained in another category
+                var same_records = $('input').filter(function() {
+                    return this.id.match(new RegExp(type + '_record_(\\d+)_' + ids[i]));
+                });
+
+                if ('active' == type) {
+                    for (var j = 0; j < same_records.length; j++) {
+                        $('#' + same_records[j].id).attr('checked', status);
+
+                        var catid              = same_records[j].id.match(/active_record_(\d+)_\d+/)[1];
+                        var current_item_count = $('#category_' + catid + '_item_count').html();
+                        var delta              = status ? 1 : -1;
+
+                        $('#category_' + catid + '_item_count').html(current_item_count * 1 + delta);
+                    }
+                } else {
+                    for (var j = 0; j < same_records.length; j++) {
+                        $('#' + same_records[j].id).attr('checked', status);
+                    }
                 }
             }
-        }
-    
-        $.get("index.php", data, null);
-        $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_savedsuc']; ?>');
-    }
 
-    /**
-     * Ajax call for deleting records
-     *
-     * @param  integer record_id   Record id
-     * @param  string  record_lang Record language
-     * @return void
-     */
-    function deleteRecord(record_id, record_lang)
-    {
-        if (confirm('<?php print addslashes($PMF_LANG["ad_entry_del_1"] . " " . $PMF_LANG["ad_entry_del_3"]); ?>')) {
-            $('#saving_data_indicator').html('<img src="images/indicator.gif" /> deleting ...');
-            $.ajax({
-                type:    "POST",
-                url:     "index.php?action=ajax&ajax=records&ajaxaction=delete_record",
-                data:    "record_id=" + record_id + "&record_lang=" + record_lang,
-                success: function(msg) {
-                    $('.record_' + record_id + '_' + record_lang).fadeOut('slow');
-                    $('.record_' + record_id + '_' + record_lang).after('<tr><td colspan="8">' + msg + '</td></tr>');
-                    $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_delsuc']; ?>');
-                }
-            });
+            $.get("index.php", data, null);
+            $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_savedsuc']; ?>');
         }
-    }
-    
-    /* ]]> */
-    </script>
+
+        /**
+         * Ajax call for deleting records
+         *
+         * @param  integer record_id   Record id
+         * @param  string  record_lang Record language
+         * @return void
+         */
+        function deleteRecord(record_id, record_lang)
+        {
+            if (confirm('<?php print addslashes($PMF_LANG["ad_entry_del_1"] . " " . $PMF_LANG["ad_entry_del_3"]); ?>')) {
+                $('#saving_data_indicator').html('<img src="images/indicator.gif" /> deleting ...');
+                $.ajax({
+                    type:    "POST",
+                    url:     "index.php?action=ajax&ajax=records&ajaxaction=delete_record",
+                    data:    "record_id=" + record_id + "&record_lang=" + record_lang,
+                    success: function(msg) {
+                        $('.record_' + record_id + '_' + record_lang).fadeOut('slow');
+                        $('.record_' + record_id + '_' + record_lang).after('<tr><td colspan="8">' + msg + '</td></tr>');
+                        $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_delsuc']; ?>');
+                    }
+                });
+            }
+        }
+
+        /* ]]> */
+        </script>
 <?php
     } else {
         print $PMF_LANG['err_nothingFound'];

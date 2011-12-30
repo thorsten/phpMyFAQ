@@ -87,7 +87,7 @@ class PMF_Helper_Faq extends PMF_Helper
             return '';
         }
                 
-        return sprintf('<iframe src="http://www.facebook.com/plugins/like.php?href=%s&amp;layout=standard&amp;show_faces=true&amp;width=450&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=80" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:80px;" allowTransparency="true"></iframe>',
+        return sprintf('<iframe src="http://www.facebook.com/plugins/like.php?href=%s&amp;layout=standard&amp;show_faces=true&amp;width=250&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=30" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:250px; height:30px;" allowTransparency="true"></iframe>',
             urlencode($url));
     }
 }

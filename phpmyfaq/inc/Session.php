@@ -80,39 +80,64 @@ class PMF_Session
     {
         global $sid, $user, $botBlacklist;
 
-        $faqconfig = PMF_Configuration::getInstance();
-        
-        if (!$faqconfig->get('main.enableUserTracking')) {
-            return;
-        }
-        
-        $bots  = 0;
-        $agent = $_SERVER['HTTP_USER_AGENT'];
-        $sid   = PMF_Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
-        $sidc  = PMF_Filter::filterInput(INPUT_COOKIE, PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
-        
-        if (! is_null($sidc)) {
-            $sid = $sidc;
-        }
-        if ($action == "old_session") {
-            $sid = null;
-        }
-        
-        foreach ($botBlacklist as $bot) {
-            if (strpos($agent, $bot)) {
-                $bots ++;
+        if (PMF_Configuration::getInstance()->get('main.enableUserTracking')) {
+
+            $bots   = 0;
+            $banned = false;
+            $agent  = $_SERVER['HTTP_USER_AGENT'];
+            $sid    = PMF_Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
+            $sidc   = PMF_Filter::filterInput(INPUT_COOKIE, PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
+            
+            if (!is_null($sidc)) {
+                $sid = $sidc;
             }
-        }
-        
-        if ($bots > 0) {
-            return;
-        }
-        
-        if (!isset($sid)) {
-            $sid = $this->db->nextID(SQLPREFIX."faqsessions", "sid");
-            // Sanity check: force the session cookie to contains the current $sid
-            if (!is_null($sidc) && (!$sidc != $sid)) {
-                self::setCookie($sid);
+            if ($action == 'old_session') {
+                $sid = null;
+            }
+
+            foreach ($botBlacklist as $bot) {
+                if ((bool)PMF_String::strstr($agent, $bot)) {
+                    $bots++;
+                }
+            }
+
+            if (!IPCheck($_SERVER['REMOTE_ADDR'])) {
+                $banned = true;
+            }
+
+            if (0 == $bots && false == $banned) {
+                if (!isset($sid)) {
+                    $sid = $this->db->nextID(SQLPREFIX . 'faqsessions', 'sid');
+                    // Sanity check: force the session cookie to contains the current $sid
+                    if (!is_null($sidc) && (!$sidc != $sid)) {
+                        self::setCookie($sid);
+                    }
+
+                    $query = sprintf("
+                        INSERT INTO 
+                            %sfaqsessions
+                        (sid, user_id, ip, time)
+                            VALUES
+                        (%d, %d, '%s', %d)",
+                        SQLPREFIX,
+                        $sid,
+                        ($user ? $user->getUserId() : -1),
+                        $_SERVER['REMOTE_ADDR'],
+                        $_SERVER['REQUEST_TIME']
+                    );
+                    $this->db->query($query);
+                }
+
+                $data = $sid.';' . 
+                        str_replace(';', ',', $action) . ';' . 
+                        $id . ';' . 
+                        $_SERVER['REMOTE_ADDR'] . ';' . 
+                        str_replace(';', ',', $_SERVER['QUERY_STRING']) . ';' . 
+                        str_replace(';', ',', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '') . ';' . 
+                        str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])) . ';' . 
+                        $_SERVER['REQUEST_TIME'] . ";\n";
+                $file = './data/tracking' . date('dmY');
+                file_put_contents($file, $data, FILE_APPEND);
             }
             
             $query = sprintf("

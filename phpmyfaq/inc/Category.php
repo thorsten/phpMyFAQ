@@ -171,7 +171,7 @@ class PMF_Category
      * Setter of number of children
      * 
      * @param int $count Number of children
-     * 
+     *
      * @return void
      */
     public function setChildcount($count)

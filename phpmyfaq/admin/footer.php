@@ -2,7 +2,7 @@
 /**
  * Footer of the admin area
  * 
- * PHP Version 5.2
+ * PHP Version 5.2.3
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -29,21 +29,19 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 ?>
-        
-        </section>
-    </section>
-    
-    <div class="clearfix"></div>
-    <footer id="footer">
+
+</div>
+
+<footer id="footer">
+    <div>
         <p id="copyrightnote">
         Proudly powered by <strong>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></strong> | 
-        <a href="http://www.phpmyfaq.de/dokumentation.php" target="_blank">phpMyFAQ documentation</a> | 
+        <a href="http://www.phpmyfaq.de/documentation.php" target="_blank">phpMyFAQ documentation</a> |
         Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | 
         &copy; 2001-2011 <a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a>
         </p>
-    </footer>
-</div>
-<!-- /footer -->
+    </div>
+</footer>
 
 <?php
 if (isset($auth)) {
@@ -56,22 +54,22 @@ if (isset($auth)) {
         if ($faqconfig->get('main.enableWysiwygEditor') == true) {
 ?>
 <!-- tinyMCE -->
-<script type="text/javascript">
+<script>
 /*<![CDATA[*/ //<!--
  
 tinyMCE.init({
     // General options
     mode     : "exact",
     language : "<?php print (PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en'); ?>",
-    elements : "content",
-    width    : "720",
+    elements : "<?php print ('addnews' == $action || 'editnews' == $action) ? 'news' : 'answer' ?>",
+    width    : "640",
     height   : "480",
     theme    : "advanced",
     plugins  : "spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,syntaxhl,phpmyfaq",
     theme_advanced_blockformats : "p,div,h1,h2,h3,h4,h5,h6,blockquote,dt,dd,code,samp",
 
     // Theme options
-    theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
+    theme_advanced_buttons1 : "save,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
     theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,phpmyfaq,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,code,syntaxhl,|,insertdate,inserttime,preview,|,forecolor,backcolor",
     theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen,help",
     theme_advanced_toolbar_location : "top",
@@ -86,8 +84,11 @@ tinyMCE.init({
     // Ajax-based file manager
     file_browser_callback : "ajaxfilemanager",
 
+    // Save function
+    save_onsavecallback : "phpMyFAQSave",
+
     // Example content CSS (should be your site CSS)
-    content_css : "../template/css/<?php print PMF_Template::getTplSetName(); ?>/style.css",
+    content_css : "../template/<?php print PMF_Template::getTplSetName(); ?>/css/style.css",
 
     // Drop lists for link/image/media/template dialogs
     template_external_list_url : "js/template_list.js",
@@ -123,7 +124,26 @@ function ajaxfilemanager(field_name, url, type, win)
     });
 }
 
-
+function phpMyFAQSave()
+{
+    $('#saving_data_indicator').html('<img src="images/indicator.gif" /> Saving ...');
+    // Create an input field with the save button name
+    var input = document.createElement("input");
+    input.setAttribute("name", $('input:submit')[0].name);
+    $('#answer')[0].parentNode.appendChild(input);
+    // Submit the form by an ajax request
+    <?php if ($faqData['id'] == 0): ?>
+    var data = {action: "ajax", ajax: 'recordAdd'};
+    <?php else: ?>
+    var data = {action: "ajax", ajax: 'recordSave'};
+    <?php endif; ?>
+    var id = $('#answer')[0].parentNode.parentNode.id;
+    $.each($('#'+id).serializeArray(), function(i, field) {
+        data[field.name] = field.value;
+    });
+    $.post("index.php", data, null);
+    $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_savedsuc']; ?>');
+}
 
 // --> /*]]>*/
 </script>

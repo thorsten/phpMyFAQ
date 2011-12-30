@@ -130,7 +130,7 @@ $PMF_LANG['err_SaveComment'] = 'Campos obrigatórios: <strong>Nome</strong>, <st
 $PMF_LANG['err_VoteTooMuch'] = '<p>Avaliações em duplicado não são contabilizadas. <a href="nojavascript...history.back();">Clicar</a> para voltar atrás.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>Não efectuou a avaliação.</strong> <a href="nojavascript...history.back();">Clique para avaliar</a>.</p>';
 $PMF_LANG['err_noMailAdress'] = '<em>E-mail</em> incorrecto.<br /><a href="nojavascript...history.back();">Voltar atrás</a>.';
-$PMF_LANG['err_sendMail'] = 'Campos obrigatórios: <strong>Nome</strong>, <strong><em>E-mail</em></strong>, <strong>Questão</strong> e, quando exigido, o código <strong><a href="http://en.wikipedia.org/wiki/Captcha" title="Informação sobre Captcha na Wikipedia - versão em inglês" target="_blank"><em>Captcha</em></a></strong>.<br /><br /><a href="nojavascript...history.back();">Página anterior</a><br /> <br />';
+$PMF_LANG['err_sendMail'] = 'Campos obrigatórios: <strong>Nome</strong>, <strong><em>E-mail</em></strong>, <strong>Questão</strong> e, quando exigido, o código <strong><a href="http://en.wikipedia.org/wiki/Captcha" title="Informação sobre Captcha na Wikipedia - versão em inglês" target="_blank"><em>Captcha</em></a></strong>.';
 $PMF_LANG['help_search'] = '<p><strong>Pesquisa de artigos:</strong><br />Usando uma expressão do tipo <strong style="color: Red;">palavra1 palavra2</strong> pode obter resultados por relevância descendente para dois ou mais critérios de pesquisa.</p><p><strong>Nota:</strong> A expressão a pesquisar tem que ter pelo menos 4 caracteres, caso contrário será ignorada.</p>';
 $PMF_LANG['ad'] = '<strong>Secção de Administração</strong>';
 $PMF_LANG['ad_menu_user_administration'] = 'Administrar Utilizadores';

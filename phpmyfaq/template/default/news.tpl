@@ -1,51 +1,79 @@
-    <!-- begin news -->
-    <div id="news">
-    <h2>{writeNewsHeader}{writeNewsRSS}</h2>
-    <h2 id="news_header">{writeHeader}</h2>
+        <!-- begin news -->
+        <section>
+            <header>
+                <h2>{writeNewsHeader}{writeNewsRSS}</h2>
+            </header>
+            <!-- News -->
+            <article>
+                <header>
+                    <h3>{writeHeader}</h3>
+                </header>
+                {writeContent}
+            </article>
+            <!-- /News -->
 
-    <!-- News -->
-    <div id="news_content">{writeContent}</div>
-    <!-- /News -->
+            <div id="faqTabs">
+                <ul class="faqTabNav">
+                    <li>
+                        <a href="javascript:void(0);" onclick="infoBox('authorInfo')">
+                            About this news
+                        </a>
+                    </li>
+                </ul>
+                <div class="faqTabContent" id="authorInfo" style="display: none;">
+                    {writeDateMsg}<br />{writeAuthor}<br />{editThisEntry}
+                </div>
+            </div>
 
-    <!-- News Info -->
-    <p>{writeDateMsg}<br />{writeAuthor}<br />{editThisEntry}</p>
-    <!-- /News Info -->
+            <p>{writeCommentMsg}</p>
 
-    <p>{writeCommentMsg}</p>
+            <!-- Comment Form -->
+            <a name="comment"></a>
+            <div id="commentForm" style="display: none;">
+            <form id="formValues" action="#" method="post">
+                <input type="hidden" name="newsid" value="{newsId}" />
+                <input type="hidden" name="lang" value="{newsLang}" />
+                <input type="hidden" name="type" value="news" />
 
-    <!-- Comment Form -->
-    <a name="comment"></a><div id="comment" style="display: none;">
-    <form action="{writeSendAdress}" method="post">
-    <input type="hidden" name="newsid" value="{newsId}" />
-    <input type="hidden" name="newslang" value="{newsLang}" />
-    <input type="hidden" name="type" value="news" />
-    <input type="hidden" name="spamid" value="{spamid}" />
+                <p>
+                    <label for="user">{msgNewContentName}</label>
+                    <input type="text" id="user" name="user" value="{defaultContentName}" size="50" required="required" />
+                </p>
 
-    <fieldset>
-    <legend>{msgWriteComment}</legend>
+                <p>
+                    <label for="mail">{msgNewContentMail}</label>
+                    <input type="email" id="mail" name="mail" value="{defaultContentMail}" size="50" required="required" />
+                </p>
 
-        <label for="user">{msgNewContentName}</label>
-        <input type="text" id="user" name="user" value="{defaultContentName}" size="50" required="true"><br />
+                <p>
+                    <label for="comment_text">{msgYourComment}</label>
+                    <textarea cols="37" rows="10" id="comment_text" name="comment_text" required="required" /></textarea>
+                </p>
 
-        <label for="mail">{msgNewContentMail}</label>
-        <input type="email" id="mail" name="mail" value="{defaultContentMail}" size="50" required="true"><br />
+                <p>
+                    {captchaFieldset}
+                </p>
 
-        <label for="comment_text">{msgYourComment}</label>
-        <textarea cols="37" rows="10" id="comment_text" name="comment" required="true"></textarea><br />
+                <p>
+                    <input class="submit" id="submitComment" type="submit" value="{msgNewContentSubmit}" />
+                </p>
 
-    </fieldset>
+            </form>
+            </div>
+            <!-- /Comment Form -->
 
-    {captchaFieldset}
+            <div id="loader"></div>
+            <div id="comments">
+                {writeComments}
+            </div>
 
-    <div style="text-align:center;">
-        <input class="submit" type="submit" name="submit" value="{msgNewContentSubmit}" />
-    </div>
-    <br />
+            <script type="text/javascript" >
+            $(function() {
+                $('#submitcomment').click(function() {
+                    saveFormValues('savecomment', 'comment');
+                });
+                $('form#formValues').submit(function() { return false; });
+            });
+            </script>
 
-    </form>
-    </div>
-    <!-- /Comment Form -->
-
-    {writeComments}
-    </div>
-
+        </section>

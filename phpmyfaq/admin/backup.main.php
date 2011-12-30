@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
@@ -28,31 +28,33 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-printf('<h2>%s</h2>', $PMF_LANG['ad_csv_backup']);
+printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_csv_backup']);
 
 if ($permission['backup']) {
 ?>
-    <fieldset>
-        <legend><?php print $PMF_LANG["ad_csv_head"]; ?></legend>
-        <p><?php print $PMF_LANG["ad_csv_make"]; ?></p>
-        <p align="center">
-            <a href="backup.export.php?action=backup_content"><?php print $PMF_LANG["ad_csv_linkdat"]; ?></a> | 
-            <a href="backup.export.php?action=backup_logs"><?php print $PMF_LANG["ad_csv_linklog"]; ?></a>
-        </p>
-    </fieldset>
+        <form method="post" action="?action=restore" enctype="multipart/form-data">
+        <fieldset>
+            <legend><?php print $PMF_LANG["ad_csv_head"]; ?></legend>
+            <p><?php print $PMF_LANG["ad_csv_make"]; ?></p>
+            <p align="center">
+                <a href="backup.export.php?action=backup_content"><?php print $PMF_LANG["ad_csv_linkdat"]; ?></a> |
+                <a href="backup.export.php?action=backup_logs"><?php print $PMF_LANG["ad_csv_linklog"]; ?></a>
+            </p>
+        </fieldset>
 
-    <form method="post" action="?action=restore" enctype="multipart/form-data">
-    <fieldset>
-        <legend><?php print $PMF_LANG["ad_csv_head2"]; ?></legend>
-        <p><?php print $PMF_LANG["ad_csv_restore"]; ?></p>
-        <div align="center">
-        <?php print $PMF_LANG["ad_csv_file"]; ?>:
-            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
-            <input type="file" name="userfile" size="30" />&nbsp;
-            <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_csv_ok"]; ?>" />
-        </div>
-    </fieldset>
-    </form>
+        <fieldset>
+            <legend><?php print $PMF_LANG["ad_csv_head2"]; ?></legend>
+            <p><?php print $PMF_LANG["ad_csv_restore"]; ?></p>
+            <p>
+                <label><?php print $PMF_LANG["ad_csv_file"]; ?>:</label>
+                <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
+                <input type="file" name="userfile" size="30" />
+            </p>
+            <p>
+                <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_csv_ok"]; ?>" />
+            </p>
+        </fieldset>
+        </form>
 <?php
 } else {
 	print $PMF_LANG["err_NotAuth"];

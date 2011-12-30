@@ -131,7 +131,7 @@ $PMF_LANG['err_SaveComment'] = 'Nødvendige felter: <strong>ditt navn</strong>, 
 $PMF_LANG['err_VoteTooMuch'] = '<p>Vi teller ikke dobbeltstemmer. <a href="nojavascript...history.back();">Gå tilbake</a>.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>Du vurderte ikke spørsmålet!</strong> <a href="nojavascript...history.back();">Gå tilbake</a>, for å stemme.</p>';
 $PMF_LANG['err_noMailAdress'] = 'din e-postadresse er ikke korrekt.<br /><a href="nojavascript...history.back();">tilbake</a>';
-$PMF_LANG['err_sendMail'] = 'Nødvendige felter: <strong>dit navn</strong>, <strong>din email addresse</strong> og <strong>dit spørsmål</strong>!<br /><br /><a href="nojavascript...history.back();">en side tilbake</a><br /><br />';
+$PMF_LANG['err_sendMail'] = 'Nødvendige felter: <strong>dit navn</strong>, <strong>din email addresse</strong> og <strong>dit spørsmål</strong>!';
 $PMF_LANG['help_search'] = '<p><strong>Søk etter spørsmål/svar:</strong><br /> Med en søketekst som <strong style="color: Red;">ord1 ord2</strong> kan du gjøre et relevansesøk for to eller flere søkebetingelser.</p><p><strong>Merk:</strong> Din søkebetingelse må være minst 4 tegn langt hvis ikke vil søket ditt bli avvist.</p>';
 $PMF_LANG['ad'] = 'ADMINISTRASJONSPANEL';
 $PMF_LANG['ad_menu_user_administration'] = 'Brukeradministrasjon';

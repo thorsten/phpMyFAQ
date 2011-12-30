@@ -154,11 +154,22 @@ installation script.
 %changelog
 =======
 
+<<<<<<< HEAD
 * Sun Aug 08 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 3.0.0.dev-1
 - New upstream version 3.0.0-dev
+=======
+* Sat Jan 28 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0.alpha2-1
+- New upstream version 2.7-0-alpha2
+>>>>>>> 3c9295794d076bc80af3ee7a7c81d79b94d916fe
 
 * Mon Aug 08 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0.alpha-1
 - New upstream version 2.7-0-alpha
+
+* Tue Mar 01 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.6.16-1
+- New upstream version 2.6.16
+
+* Sat Jan 28 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.6.15-1
+- New upstream version 2.6.15
 
 * Sat Dec 18 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.6.14-1
 - New upstream version 2.6.14

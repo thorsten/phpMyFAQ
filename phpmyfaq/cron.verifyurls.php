@@ -22,7 +22,7 @@
  * @package   CLI
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2006-2009 phpMyFAQ Team
+ * @copyright 2006-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-09-17
@@ -87,8 +87,7 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/config/database.php')) {
     }
     $output = $output."\n";
     print($output);
-    @ob_flush();
-    flush();
+    ob_flush();
 
     $i = 0;
     foreach ($_records as $_r) {
@@ -106,8 +105,7 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/config/database.php')) {
             $output = $output."\n";
         }
         print($output);
-        @ob_flush();
-        flush();
+        ob_flush();
     }
 
     $output = '';
@@ -123,8 +121,7 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/config/database.php')) {
     if ($isRequestedByWebLocalhost) {
         print '</pre>';
     }
-    @ob_flush();
-    flush();
+    ob_flush();
 }
 
 //

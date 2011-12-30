@@ -2,7 +2,7 @@
 /**
  * This is the page there a user can add a FAQ record.
  *
- * PHP Version 5.2.0
+ * PHP Version 5.2.3
  * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2010 phpMyFAQ Team
+ * @copyright 2002-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-16
@@ -59,7 +59,7 @@ $tpl->processTemplate(
     array(
         'msgNewContentHeader'   => $PMF_LANG['msgNewContentHeader'],
         'msgNewContentAddon'    => $PMF_LANG['msgNewContentAddon'],
-        'writeSendAdress'       => '?' . $sids . 'action=save',
+        'lang'                  => $Language->getLanguage(),
         'defaultContentMail'    => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
         'defaultContentName'    => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
         'msgNewContentName'     => $PMF_LANG['msgNewContentName'],

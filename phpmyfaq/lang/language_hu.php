@@ -2,7 +2,7 @@
 /******************************************************************************
  * File:				language_hu.php
  * Description:		    Hungarian language file
- * Authors:				Bal�zs T�th <>
+ * Authors:				Bal�zs T�th <>
  * Date:				2004-06-24
  * Last Update:		    2004-07-07
  * Copyright:           (c) 2006 phpMyFAQ Team
@@ -62,7 +62,7 @@ $PMF_LANG["msgAuthor"] = "Szerző: ";
 $PMF_LANG["msgPrinterFriendly"] = "nyomtatható verzió";
 $PMF_LANG["msgPrintArticle"] = "Bejegyzés nyomtatása";
 $PMF_LANG["msgMakeXMLExport"] = "exportálás XML fájlként";
-$PMF_LANG["msgAverageVote"] = "�?tlagos osztályzat:";
+$PMF_LANG["msgAverageVote"] = "�?tlagos osztályzat:";
 $PMF_LANG["msgVoteUseability"] = "Kérlek osztályozd a bejegyzést:";
 $PMF_LANG["msgVoteFrom"] = "tól";
 $PMF_LANG["msgVoteBad"] = "használhatatlan";
@@ -156,7 +156,7 @@ $PMF_LANG["err_SaveComment"] = "Required fields are <strong>your name</strong>, 
 $PMF_LANG["err_VoteTooMuch"] = "<p>We do not count double votings. <a href=\"javascript:history.back();\">Click here</a>, to go back.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>You did not rate the question!</strong> <a href=\"javascript:history.back();\">Please click here</a>, to vote.</p>";
 $PMF_LANG["err_noMailAdress"] = "Your email address is not correct.<br /><a href=\"javascript:history.back();\">back</a>";
-$PMF_LANG["err_sendMail"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong> and <strong>your question</strong>!<br /><br /><a href=\"javascript:history.back();\">one page back</a><br /><br />";
+$PMF_LANG["err_sendMail"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong> and <strong>your question</strong>!";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Találatok:</strong><br /></p>";
@@ -370,7 +370,7 @@ $PMF_LANG["ad_rs_ahtf"] = "az átlaga nagyobb mint 4";
 $PMF_LANG["ad_rs_no"] = "Nincs osztályzat";
 
 // Auth
-$PMF_LANG["ad_auth_insert"] = "�?rd be a neved és a jelszavadat.";
+$PMF_LANG["ad_auth_insert"] = "�?rd be a neved és a jelszavadat.";
 $PMF_LANG["ad_auth_user"] = "Név:";
 $PMF_LANG["ad_auth_passwd"] = "jelszó:";
 $PMF_LANG["ad_auth_ok"] = "OK";

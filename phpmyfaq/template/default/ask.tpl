@@ -1,30 +1,53 @@
 <h2>{msgQuestion}</h2>
-            
-            <p>{msgNewQuestion}</p>
-            
-            <form action="{writeSendAdress}" method="post" style="display: inline">
-                <fieldset>
-                <legend>{msgQuestion}</legend>
-                
-                <label for="username">{msgNewContentName}</label><br>
-                <input type="text" name="username" id="username" value="{defaultContentName}" size="50" required="true"><br>
-                
-                <label for="usermail">{msgNewContentMail}</label><br>
-                <input type="email" name="usermail" id="usermail" value="{defaultContentMail}" size="50" required="true"><br>
-                
-                <label for="rubrik">{msgAskCategory}</label><br>
-                <select name="rubrik" id="rubrik" required="true">
-                {printCategoryOptions}
-                </select><br>
-                
-                <label for="content">{msgAskYourQuestion}</label><br>
-                <textarea cols="45" rows="10" name="content" id="content" required="true"></textarea><br>
-                
-                </fieldset>
-                
-                {captchaFieldset}
-                
-                <div style="text-align:center;">
-                    <input class="submit" type="submit" name="submit" value="{msgNewContentSubmit}">
-                </div>
+
+            <div id="questionForm">
+                <p>{msgNewQuestion}</p>
+            </div>
+            <div id="answerForm">
+
+            </div>
+
+            <form id="formValues" action="#" method="post">
+                <input type="hidden" name="lang" id="lang" value="{lang}" />
+
+                <p>
+                    <label for="name">{msgNewContentName}</label>
+                    <input type="text" name="name" id="name" value="{defaultContentName}" size="50" required="required" />
+                </p>
+
+                <p>
+                    <label for="email">{msgNewContentMail}</label>
+                    <input type="email" name="email" id="email" value="{defaultContentMail}" size="50" required="required" />
+                </p>
+
+                <p>
+                    <label for="category">{msgAskCategory}</label>
+                    <select name="category" id="category" required="required" />
+                    {printCategoryOptions}
+                    </select>
+                </p>
+
+                <p>
+                    <label for="question">{msgAskYourQuestion}</label>
+                    <textarea cols="45" rows="5" name="question" id="question" required="required" /></textarea>
+                </p>
+
+                <p>
+                    {captchaFieldset}
+                </p>
+
+                <div id="loader"></div>
+                <div id="qerror"></div>
+
+                <input class="submit" type="submit" id="submitquestion" value="{msgNewContentSubmit}">
+
             </form>
+
+            <script type="text/javascript" >
+            $(function() {
+                $('#submitquestion').click(function() {
+                    checkQuestion();
+                });
+                $('form#formValues').submit(function() { return false; });
+            });
+            </script>

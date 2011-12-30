@@ -18,7 +18,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-23
@@ -40,14 +40,14 @@ if ($permission['editbt']) {
     // FAQ data
     $dateStart     = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
     $dateEnd       = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
-    $question      = PMF_Filter::filterInput(INPUT_POST, 'thema', FILTER_SANITIZE_STRING);
+    $question      = PMF_Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRING);
     $categories    = PMF_Filter::filterInputArray(INPUT_POST, array('rubrik' => array('filter' => FILTER_VALIDATE_INT,
                                                                                       'flags'  => FILTER_REQUIRE_ARRAY)));
     $record_lang   = PMF_Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
     $tags          = PMF_Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
     $active        = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
     $sticky        = PMF_Filter::filterInput(INPUT_POST, 'sticky', FILTER_SANITIZE_STRING);
-    $content       = PMF_Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_SPECIAL_CHARS);
+    $content       = PMF_Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
     $keywords      = PMF_Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRING);
     $author        = PMF_Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_STRING);
     $email         = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
@@ -169,6 +169,7 @@ if ($permission['editbt']) {
 
             // Callback to Twitter if enabled
             if ($faqconfig->get('socialnetworks.enableTwitterSupport')) {
+                require '../inc/libs/twitteroauth/twitteroauth.php';
                 $connection = new TwitterOAuth($faqconfig->get('socialnetworks.twitterConsumerKey'),
                                                $faqconfig->get('socialnetworks.twitterConsumerSecret'),
                                                $faqconfig->get('socialnetworks.twitterAccessTokenKey'),
@@ -252,7 +253,7 @@ if ($permission['editbt']) {
         printf("<p>%s</p>", $PMF_LANG['ad_entryins_fail']);
 ?>
     <form action="?action=editpreview" method="post">
-    <input type="hidden" name="thema"               value="<?php print PMF_String::htmlspecialchars($question); ?>" />
+    <input type="hidden" name="question"            value="<?php print PMF_String::htmlspecialchars($question); ?>" />
     <input type="hidden" name="content" class="mceNoEditor" value="<?php print PMF_String::htmlspecialchars($content); ?>" />
     <input type="hidden" name="lang"                value="<?php print $record_lang; ?>" />
     <input type="hidden" name="keywords"            value="<?php print $keywords; ?>" />

@@ -26,7 +26,7 @@
  * @author    Robin Wood <robin@digininja.org>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
- * @copyright 2001-2010 phpMyFAQ Team
+ * @copyright 2001-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2001-02-18
@@ -41,33 +41,30 @@
  *
  * NOTE: Just for debugging!
  *
- * @param   object
- * @return  void
- * @access  public
- * @since   2004-11-27
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @param mixed $var Various stuff
+ *
+ * @return void
  */
 function dump($var)
 {
-    print '<pre>';
+    ob_flush();
+    print '<code>';
     var_dump($var);
-    print '</pre>';
+    print '</code>';
 }
 
 /**
  * debug_backtrace() wrapper function
  *
- * @param   $string
- * @return  string
- * @access  public
- * @since   2006-06-24
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @param $string
+ *
+ * @return string
  */
 function pmf_debug($string)
 {
     // sometimes Zend Optimizer causes segfaults with debug_backtrace()
     if (extension_loaded('Zend Optimizer')) {
-        $ret = "<pre>" . $string . "</pre><br />\n";
+        $ret = "<code>" . $string . "</code><br />\n";
     } else {
         $debug = debug_backtrace();
         $ret   = '';
@@ -75,7 +72,7 @@ function pmf_debug($string)
         	$ret  = $debug[2]['file'] . ":<br />";
             $ret .= $debug[2]['class'].$debug[1]['type'];
             $ret .= $debug[2]['function'] . '() in line ' . $debug[2]['line'];
-            $ret .= ": <pre>" . $string . "</pre><br />\n";
+            $ret .= ": <code>" . $string . "</code><br />\n";
         }
     }
     return $ret;
@@ -266,8 +263,8 @@ function IPCheck($ip)
     $listBannedIPs = PMF_Configuration::getInstance()->get('main.bannedIPs');
     $bannedIPs     = explode(' ', $listBannedIPs);
     
-    foreach ($bannedIPs as $oneIPorNetwork) {
-        if (checkForAddrMatchIpv4($ip, $oneIPorNetwork)) {
+    foreach ($bannedIPs as $oneIPerNetwork) {
+        if (checkForAddrMatchIpv4($ip, $oneIPerNetwork)) {
             return false;
         }
     }
@@ -357,69 +354,6 @@ function getHighlightedBannedWords($content)
     } else {
         return $content;
     }
-}
-
-/**
- * Returns the number of anonymous users and registered ones.
- * These are the numbers of unique users who have perfomed
- * some activities within the last five minutes
- *
- * @param  integer $activityTimeWindow Optionally set the time window size in sec. 
- *                                     Default: 300sec, 5 minutes
- * @return array
- */
-function getUsersOnline($activityTimeWindow = 300)
-{
-    $users = array(0 ,0);
-    $db    = PMF_Db::getInstance();
-
-    if (PMF_Configuration::getInstance()->get('main.enableUserTracking')) {
-        $timeNow = ($_SERVER['REQUEST_TIME'] - $activityTimeWindow);
-        // Count all sids within the time window
-        // TODO: add a new field in faqsessions in order to find out only sids of anonymous users
-        $result = $db->query("
-                    SELECT
-                        count(sid) AS anonymous_users
-                    FROM
-                        ".SQLPREFIX."faqsessions
-                    WHERE
-                            user_id = -1
-                        AND time > ".$timeNow);
-        if (isset($result)) {
-            $row      = $db->fetch_object($result);
-            $users[0] = $row->anonymous_users;
-        }
-        // Count all faquser records within the time window
-        $result = $db->query("
-                    SELECT
-                        count(session_id) AS registered_users
-                    FROM
-                        ".SQLPREFIX."faquser
-                    WHERE
-                        session_timestamp > ".$timeNow);
-        if (isset($result)) {
-            $row      = $db->fetch_object($result);
-            $users[1] = $row->registered_users;
-        }
-    }
-
-    return $users;
-}
-
-/******************************************************************************
- * Funktionen fuer Artikelseiten
- ******************************************************************************/
-
-/**
- * Macht an den String nen / dran, falls keiner da ist
- * @@ Bastian, 2002-01-06
- */
-function EndSlash($string)
-{
-    if (PMF_String::substr($string, PMF_String::strlen($string)-1, 1) != "/" ) {
-        $string .= "/";
-    }
-    return $string;
 }
 
 /**

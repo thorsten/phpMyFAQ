@@ -1,16 +1,5 @@
 /**
- * To change the look and feel, search for the following selectors (Ctrl-F) in this style sheet:
- * 
- * - Font, background color/image: body
- * - Link colors: a:link, a:visited
- * - Hover links color: a:hover
- * - Code color: pre
- * - Title color: #header h1 a
- * - Separation color of navigation menu: #categories li a
- * - Footer color and separator: #footer
- * - Footer link color: #footer a:link, #footer a:visited
- * - RSS button color: a.rss:link, a.rss:visited
- * - Text highlight color: .highlight
+ * phpMyFAQ 2.7 default layout
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -25,10 +14,10 @@
  * @category  phpMyFAQ
  * @package   Layout
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2004-2010 phpMyFAQ Team
+ * @copyright 2010-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2004
+ * @since     2010-01-17
  */
 
 /* extended HTML5 reset */
@@ -72,8 +61,7 @@ input, select {
 
 /* basic styles */
 body {  
-    font: 13px/1.231 sans-serif; *font-size: small; background: #f5f4ef url(../images/background.png) repeat-x;
-}
+    font: 13px/1.231 sans-serif; *font-size: small; }
 select, input, textarea, button {  
     font: 99% sans-serif; }
 pre, code, kbd, samp {  
@@ -143,11 +131,11 @@ input:invalid, textarea:invalid {
 .no-boxshadow input:invalid, .no-boxshadow textarea:invalid { 
     background-color: #f0dddd; }
 ::-moz-selection{ 
-    background: #e46305; color: #fff; text-shadow: none; }
+    background: #F67600; color: #fff; text-shadow: none; }
 ::selection { 
-    background: #e46305; color: #fff; text-shadow: none; } 
+    background: #F67600; color: #fff; text-shadow: none; }
 a:link { 
-    -webkit-tap-highlight-color: #FF5E99; } 
+    -webkit-tap-highlight-color: #F67600; }
 button { 
     width: auto; overflow: visible; }
 .ie7 img { 
@@ -166,90 +154,204 @@ button {
     zoom: 1; }
 
 /* phpMyFAQ layout */
-#container { 
-    width: 960px; margin: auto; }
+body {
+    margin: 0 auto; font: 13px/22px Helvetica, Arial, sans-serif; background-color: #F0F0F0; }
+code {
+    display: block; font-size: 16px; background-color: black; color: white; padding: 10px; width: 600px;
+    margin-bottom: 22px; }
+
+/* Header */
 #header {
-    width: 960px; margin: 0 auto; padding: 2.5em 0 0 0; }
+    width: 980px; margin: 0 auto; padding: 2.5em 0 0 0; }
 #header h1 {
-    padding-top: 5px; line-height: .6; }
-#header h1 a:link, #header h1 a:visited { 
-    color: #1E4262; display: block; margin: 0 0 .6em 0; text-decoration: none; }
-#header h1 a:hover, #header h1 a:active { 
-    background: none; color: #335370; text-shadow: none; }
+    font-size: 48px; padding-top: 5px; line-height: .6; }
+#header h1 a:link, header h1 a:visited {
+    color: #444; display: block; margin: 0; text-decoration: none; }
+#header h1 a:hover, header h1 a:active {
+    background: none; text-shadow: none; }
 #header #loginBox {
-	float: right; top: 0; width: 175px; margin-top: -2.5em; padding: 5px; background: #D1480B; color: #fff;
-	border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px; 
+	float: right; top: 0; width: 185px; margin-top: -2.5em; background: #F67600; color: #fff;
+	border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; }
 #header #loginSelection {
-    text-align: center; }
+    text-align: center; padding: 5px; }
 #header #loginSelection a:link, #header #loginSelection a:visited {
     color: #fff; }
 #header #loginForm {
-    position: relative; display: none; margin: auto; padding: 5px; width: 170px; z-index: 999; }
-#header nav {
-    background: #1E4262; font-size: 1.143em; height: 40px; line-height: 30px; margin: 0 auto 2em auto; padding: 0;
-    text-align: center; width: 100%; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
-#header nav ul {
-    list-style: none; margin: 0 auto; width: 100%; }
-#header nav li {
-    float: left; display: inline; margin: 0; border-right: 2px solid #f5f4ef; }
-#header nav a:link, #header nav a:visited {
-    color: #fff; display: inline-block; height: 30px; padding: 5px 0.8em; text-decoration: none; font-weight: bold; }
-#header nav a:hover, #header nav a:active, #header nav .active a:link, #header nav .active a:visited {
-    background: #335370; color: #fff; text-shadow: none !important; }
-#header nav li:first-child a {
-    border-top-left-radius: 5px; -moz-border-radius-topleft: 5px; -webkit-border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px; }
+    position: fixed; display: none; width: 175px; z-index: 50; background: #F67600; padding: 5px; margin-top: -5px;
+    border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#header #loginForm form input[type="text"], #header #loginForm form input[type="password"] {
+    display: table-cell; height: 14px; border: 1px solid #d7d7d7; font-size: 14px; border-radius: 3px;
+    -moz-border-radius: 3px; -webkit-border-radius: 3px; }
 
-#leftcolumn {
-    float: left; width: 200px; }
+/* Navigation */
+nav {
+    position: absolute; left: 0; top: 108px; width: 100%; background: url(../images/nav_background.png); }
+nav ul {
+    margin: 0 auto; width: 980px; list-style: none; }
+nav ul li {
+    float: left; }
+nav ul li a, nav ul li a:visited {
+    display: block; margin-right: 30px; font: 16px/44px Helvetica, Arial, sans-serif; text-align: center;
+    text-decoration: none; color: #F67600; }
+nav ul li a:hover {
+    color: #fff; }
+nav ul li.selected a {
+    color: #fff; }
+
+/* Categories */
 #categories {
-    margin-bottom: 2em; width: 190px; border-left: 1px dotted #444; }
+    width: 180px; background: #f0f0f0 url(../images/category_background.png) repeat-x; margin-bottom: 15px;
+    border: 1px solid #d7d7d7; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 #categories ul {
-    list-style: none; border-top: 1px dotted #444; margin: 0 auto; }
-#categories ul ul, #categories ul ul ul, #categories ul ul ul ul, #categories ul ul ul ul ul { border-top: 0; }
-#categories li { 
-	margin: 0; padding: 0; }
-#categories li a {
-    display: block; border-bottom: 1px dotted #444; text-decoration: none; height: 100%; padding: .5em 0 .5em .5em; 
-    font-size: 110%; color: #1E4262; }
-#categories li ul a { padding-left: 1em; }
-#categories ul ul ul a { padding-left: 2em; }
-#categories ul ul ul ul a { padding-left: 3em; }
-#categories ul ul ul ul ul a { padding-left: 4em; }
-#categories a:hover {
-    background: #fff; }
-#categories .active { 
-	font-weight: bold; }
-#categories .subcat .active {}
-#useronline { 
-	margin-top: 1em; margin-bottom: 1em;  text-align: center; }
+	margin: 0 1px 0 1px; list-style: none outside none; padding: 0; }
+#categories ul li {
+	}
+#categories ul li a {
+	padding-left: 5px; line-height: 30px; text-decoration: none; display: block; color: #222; }
+#categories ul li a:hover {
+	color: #F67600; }
+#categories a.active {
+	background-color: #fff; font-weight: bold; }
+#categories .subcat li a {
+    padding-left: 10px; }
+#categories .subcat li li a {
+    padding-left: 15px; }
+#categories .subcat .active {
+	}
 
-/* My Comment */
+/* Content */
+#content {
+    display: table; width: 980px; margin: 88px auto 0; }
+#leftContent {
+    display: table-cell; width: 180px; vertical-align: top; padding-top: 11px; }
+#mainContent {
+    display: table-cell; width: 500px; vertical-align: top; padding: 11px 22px 0; }
+#mainContent h2 {
+    display: block; padding-bottom: 22px; }
+#mainContent p {
+    padding-bottom: 11px; }
+#mainContent p.comment { 
+	padding: 5px; background-color: #fff; border: 1px solid #d7d7d7; border-radius: 5px; 
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; margin: 5px 0; }
+#mainContent p.comment img {
+    float: right; }
+#mainContent p.error { 
+    margin: 10px auto; padding: 10px; background-color: #f97c7c; color: #222; border-radius: 5px; 
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#mainContent p.success { 
+    margin: 10px auto; padding: 10px; background-color: #7dfd77; color: #222; border-radius: 5px; 
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 
-#maincontent {
-    float: left; width: 560px; }
+/* phpMyFAQ forms */
+#mainContent form p {
+    display: table; margin-bottom: 11px; padding: 0 11px; }
+#mainContent form label {
+    display: table-cell; width: 150px; padding-right: 10px; text-align: right; font-weight: bold; vertical-align: top; }
+#mainContent form input[type="text"], #mainContent form input[type="email"], #mainContent form input[type="url"],
+#mainContent form input[type="search"], #mainContent form input[type="password"] {
+    display: table-cell; width: 300px; height: 20px; border: 1px solid #d7d7d7; font-size: 14px; border-radius: 5px;
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#mainContent form textarea {
+    display: table-cell; width: 300px; border: 1px solid #d7d7d7; font-size: 14px; border-radius: 5px;
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#mainContent form input[type="submit"] {
+    }
+#mainContent form input[type="submit"].submit, #mainContent form input[type="submit"].reset  {
+    margin-left: 160px; }
+
+/* FAQs */
+#breadcrumbs span[itemtype] {
+    display: -moz-inline-stack; display: inline-block; margin: 0 0 5px; zoom: 1; *display: inline; font-size: 15px; 
+    font-weight: bold; }
+#solution_id {
+    float: right; padding: 2px; background-color: #fff; border: 1px solid #d7d7d7; border-radius: 5px; 
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#social {
+    margin: 0 auto; }
+#faqTabs {
+	width: 100%; margin-bottom: 11px; margin-top: 11px; }
+#faqTabs ul.faqTabNav {
+	list-style-type: none; margin: 0; padding: 0; width: 456px; overflow: hidden; border-bottom: 2px solid #d7d7d7; }
+#faqTabs ul.faqTabNav a {
+	display: block; width: 100%; margin-right: 5px; font-size: 12px; text-decoration: none; color: #333; }
+#faqTabs ul.faqTabNav li {
+	float: left; margin: 0 4px 0 0; padding: 1px; text-align: center; background-color: #fff; 
+	border-top: 1px solid #d7d7d7; border-left: 1px solid #d7d7d7; border-right: 1px solid #d7d7d7; 
+	border-top-left-radius: 3px; -moz-border-radius-topleft: 3px; border-top-right-radius: 3px; 
+	-moz-border-radius-topright: 3px; }
+#faqTabs ul.faqTabNav li:hover {
+    background: #d7d7d7; }
+.faqTabContent {
+    position: absolute; display: none; z-index: 100; background-color: #fff; padding: 5px; width: 444px;
+    opacity:0.9; color: #222; border: 1px solid transparent;
+    border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; border-bottom-right-radius: 5px; 
+    -moz-border-radius-bottomright: 5px; }
+div.rating-cancel, div.star-rating {
+    float: left; width: 17px; height: 15px; text-indent: -999em; cursor: pointer; display: block;
+    background: transparent; overflow: hidden }
+div.rating-cancel, div.rating-cancel a {
+    background: url(../../../images/delete.gif) no-repeat 0 -16px }
+div.star-rating, div.star-rating a {
+    background: url(../../../images/star.gif) no-repeat 0 0px }
+div.rating-cancel a, div.star-rating a {
+    display:block; width:16px; height:100%; background-position:0 0px; border:0 }
+div.star-rating-on a {
+    background-position:0 -16px !important }
+div.star-rating-hover a {
+    background-position:0 -32px }
+#votingstars {
+    margin: auto; }
+#votingstars span {
+    padding-left: 11px; }
+
+
+
+/* Right panel */
+aside {
+    display: table-cell; width: 300px; padding-top: 5px; background: url(../images/sidebar_background.png) top left; }
+aside section {
+    margin: 5px 0 0 5px; padding: 5px 11px; background: url(../images/search_background.png) repeat-x;
+    border-radius: 11px; -moz-border-radius: 11px; -webkit-border-radius: 11px; }
+aside section h3 {
+    font-size: 16px; }
+aside section ul li a, aside section ul li a:visited {
+    display: block; }
+aside section ul li a:hover {
+    text-decoration: underline; }
+
 #searchBox {
-    background: #6a6b6a; margin-bottom: 2em; overflow: hidden; padding: 20px; width: 500px; color: #fff;
-    border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; }
-#searchBox input[type=text] {
-    width: 400px; height: 1.66em; font-size: 1.33em; margin-bottom: 5px;
+    background: url(../images/search_background.png) repeat-x; overflow: hidden; padding: 20px; margin-bottom: 22px;
+    width: 90%; color: #222; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; }
+#searchBox input[type=search] {
+    width: 300px; height: 1.66em; font-size: 1.33em; margin-bottom: 5px;
     border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 #searchBox a {
-    color: #cbcbcb; text-decoration: none; }
+    color: #222; text-decoration: none; }
 #searchBox a.help {
     margin-right: 10px; padding: 0 12px 0 0; background: url(../images/arrow.gif) no-repeat scroll right 55% transparent; }
 #searchBox a.help:hover {
-	color: #fff; }
-#rightcolumn {
-    float: right; width: 200px; }
+	text-decoration: underline; }
 
-#footer {
-    background: #1A3857; height: 30px; line-height: 30px; margin: 0 auto 2em auto; padding: 0; width: 100%; 
-    border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#mainContent form input.captcha {
+    vertical-align: top; height: 40px; width: 120px; text-valign: middle; font-size: 1.571em; }
+#debug_main {
+    margin: auto; width: 720px; background-color: #fff;
+    padding: 150px 10px 10px;
+}
+
+/* Footer */
+footer {
+    position: absolute; left: 0; width: 100%; background: #222; }
+footer div {
+    display: table; margin: 0 auto; padding: 44px 0; width: 980px; color: #777; }
+footer div section {
+    display: table-cell; width: 50%; }
 #copyrightnote {
-    color: #fff; margin: auto; padding-bottom: 2em; text-align: right; padding-right: 10px; }
-#copyrightnote a {
+    color: #fff; margin: auto; text-align: right; padding-right: 10px; }
+#copyrightnote a:link, #copyrightnote a:visited {
+    color: #F67600; }
+#copyrightnote a:hover {
     color: #fff; }
 
 /* print styles */
@@ -265,6 +367,7 @@ button {
   @page { margin: 0.5cm; }
   p, h2, h3 { orphans: 3; widows: 3; }
   h2, h3{ page-break-after: avoid; }
+  #leftContent, #faqTabs, aside section, header, footer, nav { display: none; }
 }
 
 @media all and (orientation:portrait) { 

@@ -146,7 +146,7 @@ $PMF_LANG["err_SaveComment"] = "Bagian yang harus diisi adalah <strong>Nama Anda
 $PMF_LANG["err_VoteTooMuch"] = "<p>Anda sudah pernah menilai sebelumnya. <a href=\"javascript:history.back();\">Klik di sini</a>, untuk kembali.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Anda belum memasukkan penilaian anda!</strong> <a href=\"javascript:history.back();\">Klik di sini</a>, untuk memberi penilaian.</p>";
 $PMF_LANG["err_noMailAdress"] = "Alamat email anda tidak benar.<br /><a href=\"javascript:history.back();\">kembali</a>";
-$PMF_LANG["err_sendMail"] = "Bagian yang harus diisi adalah <strong>Nama Anda</strong>, <strong>Alamat Email</strong>, <strong>Pertanyaan Anda</strong> dan, jika diminta, <strong>kode <a href=\"http://id.wikipedia.org/wiki/CAPTCHA\" title=\"lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a></strong>!<br /><br /><a href=\"javascript:history.back();\">mundur satu halaman</a><br /><br />";
+$PMF_LANG["err_sendMail"] = "Bagian yang harus diisi adalah <strong>Nama Anda</strong>, <strong>Alamat Email</strong>, <strong>Pertanyaan Anda</strong> dan, jika diminta, <strong>kode <a href=\"http://id.wikipedia.org/wiki/CAPTCHA\" title=\"lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a></strong>!";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Pencarian materi:</strong><br />Dengan entri seperti <strong style=\"color: Red;\">kata1 kata2</strong> anda bisa melakukan pencarian menurut relevansi atas dua atau lebih kata.</p><p><strong>Perhatian:</strong> Kriteria pencarian anda minimal berisi 4 huruf.</p>";

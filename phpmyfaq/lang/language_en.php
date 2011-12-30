@@ -19,7 +19,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matthias Sommerfeld <mso@bluebirdy.de>
  * @author    Henning Schulzrinne <hgs@cs.columbia.edu>
- * @copyright 2004-2010 phpMyFAQ Team
+ * @copyright 2004-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-19
@@ -178,10 +178,10 @@ $PMF_LANG["err_noTopTen"] = "<p>No popular FAQs available yet.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>No entry found.</p>";
 $PMF_LANG["err_SaveEntries"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>headline</strong>, <strong>your Record</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br /><a href=\"javascript:history.back();\">one page back</a><br /><br />";
 $PMF_LANG["err_SaveComment"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your comments</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br /><a href=\"javascript:history.back();\">one page back</a><br /><br />";
-$PMF_LANG["err_VoteTooMuch"] = "<p>We do not count double votings. <a href=\"javascript:history.back();\">Click here</a>, to go back.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong>You did not rate the question!</strong> <a href=\"javascript:history.back();\">Please click here</a>, to vote.</p>";
-$PMF_LANG["err_noMailAdress"] = "Your email address is not correct.<br /><a href=\"javascript:history.back();\">back</a>";
-$PMF_LANG["err_sendMail"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br /><a href=\"javascript:history.back();\">one page back</a><br /><br />";
+$PMF_LANG["err_VoteTooMuch"] = "We do not count double votings.";
+$PMF_LANG["err_noVote"] = "You did not rate the question!";
+$PMF_LANG["err_noMailAdress"] = "Your email address is not correct.";
+$PMF_LANG["err_sendMail"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Search for records:</strong><br />With an entry like <strong style=\"color: Red;\">word1 word2</strong> you can do a relevance descending search for two or more search criterion.</p><p><strong>Notice:</strong> Your search criterion has to be at least 4 letters long otherwise your request will be rejected.</p>";
@@ -519,7 +519,7 @@ $PMF_LANG["ad_passwdsuc"] = "Your password has been changed.";
 $PMF_LANG["msgPDF"] = "Show this as PDF file";
 $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Save all records of your FAQ in one XML file.";
-$PMF_LANG["ad_xml_gen"] = "make XML file";
+$PMF_LANG["ad_xml_gen"] = "create XML file";
 $PMF_LANG["ad_entry_locale"] = "Language";
 $PMF_LANG["msgLangaugeSubmit"] = "Select language:";
 
@@ -571,7 +571,7 @@ $PMF_LANG["ad_entry_email"] = "Email address:";
 $PMF_LANG["ad_entry_allowComments"] = "Allow comments:";
 $PMF_LANG["msgWriteNoComment"] = "You cannot comment on this entry";
 $PMF_LANG["ad_user_realname"] = "real name:";
-$PMF_LANG["ad_export_generate_pdf"] = "generate PDF file";
+$PMF_LANG["ad_export_generate_pdf"] = "create PDF file";
 $PMF_LANG["ad_export_full_faq"] = "Your FAQ as a PDF file: ";
 $PMF_LANG["err_bannedIP"] = "Your IP address has been banned.";
 $PMF_LANG["err_SaveQuestion"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>.<br /><br /><a href=\"javascript:history.back();\">one page back</a><br /><br />";
@@ -752,12 +752,11 @@ $PMF_LANG['ad_group_removeMember'] = "-";
 $PMF_LANG['ad_export_which_cat'] = 'Limit the FAQ data to be exported (optional)';
 $PMF_LANG['ad_export_cat_downwards'] = 'Downwards?';
 $PMF_LANG['ad_export_type'] = 'Format of the export';
-$PMF_LANG['ad_export_type_choose'] = 'Choose one of the supported formats:';
-$PMF_LANG['ad_export_download_view'] = 'Download or view in-line?';
+$PMF_LANG['ad_export_type_choose'] = 'Supported formats:';
+$PMF_LANG['ad_export_download_view'] = 'Download or view inline?';
 $PMF_LANG['ad_export_download'] = 'download';
 $PMF_LANG['ad_export_view'] = 'view in-line';
-$PMF_LANG['ad_export_gen_xhtml'] = 'Make XHTML file';
-$PMF_LANG['ad_export_gen_docbook'] = 'Make Docbook file';
+$PMF_LANG['ad_export_gen_xhtml'] = 'create XHTML file';
 
 // added v2.0.0 - 2006-07-22 by Matteo
 $PMF_LANG['ad_news_data'] = 'News data';
@@ -835,7 +834,7 @@ $PMF_LANG['ad_entry_all_users'] = 'Access for all users';
 $PMF_LANG['ad_entry_restricted_users'] = 'Restricted access to';
 $PMF_LANG['ad_entry_all_groups'] = 'Access for all groups';
 $PMF_LANG['ad_entry_restricted_groups'] = 'Restricted access to';
-$PMF_LANG['ad_session_expiration'] = 'Time to your session expiration';
+$PMF_LANG['ad_session_expiration'] = 'Session expires in';
 $PMF_LANG['ad_user_active'] = 'active';
 $PMF_LANG['ad_user_blocked'] = 'blocked';
 $PMF_LANG['ad_user_protected'] = 'protected';
@@ -957,7 +956,7 @@ $PMF_LANG['msgSendMailIfNothingIsFound'] = 'Is the wanted answer listed in the r
 
 // added 2.5.0-RC - 2009-05-11 by Anatoliy & Thorsten
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'Please choose the language for translation';
-$PMF_LANG['msgLangDirIsntWritable'] = 'Translations dir isn\'t writable';
+$PMF_LANG['msgLangDirIsntWritable'] = 'The folder <strong>/lang</strong> for the translation files isn\'t writable.';
 $PMF_LANG['ad_menu_translations'] = 'Interface Translation';
 $PMF_LANG['ad_start_notactive'] = 'Waiting for activation';
 
@@ -1098,8 +1097,8 @@ $PMF_LANG['search.relevance.keywords-content-thema'] = 'Keywords - Answer - Ques
 $PMF_LANG['search.relevance.keywords-thema-content'] = 'Keywords - Question - Answer';
 
 // added v2.6.99 - 2010-11-30 by Gustavo Solt
-$LANG_CONF['main.googleTranslationKey'] = array(0 => 'input', 1 => 'Google APIs key');
 $LANG_CONF["main.enableGoogleTranslation"] = array(0 => "checkbox", 1 => "Activate google translations? (default: deactivated)");
+$LANG_CONF['main.googleTranslationKey'] = array(0 => 'input', 1 => 'Google APIs key');
 $PMF_LANG["msgNoGoogleApiKeyFound"] = 'The Google APIs key is empty, please provide one in the configuration section';
 
 // added 2.7.0-alpha - 2010-09-13 by Thorsten
@@ -1117,6 +1116,35 @@ $LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 =>
 // added 2.7.0-alpha - 2010-12-21 by Anatoliy Belsky
 $PMF_LANG["ad_menu_attachments"] = "Attachments";
 $PMF_LANG["ad_menu_attachment_admin"] = "Attachment administration";
+
+$PMF_LANG['msgAttachmentsFilename'] = 'Filename';
+$PMF_LANG['msgAttachmentsFilesize'] = 'Filensize';
+$PMF_LANG['msgAttachmentsMimeType'] = 'MIME Type';
+$PMF_LANG['msgAttachmentsWannaDelete'] = 'Are you sure you want to delete this attachment?';
+$PMF_LANG['msgAttachmentsDeleted'] = 'Attachment <strong>successfully</strong> deleted.';
+
+// added v2.7.0-alpha2 - 2010-01-12 by Gustavo Solt
+$PMF_LANG['ad_menu_reports'] = 'Reports';
+$PMF_LANG["ad_stat_report_fields"] = "Fields";
+$PMF_LANG["ad_stat_report_category"] = "Category";
+$PMF_LANG["ad_stat_report_sub_category"] = "Subcategory";
+$PMF_LANG["ad_stat_report_translations"] = "Translations";
+$PMF_LANG["ad_stat_report_language"] = "Language";
+$PMF_LANG["ad_stat_report_id"] = "FAQ ID";
+$PMF_LANG["ad_stat_report_sticky"] = "Sticky FAQ";
+$PMF_LANG["ad_stat_report_title"] = "Question";
+$PMF_LANG["ad_stat_report_creation_date"] = "Date";
+$PMF_LANG["ad_stat_report_owner"] = "Original author";
+$PMF_LANG["ad_stat_report_last_modified_person"] = "Last author";
+$PMF_LANG["ad_stat_report_url"] = "URL";
+$PMF_LANG["ad_stat_report_visits"] = "Visits";
+$PMF_LANG["ad_stat_report_make_report"] = "Generate Report";
+$PMF_LANG["ad_stat_report_make_csv"] = "Export to CSV";
+
+// added v2.7.0-alpha2 - 2010-02-05 by Thorsten Rinne
+$PMF_LANG['msgRegistration'] = 'Registration';
+$PMF_LANG['msgRegistrationCredentials'] = 'To register please enter your name, your loginname and a valid email address!';
+$PMF_LANG['msgRegistrationNote'] = 'After successful registration you will receive an answer soon after Administration has authorized your registration.';
 
 // added 3.0.0-alpha
 $LANG_CONF['main.useAjaxMenu'] = array(0 => 'checkbox', 1 => 'Ajax powered frontend (default: deactivated)');

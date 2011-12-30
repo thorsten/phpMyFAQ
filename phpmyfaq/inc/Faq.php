@@ -20,7 +20,7 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Georgi Korchev <korchev@yahoo.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-20
@@ -43,7 +43,6 @@ define('FAQ_SQL_ACTIVE_NO',  'no');
  */
 define('FAQ_QUERY_TYPE_DEFAULT',        'faq_default');
 define('FAQ_QUERY_TYPE_APPROVAL',       'faq_approval');
-define('FAQ_QUERY_TYPE_EXPORT_DOCBOOK', 'faq_export_docbook');
 define('FAQ_QUERY_TYPE_EXPORT_PDF',     'faq_export_pdf');
 define('FAQ_QUERY_TYPE_EXPORT_XHTML',   'faq_export_xhtml');
 define('FAQ_QUERY_TYPE_EXPORT_XML',     'faq_export_xml');
@@ -468,10 +467,8 @@ class PMF_Faq
                             $row->id,
                             $row->lang);
                             
-                $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-                $oLink->itemTitle = $row->thema;
-                $oLink->text      = $title;
-                $oLink->tooltip   = $title;
+                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink->itemTitle = $oLink->text = $oLink->tooltip = $title;
                 
                 $listItem = sprintf('<li>%s<span id="viewsPerRecord"><br /><span class="little">(%s)</span>%s</span></li>',
                     $oLink->toHtmlAnchor(),
@@ -485,22 +482,18 @@ class PMF_Faq
             return false;
         }
 
-        $categoryName = 'CategoryId-'.$category_id;
-        if (isset($category)) {
-            $categoryName = $category->categoryName[$category_id]['name'];
-        }
-        
         if ($pages > 1) {
-            
-            $baseUrl = PMF_Link::getSystemRelativeUri() . '?'
-                     . (empty($sids) ? '' : "$sids&amp;")
-                     . 'action=show&amp;cat=' . $category_id
-                     . '&amp;seite=' . $page;
-            
+
+            $baseUrl = PMF_Link::getSystemRelativeUri() . '?' .
+                       (empty($sids) ? '' : $sids) .
+                       'action=show&amp;cat=' . $category_id .
+                       '&amp;seite=' . $page;
+
             $options = array('baseUrl'         => $baseUrl,
                              'total'           => $num,
                              'perPage'         => $faqconfig->get('main.numberOfRecordsPerPage'),
                              'pageParamName'   => 'seite',
+                             'seoName'         => $title,
                              'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $this->pmf_lang['msgNext'] . '</a>',
                              'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $this->pmf_lang['msgPrevious'] . '</a>',
                              'layoutTpl'       => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>');
@@ -1813,15 +1806,13 @@ class PMF_Faq
     /**
      * Retrieve faq records according to the constraints provided
      *
-     * @param   $QueryType
-     * @param   $nCatid
-     * @param   $bDownwards
-     * @param   $lang
-     * @param   $date
+     * @param string  $QueryType
+     * @param integer $nCatid
+     * @param string  $bDownwards
+     * @param string  $lang
+     * @param string  $date
+     * 
      * @return  array
-     * @access  public
-     * @since   2005-11-02
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
     function get($QueryType = FAQ_QUERY_TYPE_DEFAULT, $nCatid = 0, $bDownwards = true, $lang = '', $date = '')
     {
@@ -1980,7 +1971,6 @@ class PMF_Faq
                 $query .= " fd.active = '".FAQ_SQL_ACTIVE_NO."'";
                 $needAndOp = true;
                 break;
-            case FAQ_QUERY_TYPE_EXPORT_DOCBOOK:
             case FAQ_QUERY_TYPE_EXPORT_PDF:
             case FAQ_QUERY_TYPE_EXPORT_XHTML:
             case FAQ_QUERY_TYPE_EXPORT_XML:
@@ -2000,7 +1990,6 @@ class PMF_Faq
         }
         // Sort criteria
         switch ($QueryType) {
-            case FAQ_QUERY_TYPE_EXPORT_DOCBOOK:
             case FAQ_QUERY_TYPE_EXPORT_PDF:
             case FAQ_QUERY_TYPE_EXPORT_XHTML:
             case FAQ_QUERY_TYPE_EXPORT_XML:
@@ -2104,80 +2093,6 @@ class PMF_Faq
     }
 
     /**
-<<<<<<< HEAD
-=======
-     * Prints the open questions as a XHTML table
-     *
-     * @return  string
-     * @access  public
-     * @since   2002-09-17
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     */
-    function printOpenQuestions()
-    {
-        global $sids, $category;
-
-        $query = sprintf("
-            SELECT
-                COUNT(*) AS num
-            FROM
-                %sfaqquestions
-            WHERE
-                is_visible != 'Y'",
-            SQLPREFIX);
-
-        $result = $this->db->query($query);
-        $row = $this->db->fetch_object($result);
-        $numOfInvisibles = $row->num;
-
-        if ($numOfInvisibles > 0) {
-            $extraout = sprintf('<tr><td colspan="3"><hr />%s%s</td></tr>',
-                $this->pmf_lang['msgQuestionsWaiting'],
-                $numOfInvisibles);
-        } else {
-            $extraout = '';
-        }
-
-        $query = sprintf("
-            SELECT
-                *
-            FROM
-                %sfaqquestions
-            WHERE
-                is_visible = 'Y'
-            ORDER BY
-                created ASC",
-            SQLPREFIX);
-
-        $result = $this->db->query($query);
-        $output = '';
-        if ($this->db->num_rows($result) > 0) {
-            while ($row = $this->db->fetch_object($result)) {
-                $output .= '<tr class="openquestions">';
-                $output .= sprintf('<td valign="top" nowrap="nowrap">%s<br /><a href="mailto:%s">%s</a></td>',
-                    PMF_Date::createIsoDate($row->created),
-                    PMF_Mail::safeEmail($row->email),
-                    $row->username);
-                $output .= sprintf('<td valign="top"><strong>%s:</strong><br />%s</td>',
-                    isset($category->categoryName[$row->category_id]['name']) ? $category->categoryName[$row->category_id]['name'] : '',
-                    strip_tags($row->question));
-                $output .= sprintf('<td valign="top"><a href="?%saction=add&amp;question=%d&amp;cat=%d">%s</a></td>',
-                    $sids,
-                    $row->id,
-                    $row->category_id,
-                    $this->pmf_lang['msg2answer']);
-                $output .= '</tr>';
-            }
-        } else {
-            $output = sprintf('<tr><td colspan="3">%s</td></tr>',
-                $this->pmf_lang['msgNoQuestionsAvailable']);
-        }
-
-        return $output.$extraout;
-    }
-    
-    /**
->>>>>>> 0370324a35e7dde612fb6c49d7ae2b5aa9c19925
      * Setter for the language
      * 
      * @param  string $language Language

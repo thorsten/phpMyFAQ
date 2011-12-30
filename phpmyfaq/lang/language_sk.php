@@ -153,7 +153,7 @@ $PMF_LANG["err_SaveComment"] = "Povinné polia sú <strong>Vaše meno </strong>,
 $PMF_LANG["err_VoteTooMuch"] = "<p>Dvojité hlasovania nebudú započítané. <a href=\"javascript:history.back();\">Kliknite semClick here</a>, pre návrat.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Neohodnotili ste otázku!</strong> <a href=\"javascript:history.back();\">Prosím kliknite sem</a>, pre hlasovanie.</p>";
 $PMF_LANG["err_noMailAdress"] = "Váš e-mail je nesprávny.<br /><a href=\"javascript:history.back();\">späť</a>";
-$PMF_LANG["err_sendMail"] = "Povinné polia sú <strong>Vaše meno</strong>, <strong>Váš e-mail</strong>, <strong>your question</strong> a, na požiadanie, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br /><a href=\"javascript:history.back();\">o jednu stránku späť</a><br /><br />";
+$PMF_LANG["err_sendMail"] = "Povinné polia sú <strong>Vaše meno</strong>, <strong>Váš e-mail</strong>, <strong>your question</strong> a, na požiadanie, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Hľadanie záznamu:</strong><br />So vstupnými údajmi <strong style=\"color: Red;\">slovo1 slovo2</strong> môžete vyhľadávať aj vzostupne pre dve alebo viac hľadaných výrazov.</p><p><strong>Poznámka:</strong> Hľadané výrazy musia mať aspoň 4 písmená a preto bude Vaša požiadavka zrušená.</p>";

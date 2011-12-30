@@ -1,7 +1,7 @@
 <application xmlns="http://apstandard.com/ns/1" version="1.2">
     <id>http://www.phpmyfaq.de</id>
     <name>phpMyFAQ</name>
-    <version>2.6.14</version>
+    <version>2.6.16</version>
     <release>1</release>
     <homepage>http://www.phpmyfaq.de</homepage>
 
@@ -34,9 +34,24 @@
         </description>
 
         <changelog>
+            <version version="2.6.16" release="1">
+                <entry>n/a</entry>
+            </version>
+            <version version="2.6.15" release="1">
+                <entry>Added Malay translation</entry>
+                <entry>Updated Danish translation</entry>
+                <entry>Updated Brazilian Portuguese translation</entry>
+                <entry>Updated Spanish translation</entry>
+                <entry>Fixed minor bugs</entry>
+            </version>
             <version version="2.6.14" release="1">
+                <entry>Added rewrite rules for nginx</entry>
                 <entry>Added compatibility for MySQL 5.5 with ext/mysql</entry>
                 <entry>Improved restore functionality</entry>
+                <entry>Updated Dutch translation</entry>
+                <entry>Updated German translation</entry>
+                <entry>Fixed issue with sending mails to category administrators</entry>
+                <entry>Fixed minor bugs</entry>
             </version>
         </changelog>
 
@@ -66,6 +81,7 @@
             <language>ko</language>
             <language>lt</language>
             <language>lv</language>
+            <language>ms</language>
             <language>nb</language>
             <language>nl</language>
             <language>pl</language>

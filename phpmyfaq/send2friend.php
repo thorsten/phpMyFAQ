@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2010 phpMyFAQ Team
+ * @copyright 2002-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-16
@@ -49,8 +49,8 @@ $send2friendLink = sprintf('%s/index.php?action=artikel&amp;cat=%d&amp;id=%d&amp
     urlencode($artlang));
 
 $tpl->processTemplate ('writeContent', array(
+    'lang'               => $artlang,
     'msgSend2Friend'     => $PMF_LANG['msgSend2Friend'],
-    'writeSendAdress'    => '?'.$sids.'action=mailsend2friend',
     'msgS2FReferrer'     => 'link',
     'msgS2FName'         => $PMF_LANG['msgS2FName'],
     'msgS2FEMail'        => $PMF_LANG['msgS2FEMail'],

@@ -18,7 +18,7 @@
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-26
@@ -70,53 +70,55 @@ if ($permission['editconfig']) {
         $userAction = 'listConfig';
 ?>
 
-<h2><?php print $PMF_LANG['ad_config_edit']; ?></h2>
+        <header>
+            <h2><?php print $PMF_LANG['ad_config_edit']; ?></h2>
+        </header>
 
-<div id="user_message"><?php print $message; ?></div>
+        <div id="user_message"><?php print $message; ?></div>
 
-<form id="config_list" name="config_list" action="?action=config&amp;config_action=saveConfig" method="post">
-    <fieldset>
-        <legend><a href="javascript:void(0);" onclick="javascript:toggleConfig('Main');"><?php print $PMF_LANG['mainControlCenter']; ?></a></legend>
-        <div id="configMain" style="display: none;"></div>
-    </fieldset>
-    <fieldset>
-        <legend><a href="javascript:void(0);" onclick="javascript:toggleConfig('Records');"><?php print $PMF_LANG['recordsControlCenter']; ?></a></legend>
-        <div id="configRecords" style="display: none;"></div>
-    </fieldset>
-    <fieldset>
-        <legend><a href="javascript:void(0);" onclick="javascript:toggleConfig('Spam');"><?php print $PMF_LANG['spamControlCenter']; ?></a></legend>
-        <div id="configSpam" style="display: none;"></div>
-    </fieldset>
-    <fieldset>
-        <legend><a href="javascript:void(0);" onclick="javascript:toggleConfig('Search');"><?php print $PMF_LANG['searchControlCenter']; ?></a></legend>
-        <div id="configSearch" style="display: none;"></div>
-    </fieldset>
-    <fieldset>
-        <legend><a href="javascript:void(0);" onclick="javascript:toggleConfig('SocialNetworks');"><?php print $PMF_LANG['socialNetworksControlCenter']; ?></a></legend>
-        <div id="configSocialNetworks" style="display: none;"></div>
-    </fieldset>
-    <p align="center">
-        <input class="submit" type="submit" value="<?php print $PMF_LANG['ad_config_save']; ?>" />
-        <input class="submit" type="reset" value="<?php print $PMF_LANG['ad_config_reset']; ?>" />
-    </p>
-</form>
+        <form id="config_list" name="config_list" action="?action=config&amp;config_action=saveConfig" method="post">
+            <fieldset>
+                <legend><a href="javascript:void(0);" onclick="javascript:toggleConfig('Main');"><?php print $PMF_LANG['mainControlCenter']; ?></a></legend>
+                <div id="configMain" style="display: none;"></div>
+            </fieldset>
+            <fieldset>
+                <legend><a href="javascript:void(0);" onclick="javascript:toggleConfig('Records');"><?php print $PMF_LANG['recordsControlCenter']; ?></a></legend>
+                <div id="configRecords" style="display: none;"></div>
+            </fieldset>
+            <fieldset>
+                <legend><a href="javascript:void(0);" onclick="javascript:toggleConfig('Spam');"><?php print $PMF_LANG['spamControlCenter']; ?></a></legend>
+                <div id="configSpam" style="display: none;"></div>
+            </fieldset>
+            <fieldset>
+                <legend><a href="javascript:void(0);" onclick="javascript:toggleConfig('Search');"><?php print $PMF_LANG['searchControlCenter']; ?></a></legend>
+                <div id="configSearch" style="display: none;"></div>
+            </fieldset>
+            <fieldset>
+                <legend><a href="javascript:void(0);" onclick="javascript:toggleConfig('SocialNetworks');"><?php print $PMF_LANG['socialNetworksControlCenter']; ?></a></legend>
+                <div id="configSocialNetworks" style="display: none;"></div>
+            </fieldset>
+            <p>
+                <input class="submit" type="submit" value="<?php print $PMF_LANG['ad_config_save']; ?>" />
+                <input class="submit" type="reset" value="<?php print $PMF_LANG['ad_config_reset']; ?>" />
+            </p>
+        </form>
 
-<script type="text/javascript">
-/* <![CDATA[ */
+        <script type="text/javascript">
+        /* <![CDATA[ */
 
-function getConfigList()
-{
-    $.get("index.php", {action: "ajax", ajax: "config_list", conf: "main" }, function(data) { $('#configMain').append(data); });
-    $.get("index.php", {action: "ajax", ajax: "config_list", conf: "records" }, function(data) { $('#configRecords').append(data); });
-    $.get("index.php", {action: "ajax", ajax: "config_list", conf: "spam" }, function(data) { $('#configSpam').append(data); });
-    $.get("index.php", {action: "ajax", ajax: "config_list", conf: "search" }, function(data) { $('#configSearch').append(data); });
-    $.get("index.php", {action: "ajax", ajax: "config_list", conf: "socialnetworks" }, function(data) { $('#configSocialNetworks').append(data); });
-}
+        function getConfigList()
+        {
+            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "main" }, function(data) { $('#configMain').append(data); });
+            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "records" }, function(data) { $('#configRecords').append(data); });
+            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "spam" }, function(data) { $('#configSpam').append(data); });
+            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "search" }, function(data) { $('#configSearch').append(data); });
+            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "socialnetworks" }, function(data) { $('#configSocialNetworks').append(data); });
+        }
 
-getConfigList();
+        getConfigList();
 
-/* ]]> */
-</script>
+        /* ]]> */
+        </script>
 
 <?php
     }

@@ -2,22 +2,25 @@
 /**
  * XHTML Export class for phpMyFAQ
  *
- * @category  phpMyFAQ
- * @package   PMF_Export
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2009-10-07
- * @license   Mozilla Public License 1.1
- * @copyright 2009 phpMyFAQ Team
- *
+ * PHP Version 5.2
+ * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
  * http://www.mozilla.org/MPL/
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Export
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2009-2011 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-10-07
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -30,9 +33,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Export
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2009-2011 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
  * @since     2009-10-07
- * @license   Mozilla Public License 1.1
- * @copyright 2009 phpMyFAQ Team
  */
 class PMF_Export_Xhtml extends PMF_Export 
 {
@@ -72,12 +76,12 @@ class PMF_Export_Xhtml extends PMF_Export
      */
     public function generate($categoryId = 0, $downwards = true, $language = '')
     {
-    	global $PMF_LANG;
-    	
+        global $PMF_LANG;
+
         // Initialize categories
         $this->category->transform($categoryId);
         
-        $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
+        $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XHTML, $categoryId, $downwards, $language);
         $version = PMF_Configuration::getInstance()->get('main.currentVersion');
         $comment = sprintf('XHTML output by phpMyFAQ %s | Date: %s', 
           $version, 
@@ -112,7 +116,9 @@ class PMF_Export_Xhtml extends PMF_Export
                 }
                 
                 $this->xml->writeElement('h2', strip_tags($data['topic']));
-                $this->xml->writeElement('p', $data['content']);
+                $this->xml->startElement('p');
+                $this->xml->writeRaw(html_entity_decode($data['content'], ENT_QUOTES, 'UTF-8'));
+                $this->xml->endElement();
                 $this->xml->writeElement('p', $PMF_LANG['msgAuthor'] . ': ' .$data['author_email']);
                 $this->xml->writeElement('p', $PMF_LANG['msgLastUpdateArticle'] . 
                                               PMF_Date::createIsoDate($data['lastmodified']));

@@ -18,7 +18,7 @@
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-23
@@ -36,66 +36,102 @@ $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
 if ('addnews' == $action && $permission["addnews"]) {
 ?>
-    <h2><?php print $PMF_LANG['ad_news_add']; ?></h2>
-    <form id="faqEditor" name="faqEditor" action="?action=savenews" method="post">
-    <fieldset>
-    <legend><?php print $PMF_LANG['ad_news_data']; ?></legend>
+        <header>
+            <h2><?php print $PMF_LANG['ad_news_add']; ?></h2>
+        </header>
 
-        <label class="lefteditor" for="header"><?php print $PMF_LANG['ad_news_header']; ?></label>
-        <textarea name="header" style="width: 390px; height: 50px;" cols="2" rows="50"></textarea><br />
+        <form id="faqEditor" name="faqEditor" action="?action=savenews" method="post">
+        <fieldset>
+            <legend><?php print $PMF_LANG['ad_news_data']; ?></legend>
 
-        <label for="content"><?php print $PMF_LANG['ad_news_text']; ?></label>
-        <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript><textarea id="content" name="content" cols="84" rows="5"></textarea><br />
+            <p>
+                <label for="newsheader"><?php print $PMF_LANG['ad_news_header']; ?></label>
+                <input type="text" name="newsheader" id="newsheader" style="width: 300px;" value="" />
+            </p>
 
-        <label class="lefteditor" for="authorName"><?php print $PMF_LANG['ad_news_author_name']; ?></label>
-        <input type="text" name="authorName" style="width: 390px;" value="<?php print $user->getUserData('display_name'); ?>"/><br />
+            <p>
+                <label for="news"><?php print $PMF_LANG['ad_news_text']; ?>:</label>
+            </p>
+                <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
+                <textarea id="news" name="news" cols="84" rows="5"></textarea>
 
-        <label class="lefteditor" for="authorEmail"><?php print $PMF_LANG['ad_news_author_email']; ?></label>
-        <input type="text" name="authorEmail" style="width: 390px;" value="<?php print $user->getUserData('email'); ?>"/><br />
+            <p>
+                <label for="authorName"><?php print $PMF_LANG['ad_news_author_name']; ?></label>
+                <input type="text" name="authorName" id="authorName" style="width: 300px;" value="<?php print $user->getUserData('display_name'); ?>"/>
+            </p>
 
-        <label class="lefteditor" for="active"><?php print $PMF_LANG['ad_news_set_active']; ?></label>
-        <input type="checkbox" name="active" id="active" value="y" /><?php print $PMF_LANG['ad_gen_yes']; ?><br />
+            <p>
+                <label for="authorEmail"><?php print $PMF_LANG['ad_news_author_email']; ?></label>
+                <input type="email" name="authorEmail" id="authorEmail" style="width: 300px;" value="<?php print $user->getUserData('email'); ?>"/>
+            </p>
 
-        <label class="lefteditor" for="comment"><?php print $PMF_LANG['ad_news_allowComments']; ?></label>
-        <input type="checkbox" name="comment" id="comment" value="y" /><?php print $PMF_LANG['ad_gen_yes']; ?><br />
+            <p>
+                <label for="active"><?php print $PMF_LANG['ad_news_set_active']; ?></label>
+                <input type="checkbox" name="active" id="active" value="y" /><?php print $PMF_LANG['ad_gen_yes']; ?>
+            </p>
 
-        <label class="lefteditor" for="link"><?php print $PMF_LANG['ad_news_link_url']; ?></label>
-        <input type="text" name="link" style="width: 390px;" value="http://" /><br />
+            <p>
+                <label for="comment"><?php print $PMF_LANG['ad_news_allowComments']; ?></label>
+                <input type="checkbox" name="comment" id="comment" value="y" /><?php print $PMF_LANG['ad_gen_yes']; ?>
+            </p>
 
-        <label class="lefteditor" for="linkTitle"><?php print $PMF_LANG['ad_news_link_title']; ?></label>
-        <input type="text" name="linkTitle" style="width: 390px;" /><br />
+            <p>
+                <label for="link"><?php print $PMF_LANG['ad_news_link_url']; ?></label>
+                <input type="text" name="link" id="link" style="width: 300px;" value="http://" />
+            </p>
 
-        <label class="lefteditor" for="linkTarget"><?php print $PMF_LANG['ad_news_link_target']; ?></label>
-        <input type="radio" name="target" value="blank" /><?php print $PMF_LANG['ad_news_link_window'] ?>
-        <input type="radio" name="target" value="self" /><?php print $PMF_LANG['ad_news_link_faq'] ?>
-        <input type="radio" name="target" value="parent" /><?php print $PMF_LANG['ad_news_link_parent'] ?><br />
-    </fieldset>
-    <fieldset>
-    <legend><?php print $PMF_LANG['ad_news_expiration_window']; ?></legend>
-        <label class="lefteditor" for="dateStart"><?php print $PMF_LANG['ad_news_from']; ?></label>
-        <input name="dateStart" id="dateStart" class="date-pick" />
-        <br />
-        <label class="lefteditor" for="dateEnd"><?php print $PMF_LANG['ad_news_to']; ?></label>
-        <input name="dateEnd" id="dateEnd" class="date-pick" />
-    </fieldset>
-    <br />
-    <input class="submit" type="submit" value="<?php print $PMF_LANG['ad_news_add']; ?>" />
-    <input class="submit" type="reset" value="<?php print $PMF_LANG['ad_gen_reset']; ?>" />
-    </form>
+            <p>
+                <label for="linkTitle"><?php print $PMF_LANG['ad_news_link_title']; ?></label>
+                <input type="text" name="linkTitle" id="linkTitle" style="width: 300px;" />
+            </p>
+
+            <p>
+                <label ><?php print $PMF_LANG['ad_news_link_target']; ?></label>
+                <input type="radio" name="target" value="blank" /><?php print $PMF_LANG['ad_news_link_window'] ?>
+                <input type="radio" name="target" value="self" /><?php print $PMF_LANG['ad_news_link_faq'] ?>
+                <input type="radio" name="target" value="parent" /><?php print $PMF_LANG['ad_news_link_parent'] ?>
+            </p>
+            <p>
+                <label for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
+                <?php print PMF_Language::selectLanguages($LANGCODE, false, array(), 'langTo'); ?>
+            </p>
+        </fieldset>
+            
+        <fieldset>
+            <legend><?php print $PMF_LANG['ad_news_expiration_window']; ?></legend>
+            <p>
+                <label for="dateStart"><?php print $PMF_LANG['ad_news_from']; ?></label>
+                <input name="dateStart" id="dateStart" class="date-pick" />
+            </p>
+
+            <p>
+                <label for="dateEnd"><?php print $PMF_LANG['ad_news_to']; ?></label>
+                <input name="dateEnd" id="dateEnd" class="date-pick" />
+            </fieldset>
+
+            </p>
+                <input class="submit" type="submit" value="<?php print $PMF_LANG['ad_news_add']; ?>" />
+                <input class="submit" type="reset" value="<?php print $PMF_LANG['ad_gen_reset']; ?>" />
+            <p>
+        </form>
 <?php
 } elseif ('news' == $action && $permission["editnews"]) {
 ?>
-    <h2><?php print $PMF_LANG["msgNews"]; ?></h2>
-    <p><a href="?action=addnews"><?php print $PMF_LANG["ad_menu_news_add"]; ?></a></p>
-    <table id="tableNews">
-    <thead>
-        <tr>
-            <th><?php print $PMF_LANG["ad_news_headline"]; ?></th>
-            <th><?php print $PMF_LANG["ad_news_date"]; ?></th>
-            <th>&nbsp;</th>
-        </tr>
-    </thead>
-    <tbody>
+        <header>
+            <h2><?php print $PMF_LANG["msgNews"]; ?></h2>
+        </header>
+    
+        <p><a href="?action=addnews"><?php print $PMF_LANG["ad_menu_news_add"]; ?></a></p>
+        <table class="list" style="width: 100%">
+        <thead>
+            <tr>
+                <th><?php print $PMF_LANG["ad_news_headline"]; ?></th>
+                <th><?php print $PMF_LANG["ad_news_date"]; ?></th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+
 <?php
         $newsHeader = $news->getNewsHeader();
         if (count($newsHeader)) {
@@ -104,7 +140,7 @@ if ('addnews' == $action && $permission["addnews"]) {
         <tr>
             <td><?php print $newsItem['header']; ?></td>
             <td><?php print $newsItem['date']; ?></td>
-            <td><a href="?action=editnews&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_update"]; ?>"><img src="images/edit.png" width="18" height="18" alt="<?php print $PMF_LANG["ad_news_update"]; ?>" border="0" /></a>&nbsp;&nbsp;<a href="?action=deletenews&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_delete"]; ?>"><img src="images/delete.png" width="17" height="18" alt="<?php print $PMF_LANG["ad_news_delete"]; ?>" border="0" /></a></td>
+            <td><a href="?action=editnews&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_update"]; ?>"><img src="images/edit.png" width="16" height="16" alt="<?php print $PMF_LANG["ad_news_update"]; ?>" border="0" /></a>&nbsp;&nbsp;<a href="?action=deletenews&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_delete"]; ?>"><img src="images/delete.png" width="16" height="16" alt="<?php print $PMF_LANG["ad_news_delete"]; ?>" border="0" /></a></td>
         </tr>
 <?php
             }
@@ -113,60 +149,94 @@ if ('addnews' == $action && $permission["addnews"]) {
                 $PMF_LANG['ad_news_nodata']);
         }
 ?>
-    </tbody>
-    </table>
+        </tbody>
+        </table>
 <?php
 } elseif ('editnews' == $action && $permission['editnews']) {
     $id       = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $newsData = $news->getNewsEntry($id, true);
 ?>
-    <h2><?php print $PMF_LANG['ad_news_edit']; ?></h2>
-    <form  style="float: left;" id="faqEditor" name="faqEditor" action="?action=updatenews" method="post">
-    <fieldset>
-    <legend><?php print $PMF_LANG['ad_news_data']; ?></legend>
-        <input type="hidden" name="id" value="<?php print $newsData['id']; ?>" />
+        <header>
+            <h2><?php print $PMF_LANG['ad_news_edit']; ?></h2>
+        </header>
 
-        <label class="lefteditor" for="header"><?php print $PMF_LANG['ad_news_header']; ?></label>
-        <textarea name="header" style="width: 390px; height: 50px;" cols="2" rows="50"><?php if (isset($newsData['header'])) { print $newsData['header']; } ?></textarea><br />
+        <form action="?action=updatenews" method="post">
+        <fieldset>
+        <legend><?php print $PMF_LANG['ad_news_data']; ?></legend>
+            <input type="hidden" name="id" value="<?php print $newsData['id']; ?>" />
 
-        <label for="content"><?php print $PMF_LANG['ad_news_text']; ?></label>
-        <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript><textarea id="content" name="content" cols="84" rows="5"><?php if (isset($newsData['content'])) { print htmlspecialchars($newsData['content'], ENT_QUOTES); } ?></textarea><br />
+            <p>
+                <label for="newsheader"><?php print $PMF_LANG['ad_news_header']; ?></label>
+                <input type="text" name="newsheader" id="newsheader" style="width: 300px;" value="<?php if (isset($newsData['header'])) { print $newsData['header']; } ?>" />
+            </p>
 
-        <label class="lefteditor" for="authorName"><?php print $PMF_LANG['ad_news_author_name']; ?></label>
-        <input type="text" name="authorName" style="width: 390px;" value="<?php print $newsData['authorName']; ?>" /><br />
+            <p>
+                <label for="news"><?php print $PMF_LANG['ad_news_text']; ?>:</label>
+            </p>
+                <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
+                <textarea id="news" name="news" cols="84" rows="5"><?php if (isset($newsData['content'])) { print htmlspecialchars($newsData['content'], ENT_QUOTES); } ?></textarea>
+            </p>
 
-        <label class="lefteditor" for="authorEmail"><?php print $PMF_LANG['ad_news_author_email']; ?></label>
-        <input type="text" name="authorEmail" style="width: 390px;" value="<?php print $newsData['authorEmail']; ?>" /><br />
+            <p>
+                <label for="authorName"><?php print $PMF_LANG['ad_news_author_name']; ?></label>
+                <input type="text" name="authorName" style="width: 390px;" value="<?php print $newsData['authorName']; ?>" />
+            </p>
 
-        <label class="lefteditor" for="active"><?php print $PMF_LANG['ad_news_set_active']; ?></label>
-        <input type="checkbox" name="active" id="active" value="y"<?php if (isset($newsData['active']) && $newsData['active']) { print " checked"; } ?> /><?php print $PMF_LANG['ad_gen_yes']; ?><br />
+            <p>
+                <label for="authorEmail"><?php print $PMF_LANG['ad_news_author_email']; ?></label>
+                <input type="text" name="authorEmail" style="width: 390px;" value="<?php print $newsData['authorEmail']; ?>" />
+            </p>
 
-        <label class="lefteditor" for="comment"><?php print $PMF_LANG['ad_news_allowComments']; ?></label>
-        <input type="checkbox" name="comment" id="comment" value="y"<?php if (isset($newsData['allowComments']) && $newsData['allowComments']) { print " checked"; } ?> /><?php print $PMF_LANG['ad_gen_yes']; ?><br />
+            <p>
+                <label for="active"><?php print $PMF_LANG['ad_news_set_active']; ?></label>
+                <input type="checkbox" name="active" id="active" value="y"<?php if (isset($newsData['active']) && $newsData['active']) { print " checked"; } ?> /><?php print $PMF_LANG['ad_gen_yes']; ?>
+            </p>
 
-        <label class="lefteditor" for="link"><?php print $PMF_LANG['ad_news_link_url']; ?></label>
-        <input type="text" name="link" style="width: 390px;" value="<?php print $newsData['link']; ?>" /><br />
+            <p>
+                <label for="comment"><?php print $PMF_LANG['ad_news_allowComments']; ?></label>
+                <input type="checkbox" name="comment" id="comment" value="y"<?php if (isset($newsData['allowComments']) && $newsData['allowComments']) { print " checked"; } ?> /><?php print $PMF_LANG['ad_gen_yes']; ?>
+            </p>
 
-        <label class="lefteditor" for="linkTitle"><?php print $PMF_LANG['ad_news_link_title']; ?></label>
-        <input type="text" name="linkTitle" style="width: 390px;" value="<?php print $newsData['linkTitle']; ?>" /><br />
+            <p>
+                <label for="link"><?php print $PMF_LANG['ad_news_link_url']; ?></label>
+                <input type="text" name="link" style="width: 390px;" value="<?php print $newsData['link']; ?>" />
+            </p>
 
-        <label class="lefteditor" for="linkTarget"><?php print $PMF_LANG['ad_news_link_target']; ?></label>
-        <input type="radio" name="target" value="blank" <?php if ('blank' == $newsData['target']) { ?> checked="checked"<?php } ?> /><?php print $PMF_LANG['ad_news_link_window'] ?>
-        <input type="radio" name="target" value="self" <?php if ('self' == $newsData['target']) { ?> checked="checked"<?php } ?> /><?php print $PMF_LANG['ad_news_link_faq'] ?>
-        <input type="radio" name="target" value="parent" <?php if ('parent' == $newsData['target']) { ?> checked="checked"<?php } ?> /><?php print $PMF_LANG['ad_news_link_parent'] ?><br />
-    </fieldset>
-    <fieldset>
-    <legend><?php print $PMF_LANG['ad_news_expiration_window']; ?></legend>
-        <label class="lefteditor" for="dateStart"><?php print $PMF_LANG['ad_news_from']; ?></label>
-        <input name="dateStart" id="dateStart" class="date-pick" />
-        <br />
-        <label class="lefteditor" for="dateEnd"><?php print $PMF_LANG['ad_news_to']; ?></label>
-        <input name="dateEnd" id="dateEnd" class="date-pick" />
-    </fieldset>
-    <br />
-    <input class="submit" type="submit" value="<?php print $PMF_LANG['ad_news_edit']; ?>" />
-    <input class="submit" type="reset" value="<?php print $PMF_LANG['ad_gen_reset']; ?>" />
-    </form>
+            <p>
+                <label for="linkTitle"><?php print $PMF_LANG['ad_news_link_title']; ?></label>
+                <input type="text" name="linkTitle" style="width: 390px;" value="<?php print $newsData['linkTitle']; ?>" />
+            </p>
+
+            <p>
+                <label for="linkTarget"><?php print $PMF_LANG['ad_news_link_target']; ?></label>
+                <input type="radio" name="target" value="blank" <?php if ('blank' == $newsData['target']) { ?> checked="checked"<?php } ?> /><?php print $PMF_LANG['ad_news_link_window'] ?>
+                <input type="radio" name="target" value="self" <?php if ('self' == $newsData['target']) { ?> checked="checked"<?php } ?> /><?php print $PMF_LANG['ad_news_link_faq'] ?>
+                <input type="radio" name="target" value="parent" <?php if ('parent' == $newsData['target']) { ?> checked="checked"<?php } ?> /><?php print $PMF_LANG['ad_news_link_parent'] ?>
+            </p>
+            <p>
+                <label for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
+                <?php print PMF_Language::selectLanguages($newsData['lang'], false, array(), 'langTo'); ?>
+            </p>
+        </fieldset>
+            
+        <fieldset>
+            <legend><?php print $PMF_LANG['ad_news_expiration_window']; ?></legend>
+            <p>
+                <label for="dateStart"><?php print $PMF_LANG['ad_news_from']; ?></label>
+                <input name="dateStart" id="dateStart" class="date-pick" />
+            </p>
+
+            <p>
+                <label for="dateEnd"><?php print $PMF_LANG['ad_news_to']; ?></label>
+                <input name="dateEnd" id="dateEnd" class="date-pick" />
+            </p>
+        </fieldset>
+
+        <p>
+            <input class="submit" type="submit" value="<?php print $PMF_LANG['ad_news_edit']; ?>" />
+            <input class="submit" type="reset" value="<?php print $PMF_LANG['ad_gen_reset']; ?>" />
+        </p>
+        </form>
 <?php
     $newsId   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $oComment = new PMF_Comment();
@@ -185,18 +255,19 @@ if ('addnews' == $action && $permission["addnews"]) {
 
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING, '00000000000000');
     $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING, '99991231235959');
-    $header    = PMF_Filter::filterInput(INPUT_POST, 'header', FILTER_SANITIZE_STRIPPED);
-    $content   = PMF_Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_SPECIAL_CHARS);
+    $header    = PMF_Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_STRIPPED);
+    $content   = PMF_Filter::filterInput(INPUT_POST, 'news', FILTER_SANITIZE_SPECIAL_CHARS);
     $author    = PMF_Filter::filterInput(INPUT_POST, 'authorName', FILTER_SANITIZE_STRIPPED);
     $email     = PMF_Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
     $active    = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
     $comment   = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
     $link      = PMF_Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
     $linktitle = PMF_Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_STRIPPED);
+    $newslang  = PMF_Filter::filterInput(INPUT_POST, 'langTo', FILTER_SANITIZE_STRING);
     $target    = PMF_Filter::filterInput(INPUT_POST, 'target', FILTER_SANITIZE_STRIPPED);
     
     $newsData = array(
-        'lang'          => $LANGCODE,
+        'lang'          => $newslang,
         'header'        => $header,
         'content'       => html_entity_decode($content),
         'authorName'    => $author,
@@ -219,18 +290,19 @@ if ('addnews' == $action && $permission["addnews"]) {
 
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING, '00000000000000');
     $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING, '99991231235959');
-    $header    = PMF_Filter::filterInput(INPUT_POST, 'header', FILTER_SANITIZE_STRIPPED);
-    $content   = PMF_Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_SPECIAL_CHARS);
+    $header    = PMF_Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_STRIPPED);
+    $content   = PMF_Filter::filterInput(INPUT_POST, 'news', FILTER_SANITIZE_SPECIAL_CHARS);
     $author    = PMF_Filter::filterInput(INPUT_POST, 'authorName', FILTER_SANITIZE_STRIPPED);
     $email     = PMF_Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
     $active    = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
     $comment   = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
     $link      = PMF_Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
     $linktitle = PMF_Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_STRIPPED);
+    $newslang  = PMF_Filter::filterInput(INPUT_POST, 'langTo', FILTER_SANITIZE_STRING);
     $target    = PMF_Filter::filterInput(INPUT_POST, 'target', FILTER_SANITIZE_STRIPPED);
     
     $newsData = array(
-        'lang'          => $LANGCODE,
+        'lang'          => $newslang,
         'header'        => $header,
         'content'       => html_entity_decode($content),
         'authorName'    => $author,

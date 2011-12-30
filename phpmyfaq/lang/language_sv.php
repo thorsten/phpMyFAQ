@@ -130,7 +130,7 @@ $PMF_LANG['err_SaveComment'] = 'Nödvändiga fält är <strong>ditt namn</strong
 $PMF_LANG['err_VoteTooMuch'] = '<p>Vi räknar inte dubbla röster.<a href="nojavascript...history.back();">Klicka här</a> för att gå tillbaka.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>Du röstade inte på frågan!</strong> <a href="nojavascript...history.back();">Klicka här</a>, för att rösta.</p>';
 $PMF_LANG['err_noMailAdress'] = 'Din epostadress är inte korrekt.<br /><a href="nojavascript...history.back();">Backa</a>';
-$PMF_LANG['err_sendMail'] = 'Nödvändiga fält är <strong>ditt namn</strong>, <strong>din epostadress</strong> och <strong>din fråga</strong>!<br><br>\n<a href="nojavascript...history.back();">Backa</a><br><br>\n';
+$PMF_LANG['err_sendMail'] = 'Nödvändiga fält är <strong>ditt namn</strong>, <strong>din epostadress</strong> och <strong>din fråga</strong>!';
 $PMF_LANG['help_search'] = '<p><strong>Sök efter inlägg:</strong><br />Med ett innehåll likt: <strong style="color: Red;">ord1 ord2</strong> du kan göra en relevanssökning (i fallande ordning), med två eller fler sökkriterier.</p><p><strong>Obs:</strong> Ditt sökkriterium måste vara minst 4 tecken långt.</p>';
 $PMF_LANG['ad'] = 'Administrationsdel';
 $PMF_LANG['ad_menu_user_administration'] = 'Administrera användare';

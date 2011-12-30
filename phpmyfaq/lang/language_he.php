@@ -159,7 +159,7 @@ $PMF_LANG["err_SaveComment"] = "השדות הנחוצים הם <strong>שמך</s
 $PMF_LANG["err_VoteTooMuch"] = "<p>איננו סופרים הצבעות כפולות. <a href=\"javascript:history.back();\">לחץ כאן</a>, כדי לחזור לעמוד הקודם.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>לא דרגת את השאלה!</strong> <a href=\"javascript:history.back();\">אנא לחץ כאן</a>, להצבעה.</p>";
 $PMF_LANG["err_noMailAdress"] = "כתובת האימייל אינה נכונה.<br /><a href=\"javascript:history.back();\">חזור</a>";
-$PMF_LANG["err_sendMail"] = "שדות נחוצים <strong>שם פרטי</strong>, <strong>כתובת אמייל</strong>ו<strong>שאלתך</strong>!<br /><br /><a href=\"javascript:history.back();\">הקודם </a><br /><br />";
+$PMF_LANG["err_sendMail"] = "שדות נחוצים <strong>שם פרטי</strong>, <strong>כתובת אמייל</strong>ו<strong>שאלתך</strong>!";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>חפש ערכים:</strong><br />עם ערך כמו <strong style=\"color: Red;\">מילה 1 מילה 2</strong> הנך יכול לבצע חיפוש לשניים או יותר קריטריונים.</p><p><strong>הערה:</strong> קריטריוני החיפוש חייבים להכיל 4 סימנים או יותר.</p>";

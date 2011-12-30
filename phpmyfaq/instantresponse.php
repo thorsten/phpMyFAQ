@@ -41,7 +41,6 @@ $tpl->processTemplate(
         'searchString'                  => $searchString,
         'writeSendAdress'               => '?'.$sids.'action=instantresponse',
         'ajaxlanguage'                  => $LANGCODE,
-        'msgSearchWord'                 => $PMF_LANG['msgSearchWord'],
         'printInstantResponse'          => $printInstantResponse));
 
 $tpl->includeTemplate('writeContent', 'index');

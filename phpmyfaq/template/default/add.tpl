@@ -1,37 +1,62 @@
 <h2>{msgNewContentHeader}</h2>
             
             <p>{msgNewContentAddon}</p>
-            <form action="{writeSendAdress}" method="post" style="display: inline">
-                <fieldset>
-                <legend>{msgNewContentHeader}</legend>
+            <form id="formValues" action="#" method="post">
+                <input type="hidden" name="lang" id="lang" value="{lang}" />
                 
-                <label for="username">{msgNewContentName}</label><br>
-                <input type="text" name="username" id="username" value="{defaultContentName}" size="37" required="true"><br>
-                
-                <label for="usermail">{msgNewContentMail}</label><br>
-                <input type="email" name="usermail" id="usermail" value="{defaultContentMail}" size="37" required="true"><br>
+                <p>
+                    <label for="name">{msgNewContentName}</label>
+                    <input type="text" name="name" id="name" value="{defaultContentName}" size="37" required="required" />
+                </p>
 
-                <label for="rubrik">{msgNewContentCategory}</label><br>
-                <select name="rubrik[]" id="rubrik" multiple="multiple" size="3" required="true">
+                <p>
+                <label for="email">{msgNewContentMail}</label>
+                <input type="email" name="email" id="email" value="{defaultContentMail}" size="37" required="required" />
+
+                <p>
+                <label for="rubrik">{msgNewContentCategory}</label>
+                <select name="rubrik[]" id="rubrik" multiple="multiple" size="5" required="required" />
                 {printCategoryOptions}
-                </select><br>
+                </select>
+                </p>
 
-                <label for="thema">{msgNewContentTheme}</label><br>
-                <textarea cols="37" rows="3" name="thema" id="thema" required="true">{printQuestion}</textarea><br>
+                <p>
+                <label for="question">{msgNewContentTheme}</label>
+                <textarea cols="37" rows="3" name="question" id="question" required="required" />{printQuestion}</textarea>
+                </p>
 
-                <label for="content">{msgNewContentArticle}</label><br>
-                <textarea cols="37" rows="10" name="content" id="content" required="true"></textarea><br>
+                <p>
+                <label for="answer">{msgNewContentArticle}</label>
+                <textarea cols="37" rows="10" name="answer" id="answer" required="required" /></textarea>
+                </p>
 
-                <label for="keywords">{msgNewContentKeywords}</label><br>
-                <input type="text" name="keywords" id="keywords" size="37" /><br>
+                <p>
+                <label for="keywords">{msgNewContentKeywords}</label>
+                <input type="text" name="keywords" id="keywords" size="37" />
+                </p>
 
-                <label for="contentlink">{msgNewContentLink}</label><br>
-                <input type="url" name="contentlink" id="contentlink" size="37" value="http://" /><br>
-                </fieldset>
+                <p>
+                <label for="contentlink">{msgNewContentLink}</label>
+                <input type="url" name="contentlink" id="contentlink" size="37" value="http://" />
+                </p>
 
+                <p>
                 {captchaFieldset}
+                </p>
 
-                <div style="text-align:center;">
-                    <input class="submit" type="submit" name="submit" value="{msgNewContentSubmit}" />
-                </div>
+                <p>
+                    <input class="submit" type="submit" id="submitfaq" value="{msgNewContentSubmit}" />
+                </p>
             </form>
+
+            <div id="loader"></div>
+            <div id="faqs"></div>
+
+            <script type="text/javascript" >
+            $(function() {
+                $('#submitfaq').click(function() {
+                    saveFormValues('savefaq', 'faq');
+                });
+                $('form#formValues').submit(function() { return false; });
+            });
+            </script>

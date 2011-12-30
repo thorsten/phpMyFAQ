@@ -18,7 +18,7 @@
  * @package   PMF_Date
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-24
@@ -35,7 +35,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_Date
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-24
@@ -84,7 +84,7 @@ class PMF_Date
             $rfc822TZ = 'GMT';
         }
         
-        return self::createIsoDate($date, 'D, d M Y H:i:s', $pmfFormat) . ' ' . $rfc822TZ;
+        return self::createIsoDate($date, DATE_RFC822, $pmfFormat) . ' ' . $rfc822TZ;
     }
 
     /**
@@ -105,7 +105,7 @@ class PMF_Date
             $iso8601TZD = 'Z';
         }
         
-        return self::createIsoDate($date, 'Y-m-d\TH:i:s', $pmfFormat) . $iso8601TZD;
+        return self::createIsoDate($date, DATE_ISO8601, $pmfFormat) . $iso8601TZD;
     }
     
     /**

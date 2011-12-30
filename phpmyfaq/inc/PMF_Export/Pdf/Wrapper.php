@@ -20,7 +20,7 @@
  * @author    Peter Beauvain <pbeauvain@web.de>
  * @author    Olivier Plathey <olivier@fpdf.org>
  * @author    Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
- * @copyright 2004-2009 phpMyFAQ Team
+ * @copyright 2004-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-11-21
@@ -457,7 +457,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
         if ($this->enableBookmarks == false) {
             $this->SetY(-15);
             $this->SetFont('arialunicid0', '', 8);
-            $baseUrl = '/index.php';
+            $baseUrl = 'index.php';
             if (is_array($this->faq) && !empty($this->faq)) {
                 $baseUrl .= '?action=artikel&amp;';
                 if (isset($this->category->id)) {
@@ -468,8 +468,13 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
                 $baseUrl .= '&amp;id='.$this->faq['id'];
                 $baseUrl .= '&amp;artlang='.$this->faq['lang'];
             }
+<<<<<<< HEAD
             $url               = $faqconfig->get('main.referenceURL') . $baseUrl;
             $urlObj            = new PMF_Link($url);
+=======
+            $url = PMF_Link::getSystemUri('pdf.php').$baseUrl;
+            $urlObj = new PMF_Link($url);
+>>>>>>> 3c9295794d076bc80af3ee7a7c81d79b94d916fe
             $urlObj->itemTitle = $this->question;
             $_url              = str_replace('&amp;', '&', $urlObj->toString());
             $this->Cell(0, 10, 'URL: '.$_url, 0, 1, 'C', 0, $_url);

@@ -17,7 +17,7 @@
  * @category  phpMyFAQ 
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
@@ -48,21 +48,21 @@ if ($permission['delquestion']) {
             }
         }
 
-        printf("<h2>%s</h2>", $PMF_LANG['msgOpenQuestions']);
+        printf("<header><h2>%s</h2></header>", $PMF_LANG['msgOpenQuestions']);
 
         $openQuestions = $faqQuestions->fetchAll();
         if (count($openQuestions) > 0) {
 ?>
-    <table id="tableOpenQuestions">
-    <thead>
-        <tr>
-            <th><?php print $PMF_LANG['ad_entry_author']; ?></th>
-            <th><?php print $PMF_LANG['ad_entry_theme']; ?></th>
-            <th><?php print $PMF_LANG['ad_entry_visibility']; ?>?</th>
-            <th><?php print $PMF_LANG['ad_gen_delete']; ?>?</th>
-        </tr>
-    </thead>
-    <tbody>
+        <table class="list" style="width: 100%">
+        <thead>
+            <tr>
+                <th><?php print $PMF_LANG['ad_entry_author']; ?></th>
+                <th><?php print $PMF_LANG['ad_entry_theme']; ?></th>
+                <th><?php print $PMF_LANG['ad_entry_visibility']; ?>?</th>
+                <th><?php print $PMF_LANG['ad_gen_delete']; ?>?</th>
+            </tr>
+        </thead>
+        <tbody>
 <?php
             foreach ($openQuestions as $question) {
 ?>
@@ -89,8 +89,8 @@ if ($permission['delquestion']) {
 <?php
             }
 ?>
-    </tbody>
-    </table>
+        </tbody>
+        </table>
 <?php
         } else {
             print $PMF_LANG['msgNoQuestionsAvailable'];

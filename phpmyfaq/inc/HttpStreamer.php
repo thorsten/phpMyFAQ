@@ -199,6 +199,11 @@ class PMF_HttpStreamer
                 $description = "phpMyFaq XML export file";
                 $mimeType    = "text/xml";
                 break;
+            case 'csv':
+                $filename    = "phpmyfaq.csv";
+                $description = "phpMyFaq CSV export file";
+                $mimeType    = "text/csv";
+                break;
             // In this case no default statement is required:
             // the one above is just for clean coding style
             default:

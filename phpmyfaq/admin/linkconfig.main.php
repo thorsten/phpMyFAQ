@@ -22,7 +22,7 @@
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @todo      Move all queries and functions into the class PMF_Linkverifier
- * @copyright 2005-2010 NetJapan, Inc. and phpMyFAQ Team
+ * @copyright 2005-2011 NetJapan, Inc. and phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-07
@@ -105,8 +105,8 @@ function showListTypeSelection()
 {
     global $params, $PMF_LANG;
 ?>
-    <table class="linkconfig" id="typeselection">
-    <tr>
+        <p>
+        <ul>
     <?php
         $_description = '';
         foreach (array('WARN' => 'ad_linkcheck_config_warnlist',
@@ -115,18 +115,16 @@ function showListTypeSelection()
                 $_description = $PMF_LANG[$_name.'_description'];
             }
             ?>
-        <td class="spacer">&nbsp;</td>
-        <td class="<?php print ($params['type'] == $_type ? 'selected' : 'selectable'); ?>">
-            <a href="<?php print issueURL(array('type' => $_type, 'page' => 1)); ?>">
-                <?php print $PMF_LANG[$_name]; ?>
-            </a>
-        </td>
+            <li class="<?php print ($params['type'] == $_type ? 'selected' : 'selectable'); ?>">
+                <a href="<?php print issueURL(array('type' => $_type, 'page' => 1)); ?>">
+                    <?php print $PMF_LANG[$_name]; ?>
+                </a>
+            </li>
         <?php
             }
     ?>
-        <td class="spacer">&nbsp;</td>
-    </tr>
-    </table>
+        </ul>
+        </p>
 <?php
     print $_description;
 }
@@ -135,7 +133,9 @@ function showListTypeSelection()
 enumScriptParameters();
 
 ?>
-<h2><?php print $PMF_LANG['ad_linkcheck_config_title']; ?></h2>
+        <header>
+            <h2><?php print $PMF_LANG['ad_linkcheck_config_title']; ?></h2>
+        </header>
 <?php
 $linkverifier = new PMF_Linkverifier($user->getLogin());
 if ($linkverifier->isReady() == false) {
@@ -284,22 +284,21 @@ showListTypeSelection();
     $result = $db->query($query);
 
 ?>
-<form method="post" action="<?php print issueURL(); ?>">
-<table class="linkconfig" id="configuration">
-    <tr>
-<?php
-    foreach (array("id", "url", "reason", "owner") as $_key) {
-        ?>
-        <th class="<?php print ($params['sortby'] == $_key ? 'selected' : 'selectable'); ?>">
-        <a href="<?php print issueURL(array('sortby' => $_key, 'sortorder' => (($params['sortby'] == $_key) && ($params['sortorder'] == 'DESC') ? 'ASC' : 'DESC'))); ?>">
-            <?php print $PMF_LANG['ad_linkcheck_config_th_'.$_key]; ?>
-        </a></th>
-    <?php
-        }
-    ?>
-        <th><?php print $PMF_LANG["ad_gen_delete"]; ?></th>
-    </tr>
-
+        <form method="post" action="<?php print issueURL(); ?>">
+        <table class="list" id="configuration" style="width: 100%">
+            <thead>
+            <tr>
+                <?php foreach (array("id", "url", "reason", "owner") as $_key): ?>
+                <th class="<?php print ($params['sortby'] == $_key ? 'selected' : 'selectable'); ?>">
+                    <a href="<?php print issueURL(array('sortby' => $_key, 'sortorder' => (($params['sortby'] == $_key) && ($params['sortorder'] == 'DESC') ? 'ASC' : 'DESC'))); ?>">
+                    <?php print $PMF_LANG['ad_linkcheck_config_th_'.$_key]; ?>
+                    </a>
+                </th>
+                <?php endforeach; ?>
+            <th><?php print $PMF_LANG["ad_gen_delete"]; ?></th>
+            </tr>
+            </thead>
+            <tbody>
     <?php
         $id = 0;
         $icurrent = 0;
@@ -308,91 +307,98 @@ showListTypeSelection();
         while ($row = $db->fetchObject($result) && $iend >= $icurrent && $istart <= $icurrent++) {
             $_owner = ($row->owner == $user->getLogin() ? true : false);
     ?>
-    <tr>
-        <!-- ID and Enable/Disable -->
-        <input type="hidden" name="id[<?php print $id; ?>]" value="<?php print $row->id; ?>">
-        <td><input type="checkbox" name="enabled[<?php print $id; ?>]" value="y" <?php print ($row->enabled == 'y' ? 'checked' : ''); ?> title="<?php print $PMF_LANG['ad_linkcheck_config_th_enabled']; ?>" <?php print ($_owner ? '' : 'disabled'); ?> >
-        #<?php print $row->id; ?></td>
+            <tr>
+                <!-- ID and Enable/Disable -->
+                <input type="hidden" name="id[<?php print $id; ?>]" value="<?php print $row->id; ?>">
+                <td><input type="checkbox" name="enabled[<?php print $id; ?>]" value="y" <?php print ($row->enabled == 'y' ? 'checked' : ''); ?> title="<?php print $PMF_LANG['ad_linkcheck_config_th_enabled']; ?>" <?php print ($_owner ? '' : 'disabled'); ?> >
+                #<?php print $row->id; ?></td>
 
-        <!-- URL to match -->
-        <td><input type="text" name="url[<?php print $id; ?>]"  value="<?php print PMF_String::htmlspecialchars($row->url); ?>"  <?php print ($_owner ? '' : 'disabled'); ?>  ></td>
+                <!-- URL to match -->
+                <td><input type="text" name="url[<?php print $id; ?>]"  value="<?php print PMF_String::htmlspecialchars($row->url); ?>"  <?php print ($_owner ? '' : 'disabled'); ?>  ></td>
 
-        <!-- Reason to warn/ignore -->
-        <td><input type="text" name="reason[<?php print $id; ?>]" value="<?php print PMF_String::htmlspecialchars($row->reason); ?>"  <?php print ($_owner ? '' : 'disabled'); ?>  ></td>
+                <!-- Reason to warn/ignore -->
+                <td><input type="text" name="reason[<?php print $id; ?>]" value="<?php print PMF_String::htmlspecialchars($row->reason); ?>"  <?php print ($_owner ? '' : 'disabled'); ?>  ></td>
 
-        <!-- Lock entry / chown entry -->
-        <td>
-        <?php
-            if ($row->locked == 'y') {
-                if ($_owner || $_admin) { ?>
-                    <input type="checkbox" name="locked[<?php print $id; ?>]" value="y" checked title="<?php print $PMF_LANG['ad_linkcheck_config_th_locked']; ?>">
+                <!-- Lock entry / chown entry -->
+                <td>
+                <?php
+                if ($row->locked == 'y') {
+                    if ($_owner || $_admin) { ?>
+                        <input type="checkbox" name="locked[<?php print $id; ?>]" value="y" checked title="<?php print $PMF_LANG['ad_linkcheck_config_th_locked']; ?>">
+                    <?php } ?>
+                    <img src="images/locked.png" />
+                <?php } else { ?>
+                    <input type="checkbox" name="<?php print ($_owner ? 'locked' : 'chown').'['.$id.']'; ?>" value="y" title="<?php print ($_owner ? $PMF_LANG['ad_linkcheck_config_th_locked'] : $PMF_LANG['ad_linkcheck_config_th_chown']); ?>">
+                    <img src="images/<?php print ($_owner ? 'locked.png' : 'chown.png'); ?>" />
                 <?php } ?>
-                <img src="images/locked.png" />
-            <?php } else { ?>
-                <input type="checkbox" name="<?php print ($_owner ? 'locked' : 'chown').'['.$id.']'; ?>" value="y" title="<?php print ($_owner ? $PMF_LANG['ad_linkcheck_config_th_locked'] : $PMF_LANG['ad_linkcheck_config_th_chown']); ?>">
-                <img src="images/<?php print ($_owner ? 'locked.png' : 'chown.png'); ?>" />
-            <?php } ?>
-        <?php print $row->owner; ?></td>
+                <?php print $row->owner; ?></td>
 
-        <?php if ($_owner && ($row->locked == 'n')) { ?>
-        <!-- Delete Entry -->
-        <td><input type="checkbox" value="y" name="delete[<?php print $id; ?>]" /></td>
-        <?php } ?>
-    </tr>
+                <?php if ($_owner && ($row->locked == 'n')) { ?>
+                <!-- Delete Entry -->
+                <td><input type="checkbox" value="y" name="delete[<?php print $id; ?>]" /></td>
+                <?php } ?>
+            </tr>
 
-    <?php
-	    $id++;
+        <?php
+        $id++;
         }
 
         for ($i = 0; $i < 3; $i++) {
             ?>
-    <tr>
-        <input type="hidden" name="id[<?php print $id; ?>]" value="NEW" />
-        <td>NEW</td>
-        <td><input type="text" name="url[<?php print $id; ?>]" value="" /></td>
-        <td><input type="text" name="reason[<?php print $id; ?>]" value="" /></td>
-        <td><?php print($user->getLogin()); ?></td>
-        <td>&nbsp;</td>
-    </tr>
+            <tr>
+                <input type="hidden" name="id[<?php print $id; ?>]" value="NEW" />
+                <td>NEW</td>
+                <td><input type="text" name="url[<?php print $id; ?>]" value="" /></td>
+                <td><input type="text" name="reason[<?php print $id; ?>]" value="" /></td>
+                <td><?php print($user->getLogin()); ?></td>
+                <td>&nbsp;</td>
+            </tr>
     <?php
         $id++;
         }
 
         // Handle submission and page listing
     ?>
-    <tr id="lastrow">
-        <td><input type="hidden" name="rowcount" value="<?php print $id; ?>"><input class="submit" type="submit" value="<?php print $PMF_LANG["ad_gen_save"]; ?>" name="submit"></td>
-        <td colspan="4"><?php print $PMF_LANG["ad_gen_page"].' '.$page.(($pages > 0 )? ' '.$PMF_LANG["ad_gen_of"].' '.$pages : ''); ?>
-<?php
-            if ($page > 1){
-                print sprintf(
-                        ' | <a href="%s">%s</a>',
-                        issueURL(array('page' => $page - 1)),
-                        $PMF_LANG['ad_gen_lastpage']
-                        );
-            }
-            for ($i = 1; $i <= $pages; $i++) {
-                print ($i == 1 ? ' | ' : ', ');
-                if ($i != $page) {
-                    print sprintf(
-                        '<a href="%s">%s</a>',
-                        issueURL(array('page' => $i)),
-                        $i
-                        );
-                } else {
-                    print $i;
-                }
-            }
+            </tbody>
+            <tfoot>
+            <tr>
+                <td>
+                    <input type="hidden" name="rowcount" value="<?php print $id; ?>" />
+                    <input type="submit" value="<?php print $PMF_LANG["ad_gen_save"]; ?>" name="submit" />
+                </td>
+                <td colspan="4">
+                    <?php print $PMF_LANG["ad_gen_page"].' '.$page.(($pages > 0 )? ' '.$PMF_LANG["ad_gen_of"].' '.$pages : ''); ?>
+                    <?php
+                    if ($page > 1){
+                        print sprintf(
+                                ' | <a href="%s">%s</a>',
+                                issueURL(array('page' => $page - 1)),
+                                $PMF_LANG['ad_gen_lastpage']
+                                );
+                    }
+                    for ($i = 1; $i <= $pages; $i++) {
+                        print ($i == 1 ? ' | ' : ', ');
+                        if ($i != $page) {
+                            print sprintf(
+                                '<a href="%s">%s</a>',
+                                issueURL(array('page' => $i)),
+                                $i
+                                );
+                        } else {
+                            print $i;
+                        }
+                    }
 
-            if ($page < $pages) {
-                print sprintf(
-                        ' | <a href="%s">%s</a>',
-                        issueURL(array('page' => $page + 1)),
-                        $PMF_LANG['ad_gen_nextpage']
-                        );
-            }
-?>
-        </td>
-    </tr>
-</table>
-</form>
+                    if ($page < $pages) {
+                        print sprintf(
+                                ' | <a href="%s">%s</a>',
+                                issueURL(array('page' => $page + 1)),
+                                $PMF_LANG['ad_gen_nextpage']
+                                );
+                    }
+                    ?>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+        </form>

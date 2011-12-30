@@ -18,7 +18,7 @@
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Rudi Ferrari <bookcrossers@gmx.de>
- * @copyright 2006-2010 phpMyFAQ Team
+ * @copyright 2006-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-09-10
@@ -73,30 +73,31 @@ if ($permission["editcateg"]) {
 <?php
     if ($faqconfig->get('main.enableGoogleTranslation') === true) {
 ?>    
-        <input type="hidden" id="name" name="name" value="<?php print $categoryData->name; ?>" />
-        <input type="hidden" id="catlang" name="lang" value="<?php print $selected_lang; ?>" />
-        <input type="hidden" id="description" name="description" value="<?php print $categoryData->description; ?>" />
-        
-        <div id="editTranslations">
+
+            <input type="hidden" id="name" name="name" value="<?php print $categoryData->name; ?>" />
+            <input type="hidden" id="catlang" name="lang" value="<?php print $selected_lang; ?>" />
+            <input type="hidden" id="description" name="description" value="<?php print $categoryData->description; ?>" />
+
+            <div id="editTranslations">
             <?php
             if ($faqconfig->get('main.googleTranslationKey') == '') {
                 print $PMF_LANG["msgNoGoogleApiKeyFound"];
             } else {
-            ?>        
-            <label class="left" for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
-            <?php print PMF_Language::selectLanguages($faqData['lang'], false, array(), 'langTo'); ?>
-            <br />
+            ?>
+            <p>
+                <label for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
+                <?php print PMF_Language::selectLanguages($faqData['lang'], false, array(), 'langTo'); ?>
+            </p>
             <input type="hidden" name="used_translated_languages" id="used_translated_languages" value="" />
             <div id="getedTranslations">
             </div>
             <?php
             }
             ?>
-        </div>
-        <br />
+            </div>
 <?php
     } else {
-?>           
+?>
         <label class="left"><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
         <input type="text" name="name" size="30" style="width: 250px;" value="" /><br />
 
@@ -128,8 +129,7 @@ if ($permission["editcateg"]) {
             $category->name);
     }
 ?>
-    </fieldset>
-    </form>
+        </form>
 <?php 
     if ($faqconfig->get('main.enableGoogleTranslation') === true) {
 ?>        

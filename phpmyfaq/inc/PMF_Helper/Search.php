@@ -164,8 +164,8 @@ class PMF_Helper_Search extends PMF_Helper
      */
     public function renderOpenSearchLink()
     {
-        return sprintf('<a class="searchplugin" href="#" onclick="window.external.AddSearchProvider(\'%s/opensearch.php\');">%s</a>',
-            PMF_Link::getSystemUri('/index.php'),
+        return sprintf('<a class="searchplugin" href="#" onclick="window.external.AddSearchProvider(\'%s\'); return false;">%s</a>',
+            PMF_Link::getSystemUri('/index.php') . '/opensearch.php',
             $this->translation['opensearch_plugin_install']);
     }
     

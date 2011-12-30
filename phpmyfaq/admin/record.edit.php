@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-23
@@ -66,7 +66,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
             $url_variables = 'insertentry';
         }
         
-        $faqData['lang']  = PMF_Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
+        $faqData['lang']  = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
         $current_category = isset($_POST['rubrik']) ? $_POST['rubrik'] : null;
         if (is_array($current_category)) {
             $categoryRelations->setLanguage($faqData['lang']);
@@ -91,7 +91,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     } elseif ($action == 'editentry') {
 
         $id   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        $lang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
+        $lang = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
         if ((!isset($current_category) && !isset($faqData['title'])) || !is_null($id)) {
             $logging = new PMF_Logging();
             $logging->logAdmin($user, 'Beitragedit, ' . $id);
@@ -117,7 +117,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     } elseif ($action == 'copyentry') {
 
         $faqData['id']   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
+        $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
         $faq->language   = $faqData['lang'];
         
         foreach ($categoryRelations->fetchAll() as $relation) {
@@ -167,14 +167,14 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
         $restricted_groups = true;
     }
 
-    print '<h2>'.$PMF_LANG["ad_entry_edit_1"];
+    print '<header><h2>'.$PMF_LANG["ad_entry_edit_1"];
     if ($faqData['id'] != 0 && $action != 'copyentry') {
         printf(' <span style="color: Red;">%d (%s 1.%d) </span> ',
             $faqData['id'],
             $PMF_LANG['ad_entry_revision'],
             $revisionid_selected);
     }
-    print ' '.$PMF_LANG["ad_entry_edit_2"].'</h2>';
+    print ' '.$PMF_LANG["ad_entry_edit_2"].'</h2></header>';
 
     if ($permission["changebtrevs"]){
 
@@ -182,18 +182,23 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
         if (count($revisions)) {
 ?>
 
-    <form id="selectRevision" name="selectRevision" action="?action=editentry&amp;id=<?php print $faqData['id']; ?>&amp;artlang=<?php print $faqData['lang']; ?>" method="post">
-    <fieldset>
-    <legend><?php print $PMF_LANG['ad_changerev']; ?></legend>
-        <select name="revisionid_selected" onchange="selectRevision.submit();">
-            <option value="<?php print $faqData['revision_id']; ?>"><?php print $PMF_LANG['ad_changerev']; ?></option>
+        <form id="selectRevision" name="selectRevision" action="?action=editentry&amp;id=<?php print $faqData['id']; ?>&amp;lang=<?php print $faqData['lang']; ?>" method="post">
+        <fieldset>
+            <p>
+                <legend><?php print $PMF_LANG['ad_changerev']; ?></legend>
+                <select name="revisionid_selected" onchange="selectRevision.submit();">
+                    <option value="<?php print $faqData['revision_id']; ?>">
+                        <?php print $PMF_LANG['ad_changerev']; ?>
+                    </option>
 <?php foreach ($revisions as $_revision_id => $_revision_data) { ?>
-            <option value="<?php print $_revision_data['revision_id']; ?>" <?php if ($revisionid_selected == $_revision_data['revision_id']) { print 'selected="selected"'; } ?> ><?php print $PMF_LANG['ad_entry_revision'].' 1.'.$_revision_data['revision_id'].': '.PMF_Date::createIsoDate($_revision_data['datum'])." - ".$_revision_data['author']; ?></option>
+                    <option value="<?php print $_revision_data['revision_id']; ?>" <?php if ($revisionid_selected == $_revision_data['revision_id']) { print 'selected="selected"'; } ?> >
+                        <?php print $PMF_LANG['ad_entry_revision'].' 1.'.$_revision_data['revision_id'].': '.PMF_Date::createIsoDate($_revision_data['datum'])." - ".$_revision_data['author']; ?>
+                    </option>
 <?php } ?>
-        </select>
-    </fieldset>
-    </form>
-    <br />
+                </select>
+            </p>
+        </fieldset>
+        </form>
 <?php
         }
 
@@ -211,94 +216,120 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     $categoryData   = new PMF_Category_Tree_DataProvider_SingleQuery($LANGCODE);
     $categoryLayout = new PMF_Category_Layout(new PMF_Category_Tree_Helper(new PMF_Category_Tree($categoryData)));
 ?>
+        <form action="?action=<?php print $url_variables; ?>" method="post">
+            <input type="hidden" name="revision_id" id="revision_id" value="<?php print $faqData['revision_id']; ?>" />
+            <input type="hidden" name="record_id" id="record_id" value="<?php print $faqData['id']; ?>" />
+            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
 
-    <form id="faqEditor" style="float: left;" action="?action=<?php print $url_variables; ?>" method="post">
-    <input type="hidden" name="revision_id" id="revision_id" value="<?php print $faqData['revision_id']; ?>" />
-    <input type="hidden" name="record_id" id="record_id" value="<?php print $faqData['id']; ?>" />
-    <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
+            <fieldset>
+                <legend><?php print $PMF_LANG['ad_entry_faq_record']; ?></legend>
 
-    <fieldset class="fullwidth">
-    <legend><?php print $PMF_LANG['ad_entry_faq_record']; ?></legend>
+                <p>
+                    <label for="rubrik"><?php print $PMF_LANG["ad_entry_category"]; ?></label>
+                    <select name="rubrik[]" id="rubrik" size="5" multiple="multiple">
+                        <?php print $categoryLayout->renderOptions($categories); ?>
+                    </select>
+                </p>
 
-    <label class="lefteditor" for="rubrik"><?php print $PMF_LANG["ad_entry_category"]; ?></label>
-    <select name="rubrik[]" id="rubrik" size="5" multiple="multiple">
-    <?php print $categoryLayout->renderOptions($categories); ?>
-    </select><br />
+                <p>
+                    <label for="question"><?php print $PMF_LANG["ad_entry_theme"]; ?></label>
+                    <input type="text" name="question" id="question" maxlength="255"
+                           style="width: 536px; height: 30px; font-size: 24px;"
+                           value="<?php if (isset($faqData['title'])) { print PMF_String::htmlspecialchars($faqData['title']); } ?>" />
+                </p>
 
-    <label for="thema"><?php print $PMF_LANG["ad_entry_theme"]; ?></label>
-    <input name="thema" id="thema" style="width: 720px; height: 30px; font-size: 24px;" value="<?php if (isset($faqData['title'])) { print PMF_String::htmlspecialchars($faqData['title']); } ?>" maxlength="255" /><br />
-
-    <label for="content"><?php print $PMF_LANG["ad_entry_content"]; ?></label>
-    <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
-    <textarea id="content" name="content" cols="84" rows="16" style="width: 720px; height: 480px;">
-    <?php if (isset($faqData['content'])) { print trim(PMF_String::htmlentities($faqData['content'])); } ?>
-    </textarea><br />
-
+                <p>
+                    <label for="answer"><?php print $PMF_LANG["ad_entry_content"]; ?></label>
+                </p>
+                <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
+                <textarea id="answer" name="answer" cols="72" rows="16" style="width: 640px; height: 480px;">
+                <?php if (isset($faqData['content'])) { print trim(PMF_String::htmlentities($faqData['content'])); } ?>
+                </textarea>
 <?php
     if ($action == 'copyentry') {
-        $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
+        $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
     }
 
     if ($permission["addatt"]) {
+?>
+                <p>
+                    <label><?php print $PMF_LANG['ad_menu_attachments'] ?>:</label>
+<?php
         if (isset($faqData['id']) && $faqData['id'] != "") {
             $attList = PMF_Attachment_Factory::fetchByRecordId($faqData['id']);
             while (list(,$att) = each($attList)) {
                 print "<a href=\"../" . $att->buildUrl() . "\">" . $att->getFilename() . "</a>";
                 if ($permission["delatt"]) {
                     print "&nbsp;[&nbsp;<a href=\"?action=delatt&amp;" . "record_id=" . $faqData['id'] . "&amp;id=" . 
-                        $att->getId() . "&amp;artlang=" . $faqData['lang'] . "\">" . $PMF_LANG["ad_att_del"] . "</a>&nbsp;]";
+                        $att->getId() . "&amp;lang=" . $faqData['lang'] . "\">" . $PMF_LANG["ad_att_del"] . "</a>&nbsp;]";
                 }
                 print "<br />\n";
             }
-            print "<a href=\"#\" onclick=\"Picture('attachment.php?record_id=".$faqData['id']."&amp;record_lang=".$faqData['lang']."&amp;rubrik=".$current_category."', 'Attachment', 400,80)\">".$PMF_LANG["ad_att_add"]."</a>";
+            printf('<a href="javascript:void();" onclick="Picture(\'attachment.php?record_id=%d&amp;record_lang=%s&amp;rubrik=%d\', \'Attachment\', 400,80); return false;">%s</a>',
+                $faqData['id'],
+                $faqData['lang'],
+                $current_category,
+                $PMF_LANG['ad_att_add']
+                );
         } else {
-            print "&nbsp;".$PMF_LANG["ad_att_nope"];
+            printf("%s", $PMF_LANG['ad_att_nope']);
         }
-?><br />
-
+?>
+                </p>
 <?php
     }
 ?>
+                <p>
+                    <label for="keywords"><?php print $PMF_LANG["ad_entry_keywords"]; ?></label>
+                    <input type="text" name="keywords" id="keywords" style="width: 300px;" maxlength="255"
+                           value="<?php if (isset($faqData['keywords'])) { print PMF_String::htmlspecialchars($faqData['keywords']); } ?>" />
+                    <span id="keywordsHelp"></span>
+                </p>
 
-    <label class="lefteditor" for="keywords"><?php print $PMF_LANG["ad_entry_keywords"]; ?></label>
-    <input name="keywords" id="keywords" style="width: 390px;" value="<?php if (isset($faqData['keywords'])) { print PMF_String::htmlspecialchars($faqData['keywords']); } ?>" maxlength="255" /> <span id="keywordsHelp"></span><br />
+                <p>
+                    <label for="tags"><?php print $PMF_LANG['ad_entry_tags']; ?>:</label>
+                    <input type="text" name="tags" id="tags" style="width: 300px;" maxlength="255"
+                           value="<?php if (isset($tags)) { print PMF_String::htmlspecialchars($tags); } ?>" />
+                    <img style="display: none; margin-bottom: -5px;" id="tags_autocomplete_wait" src="images/indicator.gif" alt="waiting..." />
+                    <script type="text/javascript">
+                        $('#tags').autocomplete("index.php?action=ajax&ajax=tags_list", { width: 260, selectFirst: false, multiple: true } );
+                    </script><span id="tagsHelp"></span>
+                </p>
 
-    <label class="lefteditor" for="tags"><?php print $PMF_LANG['ad_entry_tags']; ?>:</label>
-    <input name="tags" id="tags" style="width: 390px;" value="<?php if (isset($tags)) { print PMF_String::htmlspecialchars($tags); } ?>" maxlength="255" /><img style="display: none; margin-bottom: -5px;" id="tags_autocomplete_wait" src="images/indicator.gif" alt="waiting..."></img>
-    <script type="text/javascript">
-        $('#tags').autocomplete("index.php?action=ajax&ajax=tags_list", { width: 260, selectFirst: false, multiple: true } );
-    </script><span id="tagsHelp"></span><br />
+                <p>
+                    <label for="author"><?php print $PMF_LANG["ad_entry_author"]; ?></label>
+                    <input type="text" name="author" id="author" style="width: 300px;"
+                           value="<?php if (isset($faqData['author'])) { print PMF_String::htmlspecialchars($faqData['author']); } else { print $user->getUserData('display_name'); } ?>" />
+                </p>
 
-    <label class="lefteditor" for="author"><?php print $PMF_LANG["ad_entry_author"]; ?></label>
-    <input name="author" id="author" style="width: 390px;" value="<?php if (isset($faqData['author'])) { print PMF_String::htmlspecialchars($faqData['author']); } else { print $user->getUserData('display_name'); } ?>" /><br />
+                <p>
+                    <label for="email"><?php print $PMF_LANG["ad_entry_email"]; ?></label>
+                    <input type="email" name="email" id="email" style="width: 300px;"
+                           value="<?php if (isset($faqData['email'])) { print PMF_String::htmlspecialchars($faqData['email']); } else { print $user->getUserData('email'); } ?>" />
+                </p>
 
-    <label class="lefteditor" for="email"><?php print $PMF_LANG["ad_entry_email"]; ?></label>
-    <input name="email" id="email" style="width: 390px;" value="<?php if (isset($faqData['email'])) { print PMF_String::htmlspecialchars($faqData['email']); } else { print $user->getUserData('email'); } ?>" /><br />
+            </fieldset>
 
-    </fieldset>
+            <fieldset>
+                <legend><?php print $PMF_LANG['ad_entry_record_administration']; ?></legend>
 
-    <fieldset class="fullwidth">
-    <legend><?php print $PMF_LANG['ad_entry_record_administration']; ?></legend>
-
-<?php
-    if ($faqconfig->get('main.enableGoogleTranslation') === true) {
-?>       
-    <input type="hidden" id="artlang" name="artlang" value="<?php print $faqData['lang']; ?>" />
-<?php
-    } else {
-?>           
-    <label class="left" for="artlang"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
-    <?php print PMF_Language::selectLanguages($faqData['lang'], false, array(), 'artlang'); ?><br />
-
-<?php
-    }
-?>           
-    <label class="left" for="solution_id"><?php print $PMF_LANG['ad_entry_solution_id']; ?>:</label>
-    <input name="solution_id" id="solution_id" style="width: 50px; text-align: right;" value="<?php print (isset($faqData['solution_id']) ? $faqData['solution_id'] : $faq->getSolutionId()); ?>" size="5" readonly="readonly" /><br />
-
-    <label class="left" for="active"><?php print $PMF_LANG["ad_entry_active"]; ?></label>
-<?php
-if($permission['approverec']):
+<?php if ($faqconfig->get('main.enableGoogleTranslation') === true): ?>
+                <input type="hidden" id="lang" name="lang" value="<?php print $faqData['lang']; ?>" />
+<?php else: ?>
+                <p>
+                    <label for="lang"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
+                    <?php print PMF_Language::selectLanguages($faqData['lang'], false, array(), 'lang'); ?>
+                </p>
+<?php endif; ?>
+                <p>
+                    <label for="solution_id"><?php print $PMF_LANG['ad_entry_solution_id']; ?>:</label>
+                    <input name="solution_id" id="solution_id" style="width: 50px; text-align: right;" size="5" readonly="readonly"
+                           value="<?php print (isset($faqData['solution_id']) ? $faqData['solution_id'] : $faq->getSolutionId()); ?>"  />
+                </p>
+                
+                <p>
+                    <label for="active"><?php print $PMF_LANG["ad_entry_active"]; ?></label>
+<?php if($permission['approverec']):
     if (isset($faqData['active']) && $faqData['active'] == 'yes') {
         $suf = ' checked="checked"';
         $sul = null;
@@ -310,14 +341,20 @@ if($permission['approverec']):
         $sul = ' checked="checked"';
     }
 ?>
-    <input type="radio" id="active" name="active" class="active" value="yes"<?php if (isset($suf)) { print $suf; } ?> /> <?php print $PMF_LANG['ad_gen_yes']; ?> <input type="radio" name="active" class="active" value="no"<?php if (isset($sul)) { print $sul; } ?> /> <?php print $PMF_LANG['ad_gen_no']; ?><br />
+                    <input type="radio" id="active" name="active" class="active" value="yes"<?php if (isset($suf)) { print $suf; } ?> />
+                    <?php print $PMF_LANG['ad_gen_yes']; ?>
+                    <input type="radio" name="active" class="active" value="no"<?php if (isset($sul)) { print $sul; } ?> />
+                    <?php print $PMF_LANG['ad_gen_no']; ?>
 <?php else: ?>
-    <input type="radio" name="active" class="active" value="no" checked="checked" /> <?php print $PMF_LANG['ad_gen_no']; ?><br />
+                    <input type="radio" name="active" class="active" value="no" checked="checked" />
+                    <?php print $PMF_LANG['ad_gen_no']; ?>
 <?php endif; ?>
+                </p>
 
-	<label class="left" for="sticky"><?php print $PMF_LANG['ad_entry_sticky']; ?>:</label>
-	<input type="checkbox" id="sticky" name="sticky" <?php print (isset($faqData['sticky']) && $faqData['sticky'] ? 'checked="checked"' : '') ?> /><br />
-
+                <p>
+                    <label for="sticky"><?php print $PMF_LANG['ad_entry_sticky']; ?>:</label>
+                    <input type="checkbox" id="sticky" name="sticky" <?php print (isset($faqData['sticky']) && $faqData['sticky'] ? 'checked="checked"' : '') ?> />
+                </p>
 <?php
     if (isset($faqData['comment']) && $faqData['comment'] == 'y') {
         $suf = ' checked="checked"';
@@ -327,8 +364,11 @@ if($permission['approverec']):
         $suf = null;
     }
 ?>
-    <label class="left" for="comment"><?php print $PMF_LANG["ad_entry_allowComments"]; ?></label>
-    <input type="checkbox" name="comment" id="comment" value="y"<?php if (isset($suf)) { print $suf; } ?> /> <?php print $PMF_LANG['ad_gen_yes']; ?><br />
+                <p>
+                    <label for="comment"><?php print $PMF_LANG["ad_entry_allowComments"]; ?></label>
+                    <input type="checkbox" name="comment" id="comment" value="y"<?php if (isset($suf)) { print $suf; } ?> />
+                    <?php print $PMF_LANG['ad_gen_yes']; ?>
+                </p>
 <?php
     if ($url_variables != 'insertentry') {
         $rev_yes = ' checked="checked"';
@@ -338,22 +378,34 @@ if($permission['approverec']):
         $rev_no  = ' checked="checked"';
         $rev_yes = null;
     }
-    if ($url_variables != 'insertentry') {
+    if ($url_variables != 'insertentry'):
 ?>
-    <label class="left" for="revision"><?php print $PMF_LANG['ad_entry_new_revision']; ?></label>
-    <input type="radio" name="revision" class="active" value="yes"<?php print isset($rev_yes) ? $rev_yes : ''; ?>/> <?php print $PMF_LANG["ad_gen_yes"]; ?> <input type="radio" name="revision" class="active" value="no"<?php print isset($rev_no) ? $rev_no : ''; ?>/> <?php print $PMF_LANG["ad_gen_no"]; ?><br />
+                <p>
+                    <label for="revision"><?php print $PMF_LANG['ad_entry_new_revision']; ?></label>
+                    <input type="radio" name="revision" id="revision" class="active" value="yes"<?php print isset($rev_yes) ? $rev_yes : ''; ?>/>
+                    <?php print $PMF_LANG["ad_gen_yes"]; ?>
+                    <input type="radio" name="revision" class="active" value="no"<?php print isset($rev_no) ? $rev_no : ''; ?>/>
+                    <?php print $PMF_LANG["ad_gen_no"]; ?>
+                </p>
+
 <?php
-    }
-    if ($faqconfig->get('main.permLevel') != 'basic') {
-?>
-    <label class="left" for="grouppermission"><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
-    <input type="radio" id="grouppermission" name="grouppermission" class="active" value="all" <?php print ($all_groups ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_all_groups']; ?> <input type="radio" name="grouppermission" class="active" value="restricted" <?php print ($restricted_groups ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_restricted_groups']; ?> <select name="restricted_groups" size="1"><?php print $user->perm->getAllGroupsOptions($group_permission->group_id); ?></select><br />
-<?php
-    } else {
-?>
-    <input type="hidden" name="grouppermission" class="active" value="all" />
-<?php   
-    }
+    endif;
+    if ($faqconfig->get('main.permLevel') != 'basic'): ?>
+
+                <p>
+                    <label for="grouppermission"><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
+                    <input type="radio" id="grouppermission" name="grouppermission" class="active" value="all" <?php print ($all_groups ? 'checked="checked"' : ''); ?>/>
+                    <?php print $PMF_LANG['ad_entry_all_groups']; ?>
+                    <input type="radio" name="grouppermission" class="active" value="restricted" <?php print ($restricted_groups ? 'checked="checked"' : ''); ?>/>
+                    <?php print $PMF_LANG['ad_entry_restricted_groups']; ?>
+                    <select name="restricted_groups" size="1">
+                        <?php print $user->perm->getAllGroupsOptions($group_permission[0]); ?>
+                    </select>
+                </p>
+
+<?php else: ?>
+                    <input type="hidden" name="grouppermission" class="active" value="all" />
+<?php endif;
     
     if ('00000000000000' == $faqData['dateStart']) {
         $dateStart = '';
@@ -371,79 +423,102 @@ if($permission['approverec']):
     	$faqData['date'] = PMF_Date::createIsoDate(date('YmdHis'));
     }
 ?>
-    <label class="left" for="userpermission"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
-    <input type="radio" id="userpermission" name="userpermission" class="active" value="all" <?php print ($all_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_all_users']; ?> <input type="radio" name="userpermission" class="active" value="restricted" <?php print ($restricted_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_restricted_users']; ?> <select name="restricted_users" size="1"><?php print $user->getAllUserOptions($user_permission->user_id); ?></select><br />
-    
-	<label class="left" for="dateActualize"><?php echo $PMF_LANG["ad_entry_date"]; ?></label>
-    <input type="radio" id="dateActualize" checked="checked" name="recordDateHandling" onchange="setRecordDate(this.id);" /> <?php print $PMF_LANG['msgUpdateFaqDate']; ?>
-    <input type="radio" id="dateKeep" name="recordDateHandling" onchange="setRecordDate(this.id);" /> <?php print $PMF_LANG['msgKeepFaqDate']; ?>
-    <input type="radio" id="dateCustomize" name="recordDateHandling" onchange="setRecordDate(this.id);" /> <?php print $PMF_LANG['msgEditFaqDat']; ?>
-    <div id="recordDateInputContainer" style="display: none;"></span><label class="left" for="date">&nbsp;</label>
-    <input type="text" name="date" id="date" maxlength="16" value="" /></div>
-    </fieldset>
+                <p>
+                    <label for="userpermission"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
+                    <input type="radio" id="userpermission" name="userpermission" class="active" value="all" <?php print ($all_users ? 'checked="checked"' : ''); ?>/>
+                    <?php print $PMF_LANG['ad_entry_all_users']; ?>
+                    <input type="radio" name="userpermission" class="active" value="restricted" <?php print ($restricted_users ? 'checked="checked"' : ''); ?>/>
+                    <?php print $PMF_LANG['ad_entry_restricted_users']; ?>
+                    <select name="restricted_users" size="1">
+                        <?php print $user->getAllUserOptions($user_permission[0]); ?>
+                    </select>
+                </p>
+
+                <p>
+                    <label for="dateActualize"><?php echo $PMF_LANG["ad_entry_date"]; ?></label>
+                    <input type="radio" id="dateActualize" checked="checked" name="recordDateHandling" onchange="setRecordDate(this.id);" /> <?php print $PMF_LANG['msgUpdateFaqDate']; ?>
+                    <input type="radio" id="dateKeep" name="recordDateHandling" onchange="setRecordDate(this.id);" /> <?php print $PMF_LANG['msgKeepFaqDate']; ?>
+                    <input type="radio" id="dateCustomize" name="recordDateHandling" onchange="setRecordDate(this.id);" /> <?php print $PMF_LANG['msgEditFaqDat']; ?>
+                </p>
+
+                <div id="recordDateInputContainer" style="display: none;">
+                <p>
+                    <label>&nbsp;</label>
+                    <input type="text" name="date" id="date" maxlength="16" value="" />
+                </p>
+                </div>
+            </fieldset>
 <?php
     if ($faqconfig->get('main.enableGoogleTranslation') === true) {
 ?>    
-    <fieldset class="fullwidth">
-    <legend><a href="javascript:void(0);" onclick="javascript:toggleFieldset('Translations');"><?php print $PMF_LANG["ad_menu_translations"]; ?></a></legend>
+            <fieldset>
+                <legend><a href="javascript:void(0);" onclick="javascript:toggleFieldset('Translations');"><?php print $PMF_LANG["ad_menu_translations"]; ?></a></legend>
 
-    <div id="editTranslations" style="display: none;">
-        <?php
-        if ($faqconfig->get('main.googleTranslationKey') == '') {
-            print $PMF_LANG["msgNoGoogleApiKeyFound"];
-        } else {
-        ?>
-        <label class="left" for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
-        <?php print PMF_Language::selectLanguages($faqData['lang'], false, array(), 'langTo'); ?><br />
+                <div id="editTranslations" style="display: none;">
+                    <?php
+                    if ($faqconfig->get('main.googleTranslationKey') == '') {
+                        print $PMF_LANG["msgNoGoogleApiKeyFound"];
+                    } else {
+                    ?>
+                    <p>
+                        <label for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
+                        <?php print PMF_Language::selectLanguages($faqData['lang'], false, array(), 'langTo'); ?>
+                    </p>
 
-        <input type="hidden" name="used_translated_languages" id="used_translated_languages" value="" />
-        <div id="getedTranslations">
-        </div>
-        <?php
-        }
-        ?>
-    </div>
-    </fieldset>
+                        <input type="hidden" name="used_translated_languages" id="used_translated_languages" value="" />
+                        <div id="getedTranslations">
+                        </div>
+                    <?php
+                    }
+                    ?>
+                </div>
+            </fieldset>
 <?php
     }
 ?>
-    <fieldset class="fullwidth">
-    <legend><a href="javascript:void(0);" onclick="javascript:toggleFieldset('Expiration');"><?php print $PMF_LANG['ad_record_expiration_window']; ?></a></legend>
+            <fieldset>
+                <legend><a href="javascript:void(0);" onclick="javascript:toggleFieldset('Expiration');"><?php print $PMF_LANG['ad_record_expiration_window']; ?></a></legend>
     
-    <div id="editExpiration" style="display: none;">
-        <label class="lefteditor" for="dateStart"><?php print $PMF_LANG['ad_news_from']; ?></label>
-        <input name="dateStart" id="dateStart" class="date-pick" value="<?php print $dateStart; ?>" maxlength="10" />
-        <br />
-        <label class="lefteditor" for="dateEnd"><?php print $PMF_LANG['ad_news_to']; ?></label>
-        <input name="dateEnd" id="dateEnd" class="date-pick" value="<?php print $dateEnd; ?>" maxlength="10" />
-    </div>
-    
-    </fieldset>
+                <div id="editExpiration" style="display: none;">
+                    <p>
+                        <label for="dateStart"><?php print $PMF_LANG['ad_news_from']; ?></label>
+                        <input name="dateStart" id="dateStart" class="date-pick" value="<?php print $dateStart; ?>" maxlength="10" />
+                    </p>
+                    <p>
+                        <label for="dateEnd"><?php print $PMF_LANG['ad_news_to']; ?></label>
+                        <input name="dateEnd" id="dateEnd" class="date-pick" value="<?php print $dateEnd; ?>" maxlength="10" />
+                    </p>
+                </div>
+            </fieldset>
 
-    <fieldset class="fullwidth">
-    <legend><a href="javascript:void(0);" onclick="javascript:toggleFieldset('Changelog');"><?php print $PMF_LANG['ad_entry_changelog']; ?></a></legend>
+            <fieldset>
+                <legend><a href="javascript:void(0);" onclick="javascript:toggleFieldset('Changelog');"><?php print $PMF_LANG['ad_entry_changelog']; ?></a></legend>
 
-    <div id="editChangelog" style="display: none;">
-        <label class="lefteditor"><?php print $PMF_LANG["ad_entry_date"]; ?></label>
-        <?php if (isset($faqData['date'])) { print $faqData['date']; } else { print PMF_Date::createIsoDate(date("YmdHis")); } ?><br />
+                <div id="editChangelog" style="display: none;">
+                    </p>
+                    <p>
+                        <label><?php print $PMF_LANG["ad_entry_date"]; ?></label>
+                        <?php if (isset($faqData['date'])) { print $faqData['date']; } else { print PMF_Date::createIsoDate(date("YmdHis")); } ?>
+                    </p>
+                    <p>
+                        <label for="changed"><?php print $PMF_LANG["ad_entry_changed"]; ?></label>
+                        <textarea name="changed" id="changed" style="width: 390px; height: 50px;" cols="40" rows="4"><?php if (isset($changed)) { print $changed; } ?></textarea>
+                    </p>
+                    <p>
+                </div>
 
-        <label class="lefteditor" for="changed"><?php print $PMF_LANG["ad_entry_changed"]; ?></label>
-        <textarea name="changed" id="changed" style="width: 390px; height: 50px;" cols="40" rows="4"><?php if (isset($changed)) { print $changed; } ?></textarea><br />
-    </div>
+            </fieldset>
 
-    </fieldset><br />
-
-    <p align="center">
 <?php
     if ($revisionid_selected == $faqData['revision_id']) {
 ?>
-    <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_save"]; ?>" name="submit[1]" />
-    <input class="submit" type="reset" value="<?php print $PMF_LANG["ad_gen_reset"]; ?>" />
+            <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_save"]; ?>" name="submit[1]" />
+            <input class="submit" type="reset" value="<?php print $PMF_LANG["ad_gen_reset"]; ?>" />
 <?php
     }
     if ($url_variables != "insertentry") {
 ?>
-    <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit[0]" />
+            <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit[0]" />
 <?php
     }
 ?>
@@ -451,25 +526,25 @@ if($permission['approverec']):
 <?php
     if (is_numeric($faqData['id'])) {
 ?>
-    <fieldset class="fullwidth">
-    <legend><a href="javascript:void(0);" onclick="javascript:toggleFieldset('ChangelogHistory');"><?php print $PMF_LANG["ad_entry_changelog"]; ?></a></legend>
-    <div id="editChangelogHistory" style="display: none;">
+            <fieldset>
+                <legend><a href="javascript:void(0);" onclick="javascript:toggleFieldset('ChangelogHistory');"><?php print $PMF_LANG["ad_entry_changelog"]; ?></a></legend>
+                
+                <div id="editChangelogHistory" style="display: none;">
 <?php
         $faqChangelog  = new PMF_Faq_Changelog();
         $changelogData = $faqChangelog->fetch($faqData['id']);
         foreach ($changelogData as $changelog) {
             $user->getUserById($changelog->user_id);
 ?>
-        <p style="font-size: 10px;">
-            <strong><?php print $PMF_LANG['ad_entry_revision'].' 1.'.$changelog->revision_id . ' / ' . 
-            date("Y-m-d H:i:s", $changelog->date).": ".$user->getUserData('display_name'); ?></strong><br />
-            <?php print $changelog->changelog; ?>
-        </p>
+                    <p style="font-size: 10px;">
+                        <label><?php print $PMF_LANG['ad_entry_revision'].' 1.'.$entry['revision_id'] . ' / ' . date("Y-m-d H:i:s", $entry['date']).": ".$user->getUserData('display_name'); ?></label>
+                        <?php print $entry['changelog']; ?>
+                    </p>
 <?php
         }
 ?>
-    </div>
-    </fieldset>
+                </div>
+            </fieldset>
     
     </form>
     
@@ -567,7 +642,7 @@ if($permission['approverec']):
     /* <![CDATA[ */
     google.load("language", "1");
 
-    var langFromSelect = $("#artlang");
+    var langFromSelect = $("#lang");
     var langToSelect   = $("#langTo");
         
     // Add a onChange to the faq language select
@@ -595,51 +670,46 @@ if($permission['approverec']):
                 var fieldset = $('<fieldset></fieldset>')
                     .append($('<legend></legend>').html($("#langTo option:selected").text()));
 
-                // Text for thema
+                // Text for question
                 fieldset
-                    .append($('<label></label>').attr({for: 'thema_translated_' + langTo}).addClass('left')
-                        .append('<?php print $PMF_LANG["ad_entry_theme"]; ?>'))
-                    .append($('<input></input>')
-                        .attr({id:        'thema_translated_' + langTo,
-                               name:      'thema_translated_' + langTo,
-                               maxlength: '255',
-                               style:     'width: 390px;'}))
-                    .append($('<br></br>'));
+                    .append('<p>' +
+                            '<label for="question_translated_' + langTo + '">' +
+                            '<?php print $PMF_LANG["ad_entry_theme"]; ?>' +
+                            '</label>' +
+                            '<input type="text" id="question_translated_' + langTo + '" name="question_translated_' + langTo + '" maxlength="255" style="width: 300px;">' +
+                            '</p>');
 
-                // Textarea for content
-                fieldset
-                    .append($('<label></label>').attr({for: 'content_translated_' + langTo}).addClass('left')
-                        .append('<?php print $PMF_LANG["ad_entry_content"]; ?>'))                
-                    .append($('<textarea></textarea>')
-                        .attr({id:       'content_translated_' + langTo,
-                               name:     'content_translated_' + langTo,
-                               cols:     '40',
-                               rows:     '4',
-                               style:    'width: 396px; height: 50px; margin-bottom: 4px;'}))
-                    .append($('<br></br>'));
 
-                // Text for thema
+                // Textarea for answer
                 fieldset
-                    .append($('<label></label>').attr({for: 'keywords_translated_' + langTo}).addClass('left')
-                        .append('<?php print $PMF_LANG["ad_entry_keywords"]; ?>'))
-                    .append($('<input></input>')
-                        .attr({id:       'keywords_translated_' + langTo,
-                               name:     'keywords_translated_' + langTo,
-                               maxlength: '255',
-                               style:     'width: 390px;'}))
-                    .append($('<br></br>'));
+                    .append('<p>' +
+                            '<label for="answer_translated_' + langTo + '">' +
+                            '<?php print $PMF_LANG["ad_entry_content"]; ?>' +
+                            '</label>' +
+                            '<textarea id="answer_translated_' + langTo + '" name="answer_translated_' + langTo + '" cols="80" rows="3" style="width: 300px;"></textarea>' +
+                            '</p>');
+
+
+                // Textarea for keywords
+                fieldset
+                    .append('<p>' +
+                            '<label for="keywords_translated_' + langTo + '">' +
+                            '<?php print $PMF_LANG["ad_entry_keywords"]; ?>' +
+                            '</label>' +
+                            '<textarea id="keywords_translated_' + langTo + '" name="keywords_translated_' + langTo + '" cols="80" rows="3" style="width: 300px;"></textarea>' +
+                            '</p>');
 
                 $('#getedTranslations').append(fieldset);
                 
                 // Call the init for a new tinyMCE
-                createTinyMCE('content_translated_' + langTo);
+                createTinyMCE('answer_translated_' + langTo);
             }
 
-            var langFrom = $('#artlang').val();
+            var langFrom = $('#lang').val();
             
             // Set the translated text
-            getGoogleTranslation('#thema_translated_' + langTo, $('#thema').val(), langFrom, langTo);
-            getGoogleTranslation('content_translated_' + langTo, tinymce.get('content').getContent(), langFrom, langTo, 'content');
+            getGoogleTranslation('#question_translated_' + langTo, $('#question').val(), langFrom, langTo);
+            getGoogleTranslation('#answer_translated_' + langTo, tinymce.get('answer').getContent(), langFrom, langTo, 'answer');
 
             // Keywords must be translated separately
             $('#keywords_translated_' + langTo).val('');

@@ -16,10 +16,10 @@
  * @category  phpMyFAQ
  * @package   Layout
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2004-2010 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2004
+ * @since     2009-08-05
  */
 
 /* extended HTML5 reset */
@@ -63,7 +63,7 @@ input, select {
 
 /* basic styles */
 body {  
-    font: 13px/1.231 sans-serif; *font-size: small; background: #f5f4ef url(../images/background.png) repeat-x;
+    font: 13px/1.231 sans-serif; *font-size: small; background: #f0f0f0;
 }
 select, input, textarea, button {  
     font: 99% sans-serif; }
@@ -134,11 +134,11 @@ input:invalid, textarea:invalid {
 .no-boxshadow input:invalid, .no-boxshadow textarea:invalid { 
     background-color: #f0dddd; }
 ::-moz-selection{ 
-    background: #FF5E99; color: #fff; text-shadow: none; }
+    background: #F67600; color: #fff; text-shadow: none; }
 ::selection { 
-    background: #FF5E99; color: #fff; text-shadow: none; } 
+    background: #F67600; color: #fff; text-shadow: none; }
 a:link { 
-    -webkit-tap-highlight-color: #FF5E99; } 
+    -webkit-tap-highlight-color: #F67600; }
 button { 
     width: auto; overflow: visible; }
 .ie7 img { 
@@ -157,50 +157,153 @@ button {
     zoom: 1; }
 
 /* phpMyFAQ layout */
-#container { 
-    width: 960px; margin: auto; }
+body {
+    margin: 0 auto; font: 13px/22px Helvetica, Arial, sans-serif; background-color: #F0F0F0; }
+code {
+    display: block; font-size: 16px; background-color: black; color: white; padding: 10px; width: 100%;
+    margin-bottom: 22px; }
+
+/* Header */
 #header {
-    width: 960px; margin: 0 auto; padding: 2.5em 0 0 0; }
+    width: 980px; margin: 0 auto; padding: 2.5em 0 0 0; }
 #header h1 {
-    padding-top: 5px; line-height: .6; }
-#header h1 a:link, #header h1 a:visited { 
-    color: #1E4262; display: block; margin: 0 0 .6em 0; text-decoration: none; }
-#header h1 a:hover, #header h1 a:active { 
-    background: none; color: #335370; text-shadow: none; }
+    font-size: 48px; padding-top: 5px; line-height: .6; }
+#header h1 a:link, header h1 a:visited {
+    color: #444; display: block; margin: 0; text-decoration: none; }
+#header h1 a:hover, header h1 a:active {
+    background: none; text-shadow: none; }
 #header #loginBox {
-	float: right; top: 0; width: 175px; margin-top: -2.5em; padding: 5px; background: #D1480B; color: #fff;
-	border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px; 
+	float: right; top: 0; width: 185px; margin-top: -2.5em; background: #F67600; color: #fff;
+	border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; }
 #header #languageSelection {
-    text-align: center; }
+    text-align: center; padding: 5px; }
 #header #languageSelection a:link, #header #languageSelection a:visited {
     color: #fff; }
-#header nav {
-    background: #1E4262; font-size: 1.143em; height: 40px; line-height: 30px; margin: 0 auto 2em auto; padding: 0;
-    text-align: center; width: 100%; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
-#header nav ul {
-    list-style: none; margin: 0 auto; width: 100%; }
-#header nav li {
-    float: left; display: inline; margin: 0; border-right: 2px solid #f5f4ef; }
-#header nav a:link, #header nav a:visited {
-    color: #fff; display: inline-block; height: 30px; padding: 5px 0.8em; text-decoration: none; font-weight: bold; }
-#header nav a:hover, #header nav a:active, #header nav .active a:link, #header nav .active a:visited {
-    background: #335370; color: #fff; text-shadow: none !important; }
-#header nav li:first-child a {
-    border-top-left-radius: 5px; -moz-border-radius-topleft: 5px; -webkit-border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px; }
 
-#leftcolumn {
-    float: left; width: 175px; }
-#maincontent {
-    float: left; width: 610px; }
+/* Navigation */
+nav {
+    position: absolute; left: 0; top: 108px; width: 100%; background: url(../images/nav_background.png); }
+nav ul {
+    margin: 0 auto; width: 980px; list-style: none; }
+nav ul li {
+    float: left; }
+nav ul li a, nav ul li a:visited {
+    display: block; padding-right: 15px; padding-left: 15px; font: 16px/44px Helvetica, Arial, sans-serif; 
+    text-align: center; text-decoration: none; color: #F67600; }
+nav ul li a:hover {
+    color: #fff; }
+nav ul li.active a {
+    background-color: #333; }
+nav ul li a.logout {
+    color: #f71e1b; }
 
-#footer {
-    background: #1A3857; height: 30px; line-height: 30px; margin: 0 auto 2em auto; padding: 0; width: 100%; 
-    border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+/* Categories */
+#categories, #worklog {
+    width: 180px; background: #f0f0f0 url(../images/category_background.png) repeat-x; margin-bottom: 15px;
+    border: 1px solid #d7d7d7; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#categories h3, #worklog h3 {
+    padding-top: 5px; padding-left: 5px; padding-bottom: 5px; font-size: 16px; }
+#categories ul {
+	margin: 0 1px 0 1px; list-style: none outside none; padding: 0; }
+#categories ul li {
+	}
+#categories ul li a {
+	padding-left: 5px; line-height: 30px; text-decoration: none; display: block; color: #222; }
+#categories ul li a:hover {
+	color: #F67600; }
+#categories a.active {
+	background-color: #fff; font-weight: bold; }
+#categories .subcat li a {
+    padding-left: 10px; }
+#categories .subcat li li a {
+    padding-left: 15px; }
+#categories .subcat .active {
+	}
+
+/* Content */
+#content {
+    display: table; width: 980px; margin: 88px auto 0; }
+#leftContent {
+    display: table-cell; width: 180px; vertical-align: top; padding-top: 11px; }
+#mainContent {
+    display: table-cell; width: 800px; vertical-align: top; padding: 11px 22px 0; }
+#mainContent section h2, #mainContent section h3 {
+    display: block; margin-bottom: 11px; }
+#mainContent p, ul, ol, table {
+    padding-bottom: 11px; }
+#mainContent p.error { 
+    margin: 10px auto; padding: 10px; background-color: #f97c7c; color: #222; border-radius: 5px; 
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#mainContent p.success { 
+    margin: 10px auto; padding: 10px; background-color: #7dfd77; color: #222; border-radius: 5px; 
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+    
+/* phpMyFAQ forms */
+#mainContent form p {
+    display: table; margin-bottom: 11px; padding: 0 11px; }
+#mainContent form label {
+    display: table-cell; width: 150px; padding-right: 10px; text-align: right; font-weight: bold; vertical-align: top; }
+#mainContent form label.config {
+    width: 250px; }
+#mainContent form label.small {
+    width: 100px; }
+#mainContent form input[type="text"], #mainContent form input[type="email"], #mainContent form input[type="url"],
+#mainContent form input[type="search"], #mainContent form input[type="password"] {
+    display: table-cell; height: 20px; border: 1px solid #d7d7d7; font-size: 14px; border-radius: 5px;
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#mainContent form select {
+    display: table-cell; border: 1px solid #d7d7d7; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#mainContent form textarea {
+    display: table-cell; border: 1px solid #d7d7d7; font-size: 14px; border-radius: 5px;
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#mainContent form input[type="submit"] {
+    }
+#mainContent form input[type="submit"].submit, #mainContent form input[type="submit"].reset  {
+    margin-left: 160px; }
+#mainContent fieldset {
+    border: 1px solid #d7d7d7; font-size: 14px; margin-right: 10px; padding: 5px; border-radius: 5px;
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#mainContent legend {
+    padding: 5px; }
+    
+/* Tables */
+#mainContent table.list {
+    border-collapse: collapse; margin-bottom: 22px; }
+#mainContent table.list th {
+	padding: 8px; background-color: #333; border-top: 2px solid #222; border-bottom: 2px solid #f0f0f0; color: #F67600; 
+	font-size: 14px; text-align: left; }
+#mainContent table.list tr:nth-child(odd) {
+    background-color: #fdfdfd; }
+#mainContent table.list td { 
+	padding: 8px; border-top: 1px solid transparent; border-bottom: 1px solid #333; }
+
+/* User and Group administration */
+#userInterface, #groupInterface {
+    display: table; width: 750px; }
+#userAccounts {
+    display: table-cell; width: 225px; vertical-align: top; }
+#userDetails {
+    display: table-cell; width: 300px; vertical-align: top; }
+#userRights {
+    display: table-cell; width: 225px; vertical-align: top; }
+#groupsAvailable {
+    display: table-cell; width: 200px; vertical-align: top; }
+#groupMemberships {
+    display: table-cell; width: 250px; vertical-align: top; }
+#groupDetails {
+    display: table-cell; width: 300px; vertical-align: top; }
+
+/* Footer */
+footer {
+    position: absolute; left: 0; width: 100%; background: #222; }
+footer div {
+    display: table; margin: 0 auto; padding: 44px 0; width: 960px; color: #777; }
 #copyrightnote {
-    color: #fff; margin: auto; padding-bottom: 2em; text-align: right; padding-right: 10px; }
-#copyrightnote a {
+    color: #fff; margin: auto; text-align: right; padding-right: 10px; }
+#copyrightnote a:link, #copyrightnote a:visited {
+    color: #F67600; }
+#copyrightnote a:hover {
     color: #fff; }
 
 /* print styles */

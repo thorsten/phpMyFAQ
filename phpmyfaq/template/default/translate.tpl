@@ -1,60 +1,63 @@
-<h2>{msgNewTranslationHeader}</h2>
+<section>
+            <header>
+                <h2>{msgNewTranslationHeader}</h2>
+            </header>
 
-    <p>{msgNewTranslationAddon}</p>
+            <p>{msgNewTranslationAddon}</p>
 
-    <!-- start source article -->
-    <fieldset>
-    <legend>{msgNewTransSourcePane}</legend>
-    <h3>{writeSourceTitle}</h3>
-    <div id="article_content">{writeSourceContent}</div>
-    </fieldset>
-    <!-- end source article -->
+            <!-- start source article -->
+            <div>
+                <header>
+                    <h3>{msgNewTransSourcePane}</h3>
+                </header>
+                <p><strong>{writeSourceTitle}</strong></p>
+                <p>{writeSourceContent}</p>
+            </div>
+            <!-- end source article -->
 
-    <!-- start user article translation -->
-    <script type="text/javascript" src="admin/editor/tiny_mce.js"></script>
-    <form action="{writeSendAdress}" method="post" style="display: inline">
-    <fieldset>
-    <legend>{msgNewTranslationPane}</legend>
+            <!-- start user article translation -->
+            <header>
+                <h3>{msgNewTranslationPane}</h3>
+            </header>
 
-    <textarea cols="60" rows="3" name="thema" id="thema" required="true">{writeSourceTitle}</textarea><br />
-    <br />
-    <textarea cols="60" rows="10" name="translated_content" id="translated_content" required="true">{writeSourceContent}</textarea><br />
+            <form action="{writeSendAdress}" method="post" style="display: inline">
+                <input type="hidden" name="faqid" id="faqid" value="{writeSourceFaqId}" />
+                <input type="hidden" name="faqlanguage" id="faqlanguage" value="{writeTransFaqLanguage}" />
+                <input type="hidden" name="contentlink" id="contentlink" value="http://" />
 
-    <label for="keywords">{msgNewTranslationKeywords}</label>
-    <input type="text" name="keywords" id="keywords" size="37" value="{writeSourceKeywords}"/><br />
+                <p>
+                    <label for="question">{msgNewTranslationQuestion}</label>
+                    <textarea cols="60" rows="3" name="question" id="question" required="required" />{writeSourceTitle}</textarea>
+                </p>
 
-    <br />
-    <label for="username">{msgNewTranslationName}</label>
-    <input type="text" name="username" id="username" value="{defaultContentName}" size="37" required="true"><br />
+                <p>
+                    <label for="translated_answer">{msgNewTranslationAnswer}</label>
+                    <textarea cols="60" rows="10" name="translated_answer" id="translated_answer" required="required" />{writeSourceContent}</textarea>
+                </p>
 
-    <label for="usermail">{msgNewTranslationMail}</label>
-    <input type="email" name="usermail" id="usermail" value="{defaultContentMail}" size="37" required="true"><br />
+                <p>
+                    <label for="keywords">{msgNewTranslationKeywords}</label>
+                    <input type="text" name="keywords" id="keywords" size="37" value="{writeSourceKeywords}"/>
+                </p>
 
-    <input type="hidden" name="faqid" id="faqid" value="{writeSourceFaqId}" />
-    <input type="hidden" name="faqlanguage" id="faqlanguage" value="{writeTransFaqLanguage}" />
-    <input type="hidden" name="contentlink" id="contentlink" value="http://" />
-    </fieldset>
-    <!-- end user article translation -->
+                <p>
+                    <label for="username">{msgNewTranslationName}</label>
+                    <input type="text" name="username" id="username" value="{defaultContentName}" size="37" required="required" />
+                </p>
 
-    {captchaFieldset}
+                <p>
+                    <label for="usermail">{msgNewTranslationMail}</label>
+                    <input type="email" name="usermail" id="usermail" value="{defaultContentMail}" size="37" required="required" />
+                </p>
+            <!-- end user article translation -->
 
-    <div style="text-align:center;">
-        <input class="submit" type="submit" name="submit" value="{msgNewTranslationSubmit}" />
-    </div>
-    <br />
+                <p>
+                {captchaFieldset}
+                </p>
 
-    </form>
+                <p>
+                <input class="submit" type="submit" name="submit" value="{msgNewTranslationSubmit}" />
+                </p>
 
-    <!-- tinyMCE -->
-    <script type="text/javascript">
-    <!--
-        tinyMCE.init({
-            mode : "exact",
-            language : "{tinyMCELanguage}",
-            elements : "translated_content",
-            editor_deselector : "mceNoEditor",
-            theme : "simple"
-        });
-    //-->
-    </script>
-    <!-- /tinyMCE -->
+            </form>
+        </section>

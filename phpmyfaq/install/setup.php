@@ -33,6 +33,7 @@
 define('VERSION', '3.0.0-dev');
 define('APIVERSION', 2);
 define('MINIMUM_PHP_VERSION', '5.3.0');
+
 define('COPYRIGHT', '&copy; 2001-2011 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
@@ -42,17 +43,27 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
 }
 
 ?>
-
 <!doctype html>
-<html lang="en" class="no-js">
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]> <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]> <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]> <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
     <title>phpMyFAQ <?php print VERSION; ?> Setup</title>
+
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+    <meta name="application-name" content="phpMyFAQ <?php print VERSION; ?>">
+    <meta name="copyright" content="(c) 2001-2011 phpMyFAQ Team">
+    
     <link rel="shortcut icon" href="../template/default/favicon.ico">
     <link rel="apple-touch-icon" href="../template/default/apple-touch-icon.png">
-    <link rel="stylesheet" href="style/setup.css?v=1">
-    <script language="javascript" type="text/javascript">
+    <link rel="stylesheet" href="css/setup.css?v=1">
+    <script type="text/javascript" src="../inc/js/jquery.min.js"></script>
+    <script type="text/javascript">
     /*<![CDATA[*/
     // <!--
     function cssAddClass(ele, className) {
@@ -92,18 +103,33 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
 </head>
 <body>
 
-<h1 id="header">phpMyFAQ <?php print VERSION; ?> Setup</h1>
+<header id="header">
+    <h1>
+        <h1>phpMyFAQ <?php print VERSION; ?> Setup</h1>
+    </h1>
+</header>
 
+<nav>
+    <ul>
+        <li><a target="_blank" href="http://www.phpmyfaq.de//documentation.php">Documentation</a></li>
+        <li><a target="_blank" href="http://www.phpmyfaq.de//support.php">Support</a></li>
+        <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
+        <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
+    </ul>
+</nav>
+
+<div id="content">
+    <div id="mainContent">
 <?php
 
 if (version_compare(PHP_VERSION, MINIMUM_PHP_VERSION, '<')) {
-    printf("<p class=\"center\">Sorry, but you need PHP %s or later!</p>\n", MINIMUM_PHP_VERSION);
+    printf('<p class="error">Sorry, but you need PHP %s or later!</p>', MINIMUM_PHP_VERSION);
     HTMLFooter();
     die();
 }
 
 if (!function_exists('date_default_timezone_set')) {
-    print "<p class=\"center\">Sorry, but setting a default timezone doesn't work in your environment!</p>\n";
+    print '<p class="error">Sorry, but setting a default timezone doesn\'t work in your environment!</p>';
     HTMLFooter();
     die();
 }
@@ -152,7 +178,7 @@ function db_uninstall()
  */
 function HTMLFooter()
 {
-    printf('<footer><p class="center">%s</p></footer></body></html>', COPYRIGHT);
+    printf('</div></div><footer><div><p id="copyrightnote">%s</p><div></footer></body></html>', COPYRIGHT);
 }
 
 /**
@@ -198,7 +224,7 @@ $system = new PMF_System();
 
 if (!$system->checkDatabase($supported_databases)) {
 
-    print '<p class="center">No supported database detected! Please install one of the following' .
+    print '<p class="error">No supported database detected! Please install one of the following' .
           ' database systems and enable the corresponding PHP extension:</p>';
     print '<ul>';
     foreach ($supported_databases as $database) {
@@ -210,7 +236,7 @@ if (!$system->checkDatabase($supported_databases)) {
 }
 
 if (!$system->checkExtension($enabledExtensions)) {
-    print "<p class=\"center\">The following extensions are missing! Please enable the PHP extension:</p>\n";
+    print "<p class=\"error\">The following extensions are missing! Please enable the PHP extension:</p>\n";
     print "<ul>\n";
     foreach ($system->getMissingExtensions() as $extension) {
         printf('    <li>ext/%s</li>', $extension);
@@ -221,7 +247,7 @@ if (!$system->checkExtension($enabledExtensions)) {
 }
 
 if (!$system->checkphpMyFAQInstallation()) {
-    print '<p class="center">It seems you\'re already running a version of phpMyFAQ.<br />Please use the <a href="update.php">update script</a>.</p>';
+    print '<p class="error">It seems you\'re already running a version of phpMyFAQ.<br />Please use the <a href="update.php">update script</a>.</p>';
     HTMLFooter();
     die();
 }
@@ -242,11 +268,11 @@ foreach ($dirs as $dir) {
 }
 
 if (sizeof($faileddirs)) {
-    print '<p class="center">The following directory/-ies could not be created or are not writable:</p><ul>';
+    print '<p class="error">The following directory/-ies could not be created or are not writable:</p><ul>';
     foreach ($faileddirs as $dir) {
         print "<li>$dir</li>\n";
     }
-    print '</ul><p class="center">Please create it manually and/or change access to chmod 755 (or greater if ' .
+    print '</ul><p class="error">Please create it manually and/or change access to chmod 755 (or greater if ' .
           'necessary).</p>';
     HTMLFooter();
     die();
@@ -259,34 +285,36 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
 <?php
     if ((@ini_get('safe_mode') == 'On' || @ini_get('safe_mode') === 1)) {
-        print '<p class="center">The PHP safe mode is enabled. You may have problems when phpMyFAQ writes in some ' .
+        print '<p class="error">The PHP safe mode is enabled. You may have problems when phpMyFAQ writes in some ' .
               'directories.</p>';
     }
     if (!extension_loaded('gd')) {
-        print '<p class="center">You don\'t have GD support enabled in your PHP installation. Please enabled GD ' .
+        print '<p class="error">You don\'t have GD support enabled in your PHP installation. Please enabled GD ' .
               'support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
     }
     if (!function_exists('imagettftext')) {
-        print '<p class="center">You don\'t have Freetype support enabled in the GD extension of your PHP ' .
+        print '<p class="error">You don\'t have Freetype support enabled in the GD extension of your PHP ' .
               'installation. Please enabled Freetype support in GD extension otherwise the Captchas for spam ' .
               'protection will be quite easy to break.</p>';
     }
     if (!extension_loaded('curl') || !extension_loaded('openssl')) {
-        print '<p class="center">You don\'t have cURL and/or OpenSSl support enabled in your PHP installation. ' .
+        print '<p class="error">You don\'t have cURL and/or OpenSSl support enabled in your PHP installation. ' .
               'Please enabled cUrL and/or OpenSSL support in your php.ini file otherwise you can\'t use the Twitter ' .
               ' support.</p>';
     }
 ?>
-<p class="center">
-	Did you already read the <a href="../docs/documentation.en.html">documentation</a> carefully before 
-	starting the phpMyFAQ setup?</p>
+        <p class="hint">
+            Did you already read the <a href="../docs/documentation.en.html">documentation</a> carefully before
+            starting the phpMyFAQ setup?</p>
 
-<form action="setup.php" method="post">
-<fieldset class="installation">
-<legend class="installation">Please add your database connection setup information</legend>
+        <form action="setup.php" method="post">
+        <fieldset>
+        <legend>Please add your database connection setup information</legend>
 
-    <label class="left">SQL server:</label>
-    <select class="input" name="sql_type" id="sql_selector" size="1" onchange="select_database(this);">
+            <p>
+                <label>SQL server:</label>
+                <select name="sql_type" id="sql_selector" size="1" onchange="select_database(this);">
+
 <?php
     // check what extensions are loaded in PHP
     foreach ($supported_databases as $extension => $database) {
@@ -300,74 +328,88 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         }
     }
 ?>
-    </select><br />
+                </select>
+            </p>
 
-    <div id="dbdatafull">
-    <label class="left">SQL server host:</label>
-    <input class="input" type="text" name="sql_server" title="Please enter the host of your SQL server here." /><br />
+            <div id="dbdatafull">
+            <p>
+                <label>SQL server host:</label>
+                <input type="text" name="sql_server" title="Please enter the host of your SQL server here." />
+            </p>
+            <p>
+                <label>SQL username:</label>
+                <input type="text" name="sql_user" title="Please enter your SQL username here." />
+            </p>
+            <p>
+                <label>SQL password:</label>
+                <input name="sql_passwort" type="password" title="Please enter your SQL password here." />
+            </p>
+            <p>
+                <label>SQL database:</label>
+                <input type="text" name="sql_db" title="Please enter your SQL database name here." />
+            </p>
+            </div>
 
-    <label class="left">SQL username:</label>
-    <input class="input" type="text" name="sql_user" title="Please enter your SQL username here." /><br />
+            <div id="dbsqlite" class="collapsed">
+            <p>
+                <label>SQLite database file:</label>
+                <input type="text" name="sql_sqlitefile" value="<?php print dirname(dirname(__FILE__)); ?>"
+                       title="Please enter the full path to your SQLite datafile which should be outside your documentation root." />
+            </p>
+            </div>
 
-    <label class="left">SQL password:</label>
-    <input class="input" name="sql_passwort" type="password" title="Please enter your SQL password here." /><br />
+            <p>
+                <label>Table prefix:</label>
+                <input type="text" name="sqltblpre" title="Please enter a table prefix here if you want to install more phpMyFAQ installations on one database." />
+            </p>
 
-    <label class="left">SQL database:</label>
-    <input class="input" type="text" name="sql_db" title="Please enter your SQL database name here." /><br />
-    </div>
+        </fieldset>
+            
+        <script language="javascript" type="text/javascript">
+        obj = document.getElementById("sql_selector");
+        if (obj.options.length > obj.selectedIndex) {
+            select_database(obj.options[obj.selectedIndex]);
+        }
+        </script>
 
-    <div id="dbsqlite" class="collapsed">
-    <label class="left">SQLite database file:</label>
-    <input class="input" type="text" name="sql_sqlitefile" value="<?php print dirname(dirname(__FILE__)); ?>" title="Please enter the full path to your SQLite datafile which should be outside your documentation root." /><br />
-    </div>
+        <?php if (extension_loaded('ldap')): ?>
+        <fieldset>
+        <legend>LDAP information</legend>
+            <p>
+                <label>Enable LDAP support?</label>
+                <input class="checkbox" type="checkbox" name="ldap_enabled" value="yes" />
+            </p>
+            <p>
+                <label>LDAP server host:</label>
+                <input type="text" name="ldap_server" title="Please enter the host of your LDAP server here." />
+            </p>
+            <p>
+                <label>LDAP server port:</label>
+                <input type="text" name="ldap_port" value="389" title="Please enter the port of your LDAP server here." />
+            </p>
+            <p>
+                <label>LDAP user DN:</label>
+                <input type="text" name="ldap_user" title="Please enter your specified RDN username here." />
+            </p>
+            <p>
+                <label>LDAP password:</label>
+                <input name="ldap_password" type="password" title="Please enter your LDAP password here." />
+            </p>
+            <p>
+                <label>LDAP base search DN:</label>
+                <input type="text" name="ldap_base" title="Please enter your distinguished name, e.g. 'cn=John Smith,ou=Accounts,o=My Company,c=US' here." />
+            </p>
+            <p>You can add additional LDAP configuration informations in the file config/constants_ldap.php.</p>
 
-    <label class="left">Table prefix:</label>
-    <input class="input" type="text" name="sqltblpre" title="Please enter a table prefix here if you want to install more phpMyFAQ installations on one database." />
+        </fieldset>
 
-</fieldset>
-<script language="javascript" type="text/javascript">
-obj = document.getElementById("sql_selector");
-if (obj.options.length > obj.selectedIndex) {
-    select_database(obj.options[obj.selectedIndex]);
-}
-</script>
-<br />
-<?php
-    if (extension_loaded('ldap')) {
-?>
-<fieldset class="installation">
-<legend class="installation">LDAP information</legend>
+<?php endif; ?>
 
-    <label class="left">Enable LDAP support?</label>
-    <input class="checkbox" type="checkbox" name="ldap_enabled" value="yes" /><br />
-
-    <label class="left">LDAP server host:</label>
-    <input class="input" type="text" name="ldap_server" title="Please enter the host of your LDAP server here." /><br />
-
-    <label class="left">LDAP server port:</label>
-    <input class="input" type="text" name="ldap_port" value="389" title="Please enter the port of your LDAP server here." /><br />
-
-    <label class="left">LDAP user DN:</label>
-    <input class="input" type="text" name="ldap_user" title="Please enter your specified RDN username here." /><br />
-
-    <label class="left">LDAP password:</label>
-    <input class="input" name="ldap_password" type="password" title="Please enter your LDAP password here." /><br />
-
-    <label class="left">LDAP base search DN:</label>
-    <input class="input" type="text" name="ldap_base" title="Please enter your distinguished name, e.g. 'cn=John Smith,ou=Accounts,o=My Company,c=US' here." />
-
-    <p>You can add additional LDAP configuration informations in the file config/constants_ldap.php.</p>
-</fieldset>
-<br />
-<?php
-    }
-?>
-
-<fieldset class="installation">
-<legend class="installation">phpMyFAQ information</legend>
-
-    <label class="left">Default language:</label>
-    <select class="input" name="language" size="1" title="Please select your default language.">
+        <fieldset>
+        <legend>phpMyFAQ information</legend>
+            <p>
+                <label>Default language:</label>
+                <select name="language" size="1" title="Please select your default language.">
 <?php
     if ($dir = @opendir(PMF_ROOT_DIR . '/lang')) {
         while ($dat = @readdir($dir)) {
@@ -383,40 +425,45 @@ if (obj.options.length > obj.selectedIndex) {
         print '<option>english</option>';
     }
 ?>
-    </select><br />
+                </select>
+            </p>
+            <p>
+                <label>Permission level:</label>
+                <select name="permLevel" size="1" title="Complexity of user and right administration. Basic: users may
+                have user-rights. Medium: users may have user-rights; group administration; groups may have group-rights;
+                user have group-rights via group-memberships.">
+                <?php foreach ($permLevels as $level => $desc) {
+                    printf('    <option value="%s">%s</option>', $level, $desc);
+                } ?>
+                </select>
+            </p>
+            <p>
+                <label>Admin's real name:</label>
+                <input type="text" name="realname" title="Please enter your real name here." />
+            </p>
+            <p>
+                <label>Admin's e-mail address:</label>
+                <input type="email" name="email" title="Please enter your email adress here." />
+            </p>
+            <p>
+                <label>Admin's username:</label>
+                <input type="text" name="username" title="You don't have to do anything here." value="admin" readonly="readonly" />
+            </p>
+            <p>
+                <label>Admin's password:</label>
+                <input type="password" name="password" title="Please enter your password for the admin area." />
+            </p>
+            <p>
+                <label>Retype password:</label>
+                <input type="password" name="password_retyped" title="Please retype your password for checkup." />
+            </p>
+            </fieldset>
 
-    <label class="left">Permission level:</label>
-    <select class="input" name="permLevel" size="1" title="Complexity of user and right administration. Basic: users may have user-rights. Medium: users may have user-rights; group administration; groups may have group-rights; user have group-rights via group-memberships.">
-<?php
-foreach ($permLevels as $level => $desc) {
-    printf('    <option value="%s">%s</option>', $level, $desc);
-}
-?>
-    </select><br />
-
-    <label class="left">Admin's real name:</label>
-    <input class="input" type="text" name="realname" title="Please enter your real name here." /><br />
-
-    <label class="left">Admin's e-mail address:</label>
-    <input class="input" type="text" name="email" title="Please enter your email adress here." /><br />
-
-    <label class="left">Admin's username:</label>
-    <input class="input" type="text" name="username" title="You don't have to do anything here." value="admin" readonly="readonly" /><br />
-
-    <label class="left">Admin's password:</label>
-    <input class="input" type="password" name="password" title="Please enter your password for the admin area." /><br />
-
-    <label class="left">Retype password:</label>
-    <input class="input" type="password" name="password_retyped" title="Please retype your password for checkup." /><br />
-
-</fieldset>
-
-
-<p class="center"><strong>Do not use it if you're already running a version of phpMyFAQ!</strong></p>
-
-<p class="center"><input type="submit" value="Click to install phpMyFAQ <?php print VERSION; ?>" class="button" /></p>
-
-</form>
+            <p class="hint"><strong>Do not use it if you're already running a version of phpMyFAQ!</strong></p>
+            <p>
+                <input class="submit" type="submit" value="Click to install phpMyFAQ <?php print VERSION; ?>" />
+            </p>
+        </form>
 <?php
     HTMLFooter();
 } else {
@@ -610,10 +657,8 @@ foreach ($permLevels as $level => $desc) {
     require_once $sql_type . '.sql.php'; // CREATE TABLES
     require_once 'config.sql.php';       // INSERTs for configuration
     require_once 'stopwords.sql.php';    // INSERTs for stopwords
-    
-    print '<p class="center">';
-    @ob_flush();
-    flush();
+
+    print '<p>';
 
     // Erase any table before starting creating the required ones
     if ('sqlite' != $sql_type) {
@@ -624,12 +669,10 @@ foreach ($permLevels as $level => $desc) {
     while ($each_query = each($query)) {
         $result = @$db->query($each_query[1]);
         if (!$result) {
-            print "\n<div class=\"error\">\n";
-            print "<p><strong>Error:</strong> Please install your version of phpMyFAQ once again or send us a <a href=\"http://www.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>";
-            print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
-            print "<div style=\"text-align: left;\"><p>Query:\n";
-            print "<pre>".htmlentities($each_query[1])."</pre></p></div>\n";
-            print "</div>";
+            print '<p class="error"><strong>Error:</strong> Please install your version of phpMyFAQ once again or send
+            us a <a href=\"http://www.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
+            printf('<p class="error"><strong>DB error:</strong> %s</p>', $db->error());
+            printf('<code>%s</code>', htmlentities($each_query[1]));
             db_uninstall();
             cleanInstallation();
             HTMLFooter();
@@ -639,12 +682,8 @@ foreach ($permLevels as $level => $desc) {
         $count++;
         if (!($count % 10)) {
             print '| ';
-            @ob_flush();
-            flush();
         }
     }
-    @ob_flush();
-    flush();
 
     // add admin account and rights
     $admin = new PMF_User();
@@ -916,6 +955,13 @@ foreach ($permLevels as $level => $desc) {
             'for_users' => 1,
             'for_groups' => 1
         ),
+        // 38 => 'dlattachment'
+        array(
+            'name' => 'reports',
+            'description' => 'Right to generate reports',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
     );
     foreach ($rights as $right) {
         $rightID = $admin->perm->addRight($right);
@@ -940,90 +986,110 @@ foreach ($permLevels as $level => $desc) {
 
     $oConf->update($configs);
     
-    print "</p>\n";
-    print "<p class=\"center\">All database tables were successfully created.</p>\n";
-    print "<p class=\"center\">Congratulation! Everything seems to be okay.</p>\n";
 ?>
-<script type="text/javascript">
-//<![CDATA[
-var iframect = 0;
+        </p>
+        <p class="success">
+            All database tables were successfully created.<br />Congratulation! Everything seems to be okay.
+        </p>
+        <script type="text/javascript">
+        //<![CDATA[
+        var iframect = 0;
 
-function iframeUpdated() {
-    if (iframect++ == 0) {
-        return;
-    }
+        function iframeUpdated() {
+            if (iframect++ == 0) {
+                return;
+            }
 
-    $('#questionnaireForm').hide();
-    $('#questionnaireThanks').show();
-}
+            $('#questionnaireForm').hide();
+            $('#questionnaireThanks').show();
+        }
 
-function hide(item) {
-    cssAddClass(item, 'collapsed');
-}
+        function hide(item) {
+            cssAddClass(item, 'collapsed');
+        }
 
-function show(item) {
-    cssDelClass(item, 'collapsed');
-}
-//]]>
-</script>
-<iframe onload="iframeUpdated();" name="questionaireResult" style="display:none"></iframe>
-<form action="http://www.phpmyfaq.de/stats/getstatdata.php" method="post" target="questionaireResult" id="questionnaireForm">
+        function show(item) {
+            cssDelClass(item, 'collapsed');
+        }
+        //]]>
+        </script>
+        <iframe onload="iframeUpdated();" name="questionaireResult" style="display:none"></iframe>
+        <form action="http://www.phpmyfaq.de/stats/getstatdata.php" method="post" target="questionaireResult" id="questionnaireForm">
 
-    <p class="center">For further development we would like to get some feedback from our users.<br />Therefore we'd ask you to take a few minutes of your time to answer a few questions.</p>
-    <p class="center">If you don't want to participate in the survey, you can directly visit <a href="../index.php">your version of phpMyFAQ</a> or login into your <a href="../admin/index.php">admin section</a>.</p>
+            <p>
+                For further development we would like to get some feedback from our users.<br />
+                Therefore we'd ask you to take a few minutes of your time to answer a few questions.
+            </p>
+            <p>
+                If you don't want to participate in the survey, you can directly visit
+                <a href="../index.php">your version of phpMyFAQ</a> or login into your
+                <a href="../admin/index.php">admin section</a>.
+            </p>
 
-    <fieldset class="installation">
-        <legend class="installation">General questions</legend>
-        <label class="leftquestionaire">How do you act like?</label>
-        <select name="q[individual]">
-            <option>as an individual</option>
-            <option>as an organisation</option>
-        </select>
-        <br/>
-        <label class="leftquestionaire">What kind of organisation is that?</label>
-        <select name="q[organisation]">
-             <option>private held</option>
-             <option>public held</option>
-             <option>government organisation</option>
-             <option>foundation</option>
-             <option>other</option>
-         </select>
-     </fieldset>
-     <br />
+            <fieldset>
+                <legend>General questions</legend>
+                
+                <p>
+                    <label>How do you act like?</label>
+                    <select name="q[individual]">
+                        <option>as an individual</option>
+                        <option>as an organisation</option>
+                    </select>
+                </p>
+                <p>
+                    <label>What kind of organisation is that?</label>
+                    <select name="q[organisation]">
+                         <option>private held</option>
+                         <option>public held</option>
+                         <option>government organisation</option>
+                         <option>foundation</option>
+                         <option>other</option>
+                     </select>
+                </p>
+             </fieldset>
 
-     <fieldset class="installation">
-         <legend class="installation">Technical questions</legend>
-         <label class="leftquestionaire">Where did you installed phpMyFAQ?</label>
-         <select name="q[server]">
-             <option>server run by a hosting company</option>
-             <option>public server run by you/your organisation</option>
-             <option>private server run by you/your organisation</option>
-             <option>Don't know</option>
-         </select>
-     </fieldset>
-     <br />
+            <fieldset>
+                <legend>Technical questions</legend>
+                <p>
+                    <label>Where did you installed phpMyFAQ?</label>
+                    <select name="q[server]">
+                        <option>server run by a hosting company</option>
+                        <option>public server run by you/your organisation</option>
+                        <option>private server run by you/your organisation</option>
+                        <option>Don't know</option>
+                    </select>
+                </p>
+            </fieldset>
 
-     <fieldset class="installation">
-         <legend class="installation">Beyond our own nose</legend>
-         <label class="leftquestionaire">Which PHP software do you also use?</label>
-         <input name="q[other]" /><br />
+            <fieldset>
+                <legend>Beyond our own nose</legend>
+                <p>
+                    <label>Which PHP software do you also use?</label>
+                    <input name="q[other]" />
+                </p>
+                <p>
+                    <label>Are you using other web technologies?</label>
+                    <input type="checkbox" name="q[other][]" value="ASP" />ASP
+                    <input type="checkbox" name="q[other][]" value="ASP.NET" />ASP.NET
+                    <input type="checkbox" name="q[other][]" value="jsp" />JAVA JSP
+                    <input type="checkbox" name="q[other][]" value="perl" />Perl
+                    <input type="checkbox" name="q[other][]" value="ruby" />Ruby / Ruby on Rails
+                    <input type="checkbox" name="q[other][]" value="python" />Python
+                    <input type="checkbox" name="q[other][]" value="clojure" />Clojure
+             </fieldset>
 
-         <label class="leftquestionaire">Are you using other web technologies?</label>
-         <input type="checkbox" name="q[other][]" value="ASP" />ASP
-         <input type="checkbox" name="q[other][]" value="ASP.NET" />ASP.NET
-         <input type="checkbox" name="q[other][]" value="jsp" />JAVA JSP
-         <input type="checkbox" name="q[other][]" value="perl" />Perl
-         <input type="checkbox" name="q[other][]" value="ruby" />Ruby / Ruby on Rails
-         <input type="checkbox" name="q[other][]" value="python" />Python
-     </fieldset>
-    <br />
+            <p class="hint">
+                Additional to your input we're going to submit some information about your system setup for statstic
+                purpose.
+            </p>
+            <p class="hint">
+                We are not storing any personal information. You can see the data by clicking
+                <a href="#" onclick="show('configliste'); return false;">here</a>.
+            </p>
 
-    <p class="center">Additional to your input we're going to submit some information about your system setup for statstic purpose.</p>
-    <p class="center">We are not storing any personal information. You can see the data by clicking <a href="#" onclick="show('configliste');return false;">here</a>.</p>
-
-    <div id="configliste" class="collapsed">
-        <a href="#" onclick="hide('configliste'); return false;">hide again</a>
-        <dl>
+            <div id="configliste" class="collapsed">
+                <a href="#" onclick="hide('configliste'); return false;">hide again</a>
+                <dl>
 <?php
 $questionnaire = new PMF_Helper_Questionnaire($configs);
 $options       = $questionnaire->get();
@@ -1031,15 +1097,16 @@ array_walk($options, 'data_printer');
 echo '</dl><input type="hidden" name="systemdata" value="' . 
     PMF_String::htmlspecialchars(serialize($questionnaire->get()), ENT_QUOTES) . '" />';
 ?>
-    </div>
-    <p class="center"><input type="submit" value="Click here to submit the data and finish the installation process" /></p>
-</form>
-<div id="questionnaireThanks" style="display:none;">
-    <p class="center"><b>Thank you for giving your feedback!</b></p>
-    <p class="center">You can visit <a href="../index.php">your version of phpMyFAQ</a> or</p>
-    <p class="center">login into your <a href="../admin/index.php">admin section</a>.</p>
-</div>
-<br />
+            </div>
+            <p>
+                <input class="submit" type="submit" value="Click here to submit the data and finish the installation process" />
+            </p>
+        </form>
+        <div id="questionnaireThanks" style="display:none;">
+            <p class="success"><b>Thank you for giving your feedback!</b></p>
+            <p>You can visit <a href="../index.php">your version of phpMyFAQ</a> or</p>
+            <p>login into your <a href="../admin/index.php">admin section</a>.</p>
+        </div>
 <?php
     // Remove 'phpmyfaq.spec' file: no need of prompt anything to the user
     if (file_exists(PMF_ROOT_DIR."/phpmyfaq.spec")) {
@@ -1048,15 +1115,15 @@ echo '</dl><input type="hidden" name="systemdata" value="' .
     
     // Remove 'setup.php' file
     if (@unlink(basename($_SERVER['SCRIPT_NAME']))) {
-        print "<p class=\"center\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";
+        print "<p class=\"success\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";
     } else {
-        print "<p class=\"center\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
+        print "<p class=\"hint\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
     }
     // Remove 'update.php' file
     if (@unlink(dirname($_SERVER["PATH_TRANSLATED"])."/update.php")) {
-        print "<p class=\"center\">The file <em>./install/update.php</em> was deleted automatically.</p>\n";
+        print "<p class=\"success\">The file <em>./install/update.php</em> was deleted automatically.</p>\n";
     } else {
-        print "<p class=\"center\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
+        print "<p class=\"hint\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
     }
     
     HTMLFooter();

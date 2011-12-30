@@ -18,7 +18,7 @@
  * @package   Translation
  * @author    Eduardo Polidor
  * @author    Ivan Gil
- * @copyright 2004-2010 phpMyFAQ Team
+ * @copyright 2004-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-06-24
@@ -155,7 +155,7 @@ $PMF_LANG["err_SaveComment"] = "Campos requeridos son <strong>tu Nombre</strong>
 $PMF_LANG["err_VoteTooMuch"] = "<p>No se contabilizan votaciones dobles. <a href=\"javascript:history.back();\">Click aquí</a>, para volver.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>¡No se ha evaluado!</strong> <a href=\"javascript:history.back();\">Por favor, pulsa aquí</a>, para votar.</p>";
 $PMF_LANG["err_noMailAdress"] = "Tu dirección de e-mail no es correcta.<br /><a href=\"javascript:history.back();\">volver</a>";
-$PMF_LANG["err_sendMail"] = "Campos requeridos son <strong>tu nombre</strong>, <strong>tu dirección de e-mail</strong> y <strong>tu pregunta</strong>!<br /><br /><a href=\"javascript:history.back();\">volver atrás</a><br /><br />";
+$PMF_LANG["err_sendMail"] = "Campos requeridos son <strong>tu nombre</strong>, <strong>tu dirección de e-mail</strong> y <strong>tu pregunta</strong>!";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Búsqueda de registros:</strong><br /></p>";
@@ -977,6 +977,18 @@ $LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "Ruta donde se gua
 $PMF_LANG['msgAttachmentNotFound'] = "	El archivo que está intentando descargar no se encontró en este servidor";
 $PMF_LANG['ad_sess_noentry'] = "Sin entradas";
 
+// added 2.5.3 2009-11-03 by Ivan Gil
+$PMF_LANG["ad_adus_password"] = "Contraseña";
+$PMF_LANG["ad_csv_backup"] = "Respaldo";
+$PMF_LANG["ad_menu_backup"] = "Respaldo";
+$PMF_LANG["rightsLanguage"]["backup"] = "crear respaldo";
+$LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Muestra email de usuario de forma segura (default: habilitado).");
+$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Comparar contenido publico contra palabras bloqueadas (default: habilitado).");
+$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "Usar codigo captcha para hablitar enviar contenido del publico (default: habilitado).");
+$PMF_LANG["ad_user_error_password"] = "Por favor registre su contraseña.";
+$PMF_LANG["ad_user_error_passwordsDontMatch"] = "La contraseña no coincide.";
+$PMF_LANG["admin_mainmenu_backup"] = "Respaldo";
+
 // added 2.6.0-alpha - 2009-07-30 by Aurimas FiÅ¡eras
 //P.S. "One User online" is also possible, since sprintf just ignores extra args
 $PMF_LANG["plmsgUserOnline"][0] = "%d usuario conectado";
@@ -1072,6 +1084,6 @@ $PMF_LANG['search.relevance.keywords-content-thema'] = 'Palabras clave - Respues
 $PMF_LANG['search.relevance.keywords-thema-content'] = 'Palabras clave - Pregunta - Respuesta';
 
 // added v2.6.99 - 2010-11-30 by Gustavo Solt
-$LANG_CONF['main.googleTranslationKey'] = array(0 => 'input', 1 => 'Clave API de Google');
 $LANG_CONF["main.enableGoogleTranslation"] = array(0 => "checkbox", 1 => "Activar las traducciones de Google? (Por defecto: desactivadas)'");
+$LANG_CONF['main.googleTranslationKey'] = array(0 => 'input', 1 => 'Clave API de Google');
 $PMF_LANG["msgNoGoogleApiKeyFound"] = 'La clave API de Google está vacía, por favor provea una en la sección de configuración';

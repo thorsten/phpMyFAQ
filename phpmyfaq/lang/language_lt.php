@@ -155,7 +155,7 @@ $PMF_LANG["err_SaveComment"] = "Būtini laukai yra <strong>jūsų vardas</strong
 $PMF_LANG["err_VoteTooMuch"] = "<p>Mes neskaičiuojame dvigubų balsų. <a href=\"javascript:history.back();\">Į ankstesnį tinklalapį</a>.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Jūs neįvertinote klausimo!</strong> Norėdami balsuoti <a href=\"javascript:history.back();\">spauskite čia</a>.</p>";
 $PMF_LANG["err_noMailAdress"] = "Jūsų el. pašto adresas yra neteisingas.<br /><a href=\"javascript:history.back();\">atgal</a>";
-$PMF_LANG["err_sendMail"] = "Būtini laukai yra <strong>jūsų vardas</strong>, <strong>jūsų el. pašto adresas</strong>, <strong>jūsų klausimas</strong> ir, kai prašoma, <strong><a href=\"http://lt.wikipedia.org/wiki/CAPTCHA\" title=\"Sužinokite daugiau apie CAPTCHA Vikipedijoje\" target=\"_blank\">CAPTCHA</a> kodas</strong>!<br /><br /><a href=\"javascript:history.back();\">į ankstesnį tinklalapį</a><br /><br />";
+$PMF_LANG["err_sendMail"] = "Būtini laukai yra <strong>jūsų vardas</strong>, <strong>jūsų el. pašto adresas</strong>, <strong>jūsų klausimas</strong> ir, kai prašoma, <strong><a href=\"http://lt.wikipedia.org/wiki/CAPTCHA\" title=\"Sužinokite daugiau apie CAPTCHA Vikipedijoje\" target=\"_blank\">CAPTCHA</a> kodas</strong>!";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Ieškoti įrašų:</strong><br />Su tokia paieška <strong style=\"color: Red;\">žodis1 žodis2</strong> jūs galite ieškoti svarbumo mažėjimo tvarka pagal du ar daugiau paieškos kriterijų.</p><p><strong>Pastaba:</strong> Jūsų paieškos kriterijus turi būti bent 4 raidžių ilgio, kitu atveju užklausa bus atmesta.</p>";

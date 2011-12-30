@@ -14,7 +14,7 @@
 # @author    Thorsten Rinne <thorsten@phpmyfaq.de>
 # @author    Patrick Preuster <sica@php-q.net>
 # @author    Matteo Scaramuccia <matteo@scaramuccia.com>
-# @copyright 2004-2010 phpMyFAQ Team
+# @copyright 2004-2011 phpMyFAQ Team
 #  @license  http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
 #  @link     http://www.phpmyfaq.de
 # @since     2004-11-13
@@ -82,10 +82,10 @@ RewriteCond %{REQUEST_URI}              category([0-9]+)\.html$ [NC]
 RewriteRule ^category(.*)\.html$        index.php?action=show&cat=$1 [L,QSA]
 
 # start page
-RewriteRule index.html$                 index.php [PT]
+RewriteRule ^index.html$                 index.php [PT]
 
 # sitemap (backward compatibility)
-RewriteCond %{REQUEST_URI}              sitemap-([a-zA-Z0-9�������]*)_([a-z\-]+)\.html$ [NC]
+RewriteCond %{REQUEST_URI}              sitemap-([a-zA-Z0-9]*)_([a-z\-]+)\.html$ [NC]
 RewriteRule ^sitemap-(.*)_(.*)\.html$   index.php?action=sitemap&letter=$1&lang=$2 [L,QSA]
 
 # a solution id page
@@ -125,12 +125,6 @@ RewriteRule sitemap.xml$        sitemap.google.php [L]
 RewriteRule sitemap.gz$         sitemap.google.php?gz=1 [L]
 RewriteRule sitemap.xml.gz$     sitemap.google.php?gz=1 [L]
 
-# PMF Yahoo sitemap
-# * http://[...]/urllist.txt
-# * http://[...]/urllist.txt.gz
-RewriteRule urllist.txt$        sitemap.yahoo.php [L]
-RewriteRule urllist.txt.gz$     sitemap.yahoo.php?gz=1 [L]
-
 # PMF tags page with page count
 # * http://[...]/tags/<ID>/<PAGE NUMBER>/<HEADER>.htm
 RewriteRule tags/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$   index.php?action=search&tagging_id=$1&seite=$2 [L,QSA]
@@ -150,4 +144,4 @@ RewriteRule api/getApiVersion                     api.php?action=getApiVersion [
 RewriteRule api/search/([a-z\-]+)/([a-z\-]+)$     api.php?action=search&lang=$1&q=$2 [L,QSA]
 RewriteRule api/getCategories                     api.php?action=getCategories [L,QSA]
 RewriteRule api/getFaqs/([a-z\-]+)/([0-9]+)       api.php?action=getFaqs&lang=$1&categoryId=$2 [L,QSA]
-RewriteRule api/getFaq/([a-z\-]+)/([0-9]+)        api.php?action=getFaq&lang=$1&categoryId=$2 [L,QSA]
+RewriteRule api/getFaq/([a-z\-]+)/([0-9]+)        api.php?action=getFaq&lang=$1&recordId=$2 [L,QSA]

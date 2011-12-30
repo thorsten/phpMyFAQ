@@ -134,7 +134,7 @@ $PMF_LANG['err_SaveComment'] = 'Les champs requis sont <strong>votre nom</strong
 $PMF_LANG['err_VoteTooMuch'] = '<p>Nous ne comptons pas les doubles votes. <a href="nojavascript...history.back();">Cliquez ici</a>, afin de retourner en arrière.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>Vous n\'avez pas voté!</strong> <a href="nojavascript...history.back();">Veuillez cliquer ici</a>, afin de voter.</p>';
 $PMF_LANG['err_noMailAdress'] = 'Votre adresse email n\'est pas correcte.<br /><a href="nojavascript...history.back();">retour</a>';
-$PMF_LANG['err_sendMail'] = 'Les champs requis sont <strong>votre nom</strong>, <strong>votre adresse e-mail</strong> et <strong>votre question</strong>!<br /><br /><a href="nojavascript...history.back();">retour d\'une page</a><br /><br />';
+$PMF_LANG['err_sendMail'] = 'Les champs requis sont <strong>votre nom</strong>, <strong>votre adresse e-mail</strong> et <strong>votre question</strong>!';
 $PMF_LANG['help_search'] = '<p><strong>Ainsi, vous trouverez un article :</strong><br />Avec l\'entrée <b style="color: Red;">Terme1 Terme2</b> on peut chercher plusieurs termes.</p><p><strong>Note :</strong> Votre mot-clef doit contenir au moins 4 lettres.</p>';
 $PMF_LANG['ad'] = 'SECTION ADMIN';
 $PMF_LANG['ad_menu_user_administration'] = 'Administration des utilisateurs';

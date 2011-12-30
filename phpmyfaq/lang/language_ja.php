@@ -177,7 +177,7 @@ $PMF_LANG["err_SaveComment"] = "<strong>名前</strong>、<strong>メールア�
 $PMF_LANG["err_VoteTooMuch"] = "<p>複数回の評価はできません。<a href=\"javascript:history.back();\">ここ</a>をクリックすると戻ります。</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>評価点数を選択してください。</strong> 評価をするためには<a href=\"javascript:history.back();\">ここ</a>をクリックしてください。</p>";
 $PMF_LANG["err_noMailAdress"] = "メールアドレスが正しくありません。<br /><a href=\"javascript:history.back();\">戻る</a>";
-$PMF_LANG["err_sendMail"] = "<strong>名前</strong>、<strong>メールアドレス</strong>、<strong>質問</strong>と要求された場合は <strong><a href=\"http://ja.wikipedia.org/wiki/Captcha\" title=\"Wikipedia で Captcha について読む\" target=\"_blank\">Captcha</a> コード</strong> は必須項目です!<br /><br /><a href=\"javascript:history.back();\">戻る</a><br /><br />";
+$PMF_LANG["err_sendMail"] = "<strong>名前</strong>、<strong>メールアドレス</strong>、<strong>質問</strong>と要求された場合は <strong><a href=\"http://ja.wikipedia.org/wiki/Captcha\" title=\"Wikipedia で Captcha について読む\" target=\"_blank\">Captcha</a> コード</strong> は必須項目です!";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>内容検索: </strong><br /><strong style=\"color: Red;\">言葉1 言葉2</strong>のように検索すると、2 個以上の検索結果が関連度が高い順番で表示されます。</p><p><strong>注意:</strong> 英文を検索する際には、少なくとも 4 文字以上を入力してください。</p>";

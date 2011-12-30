@@ -1,33 +1,55 @@
 phpMyFAQ 3.0.0-dev
 Codename "Poseidon"
 
+
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 3.0.0 - 201?-
 - added rewritten and enhanced category implementation (Johannes Schlüter, Thorsten)
-- added 960 Grid System CSS Framework (Thorsten)
-- added new administration layout (Thorsten)
 - added Ajax powered frontend (Guillaume Le Maout)
-- upgraded jQuery to version 1.4.2 (Thorsten)
 
-Version 2.7.0-alpha - 2011-01-
+Version 2.7.0-alpha2 - 2011-03-
 - changed PHP requirement to PHP 5.2.3 (Thorsten)
 - dropped support for MySQL 4.1 (Thorsten)
 - dropped support for Internet Explorer 6 (Thorsten)
-- added new HTML5 powered layout and administration backend (Thorsten)
+- added new HTML5/CSS3 powered layout and administration backend (Thorsten)
 - added configurable search relevance functionality (Gustavo Solt)
 - added automatic translations with Google Translate (Gustavo Solt)
 - added Twitter support (Thorsten, Thomas Zeithaml)
 - added Facebook Like Button support (Thorsten)
+- added "Bookmark on Delicious" support (Thorsten)
 - added attachment administration frontend (Anatoliy)
 - added basic authentication support for LDAP groups (Thorsten)
-- updated bundled jQuery to version 1.4.4 (Thorsten)
+- added basic support for HTML5 microdata (Thorsten)
+- added functionality of the TinyMCE save button (Gustavo Solt)
+- added basic reporting functionality (Gustavo Solt, Thorsten)
+- added IPv6 support (David Soria Parra)
+- improved usability in frontend and administration backend (Thorsten)
+- enabling Gzip compression by default (Thorsten)
+- updated bundled jQuery to version 1.5.1 (Thorsten)
+- updated bundled Modernizr to version 1.7 (Thorsten)
 
-Version 2.6.14 - 2011-01-
-- Added compatibility for MySQL 5.5 with ext/mysql (Thorsten)
-- Improved restore functionality (Thorsten)
+Version 2.6.16 - 2011-03
+- 
+
+Version 2.6.15 - 2011-02-23
+- added Malay translation (Ahmad Kamil Zailani)
+- updated Danish translation
+- updated Brazilian Portuguese translation
+- updated Spanish translation (Martin Schenk)
+- fixed minor bugs (Thorsten)
+
+Version 2.6.14 - 2011-01-24
+- added rewrite rules for nginx (Florian Anderiasch)
+- added compatibility for MySQL 5.5 with ext/mysql (Thorsten)
+- added support to ban IPs from user tracking files (Thorsten)
+- improved restore functionality (Thorsten)
+- updated Dutch translation (Hans)
+- updated German translation (Thorsten)
+- Fixed issue with sending mails to category administrators (Gustavo Solt)
+- fixed minor bugs (Thorsten)
 
 Version 2.6.13 - 2010-12-15
 - clean package after compromised server (Thorsten)

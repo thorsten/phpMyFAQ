@@ -156,7 +156,7 @@ $PMF_LANG["err_SaveComment"] = "आवश्यक जानकारी <strong
 $PMF_LANG["err_VoteTooMuch"] = "<p>हम दो बार दिए गए मत की गिनती नहीं करते हैं. पीछे जाने के लिए, <a href=\"javascript:history.back();\">क्लिक करें</a>.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>आपने सवाल को मत नहीं दिया!</strong> मत देने के लिए यहाँ पर <a href=\"javascript:history.back();\">क्लिक करें</a>.</p>";
 $PMF_LANG["err_noMailAdress"] = "आपका ईमेल पता सही नहीं है.<br /><a href=\"javascript:history.back();\">पीछे</a>";
-$PMF_LANG["err_sendMail"] = "आवश्यक जानकारियाँ <strong>आपका नाम</strong>, <strong>आपका ईमेल पता</strong>, <strong>आपका सवाल</strong> और, कब अनुरोध किया, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">एक पृष्ट पीछे</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "आवश्यक जानकारियाँ <strong>आपका नाम</strong>, <strong>आपका ईमेल पता</strong>, <strong>आपका सवाल</strong> और, कब अनुरोध किया, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>लेख खोजें:</strong><br /><strong style=\"color: Red;\">शब्द1 शब्द2</strong> तरह से खोजे गए शब्दों से आप दो या दो से जयादा मानदण्डों पर घटते क्रम में उपयुक्त लेख खोज सकतें हैं.</p><p><strong>ध्यान दें:</strong> आपका खोजने का मानदण्ड कम से कम ४ अक्षरों का होना चाहिए, वरना उस खोज मानदण्ड को नकार दिया जाएगा.</p>";

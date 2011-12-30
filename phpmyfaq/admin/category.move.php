@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2004-2010 phpMyFAQ Team
+ * @copyright 2004-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-04-29
@@ -41,13 +41,15 @@ if ($permission["editcateg"]) {
     
     printf('<h2>%s</h2>', $header);
 ?>
-    <form action="?action=changecategory" method="post">
-    <fieldset>
-        <legend><?php print $PMF_LANG["ad_categ_change"]; ?></legend>
-        <input type="hidden" name="cat" value="<?php print $categoryId; ?>" />
-        <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
-        <div class="row">
-               <select name="change" size="1">
+        <header>
+            <h2><?php print $header ?></h2>
+        </header>
+        <form action="?action=changecategory" method="post">
+            <input type="hidden" name="cat" value="<?php print $categoryId; ?>" />
+            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
+            <p>
+                <label><?php print $PMF_LANG["ad_categ_change"]; ?></label>
+                   <select name="change" size="1">
 <?php
     foreach ($categoryTreeHelper as $catId => $categoryName) {
         $parent = $categoryTreeHelper->getInnerIterator()->current()->getParentId();
@@ -56,11 +58,12 @@ if ($permission["editcateg"]) {
         }
     }
 ?>
-        </select>&nbsp;&nbsp;
-        <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" />
-        </div>
-    </fieldset>
-    </form>
+               </select
+            </p>
+            <p>
+                <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" />
+            </p>
+        </form>
 <?php
     printf('<p>%s</p>', $PMF_LANG['ad_categ_remark_move']);
 } else {

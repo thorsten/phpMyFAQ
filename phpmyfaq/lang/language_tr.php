@@ -153,7 +153,7 @@ $PMF_LANG["err_SaveComment"] = "Gerekli alanlar <strong>your name</strong>, <str
 $PMF_LANG["err_VoteTooMuch"] = "<p>Mükerrer oylar sayılmamaktadır. <a href=\"javascript:history.back();\">Buraya Tıkla</a>, geri dönmek için.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Soruyu oylayamazsınız!</strong> <a href=\"javascript:history.back();\">Lütfen buraya tıklayın</a>, oy kullanmak için.</p>";
 $PMF_LANG["err_noMailAdress"] = "E-mail adresiniz yanlış.<br /><a href=\"javascript:history.back();\">geri</a>";
-$PMF_LANG["err_sendMail"] = "Gerekli alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong> ve <strong>sorunuz</strong>!<br /><br />\n<a href=\"javascript:history.back();\">bir sayfa geri</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "Gerekli alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong> ve <strong>sorunuz</strong>!";
 
 // Yardım ve Arama
 $PMF_LANG["help_search"] = "<p><strong>Yazı Ara:</strong><br />şu kelimelere benzeyen girdileri ara <strong style=\"color: Red;\">kelime1 kelime2</strong> ıki veya daha fazla kritere inen arama yapabilirsiniz.</p><p><strong>Dikkat:</strong> Arama kriteriniz en az 4 harf uzunluğunda olmalıdır, aksi halde istek reddedilir.</p>";

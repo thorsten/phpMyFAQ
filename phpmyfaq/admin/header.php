@@ -2,7 +2,7 @@
 /**
  * Header of the admin area
  * 
- * PHP Version 5.2
+ * PHP Version 5.2.3
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administraion
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-26
@@ -166,7 +166,6 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 header("Content-type: text/html; charset=utf-8");
 header("Vary: Negotiate,Accept");
-
 ?>
 <!DOCTYPE html>
 <!--[if lt IE 7 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie6"> <![endif]-->
@@ -185,7 +184,7 @@ header("Vary: Negotiate,Accept");
     <meta name="author" content="phpMyFAQ Team">
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
     <meta name="application-name" content="phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?>">
-    <meta name="copyright" content="(c) 2001-2010 phpMyFAQ Team">
+    <meta name="copyright" content="(c) 2001-2011 phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
     <meta name="MSSmartTagsPreventParsing" content="true">
     
@@ -207,56 +206,73 @@ header("Vary: Negotiate,Accept");
 </head>
 <body dir="<?php print $PMF_LANG["dir"]; ?>">
 
-<div id="container">
-    <header id="header">
-        
-        <?php if (isset($auth) && is_null($action)) { ?>
-        <div id="loginBox">
-            <div id="languageSelection">
+<header id="header">
+
+    <?php if (isset($auth)) { ?>
+    <div id="loginBox">
+        <div id="languageSelection">
+            <p>
+                Hello, <span title="<?php print $PMF_LANG['ad_user_loggedin'] . $user->getLogin(); ?>">
+                    <?php print $user->getUserData('display_name'); ?>!
+                </span>
+            </p>
+            <?php if (is_null($action)) { ?>
                 <form action="index.php<?php print (isset($action) ? '?action=' . $action : ''); ?>" method="post">
                 <?php print PMF_Language::selectLanguages($LANGCODE, true); ?>
                 </form>
-            </div>
+            <?php } else { ?>
+
+            <p>
+                <?php print $PMF_LANG['ad_session_expiration']; ?>: <span id="sessioncounter">Loading...</span>
+            </p>
+            <?php } ?>
+            
         </div>
-        <?php } ?>
+    </div>
+    <?php } ?>
         
-        <h1><a class="mainpage" href="../"><?php print $faqconfig->get('main.titleFAQ'); ?></a></h1>
-        <?php if (isset($auth)) { ?>
-        <h2><?php print $PMF_LANG['ad_user_loggedin'] . $user->getUserData('display_name') . ' (' . $user->getLogin(); ?>)<br />
-        <?php print $PMF_LANG['ad_session_expiration']; ?>: <span id="sessioncounter">Loading...</span></h2>
+    <h1>
+        <a class="mainpage" href="../"><?php print $faqconfig->get('main.titleFAQ'); ?></a>
+    </h1>
+</header>
 
-        <nav>
-        <ul>
-            <li<?php print ($dashboardPage ? ' class="active"' : ''); ?>><a href="index.php"><?php print $PMF_LANG['admin_mainmenu_home']; ?></a></li>
-            <li<?php print ($userPage ? ' class="active"' : ''); ?>><a href="index.php?action=user"><?php print $PMF_LANG['admin_mainmenu_users']; ?></a></li>
-            <li<?php print ($contentPage ? ' class="active"' : ''); ?>><a href="index.php?action=content"><?php print $PMF_LANG['admin_mainmenu_content']; ?></a></li>
-            <li<?php print ($statisticsPage ? ' class="active"' : ''); ?>><a href="index.php?action=statistics"><?php print $PMF_LANG['admin_mainmenu_statistics']; ?></a></li>
-            <li<?php print ($exportsPage ? ' class="active"' : ''); ?>><a href="index.php?action=export"><?php print $PMF_LANG['admin_mainmenu_exports']; ?></a></li>
-            <li<?php print ($backupPage ? ' class="active"' : ''); ?>><a href="index.php?action=backup"><?php print $PMF_LANG['admin_mainmenu_backup']; ?></a></li>
-            <li<?php print ($configurationPage ? ' class="active"' : ''); ?>><a href="index.php?action=config"><?php print $PMF_LANG['admin_mainmenu_configuration']; ?></a></li>
-            <li><a class="logout" href="index.php?action=logout"><?php print $PMF_LANG['admin_mainmenu_logout']; ?></a></li>
-        </ul>
-        </nav><?php } ?>
-        
-    </header>
-    
-    <section id="maincolumns">
-        <?php if (isset($auth)) { ?>
-        <aside id="leftcolumn">
-            <div id="leftMenu">
-                <h2><?php print $secLevelHeader; ?></h2>
-                <nav>
-                    <ul>
-                    <?php print $secLevelEntries; ?>
-                    </ul>
-                </nav>
-            </div>
-            <div id="adminWorkLog">
-                <h2>Admin worklog</h2>
-                <span id="saving_data_indicator"></span>
-            </div>
-        </aside>
-        
-        <section id="maincontent">
-<?php }
+<?php if (isset($auth)) { ?>
+<nav>
+    <ul>
+        <li<?php print ($dashboardPage ? ' class="active"' : ''); ?>><a href="index.php"><?php print $PMF_LANG['admin_mainmenu_home']; ?></a></li>
+        <li<?php print ($userPage ? ' class="active"' : ''); ?>><a href="index.php?action=user"><?php print $PMF_LANG['admin_mainmenu_users']; ?></a></li>
+        <li<?php print ($contentPage ? ' class="active"' : ''); ?>><a href="index.php?action=content"><?php print $PMF_LANG['admin_mainmenu_content']; ?></a></li>
+        <li<?php print ($statisticsPage ? ' class="active"' : ''); ?>><a href="index.php?action=statistics"><?php print $PMF_LANG['admin_mainmenu_statistics']; ?></a></li>
+        <li<?php print ($exportsPage ? ' class="active"' : ''); ?>><a href="index.php?action=export"><?php print $PMF_LANG['admin_mainmenu_exports']; ?></a></li>
+        <li<?php print ($backupPage ? ' class="active"' : ''); ?>><a href="index.php?action=backup"><?php print $PMF_LANG['admin_mainmenu_backup']; ?></a></li>
+        <li<?php print ($configurationPage ? ' class="active"' : ''); ?>><a href="index.php?action=config"><?php print $PMF_LANG['admin_mainmenu_configuration']; ?></a></li>
+        <li><a class="logout" href="index.php?action=logout"><?php print $PMF_LANG['admin_mainmenu_logout']; ?></a></li>
+    </ul>
+</nav>
+<?php } ?>
 
+<div id="content">
+
+    <?php if (isset($auth)) { ?>
+
+    <div id="leftContent">
+        <menu id="categories">
+            <header>
+                <h3><?php print $secLevelHeader; ?></h3>
+            </header>
+            <ul>
+                <?php print $secLevelEntries; ?>
+            </ul>
+        </menu>
+        <div id="worklog">
+            <header>
+                <h3>Admin worklog</h3>
+            </header>
+            <span id="saving_data_indicator"></span>
+        </div>
+    </div>
+
+    <?php } ?>
+
+    <div id="mainContent">
+        <section>

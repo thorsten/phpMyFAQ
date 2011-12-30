@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-15
@@ -28,24 +28,25 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-print sprintf('<h2>%s</h2>', $PMF_LANG['ad_menu_glossary']);
+print sprintf('<header><h2>%s</h2></header>', $PMF_LANG['ad_glossary_add']);
 
 if ($permission['addglossary']) {
 ?>
-<form action="?action=saveglossary" method="post">
-<fieldset>
-    <legend><?php print $PMF_LANG['ad_glossary_add']; ?></legend>
+        <form action="?action=saveglossary" method="post">
+            <p>
+                <label for="item"><?php print $PMF_LANG['ad_glossary_item']; ?>:</label>
+                <input type="text" name="item" id="item" size="50" style="width: 300px;" />
+            </p>
 
-    <label class="left" for="item"><?php print $PMF_LANG['ad_glossary_item']; ?>:</label>
-    <input type="text" name="item" id="item" size="50" /><br />
+            <p>
+                <label for="definition"><?php print $PMF_LANG['ad_glossary_definition']; ?>:</label>
+                <textarea name="definition" id="definition" cols="50" rows="5" style="width: 300px;"></textarea>
+            </p>
 
-    <label class="left" for="definition"><?php print $PMF_LANG['ad_glossary_definition']; ?>:</label>
-    <textarea name="definition" id="definition" cols="50" rows="3"></textarea><br />
-
-    <input class="submit" style="margin-left: 190px;" type="submit" value="<?php print $PMF_LANG['ad_glossary_save']; ?>" />
-
-</fieldset>
-</form>
+            <p>
+                <input class="submit" type="submit" value="<?php print $PMF_LANG['ad_glossary_save']; ?>" />
+            </p>
+        </form>
 <?php
 } else {
     print $PMF_LANG["err_NotAuth"];

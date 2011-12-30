@@ -20,7 +20,7 @@
  * @author    Uwe Pries <uwe.pries@digartis.de>
  * @author    Sarah Hermann <sayh@gmx.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-15
@@ -33,57 +33,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 if ($permission['edituser'] || $permission['deluser'] || $permission['adduser']) {
     // set some parameters
-    $selectSize         = 10;
-    $defaultUserAction  = 'list';
-    $defaultUserStatus  = 'active';
-    $loginMinLength     = 4;
-
-    $errorMessages = array(
-        'addUser_password'           => $PMF_LANG['ad_user_error_password'],
-        'addUser_passwordsDontMatch' => $PMF_LANG['ad_user_error_passwordsDontMatch'],
-        'addUser_loginExists'        => $PMF_LANG["ad_adus_exerr"],
-        'addUser_loginInvalid'       => $PMF_LANG['ad_user_error_loginInvalid'],
-        'addUser_noEmail'            => $PMF_LANG['ad_user_error_noEmail'],
-        'addUser_noRealName'         => $PMF_LANG['ad_user_error_noRealName'],
-        'delUser'                    => $PMF_LANG['ad_user_error_delete'],
-        'delUser_noId'               => $PMF_LANG['ad_user_error_noId'],
-        'delUser_protectedAccount'   => $PMF_LANG['ad_user_error_protectedAccount'],
-        'updateUser'                 => $PMF_LANG['ad_msg_mysqlerr'],
-        'updateUser_noId'            => $PMF_LANG['ad_user_error_noId'],
-        'updateRights'               => $PMF_LANG['ad_msg_mysqlerr'],
-        'updateRights_noId'          => $PMF_LANG['ad_user_error_noId']);
-
-    $successMessages = array(
-        'addUser'                    => $PMF_LANG["ad_adus_suc"],
-        'delUser'                    => $PMF_LANG["ad_user_deleted"],
-        'updateUser'                 => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
-        'updateRights'               => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2']);
-
-    $text = array(
-        'header'                     => $PMF_LANG['ad_user'],
-        'selectUser'                 => $PMF_LANG["ad_user_username"],
-        'addUser'                    => $PMF_LANG["ad_adus_adduser"],
-        'addUser_confirm'            => $PMF_LANG["ad_gen_save"],
-        'addUser_cancel'             => $PMF_LANG['ad_gen_cancel'],
-        'addUser_link'               => $PMF_LANG["ad_user_add"],
-        'addUser_name'               => $PMF_LANG["ad_adus_name"],
-        'addUser_displayName'        => $PMF_LANG["ad_user_realname"],
-        'addUser_email'              => $PMF_LANG["ad_entry_email"],
-        'addUser_password'           => $PMF_LANG["ad_adus_password"],
-        'addUser_password2'          => $PMF_LANG["ad_passwd_con"],
-        'delUser'                    => $PMF_LANG['ad_user_deleteUser'],
-        'delUser_button'             => $PMF_LANG['ad_gen_delete'],
-        'delUser_question'           => $PMF_LANG["ad_user_del_3"]." ".$PMF_LANG["ad_user_del_1"]." ".$PMF_LANG["ad_user_del_2"],
-        'delUser_confirm'            => $PMF_LANG["ad_gen_yes"],
-        'delUser_cancel'             => $PMF_LANG["ad_gen_no"],
-        'changeUser'                 => $PMF_LANG["ad_user_profou"],
-        'changeUser_submit'          => $PMF_LANG["ad_gen_save"],
-        'changeUser_status'          => $PMF_LANG['ad_user_status'],
-        'changeRights'               => $PMF_LANG["ad_user_rights"],
-        'changeRights_submit'        => $PMF_LANG["ad_gen_save"],
-        'changeRights_checkAll'      => $PMF_LANG['ad_user_checkall'],
-        'changeRights_uncheckAll'    => $PMF_LANG['ad_user_uncheckall'],
-        'listAllUsers_link'          => $PMF_LANG['list_all_users']);
+    $selectSize        = 10;
+    $defaultUserAction = 'list';
+    $defaultUserStatus = 'active';
+    $loginMinLength    = 4;
 
     // what shall we do?
     // actions defined by url: user_action=
@@ -102,20 +55,23 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         $userAction = $defaultUserAction;
         $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
         if ($userId == 0) {
-            $message .= '<p class="error">'.$errorMessages['updateRights_noId'].'</p>';
+            $message .= sprintf('<p class="error">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
             $user       = new PMF_User();
             $perm       = $user->perm;
             // @todo: Add PMF_Filter::filterInputArray()
             $userRights = isset($_POST['user_rights']) ? $_POST['user_rights'] : array();
             if (!$perm->refuseAllUserRights($userId)) {
-                $message .= '<p class="error">'.$errorMessages['updateRights'].'</p>';
+                $message .= sprintf('<p class="error">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
             }
             foreach ($userRights as $rightId) {
                 $perm->grantUserRight($userId, $rightId);
             }
             $idUser   = $user->getUserById($userId);
-            $message .= '<p class="success">'.sprintf($successMessages['updateRights'], $user->getLogin()).'</p>';
+            $message .= sprintf('<p class="success">%s <strong>%s</strong> %s</p>',
+                $PMF_LANG['ad_msg_savedsuc_1'],
+                $user->getLogin(),
+                $PMF_LANG['ad_msg_savedsuc_2']);
             $message .= '<script type="text/javascript">updateUser('.$userId.');</script>';
         }
     }
@@ -126,7 +82,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         $userAction = $defaultUserAction;
         $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
         if ($userId == 0) {
-            $message .= '<p class="error">'.$errorMessages['updateUser_noId'].'</p>';
+            $message .= sprintf('<p class="error">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
             $userData                  = array();
             $userData['display_name']  = PMF_Filter::filterInput(INPUT_POST, 'display_name', FILTER_SANITIZE_STRING, '');
@@ -162,9 +118,12 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             }
 
             if (!$user->userdata->set(array_keys($userData), array_values($userData)) or !$user->setStatus($userStatus)) {
-                $message .= '<p class="error">'.$errorMessages['updateUser'].'</p>';
+                $message .= sprintf('<p class="error">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
             } else {
-                $message .= '<p class="success">'.sprintf($successMessages['updateUser'], $user->getLogin()).'</p>';
+                $message .= sprintf('<p class="success">%s <strong>%s</strong> %s</p>',
+                    $PMF_LANG['ad_msg_savedsuc_1'],
+                    $user->getLogin(),
+                    $PMF_LANG['ad_msg_savedsuc_2']);
                 $message .= '<script type="text/javascript">updateUser('.$userId.');</script>';
             }
         }
@@ -177,32 +136,37 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
 
         $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_list_select', FILTER_VALIDATE_INT, 0);
         if ($userId == 0) {
-            $message .= '<p class="error">'.$errorMessages['delUser_noId'].'</p>';
+            $message   .= sprintf('<p class="error">%s</p>', $PMF_LANG['ad_user_error_noId']);
             $userAction = $defaultUserAction;
         } else {
             $user->getUserById($userId);
             // account is protected
             if ($user->getStatus() == 'protected' || $userId == 1) {
+                $message   .= sprintf('<p class="error">%s</p>', $PMF_LANG['ad_user_error_protectedAccount']);
                 $userAction = $defaultUserAction;
-                $message .= '<p class="error">'.$errorMessages['delUser_protectedAccount'].'</p>';
             } else {
 ?>
+<<<<<<< HEAD
 
 <h2><?php print $text['header']; ?></h2>
 <div id="user_confirmDelete">
     <fieldset>
         <legend><?php print $text['delUser']; ?> <strong><?php print $user->getLogin(); ?></strong></legend>
         <p><?php print $text['delUser_question']; ?></p>
+=======
+        <header>
+            <h2><?php print $PMF_LANG['ad_user_deleteUser']; ?> <strong><?php print $user->getLogin(); ?></strong></h2>
+        </header>
+        <p><?php print $PMF_LANG["ad_user_del_3"].' '.$PMF_LANG["ad_user_del_1"].' '.$PMF_LANG["ad_user_del_2"]; ?></p>
+>>>>>>> 3c9295794d076bc80af3ee7a7c81d79b94d916fe
         <form action ="?action=user&amp;user_action=delete" method="post">
             <input type="hidden" name="user_id" value="<?php print $userId; ?>" />
             <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
-            <div class="button_row">
-                <input class="reset" type="submit" name="cancel" value="<?php print $text['delUser_cancel']; ?>" />
-                <input class="submit" type="submit" value="<?php print $text['delUser_confirm']; ?>" />
-            </div>
+            <p>
+                <input class="reset" type="submit" name="cancel" value="<?php print $PMF_LANG["ad_gen_no"]; ?>" />
+                <input type="submit" value="<?php print $PMF_LANG["ad_gen_yes"]; ?>" />
+            </p>
         </form>
-    </fieldset>
-</div>
 <?php
             }
         }
@@ -220,7 +184,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         }
         $userAction = $defaultUserAction;
         if ($userId == 0 && !$csrfOkay) {
-            $message .= '<p class="error">'.$errorMessages['delUser_noId'].'</p>';
+            $message .= sprintf('<p class="error">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
             // Move the categories ownership to admin (id == 1)
             $categoryHelper = new PMF_Category_Helper();
@@ -232,10 +196,10 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                 $oPerm->removeFromAllGroups($userId);
             }
             if (!$user->getUserById($userId)) {
-                $message .= '<p class="error">'.$errorMessages['delUser_noId'].'</p>';
+                $message .= sprintf('<p class="error">%s</p>', $PMF_LANG['ad_user_error_noId']);
             }
             if (!$user->deleteUser()) {
-                $message .= '<p class="error">'.$errorMessages['delUser'].'</p>';
+                $message .= sprintf('<p class="error">%s</p>', $PMF_LANG['ad_user_error_delete']);
             } else {
                 // Move the categories ownership to admin (id == 1)
                 $oCat = new PMF_Category($current_admin_user, $current_admin_groups, false);
@@ -247,11 +211,11 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                     $oPerm->removeFromAllGroups($userId);
                 }
 
-                $message .= '<p class="success">'.$successMessages['delUser'].'</p>';
+                $message .= sprintf('<p class="success">%s</p>', $PMF_LANG['ad_user_deleted']);
             }
             $userError = $user->error();
             if ($userError != "") {
-                $message .= '<p>ERROR: '.$userError.'</p>';
+                $message .= sprintf('<p class="error">%s</p>', $userError);
             }
         }
     }
@@ -276,28 +240,28 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         if ($user_password != $user_password_confirm) {
             $user_password         = '';
             $user_password_confirm = '';
-            $messages[]            = $errorMessages['addUser_passwordsDontMatch'];
+            $messages[]            = $PMF_LANG['ad_user_error_passwordsDontMatch'];
         }
 
         // check login name
         $user->setLoginMinLength($loginMinLength);
         if (!$user->isValidLogin($user_name)) {
             $user_name  = '';
-            $messages[] = $errorMessages['addUser_loginInvalid'];
+            $messages[] = $PMF_LANG['ad_user_error_loginInvalid'];
         }
         if ($user->getUserByLogin($user_name)) {
             $user_name  = '';
-            $messages[] = $errorMessages['addUser_loginExists'];
+            $messages[] = $PMF_LANG['ad_adus_exerr'];
         }
         // check realname
-        if ($user_realname == "") {
+        if ($user_realname == '') {
             $user_realname = '';
-            $messages[]    = $errorMessages['addUser_noRealName'];
+            $messages[]    = $PMF_LANG['ad_user_error_noRealName'];
         }
         // check e-mail
         if (is_null($user_email)) {
             $user_email = '';
-            $messages[] = $errorMessages['addUser_noEmail'];
+            $messages[] = $PMF_LANG['ad_user_error_noEmail'];
         }
 
         // ok, let's go
@@ -315,13 +279,15 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         // no errors, show list
         if (count($messages) == 0) {
             $userAction = $defaultUserAction;
-            $message    = '<p class="success">'.$successMessages['addUser'].'</p>';
+            $message    = sprintf('<p class="success">%s</p>', $PMF_LANG['ad_adus_suc']);
             // display error messages and show form again
         } else {
             $userAction = 'add';
+            $message    = '<p class="error">';
             foreach ($messages as $err) {
-                $message .= '<p class="error">'.$err.'</p>';
+                $message .= $err . '<br />';
             }
+            $message .= '</p>';
         }
     }
 
@@ -332,33 +298,51 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     // show new user form
     if ($userAction == 'add') {
 ?>
-<h2><?php print $text['header']; ?></h2>
-<div id="user_message"><?php print $message; ?></div>
-<div id="user_create">
-    <fieldset>
-        <legend><?php print $text['addUser']; ?></legend>
-        <form action="?action=user&amp;user_action=addsave" method="post">
-        <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
-        
-            <label class="left" for="user_name"><?php print $text['addUser_name']; ?></label>
-            <input type="text" name="user_name" value="<?php print (isset($user_name) ? $user_name : ''); ?>" tabindex="1" /><br />
+        <header>
+            <h2><?php print $PMF_LANG["ad_adus_adduser"]; ?></h2>
+        </header>
 
-            <label class="left" for="user_realname"><?php print $text['addUser_displayName']; ?></label>
-            <input type="text" name="user_realname" value="<?php print (isset($user_realname) ? $user_realname : ''); ?>" tabindex="2" /><br />
+        <div id="user_message"><?php print $message; ?></div>
+        <div id="user_create">
 
-            <label class="left" for="user_email"><?php print $text['addUser_email']; ?></label>
-            <input type="text" name="user_email" value="<?php print (isset($user_email) ? $user_email : ''); ?>" tabindex="3" /><br />
+            <form action="?action=user&amp;user_action=addsave" method="post">
+            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
 
-            <label class="left" for="password"><?php print $text['addUser_password']; ?></label>
-            <input type="password" name="user_password" value="<?php print (isset($user_password) ? $user_password : ''); ?>" tabindex="4" /><br />
+            <p>
+                <label for="user_name"><?php print $PMF_LANG["ad_adus_name"]; ?></label>
+                <input type="text" name="user_name" id="user_name"
+                       value="<?php print (isset($user_name) ? $user_name : ''); ?>" required="required" tabindex="1" />
+            </p>
 
-            <label class="left" for="password_confirm"><?php print $text['addUser_password2']; ?></label>
-            <input type="password" name="user_password_confirm" value="<?php print (isset($user_password_confirm) ? $user_password_confirm : ''); ?>" tabindex="5" /><br />
+            <p>
+                <label for="user_realname"><?php print $PMF_LANG["ad_user_realname"]; ?></label>
+                <input type="text" name="user_realname" id="user_realname"
+                       value="<?php print (isset($user_realname) ? $user_realname : ''); ?>" required="required" tabindex="2" />
+            </p>
 
-            <input style="margin-left: 190px;" class="submit" type="submit" value="<?php print $text['addUser_confirm']; ?>" tabindex="6" />
-            <input class="submit" name="cancel" type="submit" value="<?php print $text['addUser_cancel']; ?>" tabindex="7" /><br />
+            <p>
+                <label for="user_email"><?php print $PMF_LANG["ad_entry_email"]; ?></label>
+                <input type="email" name="user_email" id="user_email"
+                       value="<?php print (isset($user_email) ? $user_email : ''); ?>" required="required" tabindex="3" />
+            </p>
+
+            <p>
+                <label for="password"><?php print $PMF_LANG["ad_adus_password"]; ?></label>
+                <input type="password" name="user_password" id="password"
+                       value="<?php print (isset($user_password) ? $user_password : ''); ?>" required="required" tabindex="4" />
+            </p>
+
+            <p>
+                <label for="password_confirm"><?php print $PMF_LANG["ad_passwd_con"]; ?></label>
+                <input type="password" name="user_password_confirm" id="password_confirm"
+                       value="<?php print (isset($user_password_confirm) ? $user_password_confirm : ''); ?>" required="required" tabindex="5" />
+            </p>
+
+            <p>
+                <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_gen_save"]; ?>" tabindex="6" />
+                <input name="cancel" type="submit" value="<?php print $PMF_LANG['ad_gen_cancel']; ?>" tabindex="7" />
+            </p>
         </form>
-    </fieldset>
 </div> <!-- end #user_create -->
 <?php
     }
@@ -366,8 +350,13 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     // show list of users
     if ($userAction == 'list') {
 ?>
-<script type="text/javascript" src="js/user.js"></script>
-<script type="text/javascript">
+        
+        <header>
+            <h2><?php print $PMF_LANG['ad_user']; ?></h2>
+        </header>
+
+        <script type="text/javascript" src="js/user.js"></script>
+        <script type="text/javascript">
 /* <![CDATA[ */
 
 /**
@@ -385,99 +374,98 @@ function getUserData(user_id)
             $('#user_list_autocomplete').val(data.login);
             $("#user_list_select").val(data.user_id);
             // Append input fields
-            $('#user_data_table').append('<br /><label><?php print $PMF_LANG["ad_user_realname"]; ?></label>');
-            $('#user_data_table').append('<input type="text" class="input_row" name="display_name" value="' + data.display_name + '" />');
-            $('#user_data_table').append('<br /><label><?php print $PMF_LANG["ad_entry_email"]; ?></label>');
-            $('#user_data_table').append('<input type="text" class="input_row" name="email" value="' + data.email + '" />');
-            $('#user_data_table').append('<br /><label><?php print $PMF_LANG["ad_user_lastModified"]; ?></label>');
-            $('#user_data_table').append('<input type="text" class="input_row" name="last_modified" value="' + data.last_modified + '" />');
-            
+            $('#user_data_table').append('<p>' +
+                                         '<label class="small"><?php print $PMF_LANG["ad_user_realname"]; ?></label>' +
+                                         '<input type="text" name="display_name" value="' + data.display_name + '" />' +
+                                         '</p>' +
+                                         '<p>' +
+                                         '<label class="small"><?php print $PMF_LANG["ad_entry_email"]; ?></label>' +
+                                         '<input type="email" name="email" value="' + data.email + '" />' +
+                                         '</p>' +
+                                         '<p>' +
+                                         '<label class="small"><?php print $PMF_LANG["ad_user_lastModified"]; ?></label>' +
+                                         '<input type="text" name="last_modified" value="' + data.last_modified + '" />' +
+                                         '</p>');
         });
 }
-/* ]]> */
-</script>
+        /* ]]> */
+        </script>
+        <div id="user_message"><?php print $message; ?></div>
+        <div id="userInterface">
+            <div id="userAccounts">
+                <div id="userList">
+                <fieldset>
+                    <legend><?php print $PMF_LANG["ad_user_username"]; ?></legend>
+                    <form name="user_select" id="user_select" action="?action=user&amp;user_action=delete_confirm" method="post">
 
-    <h2><?php print $text['header']; ?></h2>
-    
-    <div class="clear"></div>
-    <div id="userAccounts" class="grid_4 alpha">
-        <p id="user_message"><?php print $message; ?></p>
-        <div id="user_list">
-        <fieldset>
-            <legend><?php print $text['selectUser']; ?></legend>
-            <form name="user_select" id="user_select" action="?action=user&amp;user_action=delete_confirm" method="post">
-                
-                <input type="text" id="user_list_autocomplete" name="user_list_search" />
-                <script type="text/javascript">
-                //<![CDATA[
-                    $('#user_list_autocomplete').autocomplete("index.php?action=ajax&ajax=user&ajaxaction=get_user_list", { width: 180, selectFirst: true } );
-                    $('#user_list_autocomplete').result(function(event, data, formatted) {
-                        var user_id = data[1];
-                        $("#user_list_select").val(user_id);
-                        getUserData(user_id);
-                        getUserRights(user_id);
-                    });
-                    //]]>
-                </script>
-                <div class="button_row">
-                    <input type="hidden" id="user_list_select" name="user_list_select" value="" />
-                    <input class="submit" type="submit" value="<?php print $text['delUser_button']; ?>" tabindex="2" />
-                </div>
-            </form>
-        </fieldset>
-        <p>
-            [ <a href="?action=user&amp;user_action=add"><?php print $text['addUser_link']; ?></a> ]<br/>
-            [ <a href="?action=user&amp;user_action=listallusers"><?php print $text['listAllUsers_link']; ?></a> ]        
-        </p>
-    </div>
-    </div>
-    
-    <div id="userData" class="grid_4">
-    <fieldset>
-        <legend id="user_data_legend"><?php print $text['changeUser']; ?></legend>
-        <form action="?action=user&amp;user_action=update_data" method="post">
-            <input id="update_user_id" type="hidden" name="user_id" value="0" />
-            <div class="input_row">
-                <label for="user_status_select"><?php print $text['changeUser_status']; ?></label>
-                <select id="user_status_select" name="user_status" >
-                    <option value="active"><?php print $PMF_LANG['ad_user_active']; ?></option>
-                    <option value="blocked"><?php print $PMF_LANG['ad_user_blocked']; ?></option>
-                    <option value="protected"><?php print $PMF_LANG['ad_user_protected']; ?></option>
-                </select>
-            </div>
-            <div id="user_data_table"></div><!-- end #user_data_table -->
-            <div class="button_row">
-                <input class="submit" type="submit" value="<?php print $text['changeUser_submit']; ?>" tabindex="6" />
-            </div>
-        </form>
-    </fieldset>
-    </div>
-    
-    <div id="userRights" class="grid_4 omega">
-    <fieldset>
-        <legend id="user_rights_legend"><?php print $text['changeRights']; ?></legend>
-        <form id="rightsForm" action="?action=user&amp;user_action=update_rights" method="post">
-            <input id="rights_user_id" type="hidden" name="user_id" value="0" />
-            <div>
-                <span><a href="javascript:form_checkAll('rightsForm')"><?php print $text['changeRights_checkAll']; ?></a></span>
-                <span><a href="javascript:form_uncheckAll('rightsForm')"><?php print $text['changeRights_uncheckAll']; ?></a></span>
-            </div>
-            <table id="user_rights_table">
-<?php foreach ($user->perm->getAllRightsData() as $right) { ?>
-                <tr>
-                    <td><input id="user_right_<?php print $right['right_id']; ?>" type="checkbox" name="user_rights[]" value="<?php print $right['right_id']; ?>"/></td>
-                    <td>&nbsp;<?php print (isset($PMF_LANG['rightsLanguage'][$right['name']]) ? $PMF_LANG['rightsLanguage'][$right['name']] : $right['description']); ?></td>
-                </tr>
-<?php } ?>
-            </table>
-            <div class="button_row">
-                <input class="submit" type="submit" value="<?php print $text['changeRights_submit']; ?>" />
-            </div>
-        </form>
-    </fieldset>
-    </div>
-    
-    <div class="clear"></div>
+                        <input type="text" id="user_list_autocomplete" name="user_list_search" />
+                        <script type="text/javascript">
+                        //<![CDATA[
+                            $('#user_list_autocomplete').autocomplete("index.php?action=ajax&ajax=user&ajaxaction=get_user_list", { width: 180, selectFirst: true } );
+                            $('#user_list_autocomplete').result(function(event, data, formatted) {
+                                var user_id = data[1];
+                                $("#user_list_select").val(user_id);
+                                getUserData(user_id);
+                                getUserRights(user_id);
+                            });
+                            //]]>
+                        </script>
+                        <p>
+                            <input type="hidden" id="user_list_select" name="user_list_select" value="" />
+                            <input type="submit" value="<?php print $PMF_LANG['ad_gen_delete']; ?>" />
+                        </p>
+                    </form>
+                </fieldset>
+                <p>
+                    [ <a href="?action=user&amp;user_action=add"><?php print $PMF_LANG["ad_user_add"]; ?></a> ]<br/>
+                    [ <a href="?action=user&amp;user_action=listallusers"><?php print $PMF_LANG['list_all_users']; ?></a> ]
+                </p>
+                </div> <!-- end #userList -->
+            </div> <!-- end #userAccounts -->
+            <div id="userDetails">
+                <fieldset>
+                    <legend id="user_data_legend"><?php print $PMF_LANG["ad_user_profou"]; ?></legend>
+                    <form action="?action=user&amp;user_action=update_data" method="post">
+                        <input id="update_user_id" type="hidden" name="user_id" value="0" />
+                        <p>
+                            <label for="user_status_select" class="small"><?php print $PMF_LANG['ad_user_status']; ?></label>
+                            <select id="user_status_select" name="user_status" >
+                                <option value="active"><?php print $PMF_LANG['ad_user_active']; ?></option>
+                                <option value="blocked"><?php print $PMF_LANG['ad_user_blocked']; ?></option>
+                                <option value="protected"><?php print $PMF_LANG['ad_user_protected']; ?></option>
+                            </select>
+                        </p>
+                        <div id="user_data_table"></div><!-- end #user_data_table -->
+                        <p>
+                            <input type="submit" value="<?php print $PMF_LANG["ad_gen_save"]; ?>" tabindex="6" />
+                        </p>
+                    </form>
+                </fieldset>
+            </div> <!-- end #userDetails -->
+            <div id="userRights">
+                <fieldset>
+                    <legend id="user_rights_legend"><?php print $PMF_LANG["ad_user_rights"]; ?></legend>
+                    <form id="rightsForm" action="?action=user&amp;user_action=update_rights" method="post">
+                        <input id="rights_user_id" type="hidden" name="user_id" value="0" />
+                        <div>
+                            <span><a href="javascript:form_checkAll('rightsForm')"><?php print $PMF_LANG['ad_user_checkall']; ?></a></span>
+                            <span><a href="javascript:form_uncheckAll('rightsForm')"><?php print $PMF_LANG['ad_user_uncheckall']; ?></a></span>
+                        </div>
+                        <table id="user_rights_table">
+            <?php foreach ($user->perm->getAllRightsData() as $right) { ?>
+                            <tr>
+                                <td><input id="user_right_<?php print $right['right_id']; ?>" type="checkbox" name="user_rights[]" value="<?php print $right['right_id']; ?>"/></td>
+                                <td>&nbsp;<?php print (isset($PMF_LANG['rightsLanguage'][$right['name']]) ? $PMF_LANG['rightsLanguage'][$right['name']] : $right['description']); ?></td>
+                            </tr>
+            <?php } ?>
+                        </table>
+                        <div class="button_row">
+                            <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_gen_save"]; ?>" />
+                        </div>
+                    </form>
+                </fieldset>
+            </div> <!-- end #userRights -->
+        </div>
 <?php 
         if (isset($_GET['user_id'])) {
             $userId     = PMF_Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT, 0);
@@ -488,37 +476,38 @@ function getUserData(user_id)
     // show list of all users
     if ($userAction == 'listallusers') {
 ?>
-
-    <h2><?php print $text['header']; ?></h2>
-    <p id="user_message"><?php print $message; ?></p>
-    
-    <div id="userList">
-    <table>
-    <thead>
-        <tr>
-            <th><?php print $PMF_LANG['ad_entry_id']?>:</th>
-            <th><?php print $PMF_LANG['msgNewContentName']?></th>
-            <th><?php print $PMF_LANG['msgNewContentMail']?></th>
-            <th><?php print $PMF_LANG['ad_entry_action']?></th>
-        </tr>
-    </thead>
+        <header>
+            <h2><?php print $PMF_LANG['ad_user']; ?></h2>
+        </header>
+        <div id="user_message"><?php print $message; ?></div>
+        <table class="list" style="width: 100%">
+        <thead>
+            <tr>
+                <th><?php print $PMF_LANG['ad_entry_id'] ?></th>
+                <th><?php print $PMF_LANG['msgNewContentName'] ?></th>
+                <th><?php print $PMF_LANG['ad_user_username'] ?></th>
+                <th><?php print $PMF_LANG['msgNewContentMail'] ?></th>
+                <th><?php print $PMF_LANG['ad_entry_action'] ?></th>
+            </tr>
+        </thead>
         <tbody>
-        <?php 
-            foreach ($user->getAllUsers() as $userId) {
-                $user->getUserById($userId);
-        ?>
+            <?php foreach ($user->getAllUsers() as $userId) { $user->getUserById($userId); ?>
+
             <tr>
                 <td><?php print $user->getUserData('user_id')?></td>
                 <td><?php print $user->getUserData('display_name')?></td>
-                <td><?php print $user->getUserData('email')?></td>
-                <td><a href="?action=user&amp;user_id=<?php print $user->getUserData('user_id')?>"><?php print $PMF_LANG['ad_user_edit']?></a></td>
+                <td><?php print $user->getLogin() ?></td>
+                <td>
+                    <a href="mailto:<?php print $user->getUserData('email')?>"><?php print $user->getUserData('email')?></a>
+                </td>
+                <td>
+                    <a href="?action=user&amp;user_id=<?php print $user->getUserData('user_id')?>"><?php print $PMF_LANG['ad_user_edit']?></a>
+                </td>
             </tr>
-        <?php
-            }
-        ?>
+            <?php } ?>
+        
         </tbody>
-    </table>
-    </div>
+        </table>
 <?php 
     }
 } else {

@@ -18,10 +18,10 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @since     2003-11-13
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2003-2010 phpMyFAQ Team
+ * @since     2003-11-13
  */
 
 function Picture(pic,title,width,height)
@@ -275,29 +275,161 @@ function table_addRow(table, rowNumber, col1, col2)
     tr.appendChild(td2);
 }
 
-$('#instantfield').keyup(function() 
+/**
+ * Displays or hides the info boxes
+ *
+ * @return void
+ */
+function infoBox(infobox_id)
 {
-    var search   = $('#instantfield').val();
-    var language = $('#ajaxlanguage').val();
-    var category = $('#searchcategory').val();
-            
-    if (search.length > 0) { 
-        $.ajax({ 
-            type:    "POST", 
-            url:     "ajaxresponse.php", 
-            data:    "search=" + search + "&ajaxlanguage=" + language + "&searchcategory=" + category, 
-            success: function(searchresults) 
-            { 
-                $("#instantresponse").empty(); 
-                if (searchresults.length > 0)  { 
-                    $("#instantresponse").append(searchresults);
-                } 
-            } 
-        });
+    if ($('#' + infobox_id).css('display') == 'none') {
+        $('.faqTabContent').hide();
+        $('#' + infobox_id).show();
+    } else {
+        $('#' + infobox_id).hide();
     }
-});
+}
 
-$('#instantform').submit(function()
+/**
+ * Saves all content from the given form via Ajax
+ *
+ * @param string action   Actions: savecomment, savefaq, savequestion,
+ *                        saveregistration, savevoting, sendcontact,
+ *                        sendtofriends
+ * @param string formName Name of the current form
+ * 
+ * @return void
+ */
+function saveFormValues(action, formName)
 {
+    var formValues = $('#formValues');
+
+    $('#loader').show();
+    $('#loader').fadeIn(400).html('<img src="images/ajax-loader.gif" />Saving ...');
+
+    $.ajax({
+        type:     'post',
+        url:      'ajaxservice.php?action=' + action,
+        data:     formValues.serialize(),
+        dataType: 'json',
+        cache:    false,
+        success:  function(json) {
+            if (json.success == undefined) {
+                $('#' + formName + 's').html('<p class="error">' + json.error + '</p>');
+                $('#loader').hide();
+            } else {
+                $('#' + formName + 's').html('<p class="success">' + json.success + '</p>');
+                $('#' + formName + 's').fadeIn("slow");
+                $('#loader').hide();
+                $('#' + formName + 'Form').hide();
+                // @todo add reload of content
+            }
+        }
+    });
+    
     return false;
-});
+}
+
+/**
+ * Auto-suggest function for instant response
+ *
+ * @return void
+ */
+//function autoSuggest()
+//{
+    $('input#instantfield').keyup(function()
+    {
+        var search   = $('#instantfield').val();
+        var language = $('#ajaxlanguage').val();
+        var category = $('#searchcategory').val();
+
+        if (search.length > 0) {
+            $.ajax({
+                type:    "POST",
+                url:     "ajaxresponse.php",
+                data:    "search=" + search + "&ajaxlanguage=" + language + "&searchcategory=" + category,
+                success: function(searchresults)
+                {
+                    $("#instantresponse").empty();
+                    if (searchresults.length > 0)  {
+                        $("#instantresponse").append(searchresults);
+                    }
+                }
+            });
+        }
+    });
+
+    $('#instantform').submit(function()
+    {
+        return false;
+    });
+//}
+
+/**
+ * Saves the voting by Ajax
+ * 
+ * @param type
+ * @param id
+ * @param value
+ */
+function saveVoting(type, id, value)
+{
+    $.ajax({
+        type:     'post',
+        url:      'ajaxservice.php?action=savevoting',
+        data:     'type=' + type + '&id=' + id + '&vote=' + value,
+        dataType: 'json',
+        cache:    false,
+        success:  function(json) {
+            if (json.success == undefined) {
+                $('#votings').html('<p class="error">' + json.error + '</p>');
+                $('#loader').hide();
+            } else {
+                $('#votings').html('<p class="success">' + json.success + '</p>');
+                $('#votings').fadeIn("slow");
+                $('#loader').hide();
+                $('#votingForm').hide();
+            }
+        }
+    });
+
+    return false;
+}
+
+/**
+ * Checks the content of a question by Ajax
+ *
+ * @param type
+ * @param id
+ * @param value
+ */
+function checkQuestion()
+{
+    var formValues = $('#formValues');
+
+    $('#loader').show();
+    $('#loader').fadeIn(400).html('<img src="images/ajax-loader.gif" />Saving ...');
+
+    $.ajax({
+        type:     'post',
+        url:      'ajaxservice.php?action=savequestion',
+        data:     formValues.serialize(),
+        dataType: 'json',
+        cache:    false,
+        success:  function(json) {
+            if (json.result == undefined) {
+                $('#qerror').html('<p class="error">' + json.error + '</p>');
+                $('#loader').hide();
+            } else {
+                $('#qerror').empty();
+                $('#questionForm').fadeOut('slow');
+                $('#answerForm').html(json.result);
+                $('#answerForm').fadeIn("slow");
+                $('#loader').hide();
+                $('#formValues').append('<input type="hidden" name="save" value="1" />');
+            }
+        }
+    });
+
+    return false;
+}

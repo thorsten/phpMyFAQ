@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2010 phpMyFAQ Team
+ * @copyright 2002-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-16
@@ -42,9 +42,9 @@ $tpl->processTemplate ('writeContent', array(
     'msgContact'         => $PMF_LANG['msgContact'],
     'msgContactOwnText'  => nl2br($faqconfig->get('main.contactInformations')),
     'msgContactEMail'    => $PMF_LANG['msgContactEMail'],
-    'writeSendAdress'    => '?' . $sids . 'action=sendmail',
     'msgNewContentName'  => $PMF_LANG['msgNewContentName'],
     'msgNewContentMail'  => $PMF_LANG['msgNewContentMail'],
+    'lang'               => $Language->getLanguage(),
     'defaultContentMail' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
     'defaultContentName' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
     'msgMessage'         => $PMF_LANG['msgMessage'],

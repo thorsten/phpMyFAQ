@@ -14,7 +14,7 @@
     <meta name="author" content="{metaPublisher}">
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
     <meta name="application-name" content="phpMyFAQ {phpmyfaqversion}">
-    <meta name="copyright" content="(c) 2001-2010 phpMyFAQ Team">
+    <meta name="copyright" content="(c) 2001-2011 phpMyFAQ Team">
     <meta name="publisher" content="{metaPublisher}">
     <meta name="robots" content="INDEX, FOLLOW">
     <meta name="revisit-after" content="7 days">
@@ -30,7 +30,10 @@
     <link rel="stylesheet" media="print" href="template/{tplSetName}/css/print.css?v=1">
 
     <script src="inc/js/modernizr.min.js"></script>
-    
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script>!window.jQuery && document.write('<script src="inc/js/jquery.min.js"><\/script>')</script>
+    <script src="inc/js/functions.js"></script>
+
     <link rel="shortcut icon" href="template/{tplSetName}/favicon.ico">
     <link rel="apple-touch-icon" href="template/{tplSetName}/apple-touch-icon.png">
     
@@ -43,101 +46,96 @@
 </head>
 <body dir="{dir}">
 
-<div id="container">
-    <header id="header">
-        
-        <div id="loginBox">
-            {loginBox}
-        </div>
-        
-        <h1><a title="{header}" href="{faqHome}">{header}</a></h1>
-        
-        <nav>
-        <ul>
-            <li>{allCategories}</li>
-            <li>{showInstantResponse}</li>
-            <li>{msgAddContent}</li>
-            <li>{msgQuestion}</li>
-            <li>{msgOpenQuestions}</li>
-            <li>{showSitemap}</li>
-            <li>{msgContact}</li>
-        </ul>
-        </nav>
-    </header>
+<header id="header">
+    <div id="loginBox">
+        {loginBox}
+    </div>
+    <h1>
+        <a title="{header}" href="{faqHome}">{header}</a>
+    </h1>
+</header>
 
-    <section id="maincolumns">
-        <aside id="leftcolumn">
-            <div id="categories">
-                <nav>
-                    <ul>
-                        <li class="home">{backToHome}</li>
-                        {showCategories}
-                    </ul>
-                </nav>
-            </div>
-            <div id="useronline">
-                {userOnline}
-            </div>
-        </aside>
-        
-        <section id="maincontent">
-            [globalSearchBox]
-            <aside id="searchBox">
+<nav>
+    <ul>
+        <li>{allCategories}</li>
+        <li>{showInstantResponse}</li>
+        <li>{msgAddContent}</li>
+        <li>{msgQuestion}</li>
+        <li>{msgOpenQuestions}</li>
+        <li>{showSitemap}</li>
+        <li>{msgContact}</li>
+    </ul>
+</nav>
+
+<a id="top"></a>
+
+<div id="content">
+    
+    <div id="leftContent">
+        <menu id="categories">
+            <ul>
+                <li class="home">{backToHome}</li>
+                {showCategories}
+            </ul>
+        </menu>
+    </div>
+
+    <div id="mainContent">
+        [globalSearchBox]
+        <div id="searchBox">
             <form id="search" action="{writeSendAdress}" method="get">
-                <input type="text" name="search" id="searchfield" size="30">
+                <input type="search" name="search" id="searchfield" size="30">
                 <input type="hidden" name="searchcategory" value="{categoryId}">
                 <input type="hidden" name="action" value="search">
                 <input type="submit" name="submit" value="{searchBox}">
             </form>
             {msgSearch}
-            </aside>
-            [/globalSearchBox]
-            [globalSuggestBox]
-            <aside id="searchBox">
+        </div>
+        [/globalSearchBox]
+        [globalSuggestBox]
+        <div id="searchBox">
             <form id="instantform" action="?action=instantresponse" method="post">
                 <input type="hidden" name="ajaxlanguage" id="ajaxlanguage" value="{ajaxlanguage}">
-                <input type="text" name="search" id="instantfield" value="">
+                <input type="search" name="search" id="instantfield" value="">
             </form>
             {msgSearch}
-            </aside>
-            [/globalSuggestBox]
-            
-            {writeContent}
-        </section>
-        
-        <aside id="rightcolumn">
-            
-            {rightBox}
-            
-            <div id="stickyrecords">
-            <h3>{stickyRecordsHeader}</h3>
+        </div>
+        [/globalSuggestBox]
+
+        {writeContent}
+    </div>
+
+    <aside>
+        {rightBox}
+        <section>
+            <header>
+                <h3>{stickyRecordsHeader}</h3>
+            </header>
             <ul>
                 [stickyRecordsList]
                 <li><a href="{stickyRecordsUrl}">{stickyRecordsTitle}</a></li>
                 [/stickyRecordsList]
             </ul>
-            </div>
-            
-        </aside>
-    
-    </section>
-    
-    <div class="clearfix"></div>
-    <footer id="footer">
-        <form action="{writeLangAdress}" method="post">
-        <p id="copyrightnote">
-            {copyright} | {switchLanguages} <input type="hidden" name="action" value="" />
-        </p>
-        </form>
-    </footer>
-    
-    {debugMessages}
-
+        </section>
+    </aside>
 </div>
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-<script>!window.jQuery && document.write('<script src="inc/js/jquery.min.js"><\/script>')</script>
-<script src="inc/js/functions.js"></script>
+<footer id="footer">
+    <div>
+        <section id="userOnline">
+            <p>{userOnline}</p>
+        </section>
+        <section>
+            <form action="{writeLangAdress}" method="post">
+            <p id="copyrightnote">
+                {copyright} | {switchLanguages} <input type="hidden" name="action" value="" />
+            </p>
+            </form>
+        </section>
+    </div>
+</footer>
+
+{debugMessages}
 
 </body>
 </html>

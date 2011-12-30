@@ -19,7 +19,7 @@
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2006-2010 phpMyFAQ Team
+ * @copyright 2006-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-07-23
@@ -90,12 +90,8 @@ $expired = (date('YmdHis') > $news['dateEnd']);
 if ((!$news['active']) || (!$news['allowComments']) || $expired) {
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
-    $oLink            = new PMF_Link($_SERVER['SCRIPT_NAME'].'?'.str_replace('&', '&amp;', $_SERVER['QUERY_STRING']));
-    $oLink->itemTitle = $header;
-    $commentHref      = $oLink->toString().'#comment';
-    $commentMessage   = sprintf(
-        '<a onclick="javascript:$(\'#comment\').show();" href="%s">%s</a>',
-        $commentHref,
+    $commentMessage = sprintf(
+        '<a href="javascript:void(0);" onclick="javascript:$(\'#commentForm\').show();">%s</a>',
         $PMF_LANG['newsWriteComment']);
 }
 
@@ -110,7 +106,6 @@ $tpl->processTemplate ("writeContent", array(
     'editThisEntry'       => $editThisEntry,
     'writeCommentMsg'     => $commentMessage,
     'msgWriteComment'     => $PMF_LANG['newsWriteComment'],
-    'writeSendAdress'     => '?'.$sids.'action=savecomment',
     'newsId'              => $news_id,
     'newsLang'            => $news['lang'],
     'msgCommentHeader'    => $PMF_LANG['msgCommentHeader'],

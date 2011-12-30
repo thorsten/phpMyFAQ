@@ -17,7 +17,8 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2006-2010 phpMyFAQ Team
+ * @author    Rudi Ferrari <bookcrossers@gmx.de>
+ * @copyright 2006-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-09-18
@@ -27,9 +28,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
-
-printf('<h2>%s</h2>', $PMF_LANG['ad_menu_categ_structure']);
-
+?>
+        <header>
+            <h2><?php print $PMF_LANG['ad_menu_categ_structure'] ?></h2>
+        </header>
+<?php
 if ($permission['editcateg']) {
 
     $categoryNode    = new PMF_Category_Node();
@@ -98,8 +101,10 @@ if ($permission['editcateg']) {
             }
         }
 
+
     }
     print "</tr>\n</table>\n";
+
     printf('<p>%s</p>', $PMF_LANG['ad_categ_remark_overview']);
 } else {
     print $PMF_LANG['err_NotAuth'];
