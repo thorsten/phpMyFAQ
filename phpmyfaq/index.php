@@ -485,7 +485,7 @@ $main_template_vars = array(
 
 if ('main' == $action || 'show' == $action) {
     if ('main' == $action && PMF_Configuration::getInstance()->get('search.useAjaxSearchOnStartpage')) {
-        $tpl->processBlock(
+        $tpl->parseBlock(
             'index',
             'globalSuggestBox',
             array(
@@ -499,7 +499,7 @@ if ('main' == $action || 'show' == $action) {
             )
         );
     } else {
-        $tpl->processBlock(
+        $tpl->parseBlock(
             'index',
             'globalSearchBox',
             array(
