@@ -180,7 +180,7 @@ if ($permission['editbt'] || $permission['delbt']) {
             $search->setMatchingColumns(array($fdTable . '.thema', $fdTable . '.content', $fdTable . '.keywords'));
         }
         
-        $result         = $search->search($searchterm);; // @todo add missing ordering!
+        $result         = $search->search($searchterm);
         $laction        = 'view';
         $internalSearch = '&amp;search='.$searchterm;
         $wasSearch      = true;
