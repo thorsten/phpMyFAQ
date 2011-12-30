@@ -138,9 +138,9 @@ if ($step == 1) {
 
                 <p>This update script will work <strong>only</strong> for the following versions:</p>
                 <ul type="square">
-                    <li>phpMyFAQ 2.5.x</li>
-                    <li>phpMyFAQ 2.6.x</li>
-                    <li>phpMyFAQ 2.7.x</li>
+                    <li>phpMyFAQ 2.5.x (supported until mid of 2010)</li>
+                    <li>phpMyFAQ 2.6.x (supported until end of 2011)</li>
+                    <li>phpMyFAQ 2.7.x (active support)</li>
                 </ul>
 
                 <p>This update script <strong>will not</strong> work for the following versions:</p>
@@ -607,20 +607,18 @@ if ($step == 4) {
     }
 
     //
-<<<<<<< HEAD
-    // UPDATES FROM 2.8.0-alpha
-    //
-    if (version_compare($version, '2.8.0-alpha', '<')) {
-
-    }
-=======
     // UPDATES FROM 2.7.1
     //
     if (version_compare($version, '2.7.1', '<')) {
         $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('security.useSslOnly', 'false')";
     }
 
->>>>>>> 184d46111a15d57bee97c6657a2f82a8ed5c17e8
+    //
+    // UPDATES FROM 2.8.0-alpha
+    //
+    if (version_compare($version, '2.8.0-alpha', '<')) {
+
+    }
 
     // Perform the queries for updating/migrating the database
     if (isset($query)) {

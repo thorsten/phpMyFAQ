@@ -5,7 +5,7 @@
  * This script checks the complete environment, writes the database connection
  * parameters into the file config/database.php and the configuration into the database.
  * 
- * PHP Version 5.2
+ * PHP Version 5.2.3
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -24,7 +24,7 @@
  * @author    Johannes Schlüter <johannes@php.net>
  * @author    Uwe Pries <uwe.pries@digartis.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2002-2011 phpMyFAQ Team
+ * @copyright 2002-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-20
@@ -33,7 +33,7 @@
 define('VERSION', '2.8.0-dev');
 define('APIVERSION', 1);
 define('MINIMUM_PHP_VERSION', '5.2.3');
-define('COPYRIGHT', '&copy; 2001-2011 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2012 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
 
@@ -293,7 +293,8 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             <strong>
                 <?php print PMF_ENCRYPTION_TYPE; ?>
             </strong>
-            encryption. You can change this in <em>config/constants.php</em>.
+            encryption without any salt.<br />
+            You can change this in <em>config/constants.php</em>.
         </p>
 
         <form action="setup.php" method="post">
@@ -429,21 +430,20 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                 </select>
             </p>
             <p>
-                <label>Admin's real name:</label>
+                <label>Your name:</label>
                 <input type="text" name="realname" title="Please enter your real name here." required="required" />
             </p>
             <p>
-                <label>E-mail address:</label>
+                <label>Your email address:</label>
                 <input type="email" name="email" title="Please enter your email adress here." required="required" />
             </p>
             <p>
-                <label>Admin's username:</label>
-                <input type="text" name="username" title="You don't have to do anything here." value="admin"
-                       readonly="readonly" />
+                <label>Your login:</label>
+                <input type="text" name="username" title="Please enter your login name for your phpMyFAQ installation." required="required" />
             </p>
             <p>
-                <label>Admin's password:</label>
-                <input type="password" name="password" title="Please enter your password for the admin area."
+                <label>Your password:</label>
+                <input type="password" name="password" title="Please enter your password for the admin section."
                        required="required" />
             </p>
             <p>
