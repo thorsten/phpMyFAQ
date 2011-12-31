@@ -977,6 +977,27 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             'for_users' => 1,
             'for_groups' => 1
         ),
+        // 39 => 'addfaq'
+        array(
+            'name' => 'addfaq',
+            'description' => 'Right to add FAQs in frontend',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        // 40 => 'addquestion'
+        array(
+            'name' => 'addquestion',
+            'description' => 'Right to add questions in frontend',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        // 41 => 'addcomment'
+        array(
+            'name' => 'addcomment',
+            'description' => 'Right to add comments in frontend',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
     );
     foreach ($rights as $right) {
         $rightID = $admin->perm->addRight($right);

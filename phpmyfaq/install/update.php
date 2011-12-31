@@ -28,7 +28,7 @@
 define('NEWVERSION', '2.8.0-dev');
 define('APIVERSION', 1);
 define('MINIMUM_PHP_VERSION', '5.2.3');
-define('COPYRIGHT', '&copy; 2001-2011 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2012 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
 
@@ -291,14 +291,14 @@ if ($step == 4) {
     //
     if (version_compare($version, '2.5.1', '<')) {
         // Truncate table and re-import all stopwords with the new Lithuanian ones
-        $query[] = "DELETE FROM ".SQLPREFIX."faqstopwords";
+        $query[] = "DELETE FROM ". SQLPREFIX . "faqstopwords";
         require 'stopwords.sql.php';
     }
     
     //
     // UPDATES FROM 2.5.2
     if (version_compare($version, '2.5.3', '<')) {
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'spam.enableCaptchaCode' WHERE config_name = 'spam.enableCatpchaCode'";
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'spam.enableCaptchaCode' WHERE config_name = 'spam.enableCatpchaCode'";
     }
     
     //
@@ -517,36 +517,36 @@ if ($step == 4) {
         }
 
 
-        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = "INSERT INTO ". SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
             (34, 'addattachment', 'Right to add attachments', 1, 1)";
-        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = "INSERT INTO ". SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
             (35, 'editattachment', 'Right to edit attachments', 1, 1)";
-        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = "INSERT INTO ". SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
             (36, 'delattachment', 'Right to delete attachments', 1, 1)";
-        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = "INSERT INTO ". SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
             (37, 'dlattachment', 'Right to download attachments', 1, 1)";
-        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 34)";
-        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 35)";
-        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 36)";
-        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 37)";
+        $query[] = "INSERT INTO ". SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 34)";
+        $query[] = "INSERT INTO ". SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 35)";
+        $query[] = "INSERT INTO ". SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 36)";
+        $query[] = "INSERT INTO ". SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 37)";
     }
 
     //
     // UPDATES FROM 2.7.0-alpha2
     //
     if (version_compare($version, '2.7.0-alpha2', '<')) {
-        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = "INSERT INTO ". SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
             (38, 'reports', 'Right to generate reports', 1, 1)";
-        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 38)";
+        $query[] = "INSERT INTO ". SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 38)";
     }
 
     //
     // UPDATES FROM 2.7.0-beta
     //
     if (version_compare($version, '2.7.0-beta', '<')) {
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'search.numberSearchTerms'
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'search.numberSearchTerms'
             WHERE config_name = 'main.numberSearchTerms'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'search.useAjaxSearchOnStartpage'
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'search.useAjaxSearchOnStartpage'
             WHERE config_name = 'main.useAjaxSearchOnStartpage'";
     }
 
@@ -564,39 +564,39 @@ if ($step == 4) {
     // UPDATES FROM 2.7.0-RC
     //
     if (version_compare($version, '2.7.0-RC', '<')) {
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.numberOfRecordsPerPage'
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'records.numberOfRecordsPerPage'
             WHERE config_name = 'main.numberOfRecordsPerPage'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.numberOfShownNewsEntries'
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'records.numberOfShownNewsEntries'
             WHERE config_name = 'main.numberOfShownNewsEntries'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.orderingPopularFaqs'
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'records.orderingPopularFaqs'
             WHERE config_name = 'main.orderingPopularFaqs'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.disableAttachments'
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'records.disableAttachments'
             WHERE config_name = 'main.disableAttachments'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.maxAttachmentSize'
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'records.maxAttachmentSize'
             WHERE config_name = 'main.maxAttachmentSize'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.attachmentsPath'
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'records.attachmentsPath'
             WHERE config_name = 'main.attachmentsPath'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.attachmentsStorageType'
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'records.attachmentsStorageType'
             WHERE config_name = 'main.attachmentsStorageType'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.enableAttachmentEncryption'
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'records.enableAttachmentEncryption'
             WHERE config_name = 'main.enableAttachmentEncryption'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.defaultAttachmentEncKey'
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'records.defaultAttachmentEncKey'
             WHERE config_name = 'main.defaultAttachmentEncKey'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'security.permLevel'
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'security.permLevel'
             WHERE config_name = 'main.permLevel'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'security.ipCheck'
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'security.ipCheck'
             WHERE config_name = 'main.ipCheck'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'security.enableLoginOnly'
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'security.enableLoginOnly'
             WHERE config_name = 'main.enableLoginOnly'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'security.ldapSupport'
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'security.ldapSupport'
             WHERE config_name = 'main.ldapSupport'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'security.bannedIPs'
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'security.bannedIPs'
             WHERE config_name = 'main.bannedIPs'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'security.ssoSupport'
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'security.ssoSupport'
             WHERE config_name = 'main.ssoSupport'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'security.ssoLogoutRedirect'
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'security.ssoLogoutRedirect'
             WHERE config_name = 'main.ssoLogoutRedirect'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'security.useSslForLogins'
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'security.useSslForLogins'
             WHERE config_name = 'main.useSslForLogins'";
 
 		$query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishEnable', 'false')";
@@ -610,14 +610,22 @@ if ($step == 4) {
     // UPDATES FROM 2.7.1
     //
     if (version_compare($version, '2.7.1', '<')) {
-        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('security.useSslOnly', 'false')";
+        $query[] = "INSERT INTO ". SQLPREFIX . "faqconfig VALUES ('security.useSslOnly', 'false')";
     }
 
     //
     // UPDATES FROM 2.8.0-alpha
     //
-    if (version_compare($version, '2.8.0-alpha', '<')) {
-
+    if (version_compare($version, '2.8.0-alpha', '<')) {  
+        $query[] = "INSERT INTO ". SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
+            (39, 'addfaq', 'Right to add FAQs in frontend', 1, 1)";
+        $query[] = "INSERT INTO ". SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 39)";
+        $query[] = "INSERT INTO ". SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
+            (40, 'addquestion', 'Right to add questions in frontend', 1, 1)";
+        $query[] = "INSERT INTO ". SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 40)";
+        $query[] = "INSERT INTO ". SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
+            (41, 'addcomment', 'Right to add comments in frontend', 1, 1)";
+        $query[] = "INSERT INTO ". SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 41)";
     }
 
     // Perform the queries for updating/migrating the database

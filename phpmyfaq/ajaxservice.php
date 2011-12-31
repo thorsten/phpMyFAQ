@@ -90,6 +90,8 @@ switch ($action) {
     // Comments
     case 'savecomment':
 
+        // @todo add check on "addcomment" permission
+
         $faq      = new PMF_Faq();
         $type     = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
         $faqid    = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
@@ -211,6 +213,8 @@ switch ($action) {
         break;
 
     case 'savefaq':
+
+        // @todo add check on "addfaq" permission
 
         $faq         = new PMF_Faq();
         $category    = new PMF_Category();
@@ -348,6 +352,8 @@ switch ($action) {
         break;
 
     case 'savequestion':
+
+        // @todo add check on "addquestion" permission
 
         $faq        = new PMF_Faq();
         $cat        = new PMF_Category();
