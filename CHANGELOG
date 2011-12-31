@@ -8,6 +8,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 Version 2.8.0-dev - 2012-
 - added improved advanced search in subcategories (Thorsten)
 - improved usability of administration backend (Thorsten)
+- improved setup (Thorsten)
 
 Version 2.7.2 - 2011-12-
 - improved install script (Thorsten)
