@@ -204,7 +204,7 @@ $system = new PMF_System();
 if (!$system->checkDatabase($supported_databases)) {
 
     print '<p class="error">No supported database detected! Please install one of the following' .
-          ' database systems and enable the corresponding PHP extension:</p>';
+          ' database systems and enable the corresponding PHP extension in php.ini:</p>';
     print '<ul>';
     foreach ($supported_databases as $database) {
         printf('    <li>%s</li>', $database[1]);
@@ -215,12 +215,13 @@ if (!$system->checkDatabase($supported_databases)) {
 }
 
 if (!$system->checkExtension($enabledExtensions)) {
-    print "<p class=\"error\">The following extensions are missing! Please enable the PHP extension:</p>\n";
+    print "<p class=\"error\">The following extensions are missing! Please enable the PHP extension(s)\n";
     print "<ul>\n";
     foreach ($system->getMissingExtensions() as $extension) {
         printf('    <li>ext/%s</li>', $extension);
     }
     print "</ul>\n";
+    print "in php.ini.</p>\n";
     HTMLFooter();
     die();
 }
@@ -265,8 +266,8 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
 <?php
     if ((@ini_get('safe_mode') == 'On' || @ini_get('safe_mode') === 1)) {
-        print '<p class="error">The PHP safe mode is enabled. You may have problems when phpMyFAQ writes in some ' .
-              'directories.</p>';
+        print '<p class="error">The PHP safe mode is enabled. You may have problems when phpMyFAQ tries to write ' .
+              ' in some directories.</p>';
     }
     if (!extension_loaded('gd')) {
         print '<p class="error">You don\'t have GD support enabled in your PHP installation. Please enable GD ' .
@@ -294,13 +295,12 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                 <?php print PMF_ENCRYPTION_TYPE; ?>
             </strong>
             encryption without any salt.<br />
-            You can change this in <em>config/constants.php</em>.
+            You can change the encryption type for passwords in <em>config/constants.php</em>.
         </p>
 
         <form action="setup.php" method="post">
         <fieldset>
         <legend>Please add your database connection setup information</legend>
-
             <p>
                 <label>SQL server:</label>
                 <select name="sql_type" id="sql_selector" size="1" onchange="select_database(this);">
@@ -344,7 +344,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             <p>
                 <label>SQLite database file:</label>
                 <input type="text" name="sql_sqlitefile" value="<?php print dirname(dirname(__FILE__)); ?>"
-                       title="Please enter the full path to your SQLite datafile which should be outside your documentation root." />
+                       title="Please enter the full path to your SQLite datafile which should be outside your doc root." />
             </p>
             </div>
 
@@ -462,39 +462,39 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     HTMLFooter();
 } else {
     
-    // Ckeck table prefix
+    // Check table prefix
     $sqltblpre = PMF_Filter::filterInput(INPUT_POST, 'sqltblpre', FILTER_SANITIZE_STRING, '');
     if (!defined('SQLPREFIX')) {
         define('SQLPREFIX', $sqltblpre);
     }
 
-    // check database entries
+    // Check database entries
     $dbType = PMF_Filter::filterInput(INPUT_POST, 'sql_type', FILTER_SANITIZE_STRING);
     if (!is_null($dbType)) {
         $dbType = trim($dbType);
         if (file_exists(PMF_ROOT_DIR . '/install/' . $dbType . '.sql.php')) {
             require PMF_ROOT_DIR . '/install/' . $dbType . '.sql.php';
         } else {
-            print '<p class="error"><strong>Error:</strong> Invalid server type.</p>';
+            printf('<p class="error"><strong>Error:</strong> Invalid server type: %s</p>', $dbType);
             HTMLFooter();
             die();
         }
     } else {
-        print "<p class=\"error\"><strong>Error:</strong> There's no DB server input.</p>\n";
+        print "<p class=\"error\"><strong>Error:</strong> Please select a database type.</p>\n";
         HTMLFooter();
         die();
     }
 
     $dbServer = PMF_Filter::filterInput(INPUT_POST, 'sql_server', FILTER_SANITIZE_STRING);
     if (is_null($dbServer) && $dbType != 'sqlite') {
-        print "<p class=\"error\"><strong>Error:</strong> There's no DB server input.</p>\n";
+        print "<p class=\"error\"><strong>Error:</strong> Please add a database server.</p>\n";
         HTMLFooter();
         die();
     }
 
     $dbUser = PMF_Filter::filterInput(INPUT_POST, 'sql_user', FILTER_SANITIZE_STRING);
     if (is_null($dbUser) && $dbType != 'sqlite') {
-        print "<p class=\"error\"><strong>Error:</strong> There's no DB username input.</p>\n";
+        print "<p class=\"error\"><strong>Error:</strong> Please add a database username.</p>\n";
         HTMLFooter();
         die();
     }
@@ -507,7 +507,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
     $dbDatabaseName = PMF_Filter::filterInput(INPUT_POST, 'sql_db', FILTER_SANITIZE_STRING);
     if (is_null($dbDatabaseName) && $dbType != 'sqlite') {
-        print "<p class=\"error\"><strong>Error:</strong> There's no DB database input.</p>\n";
+        print "<p class=\"error\"><strong>Error:</strong> Please add a database name.</p>\n";
         HTMLFooter();
         die();
     }
@@ -517,7 +517,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         if (!is_null($sqliteFile)) {
             $dbServer = $sqliteFile; // We're using $dbServer, too!
         } else {
-            print "<p class=\"error\"><strong>Error:</strong> There's no SQLite database filename input.</p>\n";
+            print "<p class=\"error\"><strong>Error:</strong> Please add a SQLite database filename.</p>\n";
             HTMLFooter();
             die();
         }
@@ -529,7 +529,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     $db = PMF_Db::factory($dbType);
     $db->connect($dbServer, $dbUser, $dbPassword, $dbDatabaseName);
     if (!$db) {
-        print "<p class=\"error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
+        printf("<p class=\"error\"><strong>DB Error:</strong> %s</p>\n", $db->error());
         HTMLFooter();
         die();
     }
@@ -541,21 +541,21 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         // check LDAP entries
         $ldapServer = PMF_Filter::filterInput(INPUT_POST, 'ldap_server', FILTER_SANITIZE_STRING);
         if (is_null($ldapServer)) {
-            print "<p class=\"error\"><strong>Error:</strong> There's no LDAP server input.</p>\n";
+            print "<p class=\"error\"><strong>Error:</strong> Please add a LDAP server.</p>\n";
             HTMLFooter();
             die();
         }
         
         $ldapPort = PMF_Filter::filterInput(INPUT_POST, 'ldap_port', FILTER_VALIDATE_INT);
         if (is_null($ldapPort)) {
-            print "<p class=\"error\"><strong>Error:</strong> There's no LDAP port input.</p>\n";
+            print "<p class=\"error\"><strong>Error:</strong> Please add a LDAP port.</p>\n";
             HTMLFooter();
             die();
         }
 
         $ldapBase = PMF_Filter::filterInput(INPUT_POST, 'ldap_base', FILTER_SANITIZE_STRING);
         if (is_null($ldapBase)) {
-            print "<p class=\"error\"><strong>Error:</strong> There's no LDAP base search DN input.</p>\n";
+            print "<p class=\"error\"><strong>Error:</strong> Please add a LDAP base search DN.</p>\n";
             HTMLFooter();
             die();
         }
@@ -577,8 +577,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     // check loginname
     $loginname = PMF_Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_STRING);
     if (is_null($loginname)) {
-        print '<p class="error"><strong>Error:</strong> There\'s no loginname for your account.' .
-                ' Please set your loginname.</p>';
+        print '<p class="error"><strong>Error:</strong> Please add a loginname for your account.</p>';
         HTMLFooter();
         die();
     }
@@ -586,16 +585,14 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     // check user entries
     $password = PMF_Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
     if (is_null($password)) {
-        print '<p class="error"><strong>Error:</strong> There\'s no password for the your account.' .
-              ' Please set your password.</p>';
+        print '<p class="error"><strong>Error:</strong> Please add a password for the your account.</p>';
         HTMLFooter();
         die();
     }
     
     $password_retyped = PMF_Filter::filterInput(INPUT_POST, 'password_retyped', FILTER_SANITIZE_STRING);
     if (is_null($password_retyped)) {
-        print '<p class="error"><strong>Error:</strong> There\'s no retyped password.' .
-              ' Please set your retyped password.</p>';
+        print '<p class="error"><strong>Error:</strong> Please add a retyped password.</p>';
         HTMLFooter();
         die();
     }
@@ -632,7 +629,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     );
     
     if (!$ret) {
-        print "<p class=\"error\"><strong>Error:</strong> Cannot write to ./config/database.php.</p>";
+        print "<p class=\"error\"><strong>Error:</strong> Setup cannot write to ./config/database.php.</p>";
         HTMLFooter();
         cleanInstallation();
         die();
@@ -651,7 +648,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             LOCK_EX
         );
         if (!$ret) {
-            print "<p class=\"error\"><strong>Error:</strong> Cannot write to ./config/ldap.php.</p>";
+            print "<p class=\"error\"><strong>Error:</strong> Setup cannot write to ./config/ldap.php.</p>";
             HTMLFooter();
             cleanInstallation();
             die();

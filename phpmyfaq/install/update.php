@@ -19,7 +19,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Thomas Melchinger <t.melchinger@uni.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2002-2011 phpMyFAQ Team
+ * @copyright 2002-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-01-10
@@ -151,21 +151,27 @@ if ($step == 1) {
                 </ul>
                 <p class="hint">
                     <strong>
-                        Please make a full backup of your SQL tables, your templates, attachments and uploaded images
+                        Please create a full backup of your database, your templates, attachments and uploaded images
                         before running this update.
                     </strong>
                 </p>
                 <?php
                 if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable($templateDir)) {
-                    printf('<p class="error"><strong>Please make the dir %s and its contents writeable (777 on Linux/UNIX).</strong></p>',
-                        $templateDir);
+                    printf(
+                        '<p class="error"><strong>Please change the directory %s and its contents writable (777 on Linux/UNIX).</strong></p>',
+                        $templateDir
+                    );
                 }
                 if (version_compare($version, '2.5.0', '>')) {
-                    printf('<p class="success">Your current phpMyFAQ version: %s</p>',
-                        $version);
+                    printf(
+                        '<p class="success">Your current phpMyFAQ version: %s</p>',
+                        $version
+                    );
                 } else {
-                    printf('<p class="error">Your current phpMyFAQ version: %s</p>',
-                        $version);
+                    printf(
+                        '<p class="error">Your current phpMyFAQ version: %s</p>',
+                        $version
+                    );
                 }
                 ?>
 
@@ -225,11 +231,11 @@ if ($step == 2) {
     }
     if (version_compare($version, '2.6.0-alpha', '<') && (!is_writeable($templateDir) || !empty($notWritableFiles))) {
         if (!is_writeable($templateDir)) {
-            printf("<p><strong>The dir %s isn't writeable.</strong></p>\n", $templateDir);
+            printf("<p><strong>The directory %s isn't writable.</strong></p>\n", $templateDir);
         }
         if (!empty($notWritableFiles)) {
             foreach ($notWritableFiles as $item) {
-                printf("<p><strong>The file %s isn't writeable.</strong></p>\n", $item);
+                printf("<p><strong>The file %s isn't writable.</strong></p>\n", $item);
             }
         }
         
@@ -632,8 +638,8 @@ if ($step == 4) {
     if (isset($query)) {
         print '<div class="center">';
         $count = 0;
-        foreach ($query as $key => $current_query) {
-            $result = @$db->query($current_query);
+        foreach ($query as $key => $executeQuery) {
+            $result = @$db->query($executeQuery);
             print '.';
             if (!($key % 100)) {
                 print '<br />';
@@ -643,7 +649,7 @@ if ($step == 4) {
                 print '<p class="error"><strong>Error:</strong> Please install your version of phpMyFAQ once again or send
                 us a <a href=\"http://bugs.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
                 printf('<p class="error"><strong>DB error:</strong> %s</p>', $db->error());
-                printf('<code>%s</code>', htmlentities($each_query[1]));
+                printf('<code>%s</code>', htmlentities($executeQuery));
                 HTMLFooter();
                 die();
             }
@@ -692,14 +698,14 @@ if ($step == 4) {
     // Perform the queries for optimizing the database
     if (isset($query)) {
         print '<div class="center">';
-        foreach ($query as $current_query) {
-            $result = $db->query($current_query);
-            printf('<span title="%s">.</span>', $current_query);
+        foreach ($query as $executeQuery) {
+            $result = $db->query($executeQuery);
+            printf('<span title="%s">.</span>', $executeQuery);
             if (!$result) {
                 print '<p class="error"><strong>Error:</strong> Please install your version of phpMyFAQ once again or send
                 us a <a href=\"http://www.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
                 printf('<p class="error"><strong>DB error:</strong> %s</p>', $db->error());
-                printf('<code>%s</code>', htmlentities($current_query));
+                printf('<code>%s</code>', htmlentities($executeQuery));
                 HTMLFooter();
                 die();
             }
