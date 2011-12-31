@@ -10,8 +10,8 @@ Version 2.8.0-dev - 2012-
 - improved usability of administration backend (Thorsten)
 - improved setup (Thorsten)
 
-Version 2.7.2 - 2011-12-
-- improved install script (Thorsten)
+Version 2.7.2 - 2011-12-31
+- improved PDF export and install script (Thorsten)
 - updated Finnish translation (Petteri Hirvonen, Niklas Lampén)
 - updated French translation (Cédric Frayssinet)
 - updated Chinese (Simplified) translation
