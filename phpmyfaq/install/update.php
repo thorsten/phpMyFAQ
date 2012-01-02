@@ -25,10 +25,10 @@
  * @since     2002-01-10
  */
 
-define('NEWVERSION', '2.7.2');
+define('NEWVERSION', '2.7.3');
 define('APIVERSION', 1);
 define('MINIMUM_PHP_VERSION', '5.2.3');
-define('COPYRIGHT', '&copy; 2001-2011 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2012 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
 

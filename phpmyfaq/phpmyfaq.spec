@@ -39,7 +39,7 @@
 #
 # @author    Matteo Scaramuccia <matteo@scaramuccia.com>
 # @since     2006-07-05
-# @copyright 2006-2011 phpMyFAQ Team
+# @copyright 2006-2012 phpMyFAQ Team
 #
 # The contents of this file are subject to the Mozilla Public License
 # Version 1.1 (the "License"); you may not use this file except in
@@ -55,7 +55,7 @@
 # phpMyFAQ
 #
 %define name        phpmyfaq
-%define version     2.7.2
+%define version     2.7.3
 %define release     1
 %define epoch       0
 
@@ -153,6 +153,9 @@ installation script.
 
 %changelog
 ==========
+
+* Mon Jan 02 2012 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.3-1
+- New upstream version 2.7.3
 
 * Wed Oct 26 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.2-1
 - New upstream version 2.7.2
