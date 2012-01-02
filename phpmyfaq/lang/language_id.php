@@ -356,8 +356,8 @@ $PMF_LANG["ad_rs_rating_1"] = "Penilaian";
 $PMF_LANG["ad_rs_rating_2"] = "pengguna menampilkan:";
 $PMF_LANG["ad_rs_red"] = "Merah";
 $PMF_LANG["ad_rs_green"] = "Hijau";
-$PMF_LANG["ad_rs_altt"] = "dengan rata-rata lebih rendah dari 2";
-$PMF_LANG["ad_rs_ahtf"] = "dengan rata-rata lebih tinggi dari 4";
+$PMF_LANG["ad_rs_altt"] = "dengan rata-rata lebih rendah dari 20%";
+$PMF_LANG["ad_rs_ahtf"] = "dengan rata-rata lebih tinggi dari 80%";
 $PMF_LANG["ad_rs_no"] = "Penilaian tidak tersedia";
 
 // Auth
@@ -556,20 +556,20 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Nama Penerbit");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Alamat Email Admin");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Informasi Kontak");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Teks untuk halaman send2friend");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "ukuran maksimal untuk lampiran dalam Bytes (maks. %sByte)");
-$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Buat Link ke lampiran di bawah entri?");
+$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "ukuran maksimal untuk lampiran dalam Bytes (maks. %sByte)");
+$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Buat Link ke lampiran di bawah entri?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "gunakan Penelusuran?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "gunakan Log Admin?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Apakah anda ingin alamat IP dicek saat memeriksa UIN dalam admin.php?");
-$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Jumlah topik yang ditampilkan per halaman");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Jumlah artikel berita");
-$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Blokir IP ini");
+$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Apakah anda ingin alamat IP dicek saat memeriksa UIN dalam admin.php?");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Jumlah topik yang ditampilkan per halaman");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Jumlah artikel berita");
+$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Blokir IP ini");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktifkan dukungan mod_rewrite? (default: non-aktif)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Aktifkan dukungan LDAP? (default: non-aktif)");
+$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Aktifkan dukungan LDAP? (default: non-aktif)");
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "URL dasar untuk verifikasi link (mis.: http://www.situsanda.com/faq)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Interval antara verifikasi link AJAX (dalam detik)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Nonaktifkan link untuk membuat Pertanyaan Baru?");
-$LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "Level Hak Akses");
+$LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Level Hak Akses");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "sebagai kategori utama baru";
 $PMF_LANG["ad_categ_paste_error"] = "Memidahkan kategori ini tidak dimungkinkan.";
@@ -814,7 +814,7 @@ $PMF_LANG["ad_categ_remark_move"] = "The exchange of 2 categories is only possib
 $PMF_LANG["ad_categ_remark_overview"] = "The correct order of categories will be shown, if all categories are defined for the actual language (first column).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
-$PMF_LANG['msgUsersOnline'] = ' :: %d tamu dan %d anggota';
+$PMF_LANG['msgUsersOnline'] = '%d tamu dan %d anggota';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Delete immediately logs older than 30 days';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Older logs successfully deleted.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'No logs deleted: an error occurred performing the request.';
@@ -962,7 +962,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = 'terjadi kesalahan saat mengirim ber
 $PMF_LANG['msgTransToolPercent'] = 'Persentase';
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "Lokasi dimana lampiran akan disimpan.<br /><small>Lokasi relatif berarti folder dalam web root</small>");
+$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Lokasi dimana lampiran akan disimpan.<br /><small>Lokasi relatif berarti folder dalam web root</small>");
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "berkas yang ingin anda unduh tidak ditemukan dalam server ini";

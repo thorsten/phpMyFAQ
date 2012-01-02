@@ -24,12 +24,23 @@
  * @since     2003-11-13
  */
 
-function Picture(pic,title,width,height)
+/**
+ * 
+ * @param pic
+ * @param title
+ * @param width
+ * @param height
+ */
+function addAttachment(pic,title,width,height)
 {
     popup = window.open(pic, title, 'width='+width+', height='+height+', toolbar=no, directories=no, status=no, scrollbars=no, resizable=yes, menubar=no');
     popup.focus();
 }
 
+/**
+ * 
+ * @param checkBox
+ */
 function checkAll(checkBox)
 {
     var v = checkBox.checked;
@@ -41,6 +52,13 @@ function checkAll(checkBox)
         }
 }
 
+/**
+ * 
+ * @param uri
+ * @param name
+ * @param ext
+ * @param cat
+ */
 function addEngine(uri, name, ext, cat)
 {
     if ((typeof window.sidebar == "object") && (typeof window.sidebar.addSearchEngine == "function")) {
@@ -73,10 +91,12 @@ function showhideCategory(id)
  */
 function loginForm()
 {
-    if ($('#loginForm').css('display') == 'none') {
+    if ($('#loginForm').hasClass('hidden')) {
+        $('#loginForm').removeClass('hidden');
         $('#loginForm').fadeIn();
     } else {
         $('#loginForm').fadeOut();
+        $('#loginForm').addClass('hidden');
     }
 }
 
@@ -322,6 +342,7 @@ function saveFormValues(action, formName)
                 $('#' + formName + 's').fadeIn("slow");
                 $('#loader').hide();
                 $('#' + formName + 'Form').hide();
+                $('#formValues')[0].reset();
                 // @todo add reload of content
             }
         }
@@ -335,8 +356,8 @@ function saveFormValues(action, formName)
  *
  * @return void
  */
-//function autoSuggest()
-//{
+function autoSuggest()
+{
     $('input#instantfield').keyup(function()
     {
         var search   = $('#instantfield').val();
@@ -363,7 +384,7 @@ function saveFormValues(action, formName)
     {
         return false;
     });
-//}
+}
 
 /**
  * Saves the voting by Ajax
@@ -417,19 +438,43 @@ function checkQuestion()
         dataType: 'json',
         cache:    false,
         success:  function(json) {
-            if (json.result == undefined) {
+            if (json.result == undefined && json.success == undefined) {
                 $('#qerror').html('<p class="error">' + json.error + '</p>');
                 $('#loader').hide();
-            } else {
+            } else if (json.success == undefined) {
                 $('#qerror').empty();
                 $('#questionForm').fadeOut('slow');
                 $('#answerForm').html(json.result);
                 $('#answerForm').fadeIn("slow");
                 $('#loader').hide();
                 $('#formValues').append('<input type="hidden" name="save" value="1" />');
+                $('#captcha').val('');
+                refreshCaptcha('ask');
+            } else {
+                $('#answers').html('<p class="success">' + json.success + '</p>');
+                $('#answers').fadeIn("slow");
+                $('#answerForm').fadeOut('slow');
+                $('#loader').hide();
+                $('#formValues').hide();
             }
         }
     });
 
     return false;
+}
+
+/**
+ * Refreshes a captcha image
+ * 
+ * @param string action
+ */
+function refreshCaptcha(action)
+{
+    $.ajax({
+        url: 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime(),
+        success: function(result) {
+            $("#captchaImage").attr('src', 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime());
+            $("#captcha").val('');
+        }
+    });
 }

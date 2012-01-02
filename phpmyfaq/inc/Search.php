@@ -19,7 +19,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
- * @copyright 2008-2010 phpMyFAQ Team
+ * @copyright 2008-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2008-01-26
@@ -37,7 +37,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
- * @copyright 2008-2010 phpMyFAQ Team
+ * @copyright 2008-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2008-01-26
@@ -59,11 +59,18 @@ class PMF_Search
     private $language;
     
     /**
-     * Category
+     * Category ID
      * 
      * @var integer
      */
     private $categoryId = null;
+
+    /**
+     * Category object
+     * 
+     * @var PMF_Category
+     */
+    private $category = null;
     
     /**
      * Search table
@@ -93,7 +100,7 @@ class PMF_Search
      * @param  integer $categoryId Category ID
      * @return void
      */
-    public function setCategory($categoryId)
+    public function setCategoryId($categoryId)
     {
         $this->categoryId = (int)$categoryId;
     }
@@ -103,9 +110,9 @@ class PMF_Search
      * 
      * @return integer
      */
-    public function getCategory()
+    public function getCategoryId()
     {
-    	return $this->categoryId;
+        return $this->categoryId;
     }
 
     /**
@@ -123,10 +130,18 @@ class PMF_Search
         $condition = array($fdTable . '.active' => "'yes'");
         $search    = PMF_Search_Factory::create($this->language, array('database' => PMF_Db::getType()));
         
-        // Search in all or one category?
-        if (!is_null($this->categoryId) && 0 < $this->categoryId) {
-            $selectedCategory = array($fcrTable . '.category_id' => $this->categoryId);
-            $condition        = array_merge($selectedCategory, $condition);
+        if (!is_null($this->getCategoryId()) && 0 < $this->getCategoryId()) {
+            if ($this->getCategory() instanceof PMF_Category) {
+                $children = $this->getCategory()->getChildNodes($this->getCategoryId());
+                $selectedCategory = array(
+                    $fcrTable . '.category_id' => array_merge((array)$this->getCategoryId(), $children)
+                );
+            } else {
+                $selectedCategory = array(
+                    $fcrTable . '.category_id' => $this->getCategoryId()
+                );
+            }
+            $condition = array_merge($selectedCategory, $condition);
         }
 
         if ((!$allLanguages) && (!is_numeric($searchterm))) {
@@ -157,11 +172,15 @@ class PMF_Search
         
         $result = $search->search($searchterm);
         
+<<<<<<< HEAD
         if ($result) {
             $num = $this->db->numRows($result);
         }
         
         if ($num == 0) {
+=======
+        if (!$this->db->numRows($result)) {
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
             return array();
         } else {
             return $this->db->fetchAll($result);
@@ -188,12 +207,36 @@ class PMF_Search
                 VALUES
             (%d, '%s', '%s', '%s')",
             $this->_table,
-            $this->db->nextID($this->_table, 'id'),
+            $this->db->nextId($this->_table, 'id'),
             $this->language->getLanguage(),
+<<<<<<< HEAD
             $this->db->escapeString($searchterm),
+=======
+            $this->db->escape($searchterm),
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
             $date->format('Y-m-d H:i:s'));
         
         $this->db->query($query);
+    }
+
+    /**
+     * Deletes a searchterm
+     *
+     * @param string $searchterm
+     * @return boolean
+     */
+    public function deleteSearchTerm($searchterm)
+    {
+        $query = sprintf("
+            DELETE FROM
+                %s
+            WHERE
+                searchterm = '%s'",
+            $this->_table,
+            $searchterm
+        );
+
+        return $this->db->query($query);
     }
     
     /**
@@ -210,7 +253,7 @@ class PMF_Search
         $byLang = $withLang ? ', lang' : '';
         $query  = sprintf("
             SELECT 
-                searchterm, COUNT(searchterm) AS number %s
+                id, searchterm, COUNT(searchterm) AS number %s
             FROM
                 %s
             GROUP BY
@@ -252,7 +295,32 @@ class PMF_Search
         $this->_table);
         
         $result = $this->db->query($sql);
+<<<<<<< HEAD
         
         return (int) $this->db->fetchObject($result)->count;
+=======
+
+        return (int)$this->db->fetchObject($result)->count;
+    }
+
+    /**
+     * Sets the PMF_Category object
+     * 
+     * @param PMF_Category $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+    }
+
+    /**
+     * Returns the PMF_Category object
+     * 
+     * @return PMF_Category
+     */
+    public function getCategory()
+    {
+        return $this->category;
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
     }
 }

@@ -39,7 +39,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $categoryId        = PMF_Filter::filterInput(INPUT_POST, 'catid', FILTER_VALIDATE_INT);
 $downwards         = PMF_Filter::filterInput(INPUT_POST, 'downwards', FILTER_VALIDATE_BOOLEAN, false);
-$inlineDisposition = PMF_Filter::filterInput(INPUT_POST, 'dispos', FILTER_VALIDATE_BOOLEAN, false);
+$inlineDisposition = PMF_Filter::filterInput(INPUT_POST, 'dispos', FILTER_SANITIZE_STRING);
 $type              = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING, 'none');
 
 $faq     = new PMF_Faq();
@@ -48,7 +48,7 @@ $content = $export->generate($categoryId, $downwards);
 
 // Stream the file content
 $oHttpStreamer = new PMF_HttpStreamer($type, $content);
-if ($inlineDisposition) {
+if ('inline' == $inlineDisposition) {
     $oHttpStreamer->send(PMF_HttpStreamer::HTTP_CONTENT_DISPOSITION_INLINE);
 } else {
     $oHttpStreamer->send(PMF_HttpStreamer::HTTP_CONTENT_DISPOSITION_ATTACHMENT);

@@ -364,8 +364,8 @@ $PMF_LANG["ad_rs_rating_1"] = "Safle";
 $PMF_LANG["ad_rs_rating_2"] = "defnyddwyr yn dangos:";
 $PMF_LANG["ad_rs_red"] = "Coch";
 $PMF_LANG["ad_rs_green"] = "Gwyrdd";
-$PMF_LANG["ad_rs_altt"] = "gyda chyfartaledd is na 2";
-$PMF_LANG["ad_rs_ahtf"] = "gyda chyfartaledd uwch na 4";
+$PMF_LANG["ad_rs_altt"] = "gyda chyfartaledd is na 20%";
+$PMF_LANG["ad_rs_ahtf"] = "gyda chyfartaledd uwch na 80%";
 $PMF_LANG["ad_rs_no"] = "Does dim safle ar gael";
 
 // Auth
@@ -563,16 +563,16 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => " Enwr Cyhoeddwr")
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => " Cyfeiriad e-bost Gweinyddol");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => " Gwybodaeth gyswllt");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => " Testun ar gyfer y dudalen anfonatffrind");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => " Uchafswm maint ar gyfer atodiadau mewn Beitiau(max. %sByte)");
-$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => " Cysylltur atodiadau islawr cofnodion?");
+$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => " Uchafswm maint ar gyfer atodiadau mewn Beitiau(max. %sByte)");
+$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => " Cysylltur atodiadau islawr cofnodion?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => " Defnyddio tracio?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => " defnyddio cofnod gweinyddol?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => " Ydych chi am ir IP gael ei wirio wrth wirio UINs yn admin.php?");
-$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => " Nifer y pynciau a ddangosir fesul tudalen");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => " Nifer yr erthyglau newyddion");
-$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => " Gwahardd yr Ips hyn");
+$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => " Ydych chi am ir IP gael ei wirio wrth wirio UINs yn admin.php?");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => " Nifer y pynciau a ddangosir fesul tudalen");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => " Nifer yr erthyglau newyddion");
+$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => " Gwahardd yr Ips hyn");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => " Actifadu mod_ailysgrifennur gefnogaeth? (diofyn: analluogi)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => " Hoffech chi osod cefnogaeth LDAP? (default: disabled)");
+$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => " Hoffech chi osod cefnogaeth LDAP? (default: disabled)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "fel prif gategori newydd";
 $PMF_LANG["ad_categ_paste_error"] = "Nid yw'n bosibl symud y categori hwn.";

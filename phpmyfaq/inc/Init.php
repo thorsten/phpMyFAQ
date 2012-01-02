@@ -35,10 +35,15 @@
 // - false      debug mode disabled
 // - true       debug mode enabled
 //
-define('DEBUG', false);
+define('DEBUG', true);
 if (DEBUG) {
+<<<<<<< HEAD
     error_reporting(E_ALL);
+=======
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
     ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL | E_STRICT);
 } else {
     error_reporting(0);
 }
@@ -96,7 +101,7 @@ set_error_handler('pmf_error_handler');
 // Create a database connection
 //
 define('SQLPREFIX', $DB['prefix']);
-$db = PMF_Db::dbSelect($DB['type']);
+$db = PMF_Db::factory($DB['type']);
 $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
 
 //
@@ -116,9 +121,9 @@ ini_set('url_rewriter.tags', '');
 //
 // Connect to LDAP server, when LDAP support is enabled
 //
-if ($faqconfig->get('main.ldapSupport') && file_exists(PMF_CONFIG_DIR . '/ldap.php')) {
-    require PMF_CONFIG_DIR . '/ldap.php';
+if ($faqconfig->get('security.ldapSupport') && file_exists(PMF_CONFIG_DIR . '/ldap.php')) {
     require PMF_CONFIG_DIR . '/constants_ldap.php';
+    require PMF_CONFIG_DIR . '/ldap.php';
 } else {
     $ldap = null;
 }
@@ -126,7 +131,7 @@ if ($faqconfig->get('main.ldapSupport') && file_exists(PMF_CONFIG_DIR . '/ldap.p
 /**
  * Build attachments path
  */
-$confAttachmentsPath = trim($faqconfig->get('main.attachmentsPath'));
+$confAttachmentsPath = trim($faqconfig->get('records.attachmentsPath'));
 if ('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:(\\\\|/)%i', $confAttachmentsPath)) {
     // If we're here, some windows or unix style absolute path was detected.
     define('PMF_ATTACHMENTS_DIR', $confAttachmentsPath);

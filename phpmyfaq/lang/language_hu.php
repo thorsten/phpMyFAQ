@@ -365,8 +365,8 @@ $PMF_LANG["ad_rs_rating_1"] = "Az osztályzata: ";
 $PMF_LANG["ad_rs_rating_2"] = "users shows:";
 $PMF_LANG["ad_rs_red"] = "Vörös";
 $PMF_LANG["ad_rs_green"] = "Zöld";
-$PMF_LANG["ad_rs_altt"] = "az átlaga kisebb mint 2";
-$PMF_LANG["ad_rs_ahtf"] = "az átlaga nagyobb mint 4";
+$PMF_LANG["ad_rs_altt"] = "az átlaga kisebb mint 20%";
+$PMF_LANG["ad_rs_ahtf"] = "az átlaga nagyobb mint 80%";
 $PMF_LANG["ad_rs_no"] = "Nincs osztályzat";
 
 // Auth
@@ -564,16 +564,16 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Name of the Publish
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Emailadress of the Admin");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Contactinformation");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Text for the send2friend page");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. %sByte)");
-$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Link the attachments below the entries?");
+$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. %sByte)");
+$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Link the attachments below the entries?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "use Tracking?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "use Adminlog?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Do you want the IP to be checked when checking the UINs in admin.php?");
-$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Number of news articles");
-$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
+$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Do you want the IP to be checked when checking the UINs in admin.php?");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Number of news articles");
+$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
+$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "as new main category";
 $PMF_LANG["ad_categ_paste_error"] = "Moving this category isn't possible.";

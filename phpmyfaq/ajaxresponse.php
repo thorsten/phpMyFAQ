@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Ajax 
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2010 phpMyFAQ Team
+ * @copyright 2007-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-27
@@ -60,7 +60,7 @@ PMF_String::init($languageCode);
 //
 // Get current user and group id - default: -1
 //
-$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
 if (isset($user) && is_object($user)) {
     $current_user = $user->getUserId();
     if ($user->perm instanceof PMF_Perm_PermMedium) {

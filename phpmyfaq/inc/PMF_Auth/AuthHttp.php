@@ -18,7 +18,7 @@
  * @package   PMF_Auth
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Alberto Cabello <alberto@unex.es>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-01
@@ -35,7 +35,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_Auth
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Alberto Cabello <alberto@unex.es>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-01
@@ -53,7 +53,7 @@ class PMF_Auth_AuthHttp extends PMF_Auth implements PMF_Auth_AuthDriver
      */
     public function add($login, $pass)
     {
-    	
+        return true;
     }
 
     /**
@@ -69,7 +69,7 @@ class PMF_Auth_AuthHttp extends PMF_Auth implements PMF_Auth_AuthDriver
     */
     public function changePassword($login, $pass)
     {
-    	
+        return true;
     }
     
     /**
@@ -84,7 +84,7 @@ class PMF_Auth_AuthHttp extends PMF_Auth implements PMF_Auth_AuthDriver
      */
     public function delete($login)
     {
-    	
+        return true;
     }
     
     /**
@@ -104,15 +104,15 @@ class PMF_Auth_AuthHttp extends PMF_Auth implements PMF_Auth_AuthDriver
      */
     public function checkPassword($login, $pass, Array $optionalData = null)
     {
-    	if (!isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_PW']) {
-    		return false;
-    	} else {
-    		if ($_SERVER['PHP_AUTH_USER'] == $login && $_SERVER['PHP_AUTH_PW'] == $pass) {
-    			return true;
-    		} else {
-    			return false;
-    		}
-    	}
+        if (!isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_PW']) {
+            return false;
+        } else {
+            if ($_SERVER['PHP_AUTH_USER'] == $login && $_SERVER['PHP_AUTH_PW'] == $pass) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 
     /**
@@ -124,6 +124,6 @@ class PMF_Auth_AuthHttp extends PMF_Auth implements PMF_Auth_AuthDriver
      */
     public function checkLogin($login, Array $optionalData = null)
     {
-    	return isset($_SERVER['PHP_AUTH_USER']) ? true : false;
+        return isset($_SERVER['PHP_AUTH_USER']) ? true : false;
     }
 }

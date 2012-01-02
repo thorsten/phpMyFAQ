@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Attachment
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-21
@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Attachment
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-21
@@ -216,6 +216,16 @@ abstract class PMF_Attachment_Abstract
     {
         return $this->id;
     }
+
+    /**
+     * Sets attachment id
+     *
+     * @return void
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
     
     /**
      * Get attachment record id
@@ -250,7 +260,7 @@ abstract class PMF_Attachment_Abstract
         $result = $this->db->query($sql);
         
         if ($result) {
-            $assoc = $this->db->fetch_assoc($result);
+            $assoc = $this->db->fetchArray($result);
             if (!empty($assoc)) {
                 $this->recordId     = $assoc['record_id'];
                 $this->recordLang   = $assoc['record_lang'];
@@ -274,15 +284,15 @@ abstract class PMF_Attachment_Abstract
      * 
      * @return integer saved attachment id
      * 
-     * TODO implement update case
+     * @todo implement update case
      */
-    protected function saveMeta()
+    public function saveMeta()
     {
         $faqattTableName = sprintf('%sfaqattachment', SQLPREFIX);
 
         if (null == $this->id) {
             
-            $this->id = $this->db->nextID($faqattTableName, 'id');
+            $this->id = $this->db->nextId($faqattTableName, 'id');
             
             $sql = sprintf("
                 INSERT INTO 
@@ -398,7 +408,7 @@ abstract class PMF_Attachment_Abstract
         $result = $this->db->query($sql);
         
         if ($result) {
-            $assoc = $this->db->fetch_assoc($result);
+            $assoc = $this->db->fetchArray($result);
         }
                         
         return $assoc['count'] > 1;

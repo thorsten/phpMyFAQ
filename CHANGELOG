@@ -10,10 +10,33 @@ Version 3.0.0 - 201?-
 - added rewritten and enhanced category implementation (Johannes Schlüter, Thorsten)
 - added Ajax powered frontend (Guillaume Le Maout)
 
-Version 2.7.0-alpha2 - 2011-03-
+Version 2.8.0-dev - 2012-
+- added improved advanced search in subcategories (Thorsten)
+- improved usability of administration backend (Thorsten)
+- improved setup (Thorsten)
+
+Version 2.7.2 - 2011-12-31
+- improved PDF export and install script (Thorsten)
+- updated Finnish translation (Petteri Hirvonen, Niklas Lampén)
+- updated French translation (Cédric Frayssinet)
+- updated Chinese (Simplified) translation
+- updated bundled TCPDF library to version 5.9.136 (Thorsten)
+- updated bundled jQuery datePicker plugin (Thorsten)
+- fixed some bugs (Thorsten)
+
+Version 2.7.1 - 2011-10-25
+- fixed security issue in bundled ImageManager library (Thorsten)
+- added missing translations (Thorsten)
+- added configurable encryption type for passwords (Thorsten)
+- added support for anonymous login for LDAP servers (Thorsten)
+- added table of contents in PDF exports (Thorsten)
+- fixed some bugs (Thorsten)
+
+Version 2.7.0 - 2011-09-30
 - changed PHP requirement to PHP 5.2.3 (Thorsten)
 - dropped support for MySQL 4.1 (Thorsten)
-- dropped support for Internet Explorer 6 (Thorsten)
+- dropped support for Internet Explorer 6 + 7 (Thorsten)
+- dropped support for obsolete Microsummaries (Thorsten)
 - added new HTML5/CSS3 powered layout and administration backend (Thorsten)
 - added configurable search relevance functionality (Gustavo Solt)
 - added automatic translations with Google Translate (Gustavo Solt)
@@ -26,13 +49,38 @@ Version 2.7.0-alpha2 - 2011-03-
 - added functionality of the TinyMCE save button (Gustavo Solt)
 - added basic reporting functionality (Gustavo Solt, Thorsten)
 - added IPv6 support (David Soria Parra)
+- added support for Single Sign On authentication (Thorsten)
+- added support for complete secured FAQ installations (Thorsten)
+- added user configurable date formatting (Thorsten)
+- added possibility to delete user generated search terms (Thorsten)
 - improved usability in frontend and administration backend (Thorsten)
-- enabling Gzip compression by default (Thorsten)
-- updated bundled jQuery to version 1.5.1 (Thorsten)
-- updated bundled Modernizr to version 1.7 (Thorsten)
+- enabling Gzip compression by default (Thorsten, Lorenzo Milesi)
+- updated bundled jQuery to version 1.6.2 (Thorsten)
+- updated bundled Modernizr to version 2.0 (Thorsten)
+- updated bundled TinyMCE to version 3.4.2 (Thorsten)
+- updated bundled SyntaxHighlighter to version 3.0.83 (Thorsten)
+- updated bundled TCPDF library to version 5.9.110 (Thorsten)
+- updated Dutch translation (ronald AT proudsites DOT com)
+- updated German translation (Thorsten)
+- updated Japanese translation (hiromi-suzuki AT garage DOT co DOT jp)
+- updated Portuguese translation (Fernando G. Monteiro)
+- updated Russian translation (cyber-01 AT yandex DOT ru)
+- updated Spanish translation (Jason)
+- fixed a lot of bugs (Thorsten)
 
-Version 2.6.16 - 2011-03
-- 
+Version 2.6.18 - 2011-09-28
+- updated Spanish translation
+- fixed Danish translation
+- fixed minor bugs (Thorsten, Matthew Robinson)
+
+Version 2.6.17 - 2011-06-08
+- updated Portuguese translation
+- fixed minor bugs (Thorsten)
+
+Version 2.6.16 - 2011-05-31
+- updated Portuguese translation
+- updated Dutch translation
+- fixed minor bugs (Thorsten)
 
 Version 2.6.15 - 2011-02-23
 - added Malay translation (Ahmad Kamil Zailani)

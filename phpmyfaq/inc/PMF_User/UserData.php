@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_User
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-18
@@ -103,7 +103,7 @@ class PMF_User_UserData
         if ($this->db->numRows($res) != 1) {
             return false;
         }
-        $arr = $this->db->fetch_assoc($res);
+        $arr = $this->db->fetchArray($res);
         if ($single_return and $field != '*') {
             return $arr[$field];
         }
@@ -169,7 +169,7 @@ class PMF_User_UserData
         if ($this->db->numRows($res) != 1) {
             return false;
         }
-        $this->data = $this->db->fetch_assoc($res);
+        $this->data = $this->db->fetchArray($res);
         return true;
     }
 
@@ -192,8 +192,8 @@ class PMF_User_UserData
                 user_id = %d",
             SQLPREFIX,
             date('YmdHis', $_SERVER['REQUEST_TIME']),
-            $this->db->escapeString($this->data['display_name']),
-            $this->db->escapeString($this->data['email']),
+            $this->db->escape($this->data['display_name']),
+            $this->db->escape($this->data['email']),
             $this->user_id);
             
         $res = $this->db->query($update);

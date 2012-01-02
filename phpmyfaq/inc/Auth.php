@@ -32,7 +32,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Auth
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-30
@@ -48,7 +48,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Auth
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-30
@@ -84,7 +84,8 @@ class PMF_Auth
     private $auth_typemap = array(
         'db'   => 'AuthDb',
         'ldap' => 'AuthLdap',
-        'http' => 'AuthHttp');
+        'http' => 'AuthHttp',
+        'sso'  => 'AuthSso');
 
     /**
      * Short description of attribute read_only

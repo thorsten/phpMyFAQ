@@ -32,7 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $news = new PMF_News();
 
 // Re-evaluate $user
-$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
 
 if ('addnews' == $action && $permission["addnews"]) {
 ?>
@@ -46,7 +46,7 @@ if ('addnews' == $action && $permission["addnews"]) {
 
             <p>
                 <label for="newsheader"><?php print $PMF_LANG['ad_news_header']; ?></label>
-                <input type="text" name="newsheader" id="newsheader" style="width: 300px;" value="" />
+                <input type="text" name="newsheader" id="newsheader" style="width: 300px;" autofocus="autofocus" />
             </p>
 
             <p>
@@ -139,7 +139,7 @@ if ('addnews' == $action && $permission["addnews"]) {
 ?>
         <tr>
             <td><?php print $newsItem['header']; ?></td>
-            <td><?php print $newsItem['date']; ?></td>
+            <td><?php print PMF_Date::format($newsItem['date']); ?></td>
             <td><a href="?action=editnews&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_update"]; ?>"><img src="images/edit.png" width="16" height="16" alt="<?php print $PMF_LANG["ad_news_update"]; ?>" border="0" /></a>&nbsp;&nbsp;<a href="?action=deletenews&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_delete"]; ?>"><img src="images/delete.png" width="16" height="16" alt="<?php print $PMF_LANG["ad_news_delete"]; ?>" border="0" /></a></td>
         </tr>
 <?php
@@ -167,7 +167,9 @@ if ('addnews' == $action && $permission["addnews"]) {
 
             <p>
                 <label for="newsheader"><?php print $PMF_LANG['ad_news_header']; ?></label>
-                <input type="text" name="newsheader" id="newsheader" style="width: 300px;" value="<?php if (isset($newsData['header'])) { print $newsData['header']; } ?>" />
+                <input type="text" name="newsheader" id="newsheader" style="width: 300px;"
+                       value="<?php if (isset($newsData['header'])) { print $newsData['header']; } ?>"
+                       autofocus="autofocus" />
             </p>
 
             <p>
@@ -282,10 +284,11 @@ if ('addnews' == $action && $permission["addnews"]) {
         'target'        => (is_null($target)) ? '' : $target);
 
     if ($news->addNewsEntry($newsData)) {
-        printf("<p>%s</p>", $PMF_LANG['ad_news_updatesuc']);
+        printf('<p class="success">%s</p>', $PMF_LANG['ad_news_updatesuc']);
     } else {
-        printf("<p>%s</p>", $PMF_LANG['ad_news_insertfail']);
+        printf('<p class="error">%s</p>', $PMF_LANG['ad_news_insertfail']);
     }
+    printf('<p>&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
 } elseif ('updatenews' == $action && $permission["editnews"]) {
 
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING, '00000000000000');
@@ -318,15 +321,16 @@ if ('addnews' == $action && $permission["addnews"]) {
     
     $newsId = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     if ($news->updateNewsEntry($newsId, $newsData)) {
-        printf("<p>%s</p>", $PMF_LANG['ad_news_updatesuc']);
+        printf('<p class="success">%s</p>', $PMF_LANG['ad_news_updatesuc']);
     } else {
-        printf("<p>%s</p>", $PMF_LANG['ad_news_updatefail']);
+        printf('<p class="error">%s</p>', $PMF_LANG['ad_news_updatefail']);
     }
+    printf('<p>&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
 } elseif ('deletenews' == $action && $permission["delnews"]) {
-	
-	$precheck  = PMF_Filter::filterInput(INPUT_POST, 'really', FILTER_SANITIZE_STRING, 'no');
-	$delete_id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-	
+
+    $precheck  = PMF_Filter::filterInput(INPUT_POST, 'really', FILTER_SANITIZE_STRING, 'no');
+    $delete_id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    
     if ('no' == $precheck) {
 ?>
     <p><?php print $PMF_LANG["ad_news_del"]; ?></p>
@@ -341,20 +345,18 @@ if ('addnews' == $action && $permission["addnews"]) {
     
     <script type="text/javascript">
     /* <![CDATA[ */
-
     $(function()
     {
         $('.date-pick').datePicker();
     });
-    
     /* ]]> */
     </script>
-    
 <?php
     } else {
-    	$delete_id = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $delete_id = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         $news->deleteNews($delete_id);
-        print "<p>".$PMF_LANG["ad_news_delsuc"]."</p>";
+        printf('<p class="success">%s</p>', $PMF_LANG['ad_news_delsuc']);
+        printf('<p>&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
     }
 } else {
     print $PMF_LANG["err_NotAuth"];

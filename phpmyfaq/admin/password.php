@@ -127,12 +127,12 @@ if ($action == "sendmail") {
 
                 <p>
                     <label><?php print $PMF_LANG["ad_auth_user"]; ?></label>
-                    <input type="text" name="username" size="30" />
+                    <input type="text" name="username" size="30" required="required" autofocus="autofocus" />
                 </p>
 
                 <p>
                     <label><?php print $PMF_LANG["ad_entry_email"]; ?></label>
-                    <input type="email"  name="email" size="30" />
+                    <input type="email" name="email" size="30" required="required" />
                 </p>
 
                 <p>
@@ -148,7 +148,7 @@ if ($action == "sendmail") {
             <p>
                 <img src="images/arrow.gif" width="11" height="11" alt="<?php print $faqconfig->get('main.titleFAQ'); ?> FAQ" border="0" />
                 <a href="../index.php" title="<?php print $faqconfig->get('main.titleFAQ'); ?> FAQ">
-                    <?php print $faqconfig->get('main.titleFAQ'); ?> FAQ
+                    <?php print $faqconfig->get('main.titleFAQ'); ?>
                 </a>
             </p>
         </section>
@@ -157,8 +157,8 @@ if ($action == "sendmail") {
 
 if (DEBUG) {
     print "\n<p>DEBUG INFORMATION:</p>\n";
-    print "<p>".$db->sqllog()."</p>";
+    print "<p>".$db->log()."</p>";
 }
 
 require 'footer.php';
-$db->dbclose();
+$db->close();

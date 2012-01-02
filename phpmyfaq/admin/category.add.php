@@ -63,7 +63,7 @@ if ($permission["addcateg"]) {
 
             <p>
                 <label><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
-                <input type="text" id="name" name="name" size="30" style="width: 300px;" />
+                <input type="text" id="name" name="name" size="30" style="width: 300px;" autofocus="autofocus" />
             </p>
 
             <p>
@@ -81,6 +81,7 @@ if ($permission["addcateg"]) {
 <?php
     if ($parentId == 0) {
         if ($faqconfig->get('main.permLevel') != 'basic') {
+        if ($faqconfig->get('security.permLevel') != 'basic') {
 ?>
             <p>
                 <label><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
@@ -119,7 +120,7 @@ if ($permission["addcateg"]) {
             ?>
             <p>
                 <label for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
-                <?php print PMF_Language::selectLanguages($faqData['lang'], false, array(), 'langTo'); ?>
+                <?php print PMF_Language::selectLanguages($LANGCODE, false, array(), 'langTo'); ?>
             </p>
                 <input type="hidden" name="used_translated_languages" id="used_translated_languages" value="" />
             <div id="getedTranslations">

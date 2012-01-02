@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Bar
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-30
@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Bar
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-30
@@ -98,19 +98,19 @@ class PMF_Bar
          * Initalize default quartiles
          */
         $this->quartiles = array('lower_quartile' => array('percentile' => 25,
-                                                           'text_color' => array(255, 255, 255),
+                                                           'text_color' => array(0, 0, 0),
                                                            'bar_color'  => array(255, 0, 0)),
                                  /**
                                   * Median is currently not used
                                   */
                                  'median' => array(),
                                  'upper_quartile' => array('percentile' => 75,
-                                                           'text_color' => array(255, 255, 255),
+                                                           'text_color' => array(0, 0, 0),
                                                            'bar_color'  => array(0, 128, 0)),
                                  /**
                                   * This is the difference between the upper and lower quartiles
                                   */
-                                 'interquartile_range' => array('text_color' => array(255, 255, 255),
+                                 'interquartile_range' => array('text_color' => array(0, 0, 0),
                                                            	    'bar_color'  => array(150, 150, 150))
         
         );

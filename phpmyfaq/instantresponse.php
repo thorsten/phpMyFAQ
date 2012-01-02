@@ -18,7 +18,7 @@
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2007-2010 phpMyFAQ Team
+ * @copyright 2007-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-18
@@ -33,7 +33,7 @@ $faqsession->userTracking('instantresponse', 0);
 
 $searchString = $printInstantResponse = '';
 
-$tpl->processTemplate(
+$tpl->parse(
     'writeContent',
     array(
         'msgInstantResponse'            => $PMF_LANG['msgInstantResponse'],
@@ -43,4 +43,4 @@ $tpl->processTemplate(
         'ajaxlanguage'                  => $LANGCODE,
         'printInstantResponse'          => $printInstantResponse));
 
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->merge('writeContent', 'index');

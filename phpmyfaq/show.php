@@ -2,7 +2,15 @@
 /**
  * Frontend for categories or list of records
  *
+<<<<<<< HEAD
  * PHP Version 5.2
+=======
+ * @package    phpMyFAQ
+ * @subpackage Frontend
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2002-08-27
+ * @copyright  2002-2011 phpMyFAQ Team
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the 'License'); you may not use this file except in
@@ -52,21 +60,30 @@ if (!is_null($categoryId)) {
         $backToParent = $oLink->toHtmlAnchor();
     }
 
+<<<<<<< HEAD
     $tpl->processTemplate('writeContent', array(
         'writeCategory'            => $PMF_LANG['msgEntriesIn'] . $selectedCategoryData->name,
         'writeCategoryDescription' => $selectedCategoryData->description,
         'writeThemes'              => $records,
         'writeOneThemeBack'        => $backToParent));
     $tpl->includeTemplate('writeContent', 'index');
+=======
+    $tpl->parse('writeContent', array(
+        'writeCategory'            => $PMF_LANG['msgEntriesIn'].$name,
+        'writeCategoryDescription' => $categoryDescription,
+        'writeThemes'              => $records,
+        'writeOneThemeBack'        => $up));
+    $tpl->merge('writeContent', 'index');
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
 
 } else {
     $categoryLayout = new PMF_Category_Layout(new PMF_Category_Tree_Helper($categoryTree));
     
     $faqsession->userTracking('show_all_categories', 0);
-    $tpl->processTemplate('writeContent', array(
+    $tpl->parse('writeContent', array(
         'writeCategory'            => $PMF_LANG['msgFullCategories'],
         'writeCategoryDescription' => '',
         'writeThemes'              => $categoryLayout->renderTree(),
         'writeOneThemeBack'        => ''));
-    $tpl->includeTemplate('writeContent', 'index');
+    $tpl->merge('writeContent', 'index');
 }

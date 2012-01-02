@@ -19,7 +19,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Georgi Korchev <korchev@yahoo.com>
- * @copyright 2006-2010 phpMyFAQ Team
+ * @copyright 2006-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-08-10
@@ -37,7 +37,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Georgi Korchev <korchev@yahoo.com>
- * @copyright 2006-2010 phpMyFAQ Team
+ * @copyright 2006-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-08-10
@@ -61,12 +61,15 @@ class PMF_Tags
     /**
      * Constructor
      *
-     * @return void
+     * @param PMF_DB_Driver $database Database connection
+     * @param PMF_Language  $language Language object
+     *
+     * @return PMF_Tags
      */
-    function __construct()
+    public function __construct(PMF_DB_Driver $database, PMF_Language $language)
     {
-        $this->db       = PMF_Db::getInstance();
-        $this->language = PMF_Language::$language;
+        $this->db       = $database;
+        $this->language = $language;
     }
 
     /**
@@ -76,7 +79,7 @@ class PMF_Tags
      * @param  boolean $limit  Limit the returned result set
      * @return array
      */
-    public function getAllTags($search = null, $limit = false)
+    public function getAllTags($search = null, $limit = false, $showInactive = false)
     {
         global $DB;
         $tags = $allTags = array();
@@ -93,15 +96,29 @@ class PMF_Tags
 
         $query = sprintf("
             SELECT
-                tagging_id, tagging_name
+                t.tagging_id AS tagging_id, t.tagging_name AS tagging_name
             FROM
-                %sfaqtags
+                %sfaqtags t
+            LEFT JOIN
+                %sfaqdata_tags dt
+            ON
+                dt.tagging_id = t.tagging_id
+            LEFT JOIN
+                %sfaqdata d
+            ON
+                d.id = dt.record_id
+            WHERE
+                1=1
+                %s
                 %s
             ORDER BY tagging_name",
             SQLPREFIX,
-            (isset($search) && ($search != '') ? "WHERE tagging_name ".$like." '".$search."%'" : '')
-            );
-        
+            SQLPREFIX,
+            SQLPREFIX,
+            ($showInactive ? '' : "AND d.active = 'yes'"),
+            (isset($search) && ($search != '') ? "AND tagging_name ".$like." '".$search."%'" : '')
+        );
+
         $result = $this->db->query($query);
         
         if ($result) {
@@ -109,9 +126,15 @@ class PMF_Tags
               $allTags[$row->tagging_id] = $row->tagging_name;
            }
         }
+<<<<<<< HEAD
 
         $numberOfItems = $limit ? PMF_TAGS_CLOUD_RESULT_SET_SIZE : $this->db->numRows($result);
 
+=======
+        
+        $numberOfItems = $limit ? PMF_TAGS_CLOUD_RESULT_SET_SIZE : $this->db->numRows($result);
+        
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
         if (isset($allTags) && ($numberOfItems < count($allTags))) {
             $keys = array_keys($allTags);
             shuffle($keys);
@@ -212,9 +235,10 @@ class PMF_Tags
         foreach ($tags as $tagging_name) {
             $tagging_name = trim($tagging_name);
             if (PMF_String::strlen($tagging_name) > 0) {
-                if (!in_array(PMF_String::strtolower($tagging_name), array_map(array('PMF_String', 'strtolower'), $current_tags))) {
+                if (!in_array(PMF_String::strtolower($tagging_name),
+                              array_map(array('PMF_String', 'strtolower'), $current_tags))) {
                     // Create the new tag
-                    $new_tagging_id = $this->db->nextID(SQLPREFIX.'faqtags', 'tagging_id');
+                    $new_tagging_id = $this->db->nextId(SQLPREFIX.'faqtags', 'tagging_id');
                     $query = sprintf("
                         INSERT INTO
                             %sfaqtags
@@ -247,7 +271,11 @@ class PMF_Tags
                         (%d, %d)",
                         SQLPREFIX,
                         $record_id,
-                        array_search(PMF_String::strtolower($tagging_name), array_map(array('PMF_String', 'strtolower'), $current_tags)));
+                        array_search(
+                            PMF_String::strtolower($tagging_name),
+                            array_map(array('PMF_String', 'strtolower'), $current_tags)
+                        )
+                    );
                     $this->db->query($query);
                 }
             }
@@ -395,7 +423,7 @@ class PMF_Tags
     public function printHTMLTagsCloud()
     {
         global $sids;
-        $html = '';
+        
         $tags = array();
 
         // Limit the result set (see: PMF_TAGS_CLOUD_RESULT_SET_SIZE)
@@ -425,13 +453,14 @@ class PMF_Tags
         $CSSRelevanceMinLevel = 1;
         $CSSRelevanceMaxLevel = $CSSRelevanceLevels - $CSSRelevanceMinLevel;
         $CSSRelevanceLevel    = 3;
-        
-        $html = '<div class="tagscloud">';
+
+        $html = '<div id="tagcloud-content">';
         $i    = 0;
         foreach ($tags as $tag) {
             $i++;
             if ($max - $min > 0) {
-                $CSSRelevanceLevel = (int)($CSSRelevanceMinLevel + $CSSRelevanceMaxLevel*($tag['count'] - $min)/($max - $min));
+                $CSSRelevanceLevel =
+                    (int)($CSSRelevanceMinLevel + $CSSRelevanceMaxLevel * ($tag['count'] - $min) / ($max - $min));
             }
             $class = 'relevance'.$CSSRelevanceLevel;
             $html .= '<span class="'.$class.'">';
@@ -466,16 +495,25 @@ class PMF_Tags
 
         $query = sprintf("
             SELECT
-                d.record_id AS record_id
+                dt.record_id AS record_id
             FROM
-                %sfaqdata_tags d, %sfaqtags t
+                %sfaqtags t, %sfaqdata_tags dt
+            LEFT JOIN
+                %sfaqdata d
+            ON
+                d.id = dt.record_id
             WHERE
-                t.tagging_id = d.tagging_id
+                t.tagging_id = dt.tagging_id
             AND 
                 t.tagging_name = '%s'",
             SQLPREFIX,
             SQLPREFIX,
+<<<<<<< HEAD
             $this->db->escapeString($tagName));
+=======
+            SQLPREFIX,
+            $this->db->escape($tagName));
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
 
         $records = array();
         $result = $this->db->query($query);

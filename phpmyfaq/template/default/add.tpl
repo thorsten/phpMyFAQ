@@ -6,16 +6,18 @@
                 
                 <p>
                     <label for="name">{msgNewContentName}</label>
-                    <input type="text" name="name" id="name" value="{defaultContentName}" size="37" required="required" />
+                    <input type="text" name="name" id="name" value="{defaultContentName}" size="37"
+                           required="required" autofocus="autofocus" />
                 </p>
 
                 <p>
                 <label for="email">{msgNewContentMail}</label>
-                <input type="email" name="email" id="email" value="{defaultContentMail}" size="37" required="required" />
+                <input type="email" name="email" id="email" value="{defaultContentMail}" size="37"
+                       required="required" />
 
                 <p>
                 <label for="rubrik">{msgNewContentCategory}</label>
-                <select name="rubrik[]" id="rubrik" multiple="multiple" size="5" required="required" />
+                <select name="rubrik[]" id="rubrik" multiple="multiple" size="5" required="true" />
                 {printCategoryOptions}
                 </select>
                 </p>

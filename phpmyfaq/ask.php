@@ -38,6 +38,7 @@ if (!is_null($showCaptcha)) {
 
 $faqsession->userTracking('ask_question', 0);
 
+<<<<<<< HEAD
 $categoryLayout = new PMF_Category_Layout(new PMF_Category_Tree_Helper(new PMF_Category_Tree($categoryData)));
 
 $tpl->processTemplate('writeContent', array(
@@ -55,3 +56,35 @@ $tpl->processTemplate('writeContent', array(
     'msgNewContentSubmit'  => $PMF_LANG['msgNewContentSubmit']));
 
 $tpl->includeTemplate('writeContent', 'index');
+=======
+$category->buildTree();
+
+$categoryId = PMF_Filter::filterInput(INPUT_GET, 'category_id', FILTER_VALIDATE_INT, 0);
+
+$helper = PMF_Helper_Category::getInstance();
+$helper->setCategory($category);
+
+$tpl->parse(
+    'writeContent',
+    array(
+        'msgQuestion'          => $PMF_LANG['msgQuestion'],
+        'msgNewQuestion'       => $PMF_LANG['msgNewQuestion'],
+        'lang'                 => $Language->getLanguage(),
+        'msgNewContentName'    => $PMF_LANG['msgNewContentName'],
+        'msgNewContentMail'    => $PMF_LANG['msgNewContentMail'],
+        'defaultContentMail'   => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
+        'defaultContentName'   => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
+        'msgAskCategory'       => $PMF_LANG['msgAskCategory'],
+        'printCategoryOptions' => $helper->renderCategoryOptions($categoryId),
+        'msgAskYourQuestion'   => $PMF_LANG['msgAskYourQuestion'],
+        'captchaFieldset'      => PMF_Helper_Captcha::getInstance()->renderCaptcha(
+            $captcha,
+            'ask',
+            $PMF_LANG['msgCaptcha']
+        ),
+        'msgNewContentSubmit'  => $PMF_LANG['msgNewContentSubmit']
+    )
+);
+
+$tpl->merge('writeContent', 'index');
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f

@@ -38,16 +38,67 @@ session_start();
 $Language = new PMF_Language();
 $LANGCODE = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
 
-if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
-    require_once "lang/language_".$LANGCODE.".php";
+// Found an article language?
+$lang = PMF_Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
+if (is_null($lang) && !PMF_Language::isASupportedLanguage($lang) ) {
+    $lang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
+    if (is_null($lang) && !PMF_Language::isASupportedLanguage($lang) ) {
+        $lang = $LANGCODE;
+    }
+}
+
+if (isset($lang) && PMF_Language::isASupportedLanguage($lang)) {
+    require_once "lang/language_".$lang.".php";
 } else {
-    $LANGCODE = "en";
+    $lang = "en";
     require_once "lang/language_en.php";
 }
 //
 // Initalizing static string wrapper
 //
 PMF_String::init($LANGCODE);
+
+// authenticate with session information
+$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
+if ($user) {
+    $auth = true;
+} else {
+    $user = null;
+}
+
+// Get current user rights
+$permission = array();
+if (isset($auth)) {
+    // read all rights, set them FALSE
+    $allRights = $user->perm->getAllRightsData();
+    foreach ($allRights as $right) {
+        $permission[$right['name']] = false;
+    }
+    // check user rights, set them TRUE
+    $allUserRights = $user->perm->getAllUserRights($user->getUserId());
+    foreach ($allRights as $right) {
+        if (in_array($right['right_id'], $allUserRights))
+            $permission[$right['name']] = true;
+    }
+}
+
+// Get current user and group id - default: -1
+if (!is_null($user) && $user instanceof PMF_User_CurrentUser) {
+    $current_user   = $user->getUserId();
+    if ($user->perm instanceof PMF_Perm_PermMedium) {
+        $current_groups = $user->perm->getUserGroups($current_user);
+    } else {
+        $current_groups = array(-1);
+    }
+    if (0 == count($current_groups)) {
+        $current_groups = array(-1);
+    }
+} else {
+    $current_user   = -1;
+    $current_groups = array(-1);
+}
+
+$category = new PMF_Category($current_user, $current_groups);
 
 $currentCategory = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 $id              = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -58,7 +109,8 @@ if (is_null($currentCategory) || is_null($id)) {
     exit();
 }
 
-$faq = new PMF_Faq();
+$faq = new PMF_Faq($current_user, $current_groups);
+$faq->setLanguage($lang);
 $faq->getRecord($id);
 
 session_cache_limiter('private');

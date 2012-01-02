@@ -180,98 +180,6 @@ EOD;
 //
 
 /**
- * Returns all sorting possibilities for FAQ records
- *
- * @param   string  $current
- * @return  string
- * @access  public
- * @since   2007-03-10
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- */
-function sortingOptions($current)
-{
-    global $PMF_LANG;
-
-    $options = array('id', 'thema', 'visits', 'datum', 'author');
-    $output = '';
-
-    foreach ($options as $value) {
-        printf('<option value="%s"%s>%s</option>',
-            $value,
-            ($value == $current) ? ' selected="selected"' : '',
-            $PMF_LANG['ad_conf_order_'.$value]);
-    }
-
-    return $output;
-}
-
-/**
- * Checks for an address match (IPv4 or Network)
- *
- * @param   string  IP Address
- * @param   string  Network Address (e.g.: a.b.c.d/255.255.255.0 or a.b.c.d/24) or IP Address
- * @return  boolean
- * @since   2006-01-23
- * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @author  Kenneth Shaw <ken@expitrans.com>
- */
-function checkForAddrMatchIpv4($ip, $network)
-{
-    // See also ip2long PHP online manual: Kenneth Shaw
-    // coded a network matching function called net_match.
-    // We use here his way of doing bit-by-bit network comparison
-    $matched = false;
-
-    // Start applying the discovering of the network mask
-    $ip_arr = explode('/', $network);
-
-    $network_long = ip2long($ip_arr[0]);
-    $ip_long      = ip2long($ip);
-
-    if (!isset($ip_arr[1])) {
-        // $network seems to be a simple ip address, instead of a network address
-        $matched = ($network_long == $ip_long);
-    } else {
-        // $network seems to be a real network address
-        $x = ip2long($ip_arr[1]);
-        // Evaluate the netmask: <Network Mask> or <CIDR>
-        $mask = ( long2ip($x) == $ip_arr[1] ? $x : 0xffffffff << (32 - $ip_arr[1]));
-        $matched = ( ($ip_long & $mask) == ($network_long & $mask) );
-    }
-
-    return $matched;
-}
-
-/**
- * Performs a check if an IPv4 is banned
- * 
- * NOTE: This function does not support IPv6
- *
- * @param   string  IP
- * @return  boolean
- * @since   2003-06-06
- * @access  public
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- */
-function IPCheck($ip)
-{
-    if (strstr($ip, '::')) {
-        // currently we cannot handle IPv6
-        return true;
-    }
-    
-    $listBannedIPs = PMF_Configuration::getInstance()->get('main.bannedIPs');
-    $bannedIPs     = explode(' ', $listBannedIPs);
-    
-    foreach ($bannedIPs as $oneIPerNetwork) {
-        if (checkForAddrMatchIpv4($ip, $oneIPerNetwork)) {
-            return false;
-        }
-    }
-    return true;
-}
-
-/**
  * This function returns the banned words dictionary as an array.
  *
  * @return  array
@@ -332,6 +240,7 @@ function checkBannedWord($content)
 }
 
 /**
+<<<<<<< HEAD
  * This function returns the passed content with HTML hilighted banned words.
  *
  * @param   string  $content
@@ -354,6 +263,52 @@ function getHighlightedBannedWords($content)
     } else {
         return $content;
     }
+=======
+ * Returns the number of anonymous users and registered ones.
+ * These are the numbers of unique users who have perfomed
+ * some activities within the last five minutes
+ *
+ * @param  integer $activityTimeWindow Optionally set the time window size in sec. 
+ *                                     Default: 300sec, 5 minutes
+ * @return array
+ */
+function getUsersOnline($activityTimeWindow = 300)
+{
+    $users = array(0 ,0);
+    $db    = PMF_Db::getInstance();
+
+    if (PMF_Configuration::getInstance()->get('main.enableUserTracking')) {
+        $timeNow = ($_SERVER['REQUEST_TIME'] - $activityTimeWindow);
+        // Count all sids within the time window
+        // TODO: add a new field in faqsessions in order to find out only sids of anonymous users
+        $result = $db->query("
+                    SELECT
+                        count(sid) AS anonymous_users
+                    FROM
+                        ".SQLPREFIX."faqsessions
+                    WHERE
+                            user_id = -1
+                        AND time > ".$timeNow);
+        if (isset($result)) {
+            $row      = $db->fetchObject($result);
+            $users[0] = $row->anonymous_users;
+        }
+        // Count all faquser records within the time window
+        $result = $db->query("
+                    SELECT
+                        count(session_id) AS registered_users
+                    FROM
+                        ".SQLPREFIX."faquser
+                    WHERE
+                        session_timestamp > ".$timeNow);
+        if (isset($result)) {
+            $row      = $db->fetchObject($result);
+            $users[1] = $row->registered_users;
+        }
+    }
+
+    return $users;
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
 }
 
 /**
@@ -412,7 +367,7 @@ function build_insert($query, $table)
 
     $ret[] = "\r\n-- Table: ".$table;
 
-    while ($row = $db->fetch_assoc($result)) {
+    while ($row = $db->fetchArray($result)) {
         $p1 = array();
         $p2 = array();
         foreach ($row as $key => $val) {
@@ -423,7 +378,11 @@ function build_insert($query, $table)
                 if (is_null($val)) {
                     $p2[] = 'NULL';
                 } else {
+<<<<<<< HEAD
                     $p2[] = sprintf("'%s'", $db->escapeString($val));
+=======
+                    $p2[] = sprintf("'%s'", $db->escape($val));
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
                 }
             }
         }

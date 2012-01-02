@@ -31,7 +31,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 print sprintf('<header><h2>%s</h2></header>', $PMF_LANG['ad_glossary_edit']);
 
 if ($permission['editglossary']) {
-
     $id           = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $glossary     = new PMF_Glossary();
     $glossaryItem = $glossary->getGlossaryItem($id);
@@ -40,7 +39,8 @@ if ($permission['editglossary']) {
             <input type="hidden" name="id" value="<?php print $glossaryItem['id']; ?>" />
             <p>
                 <label for="item"><?php print $PMF_LANG['ad_glossary_item']; ?>:</label>
-                <input type="text" name="item" id="item" size="50" value="<?php print $glossaryItem['item']; ?>" />
+                <input type="text" name="item" id="item" size="50" value="<?php print $glossaryItem['item']; ?>"
+                       autofocus="autofocus" />
             </p>
 
             <p>

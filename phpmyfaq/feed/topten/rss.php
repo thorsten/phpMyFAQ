@@ -18,7 +18,7 @@
  * @package   PMF_Feed
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2004-2010 phpMyFAQ Team
+ * @copyright 2004-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-11-05
@@ -47,12 +47,49 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
     $LANGCODE = 'en';
 }
 
+if ($faqconfig->get('security.enableLoginOnly')) {
+    if (!isset($_SERVER['PHP_AUTH_USER'])) {
+        header('WWW-Authenticate: Basic realm="phpMyFAQ RSS Feeds"');
+        header('HTTP/1.0 401 Unauthorized');
+        exit;
+    } else {
+        $user = new PMF_User_CurrentUser();
+        if ($user->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) {
+            if ($user->getStatus() != 'blocked') {
+                $auth = true;
+            } else {
+                $user = null;
+            }
+        } else {
+            $user = null;
+        }
+    }
+}
+
+//
+// Get current user and group id - default: -1
+//
+if (!is_null($user) && $user instanceof PMF_User_CurrentUser) {
+    $current_user = $user->getUserId();
+    if ($user->perm instanceof PMF_Perm_PermMedium) {
+        $current_groups = $user->perm->getUserGroups($current_user);
+    } else {
+        $current_groups = array(-1);
+    }
+    if (0 == count($current_groups)) {
+        $current_groups = array(-1);
+    }
+} else {
+    $current_user   = -1;
+    $current_groups = array(-1);
+}
+
 //
 // Initalizing static string wrapper
 //
 PMF_String::init($LANGCODE);
 
-$faq     = new PMF_Faq();
+$faq     = new PMF_Faq($current_user, $current_groups);
 $rssData = $faq->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN);
 $num     = count($rssData);
 
@@ -83,7 +120,7 @@ if ($num > 0) {
         }
 
         $rss->startElement('item');
-        $rss->writeElement('title', PMF_Utils::makeShorterText(html_entity_decode($item['thema']), ENT_COMPAT, 'UTF-8', 8) .
+        $rss->writeElement('title', PMF_Utils::makeShorterText(html_entity_decode($item['thema'], ENT_COMPAT, 'UTF-8'), 8) .
                                     " (".$item['visits']." ".$PMF_LANG['msgViews'].")");
         
         $rss->startElement('description');
@@ -105,4 +142,4 @@ header('Content-Length: '.strlen($rssData));
 
 print $rssData;
 
-$db->dbclose();
+$db->close();

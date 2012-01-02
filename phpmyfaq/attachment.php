@@ -1,6 +1,6 @@
 <?php
 /**
- * Handle attachment diwnloads
+ * Handle attachment downloads
  *
  * PHP Version 5.2
  *
@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Frontend
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-06-23
@@ -35,14 +35,28 @@ if (headers_sent()) {
 }
 
 $attachmentErrors = array();
+$permission       = false;
 
-/**
- * TODO check if user is allowed to download this file
- */
+// authenticate with session information
+$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
+if (!$user instanceof PMF_User_CurrentUser) {
+    exit(-1);
+}
 
 $id  = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $att = PMF_Attachment_Factory::create($id);
 
+$userPermission  = $faq->getPermission('user', $att->getRecordId());
+$groupPermission = $faq->getPermission('group', $att->getRecordId());
+
+if (count($groupPermission) && in_array($groupPermission[0], $user->perm->getUserGroups($user->getUserId()))) {
+    $permission = true;
+}
+if (in_array(-1, $userPermission) || in_array($user->getUserId(), $userPermission)) {
+    $permission = true;
+} else {
+    $permission = false;
+}
 
 if ($att) {
     try {
@@ -53,9 +67,7 @@ if ($att) {
     }
 }
 
-/**
- * If we're here, there was an error with file download
- */
-$tpl->processBlock('writeContent', 'attachmentErrors', array('item' => implode('<br>', $attachmentErrors)));
-$tpl->processTemplate('writeContent', array());
-$tpl->includeTemplate('writeContent', 'index');
+// If we're here, there was an error with file download
+$tpl->parseBlock('writeContent', 'attachmentErrors', array('item' => implode('<br/>', $attachmentErrors)));
+$tpl->parse('writeContent', array());
+$tpl->merge('writeContent', 'index');

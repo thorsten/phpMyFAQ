@@ -76,9 +76,14 @@ PMF_Template::setTplSetName($faqconfig->get('main.templateSet'));
 /**
  * Initialize attachment factory
  */
-PMF_Attachment_Factory::init($faqconfig->get('main.attachmentsStorageType'),
-                             $faqconfig->get('main.defaultAttachmentEncKey'),
-                             $faqconfig->get('main.enableAttachmentEncryption'));
+PMF_Attachment_Factory::init($faqconfig->get('records.attachmentsStorageType'),
+                             $faqconfig->get('records.defaultAttachmentEncKey'),
+							 $faqconfig->get('records.enableAttachmentEncryption'));
+
+/*
+ * Initiazile caching
+ */
+PMF_Cache::init($faqconfig);
 
 //
 // Create a new FAQ object
@@ -99,6 +104,9 @@ if (function_exists('mb_language') && in_array($mbLanguage, $valid_mb_strings)) 
 // Get user action
 //
 $action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+if (is_null($action)) {
+    $action = PMF_Filter::filterInput(INPUT_POST, 'action', FILTER_SANITIZE_STRING);
+}
 
 // authenticate current user
 $auth        = null;
@@ -108,7 +116,7 @@ $faqpassword = PMF_Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZ
 if (!is_null($faqusername) && !is_null($faqpassword)) {
     // login with username and password
     $user = new PMF_User_CurrentUser();
-    if ($faqconfig->get('main.ldapSupport')) {
+    if ($faqconfig->get('security.ldapSupport')) {
         $authLdap = new PMF_Auth_AuthLdap();
         $user->addAuth($authLdap, 'ldap');
     }
@@ -129,7 +137,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     }
 } else {
     // authenticate with session information
-    $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+    $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
     if ($user) {
         $auth = true;
     } else {
@@ -158,6 +166,9 @@ if ($action == 'logout' && $auth) {
     $user->deleteFromSession();
     $user = null;
     $auth = null;
+    $ssoLogout = $faqconfig->get('security.ssoLogoutRedirect');
+    if ($faqconfig->get('security.ssoSupport') && !empty ($ssoLogout))
+        header ("Location:$ssoLogout");
 }
 
 //
@@ -178,7 +189,7 @@ if (isset($user) && is_object($user)) {
 //
 // Get action from _GET and _POST first
 $_ajax = PMF_Filter::filterInput(INPUT_GET, 'ajax', FILTER_SANITIZE_STRING);
-if (!$_ajax) {
+if (is_null($_ajax)) {
     $_ajax = PMF_Filter::filterInput(INPUT_POST, 'ajax', FILTER_SANITIZE_STRING);
 }
 
@@ -186,6 +197,7 @@ if (!$_ajax) {
 if (isset($auth) && in_array(true, $permission)) {
     if (isset($action) && isset($_ajax)) {
         if ($action == 'ajax') {
+
             switch ($_ajax) {
             // Link verification
             case 'verifyURL':
@@ -225,6 +237,11 @@ if (isset($auth) && in_array(true, $permission)) {
 
             case 'recordAdd':
                 require 'record.add.php';
+                break;
+
+            // Search
+            case 'search':
+                require 'ajax.search.php';
                 break;
 
             // Users
@@ -278,6 +295,7 @@ if (isset($auth) && in_array(true, $permission)) {
             case 'viewinactive':
             case 'viewactive':
             case 'view':                    require_once 'record.show.php'; break;
+            case 'searchfaqs':              require_once 'record.search.php'; break;
             case "takequestion":
             case "editentry":
             case 'copyentry':
@@ -360,19 +378,27 @@ if (isset($auth) && in_array(true, $permission)) {
             <tbody>
                 <tr>
                     <td><strong><a href="?action=viewsessions"><?php print $PMF_LANG["ad_start_visits"]; ?></a></strong></td>
-                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX."faqsessions"]; ?></td>
+                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX . "faqsessions"]; ?></td>
                 </tr>
                 <tr>
                     <td><strong><a href="?action=view"><?php print $PMF_LANG["ad_start_articles"]; ?></a></strong></td>
-                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX."faqdata"]; ?></td>
+                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX . "faqdata"]; ?></td>
                 </tr>
                 <tr>
                     <td><strong><a href="?action=comments"><?php print $PMF_LANG["ad_start_comments"]; ?></strong></a></td>
-                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX."faqcomments"]; ?></td>
+                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX . "faqcomments"]; ?></td>
                 </tr>
                 <tr>
                     <td><strong><a href="?action=question"><?php print $PMF_LANG["msgOpenQuestions"]; ?></strong></a></td>
-                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX."faqquestions"]; ?></td>
+                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX . "faqquestions"]; ?></td>
+                </tr>
+                <tr>
+                    <td><strong><a href="?action=news"><?php print $PMF_LANG["msgNews"]; ?></strong></a></td>
+                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX . "faqnews"]; ?></td>
+                </tr>
+                <tr>
+                    <td><strong><a href="?action=user&user_action=listallusers"><?php print $PMF_LANG['admin_mainmenu_users']; ?></strong></a></td>
+                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX . 'faquser'] - 1; ?></td>
                 </tr>
             </tbody>
             </table>
@@ -389,12 +415,13 @@ if (isset($auth) && in_array(true, $permission)) {
             $json   = file_get_contents('http://www.phpmyfaq.de/json/version.php');
             $result = json_decode($json);
             if ($result instanceof stdClass) {
-                printf('%s <a href="http://www.phpmyfaq.de" target="_blank">www.phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>',
+                printf(
+                    '%s <a href="http://www.phpmyfaq.de" target="_blank">phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>',
                     $PMF_LANG['ad_xmlrpc_latest'], 
                     $result->stable);
                 // Installed phpMyFAQ version is outdated
                 if (-1 == version_compare($faqconfig->get('main.currentVersion'), $result->stable)) {
-                    print '<br /><a href="?action=upgrade">' . $PMF_LANG['ad_you_should_update'] - '</a>';
+                    print '<br />' . $PMF_LANG['ad_you_should_update'];
                 }
             }
         } else {
@@ -447,11 +474,11 @@ if (isset($auth) && in_array(true, $permission)) {
                 </tr>
                 <tr>
                     <td><strong>DB Client Version</strong></td>
-                    <td><?php print $db->client_version(); ?></td>
+                    <td><?php print $db->clientVersion(); ?></td>
                 </tr>
                 <tr>
                     <td><strong>DB Server Version</strong></td>
-                    <td><?php print $db->server_version(); ?></td>
+                    <td><?php print $db->serverVersion(); ?></td>
                 </tr>
                 <tr>
                     <td><strong>Webserver Interface</strong></td>
@@ -468,6 +495,16 @@ if (isset($auth) && in_array(true, $permission)) {
         </section>
 <?php
     }
+// User is authenticated, but has no rights
+} elseif (isset($auth) && !in_array(true, $permission)) {
+?>
+            <header>
+                <h2><?php print $PMF_LANG['ad_pmf_info']; ?></h2>
+            </header>
+
+            <p class="error"><?php print $PMF_LANG['err_NotAuth'] ?></p>
+
+<?php
 // User is NOT authenticated
 } else {
 ?>
@@ -485,7 +522,7 @@ if (isset($auth) && in_array(true, $permission)) {
         $message = sprintf('<p class="success">%s</p>', $PMF_LANG['ad_logout']);
     }
     
-    if (isset($_SERVER['HTTPS']) || !$faqconfig->get('main.useSslForLogins')) {
+    if (isset($_SERVER['HTTPS']) || !$faqconfig->get('security.useSslForLogins')) {
 ?>
 
             <?php print $message ?>
@@ -494,7 +531,8 @@ if (isset($auth) && in_array(true, $permission)) {
 
                 <p>
                     <label for="faqusername"><?php print $PMF_LANG["ad_auth_user"]; ?></label>
-                    <input type="text" name="faqusername" id="faqusername" size="30" required="required" />
+                    <input type="text" name="faqusername" id="faqusername" size="30" required="required"
+                           autofocus="autofocus" />
                 </p>
 
                 <p>
@@ -505,19 +543,6 @@ if (isset($auth) && in_array(true, $permission)) {
                 <p>
                     <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_auth_ok"]; ?>" />
                     <input class="submit" type="reset" value="<?php print $PMF_LANG["ad_auth_reset"]; ?>" />
-                </p>
-                    
-                <p>
-                    <img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_LANG["lostPassword"]; ?>" border="0" />
-                    <a href="password.php" title="<?php print $PMF_LANG["lostPassword"]; ?>">
-                        <?php print $PMF_LANG["lostPassword"]; ?>
-                    </a>
-                </p>
-                <p>
-                    <img src="images/arrow.gif" width="11" height="11" alt="<?php print $faqconfig->get('main.titleFAQ'); ?>" border="0" />
-                    <a href="../index.php" title="<?php print $faqconfig->get('main.titleFAQ'); ?>">
-                        <?php print $faqconfig->get('main.titleFAQ'); ?>
-                    </a>
                 </p>
 <?php
     } else {
@@ -534,7 +559,7 @@ if (isset($auth) && in_array(true, $permission)) {
 
 if (DEBUG) {
     print "\n";
-    print '<div id="debug_main">DEBUG INFORMATION:<br>'.$db->sqllog().'</div>';
+    print '<div id="debug_main">DEBUG INFORMATION:<br>'.$db->log().'</div>';
 }
 ?>
     </div>
@@ -542,4 +567,4 @@ if (DEBUG) {
 
 require 'footer.php';
 
-$db->dbclose();
+$db->close();

@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Db
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-02-18
@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Db
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-02-18
@@ -127,7 +127,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      * @param  string $string String
      * @return string
      */
-    public function escapeString($string)
+    public function escape($string)
     {
         return str_replace("'", "''", $string);
     }
@@ -144,12 +144,12 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
     }
 
     /**
-     * Fetch a result row as an object
+     * Fetch a result row as an assoc array
      *
      * @param  resource $result Resultset
      * @return array
      */
-    public function fetch_assoc($result)
+    public function fetchArray($result)
     {
         return sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
     }
@@ -191,7 +191,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      *
      * @return integer
      */
-    public function sqllog()
+    public function log()
     {
         return $this->sqllog;
     }
@@ -244,8 +244,8 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
            $table);
         
         $result = $this->query($select);
-        $stmt   = sqlsrv_fetch($result);
-        return (sqlsrv_get_field($stmt, 0) + 1);
+        sqlsrv_fetch($result);
+        return (sqlsrv_get_field($result, 0) + 1);
     }
 
     /**
@@ -266,7 +266,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      *
      * @return string
      */
-    public function client_version()
+    public function clientVersion()
     {
         $client_info = sqlsrv_client_info($this->conn);
         return $client_info['DriverODBCVer'] . ' ' . $client_info['DriverVer'];
@@ -277,7 +277,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      *
      * @return string
      */
-    public function server_version()
+    public function serverVersion()
     {
         $server_info = sqlsrv_server_info($this->conn);
         return $server_info['SQLServerVersion'];
@@ -294,7 +294,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
         $this->tableNames[] = $prefix.'faquser';
 
         $result = $this->query('SELECT name FROM sysobjects WHERE type = \'u\''.(('' == $prefix) ? '' : ' AND name LIKE \''.$prefix.'%\' ORDER BY name'));
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             foreach ($row as $tableName) {
                 if (!in_array($tableName, $this->tableNames)) {
                     $this->tableNames[] = $tableName;
@@ -324,7 +324,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      *
      * @return void
      */
-    public function dbclose()
+    public function close()
     {
         sqlsrv_close($this->conn);
     }

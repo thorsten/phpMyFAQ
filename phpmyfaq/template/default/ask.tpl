@@ -7,17 +7,21 @@
 
             </div>
 
+            <div id="answers"></div>
+
             <form id="formValues" action="#" method="post">
                 <input type="hidden" name="lang" id="lang" value="{lang}" />
 
                 <p>
                     <label for="name">{msgNewContentName}</label>
-                    <input type="text" name="name" id="name" value="{defaultContentName}" size="50" required="required" />
+                    <input type="text" name="name" id="name" value="{defaultContentName}" size="50"
+                           required="required" autofocus="autofocus" />
                 </p>
 
                 <p>
                     <label for="email">{msgNewContentMail}</label>
-                    <input type="email" name="email" id="email" value="{defaultContentMail}" size="50" required="required" />
+                    <input type="email" name="email" id="email" value="{defaultContentMail}" size="50"
+                           required="required" />
                 </p>
 
                 <p>
@@ -38,7 +42,7 @@
 
                 <div id="loader"></div>
                 <div id="qerror"></div>
-
+                
                 <input class="submit" type="submit" id="submitquestion" value="{msgNewContentSubmit}">
 
             </form>

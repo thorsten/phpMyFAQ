@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2010 phpMyFAQ Team
+ * @copyright 2002-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-17
@@ -34,11 +34,15 @@ $faqQuestions = new PMF_Faq_Questions();
 $faqLayout    = new PMF_Faq_Layout($categoryLayout);
 $allquestions = $faqQuestions->fetchAll();
 
-$tpl->processTemplate ('writeContent', array(
-    'msgOpenQuestions'   => $PMF_LANG['msgOpenQuestions'],
-    'msgQuestionText'    => $PMF_LANG['msgQuestionText'],
-    'msgDate_User'       => $PMF_LANG['msgDate_User'],
-    'msgQuestion2'       => $PMF_LANG['msgQuestion2'],
-    'printOpenQuestions' => $faqLayout->renderOpenQuestions($allquestions)));
+$tpl->parse(
+    'writeContent',
+    array(
+        'msgOpenQuestions'   => $PMF_LANG['msgOpenQuestions'],
+        'msgQuestionText'    => $PMF_LANG['msgQuestionText'],
+        'msgDate_User'       => $PMF_LANG['msgDate_User'],
+        'msgQuestion2'       => $PMF_LANG['msgQuestion2'],
+        'printOpenQuestions' => $faqLayout->renderOpenQuestions($allquestions)
+        )
+    );
 
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->merge('writeContent', 'index');

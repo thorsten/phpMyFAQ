@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2010 phpMyFAQ Team
+ * @copyright 2002-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-29
@@ -41,18 +41,26 @@ $artlang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRIPPE
 
 $faqsession->userTracking('write_comment', $id);
 
-$tpl->processTemplate('writeContent', array(
-                      'msgCommentHeader'    => $PMF_LANG['msgWriteComment'],
-                      'writeSendAdress'     => '?'.$sids.'action=savecomment',
-                      'ID'                  => $id,
-                      'LANG'                => $artlang,
-                      'writeThema'          => $faq->getRecordTitle($id),
-                      'msgNewContentName'   => $PMF_LANG['msgNewContentName'],
-                      'msgNewContentMail'   => $PMF_LANG['msgNewContentMail'],
-                      'defaultContentMail'  => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
-                      'defaultContentName'  => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
-                      'msgYourComment'      => $PMF_LANG['msgYourComment'],
-                      'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
-                      'captchaFieldset'     => PMF_Helper_Captcha::getInstance()->renderFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment'))));
+$tpl->parse(
+    'writeContent',
+    array(
+        'msgCommentHeader'    => $PMF_LANG['msgWriteComment'],
+        'writeSendAdress'     => '?'.$sids.'action=savecomment',
+        'ID'                  => $id,
+        'LANG'                => $artlang,
+        'writeThema'          => $faq->getRecordTitle($id),
+        'msgNewContentName'   => $PMF_LANG['msgNewContentName'],
+        'msgNewContentMail'   => $PMF_LANG['msgNewContentMail'],
+        'defaultContentMail'  => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
+        'defaultContentName'  => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
+        'msgYourComment'      => $PMF_LANG['msgYourComment'],
+        'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
+        'captchaFieldset'     => PMF_Helper_Captcha::getInstance()->renderCaptcha(
+            $captcha,
+            'writecomment',
+            $PMF_LANG['msgCaptcha']
+        )
+    )
+);
 
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->merge('writeContent', 'index');

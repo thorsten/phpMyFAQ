@@ -47,11 +47,11 @@ if (!is_null($archived)) {
     $showAllNews      = sprintf('<a href="?%snewsid=0">%s</a>', $sids, $PMF_LANG['newsShowArchive']);
 }
 
-$tpl->processTemplate('writeContent', array(
+$tpl->parse('writeContent', array(
     'writeNewsHeader'       => $writeNewsHeader,
     'writeNewsRSS'          => $writeNewsRSS,
     'writeNews'             => $news->getNews($archived),
     'showAllNews'           => $showAllNews,
     'writeNumberOfArticles' => $plr->getMsg('plmsgHomeArticlesOnline', $faq->getNumberOfRecords($LANGCODE))));
 
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->merge('writeContent', 'index');

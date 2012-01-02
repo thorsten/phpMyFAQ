@@ -1,6 +1,6 @@
 <?php
 /**
- * The db_sqlite class provides methods and functions for a sqlite database.
+ * The PMF_DB_Sqlite class provides methods and functions for a sqlite database.
  *
  * PHP Version 5.2
  *
@@ -18,10 +18,10 @@
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Johannes Schlüter <johannes@php.net>
- * @since     2005-06-27
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2005-2010 phpMyFAQ Team
+ * @since     2005-06-27
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -35,10 +35,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Johannes Schlüter <johannes@php.net>
- * @since     2005-06-27
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2005-2010 phpMyFAQ Team
+ * @since     2005-06-27
  */
 class PMF_DB_Sqlite implements PMF_DB_Driver
 {
@@ -46,7 +46,7 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
      * The connection object
      *
      * @var   mixed
-     * @see   connect(), query(), dbclose()
+     * @see   connect(), query(), close()
      */
     private $conn = false;
 
@@ -104,7 +104,7 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
      * @param   string
      * @return  string
      */
-    public function escapeString($string)
+    public function escape($string)
     {
       return sqlite_escape_string($string);
     }
@@ -128,7 +128,7 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
      * @param   mixed $result
      * @return  array
      */
-    public function fetch_assoc($result)
+    public function fetchArray($result)
     {
         return sqlite_fetch_array($result, SQLITE_ASSOC);
     }
@@ -170,7 +170,7 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
      * @param   mixed $result
      * @return  integer
      */
-    public function sqllog()
+    public function log()
     {
         return $this->sqllog;
     }
@@ -185,7 +185,7 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
         $arr = array();
 
         $result = $this->query("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
-        while ($row = $this->fetch_assoc($result)) {
+        while ($row = $this->fetchArray($result)) {
             $num_result = $this->query('SELECT * FROM '.$row['name']);
             $arr[$row['name']] = $this->numRows($num_result);
         }
@@ -200,7 +200,7 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
      * @param   string      the name of the ID column
      * @return  int
      */
-    public function nextID($table, $id)
+    public function nextId($table, $id)
     {
         $result = $this->query('SELECT max('.$id.') AS current_id FROM '.$table);
         $currentID = intval(sqlite_fetch_single($result));
@@ -225,7 +225,7 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
      *
      * @return string
      */
-    public function client_version()
+    public function clientVersion()
     {
         return 'SQLite '.sqlite_libversion();
     }
@@ -235,9 +235,9 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
      *
      * @return string
      */
-    public function server_version()
+    public function serverVersion()
     {
-        return $this->client_version();
+        return $this->clientVersion();
     }
 
     /**
@@ -279,7 +279,7 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
      * 
      * @return boolean
      */
-    public function dbclose()
+    public function close()
     {
         return sqlite_close($this->conn);
     }

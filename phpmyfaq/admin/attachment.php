@@ -2,23 +2,29 @@
 /**
  * Select an attachment and save it or create the SQL backup files
  *
- * @category  phpMyFAQ
- * @package   Administration
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Anatoliy Belsky <ab@php.net>
- * @since     2002-09-17 
- * @copyright 2002-2009 phpMyFAQ
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
+ *  http://www.mozilla.org/MPL/
  *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Administration
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Anatoliy Belsky <ab@php.net>
+ * @copyright 2002-2011 phpMyFAQ
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2002-09-17 
  */
+
+error_reporting(E_ALL);
 
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
@@ -38,11 +44,11 @@ session_start();
 /**
  * Initialize attachment factory
  */
-PMF_Attachment_Factory::init($faqconfig->get('main.attachmentsStorageType'),
-                             $faqconfig->get('main.defaultAttachmentEncKey'),
-                             $faqconfig->get('main.enableAttachmentEncryption'));
+PMF_Attachment_Factory::init($faqconfig->get('records.attachmentsStorageType'),
+                             $faqconfig->get('records.defaultAttachmentEncKey'),
+                             $faqconfig->get('records.enableAttachmentEncryption'));
 
-$currentSave   = PMF_Filter::filterInput(INPUT_POST, 'save',   FILTER_SANITIZE_STRING);
+$currentSave   = PMF_Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);
 $currentAction = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 $currentToken  = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 
@@ -58,7 +64,7 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
 }
 
 $auth = false;
-$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
 if ($user) {
     $auth = true;
 } else {
@@ -88,41 +94,56 @@ if ($auth === true) {
 if (is_null($currentAction) || !is_null($currentSave)) {
 ?>
 <!DOCTYPE html>
-<html lang="<?php print $PMF_LANG['metaLanguage']; ?>">
+<!--[if lt IE 7 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js"> <!--<![endif]-->
 <head>
-    <title><?php print $faqconfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
     <meta charset="utf-8">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta http-equiv="content-language" content="<?php print $PMF_LANG['metaLanguage']; ?>">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title><?php print $faqconfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
+    <base href="<?php print PMF_Link::getSystemUri('index.php'); ?>" />
+    
+    <meta name="description" content="Only Chuck Norris can divide by zero.">
+    <meta name="author" content="phpMyFAQ Team">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
     <meta name="application-name" content="phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?>">
-    <meta name="copyright" content="(c) 2001-2010 phpMyFAQ Team">
-    <link rel="shortcut icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon">
-    <style type="text/css">
-    @import url(style/admin.css);
-    body { margin: 5px; }
-    </style>
-    <script type="text/javascript" src="../inc/js/functions.js"></script>
+    <meta name="copyright" content="(c) 2001-2011 phpMyFAQ Team">
+    <meta name="publisher" content="phpMyFAQ Team">
+    <meta name="MSSmartTagsPreventParsing" content="true">
+
+    <link rel="stylesheet" href="style/admin.css?v=1">
+
+    <script src="../inc/js/modernizr.min.js"></script>
+    <script src="../inc/js/jquery.min.js"></script>
+    <script src="../inc/js/functions.js"></script>
+    
+    <link rel="shortcut icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico">
+    <link rel="apple-touch-icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/apple-touch-icon.png">
 </head>
-<body>
+<body class="attachments">
+
+    <div id="mainContent">
 <?php
 }
 if (is_null($currentAction) && $auth && $permission["addatt"]) {
     $recordId   = filter_input(INPUT_GET, 'record_id',   FILTER_VALIDATE_INT);
     $recordLang = filter_input(INPUT_GET, 'record_lang', FILTER_SANITIZE_STRING);
 ?>
-    <form action="?action=save" enctype="multipart/form-data" method="post">
-    <fieldset>
-    <legend><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></legend>
-        <input type="hidden" name="MAX_FILE_SIZE" value="<?php print $faqconfig->get('main.maxAttachmentSize'); ?>" />
-        <input type="hidden" name="record_id" value="<?php print $recordId; ?>" />
-        <input type="hidden" name="record_lang" value="<?php print $recordLang; ?>" />
-        <input type="hidden" name="save" value="TRUE" />
-        <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
-        <?php print $PMF_LANG["ad_att_att"]; ?> <input name="userfile" type="file" />
-        <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_att_butt"]; ?>" />
-    </fieldset>
-    </form>
+        <form action="?action=save" enctype="multipart/form-data" method="post">
+            <fieldset>
+            <legend><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></legend>
+                <input type="hidden" name="MAX_FILE_SIZE" value="<?php print $faqconfig->get('records.maxAttachmentSize'); ?>" />
+                <input type="hidden" name="record_id" value="<?php print $recordId; ?>" />
+                <input type="hidden" name="record_lang" value="<?php print $recordLang; ?>" />
+                <input type="hidden" name="save" value="TRUE" />
+                <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
+                <?php print $PMF_LANG["ad_att_att"]; ?> <input name="userfile" type="file" />
+                <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_att_butt"]; ?>" />
+            </fieldset>
+        </form>
 <?php
 }
 
@@ -140,7 +161,7 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission['adda
 ?>
 <p><strong><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></strong></p>
 <?php
-    if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && !(filesize($_FILES["userfile"]["tmp_name"]) > $faqconfig->get('main.maxAttachmentSize'))) {
+    if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && !(filesize($_FILES["userfile"]["tmp_name"]) > $faqconfig->get('records.maxAttachmentSize'))) {
 
         $att = PMF_Attachment_Factory::create();
         $att->setRecordId($recordId);
@@ -162,20 +183,67 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission['adda
             $att->delete();
             print "<p>".$PMF_LANG["ad_att_fail"]."</p>";
         }
+
+        printf(
+            '<p align="center"><a href="javascript:;" onclick="addAttachmentLink(%d, \'%s\');">%s</a></p>',
+            $att->getId(),
+            $att->getFilename(),
+            $PMF_LANG['ad_att_close']
+        );
+
     } else {
-        printf("<p>%s</p>", sprintf($PMF_LANG['ad_attach_4'], $faqconfig->get('main.maxAttachmentSize')));
+        printf(
+            '<p>%s</p>',
+            sprintf(
+                $PMF_LANG['ad_attach_4'],
+                $faqconfig->get('records.maxAttachmentSize')
+            )
+        );
+
+        printf(
+            '<p align="center"><a href="javascript:;" onclick="closeWindow();">%s</a></p>',
+            $PMF_LANG['ad_att_close']
+        );
+
     }
-    print "<p align=\"center\"><a href=\"javascript:window.close()\">".$PMF_LANG["ad_att_close"]."</a></p>";
+
+
 }
 if (!is_null($currentSave) && $currentSave == true && $auth && !$permission["addatt"]) {
     print $PMF_LANG["err_NotAuth"];
 }
 
 if (DEBUG) {
-    print "\n\n-- Debug information:\n<p>".$db->sqllog()."</p>";
+    print "\n\n-- Debug information:\n<p>".$db->log()."</p>";
 }
 
-$db->dbclose();
+$db->close();
 ?>
+    </div>
+
+    <script type="text/javascript">
+        /**
+         * Adds the link to the attachment in the main FAQ window
+         * @param integer attachmentId
+         * @param string
+         */
+        function addAttachmentLink(attachmentId, fileName)
+        {
+            window.opener.
+                $('.adminAttachments').
+                append('<li><a href="../index.php?action=attachment&id=' + attachmentId +'">' + fileName + '</a></li>');
+            window.close();
+        }
+
+        /**
+         * Closes the current window
+         *
+         */
+        function closeWindow()
+        {
+            window.close();
+        }
+    </script>
+
 </body>
 </html>

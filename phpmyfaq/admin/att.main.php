@@ -98,8 +98,8 @@ printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_attachment_admin']);
                         data:    {attId: att_id},
                         success: function(msg) {
                             $('.att_' + att_id).fadeOut('slow');
-                            $('.att_' + att_id).after('<tr><td colspan="5">' + msg + '</td></tr>');
-                            $('#saving_data_indicator').html('<?php print $PMF_LANG['msgAttachmentsDeleted']; ?>');
+                            $('#saving_data_indicator').
+                                html('<p class="success"><?php print $PMF_LANG['msgAttachmentsDeleted']; ?></p>');
                         }
                     });
                 }

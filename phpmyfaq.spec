@@ -130,7 +130,11 @@ Requires:           apache
 %else
 Requires:           httpd
 %endif
+<<<<<<< HEAD
 Requires:           php >= 5.3.0
+=======
+Requires:           php >= 5.2.3
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
 # GD is bundled into PHP starting from PHP 4.3.0
 Requires:           php-gd
 # We do not require MySQL but one among the several DB supported by phpMyFAQ.
@@ -152,18 +156,49 @@ XML-support, PDF-support, a backup-system and an easy to use
 installation script.
 
 %changelog
-=======
+==========
+
+* Wed Sep 28 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0.alpha-1
+- New upstream version 2.8.0-alpha
+
+* Wed Oct 26 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.2-1
+- New upstream version 2.7.2
+
+* Fri Sep 30 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.1-1
+- New upstream version 2.7.1
+
+* Tue Sep 20 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0-1
+- New upstream version 2.7.0
+
+* Sun Aug 17 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0.RC-1
+- New upstream version 2.7.0-RC
+
+* Sun Aug 07 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0.beta3-1
+- New upstream version 2.7.0-beta3
+
+* Thu Mar 24 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0.beta-1
+- New upstream version 2.7.0-beta
 
 <<<<<<< HEAD
 * Sun Aug 08 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 3.0.0.dev-1
 - New upstream version 3.0.0-dev
 =======
 * Sat Jan 28 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0.alpha2-1
+<<<<<<< HEAD
 - New upstream version 2.7-0-alpha2
 >>>>>>> 3c9295794d076bc80af3ee7a7c81d79b94d916fe
+=======
+- New upstream version 2.7.0-alpha2
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
 
 * Mon Aug 08 2010 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0.alpha-1
-- New upstream version 2.7-0-alpha
+- New upstream version 2.7.0-alpha
+
+* Wed Jun 22 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.6.18-1
+- New upstream version 2.6.18
+
+* Tue May 31 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.6.17-1
+- New upstream version 2.6.17
 
 * Tue Mar 01 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.6.16-1
 - New upstream version 2.6.16

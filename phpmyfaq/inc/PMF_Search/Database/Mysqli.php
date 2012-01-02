@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Search_Database
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
+ * @copyright 2010-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Search_Database
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
+ * @copyright 2010-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
@@ -66,6 +66,15 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
         if (is_numeric($searchTerm)) {
             parent::search($searchTerm);
         } else {
+            $enableRelevance = PMF_Configuration::getInstance()->get('search.enableRelevance');
+
+            $columns    =  $this->getResultColumns();
+            $columns   .= ($enableRelevance) ? $this->getMatchingColumnsAsResult($searchTerm) : '';
+            $orderBy    = ($enableRelevance) ? 'ORDER BY ' . $this->getMatchingOrder() . ' DESC' : '';
+            $chars      = array (chr(150), chr(147), chr(148), chr(146), chr(34), '&quot;', '&#34;');
+            $replace    = array ("-", "\"", "\"", "'", "\"" , "\"", "\"");
+            $searchTerm = str_replace ($chars, $replace, $searchTerm);
+
             $query = sprintf("
                 SELECT
                     %s
@@ -73,19 +82,22 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
                     %s %s %s
                 WHERE
                     MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE)
+                    %s
                     %s",
-                $this->getResultColumns(),
+                $columns,
                 $this->getTable(),
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
                 $this->getMatchingColumns(),
-                $this->dbHandle->escape_string($searchTerm),
-                $this->getConditions());
-            
+                $this->dbHandle->escape($searchTerm),
+                $this->getConditions(),
+                $orderBy
+            );
+
             $this->resultSet = $this->dbHandle->query($query);
             
             // Fallback for searches with less than three characters
-            if (false == $this->resultSet) {
+            if (0 == $this->dbHandle->num_rows($this->resultSet)) { 
                 
                 $query = sprintf("
                     SELECT
@@ -108,4 +120,53 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
         
         return $this->resultSet;
     }
+    
+    /**
+     * Add the matching columns into the columns for the resultset
+     *
+     * @return PMF_Search_Database
+     */
+    public function getMatchingColumnsAsResult($searchterm)
+    {
+        $resultColumns = '';
+
+        foreach ($this->matchingColumns as $matchColumn) {
+            $column = sprintf("MATCH (%s) AGAINST ('*%s*' IN BOOLEAN MODE) AS rel_%s",
+                $matchColumn,
+                $this->dbHandle->escape($searchterm),
+                substr(strstr($matchColumn, '.'), 1));
+
+                $resultColumns .= ', ' . $column;
+        }
+
+        return $resultColumns;
+    }
+    
+    /**
+     * Returns the part of the SQL query with the order by
+     *
+     * The order is calculate by weight depend on the search.relevance order
+     *
+     * @return string
+     */
+    public function getMatchingOrder()
+    {
+        $config = PMF_Configuration::getInstance()->get('search.relevance');
+        $list   = explode(",", $config);
+        $count  = count($list);
+        $order  = '';
+
+        foreach ($list as $field) {
+            $string = '(rel_' . $field . '*' . $count .')';
+            if (empty($order)) {
+                $order .= $string;
+            } else {
+                $order .= '+' . $string;
+            }
+            $count--;
+        }
+
+        return $order;
+    }
+
 }

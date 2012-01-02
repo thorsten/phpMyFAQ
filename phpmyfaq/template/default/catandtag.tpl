@@ -24,7 +24,7 @@
                 </a>
             </div>
             <div id="facebookLikeButton">
-                {facebookeLikeButton}
+                {facebookLikeButton}
             </div>
         </section>
 [/socialLinks]
@@ -40,7 +40,7 @@
             <header>
                 <h3>{writeTagCloudHeader}</h3>
             </header>
-            <div id = "tagcloud-content">
+            <div id="tagcloud-content">
             {writeTags}
             </div>
         </section>

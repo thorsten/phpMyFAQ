@@ -9,12 +9,14 @@
 
                 <p>
                     <label for="name">{msgS2FName}</label>
-                    <input type="text" name="name" id="name" value="{defaultContentName}" size="50" required="required" />
+                    <input type="text" name="name" id="name" value="{defaultContentName}" size="50"
+                           required="required" autofocus="autofocus" />
                 </p>
 
                 <p>
                     <label for="email">{msgS2FEMail}</label>
-                    <input type="email" name="email" id="email" value="{defaultContentMail}" size="50" required="required" />
+                    <input type="email" name="email" id="email" value="{defaultContentMail}" size="50"
+                           required="required" />
                 </p>
 
                 <p>{msgS2FFriends}</p>
@@ -44,11 +46,11 @@
                 </p>
 
                 <p>
-                    {msgS2FText}<br/>
+                    <strong>{msgS2FText}</strong><br/>
                     <em>{send2friend_text}</em>
                 </p>
                 <p>
-                    {msgS2FText2}<br/>
+                    <strong>{msgS2FText2}</strong><br/>
                     <em>{send2friendLink}</em>
                 </p>
 

@@ -21,7 +21,7 @@
  * @since     2003-12-10
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  */
 
 /**
@@ -121,6 +121,17 @@ define("PMF_TAGS_CLOUD_RESULT_SET_SIZE", 50);
  * @var const   20
  */
 define("PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE", 20);
+
+/**
+ * This is the flag for choosing the encryption type for passwords. Currently
+ * you can choose
+ * - md5 (default)
+ * - sha1
+ * - crypt
+ *
+ * @var const
+ */
+define('PMF_ENCRYPTION_TYPE', 'md5');
 
 /**
  * List of denied extensions when uploading a file.

@@ -18,7 +18,7 @@
  * @package   PMF_Category
  * @author    Johannes Schlüter <johannes@schlueters.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2004-2010 phpMyFAQ Team
+ * @copyright 2004-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-16
@@ -35,7 +35,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_Category
  * @author    Johannes Schlüter <johannes@schlueters.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2004-2010 phpMyFAQ Team
+ * @copyright 2004-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-16
@@ -169,7 +169,7 @@ class PMF_Category
 
     /**
      * Setter of number of children
-     * 
+     *
      * @param int $count Number of children
      *
      * @return void
@@ -187,5 +187,15 @@ class PMF_Category
     public function hasChildren()
     {
         return (bool)$this->children;
+    }
+
+    /**
+     * Sets language
+     *
+     * @param string $language
+     */
+    public function setLanguage($language)
+    {
+        $this->language = $language;
     }
 }

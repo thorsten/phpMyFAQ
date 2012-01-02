@@ -29,12 +29,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($permission['viewlog']) {
+
     // Get category data
     $categoryData   = new PMF_Category_Tree_DataProvider_SingleQuery($LANGCODE);
     $categoryLayout = new PMF_Category_Layout(new PMF_Category_Tree_Helper(new PMF_Category_Tree($categoryData)));
     
     // Get rating data
-    $ratings        = new PMF_Rating();
+    $ratings        = new PMF_Rating($db, $Language);
     //$ratingData     = $ratings->fetchAll();
     $ratingdata     = $ratings->getAllRatings();
     $numratings     = count($ratingdata);
@@ -44,6 +45,7 @@ if ($permission['viewlog']) {
     $faqRecord = new PMF_Faq_Record();
     $faqRecord->setLanguage($LANGCODE);
     $faqData = $faqRecord->fetchAll();
+
 ?>
         <header>
             <h2><?php print $PMF_LANG["ad_rs"] ?></h2>
@@ -55,17 +57,41 @@ if ($permission['viewlog']) {
         if ($data['category_id'] != $oldcategory) {
 ?>
         <tr>
-            <th colspan="5" style="text-align: left;"><strong><?php print $categoryLayout->renderBreadcrumb($categoryData->getPath($data['category_id'])); ?></strong></th>
+            <th colspan="5" style="text-align: left;">
+                <strong>
+                    <?php print $categoryLayout->renderBreadcrumb($categoryData->getPath($data['category_id'])); ?>
+                </strong>
+            </th>
         </tr>
 <?php
         }
+
+        $question = PMF_String::htmlspecialchars(trim($data['question']), ENT_QUOTES, 'utf-8');
+        $url      = sprintf('../index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+            $data['category_id'],
+            $data['id'],
+            $data['lang']
+        );
 ?>
         <tr>
-            <td><?php print $data['id']; ?></td>
-            <td><?php print $data['lang']; ?></td>
-            <td><a href="../index.php?action=artikel&amp;cat=<?php print $data['category_id']; ?>&amp;id=<?php print $data['id'];?>&amp;artlang=<?php print $data['lang']; ?>" title="<?php print PMF_String::htmlspecialchars(trim($data['question']), ENT_QUOTES, 'utf-8'); ?>"><?php print PMF_Utils::makeShorterText(PMF_String::htmlspecialchars(trim($data['question']), ENT_QUOTES), 14); ?></a></td>
-            <td><?php print $data['usr']; ?></td>
-            <td style="background-color: #d3d3d3;"><img src="stat.bar.php?num=<?php print $data['num']; ?>" border="0" alt="<?php print round($data['num'] * 20); ?> %" width="50" height="15" title="<?php print round($data['num'] * 20); ?> %" /></td>
+            <td>
+                <?php print $data['id']; ?>
+            </td>
+            <td>
+                <?php print $data['lang']; ?>
+            </td>
+            <td>
+                <a href="<?php print $url ?>" title="<?php print $question; ?>">
+                    <?php print PMF_Utils::makeShorterText($question, 14); ?>
+                </a>
+            </td>
+            <td>
+                <?php print $data['usr']; ?></td>
+            <td style="background-color: #d3d3d3;">
+                <img src="stat.bar.php?num=<?php print $data['num']; ?>" border="0"
+                     alt="<?php print round($data['num'] * 20); ?> %" width="50" height="15"
+                     title="<?php print round($data['num'] * 20); ?> %" />
+            </td>
         </tr>
 <?php
         $oldcategory = $data['category_id'];
@@ -73,7 +99,16 @@ if ($permission['viewlog']) {
     if ($numratings > 0) {
 ?>
         <tr>
-            <td colspan="5"><span style="color: green; font-weight: bold;"><?php print $PMF_LANG["ad_rs_green"] ?></span> <?php print $PMF_LANG["ad_rs_ahtf"] ?>, <span style="color: red; font-weight: bold;"><?php print $PMF_LANG["ad_rs_red"] ?></span> <?php print $PMF_LANG["ad_rs_altt"] ?></td>
+            <td colspan="5">
+                <span style="color: green; font-weight: bold;">
+                    <?php print $PMF_LANG["ad_rs_green"] ?>
+                </span>
+                <?php print $PMF_LANG["ad_rs_ahtf"] ?>,
+                <span style="color: red; font-weight: bold;">
+                    <?php print $PMF_LANG["ad_rs_red"] ?>
+                </span>
+                <?php print $PMF_LANG["ad_rs_altt"] ?>
+            </td>
         </tr>
 <?php
     } else {

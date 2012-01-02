@@ -1,6 +1,6 @@
 <?php
 /**
- * The db_ibase class provides methods and functions for Firebird/InterBase
+ * The PMF_DB_Ibase class provides methods and functions for Firebird/InterBase
  * databases.
  * 
  * PHP Version 5.2
@@ -18,7 +18,7 @@
  * @category  phpMyFAQ
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-28
@@ -34,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-28
@@ -99,7 +99,7 @@ class PMF_DB_Ibase implements PMF_DB_Driver
      * @param   string
      * @return  string
      */
-    public function escapeString($string)
+    public function escape($string)
     {
       return str_replace("'", "''", $string);
     }
@@ -133,7 +133,7 @@ class PMF_DB_Ibase implements PMF_DB_Driver
      * @param   mixed $result
      * @return  array
      */
-    function fetch_assoc($result)
+    public function fetchArray($result)
     {
         return ibase_fetch_assoc($result);
     }
@@ -176,7 +176,7 @@ class PMF_DB_Ibase implements PMF_DB_Driver
      * @param   mixed $result
      * @return  integer
      */
-    public function sqllog()
+    public function log()
     {
         return $this->sqllog;
     }
@@ -201,13 +201,13 @@ class PMF_DB_Ibase implements PMF_DB_Driver
     }
 
     /**
-     * Returns the next ID of a table
-     *
-     * @param   string      the name of the table
-     * @param   string      the name of the ID column
-     * @return  int
-     */
-    public function nextID($table, $id)
+    * Returns the next ID of a table
+    *
+    * @param   string      the name of the table
+    * @param   string      the name of the ID column
+    * @return  int
+    */
+    function nextId($table, $id)
     {
         $result = $this->query('SELECT max('.$id.') as current_id FROM '.$table);
         $row    = $this->fetchObject($result);
@@ -225,23 +225,23 @@ class PMF_DB_Ibase implements PMF_DB_Driver
     }
 
     /**
-     * Returns the client version string.
-     *
-     * @return string
-     */
-    function client_version()
+    * Returns the client version string.
+    *
+    * @return string
+    */
+    function clientVersion()
     {
         return '';
     }
 
     /**
-     * Returns the server version string.
-     * 
-     * @return string
-     */
-    function server_version()
+    * Returns the server version string.
+    * 
+    * @return string
+    */
+    function serverVersion()
     {
-        return ibase_server_info();
+        return ibase_server_info($this->conn, IBASE_SVC_SERVER_VERSION);
     }
 
     /**
@@ -276,7 +276,7 @@ class PMF_DB_Ibase implements PMF_DB_Driver
     *
     * @return boolean
     */
-    function dbclose()
+    function close()
     {
         return ibase_close($this->conn);
     }

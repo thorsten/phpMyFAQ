@@ -18,7 +18,7 @@
  * @package   PMF_DB
  * @author    Adam Greene <phpmyfaq@skippy.fastmail.fm>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2004-2010 phpMyFAQ Team
+ * @copyright 2004-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-12-10
@@ -100,7 +100,7 @@ class PMF_DB_Sybase implements PMF_DB_Driver
      */
     function connect($host, $user, $passwd, $db)
     {
-        $this->conn = @sybase_pconnect($host, $user, $passwd);
+        $this->conn = sybase_pconnect($host, $user, $passwd);
         if (empty($db) || $this->conn === false) {
             PMF_Db::errorPage('An unspecified error occurred.');
             die();
@@ -128,7 +128,7 @@ class PMF_DB_Sybase implements PMF_DB_Driver
     * @param   string
     * @return  string
     */
-    function escapeString($string)
+    function escape($string)
     {
         return str_replace("'", "''", $string);
     }
@@ -150,7 +150,7 @@ class PMF_DB_Sybase implements PMF_DB_Driver
      * @param   mixed $result
      * @return  array
      */
-    function fetch_assoc($result)
+    function fetchArray($result)
     {
       return sybase_fetch_assoc($result);
     }
@@ -193,7 +193,7 @@ class PMF_DB_Sybase implements PMF_DB_Driver
      * @param   mixed $result
      * @return  integer
      */
-    function sqllog()
+    function log()
     {
         return $this->sqllog;
     }
@@ -233,14 +233,11 @@ class PMF_DB_Sybase implements PMF_DB_Driver
     /**
     * Returns the next ID of a table
     *
-    * This function is a replacement for MySQL's auto-increment so that
-    * we don't need it anymore.
-    *
     * @param   string      the name of the table
     * @param   string      the name of the ID column
     * @return  int
     */
-    function nextID($table, $id)
+    function nextId($table, $id)
     {
         $result = $this->query('SELECT max('.$id.') as current_id FROM '.$table);
         $currentID = sybase_result($result, 0, 'current_id');
@@ -262,7 +259,7 @@ class PMF_DB_Sybase implements PMF_DB_Driver
      * 
      * @return string
      */
-    function client_version()
+    function clientVersion()
     {
         return '';
     }
@@ -272,9 +269,9 @@ class PMF_DB_Sybase implements PMF_DB_Driver
      * 
      * @return string
      */
-    function server_version()
+    function serverVersion()
     {
-        $result   = $this->query('SELECT @@version AS SERVER_VERSION');
+        $result  = $this->query('SELECT @@version AS SERVER_VERSION');
         $version = sybase_result($result, 0, 'SERVER_VERSION');
         if (isset($version)) {
             return $version;
@@ -322,7 +319,7 @@ class PMF_DB_Sybase implements PMF_DB_Driver
      * 
      * @return boolean
      */
-    function dbclose()
+    function close()
     {
         return sybase_close($this->conn);
     }

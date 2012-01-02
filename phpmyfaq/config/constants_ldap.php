@@ -18,7 +18,7 @@
  * @package   PMF_Ldap
  * @author    Lars Scheithauer <lars.scheithauer@googlemail.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-05
@@ -50,3 +50,11 @@ $PMF_LDAP['ldap_mapping']['memberOf'] = '';
 // Option for binding to LDAP directory using SASL
 // Default: false
 $PMF_LDAP['ldap_use_sasl'] = false;
+
+// Option to use multiple LDAP servers
+// Default: false
+$PMF_LDAP['ldap_use_multiple_servers'] = false;
+
+// Option to use anonymous LDAP connection (without username and password)
+// Default: false
+$PMF_LDAP['ldap_use_anonymous_login'] = false;

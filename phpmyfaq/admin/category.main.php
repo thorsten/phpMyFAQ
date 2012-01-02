@@ -28,7 +28,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 ?>
-    
         <header>
             <h2><?php print $PMF_LANG['ad_menu_categ_edit']; ?></h2>
         </header>
@@ -142,6 +141,7 @@ if ($permission['editcateg']) {
                 printf('<p class="error">%s</p>', $db->error());
             }
         } else {
+
             if ($categoryNode->update($categoryId, $categoryData)) {
                 
                 $userPermission  = array(
@@ -153,7 +153,7 @@ if ($permission['editcateg']) {
                 
                 $categoryUser->update($categoryId, $userPermission);
                 $categoryGroup->update($categoryId, $groupPermission);
-                
+
                 printf('<p class="success">%s</p>', $PMF_LANG['ad_categ_updated']);
             } else {
                 printf('<p class="error">%s</p>', $db->error());
@@ -264,41 +264,52 @@ if ($permission['editcateg']) {
            printf('<a href="?action=addcategory&amp;cat=%s&amp;lang=%s"><img src="images/add.png" width="16" height="16" alt="%s" title="%s" border="0" /></a>&nbsp;',
                $categoryId,
                $categoryLang,
-               $PMF_LANG['ad_quick_category'],
-               $PMF_LANG['ad_quick_category']);
 
-           // rename (sub) category (if actual language)
-           printf('<a href="?action=editcategory&amp;cat=%s"><img src="images/edit.png" width="16" height="16" border="0" title="%s" alt="%s" /></a>&nbsp;',
+               $PMF_LANG['ad_quick_category'],
+               $PMF_LANG['ad_quick_category']
+           );
+
+           // rename (sub) category (if current language)
+           printf('
+               <a href="?action=editcategory&amp;cat=%s"><img src="images/edit.png" width="16" height="16" border="0" title="%s" alt="%s" /></a>&nbsp;',
                $categoryId,
                $PMF_LANG['ad_kateg_rename'],
-               $PMF_LANG['ad_kateg_rename']);
+               $PMF_LANG['ad_kateg_rename']
+           );
         }
 
         // translate category (always)
-        printf('<a href="?action=translatecategory&amp;cat=%s"><img src="images/translate.png" width="16" height="16" border="0" title="%s" alt="%s" /></a>&nbsp;',
+        printf(
+            '<a href="?action=translatecategory&amp;cat=%s"><img src="images/translate.png" width="16" height="16" border="0" title="%s" alt="%s" /></a>&nbsp;',
             $categoryId,
             $PMF_LANG['ad_categ_translate'],
-            $PMF_LANG['ad_categ_translate']);
+            $PMF_LANG['ad_categ_translate']
+        );
 
         // delete (sub) category (if actual language)
         if (!$categoryTreeHelper->callHasChildren() && $categoryLang == $lang) {
-            printf('<a href="?action=deletecategory&amp;cat=%s&amp;lang=%s"><img src="images/delete.png" width="16" height="16" alt="%s" title="%s" border="0" /></a>&nbsp;',
+            printf(
+                '<a href="?action=deletecategory&amp;cat=%s&amp;catlang=%s"><img src="images/delete.png" width="16" height="16" alt="%s" title="%s" border="0" /></a>&nbsp;',
                 $categoryId,
                 $categoryLang,
                 $PMF_LANG['ad_categ_delete'],
-                $PMF_LANG['ad_categ_delete']);
+                $PMF_LANG['ad_categ_delete']
+            );
         }
+
 
         if ($categoryLang == $lang) {
             // cut category (if actual language)
-            printf('<a href="?action=cutcategory&amp;cat=%s"><img src="images/cut.png" width="16" height="16" alt="%s" border="0" title="%s" /></a>&nbsp;',
+            printf(
+                '<a href="?action=cutcategory&amp;cat=%s"><img src="images/cut.png" width="16" height="16" alt="%s" border="0" title="%s" /></a>&nbsp;',
                 $categoryId,
                 $PMF_LANG['ad_categ_cut'],
                 $PMF_LANG['ad_categ_cut']);
             
             if ($categoryHelper->numParent($parentId) > 1) {
                 // move category (if actual language) AND more than 1 category at the same level)
-                printf('<a href="?action=movecategory&amp;cat=%s&amp;parent_id=%s"><img src="images/move.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>',
+                printf(
+                    '<a href="?action=movecategory&amp;cat=%s&amp;parent_id=%s"><img src="images/move.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>',
                     $categoryId,
                     $parentId,
                     $PMF_LANG['ad_categ_move'],
@@ -306,20 +317,20 @@ if ($permission['editcateg']) {
             }
         }
 
-        if (count($category->getChildren($cat['id'])) != 0) {
+        print "\n";
+
+        if (count($category->getChildren($cat['id'])) !== 0) {
             // Open a div for content all the children
-            printf("<div id=\"div_%d\" style=\"display: none;\">", $cat['id']);
-            $lastOpen = true;
+            printf('<div id="div_%d" style="display: none;">', $cat['id']);
         }
-
-        $level = $cat['indent'];
+        
+        $open = $cat['level'];
     }
 
-    if ($lastOpen) {
-        // Close the last div open if is any
-        printf("</div>");
+    if ($open > 0) {
+        print str_repeat('</div>', $open);
     }
-
+    
     printf('<p>%s</p>', $PMF_LANG['ad_categ_remark']);
 ?>
 <script>

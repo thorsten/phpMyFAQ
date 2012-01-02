@@ -186,6 +186,7 @@ if ($groupAction == 'addsave') {
     $group_auto_join   = PMF_Filter::filterInput(INPUT_POST, 'group_auto_join', FILTER_SANITIZE_STRING, '');
     $csrfOkay          = true;
     $csrfToken         = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+
     if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
         $csrfOkay = false; 
     }
@@ -201,6 +202,7 @@ if ($groupAction == 'addsave') {
             'description' => $group_description,
             'auto_join'   => $group_auto_join
         );
+
         if ($user->perm->addGroup($group_data) <= 0)
             $messages[] = $PMF_LANG['ad_adus_dberr'];
     }
@@ -225,6 +227,7 @@ if (!isset($message))
 
 // show new group form
 if ($groupAction == 'add') {
+    $user = new PMF_User_CurrentUser();
 ?>
 <<<<<<< HEAD
     <h2><?php print $text['header']; ?></h2>
@@ -280,8 +283,7 @@ document.group_create.group_name.focus();
                     <label for="group_description"><?php print $PMF_LANG['ad_group_description']; ?></label>
                     <textarea name="group_description" id="group_description" cols="<?php print $descriptionCols; ?>"
                               rows="<?php print $descriptionRows; ?>" tabindex="2"
-                        ><?php print (isset($group_description) ? $group_description : ''); ?>
-                    </textarea>
+                        ><?php print (isset($group_description) ? $group_description : ''); ?></textarea>
                 </p>
                 <p>
                     <label for="group_auto_join"><?php print $PMF_LANG['ad_group_autoJoin']; ?></label>
@@ -555,7 +557,6 @@ function removeGroupMembers()
 }
 
 getGroupList();
-
         /* ]]> */
         </script>
 
@@ -594,6 +595,7 @@ getGroupList();
                                     <?php print $PMF_LANG['ad_user_checkall']; ?>
                                 </a>
                             </span>
+                            |
                             <span class="unselect_all">
                                 <a href="javascript:select_unselectAll('group_user_list')">
                                     <?php print $PMF_LANG['ad_user_uncheckall']; ?>
@@ -619,6 +621,7 @@ getGroupList();
                                     <?php print $PMF_LANG['ad_user_checkall']; ?>
                                 </a>
                             </span>
+                            |
                             <span class="unselect_all">
                                 <a href="javascript:select_unselectAll('group_member_list')">
                                     <?php print $PMF_LANG['ad_user_uncheckall']; ?>
@@ -677,6 +680,7 @@ getGroupList();
                                         <?php print $PMF_LANG['ad_user_checkall']; ?>
                                     </a>
                                 </span>
+                                |
                                 <span class="unselect_all">
                                     <a href="javascript:form_uncheckAll('rightsForm')">
                                         <?php print $PMF_LANG['ad_user_uncheckall']; ?>

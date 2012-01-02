@@ -33,10 +33,13 @@ require_once PMF_ROOT_DIR . '/lang/language_en.php';
 require_once PMF_ROOT_DIR . '/inc/libs/twitteroauth/twitteroauth.php';
 
 if (!empty($_SESSION['access_token'])) {
-    $connection = new TwitterOAuth($faqconfig->get('socialnetworks.twitterConsumerKey'),
-                                   $faqconfig->get('socialnetworks.twitterConsumerSecret'),
-                                   $_SESSION['access_token']['oauth_token'],
-                                   $_SESSION['access_token']['oauth_token_secret']);
+    $connection = new TwitterOAuth(
+        $faqconfig->get('socialnetworks.twitterConsumerKey'),
+        $faqconfig->get('socialnetworks.twitterConsumerSecret'),
+        $_SESSION['access_token']['oauth_token'],
+        $_SESSION['access_token']['oauth_token_secret']
+    );
+
     $content = $connection->get('account/verify_credentials');
 }
 
@@ -48,6 +51,11 @@ $availableConfigModes = array(
         'search'  => 1,
         'social'  => 1);
 
+/**
+ * @param  $key
+ * @param  $type
+ * @return void
+ */
 function printInputFieldByType($key, $type)
 {
     global $PMF_LANG;
@@ -85,14 +93,25 @@ function printInputFieldByType($key, $type)
                 case 'main.language':
                     $languages = PMF_Language::getAvailableLanguages();
                     if (count($languages) > 0) {
-                        print PMF_Language::languageOptions(str_replace(array("language_", ".php"), "", $faqconfig->get('main.language')), false, true);
+                        print PMF_Language::languageOptions(
+                            str_replace(
+                                array(
+                                     'language_',
+                                     '.php'
+                                ),
+                                '',
+                                $faqconfig->get('main.language')
+                            ),
+                            false,
+                            true
+                        );
                     } else {
                         print '<option value="language_en.php">English</option>';
                     }
                    break;
                 
                 case 'records.orderby':
-                    print sortingOptions($faqconfig->get($key));
+                    print PMF_Configuration::sortingOptions($faqconfig->get($key));
                     break;
                     
                 case 'records.sortby':
@@ -104,7 +123,7 @@ function printInputFieldByType($key, $type)
                         $PMF_LANG['ad_conf_asc']);
                     break;
                     
-                case 'main.permLevel':
+                case 'security.permLevel':
                     print PMF_Perm::permOptions($faqconfig->get($key));
                     break;
                     
@@ -122,7 +141,7 @@ function printInputFieldByType($key, $type)
                     }
                     break;
                     
-                case "main.attachmentsStorageType":
+                case "records.attachmentsStorageType":
                     foreach($PMF_LANG['att_storage_type'] as $i => $item) {
                         $selected = $faqconfig->get($key) == $i
                                   ? ' selected="selected"'
@@ -132,13 +151,13 @@ function printInputFieldByType($key, $type)
                     }
                     break;
                     
-                case "main.orderingPopularFaqs":
+                case "records.orderingPopularFaqs":
                     printf('<option value="visits"%s>%s</option>',
                         ('visits' == $faqconfig->get($key)) ? ' selected="selected"' : '',
-                        $PMF_LANG['main.orderingPopularFaqs.visits']);
+                        $PMF_LANG['records.orderingPopularFaqs.visits']);
                     printf('<option value="voting"%s>%s</option>',
                         ('voting' == $faqconfig->get($key)) ? ' selected="selected"' : '',
-                        $PMF_LANG['main.orderingPopularFaqs.voting']);
+                        $PMF_LANG['records.orderingPopularFaqs.voting']);
                     break;
 
                 case "search.relevance":
@@ -187,27 +206,26 @@ header("Content-type: text/html; charset=utf-8");
 
 foreach ($LANG_CONF as $key => $value) {
     if (strpos($key, $configMode) === 0) {
+        
         if ('socialnetworks.twitterConsumerKey' == $key) {
             print '<p>';
             if ('' == $faqconfig->get('socialnetworks.twitterConsumerKey') ||
                 '' == $faqconfig->get('socialnetworks.twitterConsumerSecret')) {
 
-                print '<a target="_blank" href="http://dev.twitter.com/apps/new">Create Twitter APP for your site</a>';
+                print '<a target="_blank" href="https://dev.twitter.com/apps/new">Create Twitter APP for your site</a>';
                 print "<br />\n";
                 print "Your Callback URL is: " .$faqconfig->get('main.referenceURL') . "/services/twitter/callback.php";
             }
-            if ('' == $faqconfig->get('socialnetworks.twitterAccessTokenKey') ||
-                '' == $faqconfig->get('socialnetworks.twitterAccessTokenSecret')) {
 
-                print '<a target="_blank" href="../services/twitter/redirect.php"><img src="../images/twitter.signin.png" alt="Sign in with Twitter"/></a>';
+            if (!isset($content)) {
+                print '<a target="_blank" href="../services/twitter/redirect.php">';
+                print '<img src="../images/twitter.signin.png" alt="Sign in with Twitter"/></a>';
                 print "<br />\n<br />\n";
-            } else {
-
+            } elseif (isset($content)) {
                 print $content->screen_name . "<br />\n";
-                print "<img src='" . $content->profile_image_url . "'><br />\n";
+                print "<img src='" . $content->profile_image_url_https . "'><br />\n";
                 print "Follower: " . $content->followers_count . "<br />\n";
                 print "Status Count: " . $content->statuses_count . "<br />\n";
-                print "Following: " . $content->following . "<br />\n";
                 print "Status: " . $content->status->text . "<br />\n";
                 print "<br />\n";
             }
@@ -217,12 +235,35 @@ foreach ($LANG_CONF as $key => $value) {
             <p class="config">
                 <label class="config">
 <?php
-        if ('main.maxAttachmentSize' == $key) {
-            printf($value[1], ini_get('upload_max_filesize'));
-        } else {
-            print $value[1];
-        } ?></label>
-    <?php printInputFieldByType($key, $value[0]); ?><br />
+        switch ($key) {
+
+            case 'records.maxAttachmentSize':
+                printf($value[1], ini_get('upload_max_filesize'));
+                break;
+
+            case 'main.googleTranslationKey':
+                printf(
+                    '<a target="_blank" href="http://code.google.com/apis/loader/signup.html">%s</a>',
+                    $value[1]
+                );
+                break;
+
+            case 'main.dateFormat':
+                printf(
+                    '<a target="_blank" href="http://www.php.net/manual/%s/function.date.php">%s</a>',
+                    $LANGCODE,
+                    $value[1]
+                );
+                break;
+
+            default:
+                print $value[1];
+                break;
+        }
+?>
+                </label>
+                <?php printInputFieldByType($key, $value[0]); ?>
+                <br />
 <?php
     }
 }

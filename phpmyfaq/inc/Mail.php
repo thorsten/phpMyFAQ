@@ -18,7 +18,7 @@
  * @package   PMF_Mail
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-11
@@ -294,6 +294,20 @@ class PMF_Mail
             return false;
         }
 
+        if (!empty($name)) {
+            // Remove CR and LF characters to prevent header injection
+            $name = str_replace(array("\n", "\r"), '', $name);
+            
+            if (function_exists('mb_encode_mimeheader')) {
+                // Encode any special characters in the displayed name
+                $name = mb_encode_mimeheader($name);
+            }
+            
+            // Wrap the displayed name in quotes (to fix problems with commas etc),
+            // and escape any existing quotes
+            $name = '"' . str_replace('"', '\"', $name) . '"';
+        }
+
         // Add the e-mail address into the target array
         $target[$address] = $name;
         // On Windows, when using PHP built-in mail drop any name, just use the e-mail address
@@ -429,14 +443,7 @@ class PMF_Mail
 
         // From
         foreach ($this->_from as $address => $name) {
-            if (empty($name)) {
-                $this->headers['From'] = (empty($name) ? '' : $name.' ').'<'.$address.'>';
-            } else {
-                if (function_exists('mb_encode_mimeheader')) {
-                    $name = mb_encode_mimeheader($name);
-                }
-                $this->headers['From'] =  $name .' <'.$address.'>';
-            }
+            $this->headers['From'] = (empty($name) ? '' : $name.' ').'<'.$address.'>';
         }
 
         // Message-Id
@@ -467,7 +474,9 @@ class PMF_Mail
 
         // Subject. Note: it must be RFC 2047 compliant
         // TODO: wrap mb_encode_mimeheader() to add other content encodings
-        $this->headers['Subject'] = PMF_Utils::resolveMarkers($this->subject);
+        $this->headers['Subject'] = PMF_Utils::resolveMarkers(
+            html_entity_decode($this->subject, ENT_COMPAT, 'UTF-8')
+        );
 
         // X-Mailer
         $this->headers['X-Mailer'] = $this->_mailer;

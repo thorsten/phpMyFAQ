@@ -54,7 +54,7 @@ if (!is_null($inputQuestion)) {
 
 $categoryLayout = new PMF_Category_Layout(new PMF_Category_Tree_Helper(new PMF_Category_Tree($categoryData)));
 
-$tpl->processTemplate(
+$tpl->parse(
     'writeContent', 
     array(
         'msgNewContentHeader'   => $PMF_LANG['msgNewContentHeader'],
@@ -72,11 +72,13 @@ $tpl->processTemplate(
         'msgNewContentArticle'  => $PMF_LANG['msgNewContentArticle'],
         'msgNewContentKeywords' => $PMF_LANG['msgNewContentKeywords'],
         'msgNewContentLink'     => $PMF_LANG['msgNewContentLink'],
-        'captchaFieldset'       => PMF_Helper_Captcha::getInstance()->renderFieldset(
-            $PMF_LANG['msgCaptcha'], 
-            $captcha->printCaptcha('add')),
+        'captchaFieldset'       => PMF_Helper_Captcha::getInstance()->renderCaptcha(
+            $captcha,
+            'add',
+            $PMF_LANG['msgCaptcha']
+        ),
         'msgNewContentSubmit'   => $PMF_LANG['msgNewContentSubmit']
     )
 );
 
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->merge('writeContent', 'index');

@@ -28,137 +28,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if (isset($auth)) {
-    $user         = new PMF_User();
-    $groupSupport = ($user->perm instanceof PMF_Perm_PermMedium);
-    $adminHelper  = PMF_Helper_Administration::getInstance();
-    $adminHelper->setPermission($permission);
-
-    $menuGroup = $secLevelEntries = '';
-    
-    $dashboardPage     = true;
-    $contentPage       = false;
-    $userPage          = false;
-    $statisticsPage    = false;
-    $exportsPage       = false;
-    $backupPage        = false;
-    $configurationPage = false;
-    
-    switch ($action) {
-        case 'user':
-        case 'group':
-        case 'passwd':
-        case 'cookies':
-            $menuGroup        = 'user';
-            $secLevelEntries .= $adminHelper->addMenuEntry('adduser+edituser+deluser', 'user', 'ad_menu_user_administration', $action);
-            if ($groupSupport) {
-                $secLevelEntries .= $adminHelper->addMenuEntry('adduser+edituser+deluser', 'group', 'ad_menu_group_administration', $action);
-            }
-            $secLevelEntries .= $adminHelper->addMenuEntry('passwd', 'passwd', 'ad_menu_passwd', $action);
-            $dashboardPage    = false;
-            $userPage         = true;
-            break;
-        case 'content':
-        case 'category':
-        case 'addcategory':
-        case 'savecategory':
-        case 'editcategory':
-        case 'translatecategory':
-        case 'updatecategory':
-        case 'deletecategory':
-        case 'removecategory':
-        case 'cutcategory':
-        case 'pastecategory':
-        case 'movecategory':
-        case 'changecategory':
-        case 'showcategory':
-        case 'editentry':
-        case 'insertentry':
-        case 'view':
-        case 'glossary':
-        case 'saveglossary':
-        case 'updateglossary':
-        case 'deleteglossary':
-        case 'addglossary':
-        case 'editglossary':
-        case 'news':
-        case 'addnews':
-        case 'editnews':
-        case 'delnews':
-        case 'savenews':
-        case 'question':
-        case 'comments':
-        case 'attachments':
-            $menuGroup        = 'content';
-            $secLevelEntries .= $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('addbt', 'editentry', 'ad_entry_add', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('delcomment', 'comments', 'ad_menu_comments', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('addglossary+editglossary+delglossary', 'glossary', 'ad_menu_glossary', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('addnews+editnews+delnews', 'news', 'ad_menu_news_edit', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('addattachment+editattachment+delattachment', 'attachments', 'ad_menu_attachments', $action);
-            $dashboardPage    = false;
-            $contentPage      = true;
-            break;
-        case 'statistics':
-        case 'viewsessions':
-        case 'sessionbrowse':
-        case 'sessionsuche':
-        case 'adminlog':
-        case 'searchstats':
-            $menuGroup        = 'statistics';
-            $secLevelEntries .= $adminHelper->addMenuEntry('viewlog', 'statistics', 'ad_menu_stat', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('viewlog', 'viewsessions', 'ad_menu_session', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('adminlog', 'adminlog', 'ad_menu_adminlog', $action);
-            $secLevelEntries .= $adminHelper->addMenuEntry('viewlog', 'searchstats', 'ad_menu_searchstats', $action);
-            $dashboardPage    = false;
-            $statisticsPage   = true;
-            break;
-        case 'export':
-            $menuGroup        = 'export';
-            $secLevelEntries .= $adminHelper->addMenuEntry('', 'export', 'ad_menu_export', $action);
-            $dashboardPage    = false;
-            $exportsPage      = true;
-            break;
-        case 'backup':
-            $menuGroup       = 'backup';
-            $secLevelEntries = $adminHelper->addMenuEntry('', 'backup', 'ad_menu_export', $action);
-            $dashboardPage   = false;
-            $backupPage      = true;
-            break;
-        case 'config':
-        case 'linkconfig':
-        case 'stopwordsconfig':
-        case 'translist':
-        case 'transedit':
-        case 'transadd':
-        case 'upgrade':
-            $menuGroup         = 'config';
-            $secLevelEntries  .= $adminHelper->addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
-            $secLevelEntries  .= $adminHelper->addMenuEntry('editconfig+editbt+delbt', 'linkconfig', 'ad_menu_linkconfig', $action);
-            $secLevelEntries  .= $adminHelper->addMenuEntry('editconfig', 'stopwordsconfig', 'ad_menu_stopwordsconfig', $action);
-            $secLevelEntries  .= $adminHelper->addMenuEntry('edittranslation+addtranslation+deltranslation', 'translist', 'ad_menu_translations', $action);
-            $dashboardPage     = false;
-            $configurationPage = true;
-            break;
-        default:
-            $secLevelEntries .= $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit');
-            $secLevelEntries .= $adminHelper->addMenuEntry('addbt', 'editentry', 'ad_quick_record');
-            $secLevelEntries .= $adminHelper->addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit');
-            $secLevelEntries .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open');
-            $dashboardPage    = true;
-            break;
-    }
-    $firstLevelEntries  = $adminHelper->addMenuEntry('', '', 'admin_mainmenu_home', $menuGroup, false);
-    $firstLevelEntries .= $adminHelper->addMenuEntry('', 'user', 'admin_mainmenu_users', $menuGroup, false);
-    $firstLevelEntries .= $adminHelper->addMenuEntry('', 'content', 'admin_mainmenu_content', $menuGroup, false);
-    $firstLevelEntries .= $adminHelper->addMenuEntry('', 'statistics', 'admin_mainmenu_statistics', $menuGroup, false);
-    $firstLevelEntries .= $adminHelper->addMenuEntry('', 'export', 'admin_mainmenu_exports', $menuGroup, false);
-    $firstLevelEntries .= $adminHelper->addMenuEntry('', 'backup', 'admin_mainmenu_backup', $menuGroup, false);
-    $firstLevelEntries .= $adminHelper->addMenuEntry('', 'config', 'admin_mainmenu_configuration', $menuGroup, false);
-}
-
 header("Expires: Thu, 7 Apr 1977 14:47:00 GMT");
 header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
@@ -166,6 +35,132 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 header("Content-type: text/html; charset=utf-8");
 header("Vary: Negotiate,Accept");
+
+$secLevelEntries   = '';
+$dashboardPage     = true;
+$contentPage       = false;
+$userPage          = false;
+$statisticsPage    = false;
+$exportsPage       = false;
+$backupPage        = false;
+$configurationPage = false;
+
+$adminHelper = PMF_Helper_Administration::getInstance();
+$adminHelper->setPermission($permission);
+
+switch ($action) {
+    case 'user':
+    case 'group':
+    case 'passwd':
+    case 'cookies':
+        $secLevelHeader = $PMF_LANG['admin_mainmenu_users'];
+        $secLevelEntries .= $adminHelper->addMenuEntry('adduser+edituser+deluser', 'user', 'ad_menu_user_administration', $action);
+        if ($faqconfig->get('security.permLevel') != 'basic') {
+            $secLevelEntries .= $adminHelper->addMenuEntry('adduser+edituser+deluser', 'group', 'ad_menu_group_administration', $action);
+        }
+        $secLevelEntries .= $adminHelper->addMenuEntry('passwd', 'passwd', 'ad_menu_passwd', $action);
+        $dashboardPage    = false;
+        $userPage         = true;
+        break;
+    case 'content':
+    case 'category':
+    case 'addcategory':
+    case 'savecategory':
+    case 'editcategory':
+    case 'translatecategory':
+    case 'updatecategory':
+    case 'deletecategory':
+    case 'removecategory':
+    case 'cutcategory':
+    case 'pastecategory':
+    case 'movecategory':
+    case 'changecategory':
+    case 'showcategory':
+    case 'editentry':
+    case 'insertentry':
+    case 'view':
+    case 'searchfaqs':
+    case 'glossary':
+    case 'saveglossary':
+    case 'updateglossary':
+    case 'deleteglossary':
+    case 'addglossary':
+    case 'editglossary':
+    case 'news';
+    case 'addnews':
+    case 'editnews':
+    case 'savenews':
+    case 'updatenews';
+    case 'delnews':
+    case 'question':
+    case 'comments':
+    case 'attachments':
+        $secLevelHeader = $PMF_LANG['admin_mainmenu_content'];
+        $secLevelEntries .= $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit', $action);
+        $secLevelEntries .= $adminHelper->addMenuEntry('addbt', 'editentry', 'ad_entry_add', $action);
+        $secLevelEntries .= $adminHelper->addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit', $action);
+        $secLevelEntries .= $adminHelper->addMenuEntry('editbt+delbt', 'searchfaqs', 'ad_menu_searchfaqs', $action);
+        $secLevelEntries .= $adminHelper->addMenuEntry('delcomment', 'comments', 'ad_menu_comments', $action);
+        $secLevelEntries .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open', $action);
+        $secLevelEntries .= $adminHelper->addMenuEntry('addglossary+editglossary+delglossary', 'glossary', 'ad_menu_glossary', $action);
+        $secLevelEntries .= $adminHelper->addMenuEntry('addnews+editnews+delnews', 'news', 'ad_menu_news_edit', $action);
+        $secLevelEntries .= $adminHelper->addMenuEntry('addattachment+editattachment+delattachment', 'attachments', 'ad_menu_attachments', $action);
+        $dashboardPage    = false;
+        $contentPage      = true;
+        break;
+    case 'statistics':
+    case 'viewsessions':
+    case 'sessionbrowse':
+    case 'sessionsuche':
+    case 'adminlog':
+    case 'searchstats':
+    case 'reports':
+    case 'reportview':
+        $secLevelHeader   = $PMF_LANG['admin_mainmenu_statistics'];
+        $secLevelEntries .= $adminHelper->addMenuEntry('viewlog', 'statistics', 'ad_menu_stat', $action);
+        $secLevelEntries .= $adminHelper->addMenuEntry('viewlog', 'viewsessions', 'ad_menu_session', $action);
+        $secLevelEntries .= $adminHelper->addMenuEntry('adminlog', 'adminlog', 'ad_menu_adminlog', $action);
+        $secLevelEntries .= $adminHelper->addMenuEntry('viewlog', 'searchstats', 'ad_menu_searchstats', $action);
+        $secLevelEntries .= $adminHelper->addMenuEntry('reports', 'reports', 'ad_menu_reports', $action);
+        $dashboardPage    = false;
+        $statisticsPage   = true;
+        break;
+    case 'export':
+        $secLevelHeader   = $PMF_LANG['admin_mainmenu_exports'];
+        $secLevelEntries .= $adminHelper->addMenuEntry('', 'export', 'ad_menu_export', $action);
+        $dashboardPage    = false;
+        $exportsPage      = true;
+        break;
+    case 'backup':
+        $secLevelHeader   = $PMF_LANG['admin_mainmenu_backup'];
+        $secLevelEntries .= $adminHelper->addMenuEntry('', 'backup', 'ad_menu_export', $action);
+        $dashboardPage    = false;
+        $backupPage       = true;
+        break;
+    case 'config':
+    case 'linkconfig':
+    case 'stopwordsconfig':
+    case 'translist':
+    case 'transedit':
+    case 'transadd':
+    case 'upgrade':
+        $secLevelHeader    = $PMF_LANG['admin_mainmenu_configuration'];
+        $secLevelEntries  .= $adminHelper->addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
+        $secLevelEntries  .= $adminHelper->addMenuEntry('editconfig+editbt+delbt', 'linkconfig', 'ad_menu_linkconfig', $action);
+        $secLevelEntries  .= $adminHelper->addMenuEntry('editconfig', 'stopwordsconfig', 'ad_menu_stopwordsconfig', $action);
+        $secLevelEntries  .= $adminHelper->addMenuEntry('edittranslation+addtranslation+deltranslation', 'translist', 'ad_menu_translations', $action);
+        $dashboardPage     = false;
+        $configurationPage = true;
+        break;
+    default:
+        $secLevelHeader   = $PMF_LANG['admin_mainmenu_home'];
+        $secLevelEntries .= $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit');
+        $secLevelEntries .= $adminHelper->addMenuEntry('addbt', 'editentry', 'ad_quick_record');
+        $secLevelEntries .= $adminHelper->addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit');
+        $secLevelEntries .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open');
+        $dashboardPage    = true;
+        break;
+}
 ?>
 <!DOCTYPE html>
 <!--[if lt IE 7 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie6"> <![endif]-->
@@ -193,8 +188,7 @@ header("Vary: Negotiate,Accept");
     <link rel="stylesheet" href="../inc/js/plugins/datePicker/datePicker.css" type="text/css">
     
     <script src="../inc/js/modernizr.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-    <script>!window.jQuery && document.write('<script src="../inc/js/jquery.min.js"><\/script>')</script>
+    <script src="../inc/js/jquery.min.js"></script>
     <script src="../inc/js/functions.js"></script>
     <script src="../inc/js/plugins/autocomplete/jquery.autocomplete.pack.js"></script>
     <script src="../inc/js/plugins/datePicker/date.js"></script>
@@ -216,17 +210,9 @@ header("Vary: Negotiate,Accept");
                     <?php print $user->getUserData('display_name'); ?>!
                 </span>
             </p>
-            <?php if (is_null($action)) { ?>
-                <form action="index.php<?php print (isset($action) ? '?action=' . $action : ''); ?>" method="post">
-                <?php print PMF_Language::selectLanguages($LANGCODE, true); ?>
-                </form>
-            <?php } else { ?>
-
             <p>
                 <?php print $PMF_LANG['ad_session_expiration']; ?>: <span id="sessioncounter">Loading...</span>
             </p>
-            <?php } ?>
-            
         </div>
     </div>
     <?php } ?>
@@ -236,8 +222,8 @@ header("Vary: Negotiate,Accept");
     </h1>
 </header>
 
-<?php if (isset($auth)) { ?>
 <nav>
+    <?php if (isset($auth) && in_array(true, $permission)): ?>
     <ul>
         <li<?php print ($dashboardPage ? ' class="active"' : ''); ?>><a href="index.php"><?php print $PMF_LANG['admin_mainmenu_home']; ?></a></li>
         <li<?php print ($userPage ? ' class="active"' : ''); ?>><a href="index.php?action=user"><?php print $PMF_LANG['admin_mainmenu_users']; ?></a></li>
@@ -248,12 +234,28 @@ header("Vary: Negotiate,Accept");
         <li<?php print ($configurationPage ? ' class="active"' : ''); ?>><a href="index.php?action=config"><?php print $PMF_LANG['admin_mainmenu_configuration']; ?></a></li>
         <li><a class="logout" href="index.php?action=logout"><?php print $PMF_LANG['admin_mainmenu_logout']; ?></a></li>
     </ul>
+    <form action="index.php<?php print (isset($action) ? '?action=' . $action : ''); ?>" method="post">
+    <?php print PMF_Language::selectLanguages($LANGCODE, true); ?>
+    </form>
+    <?php else: ?>
+    <ul>
+        <li>
+            <a href="../index.php">
+                <?php print $PMF_LANG['msgHome']; ?>
+            </a>
+        </li>
+        <li>
+            <a href="password.php" title="<?php print $PMF_LANG["lostPassword"]; ?>">
+                <?php print $PMF_LANG["lostPassword"]; ?>
+            </a>
+        </li>
+    </ul>
+    <?php endif; ?>
 </nav>
-<?php } ?>
 
 <div id="content">
 
-    <?php if (isset($auth)) { ?>
+    <?php if (isset($auth) && in_array(true, $permission)) { ?>
 
     <div id="leftContent">
         <menu id="categories">
@@ -269,6 +271,17 @@ header("Vary: Negotiate,Accept");
                 <h3>Admin worklog</h3>
             </header>
             <span id="saving_data_indicator"></span>
+        </div>
+
+        <!-- maybe we'll hide this after the final release ... -->
+        <div id="bugreport">
+            <header>
+                <h3>Found an issue?</h3>
+            </header>
+            <p>
+                <a href="https://github.com/thorsten/phpMyFAQ/issues/" target="_blank">Please report it here</a>.<br/>
+                Thanks!
+            </p>
         </div>
     </div>
 

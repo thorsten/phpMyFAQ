@@ -54,18 +54,22 @@ if ($permission['delcomment']) {
 ?>
         <tr id="comments_<?php print $faqcomment['comment_id']; ?>">
             <td width="20">
-                <input die="faq_comments[<?php print $faqcomment['record_id']; ?>]"
-                       name="faq_comments[<?php print $faqcomment['record_id']; ?>]"
-                       value="<?php print $faqcomment['comment_id']; ?>" type="checkbox" />
+                <input id="faq_comments[<?php print $faqcomment['comment_id']; ?>]"
+                       name="faq_comments[<?php print $faqcomment['comment_id']; ?>]"
+                       value="<?php print $faqcomment['record_id']; ?>" type="checkbox" />
             </td>
             <td>
                 <span style="font-weight: bold;">
-                    <a href="mailto:<?php print $faqcomment['email']; ?>"><?php print $faqcomment['username']; ?></a>
-                    | <?php print date("Y-m-d", $faqcomment['date']); ?>
-                    | <a href="<?php printf("../?action=artikel&cat=%d&id=%d&artlang=%s",
+                    <a href="mailto:<?php print $faqcomment['email']; ?>">
+                        <?php print $faqcomment['username']; ?>
+                    </a> |
+                    <?php print PMF_Date::format(date('Y-m-d H:i', $faqcomment['date'])); ?> |
+                    <a href="<?php printf("../?action=artikel&cat=%d&id=%d&artlang=%s",
                        $faqcomment['category_id'],
                        $faqcomment['record_id'],
-                       $LANGCODE); ?>"><?php print $faq->getRecordTitle($faqcomment['record_id']); ?></a>
+                       $LANGCODE); ?>">
+                        <?php print $faq->getRecordTitle($faqcomment['record_id']); ?>
+                    </a>
                 </span><br/>
                 <?php print PMF_String::htmlspecialchars($faqcomment['content']); ?>
             </td>
@@ -99,13 +103,15 @@ if ($permission['delcomment']) {
 ?>
         <tr id="comments_<?php print $newscomment['comment_id']; ?>">
             <td width="20">
-                <input id="name="news_comments[<?php print $newscomment['record_id']; ?>]"
-                       name="news_comments[<?php print $newscomment['record_id']; ?>]"
-                       value="<?php print $newscomment['comment_id']; ?>" type="checkbox" />
+                <input id="news_comments[<?php print $newscomment['comment_id']; ?>]"
+                       name="news_comments[<?php print $newscomment['comment_id']; ?>]"
+                       value="<?php print $newscomment['record_id']; ?>" type="checkbox" />
             </td>
             <td>
                 <span style="font-weight: bold;">
-                    <a href="mailto:<?php print $newscomment['email']; ?>"><?php print $newscomment['username']; ?></a>
+                    <a href="mailto:<?php print $newscomment['email']; ?>">
+                        <?php print $newscomment['username']; ?>
+                    </a>
                 </span><br/>
                 <?php print PMF_String::htmlspecialchars($newscomment['content']); ?>
             </td>
@@ -135,6 +141,7 @@ if ($permission['delcomment']) {
         {
             var comments = $('#' + type + 'CommentSelection').serialize();
 
+            $('#returnMessage').empty();
             $.ajax({
                 type: 'POST',
                 url:  'index.php?action=ajax&ajax=comment',
@@ -143,9 +150,12 @@ if ($permission['delcomment']) {
                     if (msg == 1) {
                         $('#saving_data_indicator').html('<img src="images/indicator.gif" /> deleting ...');
                         $('tr td input:checked').parent().parent().fadeOut('slow');
-                        $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_commentdelsuc']; ?>');
+                        $('#saving_data_indicator').fadeOut('slow');
+                        $('#returnMessage').
+                            html('<p class="success"><?php print $PMF_LANG['ad_entry_commentdelsuc']; ?></p>');
                     } else {
-                        $('#returnMessage').html('<p class="error"><?php print $PMF_LANG["ad_entry_commentdelfail"] ?></p>');
+                        $('#returnMessage').
+                            html('<p class="error"><?php print $PMF_LANG["ad_entry_commentdelfail"] ?></p>');
                     }
                 }
             });

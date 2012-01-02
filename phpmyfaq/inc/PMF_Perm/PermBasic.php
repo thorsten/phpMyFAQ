@@ -17,7 +17,7 @@
  * @category  phpMyFAQ 
  * @package   PMF_Perm
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
@@ -131,7 +131,7 @@ class PMF_Perm_PermBasic extends PMF_Perm
             
         $res    = $this->db->query($select);
         $result = array();
-        while ($row = $this->db->fetch_assoc($res)) {
+        while ($row = $this->db->fetchArray($res)) {
             $result[] = $row['right_id'];
         }
         return $result;
@@ -250,7 +250,7 @@ class PMF_Perm_PermBasic extends PMF_Perm
         }
         
         // process right data
-        $right_data               = $this->db->fetch_assoc($res);
+        $right_data               = $this->db->fetchArray($res);
         $right_data['for_users']  = (bool)$right_data['for_users'];
         $right_data['for_groups'] = (bool)$right_data['for_groups'];
         return $right_data;
@@ -294,7 +294,7 @@ class PMF_Perm_PermBasic extends PMF_Perm
             return 0;
         }
         
-        $next_id    = $this->db->nextID(SQLPREFIX."faqright", "right_id");
+        $next_id    = $this->db->nextId(SQLPREFIX."faqright", "right_id");
         $right_data = $this->checkRightData($right_data);
         
         $insert = sprintf("
@@ -430,13 +430,13 @@ class PMF_Perm_PermBasic extends PMF_Perm
             WHERE
                 name = '%s'",
             SQLPREFIX,
-            $this->db->escapeString($name));
+            $this->db->escape($name));
         
         $res = $this->db->query($select);
         if ($this->db->numRows($res) != 1) {
             return 0;
         }
-        $row = $this->db->fetch_assoc($res);
+        $row = $this->db->fetchArray($res);
         return $row['right_id'];
     }
 
@@ -457,7 +457,7 @@ class PMF_Perm_PermBasic extends PMF_Perm
             
         $res    = $this->db->query($select);
         $result = array();
-        while ($row = $this->db->fetch_assoc($res)) {
+        while ($row = $this->db->fetchArray($res)) {
             $result[] = $row['right_id'];
         }
 
@@ -494,7 +494,7 @@ class PMF_Perm_PermBasic extends PMF_Perm
         $result = array();
         $i      = 0;
         
-        while ($row = $this->db->fetch_assoc($res)) {
+        while ($row = $this->db->fetchArray($res)) {
             $result[$i] = $row;
             $i++;
         }

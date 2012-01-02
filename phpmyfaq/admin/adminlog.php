@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-23
@@ -81,11 +81,11 @@ if ($permission['adminlog'] && 'adminlog' == $action) {
         
         $user->getUserById($logging_value['usr']);
 ?>
-        <tr>
-            <td><?php print $logging_id; ?></td>
-            <td><?php print date("Y-m-d H:i:s", $logging_value['time']); ?></td>
-            <td><?php print $user->getLogin(); ?></td>
-            <td><?php print $logging_value['ip']; ?></td>
+        <tr class="cell">
+            <td class="list"><?php print $logging_id; ?></td>
+            <td class="list"><?php print PMF_Date::format(date('Y-m-d H:i', $logging_value['time'])); ?></td>
+            <td class="list"><?php print $user->getLogin(); ?></td>
+            <td class="list"><?php print $logging_value['ip']; ?></td>
         </tr>
         <tr>
             <td colspan="4"><?php
@@ -114,9 +114,9 @@ if ($permission['adminlog'] && 'adminlog' == $action) {
 } elseif ($permission['adminlog'] && 'deleteadminlog' == $action) {
 
     if ($logging->delete()) {
-        printf('<p>%s</p>', $PMF_LANG['ad_adminlog_delete_success']);
+        printf('<p class="success">%s</p>', $PMF_LANG['ad_adminlog_delete_success']);
     } else {
-        printf('<p>%s</p>', $PMF_LANG['ad_adminlog_delete_failure']);
+        printf('<p class="error">%s</p>', $PMF_LANG['ad_adminlog_delete_failure']);
     }
 } else {
     print $PMF_LANG["err_NotAuth"];

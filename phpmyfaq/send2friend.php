@@ -48,6 +48,7 @@ $send2friendLink = sprintf('%s/index.php?action=artikel&amp;cat=%d&amp;id=%d&amp
     (int)$id,
     urlencode($artlang));
 
+<<<<<<< HEAD
 $tpl->processTemplate ('writeContent', array(
     'lang'               => $artlang,
     'msgSend2Friend'     => $PMF_LANG['msgSend2Friend'],
@@ -65,5 +66,32 @@ $tpl->processTemplate ('writeContent', array(
     'msgS2FMessage'      => $PMF_LANG['msgS2FMessage'],
     'captchaFieldset'    => PMF_Helper_Captcha::getInstance()->renderFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('send2friend')),
     'msgS2FButton'       => $PMF_LANG['msgS2FButton']));
+=======
+$tpl->parse (
+    'writeContent',
+    array(
+        'lang'               => $artlang,
+        'msgSend2Friend'     => $PMF_LANG['msgSend2Friend'],
+        'msgS2FReferrer'     => 'link',
+        'msgS2FName'         => $PMF_LANG['msgS2FName'],
+        'msgS2FEMail'        => $PMF_LANG['msgS2FEMail'],
+        'defaultContentMail' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
+        'defaultContentName' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
+        'msgS2FFriends'      => $PMF_LANG['msgS2FFriends'],
+        'msgS2FEMails'       => $PMF_LANG['msgS2FEMails'],
+        'msgS2FText'         => $PMF_LANG['msgS2FText'],
+        'send2friend_text'   => $faqconfig->get('main.send2friendText'),
+        'msgS2FText2'        => $PMF_LANG['msgS2FText2'],
+        'send2friendLink'    => $send2friendLink,
+        'msgS2FMessage'      => $PMF_LANG['msgS2FMessage'],
+        'captchaFieldset'    => PMF_Helper_Captcha::getInstance()->renderCaptcha(
+            $captcha,
+            'send2friend',
+            $PMF_LANG['msgCaptcha']
+        ),
+        'msgS2FButton'       => $PMF_LANG['msgS2FButton']
+    )
+);
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
 
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->merge('writeContent', 'index');

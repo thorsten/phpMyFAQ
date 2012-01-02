@@ -69,26 +69,29 @@ class PMF_Attachment_Collection
     public function getBreadcrumbs($start = 0, $limit = 0)
     {
         $retval = array();
-        
-        $sql = str_replace(
-            array('_t1_', '_t2_'), 
-            array(
-                SQLPREFIX . "faqattachment",
-                SQLPREFIX . "faqdata"
-            ),
-			"SELECT
-			    _t1_.id,
-                _t1_.record_id, _t1_.record_lang,
-                _t1_.filename, _t1_.filesize, _t1_.mime_type,
-                _t2_.thema
+
+        $query = sprintf("
+            SELECT
+                fa.id,
+                fa.record_id,
+                fa.record_lang,
+                fa.filename,
+                fa.filesize,
+                fa.mime_type,
+                fd.thema
             FROM
-                _t1_
-            JOIN _t2_ ON _t1_.record_id = _t2_.id"
+                %s fa
+            JOIN
+                %s fd
+            ON
+                fa.record_id = fd.id",
+            SQLPREFIX . 'faqattachment',
+            SQLPREFIX . 'faqdata'
         );
+
+        $result = $this->db->query($query);
         
-        $result = $this->db->query($sql);
-        
-        if($result) {
+        if ($result) {
             $retval = $this->db->fetchAll($result);
         }
         

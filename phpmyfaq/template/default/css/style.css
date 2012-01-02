@@ -103,9 +103,7 @@ sub {
     vertical-align: sub; font-size: smaller; }
 sup {  
     vertical-align: super; font-size: smaller; }
-pre {  
-    padding: 15px; white-space: pre; white-space: pre-wrap; white-space: pre-line; word-wrap: break-word; }
-textarea {  
+textarea {
     overflow: auto; }
 .ie6 legend, .ie7 legend {  
     margin-left: -7px; }
@@ -152,13 +150,12 @@ button {
     content: "\0020"; display: block; height: 0; clear: both; visibility: hidden; }
 .clearfix { 
     zoom: 1; }
+.highlight {
+    text-decoration: dotted; background-color: orange; color: #000000; padding: 1px; }
 
 /* phpMyFAQ layout */
 body {
     margin: 0 auto; font: 13px/22px Helvetica, Arial, sans-serif; background-color: #F0F0F0; }
-code {
-    display: block; font-size: 16px; background-color: black; color: white; padding: 10px; width: 600px;
-    margin-bottom: 22px; }
 
 /* Header */
 #header {
@@ -170,19 +167,22 @@ code {
 #header h1 a:hover, header h1 a:active {
     background: none; text-shadow: none; }
 #header #loginBox {
-	float: right; top: 0; width: 185px; margin-top: -2.5em; background: #F67600; color: #fff;
-	border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px;
-	border-bottom-right-radius: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; }
+    float: right; top: 0; width: 185px; margin-top: -2.5em; background: #F67600; color: #fff;
+    border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; }
 #header #loginSelection {
     text-align: center; padding: 5px; }
 #header #loginSelection a:link, #header #loginSelection a:visited {
     color: #fff; }
 #header #loginForm {
-    position: fixed; display: none; width: 175px; z-index: 50; background: #F67600; padding: 5px; margin-top: -5px;
-    border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+    position: fixed; width: 175px; z-index: 50; background: #F67600; padding: 5px; margin-top: -5px; border-radius: 5px;
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 #header #loginForm form input[type="text"], #header #loginForm form input[type="password"] {
     display: table-cell; height: 14px; border: 1px solid #d7d7d7; font-size: 14px; border-radius: 3px;
     -moz-border-radius: 3px; -webkit-border-radius: 3px; }
+#header #loginForm .error {
+    color: #8b0000; padding: 2px; background-color: #d3d3d3; border-radius: 3px; -moz-border-radius: 3px;
+    -webkit-border-radius: 3px; font-weight: bold; }
 
 /* Navigation */
 nav {
@@ -204,23 +204,25 @@ nav ul li.selected a {
     width: 180px; background: #f0f0f0 url(../images/category_background.png) repeat-x; margin-bottom: 15px;
     border: 1px solid #d7d7d7; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 #categories ul {
-	margin: 0 1px 0 1px; list-style: none outside none; padding: 0; }
+    margin: 0 1px 0 1px; list-style: none outside none; padding: 0; }
 #categories ul li {
-	}
+    }
 #categories ul li a {
-	padding-left: 5px; line-height: 30px; text-decoration: none; display: block; color: #222; }
+    padding-left: 5px; line-height: 30px; text-decoration: none; display: block; color: #222; }
 #categories ul li a:hover {
-	color: #F67600; }
+    color: #F67600; }
 #categories a.active {
-	background-color: #fff; font-weight: bold; }
+    background-color: #fff; font-weight: bold; }
 #categories .subcat li a {
-    padding-left: 10px; }
+    padding-left: 10px; background: #f5f5f5; }
 #categories .subcat li li a {
-    padding-left: 15px; }
+    padding-left: 15px; background: #ffffff; }
 #categories .subcat .active {
-	}
+    }
 
 /* Content */
+.internet-explorer-error {
+    margin: auto; padding: 10px; background-color: #f97c7c; color: #222; font-size: 1.571em; text-align: center; }
 #content {
     display: table; width: 980px; margin: 88px auto 0; }
 #leftContent {
@@ -229,10 +231,14 @@ nav ul li.selected a {
     display: table-cell; width: 500px; vertical-align: top; padding: 11px 22px 0; }
 #mainContent h2 {
     display: block; padding-bottom: 22px; }
+#mainContent h3 {
+    font-size: 16px; }
+#mainContent h3 a {
+    text-decoration: none; }
 #mainContent p {
     padding-bottom: 11px; }
 #mainContent p.comment { 
-	padding: 5px; background-color: #fff; border: 1px solid #d7d7d7; border-radius: 5px; 
+    padding: 5px; background-color: #fff; border: 1px solid #d7d7d7; border-radius: 5px; 
     -moz-border-radius: 5px; -webkit-border-radius: 5px; margin: 5px 0; }
 #mainContent p.comment img {
     float: right; }
@@ -242,6 +248,7 @@ nav ul li.selected a {
 #mainContent p.success { 
     margin: 10px auto; padding: 10px; background-color: #7dfd77; color: #222; border-radius: 5px; 
     -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#mainContent .date { margin-bottom: 11px; font-size: 11px; }
 
 /* phpMyFAQ forms */
 #mainContent form p {
@@ -269,17 +276,19 @@ nav ul li.selected a {
     -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 #social {
     margin: 0 auto; }
+#social a:link {
+    text-decoration: none; }
 #faqTabs {
-	width: 100%; margin-bottom: 11px; margin-top: 11px; }
+    width: 100%; margin-bottom: 11px; margin-top: 11px; }
 #faqTabs ul.faqTabNav {
-	list-style-type: none; margin: 0; padding: 0; width: 456px; overflow: hidden; border-bottom: 2px solid #d7d7d7; }
+    list-style-type: none; margin: 0; padding: 0; width: 456px; overflow: hidden; border-bottom: 2px solid #d7d7d7; }
 #faqTabs ul.faqTabNav a {
-	display: block; width: 100%; margin-right: 5px; font-size: 12px; text-decoration: none; color: #333; }
+    display: block; width: 100%; margin-right: 5px; font-size: 12px; text-decoration: none; color: #333; }
 #faqTabs ul.faqTabNav li {
-	float: left; margin: 0 4px 0 0; padding: 1px; text-align: center; background-color: #fff; 
-	border-top: 1px solid #d7d7d7; border-left: 1px solid #d7d7d7; border-right: 1px solid #d7d7d7; 
-	border-top-left-radius: 3px; -moz-border-radius-topleft: 3px; border-top-right-radius: 3px; 
-	-moz-border-radius-topright: 3px; }
+    float: left; margin: 0 4px 0 0; padding: 1px; text-align: center; background-color: #fff; 
+    border-top: 1px solid #d7d7d7; border-left: 1px solid #d7d7d7; border-right: 1px solid #d7d7d7; 
+    border-top-left-radius: 3px; -moz-border-radius-topleft: 3px; border-top-right-radius: 3px; 
+    -moz-border-radius-topright: 3px; }
 #faqTabs ul.faqTabNav li:hover {
     background: #d7d7d7; }
 .faqTabContent {
@@ -304,41 +313,59 @@ div.star-rating-hover a {
     margin: auto; }
 #votingstars span {
     padding-left: 11px; }
+#tagcloud-content .relevance1 { font-size: 80%; }
+#tagcloud-content .relevance2 { font-size: 100%; }
+#tagcloud-content .relevance3 { font-size: 120%; }
+#tagcloud-content .relevance4 { font-size: 140%; }
+#tagcloud-content .relevance5 { font-size: 160%; }
 
-
+/* Tables */
+table.openquestions {
+    border-collapse: collapse; margin-bottom: 22px; }
+table.openquestions td {
+    padding: 4px; border-top: 1px solid transparent; border-bottom: 1px solid #333; }
 
 /* Right panel */
 aside {
-    display: table-cell; width: 300px; padding-top: 5px; background: url(../images/sidebar_background.png) top left; }
+    display: table-cell; width: 300px; padding-top: 5px; }
 aside section {
     margin: 5px 0 0 5px; padding: 5px 11px; background: url(../images/search_background.png) repeat-x;
-    border-radius: 11px; -moz-border-radius: 11px; -webkit-border-radius: 11px; }
+    border: 1px solid #d7d7d7; border-radius: 11px; -moz-border-radius: 11px; -webkit-border-radius: 11px; }
 aside section h3 {
     font-size: 16px; }
 aside section ul li a, aside section ul li a:visited {
     display: block; }
 aside section ul li a:hover {
     text-decoration: underline; }
+aside section #social {
+    width: 250px; }
 
 #searchBox {
     background: url(../images/search_background.png) repeat-x; overflow: hidden; padding: 20px; margin-bottom: 22px;
-    width: 90%; color: #222; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; }
+    width: 416px; color: #222; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; }
 #searchBox input[type=search] {
-    width: 300px; height: 1.66em; font-size: 1.33em; margin-bottom: 5px;
+    width: 300px; height: 1.66em; font-size: 1.33em; margin-bottom: 5px; margin-right: 10px;
     border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
 #searchBox a {
-    color: #222; text-decoration: none; }
+    clear: both; color: #222; text-decoration: none; }
 #searchBox a.help {
     margin-right: 10px; padding: 0 12px 0 0; background: url(../images/arrow.gif) no-repeat scroll right 55% transparent; }
 #searchBox a.help:hover {
-	text-decoration: underline; }
+    text-decoration: underline; }
 
+#mainContent form .captchaImage, #mainContent form .captchaInfo {
+    margin-left: 170px; position: relative; }
+#mainContent form .captchaRefresh {
+    position: absolute; width: 100px; height: 20px; bottom: 5px; z-index: 2; opacity: 0.8;
+    background-color: #eeeeee; text-align: center; line-height: 20px; display: none; cursor: pointer; }
+#mainContent form .captchaImage:hover .captchaRefresh {
+    display: block; }
+#mainContent form .captchaRefresh a {
+    text-decoration: none; color: #000000; }
 #mainContent form input.captcha {
-    vertical-align: top; height: 40px; width: 120px; text-valign: middle; font-size: 1.571em; }
+    vertical-align: top; height: 40px; width: 120px; text-valign: middle; font-size: 30px; float: right; }
 #debug_main {
-    margin: auto; width: 720px; background-color: #fff;
-    padding: 150px 10px 10px;
-}
+    margin: auto; width: 720px; background-color: #fff; padding: 150px 10px 10px; }
 
 /* Footer */
 footer {

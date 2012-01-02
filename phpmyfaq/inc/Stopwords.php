@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Stopwords
  * @author    Anatoliy Belsky
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-01
@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Stopwords
  * @author    Anatoliy Belsky
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-01
@@ -57,7 +57,7 @@ class PMF_Stopwords
     /**
      * Language
      *
-     * @var string
+     * @var PM_Language
      */
     private $language;
     
@@ -70,16 +70,21 @@ class PMF_Stopwords
 
     /**
      * Constructor
+     *
+     * @param PMF_DB_Driver $database Database connection
+     * @param PMF_Language  $language Language object
+     *
+     * @return PMF_Stopwords
      */
-    private function __construct()
+    private function __construct(PMF_DB_Driver $database, PMF_Language $language)
     {
-        $this->db       = PMF_Db::getInstance();
-        $this->language = PMF_Language::$language;
+        $this->db       = $database;
+        $this->language = $language;
         $this->table_name = SQLPREFIX . "faqstopwords";
     }
     
     /**
-     * @return string
+     * @return PMF_Language
      */
     public function getLanguage ()
     {
@@ -95,7 +100,7 @@ class PMF_Stopwords
     }
     
     /**
-     * @param string $language
+     * @param PMF_Language $language
      */
     public function setLanguage ($language)
     {
@@ -114,13 +119,17 @@ class PMF_Stopwords
      * Returns the single instance
      *
      * @access static
+     *
+     * @param PMF_DB_Driver $database Database connection
+     * @param PMF_Language  $language Language object
+     *
      * @return PMF_Stopwords
      */
-    public static function getInstance()
+    public static function getInstance(PMF_DB_Driver $database, PMF_Language $language)
     {
         if (null == self::$instance) {
             $className = __CLASS__;
-            self::$instance = new $className();
+            self::$instance = new $className($database, $language);
         }
         return self::$instance;
     }
@@ -137,7 +146,7 @@ class PMF_Stopwords
     {
         if (!$this->match($word)) {
             $sql = "INSERT INTO $this->table_name VALUES(%d, '%s', '%s')";
-            $sql = sprintf($sql, $this->db->nextID($this->table_name, 'id'), $this->language, $word);
+            $sql = sprintf($sql, $this->db->nextId($this->table_name, 'id'), $this->language->getLanguage(), $word);
             
             $this->db->query($sql);
             
@@ -158,7 +167,7 @@ class PMF_Stopwords
     public function update($id, $word)
     {
         $sql = "UPDATE $this->table_name SET stopword = '%s' WHERE id = %d AND lang = '%s'";
-        $sql = sprintf($sql, $word, $id, $this->language);
+        $sql = sprintf($sql, $word, $id, $this->language->getLanguage());
         
         $this->db->query($sql);
     }
@@ -173,7 +182,11 @@ class PMF_Stopwords
      */
     public function remove($id)
     {
-        $sql = sprintf("DELETE FROM $this->table_name WHERE id = %d AND lang = '%s'", $id, $this->language);
+        $sql = sprintf(
+            "DELETE FROM $this->table_name WHERE id = %d AND lang = '%s'",
+            $id,
+            $this->language->getLanguage()
+        );
         
         $this->db->query($sql);
     }
@@ -189,7 +202,7 @@ class PMF_Stopwords
     public function match($word)
     {
         $sql = "SELECT id FROM $this->table_name WHERE LOWER(stopword) = LOWER('%s') AND lang = '%s'";
-        $sql = sprintf($sql, $word, $this->language);
+        $sql = sprintf($sql, $word, $this->language->getLanguage());
         
         $result = $this->db->query($sql);
         
@@ -207,7 +220,7 @@ class PMF_Stopwords
      */
     public function getByLang($lang = null, $wordsOnly = false)
     {
-        $lang = is_null($lang) ? $this->language : $lang;
+        $lang = is_null($lang) ? $this->language->getLanguage() : $lang;
         $sql  = sprintf("SELECT id, lang, LOWER(stopword) AS stopword FROM $this->table_name WHERE lang = '%s'", $lang);
         
         $result = $this->db->query($sql);

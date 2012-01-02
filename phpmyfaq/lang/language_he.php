@@ -570,20 +570,20 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "שם היוצר");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "כתובת הדואל של עורך האתר");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "מידע ליצירת קשר");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "טקסט לעמוד שלח לחבר");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "גודל מקסימלי של קובץ מצורף ב- Bytes (max. %sByte)");
-$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "קשר לקובץ המצורף בתחתית הערך?");
+$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "גודל מקסימלי של קובץ מצורף ב- Bytes (max. %sByte)");
+$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "קשר לקובץ המצורף בתחתית הערך?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "אפשר רישום של פעילות המשתמשים?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "אפשר רישום של פעילות המנהל ?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "האם הנך רוצה שהIP יבדק כאשר נבדקים פרטי המשתמשים בadmin.php?");
-$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "מספר ערכים מוצגים בכל עמוד");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "מספר קטעי חדשות");
-$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "חסום את IP זה");
+$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "האם הנך רוצה שהIP יבדק כאשר נבדקים פרטי המשתמשים בadmin.php?");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "מספר ערכים מוצגים בכל עמוד");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "מספר קטעי חדשות");
+$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "חסום את IP זה");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "הפעל mod_rewrite? (ברירת מחדל: לא פעיל)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "הפעל LDAP? (ברירת מחדל: לא פעיל)");
+$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "הפעל LDAP? (ברירת מחדל: לא פעיל)");
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "URL בסיסי לאימות קישורים (דוגמה: http://www.example.org/faq)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "מרווח בין אימות קישורים (בשניות)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "לא להציג באתר שאלות חדשות ?");
-$LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "רמת הרשאות");
+$LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "רמת הרשאות");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "כקטגוריה ראשית חדשה";
 $PMF_LANG["ad_categ_paste_error"] = "הזזת הקטגוריה בלתי אפשרית.";
@@ -828,7 +828,7 @@ $PMF_LANG["ad_categ_remark_move"] = "החלפה בין שתי קטגוריות �
 $PMF_LANG["ad_categ_remark_overview"] = "הקטגוריות יוצגו בסדר נכון רק אם הוגדרו עבור אותה שפה (תור ראשון).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
-$PMF_LANG['msgUsersOnline'] = ' :: %d אורחים ו %d רשומים';
+$PMF_LANG['msgUsersOnline'] = '%d אורחים ו %d רשומים';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'מחק רישומים בני יותר מ 30 יום';
 $PMF_LANG['ad_adminlog_delete_success'] = 'רישומים ישנים נמחקו בהצלחה.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'לא נמחקו רישומים: ארעה תקלה בביצוע הבקשה.';

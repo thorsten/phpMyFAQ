@@ -22,7 +22,7 @@
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2010 NetJapan, Inc. and phpMyFAQ Team
+ * @copyright 2005-2011 NetJapan, Inc. and phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-08-01
@@ -765,7 +765,11 @@ class PMF_Linkverifier
                 lang = '%s'",
             SQLPREFIX,
             $id,
+<<<<<<< HEAD
             $this->db->escapeString($artlang));
+=======
+            $this->db->escape($artlang));
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
             
         if ($result = $this->db->query($query)) {
             while ($row = $this->db->fetchObject($result)) {
@@ -927,11 +931,8 @@ class PMF_Linkverifier
             $output = sprintf('<h2>%s</h2><br />%s',
                 $PMF_LANG['ad_linkcheck_checkResult'],
                 $PMF_LANG['ad_linkcheck_noLinksFound']);
-            return ($cron ? '' : utf8_decode($output));
+            return ($cron ? '' : $output);
         }
-
-        //uncomment to see the result structure
-        //print str_replace("\n","<br />",PMF_String::htmlspecialchars(print_r($result, true)));
 
         $failreasons = $inforeasons = array();
         $output      = "    <h2>".$PMF_LANG['ad_linkcheck_checkResult']."</h2>\n";
@@ -951,7 +952,10 @@ class PMF_Linkverifier
                     $_classname = "urlsuccess";
                     $_output .= '<td class="'.$_classname.'">'.$PMF_LANG['ad_linkcheck_checkSuccess'].$_redirects.'</td>';
                     if ($value['reason'] != "") {
-                        $inforeasons[] = sprintf($PMF_LANG['ad_linkcheck_openurl_infoprefix'],PMF_String::htmlspecialchars($value['absurl'])).$value['reason'];
+                        $inforeasons[] = sprintf(
+                            $PMF_LANG['ad_linkcheck_openurl_infoprefix'],
+                            PMF_String::htmlspecialchars($value['absurl'])
+                         ) . $value['reason'];
                     }
                 } else {
                     $_classname = "urlfail";
@@ -986,7 +990,7 @@ class PMF_Linkverifier
         if ($cron) {
             return '';
         } else {
-            return utf8_decode($output);
+            return $output;
         }
     }
 
@@ -1010,6 +1014,7 @@ class PMF_Linkverifier
                         VALUES
                             (%d, '%s', '%s', '%s', 'y', 'n', '%s', '%s', '%s')",
                         SQLPREFIX,
+<<<<<<< HEAD
                         $this->db->nextID(SQLPREFIX."faqlinkverifyrules", "id"),
                         $this->db->escapeString($type),
                         $this->db->escapeString($url),
@@ -1017,6 +1022,15 @@ class PMF_Linkverifier
                         $this->db->escapeString($this->user->getLogin()),
                         $this->db->escapeString(date('YmdHis')),
                         $this->db->escapeString(date('YmdHis'))
+=======
+                        $this->db->nextId(SQLPREFIX."faqlinkverifyrules", "id"),
+                        $this->db->escape($type),
+                        $this->db->escape($url),
+                        $this->db->escape($reason),
+                        $this->db->escape($this->user->getLogin()),
+                        $this->db->escape(date('YmdHis')),
+                        $this->db->escape(date('YmdHis'))
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
                         );
             $this->db->query($query);
         }
@@ -1172,7 +1186,7 @@ function ajaxOnDemandVerify(id, lang)
 </script>
 
 <div id="onDemandVerifyResult">
-<NOSCRIPT>LinkVerifier feature disabled (Reason: Javascript not enabled)</NOSCRIPT>
+<noscript>LinkVerifier feature disabled (Reason: Javascript not enabled)</noscript>
 </div>
 <script type="text/javascript">
 <!--

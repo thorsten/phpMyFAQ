@@ -6,11 +6,13 @@
             <p>{msgRegistrationCredentials}</p>
             <p>{msgRegistrationNote}</p>
 
+            <div id="registrations"></div>
+
             <form id="formValues" method="post" action="#>
                 <input type="hidden" name="lang" id="lang" value="{lang}" />
                 <p>
                     <label for="realname">{realname}</label>
-                    <input type="text" name="realname" id="realname" required="required" />
+                    <input type="text" name="realname" id="realname" required="required" autofocus="autofocus" />
                 </p>
                 <p>
                     <label for="name">{loginname}</label>
@@ -26,7 +28,6 @@
                 </p>
 
                 <div id="loader"></div>
-                <div id="registrations"></div>
 
                 <p>
                     <input class="submit" type="submit"  id="submitregistration" value="{submitRegister}" />

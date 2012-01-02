@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Logging
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2006-2010 phpMyFAQ Team
+ * @copyright 2006-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-08-15
@@ -122,10 +122,14 @@ class PMF_Logging
                     VALUES 
                 (%d, %d, %d, '%s', '%s')",
                     SQLPREFIX,
-                    $this->db->nextID(SQLPREFIX.'faqadminlog', 'id'),
+                    $this->db->nextId(SQLPREFIX.'faqadminlog', 'id'),
                     $_SERVER['REQUEST_TIME'],
                     $user->userdata->get('user_id'),
+<<<<<<< HEAD
                     $this->db->escapeString(nl2br($logText)),
+=======
+                    $this->db->escape(nl2br($logText)),
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
                     $_SERVER['REMOTE_ADDR']);
             
             return $this->db->query($query);

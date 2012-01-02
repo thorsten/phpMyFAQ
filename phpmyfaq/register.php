@@ -40,15 +40,23 @@ if (!is_null($showCaptcha)) {
     exit;
 }
 
-$tpl->processTemplate('writeContent', array(
-    'msgRegistration'            => $PMF_LANG['msgRegistration'],
-    'msgRegistrationCredentials' => $PMF_LANG['msgRegistrationCredentials'],
-    'msgRegistrationNote'        => $PMF_LANG['msgRegistrationNote'],
-    'lang'                       => $PMF_LANG['msgUserData'],
-    'loginname'                  => $PMF_LANG["ad_user_loginname"],
-    'realname'                   => $PMF_LANG["ad_user_realname"],
-    'email'                      => $PMF_LANG["ad_entry_email"],
-    'submitRegister'             => $PMF_LANG['submitRegister'],
-    'captchaFieldset'            => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('add'), $captcha->caplength)));
+$tpl->parse(
+    'writeContent',
+    array(
+        'msgRegistration'            => $PMF_LANG['msgRegistration'],
+        'msgRegistrationCredentials' => $PMF_LANG['msgRegistrationCredentials'],
+        'msgRegistrationNote'        => $PMF_LANG['msgRegistrationNote'],
+        'lang'                       => $LANGCODE,
+        'loginname'                  => $PMF_LANG["ad_user_loginname"],
+        'realname'                   => $PMF_LANG["ad_user_realname"],
+        'email'                      => $PMF_LANG["ad_entry_email"],
+        'submitRegister'             => $PMF_LANG['submitRegister'],
+        'captchaFieldset'            => PMF_Helper_Captcha::getInstance()->renderCaptcha(
+            $captcha,
+            'register',
+            $PMF_LANG['msgCaptcha']
+        )
+    )
+);
 
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->merge('writeContent', 'index');

@@ -18,7 +18,7 @@
  * @package   PMF_Utils
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-01
@@ -199,7 +199,9 @@ class PMF_Utils
     public static function resolveMarkers($text)
     {
         // Available markers: key and resolving value
-        $markers = array('%sitename%' => PMF_Configuration::getInstance()->get('main.titleFAQ'));
+        $markers = array(
+            '%sitename%' => PMF_Configuration::getInstance()->get('main.titleFAQ')
+        );
 
         // Resolve any known pattern
         return str_replace(
@@ -341,9 +343,9 @@ class PMF_Utils
         $prefix          = isset($matches[3]) ? $matches[3] : '';
         $item            = isset($matches[4]) ? $matches[4] : '';
         $postfix         = isset($matches[5]) ? $matches[5] : '';
-        
+
         if (!empty($item)) {
-            return '<span class="highlight">'.$prefix.$item.$postfix.'</span>';
+            return '<span class="highlight">' . $prefix . $item . $postfix . '</span>';
         }
         
         // Fallback: the original matched string

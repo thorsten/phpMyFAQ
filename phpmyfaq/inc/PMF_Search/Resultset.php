@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Search
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
+ * @copyright 2010-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
@@ -114,7 +114,7 @@ class PMF_Search_Resultset
         
         $duplicateResults = array();
         $currentUserId    = $this->user->getUserId();
-        if ('medium' == PMF_Configuration::getInstance()->get('main.permLevel')) {
+        if ('medium' == PMF_Configuration::getInstance()->get('security.permLevel')) {
             $currentGroupIds = $this->user->perm->getUserGroups($currentUserId);
         }
 
@@ -122,14 +122,14 @@ class PMF_Search_Resultset
             
             $permission = false;
             // check permissions for groups
-            if ('medium' == PMF_Configuration::getInstance()->get('main.permLevel')) {
+            if ('medium' == PMF_Configuration::getInstance()->get('security.permLevel')) {
                 $groupPerm = $faqGroup->fetch($result->id);
                 if (count($groupPerm) && in_array($groupPerm->group_id, $currentGroupIds)) {
                     $permission = true;
                 }
             }
             // check permission for user
-            if ($permission || 'basic' == PMF_Configuration::getInstance()->get('main.permLevel')) {
+            if ($permission || 'basic' == PMF_Configuration::getInstance()->get('security.permLevel')) {
                 $userPerm = $faqUser->fetch($result->id);
                 if (-1 == $userPerm->user_id || $this->user->getUserId() == $userPerm->user_id) {
                     $permission = true;

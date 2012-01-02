@@ -563,20 +563,20 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Yayıncı Adı");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Yönetici E-posta Adresi");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "İletişim Bilgisi");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Arkadaşa gönder sayfası için metin");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Maksimum ek boyutu bayt olarak (maks. %sByte)");
-$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Ekleri girdilerin altına linkle?");
+$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "Maksimum ek boyutu bayt olarak (maks. %sByte)");
+$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Ekleri girdilerin altına linkle?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "İzleme kullan?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Yönetici kütüğü kullan?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "admin.php'de UIN'leri kontrol ederken IP kontrolü de yapılmasını istiyor musunuz?");
-$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Sayfa başına gösterilen konu sayısı");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Haber yazılarının sayısı");
-$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Bu IP'leri karalistele");
+$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "admin.php'de UIN'leri kontrol ederken IP kontrolü de yapılmasını istiyor musunuz?");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Sayfa başına gösterilen konu sayısı");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Haber yazılarının sayısı");
+$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Bu IP'leri karalistele");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite desteğini etkinleştir? (varsayılan: kapalı)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP desteğini etkinleştir? (varsayılan: kapalı)");
+$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP desteğini etkinleştir? (varsayılan: kapalı)");
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Link kontrolü için baz URL (örn.: http://www.example.org/faq)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "AJAX link kontrolü zaman aralığı (saniye olarak)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Yeni soruların görünürlüğünü kapat?");
-$LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "İzin düzeyi");
+$LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "İzin düzeyi");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "yeni ana kategori olarak";
 $PMF_LANG["ad_categ_paste_error"] = "Bu kategori taşınamaz.";
@@ -821,7 +821,7 @@ $PMF_LANG["ad_categ_remark_move"] = "2 kategorinin yer değiştirmesi sadece ayn
 $PMF_LANG["ad_categ_remark_overview"] = "The correct order of categories will be shown, if all categories are defined for the actual language (first column).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
-$PMF_LANG['msgUsersOnline'] = ' :: %d Misafir ve %d Kayıtlı';
+$PMF_LANG['msgUsersOnline'] = '%d Misafir ve %d Kayıtlı';
 $PMF_LANG['ad_adminlog_del_older_30d'] = '30 günden eski kütükleri sil';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Eski kütükler başarı ile silindi.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Kütükler silinmedi: istek işlenirken bir hata oluştu.';

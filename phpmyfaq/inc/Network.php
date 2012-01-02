@@ -55,10 +55,15 @@ class PMF_Network
      */
     public function checkIp($ip)
     {
-        $bannedList = PMF_Configuration::getInstance()->get('main.bannedIPs');
+        $bannedList = PMF_Configuration::getInstance()->get('security.bannedIPs');
         $bannedIps  = explode(' ', $bannedList);
 
         foreach ($bannedIps as $ipAddress) {
+
+            if (0 == strlen($ipAddress)) {
+                continue;
+            }
+
             if (false === filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
                 // Handle IPv4
                 if ($this->checkForAddrMatchIpv4($ip, $ipAddress)) {
@@ -88,7 +93,6 @@ class PMF_Network
         // See also ip2long PHP online manual: Kenneth Shaw
         // coded a network matching function called net_match.
         // We use here his way of doing bit-by-bit network comparison
-        $matched = false;
 
         // Start applying the discovering of the network mask
         $ip_arr = explode('/', $network);
@@ -132,6 +136,7 @@ class PMF_Network
         if (!filter_var($addr, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
             throw new InvalidArgumentException("Not a valid IPv6 subnet.");
         }
+
 
         $bytes_addr = unpack("n*", inet_pton($addr));
         $bytes_test = unpack("n*", inet_pton($ip));

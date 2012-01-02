@@ -1,6 +1,6 @@
 <?php
 /**
- * The db_db2 class provides methods and functions for IBM DB2 Version 8.2 or
+ * The PMF_DB_Ibm_db2 class provides methods and functions for IBM DB2 Version 8.2 or
  * 9.1 databases. This will only work with the PECL extension ext/ibm_db2.
  *
  * PHP Version 5.2
@@ -19,7 +19,7 @@
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Helmut Tessarek <tessus@evermeet.cx>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-04-16
@@ -36,7 +36,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Helmut Tessarek <tessus@evermeet.cx>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-04-16
@@ -108,7 +108,7 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
      * @param   string
      * @return  string
      */
-    function escapeString($string)
+    function escape($string)
     {
       return str_replace("'", "''", $string);
     }
@@ -135,7 +135,7 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
      * @param   mixed $result
      * @return  array
      */
-    function fetch_assoc($result)
+    function fetchArray($result)
     {
         $_result = db2_fetch_assoc($result);
         if (is_array($_result)) {
@@ -183,7 +183,7 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
      * @param   mixed $result
      * @return  integer
      */
-    function sqllog()
+    function log()
     {
         return $this->sqllog;
     }
@@ -198,10 +198,10 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
         $tables = array();
         $this->getTableNames(SQLPREFIX);
         foreach ($this->tableNames as $table) {
-        	$result = db2_statistics($this->conn, null, null, $table);
-        	while ($res = db2_fetch_assoc($result)) {
+            $result = db2_statistics($this->conn, null, null, $table, 0);
+            while ($res = db2_fetch_assoc($result)) {
                 $tables[strtolower($table)] = $res['CARDINALITY'];
-        	}
+            }
         }
 
         return $tables;
@@ -214,7 +214,7 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
      * @param   string      the name of the ID column
      * @return  int
      */
-    function nextID($table, $id)
+    function nextId($table, $id)
     {
         $result = $this->query('SELECT MAX('.$id.') as current_id FROM '.$table);
         $row = $this->fetchObject($result);
@@ -236,11 +236,10 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
      *
      * @return string
      */
-    function client_version()
+    function clientVersion()
     {
         $client = db2_client_info($this->conn);
-        $ver = $client->DRIVER_NAME.' '.$client->DRIVER_VER;
-        return $ver;
+        return $client->DRIVER_NAME.' '.$client->DRIVER_VER;
     }
 
 
@@ -250,11 +249,10 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
      *
      * @return string
      */
-    function server_version()
+    function serverVersion()
     {
         $server = db2_server_info($this->conn);
-        $ver = $server->DBMS_NAME.' '.$server->DBMS_VER;
-        return $ver;
+        return $server->DBMS_NAME.' '.$server->DBMS_VER;
     }
 
 
@@ -296,7 +294,7 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
      *
      * @return boolean
      */
-    function dbclose()
+    function close()
     {
         return db2_close($this->conn);
     }

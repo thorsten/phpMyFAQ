@@ -192,7 +192,7 @@ class PMF_Faq
         }
         
         $faqconfig = PMF_Configuration::getInstance();
-        if ($faqconfig->get('main.permLevel') == 'medium') {
+        if ($faqconfig->get('security.permLevel') == 'medium') {
             $this->groupSupport = true;
         }
     }
@@ -292,8 +292,8 @@ class PMF_Faq
             $this->language,
             $permPart,
             $current_table,
-            $this->db->escapeString($orderby),
-            $this->db->escapeString($sortby));
+            $this->db->escape($orderby),
+            $this->db->escape($sortby));
 
         $result = $this->db->query($query);
         $num    = $this->db->numRows($result);
@@ -307,7 +307,7 @@ class PMF_Faq
                     $visits = $row->visits;
                 }
 
-                $url   = sprintf('%saction=artikel&cat=%d&id=%d&artlang=%s',
+                $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                             $sids,
                             $row->category_id,
                             $row->id,
@@ -423,18 +423,18 @@ class PMF_Faq
             $this->language,
             $permPart,
             $current_table,
-            $this->db->escapeString($orderby),
-            $this->db->escapeString($sortby));
+            $this->db->escape($orderby),
+            $this->db->escape($sortby));
 
         $result = $this->db->query($query);
 
         $num   = $this->db->numRows($result);
-        $pages = ceil($num / $faqconfig->get("main.numberOfRecordsPerPage"));
+        $pages = ceil($num / $faqconfig->get("records.numberOfRecordsPerPage"));
 
         if ($page == 1) {
             $first = 0;
         } else {
-            $first = ($page * $faqconfig->get("main.numberOfRecordsPerPage")) - $faqconfig->get("main.numberOfRecordsPerPage");
+            $first = ($page * $faqconfig->get("records.numberOfRecordsPerPage")) - $faqconfig->get("records.numberOfRecordsPerPage");
         }
 
         if ($num > 0) {
@@ -447,7 +447,7 @@ class PMF_Faq
             $output .= '<ul class="phpmyfaq_ul">';
             $counter = 0;
             $displayedCounter = 0;
-            while (($row = $this->db->fetchObject($result)) && $displayedCounter < $faqconfig->get("main.numberOfRecordsPerPage")) {
+            while (($row = $this->db->fetchObject($result)) && $displayedCounter < $faqconfig->get("records.numberOfRecordsPerPage")) {
                 $counter ++;
                 if ($counter <= $first) {
                     continue;
@@ -491,7 +491,7 @@ class PMF_Faq
 
             $options = array('baseUrl'         => $baseUrl,
                              'total'           => $num,
-                             'perPage'         => $faqconfig->get('main.numberOfRecordsPerPage'),
+                             'perPage'         => $faqconfig->get('records.numberOfRecordsPerPage'),
                              'pageParamName'   => 'seite',
                              'seoName'         => $title,
                              'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $this->pmf_lang['msgNext'] . '</a>',
@@ -589,18 +589,18 @@ class PMF_Faq
             $records,
             $this->language,
             $permPart,
-            $this->db->escapeString($orderby),
-            $this->db->escapeString($sortby));
+            $this->db->escape($orderby),
+            $this->db->escape($sortby));
 
         $result = $this->db->query($query);
 
         $num = $this->db->numRows($result);
-        $pages = ceil($num / $faqconfig->get('main.numberOfRecordsPerPage'));
+        $pages = ceil($num / $faqconfig->get('records.numberOfRecordsPerPage'));
 
         if ($page == 1) {
             $first = 0;
         } else {
-            $first = ($page * $faqconfig->get('main.numberOfRecordsPerPage')) - $faqconfig->get('main.numberOfRecordsPerPage');
+            $first = ($page * $faqconfig->get('records.numberOfRecordsPerPage')) - $faqconfig->get('records.numberOfRecordsPerPage');
         }
 
         if ($num > 0) {
@@ -613,7 +613,7 @@ class PMF_Faq
             $output .= '<ul class="phpmyfaq_ul">';
             $counter = 0;
             $displayedCounter = 0;
-            while (($row = $this->db->fetchObject($result)) && $displayedCounter < $faqconfig->get('main.numberOfRecordsPerPage')) {
+            while (($row = $this->db->fetchObject($result)) && $displayedCounter < $faqconfig->get('records.numberOfRecordsPerPage')) {
                 $counter ++;
                 if ($counter <= $first) {
                     continue;
@@ -647,7 +647,7 @@ class PMF_Faq
             return false;
         }
 
-        if ($num > $faqconfig->get('main.numberOfRecordsPerPage')) {
+        if ($num > $faqconfig->get('records.numberOfRecordsPerPage')) {
             $output .= "<p align=\"center\"><strong>";
             if (!isset($page)) {
                 $page = 1;
@@ -1017,7 +1017,6 @@ class PMF_Faq
     public function getSolutionId()
     {
         $latest_id        = 0;
-        $next_solution_id = 0;
 
         $query = sprintf('
             SELECT
@@ -1061,12 +1060,12 @@ class PMF_Faq
                     $where .= " IN (";
                     $separator = "";
                     foreach ($data as $value) {
-                        $where .= $separator."'".$this->db->escapeString($value)."'";
+                        $where .= $separator."'".$this->db->escape($value)."'";
                         $separator = ", ";
                     }
                     $where .= ")";
                 } else {
-                    $where .= " = '".$this->db->escapeString($data)."'";
+                    $where .= " = '".$this->db->escape($data)."'";
                 }
                 if ($num > 0) {
                     $where .= " AND ";
@@ -1450,7 +1449,7 @@ class PMF_Faq
             foreach ($result as $row) {
                 $output['url'][]   =  $row['url'];
                 $output['title'][] = PMF_Utils::makeShorterText($row['thema'], 8);
-                $output['date'][]  = PMF_Date::createIsoDate($row['datum']);
+                $output['date'][]  = PMF_Date::format(PMF_Date::createIsoDate($row['datum']));
             }
         } else {
             $output['error'] = $this->pmf_lang["err_noArticles"];
@@ -1751,10 +1750,10 @@ class PMF_Faq
         $oldId = 0;
         while (($row = $this->db->fetchObject($result)) && $i < $count ) {
             if ($oldId != $row->id) {
-                $data['datum'] = $row->datum;
-                $data['thema'] = $row->thema;
+                $data['datum']   = $row->datum;
+                $data['thema']   = $row->thema;
                 $data['content'] = $row->content;
-                $data['visits'] = $row->visits;
+                $data['visits']  = $row->visits;
 
                 $title = $row->thema;
                 $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
@@ -1800,6 +1799,65 @@ class PMF_Faq
         if ($this->db->numRows($this->db->query($query))) {
             return false;
         }
+        return true;
+    }
+
+    /**
+     * Returns the number of users from the table faqvotings
+     *
+     * @param   integer $record_id
+     * @return  integer
+     * @access  public
+     * @since   2006-06-18
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function getNumberOfVotings($record_id)
+    {
+        $query = sprintf(
+            'SELECT
+                usr
+            FROM
+                %sfaqvoting
+            WHERE
+                artikel = %d',
+            SQLPREFIX,
+            $record_id);
+        if ($result = $this->db->query($query)) {
+            if ($row = $this->db->fetchObject($result)) {
+                return $row->usr;
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * Adds a new voting record
+     *
+     * @param    array  $votingData
+     * @return   boolean
+     * @access   public
+     * @since    2006-06-18
+     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function addVoting($votingData)
+    {
+        if (!is_array($votingData)) {
+            return false;
+        }
+
+        $query = sprintf(
+            "INSERT INTO
+                %sfaqvoting
+            VALUES
+                (%d, %d, %d, 1, %d, '%s')",
+            SQLPREFIX,
+            $this->db->nextId(SQLPREFIX.'faqvoting', 'id'),
+            $votingData['record_id'],
+            $votingData['vote'],
+            $_SERVER['REQUEST_TIME'],
+            $votingData['user_ip']);
+        $this->db->query($query);
+
         return true;
     }
 
@@ -2093,6 +2151,7 @@ class PMF_Faq
     }
 
     /**
+
      * Setter for the language
      * 
      * @param  string $language Language
@@ -2119,21 +2178,19 @@ class PMF_Faq
         
         switch ($type) {
             case 'sticky':
-                $flag = (int)$flag;
+                $flag = ($flag === 'checked' ? 1 : 0);
                 break;
                 
             case 'active':
-                $flag = $flag ? "'yes'" : "'no'";
+                $flag = ($flag === 'checked' ? "'yes'" : "'no'");
                 break;
                 
             default:
-                /**
-                 * This is because we would run into unknown db column
-                 */
+                // This is because we would run into unknown db column
                 $flag = null;
                 break;
         }
-        
+
         if (null !== $flag) {
         
             $update = sprintf("
@@ -2296,7 +2353,7 @@ class PMF_Faq
         if (empty($pdfFile)) {
             $pdfFile = 'pdf' . $this->faqRecord['id'] . '.pdf';
         }
-        
+
         $faqconfig     = PMF_Configuration::getInstance();
         $categoryNode  = new PMF_Category_Node();
         $categoryData  = $categoryNode->fetch($currentCategory);
@@ -2312,15 +2369,14 @@ class PMF_Faq
         // Set any item
         $pdf->SetTitle($this->faqRecord['title']);
         $pdf->SetCreator($faqconfig->get('main.titleFAQ').' - powered by phpMyFAQ '.$faqconfig->get('main.currentVersion'));
-        $pdf->AliasNbPages();
         $pdf->AddPage();
-        $pdf->SetFont('arialunicid0', '', 12);
+        $pdf->SetFont('arialunicid0', '', 12, '', 'false');
         $pdf->SetDisplayMode('real');
         $pdf->Ln();
         $pdf->WriteHTML(str_replace('../', '', $this->faqRecord['content']), true);
         $pdf->Ln();
         $pdf->Ln();
-        $pdf->SetFont('arialunicid0', '', 11);
+        $pdf->SetFont('arialunicid0', '', 11, '', 'false');
         $pdf->Write(5, $PMF_LANG['ad_entry_solution_id'].': #'.$this->faqRecord['solution_id']);
         $pdf->SetAuthor($this->faqRecord['author']);
         $pdf->Ln();

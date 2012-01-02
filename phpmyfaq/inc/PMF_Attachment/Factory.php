@@ -20,7 +20,7 @@
  * @since     2009-08-21
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2011 phpMyFAQ Team
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {

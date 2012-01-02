@@ -365,8 +365,8 @@ $PMF_LANG["ad_rs_rating_1"] = "Rejting";
 $PMF_LANG["ad_rs_rating_2"] = "users shows:";
 $PMF_LANG["ad_rs_red"] = "Crveno";
 $PMF_LANG["ad_rs_green"] = "Zeleno";
-$PMF_LANG["ad_rs_altt"] = "sa prose&#269;nom ocenom manjom od 2";
-$PMF_LANG["ad_rs_ahtf"] = "sa prose&#269;nom ocenom ve&#263;om od 4";
+$PMF_LANG["ad_rs_altt"] = "sa prose&#269;nom ocenom manjom od 20%";
+$PMF_LANG["ad_rs_ahtf"] = "sa prose&#269;nom ocenom ve&#263;om od 80%";
 $PMF_LANG["ad_rs_no"] = "Nema rejtinga";
 
 // Auth
@@ -564,16 +564,16 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Ime izdava&#269;a")
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Admin email adresa");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Kontakt info");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Tekst za send2friend stranicu");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximalna veli&#269;ina priloga u bajtovima (max. %sByte)");
-$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Linkuj priloge ispod unosa?");
+$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "maximalna veli&#269;ina priloga u bajtovima (max. %sByte)");
+$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Linkuj priloge ispod unosa?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Koristi pra&#263;enje?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Koristi Adminlog?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Da li &#382;elite da se IP proverava kada se proverava UINs u admin.php?");
-$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Broj prikazanih tema po stranici");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Broj &#269;lanaka vesti");
-$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Banuj ove IP");
+$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Da li &#382;elite da se IP proverava kada se proverava UINs u admin.php?");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Broj prikazanih tema po stranici");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Broj &#269;lanaka vesti");
+$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Banuj ove IP");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Uklju&#269;i mod_rewrite podr&#269;ku? (isklju&#269;eno)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Da li &#382;elite LDAP podr&scaron;ku? (isklju&#269;eno)");
+$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Da li &#382;elite LDAP podr&scaron;ku? (isklju&#269;eno)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "kao nova glavna kategorija";
 $PMF_LANG["ad_categ_paste_error"] = "Preme&scaron;tanje ove kategorije nije mogu&#263;e.";
@@ -818,7 +818,7 @@ $PMF_LANG["ad_categ_remark_move"] = "Razmena 2 kategorije je mogu&#263;a samo na
 $PMF_LANG["ad_categ_remark_overview"] = "Ta&#269;an red kategorija &#269;e biti prikazan, ako su sve kategorije definisane za odre&#273;eni jezik (prva kolona).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
-$PMF_LANG['msgUsersOnline'] = ' :: %d Gostiju i %d Registrovanih';
+$PMF_LANG['msgUsersOnline'] = '%d Gostiju i %d Registrovanih';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Obrii odmah logove starije od 30 dana';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Stariji logovi obrisani.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Pojavila se greka.';

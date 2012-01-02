@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Feed
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2008-2010 phpMyFAQ Team
+ * @copyright 2008-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2008-01-25
@@ -45,6 +45,43 @@ PMF_String::init($LANGCODE);
 // Preload English strings
 require_once PMF_ROOT_DIR . '/lang/language_en.php';
 
+if ($faqconfig->get('security.enableLoginOnly')) {
+    if (!isset($_SERVER['PHP_AUTH_USER'])) {
+        header('WWW-Authenticate: Basic realm="phpMyFAQ RSS Feeds"');
+        header('HTTP/1.0 401 Unauthorized');
+        exit;
+    } else {
+        $user = new PMF_User_CurrentUser();
+        if ($user->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) {
+            if ($user->getStatus() != 'blocked') {
+                $auth = true;
+            } else {
+                $user = null;
+            }
+        } else {
+            $user = null;
+        }
+    }
+}
+
+//
+// Get current user and group id - default: -1
+//
+if (!is_null($user) && $user instanceof PMF_User_CurrentUser) {
+    $current_user = $user->getUserId();
+    if ($user->perm instanceof PMF_Perm_PermMedium) {
+        $current_groups = $user->perm->getUserGroups($current_user);
+    } else {
+        $current_groups = array(-1);
+    }
+    if (0 == count($current_groups)) {
+        $current_groups = array(-1);
+    }
+} else {
+    $current_user   = -1;
+    $current_groups = array(-1);
+}
+
 $category_id = PMF_Filter::filterInput(INPUT_GET, 'category_id', FILTER_VALIDATE_INT);
 $faq         = new PMF_Faq();
 
@@ -69,13 +106,14 @@ if (is_array($records)) {
     foreach ($records as $item) {
         
         $link = str_replace($_SERVER['SCRIPT_NAME'], '/index.php', $item['record_link']);
+
         if (PMF_RSS_USE_SEO) {
             if (isset($item['record_title'])) {
                 $oLink            = new PMF_Link($link);
                 $oLink->itemTitle = $item['record_title'];
                 $link             = $oLink->toString();
            }
-       } 
+        }
 
         $rss->startElement('item');
         $rss->writeElement('title', html_entity_decode($item['record_title'] .
@@ -101,4 +139,4 @@ header('Content-Length: '.strlen($rssData));
 
 print $rssData;
 
-$db->dbclose();
+$db->close();

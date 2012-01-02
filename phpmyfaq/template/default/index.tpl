@@ -30,8 +30,7 @@
     <link rel="stylesheet" media="print" href="template/{tplSetName}/css/print.css?v=1">
 
     <script src="inc/js/modernizr.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-    <script>!window.jQuery && document.write('<script src="inc/js/jquery.min.js"><\/script>')</script>
+    <script src="inc/js/jquery.min.js"></script>
     <script src="inc/js/functions.js"></script>
 
     <link rel="shortcut icon" href="template/{tplSetName}/favicon.ico">
@@ -41,10 +40,16 @@
     <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="feed/topten/rss.php">
     <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml" href="feed/latest/rss.php">
     <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml" href="feed/openquestions/rss.php">
-    <link rel="microsummary" href="microsummary.php?action={action}">
     <link rel="search" type="application/opensearchdescription+xml" title="{metaTitle}" href="{opensearch}">
 </head>
 <body dir="{dir}">
+
+<!--[if lt IE 8 ]>
+<div class="internet-explorer-error">
+    Do you know that your Internet Explorer is out of date?<br/>
+    Please use Internet Explorer 8+, Mozilla Firefox 4+, Google Chrome, Apple Safari 5+ or Opera 11+
+</div>
+ <![endif]-->
 
 <header id="header">
     <div id="loginBox">
@@ -70,7 +75,7 @@
 <a id="top"></a>
 
 <div id="content">
-    
+
     <div id="leftContent">
         <menu id="categories">
             <ul>
@@ -84,10 +89,10 @@
         [globalSearchBox]
         <div id="searchBox">
             <form id="search" action="{writeSendAdress}" method="get">
-                <input type="search" name="search" id="searchfield" size="30">
-                <input type="hidden" name="searchcategory" value="{categoryId}">
-                <input type="hidden" name="action" value="search">
-                <input type="submit" name="submit" value="{searchBox}">
+                <input type="hidden" name="searchcategory" value="{categoryId}" />
+                <input type="hidden" name="action" value="search" />
+                <input type="search" name="search" id="searchfield" size="30" placeholder="{searchBox} ..." />
+                <input type="submit" name="submit" value="{searchBox}" />
             </form>
             {msgSearch}
         </div>
@@ -95,8 +100,9 @@
         [globalSuggestBox]
         <div id="searchBox">
             <form id="instantform" action="?action=instantresponse" method="post">
-                <input type="hidden" name="ajaxlanguage" id="ajaxlanguage" value="{ajaxlanguage}">
-                <input type="search" name="search" id="instantfield" value="">
+                <input type="hidden" name="ajaxlanguage" id="ajaxlanguage" value="{ajaxlanguage}" />
+                <input type="search" name="search" id="instantfield" value=""
+                       placeholder="{msgDescriptionInstantResponse}" onfocus="autoSuggest(); return false;" />
             </form>
             {msgSearch}
         </div>

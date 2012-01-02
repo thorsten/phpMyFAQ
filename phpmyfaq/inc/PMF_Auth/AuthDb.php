@@ -17,7 +17,7 @@
  * @category  phpMyFAQ 
  * @package   PMF_Auth
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-30
@@ -86,8 +86,8 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
                 VALUES
             ('%s', '%s')",
             SQLPREFIX,
-            $this->db->escapeString($login),
-            $this->db->escapeString($this->enc_container->encrypt($pass)));
+            $this->db->escape($login),
+            $this->db->escape($this->enc_container->encrypt($pass)));
             
         $add   = $this->db->query($add);
         $error = $this->db->error();
@@ -125,8 +125,8 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
             WHERE
                 login = '%s'",
             SQLPREFIX,
-            $this->db->escapeString($this->enc_container->encrypt($pass)),
-            $this->db->escapeString($login));
+            $this->db->escape($this->enc_container->encrypt($pass)),
+            $this->db->escape($login));
             
         $change = $this->db->query($change);
         $error  = $this->db->error();
@@ -160,7 +160,7 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
             WHERE
                 login = '%s'",
             SQLPREFIX,
-            $this->db->escapeString($login));
+            $this->db->escape($login));
             
         $delete = $this->db->query($delete);
         $error  = $this->db->error();
@@ -198,7 +198,7 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
             WHERE
                 login = '%s'",
             SQLPREFIX,
-            $this->db->escapeString($login));
+            $this->db->escape($login));
             
         $check = $this->db->query($check);
         $error = $this->db->error();
@@ -217,7 +217,7 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
             $this->errors[] = PMF_User::ERROR_USER_LOGIN_NOT_UNIQUE;
         }
         // if multiple accounts are ok, just 1 valid required
-        while ($user = $this->db->fetch_assoc($check)) {
+        while ($user = $this->db->fetchArray($check)) {
             if ($user['pass'] == $this->enc_container->encrypt($pass)) {
                 return true;
                 break;
@@ -244,7 +244,7 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
             WHERE
                 login = '%s'",
             SQLPREFIX,
-            $this->db->escapeString($login));
+            $this->db->escape($login));
             
         $check = $this->db->query($check);
         $error = $this->db->error();

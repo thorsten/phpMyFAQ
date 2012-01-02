@@ -5,7 +5,7 @@
  * This script checks the complete environment, writes the database connection
  * parameters into the file config/database.php and the configuration into the database.
  * 
- * PHP Version 5.2
+ * PHP Version 5.2.3
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -24,7 +24,7 @@
  * @author    Johannes Schlüter <johannes@php.net>
  * @author    Uwe Pries <uwe.pries@digartis.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2002-2011 phpMyFAQ Team
+ * @copyright 2002-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-20
@@ -33,8 +33,7 @@
 define('VERSION', '3.0.0-dev');
 define('APIVERSION', 2);
 define('MINIMUM_PHP_VERSION', '5.3.0');
-
-define('COPYRIGHT', '&copy; 2001-2011 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2012 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
 
@@ -111,8 +110,8 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
 
 <nav>
     <ul>
-        <li><a target="_blank" href="http://www.phpmyfaq.de//documentation.php">Documentation</a></li>
-        <li><a target="_blank" href="http://www.phpmyfaq.de//support.php">Support</a></li>
+        <li><a target="_blank" href="http://www.phpmyfaq.de/documentation.php">Documentation</a></li>
+        <li><a target="_blank" href="http://www.phpmyfaq.de/support.php">Support</a></li>
         <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
         <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
     </ul>
@@ -148,14 +147,16 @@ $query = $uninst = array();
 // permission levels
 $permLevels = array(
     'basic'  => 'Basic (no group support)',
-    'medium' => 'Medium (with group support)');
+    'medium' => 'Medium (with group support)'
+);
 
 $enabledExtensions = array(
     'dom',
     'gd',
     'json',
     'xmlwriter',
-    'filter');
+    'filter'
+);
 
 /**
  * Executes the uninstall set of queries
@@ -247,7 +248,8 @@ if (!$system->checkExtension($enabledExtensions)) {
 }
 
 if (!$system->checkphpMyFAQInstallation()) {
-    print '<p class="error">It seems you\'re already running a version of phpMyFAQ.<br />Please use the <a href="update.php">update script</a>.</p>';
+    print '<p class="error">It seems you\'re already running a version of phpMyFAQ. Please use the ' .
+          '<a href="update.php">update script</a>.</p>';
     HTMLFooter();
     die();
 }
@@ -289,23 +291,33 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
               'directories.</p>';
     }
     if (!extension_loaded('gd')) {
-        print '<p class="error">You don\'t have GD support enabled in your PHP installation. Please enabled GD ' .
+        print '<p class="error">You don\'t have GD support enabled in your PHP installation. Please enable GD ' .
               'support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
     }
     if (!function_exists('imagettftext')) {
         print '<p class="error">You don\'t have Freetype support enabled in the GD extension of your PHP ' .
-              'installation. Please enabled Freetype support in GD extension otherwise the Captchas for spam ' .
+              'installation. Please enable Freetype support in GD extension otherwise the Captchas for spam ' .
               'protection will be quite easy to break.</p>';
     }
     if (!extension_loaded('curl') || !extension_loaded('openssl')) {
-        print '<p class="error">You don\'t have cURL and/or OpenSSl support enabled in your PHP installation. ' .
-              'Please enabled cUrL and/or OpenSSL support in your php.ini file otherwise you can\'t use the Twitter ' .
+        print '<p class="error">You don\'t have cURL and/or OpenSSL support enabled in your PHP installation. ' .
+              'Please enable cURL and/or OpenSSL support in your php.ini file otherwise you can\'t use the Twitter ' .
               ' support.</p>';
     }
 ?>
         <p class="hint">
-            Did you already read the <a href="../docs/documentation.en.html">documentation</a> carefully before
-            starting the phpMyFAQ setup?</p>
+            Did you already read the <a href="http://www.phpmyfaq.de/documentation.php">documentation</a> carefully
+            before starting the phpMyFAQ setup?
+        </p>
+
+        <p class="hint">
+            Your password will be saved using the
+            <strong>
+                <?php print PMF_ENCRYPTION_TYPE; ?>
+            </strong>
+            encryption without any salt.<br />
+            You can change this in <em>config/constants.php</em>.
+        </p>
 
         <form action="setup.php" method="post">
         <fieldset>
@@ -360,7 +372,8 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
             <p>
                 <label>Table prefix:</label>
-                <input type="text" name="sqltblpre" title="Please enter a table prefix here if you want to install more phpMyFAQ installations on one database." />
+                <input type="text" name="sqltblpre"
+                       title="Please enter a table prefix here if you want to install more phpMyFAQ installations on one database." />
             </p>
 
         </fieldset>
@@ -397,7 +410,8 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             </p>
             <p>
                 <label>LDAP base search DN:</label>
-                <input type="text" name="ldap_base" title="Please enter your distinguished name, e.g. 'cn=John Smith,ou=Accounts,o=My Company,c=US' here." />
+                <input type="text" name="ldap_base"
+                       title="Please enter your distinguished name, e.g. 'cn=John Smith,ou=Accounts,o=My Company,c=US' here." />
             </p>
             <p>You can add additional LDAP configuration informations in the file config/constants_ldap.php.</p>
 
@@ -431,31 +445,33 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                 <label>Permission level:</label>
                 <select name="permLevel" size="1" title="Complexity of user and right administration. Basic: users may
                 have user-rights. Medium: users may have user-rights; group administration; groups may have group-rights;
-                user have group-rights via group-memberships.">
+                user have group-rights via group-memberships." required="required">
                 <?php foreach ($permLevels as $level => $desc) {
                     printf('    <option value="%s">%s</option>', $level, $desc);
                 } ?>
                 </select>
             </p>
             <p>
-                <label>Admin's real name:</label>
-                <input type="text" name="realname" title="Please enter your real name here." />
+                <label>Your name:</label>
+                <input type="text" name="realname" title="Please enter your real name here." required="required" />
             </p>
             <p>
-                <label>Admin's e-mail address:</label>
-                <input type="email" name="email" title="Please enter your email adress here." />
+                <label>Your email address:</label>
+                <input type="email" name="email" title="Please enter your email adress here." required="required" />
             </p>
             <p>
-                <label>Admin's username:</label>
-                <input type="text" name="username" title="You don't have to do anything here." value="admin" readonly="readonly" />
+                <label>Your login:</label>
+                <input type="text" name="loginname" title="Please enter your login name for your phpMyFAQ installation." required="required" />
             </p>
             <p>
-                <label>Admin's password:</label>
-                <input type="password" name="password" title="Please enter your password for the admin area." />
+                <label>Your password:</label>
+                <input type="password" name="password" title="Please enter your password for the admin section."
+                       required="required" />
             </p>
             <p>
                 <label>Retype password:</label>
-                <input type="password" name="password_retyped" title="Please retype your password for checkup." />
+                <input type="password" name="password_retyped" title="Please retype your password for checkup."
+                       required="required" />
             </p>
             </fieldset>
 
@@ -475,11 +491,11 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     }
 
     // check database entries
-    $sql_type = PMF_Filter::filterInput(INPUT_POST, 'sql_type', FILTER_SANITIZE_STRING);
-    if (!is_null($sql_type)) {
-        $sql_type = trim($sql_type);
-        if (file_exists(PMF_ROOT_DIR . '/install/' . $sql_type . '.sql.php')) {
-            require PMF_ROOT_DIR . '/install/' . $sql_type . '.sql.php';
+    $dbType = PMF_Filter::filterInput(INPUT_POST, 'sql_type', FILTER_SANITIZE_STRING);
+    if (!is_null($dbType)) {
+        $dbType = trim($dbType);
+        if (file_exists(PMF_ROOT_DIR . '/install/' . $dbType . '.sql.php')) {
+            require PMF_ROOT_DIR . '/install/' . $dbType . '.sql.php';
         } else {
             print '<p class="error"><strong>Error:</strong> Invalid server type.</p>';
             HTMLFooter();
@@ -491,37 +507,37 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         die();
     }
 
-    $sql_server = PMF_Filter::filterInput(INPUT_POST, 'sql_server', FILTER_SANITIZE_STRING);
-    if (is_null($sql_server) && $sql_type != 'sqlite') {
+    $dbServer = PMF_Filter::filterInput(INPUT_POST, 'sql_server', FILTER_SANITIZE_STRING);
+    if (is_null($dbServer) && $dbType != 'sqlite') {
         print "<p class=\"error\"><strong>Error:</strong> There's no DB server input.</p>\n";
         HTMLFooter();
         die();
     }
 
-    $sql_user = PMF_Filter::filterInput(INPUT_POST, 'sql_user', FILTER_SANITIZE_STRING);
-    if (is_null($sql_user) && $sql_type != 'sqlite') {
+    $dbUser = PMF_Filter::filterInput(INPUT_POST, 'sql_user', FILTER_SANITIZE_STRING);
+    if (is_null($dbUser) && $dbType != 'sqlite') {
         print "<p class=\"error\"><strong>Error:</strong> There's no DB username input.</p>\n";
         HTMLFooter();
         die();
     }
 
-    $sql_passwort = PMF_Filter::filterInput(INPUT_POST, 'sql_passwort', FILTER_SANITIZE_STRING);
-    if (is_null($sql_passwort) && $sql_type == 'sqlite') {
+    $dbPassword = PMF_Filter::filterInput(INPUT_POST, 'sql_passwort', FILTER_SANITIZE_STRING);
+    if (is_null($dbPassword) && $dbType == 'sqlite') {
         // Password can be empty...
-        $sql_passwort = '';
+        $dbPassword = '';
     }
 
-    $sql_db = PMF_Filter::filterInput(INPUT_POST, 'sql_db', FILTER_SANITIZE_STRING);
-    if (is_null($sql_db) && $sql_type != 'sqlite') {
+    $dbDatabaseName = PMF_Filter::filterInput(INPUT_POST, 'sql_db', FILTER_SANITIZE_STRING);
+    if (is_null($dbDatabaseName) && $dbType != 'sqlite') {
         print "<p class=\"error\"><strong>Error:</strong> There's no DB database input.</p>\n";
         HTMLFooter();
         die();
     }
 
-    if ($sql_type == 'sqlite') {
-        $sql_sqllitefile = PMF_Filter::filterInput(INPUT_POST, 'sql_sqlitefile', FILTER_SANITIZE_STRING);
-        if (!is_null($sql_sqllitefile)) {
-            $sql_server = $sql_sqllitefile; // We're using $sql_server, too!
+    if ($dbType == 'sqlite') {
+        $sqliteFile = PMF_Filter::filterInput(INPUT_POST, 'sql_sqlitefile', FILTER_SANITIZE_STRING);
+        if (!is_null($sqliteFile)) {
+            $dbServer = $sqliteFile; // We're using $dbServer, too!
         } else {
             print "<p class=\"error\"><strong>Error:</strong> There's no SQLite database filename input.</p>\n";
             HTMLFooter();
@@ -532,8 +548,8 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     // check database connection
     require PMF_ROOT_DIR . "/inc/Db.php";
     require PMF_ROOT_DIR . "/inc/PMF_DB/Driver.php";
-    $db = PMF_Db::dbSelect($sql_type);
-    $db->connect($sql_server, $sql_user, $sql_passwort, $sql_db);
+    $db = PMF_Db::factory($dbType);
+    $db->connect($dbServer, $dbUser, $dbPassword, $dbDatabaseName);
     if (!$db) {
         print "<p class=\"error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
         HTMLFooter();
@@ -541,77 +557,80 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     }
 
     // check LDAP if available
-    $ldap_enabled = PMF_Filter::filterInput(INPUT_POST, 'ldap_enabled', FILTER_SANITIZE_STRING);
-    if (extension_loaded('ldap') && !is_null($ldap_enabled)) {
+    $ldapEnabled = PMF_Filter::filterInput(INPUT_POST, 'ldap_enabled', FILTER_SANITIZE_STRING);
+    if (extension_loaded('ldap') && !is_null($ldapEnabled)) {
 
         // check LDAP entries
-        $ldap_server = PMF_Filter::filterInput(INPUT_POST, 'ldap_server', FILTER_SANITIZE_STRING);
-        if (is_null($ldap_server)) {
+        $ldapServer = PMF_Filter::filterInput(INPUT_POST, 'ldap_server', FILTER_SANITIZE_STRING);
+        if (is_null($ldapServer)) {
             print "<p class=\"error\"><strong>Error:</strong> There's no LDAP server input.</p>\n";
             HTMLFooter();
             die();
         }
         
-        $ldap_port = PMF_Filter::filterInput(INPUT_POST, 'ldap_port', FILTER_VALIDATE_INT);
-        if (is_null($ldap_port)) {
+        $ldapPort = PMF_Filter::filterInput(INPUT_POST, 'ldap_port', FILTER_VALIDATE_INT);
+        if (is_null($ldapPort)) {
             print "<p class=\"error\"><strong>Error:</strong> There's no LDAP port input.</p>\n";
             HTMLFooter();
             die();
         }
-        
-        $ldap_user = PMF_Filter::filterInput(INPUT_POST, 'ldap_user', FILTER_SANITIZE_STRING);
-        if (is_null($ldap_user)) {
-            print "<p class=\"error\"><strong>Error:</strong> There's no LDAP user DN input.</p>\n";
-            HTMLFooter();
-            die();
-        }
-        
-        $ldap_password = PMF_Filter::filterInput(INPUT_POST, 'ldap_password', FILTER_SANITIZE_STRING);
-        if (is_null($ldap_password)) {
-            print "<p class=\"error\"><strong>Error:</strong> There's no LDAP password input.</p>\n";
-            HTMLFooter();
-            die();
-        }
-        
-        $ldap_base = PMF_Filter::filterInput(INPUT_POST, 'ldap_base', FILTER_SANITIZE_STRING);
-        if (is_null($ldap_base)) {
+
+        $ldapBase = PMF_Filter::filterInput(INPUT_POST, 'ldap_base', FILTER_SANITIZE_STRING);
+        if (is_null($ldapBase)) {
             print "<p class=\"error\"><strong>Error:</strong> There's no LDAP base search DN input.</p>\n";
             HTMLFooter();
             die();
         }
 
+        // LDAP User and LDAP password are optional
+        $ldapUser     = PMF_Filter::filterInput(INPUT_POST, 'ldap_user', FILTER_SANITIZE_STRING, '');
+        $ldapPassword = PMF_Filter::filterInput(INPUT_POST, 'ldap_password', FILTER_SANITIZE_STRING, '');
+
         // check LDAP connection
         require PMF_ROOT_DIR . "/inc/Ldap.php";
-        $ldap = new PMF_Ldap($ldap_server, $ldap_port, $ldap_base, $ldap_user, $ldap_password);
+        $ldap = new PMF_Ldap($ldapServer, $ldapPort, $ldapBase, $ldapUser, $ldapPassword);
         if (!$ldap) {
-            print "<p class=\"error\"><strong>LDAP Error:</strong> ".$ldap->error()."</p>\n";
+            print "<p class=\"error\"><strong>LDAP Error:</strong> " . $ldap->error() . "</p>\n";
             HTMLFooter();
             die();
         }
     }
 
+    // check loginname
+    $loginname = PMF_Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_STRING);
+    if (is_null($loginname)) {
+        print '<p class="error"><strong>Error:</strong> There\'s no loginname for your account.' .
+                ' Please set your loginname.</p>';
+        HTMLFooter();
+        die();
+    }
+
     // check user entries
     $password = PMF_Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
     if (is_null($password)) {
-        print "<p class=\"error\"><strong>Error:</strong> There's no password for the administrator's account. Please set your password.</p>\n";
+        print '<p class="error"><strong>Error:</strong> There\'s no password for the your account.' .
+              ' Please set your password.</p>';
         HTMLFooter();
         die();
     }
     
     $password_retyped = PMF_Filter::filterInput(INPUT_POST, 'password_retyped', FILTER_SANITIZE_STRING);
     if (is_null($password_retyped)) {
-        print "<p class=\"error\"><strong>Error:</strong> There's no retyped password. Please set your retyped password.</p>\n";
+        print '<p class="error"><strong>Error:</strong> There\'s no retyped password.' .
+              ' Please set your retyped password.</p>';
         HTMLFooter();
         die();
     }
     
     if (strlen($password) <= 5 || strlen($password_retyped) <= 5) {
-        print "<p class=\"error\"><strong>Error:</strong> Your password and retyped password are too short. Please set your password and your retyped password with a minimum of 6 characters.</p>\n";
+        print '<p class="error"><strong>Error:</strong> Your password and retyped password are too short.' .
+              ' Please set your password and your retyped password with a minimum of 6 characters.</p>';
         HTMLFooter();
         die();
     }
     if ($password != $password_retyped) {
-        print "<p class=\"error\"><strong>Error:</strong> Your password and retyped password are not equal. Please check your password and your retyped password.</p>\n";
+        print '<p class="error"><strong>Error:</strong> Your password and retyped password are not equal.' .
+              ' Please check your password and your retyped password.</p>';
         HTMLFooter();
         die();
     }
@@ -623,7 +642,17 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     
     // Write the DB variables in database.php
     $datafile = PMF_ROOT_DIR . '/config/database.php';
-    $ret = file_put_contents($datafile, "<?php\n\$DB[\"server\"] = '".$sql_server."';\n\$DB[\"user\"] = '".$sql_user."';\n\$DB[\"password\"] = '".$sql_passwort."';\n\$DB[\"db\"] = '".$sql_db."';\n\$DB[\"prefix\"] = '".$sqltblpre."';\n\$DB[\"type\"] = '".$sql_type."';", LOCK_EX);
+    $ret = file_put_contents(
+        $datafile,
+        "<?php\n\$DB[\"server\"] = '" . $dbServer . "';\n" .
+        "\$DB[\"user\"] = '" . $dbUser . "';\n" .
+        "\$DB[\"password\"] = '" . $dbPassword . "';\n" .
+        "\$DB[\"db\"] = '" . $dbDatabaseName . "';\n" .
+        "\$DB[\"prefix\"] = '" . $sqltblpre . "';\n" .
+        "\$DB[\"type\"] = '" . $dbType . "';",
+        LOCK_EX
+    );
+    
     if (!$ret) {
         print "<p class=\"error\"><strong>Error:</strong> Cannot write to ./config/database.php.</p>";
         HTMLFooter();
@@ -632,9 +661,17 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     }
 
     // check LDAP if available
-    if (extension_loaded('ldap') && !is_null($ldap_enabled)) {
+    if (extension_loaded('ldap') && !is_null($ldapEnabled)) {
         $datafile = PMF_ROOT_DIR . '/config/ldap.php';
-        $ret = file_put_contents($datafile, "<?php\n\$PMF_LDAP[\"ldap_server\"] = '".$ldap_server."';\n\$PMF_LDAP[\"ldap_port\"] = '".$ldap_port."';\n\$PMF_LDAP[\"ldap_user\"] = '".$ldap_user."';\n\$PMF_LDAP[\"ldap_password\"] = '".$ldap_password."';\n\$PMF_LDAP[\"ldap_base\"] = '".$ldap_base."';", LOCK_EX);
+        $ret = file_put_contents(
+            $datafile,
+            "<?php\n\$PMF_LDAP[\"ldap_server\"] = '" . $ldapServer . "';\n" .
+            "\$PMF_LDAP[\"ldap_port\"] = '" . $ldapPort . "';\n" .
+            "\$PMF_LDAP[\"ldap_user\"] = '" . $ldapUser . "';\n" .
+            "\$PMF_LDAP[\"ldap_password\"] = '" . $ldapPassword . "';\n" .
+            "\$PMF_LDAP[\"ldap_base\"] = '" . $ldapBase . "';",
+            LOCK_EX
+        );
         if (!$ret) {
             print "<p class=\"error\"><strong>Error:</strong> Cannot write to ./config/ldap.php.</p>";
             HTMLFooter();
@@ -645,7 +682,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
     // connect to the database using inc/data.php
     require PMF_ROOT_DIR . '/config/database.php';
-    $db = PMF_Db::dbSelect($sql_type);
+    $db = PMF_Db::factory($dbType);
     $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
     if (!$db) {
         print "<p class=\"error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
@@ -654,25 +691,25 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         die();
     }
 
-    require_once $sql_type . '.sql.php'; // CREATE TABLES
+    require_once $dbType . '.sql.php'; // CREATE TABLES
     require_once 'config.sql.php';       // INSERTs for configuration
     require_once 'stopwords.sql.php';    // INSERTs for stopwords
 
     print '<p>';
 
     // Erase any table before starting creating the required ones
-    if ('sqlite' != $sql_type) {
+    if ('sqlite' != $dbType) {
         db_uninstall();
     }
     // Start creating the required tables
     $count = 0;
-    while ($each_query = each($query)) {
-        $result = @$db->query($each_query[1]);
+    foreach ($query as $executeQuery) {
+        $result = @$db->query($executeQuery);
         if (!$result) {
             print '<p class="error"><strong>Error:</strong> Please install your version of phpMyFAQ once again or send
             us a <a href=\"http://www.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
             printf('<p class="error"><strong>DB error:</strong> %s</p>', $db->error());
-            printf('<code>%s</code>', htmlentities($each_query[1]));
+            printf('<code>%s</code>', htmlentities($executeQuery));
             db_uninstall();
             cleanInstallation();
             HTMLFooter();
@@ -687,7 +724,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
     // add admin account and rights
     $admin = new PMF_User();
-    $admin->createUser('admin', $password, 1);
+    $admin->createUser($loginname, $password, 1);
     $admin->setStatus('protected');
     $adminData = array(
         'display_name' => $realname,
@@ -962,11 +999,33 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             'for_users' => 1,
             'for_groups' => 1
         ),
+        // 39 => 'addfaq'
+        array(
+            'name' => 'addfaq',
+            'description' => 'Right to add FAQs in frontend',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        // 40 => 'addquestion'
+        array(
+            'name' => 'addquestion',
+            'description' => 'Right to add questions in frontend',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        // 41 => 'addcomment'
+        array(
+            'name' => 'addcomment',
+            'description' => 'Right to add comments in frontend',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
     );
     foreach ($rights as $right) {
         $rightID = $admin->perm->addRight($right);
         $admin->perm->grantUserRight($adminID, $rightID);
     }
+    
     // Add anonymous user account
     $anonymous = new PMF_User();
     $anonymous->createUser('anonymous', null, -1);
@@ -1014,7 +1073,8 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         //]]>
         </script>
         <iframe onload="iframeUpdated();" name="questionaireResult" style="display:none"></iframe>
-        <form action="http://www.phpmyfaq.de/stats/getstatdata.php" method="post" target="questionaireResult" id="questionnaireForm">
+        <form action="http://www.phpmyfaq.de/stats/getstatdata.php" method="post" target="questionaireResult"
+              id="questionnaireForm">
 
             <p>
                 For further development we would like to get some feedback from our users.<br />

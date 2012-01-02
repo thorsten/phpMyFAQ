@@ -43,6 +43,14 @@ if ($permission['editconfig']) {
         $userAction      = 'listConfig';
         $oldConfigValues = $faqconfig->config;
 
+		/* XXX the cache concept is designed to be able to activate only one cache engine per time
+		       so if there are more cache services implemented, respect it here*/
+		if (isset($editData['edit']['cache.varnishEnable']) && 'true' == $editData['edit']['cache.varnishEnable']) {
+			if (!extension_loaded('varnish')) {
+				throw new Exception('Varnish extension is not loaded');
+			}
+		}
+
         // Set the new values
         $forbiddenValues = array('{', '}', '$');
         $newConfigValues = array();
@@ -78,24 +86,60 @@ if ($permission['editconfig']) {
 
         <form id="config_list" name="config_list" action="?action=config&amp;config_action=saveConfig" method="post">
             <fieldset>
-                <legend><a href="javascript:void(0);" onclick="javascript:toggleConfig('Main');"><?php print $PMF_LANG['mainControlCenter']; ?></a></legend>
+                <legend>
+                    <a href="javascript:void(0);" onclick="javascript:toggleConfig('Main');">
+                        <?php print $PMF_LANG['mainControlCenter']; ?>
+                    </a>
+                </legend>
                 <div id="configMain" style="display: none;"></div>
             </fieldset>
             <fieldset>
-                <legend><a href="javascript:void(0);" onclick="javascript:toggleConfig('Records');"><?php print $PMF_LANG['recordsControlCenter']; ?></a></legend>
+                <legend>
+                    <a href="javascript:void(0);" onclick="javascript:toggleConfig('Records');">
+                        <?php print $PMF_LANG['recordsControlCenter']; ?>
+                    </a>
+                </legend>
                 <div id="configRecords" style="display: none;"></div>
             </fieldset>
             <fieldset>
-                <legend><a href="javascript:void(0);" onclick="javascript:toggleConfig('Spam');"><?php print $PMF_LANG['spamControlCenter']; ?></a></legend>
-                <div id="configSpam" style="display: none;"></div>
-            </fieldset>
-            <fieldset>
-                <legend><a href="javascript:void(0);" onclick="javascript:toggleConfig('Search');"><?php print $PMF_LANG['searchControlCenter']; ?></a></legend>
+                <legend>
+                    <a href="javascript:void(0);" onclick="javascript:toggleConfig('Search');">
+                        <?php print $PMF_LANG['searchControlCenter']; ?>
+                    </a>
+                </legend>
                 <div id="configSearch" style="display: none;"></div>
             </fieldset>
             <fieldset>
-                <legend><a href="javascript:void(0);" onclick="javascript:toggleConfig('SocialNetworks');"><?php print $PMF_LANG['socialNetworksControlCenter']; ?></a></legend>
+                <legend>
+                    <a href="javascript:void(0);" onclick="javascript:toggleConfig('Security');">
+                        <?php print $PMF_LANG['securityControlCenter']; ?>
+                    </a>
+                </legend>
+                <div id="configSecurity" style="display: none;"></div>
+            </fieldset>
+            <fieldset>
+                <legend>
+                    <a href="javascript:void(0);" onclick="javascript:toggleConfig('Spam');">
+                        <?php print $PMF_LANG['spamControlCenter']; ?>
+                    </a>
+                </legend>
+                <div id="configSpam" style="display: none;"></div>
+            </fieldset>
+            <fieldset>
+                <legend>
+                    <a href="javascript:void(0);" onclick="javascript:toggleConfig('SocialNetworks');">
+                        <?php print $PMF_LANG['socialNetworksControlCenter']; ?>
+                    </a>
+                </legend>
                 <div id="configSocialNetworks" style="display: none;"></div>
+            </fieldset>
+            <fieldset>
+                <legend>
+                    <a href="javascript:void(0);" onclick="javascript:toggleConfig('Cache');">
+                        <?php print $PMF_LANG['cacheControlCenter']; ?>
+                    </a>
+                </legend>
+                <div id="configCache" style="display: none;"></div>
             </fieldset>
             <p>
                 <input class="submit" type="submit" value="<?php print $PMF_LANG['ad_config_save']; ?>" />
@@ -108,11 +152,27 @@ if ($permission['editconfig']) {
 
         function getConfigList()
         {
-            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "main" }, function(data) { $('#configMain').append(data); });
-            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "records" }, function(data) { $('#configRecords').append(data); });
-            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "spam" }, function(data) { $('#configSpam').append(data); });
-            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "search" }, function(data) { $('#configSearch').append(data); });
-            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "socialnetworks" }, function(data) { $('#configSocialNetworks').append(data); });
+            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "main" }, function(data) {
+                $('#configMain').append(data);
+            });
+            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "records" }, function(data) {
+                $('#configRecords').append(data);
+            });
+            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "search" }, function(data) {
+                $('#configSearch').append(data);
+            });
+            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "security" }, function(data) {
+                $('#configSecurity').append(data);
+            });
+            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "spam" }, function(data) {
+                $('#configSpam').append(data);
+            });
+            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "socialnetworks" }, function(data) {
+                $('#configSocialNetworks').append(data);
+            });
+            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "cache" }, function(data) {
+                $('#configCache').append(data);
+            });
         }
 
         getConfigList();

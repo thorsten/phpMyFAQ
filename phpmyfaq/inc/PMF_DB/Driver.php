@@ -18,7 +18,7 @@
  * @package   PMF_DB
  * @author    Johannes Schlüter <johannes@php.net>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2010 phpMyFAQ Team
+ * @copyright 2007-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2007-08-19
@@ -35,7 +35,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_DB
  * @author    Johannes Schlüter <johannes@php.net>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2010 phpMyFAQ Team
+ * @copyright 2007-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2007-08-19
@@ -59,26 +59,24 @@ interface PMF_DB_Driver
      * 
      * @return string
      */
-    public function escapeString($string);
+    public function escape($string);
 
     /**
      * Fetch a result row as an object
      *
-     * @param resource $result
-     * 
-     * @return StdObj
+     * @param   mixed $result
+     * @return  mixed
      */
     public function fetchObject($result);
 
     /**
      * Fetch a result row as an associative array
      *
-     * @param mixed $result
-     * 
-     * @return array
+     * @param   mixed $result
+     * @return  array
      */
-    public function fetch_assoc($result);
-    
+    public function fetchArray($result);
+
     /**
      * Fetches a complete result as an object
      *
@@ -102,7 +100,7 @@ interface PMF_DB_Driver
      * @param   mixed $result
      * @return  integer
      */
-    public function sqllog();
+    public function log();
 
     /**
      * This function returns the table status.
@@ -115,46 +113,37 @@ interface PMF_DB_Driver
     /**
      * Returns the next ID of a table
      *
-     * This function is a replacement for sqlite's auto-increment so that
-     * we don't need it anymore.
-     *
      * @param   string      the name of the table
      * @param   string      the name of the ID column
      * @return  int
      */
-    public function nextID($table, $id);
+    public function nextId($table, $id);
 
     /**
      * Returns the error string.
      *
-     * This function returns the last error string.
-     *
-     * @access  public
+     * @return string
      */
     public function error();
 
     /**
      * Returns the libary version string.
      *
-     * This function returns the version string.
-     *
-     * @access  public
+     * @return string
      */
-    public function client_version();
+    public function clientVersion();
 
     /**
      * Returns the libary version string.
      *
-     * This function returns the version string.
-     *
-     * @access  public
+     * @return string
      */
-    public function server_version();
+    public function serverVersion();
 
     /**
      * Returns an array with all table names
      *
-     * @access  public
+     * @return string
      */
     public function getTableNames($prefix = '');
 
@@ -170,13 +159,11 @@ interface PMF_DB_Driver
      * @return boolean
      */
     public function resultSeek($result, $rowNumber);
-    
+
     /**
      * Closes the connection to the database.
      *
-     * This function closes the connection to the database.
-     *
-     * @access  public
+     * @access boolean
      */
-    public function dbclose();
+    public function close();
 }

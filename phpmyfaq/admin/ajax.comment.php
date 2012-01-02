@@ -32,22 +32,29 @@ $ajax_action = PMF_Filter::filterInput(INPUT_POST, 'ajaxaction', FILTER_SANITIZE
 
 if ('delete' == $ajax_action && $permission['delcomment']) {
 
-    $comment = new PMF_Comment();
-    $checks  = array('filter' => FILTER_VALIDATE_INT, 'flags'  => FILTER_REQUIRE_ARRAY);
+    $comment    = new PMF_Comment();
+    $checkFaqs  = array(
+        'filter'  => FILTER_VALIDATE_INT,
+        'flags'   => FILTER_REQUIRE_ARRAY
+    );
+    $checkNews  = array(
+        'filter'  => FILTER_VALIDATE_INT,
+        'flags'   => FILTER_REQUIRE_ARRAY
+    );
     $ret     = false;
     
-    $faq_comments  = PMF_Filter::filterInputArray(INPUT_POST, array('faq_comments' => $checks));
-    $news_comments = PMF_Filter::filterInputArray(INPUT_POST, array('news_comments' => $checks));
-    
-    if (!is_null($faq_comments['faq_comments'])) {
-        foreach ($faq_comments['faq_comments'] as $record_id => $comment_id) {
-            $ret = $comment->deleteComment($record_id, $comment_id);
+    $faqComments  = PMF_Filter::filterInputArray(INPUT_POST, array('faq_comments' => $checkFaqs));
+    $newsComments = PMF_Filter::filterInputArray(INPUT_POST, array('news_comments' => $checkNews));
+
+    if (!is_null($faqComments['faq_comments'])) {
+        foreach ($faqComments['faq_comments'] as $commentId => $recordId) {
+            $ret = $comment->deleteComment($recordId, $commentId);
         }
     }
     
-    if (!is_null($news_comments['news_comments'])) {
-        foreach ($news_comments['news_comments'] as $record_id => $comment_id) {
-            $ret = $comment->deleteComment($record_id, $comment_id);
+    if (!is_null($newsComments['news_comments'])) {
+        foreach ($newsComments['news_comments'] as $commentId => $recordId) {
+            $ret = $comment->deleteComment($recordId, $commentId);
         }
     }
     

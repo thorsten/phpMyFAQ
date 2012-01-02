@@ -59,7 +59,7 @@ jQuery Star Rating Plugin
 http://www.fyneworks.com/
 Licensed under the terms of the MIT License
 
-modernizr
+Modernizr
 http://www.modernizr.com/
 Licensed under the terms of the MIT and BSD licenses
 

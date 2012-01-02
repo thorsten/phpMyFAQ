@@ -1,7 +1,7 @@
 <?php
 /**
- * The PMF_DB_Mysqli class provides methods and functions for a MySQL 4.1.x,
- * 5.0.x, 5.1.x, and 5.5.x databases.
+ * The PMF_DB_Mysqli class provides methods and functions for a MySQL 5.0.x,
+ * 5.1.x, 5.5.x and 5.6.x databases.
  * 
  * PHP Version 5.2
  *
@@ -19,7 +19,7 @@
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    David Soria Parra <dsoria@gmx.net>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @package   2005-02-21
@@ -47,7 +47,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      * The connection object
      *
      * @var   mixed
-     * @see   connect(), query(), dbclose()
+     * @see   connect(), query(), close()
      */
     private $conn = false;
 
@@ -87,7 +87,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
         
         /* change character set to UTF-8 */
         if (!$this->conn->set_charset('utf8')) {
-        	PMF_Db::errorPage($this->error());
+            PMF_Db::errorPage($this->error());
         }
         
         return true;
@@ -115,7 +115,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     * @param   string
     * @return  string
     */
-    public function escapeString($string)
+    public function escape($string)
     {
       return $this->conn->real_escape_string($string);
     }
@@ -144,7 +144,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      * @param   mixed $result
      * @return  array
      */
-    public function fetch_assoc($result)
+    public function fetchArray($result)
     {
         return $result->fetch_assoc();
     }
@@ -177,9 +177,6 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      */
     public function numRows($result)
     {
-        if (!is_object($result)) {
-            debug_print_backtrace();
-        }
         return $result->num_rows;
     }
 
@@ -189,7 +186,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      * @param   mixed $result
      * @return  integer
      */
-    public function sqllog()
+    public function log()
     {
         return $this->sqllog;
     }
@@ -203,7 +200,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     {
         $arr = array();
         $result = $this->query("SHOW TABLE STATUS");
-        while ($row = $this->fetch_assoc($result)) {
+        while ($row = $this->fetchArray($result)) {
             $arr[$row["Name"]] = $row["Rows"];
         }
         return $arr;
@@ -217,7 +214,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      * @param   string      the name of the ID column
      * @return  int
      */
-    public function nextID($table, $id)
+    public function nextId($table, $id)
     {
         $select = sprintf("
            SELECT
@@ -247,7 +244,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      *
      * @return string
      */
-    public function client_version()
+    public function clientVersion()
     {
         return $this->conn->get_client_info();
     }
@@ -257,7 +254,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      *
      * @return string
      */
-    public function server_version()
+    public function serverVersion()
     {
         return $this->conn->get_server_info();
     }
@@ -283,8 +280,6 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     }
 
     /**
-     * Move internal result pointer
-     *
      * Moves the pointer within the query result to a specified location, or
      * to the beginning if nothing is specified.
      *
@@ -303,11 +298,10 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      * 
      * @return void
      */
-    public function dbclose()
+    public function close()
     {
         if (is_resource($this->conn)) {
             $this->conn->close();
         }
     }
-
 }

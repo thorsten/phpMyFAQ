@@ -54,8 +54,6 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/config/database.php')) {
     require_once PMF_ROOT_DIR. '/inc/Init.php';
     define('IS_VALID_PHPMYFAQ', null);
     PMF_Init::cleanRequest();
-    session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
-    session_start();
 
     // Preload English strings
     require_once PMF_ROOT_DIR . '/lang/language_en.php';
@@ -127,4 +125,4 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/config/database.php')) {
 //
 // Disconnect from database
 //
-$db->dbclose();
+$db->close();

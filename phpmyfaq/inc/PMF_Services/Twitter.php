@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Services
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
+ * @copyright 2010-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2010-09-05
@@ -29,7 +29,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Services
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
+ * @copyright 2010-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2010-09-05
@@ -64,15 +64,15 @@ class PMF_Services_Twitter extends PMF_Services
      */
     public function addPost($question, $tags, $link)
     {
-        $hashtags = $message = '';
+        $hashtags = '';
         
         if ($tags != '') {
             $hashtags = '#' . str_replace(',', ' #', $tags);
         }
 
         $message  = PMF_String::htmlspecialchars($question);
-        $message .= " " . $hashtags;
-        $message .= " " . $link;
+        $message .= ' ' . $hashtags;
+        $message .= ' ' . $link;
 
         $this->connection->post('statuses/update', array('status' => $message));
     }

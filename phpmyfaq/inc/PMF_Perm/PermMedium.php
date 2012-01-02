@@ -17,7 +17,7 @@
  * @category  phpMyFAQ 
  * @package   PMF_Perm
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
@@ -122,7 +122,7 @@ class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
         
         $res    = $this->db->query($select);
         $result = array();
-        while ($row = $this->db->fetch_assoc($res)) {
+        while ($row = $this->db->fetchArray($res)) {
             $result[] = $row['right_id'];
         }
         return $result;
@@ -236,7 +236,7 @@ class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
             return 0;
         }
         
-        $next_id    = $this->db->nextID(SQLPREFIX."faqgroup", "group_id");
+        $next_id    = $this->db->nextId(SQLPREFIX."faqgroup", "group_id");
         $group_data = $this->checkGroupData($group_data);
         $insert     = sprintf("
             INSERT INTO
@@ -271,7 +271,7 @@ class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
         $comma        = "";
         
         foreach ($group_data as $key => $val) {
-            $set  .= $comma.$key." = '".$this->db->escapeString($checked_data[$key])."'";
+            $set  .= $comma.$key." = '".$this->db->escape($checked_data[$key])."'";
             $comma = ",\n                ";
         }
         
@@ -416,7 +416,7 @@ class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
         
         $res    = $this->db->query($select);
         $result = array();
-        while ($row = $this->db->fetch_assoc($res)) {
+        while ($row = $this->db->fetchArray($res)) {
             $result[] = $row['user_id'];
         }
         return $result;
@@ -506,13 +506,13 @@ class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
             WHERE
                 name = '%s'",
             SQLPREFIX,
-            $this->db->escapeString($name));
+            $this->db->escape($name));
             
         $res = $this->db->query($select);
         if ($this->db->numRows($res) != 1) {
             return 0;
         }
-        $row = $this->db->fetch_assoc($res);
+        $row = $this->db->fetchArray($res);
         return $row['group_id'];
     }
 
@@ -546,7 +546,7 @@ class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
         if ($this->db->numRows($res) != 1) {
             return array();
         }
-        return $this->db->fetch_assoc($res);
+        return $this->db->fetchArray($res);
     }
 
     /**
@@ -581,7 +581,7 @@ class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
         
         $res    = $this->db->query($select);
         $result = array(-1);
-        while ($row = $this->db->fetch_assoc($res)) {
+        while ($row = $this->db->fetchArray($res)) {
             $result[] = $row['group_id'];
         }
         return $result;
@@ -604,7 +604,7 @@ class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
             
         $res    = $this->db->query($select);
         $result = array();
-        while ($row = $this->db->fetch_assoc($res)) {
+        while ($row = $this->db->fetchArray($res)) {
             $result[] = $row['group_id'];
         }
 
@@ -754,7 +754,7 @@ class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
         }
         
         $auto_join = array();
-        while ($row = $this->db->fetch_assoc($res)) {
+        while ($row = $this->db->fetchArray($res)) {
             $auto_join[] = $row['group_id'];
         }
         // add to groups
@@ -831,7 +831,7 @@ class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
         
         $res    = $this->db->query($select);
         $result = array();
-        while ($row = $this->db->fetch_assoc($res)) {
+        while ($row = $this->db->fetchArray($res)) {
             $result[] = $row['right_id'];
         }
         return $result;
@@ -891,7 +891,7 @@ class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
         if ($this->db->numRows($res) != 1) {
             return array();
         }
-        $row = $this->db->fetch_assoc($res);
+        $row = $this->db->fetchArray($res);
         return $row['name'];
     }
 

@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Glossary
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-15
@@ -228,8 +228,13 @@ class PMF_Glossary
      */
     public function addGlossaryItem($item, $definition)
     {
+<<<<<<< HEAD
         $this->item       = $this->db->escapeString($item);
         $this->definition = $this->db->escapeString($definition);
+=======
+        $this->item       = $this->db->escape($item);
+        $this->definition = $this->db->escape($definition);
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
 
         $query = sprintf("
             INSERT INTO
@@ -238,10 +243,15 @@ class PMF_Glossary
                 VALUES
             (%d, '%s', '%s', '%s')",
             SQLPREFIX,
-            $this->db->nextID(SQLPREFIX.'faqglossary', 'id'),
+            $this->db->nextId(SQLPREFIX.'faqglossary', 'id'),
             $this->language,
+<<<<<<< HEAD
             $this->db->escapeString($this->item),
             $this->db->escapeString($this->definition));
+=======
+            $this->db->escape($this->item),
+            $this->db->escape($this->definition));
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
 
         if ($this->db->query($query)) {
             return true;
@@ -259,8 +269,13 @@ class PMF_Glossary
      */
     public function updateGlossaryItem($id, $item, $definition)
     {
+<<<<<<< HEAD
         $this->item       = $this->db->escapeString($item);
         $this->definition = $this->db->escapeString($definition);
+=======
+        $this->item       = $this->db->escape($item);
+        $this->definition = $this->db->escape($definition);
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
 
         $query = sprintf("
             UPDATE
@@ -271,8 +286,13 @@ class PMF_Glossary
             WHERE
                 id = %d AND lang = '%s'",
             SQLPREFIX,
+<<<<<<< HEAD
             $this->db->escapeString($this->item),
             $this->db->escapeString($this->definition),
+=======
+            $this->db->escape($this->item),
+            $this->db->escape($this->definition),
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
             (int)$id,
             $this->language);
 

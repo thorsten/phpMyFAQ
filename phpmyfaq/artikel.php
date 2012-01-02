@@ -32,9 +32,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $captcha   = new PMF_Captcha($db, $Language);
 $oGlossary = new PMF_Glossary();
 $oLnk      = new PMF_Linkverifier();
-$tagging   = new PMF_Tags();
+$tagging   = new PMF_Tags($db, $Language);
 $relevant  = new PMF_Relation($db, $Language);
-$faqrating = new PMF_Rating();
+$faqrating = new PMF_Rating($db, $Language);
 $comment   = new PMF_Comment();
 
 $captcha->setSessionId($sids);
@@ -60,7 +60,7 @@ if (0 == $solution_id) {
 
 $faqsession->userTracking('article_view', $faq->faqRecord['id']);
 
-$faqvisits = PMF_Visits::getInstance();
+$faqvisits = PMF_Visits::getInstance($db, $Language);
 $faqvisits->logViews($faq->faqRecord['id']);
 
 $content = $faq->faqRecord['content'];
@@ -114,14 +114,14 @@ $oLnk->parse_string($fixedContent);
 $linkArray = $oLnk->getUrlpool();
 if (isset($linkArray['href'])) {
     foreach (array_unique($linkArray['href']) as $_url) {
-        if (!(strpos($_url, 'index.php?action=artikel') === false)) {
+        $xpos = strpos($_url, 'index.php?action=artikel');
+        if (!($xpos === false)) {
             // Get the Faq link title
             $matches = array();
             preg_match('/id=([\d]+)/ism', $_url, $matches);
             $_id    = $matches[1];
             $_title = $faq->getRecordTitle($_id, false);
-            $_link  = substr($_url, 9);
-            // Move the link to XHTML
+            $_link  = substr($_url, $xpos + 9);
             if (strpos($_url, '&amp;') === false) {
                 $_link = str_replace('&', '&amp;', $_link);
             }
@@ -146,22 +146,17 @@ if ($num > 1) {
         $check4Lang .= ($lang == $language ? ' selected="selected"' : '');
         $check4Lang .= ">".$languageCodes[strtoupper($language)]."</option>\n";
     }
-    $switchLanguage .= "<p>\n";
-    $switchLanguage .= "<fieldset>\n";
-    $switchLanguage .= "<legend>".$PMF_LANG["msgLangaugeSubmit"]."</legend>\n";
     $switchLanguage .= "<form action=\"".$changeLanguagePath."\" method=\"post\" style=\"display: inline;\">\n";
     $switchLanguage .= "<select name=\"artlang\" size=\"1\">\n";
     $switchLanguage .= $check4Lang;
     $switchLanguage .= "</select>\n";
     $switchLanguage .= "&nbsp;\n";
     $switchLanguage .= "<input class=\"submit\" type=\"submit\" name=\"submit\" value=\"".$PMF_LANG["msgLangaugeSubmit"]."\" />\n";
-    $switchLanguage .= "</fieldset>\n";
     $switchLanguage .= "</form>\n";
-    $switchLanguage .= "</p>\n";
 }
 
 // List all faq attachments
-if ($faqconfig->get('main.disableAttachments') && 'yes' == $faq->faqRecord['active']) {
+if ($faqconfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['active']) {
     
     $attList = PMF_Attachment_Factory::fetchByRecordId($faq->faqRecord['id']);
     $outstr  = "";
@@ -223,40 +218,12 @@ if (($faq->faqRecord['active'] != 'yes') || ('n' == $faq->faqRecord['comment']) 
         $PMF_LANG['msgWriteComment']);
 }
 
-// Create commented out HTML for microsummary
-$allVisitsData  = $faqvisits->getAllData();
-$faqPopularity  = '';
-$maxVisits      = 0;
-$minVisits      = 0;
-$currVisits     = 0;
-$faqVisitsCount = count($allVisitsData);
-$percentage     = 0;
-if ($faqVisitsCount > 0) {
-    $percentage = 100/$faqVisitsCount;
-}
-foreach ($allVisitsData as $_r) {
-    if ($minVisits > $_r['visits']) {
-        $minVisits = $_r['visits'];
-    }
-    if ($maxVisits < $_r['visits']) {
-        $maxVisits = $_r['visits'];
-    }
-    if (($faq->faqRecord['id'] == $_r['id']) && ($lang == $_r['lang'])) {
-        $currVisits = $_r['visits'];
-    }
-}
-if ($maxVisits - $minVisits > 0) {
-    $percentage = 100*($currVisits - $minVisits)/($maxVisits - $minVisits);
-}
-$faqPopularity = $currVisits.'/'.(int)$percentage.'%';
-
 $translationUrl = sprintf(
     str_replace( '%', '%%', PMF_Link::getSystemRelativeUri('index.php')) . 'index.php?%saction=translate&amp;cat=%s&amp;id=%d&amp;srclang=%s',
         $sids,
         $currentCategory,
         $faq->faqRecord['id'],
         $lang);
-
 
 // Get rating
 $recordRating = $faqrating->fetch($record_id);
@@ -270,8 +237,18 @@ if (!is_null($recordRating)) {
 
 $faqHelper = PMF_Helper_Faq::getInstance();
 
+if (!empty($switchLanguage)) {
+    $tpl->parseBlock(
+        'writeContent',
+        'switchLanguage',
+        array(
+            'msgChangeLanguage' => $PMF_LANG['msgLangaugeSubmit']
+        )
+    );
+}
+
 // Set the template variables
-$tpl->processTemplate ("writeContent", array(
+$tpl->parse('writeContent', array(
     'writeRubrik'                   => $categoryName,
     'solution_id'                   => $faq->faqRecord['solution_id'],
     'writeThema'                    => $thema,
@@ -282,8 +259,7 @@ $tpl->processTemplate ("writeContent", array(
     'writeArticleTags'              => $tagging->getAllLinkTagsById($faq->faqRecord['id']),
     'writeRelatedArticlesHeader'    => $PMF_LANG['msg_related_articles'] . ': ',
     'writeRelatedArticles'          => $relevant->getAllRelatedById($faq->faqRecord['id'], $faq->faqRecord['title'], $faq->faqRecord['keywords']),
-    'writePopularity'               => $faqPopularity,
-    'writeDateMsg'                  => $PMF_LANG['msgLastUpdateArticle'] . $faq->faqRecord['date'],
+    'writeDateMsg'                  => $PMF_LANG['msgLastUpdateArticle'] . PMF_Date::format($faq->faqRecord['date']),
     'writeRevision'                 => $PMF_LANG['ad_entry_revision'] . ': 1.' . $faq->faqRecord['revision_id'],
     'writeAuthor'                   => $PMF_LANG['msgAuthor'] . ': ' . $faq->faqRecord['author'],
     'editThisEntry'                 => $editThisEntry,
@@ -313,8 +289,16 @@ $tpl->processTemplate ("writeContent", array(
     'defaultContentName'            => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
     'msgYourComment'                => $PMF_LANG['msgYourComment'],
     'msgNewContentSubmit'           => $PMF_LANG['msgNewContentSubmit'],
-    'captchaFieldset'               => PMF_Helper_Captcha::getInstance()->renderFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment')),
-    'writeComments'                 => $comment->getComments($faq->faqRecord['id'], PMF_Comment::COMMENT_TYPE_FAQ)));
+    'captchaFieldset'               => PMF_Helper_Captcha::getInstance()->renderCaptcha(
+        $captcha,
+        'writecomment',
+        $PMF_LANG['msgCaptcha']
+    ),
+    'writeComments'                 => $comment->getComments($faq->faqRecord['id'], PMF_Comment::COMMENT_TYPE_FAQ),
+    'msg_about_faq'                 => $PMF_LANG['msg_about_faq']
+    )
+);
 
 
-$tpl->includeTemplate('writeContent', 'index');
+$tpl->merge('writeContent', 'index');
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f

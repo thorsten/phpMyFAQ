@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Rating
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2010 phpMyFAQ Team
+ * @copyright 2007-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-31
@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Rating
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2010 phpMyFAQ Team
+ * @copyright 2007-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-31
@@ -50,16 +50,9 @@ class PMF_Rating
     /**
      * Language
      *
-     * @var string
+     * @var PM_Language
      */
     private $language;
-
-    /**
-     * Database type
-     *
-     * @var string
-     */
-    private $type;
 
     /**
      * Language strings
@@ -85,16 +78,17 @@ class PMF_Rating
     /**
      * Constructor
      *
-     * @since   2007-03-31
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param PMF_DB_Driver $database Database connection
+     * @param PMF_Language  $language Language object
+     *
+     * @return PMF_Rating
      */
-    function __construct()
+    function __construct(PMF_DB_Driver $database, PMF_Language $language)
     {
-        global $DB, $PMF_LANG, $plr;
+        global $PMF_LANG, $plr;
 
-        $this->db       = PMF_Db::getInstance();
-        $this->language = PMF_Language::$language;
-        $this->type     = $DB['type'];
+        $this->db       = $database;
+        $this->language = $language;
         $this->pmf_lang = $PMF_LANG;
         $this->plr      = $plr;
     }
@@ -260,15 +254,12 @@ class PMF_Rating
      * Returns all ratings of FAQ records
      *
      * @return  array
-     * @access  public
-     * @since   2007-03-31
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function getAllRatings()
     {
         $ratings = array();
 
-        switch($this->type) {
+        switch($this->db->getType()) {
             case 'mssql':
             // In order to remove this MS SQL 2000/2005 "limit" below:
             //   The text, ntext, and image data types cannot be compared or sorted, except when using IS NULL or LIKE operator.
@@ -353,9 +344,45 @@ class PMF_Rating
                'category_id' => $row->category_id,
                'question'    => $row->question,
                'num'         => $row->num,
+<<<<<<< HEAD
                'usr'         => $row->usr);
+=======
+               'usr'         => $row->usr
+            );
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
         }
 
         return $ratings;
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * Calculates the rating of the user votings
+     *
+     * @param integer $id
+     *
+     * @return  string
+     */
+    function getVotingResult($id)
+    {
+        $query = sprintf(
+            'SELECT
+                (vote/usr) as voting, usr
+            FROM
+                %sfaqvoting
+            WHERE
+                artikel = %d',
+            SQLPREFIX,
+            $id);
+       $result = $this->db->query($query);
+       if ($this->db->numRows($result) > 0) {
+            $row = $this->db->fetchObject($result);
+            return sprintf(' %s ('.$this->plr->GetMsg('plmsgVotes',$row->usr).')',
+                round($row->voting, 2));
+       } else {
+            return '0 ('.$this->plr->GetMsg('plmsgVotes',0).')';
+       }
+    }
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
 }

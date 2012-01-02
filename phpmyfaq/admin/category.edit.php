@@ -68,7 +68,7 @@ if ($permission['editcateg']) {
             <p>
                 <label><?php print $PMF_LANG['ad_categ_titel']; ?>:</label>
                 <input type="text" id="name" name="name" size="30" style="width: 300px;"
-                       value="<?php print $categoryData->name ?>" />
+                       value="<?php print $categoryData->name ?>"  autofocus="autofocus" />
             </p>
 
             <p>
@@ -84,7 +84,7 @@ if ($permission['editcateg']) {
                 </select>
             </p>
 <?php
-    if ($faqconfig->get('main.permLevel') != 'basic') {
+    if ($faqconfig->get('security.permLevel') != 'basic') {
 ?>
             <p>
                 <label><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>

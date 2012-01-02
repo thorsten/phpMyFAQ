@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Helper
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
+ * @copyright 2010-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-11
@@ -29,7 +29,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Helper
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
+ * @copyright 2010-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-11
@@ -87,19 +87,24 @@ class PMF_Helper_Captcha extends PMF_Helper
      * 
      * @return string
      */
-    public function renderFieldset($legend, $img, $error = '')
+    public function renderCaptcha(PMF_Captcha $captcha, $action, $legend, $error = '')
     {
         $html = '';
         
         if (PMF_Configuration::getInstance()->get('spam.enableCaptchaCode')) {
-            $html = sprintf('<fieldset><legend>%s</legend>', $legend);
-            $html .= '<div style="text-align:left;">';
             if ($error != '') {
-                $html .= '<div class="error">' . $error . '</div>';
+                $html .= sprintf('<div class="error">%s</div>', $error);
             }
-            $html .= $img;
-            $html .= '&nbsp; &nbsp;<input class="inputfield" type="text" name="captcha" id="captcha" value="" size="7" style="vertical-align: top; height: 35px; text-valign: middle; font-size: 20pt;" />';
-            $html .= '</div></fieldset>';
+            $html .= sprintf('<div class="captchaInfo">%s:</div>', $legend);
+            $html .= sprintf('<div class="captchaImage">%s', $captcha->printCaptcha($action));
+            $html .= sprintf('<div class="captchaRefresh"><a href="javascript:;" onclick="refreshCaptcha(\'%s\');">%s</a></div>',
+                $action,
+                'click to refresh');
+            $html .= '&nbsp; &nbsp;' . sprintf(
+                '<input type="text" name="captcha" id="captcha" class="captcha" size="%d" required="required" /><br/>',
+                $captcha->caplength
+            );
+            $html .= '</div>';
         }
         
         return $html;

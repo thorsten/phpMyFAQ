@@ -29,9 +29,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_stat_sess']);
+
 if ($permission['viewlog']) {
-	
-    $session    = new PMF_Session();
+    
+    $session    = new PMF_Session($db, $Language);
     $statdelete = PMF_Filter::filterInput(INPUT_POST, 'statdelete', FILTER_SANITIZE_STRING);
     $month      = PMF_Filter::filterInput(INPUT_POST, 'month', FILTER_SANITIZE_STRING);
 
@@ -58,12 +60,10 @@ if ($permission['viewlog']) {
         }
         closedir($dir);
         $session->deleteSessions($first, $last);
+
+        printf('<p class="success">%s</p>', $PMF_LANG['ad_adminlog_delete_success']);
     }
 ?>
-        <header>
-            <h2><?php print $PMF_LANG["ad_stat_sess"]; ?></h2>
-        </header>
-
         <form action="?action=sessionbrowse" method="post" style="display: inline;">
         <fieldset>
             <legend><?php print $PMF_LANG["ad_stat_sess"]; ?></legend>
@@ -109,7 +109,7 @@ if ($permission['viewlog']) {
         $fp = @fopen(PMF_ROOT_DIR."/data/tracking".date("dmY", $first), "r");
         list($dummy, $dummy, $dummy, $dummy, $dummy, $dummy, $dummy, $qstamp) = fgetcsv($fp, 1024, ";");
         fclose($fp);
-        print date("d.m.Y H:i:s", $qstamp);
+        print PMF_Date::format(date('Y-m-d H:i', $qstamp));
     } else {
         print $PMF_LANG["ad_sess_noentry"];
     }
@@ -129,7 +129,7 @@ if ($permission['viewlog']) {
         if (empty($stamp)) {
             $stamp = $_SERVER['REQUEST_TIME'];
         }
-        print date("d.m.Y H:i:s", $stamp).'<br />';
+        print PMF_Date::format(date('Y-m-d H:i', $stamp)).'<br />';
     } else {
         print $PMF_LANG["ad_sess_noentry"].'<br />';
     }
@@ -156,7 +156,7 @@ if ($permission['viewlog']) {
             print ' selected="selected"';
         }
         print '>';
-        print date('Y-m-d', $trackingDate);
+        print PMF_Date::format(date('Y-m-d H:i', $trackingDate));
         print "</option>\n";
     }
 ?>

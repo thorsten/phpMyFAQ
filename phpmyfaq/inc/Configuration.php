@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Configuration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2006-2010 phpMyFAQ Team
+ * @copyright 2006-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-01-04
@@ -112,7 +112,7 @@ class PMF_Configuration
         $config = $this->db->fetchAll($result);
         
         foreach ($config as $items) {
-        	$this->config[$items->config_name] = $items->config_value;
+            $this->config[$items->config_name] = $items->config_value;
         }
         
     } // end func getAll()
@@ -162,7 +162,7 @@ class PMF_Configuration
                         WHERE
                             config_name = '%s'",
                         SQLPREFIX,
-                        $this->db->escapeString(trim($value)),
+                        $this->db->escape(trim($value)),
                         $name);
                         
                     $this->db->query($update);
@@ -175,4 +175,29 @@ class PMF_Configuration
         }
         return false;
     }
+
+    /**
+     * Returns all sorting possibilities for FAQ records
+     *
+     * @param string $current
+     *
+     * @return string
+     */
+    public static function sortingOptions($current)
+    {
+        global $PMF_LANG;
+
+        $options = array('id', 'thema', 'visits', 'datum', 'author');
+        $output = '';
+
+        foreach ($options as $value) {
+            printf('<option value="%s"%s>%s</option>',
+                $value,
+                ($value == $current) ? ' selected="selected"' : '',
+                $PMF_LANG['ad_conf_order_'.$value]);
+        }
+
+        return $output;
+    }
+
 }

@@ -23,7 +23,7 @@
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Sarah Hermann <sayh@gmx.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
@@ -31,6 +31,10 @@
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
+}
+
+if (!defined('PMF_ENCRYPTION_TYPE')) {
+    define('PMF_ENCRYPTION_TYPE', 'md5'); // Fallback to md5()
 }
 
 /**
@@ -41,7 +45,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Sarah Hermann <sayh@gmx.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
@@ -105,7 +109,7 @@ class PMF_User
      */
     public $auth_data = array('authSource' => array('name' => 'db', 
                                                     'type' => 'local'),
-                              'encType'    => 'md5',
+                              'encType'    => PMF_ENCRYPTION_TYPE,
                               'readOnly'   => false);
 
     /**
@@ -145,11 +149,11 @@ class PMF_User
 
     /**
      * regular expression to find invalid login strings
-     * (default: /(^[^a-z]{1}|[\W])/i )
+     * (default: /^[a-z0-9][\w]+/i )
      *
      * @var string
      */
-    private $_validRegExp = '/^[a-z][\w]+/i';
+    private $_validRegExp = '/^[a-z0-9][\w]+/i';
     
     /**
      * user ID
@@ -191,7 +195,7 @@ class PMF_User
                 return false;
             }
         } else {
-            $permLevel = PMF_Configuration::getInstance()->get('main.permLevel');
+            $permLevel = PMF_Configuration::getInstance()->get('security.permLevel');
             $perm      = PMF_Perm::selectPerm($permLevel);
             if (!$this->addPerm($perm)) {
                 return false;
@@ -281,7 +285,7 @@ class PMF_User
             $this->errors[] = self::ERROR_USER_NO_USERID . 'error(): ' . $this->db->error();
             return false;
         }
-        $user          = $this->db->fetch_assoc($res);
+        $user          = $this->db->fetchArray($res);
         $this->user_id = (int)   $user['user_id'];
         $this->login   = (string)$user['login'];
         $this->status  = (string)$user['account_status'];
@@ -305,7 +309,7 @@ class PMF_User
                 $this->errors[] = self::ERROR_USER_NO_USERLOGINDATA . 'error(): ' . $this->db->error();
                 return false;
             }
-            $loginData                = $this->db->fetch_assoc($res);
+            $loginData                = $this->db->fetchArray($res);
             $this->encrypted_password = (string) $loginData['pass'];
         }
         // get user-data
@@ -336,16 +340,24 @@ class PMF_User
             WHERE
                 login = '%s'",
             SQLPREFIX,
+<<<<<<< HEAD
             $this->db->escapeString($login));
         
     	$res = $this->db->query($select);
         if ($this->db->numRows($res) != 1) {
+=======
+            $this->db->escape($login));
+        
+        $res = $this->db->query($select);
+        if ($this->db->numRows($res) !== 1) {
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
             if ($raise_error) {
+
                 $this->errors[] = self::ERROR_USER_INCORRECT_LOGIN;
             }
             return false;
         }
-        $user = $this->db->fetch_assoc($res);
+        $user = $this->db->fetchArray($res);
         $this->user_id = (int)    $user['user_id'];
         $this->login   = (string) $user['login'];
         $this->status  = (string) $user['account_status'];
@@ -375,7 +387,11 @@ class PMF_User
             WHERE 
                 login LIKE '%s'",
             SQLPREFIX,
+<<<<<<< HEAD
             $this->db->escapeString($search.'%'));
+=======
+            $this->db->escape($search.'%'));
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
 
         $res = $this->db->query($select);
         if (!$res) {
@@ -383,7 +399,7 @@ class PMF_User
         }
 
         $result = array();
-        while ($row = $this->db->fetch_assoc($res)) {
+        while ($row = $this->db->fetchArray($res)) {
             $result[] = $row;
         }
 
@@ -420,7 +436,7 @@ class PMF_User
         
         // set user-ID
         if (0 == $user_id) {
-            $this->user_id = (int) $this->db->nextID(SQLPREFIX.'faquser', 'user_id');
+            $this->user_id = (int) $this->db->nextId(SQLPREFIX.'faquser', 'user_id');
         } else {
             $this->user_id = $user_id;
         }
@@ -434,7 +450,11 @@ class PMF_User
             (%d, '%s', %d, '%s')",
             SQLPREFIX,
             $this->getUserId(),
+<<<<<<< HEAD
             $this->db->escapeString($login),
+=======
+            $this->db->escape($login),
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
             $_SERVER['REQUEST_TIME'],
             date('YmdHis', $_SERVER['REQUEST_TIME']));
 
@@ -612,7 +632,11 @@ class PMF_User
             WHERE
                 user_id = %d",
             SQLPREFIX,
+<<<<<<< HEAD
             $this->db->escapeString($status),
+=======
+            $this->db->escape($status),
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
             $this->user_id);
         
         $res = $this->db->query($update);
@@ -658,6 +682,7 @@ class PMF_User
     public function isValidLogin($login)
     {
         $login = (string) $login;
+
         if (strlen($login) < $this->login_minLength || !preg_match($this->_validRegExp, $login)) {
             $this->errors[] = self::ERROR_USER_LOGIN_INVALID;
             return false;
@@ -780,8 +805,7 @@ class PMF_User
             FROM
                 %sfaquser
             %s
-            ORDER BY
-               login ASC",
+            ORDER BY user_id ASC",
             SQLPREFIX,
             ($withoutAnonymous ? 'WHERE user_id <> -1' : ''));
 
@@ -791,7 +815,7 @@ class PMF_User
         }
 
         $result = array();
-        while ($row = $this->db->fetch_assoc($res)) {
+        while ($row = $this->db->fetchArray($res)) {
             $result[] = $row['user_id'];
         }
 
@@ -826,7 +850,7 @@ class PMF_User
         }
 
         $result = array();
-        while ($row = $this->db->fetch_assoc($res)) {
+        while ($row = $this->db->fetchArray($res)) {
             $result[$row['user_id']] = $row;
         }
 

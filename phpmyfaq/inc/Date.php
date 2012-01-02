@@ -42,8 +42,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  */
 class PMF_Date
 {
-	/**
-	 * Converts the phpMyFAQ date format to a format similar to ISO 8601 standard
+    /**
+     * Converts the phpMyFAQ date format to a format similar to ISO 8601 standard
      *
      * @param string  $date      Date string
      * @param string  $format    Date format
@@ -134,5 +134,20 @@ class PMF_Date
         } else {
             return -1;
         }
+    }
+
+    /**
+     * Returns date formatted according to user defined format
+     * 
+     * @static
+     * @param string $date
+     * @return string
+     */
+    public static function format($unformattedDate)
+    {
+        $format = PMF_Configuration::getInstance()->get('main.dateFormat');
+        $date   = new DateTime($unformattedDate);
+
+        return $date->format($format);
     }
 }

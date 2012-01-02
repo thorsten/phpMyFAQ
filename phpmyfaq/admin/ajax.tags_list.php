@@ -19,7 +19,7 @@
  * @category  phpMyFAQ
  * @package   Ajax
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-15
@@ -30,17 +30,17 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+header("Expires: Thu, 7 Apr 1977 14:47:00 GMT");
 header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 header("Vary: Negotiate,Accept");
 
-$oTag              = new PMF_Tags();
+$oTag              = new PMF_Tags($db, $Language);
 $autoCompleteValue = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
 if (!is_null($autoCompleteValue)) {
-    $tags = $oTag->getAllTags($autoCompleteValue);
+    $tags = $oTag->getAllTags($autoCompleteValue, false, true);
 } else {
     $tags = $oTag->getAllTags();
 }

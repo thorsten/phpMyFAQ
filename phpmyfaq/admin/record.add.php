@@ -30,20 +30,17 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 // Re-evaluate $user
-$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
 
 if ($permission['editbt']) {
-	
-	// Get submit action
-    $submit        = PMF_Filter::filterInputArray(INPUT_POST, array('submit' => array('filter' => FILTER_VALIDATE_INT,
-                                                                                      'flags'  => FILTER_REQUIRE_ARRAY)));
+
     // FAQ data
     $dateStart     = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
     $dateEnd       = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
     $question      = PMF_Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRING);
     $categories    = PMF_Filter::filterInputArray(INPUT_POST, array('rubrik' => array('filter' => FILTER_VALIDATE_INT,
                                                                                       'flags'  => FILTER_REQUIRE_ARRAY)));
-    $record_lang   = PMF_Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
+    $record_lang   = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
     $tags          = PMF_Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
     $active        = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
     $sticky        = PMF_Filter::filterInput(INPUT_POST, 'sticky', FILTER_SANITIZE_STRING);
@@ -67,12 +64,12 @@ if ($permission['editbt']) {
         $categories['rubrik'] = array();
     }
     
-    if (isset($submit['submit'][1]) && !is_null($question) && !is_null($categories['rubrik'])) {
+    if (!is_null($question) && !is_null($categories['rubrik'])) {
         // new entry
         $logging = new PMF_Logging();
         $logging->logAdmin($user, 'Beitragcreatesave');
         printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
-        
+
         $recordData     = array(
             'id'            => null,
             'lang'          => $record_lang,
@@ -109,9 +106,9 @@ if ($permission['editbt']) {
             $faqChangelog->create($changelogData);
             
             // Create the visit entry
-            $visits = PMF_Visits::getInstance();
-            $visits->add($recordId, $recordData['lang']);
-            
+
+            $visits = PMF_Visits::getInstance($db, $Language);
+            $visits->add($record_id, $recordData['lang']);
             // Insert the new category relations
             $categoryRelations = new PMF_Category_Relations();
 
@@ -120,7 +117,7 @@ if ($permission['editbt']) {
                 $tagging = new PMF_Tags();
                 $tagging->saveTags($recordId, explode(',',$tags));
             }
-            
+
             // Set record permissions
             $faqUser = new PMF_Faq_User();
             $faqUser->create(array('record_id' => $recordId, 'user_id' => $restricted_users));
@@ -163,7 +160,7 @@ if ($permission['editbt']) {
             }
             
             print $PMF_LANG['ad_entry_savedsuc'];
-            
+
             // Call Link Verification
             link_ondemand_javascript($recordId, $recordData['lang']);
 
@@ -194,6 +191,7 @@ if ($permission['editbt']) {
             // All the other translations
             $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);            
             if ($faqconfig->get('main.enableGoogleTranslation') === true && !empty($languages)) {
+                
                 $linkverifier = new PMF_Linkverifier($user->getLogin());
     
                 $languages = explode(",", $languages);
@@ -201,15 +199,15 @@ if ($permission['editbt']) {
                     if ($translated_lang == $record_lang) {
                         continue;
                     }
-                    $translated_question = PMF_Filter::filterInput(INPUT_POST, 'thema_translated_' . $translated_lang, FILTER_SANITIZE_STRING);
-                    $translated_content  = PMF_Filter::filterInput(INPUT_POST, 'content_translated_' . $translated_lang, FILTER_SANITIZE_SPECIAL_CHARS);
+                    $translated_question = PMF_Filter::filterInput(INPUT_POST, 'question_translated_' . $translated_lang, FILTER_SANITIZE_STRING);
+                    $translated_answer   = PMF_Filter::filterInput(INPUT_POST, 'answer_translated_' . $translated_lang, FILTER_SANITIZE_SPECIAL_CHARS);
                     $translated_keywords = PMF_Filter::filterInput(INPUT_POST, 'keywords_translated_' . $translated_lang, FILTER_SANITIZE_STRING);
     
                     $recordData = array_merge($recordData, array(
                         'id'            => $record_id,
                         'lang'          => $translated_lang,
                         'thema'         => html_entity_decode($translated_question),
-                        'content'       => html_entity_decode($translated_content),
+                        'content'       => html_entity_decode($translated_answer),
                         'keywords'      => $translated_keywords,
                         'author'        => 'Google',
                         'email'         => $faqconfig->get('main.administrationMail')));
@@ -232,25 +230,38 @@ if ($permission['editbt']) {
     
                     // Copy Link Verification
                     $linkverifier->markEntry($record_id, $translated_lang);
+
+                    // add faqvisit entry
+                    $visits->add($record_id, $translated_lang);
+
+                    // Set attachment relations
+                    $attachments = PMF_Attachment_Factory::fetchByRecordId($record_id);
+                    foreach ($attachments as $attachment) {
+                        if ($attachment instanceof PMF_Attachment_Abstract) {
+                            $attachment->setId(null);
+                            $attachment->setRecordLang($translated_lang);
+                            $attachment->saveMeta();
+                        }
+                    }
+
                 }
             }
 ?>
     <script type="text/javascript">
-    <!--
     $(document).ready(function(){
         setTimeout(function() {
-            window.location = "index.php?action=view";
+            window.location = "index.php?action=editentry&id=<?php print $record_id; ?>&lang=<?php print $recordData['lang'] ?>";
             }, 5000);
         });
-    //-->
-    </script>       
+    </script>
+
 <?php
         } else {
-            print $PMF_LANG['ad_entry_savedfail'].$db->error();
+            printf('<p class="error">%s</p>',$PMF_LANG['ad_entry_savedfail'] . $db->error());
         }
     } else {
         printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
-        printf("<p>%s</p>", $PMF_LANG['ad_entryins_fail']);
+        printf('<p class="error">%s</p>', $PMF_LANG['ad_entryins_fail']);
 ?>
     <form action="?action=editpreview" method="post">
     <input type="hidden" name="question"            value="<?php print PMF_String::htmlspecialchars($question); ?>" />

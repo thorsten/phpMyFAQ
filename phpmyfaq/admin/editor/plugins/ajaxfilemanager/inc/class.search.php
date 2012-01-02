@@ -1,4 +1,8 @@
 <?php
+	if (!defined('IS_VALID_PHPMYFAQ')) {
+		header('Location: http://'.$_SERVER['HTTP_HOST']);
+		exit();
+	}
 	include_once(CLASS_FILE);
 	require_once(CLASS_SESSION_ACTION);
 	require_once(CLASS_MANAGER);

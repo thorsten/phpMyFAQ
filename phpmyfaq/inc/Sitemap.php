@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Sitemap
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2010 phpMyFAQ Team
+ * @copyright 2007-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-30
@@ -110,7 +110,7 @@ class PMF_Sitemap
         } else {
             $this->groups       = $groups;
         }
-        if (PMF_Configuration::getInstance()->get('main.permLevel') == 'medium') {
+        if (PMF_Configuration::getInstance()->get('security.permLevel') == 'medium') {
             $this->groupSupport = true;
         }
     }
@@ -243,9 +243,13 @@ class PMF_Sitemap
                 $this->user);
         }
 
+<<<<<<< HEAD
         $letter = PMF_String::strtoupper($this->db->escapeString(PMF_String::substr($letter, 0, 1)));
+=======
+        $letter = PMF_String::strtoupper($this->db->escape(PMF_String::substr($letter, 0, 1)));
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
 
-        $writeMap = '<ul>';
+        $writeMap = '';
 
         switch($this->type) {
             case 'db2':
@@ -348,7 +352,7 @@ class PMF_Sitemap
             $oldId = $row->id;
         }
 
-        $writeMap .= '</ul>';
+        $writeMap = empty($writeMap) ? '' : '<ul>' . $writeMap . '</ul>';
 
         return $writeMap;
     }

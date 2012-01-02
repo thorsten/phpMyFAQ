@@ -36,9 +36,9 @@ $PMF_LANG["nplurals"] = "2";
 
 // Navigation
 $PMF_LANG["msgCategory"] = "Categorie";
-$PMF_LANG["msgShowAllCategories"] = "Mostra tutte le categorie";
+$PMF_LANG["msgShowAllCategories"] = "Categorie";
 $PMF_LANG["msgSearch"] = "Ricerca";
-$PMF_LANG["msgAddContent"] = "Proposta per una FAQ";
+$PMF_LANG["msgAddContent"] = "Proposta FAQ";
 $PMF_LANG["msgQuestion"] = "Fai una domanda";
 $PMF_LANG["msgOpenQuestions"] = "Domande aperte";
 $PMF_LANG["msgHelp"] = "Aiuto";
@@ -369,8 +369,8 @@ $PMF_LANG["ad_rs_rating_1"] = "La classifica di";
 $PMF_LANG["ad_rs_rating_2"] = "Mostra utenti:";
 $PMF_LANG["ad_rs_red"] = "Rosso";
 $PMF_LANG["ad_rs_green"] = "Verde";
-$PMF_LANG["ad_rs_altt"] = "con una media piu bassa di 2";
-$PMF_LANG["ad_rs_ahtf"] = "con una media piu alta di 4";
+$PMF_LANG["ad_rs_altt"] = "con una media piu bassa di 20%";
+$PMF_LANG["ad_rs_ahtf"] = "con una media piu alta di 80%";
 $PMF_LANG["ad_rs_no"] = "Nessuna statistica disponibile";
 
 // Auth
@@ -569,20 +569,20 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Nome dell'Editore")
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Indirizzo email dell'Amministratore");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Testo per la pagina dei <em>Contatti</em>");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Testo per la pagina <em>Invia ad un amico</em>");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Massima dimensione per gli allegati, in Bytes (max. %sByte)");
-$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Mostra il link agli allegati");
+$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "Massima dimensione per gli allegati, in Bytes (max. %sByte)");
+$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Mostra il link agli allegati");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Abilito il tracciamento per le attivit&agrave; dell'Utente?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Abilito il tracciamento per le attivit&agrave; di Amministrazione?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Vuoi controllare l'IP quando verifico l'<em>UIN</em> in <em>admin.php</em>?");
-$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Numero di elementi visualizzati per pagina");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Numero di elementi visualizzati per la sezione News");
-$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Vieta l'accesso a questi indirizzi IP");
+$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Vuoi controllare l'IP quando verifico l'<em>UIN</em> in <em>admin.php</em>?");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Numero di elementi visualizzati per pagina");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Numero di elementi visualizzati per la sezione News");
+$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Vieta l'accesso a questi indirizzi IP");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Attivare il supporto a <em>mod_rewrite</em>? (predefinito: disabilitato)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Attivare il supporto LDAP? (predefinito: disabilitato)");
+$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Attivare il supporto LDAP? (predefinito: disabilitato)");
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "<em>Base URL</em> dell'installazione di phpMyFAQ, es: http://www.example.org/faq (&egrave; necessaria per la verifica dei links)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Intervallo della verifica asincrona dei links (in secondi)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Disabilitare la visibilit&agrave; delle domande appena inserite?");
-$LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "Configurazione della Permessistica");
+$LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Configurazione della Permessistica");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "come nuova categoria principale";
 $PMF_LANG["ad_categ_paste_error"] = "Non &egrave; possibile spostare questa categoria.";
@@ -605,7 +605,7 @@ $PMF_LANG["ad_xmlrpc_latest"] = "Questa &egrave; l'ultima versione disponibile p
 $PMF_LANG['ad_categ_select'] = 'Selezione la lingua della categoria';
 
 // added v1.5.1 - 2005-09-06 by Thorsten
-$PMF_LANG['msgSitemap'] = 'Mappa del sito';
+$PMF_LANG['msgSitemap'] = 'Mappa sito';
 
 // added v1.5.2 - 2005-09-23 by Lars
 $PMF_LANG['err_inactiveArticle'] = 'Questa FAQ &egrave; in revisione e non pu&ograve; essere visualizzata.';
@@ -827,7 +827,7 @@ $PMF_LANG["ad_categ_remark_move"] = 'Lo scambio di due categorie è possibile so
 $PMF_LANG["ad_categ_remark_overview"] = "Viene mostrato l'ordine corretto delle categorie se sono state definite tutte le categorie per la lingua corrente (vedi prima colonna).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
-$PMF_LANG['msgUsersOnline'] = ' :: %d Ospiti e %d Registrati';
+$PMF_LANG['msgUsersOnline'] = '%d Ospiti e %d Registrati';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Cancella immediatamente i dati pi&ugrave; vecchi di 30 giorni';
 $PMF_LANG['ad_adminlog_delete_success'] = 'I dati sono stati cancellati.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'I dati non sono stati cancellati: si &egrave; verificato un errore.';
@@ -882,7 +882,7 @@ $PMF_LANG['mainControlCenter'] = 'Configurazione principale';
 $PMF_LANG['recordsControlCenter'] = 'Configurazione delle FAQ';
 
 // added v2.0.0 - 2007-03-17 by Thorsten
-$PMF_LANG['msgInstantResponse'] = 'Ricerca a risposta immediata';
+$PMF_LANG['msgInstantResponse'] = 'Ricerca veloce';
 $PMF_LANG['msgInstantResponseMaxRecords'] = '. Qui sotto trovi le prime %d faq.';
 
 // added v2.0.0 - 2007-03-29 by Thorsten

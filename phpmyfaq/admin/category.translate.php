@@ -53,11 +53,12 @@ if ($permission["editcateg"]) {
 
     $userPermission  = $categoryUser->fetch($categoryId);
     $groupPermission = $categoryGroup->fetch($categoryId);
-
-    printf('<h2>%s</h2>', $header);
 ?>
+
+    <header>
+        <h2><?php print $header ?></h2>
+    </header>
     <form action="?action=updatecategory" method="post">
-    <fieldset>
     <legend><?php print $header; ?></legend>
         <input type="hidden" name="id" value="<?php print $categoryData->id; ?>" />
         <input type="hidden" name="parent_id" value="<?php print $categoryData->parent_id; ?>" />

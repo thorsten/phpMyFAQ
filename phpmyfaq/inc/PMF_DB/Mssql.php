@@ -1,6 +1,6 @@
 <?php
 /**
- * The db_mssql class provides methods and functions for a Microsoft SQL Server
+ * The PMF_DB_Mssql class provides methods and functions for a Microsoft SQL Server
  * database.
  *
  * PHP Version 5.2
@@ -19,7 +19,7 @@
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Daniel Hoechst <dhoechst@petzl.com>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @package   2005-01-11
@@ -47,7 +47,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      * The connection object
      *
      * @var   mixed
-     * @see   connect(), query(), dbclose()
+     * @see   connect(), query(), close()
      */
     private $conn = false;
 
@@ -75,7 +75,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      * @param   string $db_name
      * @return  boolean TRUE, if connected, otherwise FALSE
      */
-    function connect ($host, $user, $passwd, $db)
+    public function connect($host, $user, $passwd, $db)
     {
         $this->conn = mssql_pconnect($host, $user, $passwd);
         if (empty($db) OR $this->conn == false) {
@@ -92,7 +92,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      * 
      * @return resource
      */
-    function query($query)
+    public function query($query)
     {
         $this->sqllog .= pmf_debug($query);
         return mssql_query($query, $this->conn);
@@ -104,7 +104,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     * @param   string
     * @return  string
     */
-    function escapeString($string)
+    public function escape($string)
     {
         return str_replace("'", "''", $string);
     }
@@ -115,12 +115,10 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      * @param   mixed $result
      * @return  object
      */
-    function fetchObject($result)
+    public function fetchObject($result)
     {
         return mssql_fetch_object($result);
     }
-
-
 
     /**
      * Fetch a result row as an object
@@ -128,7 +126,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      * @param   mixed $result
      * @return  array
      */
-    function fetch_assoc($result)
+    public function fetchArray($result)
     {
         return mssql_fetch_assoc($result);
     }
@@ -160,7 +158,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      * @param   mixed $result
      * @return  integer
      */
-    function numRows($result)
+    public function numRows($result)
     {
         return mssql_num_rows($result);
     }
@@ -170,7 +168,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      *
      * @return string
      */
-    function sqllog()
+    public function log()
     {
         return $this->sqllog;
     }
@@ -180,7 +178,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      *
      * @return array
      */
-    function getTableStatus()
+    public function getTableStatus()
     {
         $tables = array();
 
@@ -213,7 +211,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      * @param   string      the name of the ID column
      * @return  int
      */
-    function nextID($table, $id)
+    public function nextId($table, $id)
     {
         $result = $this->query('SELECT max('.$id.') as current_id FROM '.$table);
         $currentID = mssql_result($result, 0, 'current_id');
@@ -225,7 +223,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      *
      * @return string
      */
-    function error()
+    public function error()
     {
         $result = $this->query('SELECT @@ERROR AS ErrorCode');
         $errormsg = mssql_result($result, 0, 'ErrorCode');
@@ -239,7 +237,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      *
      * @return string
      */
-    function client_version()
+    public function clientVersion()
     {
          return '';
     }
@@ -249,9 +247,9 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      *
      * @return string
      */
-    function server_version()
+    public function serverVersion()
     {
-        $result = $this->query('SELECT @@version AS SERVER_VERSION');
+        $result  = $this->query('SELECT @@version AS SERVER_VERSION');
         $version = mssql_result($result, 0, 'SERVER_VERSION');
         if (isset($version)) {
             return $version;
@@ -263,7 +261,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      *
      * @return void
      */
-    function getTableNames($prefix = '')
+    public function getTableNames($prefix = '')
     {
         // First, declare those tables that are referenced by others
         $this->tableNames[] = $prefix.'faquser';
@@ -299,7 +297,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      *
      * @return boolean
      */
-    function dbclose()
+    public function close()
     {
         return mssql_close($this->conn);
     }

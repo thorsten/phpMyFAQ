@@ -19,7 +19,7 @@
  * @author    Thomas Zeithaml <seo@annatom.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2006-2010 phpMyFAQ Team
+ * @copyright 2006-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-02-04
@@ -37,7 +37,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Thomas Zeithaml <seo@annatom.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2006-2010 phpMyFAQ Team
+ * @copyright 2006-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-02-04
@@ -87,7 +87,7 @@ class PMF_Captcha
      *
      * @var integer
      */
-    private $width = 200;
+    private $width = 165;
 
     /**
      * Height of the image
@@ -192,17 +192,16 @@ class PMF_Captcha
      */
     public function printCaptcha($action)
     {
-        $alt = 'Chuck Norris has counted to infinity. Twice.';
         $output = sprintf(
-            '<img src="%s?%saction=%s&amp;gen=img&amp;ck=%s" height="%d" width="%d" border="0" alt="%s" title="%s" />',
+            '<img id="captchaImage" src="%s?%saction=%s&amp;gen=img&amp;ck=%s" height="%d" width="%d" border="0" alt="%s" title="%s" />',
             $_SERVER['SCRIPT_NAME'],
             $this->sids,
             $action,
             $_SERVER['REQUEST_TIME'],
             $this->height,
             $this->width,
-            $alt,
-            $alt);
+            'Chuck Norris has counted to infinity. Twice.',
+            'click to refresh');
         return $output;
     }
 
@@ -239,7 +238,7 @@ class PMF_Captcha
     {
         $query  = sprintf('SELECT id FROM %sfaqcaptcha', SQLPREFIX);
         $result = $this->db->query($query);
-        while ($row = $this->db->fetch_assoc($result)) {
+        while ($row = $this->db->fetchArray($result)) {
             $this->code = $row['id'];
         }
 
@@ -254,6 +253,11 @@ class PMF_Captcha
      */
     public function validateCaptchaCode($captchaCode)
     {
+        // Sanity check
+        if (0 == PMF_String::strlen($captchaCode)) {
+            return false;
+        }
+
         $captchaCode = PMF_String::strtoupper($captchaCode);
         // Help the user: treat "0" (ASCII 48) like "O" (ASCII 79)
         //                if "0" is not in the realm of captcha code letters
@@ -275,7 +279,7 @@ class PMF_Captcha
             WHERE
                 id = '%s'",
             SQLPREFIX,
-            $this->db->escapeString($captchaCode));
+            $this->db->escape($captchaCode));
 
         if ($result = $this->db->query($query)) {
             $num = $this->db->numRows($result);

@@ -47,8 +47,9 @@ if ($permission['delquestion']) {
                 $faqQuestions->setVisibility($questionId, ($is_visible == 'N' ? 'Y' : 'N'));
             }
         }
+    }
 
-        printf("<header><h2>%s</h2></header>", $PMF_LANG['msgOpenQuestions']);
+    printf("<header><h2>%s</h2></header>", $PMF_LANG['msgOpenQuestions']);
 
         $openQuestions = $faqQuestions->fetchAll();
         if (count($openQuestions) > 0) {
@@ -68,7 +69,7 @@ if ($permission['delquestion']) {
 ?>
         <tr>
             <td>
-                <?php print PMF_Date::createIsoDate($question->date); ?><br />
+                <?php print PMF_Date::format(PMF_Date::createIsoDate($question->date)); ?><br />
                 <a href="mailto:<?php print $question->email; ?>"><?php print $question->username; ?></a>
             </td>
             <td>
@@ -80,21 +81,23 @@ if ($permission['delquestion']) {
                 <?php print (('Y' == $question->is_visible) ? $PMF_LANG['ad_gen_no'] : $PMF_LANG['ad_gen_yes']); ?>!</a>
             </td>
             <td>
-                <a href="?action=question&amp;id=<?php print $question->id; ?>&amp;delete=yes">
-                <?php print $PMF_LANG['ad_gen_delete']; ?>!</a><br />
+                <a onclick="return confirm('<?php print $PMF_LANG['ad_user_del_3'] ?>'); return false;" href="?action=question&amp;id=<?php print $question->id; ?>&amp;delete=yes">
+                    <?php print $PMF_LANG['ad_gen_delete']; ?>
+                </a>
+                <br />
                 <a href="?action=takequestion&amp;id=<?php print $question->id; ?>">
-                <?php print $PMF_LANG['ad_ques_take']; ?></a>
+                    <?php print $PMF_LANG['ad_ques_take']; ?>
+                </a>
             </td>
         </tr>
 <?php
-            }
+        }
 ?>
         </tbody>
         </table>
 <?php
-        } else {
-            print $PMF_LANG['msgNoQuestionsAvailable'];
-        }
+    } else {
+        print $PMF_LANG['msgNoQuestionsAvailable'];
     }
 } else {
     print $PMF_LANG['err_NotAuth'];

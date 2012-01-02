@@ -55,7 +55,7 @@
                 </p>
 
                 <p>
-                    <input class="submit" id="submitComment" type="submit" value="{msgNewContentSubmit}" />
+                    <input class="submit" id="submitcomment" type="submit" value="{msgNewContentSubmit}" />
                 </p>
 
             </form>

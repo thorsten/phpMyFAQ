@@ -93,6 +93,7 @@ if ($permission['editcateg']) {
                 printf('<a href="index.php?action=translatecategory&amp;cat=%d&amp;trlang=%s" title="%s">',
                     $categoryId,
                     $LANGCODE,
+
                     $PMF_LANG['ad_categ_translate']);
                 printf('<img src="images/translate.png" width="13" height="16" border="0" title="%s" alt="%s" /></a>',
                     $PMF_LANG['ad_categ_translate'],

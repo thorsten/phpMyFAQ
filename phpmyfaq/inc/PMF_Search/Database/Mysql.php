@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Search_Database
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
+ * @copyright 2010-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Search_Database
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
+ * @copyright 2010-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
@@ -68,10 +68,12 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
         } else {
             $enableRelevance = PMF_Configuration::getInstance()->get('search.enableRelevance');
 
-            $columns  =  $this->getResultColumns();
-            $columns .= ($enableRelevance) ? $this->getMatchingColumnsAsResult($searchTerm) : '';
-
-            $orderBy = ($enableRelevance) ? 'ORDER BY ' . $this->getMatchingOrder() . ' DESC' : '';
+            $columns    =  $this->getResultColumns();
+            $columns   .= ($enableRelevance) ? $this->getMatchingColumnsAsResult($searchTerm) : '';
+            $orderBy    = ($enableRelevance) ? 'ORDER BY ' . $this->getMatchingOrder() . ' DESC' : '';
+            $chars      = array (chr(150), chr(147), chr(148), chr(146), chr(34), '&quot;', '&#34;');
+            $replace    = array ("-", "\"", "\"", "'", "\"" , "\"", "\"");
+            $searchTerm = str_replace ($chars, $replace, $searchTerm);
 
             $query = sprintf("
                 SELECT
@@ -79,7 +81,7 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
                 FROM 
                     %s %s %s
                 WHERE
-                    MATCH (%s) AGAINST ('*%s*' IN BOOLEAN MODE)
+                    MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE)
                     %s
                     %s",
                 $columns,
@@ -87,11 +89,33 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
                 $this->getMatchingColumns(),
-                $this->dbHandle->escapeString($searchTerm),
+                $this->dbHandle->escape($searchTerm),
                 $this->getConditions(),
-                $orderBy);
+                $orderBy
+            );
 
-            $this->resultSet = $this->dbHandle->query($query);                        
+            $this->resultSet = $this->dbHandle->query($query);
+
+            // Fallback for searches with less than three characters
+            if (0 == $this->dbHandle->num_rows($this->resultSet)) { 
+
+                $query = sprintf("
+                    SELECT
+                        %s
+                    FROM
+                        %s %s %s
+                    WHERE
+                        %s
+                        %s",
+                    $this->getResultColumns(),
+                    $this->getTable(),
+                    $this->getJoinedTable(),
+                    $this->getJoinedColumns(),
+                    $this->getMatchClause($searchTerm),
+                    $this->getConditions());
+            }
+
+            $this->resultSet = $this->dbHandle->query($query);
         }
         
         return $this->resultSet;
@@ -109,7 +133,7 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
         foreach ($this->matchingColumns as $matchColumn) {
             $column = sprintf("MATCH (%s) AGAINST ('*%s*' IN BOOLEAN MODE) AS rel_%s",
                 $matchColumn,
-                $this->dbHandle->escape_string($searchterm),
+                $this->dbHandle->escape($searchterm),
                 substr(strstr($matchColumn, '.'), 1));
 
                 $resultColumns .= ', ' . $column;

@@ -23,7 +23,8 @@
  * @category  phpMyFAQ
  * @package   PMF_User
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-28
@@ -122,7 +123,7 @@ class PMF_User_CurrentUser extends PMF_User
      */
     public function login($login, $pass)
     {
-    	// ToDo: the option should be in the configuration of the DB
+        // ToDo: the option should be in the configuration of the DB
         //   instead of inc/dataldap.php
         global $PMF_LDAP;
         
@@ -136,7 +137,7 @@ class PMF_User_CurrentUser extends PMF_User
                 $login = substr($login, $pos+1);
             }
         }
-    	
+        
         // authenticate user by login and password
         $login_error = 0;
         $pass_error  = 0;
@@ -181,7 +182,7 @@ class PMF_User_CurrentUser extends PMF_User
                 WHERE
                     user_id = %d",
                 SQLPREFIX,
-                $this->db->escapeString($name),
+                $this->db->escape($name),
                 $this->getUserId());
             $res = $this->db->query($update);
             if (!$res) {
@@ -285,7 +286,7 @@ class PMF_User_CurrentUser extends PMF_User
         if (!$res or $this->db->numRows($res) != 1) {
             return array();
         }
-        return $this->db->fetch_assoc($res);
+        return $this->db->fetchArray($res);
     }
 
     /**
@@ -401,7 +402,8 @@ class PMF_User_CurrentUser extends PMF_User
      * returned.
      *
      * @param  boolean $ip_check Check th IP address
-     * @return mixed
+     * 
+     * @return PMF_User_CurrentUser
      */
     public static function getFromSession($ip_check = false)
     {

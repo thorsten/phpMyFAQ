@@ -17,7 +17,7 @@
  * @category  phpMyFAQ 
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2010 phpMyFAQ Team
+ * @copyright 2003-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
@@ -29,13 +29,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+
 if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
     $permission['restore'] = false; 
 }
 
 if ($permission['restore']) {
 
-    printf("<h2>%s</h2>\n", $PMF_LANG['ad_csv_rest']);
+    printf("<header><h2>%s</h2></header>\n", $PMF_LANG['ad_csv_rest']);
 
     if (isset($_FILES['userfile']) && 0 == $_FILES['userfile']['error']) {
         
@@ -100,7 +101,7 @@ if ($permission['restore']) {
                     $g++;
                 }
             }
-            printf("<p>%d %s %d %s</p>\n",
+            printf('<p class="success">%d %s %d %s</p>',
                 $g,
                 $PMF_LANG['ad_csv_of'],
                 $num,
@@ -134,7 +135,7 @@ if ($permission['restore']) {
                 $errorMessage = 'Undefined error.';
                 break;
         }
-        printf("<p>%s (%s)</p>", $PMF_LANG['ad_csv_no'], $errorMessage);
+        printf('<p class="error">%s (%s)</p>', $PMF_LANG['ad_csv_no'], $errorMessage);
     }
 } else {
     print $PMF_LANG['err_NotAuth'];

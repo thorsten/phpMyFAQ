@@ -37,7 +37,7 @@ if ($permission['viewlog']) {
         $PMF_LANG['ad_sess_session'],
         $sid);
 
-    $session = new PMF_Session();
+    $session = new PMF_Session($db, $Language);
     $time    = $session->getTimeFromSessionId($sid);
 
     $trackingdata = explode("\n", file_get_contents(PMF_ROOT_DIR.'/data/tracking'.date('dmY', $time)));
@@ -65,7 +65,11 @@ if ($permission['viewlog']) {
 ?>
             <tr>
                 <td><?php print $PMF_LANG["ad_sess_referer"]; ?></td>
-                <td><a href="<?php print $data[5]; ?>" target="_blank"><?php print str_replace("?", "? ", $data[5]); ?></a></td>
+                <td>
+                    <a href="<?php print $data[5]; ?>" target="_blank">
+                        <?php print str_replace("?", "? ", $data[5]); ?>
+                    </a>
+                </td>
             </tr>
             <tr>
                 <td><?php print $PMF_LANG["ad_sess_browser"]; ?></td>

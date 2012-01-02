@@ -35,7 +35,7 @@ if ($permission['addglossary']) {
         <form action="?action=saveglossary" method="post">
             <p>
                 <label for="item"><?php print $PMF_LANG['ad_glossary_item']; ?>:</label>
-                <input type="text" name="item" id="item" size="50" style="width: 300px;" />
+                <input type="text" name="item" id="item" size="50" style="width: 300px;" autofocus="autofocus" />
             </p>
 
             <p>

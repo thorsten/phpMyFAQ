@@ -28,7 +28,7 @@
 define('NEWVERSION', '3.0.0-dev');
 define('APIVERSION', 2);
 define('MINIMUM_PHP_VERSION', '5.3.0');
-define('COPYRIGHT', '&copy; 2001-2011 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2012 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
 
@@ -62,7 +62,7 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
 
 <header id="header">
     <h1>
-        <h1>phpMyFAQ <?php print NEWVERSION; ?>  Update</h1>
+        <h1>phpMyFAQ <?php print NEWVERSION; ?> Update</h1>
     </h1>
 </header>
 
@@ -85,8 +85,8 @@ if (version_compare(PHP_VERSION, MINIMUM_PHP_VERSION, '<')) {
     die();
 }
 
-require_once PMF_ROOT_DIR.'/inc/autoLoader.php';
-require_once PMF_ROOT_DIR.'/config/constants.php';
+require_once PMF_ROOT_DIR . '/inc/autoLoader.php';
+require_once PMF_ROOT_DIR . '/config/constants.php';
 
 $step        = PMF_Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
 $version     = PMF_Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);
@@ -111,16 +111,14 @@ if (!is_readable(PMF_ROOT_DIR.'/inc/data.php') && !is_readable(PMF_ROOT_DIR.'/co
 }
 
 if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
-    // before 2.6.0-alpha
-    require PMF_ROOT_DIR . '/inc/data.php';
+    require PMF_ROOT_DIR . '/inc/data.php'; // before 2.6.0-alpha
 } else {
-    // after 2.6.0-alpha
-    require PMF_ROOT_DIR . '/config/database.php';
+    require PMF_ROOT_DIR . '/config/database.php'; // after 2.6.0-alpha
 }
 require PMF_ROOT_DIR . '/inc/functions.php';
 
 define('SQLPREFIX', $DB['prefix']);
-$db = PMF_Db::dbSelect($DB["type"]);
+$db = PMF_Db::factory($DB["type"]);
 $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
     
 /**************************** STEP 1 OF 4 ***************************/
@@ -132,31 +130,48 @@ if ($step == 1) {
         <form action="update.php?step=2" method="post">
             <input name="version" type="hidden" value="<?php print $version; ?>"/>
             <fieldset>
-            <legend><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 1 of 4)</strong></legend>
-            <p class="hint">This update will work <strong>only</strong> for the following versions:</p>
-            <ul type="square">
-                <li>phpMyFAQ 2.0.x</li>
-                <li>phpMyFAQ 2.5.x</li>
-                <li>phpMyFAQ 2.6.x</li>
-            </ul>
-            <p>This update will <strong>not</strong> work for the following versions:</p>
-            <ul type="square">
-                <li>phpMyFAQ 0.x</li>
-                <li>phpMyFAQ 1.x</li>
-            </ul>
-            <p><strong>Please make a full backup of your SQL tables before running this update.</strong></p>
-            <?php
-            if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable($templateDir)) {
-                printf('<p class="error"><strong>Please make the dir %s and its contents writeable (777 on Linux/UNIX).</strong></p>',
-                    $templateDir);
-            }
-            ?>
-            <p align="hint">Your current phpMyFAQ version: <?php print $version; ?></p>
+                <legend>
+                    <strong>
+                        phpMyFAQ <?php print NEWVERSION; ?> Update (Step 1 of 4)
+                    </strong>
+                </legend>
 
+                <p>This update script will work <strong>only</strong> for the following versions:</p>
+                <ul type="square">
+                    <li>phpMyFAQ 2.5.x (supported until mid of 2010)</li>
+                    <li>phpMyFAQ 2.6.x (supported until end of 2011)</li>
+                    <li>phpMyFAQ 2.7.x (active support)</li>
+                </ul>
 
-            <p>
-                <input class="submit" type="submit" value="Go to step 2 of 4" />
-            </p>
+                <p>This update script <strong>will not</strong> work for the following versions:</p>
+                <ul type="square">
+                    <li>phpMyFAQ 0.x</li>
+                    <li>phpMyFAQ 1.x</li>
+                    <li>phpMyFAQ 2.0.x</li>
+                </ul>
+                <p class="hint">
+                    <strong>
+                        Please make a full backup of your SQL tables, your templates, attachments and uploaded images
+                        before running this update.
+                    </strong>
+                </p>
+                <?php
+                if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable($templateDir)) {
+                    printf('<p class="error"><strong>Please make the dir %s and its contents writeable (777 on Linux/UNIX).</strong></p>',
+                        $templateDir);
+                }
+                if (version_compare($version, '2.5.0', '>')) {
+                    printf('<p class="success">Your current phpMyFAQ version: %s</p>',
+                        $version);
+                } else {
+                    printf('<p class="error">Your current phpMyFAQ version: %s</p>',
+                        $version);
+                }
+                ?>
+
+                <p>
+                    <input class="submit" type="submit" value="Go to step 2 of 4" />
+                </p>
             </fieldset>
         </form>
 <?php
@@ -272,285 +287,18 @@ if ($step == 4) {
     $images = array();
 
     //
-    // UPDATES FROM 2.0.2
-    //
-    if (version_compare($version, '2.0.2', '<')) {
-        $query[] = 'CREATE INDEX '.SQLPREFIX.'idx_user_time ON '.SQLPREFIX.'faqsessions (user_id, time)';
-    }
-
-    //
-    // UPDATES FROM 2.5.0-alpha2
-    //
-    if (version_compare($version, '2.5.0-alpha2', '<')) {
-        switch($DB['type']) {
-            case 'pgsql':
-                $query[] = "CREATE TABLE ".SQLPREFIX."faqsearches (
-                            id SERIAL NOT NULL ,
-                            lang VARCHAR(5) NOT NULL ,
-                            searchterm VARCHAR(255) NOT NULL ,
-                            searchdate TIMESTAMP,
-                            PRIMARY KEY (id, lang))";
-                break;
-
-            default:
-                $query[] = "CREATE TABLE ".SQLPREFIX."faqsearches (
-                            id INTEGER NOT NULL ,
-                            lang VARCHAR(5) NOT NULL ,
-                            searchterm VARCHAR(255) NOT NULL ,
-                            searchdate TIMESTAMP,
-                            PRIMARY KEY (id, lang))";
-                break;
-        }
-        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.enableWysiwygEditor', 'true')";
-    }
-    
-    //
-    // UPDATES FROM 2.5.0-beta
-    //
-    if (version_compare($version, '2.5.0-beta', '<')) {
-        $query[] = "CREATE TABLE ".SQLPREFIX."faqstopwords (
-                    id INTEGER NOT NULL,
-                    lang VARCHAR(5) NOT NULL,
-                    stopword VARCHAR(64) NOT NULL,
-                    PRIMARY KEY (id, lang))";
-        
-        // Add stopwords list
-        require 'stopwords.sql.php';
-
-        switch($DB['type']) {
-            case 'sqlite':
-                $query[] = "BEGIN TRANSACTION";
-                $query[] = "CREATE TEMPORARY TABLE ".SQLPREFIX."faqdata_temp (
-                    id int(11) NOT NULL,
-                    lang varchar(5) NOT NULL,
-                    solution_id int(11) NOT NULL,
-                    revision_id int(11) NOT NULL DEFAULT 0,
-                    active char(3) NOT NULL,
-                    keywords text DEFAULT NULL,
-                    thema text NOT NULL,
-                    content longtext DEFAULT NULL,
-                    author varchar(255) NOT NULL,
-                    email varchar(255) NOT NULL,
-                    comment char(1) NOT NULL default 'y',
-                    datum varchar(15) NOT NULL,
-                    links_state VARCHAR(7) DEFAULT NULL,
-                    links_check_date INT(11) DEFAULT 0 NOT NULL,
-                    date_start varchar(14) NOT NULL DEFAULT '00000000000000',
-                    date_end varchar(14) NOT NULL DEFAULT '99991231235959',
-                    PRIMARY KEY (id, lang))";
-                $query[] = "INSERT INTO ".SQLPREFIX."faqdata_temp SELECT * FROM ".SQLPREFIX."faqdata";
-                $query[] = "DROP TABLE ".SQLPREFIX."faqdata";
-                $query[] = "CREATE TABLE ".SQLPREFIX."faqdata (
-                    id int(11) NOT NULL,
-                    lang varchar(5) NOT NULL,
-                    solution_id int(11) NOT NULL,
-                    revision_id int(11) NOT NULL DEFAULT 0,
-                    active char(3) NOT NULL,
-                    sticky INTEGER NOT NULL,
-                    keywords text DEFAULT NULL,
-                    thema text NOT NULL,
-                    content longtext DEFAULT NULL,
-                    author varchar(255) NOT NULL,
-                    email varchar(255) NOT NULL,
-                    comment char(1) NOT NULL default 'y',
-                    datum varchar(15) NOT NULL,
-                    links_state VARCHAR(7) DEFAULT NULL,
-                    links_check_date INT(11) DEFAULT 0 NOT NULL,
-                    date_start varchar(14) NOT NULL DEFAULT '00000000000000',
-                    date_end varchar(14) NOT NULL DEFAULT '99991231235959',
-                    PRIMARY KEY (id, lang))";
-                $query[] = "INSERT INTO ".SQLPREFIX."faqdata SELECT id, lang, solution_id, revision_id, active, NULL,
-                    keywords, thema, content, author, email, comment, datum, links_state, links_check_date, date_start,
-                    date_end FROM ".SQLPREFIX."faqdata_temp";
-                $query[] = "DROP TABLE ".SQLPREFIX."faqdata_temp";
-                $query[] = "COMMIT";
-                
-                $query[] = "BEGIN TRANSACTION";
-                $query[] = "CREATE TEMPORARY TABLE ".SQLPREFIX."faqdata_revisions_temp (
-                    id int(11) NOT NULL,
-                    lang varchar(5) NOT NULL,
-                    solution_id int(11) NOT NULL,
-                    revision_id int(11) NOT NULL DEFAULT 0,
-                    active char(3) NOT NULL,
-                    keywords text DEFAULT NULL,
-                    thema text NOT NULL,
-                    content longtext DEFAULT NULL,
-                    author varchar(255) NOT NULL,
-                    email varchar(255) NOT NULL,
-                    comment char(1) NOT NULL default 'y',
-                    datum varchar(15) NOT NULL,
-                    links_state VARCHAR(7) DEFAULT NULL,
-                    links_check_date INT(11) DEFAULT 0 NOT NULL,
-                    date_start varchar(14) NOT NULL DEFAULT '00000000000000',
-                    date_end varchar(14) NOT NULL DEFAULT '99991231235959',
-                    PRIMARY KEY (id, lang))";
-                $query[] = "INSERT INTO ".SQLPREFIX."faqdata_revisions_temp SELECT * FROM ".SQLPREFIX."faqdata_revisions";
-                $query[] = "DROP TABLE ".SQLPREFIX."faqdata_revisions";
-                $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_revisions (
-                    id int(11) NOT NULL,
-                    lang varchar(5) NOT NULL,
-                    solution_id int(11) NOT NULL,
-                    revision_id int(11) NOT NULL DEFAULT 0,
-                    active char(3) NOT NULL,
-                    sticky INTEGER NOT NULL,
-                    keywords text DEFAULT NULL,
-                    thema text NOT NULL,
-                    content longtext DEFAULT NULL,
-                    author varchar(255) NOT NULL,
-                    email varchar(255) NOT NULL,
-                    comment char(1) NOT NULL default 'y',
-                    datum varchar(15) NOT NULL,
-                    links_state VARCHAR(7) DEFAULT NULL,
-                    links_check_date INT(11) DEFAULT 0 NOT NULL,
-                    date_start varchar(14) NOT NULL DEFAULT '00000000000000',
-                    date_end varchar(14) NOT NULL DEFAULT '99991231235959',
-                    PRIMARY KEY (id, lang))";
-                $query[] = "INSERT INTO ".SQLPREFIX."faqdata_revisions SELECT id, lang, solution_id, revision_id, active, NULL,
-                    keywords, thema, content, author, email, comment, datum, links_state, links_check_date, date_start,
-                    date_end FROM ".SQLPREFIX."faqdata_revisions_temp";
-                $query[] = "DROP TABLE ".SQLPREFIX."faqdata_revisions_temp";
-                $query[] = "COMMIT";
-            break;
-            case 'pgsql':
-                $query[] = "CREATE TEMPORARY TABLE ".SQLPREFIX."faqdata_temp (
-                    id SERIAL NOT NULL,
-                    lang varchar(5) NOT NULL,
-                    solution_id int4 NOT NULL,
-                    revision_id int4 NOT NULL DEFAULT 0,
-                    active char(3) NOT NULL,
-                    keywords text DEFAULT NULL,
-                    thema text NOT NULL,
-                    content text DEFAULT NULL,
-                    author varchar(255) NOT NULL,
-                    email varchar(255) NOT NULL,
-                    comment char(1) NOT NULL default 'y',
-                    datum varchar(15) NOT NULL,
-                    links_state varchar(7) DEFAULT NULL,
-                    links_check_date int4 DEFAULT 0 NOT NULL,
-                    date_start varchar(14) NOT NULL DEFAULT '00000000000000',
-                    date_end varchar(14) NOT NULL DEFAULT '99991231235959',
-                    PRIMARY KEY (id, lang))";
-                $query[] = "INSERT INTO ".SQLPREFIX."faqdata_temp SELECT * FROM ".SQLPREFIX."faqdata";
-                $query[] = "DROP TABLE ".SQLPREFIX."faqdata";
-                $query[] = "CREATE TABLE ".SQLPREFIX."faqdata (
-                    id SERIAL NOT NULL,
-                    lang varchar(5) NOT NULL,
-                    solution_id int4 NOT NULL,
-                    revision_id int4 NOT NULL DEFAULT 0,
-                    active char(3) NOT NULL,
-                    sticky INTEGER NOT NULL DEFAULT 0,
-                    keywords text DEFAULT NULL,
-                    thema text NOT NULL,
-                    content text DEFAULT NULL,
-                    author varchar(255) NOT NULL,
-                    email varchar(255) NOT NULL,
-                    comment char(1) NOT NULL default 'y',
-                    datum varchar(15) NOT NULL,
-                    links_state varchar(7) DEFAULT NULL,
-                    links_check_date int4 DEFAULT 0 NOT NULL,
-                    date_start varchar(14) NOT NULL DEFAULT '00000000000000',
-                    date_end varchar(14) NOT NULL DEFAULT '99991231235959',
-                    PRIMARY KEY (id, lang))";
-                $query[] = "INSERT INTO ".SQLPREFIX."faqdata SELECT id, lang, solution_id, revision_id, active, 0,
-                    keywords, thema, content, author, email, comment, datum, links_state, links_check_date, date_start,
-                    date_end FROM ".SQLPREFIX."faqdata_temp";
-                $query[] = "DROP TABLE ".SQLPREFIX."faqdata_temp";
-                $query[] = "SELECT setval('".SQLPREFIX."faqdata_id_seq', (SELECT MAX(id) FROM ".SQLPREFIX."faqdata)+1)";
-
-                
-                $query[] = "CREATE TEMPORARY TABLE ".SQLPREFIX."faqdata_revisions_temp (
-                    id SERIAL NOT NULL,
-                    lang varchar(5) NOT NULL,
-                    solution_id int4 NOT NULL,
-                    revision_id int4 NOT NULL DEFAULT 0,
-                    active char(3) NOT NULL,
-                    keywords text DEFAULT NULL,
-                    thema text NOT NULL,
-                    content text DEFAULT NULL,
-                    author varchar(255) NOT NULL,
-                    email varchar(255) NOT NULL,
-                    comment char(1) default 'y',
-                    datum varchar(15) NOT NULL,
-                    links_state varchar(7) DEFAULT NULL,
-                    links_check_date int4 DEFAULT 0 NOT NULL,
-                    date_start varchar(14) NOT NULL DEFAULT '00000000000000',
-                    date_end varchar(14) NOT NULL DEFAULT '99991231235959',
-                    PRIMARY KEY (id, lang, solution_id, revision_id))";
-
-                $query[] = "INSERT INTO ".SQLPREFIX."faqdata_revisions_temp SELECT * FROM ".SQLPREFIX."faqdata_revisions";
-                $query[] = "DROP TABLE ".SQLPREFIX."faqdata_revisions";
-                $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_revisions (
-                    id SERIAL NOT NULL,
-                    lang varchar(5) NOT NULL,
-                    solution_id int4 NOT NULL,
-                    revision_id int4 NOT NULL DEFAULT 0,
-                    active char(3) NOT NULL,
-                    sticky INTEGER NOT NULL  DEFAULT 0,
-                    keywords text DEFAULT NULL,
-                    thema text NOT NULL,
-                    content text DEFAULT NULL,
-                    author varchar(255) NOT NULL,
-                    email varchar(255) NOT NULL,
-                    comment char(1) default 'y',
-                    datum varchar(15) NOT NULL,
-                    links_state varchar(7) DEFAULT NULL,
-                    links_check_date int4 DEFAULT 0 NOT NULL,
-                    date_start varchar(14) NOT NULL DEFAULT '00000000000000',
-                    date_end varchar(14) NOT NULL DEFAULT '99991231235959',
-                    PRIMARY KEY (id, lang, solution_id, revision_id))";
-                $query[] = "INSERT INTO ".SQLPREFIX."faqdata_revisions SELECT id, lang, solution_id, revision_id, active, 0,
-                    keywords, thema, content, author, email, comment, datum, links_state, links_check_date, date_start,
-                    date_end FROM ".SQLPREFIX."faqdata_revisions_temp";
-                $query[] = "DROP TABLE ".SQLPREFIX."faqdata_revisions_temp";
-                $query[] = "SELECT setval('".SQLPREFIX."faqdata_revisions_id_seq', (SELECT MAX(id) FROM ".SQLPREFIX."faqdata_revisions)+1)";
-            break;
-
-            default:
-                $query[] = "ALTER TABLE ".SQLPREFIX."faqdata ADD sticky INTEGER DEFAULT 0 NOT NULL AFTER active";
-                $query[] = "ALTER TABLE ".SQLPREFIX."faqdata_revisions ADD sticky INTEGER DEFAULT 0 NOT NULL AFTER active";
-                break;
-        }
-    }
-    
-    //
-    // UPDATES FROM 2.5.0-RC
-    //
-    if (version_compare($version, '2.5.0-RC', '<')) {
-        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES 
-            (30, 'addtranslation', 'Right to add translation', 1, 1)"; 
-        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES 
-            (31, 'edittranslation', 'Right to edit translation', 1, 1)";
-        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES 
-            (32, 'deltranslation', 'Right to delete translation', 1, 1)";
-        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 30)";
-        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 31)";
-        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 32)";
-    }
-
-    //
-    // UPDATES FROM 2.5.0-RC3
-    //
-    if(version_compare($version, '2.5.0-RC3', '<')) {
-        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES 
-            (33, 'approverec', 'Right to approve records', 1, 1)";
-        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 33)";
-        
-        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.attachmentsPath', 'attachments')";
-    }
-    
-    //
     // UPDATES FROM 2.5.1
     //
     if (version_compare($version, '2.5.1', '<')) {
         // Truncate table and re-import all stopwords with the new Lithuanian ones
-        $query[] = "DELETE FROM ".SQLPREFIX."faqstopwords";
+        $query[] = "DELETE FROM ". SQLPREFIX . "faqstopwords";
         require 'stopwords.sql.php';
     }
     
     //
     // UPDATES FROM 2.5.2
     if (version_compare($version, '2.5.3', '<')) {
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'spam.enableCaptchaCode' WHERE config_name = 'spam.enableCatpchaCode'";
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'spam.enableCaptchaCode' WHERE config_name = 'spam.enableCatpchaCode'";
     }
     
     //
@@ -578,11 +326,11 @@ if ($step == 4) {
         }
         
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.enableUpdate', 'false')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.useSslForLogins', 'false')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('security.useSslForLogins', 'false')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.currentApiVersion', '" . APIVERSION . "')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.templateSet', 'default')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.numberSearchTerms', '10')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.orderingPopularFaqs', 'visits')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('records.orderingPopularFaqs', 'visits')";
         /**
          * We did check in the first and second steps,
          * if the $templateDir and its contents are writable,
@@ -607,9 +355,9 @@ if ($step == 4) {
         /**
          * Attachments stuff
          */
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.attachmentsStorageType', '0')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.enableAttachmentEncryption', 'false')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.defaultAttachmentEncKey', '')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('records.attachmentsStorageType', '0')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('records.enableAttachmentEncryption', 'false')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('records.defaultAttachmentEncKey', '')";
         switch($DB['type']) {
             case 'pgsql':
                 $query[] = "CREATE TABLE " . SQLPREFIX . "faqattachment (
@@ -769,21 +517,117 @@ if ($step == 4) {
         }
 
 
-        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = "INSERT INTO ". SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
             (34, 'addattachment', 'Right to add attachments', 1, 1)";
-        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = "INSERT INTO ". SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
             (35, 'editattachment', 'Right to edit attachments', 1, 1)";
-        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = "INSERT INTO ". SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
             (36, 'delattachment', 'Right to delete attachments', 1, 1)";
-        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = "INSERT INTO ". SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
             (37, 'dlattachment', 'Right to download attachments', 1, 1)";
-        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 34)";
-        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 35)";
-        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 36)";
-        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 37)";
+        $query[] = "INSERT INTO ". SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 34)";
+        $query[] = "INSERT INTO ". SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 35)";
+        $query[] = "INSERT INTO ". SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 36)";
+        $query[] = "INSERT INTO ". SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 37)";
     }
-<<<<<<< HEAD
-    
+
+    //
+    // UPDATES FROM 2.7.0-alpha2
+    //
+    if (version_compare($version, '2.7.0-alpha2', '<')) {
+        $query[] = "INSERT INTO ". SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
+            (38, 'reports', 'Right to generate reports', 1, 1)";
+        $query[] = "INSERT INTO ". SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 38)";
+    }
+
+    //
+    // UPDATES FROM 2.7.0-beta
+    //
+    if (version_compare($version, '2.7.0-beta', '<')) {
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'search.numberSearchTerms'
+            WHERE config_name = 'main.numberSearchTerms'";
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'search.useAjaxSearchOnStartpage'
+            WHERE config_name = 'main.useAjaxSearchOnStartpage'";
+    }
+
+    //
+    // UPDATES FROM 2.7.0-beta2
+    //
+    if (version_compare($version, '2.7.0-beta2', '<')) {
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('security.ssoSupport', 'false')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('security.ssoLogoutRedirect', '')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.dateFormat', 'Y-m-d H:i')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('security.enableLoginOnly', 'false')";
+    }
+
+    //
+    // UPDATES FROM 2.7.0-RC
+    //
+    if (version_compare($version, '2.7.0-RC', '<')) {
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'records.numberOfRecordsPerPage'
+            WHERE config_name = 'main.numberOfRecordsPerPage'";
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'records.numberOfShownNewsEntries'
+            WHERE config_name = 'main.numberOfShownNewsEntries'";
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'records.orderingPopularFaqs'
+            WHERE config_name = 'main.orderingPopularFaqs'";
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'records.disableAttachments'
+            WHERE config_name = 'main.disableAttachments'";
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'records.maxAttachmentSize'
+            WHERE config_name = 'main.maxAttachmentSize'";
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'records.attachmentsPath'
+            WHERE config_name = 'main.attachmentsPath'";
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'records.attachmentsStorageType'
+            WHERE config_name = 'main.attachmentsStorageType'";
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'records.enableAttachmentEncryption'
+            WHERE config_name = 'main.enableAttachmentEncryption'";
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'records.defaultAttachmentEncKey'
+            WHERE config_name = 'main.defaultAttachmentEncKey'";
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'security.permLevel'
+            WHERE config_name = 'main.permLevel'";
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'security.ipCheck'
+            WHERE config_name = 'main.ipCheck'";
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'security.enableLoginOnly'
+            WHERE config_name = 'main.enableLoginOnly'";
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'security.ldapSupport'
+            WHERE config_name = 'main.ldapSupport'";
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'security.bannedIPs'
+            WHERE config_name = 'main.bannedIPs'";
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'security.ssoSupport'
+            WHERE config_name = 'main.ssoSupport'";
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'security.ssoLogoutRedirect'
+            WHERE config_name = 'main.ssoLogoutRedirect'";
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'security.useSslForLogins'
+            WHERE config_name = 'main.useSslForLogins'";
+
+        $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishEnable', 'false')";
+        $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishHost', '127.0.0.1')";
+        $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishPort', '2000')";
+        $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishSecret', '')";
+        $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishTimeout', '500')";
+    }
+
+    //
+    // UPDATES FROM 2.7.1
+    //
+    if (version_compare($version, '2.7.1', '<')) {
+        $query[] = "INSERT INTO ". SQLPREFIX . "faqconfig VALUES ('security.useSslOnly', 'false')";
+    }
+
+    //
+    // UPDATES FROM 2.8.0-alpha
+    //
+    if (version_compare($version, '2.8.0-alpha', '<')) {  
+        $query[] = "INSERT INTO ". SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
+            (39, 'addfaq', 'Right to add FAQs in frontend', 1, 1)";
+        $query[] = "INSERT INTO ". SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 39)";
+        $query[] = "INSERT INTO ". SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
+            (40, 'addquestion', 'Right to add questions in frontend', 1, 1)";
+        $query[] = "INSERT INTO ". SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 40)";
+        $query[] = "INSERT INTO ". SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
+            (41, 'addcomment', 'Right to add comments in frontend', 1, 1)";
+        $query[] = "INSERT INTO ". SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 41)";
+    }
+
     //
     // UPDATES FROM 3.0.0-alpha
     //
@@ -791,20 +635,7 @@ if ($step == 4) {
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.useAjaxMenu', 'false')";
     }
     
-=======
-
-
-    //
-    // UPDATES FROM 2.7.0-alpha2
-    //
-    if (version_compare($version, '2.7.0-alpha2', '<')) {
-        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES
-            (38, 'reports', 'Right to generate reports', 1, 1)";
-        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 38)";
-    }
-
->>>>>>> 3c9295794d076bc80af3ee7a7c81d79b94d916fe
-    // Perform the queries for updating/migrating the database from 2.x
+    // Perform the queries for updating/migrating the database
     if (isset($query)) {
         print '<div class="center">';
         $count = 0;
@@ -817,7 +648,7 @@ if ($step == 4) {
             if (!$result) {
                 print "</div>";
                 print '<p class="error"><strong>Error:</strong> Please install your version of phpMyFAQ once again or send
-                us a <a href=\"http://www.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
+                us a <a href=\"http://bugs.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
                 printf('<p class="error"><strong>DB error:</strong> %s</p>', $db->error());
                 printf('<code>%s</code>', htmlentities($each_query[1]));
                 HTMLFooter();
@@ -886,30 +717,34 @@ if ($step == 4) {
 
     print "</p>\n";
 
-    print '<p class="success">The database was updated successfully.</p>';
-    print '<p><a href="../index.php">phpMyFAQ</a></p>';
+    print '<p class="success">The database was updated successfully. Thank you very much for updating.</p>';
+    print '<p>Back to your <a href="../index.php">phpMyFAQ installation</a> and have fun! :-)</p>';
     foreach (glob(PMF_ROOT_DIR.'/config/*.bak.php') as $filename) {
         if (!@unlink($filename)) {
-            print "<p class=\"hint\">Please manually remove the backup file '".$filename."'.</p>\n";
+            printf("<p class=\"hint\">Please remove the backup file %s manually.</p>\n", $filename);
         }
     }
 
     // Remove 'scripts' folder: no need of prompt anything to the user
-    if (file_exists(PMF_ROOT_DIR.'/scripts') && is_dir(PMF_ROOT_DIR.'/scripts')) {
-        @rmdir(PMF_ROOT_DIR.'/scripts');
+    if (file_exists(PMF_ROOT_DIR . '/scripts') && is_dir(PMF_ROOT_DIR . '/scripts')) {
+        @rmdir(PMF_ROOT_DIR . '/scripts');
+    } else {
+        print "<p class=\"hint\">Please delete the folder <em>./scripts</em> manually.</p>\n";
     }
     // Remove 'phpmyfaq.spec' file: no need of prompt anything to the user
-    if (file_exists(PMF_ROOT_DIR.'/phpmyfaq.spec')) {
-        @unlink(PMF_ROOT_DIR.'/phpmyfaq.spec');
+    if (file_exists(PMF_ROOT_DIR . '/phpmyfaq.spec')) {
+        @unlink(PMF_ROOT_DIR . '/phpmyfaq.spec');
+    } else {
+        print "<p class=\"hint\">Please delete the file <em>./phpmyfaq.spec</em> manually.</p>\n";
     }
     // Remove 'setup.php' file
-    if (@unlink(dirname($_SERVER['PATH_TRANSLATED']).'/setup.php')) {
+    if (@unlink(dirname($_SERVER['PATH_TRANSLATED']) . '/setup.php')) {
         print "<p class=\"success\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";
     } else {
         print "<p class=\"hint\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
     }
     // Remove 'update.php' file
-    if (@unlink(dirname($_SERVER['PATH_TRANSLATED']).'/update.php')) {
+    if (@unlink(dirname($_SERVER['PATH_TRANSLATED']) . '/update.php')) {
         print "<p class=\"success\">The file <em>./install/update.php</em> was deleted automatically.</p>\n";
     } else {
         print "<p class=\"hint\">Please delete the file <em>./install/update.php</em> manually.</p>\n";

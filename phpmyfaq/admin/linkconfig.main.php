@@ -34,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 // Re-evaluate $user
-$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
 
 // Define number of entries per page
 $entriesPerPage = 10;
@@ -182,7 +182,7 @@ showListTypeSelection();
                                         type='%s'
                                     AND id=%d",
                                 SQLPREFIX,
-                                $db->escape_string($params['type']),
+                                $db->escape($params['type']),
                                 $posts['id']
                                 );
                     $row = false;
@@ -200,8 +200,8 @@ showListTypeSelection();
                                             dtUpdateDate = '%s'
                                             WHERE id = %d",
                                         SQLPREFIX,
-                                        $db->escape_string($user->getLogin()),
-                                        $db->escape_string(date('YmdHis')),
+                                        $db->escape($user->getLogin()),
+                                        $db->escape(date('YmdHis')),
                                         $posts['id']
                                         );
                             $db->query($query);
@@ -237,11 +237,11 @@ showListTypeSelection();
                                         WHERE
                                             id=%d",
                                         SQLPREFIX,
-                                        $db->escape_string($posts['url']),
-                                        $db->escape_string($posts['reason']),
-                                        $db->escape_string($posts['enabled']),
-                                        $db->escape_string($posts['locked']),
-                                        $db->escape_string(date('YmdHis')),
+                                        $db->escape($posts['url']),
+                                        $db->escape($posts['reason']),
+                                        $db->escape($posts['enabled']),
+                                        $db->escape($posts['locked']),
+                                        $db->escape(date('YmdHis')),
                                         $posts['id']
                                         );
                             $db->query($query);
@@ -274,12 +274,12 @@ showListTypeSelection();
                 ORDER BY
                     %s %s",
                 SQLPREFIX,
-                $db->escape_string($params['type']),
+                $db->escape($params['type']),
                 $params['sortby'],
                 $params['sortorder']
                 );
     $result = $db->query($query);
-    $pages = ceil($db->num_rows($result) / $entriesPerPage);
+    $pages = ceil($db->numRows($result) / $entriesPerPage);
     $page = $params['page'] = max(1,min($pages,$params['page']));
     $result = $db->query($query);
 

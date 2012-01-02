@@ -52,6 +52,13 @@ if (isset($auth)) {
                          ('addnews'      == $action) || ('editnews'     == $action) || ('copyentry'  == $action))) {
         
         if ($faqconfig->get('main.enableWysiwygEditor') == true) {
+
+            if (('addnews' == $action || 'editnews' == $action)) {
+                $tinyMceSave = '';
+            } else {
+                $tinyMceSave = 'save,|,';
+            }
+
 ?>
 <!-- tinyMCE -->
 <script>
@@ -69,7 +76,7 @@ tinyMCE.init({
     theme_advanced_blockformats : "p,div,h1,h2,h3,h4,h5,h6,blockquote,dt,dd,code,samp",
 
     // Theme options
-    theme_advanced_buttons1 : "save,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
+    theme_advanced_buttons1 : "<?php print $tinyMceSave ?>bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
     theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,phpmyfaq,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,code,syntaxhl,|,insertdate,inserttime,preview,|,forecolor,backcolor",
     theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen,help",
     theme_advanced_toolbar_location : "top",
@@ -88,7 +95,7 @@ tinyMCE.init({
     save_onsavecallback : "phpMyFAQSave",
 
     // Example content CSS (should be your site CSS)
-    content_css : "../template/<?php print PMF_Template::getTplSetName(); ?>/css/style.css",
+    content_css : "../template/<?php print PMF_Template::getTplSetName(); ?>/css/style.css,style/admin.css",
 
     // Drop lists for link/image/media/template dialogs
     template_external_list_url : "js/template_list.js",
@@ -124,12 +131,16 @@ function ajaxfilemanager(field_name, url, type, win)
     });
 }
 
+/**
+ * 
+ */
 function phpMyFAQSave()
 {
     $('#saving_data_indicator').html('<img src="images/indicator.gif" /> Saving ...');
     // Create an input field with the save button name
     var input = document.createElement("input");
-    input.setAttribute("name", $('input:submit')[0].name);
+    input.setAttribute('name', $('input:submit')[0].name);
+    input.setAttribute('id', 'temporarySaveButton');
     $('#answer')[0].parentNode.appendChild(input);
     // Submit the form by an ajax request
     <?php if ($faqData['id'] == 0): ?>
@@ -138,11 +149,12 @@ function phpMyFAQSave()
     var data = {action: "ajax", ajax: 'recordSave'};
     <?php endif; ?>
     var id = $('#answer')[0].parentNode.parentNode.id;
-    $.each($('#'+id).serializeArray(), function(i, field) {
+    $.each($('#' + id).serializeArray(), function(i, field) {
         data[field.name] = field.value;
     });
     $.post("index.php", data, null);
     $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_savedsuc']; ?>');
+    $('#temporarySaveButton').remove();
 }
 
 // --> /*]]>*/
@@ -202,10 +214,10 @@ function getGoogleTranslation(div, text, langFrom, langTo, fieldType)
 {
     langFrom = convertCodeForGoogle(langFrom);
     langTo   = convertCodeForGoogle(langTo);
-    google.language.translate(text, langFrom, langTo, function(result) {
+    google.language.translate({text: text, type: 'html'}, langFrom, langTo, function(result) {
         if (result.translation) {
             switch(fieldType) {
-                case 'content':
+                case 'answer':
                     tinymce.get(div).setContent(result.translation);
                     break;
                 case 'keywords':
@@ -218,7 +230,7 @@ function getGoogleTranslation(div, text, langFrom, langTo, fieldType)
                     break;
                 case 'name':
                 case 'description':
-                case 'thema':
+                case 'question':
                 default:
                     $(div).val(result.translation);
                     break;

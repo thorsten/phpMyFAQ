@@ -35,7 +35,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_News
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2006-2010 phpMyFAQ Team
+ * @copyright 2006-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-06-25
@@ -114,14 +114,18 @@ class PMF_News
             
         $result = $this->db->query($query);
 
+<<<<<<< HEAD
         if ($faqconfig->get('main.numberOfShownNewsEntries') > 0 && $this->db->numRows($result) > 0) {
+=======
+        if ($faqconfig->get('records.numberOfShownNewsEntries') > 0 && $this->db->numRows($result) > 0) {
+>>>>>>> ede35491e21b3b373402091dddceeecb034d209f
         	
             while (($row = $this->db->fetchObject($result))) {
             	
                 $counter++;
-                if (($showArchive  && ($counter > $faqconfig->get('main.numberOfShownNewsEntries'))) || 
+                if (($showArchive  && ($counter > $faqconfig->get('records.numberOfShownNewsEntries'))) ||
                    ((!$showArchive) && (!$forceConfLimit) && 
-                   ($counter <= $faqconfig->get('main.numberOfShownNewsEntries'))) || 
+                   ($counter <= $faqconfig->get('records.numberOfShownNewsEntries'))) ||
                    ((!$showArchive) && $forceConfLimit)) {
                    	
                     $item = array(
@@ -192,7 +196,10 @@ class PMF_News
                     $item['linkTitle']);
             }
             
-            $output .= sprintf('<div class="date">%s</div>', PMF_Date::createIsoDate($item['date']));
+            $output .= sprintf('
+                <div class="date">%s</div>',
+                PMF_Date::format(PMF_Date::createIsoDate($item['date']))
+            );
         }
 
         return ('' == $output) ? $this->pmf_lang['msgNoNews'] : $output;
@@ -346,7 +353,7 @@ class PMF_News
                 VALUES
             (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
             SQLPREFIX,
-            $this->db->nextID(SQLPREFIX.'faqnews', 'id'),
+            $this->db->nextId(SQLPREFIX.'faqnews', 'id'),
             $data['date'],
             $data['lang'],
             $data['header'],
