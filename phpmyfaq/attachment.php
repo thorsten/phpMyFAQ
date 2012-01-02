@@ -24,7 +24,7 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -40,7 +40,7 @@ $permission       = false;
 // authenticate with session information
 $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
 if (!$user instanceof PMF_User_CurrentUser) {
-    exit(-1);
+    $user = new PMF_User_CurrentUser(); // user not logged in -> empty user object
 }
 
 $id  = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
