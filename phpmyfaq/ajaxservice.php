@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Ajax 
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2011 phpMyFAQ Team
+ * @copyright 2010-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2010-09-15
@@ -291,11 +291,11 @@ switch ($action) {
 
             $faq->addCategoryRelations($categories, $recordId, $newData['lang']);
 
-            if ($autoActivate) {
-                // Activate visits
-                $visits = PMF_Visits::getInstance();
-                $visits->add($recordId, $newData['lang']);
+            // Activate visits
+            $visits = PMF_Visits::getInstance();
+            $visits->add($recordId, $newData['lang']);
 
+            if ($autoActivate) {
                 // Add user permissions
                 $faq->addPermission('user', $recordId, -1);
                 $category->addPermission('user', $categories['rubrik'], array(-1));
