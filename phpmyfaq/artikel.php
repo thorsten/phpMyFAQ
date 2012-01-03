@@ -291,7 +291,7 @@ $tpl->processTemplate('writeContent', array(
         'writecomment',
         $PMF_LANG['msgCaptcha']
     ),
-    'writeComments'              => $comment->getComments($faq->faqRecord['id'], PMF_Comment::COMMENT_TYPE_FAQ),
+    'writeComments'              => $faqComment->getComments($faq->faqRecord['id'], PMF_Comment::COMMENT_TYPE_FAQ),
     'msg_about_faq'              => $PMF_LANG['msg_about_faq']
     )
 );

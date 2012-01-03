@@ -28,8 +28,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-require_once('inc/News.php');
-
 $news = new PMF_News();
 
 $archived        = PMF_Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);

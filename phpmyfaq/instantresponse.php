@@ -18,7 +18,7 @@
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2007-2011 phpMyFAQ Team
+ * @copyright 2007-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-18
@@ -41,6 +41,8 @@ $tpl->processTemplate(
         'searchString'                  => $searchString,
         'writeSendAdress'               => '?'.$sids.'action=instantresponse',
         'ajaxlanguage'                  => $LANGCODE,
-        'printInstantResponse'          => $printInstantResponse));
+        'printInstantResponse'          => $printInstantResponse
+    )
+);
 
 $tpl->includeTemplate('writeContent', 'index');
