@@ -20,7 +20,7 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Georgi Korchev <korchev@yahoo.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
- * @copyright 2005-2011 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-20
@@ -60,15 +60,16 @@ define('FAQ_SORTING_TYPE_FAQID', 4);
 /**
  * PMF_Faq
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Faq
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author     Georgi Korchev <korchev@yahoo.com>
- * @author     Adrianna Musiol <musiol@imageaccess.de>
- * @since      2005-12-20
- * @copyright  2005-2010 phpMyFAQ Team
- * @version    SVN: $Id$
+ * @category  phpMyFAQ
+ * @package   PMF_Faq
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Georgi Korchev <korchev@yahoo.com>
+ * @author    Adrianna Musiol <musiol@imageaccess.de>
+ * @copyright 2005-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-12-20
  */
 class PMF_Faq
 {
@@ -584,12 +585,17 @@ class PMF_Faq
             $output .= '<ul class="phpmyfaq_ul">';
             $counter = 0;
             $displayedCounter = 0;
+            $lastFaqId = 0;
             while (($row = $this->db->fetch_object($result)) && $displayedCounter < $faqconfig->get('records.numberOfRecordsPerPage')) {
                 $counter ++;
                 if ($counter <= $first) {
                     continue;
                 }
                 $displayedCounter++;
+
+                if ($lastFaqId == $row->id) {
+                    continue; // Don't show multiple FAQs
+                }
 
                 if (empty($row->visits)) {
                     $visits = 0;
@@ -612,6 +618,8 @@ class PMF_Faq
                     $oLink->toHtmlAnchor());
 
                 $output .= $listItem;
+
+                $lastFaqId = $row->id;
             }
             $output .= '</ul><span id="totFaqRecords" style="display: none;">'.$num.'</span>';
         } else {
