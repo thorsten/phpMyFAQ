@@ -862,13 +862,12 @@ class PMF_Category
      * of associative arrays with the keys 'name', 'id', 'lang',
      * 'parent_id' and 'description'.
      *
-     * @param   integer $article_id Record id
+     * @param integer $article_id Record id
+     *
      * @return  array   
      */
-    public function getCategoriesFromArticle($article_id)
+    public function getCategoriesFromArticle($articleId)
     {
-        $rel = SQLPREFIX."faqcategoryrelations";
-        $cat = SQLPREFIX."faqcategories";
         $query = sprintf("
             SELECT
                 fc.id AS id,
@@ -889,7 +888,7 @@ class PMF_Category
                 fc.lang = '%s'",
             SQLPREFIX, 
             SQLPREFIX,
-            $article_id,
+            $articleId,
             $this->language,
             $this->language);
             
