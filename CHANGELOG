@@ -9,6 +9,7 @@ Version 2.8.0-dev - 2012-
 - added improved advanced search in subcategories (Thorsten)
 - improved usability of administration backend (Thorsten)
 - improved setup (Thorsten)
+- improved security with salted passwords (Thorsten)
 
 Version 2.7.3 - 2012-01-
 - updated Dutch translation (Almar van Pel)
