@@ -215,16 +215,17 @@ class PMF_Auth
      * migration of passwords from old phpMyFAQ installations to new ones
      * with a salt.
      *
-     * @param string $string
+     * @param string $encryptedPassword Encrypted password
+     * @param string $clearPassword     Clear Password
      *
      * @return boolean
      */
-    public function checkEncryptedString($string)
+    public function checkEncryptedPassword($encryptedPassword, $clearPassword)
     {
         $encTypes = array('crypt', 'md5', 'sha');
 
         foreach ($encTypes as $encType) {
-            if ($string === PMF_Enc::selectEnc($encType)->encrypt($string)) {
+            if ($encryptedPassword === PMF_Enc::selectEnc($encType)->encrypt($clearPassword)) {
                 return true;
             }
         }
