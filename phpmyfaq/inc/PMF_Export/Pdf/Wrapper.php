@@ -1,6 +1,6 @@
 <?php
 /**
- * Main PDF class for phpMyFAQ based on FPDF by Olivier Plathey
+ * Main PDF class for phpMyFAQ which "just" extends the TCPDF library
  *
  * PHP Version 5.2
  *
@@ -18,9 +18,8 @@
  * @package   PMF_Export
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Peter Beauvain <pbeauvain@web.de>
- * @author    Olivier Plathey <olivier@fpdf.org>
  * @author    Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
- * @copyright 2004-2011 phpMyFAQ Team
+ * @copyright 2004-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-11-21
@@ -198,104 +197,13 @@ require K_PATH_MAIN . '/tcpdf.php';
  * @author    Peter Beauvain <pbeauvain@web.de>
  * @author    Olivier Plathey <olivier@fpdf.org>
  * @author    Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
- * @copyright 2004-2011 phpMyFAQ Team
+ * @copyright 2004-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-11-21
  */
 class PMF_Export_Pdf_Wrapper extends TCPDF
 {
-    /**
-    * <b> and <strong> for bold strings
-    *
-    * @var string
-    */
-    private $B;
-
-    /**
-    * <i> and <em> for italic strings
-    *
-    * @var string
-    */
-    private $I;
-
-    /**
-    * <u> for underlined strings
-    *
-    * @var string
-    */
-    private $U;
-
-    /**
-    * The "src" attribute inside (X)HTML tags
-    *
-    * @var string
-    */
-    private $SRC;
-
-    /**
-    * The "href" attribute inside (X)HTML tags
-    *
-    * @var string
-    */
-    protected $HREF;
-
-    /**
-    * <pre> for code examples
-    *
-    * @var string
-    */
-    private $PRE;
-
-    /**
-    * <div align="center"> for centering text
-    *
-    * @var string
-    */
-    private $CENTER;
-
-    /**
-    * The border of a table
-    *
-    * @var integer
-    */
-    private $tableborder;
-
-    /**
-    * The begin of a table
-    *
-    * @var integer
-    */
-    private $tdbegin;
-
-    /**
-    * The width of a table
-    *
-    * @var integer
-    */
-    private $tdwidth;
-
-    /**
-    * The heightof a table
-    *
-    * @var integer
-    */
-    private $tdheight;
-
-    /**
-    * The alignment of a table
-    *
-    * @var integer
-    */
-    private $tdalign;
-
-    /**
-    * The background color of a table
-    *
-    * @var integer
-    */
-    private $tdbgcolor;
-
     /**
     * With or without bookmarks
     *
@@ -311,27 +219,6 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
     public $isFullExport = false;
 
     /**
-    * Array with titles
-    * 
-    * @var array
-    */
-    protected $outlines = array();
-
-    /**
-    * Outline root
-    * 
-    * @var string
-    */
-    protected $OutlineRoot;
-
-    /**
-     * Supported image MIME types
-     * 
-     * @var array
-     */
-    private $mimetypes = array(1 => 'gif', 2 => 'jpg', 3 => 'png');
-    
-    /**
      * Categories
      * 
      * @var array
@@ -346,9 +233,10 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
 
     /**
      * The current faq
-     * 
+     *
+     * @var array
      */
-    public $faq = null;
+    public $faq = array();
     
     /**
      * Question
@@ -391,24 +279,14 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
         global $PMF_LANG;
         
         parent::__construct(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $this->B = 0;
-        $this->I = 0;
-        $this->U = 0;
-        $this->PRE = 0;
-        $this->CENTER = 0;
-        $this->SRC = "";
-        $this->HREF = "";
-        $this->tableborder = 0;
-        $this->tdbegin = false;
-        $this->tdwidth = 0;
-        $this->tdheight = 0;
-        $this->tdalign = "L";
-        $this->tdbgcolor = false;
+
         $this->setFontSubsetting(false);
+
         // Check on RTL
         if ('rtl' == $PMF_LANG['dir']) {
             $this->setRTL(true);
         }
+
         // Set font
         if (array_key_exists($PMF_LANG['metaLanguage'], $this->fontFiles)) {
             $this->currentFont = (string)$this->fontFiles[$PMF_LANG['metaLanguage']];
@@ -418,7 +296,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
     /**
      * Setter for the category name
      * 
-     * @param string $catgory Category name
+     * @param string $category Category name
      * 
      * @return void
      */
@@ -454,10 +332,8 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
      */
     public function Header()
     {
-        global $PMF_LANG;
-
         if (array_key_exists($this->category, $this->categories)) {
-            $title = $this->categories[$this->category]['name'].': '.$this->question;
+            $title = $this->categories[$this->category]['name'] . ': ' . $this->question;
         } else {
             $title = $this->question;
         }
@@ -572,5 +448,15 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
     public function getCurrentFont()
     {
         return $this->currentFont;
+    }
+
+    /**
+     * Sets the FAQ array
+     *
+     * @param array $faq
+     */
+    public function setFaq(Array $faq)
+    {
+        $this->faq = $faq;
     }
 }
