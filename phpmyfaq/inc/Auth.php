@@ -32,7 +32,8 @@
  * @category  phpMyFAQ
  * @package   PMF_Auth
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2005-2011 phpMyFAQ Team
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-30
@@ -48,7 +49,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Auth
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2005-2011 phpMyFAQ Team
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-30
@@ -206,5 +208,27 @@ class PMF_Auth
     public function encrypt($str)
     {
         return $this->encContainer->encrypt($str);
+    }
+
+    /**
+     * Checks encryption type for given string. We need this for the MD5
+     * migration of passwords from old phpMyFAQ installations to new ones
+     * with a salt.
+     *
+     * @param string $string
+     *
+     * @return boolean
+     */
+    public function checkEncryption($string)
+    {
+        $encTypes = array('crypt', 'md5', 'sha1');
+
+        foreach ($encTypes as $encType) {
+            if ($string === PMF_Enc::selectEnc($encType)->encrypt($string)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

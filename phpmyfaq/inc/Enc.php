@@ -17,6 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Enc
  * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
@@ -33,6 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Enc
  * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
@@ -53,6 +55,13 @@ class PMF_Enc
      * @var array
      */
     public $errors = array();
+
+    /**
+     * Salt
+     *
+     * @var string
+     */
+    protected $salt = '';
 
     /**
      * Encrypts the string str and returns the result.
@@ -128,5 +137,17 @@ class PMF_Enc
             $message .= $error."\n";
         }
         return $message;
+    }
+
+    /**
+     * Setter for salt
+     *
+     * @param string $salt
+     */
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
+
+        return $this;
     }
 }

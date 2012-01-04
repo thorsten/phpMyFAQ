@@ -24,7 +24,7 @@
  * @package   PMF_User
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2011 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-28
@@ -50,7 +50,7 @@ define('PMF_LOGIN_BY_AUTH_FAILED', 'Could not login with login and password. ');
  * @package   PMF_User
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-28
@@ -117,11 +117,12 @@ class PMF_User_CurrentUser extends PMF_User
      * The given password must not be encrypted, since the auth
      * object takes care about the encryption method.
      *
-     * @param  string $login Loginname
-     * @param  string $pass  Password
+     * @param string $login     Loginname
+     * @param string $password  Password
+     *
      * @return bool
      */
-    public function login($login, $pass)
+    public function login($login, $password)
     {
         // ToDo: the option should be in the configuration of the DB
         //   instead of inc/dataldap.php
@@ -139,9 +140,9 @@ class PMF_User_CurrentUser extends PMF_User
         }
         
         // authenticate user by login and password
-        $login_error = 0;
-        $pass_error  = 0;
-        $count       = 0;
+        $loginError     = 0;
+        $passwordError  = 0;
+        $count          = 0;
         
         foreach ($this->authContainer as $name => $auth) {
             $count++;
@@ -153,12 +154,12 @@ class PMF_User_CurrentUser extends PMF_User
             }
             // $login does not exist, so continue
             if (!$auth->checkLogin($login, $optData)) {
-                $login_error++;
+                $loginError++;
                 continue;
             }
             // $login exists, but $pass is incorrect, so stop!
-            if (!$auth->checkPassword($login, $pass, $optData)) {
-                $pass_error++;
+            if (!$auth->checkPassword($login, $password, $optData)) {
+                $passwordError++;
                 // Don't stop, as other auth method could work:
                 continue;
             }
@@ -189,21 +190,23 @@ class PMF_User_CurrentUser extends PMF_User
                 return false;
                 break;
             }
+
             // Save encrypted password just for "Change Password" convenience
             $_authLocal = PMF_Auth::selectAuth($this->auth_data['authSource']['name']);
             $_authLocal->selectEncType($this->auth_data['encType']);
             $_authLocal->setReadOnly($this->auth_data['readOnly']);
-            $this->encrypted_password = $_authLocal->encrypt($pass);
+            $this->encrypted_password = $_authLocal->encrypt($password);
+            
             // return true
             return true;
             break;
         }
         
         // raise errors and return false
-        if ($login_error == $count) {
+        if ($loginError == $count) {
             $this->errors[] = parent::ERROR_USER_INCORRECT_LOGIN;
         }
-        if ($pass_error > 0) {
+        if ($passwordError > 0) {
             $this->errors[] = parent::ERROR_USER_INCORRECT_PASSWORD;
         }
         return false;

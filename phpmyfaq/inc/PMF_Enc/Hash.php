@@ -44,10 +44,11 @@ class PMF_Enc_Hash extends PMF_Enc
      * encrypts the string str and returns the result.
      *
      * @param  string $str String
+     *
      * @return string
      */
     public function encrypt($str)
     {
-        return hash('sha256', $str);
+        return hash('sha256', $str . $this->salt);
     }
 }

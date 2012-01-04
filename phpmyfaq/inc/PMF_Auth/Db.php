@@ -17,6 +17,7 @@
  * @category  phpMyFAQ 
  * @package   PMF_Auth
  * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
@@ -33,6 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ 
  * @package   PMF_Auth
  * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
@@ -62,14 +64,12 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
     }
 
     /**
-     * Adds a new user account to the authentication table.
+     * Adds a new user account to the faquserlogin table. Returns true on
+     * success, otherwise false. Error messages are added to the array errors.
      *
-     * Returns true on success, otherwise false.
+     * @param string $login    Loginname
+     * @param string $password Password
      *
-     * Error messages are added to the array errors.
-     *
-     * @param  string $login Loginname
-     * @param  string $pass  Password
      * @return boolean
      */
     public function add($login, $pass)
@@ -87,7 +87,7 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
             ('%s', '%s')",
             SQLPREFIX,
             $this->db->escape($login),
-            $this->db->escape($this->encContainer->encrypt($pass)));
+            $this->db->escape($this->encContainer->setSalt($login)->encrypt($pass)));
             
         $add   = $this->db->query($add);
         $error = $this->db->error();
@@ -125,7 +125,7 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
             WHERE
                 login = '%s'",
             SQLPREFIX,
-            $this->db->escape($this->encContainer->encrypt($pass)),
+            $this->db->escape($this->encContainer->setSalt($login)->encrypt($pass)),
             $this->db->escape($login));
             
         $change = $this->db->query($change);
@@ -184,11 +184,11 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
      * Error messages are added to the array errors.
      *
      * @param  string $login        Loginname
-     * @param  string $pass         Password
+     * @param  string $password     Password
      * @param  array  $optionslData Optional data
      * @return boolean
      */
-    public function checkPassword($login, $pass, Array $optionalData = null)
+    public function checkPassword($login, $password, Array $optionalData = null)
     {
         $check = sprintf("
             SELECT
@@ -207,23 +207,37 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
             $this->errors[] = PMF_User::ERROR_USER_NOT_FOUND . 'error(): ' . $error;
             return false;
         }
-        $num_rows = $this->db->numRows($check);
-        if ($num_rows < 1) {
+
+        $numRows = $this->db->numRows($check);
+        if ($numRows < 1) {
             $this->errors[] = PMF_User::ERROR_USER_NOT_FOUND;
             return false;
         }
+
         // if login not unique, raise an error, but continue
-        if ($num_rows > 1) {
+        if ($numRows > 1) {
             $this->errors[] = PMF_User::ERROR_USER_LOGIN_NOT_UNIQUE;
         }
+
         // if multiple accounts are ok, just 1 valid required
         while ($user = $this->db->fetchArray($check)) {
-            if ($user['pass'] == $this->encContainer->encrypt($pass)) {
+
+            // Check password against old one
+            if (PMF_Configuration::getInstance()->get('security.forcePasswordUpdate')) {
+                if ($this->checkEncryption($user['pass']) &&
+                    $this->encContainer->setSalt($user['login'])->encrypt($password) !== $user['pass']) {
+                    $this->changePassword($login, $password);
+                    return $this->checkPassword($login, $password);
+                }
+            }
+
+            if ($user['pass'] === $this->encContainer->setSalt($user['login'])->encrypt($password)) {
                 return true;
                 break;
             }
         }
         $this->errors[] = PMF_User::ERROR_USER_INCORRECT_PASSWORD;
+
         return false;
     }
 
@@ -244,7 +258,8 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
             WHERE
                 login = '%s'",
             SQLPREFIX,
-            $this->db->escape($login));
+            $this->db->escape($login)
+        );
             
         $check = $this->db->query($check);
         $error = $this->db->error();
