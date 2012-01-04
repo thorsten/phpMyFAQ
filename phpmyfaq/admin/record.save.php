@@ -165,7 +165,7 @@ if ($permission['editbt']) {
                     'thema'         => utf8_encode(html_entity_decode($translated_question)),
                     'content'       => utf8_encode(html_entity_decode($translated_answer)),
                     'keywords'      => utf8_encode($translated_keywords),
-                    'author'        => 'Google',
+                    'author'        => 'Google Translate',
                     'email'         => $faqconfig->get('main.administrationMail')));
     
                 // Create ChangeLog entry
