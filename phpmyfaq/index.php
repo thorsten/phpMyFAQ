@@ -444,7 +444,7 @@ if (is_null($error)) {
     $loginMessage = '<p class="error">' . $error . '</p>';
 }
 
-$main_template_vars = array(
+$tplMainPage = array(
     'msgRegisterUser'     => '<a href="?' . $sids . 'action=register">' . $PMF_LANG['msgRegisterUser'] . '</a>',
     'msgLoginUser'        => $PMF_LANG['msgLoginUser'],
     'title'               => $faqconfig->get('main.titleFAQ') . $title,
@@ -529,8 +529,7 @@ if (!isset($stickyRecordsParams['error'])) {
 }
 
 if ($faqconfig->get('main.enableRewriteRules')) {
-    $links_template_vars = array(
-        "faqHome"             => $faqconfig->get('main.referenceURL'),
+    $tplNavigation = array(
         "msgSearch"           => '<a href="' . $systemUri . 'search.html">'.$PMF_LANG["msgAdvancedSearch"].'</a>',
         'msgAddContent'       => '<a href="' . $systemUri . 'addcontent.html">'.$PMF_LANG["msgAddContent"].'</a>',
         "msgQuestion"         => '<a href="' . $systemUri . 'ask.html">'.$PMF_LANG["msgQuestion"].'</a>',
@@ -543,8 +542,7 @@ if ($faqconfig->get('main.enableRewriteRules')) {
         'showSitemap'         => '<a href="' . $systemUri . 'sitemap/A/'.$LANGCODE.'.html">'.$PMF_LANG['msgSitemap'].'</a>',
         'opensearch'          => $systemUri . 'opensearch.html');
 } else {
-    $links_template_vars = array(
-        "faqHome"             => $faqconfig->get('main.referenceURL'),
+    $tplNavigation = array(
         "msgSearch"           => '<a href="index.php?'.$sids.'action=search">'.$PMF_LANG["msgAdvancedSearch"].'</a>',
         "msgAddContent"       => '<a href="index.php?'.$sids.'action=add">'.$PMF_LANG["msgAddContent"].'</a>',
         "msgQuestion"         => '<a href="index.php?'.$sids.'action=ask&category_id='.$cat.'">'.$PMF_LANG["msgQuestion"].'</a>',
@@ -558,15 +556,17 @@ if ($faqconfig->get('main.enableRewriteRules')) {
         'opensearch'          => $systemUri . 'opensearch.php');
 }
 
+$tplNavigation['faqHome'] = $systemUri;
+
 //
 // Add debug info if needed
 //
 if (DEBUG) {
-    $debug_template_vars = array(
+    $tplDebug = array(
         'debugMessages' => '<div id="debug_main"><h2>DEBUG INFORMATION:</h2>' . $db->log() . '</div>'
     );
 } else {
-    $debug_template_vars = array(
+    $tplDebug = array(
         'debugMessages' => ''
     );
 }
@@ -574,7 +574,7 @@ if (DEBUG) {
 //
 // Get main template, set main variables
 //
-$tpl->parse('index', array_merge($main_template_vars, $links_template_vars, $debug_template_vars));
+$tpl->parse('index', array_merge($tplMainPage, $tplNavigation, $tplDebug));
 
 //
 // Show login box or logged-in user information
