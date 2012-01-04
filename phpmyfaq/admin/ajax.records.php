@@ -18,7 +18,7 @@
  * @package   Administration
  * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2011 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-31
@@ -107,13 +107,13 @@ switch($ajax_action) {
     case 'delete_record':
         if ($permission['delbt']) {
 
-            $record_id   = PMF_Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
-            $record_lang = PMF_Filter::filterInput(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
+            $recordId   = PMF_Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
+            $recordLang = PMF_Filter::filterInput(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
 
             $logging = new PMF_Logging();
-            $logging->logAdmin($user, 'Deleted FAQ ID ' . $record_id);
+            $logging->logAdmin($user, 'Deleted FAQ ID ' . $recordId);
 
-            $faq->deleteRecord($record_id, $record_lang);
+            $faq->deleteRecord($recordId, $recordLang);
             print $PMF_LANG['ad_entry_delsuc'];
             
         } else {
