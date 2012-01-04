@@ -40,7 +40,8 @@ $PMF_LDAP['ldap_use_domain_prefix'] = true;
 // refer to the documentation of ldap_set_option() for information on available options
 $PMF_LDAP["ldap_options"] = array (
     LDAP_OPT_PROTOCOL_VERSION => 3,
-    LDAP_OPT_REFERRALS        => 0 );
+    LDAP_OPT_REFERRALS        => 0
+);
 
 // Option for adding a check on LDAP groups
 // Default: false

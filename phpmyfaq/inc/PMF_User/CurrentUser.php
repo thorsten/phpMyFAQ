@@ -143,7 +143,7 @@ class PMF_User_CurrentUser extends PMF_User
         $pass_error  = 0;
         $count       = 0;
         
-        foreach ($this->auth_container as $name => $auth) {
+        foreach ($this->authContainer as $name => $auth) {
             $count++;
 
             // $auth is an invalid Auth object, so continue

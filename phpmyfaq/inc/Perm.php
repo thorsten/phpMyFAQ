@@ -42,7 +42,7 @@
  * @category  phpMyFAQ 
  * @package   PMF_Perm
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2005-2011 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
@@ -58,7 +58,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ 
  * @package   PMF_Perm
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
@@ -71,16 +71,6 @@ class PMF_Perm
      * @var PMF_Db_Driver
      */
     protected $db = null;
-
-    /**
-     * Allowed classnames for subclasses for Perm::selectPerm()
-     *
-     * @var array
-     */
-    private $perm_typemap = array(
-        'basic'  => 'PermBasic',
-        'medium' => 'PermMedium',
-        'large'  => 'PermLarge');
 
     /**
      * Constructor
@@ -99,27 +89,27 @@ class PMF_Perm
      * which subclass is returned. Allowed values and corresponding classnames
      * defined in perm_typemap.
      *
-     * @param  string $perm_level Permission level
+     * @param  string $permLevel Permission level
      * @return PMF_Perm
      */
-    public static function selectPerm($perm_level)
+    public static function selectPerm($permLevel)
     {
         // verify selected database
-        $perm       = new PMF_Perm();
-        $perm_level = strtolower($perm_level);
+        $perm      = new PMF_Perm();
+        $permLevel = ucfirst(strtolower($permLevel));
         
-        if (!isset($perm->perm_typemap[$perm_level])) {
+        if (!isset($permLevel)) {
             return $perm;
         }
         
-        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'PMF_Perm' . DIRECTORY_SEPARATOR . $perm->perm_typemap[$perm_level].".php";
+        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'PMF_Perm' . DIRECTORY_SEPARATOR . $permLevel . '.php';
         if (!file_exists($classfile)) {
             return $perm;
         }
-        
-        // instantiate 
-        $permclass = 'PMF_Perm_' . $perm->perm_typemap[$perm_level];
+
+        $permclass = 'PMF_Perm_' . $permLevel;
         $perm      = new $permclass();
+
         return $perm;
     }
     

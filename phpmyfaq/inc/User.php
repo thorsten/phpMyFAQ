@@ -107,10 +107,14 @@ class PMF_User
      *
      * @var array
      */
-    public $auth_data = array('authSource' => array('name' => 'db', 
-                                                    'type' => 'local'),
-                              'encType'    => PMF_ENCRYPTION_TYPE,
-                              'readOnly'   => false);
+    public $auth_data = array(
+        'authSource' => array(
+            'name' => 'db',
+            'type' => 'local'
+        ),
+        'encType'    => PMF_ENCRYPTION_TYPE,
+        'readOnly'   => false
+    );
 
     /**
      * Public array that contains error messages.
@@ -131,7 +135,7 @@ class PMF_User
      *
      * @var array
      */
-    protected $auth_container = array();
+    protected $authContainer = array();
     
     /**
      * login string
@@ -204,7 +208,7 @@ class PMF_User
         
         // authentication objects
         // always make a 'local' $auth object (see: $auth_data)
-        $this->auth_container = array();
+        $this->authContainer = array();
         $authLocal = PMF_Auth::selectAuth($this->auth_data['authSource']['name']);
         $authLocal->selectEncType($this->auth_data['encType']);
         $authLocal->setReadOnly($this->auth_data['readOnly']);
@@ -405,7 +409,7 @@ class PMF_User
      */
     public function createUser($login, $pass = '', $user_id = 0)
     {
-        foreach ($this->auth_container as $auth) {
+        foreach ($this->authContainer as $auth) {
             if (!$this->checkAuth($auth)) {
                 return false;
             }
@@ -458,7 +462,7 @@ class PMF_User
             $pass = $this->createPassword();
         }
         $success = false;
-        foreach ($this->auth_container as $name => $auth) {
+        foreach ($this->authContainer as $name => $auth) {
             if ($auth->setReadOnly()) {
                 continue;
             }
@@ -526,7 +530,7 @@ class PMF_User
         $read_only  = 0;
         $auth_count = 0;
         $delete     = array();
-        foreach ($this->auth_container as $auth) {
+        foreach ($this->authContainer as $auth) {
             $auth_count++;
             if ($auth->setReadOnly()) {
                 $read_only++;
@@ -553,7 +557,7 @@ class PMF_User
      */
     public function changePassword($pass = '')
     {
-        foreach ($this->auth_container as $auth) {
+        foreach ($this->authContainer as $auth) {
             if (!$this->checkAuth($auth)) {
                 return false;
             }
@@ -565,7 +569,7 @@ class PMF_User
         }
         
         $success = false;
-        foreach ($this->auth_container as $auth) {
+        foreach ($this->authContainer as $auth) {
             if ($auth->setReadOnly()) {
                 continue;
             }
@@ -681,7 +685,7 @@ class PMF_User
     public function addAuth($auth, $name)
     {
         if ($this->checkAuth($auth)) {
-            $this->auth_container[$name] = $auth;
+            $this->authContainer[$name] = $auth;
             return true;
         }
         return false;

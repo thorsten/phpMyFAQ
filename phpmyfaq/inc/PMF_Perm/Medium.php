@@ -17,7 +17,7 @@
  * @category  phpMyFAQ 
  * @package   PMF_Perm
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2005-2011 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
@@ -28,17 +28,17 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Perm_PermMedium
+ * PMF_Perm_Medium
  *
  * @category  phpMyFAQ 
  * @package   PMF_Perm
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
  */
-class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
+class PMF_Perm_Medium extends PMF_Perm_Basic
 {
     /**
      * Default data for new groups.
