@@ -68,8 +68,8 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
 
 <nav>
     <ul>
-        <li><a target="_blank" href="http://www.phpmyfaq.de//documentation.php">Documentation</a></li>
-        <li><a target="_blank" href="http://www.phpmyfaq.de//support.php">Support</a></li>
+        <li><a target="_blank" href="http://www.phpmyfaq.de/documentation.php">Documentation</a></li>
+        <li><a target="_blank" href="http://www.phpmyfaq.de/support.php">Support</a></li>
         <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
         <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
     </ul>
@@ -158,7 +158,8 @@ if ($step == 1) {
                 <?php
                 if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable($templateDir)) {
                     printf(
-                        '<p class="error"><strong>Please change the directory %s and its contents writable (777 on Linux/UNIX).</strong></p>',
+                        '<p class="error"><strong>Please change the directory %s and its contents writable (777 ' .
+                        'on Linux/UNIX).</strong></p>',
                         $templateDir
                     );
                 }
@@ -304,7 +305,8 @@ if ($step == 4) {
     //
     // UPDATES FROM 2.5.2
     if (version_compare($version, '2.5.3', '<')) {
-        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'spam.enableCaptchaCode' WHERE config_name = 'spam.enableCatpchaCode'";
+        $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'spam.enableCaptchaCode'
+            WHERE config_name = 'spam.enableCatpchaCode'";
     }
     
     //
@@ -326,7 +328,8 @@ if ($step == 4) {
                 break;
                 
             default:
-                print '<p class="hint">Please read <a target="_blank" href="../docs/documentation.en.html">documenation</a> about migration to UTF-8.</p>';
+                print '<p class="hint">Please read <a target="_blank" href="../docs/documentation.en.html">' .
+                      'documenation</a> about migration to UTF-8.</p>';
                 break; 
             }
         }
@@ -604,12 +607,6 @@ if ($step == 4) {
             WHERE config_name = 'main.ssoLogoutRedirect'";
         $query[] = "UPDATE ". SQLPREFIX . "faqconfig SET config_name = 'security.useSslForLogins'
             WHERE config_name = 'main.useSslForLogins'";
-
-		$query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishEnable', 'false')";
-		$query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishHost', '127.0.0.1')";
-		$query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishPort', '2000')";
-		$query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishSecret', '')";
-		$query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishTimeout', '500')";
     }
 
     //
@@ -623,15 +620,20 @@ if ($step == 4) {
     // UPDATES FROM 2.8.0-alpha
     //
     if (version_compare($version, '2.8.0-alpha', '<')) {  
-        $query[] = "INSERT INTO ". SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
             (39, 'addfaq', 'Right to add FAQs in frontend', 1, 1)";
-        $query[] = "INSERT INTO ". SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 39)";
-        $query[] = "INSERT INTO ". SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = "INSERT INTO " . SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 39)";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
             (40, 'addquestion', 'Right to add questions in frontend', 1, 1)";
-        $query[] = "INSERT INTO ". SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 40)";
-        $query[] = "INSERT INTO ". SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = "INSERT INTO " . SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 40)";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
             (41, 'addcomment', 'Right to add comments in frontend', 1, 1)";
-        $query[] = "INSERT INTO ". SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 41)";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 41)";
+        $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishEnable', 'false')";
+        $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishHost', '127.0.0.1')";
+        $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishPort', '2000')";
+        $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishSecret', '')";
+        $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishTimeout', '500')";
     }
 
     // Perform the queries for updating/migrating the database
@@ -646,8 +648,8 @@ if ($step == 4) {
             }
             if (!$result) {
                 print "</div>";
-                print '<p class="error"><strong>Error:</strong> Please install your version of phpMyFAQ once again or send
-                us a <a href=\"http://bugs.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
+                print '<p class="error"><strong>Error:</strong> Please install your version of phpMyFAQ once again ' .
+                      'or send us a <a href=\"http://bugs.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
                 printf('<p class="error"><strong>DB error:</strong> %s</p>', $db->error());
                 printf('<code>%s</code>', htmlentities($executeQuery));
                 HTMLFooter();
@@ -702,8 +704,8 @@ if ($step == 4) {
             $result = $db->query($executeQuery);
             printf('<span title="%s">.</span>', $executeQuery);
             if (!$result) {
-                print '<p class="error"><strong>Error:</strong> Please install your version of phpMyFAQ once again or send
-                us a <a href=\"http://www.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
+                print '<p class="error"><strong>Error:</strong> Please install your version of phpMyFAQ once again ' .
+                        'or send us a <a href=\"http://bugs.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
                 printf('<p class="error"><strong>DB error:</strong> %s</p>', $db->error());
                 printf('<code>%s</code>', htmlentities($executeQuery));
                 HTMLFooter();
