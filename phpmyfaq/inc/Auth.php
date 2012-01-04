@@ -219,9 +219,9 @@ class PMF_Auth
      *
      * @return boolean
      */
-    public function checkEncryption($string)
+    public function checkEncryptedString($string)
     {
-        $encTypes = array('crypt', 'md5', 'sha1');
+        $encTypes = array('crypt', 'md5', 'sha');
 
         foreach ($encTypes as $encType) {
             if ($string === PMF_Enc::selectEnc($encType)->encrypt($string)) {

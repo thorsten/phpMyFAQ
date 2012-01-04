@@ -224,7 +224,7 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
 
             // Check password against old one
             if (PMF_Configuration::getInstance()->get('security.forcePasswordUpdate')) {
-                if ($this->checkEncryption($user['pass']) &&
+                if ($this->checkEncryptedString($user['pass']) &&
                     $this->encContainer->setSalt($user['login'])->encrypt($password) !== $user['pass']) {
                     $this->changePassword($login, $password);
                     return $this->checkPassword($login, $password);
