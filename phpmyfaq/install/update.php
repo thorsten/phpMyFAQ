@@ -136,11 +136,19 @@ if ($step == 1) {
                     </strong>
                 </legend>
 
+                <p class="hint">
+                    <strong>
+                        Please create a full backup of your database, your templates, attachments and uploaded images
+                        before running this update.
+                    </strong>
+                </p>
+
                 <p>This update script will work <strong>only</strong> for the following versions:</p>
                 <ul type="square">
-                    <li>phpMyFAQ 2.5.x (supported until mid of 2010)</li>
-                    <li>phpMyFAQ 2.6.x (supported until end of 2011)</li>
-                    <li>phpMyFAQ 2.7.x (active support)</li>
+                    <li>phpMyFAQ 2.5.x (out of support since mid of 2010)</li>
+                    <li>phpMyFAQ 2.6.x (out of support since end of 2011)</li>
+                    <li>phpMyFAQ 2.7.x</li>
+                    <li>phpMyFAQ 2.8.x</li>
                 </ul>
 
                 <p>This update script <strong>will not</strong> work for the following versions:</p>
@@ -149,12 +157,6 @@ if ($step == 1) {
                     <li>phpMyFAQ 1.x</li>
                     <li>phpMyFAQ 2.0.x</li>
                 </ul>
-                <p class="hint">
-                    <strong>
-                        Please create a full backup of your database, your templates, attachments and uploaded images
-                        before running this update.
-                    </strong>
-                </p>
                 <?php
                 if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable($templateDir)) {
                     printf(
@@ -174,10 +176,16 @@ if ($step == 1) {
                         $version
                     );
                 }
+                if ('hash' !== PMF_ENCRYPTION_TYPE) {
+                    printf(
+                        '<p class="hint">Your passwords are currently encoded with a %s() method.</p>',
+                        PMF_ENCRYPTION_TYPE
+                    );
+                }
                 ?>
 
                 <p>
-                    <input class="submit" type="submit" value="Go to step 2 of 4" />
+                    <input class="submit update" type="submit" value="Go to step 2 of 4" />
                 </p>
             </fieldset>
         </form>
@@ -253,7 +261,7 @@ if ($step == 2) {
             <legend><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 2 of 4)</strong></legend>
             <p>A backup of your database configuration file has been made.</p>
             <p>
-                <input class="submit" type="submit" value="Go to step 3 of 4" />
+                <input class="submit update" type="submit" value="Go to step 3 of 4" />
             </p>
         </fieldset>
         </form>
@@ -275,7 +283,7 @@ if ($step == 3) {
             <legend><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 3 of 4)</strong></legend>
             <p>The configuration will be updated after the next step.</p>
             <p>
-                <input class="submit" type="submit" value="Go to step 4 of 4" />
+                <input class="submit update" type="submit" value="Go to step 4 of 4" />
             </p>
         </fieldset>
         </form>
@@ -619,7 +627,8 @@ if ($step == 4) {
     //
     // UPDATES FROM 2.8.0-alpha
     //
-    if (version_compare($version, '2.8.0-alpha', '<')) {  
+    if (version_compare($version, '2.8.0-alpha', '<')) {
+
         $query[] = "INSERT INTO " . SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
             (39, 'addfaq', 'Right to add FAQs in frontend', 1, 1)";
         $query[] = "INSERT INTO " . SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 39)";
@@ -629,11 +638,14 @@ if ($step == 4) {
         $query[] = "INSERT INTO " . SQLPREFIX . "faqright (right_id, name, description, for_users, for_groups) VALUES
             (41, 'addcomment', 'Right to add comments in frontend', 1, 1)";
         $query[] = "INSERT INTO " . SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 41)";
+
         $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishEnable', 'false')";
         $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishHost', '127.0.0.1')";
         $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishPort', '2000')";
         $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishSecret', '')";
         $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishTimeout', '500')";
+
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('security.forcePasswordUpdate', 'true')";
     }
 
     // Perform the queries for updating/migrating the database

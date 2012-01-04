@@ -125,13 +125,15 @@ define("PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE", 20);
 /**
  * This is the flag for choosing the encryption type for passwords. Currently
  * you can choose
- * - md5 (default)
+ *
+ * - hash (default)
  * - sha1
  * - crypt
+ * - md5 (default before phpMyFAQ 2.8)
  *
  * @var const
  */
-define('PMF_ENCRYPTION_TYPE', 'md5');
+define('PMF_ENCRYPTION_TYPE', 'hash');
 
 /**
  * List of denied extensions when uploading a file.

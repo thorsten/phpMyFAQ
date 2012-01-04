@@ -1,6 +1,6 @@
 <?php
 /**
- * INSERT instruction for configuration
+ * INSERT queries for the phpMyFAQ configuration for fresh installations
  *
  * PHP Version 5.2
  *
@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Setup
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2006-2011 phpMyFAQ Team
+ * @copyright 2006-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-07-02
@@ -26,12 +26,12 @@
 // Main
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.administrationMail', 'webmaster@example.org')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.contactInformations', '')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.currentVersion', '".VERSION."')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.currentApiVersion', '".APIVERSION."')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.currentVersion', '" . VERSION . "')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.currentApiVersion', '" . APIVERSION . "')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.enableAdminLog', 'true')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.enableRewriteRules', 'false')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.enableUserTracking', 'true')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.language', '".$language."')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.language', '" . $language . "')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.languageDetection', 'true')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.metaDescription', 'phpMyFAQ should be the answer for all questions in life')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.metaKeywords', '')";
@@ -72,7 +72,7 @@ $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('search.relevance', 
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('search.enableRelevance', 'false')";
 
 // Security
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('security.permLevel', '".$permLevel."')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('security.permLevel', '" . $permLevel . "')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('security.ipCheck', 'false')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('security.enableLoginOnly', 'false')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('security.ldapSupport', 'false')";
@@ -81,7 +81,7 @@ $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('security.ssoSupport
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('security.ssoLogoutRedirect', '')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('security.useSslForLogins', 'false')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('security.useSslOnly', 'false')";
-
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('security.forcePasswordUpdate', 'false')";
 
 // Spam
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('spam.checkBannedWords', 'true')";
@@ -102,4 +102,3 @@ $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('cache.varnishHost',
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('cache.varnishPort', '2000')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('cache.varnishSecret', '')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('cache.varnishTimeout', '500')";
-
