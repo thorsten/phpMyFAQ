@@ -49,6 +49,6 @@ class PMF_Enc_Hash extends PMF_Enc
      */
     public function encrypt($str)
     {
-        return hash('sha256', PMF_Configuration::getInstance()->get('main.referenceURL') . $str . $this->salt);
+        return hash('sha256', $str . $this->salt);
     }
 }

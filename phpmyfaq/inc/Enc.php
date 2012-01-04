@@ -146,7 +146,7 @@ class PMF_Enc
      */
     public function setSalt($salt)
     {
-        $this->salt = $salt;
+        $this->salt = PMF_Configuration::getInstance()->get('main.referenceURL') . $salt;
 
         return $this;
     }
