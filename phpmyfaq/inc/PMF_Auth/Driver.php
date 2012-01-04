@@ -18,7 +18,7 @@
  * @package   PMF_Auth
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Alberto Cabello <alberto@unex.es>
- * @copyright 2009-2011 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-01
@@ -29,18 +29,18 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Auth_AuthDriver
+ * PMF_Auth_Driver
  *
  * @category  phpMyFAQ 
  * @package   PMF_Auth
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Alberto Cabello <alberto@unex.es>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-01
  */
-interface PMF_Auth_AuthDriver
+interface PMF_Auth_Driver
 {
     /**
      * Adds a new user account to the authentication table.

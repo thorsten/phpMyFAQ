@@ -1,6 +1,6 @@
 <?php
 /**
- * Provides methods for password encryption using sha().
+ * Provides methods for password encryption using md5().
  *
  * PHP Version 5.2
  *
@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Enc_EncSha
+ * PMF_Enc_Md5
  *
  * @category  phpMyFAQ
  * @package   PMF_Enc
@@ -38,19 +38,16 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-18
  */
-class PMF_Enc_EncSha extends PMF_Enc
+class PMF_Enc_Md5 extends PMF_Enc
 {
-    // --- ATTRIBUTES ---
-
     /**
      * Name of the encryption method.
      *
      * @access public
      * @var string
      */
-    public $enc_method = 'sha';
+    public $enc_method = 'md5';
 
-    
     /**
      * encrypts the string str and returns the result.
      *
@@ -59,6 +56,7 @@ class PMF_Enc_EncSha extends PMF_Enc
      */
     public function encrypt($str)
     {
-        return sha1($str);
+        return md5($str);
     }
 }
+

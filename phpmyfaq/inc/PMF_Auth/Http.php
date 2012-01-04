@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Auth_AuthDriver
+ * PMF_Auth_Http
  *
  * @category  phpMyFAQ 
  * @package   PMF_Auth
@@ -40,7 +40,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-01
  */
-class PMF_Auth_AuthHttp extends PMF_Auth implements PMF_Auth_AuthDriver
+class PMF_Auth_Http extends PMF_Auth implements PMF_Auth_Driver
 {
     /**
      * Adds a new user account to the authentication table.

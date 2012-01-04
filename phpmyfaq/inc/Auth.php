@@ -67,7 +67,7 @@ class PMF_Auth
      *
      * @var PMF_Enc
      */
-    protected $enc_container = null;
+    protected $encContainer = null;
 
     /**
      * public array that contains error messages.
@@ -75,17 +75,6 @@ class PMF_Auth
      * @var array
      */
     public $errors = array();
-
-    /**
-     * authentication access methods
-     *
-     * @var array
-     */
-    private $auth_typemap = array(
-        'db'   => 'AuthDb',
-        'ldap' => 'AuthLdap',
-        'http' => 'AuthHttp',
-        'sso'  => 'AuthSso');
 
     /**
      * Short description of attribute read_only
@@ -114,7 +103,7 @@ class PMF_Auth
      *
      * This method instantiates a new Enc object by calling the static
      * method. The specified encryption method enctype is passed to
-     * The result is stored in the private container variable enc_container and
+     * The result is stored in the private container variable encContainer and
      *
      * @param string $enctype encryption type
      * 
@@ -122,16 +111,14 @@ class PMF_Auth
      */
     public function selectEncType($enctype)
     {
-        $this->enc_container = PMF_Enc::selectEnc($enctype);
+        $this->encContainer = PMF_Enc::selectEnc($enctype);
         
-        return $this->enc_container;
+        return $this->encContainer;
     }
 
     /**
-     * Returns a string with error messages.
-     *
      * The string returned by error() contains messages for all errors that
-     * during object procesing. Messages are separated by new lines.
+     * during object processing. Messages are separated by new lines.
      *
      * Error messages are stored in the public array errors.
      *
@@ -148,7 +135,7 @@ class PMF_Auth
             $message .= $error."\n";
         }
         
-        $message .= $this->enc_container->error();
+        $message .= $this->encContainer->error();
         
         return $message;
     }
@@ -165,26 +152,27 @@ class PMF_Auth
      *
      * @param string $method Authentication access methods
      * 
-     * @return PMF_Auth_AuthDriver
+     * @return PMF_Auth_Driver
      */
     public static function selectAuth($method)
     {
         // verify selected database
         $auth   = new PMF_Auth();
-        $method = strtolower($method);
+        $method = ucfirst(strtolower($method));
         
-        if (!isset($auth->auth_typemap[$method])) {
+        if (!isset($method)) {
             $auth->errors[] = self::PMF_ERROR_USER_NO_AUTHTYPE;
             return $auth;
         }
         
-        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'PMF_Auth' . DIRECTORY_SEPARATOR . $auth->auth_typemap[$method] . ".php";
+        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'PMF_Auth' . DIRECTORY_SEPARATOR . $method . '.php';
+
         if (!file_exists($classfile)) {
             $auth->errors[] = self::PMF_ERROR_USER_NO_AUTHTYPE;
             return $auth;
         }
         
-        $authclass = "PMF_Auth_" . $auth->auth_typemap[$method];
+        $authclass = 'PMF_Auth_' . $method;
         $auth      = new $authclass();
         return $auth;
     }
@@ -217,6 +205,6 @@ class PMF_Auth
      */
     public function encrypt($str)
     {
-        return $this->enc_container->encrypt($str);
+        return $this->encContainer->encrypt($str);
     }
 }

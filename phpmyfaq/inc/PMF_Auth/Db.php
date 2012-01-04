@@ -17,7 +17,7 @@
  * @category  phpMyFAQ 
  * @package   PMF_Auth
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2005-2011 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-30
@@ -28,17 +28,17 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Auth_AuthDb
+ * PMF_Auth_Db
  *
  * @category  phpMyFAQ 
  * @package   PMF_Auth
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-30
  */
-class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver 
+class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
 {
     /**
      * Database connection
@@ -87,7 +87,7 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
             ('%s', '%s')",
             SQLPREFIX,
             $this->db->escape($login),
-            $this->db->escape($this->enc_container->encrypt($pass)));
+            $this->db->escape($this->encContainer->encrypt($pass)));
             
         $add   = $this->db->query($add);
         $error = $this->db->error();
@@ -125,7 +125,7 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
             WHERE
                 login = '%s'",
             SQLPREFIX,
-            $this->db->escape($this->enc_container->encrypt($pass)),
+            $this->db->escape($this->encContainer->encrypt($pass)),
             $this->db->escape($login));
             
         $change = $this->db->query($change);
@@ -218,7 +218,7 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
         }
         // if multiple accounts are ok, just 1 valid required
         while ($user = $this->db->fetchArray($check)) {
-            if ($user['pass'] == $this->enc_container->encrypt($pass)) {
+            if ($user['pass'] == $this->encContainer->encrypt($pass)) {
                 return true;
                 break;
             }

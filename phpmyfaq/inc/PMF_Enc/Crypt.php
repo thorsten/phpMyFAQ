@@ -1,6 +1,6 @@
 <?php
 /**
- * Provides a dummy method for password encryption (passthru).
+ * Provides methods for password encryption using crypt().
  *
  * PHP Version 5.2
  *
@@ -16,11 +16,11 @@
  *
  * @category  phpMyFAQ
  * @package   PMF_Enc
- * @author    Lars Scheithauer <lars.scheithauer@googlemail.com>
- * @copyright 2009-2011 phpMyFAQ Team
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @copyright 2005-2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2009-09-04
+ * @since     2005-09-18
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -28,24 +28,24 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Enc_Enc
+ * PMF_Enc_Crypt
  *
  * @category  phpMyFAQ
  * @package   PMF_Enc
- * @author    Lars Scheithauer <lars.scheithauer@googlemail.com>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @copyright 2005-2009 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2009-09-04
+ * @since     2005-09-18
  */
-class PMF_Enc_Enc extends PMF_Enc
+class PMF_Enc_Crypt extends PMF_Enc
 {
     /**
      * Name of the encryption method.
      *
      * @var string
      */
-    public $enc_method = 'none';
+    public $enc_method = 'crypt';
 
     /**
      * encrypts the string str and returns the result.
@@ -55,6 +55,6 @@ class PMF_Enc_Enc extends PMF_Enc
      */
     public function encrypt($str)
     {
-        return $str;
+        return crypt($str);
     }
 }

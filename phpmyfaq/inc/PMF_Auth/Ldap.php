@@ -19,7 +19,7 @@
  * @author    Alberto Cabello <alberto@unex.es>
  * @author    Lars Scheithauer <larsscheithauer@googlemail.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2011 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-01
@@ -30,19 +30,19 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Auth_AuthLdap
+ * PMF_Auth_Ldap
  *
  * @category  phpMyFAQ 
  * @package   PMF_Auth
  * @author    Alberto Cabello <alberto@unex.es>
  * @author    Lars Scheithauer <larsscheithauer@googlemail.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2011 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-01
  */
-class PMF_Auth_AuthLdap extends PMF_Auth implements PMF_Auth_AuthDriver
+class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
 {
     /**
      * LDAP connection handle
@@ -102,8 +102,12 @@ class PMF_Auth_AuthLdap extends PMF_Auth implements PMF_Auth_AuthDriver
         $result = $user->createUser($login, null);
         
         // Update user information from LDAP
-        $user->setUserData(array('display_name' => $this->ldap->getCompleteName($login),
-                                 'email'        => $this->ldap->getMail($login)));
+        $user->setUserData(
+            array(
+                'display_name' => $this->ldap->getCompleteName($login),
+                'email'        => $this->ldap->getMail($login)
+            )
+        );
         return $result;
     }
 
@@ -151,8 +155,6 @@ class PMF_Auth_AuthLdap extends PMF_Auth implements PMF_Auth_AuthDriver
     public function checkPassword($login, $pass, Array $optionalData = null)
     {
         global $PMF_LDAP;
-
-
 
         $bindLogin = $login;
         if ($PMF_LDAP['ldap_use_domain_prefix']) {
