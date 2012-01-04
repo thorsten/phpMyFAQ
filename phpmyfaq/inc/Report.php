@@ -102,7 +102,7 @@ class PMF_Report
             ON
                 (fd.id = fv.id AND fd.lang = fv.lang)
             LEFT JOIN
-                faqchanges as fc
+                %sfaqchanges as fc
             ON
                 (fd.id = fc.id AND fd.lang = fc.lang)
             LEFT JOIN
@@ -110,7 +110,7 @@ class PMF_Report
             ON
                 (u.user_id = fc.usr)
             LEFT JOIN
-                faqcategories as c
+                %sfaqcategories as c
             ON
                 (c.id = fcr.category_id AND c.lang = fcr.record_lang)
             ORDER BY

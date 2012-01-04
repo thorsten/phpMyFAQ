@@ -68,12 +68,12 @@ $tagSearch       = false;
 // Handle the Tagging ID
 //
 if (!is_null($inputTag)) {
-    $tagSearch   = true;
-    $tagging     = new PMF_Tags($db, $Language);
-    $record_ids  = $tagging->getRecordsByTagId($inputTag);
-    $printResult = $faq->showAllRecordsByIds($record_ids);
+    $tagSearch    = true;
+    $tagging      = new PMF_Tags($db, $Language);
+    $recordIds    = $tagging->getRecordsByTagId($inputTag);
+    $searchResult = $faq->showAllRecordsByIds($recordIds);
 } else {
-    $printResult = '';
+    $searchResult = '';
 }
 
 //
@@ -158,8 +158,8 @@ $faqSearchHelper->setPagination($faqPagination);
 $faqSearchHelper->setPlurals($plr);
 $faqSearchHelper->setSessionId($sids);
 
-if ('' == $printResult && !is_null($inputSearchTerm)) {
-    $printResult = $faqSearchHelper->renderSearchResult($faqSearchResult, $page);
+if ('' == $searchResult && !is_null($inputSearchTerm)) {
+    $searchResult = $faqSearchHelper->renderSearchResult($faqSearchResult, $page);
 }
 
 $tpl->parse('writeContent', array(
@@ -173,7 +173,7 @@ $tpl->parse('writeContent', array(
     'printCategoryOptions'     => $faqCategoryHelper->renderCategoryOptions($inputCategory),
     'writeSendAdress'          => '?'.$sids.'action=search',
     'msgSearchWord'            => $PMF_LANG['msgSearchWord'],
-    'printResult'              => $printResult,
+    'printResult'              => $searchResult,
     'openSearchLink'           => $faqSearchHelper->renderOpenSearchLink(),
     'msgMostPopularSearches'   => $PMF_LANG['msgMostPopularSearches'],
     'printMostPopularSearches' => $faqSearchHelper->renderMostPopularSearches($mostPopularSearchData)));

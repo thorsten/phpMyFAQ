@@ -10,6 +10,11 @@ Version 2.8.0-dev - 2012-
 - improved usability of administration backend (Thorsten)
 - improved setup (Thorsten)
 
+Version 2.7.3 - 2012-01-
+- updated Dutch translation (Almar van Pel)
+- fixed some PostgreSQL related issues (Vince, Thorsten)
+- fixed some bugs (Thorsten)
+
 Version 2.7.2 - 2011-12-31
 - improved PDF export and install script (Thorsten)
 - updated Finnish translation (Petteri Hirvonen, Niklas Lampén)
@@ -998,4 +1003,4 @@ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 License for the specific language governing rights and limitations
 under the License.
 
-(c) 2001-2011 phpMyFAQ Team
+(c) 2001-2012 phpMyFAQ Team

@@ -1,6 +1,6 @@
 <?php
 /**
- * MUA (Mail User Agent) interface.
+ * Response handler for phpMyFAQ Framework
  *
  * PHP Version 5.2
  *
@@ -13,14 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- * 
+ *
  * @category  phpMyFAQ
- * @package   PMF_Mail
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2009-2012 phpMyFAQ Team
+ * @package   PMF_Framework
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2009-09-11
+ * @since     2011-09-30
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -28,26 +28,39 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Mail_IMUA
- *
+ * PMF_Framework_Response
+ * 
  * @category  phpMyFAQ
- * @package   PMF_Mail
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2009-2012 phpMyFAQ Team
+ * @package   PMF_Framework
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2011 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @since     2009-09-11
-  */ 
-interface PMF_Mail_IMUA
+ * @since     2011-09-30
+ */
+class PMF_Framework_Response
 {
     /**
-     * Send the message using an e-mail.
-     * 
-     * @param  string $recipients Recipients of the e-mail as a comma-separated list
-     *                            of RFC 2822 compliant elements
-     * @param  array  $headers    Headers of the e-mail
-     * @param  string $body       Body of the e-mail
-     * @return bool True if successful, false otherwise.     
+     * @var array
      */
-    public function send($recipients, Array $headers, $body);
+    protected $data = array();
+
+    /**
+     * @param $key
+     * @param $value
+     * @return void
+     */
+    public function set($key, $value)
+    {
+        $this->data[$key] = $value;
+    }
+
+    /**
+     * @param $key
+     * @return 
+     */
+    public function get($key)
+    {
+        return $this->data[$key];
+    }
 }

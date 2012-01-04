@@ -363,11 +363,11 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
      * @var array
      */
     private $fontFiles = array(
-        'zh' => 'cid0cs',
-        'tw' => 'cid0ct',
-        'ja' => 'cid0jp',
-        'ko' => 'cid0kr',
-        'default' => 'arialunicid0'
+        'zh' => 'arialunicid0',
+        'tw' => 'arialunicid0',
+        'ja' => 'arialunicid0',
+        'ko' => 'arialunicid0',
+        'default' => 'helvetica'
     );
 
     /**
@@ -375,7 +375,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
      *
      * @var string
      */
-    private $currentFont = 'arialunicid0';
+    private $currentFont = 'helvetica';
 
     /**
      * Constructor
@@ -467,7 +467,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
         $currentTextColor = $this->TextColor;
         
         $this->SetTextColor(0,0,0);
-        $this->SetFont('arialunicid0', 'B', 18, '', 'false');
+        $this->SetFont($this->currentFont, 'B', 18);
         $this->MultiCell(0, 9, $title, 0, 'C', 0);
         if ($this->enableBookmarks) {
             $this->Bookmark(PMF_Utils::makeShorterText($this->question, 5));
@@ -499,14 +499,14 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
         $currentTextColor = $this->TextColor;
         $this->SetTextColor(0,0,0);
         $this->SetY(-25);
-        $this->SetFont('arialunicid0', '', 10, '', 'false');
+        $this->SetFont($this->currentFont, '', 10);
         $this->Cell(0, 10, $PMF_LANG['ad_gen_page'] . ' ' . $this->getAliasNumPage() . ' / ' . $this->getAliasNbPages(), 0, 0, 'C');
         $this->SetY(-20);
-        $this->SetFont('arialunicid0', 'B', 8, '', 'false');
+        $this->SetFont($this->currentFont, 'B', 8);
         $this->Cell(0, 10, $footer,0,1,"C");
         if ($this->enableBookmarks == false) {
             $this->SetY(-15);
-            $this->SetFont('arialunicid0', '', 8, '', 'false');
+            $this->SetFont($this->currentFont, '', 8);
             $baseUrl = 'index.php';
             if (is_array($this->faq) && !empty($this->faq)) {
                 $baseUrl .= '?action=artikel&amp;';
@@ -528,25 +528,6 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
     }
 
     /**
-    * Set the specific style according to the HTML tag
-    *
-    * @param    string
-    * @param    boolean
-    * @return   void
-    */
-    public function SetStyle($tag, $enable)
-    {
-        $this->$tag += ($enable ? 1 : -1);
-        $style = "";
-        foreach (array("B", "I", "U") as $s) {
-            if ($this->$s > 0) {
-                $style .= $s;
-            }
-        }
-        $this->SetFont("", $style);
-    }
-
-    /**
      * Adds a table of content for exports of the complete FAQ
      * 
      * @return void
@@ -558,18 +539,38 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
         $this->addTOCPage();
 
         // Title
-        $this->SetFont('arialunicid0', 'B', 24, '', 'false');
+        $this->SetFont($this->currentFont, 'B', 24);
         $this->MultiCell(0, 0, PMF_Configuration::getInstance()->get('main.titleFAQ'), 0, 'C', 0, 1, '', '', true, 0);
         $this->Ln();
 
         // TOC
-        $this->SetFont('arialunicid0', 'B', 16, '', 'false');
+        $this->SetFont($this->currentFont, 'B', 16);
         $this->MultiCell(0, 0, $PMF_LANG['msgTableOfContent'], 0, 'C', 0, 1, '', '', true, 0);
         $this->Ln();
-        $this->SetFont('arialunicid0', '', 12, '', 'false');
+        $this->SetFont($this->currentFont, '', 12);
 
         // Render TOC
-        $this->addTOC(1, 'arialunicid0', '.', $PMF_LANG['msgTableOfContent'], 'B', array(128,0,0));
+        $this->addTOC(1, $this->currentFont, '.', $PMF_LANG['msgTableOfContent'], 'B', array(128,0,0));
         $this->endTOCPage();
+    }
+
+    /**
+     * Sets the current font for PDF export
+     *
+     * @param string $currentFont
+     */
+    public function setCurrentFont($currentFont)
+    {
+        $this->currentFont = $currentFont;
+    }
+
+    /**
+     * Returns the current font for PDF export
+     *
+     * @return string
+     */
+    public function getCurrentFont()
+    {
+        return $this->currentFont;
     }
 }

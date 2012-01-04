@@ -19,7 +19,7 @@
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Tom Rochester <tom.rochester@gmail.com>
- * @copyright 2003-2011 phpMyFAQ Team
+ * @copyright 2003-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @package   2003-02-24
@@ -36,7 +36,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Tom Rochester <tom.rochester@gmail.com>
- * @copyright 2003-2011 phpMyFAQ Team
+ * @copyright 2003-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @package   2003-02-24
@@ -67,19 +67,27 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     /**
      * Connects to the database.
      *
-     * @param   string $host
-     * @param   string $username
-     * @param   string $password
-     * @param   string $db_name
-     * @return  boolean true, if connected, otherwise false
+     * @param string $host     Database hostname
+     * @param string $username Database username
+     * @param string $password Password
+     * @param string $database Database name
+     *
+     * @return boolean true, if connected, otherwise false
      */
-    public function connect($host, $user, $passwd, $db)
+    public function connect ($host, $user, $password, $database)
     {
+        $connectionString = sprintf(
+            'host=%s port=5432 dbname=%s user=%s password=%s',
+            $host,
+            $database,
+            $user,
+            $password
+        );
         /* if you use mysql_pconnect(), remove the next line: */
-        $this->conn = pg_pconnect('host='.$host.' port=5432 dbname='.$db.' user='.$user.' password='.$passwd);
+        $this->conn = pg_pconnect($connectionString);
         /* comment out for more speed with mod_php or on Windows */
-        // $this->conn = @pg_pconnect("host=$host port=5432 dbname=$db user=$user password=$passwd");
-        if (empty($db) || $this->conn == false) {
+        // $this->conn = @pg_pconnect($connectionString);
+        if (empty($database) || $this->conn == false) {
             PMF_Db::errorPage(pg_last_error($this->conn));
             die();
         }
@@ -262,6 +270,8 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     /**
      * Returns an array with all table names
      *
+     * @param string $prefix Table prefix
+     *
      * @return array
      */
     public function getTableNames($prefix = '')
@@ -269,7 +279,16 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
         // First, declare those tables that are referenced by others
         $this->tableNames[] = $prefix.'faquser';
 
-        $result = $this->query('SELECT relname FROM pg_stat_user_tables '.(('' == $prefix) ? '' : 'LIKE \''.$prefix.'%\' ').'ORDER BY relname');
+        if ('' !== $prefix) {
+            $prefix = "LIKE '" . $prefix . "%'";
+        }
+
+        $query = sprintf(
+            'SELECT relname FROM pg_stat_user_tables WHERE relname %s ORDER BY relname',
+            $prefix
+        );
+
+        $result = $this->query($query);
         while ($row = $this->fetchObject($result)) {
             foreach ($row as $tableName) {
                 if (!in_array($tableName, $this->tableNames)) {

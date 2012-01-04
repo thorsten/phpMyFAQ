@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Visits
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2011 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-08
@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Visits
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2011 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-08
@@ -107,7 +107,8 @@ class PMF_Visits
     /**
      * Counting the views of a FAQ record
      *
-     * @param  integer $id id
+     * @param integer $id      FAQ record ID
+     *
      * @return void
      */
     public function logViews($id)
@@ -138,7 +139,6 @@ class PMF_Visits
             $this->update($id);
         }
     }
-    
 
     /**
      * Adds a new entry in the table faqvisits

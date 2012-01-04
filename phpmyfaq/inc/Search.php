@@ -19,7 +19,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
- * @copyright 2008-2011 phpMyFAQ Team
+ * @copyright 2008-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2008-01-26
@@ -37,7 +37,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
- * @copyright 2008-2011 phpMyFAQ Team
+ * @copyright 2008-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2008-01-26
@@ -230,8 +230,9 @@ class PMF_Search
     /**
      * Returns the most popular searches
      * 
-     * @param  integer $numResults Number of Results, default: 7
-     * @param  boolean weither language must be included into result
+     * @param integer $numResults Number of Results, default: 7
+     * @param boolean $withLang   Should the language be included in the result?
+     *
      * @return array
      */
     public function getMostPopularSearches($numResults = 7, $withLang = false)
