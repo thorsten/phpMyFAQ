@@ -41,14 +41,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Enc_Md5 extends PMF_Enc
 {
     /**
-     * Name of the encryption method.
-     *
-     * @access public
-     * @var string
-     */
-    public $enc_method = 'md5';
-
-    /**
      * encrypts the string str and returns the result.
      *
      * @param  string $str String

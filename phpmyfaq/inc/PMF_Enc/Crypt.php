@@ -41,13 +41,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Enc_Crypt extends PMF_Enc
 {
     /**
-     * Name of the encryption method.
-     *
-     * @var string
-     */
-    public $enc_method = 'crypt';
-
-    /**
      * encrypts the string str and returns the result.
      *
      * @param  string $str String

@@ -40,17 +40,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  */
 class PMF_Enc_Sha extends PMF_Enc
 {
-    // --- ATTRIBUTES ---
-
-    /**
-     * Name of the encryption method.
-     *
-     * @access public
-     * @var string
-     */
-    public $enc_method = 'sha';
-
-    
     /**
      * encrypts the string str and returns the result.
      *
