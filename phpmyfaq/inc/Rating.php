@@ -95,7 +95,7 @@ class PMF_Rating
     {
         $ratings = array();
 
-        switch($this->db->getType()) {
+        switch (PMF_Db::getType()) {
             case 'mssql':
             // In order to remove this MS SQL 2000/2005 "limit" below:
             //   The text, ntext, and image data types cannot be compared or sorted, except when using IS NULL or LIKE operator.
