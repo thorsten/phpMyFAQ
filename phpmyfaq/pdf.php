@@ -21,7 +21,7 @@
  * @author    Olivier Plathey <olivier@fpdf.org>
  * @author    Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2003-2011 phpMyFAQ Team
+ * @copyright 2003-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-12 
@@ -98,8 +98,6 @@ if (!is_null($user) && $user instanceof PMF_User_CurrentUser) {
     $current_groups = array(-1);
 }
 
-$category = new PMF_Category($current_user, $current_groups);
-
 $currentCategory = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 $id              = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
@@ -112,6 +110,10 @@ if (is_null($currentCategory) || is_null($id)) {
 $faq = new PMF_Faq($current_user, $current_groups);
 $faq->setLanguage($lang);
 $faq->getRecord($id);
+$faq->faqRecord['category_id'] = $currentCategory;
+
+$category = new PMF_Category($current_user, $current_groups);
+$pdf      = new PMF_Export_Pdf($faq, $category);
 
 session_cache_limiter('private');
 header("Pragma: public");
@@ -126,4 +128,4 @@ if (preg_match("/MSIE/i", $_SERVER["HTTP_USER_AGENT"])) {
     header("Content-Type: application/pdf");
 }
 
-$faq->buildPDFFile($currentCategory);
+$pdf->generateFile($faq->faqRecord);

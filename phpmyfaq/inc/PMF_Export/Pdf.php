@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Export
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2011 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-10-07
@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Export
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2011 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-10-07
@@ -62,8 +62,6 @@ class PMF_Export_Pdf extends PMF_Export
         $this->pdf      = new PMF_Export_Pdf_Wrapper();
         
         // Set PDF options
-        $this->pdf->enableBookmarks = true;
-        $this->pdf->isFullExport    = true;
         $this->pdf->Open();
         $this->pdf->SetDisplayMode('real');
         $this->pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
@@ -82,7 +80,11 @@ class PMF_Export_Pdf extends PMF_Export
      * @return string
      */
     public function generate($categoryId = 0, $downwards = true, $language = '')
-    {        
+    {
+        // Set PDF options
+        $this->pdf->enableBookmarks = true;
+        $this->pdf->isFullExport    = true;
+
         // Initialize categories
         $this->category->transform($categoryId);
         
@@ -121,4 +123,52 @@ class PMF_Export_Pdf extends PMF_Export
         
         return $this->pdf->Output('', 'S');
     }
+
+    /**
+     * Builds the PDF delivery for the given faq.
+     *
+     * @param array  $faqData
+     * @param string $filename
+     *
+     * @return string
+     */
+    public function generateFile(Array $faqData, $filename = null)
+    {
+        global $PMF_LANG;
+
+        // Default filename: pdf/<faq_id>.pdf
+        if (empty($filename)) {
+            $pdfFile = 'pdf' . $faqData['id'] . '.pdf';
+        }
+
+        $this->pdf->setFaq($faqData);
+        $this->pdf->setCategory($faqData['category_id']);
+        $this->pdf->setQuestion($faqData['title']);
+        $this->pdf->setCategories($this->category->categoryName);
+
+        // Set any item
+        $this->pdf->SetTitle($faqData['title']);
+        $this->pdf->SetCreator(
+            PMF_Configuration::getInstance()->get('main.titleFAQ') .
+            ' - powered by phpMyFAQ ' .
+            PMF_Configuration::getInstance()->get('main.currentVersion')
+        );
+        $this->pdf->AddPage();
+        $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 12);
+        $this->pdf->SetDisplayMode('real');
+        $this->pdf->Ln();
+        $this->pdf->WriteHTML(str_replace('../', '', $faqData['content']), true);
+        $this->pdf->Ln();
+        $this->pdf->Ln();
+        $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 11);
+        $this->pdf->Write(5, $PMF_LANG['ad_entry_solution_id'] . ': #' . $faqData['solution_id']);
+        $this->pdf->SetAuthor($faqData['author']);
+        $this->pdf->Ln();
+        $this->pdf->Write(5, $PMF_LANG['msgAuthor'] . ': ' . $faqData['author']);
+        $this->pdf->Ln();
+        $this->pdf->Write(5, $PMF_LANG['msgLastUpdateArticle'] . $faqData['date']);
+
+        return $this->pdf->Output($pdfFile);
+    }
+
 }

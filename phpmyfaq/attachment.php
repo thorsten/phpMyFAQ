@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Frontend
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2011 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-06-23
@@ -43,11 +43,11 @@ if (!$user instanceof PMF_User_CurrentUser) {
     $user = new PMF_User_CurrentUser(); // user not logged in -> empty user object
 }
 
-$id  = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$att = PMF_Attachment_Factory::create($id);
+$id         = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$attachment = PMF_Attachment_Factory::create($id);
 
-$userPermission  = $faq->getPermission('user', $att->getRecordId());
-$groupPermission = $faq->getPermission('group', $att->getRecordId());
+$userPermission  = $faq->getPermission('user', $attachment->getRecordId());
+$groupPermission = $faq->getPermission('group', $attachment->getRecordId());
 
 if (count($groupPermission) && in_array($groupPermission[0], $user->perm->getUserGroups($user->getUserId()))) {
     $permission = true;
@@ -58,13 +58,15 @@ if (in_array(-1, $userPermission) || in_array($user->getUserId(), $userPermissio
     $permission = false;
 }
 
-if ($att) {
+if ($attachment && $permission) {
     try {
-        $att->rawOut();
+        $attachment->rawOut();
         exit(0);
     } catch (Exception $e) {
         $attachmentErrors[] = $PMF_LANG['msgAttachmentInvalid'];
     }
+} else {
+    $attachmentErrors[] = $PMF_LANG['ad_att_none'];
 }
 
 // If we're here, there was an error with file download
