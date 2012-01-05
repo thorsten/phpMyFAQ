@@ -60,7 +60,7 @@ if (in_array(-1, $userPermission) || in_array($user->getUserId(), $userPermissio
 
 if ($attachment && $permission) {
     try {
-        $att->rawOut();
+        $attachment->rawOut();
         exit(0);
     } catch (Exception $e) {
         $attachmentErrors[] = $PMF_LANG['msgAttachmentInvalid'];
