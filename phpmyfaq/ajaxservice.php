@@ -221,7 +221,7 @@ switch ($action) {
         $question    = PMF_Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
         $answer      = PMF_Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_STRIPPED);
         $translation = PMF_Filter::filterInput(INPUT_POST, 'translated_answer', FILTER_SANITIZE_STRING);
-        $link        = PMF_Filter::filterInput(INPUT_POST, 'contentlink', FILTER_VALIDATE_URL);
+        $contentlink = PMF_Filter::filterInput(INPUT_POST, 'contentlink', FILTER_VALIDATE_URL);
         $keywords    = PMF_Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRIPPED);
         $categories  = PMF_Filter::filterInputArray(INPUT_POST, array(
             'rubrik' => array(
@@ -253,11 +253,12 @@ switch ($action) {
                 $newLanguage   = $faqlanguage;
             }
 
-            if (PMF_String::substr($contentlink,7) != "") {
-                $answer = sprintf('%s<br />%s<a href="http://%s" target="_blank">%s</a>',
+            if (PMF_String::substr($contentlink, 7) != "") {
+                $answer = sprintf(
+                    '%s<br /><div id="newFAQContentLink">%s<a href="http://%s" target="_blank">%s</a></div>',
                     $answer,
                     $PMF_LANG['msgInfo'],
-                    PMF_String::substr($contentlink,7),
+                    PMF_String::substr($contentlink, 7),
                     $contentlink
                 );
             }
