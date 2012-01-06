@@ -874,6 +874,15 @@ if ($step == 4) {
         $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('security.useSslOnly', 'false')";
     }
 
+    //
+    // UPDATES FROM 2.7.3
+    //
+    if (version_compare($version, '2.7.3', '<')) {
+        $query[] = "DELETE FROM ".SQLPREFIX."faqright WHERE right_id = 18 AND right_id = 19";
+        $query[] = "DELETE FROM ".SQLPREFIX."faquser_right WHERE right_id = 18 AND right_id = 19";
+        $query[] = "DELETE FROM ".SQLPREFIX."faqgroup_right WHERE right_id = 18 AND right_id = 19";
+    }
+
 
     // Perform the queries for updating/migrating the database from 2.x
     if (isset($query)) {

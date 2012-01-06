@@ -9,6 +9,7 @@ Version 2.7.3 - 2012-01-
 - improved PDF export (Thorsten)
 - updated Dutch translation (Almar van Pel)
 - fixed some PostgreSQL related issues (Vince, Thorsten)
+- fixed some attachment related issues (Thorsten)
 - fixed some bugs (Thorsten)
 
 Version 2.7.2 - 2011-12-31
