@@ -62,7 +62,7 @@ if (in_array($user->getUserId(), $userPermission)) {
     $userPermission = false;
 }
 
-if ($attachment && ($groupPermission || $userPermission)) {
+if ($attachment && ($groupPermission || ($groupPermission && $userPermission))) {
     try {
         $attachment->rawOut();
         exit(0);
@@ -70,7 +70,7 @@ if ($attachment && ($groupPermission || $userPermission)) {
         $attachmentErrors[] = $PMF_LANG['msgAttachmentInvalid'] . ' (' . $e->getMessage() . ')';
     }
 } else {
-    $attachmentErrors[] = $PMF_LANG['ad_att_none'];
+    $attachmentErrors[] = $PMF_LANG['err_NotAuth'];
 }
 
 // If we're here, there was an error with file download
