@@ -50,19 +50,19 @@ $groupPermission = $faq->getPermission('group', $attachment->getRecordId());
 
 // Check on group permissions
 if (count($groupPermission) && in_array($groupPermission[0], $user->perm->getUserGroups($user->getUserId()))) {
-    $permission = true;
+    $groupPermission = true;
 } else {
-    $permission = false;
+    $groupPermission = false;
 }
 
 // Check in user's permissions
 if (in_array($user->getUserId(), $userPermission)) {
-    $permission = true;
+    $userPermission = true;
 } else {
-    $permission = false;
+    $userPermission = false;
 }
 
-if ($attachment && $permission) {
+if ($attachment && ($groupPermission || $userPermission)) {
     try {
         $attachment->rawOut();
         exit(0);
