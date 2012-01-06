@@ -18,7 +18,7 @@
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2003-2011 phpMyFAQ Team
+ * @copyright 2003-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-23
@@ -210,9 +210,12 @@ if ('addnews' == $action && $permission["addnews"]) {
 
             <p>
                 <label for="linkTarget"><?php print $PMF_LANG['ad_news_link_target']; ?></label>
-                <input type="radio" name="target" value="blank" <?php if ('blank' == $newsData['target']) { ?> checked="checked"<?php } ?> /><?php print $PMF_LANG['ad_news_link_window'] ?>
-                <input type="radio" name="target" value="self" <?php if ('self' == $newsData['target']) { ?> checked="checked"<?php } ?> /><?php print $PMF_LANG['ad_news_link_faq'] ?>
-                <input type="radio" name="target" value="parent" <?php if ('parent' == $newsData['target']) { ?> checked="checked"<?php } ?> /><?php print $PMF_LANG['ad_news_link_parent'] ?>
+                <input type="radio" name="target" value="blank" <?php if ('blank' == $newsData['target']) { ?>
+                       checked="checked"<?php } ?> /><?php print $PMF_LANG['ad_news_link_window'] ?>
+                <input type="radio" name="target" value="self" <?php if ('self' == $newsData['target']) { ?>
+                       checked="checked"<?php } ?> /><?php print $PMF_LANG['ad_news_link_faq'] ?>
+                <input type="radio" name="target" value="parent" <?php if ('parent' == $newsData['target']) { ?>
+                       checked="checked"<?php } ?> /><?php print $PMF_LANG['ad_news_link_parent'] ?>
             </p>
             <p>
                 <label for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
@@ -224,12 +227,14 @@ if ('addnews' == $action && $permission["addnews"]) {
             <legend><?php print $PMF_LANG['ad_news_expiration_window']; ?></legend>
             <p>
                 <label for="dateStart"><?php print $PMF_LANG['ad_news_from']; ?></label>
-                <input name="dateStart" id="dateStart" class="date-pick" />
+                <input name="dateStart" id="dateStart" class="date-pick"
+                       value="<?php print PMF_Date::createIsoDate($newsData['dateStart'], 'Y-m-d'); ?>" />
             </p>
 
             <p>
                 <label for="dateEnd"><?php print $PMF_LANG['ad_news_to']; ?></label>
-                <input name="dateEnd" id="dateEnd" class="date-pick" />
+                <input name="dateEnd" id="dateEnd" class="date-pick"
+                       value="<?php print PMF_Date::createIsoDate($newsData['dateEnd'], 'Y-m-d'); ?>" />
             </p>
         </fieldset>
 
@@ -254,8 +259,8 @@ if ('addnews' == $action && $permission["addnews"]) {
     }
 } elseif ('savenews' == $action && $permission["addnews"]) {
 
-    $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING, '00000000000000');
-    $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING, '99991231235959');
+    $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
+    $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
     $header    = PMF_Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_STRIPPED);
     $content   = PMF_Filter::filterInput(INPUT_POST, 'news', FILTER_SANITIZE_SPECIAL_CHARS);
     $author    = PMF_Filter::filterInput(INPUT_POST, 'authorName', FILTER_SANITIZE_STRIPPED);
@@ -275,12 +280,13 @@ if ('addnews' == $action && $permission["addnews"]) {
         'authorEmail'   => $email,
         'active'        => (is_null($active)) ? 'n' : 'y',
         'comment'       => (is_null($comment)) ? 'n' : 'y',
-        'dateStart'     => ('' == $dateStart) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000',
-        'dateEnd'       => ('' == $dateEnd)   ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959',
+        'dateStart'     => (is_null($dateStart)) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000',
+        'dateEnd'       => (is_null($dateEnd))  ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959',
         'link'          => $link,
         'linkTitle'     => $linktitle,
         'date'          => date('YmdHis'),
-        'target'        => (is_null($target)) ? '' : $target);
+        'target'        => (is_null($target)) ? '' : $target
+    );
 
     if ($news->addNewsEntry($newsData)) {
         printf('<p class="success">%s</p>', $PMF_LANG['ad_news_updatesuc']);
@@ -290,8 +296,8 @@ if ('addnews' == $action && $permission["addnews"]) {
     printf('<p>&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
 } elseif ('updatenews' == $action && $permission["editnews"]) {
 
-    $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING, '00000000000000');
-    $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING, '99991231235959');
+    $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
+    $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
     $header    = PMF_Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_STRIPPED);
     $content   = PMF_Filter::filterInput(INPUT_POST, 'news', FILTER_SANITIZE_SPECIAL_CHARS);
     $author    = PMF_Filter::filterInput(INPUT_POST, 'authorName', FILTER_SANITIZE_STRIPPED);
@@ -311,8 +317,8 @@ if ('addnews' == $action && $permission["addnews"]) {
         'authorEmail'   => $email,
         'active'        => (is_null($active)) ? 'n' : 'y',
         'comment'       => (is_null($comment)) ? 'n' : 'y',
-        'dateStart'     => ('' == $dateStart) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000',
-        'dateEnd'       => ('' == $dateEnd)   ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959',
+        'dateStart'     => (is_null($dateStart)) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000',
+        'dateEnd'       => (is_null($dateEnd))   ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959',
         'link'          => $link,
         'linkTitle'     => $linktitle,
         'date'          => date('YmdHis'),
