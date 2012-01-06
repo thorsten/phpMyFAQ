@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2011 phpMyFAQ Team
+ * @copyright 2002-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-23
@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$news = new PMF_News();
+$news = new PMF_News($db, $Language);
 
 $archived        = PMF_Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
 $writeNewsHeader = $faqconfig->get('main.titleFAQ');

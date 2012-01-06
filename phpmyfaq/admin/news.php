@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$news = new PMF_News();
+$news = new PMF_News($db, $Language);
 
 // Re-evaluate $user
 $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
