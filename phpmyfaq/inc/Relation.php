@@ -18,7 +18,7 @@
  * @package   PMF_Relation
  * @author    Marco Enders <marco@minimarco.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2006-2011 phpMyFAQ Team
+ * @copyright 2006-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-06-18
@@ -35,7 +35,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_Relation
  * @author    Marco Enders <marco@minimarco.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2006-2010 phpMyFAQ Team
+ * @copyright 2006-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-06-18
@@ -43,56 +43,51 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Relation
 {
     /**
-    * DB handle
-    *
-    * @var PMF_DD_Driver
-    */
+     * DB handle
+     *
+     * @var PMF_DD_Driver
+     */
     private $db;
 
     /**
-    * Language
-    *
-    * @var PMF_Language
-    */
+     * Language
+     *
+     * @var PMF_Language
+     */
     private $language;
 
     /**
-    * Language strings
-    *
-    * @var  string
-    */
-    private $pmf_lang;
-
-    /**
-    * Constructor
-    *
-    */
+     * Constructor
+     *
+     * @param PMF_DB_Driver $database Database connection
+     * @param PMF_Language  $language Language object
+     *
+     * @return PMF_Relation
+     */
     function __construct(PMF_DB_Driver $database, PMF_Language $language)
     {
-        global $PMF_LANG;
-        
         $this->db       = $database;
         $this->language = $language;
-        $this->pmf_lang = $PMF_LANG;
     }
 
     /**
      * Returns all relevant articles for a FAQ record with the same language
      *
-     * @param integer $record_id FAQ ID
-     * @param string  $thema     FAQ title
+     * @param integer $recordId FAQ ID
+     * @param string  $question FAQ title
+     * @param string  $keywords FAQ keywords
      * 
      * @return string
      */
-    public function getAllRelatedById($record_id, $article_name, $keywords)
+    public function getAllRelatedById($recordId, $question, $keywords)
     {
         global $sids;
         
-        $relevantslisting = '';
-        $begriffe         = str_replace('-', ' ', $article_name) . $keywords;
-        $search           = PMF_Search_Factory::create($this->language, array('database' => PMF_Db::getType()));
+        $relatedHtml = '';
+        $terms       = str_replace('-', ' ', $question) . $keywords;
+        $search      = PMF_Search_Factory::create($this->language, array('database' => PMF_Db::getType()));
         
-        $i = $last_id = 0;
+        $i = $lastId = 0;
 
         $search->setDatabaseHandle($this->db)
                ->setTable(SQLPREFIX . 'faqdata AS fd')
@@ -100,41 +95,47 @@ class PMF_Relation
                     'fd.id AS id',
                     'fd.lang AS lang',
                     'fcr.category_id AS category_id',
-                    'fd.thema AS thema',
-                    'fd.content AS content'))
+                    'fd.thema AS question',
+                    'fd.content AS answer'))
                ->setJoinedTable(SQLPREFIX . 'faqcategoryrelations AS fcr')
                ->setJoinedColumns(array(
                     'fd.id = fcr.record_id', 
                     'fd.lang = fcr.record_lang'))
                ->setConditions(array('fd.active' => "'yes'",
                                      'fd.lang'   => "'" . $this->language->getLanguage() . "'"))
-               ->setMatchingColumns(array('fd.thema', 'fd.content', 'fd.keywords'));
+               ->setMatchingColumns(array('fd.thema', 'fd.content', 'fd.keywords')
+        );
         
-        $result = $search->search($begriffe);
-        
+        $result = $search->search($terms);
+
+        // @todo use PMF_Search_Resultset
+        // @todo add missing check on permissions!
+
         while (($row = $this->db->fetch_object($result)) && 
                ($i < PMF_Configuration::getInstance()->get('records.numberOfRelatedArticles'))) {
             
-             if ($row->id == $record_id || $row->id == $last_id) {
+             if ($row->id == $recordId || $row->id == $lastId) {
                 continue;
             }
-            $relevantslisting .= ('' == $relevantslisting ? '<ul>' : '');
-            $relevantslisting .= '<li>';
-            $url = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    $sids,
-                    $row->category_id,
-                    $row->id,
-                    $row->lang);
+            $relatedHtml .= ('' == $relatedHtml ? '<ul>' : '');
+            $relatedHtml .= '<li>';
+            $url = sprintf(
+                '%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                $sids,
+                $row->category_id,
+                $row->id,
+                $row->lang
+            );
             $oLink             = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-            $oLink->itemTitle  = $row->thema;
-            $oLink->text       = $row->thema;
-            $oLink->tooltip    = $row->thema;
-            $relevantslisting .= $oLink->toHtmlAnchor().'</li>';
+            $oLink->itemTitle  = $row->question;
+            $oLink->text       = $row->question;
+            $oLink->tooltip    = $row->question;
+            $relatedHtml .= $oLink->toHtmlAnchor().'</li>';
             $i++;
-            $last_id = $row->id;
+            $lastId = $row->id;
         }
-        $relevantslisting .= ($i > 0 ? '</ul>' : '');
+        $relatedHtml .= ($i > 0 ? '</ul>' : '');
         
-        return ('' == $relevantslisting ? '-' : $relevantslisting);
+        return ('' == $relatedHtml ? '-' : $relatedHtml);
     }
 }
