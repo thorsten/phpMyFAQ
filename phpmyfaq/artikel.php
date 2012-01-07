@@ -194,13 +194,14 @@ if (count($multiCategories) > 1) {
 
 // Show link to edit the faq?
 $editThisEntry = '';
-if (isset($permission['editbt'])) {
+if (isset($permission['editbt']) && $permission['editbt']) {
     $editThisEntry = sprintf(
         '<a href="%sadmin/index.php?action=editentry&amp;id=%d&amp;lang=%s">%s</a>',
         PMF_Link::getSystemRelativeUri('index.php'),
         $faq->faqRecord['id'],
         $lang,
-        $PMF_LANG['ad_entry_edit_1'].' '.$PMF_LANG['ad_entry_edit_2']);
+        $PMF_LANG['ad_entry_edit_1'].' '.$PMF_LANG['ad_entry_edit_2']
+    );
 }
 
 // Is the faq expired?
