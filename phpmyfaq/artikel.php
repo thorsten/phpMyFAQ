@@ -238,6 +238,15 @@ if (!empty($switchLanguage)) {
         )
     );
 }
+if (isset($permission['addtranslation']) && $permission['addtranslation']) {
+    $tpl->processBlock(
+        'writeContent',
+        'addTranslation',
+        array(
+            'msgTranslate' => $PMF_LANG['msgTranslate'],
+        )
+    );
+}
 
 // Set the template variables
 $tpl->processTemplate('writeContent', array(
@@ -255,7 +264,6 @@ $tpl->processTemplate('writeContent', array(
     'writeRevision'              => $PMF_LANG['ad_entry_revision'] . ': 1.' . $faq->faqRecord['revision_id'],
     'writeAuthor'                => $PMF_LANG['msgAuthor'] . ': ' . $faq->faqRecord['author'],
     'editThisEntry'              => $editThisEntry,
-    'msgTranslate'               => $PMF_LANG['msgTranslate'],
     'translationUrl'             => $translationUrl,
     'languageSelection'          => PMF_Language::selectLanguages($LANGCODE, false, $arrLanguage, 'translation'),
     'msgTranslateSubmit'         => $PMF_LANG['msgTranslateSubmit'],

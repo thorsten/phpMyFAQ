@@ -39,11 +39,13 @@
                         </a>
                     </li>
                     [/switchLanguage]
+                    [addTranslation]
                     <li>
                         <a href="javascript:void(0);" onclick="infoBox('addTranslation')">
                             {msgTranslate}
                         </a>
                     </li>
+                    [/addTranslation]
                 </ul>
                 <div class="faqTabContent" id="authorInfo" style="display: none;">
                     {writeDateMsg}<br />{writeAuthor}<br />{writeRevision}<br />{editThisEntry}
