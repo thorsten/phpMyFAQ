@@ -77,17 +77,12 @@ class PMF_Relation
      * @param string  $question FAQ title
      * @param string  $keywords FAQ keywords
      * 
-     * @return string
+     * @return array
      */
     public function getAllRelatedById($recordId, $question, $keywords)
     {
-        global $sids;
-        
-        $relatedHtml = '';
-        $terms       = str_replace('-', ' ', $question) . $keywords;
-        $search      = PMF_Search_Factory::create($this->language, array('database' => PMF_Db::getType()));
-        
-        $i = $lastId = 0;
+        $terms  = str_replace('-', ' ', $question) . $keywords;
+        $search = PMF_Search_Factory::create($this->language, array('database' => PMF_Db::getType()));
 
         $search->setDatabaseHandle($this->db)
                ->setTable(SQLPREFIX . 'faqdata AS fd')
@@ -108,34 +103,6 @@ class PMF_Relation
         
         $result = $search->search($terms);
 
-        // @todo use PMF_Search_Resultset
-        // @todo add missing check on permissions!
-
-        while (($row = $this->db->fetch_object($result)) && 
-               ($i < PMF_Configuration::getInstance()->get('records.numberOfRelatedArticles'))) {
-            
-             if ($row->id == $recordId || $row->id == $lastId) {
-                continue;
-            }
-            $relatedHtml .= ('' == $relatedHtml ? '<ul>' : '');
-            $relatedHtml .= '<li>';
-            $url = sprintf(
-                '%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                $sids,
-                $row->category_id,
-                $row->id,
-                $row->lang
-            );
-            $oLink             = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-            $oLink->itemTitle  = $row->question;
-            $oLink->text       = $row->question;
-            $oLink->tooltip    = $row->question;
-            $relatedHtml .= $oLink->toHtmlAnchor().'</li>';
-            $i++;
-            $lastId = $row->id;
-        }
-        $relatedHtml .= ($i > 0 ? '</ul>' : '');
-        
-        return ('' == $relatedHtml ? '-' : $relatedHtml);
+        return $this->db->fetchAll($result);
     }
 }

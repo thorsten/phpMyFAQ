@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Helper
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2011 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-07
@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Helper
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-07
@@ -273,7 +273,7 @@ class PMF_Helper_Search extends PMF_Helper
         }
 
         if (0 < $numOfResults) {
-            
+
             $html .= sprintf("<p>%s</p>\n", 
                 $this->plurals->GetMsg('plmsgSearchAmount', $numOfResults));
             
@@ -288,6 +288,7 @@ class PMF_Helper_Search extends PMF_Helper
             $html .= "<ul class=\"phpmyfaq_ul\">\n";
 
             $counter = $displayedCounter = 0;
+
             foreach ($resultSet->getResultset() as $result) {
                 if ($displayedCounter >= $confPerPage) {
                     continue;
@@ -354,7 +355,49 @@ class PMF_Helper_Search extends PMF_Helper
         } else {
             $html = $this->translation['err_noArticles'];
         }
-        
+
+        return $html;
+    }
+
+    /**
+     * @param PMF_Search_Resultset $resultSet
+     * @param integer              $recordId
+     *
+     * @return string
+     */
+    public function renderRelatedFaqs(PMF_Search_Resultset $resultSet, $recordId)
+    {
+        $html         = '';
+        $numOfResults = $resultSet->getNumberOfResults();
+
+        if ($numOfResults > 0) {
+            $html .= '<ul>';
+            $counter = 0;
+            foreach ($resultSet->getResultset() as $result) {
+                if ($counter >= 5) {
+                    continue;
+                }
+                if ($recordId == $result->id) {
+                    continue;
+                }
+                $counter++;
+
+                $html .= '<li>';
+                $url = sprintf(
+                    '?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    $result->category_id,
+                    $result->id,
+                    $result->lang
+                );
+                $oLink             = new PMF_Link(PMF_Link::getSystemRelativeUri() . '?' . $url);
+                $oLink->itemTitle  = $result->question;
+                $oLink->text       = $result->question;
+                $oLink->tooltip    = $result->question;
+                $html .= $oLink->toHtmlAnchor() . '</li>';
+            }
+            $html .= '</ul>';
+        }
+
         return $html;
     }
     
