@@ -145,9 +145,11 @@ class PMF_Helper_Search extends PMF_Helper
      */
     public function renderOpenSearchLink()
     {
-        return sprintf('<a class="searchplugin" href="#" onclick="window.external.AddSearchProvider(\'%s\'); return false;">%s</a>',
+        return sprintf(
+            '<a class="searchplugin" href="#" onclick="window.external.AddSearchProvider(\'%s\'); return false;">%s</a>',
             PMF_Link::getSystemUri('/index.php') . '/opensearch.php',
-            $this->translation['opensearch_plugin_install']);
+            $this->translation['opensearch_plugin_install']
+        );
     }
     
     /**
@@ -187,16 +189,19 @@ class PMF_Helper_Search extends PMF_Helper
                     $result->category_id,
                     $result->id,
                     $result->lang,
-                    urlencode($this->searchterm));
+                    urlencode($this->searchterm)
+                );
 
                 $oLink       = new PMF_Link($currentUrl);
                 $oLink->text = $oLink->itemTitle = $oLink->tooltip = $question;
                 
-                $html .= sprintf("<li><strong>%s</strong>: %s<br /><div class=\"searchpreview\"><strong>%s</strong> %s...</div><br /></li>\n",
+                $html .= sprintf(
+                    "<li><strong>%s</strong>: %s<br /><div class=\"searchpreview\"><strong>%s</strong> %s...</div><br /></li>\n",
                     $categoryName,
                     $oLink->toHtmlAnchor(),
                     $this->translation['msgSearchContent'],
-                    $answerPreview);
+                    $answerPreview
+                );
                 $i++;
             }
             
@@ -231,16 +236,20 @@ class PMF_Helper_Search extends PMF_Helper
                 }
                 
                 // Build the link to the faq record
-                $currentUrl = sprintf('index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                $currentUrl = sprintf(
+                    'index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     $result->category_id,
                     $result->id,
-                    $result->lang);
+                    $result->lang
+                );
                 
-                $html .= sprintf('<label for="%d"><input id="%d" type="radio" name="faqURL" value="%s"> %s</label><br />',
+                $html .= sprintf(
+                    '<label for="%d"><input id="%d" type="radio" name="faqURL" value="%s"> %s</label><br />',
                     $result->id,
                     $result->id,
                     $currentUrl, 
-                    $result->question);
+                    $result->question
+                );
                 $i++;
             }
             
@@ -274,15 +283,19 @@ class PMF_Helper_Search extends PMF_Helper
 
         if (0 < $numOfResults) {
 
-            $html .= sprintf("<p>%s</p>\n", 
-                $this->plurals->GetMsg('plmsgSearchAmount', $numOfResults));
+            $html .= sprintf(
+                "<p>%s</p>\n",
+                $this->plurals->GetMsg('plmsgSearchAmount', $numOfResults)
+            );
             
             if (1 < $totalPages) {
-                $html .= sprintf("<p><strong>%s%d %s %s</strong></p>\n",
+                $html .= sprintf(
+                    "<p><strong>%s%d %s %s</strong></p>\n",
                     $this->translation['msgPage'],
                     $currentPage,
                     $this->translation['msgVoteFrom'],
-                    $this->plurals->GetMsg('plmsgPagesTotal',$totalPages));
+                    $this->plurals->GetMsg('plmsgPagesTotal',$totalPages)
+                );
             }
             
             $html .= "<ul class=\"phpmyfaq_ul\">\n";
@@ -329,7 +342,8 @@ class PMF_Helper_Search extends PMF_Helper
                     $result->category_id,
                     $result->id,
                     $result->lang,
-                    urlencode($searchterm));
+                    urlencode($searchterm)
+                );
 
                 $oLink       = new PMF_Link($currentUrl);
                 $oLink->text = $question;
@@ -338,11 +352,13 @@ class PMF_Helper_Search extends PMF_Helper
                 $html .= "<li>";
                 $html .= sprintf("<strong>%s</strong>: %s<br />",
                     $categoryInfo[0]['name'],
-                    $oLink->toHtmlAnchor());
+                    $oLink->toHtmlAnchor()
+                );
                 $html .= sprintf(
                     "<div class=\"searchpreview\"><strong>%s</strong> %s...</div><br />\n",
                     $this->translation['msgSearchContent'],
-                    $answerPreview);
+                    $answerPreview
+                );
                 $html .= "</li>";
             }
             
@@ -371,7 +387,8 @@ class PMF_Helper_Search extends PMF_Helper
         $numOfResults = $resultSet->getNumberOfResults();
 
         if ($numOfResults > 0) {
-            $html .= '<ul>';
+
+            $html   .= '<ul>';
             $counter = 0;
             foreach ($resultSet->getResultset() as $result) {
                 if ($counter >= 5) {
@@ -382,7 +399,6 @@ class PMF_Helper_Search extends PMF_Helper
                 }
                 $counter++;
 
-                $html .= '<li>';
                 $url = sprintf(
                     '?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     $result->category_id,
@@ -393,7 +409,7 @@ class PMF_Helper_Search extends PMF_Helper
                 $oLink->itemTitle  = $result->question;
                 $oLink->text       = $result->question;
                 $oLink->tooltip    = $result->question;
-                $html .= $oLink->toHtmlAnchor() . '</li>';
+                $html .= '<li>' . $oLink->toHtmlAnchor() . '</li>';
             }
             $html .= '</ul>';
         }
@@ -414,10 +430,12 @@ class PMF_Helper_Search extends PMF_Helper
         
         foreach ($mostPopularSearches as $searchItem) {
             if (PMF_String::strlen($searchItem['searchterm']) > 0) {
-                $html .= sprintf('<li><a href="?search=%s&submit=Search&action=search">%s</a> (%dx)</li>',
+                $html .= sprintf(
+                    '<li><a href="?search=%s&submit=Search&action=search">%s</a> (%dx)</li>',
                     urlencode($searchItem['searchterm']),
                     $searchItem['searchterm'],
-                    $searchItem['number']);
+                    $searchItem['number']
+                );
             }
         }
         
