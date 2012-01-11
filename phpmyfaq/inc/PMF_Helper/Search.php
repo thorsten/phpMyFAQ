@@ -389,7 +389,7 @@ class PMF_Helper_Search extends PMF_Helper
                     $result->id,
                     $result->lang
                 );
-                $oLink             = new PMF_Link(PMF_Link::getSystemRelativeUri() . '?' . $url);
+                $oLink             = new PMF_Link(PMF_Link::getSystemRelativeUri() . $url);
                 $oLink->itemTitle  = $result->question;
                 $oLink->text       = $result->question;
                 $oLink->tooltip    = $result->question;
