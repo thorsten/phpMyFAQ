@@ -75,7 +75,7 @@ if ($permission['delquestion']) {
                 </a>
             </td>
             <td>
-                <?php print $category->categoryName[$question['category_id']]['name'] ?>
+                <div id="PMF_openQuestionsCategory"><?php print $category->categoryName[$question['category_id']]['name'] ?></div>
                 <br />
                 <?php print $question['question'] ?>
             </td>
@@ -89,9 +89,16 @@ if ($permission['delquestion']) {
                     <?php print $PMF_LANG['ad_gen_delete']; ?>
                 </a>
                 <br />
+                <?php if (PMF_Configuration::getInstance()->get('records.enableCloseQuestion') && $question['answer_id']) { ?>
+                <a href="?action=editentry&amp;id=<?php print $question['answer_id']; ?>&amp;lang=<?php print $LANGCODE; ?>">
+                    <?php print $PMF_LANG['msg2answerFAQ']; ?>
+                </a>
+                <?php } else { ?>
                 <a href="?action=takequestion&amp;id=<?php print $question['id']; ?>">
                     <?php print $PMF_LANG['ad_ques_take']; ?>
                 </a>
+                <?php } ?>
+
             </td>
         </tr>
 <?php

@@ -316,13 +316,17 @@ class PMF_Link
         // 2. Use a '-' for the words separation
         $itemTitle = PMF_String::preg_replace('/\s/m', '-', $itemTitle);
         // Hack: remove some chars for having a better readable title
-        $itemTitle = str_replace(array('+', ',', ';', ':', '.', '?', '!', '"', '(', ')', '[', ']', '{', '}', '<', '>'),
-                                 '',
-                                 $itemTitle);
+        $itemTitle = str_replace(
+            array('+', ',', ';', ':', '.', '?', '!', '"', '(', ')', '[', ']', '{', '}', '<', '>'),
+            '',
+            $itemTitle
+        );
         // Hack: move some chars to "similar" but plain ASCII chars
-        $itemTitle = str_replace(array('à', 'è', 'é', 'ì', 'ò', 'ù', 'ä', 'ö', 'ü', 'ß', 'Ä', 'Ö', 'Ü'),
-                                 array('a', 'e', 'e', 'i', 'o', 'u', 'ae', 'oe', 'ue', 'ss', 'Ae', 'Oe', 'Ue'),
-                                 $itemTitle);
+        $itemTitle = str_replace(
+            array('à', 'è', 'é', 'ì', 'ò', 'ù', 'ä', 'ö', 'ü', 'ß', 'Ä', 'Ö', 'Ü'),
+            array('a', 'e', 'e', 'i', 'o', 'u', 'ae', 'oe', 'ue', 'ss', 'Ae', 'Oe', 'Ue'),
+            $itemTitle
+        );
         // Clean up
         $itemTitle = PMF_String::preg_replace('/-[\-]+/m', '-', $itemTitle);
 
@@ -523,7 +527,7 @@ class PMF_Link
      */
     public function toString($forceNoModrewriteSupport = false)
     {
-    	$faqconfig = PMF_Configuration::getInstance();
+        $faqconfig = PMF_Configuration::getInstance();
         $url       = $this->toUri();
         // Check mod_rewrite support and 'rewrite' the passed (system) uri
         // according to the rewrite rules written in .htaccess
@@ -671,7 +675,7 @@ class PMF_Link
      */
     function toUri()
     {
-    	$url = $this->url;
+        $url = $this->url;
         if (!empty($this->url)) {
             if ((!$this->hasScheme()) && (!$this->isInternalReference())) {
                 $url = $this->getDefaultScheme() . $this->url;
@@ -679,5 +683,25 @@ class PMF_Link
         }
 
         return $url;
+    }
+    
+    /**
+     * Static method to generate simple HTML anchors
+     *
+     * @static
+     * @param string $url    URL
+     * @param string $text   Text
+     * @param bool   $active Add CSS class named "active"?
+     *
+     * @return string
+     */
+    public static function renderNavigationLink($url, $text, $active = false)
+    {
+        return printf(
+            '<a %s href="%s">%s</a>',
+            (true === $active ? 'class="active"' : ''),
+            $url,
+            $text
+        );
     }
 }

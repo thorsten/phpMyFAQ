@@ -18,7 +18,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2011 phpMyFAQ Team
+ * @copyright 2003-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-23
@@ -115,6 +115,16 @@ if ($permission['editbt']) {
             }
 
             printf('<p class="success">%s</p>', $PMF_LANG['ad_entry_savedsuc']);
+
+            // Open question answered
+            $openQuestionId = PMF_Filter::filterInput(INPUT_POST, 'openQuestionID', FILTER_VALIDATE_INT);
+            if ($openQuestionId) {
+                if (PMF_Configuration::getInstance()->get('records.enableDeleteQuestion')) { // deletes question
+                    $faq->deleteQuestion($openQuestionId);
+                } else { // adds this faq record id to the related open question
+                    $faq->updateQuestionAnswer($openQuestionId, $record_id, $categories['rubrik'][0]);
+                }
+            }
 
             // Call Link Verification
             link_ondemand_javascript($record_id, $recordData['lang']);

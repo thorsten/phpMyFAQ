@@ -2129,7 +2129,7 @@ class PMF_Faq
             INSERT INTO
                 %sfaqquestions
             VALUES
-                (%d, '%s', '%s', %d, '%s', '%s', '%s')",
+                (%d, '%s', '%s', %d, '%s', '%s', '%s', %d)",
             SQLPREFIX,
             $this->db->nextId(SQLPREFIX.'faqquestions', 'id'),
             $this->db->escape($questionData['username']),
@@ -2137,7 +2137,9 @@ class PMF_Faq
             $questionData['category_id'],
             $this->db->escape($questionData['question']),
             date('YmdHis'),
-            $questionData['is_visible']);
+            $questionData['is_visible'],
+            0
+        );
         $this->db->query($query);
 
         return true;
@@ -2208,7 +2210,7 @@ class PMF_Faq
 
         $query = sprintf("
             SELECT
-                id, username, email, category_id, question, created, is_visible
+                id, username, email, category_id, question, created, answer_id, is_visible
             FROM
                 %sfaqquestions
             %s
@@ -2226,7 +2228,9 @@ class PMF_Faq
                     'category_id' => $row->category_id,
                     'question'    => $row->question,
                     'created'     => $row->created,
-                    'is_visible'  => $row->is_visible);
+                    'answer_id'   => $row->answer_id,
+                    'is_visible'  => $row->is_visible
+                );
             }
         }
         return $questions;
@@ -2797,11 +2801,23 @@ class PMF_Faq
                 $output .= sprintf('<td valign="top"><strong>%s:</strong><br />%s</td>',
                     isset($category->categoryName[$row->category_id]['name']) ? $category->categoryName[$row->category_id]['name'] : '',
                     strip_tags($row->question));
-                $output .= sprintf('<td valign="top"><a href="?%saction=add&amp;question=%d&amp;cat=%d">%s</a></td>',
-                    $sids,
-                    $row->id,
-                    $row->category_id,
-                    $this->pmf_lang['msg2answer']);
+                if (PMF_Configuration::getInstance()->get('records.enableCloseQuestion') && $row->answer_id) {
+                    $output .= sprintf(
+                        '<td valign="top"><a id="PMF_openQuestionAnswered" href="?%saction=artikel&amp;cat=%d&amp;id=%d">%s</a></td>',
+                        $sids,
+                        $row->category_id,
+                        $row->answer_id,
+                        $this->pmf_lang['msg2answerFAQ']
+                    );
+                } else {
+                    $output .= sprintf(
+                        '<td valign="top"><a href="?%saction=add&amp;question=%d&amp;cat=%d">%s</a></td>',
+                        $sids,
+                        $row->id,
+                        $row->category_id,
+                        $this->pmf_lang['msg2answer']
+                    );
+                }
                 $output .= '</tr>';
             }
         } else {
@@ -2992,5 +3008,27 @@ class PMF_Faq
         }
 
         return $output;
+    }
+
+    /**
+     * Updates field answer_id in faqquestion
+     *
+     * @param integer $openQuestionId
+     * @param integer $faqId
+     * @param integer $categoryId
+     *
+     * @return boolean
+     */
+    function updateQuestionAnswer($openQuestionId, $faqId, $categoryId)
+    {
+        $query = sprintf(
+            'UPDATE %sfaqquestions SET answer_id = %d, category_id= %d, WHERE id= %d',
+            SQLPREFIX,
+            $faqId,
+            $categoryId,
+            $openQuestionId
+        );
+
+        return $this->db->query($query);
     }
 }

@@ -646,6 +646,10 @@ if ($step == 4) {
         $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishTimeout', '500')";
 
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('security.forcePasswordUpdate', 'true')";
+
+        $query[] = "ALTER TABLE " . SQLPREFIX . "faqfaqquestions ADD answer_id INT NOT NULL DEFAULT 0";
+        $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('records.enableCloseQuestion', 'false')";
+        $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('records.enableDeleteQuestion', 'false')";
     }
 
     // Perform the queries for updating/migrating the database

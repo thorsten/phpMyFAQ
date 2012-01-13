@@ -295,8 +295,17 @@ switch ($action) {
 
             $faq->addCategoryRelations($categories, $recordId, $newData['lang']);
 
+            $openQuestionId = PMF_Filter::filterInput(INPUT_POST, 'openQuestionID', FILTER_VALIDATE_INT);
+            if ($openQuestionId) {
+                if (PMF_Configuration::getInstance()->get('records.enableDeleteQuestion')) {
+                    $faq->deleteQuestion($openQuestionId);
+                } else { // adds this faq record id to the related open question
+                    $faq->updateQuestionAnswer($openQuestionId, $recordId, $categories[0]);
+                }
+            }
+
             // Activate visits
-            $visits = PMF_Visits::getInstance();
+            $visits = PMF_Visits::getInstance($db, $Language);
             $visits->add($recordId, $newData['lang']);
 
             if ($autoActivate) {

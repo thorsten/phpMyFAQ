@@ -19,7 +19,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    A. Neufang <B_A_F_F@gmx.de>
  * @author    René-Roger Ziesack <rr-phpmyfaq.de@inf99.de>
- * @copyright 2004-2011 phpMyFAQ Team
+ * @copyright 2004-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-19
@@ -1121,3 +1121,8 @@ $PMF_LANG['msgTableOfContent'] = 'Inhaltsverzeichnis';
 
 // added v2.8.0-alpha - 2011-09-29 by Thorsten
 $PMF_LANG['ad_menu_searchfaqs'] = 'FAQs suchen';
+
+// added v2.8.0-alpha - 2012-01-13 by Peter
+$LANG_CONF["records.enableCloseQuestion"] = array(0 => "checkbox", 1 => "Offene Frage nach Beantwortung schließen?");
+$LANG_CONF["records.enableDeleteQuestion"] = array(0 => "checkbox", 1 => "Offene Frage nach Beantwortung löschen?");
+$PMF_LANG["msg2answerFAQ"] = "Answered";

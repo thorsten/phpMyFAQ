@@ -19,7 +19,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Tom Rochester <tom.rochester@gmail.com>
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2004-2011 phpMyFAQ Team
+ * @copyright 2004-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-09-18
@@ -282,6 +282,7 @@ category_id int(11) NOT NULL,
 question text NOT NULL,
 created varchar(20) NOT NULL,
 is_visible char(1) default 'Y',
+answer_id INTEGER NOT NULL DEFAULT 0,
 PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqright

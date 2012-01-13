@@ -63,6 +63,7 @@ $tpl->parse(
         'msgNewContentHeader'   => $PMF_LANG['msgNewContentHeader'],
         'msgNewContentAddon'    => $PMF_LANG['msgNewContentAddon'],
         'lang'                  => $Language->getLanguage(),
+        'openQuestionID'        => $inputQuestion,
         'defaultContentMail'    => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
         'defaultContentName'    => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
         'msgNewContentName'     => $PMF_LANG['msgNewContentName'],

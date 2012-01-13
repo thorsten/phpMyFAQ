@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Setup
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2011 phpMyFAQ Team
+ * @copyright 2007-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2007-02-24
@@ -285,6 +285,7 @@ category_id INTEGER NOT NULL,
 question BLOB SUB_TYPE TEXT NOT NULL,
 created VARCHAR(20) NOT NULL,
 is_visible CHAR(1) default 'Y',
+answer_id INTEGER NOT NULL DEFAULT 0,
 PRIMARY KEY (id))";
 
 //faqright

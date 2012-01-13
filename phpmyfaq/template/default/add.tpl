@@ -3,6 +3,7 @@
             <p>{msgNewContentAddon}</p>
             <form id="formValues" action="#" method="post">
                 <input type="hidden" name="lang" id="lang" value="{lang}" />
+                <input type="hidden" value="{openQuestionID}" id="openQuestionID" name="openQuestionID" />
                 
                 <p>
                     <label for="name">{msgNewContentName}</label>
@@ -24,7 +25,7 @@
 
                 <p>
                 <label for="question">{msgNewContentTheme}</label>
-                <textarea cols="37" rows="3" name="question" id="question" required="required" />{printQuestion}</textarea>
+                <textarea cols="37" rows="3" name="question" id="question" required="required" {readonly} />{printQuestion}</textarea>
                 </p>
 
                 <p>
