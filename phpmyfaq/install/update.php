@@ -647,7 +647,7 @@ if ($step == 4) {
 
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('security.forcePasswordUpdate', 'true')";
 
-        $query[] = "ALTER TABLE " . SQLPREFIX . "faqfaqquestions ADD answer_id INT NOT NULL DEFAULT 0";
+        $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions ADD answer_id INT NOT NULL DEFAULT 0";
         $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('records.enableCloseQuestion', 'false')";
         $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('records.enableDeleteQuestion', 'false')";
     }
