@@ -20,6 +20,7 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Georgi Korchev <korchev@yahoo.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
+ * @author    Peter Caesar <p.caesar@osmaco.de>
  * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
@@ -41,12 +42,12 @@ define('FAQ_SQL_ACTIVE_NO',  'no');
 /**
  * Query type definitions
  */
-define('FAQ_QUERY_TYPE_DEFAULT',        'faq_default');
-define('FAQ_QUERY_TYPE_APPROVAL',       'faq_approval');
-define('FAQ_QUERY_TYPE_EXPORT_PDF',     'faq_export_pdf');
-define('FAQ_QUERY_TYPE_EXPORT_XHTML',   'faq_export_xhtml');
-define('FAQ_QUERY_TYPE_EXPORT_XML',     'faq_export_xml');
-define('FAQ_QUERY_TYPE_RSS_LATEST',     'faq_rss_latest');
+define('FAQ_QUERY_TYPE_DEFAULT',      'faq_default');
+define('FAQ_QUERY_TYPE_APPROVAL',     'faq_approval');
+define('FAQ_QUERY_TYPE_EXPORT_PDF',   'faq_export_pdf');
+define('FAQ_QUERY_TYPE_EXPORT_XHTML', 'faq_export_xhtml');
+define('FAQ_QUERY_TYPE_EXPORT_XML',   'faq_export_xml');
+define('FAQ_QUERY_TYPE_RSS_LATEST',   'faq_rss_latest');
 
 /**
  * Sorting type definitions
@@ -58,7 +59,7 @@ define('FAQ_SORTING_TYPE_DATE_FAQID', 3);
 define('FAQ_SORTING_TYPE_FAQID', 4);
 
 /**
- * PMF_Faq
+ * PMF_Faq - 3K LOC of funny things for phpMyFAQ
  *
  * @category  phpMyFAQ
  * @package   PMF_Faq
@@ -66,6 +67,7 @@ define('FAQ_SORTING_TYPE_FAQID', 4);
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Georgi Korchev <korchev@yahoo.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
+ * @author    Peter Caesar <p.caesar@osmaco.de>
  * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
@@ -296,7 +298,8 @@ class PMF_Faq
                     'record_preview' => PMF_Utils::chopString(strip_tags($row->record_content), 25),
                     'record_link'    => $oLink->toString(),
                     'record_date'    => $row->record_date,
-                    'visits'         => $visits);
+                    'visits'         => $visits
+                );
             }
         } else {
             return $faqdata;
@@ -442,10 +445,12 @@ class PMF_Faq
                 $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
                 $oLink->itemTitle = $oLink->text = $oLink->tooltip = $title;
                 
-                $listItem = sprintf('<li>%s<span id="viewsPerRecord"><br /><span class="little">(%s)</span>%s</span></li>',
+                $listItem = sprintf(
+                    '<li>%s<span id="viewsPerRecord"><br /><span class="little">(%s)</span>%s</span></li>',
                     $oLink->toHtmlAnchor(),
                     $this->plr->GetMsg('plmsgViews', $visits),
-                    ($row->sticky == 1) ? '<br /><br />' : '');
+                    ($row->sticky == 1) ? '<br /><br />' : ''
+                );
 
                 $output .= $listItem;
             }
@@ -605,18 +610,22 @@ class PMF_Faq
                 }
 
                 $title = $row->thema;
-                $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                            $sids,
-                            $row->category_id,
-                            $row->id,
-                            $row->lang
-                        );
+                $url   = sprintf(
+                    '%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    $sids,
+                    $row->category_id,
+                    $row->id,
+                    $row->lang
+                );
                 $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
                 $oLink->itemTitle = $row->thema;
                 $oLink->text = $title;
                 $oLink->tooltip = $title;
-                $listItem = sprintf('<li>%s<br /><span class="little">('.$this->plr->GetMsg('plmsgViews',$visits).')</span></li>',
-                    $oLink->toHtmlAnchor());
+                $listItem = sprintf(
+                    '<li>%s<br /><span class="little">(%s)</span></li>',
+                    $oLink->toHtmlAnchor(),
+                    $this->plr->GetMsg('plmsgViews',$visits)
+                );
 
                 $output .= $listItem;
 
@@ -2400,7 +2409,8 @@ class PMF_Faq
     }
 
     /**
-     * Build a logic sequence, for a WHERE statement, of those category IDs children of the provided category ID, if any
+     * Build a logic sequence, for a WHERE statement, of those category IDs
+     * children of the provided category ID, if any
      *
      * @param   $nCatid
      * @param   $logicOp
