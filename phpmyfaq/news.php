@@ -19,7 +19,7 @@
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2006-2011 phpMyFAQ Team
+ * @copyright 2006-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-07-23
@@ -39,7 +39,7 @@ if (!is_null($showCaptcha)) {
     exit;
 }
 
-$oNews  = new PMF_News();
+$oNews  = new PMF_News($db, $Language);
 $newsId = PMF_Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
 
 if (is_null($newsId)) {

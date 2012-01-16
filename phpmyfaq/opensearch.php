@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2006-2011 phpMyFAQ Team
+ * @copyright 2006-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-11-19
@@ -28,12 +28,10 @@ define('IS_VALID_PHPMYFAQ', null);
 
 require PMF_ROOT_DIR . '/inc/Init.php';
 require PMF_ROOT_DIR . '/inc/Link.php';
-
-require_once 'lang/' . $faqconfig->get('main.language');
+require 'lang/' . $faqconfig->get('main.language');
 
 $baseUrl   = PMF_Link::getSystemUri('/opensearch.php');
 $searchUrl = $baseUrl . '/index.php?action=search';
-$srcUrl    = $baseUrl;
 
 $opensearchXml = new XMLWriter();
 $opensearchXml->openMemory();
@@ -59,5 +57,5 @@ $opensearchXml->text($baseUrl . '/images/pmfsearch.png');
 
 $opensearchXml->endDocument();
 
-header("Content-type: text/xml");
+header('Content-type: text/xml');
 print $opensearchXml->outputMemory(true);

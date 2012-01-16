@@ -827,20 +827,20 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             'for_users' => 1,
             'for_groups' => 1
         ),
-        //18 => "addatt",
-        array(
-            'name' => 'addatt',
-            'description' => 'Right to add attachments',
-            'for_users' => 1,
-            'for_groups' => 1
-        ),
-        //19 => "delatt",
-        array(
-            'name' => 'delatt',
-            'description' => 'Right to delete attachments',
-            'for_users' => 1,
-            'for_groups' => 1
-        ),
+        //18 => "addatt", // Duplicate, removed with 2.7.3
+        //array(
+        //    'name' => 'addatt',
+        //    'description' => 'Right to add attachments',
+        //    'for_users' => 1,
+        //    'for_groups' => 1
+        //),
+        //19 => "backup delatt", // Duplicate, removed with 2.7.3
+        //array(
+        //    'name' => 'delatt',
+        //    'description' => 'Right to delete attachments',
+        //    'for_users' => 1,
+        //    'for_groups' => 1
+        //),
         //20 => "backup",
         array(
             'name' => 'backup',
@@ -1019,9 +1019,10 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     $configs['main.phpMyFAQToken']     = md5(uniqid(rand()));
 
     $oConf->update($configs);
-    
+
+    print '</p>';
+
 ?>
-        </p>
         <p class="success">
             Wow, looks like the installation worked like a charm. This is pretty cool, isn't it? :-)
         </p>

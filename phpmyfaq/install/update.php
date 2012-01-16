@@ -625,6 +625,15 @@ if ($step == 4) {
     }
 
     //
+    // UPDATES FROM 2.7.3
+    //
+    if (version_compare($version, '2.7.3', '<')) {
+        $query[] = "DELETE FROM ".SQLPREFIX."faqright WHERE right_id = 18 AND right_id = 19";
+        $query[] = "DELETE FROM ".SQLPREFIX."faquser_right WHERE right_id = 18 AND right_id = 19";
+        $query[] = "DELETE FROM ".SQLPREFIX."faqgroup_right WHERE right_id = 18 AND right_id = 19";
+    }
+
+    //
     // UPDATES FROM 2.8.0-alpha
     //
     if (version_compare($version, '2.8.0-alpha', '<')) {
@@ -648,9 +657,10 @@ if ($step == 4) {
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('security.forcePasswordUpdate', 'true')";
 
         $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions ADD answer_id INT NOT NULL DEFAULT 0";
-        $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('records.enableCloseQuestion', 'false')";
-        $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('records.enableDeleteQuestion', 'false')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('records.enableCloseQuestion', 'false')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('records.enableDeleteQuestion', 'false')";
     }
+
 
     // Perform the queries for updating/migrating the database
     if (isset($query)) {

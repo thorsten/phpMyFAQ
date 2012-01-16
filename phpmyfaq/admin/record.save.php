@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2011 phpMyFAQ Team
+ * @copyright 2003-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-23
@@ -96,6 +96,9 @@ if ($permission['editbt']) {
 
         // Create ChangeLog entry
         $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $record_lang, $revision_id);
+
+        // Create the visit entry
+        PMF_Visits::getInstance()->add($record_id);
 
         // save or update the FAQ record
         if ($faq->isAlreadyTranslated($record_id, $record_lang)) {

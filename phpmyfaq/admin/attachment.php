@@ -7,7 +7,7 @@
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
- *  http://www.mozilla.org/MPL/
+ * http://www.mozilla.org/MPL/
  *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
@@ -18,7 +18,7 @@
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2002-2011 phpMyFAQ
+ * @copyright 2002-2012 phpMyFAQ
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-17 
@@ -128,7 +128,7 @@ if (is_null($currentAction) || !is_null($currentSave)) {
     <div id="mainContent">
 <?php
 }
-if (is_null($currentAction) && $auth && $permission["addatt"]) {
+if (is_null($currentAction) && $auth && $permission['addattachment']) {
     $recordId   = filter_input(INPUT_GET, 'record_id',   FILTER_VALIDATE_INT);
     $recordLang = filter_input(INPUT_GET, 'record_lang', FILTER_SANITIZE_STRING);
 ?>
@@ -151,11 +151,11 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
     $auth = false;
 }
 
-if (!is_null($currentAction) && $auth && !$permission['addatt']) {
+if (!is_null($currentAction) && $auth && !$permission['addattachment']) {
     print $PMF_LANG['err_NotAuth'];
 }
 
-if (!is_null($currentSave) && $currentSave == true && $auth && $permission['addatt']) {
+if (!is_null($currentSave) && $currentSave == true && $auth && $permission['addattachment']) {
     $recordId   = filter_input(INPUT_POST, 'record_id',   FILTER_VALIDATE_INT);
     $recordLang = filter_input(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
 ?>
@@ -209,7 +209,7 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission['adda
 
 
 }
-if (!is_null($currentSave) && $currentSave == true && $auth && !$permission["addatt"]) {
+if (!is_null($currentSave) && $currentSave == true && $auth && !$permission['addattachment']) {
     print $PMF_LANG["err_NotAuth"];
 }
 

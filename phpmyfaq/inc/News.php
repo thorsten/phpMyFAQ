@@ -18,7 +18,7 @@
  * @package   PMF_News
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2006-2011 phpMyFAQ Team
+ * @copyright 2006-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-06-25
@@ -35,7 +35,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_News
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2006-2011 phpMyFAQ Team
+ * @copyright 2006-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-06-25
@@ -52,7 +52,7 @@ class PMF_News
     /**
     * Language
     *
-    * @var  string
+    * @var  PMF_Language
     */
     private $language;
 
@@ -64,15 +64,19 @@ class PMF_News
     private $pmf_lang;
 
     /**
-    * Constructor
-    *
-    */
-    public function __construct()
+     * Constructor
+     *
+     * @param PMF_DB_Driver $database Database connection
+     * @param PMF_Language  $language Language object
+     *
+     * @return PMF_News
+     */
+    public function __construct(PMF_DB_Driver $database, PMF_Language $language)
     {
         global $PMF_LANG;
 
-        $this->db       = PMF_Db::getInstance();
-        $this->language = PMF_Language::$language;
+        $this->db       = $database;
+        $this->language = $language;
         $this->pmf_lang = $PMF_LANG;
     }
 
@@ -110,7 +114,7 @@ class PMF_News
             $now,
             $now,
             $active ? "AND active = 'y'" : '',
-            $this->language);
+            $this->language->getLanguage());
             
         $result = $this->db->query($query);
 
@@ -175,7 +179,8 @@ class PMF_News
 
 
 
-            $output .= sprintf('<header><h3><a name="news_%d" href="%s">%s <img class="goNews" src="images/more.gif" width="11" height="11" alt="%s" /></a></h3></header>',
+            $output .= sprintf(
+                '<header><h3><a name="news_%d" href="%s">%s <img class="goNews" src="images/more.gif" width="11" height="11" alt="%s" /></a></h3></header>',
                 $item['id'],
                 $oLink->toString(),
                 $item['header'],
@@ -185,7 +190,8 @@ class PMF_News
             $output .= sprintf('%s', $item['content']);
 
             if (strlen($item['link']) > 1) {
-                $output .= sprintf('<br />%s <a href="%s" target="_%s">%s</a>',
+                $output .= sprintf(
+                    '<br />%s <a href="%s" target="_%s">%s</a>',
                     $this->pmf_lang['msgInfo'],
                     $item['link'],
                     $item['target'],
@@ -221,7 +227,7 @@ class PMF_News
             ORDER BY
                 datum DESC",
             SQLPREFIX,
-            $this->language);
+            $this->language->getLanguage());
             
         $result = $this->db->query($query);
 
@@ -234,7 +240,8 @@ class PMF_News
                     'header'    => $row->header,
                     'date'      => PMF_Date::createIsoDate($row->datum),
                     'active'    => $row->active,
-                    'expired'   => $expired);
+                    'expired'   => $expired
+                );
             }
         }
 
@@ -264,7 +271,7 @@ class PMF_News
                 lang = '%s'",
             SQLPREFIX,
             $id,
-            $this->language);
+            $this->language->getLanguage());
             
         $result = $this->db->query($query);
 
@@ -440,7 +447,7 @@ class PMF_News
                 lang = '%s'",
             SQLPREFIX,
             $id,
-            $this->language);
+            $this->language->getLanguage());
             
         if (!$this->db->query($query)) {
             return false;

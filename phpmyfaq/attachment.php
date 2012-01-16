@@ -35,7 +35,6 @@ if (headers_sent()) {
 }
 
 $attachmentErrors = array();
-$permission       = false;
 
 // authenticate with session information
 $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
@@ -49,24 +48,29 @@ $attachment = PMF_Attachment_Factory::create($id);
 $userPermission  = $faq->getPermission('user', $attachment->getRecordId());
 $groupPermission = $faq->getPermission('group', $attachment->getRecordId());
 
+// Check on group permissions
 if (count($groupPermission) && in_array($groupPermission[0], $user->perm->getUserGroups($user->getUserId()))) {
-    $permission = true;
-}
-if (in_array(-1, $userPermission) || in_array($user->getUserId(), $userPermission)) {
-    $permission = true;
+    $groupPermission = true;
 } else {
-    $permission = false;
+    $groupPermission = false;
 }
 
-if ($attachment && $permission) {
+// Check in user's permissions
+if (in_array($user->getUserId(), $userPermission)) {
+    $userPermission = true;
+} else {
+    $userPermission = false;
+}
+
+if ($attachment && ($groupPermission || ($groupPermission && $userPermission))) {
     try {
         $attachment->rawOut();
         exit(0);
     } catch (Exception $e) {
-        $attachmentErrors[] = $PMF_LANG['msgAttachmentInvalid'];
+        $attachmentErrors[] = $PMF_LANG['msgAttachmentInvalid'] . ' (' . $e->getMessage() . ')';
     }
 } else {
-    $attachmentErrors[] = $PMF_LANG['ad_att_none'];
+    $attachmentErrors[] = $PMF_LANG['err_NotAuth'];
 }
 
 // If we're here, there was an error with file download

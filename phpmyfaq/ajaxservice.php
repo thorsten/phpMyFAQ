@@ -147,7 +147,7 @@ switch ($action) {
                     $urlToContent     = $oLink->toString();
                 } else {
 
-                    $oNews = new PMF_News();
+                    $oNews = new PMF_News($db, $Language);
                     $news  = $oNews->getNewsEntry($id);
                     if ($news['authorEmail'] != '') {
                         $emailTo = $news['authorEmail'];
@@ -257,11 +257,12 @@ switch ($action) {
                 $newLanguage   = $faqlanguage;
             }
 
-            if (PMF_String::substr($contentlink,7) != "") {
-                $answer = sprintf('%s<br />%s<a href="http://%s" target="_blank">%s</a>',
+            if (PMF_String::substr($contentlink, 7) != "") {
+                $answer = sprintf(
+                    '%s<br /><div id="newFAQContentLink">%s<a href="http://%s" target="_blank">%s</a></div>',
                     $answer,
                     $PMF_LANG['msgInfo'],
-                    PMF_String::substr($contentlink,7),
+                    PMF_String::substr($contentlink, 7),
                     $contentlink
                 );
             }

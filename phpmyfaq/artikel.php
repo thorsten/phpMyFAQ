@@ -37,6 +37,12 @@ $faqRelation = new PMF_Relation($db, $Language);
 $faqRating   = new PMF_Rating($db, $Language);
 $faqComment  = new PMF_Comment();
 
+if (is_null($user)) {
+    $user = new PMF_User_CurrentUser();
+}
+
+$faqSearchResult = new PMF_Search_Resultset($user, $faq);
+
 $captcha->setSessionId($sids);
 if (!is_null($showCaptcha)) {
     $captcha->showCaptchaImg();
@@ -192,15 +198,26 @@ if (count($multiCategories) > 1) {
     $htmlAllCategories .= '    </div>';
 }
 
+// Related FAQs
+$faqSearchResult->reviewResultset(
+    $faqRelation->getAllRelatedById(
+        $faq->faqRecord['id'],
+        $faq->faqRecord['title'],
+        $faq->faqRecord['keywords']
+    )
+);
+$relatedFaqs = PMF_Helper_Search::getInstance()->renderRelatedFaqs($faqSearchResult, $faq->faqRecord['id']);
+
 // Show link to edit the faq?
 $editThisEntry = '';
-if (isset($permission['editbt'])) {
+if (isset($permission['editbt']) && $permission['editbt']) {
     $editThisEntry = sprintf(
         '<a href="%sadmin/index.php?action=editentry&amp;id=%d&amp;lang=%s">%s</a>',
         PMF_Link::getSystemRelativeUri('index.php'),
         $faq->faqRecord['id'],
         $lang,
-        $PMF_LANG['ad_entry_edit_1'].' '.$PMF_LANG['ad_entry_edit_2']);
+        $PMF_LANG['ad_entry_edit_1'].' '.$PMF_LANG['ad_entry_edit_2']
+    );
 }
 
 // Is the faq expired?
@@ -237,6 +254,15 @@ if (!empty($switchLanguage)) {
         )
     );
 }
+if (isset($permission['addtranslation']) && $permission['addtranslation']) {
+    $tpl->processBlock(
+        'writeContent',
+        'addTranslation',
+        array(
+            'msgTranslate' => $PMF_LANG['msgTranslate'],
+        )
+    );
+}
 
 $tpl->parse('writeContent', array(
     'writeRubrik'                => $categoryName,
@@ -248,12 +274,11 @@ $tpl->parse('writeContent', array(
     'writeTagHeader'             => $PMF_LANG['msg_tags'] . ': ',
     'writeArticleTags'           => $faqTagging->getAllLinkTagsById($faq->faqRecord['id']),
     'writeRelatedArticlesHeader' => $PMF_LANG['msg_related_articles'] . ': ',
-    'writeRelatedArticles'       => $faqRelation->getAllRelatedById($faq->faqRecord['id'], $faq->faqRecord['title'], $faq->faqRecord['keywords']),
+    'writeRelatedArticles'       => $relatedFaqs,
     'writeDateMsg'               => $PMF_LANG['msgLastUpdateArticle'] . PMF_Date::format($faq->faqRecord['date']),
     'writeRevision'              => $PMF_LANG['ad_entry_revision'] . ': 1.' . $faq->faqRecord['revision_id'],
     'writeAuthor'                => $PMF_LANG['msgAuthor'] . ': ' . $faq->faqRecord['author'],
     'editThisEntry'              => $editThisEntry,
-    'msgTranslate'               => $PMF_LANG['msgTranslate'],
     'translationUrl'             => $translationUrl,
     'languageSelection'          => PMF_Language::selectLanguages($LANGCODE, false, $arrLanguage, 'translation'),
     'msgTranslateSubmit'         => $PMF_LANG['msgTranslateSubmit'],

@@ -244,7 +244,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
         $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
     }
 
-    if ($permission["addatt"]) {
+    if ($permission['addattachment']) {
 ?>
                 <p>
                     <label><?php print $PMF_LANG['ad_menu_attachments'] ?>:</label>
@@ -258,7 +258,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                 printf('<li><a href="../%s">%s</a> ',
                     $att->buildUrl(),
                     $att->getFilename());
-                if ($permission['delatt']) {
+                if ($permission['delattachment']) {
                     printf('[ <a href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s">%s</a> ]',
                         $faqData['id'],
                         $att->getId(),

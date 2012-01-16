@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2011 phpMyFAQ Team
+ * @copyright 2002-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-16
@@ -89,9 +89,9 @@ if (!is_null($inputSearchTerm) || !is_null($search)) {
 
     $faqSearch->setCategory($category);
     $faqSearch->setCategoryId($inputCategory);
-    $searchResult = $faqSearch->search($inputSearchTerm, $allLanguages);
+    $searchResults = $faqSearch->search($inputSearchTerm, $allLanguages);
     
-    $faqSearchResult->reviewResultset($searchResult);
+    $faqSearchResult->reviewResultset($searchResults);
     
     $inputSearchTerm = stripslashes($inputSearchTerm);
     $faqSearch->logSearchTerm($inputSearchTerm);
