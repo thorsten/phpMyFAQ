@@ -18,7 +18,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2011 phpMyFAQ Team
+ * @copyright 2003-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-23
@@ -100,7 +100,7 @@ if ($permission['editbt']) {
             $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $recordData['lang']);
             // Create the visit entry
             $visits = PMF_Visits::getInstance();
-            $visits->add($record_id, $recordData['lang']);
+            $visits->add($record_id);
             // Insert the new category relations
             $faq->addCategoryRelations($categories['rubrik'], $record_id, $recordData['lang']);
             // Insert the tags
