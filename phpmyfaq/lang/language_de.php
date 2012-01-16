@@ -1126,3 +1126,6 @@ $PMF_LANG['ad_menu_searchfaqs'] = 'FAQs suchen';
 $LANG_CONF["records.enableCloseQuestion"] = array(0 => "checkbox", 1 => "Offene Frage nach Beantwortung schließen?");
 $LANG_CONF["records.enableDeleteQuestion"] = array(0 => "checkbox", 1 => "Offene Frage nach Beantwortung löschen?");
 $PMF_LANG["msg2answerFAQ"] = "Answered";
+
+// added v2.8.0-alpha - 2012-01-16 by Thorsten
+$PMF_LANG['headerUserControlPanel'] = 'Persönlicher Bereich';

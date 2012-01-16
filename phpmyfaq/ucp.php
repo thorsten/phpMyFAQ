@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $tpl->parse(
     'writeContent',
     array(
-        'headerUserControlPanel' => 'User Control Panel'
+        'headerUserControlPanel' => $PMF_LANG['headerUserControlPanel']
     )
 );
 
