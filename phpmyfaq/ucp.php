@@ -31,7 +31,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $tpl->parse(
     'writeContent',
     array(
-        'headerUserControlPanel' => $PMF_LANG['headerUserControlPanel']
+        'headerUserControlPanel' => $PMF_LANG['headerUserControlPanel'],
+        'msgLoginName'           => $PMF_LANG['ad_user_username'],
+        'msgRealName'            => $PMF_LANG['ad_user_name'],
+        'msgEmail'               => $PMF_LANG['msgNewContentMail'],
+        'msgPassword'            => $PMF_LANG['ad_user_password'],
+        'msgConfirm'             => $PMF_LANG['ad_user_confirm'],
+        'msgSave'                => $PMF_LANG['msgSave'],
+        'msgCancel'              => $PMF_LANG['msgCancel']
     )
 );
 
