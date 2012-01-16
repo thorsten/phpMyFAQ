@@ -478,7 +478,7 @@ function myRealPath($path) {
 		$urlprefix = "";
 		$urlsuffix = "";
 
-	$value = backslashToSlash(getRealPath($value));
+		$value = backslashToSlash(getRealPath($value));
 		
 
 		$pos = stripos($value, $wwwroot);
@@ -489,7 +489,41 @@ function myRealPath($path) {
 		{
 			$output = $value;
 		}
-		return "http://" .  addTrailingSlash(backslashToSlash($_SERVER['HTTP_HOST'])) . removeBeginingSlash(backslashToSlash($output));
+		//return "http://" .  addTrailingSlash(backslashToSlash($_SERVER['HTTP_HOST'])) . removeBeginingSlash(backslashToSlash($output));
+        // Pick up URL up to /admin and exclude /admin  . This is the phpMyFAQ directory
+        $pmfBase = strrev(
+            str_replace(
+                'nimda/',
+                '',
+                stristr(
+                    strrev(backslashToSlash($_SERVER['HTTP_REFERER'])),
+                    'nimda/'
+                )
+            )
+        );
+        if ($pmfBase == $_SERVER['HTTP_HOST'])    {
+            // phpMyFAQ is not in a subdirectory of a domain
+            $pmfBasePath = str_replace(
+                $_SERVER['DOCUMENT_ROOT'],
+                '',
+                stristr($output,$_SERVER['DOCUMENT_ROOT'])
+            );
+        } else {
+            // phpMyFAQ is in a subdirectory of a domain
+            // extract subdirectory from URL for comparison with path
+            $pmfBaseSubPath = strrchr($pmfBase, '/');
+            // extract the rest of URL including file name from file path
+            $pmfBasePath = str_replace(
+                $pmfBaseSubPath,
+                '',
+                substr(
+                    backslashToSlash($output),
+                    strrpos(backslashToSlash($output), $pmfBaseSubPath)
+                )
+            );
+        }
+
+        return $pmfBase . $pmfBasePath ;
 	}
 	
 /**
