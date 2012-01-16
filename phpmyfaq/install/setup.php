@@ -1023,7 +1023,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 ?>
         </p>
         <p class="success">
-            All database tables were successfully created.<br />Congratulation! Everything seems to be okay.
+            Wow, looks like the installation worked like a charm. This is pretty cool, isn't it? :-)
         </p>
         <script type="text/javascript">
         //<![CDATA[
