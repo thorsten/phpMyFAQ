@@ -600,6 +600,15 @@ switch ($action) {
         if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) && !is_null($question) &&
             !empty($question) && checkBannedWord(PMF_String::htmlspecialchars($question))) {
 
+            $question .= sprintf(
+                "%s %s\n%s %s\n\n %s",
+                $PMF_LANG["msgNewContentName"],
+                $name,
+                $PMF_LANG["msgNewContentMail"],
+                $email,
+                $question
+            );
+
             $mail = new PMF_Mail();
             $mail->setReplyTo($email, $name);
             $mail->addTo($faqconfig->get('main.administrationMail'));
