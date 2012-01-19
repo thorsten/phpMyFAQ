@@ -600,7 +600,7 @@ switch ($action) {
         if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) && !is_null($question) &&
             !empty($question) && checkBannedWord(PMF_String::htmlspecialchars($question))) {
 
-            $question .= sprintf(
+            $question = sprintf(
                 "%s %s\n%s %s\n\n %s",
                 $PMF_LANG["msgNewContentName"],
                 $name,
