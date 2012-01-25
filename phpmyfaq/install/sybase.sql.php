@@ -355,7 +355,7 @@ email varchar(100) NULL
 
 //faquserlogin
 $query[] = "CREATE TABLE ".$sqltblpre."faquserlogin (
-login varchar(25) NOT NULL,
+login varchar(100) NOT NULL,
 pass varchar(150) NULL,
 PRIMARY KEY (login)
 )";
