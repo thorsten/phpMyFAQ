@@ -784,7 +784,7 @@ $LANG_CONF['spam.checkBannedWords'] = array(0 => "checkbox", 1 => "Провер�
 $LANG_CONF['spam.enableCaptchaCode'] = array(0 => "checkbox", 1 => "Использовать капчу для доступа к редактированию (по умолчанию: включено).");
 $LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Количество связанных записей");
 $LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'Сортировать по:');
-$LANG_CONF['records.sortby'] = array(0 => 'select', 1 => \'Сортировать по:');
+$LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Сортировать по:');
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Новые записи надо активировать?");
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Разрешить коментарии для новых записей?");
 $LANG_CONF['main.enableWysiwygEditor'] = array(0 => "checkbox", 1 => "Включить визуальный (WYSIWYG) редактор (по умолчанию: включено)");
