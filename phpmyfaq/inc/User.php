@@ -153,7 +153,7 @@ class PMF_User
      *
      * @var string
      */
-    private $_validRegExp = '/^[a-z0-9][\w]+/i';
+    private $_validRegExp = '/^[a-z0-9][\w\.\-@]+/i';
     
     /**
      * user ID
