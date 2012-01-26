@@ -86,6 +86,7 @@ tinyMCE.init({
     convert_urls            : false,
     remove_linebreaks       : false, 
     use_native_selects      : true,
+    entity_encoding         : "raw",
     extended_valid_elements : "code",
 
     // Ajax-based file manager
