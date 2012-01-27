@@ -4,7 +4,6 @@
 # 1. a TAR.GZ package;
 # 2. a ZIP package
 # of phpMyFAQ using what committed into Git.
-# Note: it requires an internet connection.
 #
 # For creating a package simply run:
 #
@@ -13,14 +12,7 @@
 # The script will download the source code from branch and
 # it will create the 2 packages plus their MD5 hashes.
 #
-# @package   phpMyFAQ
-# @author    Matteo Scaramuccia <matteo@scaramuccia.com>
-# @author	 Thorsten Rinne <thorsten@phpmyfaq.de>
-# @author    Rene Treffer <treffer+phpmyfaq@measite.de>
-# @author    David Soria Parra <dsp@php.net>
-# @since     2008-09-10
-# @copyright 2008-2011 phpMyFAQ Team
-# @version   Since 2.5
+#
 #
 # The contents of this file are subject to the Mozilla Public License
 # Version 1.1 (the "License"); you may not use this file except in
@@ -31,6 +23,16 @@
 # basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 # License for the specific language governing rights and limitations
 # under the License.
+#
+# @package   phpMyFAQ
+# @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+# @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+# @author    Rene Treffer <treffer+phpmyfaq@measite.de>
+# @author    David Soria Parra <dsp@php.net>
+# @copyright 2008-2012 phpMyFAQ Team
+# @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+# @link      http://www.phpmyfaq.de
+# @version   2008-09-10
 
 # PMF Version
 . scripts/version.sh
@@ -45,7 +47,7 @@ fi
 
 # Package Folder
 if [ "x${PMF_PACKAGE_FOLDER}" = "x" ]; then
-	PMF_PACKAGE_FOLDER="phpmyfaq-${PMF_VERSION}"
+    PMF_PACKAGE_FOLDER="phpmyfaq-${PMF_VERSION}"
 fi
 
 cwd=`pwd`

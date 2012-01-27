@@ -1,2 +1,2 @@
-template/mobile export-ignore
-tests           export-ignore
+template/default/less export-ignore
+tests                 export-ignore
