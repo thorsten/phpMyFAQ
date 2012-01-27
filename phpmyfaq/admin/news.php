@@ -139,7 +139,15 @@ if ('addnews' == $action && $permission["addnews"]) {
         <tr>
             <td><?php print $newsItem['header']; ?></td>
             <td><?php print PMF_Date::format($newsItem['date']); ?></td>
-            <td><a href="?action=editnews&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_update"]; ?>"><img src="images/edit.png" width="16" height="16" alt="<?php print $PMF_LANG["ad_news_update"]; ?>" border="0" /></a>&nbsp;&nbsp;<a href="?action=deletenews&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_delete"]; ?>"><img src="images/delete.png" width="16" height="16" alt="<?php print $PMF_LANG["ad_news_delete"]; ?>" border="0" /></a></td>
+            <td>
+                <a href="?action=editnews&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_update"]; ?>">
+                    <img src="images/edit.png" width="16" height="16" alt="<?php print $PMF_LANG["ad_news_update"]; ?>" border="0" />
+                </a>
+                &nbsp;&nbsp;
+                <a href="?action=deletenews&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_delete"]; ?>">
+                    <img src="images/delete.png" width="16" height="16" alt="<?php print $PMF_LANG["ad_news_delete"]; ?>" border="0" />
+                </a>
+            </td>
         </tr>
 <?php
             }
@@ -222,19 +230,22 @@ if ('addnews' == $action && $permission["addnews"]) {
                 <?php print PMF_Language::selectLanguages($newsData['lang'], false, array(), 'langTo'); ?>
             </p>
         </fieldset>
-            
+
+<?php
+    $dateStart = ($newsData['dateStart'] != '00000000000000' ? PMF_Date::createIsoDate($newsData['dateStart'], 'Y-m-d') : '');
+    $dateEnd   = ($newsData['dateEnd'] != '99991231235959' ? PMF_Date::createIsoDate($newsData['dateEnd'], 'Y-m-d') : '');
+?>
+
         <fieldset>
             <legend><?php print $PMF_LANG['ad_news_expiration_window']; ?></legend>
             <p>
                 <label for="dateStart"><?php print $PMF_LANG['ad_news_from']; ?></label>
-                <input name="dateStart" id="dateStart" class="date-pick"
-                       value="<?php print PMF_Date::createIsoDate($newsData['dateStart'], 'Y-m-d'); ?>" />
+                <input name="dateStart" id="dateStart" class="date-pick" value="<?php print $dateStart; ?>" />
             </p>
 
             <p>
                 <label for="dateEnd"><?php print $PMF_LANG['ad_news_to']; ?></label>
-                <input name="dateEnd" id="dateEnd" class="date-pick"
-                       value="<?php print PMF_Date::createIsoDate($newsData['dateEnd'], 'Y-m-d'); ?>" />
+                <input name="dateEnd" id="dateEnd" class="date-pick" value="<?php print $dateEnd; ?>" />
             </p>
         </fieldset>
 
@@ -280,8 +291,8 @@ if ('addnews' == $action && $permission["addnews"]) {
         'authorEmail'   => $email,
         'active'        => (is_null($active)) ? 'n' : 'y',
         'comment'       => (is_null($comment)) ? 'n' : 'y',
-        'dateStart'     => (is_null($dateStart)) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000',
-        'dateEnd'       => (is_null($dateEnd))  ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959',
+        'dateStart'     => (empty($dateStart)) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000',
+        'dateEnd'       => (empty($dateEnd))  ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959',
         'link'          => $link,
         'linkTitle'     => $linktitle,
         'date'          => date('YmdHis'),
@@ -308,7 +319,7 @@ if ('addnews' == $action && $permission["addnews"]) {
     $linktitle = PMF_Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_STRIPPED);
     $newslang  = PMF_Filter::filterInput(INPUT_POST, 'langTo', FILTER_SANITIZE_STRING);
     $target    = PMF_Filter::filterInput(INPUT_POST, 'target', FILTER_SANITIZE_STRIPPED);
-    
+
     $newsData = array(
         'lang'          => $newslang,
         'header'        => $header,
@@ -317,8 +328,8 @@ if ('addnews' == $action && $permission["addnews"]) {
         'authorEmail'   => $email,
         'active'        => (is_null($active)) ? 'n' : 'y',
         'comment'       => (is_null($comment)) ? 'n' : 'y',
-        'dateStart'     => (is_null($dateStart)) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000',
-        'dateEnd'       => (is_null($dateEnd))   ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959',
+        'dateStart'     => (empty($dateStart)) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000',
+        'dateEnd'       => (empty($dateEnd))   ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959',
         'link'          => $link,
         'linkTitle'     => $linktitle,
         'date'          => date('YmdHis'),
