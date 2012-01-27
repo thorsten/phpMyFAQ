@@ -1,0 +1,86 @@
+/**
+* $Id: print.css,v 1.4 2006-06-21 21:06:35 matteo Exp $
+*
+* The CSS file for printers
+*
+* @author       Jens Grochtdreis <jens@grochtdreis.de>
+* @author       Thorsten Rinne <thorsten@rinne.info>
+* @since        2004-11-21
+* @copyright    (c) 2004-2011 phpMyFAQ Team
+*
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+*
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
+
+body, td
+{
+    font-family: "Bitstream Vera Sans", "Trebuchet MS", Geneva, Arial, Helvetica, sans-serif;
+}
+
+/**
+* Main columns definitions
+*/
+.columns
+{
+    border: none;
+    margin-top: 0px;
+}
+.leftcolumn
+{
+    display: none;
+}
+.rightcolumn
+{
+    display:none;
+}
+
+/*
+* Hide forms
+*/
+
+form, fieldset, legend
+{
+    display: none;
+}
+
+/*
+* Hide other html presentation items
+*/
+
+#header
+{
+    display: none;
+}
+
+#footer
+{
+    display: none;
+}
+
+#action
+{
+    display: none;
+}
+
+
+/*
+* Show article to be printed, and append some link information
+*/
+
+.main-content
+{
+    display: block;
+    font-size: 10pt;
+}
+
+.main-content a
+{
+    text-decoration: none;
+}
