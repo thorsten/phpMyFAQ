@@ -507,7 +507,7 @@ if ($step == 4) {
            
             case 'sqlite':
                 $query[] = "BEGIN TRANSACTION";
-                $query[] = "CREATE TEMPORORY TABLE " . SQLPREFIX . "faqquestions_temp (
+                $query[] = "CREATE TEMPORARY TABLE " . SQLPREFIX . "faqquestions_temp (
                                 id int(11) NOT NULL,
                                 username varchar(100) NOT NULL,
                                 email varchar(100) NOT NULL,
@@ -660,7 +660,18 @@ if ($step == 4) {
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('records.enableCloseQuestion', 'false')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('records.enableDeleteQuestion', 'false')";
 
-        
+        $query[] = "CREATE TEMPORARY TABLE " . SQLPREFIX . "faquserlogin_temp (
+                                login varchar(128) NOT NULL,
+                                pass varchar(80) NOT NULL,
+                                PRIMARY KEY (login))";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faquserlogin_temp SELECT * FROM " . SQLPREFIX . "faquserlogin";
+        $query[] = "DROP TABLE " . SQLPREFIX . "faquserlogin";
+        $query[] = "CREATE TABLE " . SQLPREFIX . "faquserlogin (
+                                login varchar(128) NOT NULL,
+                                pass varchar(80) NOT NULL,
+                                PRIMARY KEY (login))";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faquserlogin SELECT * FROM " . SQLPREFIX . "faquserlogin_temp";
+        $query[] = "DROP TABLE " . SQLPREFIX . "faquserlogin_temp";
     }
 
 

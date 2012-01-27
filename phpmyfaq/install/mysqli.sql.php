@@ -347,8 +347,8 @@ email VARCHAR(100) NULL) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faquserlogin
 $query[] = "CREATE TABLE ".$sqltblpre."faquserlogin (
-login VARCHAR(100) NOT NULL,
-pass VARCHAR(150) NULL,
+login VARCHAR(128) NOT NULL,
+pass VARCHAR(80) NULL,
 PRIMARY KEY (login)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faquser_group
