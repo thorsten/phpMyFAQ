@@ -18,7 +18,7 @@
  * @package   Translation
  * @author    Eduardo Polidor
  * @author    Ivan Gil
- * @copyright 2004-2011 phpMyFAQ Team
+ * @copyright 2004-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-06-24
@@ -493,7 +493,7 @@ $PMF_LANG['lostpwd_mail_okay'] = 'El correo electrónico ha sido enviado.';
 $PMF_LANG['ad_xmlrpc_button'] = 'Obtener la última versión phpMyFAQ usando web service';
 $PMF_LANG['ad_xmlrpc_latest'] = 'Última version disponible en';
 $PMF_LANG['ad_categ_select'] = 'Elija idioma';
-$PMF_LANG['msgSitemap'] = 'Mapa del Sitio';
+$PMF_LANG['msgSitemap'] = 'Mapa';
 $PMF_LANG['err_inactiveArticle'] = 'Este artículo está siendo supervisado y no puede ser visto.';
 $PMF_LANG['msgArticleCategories'] = 'Categorías para este artículo';
 $PMF_LANG['ad_entry_solution_id'] = 'Solución única ID';
@@ -504,7 +504,7 @@ $PMF_LANG['ad_entry_revision'] = 'Revisión';
 $PMF_LANG['ad_changerev'] = 'Elegir Revisión';
 $PMF_LANG['msgCaptcha'] = 'Por favor, ingrese los caracteres que está leyendo en la imagen';
 $PMF_LANG['msgSelectCategories'] = 'Buscar en ...';
-$PMF_LANG['msgAllCategories'] = '... todas las categorias';
+$PMF_LANG['msgAllCategories'] = '... Categorias';
 $PMF_LANG['ad_you_should_update'] = 'Su instalación de phpMyFAQ es antigua. Usted debe instalar la última versión disponible.';
 $PMF_LANG['msgAdvancedSearch'] = 'Búsqueda avanzada';
 $PMF_LANG['spamControlCenter'] = 'Centro de control de Spam';

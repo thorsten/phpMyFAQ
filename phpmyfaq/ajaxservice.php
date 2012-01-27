@@ -136,13 +136,12 @@ switch ($action) {
                         $emailTo = $faq->faqRecord['email'];
                     }
                     $_faqUrl = sprintf(
-                        '%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                        $sids,
+                        '?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                         0,
                         $faq->faqRecord['id'],
                         $faq->faqRecord['lang']
                     );
-                    $oLink            = new PMF_Link(PMF_Link::getSystemUri('/ajaxservice.php') . '?' . $_faqUrl);
+                    $oLink            = new PMF_Link(PMF_Link::getSystemUri('/ajaxservice.php') . $_faqUrl);
                     $oLink->itemTitle = $faq->faqRecord['title'];
                     $urlToContent     = $oLink->toString();
                 } else {
@@ -615,6 +614,15 @@ switch ($action) {
 
         if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) && !is_null($question) &&
             !empty($question) && checkBannedWord(PMF_String::htmlspecialchars($question))) {
+
+            $question = sprintf(
+                "%s %s\n%s %s\n\n %s",
+                $PMF_LANG["msgNewContentName"],
+                $name,
+                $PMF_LANG["msgNewContentMail"],
+                $email,
+                $question
+            );
 
             $mail = new PMF_Mail();
             $mail->setReplyTo($email, $name);

@@ -71,7 +71,6 @@
                     {switchLanguage}
                 </div>
                 <div class="faqTabContent" id="addTranslation" style="display: none;">
-                    {msgTranslate}
                     <form action="{translationUrl}" method="post">
                         {languageSelection}
                         <input type="submit" name="submit" value="{msgTranslateSubmit}" />
