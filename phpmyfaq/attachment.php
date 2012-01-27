@@ -49,10 +49,14 @@ $userPermission  = $faq->getPermission('user', $attachment->getRecordId());
 $groupPermission = $faq->getPermission('group', $attachment->getRecordId());
 
 // Check on group permissions
-if (count($groupPermission) && in_array($groupPermission[0], $user->perm->getUserGroups($user->getUserId()))) {
-    $groupPermission = true;
+if ($user->perm instanceof PMF_Perm_PermMedium) {
+    if (count($groupPermission) && in_array($groupPermission[0], $user->perm->getUserGroups($user->getUserId()))) {
+        $groupPermission = true;
+    } else {
+        $groupPermission = false;
+    }
 } else {
-    $groupPermission = false;
+    $groupPermission = true;
 }
 
 // Check in user's permissions
