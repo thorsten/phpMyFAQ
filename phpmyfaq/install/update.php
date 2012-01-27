@@ -648,17 +648,19 @@ if ($step == 4) {
             (41, 'addcomment', 'Right to add comments in frontend', 1, 1)";
         $query[] = "INSERT INTO " . SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 41)";
 
-        $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishEnable', 'false')";
-        $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishHost', '127.0.0.1')";
-        $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishPort', '2000')";
-        $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishSecret', '')";
-        $query[] = "INSERT INTO " . SQLPROFIX . "faqconfig VALUES ('cache.varnishTimeout', '500')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('cache.varnishEnable', 'false')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('cache.varnishHost', '127.0.0.1')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('cache.varnishPort', '2000')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('cache.varnishSecret', '')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('cache.varnishTimeout', '500')";
 
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('security.forcePasswordUpdate', 'true')";
 
         $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions ADD answer_id INT NOT NULL DEFAULT 0";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('records.enableCloseQuestion', 'false')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('records.enableDeleteQuestion', 'false')";
+
+        
     }
 
 
