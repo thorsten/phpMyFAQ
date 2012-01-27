@@ -15,7 +15,7 @@
     <meta name="author" content="{metaPublisher}">
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
     <meta name="application-name" content="phpMyFAQ {phpmyfaqversion}">
-    <meta name="copyright" content="(c) 2001-2011 phpMyFAQ Team">
+    <meta name="copyright" content="(c) 2001-2012 phpMyFAQ Team">
     <meta name="publisher" content="{metaPublisher}">
     <meta name="robots" content="INDEX, FOLLOW">
     <meta name="revisit-after" content="7 days">
@@ -27,8 +27,6 @@
     <meta property="og:image" content="" />
 
     <link rel="stylesheet" href="template/{tplSetName}/css/{stylesheet}.css?v=1">
-    <link rel="stylesheet" media="handheld" href="template/{tplSetName}/css/handheld.css?v=1">
-    <link rel="stylesheet" media="print" href="template/{tplSetName}/css/print.css?v=1">
 
     <script src="inc/js/modernizr.min.js"></script>
     <script src="inc/js/jquery.min.js"></script>
