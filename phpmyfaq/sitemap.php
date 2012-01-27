@@ -1,13 +1,8 @@
 <?php
 /**
- * Shows the whole FAQ articles
+ * Sitemap
  *
- * @param      phpMyFAQ
- * @subpackage Frontend
- * @author     Thomas Zeithaml <seo@annatom.de>
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2005-08-21
- * @copyright  2005-2011 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,6 +13,15 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Frontend
+ * @author    Thomas Zeithaml <seo@annatom.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2005-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-08-21
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -29,7 +33,7 @@ $faqsession->userTracking('sitemap', 0);
 
 $letter = PMF_Filter::filterInput(INPUT_GET, 'letter', FILTER_SANITIZE_STRIPPED);
 if (!is_null($letter) && (1 == PMF_String::strlen($letter))) {
-    $currentLetter = strtoupper($db->escape_string(PMF_String::substr($letter, 0, 1)));
+    $currentLetter = strtoupper(PMF_String::substr($letter, 0, 1));
 } else {
     $currentLetter = 'A';
 }
