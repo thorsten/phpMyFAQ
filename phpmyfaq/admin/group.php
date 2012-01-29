@@ -18,7 +18,7 @@
  * @package   Administration
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2011 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-15
@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if (!$permission['edituser'] and !$permission['deluser'] and !$permission['adduser']) {
+if (!$permission['editgroup'] && !$permission['delgroup'] && !$permission['addgroup']) {
     exit();
 }
 
@@ -52,7 +52,7 @@ if (isset($_POST['cancel'])) {
 }
 
 // update group members
-if ($groupAction == 'update_members') {
+if ($groupAction == 'update_members' && $permission['editgroup']) {
     $message      = '';
     $groupAction  = $defaultGroupAction;
     $groupId      = PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
@@ -74,9 +74,10 @@ if ($groupAction == 'update_members') {
             $perm->getGroupName($groupId),
             $PMF_LANG['ad_msg_savedsuc_2']);
     }
-} // end if ($groupAction == 'update_members')
+}
+
 // update group rights
-if ($groupAction == 'update_rights') {
+if ($groupAction == 'update_rights' && $permission['editgroup']) {
     $message     = '';
     $groupAction = $defaultGroupAction;
     $groupId     = PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
@@ -97,9 +98,10 @@ if ($groupAction == 'update_rights') {
             $perm->getGroupName($groupId),
             $PMF_LANG['ad_msg_savedsuc_2']);
     }
-} // end if ($groupAction == 'update_rights')
+}
+
 // update group data
-if ($groupAction == 'update_data') {
+if ($groupAction == 'update_data' && $permission['editgroup']) {
     $message     = '';
     $groupAction = $defaultGroupAction;
     $groupId     = PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
@@ -122,9 +124,10 @@ if ($groupAction == 'update_data') {
                 $PMF_LANG['ad_msg_savedsuc_2']);
         }
     }
-} // end if ($groupAction == 'update')
+}
+
 // delete group confirmation
-if ($groupAction == 'delete_confirm') {
+if ($groupAction == 'delete_confirm' && $permission['delgroup']) {
     $message = '';
     $user    = new PMF_User_CurrentUser();
     $perm    = $user->perm;
@@ -151,7 +154,7 @@ if ($groupAction == 'delete_confirm') {
     }
 }
 
-if ($groupAction == 'delete') {
+if ($groupAction == 'delete' && $permission['delgroup']) {
     $message   = '';
     $user      = new PMF_User();
     $groupId   = PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
@@ -177,7 +180,7 @@ if ($groupAction == 'delete') {
 
 }
 
-if ($groupAction == 'addsave') {
+if ($groupAction == 'addsave' && $permission['addgroup']) {
     $user              = new PMF_User();
     $message           = '';
     $messages          = array();
@@ -219,14 +222,13 @@ if ($groupAction == 'addsave') {
         }
         $message .= '</p>';
     }
-} // end if ($groupAction == 'addsave')
-
+}
 
 if (!isset($message))
     $message = '';
 
 // show new group form
-if ($groupAction == 'add') {
+if ($groupAction == 'add' && $permission['addgroup']) {
     $user = new PMF_User_CurrentUser();
 ?>
         <header>

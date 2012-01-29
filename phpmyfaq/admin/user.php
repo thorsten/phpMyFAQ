@@ -74,8 +74,6 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                 $PMF_LANG['ad_msg_savedsuc_2']);
             $message .= '<script type="text/javascript">updateUser('.$userId.');</script>';
         }
-    } else {
-        print $PMF_LANG['err_NotAuth'];
     }
 
     // update user data
@@ -129,8 +127,6 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                 $message .= '<script type="text/javascript">updateUser('.$userId.');</script>';
             }
         }
-    } else {
-        print $PMF_LANG['err_NotAuth'];
     }
 
     // delete user confirmation
@@ -165,8 +161,6 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
 <?php
             }
         }
-    } else {
-        print $PMF_LANG['err_NotAuth'];
     }
 
     // delete user
@@ -206,8 +200,6 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                 $message .= sprintf('<p class="error">%s</p>', $userError);
             }
         }
-    } else {
-        print $PMF_LANG['err_NotAuth'];
     }
 
     // save new user
@@ -279,8 +271,6 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             }
             $message .= '</p>';
         }
-    } else {
-        print $PMF_LANG['err_NotAuth'];
     }
 
     if (!isset($message)) {
@@ -341,8 +331,6 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         </form>
 </div> <!-- end #user_create -->
 <?php
-    } else {
-        print $PMF_LANG['err_NotAuth'];
     }
 
     // show list of users
@@ -556,8 +544,6 @@ function deleteUser(userId)
 /* ]]> */
 </script>
 <?php 
-    } else {
-        print $PMF_LANG['err_NotAuth'];
     }
 } else {
     print $PMF_LANG['err_NotAuth'];
