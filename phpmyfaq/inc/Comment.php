@@ -190,7 +190,7 @@ class PMF_Comment
                 $this->pmf_lang['msgCommentBy'],
                 PMF_Mail::safeEmail($item['email']),
                 $item['user'],
-                nl2br($item['content'], true),
+                nl2br($item['content']),
                 $this->pmf_lang['newsCommentDate'] .
                     PMF_Date::format(PMF_Date::createIsoDate($item['date'], 'Y-m-d H:i', false))
             );
