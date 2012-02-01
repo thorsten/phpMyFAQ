@@ -7,6 +7,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.7.4 - 2012-
 - updated Spanish translation
+- fixed some bugs (Alexander Melnik, Thorsten)
 
 Version 2.7.3 - 2012-01-16
 - improved PDF export (Thorsten)
