@@ -28,18 +28,25 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$tpl->parse(
-    'writeContent',
-    array(
-        'headerUserControlPanel' => $PMF_LANG['headerUserControlPanel'],
-        'msgLoginName'           => $PMF_LANG['ad_auth_user'],
-        'msgRealName'            => $PMF_LANG['ad_user_name'],
-        'msgEmail'               => $PMF_LANG['msgNewContentMail'],
-        'msgPassword'            => $PMF_LANG['ad_user_password'],
-        'msgConfirm'             => $PMF_LANG['ad_user_confirm'],
-        'msgSave'                => $PMF_LANG['msgSave'],
-        'msgCancel'              => $PMF_LANG['msgCancel']
-    )
-);
+if ($user instanceof PMF_User) {
 
-$tpl->merge('writeContent', 'index');
+    $tpl->parse(
+        'writeContent',
+        array(
+            'headerUserControlPanel' => $PMF_LANG['headerUserControlPanel'],
+            'userid'                 => $user->getUserId(),
+            'msgLoginName'           => $PMF_LANG['ad_auth_user'],
+            'loginname'              => $user->getLogin(),
+            'msgRealName'            => $PMF_LANG['ad_user_name'],
+            'realname'               => $user->getUserData('display_name'),
+            'msgEmail'               => $PMF_LANG['msgNewContentMail'],
+            'email'                  => $user->getUserData('email'),
+            'msgPassword'            => $PMF_LANG['ad_auth_passwd'],
+            'msgConfirm'             => $PMF_LANG['ad_user_confirm'],
+            'msgSave'                => $PMF_LANG['msgSave'],
+            'msgCancel'              => $PMF_LANG['msgCancel']
+        )
+    );
+
+    $tpl->merge('writeContent', 'index');
+}

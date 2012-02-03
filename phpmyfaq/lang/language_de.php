@@ -373,8 +373,8 @@ $PMF_LANG["ad_rs_no"] = "Keine Bewertungen verfügbar.";
 
 // Auth
 $PMF_LANG["ad_auth_insert"] = "Bitte den persönlichen Benutzernamen und das Passwort eingeben.";
-$PMF_LANG["ad_auth_user"] = "Benutzername:";
-$PMF_LANG["ad_auth_passwd"] = "Passwort:";
+$PMF_LANG["ad_auth_user"] = "Benutzername";
+$PMF_LANG["ad_auth_passwd"] = "Passwort";
 $PMF_LANG["ad_auth_ok"] = "OK";
 $PMF_LANG["ad_auth_reset"] = "Reset";
 $PMF_LANG["ad_auth_fail"] = "Falscher Benutzername oder Passwort.";
