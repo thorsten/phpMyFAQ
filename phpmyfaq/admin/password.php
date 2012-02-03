@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administraion
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2004-2011 phpMyFAQ Team
+ * @copyright 2004-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-05-11
@@ -68,9 +68,11 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
 PMF_String::init($LANGCODE);
 
 /* header of the admin page */
+$permission = array();
+$action     = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+
 require 'header.php';
 
-$action  = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 $message = '';
 
 if ($action == "sendmail") {
