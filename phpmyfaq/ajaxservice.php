@@ -544,7 +544,7 @@ switch ($action) {
                 $user->setStatus('blocked');
 
                 $text = sprintf(
-                    "New user has been registrated:\n\nUsername: %s\nLoginname: %s\n\n" .
+                    "New user has been registrated:\n\nName: %s\nLogin name: %s\n\n" .
                     "To activate this user do please use the administration interface at %s.",
                     $realname,
                     $loginname,

@@ -32,7 +32,7 @@ $tpl->parse(
     'writeContent',
     array(
         'headerUserControlPanel' => $PMF_LANG['headerUserControlPanel'],
-        'msgLoginName'           => $PMF_LANG['ad_user_username'],
+        'msgLoginName'           => $PMF_LANG['ad_auth_user'],
         'msgRealName'            => $PMF_LANG['ad_user_name'],
         'msgEmail'               => $PMF_LANG['msgNewContentMail'],
         'msgPassword'            => $PMF_LANG['ad_user_password'],

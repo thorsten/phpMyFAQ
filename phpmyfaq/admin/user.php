@@ -20,7 +20,7 @@
  * @author    Uwe Pries <uwe.pries@digartis.de>
  * @author    Sarah Hermann <sayh@gmx.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2011 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-15
@@ -108,8 +108,8 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
 
                 $mail = new PMF_Mail();
                 $mail->addTo($userData['email']);
-                $mail->subject = '[%sitename%] Username / activation';
-                $mail->message = sprintf("\nUsername: %s\nLoginname: %s\nNew Password: %s\n\n",
+                $mail->subject = '[%sitename%] Login name / activation';
+                $mail->message = sprintf("\nName: %s\nLogin name: %s\nNew password: %s\n\n",
                 $userData['display_name'],
                 $user->getLogin(),
                 $newPassword);
@@ -485,8 +485,8 @@ function getUserData(user_id)
             <tr>
                 <th><?php print $PMF_LANG['ad_entry_id'] ?></th>
                 <th><?php print $PMF_LANG['ad_user_status'] ?></th>
-                <th><?php print $PMF_LANG['msgNewContentName'] ?></th>
-                <th><?php print $PMF_LANG['ad_user_username'] ?></th>
+                <th><?php print $PMF_LANG['ad_user_realname'] ?></th>
+                <th><?php print $PMF_LANG['ad_auth_user'] ?></th>
                 <th><?php print $PMF_LANG['msgNewContentMail'] ?></th>
                 <th colspan="2"><?php print $PMF_LANG['ad_entry_action'] ?></th>
             </tr>

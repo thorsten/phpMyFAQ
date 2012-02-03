@@ -395,12 +395,12 @@ $PMF_LANG["ad_rs_ahtf"] = "with an average higher than 80%";
 $PMF_LANG["ad_rs_no"] = "No ranking available";
 
 // Auth
-$PMF_LANG["ad_auth_insert"] = "Please enter your username and password.";
-$PMF_LANG["ad_auth_user"] = "Username:";
+$PMF_LANG["ad_auth_insert"] = "Please enter your login name and password.";
+$PMF_LANG["ad_auth_user"] = "Login name:";
 $PMF_LANG["ad_auth_passwd"] = "Password:";
 $PMF_LANG["ad_auth_ok"] = "OK";
 $PMF_LANG["ad_auth_reset"] = "Reset";
-$PMF_LANG["ad_auth_fail"] = "Wrong username or password.";
+$PMF_LANG["ad_auth_fail"] = "Wrong login name or password.";
 $PMF_LANG["ad_auth_sess"] = "The Sessions ID is passed.";
 
 // Added v0.8 - 24.05.2001 - Bastian - Admin
