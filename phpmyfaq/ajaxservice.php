@@ -558,7 +558,11 @@ switch ($action) {
                 $result = $mail->send();
                 unset($mail);
 
-                $message = array('success' => $PMF_LANG['successMessage'] . $PMF_LANG['msgRegThankYou']);
+                $message = array(
+                    'success' => trim($PMF_LANG['successMessage']) .
+                                 ' ' .
+                                 trim($PMF_LANG['msgRegThankYou'])
+                );
             }
 
         } else {
