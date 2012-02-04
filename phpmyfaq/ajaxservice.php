@@ -68,14 +68,13 @@ $http->addHeader();
 
 // Set session
 $faqsession = new PMF_Session($db, $Language);
-
-$network = new PMF_Network();
+$network    = new PMF_Network();
 
 if (!$network->checkIp($_SERVER['REMOTE_ADDR'])) {
     $message = array('error' => $PMF_LANG['err_bannedIP']);
 }
 
-if ('savevoting' !== $action && !$captcha->checkCaptchaCode($code)) {
+if ('savevoting' !== $action && 'saveuserdata' !== $action && !$captcha->checkCaptchaCode($code)) {
     $message = array('error' => $PMF_LANG['msgCaptcha']);
 }
 
@@ -683,7 +682,55 @@ switch ($action) {
             $message = array('error' => $PMF_LANG['err_sendMail']);
         }
         break;
-    
+
+    // Save user data from UCP
+    case 'saveuserdata':
+
+        $userId   = PMF_Filter::filterInput(INPUT_POST, 'userid', FILTER_VALIDATE_INT);
+        $name     = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $email    = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $password = PMF_Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+        $confirm  = PMF_Filter::filterInput(INPUT_POST, 'password_confirm', FILTER_SANITIZE_STRING);
+
+        $user = PMF_User_CurrentUser::getFromSession(
+            PMF_Configuration::getInstance()->get('security.ipCheck')
+        );
+
+        if ($userId !== $user->getUserId()) {
+            $message = array('error' => 'User ID mismatch!');
+            break;
+        }
+
+        if ($password !== $confirm) {
+            $message = array('error' => $PMF_LANG['ad_user_error_passwordsDontMatch']);
+            break;
+        }
+
+        $userData = array(
+            'display_name' => $name,
+            'email'        => $email);
+        $success = $user->setUserData($userData);
+
+        if (0 !== strlen($password) && 0 !== strlen($confirm)) {
+            foreach ($user->getAuthContainer() as $name => $auth) {
+                if ($auth->setReadOnly()) {
+                    continue;
+                }
+                if (!$auth->changePassword($user->getLogin(), $password)) {
+                    $message = array('error' => $auth->error());
+                    $success = false;
+                } else {
+                    $success = true;
+                }
+            }
+        }
+
+        if ($success) {
+            $message = array('success' => $PMF_LANG['ad_entry_savedsuc']);
+        } else {
+            $message = array('error' => $PMF_LANG['ad_entry_savedfail']);
+        }
+        break;
 }
 
 print json_encode($message);

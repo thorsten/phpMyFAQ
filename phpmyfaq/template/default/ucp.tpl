@@ -8,12 +8,6 @@
     <input type="hidden" name="userid" value="{userid}" />
 
     <p>
-        <label for="loginname">{msgLoginName}:</label>
-        <input type="text" name="loginname" id="loginname" required="required" tabindex="1" value="{loginname}" />
-
-    </p>
-
-    <p>
         <label for="name">{msgRealName}:</label>
         <input type="text" name="name" id="name" required="required" tabindex="2" value="{realname}" />
     </p>
@@ -34,8 +28,20 @@
     </p>
 
     <p>
-        <input class="submit" type="submit" value="{msgSave}" tabindex="6" />
-        <input name="cancel" type="submit" value="{msgCancel}" tabindex="7" />
+        <input class="submit" type="submit" id="submituserdata" value="{msgSave}" tabindex="6" />
     </p>
 
-</form>
+    </form>
+
+    <div id="loader"></div>
+    <div id="userdatas"></div>
+
+    <script type="text/javascript">
+        $(function() {
+            $('#submituserdata').click(function() {
+                saveFormValues('saveuserdata', 'userdata');
+            });
+            $('form#formValues').submit(function() { return false; });
+        });
+    </script>
+

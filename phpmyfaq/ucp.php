@@ -35,8 +35,6 @@ if ($user instanceof PMF_User) {
         array(
             'headerUserControlPanel' => $PMF_LANG['headerUserControlPanel'],
             'userid'                 => $user->getUserId(),
-            'msgLoginName'           => $PMF_LANG['ad_auth_user'],
-            'loginname'              => $user->getLogin(),
             'msgRealName'            => $PMF_LANG['ad_user_name'],
             'realname'               => $user->getUserData('display_name'),
             'msgEmail'               => $PMF_LANG['msgNewContentMail'],

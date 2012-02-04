@@ -193,7 +193,7 @@ class PMF_User
     public function __construct(PMF_Perm $perm = null, Array $auth = array())
     {
         $this->db = PMF_Db::getInstance();
-    	
+
         if ($perm !== null) {
             if (!$this->addPerm($perm)) {
                 return false;
@@ -708,6 +708,15 @@ class PMF_User
             }
         }
         return true;
+    }
+
+    /**
+     * Returns the data aof the auth container
+     * @return array
+     */
+    public function getAuthContainer()
+    {
+        return $this->authContainer;
     }
 
     /**
