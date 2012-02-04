@@ -62,6 +62,10 @@ if ($faqconfig->get('security.enableLoginOnly')) {
             $user = null;
         }
     }
+} else {
+    $user = PMF_User_CurrentUser::getFromSession(
+        PMF_Configuration::getInstance()->get('security.ipCheck')
+    );
 }
 
 //
