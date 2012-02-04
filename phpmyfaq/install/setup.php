@@ -697,6 +697,17 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         }
     }
 
+    // add main configuration
+    $oConf = PMF_Configuration::getInstance();
+    $oConf->getAll();
+    $configs = $oConf->config;
+
+    $configs['spam.enableCaptchaCode'] = (extension_loaded('gd') ? 'true' : 'false');
+    $configs['main.referenceURL']      = PMF_Link::getSystemUri('/install/setup.php');
+    $configs['main.phpMyFAQToken']     = md5(uniqid(rand()));
+
+    $oConf->update($configs);
+
     // add admin account and rights
     $admin = new PMF_User();
     $admin->createUser($loginname, $password, 1);
@@ -1009,16 +1020,6 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         'display_name' => 'Anonymous User',
         'email'        => null);
     $anonymous->setUserData($anonymousData);
-
-    $oConf = PMF_Configuration::getInstance();
-    $oConf->getAll();
-    $configs = $oConf->config;
-
-    $configs['spam.enableCaptchaCode'] = (extension_loaded('gd') ? 'true' : 'false');
-    $configs['main.referenceURL']      = PMF_Link::getSystemUri('/install/setup.php');
-    $configs['main.phpMyFAQToken']     = md5(uniqid(rand()));
-
-    $oConf->update($configs);
 
     print '</p>';
 
