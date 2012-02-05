@@ -35,7 +35,7 @@ $letter = PMF_Filter::filterInput(INPUT_GET, 'letter', FILTER_SANITIZE_STRIPPED)
 if (!is_null($letter) && (1 == PMF_String::strlen($letter))) {
     $currentLetter = strtoupper(PMF_String::substr($letter, 0, 1));
 } else {
-    $currentLetter = 'A';
+    $currentLetter = '';
 }
 
 $sitemap = new PMF_Sitemap($current_user, $current_groups);
