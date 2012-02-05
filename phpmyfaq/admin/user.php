@@ -482,10 +482,31 @@ function getUserData(user_id)
     // show list of all users
     if ($userAction == 'listallusers') {
 
-        $allUsers = $user->getAllUsers();
-        $numUsers = count($allUsers);
-        $perPage  = 20;
-        $page     = PMF_Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 0);
+        $allUsers  = $user->getAllUsers();
+        $numUsers  = count($allUsers);
+        $page      = PMF_Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 0);
+        $perPage   = 5;
+        $numPages  = ceil($numUsers / $perPage);
+        $lastPage  = $page * $perPage;
+        $firstPage = $lastPage - $perPage;
+
+        $baseUrl = sprintf(
+            '%s?action=user&amp;user_action=listallusers',
+            PMF_Link::getSystemRelativeUri()
+        );
+
+        // Pagination options
+        $options = array(
+            'baseUrl'         => $baseUrl,
+            'total'           => $numUsers,
+            'perPage'         => $perPage,
+            'pageParamName'   => 'page',
+            'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgNext'] . '</a>',
+            'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgPrevious'] . '</a>',
+            'layoutTpl'       => '<strong>{LAYOUT_CONTENT}</strong>'
+        );
+        $pagination = new PMF_Pagination($options);
+
 ?>
         <header>
             <h2><?php print $PMF_LANG['ad_user']; ?></h2>
@@ -505,16 +526,26 @@ function getUserData(user_id)
         <?php if ($perPage < $numUsers): ?>
         <tfoot>
             <tr>
-                <td colspan="7">
-
-                </td>
+                <td colspan="7"><?php print $pagination->render(); ?></td>
             </tr>
         </tfoot>
         <?php endif; ?>
         <tbody>
-            <?php
-            foreach ($allUsers as $id => $userId) {
+        <?php
+            $counter = $displayedCounter = 0;
+            foreach ($allUsers as $userId) {
                 $user->getUserById($userId);
+
+                if ($displayedCounter >= $perPage) {
+                    continue;
+                }
+                $counter++;
+                if ($counter <= $firstPage) {
+                    continue;
+                }
+                $displayedCounter++;
+
+
             ?>
             <tr class="row_user_id_<?php print $user->getUserId() ?>">
                 <td><?php print $user->getUserId() ?></td>
