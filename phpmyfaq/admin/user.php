@@ -485,7 +485,7 @@ function getUserData(user_id)
         $allUsers  = $user->getAllUsers();
         $numUsers  = count($allUsers);
         $page      = PMF_Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 0);
-        $perPage   = 5;
+        $perPage   = 25;
         $numPages  = ceil($numUsers / $perPage);
         $lastPage  = $page * $perPage;
         $firstPage = $lastPage - $perPage;
