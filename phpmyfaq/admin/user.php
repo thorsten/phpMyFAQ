@@ -491,8 +491,9 @@ function getUserData(user_id)
         $firstPage = $lastPage - $perPage;
 
         $baseUrl = sprintf(
-            '%s?action=user&amp;user_action=listallusers',
-            PMF_Link::getSystemRelativeUri()
+            '%s?action=user&amp;user_action=listallusers&amp;page=%d',
+            PMF_Link::getSystemRelativeUri(),
+            $page
         );
 
         // Pagination options
