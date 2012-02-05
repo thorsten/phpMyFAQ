@@ -455,7 +455,13 @@ function getUserData(user_id)
                             <tr>
                                 <td><input id="user_right_<?php print $right['right_id']; ?>" type="checkbox"
                                            name="user_rights[]" value="<?php print $right['right_id']; ?>"/></td>
-                                <td>&nbsp;<?php print (isset($PMF_LANG['rightsLanguage'][$right['name']]) ? $PMF_LANG['rightsLanguage'][$right['name']] : $right['description']); ?></td>
+                                <td>&nbsp;<?php
+                                    print (isset($PMF_LANG['rightsLanguage'][$right['name']])
+                                        ?
+                                        $PMF_LANG['rightsLanguage'][$right['name']]
+                                        :
+                                        $right['description']);
+                                ?></td>
                             </tr>
             <?php } ?>
                         </table>
@@ -475,6 +481,11 @@ function getUserData(user_id)
 
     // show list of all users
     if ($userAction == 'listallusers') {
+
+        $allUsers = $user->getAllUsers();
+        $numUsers = count($allUsers);
+        $perPage  = 20;
+        $page     = PMF_Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 0);
 ?>
         <header>
             <h2><?php print $PMF_LANG['ad_user']; ?></h2>
@@ -488,14 +499,25 @@ function getUserData(user_id)
                 <th><?php print $PMF_LANG['ad_user_realname'] ?></th>
                 <th><?php print $PMF_LANG['ad_auth_user'] ?></th>
                 <th><?php print $PMF_LANG['msgNewContentMail'] ?></th>
-                <th colspan="2"><?php print $PMF_LANG['ad_entry_action'] ?></th>
+                <th colspan="2">&nbsp;</th>
             </tr>
         </thead>
-        <tbody>
-            <?php foreach ($user->getAllUsers() as $userId) { $user->getUserById($userId); ?>
+        <?php if ($perPage < $numUsers): ?>
+        <tfoot>
+            <tr>
+                <td colspan="7">
 
-            <tr class="row_user_id_<?php print $user->getUserData('user_id') ?>">
-                <td><?php print $user->getUserData('user_id') ?></td>
+                </td>
+            </tr>
+        </tfoot>
+        <?php endif; ?>
+        <tbody>
+            <?php
+            foreach ($allUsers as $id => $userId) {
+                $user->getUserById($userId);
+            ?>
+            <tr class="row_user_id_<?php print $user->getUserId() ?>">
+                <td><?php print $user->getUserId() ?></td>
                 <td><?php print $user->getStatus() ?></td>
                 <td><?php print $user->getUserData('display_name') ?></td>
                 <td><?php print $user->getLogin() ?></td>
@@ -518,8 +540,9 @@ function getUserData(user_id)
                     <?php endif; ?>
                 </td>
             </tr>
-            <?php } ?>
-        
+            <?php
+            }
+            ?>
         </tbody>
         </table>
 <script type="text/javascript">

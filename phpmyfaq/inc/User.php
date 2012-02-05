@@ -801,7 +801,8 @@ class PMF_User
             %s
             ORDER BY user_id ASC",
             SQLPREFIX,
-            ($withoutAnonymous ? 'WHERE user_id <> -1' : ''));
+            ($withoutAnonymous ? 'WHERE user_id <> -1' : '')
+        );
 
         $res = $this->db->query($select);
         if (!$res) {
