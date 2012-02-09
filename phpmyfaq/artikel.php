@@ -255,7 +255,7 @@ if (!empty($switchLanguage)) {
     );
 }
 if (isset($permission['addtranslation']) && $permission['addtranslation']) {
-    $tpl->processBlock(
+    $tpl->parseBlock(
         'writeContent',
         'addTranslation',
         array(
