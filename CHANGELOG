@@ -6,6 +6,7 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.7.4 - 2012-
+- updated Russian translation (Alexander Melnik)
 - updated Spanish translation
 - fixed some bugs (Alexander Melnik, Thorsten)
 
