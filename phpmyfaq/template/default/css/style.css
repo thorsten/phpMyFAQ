@@ -3384,3 +3384,6 @@ a.thumbnail:hover {
 .invisible {
   visibility: hidden;
 }
+body {
+  padding-top: 60px;
+}

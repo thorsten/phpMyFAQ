@@ -50,97 +50,100 @@
 </div>
  <![endif]-->
 
-<header id="header">
-    <div id="loginBox">
-        {loginBox}
-    </div>
-    <h1>
-        <a title="{header}" href="{faqHome}">{header}</a>
-    </h1>
-</header>
-
-<nav>
-    <ul>
-        <li>{allCategories}</li>
-        <li>{showInstantResponse}</li>
-        <li>{msgAddContent}</li>
-        <li>{msgQuestion}</li>
-        <li>{msgOpenQuestions}</li>
-        <li>{showSitemap}</li>
-        <li>{msgContact}</li>
-    </ul>
-</nav>
-
-<a id="top"></a>
-
-<div id="content">
-
-    <div id="leftContent">
-        <menu id="categories">
-            <ul>
-                <li class="home">{backToHome}</li>
-                {showCategories}
-            </ul>
-        </menu>
-    </div>
-
-    <div id="mainContent">
-        [globalSearchBox]
-        <div id="searchBox">
-            <form id="search" action="{writeSendAdress}" method="get">
-                <input type="hidden" name="searchcategory" value="{categoryId}" />
-                <input type="hidden" name="action" value="search" />
-                <input type="search" name="search" id="searchfield" size="30" placeholder="{searchBox} ..." />
-                <input type="submit" name="submit" value="{searchBox}" />
-            </form>
-            {msgSearch}
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" title="{header}" href="{faqHome}">{header}</a>
+            <div class="nav-collapse">
+                <ul class="nav">
+                    <li>{allCategories}</li>
+                    <li>{showInstantResponse}</li>
+                    <li>{msgAddContent}</li>
+                    <li>{msgQuestion}</li>
+                    <li>{msgOpenQuestions}</li>
+                    <li>{showSitemap}</li>
+                    <li>{msgContact}</li>
+                </ul>
+                <!-- {loginBox} -->
+            </div><!--/.nav-collapse -->
         </div>
-        [/globalSearchBox]
-        [globalSuggestBox]
-        <div id="searchBox">
-            <form id="instantform" action="?action=instantresponse" method="post">
-                <input type="hidden" name="ajaxlanguage" id="ajaxlanguage" value="{ajaxlanguage}" />
-                <input type="search" name="search" id="instantfield" value=""
-                       placeholder="{msgDescriptionInstantResponse}" onfocus="autoSuggest(); return false;" />
-            </form>
-            {msgSearch}
-        </div>
-        [/globalSuggestBox]
-
-        {writeContent}
     </div>
-
-    <aside>
-        {rightBox}
-        <section>
-            <header>
-                <h3>{stickyRecordsHeader}</h3>
-            </header>
-            <ul>
-                [stickyRecordsList]
-                <li><a href="{stickyRecordsUrl}">{stickyRecordsTitle}</a></li>
-                [/stickyRecordsList]
-            </ul>
-        </section>
-    </aside>
 </div>
 
-<footer id="footer">
-    <div>
-        <section id="userOnline">
-            <p>{userOnline}</p>
-        </section>
-        <section>
-            <form action="{writeLangAdress}" method="post">
-            <p id="copyrightnote">
-                {copyright} | {switchLanguages} <input type="hidden" name="action" value="" />
-            </p>
-            </form>
-        </section>
-    </div>
-</footer>
+<div class="container">
 
-{debugMessages}
+    <div class="row">
+
+        <div class="span3">
+            <menu class="well sidebar-nav">
+                <ul class="nav nav-list">
+                    <li class="home">{backToHome}</li>
+                    {showCategories}
+                </ul>
+            </menu>
+        </div>
+
+        <div class="span6">
+            [globalSearchBox]
+            <div id="searchBox">
+                <form id="search" action="{writeSendAdress}" method="get">
+                    <input type="hidden" name="searchcategory" value="{categoryId}" />
+                    <input type="hidden" name="action" value="search" />
+                    <input type="search" name="search" id="searchfield" size="30" placeholder="{searchBox} ..." />
+                    <input type="submit" name="submit" value="{searchBox}" />
+                </form>
+                {msgSearch}
+            </div>
+            [/globalSearchBox]
+            [globalSuggestBox]
+            <div id="searchBox">
+                <form id="instantform" action="?action=instantresponse" method="post">
+                    <input type="hidden" name="ajaxlanguage" id="ajaxlanguage" value="{ajaxlanguage}" />
+                    <input type="search" name="search" id="instantfield" value=""
+                           placeholder="{msgDescriptionInstantResponse}" onfocus="autoSuggest(); return false;" />
+                </form>
+                {msgSearch}
+            </div>
+            [/globalSuggestBox]
+
+            {writeContent}
+        </div>
+
+        <div class="span3">
+            {rightBox}
+            <section>
+                <header>
+                    <h3>{stickyRecordsHeader}</h3>
+                </header>
+                <ul>
+                    [stickyRecordsList]
+                    <li><a href="{stickyRecordsUrl}">{stickyRecordsTitle}</a></li>
+                    [/stickyRecordsList]
+                </ul>
+            </section>
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        <p class="pull-right">
+            <form action="{writeLangAdress}" method="post">
+                {switchLanguages}
+                <input type="hidden" name="action" value="" />
+            </form>
+        </p>
+        <p>{userOnline}</p>
+        <p>{copyright}</p>
+    </footer>
+
+    {debugMessages}
+
+</div>
 
 </body>
 </html>
