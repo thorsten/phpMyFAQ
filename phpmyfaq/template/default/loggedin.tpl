@@ -1,3 +1,9 @@
-            <div id="loginSelection">
-                {adminSection} | <a href="?action=logout">{logout}</a>
-            </div>
+            <ul class="nav pull-right">
+                <li>
+                {adminSection}
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="?action=logout">{logout}</a>
+                </li>
+            </ul>

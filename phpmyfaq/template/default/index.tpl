@@ -68,30 +68,7 @@
                     <li>{showSitemap}</li>
                     <li>{msgContact}</li>
                 </ul>
-                <ul class="nav pull-right">
-                    <li class="divider-vertical"></li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            Login
-                            <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="#">Action</a>
-                            </li>
-                            <li>
-                                <a href="#">Another action</a>
-                            </li>
-                            <li>
-                                <a href="#">Something else here</a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <a href="#">Separated link</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
+                {loginBox}
             </div><!--/.nav-collapse -->
         </div>
     </div>
