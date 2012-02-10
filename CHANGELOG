@@ -13,6 +13,7 @@ Version 2.8.0-dev - 2012-
 - improved setup (Thorsten)
 - improved security with salted passwords (Thorsten)
 - improved CSS with LESS (Thorsten)
+- updated bundled jQuery to version 1.7.1 (Thorsten)
 
 Version 2.7.4 - 2012-
 - updated Spanish translation

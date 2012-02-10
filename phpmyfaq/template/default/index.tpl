@@ -61,7 +61,6 @@
             <a class="brand" title="{header}" href="{faqHome}">{header}</a>
             <div class="nav-collapse">
                 <ul class="nav">
-                    <li>{allCategories}</li>
                     <li>{showInstantResponse}</li>
                     <li>{msgAddContent}</li>
                     <li>{msgQuestion}</li>
@@ -69,7 +68,30 @@
                     <li>{showSitemap}</li>
                     <li>{msgContact}</li>
                 </ul>
-                <!-- {loginBox} -->
+                <ul class="nav pull-right">
+                    <li class="divider-vertical"></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            Login
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#">Action</a>
+                            </li>
+                            <li>
+                                <a href="#">Another action</a>
+                            </li>
+                            <li>
+                                <a href="#">Something else here</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">Separated link</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </div><!--/.nav-collapse -->
         </div>
     </div>
@@ -83,6 +105,8 @@
             <menu class="well sidebar-nav">
                 <ul class="nav nav-list">
                     <li class="home">{backToHome}</li>
+                    <li>{allCategories}</li>
+                    <li class="divider-horizontal"></li>
                     {showCategories}
                 </ul>
             </menu>
@@ -144,6 +168,8 @@
     {debugMessages}
 
 </div>
+
+<script src="inc/js/phpmyfaq.js"></script>
 
 </body>
 </html>
