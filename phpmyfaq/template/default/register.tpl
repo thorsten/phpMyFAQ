@@ -8,7 +8,7 @@
 
             <div id="registrations"></div>
 
-            <form id="formValues" method="post" action="#>
+            <form id="formValues" method="post" action="#">
                 <input type="hidden" name="lang" id="lang" value="{lang}" />
                 <p>
                     <label for="realname">{realname}</label>
