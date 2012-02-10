@@ -31,6 +31,7 @@
     <script src="inc/js/modernizr.min.js"></script>
     <script src="inc/js/jquery.min.js"></script>
     <script src="inc/js/functions.js"></script>
+    <script src="inc/js/phpmyfaq.js"></script>
 
     <link rel="shortcut icon" href="template/{tplSetName}/favicon.ico">
     <link rel="apple-touch-icon" href="template/{tplSetName}/apple-touch-icon.png">
@@ -145,8 +146,6 @@
     {debugMessages}
 
 </div>
-
-<script src="inc/js/phpmyfaq.js"></script>
 
 </body>
 </html>
