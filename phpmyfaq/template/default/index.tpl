@@ -132,19 +132,23 @@
 
     </div>
 
-    <footer class="footer">
-        <p class="pull-right">
+
+</div>
+
+<div id="footer">
+    <div class="container">
+        <footer class="footer">
+            <p class="pull-right">
             <form action="{writeLangAdress}" method="post">
-                {switchLanguages}
+            {switchLanguages}
                 <input type="hidden" name="action" value="" />
             </form>
-        </p>
-        <p>{userOnline}</p>
-        <p>{copyright}</p>
-    </footer>
-
-    {debugMessages}
-
+            </p>
+            <p>{userOnline}</p>
+            <p>{copyright}</p>
+        </footer>
+        {debugMessages}
+    </div>
 </div>
 
 </body>

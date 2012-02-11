@@ -1807,16 +1807,16 @@ table .span12 {
   background-color: #003399 \9;
 }
 .btn-warning {
-  background-color: #fb8e28;
-  background-image: -moz-linear-gradient(top, #ff9d43, #f67600);
-  background-image: -ms-linear-gradient(top, #ff9d43, #f67600);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ff9d43), to(#f67600));
-  background-image: -webkit-linear-gradient(top, #ff9d43, #f67600);
-  background-image: -o-linear-gradient(top, #ff9d43, #f67600);
-  background-image: linear-gradient(top, #ff9d43, #f67600);
+  background-color: #faa732;
+  background-image: -moz-linear-gradient(top, #fbb450, #f89406);
+  background-image: -ms-linear-gradient(top, #fbb450, #f89406);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fbb450), to(#f89406));
+  background-image: -webkit-linear-gradient(top, #fbb450, #f89406);
+  background-image: -o-linear-gradient(top, #fbb450, #f89406);
+  background-image: linear-gradient(top, #fbb450, #f89406);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff9d43', endColorstr='#f67600', GradientType=0);
-  border-color: #f67600 #f67600 #aa5100;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbb450', endColorstr='#f89406', GradientType=0);
+  border-color: #f89406 #f89406 #ad6704;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
 }
@@ -1825,10 +1825,10 @@ table .span12 {
 .btn-warning.active,
 .btn-warning.disabled,
 .btn-warning[disabled] {
-  background-color: #f67600;
+  background-color: #f89406;
 }
 .btn-warning:active, .btn-warning.active {
-  background-color: #c35e00 \9;
+  background-color: #c67605 \9;
 }
 .btn-danger {
   background-color: #da4f49;
@@ -3080,7 +3080,7 @@ a.thumbnail:hover {
   background-color: #b94a48;
 }
 .label-warning {
-  background-color: #f67600;
+  background-color: #f89406;
 }
 .label-success {
   background-color: #468847;
@@ -3386,4 +3386,9 @@ a.thumbnail:hover {
 }
 body {
   padding-top: 60px;
+}
+#footer {
+  background: #34373b;
+  color: #ffffff;
+  padding-top: 10px;
 }
