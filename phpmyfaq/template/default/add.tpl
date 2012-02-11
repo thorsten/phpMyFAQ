@@ -1,7 +1,7 @@
 <h2>{msgNewContentHeader}</h2>
             
             <p>{msgNewContentAddon}</p>
-            <form id="formValues" action="#" method="post">
+            <form id="formValues" action="#" method="post" class="form-horizontal">
                 <input type="hidden" name="lang" id="lang" value="{lang}" />
                 <input type="hidden" value="{openQuestionID}" id="openQuestionID" name="openQuestionID" />
                 
