@@ -363,11 +363,7 @@ if (!isset($allowedVariables[$action])) {
 if (isset($auth)) {
     $loginTemplate = 'loggedin.tpl';
 } else {
-    if (isset($_SERVER['HTTPS']) || !$faqconfig->get('security.useSslForLogins')) {
-        $loginTemplate = 'loginbox.tpl';
-    } else {
-        $loginTemplate = 'secureswitch.tpl';
-    }
+    $loginTemplate = 'login.tpl';
 }
 
 if ($action != 'main') {
@@ -419,11 +415,15 @@ if ($faqconfig->get('security.enableLoginOnly')) {
 //
 // Load template files and set template variables
 //
-$tpl = new PMF_Template(array('index'        => $indexSet,
-                              'loginBox'     => $loginTemplate,
-                              'rightBox'     => $rightSidebarTemplate,
-                              'writeContent' => $includeTemplate),
-                              $faqconfig->get('main.templateSet'));
+$tpl = new PMF_Template(
+    array(
+        'index'        => $indexSet,
+        'loginBox'     => $loginTemplate,
+        'rightBox'     => $rightSidebarTemplate,
+        'writeContent' => $includeTemplate
+    ),
+    $faqconfig->get('main.templateSet')
+);
 
 $usersOnLine    = $faqsession->getUsersOnline();
 $totUsersOnLine = $usersOnLine[0] + $usersOnLine[1];
@@ -437,12 +437,6 @@ $keywordsArray = array_merge(explode(',', $keywords), explode(',', $faqconfig->g
 $keywordsArray = array_filter($keywordsArray, 'strlen');
 shuffle($keywordsArray);
 $keywords = implode(',', $keywordsArray);
-
-if (is_null($error)) {
-    $loginMessage = '<p>' . $PMF_LANG['ad_auth_insert'] . '</p>';
-} else {
-    $loginMessage = '<p class="error">' . $error . '</p>';
-}
 
 $tplMainPage = array(
     'msgRegisterUser'     => '<a href="?' . $sids . 'action=register">' . $PMF_LANG['msgRegisterUser'] . '</a>',
@@ -473,14 +467,7 @@ $tplMainPage = array(
     'copyright'           => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' . 
                              $faqconfig->get('main.currentVersion'),
     'registerUser'        => '<a href="?action=register">' . $PMF_LANG['msgRegistration'] . '</a>',
-    'sendPassword'        => '<a href="./admin/password.php">' . $PMF_LANG['lostPassword'] . '</a>',
-    'loginHeader'         => $PMF_LANG['msgLoginUser'],
-    'loginMessage'        => $loginMessage,
-    'writeLoginPath'      => $systemUri . '?' . PMF_Filter::getFilteredQueryString(),
-    'faqloginaction'      => $action,
-    'login'               => $PMF_LANG['ad_auth_ok'],
-    'username'            => $PMF_LANG['ad_auth_user'],
-    'password'            => $PMF_LANG['ad_auth_passwd']
+    'sendPassword'        => '<a href="./admin/password.php">' . $PMF_LANG['lostPassword'] . '</a>'
 );
 
 if ('main' == $action || 'show' == $action) {
@@ -572,11 +559,6 @@ if (DEBUG) {
 }
 
 //
-// Get main template, set main variables
-//
-$tpl->parse('index', array_merge($tplMainPage, $tplNavigation, $tplDebug));
-
-//
 // Show login box or logged-in user information
 //
 if (isset($auth)) {
@@ -591,43 +573,29 @@ if (isset($auth)) {
             $PMF_LANG['headerUserControlPanel']
         );
     }
-    $tpl->parse(
-        'loginBox',
+
+    $tpl->parseBlock(
+        'index',
+        'userloggedIn',
         array(
-            'loggedinas'   => $PMF_LANG['ad_user_loggedin'],
-            'currentuser'  => $user->getUserData('display_name'),
-            'adminSection' => $adminSection,
-            'logout'       => $PMF_LANG['ad_menu_logout']
+            'msgUserControl' => $adminSection,
+            'msgLogoutUser'  => '<a href="?action=logout">' . $PMF_LANG['ad_menu_logout'] . '</a>'
         )
     );
 } else {
-    if (isset($_SERVER['HTTPS']) || !$faqconfig->get('security.useSslForLogins')) {
-        $tpl->parse(
-            'loginBox',
-            array(
-                'msgLoginUser'    => $PMF_LANG['msgLoginUser'],
-                'writeLoginPath'  => $systemUri . '?action=login',
-                'faqloginaction'  => $action,
-                'login'           => $PMF_LANG['ad_auth_ok'],
-                'username'        => $PMF_LANG['ad_auth_user'],
-                'password'        => $PMF_LANG['ad_auth_passwd'],
-                'msgRegisterUser' => '<a href="?' . $sids . 'action=register">' . $PMF_LANG['msgRegisterUser'] . '</a>',
-                'msgLoginFailed'  => $error,
-                'msgLostPassword' => $PMF_LANG['lostPassword'],
-                'loginVisibility' => $loginVisibility
-            )
-        );
-    } else {
-        $tpl->parse(
-            'loginBox',
-            array(
-                'secureloginurl'  => sprintf('https://%s%s', $_SERVER['HTTP_HOST'], $_SERVER['REQUEST_URI']),
-                'securelogintext' => $PMF_LANG['msgSecureSwitch']
-            )
-        );
-    }
+    $tpl->parseBlock(
+        'index',
+        'notLoggedIn',
+        array(
+            'msgLoginUser' => '<a href="?action=login">' . $PMF_LANG['msgLoginUser'] . '</a>'
+        )
+    );
 }
-$tpl->merge('loginBox', 'index');
+
+//
+// Get main template, set main variables
+//
+$tpl->parse('index', array_merge($tplMainPage, $tplNavigation, $tplDebug));
 
 // generate top ten list
 if ($faqconfig->get('records.orderingPopularFaqs') == 'visits') {

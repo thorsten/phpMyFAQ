@@ -69,7 +69,15 @@
                     <li>{showSitemap}</li>
                     <li>{msgContact}</li>
                 </ul>
-                {loginBox}
+                <ul class="nav pull-right">
+                    [notLoggedIn]
+                    <li>{msgLoginUser}</li>
+                    [/notLoggedIn]
+                    [userloggedIn]
+                    <li>{msgUserControl}</li>
+                    <li>{msgLogoutUser}</li>
+                    [/userloggedIn]
+                </ul>
             </div><!--/.nav-collapse -->
         </div>
     </div>
