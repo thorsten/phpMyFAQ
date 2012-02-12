@@ -23,16 +23,43 @@
 // Twitter Bootstrap
 @import "../../../../vendor/bootstrap/less/bootstrap.less";
 
-@pmfGray: #34373b;
-@pmforange: #f47621;
+// Basic definitions
+@pmfDarkGray: #262F32;
+@pmfGrayLight: #f2f2f2;
+@pmfOrange: #ef7507;
 
 // phpMyFAQ styles
 body {
-    padding-top: 60px;
+    background: @pmfDarkGray;
+}
+
+.navbar-inner {
+    #gradient > .vertical(@pmfDarkGray, black);
+}
+
+#main {
+    background: #fffff9;
+    padding-top: 70px;
 }
 
 #footer {
-    background: @pmfGray;
-    color: #ffffff;
-    padding-top: 22px;
+    color: @pmfGrayLight;
+    padding-top: 30px;
+
+    ul.footer-menu {
+        list-style: none outside none;
+        li {
+            float: left;
+            list-style: none outside none;
+            margin-right: 22px;
+        }
+    }
+
+    .copyright {
+        color: @pmfGrayLight;
+    }
+
+    a {
+        color: @pmfOrange;
+    }
 }

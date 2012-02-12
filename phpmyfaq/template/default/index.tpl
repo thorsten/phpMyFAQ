@@ -75,85 +75,85 @@
     </div>
 </div>
 
-<div class="container">
+<div id="main">
+    <div class="container">
 
-    <div class="row">
+        <div class="row">
 
-        <div class="span3">
-            <menu class="well sidebar-nav">
-                <ul class="nav nav-list">
-                    <li class="home">{backToHome}</li>
-                    <li>{allCategories}</li>
-                    <li class="divider-horizontal"></li>
-                    {showCategories}
-                </ul>
-            </menu>
-        </div>
-
-        <div class="span6">
-            [globalSearchBox]
-            <div id="searchBox">
-                <form id="search" action="{writeSendAdress}" method="get">
-                    <input type="hidden" name="searchcategory" value="{categoryId}" />
-                    <input type="hidden" name="action" value="search" />
-                    <input type="search" name="search" id="searchfield" size="30" placeholder="{searchBox} ..." />
-                    <input type="submit" name="submit" value="{searchBox}" />
-                </form>
-                {msgSearch}
+            <div class="span3">
+                <menu class="well sidebar-nav">
+                    <ul class="nav nav-list">
+                        <li class="home">{backToHome}</li>
+                        <li>{allCategories}</li>
+                        <li class="divider-horizontal"></li>
+                        {showCategories}
+                    </ul>
+                </menu>
             </div>
-            [/globalSearchBox]
-            [globalSuggestBox]
-            <div id="searchBox">
-                <form id="instantform" action="?action=instantresponse" method="post">
-                    <input type="hidden" name="ajaxlanguage" id="ajaxlanguage" value="{ajaxlanguage}" />
-                    <input type="search" name="search" id="instantfield" value=""
-                           placeholder="{msgDescriptionInstantResponse}" onfocus="autoSuggest(); return false;" />
-                </form>
-                {msgSearch}
+
+            <div class="span6">
+                [globalSearchBox]
+                <div id="searchBox">
+                    <form id="search" action="{writeSendAdress}" method="get">
+                        <input type="hidden" name="searchcategory" value="{categoryId}" />
+                        <input type="hidden" name="action" value="search" />
+                        <input type="search" name="search" id="searchfield" size="30" placeholder="{searchBox} ..." />
+                        <input type="submit" name="submit" value="{searchBox}" />
+                    </form>
+                    {msgSearch}
+                </div>
+                [/globalSearchBox]
+                [globalSuggestBox]
+                <div id="searchBox">
+                    <form id="instantform" action="?action=instantresponse" method="post">
+                        <input type="hidden" name="ajaxlanguage" id="ajaxlanguage" value="{ajaxlanguage}" />
+                        <input type="search" name="search" id="instantfield" value=""
+                               placeholder="{msgDescriptionInstantResponse}" onfocus="autoSuggest(); return false;" />
+                    </form>
+                    {msgSearch}
+                </div>
+                [/globalSuggestBox]
+
+                {writeContent}
             </div>
-            [/globalSuggestBox]
 
-            {writeContent}
+            <div class="span3">
+                {rightBox}
+                <section>
+                    <header>
+                        <h3>{stickyRecordsHeader}</h3>
+                    </header>
+                    <ul>
+                        [stickyRecordsList]
+                        <li><a href="{stickyRecordsUrl}">{stickyRecordsTitle}</a></li>
+                        [/stickyRecordsList]
+                    </ul>
+                </section>
+            </div>
+
         </div>
-
-        <div class="span3">
-            {rightBox}
-            <section>
-                <header>
-                    <h3>{stickyRecordsHeader}</h3>
-                </header>
-                <ul>
-                    [stickyRecordsList]
-                    <li><a href="{stickyRecordsUrl}">{stickyRecordsTitle}</a></li>
-                    [/stickyRecordsList]
-                </ul>
-            </section>
-        </div>
-
     </div>
-
-
 </div>
 
 <div id="footer">
     <div class="container">
-        <footer class="footer">
-            <div class="row">
-                <div class="span6">
-                    {userOnline}
-                </div>
-                <div class="span6">
-                    <form action="{writeLangAdress}" method="post" class="pull-right">
-                    {switchLanguages}
-                        <input type="hidden" name="action" value="" />
-                    </form>
-                </div>
+        <div class="row">
+            <div class="span6">
+                {userOnline}
             </div>
-            <div class="row">
-                <p class="pull-right">{copyright}</p>
+            <div class="span6">
+                <form action="{writeLangAdress}" method="post" class="pull-right">
+                {switchLanguages}
+                    <input type="hidden" name="action" value="" />
+                </form>
             </div>
-        </footer>
-        {debugMessages}
+        </div>
+        <div class="row">
+            <p class="copyright pull-right">
+                {copyright}
+            </p>
+        </div>
+
     </div>
 </div>
 
