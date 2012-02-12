@@ -62,12 +62,10 @@
             <a class="brand" title="{header}" href="{faqHome}">{header}</a>
             <div class="nav-collapse">
                 <ul class="nav">
-                    <li>{showInstantResponse}</li>
+                    <!-- <li>{showInstantResponse}</li> -->
                     <li>{msgAddContent}</li>
                     <li>{msgQuestion}</li>
                     <li>{msgOpenQuestions}</li>
-                    <li>{showSitemap}</li>
-                    <li>{msgContact}</li>
                 </ul>
                 <ul class="nav pull-right">
                     [notLoggedIn]
@@ -97,6 +95,7 @@
                         {showCategories}
                     </ul>
                 </menu>
+                {userOnline}
             </div>
 
             <div class="span6">
@@ -147,7 +146,10 @@
     <div class="container">
         <div class="row">
             <div class="span6">
-                {userOnline}
+                <ul class="footer-menu">
+                    <li>{showSitemap}</li>
+                    <li>{msgContact}</li>
+                </ul>
             </div>
             <div class="span6">
                 <form action="{writeLangAdress}" method="post" class="pull-right">
