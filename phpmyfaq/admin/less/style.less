@@ -1,0 +1,66 @@
+/**
+ * phpMyFAQ 2.8 default layout
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Layout
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2010-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2010-01-17
+ */
+
+// Twitter Bootstrap
+@import "../../../vendor/bootstrap/less/bootstrap.less";
+
+// Basic definitions
+@pmfDarkGray: #262F32;
+@pmfGrayLight: #f2f2f2;
+@pmfOrange: #ef7507;
+@baseFontSize: 14px;
+
+// phpMyFAQ styles
+body {
+    background: @pmfDarkGray;
+}
+
+.navbar-inner {
+    #gradient > .vertical(@pmfDarkGray, black);
+}
+
+#main {
+    background: #fffff9;
+    padding-top: 70px;
+}
+
+#footer {
+    color: @pmfGrayLight;
+    padding-top: 30px;
+
+    ul.footer-menu {
+        list-style: none outside none;
+        li {
+            float: left;
+            list-style: none outside none;
+            margin-right: 22px;
+        }
+    }
+
+    .copyright {
+        color: @pmfGrayLight;
+    }
+
+    a {
+        color: @pmfOrange;
+    }
+}

@@ -29,19 +29,28 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 ?>
-
+            </div>
+        </div>
+    </div>
 </div>
 
-<footer id="footer">
-    <div>
-        <p id="copyrightnote">
-        Proudly powered by <strong>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></strong> | 
-        <a href="http://www.phpmyfaq.de/documentation.php" target="_blank">phpMyFAQ documentation</a> |
-        Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | 
-        &copy; 2001-2012 <a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a>
-        </p>
+<div id="footer">
+    <div class="container">
+        <div class="row">
+            <p class="copyright pull-right">
+                Proudly powered by <strong>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></strong> |
+                <a href="http://www.phpmyfaq.de/documentation.php" target="_blank">phpMyFAQ documentation</a> |
+                Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> |
+                &copy; 2001-2012 <a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a>
+            </p>
+        </div>
     </div>
-</footer>
+<?php
+    if (DEBUG) {
+        print '<div class="container">DEBUG INFORMATION:<br>'.$db->log().'</div>';
+    }
+?>
+</div>
 
 <?php
 if (isset($auth)) {

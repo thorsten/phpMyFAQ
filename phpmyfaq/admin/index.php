@@ -556,11 +556,6 @@ if (isset($auth) && in_array(true, $permission)) {
         </section>
 <?php
 }
-
-if (DEBUG) {
-    print "\n";
-    print '<div id="debug_main">DEBUG INFORMATION:<br>'.$db->log().'</div>';
-}
 ?>
     </div>
 <?php

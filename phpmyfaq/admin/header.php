@@ -183,7 +183,7 @@ switch ($action) {
     <meta name="publisher" content="phpMyFAQ Team">
     <meta name="MSSmartTagsPreventParsing" content="true">
     
-    <link rel="stylesheet" href="style/admin.css?v=1">
+    <link rel="stylesheet" href="css/style.css?v=1">
     <link rel="stylesheet" href="../inc/js/plugins/autocomplete/jquery.autocomplete.css" type="text/css">
     <link rel="stylesheet" href="../inc/js/plugins/datePicker/datePicker.css" type="text/css">
     
@@ -200,92 +200,80 @@ switch ($action) {
 </head>
 <body dir="<?php print $PMF_LANG["dir"]; ?>">
 
-<header id="header">
+<!--
+<?php if (isset($auth)) { ?>
+<div id="loginBox">
+    <div id="languageSelection">
+        <p>
+            Hello, <span title="<?php print $PMF_LANG['ad_user_loggedin'] . $user->getLogin(); ?>">
+                <?php print $user->getUserData('display_name'); ?>!
+            </span>
+        </p>
+        <p>
+            <?php print $PMF_LANG['ad_session_expiration']; ?>: <span id="sessioncounter">Loading...</span>
+        </p>
+    </div>
+</div>
+<?php } ?>
+-->
 
-    <?php if (isset($auth)) { ?>
-    <div id="loginBox">
-        <div id="languageSelection">
-            <p>
-                Hello, <span title="<?php print $PMF_LANG['ad_user_loggedin'] . $user->getLogin(); ?>">
-                    <?php print $user->getUserData('display_name'); ?>!
-                </span>
-            </p>
-            <p>
-                <?php print $PMF_LANG['ad_session_expiration']; ?>: <span id="sessioncounter">Loading...</span>
-            </p>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="../index.php"><?php print $faqconfig->get('main.titleFAQ'); ?></a>
+            <div class="nav-collapse">
+                <?php if (isset($auth) && in_array(true, $permission)): ?>
+                <ul class="nav">
+                    <li<?php print ($dashboardPage ? ' class="active"' : ''); ?>><a href="index.php"><?php print $PMF_LANG['admin_mainmenu_home']; ?></a></li>
+                    <li<?php print ($userPage ? ' class="active"' : ''); ?>><a href="index.php?action=user"><?php print $PMF_LANG['admin_mainmenu_users']; ?></a></li>
+                    <li<?php print ($contentPage ? ' class="active"' : ''); ?>><a href="index.php?action=content"><?php print $PMF_LANG['admin_mainmenu_content']; ?></a></li>
+                    <li<?php print ($statisticsPage ? ' class="active"' : ''); ?>><a href="index.php?action=statistics"><?php print $PMF_LANG['admin_mainmenu_statistics']; ?></a></li>
+                    <li<?php print ($exportsPage ? ' class="active"' : ''); ?>><a href="index.php?action=export"><?php print $PMF_LANG['admin_mainmenu_exports']; ?></a></li>
+                    <li<?php print ($backupPage ? ' class="active"' : ''); ?>><a href="index.php?action=backup"><?php print $PMF_LANG['admin_mainmenu_backup']; ?></a></li>
+                    <li<?php print ($configurationPage ? ' class="active"' : ''); ?>><a href="index.php?action=config"><?php print $PMF_LANG['admin_mainmenu_configuration']; ?></a></li>
+
+                </ul>
+                <ul class="nav pull-right">
+                    <li><a class="logout" href="index.php?action=logout"><?php print $PMF_LANG['admin_mainmenu_logout']; ?></a></li>
+                </ul>
+                <?php else: ?>
+                <ul>
+                    <li><a href="password.php"><?php print $PMF_LANG["lostPassword"]; ?></a></li>
+                </ul>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
-    <?php } ?>
-        
-    <h1>
-        <a class="mainpage" href="../"><?php print $faqconfig->get('main.titleFAQ'); ?></a>
-    </h1>
-</header>
+</div>
 
-<nav>
-    <?php if (isset($auth) && in_array(true, $permission)): ?>
-    <ul>
-        <li<?php print ($dashboardPage ? ' class="active"' : ''); ?>><a href="index.php"><?php print $PMF_LANG['admin_mainmenu_home']; ?></a></li>
-        <li<?php print ($userPage ? ' class="active"' : ''); ?>><a href="index.php?action=user"><?php print $PMF_LANG['admin_mainmenu_users']; ?></a></li>
-        <li<?php print ($contentPage ? ' class="active"' : ''); ?>><a href="index.php?action=content"><?php print $PMF_LANG['admin_mainmenu_content']; ?></a></li>
-        <li<?php print ($statisticsPage ? ' class="active"' : ''); ?>><a href="index.php?action=statistics"><?php print $PMF_LANG['admin_mainmenu_statistics']; ?></a></li>
-        <li<?php print ($exportsPage ? ' class="active"' : ''); ?>><a href="index.php?action=export"><?php print $PMF_LANG['admin_mainmenu_exports']; ?></a></li>
-        <li<?php print ($backupPage ? ' class="active"' : ''); ?>><a href="index.php?action=backup"><?php print $PMF_LANG['admin_mainmenu_backup']; ?></a></li>
-        <li<?php print ($configurationPage ? ' class="active"' : ''); ?>><a href="index.php?action=config"><?php print $PMF_LANG['admin_mainmenu_configuration']; ?></a></li>
-        <li><a class="logout" href="index.php?action=logout"><?php print $PMF_LANG['admin_mainmenu_logout']; ?></a></li>
-    </ul>
-    <form action="index.php<?php print (isset($action) ? '?action=' . $action : ''); ?>" method="post">
-    <?php print PMF_Language::selectLanguages($LANGCODE, true); ?>
-    </form>
-    <?php else: ?>
-    <ul>
-        <li>
-            <a href="../index.php">
-                <?php print $PMF_LANG['msgHome']; ?>
-            </a>
-        </li>
-        <li>
-            <a href="password.php" title="<?php print $PMF_LANG["lostPassword"]; ?>">
-                <?php print $PMF_LANG["lostPassword"]; ?>
-            </a>
-        </li>
-    </ul>
-    <?php endif; ?>
-</nav>
+<!--
+<form action="index.php<?php print (isset($action) ? '?action=' . $action : ''); ?>" method="post">
+<?php print PMF_Language::selectLanguages($LANGCODE, true); ?>
+</form>
+-->
 
-<div id="content">
+<div id="main">
+    <div class="container">
+        <div class="row">
+            <?php if (isset($auth) && in_array(true, $permission)) { ?>
+            <div class="span3">
+                <menu class="well sidebar-nav">
+                    <ul class="nav nav-list">
+                        <li class="nav-header"><?php print $secLevelHeader; ?></li>
+                        <?php print $secLevelEntries; ?>
+                        <li class="nav-header">Admin worklog</li>
+                        <li><span id="saving_data_indicator"></span></li>
+                        <li class="nav-header">Found an issue?</li>
+                        <li><a href="https://github.com/thorsten/phpMyFAQ/issues/" target="_blank">Please report it here</a></li>
+                    </ul>
+                </menu>
+            </div>
+            <?php } ?>
 
-    <?php if (isset($auth) && in_array(true, $permission)) { ?>
-
-    <div id="leftContent">
-        <menu id="categories">
-            <header>
-                <h3><?php print $secLevelHeader; ?></h3>
-            </header>
-            <ul>
-                <?php print $secLevelEntries; ?>
-            </ul>
-        </menu>
-        <div id="worklog">
-            <header>
-                <h3>Admin worklog</h3>
-            </header>
-            <span id="saving_data_indicator"></span>
-        </div>
-
-        <!-- maybe we'll hide this after the final release ... -->
-        <div id="bugreport">
-            <header>
-                <h3>Found an issue?</h3>
-            </header>
-            <p>
-                <a href="https://github.com/thorsten/phpMyFAQ/issues/" target="_blank">Please report it here</a>.<br/>
-                Thanks!
-            </p>
-        </div>
-    </div>
-
-    <?php } ?>
-    
-    <div id="mainContent">
-        <section>
+            <div class="span9">
