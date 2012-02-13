@@ -190,6 +190,8 @@ switch ($action) {
     <script src="../inc/js/modernizr.min.js"></script>
     <script src="../inc/js/jquery.min.js"></script>
     <script src="../inc/js/functions.js"></script>
+    <script src="../inc/js/phpmyfaq.js"></script
+
     <script src="../inc/js/plugins/autocomplete/jquery.autocomplete.pack.js"></script>
     <script src="../inc/js/plugins/datePicker/date.js"></script>
     <script src="../inc/js/plugins/datePicker/jquery.datePicker.js"></script>
@@ -199,24 +201,6 @@ switch ($action) {
     <link rel="apple-touch-icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/apple-touch-icon.png">
 </head>
 <body dir="<?php print $PMF_LANG["dir"]; ?>">
-
-<!--
-<?php if (isset($auth)) { ?>
-<div id="loginBox">
-    <div id="languageSelection">
-        <p>
-            Hello, <span title="<?php print $PMF_LANG['ad_user_loggedin'] . $user->getLogin(); ?>">
-                <?php print $user->getUserData('display_name'); ?>!
-            </span>
-        </p>
-        <p>
-            <?php print $PMF_LANG['ad_session_expiration']; ?>: <span id="sessioncounter">Loading...</span>
-        </p>
-    </div>
-</div>
-<?php } ?>
--->
-
 
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
@@ -253,8 +237,23 @@ switch ($action) {
                     </li>
                 </ul>
                 <ul class="nav pull-right">
-                    <li>
-                        <a href="index.php?action=logout"><?php print $PMF_LANG['admin_mainmenu_logout']; ?></a>
+                    <li class="divider-vertical"></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <span title="<?php print $PMF_LANG['ad_user_loggedin'] . $user->getLogin(); ?>">
+                            <?php print $user->getUserData('display_name'); ?>!
+                            </span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <?php print $PMF_LANG['ad_session_expiration']; ?>: <span id="sessioncounter">Loading...</span>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="index.php?action=logout"><?php print $PMF_LANG['admin_mainmenu_logout']; ?></a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
                 <?php else: ?>
@@ -266,12 +265,6 @@ switch ($action) {
         </div>
     </div>
 </div>
-
-<!--
-<form action="index.php<?php print (isset($action) ? '?action=' . $action : ''); ?>" method="post">
-<?php print PMF_Language::selectLanguages($LANGCODE, true); ?>
-</form>
--->
 
 <div id="main">
     <div class="container">

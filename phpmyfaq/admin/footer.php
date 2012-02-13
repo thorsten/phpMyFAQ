@@ -37,6 +37,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <div id="footer">
     <div class="container">
         <div class="row">
+            <form action="index.php<?php print (isset($action) ? '?action=' . $action : ''); ?>" method="post" class="pull-right">
+            <?php print PMF_Language::selectLanguages($LANGCODE, true); ?>
+            </form>
+        </div>
+        <div class="row">
             <p class="copyright pull-right">
                 Proudly powered by <strong>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></strong> |
                 <a href="http://www.phpmyfaq.de/documentation.php" target="_blank">phpMyFAQ documentation</a> |
