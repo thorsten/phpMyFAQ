@@ -69,6 +69,8 @@
                 </ul>
                 <ul class="nav pull-right">
                     [notLoggedIn]
+                    <li>{msgRegisterUser}</li>
+                    <li class="divider-vertical"></li>
                     <li>{msgLoginUser}</li>
                     [/notLoggedIn]
                     [userloggedIn]

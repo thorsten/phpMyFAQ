@@ -439,7 +439,6 @@ shuffle($keywordsArray);
 $keywords = implode(',', $keywordsArray);
 
 $tplMainPage = array(
-    'msgRegisterUser'     => '<a href="?' . $sids . 'action=register">' . $PMF_LANG['msgRegisterUser'] . '</a>',
     'msgLoginUser'        => $PMF_LANG['msgLoginUser'],
     'title'               => $faqconfig->get('main.titleFAQ') . $title,
     'baseHref'            => $systemUri,
@@ -587,7 +586,8 @@ if (isset($auth)) {
         'index',
         'notLoggedIn',
         array(
-            'msgLoginUser' => '<a href="?action=login">' . $PMF_LANG['msgLoginUser'] . '</a>'
+            'msgRegisterUser' => '<a href="?action=register">' . $PMF_LANG['msgRegisterUser'] . '</a>',
+            'msgLoginUser'    => '<a href="?action=login">' . $PMF_LANG['msgLoginUser'] . '</a>'
         )
     );
 }
