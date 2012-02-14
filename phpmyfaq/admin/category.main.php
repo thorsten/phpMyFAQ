@@ -227,7 +227,8 @@ if ($permission['editcateg']) {
     $category->getMissingCategories();
     $category->buildTree();
 
-    $open = 0;
+    $open = $lastCatId = 0;
+    print '<ul>';
     foreach ($category->catTree as $cat) {
 
         $indent = '';
@@ -237,35 +238,53 @@ if ($permission['editcateg']) {
 
         // Category translated in this language?
         if ($cat['lang'] == $lang) {
-            $catname = $cat['name'];
+            $categoryName = $cat['name'];
         } else {
-            $catname = $cat['name'] . ' (' . $languageCodes[strtoupper($cat['lang'])] . ')';
+            $categoryName = $cat['name'] . ' (' . $languageCodes[strtoupper($cat['lang'])] . ')';
         }
 
-        // Check open <div>'s
-        $levelDiff = $open - $cat['level'];
-        if ($levelDiff > 1) {
-            print '</div>' . str_repeat('</div>', $levelDiff - 2);
+        $level     = $cat['level'];
+        $leveldiff = $open - $level;
+
+        if ($leveldiff > 1) {
+            print '</li>';
+            for ($i = $leveldiff; $i > 1; $i--) {
+                printf(
+                    "\n%s</ul>\n%s</li>\n</div>\n",
+                    str_repeat("\t", $level + $i + 1),
+                    str_repeat("\t", $level + $i)
+                );
+            }
         }
-        if ($cat['level'] < $open) {
-            print '</div>';
+
+        if ($level < $open) {
+            if (($level - $open) == -1) {
+                print '</li>';
+            }
+            print "\n".str_repeat("\t", $level + 2)."</ul>\n".str_repeat("\t", $level + 1)."</li>\n";
+        } elseif ($level == $open && $y != 0) {
+            print "</li>\n";
+        }
+
+        if ($level > $open) {
+            printf('<div id="div_%d" style="display: none;">', $lastCatId);
+            printf("\n%s<ul>\n%s<li>",
+                str_repeat("\t", $level + 1),
+                str_repeat("\t", $level + 1));
+        } else {
+            print str_repeat("\t", $level + 1)."<li>";
         }
 
         if (count($category->getChildren($cat['id'])) != 0) {
             // Show name and icon for expand the sub-categories
             printf(
-                "<p>%s<strong style=\"vertical-align: top;\">&middot; <a href=\"javascript:;\" onclick=\"toggleFieldset('%d');\">%s</strong> ",
-                $indent,
+                "<strong><a href=\"javascript:;\" onclick=\"toggleFieldset('%d');\">%s</a></strong> ",
                 $cat['id'],
-                $catname
+                $categoryName
             );
         } else {
             // Show just the name
-            printf(
-                "<p>%s<strong style=\"vertical-align: top;\">&middot; %s</strong> ",
-                $indent,
-                $catname
-            );
+            printf("<strong>%s</strong> ", $categoryName);
         }
 
         if ($cat["lang"] == $lang) {
@@ -327,19 +346,15 @@ if ($permission['editcateg']) {
            }
         }
 
-        print "\n";
-
-        if (count($category->getChildren($cat['id'])) !== 0) {
-            // Open a div for content all the children
-            printf('<div id="div_%d" style="display: none;">', $cat['id']);
-        }
-        
-        $open = $cat['level'];
+        $open      = $level;
+        $lastCatId = $cat['id'];
     }
 
     if ($open > 0) {
-        print str_repeat('</div>', $open);
+        print str_repeat("</li>\n\t</ul>\n\t", $open);
     }
+
+    print "</li>\n</ul>";
     
     printf('<p>%s</p>', $PMF_LANG['ad_categ_remark']);
 ?>
