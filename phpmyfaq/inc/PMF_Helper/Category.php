@@ -2,13 +2,7 @@
 /**
  * Helper class for phpMyFAQ categories
  *
- * @package    phpMyFAQ
- * @subpackage PMF_Helper
- * @license    MPL
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2009-09-07
- * @version    SVN: $Id$
- * @copyright  2009-2011 phpMyFAQ Team
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,6 +13,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Helper
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2009-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-09-07
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -27,12 +29,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * PMF_Helper
- * 
- * @package    phpMyFAQ
- * @subpackage PMF_Helper
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2009-09-07
- * @copyright  2009 phpMyFAQ Team
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Helper
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2009-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-09-07
  */
 class PMF_Helper_Category extends PMF_Helper 
 {
@@ -132,15 +136,24 @@ class PMF_Helper_Category extends PMF_Helper
                 }
 
                 if ($level > $open) {
-                    $output .= sprintf("\n%s<ul class=\"subcat\">\n%s<li>",
+                    $output .= sprintf(
+                        "\n%s<ul class=\"subcat\">\n%s<li%s>",
                         str_repeat("\t", $level + 1),
-                        str_repeat("\t", $level + 1));
+                        str_repeat("\t", $level + 1),
+                        $isActive ? ' class="active"' : ''
+                    );
                 } else {
-                    $output .= str_repeat("\t", $level + 1)."<li>";
+                    $output .= sprintf(
+                        "%s<li%s>",
+                        str_repeat("\t", $level + 1),
+                        $isActive ? ' class="active"' : ''
+                    );
                 }
-
+                
                 if (isset($this->Category->treeTab[$y]['symbol']) && $this->Category->treeTab[$y]['symbol'] == 'plus') {
-                    $output .= $this->Category->addCategoryLink($sids, $categoryId, $name, $description, true, $isActive);
+                    $output .= $this->Category->addCategoryLink(
+                        $sids, $categoryId, $name, $description, true, $isActive
+                    );
                 } else {
                     if ($this->Category->treeTab[$y]['symbol'] == 'minus') {
                         $name = ($this->Category->treeTab[$y]['parent_id'] == 0) 
@@ -148,9 +161,13 @@ class PMF_Helper_Category extends PMF_Helper
                                 $name 
                                 : 
                                 $this->Category->categoryName[$this->Category->treeTab[$y]['id']]['name'];
-                        $output .= $this->Category->addCategoryLink($sids, $this->Category->treeTab[$y]['parent_id'], $name, $description, false, $isActive);
+                        $output .= $this->Category->addCategoryLink(
+                            $sids, $this->Category->treeTab[$y]['parent_id'], $name, $description, false, $isActive
+                        );
                     } else {
-                        $output .= $this->Category->addCategoryLink($sids, $categoryId, $name, $description, false, $isActive);
+                        $output .= $this->Category->addCategoryLink(
+                            $sids, $categoryId, $name, $description, false, $isActive
+                        );
                     }
                 }
                 $open = $level;
