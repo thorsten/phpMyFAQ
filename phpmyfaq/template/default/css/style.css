@@ -3387,6 +3387,9 @@ a.thumbnail:hover {
 body {
   background: #262f32;
 }
+a {
+  color: #ef7507;
+}
 .navbar-inner {
   background-color: #171c1e;
   background-image: -moz-linear-gradient(top, #262f32, #000000);
@@ -3400,23 +3403,26 @@ body {
 }
 #main {
   background: #fffff9;
-  padding-top: 70px;
+  padding-top: 60px;
 }
-#footer {
+#main menu {
+  padding: 8px 0;
+}
+footer {
   color: #f2f2f2;
   padding-top: 30px;
 }
-#footer ul.footer-menu {
+footer ul.footer-menu {
   list-style: none outside none;
 }
-#footer ul.footer-menu li {
+footer ul.footer-menu li {
   float: left;
   list-style: none outside none;
   margin-right: 22px;
 }
-#footer .copyright {
+footer .copyright {
   color: #f2f2f2;
 }
-#footer a {
+footer a {
   color: #ef7507;
 }

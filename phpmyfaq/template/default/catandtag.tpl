@@ -1,5 +1,5 @@
-[socialLinks]
-<section>
+        [socialLinks]
+        <section class="well">
             <div id="social">
                 <a href="{link_facebook}" target="_blank">
                     <img src="images/facebook.png" alt="{writeFacebookMsgTag}" title="{writeFacebookMsgTag}" width="32" height="32" border="0" />
@@ -27,8 +27,8 @@
                 {facebookLikeButton}
             </div>
         </section>
-[/socialLinks]
-        <section>
+        [/socialLinks]
+        <section class="well">
             <header>
                 <h3>{msgAllCatArticles}</h3>
             </header>
@@ -36,7 +36,7 @@
             {allCatArticles}
             </div>
         </section>
-        <section>
+        <section class="well">
             <header>
                 <h3>{writeTagCloudHeader}</h3>
             </header>

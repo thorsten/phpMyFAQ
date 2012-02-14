@@ -812,14 +812,19 @@ class PMF_Category
                     $oLink->setRelation('index');
                 }
 
-                $breadcrumb[] = sprintf('<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">%s</span>',
-                    $oLink->toHtmlAnchor());
+                $breadcrumb[] = sprintf(
+                    '<li itemscope itemtype="http://data-vocabulary.org/Breadcrumb">%s</li>',
+                    $oLink->toHtmlAnchor()
+                );
             }
             
             $temp = $breadcrumb;
         }
         
-        return implode($separator, $temp);
+        return '<ul class="breadcrumb">'. implode(
+            '<span class="divider">' . $separator . '</span>',
+            $temp
+        ) . '</ul>';
     }
 
     /**

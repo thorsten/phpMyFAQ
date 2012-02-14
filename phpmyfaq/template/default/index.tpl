@@ -53,16 +53,11 @@
 
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
-        <div class="container">
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
+        <div class="container-fluid">
             <a class="brand" title="{header}" href="{faqHome}">{header}</a>
-            <div class="nav-collapse">
+            <nav class="nav-collapse">
                 <ul class="nav">
-                    <!-- <li>{showInstantResponse}</li> -->
+                    <li>{showInstantResponse}</li>
                     <li>{msgAddContent}</li>
                     <li>{msgQuestion}</li>
                     <li>{msgOpenQuestions}</li>
@@ -75,34 +70,33 @@
                     [/notLoggedIn]
                     [userloggedIn]
                     <li>{msgUserControl}</li>
+                    <li class="divider-vertical"></li>
                     <li>{msgLogoutUser}</li>
                     [/userloggedIn]
                 </ul>
-            </div><!--/.nav-collapse -->
+            </nav>
         </div>
     </div>
 </div>
 
-<div id="main">
-    <div class="container">
-
-        <div class="row">
-
+<section id="main">
+    <div class="container-fluid">
+        <div class="row-fluid">
             <div class="span3">
-                <menu class="well sidebar-nav">
+                <div class="well">
                     <ul class="nav nav-list">
                         <li class="home">{backToHome}</li>
                         <li>{allCategories}</li>
                         <li class="divider-horizontal"></li>
                         {showCategories}
                     </ul>
-                </menu>
+                </div>
                 {userOnline}
             </div>
 
-            <div class="span6">
+            <div class="span6 main-content">
                 [globalSearchBox]
-                <div id="searchBox">
+                <section class="search-box">
                     <form id="search" action="{writeSendAdress}" method="get">
                         <input type="hidden" name="searchcategory" value="{categoryId}" />
                         <input type="hidden" name="action" value="search" />
@@ -110,17 +104,17 @@
                         <input type="submit" name="submit" value="{searchBox}" />
                     </form>
                     {msgSearch}
-                </div>
+                </section>
                 [/globalSearchBox]
                 [globalSuggestBox]
-                <div id="searchBox">
+                <section class="search-box">
                     <form id="instantform" action="?action=instantresponse" method="post">
                         <input type="hidden" name="ajaxlanguage" id="ajaxlanguage" value="{ajaxlanguage}" />
                         <input type="search" name="search" id="instantfield" value=""
                                placeholder="{msgDescriptionInstantResponse}" onfocus="autoSuggest(); return false;" />
                     </form>
                     {msgSearch}
-                </div>
+                </section>
                 [/globalSuggestBox]
 
                 {writeContent}
@@ -128,7 +122,7 @@
 
             <div class="span3">
                 {rightBox}
-                <section>
+                <section class="well">
                     <header>
                         <h3>{stickyRecordsHeader}</h3>
                     </header>
@@ -142,11 +136,11 @@
 
         </div>
     </div>
-</div>
+</section>
 
-<div id="footer">
-    <div class="container">
-        <div class="row">
+<footer>
+    <div class="container-fluid">
+        <div class="row-fluid">
             <div class="span6">
                 <ul class="footer-menu">
                     <li>{showSitemap}</li>
@@ -166,7 +160,7 @@
             </p>
         </div>
     </div>
-</div>
+</footer>
 
 </body>
 </html>

@@ -137,7 +137,7 @@ class PMF_Helper_Category extends PMF_Helper
 
                 if ($level > $open) {
                     $output .= sprintf(
-                        "\n%s<ul class=\"subcat\">\n%s<li%s>",
+                        "\n%s<ul class=\"nav nav-list\">\n%s<li%s>",
                         str_repeat("\t", $level + 1),
                         str_repeat("\t", $level + 1),
                         $isActive ? ' class="active"' : ''
