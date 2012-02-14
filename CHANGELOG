@@ -15,8 +15,12 @@ Version 2.8.0-dev - 2012-
 - improved CSS with LESS (Thorsten)
 - updated bundled jQuery to version 1.7.1 (Thorsten)
 
-Version 2.7.4 - 2012-
+Version 2.7.4 - 2012-02-
+- added PDF export for complete FAQ in frontend (Thorsten)
+- updated Japanese translation
+- updated Russian translation (Alexander Melnik)
 - updated Spanish translation
+- fixed some bugs (Alexander Melnik, Thorsten)
 
 Version 2.7.3 - 2012-01-16
 - improved PDF export (Thorsten)

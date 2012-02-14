@@ -100,32 +100,45 @@ if (!is_null($user) && $user instanceof PMF_User_CurrentUser) {
 
 $currentCategory = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 $id              = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-
-if (is_null($currentCategory) || is_null($id)) {
-    header('HTTP/1.1 403 Forbidden');
-    print 'Wrong HTTP GET parameters values.';
-    exit();
-}
+$getAll          = PMF_Filter::filterInput(INPUT_GET, 'getAll', FILTER_VALIDATE_BOOLEAN, false);
 
 $faq = new PMF_Faq($current_user, $current_groups);
 $faq->setLanguage($lang);
-$faq->getRecord($id);
-$faq->faqRecord['category_id'] = $currentCategory;
 
 $category = new PMF_Category($current_user, $current_groups);
 $pdf      = new PMF_Export_Pdf($faq, $category);
 
 session_cache_limiter('private');
 header("Pragma: public");
-header("Expires: 0"); // set expiration time
+header("Expires: 0");
 header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+
+if (true === $getAll) {
+
+    $filename = 'FAQs.pdf';
+    $pdfFile  = $pdf->generate();
+
+} else {
+
+    if (is_null($currentCategory) || is_null($id)) {
+        header('HTTP/1.1 403 Forbidden');
+        print 'Wrong HTTP GET parameters values.';
+        exit();
+    }
+
+    $faq->getRecord($id);
+    $faq->faqRecord['category_id'] = $currentCategory;
+
+    $filename = 'FAQ-' . $id . '-' . $lang . '.pdf';
+    $pdfFile  = $pdf->generateFile($faq->faqRecord, $filename);
+}
 
 if (preg_match("/MSIE/i", $_SERVER["HTTP_USER_AGENT"])) {
     header("Content-type: application/pdf");
     header("Content-Transfer-Encoding: binary");
-    header("Content-Disposition: attachment; filename=".$id.".pdf" );
+    header("Content-Disposition: attachment; filename=" . $filename);
 } else {
     header("Content-Type: application/pdf");
 }
 
-$pdf->generateFile($faq->faqRecord);
+print $pdfFile;

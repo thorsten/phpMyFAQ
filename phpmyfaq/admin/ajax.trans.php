@@ -17,7 +17,8 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2011 phpMyFAQ Team
+ * @author    Alexander Melnik <old@km.ua>
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-05-12
@@ -56,9 +57,39 @@ switch($ajax_action) {
         }
         
         foreach ((array)@$_POST['LANG_CONF'] as $key => $val) {
-            $val = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $val);
-            $val = str_replace("'", "\\'", $val);
-            $_SESSION['trans']['rightVarsOnly']["LANG_CONF[$key]"] = $val;
+            // if string like array(blah-blah-blah), extract the contents inside the brackets
+            if (preg_match('/^\s*array\s*\(\s*(\d+.+)\s*\).*$/',$val,$matches1)) {
+                // split the resulting string of delimiters such as "number =>"
+                $valArr = preg_split(
+                    '/\s*(\d+)\s*\=\>\s*/',
+                    $matches1[1],
+                    null,
+                    PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY
+                );
+                // in an array $valArr contents like  "number substring", "substring", "number substring", "substring", ...
+                $numVal = count($valArr);
+                if ($numVal > 1) {
+                    $newValArr = array();
+                    for ($i = 0; $i < $numVal; $i += 2) {
+                        if (is_numeric($valArr[$i])) {
+                            // clearing quotes
+                            if (preg_match('/^\s*\\\\*[\"|\'](.+)\\\\*[\"|\'][\s\,]*$/', $valArr[$i + 1], $matches2)) {
+                                $subVal = $matches2[1];
+                                // normalize quotes
+                                $subVal = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $subVal);
+                                $subVal = str_replace("'", "\\'", $subVal);
+                                // assembly of the original substring back
+                                $newValArr[] = $valArr[$i].' => \''.$subVal.'\'';
+                            }
+                        }
+                    }
+                    $_SESSION['trans']['rightVarsOnly']["LANG_CONF[$key]"] = 'array('.implode(", ",$newValArr).')';
+                }
+            } else {  // compatibility for old behavior
+                $val = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $val);
+                $val = str_replace("'", "\\'", $val);
+                $_SESSION['trans']['rightVarsOnly']["LANG_CONF[$key]"]  = $val;
+            }
         }
         
         print 1;

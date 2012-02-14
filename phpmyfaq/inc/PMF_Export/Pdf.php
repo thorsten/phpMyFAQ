@@ -84,6 +84,7 @@ class PMF_Export_Pdf extends PMF_Export
         // Set PDF options
         $this->pdf->enableBookmarks = true;
         $this->pdf->isFullExport    = true;
+        $filename = 'FAQs.pdf';
 
         // Initialize categories
         $this->category->transform($categoryId);
@@ -91,7 +92,12 @@ class PMF_Export_Pdf extends PMF_Export
         $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
         $this->pdf->setCategory($categoryId);
         $this->pdf->setCategories($this->category->categoryName);
-        
+        $this->pdf->SetCreator(
+            PMF_Configuration::getInstance()->get('main.titleFAQ') .
+            ' - powered by phpMyFAQ ' .
+            PMF_Configuration::getInstance()->get('main.currentVersion')
+        );
+
         if (count($faqdata)) {
             
             $categories = $questions = $answers = $authors = $dates = array();
@@ -121,7 +127,7 @@ class PMF_Export_Pdf extends PMF_Export
             $this->pdf->addFaqToc();
         }
         
-        return $this->pdf->Output('', 'S');
+        return $this->pdf->Output($filename);
     }
 
     /**
@@ -136,9 +142,9 @@ class PMF_Export_Pdf extends PMF_Export
     {
         global $PMF_LANG;
 
-        // Default filename: pdf/<faq_id>.pdf
+        // Default filename: FAQ-<id>-<language>.pdf
         if (empty($filename)) {
-            $pdfFile = 'pdf' . $faqData['id'] . '.pdf';
+            $filename = 'FAQ-' . $faqData['id'] . '-' . $faqData['lang'] . '.pdf';
         }
 
         $this->pdf->setFaq($faqData);
@@ -168,7 +174,7 @@ class PMF_Export_Pdf extends PMF_Export
         $this->pdf->Ln();
         $this->pdf->Write(5, $PMF_LANG['msgLastUpdateArticle'] . $faqData['date']);
 
-        return $this->pdf->Output($pdfFile);
+        return $this->pdf->Output($filename);
     }
 
 }

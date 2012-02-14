@@ -50,7 +50,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     }
 
     // update user rights
-    if ($userAction == 'update_rights') {
+    if ($userAction == 'update_rights' && $permission['edituser']) {
         $message    = '';
         $userAction = $defaultUserAction;
         $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
@@ -77,7 +77,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     }
 
     // update user data
-    if ($userAction == 'update_data') {
+    if ($userAction == 'update_data' && $permission['edituser']) {
         $message    = '';
         $userAction = $defaultUserAction;
         $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
@@ -130,7 +130,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     }
 
     // delete user confirmation
-    if ($userAction == 'delete_confirm') {
+    if ($userAction == 'delete_confirm' && $permission['deluser']) {
         $message    = '';
         $user       = new PMF_User_CurrentUser();
 
@@ -164,7 +164,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     }
 
     // delete user
-    if ($userAction == 'delete') {
+    if ($userAction == 'delete' && $permission['deluser']) {
         $message    = '';
         $user       = new PMF_User();
         $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
@@ -203,7 +203,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     }
 
     // save new user
-    if ($userAction == 'addsave') {
+    if ($userAction == 'addsave' && $permission['adduser']) {
         $user                  = new PMF_User();
         $message               = '';
         $messages              = array();
@@ -278,7 +278,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     }
 
     // show new user form
-    if ($userAction == 'add') {
+    if ($userAction == 'add' && $permission['adduser']) {
 ?>
         <header>
             <h2><?php print $PMF_LANG["ad_adus_adduser"]; ?></h2>
@@ -409,7 +409,9 @@ function getUserData(user_id)
                 </fieldset>
                 <p>
                     [ <a href="?action=user&amp;user_action=add"><?php print $PMF_LANG["ad_user_add"]; ?></a> ]<br/>
+                    <?php if ($permission['edituser']): ?>
                     [ <a href="?action=user&amp;user_action=listallusers"><?php print $PMF_LANG['list_all_users']; ?></a> ]
+                    <?php endif; ?>
                 </p>
                 </div> <!-- end #userList -->
             </div> <!-- end #userAccounts -->
@@ -480,7 +482,7 @@ function getUserData(user_id)
     }
 
     // show list of all users
-    if ($userAction == 'listallusers') {
+    if ($userAction == 'listallusers' && $permission['edituser']) {
 
         $allUsers  = $user->getAllUsers();
         $numUsers  = count($allUsers);
@@ -507,7 +509,6 @@ function getUserData(user_id)
             'layoutTpl'       => '<strong>{LAYOUT_CONTENT}</strong>'
         );
         $pagination = new PMF_Pagination($options);
-
 ?>
         <header>
             <h2><?php print $PMF_LANG['ad_user']; ?></h2>

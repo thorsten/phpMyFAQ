@@ -2,12 +2,7 @@
 /**
  * The Japanese language file - try to be the best of Japanese
  *
- * @package    phpMyFAQ
- * @subpackage i18n
- * @author     Tadashi Jokagi <http://poyo.jp/>
- * @author     Minoru TODA <todam@netjapan.co.jp>
- * @since      2004-02-19
- * @copyright  2004-2009 phpMyFAQ Team]
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,6 +13,15 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ *
+ * @category  phpMyFAQ
+ * @package   Translation
+ * @author    Tadashi Jokagi <http://poyo.jp/>
+ * @author    Minoru TODA <todam@netjapan.co.jp>
+ * @copyright 2004-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-02-19
  */
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'ja';
@@ -33,8 +37,8 @@ $PMF_LANG['msgOpenQuestions'] = '質問を開く';
 $PMF_LANG['msgHelp'] = 'ヘルプ';
 $PMF_LANG['msgContact'] = '問い合わせ';
 $PMF_LANG['msgHome'] = 'FAQ ホーム';
-$PMF_LANG['msgNews'] = ' お知らせ';
-$PMF_LANG['msgUserOnline'] = ' ユーザーがオンライン';
+$PMF_LANG['msgNews'] = 'お知らせ';
+$PMF_LANG['msgUserOnline'] = 'ユーザーがオンライン';
 $PMF_LANG['msgBack2Home'] = 'メイン ページに戻る';
 $PMF_LANG['msgFullCategories'] = 'FAQ とカテゴリー';
 $PMF_LANG['msgFullCategoriesIn'] = 'カテゴリー';
@@ -844,12 +848,12 @@ $PMF_LANG['search.relevance.content-thema-keywords'] = '回答 - 質問 - キー
 $PMF_LANG['search.relevance.content-keywords-thema'] = '回答 - キーワード - 質問';
 $PMF_LANG['search.relevance.keywords-content-thema'] = 'キーワード - 回答 - 質問';
 $PMF_LANG['search.relevance.keywords-thema-content'] = 'キーワード - 質問 - 回答';
-$PMF_LANG['msgNoGoogleApiKeyFound'] = 'The Google API key is empty, please provide one in the configuration section';
+$PMF_LANG['msgNoGoogleApiKeyFound'] = 'The Google API key が設定されていません。環境設定で設定してください。';
 $PMF_LANG['msgLoginUser'] = 'ログイン';
 $PMF_LANG['socialNetworksControlCenter'] = 'SNS設定';
 $LANG_CONF['search.relevance'] = array(0 => "select", 1 => "関連度による並び替え");
 $LANG_CONF['search.enableRelevance'] = array(0 => "checkbox", 1 => "関連度サポートを有効化する (初期値:無効)");
-$LANG_CONF['main.enableGoogleTranslation'] = array(0 => "checkbox", 1 => "Activate Google translations (default: deactivated)");
+$LANG_CONF['main.enableGoogleTranslation'] = array(0 => "checkbox", 1 => "Google 翻訳を有効化する (初期値:無効)");
 $LANG_CONF['main.googleTranslationKey'] = array(0 => "input", 1 => "Google API キー");
 $LANG_CONF['socialnetworks.enableTwitterSupport'] = array(0 => "checkbox", 1 => "Twitter サポート (初期値:無効)");
 $LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => "input", 1 => "Twitter コンシューマ・キー");
@@ -888,4 +892,9 @@ $LANG_CONF['security.ssoSupport'] = array(0 => "checkbox", 1 => "シングルサ
 $LANG_CONF['security.ssoLogoutRedirect'] = array(0 => "input", 1 => "シングルサインオン ログアウトのリダイレクトサービスURL");
 $LANG_CONF['main.dateFormat'] = array(0 => "input", 1 => "日付フォーマット (初期値: Y-m-d H:i)");
 $LANG_CONF['security.enableLoginOnly'] = array(0 => "checkbox", 1 => "FAQ閲覧にログインを必要とする (初期値: 無効)");
-
+$PMF_LANG['securityControlCenter'] = 'セキュリティ構成';
+$PMF_LANG['ad_search_delsuc'] = 'The searchterm was successfully deleted.';
+$PMF_LANG['ad_search_delfail'] = 'The seachterm was not deleted.';
+$PMF_LANG['msg_about_faq'] = 'この FAQ について';
+$LANG_CONF['security.useSslOnly'] = array(0 => 'checkbox', 1 => 'FAQ with SSL only (初期値: 無効)');
+$PMF_LANG['msgTableOfContent'] = '目次';
