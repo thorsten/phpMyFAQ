@@ -478,3 +478,19 @@ function refreshCaptcha(action)
         }
     });
 }
+
+/**
+ * Toggle fieldsets
+ *
+ * @param string fieldset ID of the fieldset
+ *
+ * @return void
+ */
+function toggleFieldset(fieldset)
+{
+    if ($('#div_' + fieldset).css('display') == 'none') {
+        $('#div_' + fieldset).fadeIn('fast');
+    } else {
+        $('#div_' + fieldset).fadeOut('fast');
+    }
+}

@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2011 phpMyFAQ Team
+ * @copyright 2003-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-12-20
@@ -357,25 +357,6 @@ if ($permission['editcateg']) {
     print "</li>\n</ul>";
     
     printf('<p>%s</p>', $PMF_LANG['ad_categ_remark']);
-?>
-<script>
-    /**
-     * Toggle fieldsets
-     *
-     * @param string fieldset ID of the fieldset
-     *
-     * @return void
-     */
-    function toggleFieldset(fieldset)
-    {
-        if ($('#div_' + fieldset).css('display') == 'none') {
-            $('#div_' + fieldset).fadeIn('fast');
-        } else {
-            $('#div_' + fieldset).fadeOut('fast');
-        }
-    }
-</script>
-<?php
 } else {
     print $PMF_LANG['err_NotAuth'];
 }
