@@ -68,21 +68,23 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
 //
 PMF_String::init($LANGCODE);
 
-/**
- * Set actual template set name
- */
+//
+// Set actual template set name
+//
 PMF_Template::setTplSetName($faqconfig->get('main.templateSet'));
 
-/**
- * Initialize attachment factory
- */
-PMF_Attachment_Factory::init($faqconfig->get('records.attachmentsStorageType'),
-                             $faqconfig->get('records.defaultAttachmentEncKey'),
-							 $faqconfig->get('records.enableAttachmentEncryption'));
+//
+// Initialize attachment factory
+//
+PMF_Attachment_Factory::init(
+    $faqconfig->get('records.attachmentsStorageType'),
+    $faqconfig->get('records.defaultAttachmentEncKey'),
+    $faqconfig->get('records.enableAttachmentEncryption')
+);
 
-/*
- * Initiazile caching
- */
+//
+// Initiazile caching
+//
 PMF_Cache::init($faqconfig);
 
 //
