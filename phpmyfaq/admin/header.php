@@ -186,11 +186,11 @@ switch ($action) {
     <link rel="stylesheet" href="css/style.css?v=1">
     <link rel="stylesheet" href="../inc/js/plugins/autocomplete/jquery.autocomplete.css" type="text/css">
     <link rel="stylesheet" href="../inc/js/plugins/datePicker/datePicker.css" type="text/css">
-    
-    <script src="../inc/js/modernizr.min.js"></script>
-    <script src="../inc/js/jquery.min.js"></script>
-    <script src="../inc/js/functions.js"></script>
-    <script src="../inc/js/phpmyfaq.js"></script
+
+    <script src="../js/libs/modernizr.min.js"></script>
+    <script src="../js/libs/jquery.min.js"></script>
+    <script src="../js/functions.js"></script>
+    <script src="../js/phpmyfaq.js"></script>
 
     <script src="../inc/js/plugins/autocomplete/jquery.autocomplete.pack.js"></script>
     <script src="../inc/js/plugins/datePicker/date.js"></script>

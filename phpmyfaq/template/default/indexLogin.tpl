@@ -30,9 +30,10 @@
     <link rel="stylesheet" media="handheld" href="template/{tplSetName}/css/handheld.css?v=1">
     <link rel="stylesheet" media="print" href="template/{tplSetName}/css/print.css?v=1">
 
-    <script src="inc/js/modernizr.min.js"></script>
-    <script src="inc/js/jquery.min.js"></script>
-    <script src="inc/js/functions.js"></script>
+    <script src="js/libs/modernizr.min.js"></script>
+    <script src="js/libs/jquery.min.js"></script>
+    <script src="js/functions.js"></script>
+    <script src="js/phpmyfaq.js"></script>
 
     <link rel="shortcut icon" href="template/{tplSetName}/favicon.ico">
     <link rel="apple-touch-icon" href="template/{tplSetName}/apple-touch-icon.png">

@@ -116,10 +116,11 @@ if (is_null($currentAction) || !is_null($currentSave)) {
 
     <link rel="stylesheet" href="style/admin.css?v=1">
 
-    <script src="../inc/js/modernizr.min.js"></script>
-    <script src="../inc/js/jquery.min.js"></script>
-    <script src="../inc/js/functions.js"></script>
-    
+    <script src="../js/libs/modernizr.min.js"></script>
+    <script src="../js/libs/jquery.min.js"></script>
+    <script src="../js/functions.js"></script>
+    <script src="../js/phpmyfaq.js"></script>
+
     <link rel="shortcut icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico">
     <link rel="apple-touch-icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/apple-touch-icon.png">
 </head>
