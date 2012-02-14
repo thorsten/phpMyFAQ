@@ -494,3 +494,25 @@ function toggleFieldset(fieldset)
         $('#div_' + fieldset).fadeOut('fast');
     }
 }
+
+/**
+ * Adds the link to the attachment in the main FAQ window
+ * @param integer attachmentId
+ * @param string
+ */
+function addAttachmentLink(attachmentId, fileName)
+{
+    window.opener.
+        $('.adminAttachments').
+        append('<li><a href="../index.php?action=attachment&id=' + attachmentId +'">' + fileName + '</a></li>');
+    window.close();
+}
+
+/**
+ * Closes the current window
+ *
+ */
+function closeWindow()
+{
+    window.close();
+}
