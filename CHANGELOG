@@ -5,7 +5,8 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.7.4 - 2012-
+Version 2.7.4 - 2012-02-
+- added PDF export for complete FAQ in frontend (Thorsten)
 - updated Japanese translation
 - updated Russian translation (Alexander Melnik)
 - updated Spanish translation
