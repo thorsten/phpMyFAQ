@@ -669,7 +669,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         }
     }
 
-    // connect to the database using inc/data.php
+    // connect to the database using config/database.php
     require PMF_ROOT_DIR . '/config/database.php';
     $db = PMF_Db::factory($dbType);
     $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
@@ -692,6 +692,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     if ('sqlite' != $dbType) {
         $system->dropTables($uninst);
     }
+    
     // Start creating the required tables
     $count = 0;
     foreach ($query as $executeQuery) {
@@ -714,15 +715,16 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     }
 
     // add main configuration
-    $oConf = PMF_Configuration::getInstance();
-    $oConf->getAll();
-    $configs = $oConf->config;
+    $configuration = PMF_Configuration::getInstance();
+    $configuration->getAll();
+
+    $configs = $configuration->config;
 
     $configs['spam.enableCaptchaCode'] = (extension_loaded('gd') ? 'true' : 'false');
     $configs['main.referenceURL']      = PMF_Link::getSystemUri('/install/setup.php');
     $configs['main.phpMyFAQToken']     = md5(uniqid(rand()));
 
-    $oConf->update($configs);
+    $configuration->update($configs);
 
     // add admin account and rights
     $admin = new PMF_User();
@@ -730,9 +732,11 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     $admin->setStatus('protected');
     $adminData = array(
         'display_name' => $realname,
-        'email'        => $email);
+        'email'        => $email
+    );
     $admin->setUserData($adminData);
-    $adminID = $admin->getUserId();
+    $adminId = $admin->getUserId();
+
     // add rights
     $rights = array(
         //1 => "adduser",
@@ -1023,9 +1027,10 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             'for_groups' => 1
         ),
     );
+    
     foreach ($rights as $right) {
-        $rightID = $admin->perm->addRight($right);
-        $admin->perm->grantUserRight($adminID, $rightID);
+        $rightId = $admin->perm->addRight($right);
+        $admin->perm->grantUserRight($adminId, $rightId);
     }
     
     // Add anonymous user account
@@ -1034,7 +1039,8 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     $anonymous->setStatus('protected');
     $anonymousData = array(
         'display_name' => 'Anonymous User',
-        'email'        => null);
+        'email'        => null
+    );
     $anonymous->setUserData($anonymousData);
 
     print '</p>';
