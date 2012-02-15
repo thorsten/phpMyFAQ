@@ -57,106 +57,105 @@ $query = $uninst = array();
  */
 function HTMLFooter()
 {
-    printf('</div></div><footer><div><p id="copyrightnote">%s</p><div></footer></body></html>', COPYRIGHT);
+    printf('</div></section><footer><div><p id="copyrightnote">%s</p><div></footer></body></html>', COPYRIGHT);
 }
 
 $system = new PMF_System();
 
 ?>
 <!doctype html>
-<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
-<!--[if IE 7 ]> <html lang="en" class="no-js ie7"> <![endif]-->
-<!--[if IE 8 ]> <html lang="en" class="no-js ie8"> <![endif]-->
-<!--[if IE 9 ]> <html lang="en" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+<!--[if lt IE 7 ]> <html lang="{metaLanguage}" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]> <html lang="{metaLanguage}" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]> <html lang="{metaLanguage}" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]> <html lang="{metaLanguage}" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="{metaLanguage}" class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
     <title>phpMyFAQ <?php print PMF_System::getVersion(); ?> Setup</title>
 
-    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+    <meta name="viewport" content="width=device-width;">
     <meta name="application-name" content="phpMyFAQ <?php print PMF_System::getVersion(); ?>">
-    <meta name="copyright" content="(c) 2001-2011 phpMyFAQ Team">
-    
+    <meta name="copyright" content="(c) 2001-<?php print date('Y'); ?> phpMyFAQ Team">
+
+    <link rel="stylesheet" href="../template/default/css/style.css?v=1">
+
+    <script src="../js/libs/modernizr.min.js"></script>
+    <script src="../js/libs/jquery.min.js"></script>
+
     <link rel="shortcut icon" href="../template/default/favicon.ico">
     <link rel="apple-touch-icon" href="../template/default/apple-touch-icon.png">
-    <link rel="stylesheet" href="css/setup.css?v=1">
-    <script type="text/javascript" src="../inc/js/jquery.min.js"></script>
+
     <script type="text/javascript">
-    /*<![CDATA[*/
-    // <!--
-    function cssAddClass(ele, className) {
-        if (typeof ele == 'string') {
-            ele = document.getElementById(ele);
-        }
-
-        ele.className += ' ' + className;
-    }
-
-    function cssDelClass(ele, className) {
-        if (typeof ele == 'string') {
-            ele = document.getElementById(ele);
-        }
-
-        var regexp = new RegExp(
-            '^'+className+'\\b\\s*|\\s*\\b'+className+'\\b', 'ig'
-        );
-        ele.className = ele.className.replace(regexp, '');
-    }
-
-    function select_database(field) {
-        switch (field.value) {
+        function selectDatabaseSetup(field) {
+            switch (field.value) {
             case 'sqlite':
-                cssDelClass('dbsqlite', 'collapsed');
-                cssAddClass('dbdatafull', 'collapsed');
+                $('#dbsqlite').show()
+                $('#dbdatafull').hide();
                 break;
             default:
-                cssAddClass('dbsqlite', 'collapsed');
-                cssDelClass('dbdatafull', 'collapsed');
+                $('#dbsqlite').hide();
+                $('#dbdatafull').show();
                 break;
+            }
         }
-    }
-    // -->
-    /*]]>*/
     </script>
 </head>
 <body>
 
-<header id="header">
-    <h1>
-        <h1>phpMyFAQ <?php print PMF_System::getVersion(); ?> Setup</h1>
-    </h1>
-</header>
+<!--[if lt IE 8 ]>
+<div class="internet-explorer-error">
+    Do you know that your Internet Explorer is out of date?<br/>
+    Please use Internet Explorer 8+, Mozilla Firefox 4+, Google Chrome, Apple Safari 5+ or Opera 11+
+</div>
+<![endif]-->
 
-<nav>
-    <ul>
-        <li><a target="_blank" href="http://www.phpmyfaq.de/documentation.php">Documentation</a></li>
-        <li><a target="_blank" href="http://www.phpmyfaq.de/support.php">Support</a></li>
-        <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
-        <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
-    </ul>
-</nav>
 
-<div id="content">
-    <div id="mainContent">
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <nav class="nav-collapse">
+                <ul class="nav">
+                    <li><a target="_blank" href="http://www.phpmyfaq.de/documentation.php">Documentation</a></li>
+                    <li><a target="_blank" href="http://www.phpmyfaq.de/support.php">Support</a></li>
+                    <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
+                    <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<section id="main">
+    <div class="container">
+        <div class="row" style="padding-left: 20px;">
+            <div class="hero-unit hello-phpmyfaq" style="text-align: center; height: 70px;">
+                <h1>phpMyFAQ <?php print PMF_System::getVersion(); ?> Setup</h1>
+                <p>
+                    Did you already read the <a style="color: #ffffff; text-decoration: underline;"
+                    href="http://www.phpmyfaq.de/documentation.php">documentation</a> carefully before starting the phpMyFAQ
+                    setup? :-)
+                </p>
+            </div>
+        </div>
+        <div class="row" style="padding-left: 20px;">
 <?php
 
 if (version_compare(PHP_VERSION, PMF_System::VERSION_MINIMUM_PHP, '<')) {
-    printf('<p class="error">Sorry, but you need PHP %s or later!</p>', PMF_System::VERSION_MINIMUM_PHP);
+    printf('<p class="alert alert-error">Sorry, but you need PHP %s or later!</p>', PMF_System::VERSION_MINIMUM_PHP);
     HTMLFooter();
     die();
 }
 
-if (!function_exists('date_default_timezone_set')) {
-    print '<p class="error">Sorry, but setting a default timezone doesn\'t work in your environment!</p>';
+if (! function_exists('date_default_timezone_set')) {
+    print '<p class="alert alert-error">Sorry, but setting a default timezone doesn\'t work in your environment!</p>';
     HTMLFooter();
     die();
 }
 
-if (!$system->checkDatabase()) {
-
-    print '<p class="error">No supported database detected! Please install one of the following' .
+if (! $system->checkDatabase()) {
+    print '<p class="alert alert-error">No supported database detected! Please install one of the following' .
           ' database systems and enable the corresponding PHP extension in php.ini:</p>';
     print '<ul>';
     foreach ($system->getSupportedDatabases() as $database) {
@@ -167,20 +166,20 @@ if (!$system->checkDatabase()) {
     die();
 }
 
-if (!$system->checkRequiredExtensions()) {
-    print "<p class=\"error\">The following extensions are missing! Please enable the PHP extension(s)\n";
-    print "<ul>\n";
+if (! $system->checkRequiredExtensions()) {
+    print '<p class="alert alert-error">The following extensions are missing! Please enable the PHP extension(s) in ' .
+          'php.ini.</p>';
+    print '<ul>';
     foreach ($system->getMissingExtensions() as $extension) {
         printf('    <li>ext/%s</li>', $extension);
     }
-    print "</ul>\n";
-    print "in php.ini.</p>\n";
+    print '</ul>';
     HTMLFooter();
     die();
 }
 
-if (!$system->checkphpMyFAQInstallation()) {
-    print '<p class="error">It seems you\'re already running a version of phpMyFAQ. Please use the ' .
+if (! $system->checkphpMyFAQInstallation()) {
+    print '<p class="alert alert-error">It seems you\'re already running a version of phpMyFAQ. Please use the ' .
           '<a href="update.php">update script</a>.</p>';
     HTMLFooter();
     die();
@@ -202,62 +201,48 @@ foreach ($dirs as $dir) {
 }
 
 if (sizeof($faileddirs)) {
-    print '<p class="error">The following directory/-ies could not be created or are not writable:</p><ul>';
+    print '<p class="alert alert-error">The following directory/-ies could not be created or are not writable:</p><ul>';
     foreach ($faileddirs as $dir) {
         print "<li>$dir</li>\n";
     }
-    print '</ul><p class="error">Please create it manually and/or change access to chmod 755 (or greater if ' .
+    print '</ul><p class="alert alert-error">Please create it manually and/or change access to chmod 755 (or greater if ' .
           'necessary).</p>';
     HTMLFooter();
     die();
 }
 
 if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST["sql_db"])) {
-?>
 
-<p class="center">Your PHP version: <strong>PHP <?php print PHP_VERSION; ?></strong></p>
-
-<?php
     if ((@ini_get('safe_mode') == 'On' || @ini_get('safe_mode') === 1)) {
-        print '<p class="error">The PHP safe mode is enabled. You may have problems when phpMyFAQ tries to write ' .
+        print '<p class="alert alert-error">The PHP safe mode is enabled. You may have problems when phpMyFAQ tries to write ' .
               ' in some directories.</p>';
     }
-    if (!extension_loaded('gd')) {
-        print '<p class="error">You don\'t have GD support enabled in your PHP installation. Please enable GD ' .
+    if (! extension_loaded('gd')) {
+        print '<p class="alert alert-error">You don\'t have GD support enabled in your PHP installation. Please enable GD ' .
               'support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
     }
-    if (!function_exists('imagettftext')) {
-        print '<p class="error">You don\'t have Freetype support enabled in the GD extension of your PHP ' .
+    if (! function_exists('imagettftext')) {
+        print '<p class="alert alert-error">You don\'t have Freetype support enabled in the GD extension of your PHP ' .
               'installation. Please enable Freetype support in GD extension otherwise the Captchas for spam ' .
               'protection will be quite easy to break.</p>';
     }
-    if (!extension_loaded('curl') || !extension_loaded('openssl')) {
-        print '<p class="error">You don\'t have cURL and/or OpenSSL support enabled in your PHP installation. ' .
+    if (! extension_loaded('curl') || ! extension_loaded('openssl')) {
+        print '<p class="alert alert-error">You don\'t have cURL and/or OpenSSL support enabled in your PHP installation. ' .
               'Please enable cURL and/or OpenSSL support in your php.ini file otherwise you can\'t use the Twitter ' .
               ' support.</p>';
     }
 ?>
-        <p class="hint">
-            Did you already read the <a href="http://www.phpmyfaq.de/documentation.php">documentation</a> carefully
-            before starting the phpMyFAQ setup?
-        </p>
+        </div>
 
-        <p class="hint">
-            Your password will be saved using the
-            <strong>
-                <?php print PMF_ENCRYPTION_TYPE; ?>
-            </strong>
-            encryption without any salt.<br />
-            You can change the encryption type for passwords in <em>config/constants.php</em>.
-        </p>
-
-        <form action="setup.php" method="post">
-        <fieldset>
-        <legend>Please add your database connection setup information</legend>
-            <p>
-                <label>SQL server:</label>
-                <select name="sql_type" id="sql_selector" size="1" onchange="select_database(this);">
-
+        <form class="form-horizontal" action="setup.php" method="post">
+        <div class="row">
+            <div class="span6">
+                <fieldset>
+                <legend>Add your database connection setup</legend>
+                    <div class="control-group">
+                        <label for="sql_type">Database server:</label>
+                        <div class="controls">
+                            <select name="sql_type" id="sql_type" size="1" onchange="selectDatabaseSetup(this);">
 <?php
     // check what extensions are loaded in PHP
     foreach ($system->getSupportedDatabases() as $extension => $database) {
@@ -266,95 +251,143 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             if (($extension == 'mysqli') && ini_get('zend.ze1_compatibility_mode')) {
                 continue;
             }
-
             printf('<option value="%s">%s</option>', $extension, $database[1]);
         }
     }
 ?>
-                </select>
-            </p>
+                            </select>
+                            <p class="help-block">Please select your preferred database type.</p>
+                        </div>
+                    </div>
 
-            <div id="dbdatafull">
-            <p>
-                <label>SQL server host:</label>
-                <input type="text" name="sql_server" title="Please enter the host of your SQL server here." />
-            </p>
-            <p>
-                <label>SQL username:</label>
-                <input type="text" name="sql_user" title="Please enter your SQL username here." />
-            </p>
-            <p>
-                <label>SQL password:</label>
-                <input name="sql_passwort" type="password" title="Please enter your SQL password here." />
-            </p>
-            <p>
-                <label>SQL database:</label>
-                <input type="text" name="sql_db" title="Please enter your SQL database name here." />
-            </p>
+                    <div id="dbdatafull">
+                        <div class="control-group">
+                            <label for="sql_server">Database hostname:</label>
+                            <div class="controls">
+                                <input type="text" name="sql_server" id="sql_server" />
+                                <p class="help-block">Please enter the host of your database server.</p>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="sql_user">Database user:</label>
+                            <div class="controls">
+                                <input type="text" name="sql_user" id="sql_user" />
+                                <p class="help-block">Please enter your database user.</p>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="sql_password">Database password:</label>
+                            <div class="controls">
+                                <input name="sql_passwort" type="password" id="sql_password" />
+                                <p class="help-block">Please enter your database password.</p>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="sql_db">Database name:</label>
+                            <div class="controls">
+                                <input type="text" name="sql_db" id="sql_db" />
+                                <p class="help-block">Please enter your database name.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="dbsqlite" class="hide">
+                        <div class="control-group">
+                            <label for="sql_sqlitefile">SQLite database file:</label>
+                            <div class="controls">
+                                <input type="text" name="sql_sqlitefile" id="sql_sqlitefile"
+                                       value="<?php print dirname(dirname(__FILE__)); ?>" />
+                                <p class="help-block">
+                                    Please enter the full path to your SQLite datafile which should be outside your
+                                    docroot.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="sqltblpre">Table prefix:</label>
+                        <div class="controls">
+                            <input type="text" name="sqltblpre" id="sqltblpre" />
+                            <p class="help-block">
+                                Please enter a table prefix here if you want to install more phpMyFAQ installations on
+                                one database.
+                            </p>
+                        </div>
+                    </div>
+
+                </fieldset>
             </div>
 
-            <div id="dbsqlite" class="collapsed">
-            <p>
-                <label>SQLite database file:</label>
-                <input type="text" name="sql_sqlitefile" value="<?php print dirname(dirname(__FILE__)); ?>"
-                       title="Please enter the full path to your SQLite datafile which should be outside your doc root." />
-            </p>
+            <?php if (extension_loaded('ldap')): ?>
+            <div class="span6">
+                <fieldset>
+                <legend>Add your LDAP setup</legend>
+                    <div class="control-group">
+                        <label for="ldap_enabled">&nbsp;</label>
+                        <div class="controls">
+                            <label class="checkbox">
+                                <input id="ldap_enabled" type="checkbox" name="ldap_enabled" value="yes" />
+                                Enable LDAP support?
+                            </label>
+                            <p class="help-block">You can enable LDAP later if you like.</p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="ldap_server">LDAP server host:</label>
+                        <div class="controls">
+                            <input type="text" name="ldap_server" id="ldap_server" />
+                            <p class="help-block">Please enter the host of your LDAP server.</p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="ldap_port">LDAP server port:</label>
+                        <div class="controls">
+                            <input type="number" name="ldap_port" value="389" id="ldap_port" />
+                            <p class="help-block">Please enter the port of your LDAP server.</p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="ldap_user">LDAP user DN:</label>
+                        <div class="controls">
+                            <input type="text" name="ldap_user" id="ldap_user" />
+                            <p class="help-block">Please enter your specified RDN username.</p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="ldap_password">LDAP password:</label>
+                        <div class="controls">
+                            <input name="ldap_password" type="password" id="ldap_password" />
+                            <p class="help-block">Please enter your LDAP password.</p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="ldap_base">LDAP base DN:</label>
+                        <div class="controls">
+                        <input type="text" name="ldap_base" id="ldap_base" />
+                            <p class="help-block">
+                                Please enter your distinguished name, e.g. 'cn=John Doe,ou=Accounts,o=My Company,c=US'.
+                            </p>
+                        </div>
+                    </div>
+                    <p class="alert alert-info">
+                        You can add additional LDAP configuration and more LDAP servers in the file
+                        config/constants_ldap.php.
+                    </p>
+
+                </fieldset>
             </div>
+        </div>
+        <div class="row">
+        <?php endif; ?>
 
-            <p>
-                <label>Table prefix:</label>
-                <input type="text" name="sqltblpre"
-                       title="Please enter a table prefix here if you want to install more phpMyFAQ installations on one database." />
-            </p>
-
-        </fieldset>
-            
-        <script language="javascript" type="text/javascript">
-        obj = document.getElementById("sql_selector");
-        if (obj.options.length > obj.selectedIndex) {
-            select_database(obj.options[obj.selectedIndex]);
-        }
-        </script>
-
-        <?php if (extension_loaded('ldap')): ?>
-        <fieldset>
-        <legend>LDAP information</legend>
-            <p>
-                <label>Enable LDAP support?</label>
-                <input class="checkbox" type="checkbox" name="ldap_enabled" value="yes" />
-            </p>
-            <p>
-                <label>LDAP server host:</label>
-                <input type="text" name="ldap_server" title="Please enter the host of your LDAP server here." />
-            </p>
-            <p>
-                <label>LDAP server port:</label>
-                <input type="text" name="ldap_port" value="389" title="Please enter the port of your LDAP server here." />
-            </p>
-            <p>
-                <label>LDAP user DN:</label>
-                <input type="text" name="ldap_user" title="Please enter your specified RDN username here." />
-            </p>
-            <p>
-                <label>LDAP password:</label>
-                <input name="ldap_password" type="password" title="Please enter your LDAP password here." />
-            </p>
-            <p>
-                <label>LDAP base search DN:</label>
-                <input type="text" name="ldap_base"
-                       title="Please enter your distinguished name, e.g. 'cn=John Smith,ou=Accounts,o=My Company,c=US' here." />
-            </p>
-            <p>You can add additional LDAP configuration informations in the file config/constants_ldap.php.</p>
-
-        </fieldset>
-
-<?php endif; ?>
-
-        <fieldset>
-        <legend>phpMyFAQ information</legend>
-            <p>
-                <label>Default language:</label>
-                <select name="language" size="1" title="Please select your default language.">
+            <div class="span6">
+                <fieldset>
+                <legend>Your phpMyFAQ setup</legend>
+                    <div class="control-group">
+                        <label for="language">Default language:</label>
+                        <div class="controls">
+                            <select name="language" size="1" id="language">
 <?php
     if ($dir = @opendir(PMF_ROOT_DIR . '/lang')) {
         while ($dat = @readdir($dir)) {
@@ -370,45 +403,74 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         print '<option>english</option>';
     }
 ?>
-                </select>
-            </p>
-            <p>
-                <label for="permLevel">Permission level:</label>
-                <select id="permLevel" name="permLevel" size="1" title="Complexity of user and right administration. Basic: users may
-                have user-rights. Medium: users may have user-rights; group administration; groups may have group-rights;
-                user have group-rights via group-memberships." required="required">
-                    <option value="basic">Basic (no group support)</option>
-                    <option value="medium">Medium (with group support)</option>
-                </select>
-            </p>
-            <p>
-                <label>Your name:</label>
-                <input type="text" name="realname" title="Please enter your real name here." required="required" />
-            </p>
-            <p>
-                <label>Your email address:</label>
-                <input type="email" name="email" title="Please enter your email adress here." required="required" />
-            </p>
-            <p>
-                <label>Your login:</label>
-                <input type="text" name="loginname" title="Please enter your login name for your phpMyFAQ installation." required="required" />
-            </p>
-            <p>
-                <label>Your password:</label>
-                <input type="password" name="password" title="Please enter your password for the admin section."
-                       required="required" />
-            </p>
-            <p>
-                <label>Retype password:</label>
-                <input type="password" name="password_retyped" title="Please retype your password for checkup."
-                       required="required" />
-            </p>
-            </fieldset>
+                            </select>
+                            <p class="help-block">Please select your default language.</p>
+                        </div>
+                    </div>
 
-            <p class="hint"><strong>Do not use it if you're already running a version of phpMyFAQ!</strong></p>
-            <p>
-                <input class="submit" type="submit" value="Click to install phpMyFAQ <?php print PMF_System::getVersion(); ?>" />
+                    <div class="control-group">
+                        <label for="permLevel">Permission level:</label>
+                        <div class="controls">
+                                <select id="permLevel" name="permLevel" size="1" required="required">
+                                    <option value="basic">Basic (no group support)</option>
+                                    <option value="medium">Medium (with group support)</option>
+                            </select>
+                            <p class="help-block">
+                                Complexity of rights and permissions.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="realname">Your name:</label>
+                        <div class="controls">
+                            <input type="text" name="realname" id="realname" required="required" />
+                            <p class="help-block">Please enter your real name.</p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="email">Your email address:</label>
+                        <div class="controls">
+                            <input type="email" name="email" id="email" required="required" />
+                            <p class="help-block">Please enter your email adress.</p>
+                        </div>
+
+                    </div>
+                    <div class="control-group">
+                        <label for="loginname">Your login name:</label>
+                        <div class="controls">
+                            <input type="text" name="loginname" id="loginname" required="required" />
+                            <p class="help-block">Please enter your login name.</p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="password">Your password:</label>
+                        <div class="controls">
+                            <input type="password" name="password" id="password" required="required" />
+                            <p class="help-block">Please enter your password.</p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="password_retype">Retype password:</label>
+                        <div class="controls">
+                            <input type="password" name="password_retyped" id="password_retype" required="required" />
+                            <p class="help-block">Please retype your password.</p>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="row" style="padding-left: 20px; text-align: center;">
+            <input class="btn-primary btn-large" type="submit"
+                   value="Click to install phpMyFAQ <?php print PMF_System::getVersion(); ?>" />
+        </div>
+        <div class="row" style="padding-left: 20px;">
+            <p class="alert alert-info" style="margin-top: 20px;">
+                Your password will be saved with a <strong><?php print PMF_ENCRYPTION_TYPE; ?></strong>
+                encryption without any salt. You can change the encryption type for passwords in
+                <em>config/constants.php</em>.
             </p>
+        </div>
         </form>
 <?php
     HTMLFooter();
@@ -427,26 +489,26 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         if (file_exists(PMF_ROOT_DIR . '/install/' . $dbType . '.sql.php')) {
             require PMF_ROOT_DIR . '/install/' . $dbType . '.sql.php';
         } else {
-            printf('<p class="error"><strong>Error:</strong> Invalid server type: %s</p>', $dbType);
+            printf('<p class="alert alert-error"><strong>Error:</strong> Invalid server type: %s</p>', $dbType);
             HTMLFooter();
             die();
         }
     } else {
-        print "<p class=\"error\"><strong>Error:</strong> Please select a database type.</p>\n";
+        print "<p class=\"alert alert-error\"><strong>Error:</strong> Please select a database type.</p>\n";
         HTMLFooter();
         die();
     }
 
     $dbServer = PMF_Filter::filterInput(INPUT_POST, 'sql_server', FILTER_SANITIZE_STRING);
     if (is_null($dbServer) && $dbType != 'sqlite') {
-        print "<p class=\"error\"><strong>Error:</strong> Please add a database server.</p>\n";
+        print "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a database server.</p>\n";
         HTMLFooter();
         die();
     }
 
     $dbUser = PMF_Filter::filterInput(INPUT_POST, 'sql_user', FILTER_SANITIZE_STRING);
     if (is_null($dbUser) && $dbType != 'sqlite') {
-        print "<p class=\"error\"><strong>Error:</strong> Please add a database username.</p>\n";
+        print "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a database username.</p>\n";
         HTMLFooter();
         die();
     }
@@ -459,7 +521,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
     $dbDatabaseName = PMF_Filter::filterInput(INPUT_POST, 'sql_db', FILTER_SANITIZE_STRING);
     if (is_null($dbDatabaseName) && $dbType != 'sqlite') {
-        print "<p class=\"error\"><strong>Error:</strong> Please add a database name.</p>\n";
+        print "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a database name.</p>\n";
         HTMLFooter();
         die();
     }
@@ -469,7 +531,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         if (!is_null($sqliteFile)) {
             $dbServer = $sqliteFile; // We're using $dbServer, too!
         } else {
-            print "<p class=\"error\"><strong>Error:</strong> Please add a SQLite database filename.</p>\n";
+            print "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a SQLite database filename.</p>\n";
             HTMLFooter();
             die();
         }
@@ -481,7 +543,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     $db = PMF_Db::factory($dbType);
     $db->connect($dbServer, $dbUser, $dbPassword, $dbDatabaseName);
     if (!$db) {
-        printf("<p class=\"error\"><strong>DB Error:</strong> %s</p>\n", $db->error());
+        printf("<p class=\"alert alert-error\"><strong>DB Error:</strong> %s</p>\n", $db->error());
         HTMLFooter();
         die();
     }
@@ -493,21 +555,21 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         // check LDAP entries
         $ldapServer = PMF_Filter::filterInput(INPUT_POST, 'ldap_server', FILTER_SANITIZE_STRING);
         if (is_null($ldapServer)) {
-            print "<p class=\"error\"><strong>Error:</strong> Please add a LDAP server.</p>\n";
+            print "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a LDAP server.</p>\n";
             HTMLFooter();
             die();
         }
         
         $ldapPort = PMF_Filter::filterInput(INPUT_POST, 'ldap_port', FILTER_VALIDATE_INT);
         if (is_null($ldapPort)) {
-            print "<p class=\"error\"><strong>Error:</strong> Please add a LDAP port.</p>\n";
+            print "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a LDAP port.</p>\n";
             HTMLFooter();
             die();
         }
 
         $ldapBase = PMF_Filter::filterInput(INPUT_POST, 'ldap_base', FILTER_SANITIZE_STRING);
         if (is_null($ldapBase)) {
-            print "<p class=\"error\"><strong>Error:</strong> Please add a LDAP base search DN.</p>\n";
+            print "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a LDAP base search DN.</p>\n";
             HTMLFooter();
             die();
         }
@@ -520,7 +582,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         require PMF_ROOT_DIR . "/inc/Ldap.php";
         $ldap = new PMF_Ldap($ldapServer, $ldapPort, $ldapBase, $ldapUser, $ldapPassword);
         if (!$ldap) {
-            print "<p class=\"error\"><strong>LDAP Error:</strong> " . $ldap->error() . "</p>\n";
+            print "<p class=\"alert alert-error\"><strong>LDAP Error:</strong> " . $ldap->error() . "</p>\n";
             HTMLFooter();
             die();
         }
@@ -529,7 +591,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     // check loginname
     $loginname = PMF_Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_STRING);
     if (is_null($loginname)) {
-        print '<p class="error"><strong>Error:</strong> Please add a loginname for your account.</p>';
+        print '<p class="alert alert-error"><strong>Error:</strong> Please add a loginname for your account.</p>';
         HTMLFooter();
         die();
     }
@@ -537,26 +599,26 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     // check user entries
     $password = PMF_Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
     if (is_null($password)) {
-        print '<p class="error"><strong>Error:</strong> Please add a password for the your account.</p>';
+        print '<p class="alert alert-error"><strong>Error:</strong> Please add a password for the your account.</p>';
         HTMLFooter();
         die();
     }
     
     $password_retyped = PMF_Filter::filterInput(INPUT_POST, 'password_retyped', FILTER_SANITIZE_STRING);
     if (is_null($password_retyped)) {
-        print '<p class="error"><strong>Error:</strong> Please add a retyped password.</p>';
+        print '<p class="alert alert-error"><strong>Error:</strong> Please add a retyped password.</p>';
         HTMLFooter();
         die();
     }
     
     if (strlen($password) <= 5 || strlen($password_retyped) <= 5) {
-        print '<p class="error"><strong>Error:</strong> Your password and retyped password are too short.' .
+        print '<p class="alert alert-error"><strong>Error:</strong> Your password and retyped password are too short.' .
               ' Please set your password and your retyped password with a minimum of 6 characters.</p>';
         HTMLFooter();
         die();
     }
     if ($password != $password_retyped) {
-        print '<p class="error"><strong>Error:</strong> Your password and retyped password are not equal.' .
+        print '<p class="alert alert-error"><strong>Error:</strong> Your password and retyped password are not equal.' .
               ' Please check your password and your retyped password.</p>';
         HTMLFooter();
         die();
@@ -581,7 +643,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     );
     
     if (!$ret) {
-        print "<p class=\"error\"><strong>Error:</strong> Setup cannot write to ./config/database.php.</p>";
+        print "<p class=\"alert alert-error\"><strong>Error:</strong> Setup cannot write to ./config/database.php.</p>";
         HTMLFooter();
         $system->cleanInstallation();
         die();
@@ -600,7 +662,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             LOCK_EX
         );
         if (!$ret) {
-            print "<p class=\"error\"><strong>Error:</strong> Setup cannot write to ./config/ldap.php.</p>";
+            print "<p class=\"alert alert-error\"><strong>Error:</strong> Setup cannot write to ./config/ldap.php.</p>";
             HTMLFooter();
             $system->cleanInstallation();
             die();
@@ -612,7 +674,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     $db = PMF_Db::factory($dbType);
     $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
     if (!$db) {
-        print "<p class=\"error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
+        print "<p class=\"alert alert-error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
         HTMLFooter();
         $system->cleanInstallation();
         die();
@@ -635,9 +697,9 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     foreach ($query as $executeQuery) {
         $result = @$db->query($executeQuery);
         if (!$result) {
-            print '<p class="error"><strong>Error:</strong> Please install your version of phpMyFAQ once again or send
+            print '<p class="alert alert-error"><strong>Error:</strong> Please install your version of phpMyFAQ once again or send
             us a <a href=\"http://www.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
-            printf('<p class="error"><strong>DB error:</strong> %s</p>', $db->error());
+            printf('<p class="alert alert-error"><strong>DB error:</strong> %s</p>', $db->error());
             printf('<code>%s</code>', htmlentities($executeQuery));
             $system->dropTables($uninst);
             $system->cleanInstallation();
@@ -978,7 +1040,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     print '</p>';
 
 ?>
-        <p class="success">
+        <p class="alert alert-success">
             Wow, looks like the installation worked like a charm. This is pretty cool, isn't it? :-)
         </p>
         <script type="text/javascript">
@@ -1089,26 +1151,26 @@ echo '</dl><input type="hidden" name="systemdata" value="'.PMF_String::htmlspeci
 ?>
             </div>
             <p>
-                <input class="submit" type="submit" value="Click here to submit the data and finish the installation process" />
+                <input class="btn-primary" type="submit" value="Click here to submit the data and finish the installation process" />
             </p>
         </form>
         <div id="questionnaireThanks" style="display:none;">
-            <p class="success"><b>Thank you for giving your feedback!</b></p>
+            <p class="alert alert-success"><b>Thank you for giving your feedback!</b></p>
             <p>You can visit <a href="../index.php">your version of phpMyFAQ</a> or</p>
             <p>login into your <a href="../admin/index.php">admin section</a>.</p>
         </div>
 <?php
     // Remove 'setup.php' file
     if (@unlink(basename($_SERVER['SCRIPT_NAME']))) {
-        print "<p class=\"success\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";
+        print "<p class=\"alert alert-success\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";
     } else {
-        print "<p class=\"hint\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
+        print "<p class=\"alert alert-info\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
     }
     // Remove 'update.php' file
     if (@unlink(dirname($_SERVER["PATH_TRANSLATED"])."/update.php")) {
-        print "<p class=\"success\">The file <em>./install/update.php</em> was deleted automatically.</p>\n";
+        print "<p class=\"alert alert-success\">The file <em>./install/update.php</em> was deleted automatically.</p>\n";
     } else {
-        print "<p class=\"hint\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
+        print "<p class=\"alert alert-info\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
     }
     
     HTMLFooter();

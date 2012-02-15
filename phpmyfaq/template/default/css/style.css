@@ -3408,6 +3408,23 @@ a {
 #main menu {
   padding: 8px 0;
 }
+#main .hello-phpmyfaq {
+  background-color: #d45d09;
+  background-image: -moz-linear-gradient(top, #ef7507, #ac380c);
+  background-image: -ms-linear-gradient(top, #ef7507, #ac380c);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ef7507), to(#ac380c));
+  background-image: -webkit-linear-gradient(top, #ef7507, #ac380c);
+  background-image: -o-linear-gradient(top, #ef7507, #ac380c);
+  background-image: linear-gradient(top, #ef7507, #ac380c);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ef7507', endColorstr='#ac380c', GradientType=0);
+  color: #f2f2f2;
+}
+#main .hello-phpmyfaq h1 {
+  color: #f2f2f2;
+  font-size: 54px;
+  margin-bottom: 24px;
+}
 footer {
   color: #f2f2f2;
   padding-top: 30px;
