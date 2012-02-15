@@ -1043,6 +1043,13 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         <p class="alert alert-success">
             Wow, looks like the installation worked like a charm. This is pretty cool, isn't it? :-)
         </p>
+
+        <!--
+
+        @todo: Fix the survey!
+
+        -->
+
         <script type="text/javascript">
         //<![CDATA[
         var iframect = 0;
