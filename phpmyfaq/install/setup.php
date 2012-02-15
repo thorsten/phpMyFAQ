@@ -1044,12 +1044,6 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             Wow, looks like the installation worked like a charm. This is pretty cool, isn't it? :-)
         </p>
 
-        <!--
-
-        @todo: Fix the survey!
-
-        -->
-
         <script type="text/javascript">
         //<![CDATA[
         var iframect = 0;
@@ -1064,21 +1058,21 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         }
 
         function hide(item) {
-            cssAddClass(item, 'collapsed');
+            $('#configliste').hide();
         }
 
         function show(item) {
-            cssDelClass(item, 'collapsed');
+            $('#configliste').show();
         }
         //]]>
         </script>
         <iframe onload="iframeUpdated();" name="questionaireResult" style="display:none"></iframe>
         <form action="http://www.phpmyfaq.de/stats/getstatdata.php" method="post" target="questionaireResult"
-              id="questionnaireForm">
+              id="questionnaireForm" class="form-horizontal">
 
             <p>
-                For further development we would like to get some feedback from our users.<br />
-                Therefore we'd ask you to take a few minutes of your time to answer a few questions.
+                For further development we would like to get some feedback from our users. Therefore we'd ask you to
+                take a few minutes of your time to answer a few questions.
             </p>
             <p>
                 If you don't want to participate in the survey, you can directly visit
@@ -1088,66 +1082,96 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
             <fieldset>
                 <legend>General questions</legend>
-                
-                <p>
+                <div class="control-group">
                     <label>How do you act like?</label>
-                    <select name="q[individual]">
-                        <option>as an individual</option>
-                        <option>as an organisation</option>
-                    </select>
-                </p>
-                <p>
+                        <div class="controls">
+                        <select name="q[individual]">
+                            <option>as an individual</option>
+                            <option>as an organisation</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
                     <label>What kind of organisation is that?</label>
-                    <select name="q[organisation]">
-                         <option>private held</option>
-                         <option>public held</option>
-                         <option>government organisation</option>
-                         <option>foundation</option>
-                         <option>other</option>
-                     </select>
-                </p>
+                    <div class="controls">
+                        <select name="q[organisation]">
+                             <option>private held</option>
+                             <option>public held</option>
+                             <option>government organisation</option>
+                             <option>foundation</option>
+                             <option>other</option>
+                         </select>
+                    </div>
+                </div>
              </fieldset>
 
             <fieldset>
                 <legend>Technical questions</legend>
-                <p>
+                <div class="control-group">
                     <label>Where did you installed phpMyFAQ?</label>
-                    <select name="q[server]">
-                        <option>server run by a hosting company</option>
-                        <option>public server run by you/your organisation</option>
-                        <option>private server run by you/your organisation</option>
-                        <option>Don't know</option>
-                    </select>
-                </p>
+                    <div class="controls">
+                        <select name="q[server]">
+                            <option>server run by a hosting company</option>
+                            <option>public server run by you/your organisation</option>
+                            <option>private server run by you/your organisation</option>
+                            <option>Don't know</option>
+                        </select>
+                    </div>
+                </div>
             </fieldset>
 
             <fieldset>
                 <legend>Beyond our own nose</legend>
-                <p>
+                <div class="control-group">
                     <label>Which PHP software do you also use?</label>
-                    <input name="q[other]" />
-                </p>
-                <p>
+                    <div class="controls">
+                        <input name="q[other]" />
+                    </div>
+                </div>
+                <div class="control-group">
                     <label>Are you using other web technologies?</label>
-                    <input type="checkbox" name="q[other][]" value="ASP" />ASP
-                    <input type="checkbox" name="q[other][]" value="ASP.NET" />ASP.NET
-                    <input type="checkbox" name="q[other][]" value="jsp" />JAVA JSP
-                    <input type="checkbox" name="q[other][]" value="perl" />Perl
-                    <input type="checkbox" name="q[other][]" value="ruby" />Ruby / Ruby on Rails
-                    <input type="checkbox" name="q[other][]" value="python" />Python
-                    <input type="checkbox" name="q[other][]" value="clojure" />Clojure
+                    <div class="controls">
+                        <label class="checkbox inline">
+                            <input type="checkbox" name="q[other][]" value="ASP" />ASP
+                        </label>
+                        <label class="checkbox inline">
+                            <input type="checkbox" name="q[other][]" value="ASP.NET" />ASP.NET
+                        </label>
+                        <label class="checkbox inline">
+                            <input type="checkbox" name="q[other][]" value="jsp" />JAVA JSP
+                        </label>
+                        <label class="checkbox inline">
+                            <input type="checkbox" name="q[other][]" value="perl" />Perl
+                        </label>
+                        <label class="checkbox inline">
+                            <input type="checkbox" name="q[other][]" value="ruby" />Ruby / Ruby on Rails
+                        </label>
+                        <label class="checkbox inline">
+                            <input type="checkbox" name="q[other][]" value="python" />Python
+                        </label>
+                        <label class="checkbox inline">
+                            <input type="checkbox" name="q[other][]" value="clojure" />Clojure
+                        </label>
+                        <label class="checkbox inline">
+                            <input type="checkbox" name="q[other][]" value="scala" />Scala
+                        </label>
+                        <label class="checkbox inline">
+                            <input type="checkbox" name="q[other][]" value="go" />Go
+                        </label>
+                    </div>
+                </div>
              </fieldset>
 
-            <p class="hint">
+            <p class="alert alert-info">
                 Additional to your input we're going to submit some information about your system setup for statstic
                 purpose.
             </p>
-            <p class="hint">
+            <p class="alert alert-info">
                 We are not storing any personal information. You can see the data by clicking
                 <a href="#" onclick="show('configliste'); return false;">here</a>.
             </p>
 
-            <div id="configliste" class="collapsed">
+            <div id="configliste" class="hide">
                 <a href="#" onclick="hide('configliste'); return false;">hide again</a>
                 <dl>
 <?php
@@ -1157,7 +1181,7 @@ array_walk($options, 'data_printer');
 echo '</dl><input type="hidden" name="systemdata" value="'.PMF_String::htmlspecialchars(serialize($q->get()), ENT_QUOTES).'" />';
 ?>
             </div>
-            <p>
+            <p style="text-align: center;">
                 <input class="btn-primary" type="submit" value="Click here to submit the data and finish the installation process" />
             </p>
         </form>

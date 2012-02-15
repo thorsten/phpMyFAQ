@@ -22,7 +22,7 @@
  * @package   PMF_Questionnaire_Data
  * @author    Johannes Schlueter <johannes@php.net>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2011 phpMyFAQ Team
+ * @copyright 2007-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-17
@@ -35,7 +35,7 @@
  * @package   PMF_Questionnaire_Data
  * @author    Johannes Schlueter <johannes@php.net>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2009 phpMyFAQ Team
+ * @copyright 2007-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-17
@@ -161,7 +161,7 @@ class PMF_Questionnaire_Data
      */
     public function getSystemInfo()
     {
-        // Start discovering the IPV4 server address, if available
+        // Start discovering the IPv4 server address, if available
         $serverAddress = '0.0.0.0';
         if (isset($_SERVER['SERVER_ADDR'])) {
             $serverAddress = $_SERVER['SERVER_ADDR'];
@@ -170,18 +170,14 @@ class PMF_Questionnaire_Data
         if (isset($_SERVER['LOCAL_ADDR'])) {
             $serverAddress = $_SERVER['LOCAL_ADDR'];
         }
-        $aIPAddress = explode('.', $serverAddress);
+
+        $aIPAddress = explode('.', $serverAddress); // only works with IPv4
 
         return array(
             'os'    => PHP_OS,
             'httpd' => $_SERVER['SERVER_SOFTWARE'],
-            // we don't want the real IPv4 address (for privacy policy reasons) but only
-            // a network address to see whether your phpMyFAQ is running on a private or public network.
-            // IANA reserved addresses for private networks (RFC 1918) are:
-            // - 10.0.0.0/8
-            // - 172.16.0.0/12
-            // - 192.168.0.0/16
-            'ip'    => $aIPAddress[0].'.'.$aIPAddress[1].'.XXX.YYY');
+            'ip'    => ''
+        );
     }
 }
 
