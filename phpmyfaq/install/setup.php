@@ -57,7 +57,7 @@ $query = $uninst = array();
  */
 function HTMLFooter()
 {
-    printf('</div></section><footer><div><p id="copyrightnote">%s</p><div></footer></body></html>', COPYRIGHT);
+    printf('</div></div></section><footer><div class="container"><p class="pull-right">%s</p><div></footer></body></html>', COPYRIGHT);
 }
 
 $system = new PMF_System();

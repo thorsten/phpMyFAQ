@@ -59,7 +59,7 @@ $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
  */
 function HTMLFooter()
 {
-    printf('</div></div><footer><div><p id="copyrightnote">%s</p><div></footer></body></html>', COPYRIGHT);
+    printf('</div></div></section><footer><div class="container"><p class="pull-right">%s</p><div></footer></body></html>', COPYRIGHT);
 }
 
 ?>
