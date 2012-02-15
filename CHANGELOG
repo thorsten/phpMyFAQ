@@ -10,7 +10,7 @@ Version 2.8.0-dev - 2012-
 - added possibility to close and delete open questions (Peter Caesar)
 - added user control panel (Thorsten)
 - improved usability of administration backend (Thorsten)
-- improved setup (Thorsten)
+- improved setup and update (Thorsten)
 - improved security with salted passwords (Thorsten)
 - improved CSS with LESS (Thorsten)
 - updated bundled jQuery to version 1.7.1 (Thorsten)

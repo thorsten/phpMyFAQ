@@ -41,6 +41,13 @@ $version     = PMF_Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_ST
 $query       = array();
 $templateDir = '../template';
 
+if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
+    require PMF_ROOT_DIR . '/inc/data.php'; // before 2.6.0-alpha
+} else {
+    require PMF_ROOT_DIR . '/config/database.php'; // after 2.6.0-alpha
+}
+require PMF_ROOT_DIR . '/inc/functions.php';
+
 define('SQLPREFIX', $DB['prefix']);
 $db = PMF_Db::factory($DB["type"]);
 $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
@@ -111,14 +118,7 @@ if (!is_readable(PMF_ROOT_DIR.'/inc/data.php') && !is_readable(PMF_ROOT_DIR.'/co
     die();
 }
 
-if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
-    require PMF_ROOT_DIR . '/inc/data.php'; // before 2.6.0-alpha
-} else {
-    require PMF_ROOT_DIR . '/config/database.php'; // after 2.6.0-alpha
-}
-require PMF_ROOT_DIR . '/inc/functions.php';
-
-/**************************** STEP 1 OF 4 ***************************/
+/**************************** STEP 1 OF 3 ***************************/
 if ($step == 1) {
     
     $faqconfig = PMF_Configuration::getInstance();
@@ -129,7 +129,7 @@ if ($step == 1) {
             <fieldset>
                 <legend>
                     <strong>
-                        phpMyFAQ <?php print PMF_System::getVersion(); ?> Update (Step 1 of 4)
+                        phpMyFAQ <?php print PMF_System::getVersion(); ?> Update (Step 1 of 3)
                     </strong>
                 </legend>
 
@@ -172,6 +172,7 @@ if ($step == 1) {
                         '<p class="error">Your current phpMyFAQ version: %s</p>',
                         $version
                     );
+                    print '<p>Please update to the latest phpMyFAQ 2.7 version first.</p>';
                 }
                 if ('hash' !== PMF_ENCRYPTION_TYPE) {
                     printf(
@@ -182,7 +183,7 @@ if ($step == 1) {
                 ?>
 
                 <p>
-                    <input class="submit update" type="submit" value="Go to step 2 of 4" />
+                    <input class="submit update" type="submit" value="Go to step 2 of 3" />
                 </p>
             </fieldset>
         </form>
@@ -190,7 +191,7 @@ if ($step == 1) {
     HTMLFooter();
 }
 
-/**************************** STEP 2 OF 4 ***************************/
+/**************************** STEP 2 OF 3 ***************************/
 if ($step == 2) {
 
     $checkDatabaseSetupFile = $checkLdapSetupFile = $checkTemplateDirectory = false;
@@ -257,8 +258,9 @@ if ($step == 2) {
         <fieldset>
             <legend><strong>phpMyFAQ <?php print PMF_System::getVersion(); ?> Update (Step 2 of 4)</strong></legend>
             <p>A backup of your database configuration file has been made.</p>
+            <p>The configuration will be updated after the next step.</p>
             <p>
-                <input class="submit update" type="submit" value="Go to step 3 of 4" />
+                <input class="submit update" type="submit" value="Go to step 3 of 3" />
             </p>
         </fieldset>
         </form>
@@ -271,25 +273,8 @@ if ($step == 2) {
     }
 }
 
-/**************************** STEP 3 OF 4 ***************************/
+/**************************** STEP 3 OF 3 ***************************/
 if ($step == 3) {
-?>
-        <form action="update.php?step=4" method="post">
-        <input type="hidden" name="version" value="<?php print $version; ?>" />
-        <fieldset>
-            <legend><strong>phpMyFAQ <?php print PMF_System::getVersion(); ?> Update (Step 3 of 4)</strong></legend>
-            <p>The configuration will be updated after the next step.</p>
-            <p>
-                <input class="submit update" type="submit" value="Go to step 4 of 4" />
-            </p>
-        </fieldset>
-        </form>
-<?php
-    HTMLFooter();
-}
-
-/**************************** STEP 4 OF 4 ***************************/
-if ($step == 4) {
     
     require_once PMF_ROOT_DIR . '/inc/Configuration.php';
     require_once PMF_ROOT_DIR . '/inc/Db.php';
