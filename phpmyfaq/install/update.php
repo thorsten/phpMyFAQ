@@ -42,16 +42,8 @@ $query       = array();
 $templateDir = '../template';
 
 if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
-    if (!file_exists('inc/data.php')) {
-        header("Location: setup.php");
-        exit();
-    }
     require PMF_ROOT_DIR . '/inc/data.php'; // before 2.6.0-alpha
 } else {
-    if (!file_exists('config/database.php')) {
-        header("Location: setup.php");
-        exit();
-    }
     require PMF_ROOT_DIR . '/config/database.php'; // after 2.6.0-alpha
 }
 require PMF_ROOT_DIR . '/inc/functions.php';
@@ -83,44 +75,63 @@ function HTMLFooter()
 
     <title>phpMyFAQ <?php print PMF_System::getVersion(); ?> Update</title>
 
-    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+    <meta name="viewport" content="width=device-width;">
     <meta name="application-name" content="phpMyFAQ <?php print PMF_System::getVersion(); ?>">
-    <meta name="copyright" content="(c) 2001-2011 phpMyFAQ Team">
+    <meta name="copyright" content="(c) 2001-<?php print date('Y'); ?> phpMyFAQ Team">
+
+    <link rel="stylesheet" href="../template/default/css/style.css?v=1">
+
+    <script src="../js/libs/modernizr.min.js"></script>
+    <script src="../js/libs/jquery.min.js"></script>
 
     <link rel="shortcut icon" href="../template/default/favicon.ico">
     <link rel="apple-touch-icon" href="../template/default/apple-touch-icon.png">
-    <link rel="stylesheet" href="css/setup.css?v=1">
-    <script type="text/javascript" src="../inc/js/jquery.min.js"></script>
+
 </head>
 <body>
 
-<header id="header">
-    <h1>
-        <h1>phpMyFAQ <?php print PMF_System::getVersion(); ?> Update</h1>
-    </h1>
-</header>
+<!--[if lt IE 8 ]>
+<div class="internet-explorer-error">
+    Do you know that your Internet Explorer is out of date?<br/>
+    Please use Internet Explorer 8+, Mozilla Firefox 4+, Google Chrome, Apple Safari 5+ or Opera 11+
+</div>
+<![endif]-->
 
-<nav>
-    <ul>
-        <li><a target="_blank" href="http://www.phpmyfaq.de/documentation.php">Documentation</a></li>
-        <li><a target="_blank" href="http://www.phpmyfaq.de/support.php">Support</a></li>
-        <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
-        <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
-    </ul>
-</nav>
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <nav class="nav-collapse">
+                <ul class="nav">
+                    <li><a target="_blank" href="http://www.phpmyfaq.de/documentation.php">Documentation</a></li>
+                    <li><a target="_blank" href="http://www.phpmyfaq.de/support.php">Support</a></li>
+                    <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
+                    <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
 
-<div id="content">
-    <div id="mainContent">
+<section id="main">
+    <div class="container">
+        <div class="row" style="padding-left: 20px;">
+            <div class="hero-unit hello-phpmyfaq" style="text-align: center; height: 70px;">
+                <h1>phpMyFAQ <?php print PMF_System::getVersion(); ?> Update</h1>
+            </div>
+        </div>
+        <div class="row" style="padding-left: 20px;">
+            <div class="span1">&nbsp;</div>
+            <div class="span10">
 <?php
 
 if (version_compare(PHP_VERSION, PMF_System::VERSION_MINIMUM_PHP, '<')) {
-    printf("<p>Sorry, but you need PHP %s or later!</p>\n", PMF_System::VERSION_MINIMUM_PHP);
+    printf('<p class="alert alert-error">Sorry, but you need PHP %s or later!</p>', PMF_System::VERSION_MINIMUM_PHP);
     HTMLFooter();
     die();
 }
 
-if (!is_readable(PMF_ROOT_DIR.'/inc/data.php') && !is_readable(PMF_ROOT_DIR.'/config/database.php')) {
-    print '<p class="error">It seems you never run a version of phpMyFAQ.<br />' .
+if (! is_readable(PMF_ROOT_DIR.'/inc/data.php') && ! is_readable(PMF_ROOT_DIR.'/config/database.php')) {
+    print '<p class="alert alert-error">It seems you never run a version of phpMyFAQ.<br />' .
           'Please use the <a href="setup.php">install script</a>.</p>';
     HTMLFooter();
     die();
@@ -141,7 +152,7 @@ if ($step == 1) {
                     </strong>
                 </legend>
 
-                <p class="hint">
+                <p class="alert alert-info">
                     <strong>
                         Please create a full backup of your database, your templates, attachments and uploaded images
                         before running this update.
@@ -165,33 +176,33 @@ if ($step == 1) {
                 <?php
                 if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable($templateDir)) {
                     printf(
-                        '<p class="error"><strong>Please change the directory %s and its contents writable (777 ' .
-                        'on Linux/UNIX).</strong></p>',
+                        '<p class="alert alert-error"><strong>Please change the directory %s and its contents ' .
+                        'writable (777 on Linux/UNIX).</strong></p>',
                         $templateDir
                     );
                 }
                 if (version_compare($version, '2.5.0', '>')) {
                     printf(
-                        '<p class="success">Your current phpMyFAQ version: %s</p>',
+                        '<p class="alert alert-success">Your current phpMyFAQ version: %s</p>',
                         $version
                     );
                 } else {
                     printf(
-                        '<p class="error">Your current phpMyFAQ version: %s</p>',
+                        '<p class="alert alert-error">Your current phpMyFAQ version: %s</p>',
                         $version
                     );
                     print '<p>Please update to the latest phpMyFAQ 2.7 version first.</p>';
                 }
                 if ('hash' !== PMF_ENCRYPTION_TYPE) {
                     printf(
-                        '<p class="hint">Your passwords are currently encoded with a %s() method.</p>',
+                        '<p class="alert alert-info">Your passwords are currently encoded with a %s() method.</p>',
                         PMF_ENCRYPTION_TYPE
                     );
                 }
                 ?>
 
-                <p>
-                    <input class="submit update" type="submit" value="Go to step 2 of 3" />
+                <p style="text-align: center">
+                    <input class="btn-primary btn-large" type="submit" value="Go to step 2 of 3" />
                 </p>
             </fieldset>
         </form>
@@ -209,8 +220,8 @@ if ($step == 2) {
     if (file_exists(PMF_ROOT_DIR . '/inc/data.php')) {
         if (!copy(PMF_ROOT_DIR . '/inc/data.php', PMF_ROOT_DIR . '/config/database.bak.php') ||
             !copy(PMF_ROOT_DIR . '/inc/data.php', PMF_ROOT_DIR . '/config/database.php')) {
-            print "<p class=\"error\"><strong>Error:</strong> The backup file ../config/database.bak.php could " .
-                  "not be written. Please correct this!</p>";
+            print "<p class=\"alert alert-error\"><strong>Error:</strong> The backup file ../config/database.bak.php " .
+                  "could not be written. Please correct this!</p>";
         } else {
             $checkDatabaseSetupFile = true;
         }
@@ -219,8 +230,8 @@ if ($step == 2) {
     // The backup an existing config/database.php
     if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {
         if (!copy(PMF_ROOT_DIR . '/config/database.php', PMF_ROOT_DIR . '/config/database.bak.php')) {
-            print "<p class=\"error\"><strong>Error:</strong> The backup file ../config/database.bak.php could " .
-                  "not be written. Please correct this!</p>";
+            print "<p class=\"alert alert-error\"><strong>Error:</strong> The backup file ../config/database.bak.php " .
+                  "could not be written. Please correct this!</p>";
         } else {
             $checkDatabaseSetupFile = true;
         }
@@ -230,8 +241,8 @@ if ($step == 2) {
     if (file_exists(PMF_ROOT_DIR . '/inc/dataldap.php')) {
         if (!copy(PMF_ROOT_DIR . '/inc/dataldap.php', PMF_ROOT_DIR . '/config/ldap.bak.php') ||
             !copy(PMF_ROOT_DIR . '/inc/dataldap.php', PMF_ROOT_DIR . '/config/ldap.php')) {
-            print "<p class=\"error\"><strong>Error:</strong> The backup file ../config/ldap.bak.php could " .
-                  "not be written. Please correct this!</p>";
+            print "<p class=\"alert alert-error\"><strong>Error:</strong> The backup file ../config/ldap.bak.php " .
+                  "could not be written. Please correct this!</p>";
         } else {
             $checkLdapSetupFile = true;
         }
@@ -246,11 +257,11 @@ if ($step == 2) {
     }
     if (version_compare($version, '2.6.0-alpha', '<') && (!is_writeable($templateDir) || !empty($notWritableFiles))) {
         if (!is_writeable($templateDir)) {
-            printf("<p><strong>The directory %s isn't writable.</strong></p>\n", $templateDir);
+            printf("<p class=\"alert alert-error\"><strong>The directory %s isn't writable.</strong></p>\n", $templateDir);
         }
         if (!empty($notWritableFiles)) {
             foreach ($notWritableFiles as $item) {
-                printf("<p><strong>The file %s isn't writable.</strong></p>\n", $item);
+                printf("<p class=\"alert alert-error\"><strong>The file %s isn't writable.</strong></p>\n", $item);
             }
         }
         
@@ -264,18 +275,18 @@ if ($step == 2) {
         <form action="update.php?step=3" method="post">
         <input type="hidden" name="version" value="<?php print $version; ?>" />
         <fieldset>
-            <legend><strong>phpMyFAQ <?php print PMF_System::getVersion(); ?> Update (Step 2 of 4)</strong></legend>
+            <legend><strong>phpMyFAQ <?php print PMF_System::getVersion(); ?> Update (Step 2 of 3)</strong></legend>
             <p>A backup of your database configuration file has been made.</p>
             <p>The configuration will be updated after the next step.</p>
-            <p>
-                <input class="submit update" type="submit" value="Go to step 3 of 3" />
+            <p style="text-align: center;">
+                <input class="btn-primary btn-large" type="submit" value="Go to step 3 of 3" />
             </p>
         </fieldset>
         </form>
 <?php
         HTMLFooter();
     } else {
-        print "<p class=\"error\"><strong>Error:</strong> Your version of phpMyFAQ could not updated.</p>\n";
+        print "<p class=\"alert alert-error\"><strong>Error:</strong> Your version of phpMyFAQ could not updated.</p>\n";
         HTMLFooter();
         die();
     }
@@ -667,9 +678,10 @@ if ($step == 3) {
             }
             if (!$result) {
                 print "</div>";
-                print '<p class="error"><strong>Error:</strong> Please install your version of phpMyFAQ once again ' .
-                      'or send us a <a href=\"http://bugs.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
-                printf('<p class="error"><strong>DB error:</strong> %s</p>', $db->error());
+                print '<p class="alert alert-error"><strong>Error:</strong> Please install your version of phpMyFAQ ' .
+                      'once again or send us a <a href=\"http://bugs.phpmyfaq.de\" target=\"_blank\">bug report</a>.' .
+                      '</p>';
+                printf('<p class="alert alert-error"><strong>DB error:</strong> %s</p>', $db->error());
                 printf('<code>%s</code>', htmlentities($executeQuery));
                 HTMLFooter();
                 die();
@@ -723,7 +735,7 @@ if ($step == 3) {
             $result = $db->query($executeQuery);
             printf('<span title="%s">.</span>', $executeQuery);
             if (!$result) {
-                print '<p class="error"><strong>Error:</strong> Please install your version of phpMyFAQ once again ' .
+                print '<p class="alert alert-error"><strong>Error:</strong> Please install your version of phpMyFAQ once again ' .
                         'or send us a <a href=\"http://bugs.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
                 printf('<p class="error"><strong>DB error:</strong> %s</p>', $db->error());
                 printf('<code>%s</code>', htmlentities($executeQuery));
@@ -737,26 +749,26 @@ if ($step == 3) {
 
     print "</p>\n";
 
-    print '<p class="success">The database was updated successfully. Thank you very much for updating.</p>';
+    print '<p class="alert alert-success">The database was updated successfully. Thank you very much for updating.</p>';
     print '<p>Back to your <a href="../index.php">phpMyFAQ installation</a> and have fun! :-)</p>';
 
     // Remove backup files
     foreach (glob(PMF_ROOT_DIR.'/config/*.bak.php') as $filename) {
         if (!@unlink($filename)) {
-            printf("<p class=\"hint\">Please remove the backup file %s manually.</p>\n", $filename);
+            printf("<p class=\"alert alert-info\">Please remove the backup file %s manually.</p>\n", $filename);
         }
     }
     // Remove 'setup.php' file
     if (@unlink(dirname($_SERVER['PATH_TRANSLATED']) . '/setup.php')) {
-        print "<p class=\"success\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";
+        print "<p class=\"alert alert-success\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";
     } else {
-        print "<p class=\"hint\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
+        print "<p class=\"alert alert-info\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
     }
     // Remove 'update.php' file
     if (@unlink(dirname($_SERVER['PATH_TRANSLATED']) . '/update.php')) {
-        print "<p class=\"success\">The file <em>./install/update.php</em> was deleted automatically.</p>\n";
+        print "<p class=\"alert alert-success\">The file <em>./install/update.php</em> was deleted automatically.</p>\n";
     } else {
-        print "<p class=\"hint\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
+        print "<p class=\"alert alert-info\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
     }
 
     HTMLFooter();
