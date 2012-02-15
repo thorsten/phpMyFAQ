@@ -1187,8 +1187,10 @@ echo '</dl><input type="hidden" name="systemdata" value="'.PMF_String::htmlspeci
         </form>
         <div id="questionnaireThanks" style="display:none;">
             <p class="alert alert-success"><b>Thank you for giving your feedback!</b></p>
-            <p>You can visit <a href="../index.php">your version of phpMyFAQ</a> or</p>
-            <p>login into your <a href="../admin/index.php">admin section</a>.</p>
+            <p>
+                You can visit <a href="../index.php">your version of phpMyFAQ</a> or login into your
+                <a href="../admin/index.php">admin section</a>.
+            </p>
         </div>
 <?php
     // Remove 'setup.php' file
