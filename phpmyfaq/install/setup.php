@@ -30,9 +30,6 @@
  * @since     2002-08-20
  */
 
-define('VERSION', '2.8.0-dev');
-define('APIVERSION', 1);
-define('MINIMUM_PHP_VERSION', '5.2.3');
 define('COPYRIGHT', '&copy; 2001-2012 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
@@ -40,6 +37,30 @@ define('IS_VALID_PHPMYFAQ', null);
 if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     set_time_limit(0);
 }
+
+require PMF_ROOT_DIR . '/config/constants.php';
+require PMF_ROOT_DIR . '/inc/autoLoader.php';
+require PMF_ROOT_DIR . '/inc/functions.php';
+require PMF_ROOT_DIR . '/install/questionnaire.php';
+
+//
+// Initalizing static string wrapper
+//
+PMF_String::init('en');
+
+$query = $uninst = array();
+
+/**
+ * Print out the HTML5 Footer
+ *
+ * @return void
+ */
+function HTMLFooter()
+{
+    printf('</div></div><footer><div><p id="copyrightnote">%s</p><div></footer></body></html>', COPYRIGHT);
+}
+
+$system = new PMF_System();
 
 ?>
 <!doctype html>
@@ -52,10 +73,10 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title>phpMyFAQ <?php print VERSION; ?> Setup</title>
+    <title>phpMyFAQ <?php print PMF_System::getVersion(); ?> Setup</title>
 
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
-    <meta name="application-name" content="phpMyFAQ <?php print VERSION; ?>">
+    <meta name="application-name" content="phpMyFAQ <?php print PMF_System::getVersion(); ?>">
     <meta name="copyright" content="(c) 2001-2011 phpMyFAQ Team">
     
     <link rel="shortcut icon" href="../template/default/favicon.ico">
@@ -104,7 +125,7 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
 
 <header id="header">
     <h1>
-        <h1>phpMyFAQ <?php print VERSION; ?> Setup</h1>
+        <h1>phpMyFAQ <?php print PMF_System::getVersion(); ?> Setup</h1>
     </h1>
 </header>
 
@@ -121,8 +142,8 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     <div id="mainContent">
 <?php
 
-if (version_compare(PHP_VERSION, MINIMUM_PHP_VERSION, '<')) {
-    printf('<p class="error">Sorry, but you need PHP %s or later!</p>', MINIMUM_PHP_VERSION);
+if (version_compare(PHP_VERSION, PMF_System::VERSION_MINIMUM_PHP, '<')) {
+    printf('<p class="error">Sorry, but you need PHP %s or later!</p>', PMF_System::VERSION_MINIMUM_PHP);
     HTMLFooter();
     die();
 }
@@ -133,80 +154,12 @@ if (!function_exists('date_default_timezone_set')) {
     die();
 }
 
-require PMF_ROOT_DIR . '/config/constants.php';
-require PMF_ROOT_DIR . '/inc/autoLoader.php';
-require PMF_ROOT_DIR . '/inc/functions.php';
-require PMF_ROOT_DIR . '/install/questionnaire.php';
-
-//
-// Initalizing static string wrapper
-//
-PMF_String::init('en');
-
-$query = $uninst = array();
-
-// permission levels
-$permLevels = array(
-    'basic'  => 'Basic (no group support)',
-    'medium' => 'Medium (with group support)'
-);
-
-$enabledExtensions = array(
-    'gd',
-    'json',
-    'xmlwriter',
-    'filter'
-);
-
-/**
- * Executes the uninstall set of queries
- *
- * @return void
- */
-function db_uninstall()
-{
-    global $uninst, $db;
-
-    while ($each_query = each($uninst)) {
-        $db->query($each_query[1]);
-    }
-}
-
-/**
- * Print out the HTML5 Footer
- *
- * @return void
- */
-function HTMLFooter()
-{
-    printf('</div></div><footer><div><p id="copyrightnote">%s</p><div></footer></body></html>', COPYRIGHT);
-}
-
-/**
- * Removes the data.php and the dataldap.php if an installation failed
- *
- * @return void
- */
-function cleanInstallation()
-{
-    // Remove 'database.php' file: no need of prompt anything to the user
-    if (file_exists(PMF_ROOT_DIR.'/config/database.php')) {
-        @unlink(PMF_ROOT_DIR.'/config/database.php');
-    }
-    // Remove 'dataldap.php' file: no need of prompt anything to the user
-    if (file_exists(PMF_ROOT_DIR.'/config/ldap.php')) {
-        @unlink(PMF_ROOT_DIR.'/config/ldap.php');
-    }
-}
-
-$system = new PMF_System();
-
-if (!$system->checkDatabase($supported_databases)) {
+if (!$system->checkDatabase()) {
 
     print '<p class="error">No supported database detected! Please install one of the following' .
           ' database systems and enable the corresponding PHP extension in php.ini:</p>';
     print '<ul>';
-    foreach ($supported_databases as $database) {
+    foreach ($system->getSupportedDatabases() as $database) {
         printf('    <li>%s</li>', $database[1]);
     }
     print '</ul>';
@@ -214,7 +167,7 @@ if (!$system->checkDatabase($supported_databases)) {
     die();
 }
 
-if (!$system->checkExtension($enabledExtensions)) {
+if (!$system->checkRequiredExtensions()) {
     print "<p class=\"error\">The following extensions are missing! Please enable the PHP extension(s)\n";
     print "<ul>\n";
     foreach ($system->getMissingExtensions() as $extension) {
@@ -307,7 +260,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
 <?php
     // check what extensions are loaded in PHP
-    foreach ($supported_databases as $extension => $database) {
+    foreach ($system->getSupportedDatabases() as $extension => $database) {
         if (extension_loaded($extension) && version_compare(PHP_VERSION, $database[0]) >= 0) {
             // prevent MySQLi with zend.ze1_compatibility_mode enabled due to a few cloning isssues
             if (($extension == 'mysqli') && ini_get('zend.ze1_compatibility_mode')) {
@@ -420,13 +373,12 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                 </select>
             </p>
             <p>
-                <label>Permission level:</label>
-                <select name="permLevel" size="1" title="Complexity of user and right administration. Basic: users may
+                <label for="permLevel">Permission level:</label>
+                <select id="permLevel" name="permLevel" size="1" title="Complexity of user and right administration. Basic: users may
                 have user-rights. Medium: users may have user-rights; group administration; groups may have group-rights;
                 user have group-rights via group-memberships." required="required">
-                <?php foreach ($permLevels as $level => $desc) {
-                    printf('    <option value="%s">%s</option>', $level, $desc);
-                } ?>
+                    <option value="basic">Basic (no group support)</option>
+                    <option value="medium">Medium (with group support)</option>
                 </select>
             </p>
             <p>
@@ -455,7 +407,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
             <p class="hint"><strong>Do not use it if you're already running a version of phpMyFAQ!</strong></p>
             <p>
-                <input class="submit" type="submit" value="Click to install phpMyFAQ <?php print VERSION; ?>" />
+                <input class="submit" type="submit" value="Click to install phpMyFAQ <?php print PMF_System::getVersion(); ?>" />
             </p>
         </form>
 <?php
@@ -631,7 +583,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     if (!$ret) {
         print "<p class=\"error\"><strong>Error:</strong> Setup cannot write to ./config/database.php.</p>";
         HTMLFooter();
-        cleanInstallation();
+        $system->cleanInstallation();
         die();
     }
 
@@ -650,7 +602,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         if (!$ret) {
             print "<p class=\"error\"><strong>Error:</strong> Setup cannot write to ./config/ldap.php.</p>";
             HTMLFooter();
-            cleanInstallation();
+            $system->cleanInstallation();
             die();
         }
     }
@@ -662,19 +614,21 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     if (!$db) {
         print "<p class=\"error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
         HTMLFooter();
-        cleanInstallation();
+        $system->cleanInstallation();
         die();
     }
 
     require_once $dbType . '.sql.php'; // CREATE TABLES
-    require_once 'config.sql.php';       // INSERTs for configuration
-    require_once 'stopwords.sql.php';    // INSERTs for stopwords
+    require_once 'config.sql.php';     // INSERTs for configuration
+    require_once 'stopwords.sql.php';  // INSERTs for stopwords
+
+    $system->setDatabase($db);
 
     print '<p>';
 
     // Erase any table before starting creating the required ones
     if ('sqlite' != $dbType) {
-        db_uninstall();
+        $system->dropTables($uninst);
     }
     // Start creating the required tables
     $count = 0;
@@ -685,8 +639,8 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             us a <a href=\"http://www.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
             printf('<p class="error"><strong>DB error:</strong> %s</p>', $db->error());
             printf('<code>%s</code>', htmlentities($executeQuery));
-            db_uninstall();
-            cleanInstallation();
+            $system->dropTables($uninst);
+            $system->cleanInstallation();
             HTMLFooter();
             die();
         }
@@ -1144,16 +1098,6 @@ echo '</dl><input type="hidden" name="systemdata" value="'.PMF_String::htmlspeci
             <p>login into your <a href="../admin/index.php">admin section</a>.</p>
         </div>
 <?php
-
-    // Remove 'scripts' folder: no need of prompt anything to the user
-    if (file_exists(PMF_ROOT_DIR."/scripts") && is_dir(PMF_ROOT_DIR."/scripts")) {
-        @rmdir(PMF_ROOT_DIR."/scripts");
-    }
-    // Remove 'phpmyfaq.spec' file: no need of prompt anything to the user
-    if (file_exists(PMF_ROOT_DIR."/phpmyfaq.spec")) {
-        @unlink(PMF_ROOT_DIR."/phpmyfaq.spec");
-    }
-    
     // Remove 'setup.php' file
     if (@unlink(basename($_SERVER['SCRIPT_NAME']))) {
         print "<p class=\"success\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";

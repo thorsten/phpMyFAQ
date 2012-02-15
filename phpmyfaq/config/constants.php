@@ -184,24 +184,6 @@ $botBlacklist = array(
  ****************************************************************************/
 
 /**
- * Supported databases for phpMyFAQ.
- *
- * @var  array
- */
-$supported_databases = array(
-    'mysql'   => array('5.2.0', 'MySQL 5.x (ext/mysql)'),
-    'pgsql'   => array('5.2.0', 'PostgreSQL 8.x'),
-    'sybase'  => array('5.2.0', 'Sybase'),
-    'mssql'   => array('5.2.0', 'MS SQL Server 2005 / 2008'),
-    'mysqli'  => array('5.2.0', 'MySQL 5.x (ext/mysqli)'),
-    'sqlite'  => array('5.2.0', 'SQLite'),
-    'ibm_db2' => array('5.2.0', 'IBM DB2 Universal Database 8.2 / 9.1'),
-    'sqlsrv'  => array('5.2.0', 'SQL Server Driver for PHP (experimental)'),
-    'ibase'   => array('5.2.0', 'Interbase/Firebird (experimental)'),
-    'mysqli'  => array('5.2.0', 'MariaDB 5.x (experimental)')
-);
-
-/**
  * Allowed 'action' variables for GET. DO NOT CHANGE!
  *
  * @var array

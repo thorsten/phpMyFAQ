@@ -26,8 +26,8 @@
 // Main
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.administrationMail', 'webmaster@example.org')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.contactInformations', '')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.currentVersion', '" . VERSION . "')";
-$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.currentApiVersion', '" . APIVERSION . "')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.currentVersion', '" . PMF_System::getVersion() . "')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.currentApiVersion', '" . PMF_System::getApiVersion() . "')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.enableAdminLog', 'true')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.enableRewriteRules', 'false')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('main.enableUserTracking', 'true')";
