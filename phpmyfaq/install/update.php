@@ -25,15 +25,34 @@
  * @since     2002-01-10
  */
 
-define('NEWVERSION', '2.8.0-dev');
-define('APIVERSION', 1);
-define('MINIMUM_PHP_VERSION', '5.2.3');
 define('COPYRIGHT', '&copy; 2001-2012 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
 
 if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     set_time_limit(0);
+}
+
+require_once PMF_ROOT_DIR . '/inc/autoLoader.php';
+require_once PMF_ROOT_DIR . '/config/constants.php';
+
+$step        = PMF_Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
+$version     = PMF_Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);
+$query       = array();
+$templateDir = '../template';
+
+define('SQLPREFIX', $DB['prefix']);
+$db = PMF_Db::factory($DB["type"]);
+$db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
+
+/**
+ * Print out the HTML Footer
+ *
+ * @return void
+ */
+function HTMLFooter()
+{
+    printf('</div></div><footer><div><p id="copyrightnote">%s</p><div></footer></body></html>', COPYRIGHT);
 }
 
 ?>
@@ -47,10 +66,10 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title>phpMyFAQ <?php print NEWVERSION; ?> Update</title>
+    <title>phpMyFAQ <?php print PMF_System::getVersion(); ?> Update</title>
 
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
-    <meta name="application-name" content="phpMyFAQ <?php print NEWVERSION; ?>">
+    <meta name="application-name" content="phpMyFAQ <?php print PMF_System::getVersion(); ?>">
     <meta name="copyright" content="(c) 2001-2011 phpMyFAQ Team">
 
     <link rel="shortcut icon" href="../template/default/favicon.ico">
@@ -62,7 +81,7 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
 
 <header id="header">
     <h1>
-        <h1>phpMyFAQ <?php print NEWVERSION; ?> Update</h1>
+        <h1>phpMyFAQ <?php print PMF_System::getVersion(); ?> Update</h1>
     </h1>
 </header>
 
@@ -79,28 +98,10 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     <div id="mainContent">
 <?php
 
-if (version_compare(PHP_VERSION, MINIMUM_PHP_VERSION, '<')) {
-    printf("<p>Sorry, but you need PHP %s or later!</p>\n", MINIMUM_PHP_VERSION);
+if (version_compare(PHP_VERSION, PMF_System::VERSION_MINIMUM_PHP, '<')) {
+    printf("<p>Sorry, but you need PHP %s or later!</p>\n", PMF_System::VERSION_MINIMUM_PHP);
     HTMLFooter();
     die();
-}
-
-require_once PMF_ROOT_DIR . '/inc/autoLoader.php';
-require_once PMF_ROOT_DIR . '/config/constants.php';
-
-$step        = PMF_Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
-$version     = PMF_Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);
-$query       = array();
-$templateDir = '../template';
-
-/**
- * Print out the HTML Footer
- *
- * @return void
- */
-function HTMLFooter()
-{
-    printf('</div></div><footer><div><p id="copyrightnote">%s</p><div></footer></body></html>', COPYRIGHT);
 }
 
 if (!is_readable(PMF_ROOT_DIR.'/inc/data.php') && !is_readable(PMF_ROOT_DIR.'/config/database.php')) {
@@ -117,10 +118,6 @@ if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
 }
 require PMF_ROOT_DIR . '/inc/functions.php';
 
-define('SQLPREFIX', $DB['prefix']);
-$db = PMF_Db::factory($DB["type"]);
-$db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
-    
 /**************************** STEP 1 OF 4 ***************************/
 if ($step == 1) {
     
@@ -132,7 +129,7 @@ if ($step == 1) {
             <fieldset>
                 <legend>
                     <strong>
-                        phpMyFAQ <?php print NEWVERSION; ?> Update (Step 1 of 4)
+                        phpMyFAQ <?php print PMF_System::getVersion(); ?> Update (Step 1 of 4)
                     </strong>
                 </legend>
 
@@ -258,7 +255,7 @@ if ($step == 2) {
         <form action="update.php?step=3" method="post">
         <input type="hidden" name="version" value="<?php print $version; ?>" />
         <fieldset>
-            <legend><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 2 of 4)</strong></legend>
+            <legend><strong>phpMyFAQ <?php print PMF_System::getVersion(); ?> Update (Step 2 of 4)</strong></legend>
             <p>A backup of your database configuration file has been made.</p>
             <p>
                 <input class="submit update" type="submit" value="Go to step 3 of 4" />
@@ -280,7 +277,7 @@ if ($step == 3) {
         <form action="update.php?step=4" method="post">
         <input type="hidden" name="version" value="<?php print $version; ?>" />
         <fieldset>
-            <legend><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 3 of 4)</strong></legend>
+            <legend><strong>phpMyFAQ <?php print PMF_System::getVersion(); ?> Update (Step 3 of 4)</strong></legend>
             <p>The configuration will be updated after the next step.</p>
             <p>
                 <input class="submit update" type="submit" value="Go to step 4 of 4" />
@@ -344,7 +341,7 @@ if ($step == 4) {
         
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.enableUpdate', 'false')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('security.useSslForLogins', 'false')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.currentApiVersion', '" . APIVERSION . "')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.currentApiVersion', '" . PMF_System::getApiVersion() . "')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.templateSet', 'default')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.numberSearchTerms', '10')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('records.orderingPopularFaqs', 'visits')";
@@ -469,15 +466,6 @@ if ($step == 4) {
 
         switch($DB['type']) {
 
-            case 'ibase':
-                $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions ALTER ask_username TO username";
-                $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions ALTER ask_usermail TO email";
-                $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions ALTER ask_rubrik TO category_id";
-                $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions ALTER ask_content TO question";
-                $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions ALTER ask_date TO created";
-                break;
-
-            case 'ibm_db2':
             case 'pgsql':
                 $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions RENAME COLUMN ask_username TO username";
                 $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions RENAME COLUMN ask_usermail TO email";
@@ -488,7 +476,6 @@ if ($step == 4) {
 
             case 'mssql':
             case 'sqlsrv':
-            case 'sybase':
                 $query[] = "EXEC sp_RENAME '" . SQLPREFIX . "faqquestions.ask_username', 'username', 'COLUMN'";
                 $query[] = "EXEC sp_RENAME '" . SQLPREFIX . "faqquestions.ask_usermail', 'email', 'COLUMN'";
                 $query[] = "EXEC sp_RENAME '" . SQLPREFIX . "faqquestions.ask_rubrik', 'category_id', 'COLUMN'";
@@ -708,15 +695,15 @@ if ($step == 4) {
     $query = array();
 
     // Always the last step: Update version number
-    if (version_compare($version, NEWVERSION, '<')) {
+    if (version_compare($version, PMF_System::getVersion(), '<')) {
         $oPMFConf = PMF_Configuration::getInstance();
-        $oPMFConf->update(array('main.currentVersion' => NEWVERSION));
+        $oPMFConf->update(array('main.currentVersion' => PMF_System::getVersion()));
     }
 
     // optimize tables
     switch ($DB["type"]) {
         case 'mssql':
-        case 'sybase':
+        case 'sqlsrv':
             // Get all table names
             $db->getTableNames(SQLPREFIX);
             foreach ($db->tableNames as $tableName) {
@@ -759,23 +746,12 @@ if ($step == 4) {
 
     print '<p class="success">The database was updated successfully. Thank you very much for updating.</p>';
     print '<p>Back to your <a href="../index.php">phpMyFAQ installation</a> and have fun! :-)</p>';
+
+    // Remove backup files
     foreach (glob(PMF_ROOT_DIR.'/config/*.bak.php') as $filename) {
         if (!@unlink($filename)) {
             printf("<p class=\"hint\">Please remove the backup file %s manually.</p>\n", $filename);
         }
-    }
-
-    // Remove 'scripts' folder: no need of prompt anything to the user
-    if (file_exists(PMF_ROOT_DIR . '/scripts') && is_dir(PMF_ROOT_DIR . '/scripts')) {
-        @rmdir(PMF_ROOT_DIR . '/scripts');
-    } else {
-        print "<p class=\"hint\">Please delete the folder <em>./scripts</em> manually.</p>\n";
-    }
-    // Remove 'phpmyfaq.spec' file: no need of prompt anything to the user
-    if (file_exists(PMF_ROOT_DIR . '/phpmyfaq.spec')) {
-        @unlink(PMF_ROOT_DIR . '/phpmyfaq.spec');
-    } else {
-        print "<p class=\"hint\">Please delete the file <em>./phpmyfaq.spec</em> manually.</p>\n";
     }
     // Remove 'setup.php' file
     if (@unlink(dirname($_SERVER['PATH_TRANSLATED']) . '/setup.php')) {
