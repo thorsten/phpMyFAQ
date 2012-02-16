@@ -533,7 +533,7 @@ if ($faqconfig->get('main.enableRewriteRules')) {
     $links_template_vars = array(
         "faqHome"             => $faqconfig->get('main.referenceURL'),
         "msgSearch"           => '<a href="index.php?'.$sids.'action=search">'.$PMF_LANG["msgAdvancedSearch"].'</a>',
-        "msgAddContent"       => '<a href="index.php?'.$sids.'action=add">'.$PMF_LANG["msgAddContent"].'</a>',
+        "msgAddContent"       => '<a href="index.php?'.$sids.'action=add&cat='.$cat.'">'.$PMF_LANG["msgAddContent"].'</a>',
         "msgQuestion"         => '<a href="index.php?'.$sids.'action=ask&category_id='.$cat.'">'.$PMF_LANG["msgQuestion"].'</a>',
         "msgOpenQuestions"    => '<a href="index.php?'.$sids.'action=open">'.$PMF_LANG["msgOpenQuestions"].'</a>',
         "msgHelp"             => '<a href="index.php?'.$sids.'action=help">'.$PMF_LANG["msgHelp"].'</a>',
