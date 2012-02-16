@@ -65,7 +65,7 @@
                             <input class="voting" type="radio" name="vote" value="3" />
                             <input class="voting" type="radio" name="vote" value="4" />
                             <input class="voting" type="radio" name="vote" value="5" />
-                            <span><strong>{msgAverageVote}</strong> {printVotings}</span>
+                            <span><strong>{msgAverageVote}</strong><span id="rating">{printVotings}</span></span>
                         </div>
                     </fieldset>
                     </form>

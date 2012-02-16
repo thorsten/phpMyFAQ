@@ -298,11 +298,11 @@ if (!is_null($id)) {
 //
 // found a solution ID?
 //
-$solution_id = PMF_Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
-if (!is_null($solution_id)) {
+$solutionId = PMF_Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
+if (! is_null($solutionId)) {
     $title    = ' -  powered by phpMyFAQ ' . $faqconfig->get('main.currentVersion');
     $keywords = '';
-    $faqData  = $faq->getIdFromSolutionId($solution_id);
+    $faqData  = $faq->getIdFromSolutionId($solutionId);
     if (is_array($faqData)) {
         $id              = $faqData['id'];
         $lang            = $faqData['lang'];
@@ -371,7 +371,7 @@ if ($action != 'main') {
     $includePhp      = $action . '.php';
     $writeLangAdress = '?sid=' . $sid;
 } else {
-    if (isset($solution_id) && is_numeric($solution_id)) {
+    if (isset($solutionId) && is_numeric($solutionId)) {
         // show the record with the solution ID
         $includeTemplate = 'artikel.tpl';
         $includePhp      = 'artikel.php';
@@ -530,7 +530,7 @@ if ($faqconfig->get('main.enableRewriteRules')) {
 } else {
     $tplNavigation = array(
         "msgSearch"           => '<a href="index.php?'.$sids.'action=search">'.$PMF_LANG["msgAdvancedSearch"].'</a>',
-        "msgAddContent"       => '<a href="index.php?'.$sids.'action=add">'.$PMF_LANG["msgAddContent"].'</a>',
+        "msgAddContent"       => '<a href="index.php?'.$sids.'action=add&cat='.$cat.'">'.$PMF_LANG["msgAddContent"].'</a>',
         "msgQuestion"         => '<a href="index.php?'.$sids.'action=ask&category_id='.$cat.'">'.$PMF_LANG["msgQuestion"].'</a>',
         "msgOpenQuestions"    => '<a href="index.php?'.$sids.'action=open">'.$PMF_LANG["msgOpenQuestions"].'</a>',
         "msgHelp"             => '<a href="index.php?'.$sids.'action=help">'.$PMF_LANG["msgHelp"].'</a>',
@@ -642,7 +642,7 @@ if (!isset($latestEntriesParams['error'])) {
     );
 }
 
-if ('artikel' == $action || 'show' == $action) {
+if ('artikel' == $action || 'show' == $action || is_numeric($solutionId)) {
     // We need some Links from social networks
     $faqServices = new PMF_Services();
     $faqServices->setCategoryId($cat);
