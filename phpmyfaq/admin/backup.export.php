@@ -17,7 +17,7 @@
  * @category  phpMyFAQ 
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2011 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-18
@@ -79,20 +79,21 @@ if ($permission['backup']) {
     switch ($action) {
         case 'backup_content' :
             foreach ($db->tableNames as $table) {
-                if (SQLPREFIX . 'faqadminlog' != $table || SQLPREFIX . 'faqsessions' != $table) {
-                    $tablenames .= $table . ' ';
+                if ((SQLPREFIX . 'faqadminlog' == trim($table)) || (SQLPREFIX . 'faqsessions' == trim($table))) {
+                    continue;
                 }
+                $tablenames .= $table . ' ';
             }
             break;
         case 'backup_logs' :
             foreach ($db->tableNames as $table) {
-                if (SQLPREFIX . 'faqadminlog' == $table || SQLPREFIX . 'faqsessions' == $table) {
+                if ((SQLPREFIX . 'faqadminlog' == trim($table)) || (SQLPREFIX . 'faqsessions' == trim($table))) {
                     $tablenames .= $table . ' ';
                 }
             }
             break;
     }
-    
+
     $text[] = "-- pmf" . $majorVersion . ": " . $tablenames;
     $text[] = "-- DO NOT REMOVE THE FIRST LINE!";
     $text[] = "-- pmftableprefix: " . SQLPREFIX;
@@ -102,18 +103,16 @@ if ($permission['backup']) {
     switch ($action) {
         case 'backup_content' :
             header('Content-Disposition: attachment; filename="phpmyfaq-data.'.date("Y-m-d-H-i-s").'.sql');
-            foreach ($db->tableNames as $table) {
+            foreach (explode(' ', $tablenames) as $table) {
                 print implode("\r\n", $text);
                 $text = build_insert("SELECT * FROM " . $table, $table);
             }
             break;
         case 'backup_logs' :
             header('Content-Disposition: attachment; filename="phpmyfaq-logs.'.date("Y-m-d-H-i-s").'.sql');
-            foreach ($db->tableNames as $table) {
-                if (SQLPREFIX . 'faqadminlog' == $table || SQLPREFIX . 'faqsessions' == $table) {
-                    print implode("\r\n", $text);
-                    $text = build_insert("SELECT * FROM " . $table, $table);
-                }
+            foreach (explode(' ', $tablenames) as $table) {
+                print implode("\r\n", $text);
+                $text = build_insert("SELECT * FROM " . $table, $table);
             }
             break;
     }
