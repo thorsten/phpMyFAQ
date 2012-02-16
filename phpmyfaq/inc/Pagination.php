@@ -18,7 +18,7 @@
  * @package   PMF_Pagination
  * @author    Anatoliy Belsky <ab@php.net>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2011 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-27
@@ -35,7 +35,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_Pagination
  * @author    Anatoliy Belsky <ab@php.net>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-27
@@ -111,14 +111,14 @@ class PMF_Pagination
      * 
      * @var string
      */
-    protected $firstPageLinkTpl = '<li><a href="{LINK_URL}">&lt;&lt;</a></li>';
+    protected $firstPageLinkTpl = '<li><a href="{LINK_URL}">←</a></li>';
     
     /**
      * Last page link template
      * 
      * @var string
      */
-    protected $lastPageLinkTpl = '<li><a href="{LINK_URL}">&gt;&gt;</a></li>';
+    protected $lastPageLinkTpl = '<li><a href="{LINK_URL}">→</a></li>';
     
     /**
      * Layout template
@@ -151,26 +151,24 @@ class PMF_Pagination
     /**
      * Constructor
      *
+     * We read in the current page from the baseUrl, so if it contains
+     * no pageParamName, first page is asumed
+     *
      * @param array $options initialization options,
-     * possible options:
-     * - baseUrl (default "")
-     * - total
-     * - perPage
-     * - linkTpl
-     * - currentPageLinkTpl
-     * - nextPageLinkTpl
-     * - prevPageLinkTpl
-     * - firstPageLinkTpl
-     * - lastPageLinkTpl
-     * - layoutTpl
-     * - pageParamName (default "page")
-     * 
-     * NOTE we read in the current page from the baseUrl, so if it contains
-     *      no pageParamName, first page is asumed
-     * 
-     * @return null
-     * 
-     * TODO do some checks to params (eq. arguments count for templates etc)
+     *                       possible options:
+     *                       - baseUrl (default "")
+     *                       - total
+     *                       - perPage
+     *                       - linkTpl
+     *                       - currentPageLinkTpl
+     *                       - nextPageLinkTpl
+     *                       - prevPageLinkTpl
+     *                       - firstPageLinkTpl
+     *                       - lastPageLinkTpl
+     *                       - layoutTpl
+     *                       - pageParamName (default "page")
+     *
+     * @return PMF_Pagination
      */
     public function __construct(Array $options = null)
     {
@@ -222,12 +220,8 @@ class PMF_Pagination
            $this->seoName = $options['seoName'];
         }
         
-        /**
-         * Let this call to be last cuz it 
-         * needs some options to be set before
-         */
+        // Let this call to be last cuz it  needs some options to be set before
         $this->currentPage = $this->getCurrentPageFromUrl($this->baseUrl);
-        
     }
     
     /**
@@ -288,25 +282,41 @@ class PMF_Pagination
         }
         
         if (1 < $this->currentPage) {
-            array_unshift($content,
-                          $this->renderLink($this->prevPageLinkTpl,
-                                            $this->renderUrl($this->baseUrl, $this->currentPage - 1),
-                                            $this->currentPage - 1));
-            array_unshift($content,
-                          $this->renderLink($this->firstPageLinkTpl,
-                                            $this->renderUrl($this->baseUrl, 1),
-                                            1));
+            array_unshift(
+                $content,
+                $this->renderLink(
+                    $this->prevPageLinkTpl,
+                    $this->renderUrl($this->baseUrl, $this->currentPage - 1),
+                    $this->currentPage - 1
+                )
+            );
+            array_unshift(
+                $content,
+                $this->renderLink(
+                    $this->firstPageLinkTpl,
+                    $this->renderUrl($this->baseUrl, 1),
+                    1
+                )
+            );
         }
         
         if ($page - 1 > $this->currentPage) {
-            array_push($content,
-                       $this->renderLink($this->nextPageLinkTpl,
-                                         $this->renderUrl($this->baseUrl, $this->currentPage + 1),
-                                         $this->currentPage + 1));
-            array_push($content,
-                       $this->renderLink($this->lastPageLinkTpl,
-                                         $this->renderUrl($this->baseUrl, $page - 1),
-                                         $page - 1));
+            array_push(
+                $content,
+                $this->renderLink(
+                    $this->nextPageLinkTpl,
+                    $this->renderUrl($this->baseUrl, $this->currentPage + 1),
+                    $this->currentPage + 1
+                )
+            );
+            array_push(
+                $content,
+                $this->renderLink(
+                    $this->lastPageLinkTpl,
+                    $this->renderUrl($this->baseUrl, $page - 1),
+                    $page - 1
+                )
+            );
         }
         
         return $this->renderLayout(implode('&nbsp;&nbsp;', $content));
