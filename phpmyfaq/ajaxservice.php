@@ -573,7 +573,9 @@ switch ($action) {
             }  else {
                 $faq->updateVoting($votingData);
             }
-            $message = array('success' => $PMF_LANG['msgVoteThanks']);
+            $faqRating   = new PMF_Rating();
+            $message = array('success' => $PMF_LANG['msgVoteThanks'],
+                             'rating'  => $faqRating->getVotingResult($recordId));
         } elseif (!$faq->votingCheck($recordId, $userIp)) {
             $faqsession->userTracking('error_save_voting', $recordId);
             $message = array('error' => $PMF_LANG['err_VoteTooMuch']);
