@@ -407,6 +407,7 @@ function saveVoting(type, id, value)
                 $('#loader').hide();
             } else {
                 $('#votings').html('<p class="success">' + json.success + '</p>');
+                $('#rating').html(json.rating);
                 $('#votings').fadeIn("slow");
                 $('#loader').hide();
                 $('#votingForm').hide();
