@@ -89,19 +89,19 @@ if ($permission['restore']) {
                 $mquery[$i] = alignTablePrefix($mquery[$i], $table_prefix, SQLPREFIX);
                 $kg         = $db->query($mquery[$i]);
                 if (!$kg) {
-                    printf('<div style="font-size: 9px;"><strong>Query</strong>: "%s" <span style="color: red;">failed (Reason: %s)</span></div>%s',
+                    printf('<div style="alert alert-error"><strong>Query</strong>: "%s" failed (Reason: %s)</div>%s',
                         PMF_String::htmlspecialchars($mquery[$i], ENT_QUOTES, 'utf-8'),
                         $db->error(),
                         "\n");
                     $k++;
                 } else {
-                    printf('<!-- <div style="font-size: 9px;"><strong>Query</strong>: "%s" <span style="color: green;">okay</span></div> -->%s',
+                    printf('<!-- <div style="alert alert-success"><strong>Query</strong>: "%s" okay</div> -->%s',
                         PMF_String::htmlspecialchars($mquery[$i], ENT_QUOTES, 'utf-8'),
                         "\n");
                     $g++;
                 }
             }
-            printf('<p class="success">%d %s %d %s</p>',
+            printf('<p class="alert alert-success">%d %s %d %s</p>',
                 $g,
                 $PMF_LANG['ad_csv_of'],
                 $num,
@@ -135,7 +135,7 @@ if ($permission['restore']) {
                 $errorMessage = 'Undefined error.';
                 break;
         }
-        printf('<p class="error">%s (%s)</p>', $PMF_LANG['ad_csv_no'], $errorMessage);
+        printf('<p class="alert alert-error">%s (%s)</p>', $PMF_LANG['ad_csv_no'], $errorMessage);
     }
 } else {
     print $PMF_LANG['err_NotAuth'];

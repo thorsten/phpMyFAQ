@@ -51,7 +51,7 @@ if ($permission['backup']) {
                 <input type="file" name="userfile" size="30" />
             </p>
             <p>
-                <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_csv_ok"]; ?>" />
+                <input class="btn-primary btn-large" type="submit" value="<?php print $PMF_LANG["ad_csv_ok"]; ?>" />
             </p>
         </fieldset>
         </form>
