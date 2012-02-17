@@ -516,12 +516,12 @@ if (isset($auth) && in_array(true, $permission)) {
             </header>
 <?php
     if (isset($error) && 0 < strlen($error)) {
-        $message = sprintf('<p class="error">%s</p>', $error);
+        $message = sprintf('<p class="alert alert-error">%s</p>', $error);
     } else {
         $message = sprintf('<p>%s</p>', $PMF_LANG['ad_auth_insert']);
     }
     if ($action == 'logout') {
-        $message = sprintf('<p class="success">%s</p>', $PMF_LANG['ad_logout']);
+        $message = sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_logout']);
     }
     
     if (isset($_SERVER['HTTPS']) || !$faqconfig->get('security.useSslForLogins')) {
@@ -529,23 +529,25 @@ if (isset($auth) && in_array(true, $permission)) {
 
             <?php print $message ?>
 
-            <form action="index.php" method="post">
+            <form class="form-horizontal" action="index.php" method="post">
 
-                <p>
+                <div class="control-group">
                     <label for="faqusername"><?php print $PMF_LANG["ad_auth_user"]; ?></label>
-                    <input type="text" name="faqusername" id="faqusername" size="30" required="required"
-                           autofocus="autofocus" />
-                </p>
+                    <div class="controls">
+                        <input type="text" name="faqusername" id="faqusername" required="required" autofocus="autofocus" />
+                    </div>
+                </div>
 
-                <p>
+                <div class="control-group">
                     <label for="faqpassword"><?php print $PMF_LANG["ad_auth_passwd"]; ?></label>
-                    <input type="password" size="30" name="faqpassword" id="faqpassword" required="required" />
-                </p>
+                    <div class="controls">
+                        <input type="password" size="30" name="faqpassword" id="faqpassword" required="required" />
+                    </div>
+                </div>
 
-                <p>
-                    <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_auth_ok"]; ?>" />
-                    <input class="submit" type="reset" value="<?php print $PMF_LANG["ad_auth_reset"]; ?>" />
-                </p>
+                <div class="form-actions">
+                    <input class="btn-primary btn-large" type="submit" value="<?php print $PMF_LANG["ad_auth_ok"]; ?>" />
+                </div>
 <?php
     } else {
         printf('<p><a href="https://%s%s">%s</a></p>',
@@ -555,7 +557,6 @@ if (isset($auth) && in_array(true, $permission)) {
     }
 ?>
             </form>
-        </section>
 <?php
 }
 ?>

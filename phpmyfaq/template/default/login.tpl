@@ -12,22 +12,26 @@
 
             {loginMessage}
 
-            <form action="{writeLoginPath}" method="post">
+            <form class="form-horizontal" action="{writeLoginPath}" method="post">
                 <input type="hidden" name="faqloginaction" value="{faqloginaction}"/>
 
-                <p>
+                <div class="control-group">
                     <label for="faqusername">{username}</label>
-                    <input type="text" name="faqusername" id="faqusername" size="16" required="required"
-                           autofocus="autofocus">
-                </p>
-                <p>
-                    <label for="faqpassword">{password}</label>
-                    <input type="password" size="16" name="faqpassword" id="faqpassword" required="required">
-                </p>
-                <p>
-                    <input class="submit" type="submit" value="{login}">
-                </p>
+                    <div class="controls">
+                        <input type="text" name="faqusername" id="faqusername" required="required" autofocus="autofocus">
+                    </div>
+                </div>
 
+                <div class="control-group">
+                    <label for="faqpassword">{password}</label>
+                    <div class="controls">
+                        <input type="password" name="faqpassword" id="faqpassword" required="required">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <input class="btn-primary btn-large" type="submit" value="{login}">
+                </div>
             </form>
 
         </section>

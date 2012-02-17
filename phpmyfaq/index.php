@@ -123,14 +123,14 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
             $error           = $PMF_LANG['ad_auth_fail'] . ' (' . $faqusername . ')';
             $loginVisibility = '';
             $user            = null;
-            $action          = 'main';
+            $action          = 'login';
         }
     } else {
         // error
         $error           = $PMF_LANG['ad_auth_fail'];
         $loginVisibility = '';
         $user            = null;
-        $action          = 'main';
+        $action          = 'login';
     }
 
 } else {

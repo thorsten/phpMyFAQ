@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 if (is_null($error)) {
     $loginMessage = '<p>' . $PMF_LANG['ad_auth_insert'] . '</p>';
 } else {
-    $loginMessage = '<p class="error">' . $error . '</p>';
+    $loginMessage = '<p class="alert alert-error">' . $error . '</p>';
 }
 
 $tpl->parse(
