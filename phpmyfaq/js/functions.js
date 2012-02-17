@@ -18,7 +18,7 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2003-2011 phpMyFAQ Team
+ * @copyright 2003-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-11-13
@@ -83,24 +83,6 @@ function showhideCategory(id)
     }
 }
 
-
-/**
- * Displays or hides the login form
- *
- * @return void
- */
-function loginForm()
-{
-    if ($('#loginForm').hasClass('hidden')) {
-        $('#loginForm').removeClass('hidden');
-        $('#loginForm').fadeIn();
-    } else {
-        $('#loginForm').fadeOut();
-        $('#loginForm').addClass('hidden');
-    }
-}
-
- 
 /**
  * Displays or hides a configuration block
  * 
@@ -110,46 +92,10 @@ function loginForm()
 function toggleConfig(container)
 {
     if ($('#config' + container).css('display') == 'none') {
-    	$('#config' + container).fadeIn("slow");
+        $('#config' + container).fadeIn("slow");
     } else {
         $('#config' + container).fadeOut("slow");
     }
-}
-
-/**
- * deletes all options from given select-object.
- *
- * @param select
- * @return void
- */
-function select_clear(select)
-{
-    while (select.length > 0) {
-        select.remove(0);
-    }
-}
-
-/**
-* adds an option to the given select-object.
-*
-* @access public
-* @author Lars Tiedemann, <php@larstiedemann.de>
-* @param select node
-* @param string
-* @param text node
-* @param string
-* @return void
-*/
-function select_addOption(select, value, content, classValue)
-{
-    var opt;
-    opt = document.createElement("option");
-    opt.value = value;
-    if (classValue) {
-        opt.className = classValue;
-    }
-    opt.appendChild(content);
-    select.appendChild(opt);
 }
 
 /**
@@ -218,81 +164,6 @@ function form_uncheckAll(form_id)
             ele.checked = false;
         }
     }
-}
-
-/**
-* returns the text content of a child element.
-*
-* When having a dom structure like this:
-* <item id="1">
-*   <name>Item Name</name>
-*   <value>Text Value</value>
-* </item>
-* text_getFromParent(document.getElementById(1), "name")
-* would return "Item Name".
-*
-* @access public
-* @author Lars Tiedemann, <php@larstiedemann.de>
-* @param Object select
-* @return void
-*/
-function text_getFromParent(parentObject, childElement)
-{
-    var result = "";
-    result = parentObject.getElementsByTagName(childElement)[0];
-    if (result) {
-        if (result.childNodes.length > 1) {
-            return result.childNodes[1].nodeValue;
-        } else {
-            if (result.firstChild) {
-                return result.firstChild.nodeValue;
-            } else {
-                return "";
-            }
-        }
-    } else {
-        return "n/a";
-    }
-}
-
-/**
-* deletes all rows from given table-object.
-*
-* @access public
-* @author Lars Tiedemann, <php@larstiedemann.de>
-* @param table
-* @return void
-*/
-function table_clear(table)
-{
-    while (table.rows.length > 0) {
-        table.deleteRow(0);
-    }
-}
-
-/**
-* inserts a new row into the given table at the given position.
-*
-* @access public
-* @author Lars Tiedemann, <php@larstiedemann.de>
-* @param table
-* @param int
-* @param node
-* @param node
-* @return void
-*/
-function table_addRow(table, rowNumber, col1, col2)
-{
-    var td1;
-    var td2;
-    var tr;
-    td1 = document.createElement("td");
-    td1.appendChild(col1);
-    td2 = document.createElement("td");
-    td2.appendChild(col2);
-    tr = table.insertRow(rowNumber);
-    tr.appendChild(td1);
-    tr.appendChild(td2);
 }
 
 /**
@@ -517,3 +388,10 @@ function closeWindow()
 {
     window.close();
 }
+
+/**
+ * General functions
+ */
+$(document).ready(function() {
+
+});
