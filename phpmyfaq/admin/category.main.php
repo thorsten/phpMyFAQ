@@ -229,7 +229,7 @@ if ($permission['editcateg']) {
 
     $open = $lastCatId = 0;
     print '<ul>';
-    foreach ($category->catTree as $cat) {
+    foreach ($category->catTree as $id => $cat) {
 
         $indent = '';
         for ($i = 0; $i < $cat['indent']; $i++) {
@@ -262,7 +262,7 @@ if ($permission['editcateg']) {
                 print '</li>';
             }
             print "\n".str_repeat("\t", $level + 2)."</ul>\n".str_repeat("\t", $level + 1)."</li>\n";
-        } elseif ($level == $open && $y != 0) {
+        } elseif ($level == $open && $id != 0) {
             print "</li>\n";
         }
 
