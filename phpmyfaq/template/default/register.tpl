@@ -3,35 +3,43 @@
                 <h2>{msgRegistration}</h2>
             </header>
 
-            <p>{msgRegistrationCredentials}</p>
-            <p>{msgRegistrationNote}</p>
+            <p>{msgRegistrationCredentials} {msgRegistrationNote}</p>
 
             <div id="registrations"></div>
 
-            <form id="formValues" method="post" action="#">
+            <form class="form-horizontal" id="formValues" method="post" action="#">
                 <input type="hidden" name="lang" id="lang" value="{lang}" />
-                <p>
-                    <label for="realname">{realname}</label>
-                    <input type="text" name="realname" id="realname" required="required" autofocus="autofocus" />
-                </p>
-                <p>
-                    <label for="name">{loginname}</label>
-                    <input type="text" name="name" id="name" required="required" />
-                </p>
-                <p>
-                    <label for="email">{email}</label>
-                    <input type="email" name="email" id="email" required="required" />
-                </p>
 
-                <p>
+                <div class="control-group">
+                    <label for="realname">{realname}</label>
+                    <div class="controls">
+                        <input type="text" name="realname" id="realname" required="required" />
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="name">{loginname}</label>
+                    <div class="controls">
+                        <input type="text" name="name" id="name" required="required" />
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="email">{email}</label>
+                    <div class="controls">
+                        <input type="email" name="email" id="email" required="required" />
+                    </div>
+                </div>
+
+                <div class="control-group">
                     {captchaFieldset}
-                </p>
+                </div>
 
                 <div id="loader"></div>
 
-                <p>
-                    <input class="submit" type="submit"  id="submitregistration" value="{submitRegister}" />
-                </p>
+                <div class="form-actions">
+                    <input class="btn-primary" type="submit"  id="submitregistration" value="{submitRegister}" />
+                </div>
             </form>
             <script type="text/javascript" >
             $(function() {

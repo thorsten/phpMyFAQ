@@ -5,33 +5,37 @@
             <div id="loader"></div>
             <div id="contacts"></div>
 
-            <form id="formValues" action="#" method="post">
+            <form class="form-horizontal" id="formValues" action="#" method="post">
                 <input type="hidden" name="lang" id="lang" value="{lang}" />
-            
-                <p>
+
+                <div class="control-group">
                     <label for="name">{msgNewContentName}</label>
-                    <input type="text" name="name" id="name" value="{defaultContentName}" size="40"
-                           required="required" autofocus="autofocus" />
-                </p>
+                    <div class="controls">
+                        <input type="text" name="name" id="name" value="{defaultContentName}" required="required" />
+                    </div>
+                </div>
 
-                <p>
+                <div class="control-group">
                     <label for="email">{msgNewContentMail}</label>
-                    <input type="email" name="email" id="email" value="{defaultContentMail}" size="40"
-                           required="required" />
-                </p>
+                    <div class="controls">
+                        <input type="email" name="email" id="email" value="{defaultContentMail}" required="required" />
+                    </div>
+                </div>
 
-                <p>
+                <div class="control-group">
                     <label for="question">{msgMessage}</label>
-                    <textarea cols="37" rows="5" name="question" id="question" required="required" /></textarea>
-                </p>
+                    <div class="controls">
+                        <textarea cols="37" rows="5" name="question" id="question" required="required" /></textarea>
+                    </div>
+                </div>
 
-                <p>
+                <div class="control-group">
                     {captchaFieldset}
-                </p>
+                </div>
 
-                <p>
-                    <input class="submit" type="submit" id="submitcontact" value="{msgS2FButton}" />
-                </p>
+                <div class="form-actions">
+                    <input class="btn-primary" type="submit" id="submitcontact" value="{msgS2FButton}" />
+                </div>
             </form>
             <script type="text/javascript" >
             $(function() {

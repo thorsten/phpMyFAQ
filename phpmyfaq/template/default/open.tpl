@@ -8,7 +8,7 @@
 
             <p>{msgQuestionText}</p>
 
-            <table class="openquestions">
+            <table class="table table-striped">
             <tr>
                 <th>{msgDate_User}</th>
                 <th>{msgQuestion2}</th>

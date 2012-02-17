@@ -3,47 +3,52 @@
             <div id="questionForm">
                 <p>{msgNewQuestion}</p>
             </div>
-            <div id="answerForm">
-
-            </div>
-
+            <div id="answerForm"></div>
             <div id="answers"></div>
 
-            <form id="formValues" action="#" method="post">
+            <form class="form-horizontal" id="formValues" action="#" method="post">
                 <input type="hidden" name="lang" id="lang" value="{lang}" />
 
-                <p>
+                <div class="control-group">
                     <label for="name">{msgNewContentName}</label>
-                    <input type="text" name="name" id="name" value="{defaultContentName}" size="50"
-                           required="required" autofocus="autofocus" />
-                </p>
+                    <div class="controls">
+                        <input type="text" name="name" id="name" value="{defaultContentName}" required="required" />
+                    </div>
+                </div>
 
-                <p>
+                <div class="control-group">
                     <label for="email">{msgNewContentMail}</label>
-                    <input type="email" name="email" id="email" value="{defaultContentMail}" size="50"
-                           required="required" />
-                </p>
+                    <div class="controls">
+                        <input type="email" name="email" id="email" value="{defaultContentMail}" required="required" />
+                    </div>
+                </div>
 
-                <p>
+                <div class="control-group">
                     <label for="category">{msgAskCategory}</label>
-                    <select name="category" id="category" required="required" />
-                    {printCategoryOptions}
-                    </select>
-                </p>
+                    <div class="controls">
+                        <select name="category" id="category" required="required" />
+                        {printCategoryOptions}
+                        </select>
+                    </div>
+                </div>
 
-                <p>
+                <div class="control-group">
                     <label for="question">{msgAskYourQuestion}</label>
-                    <textarea cols="45" rows="5" name="question" id="question" required="required" /></textarea>
-                </p>
+                    <div class="controls">
+                        <textarea cols="45" rows="5" name="question" id="question" required="required" /></textarea>
+                    </div>
+                </div>
 
-                <p>
+                <div class="control-group">
                     {captchaFieldset}
-                </p>
+                </div>
 
                 <div id="loader"></div>
                 <div id="qerror"></div>
-                
-                <input class="submit" type="submit" id="submitquestion" value="{msgNewContentSubmit}">
+
+                <div class="form-actions">
+                    <input class="btn-primary" type="submit" id="submitquestion" value="{msgNewContentSubmit}">
+                </div>
 
             </form>
 
