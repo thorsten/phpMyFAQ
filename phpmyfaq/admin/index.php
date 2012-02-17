@@ -376,7 +376,7 @@ if (isset($auth) && in_array(true, $permission)) {
             <header>
                 <h2><?php print $PMF_LANG['ad_pmf_info']; ?></h2>
             </header>
-            <table class="list" style="width: 300px;">
+            <table class="table table-striped">
             <tbody>
                 <tr>
                     <td><strong><a href="?action=viewsessions"><?php print $PMF_LANG["ad_start_visits"]; ?></a></strong></td>
@@ -431,7 +431,7 @@ if (isset($auth) && in_array(true, $permission)) {
 
                 <form action="index.php" method="post">
                     <input type="hidden" name="param" value="version" />
-                    <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_xmlrpc_button"]; ?>" />
+                    <input class="btn-primary btn-large" type="submit" value="<?php print $PMF_LANG["ad_xmlrpc_button"]; ?>" />
                 </form>
 <?php
         }
@@ -444,7 +444,7 @@ if (isset($auth) && in_array(true, $permission)) {
             <header>
                 <h3><?php print $PMF_LANG['ad_system_info']; ?></h3>
             </header>
-            <table class="list" style="width: 750px;">
+            <table class="table table-striped">
             <tbody>
                 <tr>
                     <td style="width: 150px;"><strong>phpMyFAQ Version</strong></td>

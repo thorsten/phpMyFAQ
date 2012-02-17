@@ -241,7 +241,7 @@ switch ($action) {
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <span title="<?php print $PMF_LANG['ad_user_loggedin'] . $user->getLogin(); ?>">
-                            <?php print $user->getUserData('display_name'); ?>!
+                            <?php print $user->getUserData('display_name'); ?>
                             </span>
                             <b class="caret"></b>
                         </a>
@@ -271,7 +271,7 @@ switch ($action) {
         <div class="row">
             <?php if (isset($auth) && in_array(true, $permission)) { ?>
             <div class="span3">
-                <menu class="well sidebar-nav">
+                <div class="well">
                     <ul class="nav nav-list">
                         <li class="nav-header"><?php print $secLevelHeader; ?></li>
                         <?php print $secLevelEntries; ?>
@@ -280,7 +280,7 @@ switch ($action) {
                         <li class="nav-header">Found an issue?</li>
                         <li><a href="https://github.com/thorsten/phpMyFAQ/issues/" target="_blank">Please report it here</a></li>
                     </ul>
-                </menu>
+                </div>
             </div>
             <?php } ?>
 
