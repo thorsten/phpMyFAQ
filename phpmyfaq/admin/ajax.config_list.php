@@ -68,7 +68,7 @@ function printInputFieldByType($key, $type)
             printf('<textarea name="edit[%s]" cols="60" rows="6" style="width: 300px;">%s</textarea>',
                     $key,
                     str_replace('<', '&lt;', str_replace('>', '&gt;', $faqconfig->get($key))));
-            printf("</p>\n");
+            printf("</div>\n");
             break;
 
         case 'input':
@@ -82,7 +82,7 @@ function printInputFieldByType($key, $type)
             printf('<input type="text" name="edit[%s]" size="75" value="%s" style="width: 300px;" />',
                     $key,
                     $value);
-            printf("</p>\n");
+            printf("</div>\n");
             break;
 
         case 'select':
@@ -190,11 +190,11 @@ function printInputFieldByType($key, $type)
             if ($faqconfig->get($key)) {
                 print ' checked="checked"';
             }
-            print " /></p>\n";
+            print " /></div>\n";
             break;
             
         case 'print':
-            printf('<input type="hidden" name="edit[%s]" size="80" value="%s" />%s</p>',
+            printf('<input type="hidden" name="edit[%s]" size="80" value="%s" />%s</div>',
                     $key,
                     str_replace('"', '&quot;', $faqconfig->get($key)),
                     $faqconfig->get($key));
@@ -229,11 +229,11 @@ foreach ($LANG_CONF as $key => $value) {
                 print "Status: " . $content->status->text . "<br />\n";
                 print "<br />\n";
             }
-            print '</p>';
+            print '</div>';
         }
 ?>
-            <p class="config">
-                <label class="config">
+            <div class="control-group">
+                <label>
 <?php
         switch ($key) {
 
@@ -262,8 +262,9 @@ foreach ($LANG_CONF as $key => $value) {
         }
 ?>
                 </label>
-                <?php printInputFieldByType($key, $value[0]); ?>
-                <br />
+                <div class="controls">
+                    <?php printInputFieldByType($key, $value[0]); ?>
+                </div>
 <?php
     }
 }
