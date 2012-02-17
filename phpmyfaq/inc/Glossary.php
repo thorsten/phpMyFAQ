@@ -143,7 +143,7 @@ class PMF_Glossary
                 // e. the glossary item could be at the end of the string as a distinct word
                 .'(\W+)('.$item['item'].')$'
                 .'/mis',
-                array($this, 'setAbbreviations'),
+                array($this, 'setTooltip'),
                 $content); 
         }
 
@@ -154,9 +154,10 @@ class PMF_Glossary
      * Callback function for filtering HTML from URLs and images
      *
      * @param  array $matches Matchings
+     *
      * @return string
      */
-    public function setAbbreviations(Array $matches)
+    public function setTooltip(Array $matches)
     {
         if (count($matches) > 9) {
             // if the word is at the end of the string
@@ -176,7 +177,7 @@ class PMF_Glossary
         }
         
         if (!empty($item)) {
-            return sprintf('%s<abbr class="glossary" title="%s">%s</abbr>%s',
+            return sprintf('%s<a rel="tooltip" data-original-title="%s">%s</a>%s',
                 $prefix,
                 $this->definition,
                 $item,

@@ -7,9 +7,14 @@
                 <h2>{writeThema}</h2>
             </header>
             
-            <article>
+            <article id="answer">
             {writeContent}
             </article>
+            <script>
+                $(function(){
+                    $('a[rel="tooltip"]').tooltip();
+                });
+            </script>
 
             <div id="faqAccordion" class="accordion">
                 <div class="accordion-group">
