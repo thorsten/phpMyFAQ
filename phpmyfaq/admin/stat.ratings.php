@@ -41,7 +41,7 @@ if ($permission['viewlog']) {
             <h2><?php print $PMF_LANG["ad_rs"] ?></h2>
         </header>
 
-        <table class="list" style="width: 100%">
+        <table class="table table-striped">
 <?php
     foreach ($ratingdata as $data) {
         if ($data['category_id'] != $oldcategory) {
@@ -75,7 +75,7 @@ if ($permission['viewlog']) {
             </td>
             <td>
                 <?php print $data['usr']; ?></td>
-            <td style="background-color: #d3d3d3;">
+            <td>
                 <img src="stat.bar.php?num=<?php print $data['num']; ?>" border="0"
                      alt="<?php print round($data['num'] * 20); ?> %" width="50" height="15"
                      title="<?php print round($data['num'] * 20); ?> %" />

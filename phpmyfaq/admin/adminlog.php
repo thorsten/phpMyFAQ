@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2011 phpMyFAQ Team
+ * @copyright 2003-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-23
@@ -48,18 +48,18 @@ if ($permission['adminlog'] && 'adminlog' == $action) {
     $logging_data = $logging->getAll();
 ?>
     <h2><?php print $PMF_LANG["ad_adminlog"]; ?></h2>
-    <table class="list">
+    <table class="table table-striped">
     <thead>
         <tr>
-            <th class="list"><?php print $PMF_LANG["ad_categ_id"]; ?></th>
-            <th class="list"><?php print $PMF_LANG["ad_adminlog_date"]; ?></th>
-            <th class="list"><?php print $PMF_LANG["ad_adminlog_user"]; ?></th>
-            <th class="list"><?php print $PMF_LANG["ad_adminlog_ip"]; ?></th>
+            <th><?php print $PMF_LANG["ad_categ_id"]; ?></th>
+            <th><?php print $PMF_LANG["ad_adminlog_date"]; ?></th>
+            <th><?php print $PMF_LANG["ad_adminlog_user"]; ?></th>
+            <th><?php print $PMF_LANG["ad_adminlog_ip"]; ?></th>
         </tr>
     </thead>
     <tfoot>
         <tr>
-            <td class="list" colspan="4"><?php print $PageSpan; ?></td>
+            <td colspan="4"><?php print $PageSpan; ?></td>
         </tr>
     </tfoot>
     <tbody>
@@ -82,13 +82,13 @@ if ($permission['adminlog'] && 'adminlog' == $action) {
         $user->getUserById($logging_value['usr']);
 ?>
         <tr class="cell">
-            <td class="list"><?php print $logging_id; ?></td>
-            <td class="list"><?php print PMF_Date::format(date('Y-m-d H:i', $logging_value['time'])); ?></td>
-            <td class="list"><?php print $user->getLogin(); ?></td>
-            <td class="list"><?php print $logging_value['ip']; ?></td>
+            <td><?php print $logging_id; ?></td>
+            <td><?php print PMF_Date::format(date('Y-m-d H:i', $logging_value['time'])); ?></td>
+            <td><?php print $user->getLogin(); ?></td>
+            <td><?php print $logging_value['ip']; ?></td>
         </tr>
         <tr class="cell">
-            <td colspan="4" class="list"><?php
+            <td colspan="4"><?php
         $text = $logging_value['text'];
         $text = str_replace("Loginerror", $PMF_LANG["ad_log_lger"], $text);
         $text = str_replace("Session expired", $PMF_LANG["ad_log_sess"], $text);
