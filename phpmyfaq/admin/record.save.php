@@ -98,7 +98,7 @@ if ($permission['editbt']) {
         $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $record_lang, $revision_id);
 
         // Create the visit entry
-        PMF_Visits::getInstance()->add($record_id);
+        PMF_Visits::getInstance($db, $Language)->add($record_id);
 
         // save or update the FAQ record
         if ($faq->isAlreadyTranslated($record_id, $record_lang)) {
