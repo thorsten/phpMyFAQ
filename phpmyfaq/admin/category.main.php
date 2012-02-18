@@ -95,9 +95,9 @@ if ($permission['editcateg']) {
                     }
                 }
             }
-            printf('<p class="success">%s</p>', $PMF_LANG['ad_categ_added']);
+            printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_added']);
         } else {
-            printf('<p class="error">%s</p>', $db->error());
+            printf('<p class="alert alert-error">%s</p>', $db->error());
         }
     }
 
@@ -123,9 +123,9 @@ if ($permission['editcateg']) {
             if ($category->addCategory($category_data, $parent_id, $category_data['id']) &&
                 $category->addPermission('user', array($category_data['id']), $user_allowed) &&
                 $category->addPermission('group', array($category_data['id']), $group_allowed)) {
-                printf('<p class="success">%s</p>', $PMF_LANG['ad_categ_translated']);
+                printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_translated']);
             } else {
-                printf('<p class="error">%s</p>', $db->error());
+                printf('<p class="alert alert-error">%s</p>', $db->error());
             }
         } else {
             if ($category->updateCategory($category_data)) {
@@ -133,9 +133,9 @@ if ($permission['editcateg']) {
                 $category->deletePermission('group', array($category_data['id']));
                 $category->addPermission('user', array($category_data['id']), $user_allowed);
                 $category->addPermission('group', array($category_data['id']), $group_allowed);
-                printf('<p class="success">%s</p>', $PMF_LANG['ad_categ_updated']);
+                printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_updated']);
             } else {
-                printf('<p class="error">%s</p>', $db->error());
+                printf('<p class="alert alert-error">%s</p>', $db->error());
             }
         }
         
@@ -183,9 +183,9 @@ if ($permission['editcateg']) {
         if ($category->deleteCategory($id, $lang, $delete_all) && 
             $category->deleteCategoryRelation($id, $lang, $delete_all) &&
             $category->deletePermission('user', array($id)) && $category->deletePermission('group', array($id))) {
-            printf('<p class="success">%s</p>', $PMF_LANG['ad_categ_deleted']);
+            printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_deleted']);
         } else {
-            printf('<p class="error">%s</p>', $db->error());
+            printf('<p class="alert alert-error">%s</p>', $db->error());
         }
     }
 
@@ -197,9 +197,9 @@ if ($permission['editcateg']) {
         $category_id_2 = PMF_Filter::filterInput(INPUT_POST, 'change', FILTER_VALIDATE_INT);
 
         if ($category->swapCategories($category_id_1, $category_id_2)) {
-            printf('<p class="success">%s</p>', $PMF_LANG['ad_categ_updated']);
+            printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_updated']);
         } else {
-            printf('<p class="error">%s<br />%s</p>', $PMF_LANG['ad_categ_paste_error'], $db->error());
+            printf('<p class="alert alert-error">%s<br />%s</p>', $PMF_LANG['ad_categ_paste_error'], $db->error());
         }
     }
 
@@ -210,9 +210,9 @@ if ($permission['editcateg']) {
         $category_id = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
         $parent_id   = PMF_Filter::filterInput(INPUT_POST, 'after', FILTER_VALIDATE_INT);
         if ($category->updateParentCategory($category_id, $parent_id)) {
-            printf('<p class="success">%s</p>', $PMF_LANG['ad_categ_updated']);
+            printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_updated']);
         } else {
-            printf('<p class="error">%s<br />%s</p>', $PMF_LANG['ad_categ_paste_error'], $db->error());
+            printf('<p class="alert alert-error">%s<br />%s</p>', $PMF_LANG['ad_categ_paste_error'], $db->error());
         }
     }
 
@@ -356,7 +356,7 @@ if ($permission['editcateg']) {
 
     print "</li>\n</ul>";
     
-    printf('<p>%s</p>', $PMF_LANG['ad_categ_remark']);
+    printf('<p class="alert alert-info">%s</p>', $PMF_LANG['ad_categ_remark']);
 } else {
     print $PMF_LANG['err_NotAuth'];
 }

@@ -314,12 +314,14 @@ class PMF_Category
         if ($x != 0) {
             foreach ($tt as $d) {
                 $tmp = array();
-                foreach ($this->categories[$d] as $key => $value) {
-                    $tmp[$key] = $value;
+                if (isset($this->categories[$d])) {
+                    foreach ($this->categories[$d] as $key => $value) {
+                        $tmp[$key] = $value;
+                    }
+                    $tmp["indent"] = $indent;
+                    $this->catTree[] = $tmp;
+                    $this->buildTree($tmp["id"], $indent + 1);
                 }
-                $tmp["indent"] = $indent;
-                $this->catTree[] = $tmp;
-                $this->buildTree($tmp["id"], $indent+1);
             }
         }
     }

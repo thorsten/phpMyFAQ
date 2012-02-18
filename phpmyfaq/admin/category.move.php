@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2004-2011 phpMyFAQ Team
+ * @copyright 2004-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-04-29
@@ -47,11 +47,12 @@ if ($permission["editcateg"]) {
         <header>
             <h2><?php print $header ?></h2>
         </header>
-        <form action="?action=changecategory" method="post">
+        <form class="form-horizontal" action="?action=changecategory" method="post">
             <input type="hidden" name="cat" value="<?php print $id; ?>" />
             <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
-            <p>
+            <div class="control-group">
                 <label><?php print $PMF_LANG["ad_categ_change"]; ?></label>
+                <div class="controls">
                    <select name="change" size="1">
 <?php
                     foreach ($category->categories as $cat) {
@@ -60,14 +61,16 @@ if ($permission["editcateg"]) {
                        }
                    }
 ?>
-               </select
-            </p>
-            <p>
-                <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" />
-            </p>
+                    </select>
+                    <?php printf('<p class="help-block">%s</p>', $PMF_LANG['ad_categ_remark_move']); ?>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <input class="btn-primary" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" />
+            </div>
         </form>
 <?php
-    printf('<p>%s</p>', $PMF_LANG['ad_categ_remark_move']);
 } else {
     print $PMF_LANG["err_NotAuth"];
 }
