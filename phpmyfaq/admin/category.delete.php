@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2011 phpMyFAQ Team
+ * @copyright 2003-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-12-20
@@ -40,35 +40,47 @@ if ($permission['delcateg']) {
     $categories = $category->getAllCategories();
     $id         = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
     ?>
-        <form action="?action=removecategory" method="post">
+        <form class="form-horizontal" action="?action=removecategory" method="post">
             <input type="hidden" name="cat" value="<?php print $id; ?>" />
             <input type="hidden" name="lang" value="<?php print $LANGCODE; ?>" />
             <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
 
-            <p>
-                <label class="left"><?php print $PMF_LANG['ad_categ_titel']; ?>:</label>
-                <?php print $categories[$id]['name']; ?>
-            </p>
+            <div class="control-group">
+                <label><?php print $PMF_LANG['ad_categ_titel']; ?>:</label>
+                <div class="controls">
+                    <?php print $categories[$id]['name']; ?>
+                </div>
+            </div>
 
-            <p>
-                <label class="left"><?php print $PMF_LANG['ad_categ_desc']; ?>:</label>
-                <?php print $categories[$id]['description']; ?>
-            </p>
+            <div class="control-group">
+                <label><?php print $PMF_LANG['ad_categ_desc']; ?>:</label>
+                <div class="controls">
+                    <?php print $categories[$id]['description']; ?>
+                </div>
+            </div>
 
-            <p>
-                <label class="left"><?php print $PMF_LANG['ad_categ_deletealllang']; ?></label>
-                <input type="radio" checked name="deleteall" value="yes" />
-            </p>
+            <div class="control-group">
+                <div class="controls">
+                    <label class="radio">
+                        <input type="radio" checked name="deleteall" value="yes" />
+                        <?php print $PMF_LANG['ad_categ_deletealllang']; ?>
+                    </label>
+                </div>
+            </div>
 
-            <p>
-                <label class="left"><?php print $PMF_LANG['ad_categ_deletethislang']; ?></label>
-                <input type="radio" name="deleteall" value="no" />  <br />
-            </p>
+            <div class="control-group">
+                <div class="controls">
+                    <label class="radio">
+                        <input type="radio" name="deleteall" value="no" />
+                        <?php print $PMF_LANG['ad_categ_deletethislang']; ?>
+                    </label>
+                </div>
+            </div>
 
-            <p>
-                <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG['ad_categ_del_yes']; ?>" />&nbsp;&nbsp;
-                <input  type="reset" onclick="javascript:history.back();" value="<?php print $PMF_LANG['ad_categ_del_no']; ?>" />
-            </p>
+            <div class="form-actions">
+                <input class="btn-danger" type="submit" name="submit" value="<?php print $PMF_LANG['ad_categ_del_yes']; ?>" />&nbsp;&nbsp;
+                <input class="btn-success" type="reset" onclick="javascript:history.back();" value="<?php print $PMF_LANG['ad_categ_del_no']; ?>" />
+            </div>
         </form>
 <?php
 } else {
