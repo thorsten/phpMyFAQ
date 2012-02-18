@@ -18,7 +18,7 @@
  * @package   PMF_Helper
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
- * @copyright 2010-2011 phpMyFAQ Team
+ * @copyright 2010-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-19
@@ -31,7 +31,7 @@
  * @package   PMF_Helper
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
- * @copyright 2010-2011 phpMyFAQ Team
+ * @copyright 2010-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-19
@@ -101,10 +101,11 @@ class PMF_Helper_Administration
     public function addMenuEntry($restrictions = '', $action = '', $caption = '', $active = '', $checkPerm = true)
     {
         global $PMF_LANG;
-        
-        $current = '';
+
         if ($active == $action) {
-            $current = ' id="current"';
+            $active = ' class="active"';
+        } else {
+            $active = '';
         }
         
         if ($action != '') {
@@ -117,7 +118,7 @@ class PMF_Helper_Administration
             $_caption = 'No string for ' . $caption;
         }
         
-        $output = sprintf('<li%s><a href="?%s">%s</a></li>%s', $current, $action, $_caption, "\n");
+        $output = sprintf('<li%s><a href="?%s">%s</a></li>%s', $active, $action, $_caption, "\n");
         
         if ($checkPerm) {
             return $this->evaluatePermission($restrictions) ? $output : '';
