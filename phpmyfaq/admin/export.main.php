@@ -54,46 +54,61 @@ if (!PMF_Db::checkOnEmptyTable('faqdata')) {
                     <div class="controls">
                         <select name="catid" id="catid" size="1">
                             <option value="0"><?php print $PMF_LANG['msgShowAllCategories'] ?></option>
-<?php
-        print $helper->renderCategoryOptions();
-?>
+                            <?php print $helper->renderCategoryOptions(); ?>
                         </select>
                     </div>
                 </div>
 
                 <div class="control-group">
-                    <label for="downwards"><?php print($PMF_LANG['ad_export_cat_downwards']); ?></label>
                     <div class="controls">
-                        <input type="checkbox" name="downwards" id="downwards" value="1" checked="checked" />
+                        <label class="checkbox" for="downwards">
+                            <input type="checkbox" name="downwards" id="downwards" value="1" checked="checked" />
+                            <?php print($PMF_LANG['ad_export_cat_downwards']); ?>
+                        </label>
                     </div>
                 </div>
             </fieldset>
-        
+
 <?php
     }
 ?>
             <fieldset>
                 <legend><?php print($PMF_LANG['ad_export_type']); ?></legend>
                 <div class="control-group">
-                    <label ><?php print($PMF_LANG['ad_export_type_choose']); ?></label>
                     <div class="controls">
-                        <input type="radio" name="type" value="pdf" checked="checked" />&nbsp;<?php print($PMF_LANG["ad_export_generate_pdf"]); ?><br />
-                        <input type="radio" name="type" value="xml" />&nbsp;<?php print($PMF_LANG["ad_xml_gen"]); ?><br />
-                        <input type="radio" name="type" value="xhtml" />&nbsp;<?php print($PMF_LANG['ad_export_gen_xhtml']); ?>
+                        <label ><?php print($PMF_LANG['ad_export_type_choose']); ?></label>
+                        <label class="radio">
+                            <input type="radio" name="type" value="pdf" checked="checked" />
+                            <?php print($PMF_LANG["ad_export_generate_pdf"]); ?>
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="type" value="xml" />
+                            <?php print($PMF_LANG["ad_xml_gen"]); ?>
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="type" value="xhtml" />
+                            <?php print($PMF_LANG['ad_export_gen_xhtml']); ?>
+                        </label>
                     </div>
                 </div>
                 <div class="control-group">
-                    <label><?php print($PMF_LANG['ad_export_download_view']); ?></label>
                     <div class="controls">
-                        <input type="radio" name="dispos" value="<?php print PMF_HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT; ?>" checked="checked"><?php print($PMF_LANG['ad_export_download']); ?></input>
-                        <input type="radio" name="dispos" value="<?php print PMF_HttpStreamer::EXPORT_DISPOSITION_INLINE; ?>"><?php print($PMF_LANG['ad_export_view']); ?></input>
+                        <label><?php print($PMF_LANG['ad_export_download_view']); ?></label>
+                        <label class="radio">
+                            <input type="radio" name="dispos" value="<?php print PMF_HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT; ?>" checked="checked" />
+                            <?php print($PMF_LANG['ad_export_download']); ?>
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="dispos" value="<?php print PMF_HttpStreamer::EXPORT_DISPOSITION_INLINE; ?>">
+                            <?php print($PMF_LANG['ad_export_view']); ?>
+                        </label>
                     </div>
                 </div>
             </fieldset>
 
             <div class="form-actions">
-                <input class="btn-primary btn-large" type="submit" name="submitExport" value="<?php print(strip_tags($PMF_LANG["ad_menu_export"])); ?>" />
-                <input class="btn-large" type="reset" name="resetExport" value="<?php print(strip_tags($PMF_LANG["ad_config_reset"])); ?>" />
+                <input class="btn-primary" type="submit" name="submitExport" value="<?php print(strip_tags($PMF_LANG["ad_menu_export"])); ?>" />
+                <input class="btn-info" type="reset" name="resetExport" value="<?php print(strip_tags($PMF_LANG["ad_config_reset"])); ?>" />
             </div>
         </form>
 <?php
