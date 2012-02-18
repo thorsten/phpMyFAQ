@@ -54,35 +54,41 @@ if ($permission["passwd"]) {
         
         if (($_authSource->encrypt($opasswd) == $user->encrypted_password) && ($npasswd == $bpasswd)) {
             if (!$user->changePassword($npasswd)) {
-                printf('<p class="error">%s</p>', $PMF_LANG["ad_passwd_fail"]);
+                printf('<p class="alert alert-error">%s</p>', $PMF_LANG["ad_passwd_fail"]);
             }
-            printf('<p class="success">%s</p>', $PMF_LANG["ad_passwdsuc"]);
+            printf('<p class="alert alert-success">%s</p>', $PMF_LANG["ad_passwdsuc"]);
         } else {
-            printf('<p class="error">%s</p>', $PMF_LANG["ad_passwd_fail"]);
+            printf('<p class="alert alert-error">%s</p>', $PMF_LANG["ad_passwd_fail"]);
         }
     }
 ?>
 
-        <form action="?action=passwd" method="post">
+        <form class="form-horizontal" action="?action=passwd" method="post">
         <input type="hidden" name="save" value="newpassword" />
-            <p>
+            <div class="control-group">
                 <label for="opass"><?php print $PMF_LANG["ad_passwd_old"]; ?></label>
-                <input type="password" name="opass" id="opass" size="30" />
-            </p>
+                <div class="controls">
+                    <input type="password" name="opass" id="opass" required="required" />
+                </div>
+            </div>
 
-            <p>
+            <div class="control-group">
                 <label for="npass"><?php print $PMF_LANG["ad_passwd_new"]; ?></label>
-                <input type="password" name="npass" id="npass" size="30" />
-            </p>
+                <div class="controls">
+                    <input type="password" name="npass" id="npass" required="required" />
+                </div>
+            </div>
 
-            <p>
+            <div class="control-group">
                 <label for="bpass"><?php print $PMF_LANG["ad_passwd_con"]; ?></label>
-                <input type="password" name="bpass" id="bpass" size="30" />
-            </p>
+                <div class="controls">
+                    <input type="password" name="bpass" id="bpass" required="required"  />
+                </div>
+            </div>
 
-            <p>
-                <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_passwd_change"]; ?>" />
-            </p>
+            <div class="form-actions">
+                <input class="btn-primary" type="submit" value="<?php print $PMF_LANG["ad_passwd_change"]; ?>" />
+            </div>
         </form>
 <?php
 } else {
