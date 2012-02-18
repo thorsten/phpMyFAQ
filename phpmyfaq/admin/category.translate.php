@@ -53,15 +53,15 @@ if ($permission["editcateg"]) {
         <header>
             <h2><?php print $header ?></h2>
         </header>
-        <form action="?action=updatecategory" method="post">
+        <form class="form-horizontal" action="?action=updatecategory" method="post">
             <input type="hidden" name="id" value="<?php print $id; ?>" />
             <input type="hidden" name="parent_id" value="<?php print $category->categoryName[$id]["parent_id"]; ?>" />
             <input type="hidden" name="showcat" value="<?php print $showcat; ?>" />
-            <?php if ($faqconfig->get('security.permLevel') != 'basic') { ?>
+            <?php if ($faqconfig->get('security.permLevel') !== 'basic'): ?>
             <input type="hidden" name="restricted_groups" value="<?php print $group_permission[0]; ?>" />
-            <?php } else { ?>
+            <?php else: ?>
             <input type="hidden" name="restricted_groups" value="-1" />
-            <?php } ?>
+            <?php endif; ?>
             <input type="hidden" name="restricted_users" value="<?php print $user_permission[0]; ?>" />
             <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
 
@@ -78,10 +78,12 @@ if ($permission["editcateg"]) {
                 print $PMF_LANG["msgNoGoogleApiKeyFound"];
             } else {
             ?>
-            <p>
+            <div class="control-group">
                 <label for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
-                <?php print PMF_Language::selectLanguages($faqData['lang'], false, array(), 'langTo'); ?>
-            </p>
+                <div class="controls">
+                    <?php print PMF_Language::selectLanguages($category->categoryName[$id]['name'], false, array(), 'langTo'); ?>
+                </div>
+            </div>
             <input type="hidden" name="used_translated_languages" id="used_translated_languages" value="" />
             <div id="getedTranslations">
             </div>
@@ -92,45 +94,58 @@ if ($permission["editcateg"]) {
 <?php
     } else {
 ?>
-            <p>
+            <div class="control-group">
                 <label><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
-                <input type="text" name="name" size="30" style="width: 250px;" value="" />
-            </p>
+                <div class="controls">
+                    <input type="text" name="name" value="" />
+                </div>
+            </div>
 
-            <p>
+            <div class="control-group">
                 <label><?php print $PMF_LANG["ad_categ_lang"]; ?>:</label>
-                <select name="catlang" size="1">
-                    <?php print $category->getCategoryLanguagesToTranslate($id, $selected_lang); ?>
-                </select>
-            </p>
+                <div class="controls">
+                    <select name="catlang" size="1">
+                        <?php print $category->getCategoryLanguagesToTranslate($id, $selected_lang); ?>
+                    </select>
+                </div>
+            </div>
 
-            <p>
+            <div class="control-group">
                 <label><?php print $PMF_LANG["ad_categ_desc"]; ?>:</label>
-                <textarea name="description" rows="3" cols="80" style="width: 300px;"></textarea>
-            </p>
+                <div class="controls">
+                    <textarea name="description" rows="3" cols="80"></textarea>
+                </div>
+            </div>
 
 <?php
     }
 ?>
-            <p>
+            <div class="control-group">
                 <label><?php print $PMF_LANG["ad_categ_owner"]; ?>:</label>
-                <select name="user_id" size="1">
-                    <?php print $user->getAllUserOptions($category->categoryName[$id]['user_id']); ?>
-                </select>
-            </p>
+                <div class="controls">
+                    <select name="user_id" size="1">
+                        <?php print $user->getAllUserOptions($category->categoryName[$id]['user_id']); ?>
+                    </select>
+                </div>
+            </div>
 
-            <p>
-                <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_translatecateg"]; ?>" />
-            </p>
+            <div class="control-group">
+                <label><?php print $PMF_LANG['ad_categ_transalready']; ?></label>
+                <div class="controls">
+                    <ul>
+                        <?php
+                        foreach ($category->getCategoryLanguagesTranslated($id) as $language => $namedesc) {
+                            print "<li><strong>" . $language . "</strong>: " . $namedesc . "</li>";
+                        }
+                        ?>
+                    </ul>
+                </div>
+            </div>
 
-            <hr />
-<?php
-           print '<p><strong>'.$PMF_LANG["ad_categ_transalready"].'</strong><br />';
-           foreach ($category->getCategoryLanguagesTranslated($id) as $language => $namedesc) {
-              print "&nbsp;&nbsp;&nbsp;<strong style=\"vertical-align: top;\">&middot; " . $language . "</strong>: " . $namedesc . "\n<br />";
-           }
-           print '</p>';
-?>
+            <div class="form-actions">
+                <input class="btn-primary" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_translatecateg"]; ?>" />
+            </div>
+
         </form>
 <?php 
     if ($faqconfig->get('main.enableGoogleTranslation') === true) {
