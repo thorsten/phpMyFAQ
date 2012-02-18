@@ -37,15 +37,15 @@ if (is_null($error)) {
 $tpl->parse(
     'writeContent',
     array(
-        'registerUser'        => '<a href="?action=register">' . $PMF_LANG['msgRegistration'] . '</a>',
-        'sendPassword'        => '<a href="./admin/password.php">' . $PMF_LANG['lostPassword'] . '</a>',
-        'loginHeader'         => $PMF_LANG['msgLoginUser'],
-        'loginMessage'        => $loginMessage,
-        'writeLoginPath'      => $systemUri,
-        'faqloginaction'      => $action,
-        'login'               => $PMF_LANG['ad_auth_ok'],
-        'username'            => $PMF_LANG['ad_auth_user'],
-        'password'            => $PMF_LANG['ad_auth_passwd']
+        'registerUser'   => '<a href="?action=register">' . $PMF_LANG['msgRegistration'] . '</a>',
+        'sendPassword'   => '<a href="./admin/password.php">' . $PMF_LANG['lostPassword'] . '</a>',
+        'loginHeader'    => $PMF_LANG['msgLoginUser'],
+        'loginMessage'   => $loginMessage,
+        'writeLoginPath' => $systemUri,
+        'faqloginaction' => $action,
+        'login'          => $PMF_LANG['ad_auth_ok'],
+        'username'       => $PMF_LANG['ad_auth_user'],
+        'password'       => $PMF_LANG['ad_auth_passwd']
     )
 );
 

@@ -26,6 +26,7 @@
                     <label for="faqpassword">{password}</label>
                     <div class="controls">
                         <input type="password" name="faqpassword" id="faqpassword" required="required">
+                        <p class="help-block">{sendPassword}</p>
                     </div>
                 </div>
 
