@@ -570,10 +570,11 @@ if (isset($auth)) {
         'index',
         'userloggedIn',
         array(
-            'msgUserControl' => $adminSection,
-            'msgFullName'    => $PMF_LANG['ad_user_loggedin'] . $user->getLogin(),
-            'msgLoginName'   => $user->getUserData('display_name'),
-            'msgLogoutUser'  => '<a href="?action=logout">' . $PMF_LANG['ad_menu_logout'] . '</a>'
+            'msgUserControl'         => $adminSection,
+            'msgFullName'            => $PMF_LANG['ad_user_loggedin'] . $user->getLogin(),
+            'msgLoginName'           => $user->getUserData('display_name'),
+            'msgUserControlDropDown' => '<a href="?action=ucp">' . $PMF_LANG['headerUserControlPanel'] . '</a>',
+            'msgLogoutUser'          => '<a href="?action=logout">' . $PMF_LANG['ad_menu_logout'] . '</a>'
         )
     );
 } else {
