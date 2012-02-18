@@ -39,7 +39,7 @@ if ($permission["addcateg"]) {
     $category  = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $parent_id = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
 ?>
-        <form action="?action=savecategory" method="post">
+        <form class="form-horizontal" action="?action=savecategory" method="post">
             <input type="hidden" id="lang" name="lang" value="<?php print $LANGCODE; ?>" />
             <input type="hidden" name="parent_id" value="<?php print $parent_id; ?>" />
             <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
@@ -51,54 +51,79 @@ if ($permission["addcateg"]) {
             <input type="hidden" name="restricted_users" value="<?php print $user_allowed[0]; ?>" />
             <input type="hidden" name="restricted_groups" value="<?php print $group_allowed[0]; ?>" />
 <?php
-        printf("<p>%s: %s (%s)</p>",
+        printf('<div class="control-group">%s: %s (%s)</div>',
             $PMF_LANG["msgMainCategory"],
             $category->categoryName[$parent_id]["name"],
             $languageCodes[PMF_String::strtoupper($category->categoryName[$parent_id]["lang"])]);
     }
 ?>
-
-            <p>
+            <div class="control-group">
                 <label><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
-                <input type="text" id="name" name="name" size="30" style="width: 300px;" autofocus="autofocus" />
-            </p>
+                <div class="controls">
+                    <input type="text" id="name" name="name" required="required" />
+                </div>
+            </div>
 
-            <p>
+            <div class="control-group">
                 <label><?php print $PMF_LANG["ad_categ_desc"]; ?>:</label>
-                <textarea id="description" name="description" rows="3" cols="80" style="width: 300px;"></textarea>
-            </p>
+                <div class="controls">
+                    <textarea id="description" name="description" rows="3" cols="80" ></textarea>
+                </div>
+            </div>
 
-            <p>
+            <div class="control-group">
                 <label><?php print $PMF_LANG["ad_categ_owner"]; ?>:</label>
-                <select name="user_id" size="1">
-                <?php print $user->getAllUserOptions(1); ?>
-                </select>
-            </p>
+                <div class="controls">
+                    <select name="user_id" size="1">
+                    <?php print $user->getAllUserOptions(1); ?>
+                    </select>
+                </div>
+            </div>
 
 <?php
     if ($parent_id == 0) {
         if ($faqconfig->get('security.permLevel') != 'basic') {
 ?>
-            <p>
+            <div class="control-group">
                 <label><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
-                <input type="radio" name="grouppermission" class="active" value="all" checked="checked" /> <?php print $PMF_LANG['ad_entry_all_groups']; ?>
-                <input type="radio" name="grouppermission" class="active" value="restricted" /> <?php print $PMF_LANG['ad_entry_restricted_groups']; ?>
-                <select name="restricted_groups" size="1"><?php print $user->perm->getAllGroupsOptions(1); ?></select>
-            </p>
+                <div class="controls">
+                    <label class="radio">
+                        <input type="radio" name="grouppermission" value="all" checked="checked" />
+                        <?php print $PMF_LANG['ad_entry_all_groups']; ?>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="grouppermission" value="restricted" />
+                        <?php print $PMF_LANG['ad_entry_restricted_groups']; ?>
+                    </label>
+                    <select name="restricted_groups" size="1">
+                        <?php print $user->perm->getAllGroupsOptions(1); ?>
+                    </select>
+                </div>
+            </div>
 
 <?php
         } else {
 ?>
-                <input type="hidden" name="grouppermission" class="active" value="all" />
+                <input type="hidden" name="grouppermission" value="all" />
 <?php
         }
 ?>
-            <p>
+            <div class="control-group">
                 <label><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
-                <input type="radio" name="userpermission" class="active" value="all" checked="checked" /> <?php print $PMF_LANG['ad_entry_all_users']; ?>
-                <input type="radio" name="userpermission" class="active" value="restricted" /> <?php print $PMF_LANG['ad_entry_restricted_users']; ?>
-                <select name="restricted_users" size="1"><?php print $user->getAllUserOptions(1); ?></select>
-            </p>
+                <div class="controls">
+                    <label class="radio">
+                        <input type="radio" name="userpermission" value="all" checked="checked" />
+                        <?php print $PMF_LANG['ad_entry_all_users']; ?>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="userpermission" value="restricted" />
+                        <?php print $PMF_LANG['ad_entry_restricted_users']; ?>
+                    </label>
+                    <select name="restricted_users" size="1">
+                        <?php print $user->getAllUserOptions(1); ?>
+                    </select>
+                </div>
+            </div>
 
 <?php
     }
@@ -109,26 +134,28 @@ if ($permission["addcateg"]) {
                 <h3><?php print $PMF_LANG["ad_menu_translations"]; ?></h3>
             </header>
             <div id="editTranslations">
-            <?php
-            if ($faqconfig->get('main.googleTranslationKey') == '') {
-                print $PMF_LANG["msgNoGoogleApiKeyFound"];
-            } else {
-            ?>
-            <p>
-                <label for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
-                <?php print PMF_Language::selectLanguages($LANGCODE, false, array(), 'langTo'); ?>
-            </p>
+                <?php
+                if ($faqconfig->get('main.googleTranslationKey') == '') {
+                    print $PMF_LANG["msgNoGoogleApiKeyFound"];
+                } else {
+                ?>
+                <div class="control-group">
+                    <label for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
+                    <div class="controls">
+                        <?php print PMF_Language::selectLanguages($LANGCODE, false, array(), 'langTo'); ?>
+                    </div>
+                </div>
                 <input type="hidden" name="used_translated_languages" id="used_translated_languages" value="" />
-            <div id="getedTranslations">
+                <div id="getedTranslations">
+                </div>
+                <?php } ?>
             </div>
-            <?php } ?>
-        </div>
 <?php
     }
 ?>
-            <p>
-                <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_add"]; ?>" />
-            </p>
+            <div class="form-actions">
+                <input class="btn-primary" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_add"]; ?>" />
+            </div>
         </form>
     
 <?php    
@@ -168,7 +195,7 @@ if ($permission["addcateg"]) {
                             '<label for="name_translated_' + langTo + '">' +
                             '<?php print $PMF_LANG["ad_categ_titel"]; ?>:' +
                             '</label>' +
-                            '<input type="text" id="name_translated_' + langTo + '" name="name_translated_' + langTo + '" maxlength="255" style="width: 300px;">' +
+                            '<input type="text" id="name_translated_' + langTo + '" name="name_translated_' + langTo + '" maxlength="255" >' +
                             '</p>');
 
                 // Textarea for description
@@ -177,7 +204,7 @@ if ($permission["addcateg"]) {
                             '<label for="description_translated_' + langTo + '">' +
                             '<?php print $PMF_LANG["ad_categ_desc"]; ?>:' +
                             '</label>' +
-                            '<textarea id="description_translated_' + langTo + '" name="description_translated_' + langTo + '" cols="80" rows="3" style="width: 300px;"></textarea>' +
+                            '<textarea id="description_translated_' + langTo + '" name="description_translated_' + langTo + '" cols="80" rows="3" ></textarea>' +
                             '</p>');
 
                 $('#getedTranslations').append(fieldset);
