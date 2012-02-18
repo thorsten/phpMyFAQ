@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2011 phpMyFAQ Team
+ * @copyright 2003-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-12-25
@@ -41,12 +41,13 @@ if ($permission["editcateg"]) {
         <header>
             <h2><?php print $header ?></h2>
         </header>
-        <form action="?action=pastecategory" method="post">
+        <form class="form-horizontal" action="?action=pastecategory" method="post">
             <input type="hidden" name="cat" value="<?php print $id; ?>" />
             <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
-            <p>
+            <div class="control-group">
                 <label><?php print $PMF_LANG["ad_categ_paste2"]; ?></label>
-                <select name="after" size="1">
+                <div class="controls">
+                    <select name="after" size="1">
 <?php
 
     foreach ($category->catTree as $cat) {
@@ -64,11 +65,12 @@ if ($permission["editcateg"]) {
     }
 
 ?>
-                </select>
-            </p>
-            <p>
-                <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" />
-            </p>
+                    </select>
+                </div>
+            </div>
+            <div class="form-actions">
+                <input class="btn-primary" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" />
+            </div>
         </form>
 <?php
 } else {
