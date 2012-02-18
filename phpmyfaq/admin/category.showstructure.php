@@ -65,7 +65,7 @@ if ($permission['editcateg']) {
     $category->getMissingCategories();
     $category->buildTree();
 ?>
-        <table class="list">
+        <table class="table table-striped">
         <thead>
             <tr>
                 <th><?php print $currentLanguage ?></th>
@@ -101,7 +101,8 @@ if ($permission['editcateg']) {
         print '<td>';
         if ($cat['lang'] != $LANGCODE) {
            // translate category
-           printf('<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><img src="images/translate.png" width="16" height="16" border="0" title="%s" alt="%s" /></a>',
+           printf(
+               '<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><img src="images/translate.png" width="16" height="16" border="0" title="%s" alt="%s" /></a>',
                $currentLink,
                $cat['id'],
                $LANGCODE,
@@ -109,7 +110,7 @@ if ($permission['editcateg']) {
                $PMF_LANG['ad_categ_translate'],
                $PMF_LANG['ad_categ_translate']);
         }
-        printf("&nbsp;%s<strong>&middot; %s</strong>",
+        printf("&nbsp;%s<strong>%s</strong>",
             $indent,
             $catname);
         print "</td>\n";
