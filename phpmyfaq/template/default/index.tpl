@@ -70,8 +70,15 @@
                     [/notLoggedIn]
                     [userloggedIn]
                     <li>{msgUserControl}</li>
-                    <li class="divider-vertical"></li>
-                    <li>{msgLogoutUser}</li>
+                    <li class="divider"></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <span title="{msgFullName}">{msgLoginName}</span><b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>{msgLogoutUser}</li>
+                        </ul>
+                    </li>
                     [/userloggedIn]
                 </ul>
             </nav>

@@ -360,12 +360,6 @@ if (!isset($allowedVariables[$action])) {
 //
 // Select the template for the requested page
 //
-if (isset($auth)) {
-    $loginTemplate = 'loggedin.tpl';
-} else {
-    $loginTemplate = 'login.tpl';
-}
-
 if ($action != 'main') {
     $includeTemplate = $action . '.tpl';
     $includePhp      = $action . '.php';
@@ -418,7 +412,6 @@ if ($faqconfig->get('security.enableLoginOnly')) {
 $tpl = new PMF_Template(
     array(
         'index'        => $indexSet,
-        'loginBox'     => $loginTemplate,
         'rightBox'     => $rightSidebarTemplate,
         'writeContent' => $includeTemplate
     ),
@@ -578,6 +571,8 @@ if (isset($auth)) {
         'userloggedIn',
         array(
             'msgUserControl' => $adminSection,
+            'msgFullName'    => $PMF_LANG['ad_user_loggedin'] . $user->getLogin(),
+            'msgLoginName'   => $user->getUserData('display_name'),
             'msgLogoutUser'  => '<a href="?action=logout">' . $PMF_LANG['ad_menu_logout'] . '</a>'
         )
     );
