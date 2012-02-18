@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2011 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-15
@@ -38,9 +38,9 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
         $item       = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_STRIPPED);
         $definition = PMF_Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_STRIPPED);
         if ($glossary->addGlossaryItem($item, $definition)) {
-            print '<p class="success">' . $PMF_LANG['ad_glossary_save_success'] . '</p>';
+            print '<p class="alert alert-success">' . $PMF_LANG['ad_glossary_save_success'] . '</p>';
         } else {
-            print '<p class="error">' . $PMF_LANG['ad_glossary_save_error'];
+            print '<p class="alert alert-error">' . $PMF_LANG['ad_glossary_save_error'];
             print '<br />'.$PMF_LANG["ad_adus_dberr"].'<br />';
             print $db->error() . '</p>';
         }
@@ -51,9 +51,9 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
         $item       = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_STRIPPED);
         $definition = PMF_Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_STRIPPED);
         if ($glossary->updateGlossaryItem($id, $item, $definition)) {
-            print '<p class="success">' . $PMF_LANG['ad_glossary_update_success'] . '</p>';
+            print '<p class="alert alert-success">' . $PMF_LANG['ad_glossary_update_success'] . '</p>';
         } else {
-            print '<p class="error">' . $PMF_LANG['ad_glossary_update_error'];
+            print '<p class="alert alert-error">' . $PMF_LANG['ad_glossary_update_error'];
             print '<br />'.$PMF_LANG["ad_adus_dberr"].'<br />';
             print $db->error() . '</p>';
         }
@@ -62,9 +62,9 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
     if ('deleteglossary' == $action && $permission['editglossary']) {
         $id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         if ($glossary->deleteGlossaryItem($id)) {
-            print '<p class="success">' . $PMF_LANG['ad_glossary_delete_success'] . '</p>';
+            print '<p class="alert alert-success">' . $PMF_LANG['ad_glossary_delete_success'] . '</p>';
         } else {
-            print '<p class="error">' . $PMF_LANG['ad_glossary_delete_error'];
+            print '<p class="alert alert-error">' . $PMF_LANG['ad_glossary_delete_error'];
             print '<br />'.$PMF_LANG["ad_adus_dberr"].'<br />';
             print $db->error() . '</p>';
         }
@@ -74,7 +74,7 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
 
     print sprintf('<p>[ <a href="?action=addglossary">%s</a> ]</p>', $PMF_LANG['ad_glossary_add']);
 
-    print '<table class="list" style="width: 100%">';
+    print '<table class="table table-striped">';
     print sprintf("<thead><tr><th class=\"list\">%s</th><th class=\"list\">%s</th><th style=\"width: 16px\">&nbsp;</th></tr></thead>", 
         $PMF_LANG['ad_glossary_item'], 
         $PMF_LANG['ad_glossary_definition']);

@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2011 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-15
@@ -32,20 +32,24 @@ print sprintf('<header><h2>%s</h2></header>', $PMF_LANG['ad_glossary_add']);
 
 if ($permission['addglossary']) {
 ?>
-        <form action="?action=saveglossary" method="post">
-            <p>
+        <form class="form-horizontal" action="?action=saveglossary" method="post">
+            <div class="control-group">
                 <label for="item"><?php print $PMF_LANG['ad_glossary_item']; ?>:</label>
-                <input type="text" name="item" id="item" size="50" style="width: 300px;" autofocus="autofocus" />
-            </p>
+                <div class="controls">
+                    <input type="text" name="item" id="item" />
+                </div>
+            </div>
 
-            <p>
+            <div class="control-group">
                 <label for="definition"><?php print $PMF_LANG['ad_glossary_definition']; ?>:</label>
-                <textarea name="definition" id="definition" cols="50" rows="5" style="width: 300px;"></textarea>
-            </p>
+                <div class="controls">
+                    <textarea name="definition" id="definition" cols="50" rows="5"></textarea>
+                </div>
+            </div>
 
-            <p>
-                <input class="submit" type="submit" value="<?php print $PMF_LANG['ad_glossary_save']; ?>" />
-            </p>
+            <div class="form-actions">
+                <input class="btn-primary" type="submit" value="<?php print $PMF_LANG['ad_glossary_save']; ?>" />
+            </div>
         </form>
 <?php
 } else {

@@ -53,7 +53,7 @@ if ($permission['delquestion']) {
 
     if (count($openquestions) > 0) {
 ?>
-        <table class="list" style="width: 100%">
+        <table class="table table-striped">
         <thead>
             <tr>
                 <th><?php print $PMF_LANG['ad_entry_author']; ?></th>

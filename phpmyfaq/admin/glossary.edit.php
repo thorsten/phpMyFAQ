@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2011 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-15
@@ -35,22 +35,25 @@ if ($permission['editglossary']) {
     $glossary     = new PMF_Glossary();
     $glossaryItem = $glossary->getGlossaryItem($id);
 ?>
-        <form action="?action=updateglossary" method="post">
+        <form class="form-horizontal" action="?action=updateglossary" method="post">
             <input type="hidden" name="id" value="<?php print $glossaryItem['id']; ?>" />
-            <p>
+            <div class="control-group">
                 <label for="item"><?php print $PMF_LANG['ad_glossary_item']; ?>:</label>
-                <input type="text" name="item" id="item" size="50" value="<?php print $glossaryItem['item']; ?>"
-                       autofocus="autofocus" />
-            </p>
+                <div class="controls">
+                    <input type="text" name="item" id="item" value="<?php print $glossaryItem['item']; ?>" />
+                </div>
+            </div>
 
-            <p>
+            <div class="control-group">
                 <label for="definition"><?php print $PMF_LANG['ad_glossary_definition']; ?>:</label>
-                <textarea name="definition" id="definition" cols="50" rows="3"><?php print $glossaryItem['definition']; ?></textarea>
-            </p>
+                <div class="controls">
+                    <textarea name="definition" id="definition" cols="50" rows="3"><?php print $glossaryItem['definition']; ?></textarea>
+                </div>
+            </div>
 
-            <p>
-                <input class="submit" type="submit" value="<?php print $PMF_LANG['ad_glossary_save']; ?>" />
-            </p>
+            <div class="form-actions">
+                <input class="btn-primary" type="submit" value="<?php print $PMF_LANG['ad_glossary_save']; ?>" />
+            </div>
         </form>
 <?php
 } else {
