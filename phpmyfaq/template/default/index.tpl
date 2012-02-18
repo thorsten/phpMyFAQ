@@ -72,7 +72,7 @@
                     <li>{msgUserControl}</li>
                     <li class="divider"></li>
                     <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="?action=ucp">
                             <span title="{msgFullName}">{msgLoginName}</span><b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
