@@ -6,21 +6,21 @@
                 <input type="hidden" value="{openQuestionID}" id="openQuestionID" name="openQuestionID" />
                 
                 <div class="control-group">
-                    <label for="name">{msgNewContentName}</label>
+                    <label class="control-label" class="control-label" for="name">{msgNewContentName}</label>
                     <div class="controls">
                         <input type="text" name="name" id="name" value="{defaultContentName}"required />
                     </div>
                 </div>
 
                 <div class="control-group">
-                    <label for="email">{msgNewContentMail}</label>
+                    <label class="control-label" for="email">{msgNewContentMail}:</label>
                     <div class="controls">
                         <input type="email" name="email" id="email" value="{defaultContentMail}" required="required" />
                     </div>
                 </div>
 
                 <div class="control-group">
-                    <label for="rubrik">{msgNewContentCategory}</label>
+                    <label class="control-label" for="rubrik">{msgNewContentCategory}</label>
                     <div class="controls">
                         <select name="rubrik[]" id="rubrik" multiple="multiple" size="5" required="true" />
                         {printCategoryOptions}
@@ -29,28 +29,28 @@
                 </div>
 
                 <div class="control-group">
-                    <label for="question">{msgNewContentTheme}</label>
+                    <label class="control-label" for="question">{msgNewContentTheme}</label>
                     <div class="controls">
                         <textarea cols="37" rows="3" name="question" id="question" required="required" {readonly} />{printQuestion}</textarea>
                     </div>
                 </div>
 
                 <div class="control-group">
-                    <label for="answer">{msgNewContentArticle}</label>
+                    <label class="control-label" for="answer">{msgNewContentArticle}</label>
                     <div class="controls">
                         <textarea cols="37" rows="10" name="answer" id="answer" required="required" /></textarea>
                     </div>
                 </div>
 
                 <div class="control-group">
-                    <label for="keywords">{msgNewContentKeywords}</label>
+                    <label class="control-label" for="keywords">{msgNewContentKeywords}</label>
                     <div class="controls">
                         <input type="text" name="keywords" id="keywords" />
                     </div>
                 </div>
 
                 <div class="control-group">
-                    <label for="contentlink">{msgNewContentLink}</label>
+                    <label class="control-label" for="contentlink">{msgNewContentLink}</label>
                     <div class="controls">
                         <input type="url" name="contentlink" id="contentlink" size="37" value="http://" />
                     </div>

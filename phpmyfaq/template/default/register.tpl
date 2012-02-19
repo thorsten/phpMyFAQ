@@ -11,21 +11,21 @@
                 <input type="hidden" name="lang" id="lang" value="{lang}" />
 
                 <div class="control-group">
-                    <label for="realname">{realname}</label>
+                    <label class="control-label" for="realname">{realname}</label>
                     <div class="controls">
                         <input type="text" name="realname" id="realname" required="required" />
                     </div>
                 </div>
 
                 <div class="control-group">
-                    <label for="name">{loginname}</label>
+                    <label class="control-label" for="name">{loginname}</label>
                     <div class="controls">
                         <input type="text" name="name" id="name" required="required" />
                     </div>
                 </div>
 
                 <div class="control-group">
-                    <label for="email">{email}</label>
+                    <label class="control-label" for="email">{email}</label>
                     <div class="controls">
                         <input type="email" name="email" id="email" required="required" />
                     </div>
