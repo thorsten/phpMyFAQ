@@ -177,7 +177,8 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
         if (count($revisions)) {
 ?>
 
-        <form id="selectRevision" name="selectRevision" action="?action=editentry&amp;id=<?php print $faqData['id']; ?>&amp;lang=<?php print $faqData['lang']; ?>" method="post">
+        <form class="form-horizontal" id="selectRevision" name="selectRevision" method="post"
+              action="?action=editentry&amp;id=<?php print $faqData['id'] ?>&amp;lang=<?php print $faqData['lang'] ?>">
         <fieldset>
             <legend><?php print $PMF_LANG['ad_changerev']; ?></legend>
             <p>
@@ -209,7 +210,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     }
 ?>
 
-        <form id="faqEditor" action="?action=<?php print $queryString; ?>" method="post">
+        <form class="form-horizontal" id="faqEditor" action="?action=<?php print $queryString; ?>" method="post">
             <input type="hidden" name="revision_id" id="revision_id" value="<?php print $faqData['revision_id']; ?>" />
             <input type="hidden" name="record_id" id="record_id" value="<?php print $faqData['id']; ?>" />
             <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
@@ -218,26 +219,30 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
             <fieldset>
                 <legend><?php print $PMF_LANG['ad_entry_faq_record']; ?></legend>
 
-                <p>
+                <div class="control-group">
                     <label for="rubrik"><?php print $PMF_LANG["ad_entry_category"]; ?></label>
-                    <select name="rubrik[]" id="rubrik" size="5" multiple="multiple">
-                    <?php print $helper->renderCategoryOptions($categories); ?>
-                    </select>
-                </p>
+                    <div class="controls">
+                        <select name="rubrik[]" id="rubrik" size="5" multiple="multiple">
+                        <?php print $helper->renderCategoryOptions($categories); ?>
+                        </select>
+                    </div>
+                </div>
 
-                <p>
+                <div class="control-group">
                     <label for="question"><?php print $PMF_LANG["ad_entry_theme"]; ?></label>
-                    <input type="text" name="question" id="question" maxlength="255"
-                           style="width: 536px; height: 30px; font-size: 24px;" autofocus="autofocus"
-                           value="<?php if (isset($faqData['title'])) { print PMF_String::htmlspecialchars($faqData['title']); } ?>" />
-                </p>
+                    <div class="controls">
+                        <input type="text" name="question" id="question" maxlength="255" class="span7"
+                               value="<?php if (isset($faqData['title'])) { print PMF_String::htmlspecialchars($faqData['title']); } ?>" />
+                    </div>
+                </div>
 
-                <p>
+                <div class="control-group">
                     <label for="answer"><?php print $PMF_LANG["ad_entry_content"]; ?></label>
-                </p>
+                </div>
+
                 <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
                 <textarea id="answer" name="answer" cols="72" rows="16" style="width: 640px; height: 480px;">
-                <?php if (isset($faqData['content'])) { print trim(PMF_String::htmlentities($faqData['content'])); } ?>
+                    <?php if (isset($faqData['content'])) { print trim(PMF_String::htmlentities($faqData['content'])); } ?>
                 </textarea>
 <?php
     if ($action == 'copyentry') {

@@ -387,8 +387,8 @@ function getUserData(user_id)
         </script>
         <div id="user_message"><?php print $message; ?></div>
 
-        <div class="row">
-            <div class="span3" id="userAccounts">
+        <div class="row-fluid">
+            <div class="span4" id="userAccounts">
                 <fieldset>
                     <legend><?php print $PMF_LANG["ad_user_username"]; ?></legend>
                     <form name="user_select" id="user_select" action="?action=user&amp;user_action=delete_confirm"
@@ -426,7 +426,7 @@ function getUserData(user_id)
                     </p>
                 </fieldset>
             </div>
-            <div class="span3" id="userDetails">
+            <div class="span4" id="userDetails">
                 <fieldset>
                     <legend id="user_data_legend"><?php print $PMF_LANG["ad_user_profou"]; ?></legend>
                     <form action="?action=user&amp;user_action=update_data" method="post">
@@ -448,7 +448,7 @@ function getUserData(user_id)
                     </form>
                 </fieldset>
             </div>
-            <div class="span3" id="userRights">
+            <div class="span4" id="userRights">
                 <fieldset>
                     <legend id="user_rights_legend"><?php print $PMF_LANG["ad_user_rights"]; ?></legend>
                     <form id="rightsForm" action="?action=user&amp;user_action=update_rights" method="post">

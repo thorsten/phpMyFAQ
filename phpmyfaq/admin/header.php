@@ -204,7 +204,7 @@ switch ($action) {
 
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
-        <div class="container">
+        <div class="container-fluid">
             <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -267,8 +267,8 @@ switch ($action) {
 </div>
 
 <div id="main">
-    <div class="container">
-        <div class="row">
+    <div class="container-fluid">
+        <div class="row-fluid">
             <?php if (isset($auth) && in_array(true, $permission)) { ?>
             <div class="span3">
                 <div class="well">

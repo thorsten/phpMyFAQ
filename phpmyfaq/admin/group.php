@@ -534,9 +534,9 @@ getGroupList();
         </script>
 
         <div id="user_message"><?php print $message; ?></div>
-        <div class="row">
+        <div class="row-fluid">
 
-            <div class="span3" id="group_list">
+            <div class="span4" id="group_list">
                 <fieldset>
                     <legend><?php print $PMF_LANG['ad_groups']; ?></legend>
                     <form id="group_select" name="group_select" action="?action=group&amp;group_action=delete_confirm"
@@ -554,7 +554,7 @@ getGroupList();
                 <p>[ <a href="?action=group&amp;group_action=add"><?php print $PMF_LANG['ad_group_add_link']; ?></a> ]</p>
             </div>
 
-            <div class="span3" id="groupMemberships">
+            <div class="span4" id="groupMemberships">
                 <form id="group_membership" name="group_membership" action="?action=group&amp;group_action=update_members"
                   method="post" onsubmit="select_selectAll('group_member_list')">
                 <input id="update_member_group_id" type="hidden" name="group_id" value="0" />
@@ -613,7 +613,7 @@ getGroupList();
                 </form>
             </div>
 
-            <div class="span3" id="groupDetails">
+            <div class="span4" id="groupDetails">
                 <div id="group_data">
                     <fieldset>
                         <legend id="group_data_legend"><?php print $PMF_LANG['ad_group_details']; ?></legend>
