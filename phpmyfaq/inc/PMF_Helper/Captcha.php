@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Helper
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2011 phpMyFAQ Team
+ * @copyright 2010-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-11
@@ -29,7 +29,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Helper
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2011 phpMyFAQ Team
+ * @copyright 2010-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-11
@@ -93,17 +93,18 @@ class PMF_Helper_Captcha extends PMF_Helper
         
         if (PMF_Configuration::getInstance()->get('spam.enableCaptchaCode')) {
             if ($error != '') {
-                $html .= sprintf('<div class="error">%s</div>', $error);
+                $html .= sprintf('<div class="alert alert-error">%s</div>', $error);
             }
-            $html .= sprintf('<div class="captchaInfo">%s:</div>', $legend);
-            $html .= sprintf('<div class="captchaImage">%s', $captcha->printCaptcha($action));
-            $html .= sprintf('<div class="captchaRefresh"><a href="javascript:;" onclick="refreshCaptcha(\'%s\');">%s</a></div>',
-                $action,
-                'click to refresh');
-            $html .= '&nbsp; &nbsp;' . sprintf(
-                '<input type="text" name="captcha" id="captcha" class="captcha" size="%d" required="required" /><br/>',
+            $html .= sprintf('<div class="controls"><label>%s</label>', $legend);
+            $html .= $captcha->printCaptcha($action);
+            $html .= sprintf(
+                '<input type="text" name="captcha" id="captcha" class="span2" size="%d" required="required" />',
                 $captcha->caplength
             );
+            $html .= sprintf(
+                '<div class="captchaRefresh"><a href="javascript:;" onclick="refreshCaptcha(\'%s\');">%s</a></div>',
+                $action,
+                'click to refresh');
             $html .= '</div>';
         }
         
