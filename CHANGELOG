@@ -10,6 +10,7 @@ Version 2.8.0-alpha - 2012-02-
 - added improved advanced search in subcategories (Thorsten)
 - added possibility to close and delete open questions (Peter Caesar)
 - added user control panel (Thorsten)
+- dropped support for IBM DB2, Interbase/Firebird and Sybase (Thorsten)
 - improved usability of administration backend (Thorsten)
 - improved setup and update (Thorsten)
 - improved security with salted passwords (Thorsten)
