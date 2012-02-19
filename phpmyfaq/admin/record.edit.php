@@ -225,7 +225,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
                     <div class="control-group">
                         <div class="controls">
-                            <input type="text" name="question" id="question" maxlength="255" class="span10"
+                            <input type="text" name="question" id="question" maxlength="255" class="span8"
                                    placeholder="<?php print $PMF_LANG["ad_entry_theme"]; ?>" style="font-size: 24px; height: 30px;"
                                    value="<?php if (isset($faqData['title'])) { print PMF_String::htmlspecialchars($faqData['title']); } ?>" />
                         </div>
@@ -234,7 +234,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                     <div class="control-group">
                         <div class="controls">
                             <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
-                            <textarea id="answer" name="answer" class="span10">
+                            <textarea id="answer" name="answer" class="span9">
                                 <?php if (isset($faqData['content'])) { print trim(PMF_String::htmlentities($faqData['content'])); } ?>
                             </textarea>
                         </div>
@@ -592,13 +592,13 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                     <div class="control-group">
                         <label class="control-label" for="dateStart"><?php print $PMF_LANG['ad_news_from']; ?></label>
                         <div class="controls">
-                            <input name="dateStart" id="dateStart" class="date-pick span9" value="<?php print $dateStart; ?>" maxlength="10" />
+                            <input name="dateStart" id="dateStart" class="date-pick span2" value="<?php print $dateStart; ?>" maxlength="10" />
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label" for="dateEnd"><?php print $PMF_LANG['ad_news_to']; ?></label>
                         <div class="controls">
-                            <input name="dateEnd" id="dateEnd" class="date-pick span9" value="<?php print $dateEnd; ?>" maxlength="10" />
+                            <input name="dateEnd" id="dateEnd" class="date-pick span2" value="<?php print $dateEnd; ?>" maxlength="10" />
                         </div>
                     </div>
                 </fieldset>
@@ -620,7 +620,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                         </p>
                         <p>
                             <label class="control-label" for="changed"><?php print $PMF_LANG["ad_entry_changed"]; ?></label>
-                            <textarea name="changed" id="changed"><?php if (isset($changed)) { print $changed; } ?></textarea>
+                            <textarea name="changed" id="changed" class="span3"><?php if (isset($changed)) { print $changed; } ?></textarea>
                         </p>
                         <p>
                     </div>

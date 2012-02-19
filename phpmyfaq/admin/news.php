@@ -122,7 +122,7 @@ if ('addnews' == $action && $permission["addnews"]) {
         </header>
     
         <p><a href="?action=addnews"><?php print $PMF_LANG["ad_menu_news_add"]; ?></a></p>
-        <table class="list" style="width: 100%">
+        <table class="table table-striped">
         <thead>
             <tr>
                 <th><?php print $PMF_LANG["ad_news_headline"]; ?></th>
