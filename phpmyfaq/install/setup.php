@@ -240,7 +240,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                 <fieldset>
                 <legend>Add your database connection setup</legend>
                     <div class="control-group">
-                        <label for="sql_type">Database server:</label>
+                        <label class="control-label" for="sql_type">Database server:</label>
                         <div class="controls">
                             <select name="sql_type" id="sql_type" size="1" onchange="selectDatabaseSetup(this);">
 <?php
@@ -262,28 +262,28 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
                     <div id="dbdatafull">
                         <div class="control-group">
-                            <label for="sql_server">Database hostname:</label>
+                            <label class="control-label" for="sql_server">Database hostname:</label>
                             <div class="controls">
                                 <input type="text" name="sql_server" id="sql_server" />
                                 <p class="help-block">Please enter the host of your database server.</p>
                             </div>
                         </div>
                         <div class="control-group">
-                            <label for="sql_user">Database user:</label>
+                            <label class="control-label" for="sql_user">Database user:</label>
                             <div class="controls">
                                 <input type="text" name="sql_user" id="sql_user" />
                                 <p class="help-block">Please enter your database user.</p>
                             </div>
                         </div>
                         <div class="control-group">
-                            <label for="sql_password">Database password:</label>
+                            <label class="control-label" for="sql_password">Database password:</label>
                             <div class="controls">
                                 <input name="sql_passwort" type="password" id="sql_password" />
                                 <p class="help-block">Please enter your database password.</p>
                             </div>
                         </div>
                         <div class="control-group">
-                            <label for="sql_db">Database name:</label>
+                            <label class="control-label" for="sql_db">Database name:</label>
                             <div class="controls">
                                 <input type="text" name="sql_db" id="sql_db" />
                                 <p class="help-block">Please enter your database name.</p>
@@ -293,7 +293,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
                     <div id="dbsqlite" class="hide">
                         <div class="control-group">
-                            <label for="sql_sqlitefile">SQLite database file:</label>
+                            <label class="control-label" for="sql_sqlitefile">SQLite database file:</label>
                             <div class="controls">
                                 <input type="text" name="sql_sqlitefile" id="sql_sqlitefile"
                                        value="<?php print dirname(dirname(__FILE__)); ?>" />
@@ -306,7 +306,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                     </div>
 
                     <div class="control-group">
-                        <label for="sqltblpre">Table prefix:</label>
+                        <label class="control-label" for="sqltblpre">Table prefix:</label>
                         <div class="controls">
                             <input type="text" name="sqltblpre" id="sqltblpre" />
                             <p class="help-block">
@@ -324,7 +324,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                 <fieldset>
                 <legend>Add your LDAP setup</legend>
                     <div class="control-group">
-                        <label for="ldap_enabled">&nbsp;</label>
+                        <label class="control-label" for="ldap_enabled">&nbsp;</label>
                         <div class="controls">
                             <label class="checkbox">
                                 <input id="ldap_enabled" type="checkbox" name="ldap_enabled" value="yes" />
@@ -334,35 +334,35 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="ldap_server">LDAP server host:</label>
+                        <label class="control-label" for="ldap_server">LDAP server host:</label>
                         <div class="controls">
                             <input type="text" name="ldap_server" id="ldap_server" />
                             <p class="help-block">Please enter the host of your LDAP server.</p>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="ldap_port">LDAP server port:</label>
+                        <label class="control-label" for="ldap_port">LDAP server port:</label>
                         <div class="controls">
                             <input type="number" name="ldap_port" value="389" id="ldap_port" />
                             <p class="help-block">Please enter the port of your LDAP server.</p>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="ldap_user">LDAP user DN:</label>
+                        <label class="control-label" for="ldap_user">LDAP user DN:</label>
                         <div class="controls">
                             <input type="text" name="ldap_user" id="ldap_user" />
                             <p class="help-block">Please enter your specified RDN username.</p>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="ldap_password">LDAP password:</label>
+                        <label class="control-label" for="ldap_password">LDAP password:</label>
                         <div class="controls">
                             <input name="ldap_password" type="password" id="ldap_password" />
                             <p class="help-block">Please enter your LDAP password.</p>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="ldap_base">LDAP base DN:</label>
+                        <label class="control-label" for="ldap_base">LDAP base DN:</label>
                         <div class="controls">
                         <input type="text" name="ldap_base" id="ldap_base" />
                             <p class="help-block">
@@ -385,7 +385,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                 <fieldset>
                 <legend>Your phpMyFAQ setup</legend>
                     <div class="control-group">
-                        <label for="language">Default language:</label>
+                        <label class="control-label" for="language">Default language:</label>
                         <div class="controls">
                             <select name="language" size="1" id="language">
 <?php
@@ -409,7 +409,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                     </div>
 
                     <div class="control-group">
-                        <label for="permLevel">Permission level:</label>
+                        <label class="control-label" for="permLevel">Permission level:</label>
                         <div class="controls">
                                 <select id="permLevel" name="permLevel" size="1" required="required">
                                     <option value="basic">Basic (no group support)</option>
@@ -421,14 +421,14 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="realname">Your name:</label>
+                        <label class="control-label" for="realname">Your name:</label>
                         <div class="controls">
                             <input type="text" name="realname" id="realname" required="required" />
                             <p class="help-block">Please enter your real name.</p>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="email">Your email address:</label>
+                        <label class="control-label" for="email">Your email address:</label>
                         <div class="controls">
                             <input type="email" name="email" id="email" required="required" />
                             <p class="help-block">Please enter your email adress.</p>
@@ -436,21 +436,21 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
                     </div>
                     <div class="control-group">
-                        <label for="loginname">Your login name:</label>
+                        <label class="control-label" for="loginname">Your login name:</label>
                         <div class="controls">
                             <input type="text" name="loginname" id="loginname" required="required" />
                             <p class="help-block">Please enter your login name.</p>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="password">Your password:</label>
+                        <label class="control-label" for="password">Your password:</label>
                         <div class="controls">
                             <input type="password" name="password" id="password" required="required" />
                             <p class="help-block">Please enter your password.</p>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="password_retype">Retype password:</label>
+                        <label class="control-label" for="password_retype">Retype password:</label>
                         <div class="controls">
                             <input type="password" name="password_retyped" id="password_retype" required="required" />
                             <p class="help-block">Please retype your password.</p>
@@ -1089,7 +1089,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             <fieldset>
                 <legend>General questions</legend>
                 <div class="control-group">
-                    <label>How do you act like?</label>
+                    <label class="control-label">How do you act like?</label>
                         <div class="controls">
                         <select name="q[individual]">
                             <option>as an individual</option>
@@ -1098,7 +1098,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                     </div>
                 </div>
                 <div class="control-group">
-                    <label>What kind of organisation is that?</label>
+                    <label class="control-label">What kind of organisation is that?</label>
                     <div class="controls">
                         <select name="q[organisation]">
                              <option>private held</option>
@@ -1114,7 +1114,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             <fieldset>
                 <legend>Technical questions</legend>
                 <div class="control-group">
-                    <label>Where did you installed phpMyFAQ?</label>
+                    <label class="control-label">Where did you installed phpMyFAQ?</label>
                     <div class="controls">
                         <select name="q[server]">
                             <option>server run by a hosting company</option>
@@ -1129,13 +1129,13 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             <fieldset>
                 <legend>Beyond our own nose</legend>
                 <div class="control-group">
-                    <label>Which PHP software do you also use?</label>
+                    <label class="control-label">Which PHP software do you also use?</label>
                     <div class="controls">
                         <input name="q[other]" />
                     </div>
                 </div>
                 <div class="control-group">
-                    <label>Are you using other web technologies?</label>
+                    <label class="control-label">Are you using other web technologies?</label>
                     <div class="controls">
                         <label class="checkbox inline">
                             <input type="checkbox" name="q[other][]" value="ASP" />ASP
