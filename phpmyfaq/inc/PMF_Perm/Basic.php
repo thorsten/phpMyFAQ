@@ -286,6 +286,7 @@ class PMF_Perm_Basic extends PMF_Perm
      * data stored in the rights table. 
      *
      * @param array $right_data Array if rights
+     *
      * @return int
      */
     public function addRight(Array $right_data)
@@ -294,8 +295,8 @@ class PMF_Perm_Basic extends PMF_Perm
             return 0;
         }
         
-        $next_id    = $this->db->nextId(SQLPREFIX."faqright", "right_id");
-        $right_data = $this->checkRightData($right_data);
+        $nextId    = $this->db->nextId(SQLPREFIX."faqright", "right_id");
+        $rightData = $this->checkRightData($right_data);
         
         $insert = sprintf("
             INSERT INTO
@@ -304,18 +305,18 @@ class PMF_Perm_Basic extends PMF_Perm
                 VALUES
             (%d, '%s', '%s', %d, %d)",
             SQLPREFIX,
-            $next_id,
-            $right_data['name'],
-            $right_data['description'],
-            (int)$right_data['for_users'],
-            (int)$right_data['for_groups']);
-            
-        $res = $this->db->query($insert);
-        if (!$res) {
+            $nextId,
+            $rightData['name'],
+            $rightData['description'],
+            isset($rightData['for_users']) ? (int)$rightData['for_users'] : 1,
+            isset($rightData['for_groups']) ? (int)$rightData['for_groups'] : 1
+        );
+
+        if (! $this->db->query($insert)) {
             return 0;
         }
         
-        return $next_id;
+        return $nextId;
     }
 
     /**
