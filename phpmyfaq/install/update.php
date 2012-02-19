@@ -106,6 +106,8 @@ function HTMLFooter()
                     <li><a target="_blank" href="http://www.phpmyfaq.de/support.php">Support</a></li>
                     <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
                     <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
+                    <li class="divider-vertical"></li>
+                    <li><a href="../">Back to your FAQ</a></li>
                 </ul>
             </nav>
         </div>
