@@ -417,18 +417,22 @@ if (isset($auth) && in_array(true, $permission)) {
             $json   = file_get_contents('http://www.phpmyfaq.de/json/version.php');
             $result = json_decode($json);
             if ($result instanceof stdClass) {
+                $installed = $faqconfig->get('main.currentVersion');
+                $available = $result->stable;
                 printf(
-                    '%s <a href="http://www.phpmyfaq.de" target="_blank">phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>',
-                    $PMF_LANG['ad_xmlrpc_latest'], 
-                    $result->stable);
+                    '<p class="alert alert-%s">%s <a href="http://www.phpmyfaq.de" target="_blank">phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>',
+                    (-1 == version_compare($installed, $available)) ? 'danger' : 'info',
+                    $PMF_LANG['ad_xmlrpc_latest'],
+                    $available
+                );
                 // Installed phpMyFAQ version is outdated
-                if (-1 == version_compare($faqconfig->get('main.currentVersion'), $result->stable)) {
+                if (-1 == version_compare($installed, $available)) {
                     print '<br />' . $PMF_LANG['ad_you_should_update'];
                 }
+                print '</p>';
             }
         } else {
 ?>
-
                 <form action="index.php" method="post">
                     <input type="hidden" name="param" value="version" />
                     <input class="btn-primary btn-large" type="submit" value="<?php print $PMF_LANG["ad_xmlrpc_button"]; ?>" />
