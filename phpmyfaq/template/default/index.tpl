@@ -57,10 +57,10 @@
             <a class="brand" title="{header}" href="{faqHome}">{header}</a>
             <nav class="nav-collapse">
                 <ul class="nav">
-                    <li>{showInstantResponse}</li>
-                    <li>{msgAddContent}</li>
-                    <li>{msgQuestion}</li>
-                    <li>{msgOpenQuestions}</li>
+                    <li class="{activeQuickfind}">{showInstantResponse}</li>
+                    <li class="{activeAddContent}">{msgAddContent}</li>
+                    <li class="{activeAddQuestion}">{msgQuestion}</li>
+                    <li class="{activeOpenQuestions}">{msgOpenQuestions}</li>
                 </ul>
                 <ul class="nav pull-right">
                     [notLoggedIn]
