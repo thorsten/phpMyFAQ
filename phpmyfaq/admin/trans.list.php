@@ -46,7 +46,7 @@ printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_translations']);
             print '<p class="error">'. $PMF_LANG['msgLangDirIsntWritable'] . "</p>";
         endif; ?>
 
-        <table class="list" style="width: 100%">
+        <table class="table table-striped">
         <thead>
             <?php if($permission["addtranslation"] && $isTransDirWritable): ?>
             <tr>
