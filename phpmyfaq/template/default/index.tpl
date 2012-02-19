@@ -64,12 +64,12 @@
                 </ul>
                 <ul class="nav pull-right">
                     [notLoggedIn]
-                    <li>{msgRegisterUser}</li>
+                    <li class="{activeRegister}">{msgRegisterUser}</li>
                     <li class="divider-vertical"></li>
-                    <li>{msgLoginUser}</li>
+                    <li class="{activeLogin}">{msgLoginUser}</li>
                     [/notLoggedIn]
                     [userloggedIn]
-                    <li>{msgUserControl}</li>
+                    <li class="{activeUserControl}">{msgUserControl}</li>
                     <li class="divider"></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">

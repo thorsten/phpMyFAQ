@@ -578,16 +578,20 @@ if (isset($auth)) {
             'msgFullName'            => $PMF_LANG['ad_user_loggedin'] . $user->getLogin(),
             'msgLoginName'           => $user->getUserData('display_name'),
             'msgUserControlDropDown' => '<a href="?action=ucp">' . $PMF_LANG['headerUserControlPanel'] . '</a>',
-            'msgLogoutUser'          => '<a href="?action=logout">' . $PMF_LANG['ad_menu_logout'] . '</a>'
+            'msgLogoutUser'          => '<a href="?action=logout">' . $PMF_LANG['ad_menu_logout'] . '</a>',
+            'activeUserControl'      => ('ucp' == $action) ? 'active' : ''
         )
     );
+
 } else {
     $tpl->parseBlock(
         'index',
         'notLoggedIn',
         array(
             'msgRegisterUser' => '<a href="?action=register">' . $PMF_LANG['msgRegisterUser'] . '</a>',
-            'msgLoginUser'    => '<a href="?action=login">' . $PMF_LANG['msgLoginUser'] . '</a>'
+            'msgLoginUser'    => '<a href="?action=login">' . $PMF_LANG['msgLoginUser'] . '</a>',
+            'activeRegister'  => ('register' == $action) ? 'active' : '',
+            'activeLogin'     => ('login' == $action) ? 'active' : ''
         )
     );
 }
