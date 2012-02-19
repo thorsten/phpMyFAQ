@@ -42,15 +42,16 @@ if ($permission['viewlog']) {
         </header>
 
         <table class="table table-striped">
+        <tbody>
 <?php
     foreach ($ratingdata as $data) {
         if ($data['category_id'] != $oldcategory) {
 ?>
-        <tr>
-            <th colspan="5" style="text-align: left;">
-                <strong><?php print $category->categoryName[$data['category_id']]['name']; ?></strong>
-            </th>
-        </tr>
+            <tr>
+                <th colspan="6" style="text-align: left;">
+                    <strong><?php print $category->categoryName[$data['category_id']]['name']; ?></strong>
+                </th>
+            </tr>
 <?php
         }
 
@@ -61,59 +62,57 @@ if ($permission['viewlog']) {
             $data['lang']
         );
 ?>
-        <tr>
-            <td>
-                <?php print $data['id']; ?>
-            </td>
-            <td>
-                <?php print $data['lang']; ?>
-            </td>
-            <td>
-                <a href="<?php print $url ?>" title="<?php print $question; ?>">
-                    <?php print PMF_Utils::makeShorterText($question, 14); ?>
-                </a>
-            </td>
-            <td>
-                <?php print $data['usr']; ?></td>
-            <td>
-                <?php
-                if (round($data['num'] * 20) > 75) {
-                    $progressBar = 'success';
-                } elseif (round($data['num'] * 20) < 25) {
-                    $progressBar = 'danger';
-                } else {
-                    $progressBar = 'info';
-                }
-                ?>
-                <div class="progress progress-<?php print $progressBar ?>" style="width: 50px;">
-                    <div class="bar" style="width: <?php print round($data['num'] * 20); ?>%;"></div>
-                </div>
-                <?php print round($data['num'] * 20); ?>%
-            </td>
-        </tr>
+            <tr>
+                <td><?php print $data['id']; ?></td>
+                <td><?php print $data['lang']; ?></td>
+                <td>
+                    <a href="<?php print $url ?>" title="<?php print $question; ?>">
+                        <?php print PMF_Utils::makeShorterText($question, 14); ?>
+                    </a>
+                </td>
+                <td style="width: 60px;"><?php print $data['usr']; ?></td>
+                <td style="width: 60px;">
+                    <?php
+                    if (round($data['num'] * 20) > 75) {
+                        $progressBar = 'success';
+                    } elseif (round($data['num'] * 20) < 25) {
+                        $progressBar = 'danger';
+                    } else {
+                        $progressBar = 'info';
+                    }
+                    ?>
+                    <div class="progress progress-<?php print $progressBar ?>" style="width: 50px;">
+                        <div class="bar" style="width: <?php print round($data['num'] * 20); ?>%;"></div>
+                    </div>
+                </td>
+                <td style="width: 60px;"><?php print round($data['num'] * 20); ?>%</td>
+            </tr>
 <?php
         $oldcategory = $data['category_id'];
     }
+?>
+        </tbody>
+<?php
     if ($numratings > 0) {
 ?>
-        <tr>
-            <td colspan="5">
-                <span style="color: green; font-weight: bold;">
-                    <?php print $PMF_LANG["ad_rs_green"] ?>
-                </span>
-                <?php print $PMF_LANG["ad_rs_ahtf"] ?>,
-                <span style="color: red; font-weight: bold;">
-                    <?php print $PMF_LANG["ad_rs_red"] ?>
-                </span>
-                <?php print $PMF_LANG["ad_rs_altt"] ?>
-            </td>
-        </tr>
+            <tr>
+                <td colspan="6">
+                    <span style="color: green; font-weight: bold;">
+                        <?php print $PMF_LANG["ad_rs_green"] ?>
+                    </span>
+                    <?php print $PMF_LANG["ad_rs_ahtf"] ?>,
+                    <span style="color: red; font-weight: bold;">
+                        <?php print $PMF_LANG["ad_rs_red"] ?>
+                    </span>
+                    <?php print $PMF_LANG["ad_rs_altt"] ?>
+                </td>
+            </tr>
 <?php
     } else {
 ?>
-        <tr>
-            <td colspan="5"><?php print $PMF_LANG["ad_rs_no"] ?></td>
-        </tr>
+            <tr>
+                <td colspan="5"><?php print $PMF_LANG["ad_rs_no"] ?></td>
+            </tr>
 <?php
     }
 ?>
