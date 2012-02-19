@@ -34,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     </div>
 </div>
 
-<div id="footer">
+<footer>
     <div class="container-fluid">
         <div class="row">
             <form action="index.php<?php print (isset($action) ? '?action=' . $action : ''); ?>" method="post" class="pull-right">
@@ -55,7 +55,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         print '<div class="container">DEBUG INFORMATION:<br>'.$db->log().'</div>';
     }
 ?>
-</div>
+</footer>
 
 <?php
 if (isset($auth)) {

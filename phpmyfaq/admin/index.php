@@ -532,14 +532,14 @@ if (isset($auth) && in_array(true, $permission)) {
             <form class="form-horizontal" action="index.php" method="post">
 
                 <div class="control-group">
-                    <label for="faqusername"><?php print $PMF_LANG["ad_auth_user"]; ?></label>
+                    <label class="control-label" for="faqusername"><?php print $PMF_LANG["ad_auth_user"]; ?></label>
                     <div class="controls">
                         <input type="text" name="faqusername" id="faqusername" required="required" autofocus="autofocus" />
                     </div>
                 </div>
 
                 <div class="control-group">
-                    <label for="faqpassword"><?php print $PMF_LANG["ad_auth_passwd"]; ?></label>
+                    <label class="control-label" for="faqpassword"><?php print $PMF_LANG["ad_auth_passwd"]; ?></label>
                     <div class="controls">
                         <input type="password" size="30" name="faqpassword" id="faqpassword" required="required" />
                     </div>

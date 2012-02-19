@@ -240,7 +240,7 @@ if ($groupAction == 'add' && $permission['addgroup']) {
         <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
 
             <div class="control-group">
-                <label for="group_name"><?php print $PMF_LANG['ad_group_name']; ?></label>
+                <label class="control-label" for="group_name"><?php print $PMF_LANG['ad_group_name']; ?></label>
                 <div class="controls">
                     <input type="text" name="group_name" id="group_name" autofocus="autofocus"
                            value="<?php print (isset($group_name) ? $group_name : ''); ?>" tabindex="1" />
@@ -248,7 +248,7 @@ if ($groupAction == 'add' && $permission['addgroup']) {
             </div>
 
             <div class="control-group">
-                <label for="group_description"><?php print $PMF_LANG['ad_group_description']; ?></label>
+                <label class="control-label" for="group_description"><?php print $PMF_LANG['ad_group_description']; ?></label>
                 <div class="controls">
                     <textarea name="group_description" id="group_description" cols="<?php print $descriptionCols; ?>"
                               rows="<?php print $descriptionRows; ?>" tabindex="2"
@@ -257,7 +257,7 @@ if ($groupAction == 'add' && $permission['addgroup']) {
             </div>
 
             <div class="control-group">
-                <label for="group_auto_join"><?php print $PMF_LANG['ad_group_autoJoin']; ?></label>
+                <label class="control-label" for="group_auto_join"><?php print $PMF_LANG['ad_group_autoJoin']; ?></label>
                 <div class="controls">
                     <input type="checkbox" name="group_auto_join" id="group_auto_join" value="1" tabindex="3"
                     <?php print ((isset($group_auto_join) && $group_auto_join) ? ' checked="checked"' : ''); ?> />
@@ -621,18 +621,18 @@ getGroupList();
                             <input id="update_group_id" type="hidden" name="group_id" value="0" />
                             <div id="group_data_table">
                                 <p>
-                                    <label for="update_group_name" class="small"><?php print $PMF_LANG['ad_group_name']; ?></label>
+                                    <label class="control-label" for="update_group_name" class="small"><?php print $PMF_LANG['ad_group_name']; ?></label>
                                     <input id="update_group_name" type="text" name="name" style="width: 150px;"
                                            tabindex="1" value="<?php print (isset($group_name) ? $group_name : ''); ?>" />
                                 </p>
                                 <p>
-                                    <label for="update_group_description" class="small"><?php print $PMF_LANG['ad_group_description']; ?></label>
+                                    <label class="control-label" for="update_group_description" class="small"><?php print $PMF_LANG['ad_group_description']; ?></label>
                                     <textarea id="update_group_description" name="description" cols="<?php print $descriptionCols; ?>"
                                               rows="<?php print $descriptionRows; ?>" style="width: 150px;"
                                               tabindex="2"><?php print (isset($group_description) ? $group_description : ''); ?></textarea>
                                 </p>
                                 <p>
-                                    <label for="update_group_auto_join" class="small"><?php print $PMF_LANG['ad_group_autoJoin'] ?></label>
+                                    <label class="control-label" for="update_group_auto_join" class="small"><?php print $PMF_LANG['ad_group_autoJoin'] ?></label>
                                     <input id="update_group_auto_join" type="checkbox" name="auto_join" value="1"
                                            tabindex="3"<?php print ((isset($group_auto_join) && $group_auto_join) ? ' checked="checked"' : ''); ?> />
                                 </p>

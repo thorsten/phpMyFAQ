@@ -142,7 +142,7 @@ if ($permission['editcateg']) {
             } else {
             ?>
             <div class="control-group">
-                <label for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
+                <label class="control-label" for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
                 <div class="controls">
                     <?php print PMF_Language::selectLanguages($categories[$id]['lang'], false, array(), 'langTo'); ?>
                 </div>
@@ -194,7 +194,7 @@ if ($permission['editcateg']) {
                 // Text for title
                 fieldset
                     .append('<p>' +
-                            '<label for="name_translated_' + langTo + '">' +
+                            '<label class="control-label" for="name_translated_' + langTo + '">' +
                             '<?php print $PMF_LANG["ad_categ_titel"]; ?>:' +
                             '</label>' +
                             '<input type="text" id="name_translated_' + langTo + '" name="name_translated_' + langTo + '" maxlength="255" style="width: 300px;">' +
@@ -203,7 +203,7 @@ if ($permission['editcateg']) {
                 // Textarea for description
                 fieldset
                     .append('<p>' +
-                            '<label for="description_translated_' + langTo + '">' +
+                            '<label class="control-label" for="description_translated_' + langTo + '">' +
                             '<?php print $PMF_LANG["ad_categ_desc"]; ?>:' +
                             '</label>' +
                             '<textarea id="description_translated_' + langTo + '" name="description_translated_' + langTo + '" cols="80" rows="3" style="width: 300px;"></textarea>' +

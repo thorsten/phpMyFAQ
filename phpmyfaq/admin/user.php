@@ -291,7 +291,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
 
             <div class="control-group">
-                <label for="user_name"><?php print $PMF_LANG["ad_adus_name"]; ?></label>
+                <label class="control-label" for="user_name"><?php print $PMF_LANG["ad_adus_name"]; ?></label>
                 <div class="controls">
                     <input type="text" name="user_name" id="user_name" required="required" tabindex="1"
                            value="<?php print (isset($user_name) ? $user_name : ''); ?>" />
@@ -299,7 +299,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             </div>
 
             <div class="control-group">
-                <label for="user_realname"><?php print $PMF_LANG["ad_user_realname"]; ?></label>
+                <label class="control-label" for="user_realname"><?php print $PMF_LANG["ad_user_realname"]; ?></label>
                 <div class="controls">
                 <input type="text" name="user_realname" id="user_realname" required="required" tabindex="2"
                    value="<?php print (isset($user_realname) ? $user_realname : ''); ?>" />
@@ -307,7 +307,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             </div>
 
             <div class="control-group">
-                <label for="user_email"><?php print $PMF_LANG["ad_entry_email"]; ?></label>
+                <label class="control-label" for="user_email"><?php print $PMF_LANG["ad_entry_email"]; ?></label>
                 <div class="controls">
                     <input type="email" name="user_email" id="user_email" required="required" tabindex="3"
                            value="<?php print (isset($user_email) ? $user_email : ''); ?>" />
@@ -315,7 +315,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             </div>
 
             <div class="control-group">
-                <label for="password"><?php print $PMF_LANG["ad_adus_password"]; ?></label>
+                <label class="control-label" for="password"><?php print $PMF_LANG["ad_adus_password"]; ?></label>
                 <div class="controls">
                     <input type="password" name="user_password" id="password" required="required" tabindex="4"
                            value="<?php print (isset($user_password) ? $user_password : ''); ?>" />
@@ -323,7 +323,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             </div>
 
              <div class="control-group">
-                 <label for="password_confirm"><?php print $PMF_LANG["ad_passwd_con"]; ?></label>
+                 <label class="control-label" for="password_confirm"><?php print $PMF_LANG["ad_passwd_con"]; ?></label>
                  <div class="controls">
                     <input type="password" name="user_password_confirm" id="password_confirm" required="required"
                            tabindex="5" value="<?php print (isset($user_password_confirm) ? $user_password_confirm : ''); ?>" />

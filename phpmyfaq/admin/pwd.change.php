@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2011 phpMyFAQ Team
+ * @copyright 2003-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-23
@@ -28,11 +28,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 ?>
-
         <header>
             <h2><?php print $PMF_LANG['ad_passwd_cop']; ?></h2>
         </header>
-
 <?php
 if ($permission["passwd"]) {
     
@@ -66,21 +64,21 @@ if ($permission["passwd"]) {
         <form class="form-horizontal" action="?action=passwd" method="post">
         <input type="hidden" name="save" value="newpassword" />
             <div class="control-group">
-                <label for="opass"><?php print $PMF_LANG["ad_passwd_old"]; ?></label>
+                <label class="control-label" for="opass"><?php print $PMF_LANG["ad_passwd_old"]; ?></label>
                 <div class="controls">
                     <input type="password" name="opass" id="opass" required="required" />
                 </div>
             </div>
 
             <div class="control-group">
-                <label for="npass"><?php print $PMF_LANG["ad_passwd_new"]; ?></label>
+                <label class="control-label" for="npass"><?php print $PMF_LANG["ad_passwd_new"]; ?></label>
                 <div class="controls">
                     <input type="password" name="npass" id="npass" required="required" />
                 </div>
             </div>
 
             <div class="control-group">
-                <label for="bpass"><?php print $PMF_LANG["ad_passwd_con"]; ?></label>
+                <label class="control-label" for="bpass"><?php print $PMF_LANG["ad_passwd_con"]; ?></label>
                 <div class="controls">
                     <input type="password" name="bpass" id="bpass" required="required"  />
                 </div>

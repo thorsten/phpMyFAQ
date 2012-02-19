@@ -58,23 +58,23 @@ if ($permission["addcateg"]) {
     }
 ?>
             <div class="control-group">
-                <label><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
+                <label class="control-label" for="name"><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
                 <div class="controls">
                     <input type="text" id="name" name="name" required="required" />
                 </div>
             </div>
 
             <div class="control-group">
-                <label><?php print $PMF_LANG["ad_categ_desc"]; ?>:</label>
+                <label class="control-label" for="description"><?php print $PMF_LANG["ad_categ_desc"]; ?>:</label>
                 <div class="controls">
                     <textarea id="description" name="description" rows="3" cols="80" ></textarea>
                 </div>
             </div>
 
             <div class="control-group">
-                <label><?php print $PMF_LANG["ad_categ_owner"]; ?>:</label>
+                <label class="control-label" for="user_id"><?php print $PMF_LANG["ad_categ_owner"]; ?>:</label>
                 <div class="controls">
-                    <select name="user_id" size="1">
+                    <select name="user_id" id="user_id" size="1">
                     <?php print $user->getAllUserOptions(1); ?>
                     </select>
                 </div>
@@ -85,7 +85,7 @@ if ($permission["addcateg"]) {
         if ($faqconfig->get('security.permLevel') != 'basic') {
 ?>
             <div class="control-group">
-                <label><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
+                <label class="control-label"><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
                 <div class="controls">
                     <label class="radio">
                         <input type="radio" name="grouppermission" value="all" checked="checked" />
@@ -109,7 +109,7 @@ if ($permission["addcateg"]) {
         }
 ?>
             <div class="control-group">
-                <label><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
+                <label class="control-label"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
                 <div class="controls">
                     <label class="radio">
                         <input type="radio" name="userpermission" value="all" checked="checked" />
@@ -140,7 +140,7 @@ if ($permission["addcateg"]) {
                 } else {
                 ?>
                 <div class="control-group">
-                    <label for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
+                    <label class="control-label" for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
                     <div class="controls">
                         <?php print PMF_Language::selectLanguages($LANGCODE, false, array(), 'langTo'); ?>
                     </div>

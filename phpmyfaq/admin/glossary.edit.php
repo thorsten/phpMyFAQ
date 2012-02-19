@@ -38,14 +38,14 @@ if ($permission['editglossary']) {
         <form class="form-horizontal" action="?action=updateglossary" method="post">
             <input type="hidden" name="id" value="<?php print $glossaryItem['id']; ?>" />
             <div class="control-group">
-                <label for="item"><?php print $PMF_LANG['ad_glossary_item']; ?>:</label>
+                <label class="control-label" for="item"><?php print $PMF_LANG['ad_glossary_item']; ?>:</label>
                 <div class="controls">
                     <input type="text" name="item" id="item" value="<?php print $glossaryItem['item']; ?>" />
                 </div>
             </div>
 
             <div class="control-group">
-                <label for="definition"><?php print $PMF_LANG['ad_glossary_definition']; ?>:</label>
+                <label class="control-label" for="definition"><?php print $PMF_LANG['ad_glossary_definition']; ?>:</label>
                 <div class="controls">
                     <textarea name="definition" id="definition" cols="50" rows="3"><?php print $glossaryItem['definition']; ?></textarea>
                 </div>

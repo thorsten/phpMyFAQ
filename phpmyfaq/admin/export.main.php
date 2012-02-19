@@ -50,7 +50,7 @@ if (!PMF_Db::checkOnEmptyTable('faqdata')) {
             <fieldset>
                 <legend><?php print($PMF_LANG['ad_export_which_cat']); ?></legend>
                 <div class="control-group">
-                    <label for="catid"><?php print($PMF_LANG["ad_entry_category"]); ?></label>
+                    <label class="control-label" for="catid"><?php print($PMF_LANG["ad_entry_category"]); ?></label>
                     <div class="controls">
                         <select name="catid" id="catid" size="1">
                             <option value="0"><?php print $PMF_LANG['msgShowAllCategories'] ?></option>
@@ -76,7 +76,7 @@ if (!PMF_Db::checkOnEmptyTable('faqdata')) {
                 <legend><?php print($PMF_LANG['ad_export_type']); ?></legend>
                 <div class="control-group">
                     <div class="controls">
-                        <label ><?php print($PMF_LANG['ad_export_type_choose']); ?></label>
+                        <label><?php print($PMF_LANG['ad_export_type_choose']); ?></label>
                         <label class="radio">
                             <input type="radio" name="type" value="pdf" checked="checked" />
                             <?php print($PMF_LANG["ad_export_generate_pdf"]); ?>

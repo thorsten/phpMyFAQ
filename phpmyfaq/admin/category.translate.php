@@ -79,7 +79,7 @@ if ($permission["editcateg"]) {
             } else {
             ?>
             <div class="control-group">
-                <label for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
+                <label class="control-label" for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
                 <div class="controls">
                     <?php print PMF_Language::selectLanguages($category->categoryName[$id]['name'], false, array(), 'langTo'); ?>
                 </div>
