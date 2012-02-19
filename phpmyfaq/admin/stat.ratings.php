@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2011 phpMyFAQ Team
+ * @copyright 2003-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
@@ -76,9 +76,19 @@ if ($permission['viewlog']) {
             <td>
                 <?php print $data['usr']; ?></td>
             <td>
-                <img src="stat.bar.php?num=<?php print $data['num']; ?>" border="0"
-                     alt="<?php print round($data['num'] * 20); ?> %" width="50" height="15"
-                     title="<?php print round($data['num'] * 20); ?> %" />
+                <?php
+                if (round($data['num'] * 20) > 75) {
+                    $progressBar = 'success';
+                } elseif (round($data['num'] * 20) < 25) {
+                    $progressBar = 'danger';
+                } else {
+                    $progressBar = 'info';
+                }
+                ?>
+                <div class="progress progress-<?php print $progressBar ?>" style="width: 50px;">
+                    <div class="bar" style="width: <?php print round($data['num'] * 20); ?>%;"></div>
+                </div>
+                <?php print round($data['num'] * 20); ?>%
             </td>
         </tr>
 <?php

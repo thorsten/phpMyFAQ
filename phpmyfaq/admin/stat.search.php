@@ -18,27 +18,11 @@
  * @package   Administration
  * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2011 phpMyFAQ Team
+ * @copyright 2003-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-03-30
  */
-
-if (isset($_GET['num']) && !defined('PMF_ROOT_DIR')) {
-    define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
-    
-    require_once PMF_ROOT_DIR . '/inc/Init.php';
-    PMF_Init::cleanRequest();
-    session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
-    session_start();
-    
-    $num = PMF_Filter::filterInput(INPUT_GET, 'num', FILTER_VALIDATE_FLOAT);
-    if (!is_null($num)) {
-        $bar = new PMF_Bar($num);
-        $bar->renderImage();
-        exit;
-    }
-}
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -67,19 +51,19 @@ if ($permission['viewlog']) {
     $PageSpan = PageSpan("<a href=\"?action=searchstats&amp;pages=".$pages."&amp;page=<NUM>\">", 1, $pages, $page);
 ?>
         <div id="ajaxresponse"></div>
-        <table class="list" style="width: 100%">
+        <table class="table table-striped">
         <thead>
         <tr>
             <th><?php print $PMF_LANG['ad_searchstats_search_term'] ?></th>
             <th><?php print $PMF_LANG['ad_searchstats_search_term_count'] ?></th>
             <th><?php print $PMF_LANG['ad_searchstats_search_term_lang'] ?></th>
-            <th><?php print $PMF_LANG['ad_searchstats_search_term_percentage'] ?></th>
+            <th colspan="2"><?php print $PMF_LANG['ad_searchstats_search_term_percentage'] ?></th>
             <th>&nbsp;</th>
         </tr>
         </thead>
         <tfoot>
             <tr>
-                <td colspan="5"><?php print $PageSpan; ?></td>
+                <td colspan="6"><?php print $PageSpan; ?></td>
             </tr>
         </tfoot>
         <tbody>
@@ -107,7 +91,12 @@ if ($permission['viewlog']) {
             <td><?php print PMF_String::htmlspecialchars($searchItem['searchterm']);  ?></td>
             <td><?php print $searchItem['number'] ?></td>
             <td><?php print $languageCodes[PMF_String::strtoupper($searchItem['lang'])] ?></td>
-            <td><?php print $num ?> %</td>
+            <td>
+                <div class="progress progress-info" style="width: 50px;">
+                    <div class="bar" style="width: <?php print $num; ?>%;"></div>
+                </div>
+            </td>
+            <td><?php print $num; ?>%</td>
             <td>
                 <a onclick="deleteSearchTerm('<?php print $searchItem['searchterm'] ?>', <?php print $searchItem['id'] ?>); return false;"
                    href="javascript:;">
