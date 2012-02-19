@@ -1,5 +1,5 @@
 /* ===================================================
- * bootstrap-transition.js v2.0.0
+ * bootstrap-transition.js v2.0.1
  * http://twitter.github.com/bootstrap/javascript.html#transitions
  * ===================================================
  * Copyright 2012 Twitter, Inc.
@@ -47,10 +47,9 @@
     })()
 
   })
-  
-}( window.jQuery )
-/* ==========================================================
- * bootstrap-alert.js v2.0.0
+
+}( window.jQuery );/* ==========================================================
+ * bootstrap-alert.js v2.0.1
  * http://twitter.github.com/bootstrap/javascript.html#alerts
  * ==========================================================
  * Copyright 2012 Twitter, Inc.
@@ -102,11 +101,14 @@
 
       $parent.length || ($parent = $this.hasClass('alert') ? $this : $this.parent())
 
-      $parent.removeClass('in')
+      $parent
+        .trigger('close')
+        .removeClass('in')
 
       function removeElement() {
-        $parent.remove()
-        $parent.trigger('closed')
+        $parent
+          .trigger('closed')
+          .remove()
       }
 
       $.support.transition && $parent.hasClass('fade') ?
@@ -139,9 +141,8 @@
     $('body').on('click.alert.data-api', dismiss, Alert.prototype.close)
   })
 
-}( window.jQuery )
-/* ============================================================
- * bootstrap-button.js v2.0.0
+}( window.jQuery );/* ============================================================
+ * bootstrap-button.js v2.0.1
  * http://twitter.github.com/bootstrap/javascript.html#buttons
  * ============================================================
  * Copyright 2012 Twitter, Inc.
@@ -233,13 +234,14 @@
 
   $(function () {
     $('body').on('click.button.data-api', '[data-toggle^=button]', function ( e ) {
-      $(e.target).button('toggle')
+      var $btn = $(e.target)
+      if (!$btn.hasClass('btn')) $btn = $btn.closest('.btn')
+      $btn.button('toggle')
     })
   })
 
-}( window.jQuery )
-/* ==========================================================
- * bootstrap-carousel.js v2.0.0
+}( window.jQuery );/* ==========================================================
+ * bootstrap-carousel.js v2.0.1
  * http://twitter.github.com/bootstrap/javascript.html#carousel
  * ==========================================================
  * Copyright 2012 Twitter, Inc.
@@ -301,6 +303,7 @@
 
   , pause: function () {
       clearInterval(this.interval)
+      this.interval = null
       return this
     }
 
@@ -321,6 +324,8 @@
         , direction = type == 'next' ? 'left' : 'right'
         , fallback  = type == 'next' ? 'first' : 'last'
         , that = this
+
+      if (!$next.length) return
 
       this.sliding = true
 
@@ -391,9 +396,8 @@
     })
   })
 
-}( window.jQuery )
-/* =============================================================
- * bootstrap-collapse.js v2.0.0
+}( window.jQuery );/* =============================================================
+ * bootstrap-collapse.js v2.0.1
  * http://twitter.github.com/bootstrap/javascript.html#collapse
  * =============================================================
  * Copyright 2012 Twitter, Inc.
@@ -527,9 +531,8 @@
     })
   })
 
-}( window.jQuery )
-/* ============================================================
- * bootstrap-dropdown.js v2.0.0
+}( window.jQuery );/* ============================================================
+ * bootstrap-dropdown.js v2.0.1
  * http://twitter.github.com/bootstrap/javascript.html#dropdowns
  * ============================================================
  * Copyright 2012 Twitter, Inc.
@@ -619,9 +622,8 @@
     $('body').on('click.dropdown.data-api', toggle, Dropdown.prototype.toggle)
   })
 
-}( window.jQuery )
-/* =========================================================
- * bootstrap-modal.js v2.0.0
+}( window.jQuery );/* =========================================================
+ * bootstrap-modal.js v2.0.1
  * http://twitter.github.com/bootstrap/javascript.html#modals
  * =========================================================
  * Copyright 2012 Twitter, Inc.
@@ -799,7 +801,7 @@
     return this.each(function () {
       var $this = $(this)
         , data = $this.data('modal')
-        , options = $.extend({}, $.fn.modal.defaults, typeof option == 'object' && option)
+        , options = $.extend({}, $.fn.modal.defaults, $this.data(), typeof option == 'object' && option)
       if (!data) $this.data('modal', (data = new Modal(this, options)))
       if (typeof option == 'string') data[option]()
       else if (options.show) data.show()
@@ -829,9 +831,8 @@
     })
   })
 
-}( window.jQuery )
-/* ===========================================================
- * bootstrap-tooltip.js v2.0.0
+}( window.jQuery );/* ===========================================================
+ * bootstrap-tooltip.js v2.0.1
  * http://twitter.github.com/bootstrap/javascript.html#tooltips
  * Inspired by the original jQuery.tipsy by Jason Frame
  * ===========================================================
@@ -1099,9 +1100,8 @@
   , template: '<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
   }
 
-}( window.jQuery )
-/* ===========================================================
- * bootstrap-popover.js v2.0.0
+}( window.jQuery );/* ===========================================================
+ * bootstrap-popover.js v2.0.1
  * http://twitter.github.com/bootstrap/javascript.html#popovers
  * ===========================================================
  * Copyright 2012 Twitter, Inc.
@@ -1194,9 +1194,8 @@
   , template: '<div class="popover"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
   })
 
-}( window.jQuery )
-/* =============================================================
- * bootstrap-scrollspy.js v2.0.0
+}( window.jQuery );/* =============================================================
+ * bootstrap-scrollspy.js v2.0.1
  * http://twitter.github.com/bootstrap/javascript.html#scrollspy
  * =============================================================
  * Copyright 2012 Twitter, Inc.
@@ -1319,9 +1318,8 @@
     })
   })
 
-}( window.jQuery )
-/* ========================================================
- * bootstrap-tab.js v2.0.0
+}( window.jQuery );/* ========================================================
+ * bootstrap-tab.js v2.0.1
  * http://twitter.github.com/bootstrap/javascript.html#tabs
  * ========================================================
  * Copyright 2012 Twitter, Inc.
@@ -1449,9 +1447,8 @@
     })
   })
 
-}( window.jQuery )
-/* =============================================================
- * bootstrap-typeahead.js v2.0.0
+}( window.jQuery );/* =============================================================
+ * bootstrap-typeahead.js v2.0.1
  * http://twitter.github.com/bootstrap/javascript.html#typeahead
  * =============================================================
  * Copyright 2012 Twitter, Inc.
@@ -1720,8 +1717,7 @@
     })
   })
 
-}( window.jQuery )
-/**
+}( window.jQuery );/**
  * Some JavaScript functions used in the admin backend
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -1741,7 +1737,7 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2003-2011 phpMyFAQ Team
+ * @copyright 2003-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-11-13
@@ -1806,24 +1802,6 @@ function showhideCategory(id)
     }
 }
 
-
-/**
- * Displays or hides the login form
- *
- * @return void
- */
-function loginForm()
-{
-    if ($('#loginForm').hasClass('hidden')) {
-        $('#loginForm').removeClass('hidden');
-        $('#loginForm').fadeIn();
-    } else {
-        $('#loginForm').fadeOut();
-        $('#loginForm').addClass('hidden');
-    }
-}
-
- 
 /**
  * Displays or hides a configuration block
  * 
@@ -1833,46 +1811,10 @@ function loginForm()
 function toggleConfig(container)
 {
     if ($('#config' + container).css('display') == 'none') {
-    	$('#config' + container).fadeIn("slow");
+        $('#config' + container).fadeIn("slow");
     } else {
         $('#config' + container).fadeOut("slow");
     }
-}
-
-/**
- * deletes all options from given select-object.
- *
- * @param select
- * @return void
- */
-function select_clear(select)
-{
-    while (select.length > 0) {
-        select.remove(0);
-    }
-}
-
-/**
-* adds an option to the given select-object.
-*
-* @access public
-* @author Lars Tiedemann, <php@larstiedemann.de>
-* @param select node
-* @param string
-* @param text node
-* @param string
-* @return void
-*/
-function select_addOption(select, value, content, classValue)
-{
-    var opt;
-    opt = document.createElement("option");
-    opt.value = value;
-    if (classValue) {
-        opt.className = classValue;
-    }
-    opt.appendChild(content);
-    select.appendChild(opt);
 }
 
 /**
@@ -1944,81 +1886,6 @@ function form_uncheckAll(form_id)
 }
 
 /**
-* returns the text content of a child element.
-*
-* When having a dom structure like this:
-* <item id="1">
-*   <name>Item Name</name>
-*   <value>Text Value</value>
-* </item>
-* text_getFromParent(document.getElementById(1), "name")
-* would return "Item Name".
-*
-* @access public
-* @author Lars Tiedemann, <php@larstiedemann.de>
-* @param Object select
-* @return void
-*/
-function text_getFromParent(parentObject, childElement)
-{
-    var result = "";
-    result = parentObject.getElementsByTagName(childElement)[0];
-    if (result) {
-        if (result.childNodes.length > 1) {
-            return result.childNodes[1].nodeValue;
-        } else {
-            if (result.firstChild) {
-                return result.firstChild.nodeValue;
-            } else {
-                return "";
-            }
-        }
-    } else {
-        return "n/a";
-    }
-}
-
-/**
-* deletes all rows from given table-object.
-*
-* @access public
-* @author Lars Tiedemann, <php@larstiedemann.de>
-* @param table
-* @return void
-*/
-function table_clear(table)
-{
-    while (table.rows.length > 0) {
-        table.deleteRow(0);
-    }
-}
-
-/**
-* inserts a new row into the given table at the given position.
-*
-* @access public
-* @author Lars Tiedemann, <php@larstiedemann.de>
-* @param table
-* @param int
-* @param node
-* @param node
-* @return void
-*/
-function table_addRow(table, rowNumber, col1, col2)
-{
-    var td1;
-    var td2;
-    var tr;
-    td1 = document.createElement("td");
-    td1.appendChild(col1);
-    td2 = document.createElement("td");
-    td2.appendChild(col2);
-    tr = table.insertRow(rowNumber);
-    tr.appendChild(td1);
-    tr.appendChild(td2);
-}
-
-/**
  * Displays or hides the info boxes
  *
  * @return void
@@ -2058,10 +1925,10 @@ function saveFormValues(action, formName)
         cache:    false,
         success:  function(json) {
             if (json.success == undefined) {
-                $('#' + formName + 's').html('<p class="error">' + json.error + '</p>');
+                $('#' + formName + 's').html('<p class="alert alert-error">' + json.error + '</p>');
                 $('#loader').hide();
             } else {
-                $('#' + formName + 's').html('<p class="success">' + json.success + '</p>');
+                $('#' + formName + 's').html('<p class="alert alert-success">' + json.success + '</p>');
                 $('#' + formName + 's').fadeIn("slow");
                 $('#loader').hide();
                 $('#' + formName + 'Form').hide();
@@ -2126,10 +1993,11 @@ function saveVoting(type, id, value)
         cache:    false,
         success:  function(json) {
             if (json.success == undefined) {
-                $('#votings').html('<p class="error">' + json.error + '</p>');
+                $('#votings').html('<p class="alert alert-error">' + json.error + '</p>');
                 $('#loader').hide();
             } else {
-                $('#votings').html('<p class="success">' + json.success + '</p>');
+                $('#votings').html('<p class="alert alert-success">' + json.success + '</p>');
+                $('#rating').html(json.rating);
                 $('#votings').fadeIn("slow");
                 $('#loader').hide();
                 $('#votingForm').hide();
@@ -2162,7 +2030,7 @@ function checkQuestion()
         cache:    false,
         success:  function(json) {
             if (json.result == undefined && json.success == undefined) {
-                $('#qerror').html('<p class="error">' + json.error + '</p>');
+                $('#qerror').html('<p class="alert alert-error">' + json.error + '</p>');
                 $('#loader').hide();
             } else if (json.success == undefined) {
                 $('#qerror').empty();
@@ -2174,7 +2042,7 @@ function checkQuestion()
                 $('#captcha').val('');
                 refreshCaptcha('ask');
             } else {
-                $('#answers').html('<p class="success">' + json.success + '</p>');
+                $('#answers').html('<p class="alert alert-success">' + json.success + '</p>');
                 $('#answers').fadeIn("slow");
                 $('#answerForm').fadeOut('slow');
                 $('#loader').hide();
@@ -2201,3 +2069,48 @@ function refreshCaptcha(action)
         }
     });
 }
+
+/**
+ * Toggle fieldsets
+ *
+ * @param string fieldset ID of the fieldset
+ *
+ * @return void
+ */
+function toggleFieldset(fieldset)
+{
+    if ($('#div_' + fieldset).css('display') == 'none') {
+        $('#div_' + fieldset).fadeIn('fast');
+    } else {
+        $('#div_' + fieldset).fadeOut('fast');
+    }
+}
+
+/**
+ * Adds the link to the attachment in the main FAQ window
+ * @param integer attachmentId
+ * @param string
+ */
+function addAttachmentLink(attachmentId, fileName)
+{
+    window.opener.
+        $('.adminAttachments').
+        append('<li><a href="../index.php?action=attachment&id=' + attachmentId +'">' + fileName + '</a></li>');
+    window.close();
+}
+
+/**
+ * Closes the current window
+ *
+ */
+function closeWindow()
+{
+    window.close();
+}
+
+/**
+ * General functions
+ */
+$(document).ready(function() {
+
+});

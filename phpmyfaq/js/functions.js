@@ -206,10 +206,10 @@ function saveFormValues(action, formName)
         cache:    false,
         success:  function(json) {
             if (json.success == undefined) {
-                $('#' + formName + 's').html('<p class="error">' + json.error + '</p>');
+                $('#' + formName + 's').html('<p class="alert alert-error">' + json.error + '</p>');
                 $('#loader').hide();
             } else {
-                $('#' + formName + 's').html('<p class="success">' + json.success + '</p>');
+                $('#' + formName + 's').html('<p class="alert alert-success">' + json.success + '</p>');
                 $('#' + formName + 's').fadeIn("slow");
                 $('#loader').hide();
                 $('#' + formName + 'Form').hide();
@@ -274,10 +274,10 @@ function saveVoting(type, id, value)
         cache:    false,
         success:  function(json) {
             if (json.success == undefined) {
-                $('#votings').html('<p class="error">' + json.error + '</p>');
+                $('#votings').html('<p class="alert alert-error">' + json.error + '</p>');
                 $('#loader').hide();
             } else {
-                $('#votings').html('<p class="success">' + json.success + '</p>');
+                $('#votings').html('<p class="alert alert-success">' + json.success + '</p>');
                 $('#rating').html(json.rating);
                 $('#votings').fadeIn("slow");
                 $('#loader').hide();
@@ -311,7 +311,7 @@ function checkQuestion()
         cache:    false,
         success:  function(json) {
             if (json.result == undefined && json.success == undefined) {
-                $('#qerror').html('<p class="error">' + json.error + '</p>');
+                $('#qerror').html('<p class="alert alert-error">' + json.error + '</p>');
                 $('#loader').hide();
             } else if (json.success == undefined) {
                 $('#qerror').empty();
@@ -323,7 +323,7 @@ function checkQuestion()
                 $('#captcha').val('');
                 refreshCaptcha('ask');
             } else {
-                $('#answers').html('<p class="success">' + json.success + '</p>');
+                $('#answers').html('<p class="alert alert-success">' + json.success + '</p>');
                 $('#answers').fadeIn("slow");
                 $('#answerForm').fadeOut('slow');
                 $('#loader').hide();
