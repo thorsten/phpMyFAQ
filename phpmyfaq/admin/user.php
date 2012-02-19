@@ -55,20 +55,20 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         $userAction = $defaultUserAction;
         $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
         if ($userId == 0) {
-            $message .= sprintf('<p class="error">%s</p>', $PMF_LANG['ad_user_error_noId']);
+            $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
             $user       = new PMF_User();
             $perm       = $user->perm;
             // @todo: Add PMF_Filter::filterInputArray()
             $userRights = isset($_POST['user_rights']) ? $_POST['user_rights'] : array();
             if (!$perm->refuseAllUserRights($userId)) {
-                $message .= sprintf('<p class="error">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
+                $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
             }
             foreach ($userRights as $rightId) {
                 $perm->grantUserRight($userId, $rightId);
             }
             $idUser   = $user->getUserById($userId);
-            $message .= sprintf('<p class="success">%s <strong>%s</strong> %s</p>',
+            $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
                 $PMF_LANG['ad_msg_savedsuc_1'],
                 $user->getLogin(),
                 $PMF_LANG['ad_msg_savedsuc_2']);
@@ -82,7 +82,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         $userAction = $defaultUserAction;
         $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
         if ($userId == 0) {
-            $message .= sprintf('<p class="error">%s</p>', $PMF_LANG['ad_user_error_noId']);
+            $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
             $userData                  = array();
             $userData['display_name']  = PMF_Filter::filterInput(INPUT_POST, 'display_name', FILTER_SANITIZE_STRING, '');
@@ -118,9 +118,9 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             }
 
             if (!$user->userdata->set(array_keys($userData), array_values($userData)) or !$user->setStatus($userStatus)) {
-                $message .= sprintf('<p class="error">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
+                $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
             } else {
-                $message .= sprintf('<p class="success">%s <strong>%s</strong> %s</p>',
+                $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
                     $PMF_LANG['ad_msg_savedsuc_1'],
                     $user->getLogin(),
                     $PMF_LANG['ad_msg_savedsuc_2']);
@@ -136,26 +136,26 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
 
         $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_list_select', FILTER_VALIDATE_INT, 0);
         if ($userId == 0) {
-            $message   .= sprintf('<p class="error">%s</p>', $PMF_LANG['ad_user_error_noId']);
+            $message   .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
             $userAction = $defaultUserAction;
         } else {
             $user->getUserById($userId);
             // account is protected
             if ($user->getStatus() == 'protected' || $userId == 1) {
-                $message   .= sprintf('<p class="error">%s</p>', $PMF_LANG['ad_user_error_protectedAccount']);
+                $message   .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_protectedAccount']);
                 $userAction = $defaultUserAction;
             } else {
 ?>
         <header>
             <h2><?php print $PMF_LANG['ad_user_deleteUser']; ?> <strong><?php print $user->getLogin(); ?></strong></h2>
         </header>
-        <p><?php print $PMF_LANG["ad_user_del_3"].' '.$PMF_LANG["ad_user_del_1"].' '.$PMF_LANG["ad_user_del_2"]; ?></p>
+        <p class="alert alert-danger"><?php print $PMF_LANG["ad_user_del_3"].' '.$PMF_LANG["ad_user_del_1"].' '.$PMF_LANG["ad_user_del_2"]; ?></p>
         <form action ="?action=user&amp;user_action=delete" method="post">
             <input type="hidden" name="user_id" value="<?php print $userId; ?>" />
             <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
             <p>
-                <input class="reset" type="submit" name="cancel" value="<?php print $PMF_LANG["ad_gen_no"]; ?>" />
-                <input type="submit" value="<?php print $PMF_LANG["ad_gen_yes"]; ?>" />
+                <input class="btn-danger" type="submit" value="<?php print $PMF_LANG["ad_gen_yes"]; ?>" />
+                <input class="btn-info" type="submit" name="cancel" value="<?php print $PMF_LANG["ad_gen_no"]; ?>" />
             </p>
         </form>
 <?php
@@ -175,13 +175,13 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         }
         $userAction = $defaultUserAction;
         if ($userId == 0 && !$csrfOkay) {
-            $message .= sprintf('<p class="error">%s</p>', $PMF_LANG['ad_user_error_noId']);
+            $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
             if (!$user->getUserById($userId)) {
-                $message .= sprintf('<p class="error">%s</p>', $PMF_LANG['ad_user_error_noId']);
+                $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
             }
             if (!$user->deleteUser()) {
-                $message .= sprintf('<p class="error">%s</p>', $PMF_LANG['ad_user_error_delete']);
+                $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_delete']);
             } else {
                 // Move the categories ownership to admin (id == 1)
                 $oCat = new PMF_Category($current_admin_user, $current_admin_groups, false);
@@ -193,11 +193,11 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                     $oPerm->removeFromAllGroups($userId);
                 }
 
-                $message .= sprintf('<p class="success">%s</p>', $PMF_LANG['ad_user_deleted']);
+                $message .= sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_user_deleted']);
             }
             $userError = $user->error();
             if ($userError != "") {
-                $message .= sprintf('<p class="error">%s</p>', $userError);
+                $message .= sprintf('<p class="alert alert-error">%s</p>', $userError);
             }
         }
     }
@@ -261,11 +261,11 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         // no errors, show list
         if (count($messages) == 0) {
             $userAction = $defaultUserAction;
-            $message    = sprintf('<p class="success">%s</p>', $PMF_LANG['ad_adus_suc']);
+            $message    = sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_adus_suc']);
             // display error messages and show form again
         } else {
             $userAction = 'add';
-            $message    = '<p class="error">';
+            $message    = '<p class="alert alert-error">';
             foreach ($messages as $err) {
                 $message .= $err . '<br />';
             }
