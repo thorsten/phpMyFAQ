@@ -1,20 +1,23 @@
-phpMyFAQ 2.8.0-dev
+phpMyFAQ 2.8.0-alpha
 Codename "Perdita"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.8.0-dev - 2012-
+Version 2.8.0-alpha - 2012-02-
+- added new and improved frontend and backend user interface based on Twitter Bootstrap (Thorsten)
 - added improved advanced search in subcategories (Thorsten)
 - added possibility to close and delete open questions (Peter Caesar)
 - added user control panel (Thorsten)
 - improved usability of administration backend (Thorsten)
 - improved setup and update (Thorsten)
 - improved security with salted passwords (Thorsten)
-- improved CSS with LESS (Thorsten)
+- improved CSS development with LESS (Thorsten)
 - updated bundled jQuery to version 1.7.1 (Thorsten)
 - updated bundled Modernizr to version 2.5.2 (Thorsten)
+- updated bundled Twitter Bootstrap to version 2.0.1 (Thorsten)
+- fixed some bugs (Thorsten, Florian Anderiasch)
 
 Version 2.7.4 - 2012-02-
 - added PDF export for complete FAQ in frontend (Thorsten)

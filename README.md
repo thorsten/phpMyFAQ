@@ -63,6 +63,10 @@ Modernizr
 http://www.modernizr.com/
 Licensed under the terms of the MIT and BSD licenses
 
+Twitter Bootstrap
+http://twitter.github.com/bootstrap/
+Licensed under the terms of the Apache License v2.0
+
 phpseclib
 http://phpseclib.sourceforge.net/
 Licensed under the terms of the GNU Lesser General Public License
