@@ -3533,8 +3533,9 @@ body {
   background: #fffff9;
   padding-top: 60px;
 }
-#main menu {
+#main .categories {
   padding: 8px 0;
+  font-size: 15px;
 }
 #main .hello-phpmyfaq {
   background-color: #d45d09;

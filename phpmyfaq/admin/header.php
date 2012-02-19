@@ -271,7 +271,7 @@ switch ($action) {
         <div class="row-fluid">
             <?php if (isset($auth) && in_array(true, $permission)) { ?>
             <div class="span3">
-                <div class="well">
+                <div class="well categories">
                     <ul class="nav nav-list">
                         <li class="nav-header"><?php print $secLevelHeader; ?></li>
                         <?php print $secLevelEntries; ?>

@@ -3533,8 +3533,13 @@ body {
   background: #fffff9;
   padding-top: 60px;
 }
-#main menu {
+#main .categories {
   padding: 8px 0;
+  font-size: 15px;
+}
+#main .categories .nav-header {
+  font-size: 13px;
+  color: #333333;
 }
 #main .hello-phpmyfaq {
   background-color: #d45d09;

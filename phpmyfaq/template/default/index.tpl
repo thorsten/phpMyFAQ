@@ -91,7 +91,7 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <div class="span3">
-                <div class="well">
+                <div class="well categories">
                     <ul class="nav nav-list">
                         <li class="home">{backToHome}</li>
                         <li>{allCategories}</li>
