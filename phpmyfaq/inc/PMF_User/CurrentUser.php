@@ -487,9 +487,8 @@ class PMF_User_CurrentUser extends PMF_User
     protected function saveCrsfTokenToSession()
     {
         if (!isset($_SESSION['phpmyfaq_csrf_token'])) {
-            $csrfToken = $this->createCsrfToken();
+            $_SESSION['phpmyfaq_csrf_token'] = $this->createCsrfToken();
         }
-        $_SESSION['phpmyfaq_csrf_token'] = $csrfToken;
     }
     
     /**
