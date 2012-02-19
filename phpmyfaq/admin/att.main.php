@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2003-2011 phpMyFAQ Team
+ * @copyright 2003-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2010-12-13
@@ -42,14 +42,13 @@ $pagination = new PMF_Pagination(
         'baseUrl'   => PMF_Link::getSystemRelativeUri() . '?' . str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
         'total'     => count($allCrumbs),
         'perPage'   => $itemsPerPage,
-        'layoutTpl' => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>',
     )
 );
 
 printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_attachment_admin']);
 
 ?>
-        <table class="list" style="width: 100%;">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th><?php print $PMF_LANG['msgAttachmentsFilename'] ?></th>
