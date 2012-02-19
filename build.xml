@@ -11,8 +11,19 @@
   <mkdir dir="${basedir}/build/pdepend"/>
  </target>
 
- <!-- Run unit tests and generate junit.xml and clover.xml -->
- <target name="phpunit">
+ <target name="sync" description="Updates all git submodules">
+     <exec executable="git">
+         <arg line="submodule update --init --recursive" />
+     </exec>
+ </target>
+
+ <target name="mergejs" description="Merges all JavaScript files into one file">
+     <exec executable="cat">
+         <arg line=" ./vendor/bootstrap/js/bootstrap-transition.js ./vendor/bootstrap/js/bootstrap-alert.js ./vendor/bootstrap/js/bootstrap-button.js ./vendor/bootstrap/js/bootstrap-carousel.js ./vendor/bootstrap/js/bootstrap-collapse.js ./vendor/bootstrap/js/bootstrap-dropdown.js ./vendor/bootstrap/js/bootstrap-modal.js ./vendor/bootstrap/js/bootstrap-tooltip.js ./vendor/bootstrap/js/bootstrap-popover.js ./vendor/bootstrap/js/bootstrap-scrollspy.js ./vendor/bootstrap/js/bootstrap-tab.js ./vendor/bootstrap/js/bootstrap-typeahead.js ./phpmyfaq/js/functions.js > ./phpmyfaq/js/phpmyfaq.js;" />
+     </exec>
+ </target>
+
+ <target name="phpunit" description="Run unit tests and generate junit.xml and clover.xml">
   <exec executable="phpunit" failonerror="true">
     <arg line="--coverage-clover ${basedir}/build/logs/clover.xml
                --coverage-html ${basedir}/build/coverage/
@@ -21,8 +32,7 @@
   </exec>
  </target>
 
- <!-- Run pdepend, phpmd, phpcpd, and phpcs in parallel -->
- <target name="parallelTasks">
+ <target name="parallelTasks" description="Run pdepend, phpmd, phpcpd, and phpcs in parallel">
   <parallel threadCount="2">
    <antcall target="pdepend"/>
    <antcall target="phpmd"/>
@@ -32,8 +42,8 @@
   </parallel>
  </target>
 
- <!-- Generate jdepend.xml and software metrics charts -->
- <target name="pdepend">
+ <!--  -->
+ <target name="pdepend" description="Generate jdepend.xml and software metrics charts">
   <exec executable="pdepend">
    <arg line="--jdepend-xml=${basedir}/build/logs/jdepend.xml
               --ignore=${basedir}/phpmyfaq/inc/libs ./" />
@@ -87,5 +97,5 @@
   </exec>
  </target>
 
- <target name="build" depends="clean,parallelTasks,phpunit,phpcb"/>
+ <target name="build" depends="clean,sync,parallelTasks,phpunit,phpcb"/>
 </project>
