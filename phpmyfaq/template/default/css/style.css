@@ -3554,6 +3554,35 @@ body {
   font-size: 54px;
   margin-bottom: 24px;
 }
+#main .rating-cancel, #main .star-rating {
+  float: left;
+  width: 17px;
+  height: 15px;
+  text-indent: -999em;
+  cursor: pointer;
+  display: block;
+  background: transparent;
+  overflow: hidden;
+}
+#main .rating-cancel, #main .star-rating a {
+  background: url(../../../images/delete.gif) no-repeat 0 -16px;
+}
+#main .star-rating, #main .star-rating a {
+  background: url(../../../images/star.gif) no-repeat 0 0px;
+}
+#main .rating-cancel a, #main .star-rating a {
+  display: block;
+  width: 16px;
+  height: 100%;
+  background-position: 0 0px;
+  border: 0;
+}
+#main .star-rating-on a {
+  background-position: 0 -16px !important;
+}
+#main .star-rating-hover a {
+  background-position: 0 -32px;
+}
 footer {
   color: #f2f2f2;
   padding-top: 30px;
