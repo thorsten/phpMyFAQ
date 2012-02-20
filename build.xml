@@ -18,9 +18,10 @@
  </target>
 
  <target name="mergejs" description="Merges all JavaScript files into one file">
-     <exec executable="cat">
-         <arg line=" ./vendor/bootstrap/js/bootstrap-transition.js ./vendor/bootstrap/js/bootstrap-alert.js ./vendor/bootstrap/js/bootstrap-button.js ./vendor/bootstrap/js/bootstrap-carousel.js ./vendor/bootstrap/js/bootstrap-collapse.js ./vendor/bootstrap/js/bootstrap-dropdown.js ./vendor/bootstrap/js/bootstrap-modal.js ./vendor/bootstrap/js/bootstrap-tooltip.js ./vendor/bootstrap/js/bootstrap-popover.js ./vendor/bootstrap/js/bootstrap-scrollspy.js ./vendor/bootstrap/js/bootstrap-tab.js ./vendor/bootstrap/js/bootstrap-typeahead.js ./phpmyfaq/js/functions.js > ./phpmyfaq/js/phpmyfaq.js;" />
-     </exec>
+     <concat destfile="${basedir}/phpmyfaq/js/phpmyfaq.js" force="yes">
+         <fileset dir="${basedir}/vendor/bootstrap/js" includes="bootstrap-*.js" />
+         <filelist dir="${basedir}/phpmyfaq/js" files="functions.js" />
+     </concat>
  </target>
 
  <target name="phpunit" description="Run unit tests and generate junit.xml and clover.xml">
