@@ -667,6 +667,64 @@ if ($step == 3) {
         $query[] = "DROP TABLE " . SQLPREFIX . "faquserlogin_temp";
     }
 
+    //
+    // UPDATES FROM 2.8.0-alpha2
+    //
+    if (version_compare($version, '2.8.0-alpha2', '<')) {
+        switch($DB['type']) {
+            case 'pgsql':
+                $query[] = "CREATE TABLE " . SQLPREFIX . "faqinstances (
+                    id int4 NOT NULL,
+                    url VARCHAR(255) NOT NULL,
+                    instance VARCHAR(255) NOT NULL,
+                    comment TEXT NULL,
+                    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    modified TIMESTAMP NOT NULL,
+                    PRIMARY KEY (id))";
+                $query[] = "CREATE TABLE " . SQLPREFIX . "faqinstances_config (
+                    instance_id int4 NOT NULL,
+                    config_name VARCHAR(255) NOT NULL default '',
+                    config_value VARCHAR(255) DEFAULT NULL,
+                    PRIMARY KEY (instance_id, config_name))";
+                break;
+
+            case 'mssql':
+            case 'sqlsrv':
+            case 'sqlite':
+                $query[] = "CREATE TABLE " . SQLPREFIX . "faqinstances (
+                    id INT(11) NOT NULL,
+                    url VARCHAR(255) NOT NULL,
+                    instance VARCHAR(255) NOT NULL,
+                    comment TEXT NULL,
+                    created DATETIME NOT NULL,
+                    modified DATETIME NOT NULL,
+                    PRIMARY KEY (id))";
+                $query[] = "CREATE TABLE " . SQLPREFIX . "faqinstances_config (
+                    instance_id INT(11) NOT NULL,
+                    config_name VARCHAR(255) NOT NULL default '',
+                    config_value VARCHAR(255) DEFAULT NULL,
+                    PRIMARY KEY (instance_id, config_name))";
+                break;
+
+            case 'mysql':
+            case 'mysqli':
+                $query[] = "CREATE TABLE " . SQLPREFIX . "faqinstances (
+                    id INT(11) NOT NULL,
+                    url VARCHAR(255) NOT NULL,
+                    instance VARCHAR(255) NOT NULL,
+                    comment TEXT NULL,
+                    created TIMESTAMP DEFAULT 0,
+                    modified TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
+                $query[] = "CREATE TABLE " . SQLPREFIX . "faqinstances_config (
+                    instance_id INT(11) NOT NULL,
+                    config_name VARCHAR(255) NOT NULL default '',
+                    config_value VARCHAR(255) DEFAULT NULL,
+                    PRIMARY KEY (instance_id, config_name)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
+                break;
+        }
+
+    }
 
     // Perform the queries for updating/migrating the database
     if (isset($query)) {

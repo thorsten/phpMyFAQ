@@ -44,6 +44,8 @@ $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqdata_user CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqglossary CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqgroup CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqgroup_right CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqinstances CASCADE";
+$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqinstances_config CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqlinkverifyrules CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqnews CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqquestions CASCADE";
@@ -241,6 +243,25 @@ $query[] = "CREATE TABLE ".$sqltblpre."faqgroup_right (
 group_id int4 NOT NULL,
 right_id int4 NOT NULL,
 PRIMARY KEY (group_id, right_id)
+)";
+
+//faqinstances
+$query[] = "CREATE TABLE " . $sqltblpre . "faqinstances (
+id int4 NOT NULL,
+url VARCHAR(255) NOT NULL,
+instance VARCHAR(255) NOT NULL,
+comment TEXT NULL,
+created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+modified TIMESTAMP NOT NULL,
+PRIMARY KEY (id)
+)";
+
+//faqinstances_config
+$query[] = "CREATE TABLE ".$sqltblpre."faqinstances_config (
+instance_id int4 NOT NULL,
+config_name VARCHAR(255) NOT NULL default '',
+config_value VARCHAR(255) DEFAULT NULL,
+PRIMARY KEY (instance_id, config_name)
 )";
 
 //faqlinkverifyrules
