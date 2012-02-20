@@ -15,7 +15,7 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- * 
+ *
  * @category  phpMyFAQ
  * @package   Core
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -32,7 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * phpMyFAQ __autoload() implementation
- * 
+ *
  * @category  phpMyFAQ
  * @package   Core
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -42,7 +42,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @link      http://www.phpmyfaq.de
  * @since     2009-01-07
  */
-function __autoload($class)
+function PMF_autoload($class)
 {
     // Class/interface name paranoid cleanup i.e.:
     // - avoid path traversal issues;
@@ -50,14 +50,14 @@ function __autoload($class)
     $invalidChars = array(
         '.', '\\', '/', ':', '*', '?', '"', '<', '>', "'", '|'
     );
-    
+
     $class   = str_replace($invalidChars, '', $class);
     $rootDir = defined('PMF_ROOT_DIR') ? PMF_ROOT_DIR : '.';
 
     // Try to load the class/interface declaration using its name if splittable by '_'
     // Note: using include instead of require give us the possibility to echo failures
     $classParts      = explode('_', $class);
-    $classPartsCount = count($classParts); 
+    $classPartsCount = count($classParts);
     $includeDir      = $rootDir . DIRECTORY_SEPARATOR . 'inc'. DIRECTORY_SEPARATOR;
     if (2 == $classPartsCount) {
         $path = $includeDir . $classParts[1] . '.php';
@@ -68,7 +68,7 @@ function __autoload($class)
         }
         $path .= '.php';
     }
-    
+
     if (file_exists($path)) {
         include $path;
     } else {
@@ -80,3 +80,4 @@ function __autoload($class)
         printf("<br /><b>PMF Autoloader</b>: unable to define '%s' as a class/interface.<br />", $class);
     }
 }
+spl_autoload_register('PMF_autoload');
