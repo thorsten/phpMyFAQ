@@ -20,7 +20,7 @@
  * @package   Core
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramucia <matteo@phpmyfaq.de>
- * @copyright 2009-2011 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-01-07
@@ -37,12 +37,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   Core
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramucia <matteo@phpmyfaq.de>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-01-07
  */
-function PMF_autoload($class)
+function PMF_Autoloader($class)
 {
     // Class/interface name paranoid cleanup i.e.:
     // - avoid path traversal issues;
@@ -80,4 +80,5 @@ function PMF_autoload($class)
         printf("<br /><b>PMF Autoloader</b>: unable to define '%s' as a class/interface.<br />", $class);
     }
 }
-spl_autoload_register('PMF_autoload');
+
+spl_autoload_register('PMF_Autoloader');

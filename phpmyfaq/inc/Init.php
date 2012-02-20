@@ -24,7 +24,7 @@
  * @author    Stefan Esser <sesser@php.net>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Christian Stocker <chregu@bitflux.ch>
- * @copyright 2005-2011 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-24
@@ -72,18 +72,15 @@ ini_set('pcre.backtrack_limit', 100000000);
 ini_set('pcre.recursion_limit', 100000000);
 
 //
-// Include our class/interface autoloader
-//
-require_once 'autoLoader.php';
-
-//
-// Read configuration and constants, included main functions
+// Read configuration and constants, included phpMyFAQ autoloader
 //
 define('PMF_INCLUDE_DIR', dirname(__FILE__));
 define('PMF_CONFIG_DIR', dirname(dirname(__FILE__)) . '/config');
 require PMF_CONFIG_DIR . '/database.php';
 require PMF_CONFIG_DIR . '/constants.php';
+require PMF_INCLUDE_DIR . '/Autoloader.php';
 require PMF_INCLUDE_DIR . '/functions.php';
+
 // TODO: Linkverifier.php contains both PMF_Linkverifier class and
 //       helper functions => move the fns into the class.
 require_once PMF_INCLUDE_DIR.'/Linkverifier.php';
@@ -157,7 +154,7 @@ if ('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:(\\\\|/)%i', $confAtta
  * @author    Stefan Esser <sesser@php.net>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Christian Stocker <chregu@bitflux.ch>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-24
