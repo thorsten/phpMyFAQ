@@ -41,6 +41,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Configuration
 {
     /**
+     * Tablename
+     */
+    const TABLE_FAQCONFIG = 'faqconfig';
+
+    /**
      * Instance
      * 
      * @var PMF_Configuration
@@ -50,9 +55,9 @@ class PMF_Configuration
     /**
      * DB handle
      *
-     * @var PMF_Db
+     * @var PMF_DB_Driver
      */
-    private $db = null;
+    protected $_db = null;
 
     /**
      * Configuration array
@@ -68,7 +73,7 @@ class PMF_Configuration
      */
     private function __construct()
     {
-        $this->db = PMF_Db::getInstance();
+        $this->_db = PMF_Db::getInstance();
     }
 
     /**
@@ -108,14 +113,14 @@ class PMF_Configuration
                 %sfaqconfig",
             SQLPREFIX);
             
-        $result = $this->db->query($query);
-        $config = $this->db->fetchAll($result);
+        $result = $this->_db->query($query);
+        $config = $this->_db->fetchAll($result);
         
         foreach ($config as $items) {
-        	$this->config[$items->config_name] = $items->config_value;
+            $this->config[$items->config_name] = $items->config_value;
         }
         
-    } // end func getAll()
+    }
 
     /**
      * Returns a configuration item
@@ -162,10 +167,10 @@ class PMF_Configuration
                         WHERE
                             config_name = '%s'",
                         SQLPREFIX,
-                        $this->db->escape(trim($value)),
+                        $this->_db->escape(trim($value)),
                         $name);
                         
-                    $this->db->query($update);
+                    $this->_db->query($update);
                     if (isset($this->config[$name])) {
                         unset($this->config[$name]);
                     }
@@ -199,5 +204,4 @@ class PMF_Configuration
 
         return $output;
     }
-
 }
