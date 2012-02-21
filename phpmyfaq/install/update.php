@@ -724,6 +724,8 @@ if ($step == 3) {
                 break;
         }
 
+        // @todo add first instance
+
     }
 
     // Perform the queries for updating/migrating the database
