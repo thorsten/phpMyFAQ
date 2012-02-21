@@ -33,7 +33,7 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     set_time_limit(0);
 }
 
-require_once PMF_ROOT_DIR . '/inc/autoLoader.php';
+require_once PMF_ROOT_DIR . '/inc/Autoloader.php';
 require_once PMF_ROOT_DIR . '/config/constants.php';
 
 $step        = PMF_Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
