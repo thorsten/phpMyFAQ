@@ -724,8 +724,15 @@ if ($step == 3) {
                 break;
         }
 
-        // @todo add first instance
+        $instanceData = array(
+            'url'      => $_SERVER['SERVER_NAME '],
+            'instance' => dirname($_SERVER['SCRIP_NAME']),
+            'comment'  => PMF_Configuration::getInstance()->get('main.titleFAQ')
+        );
+        $faqInstance = new PMF_Instance($db);
+        $faqInstance->addInstance($instanceData);
 
+        // @todo: add basic instance configuration
     }
 
     // Perform the queries for updating/migrating the database
