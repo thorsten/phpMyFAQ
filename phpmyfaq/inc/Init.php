@@ -72,18 +72,28 @@ ini_set('pcre.backtrack_limit', 100000000);
 ini_set('pcre.recursion_limit', 100000000);
 
 //
-// Read configuration and constants, included phpMyFAQ autoloader
+// Read configuration and constants
 //
-define('PMF_INCLUDE_DIR', dirname(__FILE__));
-define('PMF_CONFIG_DIR', dirname(dirname(__FILE__)) . '/config');
+if (! defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
+    // Single instance configuration
+    define('PMF_CONFIG_DIR', dirname(dirname(__FILE__)) . '/config');
+} else {
+    // Multi instance configuration
+    define('PMF_CONFIG_DIR', PMF_MULTI_INSTANCE_CONFIG_DIR);
+}
+
 require PMF_CONFIG_DIR . '/database.php';
 require PMF_CONFIG_DIR . '/constants.php';
+
+//
+// Include Autoloader and global functions
+//
+define('PMF_INCLUDE_DIR', dirname(__FILE__));
 require PMF_INCLUDE_DIR . '/Autoloader.php';
 require PMF_INCLUDE_DIR . '/functions.php';
-
-// TODO: Linkverifier.php contains both PMF_Linkverifier class and
-//       helper functions => move the fns into the class.
-require_once PMF_INCLUDE_DIR.'/Linkverifier.php';
+// @todo: Linkverifier.php contains both PMF_Linkverifier class and
+// helper functions => move the fns into the class.
+require_once PMF_INCLUDE_DIR . '/Linkverifier.php';
 
 //
 // Set the error handler to our pmf_error_handler() function

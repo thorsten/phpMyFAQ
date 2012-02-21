@@ -18,10 +18,10 @@
  * @package   Setup
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since     2003-12-10
+ * @copyright 2003-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2003-2011 phpMyFAQ Team
+ * @since     2003-12-10
  */
 
 /**
