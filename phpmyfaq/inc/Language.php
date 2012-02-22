@@ -19,7 +19,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo scaramuccia <matteo@phpmyfaq.de>
  * @author    Aurimas Fišeras <aurimas@gmail.com>
- * @copyright 2009-2011 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-05-14
@@ -37,7 +37,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo scaramuccia <matteo@phpmyfaq.de>
  * @author    Aurimas Fišeras <aurimas@gmail.com>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-05-14
@@ -70,12 +70,12 @@ class PMF_Language
     /**
      * Sets the current language for phpMyFAQ user session
      *
-     * @param bool   $config_detection Configuration detection
-     * @param string $config_language  Language from configuration
+     * @param bool   $configDetection Configuration detection
+     * @param string $configLanguage  Language from configuration
      * 
      * @return  string
      */
-    public function setLanguage($config_detection, $config_language)
+    public function setLanguage($configDetection, $configLanguage)
     {
         $_lang = array();
         self::_getUserAgentLanguage();
@@ -101,15 +101,15 @@ class PMF_Language
         }
         
         // Get the language from the config
-        if (isset($config_language)) {
-            $confLangCode = str_replace(array("language_", ".php"), "", $config_language);
+        if (isset($configLanguage)) {
+            $confLangCode = str_replace(array("language_", ".php"), "", $configLanguage);
             if (self::isASupportedLanguage($confLangCode) ) {
                 $_lang['config'] = $confLangCode;
             }
         }
         // Detect the browser's language
-        if ((true === $config_detection) && self::isASupportedLanguage($this->acceptedLanguage) ) {
-            $_lang['detection'] = $this->acceptedLanguage;
+        if ((true === $configDetection) && self::isASupportedLanguage($this->acceptedLanguage) ) {
+            $_lang['detection'] = strtolower($this->acceptedLanguage);
         }
         // Select the language
         if (isset($_lang['post'])) {
@@ -162,7 +162,9 @@ class PMF_Language
         $dir = new DirectoryIterator(dirname(dirname(__FILE__)) . '/lang');
         foreach ($dir as $fileinfo) {
             if (! $fileinfo->isDot()) {
-                $languageFiles[] = strtoupper(str_replace($search, '', trim($fileinfo->getFilename())));
+                $languageFiles[] = strtoupper(
+                    str_replace($search, '', trim($fileinfo->getFilename()))
+                );
             }
         }
         
@@ -189,7 +191,7 @@ class PMF_Language
      * @param  string  $id
      * @return string
      */
-    public static function selectLanguages ($default, $submitOnChange = false, Array $excludedLanguages = array(), $id = 'language')
+    public static function selectLanguages($default, $submitOnChange = false, Array $excludedLanguages = array(), $id = 'language')
     {
         global $languageCodes;
         
@@ -222,7 +224,7 @@ class PMF_Language
      * @param  bool   $fileLanguageValue print the <language file> instead of the <language code> as value?
      * @return string
      */
-    public static function languageOptions($lang = "", $onlyThisLang = false, $fileLanguageValue = false)
+    public static function languageOptions($lang = '', $onlyThisLang = false, $fileLanguageValue = false)
     {
         $output = "";
         foreach (self::getAvailableLanguages() as $key => $value) {
@@ -280,7 +282,9 @@ class PMF_Language
      */
     public static function isASupportedTinyMCELanguage($langcode)
     {
-        return file_exists(dirname(dirname(__FILE__)) . '/admin/editor/langs/' . $langcode . '.js');
+        return file_exists(
+            dirname(dirname(__FILE__)) . '/admin/editor/langs/' . $langcode . '.js'
+        );
     }
     
 
