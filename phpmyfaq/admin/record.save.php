@@ -33,13 +33,31 @@ $user     = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipChe
 $category = new PMF_Category($current_admin_user, $current_admin_groups, false);    
 
 if ($permission['editbt']) {
-    
+
+    // Get submit action
+    $submit = PMF_Filter::filterInputArray(
+        INPUT_POST,
+        array(
+            'submit' => array(
+                'filter' => FILTER_VALIDATE_INT,
+                'flags'  => FILTER_REQUIRE_ARRAY
+            )
+        )
+    );
+
     // FAQ data
     $dateStart     = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
     $dateEnd       = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
     $question      = PMF_Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRING);
-    $categories    = PMF_Filter::filterInputArray(INPUT_POST, array('rubrik' => array('filter' => FILTER_VALIDATE_INT,
-                                                                                      'flags'  => FILTER_REQUIRE_ARRAY)));
+    $categories    = PMF_Filter::filterInputArray(
+        INPUT_POST,
+        array(
+            'rubrik' => array(
+                'filter' => FILTER_VALIDATE_INT,
+                'flags'  => FILTER_REQUIRE_ARRAY
+            )
+        )
+    );
     $record_lang   = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
     $tags          = PMF_Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
     $active        = 'yes' == PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING) && $permission['approverec'] ? 'yes' : 'no';

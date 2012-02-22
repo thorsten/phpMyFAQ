@@ -17,13 +17,13 @@
  * @category  phpMyFAQ
  * @package   Translation
  * @author    Pedro Lineu Orso <pedro.orso@gmail.com>
- * @since     2006-04-05
+ * @copyright 2006-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2006-2010 phpMyFAQ Team
+ * @since     2006-04-05
  */
 $PMF_LANG['metaCharset'] = 'utf-8';
-$PMF_LANG['metaLanguage'] = 'pt-br';
+$PMF_LANG['metaLanguage'] = 'pt-BR';
 $PMF_LANG['language'] = 'Brazilian Portuguese';
 $PMF_LANG['dir'] = 'ltr';
 $PMF_LANG['nplurals'] = '2';
