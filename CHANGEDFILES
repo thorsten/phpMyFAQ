@@ -1,3 +1,34 @@
+CHANGED FILES FROM 2.7.3 -> 2.7.4
+
+./admin/ajax.trans.php
+./admin/backup.export.php
+./admin/category.main.php
+./admin/footer.php
+./admin/group.php
+./admin/news.php
+./admin/record.save.php
+./admin/style/admin.css
+./admin/user.php
+./attachment.php
+./inc/Comment.php
+./inc/Language.php
+./inc/PMF_Export/Pdf.php
+./inc/User.php
+./inc/js/functions.js
+./install/setup.php
+./install/update.php
+./lang/language_es.php
+./lang/language_ja.php
+./lang/language_pt-br.php
+./lang/language_ru.php
+./template/default/artikel.tpl
+./template/default/register.tpl
+./ajaxservice.php
+./index.php
+./pdf.php
+
+
+
 CHANGED FILES FROM 2.7.2 -> 2.7.3
 
 ./admin/attachment.php
