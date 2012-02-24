@@ -130,7 +130,7 @@ $system = new PMF_System();
 <section id="main">
     <div class="container">
         <div class="row" style="padding-left: 20px;">
-            <div class="hero-unit hello-phpmyfaq" style="text-align: center; height: 70px;">
+            <div class="hero-unit hello-phpmyfaq" style="text-align: center; height: 60px;">
                 <h1>phpMyFAQ <?php print PMF_System::getVersion(); ?> Setup</h1>
                 <p>
                     Did you already read the <a style="color: #ffffff; text-decoration: underline;"

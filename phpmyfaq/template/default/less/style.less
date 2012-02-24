@@ -30,7 +30,7 @@
 // --------------------------
 
 // Links
-@linkColor:             #ef7507;
+@linkColor:             #cb3a25;
 @linkColorHover:        darken(@linkColor, 15%);
 
 // Grays
@@ -53,7 +53,6 @@
 @purple:                #7a43b6;
 
 // phpMyFAQ special colors
-@pmfDarkGray:           #262F32;
 @pmfGrayLight:          #f2f2f2;
 @pmfOrange:             #ef7507;
 
@@ -86,13 +85,13 @@
 
 // Navbar
 @navbarHeight:                    40px;
-@navbarBackground:                @grayDarker;
+@navbarBackground:                @grayDark;
 @navbarBackgroundHighlight:       @grayDark;
 @navbarLinkBackgroundHover:       transparent;
 
 @navbarText:                      @grayLight;
-@navbarLinkColor:                 @grayLight;
-@navbarLinkColorHover:            @white;
+@navbarLinkColor:                 @grayLighter;
+@navbarLinkColorHover:            @grayLighter;
 
 // Form states and alerts
 @warningText:             #c09853;
@@ -129,11 +128,12 @@
 // phpMyFAQ styles
 // ---------------
 body {
-    background: @pmfDarkGray;
+    background: #f6f1eb;
 }
 
 .navbar-inner {
-    #gradient > .vertical(@gray, black);
+    #gradient > .vertical(#52575c, #3a3f44);
+
 }
 
 #main {
@@ -146,13 +146,13 @@ body {
     }
 
     .hello-phpmyfaq {
-        #gradient > .vertical(@pmfOrange, #ac380c);
+        #gradient > .vertical(#cb3a25, #a20e05);
         color: @pmfGrayLight;
 
         h1 {
             color: @pmfGrayLight;
-            font-size: 54px;
-            margin-bottom: 24px;
+            font-size: 44px;
+            margin-bottom: 16px;
         }
     }
 
@@ -189,6 +189,7 @@ body {
 }
 
 footer {
+    background: #2a333c;
     color: @pmfGrayLight;
     padding-top: 30px;
 

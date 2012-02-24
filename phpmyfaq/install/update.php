@@ -117,7 +117,7 @@ function HTMLFooter()
 <section id="main">
     <div class="container">
         <div class="row" style="padding-left: 20px;">
-            <div class="hero-unit hello-phpmyfaq" style="text-align: center; height: 70px;">
+            <div class="hero-unit hello-phpmyfaq" style="text-align: center; height: 55px;">
                 <h1>phpMyFAQ <?php print PMF_System::getVersion(); ?> Update</h1>
             </div>
         </div>
