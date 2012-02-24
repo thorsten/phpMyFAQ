@@ -186,13 +186,11 @@ if (count($multiCategories) > 1) {
     $htmlAllCategories .= '            <p>' . $PMF_LANG['msgArticleCategories'] . '</p>';
     $htmlAllCategories .= '            <ul>';
     foreach ($multiCategories as $multiCat) {
-        if ('' !== trim($multiCat['name'])) {
+        $path = $category->getPath($multiCat['id'], ' &raquo; ', true);
+        if ('' === trim($path)) {
             continue;
         }
-        $htmlAllCategories .= sprintf(
-            "<li>%s</li>\n",
-            $category->getPath($multiCat['id'], ' &raquo; ', true)
-        );
+        $htmlAllCategories .= sprintf("<li>%s</li>\n", $path);
     }
     $htmlAllCategories .= '            </ul>';
     $htmlAllCategories .= '    </div>';
