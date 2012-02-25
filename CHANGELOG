@@ -20,6 +20,9 @@ Version 2.8.0-alpha - 2012-02-
 - updated bundled Twitter Bootstrap to version 2.0.1 (Thorsten)
 - fixed some bugs (Thorsten, Florian Anderiasch)
 
+Version 2.7.5 - 2012-03-
+- fixed some bugs (Thorsten)
+
 Version 2.7.4 - 2012-02-22
 - added PDF export for complete FAQ in frontend (Thorsten)
 - updated Japanese translation

@@ -154,8 +154,12 @@ installation script.
 %changelog
 ==========
 
-* Wed Sep 28 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.0.alpha-1
+
+* Wed Sep 28 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.8.0.alpha-1
 - New upstream version 2.8.0-alpha
+
+* Mon Feb 24 2012 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.5-1
+- New upstream version 2.7.5
 
 * Mon Jan 02 2012 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.3-1
 - New upstream version 2.7.3
