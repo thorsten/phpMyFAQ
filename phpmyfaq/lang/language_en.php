@@ -791,7 +791,7 @@ $PMF_LANG['adminSection'] = 'Administration';
 $PMF_LANG['err_expiredArticle'] = 'This entry is expired and can not be displayed';
 $PMF_LANG['err_expiredNews'] = 'This news is expired and can not be displayed';
 $PMF_LANG['err_inactiveNews'] = 'This news is in revision and can not be displayed';
-$PMF_LANG['msgSearchOnAllLanguages'] = 'Search in all languages:';
+$PMF_LANG['msgSearchOnAllLanguages'] = 'search in all languages';
 $PMF_LANG['ad_entry_tags'] = 'Tags';
 $PMF_LANG['msg_tags'] = 'Tags';
 

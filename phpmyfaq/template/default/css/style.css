@@ -3537,6 +3537,12 @@ body {
   padding: 8px 0;
   font-size: 15px;
 }
+#main .search-box form {
+  margin-bottom: 5px;
+}
+#main .search-box form a {
+  font-size: 11px;
+}
 #main .hello-phpmyfaq {
   background-color: #bb2818;
   background-image: -moz-linear-gradient(top, #cb3a25, #a20e05);

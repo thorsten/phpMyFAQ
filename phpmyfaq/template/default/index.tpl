@@ -70,7 +70,7 @@
                     [/notLoggedIn]
                     [userloggedIn]
                     <li class="{activeUserControl}">{msgUserControl}</li>
-                    <li class="divider"></li>
+                    <li class="divider-vertical"></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <span title="{msgFullName}">{msgLoginName}</span><b class="caret"></b>
@@ -104,21 +104,22 @@
 
             <div class="span6 main-content">
                 [globalSearchBox]
-                <section class="search-box">
-                    <form id="search" action="{writeSendAdress}" method="get">
+                <section class="well search-box">
+                    <form id="search" action="{writeSendAdress}" method="get" class="form-search">
                         <input type="hidden" name="searchcategory" value="{categoryId}" />
                         <input type="hidden" name="action" value="search" />
-                        <input type="search" name="search" id="searchfield" size="30" placeholder="{searchBox} ..." />
+                        <input type="search" name="search" id="searchfield" size="30" placeholder="{searchBox} ..."
+                               class="input-xlarge search-query" />
                         <input type="submit" name="submit" value="{searchBox}" />
                     </form>
                     {msgSearch}
                 </section>
                 [/globalSearchBox]
                 [globalSuggestBox]
-                <section class="search-box">
-                    <form id="instantform" action="?action=instantresponse" method="post">
+                <section class="well search-box">
+                    <form id="instantform" action="?action=instantresponse" method="post" class="form-search">
                         <input type="hidden" name="ajaxlanguage" id="ajaxlanguage" value="{ajaxlanguage}" />
-                        <input type="search" name="search" id="instantfield" value=""
+                        <input type="search" name="search" id="instantfield" class="input-xxlarge search-query" value=""
                                placeholder="{msgDescriptionInstantResponse}" onfocus="autoSuggest(); return false;" />
                     </form>
                     {msgSearch}

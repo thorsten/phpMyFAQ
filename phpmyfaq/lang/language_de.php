@@ -762,7 +762,7 @@ $PMF_LANG["adminSection"] = "Administration";
 $PMF_LANG["err_expiredArticle"] = "Diese FAQ ist abgelaufen und kann nicht angezeigt werden";
 $PMF_LANG["err_expiredNews"] = "Diese Nachricht ist abgelaufen und kann nicht angezeigt werden";
 $PMF_LANG["err_inactiveNews"] = "Diese Nachricht werden überarbeitet und kann nicht angezeigt werden";
-$PMF_LANG["msgSearchOnAllLanguages"] = "Alle Sprachen durchsuchen:";
+$PMF_LANG["msgSearchOnAllLanguages"] = "alle Sprachen durchsuchen";
 $PMF_LANG["ad_entry_tags"] = "Tags";
 $PMF_LANG["msg_tags"] = "Tags";
 
