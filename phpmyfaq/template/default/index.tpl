@@ -30,7 +30,6 @@
 
     <script src="js/libs/modernizr.min.js"></script>
     <script src="js/libs/jquery.min.js"></script>
-    <script src="js/functions.js"></script>
     <script src="js/phpmyfaq.js"></script>
 
     <link rel="shortcut icon" href="template/{tplSetName}/favicon.ico">
