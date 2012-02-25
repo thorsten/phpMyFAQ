@@ -253,7 +253,8 @@ if ($permission['editbt'] || $permission['delbt']) {
             }
             
             if (isset($numRecordsByCat[$cid]) && $numRecordsByCat[$cid] > $numActiveByCat[$cid]) {
-                $catInfo .= sprintf(', <span style="color: red;">%d %s</span>', 
+                $catInfo .= sprintf(', <span style="color: red;"><span id="js-active-records-%d">%d</span> %s</span>',
+                    $cid,
                     $numActiveByCat[$cid], 
                     $PMF_LANG['ad_record_active']);
                 $needComma = true;
@@ -477,10 +478,10 @@ foreach ($all_ids as $cat_id => $record_ids) {
                         $('#' + same_records[j].id).attr('checked', status);
 
                         var catid              = same_records[j].id.match(/active_record_(\d+)_\d+/)[1];
-                        var current_item_count = $('#category_' + catid + '_item_count').html();
+                        var current_item_count = $('#js-active-records-' + catid).html();
                         var delta              = status ? 1 : -1;
 
-                        $('#category_' + catid + '_item_count').html(current_item_count * 1 + delta);
+                        $('#js-active-records-' + catid).html(current_item_count * 1 + delta);
                     }
                 } else {
                     for (var j = 0; j < same_records.length; j++) {
