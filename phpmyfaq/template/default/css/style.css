@@ -3543,6 +3543,12 @@ body {
 #main .search-box form a {
   font-size: 11px;
 }
+#main .nav {
+  margin-bottom: 0;
+}
+#main .tab-content {
+  padding: 5px;
+}
 #main .hello-phpmyfaq {
   background-color: #bb2818;
   background-image: -moz-linear-gradient(top, #cb3a25, #a20e05);

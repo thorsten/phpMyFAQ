@@ -30,35 +30,41 @@
             <!-- Comment Form -->
             <a name="comment"></a>
             <div id="commentForm" style="display: none;">
-            <form id="formValues" action="#" method="post">
-                <input type="hidden" name="newsid" value="{newsId}" />
-                <input type="hidden" name="lang" value="{newsLang}" />
-                <input type="hidden" name="type" value="news" />
+                <form id="formValues" action="#" method="post" class="form-horizontal">
+                    <input type="hidden" name="newsid" value="{newsId}" />
+                    <input type="hidden" name="lang" value="{newsLang}" />
+                    <input type="hidden" name="type" value="news" />
 
-                <p>
-                    <label for="user">{msgNewContentName}</label>
-                    <input type="text" id="user" name="user" value="{defaultContentName}" size="50" required="required" />
-                </p>
+                    <div class="control-group">
+                        <label class="control-label" for="user">{msgNewContentName}</label>
+                        <div class="controls">
+                            <input type="text" id="user" name="user" value="{defaultContentName}" required="required" />
+                        </div>
+                    </div>
 
-                <p>
-                    <label for="mail">{msgNewContentMail}</label>
-                    <input type="email" id="mail" name="mail" value="{defaultContentMail}" size="50" required="required" />
-                </p>
+                    <div class="control-group">
+                        <label class="control-label" for="mail">{msgNewContentMail}</label>
+                        <div class="controls">
+                            <input type="email" id="mail" name="mail" value="{defaultContentMail}" required="required" />
+                        </div>
+                    </div>
 
-                <p>
-                    <label for="comment_text">{msgYourComment}</label>
-                    <textarea cols="37" rows="10" id="comment_text" name="comment_text" required="required" /></textarea>
-                </p>
+                    <div class="control-group">
+                        <label class="control-label" for="comment_text">{msgYourComment}</label>
+                        <div class="controls">
+                            <textarea id="comment_text" name="comment_text" required="required" /></textarea>
+                        </div>
+                    </div>
 
-                <p>
+                    <div class="control-group">
                     {captchaFieldset}
-                </p>
+                    </div>
 
-                <p>
-                    <input class="submit" id="submitcomment" type="submit" value="{msgNewContentSubmit}" />
-                </p>
+                    <div class="form-actions">
+                        <input class="btn-primary" id="submitcomment" type="submit" value="{msgNewContentSubmit}" />
+                    </div>
 
-            </form>
+                </form>
             </div>
             <!-- /Comment Form -->
 
