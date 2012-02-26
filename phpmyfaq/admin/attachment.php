@@ -114,7 +114,7 @@ if (is_null($currentAction) || !is_null($currentSave)) {
     <meta name="publisher" content="phpMyFAQ Team">
     <meta name="MSSmartTagsPreventParsing" content="true">
 
-    <link rel="stylesheet" href="style/admin.css?v=1">
+    <link rel="stylesheet" href="css/style.css?v=1">
 
     <script src="../js/libs/modernizr.min.js"></script>
     <script src="../js/libs/jquery.min.js"></script>
@@ -126,7 +126,6 @@ if (is_null($currentAction) || !is_null($currentSave)) {
 </head>
 <body class="attachments">
 
-    <div id="mainContent">
 <?php
 }
 if (is_null($currentAction) && $auth && $permission['addattachment']) {
@@ -142,7 +141,7 @@ if (is_null($currentAction) && $auth && $permission['addattachment']) {
                 <input type="hidden" name="save" value="TRUE" />
                 <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
                 <?php print $PMF_LANG["ad_att_att"]; ?> <input name="userfile" type="file" />
-                <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_att_butt"]; ?>" />
+                <input class="btn-primary" type="submit" value="<?php print $PMF_LANG["ad_att_butt"]; ?>" />
             </fieldset>
         </form>
 <?php
@@ -214,12 +213,7 @@ if (!is_null($currentSave) && $currentSave == true && $auth && !$permission['add
     print $PMF_LANG["err_NotAuth"];
 }
 
-if (DEBUG) {
-    print "\n\n-- Debug information:\n<p>".$db->log()."</p>";
-}
-
 $db->close();
 ?>
-    </div>
 </body>
 </html>
