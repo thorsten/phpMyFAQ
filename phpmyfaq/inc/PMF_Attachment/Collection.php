@@ -17,10 +17,10 @@
  * @category  phpMyFAQ
  * @package   PMF_Attachment
  * @author    Anatoliy Belsky <ab@php.net>
- * @since     2010-12-13
+ * @copyright 2010-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2010 phpMyFAQ Team
+ * @since     2010-12-13
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -33,10 +33,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Attachment
  * @author    Anatoliy Belsky <ab@php.net>
- * @since     2009-08-21
+ * @copyright 2010-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2009-2010 phpMyFAQ Team
+ * @since     2010-12-13
  */
 class PMF_Attachment_Collection
 {
@@ -47,26 +47,22 @@ class PMF_Attachment_Collection
      */
     protected $db;
 
-    
     /**
      * Constructor
      * 
      * @return null
      */
-    public function __construct()
+    public function __construct(PMF_DB_Driver $database)
     {
-        $this->db = PMF_Db::getInstance();
+        $this->db = $database;
     }
 
     /**
      * Get an array with minimalistic attachment meta data
-     * 
-     * @param integer $start Listing start
-     * @param integer $limit Listing end
-     * 
+     *
      * @return array
      */
-    public function getBreadcrumbs($start = 0, $limit = 0)
+    public function getBreadcrumbs()
     {
         $retval = array();
 
@@ -84,7 +80,9 @@ class PMF_Attachment_Collection
             JOIN
                 %s fd
             ON
-                fa.record_id = fd.id",
+                fa.record_id = fd.id
+            GROUP BY
+                fa.id",
             SQLPREFIX . 'faqattachment',
             SQLPREFIX . 'faqdata'
         );
