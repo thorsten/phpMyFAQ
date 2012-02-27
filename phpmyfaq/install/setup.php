@@ -130,7 +130,7 @@ $system = new PMF_System();
 <section id="main">
     <div class="container">
         <div class="row" style="padding-left: 20px;">
-            <div class="hero-unit hello-phpmyfaq" style="text-align: center; height: 70px;">
+            <div class="hero-unit hello-phpmyfaq" style="text-align: center; height: 60px;">
                 <h1>phpMyFAQ <?php print PMF_System::getVersion(); ?> Setup</h1>
                 <p>
                     Did you already read the <a style="color: #ffffff; text-decoration: underline;"
@@ -461,6 +461,11 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         </div>
 
         <div class="row" style="padding-left: 20px; text-align: center;">
+
+            <p class="alert alert-danger">
+                Dude, this is an early alpha version. Please don't install this version on production!
+            </p>
+
             <input class="btn-primary btn-large" type="submit"
                    value="Click to install phpMyFAQ <?php print PMF_System::getVersion(); ?>" />
         </div>

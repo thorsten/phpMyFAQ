@@ -791,7 +791,7 @@ $PMF_LANG['adminSection'] = 'Administration';
 $PMF_LANG['err_expiredArticle'] = 'This entry is expired and can not be displayed';
 $PMF_LANG['err_expiredNews'] = 'This news is expired and can not be displayed';
 $PMF_LANG['err_inactiveNews'] = 'This news is in revision and can not be displayed';
-$PMF_LANG['msgSearchOnAllLanguages'] = 'Search in all languages:';
+$PMF_LANG['msgSearchOnAllLanguages'] = 'search in all languages';
 $PMF_LANG['ad_entry_tags'] = 'Tags';
 $PMF_LANG['msg_tags'] = 'Tags';
 
@@ -906,7 +906,7 @@ $PMF_LANG['msgInstantResponse'] = 'Instant Response';
 $PMF_LANG['msgInstantResponseMaxRecords'] = '. Find below the first %d records.';
 
 // added v2.0.0 - 2007-03-29 by Thorsten
-$LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Activate a new records (default: deactivated)");
+$LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Activate new records (default: deactivated)");
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Allow comments for new records (default: disallowed)");
 
 // added v2.0.0 - 2007-04-04 by Thorsten

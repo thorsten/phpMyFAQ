@@ -117,7 +117,7 @@ function HTMLFooter()
 <section id="main">
     <div class="container">
         <div class="row" style="padding-left: 20px;">
-            <div class="hero-unit hello-phpmyfaq" style="text-align: center; height: 70px;">
+            <div class="hero-unit hello-phpmyfaq" style="text-align: center; height: 55px;">
                 <h1>phpMyFAQ <?php print PMF_System::getVersion(); ?> Update</h1>
             </div>
         </div>
@@ -202,6 +202,10 @@ if ($step == 1) {
                     );
                 }
                 ?>
+
+                <p class="alert alert-danger">
+                    Dude, this is an early alpha version. Please don't update your production version!
+                </p>
 
                 <p style="text-align: center">
                     <input class="btn-primary btn-large" type="submit" value="Go to step 2 of 3" />

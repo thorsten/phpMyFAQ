@@ -367,17 +367,17 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                                 $sul = ' checked="checked"';
                             }
                             ?>
-                            <label class="control-label" class="radio">
+                            <label class="radio">
                                 <input type="radio" id="active" name="active"  value="yes"<?php if (isset($suf)) { print $suf; } ?> />
                                 <?php print $PMF_LANG['ad_gen_yes']; ?>
                             </label>
-                            <label class="control-label" class="radio">
+                            <label class="radio">
                                 <input type="radio" name="active"  value="no"<?php if (isset($sul)) { print $sul; } ?> />
                                 <?php print $PMF_LANG['ad_gen_no']; ?>
                             </label>
 
                             <?php else: ?>
-                            <label class="control-label" class="radio">
+                            <label class="radio">
                                 <input type="radio" name="active"  value="no" checked="checked" />
                                 <?php print $PMF_LANG['ad_gen_no']; ?>
                             </label>
@@ -388,9 +388,10 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
                     <div class="control-group">
                         <label class="control-label" for="sticky"><?php print $PMF_LANG['ad_entry_sticky']; ?>:</label>
-                        <div class="conrols">
-                            <label class="control-label" class="checkbox">
+                        <div class="controls">
+                            <label class="checkbox">
                                 <input type="checkbox" id="sticky" name="sticky" <?php print (isset($faqData['sticky']) && $faqData['sticky'] ? 'checked="checked"' : '') ?> />
+                                &nbsp;
                             </label>
                         </div>
                     </div>
@@ -407,7 +408,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                         ?>
                         <label class="control-label" for="comment"><?php print $PMF_LANG["ad_entry_allowComments"]; ?></label>
                         <div class="controls">
-                            <label class="control-label" class="checkbox">
+                            <label class="checkbox">
                                 <input type="checkbox" name="comment" id="comment" value="y"<?php if (isset($suf)) { print $suf; } ?> />
                                 <?php print $PMF_LANG['ad_gen_yes']; ?>
                             </label>
@@ -428,11 +429,11 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                         }
                         ?>
                         <div class="controls">
-                            <label class="control-label" class="radio">
+                            <label class="radio">
                                 <input type="radio" name="revision" id="revision" value="yes"<?php print isset($rev_yes) ? $rev_yes : ''; ?>/>
                                 <?php print $PMF_LANG["ad_gen_yes"]; ?>
                             </label>
-                            <label class="control-label" class="radio">
+                            <label class="radio">
                                 <input type="radio" name="revision" value="no"<?php print isset($rev_no) ? $rev_no : ''; ?>/>
                                 <?php print $PMF_LANG["ad_gen_no"]; ?>
                             </label>
@@ -443,21 +444,26 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
                     <?php if ($faqconfig->get('security.permLevel') != 'basic'): ?>
 
-                        <p>
-                            <label class="control-label" for="grouppermission"><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
-                            <input type="radio" id="grouppermission" name="grouppermission"  value="all" <?php print ($allGroups ? 'checked="checked"' : ''); ?>/>
-                            <?php print $PMF_LANG['ad_entry_all_groups']; ?>
-                            <br />
-                            <input type="radio" name="grouppermission"  value="restricted" <?php print ($restrictedGroups ? 'checked="checked"' : ''); ?>/>
-                            <?php print $PMF_LANG['ad_entry_restricted_groups']; ?>
-                            <select name="restricted_groups" size="1">
-                                <?php print $user->perm->getAllGroupsOptions($groupPermission[0]); ?>
-                            </select>
-                        </p>
+                    <div class="control-group">
+                        <label class="control-label" for="grouppermission"><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
+                        <div class="controls">
+                            <label class="radio">
+                                <input type="radio" id="grouppermission" name="grouppermission"  value="all" <?php print ($allGroups ? 'checked="checked"' : ''); ?>/>
+                                <?php print $PMF_LANG['ad_entry_all_groups']; ?>
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="grouppermission"  value="restricted" <?php print ($restrictedGroups ? 'checked="checked"' : ''); ?>/>
+                                <?php print $PMF_LANG['ad_entry_restricted_groups']; ?>
+                                <select name="restricted_groups" size="1">
+                                    <?php print $user->perm->getAllGroupsOptions($groupPermission[0]); ?>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
 
-                        <?php else: ?>
-                        <input type="hidden" name="grouppermission"  value="all" />
-                        <?php endif;
+                    <?php else: ?>
+                    <input type="hidden" name="grouppermission"  value="all" />
+                    <?php endif;
 
                     if ('00000000000000' == $faqData['dateStart']) {
                         $dateStart = '';
@@ -475,51 +481,67 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                         $faqData['date'] = PMF_Date::createIsoDate(date('YmdHis'));
                     }
                     ?>
-                    <p>
+
+                    <div class="control-group">
                         <label class="control-label" for="userpermission"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
-                        <input type="radio" id="userpermission" name="userpermission"  value="all" <?php print ($allUsers ? 'checked="checked"' : ''); ?>/>
-                        <?php print $PMF_LANG['ad_entry_all_users']; ?>
-                        <br />
-                        <input type="radio" name="userpermission"  value="restricted" <?php print ($restrictedUsers ? 'checked="checked"' : ''); ?>/>
-                        <?php print $PMF_LANG['ad_entry_restricted_users']; ?>
-                        <select name="restricted_users" size="1">
-                            <?php print $user->getAllUserOptions($userPermission[0]); ?>
-                        </select>
-                    </p>
+                        <div class="controls">
+                            <label class="radio">
+                                <input type="radio" id="userpermission" name="userpermission"  value="all" <?php print ($allUsers ? 'checked="checked"' : ''); ?>/>
+                                <?php print $PMF_LANG['ad_entry_all_users']; ?>
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="userpermission"  value="restricted" <?php print ($restrictedUsers ? 'checked="checked"' : ''); ?>/>
+                                <?php print $PMF_LANG['ad_entry_restricted_users']; ?>
+                                <select name="restricted_users" size="1">
+                                    <?php print $user->getAllUserOptions($userPermission[0]); ?>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
 
-                    <p>
+                    <div class="control-group">
                         <label class="control-label" for="dateActualize"><?php echo $PMF_LANG["ad_entry_date"]; ?></label>
-                        <input type="radio" id="dateActualize" checked="checked" name="recordDateHandling" onchange="setRecordDate(this.id);" /> <?php print $PMF_LANG['msgUpdateFaqDate']; ?>
-                        <input type="radio" id="dateKeep" name="recordDateHandling" onchange="setRecordDate(this.id);" /> <?php print $PMF_LANG['msgKeepFaqDate']; ?>
-                        <input type="radio" id="dateCustomize" name="recordDateHandling" onchange="setRecordDate(this.id);" /> <?php print $PMF_LANG['msgEditFaqDat']; ?>
-                    </p>
+                        <div class="controls">
+                            <label class="radio">
+                                <input type="radio" id="dateActualize" checked="checked" name="recordDateHandling" onchange="setRecordDate(this.id);" />
+                                <?php print $PMF_LANG['msgUpdateFaqDate']; ?>
+                            </label>
+                            <label class="radio">
+                                <input type="radio" id="dateKeep" name="recordDateHandling" onchange="setRecordDate(this.id);" />
+                                <?php print $PMF_LANG['msgKeepFaqDate']; ?>
+                            </label>
+                            <label class="radio">
+                                <input type="radio" id="dateCustomize" name="recordDateHandling" onchange="setRecordDate(this.id);" />
+                                <?php print $PMF_LANG['msgEditFaqDat']; ?>
+                            </label>
+                        </div>
+                    </div>
 
-                    <div id="recordDateInputContainer" style="display: none;">
-                        <p>
-                            <label>&nbsp;</label>
+                    <div id="recordDateInputContainer" class="control-group hide">
+                        <div class="controls">
                             <input type="text" name="date" id="date" maxlength="16" value="" />
-                        </p>
+                        </div>
                     </div>
                 </fieldset>
 
                 <?php if ($faqconfig->get('main.enableGoogleTranslation') === true):  ?>
-                <fieldset>
+                <fieldset class="form-horizontal">
                     <legend>
                         <a href="javascript:void(0);" onclick="javascript:toggleFieldset('Translations');">
                             <?php print $PMF_LANG["ad_menu_translations"]; ?>
                         </a>
                     </legend>
 
-                    <div id="editTranslations" style="display: none;">
+                    <div class="control-group hide" id="editTranslations">
                         <?php
                         if ($faqconfig->get('main.googleTranslationKey') == '') {
                             print $PMF_LANG["msgNoGoogleApiKeyFound"];
                         } else {
                             ?>
-                            <p>
-                                <label class="control-label" for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
+                            <label class="control-label" for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
+                            <div class="controls">
                                 <?php print PMF_Language::selectLanguages($faqData['lang'], false, array(), 'langTo'); ?>
-                            </p>
+                            </div>
 
                             <input type="hidden" name="used_translated_languages" id="used_translated_languages" value="" />
                             <div id="getedTranslations">
@@ -754,32 +776,44 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
                 // Text for question
                 fieldset
-                    .append('<p>' +
-                            '<label class="control-label" for="question_translated_' + langTo + '">' +
-                            '<?php print $PMF_LANG["ad_entry_theme"]; ?>' +
-                            '</label>' +
-                            '<input type="text" id="question_translated_' + langTo + '" name="question_translated_' + langTo + '" maxlength="255" >' +
-                            '</p>');
+                    .append(
+                        '<div class="control-group">' +
+                        '<label class="control-label" for="question_translated_' + langTo + '">' +
+                        '<?php print $PMF_LANG["ad_entry_theme"]; ?>' +
+                        '</label>' +
+                        '<div class="controls">' +
+                        '<input type="text" id="question_translated_' + langTo + '" name="question_translated_' + langTo + '" maxlength="255" >' +
+                        '</div>' +
+                        '</div>'
+                    );
 
 
                 // Textarea for answer
                 fieldset
-                    .append('<p>' +
-                            '<label class="control-label" for="answer_translated_' + langTo + '">' +
-                            '<?php print $PMF_LANG["ad_entry_content"]; ?>' +
-                            '</label>' +
-                            '<textarea id="answer_translated_' + langTo + '" name="answer_translated_' + langTo + '" cols="80" rows="3" ></textarea>' +
-                            '</p>');
+                    .append(
+                        '<div class="control-group">' +
+                        '<label class="control-label" for="answer_translated_' + langTo + '">' +
+                        '<?php print $PMF_LANG["ad_entry_content"]; ?>' +
+                        '</label>' +
+                        '<div class="controls">' +
+                        '<textarea id="answer_translated_' + langTo + '" name="answer_translated_' + langTo + '" cols="80" rows="3" ></textarea>' +
+                        '</div>' +
+                        '</div>'
+                    );
 
 
                 // Textarea for keywords
                 fieldset
-                    .append('<p>' +
-                            '<label class="control-label" for="keywords_translated_' + langTo + '">' +
-                            '<?php print $PMF_LANG["ad_entry_keywords"]; ?>' +
-                            '</label>' +
-                            '<textarea id="keywords_translated_' + langTo + '" name="keywords_translated_' + langTo + '" cols="80" rows="3" ></textarea>' +
-                            '</p>');
+                    .append(
+                        '<div class="control-group">' +
+                        '<label class="control-label" for="keywords_translated_' + langTo + '">' +
+                        '<?php print $PMF_LANG["ad_entry_keywords"]; ?>' +
+                        '</label>' +
+                        '<div class="controls">' +
+                        '<textarea id="keywords_translated_' + langTo + '" name="keywords_translated_' + langTo + '" cols="80" rows="3" ></textarea>' +
+                        '</div>' +
+                        '</div>'
+                    );
 
                 $('#getedTranslations').append(fieldset);
                 

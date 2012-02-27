@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Documentation for phpMyFAQ 2.7.x</title>
+    <title>Documentation for phpMyFAQ 2.8.x</title>
     <style type="text/css"><!--
     body { margin: 0 auto; width: 960px; font: 15px/24px Helvetica, Arial, sans-serif; background-color: #F0F0F0; }
     code { display: block; font-size: 16px; background-color: black; color: white; padding: 10px; width: 600px;
@@ -12,7 +12,7 @@
     a:hover { color: #ff0000; }
     #doc { width: 70%; min-width: 550px; max-width:700px; }
     ol.alpha { list-style-type: lower-alpha; }
-	pre { font: 15px monospace; border: 1px solid gray; padding: 5px; }
+pre { font: 15px monospace; border: 1px solid gray; padding: 5px; }
     -->
     </style>
 </head>
@@ -20,7 +20,7 @@
 <!-- start of documentation -->
 <div id="doc">
     <a id="top"></a>
-    <h3>[ phpMyFAQ 2.7.x Documentation ]</h3>
+    <h3>[ phpMyFAQ 2.8.x Documentation ]</h3>
     <ol class="main">
         <li><strong><a href="#1">Introduction</a></strong>
         <ol class="alpha">
@@ -49,11 +49,11 @@
         </ol></li>
         <li><strong><a href="#3">Upgrading</a></strong>
         <ol class="alpha">
-            <li><a href="#3a">Upgrading from phpMyFAQ 2.0.x</a></li>
-            <li><a href="#3b">Upgrading from phpMyFAQ 2.5.x</a></li>
-            <li><a href="#3c">Upgrading from phpMyFAQ 2.6.x</a></li>
-            <li><a href="#3d">Upgrading phpMyFAQ 2.7.x versions</a></li>
-            <li><a href="#3e">Modifying templates for phpMyFAQ 2.7.x</a></li>
+            <li><a href="#3a">Upgrading from phpMyFAQ 2.5.x</a></li>
+            <li><a href="#3b">Upgrading from phpMyFAQ 2.6.x</a></li>
+            <li><a href="#3c">Upgrading from phpMyFAQ 2.7.x</a></li>
+            <li><a href="#3d">Upgrading phpMyFAQ 2.8.x versions</a></li>
+            <li><a href="#3e">Modifying templates for phpMyFAQ 2.8.x</a></li>
         </ol></li>
         <li><strong><a href="#4">Front-end</a></strong>
         <ol class="alpha">
@@ -85,13 +85,13 @@
             <li><a href="#5k">Backup</a></li>
             <li><a href="#5l">Configuration</a></li>
         </ol></li>
-        <li><strong><a href="#6">Customizing phpMyFAQ 2.7.x</a></strong>
+        <li><strong><a href="#6">Customizing phpMyFAQ</a></strong>
         <ol class="alpha">
             <li><a href="#6a">The file template/default/index.tpl</a></li>
             <li><a href="#6b">The file template/default/style.css</a></li>
             <li><a href="#6c">More Templates</a></li>
         </ol></li>
-        <li><strong><a href="#7">Customizing phpMyFAQ 2.7.x</a></strong>
+        <li><strong><a href="#7">Customizing phpMyFAQ</a></strong>
         <ol class="alpha">
             <li><a href="#7a">Creating custom layout</a></li>
         </ol></li>
@@ -122,24 +122,31 @@
 
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="1a"></a><strong>1.a. License</strong></p>
-    <p>phpMyFAQ is published under the <a href="http://www.mozilla.org/MPL/MPL-1.1.html">
-    Mozilla Public License Version 1.1</a> (MPL). This license guarantees you the
-    free usage of phpMyFAQ, access to the source code and the right to modify and
-    distribute phpMyFAQ.</p>
-    <p>The only restrictions apply to the copyright, which remains at all times
-    at Thorsten Rinne and the phpMyFAQ Team. Any modified versions of phpMyFAQ
-    will also fall under the terms of MPL. Any other program, that may only be
-    accessing certain functions of phpMyFAQ is not affected by these restrictions
-    and may be distributed under any type of license.</p>
-    <p>A commercial usage or commercially distribution of phpMyFAQ, e.g. on CD-ROMs,
-    is allowed, as long as the conditions mentioned above are met.</p>
-    <p>We decided to use MPL as the licensing model for phpMyFAQ because we feel
-    that it is a good compromise between the protection of the openness and  free
-    distribution on the one hand and the interaction with other software regardless
-    of its licensing model. When compared to other licensing models its text is
-    short and easily comprehensible, even for newcomers.</p>
-    <p>This documentation is licensed under a <a href="http://creativecommons.org/licenses/by/2.0/" class="subfoot">
-    Creative Commons License</a>.</p>
+    <p>
+        phpMyFAQ is published under the <a href="http://www.mozilla.org/MPL/MPL-1.1.html">Mozilla Public License
+        Version 1.1</a> (MPL). This license guarantees you the free usage of phpMyFAQ, access to the source code and the
+        right to modify and distribute phpMyFAQ.
+    </p>
+    <p>
+        The only restrictions apply to the copyright, which remains at all times at Thorsten Rinne and the phpMyFAQ
+        Team. Any modified versions of phpMyFAQ will also fall under the terms of MPL. Any other program, that may only
+        be accessing certain functions of phpMyFAQ is not affected by these restrictions and may be distributed under
+        any type of license.
+    </p>
+    <p>
+        A commercial usage or commercially distribution of phpMyFAQ, e.g. on CD-ROMs, is allowed, as long as the
+        conditions mentioned above are met.
+    </p>
+    <p>
+        We decided to use MPL as the licensing model for phpMyFAQ because we feel that it is a good compromise between
+        the protection of the openness and free distribution on the one hand and the interaction with other software
+        regardless of its licensing model. When compared to other licensing models its text is short and easily
+        comprehensible, even for newcomers.
+    </p>
+    <p>
+        This documentation is licensed under a <a href="http://creativecommons.org/licenses/by/2.0/">Creative Commons
+        License</a>.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -193,21 +200,15 @@
             <a href="http://www.microsoft.com/">IIS</a> 7.0+)
         </li>
         <li><strong>Database server</strong>
-        <ul>
-            <li><a href="http://www.mysql.com">MySQL</a> 5.x with the MySQL extension (recommended: 5.5.x)</li>
-            <li><a href="http://www.mysql.com">MySQL</a> 5.x with the MySQLi extension (recommended: 5.5.x)</li>
-            <li><a href="http://www.postgresql.org">PostgreSQL</a> 8.x (recommended: latest 8.x)</li>
-            <li><a href="http://www.sybase.com">Sybase</a></li>
-            <li><a href="http://www.microsoft.com/sql/">Microsoft SQL Server</a> 2000, 2005, 2008</li>
-            <li><a href="http://www-306.ibm.com/software/data/db2/">IBM DB2 Universal
-            Database</a> 8.2.x, 9.1.x, <a href="http://www-306.ibm.com/software/data/cloudscape/">
-            IBM Cloudscape</a>, and <a href="http://db.apache.org/derby/">
-            Apache Derby</a></li>
-            <li><a href="http://www.sqlite.org">SQLite</a></li>
-            <li><a href="http://montyprogram.com/mariadb/">MariaDB</a> 5.x (experimental)</li>
-            <li><a href="http://www.firebirdsql.org">Firebird</a> /
-            <a href="http://www.codegear.com/products/interbase">Interbase</a> (experimental)</li>
-        </ul></li>
+            <ul>
+                <li><a href="http://www.mysql.com">MySQL</a> 5.x with the MySQL extension (recommended: 5.5.x)</li>
+                <li><a href="http://www.mysql.com">MySQL</a> 5.x with the MySQLi extension (recommended: 5.5.x)</li>
+                <li><a href="http://www.postgresql.org">PostgreSQL</a> 8.x (recommended: latest 8.x)</li>
+                <li><a href="http://www.microsoft.com/sql/">Microsoft SQL Server</a> 2000, 2005, 2008</li>
+                <li><a href="http://www.sqlite.org">SQLite</a></li>
+                <li><a href="http://montyprogram.com/mariadb/">MariaDB</a> 5.x (experimental)</li>
+            </ul>
+        </li>
         <li>correctly set: access permissions, owner, group</li>
     </ul>
     <p>You can only run phpMyFAQ successfully, when the PHP directive safe_mode is
@@ -223,7 +224,7 @@
     installation-script checks which version of PHP is installed on your server.
     Should you not meet the requirements, you cannot start the installation
     process.</p>
-    <p>In case you have PHP below 5.2.3 installed you cannot use phpMyFAQ 2.7.</p>
+    <p>In case you have PHP below 5.2.3 installed you cannot use phpMyFAQ.</p>
     <p>phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers 
     are Mozilla Firefox 3.6 and later (Windows/MacOS X/Linux), Safari 5.x or later
     (MacOS X/Windows/iOS), Chrome 5 or later (Windows/MacOS X/Linux), Opera 11.0
@@ -442,7 +443,7 @@
         <strong><a name="2k"></a>2.k. Mozilla Firefox, Google Chrome and IE8+ search plugins</strong>
     </p>
     <p>
-        phpMyFAQ 2.7 provides search plugins for Mozilla Firefox, Google Chrome and Internet Explorer 8 and later
+        phpMyFAQ provides search plugins for Mozilla Firefox, Google Chrome and Internet Explorer 8 and later
         based on the OpenSearch specification. Every user in the front-end can install it. With an installed search
         plugin you can search through the phpMyFAQ installation with the search box in upper right corner of Mozilla
         Firefox, Google Chrome or Internet Explorer.
@@ -468,7 +469,7 @@
     <hr style="width: 90%; height: 1px;" />
     <p><strong><a name="2m"></a>2.m. Spam protection</strong></p>
     <p>
-        phpMyFAQ 2.7 performs these three checks on public forms:
+        phpMyFAQ performs these three checks on public forms:
     </p>
     <ol>
         <li>Check against IPv4 and IPv6 Network address</li>
@@ -486,7 +487,7 @@
     <hr style="width: 90%; height: 1px;" />
     <p><strong><a name="2n"></a>2.n. Attachments</strong></p>
     <p>
-        phpMyFAQ 2.7 supports encrypted attachments. The  encryption is done using the
+        phpMyFAQ supports encrypted attachments. The  encryption is done using the
         <a href="http://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a> algorithm implemented in mcrypt
         extension (if avaliable) or with native PHP Rijndael implementation. The key size vary depending on
         implementation used and can be max 256 bits long. Use of mcrypt extension is strongly recommended because of
@@ -528,10 +529,10 @@
         <strong><a name="2o"></a>2.o. Twitter</strong>
     </p>
     <p>
-        Starting with version 2.7 phpMyFAQ supports Twitter via OAuth. If you enable Twitter support in the social
-        network configuration and add phpMyFAQ as a Twitter application on twitter.com, all new FAQ additions in the
-        administration backend will also post the question of the FAQ, the URL of the FAQ and all tags as hashtags to
-        Twitter.
+        phpMyFAQ supports Twitter via OAuth. If you enable Twitter support in the social network configuration and add
+        phpMyFAQ as a Twitter application on <a href="https://dev.twitter.com/apps/new">twitter.com</a>, all new FAQ
+        additions in the administration backend will also post the question of the FAQ, the URL of the FAQ and all tags
+        as hashtags to Twitter.
     </p>
     <p><a href="#top">back to top</a></p>
 
@@ -541,17 +542,13 @@
         <strong><a name="2p"></a>2.p. Caching</strong>
     </p>
     <p>
-	Starting with version 2.7 phpMyFAQ supports Caching. Supported cache services are:
-	<ul>
-		<li>
-		<strong>Varnish</strong>
-		<p>
-		Required are Varnish Cache accelerator &gt;=3.0 and Varnish PECL extension &gt;= 0.9.1 
-		</p>
-		<p>
-		VCL sample, merge it with yours:
-		</p>
-		<pre>
+        phpMyFAQ supports server-side caching. Supported cache services are:
+    </p>
+    <ul>
+        <li><strong>Varnish</strong>
+            <p>Required are Varnish Cache accelerator &gt;=3.0 and Varnish PECL extension &gt;= 0.9.1</p>
+            <p>VCL sample, merge it with yours:</p>
+            <pre>
 backend default {
         .host = "127.0.0.1";
         .port = "8070";
@@ -578,20 +575,17 @@ sub vcl_fetch {
                 set beresp.ttl = 0s;
         }
 }
-		</pre>
-		<p>
-		As you can see, all cookie are deleted except the admin area, which allows the cache to perform on the frontend, but work as admin in the backend.
-		Also for the non admin area all the cache related backend headers get deleted, and ttl is set to one day.
-		There is almost much room for improvement. Please notify us, if you have discovered some essential VCL improvements to this sample, so we can improve
-		this documentation.
-		</p>
-		<p>
-		Once an article is saved, its cache and all related items cache is cleared.
-		</p>
-		</li>
-
-	</ul>
-    </p>
+            </pre>
+            <p>
+                As you can see, all cookie are deleted except the admin area, which allows the cache to perform on the
+                frontend, but work as admin in the backend. Also for the non admin area all the cache related backend
+                headers get deleted, and ttl is set to one day. There is almost much room for improvement. Please notify
+                us, if you have discovered some essential VCL improvements to this sample, so we can improve this
+                documentation.
+            </p>
+            <p>Once an article is saved, its cache and all related items cache is cleared.</p>
+        </li>
+    </ul>
     <p><a href="#top">back to top</a></p>
 
 
@@ -600,13 +594,13 @@ sub vcl_fetch {
         <a name="3"></a><strong>3. Upgrading</strong>
     </p>
     <p>
-        Upgrading to phpMyFAQ 2.7.x is possible from the following versions:
+        Upgrading to phpMyFAQ 2.8.x is possible from the following versions:
     </p>
     <ul>
-        <li>phpMyFAQ 2.0.x</li>
         <li>phpMyFAQ 2.5.x</li>
         <li>phpMyFAQ 2.6.x</li>
         <li>phpMyFAQ 2.7.x</li>
+        <li>phpMyFAQ 2.8.x</li>
     </ul>
     <p>
         If you're running an older version of phpMyFAQ we recommend a new and fresh install. If you need support for
@@ -615,47 +609,12 @@ sub vcl_fetch {
     <p><a href="#top">back to top</a></p>
 
 
-    <hr style="width: 90%; height: 1px;"  />
-    <p><a name="3a"></a><strong>3.a. Upgrading from phpMyFAQ 2.0.x</strong></p>
-    <p>
-        Upgrading from 2.0.x to 2.7.x is a major upgrade. Please create a full backup before you run the upgrade!
-        Nevertheless the update from phpMyFAQ 2.0.x to the current release is fairly simple. First you have to delete
-        all files <strong>except</strong>:
-    </p>
-    <ul>
-        <li>the files <strong>data.php</strong> in the directory <strong>inc/</strong> </li>
-        <li>all files in the <strong>template/</strong> directory</li>
-        <li>the directory <strong>attachments/</strong></li>
-        <li>the directory <strong>data/</strong></li>
-        <li>the directory <strong>images/</strong></li>
-    </ul>
-    <p>
-        Open the following URL in your browser:
-    </p>
-    <code>http://www.example.com/faq/install/update.php</code>
-    <p>
-        Choose your installed phpMyFAQ version and click the button of the update script, your version will
-        automatically be updated. You have to update a lot of your template files due to the new, enhanced template
-        engine.
-    </p>
-    <p>
-        The update script will move your template files to a folder <strong>backup/</strong> in the directory
-        <strong>template/</strong>. The default layout will be stored in the folder <strong>template/default/</strong>.
-    </p>
-    <p>
-        Note: We changed the character set for all languages and templates to UTF-8. If you notice problems with e.g.
-        German umlauts you have to convert your templates to UTF-8 encoding.
-    </p>
-    <p>
-        Please copy the template file <strong>template/default/indexLogin.tpl</strong> into your template folder.
-    </p>
-    <p><a href="#top">back to top</a></p>
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><a name="3b"></a><strong>3.b. Upgrading from phpMyFAQ 2.5.x</strong></p>
+    <p><a name="3a"></a><strong>3.a. Upgrading from phpMyFAQ 2.5.x</strong></p>
     <p>
-        Upgrading from 2.5.x to 2.7.x is a minor upgrade. Please make a full backup before you run the upgrade! First
-        you have to delete all files <strong>except</strong>:
+        Upgrading from 2.5.x is a minor upgrade. Please make a full backup before you run the upgrade! First you have to
+        delete all files <strong>except</strong>:
     </p>
     <ul>
         <li>the file <strong>data.php</strong> in the directory <strong>inc/</strong> </li>
@@ -687,10 +646,13 @@ sub vcl_fetch {
     <p><a href="#top">back to top</a></p>
 
 
+
     <hr style="width: 90%; height: 1px;"  />
-    <p><a name="3c"></a><strong>3.c. Upgrading from phpMyFAQ 2.6.x</strong></p>
-    <p>Upgrading from 2.6.x to 2.7.x is fairly simple. Via FTP copy all new files from
-    the phpMyFAQ package <strong>except</strong>:</p>
+    <p><a name="3b"></a><strong>3.b. Upgrading from phpMyFAQ 2.6.x</strong></p>
+    <p>
+        Upgrading from 2.6.x is a minor upgrade. Please make a full backup before you run the upgrade! First you have to
+        delete all files <strong>except</strong>:
+    </p>
     <ul>
         <li>all files in the directory <strong>config/</strong> </li>
         <li>all files in the directory <strong>template/</strong></li>
@@ -712,10 +674,36 @@ sub vcl_fetch {
     <p><a href="#top">back to top</a></p>
 
 
+
     <hr style="width: 90%; height: 1px;"  />
-    <p><a name="3d"></a><strong>3.d. Upgrading phpMyFAQ 2.7.x</strong></p>
+    <p><a name="3c"></a><strong>3.c. Upgrading from phpMyFAQ 2.7.x</strong></p>
     <p>
-        Updating phpMyFAQ 2.7.x is fairly simple. Via FTP copy all new files from the phpMyFAQ package
+        Upgrading from 2.7.x is a minor upgrade. Please make a full backup before you run the upgrade! First you have to
+        delete all files <strong>except</strong>:
+    </p>
+    <ul>
+        <li>all files in the directory <strong>config/</strong> </li>
+        <li>all files in the directory <strong>template/</strong></li>
+        <li>the directory <strong>attachments/</strong></li>
+        <li>the directory <strong>images/</strong></li>
+    </ul>
+    <p>
+        Open the following URL in your browser:
+    </p>
+    <code>http://www.example.com/faq/install/update.php</code>
+    <p>
+        Choose your installed phpMyFAQ version and click the button of the update script, your version will
+        automatically be updated. You have to update a lot of your template files due to our change to the Twitter
+        Bootstrap framework.
+    </p>
+    <p><a href="#top">back to top</a></p>
+
+
+
+    <hr style="width: 90%; height: 1px;"  />
+    <p><a name="3d"></a><strong>3.d. Upgrading phpMyFAQ 2.8.x</strong></p>
+    <p>
+        Updating phpMyFAQ 2.8.x is fairly simple. Via FTP copy all new files from the phpMyFAQ package
         <strong>except</strong>:
     </p>
     <ul>
@@ -733,20 +721,23 @@ sub vcl_fetch {
         automatically be updated.
     </p>
     <p>
-        You can find the changed files between the 2.7.x versions in the file <em>CHANGEDFILES</em>.
+        You can find the changed files between the 2.8.x versions in the file <em>CHANGEDFILES</em>.
     </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
     <p>
-        <a name="3e"></a><strong>3.d. Modifying templates for phpMyFAQ 2.7.x</strong>
+        <a name="3e"></a><strong>3.d. Modifying templates for phpMyFAQ 2.8.x</strong>
     </p>
     <p>
-        Your current 2.0.x, 2.5.x and 2.6.x templates are <strong>barely</strong> compatible with phpMyFAQ 2.7 because
-        we changed the complete markup from XHTML 1.0 to HTML5. We also using now a lot of Ajax in the frontend.
+        Your current 2.5.x, 2.6.x and 2.7.x templates are <strong>barely</strong> compatible with phpMyFAQ 2.8 because
+        we changed the complete CSS framework to Twitter Bootstrap. We also using now a lot of Ajax in the frontend.
     </p>
     <p>
+        We recommend you'll take a look at the main <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap
+        documentation</a>. Please don't forget that the style sheets are written with <a href="http://lesscss.org/">
+        LESS</a>.
     </p>
     <p>
         Note: We changed the character set for all languages and templates to UTF-8. If you notice problems with e.g.
@@ -756,12 +747,14 @@ sub vcl_fetch {
     <p><a href="#top">back to top</a></p>
 
 
+
     <hr style="width: 90%; height: 1px;"  />
     <p>
         <strong><a name="4"></a>4. Front-end</strong>
     </p>
     <p>
-        The public phpMyFAQ frontend has a simple, HTML5 based default layout. The header has the main links for the
+        The public phpMyFAQ frontend has a simple, HTML5 based default layout based on
+        <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>. The header has the main links for the
         all categories, instant response, add FAQs, add questions, open questions, sitemap and contact. On the left side
         you only see the main categories. You can also change the current language at the bottom of the FAQ, use the
         global search in the center of the FAQ or use the login box in the upper right if you have a valid user account.
@@ -770,6 +763,7 @@ sub vcl_fetch {
         cloud if you're using tagging.
     </p>
     <p><a href="#top">back to top</a></p>
+
 
 
     <hr style="width: 90%; height: 1px;"  />
@@ -1290,7 +1284,7 @@ sub vcl_fetch {
 
     <hr style="width: 90%; height: 1px;"  />
     <p>
-        <strong><a name="6"></a>6. Customizing phpMyFAQ 2.7.x</strong>
+        <strong><a name="6"></a>6. Customizing phpMyFAQ 2.8.x</strong>
     </p>
     <p>
         In phpMyFAQ code and layout are separated. The layout is based on several template files, that you can modify
@@ -1299,7 +1293,7 @@ sub vcl_fetch {
     </p>
     <p>
         <strong>Note:</strong> You can change the layout of the admin area using the CSS file
-        <em>admin/style/admin.css</em>.
+        <em>admin/css/style.css</em>.
     </p>
     <p><a href="#top">back to top</a></p>
 
@@ -1348,11 +1342,11 @@ sub vcl_fetch {
 
     <hr style="width: 90%; height: 1px;"  />
     <p>
-        <strong><a name="7"></a>7. Customizing phpMyFAQ 2.7.x</strong>
+        <strong><a name="7"></a>7. Customizing phpMyFAQ</strong>
     </p>
     <p>
-        phpMyFAQ 2.7 users have even more customization opportunities. The key feature is the user selectable template
-        sets. Version 2.7 there is a templates/default directory where the default layouts get shipped.
+        phpMyFAQ users have even more customization opportunities. The key feature is the user selectable template
+        sets, there is a templates/default directory where the default layouts get shipped.
     </p>
     <p><a href="#top">back to top</a></p>
 
@@ -1411,7 +1405,7 @@ sub vcl_fetch {
         </ul>
         <p>The result will be a string value like this:</p>
         <code>
-        {"version":"2.7.0"}
+        {"version":"2.8.0"}
         </code></li>
         
         <li><strong>getApiVersion()</strong>
@@ -1476,8 +1470,8 @@ sub vcl_fetch {
         "id":"2",
         "lang":"en",
         "parent_id":"0",
-        "name":"phpMyFAQ 2.7",
-        "description":"Everything about phpMyFAQ 2.7",
+        "name":"phpMyFAQ 2.8",
+        "description":"Everything about phpMyFAQ 2.8",
         "user_id":"1",
         "level":0}
     ]

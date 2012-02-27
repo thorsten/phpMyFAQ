@@ -2,6 +2,8 @@
 /**
  * Reset a forgotten password to a new one.
  *
+ * @todo: Move this to the frontend, check #300
+ *
  * PHP Version 5.2.3
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -108,13 +110,13 @@ if ($action == "sendmail") {
             $result = $mail->send();
             unset($mail);
             // Trust that the email has been sent
-            $message = sprintf('<p class="success">%s</p>', $PMF_LANG["lostpwd_mail_okay"]);
+            $message = sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG["lostpwd_mail_okay"]);
             print "<p><img src=\"images/arrow.gif\" width=\"11\" height=\"11\" alt=\"".$PMF_LANG["ad"]."\" border=\"0\" /> <a href=\"index.php\" title=\"".$PMF_LANG["ad"]."\">".$PMF_LANG["ad"]."</a></p>";
         } else {
-            $message = sprintf('<p class="error">%s</p>', $PMF_LANG["lostpwd_err_1"]);
+            $message = sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG["lostpwd_err_1"]);
         }
     } else {
-        $message = sprintf('<p class="error">%s</p>', $PMF_LANG["lostpwd_err_2"]);
+        $message = sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG["lostpwd_err_2"]);
     }
 }
 ?>
@@ -125,21 +127,25 @@ if ($action == "sendmail") {
 
             <?php print $message ?>
 
-            <form action="?action=sendmail" method="post">
+            <form action="?action=sendmail" method="post" class="form-horizontal">
 
-                <p>
-                    <label><?php print $PMF_LANG["ad_auth_user"]; ?></label>
-                    <input type="text" name="username" size="30" required="required" autofocus="autofocus" />
-                </p>
+                <div class="control-group">
+                    <label class="control-label"><?php print $PMF_LANG["ad_auth_user"]; ?></label>
+                    <div class="controls">
+                        <input type="text" name="username" required="required" autofocus="autofocus" />
+                    </div>
+                </div>
 
-                <p>
-                    <label><?php print $PMF_LANG["ad_entry_email"]; ?></label>
-                    <input type="email" name="email" size="30" required="required" />
-                </p>
+                <div class="control-group">
+                    <label class="control-label"><?php print $PMF_LANG["ad_entry_email"]; ?></label>
+                    <div class="controls">
+                        <input type="email" name="email" required="required" />
+                    </div>
+                </div>
 
-                <p>
-                    <input class="submit" type="submit" value="<?php print $PMF_LANG["msgNewContentSubmit"]; ?>" />
-                </p>
+                <div class="form-actions">
+                    <input class="btn-primary" type="submit" value="<?php print $PMF_LANG["msgNewContentSubmit"]; ?>" />
+                </div>
             </form>
             <p>
                 <img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_LANG["ad_sess_back"]; ?> FAQ" border="0" />
@@ -154,13 +160,7 @@ if ($action == "sendmail") {
                 </a>
             </p>
         </section>
-    </div>
+
 <?php
-
-if (DEBUG) {
-    print "\n<p>DEBUG INFORMATION:</p>\n";
-    print "<p>".$db->log()."</p>";
-}
-
 require 'footer.php';
 $db->close();
