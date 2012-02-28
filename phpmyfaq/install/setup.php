@@ -725,9 +725,11 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
     $configs = $configuration->config;
 
-    $configs['spam.enableCaptchaCode'] = (extension_loaded('gd') ? 'true' : 'false');
-    $configs['main.referenceURL']      = PMF_Link::getSystemUri('/install/setup.php');
-    $configs['main.phpMyFAQToken']     = md5(uniqid(rand()));
+    $configs['spam.enableCaptchaCode']  = (extension_loaded('gd') ? 'true' : 'false');
+    $configs['main.referenceURL']       = PMF_Link::getSystemUri('/install/setup.php');
+    $configs['main.phpMyFAQToken']      = md5(uniqid(rand()));
+    $configs['main.metaPublisher']      = $realname;
+    $configs['main.administrationMail'] = $email;
 
     $configuration->update($configs);
 
@@ -740,7 +742,6 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         'email'        => $email
     );
     $admin->setUserData($adminData);
-    $adminId = $admin->getUserId();
 
     // add rights
     $rights = array(
@@ -953,7 +954,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     
     foreach ($rights as $right) {
         $rightId = $admin->perm->addRight($right);
-        $admin->perm->grantUserRight($adminId, $rightId);
+        $admin->perm->grantUserRight($admin->getUserId(), $rightId);
     }
     
     // Add anonymous user account

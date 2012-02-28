@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $page = PMF_Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT);
 $page = 1 > $page ? 1 : $page;
 
-$fa           = new PMF_Attachment_Collection;
+$fa           = new PMF_Attachment_Collection($db);
 $itemsPerPage = 32;
 $allCrumbs    = $fa->getBreadcrumbs();
 
@@ -98,7 +98,7 @@ printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_attachment_admin']);
                         success: function(msg) {
                             $('.att_' + att_id).fadeOut('slow');
                             $('#saving_data_indicator').
-                                html('<p class="success"><?php print $PMF_LANG['msgAttachmentsDeleted']; ?></p>');
+                                html('<p class="alert alert-success"><?php print $PMF_LANG['msgAttachmentsDeleted']; ?></p>');
                         }
                     });
                 }
