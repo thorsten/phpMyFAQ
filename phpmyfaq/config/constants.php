@@ -213,7 +213,8 @@ $allowedVariables = array(
     'sitemap'         => 1,
     'thankyou'        => 1,
     'translate'       => 1,
-    'ucp'             => 1
+    'ucp'             => 1,
+    'writecomment'    => 1
 );
 
 /**
