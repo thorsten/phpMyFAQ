@@ -35,32 +35,3 @@ if (!is_null($showCaptcha)) {
     $captcha->showCaptchaImg();
     exit;
 }
-
-$id      = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$artlang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRIPPED);
-
-$faqsession->userTracking('write_comment', $id);
-
-$tpl->parse(
-    'writeContent',
-    array(
-        'msgCommentHeader'    => $PMF_LANG['msgWriteComment'],
-        'writeSendAdress'     => '?'.$sids.'action=savecomment',
-        'ID'                  => $id,
-        'LANG'                => $artlang,
-        'writeThema'          => $faq->getRecordTitle($id),
-        'msgNewContentName'   => $PMF_LANG['msgNewContentName'],
-        'msgNewContentMail'   => $PMF_LANG['msgNewContentMail'],
-        'defaultContentMail'  => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
-        'defaultContentName'  => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
-        'msgYourComment'      => $PMF_LANG['msgYourComment'],
-        'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
-        'captchaFieldset'     => PMF_Helper_Captcha::getInstance()->renderCaptcha(
-            $captcha,
-            'writecomment',
-            $PMF_LANG['msgCaptcha']
-        )
-    )
-);
-
-$tpl->merge('writeContent', 'index');
