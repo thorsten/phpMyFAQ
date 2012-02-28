@@ -300,9 +300,9 @@ if ('addnews' == $action && $permission["addnews"]) {
     );
 
     if ($news->addNewsEntry($newsData)) {
-        printf('<p class="success">%s</p>', $PMF_LANG['ad_news_updatesuc']);
+        printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_news_updatesuc']);
     } else {
-        printf('<p class="error">%s</p>', $PMF_LANG['ad_news_insertfail']);
+        printf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_news_insertfail']);
     }
     printf('<p>&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
 } elseif ('updatenews' == $action && $permission["editnews"]) {
@@ -337,9 +337,9 @@ if ('addnews' == $action && $permission["addnews"]) {
     
     $newsId = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     if ($news->updateNewsEntry($newsId, $newsData)) {
-        printf('<p class="success">%s</p>', $PMF_LANG['ad_news_updatesuc']);
+        printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_news_updatesuc']);
     } else {
-        printf('<p class="error">%s</p>', $PMF_LANG['ad_news_updatefail']);
+        printf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_news_updatefail']);
     }
     printf('<p>&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
 } elseif ('deletenews' == $action && $permission["delnews"]) {
@@ -371,7 +371,7 @@ if ('addnews' == $action && $permission["addnews"]) {
     } else {
         $delete_id = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         $news->deleteNews($delete_id);
-        printf('<p class="success">%s</p>', $PMF_LANG['ad_news_delsuc']);
+        printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_news_delsuc']);
         printf('<p>&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
     }
 } else {

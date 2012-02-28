@@ -126,10 +126,10 @@ if ($permission['editbt']) {
         }
 
         if ($record_id) {
-            printf('<p class="success">%s</p>', $PMF_LANG['ad_entry_savedsuc']);
+            printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_entry_savedsuc']);
             link_ondemand_javascript($record_id, $record_lang);
         } else {
-            printf('<p class="error">%s</p>', print $PMF_LANG['ad_entry_savedfail'] . $db->error());
+            printf('<p class="alert alert-error">%s</p>', print $PMF_LANG['ad_entry_savedfail'] . $db->error());
         }
         
         if (!isset($categories['rubrik'])) {
@@ -230,10 +230,8 @@ if ($permission['editbt']) {
 <?php
     }
 
-	/*
-	 * Clear the article cache and the related stuff
-	 */ 
-	PMF_Cache::getInstance()->clearArticle($record_id);
+    // Clear the article cache and the related stuff
+    PMF_Cache::getInstance()->clearArticle($record_id);
 } else {
     print $PMF_LANG['err_NotAuth'];
 }

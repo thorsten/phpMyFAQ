@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2011 phpMyFAQ Team
+ * @copyright 2007-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-04
@@ -155,10 +155,10 @@ if ($permission['delcomment']) {
                         $('tr td input:checked').parent().parent().fadeOut('slow');
                         $('#saving_data_indicator').fadeOut('slow');
                         $('#returnMessage').
-                            html('<p class="success"><?php print $PMF_LANG['ad_entry_commentdelsuc']; ?></p>');
+                            html('<p class="alert alert-success"><?php print $PMF_LANG['ad_entry_commentdelsuc']; ?></p>');
                     } else {
                         $('#returnMessage').
-                            html('<p class="error"><?php print $PMF_LANG["ad_entry_commentdelfail"] ?></p>');
+                            html('<p class="alert alert-error"><?php print $PMF_LANG["ad_entry_commentdelfail"] ?></p>');
                     }
                 }
             });
