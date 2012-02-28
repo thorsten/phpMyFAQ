@@ -200,7 +200,6 @@ $allowedVariables = array(
     'mailsend2friend' => 1,
     'news'            => 1,
     'open'            => 1,
-    'password'        => 1,
     'register'        => 1,
     'save'            => 1,
     'savecomment'     => 1,
