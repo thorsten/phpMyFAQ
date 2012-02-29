@@ -116,7 +116,7 @@ if ($permission['editbt']) {
                 $category->addPermission('group', $categories['rubrik'], $restricted_groups);
             }
 
-            printf('<p class="success">%s</p>', $PMF_LANG['ad_entry_savedsuc']);
+            printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_entry_savedsuc']);
 
             // Open question answered
             $openQuestionId = PMF_Filter::filterInput(INPUT_POST, 'openQuestionID', FILTER_VALIDATE_INT);
@@ -224,12 +224,12 @@ if ($permission['editbt']) {
 
 <?php
         } else {
-            printf('<p class="error">%s</p>',$PMF_LANG['ad_entry_savedfail'] . $db->error());
+            printf('<p class="alert alert-error">%s</p>',$PMF_LANG['ad_entry_savedfail'] . $db->error());
         }
 
     } else {
         printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
-        printf('<p class="error">%s</p>', $PMF_LANG['ad_entryins_fail']);
+        printf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_entryins_fail']);
 ?>
     <form action="?action=editpreview" method="post">
     <input type="hidden" name="question"            value="<?php print PMF_String::htmlspecialchars($question); ?>" />
