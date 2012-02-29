@@ -244,7 +244,6 @@ group_id INT(11) NOT NULL,
 right_id INT(11) UNSIGNED NOT NULL,
 PRIMARY KEY (group_id, right_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
-/*
 //faqinstances
 $query[] = "CREATE TABLE " . $sqltblpre . "faqinstances (
 id INT(11) NOT NULL,
@@ -261,7 +260,6 @@ instance_id INT(11) NOT NULL,
 config_name VARCHAR(255) NOT NULL default '',
 config_value VARCHAR(255) DEFAULT NULL,
 PRIMARY KEY (instance_id, config_name)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
-*/
 
 //faqlinkverifyrules
 $query[] = "CREATE TABLE ".$sqltblpre."faqlinkverifyrules (
