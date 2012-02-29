@@ -364,7 +364,7 @@ showListTypeSelection();
             <tr>
                 <td>
                     <input type="hidden" name="rowcount" value="<?php print $id; ?>" />
-                    <input type="submit" value="<?php print $PMF_LANG["ad_gen_save"]; ?>" name="submit" />
+                    <input class="btn-primary" type="submit" value="<?php print $PMF_LANG["ad_gen_save"]; ?>" name="submit" />
                 </td>
                 <td colspan="4">
                     <?php print $PMF_LANG["ad_gen_page"].' '.$page.(($pages > 0 )? ' '.$PMF_LANG["ad_gen_of"].' '.$pages : ''); ?>
