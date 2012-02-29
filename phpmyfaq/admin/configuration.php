@@ -142,8 +142,8 @@ if ($permission['editconfig']) {
                 <div id="configCache" style="display: none;"></div>
             </fieldset>
             <p>
-                <input class="submit" type="submit" value="<?php print $PMF_LANG['ad_config_save']; ?>" />
-                <input class="submit" type="reset" value="<?php print $PMF_LANG['ad_config_reset']; ?>" />
+                <input class="btn-primary" type="submit" value="<?php print $PMF_LANG['ad_config_save']; ?>" />
+                <input class="btn-inverse" type="reset" value="<?php print $PMF_LANG['ad_config_reset']; ?>" />
             </p>
         </form>
 

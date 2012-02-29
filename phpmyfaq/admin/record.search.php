@@ -69,7 +69,7 @@ if ($permission['editbt'] || $permission['delbt']) {
             </select>
         </p>
         <p>
-            <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["msgSearch"]; ?>" />
+            <input class="btn-primary" type="submit" name="submit" value="<?php print $PMF_LANG["msgSearch"]; ?>" />
         </p>
     </fieldset>
     </form>

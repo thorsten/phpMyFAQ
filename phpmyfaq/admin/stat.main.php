@@ -164,7 +164,7 @@ if ($permission['viewlog']) {
             </p>
 
             <p>
-                <input class="submit" type="submit" name="statbrowse" value="<?php print $PMF_LANG["ad_stat_ok"]; ?>" />
+                <input class="btn-primary" type="submit" name="statbrowse" value="<?php print $PMF_LANG["ad_stat_ok"]; ?>" />
             </p>
 
         </fieldset>
@@ -201,7 +201,7 @@ if ($permission['viewlog']) {
             </p>
 
             <p>
-            <input class="submit" type="submit" name="statdelete" value="<?php print $PMF_LANG['ad_stat_delete']; ?>" />
+            <input class="btn-primary" type="submit" name="statdelete" value="<?php print $PMF_LANG['ad_stat_delete']; ?>" />
             </p>
         </fieldset>
         </form>

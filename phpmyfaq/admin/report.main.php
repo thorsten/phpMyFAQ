@@ -86,7 +86,7 @@ if ($permission['reports']) {
             <input type="checkbox" name="report_visits" id="report_visits" class="radio" checked="checked" value="1" />
         </p>
 
-        <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_stat_report_make_report"]; ?>" />
+        <input class="btn-primary" type="submit" value="<?php print $PMF_LANG["ad_stat_report_make_report"]; ?>" />
 
     </fieldset>
     </form>
