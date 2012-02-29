@@ -65,10 +65,13 @@ $leftVarsOnly   = array_slice($_SESSION['trans']['leftVarsOnly'],
 $rightVarsOnly  = &$_SESSION['trans']['rightVarsOnly'];
 
 
-$options = array('baseUrl'   => PMF_Link::getSystemRelativeUri() . '?' . str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
-                 'total'     => count($_SESSION['trans']['leftVarsOnly']),
-                 'perPage'   => $itemsPerPage,
-                 'layoutTpl' => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>');
+$options = array(
+    'baseUrl'   => PMF_Link::getSystemRelativeUri('index.php') . '?' .
+                   str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
+    'total'     => count($_SESSION['trans']['leftVarsOnly']),
+    'perPage'   => $itemsPerPage,
+    'layoutTpl' => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>'
+);
 
 $pagination = new PMF_Pagination($options);
 $pageBar    = $pagination->render();
