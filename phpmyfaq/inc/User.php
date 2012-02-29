@@ -96,13 +96,6 @@ class PMF_User
     public $userdata = null;
 
     /**
-     * Encrypted password string
-     *
-     * @var string
-     */
-    public $encrypted_password = '';
-
-    /**
      * Default Authentication properties
      *
      * @var array
@@ -313,8 +306,6 @@ class PMF_User
                 $this->errors[] = self::ERROR_USER_NO_USERLOGINDATA . 'error(): ' . $this->db->error();
                 return false;
             }
-            $loginData                = $this->db->fetchArray($res);
-            $this->encrypted_password = (string) $loginData['pass'];
         }
         // get user-data
         if (!$this->userdata instanceof PMF_User_UserData) {
