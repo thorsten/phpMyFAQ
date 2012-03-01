@@ -70,7 +70,7 @@ class PMF_Search_FactoryTest extends PHPUnit_Framework_TestCase
         $search = PMF_Search_Factory::create($this->PMF_Language, array('database' => 'sqlite'));
         
         $this->assertEquals(new PMF_Search_Database_Sqlite($this->PMF_Language), $search);
-        $this->assertType('PMF_Search_Database_Sqlite', $search);
+        $this->assertInstanceOf('PMF_Search_Database_Sqlite', $search);
     }
 
 }

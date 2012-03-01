@@ -23,14 +23,13 @@
  * @since     2010-06-06
  */
 
-define('IS_VALID_PHPMYFAQ', null);
-
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Abstract.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Interface.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Database.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Database/Sqlite.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Driver.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Sqlite.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/Exception.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/Language.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/String.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_String/Abstract.php';
@@ -87,25 +86,25 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
     
     public function testSetDatabaseHandleWrongParameter()
     {
-        $this->setExpectedException('Exception');
+        $this->setExpectedException('PMF_Exception');
         try {
             $this->PMF_Search_Database->setDatabaseHandle('wrongParameter');
         } catch (Exception $expected) {
-            throw new Exception($expected);
+            throw new PMF_Exception($expected);
         }
     }
     
     public function testGetDatabaseHandleType()
     {
         $this->PMF_Search_Database->setDatabaseHandle($this->dbHandle);
-        $this->assertType('PMF_DB_Sqlite', $this->PMF_Search_Database->getDatabaseHandle());
+        $this->assertInstanceOf('PMF_DB_Sqlite', $this->PMF_Search_Database->getDatabaseHandle());
     }
     
     public function testSetAndGetTable()
     {
         $this->PMF_Search_Database->setTable('faqdata');
         $this->assertEquals('faqdata', $this->PMF_Search_Database->getTable());
-        $this->assertType('string', $this->PMF_Search_Database->getTable());
+        $this->assertInternalType('string', $this->PMF_Search_Database->getTable());
     }
     
     public function testSetAndGetTableWithoutTable()
@@ -117,7 +116,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
     {
         $this->PMF_Search_Database->setJoinedTable('faqcategoryrelations');
         $this->assertEquals(' LEFT JOIN faqcategoryrelations ON ', $this->PMF_Search_Database->getJoinedTable());
-        $this->assertType('string', $this->PMF_Search_Database->getJoinedTable());
+        $this->assertInternalType('string', $this->PMF_Search_Database->getJoinedTable());
     }
     
     public function testSetAndGetJoinedTableWithoutJoinedTable()
@@ -135,7 +134,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
         $this->PMF_Search_Database->setResultColumns($resultColumns);
         $this->assertEquals('faqdata.id AS id, faqdata.lang AS lang, faqdata.thema AS question, faqdata.content AS answer', 
             $this->PMF_Search_Database->getResultColumns());
-        $this->assertType('string', 
+        $this->assertInternalType('string',
             $this->PMF_Search_Database->getResultColumns());
     }
     
@@ -153,7 +152,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
         $this->PMF_Search_Database->setJoinedColumns($joinedColumns);
         $this->assertEquals('faqdata.id = faqcategoryrelations.record_id AND faqdata.lang = faqcategoryrelations.record_lang ', 
             $this->PMF_Search_Database->getJoinedColumns());
-        $this->assertType('string', 
+        $this->assertInternalType('string',
             $this->PMF_Search_Database->getJoinedColumns());
     }
     
@@ -172,7 +171,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
         $this->PMF_Search_Database->setMatchingColumns($matchingColumns);
         $this->assertEquals('faqdata.thema, faqdata.content, faqdata.keywords', 
             $this->PMF_Search_Database->getMatchingColumns());
-        $this->assertType('string', 
+        $this->assertInternalType('string',
             $this->PMF_Search_Database->getMatchingColumns());
     }
     
@@ -190,7 +189,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
         $this->PMF_Search_Database->setConditions($conditions);
         $this->assertEquals(" AND faqdata.active = 'yes' AND faqcategoryrelations.category_id = 1", 
             $this->PMF_Search_Database->getConditions());
-        $this->assertType('string', 
+        $this->assertInternalType('string',
             $this->PMF_Search_Database->getConditions());
     }
     
@@ -206,7 +205,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
         $this->PMF_Search_Database->setMatchingColumns(array('faqdata.author'));
         $this->assertEquals(" (faqdata.author LIKE '%Thorsten%')", 
             $this->PMF_Search_Database->getMatchClause('Thorsten'));
-        $this->assertType('string', 
+        $this->assertInternalType('string',
             $this->PMF_Search_Database->getMatchClause('Thorsten'));
     }
     
@@ -216,7 +215,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
         $this->PMF_Search_Database->setMatchingColumns(array('faqdata.author'));
         $this->assertEquals(" (faqdata.author LIKE '%Thorsten%') OR (faqdata.author LIKE '%Rinne%')", 
             $this->PMF_Search_Database->getMatchClause('Thorsten Rinne'));
-        $this->assertType('string', 
+        $this->assertInternalType('string',
             $this->PMF_Search_Database->getMatchClause('Thorsten'));
     }
     
@@ -226,7 +225,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
         $this->PMF_Search_Database->setMatchingColumns(array('faqdata.author', 'faqdata.thema'));
         $this->assertEquals(" (faqdata.author LIKE '%Thorsten%' OR faqdata.thema LIKE '%Thorsten%')", 
             $this->PMF_Search_Database->getMatchClause('Thorsten'));
-        $this->assertType('string', 
+        $this->assertInternalType('string',
             $this->PMF_Search_Database->getMatchClause('Thorsten'));
     }
 }
