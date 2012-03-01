@@ -3,4 +3,4 @@ php:
   - 5.2
   - 5.3
   - 5.4
-script: phpunit --configuration phpunit.xml --coverage-text phpmyfaq/tests/AllTests.php
+script: phpunit --configuration phpunit.xml --coverage-text
