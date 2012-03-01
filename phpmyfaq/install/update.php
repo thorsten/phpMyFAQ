@@ -728,15 +728,6 @@ if ($step == 3) {
                 break;
         }
 
-        $instanceData = array(
-            'url'      => $_SERVER['SERVER_NAME '],
-            'instance' => dirname($_SERVER['SCRIP_NAME']),
-            'comment'  => PMF_Configuration::getInstance()->get('main.titleFAQ')
-        );
-        $faqInstance = new PMF_Instance($db);
-        $faqInstance->addInstance($instanceData);
-
-        // @todo: add basic instance configuration
     }
 
     // Perform the queries for updating/migrating the database
@@ -771,6 +762,21 @@ if ($step == 3) {
     // Clear the array with the queries
     unset($query);
     $query = array();
+
+    //
+    // 2nd UPDATES FROM 2.8.0-alpha2
+    //
+    if (version_compare($version, '2.8.0-alpha2', '<')) {
+        $instanceData = array(
+            'url'      => $_SERVER['SERVER_NAME'],
+            'instance' => dirname($_SERVER['SCRIPT_NAME']),
+            'comment'  => PMF_Configuration::getInstance()->get('main.titleFAQ')
+        );
+        $faqInstance = new PMF_Instance($db);
+        $faqInstance->addInstance($instanceData);
+
+        // @todo: add basic instance configuration
+    }
 
     // Always the last step: Update version number
     if (version_compare($version, PMF_System::getVersion(), '<')) {

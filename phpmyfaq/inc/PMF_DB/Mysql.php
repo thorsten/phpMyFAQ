@@ -202,7 +202,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
      * @param  string  $id    The name of the ID column
      * @return integer
      */
-    public function nextID($table, $id)
+    public function nextId($table, $id)
     {
         $select = sprintf("
          SELECT
@@ -214,6 +214,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
            
         $result    = $this->query($select);
         $currentId = mysql_result($result, 0, 'current_id');
+
         return ($currentId + 1);
     }
 

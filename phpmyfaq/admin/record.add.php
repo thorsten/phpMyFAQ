@@ -257,7 +257,7 @@ if ($permission['editbt']) {
     <input type="hidden" name="restricted_users"    value="<?php print $restricted_users; ?>" />
     <input type="hidden" name="grouppermission"     value="<?php print $group_permission; ?>" />
     <input type="hidden" name="restricted_group"    value="<?php print $restricted_groups; ?>" />
-    <p align="center"><input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG['ad_entry_back']; ?>" /></p>
+    <p align="center"><input class="btn-primary" type="submit" name="submit" value="<?php print $PMF_LANG['ad_entry_back']; ?>" /></p>
     </form>
 <?php
     }

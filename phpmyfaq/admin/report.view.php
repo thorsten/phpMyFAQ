@@ -140,7 +140,7 @@ if ($permission['reports']) {
         <input type="hidden" name="report_last_modified_person" id="report_last_modified_person" class="radio" value="<?php print $useLastModified; ?>">
         <input type="hidden" name="report_url" id="report_url" value="<?php print $useUrl; ?>" /></td>
         <input type="hidden" name="report_visits" id="report_visits" value="<?php print $useVisits; ?>" /></td>
-        <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_stat_report_make_csv"]; ?>" />
+        <input class="btn-primary" type="submit" value="<?php print $PMF_LANG["ad_stat_report_make_csv"]; ?>" />
     </form>
 <?php
 } else {

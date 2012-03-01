@@ -146,8 +146,8 @@ if ($groupAction == 'delete_confirm' && $permission['delgroup']) {
             <input type="hidden" name="group_id" value="<?php print $groupId; ?>" />
             <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
             <p>
-                <input class="submit" type="submit" name="cancel" value="<?php print $PMF_LANG['ad_gen_cancel']; ?>" />
-                <input type="submit" value="<?php print $PMF_LANG['ad_gen_save']; ?>" />
+                <input class="btn-inverse" type="submit" name="cancel" value="<?php print $PMF_LANG['ad_gen_cancel']; ?>" />
+                <input class="btn-primary" type="submit" value="<?php print $PMF_LANG['ad_gen_save']; ?>" />
             </p>
         </form>
 <?php

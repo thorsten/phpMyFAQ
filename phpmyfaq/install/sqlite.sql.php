@@ -246,7 +246,6 @@ right_id INT(11) NOT NULL,
 PRIMARY KEY (group_id, right_id)
 )";
 
-/*
 //faqinstances
 $query[] = "CREATE TABLE " . $sqltblpre . "faqinstances (
 id INT(11) NOT NULL,
@@ -265,7 +264,6 @@ config_name VARCHAR(255) NOT NULL default '',
 config_value VARCHAR(255) DEFAULT NULL,
 PRIMARY KEY (instance_id, config_name)
 )";
-*/
 
 //faqlinkverifyrules
 $query[] = "CREATE TABLE ".$sqltblpre."faqlinkverifyrules (
