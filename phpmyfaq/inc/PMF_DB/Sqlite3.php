@@ -201,9 +201,9 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
         $arr = array();
 
         $result = $this->query("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
-        while ($row = $this->fetchAssoc($result)) {
+        while ($row = $this->fetch_assoc($result)) {
             $num_result = $this->query('SELECT * FROM '.$row['name']);
-            $arr[$row['name']] = $this->numRows($num_result);
+            $arr[$row['name']] = $this->num_rows($num_result);
         }
 
         return $arr;
