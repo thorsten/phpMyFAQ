@@ -1,6 +1,7 @@
 <?php
 /**
- * The PMF_DB_Sqlsrv class provides methods and functions for SQL Server Driver for PHP from Microsoft.
+ * The PMF_DB_Sqlsrv class provides methods and functions for SQL Server Driver
+ * for PHP from Microsoft.
  * 
  * PHP Version 5.2
  *
@@ -17,7 +18,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Db
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2011 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-02-18
@@ -33,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Db
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2011 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-02-18
@@ -303,22 +304,6 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
         }
     }
 
-    /**
-     * Move internal result pointer
-     *
-     * Moves the pointer within the query result to a specified location, or
-     * to the beginning if nothing is specified.
-     *
-     * @param resource $result    Resultset
-     * @param integer  $rowNumber Row number
-     * 
-     * @return boolean
-     */
-    public function resultSeek($result, $rowNumber)
-    {
-        return sqlsrv_fetch($result, SQLSRV_SCROLL_ABSOLUTE, $rowNumber); 
-    }
-    
     /**
      * Closes the connection to the database.
      *

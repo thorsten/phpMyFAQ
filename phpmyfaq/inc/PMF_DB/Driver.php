@@ -1,6 +1,6 @@
 <?php
 /**
- * Base interface for database drivers.
+ * Interface for database drivers
  * 
  * PHP Version 5.2
  *
@@ -18,7 +18,7 @@
  * @package   PMF_DB
  * @author    Johannes Schlüter <johannes@php.net>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2011 phpMyFAQ Team
+ * @copyright 2007-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2007-08-19
@@ -35,7 +35,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_DB
  * @author    Johannes Schlüter <johannes@php.net>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2011 phpMyFAQ Team
+ * @copyright 2007-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2007-08-19
@@ -144,19 +144,6 @@ interface PMF_DB_Driver
      * @return string
      */
     public function getTableNames($prefix = '');
-
-    /**
-     * Move internal result pointer
-     *
-     * Moves the pointer within the query result to a specified location, or
-     * to the beginning if nothing is specified.
-     *
-     * @param resource $result    Resultset
-     * @param integer  $rowNumber Row number
-     * 
-     * @return boolean
-     */
-    public function resultSeek($result, $rowNumber);
 
     /**
      * Closes the connection to the database.

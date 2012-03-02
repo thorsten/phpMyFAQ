@@ -51,10 +51,7 @@
 
  <target name="phpunit" description="Run unit tests and generate junit.xml and clover.xml">
   <exec executable="phpunit" failonerror="true">
-    <arg line="--coverage-clover ${basedir}/build/logs/clover.xml
-               --coverage-html ${basedir}/build/coverage/
-               --log-junit ${basedir}/build/logs/junit.xml
-               ${basedir}/phpmyfaq/tests" />
+    <arg line="--configuration phpunit.xml --coverage-text" />
   </exec>
  </target>
 

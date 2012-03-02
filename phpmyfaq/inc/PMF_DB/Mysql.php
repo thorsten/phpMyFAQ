@@ -1,9 +1,9 @@
 <?php
 /**
- * The PMF_DB_Mysql class provides methods and functions for a MySQL 4.0.x
- * and higher database.
- * 
- * PHP Version 5.2.3
+ * The PMF_DB_Mysql class provides methods and functions for MySQL 5.0.x,
+ * 5.1.x, and 5.5.x databases.
+ *
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,7 +20,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Meikel Katzengreis <meikel@katzengreis.com>
  * @author    Tom Rochester <tom.rochester@gmail.com>
- * @copyright 2003-2011 phpMyFAQ Team
+ * @copyright 2003-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @package   2003-02-24
@@ -38,7 +38,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Meikel Katzengreis <meikel@katzengreis.com>
  * @author    Tom Rochester <tom.rochester@gmail.com>
- * @copyright 2003-2011 phpMyFAQ Team
+ * @copyright 2003-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @package   2003-02-24
@@ -221,7 +221,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
      /**
       * Returns the error string.
       * 
-      * @return void
+      * @return string
       */
     public function error()
     {
@@ -231,7 +231,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
     /**
      * Returns the client version string.
      * 
-     * @return void
+     * @return string
      */
     public function clientVersion()
     {
@@ -241,7 +241,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
     /**
      * Returns the server version string.
      *
-     * @return void
+     * @return string
      */
     public function serverVersion()
     {
@@ -269,22 +269,6 @@ class PMF_DB_Mysql implements PMF_DB_Driver
         }
     }
 
-    /**
-     * Move internal result pointer
-     *
-     * Moves the pointer within the query result to a specified location, or
-     * to the beginning if nothing is specified.
-     *
-     * @param resource $result    Resultset
-     * @param integer  $rowNumber Row number
-     * 
-     * @return boolean
-     */
-    public function resultSeek($result, $rowNumber)
-    {
-        return mysql_data_seek($result, $rowNumber);
-    }
-    
     /**
      * Closes the connection to the database.
      *

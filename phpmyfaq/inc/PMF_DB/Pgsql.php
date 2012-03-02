@@ -297,23 +297,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
             }
         }
     }
-    
-    /**
-     * Move internal result pointer
-     *
-     * Moves the pointer within the query result to a specified location, or
-     * to the beginning if nothing is specified.
-     *
-     * @param resource $result    Resultset
-     * @param integer  $rowNumber Row number
-     * 
-     * @return boolean
-     */
-    public function resultSeek($result, $rowNumber)
-    {
-        return pg_result_seek($result, $rowNumber);
-    }
-    
+
     /**
      * Closes the connection to the database.
      *
