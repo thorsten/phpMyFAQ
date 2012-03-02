@@ -81,7 +81,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
     public function testSetDatabaseHandle()
     {
         $this->PMF_Search_Database->setDatabaseHandle($this->dbHandle);
-        $this->assertEquals(new PMF_DB_Sqlite(), $this->PMF_Search_Database->getDatabaseHandle());
+        $this->assertEquals(new PMF_DB_Sqlite3(), $this->PMF_Search_Database->getDatabaseHandle());
     }
 
     public function testSetDatabaseHandleWrongParameter()
@@ -97,7 +97,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
     public function testGetDatabaseHandleType()
     {
         $this->PMF_Search_Database->setDatabaseHandle($this->dbHandle);
-        $this->assertInstanceOf('PMF_DB_Sqlite', $this->PMF_Search_Database->getDatabaseHandle());
+        $this->assertInstanceOf('PMF_DB_Sqlite3', $this->PMF_Search_Database->getDatabaseHandle());
     }
 
     public function testSetAndGetTable()
