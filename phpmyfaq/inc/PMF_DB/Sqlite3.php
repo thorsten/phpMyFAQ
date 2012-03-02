@@ -206,9 +206,27 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
     /**
      * This function returns the table status.
      *
-     * @return  array
+     * @return array
      */
     public function getTableStatus()
+    {
+        $arr = array();
+
+        $result = $this->query("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
+        while ($row = $this->fetchAssoc($result)) {
+            $num_result = $this->query('SELECT * FROM '.$row['name']);
+            $arr[$row['name']] = $this->numRows($num_result);
+        }
+
+        return $arr;
+    }
+
+    /**
+     * This function returns the table status.
+     *
+     * @return  array
+     */
+    public function getTableNames($prefix = '')
     {
         $arr = array();
 
