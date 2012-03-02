@@ -101,7 +101,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      * @param   string
      * @return  string
      */
-    public function escape_string($string)
+    public function escape($string)
     {
         return $this->conn->escapeString($string);
     }
@@ -112,7 +112,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      * @param   mixed $result
      * @return object
      */
-    public function fetch_object($result)
+    public function fetchObject($result)
     {
         $array = $this->fetch_assoc($result);
 
@@ -136,13 +136,25 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
     }
 
     /**
+     * Fetch a result row as an array
+     *
+     * @param   SQLite3Result $result
+     *
+     * @return  array
+     */
+    public function fetchArray($result)
+    {
+        return $result->fetchArray();
+    }
+
+    /**
      * Fetch a result row as an associate array
      *
      * @param   SQLite3Result $result
      *
      * @return  array
      */
-    public function fetch_assoc($result)
+    public function fetchAssoc($result)
     {
         return $result->fetchArray(SQLITE3_ASSOC);
     }
@@ -174,7 +186,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      * @param   SQLite3Result $result
      * @return  integer
      */
-    public function num_rows($result)
+    public function numRows($result)
     {
         return count($result->fetchArray());
     }
@@ -185,7 +197,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      * @param   mixed $result
      * @return  integer
      */
-    public function sqllog()
+    public function log()
     {
         return $this->sqllog;
     }
@@ -215,7 +227,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      * @param   string      the name of the ID column
      * @return  int
      */
-    public function nextID($table, $id)
+    public function nextId($table, $id)
     {
         $result = (int)$this->conn->querySingle(
             sprintf(
@@ -245,7 +257,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      *
      * @return string
      */
-    public function client_version()
+    public function clientVersion()
     {
         $version = $this->conn->version();
 
@@ -257,9 +269,9 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      *
      * @return string
      */
-    public function server_version()
+    public function serverVersion()
     {
-        return $this->client_version();
+        return $this->clientVersion();
     }
 
     /**
@@ -299,7 +311,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      *
      * @return boolean
      */
-    public function dbclose()
+    public function close()
     {
         return $this->conn->close();
     }
