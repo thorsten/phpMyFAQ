@@ -1118,3 +1118,6 @@ $PMF_LANG["ad_search_delfail"] = "Der Suchbegriff konnte nicht gelöscht werden.
 $PMF_LANG["msg_about_faq"] = "Über diese FAQ";
 $LANG_CONF["security.useSslOnly"] = array(0 => "checkbox", 1 => "FAQ nur mit SSL nutzen (Standard: deaktiviert)");
 $PMF_LANG["msgTableOfContent"] = "Inhaltsverzeichnis";
+
+// added 2.7.5 - 2012-03-02 by Thorsten
+$PMF_LANG["msgExportAllFaqs"] = "FAQ als PDF speichern";

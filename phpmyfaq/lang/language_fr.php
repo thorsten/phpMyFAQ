@@ -921,3 +921,4 @@ $LANG_CONF['security.ssoLogoutRedirect'] = array(0 => "input", 1 => "Single Sign
 $LANG_CONF['main.dateFormat'] = array(0 => "input", 1 => "Format de date (défault: Y-m-d H:i)");
 $LANG_CONF['security.enableLoginOnly'] = array(0 => "checkbox", 1 => "Complete secured FAQ (default: deactivated)");
 $LANG_CONF['security.useSslOnly'] = array(0 => "checkbox", 1 => "FAQ with SSL only (default: deactivated)");
+$PMF_LANG["msgExportAllFaqs"] = "Générer PDF complet";
