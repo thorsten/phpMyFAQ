@@ -19,7 +19,7 @@
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Helmut Tessarek <tessus@evermeet.cx>
- * @copyright 2005-2011 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-04-16
@@ -36,7 +36,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Helmut Tessarek <tessus@evermeet.cx>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-04-16
@@ -275,22 +275,6 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
         }
     }
 
-    /**
-     * Move internal result pointer
-     *
-     * Moves the pointer within the query result to a specified location, or
-     * to the beginning if nothing is specified.
-     *
-     * @param resource $result    Resultset
-     * @param integer  $rowNumber Row number
-     * 
-     * @return boolean
-     */
-    public function resultSeek($result, $rowNumber)
-    {
-        return db2_result($result, $rowNumber);
-    }
-    
     /**
      * This function closes the connection to the database.
      *

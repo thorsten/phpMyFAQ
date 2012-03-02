@@ -1,7 +1,7 @@
 <?php
 /**
- * The PMF_DB_Mysqli class provides methods and functions for a MySQL 4.1.x,
- * 5.0.x, 5.1.x, and 5.5.x databases.
+ * The PMF_DB_Mysqli class provides methods and functions for MySQL 5.0.x,
+ * 5.1.x, and 5.5.x databases.
  * 
  * PHP Version 5.2
  *
@@ -19,7 +19,7 @@
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    David Soria Parra <dsoria@gmx.net>
- * @copyright 2005-2011 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @package   2005-02-21
@@ -36,7 +36,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    David Soria Parra <dsoria@gmx.net>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @package   2005-02-21
@@ -282,22 +282,6 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
         }
     }
 
-    /**
-     * Move internal result pointer
-     *
-     * Moves the pointer within the query result to a specified location, or
-     * to the beginning if nothing is specified.
-     *
-     * @param resource $result    Resultset
-     * @param integer  $rowNumber Row number
-     * 
-     * @return boolean
-     */
-    public function resultSeek($result, $rowNumber)
-    {
-        return mysqli_data_seek($result, $rowNumber);
-    }
-    
     /**
      * Closes the connection to the database.
      * 

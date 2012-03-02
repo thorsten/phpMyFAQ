@@ -1,6 +1,7 @@
 <?php
 /**
- * The db_sqlite class provides methods and functions for a sqlite database.
+ * The PMF_DB_Sqlite class provides methods and functions for a SQLite v2
+ * database. This class is deprecated for PHP 5.3 and PHP 5.4.
  *
  * PHP Version 5.2
  *
@@ -18,10 +19,10 @@
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Johannes Schlüter <johannes@php.net>
- * @since     2005-06-27
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2005-2011 phpMyFAQ Team
+ * @since     2005-06-27
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -30,15 +31,15 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * PMF_DB_Sqlite
- * 
+ *
  * @category  phpMyFAQ
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Johannes Schlüter <johannes@php.net>
- * @since     2005-06-27
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2005-2010 phpMyFAQ Team
+ * @since     2005-06-27
  */
 class PMF_DB_Sqlite implements PMF_DB_Driver
 {
@@ -258,22 +259,6 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
         }
     }
 
-    /**
-     * Move internal result pointer
-     *
-     * Moves the pointer within the query result to a specified location, or
-     * to the beginning if nothing is specified.
-     *
-     * @param resource $result    Resultset
-     * @param integer  $rowNumber Row number
-     * 
-     * @return boolean
-     */
-    public function resultSeek($result, $rowNumber)
-    {
-        return sqlite_seek($result, $rowNumber);
-    }
-    
     /**
      * Closes the connection to the database.
      * 

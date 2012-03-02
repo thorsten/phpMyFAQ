@@ -1,6 +1,6 @@
 <?php
 /**
- * The db_ibase class provides methods and functions for Firebird/InterBase
+ * The PMF_DB_Ibase class provides methods and functions for Firebird/InterBase
  * databases.
  * 
  * PHP Version 5.2
@@ -18,7 +18,7 @@
  * @category  phpMyFAQ
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2011 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-28
@@ -34,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-28
@@ -241,7 +241,7 @@ class PMF_DB_Ibase implements PMF_DB_Driver
     */
     function server_version()
     {
-        return ibase_server_info();
+        return ibase_server_info($this->conn);
     }
 
     /**
@@ -255,22 +255,6 @@ class PMF_DB_Ibase implements PMF_DB_Driver
         $this->tableNames[] = $prefix.'faquser';
     }
 
-    /**
-     * Move internal result pointer
-     *
-     * Moves the pointer within the query result to a specified location, or
-     * to the beginning if nothing is specified.
-     *
-     * @param resource $result    Resultset
-     * @param integer  $rowNumber Row number
-     * 
-     * @return boolean
-     */
-    public function resultSeek($result, $rowNumber)
-    {
-        return true;
-    }
-    
     /**
     * Closes the connection to the database.
     *

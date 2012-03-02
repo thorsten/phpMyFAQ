@@ -1,7 +1,7 @@
 <?php
 /**
- * The db_mssql class provides methods and functions for a Microsoft SQL Server
- * database.
+ * The PMF_DB_Mssql class provides methods and functions for a Microsoft SQL
+ * Server database.
  *
  * PHP Version 5.2
  *
@@ -278,22 +278,6 @@ class PMF_DB_Mssql implements PMF_DB_Driver
         }
     }
 
-    /**
-     * Move internal result pointer
-     *
-     * Moves the pointer within the query result to a specified location, or
-     * to the beginning if nothing is specified.
-     *
-     * @param resource $result    Resultset
-     * @param integer  $rowNumber Row number
-     * 
-     * @return boolean
-     */
-    public function resultSeek($result, $rowNumber)
-    {
-        return mssql_data_seek($result, $rowNumber);
-    }
-    
     /**
      * Closes the connection to the database.
      *

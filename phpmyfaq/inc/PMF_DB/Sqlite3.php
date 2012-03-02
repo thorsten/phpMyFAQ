@@ -1,6 +1,7 @@
 <?php
 /**
- * The PMF_DB_Sqlite3 class provides methods and functions for a SQLite v3 database
+ * The PMF_DB_Sqlite3 class provides methods and functions for a SQLite v3
+ * database
  *
  * PHP Version 5.2
  *
@@ -260,38 +261,6 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
     public function server_version()
     {
         return $this->client_version();
-    }
-
-    /**
-     * Returns an array with all table names
-     *
-     * @return array
-     */
-    public function getTableNames($prefix = '')
-    {
-        // First, declare those tables that are referenced by others
-        $this->tableNames[] = $prefix.'faquser';
-
-        $result = $this->query("SELECT name FROM sqlite_master WHERE type='table' ".(('' == $prefix) ? '':  "AND name LIKE '".$prefix."%' ")."ORDER BY name");
-        while ($row = $this->fetch_object($result)) {
-            if (!in_array($row->name, $this->tableNames)) {
-                $this->tableNames[] = $row->name;
-            }
-        }
-    }
-
-    /**
-     * Moves the pointer within the query result to a specified location, or
-     * to the beginning if nothing is specified.
-     *
-     * @param resource $result    Resultset
-     * @param integer  $rowNumber Row number
-     *
-     * @return boolean
-     */
-    public function resultSeek($result, $rowNumber)
-    {
-        return null;
     }
 
     /**
