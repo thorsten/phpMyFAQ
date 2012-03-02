@@ -103,7 +103,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      */
     public function escape($string)
     {
-        return $this->conn->escapeString($string);
+        return SQLite3::escapeString($string);
     }
 
     /**
