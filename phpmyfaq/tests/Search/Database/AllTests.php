@@ -46,7 +46,7 @@ class PMF_Search_Database_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('phpMyFAQ PMF_Search Database');
         
-        $suite->addTestSuite('PMF_Search_Database_MysqlTest');
+        //$suite->addTestSuite('PMF_Search_Database_MysqlTest');
         //$suite->addTestSuite('PMF_Search_Database_PgsqlTest');
         
         return $suite;

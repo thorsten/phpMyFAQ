@@ -33,6 +33,7 @@ require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Database.php
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Database/Sqlite.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Driver.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Sqlite.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/Exception.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/Language.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/String.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_String/Abstract.php';
@@ -89,11 +90,11 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
 
     public function testSetDatabaseHandleWrongParameter()
     {
-        $this->setExpectedException('Exception');
+        $this->setExpectedException('PMF_Exception');
         try {
             $this->PMF_Search_Database->setDatabaseHandle('wrongParameter');
         } catch (Exception $expected) {
-            throw new Exception($expected);
+            throw new PMF_Exception($expected);
         }
     }
 
