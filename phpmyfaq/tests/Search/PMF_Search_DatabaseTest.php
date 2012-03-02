@@ -28,7 +28,7 @@ require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Interface.ph
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Database.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Database/Sqlite.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Driver.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Sqlite.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Sqlite3.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/Exception.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/Language.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/String.php';
@@ -66,7 +66,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
         
         $this->PMF_Language        = new PMF_Language();
         $this->PMF_Search_Database = new PMF_Search_Database($this->PMF_Language);
-        $this->dbHandle            = new PMF_DB_Sqlite();
+        $this->dbHandle            = new PMF_DB_Sqlite3();
     }
     
     /**
@@ -81,7 +81,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
     public function testSetDatabaseHandle()
     {
         $this->PMF_Search_Database->setDatabaseHandle($this->dbHandle);
-        $this->assertEquals(new PMF_DB_Sqlite(), $this->PMF_Search_Database->getDatabaseHandle());
+        $this->assertEquals(new PMF_DB_Sqlite3(), $this->PMF_Search_Database->getDatabaseHandle());
     }
     
     public function testSetDatabaseHandleWrongParameter()
@@ -97,7 +97,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
     public function testGetDatabaseHandleType()
     {
         $this->PMF_Search_Database->setDatabaseHandle($this->dbHandle);
-        $this->assertInstanceOf('PMF_DB_Sqlite', $this->PMF_Search_Database->getDatabaseHandle());
+        $this->assertInstanceOf('PMF_DB_Sqlite3', $this->PMF_Search_Database->getDatabaseHandle());
     }
     
     public function testSetAndGetTable()
