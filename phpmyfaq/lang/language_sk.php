@@ -553,30 +553,30 @@ $PMF_LANG["ad_entry_fontcolor"] = "Farba písma: ";
 $PMF_LANG["ad_entry_fontsize"] = "Veľkosť písma: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF['main.language'] = array(0 => "Vyberte", 1 => "Language-File");
+$LANG_CONF['main.language'] = array(0 => "select", 1 => "Language-File");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Povoliť automatický obsah jednania");
-$LANG_CONF['main.titleFAQ'] = array(0 => "vstup", 1 => "Názov FAQ");
+$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Názov FAQ");
 $LANG_CONF['main.currentVersion'] = array(0 => "tlačiť", 1 => "Verzia FAQ");
-$LANG_CONF["main.metaDescription"] = array(0 => "vstup", 1 => "Popis stránky");
-$LANG_CONF["main.metaKeywords"] = array(0 => "vstup", 1 => "Kľúčové slová pre Spiders");
-$LANG_CONF["main.metaPublisher"] = array(0 => "vstup", 1 => "Meno vydavateľa");
-$LANG_CONF['main.administrationMail'] = array(0 => "vstup", 1 => "E-mailová adresa administrátora");
-$LANG_CONF["main.contactInformations"] = array(0 => "pole", 1 => "Kontaktné informácie");
-$LANG_CONF["main.send2friendText"] = array(0 => "pole", 1 => "Text pre odkaz poslať známemu");
-$LANG_CONF['records.maxAttachmentSize'] = array(0 => "vstup", 1 => "maximumálna veľkosť prílohy v Bytoch (max. %sByte)");
+$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Popis stránky");
+$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Kľúčové slová pre Spiders");
+$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Meno vydavateľa");
+$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "E-mailová adresa administrátora");
+$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Kontaktné informácie");
+$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Text pre odkaz poslať známemu");
+$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "maximumálna veľkosť prílohy v Bytoch (max. %sByte)");
 $LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Pripojiť prílohu k položkám?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "použiť stopovač?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "použiť Adminlog?");
 $LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Chcete aby bola IP skontrolovaná pri kontrole UINs v admin.php?");
-$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "vstup", 1 => "Počet tém na stránku");
-$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "vstup", 1 => "Počet článkov");
-$LANG_CONF['security.bannedIPs'] = array(0 => "pole", 1 => "Zakázať tieto IP");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Počet tém na stránku");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Počet článkov");
+$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Zakázať tieto IP");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktivovať mód_podporu prepisovania? (prednastavené: nepovoliť)");
 $LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Chcete povoliť LDAP podporu? (Prednastavené: nepovoliť)");
-$LANG_CONF["main.referenceURL"] = array(0 => "vstup", 1 => "Overiť URL (e.g.: http://www.example.org/faq)");
-$LANG_CONF["main.urlValidateInterval"] = array(0 => "vstup", 1 => "Interval medzi AJAX overením (v sekundách)");
+$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Overiť URL (e.g.: http://www.example.org/faq)");
+$LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Interval medzi AJAX overením (v sekundách)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Vypnúť viditeľnosť nových otázok?");
-$LANG_CONF['security.permLevel'] = array(0 => "vyberte", 1 => "Úroveň povolenia");
+$LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Úroveň povolenia");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "ako novú hlavnú kategóriu";
 $PMF_LANG["ad_categ_paste_error"] = "Presunúť túto kategóriu nie je možné.";
@@ -863,7 +863,7 @@ $PMF_LANG['ad_comment_news'] = 'Komentáre v záznamoch noviniek:';
 $PMF_LANG['ad_groups'] = 'Skupiny';
 
 // added v2.0.0 - 2007-03-10 by Thorsten
-$LANG_CONF['records.orderby'] = array(0 => 'zvoľte', 1 => 'Triedenie záznamov (podľa zakladateľa)');
+$LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'Triedenie záznamov (podľa zakladateľa)');
 $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Triedenie záznamov (zostupne alebo vzostupne)');
 $PMF_LANG['ad_conf_order_id'] = 'ID (prednastavené)';
 $PMF_LANG['ad_conf_order_thema'] = 'Názov';
@@ -969,7 +969,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = 'Počas posielania jazykového súbo
 $PMF_LANG['msgTransToolPercent'] = 'Percento';
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['records.attachmentsPath'] = array(0 => "vstup", 1 => "Cesta k uloženým prílohám.<br /><small>Relative path means a folder within web root</small>");
+$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Cesta k uloženým prílohám.<br /><small>Relative path means a folder within web root</small>");
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "Súbor, ktorý sa pokúšate stiahnuť nebol na tomto serveri nájdený.";
@@ -981,7 +981,7 @@ $PMF_LANG["plmsgUserOnline"][0] = "%d užívateľ online";
 $PMF_LANG["plmsgUserOnline"][1] = "%d užívatelia online";
 
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy
-$LANG_CONF['main.templateSet'] = array(0 => "zvoľte", 1 => "Šablóna nastavená na použitie");
+$LANG_CONF['main.templateSet'] = array(0 => "select", 1 => "Šablóna nastavená na použitie");
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras
 $PMF_LANG['msgTransToolRemove'] = 'Odstrániť';
@@ -1017,7 +1017,7 @@ $PMF_LANG["rightsLanguage"]['approverec'] = "schváliť záznamy";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF["records.enableAttachmentEncryption"] = array(0 => "checkbox", 1 => "Povoliť šifrovanie príloh <br><small>Ignorovať, keď sú prílohy nepovolené</small>");
-$LANG_CONF["records.defaultAttachmentEncKey"] = array(0 => "vstup", 1 => 'Predvolený šifrovací kľúč príloh <br><small>Ignorovať, keď je šifrovanie príloh nepovolené</small><br><small><font color="red">WARNING: Toto nastavenie nemeňte, pokiaľ ste už povolili šifrovanie súborov!!!</font></small>');
+$LANG_CONF["records.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Predvolený šifrovací kľúč príloh <br><small>Ignorovať, keď je šifrovanie príloh nepovolené</small><br><small><font color="red">WARNING: Toto nastavenie nemeňte, pokiaľ ste už povolili šifrovanie súborov!!!</font></small>');
 //$LANG_CONF["records.attachmentsStorageType"] = array(0 => "select", 1 => "Attachment storage type");
 //$PMF_LANG['att_storage_type'][0] = 'Filesystem';
 //$PMF_LANG['att_storage_type'][1] = 'Database';
@@ -1041,8 +1041,8 @@ $PMF_LANG['ad_record_active'] = 'Aktívny';
 $PMF_LANG['msgAttachmentInvalid'] = 'Príloha je chybná, prosím informujte administrátora';
 
 // added 2.6.0-alpha - 2009-11-02 by max
-$LANG_CONF['search.numberSearchTerms']   = array(0 => 'vstup', 1 => 'Počet nájdených položiek');
-$LANG_CONF['records.orderingPopularFaqs'] = array(0 => "zvoľte", 1 => "Triedenie top FAQ");
+$LANG_CONF['search.numberSearchTerms']   = array(0 => "input", 1 => 'Počet nájdených položiek');
+$LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "Triedenie top FAQ");
 $PMF_LANG['list_all_users']            = 'Zobraziť všetkých užívateľov';
 
 $PMF_LANG['records.orderingPopularFaqs.visits'] = "zobraziť najnavštevovanejšie položky";

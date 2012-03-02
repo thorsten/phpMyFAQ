@@ -21,6 +21,8 @@ Version 2.8.0-alpha2 - 2012-
 - fixed some bugs (Thorsten, Florian Anderiasch)
 
 Version 2.7.5 - 2012-03-
+- added experimental support for SQLite3 (Thorsten)
+- fixed Slovak translation (Thorsten)
 - fixed some bugs (Thorsten)
 
 Version 2.7.4 - 2012-02-22

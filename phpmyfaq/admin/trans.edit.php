@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2011 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-05-11
@@ -65,11 +65,13 @@ $leftVarsOnly   = array_slice($_SESSION['trans']['leftVarsOnly'],
 $rightVarsOnly  = &$_SESSION['trans']['rightVarsOnly'];
 
 
-$options = array('baseUrl'   => PMF_Link::getSystemRelativeUri() . '?' . str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
-                 'total'     => count($_SESSION['trans']['leftVarsOnly']),
-                 'perPage'   => $itemsPerPage,
-                 'linkTpl'   => '<a href="javascript: go(\'{LINK_URL}\');void(0);">{LINK_TEXT}</a>',
-                 'layoutTpl' => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>');
+$options = array(
+    'baseUrl'   => PMF_Link::getSystemRelativeUri('index.php') . '?' .
+                   str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
+    'total'     => count($_SESSION['trans']['leftVarsOnly']),
+    'perPage'   => $itemsPerPage,
+    'layoutTpl' => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>'
+);
 
 $pagination = new PMF_Pagination($options);
 $pageBar    = $pagination->render();

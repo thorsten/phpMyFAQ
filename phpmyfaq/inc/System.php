@@ -96,6 +96,7 @@ class PMF_System
         'mysqli'  => array('5.2.0', 'MariaDB 5.x (experimental)'),
         'pgsql'   => array('5.2.0', 'PostgreSQL 8.x'),
         'sqlite'  => array('5.2.0', 'SQLite'),
+        'sqlite3' => array('5.3.0', 'SQLite 3 (only PHP 5.3+, experimental)'),
         'mssql'   => array('5.2.0', 'MS SQL Server 2005 / 2008'),
         'sqlsrv'  => array('5.2.0', 'SQL Server Driver for PHP (experimental)')
     );

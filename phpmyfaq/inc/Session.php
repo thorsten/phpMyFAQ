@@ -386,7 +386,7 @@ class PMF_Session
             PMF_COOKIE_NAME_SESSIONID,
             $sessionId, 
             $_SERVER['REQUEST_TIME'] + PMF_SESSION_EXPIRED_TIME,
-            dirname($_SERVER['SCRIPT_NAME']),
-            $_SERVER['HTTP_HOST']);
+            dirname($_SERVER['SCRIPT_NAME'])
+        );
     }
 }

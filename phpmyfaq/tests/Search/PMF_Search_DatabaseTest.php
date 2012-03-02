@@ -23,16 +23,12 @@
  * @since     2010-06-06
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    define('IS_VALID_PHPMYFAQ', null);
-}
-
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Abstract.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Interface.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Database.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Database/Sqlite.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Driver.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Sqlite.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Sqlite3.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/Exception.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/Language.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/String.php';
@@ -70,7 +66,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
 
         $this->PMF_Language        = new PMF_Language();
         $this->PMF_Search_Database = new PMF_Search_Database($this->PMF_Language);
-        $this->dbHandle            = new PMF_DB_Sqlite();
+        $this->dbHandle            = new PMF_DB_Sqlite3();
     }
 
     /**

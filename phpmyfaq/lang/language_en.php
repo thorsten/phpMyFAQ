@@ -1163,6 +1163,9 @@ $PMF_LANG['msg_about_faq'] = 'About this FAQ';
 $LANG_CONF['security.useSslOnly'] = array(0 => 'checkbox', 1 => 'FAQ with SSL only (default: deactivated)');
 $PMF_LANG['msgTableOfContent'] = 'Table of Content';
 
+// added 2.7.5 - 2012-03-02 by Thorsten
+$PMF_LANG["msgExportAllFaqs"] = "Print all as PDF";
+
 // added v2.8.0-alpha - 2011-09-22 by Anatoliy
 $PMF_LANG['cacheControlCenter'] = 'Cache configuration';
 $LANG_CONF['cache.varnishEnable'] = array(0 => 'checkbox', 1 => 'Enable Varnish >=3.0 support<br><small>You will need varnish PECL extension</small>');
