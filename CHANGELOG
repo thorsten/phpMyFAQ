@@ -7,6 +7,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.7.5 - 2012-03-
 - added experimental support for SQLite3 (Thorsten)
+- updaed Spanish translation (Reynaldo Martinez P.)
 - fixed Slovak translation (Thorsten)
 - fixed some bugs (Thorsten)
 
