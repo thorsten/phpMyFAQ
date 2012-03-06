@@ -1,6 +1,7 @@
 <?php
 /**
- * The main class for fetching the configuration, update and delete items.
+ * The main class for fetching the configuration, update and delete items. This
+ * class is also a small Dependency Injection Container for phpMyFAQ.
  * 
  * PHP Version 5.2
  *
