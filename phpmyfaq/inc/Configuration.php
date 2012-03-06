@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Configuration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2006-2011 phpMyFAQ Team
+ * @copyright 2006-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-01-04
@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Configuration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2006-2010 phpMyFAQ Team
+ * @copyright 2006-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2006-01-04
@@ -69,15 +69,23 @@ class PMF_Configuration
     /**
      * Constructor
      *
+     * @param PMF_DB_Driver $database
+     *
      * @return PMF_Configuration
      */
-    private function __construct()
+    public function __construct(PMF_DB_Driver $database = null)
     {
-        $this->_db = PMF_Db::getInstance();
+        if (! is_null($database)) {
+            $this->_db = $database;
+        } else {
+            $this->_db = PMF_Db::getInstance();
+        }
     }
 
     /**
      * Returns the single instance
+     *
+     * @deprecated
      *
      * @return PMF_Configuration
      */
@@ -88,15 +96,6 @@ class PMF_Configuration
             self::$instance = new $className();
         }
         return self::$instance;
-    }
-   
-    /**
-     * __clone() Magic method to prevent cloning
-     * 
-     * @return void
-     */
-    private function __clone()
-    {
     }
        
     /**
