@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2011 phpMyFAQ Team
+ * @copyright 2003-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-12-20
@@ -227,7 +227,7 @@ if ($permission['editcateg']) {
     $category->getMissingCategories();
     $category->buildTree();
 
-    $open = $lastCatId = 0;
+    $open = $lastCatId = $openDiv = 0;
     print '<ul>';
     foreach ($category->catTree as $cat) {
 
@@ -247,13 +247,10 @@ if ($permission['editcateg']) {
         $leveldiff = $open - $level;
 
         if ($leveldiff > 1) {
+
             print '</li>';
             for ($i = $leveldiff; $i > 1; $i--) {
-                printf(
-                    "\n%s</ul>\n%s</li>\n</div>\n",
-                    str_repeat("\t", $level + $i + 1),
-                    str_repeat("\t", $level + $i)
-                );
+                print '</ul></div></li>';
             }
         }
 
@@ -261,18 +258,16 @@ if ($permission['editcateg']) {
             if (($level - $open) == -1) {
                 print '</li>';
             }
-            print "\n".str_repeat("\t", $level + 2)."</ul>\n".str_repeat("\t", $level + 1)."</li>\n";
+            print '</ul></li>';
         } elseif ($level == $open && $y != 0) {
-            print "</li>\n";
+            print '</li>';
         }
 
         if ($level > $open) {
             printf('<div id="div_%d" style="display: none;">', $lastCatId);
-            printf("\n%s<ul>\n%s<li>",
-                str_repeat("\t", $level + 1),
-                str_repeat("\t", $level + 1));
+            print '<ul><li>';
         } else {
-            print str_repeat("\t", $level + 1)."<li>";
+            print '<li>';
         }
 
         if (count($category->getChildren($cat['id'])) != 0) {
