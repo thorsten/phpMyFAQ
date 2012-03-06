@@ -93,7 +93,7 @@ function buildSitemapNode($location, $lastmod = null, $changeFreq = null, $prior
 //
 
 PMF_Init::cleanRequest();
-session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH . trim($faqConfig->get('main.phpMyFAQToken')));
 session_start();
 
 $oFaq = new PMF_Faq();

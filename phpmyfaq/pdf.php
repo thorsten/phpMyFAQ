@@ -31,12 +31,12 @@ define('IS_VALID_PHPMYFAQ', null);
 
 require_once 'inc/Init.php';
 PMF_Init::cleanRequest();
-session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH . trim($faqConfig->get('main.phpMyFAQToken')));
 session_start();
 
 // get language (default: english)
 $Language = new PMF_Language();
-$LANGCODE = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
+$LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 
 // Found an article language?
 $lang = PMF_Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
@@ -59,7 +59,7 @@ if (isset($lang) && PMF_Language::isASupportedLanguage($lang)) {
 PMF_String::init($LANGCODE);
 
 // authenticate with session information
-$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqConfig->get('security.ipCheck'));
 if ($user) {
     $auth = true;
 } else {

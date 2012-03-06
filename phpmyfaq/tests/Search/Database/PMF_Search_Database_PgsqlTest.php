@@ -75,29 +75,29 @@ class PMF_Search_Database_PgsqlTest extends Database_PostgressTest
      */
     public function testSearchRelevance()
     {
-        $faqconfig = PMF_Configuration::getInstance();
+        $faqConfig = new PMF_Configuration($this->db);
 
-        $faqconfig->update(array('search.relevance' => 'thema,content,keywords'));
+        $faqConfig->update(array('search.relevance' => 'thema,content,keywords'));
         $data = $this->PMF_Search->search('pregunta');
         $this->assertEquals(array('1','3','2','4'), array($data[0]->id, $data[1]->id, $data[2]->id, $data[3]->id));
 
-        $faqconfig->update(array('search.relevance' => 'thema,keywords,content'));
+        $faqConfig->update(array('search.relevance' => 'thema,keywords,content'));
         $data = $this->PMF_Search->search('pregunta');
         $this->assertEquals(array('1','2','3','4'), array($data[0]->id, $data[1]->id, $data[2]->id, $data[3]->id));
 
-        $faqconfig->update(array('search.relevance' => 'content,thema,keywords'));
+        $faqConfig->update(array('search.relevance' => 'content,thema,keywords'));
         $data = $this->PMF_Search->search('pregunta');
         $this->assertEquals(array('3','1','2','4'), array($data[0]->id, $data[1]->id, $data[2]->id, $data[3]->id));
 
-        $faqconfig->update(array('search.relevance' => 'content,keywords,thema'));
+        $faqConfig->update(array('search.relevance' => 'content,keywords,thema'));
         $data = $this->PMF_Search->search('pregunta');
         $this->assertEquals(array('3','2','1','4'), array($data[0]->id, $data[1]->id, $data[2]->id, $data[3]->id));
 
-        $faqconfig->update(array('search.relevance' => 'keywords,content,thema'));
+        $faqConfig->update(array('search.relevance' => 'keywords,content,thema'));
         $data = $this->PMF_Search->search('pregunta');
         $this->assertEquals(array('2','3','1','4'), array($data[0]->id, $data[1]->id, $data[2]->id, $data[3]->id));
 
-        $faqconfig->update(array('search.relevance' => 'keywords,thema,content'));
+        $faqConfig->update(array('search.relevance' => 'keywords,thema,content'));
         $data = $this->PMF_Search->search('pregunta');
         $this->assertEquals(array('2','1','3','4'), array($data[0]->id, $data[1]->id, $data[2]->id, $data[3]->id));
     }
@@ -117,14 +117,14 @@ class PMF_Search_Database_PgsqlTest extends Database_PostgressTest
      */
     public function testSearchWithoutRelevance()
     {
-        $faqconfig = PMF_Configuration::getInstance();
+        $faqConfig = new PMF_Configuration($this->db);
 
-        $faqconfig->update(array('search.relevance'       => 'thema,content,keywords',
+        $faqConfig->update(array('search.relevance'       => 'thema,content,keywords',
                                  'search.enableRelevance' => 'true'));
         $data = $this->PMF_Search->search('pregunta');
         $this->assertEquals(array('1','3','2','4'), array($data[0]->id, $data[1]->id, $data[2]->id, $data[3]->id));
 
-        $faqconfig->update(array('search.enableRelevance' => 'false'));
+        $faqConfig->update(array('search.enableRelevance' => 'false'));
         $data = $this->PMF_Search->search('pregunta');
         $this->assertEquals(array('1','2','3','4'), array($data[0]->id, $data[1]->id, $data[2]->id, $data[3]->id));
     }
@@ -158,21 +158,21 @@ class PMF_Search_Database_PgsqlTest extends Database_PostgressTest
      */
     public function testGetMatchingOrder()
     {
-        $faqconfig = PMF_Configuration::getInstance();
+        $faqConfig = new PMF_Configuration($this->db);
 
-        $faqconfig->update(array('search.relevance' => 'thema,content,keywords'));
+        $faqConfig->update(array('search.relevance' => 'thema,content,keywords'));
         $result = $this->PMF_Search_Pgsql->getMatchingOrder('pregunta');
         $this->assertEquals("rel_thema DESC, rel_content DESC, rel_keywords DESC", $result);
 
-        $faqconfig->update(array('search.relevance' => 'thema,content'));
+        $faqConfig->update(array('search.relevance' => 'thema,content'));
         $result = $this->PMF_Search_Pgsql->getMatchingOrder('pregunta');
         $this->assertEquals("rel_thema DESC, rel_content DESC", $result);
 
-        $faqconfig->update(array('search.relevance' => 'thema,content,field1,field2'));
+        $faqConfig->update(array('search.relevance' => 'thema,content,field1,field2'));
         $result = $this->PMF_Search_Pgsql->getMatchingOrder('pregunta');
         $this->assertEquals("rel_thema DESC, rel_content DESC, rel_field1 DESC, rel_field2 DESC", $result);
 
-        $faqconfig->update(array('search.relevance' => ''));
+        $faqConfig->update(array('search.relevance' => ''));
         $result = $this->PMF_Search_Pgsql->getMatchingOrder('pregunta');
         $this->assertEquals("rel_ DESC", $result);
     }

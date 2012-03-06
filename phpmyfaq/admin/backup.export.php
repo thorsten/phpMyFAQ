@@ -35,13 +35,13 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 require_once PMF_ROOT_DIR.'/inc/Init.php';
 PMF_Init::cleanRequest();
-session_name(PMF_COOKIE_NAME_AUTH.trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH.trim($faqConfig->get('main.phpMyFAQToken')));
 session_start();
 
 $action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 
 $auth = false;
-$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqConfig->get('security.ipCheck'));
 if ($user) {
     $auth = true;
 } else {
@@ -74,7 +74,7 @@ if ($permission['backup']) {
 
     $db->getTableNames ( SQLPREFIX );
     $tablenames   = '';
-    $majorVersion = substr($faqconfig->get('main.currentVersion'), 0, 3);
+    $majorVersion = substr($faqConfig->get('main.currentVersion'), 0, 3);
 
     switch ($action) {
         case 'backup_content' :

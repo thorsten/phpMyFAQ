@@ -68,7 +68,7 @@ if ($permission['editcateg']) {
                         
             // All the other translations            
             $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
-            if ($faqconfig->get('main.enableGoogleTranslation') === true && !empty($languages)) {
+            if ($faqConfig->get('main.enableGoogleTranslation') === true && !empty($languages)) {
 
                 $languages     = explode(",", $languages);
                 $category_lang = $category_data['lang'];
@@ -141,7 +141,7 @@ if ($permission['editcateg']) {
         
         // All the other translations            
         $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
-        if ($faqconfig->get('main.enableGoogleTranslation') === true && !empty($languages)) {
+        if ($faqConfig->get('main.enableGoogleTranslation') === true && !empty($languages)) {
 
             $languages     = explode(",", $languages);
             $category_lang = $category_data['lang'];

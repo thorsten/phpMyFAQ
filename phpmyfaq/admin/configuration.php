@@ -41,7 +41,7 @@ if ($permission['editconfig']) {
         $editData        = PMF_Filter::filterInputArray(INPUT_POST, array('edit' => $checks));
         $message         = '';
         $userAction      = 'listConfig';
-        $oldConfigValues = $faqconfig->config;
+        $oldConfigValues = $faqConfig->config;
 
         /* XXX the cache concept is designed to be able to activate only one cache engine per time
                so if there are more cache services implemented, respect it here*/
@@ -70,7 +70,7 @@ if ($permission['editconfig']) {
             }
         }
 
-        $faqconfig->update($newConfigValues);
+        $faqConfig->update($newConfigValues);
     }
     // Lists the current configuration
     if ('listConfig' == $userAction) {

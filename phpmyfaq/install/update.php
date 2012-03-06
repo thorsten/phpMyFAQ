@@ -52,6 +52,8 @@ define('SQLPREFIX', $DB['prefix']);
 $db = PMF_Db::factory($DB["type"]);
 $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 
+$faqConfig = new PMF_Configuration($db);
+
 /**
  * Print out the HTML Footer
  *
@@ -141,9 +143,8 @@ if (! is_readable(PMF_ROOT_DIR.'/inc/data.php') && ! is_readable(PMF_ROOT_DIR.'/
 
 /**************************** STEP 1 OF 3 ***************************/
 if ($step == 1) {
-    
-    $faqconfig = PMF_Configuration::getInstance();
-    $version   = $faqconfig->get('main.currentVersion');
+
+    $version = $faqConfig->get('main.currentVersion');
 ?>
         <form action="update.php?step=2" method="post">
             <input name="version" type="hidden" value="<?php print $version; ?>"/>
@@ -329,7 +330,7 @@ if ($step == 3) {
     //
     if (version_compare($version, '2.6.0-alpha', '<')) {
         
-        require '../lang/' . PMF_Configuration::getInstance()->get('main.language');
+        require '../lang/' . $faqConfig->get('main.language');
         
         if (isset($PMF_LANG['metaCharset']) && strtolower($PMF_LANG['metaCharset']) != 'utf-8') {
             // UTF-8 Migration
@@ -770,7 +771,7 @@ if ($step == 3) {
         $instanceData = array(
             'url'      => $_SERVER['SERVER_NAME'],
             'instance' => dirname($_SERVER['SCRIPT_NAME']),
-            'comment'  => PMF_Configuration::getInstance()->get('main.titleFAQ')
+            'comment'  => $faqConfig->get('main.titleFAQ')
         );
         $faqInstance = new PMF_Instance($db);
         $faqInstance->addInstance($instanceData);
@@ -780,8 +781,7 @@ if ($step == 3) {
 
     // Always the last step: Update version number
     if (version_compare($version, PMF_System::getVersion(), '<')) {
-        $oPMFConf = PMF_Configuration::getInstance();
-        $oPMFConf->update(array('main.currentVersion' => PMF_System::getVersion()));
+        $faqConfig->update(array('main.currentVersion' => PMF_System::getVersion()));
     }
 
     // optimize tables

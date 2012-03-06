@@ -87,7 +87,7 @@ if ($permission['editcateg']) {
                 </div>
             </div>
 <?php
-    if ($faqconfig->get('security.permLevel') != 'basic') {
+    if ($faqConfig->get('security.permLevel') != 'basic') {
 ?>
             <div class="control-group">
                 <label><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
@@ -130,14 +130,14 @@ if ($permission['editcateg']) {
             </div>
 
 <?php
-    if ($faqconfig->get('main.enableGoogleTranslation') === true) {
+    if ($faqConfig->get('main.enableGoogleTranslation') === true) {
 ?>
             <header>
                 <h3><?php print $PMF_LANG["ad_menu_translations"]; ?></h3>
             </header>
             <div id="editTranslations">
             <?php
-            if ($faqconfig->get('main.googleTranslationKey') == '') {
+            if ($faqConfig->get('main.googleTranslationKey') == '') {
                 print $PMF_LANG["msgNoGoogleApiKeyFound"];
             } else {
             ?>
@@ -161,9 +161,9 @@ if ($permission['editcateg']) {
             </div>
     </form>
 <?php 
-    if ($faqconfig->get('main.enableGoogleTranslation') === true) {
+    if ($faqConfig->get('main.enableGoogleTranslation') === true) {
 ?>        
-    <script src="https://www.google.com/jsapi?key=<?php echo $faqconfig->get('main.googleTranslationKey')?>" type="text/javascript"></script>
+    <script src="https://www.google.com/jsapi?key=<?php echo $faqConfig->get('main.googleTranslationKey')?>" type="text/javascript"></script>
     <script type="text/javascript">
     /* <![CDATA[ */
     google.load("language", "1");

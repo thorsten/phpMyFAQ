@@ -37,7 +37,7 @@ if (headers_sent()) {
 $attachmentErrors = array();
 
 // authenticate with session information
-$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqConfig->get('security.ipCheck'));
 if (!$user instanceof PMF_User_CurrentUser) {
     $user = new PMF_User_CurrentUser(); // user not logged in -> empty user object
 }

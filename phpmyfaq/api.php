@@ -29,7 +29,7 @@
 define('IS_VALID_PHPMYFAQ', null);
 require 'inc/Init.php';
 PMF_Init::cleanRequest();
-session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH . trim($faqConfig->get('main.phpMyFAQToken')));
 session_start();
 
 // Send headers
@@ -48,7 +48,7 @@ $recordId   = PMF_Filter::filterInput(INPUT_GET, 'recordId', FILTER_VALIDATE_INT
 
 // Get language (default: english)
 $Language = new PMF_Language();
-$language = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
+$language = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 
 // Set language
 if (PMF_Language::isASupportedLanguage($language)) {
@@ -66,18 +66,18 @@ $result = array();
 // Handle actions
 switch ($action) {
     case 'getVersion':
-        $result = array('version' => $faqconfig->get('main.currentVersion'));
+        $result = array('version' => $faqConfig->get('main.currentVersion'));
         break;
         
     case 'getApiVersion':
-        $result = array('apiVersion' => (int)$faqconfig->get('main.currentApiVersion'));
+        $result = array('apiVersion' => (int)$faqConfig->get('main.currentApiVersion'));
         break;
         
     case 'search':
         $search       = new PMF_Search($db, $Language);
         $searchString = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
         $result       = $search->search($searchString, false);
-        $url          = $faqconfig->get('main.referenceURL') . '/index.php?action=artikel&cat=%d&id=%d&artlang=%s';
+        $url          = $faqConfig->get('main.referenceURL') . '/index.php?action=artikel&cat=%d&id=%d&artlang=%s';
         
         foreach ($result as &$data) {
             $data->answer = html_entity_decode(strip_tags($data->answer), ENT_COMPAT, 'utf-8');

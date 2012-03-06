@@ -34,7 +34,7 @@ require_once PMF_ROOT_DIR . '/inc/Init.php';
 require_once PMF_ROOT_DIR . '/inc/libs/twitteroauth/twitteroauth.php';
 
 PMF_Init::cleanRequest();
-session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH . trim($faqConfig->get('main.phpMyFAQToken')));
 session_start();
 
 if (empty($_SESSION['access_token']) ||
@@ -45,8 +45,8 @@ if (empty($_SESSION['access_token']) ||
 
 $accessToken = $_SESSION['access_token'];
 
-$connection = new TwitterOAuth($faqconfig->get('socialnetworks.twitterConsumerKey'),
-                               $faqconfig->get('socialnetworks.twitterConsumerSecret'),
+$connection = new TwitterOAuth($faqConfig->get('socialnetworks.twitterConsumerKey'),
+                               $faqConfig->get('socialnetworks.twitterConsumerSecret'),
                                $accessToken['oauth_token'],
                                $accessToken['oauth_token_secret']);
 

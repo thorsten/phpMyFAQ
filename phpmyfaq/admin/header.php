@@ -55,7 +55,7 @@ switch ($action) {
     case 'cookies':
         $secLevelHeader = $PMF_LANG['admin_mainmenu_users'];
         $secLevelEntries .= $adminHelper->addMenuEntry('adduser+edituser+deluser', 'user', 'ad_menu_user_administration', $action);
-        if ($faqconfig->get('security.permLevel') != 'basic') {
+        if ($faqConfig->get('security.permLevel') != 'basic') {
             $secLevelEntries .= $adminHelper->addMenuEntry('addgroup+editgroup+delgroup', 'group', 'ad_menu_group_administration', $action);
         }
         $secLevelEntries .= $adminHelper->addMenuEntry('passwd', 'passwd', 'ad_menu_passwd', $action);
@@ -172,13 +172,13 @@ switch ($action) {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     
-    <title><?php print $faqconfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></title>
+    <title><?php print $faqConfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?></title>
     <base href="<?php print PMF_Link::getSystemUri('index.php'); ?>" />
     
     <meta name="description" content="Only Chuck Norris can divide by zero.">
     <meta name="author" content="phpMyFAQ Team">
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
-    <meta name="application-name" content="phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?>">
+    <meta name="application-name" content="phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?>">
     <meta name="copyright" content="(c) 2001-2012 phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
     <meta name="MSSmartTagsPreventParsing" content="true">
@@ -210,7 +210,7 @@ switch ($action) {
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a class="brand" href="../index.php"><?php print $faqconfig->get('main.titleFAQ'); ?></a>
+            <a class="brand" href="../index.php"><?php print $faqConfig->get('main.titleFAQ'); ?></a>
             <div class="nav-collapse">
                 <?php if (isset($auth) && in_array(true, $permission)): ?>
                 <ul class="nav">

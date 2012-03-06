@@ -107,7 +107,7 @@ if (is_numeric($inputSearchTerm) && PMF_SOLUTION_ID_START_VALUE <= $inputSearchT
     
     // Before a redirection we must force the PHP session update for preventing data loss
     session_write_close();
-    if (PMF_Configuration::getInstance()->get('main.enableRewriteRules')) {
+    if ($faqConfig->get('main.enableRewriteRules')) {
         header('Location: '.PMF_Link::getSystemUri('/index.php') . '/solution_id_' . $inputSearchTerm . '.html');
     } else {
         header('Location: '.PMF_Link::getSystemUri('/index.php') . '/index.php?solution_id=' . $inputSearchTerm);
@@ -117,10 +117,10 @@ if (is_numeric($inputSearchTerm) && PMF_SOLUTION_ID_START_VALUE <= $inputSearchT
 
 $category->buildTree();
 
-$mostPopularSearchData = $faqSearch->getMostPopularSearches($faqconfig->get('search.numberSearchTerms'));
+$mostPopularSearchData = $faqSearch->getMostPopularSearches($faqConfig->get('search.numberSearchTerms'));
 
 // Set base URL scheme
-if (PMF_Configuration::getInstance()->get('main.enableRewriteRules')) {
+if ($faqConfig->get('main.enableRewriteRules')) {
     $baseUrl = sprintf("%ssearch.html?search=%s&amp;seite=%d%s&amp;searchcategory=%d",
         PMF_Link::getSystemRelativeUri('index.php'),
         urlencode($inputSearchTerm),
@@ -141,7 +141,7 @@ if (PMF_Configuration::getInstance()->get('main.enableRewriteRules')) {
 $options = array(
     'baseUrl'         => $baseUrl,
     'total'           => $faqSearchResult->getNumberOfResults(),
-    'perPage'         => PMF_Configuration::getInstance()->get('records.numberOfRecordsPerPage'),
+    'perPage'         => $faqConfig->get('records.numberOfRecordsPerPage'),
     'pageParamName'   => 'seite',
     'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgNext'] . '</a>',
     'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgPrevious'] . '</a>',

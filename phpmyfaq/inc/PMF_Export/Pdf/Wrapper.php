@@ -362,13 +362,13 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
     {
         global $PMF_LANG;
         
-        $faqconfig = PMF_Configuration::getInstance();
+        $faqConfig = PMF_Configuration::getInstance();
 
         $footer = sprintf(
             '(c) %d %s <%s> | %s',
             date('Y'),
-            $faqconfig->get('main.metaPublisher'),
-            $faqconfig->get('main.administrationMail'),
+            $faqConfig->get('main.metaPublisher'),
+            $faqConfig->get('main.administrationMail'),
             PMF_Date::format(date('Y-m-d H:i'))
         );
         

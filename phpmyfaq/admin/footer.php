@@ -43,7 +43,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         </div>
         <div class="row">
             <p class="copyright pull-right">
-                Proudly powered by <strong>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></strong> |
+                Proudly powered by <strong>phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?></strong> |
                 <a href="http://www.phpmyfaq.de/documentation.php" target="_blank">phpMyFAQ documentation</a> |
                 Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> |
                 &copy; 2001-2012 <a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a>
@@ -65,7 +65,7 @@ if (isset($auth)) {
     if (isset($auth) && (('takequestion' == $action) || ('editentry'    == $action) || ('editpreview'  == $action) ||
                          ('addnews'      == $action) || ('editnews'     == $action) || ('copyentry'  == $action))) {
     
-        if ($faqconfig->get('main.enableWysiwygEditor') == true) {
+        if ($faqConfig->get('main.enableWysiwygEditor') == true) {
 
             if (('addnews' == $action || 'editnews' == $action)) {
                 $tinyMceSave = '';
@@ -209,7 +209,7 @@ function phpMyFAQSave()
 
     if (isset($auth) && (('addcategory'    == $action) || ('editcategory' == $action) || 
                          ('updatecategory' == $action) || ('editentry' == $action)   )) {
-        if ($faqconfig->get('main.enableGoogleTranslation') == true) {
+        if ($faqConfig->get('main.enableGoogleTranslation') == true) {
 ?>
 <!-- Google API functions -->
 <script type="text/javascript">

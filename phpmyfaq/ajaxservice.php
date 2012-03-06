@@ -30,7 +30,7 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 require_once 'inc/Init.php';
 PMF_Init::cleanRequest();
-session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH . trim($faqConfig->get('main.phpMyFAQToken')));
 session_start();
 
 $action   = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
@@ -38,7 +38,7 @@ $ajaxlang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
 $code     = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
 
 $Language     = new PMF_Language();
-$languageCode = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
+$languageCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 require_once 'lang/language_en.php';
 
 if (PMF_Language::isASupportedLanguage($ajaxlang)) {
@@ -109,8 +109,8 @@ switch ($action) {
         }
 
         // If e-mail address is set to optional
-        if (!PMF_Configuration::getInstance()->get('main.optionalMailAddress') && is_null($mail)) {
-            $mail = PMF_Configuration::getInstance()->get('main.administrationMail');
+        if (!$faqConfig->get('main.optionalMailAddress') && is_null($mail)) {
+            $mail = $faqConfig->get('main.administrationMail');
         }
 
         if (!is_null($username) && !empty($username) && !empty($mail) && !is_null($mail) && !is_null($comment) &&
@@ -127,7 +127,7 @@ switch ($action) {
                 'helped'    => '');
 
             if ($faq->addComment($commentData)) {
-                $emailTo = $faqconfig->get('main.administrationMail');
+                $emailTo = $faqConfig->get('main.administrationMail');
                 $urlToContent = '';
                 if ('faq' == $type) {
                     $faq->getRecord($id);
@@ -173,9 +173,9 @@ switch ($action) {
                 $send[$emailTo] = 1;
 
                 // Let the admin get a copy of the message
-                if (!isset($send[$faqconfig->get('main.administrationMail')])) {
-                    $mail->addCc($faqconfig->get('main.administrationMail'));
-                    $send[$faqconfig->get('main.administrationMail')] = 1;
+                if (!isset($send[$faqConfig->get('main.administrationMail')])) {
+                    $mail->addCc($faqConfig->get('main.administrationMail'));
+                    $send[$faqConfig->get('main.administrationMail')] = 1;
                 }
 
                 // Let the category owner get a copy of the message
@@ -265,7 +265,7 @@ switch ($action) {
                 );
             }
 
-            $autoActivate = PMF_Configuration::getInstance()->get('records.defaultActivation');
+            $autoActivate = $faqConfig->get('records.defaultActivation');
 
             $newData = array(
                 'lang'          => ($isTranslation == true ? $newLanguage : $languageCode),
@@ -296,7 +296,7 @@ switch ($action) {
 
             $openQuestionId = PMF_Filter::filterInput(INPUT_POST, 'openQuestionID', FILTER_VALIDATE_INT);
             if ($openQuestionId) {
-                if (PMF_Configuration::getInstance()->get('records.enableDeleteQuestion')) {
+                if ($faqConfig->get('records.enableDeleteQuestion')) {
                     $faq->deleteQuestion($openQuestionId);
                 } else { // adds this faq record id to the related open question
                     $faq->updateQuestionAnswer($openQuestionId, $recordId, $categories[0]);
@@ -312,7 +312,7 @@ switch ($action) {
                 $faq->addPermission('user', $recordId, -1);
                 $category->addPermission('user', $categories['rubrik'], array(-1));
                 // Add group permission
-                if ($faqconfig->get('security.permLevel') != 'basic') {
+                if ($faqConfig->get('security.permLevel') != 'basic') {
                     $faq->addPermission('group', $recordId, -1);
                     $category->addPermission('group', $categories['rubrik'], array(-1));
                 }
@@ -322,8 +322,8 @@ switch ($action) {
             $send = array();
             $mail = new PMF_Mail();
             $mail->setReplyTo($email, $name);
-            $mail->addTo($faqconfig->get('main.administrationMail'));
-            $send[$faqconfig->get('main.administrationMail')] = 1;
+            $mail->addTo($faqConfig->get('main.administrationMail'));
+            $send[$faqConfig->get('main.administrationMail')] = 1;
 
             foreach ($categories as $_category) {
 
@@ -346,8 +346,8 @@ switch ($action) {
             // @todo let the email contains the faq article both as plain text and as HTML
             $mail->message = html_entity_decode(
                 $PMF_LANG['msgMailCheck']) . "\n\n" .
-                $faqconfig->get('main.titleFAQ') . ": " .
-                $faqconfig->get('main.referenceURL') . '/admin/';
+                $faqConfig->get('main.titleFAQ') . ": " .
+                $faqConfig->get('main.referenceURL') . '/admin/';
             $result = $mail->send();
             unset($mail);
 
@@ -375,14 +375,14 @@ switch ($action) {
         $save       = PMF_Filter::filterInput(INPUT_POST, 'save', FILTER_VALIDATE_INT, 0);
 
         // If e-mail address is set to optional
-        if (!PMF_Configuration::getInstance()->get('main.optionalMailAddress') && is_null($email)) {
-            $email = PMF_Configuration::getInstance()->get('main.administrationMail');
+        if (!$faqConfig->get('main.optionalMailAddress') && is_null($email)) {
+            $email = $faqConfig->get('main.administrationMail');
         }
 
         if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) &&
             !is_null($question) && !empty($question) && checkBannedWord(PMF_String::htmlspecialchars($question))) {
 
-            if (PMF_Configuration::getInstance()->get('records.enableVisibilityQuestions')) {
+            if ($faqConfig->get('records.enableVisibilityQuestions')) {
                 $visibility = 'N';
             } else {
                 $visibility = 'Y';
@@ -421,7 +421,7 @@ switch ($action) {
                             $result->id,
                             $result->lang
                         );
-                        $oLink       = new PMF_Link(PMF_Configuration::getInstance()->get('main.referenceURL') . $url);
+                        $oLink       = new PMF_Link($faqConfig->get('main.referenceURL') . $url);
                         $oLink->text = PMF_Utils::chopString($result->question, 15);
                         $oLink->itemTitle = $result->question;
                         $response   .= sprintf('<li>%s<br /><div class="searchpreview">%s...</div></li>',
@@ -448,14 +448,14 @@ switch ($action) {
                                 ", mailto:".$questionData['email'] . "\n" . $PMF_LANG["msgCategory"] .
                                 ": " . $categories[$questionData['category_id']]["name"] . "\n\n" .
                                 wordwrap($question, 72) . "\n\n" .
-                                $faqconfig->get('main.referenceURL') . '/admin/';
+                                $faqConfig->get('main.referenceURL') . '/admin/';
 
                     $userId = $cat->getCategoryUser($questionData['category_id']);
                     $oUser  = new PMF_User();
                     $oUser->getUserById($userId);
 
                     $userEmail      = $oUser->getUserData('email');
-                    $mainAdminEmail = PMF_Configuration::getInstance()->get('main.administrationMail');
+                    $mainAdminEmail = $faqConfig->get('main.administrationMail');
 
                     $mail = new PMF_Mail();
                     $mail->setReplyTo($questionData['email'], $questionData['username']);
@@ -487,14 +487,14 @@ switch ($action) {
                                 ", mailto:".$questionData['email'] . "\n" . $PMF_LANG["msgCategory"] .
                                 ": " . $categories[$questionData['category_id']]["name"] . "\n\n" .
                                 wordwrap($question, 72) . "\n\n" .
-                                $faqconfig->get('main.referenceURL') . '/admin/';
+                                $faqConfig->get('main.referenceURL') . '/admin/';
 
                 $userId = $cat->getCategoryUser($questionData['category_id']);
                 $oUser  = new PMF_User();
                 $oUser->getUserById($userId);
 
                 $userEmail      = $oUser->getUserData('email');
-                $mainAdminEmail = PMF_Configuration::getInstance()->get('main.administrationMail');
+                $mainAdminEmail = $faqConfig->get('main.administrationMail');
 
                 $mail = new PMF_Mail();
                 $mail->setReplyTo($questionData['email'], $questionData['username']);
@@ -547,12 +547,12 @@ switch ($action) {
                     "To activate this user do please use the administration interface at %s.",
                     $realname,
                     $loginname,
-                    $faqconfig->get('main.referenceURL')
+                    $faqConfig->get('main.referenceURL')
                 );
 
                 $mail = new PMF_Mail();
                 $mail->setReplyTo($email, $realname);
-                $mail->addTo($faqconfig->get('main.administrationMail'));
+                $mail->addTo($faqConfig->get('main.administrationMail'));
                 $mail->subject = PMF_Utils::resolveMarkers($PMF_LANG['emailRegSubject']);
                 $mail->message = $text;
                 $result = $mail->send();
@@ -615,8 +615,8 @@ switch ($action) {
         $question = PMF_Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
 
         // If e-mail address is set to optional
-        if (!PMF_Configuration::getInstance()->get('main.optionalMailAddress') && is_null($email)) {
-            $email = PMF_Configuration::getInstance()->get('main.administrationMail');
+        if (!$faqConfig->get('main.optionalMailAddress') && is_null($email)) {
+            $email = $faqConfig->get('main.administrationMail');
         }
 
         if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) && !is_null($question) &&
@@ -633,7 +633,7 @@ switch ($action) {
 
             $mail = new PMF_Mail();
             $mail->setReplyTo($email, $name);
-            $mail->addTo($faqconfig->get('main.administrationMail'));
+            $mail->addTo($faqConfig->get('main.administrationMail'));
             $mail->subject = 'Feedback: %sitename%';;
             $mail->message = $question;
             $result = $mail->send();
@@ -673,7 +673,7 @@ switch ($action) {
                     $mail->addTo($recipient);
                     $mail->subject = $PMF_LANG["msgS2FMailSubject"].$name;
                     $mail->message = sprintf("%s\r\n\r\n%s\r\n%s\r\n\r\n%s",
-                        $faqconfig->get('main.send2friendText'),
+                        $faqConfig->get('main.send2friendText'),
                         $PMF_LANG['msgS2FText2'],
                         $link,
                         $attached);
@@ -701,7 +701,7 @@ switch ($action) {
         $confirm  = PMF_Filter::filterInput(INPUT_POST, 'password_confirm', FILTER_SANITIZE_STRING);
 
         $user = PMF_User_CurrentUser::getFromSession(
-            PMF_Configuration::getInstance()->get('security.ipCheck')
+            $faqConfig->get('security.ipCheck')
         );
 
         if ($userId !== $user->getUserId()) {

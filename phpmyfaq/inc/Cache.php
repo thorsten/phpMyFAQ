@@ -42,14 +42,14 @@ class PMF_Cache
 {
 	protected static $instance = NULL;
 
-	public static function init(PMF_Configuration $faqconfig)
+	public static function init(PMF_Configuration $faqConfig)
 	{
 		$config = array();
-		if ($faqconfig->get('cache.varnishEnable')) {
-			$config[VARNISH_CONFIG_PORT]    = $faqconfig->get('cache.varnishPort');
-			$config[VARNISH_CONFIG_SECRET]  = $faqconfig->get('cache.varnishSecret');
-			$config[VARNISH_CONFIG_TIMEOUT] = $faqconfig->get('cache.varnishTimeout');
-			$config[VARNISH_CONFIG_HOST]    = $faqconfig->get('cache.varnishHost');
+		if ($faqConfig->get('cache.varnishEnable')) {
+			$config[VARNISH_CONFIG_PORT]    = $faqConfig->get('cache.varnishPort');
+			$config[VARNISH_CONFIG_SECRET]  = $faqConfig->get('cache.varnishSecret');
+			$config[VARNISH_CONFIG_TIMEOUT] = $faqConfig->get('cache.varnishTimeout');
+			$config[VARNISH_CONFIG_HOST]    = $faqConfig->get('cache.varnishHost');
 
 			self::$instance = new PMF_Cache_Varnish($config);
 		} else {

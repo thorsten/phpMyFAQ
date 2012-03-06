@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 // Re-evaluate $user
-$user     = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
+$user     = PMF_User_CurrentUser::getFromSession($faqConfig->get('security.ipCheck'));
 $category = new PMF_Category($current_admin_user, $current_admin_groups, false);    
 
 if ($permission['editbt']) {
@@ -154,7 +154,7 @@ if ($permission['editbt']) {
         $category->deletePermission('user', $categories['rubrik']);
         $category->addPermission('user', $categories['rubrik'], $restricted_users);
         // Add group permission
-        if ($faqconfig->get('security.permLevel') != 'basic') {
+        if ($faqConfig->get('security.permLevel') != 'basic') {
             $faq->deletePermission('group', $record_id);
             $faq->addPermission('group', $record_id, $restricted_groups);
             $category->deletePermission('group', $categories['rubrik']);
@@ -163,7 +163,7 @@ if ($permission['editbt']) {
 
         // All the other translations        
         $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);            
-        if ($faqconfig->get('main.enableGoogleTranslation') === true && !empty($languages)) {
+        if ($faqConfig->get('main.enableGoogleTranslation') === true && !empty($languages)) {
             
             $linkverifier = new PMF_Linkverifier($user->getLogin());
             $visits       = PMF_Visits::getInstance($db, $Language);
@@ -184,7 +184,7 @@ if ($permission['editbt']) {
                     'content'       => utf8_encode(html_entity_decode($translated_answer)),
                     'keywords'      => utf8_encode($translated_keywords),
                     'author'        => 'Google Translate',
-                    'email'         => $faqconfig->get('main.administrationMail')));
+                    'email'         => $faqConfig->get('main.administrationMail')));
     
                 // Create ChangeLog entry
                 $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $translated_lang, $revision_id);

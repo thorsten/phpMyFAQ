@@ -720,7 +720,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     }
 
     // add main configuration
-    $configuration = PMF_Configuration::getInstance();
+    $configuration = new PMF_Configuration($db);
     $configuration->getAll();
 
     $configs = $configuration->config;

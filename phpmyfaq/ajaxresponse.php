@@ -30,7 +30,7 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 require_once 'inc/Init.php';
 PMF_Init::cleanRequest();
-session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH . trim($faqConfig->get('main.phpMyFAQToken')));
 session_start();
 
 $searchString = PMF_Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
@@ -38,7 +38,7 @@ $ajaxLanguage = PMF_Filter::filterInput(INPUT_POST, 'ajaxlanguage', FILTER_SANIT
 $categoryId   = PMF_Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALIDATE_INT, '%');
 
 $language     = new PMF_Language();
-$languageCode = $language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
+$languageCode = $language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 require_once 'lang/language_en.php';
 
 if (PMF_Language::isASupportedLanguage($ajaxLanguage)) {
@@ -60,7 +60,7 @@ PMF_String::init($languageCode);
 //
 // Get current user and group id - default: -1
 //
-$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqConfig->get('security.ipCheck'));
 if (isset($user) && is_object($user)) {
     $current_user = $user->getUserId();
     if ($user->perm instanceof PMF_Perm_PermMedium) {

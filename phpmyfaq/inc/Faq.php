@@ -165,8 +165,8 @@ class PMF_Faq
             $this->groups = $groups;
         }
         
-        $faqconfig = PMF_Configuration::getInstance();
-        if ($faqconfig->get('security.permLevel') == 'medium') {
+        $faqConfig = PMF_Configuration::getInstance();
+        if ($faqConfig->get('security.permLevel') == 'medium') {
             $this->groupSupport = true;
         }
     }
@@ -320,7 +320,7 @@ class PMF_Faq
     {
         global $sids, $category;
 
-        $faqconfig = PMF_Configuration::getInstance();
+        $faqConfig = PMF_Configuration::getInstance();
         $page      = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
         $output    = '';
 
@@ -404,12 +404,12 @@ class PMF_Faq
         $result = $this->db->query($query);
 
         $num   = $this->db->numRows($result);
-        $pages = ceil($num / $faqconfig->get("records.numberOfRecordsPerPage"));
+        $pages = ceil($num / $faqConfig->get("records.numberOfRecordsPerPage"));
 
         if ($page == 1) {
             $first = 0;
         } else {
-            $first = ($page * $faqconfig->get("records.numberOfRecordsPerPage")) - $faqconfig->get("records.numberOfRecordsPerPage");
+            $first = ($page * $faqConfig->get("records.numberOfRecordsPerPage")) - $faqConfig->get("records.numberOfRecordsPerPage");
         }
 
         if ($num > 0) {
@@ -422,7 +422,7 @@ class PMF_Faq
             $output .= '<ul class="phpmyfaq_ul">';
             $counter = 0;
             $displayedCounter = 0;
-            while (($row = $this->db->fetchObject($result)) && $displayedCounter < $faqconfig->get("records.numberOfRecordsPerPage")) {
+            while (($row = $this->db->fetchObject($result)) && $displayedCounter < $faqConfig->get("records.numberOfRecordsPerPage")) {
                 $counter ++;
                 if ($counter <= $first) {
                     continue;
@@ -469,7 +469,7 @@ class PMF_Faq
             $options = array(
                 'baseUrl'         => $baseUrl,
                 'total'           => $num,
-                'perPage'         => $faqconfig->get('records.numberOfRecordsPerPage'),
+                'perPage'         => $faqConfig->get('records.numberOfRecordsPerPage'),
                 'pageParamName'   => 'seite',
                 'seoName'         => $title,
                 'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $this->pmf_lang['msgNext'] . '</a>',
@@ -495,7 +495,7 @@ class PMF_Faq
     {
         global $sids;
 
-        $faqconfig  = PMF_Configuration::getInstance();
+        $faqConfig  = PMF_Configuration::getInstance();
         $records    = implode(', ', $record_ids);
         $page       = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
         $tagging_id = PMF_Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_VALIDATE_INT); 
@@ -573,12 +573,12 @@ class PMF_Faq
         $result = $this->db->query($query);
 
         $num = $this->db->numRows($result);
-        $pages = ceil($num / $faqconfig->get('records.numberOfRecordsPerPage'));
+        $pages = ceil($num / $faqConfig->get('records.numberOfRecordsPerPage'));
 
         if ($page == 1) {
             $first = 0;
         } else {
-            $first = ($page * $faqconfig->get('records.numberOfRecordsPerPage')) - $faqconfig->get('records.numberOfRecordsPerPage');
+            $first = ($page * $faqConfig->get('records.numberOfRecordsPerPage')) - $faqConfig->get('records.numberOfRecordsPerPage');
         }
 
         if ($num > 0) {
@@ -593,7 +593,7 @@ class PMF_Faq
             $displayedCounter = 0;
 
             $lastFaqId = 0;
-            while (($row = $this->db->fetchObject($result)) && $displayedCounter < $faqconfig->get('records.numberOfRecordsPerPage')) {
+            while (($row = $this->db->fetchObject($result)) && $displayedCounter < $faqConfig->get('records.numberOfRecordsPerPage')) {
                 $counter ++;
                 if ($counter <= $first) {
                     continue;
@@ -637,7 +637,7 @@ class PMF_Faq
             return false;
         }
 
-        if ($num > $faqconfig->get('records.numberOfRecordsPerPage')) {
+        if ($num > $faqConfig->get('records.numberOfRecordsPerPage')) {
             $output .= "<p align=\"center\"><strong>";
             if (!isset($page)) {
                 $page = 1;

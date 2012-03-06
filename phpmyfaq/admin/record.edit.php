@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 // Re-evaluate $user
-$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqConfig->get('security.ipCheck'));
 
 if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
@@ -332,7 +332,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                 <fieldset class="form-horizontal">
                     <legend><?php print $PMF_LANG['ad_entry_record_administration']; ?></legend>
 
-                    <?php if ($faqconfig->get('main.enableGoogleTranslation') === true): ?>
+                    <?php if ($faqConfig->get('main.enableGoogleTranslation') === true): ?>
                     <input type="hidden" id="lang" name="lang" value="<?php print $faqData['lang']; ?>" />
                     <?php else: ?>
 
@@ -359,7 +359,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                             if (isset($faqData['active']) && $faqData['active'] == 'yes') {
                                 $suf = ' checked="checked"';
                                 $sul = null;
-                            } elseif ($faqconfig->get('records.defaultActivation')) {
+                            } elseif ($faqConfig->get('records.defaultActivation')) {
                                 $suf = ' checked="checked"';
                                 $sul = null;
                             } else {
@@ -400,7 +400,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                         <?php
                         if (isset($faqData['comment']) && $faqData['comment'] == 'y') {
                             $suf = ' checked="checked"';
-                        } elseif ($faqconfig->get('records.defaultAllowComments')) {
+                        } elseif ($faqConfig->get('records.defaultAllowComments')) {
                             $suf = ' checked="checked"';
                         } else {
                             $suf = null;
@@ -442,7 +442,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                     <?php endif; ?>
 
 
-                    <?php if ($faqconfig->get('security.permLevel') != 'basic'): ?>
+                    <?php if ($faqConfig->get('security.permLevel') != 'basic'): ?>
 
                     <div class="control-group">
                         <label class="control-label" for="grouppermission"><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
@@ -524,7 +524,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                     </div>
                 </fieldset>
 
-                <?php if ($faqconfig->get('main.enableGoogleTranslation') === true):  ?>
+                <?php if ($faqConfig->get('main.enableGoogleTranslation') === true):  ?>
                 <fieldset class="form-horizontal">
                     <legend>
                         <a href="javascript:void(0);" onclick="javascript:toggleFieldset('Translations');">
@@ -534,7 +534,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
                     <div class="control-group hide" id="editTranslations">
                         <?php
-                        if ($faqconfig->get('main.googleTranslationKey') == '') {
+                        if ($faqConfig->get('main.googleTranslationKey') == '') {
                             print $PMF_LANG["msgNoGoogleApiKeyFound"];
                         } else {
                             ?>
@@ -739,9 +739,9 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     /* ]]> */
     </script>
 <?php    
-        if ($faqconfig->get('main.enableGoogleTranslation') === true) {
+        if ($faqConfig->get('main.enableGoogleTranslation') === true) {
 ?>        
-    <script src="https://www.google.com/jsapi?key=<?php echo $faqconfig->get('main.googleTranslationKey')?>" type="text/javascript"></script>
+    <script src="https://www.google.com/jsapi?key=<?php echo $faqConfig->get('main.googleTranslationKey')?>" type="text/javascript"></script>
     <script type="text/javascript">
     /* <![CDATA[ */
     google.load("language", "1");

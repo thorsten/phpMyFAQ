@@ -94,7 +94,7 @@ class PMF_News
         $news      = array();
         $counter   = 0;
         $now       = date('YmdHis');
-        $faqconfig = PMF_Configuration::getInstance();
+        $faqConfig = PMF_Configuration::getInstance();
 
         $query = sprintf("
             SELECT
@@ -118,14 +118,14 @@ class PMF_News
             
         $result = $this->db->query($query);
 
-        if ($faqconfig->get('records.numberOfShownNewsEntries') > 0 && $this->db->numRows($result) > 0) {
+        if ($faqConfig->get('records.numberOfShownNewsEntries') > 0 && $this->db->numRows($result) > 0) {
         	
             while (($row = $this->db->fetchObject($result))) {
             	
                 $counter++;
-                if (($showArchive  && ($counter > $faqconfig->get('records.numberOfShownNewsEntries'))) ||
+                if (($showArchive  && ($counter > $faqConfig->get('records.numberOfShownNewsEntries'))) ||
                    ((!$showArchive) && (!$forceConfLimit) && 
-                   ($counter <= $faqconfig->get('records.numberOfShownNewsEntries'))) ||
+                   ($counter <= $faqConfig->get('records.numberOfShownNewsEntries'))) ||
                    ((!$showArchive) && $forceConfLimit)) {
                    	
                     $item = array(

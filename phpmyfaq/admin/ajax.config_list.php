@@ -34,8 +34,8 @@ require_once PMF_ROOT_DIR . '/inc/libs/twitteroauth/twitteroauth.php';
 
 if (!empty($_SESSION['access_token'])) {
     $connection = new TwitterOAuth(
-        $faqconfig->get('socialnetworks.twitterConsumerKey'),
-        $faqconfig->get('socialnetworks.twitterConsumerSecret'),
+        $faqConfig->get('socialnetworks.twitterConsumerKey'),
+        $faqConfig->get('socialnetworks.twitterConsumerSecret'),
         $_SESSION['access_token']['oauth_token'],
         $_SESSION['access_token']['oauth_token_secret']
     );
@@ -58,26 +58,24 @@ $availableConfigModes = array(
  */
 function printInputFieldByType($key, $type)
 {
-    global $PMF_LANG;
-    
-    $faqconfig = PMF_Configuration::getInstance();
+    global $PMF_LANG, $faqConfig;
 
     switch ($type) {
 
         case 'area':
             printf('<textarea name="edit[%s]" cols="60" rows="6" style="width: 300px;">%s</textarea>',
                     $key,
-                    str_replace('<', '&lt;', str_replace('>', '&gt;', $faqconfig->get($key))));
+                    str_replace('<', '&lt;', str_replace('>', '&gt;', $faqConfig->get($key))));
             printf("</div>\n");
             break;
 
         case 'input':
-            if ('' == $faqconfig->get($key) && 'socialnetworks.twitterAccessTokenKey' == $key) {
+            if ('' == $faqConfig->get($key) && 'socialnetworks.twitterAccessTokenKey' == $key) {
                 $value = $_SESSION['access_token']['oauth_token'];
-            } elseif ('' == $faqconfig->get($key) && 'socialnetworks.twitterAccessTokenSecret' == $key) {
+            } elseif ('' == $faqConfig->get($key) && 'socialnetworks.twitterAccessTokenSecret' == $key) {
                 $value = $_SESSION['access_token']['oauth_token_secret'];
             } else {
-                $value = str_replace('"', '&quot;', $faqconfig->get($key));
+                $value = str_replace('"', '&quot;', $faqConfig->get($key));
             }
             printf('<input type="text" name="edit[%s]" size="75" value="%s" style="width: 300px;" />',
                     $key,
@@ -100,7 +98,7 @@ function printInputFieldByType($key, $type)
                                      '.php'
                                 ),
                                 '',
-                                $faqconfig->get('main.language')
+                                $faqConfig->get('main.language')
                             ),
                             false,
                             true
@@ -111,20 +109,20 @@ function printInputFieldByType($key, $type)
                    break;
                 
                 case 'records.orderby':
-                    print PMF_Configuration::sortingOptions($faqconfig->get($key));
+                    print PMF_Configuration::sortingOptions($faqConfig->get($key));
                     break;
                     
                 case 'records.sortby':
                     printf('<option value="DESC"%s>%s</option>',
-                        ('DESC' == $faqconfig->get($key)) ? ' selected="selected"' : '',
+                        ('DESC' == $faqConfig->get($key)) ? ' selected="selected"' : '',
                         $PMF_LANG['ad_conf_desc']);
                     printf('<option value="ASC"%s>%s</option>',
-                        ('ASC' == $faqconfig->get($key)) ? ' selected="selected"' : '',
+                        ('ASC' == $faqConfig->get($key)) ? ' selected="selected"' : '',
                         $PMF_LANG['ad_conf_asc']);
                     break;
                     
                 case 'security.permLevel':
-                    print PMF_Perm::permOptions($faqconfig->get($key));
+                    print PMF_Perm::permOptions($faqConfig->get($key));
                     break;
                     
                 case "main.templateSet":
@@ -143,7 +141,7 @@ function printInputFieldByType($key, $type)
                     
                 case "records.attachmentsStorageType":
                     foreach($PMF_LANG['att_storage_type'] as $i => $item) {
-                        $selected = $faqconfig->get($key) == $i
+                        $selected = $faqConfig->get($key) == $i
                                   ? ' selected="selected"'
                                   : '';
                         printf('<option value="%d"%s>%s</option>',
@@ -153,31 +151,31 @@ function printInputFieldByType($key, $type)
                     
                 case "records.orderingPopularFaqs":
                     printf('<option value="visits"%s>%s</option>',
-                        ('visits' == $faqconfig->get($key)) ? ' selected="selected"' : '',
+                        ('visits' == $faqConfig->get($key)) ? ' selected="selected"' : '',
                         $PMF_LANG['records.orderingPopularFaqs.visits']);
                     printf('<option value="voting"%s>%s</option>',
-                        ('voting' == $faqconfig->get($key)) ? ' selected="selected"' : '',
+                        ('voting' == $faqConfig->get($key)) ? ' selected="selected"' : '',
                         $PMF_LANG['records.orderingPopularFaqs.voting']);
                     break;
 
                 case "search.relevance":
                     printf('<option value="thema,content,keywords"%s>%s</option>',
-                        ('thema,content,keywords' == $faqconfig->get($key)) ? ' selected="selected"' : '',
+                        ('thema,content,keywords' == $faqConfig->get($key)) ? ' selected="selected"' : '',
                         $PMF_LANG['search.relevance.thema-content-keywords']);
                     printf('<option value="thema,keywords,content"%s>%s</option>',
-                        ('thema,keywords,content' == $faqconfig->get($key)) ? ' selected="selected"' : '',
+                        ('thema,keywords,content' == $faqConfig->get($key)) ? ' selected="selected"' : '',
                         $PMF_LANG['search.relevance.thema-keywords-content']);
                     printf('<option value="content,thema,keywords"%s>%s</option>',
-                        ('content,thema,keywords' == $faqconfig->get($key)) ? ' selected="selected"' : '',
+                        ('content,thema,keywords' == $faqConfig->get($key)) ? ' selected="selected"' : '',
                         $PMF_LANG['search.relevance.content-thema-keywords']);
                     printf('<option value="content,keywords,thema"%s>%s</option>',
-                        ('content,keywords,thema' == $faqconfig->get($key)) ? ' selected="selected"' : '',
+                        ('content,keywords,thema' == $faqConfig->get($key)) ? ' selected="selected"' : '',
                         $PMF_LANG['search.relevance.content-keywords-thema']);
                     printf('<option value="keywords,content,thema"%s>%s</option>',
-                        ('keywords,content,thema' == $faqconfig->get($key)) ? ' selected="selected"' : '',
+                        ('keywords,content,thema' == $faqConfig->get($key)) ? ' selected="selected"' : '',
                         $PMF_LANG['search.relevance.keywords-content-thema']);
                     printf('<option value="keywords,thema,content"%s>%s</option>',
-                        ('keywords,thema,content' == $faqconfig->get($key)) ? ' selected="selected"' : '',
+                        ('keywords,thema,content' == $faqConfig->get($key)) ? ' selected="selected"' : '',
                         $PMF_LANG['search.relevance.keywords-thema-content']);
                     break;
             }
@@ -187,7 +185,7 @@ function printInputFieldByType($key, $type)
 
         case 'checkbox':
             printf('<input type="checkbox" name="edit[%s]" value="true"', $key);
-            if ($faqconfig->get($key)) {
+            if ($faqConfig->get($key)) {
                 print ' checked="checked"';
             }
             print " /></div>\n";
@@ -196,8 +194,8 @@ function printInputFieldByType($key, $type)
         case 'print':
             printf('<input type="hidden" name="edit[%s]" size="80" value="%s" />%s</div>',
                     $key,
-                    str_replace('"', '&quot;', $faqconfig->get($key)),
-                    $faqconfig->get($key));
+                    str_replace('"', '&quot;', $faqConfig->get($key)),
+                    $faqConfig->get($key));
             break;
     }
 }
@@ -209,12 +207,12 @@ foreach ($LANG_CONF as $key => $value) {
         
         if ('socialnetworks.twitterConsumerKey' == $key) {
             print '<p>';
-            if ('' == $faqconfig->get('socialnetworks.twitterConsumerKey') ||
-                '' == $faqconfig->get('socialnetworks.twitterConsumerSecret')) {
+            if ('' == $faqConfig->get('socialnetworks.twitterConsumerKey') ||
+                '' == $faqConfig->get('socialnetworks.twitterConsumerSecret')) {
 
                 print '<a target="_blank" href="https://dev.twitter.com/apps/new">Create Twitter APP for your site</a>';
                 print "<br />\n";
-                print "Your Callback URL is: " .$faqconfig->get('main.referenceURL') . "/services/twitter/callback.php";
+                print "Your Callback URL is: " .$faqConfig->get('main.referenceURL') . "/services/twitter/callback.php";
             }
 
             if (!isset($content)) {

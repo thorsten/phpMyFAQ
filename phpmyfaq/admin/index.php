@@ -47,12 +47,12 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 require_once PMF_ROOT_DIR.'/inc/Init.php';
 PMF_Init::cleanRequest();
-session_name(PMF_COOKIE_NAME_AUTH.trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH.trim($faqConfig->get('main.phpMyFAQToken')));
 session_start();
 
 // get language (default: english)
 $Language = new PMF_Language();
-$LANGCODE = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
+$LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 // Preload English strings
 require_once (PMF_ROOT_DIR.'/lang/language_en.php');
 
@@ -71,21 +71,21 @@ PMF_String::init($LANGCODE);
 //
 // Set actual template set name
 //
-PMF_Template::setTplSetName($faqconfig->get('main.templateSet'));
+PMF_Template::setTplSetName($faqConfig->get('main.templateSet'));
 
 //
 // Initialize attachment factory
 //
 PMF_Attachment_Factory::init(
-    $faqconfig->get('records.attachmentsStorageType'),
-    $faqconfig->get('records.defaultAttachmentEncKey'),
-    $faqconfig->get('records.enableAttachmentEncryption')
+    $faqConfig->get('records.attachmentsStorageType'),
+    $faqConfig->get('records.defaultAttachmentEncKey'),
+    $faqConfig->get('records.enableAttachmentEncryption')
 );
 
 //
 // Initiazile caching
 //
-PMF_Cache::init($faqconfig);
+PMF_Cache::init($faqConfig);
 
 //
 // Create a new FAQ object
@@ -118,7 +118,7 @@ $faqpassword = PMF_Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZ
 if (!is_null($faqusername) && !is_null($faqpassword)) {
     // login with username and password
     $user = new PMF_User_CurrentUser();
-    if ($faqconfig->get('security.ldapSupport')) {
+    if ($faqConfig->get('security.ldapSupport')) {
         $authLdap = new PMF_Auth_AuthLdap();
         $user->addAuth($authLdap, 'ldap');
     }
@@ -139,7 +139,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     }
 } else {
     // authenticate with session information
-    $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
+    $user = PMF_User_CurrentUser::getFromSession($faqConfig->get('security.ipCheck'));
     if ($user) {
         $auth = true;
     } else {
@@ -168,8 +168,8 @@ if ($action == 'logout' && $auth) {
     $user->deleteFromSession();
     $user = null;
     $auth = null;
-    $ssoLogout = $faqconfig->get('security.ssoLogoutRedirect');
-    if ($faqconfig->get('security.ssoSupport') && !empty ($ssoLogout))
+    $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
+    if ($faqConfig->get('security.ssoSupport') && !empty ($ssoLogout))
         header ("Location:$ssoLogout");
 }
 
@@ -417,7 +417,7 @@ if (isset($auth) && in_array(true, $permission)) {
             $json   = file_get_contents('http://www.phpmyfaq.de/json/version.php');
             $result = json_decode($json);
             if ($result instanceof stdClass) {
-                $installed = $faqconfig->get('main.currentVersion');
+                $installed = $faqConfig->get('main.currentVersion');
                 $available = $result->stable;
                 printf(
                     '<p class="alert alert-%s">%s <a href="http://www.phpmyfaq.de" target="_blank">phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>',
@@ -452,7 +452,7 @@ if (isset($auth) && in_array(true, $permission)) {
             <tbody>
                 <tr>
                     <td style="width: 150px;"><strong>phpMyFAQ Version</strong></td>
-                    <td>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></td>
+                    <td>phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?></td>
                 </tr>
                 <tr>
                     <td><strong>Server Software</strong></td>
@@ -528,7 +528,7 @@ if (isset($auth) && in_array(true, $permission)) {
         $message = sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_logout']);
     }
     
-    if (isset($_SERVER['HTTPS']) || !$faqconfig->get('security.useSslForLogins')) {
+    if (isset($_SERVER['HTTPS']) || !$faqConfig->get('security.useSslForLogins')) {
 ?>
 
             <?php print $message ?>

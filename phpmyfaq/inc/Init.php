@@ -110,8 +110,8 @@ $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
 //
 // Fetch the configuration
 //
-$faqconfig = PMF_Configuration::getInstance();
-$faqconfig->getAll();
+$faqConfig = new PMF_Configuration($db);
+$faqConfig->getAll();
 
 //
 // We always need a valid session!
@@ -124,7 +124,7 @@ ini_set('url_rewriter.tags', '');
 //
 // Connect to LDAP server, when LDAP support is enabled
 //
-if ($faqconfig->get('security.ldapSupport') && file_exists(PMF_CONFIG_DIR . '/ldap.php')) {
+if ($faqConfig->get('security.ldapSupport') && file_exists(PMF_CONFIG_DIR . '/ldap.php')) {
     require PMF_CONFIG_DIR . '/constants_ldap.php';
     require PMF_CONFIG_DIR . '/ldap.php';
 } else {
@@ -134,7 +134,7 @@ if ($faqconfig->get('security.ldapSupport') && file_exists(PMF_CONFIG_DIR . '/ld
 /**
  * Build attachments path
  */
-$confAttachmentsPath = trim($faqconfig->get('records.attachmentsPath'));
+$confAttachmentsPath = trim($faqConfig->get('records.attachmentsPath'));
 if ('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:(\\\\|/)%i', $confAttachmentsPath)) {
     // If we're here, some windows or unix style absolute path was detected.
     define('PMF_ATTACHMENTS_DIR', $confAttachmentsPath);

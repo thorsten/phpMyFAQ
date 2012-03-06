@@ -527,11 +527,11 @@ class PMF_Link
      */
     public function toString($forceNoModrewriteSupport = false)
     {
-        $faqconfig = PMF_Configuration::getInstance();
+        $faqConfig = PMF_Configuration::getInstance();
         $url       = $this->toUri();
         // Check mod_rewrite support and 'rewrite' the passed (system) uri
         // according to the rewrite rules written in .htaccess
-        if ((!$forceNoModrewriteSupport) && ($faqconfig->get('main.enableRewriteRules'))) {
+        if ((!$forceNoModrewriteSupport) && ($faqConfig->get('main.enableRewriteRules'))) {
 
             if ($this->isHomeIndex()) {
 

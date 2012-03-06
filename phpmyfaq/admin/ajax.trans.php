@@ -260,8 +260,8 @@ FILE;
         $mail          = new PMF_Mail();
         $mail->subject = 'New phpMyFAQ language file submitted';
         $mail->message = sprintf('The file below was sent by %s, which is using phpMyFAQ %s on %s',
-            $user->userdata->get('email'), 
-            PMF_Configuration::getInstance()->get('main.currentVersion'), 
+            $user->userdata->get('email'),
+            $faqConfig->get('main.currentVersion'),
             $_SERVER['HTTP_HOST']);
             
         $mail->addTo('thorsten@phpmyfaq.de');

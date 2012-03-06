@@ -46,14 +46,14 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 require_once 'inc/Init.php';
 PMF_Init::cleanRequest();
-session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH . trim($faqConfig->get('main.phpMyFAQToken')));
 session_start();
 
 //
 // Get language (default: english)
 //
 $Language = new PMF_Language();
-$LANGCODE = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
+$LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 // Preload English strings
 require_once 'lang/language_en.php';
 
@@ -79,12 +79,12 @@ PMF_String::init($LANGCODE);
  * Initialize attachment factory
  */
 PMF_Attachment_Factory::init(
-    $faqconfig->get('records.attachmentsStorageType'),
-    $faqconfig->get('records.defaultAttachmentEncKey'),
-    $faqconfig->get('records.enableAttachmentEncryption')
+    $faqConfig->get('records.attachmentsStorageType'),
+    $faqConfig->get('records.defaultAttachmentEncKey'),
+    $faqConfig->get('records.enableAttachmentEncryption')
 );
 
-PMF_Cache::init($faqconfig);
+PMF_Cache::init($faqConfig);
 
 //
 // Get user action
@@ -99,17 +99,17 @@ $loginVisibility = 'hidden';
 $faqusername = PMF_Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
 $faqpassword = PMF_Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
 $faqaction   = PMF_Filter::filterInput(INPUT_POST, 'faqloginaction', FILTER_SANITIZE_STRING);
-if ($faqconfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
+if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
     $faqusername = trim($_SERVER['REMOTE_USER']);
     $faqpassword = '';
 }
 if (!is_null($faqusername) && !is_null($faqpassword)) {
     $user = new PMF_User_CurrentUser();
-    if ($faqconfig->get('security.ldapSupport')) {
+    if ($faqConfig->get('security.ldapSupport')) {
         $authLdap = new PMF_Auth_AuthLdap();
         $user->addAuth($authLdap, 'ldap');
     }
-    if ($faqconfig->get('security.ssoSupport')) {
+    if ($faqConfig->get('security.ssoSupport')) {
         $authSso = new PMF_Auth_AuthSso();
         $user->addAuth($authSso, 'sso');
     }
@@ -135,7 +135,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
 
 } else {
     // authenticate with session information
-    $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
+    $user = PMF_User_CurrentUser::getFromSession($faqConfig->get('security.ipCheck'));
     if ($user) {
         $auth = true;
     } else {
@@ -169,11 +169,11 @@ if ('logout' === $action && isset($auth)) {
     $user   = null;
     $auth   = null;
     $action = 'main';
-    $ssoLogout = $faqconfig->get('security.ssoLogoutRedirect');
-    if ($faqconfig->get('security.ssoSupport') && !empty ($ssoLogout)) {
+    $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
+    if ($faqConfig->get('security.ssoSupport') && !empty ($ssoLogout)) {
         header ('Location: ' . $ssoLogout);
     } else {
-        header ('Location: ' . $faqconfig->get('main.referenceURL'));
+        header ('Location: ' . $faqConfig->get('main.referenceURL'));
     }
 
 }
@@ -235,7 +235,7 @@ if (!$internal) {
 // Is user tracking activated?
 //
 $sids = '';
-if ($faqconfig->get('main.enableUserTracking')) {
+if ($faqConfig->get('main.enableUserTracking')) {
     if (isset($sid)) {
         PMF_Session::setCookie($sid);
         if (is_null($sid_cookie)) {
@@ -290,9 +290,9 @@ if (!is_null($id)) {
     $metaDescription = $faq->getRecordPreview($id);
 } else {
     $id              = '';
-    $title           = ' -  powered by phpMyFAQ ' . $faqconfig->get('main.currentVersion');
+    $title           = ' -  powered by phpMyFAQ ' . $faqConfig->get('main.currentVersion');
     $keywords        = '';
-    $metaDescription = $faqconfig->get('main.metaDescription');
+    $metaDescription = $faqConfig->get('main.metaDescription');
 }
 
 //
@@ -300,7 +300,7 @@ if (!is_null($id)) {
 //
 $solutionId = PMF_Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
 if (! is_null($solutionId)) {
-    $title    = ' -  powered by phpMyFAQ ' . $faqconfig->get('main.currentVersion');
+    $title    = ' -  powered by phpMyFAQ ' . $faqConfig->get('main.currentVersion');
     $keywords = '';
     $faqData  = $faq->getIdFromSolutionId($solutionId);
     if (is_array($faqData)) {
@@ -392,7 +392,7 @@ if ($hasTags && (($action == 'artikel') || ($action == 'show'))) {
 //
 // Check if FAQ should be secured
 //
-if ($faqconfig->get('security.enableLoginOnly')) {
+if ($faqConfig->get('security.enableLoginOnly')) {
     if ($auth) {
         $indexSet = 'index.tpl';
     } else {
@@ -415,7 +415,7 @@ $tpl = new PMF_Template(
         'rightBox'     => $rightSidebarTemplate,
         'writeContent' => $includeTemplate
     ),
-    $faqconfig->get('main.templateSet')
+    $faqConfig->get('main.templateSet')
 );
 
 $usersOnLine    = $faqsession->getUsersOnline();
@@ -426,24 +426,24 @@ $helper = PMF_Helper_Category::getInstance();
 $helper->setCategory($category);
 
 
-$keywordsArray = array_merge(explode(',', $keywords), explode(',', $faqconfig->get('main.metaKeywords')));
+$keywordsArray = array_merge(explode(',', $keywords), explode(',', $faqConfig->get('main.metaKeywords')));
 $keywordsArray = array_filter($keywordsArray, 'strlen');
 shuffle($keywordsArray);
 $keywords = implode(',', $keywordsArray);
 
 $tplMainPage = array(
     'msgLoginUser'        => $PMF_LANG['msgLoginUser'],
-    'title'               => $faqconfig->get('main.titleFAQ') . $title,
+    'title'               => $faqConfig->get('main.titleFAQ') . $title,
     'baseHref'            => $systemUri,
-    'version'             => $faqconfig->get('main.currentVersion'),
-    'header'              => str_replace('"', '', $faqconfig->get('main.titleFAQ')),
-    'metaTitle'           => str_replace('"', '', $faqconfig->get('main.titleFAQ')),
+    'version'             => $faqConfig->get('main.currentVersion'),
+    'header'              => str_replace('"', '', $faqConfig->get('main.titleFAQ')),
+    'metaTitle'           => str_replace('"', '', $faqConfig->get('main.titleFAQ')),
     'metaDescription'     => $metaDescription,
     'metaKeywords'        => $keywords,
-    'metaPublisher'       => $faqconfig->get('main.metaPublisher'),
+    'metaPublisher'       => $faqConfig->get('main.metaPublisher'),
     'metaLanguage'        => $PMF_LANG['metaLanguage'],
     'metaCharset'         => 'utf-8', // backwards compability
-    'phpmyfaqversion'     => $faqconfig->get('main.currentVersion'),
+    'phpmyfaqversion'     => $faqConfig->get('main.currentVersion'),
     'stylesheet'          => $PMF_LANG['dir'] == 'rtl' ? 'style.rtl' : 'style',
     'action'              => $action,
     'dir'                 => $PMF_LANG['dir'],
@@ -457,13 +457,13 @@ $tplMainPage = array(
                              $plr->getMsg('plmsgRegisteredOnline',$usersOnLine[1]),
     'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
     'copyright'           => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' . 
-                             $faqconfig->get('main.currentVersion'),
+                             $faqConfig->get('main.currentVersion'),
     'registerUser'        => '<a href="?action=register">' . $PMF_LANG['msgRegistration'] . '</a>',
     'sendPassword'        => '<a href="./admin/password.php">' . $PMF_LANG['lostPassword'] . '</a>'
 );
 
 if ('main' == $action || 'show' == $action) {
-    if ('main' == $action && PMF_Configuration::getInstance()->get('search.useAjaxSearchOnStartpage')) {
+    if ('main' == $action && $faqConfig->get('search.useAjaxSearchOnStartpage')) {
         $tpl->parseBlock(
             'index',
             'globalSuggestBox',
@@ -507,7 +507,7 @@ if (!isset($stickyRecordsParams['error'])) {
     );
 }
 
-if ($faqconfig->get('main.enableRewriteRules')) {
+if ($faqConfig->get('main.enableRewriteRules')) {
     $tplNavigation = array(
         "msgSearch"           => '<a href="' . $systemUri . 'search.html">'.$PMF_LANG["msgAdvancedSearch"].'</a>',
         'msgAddContent'       => '<a href="' . $systemUri . 'addcontent.html">'.$PMF_LANG["msgAddContent"].'</a>',
@@ -602,7 +602,7 @@ if (isset($auth)) {
 $tpl->parse('index', array_merge($tplMainPage, $tplNavigation, $tplDebug));
 
 // generate top ten list
-if ($faqconfig->get('records.orderingPopularFaqs') == 'visits') {
+if ($faqConfig->get('records.orderingPopularFaqs') == 'visits') {
     $param = 'visits';
 } else {
     $param = 'voted';

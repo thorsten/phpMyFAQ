@@ -27,14 +27,14 @@ define('IS_VALID_PHPMYFAQ', null);
 
 require_once(PMF_ROOT_DIR.'/inc/Init.php');
 PMF_Init::cleanRequest();
-session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH . trim($faqConfig->get('main.phpMyFAQToken')));
 session_start();
 
 //
 // get language (default: english)
 //
 $Language = new PMF_Language();
-$LANGCODE = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
+$LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 
 // Preload English strings
 require_once (PMF_ROOT_DIR.'/lang/language_en.php');
@@ -46,7 +46,7 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
     $LANGCODE = 'en';
 }
 
-if ($faqconfig->get('security.enableLoginOnly')) {
+if ($faqConfig->get('security.enableLoginOnly')) {
     if (!isset($_SERVER['PHP_AUTH_USER'])) {
         header('WWW-Authenticate: Basic realm="phpMyFAQ RSS Feeds"');
         header('HTTP/1.0 401 Unauthorized');
@@ -64,9 +64,7 @@ if ($faqconfig->get('security.enableLoginOnly')) {
         }
     }
 } else {
-    $user = PMF_User_CurrentUser::getFromSession(
-        PMF_Configuration::getInstance()->get('security.ipCheck')
-    );
+    $user = PMF_User_CurrentUser::getFromSession($faqConfig->get('security.ipCheck'));
 }
 
 //
@@ -104,8 +102,8 @@ $rss->startDocument('1.0', 'utf-8');
 $rss->startElement('rss');
 $rss->writeAttribute('version', '2.0');
 $rss->startElement('channel');
-$rss->writeElement('title', $faqconfig->get('main.titleFAQ') . ' - ' . $PMF_LANG['msgLatestArticles']);
-$rss->writeElement('description', html_entity_decode($faqconfig->get('main.metaDescription')));
+$rss->writeElement('title', $faqConfig->get('main.titleFAQ') . ' - ' . $PMF_LANG['msgLatestArticles']);
+$rss->writeElement('description', html_entity_decode($faqConfig->get('main.metaDescription')));
 $rss->writeElement('link', PMF_Link::getSystemUri('/feed/latests/rss.php'));
 
 if ($num > 0) {

@@ -33,11 +33,11 @@ define('IS_VALID_PHPMYFAQ', null);
 require_once PMF_ROOT_DIR . '/inc/Init.php';
 
 PMF_Init::cleanRequest();
-session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH . trim($faqConfig->get('main.phpMyFAQToken')));
 session_start();
 
-if ($faqconfig->get('socialnetworks.twitterConsumerKey') === '' || 
-    $faqconfig->get('socialnetworks.twitterConsumerSecret') === '') {
+if ($faqConfig->get('socialnetworks.twitterConsumerKey') === '' ||
+    $faqConfig->get('socialnetworks.twitterConsumerSecret') === '') {
     
     print 'Get a consumer key and secret from <a href="https://twitter.com/apps">twitter.com</a>.';
     exit;

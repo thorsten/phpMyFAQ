@@ -39,7 +39,7 @@ if ($permission["passwd"]) {
     if (!is_null($save)) {
 
         // Re-evaluate $user
-        $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
+        $user = PMF_User_CurrentUser::getFromSession($faqConfig->get('security.ipCheck'));
 
         // Define the (Local/Current) Authentication Source
         $_authSource = PMF_Auth::selectAuth($user->auth_data['authSource']['name']);

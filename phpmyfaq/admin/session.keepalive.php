@@ -39,7 +39,7 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 require PMF_ROOT_DIR.'/inc/Init.php';
 PMF_Init::cleanRequest();
-session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH . trim($faqConfig->get('main.phpMyFAQToken')));
 session_start();
 
 // Preload English strings
@@ -58,7 +58,7 @@ if (!is_null($_language) && PMF_Language::isASupportedLanguage($_language)) {
 //
 PMF_String::init($_language);
 
-$user        = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
+$user        = PMF_User_CurrentUser::getFromSession($faqConfig->get('security.ipCheck'));
 $refreshTime = (PMF_SESSION_ID_EXPIRES - PMF_SESSION_ID_REFRESH) * 60;
 ?>
 <!DOCTYPE html>
@@ -71,7 +71,7 @@ $refreshTime = (PMF_SESSION_ID_EXPIRES - PMF_SESSION_ID_REFRESH) * 60;
     <meta name="description" content="Only Chuck Norris can divide by zero.">
     <meta name="author" content="phpMyFAQ Team">
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
-    <meta name="application-name" content="phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?>">
+    <meta name="application-name" content="phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?>">
     <meta name="copyright" content="(c) 2001-2012 phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
 <?php

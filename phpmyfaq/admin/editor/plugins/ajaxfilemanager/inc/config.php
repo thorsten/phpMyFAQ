@@ -16,7 +16,7 @@
     define('PMF_ROOT_DIR', dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))));
     define('IS_VALID_PHPMYFAQ', null);
     require_once PMF_ROOT_DIR.'/inc/Init.php';
-    session_name(PMF_COOKIE_NAME_AUTH.trim($faqconfig->get('main.phpMyFAQToken')));
+    session_name(PMF_COOKIE_NAME_AUTH.trim($faqConfig->get('main.phpMyFAQToken')));
 	
 	if (!isset($_SESSION)) {
 		session_start();

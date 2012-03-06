@@ -38,22 +38,22 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 require_once PMF_ROOT_DIR.'/inc/Init.php';
 PMF_Init::cleanRequest();
-session_name(PMF_COOKIE_NAME_AUTH.trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH.trim($faqConfig->get('main.phpMyFAQToken')));
 session_start();
 
 /**
  * Initialize attachment factory
  */
-PMF_Attachment_Factory::init($faqconfig->get('records.attachmentsStorageType'),
-                             $faqconfig->get('records.defaultAttachmentEncKey'),
-                             $faqconfig->get('records.enableAttachmentEncryption'));
+PMF_Attachment_Factory::init($faqConfig->get('records.attachmentsStorageType'),
+                             $faqConfig->get('records.defaultAttachmentEncKey'),
+                             $faqConfig->get('records.enableAttachmentEncryption'));
 
 $currentSave   = PMF_Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);
 $currentAction = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 $currentToken  = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 
 $Language = new PMF_Language();
-$LANGCODE = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
+$LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 
 require_once PMF_ROOT_DIR . '/lang/language_en.php';
 
@@ -64,7 +64,7 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
 }
 
 $auth = false;
-$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqConfig->get('security.ipCheck'));
 if ($user) {
     $auth = true;
 } else {
@@ -103,13 +103,13 @@ if (is_null($currentAction) || !is_null($currentSave)) {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title><?php print $faqconfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
+    <title><?php print $faqConfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
     <base href="<?php print PMF_Link::getSystemUri('index.php'); ?>" />
     
     <meta name="description" content="Only Chuck Norris can divide by zero.">
     <meta name="author" content="phpMyFAQ Team">
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
-    <meta name="application-name" content="phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?>">
+    <meta name="application-name" content="phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?>">
     <meta name="copyright" content="(c) 2001-2011 phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
     <meta name="MSSmartTagsPreventParsing" content="true">
@@ -135,7 +135,7 @@ if (is_null($currentAction) && $auth && $permission['addattachment']) {
         <form action="?action=save" enctype="multipart/form-data" method="post">
             <fieldset>
             <legend><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></legend>
-                <input type="hidden" name="MAX_FILE_SIZE" value="<?php print $faqconfig->get('records.maxAttachmentSize'); ?>" />
+                <input type="hidden" name="MAX_FILE_SIZE" value="<?php print $faqConfig->get('records.maxAttachmentSize'); ?>" />
                 <input type="hidden" name="record_id" value="<?php print $recordId; ?>" />
                 <input type="hidden" name="record_lang" value="<?php print $recordLang; ?>" />
                 <input type="hidden" name="save" value="TRUE" />
@@ -161,7 +161,7 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission['adda
 ?>
 <p><strong><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></strong></p>
 <?php
-    if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && !(filesize($_FILES["userfile"]["tmp_name"]) > $faqconfig->get('records.maxAttachmentSize'))) {
+    if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && !(filesize($_FILES["userfile"]["tmp_name"]) > $faqConfig->get('records.maxAttachmentSize'))) {
 
         $att = PMF_Attachment_Factory::create();
         $att->setRecordId($recordId);
@@ -196,7 +196,7 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission['adda
             '<p>%s</p>',
             sprintf(
                 $PMF_LANG['ad_attach_4'],
-                $faqconfig->get('records.maxAttachmentSize')
+                $faqConfig->get('records.maxAttachmentSize')
             )
         );
 

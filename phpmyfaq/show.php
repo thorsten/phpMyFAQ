@@ -33,8 +33,8 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
     $name                = $category->categoryName[$currentCategory]['name'];
     $categoryDescription = $category->categoryName[$currentCategory]['description'];
     $records             = $faq->showAllRecords($currentCategory, 
-                                                $faqconfig->get('records.orderby'), 
-                                                $faqconfig->get('records.sortby'));
+                                                $faqConfig->get('records.orderby'),
+                                                $faqConfig->get('records.sortby'));
     
     if (!$records) {
         $subCategory = new PMF_Category($current_user, $current_groups, true);

@@ -30,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 // Re-evaluate $user
-$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqConfig->get('security.ipCheck'));
 
 if ($permission['editbt']) {
 
@@ -111,7 +111,7 @@ if ($permission['editbt']) {
             $faq->addPermission('user', $record_id, $restricted_users);
             $category->addPermission('user', $categories['rubrik'], $restricted_users);
             // Add group permission
-            if ($faqconfig->get('security.permLevel') != 'basic') {
+            if ($faqConfig->get('security.permLevel') != 'basic') {
                 $faq->addPermission('group', $record_id, $restricted_groups);
                 $category->addPermission('group', $categories['rubrik'], $restricted_groups);
             }
@@ -121,7 +121,7 @@ if ($permission['editbt']) {
             // Open question answered
             $openQuestionId = PMF_Filter::filterInput(INPUT_POST, 'openQuestionID', FILTER_VALIDATE_INT);
             if ($openQuestionId) {
-                if (PMF_Configuration::getInstance()->get('records.enableDeleteQuestion')) { // deletes question
+                if ($faqConfig->get('records.enableDeleteQuestion')) { // deletes question
                     $faq->deleteQuestion($openQuestionId);
                 } else { // adds this faq record id to the related open question
                     $faq->updateQuestionAnswer($openQuestionId, $record_id, $categories['rubrik'][0]);
@@ -132,19 +132,19 @@ if ($permission['editbt']) {
             link_ondemand_javascript($record_id, $recordData['lang']);
 
             // Callback to Twitter if enabled
-            if ($faqconfig->get('socialnetworks.enableTwitterSupport')) {
+            if ($faqConfig->get('socialnetworks.enableTwitterSupport')) {
                 require '../inc/libs/twitteroauth/twitteroauth.php';
-                $connection = new TwitterOAuth($faqconfig->get('socialnetworks.twitterConsumerKey'),
-                                               $faqconfig->get('socialnetworks.twitterConsumerSecret'),
-                                               $faqconfig->get('socialnetworks.twitterAccessTokenKey'),
-                                               $faqconfig->get('socialnetworks.twitterAccessTokenSecret'));
+                $connection = new TwitterOAuth($faqConfig->get('socialnetworks.twitterConsumerKey'),
+                                               $faqConfig->get('socialnetworks.twitterConsumerSecret'),
+                                               $faqConfig->get('socialnetworks.twitterAccessTokenKey'),
+                                               $faqConfig->get('socialnetworks.twitterAccessTokenSecret'));
 
                 $link = PMF_Link::getSystemRelativeUri() .
                         sprintf('?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                             $category,
                             $record_id,
                             $record_lang);
-                $link             = $faqconfig->get('main.referenceURL') . str_replace('/admin/','/', $link);
+                $link             = $faqConfig->get('main.referenceURL') . str_replace('/admin/','/', $link);
                 $oLink            = new PMF_Link($link);
                 $oLink->itemTitle = $question;
                 $link             = $oLink->toString();
@@ -157,7 +157,7 @@ if ($permission['editbt']) {
 
             // All the other translations
             $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);            
-            if ($faqconfig->get('main.enableGoogleTranslation') === true && !empty($languages)) {
+            if ($faqConfig->get('main.enableGoogleTranslation') === true && !empty($languages)) {
                 
                 $linkverifier = new PMF_Linkverifier($user->getLogin());
     
@@ -177,7 +177,7 @@ if ($permission['editbt']) {
                         'content'       => html_entity_decode($translated_answer),
                         'keywords'      => $translated_keywords,
                         'author'        => 'Google Translate',
-                        'email'         => $faqconfig->get('main.administrationMail')));
+                        'email'         => $faqConfig->get('main.administrationMail')));
     
                     // Create ChangeLog entry
                     $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $translated_lang);

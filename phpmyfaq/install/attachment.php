@@ -41,7 +41,7 @@ if (!file_exists(PMF_ROOT_DIR . '/config/database.php')) {
 //
 require_once PMF_ROOT_DIR.'/inc/Init.php';
 PMF_Init::cleanRequest();
-session_name(PMF_COOKIE_NAME_AUTH.trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH.trim($faqConfig->get('main.phpMyFAQToken')));
 session_start();
 ?>
 <!DOCTYPE html>

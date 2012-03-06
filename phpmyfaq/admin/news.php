@@ -32,7 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $news = new PMF_News($db, $Language);
 
 // Re-evaluate $user
-$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqConfig->get('security.ipCheck'));
 
 if ('addnews' == $action && $permission["addnews"]) {
 ?>

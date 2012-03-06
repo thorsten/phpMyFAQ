@@ -42,7 +42,7 @@ $tpl->parse (
     'writeContent',
     array(
         'msgContact'         => $PMF_LANG['msgContact'],
-        'msgContactOwnText'  => nl2br($faqconfig->get('main.contactInformations')),
+        'msgContactOwnText'  => nl2br($faqConfig->get('main.contactInformations')),
         'msgContactEMail'    => $PMF_LANG['msgContactEMail'],
         'msgNewContentName'  => $PMF_LANG['msgNewContentName'],
         'msgNewContentMail'  => $PMF_LANG['msgNewContentMail'],
@@ -51,7 +51,7 @@ $tpl->parse (
         'defaultContentName' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
         'msgMessage'         => $PMF_LANG['msgMessage'],
         'msgS2FButton'       => $PMF_LANG['msgS2FButton'],
-        'version'            => $faqconfig->get('main.currentVersion'),
+        'version'            => $faqConfig->get('main.currentVersion'),
         'captchaFieldset'    => PMF_Helper_Captcha::getInstance()->renderCaptcha(
             $captcha,
             'contact',

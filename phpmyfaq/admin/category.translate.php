@@ -57,7 +57,7 @@ if ($permission["editcateg"]) {
             <input type="hidden" name="id" value="<?php print $id; ?>" />
             <input type="hidden" name="parent_id" value="<?php print $category->categoryName[$id]["parent_id"]; ?>" />
             <input type="hidden" name="showcat" value="<?php print $showcat; ?>" />
-            <?php if ($faqconfig->get('security.permLevel') !== 'basic'): ?>
+            <?php if ($faqConfig->get('security.permLevel') !== 'basic'): ?>
             <input type="hidden" name="restricted_groups" value="<?php print $group_permission[0]; ?>" />
             <?php else: ?>
             <input type="hidden" name="restricted_groups" value="-1" />
@@ -66,7 +66,7 @@ if ($permission["editcateg"]) {
             <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
 
 <?php
-    if ($faqconfig->get('main.enableGoogleTranslation') === true) {
+    if ($faqConfig->get('main.enableGoogleTranslation') === true) {
 ?>    
             <input type="hidden" id="name" name="name" value="<?php print $category->categoryName[$id]['name']; ?>" />
             <input type="hidden" id="catlang" name="lang" value="<?php print $selected_lang; ?>" />
@@ -74,7 +74,7 @@ if ($permission["editcateg"]) {
         
             <div id="editTranslations">
             <?php
-            if ($faqconfig->get('main.googleTranslationKey') == '') {
+            if ($faqConfig->get('main.googleTranslationKey') == '') {
                 print $PMF_LANG["msgNoGoogleApiKeyFound"];
             } else {
             ?>
@@ -148,9 +148,9 @@ if ($permission["editcateg"]) {
 
         </form>
 <?php 
-    if ($faqconfig->get('main.enableGoogleTranslation') === true) {
+    if ($faqConfig->get('main.enableGoogleTranslation') === true) {
 ?>        
-    <script src="https://www.google.com/jsapi?key=<?php echo $faqconfig->get('main.googleTranslationKey')?>" type="text/javascript"></script>
+    <script src="https://www.google.com/jsapi?key=<?php echo $faqConfig->get('main.googleTranslationKey')?>" type="text/javascript"></script>
     <script type="text/javascript">
     /* <![CDATA[ */
     google.load("language", "1");

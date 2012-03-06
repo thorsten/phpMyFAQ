@@ -259,9 +259,9 @@ class PMF_Mail
         $this->_to         = array();
 
         // Set phpMyFAQ related data
-        $faqconfig     = PMF_Configuration::getInstance();
-        $this->_mailer = 'phpMyFAQ/' . $faqconfig->get('main.currentVersion');
-        $this->setFrom($faqconfig->get('main.administrationMail'));
+        $faqConfig     = PMF_Configuration::getInstance();
+        $this->_mailer = 'phpMyFAQ/' . $faqConfig->get('main.currentVersion');
+        $this->setFrom($faqConfig->get('main.administrationMail'));
     }
 
     /**

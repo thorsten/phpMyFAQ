@@ -45,7 +45,7 @@ if ($permission['restore']) {
         $handle          = fopen($_FILES['userfile']['tmp_name'], 'r');
         $dat             = fgets($handle, 65536);
         $versionFound    = PMF_String::substr($dat, 0, 9);
-        $versionExpected = '-- pmf' . substr($faqconfig->get('main.currentVersion'), 0, 3);
+        $versionExpected = '-- pmf' . substr($faqConfig->get('main.currentVersion'), 0, 3);
 
         if ($versionFound != $versionExpected) {
             printf('%s (Version check failure: "%s" found, "%s" expected)',

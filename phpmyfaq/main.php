@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $news = new PMF_News($db, $Language);
 
 $archived        = PMF_Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
-$writeNewsHeader = $faqconfig->get('main.titleFAQ');
+$writeNewsHeader = $faqConfig->get('main.titleFAQ');
 
 if (!is_null($archived)) {
     $writeNewsHeader .= $PMF_LANG['newsArchive'];

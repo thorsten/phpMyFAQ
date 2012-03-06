@@ -43,7 +43,7 @@ $id      = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $artlang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRIPPED);
 
 $send2friendLink = sprintf('%s/index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-    $faqconfig->get('main.referenceURL'),
+    $faqConfig->get('main.referenceURL'),
     (int)$cat,
     (int)$id,
     urlencode($artlang));
@@ -61,7 +61,7 @@ $tpl->parse (
         'msgS2FFriends'      => $PMF_LANG['msgS2FFriends'],
         'msgS2FEMails'       => $PMF_LANG['msgS2FEMails'],
         'msgS2FText'         => $PMF_LANG['msgS2FText'],
-        'send2friend_text'   => $faqconfig->get('main.send2friendText'),
+        'send2friend_text'   => $faqConfig->get('main.send2friendText'),
         'msgS2FText2'        => $PMF_LANG['msgS2FText2'],
         'send2friendLink'    => $send2friendLink,
         'msgS2FMessage'      => $PMF_LANG['msgS2FMessage'],

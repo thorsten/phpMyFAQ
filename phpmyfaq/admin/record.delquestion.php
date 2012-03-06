@@ -89,7 +89,7 @@ if ($permission['delquestion']) {
                     <?php print $PMF_LANG['ad_gen_delete']; ?>
                 </a>
                 <br />
-                <?php if (PMF_Configuration::getInstance()->get('records.enableCloseQuestion') && $question['answer_id']) { ?>
+                <?php if ($faqConfig->get('records.enableCloseQuestion') && $question['answer_id']) { ?>
                 <a href="?action=editentry&amp;id=<?php print $question['answer_id']; ?>&amp;lang=<?php print $LANGCODE; ?>">
                     <?php print $PMF_LANG['msg2answerFAQ']; ?>
                 </a>

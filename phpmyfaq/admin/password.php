@@ -45,14 +45,14 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 require_once PMF_ROOT_DIR.'/inc/Init.php';
 PMF_Init::cleanRequest();
-session_name(PMF_COOKIE_NAME_AUTH.trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH.trim($faqConfig->get('main.phpMyFAQToken')));
 session_start();
 
 //
 // get language (default: english)
 //
 $Language = new PMF_Language();
-$LANGCODE = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
+$LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 
 // Preload English strings
 require_once PMF_ROOT_DIR.'/lang/language_en.php';
@@ -154,9 +154,9 @@ if ($action == "sendmail") {
                 </a>
             </p>
             <p>
-                <img src="images/arrow.gif" width="11" height="11" alt="<?php print $faqconfig->get('main.titleFAQ'); ?> FAQ" border="0" />
-                <a href="../index.php" title="<?php print $faqconfig->get('main.titleFAQ'); ?> FAQ">
-                    <?php print $faqconfig->get('main.titleFAQ'); ?>
+                <img src="images/arrow.gif" width="11" height="11" alt="<?php print $faqConfig->get('main.titleFAQ'); ?> FAQ" border="0" />
+                <a href="../index.php" title="<?php print $faqConfig->get('main.titleFAQ'); ?> FAQ">
+                    <?php print $faqConfig->get('main.titleFAQ'); ?>
                 </a>
             </p>
         </section>

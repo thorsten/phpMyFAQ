@@ -28,7 +28,7 @@ define('IS_VALID_PHPMYFAQ', null);
 
 require PMF_ROOT_DIR . '/inc/Init.php';
 require PMF_ROOT_DIR . '/inc/Link.php';
-require 'lang/' . $faqconfig->get('main.language');
+require 'lang/' . $faqConfig->get('main.language');
 
 $baseUrl   = PMF_Link::getSystemUri('/opensearch.php');
 $searchUrl = $baseUrl . '/index.php?action=search';
@@ -40,15 +40,15 @@ $opensearchXml->startDocument('1.0', 'utf-8');
 $opensearchXml->startElement('OpenSearchDescription');
 $opensearchXml->writeAttribute('xmlns', 'http://a9.com/-/spec/opensearch/1.1/');
 
-$opensearchXml->writeElement('ShortName', $faqconfig->get('main.titleFAQ'));
-$opensearchXml->writeElement('Description', $faqconfig->get('main.metaDescription'));
+$opensearchXml->writeElement('ShortName', $faqConfig->get('main.titleFAQ'));
+$opensearchXml->writeElement('Description', $faqConfig->get('main.metaDescription'));
 $opensearchXml->startElement('Url');
 $opensearchXml->writeAttribute('type', 'text/html');
 $opensearchXml->writeAttribute('template', $searchUrl . '&search={searchTerms}');
 $opensearchXml->endElement();
 $opensearchXml->writeElement('Language', $PMF_LANG['metaLanguage']);
 $opensearchXml->writeElement('OutputEncoding', 'utf-8');
-$opensearchXml->writeElement('Contact', $faqconfig->get('main.administrationMail'));
+$opensearchXml->writeElement('Contact', $faqConfig->get('main.administrationMail'));
 $opensearchXml->startElement('Image');
 $opensearchXml->writeAttribute('height', 16);
 $opensearchXml->writeAttribute('width', 16);

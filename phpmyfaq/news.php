@@ -50,7 +50,7 @@ if (is_null($newsId)) {
 $faqsession->userTracking('news_view', $id);
 
 // Define the header of the page
-$newsMainHeader = $faqconfig->get('main.titleFAQ') . $PMF_LANG['msgNews'];
+$newsMainHeader = $faqConfig->get('main.titleFAQ') . $PMF_LANG['msgNews'];
 $newsFeed       = '&nbsp;<a href="feed/news/rss.php" target="_blank"><img id="newsRSS" src="images/feed.png" width="16" height="16" alt="RSS" /></a>';
 
 // Get all data from the news record

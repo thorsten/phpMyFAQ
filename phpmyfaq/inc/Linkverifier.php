@@ -681,11 +681,11 @@ class PMF_Linkverifier
      */
     public function getURLValidateInterval()
     {
-        $faqconfig   = PMF_Configuration::getInstance();
+        $faqConfig   = PMF_Configuration::getInstance();
         $requestTime = 0;
 
-        if ($faqconfig->get('main.urlValidateInterval') != '') {
-            $requestTime = $_SERVER['REQUEST_TIME'] - $faqconfig->get('main.urlValidateInterval');
+        if ($faqConfig->get('main.urlValidateInterval') != '') {
+            $requestTime = $_SERVER['REQUEST_TIME'] - $faqConfig->get('main.urlValidateInterval');
         } else {
             $requestTime = $_SERVER['REQUEST_TIME'] - 86400; // default in recheck links once a day unless explicitly requested.
         }
@@ -871,14 +871,14 @@ class PMF_Linkverifier
     {
         global $PMF_LANG;
         
-        $faqconfig = PMF_Configuration::getInstance();
+        $faqConfig = PMF_Configuration::getInstance();
         
-        if ($faqconfig->get('main.referenceURL') == '') {
+        if ($faqConfig->get('main.referenceURL') == '') {
             $output = $PMF_LANG['ad_linkcheck_noReferenceURL'];
             return ($cron ? '' : '<br /><br />'.$output);
         }
 
-        if (trim('' == $faqconfig->get('main.referenceURL'))) {
+        if (trim('' == $faqConfig->get('main.referenceURL'))) {
             $output = $PMF_LANG['ad_linkcheck_noReferenceURL'];
             return ($cron ? '' : '<br /><br />'.$output);
         }
@@ -890,7 +890,7 @@ class PMF_Linkverifier
 
         // Parse contents and verify URLs
         $this->parse_string($contents);
-        $result = $this->VerifyURLs($faqconfig->get('main.referenceURL'));
+        $result = $this->VerifyURLs($faqConfig->get('main.referenceURL'));
         $this->markEntry($id, $artlang);
 
         // If no URLs found
