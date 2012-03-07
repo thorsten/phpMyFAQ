@@ -8,7 +8,6 @@
  * @copyright 2006-2012 phpMyFAQ Team
  * @version   $Id: language_sr.php,v 1.26 2008-05-31 11:49:42 thorstenr Exp $
  *
-
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
