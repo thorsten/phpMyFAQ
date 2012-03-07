@@ -5,21 +5,15 @@
  * 
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
  * @package   PMF_Configuration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2006-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2006-01-04
  */
@@ -35,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_Configuration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2006-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2006-01-04
  */
@@ -54,13 +48,6 @@ class PMF_Configuration
     private static $instance = null;
     
     /**
-     * DB handle
-     *
-     * @var PMF_DB_Driver
-     */
-    protected $_db = null;
-
-    /**
      * Configuration array
      *
      * @var array
@@ -77,9 +64,9 @@ class PMF_Configuration
     public function __construct(PMF_DB_Driver $database = null)
     {
         if (! is_null($database)) {
-            $this->_db = $database;
+            $this->setDb($database);
         } else {
-            $this->_db = PMF_Db::getInstance();
+            $this->setDb(PMF_Db::getInstance());
         }
     }
 
@@ -113,8 +100,8 @@ class PMF_Configuration
                 %sfaqconfig",
             SQLPREFIX);
             
-        $result = $this->_db->query($query);
-        $config = $this->_db->fetchAll($result);
+        $result = $this->getDb()->query($query);
+        $config = $this->getDb()->fetchAll($result);
         
         foreach ($config as $items) {
             $this->config[$items->config_name] = $items->config_value;
@@ -148,6 +135,28 @@ class PMF_Configuration
     }
 
     /**
+     * Sets the database object
+     *
+     * @param PMF_DB_Driver $database
+     *
+     * @return void
+     */
+    public function setDb(PMF_DB_Driver $database)
+    {
+        $this->config['core.database'] = $database;
+    }
+
+    /**
+     * Returns the database object
+     *
+     * @return PMF_DB_Driver
+     */
+    public function getDb()
+    {
+        return $this->config['core.database'];
+    }
+
+    /**
      * Updates all configuration items
      *
      * @param  array $newconfig Array with new configuration values
@@ -156,9 +165,15 @@ class PMF_Configuration
      */
     public function update(Array $newconfig)
     {
+        $runtimeConfigs = array(
+            'core.database', // PMF_DB_Driver
+            'core.language'  // PMF_Language
+        );
         if (is_array($newconfig)) {
             foreach ($newconfig as $name => $value) {
-                if ($name != 'main.phpMyFAQToken') {
+                if ($name != 'main.phpMyFAQToken' &&
+                    !in_array($name, $runtimeConfigs)
+                ) {
                     $update = sprintf("
                         UPDATE
                             %sfaqconfig
@@ -167,10 +182,11 @@ class PMF_Configuration
                         WHERE
                             config_name = '%s'",
                         SQLPREFIX,
-                        $this->_db->escape(trim($value)),
-                        $name);
+                        $this->getDb()->escape(trim($value)),
+                        $name
+                    );
                         
-                    $this->_db->query($update);
+                    $this->getDb()->query($update);
                     if (isset($this->config[$name])) {
                         unset($this->config[$name]);
                     }
