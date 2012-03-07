@@ -22,7 +22,7 @@ See documentation/documentation.en.html for more information.
 License
 -------
 
-Mozilla Public License 1.1, see LICENSE for more information.
+Mozilla Public License 2.0, see LICENSE for more information.
 
 
 Bundled libraries
