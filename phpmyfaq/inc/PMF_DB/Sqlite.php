@@ -5,22 +5,17 @@
  *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Johannes Schlüter <johannes@php.net>
  * @copyright 2005-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-06-27
  */
@@ -36,12 +31,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Johannes Schlüter <johannes@php.net>
-<<<<<<< HEAD
- * @copyright 2005-2011 phpMyFAQ Team
-=======
  * @copyright 2005-2012 phpMyFAQ Team
->>>>>>> fddffb9c8c34227473034cf5c50d7a8127f3ffb3
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-06-27
  */
@@ -90,7 +81,7 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
      * Sends a query to the database.
      *
      * @param string $query SQL query
-     * 
+     *
      * @return mixed $result
      */
     public function query($query)
@@ -150,14 +141,14 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
         if (false === $result) {
             throw new Exception('Error while fetching result: ' . $this->error());
         }
-        
+
         while ($row = $this->fetchObject($result)) {
             $ret[] = $row;
         }
-        
+
         return $ret;
     }
-    
+
     /**
      * Number of rows in a result
      *
@@ -214,7 +205,7 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
 
     /**
      * Returns the error string.
-     * 
+     *
      * @return void|string
      */
     public function error()
@@ -265,7 +256,7 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
 
     /**
      * Closes the connection to the database.
-     * 
+     *
      * @return boolean
      */
     public function close()

@@ -2,25 +2,20 @@
 /**
  * The PMF_Template class provides methods and functions for the
  * template parser
- * 
+ *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
  * @package   PMF_Template
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Jan Mergler <jan.mergler@gmx.de>
- * @copyright 2002-2011 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @copyright 2002-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-22
  */
@@ -36,8 +31,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_Template
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Jan Mergler <jan.mergler@gmx.de>
- * @copyright 2002-2011 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @copyright 2002-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-22
  */
@@ -73,7 +68,7 @@ class PMF_Template
 
     /**
      * Name of active template set
-     * 
+     *
      * @var string
      */
     private static $tplSetName;
@@ -85,7 +80,7 @@ class PMF_Template
      *
      * @param array  $myTemplate Templates
      * @param string $tplSetName active template set name
-     * 
+     *
      * @return PMF_Template
      */
     public function __construct(Array $myTemplate, $tplSetName = 'default')
@@ -105,7 +100,7 @@ class PMF_Template
      *
      * @param string $from Name of the template to include
      * @param string $into Name of the new template
-     * 
+     *
      * @return void
      */
     public function merge($from, $into)
@@ -119,7 +114,7 @@ class PMF_Template
      *
      * @param string $templateName    Name of the template
      * @param array  $templateContent Content of the template
-     * 
+     *
      * @return void
      */
     public function parse($templateName, Array $templateContent)
@@ -180,7 +175,7 @@ class PMF_Template
      *
      * @param array $from Name of the template to add
      * @param array $into Name of the new template
-     * 
+     *
      * @return void
      */
     public function add(Array $from, Array $into)
@@ -195,7 +190,7 @@ class PMF_Template
      * @param string $templateName Name of the template
      * @param string $blockName    Block name
      * @param array  $blockContent Content of the block
-     * 
+     *
      * @return void
      */
     public function parseBlock($templateName, $blockName, Array $blockContent)
@@ -223,9 +218,9 @@ class PMF_Template
 
     /**
      * Set the template set name to use
-     * 
+     *
      * @param $tplSetName
-     * 
+     *
      * @return void
      */
     public static function setTplSetName($tplSetName)
@@ -235,7 +230,7 @@ class PMF_Template
     
     /**
      * Get name of the actual template set
-     * 
+     *
      * @return string
      */
     public static function getTplSetName()
@@ -271,7 +266,7 @@ class PMF_Template
      *
      * @param  string $block        Blockname
      * @param  array  $blockContent Content of block
-     * 
+     *
      * @return string implode('', $tmpBlock)
      */
     private function _multiplyBlock($block, $blockContent)
@@ -315,7 +310,7 @@ class PMF_Template
      * This function reads the block
      *
      * @param  string $tpl Block to read
-     * 
+     *
      * @return string
      */
     private function _readBlocks($tpl)
@@ -359,7 +354,7 @@ class PMF_Template
      * This function checks the content
      *
      * @param  string $content Content to check
-     * 
+     *
      * @return string
      */
     private function _checkContent($content)

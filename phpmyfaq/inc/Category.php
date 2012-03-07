@@ -477,7 +477,7 @@ class PMF_Category
 
     /**
      * List in array the root, super-root, ... of the $id
-     * 
+     *
      * @param  integer $id Category id
      * @return array
      */
@@ -496,7 +496,7 @@ class PMF_Category
 
     /**
      * Collapse the complete category tree
-     * 
+     *
      * @return void
      */
     public function collapseAll()
@@ -540,7 +540,7 @@ class PMF_Category
 
     /**
      * expand the entire tree
-     * 
+     *
      * @return void
      */
     public function expandAll()
@@ -554,7 +554,7 @@ class PMF_Category
 
     /**
      * Total height of the expanded tree
-     * 
+     *
      * @return integer
      */
     public function height()
@@ -656,7 +656,6 @@ class PMF_Category
                     $parent,
                     $this->language,
                     $parent
-                )
                 );
                 $num_entries   .= ')</span>';
             }

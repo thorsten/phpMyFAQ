@@ -4,21 +4,16 @@
  *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
  * @package   PMF_Helper
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-07
  */
@@ -29,12 +24,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * PMF_Helper
- * 
+ *
  * @category  phpMyFAQ
  * @package   PMF_Helper
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-07
  */
@@ -42,35 +37,35 @@ class PMF_Helper_Search extends PMF_Helper
 {
     /**
      * Instance
-     * 
+     *
      * @var PMF_Helper_Search
      */
     private static $instance = null;
     
     /**
      * Language
-     * 
+     *
      * @var PMF_Language
      */
     private $language = null;
     
     /**
      * PMF_Pagination object
-     * 
+     *
      * @var PMF_Pagination
      */
     private $pagination = null;
     
     /**
      * Search term
-     * 
+     *
      * @var string
      */
     private $searchterm = '';
     
     /**
      * Constructor
-     * 
+     *
      * @return PMF_Helper_Search
      */
     private function __construct()
@@ -95,7 +90,7 @@ class PMF_Helper_Search extends PMF_Helper
    
     /**
      * __clone() Magic method to prevent cloning
-     * 
+     *
      * @return void
      */
     private function __clone()
@@ -104,9 +99,9 @@ class PMF_Helper_Search extends PMF_Helper
     
     /**
      * PMF_Language setter
-     * 
+     *
      * @param PMF_Language $language PMF_Language
-     * 
+     *
      * @return void
      */
     public function setLanguage(PMF_Language $language)
@@ -116,9 +111,9 @@ class PMF_Helper_Search extends PMF_Helper
     
     /**
      * PMF_Pagination setter
-     * 
+     *
      * @param PMF_Pagination $pagination PMF_Pagination
-     * 
+     *
      * @return void
      */
     public function setPagination(PMF_Pagination $pagination)
@@ -128,9 +123,9 @@ class PMF_Helper_Search extends PMF_Helper
     
     /**
      * Searchterm setter
-     * 
+     *
      * @param string $searchterm Searchterm
-     * 
+     *
      * @return void
      */
     public function setSearchterm($searchterm)
@@ -140,7 +135,7 @@ class PMF_Helper_Search extends PMF_Helper
     
     /**
      * Renders the OpenSearchLink
-     * 
+     *
      * @return string
      */
     public function renderOpenSearchLink()
@@ -154,9 +149,9 @@ class PMF_Helper_Search extends PMF_Helper
     
     /**
      * Renders the result page for Instant Response
-     * 
+     *
      * @param PMF_Search_Resultset $resultSet PMF_Search_Resultset object
-     * 
+     *
      * @return string
      */
     public function renderInstantResponseResult(PMF_Search_Resultset $resultSet)
@@ -216,9 +211,9 @@ class PMF_Helper_Search extends PMF_Helper
     
     /**
      * Renders the result page for Instant Response
-     * 
+     *
      * @param PMF_Search_Resultset $resultSet PMF_Search_Resultset object
-     * 
+     *
      * @return string
      */
     public function renderAdminSuggestionResult(PMF_Search_Resultset $resultSet)
@@ -262,10 +257,10 @@ class PMF_Helper_Search extends PMF_Helper
     
     /**
      * Renders the result page for the main search page
-     * 
+     *
      * @param PMF_Search_Resultset $resultSet   PMF_Search_Resultset object
      * @param integer              $currentPage Current page number
-     * 
+     *
      * @return string
      */
     public function renderSearchResult(PMF_Search_Resultset $resultSet, $currentPage)
@@ -419,9 +414,9 @@ class PMF_Helper_Search extends PMF_Helper
     
     /**
      * Renders the list of the most popular search terms
-     * 
+     *
      * @param array $mostPopularSearches Array with popular search terms
-     * 
+     *
      * @return string
      */
     public function renderMostPopularSearches(Array $mostPopularSearches)

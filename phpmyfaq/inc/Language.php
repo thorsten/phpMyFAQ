@@ -1,18 +1,13 @@
 <?php
 /**
  * Manages all language stuff
- * 
+ *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
  * @package   PMF_Language
@@ -20,7 +15,7 @@
  * @author    Matteo scaramuccia <matteo@phpmyfaq.de>
  * @author    Aurimas Fišeras <aurimas@gmail.com>
  * @copyright 2009-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-05-14
  */
@@ -31,14 +26,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * PMF_Language
- * 
+ *
  * @category  phpMyFAQ
  * @package   PMF_Language
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo scaramuccia <matteo@phpmyfaq.de>
  * @author    Aurimas Fišeras <aurimas@gmail.com>
  * @copyright 2009-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-05-14
  */
@@ -60,7 +55,7 @@ class PMF_Language
     
     /**
      * Constructor
-     * 
+     *
      * @return PMF_Language
      */
     public function __construct()
@@ -72,7 +67,7 @@ class PMF_Language
      *
      * @param bool   $configDetection Configuration detection
      * @param string $configLanguage  Language from configuration
-     * 
+     *
      * @return  string
      */
     public function setLanguage($configDetection, $configLanguage)
@@ -139,7 +134,7 @@ class PMF_Language
     
     /**
      * Returns the current language
-     * 
+     *
      * @return string
      */
     public function getLanguage()
@@ -268,16 +263,16 @@ class PMF_Language
     
     /**
      * True if the language is supported by the bundled TinyMCE editor
-     * 
+     *
      * TinyMCE Language is supported if there is a language file present in
      * PMF_ROOT/admin/editor/langs/$langcode.js
-     * 
+     *
      * TinyMCE language packs can be downloaded from 
      * http://tinymce.moxiecode.com/download_i18n.php
      * and extracted to PMF_ROOT/admin/editor
      *
      * @param  string $langcode Language code
-     * 
+     *
      * @return boolean
      */
     public static function isASupportedTinyMCELanguage($langcode)
@@ -293,7 +288,7 @@ class PMF_Language
      *
      * $_SERVER['HTTP_ACCEPT_LANGUAGE'] could be like the text below:
      * it,pt-br;q=0.8,en-us;q=0.5,en;q=0.3
-     * 
+     *
      * @return void
      */
     private function _getUserAgentLanguage()

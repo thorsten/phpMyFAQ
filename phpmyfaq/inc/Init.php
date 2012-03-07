@@ -1,19 +1,14 @@
 <?php
 /**
  * Some basic functions and PMF_Init class.
- * 
+ *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/. 
  *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License. 
- * 
  * Portions created by Christian Stocker are Copyright (c) 2001-2008 Liip AG.
  * All Rights Reserved.
  *
@@ -25,7 +20,7 @@
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Christian Stocker <chregu@bitflux.ch>
  * @copyright 2005-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-24
  */
@@ -49,7 +44,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Christian Stocker <chregu@bitflux.ch>
  * @copyright 2005-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-24
  */
@@ -108,7 +103,7 @@ class PMF_Init
      * Clean up a filename: if anything goes wrong, an empty string will be returned
      *
      * @param string $filename Filename
-     * 
+     *
      * @return string
      */
     private static function _basicFilenameClean($filename)
@@ -220,7 +215,7 @@ class PMF_Init
      * This function removes the magic quotes if they are enabled.
      *
      * @param array $data Array of data
-     * 
+     *
      * @return array
      */
     private static function _removeMagicQuotesGPC(Array $data)
@@ -252,7 +247,7 @@ class PMF_Init
      * Cleans a html string from some xss issues
      *
      * @param string $string String
-     * 
+     *
      * @return string
      */
     private static function _basicXSSClean($string)
@@ -303,7 +298,7 @@ class PMF_Init
      * Removes xss from an array
      *
      * @param array $data Array of data
-     * 
+     *
      * @return array
      */
     private static function _removeXSSGPC(Array $data)

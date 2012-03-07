@@ -1,15 +1,14 @@
 <?php
 /**
  * Constants for phpMyFAQ
- * 
+ *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License Version
+ *  Version
  * 1.1 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
  *
- * Software distributed under the License is distributed on an "AS IS" basis,
+ basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
  * for the specific language governing rights and limitations under the
  * License.
@@ -19,7 +18,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2003-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2003-12-10
  */
@@ -27,9 +26,9 @@
 /**
  * Set the string below according to your users (main) timezone.
  * For your convenience find below the list of the available timezones:
- * 
+ *
  * http://www.php.net/manual/en/timezones.php   
- * 
+ *
  * Note: a wrong timezone setting could affect on-line users tracking as well as
  *       any filter criterion built using a date.
  * Note: timezone is a global setting i.e. no per-user setting. 
@@ -137,7 +136,7 @@ define('PMF_ENCRYPTION_TYPE', 'hash');
 
 /**
  * List of denied extensions when uploading a file.
- * 
+ *
  * Here is an example:
  * <code>
  * $denyUploadExts = array(

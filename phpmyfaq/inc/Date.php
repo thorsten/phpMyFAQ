@@ -1,25 +1,20 @@
 <?php
 /**
  * phpMyFAQ Date class
- * 
+ *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
  * @package   PMF_Date
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2009-2011 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @copyright 2009-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-24
  */
@@ -35,8 +30,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_Date
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2009-2011 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @copyright 2009-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-24
  */
@@ -49,7 +44,7 @@ class PMF_Date
      * @param string  $format    Date format
      * @param boolean $pmfFormat true if the passed date is in phpMyFAQ format, false if in
      *                           Unix timestamp format
-     * 
+     *
      * @return string
      */
     public static function createIsoDate($date, $format = 'Y-m-d H:i', $pmfFormat = true)
@@ -74,7 +69,7 @@ class PMF_Date
      * @param string  $date      Date string
      * @param boolean $pmfFormat true if the passed date is in phpMyFAQ format, false if in
      *                           Unix timestamp format
-     * 
+     *
      * @return  string  RFC 822 date
      */
     public static function createRFC822Date($date, $pmfFormat = true)
@@ -95,7 +90,7 @@ class PMF_Date
      * @param string  $date      Date string
      * @param boolean $pmfFormat true if the passed date is in phpMyFAQ format, false if in
      *                           Unix timestamp format
-     * 
+     *
      * @return  string  ISO 8601 date
      */
     public static function createISO8601Date($date, $pmfFormat = true)
@@ -113,7 +108,7 @@ class PMF_Date
      *
      * @param string  $file     Filename
      * @param boolean $endOfDay End of day?
-     * 
+     *
      * @return integer
      */
     public static function getTrackingFileDate($file, $endOfDay = false)
@@ -138,7 +133,7 @@ class PMF_Date
 
     /**
      * Returns date formatted according to user defined format
-     * 
+     *
      * @static
      * @param string $date
      * @return string

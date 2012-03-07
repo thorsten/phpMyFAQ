@@ -5,15 +5,10 @@
  *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
  * @package   PMF_DB
@@ -21,7 +16,7 @@
  * @author    Meikel Katzengreis <meikel@katzengreis.com>
  * @author    Tom Rochester <tom.rochester@gmail.com>
  * @copyright 2003-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @package   2003-02-24
  */
@@ -39,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Meikel Katzengreis <meikel@katzengreis.com>
  * @author    Tom Rochester <tom.rochester@gmail.com>
  * @copyright 2003-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @package   2003-02-24
  */
@@ -68,12 +63,12 @@ class PMF_DB_Mysql implements PMF_DB_Driver
 
     /**
      * Connects to the database
-     * 
+     *
      * @param string $host     MySQL Hostname
      * @param string $username MySQL Username
      * @param string $password MySQL Password
      * @param string $db_name  MySQL Database name
-     * 
+     *
      * @return boolean TRUE, if connected, otherwise false
      */
     public function connect ($host, $user, $password, $db)
@@ -220,7 +215,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
 
      /**
       * Returns the error string.
-      * 
+      *
       * @return string
       */
     public function error()
@@ -230,7 +225,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
 
     /**
      * Returns the client version string.
-     * 
+     *
      * @return string
      */
     public function clientVersion()

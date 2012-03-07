@@ -4,23 +4,18 @@
  *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- * 
  * @category  phpMyFAQ
  * @package   PMF_Search
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
  * @copyright 2008-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2008-01-26
  */
@@ -38,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
  * @copyright 2008-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2008-01-26
  */
@@ -60,21 +55,21 @@ class PMF_Search
     
     /**
      * Category ID
-     * 
+     *
      * @var integer
      */
     private $categoryId = null;
 
     /**
      * Category object
-     * 
+     *
      * @var PMF_Category
      */
     private $category = null;
     
     /**
      * Search table
-     * 
+     *
      * @var string
      */
     private $_table = null;
@@ -84,7 +79,7 @@ class PMF_Search
      *
      * @param PMF_DB_Driver $database Database connection
      * @param PMF_Language  $language Language object
-     * 
+     *
      * @return PMF_Search
      */
     public function __construct(PMF_DB_Driver $database, PMF_Language $language)
@@ -96,7 +91,7 @@ class PMF_Search
     
     /**
      * Setter for category
-     * 
+     *
      * @param  integer $categoryId Category ID
      * @return void
      */
@@ -107,7 +102,7 @@ class PMF_Search
     
     /**
      * Getter for category
-     * 
+     *
      * @return integer
      */
     public function getCategoryId()
@@ -120,7 +115,7 @@ class PMF_Search
      *
      * @param string  $searchterm   Text/Number (solution id)
      * @param boolean $allLanguages true to search over all languages
-     * 
+     *
      * @return  array
      */
     public function search($searchterm, $allLanguages = true)
@@ -229,7 +224,7 @@ class PMF_Search
     
     /**
      * Returns the most popular searches
-     * 
+     *
      * @param integer $numResults Number of Results, default: 7
      * @param boolean $withLang   Should the language be included in the result?
      *
@@ -271,7 +266,7 @@ class PMF_Search
     
     /**
      * Returns row count from the faqsearches table
-     * 
+     *
      * @return integer
      */
     public function getSearchesCount()
@@ -290,7 +285,7 @@ class PMF_Search
 
     /**
      * Sets the PMF_Category object
-     * 
+     *
      * @param PMF_Category $category
      */
     public function setCategory($category)
@@ -300,7 +295,7 @@ class PMF_Search
 
     /**
      * Returns the PMF_Category object
-     * 
+     *
      * @return PMF_Category
      */
     public function getCategory()
