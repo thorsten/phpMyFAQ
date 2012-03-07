@@ -174,6 +174,11 @@ class PMF_Link
     public $id = '';
 
     /**
+     * @var PMF_Configuration
+     */
+    private $_config = null;
+
+    /**
      * Constructor
      *
      * @param string $url    URL

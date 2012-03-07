@@ -4,7 +4,6 @@
  *
  * PHP Version 5.2
  *
-
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -160,7 +159,7 @@ if ($permission['editbt']) {
         $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);            
         if ($faqConfig->get('main.enableGoogleTranslation') === true && !empty($languages)) {
             
-            $linkverifier = new PMF_Linkverifier($user->getLogin());
+            $linkverifier = new PMF_Linkverifier($faqConfig, $user->getLogin());
             $visits       = PMF_Visits::getInstance($db, $Language);
     
             $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);

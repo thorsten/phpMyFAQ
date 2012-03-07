@@ -4,7 +4,6 @@
  *
  * PHP Version 5.2
  *
-
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -132,7 +131,7 @@ enumScriptParameters();
             <h2><?php print $PMF_LANG['ad_linkcheck_config_title']; ?></h2>
         </header>
 <?php
-$linkverifier = new PMF_Linkverifier($user->getLogin());
+$linkverifier = new PMF_Linkverifier($faqConfig, $user->getLogin());
 if ($linkverifier->isReady() == false) {
     print $PMF_LANG['ad_linkcheck_config_disabled'];
     return;

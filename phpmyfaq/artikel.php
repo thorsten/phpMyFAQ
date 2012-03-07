@@ -4,7 +4,6 @@
  *
  * PHP Version 5.2
  *
-
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -26,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $captcha     = new PMF_Captcha($faqConfig);
 $oGlossary   = new PMF_Glossary();
-$oLnk        = new PMF_Linkverifier();
+$oLnk        = new PMF_Linkverifier($faqConfig);
 $faqTagging  = new PMF_Tags($db, $Language);
 $faqRelation = new PMF_Relation($db, $Language);
 $faqRating   = new PMF_Rating($db, $Language);

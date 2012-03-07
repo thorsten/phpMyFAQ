@@ -4,7 +4,6 @@
  *
  * PHP Version 5.2
  *
-
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -117,13 +116,6 @@ class PMF_Linkverifier
     protected $slow_hosts = array();
 
     /**
-    * DB handle
-    *
-    * @var  object
-    */
-    private $db = null;
-
-    /**
      * User
      *
      * @var integer
@@ -131,19 +123,22 @@ class PMF_Linkverifier
     protected $user = null;
 
     /**
+     * @var PMF_Configuration
+     */
+    private $_config = null;
+
+    /**
      * Constructor
      *
+     *
      * @param  string $user User
-     * @author Minoru TODA <todam@netjapan.co.jp>
-     * @author Matteo Scaramuccia <matteo@scaramuccia.com>
-     * @since  2005-08-01
      */
-    public function __construct($user = null)
+    public function __construct(PMF_Configuration $config, $user = null)
     {
         global $PMF_LANG;
 
-        $this->db   = PMF_Db::getInstance();
-        $this->user = $user;
+        $this->_config = $config;
+        $this->user    = $user;
 
         if (!@extension_loaded('openssl')) { // PHP 4.3.0+: fsockopen needs OpenSSL
             $this->addIgnoreProtocol("https:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "https"));
@@ -275,8 +270,8 @@ class PMF_Linkverifier
     function loadConfigurationFromDB()
     {
         $query = "SELECT type, url, reason FROM ".SQLPREFIX."faqlinkverifyrules WHERE enabled = 'y'";
-        $result = $this->db->query($query);
-        while ($row = @$this->db->fetchObject($result)) {
+        $result = $this->_config->getDb()->query($query);
+        while ($row = $this->_config->getDb()->fetchObject($result)) {
             switch (strtolower($row->type)) {
             case 'ignore':      $this->addIgnoreList($row->url, $row->reason);
                                 break;
@@ -445,7 +440,14 @@ class PMF_Linkverifier
 
         // Recursing too much ?
         if (($redirectCount >= LINKVERIFIER_MAX_REDIRECT_COUNT) || ($url == $redirect)) {
-            return array(false, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_maxredirect'], LINKVERIFIER_MAX_REDIRECT_COUNT));
+            return array(
+                false,
+                $redirectCount,
+                sprintf(
+                    $PMF_LANG['ad_linkcheck_openurl_maxredirect'],
+                    LINKVERIFIER_MAX_REDIRECT_COUNT
+                )
+            );
         }
 
         // If destination is blank, fail.
@@ -499,14 +501,28 @@ class PMF_Linkverifier
 
         // Check whether we tried the host before
         if (isset($this->slow_hosts[$urlParts['host']])) {
-            return array(false, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_tooslow'],PMF_String::htmlspecialchars($urlParts['host'])));
+            return array(
+                false,
+                $redirectCount,
+                sprintf(
+                    $PMF_LANG['ad_linkcheck_openurl_tooslow'],
+                    PMF_String::htmlspecialchars($urlParts['host'])
+                )
+            );
         }
 
         // Check whether the hostname exists
         if (gethostbynamel($urlParts['host']) === false) {
             // mark this host too slow to verify
             $this->slow_hosts[$urlParts['host']] = true;
-            return array(false, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_nodns'], PMF_String::htmlspecialchars($urlParts['host'])));
+            return array(
+                false,
+                $redirectCount,
+                sprintf(
+                    $PMF_LANG['ad_linkcheck_openurl_nodns'],
+                    PMF_String::htmlspecialchars($urlParts['host'])
+                )
+            );
         }
 
         $_response = "";
@@ -520,7 +536,14 @@ class PMF_Linkverifier
         if (!$fp) {
             // mark this host too slow to verify
             $this->slow_hosts[$urlParts['host']] = true;
-            return array(false, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_tooslow'],PMF_String::htmlspecialchars($urlParts['host'])));
+            return array(
+                false,
+                $redirectCount,
+                sprintf(
+                    $PMF_LANG['ad_linkcheck_openurl_tooslow'],
+                    PMF_String::htmlspecialchars($urlParts['host'])
+                )
+            );
         }
 
         // wait for data with timeout (default: 10secs)
@@ -662,7 +685,7 @@ class PMF_Linkverifier
             $id,
             $artlang);
         
-        if ($this->db->query($query)) {
+        if ($this->_config->getDb()->query($query)) {
             return true;
         } else {
             return false;
@@ -676,11 +699,8 @@ class PMF_Linkverifier
      */
     public function getURLValidateInterval()
     {
-        $faqConfig   = PMF_Configuration::getInstance();
-        $requestTime = 0;
-
-        if ($faqConfig->get('main.urlValidateInterval') != '') {
-            $requestTime = $_SERVER['REQUEST_TIME'] - $faqConfig->get('main.urlValidateInterval');
+        if ($this->_config->get('main.urlValidateInterval') != '') {
+            $requestTime = $_SERVER['REQUEST_TIME'] - $this->_config->get('main.urlValidateInterval');
         } else {
             $requestTime = $_SERVER['REQUEST_TIME'] - 86400; // default in recheck links once a day unless explicitly requested.
         }
@@ -701,9 +721,9 @@ class PMF_Linkverifier
         $interval = $this->getURLValidateInterval();
 
         $query = "SELECT COUNT(*) FROM ".SQLPREFIX."faqdata WHERE links_check_date < ".$interval;
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
         $untestedCount = 0;
-        while ($row = $this->db->fetch_row($result)) {
+        while ($row = $this->_config->getDb()->fetch_row($result)) {
             list($untestedCount) = $row;
         }
         return $untestedCount;
@@ -731,10 +751,10 @@ class PMF_Linkverifier
                 lang = '%s'",
             SQLPREFIX,
             $id,
-            $this->db->escape($artlang));
+            $this->_config->getDb()->escape($artlang));
             
-        if ($result = $this->db->query($query)) {
-            while ($row = $this->db->fetchObject($result)) {
+        if ($result = $this->_config->getDb()->query($query)) {
+            while ($row = $this->_config->getDb()->fetchObject($result)) {
                 $_linkState = $row->links_state;
                 if (trim($_linkState) == "") {
                     $_linkState = true;
@@ -865,15 +885,13 @@ class PMF_Linkverifier
     public function verifyArticleURL($contents = '', $id = 0, $artlang = '', $cron = false)
     {
         global $PMF_LANG;
-        
-        $faqConfig = PMF_Configuration::getInstance();
-        
-        if ($faqConfig->get('main.referenceURL') == '') {
+
+        if ($this->_config->get('main.referenceURL') == '') {
             $output = $PMF_LANG['ad_linkcheck_noReferenceURL'];
             return ($cron ? '' : '<br /><br />'.$output);
         }
 
-        if (trim('' == $faqConfig->get('main.referenceURL'))) {
+        if (trim('' == $this->_config->get('main.referenceURL'))) {
             $output = $PMF_LANG['ad_linkcheck_noReferenceURL'];
             return ($cron ? '' : '<br /><br />'.$output);
         }
@@ -901,7 +919,7 @@ class PMF_Linkverifier
         $output     .= '    <table class="verifyArticleURL">'."\n";
         foreach ($result as $type => $_value) {
             $output .= "        <tr><td><strong>".PMF_String::htmlspecialchars($type)."</strong></td></tr>\n";
-            foreach ($_value as $url => $value) {
+            foreach ($_value as $value) {
                 $_output  = '            <td />';
                 $_output .= '            <td><a href="'.$value['absurl'].'" target="_blank">'.PMF_String::htmlspecialchars($value['absurl'])."</a></td>\n";
                 $_output .= '            <td>';
@@ -962,9 +980,8 @@ class PMF_Linkverifier
      * @param   string $type
      * @param   string $url
      * @param   string $reason
+     *
      * @return  void
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     function addVerifyRule($type = '', $url = '', $reason = '')
     {
@@ -976,15 +993,15 @@ class PMF_Linkverifier
                         VALUES
                             (%d, '%s', '%s', '%s', 'y', 'n', '%s', '%s', '%s')",
                         SQLPREFIX,
-                        $this->db->nextId(SQLPREFIX."faqlinkverifyrules", "id"),
-                        $this->db->escape($type),
-                        $this->db->escape($url),
-                        $this->db->escape($reason),
-                        $this->db->escape($this->user->getLogin()),
-                        $this->db->escape(date('YmdHis')),
-                        $this->db->escape(date('YmdHis'))
+                        $this->_config->getDb()->nextId(SQLPREFIX."faqlinkverifyrules", "id"),
+                        $this->_config->getDb()->escape($type),
+                        $this->_config->getDb()->escape($url),
+                        $this->_config->getDb()->escape($reason),
+                        $this->user,
+                        date('YmdHis'),
+                        date('YmdHis')
                         );
-            $this->db->query($query);
+            $this->_config->getDb()->query($query);
         }
     }
 }
