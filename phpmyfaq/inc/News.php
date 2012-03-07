@@ -1,25 +1,20 @@
 <?php
 /**
  * The News class for phpMyFAQ news
- * 
+ *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
  * @package   PMF_News
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2006-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2006-06-25
  */
@@ -36,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2006-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2006-06-25
  */
@@ -86,7 +81,7 @@ class PMF_News
      * @param boolean $showArchive    Show archived news
      * @param boolean $active         Show active news
      * @param boolean $forceConfLimit Force to limit in configuration
-     * 
+     *
      * @return array
      */
     public function getLatestData($showArchive = false, $active = true, $forceConfLimit = false)
@@ -157,7 +152,7 @@ class PMF_News
      *
      * @param boolean $showArchive Show archived news
      * @param boolean $active      Show active news
-     * 
+     *
      * @return string
      */
     public function getNews($showArchive = false, $active = true)
@@ -253,7 +248,7 @@ class PMF_News
      *
      * @param integer $id    ID of news
      * @param boolean $admin Is admin
-     * 
+     *
      * @return array
      */
     function getNewsEntry($id, $admin = false)
@@ -316,7 +311,7 @@ class PMF_News
      * Adds a comment
      *
      * @param array $commentData Array with comment data
-     * 
+     *
      * @return boolean
      */
     function addComment($commentData)
@@ -330,7 +325,7 @@ class PMF_News
      *
      * @param integer $record_id  Record ID
      * @param integer $comment_id Comment ID
-     * 
+     *
      * @return boolean
      */
     function deleteComment($record_id, $comment_id)
@@ -343,7 +338,7 @@ class PMF_News
      * Adds a new news entry
      *
      * @param array $data Array with news data
-     * 
+     *
      * @return boolean
      */
     function addNewsEntry($data)
@@ -383,7 +378,7 @@ class PMF_News
      *
      * @param integer $id   News ID
      * @param array   $data Array with news data
-     * 
+     *
      * @return boolean
      */
     function updateNewsEntry($id, Array $data)
@@ -433,7 +428,7 @@ class PMF_News
      * Deletes a news entry identified by its ID
      *
      * @param integer $id News ID
-     * 
+     *
      * @return boolean
      */
     function deleteNews($id)

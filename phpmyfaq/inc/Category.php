@@ -4,24 +4,19 @@
  *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- * 
  * @category  phpMyFAQ
  * @package   PMF_Category
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Lars Tiedemann <larstiedemann@yahoo.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Rudi Ferrari <bookcrossers@gmx.de>
- * @copyright 2004-2011 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @copyright 2004-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-16
  */
@@ -39,8 +34,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Lars Tiedemann <larstiedemann@yahoo.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Rudi Ferrari <bookcrossers@gmx.de>
- * @copyright 2004-2011 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @copyright 2004-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-16
  */
@@ -483,7 +478,7 @@ class PMF_Category
 
     /**
      * List in array the root, super-root, ... of the $id
-     * 
+     *
      * @param  integer $id Category id
      * @return array
      */
@@ -502,7 +497,7 @@ class PMF_Category
 
     /**
      * Collapse the complete category tree
-     * 
+     *
      * @return void
      */
     public function collapseAll()
@@ -546,7 +541,7 @@ class PMF_Category
 
     /**
      * expand the entire tree
-     * 
+     *
      * @return void
      */
     public function expandAll()
@@ -560,7 +555,7 @@ class PMF_Category
 
     /**
      * Total height of the expanded tree
-     * 
+     *
      * @return integer
      */
     public function height()

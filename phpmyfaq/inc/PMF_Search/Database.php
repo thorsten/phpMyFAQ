@@ -4,21 +4,16 @@
  *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- * 
  * @category  phpMyFAQ
  * @package   PMF_Search
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2011 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @copyright 2010-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
  */
@@ -33,8 +28,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Search
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2011 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @copyright 2010-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
  */
@@ -42,58 +37,58 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
 {
     /**
      * Database connection handle
-     * 
+     *
      * @var PMF_DB_Driver
      */
     protected $dbHandle = null;
 
     /**
      * Searching database table
-     * 
+     *
      * @var string
      */
     protected $table = '';
     
     /**
      * Joined searching database table
-     * 
+     *
      * @var string
      */
     protected $joinedTable = '';
     
     /**
      * Columns for the resultset
-     * 
+     *
      * @var array
      */
     protected $resultColumns = array();
     
     /**
      * Columns for the joined table
-     * 
+     *
      * @var array
      */
     protected $joinedColumns = array();
     
     /**
      * Matching columns for the search
-     * 
+     *
      * @var array
      */
     protected $matchingColumns = array();
     
     /**
      * Conditions columns with their values
-     * 
+     *
      * @var array
      */
     protected $conditions = array();
     
     /**
      * Constructor
-     * 
+     *
      * @param PMF_Language $language Language
-     * 
+     *
      * @return PMF_Search_Abstract
      */
     public function __construct(PMF_Language $language)
@@ -103,11 +98,11 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     
     /**
      * Prepares the search and executes it
-     * 
+     *
      * @param string $searchTerm Search term
-     * 
+     *
      * @return resource
-     * 
+     *
      * @throws PMF_Search_Exception
      */
     public function search($searchTerm)
@@ -131,9 +126,9 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     
     /**
      * Setter for the database handle
-     * 
+     *
      * @param PMF_DB_Driver $dbHandle Database Handle
-     * 
+     *
      * @return PMF_Search_Database
      */
     public function setDatabaseHandle(PMF_DB_Driver $dbHandle)
@@ -144,7 +139,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     }
     /**
      * Getter for the database handle
-     * 
+     *
      * @return PMF_DB_Driver
      */
     public function getDatabaseHandle()
@@ -154,9 +149,9 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     
     /**
      * Sets search table
-     * 
+     *
      * @param string $table Table where search should be performed
-     * 
+     *
      * @return PMF_Search_Database
      */
     public function setTable($table)
@@ -168,7 +163,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     
     /**
      * Returns the search table
-     * 
+     *
      * @return string
      */
     public function getTable()
@@ -178,9 +173,9 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     
     /**
      * Sets joined search table
-     * 
+     *
      * @param string $joinedTable Joined table where search should be performed
-     * 
+     *
      * @return PMF_Search_Database
      */
     public function setJoinedTable($joinedTable = '')
@@ -192,7 +187,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     
     /**
      * Returns the joined table
-     * 
+     *
      * @return string
      */
     public function getJoinedTable()
@@ -206,9 +201,9 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     
     /**
      * Sets the part of the SQL query with the columns for the result set
-     * 
+     *
      * @param array $columns Array of columns
-     * 
+     *
      * @return PMF_Search_Database
      */
     public function setResultColumns(Array $columns)
@@ -220,7 +215,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     
     /**
      * Returns the part of the SQL query with the columns for the result set
-     * 
+     *
      * @return string
      */
     public function getResultColumns()
@@ -240,9 +235,9 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     
     /**
      * Sets the part of the SQL query with the columns for the join
-     * 
+     *
      * @param array $joinedColumns Array of columns
-     * 
+     *
      * @return PMF_Search_Database
      */
     public function setJoinedColumns(Array $joinedColumns)
@@ -254,7 +249,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     
     /**
      * Returns the part of the SQL query with the columns for the join
-     * 
+     *
      * @return string
      */
     public function getJoinedColumns()
@@ -270,9 +265,9 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     
     /**
      * Sets the part of the SQL query with the matching columns
-     * 
+     *
      * @param array $matchingColumns Array of columns
-     * 
+     *
      * @return PMF_Search_Database
      */
     public function setMatchingColumns(Array $matchingColumns)
@@ -284,7 +279,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     
     /**
      * Returns the part of the SQL query with the matching columns
-     * 
+     *
      * @return string
      */
     public function getMatchingColumns()
@@ -294,9 +289,9 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     
     /**
      * Sets the part of the SQL query with the conditions
-     * 
+     *
      * @param array $conditions Array of columns
-     * 
+     *
      * @return PMF_Search_Database
      */
     public function setConditions(Array $conditions)
@@ -308,7 +303,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     
     /**
      * Returns the part of the SQL query with the conditions
-     * 
+     *
      * @return string
      */
     public function getConditions()
@@ -330,9 +325,9 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     
     /**
      * Creates the part for the WHERE clause
-     * 
+     *
      * @param string $searchTerm Search term
-     * 
+     *
      * @return string
      */
     public function getMatchClause($searchTerm = '')

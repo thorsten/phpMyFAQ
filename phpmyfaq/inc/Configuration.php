@@ -2,7 +2,7 @@
 /**
  * The main class for fetching the configuration, update and delete items. This
  * class is also a small Dependency Injection Container for phpMyFAQ.
- * 
+ *
  * PHP Version 5.2
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -42,7 +42,7 @@ class PMF_Configuration
 
     /**
      * Instance
-     * 
+     *
      * @var PMF_Configuration
      */
     private static $instance = null;
@@ -115,7 +115,7 @@ class PMF_Configuration
      * Returns a configuration item
      *
      * @param  string $item Configuration item
-     * 
+     *
      * @return mixed
      */
     public function get($item)
@@ -184,7 +184,7 @@ class PMF_Configuration
      * Updates all configuration items
      *
      * @param  array $newConfigs Array with new configuration values
-     * 
+     *
      * @return bool
      */
     public function update(Array $newConfigs)

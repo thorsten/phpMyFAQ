@@ -1,18 +1,13 @@
 <?php
 /**
  * Manages user authentication with LDAP server.
- * 
+ *
  * PHP version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ 
  * @package   PMF_Auth
@@ -20,7 +15,7 @@
  * @author    Lars Scheithauer <larsscheithauer@googlemail.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-01
  */
@@ -38,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Lars Scheithauer <larsscheithauer@googlemail.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-01
  */
@@ -63,7 +58,7 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
      *
      * @param string  $enctype   Type of encoding
      * @param boolean $read_only Readonly?
-     * 
+     *
      * @return PMF_Auth_AuthLdap
      */
     public function __construct($enctype = 'none', $read_only = false)
@@ -116,7 +111,7 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
      *
      * @param string $login Loginname
      * @param string $pass  Password
-     * 
+     *
      * @return boolean
     */
     public function changePassword($login, $pass)
@@ -128,7 +123,7 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
      * Does nothing. A function required to be a valid auth.
      *
      * @param string $login Loginname
-     * 
+     *
      * @return bool
      */
     public function delete($login)
@@ -149,7 +144,7 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
      * @param string $login        Loginname
      * @param string $pass         Password
      * @param array  $optionslData Optional data
-     * 
+     *
      * @return boolean
      */
     public function checkPassword($login, $pass, Array $optionalData = null)
@@ -199,7 +194,7 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
      *
      * @param string $login        Loginname
      * @param array  $optionslData Optional data
-     * 
+     *
      * @return integer
      */
     public function checkLogin($login, Array $optionalData = null)

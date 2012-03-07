@@ -3,22 +3,17 @@
  * The string wrapper class using single byte string functions.
  *
  * PHP Version 5.2.0
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
  *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- * 
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
+ *
  * @category  phpMyFAQ
  * @package   PMF_String
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2011 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @copyright 2009-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-08
  */
@@ -37,12 +32,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  *
  * TODO Cover also nearly complete supported charsets, languages and chars
  *      Notice this article: http://en.wikipedia.org/wiki/ISO_8859-1
- * 
+ *
  * @category  phpMyFAQ
  * @package   PMF_String
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2010 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @copyright 2009-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-06
  */
@@ -50,15 +45,15 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
 {
     /**
      * Instance
-     * 
+     *
      * @var PMF_String_UTF8ToLatinConvertable
      */
     private static $instance;
 
     /**
-     * 
+     *
      * Constructor
-     * 
+     *
      * @return PMF_String_Basic
      */
     private final function __construct()
@@ -68,9 +63,9 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
     
     /**
      * Create and return an instance
-     * 
+     *
      * @param string $language
-     * 
+     *
      * @return PMF_String_Basic
      */
     public static function getInstance($language = 'en')
@@ -89,7 +84,7 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
 	 * Prepare a string to be used with a single byte string function.
 	 * If the string isn't utf8, presume it's iso
 	 * @param string $str
-	 * 
+	 *
 	 * @return string
      */
     public function iso($str)
@@ -101,7 +96,7 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
     /**
 	 * Convert a string back to it's original charset which is utf8
 	 * @param string $str
-	 * 
+	 *
 	 * @return string
      */
     public function utf8($str)
@@ -110,9 +105,9 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
     }
     /**
      * Get string character count
-     * 
+     *
      * @param string $str String
-     * 
+     *
      * @return int
      */
     public function strlen($str)
@@ -123,11 +118,11 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
     
     /**
      * Get a part of string
-     * 
+     *
      * @param string $str    String
      * @param int    $start  Start
      * @param int    $length Length
-     * 
+     *
      * @return string
      */
     public function substr($str, $start, $length = null)
@@ -142,11 +137,11 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
     
     /**
      * Get position of the first occurence of a string
-     * 
+     *
      * @param string $haystack Haystack
      * @param string $needle   Needle
      * @param string $offset   Offset
-     * 
+     *
      * @return int
      */
     public function strpos($haystack, $needle, $offset = 0)
@@ -157,9 +152,9 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
     
     /**
      * Make a string lower case
-     * 
+     *
      * @param string $str String
-     * 
+     *
      * @return string
      */
     public function strtolower($str)
@@ -172,9 +167,9 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
     
     /**
      * Make a string upper case
-     * 
+     *
      * @param string $str String
-     * 
+     *
      * @return string
      */
     public function strtoupper($str)
@@ -187,11 +182,11 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
     
     /**
      * Get occurence of a string within another
-     * 
+     *
      * @param string $haystack Haystack
      * @param string $needle   Needle
      * @param boolean $part    Part
-     * 
+     *
      * @return string|false
      */
     public function strstr($haystack, $needle, $part = false)
@@ -206,7 +201,7 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
 	 * Get last occurence of a string within another
 	 * @param string $haystack
 	 * @param string $needle
-	 * 
+	 *
 	 * @return string
      */
     public function strrchr($haystack, $needle)
@@ -218,11 +213,11 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
     
     
     /**
-     * 
+     *
      * Count substring occurences
      * @param string $haystack
      * @param string $needle
-     * 
+     *
      * @return int
      */
     public function substr_count($haystack, $needle)
@@ -236,7 +231,7 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
 	 * @param string $haystack
 	 * @param string $needle
 	 * @param int $offset
-	 * 
+	 *
 	 * @return int
      */
     public function strrpos($haystack, $needle, $offset = 0)
@@ -246,14 +241,14 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
     
     
     /**
-     * 
+     *
      * Match a regexp
      * @param string $pattern
      * @param string $subject
      * @param array &$matches
      * @param int $flags
      * @param int $offset
-     * 
+     *
      * @return int
      */
     public function preg_match($pattern, $subject, &$matches = null, $flags = 0, $offset = 0)
@@ -263,14 +258,14 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
     
     
     /**
-     * 
+     *
      * Match a regexp globally
      * @param string $pattern
      * @param string $subject
      * @param array &$matches
      * @param int $flags
      * @param int $offset
-     * 
+     *
      * @return int
      */
     public function preg_match_all($pattern, $subject, &$matches, $flags = 0, $offset = 0)
@@ -285,7 +280,7 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
      * @param string $subject
      * @param int $limit
      * @param int $flags
-     * 
+     *
      * @return array
      */
     public function preg_split($pattern, $subject, $limit = -1, $flags = 0)
@@ -301,7 +296,7 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
      * @param string|array $subject
      * @param int $limit
      * @param int &$count
-     * 
+     *
      * @return array|string
      */
     public function preg_replace_callback($pattern, $callback, $subject, $limit= -1, &$count = 0)
@@ -325,7 +320,7 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
      * @param string|array $subject
      * @param int $limit
      * @param int &$count
-     * 
+     *
      * @return array|string|null
      */
     public function preg_replace($pattern, $replacement, $subject, $limit= -1, &$count = 0)
@@ -345,9 +340,9 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
     /**
      * Append an u to the string. The string is supposed 
      * to be a regex prepared to use with a preg_* function
-     * 
+     *
      * @param string $str
-     * 
+     *
      * @return string
      */
     private static function appendU($str)
