@@ -51,8 +51,9 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/config/database.php')) {
         $_SERVER['HTTP_USER_AGENT'] = '';
     }
     
-    require_once PMF_ROOT_DIR. '/inc/Init.php';
     define('IS_VALID_PHPMYFAQ', null);
+    
+    require_once PMF_ROOT_DIR. '/inc/Bootstrap.php';
     PMF_Init::cleanRequest();
 
     // Preload English strings

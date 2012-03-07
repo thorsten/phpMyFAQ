@@ -44,7 +44,7 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 // Autoload classes, prepend and start the PHP session
 //
-require_once 'inc/Init.php';
+require_once 'inc/Bootstrap.php';
 PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH . trim($faqConfig->get('main.phpMyFAQToken')));
 session_start();

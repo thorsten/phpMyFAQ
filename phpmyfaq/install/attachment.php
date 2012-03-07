@@ -39,7 +39,7 @@ if (!file_exists(PMF_ROOT_DIR . '/config/database.php')) {
 //
 // Autoload classes, prepend and start the PHP session
 //
-require_once PMF_ROOT_DIR.'/inc/Init.php';
+require_once PMF_ROOT_DIR.'/inc/Bootstrap.php';
 PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH.trim($faqConfig->get('main.phpMyFAQToken')));
 session_start();

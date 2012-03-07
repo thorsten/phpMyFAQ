@@ -36,7 +36,7 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 // Autoload classes, prepend and start the PHP session
 //
-require_once PMF_ROOT_DIR.'/inc/Init.php';
+require_once PMF_ROOT_DIR.'/inc/Bootstrap.php';
 PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH.trim($faqConfig->get('main.phpMyFAQToken')));
 session_start();
@@ -44,9 +44,11 @@ session_start();
 /**
  * Initialize attachment factory
  */
-PMF_Attachment_Factory::init($faqConfig->get('records.attachmentsStorageType'),
-                             $faqConfig->get('records.defaultAttachmentEncKey'),
-                             $faqConfig->get('records.enableAttachmentEncryption'));
+PMF_Attachment_Factory::init(
+    $faqConfig->get('records.attachmentsStorageType'),
+    $faqConfig->get('records.defaultAttachmentEncKey'),
+    $faqConfig->get('records.enableAttachmentEncryption')
+);
 
 $currentSave   = PMF_Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);
 $currentAction = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);

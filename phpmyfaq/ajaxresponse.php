@@ -28,7 +28,7 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 // Prepend and start the PHP session
 //
-require_once 'inc/Init.php';
+require 'inc/Bootstrap.php';
 PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH . trim($faqConfig->get('main.phpMyFAQToken')));
 session_start();

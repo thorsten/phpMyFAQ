@@ -56,7 +56,7 @@ define('PMF_SITEMAP_GOOGLE_INDEX_FILENAME', 'sitemap_index.xml');
 define('PMF_ROOT_DIR', dirname(__FILE__));
 define('IS_VALID_PHPMYFAQ', null);
 
-require PMF_ROOT_DIR .'/inc/Init.php';
+require PMF_ROOT_DIR .'/inc/Bootstrap.php';
 
 //
 // Initalizing static string wrapper
