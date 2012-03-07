@@ -214,9 +214,11 @@ function getBannedWords()
  */
 function checkBannedWord($content)
 {
+    global $faqConfig;
+
     // Sanity checks
     $content = trim($content);
-    if (('' == $content) && (!PMF_Configuration::getInstance()->get('spam.checkBannedWords'))) {
+    if (('' == $content) && (!$faqConfig->get('spam.checkBannedWords'))) {
         return true;
     }
 
@@ -232,53 +234,6 @@ function checkBannedWord($content)
     }
 
     return true;
-}
-
-/**
- * Returns the number of anonymous users and registered ones.
- * These are the numbers of unique users who have perfomed
- * some activities within the last five minutes
- *
- * @param  integer $activityTimeWindow Optionally set the time window size in sec. 
- *                                     Default: 300sec, 5 minutes
- * @return array
- */
-function getUsersOnline($activityTimeWindow = 300)
-{
-    $users = array(0 ,0);
-    $db    = PMF_Db::getInstance();
-
-    if (PMF_Configuration::getInstance()->get('main.enableUserTracking')) {
-        $timeNow = ($_SERVER['REQUEST_TIME'] - $activityTimeWindow);
-        // Count all sids within the time window
-        // TODO: add a new field in faqsessions in order to find out only sids of anonymous users
-        $result = $db->query("
-                    SELECT
-                        count(sid) AS anonymous_users
-                    FROM
-                        ".SQLPREFIX."faqsessions
-                    WHERE
-                            user_id = -1
-                        AND time > ".$timeNow);
-        if (isset($result)) {
-            $row      = $db->fetchObject($result);
-            $users[0] = $row->anonymous_users;
-        }
-        // Count all faquser records within the time window
-        $result = $db->query("
-                    SELECT
-                        count(session_id) AS registered_users
-                    FROM
-                        ".SQLPREFIX."faquser
-                    WHERE
-                        session_timestamp > ".$timeNow);
-        if (isset($result)) {
-            $row      = $db->fetchObject($result);
-            $users[1] = $row->registered_users;
-        }
-    }
-
-    return $users;
 }
 
 /**
