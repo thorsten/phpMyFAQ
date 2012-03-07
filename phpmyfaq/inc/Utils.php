@@ -4,7 +4,6 @@
  *
  * PHP Version 5.2
  *
-
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -66,14 +65,15 @@ class PMF_Utils
 
         // Create the HTTP options for the HTTP stream context, see below
         // Set phpMyFAQ agent related data
-        $agent = 'phpMyFAQ/' . PMF_Configuration::getInstance()->get('main.currentVersion') . ' on PHP/'.PHP_VERSION;
+        $agent = 'phpMyFAQ/' . PMF_System::getVersion() . ' on PHP/' . PHP_VERSION;
         $opts  = array(
             'header' => 'User-Agent: '.$agent."\r\n",
-            'method' => 'GET');
+            'method' => 'GET'
+        );
         // HTTP 1.1 Virtual Host
         $urlParts = @parse_url($url);
         if (isset($urlParts['host'])) {
-            $opts['header'] = $opts['header'].'Host: '.$urlParts['host']."\r\n";
+            $opts['header'] = $opts['header'] . 'Host: ' . $urlParts['host'] . "\r\n";
         }
         // Socket timeout
         if (version_compare(PHP_VERSION, '5.2.1', '<')) {
