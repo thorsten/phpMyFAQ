@@ -97,8 +97,10 @@ class PMF_Configuration
             SELECT
                 config_name, config_value
             FROM
-                %sfaqconfig",
-            SQLPREFIX);
+                %s%s",
+            SQLPREFIX,
+            self::TABLE_FAQCONFIG
+        );
             
         $result = $this->getDb()->query($query);
         $config = $this->getDb()->fetchAll($result);
@@ -135,7 +137,7 @@ class PMF_Configuration
     }
 
     /**
-     * Sets the database object
+     * Sets the PMF_DB_Driver object
      *
      * @param PMF_DB_Driver $database
      *
@@ -147,7 +149,7 @@ class PMF_Configuration
     }
 
     /**
-     * Returns the database object
+     * Returns the PMF_DB_Driver object
      *
      * @return PMF_DB_Driver
      */
@@ -157,31 +159,54 @@ class PMF_Configuration
     }
 
     /**
+     * Sets the PMF_Language object
+     *
+     * @param PMF_Language $language
+     *
+     * @return void
+     */
+    public function setLanguage(PMF_Language $language)
+    {
+        $this->config['core.language'] = $language;
+    }
+
+    /**
+     * Returns the PMF_Language object
+     *
+     * @return mixed
+     */
+    public function getLanguage()
+    {
+        return $this->config['core.language'];
+    }
+
+    /**
      * Updates all configuration items
      *
-     * @param  array $newconfig Array with new configuration values
+     * @param  array $newConfigs Array with new configuration values
      * 
      * @return bool
      */
-    public function update(Array $newconfig)
+    public function update(Array $newConfigs)
     {
         $runtimeConfigs = array(
             'core.database', // PMF_DB_Driver
             'core.language'  // PMF_Language
         );
-        if (is_array($newconfig)) {
-            foreach ($newconfig as $name => $value) {
+        if (is_array($newConfigs)) {
+            foreach ($newConfigs as $name => $value) {
                 if ($name != 'main.phpMyFAQToken' &&
                     !in_array($name, $runtimeConfigs)
                 ) {
                     $update = sprintf("
                         UPDATE
-                            %sfaqconfig
+                            %s%s
                         SET
                             config_value = '%s'
                         WHERE
                             config_name = '%s'",
                         SQLPREFIX,
+                        self::TABLE_FAQCONFIG,
                         $this->getDb()->escape(trim($value)),
                         $name
                     );
