@@ -32,7 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $faqsession->userTracking('registration', 0);
 
-$captcha = new PMF_Captcha($db, $Language);
+$captcha = new PMF_Captcha($faqConfig);
 $captcha->setSessionId($sids);
 
 if (!is_null($showCaptcha)) {

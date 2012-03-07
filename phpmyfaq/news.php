@@ -30,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new PMF_Captcha($db, $Language);
+$captcha = new PMF_Captcha($faqConfig);
 $comment = new PMF_Comment();
 
 $captcha->setSessionId($sids);

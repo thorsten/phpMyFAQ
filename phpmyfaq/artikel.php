@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha     = new PMF_Captcha($db, $Language);
+$captcha     = new PMF_Captcha($faqConfig);
 $oGlossary   = new PMF_Glossary();
 $oLnk        = new PMF_Linkverifier();
 $faqTagging  = new PMF_Tags($db, $Language);

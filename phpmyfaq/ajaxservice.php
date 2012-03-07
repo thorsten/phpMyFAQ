@@ -58,7 +58,7 @@ $plr = new PMF_Language_Plurals($PMF_LANG);
 PMF_String::init($languageCode);
 
 // Check captcha
-$captcha = new PMF_Captcha($db, $Language);
+$captcha = new PMF_Captcha($faqConfig);
 //$captcha->setSessionId($sids);
 
 // Send headers

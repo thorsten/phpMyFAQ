@@ -4,15 +4,9 @@
  * 
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
  * @package   PMF_Captcha
@@ -20,7 +14,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2006-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2006-02-04
  */
@@ -38,18 +32,16 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2006-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2006-02-04
  */
 class PMF_Captcha
 {
     /**
-     * The database handle
-     *
-     * @var PMF_DB_Driver
+     * @var PMF_Configuration
      */
-    private $db;
+    private $_config = null;
 
     /**
      * The phpMyFAQ session id
@@ -77,10 +69,12 @@ class PMF_Captcha
      *
      * @var array
      */
-    private $letters = array('1', '2', '3', '4', '5', '6', '7', '8', '9',
-                             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
-                             'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
-                             'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' );
+    private $letters = array(
+        '1', '2', '3', '4', '5', '6', '7', '8', '9',
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
+        'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+        'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+    );
 
     /**
      * Length of the captcha code
@@ -148,15 +142,13 @@ class PMF_Captcha
     /**
      * Constructor
      *
-     * @param PMF_DB_Driver $database Database connection
-     * @param PMF_Language  $language Language object
+     * @param PMF_Configuration $config
      * 
      * @return PMF_Captcha
      */
-    public function __construct(PMF_DB_Driver $database, PMF_Language $language)
+    public function __construct(PMF_Configuration $config)
     {
-        $this->db        = $database;
-        $this->language  = $language;
+        $this->_config   = $config;
         $this->userAgent = $_SERVER['HTTP_USER_AGENT'];
         $this->ip        = $_SERVER['REMOTE_ADDR'];
         $this->fonts     = $this->getFonts();
@@ -244,8 +236,8 @@ class PMF_Captcha
     public function getCaptchaCode()
     {
         $query  = sprintf('SELECT id FROM %sfaqcaptcha', SQLPREFIX);
-        $result = $this->db->query($query);
-        while ($row = $this->db->fetchArray($result)) {
+        $result = $this->_config->getDb()->query($query);
+        while ($row = $this->_config->fetchArray($result)) {
             $this->code = $row['id'];
         }
 
@@ -286,10 +278,10 @@ class PMF_Captcha
             WHERE
                 id = '%s'",
             SQLPREFIX,
-            $this->db->escape($captchaCode));
+            $this->_config->getDb()->escape($captchaCode));
 
-        if ($result = $this->db->query($query)) {
-            $num = $this->db->numRows($result);
+        if ($result = $this->_config->getDb()->query($query)) {
+            $num = $this->_config->getDb()->numRows($result);
             if ($num > 0) {
                 $this->code = $captchaCode;
                 $this->removeCaptcha($captchaCode);
@@ -309,7 +301,7 @@ class PMF_Captcha
      */
     public function checkCaptchaCode($code)
     {
-        if (PMF_Configuration::getInstance()->get('spam.enableCaptchaCode')) {
+        if ($this->_config->get('spam.enableCaptchaCode')) {
             return $this->validateCaptchaCode($code);
         } else {
             return true;
@@ -431,12 +423,15 @@ class PMF_Captcha
         $this->_backgroundColor['g'] = rand(220, 255);
         $this->_backgroundColor['b'] = rand(220, 255);
         
-        $colorallocate = imagecolorallocate($this->img, 
-                                            $this->_backgroundColor['r'], 
-                                            $this->_backgroundColor['g'], 
-                                            $this->_backgroundColor['b']);
+        $colorallocate = imagecolorallocate(
+            $this->img,
+            $this->_backgroundColor['r'],
+            $this->_backgroundColor['g'],
+            $this->_backgroundColor['b']
+        );
                                             
         imagefilledrectangle($this->img, 0, 0, $this->width, $this->height, $colorallocate);
+
         return $this->img;
     }
 
@@ -494,12 +489,13 @@ class PMF_Captcha
            WHERE 
                id = '%s'",
            SQLPREFIX,
-           $this->code);
+           $this->code
+        );
         
-        $result = $this->db->query($select);   
+        $result = $this->_config->getDb()->query($select);
         
         if ($result) {
-            $num = $this->db->numRows($result);
+            $num = $this->_config->getDb()->numRows($result);
             if ($num > 0) {
                 return false;
             } else {
@@ -512,11 +508,11 @@ class PMF_Captcha
                     SQLPREFIX, 
                     $this->code, 
                     $this->userAgent, 
-                    $this->language->getLanguage(), 
+                    $this->_config->getLanguage()->getLanguage(),
                     $this->ip, 
                     $this->timestamp);
                     
-                $this->db->query($insert);
+                $this->_config->getDb()->query($insert);
                 return true;
             }
         }
@@ -536,7 +532,7 @@ class PMF_Captcha
             $captchaCode = $this->code;
         }
         $query = sprintf("DELETE FROM %sfaqcaptcha WHERE id = '%s'", SQLPREFIX, $captchaCode);
-        $this->db->query($query);
+        $this->_config->getDb()->query($query);
     }
 
     /**
@@ -561,7 +557,7 @@ class PMF_Captcha
             SQLPREFIX, 
             $_SERVER['REQUEST_TIME'] - $time);
             
-        $this->db->query($delete);
+        $this->_config->getDb()->query($delete);
     }
 
     /**
