@@ -1,7 +1,7 @@
 <?php
 /**
  * The PMF_Cache class implements caching factory to be used with different concrete cache services
- * 
+ *
  * PHP Version 5.2
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,

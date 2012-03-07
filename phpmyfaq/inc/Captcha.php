@@ -1,7 +1,7 @@
 <?php
 /**
  * The phpMyFAQ Captcha class
- * 
+ *
  * PHP Version 5.2
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -143,7 +143,7 @@ class PMF_Captcha
      * Constructor
      *
      * @param PMF_Configuration $config
-     * 
+     *
      * @return PMF_Captcha
      */
     public function __construct(PMF_Configuration $config)
@@ -161,9 +161,9 @@ class PMF_Captcha
     
     /**
      * Setter for session id
-     * 
+     *
      * @param integer $sid session id
-     * 
+     *
      * @return void
      */
     public function setSessionId($sid)
@@ -173,9 +173,9 @@ class PMF_Captcha
     
     /**
      * Setter for the captcha code length
-     * 
+     *
      * @param integer $caplength Length of captch code
-     * 
+     *
      * @return void
      */
     public function setCodeLength($length = 6)

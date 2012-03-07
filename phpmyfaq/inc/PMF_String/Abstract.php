@@ -3,22 +3,17 @@
  * Abstract parent for the string wrapper classes 
  *
  * PHP Version 5.2.0
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
  *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- * 
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
+ *
  * @category  phpMyFAQ
  * @package   PMF_String
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2011 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @copyright 2009-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-06
  */
@@ -33,8 +28,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_String
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2010 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @copyright 2009-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-06
  */
@@ -42,7 +37,7 @@ abstract class PMF_String_Abstract
 {
     /**
      * Default encoding
-     * 
+     *
      * @var string
      */
     const DEFAULT_ENCODING = 'utf-8';
@@ -57,7 +52,7 @@ abstract class PMF_String_Abstract
     
     /**
      * Encoding
-     * 
+     *
      * @var string
      */
     protected $encoding = self::DEFAULT_ENCODING;
@@ -72,9 +67,9 @@ abstract class PMF_String_Abstract
     
     /**
      * Check if the string is a unicode string
-     * 
+     *
      * @param string $str String
-     * 
+     *
      * @return boolean
      */
     public static function isUTF8($str)
@@ -95,7 +90,7 @@ abstract class PMF_String_Abstract
     
     /**
      * Set current encoding
-     * 
+     *
      * @return string
      */
     public function setEncoding($encoding)

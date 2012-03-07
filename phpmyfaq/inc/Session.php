@@ -4,21 +4,16 @@
  *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
  * @package   PMF_Session
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2011 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @copyright 2007-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-31
  */
@@ -33,8 +28,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Session
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2011 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @copyright 2007-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-31
  */
@@ -70,10 +65,10 @@ class PMF_Session
     
     /**
      * Tracks the user and log what he did
-     * 
+     *
      * @param  string  $action Action string
      * @param  integer $id     Current ID
-     * 
+     *
      * @return void
      */
     public function userTracking($action, $id = 0)
@@ -148,7 +143,7 @@ class PMF_Session
      * Returns the timestamp of a session
      *
      * @param  integer $sid Session ID
-     * 
+     *
      * @return integer
      */
     public function getTimeFromSessionId($sid)
@@ -180,7 +175,7 @@ class PMF_Session
      *
      * @param integer $firstHour First hour
      * @param integer $lastHour  Last hour
-     * 
+     *
      * @return array
      */
     public function getSessionsbyDate($firstHour, $lastHour)
@@ -241,7 +236,7 @@ class PMF_Session
      *
      * @param  integer $first Frist session ID
      * @param  integer $last  Last session ID
-     * 
+     *
      * @return boolean
      */
     public function deleteSessions($first, $last)
@@ -267,7 +262,7 @@ class PMF_Session
      *
      * @param integer $sessionId Session ID
      * @param string  $ip  IP
-     * 
+     *
      * @return void
      */
     public function checkSessionId($sessionId, $ip)
@@ -323,7 +318,7 @@ class PMF_Session
      *
      * @param  integer $activityTimeWindow Optionally set the time window size in sec. 
      *                                     Default: 300sec, 5 minutes
-     * 
+     *
      * @return array
      */
     public function getUsersOnline($activityTimeWindow = 300)
@@ -377,7 +372,7 @@ class PMF_Session
      * Store the Session ID into a persistent cookie expiring PMF_SESSION_EXPIRED_TIME seconds after the page request.
      *
      * @param integer $sessionId Session ID
-     * 
+     *
      * @return void
      */
     public static function setCookie($sessionId)
