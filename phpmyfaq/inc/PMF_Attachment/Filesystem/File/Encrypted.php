@@ -12,7 +12,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Attachment
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-21
@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Attachment
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-21

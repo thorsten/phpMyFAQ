@@ -9,7 +9,7 @@
  * @author      Petteri Hirvonen <petteri.hirvonen@eventusmedia.fi>
  * @author      Niklas Lampén <niklas.lampen@eventusmedia.fi>
  * @since       2004-02-19
- * @copyright   (c) 2006-2007 phpMyFAQ Team
+ * @copyright   (c) 2006-2012 phpMyFAQ Team
  *
 
  * This Source Code Form is subject to the terms of the Mozilla Public License,

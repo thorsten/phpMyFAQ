@@ -12,7 +12,7 @@
  * @category  phpMyFAQ
  * @package   Translation
  * @author    Hans Fredrik Nordhaug <hans@nordhaug.priv.no>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-08-31

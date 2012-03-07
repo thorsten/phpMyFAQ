@@ -14,7 +14,7 @@
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Daniel Hoechst <dhoechst@petzl.com>
- * @copyright 2005-2011 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @package   2005-01-11
@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Daniel Hoechst <dhoechst@petzl.com>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @package   2005-01-11

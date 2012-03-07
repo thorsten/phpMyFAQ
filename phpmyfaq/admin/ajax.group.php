@@ -6,7 +6,7 @@
  * @subpackage Administration
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2009-04-06
- * @copyright  2009-2011 phpMyFAQ Team
+ * @copyright  2009-2012 phpMyFAQ Team
  * @version    SVN: $Id$
  *
 

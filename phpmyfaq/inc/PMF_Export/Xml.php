@@ -7,7 +7,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since     2009-10-07
  * @license   Mozilla Public License 1.1
- * @copyright 2009-2011 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  *
 
  * This Source Code Form is subject to the terms of the Mozilla Public License,

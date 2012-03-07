@@ -4,7 +4,7 @@
  *
  * @author    Tri Agus Prayitno <tap@ruangweb.co.id>
  * @since     2009-12-28
- * @copyright 2004-2010 phpMyFAQ Team
+ * @copyright 2004-2012 phpMyFAQ Team
  *
 
  * This Source Code Form is subject to the terms of the Mozilla Public License,

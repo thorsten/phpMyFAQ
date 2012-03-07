@@ -9,7 +9,7 @@
  * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since      2004-06-24
  * @version    SVN: $Id$ 
- * @copyright  (c) 2004-2009 phpMyFAQ Team
+ * @copyright  (c) 2004-2012 phpMyFAQ Team
  *
 
  * This Source Code Form is subject to the terms of the Mozilla Public License,

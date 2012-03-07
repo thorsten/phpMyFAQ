@@ -15,7 +15,7 @@
  * @since     2009-08-21
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @copyright 2009-2011 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -34,7 +34,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'libs' . DIRECTO
  * @since     2009-08-21
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  */
 class PMF_Attachment_Factory
 {

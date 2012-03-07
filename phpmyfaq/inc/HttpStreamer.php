@@ -12,7 +12,7 @@
  * @category  phpMyFAQ
  * @package   PMF_HttpStreamer
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2005-2011 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-02
@@ -37,7 +37,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_HttpStreamer
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-02

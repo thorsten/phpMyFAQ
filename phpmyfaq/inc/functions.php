@@ -21,7 +21,7 @@
  * @author    Robin Wood <robin@digininja.org>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
- * @copyright 2001-2011 phpMyFAQ Team
+ * @copyright 2001-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2001-02-18

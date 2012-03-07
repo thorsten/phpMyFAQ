@@ -13,7 +13,7 @@
  * @package   PMF_Mail
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2011 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-11
@@ -30,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_Mail
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-11

@@ -15,7 +15,7 @@
  * @author    Fernando G. Monteiro <fgmont@reit.up.pt>
  * @author    Luis Costa <izhirahider@gmail.com>
  * @author... Carlos E. Gorges <carlos@linuxwaves.com>
- * @copyright 2004-2011 phpMyFAQ Team
+ * @copyright 2004-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-06-24

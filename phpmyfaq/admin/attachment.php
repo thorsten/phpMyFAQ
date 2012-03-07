@@ -107,7 +107,7 @@ if (is_null($currentAction) || !is_null($currentSave)) {
     <meta name="author" content="phpMyFAQ Team">
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
     <meta name="application-name" content="phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?>">
-    <meta name="copyright" content="(c) 2001-2011 phpMyFAQ Team">
+    <meta name="copyright" content="(c) 2001-2012 phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
     <meta name="MSSmartTagsPreventParsing" content="true">
 

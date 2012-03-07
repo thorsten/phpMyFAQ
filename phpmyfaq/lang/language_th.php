@@ -4,7 +4,7 @@
  *
  * @author    Thanadon Somdee <jimmy@thaizone.com>
  * @date      2007-08-19
- * @copyright 2007-2010 phpMyFAQ Team
+ * @copyright 2007-2012 phpMyFAQ Team
  *
 
  * This Source Code Form is subject to the terms of the Mozilla Public License,

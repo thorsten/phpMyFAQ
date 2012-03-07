@@ -31,11 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Johannes Schlüter <johannes@php.net>
-<<<<<<< HEAD
- * @copyright 2005-2011 phpMyFAQ Team
-=======
  * @copyright 2005-2012 phpMyFAQ Team
->>>>>>> fddffb9c8c34227473034cf5c50d7a8127f3ffb3
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-06-27
@@ -145,14 +141,14 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
         if (false === $result) {
             throw new Exception('Error while fetching result: ' . $this->error());
         }
-        
+
         while ($row = $this->fetchObject($result)) {
             $ret[] = $row;
         }
-        
+
         return $ret;
     }
-    
+
     /**
      * Number of rows in a result
      *
