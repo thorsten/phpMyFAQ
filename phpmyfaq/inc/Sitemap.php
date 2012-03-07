@@ -1,24 +1,19 @@
 <?php
 /**
  * The main Sitemap class
- * 
+ *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- * 
  * @category  phpMyFAQ
  * @package   PMF_Sitemap
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2011 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-30
  */
@@ -36,7 +31,7 @@ require_once PMF_INCLUDE_DIR . '/Link.php';
  * @package   PMF_Sitemap
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2010 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-30
  */
@@ -89,7 +84,7 @@ class PMF_Sitemap
      *
      * @param integer $user   User
      * @param array   $groups Groups
-     * 
+     *
      * @return PMF_Sitemap
      */
     public function __construct($user = null, $groups = null)

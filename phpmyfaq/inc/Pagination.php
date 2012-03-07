@@ -4,22 +4,17 @@
  *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
  * @package   PMF_Pagination
  * @author    Anatoliy Belsky <ab@php.net>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-27
  */
@@ -36,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Anatoliy Belsky <ab@php.net>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-27
  */
@@ -51,28 +46,28 @@ class PMF_Pagination
 
     /**
      * Base url used for links
-     * 
+     *
      * @var string
      */
     protected $baseUrl = '';
     
     /**
      * Total items count
-     * 
+     *
      * @var integer
      */
     protected $total = 0;
     
     /**
      * Items per page count
-     * 
+     *
      * @var integer
      */
     protected $perPage = 0;
     
     /**
      * Number of adjacent links
-     * 
+     *
      * @var integer
      */
     protected $adjacents = 4;
@@ -80,63 +75,63 @@ class PMF_Pagination
     /**
      * Default link template. 
      * Possible variables are {LINK}, {TITLE}, {TEXT}
-     * 
+     *
      * @var string
      */
     protected $linkTpl = '<li><a href="{LINK_URL}">{LINK_TEXT}</a></li>';
     
     /**
      * Current page link template
-     * 
+     *
      * @var string
      */
     protected $currentPageLinkTpl = '<li class="active"><a href="{LINK_URL}">{LINK_TEXT}</a></li>';
     
     /**
      * Next page link template
-     * 
+     *
      * @var string
      */
     protected $nextPageLinkTpl = '<li><a href="{LINK_URL}">&gt;</a></li>';
     
     /**
      * Previous page link template
-     * 
+     *
      * @var string
      */
     protected $prevPageLinkTpl = '<li><a href="{LINK_URL}">&lt;</a></li>';
     
     /**
      * First page link template
-     * 
+     *
      * @var string
      */
     protected $firstPageLinkTpl = '<li><a href="{LINK_URL}">←</a></li>';
     
     /**
      * Last page link template
-     * 
+     *
      * @var string
      */
     protected $lastPageLinkTpl = '<li><a href="{LINK_URL}">→</a></li>';
     
     /**
      * Layout template
-     * 
+     *
      * @var string
      */
     protected $layoutTpl = '<div class="pagination pagination-centered"><ul>{LAYOUT_CONTENT}</ul></div>';
 
     /**
      * Current page index
-     * 
+     *
      * @var integer
      */
     protected $currentPage = 0;
     
     /**
      * Param name to associate the page numbers to
-     * 
+     *
      * @var string
      */
     protected $pageParamName = 'page';
@@ -226,9 +221,9 @@ class PMF_Pagination
     
     /**
      * Returns the current page URL
-     * 
+     *
      * @param string $url URL
-     * 
+     *
      * @return integer
      */
     protected function getCurrentPageFromUrl($url)
@@ -247,7 +242,7 @@ class PMF_Pagination
     
     /**
      * Render full pagination string
-     * 
+     *
      * @return string
      */
     public function render()
@@ -324,10 +319,10 @@ class PMF_Pagination
     
     /**
      * Render url for a given page
-     * 
+     *
      * @param string  $url  url
      * @param integer $page page number
-     * 
+     *
      * @return string
      */
     protected function renderUrl($url, $page)
@@ -347,11 +342,11 @@ class PMF_Pagination
     
     /**
      * Render a link
-     * 
+     *
      * @param string $tpl      link template
      * @param string $url      url value for template container
      * @param string $linkText text value for template container
-     * 
+     *
      * @return string
      */
     protected function renderLink($tpl, $url, $linkText)
@@ -364,9 +359,9 @@ class PMF_Pagination
     
     /**
      * Render the whole pagination layout
-     * 
+     *
      * @param string $content layout contents
-     * 
+     *
      * @return string
      */
     protected function renderLayout($content)

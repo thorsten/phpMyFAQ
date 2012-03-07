@@ -1,24 +1,19 @@
 <?php
 /**
  * Abstract attachment class
- * 
+ *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
  * @package   PMF_Attachment
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2011 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-21
  */
@@ -29,12 +24,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * PMF_Atachment_Abstract
- * 
+ *
  * @category  phpMyFAQ
  * @package   PMF_Attachment
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2011 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-21
  */
@@ -42,14 +37,14 @@ abstract class PMF_Attachment_Abstract
 {
     /**
      * Attachment id
-     * 
+     *
      * @var int
      */
     protected $id;
     
     /**
      * The key to encrypt with
-     * 
+     *
      * @var string
      */
     protected $key;
@@ -62,28 +57,28 @@ abstract class PMF_Attachment_Abstract
     
     /**
      * Database instance
-     * 
+     *
      * @var PMF_Db_Driver
      */
     protected $db;
     
     /**
      * Record ID
-     * 
+     *
      * @var integer
      */
     protected $recordId;
     
     /**
      * Record language
-     * 
+     *
      * @var string
      */
     protected $recordLang;
     
     /**
      * Real file md5 hash
-     * 
+     *
      * @var string
      */
     protected $realHash;
@@ -91,50 +86,50 @@ abstract class PMF_Attachment_Abstract
     /**
      * Virtual unique md5 hash used for encrypted files.
      * Must equal real hash for unencrypted files.
-     * 
+     *
      * @var string
      */
     protected $virtualHash;
     
     /**
      * If this is set, the sh1 hashed key we got must equal to it 
-     * 
+     *
      * @var string
      */
     protected $passwordHash;
     
     /**
      * Filesize in bytes
-     * 
+     *
      * @var integer
      */
     protected $filesize;
     
     /**
      * Filename
-     * 
+     *
      * @var string
      */
     protected $filename;
     
     /**
      * Encrypted
-     * 
+     *
      * @var string
      */
     protected $encrypted;
             
     /**
      * Attachment file mime type
-     * 
+     *
      * @var string
      */
     protected $mimeType;
     /**
      * Constructor
-     * 
+     *
      * @param integer $id attachment id
-     * 
+     *
      * @return null
      */
     public function __construct ($id = null)
@@ -149,9 +144,9 @@ abstract class PMF_Attachment_Abstract
     
     /**
      * Build attachment url
-     * 
+     *
      * @param boolean $forHTML either to use ampersands directly
-     * 
+     *
      * @return string
      */
     public function buildUrl ($forHTML = true)
@@ -163,10 +158,10 @@ abstract class PMF_Attachment_Abstract
     
     /**
      * Set encryption key
-     * 
+     *
      * @param string $key     encryption key
      * @param string $default if the key is default system wide
-     * 
+     *
      * @return null
      */
     public function setKey ($key, $default = true)
@@ -185,9 +180,9 @@ abstract class PMF_Attachment_Abstract
     
     /**
      * Set record id
-     * 
+     *
      * @param integer $id record id
-     * 
+     *
      * @return null
      */
     public function setRecordId ($id)
@@ -197,9 +192,9 @@ abstract class PMF_Attachment_Abstract
     
     /**
      * Set record language
-     * 
+     *
      * @param lang $lang record language
-     * 
+     *
      * @return null
      */
     public function setRecordLang ($lang)
@@ -209,7 +204,7 @@ abstract class PMF_Attachment_Abstract
     
     /**
      * Get attachment id
-     * 
+     *
      * @return integer
      */
     public function getId()
@@ -229,7 +224,7 @@ abstract class PMF_Attachment_Abstract
     
     /**
      * Get attachment record id
-     * 
+     *
      * @return integer
      */
     public function getRecordId()
@@ -239,7 +234,7 @@ abstract class PMF_Attachment_Abstract
     
     /**
      * Get meta data
-     * 
+     *
      * @return boolean
      */
     protected function getMeta ()
@@ -281,9 +276,9 @@ abstract class PMF_Attachment_Abstract
     
     /**
      * Save attachment meta data
-     * 
+     *
      * @return integer saved attachment id
-     * 
+     *
      * @todo implement update case
      */
     public function saveMeta()
@@ -323,7 +318,7 @@ abstract class PMF_Attachment_Abstract
     
     /**
      * Update several meta things after it was saved
-     * 
+     *
      * @return null
      */
     protected function postUpdateMeta()
@@ -344,7 +339,7 @@ abstract class PMF_Attachment_Abstract
     /**
      * The function is supposed to detect the file mime
      * type.
-     * 
+     *
      * @return string
      * TODO implement this
      */
@@ -358,9 +353,9 @@ abstract class PMF_Attachment_Abstract
     
     /**
      * Generate hash based on current conditions
-     * 
+     *
      * @return string
-     * 
+     *
      * NOTE The way a file is saved in the filesystem
      * is based on md5 hash. If the file is unencrypted,
      * it's md5 hash is used directly, otherwise a
@@ -416,7 +411,7 @@ abstract class PMF_Attachment_Abstract
     
     /**
      * Remove meta data from the db
-     * 
+     *
      * @return null
      */
     protected function deleteMeta()
@@ -432,7 +427,7 @@ abstract class PMF_Attachment_Abstract
     
     /**
      * Validate attached file with the real hash
-     * 
+     *
      * @return boolean
      */
     public function validate()
@@ -442,7 +437,7 @@ abstract class PMF_Attachment_Abstract
     
     /**
      * Destructor
-     * 
+     *
      * @return null
      */
     public function __destruct()

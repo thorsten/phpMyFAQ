@@ -4,7 +4,7 @@
  * language, gets and sets all cookie, post and get informations and includes
  * the templates we need and set all internal variables to the template
  * variables. That's all.
- * 
+ *
  * PHP Version 5.2
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,

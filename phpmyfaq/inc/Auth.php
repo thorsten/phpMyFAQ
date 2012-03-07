@@ -19,22 +19,17 @@
  *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- * 
  * @category  phpMyFAQ
  * @package   PMF_Auth
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-30
  */
@@ -45,13 +40,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * PMF_Auth
- * 
+ *
  * @category  phpMyFAQ
  * @package   PMF_Auth
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-30
  */
@@ -90,7 +85,7 @@ class PMF_Auth
      *
      * @param string  $enctype   Type of encoding
      * @param boolean $read_only Readonly?
-     * 
+     *
      * @return PMF_Auth
      */
     public function __construct($enctype = 'none', $read_only = false)
@@ -108,7 +103,7 @@ class PMF_Auth
      * The result is stored in the private container variable encContainer and
      *
      * @param string $enctype encryption type
-     * 
+     *
      * @return PMF_Enc
      */
     public function selectEncType($enctype)
@@ -153,7 +148,7 @@ class PMF_Auth
      * of the error() method for further details.
      *
      * @param string $method Authentication access methods
-     * 
+     *
      * @return PMF_Auth_Driver
      */
     public static function selectAuth($method)
@@ -183,7 +178,7 @@ class PMF_Auth
      * Short description of method read_only
      *
      * @param boolean $read_only boolean flag
-     * 
+     *
      * @return boolean
      */
     public function setReadOnly($read_only = null)
@@ -202,7 +197,7 @@ class PMF_Auth
      * Short description of method encrypt
      *
      * @param string $str string
-     * 
+     *
      * @return string
      */
     public function encrypt($str)

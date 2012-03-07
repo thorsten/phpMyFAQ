@@ -1,24 +1,19 @@
 <?php
 /**
  * Abstract class for manage different databases.
- * 
- * PHP Version 5.2
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
  *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- * 
+ * PHP Version 5.2
+ *
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
+ *
  * @category  phpMyFAQ
  * @package   PMF_Tests
  * @author    Gustavo Solt <gustavo.solt@mayflower.de>
  * @copyright 2010 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-03
  */
@@ -30,11 +25,11 @@ define('SQLPREFIX', '');
 
 /**
  * Database_AbstractTest
- * 
+ *
  * @category  phpMyFAQ
  * @package   PMF_Tests
  * @author    Gustavo Solt <gustavo.solt@mayflower.de>
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @copyright 2009-2010 phpMyFAQ Team
  * @since     2009-05-16
@@ -62,7 +57,7 @@ abstract class Database_AbstractTest extends PHPUnit_Extensions_Database_TestCas
 
     /**
      * Make the connection in 2 times.
-     * 
+     *
      * 1. Connect using the phpMyFAQ API for use internally.
      * 2. Connect using the PHPUnit unit for run the tests.
      *

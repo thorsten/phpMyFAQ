@@ -1,36 +1,31 @@
 <?php
 /**
  * Helper class for phpMyFAQ captchas
- * 
+ *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
  * @package   PMF_Helper
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-11
  */
 
 /**
  * PMF_Helper
- * 
+ *
  * @category  phpMyFAQ
  * @package   PMF_Helper
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-11
  */
@@ -38,14 +33,14 @@ class PMF_Helper_Captcha extends PMF_Helper
 {
     /**
      * Instance
-     * 
+     *
      * @var PMF_Helper_Search
      */
     private static $instance = null;
     
     /**
      * Constructor
-     * 
+     *
      * @return 
      */
     private function __construct()
@@ -70,7 +65,7 @@ class PMF_Helper_Captcha extends PMF_Helper
    
     /**
      * __clone() Magic method to prevent cloning
-     * 
+     *
      * @return void
      */
     private function __clone()
@@ -84,7 +79,7 @@ class PMF_Helper_Captcha extends PMF_Helper
      * @param string $legend Text of the HTML Legend element
      * @param string $img    HTML code for the Captcha image
      * @param string $error  Error message
-     * 
+     *
      * @return string
      */
     public function renderCaptcha(PMF_Captcha $captcha, $action, $legend, $error = '')

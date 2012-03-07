@@ -1,18 +1,13 @@
 <?php
 /**
  * The PMF_Linkverifier class provides methods and functions for verifying URLs
- * 
- * PHP Version 5.2
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
  *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
+ * PHP Version 5.2
+ *
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * The Initial Developer of the Original Code is released for external use
  * with permission from NetJapan, Inc. IT Administration Group.
@@ -23,7 +18,7 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2011 NetJapan, Inc. and phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-08-01
  */
@@ -79,7 +74,7 @@ if (!defined('LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ')) {
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2010 NetJapan, Inc. and phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-08-01
  */
@@ -171,7 +166,7 @@ class PMF_Linkverifier
     
 	/**
 	 * Get current urls
-	 * 
+	 *
      * @return array $urlpool url list
      */
     function getUrlpool()
@@ -401,7 +396,7 @@ class PMF_Linkverifier
      * This function parses HTML and extracts urls
      *
      * @param string $string String
-     * 
+     *
      * @return mixed  false if URL is not found, otherwise returns the number of URLs found.
      */
     public function parse_string($string = "")
@@ -595,7 +590,7 @@ class PMF_Linkverifier
      * Perform link validation to each URLs found
      *
      * @param   string $referenceuri
-     * 
+     *
      * @result  mixed  array of [protocol][url][info] = value
      */
     function VerifyURLs($referenceuri = '')
@@ -639,7 +634,7 @@ class PMF_Linkverifier
      * @param integer $id
      * @param string  $artlang
      * @param string  $state (optional)
-     * 
+     *
      * @return boolean true if operation successful, otherwise false
      */
     public function markEntry($id = 0, $artlang = '', $state = '')
@@ -864,7 +859,7 @@ class PMF_Linkverifier
     * @param   integer $id
     * @param   string  $artlang
     * @param   boolean $cron
-    * 
+    *
     * @result  string  HTML text, if $cron is false (default)
     */
     public function verifyArticleURL($contents = '', $id = 0, $artlang = '', $cron = false)

@@ -8,22 +8,17 @@
  *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
  * @package   PMF_Questionnaire_Data
  * @author    Johannes Schlueter <johannes@php.net>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-17
  */
@@ -36,7 +31,7 @@
  * @author    Johannes Schlueter <johannes@php.net>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-17
  */
@@ -44,21 +39,21 @@ class PMF_Questionnaire_Data
 {
     /**
      * Array with data
-     * 
+     *
      * @var array
      */
     private $data = array();
     
     /**
      * Array with configuration data
-     * 
+     *
      * @var array
      */
     private $config = array();
     
     /**
      * Old version number
-     * 
+     *
      * @var string
      */
     private $oldversion = '0';
@@ -68,7 +63,7 @@ class PMF_Questionnaire_Data
      *
      * @param  array  $config     Array of configuration items
      * @param  string $oldversion Old version number
-     * 
+     *
      * @return void
      */
     function __construct(Array $config, $oldversion = '0')
@@ -187,7 +182,7 @@ class PMF_Questionnaire_Data
  * @param  mixed  $value Value
  * @param  string $key   Key
  * @param  string $ident Identian
- * 
+ *
  * @return  void
  */
 function data_printer($value, $key, $ident = "\n\t")

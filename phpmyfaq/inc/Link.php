@@ -4,22 +4,17 @@
  *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- * 
  * @category  phpMyFAQ
  * @package   PMF_Link  
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2011 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-02
  */
@@ -34,13 +29,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * This class wrap the needs for managing an HTML anchor
  * taking into account also the HTML anchor creation
  * with specific handling for mod_rewrite PMF native support
- * 
+ *
  * @category  phpMyFAQ
  * @package   PMF_Link  
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2011 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-02
  */
@@ -110,49 +105,49 @@ class PMF_Link
 
     /**
      * URL
-     * 
+     *
      * @var string
      */
     public $url = '';
     
     /**
      * CSS class
-     * 
+     *
      * @var string
      */
     public $class = '';
     
     /**
      * Linktext
-     * 
+     *
      * @var string
      */
     public $text = '';
     
     /**
      * Tooltip
-     * 
+     *
      * @var string
      */
     public $tooltip = '';
     
     /**
      * Target
-     * 
+     *
      * @var string
      */
     public $target = '';
     
     /**
      * Name selector
-     * 
+     *
      * @var string
      */
     public $name = '';
     
     /**
      * property specific to the SEO/SEF URLs
-     * 
+     *
      * @var string
      */
     public $itemTitle = '';
@@ -173,18 +168,18 @@ class PMF_Link
 
     /**
      * id selector
-     * 
+     *
      * @var string
      */
     public $id = '';
 
     /**
      * Constructor
-     * 
+     *
      * @param string $url    URL
      * @param string $text   Text
      * @param string $target Target
-     * 
+     *
      * @return PMF_Link
      */
     public function __construct($url, $text = '', $target = '')
@@ -196,7 +191,7 @@ class PMF_Link
 
     /**
      * Checks if webserver is an IIS Server
-     * 
+     *
      * @return boolean
      */
     public static function isIISServer()
@@ -206,7 +201,7 @@ class PMF_Link
 
     /**
      * Checks if the the current URL is the main index.php file
-     * 
+     *
      * @return boolean
      */
     protected function isHomeIndex()
@@ -220,7 +215,7 @@ class PMF_Link
 
     /**
      * Checks if URL is an internal reference
-     * 
+     *
      * @return boolean
      */
     protected function isInternalReference()
@@ -252,7 +247,7 @@ class PMF_Link
 
     /**
      * Checks if URL is a system link
-     * 
+     *
      * @return boolean
      */
     protected function isSystemLink()
@@ -288,7 +283,7 @@ class PMF_Link
 
     /**
      * Checks if URL contains a scheme
-     * 
+     *
      * @return boolean
      */
     protected function hasScheme()
@@ -300,7 +295,7 @@ class PMF_Link
 
     /**
      * Returns a search engine optimized title
-     * 
+     *
      * @return string
      */
     protected function getSEOItemTitle()
@@ -385,7 +380,7 @@ class PMF_Link
 
     /**
      * Returns the default scheme
-     * 
+     *
      * @return string
      */
     protected function getDefaultScheme()
@@ -400,7 +395,7 @@ class PMF_Link
 
     /**
      * Returns the system scheme, http or https
-     * 
+     *
      * @return string
      */
     public static function getSystemScheme()
@@ -417,7 +412,7 @@ class PMF_Link
 
     /**
      * Returns the relative URI
-     * 
+     *
      * @return string
      */
     public static function getSystemRelativeUri($path = null)
@@ -431,7 +426,7 @@ class PMF_Link
 
     /**
      * Returns the system URI
-     * 
+     *
      * @return string
      */
     public static function getSystemUri($path = null)
@@ -505,7 +500,7 @@ class PMF_Link
      *
      * @param string  $url  URL
      * @param integer $sids Session Id
-     * 
+     *
      * @return string
      */
     protected function appendSids($url, $sids)
@@ -522,7 +517,7 @@ class PMF_Link
      * Rewrites a URL string
      *
      * @param boolean $forceNoModrewriteSupport Force no rewrite support
-     * 
+     *
      * @return string
      */
     public function toString($forceNoModrewriteSupport = false)

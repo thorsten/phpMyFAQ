@@ -4,21 +4,16 @@
  *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- * 
  * @category  phpMyFAQ
  * @package   PMF_Search
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2011 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
  */
@@ -34,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_Search
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
  */
@@ -43,7 +38,7 @@ class PMF_Search_Resultset
     /**
      * "Raw" search resultset without permission checks and with possible
      * duplicates
-     * 
+     *
      * @var array
      */
     protected $rawResultset = array();
@@ -51,45 +46,45 @@ class PMF_Search_Resultset
     /**
      * "Reviewed" search resultset with checked permissions and without 
      * duplicates
-     * 
+     *
      * @var array
      */
     protected $reviewedResultset = array();
     
     /**
      * Ordering of resultset
-     * 
+     *
      * @var string
      */
     protected $ordering;
     
     /**
      * Number of search results
-     * 
+     *
      * @var integer
      */
     protected $numberOfResults = 0;
     
     /**
      * PMF_User object
-     * 
+     *
      * @var PMF_User
      */
     protected $user = null;
     
     /**
      * PMF_Faq object
-     * 
+     *
      * @var PMF_Faq
      */
     protected $faq = null;
     
     /**
      * Constructor
-     * 
+     *
      * @param PMF_User $user PMF_User object
      * @param PMF_Faq  $faq  PMF_Faq object
-     * 
+     *
      * @return PMF_Search_Resultset
      */
     public function __construct(PMF_User $user, PMF_Faq $faq)
@@ -100,9 +95,9 @@ class PMF_Search_Resultset
     
     /**
      * Check on user and group permissions and on duplicate FAQs
-     * 
+     *
      * @param array $resultset Array with search results
-     * 
+     *
      * @return void
      */
     public function reviewResultset(Array $resultset)
@@ -153,9 +148,9 @@ class PMF_Search_Resultset
     
     /**
      * Sets the "raw" search results
-     * 
+     *
      * @param array $resultset Array with search results
-     * 
+     *
      * @return void
      */
     public function setResultset(Array $resultset)
@@ -165,9 +160,9 @@ class PMF_Search_Resultset
     
     /**
      * Returns the "reviewd" search results
-     * 
+     *
      * @param array $resultset Array with search results
-     * 
+     *
      * @return void
      */
     public function getResultset()
@@ -177,9 +172,9 @@ class PMF_Search_Resultset
     
     /**
      * Sets the number of search results
-     * 
+     *
      * @param array $resultset Array with search results
-     * 
+     *
      * @return void
      */
     public function setNumberOfResults(Array $resultset)
@@ -189,7 +184,7 @@ class PMF_Search_Resultset
     
     /**
      * Returns the number search results
-     * 
+     *
      * @return integer
      */
     public function getNumberOfResults()

@@ -4,16 +4,11 @@
  *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- * 
  * @category  phpMyFAQ
  * @package   PMF_Faq
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -22,7 +17,7 @@
  * @author    Adrianna Musiol <musiol@imageaccess.de>
  * @author    Peter Caesar <p.caesar@osmaco.de>
  * @copyright 2005-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-20
  */
@@ -69,7 +64,7 @@ define('FAQ_SORTING_TYPE_FAQID', 4);
  * @author    Adrianna Musiol <musiol@imageaccess.de>
  * @author    Peter Caesar <p.caesar@osmaco.de>
  * @copyright 2005-2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-20
  */
@@ -883,7 +878,7 @@ class PMF_Faq
      *
      * @param integer $record_id   Record id
      * @param string  $record_lang Record language
-     * 
+     *
      * @return boolean
      */
     public function deleteRecord($record_id, $record_lang)
@@ -952,7 +947,7 @@ class PMF_Faq
     
     /**
      * Checks, if comments are disabled for the FAQ record
-     * 
+     *
      * @param  integer $record_id   Id of FAQ or news entry
      * @param  string  $record_lang Language
      * @param  string  $record_type Type of comment: faq or news
@@ -1480,7 +1475,7 @@ class PMF_Faq
      *
      * @param integer $recordId  FAQ record ID
      * @param integer $wordCount Number of words, default: 12
-     * 
+     *
      * @return string 
      */
     public function getRecordPreview($recordId, $wordCount = 12)
@@ -1586,7 +1581,7 @@ class PMF_Faq
 
     /**
      * This function generates a list with the mosted voted or most visited records
-     * 
+     *
      * @param  string $type Type definition visits/voted
      * @access public
      * @since  2009-11-03
@@ -2372,7 +2367,7 @@ class PMF_Faq
      * @param string  $bDownwards
      * @param string  $lang
      * @param string  $date
-     * 
+     *
      * @return  array
      */
     function get($QueryType = FAQ_QUERY_TYPE_DEFAULT, $nCatid = 0, $bDownwards = true, $lang = '', $date = '')
@@ -2841,7 +2836,7 @@ class PMF_Faq
     
     /**
      * Setter for the language
-     * 
+     *
      * @param  string $language Language
      * @return void
      */
@@ -2857,7 +2852,7 @@ class PMF_Faq
      * @param string  $lang language code which is valid with PMF_Language::isASupportedLanguage
      * @param boolean $flag weither or not the record is set to sticky
      * @param string  $type type of the flag to set, use the column name
-     * 
+     *
      * @return boolean
      */
     public function updateRecordFlag($id, $lang, $flag, $type)
@@ -2905,7 +2900,7 @@ class PMF_Faq
     
     /**
      * Returns the sticky records with URL and Title
-     * 
+     *
      * @return array
      */
     private function getStickyRecordsData()
@@ -3000,7 +2995,7 @@ class PMF_Faq
     
     /**
      * Prepares and returns the sticky records for the frontend
-     * 
+     *
      * @return array
      */
     public function getStickyRecords()

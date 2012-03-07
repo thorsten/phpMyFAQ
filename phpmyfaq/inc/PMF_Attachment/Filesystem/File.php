@@ -4,21 +4,16 @@
  *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
  * @package   PMF_Attachment
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2011 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-21
  */
@@ -29,12 +24,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * PMF_Atachment_Abstract
- * 
+ *
  * @category  phpMyFAQ
  * @package   PMF_Attachment
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2010 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-21
  */
@@ -49,17 +44,17 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
     
     /**
      * Filemode
-     * 
+     *
      * @var string
      */
     protected $mode;
     
     /**
      * Constructor 
-     * 
+     *
      * @param string $filepath path to file
      * @param string $mode     mode for fopen
-     * 
+     *
      * @return null
      * TODO check for correct mode if file doesn't exist
      */
@@ -77,7 +72,7 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
     
     /**
      * Destructor
-     * 
+     *
      * @return null
      */
     public function __destruct()
@@ -89,7 +84,7 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
     
     /**
      * Either EOF was reached
-     * 
+     *
      * @return boolean
      */
     public function eof()
@@ -99,16 +94,16 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
     
     /**
      * Get next file chunk
-     * 
+     *
      * @return string
      */
     abstract public function getChunk();
     
     /**
      * Put chunk into file.
-     * 
+     *
      * @param string $chunk chunk to write
-     * 
+     *
      * @return integer bytes written or false
      */
     abstract public function putChunk($chunk);
@@ -133,7 +128,7 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
     
     /**
      * Return current file mode
-     * 
+     *
      * @return string
      */
     public function getMode()
@@ -143,9 +138,9 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
     
     /**
      * Reopen file in given mode
-     * 
+     *
      * @param string $mode file mode
-     * 
+     *
      * @return boolean
      */
     public function setMode($mode)
@@ -164,9 +159,9 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
     
     /**
      * Simple copy file
-     * 
+     *
      * @param string $target filepath
-     * 
+     *
      * @return boolean
      */
     public function copyToSimple($target)
@@ -184,7 +179,7 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
     
     /**
      * Selfcheck
-     * 
+     *
      * @return boolean
      */
     public function isOk()

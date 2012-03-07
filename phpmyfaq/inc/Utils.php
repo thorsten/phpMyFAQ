@@ -4,22 +4,17 @@
  *
  * PHP Version 5.2
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
+
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- * 
  * @category  phpMyFAQ
  * @package   PMF_Utils
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2005-2011 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-01
  */
@@ -43,13 +38,13 @@ define('HTTP_PARAMS_GET_TYPE', 'type');
  * PMF_Utils class
  *
  * This class has only static methods
- * 
+ *
  * @category  phpMyFAQ
  * @package   PMF_Utils
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2005-2010 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-01
  */
@@ -160,12 +155,12 @@ class PMF_Utils
 
     /**
      * Shortens a string for a given number of words
-     * 
+     *
      * @param  string  $str  String  
      * @param  integer $char Characters
-     * 
+     *
      * @return string
-     * 
+     *
      * @todo This function doesn't work with Chinese, Japanese and Korean
      *       because they don't have spaces as word delimiters
      */
@@ -285,7 +280,7 @@ class PMF_Utils
     
     /**
      * This method chops a string
-     * 
+     *
      * @param string  $string String to chop
      * @param integer $words  Number of words
      *
@@ -307,10 +302,10 @@ class PMF_Utils
     
     /**
      * Adds a highlighted word to a string
-     * 
+     *
      * @param string $string    String
      * @param string $highlight Given word for highlighting
-     * 
+     *
      * @return string
      */
     public static function setHighlightedString($string, $highlight)
@@ -333,7 +328,7 @@ class PMF_Utils
      * Callback function for filtering HTML from URLs and images
      *
      * @param array $matches Array of matches from regex pattern
-     * 
+     *
      * @return string
      */
     public static function highlightNoLinks(Array $matches)
