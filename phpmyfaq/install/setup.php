@@ -721,7 +721,6 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
     $configs['spam.enableCaptchaCode']  = (extension_loaded('gd') ? 'true' : 'false');
     $configs['main.referenceURL']       = PMF_Link::getSystemUri('/install/setup.php');
-    $configs['main.phpMyFAQToken']      = md5(uniqid(rand()));
     $configs['main.metaPublisher']      = $realname;
     $configs['main.administrationMail'] = $email;
 
