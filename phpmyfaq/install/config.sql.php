@@ -58,6 +58,8 @@ $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.attachments
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.attachmentsStorageType', '0')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.enableAttachmentEncryption', 'false')";
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.defaultAttachmentEncKey', '')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.enableCloseQuestion', 'false')";
+$query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('records.enableDeleteQuestion', 'false')";
 
 // Search
 $query[] = "INSERT INTO " . $sqltblpre . "faqconfig VALUES ('search.useAjaxSearchOnStartpage', 'false')";
