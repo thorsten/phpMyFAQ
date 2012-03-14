@@ -104,7 +104,7 @@ switch($ajax_action) {
             $recordId   = PMF_Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
             $recordLang = PMF_Filter::filterInput(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
 
-            $logging = new PMF_Logging();
+            $logging = new PMF_Logging($faqConfig);
             $logging->logAdmin($user, 'Deleted FAQ ID ' . $recordId);
 
             $faq->deleteRecord($recordId, $recordLang);

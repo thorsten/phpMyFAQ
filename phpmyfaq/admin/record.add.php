@@ -60,7 +60,7 @@ if ($permission['editbt']) {
     
     if (!is_null($question) && !is_null($categories['rubrik'])) {
         // new entry
-        $logging = new PMF_Logging();
+        $logging = new PMF_Logging($faqConfig);
         $logging->logAdmin($user, 'Beitragcreatesave');
         printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 

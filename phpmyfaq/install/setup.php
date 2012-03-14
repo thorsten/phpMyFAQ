@@ -725,7 +725,6 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     $configs['main.administrationMail'] = $email;
 
     $configuration->update($configs);
-    $configuration->setDb($db);
 
     // add admin account and rights
     $admin = new PMF_User($configuration);

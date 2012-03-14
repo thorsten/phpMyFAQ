@@ -4,8 +4,6 @@
  *
  * PHP Version 5.2
  *
- *  http://www.mozilla.org/MPL/
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -37,20 +35,20 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Logging
 {
     /**
-     * DB handle
-     *
-     * @var PMF_Db
+     * @var PMF_Configuration
      */
-    private $db = null;
+    private $_config = null;
 
     /**
      * Constructor
      *
-     * @return void
+     * @param PMF_Configuration $config
+     *
+     * @return PMF_Logging
      */
-    public function __construct()
+    public function __construct(PMF_Configuration $config)
     {
-        $this->db = PMF_Db::getInstance();
+        $this->_config = $config;
     }
 
     /**
@@ -67,7 +65,9 @@ class PMF_Logging
                 %sfaqadminlog',
             SQLPREFIX);
 
-        return $this->db->numRows($this->db->query($query));
+        return $this->_config->getDb()->numRows(
+            $this->_config->getDb()->query($query)
+        );
     }
 
     /**
@@ -87,8 +87,8 @@ class PMF_Logging
             ORDER BY id DESC',
             SQLPREFIX);
 
-        $result = $this->db->query($query);
-        while ($row = $this->db->fetchObject($result)) {
+        $result = $this->_config->getDb()->query($query);
+        while ($row = $this->_config->getDb()->fetchObject($result)) {
             $data[$row->id] = array(
                'time'  => $row->time,
                'usr'   => $row->usr,
@@ -109,7 +109,7 @@ class PMF_Logging
      */
     public function logAdmin(PMF_User $user, $logText = '')
     {
-        if (PMF_Configuration::getInstance()->get('main.enableAdminLog')) {
+        if ($this->_config->get('main.enableAdminLog')) {
             
             $query = sprintf("
                 INSERT INTO
@@ -118,13 +118,13 @@ class PMF_Logging
                     VALUES 
                 (%d, %d, %d, '%s', '%s')",
                     SQLPREFIX,
-                    $this->db->nextId(SQLPREFIX.'faqadminlog', 'id'),
+                    $this->$this->_config->nextId(SQLPREFIX.'faqadminlog', 'id'),
                     $_SERVER['REQUEST_TIME'],
                     $user->userdata->get('user_id'),
-                    $this->db->escape(nl2br($logText)),
+                    $this->$this->_config->escape(nl2br($logText)),
                     $_SERVER['REMOTE_ADDR']);
             
-            return $this->db->query($query);
+            return $this->$this->_config->query($query);
         } else {
         	return false;
         }
@@ -145,7 +145,7 @@ class PMF_Logging
             SQLPREFIX,
             $_SERVER['REQUEST_TIME'] - 30 * 86400);
 
-        if ($this->db->query($query)) {
+        if ($this->$this->_config->query($query)) {
             return true;
         }
         return false;

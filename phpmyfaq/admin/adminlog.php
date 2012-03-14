@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$logging = new PMF_Logging();
+$logging = new PMF_Logging($faqConfig);
 
 if ($permission['adminlog'] && 'adminlog' == $action) {
 

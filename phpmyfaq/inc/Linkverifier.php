@@ -177,7 +177,7 @@ class PMF_Linkverifier
      */
     public function isReady()
     {
-        if (PMF_Configuration::getInstance()->get('main.referenceURL') == '') {
+        if ($this->_config->get('main.referenceURL') == '') {
             return false;
         }
 

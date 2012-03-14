@@ -76,7 +76,7 @@ if ($permission['editbt']) {
     
     if (!is_null($question) && !is_null($categories)) {
         // Save entry
-        $logging = new PMF_Logging();
+        $logging = new PMF_Logging($faqConfig);
         $logging->logAdmin($user, 'Beitragsave ' . $record_id);
         print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
 

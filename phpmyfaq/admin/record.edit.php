@@ -92,7 +92,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
         $id   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $lang = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
         if ((!isset($selectedCategory) && !isset($faqData['title'])) || !is_null($id)) {
-            $logging = new PMF_Logging();
+            $logging = new PMF_Logging($faqConfig);
             $logging->logAdmin($user, 'Beitragedit, ' . $id);
             $faqData['id']   = $id;
             $faqData['lang'] = $lang;
@@ -121,7 +121,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
         $queryString = 'insertentry';
 
     } else {
-        $logging = new PMF_Logging();
+        $logging = new PMF_Logging($faqConfig);
         $logging->logAdmin($user, 'Beitragcreate');
         $queryString = 'insertentry';
         if (!is_array($categories)) {
