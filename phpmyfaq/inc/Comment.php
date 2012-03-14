@@ -175,7 +175,7 @@ class PMF_Comment
     public function getComments($id, $type)
     {
         $comments = $this->getCommentsData($id, $type);
-
+        $date     = new PMF_Date(PMF_Configuration::getInstance());
         $output = '';
         foreach ($comments as $item) {
             $output .= '<p class="comment">';
@@ -186,7 +186,7 @@ class PMF_Comment
                 $item['user'],
                 nl2br($item['content']),
                 $this->pmf_lang['newsCommentDate'] .
-                    PMF_Date::format(PMF_Date::createIsoDate($item['date'], 'Y-m-d H:i', false))
+                    $date->format(PMF_Date::createIsoDate($item['date'], 'Y-m-d H:i', false))
             );
         }
 

@@ -25,6 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 if ($permission['delquestion']) {
 
     $category   = new PMF_Category($current_admin_user, $current_admin_groups, false);
+    $date       = new PMF_Date($faqConfig);
     $questionId = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $delete     = PMF_Filter::filterInput(INPUT_GET, 'delete', FILTER_SANITIZE_STRING, 'no');
     
@@ -62,7 +63,7 @@ if ($permission['delquestion']) {
 ?>
         <tr>
             <td>
-                <?php print PMF_Date::format(PMF_Date::createIsoDate($question['created'])); ?>
+                <?php print $date->format(PMF_Date::createIsoDate($question['created'])); ?>
                 <br />
                 <a href="mailto:<?php print $question['email']; ?>">
                     <?php print $question['username']; ?>

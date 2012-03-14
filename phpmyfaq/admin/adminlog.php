@@ -28,6 +28,7 @@ $logging = new PMF_Logging($faqConfig);
 
 if ($permission['adminlog'] && 'adminlog' == $action) {
 
+    $date    = new PMF_Date($faqConfig);
     $perpage = 15;
     $pages   = PMF_Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
     $page    = PMF_Filter::filterInput(INPUT_GET, 'page' , FILTER_VALIDATE_INT, 1);
@@ -79,7 +80,7 @@ if ($permission['adminlog'] && 'adminlog' == $action) {
 ?>
         <tr class="cell">
             <td><?php print $logging_id; ?></td>
-            <td><?php print PMF_Date::format(date('Y-m-d H:i', $logging_value['time'])); ?></td>
+            <td><?php print $date->format(date('Y-m-d H:i', $logging_value['time'])); ?></td>
             <td><?php print $user->getLogin(); ?></td>
             <td><?php print $logging_value['ip']; ?></td>
         </tr>

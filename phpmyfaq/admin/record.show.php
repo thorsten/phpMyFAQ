@@ -44,6 +44,7 @@ if ($permission['editbt'] || $permission['delbt']) {
 
     $comment = new PMF_Comment();
     $faq     = new PMF_Faq();
+    $date    = new PMF_Date($faqConfig);
 
     $cond           = $numCommentsByFaq = $numActiveByCat = array();
     $internalSearch = $linkState = $searchterm = '';
@@ -348,7 +349,7 @@ if ($permission['editbt'] || $permission['delbt']) {
         }
 ?></td>
             <td style="width: 48px;">
-                <?php print PMF_Date::format($record['date']); ?>
+                <?php print $date->format($record['date']); ?>
             </td>
             <td style="width: 96px;">
                 <?php print $linkverifier->getEntryStateHTML($record['id'], $record['lang']); ?>

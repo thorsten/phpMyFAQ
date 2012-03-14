@@ -91,9 +91,10 @@ if ((!$news['active']) || (!$news['allowComments']) || $expired) {
 
 // date of news entry
 if ($news['active'] && (!$expired)) {
+    $date = new PMF_Date($faqConfig);
     $newsDate = sprintf('%s<span id="newsLastUpd">%s</span>',
         $PMF_LANG['msgLastUpdateArticle'],
-        PMF_Date::format($news['date'])
+        $date->format($news['date'])
     );
 } else {
     $newsDate = '';

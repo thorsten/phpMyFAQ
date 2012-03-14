@@ -357,13 +357,14 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
         global $PMF_LANG;
         
         $faqConfig = PMF_Configuration::getInstance();
+        $date      = new PMF_Date($faqConfig);
 
         $footer = sprintf(
             '(c) %d %s <%s> | %s',
             date('Y'),
             $faqConfig->get('main.metaPublisher'),
             $faqConfig->get('main.administrationMail'),
-            PMF_Date::format(date('Y-m-d H:i'))
+            $date->format(date('Y-m-d H:i'))
         );
         
         $currentTextColor = $this->TextColor;

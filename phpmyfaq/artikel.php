@@ -256,6 +256,8 @@ if (isset($permission['addtranslation']) && $permission['addtranslation']) {
     );
 }
 
+$date = new PMF_Date($faqConfig);
+
 $tpl->parse('writeContent', array(
     'writeRubrik'                => $categoryName,
     'solution_id'                => $faq->faqRecord['solution_id'],
@@ -267,7 +269,7 @@ $tpl->parse('writeContent', array(
     'writeArticleTags'           => $faqTagging->getAllLinkTagsById($faq->faqRecord['id']),
     'writeRelatedArticlesHeader' => $PMF_LANG['msg_related_articles'] . ': ',
     'writeRelatedArticles'       => $relatedFaqs,
-    'writeDateMsg'               => $PMF_LANG['msgLastUpdateArticle'] . PMF_Date::format($faq->faqRecord['date']),
+    'writeDateMsg'               => $PMF_LANG['msgLastUpdateArticle'] . $date->format($faq->faqRecord['date']),
     'writeRevision'              => $PMF_LANG['ad_entry_revision'] . ': 1.' . $faq->faqRecord['revision_id'],
     'writeAuthor'                => $PMF_LANG['msgAuthor'] . ': ' . $faq->faqRecord['author'],
     'editThisEntry'              => $editThisEntry,

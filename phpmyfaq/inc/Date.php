@@ -37,6 +37,23 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Date
 {
     /**
+     * @var PMF_Configuration
+     */
+    private $_config = null;
+
+    /**
+     * Constructor
+     *
+     * @param PMF_Configuration $config
+     *
+     * @return PMF_Date
+     */
+    public function __construct(PMF_Configuration $config)
+    {
+        $this->_config = $config;
+    }
+
+    /**
      * Converts the phpMyFAQ date format to a format similar to ISO 8601 standard
      *
      * @param string  $date      Date string
@@ -133,15 +150,13 @@ class PMF_Date
     /**
      * Returns date formatted according to user defined format
      *
-     * @static
      * @param string $date
      * @return string
      */
-    public static function format($unformattedDate)
+    public function format($unformattedDate)
     {
-        $format = PMF_Configuration::getInstance()->get('main.dateFormat');
-        $date   = new DateTime($unformattedDate);
+        $date = new DateTime($unformattedDate);
 
-        return $date->format($format);
+        return $date->format($this->_config->get('main.dateFormat'));
     }
 }

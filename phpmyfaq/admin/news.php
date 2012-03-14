@@ -164,12 +164,13 @@ if ('addnews' == $action && $permission["addnews"]) {
         <tbody>
 <?php
         $newsHeader = $news->getNewsHeader();
+        $date       = new PMF_Date($faqConfig);
         if (count($newsHeader)) {
             foreach($newsHeader as $newsItem) {
 ?>
         <tr>
             <td><?php print $newsItem['header']; ?></td>
-            <td><?php print PMF_Date::format($newsItem['date']); ?></td>
+            <td><?php print $date->format($newsItem['date']); ?></td>
             <td>
                 <a href="?action=editnews&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_update"]; ?>">
                     <img src="images/edit.png" width="16" height="16" alt="<?php print $PMF_LANG["ad_news_update"]; ?>" border="0" />

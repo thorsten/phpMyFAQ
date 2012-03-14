@@ -158,6 +158,7 @@ class PMF_News
     {
         $output = '';
         $news   = $this->getLatestData($showArchive, $active);
+        $date   = new PMF_Date(PMF_Configuration::getInstance());
 
         foreach ($news as $item) {
 
@@ -194,7 +195,7 @@ class PMF_News
             
             $output .= sprintf('
                 <div class="date">%s</div>',
-                PMF_Date::format(PMF_Date::createIsoDate($item['date']))
+                $date->format(PMF_Date::createIsoDate($item['date']))
             );
         }
 

@@ -1625,6 +1625,7 @@ class PMF_Faq
      */
     public function getLatest()
     {
+        $date   = new PMF_Date(PMF_Configuration::getInstance());
         $result = $this->getLatestData(PMF_NUMBER_RECORDS_LATEST, $this->language);
         $output = array();
         
@@ -1632,7 +1633,7 @@ class PMF_Faq
             foreach ($result as $row) {
                 $output['url'][]   =  $row['url'];
                 $output['title'][] = PMF_Utils::makeShorterText($row['thema'], 8);
-                $output['date'][]  = PMF_Date::format(PMF_Date::createIsoDate($row['datum']));
+                $output['date'][]  = $date->format(PMF_Date::createIsoDate($row['datum']));
             }
         } else {
             $output['error'] = $this->pmf_lang["err_noArticles"];
@@ -2761,6 +2762,8 @@ class PMF_Faq
     {
         global $sids, $category;
 
+        $date = new PMF_Date(PMF_Configuration::getInstance());
+
         $query = sprintf("
             SELECT
                 COUNT(*) AS num
@@ -2800,7 +2803,7 @@ class PMF_Faq
             while ($row = $this->db->fetchObject($result)) {
                 $output .= '<tr class="openquestions">';
                 $output .= sprintf('<td valign="top" nowrap="nowrap">%s<br /><a href="mailto:%s">%s</a></td>',
-                    PMF_Date::format(PMF_Date::createIsoDate($row->created)),
+                    $date->format(PMF_Date::createIsoDate($row->created)),
                     PMF_Mail::safeEmail($row->email),
                     $row->username);
                 $output .= sprintf('<td valign="top"><strong>%s:</strong><br />%s</td>',

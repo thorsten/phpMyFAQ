@@ -44,6 +44,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
         'dateEnd'     => '');
 
     $tagging = new PMF_Tags($db, $Language);
+    $date    = new PMF_Date($faqConfig);
 
     if ($action == 'takequestion') {
         $questionId       = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -573,7 +574,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                             <?php printf('%s  1.%d<br/>%s<br/>%s: %s',
                             $PMF_LANG['ad_entry_revision'],
                             $entry['revision_id'],
-                            PMF_Date::format(date('Y-m-d H:i', $entry['date'])),
+                            $date->format(date('Y-m-d H:i', $entry['date'])),
                             $PMF_LANG['ad_entry_author'],
                             $user->getUserData('display_name')); ?>
                         </label>
@@ -628,9 +629,9 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                             <label><?php print $PMF_LANG["ad_entry_date"]; ?></label>
                             <?php
                             if (isset($faqData['date'])) {
-                                print PMF_Date::format($faqData['date']);
+                                print $date->format($faqData['date']);
                             } else {
-                                print PMF_Date::format(date('Y-m-d H:i'));
+                                print $date->format(date('Y-m-d H:i'));
                             }
                             ?>
                         </p>
