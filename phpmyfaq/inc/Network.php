@@ -41,6 +41,23 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Network
 {
     /**
+     * @var PMF_Configuration
+     */
+    private $_config;
+
+    /**
+     * Constructor
+     *
+     * @param PMF_Configuration $config
+     *
+     * @return PMF_Network
+     */
+    public function __construct(PMF_Configuration $config)
+    {
+        $this->_config = $config;
+    }
+
+    /**
      * Performs a check if an IPv4 or IPv6 address is banned
      *
      * @param string $ip IPv4 or IPv6 address
@@ -49,8 +66,7 @@ class PMF_Network
      */
     public function checkIp($ip)
     {
-        $bannedList = PMF_Configuration::getInstance()->get('security.bannedIPs');
-        $bannedIps  = explode(' ', $bannedList);
+        $bannedIps = explode(' ', $this->_config->get('security.bannedIPs'));
 
         foreach ($bannedIps as $ipAddress) {
 

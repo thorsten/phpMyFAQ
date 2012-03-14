@@ -27,7 +27,7 @@ printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_stat_sess']);
 
 if ($permission['viewlog']) {
     
-    $session    = new PMF_Session($db, $Language);
+    $session    = new PMF_Session($faqConfig);
     $statdelete = PMF_Filter::filterInput(INPUT_POST, 'statdelete', FILTER_SANITIZE_STRING);
     $month      = PMF_Filter::filterInput(INPUT_POST, 'month', FILTER_SANITIZE_STRING);
 

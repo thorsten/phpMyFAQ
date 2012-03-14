@@ -28,7 +28,7 @@ if ($permission['viewlog']) {
     $firstHour = mktime (0, 0, 0, date('m', $day), date('d', $day), date('Y', $day));
     $lastHour  = mktime (23, 59, 59, date('m', $day), date('d', $day), date('Y', $day));
     
-    $session     = new PMF_Session($db, $Language);
+    $session     = new PMF_Session($faqConfig);
     $sessiondata = $session->getSessionsbyDate($firstHour, $lastHour);
 ?>
         <header>

@@ -31,7 +31,7 @@ if ($permission['viewlog']) {
         $PMF_LANG['ad_sess_session'],
         $sid);
 
-    $session = new PMF_Session($db, $Language);
+    $session = new PMF_Session($faqConfig);
     $time    = $session->getTimeFromSessionId($sid);
 
     $trackingdata = explode("\n", file_get_contents(PMF_ROOT_DIR.'/data/tracking'.date('dmY', $time)));

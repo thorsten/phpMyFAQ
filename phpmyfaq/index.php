@@ -206,7 +206,7 @@ if (function_exists('mb_language') && in_array($mbLanguage, $valid_mb_strings)) 
 $sid        = null;
 $sid_get    = PMF_Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
 $sid_cookie = PMF_Filter::filterInput(INPUT_COOKIE, PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
-$faqsession = new PMF_Session($db, $Language);
+$faqsession = new PMF_Session($faqConfig);
 // Note: do not track internal calls
 $internal = false;
 if (isset($_SERVER['HTTP_USER_AGENT'])) {
