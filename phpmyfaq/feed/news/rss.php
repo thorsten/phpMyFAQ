@@ -63,7 +63,7 @@ $rss->writeAttribute('version', '2.0');
 $rss->startElement('channel');
 $rss->writeElement('title', $faqConfig->get('main.titleFAQ') . ' - ' . $PMF_LANG['msgNews']);
 $rss->writeElement('description', html_entity_decode($faqConfig->get('main.metaDescription')));
-$rss->writeElement('link', PMF_Link::getSystemUri('/feed/news/rss.php'));
+$rss->writeElement('link', $faqConfig->get('main.referenceURL'));
 
 if ($num > 0) {
     foreach ($rssData as $item) {
@@ -84,7 +84,7 @@ if ($num > 0) {
         $rss->writeCdata($item['content']);
         $rss->endElement();
         
-        $rss->writeElement('link', PMF_Link::getSystemUri('/feed/news/rss.php').$link);
+        $rss->writeElement('link', $faqConfig->get('main.referenceURL').$link);
         $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['date'], true));
         $rss->endElement();
     }

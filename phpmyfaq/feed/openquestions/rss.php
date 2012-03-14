@@ -60,7 +60,7 @@ $rss->writeAttribute('version', '2.0');
 $rss->startElement('channel');
 $rss->writeElement('title', $faqConfig->get('main.titleFAQ') . ' - ' . $PMF_LANG['msgOpenQuestions']);
 $rss->writeElement('description', html_entity_decode($faqConfig->get('main.metaDescription')));
-$rss->writeElement('link', PMF_Link::getSystemUri('/feed/openquestions/rss.php'));
+$rss->writeElement('link', $faqConfig->get('main.referenceURL'));
 
 if ($num > 0) {
     $counter = 0;

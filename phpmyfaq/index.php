@@ -416,7 +416,7 @@ $tpl = new PMF_Template(
 
 $usersOnLine    = $faqsession->getUsersOnline();
 $totUsersOnLine = $usersOnLine[0] + $usersOnLine[1];
-$systemUri      = PMF_Link::getSystemUri('index.php');
+$systemUri      = $faqConfig->get('main.referenceURL');
 
 $helper = PMF_Helper_Category::getInstance();
 $helper->setCategory($category);
@@ -644,7 +644,7 @@ if (!isset($latestEntriesParams['error'])) {
 
 if ('artikel' == $action || 'show' == $action || is_numeric($solutionId)) {
     // We need some Links from social networks
-    $faqServices = new PMF_Services();
+    $faqServices = new PMF_Services($faqConfig);
     $faqServices->setCategoryId($cat);
     $faqServices->setFaqId($id);
     $faqServices->setLanguage($lang);

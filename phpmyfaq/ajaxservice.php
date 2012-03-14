@@ -131,7 +131,7 @@ switch ($action) {
                     }
                     $faqUrl = sprintf(
                         '%s?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                        PMF_Link::getSystemUri('/ajaxservice.php'),
+                        $faqConfig->get('main.referenceURL'),
                         0,
                         $faq->faqRecord['id'],
                         $faq->faqRecord['lang']
@@ -148,7 +148,7 @@ switch ($action) {
                         $emailTo = $news['authorEmail'];
                     }
                     $link = sprintf('%s?action=news&amp;newsid=%d&amp;newslang=%s',
-                        PMF_Link::getSystemUri('/ajaxservice.php'),
+                        $faqConfig->get('main.referenceURL'),
                         $news['id'],
                         $news['lang']
                     );

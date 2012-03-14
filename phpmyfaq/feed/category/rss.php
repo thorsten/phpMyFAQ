@@ -99,7 +99,7 @@ $rss->writeAttribute('version', '2.0');
 $rss->startElement('channel');
 $rss->writeElement('title', $faqConfig->get('main.titleFAQ') . ' - ');
 $rss->writeElement('description', html_entity_decode($faqConfig->get('main.metaDescription')));
-$rss->writeElement('link', PMF_Link::getSystemUri('/feed/category/rss.php'));
+$rss->writeElement('link', $faqConfig->get('main.referenceURL'));
 
 if (is_array($records)) {
 
@@ -123,7 +123,7 @@ if (is_array($records)) {
         $rss->writeCdata($item['record_preview']);
         $rss->endElement();
         
-        $rss->writeElement('link', PMF_Link::getSystemUri('/feed/category/rss.php') . $link); 
+        $rss->writeElement('link', $faqConfig->get('main.referenceURL') . $link);
         $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['record_date'], true));
 
         $rss->endElement();

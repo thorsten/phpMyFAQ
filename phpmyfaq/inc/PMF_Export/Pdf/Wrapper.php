@@ -389,7 +389,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
                 $baseUrl .= '&amp;id='.$this->faq['id'];
                 $baseUrl .= '&amp;artlang='.$this->faq['lang'];
             }
-            $url    = PMF_Link::getSystemUri('pdf.php') . $baseUrl;
+            $url    = $this->_config->get('main.referenceURL') . $baseUrl;
             $urlObj = new PMF_Link($url, $this->_config);
             $urlObj->itemTitle = $this->question;
             $_url = str_replace('&amp;', '&', $urlObj->toString());

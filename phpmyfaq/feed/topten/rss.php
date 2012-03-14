@@ -102,7 +102,7 @@ $rss->writeAttribute('version', '2.0');
 $rss->startElement('channel');
 $rss->writeElement('title', $faqConfig->get('main.titleFAQ') . ' - ' . $PMF_LANG['msgTopTen']);
 $rss->writeElement('description', html_entity_decode($faqConfig->get('main.metaDescription')));
-$rss->writeElement('link', PMF_Link::getSystemUri('/feed/topten/rss.php'));
+$rss->writeElement('link', $faqConfig->get('main.referenceURL'));
 
 if ($num > 0) {
     $i = 0;
@@ -126,7 +126,7 @@ if ($num > 0) {
         $rss->writeCdata("[".$i.".] ".$item['thema']." (".$item['visits']." ".$PMF_LANG['msgViews'].")");
         $rss->endElement();
         
-        $rss->writeElement('link', PMF_Link::getSystemUri('/feed/topten/rss.php').$link);
+        $rss->writeElement('link', $faqConfig->get('main.referenceURL').$link);
         $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['last_visit'], false));
         $rss->endElement();
     }

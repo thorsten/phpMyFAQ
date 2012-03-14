@@ -389,7 +389,7 @@ class PMF_Link
     {
         $scheme = 'http://';
         if ($this->isSystemLink()) {
-            $scheme = PMF_Link::getSystemScheme();
+            $scheme = $this->getSystemScheme();
         }
 
         return $scheme;
@@ -400,7 +400,7 @@ class PMF_Link
      *
      * @return string
      */
-    public static function getSystemScheme()
+    public function getSystemScheme()
     {
         if ($this->_config->get('security.useSslOnly')) {
             return 'https://';
@@ -431,7 +431,7 @@ class PMF_Link
      *
      * @return string
      */
-    public static function getSystemUri($path = null)
+    public function getSystemUri($path = null)
     {
         // $_SERVER['HTTP_HOST'] is the name of the website or virtual host name (HTTP/1.1)
         // Precisely, it contains what the user has written in the Host request-header, see below.
@@ -441,7 +441,7 @@ class PMF_Link
         // Remove any ref to standard ports 80 and 443.
         $pattern[0] = '/:80$/';   // HTTP: port 80
         $pattern[1] = '/:443$/'; // HTTPS: port 443
-        $sysUri = PMF_Link::getSystemScheme().preg_replace($pattern, '', $_SERVER['HTTP_HOST']);
+        $sysUri = $this->getSystemScheme() . preg_replace($pattern, '', $_SERVER['HTTP_HOST']);
 
         return $sysUri.PMF_link::getSystemRelativeUri($path);
     }

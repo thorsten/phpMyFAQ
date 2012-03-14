@@ -167,7 +167,7 @@ switch ($action) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     
     <title><?php print $faqConfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?></title>
-    <base href="<?php print PMF_Link::getSystemUri('index.php'); ?>" />
+    <base href="<?php print $faqConfig->get('main.referenceURL'); ?>" />
     
     <meta name="description" content="Only Chuck Norris can divide by zero.">
     <meta name="author" content="phpMyFAQ Team">

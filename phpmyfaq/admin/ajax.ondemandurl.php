@@ -70,7 +70,7 @@ if (count(ob_list_handlers()) > 0) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
     <title><?php print $faqConfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
-    <base href="<?php print PMF_Link::getSystemUri('index.php'); ?>" />
+    <base href="<?php print $faqConfig->get('main.referenceURL'); ?>" />
 
     <meta name="description" content="Only Chuck Norris can divide by zero.">
     <meta name="author" content="phpMyFAQ Team">
