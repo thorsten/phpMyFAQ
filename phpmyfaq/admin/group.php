@@ -55,7 +55,7 @@ if ($groupAction == 'update_members' && $permission['editgroup']) {
     if ($groupId == 0) {
         $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
     } else {
-        $user = new PMF_User();
+        $user = new PMF_User($faqConfig);
         $perm = $user->perm;
         if (!$perm->removeAllUsersFromGroup($groupId)) {
             $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
@@ -78,7 +78,7 @@ if ($groupAction == 'update_rights' && $permission['editgroup']) {
     if ($groupId == 0) {
         $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
     } else {
-        $user = new PMF_User();
+        $user = new PMF_User($faqConfig);
         $perm = $user->perm;
         $groupRights = isset($_POST['group_rights']) ? $_POST['group_rights'] : array();
         if (!$perm->refuseAllGroupRights($groupId)) {
@@ -107,7 +107,7 @@ if ($groupAction == 'update_data' && $permission['editgroup']) {
         foreach ($dataFields as $field) {
             $groupData[$field] = PMF_Filter::filterInput(INPUT_POST, $field, FILTER_SANITIZE_STRING, '');
         }
-        $user = new PMF_User();
+        $user = new PMF_User($faqConfig);
         $perm = $user->perm;
         if (!$perm->changeGroup($groupId, $groupData)) {
             $message .= sprintf('<p class="alert alert-error">%s<br />%s</p>', $PMF_LANG['ad_msg_mysqlerr'], $perm->_db->error());
@@ -123,7 +123,7 @@ if ($groupAction == 'update_data' && $permission['editgroup']) {
 // delete group confirmation
 if ($groupAction == 'delete_confirm' && $permission['delgroup']) {
     $message = '';
-    $user    = new PMF_User_CurrentUser();
+    $user    = new PMF_User_CurrentUser($faqConfig);
     $perm    = $user->perm;
     $groupId = PMF_Filter::filterInput(INPUT_POST, 'group_list_select', FILTER_VALIDATE_INT, 0);
     if ($groupId <= 0) {
@@ -150,7 +150,7 @@ if ($groupAction == 'delete_confirm' && $permission['delgroup']) {
 
 if ($groupAction == 'delete' && $permission['delgroup']) {
     $message   = '';
-    $user      = new PMF_User();
+    $user      = new PMF_User($faqConfig);
     $groupId   = PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
     $csrfOkay  = true;
     $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
@@ -175,7 +175,7 @@ if ($groupAction == 'delete' && $permission['delgroup']) {
 }
 
 if ($groupAction == 'addsave' && $permission['addgroup']) {
-    $user              = new PMF_User();
+    $user              = new PMF_User($faqConfig);
     $message           = '';
     $messages          = array();
     $group_name        = PMF_Filter::filterInput(INPUT_POST, 'group_name', FILTER_SANITIZE_STRING, '');
@@ -223,7 +223,7 @@ if (!isset($message))
 
 // show new group form
 if ($groupAction == 'add' && $permission['addgroup']) {
-    $user = new PMF_User_CurrentUser();
+    $user = new PMF_User_CurrentUser($faqConfig);
 ?>
         <header>
             <h2><?php print $PMF_LANG['ad_group_add']; ?></h2>

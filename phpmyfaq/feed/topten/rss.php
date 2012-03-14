@@ -47,7 +47,7 @@ if ($faqConfig->get('security.enableLoginOnly')) {
         header('HTTP/1.0 401 Unauthorized');
         exit;
     } else {
-        $user = new PMF_User_CurrentUser();
+        $user = new PMF_User_CurrentUser($faqConfig);
         if ($user->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) {
             if ($user->getStatus() != 'blocked') {
                 $auth = true;
@@ -59,7 +59,7 @@ if ($faqConfig->get('security.enableLoginOnly')) {
         }
     }
 } else {
-    $user = PMF_User_CurrentUser::getFromSession($faqConfig->get('security.ipCheck'));
+    $user = PMF_User_CurrentUser::getFromSession($faqConfig);
 }
 
 //

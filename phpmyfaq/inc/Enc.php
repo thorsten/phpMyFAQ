@@ -41,7 +41,7 @@ class PMF_Enc
      *
      * @const
      */
-    const PMF_ERROR_USER_NO_ENCTYPE = 'Specified encryption method could not be found.';
+    const PMF_ERROR_USER_NO_ENCTYPE = 'Encryption method could not be found.';
 
     /**
      * Public array that contains error messages.
@@ -49,6 +49,13 @@ class PMF_Enc
      * @var array
      */
     public $errors = array();
+
+    /**
+     * PMF_Configuration
+     *
+     * @var PMF_Configuration
+     */
+    protected $_config = null;
 
     /**
      * Salt
@@ -70,6 +77,18 @@ class PMF_Enc
     }
 
     /**
+     * Constructor
+     *
+     * @param PMF_Configuration $config
+     *
+     * @return PMF_Enc
+     */
+    public function __construct(PMF_Configuration $config)
+    {
+        $this->_config = $config;
+    }
+
+    /**
      * This method is called statically. The parameter enctype specifies the
      * of encryption method for the encryption object. Supported
      * are 'crypt', 'md5', 'sha' and 'none'.
@@ -85,9 +104,9 @@ class PMF_Enc
      * @param  string
      * @return PMF_Enc
      */
-    public static function selectEnc($enctype)
+    public static function selectEnc($enctype, PMF_Configuration $config)
     {
-        $enc     = new PMF_Enc();
+        $enc     = new PMF_Enc($config);
         $enctype = ucfirst(strtolower($enctype));
 
         if (!isset($enctype)) {
@@ -95,22 +114,14 @@ class PMF_Enc
             return $enc;
         }
 
-        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'PMF_Enc' . DIRECTORY_SEPARATOR . $enctype . '.php';
+        $encClass = 'PMF_Enc_' . $enctype;
 
-        if (!file_exists($classfile)) {
-            $enc->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
-            return $enc;
-        }
-        
-        $newclass = 'PMF_Enc_' . $enctype;
-
-        if (!class_exists($newclass)) {
+        if (!class_exists($encClass)) {
             $enc->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
             return $enc;
         }
 
-        $enc = new $newclass();
-        return $enc;
+        return new $encClass($config);
     }
 
     /**
@@ -140,7 +151,7 @@ class PMF_Enc
      */
     public function setSalt($salt)
     {
-        $this->salt = PMF_Configuration::getInstance()->get('main.referenceURL') . $salt;
+        $this->salt = $this->_config->get('main.referenceURL') . $salt;
 
         return $this;
     }

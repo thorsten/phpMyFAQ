@@ -8,7 +8,7 @@
 	 */
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");
 
-$user = PMF_User_CurrentUser::getFromSession($faqConfig->get('security.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqConfig);
 
 if ($user) {
     $_SESSION['ajax_user'] = true;

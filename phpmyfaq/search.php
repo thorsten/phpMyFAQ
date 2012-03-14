@@ -51,7 +51,7 @@ if ($allLanguages) {
 }
 
 if (is_null($user)) {
-    $user = new PMF_User_CurrentUser();
+    $user = new PMF_User_CurrentUser($faqConfig);
 }
 
 $faqSearch       = new PMF_Search($db, $Language);

@@ -28,7 +28,7 @@ $usersearch = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
 
 if ($permission['adduser'] || $permission['edituser'] || $permission['deluser']) {
 
-    $user = new PMF_User();
+    $user = new PMF_User($faqConfig);
     
     switch ($ajaxAction) {
 

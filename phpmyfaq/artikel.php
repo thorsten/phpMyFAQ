@@ -32,7 +32,7 @@ $faqRating   = new PMF_Rating($db, $Language);
 $faqComment  = new PMF_Comment();
 
 if (is_null($user)) {
-    $user = new PMF_User_CurrentUser();
+    $user = new PMF_User_CurrentUser($faqConfig);
 }
 
 $faqSearchResult = new PMF_Search_Resultset($user, $faq);

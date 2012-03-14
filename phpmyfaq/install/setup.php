@@ -725,9 +725,10 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     $configs['main.administrationMail'] = $email;
 
     $configuration->update($configs);
+    $configuration->setDb($db);
 
     // add admin account and rights
-    $admin = new PMF_User();
+    $admin = new PMF_User($configuration);
     $admin->createUser($loginname, $password, 1);
     $admin->setStatus('protected');
     $adminData = array(
@@ -951,7 +952,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     }
     
     // Add anonymous user account
-    $anonymous = new PMF_User();
+    $anonymous = new PMF_User($configuration);
     $anonymous->createUser('anonymous', null, -1);
     $anonymous->setStatus('protected');
     $anonymousData = array(

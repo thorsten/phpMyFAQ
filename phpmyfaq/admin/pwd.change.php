@@ -33,10 +33,11 @@ if ($permission["passwd"]) {
     if (!is_null($save)) {
 
         // Re-evaluate $user
-        $user = PMF_User_CurrentUser::getFromSession($faqConfig->get('security.ipCheck'));
+        $user = PMF_User_CurrentUser::getFromSession($faqConfig);
 
         // Define the (Local/Current) Authentication Source
-        $_authSource = PMF_Auth::selectAuth($user->auth_data['authSource']['name']);
+        $auth = new PMF_Auth($faqConfig);
+        $_authSource = $auth->selectAuth($user->auth_data['authSource']['name']);
         $_authSource->selectEncType($user->auth_data['encType']);
         $_authSource->setReadOnly($user->auth_data['readOnly']);
         

@@ -80,17 +80,22 @@ class PMF_Auth
     private $readOnly = false;
 
     /**
+     * PMF_Configuration
+     *
+     * @var PMF_Configuration
+     */
+    protected $_config = null;
+
+    /**
      * Constructor
      *
-     * @param string  $enctype   Type of encoding
-     * @param boolean $readOnly Readonly?
+     * @param PMF_Configuration $config
      *
      * @return PMF_Auth
      */
-    public function __construct($enctype = 'none', $readOnly = false)
+    public function __construct(PMF_Configuration $config)
     {
-        $this->selectEncType($enctype);
-        $this->setReadOnly($readOnly);
+        $this->_config = $config;
     }
     
     /**
@@ -107,7 +112,7 @@ class PMF_Auth
      */
     public function selectEncType($enctype)
     {
-        $this->encContainer = PMF_Enc::selectEnc($enctype);
+        $this->encContainer = PMF_Enc::selectEnc($enctype, $this->_config);
         
         return $this->encContainer;
     }
@@ -150,27 +155,23 @@ class PMF_Auth
      *
      * @return PMF_Auth_Driver
      */
-    public static function selectAuth($method)
+    public function selectAuth($method)
     {
         // verify selected database
-        $auth   = new PMF_Auth();
         $method = ucfirst(strtolower($method));
         
         if (!isset($method)) {
-            $auth->errors[] = self::PMF_ERROR_USER_NO_AUTHTYPE;
-            return $auth;
+            $this->errors[] = self::PMF_ERROR_USER_NO_AUTHTYPE;
+            return $this;
         }
-        
-        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'PMF_Auth' . DIRECTORY_SEPARATOR . $method . '.php';
 
-        if (!file_exists($classfile)) {
-            $auth->errors[] = self::PMF_ERROR_USER_NO_AUTHTYPE;
-            return $auth;
+        $authClass = 'PMF_Auth_' . $method;
+        if (!class_exists($authClass)) {
+            $this->errors[] = self::PMF_ERROR_USER_NO_AUTHTYPE;
+            return $this;
         }
-        
-        $authclass = 'PMF_Auth_' . $method;
-        $auth      = new $authclass();
-        return $auth;
+
+        return new $authClass($this->_config);
     }
 
     /**
@@ -219,7 +220,7 @@ class PMF_Auth
         $encTypes = array('crypt', 'md5', 'sha');
 
         foreach ($encTypes as $encType) {
-            if ($encryptedPassword === PMF_Enc::selectEnc($encType)->encrypt($clearPassword)) {
+            if ($encryptedPassword === PMF_Enc::selectEnc($encType, $this->_config)->encrypt($clearPassword)) {
                 return true;
             }
         }

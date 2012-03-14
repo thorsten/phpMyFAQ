@@ -87,15 +87,15 @@ class PMF_User_CurrentUser extends PMF_User
     private $session_id_timeout = 1;
 
     /**
-     * constructor
+     * Constructor
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @return void
+     * @param PMF_Configuration $config
+     *
+     * @return PMF_User_CurrentUser
      */
-    function __construct()
+    function __construct(PMF_Configuration $config)
     {
-        parent::__construct();
+        parent::__construct($config);
     }
 
     /**
@@ -392,18 +392,18 @@ class PMF_User_CurrentUser extends PMF_User
      * will be returned. On success, a valid CurrentUser object is
      * returned.
      *
-     * @param  boolean $ip_check Check th IP address
+     * @param  PMF_Configuration $config
      *
      * @return PMF_User_CurrentUser
      */
-    public static function getFromSession($ip_check = false)
+    public static function getFromSession(PMF_Configuration $config)
     {
         // there is no valid user object in session
         if (!isset($_SESSION[PMF_SESSION_CURRENT_USER]) || !isset($_SESSION[PMF_SESSION_ID_TIMESTAMP])) {
             return null;
         }
         // create a new CurrentUser object
-        $user = new PMF_User_CurrentUser();
+        $user = new PMF_User_CurrentUser($config);
         $user->getUserById($_SESSION[PMF_SESSION_CURRENT_USER]);
         // user object is timed out
         if ($user->sessionIsTimedOut()) {
@@ -417,7 +417,8 @@ class PMF_User_CurrentUser extends PMF_User
             return false;
         }
         // check ip
-        if ($ip_check and $session_info['ip'] != $_SERVER['REMOTE_ADDR']) {
+        if ($config->get('security.ipCheck') &&
+            $session_info['ip'] != $_SERVER['REMOTE_ADDR']) {
             return false;
         }
         // session-id needs to be updated

@@ -111,9 +111,9 @@ $faqusername = PMF_Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZ
 $faqpassword = PMF_Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
 if (!is_null($faqusername) && !is_null($faqpassword)) {
     // login with username and password
-    $user = new PMF_User_CurrentUser();
+    $user = new PMF_User_CurrentUser($faqConfig);
     if ($faqConfig->get('security.ldapSupport')) {
-        $authLdap = new PMF_Auth_AuthLdap();
+        $authLdap = new PMF_Auth_AuthLdap($faqConfig);
         $user->addAuth($authLdap, 'ldap');
     }
     if ($user->login($faqusername, $faqpassword)) {
@@ -133,7 +133,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     }
 } else {
     // authenticate with session information
-    $user = PMF_User_CurrentUser::getFromSession($faqConfig->get('security.ipCheck'));
+    $user = PMF_User_CurrentUser::getFromSession($faqConfig);
     if ($user) {
         $auth = true;
     } else {

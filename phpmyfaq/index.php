@@ -98,13 +98,13 @@ if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
     $faqpassword = '';
 }
 if (!is_null($faqusername) && !is_null($faqpassword)) {
-    $user = new PMF_User_CurrentUser();
+    $user = new PMF_User_CurrentUser($faqConfig);
     if ($faqConfig->get('security.ldapSupport')) {
-        $authLdap = new PMF_Auth_AuthLdap();
+        $authLdap = new PMF_Auth_AuthLdap($faqConfig);
         $user->addAuth($authLdap, 'ldap');
     }
     if ($faqConfig->get('security.ssoSupport')) {
-        $authSso = new PMF_Auth_AuthSso();
+        $authSso = new PMF_Auth_AuthSso($faqConfig);
         $user->addAuth($authSso, 'sso');
     }
     if ($user->login($faqusername, $faqpassword)) {
@@ -129,7 +129,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
 
 } else {
     // authenticate with session information
-    $user = PMF_User_CurrentUser::getFromSession($faqConfig->get('security.ipCheck'));
+    $user = PMF_User_CurrentUser::getFromSession($faqConfig);
     if ($user) {
         $auth = true;
     } else {

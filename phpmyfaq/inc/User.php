@@ -168,39 +168,44 @@ class PMF_User
     private $allowed_status = array(
         'active'    => self::STATUS_USER_ACTIVE,
         'blocked'   => self::STATUS_USER_BLOCKED,
-        'protected' => self::STATUS_USER_PROTECTED);
+        'protected' => self::STATUS_USER_PROTECTED
+    );
+
+    /**
+     * PMF_Configuration
+     *
+     * @var PMF_Configuration
+     */
+    protected $_config = null;
 
     /**
      * Constructor
      *
-     * @param  PMF_Perm $perm Permission object
-     * @param  array         $auth Authorization array
-     * @return void
+     * @param PMF_Configuration $config
+     *
+     * @return PMF_User
      */
-    public function __construct(PMF_Perm $perm = null, Array $auth = array())
+    public function __construct(PMF_Configuration $config)
     {
-        $this->db = PMF_Db::getInstance();
+        $this->_config = $config;
 
-        if ($perm !== null) {
-            if (!$this->addPerm($perm)) {
-                return false;
-            }
-        } else {
-            $permLevel = PMF_Configuration::getInstance()->get('security.permLevel');
-            $perm      = PMF_Perm::selectPerm($permLevel);
-            if (!$this->addPerm($perm)) {
-                return false;
-            }
+        $this->db = $this->_config->getDb();
+
+        $permLevel = $this->_config->get('security.permLevel');
+        $perm      = PMF_Perm::selectPerm($permLevel);
+        if (!$this->addPerm($perm)) {
+            return;
         }
         
         // authentication objects
         // always make a 'local' $auth object (see: $auth_data)
         $this->authContainer = array();
-        $authLocal = PMF_Auth::selectAuth($this->auth_data['authSource']['name']);
+        $auth = new PMF_Auth($this->_config);
+        $authLocal = $auth->selectAuth($this->auth_data['authSource']['name']);
         $authLocal->selectEncType($this->auth_data['encType']);
         $authLocal->setReadOnly($this->auth_data['readOnly']);
         if (!$this->addAuth($authLocal, $this->auth_data['authSource']['type'])) {
-            return false;
+            return;
         }
         
         // additionally, set given $auth objects
@@ -512,19 +517,19 @@ class PMF_User
             return false;
         }
         
-        $read_only  = 0;
+        $readOnly  = 0;
         $auth_count = 0;
         $delete     = array();
         foreach ($this->authContainer as $auth) {
             $auth_count++;
             if ($auth->setReadOnly()) {
-                $read_only++;
+                $readOnly++;
                 continue;
             }
             $delete[] = $auth->delete($this->login);
         }
         
-        if ($read_only == $auth_count) {
+        if ($readOnly == $auth_count) {
             $this->errors[] = self::ERROR_USER_NO_AUTH_WRITABLE;
         }
         if (!in_array(true, $delete)) {

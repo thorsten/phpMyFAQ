@@ -177,7 +177,7 @@ switch ($action) {
                 $categories = $category->getCategoryIdsFromArticle($faq->faqRecord['id']);
                 foreach ($categories as $_category) {
                     $userId = $category->getCategoryUser($_category);
-                    $catUser = new PMF_User();
+                    $catUser = new PMF_User($faqConfig);
                     $catUser->getUserById($userId);
                     $catOwnerEmail = $catUser->getUserData('email');
 
@@ -324,7 +324,7 @@ switch ($action) {
                 $userId = $category->getCategoryUser($_category);
 
                 // @todo Move this code to Category.php
-                $oUser = new PMF_User();
+                $oUser = new PMF_User($faqConfig);
                 $oUser->getUserById($userId);
                 $catOwnerEmail = $oUser->getUserData('email');
 
@@ -386,7 +386,7 @@ switch ($action) {
 
                 $cleanQuestion = PMF_Stopwords::getInstance($db, $Language)->clean($question);
 
-                $user            = new PMF_User_CurrentUser();
+                $user            = new PMF_User_CurrentUser($faqConfig);
                 $faqSearch       = new PMF_Search($db, $Language);
                 $faqSearchResult = new PMF_Search_Resultset($user, $faq);
                 $searchResult    = array();
@@ -445,7 +445,7 @@ switch ($action) {
                                 $faqConfig->get('main.referenceURL') . '/admin/';
 
                     $userId = $cat->getCategoryUser($questionData['category_id']);
-                    $oUser  = new PMF_User();
+                    $oUser  = new PMF_User($faqConfig);
                     $oUser->getUserById($userId);
 
                     $userEmail      = $oUser->getUserData('email');
@@ -484,7 +484,7 @@ switch ($action) {
                                 $faqConfig->get('main.referenceURL') . '/admin/';
 
                 $userId = $cat->getCategoryUser($questionData['category_id']);
-                $oUser  = new PMF_User();
+                $oUser  = new PMF_User($faqConfig);
                 $oUser->getUserById($userId);
 
                 $userEmail      = $oUser->getUserData('email');
@@ -521,7 +521,7 @@ switch ($action) {
             !is_null($realname) && !empty($realname)) {
 
             $message = array();
-            $user    = new PMF_User();
+            $user    = new PMF_User($faqConfig);
             $user->setLoginMinLength(4);
 
             // Create user account (login and password)
@@ -694,9 +694,7 @@ switch ($action) {
         $password = PMF_Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
         $confirm  = PMF_Filter::filterInput(INPUT_POST, 'password_confirm', FILTER_SANITIZE_STRING);
 
-        $user = PMF_User_CurrentUser::getFromSession(
-            $faqConfig->get('security.ipCheck')
-        );
+        $user = PMF_User_CurrentUser::getFromSession($faqConfig);
 
         if ($userId !== $user->getUserId()) {
             $message = array('error' => 'User ID mismatch!');

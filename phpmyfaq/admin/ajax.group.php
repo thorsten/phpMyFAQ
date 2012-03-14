@@ -24,7 +24,7 @@ $group_id    = PMF_Filter::filterInput(INPUT_GET, 'group_id', FILTER_VALIDATE_IN
 
 if ($permission['adduser'] || $permission['edituser'] || $permission['deluser']) {
 	
-	$user      = new PMF_User();
+	$user      = new PMF_User($faqConfig);
     $userList  = $user->getAllUsers();
     $groupList = ($user->perm instanceof PMF_Perm_PermMedium) ? $user->perm->getAllGroups() : array();
     

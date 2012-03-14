@@ -50,11 +50,11 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
      * @param  boolean $read_only Readonly?
      * @return void
      */
-    function __construct($enctype = 'none', $read_only = false)
+    function __construct(PMF_Configuration $config)
     {
-        parent::__construct($enctype, $read_only);
+        parent::__construct($config);
         
-        $this->db = PMF_Db::getInstance();
+        $this->db = $this->_config->getDb();
     }
 
     /**

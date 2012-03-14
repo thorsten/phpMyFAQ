@@ -78,7 +78,7 @@ if ($action == "sendmail") {
     
     if (!is_null($username) && !is_null($email)) {
 
-        $user       = new PMF_User_CurrentUser();
+        $user       = new PMF_User_CurrentUser($faqConfig);
         $loginExist = $user->getUserByLogin($username);
 
         if ($loginExist && ($email == $user->getUserData('email'))) {

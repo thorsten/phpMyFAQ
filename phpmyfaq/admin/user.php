@@ -51,7 +51,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         if ($userId == 0) {
             $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
-            $user       = new PMF_User();
+            $user       = new PMF_User($faqConfig);
             $perm       = $user->perm;
             // @todo: Add PMF_Filter::filterInputArray()
             $userRights = isset($_POST['user_rights']) ? $_POST['user_rights'] : array();
@@ -84,7 +84,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             $userData['last_modified'] = PMF_Filter::filterInput(INPUT_POST, 'last_modified', FILTER_SANITIZE_STRING, '');
             $userStatus                = PMF_Filter::filterInput(INPUT_POST, 'user_status', FILTER_SANITIZE_STRING, $defaultUserStatus);
 
-            $user = new PMF_User();
+            $user = new PMF_User($faqConfig);
             $user->getUserById($userId);
 
             $stats = $user->getStatus();
@@ -126,7 +126,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     // delete user confirmation
     if ($userAction == 'delete_confirm' && $permission['deluser']) {
         $message    = '';
-        $user       = new PMF_User_CurrentUser();
+        $user       = new PMF_User_CurrentUser($faqConfig);
 
         $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_list_select', FILTER_VALIDATE_INT, 0);
         if ($userId == 0) {
@@ -160,7 +160,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     // delete user
     if ($userAction == 'delete' && $permission['deluser']) {
         $message    = '';
-        $user       = new PMF_User();
+        $user       = new PMF_User($faqConfig);
         $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
         $csrfOkay   = true;
         $csrfToken  = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
@@ -198,7 +198,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
 
     // save new user
     if ($userAction == 'addsave' && $permission['adduser']) {
-        $user                  = new PMF_User();
+        $user                  = new PMF_User($faqConfig);
         $message               = '';
         $messages              = array();
         $user_name             = PMF_Filter::filterInput(INPUT_POST, 'user_name', FILTER_SANITIZE_STRING, '');

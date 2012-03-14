@@ -23,7 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 // Re-evaluate $user
-$user = PMF_User_CurrentUser::getFromSession($faqConfig->get('security.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqConfig);
 
 if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
