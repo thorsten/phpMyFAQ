@@ -36,7 +36,7 @@ $downwards         = PMF_Filter::filterInput(INPUT_POST, 'downwards', FILTER_VAL
 $inlineDisposition = PMF_Filter::filterInput(INPUT_POST, 'dispos', FILTER_SANITIZE_STRING);
 $type              = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING, 'none');
 
-$faq      = new PMF_Faq();
+$faq      = new PMF_Faq($faqConfig);
 $category = new PMF_Category();
 
 $export  = PMF_Export::create($faq, $category, $type);

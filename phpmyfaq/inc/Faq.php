@@ -70,18 +70,9 @@ define('FAQ_SORTING_TYPE_FAQID', 4);
 class PMF_Faq
 {
     /**
-    * DB handle
-    *
-    * @var PMF_Db
-    */
-    private $db;
-
-    /**
-    * Language
-    *
-    * @var  string
-    */
-    public $language;
+     * @var PMF_Configuration
+     */
+    private $_config;
 
     /**
     * Language strings
@@ -114,9 +105,9 @@ class PMF_Faq
     /**
      * Users
      *
-     * @var array
+     * @var integer
      */
-    private $user = null;
+    private $user = -1;
 
     /**
      * Groups
@@ -135,32 +126,18 @@ class PMF_Faq
     /**
      * Constructor
      *
-     * @param  integer $user   User
-     * @param  array   $groups Groups
+     * @param PMF_Configuration $config
      * @return void
      */
-    public function __construct($user = null, $groups = null)
+    public function __construct(PMF_Configuration $config)
     {
         global $PMF_LANG, $plr;
 
-        $this->db       = PMF_Db::getInstance();
-        $this->language = PMF_Language::$language;
+        $this->_config  = $config;
         $this->pmf_lang = $PMF_LANG;
         $this->plr      = $plr;
 
-        if (is_null($user)) {
-            $this->user = -1;
-        } else {
-            $this->user = $user;
-        }
-        if (is_null($groups)) {
-            $this->groups = array(-1);
-        } else {
-            $this->groups = $groups;
-        }
-        
-        $faqConfig = PMF_Configuration::getInstance();
-        if ($faqConfig->get('security.permLevel') == 'medium') {
+        if ($this->_config->get('security.permLevel') == 'medium') {
             $this->groupSupport = true;
         }
     }
@@ -170,6 +147,22 @@ class PMF_Faq
     // PUBLIC METHODS
     //
     //
+
+    /**
+     * @param integer $userId
+     */
+    public function setUser($userId = -1)
+    {
+        $this->user = $userId;
+    }
+
+    /**
+     * @param array $groups
+     */
+    public function setGroups(Array $groups)
+    {
+        $this->groups = $groups;
+    }
 
     /**
      * This function returns all not expired records from one category
@@ -257,17 +250,17 @@ class PMF_Faq
             $now,
             $now,
             $category_id,
-            $this->language,
+            $this->_config->getLanguage()->getLanguage,
             $permPart,
             $current_table,
-            $this->db->escape($orderby),
-            $this->db->escape($sortby));
+            $this->_config->getDb()->escape($orderby),
+            $this->_config->getDb()->escape($sortby));
 
-        $result = $this->db->query($query);
-        $num    = $this->db->numRows($result);
+        $result = $this->_config->getDb()->query($query);
+        $num    = $this->_config->getDb()->numRows($result);
 
         if ($num > 0) {
-            while (($row = $this->db->fetchObject($result))) {
+            while (($row = $this->_config->getDb()->fetchObject($result))) {
 
                 if (empty($row->visits)) {
                     $visits = 0;
@@ -312,9 +305,8 @@ class PMF_Faq
      */
     public function showAllRecords($category_id, $orderby = 'id', $sortby = 'ASC')
     {
-        global $sids, $category;
+        global $sids;
 
-        $faqConfig = PMF_Configuration::getInstance();
         $page      = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
         $output    = '';
 
@@ -389,21 +381,21 @@ class PMF_Faq
             $now,
             $now,
             $category_id,
-            $this->language,
+            $this->_config->getLanguage()->getLanguage(),
             $permPart,
             $current_table,
-            $this->db->escape($orderby),
-            $this->db->escape($sortby));
+            $this->_config->getDb()->escape($orderby),
+            $this->_config->getDb()->escape($sortby));
 
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
 
-        $num   = $this->db->numRows($result);
-        $pages = ceil($num / $faqConfig->get("records.numberOfRecordsPerPage"));
+        $num   = $this->_config->getDb()->numRows($result);
+        $pages = ceil($num / $this->_config->get("records.numberOfRecordsPerPage"));
 
         if ($page == 1) {
             $first = 0;
         } else {
-            $first = ($page * $faqConfig->get("records.numberOfRecordsPerPage")) - $faqConfig->get("records.numberOfRecordsPerPage");
+            $first = ($page * $this->_config->get("records.numberOfRecordsPerPage")) - $this->_config->get("records.numberOfRecordsPerPage");
         }
 
         if ($num > 0) {
@@ -416,7 +408,7 @@ class PMF_Faq
             $output .= '<ul class="phpmyfaq_ul">';
             $counter = 0;
             $displayedCounter = 0;
-            while (($row = $this->db->fetchObject($result)) && $displayedCounter < $faqConfig->get("records.numberOfRecordsPerPage")) {
+            while (($row = $this->_config->getDb()->fetchObject($result)) && $displayedCounter < $this->_config->get("records.numberOfRecordsPerPage")) {
                 $counter ++;
                 if ($counter <= $first) {
                     continue;
@@ -463,7 +455,7 @@ class PMF_Faq
             $options = array(
                 'baseUrl'         => $baseUrl,
                 'total'           => $num,
-                'perPage'         => $faqConfig->get('records.numberOfRecordsPerPage'),
+                'perPage'         => $this->_config->get('records.numberOfRecordsPerPage'),
                 'pageParamName'   => 'seite',
                 'seoName'         => $title,
                 'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $this->pmf_lang['msgNext'] . '</a>',
@@ -489,7 +481,6 @@ class PMF_Faq
     {
         global $sids;
 
-        $faqConfig  = PMF_Configuration::getInstance();
         $records    = implode(', ', $record_ids);
         $page       = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
         $tagging_id = PMF_Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_VALIDATE_INT); 
@@ -559,20 +550,20 @@ class PMF_Faq
             $now,
             $now,
             $records,
-            $this->language,
+            $this->_config->getLanguage()->getLanguage(),
             $permPart,
-            $this->db->escape($orderby),
-            $this->db->escape($sortby));
+            $this->_config->getDb()->escape($orderby),
+            $this->_config->getDb()->escape($sortby));
 
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
 
-        $num = $this->db->numRows($result);
-        $pages = ceil($num / $faqConfig->get('records.numberOfRecordsPerPage'));
+        $num = $this->_config->getDb()->numRows($result);
+        $pages = ceil($num / $this->_config->get('records.numberOfRecordsPerPage'));
 
         if ($page == 1) {
             $first = 0;
         } else {
-            $first = ($page * $faqConfig->get('records.numberOfRecordsPerPage')) - $faqConfig->get('records.numberOfRecordsPerPage');
+            $first = ($page * $this->_config->get('records.numberOfRecordsPerPage')) - $this->_config->get('records.numberOfRecordsPerPage');
         }
 
         if ($num > 0) {
@@ -587,7 +578,7 @@ class PMF_Faq
             $displayedCounter = 0;
 
             $lastFaqId = 0;
-            while (($row = $this->db->fetchObject($result)) && $displayedCounter < $faqConfig->get('records.numberOfRecordsPerPage')) {
+            while (($row = $this->_config->getDb()->fetchObject($result)) && $displayedCounter < $this->_config->get('records.numberOfRecordsPerPage')) {
                 $counter ++;
                 if ($counter <= $first) {
                     continue;
@@ -631,7 +622,7 @@ class PMF_Faq
             return false;
         }
 
-        if ($num > $faqConfig->get('records.numberOfRecordsPerPage')) {
+        if ($num > $this->_config->get('records.numberOfRecordsPerPage')) {
             $output .= "<p align=\"center\"><strong>";
             if (!isset($page)) {
                 $page = 1;
@@ -713,12 +704,12 @@ class PMF_Faq
             SQLPREFIX,
             $id,
             isset($revision_id) ? 'AND revision_id = '.$revision_id : '',
-            $this->language,
+            $this->_config->getLanguage()->getLanguage(),
             ($admin) ? '1=1' : $permPart);
 
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
 
-        if ($row = $this->db->fetchObject($result)) {
+        if ($row = $this->_config->getDb()->fetchObject($result)) {
 
             $content        = $row->content;
             $active         = ('yes' == $row->active);
@@ -755,7 +746,7 @@ class PMF_Faq
         } else {
             $this->faqRecord = array(
                 'id'            => $id,
-                'lang'          => $this->language,
+                'lang'          => $this->_config->getLanguage()->getLanguage(),
                 'solution_id'   => 42,
                 'revision_id'   => 0,
                 'active'        => 'no',
@@ -785,7 +776,7 @@ class PMF_Faq
     public function addRecord(Array $data, $new_record = true)
     {
         if ($new_record) {
-            $record_id = $this->db->nextId(SQLPREFIX.'faqdata', 'id');
+            $record_id = $this->_config->getDb()->nextId(SQLPREFIX.'faqdata', 'id');
         } else {
             $record_id = $data['id'];
         }
@@ -803,10 +794,10 @@ class PMF_Faq
             0,
             $data['active'],
             $data['sticky'],
-            $this->db->escape($data['keywords']),
-            $this->db->escape($data['thema']),
-            $this->db->escape($data['content']),
-            $this->db->escape($data['author']),
+            $this->_config->getDb()->escape($data['keywords']),
+            $this->_config->getDb()->escape($data['thema']),
+            $this->_config->getDb()->escape($data['content']),
+            $this->_config->getDb()->escape($data['author']),
             $data['email'],
             $data['comment'],
             $data['date'],
@@ -815,7 +806,7 @@ class PMF_Faq
             $data['dateStart'],
             $data['dateEnd']);
 
-        $this->db->query($query);
+        $this->_config->getDb()->query($query);
         return $record_id;
     }
 
@@ -854,10 +845,10 @@ class PMF_Faq
             $data['revision_id'],
             $data['active'],
             $data['sticky'],
-            $this->db->escape($data['keywords']),
-            $this->db->escape($data['thema']),
-            $this->db->escape($data['content']),
-            $this->db->escape($data['author']),
+            $this->_config->getDb()->escape($data['keywords']),
+            $this->_config->getDb()->escape($data['thema']),
+            $this->_config->getDb()->escape($data['content']),
+            $this->_config->getDb()->escape($data['author']),
             $data['email'],
             $data['comment'],
             $data['date'],
@@ -868,7 +859,7 @@ class PMF_Faq
             $data['id'],
             $data['lang']);
 
-        $this->db->query($query);
+        $this->_config->getDb()->query($query);
         return true;
     }
 
@@ -907,7 +898,7 @@ class PMF_Faq
                 SQLPREFIX, $record_id));
 
          foreach($queries as $query) {
-            $this->db->query($query);
+            $this->_config->getDb()->query($query);
          }
 
          return true;
@@ -935,9 +926,9 @@ class PMF_Faq
             $record_id,
             $record_lang);
 
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
 
-        if ($this->db->numRows($result)) {
+        if ($this->_config->getDb()->numRows($result)) {
             return true;
         }
 
@@ -974,9 +965,9 @@ class PMF_Faq
             $record_id,
             $record_lang);
 
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
         
-        if ($row = $this->db->fetchObject($result)) {
+        if ($row = $this->_config->getDb()->fetchObject($result)) {
             return ($row->comment === 'y') ? false : true;
         } else {
             return true;
@@ -998,7 +989,7 @@ class PMF_Faq
         }
 
         foreach ($categories as $_category) {
-            $this->db->query(sprintf(
+            $this->_config->getDb()->query(sprintf(
                 "INSERT INTO
                     %sfaqcategoryrelations
                 VALUES
@@ -1051,7 +1042,7 @@ class PMF_Faq
             SQLPREFIX,
             $record_id,
             $record_lang);
-        $this->db->query($query);
+        $this->_config->getDb()->query($query);
 
         return true;
     }
@@ -1099,9 +1090,9 @@ class PMF_Faq
             $solution_id,
             $permPart);
 
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
 
-        if ($row = $this->db->fetchObject($result)) {
+        if ($row = $this->_config->getDb()->fetchObject($result)) {
             $content        = $row->content;
             $active         = ('yes' == $row->active);
             $expired        = (date('YmdHis') > $row->date_end);
@@ -1152,9 +1143,9 @@ class PMF_Faq
             SQLPREFIX,
             $solution_id);
 
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
 
-        if ($row = $this->db->fetchObject($result)) {
+        if ($row = $this->_config->getDb()->fetchObject($result)) {
             return array('id'      => $row->id,
                          'lang'    => $row->lang,
                          'content' => $row->content);
@@ -1179,9 +1170,9 @@ class PMF_Faq
             FROM
                 %sfaqdata',
             SQLPREFIX);
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
 
-        if ($result && $row = $this->db->fetchObject($result)) {
+        if ($result && $row = $this->_config->getDb()->fetchObject($result)) {
             $latest_id = $row->solution_id;
         }
 
@@ -1215,12 +1206,12 @@ class PMF_Faq
                     $where .= " IN (";
                     $separator = "";
                     foreach ($data as $value) {
-                        $where .= $separator."'".$this->db->escape($value)."'";
+                        $where .= $separator."'".$this->_config->getDb()->escape($value)."'";
                         $separator = ", ";
                     }
                     $where .= ")";
                 } else {
-                    $where .= " = '".$this->db->escape($data)."'";
+                    $where .= " = '".$this->_config->getDb()->escape($data)."'";
                 }
                 if ($num > 0) {
                     $where .= " AND ";
@@ -1299,9 +1290,9 @@ class PMF_Faq
             $where,
             $orderBy);
 
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
 
-        while ($row = $this->db->fetchObject($result)) {
+        while ($row = $this->_config->getDb()->fetchObject($result)) {
             $content        = $row->content;
             $active         = ('yes' == $row->active);
             $expired        = (date('YmdHis') > $row->date_end);
@@ -1354,12 +1345,12 @@ class PMF_Faq
                 id = %d AND lang = '%s'",
             SQLPREFIX,
             $id,
-            $this->language
+            $this->_config->getLanguage()->getLanguage()
             );
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
 
-        if ($this->db->numRows($result) > 0) {
-            while ($row = $this->db->fetchObject($result)) {
+        if ($this->_config->getDb()->numRows($result) > 0) {
+            while ($row = $this->_config->getDb()->fetchObject($result)) {
                 $output = $row->thema;
             }
         } else {
@@ -1395,10 +1386,10 @@ class PMF_Faq
             $record_id,
             $record_lang);
 
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
 
-        if ($this->db->numRows($result) > 0) {
-            while ($row = $this->db->fetchObject($result)) {
+        if ($this->_config->getDb()->numRows($result) > 0) {
+            while ($row = $this->_config->getDb()->fetchObject($result)) {
                 $revision_data[] = array(
                     'revision_id' => $row->revision_id,
                     'datum'       => $row->datum,
@@ -1431,7 +1422,7 @@ class PMF_Faq
             SQLPREFIX,
             $record_id,
             $record_lang);
-        $this->db->query($query);
+        $this->_config->getDb()->query($query);
 
         return true;
     }
@@ -1457,12 +1448,12 @@ class PMF_Faq
             WHERE id = %d AND lang = '%s'",
             SQLPREFIX,
             $id,
-            $this->language);
+            $this->_config->getLanguage()->getLanguage());
 
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
 
-        if ($this->db->numRows($result) > 0) {
-            $row = $this->db->fetchObject($result);
+        if ($this->_config->getDb()->numRows($result) > 0) {
+            $row = $this->_config->getDb()->fetchObject($result);
             return PMF_String::htmlspecialchars($row->keywords, ENT_QUOTES, 'utf-8');
         } else {
             return '';
@@ -1496,18 +1487,18 @@ class PMF_Faq
                 lang = '%s'",
             SQLPREFIX,
             $recordId,
-            $this->language);
+            $this->_config->getLanguage()->getLanguage());
 
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
 
-        if ($this->db->numRows($result) > 0) {
-            $row           = $this->db->fetchObject($result);
+        if ($this->_config->getDb()->numRows($result) > 0) {
+            $row           = $this->_config->getDb()->fetchObject($result);
             $answerPreview = strip_tags($row->answer);
         } else {
-            $answerPreview = PMF_Configuration::getInstance()->get('main.metaDescription');
+            $answerPreview = $this->_config->get('main.metaDescription');
         }
-    	
-    	return PMF_Utils::makeShorterText($answerPreview, $wordCount);
+
+        return PMF_Utils::makeShorterText($answerPreview, $wordCount);
     }
 
     /**
@@ -1538,7 +1529,7 @@ class PMF_Faq
             $now,
             $now);
 
-        $num = $this->db->numRows($this->db->query($query));
+        $num = $this->_config->getDb()->numRows($this->_config->getDb()->query($query));
 
         if ($num > 0) {
             return $num;
@@ -1559,9 +1550,9 @@ class PMF_Faq
     public function getTopTen($type = 'visits')
     {
         if ('visits' == $type) {
-            $result = $this->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN, 0, $this->language);
+            $result = $this->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN, 0, $this->_config->getLanguage()->getLanguage());
         } else {
-            $result = $this->getTopVotedData(PMF_NUMBER_RECORDS_TOPTEN, 0, $this->language);
+            $result = $this->getTopVotedData(PMF_NUMBER_RECORDS_TOPTEN, 0, $this->_config->getLanguage()->getLanguage());
         }
         $output = array();
 
@@ -1594,8 +1585,8 @@ class PMF_Faq
      */
     public function getLatest()
     {
-        $date   = new PMF_Date(PMF_Configuration::getInstance());
-        $result = $this->getLatestData(PMF_NUMBER_RECORDS_LATEST, $this->language);
+        $date   = new PMF_Date($this->_config);
+        $result = $this->getLatestData(PMF_NUMBER_RECORDS_LATEST, $this->_config->getLanguage()->getLanguage());
         $output = array();
         
         if (count ($result) > 0) {
@@ -1627,7 +1618,7 @@ class PMF_Faq
             SQLPREFIX,
             $question_id);
 
-        $this->db->query($query);
+        $this->_config->getDb()->query($query);
         return true;
     }
 
@@ -1652,9 +1643,9 @@ class PMF_Faq
             SQLPREFIX,
             $question_id);
 
-        $result = $this->db->query($query);
-        if ($this->db->numRows($result) > 0) {
-            $row = $this->db->fetchObject($result);
+        $result = $this->_config->getDb()->query($query);
+        if ($this->_config->getDb()->numRows($result) > 0) {
+            $row = $this->_config->getDb()->fetchObject($result);
             return $row->is_visible;
         }
         return null;
@@ -1683,7 +1674,7 @@ class PMF_Faq
             $is_visible,
             $question_id);
         
-        $this->db->query($query);
+        $this->_config->getDb()->query($query);
         return true;
     }
 
@@ -1760,13 +1751,13 @@ class PMF_Faq
             ORDER BY
                 avg DESC';
 
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
         $topten = array();
         $data = array();
 
         $i = 1;
         $oldId = 0;
-        while (($row = $this->db->fetchObject($result)) && $i <= $count) {
+        while (($row = $this->_config->getDb()->fetchObject($result)) && $i <= $count) {
             if ($oldId != $row->id) {
                 $data['avg'] = $row->avg;
                 $data['thema'] = $row->thema;
@@ -1868,13 +1859,13 @@ class PMF_Faq
             ORDER BY
                 fv.visits DESC';
 
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
         $topten = array();
         $data = array();
 
         $i = 1;
         $oldId = 0;
-        while (($row = $this->db->fetchObject($result)) && $i <= $count) {
+        while (($row = $this->_config->getDb()->fetchObject($result)) && $i <= $count) {
             if ($oldId != $row->id) {
                 $data['visits'] = $row->visits;
                 $data['thema'] = $row->thema;
@@ -1971,13 +1962,13 @@ class PMF_Faq
             ORDER BY
                 fd.datum DESC';
 
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
         $latest = array();
         $data = array();
 
         $i = 0;
         $oldId = 0;
-        while (($row = $this->db->fetchObject($result)) && $i < $count ) {
+        while (($row = $this->_config->getDb()->fetchObject($result)) && $i < $count ) {
             if ($oldId != $row->id) {
                 $data['datum']   = $row->datum;
                 $data['thema']   = $row->thema;
@@ -2025,7 +2016,7 @@ class PMF_Faq
             $id,
             $ip,
             $check);
-        if ($this->db->numRows($this->db->query($query))) {
+        if ($this->_config->getDb()->numRows($this->_config->getDb()->query($query))) {
             return false;
         }
         return true;
@@ -2051,8 +2042,8 @@ class PMF_Faq
                 artikel = %d',
             SQLPREFIX,
             $record_id);
-        if ($result = $this->db->query($query)) {
-            if ($row = $this->db->fetchObject($result)) {
+        if ($result = $this->_config->getDb()->query($query)) {
+            if ($row = $this->_config->getDb()->fetchObject($result)) {
                 return $row->usr;
             }
         }
@@ -2080,12 +2071,12 @@ class PMF_Faq
             VALUES
                 (%d, %d, %d, 1, %d, '%s')",
             SQLPREFIX,
-            $this->db->nextId(SQLPREFIX.'faqvoting', 'id'),
+            $this->_config->getDb()->nextId(SQLPREFIX.'faqvoting', 'id'),
             $votingData['record_id'],
             $votingData['vote'],
             $_SERVER['REQUEST_TIME'],
             $votingData['user_ip']);
-        $this->db->query($query);
+        $this->_config->getDb()->query($query);
 
         return true;
     }
@@ -2105,16 +2096,16 @@ class PMF_Faq
             VALUES
                 (%d, '%s', '%s', %d, '%s', '%s', '%s', %d)",
             SQLPREFIX,
-            $this->db->nextId(SQLPREFIX.'faqquestions', 'id'),
-            $this->db->escape($questionData['username']),
-            $this->db->escape($questionData['email']),
+            $this->_config->getDb()->nextId(SQLPREFIX.'faqquestions', 'id'),
+            $this->_config->getDb()->escape($questionData['username']),
+            $this->_config->getDb()->escape($questionData['email']),
             $questionData['category_id'],
-            $this->db->escape($questionData['question']),
+            $this->_config->getDb()->escape($questionData['question']),
             date('YmdHis'),
             $questionData['is_visible'],
             0
         );
-        $this->db->query($query);
+        $this->_config->getDb()->query($query);
 
         return true;
     }
@@ -2156,8 +2147,8 @@ class PMF_Faq
             SQLPREFIX,
             $id_question);
 
-        if ($result = $this->db->query($query)) {
-            if ($row = $this->db->fetchObject($result)) {
+        if ($result = $this->_config->getDb()->query($query)) {
+            if ($row = $this->_config->getDb()->fetchObject($result)) {
                 $question = array(
                     'id'            => $row->id,
                     'user'          => $row->username,
@@ -2193,8 +2184,8 @@ class PMF_Faq
             SQLPREFIX,
             ($all == false ? "WHERE is_visible = 'Y'" : ''));
 
-        if ($result = $this->db->query($query)) {
-            while ($row = $this->db->fetchObject($result)) {
+        if ($result = $this->_config->getDb()->query($query)) {
+            while ($row = $this->_config->getDb()->fetchObject($result)) {
                 $questions[] = array(
                     'id'          => $row->id,
                     'username'    => $row->username,
@@ -2240,7 +2231,7 @@ class PMF_Faq
             $_SERVER['REQUEST_TIME'],
             $votingData['user_ip'],
             $votingData['record_id']);
-        $this->db->query($query);
+        $this->_config->getDb()->query($query);
 
         return true;
     }
@@ -2277,7 +2268,7 @@ class PMF_Faq
                 VALUES
             (%d, %d, '%s', %d, %d, %d, '%s')",
             SQLPREFIX,
-            $this->db->nextId(SQLPREFIX.'faqchanges', 'id'),
+            $this->_config->getDb()->nextId(SQLPREFIX.'faqchanges', 'id'),
             $id,
             $lang,
             $revision_id,
@@ -2285,7 +2276,7 @@ class PMF_Faq
             $_SERVER['REQUEST_TIME'],
             $text);
 
-        $this->db->query($query);
+        $this->_config->getDb()->query($query);
 
         return true;
     }
@@ -2315,8 +2306,8 @@ class PMF_Faq
             $record_id
             );
 
-       if ($result = $this->db->query($query)) {
-            while ($row = $this->db->fetchObject($result)) {
+       if ($result = $this->_config->getDb()->query($query)) {
+            while ($row = $this->_config->getDb()->fetchObject($result)) {
                 $entries[] = array(
                     'revision_id'   => $row->revision_id,
                     'user'          => $row->usr,
@@ -2343,11 +2334,11 @@ class PMF_Faq
     {
         $faqs = array();
 
-        $result = $this->db->query($this->_getSQLQuery($QueryType, $nCatid, $bDownwards, $lang, $date));
+        $result = $this->_config->getDb()->query($this->_getSQLQuery($QueryType, $nCatid, $bDownwards, $lang, $date));
 
-        if ($this->db->numRows($result) > 0) {
+        if ($this->_config->getDb()->numRows($result) > 0) {
             $i = 0;
-            while ($row = $this->db->fetchObject($result)) {
+            while ($row = $this->_config->getDb()->fetchObject($result)) {
                 $faq = array();
                 $faq['id']             = $row->id;
                 $faq['solution_id']    = $row->solution_id;
@@ -2563,7 +2554,7 @@ class PMF_Faq
             $record_id,
             $id);
 
-        $this->db->query($query);
+        $this->_config->getDb()->query($query);
 
         return true;
     }
@@ -2594,7 +2585,7 @@ class PMF_Faq
             SQLPREFIX,
             $mode,
             $record_id);
-        $this->db->query($query);
+        $this->_config->getDb()->query($query);
 
         return true;
     }
@@ -2628,9 +2619,9 @@ class PMF_Faq
             $mode,
             (int)$record_id);
 
-        $result = $this->db->query($query);
-        if ($this->db->numRows($result) > 0) {
-            $row = $this->db->fetchObject($result);
+        $result = $this->_config->getDb()->query($query);
+        if ($this->_config->getDb()->numRows($result) > 0) {
+            $row = $this->_config->getDb()->fetchObject($result);
             $permissions[] = (int)$row->permission;
         }
         return $permissions;
@@ -2688,15 +2679,15 @@ class PMF_Faq
             AND
                 fcr.category_id = '.$category.'
             AND
-                fd.lang = \''.$this->language.'\'
+                fd.lang = \''.$this->_config->getLanguage()->getLanguage().'\'
             ORDER BY
                 fd.id';
 
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
 
         $output = '<ul class="phpmyfaq_ul">';
 
-        while (($row = $this->db->fetchObject($result))) {
+        while (($row = $this->_config->getDb()->fetchObject($result))) {
             $title = $row->thema;
             $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                         $sids,
@@ -2731,7 +2722,7 @@ class PMF_Faq
     {
         global $sids, $category;
 
-        $date = new PMF_Date(PMF_Configuration::getInstance());
+        $date = new PMF_Date($this->_config);
 
         $query = sprintf("
             SELECT
@@ -2742,8 +2733,8 @@ class PMF_Faq
                 is_visible != 'Y'",
             SQLPREFIX);
 
-        $result = $this->db->query($query);
-        $row = $this->db->fetchObject($result);
+        $result = $this->_config->getDb()->query($query);
+        $row = $this->_config->getDb()->fetchObject($result);
         $numOfInvisibles = $row->num;
 
         if ($numOfInvisibles > 0) {
@@ -2765,11 +2756,11 @@ class PMF_Faq
                 created ASC",
             SQLPREFIX);
 
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
         $output = '';
 
-        if ($result && $this->db->numRows($result) > 0) {
-            while ($row = $this->db->fetchObject($result)) {
+        if ($result && $this->_config->getDb()->numRows($result) > 0) {
+            while ($row = $this->_config->getDb()->fetchObject($result)) {
                 $output .= '<tr class="openquestions">';
                 $output .= sprintf('<td valign="top" nowrap="nowrap">%s<br /><a href="mailto:%s">%s</a></td>',
                     $date->format(PMF_Date::createIsoDate($row->created)),
@@ -2778,7 +2769,7 @@ class PMF_Faq
                 $output .= sprintf('<td valign="top"><strong>%s:</strong><br />%s</td>',
                     isset($category->categoryName[$row->category_id]['name']) ? $category->categoryName[$row->category_id]['name'] : '',
                     strip_tags($row->question));
-                if (PMF_Configuration::getInstance()->get('records.enableCloseQuestion') && $row->answer_id) {
+                if ($this->_config->get('records.enableCloseQuestion') && $row->answer_id) {
                     $output .= sprintf(
                         '<td valign="top"><a id="PMF_openQuestionAnswered" href="?%saction=artikel&amp;cat=%d&amp;id=%d">%s</a></td>',
                         $sids,
@@ -2803,17 +2794,6 @@ class PMF_Faq
         }
 
         return $output.$extraout;
-    }
-    
-    /**
-     * Setter for the language
-     *
-     * @param  string $language Language
-     * @return void
-     */
-    public function setLanguage($language)
-    {
-    	$this->language = $language;
     }
     
     /**
@@ -2862,7 +2842,7 @@ class PMF_Faq
                 $id, 
                 $lang);
         
-            $retval = (bool)$this->db->query($update);
+            $retval = (bool)$this->_config->getDb()->query($update);
         
         }
         
@@ -2931,17 +2911,17 @@ class PMF_Faq
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
-            $this->language,
+            $this->_config->getLanguage()->getLanguage(),
             $now,
             $now,
             $permPart);
 
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
         $sticky = array();
         $data   = array();
 
         $oldId = 0;
-        while (($row = $this->db->fetchObject($result))) {
+        while (($row = $this->_config->getDb()->fetchObject($result))) {
             if ($oldId != $row->id) {
                 $data['thema'] = $row->thema;
 
@@ -3006,6 +2986,6 @@ class PMF_Faq
             $openQuestionId
         );
 
-        return $this->db->query($query);
+        return $this->_config->getDb()->query($query);
     }
 }

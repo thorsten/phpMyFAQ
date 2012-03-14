@@ -85,7 +85,7 @@ switch ($action) {
 
         // @todo add check on "addcomment" permission
 
-        $faq      = new PMF_Faq();
+        $faq      = new PMF_Faq($faqConfig);
         $oComment = new PMF_Comment($faqConfig);
         $type     = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
         $faqid    = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
@@ -209,7 +209,7 @@ switch ($action) {
 
         // @todo add check on "addfaq" permission
 
-        $faq         = new PMF_Faq();
+        $faq         = new PMF_Faq($faqConfig);
         $category    = new PMF_Category();
         $name        = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $email       = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
@@ -360,7 +360,7 @@ switch ($action) {
 
         // @todo add check on "addquestion" permission
 
-        $faq        = new PMF_Faq();
+        $faq        = new PMF_Faq($faqConfig);
         $cat        = new PMF_Category();
         $categories = $cat->getAllCategories();
         $name       = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
@@ -567,7 +567,7 @@ switch ($action) {
 
     case 'savevoting':
 
-        $faq      = new PMF_Faq();
+        $faq      = new PMF_Faq($faqConfig);
         $type     = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING, 'faq');
         $recordId = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
         $vote     = PMF_Filter::filterInput(INPUT_POST, 'vote', FILTER_VALIDATE_INT);

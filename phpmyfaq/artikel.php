@@ -49,9 +49,6 @@ $recordId       = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $solutionId     = PMF_Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
 $highlight      = PMF_Filter::filterInput(INPUT_GET, 'highlight', FILTER_SANITIZE_STRIPPED);
 
-// Set the FAQ language
-$faq->setLanguage($lang);
-
 // Get all data from the FAQ record
 if (0 == $solutionId) {
     $faq->getRecord($recordId);

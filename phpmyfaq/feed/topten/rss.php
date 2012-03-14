@@ -85,7 +85,10 @@ if (!is_null($user) && $user instanceof PMF_User_CurrentUser) {
 //
 PMF_String::init($LANGCODE);
 
-$faq     = new PMF_Faq($current_user, $current_groups);
+$faq = new PMF_Faq($faqConfig);
+$faq->setUser($current_user);
+$faq->setGroups($current_user);
+
 $rssData = $faq->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN);
 $num     = count($rssData);
 

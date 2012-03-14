@@ -41,7 +41,7 @@ switch($ajax_action) {
     case 'save_active_records':
         if ($permission['approverec']) {
             if (!empty($items)) {
-                $faq = new PMF_Faq();
+                $faq = new PMF_Faq($faqConfig);
 
                 foreach ($items as $item) {
                     if (is_array($item) && count($item) == 3 && PMF_Language::isASupportedLanguage($item[1])) {
@@ -58,7 +58,7 @@ switch($ajax_action) {
     case 'save_sticky_records':
         if ($permission['editbt']) {
             if (!empty($items)) {
-                $faq = new PMF_Faq();
+                $faq = new PMF_Faq($faqConfig);
 
                 foreach ($items as $item) {
                     if (is_array($item) && count($item) == 3 && PMF_Language::isASupportedLanguage($item[1])) {
@@ -75,7 +75,7 @@ switch($ajax_action) {
     case 'search_records':
         if ($permission['editbt']) {
 
-            $faq             = new PMF_Faq();
+            $faq             = new PMF_Faq($faqConfig);
             $faqSearch       = new PMF_Search($faqConfig);
             $faqSearchResult = new PMF_Search_Resultset($user, $faq);
             $searchResult    = '';

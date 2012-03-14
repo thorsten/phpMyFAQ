@@ -262,7 +262,9 @@ if (is_null($lang) && !PMF_Language::isASupportedLanguage($lang) ) {
 //
 // Create a new FAQ object
 //
-$faq = new PMF_Faq($current_user, $current_groups);
+$faq = new PMF_Faq($faqConfig);
+$faq->setUser($current_user);
+$faq->setGroups($current_groups);
 
 //
 // Create a new Category object

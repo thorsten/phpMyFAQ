@@ -76,7 +76,7 @@ class PMF_Attachment_Migration
     {
         $list = array();
         
-        $faq  = new PMF_Faq;
+        $faq  = new PMF_Faq(PMF_Configuration::getInstance());
         $faq->getAllRecords();
         $records = $faq->faqRecords;
         

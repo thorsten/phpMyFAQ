@@ -97,8 +97,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
             $logging->logAdmin($user, 'Beitragedit, ' . $id);
             $faqData['id']   = $id;
             $faqData['lang'] = $lang;
-            
-            $faq->setLanguage($faqData['lang']);
+
             $categories = $category->getCategoryRelationsFromArticle($faqData['id'], $faqData['lang']);
 
             $faq->getRecord($faqData['id'], null, true);

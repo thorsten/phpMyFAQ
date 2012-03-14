@@ -43,7 +43,7 @@ if ($permission['editbt'] || $permission['delbt']) {
     }
 
     $comment = new PMF_Comment($faqConfig);
-    $faq     = new PMF_Faq();
+    $faq     = new PMF_Faq($faqConfig);
     $date    = new PMF_Date($faqConfig);
 
     $cond           = $numCommentsByFaq = $numActiveByCat = array();

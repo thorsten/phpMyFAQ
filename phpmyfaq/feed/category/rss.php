@@ -80,7 +80,10 @@ if (!is_null($user) && $user instanceof PMF_User_CurrentUser) {
 
 $category_id = PMF_Filter::filterInput(INPUT_GET, 'category_id', FILTER_VALIDATE_INT);
 $category    = new PMF_Category($current_user, $current_groups);
-$faq         = new PMF_Faq($current_user, $current_groups);
+
+$faq = new PMF_Faq($faqConfig);
+$faq->setUser($current_user);
+$faq->setGroups($current_user);
 
 $records = $faq->getAllRecordPerCategory($category_id,
                                          $faqConfig->get('records.orderby'),

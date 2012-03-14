@@ -46,7 +46,7 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
 //
 PMF_String::init($LANGCODE);
 
-$faq     = new PMF_Faq();
+$faq     = new PMF_Faq($faqConfig);
 $rssData = $faq->getAllOpenQuestions(false);
 $num     = count($rssData);
 

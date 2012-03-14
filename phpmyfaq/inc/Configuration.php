@@ -173,7 +173,7 @@ class PMF_Configuration
     /**
      * Returns the PMF_Language object
      *
-     * @return mixed
+     * @return PMF_Language
      */
     public function getLanguage()
     {

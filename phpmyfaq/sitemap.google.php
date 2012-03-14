@@ -90,7 +90,7 @@ PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH . trim($faqConfig->get('main.phpMyFAQToken')));
 session_start();
 
-$oFaq = new PMF_Faq();
+$oFaq = new PMF_Faq($faqConfig);
 // Load the faq
 $items = $oFaq->getTopTenData(PMF_SITEMAP_GOOGLE_MAX_URLS - 1);
 $visitsMax = 0;
