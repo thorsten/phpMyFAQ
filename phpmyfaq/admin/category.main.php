@@ -42,7 +42,9 @@ if ($permission['editcateg']) {
     // Save a new category
     if ($action == 'savecategory') {
 
-        $category      = new PMF_Category($current_admin_user, $current_admin_groups, false);
+        $category = new PMF_Category($faqConfig, false);
+        $category->setUser($current_admin_user);
+        $category->setGroups($current_admin_groups);
         $parent_id     = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
         $category_data = array(
             'lang'        => PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING),
@@ -98,7 +100,9 @@ if ($permission['editcateg']) {
     // Updates an existing category
     if ($action == 'updatecategory') {
 
-        $category      = new PMF_Category($current_admin_user, $current_admin_groups, false);
+        $category = new PMF_Category($faqConfig, false);
+        $category->setUser($current_admin_user);
+        $category->setGroups($current_admin_groups);
         $parent_id     = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
         $category_data = array(
             'id'          => PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT),
@@ -168,7 +172,9 @@ if ($permission['editcateg']) {
     // Deletes an existing category
     if ($permission['delcateg'] && $action == 'removecategory') {
 
-        $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
+        $category = new PMF_Category($faqConfig, false);
+        $category->setUser($current_admin_user);
+        $category->setGroups($current_admin_groups);
         $id         = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
         $lang       = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
         $deleteall  = PMF_Filter::filterInput(INPUT_POST, 'deleteall', FILTER_SANITIZE_STRING);
@@ -186,7 +192,9 @@ if ($permission['editcateg']) {
     // Moves a category
     if ($action == 'changecategory') {
 
-        $category      = new PMF_Category($current_admin_user, $current_admin_groups, false);
+        $category = new PMF_Category($faqConfig, false);
+        $category->setUser($current_admin_user);
+        $category->setGroups($current_admin_groups);
         $category_id_1 = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
         $category_id_2 = PMF_Filter::filterInput(INPUT_POST, 'change', FILTER_VALIDATE_INT);
 
@@ -200,7 +208,9 @@ if ($permission['editcateg']) {
     // Pastes a category
     if ($action == 'pastecategory') {
 
-        $category    = new PMF_Category($current_admin_user, $current_admin_groups, false);
+        $category = new PMF_Category($faqConfig, false);
+        $category->setUser($current_admin_user);
+        $category->setGroups($current_admin_groups);
         $category_id = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
         $parent_id   = PMF_Filter::filterInput(INPUT_POST, 'after', FILTER_VALIDATE_INT);
         if ($category->updateParentCategory($category_id, $parent_id)) {
@@ -217,7 +227,9 @@ if ($permission['editcateg']) {
     if (isset($category)) {
         unset($category);
     }
-    $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
+    $category = new PMF_Category($faqConfig, false);
+    $category->setUser($current_admin_user);
+    $category->setGroups($current_admin_groups);
     $category->getMissingCategories();
     $category->buildTree();
 

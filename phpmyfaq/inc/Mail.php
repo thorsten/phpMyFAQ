@@ -959,7 +959,7 @@ class PMF_Mail
      *
      * @return string
      */
-    public static function safeEmail($email)
+    public function safeEmail($email)
     {
         if ($this->_config->get('spam.enableSafeEmail')) {
             return str_replace ( array ('@', '.' ), array ('_AT_', '_DOT_' ), $email );

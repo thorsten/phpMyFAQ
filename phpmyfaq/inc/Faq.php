@@ -2395,7 +2395,7 @@ class PMF_Faq
         $sqlWherefilter = '';
 
         if (!isset($oCat)) {
-            $oCat  = new PMF_Category();
+            $oCat  = new PMF_Category($this->_config);
         }
         $aChildren = array_values($oCat->getChildren($nCatid));
 
@@ -2740,6 +2740,7 @@ class PMF_Faq
         global $sids, $category;
 
         $date = new PMF_Date($this->_config);
+        $mail = new PMF_Mail($this->_config);
 
         $query = sprintf("
             SELECT
@@ -2781,7 +2782,7 @@ class PMF_Faq
                 $output .= '<tr class="openquestions">';
                 $output .= sprintf('<td valign="top" nowrap="nowrap">%s<br /><a href="mailto:%s">%s</a></td>',
                     $date->format(PMF_Date::createIsoDate($row->created)),
-                    PMF_Mail::safeEmail($row->email),
+                    $mail->safeEmail($row->email),
                     $row->username);
                 $output .= sprintf('<td valign="top"><strong>%s:</strong><br />%s</td>',
                     isset($category->categoryName[$row->category_id]['name']) ? $category->categoryName[$row->category_id]['name'] : '',

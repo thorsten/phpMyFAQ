@@ -39,31 +39,20 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Tags
 {
     /**
-     * DB handle
-     *
-     * @var PMF_Db
+     * @var PMF_Configuration
      */
-    private $db;
-
-    /**
-     * Language
-     *
-     * @var string
-     */
-    private $language;
+    private $_config;
 
     /**
      * Constructor
      *
-     * @param PMF_DB_Driver $database Database connection
-     * @param PMF_Language  $language Language object
+     * @param PMF_Configuration $config
      *
      * @return PMF_Tags
      */
-    public function __construct(PMF_DB_Driver $database, PMF_Language $language)
+    public function __construct(PMF_Configuration $config)
     {
-        $this->db       = $database;
-        $this->language = $language;
+        $this->_config = $config;
     }
 
     /**
@@ -113,15 +102,15 @@ class PMF_Tags
             (isset($search) && ($search != '') ? "AND tagging_name ".$like." '".$search."%'" : '')
         );
 
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
         
         if ($result) {
-           while ($row = $this->db->fetchObject($result)) {
+           while ($row = $this->_config->getDb()->fetchObject($result)) {
               $allTags[$row->tagging_id] = $row->tagging_name;
            }
         }
         
-        $numberOfItems = $limit ? PMF_TAGS_CLOUD_RESULT_SET_SIZE : $this->db->numRows($result);
+        $numberOfItems = $limit ? PMF_TAGS_CLOUD_RESULT_SET_SIZE : $this->_config->getDb()->numRows($result);
         
         if (isset($allTags) && ($numberOfItems < count($allTags))) {
             $keys = array_keys($allTags);
@@ -164,9 +153,9 @@ class PMF_Tags
             $record_id
         );
 
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
         if ($result) {
-            while ($row = $this->db->fetchObject($result)) {
+            while ($row = $this->_config->getDb()->fetchObject($result)) {
                 $tags[$row->tagging_id] = $row->tagging_name;
             }
         }
@@ -227,7 +216,7 @@ class PMF_Tags
                 if (!in_array(PMF_String::strtolower($tagging_name),
                               array_map(array('PMF_String', 'strtolower'), $current_tags))) {
                     // Create the new tag
-                    $new_tagging_id = $this->db->nextId(SQLPREFIX.'faqtags', 'tagging_id');
+                    $new_tagging_id = $this->_config->getDb()->nextId(SQLPREFIX.'faqtags', 'tagging_id');
                     $query = sprintf("
                         INSERT INTO
                             %sfaqtags
@@ -237,7 +226,7 @@ class PMF_Tags
                         SQLPREFIX,
                         $new_tagging_id,
                         $tagging_name);
-                    $this->db->query($query);
+                    $this->_config->getDb()->query($query);
 
                     // Add the tag reference for the faq record
                     $query = sprintf("
@@ -249,7 +238,7 @@ class PMF_Tags
                         SQLPREFIX,
                         $record_id,
                         $new_tagging_id);
-                    $this->db->query($query);
+                    $this->_config->getDb()->query($query);
                 } else {
                     // Add the tag reference for the faq record
                     $query = sprintf("
@@ -265,7 +254,7 @@ class PMF_Tags
                             array_map(array('PMF_String', 'strtolower'), $current_tags)
                         )
                     );
-                    $this->db->query($query);
+                    $this->_config->getDb()->query($query);
                 }
             }
         }
@@ -293,7 +282,7 @@ class PMF_Tags
             SQLPREFIX,
             $record_id);
 
-        $this->db->query($query);
+        $this->_config->getDb()->query($query);
 
         return true;
 
@@ -331,8 +320,8 @@ class PMF_Tags
         );
 
         $records = array();
-        $result  = $this->db->query($query);
-        while ($row = $this->db->fetchObject($result)) {
+        $result  = $this->_config->getDb()->query($query);
+        while ($row = $this->_config->getDb()->fetchObject($result)) {
             $records[] = $row->record_id;
         }
 
@@ -368,8 +357,8 @@ class PMF_Tags
         );
 
         $records = array();
-        $result  = $this->db->query($query);
-        while ($row = $this->db->fetchObject($result)) {
+        $result  = $this->_config->getDb()->query($query);
+        while ($row = $this->_config->getDb()->fetchObject($result)) {
             $records[] = $row->record_id;
         }
         return $records;
@@ -398,8 +387,8 @@ class PMF_Tags
             $tagId
         );
 
-        $result = $this->db->query($query);
-        if ($row = $this->db->fetchObject($result)) {
+        $result = $this->_config->getDb()->query($query);
+        if ($row = $this->_config->getDb()->fetchObject($result)) {
             return $row->tagging_name;
         }
     }
@@ -499,11 +488,11 @@ class PMF_Tags
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
-            $this->db->escape($tagName));
+            $this->_config->getDb()->escape($tagName));
 
         $records = array();
-        $result = $this->db->query($query);
-        while ($row = $this->db->fetchObject($result)) {
+        $result = $this->_config->getDb()->query($query);
+        while ($row = $this->_config->getDb()->fetchObject($result)) {
             $records[] = $row->record_id;
         }
 
@@ -538,8 +527,8 @@ class PMF_Tags
             $tagId);
 
         $records = array();
-        $result  = $this->db->query($query);
-        while ($row = $this->db->fetchObject($result)) {
+        $result  = $this->_config->getDb()->query($query);
+        while ($row = $this->_config->getDb()->fetchObject($result)) {
             $records[] = $row->record_id;
         }
 
@@ -561,8 +550,8 @@ class PMF_Tags
             SQLPREFIX
         );
 
-        $result = $this->db->query($query);
-        if ($row = $this->db->fetchObject($result)) {
+        $result = $this->_config->getDb()->query($query);
+        if ($row = $this->_config->getDb()->fetchObject($result)) {
             return ($row->n > 0);
         }
 

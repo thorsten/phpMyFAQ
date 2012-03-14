@@ -178,7 +178,9 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                 $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_delete']);
             } else {
                 // Move the categories ownership to admin (id == 1)
-                $oCat = new PMF_Category($current_admin_user, $current_admin_groups, false);
+                $oCat = new PMF_Category($faqConfig, false);
+                $oCat->setUser($current_admin_user);
+                $oCat->setGroups($current_admin_groups);
                 $oCat->moveOwnership($userId, 1);
 
                 // Remove the user from groups

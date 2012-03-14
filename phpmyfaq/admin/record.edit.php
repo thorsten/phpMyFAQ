@@ -27,7 +27,9 @@ $user = PMF_User_CurrentUser::getFromSession($faqConfig);
 
 if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
-    $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
+    $category = new PMF_Category($faqConfig, false);
+    $category->setUser($current_admin_user);
+    $category->setGroups($current_admin_groups);
     $category->buildTree();
     
     $helper = PMF_Helper_Category::getInstance();
@@ -43,7 +45,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
         'dateStart'   => '',
         'dateEnd'     => '');
 
-    $tagging = new PMF_Tags($db, $Language);
+    $tagging = new PMF_Tags($faqConfig);
     $date    = new PMF_Date($faqConfig);
 
     if ($action == 'takequestion') {

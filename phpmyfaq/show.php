@@ -34,7 +34,9 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
                                                 $faqConfig->get('records.sortby'));
     
     if (!$records) {
-        $subCategory = new PMF_Category($current_user, $current_groups, true);
+        $subCategory = new PMF_Category($faqConfig, true);
+        $subCategory->setUser($current_user);
+        $subCategory->setGroups($current_groups);
         $subCategory->transform($currentCategory);
         $records = $subCategory->viewTree();
     }

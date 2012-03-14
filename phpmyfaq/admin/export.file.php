@@ -37,7 +37,7 @@ $inlineDisposition = PMF_Filter::filterInput(INPUT_POST, 'dispos', FILTER_SANITI
 $type              = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING, 'none');
 
 $faq      = new PMF_Faq($faqConfig);
-$category = new PMF_Category();
+$category = new PMF_Category($faqConfig);
 
 $export  = PMF_Export::create($faq, $category, $type);
 $content = $export->generate($categoryId, $downwards);

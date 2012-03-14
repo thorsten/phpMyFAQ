@@ -176,7 +176,7 @@ switch ($action) {
                 }
 
                 // Let the category owner get a copy of the message
-                $category = new PMF_Category();
+                $category = new PMF_Category($faqConfig);
                 $categories = $category->getCategoryIdsFromArticle($faq->faqRecord['id']);
                 foreach ($categories as $_category) {
                     $userId = $category->getCategoryUser($_category);
@@ -212,7 +212,7 @@ switch ($action) {
         // @todo add check on "addfaq" permission
 
         $faq         = new PMF_Faq($faqConfig);
-        $category    = new PMF_Category();
+        $category    = new PMF_Category($faqConfig);
         $name        = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $email       = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $faqid       = PMF_Filter::filterInput(INPUT_POST, 'faqid', FILTER_VALIDATE_INT);
@@ -363,7 +363,7 @@ switch ($action) {
         // @todo add check on "addquestion" permission
 
         $faq        = new PMF_Faq($faqConfig);
-        $cat        = new PMF_Category();
+        $cat        = new PMF_Category($faqConfig);
         $categories = $cat->getAllCategories();
         $name       = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $email      = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);

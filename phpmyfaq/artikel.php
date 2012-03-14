@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $captcha     = new PMF_Captcha($faqConfig);
 $oGlossary   = new PMF_Glossary();
 $oLnk        = new PMF_Linkverifier($faqConfig);
-$faqTagging  = new PMF_Tags($db, $Language);
+$faqTagging  = new PMF_Tags($faqConfig);
 $faqRelation = new PMF_Relation($faqConfig);
 $faqRating   = new PMF_Rating($db, $Language);
 $faqComment  = new PMF_Comment($faqConfig);
@@ -195,7 +195,7 @@ $faqSearchResult->reviewResultset(
         $faq->faqRecord['keywords']
     )
 );
-$relatedFaqs = PMF_Helper_Search::getInstance()->renderRelatedFaqs($faqSearchResult, $faq->faqRecord['id']);
+$relatedFaqs = PMF_Helper_Search::getInstance($faqConfig)->renderRelatedFaqs($faqSearchResult, $faq->faqRecord['id']);
 
 // Show link to edit the faq?
 $editThisEntry = '';

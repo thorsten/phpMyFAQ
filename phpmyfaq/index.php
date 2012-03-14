@@ -269,12 +269,14 @@ $faq->setGroups($current_groups);
 //
 // Create a new Category object
 //
-$category = new PMF_Category($current_user, $current_groups);
+$category = new PMF_Category($faqConfig);
+$category->setUser($current_user);
+$category->setGroups($current_groups);
 
 //
 // Create a new Tags object
 //
-$oTag = new PMF_Tags($db, $Language);
+$oTag = new PMF_Tags($faqConfig);
 
 //
 // Found a record ID?

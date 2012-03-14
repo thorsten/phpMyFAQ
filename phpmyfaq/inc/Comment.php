@@ -168,13 +168,15 @@ class PMF_Comment
     {
         $comments = $this->getCommentsData($id, $type);
         $date     = new PMF_Date($this->_config);
+        $mail     = new PMF_Mail($this->_config);
+
         $output = '';
         foreach ($comments as $item) {
             $output .= '<p class="comment">';
             $output .= '<img src="images/bubbles.gif" />';
             $output .= sprintf('<strong>%s<a href="mailto:%s">%s</a>:</strong><br />%s<br />%s</p>',
                 $this->pmf_lang['msgCommentBy'],
-                PMF_Mail::safeEmail($item['email']),
+                $mail->safeEmail($item['email']),
                 $item['user'],
                 nl2br($item['content']),
                 $this->pmf_lang['newsCommentDate'] .

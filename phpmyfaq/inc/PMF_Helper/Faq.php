@@ -37,7 +37,7 @@ class PMF_Helper_Faq extends PMF_Helper
     /**
      * Instance
      *
-     * @var PMF_Helper_Search
+     * @var PMF_Helper_Faq
      */
     private static $instance = null;
 
@@ -59,7 +59,7 @@ class PMF_Helper_Faq extends PMF_Helper
      * Returns the single instance
      *
      * @access static
-     * @return PMF_Helper_Search
+     * @return PMF_Helper_Faq
      */
     public static function getInstance()
     {

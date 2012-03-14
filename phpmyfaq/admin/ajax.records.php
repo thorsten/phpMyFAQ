@@ -86,7 +86,7 @@ switch($ajax_action) {
 
                 $faqSearchResult->reviewResultset($searchResult);
 
-                $faqSearchHelper = PMF_Helper_Search::getInstance();
+                $faqSearchHelper = PMF_Helper_Search::getInstance($faqConfig);
                 $faqSearchHelper->setSearchterm($searchString);
 
                 print $faqSearchHelper->renderAdminSuggestionResult($faqSearchResult);

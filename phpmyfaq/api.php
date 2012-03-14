@@ -81,7 +81,9 @@ switch ($action) {
         break;
         
     case 'getCategories':
-        $category = new PMF_Category($current_user, $current_groups, true);
+        $category = new PMF_Category($faqConfig, true);
+        $category->setUser($current_user);
+        $category->setGroups($current_user);
         $result   = $category->categories;
         break;
         

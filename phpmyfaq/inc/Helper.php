@@ -77,6 +77,11 @@ abstract class PMF_Helper
     protected $translation = array();
 
     /**
+     * @var PMF_Configuration
+     */
+    protected $_config;
+
+    /**
      * Category Setter
      *
      * @param PMF_Category $Category PMF_Category object

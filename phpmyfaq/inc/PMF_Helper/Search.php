@@ -65,10 +65,13 @@ class PMF_Helper_Search extends PMF_Helper
     /**
      * Constructor
      *
+     * @param PMF_Configuration $config
+     *
      * @return PMF_Helper_Search
      */
-    private function __construct()
+    private function __construct(PMF_Configuration $config)
     {
+        $this->_config = $config;
         $this->pmfLang = $this->getTranslations();
     }
     
@@ -78,11 +81,11 @@ class PMF_Helper_Search extends PMF_Helper
      * @access static
      * @return PMF_Helper_Search
      */
-    public static function getInstance()
+    public static function getInstance(PMF_Configuration $config)
     {
         if (null == self::$instance) {
             $className = __CLASS__;
-            self::$instance = new $className();
+            self::$instance = new $className($config);
         }
         return self::$instance;
     }

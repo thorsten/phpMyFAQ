@@ -79,7 +79,9 @@ if (!is_null($user) && $user instanceof PMF_User_CurrentUser) {
 }
 
 $category_id = PMF_Filter::filterInput(INPUT_GET, 'category_id', FILTER_VALIDATE_INT);
-$category    = new PMF_Category($current_user, $current_groups);
+$category    = new PMF_Category($faqConfig);
+$category->setUser($current_user);
+$category->setGroups($current_user);
 
 $faq = new PMF_Faq($faqConfig);
 $faq->setUser($current_user);

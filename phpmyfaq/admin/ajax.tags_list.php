@@ -31,7 +31,7 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 header("Vary: Negotiate,Accept");
 
-$oTag              = new PMF_Tags($db, $Language);
+$oTag              = new PMF_Tags($faqConfig);
 $autoCompleteValue = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
 if (!is_null($autoCompleteValue)) {
     $tags = $oTag->getAllTags($autoCompleteValue, false, true);

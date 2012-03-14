@@ -24,7 +24,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 if ($permission['delquestion']) {
 
-    $category   = new PMF_Category($current_admin_user, $current_admin_groups, false);
+    $category = new PMF_Category($faqConfig, false);
+    $category->setUser($current_admin_user);
+    $category->setGroups($current_admin_groups);
     $date       = new PMF_Date($faqConfig);
     $questionId = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $delete     = PMF_Filter::filterInput(INPUT_GET, 'delete', FILTER_SANITIZE_STRING, 'no');

@@ -33,7 +33,7 @@ class PMF_Helper_Captcha extends PMF_Helper
     /**
      * Instance
      *
-     * @var PMF_Helper_Search
+     * @var PMF_Helper_Captcha
      */
     private static $instance = null;
     

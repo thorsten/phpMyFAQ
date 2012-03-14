@@ -46,7 +46,7 @@ if (!is_null($inputLanguage)) {
 //       for any of the multilanguage faq records and the Category list
 //       on the left pane will not be affected
 if ($allLanguages) {
-    $category = new PMF_Category();
+    $category = new PMF_Category($faqConfig);
     $category->transform(0);
 }
 
@@ -63,7 +63,7 @@ $tagSearch       = false;
 //
 if (!is_null($inputTag)) {
     $tagSearch    = true;
-    $tagging      = new PMF_Tags($db, $Language);
+    $tagging      = new PMF_Tags($faqConfig);
     $recordIds    = $tagging->getRecordsByTagId($inputTag);
     $searchResult = $faq->showAllRecordsByIds($recordIds);
 } else {
@@ -145,7 +145,7 @@ $faqPagination     = new PMF_Pagination($options);
 $faqCategoryHelper = PMF_Helper_Category::getInstance();
 $faqCategoryHelper->setCategory($category);
 
-$faqSearchHelper = PMF_Helper_Search::getInstance();
+$faqSearchHelper = PMF_Helper_Search::getInstance($faqConfig);
 $faqSearchHelper->setSearchterm($inputSearchTerm);
 $faqSearchHelper->setCategory($category);
 $faqSearchHelper->setPagination($faqPagination);
