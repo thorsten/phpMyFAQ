@@ -77,20 +77,20 @@ class PMF_Auth
      *
      * @var boolean
      */
-    private $read_only = false;
+    private $readOnly = false;
 
     /**
      * Constructor
      *
      * @param string  $enctype   Type of encoding
-     * @param boolean $read_only Readonly?
+     * @param boolean $readOnly Readonly?
      *
      * @return PMF_Auth
      */
-    public function __construct($enctype = 'none', $read_only = false)
+    public function __construct($enctype = 'none', $readOnly = false)
     {
         $this->selectEncType($enctype);
-        $this->setReadOnly($read_only);
+        $this->setReadOnly($readOnly);
     }
     
     /**
@@ -176,20 +176,20 @@ class PMF_Auth
     /**
      * Short description of method read_only
      *
-     * @param boolean $read_only boolean flag
+     * @param boolean $readOnly boolean flag
      *
      * @return boolean
      */
-    public function setReadOnly($read_only = null)
+    public function setReadOnly($readOnly = null)
     {
-        if ($read_only === null) {
-            return $this->read_only;
+        if ($readOnly === null) {
+            return $this->readOnly;
         }
         
-        $oldread_only    = $this->read_only;
-        $this->read_only = (bool) $read_only;
+        $oldreadOnly    = $this->readOnly;
+        $this->readOnly = (bool)$readOnly;
         
-        return $oldread_only;
+        return $oldreadOnly;
     }
 
     /**
