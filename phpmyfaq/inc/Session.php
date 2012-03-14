@@ -313,7 +313,7 @@ class PMF_Session
     {
         $users = array(0, 0);
         
-        if (PMF_Configuration::getInstance()->get('main.enableUserTracking')) {
+        if ($this->_config->get('main.enableUserTracking')) {
             $timeNow = ($_SERVER['REQUEST_TIME'] - $activityTimeWindow);
             // Count all sids within the time window
             // TODO: add a new field in faqsessions in order to find out only sids of anonymous users
