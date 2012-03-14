@@ -166,7 +166,7 @@ class PMF_News
                            PMF_Link::getSystemRelativeUri(),
                            $item['id'],
                            $item['lang']);
-            $oLink = new PMF_Link($url);
+            $oLink = new PMF_Link($url, $this->_config);
             
             if (isset($item['header'])) {
                 $oLink->itemTitle = $item['header'];

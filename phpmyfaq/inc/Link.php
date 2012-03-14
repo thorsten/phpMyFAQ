@@ -180,17 +180,15 @@ class PMF_Link
     /**
      * Constructor
      *
-     * @param string $url    URL
-     * @param string $text   Text
-     * @param string $target Target
+     * @param string            $url    URL
+     * @param PMF_Configuration $config
      *
      * @return PMF_Link
      */
-    public function __construct($url, $text = '', $target = '')
+    public function __construct($url, PMF_Configuration $config)
     {
-        $this->url    = $url;
-        $this->text   = $text;
-        $this->target = $target;
+        $this->url     = $url;
+        $this->_config = $config;
     }
 
     /**
@@ -404,7 +402,7 @@ class PMF_Link
      */
     public static function getSystemScheme()
     {
-        if (PMF_Configuration::getInstance()->get('security.useSslOnly')) {
+        if ($this->_config->get('security.useSslOnly')) {
             return 'https://';
         }
         
@@ -526,11 +524,10 @@ class PMF_Link
      */
     public function toString($forceNoModrewriteSupport = false)
     {
-        $faqConfig = PMF_Configuration::getInstance();
-        $url       = $this->toUri();
+        $url = $this->toUri();
         // Check mod_rewrite support and 'rewrite' the passed (system) uri
         // according to the rewrite rules written in .htaccess
-        if ((!$forceNoModrewriteSupport) && ($faqConfig->get('main.enableRewriteRules'))) {
+        if ((!$forceNoModrewriteSupport) && ($this->_config->get('main.enableRewriteRules'))) {
 
             if ($this->isHomeIndex()) {
 

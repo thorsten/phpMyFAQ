@@ -139,7 +139,7 @@ if ($permission['editbt']) {
                             $record_id,
                             $record_lang);
                 $link             = $faqConfig->get('main.referenceURL') . str_replace('/admin/','/', $link);
-                $oLink            = new PMF_Link($link);
+                $oLink            = new PMF_Link($link, $faqConfig);
                 $oLink->itemTitle = $question;
                 $link             = $oLink->toString();
                 

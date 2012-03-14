@@ -41,10 +41,13 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
 
     $up = '';
     if ($parent != 0) {
-        $url = sprintf('%saction=show&amp;cat=%d',
-                    $sids,
-                    $parent);
-        $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+        $url = sprintf(
+            '%s?%saction=show&amp;cat=%d',
+            PMF_Link::getSystemRelativeUri(),
+            $sids,
+            $parent
+        );
+        $oLink            = new PMF_Link($url, $faqConfig);
         $oLink->itemTitle = $category->categoryName[$parent]['name'];
         $oLink->text      = $PMF_LANG['msgCategoryUp'];
         $up               = $oLink->toHtmlAnchor();

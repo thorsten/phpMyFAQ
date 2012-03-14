@@ -109,7 +109,7 @@ if ($num > 0) {
         $link = str_replace($_SERVER['SCRIPT_NAME'], '/index.php', $item['url']);
         if (PMF_RSS_USE_SEO) {
             if (isset($item['thema'])) {
-                $oLink            = new PMF_Link($link);
+                $oLink            = new PMF_Link($link, $faqConfig);
                 $oLink->itemTitle = html_entity_decode($item['thema'], ENT_COMPAT, 'UTF-8');
                 $link             = html_entity_decode($oLink->toString(), ENT_COMPAT, 'UTF-8');
             }

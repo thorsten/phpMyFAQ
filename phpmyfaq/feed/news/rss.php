@@ -71,7 +71,7 @@ if ($num > 0) {
         $link = '/index.php?action=news&newsid=' . $item['id'] . '&newslang=' . $item['lang'];
         if (PMF_RSS_USE_SEO) {
             if (isset($item['header'])) {
-                $oLink            = new PMF_Link($link);
+                $oLink            = new PMF_Link($link, $faqConfig);
                 $oLink->itemTitle = $item['header'];
                 $link             = $oLink->toString();
             }

@@ -268,13 +268,15 @@ class PMF_Faq
                     $visits = $row->visits;
                 }
 
-                $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                            $sids,
-                            $row->category_id,
-                            $row->id,
-                            $row->lang
-                        );
-                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $url   = sprintf(
+                    '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    PMF_Link::getSystemRelativeUri(),
+                    $sids,
+                    $row->category_id,
+                    $row->id,
+                    $row->lang
+                );
+                $oLink = new PMF_Link($url, $this->_config);
                 $oLink->itemTitle = $oLink->text = $oLink->tooltip = $row->thema;;
 
                 $faqdata[] = array(
@@ -422,13 +424,16 @@ class PMF_Faq
                 }
 
                 $title = $row->thema;
-                $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                            $sids,
-                            $row->category_id,
-                            $row->id,
-                            $row->lang);
+                $url   = sprintf(
+                    '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    PMF_Link::getSystemRelativeUri(),
+                    $sids,
+                    $row->category_id,
+                    $row->id,
+                    $row->lang
+                );
                             
-                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink = new PMF_Link($url, $this->_config);
                 $oLink->itemTitle = $oLink->text = $oLink->tooltip = $title;
                 
                 $listItem = sprintf(
@@ -597,13 +602,14 @@ class PMF_Faq
 
                 $title = $row->thema;
                 $url   = sprintf(
-                    '%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    PMF_Link::getSystemRelativeUri(),
                     $sids,
                     $row->category_id,
                     $row->id,
                     $row->lang
                 );
-                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink = new PMF_Link($url, $this->_config);
                 $oLink->itemTitle = $row->thema;
                 $oLink->text = $title;
                 $oLink->tooltip = $title;
@@ -631,7 +637,7 @@ class PMF_Faq
             $next = $page + 1;
             if ($vor != 0) {
                 $url              = $sids.'&amp;action=search&amp;tagging_id='.$tagging_id.'&amp;seite='.$vor;
-                $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url, $this->_config);
                 $oLink->itemTitle = 'tag';
                 $oLink->text      = $this->pmf_lang["msgPrevious"];
                 $oLink->tooltip   = $this->pmf_lang["msgPrevious"];
@@ -640,7 +646,7 @@ class PMF_Faq
             $output .= " ";
             if ($next <= $pages) {
                 $url              = $sids.'&amp;action=search&amp;tagging_id='.$tagging_id.'&amp;seite='.$next;
-                $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url, $this->_config);
                 $oLink->itemTitle = 'tag';
                 $oLink->text      = $this->pmf_lang["msgNext"];
                 $oLink->tooltip   = $this->pmf_lang["msgNext"];
@@ -1765,13 +1771,15 @@ class PMF_Faq
                 $data['user'] = $row->user;
 
                 $title = $row->thema;
-                $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                        $sids,
-                        $row->category_id,
-                        $row->id,
-                        $row->lang
-                        );
-                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $url   = sprintf(
+                    '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    PMF_Link::getSystemRelativeUri(),
+                    $sids,
+                    $row->category_id,
+                    $row->id,
+                    $row->lang
+                );
+                $oLink = new PMF_Link($url, $this->_config);
                 $oLink->itemTitle = $row->thema;
                 $oLink->tooltip   = $title;
                 $data['url']      = $oLink->toString();
@@ -1873,13 +1881,15 @@ class PMF_Faq
                 $data['last_visit'] = $row->last_visit;
 
                 $title = $row->thema;
-                $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                        $sids,
-                        $row->category_id,
-                        $row->id,
-                        $row->lang
-                        );
-                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $url   = sprintf(
+                    '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    PMF_Link::getSystemRelativeUri(),
+                    $sids,
+                    $row->category_id,
+                    $row->id,
+                    $row->lang
+                );
+                $oLink = new PMF_Link($url, $this->_config);
                 $oLink->itemTitle = $row->thema;
                 $oLink->tooltip   = $title;
                 $data['url']      = $oLink->toString();
@@ -1976,12 +1986,15 @@ class PMF_Faq
                 $data['visits']  = $row->visits;
 
                 $title = $row->thema;
-                $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                        $sids,
-                        $row->category_id,
-                        $row->id,
-                        $row->lang);
-                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $url   = sprintf(
+                    '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    PMF_Link::getSystemRelativeUri(),
+                    $sids,
+                    $row->category_id,
+                    $row->id,
+                    $row->lang
+                );
+                $oLink = new PMF_Link($url, $this->_config);
                 $oLink->itemTitle = $row->thema;
                 $oLink->tooltip   = $title;
                 $data['url']      = $oLink->toString();
@@ -2689,13 +2702,16 @@ class PMF_Faq
 
         while (($row = $this->_config->getDb()->fetchObject($result))) {
             $title = $row->thema;
-            $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                        $sids,
-                        $row->category_id,
-                        $row->id,
-                        $row->lang);
+            $url   = sprintf(
+                '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                PMF_Link::getSystemRelativeUri(),
+                $sids,
+                $row->category_id,
+                $row->id,
+                $row->lang
+            );
                         
-            $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+            $oLink            = new PMF_Link($url, $this->_config);
             $oLink->itemTitle = $row->thema;
             $oLink->text      = $title;
             $oLink->tooltip   = $title;
@@ -2926,12 +2942,15 @@ class PMF_Faq
                 $data['thema'] = $row->thema;
 
                 $title = $row->thema;
-                $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                            $sids,
-                            $row->category_id,
-                            $row->id,
-                            $row->lang);
-                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $url   = sprintf(
+                    '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    PMF_Link::getSystemRelativeUri(),
+                    $sids,
+                    $row->category_id,
+                    $row->id,
+                    $row->lang
+                );
+                $oLink = new PMF_Link($url, $this->_config);
                 $oLink->itemTitle = $row->thema;
                 $oLink->tooltip = $title;
                 $data['url'] = $oLink->toString();

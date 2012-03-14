@@ -109,7 +109,7 @@ if (is_array($records)) {
 
         if (PMF_RSS_USE_SEO) {
             if (isset($item['record_title'])) {
-                $oLink            = new PMF_Link($link);
+                $oLink            = new PMF_Link($link, $faqConfig);
                 $oLink->itemTitle = $item['record_title'];
                 $link             = $oLink->toString();
            }

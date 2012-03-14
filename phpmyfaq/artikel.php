@@ -76,7 +76,7 @@ $changeLanguagePath = PMF_Link::getSystemRelativeUri() .
         $faq->faqRecord['id'],
         $LANGCODE
     );
-$oLink              = new PMF_Link($changeLanguagePath);
+$oLink              = new PMF_Link($changeLanguagePath, $faqConfig);
 $oLink->itemTitle   = $faq->getRecordTitle($faq->faqRecord['id'], false);
 $changeLanguagePath = $oLink->toString();
 
@@ -124,7 +124,7 @@ if (isset($linkArray['href'])) {
             if (strpos($_url, '&amp;') === false) {
                 $_link = str_replace('&', '&amp;', $_link);
             }
-            $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().$_link);
+            $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().$_link, $faqConfig);
             $oLink->itemTitle = $oLink->tooltip = $_title;
             $newFaqPath       = $oLink->toString();
             $fixedContent     = str_replace($_url, $newFaqPath, $fixedContent);

@@ -129,13 +129,15 @@ switch ($action) {
                     if ($faq->faqRecord['email'] != '') {
                         $emailTo = $faq->faqRecord['email'];
                     }
-                    $_faqUrl = sprintf(
-                        '?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    $faqUrl = sprintf(
+                        '%s?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                        PMF_Link::getSystemUri('/ajaxservice.php'),
                         0,
                         $faq->faqRecord['id'],
                         $faq->faqRecord['lang']
                     );
-                    $oLink            = new PMF_Link(PMF_Link::getSystemUri('/ajaxservice.php') . $_faqUrl);
+                    $
+                    $oLink            = new PMF_Link($faqUrl, $faqConfig);
                     $oLink->itemTitle = $faq->faqRecord['title'];
                     $urlToContent     = $oLink->toString();
                 } else {
@@ -150,7 +152,7 @@ switch ($action) {
                         $news['id'],
                         $news['lang']
                     );
-                    $oLink            = new PMF_Link($link);
+                    $oLink            = new PMF_Link($link, $faqConfig);
                     $oLink->itemTitle = $news['header'];
                     $urlToContent     = $oLink->toString();
                 }
@@ -411,12 +413,14 @@ switch ($action) {
                     $response .= '<ul>';
 
                     foreach ($faqSearchResult->getResultset() as $result) {
-                        $url = sprintf('/index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                        $url = sprintf(
+                            '%s/index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                            $faqConfig->get('main.referenceURL'),
                             $result->category_id,
                             $result->id,
                             $result->lang
                         );
-                        $oLink       = new PMF_Link($faqConfig->get('main.referenceURL') . $url);
+                        $oLink       = new PMF_Link($url, $faqConfig);
                         $oLink->text = PMF_Utils::chopString($result->question, 15);
                         $oLink->itemTitle = $result->question;
                         $response   .= sprintf('<li>%s<br /><div class="searchpreview">%s...</div></li>',

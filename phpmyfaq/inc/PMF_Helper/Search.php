@@ -186,7 +186,7 @@ class PMF_Helper_Search extends PMF_Helper
                     urlencode($this->searchterm)
                 );
 
-                $oLink       = new PMF_Link($currentUrl);
+                $oLink       = new PMF_Link($currentUrl, $this->_config);
                 $oLink->text = $oLink->itemTitle = $oLink->tooltip = $question;
                 
                 $html .= sprintf(
@@ -339,7 +339,7 @@ class PMF_Helper_Search extends PMF_Helper
                     urlencode($searchterm)
                 );
 
-                $oLink       = new PMF_Link($currentUrl);
+                $oLink       = new PMF_Link($currentUrl, $this->_config);
                 $oLink->text = $question;
                 $oLink->itemTitle = $oLink->tooltip = $result->question;
 
@@ -394,12 +394,13 @@ class PMF_Helper_Search extends PMF_Helper
                 $counter++;
 
                 $url = sprintf(
-                    '?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%s?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    PMF_Link::getSystemRelativeUri(),
                     $result->category_id,
                     $result->id,
                     $result->lang
                 );
-                $oLink             = new PMF_Link(PMF_Link::getSystemRelativeUri() . $url);
+                $oLink             = new PMF_Link($url, $this->_config);
                 $oLink->itemTitle  = $result->question;
                 $oLink->text       = $result->question;
                 $oLink->tooltip    = $result->question;

@@ -199,11 +199,13 @@ class PMF_Sitemap
         while ($row = $this->db->fetchObject($result)) {
             $letters = PMF_String::strtoupper($row->letters);
             if (PMF_String::preg_match("/^[一-龠]+|[ぁ-ん]+|[ァ-ヴー]+|[a-zA-Z0-9]+|[ａ-ｚＡ-Ｚ０-９]/i", $letters)) {
-                $url = sprintf('%saction=sitemap&amp;letter=%s&amp;lang=%s',
+                $url = sprintf(
+                    '%s?%saction=sitemap&amp;letter=%s&amp;lang=%s',
+                    PMF_Link::getSystemRelativeUri(),
                     $sids,
                     $letters,
                     $this->language);
-                $oLink         = new PMF_Link(PMF_Link::getSystemRelativeUri() . '?' . $url);
+                $oLink         = new PMF_Link($url, $this->_config);
                 $oLink->text   = (string)$letters;
                 $writeLetters .= $oLink->toHtmlAnchor().' ';
             }
@@ -325,13 +327,16 @@ class PMF_Sitemap
         while ($row = $this->db->fetchObject($result)) {
             if ($oldId != $row->id) {
                 $title = PMF_String::htmlspecialchars($row->thema, ENT_QUOTES, 'utf-8');
-                $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                $url   = sprintf(
+                    '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    PMF_Link::getSystemRelativeUri(),
                     $sids,
                     $row->category_id,
                     $row->id,
-                    $row->lang);
+                    $row->lang
+                );
 
-                $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink            = new PMF_Link($url, $this->_config);
                 $oLink->itemTitle = $row->thema;
                 $oLink->text      = $title;
                 $oLink->tooltip   = $title;

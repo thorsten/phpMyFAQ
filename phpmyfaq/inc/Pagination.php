@@ -333,7 +333,7 @@ class PMF_Pagination
         );
         
         $url             = sprintf('%s&amp;%s=%d', $cleanedUrl, $this->pageParamName, $page);
-        $link            = new PMF_Link($url);
+        $link            = new PMF_Link($url, $this->_config);
         $link->itemTitle = $this->seoName;
 
         return $link->toString();

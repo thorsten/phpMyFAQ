@@ -125,7 +125,7 @@ foreach ($items as $item) {
     // b. We use SEO PMF urls
     if (PMF_SITEMAP_GOOGLE_USE_SEO) {
         if (isset($item['thema'])) {
-            $oL = new PMF_Link($link);
+            $oL = new PMF_Link($link, $faqConfig);
             $oL->itemTitle = $item['thema'];
             $link = $oL->toString();
         }

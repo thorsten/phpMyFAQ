@@ -660,8 +660,13 @@ class PMF_Category
                 $num_entries   .= ')</span>';
             }
 
-            $url              = sprintf('%saction=show&amp;cat=%d', $sids, $parent);
-            $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri() . '?' . $url);
+            $url = sprintf(
+                '%s?%saction=show&amp;cat=%d',
+                PMF_Link::getSystemRelativeUri(),
+                $sids,
+                $parent
+            );
+            $oLink            = new PMF_Link($url, $this->_config);
             $oLink->itemTitle = $categoryName;
             $oLink->text      = $categoryName;
             $oLink->tooltip   = $description;
@@ -741,8 +746,14 @@ class PMF_Category
      */
     public function addCategoryLink($sids, $categoryId, $categoryName, $description, $hasChildren = false, $isActive = false)
     {
-        $url              = sprintf('%saction=show&amp;cat=%d', $sids, $categoryId);
-        $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+        $url = sprintf(
+            '%s?%saction=show&amp;cat=%d',
+            PMF_Link::getSystemRelativeUri(),
+            $sids,
+            $categoryId
+        );
+
+        $oLink            = new PMF_Link($url, $this->_config);
         $oLink->id        = 'category_' . $categoryId;
         $oLink->itemTitle = $categoryName;
         $oLink->text      = $categoryName;
@@ -796,8 +807,13 @@ class PMF_Category
         if ($renderAsMicroData) {
 
             foreach ($temp as $k => $category) {
-                $url              = sprintf('%saction=show&amp;cat=%d', $sids, $catid[$k]);
-                $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?' . $url);
+                $url = sprintf(
+                    '%s?%saction=show&amp;cat=%d',
+                    PMF_Link::getSystemRelativeUri(),
+                    $sids,
+                    $catid[$k]
+                );
+                $oLink            = new PMF_Link($url, $this->_config);
                 $oLink->text      = sprintf('<span itemprop="title">%s</span>', $category);
                 $oLink->itemTitle = $category;
                 $oLink->tooltip   = $desc[$k];

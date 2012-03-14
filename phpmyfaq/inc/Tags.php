@@ -188,10 +188,11 @@ class PMF_Tags
         foreach ($this->getAllTagsById($record_id) as $tagging_id => $tagging_name) {
             $title = PMF_String::htmlspecialchars($tagging_name, ENT_QUOTES, 'utf-8');
             $url = sprintf(
-                $sids.'action=search&amp;tagging_id=%d',
+                '%s?action=search&amp;tagging_id=%d',
+                PMF_Link::getSystemRelativeUri(),
                 $tagging_id
             );
-            $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+            $oLink            = new PMF_Link($url, $this->_config);
             $oLink->itemTitle = $tagging_name;
             $oLink->text      = $tagging_name;
             $oLink->tooltip   = $title;
@@ -454,10 +455,11 @@ class PMF_Tags
             $html .= '<span class="'.$class.'">';
             $title = PMF_String::htmlspecialchars($tag['name'].' ('.$tag['count'].')', ENT_QUOTES, 'utf-8');
             $url = sprintf(
-                        $sids.'action=search&amp;tagging_id=%d',
-                        $tag['id']
-                        );
-            $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                '%s?action=search&amp;tagging_id=%d',
+                PMF_Link::getSystemRelativeUri(),
+                $tag['id']
+            );
+            $oLink            = new PMF_Link($url, $this->_config);
             $oLink->itemTitle = $tag['name'];
             $oLink->text      = $tag['name'];
             $oLink->tooltip   = $title;
