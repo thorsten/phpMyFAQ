@@ -59,7 +59,7 @@ $tpl->parse (
         'msgS2FText2'        => $PMF_LANG['msgS2FText2'],
         'send2friendLink'    => $send2friendLink,
         'msgS2FMessage'      => $PMF_LANG['msgS2FMessage'],
-        'captchaFieldset'    => PMF_Helper_Captcha::getInstance()->renderCaptcha(
+        'captchaFieldset'    => PMF_Helper_Captcha::getInstance($faqConfig)->renderCaptcha(
             $captcha,
             'send2friend',
             $PMF_LANG['msgCaptcha']

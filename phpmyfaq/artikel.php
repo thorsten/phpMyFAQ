@@ -301,7 +301,7 @@ $tpl->parse('writeContent', array(
     'defaultContentName'         => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
     'msgYourComment'             => $PMF_LANG['msgYourComment'],
     'msgNewContentSubmit'        => $PMF_LANG['msgNewContentSubmit'],
-    'captchaFieldset'            => PMF_Helper_Captcha::getInstance()->renderCaptcha(
+    'captchaFieldset'            => PMF_Helper_Captcha::getInstance($faqConfig)->renderCaptcha(
         $captcha,
         'writecomment',
         $PMF_LANG['msgCaptcha']

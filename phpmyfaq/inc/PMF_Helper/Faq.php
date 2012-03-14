@@ -56,16 +56,28 @@ class PMF_Helper_Faq extends PMF_Helper
     private $_ssl = false;
 
     /**
+     * Constructor
+     *
+     * @return PMF_Helper_Faq
+     */
+    private function __construct(PMF_Configuration $config)
+    {
+        $this->_config = $config;
+    }
+
+    /**
      * Returns the single instance
+     *
+     * @param PMF_Configuration $config
      *
      * @access static
      * @return PMF_Helper_Faq
      */
-    public static function getInstance()
+    public static function getInstance(PMF_Configuration $config)
     {
         if (null == self::$instance) {
             $className = __CLASS__;
-            self::$instance = new $className();
+            self::$instance = new $className($config);
         }
         return self::$instance;
     }
@@ -105,7 +117,7 @@ class PMF_Helper_Faq extends PMF_Helper
      */
     public function renderFacebookLikeButton($url)
     {
-        if (empty($url) || PMF_Configuration::getInstance()->get('socialnetworks.enableFacebookSupport') == false) {
+        if (empty($url) || $this->_config->get('socialnetworks.enableFacebookSupport') == false) {
             return '';
         }
 

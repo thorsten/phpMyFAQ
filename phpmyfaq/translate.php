@@ -75,7 +75,7 @@ $tpl->parse(
         'msgNewTranslationMail'     => $PMF_LANG['msgNewTranslationMail'],
         'msgNewTranslationKeywords' => $PMF_LANG['msgNewTranslationKeywords'],
         'writeTransFaqLanguage'     => $translationLanguage,
-        'captchaFieldset'           => PMF_Helper_Captcha::getInstance()->renderCaptcha(
+        'captchaFieldset'           => PMF_Helper_Captcha::getInstance($faqConfig)->renderCaptcha(
             $captcha,
             'translate',
             $PMF_LANG['msgCaptcha']

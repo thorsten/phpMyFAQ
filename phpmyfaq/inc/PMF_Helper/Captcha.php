@@ -40,24 +40,28 @@ class PMF_Helper_Captcha extends PMF_Helper
     /**
      * Constructor
      *
-     * @return 
+     * @param PMF_Configuration $config
+     *
+     * @return PMF_Helper_Captcha
      */
-    private function __construct()
+    private function __construct(PMF_Configuration $config)
     {
-        
+        $this->_config = $config;
     }
     
     /**
      * Returns the single instance
      *
+     * @param PMF_Configuration $config
+     *
      * @access static
      * @return PMF_Helper_Category
      */
-    public static function getInstance()
+    public static function getInstance(PMF_Configuration $config)
     {
         if (null == self::$instance) {
             $className = __CLASS__;
-            self::$instance = new $className();
+            self::$instance = new $className($config);
         }
         return self::$instance;
     }
@@ -85,7 +89,7 @@ class PMF_Helper_Captcha extends PMF_Helper
     {
         $html = '';
         
-        if (PMF_Configuration::getInstance()->get('spam.enableCaptchaCode')) {
+        if ($this->_config->get('spam.enableCaptchaCode')) {
             if ($error != '') {
                 $html .= sprintf('<div class="alert alert-error">%s</div>', $error);
             }

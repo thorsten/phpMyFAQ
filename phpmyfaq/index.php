@@ -652,7 +652,7 @@ if ('artikel' == $action || 'show' == $action || is_numeric($solutionId)) {
     $faqServices->setLanguage($lang);
     $faqServices->setQuestion($title);
 
-    $faqHelper = PMF_Helper_Faq::getInstance();
+    $faqHelper = PMF_Helper_Faq::getInstance($faqConfig);
     $faqHelper->setSsl((isset($_SERVER['HTTPS']) && is_null($_SERVER['HTTPS']) ? false : true));
     
     $tpl->parseBlock(

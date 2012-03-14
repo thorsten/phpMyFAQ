@@ -46,7 +46,7 @@ $tpl->parse (
         'msgMessage'         => $PMF_LANG['msgMessage'],
         'msgS2FButton'       => $PMF_LANG['msgS2FButton'],
         'version'            => $faqConfig->get('main.currentVersion'),
-        'captchaFieldset'    => PMF_Helper_Captcha::getInstance()->renderCaptcha(
+        'captchaFieldset'    => PMF_Helper_Captcha::getInstance($faqConfig)->renderCaptcha(
             $captcha,
             'contact',
             $PMF_LANG['msgCaptcha']

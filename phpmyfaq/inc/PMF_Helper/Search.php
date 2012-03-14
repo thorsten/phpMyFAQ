@@ -159,7 +159,7 @@ class PMF_Helper_Search extends PMF_Helper
     public function renderInstantResponseResult(PMF_Search_Resultset $resultSet)
     {
         $html         = '';
-        $confPerPage  = PMF_Configuration::getInstance()->get('records.numberOfRecordsPerPage');
+        $confPerPage  = $this->_config->get('records.numberOfRecordsPerPage');
         $numOfResults = $resultSet->getNumberOfResults();
         
         if (0 < $numOfResults) {
@@ -221,7 +221,7 @@ class PMF_Helper_Search extends PMF_Helper
     public function renderAdminSuggestionResult(PMF_Search_Resultset $resultSet)
     {
         $html         = '';
-        $confPerPage  = PMF_Configuration::getInstance()->get('records.numberOfRecordsPerPage');
+        $confPerPage  = $this->_config->get('records.numberOfRecordsPerPage');
         $numOfResults = $resultSet->getNumberOfResults();
         
         if (0 < $numOfResults) {
@@ -268,7 +268,7 @@ class PMF_Helper_Search extends PMF_Helper
     public function renderSearchResult(PMF_Search_Resultset $resultSet, $currentPage)
     {
         $html         = '';
-        $confPerPage  = PMF_Configuration::getInstance()->get('records.numberOfRecordsPerPage');
+        $confPerPage  = $this->_config->get('records.numberOfRecordsPerPage');
         $numOfResults = $resultSet->getNumberOfResults();
         
         $totalPages = ceil($numOfResults / $confPerPage);
