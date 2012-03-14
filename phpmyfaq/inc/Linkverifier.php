@@ -903,7 +903,7 @@ class PMF_Linkverifier
 
         // Parse contents and verify URLs
         $this->parse_string($contents);
-        $result = $this->VerifyURLs($faqConfig->get('main.referenceURL'));
+        $result = $this->VerifyURLs($this->_config->get('main.referenceURL'));
         $this->markEntry($id, $artlang);
 
         // If no URLs found
