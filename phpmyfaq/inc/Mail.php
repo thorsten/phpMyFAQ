@@ -355,7 +355,7 @@ class PMF_Mail
                 $lines[] = 'Content-Type: text/plain; charset="'.$this->charset.'"';
                 $lines[] = 'Content-Transfer-Encoding: '.$this->contentTransferEncoding;
                 $lines[] = '';
-                $lines[] = self::wrapLines(PMF_Utils::resolveMarkers($this->messageAlt));
+                $lines[] = self::wrapLines(PMF_Utils::resolveMarkers($this->messageAlt, $this->_config));
                 $lines[] = '';
             }
             // 2/2. message, supposed as, potentially, HTML
@@ -472,7 +472,8 @@ class PMF_Mail
         // Subject. Note: it must be RFC 2047 compliant
         // TODO: wrap mb_encode_mimeheader() to add other content encodings
         $this->headers['Subject'] = PMF_Utils::resolveMarkers(
-            html_entity_decode($this->subject, ENT_COMPAT, 'UTF-8')
+            html_entity_decode($this->subject, ENT_COMPAT, 'UTF-8'),
+            $this->_config
         );
 
         // X-Mailer

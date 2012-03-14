@@ -552,7 +552,7 @@ switch ($action) {
                 $mail = new PMF_Mail($faqConfig);
                 $mail->setReplyTo($email, $realname);
                 $mail->addTo($faqConfig->get('main.administrationMail'));
-                $mail->subject = PMF_Utils::resolveMarkers($PMF_LANG['emailRegSubject']);
+                $mail->subject = PMF_Utils::resolveMarkers($PMF_LANG['emailRegSubject'], $faqConfig);
                 $mail->message = $text;
                 $result = $mail->send();
                 unset($mail);

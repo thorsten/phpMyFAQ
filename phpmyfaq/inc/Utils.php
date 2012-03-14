@@ -191,11 +191,11 @@ class PMF_Utils
      * @param   string $text Text contains PMF markers
      * @return  string
      */
-    public static function resolveMarkers($text)
+    public static function resolveMarkers($text, PMF_Configuration $config)
     {
         // Available markers: key and resolving value
         $markers = array(
-            '%sitename%' => PMF_Configuration::getInstance()->get('main.titleFAQ')
+            '%sitename%' => $config->get('main.titleFAQ')
         );
 
         // Resolve any known pattern

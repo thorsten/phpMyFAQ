@@ -41,13 +41,6 @@ class PMF_Configuration
     const TABLE_FAQCONFIG = 'faqconfig';
 
     /**
-     * Instance
-     *
-     * @var PMF_Configuration
-     */
-    private static $instance = null;
-    
-    /**
      * Configuration array
      *
      * @var array
@@ -70,22 +63,6 @@ class PMF_Configuration
         }
     }
 
-    /**
-     * Returns the single instance
-     *
-     * @deprecated
-     *
-     * @return PMF_Configuration
-     */
-    public static function getInstance()
-    {
-        if (null == self::$instance) {
-            $className = __CLASS__;
-            self::$instance = new $className();
-        }
-        return self::$instance;
-    }
-       
     /**
      * Fetches all configuration items into an array
      *
