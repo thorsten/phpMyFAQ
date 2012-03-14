@@ -118,13 +118,13 @@ class PMF_Logging
                     VALUES 
                 (%d, %d, %d, '%s', '%s')",
                     SQLPREFIX,
-                    $this->$this->_config->nextId(SQLPREFIX.'faqadminlog', 'id'),
+                    $this->_config->getDb()->nextId(SQLPREFIX.'faqadminlog', 'id'),
                     $_SERVER['REQUEST_TIME'],
                     $user->userdata->get('user_id'),
-                    $this->$this->_config->escape(nl2br($logText)),
+                    $this->_config->getDb()->escape(nl2br($logText)),
                     $_SERVER['REMOTE_ADDR']);
             
-            return $this->$this->_config->query($query);
+            return $this->_config->getDb()->query($query);
         } else {
         	return false;
         }
@@ -145,7 +145,7 @@ class PMF_Logging
             SQLPREFIX,
             $_SERVER['REQUEST_TIME'] - 30 * 86400);
 
-        if ($this->$this->_config->query($query)) {
+        if ($this->_config->getDb()->query($query)) {
             return true;
         }
         return false;
