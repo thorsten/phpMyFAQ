@@ -308,33 +308,6 @@ class PMF_News
     }
 
     /**
-     * Adds a comment
-     *
-     * @param array $commentData Array with comment data
-     *
-     * @return boolean
-     */
-    function addComment($commentData)
-    {
-        $oComment = new PMF_Comment();
-        return $oComment->addComment($commentData);
-    }
-
-    /**
-     * Deletes a comment
-     *
-     * @param integer $record_id  Record ID
-     * @param integer $comment_id Comment ID
-     *
-     * @return boolean
-     */
-    function deleteComment($record_id, $comment_id)
-    {
-        $oComment = new PMF_Comment();
-        return $oComment->deleteComment($record_id, $comment_id);
-    }
-
-    /**
      * Adds a new news entry
      *
      * @param array $data Array with news data

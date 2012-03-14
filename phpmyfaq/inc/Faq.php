@@ -1546,37 +1546,6 @@ class PMF_Faq
             return 0;
         }
     }
-    
-    /**
-     * Adds a comment
-     *
-     * @param   array       $commentData
-     * @return  boolean
-     * @access  public
-     * @since   2006-06-18
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     */
-    public function addComment($commentData)
-    {
-        $oComment = new PMF_Comment();
-        return $oComment->addComment($commentData);
-    }
-
-    /**
-     * Deletes a comment
-     *
-     * @param   integer     $record_id
-     * @param   integer     $comment_id
-     * @return  boolean
-     * @access  public
-     * @since   2006-06-18
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     */
-    public function deleteComment($record_id, $comment_id)
-    {
-        $oComment = new PMF_Comment();
-        return $oComment->deleteComment($record_id, $comment_id);
-    }
 
     /**
      * This function generates a list with the mosted voted or most visited records

@@ -42,7 +42,7 @@ if ($permission['editbt'] || $permission['delbt']) {
         link_verifier_javascript();
     }
 
-    $comment = new PMF_Comment();
+    $comment = new PMF_Comment($faqConfig);
     $faq     = new PMF_Faq();
     $date    = new PMF_Date($faqConfig);
 

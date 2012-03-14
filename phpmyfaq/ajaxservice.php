@@ -86,6 +86,7 @@ switch ($action) {
         // @todo add check on "addcomment" permission
 
         $faq      = new PMF_Faq();
+        $oComment = new PMF_Comment($faqConfig);
         $type     = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
         $faqid    = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
         $newsid   = PMF_Filter::filterInput(INPUT_POST, 'newsid', FILTER_VALIDATE_INT);
@@ -120,7 +121,7 @@ switch ($action) {
                 'date'      => $_SERVER['REQUEST_TIME'],
                 'helped'    => '');
 
-            if ($faq->addComment($commentData)) {
+            if ($oComment->addComment($commentData)) {
                 $emailTo = $faqConfig->get('main.administrationMail');
                 $urlToContent = '';
                 if ('faq' == $type) {

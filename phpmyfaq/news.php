@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $captcha = new PMF_Captcha($faqConfig);
-$comment = new PMF_Comment();
+$comment = new PMF_Comment($faqConfig);
 
 $captcha->setSessionId($sids);
 if (!is_null($showCaptcha)) {

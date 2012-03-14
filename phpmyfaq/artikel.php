@@ -29,7 +29,7 @@ $oLnk        = new PMF_Linkverifier($faqConfig);
 $faqTagging  = new PMF_Tags($db, $Language);
 $faqRelation = new PMF_Relation($faqConfig);
 $faqRating   = new PMF_Rating($db, $Language);
-$faqComment  = new PMF_Comment();
+$faqComment  = new PMF_Comment($faqConfig);
 
 if (is_null($user)) {
     $user = new PMF_User_CurrentUser($faqConfig);

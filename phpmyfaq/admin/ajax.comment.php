@@ -26,7 +26,7 @@ $ajax_action = PMF_Filter::filterInput(INPUT_POST, 'ajaxaction', FILTER_SANITIZE
 
 if ('delete' == $ajax_action && $permission['delcomment']) {
 
-    $comment    = new PMF_Comment();
+    $comment    = new PMF_Comment($faqConfig);
     $checkFaqs  = array(
         'filter'  => FILTER_VALIDATE_INT,
         'flags'   => FILTER_REQUIRE_ARRAY

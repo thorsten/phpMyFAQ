@@ -28,7 +28,7 @@ print '<div id="returnMessage"></div>';
 
 if ($permission['delcomment']) {
 
-    $comment  = new PMF_Comment();
+    $comment  = new PMF_Comment($faqConfig);
     $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $faq      = new PMF_Faq();
     $date     = new PMF_Date($faqConfig);

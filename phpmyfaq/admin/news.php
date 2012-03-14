@@ -323,7 +323,7 @@ if ('addnews' == $action && $permission["addnews"]) {
         </form>
 <?php
     $newsId   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    $oComment = new PMF_Comment();
+    $oComment = new PMF_Comment($faqConfig);
     $comments = $oComment->getCommentsData($newsId, PMF_Comment::COMMENT_TYPE_NEWS);
     if (count($comments) > 0) {
 ?>

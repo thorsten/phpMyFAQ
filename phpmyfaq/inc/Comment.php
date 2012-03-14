@@ -49,18 +49,9 @@ class PMF_Comment
     const COMMENT_TYPE_NEWS ='news';
 
     /**
-     * DB handle
-     *
-     * @var PMF_Db
+     * @var PMF_Configuration
      */
-    private $db;
-
-    /**
-     * Language
-     *
-     * @var string
-     */
-    private $language;
+    private $_config;
 
     /**
      * Language strings
@@ -72,14 +63,15 @@ class PMF_Comment
     /**
      * Constructor
      *
-     * @return void
+     * @param PMF_Configuration $config
+     *
+     * @return PMF_Comment
      */
-    public function __construct()
+    public function __construct(PMF_Configuration $config)
     {
         global $PMF_LANG;
 
-        $this->db       = PMF_Db::getInstance();
-        $this->language = PMF_Language::$language;
+        $this->_config  = $config;
         $this->pmf_lang = $PMF_LANG;
     }
 
@@ -107,8 +99,8 @@ class PMF_Comment
             SQLPREFIX,
             $id);
 
-        $result = $this->db->query($query);
-        if (($this->db->numRows($result) > 0) && ($row = $this->db->fetchObject($result))) {
+        $result = $this->_config->getDb()->query($query);
+        if (($this->_config->getDb()->numRows($result) > 0) && ($row = $this->_config->getDb()->fetchObject($result))) {
             $item = array(
                 'id'       => $row->id_comment,
                 'recordId' => $row->id,
@@ -146,9 +138,9 @@ class PMF_Comment
             $type,
             $id);
 
-        $result = $this->db->query($query);
-        if ($this->db->numRows($result) > 0) {
-            while ($row = $this->db->fetchObject($result)) {
+        $result = $this->_config->getDb()->query($query);
+        if ($this->_config->getDb()->numRows($result) > 0) {
+            while ($row = $this->_config->getDb()->fetchObject($result)) {
                 $item = array(
                     'id'      => $row->id_comment,
                     'content' => $row->comment,
@@ -175,7 +167,7 @@ class PMF_Comment
     public function getComments($id, $type)
     {
         $comments = $this->getCommentsData($id, $type);
-        $date     = new PMF_Date(PMF_Configuration::getInstance());
+        $date     = new PMF_Date($this->_config);
         $output = '';
         foreach ($comments as $item) {
             $output .= '<p class="comment">';
@@ -207,7 +199,7 @@ class PMF_Comment
             VALUES
                 (%d, %d, '%s', '%s', '%s', '%s', %d, '%s')",
             SQLPREFIX,
-            $this->db->nextId(SQLPREFIX.'faqcomments', 'id_comment'),
+            $this->_config->getDb()->nextId(SQLPREFIX.'faqcomments', 'id_comment'),
             $commentData['record_id'],
             $commentData['type'],
             $commentData['username'],
@@ -216,7 +208,7 @@ class PMF_Comment
             $commentData['date'],
             $commentData['helped']);
 
-        if (!$this->db->query($query)) {
+        if (!$this->_config->getDb()->query($query)) {
             return false;
         }
 
@@ -247,7 +239,7 @@ class PMF_Comment
             $record_id,
             $comment_id);
 
-        if (!$this->db->query($query)) {
+        if (!$this->_config->getDb()->query($query)) {
             return false;
         }
 
@@ -277,9 +269,9 @@ class PMF_Comment
             SQLPREFIX,
             $type);
 
-        $result = $this->db->query($query);
-        if ($this->db->numRows($result) > 0) {
-            while ($row = $this->db->fetchObject($result)) {
+        $result = $this->_config->getDb()->query($query);
+        if ($this->_config->getDb()->numRows($result) > 0) {
+            while ($row = $this->_config->getDb()->fetchObject($result)) {
                 $num[$row->id] = $row->anz;
             }
         }
@@ -319,9 +311,9 @@ class PMF_Comment
                 fc.id = fcg.record_id\n" : '',
             $type);
             
-        $result = $this->db->query($query);
-        if ($this->db->numRows($result) > 0) {
-            while ($row = $this->db->fetchObject($result)) {
+        $result = $this->_config->getDb()->query($query);
+        if ($this->_config->getDb()->numRows($result) > 0) {
+            while ($row = $this->_config->getDb()->fetchObject($result)) {
                 $comments[] = array(
                     'comment_id'  => $row->comment_id,
                     'record_id'   => $row->record_id,
