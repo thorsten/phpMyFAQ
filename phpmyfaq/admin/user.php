@@ -100,7 +100,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                 }
                 $user->changePassword($newPassword);
 
-                $mail = new PMF_Mail();
+                $mail = new PMF_Mail($faqConfig);
                 $mail->addTo($userData['email']);
                 $mail->subject = '[%sitename%] Login name / activation';
                 $mail->message = sprintf("\nName: %s\nLogin name: %s\nNew password: %s\n\n",

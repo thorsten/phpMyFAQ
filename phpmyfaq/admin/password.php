@@ -97,7 +97,7 @@ if ($action == "sendmail") {
             $user->changePassword($newPassword);
             $text = $PMF_LANG['lostpwd_text_1']."\nUsername: ".$username."\nNew Password: ".$newPassword."\n\n".$PMF_LANG["lostpwd_text_2"];
 
-            $mail = new PMF_Mail();
+            $mail = new PMF_Mail($faqConfig);
             $mail->addTo($email);
             $mail->subject = '[%sitename%] Username / password request';
             $mail->message = $text;

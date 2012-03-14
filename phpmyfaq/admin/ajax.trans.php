@@ -245,7 +245,7 @@ FILE;
 
         $letterTpl = '';
         
-        $mail          = new PMF_Mail();
+        $mail          = new PMF_Mail($faqConfig);
         $mail->subject = 'New phpMyFAQ language file submitted';
         $mail->message = sprintf('The file below was sent by %s, which is using phpMyFAQ %s on %s',
             $user->userdata->get('email'),

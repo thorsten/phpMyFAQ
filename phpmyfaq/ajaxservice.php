@@ -164,7 +164,7 @@ switch ($action) {
                     wordwrap($comment, 72);
 
                 $send = array();
-                $mail = new PMF_Mail();
+                $mail = new PMF_Mail($faqConfig);
                 $mail->setReplyTo($commentData['usermail'], $commentData['username']);
                 $mail->addTo($emailTo);
                 $send[$emailTo] = 1;
@@ -317,7 +317,7 @@ switch ($action) {
 
             // Let the PMF Administrator and the Category Owner to be informed by email of this new entry
             $send = array();
-            $mail = new PMF_Mail();
+            $mail = new PMF_Mail($faqConfig);
             $mail->setReplyTo($email, $name);
             $mail->addTo($faqConfig->get('main.administrationMail'));
             $send[$faqConfig->get('main.administrationMail')] = 1;
@@ -456,7 +456,7 @@ switch ($action) {
                     $userEmail      = $oUser->getUserData('email');
                     $mainAdminEmail = $faqConfig->get('main.administrationMail');
 
-                    $mail = new PMF_Mail();
+                    $mail = new PMF_Mail($faqConfig);
                     $mail->setReplyTo($questionData['email'], $questionData['username']);
                     $mail->addTo($mainAdminEmail);
                     // Let the category owner get a copy of the message
@@ -495,7 +495,7 @@ switch ($action) {
                 $userEmail      = $oUser->getUserData('email');
                 $mainAdminEmail = $faqConfig->get('main.administrationMail');
 
-                $mail = new PMF_Mail();
+                $mail = new PMF_Mail($faqConfig);
                 $mail->setReplyTo($questionData['email'], $questionData['username']);
                 $mail->addTo($mainAdminEmail);
                 // Let the category owner get a copy of the message
@@ -549,7 +549,7 @@ switch ($action) {
                     $faqConfig->get('main.referenceURL')
                 );
 
-                $mail = new PMF_Mail();
+                $mail = new PMF_Mail($faqConfig);
                 $mail->setReplyTo($email, $realname);
                 $mail->addTo($faqConfig->get('main.administrationMail'));
                 $mail->subject = PMF_Utils::resolveMarkers($PMF_LANG['emailRegSubject']);
@@ -630,7 +630,7 @@ switch ($action) {
                 $question
             );
 
-            $mail = new PMF_Mail();
+            $mail = new PMF_Mail($faqConfig);
             $mail->setReplyTo($email, $name);
             $mail->addTo($faqConfig->get('main.administrationMail'));
             $mail->subject = 'Feedback: %sitename%';;
@@ -667,7 +667,7 @@ switch ($action) {
             foreach($mailto['mailto'] as $recipient) {
                 $recipient = trim(strip_tags($recipient));
                 if (!empty($recipient)) {
-                    $mail = new PMF_Mail();
+                    $mail = new PMF_Mail($faqConfig);
                     $mail->setReplyTo($email, $name);
                     $mail->addTo($recipient);
                     $mail->subject = $PMF_LANG["msgS2FMailSubject"].$name;
