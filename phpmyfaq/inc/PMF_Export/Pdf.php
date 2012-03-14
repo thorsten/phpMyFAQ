@@ -53,7 +53,9 @@ class PMF_Export_Pdf extends PMF_Export
     {
         $this->faq      = $faq;
         $this->category = $category;
-        $this->pdf      = new PMF_Export_Pdf_Wrapper();
+
+        $this->pdf = new PMF_Export_Pdf_Wrapper();
+        $this->pdf->setConfig($this->_config);
         
         // Set PDF options
         $this->pdf->Open();
