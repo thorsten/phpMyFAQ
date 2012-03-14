@@ -39,29 +39,20 @@ class PMF_Relation
     /**
      * DB handle
      *
-     * @var PMF_DD_Driver
+     * @var PMF_Configuration
      */
-    private $db;
-
-    /**
-     * Language
-     *
-     * @var PMF_Language
-     */
-    private $language;
+    private $_config;
 
     /**
      * Constructor
      *
-     * @param PMF_DB_Driver $database Database connection
-     * @param PMF_Language  $language Language object
+     * @param PMF_Configuration
      *
      * @return PMF_Relation
      */
-    function __construct(PMF_DB_Driver $database, PMF_Language $language)
+    function __construct(PMF_Configuration $config)
     {
-        $this->db       = $database;
-        $this->language = $language;
+        $this->_config = $config;
     }
 
     /**
@@ -76,10 +67,12 @@ class PMF_Relation
     public function getAllRelatedById($recordId, $question, $keywords)
     {
         $terms  = str_replace('-', ' ', $question) . $keywords;
-        $search = PMF_Search_Factory::create($this->language, array('database' => PMF_Db::getType()));
+        $search = PMF_Search_Factory::create(
+            $this->_config,
+            array('database' => PMF_Db::getType())
+        );
 
-        $search->setDatabaseHandle($this->db)
-               ->setTable(SQLPREFIX . 'faqdata AS fd')
+        $search->setTable(SQLPREFIX . 'faqdata AS fd')
                ->setResultColumns(array(
                     'fd.id AS id',
                     'fd.lang AS lang',
@@ -90,13 +83,17 @@ class PMF_Relation
                ->setJoinedColumns(array(
                     'fd.id = fcr.record_id', 
                     'fd.lang = fcr.record_lang'))
-               ->setConditions(array('fd.active' => "'yes'",
-                                     'fd.lang'   => "'" . $this->language->getLanguage() . "'"))
+               ->setConditions(
+                    array(
+                        'fd.active' => "'yes'",
+                        'fd.lang'   => "'" . $this->_config->getLanguage()->getLanguage() . "'"
+                    )
+               )
                ->setMatchingColumns(array('fd.thema', 'fd.content', 'fd.keywords')
         );
 
         $result = $search->search($terms);
 
-        return $this->db->fetchAll($result);
+        return $this->_config->getDb()->fetchAll($result);
     }
 }

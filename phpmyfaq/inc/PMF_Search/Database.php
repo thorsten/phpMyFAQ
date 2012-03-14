@@ -35,13 +35,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Interface
 {
     /**
-     * Database connection handle
-     *
-     * @var PMF_DB_Driver
-     */
-    protected $dbHandle = null;
-
-    /**
      * Searching database table
      *
      * @var string
@@ -86,13 +79,13 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     /**
      * Constructor
      *
-     * @param PMF_Language $language Language
+     * @param PMF_Configuration
      *
      * @return PMF_Search_Abstract
      */
-    public function __construct(PMF_Language $language)
+    public function __construct(PMF_Configuration $config)
     {
-        parent::__construct($language);
+        parent::__construct($config);
     }
     
     /**
@@ -120,32 +113,9 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
             $this->getMatchingColumns(),
             $searchTerm);
 
-        $this->resultSet = $this->dbHandle->query($query);
+        $this->resultSet = $this->_config->getDb()->query($query);
     }
-    
-    /**
-     * Setter for the database handle
-     *
-     * @param PMF_DB_Driver $dbHandle Database Handle
-     *
-     * @return PMF_Search_Database
-     */
-    public function setDatabaseHandle(PMF_DB_Driver $dbHandle)
-    {
-        $this->dbHandle = $dbHandle;
-        
-        return $this;
-    }
-    /**
-     * Getter for the database handle
-     *
-     * @return PMF_DB_Driver
-     */
-    public function getDatabaseHandle()
-    {
-        return $this->dbHandle;
-    }
-    
+
     /**
      * Sets search table
      *
@@ -348,7 +318,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
                 $where = sprintf("%s%s LIKE '%%%s%%'", 
                     $where, 
                     $this->matchingColumns[$j], 
-                    $this->dbHandle->escape($keys[$i]));
+                    $this->_config->getDb()->escape($keys[$i]));
             }
             $where .= ")";
         }

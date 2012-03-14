@@ -76,7 +76,7 @@ switch($ajax_action) {
         if ($permission['editbt']) {
 
             $faq             = new PMF_Faq();
-            $faqSearch       = new PMF_Search($db, $Language);
+            $faqSearch       = new PMF_Search($faqConfig);
             $faqSearchResult = new PMF_Search_Resultset($user, $faq);
             $searchResult    = '';
             $searchString    = PMF_Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);

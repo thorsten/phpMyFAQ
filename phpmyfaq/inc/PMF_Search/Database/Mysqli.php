@@ -37,15 +37,15 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
     /**
      * Constructor
      *
-     * @param PMF_Language $language Language
+     * @param PMF_Configuration
      *
      * @return PMF_Search_Abstract
      */
-    public function __construct(PMF_Language $language)
+    public function __construct(PMF_Configuration $config)
     {
-        parent::__construct($language);
+        parent::__construct($config);
     }
-    
+
     /**
      * Prepares the search and executes it
      *
@@ -60,7 +60,7 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
         if (is_numeric($searchTerm)) {
             parent::search($searchTerm);
         } else {
-            $enableRelevance = PMF_Configuration::getInstance()->get('search.enableRelevance');
+            $enableRelevance = $this->_config->get('search.enableRelevance');
 
             $columns    =  $this->getResultColumns();
             $columns   .= ($enableRelevance) ? $this->getMatchingColumnsAsResult($searchTerm) : '';
@@ -83,15 +83,15 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
                 $this->getMatchingColumns(),
-                $this->dbHandle->escape($searchTerm),
+                $this->_config->getDb()->escape($searchTerm),
                 $this->getConditions(),
                 $orderBy
             );
 
-            $this->resultSet = $this->dbHandle->query($query);
+            $this->resultSet = $this->_config->getDb()->query($query);
             
             // Fallback for searches with less than three characters
-            if (0 == $this->dbHandle->numRows($this->resultSet)) {
+            if (0 == $this->_config->getDb()->numRows($this->resultSet)) {
                 
                 $query = sprintf("
                     SELECT
@@ -109,7 +109,7 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
                     $this->getConditions());
             }
             
-            $this->resultSet = $this->dbHandle->query($query);
+            $this->resultSet = $this->_config->getDb()->query($query);
         }
         
         return $this->resultSet;
@@ -127,7 +127,7 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
         foreach ($this->matchingColumns as $matchColumn) {
             $column = sprintf("MATCH (%s) AGAINST ('*%s*' IN BOOLEAN MODE) AS rel_%s",
                 $matchColumn,
-                $this->dbHandle->escape($searchterm),
+                $this->_config->getDb()->escape($searchterm),
                 substr(strstr($matchColumn, '.'), 1));
 
                 $resultColumns .= ', ' . $column;
@@ -145,10 +145,9 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
      */
     public function getMatchingOrder()
     {
-        $config = PMF_Configuration::getInstance()->get('search.relevance');
-        $list   = explode(",", $config);
-        $count  = count($list);
-        $order  = '';
+        $list  = explode(",", $this->_config->get('search.relevance'));
+        $count = count($list);
+        $order = '';
 
         foreach ($list as $field) {
             $string = '(rel_' . $field . '*' . $count .')';
@@ -162,5 +161,4 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
 
         return $order;
     }
-
 }

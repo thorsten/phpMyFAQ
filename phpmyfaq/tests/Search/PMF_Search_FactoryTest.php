@@ -36,7 +36,9 @@ require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_String/Mbstring.php
  */
 class PMF_Search_FactoryTest extends PHPUnit_Framework_TestCase
 {
-    private $PMF_Language;
+    private $PMF_Configuration;
+
+    private $dbHandle;
 
     /**
      * Prepares the environment before running a test.
@@ -47,7 +49,8 @@ class PMF_Search_FactoryTest extends PHPUnit_Framework_TestCase
 
         PMF_String::init('en');
 
-        $this->PMF_Language = new PMF_Language();
+        $this->dbHandle = new PMF_DB_Sqlite3();
+        $this->PMF_Configuration = new PMF_Configuration($this->dbHandle);
     }
 
     /**
@@ -61,9 +64,9 @@ class PMF_Search_FactoryTest extends PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $search = PMF_Search_Factory::create($this->PMF_Language, array('database' => 'sqlite'));
+        $search = PMF_Search_Factory::create($this->PMF_Configuration, array('database' => 'sqlite'));
 
-        $this->assertEquals(new PMF_Search_Database_Sqlite($this->PMF_Language), $search);
+        $this->assertEquals(new PMF_Search_Database_Sqlite($this->PMF_Configuration), $search);
         $this->assertInstanceOf('PMF_Search_Database_Sqlite', $search);
     }
 

@@ -68,7 +68,7 @@ switch ($action) {
         break;
         
     case 'search':
-        $search       = new PMF_Search($db, $Language);
+        $search       = new PMF_Search($faqConfig);
         $searchString = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
         $result       = $search->search($searchString, false);
         $url          = $faqConfig->get('main.referenceURL') . '/index.php?action=artikel&cat=%d&id=%d&artlang=%s';

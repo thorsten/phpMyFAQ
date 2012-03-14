@@ -123,10 +123,9 @@ if ($permission['editbt'] || $permission['delbt']) {
         
         $fdTable  = SQLPREFIX . 'faqdata';
         $fcrTable = SQLPREFIX . 'faqcategoryrelations';
-        $search   = PMF_Search_Factory::create($Language, array('database' => PMF_Db::getType()));
+        $search   = PMF_Search_Factory::create($faqConfig, array('database' => PMF_Db::getType()));
 
-        $search->setDatabaseHandle($db)
-            ->setTable($fdTable)
+        $search->setTable($fdTable)
             ->setResultColumns(array(
                 $fdTable . '.id AS id',
                 $fdTable . '.lang AS lang',

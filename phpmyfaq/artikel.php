@@ -27,7 +27,7 @@ $captcha     = new PMF_Captcha($faqConfig);
 $oGlossary   = new PMF_Glossary();
 $oLnk        = new PMF_Linkverifier($faqConfig);
 $faqTagging  = new PMF_Tags($db, $Language);
-$faqRelation = new PMF_Relation($db, $Language);
+$faqRelation = new PMF_Relation($faqConfig);
 $faqRating   = new PMF_Rating($db, $Language);
 $faqComment  = new PMF_Comment();
 

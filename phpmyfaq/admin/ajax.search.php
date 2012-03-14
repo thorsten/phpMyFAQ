@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $ajaxAction = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 $searchTerm = PMF_Filter::filterInput(INPUT_GET, 'searchterm', FILTER_SANITIZE_STRING);
 
-$search = new PMF_Search($db, $Language);
+$search = new PMF_Search($faqConfig);
 
 switch ($ajaxAction) {
 

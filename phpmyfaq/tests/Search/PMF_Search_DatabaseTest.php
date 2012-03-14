@@ -24,7 +24,7 @@ require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Database/Sql
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Driver.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Sqlite3.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/Exception.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/Language.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/Configuration.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/String.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_String/Abstract.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_String/Mbstring.php';
@@ -45,7 +45,7 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
 {
     private $PMF_Search_Database;
 
-    private $PMF_Language;
+    private $PMF_Configuration;
 
     private $dbHandle;
 
@@ -58,9 +58,9 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
 
         PMF_String::init('en');
 
-        $this->PMF_Language        = new PMF_Language();
-        $this->PMF_Search_Database = new PMF_Search_Database($this->PMF_Language);
-        $this->dbHandle            = new PMF_DB_Sqlite3();
+        $this->dbHandle = new PMF_DB_Sqlite3();
+        $this->PMF_Configuration = new PMF_Configuration($this->dbHandle);
+        $this->PMF_Search_Database = new PMF_Search_Database($this->PMF_Configuration);
     }
 
     /**
@@ -70,28 +70,6 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
     {
         $this->PMF_Search_Database = null;
         parent::tearDown();
-    }
-
-    public function testSetDatabaseHandle()
-    {
-        $this->PMF_Search_Database->setDatabaseHandle($this->dbHandle);
-        $this->assertEquals(new PMF_DB_Sqlite3(), $this->PMF_Search_Database->getDatabaseHandle());
-    }
-
-    public function testSetDatabaseHandleWrongParameter()
-    {
-        $this->setExpectedException('PMF_Exception');
-        try {
-            $this->PMF_Search_Database->setDatabaseHandle('wrongParameter');
-        } catch (Exception $expected) {
-            throw new PMF_Exception($expected);
-        }
-    }
-
-    public function testGetDatabaseHandleType()
-    {
-        $this->PMF_Search_Database->setDatabaseHandle($this->dbHandle);
-        $this->assertInstanceOf('PMF_DB_Sqlite3', $this->PMF_Search_Database->getDatabaseHandle());
     }
 
     public function testSetAndGetTable()
@@ -195,7 +173,6 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
 
     public function testGetMatchClause()
     {
-        $this->PMF_Search_Database->setDatabaseHandle($this->dbHandle);
         $this->PMF_Search_Database->setMatchingColumns(array('faqdata.author'));
         $this->assertEquals(" (faqdata.author LIKE '%Thorsten%')",
             $this->PMF_Search_Database->getMatchClause('Thorsten'));
@@ -205,7 +182,6 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
 
     public function testGetMatchClauseWithTwoSearchTerms()
     {
-        $this->PMF_Search_Database->setDatabaseHandle($this->dbHandle);
         $this->PMF_Search_Database->setMatchingColumns(array('faqdata.author'));
         $this->assertEquals(" (faqdata.author LIKE '%Thorsten%') OR (faqdata.author LIKE '%Rinne%')",
             $this->PMF_Search_Database->getMatchClause('Thorsten Rinne'));
@@ -215,7 +191,6 @@ class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
 
     public function testGetMatchClauseWithTwoColumns()
     {
-        $this->PMF_Search_Database->setDatabaseHandle($this->dbHandle);
         $this->PMF_Search_Database->setMatchingColumns(array('faqdata.author', 'faqdata.thema'));
         $this->assertEquals(" (faqdata.author LIKE '%Thorsten%' OR faqdata.thema LIKE '%Thorsten%')",
             $this->PMF_Search_Database->getMatchClause('Thorsten'));

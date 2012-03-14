@@ -35,11 +35,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Search_Abstract
 {
     /**
-     * Language
-     *
-     * @var PMF_Language
+     * @var PMF_Configuration
      */
-    protected $language = null;
+    protected $_config = null;
     
     /**
      * Resultset
@@ -51,12 +49,12 @@ class PMF_Search_Abstract
     /**
      * Constructor
      *
-     * @param PMF_Language $language Language
+     * @param PMF_Configuration
      *
      * @return PMF_Search_Abstract
      */
-    public function __construct(PMF_Language $language)
+    public function __construct(PMF_Configuration $config)
     {
-        $this->language = $language;
+        $this->_config = $config;
     }
 }

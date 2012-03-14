@@ -39,19 +39,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Search
 {
     /**
-     * DB handle
-     *
-     * @var PMF_Db
+     * @var PMF_Configuration
      */
-    private $db;
+    private $_config;
 
-    /**
-     * Language
-     *
-     * @var PMF_Language
-     */
-    private $language;
-    
     /**
      * Category ID
      *
@@ -76,16 +67,14 @@ class PMF_Search
     /**
      * Constructor
      *
-     * @param PMF_DB_Driver $database Database connection
-     * @param PMF_Language  $language Language object
+     * @param PMF_Configuration $config
      *
      * @return PMF_Search
      */
-    public function __construct(PMF_DB_Driver $database, PMF_Language $language)
+    public function __construct(PMF_Configuration $config)
     {
-        $this->db       = $database;
-        $this->language = $language;
-        $this->_table   = SQLPREFIX . 'faqsearches';
+        $this->_config = $config;
+        $this->_table  = SQLPREFIX . 'faqsearches';
     }
     
     /**
@@ -122,7 +111,7 @@ class PMF_Search
         $fdTable   = SQLPREFIX . 'faqdata';
         $fcrTable  = SQLPREFIX . 'faqcategoryrelations';
         $condition = array($fdTable . '.active' => "'yes'");
-        $search    = PMF_Search_Factory::create($this->language, array('database' => PMF_Db::getType()));
+        $search    = PMF_Search_Factory::create($this->_config, array('database' => PMF_Db::getType()));
         
         if (!is_null($this->getCategoryId()) && 0 < $this->getCategoryId()) {
             if ($this->getCategory() instanceof PMF_Category) {
@@ -139,12 +128,11 @@ class PMF_Search
         }
 
         if ((!$allLanguages) && (!is_numeric($searchterm))) {
-            $selectedLanguage = array($fdTable . '.lang' => "'" . $this->language->getLanguage() . "'");
+            $selectedLanguage = array($fdTable . '.lang' => "'" . $this->_config->getLanguage()->getLanguage() . "'");
             $condition        = array_merge($selectedLanguage, $condition);
         }
         
-        $search->setDatabaseHandle($this->db)
-               ->setTable($fdTable)
+        $search->setTable($fdTable)
                ->setResultColumns(array(
                     $fdTable . '.id AS id',
                     $fdTable . '.lang AS lang',
@@ -166,10 +154,10 @@ class PMF_Search
         
         $result = $search->search($searchterm);
         
-        if (!$this->db->numRows($result)) {
+        if (!$this->_config->getDb()->numRows($result)) {
             return array();
         } else {
-            return $this->db->fetchAll($result);
+            return $this->_config->getDb()->fetchAll($result);
         }
     }
 
@@ -193,12 +181,12 @@ class PMF_Search
                 VALUES
             (%d, '%s', '%s', '%s')",
             $this->_table,
-            $this->db->nextId($this->_table, 'id'),
-            $this->language->getLanguage(),
-            $this->db->escape($searchterm),
+            $this->_config->getDb()->nextId($this->_table, 'id'),
+            $this->_config->getLanguage()->getLanguage(),
+            $this->_config->getDb()->escape($searchterm),
             $date->format('Y-m-d H:i:s'));
         
-        $this->db->query($query);
+        $this->_config->getDb()->query($query);
     }
 
     /**
@@ -218,7 +206,7 @@ class PMF_Search
             $searchterm
         );
 
-        return $this->db->query($query);
+        return $this->_config->getDb()->query($query);
     }
     
     /**
@@ -248,11 +236,11 @@ class PMF_Search
             $this->_table, 
             $byLang);
         
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
         
         if (false !== $result) {
             $i = 0;
-            while ($row = $this->db->fetchObject($result)) {
+            while ($row = $this->_config->getDb()->fetchObject($result)) {
                 if ($i < $numResults) {
                     $searchResult[] = (array)$row;
                 }
@@ -277,9 +265,9 @@ class PMF_Search
                 %s",
         $this->_table);
     
-        $result = $this->db->query($sql);
+        $result = $this->_config->getDb()->query($sql);
 
-        return (int)$this->db->fetchObject($result)->count;
+        return (int)$this->_config->getDb()->fetchObject($result)->count;
     }
 
     /**

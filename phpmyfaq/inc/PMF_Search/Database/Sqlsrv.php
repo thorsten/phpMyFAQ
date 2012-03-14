@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Search_Database
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
+ * @copyright 2010-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-07-06
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Search_Database
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
+ * @copyright 2010-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-07-06
@@ -37,15 +37,15 @@ class PMF_Search_Database_Sqlsrv extends PMF_Search_Database
     /**
      * Constructor
      *
-     * @param PMF_Language $language Language
+     * @param PMF_Configuration
      *
      * @return PMF_Search_Abstract
      */
-    public function __construct(PMF_Language $language)
+    public function __construct(PMF_Configuration $config)
     {
-        parent::__construct($language);
+        parent::__construct($config);
     }
-    
+
     /**
      * Prepares the search and executes it
      *
@@ -75,7 +75,7 @@ class PMF_Search_Database_Sqlsrv extends PMF_Search_Database
                 $this->getMatchClause($searchTerm),
                 $this->getConditions());
             
-            $this->resultSet = $this->dbHandle->query($query);
+            $this->resultSet = $this->_config->getDb()->query($query);
         }
         
         return $this->resultSet;

@@ -37,13 +37,13 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
     /**
      * Constructor
      *
-     * @param PMF_Language $language Language
+     * @param PMF_Configuration
      *
      * @return PMF_Search_Abstract
      */
-    public function __construct(PMF_Language $language)
+    public function __construct(PMF_Configuration $config)
     {
-        parent::__construct($language);
+        parent::__construct($config);
     }
 
     /**
@@ -60,7 +60,7 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
         if (is_numeric($searchTerm)) {
             parent::search($searchTerm);
         } else {
-            $enableRelevance = PMF_Configuration::getInstance()->get('search.enableRelevance');
+            $enableRelevance = $this->_config->get('search.enableRelevance');
 
             $columns  =  $this->getResultColumns();
             $columns .= ($enableRelevance) ? $this->getMatchingColumnsAsResult($searchTerm) : '';
@@ -81,14 +81,14 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
                 ($enableRelevance)
-                    ? ", plainto_tsquery('" . $this->dbHandle->escape($searchTerm) . "') query "
+                    ? ", plainto_tsquery('" . $this->_config->getDb()->escape($searchTerm) . "') query "
                     : '',
                 $this->getMatchingColumns(),
-                $this->dbHandle->escape($searchTerm),
+                $this->_config->getDb()->escape($searchTerm),
                 $this->getConditions(),
                 $orderBy);
 
-            $this->resultSet = $this->dbHandle->query($query);
+            $this->resultSet = $this->_config->getDb()->query($query);
         }
 
         return $this->resultSet;
@@ -101,7 +101,7 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
      */
     public function getMatchingColumns()
     {
-        $enableRelevance = PMF_Configuration::getInstance()->get('search.enableRelevance');
+        $enableRelevance = $this->_config->get('search.enableRelevance');
 
         if ($enableRelevance) {
             $machColumns = '';
@@ -132,7 +132,7 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
     public function getMatchingColumnsAsResult()
     {
         $resultColumns = '';
-        $config        = PMF_Configuration::getInstance()->get('search.relevance');
+        $config        = $this->_config->get('search.relevance');
         $list          = explode(",", $config);
 
         // Set weight
@@ -167,9 +167,8 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
      */
     public function getMatchingOrder()
     {
-        $config = PMF_Configuration::getInstance()->get('search.relevance');
-        $list   = explode(",", $config);
-        $order  = '';
+        $list  = explode(",", $this->_config->get('search.relevance'));
+        $order = '';
 
         foreach ($list as $field) {
             $string = 'rel_' . $field . ' DESC';

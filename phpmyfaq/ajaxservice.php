@@ -387,7 +387,7 @@ switch ($action) {
                 $cleanQuestion = PMF_Stopwords::getInstance($db, $Language)->clean($question);
 
                 $user            = new PMF_User_CurrentUser($faqConfig);
-                $faqSearch       = new PMF_Search($db, $Language);
+                $faqSearch       = new PMF_Search($faqConfig);
                 $faqSearchResult = new PMF_Search_Resultset($user, $faq);
                 $searchResult    = array();
                 $mergedResult    = array();

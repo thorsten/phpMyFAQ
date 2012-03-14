@@ -37,19 +37,19 @@ class PMF_Search_Factory
     /**
      * Factory for generating search instances
      *
-     * @param PMF_Language $language      Language object
-     * @param array        $searchHandler Array with informations about search
-     *                                    handlers, e.g.
-     *                                    array('database' => 'mysql')
+     * @param PMF_Configuration $config
+     * @param array             $searchHandler Array with informations about search
+     *                                         handlers, e.g.
+     *                                         array('database' => 'mysql')
      *
      * @return PMF_Search_Abstract
      */
-    public static function create(PMF_Language $language, Array $searchHandler)
+    public static function create(PMF_Configuration $config, Array $searchHandler)
     {
         $searchClass = sprintf('PMF_Search_%s_%s',
             ucfirst(key($searchHandler)),
             ucfirst(current($searchHandler)));
         
-        return new $searchClass($language);
+        return new $searchClass($config);
     }
 }

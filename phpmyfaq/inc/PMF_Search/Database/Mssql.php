@@ -37,15 +37,15 @@ class PMF_Search_Database_Mssql extends PMF_Search_Database
     /**
      * Constructor
      *
-     * @param PMF_Language $language Language
+     * @param PMF_Configuration
      *
      * @return PMF_Search_Abstract
      */
-    public function __construct(PMF_Language $language)
+    public function __construct(PMF_Configuration $config)
     {
-        parent::__construct($language);
+        parent::__construct($config);
     }
-    
+
     /**
      * Prepares the search and executes it
      *
@@ -75,7 +75,7 @@ class PMF_Search_Database_Mssql extends PMF_Search_Database
                 $this->getMatchClause($searchTerm),
                 $this->getConditions());
             
-            $this->resultSet = $this->dbHandle->query($query);
+            $this->resultSet = $this->_config->getDb()->query($query);
         }
         
         return $this->resultSet;

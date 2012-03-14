@@ -76,7 +76,7 @@ $category->transform(0);
 $category->buildTree();
 
 $faq             = new PMF_Faq();
-$faqSearch       = new PMF_Search($db, $language);
+$faqSearch       = new PMF_Search($faqConfig);
 $faqSearchResult = new PMF_Search_Resultset($user, $faq);
 
 //
