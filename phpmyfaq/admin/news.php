@@ -23,7 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$news = new PMF_News($db, $Language);
+$news = new PMF_News($faqConfig);
 
 // Re-evaluate $user
 $user = PMF_User_CurrentUser::getFromSession($faqConfig);

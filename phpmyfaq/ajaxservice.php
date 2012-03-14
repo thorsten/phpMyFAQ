@@ -142,7 +142,7 @@ switch ($action) {
                     $urlToContent     = $oLink->toString();
                 } else {
 
-                    $oNews = new PMF_News($db, $Language);
+                    $oNews = new PMF_News($faqConfig);
                     $news  = $oNews->getNewsEntry($id);
                     if ($news['authorEmail'] != '') {
                         $emailTo = $news['authorEmail'];

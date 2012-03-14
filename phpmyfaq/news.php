@@ -33,7 +33,7 @@ if (!is_null($showCaptcha)) {
     exit;
 }
 
-$oNews  = new PMF_News($db, $Language);
+$oNews  = new PMF_News($faqConfig);
 $newsId = PMF_Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
 
 if (is_null($newsId)) {

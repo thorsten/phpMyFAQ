@@ -46,7 +46,7 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
 //
 PMF_String::init($LANGCODE);
 
-$oNews          = new PMF_News($db, $Language);
+$oNews          = new PMF_News($faqConfig);
 $showArchive    = false;
 $active         = true;
 $forceConfLimit = true;
