@@ -127,7 +127,8 @@ class PMF_Faq
      * Constructor
      *
      * @param PMF_Configuration $config
-     * @return void
+     *
+     * @return PMF_Faq
      */
     public function __construct(PMF_Configuration $config)
     {
