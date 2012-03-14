@@ -77,7 +77,7 @@ switch($ajax_action) {
 
             $faq             = new PMF_Faq($faqConfig);
             $faqSearch       = new PMF_Search($faqConfig);
-            $faqSearchResult = new PMF_Search_Resultset($user, $faq);
+            $faqSearchResult = new PMF_Search_Resultset($user, $faq, $faqConfig);
             $searchResult    = '';
             $searchString    = PMF_Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
 

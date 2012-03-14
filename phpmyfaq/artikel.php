@@ -35,7 +35,7 @@ if (is_null($user)) {
     $user = new PMF_User_CurrentUser($faqConfig);
 }
 
-$faqSearchResult = new PMF_Search_Resultset($user, $faq);
+$faqSearchResult = new PMF_Search_Resultset($user, $faq, $faqConfig);
 
 $captcha->setSessionId($sids);
 if (!is_null($showCaptcha)) {

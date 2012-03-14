@@ -55,7 +55,7 @@ if (is_null($user)) {
 }
 
 $faqSearch       = new PMF_Search($faqConfig);
-$faqSearchResult = new PMF_Search_Resultset($user, $faq);
+$faqSearchResult = new PMF_Search_Resultset($user, $faq, $faqConfig);
 $tagSearch       = false;
 
 //
