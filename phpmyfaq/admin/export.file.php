@@ -39,7 +39,7 @@ $type              = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE
 $faq      = new PMF_Faq($faqConfig);
 $category = new PMF_Category($faqConfig);
 
-$export  = PMF_Export::create($faq, $category, $type);
+$export  = PMF_Export::create($faq, $category, $faqConfig, $type);
 $content = $export->generate($categoryId, $downwards);
 
 // Stream the file content

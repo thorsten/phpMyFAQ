@@ -87,9 +87,9 @@ class PMF_Export_Pdf extends PMF_Export
         $this->pdf->setCategory($categoryId);
         $this->pdf->setCategories($this->category->categoryName);
         $this->pdf->SetCreator(
-            PMF_Configuration::getInstance()->get('main.titleFAQ') .
+            $this->_config->get('main.titleFAQ') .
             ' - powered by phpMyFAQ ' .
-            PMF_Configuration::getInstance()->get('main.currentVersion')
+            $this->_config->get('main.currentVersion')
         );
 
         if (count($faqdata)) {
@@ -149,9 +149,9 @@ class PMF_Export_Pdf extends PMF_Export
         // Set any item
         $this->pdf->SetTitle($faqData['title']);
         $this->pdf->SetCreator(
-            PMF_Configuration::getInstance()->get('main.titleFAQ') .
+            $this->_config->get('main.titleFAQ') .
             ' - powered by phpMyFAQ ' .
-            PMF_Configuration::getInstance()->get('main.currentVersion')
+            $this->_config->get('main.currentVersion')
         );
         $this->pdf->AddPage();
         $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 12);
