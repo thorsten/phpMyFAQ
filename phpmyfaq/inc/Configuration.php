@@ -108,9 +108,6 @@ class PMF_Configuration
                 return false;
                 break;
             default:
-                if ('main.referenceURL' === $item) {
-                    return $this->config[$item] . '/';
-                }
                 return $this->config[$item];
                 break;
         }

@@ -53,7 +53,7 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
     function __construct(PMF_Configuration $config)
     {
         parent::__construct($config);
-        
+
         $this->db = $this->_config->getDb();
     }
 

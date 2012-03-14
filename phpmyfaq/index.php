@@ -418,7 +418,7 @@ $tpl = new PMF_Template(
 
 $usersOnLine    = $faqsession->getUsersOnline();
 $totUsersOnLine = $usersOnLine[0] + $usersOnLine[1];
-$systemUri      = $faqConfig->get('main.referenceURL');
+$systemUri      = $faqConfig->get('main.referenceURL') . '/';
 
 $helper = PMF_Helper_Category::getInstance();
 $helper->setCategory($category);
