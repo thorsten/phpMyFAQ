@@ -40,7 +40,7 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 require_once 'inc/Bootstrap.php';
 PMF_Init::cleanRequest();
-session_name(PMF_COOKIE_NAME_AUTH . trim($faqConfig->get('main.phpMyFAQToken')));
+session_name(PMF_Session::PMF_COOKIE_NAME_AUTH);
 session_start();
 
 //
@@ -205,7 +205,7 @@ if (function_exists('mb_language') && in_array($mbLanguage, $valid_mb_strings)) 
 //
 $sid        = null;
 $sid_get    = PMF_Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
-$sid_cookie = PMF_Filter::filterInput(INPUT_COOKIE, PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
+$sid_cookie = PMF_Filter::filterInput(INPUT_COOKIE, PMF_Session::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
 $faqsession = new PMF_Session($faqConfig);
 // Note: do not track internal calls
 $internal = false;
@@ -231,7 +231,7 @@ if (!$internal) {
 $sids = '';
 if ($faqConfig->get('main.enableUserTracking')) {
     if (isset($sid)) {
-        PMF_Session::setCookie($sid);
+        PMF_Session::setCookie(PMF_Session::PMF_COOKIE_NAME_SESSIONID, $sid);
         if (is_null($sid_cookie)) {
             $sids = sprintf('sid=%d&amp;lang=%s&amp;', $sid, $LANGCODE);
         }

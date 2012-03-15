@@ -34,6 +34,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  */
 class PMF_Session
 {
+    const PMF_COOKIE_NAME_REMEMBERME = 'pmf_rememberme';
+    const PMF_COOKIE_NAME_AUTH = 'pmf_auth';
+    const PMF_COOKIE_NAME_SESSIONID = 'pmf_sid';
+
     /**
      * @var PMF_Configuration
      */
@@ -69,7 +73,7 @@ class PMF_Session
             $banned = false;
             $agent  = $_SERVER['HTTP_USER_AGENT'];
             $sid    = PMF_Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
-            $sidc   = PMF_Filter::filterInput(INPUT_COOKIE, PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
+            $sidc   = PMF_Filter::filterInput(INPUT_COOKIE, self::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
             
             if (!is_null($sidc)) {
                 $sid = $sidc;
@@ -95,7 +99,7 @@ class PMF_Session
                     $sid = $this->_config->getDb()->nextId(SQLPREFIX . 'faqsessions', 'sid');
                     // Sanity check: force the session cookie to contains the current $sid
                     if (!is_null($sidc) && (!$sidc != $sid)) {
-                        self::setCookie($sid);
+                        self::setCookie(self::PMF_COOKIE_NAME_SESSIONID, $sid);
                     }
 
                     $query = sprintf("
@@ -360,14 +364,15 @@ class PMF_Session
      * Store the Session ID into a persistent cookie expiring
      * PMF_SESSION_EXPIRED_TIME seconds after the page request.
      *
+     * @param string  $name      Cookie name
      * @param integer $sessionId Session ID
      *
      * @return void
      */
-    public static function setCookie($sessionId)
+    public static function setCookie($name, $sessionId)
     {
         setcookie(
-            PMF_COOKIE_NAME_SESSIONID,
+            $name,
             $sessionId, 
             $_SERVER['REQUEST_TIME'] + PMF_SESSION_EXPIRED_TIME,
             dirname($_SERVER['SCRIPT_NAME'])

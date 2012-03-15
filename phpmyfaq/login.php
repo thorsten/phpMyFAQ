@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the page there a user can add a FAQ record.
+ * This is the page there a user can login.
  *
  * PHP Version 5.2.3
  *
@@ -39,7 +39,8 @@ $tpl->parse(
         'faqloginaction' => $action,
         'login'          => $PMF_LANG['ad_auth_ok'],
         'username'       => $PMF_LANG['ad_auth_user'],
-        'password'       => $PMF_LANG['ad_auth_passwd']
+        'password'       => $PMF_LANG['ad_auth_passwd'],
+        'rememberMe'     => $PMF_LANG['rememberMe']
     )
 );
 

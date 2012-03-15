@@ -33,7 +33,7 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 require PMF_ROOT_DIR.'/inc/Bootstrap.php';
 PMF_Init::cleanRequest();
-session_name(PMF_COOKIE_NAME_AUTH . trim($faqConfig->get('main.phpMyFAQToken')));
+session_name(PMF_Session::PMF_COOKIE_NAME_AUTH);
 session_start();
 
 // Preload English strings

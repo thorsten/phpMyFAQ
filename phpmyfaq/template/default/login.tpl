@@ -30,6 +30,15 @@
                     </div>
                 </div>
 
+                <div class="control-group">
+                    <div class="controls">
+                        <label class="checkbox">
+                            <input type="checkbox" id="faqrememberme" value="faqrememberme">
+                            {rememberMe}
+                        </label>
+                    </div>
+                </div>
+
                 <div class="form-actions">
                     <input class="btn-primary btn-large" type="submit" value="{loginHeader}">
                 </div>

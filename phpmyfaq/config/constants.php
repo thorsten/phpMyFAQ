@@ -365,10 +365,7 @@ $languageCodes = array(
 //
 // Define some internal constants
 //
-// Sessions
-define('PMF_COOKIE_NAME_AUTH', 'pmf_auth');
-define('PMF_COOKIE_NAME_LANGUAGE', 'pmf_lang');
-define('PMF_COOKIE_NAME_SESSIONID', 'pmf_sid');
+
 // HTTP GET parameters
 define('PMF_GET_KEY_NAME_LANGUAGE', 'lang');
 define('PMF_GET_KEY_NAME_SESSIONID', 'sid');
