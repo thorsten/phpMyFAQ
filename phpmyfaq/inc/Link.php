@@ -180,17 +180,15 @@ class PMF_Link
     /**
      * Constructor
      *
-     * @param string $url    URL
-     * @param string $text   Text
-     * @param string $target Target
+     * @param string            $url    URL
+     * @param PMF_Configuration $config
      *
      * @return PMF_Link
      */
-    public function __construct($url, $text = '', $target = '')
+    public function __construct($url, PMF_Configuration $config)
     {
-        $this->url    = $url;
-        $this->text   = $text;
-        $this->target = $target;
+        $this->url     = $url;
+        $this->_config = $config;
     }
 
     /**
@@ -391,7 +389,7 @@ class PMF_Link
     {
         $scheme = 'http://';
         if ($this->isSystemLink()) {
-            $scheme = PMF_Link::getSystemScheme();
+            $scheme = $this->getSystemScheme();
         }
 
         return $scheme;
@@ -402,9 +400,9 @@ class PMF_Link
      *
      * @return string
      */
-    public static function getSystemScheme()
+    public function getSystemScheme()
     {
-        if (PMF_Configuration::getInstance()->get('security.useSslOnly')) {
+        if ($this->_config->get('security.useSslOnly')) {
             return 'https://';
         }
         
@@ -433,7 +431,7 @@ class PMF_Link
      *
      * @return string
      */
-    public static function getSystemUri($path = null)
+    public function getSystemUri($path = null)
     {
         // $_SERVER['HTTP_HOST'] is the name of the website or virtual host name (HTTP/1.1)
         // Precisely, it contains what the user has written in the Host request-header, see below.
@@ -443,7 +441,7 @@ class PMF_Link
         // Remove any ref to standard ports 80 and 443.
         $pattern[0] = '/:80$/';   // HTTP: port 80
         $pattern[1] = '/:443$/'; // HTTPS: port 443
-        $sysUri = PMF_Link::getSystemScheme().preg_replace($pattern, '', $_SERVER['HTTP_HOST']);
+        $sysUri = $this->getSystemScheme() . preg_replace($pattern, '', $_SERVER['HTTP_HOST']);
 
         return $sysUri.PMF_link::getSystemRelativeUri($path);
     }
@@ -526,11 +524,10 @@ class PMF_Link
      */
     public function toString($forceNoModrewriteSupport = false)
     {
-        $faqConfig = PMF_Configuration::getInstance();
-        $url       = $this->toUri();
+        $url = $this->toUri();
         // Check mod_rewrite support and 'rewrite' the passed (system) uri
         // according to the rewrite rules written in .htaccess
-        if ((!$forceNoModrewriteSupport) && ($faqConfig->get('main.enableRewriteRules'))) {
+        if ((!$forceNoModrewriteSupport) && ($this->_config->get('main.enableRewriteRules'))) {
 
             if ($this->isHomeIndex()) {
 

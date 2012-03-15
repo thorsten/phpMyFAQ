@@ -70,13 +70,33 @@ class PMF_Attachment_Migration
      * @var array
      */
     protected $warning = array();
-    
-    
+
+    /**
+     * @var PMF_Configuration
+     */
+    private $_config;
+
+    /**
+     * Constructor
+     *
+     * @param PMF_Configuration $config
+     *
+     * @return PMF_Attachment_Migration
+     */
+    public function __construct(PMF_Configuration $config)
+    {
+        $this->_config = $config;
+    }
+
+    /**
+     * @param $dir
+     * @return array
+     */
     protected function getOldFileList($dir)
     {
         $list = array();
         
-        $faq  = new PMF_Faq;
+        $faq  = new PMF_Faq($this->_config);
         $faq->getAllRecords();
         $records = $faq->faqRecords;
         

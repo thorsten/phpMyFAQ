@@ -35,6 +35,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Search_Resultset
 {
     /**
+     * @var PMF_Configuration
+     */
+    protected $_config = null;
+
+    /**
      * "Raw" search resultset without permission checks and with possible
      * duplicates
      *
@@ -81,15 +86,17 @@ class PMF_Search_Resultset
     /**
      * Constructor
      *
-     * @param PMF_User $user PMF_User object
-     * @param PMF_Faq  $faq  PMF_Faq object
+     * @param PMF_User          $user   PMF_User object
+     * @param PMF_Faq           $faq    PMF_Faq object
+     * @param PMF_Configuration $config PMF_Configuration object
      *
      * @return PMF_Search_Resultset
      */
-    public function __construct(PMF_User $user, PMF_Faq $faq)
+    public function __construct(PMF_User $user, PMF_Faq $faq, PMF_Configuration $config)
     {
-        $this->user = $user;
-        $this->faq  = $faq;
+        $this->user    = $user;
+        $this->faq     = $faq;
+        $this->_config = $config;
     }
     
     /**
@@ -105,7 +112,7 @@ class PMF_Search_Resultset
         
         $duplicateResults = array();
         $currentUserId    = $this->user->getUserId();
-        if ('medium' == PMF_Configuration::getInstance()->get('security.permLevel')) {
+        if ('medium' == $this->_config->get('security.permLevel')) {
             $currentGroupIds = $this->user->perm->getUserGroups($currentUserId);
         }
 
@@ -113,14 +120,14 @@ class PMF_Search_Resultset
             
             $permission = false;
             // check permissions for groups
-            if ('medium' == PMF_Configuration::getInstance()->get('security.permLevel')) {
+            if ('medium' == $this->_config->get('security.permLevel')) {
                 $groupPermission = $this->faq->getPermission('group', $result->id);
                 if (count($groupPermission) && in_array($groupPermission[0], $currentGroupIds)) {
                     $permission = true;
                 }
             }
             // check permission for user
-            if ($permission || 'basic' == PMF_Configuration::getInstance()->get('security.permLevel')) {
+            if ($permission || 'basic' == $this->_config->get('security.permLevel')) {
                 $userPermission = $this->faq->getPermission('user', $result->id);
                 if (in_array(-1, $userPermission) || in_array($this->user->getUserId(), $userPermission)) {
                     $permission = true;

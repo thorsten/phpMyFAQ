@@ -84,7 +84,7 @@ PMF_Cache::init($faqConfig);
 //
 // Create a new FAQ object
 //
-$faq = new PMF_Faq();
+$faq = new PMF_Faq($faqConfig);
 
 //
 // use mbstring extension if available and when possible

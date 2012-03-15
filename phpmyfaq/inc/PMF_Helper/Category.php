@@ -37,7 +37,7 @@ class PMF_Helper_Category extends PMF_Helper
     /**
      * Instance
      *
-     * @var PMF_Helper_Search
+     * @var PMF_Helper_Category
      */
     private static $instance = null;
     

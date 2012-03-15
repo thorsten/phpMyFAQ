@@ -60,7 +60,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
                 if (!$user->deleteUser()) {
                     $message = $PMF_LANG['ad_user_error_delete'];
                 } else {
-                    $category = new PMF_Category();
+                    $category = new PMF_Category($faqConfig);
                     $category->moveOwnership($userId, 1);
 
                     // Remove the user from groups

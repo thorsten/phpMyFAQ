@@ -70,7 +70,7 @@ $tpl->parse(
         'msgNewContentArticle'  => $PMF_LANG['msgNewContentArticle'],
         'msgNewContentKeywords' => $PMF_LANG['msgNewContentKeywords'],
         'msgNewContentLink'     => $PMF_LANG['msgNewContentLink'],
-        'captchaFieldset'       => PMF_Helper_Captcha::getInstance()->renderCaptcha(
+        'captchaFieldset'       => PMF_Helper_Captcha::getInstance($faqConfig)->renderCaptcha(
             $captcha,
             'add',
             $PMF_LANG['msgCaptcha']

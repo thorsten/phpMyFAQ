@@ -27,7 +27,9 @@ $user = PMF_User_CurrentUser::getFromSession($faqConfig);
 
 if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
-    $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
+    $category = new PMF_Category($faqConfig, false);
+    $category->setUser($current_admin_user);
+    $category->setGroups($current_admin_groups);
     $category->buildTree();
     
     $helper = PMF_Helper_Category::getInstance();
@@ -43,7 +45,8 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
         'dateStart'   => '',
         'dateEnd'     => '');
 
-    $tagging = new PMF_Tags($db, $Language);
+    $tagging = new PMF_Tags($faqConfig);
+    $date    = new PMF_Date($faqConfig);
 
     if ($action == 'takequestion') {
         $questionId       = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -96,8 +99,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
             $logging->logAdmin($user, 'Beitragedit, ' . $id);
             $faqData['id']   = $id;
             $faqData['lang'] = $lang;
-            
-            $faq->setLanguage($faqData['lang']);
+
             $categories = $category->getCategoryRelationsFromArticle($faqData['id'], $faqData['lang']);
 
             $faq->getRecord($faqData['id'], null, true);
@@ -573,7 +575,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                             <?php printf('%s  1.%d<br/>%s<br/>%s: %s',
                             $PMF_LANG['ad_entry_revision'],
                             $entry['revision_id'],
-                            PMF_Date::format(date('Y-m-d H:i', $entry['date'])),
+                            $date->format(date('Y-m-d H:i', $entry['date'])),
                             $PMF_LANG['ad_entry_author'],
                             $user->getUserData('display_name')); ?>
                         </label>
@@ -628,9 +630,9 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                             <label><?php print $PMF_LANG["ad_entry_date"]; ?></label>
                             <?php
                             if (isset($faqData['date'])) {
-                                print PMF_Date::format($faqData['date']);
+                                print $date->format($faqData['date']);
                             } else {
-                                print PMF_Date::format(date('Y-m-d H:i'));
+                                print $date->format(date('Y-m-d H:i'));
                             }
                             ?>
                         </p>

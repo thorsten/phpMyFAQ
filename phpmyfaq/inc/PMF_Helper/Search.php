@@ -65,10 +65,13 @@ class PMF_Helper_Search extends PMF_Helper
     /**
      * Constructor
      *
+     * @param PMF_Configuration $config
+     *
      * @return PMF_Helper_Search
      */
-    private function __construct()
+    private function __construct(PMF_Configuration $config)
     {
+        $this->_config = $config;
         $this->pmfLang = $this->getTranslations();
     }
     
@@ -78,11 +81,11 @@ class PMF_Helper_Search extends PMF_Helper
      * @access static
      * @return PMF_Helper_Search
      */
-    public static function getInstance()
+    public static function getInstance(PMF_Configuration $config)
     {
         if (null == self::$instance) {
             $className = __CLASS__;
-            self::$instance = new $className();
+            self::$instance = new $className($config);
         }
         return self::$instance;
     }
@@ -141,7 +144,7 @@ class PMF_Helper_Search extends PMF_Helper
     {
         return sprintf(
             '<a class="searchplugin" href="#" onclick="window.external.AddSearchProvider(\'%s\'); return false;">%s</a>',
-            PMF_Link::getSystemUri('/index.php') . '/opensearch.php',
+                $this->_config->get('main.referenceURL') . '/opensearch.php',
             $this->translation['opensearch_plugin_install']
         );
     }
@@ -156,7 +159,7 @@ class PMF_Helper_Search extends PMF_Helper
     public function renderInstantResponseResult(PMF_Search_Resultset $resultSet)
     {
         $html         = '';
-        $confPerPage  = PMF_Configuration::getInstance()->get('records.numberOfRecordsPerPage');
+        $confPerPage  = $this->_config->get('records.numberOfRecordsPerPage');
         $numOfResults = $resultSet->getNumberOfResults();
         
         if (0 < $numOfResults) {
@@ -186,7 +189,7 @@ class PMF_Helper_Search extends PMF_Helper
                     urlencode($this->searchterm)
                 );
 
-                $oLink       = new PMF_Link($currentUrl);
+                $oLink       = new PMF_Link($currentUrl, $this->_config);
                 $oLink->text = $oLink->itemTitle = $oLink->tooltip = $question;
                 
                 $html .= sprintf(
@@ -218,7 +221,7 @@ class PMF_Helper_Search extends PMF_Helper
     public function renderAdminSuggestionResult(PMF_Search_Resultset $resultSet)
     {
         $html         = '';
-        $confPerPage  = PMF_Configuration::getInstance()->get('records.numberOfRecordsPerPage');
+        $confPerPage  = $this->_config->get('records.numberOfRecordsPerPage');
         $numOfResults = $resultSet->getNumberOfResults();
         
         if (0 < $numOfResults) {
@@ -265,7 +268,7 @@ class PMF_Helper_Search extends PMF_Helper
     public function renderSearchResult(PMF_Search_Resultset $resultSet, $currentPage)
     {
         $html         = '';
-        $confPerPage  = PMF_Configuration::getInstance()->get('records.numberOfRecordsPerPage');
+        $confPerPage  = $this->_config->get('records.numberOfRecordsPerPage');
         $numOfResults = $resultSet->getNumberOfResults();
         
         $totalPages = ceil($numOfResults / $confPerPage);
@@ -339,7 +342,7 @@ class PMF_Helper_Search extends PMF_Helper
                     urlencode($searchterm)
                 );
 
-                $oLink       = new PMF_Link($currentUrl);
+                $oLink       = new PMF_Link($currentUrl, $this->_config);
                 $oLink->text = $question;
                 $oLink->itemTitle = $oLink->tooltip = $result->question;
 
@@ -394,12 +397,13 @@ class PMF_Helper_Search extends PMF_Helper
                 $counter++;
 
                 $url = sprintf(
-                    '?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%s?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    PMF_Link::getSystemRelativeUri(),
                     $result->category_id,
                     $result->id,
                     $result->lang
                 );
-                $oLink             = new PMF_Link(PMF_Link::getSystemRelativeUri() . $url);
+                $oLink             = new PMF_Link($url, $this->_config);
                 $oLink->itemTitle  = $result->question;
                 $oLink->text       = $result->question;
                 $oLink->tooltip    = $result->question;

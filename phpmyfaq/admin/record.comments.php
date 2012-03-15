@@ -28,9 +28,12 @@ print '<div id="returnMessage"></div>';
 
 if ($permission['delcomment']) {
 
-    $comment  = new PMF_Comment();
-    $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
-    $faq      = new PMF_Faq();
+    $comment  = new PMF_Comment($faqConfig);
+    $category = new PMF_Category($faqConfig, false);
+    $category->setUser($current_admin_user);
+    $category->setGroups($current_admin_groups);
+    $faq      = new PMF_Faq($faqConfig);
+    $date     = new PMF_Date($faqConfig);
     
     $category->buildTree();
     $faqcomments = $comment->getAllComments('faq');
@@ -60,7 +63,7 @@ if ($permission['delcomment']) {
                     <a href="mailto:<?php print $faqcomment['email']; ?>">
                         <?php print $faqcomment['username']; ?>
                     </a> |
-                    <?php print PMF_Date::format(date('Y-m-d H:i', $faqcomment['date'])); ?> |
+                    <?php print $date->format(date('Y-m-d H:i', $faqcomment['date'])); ?> |
                     <a href="<?php printf("../?action=artikel&cat=%d&id=%d&artlang=%s",
                        $faqcomment['category_id'],
                        $faqcomment['record_id'],

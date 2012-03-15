@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $captcha = new PMF_Captcha($faqConfig);
-$comment = new PMF_Comment();
+$comment = new PMF_Comment($faqConfig);
 
 $captcha->setSessionId($sids);
 if (!is_null($showCaptcha)) {
@@ -33,7 +33,7 @@ if (!is_null($showCaptcha)) {
     exit;
 }
 
-$oNews  = new PMF_News($db, $Language);
+$oNews  = new PMF_News($faqConfig);
 $newsId = PMF_Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
 
 if (is_null($newsId)) {
@@ -91,9 +91,10 @@ if ((!$news['active']) || (!$news['allowComments']) || $expired) {
 
 // date of news entry
 if ($news['active'] && (!$expired)) {
+    $date = new PMF_Date($faqConfig);
     $newsDate = sprintf('%s<span id="newsLastUpd">%s</span>',
         $PMF_LANG['msgLastUpdateArticle'],
-        PMF_Date::format($news['date'])
+        $date->format($news['date'])
     );
 } else {
     $newsDate = '';
@@ -121,7 +122,7 @@ $tpl->parse(
         'defaultContentName'  => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
         'msgYourComment'      => $PMF_LANG['msgYourComment'],
         'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
-        'captchaFieldset'     => PMF_Helper_Captcha::getInstance()->renderCaptcha(
+        'captchaFieldset'     => PMF_Helper_Captcha::getInstance($faqConfig)->renderCaptcha(
             $captcha,
             'writecomment',
             $PMF_LANG['msgCaptcha']

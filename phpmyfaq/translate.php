@@ -49,7 +49,7 @@ $categoryId = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 $srclang    = PMF_Filter::filterInput(INPUT_GET, 'srclang', FILTER_SANITIZE_STRIPPED);
 
 if (!is_null($id) && !is_null($srclang) && PMF_Language::isASupportedLanguage($srclang)) {
-    $oFaq = new PMF_Faq();
+    $oFaq = new PMF_Faq($faqConfig);
     $oFaq->getRecord($id);
     $faqSource = $oFaq->faqRecord;
 }
@@ -75,7 +75,7 @@ $tpl->parse(
         'msgNewTranslationMail'     => $PMF_LANG['msgNewTranslationMail'],
         'msgNewTranslationKeywords' => $PMF_LANG['msgNewTranslationKeywords'],
         'writeTransFaqLanguage'     => $translationLanguage,
-        'captchaFieldset'           => PMF_Helper_Captcha::getInstance()->renderCaptcha(
+        'captchaFieldset'           => PMF_Helper_Captcha::getInstance($faqConfig)->renderCaptcha(
             $captcha,
             'translate',
             $PMF_LANG['msgCaptcha']

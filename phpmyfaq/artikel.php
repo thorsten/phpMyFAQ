@@ -26,16 +26,16 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $captcha     = new PMF_Captcha($faqConfig);
 $oGlossary   = new PMF_Glossary();
 $oLnk        = new PMF_Linkverifier($faqConfig);
-$faqTagging  = new PMF_Tags($db, $Language);
+$faqTagging  = new PMF_Tags($faqConfig);
 $faqRelation = new PMF_Relation($faqConfig);
 $faqRating   = new PMF_Rating($db, $Language);
-$faqComment  = new PMF_Comment();
+$faqComment  = new PMF_Comment($faqConfig);
 
 if (is_null($user)) {
     $user = new PMF_User_CurrentUser($faqConfig);
 }
 
-$faqSearchResult = new PMF_Search_Resultset($user, $faq);
+$faqSearchResult = new PMF_Search_Resultset($user, $faq, $faqConfig);
 
 $captcha->setSessionId($sids);
 if (!is_null($showCaptcha)) {
@@ -48,9 +48,6 @@ $currentCategory = $cat;
 $recordId       = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $solutionId     = PMF_Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
 $highlight      = PMF_Filter::filterInput(INPUT_GET, 'highlight', FILTER_SANITIZE_STRIPPED);
-
-// Set the FAQ language
-$faq->setLanguage($lang);
 
 // Get all data from the FAQ record
 if (0 == $solutionId) {
@@ -79,7 +76,7 @@ $changeLanguagePath = PMF_Link::getSystemRelativeUri() .
         $faq->faqRecord['id'],
         $LANGCODE
     );
-$oLink              = new PMF_Link($changeLanguagePath);
+$oLink              = new PMF_Link($changeLanguagePath, $faqConfig);
 $oLink->itemTitle   = $faq->getRecordTitle($faq->faqRecord['id'], false);
 $changeLanguagePath = $oLink->toString();
 
@@ -127,7 +124,7 @@ if (isset($linkArray['href'])) {
             if (strpos($_url, '&amp;') === false) {
                 $_link = str_replace('&', '&amp;', $_link);
             }
-            $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().$_link);
+            $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().$_link, $faqConfig);
             $oLink->itemTitle = $oLink->tooltip = $_title;
             $newFaqPath       = $oLink->toString();
             $fixedContent     = str_replace($_url, $newFaqPath, $fixedContent);
@@ -198,7 +195,7 @@ $faqSearchResult->reviewResultset(
         $faq->faqRecord['keywords']
     )
 );
-$relatedFaqs = PMF_Helper_Search::getInstance()->renderRelatedFaqs($faqSearchResult, $faq->faqRecord['id']);
+$relatedFaqs = PMF_Helper_Search::getInstance($faqConfig)->renderRelatedFaqs($faqSearchResult, $faq->faqRecord['id']);
 
 // Show link to edit the faq?
 $editThisEntry = '';
@@ -256,6 +253,8 @@ if (isset($permission['addtranslation']) && $permission['addtranslation']) {
     );
 }
 
+$date = new PMF_Date($faqConfig);
+
 $tpl->parse('writeContent', array(
     'writeRubrik'                => $categoryName,
     'solution_id'                => $faq->faqRecord['solution_id'],
@@ -267,7 +266,7 @@ $tpl->parse('writeContent', array(
     'writeArticleTags'           => $faqTagging->getAllLinkTagsById($faq->faqRecord['id']),
     'writeRelatedArticlesHeader' => $PMF_LANG['msg_related_articles'] . ': ',
     'writeRelatedArticles'       => $relatedFaqs,
-    'writeDateMsg'               => $PMF_LANG['msgLastUpdateArticle'] . PMF_Date::format($faq->faqRecord['date']),
+    'writeDateMsg'               => $PMF_LANG['msgLastUpdateArticle'] . $date->format($faq->faqRecord['date']),
     'writeRevision'              => $PMF_LANG['ad_entry_revision'] . ': 1.' . $faq->faqRecord['revision_id'],
     'writeAuthor'                => $PMF_LANG['msgAuthor'] . ': ' . $faq->faqRecord['author'],
     'editThisEntry'              => $editThisEntry,
@@ -302,7 +301,7 @@ $tpl->parse('writeContent', array(
     'defaultContentName'         => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
     'msgYourComment'             => $PMF_LANG['msgYourComment'],
     'msgNewContentSubmit'        => $PMF_LANG['msgNewContentSubmit'],
-    'captchaFieldset'            => PMF_Helper_Captcha::getInstance()->renderCaptcha(
+    'captchaFieldset'            => PMF_Helper_Captcha::getInstance($faqConfig)->renderCaptcha(
         $captcha,
         'writecomment',
         $PMF_LANG['msgCaptcha']

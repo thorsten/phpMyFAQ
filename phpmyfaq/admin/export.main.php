@@ -35,7 +35,9 @@ require PMF_INCLUDE_DIR . '/Export.php';
 if (!PMF_Db::checkOnEmptyTable('faqdata')) {
 
     if (!PMF_Db::checkOnEmptyTable('faqcategories')) {
-        $category = new PMF_Category($current_admin_user, $current_admin_groups);
+        $category = new PMF_Category($faqConfig);
+        $category->setUser($current_admin_user);
+        $category->setGroups($current_admin_groups);
         $category->buildTree();
         
         $helper = PMF_Helper_Category::getInstance();

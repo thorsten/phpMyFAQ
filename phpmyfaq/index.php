@@ -262,17 +262,21 @@ if (is_null($lang) && !PMF_Language::isASupportedLanguage($lang) ) {
 //
 // Create a new FAQ object
 //
-$faq = new PMF_Faq($current_user, $current_groups);
+$faq = new PMF_Faq($faqConfig);
+$faq->setUser($current_user);
+$faq->setGroups($current_groups);
 
 //
 // Create a new Category object
 //
-$category = new PMF_Category($current_user, $current_groups);
+$category = new PMF_Category($faqConfig);
+$category->setUser($current_user);
+$category->setGroups($current_groups);
 
 //
 // Create a new Tags object
 //
-$oTag = new PMF_Tags($db, $Language);
+$oTag = new PMF_Tags($faqConfig);
 
 //
 // Found a record ID?
@@ -414,7 +418,7 @@ $tpl = new PMF_Template(
 
 $usersOnLine    = $faqsession->getUsersOnline();
 $totUsersOnLine = $usersOnLine[0] + $usersOnLine[1];
-$systemUri      = PMF_Link::getSystemUri('index.php');
+$systemUri      = $faqConfig->get('main.referenceURL') . '/';
 
 $helper = PMF_Helper_Category::getInstance();
 $helper->setCategory($category);
@@ -642,13 +646,13 @@ if (!isset($latestEntriesParams['error'])) {
 
 if ('artikel' == $action || 'show' == $action || is_numeric($solutionId)) {
     // We need some Links from social networks
-    $faqServices = new PMF_Services();
+    $faqServices = new PMF_Services($faqConfig);
     $faqServices->setCategoryId($cat);
     $faqServices->setFaqId($id);
     $faqServices->setLanguage($lang);
     $faqServices->setQuestion($title);
 
-    $faqHelper = PMF_Helper_Faq::getInstance();
+    $faqHelper = PMF_Helper_Faq::getInstance($faqConfig);
     $faqHelper->setSsl((isset($_SERVER['HTTPS']) && is_null($_SERVER['HTTPS']) ? false : true));
     
     $tpl->parseBlock(

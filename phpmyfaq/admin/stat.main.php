@@ -28,6 +28,7 @@ printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_stat_sess']);
 if ($permission['viewlog']) {
     
     $session    = new PMF_Session($faqConfig);
+    $date       = new PMF_Date($faqConfig);
     $statdelete = PMF_Filter::filterInput(INPUT_POST, 'statdelete', FILTER_SANITIZE_STRING);
     $month      = PMF_Filter::filterInput(INPUT_POST, 'month', FILTER_SANITIZE_STRING);
 
@@ -103,7 +104,7 @@ if ($permission['viewlog']) {
         $fp = @fopen(PMF_ROOT_DIR."/data/tracking".date("dmY", $first), "r");
         list($dummy, $dummy, $dummy, $dummy, $dummy, $dummy, $dummy, $qstamp) = fgetcsv($fp, 1024, ";");
         fclose($fp);
-        print PMF_Date::format(date('Y-m-d H:i', $qstamp));
+        print $date->format(date('Y-m-d H:i', $qstamp));
     } else {
         print $PMF_LANG["ad_sess_noentry"];
     }
@@ -123,7 +124,7 @@ if ($permission['viewlog']) {
         if (empty($stamp)) {
             $stamp = $_SERVER['REQUEST_TIME'];
         }
-        print PMF_Date::format(date('Y-m-d H:i', $stamp)).'<br />';
+        print $date->format(date('Y-m-d H:i', $stamp)).'<br />';
     } else {
         print $PMF_LANG["ad_sess_noentry"].'<br />';
     }
@@ -150,7 +151,7 @@ if ($permission['viewlog']) {
             print ' selected="selected"';
         }
         print '>';
-        print PMF_Date::format(date('Y-m-d H:i', $trackingDate));
+        print $date->format(date('Y-m-d H:i', $trackingDate));
         print "</option>\n";
     }
 ?>

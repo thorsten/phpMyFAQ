@@ -25,7 +25,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 if ($permission['viewlog']) {
     require_once(PMF_ROOT_DIR.'/inc/Rating.php');
 
-    $category    = new PMF_Category($current_admin_user, $current_admin_groups, false);
+    $category = new PMF_Category($faqConfig, false);
+    $category->setUser($current_admin_user);
+    $category->setGroups($current_admin_groups);
     $ratings     = new PMF_Rating($db, $Language);
     $ratingdata  = $ratings->getAllRatings();
     $numratings  = count($ratingdata);

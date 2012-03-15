@@ -99,7 +99,7 @@ if ($permission['reports']) {
         if ($useUrl) {
             $text[$i][] = $report->convertEncoding(
                 sprintf('%sindex.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    PMF_Link::getSystemUri('admin/index.php'),
+                    $faqConfig->get('main.referenceURL'),
                     $data['category_id'],
                     $data['faq_id'],
                     $data['faq_language']

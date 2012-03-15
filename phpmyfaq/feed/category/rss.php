@@ -79,8 +79,13 @@ if (!is_null($user) && $user instanceof PMF_User_CurrentUser) {
 }
 
 $category_id = PMF_Filter::filterInput(INPUT_GET, 'category_id', FILTER_VALIDATE_INT);
-$category    = new PMF_Category($current_user, $current_groups);
-$faq         = new PMF_Faq($current_user, $current_groups);
+$category    = new PMF_Category($faqConfig);
+$category->setUser($current_user);
+$category->setGroups($current_user);
+
+$faq = new PMF_Faq($faqConfig);
+$faq->setUser($current_user);
+$faq->setGroups($current_user);
 
 $records = $faq->getAllRecordPerCategory($category_id,
                                          $faqConfig->get('records.orderby'),
@@ -96,7 +101,7 @@ $rss->writeAttribute('version', '2.0');
 $rss->startElement('channel');
 $rss->writeElement('title', $faqConfig->get('main.titleFAQ') . ' - ');
 $rss->writeElement('description', html_entity_decode($faqConfig->get('main.metaDescription')));
-$rss->writeElement('link', PMF_Link::getSystemUri('/feed/category/rss.php'));
+$rss->writeElement('link', $faqConfig->get('main.referenceURL'));
 
 if (is_array($records)) {
 
@@ -106,7 +111,7 @@ if (is_array($records)) {
 
         if (PMF_RSS_USE_SEO) {
             if (isset($item['record_title'])) {
-                $oLink            = new PMF_Link($link);
+                $oLink            = new PMF_Link($link, $faqConfig);
                 $oLink->itemTitle = $item['record_title'];
                 $link             = $oLink->toString();
            }
@@ -120,7 +125,7 @@ if (is_array($records)) {
         $rss->writeCdata($item['record_preview']);
         $rss->endElement();
         
-        $rss->writeElement('link', PMF_Link::getSystemUri('/feed/category/rss.php') . $link); 
+        $rss->writeElement('link', $faqConfig->get('main.referenceURL') . $link);
         $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['record_date'], true));
 
         $rss->endElement();

@@ -717,10 +717,12 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     $configuration = new PMF_Configuration($db);
     $configuration->getAll();
 
+    $link = new PMF_Link(null, $configuration);
+
     $configs = $configuration->config;
 
     $configs['spam.enableCaptchaCode']  = (extension_loaded('gd') ? 'true' : 'false');
-    $configs['main.referenceURL']       = PMF_Link::getSystemUri('/install/setup.php');
+    $configs['main.referenceURL']       = $link->getSystemUri('/install/setup.php');
     $configs['main.metaPublisher']      = $realname;
     $configs['main.administrationMail'] = $email;
 

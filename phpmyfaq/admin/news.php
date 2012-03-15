@@ -23,7 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$news = new PMF_News($db, $Language);
+$news = new PMF_News($faqConfig);
 
 // Re-evaluate $user
 $user = PMF_User_CurrentUser::getFromSession($faqConfig);
@@ -164,12 +164,13 @@ if ('addnews' == $action && $permission["addnews"]) {
         <tbody>
 <?php
         $newsHeader = $news->getNewsHeader();
+        $date       = new PMF_Date($faqConfig);
         if (count($newsHeader)) {
             foreach($newsHeader as $newsItem) {
 ?>
         <tr>
             <td><?php print $newsItem['header']; ?></td>
-            <td><?php print PMF_Date::format($newsItem['date']); ?></td>
+            <td><?php print $date->format($newsItem['date']); ?></td>
             <td>
                 <a href="?action=editnews&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_update"]; ?>">
                     <img src="images/edit.png" width="16" height="16" alt="<?php print $PMF_LANG["ad_news_update"]; ?>" border="0" />
@@ -322,7 +323,7 @@ if ('addnews' == $action && $permission["addnews"]) {
         </form>
 <?php
     $newsId   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    $oComment = new PMF_Comment();
+    $oComment = new PMF_Comment($faqConfig);
     $comments = $oComment->getCommentsData($newsId, PMF_Comment::COMMENT_TYPE_NEWS);
     if (count($comments) > 0) {
 ?>

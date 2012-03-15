@@ -37,18 +37,9 @@ require_once PMF_INCLUDE_DIR . '/Link.php';
 class PMF_Sitemap
 {
     /**
-     * DB handle
-     *
-     * @var PMF_Db
+     * @var PMF_Configuration
      */
-    private $db = null;
-
-    /**
-     * Language
-     *
-     * @var string
-     */
-    private $language = '';
+    private $_config;
 
     /**
      * Database type
@@ -60,9 +51,9 @@ class PMF_Sitemap
     /**
      * Users
      *
-     * @var array
+     * @var integer
      */
-    private $user = array();
+    private $user = -1;
 
     /**
      * Groups
@@ -81,32 +72,33 @@ class PMF_Sitemap
     /**
      * Constructor
      *
-     * @param integer $user   User
-     * @param array   $groups Groups
+     * @param PMF_Configuration $config
      *
      * @return PMF_Sitemap
      */
-    public function __construct($user = null, $groups = null)
+    public function __construct(PMF_Configuration $config)
     {
-        global $DB;
+        $this->_config = $config;
 
-        $this->db       = PMF_Db::getInstance();
-        $this->language = PMF_Language::$language;
-        $this->type     = $DB['type'];
-
-        if (is_null($user)) {
-            $this->user  = -1;
-        } else {
-            $this->user  = $user;
-        }
-        if (is_null($groups)) {
-            $this->groups       = array(-1);
-        } else {
-            $this->groups       = $groups;
-        }
-        if (PMF_Configuration::getInstance()->get('security.permLevel') == 'medium') {
+        if ($this->_config->get('security.permLevel') == 'medium') {
             $this->groupSupport = true;
         }
+    }
+
+    /**
+     * @param integer $userId
+     */
+    public function setUser($userId = -1)
+    {
+        $this->user = $userId;
+    }
+
+    /**
+     * @param array $groups
+     */
+    public function setGroups(Array $groups)
+    {
+        $this->groups = $groups;
     }
 
     /**
@@ -134,9 +126,8 @@ class PMF_Sitemap
 
         $writeLetters = '<p id="sitemapletters">';
 
-        switch($this->type) {
-        case 'db2':
-        case 'sqlite':
+        if ($this->_config->getDb() instanceof PMF_DB_Sqlite || $this->_config->getDb() instanceof PMF_DB_Sqlite3) {
+
             $query = sprintf("
                     SELECT
                         DISTINCT UPPER(SUBSTR(fd.thema, 1, 1)) AS letters
@@ -158,14 +149,14 @@ class PMF_Sitemap
                         %s
                     ORDER BY
                         letters",
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            $this->language,
-            $permPart);
-            break;
+                SQLPREFIX,
+                SQLPREFIX,
+                SQLPREFIX,
+                $this->_config->getLanguage()->getLanguage(),
+                $permPart
+            );
+        } else {
 
-        default:
             $query = sprintf("
                     SELECT
                         DISTINCT UPPER(SUBSTRING(fd.thema, 1, 1)) AS letters
@@ -187,23 +178,25 @@ class PMF_Sitemap
                         %s
                     ORDER BY
                         letters",
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            $this->language,
-            $permPart);
-            break;
+                SQLPREFIX,
+                SQLPREFIX,
+                SQLPREFIX,
+                $this->_config->getLanguage()->getLanguage(),
+                $permPart
+            );
         }
 
-        $result = $this->db->query($query);
-        while ($row = $this->db->fetchObject($result)) {
+        $result = $this->_config->getDb()->query($query);
+        while ($row = $this->_config->getDb()->fetchObject($result)) {
             $letters = PMF_String::strtoupper($row->letters);
             if (PMF_String::preg_match("/^[一-龠]+|[ぁ-ん]+|[ァ-ヴー]+|[a-zA-Z0-9]+|[ａ-ｚＡ-Ｚ０-９]/i", $letters)) {
-                $url = sprintf('%saction=sitemap&amp;letter=%s&amp;lang=%s',
+                $url = sprintf(
+                    '%s?%saction=sitemap&amp;letter=%s&amp;lang=%s',
+                    PMF_Link::getSystemRelativeUri(),
                     $sids,
                     $letters,
-                    $this->language);
-                $oLink         = new PMF_Link(PMF_Link::getSystemRelativeUri() . '?' . $url);
+                    $this->_config->getLanguage()->getLanguage());
+                $oLink         = new PMF_Link($url, $this->_config);
                 $oLink->text   = (string)$letters;
                 $writeLetters .= $oLink->toHtmlAnchor().' ';
             }
@@ -237,7 +230,7 @@ class PMF_Sitemap
                 $this->user);
         }
 
-        $letter = PMF_String::strtoupper($this->db->escape(PMF_String::substr($letter, 0, 1)));
+        $letter = PMF_String::strtoupper($this->_config->getDb()->escape(PMF_String::substr($letter, 0, 1)));
 
         $writeMap = '';
 
@@ -277,7 +270,7 @@ class PMF_Sitemap
                     SQLPREFIX,
                     SQLPREFIX,
                     $letter,
-                    $this->language,
+                    $this->_config->getLanguage()->getLanguage(),
                     $permPart);
                 break;
 
@@ -315,23 +308,26 @@ class PMF_Sitemap
                     SQLPREFIX,
                     SQLPREFIX,
                     $letter,
-                    $this->language,
+                    $this->_config->getLanguage()->getLanguage(),
                     $permPart);
                 break;
         }
 
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
         $oldId = 0;
-        while ($row = $this->db->fetchObject($result)) {
+        while ($row = $this->_config->getDb()->fetchObject($result)) {
             if ($oldId != $row->id) {
                 $title = PMF_String::htmlspecialchars($row->thema, ENT_QUOTES, 'utf-8');
-                $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                $url   = sprintf(
+                    '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    PMF_Link::getSystemRelativeUri(),
                     $sids,
                     $row->category_id,
                     $row->id,
-                    $row->lang);
+                    $row->lang
+                );
 
-                $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink            = new PMF_Link($url, $this->_config);
                 $oLink->itemTitle = $row->thema;
                 $oLink->text      = $title;
                 $oLink->tooltip   = $title;

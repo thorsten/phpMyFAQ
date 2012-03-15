@@ -28,7 +28,9 @@ printf("<header><h2>%s</h2><header>\n", $PMF_LANG['ad_entry_aor']);
 if ($permission['editbt'] || $permission['delbt']) {
 
     // (re)evaluate the Category object w/o passing the user language
-    $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
+    $category = new PMF_Category($faqConfig, false);
+    $category->setUser($current_admin_user);
+    $category->setGroups($current_admin_groups);
     $category->transform(0);
     
     // Set the Category for the helper class
@@ -42,8 +44,9 @@ if ($permission['editbt'] || $permission['delbt']) {
         link_verifier_javascript();
     }
 
-    $comment = new PMF_Comment();
-    $faq     = new PMF_Faq();
+    $comment = new PMF_Comment($faqConfig);
+    $faq     = new PMF_Faq($faqConfig);
+    $date    = new PMF_Date($faqConfig);
 
     $cond           = $numCommentsByFaq = $numActiveByCat = array();
     $internalSearch = $linkState = $searchterm = '';
@@ -348,7 +351,7 @@ if ($permission['editbt'] || $permission['delbt']) {
         }
 ?></td>
             <td style="width: 48px;">
-                <?php print PMF_Date::format($record['date']); ?>
+                <?php print $date->format($record['date']); ?>
             </td>
             <td style="width: 96px;">
                 <?php print $linkverifier->getEntryStateHTML($record['id'], $record['lang']); ?>

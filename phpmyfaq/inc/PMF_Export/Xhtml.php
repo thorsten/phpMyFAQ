@@ -76,7 +76,7 @@ class PMF_Export_Xhtml extends PMF_Export
         $this->category->transform($categoryId);
         
         $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XHTML, $categoryId, $downwards, $language);
-        $version = PMF_Configuration::getInstance()->get('main.currentVersion');
+        $version = $this->_config->get('main.currentVersion');
         $comment = sprintf('XHTML output by phpMyFAQ %s | Date: %s', 
           $version, 
           PMF_Date::createIsoDate(date("YmdHis")));
@@ -91,7 +91,7 @@ class PMF_Export_Xhtml extends PMF_Export
         $this->xml->writeComment($comment);
         
         $this->xml->startElement('head');
-        $this->xml->writeElement('title', PMF_Configuration::getInstance()->get('main.titleFAQ'));
+        $this->xml->writeElement('title', $this->_config->get('main.titleFAQ'));
         $this->xml->startElement('meta');
         $this->xml->writeAttribute('http-equiv', 'Content-Type');
         $this->xml->writeAttribute('content', 'application/xhtml+xml; charset=utf-8');

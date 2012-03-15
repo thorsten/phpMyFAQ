@@ -84,7 +84,10 @@ if (!is_null($user) && $user instanceof PMF_User_CurrentUser) {
 //
 PMF_String::init($LANGCODE);
 
-$faq     = new PMF_Faq($current_user, $current_groups);
+$faq = new PMF_Faq($faqConfig);
+$faq->setUser($current_user);
+$faq->setGroups($current_user);
+
 $rssData = $faq->getLatestData(PMF_NUMBER_RECORDS_LATEST);
 $num     = count($rssData);
 
@@ -98,7 +101,7 @@ $rss->writeAttribute('version', '2.0');
 $rss->startElement('channel');
 $rss->writeElement('title', $faqConfig->get('main.titleFAQ') . ' - ' . $PMF_LANG['msgLatestArticles']);
 $rss->writeElement('description', html_entity_decode($faqConfig->get('main.metaDescription')));
-$rss->writeElement('link', PMF_Link::getSystemUri('/feed/latests/rss.php'));
+$rss->writeElement('link', $faqConfig->get('main.referenceURL'));
 
 if ($num > 0) {
     foreach ($rssData as $item) {
@@ -106,7 +109,7 @@ if ($num > 0) {
         $link = str_replace($_SERVER['SCRIPT_NAME'], '/index.php', $item['url']);
         if (PMF_RSS_USE_SEO) {
             if (isset($item['thema'])) {
-                $oLink            = new PMF_Link($link);
+                $oLink            = new PMF_Link($link, $faqConfig);
                 $oLink->itemTitle = html_entity_decode($item['thema'], ENT_COMPAT, 'UTF-8');
                 $link             = html_entity_decode($oLink->toString(), ENT_COMPAT, 'UTF-8');
             }
@@ -114,7 +117,7 @@ if ($num > 0) {
         // Get the content
         $content = $item['content'];
         // Fix the content internal image references
-        $content = str_replace("<img src=\"/", "<img src=\"".PMF_Link::getSystemUri('/feed/latest/rss.php')."/", $content);
+        $content = str_replace("<img src=\"/", "<img src=\"".$faqConfig->get('main.referenceURL')."/", $content);
 
         $rss->startElement('item');
         $rss->writeElement('title', html_entity_decode($item['thema'], ENT_COMPAT, 'UTF-8'));
@@ -123,7 +126,7 @@ if ($num > 0) {
         $rss->writeCdata($content);
         $rss->endElement();
         
-        $rss->writeElement('link', PMF_Link::getSystemUri('/feed/latest/rss.php') . $link);
+        $rss->writeElement('link', $faqConfig->get('main.referenceURL') . $link);
         $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['datum'], true));
         $rss->endElement();
     }

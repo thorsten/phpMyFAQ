@@ -22,6 +22,10 @@ require_once dirname(dirname(dirname(__FILE__))) . '/inc/String.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_String/Abstract.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_String/Mbstring.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Resultset.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Driver.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Sqlite3.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/Exception.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/Configuration.php';
 
 /**
  * PMF_Category test case
@@ -37,7 +41,11 @@ require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Resultset.ph
 class PMF_Search_ResultsetTest extends PHPUnit_Framework_TestCase
 {
     private $PMF_Search_Resultset;
-    
+
+    private $PMF_Configuration;
+
+    private $dbHandle;
+
     /**
      * Prepares the environment before running a test.
      */
@@ -46,11 +54,15 @@ class PMF_Search_ResultsetTest extends PHPUnit_Framework_TestCase
         parent::setUp();
         
         PMF_String::init('en');
+
+        $this->dbHandle = new PMF_DB_Sqlite3();
+        $this->PMF_Configuration = new PMF_Configuration($this->dbHandle);
         
         $this->PMF_Search_Resultset = new PMF_Search_Resultset(
             $this->getMock('PMF_User'), 
-            $this->getMock('PMF_Faq')
-            );
+            $this->getMock('PMF_Faq'),
+            $this->PMF_Configuration
+        );
     }
     
     /**

@@ -219,19 +219,22 @@ class PMF_Mail
      */
     private $_to;
 
+    /**
+     * @var PMF_Configuration
+     */
+    private $_config;
+
     /*
      * Default constructor.
      * Note: any email will be sent from the PMF administrator, use unsetFrom
      *       before using setFrom.     
-     *      
-     * @param string $agent Type of agent. Default: built-in.
-     * @see   setFrom     
-     * @see   unsetFrom     
+     *
+     * @param PMF_Configuration $config
      */     
-    function __construct($agent = 'built-in')
+    function __construct(PMF_Configuration $config)
     {
         // Set default value for public properties
-        $this->agent       = $agent;
+        $this->agent       = 'built-in';
         $this->attachments = array();
         $this->boundary    = self::createBoundary();
         $this->headers     = array();
@@ -242,6 +245,7 @@ class PMF_Mail
         $this->subject     = '';
 
         // Set default value for private properties
+        $this->_config     = $config;
         $this->_bcc        = array();
         $this->_cc         = array();
         $this->_from       = array();
@@ -253,9 +257,8 @@ class PMF_Mail
         $this->_to         = array();
 
         // Set phpMyFAQ related data
-        $faqConfig     = PMF_Configuration::getInstance();
-        $this->_mailer = 'phpMyFAQ/' . $faqConfig->get('main.currentVersion');
-        $this->setFrom($faqConfig->get('main.administrationMail'));
+        $this->_mailer = 'phpMyFAQ/' . $this->_config->get('main.currentVersion');
+        $this->setFrom($this->_config->get('main.administrationMail'));
     }
 
     /**
@@ -352,7 +355,7 @@ class PMF_Mail
                 $lines[] = 'Content-Type: text/plain; charset="'.$this->charset.'"';
                 $lines[] = 'Content-Transfer-Encoding: '.$this->contentTransferEncoding;
                 $lines[] = '';
-                $lines[] = self::wrapLines(PMF_Utils::resolveMarkers($this->messageAlt));
+                $lines[] = self::wrapLines(PMF_Utils::resolveMarkers($this->messageAlt, $this->_config));
                 $lines[] = '';
             }
             // 2/2. message, supposed as, potentially, HTML
@@ -469,7 +472,8 @@ class PMF_Mail
         // Subject. Note: it must be RFC 2047 compliant
         // TODO: wrap mb_encode_mimeheader() to add other content encodings
         $this->headers['Subject'] = PMF_Utils::resolveMarkers(
-            html_entity_decode($this->subject, ENT_COMPAT, 'UTF-8')
+            html_entity_decode($this->subject, ENT_COMPAT, 'UTF-8'),
+            $this->_config
         );
 
         // X-Mailer
@@ -956,9 +960,9 @@ class PMF_Mail
      *
      * @return string
      */
-    public static function safeEmail($email)
+    public function safeEmail($email)
     {
-        if (PMF_Configuration::getInstance ()->get ( 'spam.enableSafeEmail' )) {
+        if ($this->_config->get('spam.enableSafeEmail')) {
             return str_replace ( array ('@', '.' ), array ('_AT_', '_DOT_' ), $email );
         } else {
             return $email;

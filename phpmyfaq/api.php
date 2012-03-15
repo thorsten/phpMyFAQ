@@ -81,17 +81,23 @@ switch ($action) {
         break;
         
     case 'getCategories':
-        $category = new PMF_Category($current_user, $current_groups, true);
+        $category = new PMF_Category($faqConfig, true);
+        $category->setUser($current_user);
+        $category->setGroups($current_user);
         $result   = $category->categories;
         break;
         
     case 'getFaqs':
-        $faq    = new PMF_Faq($current_user, $current_groups);
+        $faq = new PMF_Faq($faqConfig);
+        $faq->setUser($current_user);
+        $faq->setGroups($current_user);
         $result = $faq->getAllRecordPerCategory($categoryId);
         break;
         
     case 'getFaq':
-        $faq = new PMF_Faq($current_user, $current_groups);
+        $faq = new PMF_Faq($faqConfig);
+        $faq->setUser($current_user);
+        $faq->setGroups($current_user);
         $faq->getRecord($recordId);
         $result = $faq->faqRecord;
         break;

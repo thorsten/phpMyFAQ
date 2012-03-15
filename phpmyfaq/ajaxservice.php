@@ -85,7 +85,8 @@ switch ($action) {
 
         // @todo add check on "addcomment" permission
 
-        $faq      = new PMF_Faq();
+        $faq      = new PMF_Faq($faqConfig);
+        $oComment = new PMF_Comment($faqConfig);
         $type     = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
         $faqid    = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
         $newsid   = PMF_Filter::filterInput(INPUT_POST, 'newsid', FILTER_VALIDATE_INT);
@@ -120,7 +121,7 @@ switch ($action) {
                 'date'      => $_SERVER['REQUEST_TIME'],
                 'helped'    => '');
 
-            if ($faq->addComment($commentData)) {
+            if ($oComment->addComment($commentData)) {
                 $emailTo = $faqConfig->get('main.administrationMail');
                 $urlToContent = '';
                 if ('faq' == $type) {
@@ -128,28 +129,30 @@ switch ($action) {
                     if ($faq->faqRecord['email'] != '') {
                         $emailTo = $faq->faqRecord['email'];
                     }
-                    $_faqUrl = sprintf(
-                        '?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    $faqUrl = sprintf(
+                        '%s?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                        $faqConfig->get('main.referenceURL'),
                         0,
                         $faq->faqRecord['id'],
                         $faq->faqRecord['lang']
                     );
-                    $oLink            = new PMF_Link(PMF_Link::getSystemUri('/ajaxservice.php') . $_faqUrl);
+                    $
+                    $oLink            = new PMF_Link($faqUrl, $faqConfig);
                     $oLink->itemTitle = $faq->faqRecord['title'];
                     $urlToContent     = $oLink->toString();
                 } else {
 
-                    $oNews = new PMF_News($db, $Language);
+                    $oNews = new PMF_News($faqConfig);
                     $news  = $oNews->getNewsEntry($id);
                     if ($news['authorEmail'] != '') {
                         $emailTo = $news['authorEmail'];
                     }
                     $link = sprintf('%s?action=news&amp;newsid=%d&amp;newslang=%s',
-                        PMF_Link::getSystemUri('/ajaxservice.php'),
+                        $faqConfig->get('main.referenceURL'),
                         $news['id'],
                         $news['lang']
                     );
-                    $oLink            = new PMF_Link($link);
+                    $oLink            = new PMF_Link($link, $faqConfig);
                     $oLink->itemTitle = $news['header'];
                     $urlToContent     = $oLink->toString();
                 }
@@ -161,7 +164,7 @@ switch ($action) {
                     wordwrap($comment, 72);
 
                 $send = array();
-                $mail = new PMF_Mail();
+                $mail = new PMF_Mail($faqConfig);
                 $mail->setReplyTo($commentData['usermail'], $commentData['username']);
                 $mail->addTo($emailTo);
                 $send[$emailTo] = 1;
@@ -173,7 +176,7 @@ switch ($action) {
                 }
 
                 // Let the category owner get a copy of the message
-                $category = new PMF_Category();
+                $category = new PMF_Category($faqConfig);
                 $categories = $category->getCategoryIdsFromArticle($faq->faqRecord['id']);
                 foreach ($categories as $_category) {
                     $userId = $category->getCategoryUser($_category);
@@ -208,8 +211,8 @@ switch ($action) {
 
         // @todo add check on "addfaq" permission
 
-        $faq         = new PMF_Faq();
-        $category    = new PMF_Category();
+        $faq         = new PMF_Faq($faqConfig);
+        $category    = new PMF_Category($faqConfig);
         $name        = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $email       = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $faqid       = PMF_Filter::filterInput(INPUT_POST, 'faqid', FILTER_VALIDATE_INT);
@@ -314,7 +317,7 @@ switch ($action) {
 
             // Let the PMF Administrator and the Category Owner to be informed by email of this new entry
             $send = array();
-            $mail = new PMF_Mail();
+            $mail = new PMF_Mail($faqConfig);
             $mail->setReplyTo($email, $name);
             $mail->addTo($faqConfig->get('main.administrationMail'));
             $send[$faqConfig->get('main.administrationMail')] = 1;
@@ -359,8 +362,8 @@ switch ($action) {
 
         // @todo add check on "addquestion" permission
 
-        $faq        = new PMF_Faq();
-        $cat        = new PMF_Category();
+        $faq        = new PMF_Faq($faqConfig);
+        $cat        = new PMF_Category($faqConfig);
         $categories = $cat->getAllCategories();
         $name       = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $email      = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
@@ -388,7 +391,7 @@ switch ($action) {
 
                 $user            = new PMF_User_CurrentUser($faqConfig);
                 $faqSearch       = new PMF_Search($faqConfig);
-                $faqSearchResult = new PMF_Search_Resultset($user, $faq);
+                $faqSearchResult = new PMF_Search_Resultset($user, $faq, $faqConfig);
                 $searchResult    = array();
                 $mergedResult    = array();
 
@@ -410,12 +413,14 @@ switch ($action) {
                     $response .= '<ul>';
 
                     foreach ($faqSearchResult->getResultset() as $result) {
-                        $url = sprintf('/index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                        $url = sprintf(
+                            '%s/index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                            $faqConfig->get('main.referenceURL'),
                             $result->category_id,
                             $result->id,
                             $result->lang
                         );
-                        $oLink       = new PMF_Link($faqConfig->get('main.referenceURL') . $url);
+                        $oLink       = new PMF_Link($url, $faqConfig);
                         $oLink->text = PMF_Utils::chopString($result->question, 15);
                         $oLink->itemTitle = $result->question;
                         $response   .= sprintf('<li>%s<br /><div class="searchpreview">%s...</div></li>',
@@ -451,7 +456,7 @@ switch ($action) {
                     $userEmail      = $oUser->getUserData('email');
                     $mainAdminEmail = $faqConfig->get('main.administrationMail');
 
-                    $mail = new PMF_Mail();
+                    $mail = new PMF_Mail($faqConfig);
                     $mail->setReplyTo($questionData['email'], $questionData['username']);
                     $mail->addTo($mainAdminEmail);
                     // Let the category owner get a copy of the message
@@ -490,7 +495,7 @@ switch ($action) {
                 $userEmail      = $oUser->getUserData('email');
                 $mainAdminEmail = $faqConfig->get('main.administrationMail');
 
-                $mail = new PMF_Mail();
+                $mail = new PMF_Mail($faqConfig);
                 $mail->setReplyTo($questionData['email'], $questionData['username']);
                 $mail->addTo($mainAdminEmail);
                 // Let the category owner get a copy of the message
@@ -544,10 +549,10 @@ switch ($action) {
                     $faqConfig->get('main.referenceURL')
                 );
 
-                $mail = new PMF_Mail();
+                $mail = new PMF_Mail($faqConfig);
                 $mail->setReplyTo($email, $realname);
                 $mail->addTo($faqConfig->get('main.administrationMail'));
-                $mail->subject = PMF_Utils::resolveMarkers($PMF_LANG['emailRegSubject']);
+                $mail->subject = PMF_Utils::resolveMarkers($PMF_LANG['emailRegSubject'], $faqConfig);
                 $mail->message = $text;
                 $result = $mail->send();
                 unset($mail);
@@ -566,7 +571,7 @@ switch ($action) {
 
     case 'savevoting':
 
-        $faq      = new PMF_Faq();
+        $faq      = new PMF_Faq($faqConfig);
         $type     = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING, 'faq');
         $recordId = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
         $vote     = PMF_Filter::filterInput(INPUT_POST, 'vote', FILTER_VALIDATE_INT);
@@ -625,7 +630,7 @@ switch ($action) {
                 $question
             );
 
-            $mail = new PMF_Mail();
+            $mail = new PMF_Mail($faqConfig);
             $mail->setReplyTo($email, $name);
             $mail->addTo($faqConfig->get('main.administrationMail'));
             $mail->subject = 'Feedback: %sitename%';;
@@ -662,7 +667,7 @@ switch ($action) {
             foreach($mailto['mailto'] as $recipient) {
                 $recipient = trim(strip_tags($recipient));
                 if (!empty($recipient)) {
-                    $mail = new PMF_Mail();
+                    $mail = new PMF_Mail($faqConfig);
                     $mail->setReplyTo($email, $name);
                     $mail->addTo($recipient);
                     $mail->subject = $PMF_LANG["msgS2FMailSubject"].$name;

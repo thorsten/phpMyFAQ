@@ -37,18 +37,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_News
 {
     /**
-     * DB handle
-     *
-     * @var PMF_DB
+     * @var PMF_Configuration
      */
-    private $db;
-
-    /**
-    * Language
-    *
-    * @var  PMF_Language
-    */
-    private $language;
+    private $_config;
 
     /**
     * Language strings
@@ -60,17 +51,15 @@ class PMF_News
     /**
      * Constructor
      *
-     * @param PMF_DB_Driver $database Database connection
-     * @param PMF_Language  $language Language object
+     * @param PMF_Configuration
      *
      * @return PMF_News
      */
-    public function __construct(PMF_DB_Driver $database, PMF_Language $language)
+    public function __construct(PMF_Configuration $config)
     {
         global $PMF_LANG;
 
-        $this->db       = $database;
-        $this->language = $language;
+        $this->_config  = $config;
         $this->pmf_lang = $PMF_LANG;
     }
 
@@ -85,10 +74,9 @@ class PMF_News
      */
     public function getLatestData($showArchive = false, $active = true, $forceConfLimit = false)
     {
-        $news      = array();
-        $counter   = 0;
-        $now       = date('YmdHis');
-        $faqConfig = PMF_Configuration::getInstance();
+        $news    = array();
+        $counter = 0;
+        $now     = date('YmdHis');
 
         $query = sprintf("
             SELECT
@@ -108,18 +96,19 @@ class PMF_News
             $now,
             $now,
             $active ? "AND active = 'y'" : '',
-            $this->language->getLanguage());
+            $this->_config->getLanguage()->getLanguage()
+        );
             
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
 
-        if ($faqConfig->get('records.numberOfShownNewsEntries') > 0 && $this->db->numRows($result) > 0) {
-        	
-            while (($row = $this->db->fetchObject($result))) {
-            	
+        if ($this->_config->get('records.numberOfShownNewsEntries') > 0 && $this->_config->getDb()->numRows($result) > 0) {
+
+            while (($row = $this->_config->getDb()->fetchObject($result))) {
+
                 $counter++;
-                if (($showArchive  && ($counter > $faqConfig->get('records.numberOfShownNewsEntries'))) ||
+                if (($showArchive  && ($counter > $this->_config->get('records.numberOfShownNewsEntries'))) ||
                    ((!$showArchive) && (!$forceConfLimit) && 
-                   ($counter <= $faqConfig->get('records.numberOfShownNewsEntries'))) ||
+                   ($counter <= $this->_config->get('records.numberOfShownNewsEntries'))) ||
                    ((!$showArchive) && $forceConfLimit)) {
                    	
                     $item = array(
@@ -158,6 +147,7 @@ class PMF_News
     {
         $output = '';
         $news   = $this->getLatestData($showArchive, $active);
+        $date   = new PMF_Date($this->_config);
 
         foreach ($news as $item) {
 
@@ -165,7 +155,7 @@ class PMF_News
                            PMF_Link::getSystemRelativeUri(),
                            $item['id'],
                            $item['lang']);
-            $oLink = new PMF_Link($url);
+            $oLink = new PMF_Link($url, $this->_config);
             
             if (isset($item['header'])) {
                 $oLink->itemTitle = $item['header'];
@@ -194,7 +184,7 @@ class PMF_News
             
             $output .= sprintf('
                 <div class="date">%s</div>',
-                PMF_Date::format(PMF_Date::createIsoDate($item['date']))
+                $date->format(PMF_Date::createIsoDate($item['date']))
             );
         }
 
@@ -223,10 +213,10 @@ class PMF_News
             SQLPREFIX,
             $this->language->getLanguage());
             
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
 
-        if ($this->db->numRows($result) > 0) {
-            while ($row = $this->db->fetchObject($result)) {
+        if ($this->_config->getDb()->numRows($result) > 0) {
+            while ($row = $this->_config->getDb()->fetchObject($result)) {
                 $expired = ($now > $row->date_end);
                 $headers[] = array(
                     'id'        => $row->id,
@@ -267,10 +257,10 @@ class PMF_News
             $id,
             $this->language->getLanguage());
             
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
 
-        if ($this->db->numRows($result) > 0) {
-            if ($row = $this->db->fetchObject($result)) {
+        if ($this->_config->getDb()->numRows($result) > 0) {
+            if ($row = $this->_config->getDb()->fetchObject($result)) {
                 $content        = $row->artikel;
                 $active         = ('y' == $row->active);
                 $allowComments  = ('y' == $row->comment);
@@ -307,33 +297,6 @@ class PMF_News
     }
 
     /**
-     * Adds a comment
-     *
-     * @param array $commentData Array with comment data
-     *
-     * @return boolean
-     */
-    function addComment($commentData)
-    {
-        $oComment = new PMF_Comment();
-        return $oComment->addComment($commentData);
-    }
-
-    /**
-     * Deletes a comment
-     *
-     * @param integer $record_id  Record ID
-     * @param integer $comment_id Comment ID
-     *
-     * @return boolean
-     */
-    function deleteComment($record_id, $comment_id)
-    {
-        $oComment = new PMF_Comment();
-        return $oComment->deleteComment($record_id, $comment_id);
-    }
-
-    /**
      * Adds a new news entry
      *
      * @param array $data Array with news data
@@ -350,7 +313,7 @@ class PMF_News
                 VALUES
             (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
             SQLPREFIX,
-            $this->db->nextId(SQLPREFIX.'faqnews', 'id'),
+            $this->_config->getDb()->nextId(SQLPREFIX.'faqnews', 'id'),
             $data['date'],
             $data['lang'],
             $data['header'],
@@ -365,7 +328,7 @@ class PMF_News
             $data['linkTitle'],
             $data['target']);
 
-        if (!$this->db->query($query)) {
+        if (!$this->_config->getDb()->query($query)) {
             return false;
         }
         
@@ -417,7 +380,7 @@ class PMF_News
             $data['target'],
             $id);
 
-        if (!$this->db->query($query)) {
+        if (!$this->_config->getDb()->query($query)) {
             return false;
         }
         return true;
@@ -443,7 +406,7 @@ class PMF_News
             $id,
             $this->language->getLanguage());
             
-        if (!$this->db->query($query)) {
+        if (!$this->_config->getDb()->query($query)) {
             return false;
         }
         

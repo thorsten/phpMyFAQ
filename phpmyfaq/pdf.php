@@ -96,11 +96,15 @@ $currentCategory = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT
 $id              = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $getAll          = PMF_Filter::filterInput(INPUT_GET, 'getAll', FILTER_VALIDATE_BOOLEAN, false);
 
-$faq = new PMF_Faq($current_user, $current_groups);
-$faq->setLanguage($lang);
+$faq = new PMF_Faq($faqConfig);
+$faq->setUser($current_user);
+$faq->setGroups($current_user);
 
-$category = new PMF_Category($current_user, $current_groups);
-$pdf      = new PMF_Export_Pdf($faq, $category);
+$category = new PMF_Category($faqConfig);
+$category->setUser($current_user);
+$category->setGroups($current_groups);
+
+$pdf = new PMF_Export_Pdf($faq, $category);
 
 session_cache_limiter('private');
 header("Pragma: public");

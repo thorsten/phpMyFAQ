@@ -24,7 +24,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 // Re-evaluate $user
 $user     = PMF_User_CurrentUser::getFromSession($faqConfig);
-$category = new PMF_Category($current_admin_user, $current_admin_groups, false);    
+$category = new PMF_Category($faqConfig, false);
+$category->setUser($current_admin_user);
+$category->setGroups($current_admin_groups);
 
 if ($permission['editbt']) {
 
@@ -80,7 +82,7 @@ if ($permission['editbt']) {
         $logging->logAdmin($user, 'Beitragsave ' . $record_id);
         print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
 
-        $tagging = new PMF_Tags($db, $Language);
+        $tagging = new PMF_Tags($faqConfig);
         
         if ('yes' == $revision) {
             // Add current version into revision table

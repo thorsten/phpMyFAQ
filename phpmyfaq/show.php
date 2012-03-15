@@ -34,17 +34,22 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
                                                 $faqConfig->get('records.sortby'));
     
     if (!$records) {
-        $subCategory = new PMF_Category($current_user, $current_groups, true);
+        $subCategory = new PMF_Category($faqConfig, true);
+        $subCategory->setUser($current_user);
+        $subCategory->setGroups($current_groups);
         $subCategory->transform($currentCategory);
         $records = $subCategory->viewTree();
     }
 
     $up = '';
     if ($parent != 0) {
-        $url = sprintf('%saction=show&amp;cat=%d',
-                    $sids,
-                    $parent);
-        $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+        $url = sprintf(
+            '%s?%saction=show&amp;cat=%d',
+            PMF_Link::getSystemRelativeUri(),
+            $sids,
+            $parent
+        );
+        $oLink            = new PMF_Link($url, $faqConfig);
         $oLink->itemTitle = $category->categoryName[$parent]['name'];
         $oLink->text      = $PMF_LANG['msgCategoryUp'];
         $up               = $oLink->toHtmlAnchor();

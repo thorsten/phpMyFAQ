@@ -71,13 +71,15 @@ if (isset($user) && is_object($user)) {
     $current_groups = array(-1);
 }
 
-$category = new PMF_Category($current_user, $current_groups);
+$category = new PMF_Category($faqConfig);
+$category->setUser($current_user);
+$category->setGroups($current_groups);
 $category->transform(0);
 $category->buildTree();
 
-$faq             = new PMF_Faq();
+$faq             = new PMF_Faq($faqConfig);
 $faqSearch       = new PMF_Search($faqConfig);
-$faqSearchResult = new PMF_Search_Resultset($user, $faq);
+$faqSearchResult = new PMF_Search_Resultset($user, $faq, $faqConfig);
 
 //
 // Handle the search requests
@@ -88,7 +90,7 @@ if (!is_null($searchString)) {
     
     $faqSearchResult->reviewResultset($searchResult);
     
-    $faqSearchHelper = PMF_Helper_Search::getInstance();
+    $faqSearchHelper = PMF_Helper_Search::getInstance($faqConfig);
     $faqSearchHelper->setSearchterm($searchString);
     $faqSearchHelper->setCategory($category);
     $faqSearchHelper->setPlurals($plr);

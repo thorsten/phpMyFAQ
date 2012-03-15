@@ -35,7 +35,7 @@ class PMF_Helper_Administration
     /**
      * Instance
      *
-     * @var PMF_Helper_Search
+     * @var PMF_Helper_Administration
      */
     private static $instance = null;
     

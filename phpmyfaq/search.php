@@ -46,7 +46,7 @@ if (!is_null($inputLanguage)) {
 //       for any of the multilanguage faq records and the Category list
 //       on the left pane will not be affected
 if ($allLanguages) {
-    $category = new PMF_Category();
+    $category = new PMF_Category($faqConfig);
     $category->transform(0);
 }
 
@@ -55,7 +55,7 @@ if (is_null($user)) {
 }
 
 $faqSearch       = new PMF_Search($faqConfig);
-$faqSearchResult = new PMF_Search_Resultset($user, $faq);
+$faqSearchResult = new PMF_Search_Resultset($user, $faq, $faqConfig);
 $tagSearch       = false;
 
 //
@@ -63,7 +63,7 @@ $tagSearch       = false;
 //
 if (!is_null($inputTag)) {
     $tagSearch    = true;
-    $tagging      = new PMF_Tags($db, $Language);
+    $tagging      = new PMF_Tags($faqConfig);
     $recordIds    = $tagging->getRecordsByTagId($inputTag);
     $searchResult = $faq->showAllRecordsByIds($recordIds);
 } else {
@@ -102,9 +102,9 @@ if (is_numeric($inputSearchTerm) && PMF_SOLUTION_ID_START_VALUE <= $inputSearchT
     // Before a redirection we must force the PHP session update for preventing data loss
     session_write_close();
     if ($faqConfig->get('main.enableRewriteRules')) {
-        header('Location: '.PMF_Link::getSystemUri('/index.php') . '/solution_id_' . $inputSearchTerm . '.html');
+        header('Location: ' . $faqConfig->get('main.referenceURL') . '/solution_id_' . $inputSearchTerm . '.html');
     } else {
-        header('Location: '.PMF_Link::getSystemUri('/index.php') . '/index.php?solution_id=' . $inputSearchTerm);
+        header('Location: ' . $faqConfig->get('main.referenceURL') . '/index.php?solution_id=' . $inputSearchTerm);
     }
     exit();
 }
@@ -145,7 +145,7 @@ $faqPagination     = new PMF_Pagination($options);
 $faqCategoryHelper = PMF_Helper_Category::getInstance();
 $faqCategoryHelper->setCategory($category);
 
-$faqSearchHelper = PMF_Helper_Search::getInstance();
+$faqSearchHelper = PMF_Helper_Search::getInstance($faqConfig);
 $faqSearchHelper->setSearchterm($inputSearchTerm);
 $faqSearchHelper->setCategory($category);
 $faqSearchHelper->setPagination($faqPagination);

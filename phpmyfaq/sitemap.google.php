@@ -90,7 +90,7 @@ PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH . trim($faqConfig->get('main.phpMyFAQToken')));
 session_start();
 
-$oFaq = new PMF_Faq();
+$oFaq = new PMF_Faq($faqConfig);
 // Load the faq
 $items = $oFaq->getTopTenData(PMF_SITEMAP_GOOGLE_MAX_URLS - 1);
 $visitsMax = 0;
@@ -108,11 +108,12 @@ $sitemap =
     .' xsi:schemaLocation="http://www.google.com/schemas/sitemap/0.84'
     .' http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">';
 // 1st entry: the faq server itself
-$sitemap .= buildSitemapNode(PMF_Link::getSystemUri('/sitemap.google.php'),
-                PMF_Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_W3C, false),
-                PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY,
-                PMF_SITEMAP_GOOGLE_PRIORITY_MAX
-            );
+$sitemap .= buildSitemapNode(
+    $faqConfig->get('main.referenceURL'),
+    PMF_Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_W3C, false),
+    PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY,
+    PMF_SITEMAP_GOOGLE_PRIORITY_MAX
+);
            
 // nth entry: each faq
 foreach ($items as $item) {
@@ -125,19 +126,19 @@ foreach ($items as $item) {
     // b. We use SEO PMF urls
     if (PMF_SITEMAP_GOOGLE_USE_SEO) {
         if (isset($item['thema'])) {
-            $oL = new PMF_Link($link);
+            $oL = new PMF_Link($link, $faqConfig);
             $oL->itemTitle = $item['thema'];
             $link = $oL->toString();
         }
     }
     $sitemap .= buildSitemapNode(
-                    PMF_Link::getSystemUri('/sitemap.google.php').$link,
-                    PMF_Date::createIsoDate($item['date'], DATE_W3C),
-                    // @todo: manage changefreq node with the info provided by faqchanges,
-                    // if this will not add a big load to the server (+1 query/faq)
-                    PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY,
-                    $priority
-                );
+        $faqConfig->get('main.referenceURL').$link,
+        PMF_Date::createIsoDate($item['date'], DATE_W3C),
+        // @todo: manage changefreq node with the info provided by faqchanges,
+        // if this will not add a big load to the server (+1 query/faq)
+        PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY,
+        $priority
+    );
 }
 
 $sitemap .= '</urlset>';

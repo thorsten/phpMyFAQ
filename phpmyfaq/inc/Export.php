@@ -58,16 +58,26 @@ class PMF_Export
     protected $category = null;
 
     /**
+     * PMF_Configuration
+     *
+     * @var PMF_Configuration
+     */
+    protected $_config = null;
+
+    /**
      * Factory
      *
-     * @param PMF_Faq      $faq      PMF_Faq object
-     * @param PMF_Category $category PMF_Category object
-     * @param string       $mode     Export
+     * @param PMF_Faq           $faq      PMF_Faq object
+     * @param PMF_Category      $category PMF_Category object
+     * @param PMF_Configuration $config   PMF_Configuration object
+     * @param string            $mode     Export
      *
      * @return PMF_Export
      */
-    public static function create(PMF_Faq $faq, PMF_Category $category, $mode = 'pdf')
+    public static function create(PMF_Faq $faq, PMF_Category $category, PMF_Configuration $config, $mode = 'pdf')
     {
+        $this->_config = $config;
+
         switch ($mode) {
             case 'pdf':
                 return new PMF_Export_Pdf($faq, $category);

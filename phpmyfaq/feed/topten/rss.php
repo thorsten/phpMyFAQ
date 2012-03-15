@@ -85,7 +85,10 @@ if (!is_null($user) && $user instanceof PMF_User_CurrentUser) {
 //
 PMF_String::init($LANGCODE);
 
-$faq     = new PMF_Faq($current_user, $current_groups);
+$faq = new PMF_Faq($faqConfig);
+$faq->setUser($current_user);
+$faq->setGroups($current_user);
+
 $rssData = $faq->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN);
 $num     = count($rssData);
 
@@ -99,7 +102,7 @@ $rss->writeAttribute('version', '2.0');
 $rss->startElement('channel');
 $rss->writeElement('title', $faqConfig->get('main.titleFAQ') . ' - ' . $PMF_LANG['msgTopTen']);
 $rss->writeElement('description', html_entity_decode($faqConfig->get('main.metaDescription')));
-$rss->writeElement('link', PMF_Link::getSystemUri('/feed/topten/rss.php'));
+$rss->writeElement('link', $faqConfig->get('main.referenceURL'));
 
 if ($num > 0) {
     $i = 0;
@@ -109,7 +112,7 @@ if ($num > 0) {
         $link = str_replace($_SERVER['SCRIPT_NAME'], '/index.php', $item['url']);
         if (PMF_RSS_USE_SEO) {
             if (isset($item['thema'])) {
-                $oLink            = new PMF_Link($link);
+                $oLink            = new PMF_Link($link, $faqConfig);
                 $oLink->itemTitle = html_entity_decode($item['thema'], ENT_COMPAT, 'UTF-8');
                 $link             = html_entity_decode($oLink->toString(), ENT_COMPAT, 'UTF-8');
             }
@@ -123,7 +126,7 @@ if ($num > 0) {
         $rss->writeCdata("[".$i.".] ".$item['thema']." (".$item['visits']." ".$PMF_LANG['msgViews'].")");
         $rss->endElement();
         
-        $rss->writeElement('link', PMF_Link::getSystemUri('/feed/topten/rss.php').$link);
+        $rss->writeElement('link', $faqConfig->get('main.referenceURL').$link);
         $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['last_visit'], false));
         $rss->endElement();
     }

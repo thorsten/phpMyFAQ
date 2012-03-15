@@ -240,6 +240,13 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
     private $question = '';
 
     /**
+     * PMF_Configuration
+     *
+     * @var PMF_Configuration
+     */
+    protected $_config = null;
+
+    /**
      * Font files
      *
      * @var array
@@ -318,6 +325,14 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
     {
         $this->categories = $categories;
     }
+
+    /**
+     * @param PMF_Configuration $config
+     */
+    public function setConfig(PMF_Configuration $config)
+    {
+        $this->_config = $config;
+    }
     
     /**
      * The header of the PDF file
@@ -355,15 +370,15 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
     public function Footer() 
     {
         global $PMF_LANG;
-        
-        $faqConfig = PMF_Configuration::getInstance();
+
+        $date = new PMF_Date($this->_config);
 
         $footer = sprintf(
             '(c) %d %s <%s> | %s',
             date('Y'),
             $faqConfig->get('main.metaPublisher'),
             $faqConfig->get('main.administrationMail'),
-            PMF_Date::format(date('Y-m-d H:i'))
+            $date->format(date('Y-m-d H:i'))
         );
         
         $currentTextColor = $this->TextColor;
@@ -388,8 +403,8 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
                 $baseUrl .= '&amp;id='.$this->faq['id'];
                 $baseUrl .= '&amp;artlang='.$this->faq['lang'];
             }
-            $url    = PMF_Link::getSystemUri('pdf.php') . $baseUrl;
-            $urlObj = new PMF_Link($url);
+            $url    = $this->_config->get('main.referenceURL') . $baseUrl;
+            $urlObj = new PMF_Link($url, $this->_config);
             $urlObj->itemTitle = $this->question;
             $_url = str_replace('&amp;', '&', $urlObj->toString());
             $this->Cell(0, 10, 'URL: '.$_url, 0, 1, 'C', 0, $_url);
@@ -410,7 +425,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
 
         // Title
         $this->SetFont($this->currentFont, 'B', 24);
-        $this->MultiCell(0, 0, PMF_Configuration::getInstance()->get('main.titleFAQ'), 0, 'C', 0, 1, '', '', true, 0);
+        $this->MultiCell(0, 0, $this->_config->get('main.titleFAQ'), 0, 'C', 0, 1, '', '', true, 0);
         $this->Ln();
 
         // TOC

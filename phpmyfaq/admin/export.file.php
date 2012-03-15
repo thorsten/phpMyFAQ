@@ -36,10 +36,10 @@ $downwards         = PMF_Filter::filterInput(INPUT_POST, 'downwards', FILTER_VAL
 $inlineDisposition = PMF_Filter::filterInput(INPUT_POST, 'dispos', FILTER_SANITIZE_STRING);
 $type              = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING, 'none');
 
-$faq      = new PMF_Faq();
-$category = new PMF_Category();
+$faq      = new PMF_Faq($faqConfig);
+$category = new PMF_Category($faqConfig);
 
-$export  = PMF_Export::create($faq, $category, $type);
+$export  = PMF_Export::create($faq, $category, $faqConfig, $type);
 $content = $export->generate($categoryId, $downwards);
 
 // Stream the file content

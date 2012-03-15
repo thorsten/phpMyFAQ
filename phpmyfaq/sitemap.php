@@ -32,12 +32,17 @@ if (!is_null($letter) && (1 == PMF_String::strlen($letter))) {
     $currentLetter = '';
 }
 
-$sitemap = new PMF_Sitemap($current_user, $current_groups);
+$sitemap = new PMF_Sitemap($faqConfig);
+$sitemap->setUser($current_user);
+$sitemap->setGroups($current_groups);
 
 $tpl->parse (
-    'writeContent', array(
+    'writeContent',
+    array(
         'writeLetters'       => $sitemap->getAllFirstLetters(),
         'writeMap'           => $sitemap->getRecordsFromLetter($currentLetter),
-        'writeCurrentLetter' => $currentLetter));
+        'writeCurrentLetter' => $currentLetter
+    )
+);
 
 $tpl->merge('writeContent', 'index');

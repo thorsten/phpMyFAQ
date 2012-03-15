@@ -59,6 +59,23 @@ class PMF_Services
     protected $question;
 
     /**
+     * @var PMF_Configuration
+     */
+    private $_config;
+
+    /**
+     * Constructor
+     *
+     * @param PMF_Configuration $config
+     *
+     * @return PMF_Services
+     */
+    public function __construct(PMF_Configuration $config)
+    {
+        $this->_config = $config;
+    }
+
+    /**
      * Returns the current URL
      *
      * @return string
@@ -66,7 +83,7 @@ class PMF_Services
     public function getLink()
     {
         $url = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s',
-            PMF_Link::getSystemUri(),
+            $this->_config->get('main.referenceURL'),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()
@@ -83,7 +100,7 @@ class PMF_Services
     public function getDiggLink()
     {
         $url = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s&amp;title=%s',
-            PMF_Link::getSystemUri(),
+            $this->_config->get('main.referenceURL'),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage(),
@@ -101,7 +118,7 @@ class PMF_Services
     public function getShareOnFacebookLink()
     {
         $url = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s',
-            PMF_Link::getSystemUri(),
+            $this->_config->get('main.referenceURL'),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()
@@ -118,7 +135,7 @@ class PMF_Services
     public function getShareOnTwitterLink()
     {
         $url = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s',
-            PMF_Link::getSystemUri(),
+            $this->_config->get('main.referenceURL'),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()
@@ -138,7 +155,7 @@ class PMF_Services
     public function getBookmarkOnDeliciousLink()
     {
         $url = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s',
-            PMF_Link::getSystemUri(),
+            $this->_config->get('main.referenceURL'),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()
@@ -158,7 +175,7 @@ class PMF_Services
     public function getSuggestLink()
     {
         return sprintf('%s?action=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-            PMF_Link::getSystemUri(),
+            $this->_config->get('main.referenceURL'),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()

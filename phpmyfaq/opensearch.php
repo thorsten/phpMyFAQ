@@ -24,7 +24,7 @@ require PMF_ROOT_DIR . '/inc/Bootstrap.php';
 require PMF_ROOT_DIR . '/inc/Link.php';
 require 'lang/' . $faqConfig->get('main.language');
 
-$baseUrl   = PMF_Link::getSystemUri('/opensearch.php');
+$baseUrl   = $faqConfig->get('main.referenceURL');
 $searchUrl = $baseUrl . '/index.php?action=search';
 
 $opensearchXml = new XMLWriter();

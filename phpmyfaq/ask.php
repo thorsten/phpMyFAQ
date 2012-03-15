@@ -52,7 +52,7 @@ $tpl->parse(
         'msgAskCategory'       => $PMF_LANG['msgAskCategory'],
         'printCategoryOptions' => $helper->renderCategoryOptions($categoryId),
         'msgAskYourQuestion'   => $PMF_LANG['msgAskYourQuestion'],
-        'captchaFieldset'      => PMF_Helper_Captcha::getInstance()->renderCaptcha(
+        'captchaFieldset'      => PMF_Helper_Captcha::getInstance($faqConfig)->renderCaptcha(
             $captcha,
             'ask',
             $PMF_LANG['msgCaptcha']

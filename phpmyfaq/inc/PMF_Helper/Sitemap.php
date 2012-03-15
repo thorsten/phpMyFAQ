@@ -48,7 +48,7 @@ class PMF_Helper_Sitemap extends PMF_Helper
      * Returns the single instance
      *
      * @access static
-     * @return PMF_Helper_Search
+     * @return PMF_Helper_Sitemap
      */
     public static function getInstance()
     {

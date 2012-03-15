@@ -22,7 +22,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$news = new PMF_News($db, $Language);
+$news = new PMF_News($faqConfig);
 
 $archived        = PMF_Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
 $writeNewsHeader = $faqConfig->get('main.titleFAQ');

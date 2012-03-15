@@ -46,7 +46,7 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
 //
 PMF_String::init($LANGCODE);
 
-$oNews          = new PMF_News($db, $Language);
+$oNews          = new PMF_News($faqConfig);
 $showArchive    = false;
 $active         = true;
 $forceConfLimit = true;
@@ -63,7 +63,7 @@ $rss->writeAttribute('version', '2.0');
 $rss->startElement('channel');
 $rss->writeElement('title', $faqConfig->get('main.titleFAQ') . ' - ' . $PMF_LANG['msgNews']);
 $rss->writeElement('description', html_entity_decode($faqConfig->get('main.metaDescription')));
-$rss->writeElement('link', PMF_Link::getSystemUri('/feed/news/rss.php'));
+$rss->writeElement('link', $faqConfig->get('main.referenceURL'));
 
 if ($num > 0) {
     foreach ($rssData as $item) {
@@ -71,7 +71,7 @@ if ($num > 0) {
         $link = '/index.php?action=news&newsid=' . $item['id'] . '&newslang=' . $item['lang'];
         if (PMF_RSS_USE_SEO) {
             if (isset($item['header'])) {
-                $oLink            = new PMF_Link($link);
+                $oLink            = new PMF_Link($link, $faqConfig);
                 $oLink->itemTitle = $item['header'];
                 $link             = $oLink->toString();
             }
@@ -84,7 +84,7 @@ if ($num > 0) {
         $rss->writeCdata($item['content']);
         $rss->endElement();
         
-        $rss->writeElement('link', PMF_Link::getSystemUri('/feed/news/rss.php').$link);
+        $rss->writeElement('link', $faqConfig->get('main.referenceURL').$link);
         $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['date'], true));
         $rss->endElement();
     }
