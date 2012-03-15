@@ -64,9 +64,11 @@ function printInputFieldByType($key, $type)
             break;
 
         case 'input':
-            if ('' == $faqConfig->get($key) && 'socialnetworks.twitterAccessTokenKey' == $key) {
+            if ('' == $faqConfig->get($key) && 'socialnetworks.twitterAccessTokenKey' == $key &&
+                isset($_SESSION['access_token'])) {
                 $value = $_SESSION['access_token']['oauth_token'];
-            } elseif ('' == $faqConfig->get($key) && 'socialnetworks.twitterAccessTokenSecret' == $key) {
+            } elseif ('' == $faqConfig->get($key) && 'socialnetworks.twitterAccessTokenSecret' == $key &&
+                isset($_SESSION['access_token'])) {
                 $value = $_SESSION['access_token']['oauth_token_secret'];
             } else {
                 $value = str_replace('"', '&quot;', $faqConfig->get($key));
