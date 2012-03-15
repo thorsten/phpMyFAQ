@@ -3,10 +3,10 @@
  * Manages authentication process using php sessions.
  *
  * The CurrentUser class is an extension of the User class. It provides methods
- * manage user authentication using multiple database accesses.
- * There are three ways of making a new current user object, using
- * the login() method, getFromSession() method or manually.
- * login() and getFromSession() may be combined.
+ * manage user authentication using multiple database accesses. There are three
+ * ways of making a new current user object, using the login() method,
+ * getFromSession() method or manually. login() and getFromSession() may be
+ * combined.
  *
  * PHP version 5.2
  *
@@ -57,26 +57,26 @@ class PMF_User_CurrentUser extends PMF_User
      *
      * @var bool
      */
-    private $logged_in = false;
+    private $_loggedIn = false;
 
     /**
      * Session timeout
      *
      * Specifies the timeout for the session in minutes. If the
      * session-ID was not updated for the last
-     * $this->session_timeout minutes, the CurrentUser will be
+     * $this->_sessionTimeout minutes, the CurrentUser will be
      * logged out automatically.
      *
      * @var integer
      */
-    private $session_timeout = PMF_SESSION_ID_EXPIRES;
+    private $_sessionTimeout = PMF_SESSION_ID_EXPIRES;
 
     /**
      * Session-ID timeout
      *
      * Specifies the timeout for the session-ID in minutes. If the
      * session-ID was not updated for the last
-     * $this->session_id_timeout minutes, it will be updated. If
+     * $this->_sessionIdTimeout minutes, it will be updated. If
      * set to 0, the session-ID will be updated on every click.
      * The session-ID timeout must not be greater than Session
      * timeout.
@@ -84,7 +84,7 @@ class PMF_User_CurrentUser extends PMF_User
      * @access private
      * @var int
      */
-    private $session_id_timeout = 1;
+    private $_sessionIdTimeout = 1;
 
     /**
      * Constructor
@@ -162,7 +162,7 @@ class PMF_User_CurrentUser extends PMF_User
             // load user object
             $this->getUserByLogin($login);
             // user is now logged in
-            $this->logged_in = true;
+            $this->_loggedIn = true;
             // update last login info, session-id and save to session
             $this->updateSessionId(true);
             $this->saveToSession();
@@ -207,20 +207,20 @@ class PMF_User_CurrentUser extends PMF_User
      */
     public function isLoggedIn()
     {
-        return $this->logged_in;
+        return $this->_loggedIn;
     }
 
     /**
      * Returns false if the CurrentUser object stored in the
      * session is valid and not timed out. There are two
-     * parameters for session timeouts: $this->session_timeout
-     * and $this->session_id_timeout.
+     * parameters for session timeouts: $this->_sessionTimeout
+     * and $this->_sessionIdTimeout.
      *
      * @return boolean
      */
     public function sessionIsTimedOut()
     {
-        if ($this->session_timeout <= $this->sessionAge()) {
+        if ($this->_sessionTimeout <= $this->sessionAge()) {
             return true;
         }
         return false;
@@ -233,7 +233,7 @@ class PMF_User_CurrentUser extends PMF_User
      */
     public function sessionIdIsTimedOut()
     {
-        if ($this->session_id_timeout <= $this->sessionAge()) {
+        if ($this->_sessionIdTimeout <= $this->sessionAge()) {
             return true;
         }
         return false;
@@ -261,7 +261,7 @@ class PMF_User_CurrentUser extends PMF_User
      */
     public function getSessionInfo()
     {
-    	$select = sprintf("
+        $select = sprintf("
             SELECT
                 session_id,
                 session_timestamp,
@@ -270,9 +270,10 @@ class PMF_User_CurrentUser extends PMF_User
                 %sfaquser
             WHERE
                 user_id = %d",
-    	   SQLPREFIX,
-    	   $this->getUserId());
-    	   
+           SQLPREFIX,
+           $this->getUserId()
+        );
+           
         $res = $this->db->query($select);
         if (!$res or $this->db->numRows($res) != 1) {
             return array();
@@ -295,7 +296,7 @@ class PMF_User_CurrentUser extends PMF_User
         // renew the session-ID
         $oldSessionId = session_id();
         if (session_regenerate_id(true)) {
-        	$sessionPath = session_save_path();
+            $sessionPath = session_save_path();
             if (strpos ($sessionPath, ';') !== false) {
                 $sessionPath = substr ($sessionPath, strpos ($sessionPath, ';') + 1);
             }
@@ -322,7 +323,8 @@ class PMF_User_CurrentUser extends PMF_User
             $_SERVER['REQUEST_TIME'],
             $updateLastlogin ?  "last_login = '".date('YmdHis', $_SERVER['REQUEST_TIME'])."'," : '',
             $_SERVER['REMOTE_ADDR'],
-            $this->getUserId());
+            $this->getUserId()
+        );
                     
         $res = $this->db->query($update);
         if (!$res) {
@@ -358,8 +360,10 @@ class PMF_User_CurrentUser extends PMF_User
         // delete CurrentUser object from session
         $_SESSION[PMF_SESSION_CURRENT_USER] = null;
         unset($_SESSION[PMF_SESSION_CURRENT_USER]);
+
         // log CurrentUser out
-        $this->logged_in = false;
+        $this->_loggedIn = false;
+
         // delete session-ID
         $update = sprintf("
             UPDATE
@@ -369,13 +373,16 @@ class PMF_User_CurrentUser extends PMF_User
             WHERE
                 user_id = %d",
                 SQLPREFIX,
-                $this->getUserId());
+                $this->getUserId()
+        );
                 
         $res = $this->db->query($update);
+
         if (!$res) {
             $this->errors[] = $this->db->error();
             return false;
         }
+        
         return true;
     }
 
@@ -426,7 +433,7 @@ class PMF_User_CurrentUser extends PMF_User
             $user->updateSessionId();
         }
         // user is now logged in
-        $user->logged_in = true;
+        $user->_loggedIn = true;
         // save current user to session and return the instance
         $user->saveToSession();
         
@@ -442,7 +449,7 @@ class PMF_User_CurrentUser extends PMF_User
      */
     public function setSessionTimeout($timeout)
     {
-        $this->session_timeout = abs($timeout);
+        $this->_sessionTimeout = abs($timeout);
     }
 
     /**
@@ -455,7 +462,7 @@ class PMF_User_CurrentUser extends PMF_User
      */
     public function setSessionIdTimeout($timeout)
     {
-        $this->session_id_timeout = abs($timeout);
+        $this->_sessionIdTimeout = abs($timeout);
     }
     
     /**
