@@ -158,6 +158,51 @@ class PMF_Configuration
     }
 
     /**
+     * Sets the PMF_Ldap object
+     *
+     * @param PMF_Ldap $ldap
+     *
+     * @return void
+     */
+    public function setLdap(PMF_Ldap $ldap)
+    {
+        $this->config['core.ldap'] = $ldap;
+    }
+
+    /**
+     * Returns the PMF_Ldap object
+     *
+     * @return PMF_Ldap
+     */
+    public function getLdap()
+    {
+        return $this->config['core.ldap'];
+    }
+
+    /**
+     * Sets the LDAP configuration
+     *
+     * @param Array $ldapConfig
+     *
+     * @return void
+     */
+    public function setLdapConfig(Array $ldapConfig)
+    {
+        $this->config['core.ldapConfig'] = $ldapConfig;
+    }
+
+    /**
+     * Returns the LDAP configuration
+     *
+     * @return array
+     */
+    public function getLdapConfig()
+    {
+        return $this->config['core.ldapConfig'];
+    }
+
+
+    /**
      * Updates all configuration items
      *
      * @param  array $newConfigs Array with new configuration values
@@ -167,8 +212,10 @@ class PMF_Configuration
     public function update(Array $newConfigs)
     {
         $runtimeConfigs = array(
-            'core.database', // PMF_DB_Driver
-            'core.language'  // PMF_Language
+            'core.database',  // PMF_DB_Driver
+            'core.language',  // PMF_Language
+            'core.ldap',      // PMF_Ldap
+            'core.ldapConfig' // $PMF_LDAP
         );
         if (is_array($newConfigs)) {
             foreach ($newConfigs as $name => $value) {

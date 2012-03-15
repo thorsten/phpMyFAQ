@@ -114,6 +114,7 @@ ini_set('url_rewriter.tags', '');
 if ($faqConfig->get('security.ldapSupport') && file_exists(PMF_CONFIG_DIR . '/ldap.php')) {
     require PMF_CONFIG_DIR . '/constants_ldap.php';
     require PMF_CONFIG_DIR . '/ldap.php';
+    $faqConfig->setLdapConfig($PMF_LDAP);
 } else {
     $ldap = null;
 }

@@ -46,6 +46,13 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
     private $ldap = null;
 
     /**
+     * LDAP configuration
+     *
+     * @var array
+     */
+    private $_ldapConfig = array();
+
+    /**
      * Multiple LDAP servers
      *
      * @var boolean
@@ -62,18 +69,17 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
      */
     public function __construct($enctype = 'none', $read_only = false)
     {
-        global $PMF_LDAP;
-
-        $this->multipleServers = $PMF_LDAP['ldap_use_multiple_servers'];
+        $this->_ldapConfig     = $this->_config->getLdapConfig();
+        $this->multipleServers = $this->_ldapConfig['ldap_use_multiple_servers'];
         
         parent::__construct($enctype, $read_only);
         
         $this->ldap = new PMF_Ldap(
-            $PMF_LDAP['ldap_server'],
-            $PMF_LDAP['ldap_port'],
-            $PMF_LDAP['ldap_base'],
-            $PMF_LDAP['ldap_user'],
-            $PMF_LDAP['ldap_password']
+            $this->_ldapConfig['ldap_server'],
+            $this->_ldapConfig['ldap_port'],
+            $this->_ldapConfig['ldap_base'],
+            $this->_ldapConfig['ldap_user'],
+            $this->_ldapConfig['ldap_password']
         );
         
         if ($this->ldap->error) {
@@ -148,20 +154,18 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
      */
     public function checkPassword($login, $pass, Array $optionalData = null)
     {
-        global $PMF_LDAP;
-
         $bindLogin = $login;
-        if ($PMF_LDAP['ldap_use_domain_prefix']) {
+        if ($this->_ldapConfig['ldap_use_domain_prefix']) {
             if (array_key_exists('domain', $optionalData)) {
                 $bindLogin = $optionalData['domain'] . '\\' . $login;
             }
         } else {
             $this->ldap = new PMF_Ldap(
-                $PMF_LDAP['ldap_server'],
-                $PMF_LDAP['ldap_port'],
-                $PMF_LDAP['ldap_base'],
-                $PMF_LDAP['ldap_user'],
-                $PMF_LDAP['ldap_password']
+                $this->_ldapConfig['ldap_server'],
+                $this->_ldapConfig['ldap_port'],
+                $this->_ldapConfig['ldap_base'],
+                $this->_ldapConfig['ldap_user'],
+                $this->_ldapConfig['ldap_password']
             );
             if ($this->ldap->error) {
                 $this->errors[] = $this->ldap->error;
@@ -172,9 +176,9 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
 
         // Check user in LDAP
         $this->ldap = new PMF_Ldap(
-            $PMF_LDAP['ldap_server'],
-            $PMF_LDAP['ldap_port'],
-            $PMF_LDAP['ldap_base'],
+            $this->_ldapConfig['ldap_server'],
+            $this->_ldapConfig['ldap_port'],
+            $this->_ldapConfig['ldap_base'],
             $bindLogin,
             $pass
         );

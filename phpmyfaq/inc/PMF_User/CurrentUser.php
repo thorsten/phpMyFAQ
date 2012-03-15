@@ -87,6 +87,13 @@ class PMF_User_CurrentUser extends PMF_User
     private $_sessionIdTimeout = 1;
 
     /**
+     * LDAP configuration
+     *
+     * @var array
+     */
+    private $_ldapConfig = array();
+
+    /**
      * Constructor
      *
      * @param PMF_Configuration $config
@@ -96,6 +103,8 @@ class PMF_User_CurrentUser extends PMF_User
     function __construct(PMF_Configuration $config)
     {
         parent::__construct($config);
+
+        $this->_ldapConfig = $config->getLdapConfig();
     }
 
     /**
@@ -118,12 +127,8 @@ class PMF_User_CurrentUser extends PMF_User
      */
     public function login($login, $password)
     {
-        // ToDo: the option should be in the configuration of the DB
-        //   instead of inc/dataldap.php
-        global $PMF_LDAP;
-        
         $optData = array();
-        if ($PMF_LDAP['ldap_use_domain_prefix']) {
+        if ($this->_ldapConfig['ldap_use_domain_prefix']) {
             if (($pos = strpos($login, '\\')) !== false) {
                 if ($pos != 0) {
                     $optData['domain'] = substr($login, 0, $pos);
