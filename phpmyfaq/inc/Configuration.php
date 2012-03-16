@@ -198,7 +198,7 @@ class PMF_Configuration
      */
     public function getLdapConfig()
     {
-        return $this->config['core.ldapConfig'];
+        return isset($this->config['core.ldapConfig']) ? $this->config['core.ldapConfig'] : array();
     }
 
 
