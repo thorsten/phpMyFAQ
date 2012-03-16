@@ -74,7 +74,8 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
         
         parent::__construct($enctype, $read_only);
         
-        $this->ldap = new PMF_Ldap(
+        $this->ldap = new PMF_Ldap($this->_config);
+        $this->ldap->connect(
             $this->_ldapConfig['ldap_server'],
             $this->_ldapConfig['ldap_port'],
             $this->_ldapConfig['ldap_base'],
@@ -160,7 +161,8 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
                 $bindLogin = $optionalData['domain'] . '\\' . $login;
             }
         } else {
-            $this->ldap = new PMF_Ldap(
+            $this->ldap = new PMF_Ldap($this->_config);
+            $this->ldap->connect(
                 $this->_ldapConfig['ldap_server'],
                 $this->_ldapConfig['ldap_port'],
                 $this->_ldapConfig['ldap_base'],
@@ -175,7 +177,8 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
         }
 
         // Check user in LDAP
-        $this->ldap = new PMF_Ldap(
+        $this->ldap = new PMF_Ldap($this->_config);
+        $this->ldap->connect(
             $this->_ldapConfig['ldap_server'],
             $this->_ldapConfig['ldap_port'],
             $this->_ldapConfig['ldap_base'],

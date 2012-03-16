@@ -41,14 +41,21 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Ldap
 {
     /**
+     * @var array
+     */
+    private $_ldapConfig = array();
+
+    /**
      * The connection handle
      *
+     * @return resource
      */
     private $ds = false;
 
     /**
      * The LDAP base
      *
+     * @var string
      */
     private $base = null;
 
@@ -69,64 +76,78 @@ class PMF_Ldap
     /**
      * Constructor
      *
-     * Connects and binds to LDAP server
-     *
-     * @param string  $ldap_server   Server name
-     * @param integer $ldap_port     Port number
-     * @param string  $ldap_base     Base DN
-     * @param string  $ldap_user     optional LDAP user
-     * @param string  $ldap_password optional LDAP password
+     * @param PMF_Configuration $config
      *
      * @return PMF_Ldap
      */
-    public function __construct($ldap_server, $ldap_port, $ldap_base, $ldap_user = '', $ldap_password = '')
+    public function __construct(PMF_Configuration $config)
     {
-        global $PMF_LDAP;
+        $this->_ldapConfig = $config->getLdapConfig();
+    }
 
-        $this->base = $ldap_base;
-
-        if (!isset($ldap_user) || !isset($ldap_server) || $ldap_server == "" ||
-            !isset($ldap_port) || $ldap_port == "" || !isset($ldap_base) ||
-            $ldap_base == "") {
+    /**
+     * Connects to given LDAP server with given credentials
+     *
+     * @param string  $ldapServer
+     * @param integer $ldapPort
+     * @param string  $ldapBase
+     * @param string  $ldapUser
+     * @param string  $ldapPassword
+     *
+     * @return boolean
+     */
+    public function connect($ldapServer, $ldapPort, $ldapBase, $ldapUser = '', $ldapPassword = '')
+    {
+        // Sanity checks
+        if ('' === $ldapServer || '' === $ldapPort || '' === $ldapBase) {
             return false;
         }
 
-        $this->ds = ldap_connect($ldap_server, $ldap_port);
-        if (!$this->ds) {
+        $this->base = $ldapBase;
+        $this->ds   = ldap_connect($ldapServer, $ldapPort);
+
+        if (! $this->ds) {
             $this->error = sprintf(
                 'Unable to connect to LDAP server (Error: %s)',
                 ldap_error($this->ds)
             );
             $this->errno = ldap_errno($this->ds);
+            return false;
         }
 
         // optionally set Bind version
-        if (isset($PMF_LDAP['ldap_options'])) {
-            foreach ($PMF_LDAP['ldap_options'] as $key => $value) {
-                if (!ldap_set_option($this->ds, $key, $value)) {
+        if (isset($this->_ldapConfig['ldap_options'])) {
+            foreach ($this->_ldapConfig['ldap_options'] as $key => $value) {
+                if (! ldap_set_option($this->ds, $key, $value)) {
                     $this->errno = ldap_errno($this->ds);
                     $this->error = sprintf(
                         'Unable to set LDAP option "%s" to "%s" (Error: %s).',
                         $key,
                         $value,
-                        ldap_error($this->ds));
+                        ldap_error($this->ds)
+                    );
                 }
             }
         }
 
-        if ($PMF_LDAP['ldap_use_anonymous_login']) {
-            $ldapbind = ldap_bind($this->ds); // Anonymous LDAP login
+
+        if ($this->_ldapConfig['ldap_use_anonymous_login']) {
+            $ldapBind = ldap_bind($this->ds); // Anonymous LDAP login
         } else {
-            $ldapbind = ldap_bind($this->ds, $ldap_user, $ldap_password);
+            $ldapBind = ldap_bind($this->ds, $ldapUser, $ldapPassword);
         }
 
-        if (!$ldapbind) {
+        if (! $ldapBind) {
             $this->errno = ldap_errno($this->ds);
             $this->error = sprintf(
                 'Unable to bind to LDAP server (Error: %s).',
-                ldap_error($this->ds));
-            $this->ds    = false;
-         }
+                ldap_error($this->ds)
+            );
+            $this->ds = false;
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -190,39 +211,50 @@ class PMF_Ldap
      */
     private function getLdapData ($username, $data)
     {
-        global $PMF_LDAP;
-
-        $values = array();
-
-        if (!array_key_exists($data, $PMF_LDAP['ldap_mapping'])) {
-            $this->error = sprintf('The requested datafield "%s" does not exist in $PMF_LDAP["ldap_mapping"].',
+        if (!array_key_exists($data, $this->_ldapConfig['ldap_mapping'])) {
+            $this->error = sprintf(
+                'The requested datafield "%s" does not exist in $PMF_LDAP["ldap_mapping"].',
                 $data);
             return '';
         }
 
-        $filter = sprintf('(%s=%s)', $PMF_LDAP['ldap_mapping']['username'], $username);
-        if (true === $PMF_LDAP['ldap_use_memberOf']) {
-            $filter = sprintf('(&%s(memberof=%s))', $filter, $PMF_LDAP['ldap_mapping']['memberOf']);
+        $filter = sprintf(
+            '(%s=%s)',
+            $this->_ldapConfig['ldap_mapping']['username'],
+            $username
+        );
+
+        if (true === $this->_ldapConfig['ldap_use_memberOf']) {
+            $filter = sprintf(
+                '(&%s(memberof=%s))',
+                $filter,
+                $this->_ldapConfig['ldap_mapping']['memberOf']
+            );
         }
-        $fields = array($PMF_LDAP['ldap_mapping'][$data]);
+
+        $fields = array($this->_ldapConfig['ldap_mapping'][$data]);
         $sr     = ldap_search($this->ds, $this->base, $filter, $fields);
 
         if (!$sr) {
             $this->errno = ldap_errno($this->ds);
-            $this->error = sprintf('Unable to search for "%s" (Error: %s)',
+            $this->error = sprintf(
+                'Unable to search for "%s" (Error: %s)',
                 $username,
-                ldap_error($this->ds));
+                ldap_error($this->ds)
+            );
         }
 
         $entryId = ldap_first_entry($this->ds, $sr);
 
         if (!is_resource($entryId)) {
             $this->errno = ldap_errno($this->ds);
-            $this->error = sprintf('Cannot get the value(s). Error: %s',
-                ldap_error($this->ds));
+            $this->error = sprintf(
+                'Cannot get the value(s). Error: %s',
+                ldap_error($this->ds)
+            );
         }
 
-        $values  = ldap_get_values($this->ds, $entryId, $fields[0]);
+        $values = ldap_get_values($this->ds, $entryId, $fields[0]);
 
         return $values[0];
     }
@@ -236,24 +268,26 @@ class PMF_Ldap
      */
     private function getLdapDn($username)
     {
-        global $PMF_LDAP;
-
-        $filter = "(" . $PMF_LDAP['ldap_mapping']['username'] . "=" . $username . ")";
+        $filter = "(" . $this->_ldapConfig['ldap_mapping']['username'] . "=" . $username . ")";
         $sr     = ldap_search($this->ds, $this->base, $filter);
 
-        if (!$sr) {
+        if (! $sr) {
             $this->errno = ldap_errno($this->ds);
-            $this->error = sprintf('Unable to search for "%s" (Error: %s)',
+            $this->error = sprintf(
+                'Unable to search for "%s" (Error: %s)',
                 $username,
-                ldap_error($this->ds));
+                ldap_error($this->ds)
+            );
         }
 
         $entryId = ldap_first_entry($this->ds, $sr);
 
-        if (!$entryId) {
+        if (! $entryId) {
             $this->errno = ldap_errno($this->ds);
-            $this->error = sprintf('Cannot get the value(s). Error: %s',
-                ldap_error($this->ds));
+            $this->error = sprintf(
+                'Cannot get the value(s). Error: %s',
+                ldap_error($this->ds)
+            );
         }
 
         return ldap_get_dn($this->ds, $entryId);
