@@ -213,7 +213,7 @@ class PMF_Ldap
     {
         if (!array_key_exists($data, $this->_ldapConfig['ldap_mapping'])) {
             $this->error = sprintf(
-                'The requested datafield "%s" does not exist in $PMF_LDAP["ldap_mapping"].',
+                'The requested datafield "%s" does not exist in LDAP mapping configuration.',
                 $data);
             return '';
         }
