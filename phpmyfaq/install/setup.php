@@ -945,6 +945,21 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             'name' => 'addcomment',
             'description' => 'Right to add comments in frontend'
         ),
+        // 42 => 'editinstances'
+        array(
+            'name' => 'editinstances',
+            'description' => 'Right to edit multi-site instances'
+        ),
+        // 43 => 'addinstances'
+        array(
+            'name' => 'addinstances',
+            'description' => 'Right to add multi-site instances'
+        ),
+        // 44 => 'delinstances'
+        array(
+            'name' => 'delinstances',
+            'description' => 'Right to delete multi-site instances'
+        ),
     );
     
     foreach ($rights as $right) {

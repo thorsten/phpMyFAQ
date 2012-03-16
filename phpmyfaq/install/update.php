@@ -723,6 +723,15 @@ if ($step == 3) {
                 break;
         }
 
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqright (right_id, name, description) VALUES
+            (42, 'editinstances', 'Right to edit multi-site instances')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 42)";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqright (right_id, name, description) VALUES
+            (43, 'addinstances', 'Right to add multi-site instances')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 43)";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faqright (right_id, name, description) VALUES
+            (44, 'delinstances', 'Right to delete multi-site instances')";
+        $query[] = "INSERT INTO " . SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 44)";
     }
 
     // Perform the queries for updating/migrating the database

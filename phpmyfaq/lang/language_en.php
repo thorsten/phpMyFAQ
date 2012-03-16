@@ -1181,3 +1181,4 @@ $PMF_LANG['headerUserControlPanel'] = 'User Control Panel';
 
 // added v2.8.0-alpha2 - 2012-03-15 by Thorsten
 $PMF_LANG['rememberMe'] = 'Remember me';
+$PMF_LANG["ad_menu_instances"] = "FAQ Multi-sites";

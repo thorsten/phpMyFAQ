@@ -40,11 +40,11 @@ class PMF_Instance
     const TABLE_FAQINSTANCES = 'faqinstances';
 
     /**
-     * DB handle
+     * Configuration
      *
-     * @var PMF_DB
+     * @var PMF_Configuration
      */
-    private $_db = null;
+    private $_config = null;
 
     /**
      * Instance ID
@@ -58,9 +58,9 @@ class PMF_Instance
      *
      * @return PMF_Instance
      */
-    public function __construct(PMF_DB_Driver $database)
+    public function __construct(PMF_Configuration $config)
     {
-        $this->_db = $database;
+        $this->_config = $config;
     }
 
     /**
@@ -72,7 +72,7 @@ class PMF_Instance
      */
     public function addInstance(Array $data)
     {
-        $this->_id = $this->_db->nextId(SQLPREFIX . self::TABLE_FAQINSTANCES, 'id');
+        $this->_id = $this->_config->getDb()->nextId(SQLPREFIX . self::TABLE_FAQINSTANCES, 'id');
 
         $insert = sprintf(
             "INSERT INTO %sfaqinstances VALUES (%d, '%s', '%s', '%s', NOW(), NOW())",
@@ -83,7 +83,7 @@ class PMF_Instance
             $data['comment']
         );
 
-        if (! $this->_db->query($insert)) {
+        if (! $this->_config->getDb()->query($insert)) {
             return 0;
         }
 
@@ -102,9 +102,9 @@ class PMF_Instance
             SQLPREFIX
         );
 
-        $result = $this->_db->query($select);
+        $result = $this->_config->getDb()->query($select);
 
-        return $this->_db->fetchAll($result);
+        return $this->_config->getDb()->fetchAll($result);
     }
 
     /**
@@ -122,9 +122,9 @@ class PMF_Instance
             (int)$id
         );
 
-        $result = $this->_db->query($select);
+        $result = $this->_config->getDb()->query($select);
 
-        return $this->_db->fetchAll($result);
+        return $this->_config->getDb()->fetchAll($result);
     }
 
     /**
@@ -142,9 +142,9 @@ class PMF_Instance
             $url
         );
 
-        $result = $this->_db->query($select);
+        $result = $this->_config->getDb()->query($select);
 
-        return $this->_db->fetchAll($result);
+        return $this->_config->getDb()->fetchAll($result);
     }
 
     /**
@@ -160,6 +160,6 @@ class PMF_Instance
             (int)$id
         );
 
-        return $this->_db->query($delete);
+        return $this->_config->getDb()->query($delete);
     }
 }
