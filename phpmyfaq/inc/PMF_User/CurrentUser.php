@@ -128,7 +128,7 @@ class PMF_User_CurrentUser extends PMF_User
     public function login($login, $password)
     {
         $optData = array();
-        if ($this->_ldapConfig['ldap_use_domain_prefix']) {
+        if (isset($this->_ldapConfig['ldap_use_domain_prefix'])) {
             if (($pos = strpos($login, '\\')) !== false) {
                 if ($pos != 0) {
                     $optData['domain'] = substr($login, 0, $pos);
