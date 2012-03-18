@@ -983,7 +983,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         'instance' => dirname($_SERVER['SCRIPT_NAME']),
         'comment'  => 'phpMyFAQ'
     );
-    $faqInstance = new PMF_Instance($db);
+    $faqInstance = new PMF_Instance($configuration);
     $faqInstance->addInstance($instanceData);
 
     // @todo: add basic instance configuration
