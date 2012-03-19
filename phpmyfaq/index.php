@@ -90,13 +90,19 @@ $action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING, '
 //
 $auth = $error = null;
 $loginVisibility = 'hidden';
+
 $faqusername = PMF_Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
 $faqpassword = PMF_Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
 $faqaction   = PMF_Filter::filterInput(INPUT_POST, 'faqloginaction', FILTER_SANITIZE_STRING);
+$faqremember = PMF_Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_SANITIZE_STRING);
+
+// Set username via SSO
 if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
     $faqusername = trim($_SERVER['REMOTE_USER']);
     $faqpassword = '';
 }
+
+// Login via local DB or LDAP or SSO
 if (!is_null($faqusername) && !is_null($faqpassword)) {
     $user = new PMF_User_CurrentUser($faqConfig);
     if ($faqConfig->get('security.ldapSupport')) {
@@ -160,16 +166,14 @@ if (isset($auth)) {
 //
 if ('logout' === $action && isset($auth)) {
     $user->deleteFromSession();
-    $user   = null;
-    $auth   = null;
+    $user = $auth = null;
     $action = 'main';
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
     if ($faqConfig->get('security.ssoSupport') && !empty ($ssoLogout)) {
-        header ('Location: ' . $ssoLogout);
+        header('Location: ' . $ssoLogout);
     } else {
-        header ('Location: ' . $faqConfig->get('main.referenceURL'));
+        header('Location: ' . $faqConfig->get('main.referenceURL'));
     }
-
 }
 
 //
@@ -177,7 +181,7 @@ if ('logout' === $action && isset($auth)) {
 //
 if (!is_null($user) && $user instanceof PMF_User_CurrentUser) {
     $current_user   = $user->getUserId();
-    if ($user->perm instanceof PMF_Perm_PermMedium) {
+    if ($user->perm instanceof PMF_Perm_Medium) {
         $current_groups = $user->perm->getUserGroups($current_user);
     } else {
         $current_groups = array(-1);
@@ -193,9 +197,9 @@ if (!is_null($user) && $user instanceof PMF_User_CurrentUser) {
 //
 // Use mbstring extension if available and when possible
 //
-$valid_mb_strings = array('ja', 'en', 'uni');
+$validMbStrings = array('ja', 'en', 'uni');
 $mbLanguage       = ($PMF_LANG['metaLanguage'] != 'ja') ? 'uni' : $PMF_LANG['metaLanguage'];
-if (function_exists('mb_language') && in_array($mbLanguage, $valid_mb_strings)) {
+if (function_exists('mb_language') && in_array($mbLanguage, $validMbStrings)) {
     mb_language($mbLanguage);
     mb_internal_encoding('utf-8');
 }
@@ -672,7 +676,7 @@ if ('artikel' == $action || 'show' == $action || is_numeric($solutionId)) {
             'link_delicious'         => $faqServices->getBookmarkOnDeliciousLink(),
             'link_email'             => $faqServices->getSuggestLink(),
             'link_pdf'               => $faqServices->getPdfLink(),
-            'facebookLikeButton'     => $faqHelper->renderFacebookLikeButton($faqServices->getLink()),
+            'facebookLikeButton'     => $faqHelper->renderFacebookLikeButton($faqServices->getLink())
         )
     );
 }
