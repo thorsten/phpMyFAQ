@@ -757,7 +757,7 @@ if ($step == 4) {
            
             case 'sqlite':
                 $query[] = "BEGIN TRANSACTION";
-                $query[] = "CREATE TEMPORORY TABLE " . SQLPREFIX . "faqquestions_temp (
+                $query[] = "CREATE TEMPORARY TABLE " . SQLPREFIX . "faqquestions_temp (
                                 id int(11) NOT NULL,
                                 username varchar(100) NOT NULL,
                                 email varchar(100) NOT NULL,
@@ -899,7 +899,7 @@ if ($step == 4) {
                 print '<p class="error"><strong>Error:</strong> Please install your version of phpMyFAQ once again or send
                 us a <a href=\"http://bugs.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
                 printf('<p class="error"><strong>DB error:</strong> %s</p>', $db->error());
-                printf('<code>%s</code>', htmlentities($each_query[1]));
+                printf('<code>%s</code>', htmlentities($current_query));
                 HTMLFooter();
                 die();
             }
