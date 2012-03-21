@@ -255,7 +255,7 @@ class PMF_System
         if (file_exists(PMF_ROOT_DIR.'/config/database.php')) {
             @unlink(PMF_ROOT_DIR.'/config/database.php');
         }
-        // Remove 'dap.php' file: no need of prompt anything to the user
+        // Remove 'ldap.php' file: no need of prompt anything to the user
         if (file_exists(PMF_ROOT_DIR.'/config/ldap.php')) {
             @unlink(PMF_ROOT_DIR.'/config/ldap.php');
         }
