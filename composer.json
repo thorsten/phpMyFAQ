@@ -1,29 +1,17 @@
 {
-    "repositories": [
+    "type": "application",
+    "name": "phpmyfaq/phpmyfaq",
+    "description": "FAQ System",
+    "keywords": ["FAQ"],
+    "homepage": "http://github.com/thorsten/phpMyFAQ",
+    "license": "MPL 2.0",
+    "authors": [
         {
-            "type": "package",
-            "package": {
-                "name": "phpmyfaq/phpmyfaq",
-                "version": "2.8.0-alpha2",
-                "dist": {
-                    "url": "http://www.phpmyfaq.de/download/phpmyfaq-2.8.0-alpha2.zip",
-                    "type": "zip"
-                },
-                "source": {
-                    "url": "https://github.com/thorsten/phpMyFAQ",
-                    "type": "git",
-                    "reference": "tags/2.8.0-alpha2"
-                },
-                "require": {
-                    "php": ">=5.2.3"
-                },
-                "authors": [
-                    {
-                        "name": "Thorsten Rinne",
-                        "email": "thorsten@phpmyfaq.de"
-                    }
-                ]
-            }
+            "name": "Thorsten Rinne",
+            "email": "thorsten@phpmyfaq.de"
         }
-    ]
+    ],
+    "require": {
+        "php": ">=5.2.3"
+    }
 }
