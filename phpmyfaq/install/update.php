@@ -690,6 +690,7 @@ if ($step == 3) {
             case 'mssql':
             case 'sqlsrv':
             case 'sqlite':
+            case 'sqlite3':
                 $query[] = "CREATE TABLE " . SQLPREFIX . "faqinstances (
                     id INT(11) NOT NULL,
                     url VARCHAR(255) NOT NULL,
@@ -732,6 +733,8 @@ if ($step == 3) {
         $query[] = "INSERT INTO " . SQLPREFIX . "faqright (right_id, name, description) VALUES
             (44, 'delinstances', 'Right to delete multi-site instances')";
         $query[] = "INSERT INTO " . SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 44)";
+
+        $query[] = "ALTER TABLE " . SQLPREFIX . "faquser ADD remember_me VARCHAR(150) NULL";
     }
 
     // Perform the queries for updating/migrating the database

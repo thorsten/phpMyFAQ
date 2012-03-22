@@ -356,6 +356,7 @@ account_status VARCHAR(50) NULL,
 last_login TIMESTAMP(14) NULL,
 auth_source VARCHAR(100) NULL,
 member_since TIMESTAMP(14) NULL,
+remember_me VARCHAR(150) NULL,
 PRIMARY KEY(user_id)
 )";
 

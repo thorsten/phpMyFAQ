@@ -71,8 +71,8 @@ account_status varchar(50) NULL,
 last_login varchar(14) NULL,
 auth_source varchar(100) NULL,
 member_since varchar(14) NULL,
-PRIMARY KEY (user_id)
-)";
+remember_me VARCHAR(150) NULL,
+PRIMARY KEY (user_id))";
 
 //faqgroup
 $query[] = "CREATE TABLE ".$sqltblpre."faqgroup (
