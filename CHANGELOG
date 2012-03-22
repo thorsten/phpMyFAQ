@@ -6,11 +6,12 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.8.0-alpha2 - 2012-
-- phpMyFAQ is now licensed under the terms of Mozilla Public License 2.0
+- phpMyFAQ is now licensed under the terms of Mozilla Public License 2.0 (Thorsten, Florian)
 - added new and improved frontend and backend user interface based on Twitter Bootstrap (Thorsten)
 - added improved advanced search in subcategories (Thorsten)
 - added possibility to close and delete open questions (Peter Caesar)
 - added user control panel (Thorsten)
+- added support for Composer (Thorsten)
 - dropped support for IBM DB2, Interbase/Firebird and Sybase (Thorsten)
 - improved usability of administration backend (Thorsten)
 - improved setup and update (Thorsten)
@@ -19,7 +20,7 @@ Version 2.8.0-alpha2 - 2012-
 - updated bundled jQuery to version 1.7.1 (Thorsten)
 - updated bundled Modernizr to version 2.5.2 (Thorsten)
 - updated bundled Twitter Bootstrap to version 2.0.2 (Thorsten)
-- fixed some bugs (Thorsten, Florian Anderiasch)
+- fixed some bugs (Thorsten, Florian)
 
 Version 2.7.5 - 2012-03-
 - added experimental support for SQLite3 (Thorsten)
