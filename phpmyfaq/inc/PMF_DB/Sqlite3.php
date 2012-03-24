@@ -225,7 +225,9 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
         // First, declare those tables that are referenced by others
         $this->tableNames[] = $prefix.'faquser';
 
-        $result = $this->query("SELECT name FROM sqlite_master WHERE type='table' ".(('' == $prefix) ? '': "AND name LIKE '".$prefix."%' ")."ORDER BY name");
+        $result = $this->query(
+            "SELECT name FROM sqlite_master WHERE type='table' ".(('' == $prefix) ? '': "AND name LIKE '".$prefix."%' ")."ORDER BY name"
+        );
         while ($row = $this->fetchObject($result)) {
             if (!in_array($row->name, $this->tableNames)) {
                 $this->tableNames[] = $row->name;
