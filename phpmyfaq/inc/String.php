@@ -9,7 +9,7 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_String
+ * @package   String
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
@@ -22,7 +22,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_String
+ * String
  *
  * The class uses mbstring extension if available. It's strongly recommended
  * to use and extend this class instead of using direct string functions. Doing so
@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * single byte string functions.
  *
  * @category  phpMyFAQ
- * @package   PMF_String
+ * @package   String
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0

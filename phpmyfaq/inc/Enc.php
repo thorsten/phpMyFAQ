@@ -9,7 +9,7 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Enc
+ * @package   Enc
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2012 phpMyFAQ Team
@@ -23,10 +23,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Enc
+ * Enc
  *
  * @category  phpMyFAQ
- * @package   PMF_Enc
+ * @package   Enc
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2012 phpMyFAQ Team
@@ -51,7 +51,7 @@ class PMF_Enc
     public $errors = array();
 
     /**
-     * PMF_Configuration
+     * Configuration
      *
      * @var PMF_Configuration
      */

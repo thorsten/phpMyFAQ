@@ -13,7 +13,7 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_User
+ * @package   User
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Sarah Hermann <sayh@gmx.de>
@@ -32,10 +32,10 @@ if (!defined('PMF_ENCRYPTION_TYPE')) {
 }
 
 /**
- * PMF_User
+ * User
  *
  * @category  phpMyFAQ
- * @package   PMF_User
+ * @package   User
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Sarah Hermann <sayh@gmx.de>
@@ -172,7 +172,7 @@ class PMF_User
     );
 
     /**
-     * PMF_Configuration
+     * Configuration
      *
      * @var PMF_Configuration
      */
@@ -457,7 +457,7 @@ class PMF_User
                 continue;
             }
             if (!$auth->add($login, $pass)) {
-                $this->errors[] = self::ERROR_USER_CANNOT_CREATE_USER.'in PMF_Auth '.$name;
+                $this->errors[] = self::ERROR_USER_CANNOT_CREATE_USER.'in Auth '.$name;
             } else {
                 $success = true;
             }
@@ -668,7 +668,7 @@ class PMF_User
     /**
      * adds a new authentication object to the user object.
      *
-     * @param  PMF_Auth $auth PMF_Auth object
+     * @param  PMF_Auth $auth Auth object
      * @param  string   $name Auth name
      * @return boolean
      */
@@ -684,7 +684,7 @@ class PMF_User
     /**
      * returns true if auth is a valid authentication object.
      *
-     * @param  PMF_Auth $auth PMF_Auth object
+     * @param  PMF_Auth $auth Auth object
      * @return bool
      */
     protected function checkAuth($auth)
@@ -712,7 +712,7 @@ class PMF_User
     /**
      * returns true if perm is a valid permission object.
      *
-     * @param  PMF_Perm $perm PMF_Perm object
+     * @param  PMF_Perm $perm Perm object
      * @return bool
      */
     private function checkPerm($perm)

@@ -1,6 +1,6 @@
 <?php
 /**
- * The PMF_Cache class implements caching factory to be used with different concrete cache services
+ * The Cache class implements caching factory to be used with different concrete cache services
  *
  * PHP Version 5.2
  *
@@ -9,7 +9,7 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Cache
+ * @package   Cache
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2002-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
@@ -22,10 +22,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Cache
+ * Cache
  *
  * @category  phpMyFAQ
- * @package   PMF_Cache
+ * @package   Cache
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2002-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0

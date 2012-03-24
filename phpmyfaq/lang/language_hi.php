@@ -21,7 +21,7 @@ $PMF_LANG["dir"] = "ltr"; // ltr: left to right (e.g. English language); rtl: ri
 
 $PMF_LANG["nplurals"] = "2";
 /**
- * This parameter is used with the function 'plural' from inc/PMF_Language/Plurals.php
+ * This parameter is used with the function 'plural' from inc/Language/Plurals.php
  * If this parameter and function are not in sync plural form support will be broken.
  */
 

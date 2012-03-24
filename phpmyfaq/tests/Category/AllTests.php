@@ -1,6 +1,6 @@
 <?php
 /**
- * Test suite for PMF_Category related classes
+ * Test suite for Category related classes
  *
  * PHP Version 5.2
  *
@@ -35,7 +35,7 @@ class Category_AllTests
 {
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('phpMyFAQ PMF_Category');
+        $suite = new PHPUnit_Framework_TestSuite('phpMyFAQ Category');
         
         return $suite;
     }

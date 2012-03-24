@@ -9,7 +9,7 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Mail
+ * @package   Mail
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2012 phpMyFAQ Team
@@ -23,10 +23,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Mail
+ * Mail
  *
  * @category  phpMyFAQ
- * @package   PMF_Mail
+ * @package   Mail
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2012 phpMyFAQ Team
@@ -229,7 +229,7 @@ class PMF_Mail
      * Note: any email will be sent from the PMF administrator, use unsetFrom
      *       before using setFrom.     
      *
-     * @param PMF_Configuration $config
+     * @param Configuration $config
      */     
     function __construct(PMF_Configuration $config)
     {
@@ -276,7 +276,7 @@ class PMF_Mail
         // Sanity check
         if (!self::validateEmail($address)) {
             trigger_error(
-                "<b>PMF_Mail Class</b>: $address is not a valid e-mail address!",
+                "<b>Mail Class</b>: $address is not a valid e-mail address!",
                 E_USER_ERROR
             );
             return false;
@@ -285,7 +285,7 @@ class PMF_Mail
         // Don't allow duplicated addresses
         if (array_key_exists($address, $target)) {
             trigger_error(
-                "<b>PMF_Mail Class</b>: $address has been already added in '$targetAlias'!",
+                "<b>Mail Class</b>: $address has been already added in '$targetAlias'!",
                 E_USER_WARNING
             );
             return false;
@@ -508,7 +508,7 @@ class PMF_Mail
         if (count($target) > 0) {
             $keys = array_keys($target);
             trigger_error(
-                "<b>PMF_Mail Class</b>: a valid e-mail address, $keys[0], has been already added as '$targetAlias'!",
+                "<b>Mail Class</b>: a valid e-mail address, $keys[0], has been already added as '$targetAlias'!",
                 E_USER_ERROR
             );
             return false;
@@ -717,7 +717,7 @@ class PMF_Mail
         // Sanity check
         if (count($this->_to) + count($this->_cc) + count($this->_bcc) < 1) {
             trigger_error(
-                "<b>PMF_Mail Class</b>: you need at least to set one recipient among TO, CC and BCC!",
+                "<b>Mail Class</b>: you need at least to set one recipient among TO, CC and BCC!",
                 E_USER_ERROR
             );
             return false;
@@ -774,7 +774,7 @@ class PMF_Mail
                 $sent = $mua->send($recipients, $this->headers, $this->body);
                 break;
             default:
-                trigger_error("<b>PMF_Mail Class</b>: $this->agent has no implementation!", E_USER_ERROR);
+                trigger_error("<b>Mail Class</b>: $this->agent has no implementation!", E_USER_ERROR);
                 $sent = false;
         }
 
@@ -831,7 +831,7 @@ class PMF_Mail
 
         if ($inline) {
             trigger_error(
-                "<b>PMF_Mail Class</b>: inline option is not implemented yet.",
+                "<b>Mail Class</b>: inline option is not implemented yet.",
                 E_USER_ERROR
             );
         }

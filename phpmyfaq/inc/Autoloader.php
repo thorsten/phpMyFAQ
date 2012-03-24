@@ -56,7 +56,7 @@ function PMF_Autoloader($class)
     if (2 == $classPartsCount) {
         $path = $includeDir . $classParts[1] . '.php';
     } else {
-        $path = $includeDir . 'PMF_'. $classParts[1];
+        $path = $includeDir . $classParts[1];
         for ($i = 2; $i < $classPartsCount; $i++) {
             $path .= DIRECTORY_SEPARATOR . $classParts[$i];
         }

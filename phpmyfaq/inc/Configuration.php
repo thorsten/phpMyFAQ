@@ -10,7 +10,7 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Configuration
+ * @package   Configuration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2006-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
@@ -23,10 +23,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Configuration
+ * Configuration
  *
  * @category  phpMyFAQ
- * @package   PMF_Configuration
+ * @package   Configuration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2006-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
@@ -136,7 +136,7 @@ class PMF_Configuration
     }
 
     /**
-     * Sets the PMF_Language object
+     * Sets the Language object
      *
      * @param PMF_Language $language
      *
@@ -148,7 +148,7 @@ class PMF_Configuration
     }
 
     /**
-     * Returns the PMF_Language object
+     * Returns the Language object
      *
      * @return PMF_Language
      */
@@ -213,7 +213,7 @@ class PMF_Configuration
     {
         $runtimeConfigs = array(
             'core.database',  // PMF_DB_Driver
-            'core.language',  // PMF_Language
+            'core.language',  // Language
             'core.ldap',      // PMF_Ldap
             'core.ldapConfig' // $PMF_LDAP
         );

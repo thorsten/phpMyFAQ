@@ -19,16 +19,16 @@
 
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/Language.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/String.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_String/Abstract.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_String/Mbstring.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Resultset.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Driver.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_DB/Sqlite3.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/String/Abstract.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/String/Mbstring.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/Search/Resultset.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/DB/Driver.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/DB/Sqlite3.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/Exception.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/Configuration.php';
 
 /**
- * PMF_Category test case
+ * Category test case
  *
  * @category  phpMyFAQ
  * @package   PMF_Tests
@@ -59,8 +59,8 @@ class PMF_Search_ResultsetTest extends PHPUnit_Framework_TestCase
         $this->PMF_Configuration = new PMF_Configuration($this->dbHandle);
         
         $this->PMF_Search_Resultset = new PMF_Search_Resultset(
-            $this->getMock('PMF_User'), 
-            $this->getMock('PMF_Faq'),
+            $this->getMock('User'),
+            $this->getMock('Faq'),
             $this->PMF_Configuration
         );
     }

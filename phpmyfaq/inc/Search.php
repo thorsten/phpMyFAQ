@@ -9,7 +9,7 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Search
+ * @package   Search
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
@@ -24,10 +24,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Search
+ * Search
  *
  * @category  phpMyFAQ
- * @package   PMF_Search
+ * @package   Search
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
@@ -271,7 +271,7 @@ class PMF_Search
     }
 
     /**
-     * Sets the PMF_Category object
+     * Sets the Category object
      *
      * @param PMF_Category $category
      */
@@ -281,7 +281,7 @@ class PMF_Search
     }
 
     /**
-     * Returns the PMF_Category object
+     * Returns the Category object
      *
      * @return PMF_Category
      */

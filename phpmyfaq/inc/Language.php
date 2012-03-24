@@ -9,7 +9,7 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Language
+ * @package   Language
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo scaramuccia <matteo@phpmyfaq.de>
  * @author    Aurimas Fišeras <aurimas@gmail.com>
@@ -24,10 +24,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Language
+ * Language
  *
  * @category  phpMyFAQ
- * @package   PMF_Language
+ * @package   Language
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo scaramuccia <matteo@phpmyfaq.de>
  * @author    Aurimas Fišeras <aurimas@gmail.com>

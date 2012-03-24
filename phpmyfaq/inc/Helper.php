@@ -9,7 +9,7 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Helper
+ * @package   Helper
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
@@ -22,10 +22,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Helper
+ * Helper
  *
  * @category  phpMyFAQ
- * @package   PMF_Helper
+ * @package   Helper
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
@@ -84,7 +84,7 @@ abstract class PMF_Helper
     /**
      * Category Setter
      *
-     * @param PMF_Category $Category PMF_Category object
+     * @param PMF_Category $Category Category object
      *
      * @return void
      */

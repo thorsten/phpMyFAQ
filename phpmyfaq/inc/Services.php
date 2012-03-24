@@ -9,7 +9,7 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Services
+ * @package   Services
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
@@ -18,10 +18,10 @@
  */
 
 /**
- * PMF_Services
+ * Services
  *
  * @category  phpMyFAQ
- * @package   PMF_Services
+ * @package   Services
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0

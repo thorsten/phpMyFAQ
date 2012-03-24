@@ -1,6 +1,6 @@
 <?php
 /**
- * Test suite for PMF_Search related classes
+ * Test suite for Search related classes
  *
  * PHP Version 5.2
  *
@@ -40,7 +40,7 @@ class Search_AllTests
 {
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('phpMyFAQ PMF_Search');
+        $suite = new PHPUnit_Framework_TestSuite('phpMyFAQ Search');
         
         $suite->addTestSuite('PMF_Search_DatabaseTest');
         $suite->addTestSuite('PMF_Search_FactoryTest');

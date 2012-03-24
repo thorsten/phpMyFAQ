@@ -20,14 +20,14 @@
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/inc/Configuration.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/inc/functions.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/inc/Search.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/inc/PMF_Search/Database/Mysql.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/inc/PMF_DB/Driver.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/inc/PMF_DB/Mysql.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/inc/Search/Database/Mysql.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/inc/DB/Driver.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/inc/DB/Mysql.php';
 
 require_once dirname(dirname(dirname(__FILE__))) . '/Database/MysqlTest.php';
 
 /**
- * PMF_Search test case
+ * Search test case
  *
  * @category  phpMyFAQ
  * @package   PMF_Tests

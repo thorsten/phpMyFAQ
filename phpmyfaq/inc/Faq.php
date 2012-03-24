@@ -9,7 +9,7 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Faq
+ * @package   Faq
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Georgi Korchev <korchev@yahoo.com>
@@ -53,10 +53,10 @@ define('FAQ_SORTING_TYPE_DATE_FAQID', 3);
 define('FAQ_SORTING_TYPE_FAQID', 4);
 
 /**
- * PMF_Faq - 3K LOC of funny things for phpMyFAQ
+ * Faq - 3K LOC of funny things for phpMyFAQ
  *
  * @category  phpMyFAQ
- * @package   PMF_Faq
+ * @package   Faq
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Georgi Korchev <korchev@yahoo.com>
@@ -2818,7 +2818,7 @@ class PMF_Faq
      * Set or unset a faq item flag 
      *
      * @param integer $id   Record id
-     * @param string  $lang language code which is valid with PMF_Language::isASupportedLanguage
+     * @param string  $lang language code which is valid with Language::isASupportedLanguage
      * @param boolean $flag weither or not the record is set to sticky
      * @param string  $type type of the flag to set, use the column name
      *

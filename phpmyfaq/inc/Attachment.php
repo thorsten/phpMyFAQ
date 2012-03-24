@@ -9,7 +9,7 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Attachment
+ * @package   Attachment
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * PMF_Atachment
  *
  * @category  phpMyFAQ
- * @package   PMF_Attachment
+ * @package   Attachment
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0

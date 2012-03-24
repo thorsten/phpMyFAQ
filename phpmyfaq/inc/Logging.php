@@ -102,7 +102,7 @@ class PMF_Logging
     /**
      * Adds a new adminlog entry
      *
-     * @param PMF_User $user    PMF_User object
+     * @param PMF_User $user    User object
      * @param string   $logText Logged string
      *
      * @return boolean

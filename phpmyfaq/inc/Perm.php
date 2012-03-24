@@ -7,8 +7,8 @@
  * to allow for scalability. This means that PMF_PermMedium is an extend of
  * and PMF_PermLarge is an extend of PMF_PermMedium.
  *
- * The permission type can be selected by calling $perm = PMF_Perm(perm_type) or
- * static method $perm = PMF_Perm::selectPerm(perm_type) where perm_type is
+ * The permission type can be selected by calling $perm = Perm(perm_type) or
+ * static method $perm = Perm::selectPerm(perm_type) where perm_type is
  * 'medium' or 'large'. Both ways, a PMF_PermBasic, PMF_PermMedium or
  * is returned.
  *
@@ -34,7 +34,7 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ 
- * @package   PMF_Perm
+ * @package   Perm
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
@@ -47,10 +47,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Perm
+ * Perm
  *
  * @category  phpMyFAQ 
- * @package   PMF_Perm
+ * @package   Perm
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
@@ -77,9 +77,9 @@ class PMF_Perm
     }
     
     /**
-     * Selects a subclass of PMF_Perm. 
+     * Selects a subclass of Perm.
      *
-     * selectPerm() returns an instance of a subclass of PMF_Perm. perm_level
+     * selectPerm() returns an instance of a subclass of Perm. perm_level
      * which subclass is returned. Allowed values and corresponding classnames
      * defined in perm_typemap.
      *
@@ -96,7 +96,7 @@ class PMF_Perm
             return $perm;
         }
         
-        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'PMF_Perm' . DIRECTORY_SEPARATOR . $permLevel . '.php';
+        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Perm' . DIRECTORY_SEPARATOR . $permLevel . '.php';
         if (!file_exists($classfile)) {
             return $perm;
         }

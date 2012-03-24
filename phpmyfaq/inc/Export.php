@@ -9,7 +9,7 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Export
+ * @package   Export
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 require_once PMF_CONFIG_DIR . '/constants.php';
 
 /**
- * PMF_Export Class
+ * Export Class
  *
  * This class manages the export formats supported by phpMyFAQ:
  * - PDF
@@ -33,7 +33,7 @@ require_once PMF_CONFIG_DIR . '/constants.php';
  * - XML
  *
  * @category  phpMyFAQ
- * @package   PMF_Export
+ * @package   Export
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
@@ -44,21 +44,21 @@ require_once PMF_CONFIG_DIR . '/constants.php';
 class PMF_Export
 {
     /**
-     * PMF_Faq object
+     * Faq object
      *
      * @var PMF_Faq
      */
     protected $faq = null;
 
     /**
-     * PMF_Category object
+     * Category object
      *
      * @var PMF_Category
      */
     protected $category = null;
 
     /**
-     * PMF_Configuration
+     * Configuration
      *
      * @var PMF_Configuration
      */
@@ -67,9 +67,9 @@ class PMF_Export
     /**
      * Factory
      *
-     * @param PMF_Faq           $faq      PMF_Faq object
-     * @param PMF_Category      $category PMF_Category object
-     * @param PMF_Configuration $config   PMF_Configuration object
+     * @param PMF_Faq           $faq      Faq object
+     * @param PMF_Category      $category Category object
+     * @param PMF_Configuration $config   Configuration object
      * @param string            $mode     Export
      *
      * @return PMF_Export

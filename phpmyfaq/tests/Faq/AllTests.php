@@ -35,7 +35,7 @@ class Faq_AllTests
 {
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('phpMyFAQ PMF_Faq');
+        $suite = new PHPUnit_Framework_TestSuite('phpMyFAQ Faq');
         
         return $suite;
     }

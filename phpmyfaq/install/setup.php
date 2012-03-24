@@ -538,7 +538,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
     // check database connection
     require PMF_ROOT_DIR . "/inc/Db.php";
-    require PMF_ROOT_DIR . "/inc/PMF_DB/Driver.php";
+    require PMF_ROOT_DIR . "/inc/DB/Driver.php";
     $db = PMF_Db::factory($dbType);
     $db->connect($dbServer, $dbUser, $dbPassword, $dbDatabaseName);
     if (!$db) {

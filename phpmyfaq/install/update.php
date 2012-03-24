@@ -298,7 +298,7 @@ if ($step == 3) {
     
     require_once PMF_ROOT_DIR . '/inc/Configuration.php';
     require_once PMF_ROOT_DIR . '/inc/Db.php';
-    require_once PMF_ROOT_DIR . '/inc/PMF_DB/Driver.php';
+    require_once PMF_ROOT_DIR . '/inc/DB/Driver.php';
     require_once PMF_ROOT_DIR . '/inc/Link.php';
     
     $images = array();

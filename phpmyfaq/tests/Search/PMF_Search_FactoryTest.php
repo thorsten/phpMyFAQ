@@ -17,14 +17,14 @@
  * @since     2010-07-06
  */
 
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Search/Factory.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/Search/Factory.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/Language.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/inc/String.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_String/Abstract.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_String/Mbstring.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/String/Abstract.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/inc/String/Mbstring.php';
 
 /**
- * PMF_Category test case
+ * Category test case
  *
  * @category  phpMyFAQ
  * @package   PMF_Tests
