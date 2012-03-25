@@ -59,8 +59,8 @@ class PMF_Search_ResultsetTest extends PHPUnit_Framework_TestCase
         $this->PMF_Configuration = new PMF_Configuration($this->dbHandle);
         
         $this->PMF_Search_Resultset = new PMF_Search_Resultset(
-            $this->getMock('User'),
-            $this->getMock('Faq'),
+            $this->getMock('PMF_User'),
+            $this->getMock('PMF_Faq'),
             $this->PMF_Configuration
         );
     }
