@@ -109,15 +109,9 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      */
     public function fetchObject($result)
     {
-        $object = new stdClass();
+        $return = $result->fetchArray(SQLITE3_ASSOC);
 
-        while ($res = $result->fetchArray(SQLITE3_ASSOC)) {
-            foreach ($res as $key => $value) {
-                $object->$key = $value;
-            }
-        }
-
-        return $object;
+        return (object)$return;
     }
 
     /**
