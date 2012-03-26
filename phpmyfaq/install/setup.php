@@ -383,21 +383,24 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                         <label class="control-label" for="language">Default language:</label>
                         <div class="controls">
                             <select name="language" size="1" id="language">
-<?php
-    if ($dir = @opendir(PMF_ROOT_DIR . '/lang')) {
-        while ($dat = @readdir($dir)) {
-            if (substr($dat, -4) == '.php') {
-                printf('<option value="%s"', $dat);
-                if ($dat == "language_en.php") {
-                    print ' selected="selected"';
-                }
-                print '>' . $languageCodes[substr(strtoupper($dat), 9, 2)] . '</option>';
-            }
-        }
-    } else {
-        print '<option>english</option>';
-    }
-?>
+                            <?php
+                                if ($dir = @opendir(PMF_ROOT_DIR . '/lang')) {
+                                    while ($dat = @readdir($dir)) {
+                                        if (substr($dat, -4) == '.php') {
+                                            printf('<option value="%s"', $dat);
+                                            if ($dat == "language_en.php") {
+                                                print ' selected="selected"';
+                                            }
+                                            printf(
+                                                '>%s</option>',
+                                                $languageCodes[substr(strtoupper($dat), 9, 2)]
+                                            );
+                                        }
+                                    }
+                                } else {
+                                    print '<option>english</option>';
+                                }
+                            ?>
                             </select>
                             <p class="help-block">Please select your default language.</p>
                         </div>
@@ -525,11 +528,9 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         die();
     }
 
-    if ($dbType == 'sqlite') {
-        $sqliteFile = PMF_Filter::filterInput(INPUT_POST, 'sql_sqlitefile', FILTER_SANITIZE_STRING);
-        if (!is_null($sqliteFile)) {
-            $dbServer = $sqliteFile; // We're using $dbServer, too!
-        } else {
+    if ('sqlite' === $dbType || 'sqlite3' === $dbType) {
+        $dbServer = PMF_Filter::filterInput(INPUT_POST, 'sql_sqlitefile', FILTER_SANITIZE_STRING);
+        if (is_null($dbServer)) {
             print "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a SQLite database filename.</p>\n";
             HTMLFooter();
             die();
@@ -688,7 +689,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     print '<p>';
 
     // Erase any table before starting creating the required ones
-    if ('sqlite' != $dbType) {
+    if ('sqlite' !== $dbType && 'sqlite3' !== $dbType) {
         $system->dropTables($uninst);
     }
     
