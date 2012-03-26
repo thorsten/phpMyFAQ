@@ -141,7 +141,7 @@ $options = array(
     'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgPrevious'] . '</a>',
     'layoutTpl'       => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>');
 
-$faqPagination     = new PMF_Pagination($options);
+$faqPagination     = new PMF_Pagination($faqConfig, $options);
 $faqCategoryHelper = PMF_Helper_Category::getInstance();
 $faqCategoryHelper->setCategory($category);
 

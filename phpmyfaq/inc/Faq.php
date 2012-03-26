@@ -468,7 +468,7 @@ class PMF_Faq
                 'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $this->pmf_lang['msgPrevious'] . '</a>'
             );
         
-            $pagination = new PMF_Pagination($options);
+            $pagination = new PMF_Pagination($this->_config, $options);
             $output    .= $pagination->render();
         }
         

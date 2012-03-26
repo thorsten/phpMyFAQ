@@ -32,6 +32,7 @@ $allCrumbs    = $fa->getBreadcrumbs();
 $crumbs   = array_slice($allCrumbs, ($page - 1) * $itemsPerPage, $itemsPerPage);
 
 $pagination = new PMF_Pagination(
+    $faqConfig,
     array(
         'baseUrl'   => PMF_Link::getSystemRelativeUri() . '?' . str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
         'total'     => count($allCrumbs),

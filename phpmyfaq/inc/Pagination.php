@@ -141,31 +141,39 @@ class PMF_Pagination
      * @var string
      */
     protected $seoName = '';
-    
+
+    /**
+     * @var PMF_Configuration
+     */
+    private $_config;
+
     /**
      * Constructor
      *
      * We read in the current page from the baseUrl, so if it contains
      * no pageParamName, first page is asumed
      *
-     * @param array $options initialization options,
-     *                       possible options:
-     *                       - baseUrl (default "")
-     *                       - total
-     *                       - perPage
-     *                       - linkTpl
-     *                       - currentPageLinkTpl
-     *                       - nextPageLinkTpl
-     *                       - prevPageLinkTpl
-     *                       - firstPageLinkTpl
-     *                       - lastPageLinkTpl
-     *                       - layoutTpl
-     *                       - pageParamName (default "page")
+     * @param PMF_Configuration $config
+     * @param array             $options initialization options,
+     *                                   possible options:
+     *                                   - baseUrl (default "")
+     *                                   - total
+     *                                   - perPage
+     *                                   - linkTpl
+     *                                   - currentPageLinkTpl
+     *                                   - nextPageLinkTpl
+     *                                   - prevPageLinkTpl
+     *                                   - firstPageLinkTpl
+     *                                   - lastPageLinkTpl
+     *                                   - layoutTpl
+     *                                   - pageParamName (default "page")
      *
      * @return PMF_Pagination
      */
-    public function __construct(Array $options = null)
+    public function __construct(PMF_Configuration $config, Array $options = null)
     {
+        $this->_config = $config;
+
         if (isset($options['baseUrl'])) {
             $this->baseUrl = $options['baseUrl'];
         }

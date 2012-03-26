@@ -535,12 +535,20 @@ if (isset($auth) && in_array(true, $permission)) {
             </header>
 <?php
     if (isset($error) && 0 < strlen($error)) {
-        $message = sprintf('<p class="alert alert-error">%s</p>', $error);
+        $message = sprintf(
+            '<p class="alert alert-error">%s%s</p>',
+            '<a class="close" data-dismiss="alert" href="#">&times;</a>',
+            $error
+        );
     } else {
         $message = sprintf('<p>%s</p>', $PMF_LANG['ad_auth_insert']);
     }
     if ($action == 'logout') {
-        $message = sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_logout']);
+        $message = sprintf(
+            '<p class="alert alert-success">%s%s</p>',
+            '<a class="close" data-dismiss="alert" href="#">&times;</a>',
+            $PMF_LANG['ad_logout']
+        );
     }
     
     if (isset($_SERVER['HTTPS']) || !$faqConfig->get('security.useSslForLogins')) {

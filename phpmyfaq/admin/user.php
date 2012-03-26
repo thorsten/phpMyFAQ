@@ -516,7 +516,7 @@ function getUserData(user_id)
             'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgPrevious'] . '</a>',
             'layoutTpl'       => '<strong>{LAYOUT_CONTENT}</strong>'
         );
-        $pagination = new PMF_Pagination($options);
+        $pagination = new PMF_Pagination($faqConfig, $options);
 ?>
         <header>
             <h2><?php print $PMF_LANG['ad_user']; ?></h2>

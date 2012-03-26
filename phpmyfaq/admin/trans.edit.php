@@ -67,7 +67,7 @@ $options = array(
     'layoutTpl' => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>'
 );
 
-$pagination = new PMF_Pagination($options);
+$pagination = new PMF_Pagination($faqConfig, $options);
 $pageBar    = $pagination->render();
 
 /**
