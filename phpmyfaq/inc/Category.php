@@ -127,13 +127,18 @@ class PMF_Category
      * Constructor
      *
      * @param PMF_Configuration $config
-     * @param boolean           $withperm With or without permission check
+     * @param boolean           $withperm     With or without permission check
+     * @param boolean           $withLanguage With or without defined language
      *
      * @return PMF_Category
      */
-    public function __construct(PMF_Configuration $config, $withperm = true)
+    public function __construct(PMF_Configuration $config, $withperm = true, $withLanguage = true)
     {
         $this->_config = $config;
+
+        if ($withLanguage) {
+            $this->language = $this->_config->getLanguage()->getLanguage();
+        }
 
         $this->lineTab = $this->getOrderedCategories($withperm);
         for ($i = 0; $i < count($this->lineTab); $i++) {
@@ -331,7 +336,7 @@ class PMF_Category
      */
     private function levelOf($id)
     {
-    	$alreadies = array($id);
+        $alreadies = array($id);
         $ret       = 0;
         while ((isset($this->categoryName[$id]['parent_id'])) && ($this->categoryName[$id]['parent_id'] != 0)) {
             $ret++;

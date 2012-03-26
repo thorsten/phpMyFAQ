@@ -265,7 +265,7 @@ if ($permission['editcateg']) {
                 print '</li>';
             }
             print '</ul></li>';
-        } elseif ($level == $open && $y != 0) {
+        } elseif ($level == $open && $id != 0) {
             print '</li>';
         }
 
