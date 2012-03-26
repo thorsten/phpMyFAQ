@@ -85,6 +85,7 @@ $system = new PMF_System();
         function selectDatabaseSetup(field) {
             switch (field.value) {
             case 'sqlite':
+            case 'sqlite3':
                 $('#dbsqlite').show()
                 $('#dbdatafull').hide();
                 break;
