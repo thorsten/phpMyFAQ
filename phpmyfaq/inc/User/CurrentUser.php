@@ -477,7 +477,7 @@ class PMF_User_CurrentUser extends PMF_User
      */
     public static function getFromCookie(PMF_Configuration $config)
     {
-        if (! $_COOKIE[PMF_Session::PMF_COOKIE_NAME_REMEMBERME]) {
+        if (! isset($_COOKIE[PMF_Session::PMF_COOKIE_NAME_REMEMBERME])) {
             return null;
         }
 
