@@ -24,11 +24,57 @@ if (!defined('IS_VALID_PHPMYFAQ') || !$permission['editconfig']) {
 }
 
 $ajaxAction    = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$instanceId    = PMF_Filter::filterInput(INPUT_GET, 'instanceId', FILTER_VALIDATE_INT);
 $stopwordId    = PMF_Filter::filterInput(INPUT_GET, 'stopword_id', FILTER_VALIDATE_INT);
 $stopword      = PMF_Filter::filterInput(INPUT_GET, 'stopword', FILTER_SANITIZE_STRING);
 $stopwordsLang = PMF_Filter::filterInput(INPUT_GET, 'stopwords_lang', FILTER_SANITIZE_STRING);
 
 switch ($ajaxAction) {
+
+    case 'add_instance':
+
+        $url      = PMF_Filter::filterInput(INPUT_GET, 'url', FILTER_SANITIZE_STRING);
+        $instance = PMF_Filter::filterInput(INPUT_GET, 'instance', FILTER_SANITIZE_STRING);
+        $comment  = PMF_Filter::filterInput(INPUT_GET, 'comment', FILTER_SANITIZE_STRING);
+        $data     = array(
+            'url'      => $url,
+            'instance' => $instance,
+            'comment'  => $comment
+        );
+
+        $faqInstance = new PMF_Instance($faqConfig);
+        header('Content-Type: application/json');
+        $instanceId = $faqInstance->addInstance($data);
+        if (0 !== $instanceId) {
+            print json_encode(array('added' => $instanceId));
+        } else {
+            print json_encode(array('error' => $instanceId));
+        }
+        break;
+
+    case 'delete_instance':
+        if (null !== $instanceId) {
+            $faqInstance = new PMF_Instance($faqConfig);
+            header('Content-Type: application/json');
+            if ($faqInstance->removeInstance($instanceId)) {
+                print json_encode(array('deleted' => $instanceId));
+            } else {
+                print json_encode(array('error' => $instanceId));
+            }
+        }
+        break;
+
+    case 'edit_instance':
+        if (null !== $instanceId) {
+            $faqInstance = new PMF_Instance($faqConfig);
+            header('Content-Type: application/json');
+            if ($faqInstance->removeInstance($instanceId)) {
+                print json_encode(array('deleted' => $instanceId));
+            } else {
+                print json_encode(array('error' => $instanceId));
+            }
+        }
+        break;
     
     case 'load_stop_words_by_lang':
         if (PMF_Language::isASupportedLanguage($stopwordsLang)) {
