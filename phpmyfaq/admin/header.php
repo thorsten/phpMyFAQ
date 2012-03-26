@@ -254,7 +254,7 @@ switch ($action) {
                 </ul>
                 <?php else: ?>
                 <ul class="nav">
-                    <li><a href="password.php"><?php print $PMF_LANG["lostPassword"]; ?></a></li>
+                    <li><a href="../index.php?action=password"><?php print $PMF_LANG["lostPassword"]; ?></a></li>
                 </ul>
                 <?php endif; ?>
             </div>

@@ -32,7 +32,7 @@ $tpl->parse(
     'writeContent',
     array(
         'registerUser'   => '<a href="?action=register">' . $PMF_LANG['msgRegistration'] . '</a>',
-        'sendPassword'   => '<a href="./admin/password.php">' . $PMF_LANG['lostPassword'] . '</a>',
+        'sendPassword'   => '<a href="?action=password">' . $PMF_LANG['lostPassword'] . '</a>',
         'loginHeader'    => $PMF_LANG['msgLoginUser'],
         'loginMessage'   => $loginMessage,
         'writeLoginPath' => $systemUri,

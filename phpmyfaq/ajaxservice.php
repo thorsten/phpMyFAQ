@@ -68,7 +68,8 @@ if (!$network->checkIp($_SERVER['REMOTE_ADDR'])) {
     $message = array('error' => $PMF_LANG['err_bannedIP']);
 }
 
-if ('savevoting' !== $action && 'saveuserdata' !== $action && !$captcha->checkCaptchaCode($code)) {
+if ('savevoting' !== $action && 'saveuserdata' !== $action && 'changepassword' !== $action &&
+    !$captcha->checkCaptchaCode($code)) {
     $message = array('error' => $PMF_LANG['msgCaptcha']);
 }
 
@@ -734,6 +735,48 @@ switch ($action) {
             $message = array('success' => $PMF_LANG['ad_entry_savedsuc']);
         } else {
             $message = array('error' => $PMF_LANG['ad_entry_savedfail']);
+        }
+        break;
+
+    case 'changepassword':
+
+        $username = PMF_Filter::filterInput(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+        $email    = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+
+        if (!is_null($username) && !is_null($email)) {
+
+            $user       = new PMF_User_CurrentUser($faqConfig);
+            $loginExist = $user->getUserByLogin($username);
+
+            if ($loginExist && ($email == $user->getUserData('email'))) {
+                $consonants = array(
+                    'b','c','d','f','g','h','j','k','l','m','n','p','r','s','t','v','w','x','y','z'
+                );
+                $vowels = array(
+                    'a','e','i','o','u'
+                );
+                $newPassword = '';
+                srand((double)microtime()*1000000);
+                for ($i = 1; $i <= 4; $i++) {
+                    $newPassword .= $consonants[rand(0,19)];
+                    $newPassword .= $vowels[rand(0,4)];
+                }
+                $user->changePassword($newPassword);
+                $text = $PMF_LANG['lostpwd_text_1']."\nUsername: ".$username."\nNew Password: ".$newPassword."\n\n".$PMF_LANG["lostpwd_text_2"];
+
+                $mail = new PMF_Mail($faqConfig);
+                $mail->addTo($email);
+                $mail->subject = '[%sitename%] Username / password request';
+                $mail->message = $text;
+                $result = $mail->send();
+                unset($mail);
+                // Trust that the email has been sent
+                $message = array('success' => $PMF_LANG['lostpwd_mail_okay']);
+            } else {
+                $message = array('error' => $PMF_LANG['lostpwd_err_1']);
+            }
+        } else {
+            $message = array('error' => $PMF_LANG['lostpwd_err_2']);
         }
         break;
 }
