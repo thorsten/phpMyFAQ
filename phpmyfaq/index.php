@@ -105,6 +105,9 @@ if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
 // Login via local DB or LDAP or SSO
 if (!is_null($faqusername) && !is_null($faqpassword)) {
     $user = new PMF_User_CurrentUser($faqConfig);
+    if (!is_null($faqremember) && 'rememberMe' === $faqremember) {
+        $user->enableRememberMe();
+    }
     if ($faqConfig->get('security.ldapSupport')) {
         $authLdap = new PMF_Auth_AuthLdap($faqConfig);
         $user->addAuth($authLdap, 'ldap');
@@ -134,9 +137,13 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     }
 
 } else {
+    // Try to authenticate with cookie information
+    $user = PMF_User_CurrentUser::getFromCookie($faqConfig);
     // authenticate with session information
-    $user = PMF_User_CurrentUser::getFromSession($faqConfig);
-    if ($user) {
+    if (! $user instanceof PMF_User_CurrentUser) {
+        $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+    }
+    if ($user instanceof PMF_User_CurrentUser) {
         $auth = true;
     } else {
         $user = null;

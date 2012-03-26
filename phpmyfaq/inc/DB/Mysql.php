@@ -94,7 +94,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
         $this->sqllog .= pmf_debug($query);
         $result = mysql_query($query, $this->conn);
         if (!$result) {
-        	$this->sqllog .= $this->error();
+            $this->sqllog .= $this->error();
         }
         
         return $result;

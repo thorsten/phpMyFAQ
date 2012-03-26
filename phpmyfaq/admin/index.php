@@ -110,12 +110,27 @@ $auth        = null;
 $error       = '';
 $faqusername = PMF_Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
 $faqpassword = PMF_Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
+$faqremember = PMF_Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_SANITIZE_STRING);
+
+// Set username via SSO
+if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
+    $faqusername = trim($_SERVER['REMOTE_USER']);
+    $faqpassword = '';
+}
+
+// Login via local DB or LDAP or SSO
 if (!is_null($faqusername) && !is_null($faqpassword)) {
-    // login with username and password
     $user = new PMF_User_CurrentUser($faqConfig);
+    if (!is_null($faqremember) && 'rememberMe' === $faqremember) {
+        $user->enableRememberMe();
+    }
     if ($faqConfig->get('security.ldapSupport')) {
         $authLdap = new PMF_Auth_AuthLdap($faqConfig);
         $user->addAuth($authLdap, 'ldap');
+    }
+    if ($faqConfig->get('security.ssoSupport')) {
+        $authSso = new PMF_Auth_AuthSso($faqConfig);
+        $user->addAuth($authSso, 'sso');
     }
     if ($user->login($faqusername, $faqpassword)) {
         // login, if user account is NOT blocked
@@ -133,9 +148,13 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
         $user  = null;
     }
 } else {
+    // Try to authenticate with cookie information
+    $user = PMF_User_CurrentUser::getFromCookie($faqConfig);
     // authenticate with session information
-    $user = PMF_User_CurrentUser::getFromSession($faqConfig);
-    if ($user) {
+    if (! $user instanceof PMF_User_CurrentUser) {
+        $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+    }
+    if ($user instanceof PMF_User_CurrentUser) {
         $auth = true;
     } else {
         $user = null;
@@ -534,14 +553,23 @@ if (isset($auth) && in_array(true, $permission)) {
                 <div class="control-group">
                     <label class="control-label" for="faqusername"><?php print $PMF_LANG["ad_auth_user"]; ?></label>
                     <div class="controls">
-                        <input type="text" name="faqusername" id="faqusername" required="required" autofocus="autofocus" />
+                        <input type="text" name="faqusername" id="faqusername" required="required" />
                     </div>
                 </div>
 
                 <div class="control-group">
                     <label class="control-label" for="faqpassword"><?php print $PMF_LANG["ad_auth_passwd"]; ?></label>
                     <div class="controls">
-                        <input type="password" size="30" name="faqpassword" id="faqpassword" required="required" />
+                        <input type="password" name="faqpassword" id="faqpassword" required="required" />
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="controls">
+                        <label class="checkbox">
+                            <input type="checkbox" id="faqrememberme" name="faqrememberme" value="rememberMe">
+                            <?php print $PMF_LANG['rememberMe'] ?>
+                        </label>
                     </div>
                 </div>
 

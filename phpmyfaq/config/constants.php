@@ -370,8 +370,9 @@ $languageCodes = array(
 define('PMF_GET_KEY_NAME_LANGUAGE', 'lang');
 define('PMF_GET_KEY_NAME_SESSIONID', 'sid');
 // Misc parameters
-define('PMF_LANGUAGE_EXPIRED_TIME', 3600);
-define('PMF_SESSION_EXPIRED_TIME', 3600);
+define('PMF_LANGUAGE_EXPIRED_TIME', 3600); // 30 minutes
+define('PMF_SESSION_EXPIRED_TIME', 3600); // 30 minutes
+define('PMF_REMEMBERME_EXPIRED_TIME', 1209600); // 2 weeks
 
 //
 // Set the default timezone used by all date/time functions

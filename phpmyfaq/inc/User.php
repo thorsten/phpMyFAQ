@@ -298,7 +298,8 @@ class PMF_User
                 WHERE
                     login = '%s'",
                 SQLPREFIX,
-                $this->login);
+                $this->login
+            );
                 
             $res = $this->db->query($select);
             if ($this->db->numRows($res) != 1) {
@@ -334,7 +335,8 @@ class PMF_User
             WHERE
                 login = '%s'",
             SQLPREFIX,
-            $this->db->escape($login));
+            $this->db->escape($login)
+        );
         
         $res = $this->db->query($select);
         if ($this->db->numRows($res) !== 1) {
@@ -348,6 +350,53 @@ class PMF_User
         $this->user_id = (int)    $user['user_id'];
         $this->login   = (string) $user['login'];
         $this->status  = (string) $user['account_status'];
+        // get user-data
+        if (!$this->userdata instanceof PMF_User_UserData) {
+            $this->userdata = new PMF_User_UserData();
+        }
+        $this->userdata->load($this->getUserId());
+        return true;
+    }
+
+    /**
+     * loads basic user information from the database selecting the user with
+     * specified cookie information.
+     *
+     * @param string $cookie
+     *
+     * @return boolean
+     */
+    public function getUserByCookie($cookie)
+    {
+        $select = sprintf("
+            SELECT
+                user_id,
+                login,
+                account_status
+            FROM
+                %sfaquser
+            WHERE
+                remember_me = '%s'",
+            SQLPREFIX,
+            $this->db->escape($cookie)
+        );
+
+        $res = $this->db->query($select);
+        if ($this->db->numRows($res) !== 1) {
+            $this->errors[] = self::ERROR_USER_INCORRECT_LOGIN;
+            return false;
+        }
+        $user = $this->db->fetchArray($res);
+
+        // Don't ever login via anonymous user
+        if (-1 === $user['user_id']) {
+            return false;
+        }
+
+        $this->user_id = (int)    $user['user_id'];
+        $this->login   = (string) $user['login'];
+        $this->status  = (string) $user['account_status'];
+
         // get user-data
         if (!$this->userdata instanceof PMF_User_UserData) {
             $this->userdata = new PMF_User_UserData();

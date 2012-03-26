@@ -34,6 +34,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  */
 class PMF_Session
 {
+    /**
+     * Constants
+     */
     const PMF_COOKIE_NAME_REMEMBERME = 'pmf_rememberme';
     const PMF_COOKIE_NAME_AUTH = 'pmf_auth';
     const PMF_COOKIE_NAME_SESSIONID = 'pmf_sid';
@@ -366,10 +369,11 @@ class PMF_Session
      *
      * @param string  $name      Cookie name
      * @param integer $sessionId Session ID
+     * @param integer $timeout   Cookie timeout
      *
      * @return void
      */
-    public static function setCookie($name, $sessionId)
+    public static function setCookie($name, $sessionId, $timeout = PMF_SESSION_EXPIRED_TIME)
     {
         setcookie(
             $name,

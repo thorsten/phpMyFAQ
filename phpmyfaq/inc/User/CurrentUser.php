@@ -94,6 +94,13 @@ class PMF_User_CurrentUser extends PMF_User
     private $_ldapConfig = array();
 
     /**
+     * Remember me activated or deactivated
+     *
+     * @var boolean
+     */
+    private $_rememberMe = false;
+
+    /**
      * Constructor
      *
      * @param PMF_Configuration $config
@@ -172,6 +179,15 @@ class PMF_User_CurrentUser extends PMF_User
             $this->updateSessionId(true);
             $this->saveToSession();
             $this->saveCrsfTokenToSession();
+            // save remember me cookie
+            if (true === $this->_rememberMe) {
+                $rememberMe = sha1(session_id());
+                $this->setRememberMe($rememberMe);
+                PMF_Session::setCookie(
+                    PMF_Session::PMF_COOKIE_NAME_REMEMBERME,
+                    $rememberMe
+                );
+            }
             
             // remember the auth container for administration
             $update = sprintf("
@@ -183,7 +199,8 @@ class PMF_User_CurrentUser extends PMF_User
                     user_id = %d",
                 SQLPREFIX,
                 $this->db->escape($name),
-                $this->getUserId());
+                $this->getUserId()
+            );
             $res = $this->db->query($update);
             if (!$res) {
                 return false;
@@ -374,7 +391,8 @@ class PMF_User_CurrentUser extends PMF_User
             UPDATE
                 %sfaquser
             SET
-                session_id = null
+                session_id = NULL,
+                remember_me = NULL
             WHERE
                 user_id = %d",
                 SQLPREFIX,
@@ -392,21 +410,19 @@ class PMF_User_CurrentUser extends PMF_User
     }
 
     /**
-     * This static method returns a valid CurrentUser object if
-     * there is one in the session that is not timed out.
-     * If the the optional parameter ip_check is true, the current
-     * user must have the same ip which is stored in the user table
-     * The session-ID is updated if necessary. The CurrentUser
-     * will be removed from the session, if it is timed out. If
-     * there is no valid CurrentUser in the session or the session
-     * is timed out, null will be returned. If the session data is
-     * correct, but there is no user found in the user table, false
-     * will be returned. On success, a valid CurrentUser object is
-     * returned.
+     * This static method returns a valid CurrentUser object if there is one
+     * in the session that is not timed out. If the the optional configuration
+     * ip_check is true, the current user must have the same ip which is stored
+     * in the user table. The session-ID is updated if necessary. The
+     * CurrentUser will be removed from the session, if it is timed out. If
+     * there is no valid CurrentUser in the session or the session is timed
+     * out, null will be returned. If the session data is correct, but there
+     * is no user found in the user table, false will be returned. On success,
+     * a valid CurrentUser object is returned.
      *
      * @param  PMF_Configuration $config
      *
-     * @return PMF_User_CurrentUser
+     * @return null|PMF_User_CurrentUser
      */
     public static function getFromSession(PMF_Configuration $config)
     {
@@ -446,6 +462,47 @@ class PMF_User_CurrentUser extends PMF_User
     }
 
     /**
+     * This static method returns a valid CurrentUser object if there is one
+     * in the cookie that is not timed out. The session-ID is updated if
+     * necessary. The CurrentUser will be removed from the session, if it is
+     * timed out. If there is no valid CurrentUser in the cookie or the
+     * cookie is timed out, null will be returned. If the cookie is correct,
+     * but there is no user found in the user table, false will be returned.
+     * On success, a valid CurrentUser object is returned
+     *
+     * @static
+     * @param PMF_Configuration $config
+     *
+     * @return null|PMF_User_CurrentUser
+     */
+    public static function getFromCookie(PMF_Configuration $config)
+    {
+        if (! $_COOKIE[PMF_Session::PMF_COOKIE_NAME_REMEMBERME]) {
+            return null;
+        }
+
+        // create a new CurrentUser object
+        $user = new PMF_User_CurrentUser($config);
+        $user->getUserByCookie($_COOKIE[PMF_Session::PMF_COOKIE_NAME_REMEMBERME]);
+
+        if (-1 === $user->getUserId()) {
+            return null;
+        }
+
+        // sessionId and cookie information needs to be updated
+        if ($user->sessionIdIsTimedOut()) {
+            $user->updateSessionId();
+            $user->setRememberMe(sha1(session_id()));
+        }
+        // user is now logged in
+        $user->_loggedIn = true;
+        // save current user to session and return the instance
+        $user->saveToSession();
+
+        return $user;
+    }
+
+    /**
      * Sets the number of minutes when the current user stored in
      * the session gets invalid.
      *
@@ -469,7 +526,41 @@ class PMF_User_CurrentUser extends PMF_User
     {
         $this->_sessionIdTimeout = abs($timeout);
     }
-    
+
+    /**
+     * Enables the remember me decision
+     *
+     * @return void
+     */
+    public function enableRememberMe()
+    {
+        $this->_rememberMe = true;
+    }
+
+    /**
+     * Saves remember me token
+     *
+     * @param string $rememberMe
+     *
+     * @return boolean
+     */
+    protected function setRememberMe($rememberMe)
+    {
+        $update = sprintf("
+            UPDATE
+                %sfaquser
+            SET
+                remember_me = '%s'
+            WHERE
+                user_id = %d",
+            SQLPREFIX,
+            $this->db->escape($rememberMe),
+            $this->getUserId()
+        );
+
+        return $this->db->query($update);
+    }
+
     /**
      * Returns the CSRF token from session
      *
@@ -501,7 +592,7 @@ class PMF_User_CurrentUser extends PMF_User
     {
         unset($_SESSION['phpmyfaq_csrf_token']);
     }
-    
+
     /**
      * Creates a CSRF token
      *

@@ -33,7 +33,7 @@
                 <div class="control-group">
                     <div class="controls">
                         <label class="checkbox">
-                            <input type="checkbox" id="faqrememberme" value="faqrememberme">
+                            <input type="checkbox" id="faqrememberme" name="faqrememberme" value="rememberMe">
                             {rememberMe}
                         </label>
                     </div>
