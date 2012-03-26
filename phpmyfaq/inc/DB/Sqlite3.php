@@ -109,21 +109,11 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      */
     public function fetchObject($result)
     {
-        $array = $this->fetch_assoc($result);
+        $object = new stdClass();
 
-        $object    = new stdClass();
-        $reflector = new ReflectionObject($object);
-
-        for($i = 0; $i < $result->numColumns(); $i++) {
-            $name  = $result->columnName($i);
-            $value = $array[$name];
-
-            try {
-                $attribute = $reflector->getProperty($name);
-                $attribute->setAccessible(TRUE);
-                $attribute->setValue($object, $value);
-            } catch (ReflectionException $e) {
-                $object->$name = $value;
+        while ($res = $result->fetchArray(SQLITE3_ASSOC)) {
+            foreach ($res as $key => $value) {
+                $object->$key = $value;
             }
         }
 
@@ -139,7 +129,13 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      */
     public function fetchArray($result)
     {
-        return $result->fetchArray();
+        $ret = array();
+
+        while ($res = $result->fetchArray()) {
+            $ret[] = $res;
+        }
+
+        return $ret;
     }
 
     /**
@@ -151,15 +147,21 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      */
     public function fetchAssoc($result)
     {
-        return $result->fetchArray(SQLITE3_ASSOC);
+        $ret = array();
+
+        while ($res = $result->fetchArray(SQLITE3_ASSOC)) {
+            $ret[] = $res;
+        }
+
+        return $ret;
     }
 
     /**
      * Fetches a complete result as an object
      *
-     * @param  resource      $result Resultset
+     * @param resource $result Resultset
      *
-     * @return array
+     * @return array of stdClass
      */
     public function fetchAll($result)
     {
@@ -168,7 +170,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
             throw new Exception('Error while fetching result: ' . $this->error());
         }
 
-        while ($row = $this->fetch_object($result)) {
+        while ($row = $this->fetchObject($result)) {
             $ret[] = $row;
         }
 
