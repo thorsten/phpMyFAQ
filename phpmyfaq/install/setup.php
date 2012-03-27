@@ -681,7 +681,6 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     }
 
     require_once $dbType . '.sql.php'; // CREATE TABLES
-    require_once 'config.sql.php';     // INSERTs for configuration
     require_once 'stopwords.sql.php';  // INSERTs for stopwords
 
     $system->setDatabase($db);
@@ -714,20 +713,26 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         }
     }
 
-    // add main configuration
     $configuration = new PMF_Configuration($db);
-    $configuration->getAll();
+
+    // add main configuration
+    include 'configurationdata.php';
+    $mainConfig['spam.enableCaptchaCode']  = (extension_loaded('gd') ? 'true' : 'false');
+    $mainConfig['main.metaPublisher']      = $realname;
+    $mainConfig['main.administrationMail'] = $email;
+    $mainConfig['main.currentVersion']     = PMF_System::getVersion();
+    $mainConfig['main.currentApiVersion']  = PMF_System::getApiVersion();
+    $mainConfig['main.language']           = $language;
+    $mainConfig['main.languageDetection']  = 'true';
+    $mainConfig['main.phpMyFAQToken']      = md5(uniqid(rand()));
+    $mainConfig['security.permLevel']      = $permLevel;
+
+    foreach ($mainConfig as $name => $value) {
+        $configuration->add($name, $value);
+    }
 
     $link = new PMF_Link(null, $configuration);
-
-    $configs = $configuration->config;
-
-    $configs['spam.enableCaptchaCode']  = (extension_loaded('gd') ? 'true' : 'false');
-    $configs['main.referenceURL']       = $link->getSystemUri('/install/setup.php');
-    $configs['main.metaPublisher']      = $realname;
-    $configs['main.administrationMail'] = $email;
-
-    $configuration->update($configs);
+    $configuration->add('main.referenceURL', $link->getSystemUri('/install/setup.php'));
 
     // add admin account and rights
     $admin = new PMF_User($configuration);
@@ -1132,7 +1137,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                 <a href="#" onclick="hide('configliste'); return false;">hide again</a>
                 <dl>
 <?php
-$q = new PMF_Questionnaire_Data($configs);
+$q = new PMF_Questionnaire_Data($mainConfig);
 $options = $q->get();
 array_walk($options, 'data_printer');
 echo '</dl><input type="hidden" name="systemdata" value="'.PMF_String::htmlspecialchars(serialize($q->get()), ENT_QUOTES).'" />';

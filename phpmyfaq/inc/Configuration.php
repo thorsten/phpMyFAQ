@@ -199,6 +199,29 @@ class PMF_Configuration
         return isset($this->config['core.ldapConfig']) ? $this->config['core.ldapConfig'] : array();
     }
 
+    /**
+     * Adds a configuration item for the database
+     *
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return boolean
+     */
+    public function add($name, $value)
+    {
+        $insert = sprintf(
+            "INSERT INTO
+                %s%s
+            VALUES
+                ('%s', '%s')",
+            SQLPREFIX,
+            $this->_tableName,
+            $this->getDb()->escape(trim($name)),
+            $this->getDb()->escape(trim($value))
+        );
+
+        return $this->getDb()->query($insert);
+    }
 
     /**
      * Updates all configuration items

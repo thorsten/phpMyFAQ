@@ -33,6 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <?php
 if ($permission['editinstances']) {
     $instance = new PMF_Instance($faqConfig);
+
 ?>
 
     <table class="table">

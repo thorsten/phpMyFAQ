@@ -36,7 +36,7 @@ switch ($ajaxAction) {
         $url      = PMF_Filter::filterInput(INPUT_GET, 'url', FILTER_SANITIZE_STRING);
         $instance = PMF_Filter::filterInput(INPUT_GET, 'instance', FILTER_SANITIZE_STRING);
         $comment  = PMF_Filter::filterInput(INPUT_GET, 'comment', FILTER_SANITIZE_STRING);
-        $install  = PMF_Filter::filterInput(INPUT_GET, 'install' FILTER_SANITIZE_STRING);
+        $install  = PMF_Filter::filterInput(INPUT_GET, 'install', FILTER_SANITIZE_STRING);
 
         $data = array(
             'url'      => $url,
