@@ -443,7 +443,7 @@ class PMF_Link
         $pattern[1] = '/:443$/'; // HTTPS: port 443
         $sysUri = $this->getSystemScheme() . preg_replace($pattern, '', $_SERVER['HTTP_HOST']);
 
-        return $sysUri.PMF_link::getSystemRelativeUri($path);
+        return $sysUri . PMF_link::getSystemRelativeUri($path);
     }
 
     /**

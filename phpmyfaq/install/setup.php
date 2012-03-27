@@ -763,9 +763,9 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
     // Add master instance
     $instanceData = array(
-        'url'      => $_SERVER['SERVER_NAME'],
-        'instance' => dirname(dirname($_SERVER['SCRIPT_NAME'])),
-        'comment'  => 'phpMyFAQ'
+        'url'      => $link->getSystemUri($_SERVER['SCRIPT_NAME']),
+        'instance' => $link->getSystemRelativeUri('install/setup.php'),
+        'comment'  => 'phpMyFAQ ' . PMF_System::getVersion()
     );
     $faqInstance = new PMF_Instance($configuration);
     $faqInstance->addInstance($instanceData);
