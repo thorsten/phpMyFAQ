@@ -45,7 +45,6 @@ switch ($ajaxAction) {
         );
 
         $faqInstance = new PMF_Instance($faqConfig);
-        header('Content-Type: application/json');
         $instanceId = $faqInstance->addInstance($data);
 
         if ('yes' === $install) {
@@ -53,45 +52,46 @@ switch ($ajaxAction) {
         }
 
         if (0 !== $instanceId) {
-            print json_encode(array('added' => $instanceId));
+            $payload = array('added' => $instanceId);
         } else {
-            print json_encode(array('error' => $instanceId));
+            $payload = array('error' => $instanceId);
         }
+        PMF_Helper_Http::sendJsonWithHeaders($payload);
         break;
 
     case 'delete_instance':
         if (null !== $instanceId) {
             $faqInstance = new PMF_Instance($faqConfig);
-            header('Content-Type: application/json');
             if ($faqInstance->removeInstance($instanceId)) {
-                print json_encode(array('deleted' => $instanceId));
+                $payload = array('deleted' => $instanceId);
             } else {
-                print json_encode(array('error' => $instanceId));
+                $payload = array('error' => $instanceId);
             }
+            PMF_Helper_Http::sendJsonWithHeaders($payload);
         }
         break;
 
     case 'edit_instance':
         if (null !== $instanceId) {
             $faqInstance = new PMF_Instance($faqConfig);
-            header('Content-Type: application/json');
             if ($faqInstance->removeInstance($instanceId)) {
-                print json_encode(array('deleted' => $instanceId));
+                $payload = array('deleted' => $instanceId);
             } else {
-                print json_encode(array('error' => $instanceId));
+                $payload = array('error' => $instanceId);
             }
+            PMF_Helper_Http::sendJsonWithHeaders($payload);
         }
         break;
-    
+
     case 'load_stop_words_by_lang':
         if (PMF_Language::isASupportedLanguage($stopwordsLang)) {
             $stopwordsList = PMF_Stopwords::getInstance($db, $Language)->getByLang($stopwordsLang);
-            
+
             header('Content-Type: application/json');
             print json_encode($stopwordsList);
         }
         break;
-        
+
     case 'delete_stop_word':
         if (null != $stopwordId && PMF_Language::isASupportedLanguage($stopwordsLang)) {
             $oStopwords = PMF_Stopwords::getInstance($db, $Language);
