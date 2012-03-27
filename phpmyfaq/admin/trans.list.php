@@ -37,7 +37,7 @@ printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_translations']);
         <p><?php print $PMF_LANG['msgChooseLanguageToTranslate'] ?>:</p>
 
         <?php if(!$isTransDirWritable):
-            print '<p class="error">'. $PMF_LANG['msgLangDirIsntWritable'] . "</p>";
+            print '<p class="alert alert-error">'. $PMF_LANG['msgLangDirIsntWritable'] . "</p>";
         endif; ?>
 
         <table class="table table-striped">
