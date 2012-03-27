@@ -37,8 +37,10 @@ class PMF_Configuration
 {
     /**
      * Tablename
+     *
+     * @var string
      */
-    const TABLE_FAQCONFIG = 'faqconfig';
+    protected $_tableName = 'faqconfig';
 
     /**
      * Configuration array
@@ -54,13 +56,9 @@ class PMF_Configuration
      *
      * @return PMF_Configuration
      */
-    public function __construct(PMF_DB_Driver $database = null)
+    public function __construct(PMF_DB_Driver $database)
     {
-        if (! is_null($database)) {
-            $this->setDb($database);
-        } else {
-            $this->setDb(PMF_Db::getInstance());
-        }
+        $this->setDb($database);
     }
 
     /**
@@ -76,7 +74,7 @@ class PMF_Configuration
             FROM
                 %s%s",
             SQLPREFIX,
-            self::TABLE_FAQCONFIG
+            $this->_tableName
         );
             
         $result = $this->getDb()->query($query);
@@ -230,7 +228,7 @@ class PMF_Configuration
                         WHERE
                             config_name = '%s'",
                         SQLPREFIX,
-                        self::TABLE_FAQCONFIG,
+                        $this->_tableName,
                         $this->getDb()->escape(trim($value)),
                         $name
                     );

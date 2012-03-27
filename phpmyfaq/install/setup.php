@@ -978,16 +978,21 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     );
     $anonymous->setUserData($anonymousData);
 
-    // Add instance
+    // Add master instance
     $instanceData = array(
         'url'      => $_SERVER['SERVER_NAME'],
-        'instance' => dirname($_SERVER['SCRIPT_NAME']),
+        'instance' => dirname(dirname($_SERVER['SCRIPT_NAME'])),
         'comment'  => 'phpMyFAQ'
     );
     $faqInstance = new PMF_Instance($configuration);
     $faqInstance->addInstance($instanceData);
 
-    // @todo: add basic instance configuration
+    $configInstanceData = array(
+        'main.isMaster'   => true,
+        'main.numClients' => 0
+    );
+    $faqConfigInstance = new PMF_Configuration_Instance($db);
+    $faqConfigInstance->update($configInstanceData);
 
     print '</p>';
 

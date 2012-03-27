@@ -36,8 +36,10 @@ class PMF_Configuration_Instance extends PMF_Configuration
 {
     /**
      * Tablename
+     *
+     * @var string
      */
-    const TABLE_FAQINSTANCES_CONFIG = 'faqinstances_config';
+    protected $_tableName = 'faqinstances_config';
 
     /**
      * Constructor
@@ -46,8 +48,9 @@ class PMF_Configuration_Instance extends PMF_Configuration
      */
     public function __construct(PMF_DB_Driver $database)
     {
-        $this->_db = $database;
+        parent::__construct($database);
     }
+
 
 
 }

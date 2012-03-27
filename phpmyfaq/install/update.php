@@ -776,13 +776,18 @@ if ($step == 3) {
     if (version_compare($version, '2.8.0-alpha2', '<')) {
         $instanceData = array(
             'url'      => $_SERVER['SERVER_NAME'],
-            'instance' => dirname($_SERVER['SCRIPT_NAME']),
+            'instance' => dirname(dirname($_SERVER['SCRIPT_NAME'])),
             'comment'  => $faqConfig->get('main.titleFAQ')
         );
-        $faqInstance = new PMF_Instance($db);
+        $faqInstance = new PMF_Instance($faqConfig);
         $faqInstance->addInstance($instanceData);
 
-        // @todo: add basic instance configuration
+        $configInstanceData = array(
+            'main.isMaster'   => true,
+            'main.numClients' => 0
+        );
+        $faqConfigInstance = new PMF_Configuration_Instance($db);
+        $faqConfigInstance->update($configInstanceData);
     }
 
     // Always the last step: Update version number
