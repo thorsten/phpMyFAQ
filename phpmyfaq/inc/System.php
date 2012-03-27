@@ -58,7 +58,7 @@ class PMF_System
     /**
      * Minimum required PHP version
      */
-    const VERSION_MINIMUM_PHP = '5.2.3';
+    const VERSION_MINIMUM_PHP = '5.3.2';
 
     /**
      * Array of required PHP extensions
@@ -85,14 +85,14 @@ class PMF_System
      * @var  array
      */
     private $_supportedDatabases = array(
-        'mysql'   => array('5.2.0', 'MySQL 5.x (ext/mysql)'),
-        'mysqli'  => array('5.2.0', 'MySQL 5.x (ext/mysqli)'),
-        'mysqli'  => array('5.2.0', 'MariaDB 5.x (experimental)'),
-        'pgsql'   => array('5.2.0', 'PostgreSQL 8.x'),
-        'sqlite'  => array('5.2.0', 'SQLite'),
-        'sqlite3' => array('5.3.0', 'SQLite 3 (only PHP 5.3+, experimental)'),
-        'mssql'   => array('5.2.0', 'MS SQL Server 2005 / 2008'),
-        'sqlsrv'  => array('5.2.0', 'SQL Server Driver for PHP (experimental)')
+        'mysql'   => array('5.3.2', 'MySQL 5.x (ext/mysql)'),
+        'mysqli'  => array('5.3.2', 'MySQL 5.x (ext/mysqli)'),
+        'mysqli'  => array('5.3.2', 'MariaDB 5.x (experimental)'),
+        'pgsql'   => array('5.3.2', 'PostgreSQL 8.x'),
+        'sqlite'  => array('5.3.2', 'SQLite'),
+        'sqlite3' => array('5.3.2', 'SQLite 3 (only PHP 5.3+, experimental)'),
+        'mssql'   => array('5.3.2', 'MS SQL Server 2005 / 2008'),
+        'sqlsrv'  => array('5.3.2', 'SQL Server Driver for PHP (experimental)')
     );
 
     /**

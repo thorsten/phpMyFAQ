@@ -76,11 +76,7 @@ class PMF_Utils
             $opts['header'] = $opts['header'] . 'Host: ' . $urlParts['host'] . "\r\n";
         }
         // Socket timeout
-        if (version_compare(PHP_VERSION, '5.2.1', '<')) {
-            @ini_set('default_socket_timeout', 5);
-        } else {
-            $opts['timeout'] = 5;
-        }
+        $opts['timeout'] = 5;
 
         // Create the HTTP stream context
         $ctx = stream_context_create(
