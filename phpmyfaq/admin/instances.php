@@ -72,7 +72,11 @@ if ($permission['editinstances']) {
                 <div class="control-group">
                     <label class="control-label"><?php print $PMF_LANG['ad_stat_report_url'] ?>:</label>
                     <div class="controls">
-                        <input type="text" name="url" id="url" required="required">
+                        <div class="input-prepend">
+                            <span class="add-on">http://</span>
+                            <input type="text" name="url" id="url" required="required"
+                                   value="<?php print $_SERVER['SERVER_NAME'] ?>">
+                        </div>
                     </div>
                 </div>
                 <div class="control-group">
@@ -85,6 +89,14 @@ if ($permission['editinstances']) {
                     <label class="control-label">Site name:</label>
                     <div class="controls">
                         <input type="text" name="comment" id="comment" required="required">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <label class="checkbox">
+                        <input type="checkbox" name="install" id="install" value="yes">
+                        install phpMyFAQ in given directory
+                        </label>
                     </div>
                 </div>
             </form>
@@ -100,11 +112,11 @@ if ($permission['editinstances']) {
             var url = $('#url').val();
             var instance = $('#instance').val();
             var comment = $('#comment').val();
-
+            var install = $('#install').val();
 
             $.get('index.php',
                 { action: 'ajax', ajax: 'config', ajaxaction: 'add_instance',
-                  url: url, instance: instance, comment: comment
+                  url: url, instance: instance, comment: comment, install: install
                 },
                 function(data) {
                     if (typeof(data.added) === 'undefined') {

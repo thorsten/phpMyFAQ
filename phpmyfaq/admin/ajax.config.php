@@ -36,7 +36,9 @@ switch ($ajaxAction) {
         $url      = PMF_Filter::filterInput(INPUT_GET, 'url', FILTER_SANITIZE_STRING);
         $instance = PMF_Filter::filterInput(INPUT_GET, 'instance', FILTER_SANITIZE_STRING);
         $comment  = PMF_Filter::filterInput(INPUT_GET, 'comment', FILTER_SANITIZE_STRING);
-        $data     = array(
+        $install  = PMF_Filter::filterInput(INPUT_GET, 'install' FILTER_SANITIZE_STRING);
+
+        $data = array(
             'url'      => $url,
             'instance' => $instance,
             'comment'  => $comment
@@ -45,6 +47,11 @@ switch ($ajaxAction) {
         $faqInstance = new PMF_Instance($faqConfig);
         header('Content-Type: application/json');
         $instanceId = $faqInstance->addInstance($data);
+
+        if ('yes' === $install) {
+
+        }
+
         if (0 !== $instanceId) {
             print json_encode(array('added' => $instanceId));
         } else {
