@@ -120,8 +120,9 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
                 login = '%s'",
             SQLPREFIX,
             $this->db->escape($this->encContainer->setSalt($login)->encrypt($pass)),
-            $this->db->escape($login));
-            
+            $this->db->escape($login)
+        );
+
         $change = $this->db->query($change);
         $error  = $this->db->error();
         
@@ -192,7 +193,8 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
             WHERE
                 login = '%s'",
             SQLPREFIX,
-            $this->db->escape($login));
+            $this->db->escape($login)
+        );
             
         $check = $this->db->query($check);
         $error = $this->db->error();
