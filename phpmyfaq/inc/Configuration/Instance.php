@@ -51,6 +51,31 @@ class PMF_Configuration_Instance extends PMF_Configuration
         parent::__construct($database);
     }
 
+    /**
+     * Adds a configuration item for the database
+     *
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return boolean
+     */
+    public function add($name, $value)
+    {
+        $insert = sprintf(
+            "INSERT INTO
+                %s%s
+            VALUES
+                (%d, '%s', '%s')",
+            SQLPREFIX,
+            $this->_tableName,
+            $this->getInstance()->getId(),
+            $this->getDb()->escape(trim($name)),
+            $this->getDb()->escape(trim($value))
+        );
+
+        return $this->getDb()->query($insert);
+    }
+
 
 
 }
