@@ -200,8 +200,8 @@ if (sizeof($faileddirs)) {
     foreach ($faileddirs as $dir) {
         print "<li>$dir</li>\n";
     }
-    print '</ul><p class="alert alert-error">Please create it manually and/or change access to chmod 755 (or greater if ' .
-          'necessary).</p>';
+    print '</ul><p class="alert alert-error">Please create it/them manually and/or change access to chmod 755 (or ' .
+          'greater if necessary).</p>';
     HTMLFooter();
     die();
 }
