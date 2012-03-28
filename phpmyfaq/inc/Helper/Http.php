@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @since      2009-09-13
  * @copyright  2009 phpMyFAQ Team
  */
-class PMF_Helper_Http extends PMF_Helper 
+class PMF_Helper_Http extends PMF_Helper
 {
     /**
      * Instance
@@ -36,24 +36,24 @@ class PMF_Helper_Http extends PMF_Helper
      * @var PMF_Helper_Http
      */
     private static $instance = null;
-    
+
     /**
      * Content type
      *
      * @var string
      */
     private $contentType = '';
-    
+
     /**
      * Constructor
      *
-     * @return 
+     * @return
      */
     private function __construct()
     {
-        
+
     }
-    
+
     /**
      * Returns the single instance
      *
@@ -68,7 +68,7 @@ class PMF_Helper_Http extends PMF_Helper
         }
         return self::$instance;
     }
-   
+
     /**
      * __clone() Magic method to prevent cloning
      *
@@ -76,7 +76,7 @@ class PMF_Helper_Http extends PMF_Helper
      */
     private function __clone()
     {
-        
+
     }
 
     /**
@@ -106,7 +106,7 @@ class PMF_Helper_Http extends PMF_Helper
         header('Vary: Negotiate,Accept');
         header('Content-type: ' . $this->contentType);
     }
-    
+
     /**
      * Returns a 404 header
      *

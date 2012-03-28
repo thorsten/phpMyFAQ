@@ -107,7 +107,7 @@ $rss->writeElement('link', $faqConfig->get('main.referenceURL'));
 if (is_array($records)) {
 
     foreach ($records as $item) {
-        
+
         $link = str_replace($_SERVER['SCRIPT_NAME'], '/index.php', $item['record_link']);
 
         if (PMF_RSS_USE_SEO) {
@@ -121,11 +121,11 @@ if (is_array($records)) {
         $rss->startElement('item');
         $rss->writeElement('title', html_entity_decode($item['record_title'] .
                                     ' (' . $item['visits'] . ' '.$PMF_LANG['msgViews'].')', ENT_COMPAT, 'UTF-8'));
-        
+
         $rss->startElement('description');
         $rss->writeCdata($item['record_preview']);
         $rss->endElement();
-        
+
         $rss->writeElement('link', $faqConfig->get('main.referenceURL') . $link);
         $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['record_date'], true));
 
