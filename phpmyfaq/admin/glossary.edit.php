@@ -26,7 +26,7 @@ print sprintf('<header><h2>%s</h2></header>', $PMF_LANG['ad_glossary_edit']);
 
 if ($permission['editglossary']) {
     $id           = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    $glossary     = new PMF_Glossary();
+    $glossary     = new PMF_Glossary($faqConfig);
     $glossaryItem = $glossary->getGlossaryItem($id);
 ?>
         <form class="form-horizontal" action="?action=updateglossary" method="post">

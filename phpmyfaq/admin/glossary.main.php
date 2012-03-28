@@ -26,7 +26,7 @@ printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_glossary']);
 
 if ($permission['addglossary'] || $permission['editglossary'] || $permission['delglossary']) {
 
-    $glossary = new PMF_Glossary();
+    $glossary = new PMF_Glossary($faqConfig);
 
     if ('saveglossary' == $action && $permission['addglossary']) {
         $item       = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_STRIPPED);

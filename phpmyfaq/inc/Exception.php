@@ -2,7 +2,7 @@
 /**
  * phpMyFAQ main exception class
  *
- * PHP Version 5.2.0
+ * PHP Version 5.3
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Exception
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-12-28
@@ -46,7 +46,8 @@ class PMF_Exception extends Exception
             $this->getMessage(),
             $this->getFile(),
             $this->getLine(),
-            $this->getTraceAsString());
+            $this->getTraceAsString()
+        );
         
         return $exception;
     }

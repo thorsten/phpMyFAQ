@@ -54,7 +54,7 @@ $newsContent = $news['content'];
 $newsHeader  = $news['header'];
 
 // Add Glossary entries
-$oGlossary   = new PMF_Glossary();
+$oGlossary   = new PMF_Glossary($faqConfig);
 $newsContent = $oGlossary->insertItemsIntoContent($newsContent);
 $newsHeader  = $oGlossary->insertItemsIntoContent($newsHeader);
  

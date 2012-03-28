@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $captcha     = new PMF_Captcha($faqConfig);
-$oGlossary   = new PMF_Glossary();
+$oGlossary   = new PMF_Glossary($faqConfig);
 $oLnk        = new PMF_Linkverifier($faqConfig);
 $faqTagging  = new PMF_Tags($faqConfig);
 $faqRelation = new PMF_Relation($faqConfig);

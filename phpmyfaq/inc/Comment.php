@@ -108,7 +108,8 @@ class PMF_Comment
                 'content'  => $row->comment,
                 'date'     => $row->datum,
                 'user'     => $row->usr,
-                'email'    => $row->email);
+                'email'    => $row->email
+            );
         }
 
         return $item;
@@ -141,13 +142,13 @@ class PMF_Comment
         $result = $this->_config->getDb()->query($query);
         if ($this->_config->getDb()->numRows($result) > 0) {
             while ($row = $this->_config->getDb()->fetchObject($result)) {
-                $item = array(
+                $comments[] = array(
                     'id'      => $row->id_comment,
                     'content' => $row->comment,
                     'date'    => $row->datum,
                     'user'    => $row->usr,
-                    'email'   => $row->email);
-                $comments[] = $item;
+                    'email'   => $row->email
+                );
             }
         }
 
@@ -180,7 +181,9 @@ class PMF_Comment
                 $item['user'],
                 nl2br($item['content']),
                 $this->pmf_lang['newsCommentDate'] .
-                    $date->format(PMF_Date::createIsoDate($item['date'], 'Y-m-d H:i', false))
+                    $date->format(
+                        PMF_Date::createIsoDate($item['date'], 'Y-m-d H:i', false)
+                    )
             );
         }
 
@@ -208,7 +211,8 @@ class PMF_Comment
             $commentData['usermail'],
             $commentData['comment'],
             $commentData['date'],
-            $commentData['helped']);
+            $commentData['helped']
+        );
 
         if (!$this->_config->getDb()->query($query)) {
             return false;
@@ -220,13 +224,13 @@ class PMF_Comment
     /**
      * Deletes a comment
      *
-     * @param  integer $record_id  Record id
-     * @param  integer $comment_id Comment id
+     * @param  integer $recordId  Record id
+     * @param  integer $commentId Comment id
      * @return boolean
      */
-    public function deleteComment($record_id, $comment_id)
+    public function deleteComment($recordId, $commentId)
     {
-        if (!is_int($record_id) && !is_int($comment_id)) {
+        if (!is_int($recordId) && !is_int($commentId)) {
             return false;
         }
 
@@ -238,8 +242,9 @@ class PMF_Comment
             AND
                 id_comment = %d",
             SQLPREFIX,
-            $record_id,
-            $comment_id);
+            $recordId,
+            $commentId
+        );
 
         if (!$this->_config->getDb()->query($query)) {
             return false;
@@ -269,7 +274,8 @@ class PMF_Comment
             GROUP BY id
             ORDER BY id",
             SQLPREFIX,
-            $type);
+            $type
+        );
 
         $result = $this->_config->getDb()->query($query);
         if ($this->_config->getDb()->numRows($result) > 0) {
@@ -311,7 +317,8 @@ class PMF_Comment
                 ".SQLPREFIX."faqcategoryrelations fcg
             ON
                 fc.id = fcg.record_id\n" : '',
-            $type);
+            $type
+        );
             
         $result = $this->_config->getDb()->query($query);
         if ($this->_config->getDb()->numRows($result) > 0) {
@@ -323,7 +330,8 @@ class PMF_Comment
                     'content'     => $row->comment,
                     'date'        => $row->comment_date,
                     'username'    => $row->username,
-                    'email'       => $row->email);
+                    'email'       => $row->email
+                );
             }
         }
 
