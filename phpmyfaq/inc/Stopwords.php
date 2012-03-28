@@ -42,19 +42,15 @@ class PMF_Stopwords
     private static $instance = null;
     
     /**
-     * DB handle
-     *
-     * @var PMF_Db
+     * @var PMF_Configuration
      */
-    private $db;
+    private $_config;
 
     /**
-     * Language
-     *
-     * @var PM_Language
+     * @var PMF_Language
      */
-    private $language;
-    
+    private $_language;
+
     /**
      * Table name
      *
@@ -65,30 +61,28 @@ class PMF_Stopwords
     /**
      * Constructor
      *
-     * @param PMF_DB_Driver $database Database connection
-     * @param PMF_Language  $language Language object
+     * @param PMF_Configuration $config
      *
      * @return PMF_Stopwords
      */
-    private function __construct(PMF_DB_Driver $database, PMF_Language $language)
+    private function __construct(PMF_Configuration $config)
     {
-        $this->db       = $database;
-        $this->language = $language;
+        $this->_config    = $config;
         $this->table_name = SQLPREFIX . "faqstopwords";
     }
     
     /**
      * @return PMF_Language
      */
-    public function getLanguage ()
+    public function getLanguage()
     {
-        return $this->language;
+        return $this->_language;
     }
     
     /**
      * @return string
      */
-    public function getTableName ()
+    public function getTableName()
     {
         return $this->table_name;
     }
@@ -96,15 +90,15 @@ class PMF_Stopwords
     /**
      * @param PMF_Language $language
      */
-    public function setLanguage ($language)
+    public function setLanguage($language)
     {
-        $this->language = $language;
+        $this->_language = $language;
     }
     
     /**
      * @param string $table_name
      */
-    public function setTableName ($table_name)
+    public function setTableName($table_name)
     {
         $this->table_name = $table_name;
     }
@@ -114,16 +108,15 @@ class PMF_Stopwords
      *
      * @access static
      *
-     * @param PMF_DB_Driver $database Database connection
-     * @param PMF_Language  $language Language object
+     * @param PMF_Configuration $config
      *
      * @return PMF_Stopwords
      */
-    public static function getInstance(PMF_DB_Driver $database, PMF_Language $language)
+    public static function getInstance(PMF_Configuration $config)
     {
         if (null == self::$instance) {
             $className = __CLASS__;
-            self::$instance = new $className($database, $language);
+            self::$instance = new $className($config);
         }
         return self::$instance;
     }
@@ -139,10 +132,16 @@ class PMF_Stopwords
     public function add($word)
     {
         if (!$this->match($word)) {
+
             $sql = "INSERT INTO $this->table_name VALUES(%d, '%s', '%s')";
-            $sql = sprintf($sql, $this->db->nextId($this->table_name, 'id'), $this->language->getLanguage(), $word);
+            $sql = sprintf(
+                $sql,
+                $this->_config->getDb()->nextId($this->table_name, 'id'),
+                $this->_language->getLanguage(),
+                $word
+            );
             
-            $this->db->query($sql);
+            $this->_config->getDb()->query($sql);
             
             return true;
         }
@@ -161,9 +160,14 @@ class PMF_Stopwords
     public function update($id, $word)
     {
         $sql = "UPDATE $this->table_name SET stopword = '%s' WHERE id = %d AND lang = '%s'";
-        $sql = sprintf($sql, $word, $id, $this->language->getLanguage());
+        $sql = sprintf(
+            $sql,
+            $word,
+            $id,
+            $this->_language->getLanguage()
+        );
         
-        $this->db->query($sql);
+        $this->_config->getDb()->query($sql);
     }
     
     
@@ -179,10 +183,10 @@ class PMF_Stopwords
         $sql = sprintf(
             "DELETE FROM $this->table_name WHERE id = %d AND lang = '%s'",
             $id,
-            $this->language->getLanguage()
+            $this->_language->getLanguage()
         );
         
-        $this->db->query($sql);
+        $this->_config->getDb()->query($sql);
     }
     
     
@@ -196,37 +200,40 @@ class PMF_Stopwords
     public function match($word)
     {
         $sql = "SELECT id FROM $this->table_name WHERE LOWER(stopword) = LOWER('%s') AND lang = '%s'";
-        $sql = sprintf($sql, $word, $this->language->getLanguage());
+        $sql = sprintf($sql, $word, $this->_language->getLanguage());
         
-        $result = $this->db->query($sql);
+        $result = $this->_config->getDb()->query($sql);
         
-        return $this->db->numRows($result) > 0;
+        return $this->_config->getDb()->numRows($result) > 0;
     }
     
     
     /**
      * Retrieve all the stop words by a certain language
      *
-     * @param string $lang Language to retrieve stop words by
-     * @param boolean wordsOnly
+     * @param string  $lang      Language to retrieve stop words by
+     * @param boolean $wordsOnly
      *
      * @return array
      */
     public function getByLang($lang = null, $wordsOnly = false)
     {
-        $lang = is_null($lang) ? $this->language->getLanguage() : $lang;
-        $sql  = sprintf("SELECT id, lang, LOWER(stopword) AS stopword FROM $this->table_name WHERE lang = '%s'", $lang);
+        $lang = is_null($lang) ? $this->_language->getLanguage() : $lang;
+        $sql  = sprintf(
+            "SELECT id, lang, LOWER(stopword) AS stopword FROM $this->table_name WHERE lang = '%s'",
+            $lang
+        );
         
-        $result = $this->db->query($sql);
+        $result = $this->_config->getDb()->query($sql);
         
         $retval = array();
         
-        if($wordsOnly) {
-            while(($row = $this->db->fetchObject($result)) == true) {
+        if ($wordsOnly) {
+            while(($row = $this->_config->getDb()->fetchObject($result)) == true) {
                 $retval[] = $row->stopword; 
             }
         } else {
-            return $this->db->fetchAll($result);
+            return $this->_config->getDb()->fetchAll($result);
         }
         
         return $retval;
@@ -238,7 +245,7 @@ class PMF_Stopwords
      *
      * @param string $input text to filter
      *
-     * @return string 
+     * @return array
      */
     public function clean($input)
     {
