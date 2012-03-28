@@ -38,6 +38,7 @@ PMF_String::init($LANGCODE);
 
 // Preload English strings
 require_once PMF_ROOT_DIR . '/lang/language_en.php';
+$faqConfig->setLanguage($Language);
 
 if ($faqConfig->get('security.enableLoginOnly')) {
     if (!isset($_SERVER['PHP_AUTH_USER'])) {
