@@ -84,7 +84,7 @@ if ($num > 0) {
         $rss->startElement('description');
         $rss->writeCdata($item['content']);
         $rss->endElement();
-        
+
         $rss->writeElement('link', $faqConfig->get('main.referenceURL').$link);
         $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['date'], true));
         $rss->endElement();

@@ -99,7 +99,7 @@ switch ($ajaxAction) {
             $oStopwords->remove($stopwordId);
         }
         break;
-        
+
     case 'save_stop_word':
         if (null != $stopword && PMF_Language::isASupportedLanguage($stopwordsLang)) {
             $oStopwords = PMF_Stopwords::getInstance($faqConfig);
