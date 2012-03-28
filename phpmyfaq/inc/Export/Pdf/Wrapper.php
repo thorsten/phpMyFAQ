@@ -376,8 +376,8 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
         $footer = sprintf(
             '(c) %d %s <%s> | %s',
             date('Y'),
-            $faqConfig->get('main.metaPublisher'),
-            $faqConfig->get('main.administrationMail'),
+            $this->_config->get('main.metaPublisher'),
+            $this->_config->get('main.administrationMail'),
             $date->format(date('Y-m-d H:i'))
         );
         

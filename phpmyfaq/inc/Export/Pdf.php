@@ -44,15 +44,17 @@ class PMF_Export_Pdf extends PMF_Export
     /**
      * Constructor
      *
-     * @param PMF_Faq      $faq      Faq object
-     * @param PMF_Category $category Category object
+     * @param PMF_Faq           $faq      Faq object
+     * @param PMF_Category      $category Category object
+     * @param PMF_Configuration $config   Configuration
      *
      * return PMF_Export_Pdf
      */
-    public function __construct(PMF_Faq $faq, PMF_Category $category)
+    public function __construct(PMF_Faq $faq, PMF_Category $category, PMF_Configuration $config)
     {
         $this->faq      = $faq;
         $this->category = $category;
+        $this->_config  = $config;
 
         $this->pdf = new PMF_Export_Pdf_Wrapper();
         $this->pdf->setConfig($this->_config);

@@ -31,6 +31,7 @@ session_start();
 // get language (default: english)
 $Language = new PMF_Language();
 $LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
+$faqConfig->setLanguage($Language);
 
 // Found an article language?
 $lang = PMF_Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
@@ -98,13 +99,13 @@ $getAll          = PMF_Filter::filterInput(INPUT_GET, 'getAll', FILTER_VALIDATE_
 
 $faq = new PMF_Faq($faqConfig);
 $faq->setUser($current_user);
-$faq->setGroups($current_user);
+$faq->setGroups($current_groups);
 
 $category = new PMF_Category($faqConfig);
 $category->setUser($current_user);
 $category->setGroups($current_groups);
 
-$pdf = new PMF_Export_Pdf($faq, $category);
+$pdf = new PMF_Export_Pdf($faq, $category, $faqConfig);
 
 session_cache_limiter('private');
 
