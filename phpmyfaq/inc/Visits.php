@@ -2,7 +2,7 @@
 /**
  * Handles all the stuff for visits
  *
- * PHP Version 5.2
+ * PHP Version 5.3
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -35,18 +35,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Visits
 {
     /**
-     * The database handle
-     *
-     * @var PMF_DB_Driver
+     * @var PMF_Configuration
      */
-    private $db = null;
-    
-    /**
-     * The user agent language
-     *
-     * @var string
-     */
-    private $language;
+    private $_config;
     
     /**
      * Instance
@@ -58,15 +49,13 @@ class PMF_Visits
     /**
      * Constructor
      *
-     * @param PMF_DB_Driver $database Database connection
-     * @param PMF_Language  $language Language object
+     * @param PMF_Configuration $config
      *
      * @return PMF_Visits
      */
-    private function __construct(PMF_DB_Driver $database, PMF_Language $language)
+    private function __construct(PMF_Configuration $config)
     {
-        $this->db       = $database;
-        $this->language = $language;
+        $this->_config = $config;
     }
 
 
@@ -75,16 +64,15 @@ class PMF_Visits
      *
      * @access static
      *
-     * @param PMF_DB_Driver $database Database connection
-     * @param PMF_Language  $language Language object
+     * @param PMF_Configuration $config
      *
      * @return PMF_Visits
      */
-    public static function getInstance(PMF_DB_Driver $database, PMF_Language $language)
+    public static function getInstance(PMF_Configuration $config)
     {
         if (null == self::$instance) {
             $className = __CLASS__;
-            self::$instance = new $className($database, $language);
+            self::$instance = new $className($config);
         }
         return self::$instance;
     }
@@ -119,12 +107,12 @@ class PMF_Visits
                 lang = '%s'",
             SQLPREFIX,
             $id,
-            $this->language->getLanguage()
+            $this->_config->getLanguage()->getLanguage()
         );
 
-        $result = $this->db->query($query);
-        if ($this->db->numRows($result)) {
-            $row     = $this->db->fetchObject($result);
+        $result = $this->_config->getDb()->query($query);
+        if ($this->_config->getDb()->numRows($result)) {
+            $row     = $this->_config->getDb()->fetchObject($result);
             $nVisits = $row->visits;
         }
         if ($nVisits == 0) {
@@ -153,11 +141,11 @@ class PMF_Visits
                 (%d, '%s', %d, %d)",
             SQLPREFIX,
             $id,
-            $this->language->getLanguage(),
+            $this->_config->getLanguage()->getLanguage(),
             1,
             $_SERVER['REQUEST_TIME']
         );
-        $this->db->query($query);
+        $this->_config->getDb()->query($query);
 
         return true;
     }
@@ -185,9 +173,9 @@ class PMF_Visits
             SQLPREFIX,
             $_SERVER['REQUEST_TIME'],
             $id,
-            $this->language->getLanguage()
+            $this->_config->getLanguage()->getLanguage()
         );
-        $this->db->query($query);
+        $this->_config->getDb()->query($query);
 
         return true;
     }
@@ -210,9 +198,9 @@ class PMF_Visits
                 visits DESC",
             SQLPREFIX
             );
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
 
-        while ($row = $this->db->fetchObject($result)) {
+        while ($row = $this->_config->getDb()->fetchObject($result)) {
             $data[] = array(
                 'id'         => $row->id,
                 'lang'       => $row->lang,

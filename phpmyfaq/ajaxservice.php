@@ -303,7 +303,7 @@ switch ($action) {
             }
 
             // Activate visits
-            $visits = PMF_Visits::getInstance($db, $Language);
+            $visits = PMF_Visits::getInstance($faqConfig);
             $visits->add($recordId, $newData['lang']);
 
             if ($autoActivate) {

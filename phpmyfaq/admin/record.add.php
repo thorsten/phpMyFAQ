@@ -93,7 +93,7 @@ if ($permission['editbt']) {
             $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $recordData['lang']);
             // Create the visit entry
 
-            $visits = PMF_Visits::getInstance($db, $Language);
+            $visits = PMF_Visits::getInstance($faqConfig);
             $visits->add($record_id);
 
             // Insert the new category relations
