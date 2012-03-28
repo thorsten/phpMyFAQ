@@ -9,7 +9,7 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Frontend 
+ * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Peter Beauvain <pbeauvain@web.de>
  * @author    Olivier Plathey <olivier@fpdf.org>
@@ -18,7 +18,7 @@
  * @copyright 2003-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @since     2003-02-12 
+ * @since     2003-02-12
  */
 
 define('IS_VALID_PHPMYFAQ', null);
