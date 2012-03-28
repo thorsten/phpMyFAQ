@@ -2,7 +2,7 @@
 /**
  * The reporting class for simple report generation
  *
- * PHP Version 5.2
+ * PHP Version 5.3
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -37,31 +37,20 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Report
 {
     /**
-     * DB handle
-     *
-     * @var PMF_DB_Driver
+     * @var PMF_Configuration
      */
-    private $db;
-
-    /**
-     * Language
-     *
-     * @var PMF_Language
-     */
-    private $language;
+    private $_config;
 
     /**
      * Constructor
      *
-     * @param PMF_DB_Driver $database Database connection
-     * @param PMF_Language  $language Language object
+     * @param PMF_Configuration
      *
      * @return PMF_Report
      */
-    public function __construct(PMF_DB_Driver $database, PMF_Language $language)
+    public function __construct(PMF_Configuration $config)
     {
-        $this->db       = $database;
-        $this->language = $language;
+        $this->_config = $config;
     }
 
     /**
@@ -118,10 +107,10 @@ class PMF_Report
             SQLPREFIX
         );
 
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
 
         $lastId = 0;
-        while ($row = $this->db->fetchObject($result)) {
+        while ($row = $this->_config->getDb()->fetchObject($result)) {
 
             if ($row->id == $lastId) {
                 $report[$row->id]['faq_translations'] += 1;

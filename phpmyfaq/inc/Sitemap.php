@@ -21,8 +21,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-require_once PMF_INCLUDE_DIR . '/Link.php';
-
 /**
  * PMF_Sitemap 
  *

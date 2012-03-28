@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Report
+ * PMF_Network
  *
  * @category  phpMyFAQ
  * @package   PMF_Network

@@ -54,7 +54,7 @@ if ($permission['reports']) {
     ($useUrl)          ? $text[0][] = $PMF_LANG['ad_stat_report_url'] : '';
     ($useVisits)       ? $text[0][] = $PMF_LANG['ad_stat_report_visits'] : '';
 
-    $report = new PMF_Report($db, $language);
+    $report = new PMF_Report($faqConfig);
 
     foreach ($report->getReportingData() as $data) {
         $i = $data['faq_id'];
