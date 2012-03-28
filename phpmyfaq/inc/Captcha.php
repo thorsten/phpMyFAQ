@@ -119,13 +119,6 @@ class PMF_Captcha
     private $img;
 
     /**
-     * The user agent language
-     *
-     * @var PMF_Language
-     */
-    private $language;
-
-    /**
      * The user agent string
      *
      * @var string
