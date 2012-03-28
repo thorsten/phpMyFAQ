@@ -256,7 +256,7 @@ class PMF_News
                 lang = '%s'",
             SQLPREFIX,
             $id,
-            $this->language->getLanguage());
+            $this->_config->getLanguage()->getLanguage());
             
         $result = $this->_config->getDb()->query($query);
 

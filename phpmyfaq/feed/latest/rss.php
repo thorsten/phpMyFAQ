@@ -32,6 +32,7 @@ $LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $f
 
 // Preload English strings
 require_once (PMF_ROOT_DIR.'/lang/language_en.php');
+$faqConfig->setLanguage($Language);
 
 if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
     // Overwrite English strings with the ones we have in the current language

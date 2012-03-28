@@ -2,7 +2,7 @@
 /**
  * The network class for IPv4 and IPv6 handling
  *
- * PHP Version 5.2
+ * PHP Version 5.3
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Report
+ * PMF_Network
  *
  * @category  phpMyFAQ
  * @package   PMF_Network
@@ -129,6 +129,8 @@ class PMF_Network
      *
      * @param string $ip      IPv6 Address
      * @param string $network Network Address or IPv6 Address
+     *
+     * @throws InvalidArgumentException
      *
      * @return boolean true if IP matched
      */

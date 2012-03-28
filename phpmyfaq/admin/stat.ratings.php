@@ -28,7 +28,7 @@ if ($permission['viewlog']) {
     $category = new PMF_Category($faqConfig, false);
     $category->setUser($current_admin_user);
     $category->setGroups($current_admin_groups);
-    $ratings     = new PMF_Rating($db, $Language);
+    $ratings     = new PMF_Rating($faqConfig);
     $ratingdata  = $ratings->getAllRatings();
     $numratings  = count($ratingdata);
     $oldcategory = 0;

@@ -62,7 +62,7 @@ if ($permission['reports']) {
         <tbody>
 <?php
 
-    $report = new PMF_Report($db, $language);
+    $report = new PMF_Report($faqConfig);
 
     foreach ($report->getReportingData() as $data) {
         print '<tr>';

@@ -34,6 +34,7 @@ $code     = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRIN
 $Language     = new PMF_Language();
 $languageCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 require_once 'lang/language_en.php';
+$faqConfig->setLanguage($Language);
 
 if (PMF_Language::isASupportedLanguage($ajaxlang)) {
     $languageCode = trim($ajaxlang);
@@ -591,7 +592,7 @@ switch ($action) {
             }  else {
                 $faq->updateVoting($votingData);
             }
-            $faqRating   = new PMF_Rating($db, $Language);
+            $faqRating   = new PMF_Rating($faqConfig);
             $message = array(
                 'success' => $PMF_LANG['msgVoteThanks'],
                 'rating'  => $faqRating->getVotingResult($recordId)
