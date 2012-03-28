@@ -95,9 +95,11 @@ $rss->endElement();
 $rss->endElement();
 $rssData = $rss->outputMemory();
 
-header('Content-Type: application/rss+xml');
-header('Content-Length: '.strlen($rssData));
+$headers = array(
+    'Content-Type: application/rss+xml',
+    'Content-Length: '.strlen($rssData)
+);
 
-print $rssData;
+PMF_Helper_Http::sendWithHeaders($rssData, $headers);
 
 $db->close();
