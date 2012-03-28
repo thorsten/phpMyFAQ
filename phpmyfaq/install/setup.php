@@ -714,8 +714,9 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     }
 
     $configuration = new PMF_Configuration($db);
+    $link = new PMF_Link(null, $configuration);
 
-    // add main configuration
+    // add main configuration, add personal settings
     include 'configurationdata.php';
     $mainConfig['spam.enableCaptchaCode']  = (extension_loaded('gd') ? 'true' : 'false');
     $mainConfig['main.metaPublisher']      = $realname;
@@ -731,8 +732,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         $configuration->add($name, $value);
     }
 
-    $link = new PMF_Link(null, $configuration);
-    $configuration->add('main.referenceURL', $link->getSystemUri('/install/setup.php'));
+    $configuration->update(array('main.referenceURL' => $link->getSystemUri('/install/setup.php')));
 
     // add admin account and rights
     $admin = new PMF_User($configuration);
