@@ -35,18 +35,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Rating
 {
     /**
-     * DB handle
-     *
-     * @var PMF_Db
+     * @var PMF_Configuration
      */
-    private $db;
-
-    /**
-     * Language
-     *
-     * @var PM_Language
-     */
-    private $language;
+    private $_config;
 
     /**
      * Language strings
@@ -65,17 +56,15 @@ class PMF_Rating
     /**
      * Constructor
      *
-     * @param PMF_DB_Driver $database Database connection
-     * @param PMF_Language  $language Language object
+     * @param PMF_Configuration $config
      *
      * @return PMF_Rating
      */
-    function __construct(PMF_DB_Driver $database, PMF_Language $language)
+    function __construct(PMF_Configuration $config)
     {
         global $PMF_LANG, $plr;
 
-        $this->db       = $database;
-        $this->language = $language;
+        $this->_config  = $config;
         $this->pmf_lang = $PMF_LANG;
         $this->plr      = $plr;
     }
@@ -166,8 +155,8 @@ class PMF_Rating
                 break;
         }
 
-        $result = $this->db->query($query);
-        while ($row = $this->db->fetchObject($result)) {
+        $result = $this->_config->getDb()->query($query);
+        while ($row = $this->_config->getDb()->fetchObject($result)) {
             $ratings[] = array(
                'id'          => $row->id,
                'lang'        => $row->lang,
@@ -199,9 +188,9 @@ class PMF_Rating
                 artikel = %d',
             SQLPREFIX,
             $id);
-       $result = $this->db->query($query);
-       if ($this->db->numRows($result) > 0) {
-            $row = $this->db->fetchObject($result);
+       $result = $this->_config->getDb()->query($query);
+       if ($this->_config->getDb()->numRows($result) > 0) {
+            $row = $this->_config->getDb()->fetchObject($result);
             return sprintf(' %s ('.$this->plr->GetMsg('plmsgVotes',$row->usr).')',
                 round($row->voting, 2));
        } else {

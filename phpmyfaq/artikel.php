@@ -28,7 +28,7 @@ $oGlossary   = new PMF_Glossary($faqConfig);
 $oLnk        = new PMF_Linkverifier($faqConfig);
 $faqTagging  = new PMF_Tags($faqConfig);
 $faqRelation = new PMF_Relation($faqConfig);
-$faqRating   = new PMF_Rating($db, $Language);
+$faqRating   = new PMF_Rating($faqConfig);
 $faqComment  = new PMF_Comment($faqConfig);
 
 if (is_null($user)) {
