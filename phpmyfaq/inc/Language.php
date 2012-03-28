@@ -2,7 +2,7 @@
 /**
  * Manages all language stuff
  *
- * PHP Version 5.2
+ * PHP Version 5.3
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -153,7 +153,7 @@ class PMF_Language
         $search    = array("language_" , ".php");
         $languages = $languageFiles = array();
         
-        $dir = new DirectoryIterator(dirname(dirname(__FILE__)) . '/lang');
+        $dir = new DirectoryIterator(__DIR__ . '/../lang');
         foreach ($dir as $fileinfo) {
             if (! $fileinfo->isDot()) {
                 $languageFiles[] = strtoupper(

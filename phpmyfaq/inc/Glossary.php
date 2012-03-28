@@ -2,7 +2,7 @@
 /**
  * The main glossary class
  *
- * PHP Version 5.2
+ * PHP Version 5.3
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -286,7 +286,7 @@ class PMF_Glossary
      * Deletes an item and definition into the database
      *
      * @param  integer $id Glossary ID
-     * 
+     *
      * @return boolean
      */
     public function deleteGlossaryItem($id)
