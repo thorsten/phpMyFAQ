@@ -107,9 +107,12 @@ $category->setGroups($current_groups);
 $pdf = new PMF_Export_Pdf($faq, $category);
 
 session_cache_limiter('private');
-header("Pragma: public");
-header("Expires: 0");
-header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+
+$headers = array(
+    "Pragma: public",
+    "Expires: 0",
+    "Cache-Control: must-revalidate, post-check=0, pre-check=0",
+);
 
 if (true === $getAll) {
 
@@ -119,8 +122,9 @@ if (true === $getAll) {
 } else {
 
     if (is_null($currentCategory) || is_null($id)) {
-        header('HTTP/1.1 403 Forbidden');
-        print 'Wrong HTTP GET parameters values.';
+        $headers[] = 'HTTP/1.1 403 Forbidden';
+        $payload = 'Wrong HTTP GET parameters values.';
+        PMF_Helper_Http::sendWithHeaders($payload, $headers);
         exit();
     }
 
@@ -132,11 +136,11 @@ if (true === $getAll) {
 }
 
 if (preg_match("/MSIE/i", $_SERVER["HTTP_USER_AGENT"])) {
-    header("Content-type: application/pdf");
-    header("Content-Transfer-Encoding: binary");
-    header("Content-Disposition: attachment; filename=" . $filename);
+    $headers[] = "Content-type: application/pdf";
+    $headers[] = "Content-Transfer-Encoding: binary";
+    $headers[] = "Content-Disposition: attachment; filename=" . $filename;
 } else {
-    header("Content-Type: application/pdf");
+    $headers[] = "Content-Type: application/pdf";
 }
 
-print $pdfFile;
+PMF_Helper_Http::sendWithHeaders($pdfFile, $headers);

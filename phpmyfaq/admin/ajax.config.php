@@ -87,8 +87,8 @@ switch ($ajaxAction) {
         if (PMF_Language::isASupportedLanguage($stopwordsLang)) {
             $stopwordsList = PMF_Stopwords::getInstance($faqConfig)->getByLang($stopwordsLang);
 
-            header('Content-Type: application/json');
-            print json_encode($stopwordsList);
+            $payload = $stopwordsList;
+            PMF_Helper_Http::sendJsonWithHeaders($payload);
         }
         break;
 
