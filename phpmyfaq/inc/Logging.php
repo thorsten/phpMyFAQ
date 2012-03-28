@@ -63,7 +63,8 @@ class PMF_Logging
                 id
             FROM
                 %sfaqadminlog',
-            SQLPREFIX);
+            SQLPREFIX
+        );
 
         return $this->_config->getDb()->numRows(
             $this->_config->getDb()->query($query)
@@ -85,7 +86,8 @@ class PMF_Logging
             FROM
                 %sfaqadminlog
             ORDER BY id DESC',
-            SQLPREFIX);
+            SQLPREFIX
+        );
 
         $result = $this->_config->getDb()->query($query);
         while ($row = $this->_config->getDb()->fetchObject($result)) {
@@ -93,7 +95,8 @@ class PMF_Logging
                'time'  => $row->time,
                'usr'   => $row->usr,
                'text'  => $row->text,
-               'ip'    => $row->ip);
+               'ip'    => $row->ip
+            );
         }
 
         return $data;
@@ -122,11 +125,12 @@ class PMF_Logging
                     $_SERVER['REQUEST_TIME'],
                     $user->userdata->get('user_id'),
                     $this->_config->getDb()->escape(nl2br($logText)),
-                    $_SERVER['REMOTE_ADDR']);
+                    $_SERVER['REMOTE_ADDR']
+            );
             
             return $this->_config->getDb()->query($query);
         } else {
-        	return false;
+            return false;
         }
     }
     
@@ -143,7 +147,8 @@ class PMF_Logging
             WHERE
                 time < %d",
             SQLPREFIX,
-            $_SERVER['REQUEST_TIME'] - 30 * 86400);
+            $_SERVER['REQUEST_TIME'] - 30 * 86400
+        );
 
         if ($this->_config->getDb()->query($query)) {
             return true;

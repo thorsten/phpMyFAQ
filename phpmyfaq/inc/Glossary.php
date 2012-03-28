@@ -2,7 +2,7 @@
 /**
  * The main glossary class
  *
- * PHP Version 5.2
+ * PHP Version 5.3
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -35,18 +35,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Glossary
 {
     /**
-     * DB handle
-     *
-     * @var PMF_DB
+     * @var PMF_Configuration
      */
-    private $db = null;
-
-    /**
-     * Language
-     *
-     * @var string
-     */
-    private $language = '';
+    private $_config;
 
     /**
      * Item
@@ -63,21 +54,22 @@ class PMF_Glossary
     private $definition = '';
 
     /**
-    * Constructor
-    *
-    * @return void
-    */
-    public function __construct()
+     * Constructor
+     *
+     * @param PMF_Configuration $config
+     *
+     * @return PMF_Glossary
+     */
+    public function __construct(PMF_Configuration $config)
     {
-        $this->db       = PMF_Db::getInstance();
-        $this->language = PMF_Language::$language;
+        $this->_config = $config;
     }
 
     /**
-    * Gets all items and definitions from the database
-    *
-    * @return array
-    */
+     * Gets all items and definitions from the database
+     *
+     * @return array
+     */
     public function getAllGlossaryItems()
     {
         $items = array();
@@ -90,15 +82,17 @@ class PMF_Glossary
             WHERE
                 lang = '%s'",
             SQLPREFIX,
-            $this->language);
+            $this->_config->getLanguage()->getLanguage()
+        );
             
-        $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
         
-        while ($row = $this->db->fetchObject($result)) {
+        while ($row = $this->_config->getDb()->fetchObject($result)) {
             $items[] = array(
                 'id'         => $row->id,
                 'item'       => stripslashes($row->item),
-                'definition' => stripslashes($row->definition));
+                'definition' => stripslashes($row->definition)
+            );
         }
         return $items;
     }
@@ -107,6 +101,7 @@ class PMF_Glossary
      * Fill the passed string with the current Glossary items.
      *
      * @param  string $content Content
+     *
      * @return string
      */
     public function insertItemsIntoContent($content = '')
@@ -119,7 +114,8 @@ class PMF_Glossary
             'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name',
             'face', 'size', 'dir', 'onclick', 'ondblclick', 'onmousedown',
             'onmouseup', 'onmouseover', 'onmousemove', 'onmouseout',
-            'onkeypress', 'onkeydown', 'onkeyup');
+            'onkeypress', 'onkeydown', 'onkeyup'
+        );
 
         foreach ($this->getAllGlossaryItems() as $item) {
             $this->definition = $item['definition'];
@@ -138,7 +134,8 @@ class PMF_Glossary
                 .'(\W+)('.$item['item'].')$'
                 .'/mis',
                 array($this, 'setTooltip'),
-                $content); 
+                $content
+            );
         }
 
         return $content;
@@ -171,11 +168,13 @@ class PMF_Glossary
         }
         
         if (!empty($item)) {
-            return sprintf('%s<a rel="tooltip" data-original-title="%s">%s</a>%s',
+            return sprintf(
+                '%s<a rel="tooltip" data-original-title="%s">%s</a>%s',
                 $prefix,
                 $this->definition,
                 $item,
-                $postfix);
+                $postfix
+            );
         }
         
         // Fallback: the original matched string
@@ -201,15 +200,17 @@ class PMF_Glossary
                 id = %d AND lang = '%s'",
             SQLPREFIX,
             (int)$id,
-            $this->language);
+            $this->_config->getLanguage()->getLanguage()
+        );
             
-        $result = $result = $this->db->query($query);
+        $result = $this->_config->getDb()->query($query);
            
-        while ($row = $this->db->fetchObject($result)) {
+        while ($row = $this->_config->getDb()->fetchObject($result)) {
             $item = array(
                 'id'         => $row->id,
                 'item'       => stripslashes($row->item),
-                'definition' => stripslashes($row->definition));
+                'definition' => stripslashes($row->definition)
+            );
         }
         return $item;
     }
@@ -219,12 +220,13 @@ class PMF_Glossary
      *
      * @param  string $item       Item
      * @param  string $definition Definition
+     *
      * @return boolean
      */
     public function addGlossaryItem($item, $definition)
     {
-        $this->item       = $this->db->escape($item);
-        $this->definition = $this->db->escape($definition);
+        $this->item       = $this->_config->getDb()->escape($item);
+        $this->definition = $this->_config->getDb()->escape($definition);
 
         $query = sprintf("
             INSERT INTO
@@ -233,12 +235,13 @@ class PMF_Glossary
                 VALUES
             (%d, '%s', '%s', '%s')",
             SQLPREFIX,
-            $this->db->nextId(SQLPREFIX.'faqglossary', 'id'),
-            $this->language,
-            $this->db->escape($this->item),
-            $this->db->escape($this->definition));
+            $this->_config->getDb()->nextId(SQLPREFIX.'faqglossary', 'id'),
+            $this->_config->getLanguage()->getLanguage(),
+            $this->item,
+            $this->definition
+        );
 
-        if ($this->db->query($query)) {
+        if ($this->_config->getDb()->query($query)) {
             return true;
         }
         return false;
@@ -250,12 +253,13 @@ class PMF_Glossary
      * @param  integer $id         Glossary ID
      * @param  string  $item       Item
      * @param  string  $definition Definition
+     *
      * @return boolean
      */
     public function updateGlossaryItem($id, $item, $definition)
     {
-        $this->item       = $this->db->escape($item);
-        $this->definition = $this->db->escape($definition);
+        $this->item       = $this->_config->getDb()->escape($item);
+        $this->definition = $this->_config->getDb()->escape($definition);
 
         $query = sprintf("
             UPDATE
@@ -266,12 +270,13 @@ class PMF_Glossary
             WHERE
                 id = %d AND lang = '%s'",
             SQLPREFIX,
-            $this->db->escape($this->item),
-            $this->db->escape($this->definition),
+            $this->item,
+            $this->definition,
             (int)$id,
-            $this->language);
+            $this->_config->getLanguage()->getLanguage()
+        );
 
-        if ($this->db->query($query)) {
+        if ($this->_config->getDb()->query($query)) {
             return true;
         }
         return false;
@@ -281,6 +286,7 @@ class PMF_Glossary
      * Deletes an item and definition into the database
      *
      * @param  integer $id Glossary ID
+     *
      * @return boolean
      */
     public function deleteGlossaryItem($id)
@@ -292,9 +298,10 @@ class PMF_Glossary
                 id = %d AND lang = '%s'",
             SQLPREFIX,
             (int)$id,
-            $this->language);
+            $this->_config->getLanguage()->getLanguage()
+        );
 
-        if ($this->db->query($query)) {
+        if ($this->_config->getDb()->query($query)) {
             return true;
         }
         return false;

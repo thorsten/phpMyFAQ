@@ -71,7 +71,8 @@ class PMF_Date
                 substr($date, 4, 2) . '-' .
                 substr($date, 6, 2) . ' ' .
                 substr($date, 8, 2) . ':' .
-                substr($date, 10, 2));
+                substr($date, 10, 2)
+            );
         } else {
             $dateString = $date;
         }

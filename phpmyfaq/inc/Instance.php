@@ -91,6 +91,16 @@ class PMF_Instance
     }
 
     /**
+     * Returns the current instance id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->_id;
+    }
+
+    /**
      * Returns all instances
      *
      * @return array

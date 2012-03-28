@@ -134,6 +134,28 @@ class PMF_Configuration
     }
 
     /**
+     * Sets the PMF_Instance object
+     *
+     * @param PMF_Instance $instance
+     *
+     * @return void
+     */
+    public function setInstance(PMF_Instance $instance)
+    {
+        $this->config['core.instance'] = $instance;
+    }
+
+    /**
+     * Returns the PMF_Instance object
+     *
+     * @return PMF_Instance
+     */
+    public function getInstance()
+    {
+        return $this->config['core.instance'];
+    }
+
+    /**
      * Sets the Language object
      *
      * @param PMF_Language $language
@@ -234,6 +256,7 @@ class PMF_Configuration
     {
         $runtimeConfigs = array(
             'core.database',  // PMF_DB_Driver
+            'core.instance',  // PMF_Instance
             'core.language',  // Language
             'core.ldap',      // PMF_Ldap
             'core.ldapConfig' // $PMF_LDAP

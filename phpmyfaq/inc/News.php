@@ -211,7 +211,8 @@ class PMF_News
             ORDER BY
                 datum DESC",
             SQLPREFIX,
-            $this->language->getLanguage());
+            $this->_config->getLanguage()->getLanguage()
+        );
             
         $result = $this->_config->getDb()->query($query);
 
