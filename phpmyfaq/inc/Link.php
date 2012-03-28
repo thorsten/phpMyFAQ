@@ -2,7 +2,7 @@
 /**
  * Link management - Functions and Classes
  *
- * PHP Version 5.2
+ * PHP Version 5.3
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -84,8 +84,11 @@ class PMF_Link
     const PMF_LINK_GET_ACTION_ASK = 'ask';
     const PMF_LINK_GET_ACTION_CONTACT = 'contact';
     const PMF_LINK_GET_ACTION_HELP = 'help';
+    const PMF_LINK_GET_ACTION_LOGIN = 'login';
     const PMF_LINK_GET_ACTION_NEWS = 'news';
     const PMF_LINK_GET_ACTION_OPEN = 'open';
+    const PMF_LINK_GET_ACTION_PASSWORD = 'password';
+    const PMF_LINK_GET_ACTION_REGISTER = 'register';
     const PMF_LINK_GET_ACTION_SEARCH = 'search';
     const PMF_LINK_GET_ACTION_SITEMAP = 'sitemap';
     const PMF_LINK_GET_ACTION_SHOW = 'show';
@@ -98,7 +101,10 @@ class PMF_Link
     const PMF_LINK_HTML_ASK = 'ask.html';
     const PMF_LINK_HTML_CONTACT = 'contact.html';
     const PMF_LINK_HTML_HELP = 'help.html';
+    const PMF_LINK_HTML_LOGIN = 'login.html';
     const PMF_LINK_HTML_OPEN = 'open.html';
+    const PMF_LINK_HTML_PASSWORD = 'password.html';
+    const PMF_LINK_HTML_REGISTER = 'register.html';
     const PMF_LINK_HTML_SEARCH = 'search.html';
     const PMF_LINK_HTML_SHOWCAT = 'showcat.html';
 
