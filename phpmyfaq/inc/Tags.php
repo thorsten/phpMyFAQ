@@ -214,7 +214,7 @@ class PMF_Tags
             $tagging_name = trim($tagging_name);
             if (PMF_String::strlen($tagging_name) > 0) {
                 if (!in_array(PMF_String::strtolower($tagging_name),
-                              array_map(array('String', 'strtolower'), $current_tags))) {
+                              array_map(array('PMF_String', 'strtolower'), $current_tags))) {
                     // Create the new tag
                     $new_tagging_id = $this->_config->getDb()->nextId(SQLPREFIX.'faqtags', 'tagging_id');
                     $query = sprintf("

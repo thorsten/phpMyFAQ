@@ -775,7 +775,6 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         'main.numClients' => 0
     );
     $faqConfigInstance = new PMF_Configuration_Instance($db);
-    $faqConfigInstance->update($configInstanceData);
 
     print '</p>';
 
