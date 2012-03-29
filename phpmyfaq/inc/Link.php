@@ -675,7 +675,7 @@ class PMF_Link
      *
      * @return string
      */
-    function toUri()
+    public function toUri()
     {
         $url = $this->url;
         if (!empty($this->url)) {

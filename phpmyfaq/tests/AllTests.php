@@ -28,9 +28,10 @@ require_once 'PHPUnit/Framework/TestSuite.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
 // include Testsuites
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Category' . DIRECTORY_SEPARATOR . 'AllTests.php';
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Faq' . DIRECTORY_SEPARATOR . 'AllTests.php';
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Search' . DIRECTORY_SEPARATOR . 'AllTests.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'Category' . DIRECTORY_SEPARATOR . 'AllTests.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'Faq' . DIRECTORY_SEPARATOR . 'AllTests.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'Search' . DIRECTORY_SEPARATOR . 'AllTests.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'PMF_LinkTest.php';
 
 /**
  * AllTests
@@ -52,6 +53,7 @@ class AllTests
         $suite->addTest(Category_AllTests::suite());
         $suite->addTest(Faq_AllTests::suite());
         $suite->addTest(Search_AllTests::suite());
+        $suite->addTestSuite('PMF_LinkTest');
         
         return $suite;
     }
