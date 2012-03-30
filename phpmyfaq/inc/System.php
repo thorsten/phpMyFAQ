@@ -62,13 +62,15 @@ class PMF_System
 
     /**
      * Array of required PHP extensions
+     *
      * @var array
      */
     private $_requiredExtensions = array(
         'gd',
         'json',
         'xmlwriter',
-        'filter'
+        'filter',
+        'zip'
     );
 
     /**
@@ -133,13 +135,15 @@ class PMF_System
                 self::VERSION_MAJOR,
                 self::VERSION_MINOR,
                 self::VERSION_PATCHLEVEL,
-                self::VERSION_PRERELEASE);
+                self::VERSION_PRERELEASE
+            );
         } else {
             return sprintf(
                 '%d.%d.%d',
                 self::VERSION_MAJOR,
                 self::VERSION_MINOR,
-                self::VERSION_PATCHLEVEL);
+                self::VERSION_PATCHLEVEL
+            );
         }
     }
 
@@ -251,15 +255,13 @@ class PMF_System
      */
     public function cleanInstallation()
     {
-        // Remove 'database.php' file: no need of prompt anything to the user
-        if (file_exists(PMF_ROOT_DIR.'/config/database.php')) {
-            @unlink(PMF_ROOT_DIR.'/config/database.php');
+        // Remove './config/database.php' file: no need of prompt anything to the user
+        if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {
+            @unlink(PMF_ROOT_DIR . '/config/database.php');
         }
-        // Remove 'ldap.php' file: no need of prompt anything to the user
-        if (file_exists(PMF_ROOT_DIR.'/config/ldap.php')) {
-            @unlink(PMF_ROOT_DIR.'/config/ldap.php');
+        // Remove './config/ldap.php' file: no need of prompt anything to the user
+        if (file_exists(PMF_ROOT_DIR . '/config/ldap.php')) {
+            @unlink(PMF_ROOT_DIR . '/config/ldap.php');
         }
     }
-
-
 }
