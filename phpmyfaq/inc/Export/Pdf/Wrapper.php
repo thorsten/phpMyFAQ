@@ -29,7 +29,7 @@ define('K_PATH_URL', '');
  * path to TCPDF
  *
  */
-define('K_PATH_MAIN', dirname(dirname(dirname(__FILE__))) . '/libs/tcpdf/');
+define('K_PATH_MAIN', dirname(dirname(__DIR__)) . '/libs/tcpdf/');
 
 /**
  * path for PDF fonts
@@ -40,7 +40,7 @@ define('K_PATH_FONTS', K_PATH_MAIN . 'fonts/');
 /**
  * cache directory for temporary files (full path)
  */
-define('K_PATH_CACHE', dirname(dirname(dirname(dirname(__FILE__)))) . '/images/');
+define('K_PATH_CACHE', dirname(dirname(dirname(__DIR__))) . '/images/');
 
 /**
  * cache directory for temporary files (url path)

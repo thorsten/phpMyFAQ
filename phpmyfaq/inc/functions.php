@@ -183,7 +183,7 @@ EOD;
 function getBannedWords()
 {
     $bannedTrimmedWords = array();
-    $bannedWordsFile    = dirname(__FILE__).'/blockedwords.txt';
+    $bannedWordsFile    = __DIR__ . '/blockedwords.txt';
     $bannedWords        = array();
 
     // Read the dictionary

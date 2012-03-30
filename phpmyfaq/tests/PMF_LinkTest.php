@@ -18,11 +18,11 @@
  */
 
 
-require_once dirname(dirname(__FILE__)) . '/inc/DB/Driver.php';
-require_once dirname(dirname(__FILE__)) . '/inc/DB/Sqlite3.php';
-require_once dirname(dirname(__FILE__)) . '/inc/Exception.php';
-require_once dirname(dirname(__FILE__)) . '/inc/Configuration.php';
-require_once dirname(dirname(__FILE__)) . '/inc/Link.php';
+require_once dirname(__DIR__) . '/inc/DB/Driver.php';
+require_once dirname(__DIR__) . '/inc/DB/Sqlite3.php';
+require_once dirname(__DIR__) . '/inc/Exception.php';
+require_once dirname(__DIR__) . '/inc/Configuration.php';
+require_once dirname(__DIR__) . '/inc/Link.php';
 
 /**
  * Category test case

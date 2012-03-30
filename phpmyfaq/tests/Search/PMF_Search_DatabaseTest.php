@@ -17,18 +17,18 @@
  * @since     2010-06-06
  */
 
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/Search/Abstract.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/Search/Interface.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/Search/Database.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/Search/Database/Sqlite.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/DB/Driver.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/DB/Sqlite3.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/Exception.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/Configuration.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/String.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/String/Abstract.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/String/Mbstring.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/String/UTF8ToLatinConvertable.php';
+require_once dirname(dirname(__DIR__)) . '/inc/Search/Abstract.php';
+require_once dirname(dirname(__DIR__)) . '/inc/Search/Interface.php';
+require_once dirname(dirname(__DIR__)) . '/inc/Search/Database.php';
+require_once dirname(dirname(__DIR__)) . '/inc/Search/Database/Sqlite.php';
+require_once dirname(dirname(__DIR__)) . '/inc/DB/Driver.php';
+require_once dirname(dirname(__DIR__)) . '/inc/DB/Sqlite3.php';
+require_once dirname(dirname(__DIR__)) . '/inc/Exception.php';
+require_once dirname(dirname(__DIR__)) . '/inc/Configuration.php';
+require_once dirname(dirname(__DIR__)) . '/inc/String.php';
+require_once dirname(dirname(__DIR__)) . '/inc/String/Abstract.php';
+require_once dirname(dirname(__DIR__)) . '/inc/String/Mbstring.php';
+require_once dirname(dirname(__DIR__)) . '/inc/String/UTF8ToLatinConvertable.php';
 
 /**
  * Category test case

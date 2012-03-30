@@ -30,7 +30,7 @@
 define('LANGCODE', 'en');
 
 // Do not change anything below this line!
-define('PMF_ROOT_DIR', dirname(__FILE__));
+define('PMF_ROOT_DIR', __DIR__);
 $output                    = '';
 $isCronRequest             = false;
 $isRequestedByCLI          = isset($_SERVER['argv']) && (isset($_SERVER['argv'][0]));

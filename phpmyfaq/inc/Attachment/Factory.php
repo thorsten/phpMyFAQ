@@ -21,7 +21,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'libs' . DIRECTORY_SEPARATOR . 
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'libs' . DIRECTORY_SEPARATOR .
     'phpseclib' . DIRECTORY_SEPARATOR . 'Crypt' . DIRECTORY_SEPARATOR .'AES.php';
                  
 /**

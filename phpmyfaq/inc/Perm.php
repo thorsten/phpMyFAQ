@@ -96,7 +96,7 @@ class PMF_Perm
             return $perm;
         }
         
-        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Perm' . DIRECTORY_SEPARATOR . $permLevel . '.php';
+        $classfile = __DIR__ . DIRECTORY_SEPARATOR . 'Perm' . DIRECTORY_SEPARATOR . $permLevel . '.php';
         if (!file_exists($classfile)) {
             return $perm;
         }

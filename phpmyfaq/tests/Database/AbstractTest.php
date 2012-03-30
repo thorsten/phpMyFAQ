@@ -18,7 +18,7 @@
  */
 
 require_once 'PHPUnit/Extensions/Database/TestCase.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/Db.php';
+require_once dirname(dirname(__DIR__)) . '/inc/Db.php';
 
 define('SQLPREFIX', '');
 

@@ -25,7 +25,7 @@
  */
 
 define('COPYRIGHT', '&copy; 2001-2012 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
-define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
+define('PMF_ROOT_DIR', dirname(__DIR__));
 define('IS_VALID_PHPMYFAQ', null);
 
 if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
@@ -291,7 +291,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                             <label class="control-label" for="sql_sqlitefile">SQLite database file:</label>
                             <div class="controls">
                                 <input type="text" name="sql_sqlitefile" id="sql_sqlitefile"
-                                       value="<?php print dirname(dirname(__FILE__)); ?>" />
+                                       value="<?php print dirname(__DIR__); ?>" />
                                 <p class="help-block">
                                     Please enter the full path to your SQLite datafile which should be outside your
                                     docroot.

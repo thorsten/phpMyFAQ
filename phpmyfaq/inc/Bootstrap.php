@@ -63,7 +63,7 @@ ini_set('pcre.recursion_limit', 100000000);
 //
 if (! defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
     // Single instance configuration
-    define('PMF_CONFIG_DIR', dirname(dirname(__FILE__)) . '/config');
+    define('PMF_CONFIG_DIR', dirname(__DIR__) . '/config');
 } else {
     // Multi instance configuration
     define('PMF_CONFIG_DIR', PMF_MULTI_INSTANCE_CONFIG_DIR);
@@ -75,7 +75,7 @@ require PMF_CONFIG_DIR . '/constants.php';
 //
 // Include Autoloader and global functions
 //
-define('PMF_INCLUDE_DIR', dirname(__FILE__));
+define('PMF_INCLUDE_DIR', __DIR__);
 require PMF_INCLUDE_DIR . '/Autoloader.php';
 require PMF_INCLUDE_DIR . '/functions.php';
 // @todo: Linkverifier.php contains both PMF_Linkverifier class and
@@ -128,10 +128,10 @@ if ('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:(\\\\|/)%i', $confAtta
     define('PMF_ATTACHMENTS_DIR', $confAttachmentsPath);
 } else {
     // otherwise build the absolute path
-    $tmp = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . $confAttachmentsPath;
+    $tmp = dirname(__DIR__) . DIRECTORY_SEPARATOR . $confAttachmentsPath;
 
     // Check that nobody is traversing
-    if (0 === strpos((string)$tmp, dirname(dirname(__FILE__)))) {
+    if (0 === strpos((string)$tmp, dirname(__DIR__))) {
         define('PMF_ATTACHMENTS_DIR', $tmp);
     } else {
         define('PMF_ATTACHMENTS_DIR', false);

@@ -17,11 +17,11 @@
  * @since     2010-07-06
  */
 
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/Search/Factory.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/Language.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/String.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/String/Abstract.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/String/Mbstring.php';
+require_once dirname(dirname(__DIR__)) . '/inc/Search/Factory.php';
+require_once dirname(dirname(__DIR__)) . '/inc/Language.php';
+require_once dirname(dirname(__DIR__)) . '/inc/String.php';
+require_once dirname(dirname(__DIR__)) . '/inc/String/Abstract.php';
+require_once dirname(dirname(__DIR__)) . '/inc/String/Mbstring.php';
 
 /**
  * Category test case

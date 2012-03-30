@@ -17,14 +17,14 @@
  * @since     2010-06-06
  */
 
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/inc/Configuration.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/inc/functions.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/inc/Search.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/inc/Search/Database/Mysql.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/inc/DB/Driver.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/inc/DB/Mysql.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/inc/Configuration.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/inc/functions.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/inc/Search.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/inc/Search/Database/Mysql.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/inc/DB/Driver.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/inc/DB/Mysql.php';
 
-require_once dirname(dirname(dirname(__FILE__))) . '/Database/MysqlTest.php';
+require_once dirname(dirname(__DIR__)) . '/Database/MysqlTest.php';
 
 /**
  * Search test case
@@ -46,7 +46,7 @@ class PMF_Search_Database_MysqlTest extends Database_MysqlTest
      */
     protected function getDataSet() 
     {
-        return $this->createFlatXMLDataSet(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'data.xml');
+        return $this->createFlatXMLDataSet(__DIR__ . DIRECTORY_SEPARATOR . 'data.xml');
     }
         
     /**

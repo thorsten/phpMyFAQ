@@ -21,7 +21,7 @@
  * @since     2002-09-16
  */
 
-define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
+define('PMF_ROOT_DIR', dirname(__DIR__));
 
 //
 // Check if config/database.php exist -> if not, redirect to installer

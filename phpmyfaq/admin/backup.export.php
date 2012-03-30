@@ -17,7 +17,7 @@
  * @since     2009-08-18
  */
 
-define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
+define('PMF_ROOT_DIR', dirname(__DIR__));
 
 //
 // Define the named constant used as a check by any included PHP file

@@ -17,7 +17,7 @@
  * @since     2008-01-25
  */
 
-define('PMF_ROOT_DIR', dirname(dirname(dirname(__FILE__))));
+define('PMF_ROOT_DIR', dirname(dirname(__DIR__)));
 define('IS_VALID_PHPMYFAQ', null);
 
 require_once PMF_ROOT_DIR.'/inc/Bootstrap.php';

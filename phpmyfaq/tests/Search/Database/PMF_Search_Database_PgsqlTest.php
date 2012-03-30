@@ -17,14 +17,14 @@
  * @since     2010-06-06
  */
 
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/inc/Configuration.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/inc/functions.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/inc/Search.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/inc/Search/Database/Pgsql.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/inc/DB/Driver.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/inc/DB/Pgsql.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/inc/Configuration.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/inc/functions.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/inc/Search.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/inc/Search/Database/Pgsql.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/inc/DB/Driver.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/inc/DB/Pgsql.php';
 
-require_once dirname(dirname(dirname(__FILE__))) . '/Database/PostgressTest.php';
+require_once dirname(dirname(__DIR__)) . '/Database/PostgressTest.php';
 
 /**
  * Search test case
@@ -46,7 +46,7 @@ class PMF_Search_Database_PgsqlTest extends Database_PostgressTest
      */
     protected function getDataSet()
     {
-        return $this->createFlatXMLDataSet(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'data.xml');
+        return $this->createFlatXMLDataSet(__DIR__ . DIRECTORY_SEPARATOR . 'data.xml');
     }
 
     /**

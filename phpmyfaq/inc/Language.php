@@ -277,7 +277,7 @@ class PMF_Language
     public static function isASupportedTinyMCELanguage($langcode)
     {
         return file_exists(
-            dirname(dirname(__FILE__)) . '/admin/editor/langs/' . $langcode . '.js'
+            dirname(__DIR__) . '/admin/editor/langs/' . $langcode . '.js'
         );
     }
     
