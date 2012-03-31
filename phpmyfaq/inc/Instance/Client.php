@@ -1,8 +1,8 @@
 <?php
 /**
- * The main phpMyFAQ instances class
+ * The main phpMyFAQ instances class for instance clients
  *
- * PHP Version 5.2
+ * PHP Version 5.3
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -14,7 +14,7 @@
  * @copyright 2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @since     2012-02-20
+ * @since     2012-03-31
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -30,25 +30,34 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @copyright 2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @since     2012-02-20
+ * @since     2012-03-31
  */
-class PMF_Configuration_Instance extends PMF_Configuration
+class PMF_Instance_Client extends PMF_Instance
 {
     /**
-     * Tablename
+     * Tablename for configurations
      *
      * @var string
      */
-    protected $_tableName = 'faqinstances_config';
+    private $_tableName = 'faqinstances_config';
 
     /**
-     * Constructor
-     *
-     * @return PMF_Instance
+     * @var FilesystemIterator
      */
-    public function __construct(PMF_DB_Driver $database)
+    private $_fileSystemIterator;
+
+    /**
+     * @var PMF_Instance
+     */
+    private $_instance;
+
+    /**
+     *
+     * @param PMF_Instance $instance
+     */
+    public function createClient(PMF_Instance $instance)
     {
-        parent::__construct($database);
+        $this->_instance = $instance;
     }
 
     /**
@@ -59,7 +68,7 @@ class PMF_Configuration_Instance extends PMF_Configuration
      *
      * @return boolean
      */
-    public function add($name, $value)
+    public function addConfig($name, $value)
     {
         $insert = sprintf(
             "INSERT INTO
@@ -68,14 +77,11 @@ class PMF_Configuration_Instance extends PMF_Configuration
                 (%d, '%s', '%s')",
             SQLPREFIX,
             $this->_tableName,
-            $this->getInstance()->getId(),
-            $this->getDb()->escape(trim($name)),
-            $this->getDb()->escape(trim($value))
+            $this->_instance->getId(),
+            $this->_config->getDb()->escape(trim($name)),
+            $this->_config->getDb()->escape(trim($value))
         );
 
-        return $this->getDb()->query($insert);
+        return $this->_config->getDb()->query($insert);
     }
-
-
-
 }

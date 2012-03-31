@@ -44,14 +44,14 @@ class PMF_Instance
      *
      * @var PMF_Configuration
      */
-    private $_config = null;
+    protected $_config = null;
 
     /**
      * Instance ID
      *
      * @var integer
      */
-    private $_id;
+    protected $_id;
 
     /**
      * Constructor
