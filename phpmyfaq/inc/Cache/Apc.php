@@ -34,35 +34,38 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  */
 class PMF_Cache_Apc extends PMF_Cache_Service
 {
-	protected $instance = NULL;
+    /**
+     * @var PMF_Cache_Apc
+     */
+    protected $instance = NULL;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param array $config Cache configuration
-	 *
-	 * @return PMF_Cache_Apc
-	 */
-	public function __construct(array $config)
-	{
+    /**
+     * Constructor.
+     *
+     * @param array $config Cache configuration
+     *
+     * @return PMF_Cache_Apc
+     */
+    public function __construct(array $config)
+    {
 
-	}
+    }
 
-	/**
-	 * Clear all cached article related items.
-	 *
-	 * @param intereg $id Article id
-	 *
-	 * @return void
-	 */
-	public function clearArticle($id)
-	{
+    /**
+     * Clear all cached article related items.
+     *
+     * @param intereg $id Article id
+     *
+     * @return void
+     */
+    public function clearArticle($id)
+    {
 
-	}
+    }
 
-	public function clearAll()
-	{
-		
-	}
+    public function clearAll()
+    {
+        
+    }
 
 }
