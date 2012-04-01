@@ -54,7 +54,8 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
      * @param string $filepath path to file
      * @param string $mode     mode for fopen
      *
-     * @return null
+     * @return PMF_Attachment_Filesystem_File
+     *
      * TODO check for correct mode if file doesn't exist
      */
     public function __construct($filepath, $mode = self::MODE_READ)

@@ -129,7 +129,7 @@ abstract class PMF_Attachment_Abstract
      *
      * @param integer $id attachment id
      *
-     * @return null
+     * @return PMF_Attachment_Abstract
      */
     public function __construct ($id = null)
     {   
@@ -433,17 +433,12 @@ abstract class PMF_Attachment_Abstract
     {
         // TODO implement this
     }
-    
+
     /**
-     * Destructor
+     * Returns filename
      *
-     * @return null
+     * @return string
      */
-    public function __destruct()
-    {
-        
-    }
-    
     public function getFilename()
     {
         return $this->filename;

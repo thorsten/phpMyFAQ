@@ -47,7 +47,14 @@ class PMF_Attachment_Filesystem_File_Encrypted extends PMF_Attachment_Filesystem
      * @var object
      */
     protected $aes;
-    
+
+    /**
+     * @param $filepath
+     * @param $mode
+     * @param $key
+     *
+     * @return PMF_Attachment_Filesystem_File_Encrypted
+     */
     public function __construct($filepath, $mode, $key)
     {
         $this->aes = new Crypt_AES();
