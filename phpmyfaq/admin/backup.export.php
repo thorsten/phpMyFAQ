@@ -69,6 +69,7 @@ if ($permission['backup']) {
     $db->getTableNames ( SQLPREFIX );
     $tablenames   = '';
     $majorVersion = substr($faqConfig->get('main.currentVersion'), 0, 3);
+    $dbHelper     = new PMF_DB_Helper($faqConfig);
 
     switch ($action) {
         case 'backup_content' :
@@ -99,14 +100,14 @@ if ($permission['backup']) {
             header('Content-Disposition: attachment; filename="phpmyfaq-data.'.date("Y-m-d-H-i-s").'.sql');
             foreach (explode(' ', $tablenames) as $table) {
                 print implode("\r\n", $text);
-                $text = build_insert("SELECT * FROM " . $table, $table);
+                $text = $dbHelper->buildInsertQueries("SELECT * FROM " . $table, $table);
             }
             break;
         case 'backup_logs' :
             header('Content-Disposition: attachment; filename="phpmyfaq-logs.'.date("Y-m-d-H-i-s").'.sql');
             foreach (explode(' ', $tablenames) as $table) {
                 print implode("\r\n", $text);
-                $text = build_insert("SELECT * FROM " . $table, $table);
+                $text = $dbHelper->buildInsertQueries("SELECT * FROM " . $table, $table);
             }
             break;
     }
