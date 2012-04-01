@@ -26,44 +26,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-/* Defines number of times linkverifier follows 302 response before failing.
- *
- * Suggested value is above 10 redirects
- */
-
-if (!defined('LINKVERIFIER_MAX_REDIRECT_COUNT')) {
-    define('LINKVERIFIER_MAX_REDIRECT_COUNT', 10);
-}
-
-/* Defines the number of seconds to wait for the remote server to respond
- *
- * Suggested value is 5 seconds
- */
-if (!defined('LINKVERIFIER_CONNECT_TIMEOUT')) {
-    define('LINKVERIFIER_CONNECT_TIMEOUT', 5);
-}
-
-/* Defines the number of seconds to wait for the remote server to send data
- *
- * Suggested value is 10 seconds
- */
-if (!defined('LINKVERIFIER_RESPONSE_TIMEOUT')) {
-    define('LINKVERIFIER_RESPONSE_TIMEOUT', 10);
-}
-
-/* Defines the behaviour when a user click "Edit FAQs" in the backend.
- * Do you want an automatic links verification
- * with live update of each links verification status?
- *
- * Suggested value is:
- * a. false, if you don't use a cron/at entry to call 'cron.verifyurls.php' during each night.
- *           This will avoid browser high load (100% CPU)
- * b. true, if you use a cron/at entry to call 'cron.verifyurls.php' during each night
- */
-if (!defined('LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ')) {
-    define('LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ', false);
-}
-
 /**
  * PMF_LinkVerifier
  *
@@ -79,6 +41,33 @@ if (!defined('LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ')) {
  */
 class PMF_Linkverifier
 {
+    /**
+     * Defines number of times linkverifier follows 302 response before failing.
+     */
+    const LINKVERIFIER_MAX_REDIRECT_COUNT = 10;
+
+    /**
+     * Defines the number of seconds to wait for the remote server to respond
+     */
+    const LINKVERIFIER_CONNECT_TIMEOUT = 5;
+
+    /**
+     * Defines the number of seconds to wait for the remote server to send data
+     */
+    const LINKVERIFIER_RESPONSE_TIMEOUT = 10;
+
+    /**
+     * Defines the behaviour when a user click "Edit FAQs" in the backend.
+     * Do you want an automatic links verification
+     * with live update of each links verification status?
+     *
+     * Suggested value is:
+     * a. false, if you don't use a cron/at entry to call 'cron.verifyurls.php' during each night.
+     *           This will avoid browser high load (100% CPU)
+     * b. true, if you use a cron/at entry to call 'cron.verifyurls.php' during each night
+     */
+    const LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ = false;
+
     /* List of protocol and urls
      *
      * @var mixed
@@ -439,13 +428,13 @@ class PMF_Linkverifier
         }
 
         // Recursing too much ?
-        if (($redirectCount >= LINKVERIFIER_MAX_REDIRECT_COUNT) || ($url == $redirect)) {
+        if (($redirectCount >= self::LINKVERIFIER_MAX_REDIRECT_COUNT) || ($url == $redirect)) {
             return array(
                 false,
                 $redirectCount,
                 sprintf(
                     $PMF_LANG['ad_linkcheck_openurl_maxredirect'],
-                    LINKVERIFIER_MAX_REDIRECT_COUNT
+                    self::LINKVERIFIER_MAX_REDIRECT_COUNT
                 )
             );
         }
@@ -532,7 +521,7 @@ class PMF_Linkverifier
         if (@extension_loaded('openssl') && ('https' == $urlParts['scheme'])) {
             $_host = 'ssl://'.$_host;
         }
-        $fp = @fsockopen($_host, $urlParts['port'], $errno, $errstr, LINKVERIFIER_CONNECT_TIMEOUT);
+        $fp = @fsockopen($_host, $urlParts['port'], $errno, $errstr, self::LINKVERIFIER_CONNECT_TIMEOUT);
         if (!$fp) {
             // mark this host too slow to verify
             $this->slow_hosts[$urlParts['host']] = true;
@@ -547,7 +536,7 @@ class PMF_Linkverifier
         }
 
         // wait for data with timeout (default: 10secs)
-        stream_set_timeout($fp, LINKVERIFIER_RESPONSE_TIMEOUT, 0);
+        stream_set_timeout($fp, self::LINKVERIFIER_RESPONSE_TIMEOUT, 0);
         $_url = $urlParts['path'].$urlParts['query'].$urlParts['fragment'];
         fputs($fp, "HEAD ".$_url." HTTP/1.0\r\nHost: ".$urlParts['host']."\r\n");
         // Be polite: let our probe declares itself
@@ -814,7 +803,7 @@ class PMF_Linkverifier
 
         $onLoad = '';
         if ($this->getEntryState($id, $artlang, true) === true) {
-            if (LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ) {
+            if (self::LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ) {
                 $onLoad = " onload=\"verifyEntryURL(".$id.",'".$artlang."');\"";
             }
         }
@@ -1004,112 +993,6 @@ class PMF_Linkverifier
             $this->_config->getDb()->query($query);
         }
     }
-}
-
-
-
-/**
- * Prints javascripts needed for AJAX linkverification in record listing
- *
- * @access  public
- * @author  Minoru TODA <todam@netjapan.co.jp>
- * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since   2005-08-01
- */
-
-// Client-side Javascript needed for AJAX URL verification
-function link_verifier_javascript()
-{
-    global $PMF_LANG;
-
-    //TODO: ASSIGN STRINGS FOR THE <IMG ALT="">
-    $ajaxphp = 'index.php?';
-?>
-<script type="text/javascript">
-<!--
-function getImageElement(id, lang)
-{
-    return $('#imgurl_' + lang + '_' + id);
-}
-
-function getSpanElement(id, lang)
-{
-    return $('#spanurl_' + lang + '_' + id);
-}
-
-function getDivElement(id, lang)
-{
-    return $('#divurl_' + lang + '_' + id);
-}
-
-function onDemandVerifyURL(id, lang, target)
-{
-    var target = getSpanElement(id, lang);
-    var widthPx  = 780;
-    var heigthPx = 450;
-    var leftPx   = (screen.width  - widthPx)/2;
-    var topPx    = (screen.height - heigthPx)/2;
-    Fenster = window.open('<?php print $ajaxphp; ?>&action=ajax&ajax=onDemandURL&id=' + id + '&artlang=' + lang, 'onDemandURLVerification', 'toolbar=no, location=no, status=no, menubar=no, width=' + widthPx + ', height=' + heigthPx + ', left=' + leftPx + ', top=' + topPx + ', resizable=yes, scrollbars=yes');
-    Fenster.focus();
-
-    verifyEntryURL(id, lang);
-}
-
-function verifyEntryURL(id, lang)
-{
-    //var target = getImageElement(id, lang);
-    var target = getSpanElement(id, lang);
-
-    // !!IMPORTANT!! DISABLE ONLOAD. If you do not do this, you will get infinite loop!
-    getImageElement(id, lang).onload = "";
-
-    //target.src = "images/url-checking.png";
-    getDivElement(id, lang).className = "url-checking";
-    target.innerHTML = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-checking']); ?>";
-
-    var url = 'index.php';
-    var pars = 'action=ajax&ajax=verifyURL&id=' + id + '&artlang=' + lang;
-    var myAjax = new jQuery.ajax({url: url,
-                                 type: 'get',
-                                 data: pars,
-                                 complete: verifyEntryURL_success,
-                                 error: verifyEntryURL_failure});
-
-    function verifyEntryURL_success(XmlRequest)
-    {
-        //target.src = "images/url-" + XmlRequest.responseText + ".png";
-        var allResponses = new Array();
-        allResponses['batch1'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-batch1']); ?>";
-        allResponses['batch2'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-batch2']); ?>";
-        allResponses['batch3'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-batch3']); ?>";
-        allResponses['checking'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-checking']); ?>";
-        allResponses['disabled'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-disabled']); ?>";
-        allResponses['linkbad'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-linkbad']); ?>";
-        allResponses['linkok'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-linkok']); ?>";
-        allResponses['noaccess'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-noaccess']); ?>";
-        allResponses['noajax'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-noajax']); ?>";
-        allResponses['nolinks'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-nolinks']); ?>";
-        allResponses['noscript'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-noscript']); ?>";
-        getDivElement(id, lang).className = "url-" + XmlRequest.responseText;
-        if (typeof(allResponses[XmlRequest.responseText]) == "undefined") {
-            getDivElement(id, lang).className = "url-noajax ";
-            target.html(allResponses['noajax']);
-        } else {
-            target.html(allResponses[XmlRequest.responseText]);
-        }
-    }
-
-    function verifyEntryURL_failure(XmlRequest)
-    {
-        //target.src = "images/url-noaccess.png";
-        getDivElement(id, lang).className = "url-noaccess";
-        target.html("<?php print($PMF_LANG['ad_linkcheck_feedback_url-noaccess']); ?>");
-    }
-
-}
-//-->
-</script>
-<?php
 }
 
 /**
