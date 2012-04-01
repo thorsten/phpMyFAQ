@@ -97,8 +97,14 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      */
     public function query($query)
     {
-        $this->sqllog .= pmf_debug($query);
-        return $this->conn->query($query);
+        if (DEBUG) {
+            $this->sqllog .= PMF_Utils::debug($query);
+        }
+        $result = $this->conn->query($query);
+        if (!$result) {
+            $this->sqllog .= $this->error();
+        }
+        return $result;
     }
 
 

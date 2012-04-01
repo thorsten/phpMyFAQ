@@ -88,8 +88,14 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      */
     public function query($query)
     {
-        $this->sqllog .= pmf_debug($query);
-        return mssql_query($query, $this->conn);
+        if (DEBUG) {
+            $this->sqllog .= PMF_Utils::debug($query);
+        }
+        $result = mssql_query($query, $this->conn);
+        if (!$result) {
+            $this->sqllog .= $this->error();
+        }
+        return $result;
     }
 
     /**

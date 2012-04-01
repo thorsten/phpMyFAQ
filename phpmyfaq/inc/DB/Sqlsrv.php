@@ -113,7 +113,14 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      */
     public function query($query)
     {
-        return sqlsrv_query($this->conn, $query);
+        if (DEBUG) {
+            $this->sqllog .= PMF_Utils::debug($query);
+        }
+        $result = sqlsrv_query($this->conn, $query);
+        if (!$result) {
+            $this->sqllog .= $this->error();
+        }
+        return $result;
     }
 
     /**

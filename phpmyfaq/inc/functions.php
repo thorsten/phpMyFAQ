@@ -26,52 +26,6 @@
  * @since     2001-02-18
  */
 
-//
-// DEBUGGING FUNCTIONS
-//
-
-/**
- * Function to get a pretty formatted output of a variable
- *
- * NOTE: Just for debugging!
- *
- * @param mixed $var Various stuff
- *
- * @return void
- */
-function dump($var)
-{
-    ob_flush();
-    print '<code>';
-    var_dump($var);
-    print '</code>';
-}
-
-/**
- * debug_backtrace() wrapper function
- *
- * @param $string
- *
- * @return string
- */
-function pmf_debug($string)
-{
-    // sometimes Zend Optimizer causes segfaults with debug_backtrace()
-    if (extension_loaded('Zend Optimizer')) {
-        $ret = "<code>" . $string . "</code><br />\n";
-    } else {
-        $debug = debug_backtrace();
-        $ret   = '';
-        if (isset($debug[2]['class'])) {
-        	$ret  = $debug[2]['file'] . ":<br />";
-            $ret .= $debug[2]['class'].$debug[1]['type'];
-            $ret .= $debug[2]['function'] . '() in line ' . $debug[2]['line'];
-            $ret .= ": <code>" . $string . "</code><br />\n";
-        }
-    }
-    return $ret;
-}
-
 /**
  * phpMyFAQ custom error handler function, also to prevent the disclosure of
  * potential sensitive data.

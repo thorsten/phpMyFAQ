@@ -359,4 +359,30 @@ class PMF_Utils
             return $finfo->file($filename);
         }
     }
+
+    /**
+     * debug_backtrace() wrapper function
+     *
+     * @param $string
+     *
+     * @return string
+     */
+    public static function debug($string)
+    {
+        // sometimes Zend Optimizer causes segfaults with debug_backtrace()
+        if (extension_loaded('Zend Optimizer')) {
+            $ret = "<code>" . $string . "</code><br />\n";
+        } else {
+            $debug = debug_backtrace();
+            $ret   = '';
+            if (isset($debug[2]['class'])) {
+                $ret  = $debug[2]['file'] . ":<br />";
+                $ret .= $debug[2]['class'].$debug[1]['type'];
+                $ret .= $debug[2]['function'] . '() in line ' . $debug[2]['line'];
+                $ret .= ": <code>" . $string . "</code><br />\n";
+            }
+        }
+        return $ret;
+    }
+
 }

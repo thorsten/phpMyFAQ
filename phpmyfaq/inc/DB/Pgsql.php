@@ -97,8 +97,14 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      */
     public function query($query)
     {
-        $this->sqllog .= pmf_debug($query);
-        return pg_query($this->conn, $query);
+        if (DEBUG) {
+            $this->sqllog .= PMF_Utils::debug($query);
+        }
+        $result = pg_query($this->conn, $query);
+        if (!$result) {
+            $this->sqllog .= $this->error();
+        }
+        return $result;
     }
 
     /**
