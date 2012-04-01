@@ -128,68 +128,6 @@ EOD;
 //
 
 /**
- * This function returns the banned words dictionary as an array.
- *
- * @return  array
- * @access  public
- * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
- */
-function getBannedWords()
-{
-    $bannedTrimmedWords = array();
-    $bannedWordsFile    = __DIR__ . '/blockedwords.txt';
-    $bannedWords        = array();
-
-    // Read the dictionary
-    if (file_exists($bannedWordsFile) && is_readable($bannedWordsFile)) {
-        $bannedWords = file_get_contents($bannedWordsFile);
-    }
-    
-    // Trim it
-    foreach (explode("\n", $bannedWords) as $word) {
-        $bannedTrimmedWords[] = trim($word);
-    }
-
-    return $bannedTrimmedWords;
-}
-
-/**
- * This function checks the content against a dab word list
- * if the banned word spam protection has been activated from the general PMF configuration.
- *
- * @param   string  $content
- * @return  bool
- * @access  public
- * @author  Katherine A. Bouton
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @author  Peter Beauvain <pbeauvain@web.de>
- */
-function checkBannedWord($content)
-{
-    global $faqConfig;
-
-    // Sanity checks
-    $content = trim($content);
-    if (('' == $content) && (!$faqConfig->get('spam.checkBannedWords'))) {
-        return true;
-    }
-
-    $bannedWords = getBannedWords();
-    // We just search a match of, at least, one banned word into $content
-    $content = PMF_String::strtolower($content);
-    if (is_array($bannedWords)) {
-        foreach ($bannedWords as $bannedWord) {
-            if (PMF_String::strpos($content, PMF_String::strtolower($bannedWord)) !== false) {
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
-/**
  * Funktion zum generieren vom "Umblaettern" | @@ Bastian, 2002-01-03
  * Last Update: @@ Thorsten, 2004-05-07
  */

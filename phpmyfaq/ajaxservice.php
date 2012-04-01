@@ -64,6 +64,7 @@ $http->addHeader();
 // Set session
 $faqsession = new PMF_Session($faqConfig);
 $network    = new PMF_Network($faqConfig);
+$stopwords  = new PMF_Stopwords($faqConfig);
 
 if (!$network->checkIp($_SERVER['REMOTE_ADDR'])) {
     $message = array('error' => $PMF_LANG['err_bannedIP']);
@@ -111,7 +112,7 @@ switch ($action) {
         }
 
         if (!is_null($username) && !empty($username) && !empty($mail) && !is_null($mail) && !is_null($comment) &&
-            !empty($comment) && checkBannedWord($comment) && !$faq->commentDisabled($id, $languageCode, $type)) {
+            !empty($comment) && $stopwords->checkBannedWord($comment) && !$faq->commentDisabled($id, $languageCode, $type)) {
 
             $faqsession->userTracking("save_comment", $id);
             $commentData = array(
@@ -235,8 +236,8 @@ switch ($action) {
         }
 
         if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) &&
-            !is_null($question) && !empty($question) && checkBannedWord(PMF_String::htmlspecialchars($question)) &&
-            !is_null($answer) && !empty($answer) && checkBannedWord(PMF_String::htmlspecialchars($answer)) &&
+            !is_null($question) && !empty($question) && $stopwords->checkBannedWord(PMF_String::htmlspecialchars($question)) &&
+            !is_null($answer) && !empty($answer) && $stopwords->checkBannedWord(PMF_String::htmlspecialchars($answer)) &&
             ((is_null($faqid) && !is_null($categories['rubrik'])) || (!is_null($faqid) && !is_null($faqlanguage) &&
             PMF_Language::isASupportedLanguage($faqlanguage)))) {
 
@@ -379,7 +380,7 @@ switch ($action) {
         }
 
         if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) &&
-            !is_null($question) && !empty($question) && checkBannedWord(PMF_String::htmlspecialchars($question))) {
+            !is_null($question) && !empty($question) && $stopwords->checkBannedWord(PMF_String::htmlspecialchars($question))) {
 
             if ($faqConfig->get('records.enableVisibilityQuestions')) {
                 $visibility = 'N';
@@ -621,7 +622,7 @@ switch ($action) {
         }
 
         if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) && !is_null($question) &&
-            !empty($question) && checkBannedWord(PMF_String::htmlspecialchars($question))) {
+            !empty($question) && $stopwords->checkBannedWord(PMF_String::htmlspecialchars($question))) {
 
             $question = sprintf(
                 "%s %s\n%s %s\n\n %s",
@@ -664,7 +665,7 @@ switch ($action) {
 
         if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) &&
             is_array($mailto) && !empty($mailto['mailto'][0]) &&
-            checkBannedWord(PMF_String::htmlspecialchars($attached))) {
+                $stopwords->checkBannedWord(PMF_String::htmlspecialchars($attached))) {
 
             foreach($mailto['mailto'] as $recipient) {
                 $recipient = trim(strip_tags($recipient));

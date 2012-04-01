@@ -11,6 +11,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Stopwords
  * @author    Anatoliy Belsky
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
@@ -27,6 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Stopwords
  * @author    Anatoliy Belsky
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
@@ -263,4 +265,58 @@ class PMF_Stopwords
         
         return $retval;
     }
+    /**
+     * This function checks the content against a dab word list
+     * if the banned word spam protection has been activated from the general PMF configuration.
+     *
+     * @param string $content
+     *
+     * @return bool
+     */
+    public function checkBannedWord($content)
+    {
+        // Sanity checks
+        $content = trim($content);
+        if (('' == $content) && (!$this->_config->get('spam.checkBannedWords'))) {
+            return true;
+        }
+
+        $bannedWords = getBannedWords();
+        // We just search a match of, at least, one banned word into $content
+        $content = PMF_String::strtolower($content);
+        if (is_array($bannedWords)) {
+            foreach ($bannedWords as $bannedWord) {
+                if (PMF_String::strpos($content, PMF_String::strtolower($bannedWord)) !== false) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * This function returns the banned words dictionary as an array.
+     *
+     * @return array
+     */
+    private function getBannedWords()
+    {
+        $bannedTrimmedWords = array();
+        $bannedWordsFile    = __DIR__ . '/blockedwords.txt';
+        $bannedWords        = array();
+
+        // Read the dictionary
+        if (file_exists($bannedWordsFile) && is_readable($bannedWordsFile)) {
+            $bannedWords = file_get_contents($bannedWordsFile);
+        }
+
+        // Trim it
+        foreach (explode("\n", $bannedWords) as $word) {
+            $bannedTrimmedWords[] = trim($word);
+        }
+
+        return $bannedTrimmedWords;
+    }
+
 }
