@@ -51,7 +51,10 @@ $query = $uninst = array();
  */
 function HTMLFooter()
 {
-    printf('</div></div></section><footer><div class="container"><p class="pull-right">%s</p><div></footer></body></html>', COPYRIGHT);
+    printf(
+        '</div></div></section><footer><div class="container"><p class="pull-right">%s</p><div></footer></body></html>',
+        COPYRIGHT
+    );
 }
 
 $system = new PMF_System();
@@ -770,11 +773,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     $faqInstance = new PMF_Instance($configuration);
     $faqInstance->addInstance($instanceData);
 
-    $configInstanceData = array(
-        'main.isMaster'   => true,
-        'main.numClients' => 0
-    );
-    $faqConfigInstance = new PMF_Configuration_Instance($db);
+    $faqInstanceMaster = new PMF_Instance_Master($configuration);
 
     print '</p>';
 
