@@ -57,7 +57,8 @@ function HTMLFooter()
     );
 }
 
-$system = new PMF_System();
+$system        = new PMF_System();
+$instanceSetup = new PMF_Instance_Setup();
 
 ?>
 <!doctype html>
@@ -132,8 +133,8 @@ $system = new PMF_System();
                 <h1>phpMyFAQ <?php print PMF_System::getVersion(); ?> Setup</h1>
                 <p>
                     Did you already read the <a style="color: #ffffff; text-decoration: underline;"
-                    href="http://www.phpmyfaq.de/documentation.php">documentation</a> carefully before starting the phpMyFAQ
-                    setup? :-)
+                    href="http://www.phpmyfaq.de/documentation.php">documentation</a> carefully before starting the
+                    phpMyFAQ setup? :-)
                 </p>
             </div>
         </div>
@@ -184,19 +185,7 @@ if (! $system->checkphpMyFAQInstallation()) {
 }
 
 $dirs       = array('/attachments', '/config', '/data');
-$faileddirs = array();
-
-foreach ($dirs as $dir) {
-    if (!@is_dir(PMF_ROOT_DIR . $dir)) {
-        if (!@mkdir (PMF_ROOT_DIR . $dir, 0755)) {
-            $faileddirs[] = $dir;
-        }
-    } else if (!@is_writable(PMF_ROOT_DIR . $dir)) {
-        $faileddirs[] = $dir;
-    } else {
-        @copy('index.html', PMF_ROOT_DIR . $dir . '/index.html');
-    }
-}
+$faileddirs = $instanceSetup->checkDirs($dirs);
 
 if (sizeof($faileddirs)) {
     print '<p class="alert alert-error">The following directory/-ies could not be created or are not writable:</p><ul>';
@@ -672,7 +661,8 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         }
     }
 
-    // connect to the database using config/database.php
+    // re-connect to the database using config/database.php
+    $db->close();
     require PMF_ROOT_DIR . '/config/database.php';
     $db = PMF_Db::factory($dbType);
     $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
