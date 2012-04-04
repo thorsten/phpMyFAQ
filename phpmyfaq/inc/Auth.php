@@ -17,7 +17,7 @@
  * selectDb(dbtype) may be called which returns a valid database-specific
  * object. See documentation of the static method selectDb for further details.
  *
- * PHP Version 5.2
+ * PHP Version 5.3
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can

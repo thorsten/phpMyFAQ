@@ -3,7 +3,7 @@
  * The PMF_DB_Mysql class provides methods and functions for MySQL 5.0.x,
  * 5.1.x, and 5.5.x databases.
  *
- * PHP Version 5.2
+ * PHP Version 5.3
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can

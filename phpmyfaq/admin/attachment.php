@@ -2,7 +2,7 @@
 /**
  * Select an attachment and save it or create the SQL backup files
  *
- * PHP Version 5.2
+ * PHP Version 5.3
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can

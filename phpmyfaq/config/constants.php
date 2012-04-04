@@ -2,7 +2,7 @@
 /**
  * Constants for phpMyFAQ
  *
- * PHP Version 5.2
+ * PHP Version 5.3
  *
  *  Version
  * 1.1 (the "License"); you may not use this file except in compliance with

@@ -3,7 +3,7 @@
  * The PMF_DB_Sqlite class provides methods and functions for a SQLite v2
  * database. This class is deprecated for PHP 5.3 and PHP 5.4.
  *
- * PHP Version 5.2
+ * PHP Version 5.3
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
