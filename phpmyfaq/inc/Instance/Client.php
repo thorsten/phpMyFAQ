@@ -35,21 +35,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Instance_Client extends PMF_Instance
 {
     /**
-     * Tablename for configurations
-     *
-     * @var string
-     */
-    private $_tableName = 'faqinstances_config';
-
-    /**
      * @var FilesystemIterator
      */
     private $_fileSystemIterator;
-
-    /**
-     * @var PMF_Instance
-     */
-    private $_instance;
 
     /**
      *
@@ -57,31 +45,7 @@ class PMF_Instance_Client extends PMF_Instance
      */
     public function createClient(PMF_Instance $instance)
     {
-        $this->_instance = $instance;
-    }
-
-    /**
-     * Adds a configuration item for the database
-     *
-     * @param string $name
-     * @param mixed  $value
-     *
-     * @return boolean
-     */
-    public function addConfig($name, $value)
-    {
-        $insert = sprintf(
-            "INSERT INTO
-                %s%s
-            VALUES
-                (%d, '%s', '%s')",
-            SQLPREFIX,
-            $this->_tableName,
-            $this->_instance->getId(),
-            $this->_config->getDb()->escape(trim($name)),
-            $this->_config->getDb()->escape(trim($value))
-        );
-
-        return $this->_config->getDb()->query($insert);
+        $this->setId($instance->getId());
+        $this->addConfig('isMaster', false);
     }
 }

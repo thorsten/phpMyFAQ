@@ -35,11 +35,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Instance
 {
     /**
-     * Tablename
-     */
-    const TABLE_FAQINSTANCES = 'faqinstances';
-
-    /**
      * Configuration
      *
      * @var PMF_Configuration
@@ -72,12 +67,12 @@ class PMF_Instance
      */
     public function addInstance(Array $data)
     {
-        $this->_id = $this->_config->getDb()->nextId(SQLPREFIX . self::TABLE_FAQINSTANCES, 'id');
+        $this->setId($this->_config->getDb()->nextId(SQLPREFIX . 'faqinstances', 'id'));
 
         $insert = sprintf(
             "INSERT INTO %sfaqinstances VALUES (%d, '%s', '%s', '%s', NOW(), NOW())",
             SQLPREFIX,
-            $this->_id,
+            $this->getId(),
             $data['url'],
             $data['instance'],
             $data['comment']
@@ -87,7 +82,17 @@ class PMF_Instance
             return 0;
         }
 
-        return $this->_id;
+        return $this->getId();
+    }
+
+    /**
+     * Sets the instance ID
+     *
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->_id = (int)$id;
     }
 
     /**
@@ -164,12 +169,50 @@ class PMF_Instance
      */
     public function removeInstance($id)
     {
-        $delete = sprintf(
-            "DELETE FROM %sfaqinstances WHERE id = %d",
-            SQLPREFIX,
-            (int)$id
+        $deletes = array(
+            sprintf(
+                "DELETE FROM %sfaqinstances WHERE id = %d",
+                SQLPREFIX,
+                (int)$id
+            ),
+            sprintf(
+                "DELETE FROM %sfaqinstances_config WHERE instance_id = %d",
+                SQLPREFIX,
+                (int)$id
+            ),
         );
 
-        return $this->_config->getDb()->query($delete);
+        foreach ($deletes as $delete) {
+            $success = $this->_config->getDb()->query($delete);
+            if (! $success) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Adds a configuration item for the database
+     *
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return boolean
+     */
+    public function addConfig($name, $value)
+    {
+        $insert = sprintf(
+            "INSERT INTO
+                %sfaqinstances_config
+            VALUES
+                (%d, '%s', '%s')",
+            SQLPREFIX,
+            $this->getId(),
+            $this->_config->getDb()->escape(trim($name)),
+            $this->_config->getDb()->escape(trim($value))
+        );
+
+        return $this->_config->getDb()->query($insert);
     }
 }

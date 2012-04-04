@@ -35,16 +35,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Instance_Master extends PMF_Instance
 {
     /**
-     * @var FilesystemIterator
-     */
-    private $_fileSystemIterator;
-
-    /**
      *
      * @param PMF_Instance $instance
      */
     public function createMaster(PMF_Instance $instance)
     {
-
+        $this->setId($instance->getId());
+        $this->addConfig('isMaster', true);
     }
 }
