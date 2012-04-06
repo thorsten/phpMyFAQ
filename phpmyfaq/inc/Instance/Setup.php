@@ -80,11 +80,11 @@ class PMF_Instance_Setup
      *
      * @param array $data
      *
-     * @return bool
+     * @return integer
      */
     public function createDatabaseFile(Array $data)
     {
-        return (boolean)file_put_contents(
+        $ret = file_put_contents(
             $this->_rootDir  . '/config/database.php',
             "<?php\n" .
             "\$DB['server'] = '" . $data['dbServer'] . "';\n" .
@@ -95,6 +95,8 @@ class PMF_Instance_Setup
             "\$DB['type'] = '" . $data['dbType'] . "';",
             LOCK_EX
         );
+
+        return $ret;
     }
 
     /**
@@ -102,11 +104,11 @@ class PMF_Instance_Setup
      *
      * @param array $data
      *
-     * @return bool
+     * @return integer
      */
     public function createLdapFile(Array $data)
     {
-        return (boolean)file_put_contents(
+        $ret = file_put_contents(
             $this->_rootDir  . '/config/database.php',
             "<?php\n" .
             "\$PMF_LDAP['ldap_server'] = '" . $data['ldapServer'] . "';\n" .
@@ -116,5 +118,7 @@ class PMF_Instance_Setup
             "\$PMF_LDAP['ldap_base'] = '" . $data['ldapBase'] . "';",
             LOCK_EX
         );
+
+        return $ret;
     }
 }
