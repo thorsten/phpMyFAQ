@@ -125,11 +125,11 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
         $user->enableRememberMe();
     }
     if ($faqConfig->get('security.ldapSupport')) {
-        $authLdap = new PMF_Auth_AuthLdap($faqConfig);
+        $authLdap = new PMF_Auth_Ldap($faqConfig);
         $user->addAuth($authLdap, 'ldap');
     }
     if ($faqConfig->get('security.ssoSupport')) {
-        $authSso = new PMF_Auth_AuthSso($faqConfig);
+        $authSso = new PMF_Auth_Sso($faqConfig);
         $user->addAuth($authSso, 'sso');
     }
     if ($user->login($faqusername, $faqpassword)) {
