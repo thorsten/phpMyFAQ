@@ -27,6 +27,7 @@
 define('COPYRIGHT', '&copy; 2001-2012 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(__DIR__));
 define('IS_VALID_PHPMYFAQ', null);
+define('DEBUG', true);
 
 if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     set_time_limit(0);
@@ -59,6 +60,8 @@ function HTMLFooter()
 
 $system        = new PMF_System();
 $instanceSetup = new PMF_Instance_Setup();
+
+$instanceSetup->setRootDir(PMF_ROOT_DIR);
 
 ?>
 <!doctype html>
@@ -469,21 +472,24 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 <?php
     HTMLFooter();
 } else {
-    
+
+    $dbSetup = array();
+
     // Check table prefix
-    $sqltblpre = PMF_Filter::filterInput(INPUT_POST, 'sqltblpre', FILTER_SANITIZE_STRING, '');
+    $dbSetup['dbPrefix'] = $sqltblpre = PMF_Filter::filterInput(INPUT_POST, 'sqltblpre', FILTER_SANITIZE_STRING, '');
     if (!defined('SQLPREFIX')) {
-        define('SQLPREFIX', $sqltblpre);
+        define('SQLPREFIX', $dbSetup['dbPrefix']);
     }
 
     // Check database entries
-    $dbType = PMF_Filter::filterInput(INPUT_POST, 'sql_type', FILTER_SANITIZE_STRING);
-    if (!is_null($dbType)) {
-        $dbType = trim($dbType);
-        if (file_exists(PMF_ROOT_DIR . '/install/' . $dbType . '.sql.php')) {
-            require PMF_ROOT_DIR . '/install/' . $dbType . '.sql.php';
-        } else {
-            printf('<p class="alert alert-error"><strong>Error:</strong> Invalid server type: %s</p>', $dbType);
+    $dbSetup['dbType'] = PMF_Filter::filterInput(INPUT_POST, 'sql_type', FILTER_SANITIZE_STRING);
+    if (!is_null($dbSetup['dbType'])) {
+        $dbSetup['dbType'] = trim($dbSetup['dbType']);
+        if (! file_exists(PMF_ROOT_DIR . '/install/' . $dbSetup['dbType'] . '.sql.php')) {
+            printf(
+                '<p class="alert alert-error"><strong>Error:</strong> Invalid server type: %s</p>',
+                $dbSetup['dbType']
+            );
             HTMLFooter();
             die();
         }
@@ -493,36 +499,36 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         die();
     }
 
-    $dbServer = PMF_Filter::filterInput(INPUT_POST, 'sql_server', FILTER_SANITIZE_STRING);
-    if (is_null($dbServer) && $dbType != 'sqlite') {
+    $dbSetup['dbServer'] = PMF_Filter::filterInput(INPUT_POST, 'sql_server', FILTER_SANITIZE_STRING);
+    if (is_null($dbSetup['dbServer']) && ! PMF_System::isSqlite($dbSetup['dbType'])) {
         print "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a database server.</p>\n";
         HTMLFooter();
         die();
     }
 
-    $dbUser = PMF_Filter::filterInput(INPUT_POST, 'sql_user', FILTER_SANITIZE_STRING);
-    if (is_null($dbUser) && $dbType != 'sqlite') {
+    $dbSetup['dbUser'] = PMF_Filter::filterInput(INPUT_POST, 'sql_user', FILTER_SANITIZE_STRING);
+    if (is_null($dbSetup['dbUser']) && ! PMF_System::isSqlite($dbSetup['dbType'])) {
         print "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a database username.</p>\n";
         HTMLFooter();
         die();
     }
 
-    $dbPassword = PMF_Filter::filterInput(INPUT_POST, 'sql_passwort', FILTER_SANITIZE_STRING);
-    if (is_null($dbPassword) && $dbType == 'sqlite') {
+    $dbSetup['dbPassword'] = PMF_Filter::filterInput(INPUT_POST, 'sql_passwort', FILTER_SANITIZE_STRING);
+    if (is_null($dbSetup['dbPassword']) && ! PMF_System::isSqlite($dbSetup['dbType'])) {
         // Password can be empty...
-        $dbPassword = '';
+        $dbSetup['dbPassword'] = '';
     }
 
-    $dbDatabaseName = PMF_Filter::filterInput(INPUT_POST, 'sql_db', FILTER_SANITIZE_STRING);
-    if (is_null($dbDatabaseName) && $dbType != 'sqlite') {
+    $dbSetup['dbDatabaseName'] = PMF_Filter::filterInput(INPUT_POST, 'sql_db', FILTER_SANITIZE_STRING);
+    if (is_null($dbSetup['dbDatabaseName']) && ! PMF_System::isSqlite($dbSetup['dbType'])) {
         print "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a database name.</p>\n";
         HTMLFooter();
         die();
     }
 
-    if ('sqlite' === $dbType || 'sqlite3' === $dbType) {
-        $dbServer = PMF_Filter::filterInput(INPUT_POST, 'sql_sqlitefile', FILTER_SANITIZE_STRING);
-        if (is_null($dbServer)) {
+    if (PMF_System::isSqlite($dbSetup['dbType'])) {
+        $dbSetup['dbServer'] = PMF_Filter::filterInput(INPUT_POST, 'sql_sqlitefile', FILTER_SANITIZE_STRING);
+        if (is_null($dbSetup['dbServer'])) {
             print "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a SQLite database filename.</p>\n";
             HTMLFooter();
             die();
@@ -532,47 +538,58 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     // check database connection
     require PMF_ROOT_DIR . "/inc/Db.php";
     require PMF_ROOT_DIR . "/inc/DB/Driver.php";
-    $db = PMF_Db::factory($dbType);
-    $db->connect($dbServer, $dbUser, $dbPassword, $dbDatabaseName);
+    $db = PMF_Db::factory($dbSetup['dbType']);
+    $db->connect($dbSetup['dbServer'], $dbSetup['dbUser'], $dbSetup['dbPassword'], $dbSetup['dbDatabaseName']);
     if (!$db) {
         printf("<p class=\"alert alert-error\"><strong>DB Error:</strong> %s</p>\n", $db->error());
         HTMLFooter();
         die();
     }
 
+    $configuration = new PMF_Configuration($db);
+
     // check LDAP if available
     $ldapEnabled = PMF_Filter::filterInput(INPUT_POST, 'ldap_enabled', FILTER_SANITIZE_STRING);
     if (extension_loaded('ldap') && !is_null($ldapEnabled)) {
 
+        $ldapSetup = array();
+
         // check LDAP entries
-        $ldapServer = PMF_Filter::filterInput(INPUT_POST, 'ldap_server', FILTER_SANITIZE_STRING);
-        if (is_null($ldapServer)) {
+        $ldapSetup['ldapServer'] = PMF_Filter::filterInput(INPUT_POST, 'ldap_server', FILTER_SANITIZE_STRING);
+        if (is_null($ldapSetup['ldapServer'])) {
             print "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a LDAP server.</p>\n";
             HTMLFooter();
             die();
         }
         
-        $ldapPort = PMF_Filter::filterInput(INPUT_POST, 'ldap_port', FILTER_VALIDATE_INT);
-        if (is_null($ldapPort)) {
+        $ldapSetup['ldapPort'] = PMF_Filter::filterInput(INPUT_POST, 'ldap_port', FILTER_VALIDATE_INT);
+        if (is_null($ldapSetup['ldapPort'])) {
             print "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a LDAP port.</p>\n";
             HTMLFooter();
             die();
         }
 
-        $ldapBase = PMF_Filter::filterInput(INPUT_POST, 'ldap_base', FILTER_SANITIZE_STRING);
-        if (is_null($ldapBase)) {
+        $ldapSetup['ldapBase'] = PMF_Filter::filterInput(INPUT_POST, 'ldap_base', FILTER_SANITIZE_STRING);
+        if (is_null($ldapSetup['ldapBase'])) {
             print "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a LDAP base search DN.</p>\n";
             HTMLFooter();
             die();
         }
 
         // LDAP User and LDAP password are optional
-        $ldapUser     = PMF_Filter::filterInput(INPUT_POST, 'ldap_user', FILTER_SANITIZE_STRING, '');
-        $ldapPassword = PMF_Filter::filterInput(INPUT_POST, 'ldap_password', FILTER_SANITIZE_STRING, '');
+        $ldapSetup['ldapUser']     = PMF_Filter::filterInput(INPUT_POST, 'ldap_user', FILTER_SANITIZE_STRING, '');
+        $ldapSetup['ldapPassword'] = PMF_Filter::filterInput(INPUT_POST, 'ldap_password', FILTER_SANITIZE_STRING, '');
 
         // check LDAP connection
         require PMF_ROOT_DIR . "/inc/Ldap.php";
-        $ldap = new PMF_Ldap($ldapServer, $ldapPort, $ldapBase, $ldapUser, $ldapPassword);
+        $ldap = new PMF_Ldap($configuration);
+        $ldap->connect(
+            $ldapSetup['ldapServer'],
+            $ldapSetup['ldapPort'],
+            $ldapSetup['ldapBase'],
+            $ldapSetup['ldapUser'],
+            $ldapSetup['ldapPassword']
+        );
         if (!$ldap) {
             print "<p class=\"alert alert-error\"><strong>LDAP Error:</strong> " . $ldap->error() . "</p>\n";
             HTMLFooter();
@@ -622,19 +639,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     $permLevel = PMF_Filter::filterInput(INPUT_POST, 'permLevel', FILTER_SANITIZE_STRING, 'basic');
     
     // Write the DB variables in database.php
-    $datafile = PMF_ROOT_DIR . '/config/database.php';
-    $ret = file_put_contents(
-        $datafile,
-        "<?php\n\$DB[\"server\"] = '" . $dbServer . "';\n" .
-        "\$DB[\"user\"] = '" . $dbUser . "';\n" .
-        "\$DB[\"password\"] = '" . $dbPassword . "';\n" .
-        "\$DB[\"db\"] = '" . $dbDatabaseName . "';\n" .
-        "\$DB[\"prefix\"] = '" . $sqltblpre . "';\n" .
-        "\$DB[\"type\"] = '" . $dbType . "';",
-        LOCK_EX
-    );
-    
-    if (!$ret) {
+    if (! $instanceSetup->createDatabaseFile($dbSetup)) {
         print "<p class=\"alert alert-error\"><strong>Error:</strong> Setup cannot write to ./config/database.php.</p>";
         HTMLFooter();
         $system->cleanInstallation();
@@ -643,17 +648,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
     // check LDAP if available
     if (extension_loaded('ldap') && !is_null($ldapEnabled)) {
-        $datafile = PMF_ROOT_DIR . '/config/ldap.php';
-        $ret = file_put_contents(
-            $datafile,
-            "<?php\n\$PMF_LDAP[\"ldap_server\"] = '" . $ldapServer . "';\n" .
-            "\$PMF_LDAP[\"ldap_port\"] = '" . $ldapPort . "';\n" .
-            "\$PMF_LDAP[\"ldap_user\"] = '" . $ldapUser . "';\n" .
-            "\$PMF_LDAP[\"ldap_password\"] = '" . $ldapPassword . "';\n" .
-            "\$PMF_LDAP[\"ldap_base\"] = '" . $ldapBase . "';",
-            LOCK_EX
-        );
-        if (!$ret) {
+        if (! $instanceSetup->createLdapFile($ldapSetup)) {
             print "<p class=\"alert alert-error\"><strong>Error:</strong> Setup cannot write to ./config/ldap.php.</p>";
             HTMLFooter();
             $system->cleanInstallation();
@@ -661,10 +656,9 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         }
     }
 
-    // re-connect to the database using config/database.php
-    $db->close();
+    // connect to the database using config/database.php
     require PMF_ROOT_DIR . '/config/database.php';
-    $db = PMF_Db::factory($dbType);
+    $db = PMF_Db::factory($dbSetup['dbType']);
     $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
     if (!$db) {
         print "<p class=\"alert alert-error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
@@ -673,15 +667,15 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         die();
     }
 
-    require_once $dbType . '.sql.php'; // CREATE TABLES
-    require_once 'stopwords.sql.php';  // INSERTs for stopwords
+    require $dbSetup['dbType'] . '.sql.php'; // CREATE TABLES
+    require 'stopwords.sql.php';  // INSERTs for stopwords
 
     $system->setDatabase($db);
 
     print '<p>';
 
     // Erase any table before starting creating the required ones
-    if ('sqlite' !== $dbType && 'sqlite3' !== $dbType) {
+    if (! PMF_System::isSqlite($dbSetup['dbType'])) {
         $system->dropTables($uninst);
     }
     
@@ -706,7 +700,6 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         }
     }
 
-    $configuration = new PMF_Configuration($db);
     $link = new PMF_Link(null, $configuration);
 
     // add main configuration, add personal settings
