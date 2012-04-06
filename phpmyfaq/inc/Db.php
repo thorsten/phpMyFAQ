@@ -63,7 +63,7 @@ class PMF_Db
      *
      * @param string $type Database management system type
      *
-     * @return PMF_Db_Driver
+     * @return PMF_DB_Driver
      */
     public static function factory($type)
     {
