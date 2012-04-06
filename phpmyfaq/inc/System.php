@@ -232,6 +232,19 @@ class PMF_System
         return $this->_missingExtensions;
     }
 
+    /**
+     * Returns true or false on sqlite or sqlite3
+     *
+     * @static
+     * @param string $dbType
+     *
+     * @return bool
+     */
+    public static function isSqlite($dbType)
+    {
+        return ('sqlite' === $dbType || 'sqlite3' === $dbType) ? true : false;
+    }
+
     //
     // Methods to clean a phpMyFAQ installation
     //
