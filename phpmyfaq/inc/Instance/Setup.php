@@ -91,7 +91,7 @@ class PMF_Instance_Setup
             "\$DB['user'] = '" . $data['dbUser'] . "';\n" .
             "\$DB['password'] = '" . $data['dbPassword'] . "';\n" .
             "\$DB['db'] = '" . $data['dbDatabaseName'] . "';\n" .
-            "\$DB['prefix'] = '" . $data['sqltblpre'] . "';\n" .
+            "\$DB['prefix'] = '" . $data['dbPrefix'] . "';\n" .
             "\$DB['type'] = '" . $data['dbType'] . "';",
             LOCK_EX
         );
