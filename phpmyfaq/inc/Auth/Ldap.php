@@ -65,7 +65,7 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
      * @param string  $enctype   Type of encoding
      * @param boolean $read_only Readonly?
      *
-     * @return PMF_Auth_AuthLdap
+     * @return PMF_Auth_Ldap
      */
     public function __construct($enctype = 'none', $read_only = false)
     {
