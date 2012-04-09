@@ -242,7 +242,7 @@ class PMF_Instance
     {
         $insert = sprintf(
             "INSERT INTO
-                %sfaqinstancesconfig
+                %sfaqinstances_config
             VALUES
                 (%d, '%s', '%s')",
             SQLPREFIX,
