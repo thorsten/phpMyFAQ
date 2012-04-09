@@ -37,25 +37,34 @@ class PMF_Instance
     /**
      * Configuration
      *
-     * @var PMF_Configuration
+     * @var PMFconfiguration
      */
-    protected $_config = null;
+    protected $config = null;
 
     /**
      * Instance ID
      *
      * @var integer
      */
-    protected $_id;
+    protected $id;
+
+    /**
+     * Instance configuration
+     *
+     * @var array
+     */
+    protected $instanceConfig = array();
 
     /**
      * Constructor
+     *
+     * @param PMF_Configuration $config
      *
      * @return PMF_Instance
      */
     public function __construct(PMF_Configuration $config)
     {
-        $this->_config = $config;
+        $this->config = $config;
     }
 
     /**
@@ -67,7 +76,7 @@ class PMF_Instance
      */
     public function addInstance(Array $data)
     {
-        $this->setId($this->_config->getDb()->nextId(SQLPREFIX . 'faqinstances', 'id'));
+        $this->setId($this->config->getDb()->nextId(SQLPREFIX . 'faqinstances', 'id'));
 
         $insert = sprintf(
             "INSERT INTO %sfaqinstances VALUES (%d, '%s', '%s', '%s', NOW(), NOW())",
@@ -78,7 +87,7 @@ class PMF_Instance
             $data['comment']
         );
 
-        if (! $this->_config->getDb()->query($insert)) {
+        if (! $this->config->getDb()->query($insert)) {
             return 0;
         }
 
@@ -92,7 +101,7 @@ class PMF_Instance
      */
     public function setId($id)
     {
-        $this->_id = (int)$id;
+        $this->id = (int)$id;
     }
 
     /**
@@ -102,7 +111,7 @@ class PMF_Instance
      */
     public function getId()
     {
-        return $this->_id;
+        return $this->id;
     }
 
     /**
@@ -117,9 +126,9 @@ class PMF_Instance
             SQLPREFIX
         );
 
-        $result = $this->_config->getDb()->query($select);
+        $result = $this->config->getDb()->query($select);
 
-        return $this->_config->getDb()->fetchAll($result);
+        return $this->config->getDb()->fetchAll($result);
     }
 
     /**
@@ -137,9 +146,9 @@ class PMF_Instance
             (int)$id
         );
 
-        $result = $this->_config->getDb()->query($select);
+        $result = $this->config->getDb()->query($select);
 
-        return $this->_config->getDb()->fetchAll($result);
+        return $this->config->getDb()->fetchAll($result);
     }
 
     /**
@@ -157,13 +166,42 @@ class PMF_Instance
             $url
         );
 
-        $result = $this->_config->getDb()->query($select);
+        $result = $this->config->getDb()->query($select);
 
-        return $this->_config->getDb()->fetchAll($result);
+        return $this->config->getDb()->fetchAll($result);
+    }
+
+    /**
+     * Returns the configuration of the given instance ID
+     * @param $id
+     *
+     * @return PMF_DB_Driver
+     */
+    public function getInstanceConfig($id)
+    {
+        $query = sprintf("
+            SELECT
+                config_name, config_value
+            FROM
+                %sfaqinstances_config
+            WHERE
+                instance_id = %d",
+            SQLPREFIX,
+            $id
+        );
+
+        $result = $this->config->getDb()->query($query);
+        $config = $this->config->getDb()->fetchAll($result);
+
+        foreach ($config as $items) {
+            $this->instanceConfig[$items->config_name] = $items->config_value;
+        }
     }
 
     /**
      * Deletes an instance
+     *
+     * @param integer $id
      *
      * @return boolean
      */
@@ -176,14 +214,14 @@ class PMF_Instance
                 (int)$id
             ),
             sprintf(
-                "DELETE FROM %sfaqinstances_config WHERE instance_id = %d",
+                "DELETE FROM %sfaqinstancesconfig WHERE instanceid = %d",
                 SQLPREFIX,
                 (int)$id
             ),
         );
 
         foreach ($deletes as $delete) {
-            $success = $this->_config->getDb()->query($delete);
+            $success = $this->config->getDb()->query($delete);
             if (! $success) {
                 return false;
             }
@@ -204,15 +242,41 @@ class PMF_Instance
     {
         $insert = sprintf(
             "INSERT INTO
-                %sfaqinstances_config
+                %sfaqinstancesconfig
             VALUES
                 (%d, '%s', '%s')",
             SQLPREFIX,
             $this->getId(),
-            $this->_config->getDb()->escape(trim($name)),
-            $this->_config->getDb()->escape(trim($value))
+            $this->config->getDb()->escape(trim($name)),
+            $this->config->getDb()->escape(trim($value))
         );
 
-        return $this->_config->getDb()->query($insert);
+        return $this->config->getDb()->query($insert);
+    }
+
+    /**
+     * Returns the configuration value
+     *
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function getConfig($name)
+    {
+        if (! isset($this->instanceConfig[$name])) {
+            $this->getInstanceConfig($this->getId());
+        }
+
+        switch ($this->instanceConfig[$name]) {
+            case 'true':
+                return true;
+                break;
+            case 'false':
+                return false;
+                break;
+            default:
+                return $this->instanceConfig[$name];
+                break;
+        }
     }
 }

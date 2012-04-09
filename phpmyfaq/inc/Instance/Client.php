@@ -59,7 +59,7 @@ class PMF_Instance_Client extends PMF_Instance
     public function createClient(PMF_Instance $instance)
     {
         $this->setId($instance->getId());
-        $this->addConfig('isMaster', false);
+        $this->addConfig('isMaster', 'false');
     }
 
     /**

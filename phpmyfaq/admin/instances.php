@@ -46,7 +46,12 @@ if ($permission['editinstances']) {
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($instance->getAllInstances() as $site): ?>
+        <?php
+        foreach ($instance->getAllInstances() as $site):
+            $currentInstance = new PMF_Instance($faqConfig);
+            $currentInstance->getInstanceById($site->id);
+            $currentInstance->setId($site->id);
+        ?>
         <tr id="row-instance-<?php print $site->id ?>">
             <td><?php print $site->id ?></td>
             <td><a href="http://<?php print $site->url.$site->instance ?>"><?php print $site->url ?></a></td>
@@ -56,7 +61,9 @@ if ($permission['editinstances']) {
                 <a href="javascript:;" id="edit-instance-<?php print $site->id ?>" class="btn btn-info pmf-instance-edit">edit</a>
             </td>
             <td>
+                <?php if (! $currentInstance->getConfig('isMaster') === true): ?>
                 <a href="javascript:;" id="delete-instance-<?php print $site->id ?>" class="btn btn-danger pmf-instance-delete">delete</a>
+                <?php endif; ?>
             </td>
         </tr>
         <?php endforeach; ?>

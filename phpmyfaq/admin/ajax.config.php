@@ -47,6 +47,9 @@ switch ($ajaxAction) {
         $faqInstance = new PMF_Instance($faqConfig);
         $instanceId = $faqInstance->addInstance($data);
 
+        $faqInstanceClient = new PMF_Instance_Client($faqConfig);
+        $faqInstanceClient->createClient($faqInstance);
+
         if ('yes' === $install) {
 
         }
