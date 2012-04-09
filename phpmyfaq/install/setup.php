@@ -757,6 +757,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     $faqInstance->addInstance($instanceData);
 
     $faqInstanceMaster = new PMF_Instance_Master($configuration);
+    $faqInstanceMaster->createMaster($faqInstance);
 
     print '</p>';
 

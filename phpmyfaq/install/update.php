@@ -776,15 +776,15 @@ if ($step == 3) {
     if (version_compare($version, '2.8.0-alpha2', '<')) {
 
         $instanceData = array(
-            'url'      => $_SERVER['SERVER_NAME'],
-            'instance' => dirname(dirname($_SERVER['SCRIPT_NAME'])),
+            'url'      => $link->getSystemUri($_SERVER['SCRIPT_NAME']),
+            'instance' => $link->getSystemRelativeUri('install/update.php'),
             'comment'  => $faqConfig->get('main.titleFAQ')
         );
         $faqInstance = new PMF_Instance($faqConfig);
         $faqInstance->addInstance($instanceData);
 
         $faqInstanceMaster = new PMF_Instance_Master($faqConfig);
-
+        $faqInstanceMaster->createMaster($faqInstance);
     }
 
     // Always the last step: Update version number

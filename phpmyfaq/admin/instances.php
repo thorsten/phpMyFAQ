@@ -83,7 +83,8 @@ if ($permission['editinstances']) {
                 <div class="control-group">
                     <label class="control-label">Instance:</label>
                     <div class="controls">
-                        <input type="text" name="instance" id="instance" required="required" value="/">
+                        <input type="text" name="instance" id="instance" required="required"
+                               value="<?php print dirname(dirname($_SERVER['SCRIPT_NAME'])) ?>">
                     </div>
                 </div>
                 <div class="control-group">
