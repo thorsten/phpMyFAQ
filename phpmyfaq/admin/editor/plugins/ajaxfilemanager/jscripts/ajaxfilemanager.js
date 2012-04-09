@@ -1129,9 +1129,9 @@ function generateDownloadIframe(url)
 				var frameId = 'ajaxDownloadIframe';		
 				$('#' + frameId).remove();
 				if(window.ActiveXObject) {
-						var io = document.createElement('<iframe id="' + frameId + '" name="' + frameId + '" />');
-						
-						
+						var io = document.createElement("iframe");
+						io.setAttribute("id", frameId);
+						io.setAttribute("name", frameId);
 				}
 				else {
 						var io = document.createElement('iframe');
