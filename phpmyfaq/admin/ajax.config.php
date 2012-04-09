@@ -51,7 +51,11 @@ switch ($ajaxAction) {
         $faqInstanceClient->createClient($faqInstance);
 
         if ('yes' === $install) {
-
+            // @todo
+            // - create new folder for client
+            // - copy /config folder stuff
+            // - create /images folder
+            // - copy /template stuff
         }
 
         if (0 !== $instanceId) {
