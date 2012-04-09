@@ -23,6 +23,10 @@ define('COPYRIGHT', '&copy; 2001-2012 <a href="http://www.phpmyfaq.de/">phpMyFAQ
 define('PMF_ROOT_DIR', dirname(__DIR__));
 define('IS_VALID_PHPMYFAQ', null);
 
+if (! defined('DEBUG')) {
+    define('DEBUG', true);
+}
+
 if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     set_time_limit(0);
 }
@@ -774,6 +778,8 @@ if ($step == 3) {
     // 2nd UPDATES FROM 2.8.0-alpha2
     //
     if (version_compare($version, '2.8.0-alpha2', '<')) {
+
+        $link = new PMF_Link(null, $faqConfig);
 
         $instanceData = array(
             'url'      => $link->getSystemUri($_SERVER['SCRIPT_NAME']),

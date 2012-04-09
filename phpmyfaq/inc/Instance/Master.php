@@ -41,6 +41,6 @@ class PMF_Instance_Master extends PMF_Instance
     public function createMaster(PMF_Instance $instance)
     {
         $this->setId($instance->getId());
-        $this->addConfig('isMaster', true);
+        $this->addConfig('isMaster', 'true');
     }
 }
