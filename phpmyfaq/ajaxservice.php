@@ -64,7 +64,7 @@ $http->addHeader();
 // Set session
 $faqsession = new PMF_Session($faqConfig);
 $network    = new PMF_Network($faqConfig);
-$stopwords  = new PMF_Stopwords($faqConfig);
+$stopwords  = PMF_Stopwords::getInstance($faqConfig);
 
 if (!$network->checkIp($_SERVER['REMOTE_ADDR'])) {
     $message = array('error' => $PMF_LANG['err_bannedIP']);
