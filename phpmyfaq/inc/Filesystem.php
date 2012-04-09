@@ -75,4 +75,30 @@ class PMF_Filesystem
     {
         return $this->_path;
     }
+
+    /**
+     * Copies the source file to the destination
+     *
+     * @param string $source
+     * @param string $dest
+     *
+     * @return bool
+     */
+    public function copy($source, $dest)
+    {
+        if (! is_readable($source)) {
+            throw new PMF_Exception('/config/constants.php is not readable.');
+        }
+
+        if (! is_writable(dirname($dest))) {
+            throw new PMF_Exception(sprintf('%s is not writeable.', $dest));
+        }
+
+        if (! copy($source, $dest)) {
+            $error = error_get_last();
+            throw new PMF_Exception($error['message']);
+        }
+
+        return true;
+    }
 }

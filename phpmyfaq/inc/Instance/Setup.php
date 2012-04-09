@@ -40,6 +40,16 @@ class PMF_Instance_Setup
     private $_rootDir;
 
     /**
+     * Constructor
+     *
+     * @return PMF_Instance_Setup
+     */
+    public function __construct()
+    {
+        $this->setRootDir(dirname(__DIR__));
+    }
+
+    /**
      * Sets the root directory of the phpMyFAQ instance
      *
      * @param string $rootDir
@@ -120,5 +130,18 @@ class PMF_Instance_Setup
         );
 
         return $ret;
+    }
+
+    /**
+     * Creates a new folder
+     *
+     * @param string $name Name of the new folder
+     * @param string $path Path to the new folder
+     *
+     * @return bool
+     */
+    public function createFolder($name, $path)
+    {
+        // @todo add code here
     }
 }

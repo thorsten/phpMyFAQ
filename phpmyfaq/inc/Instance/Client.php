@@ -35,9 +35,22 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Instance_Client extends PMF_Instance
 {
     /**
-     * @var FilesystemIterator
+     * @var PMF_Filesystem
      */
-    private $_fileSystemIterator;
+    private $fileSystem;
+
+    /**
+     * Constructor
+     *
+     * @param PMF_Configuration $config
+     * @param PMF_Filesystem $fileSystem
+     *
+     * @return PMF_Instance_Client
+     */
+    public function __construct(PMF_Configuration $config)
+    {
+        parent::__construct($config);
+    }
 
     /**
      *
@@ -47,5 +60,61 @@ class PMF_Instance_Client extends PMF_Instance
     {
         $this->setId($instance->getId());
         $this->addConfig('isMaster', false);
+    }
+
+    /**
+     * Sets the PMF_Filesystem
+     *
+     * @param PMF_Filesystem $fileSystem
+     *
+     * @return void
+     */
+    public function setFileSystem(PMF_Filesystem $fileSystem)
+    {
+        $this->fileSystem = $fileSystem;
+    }
+
+    /**
+     * Copies the config/constants.php file to a new client instance
+     *
+     * @param string $dest Destination file
+     *
+     * @return bool
+     */
+    public function copyConstantsFile($dest)
+    {
+        return $this->fileSystem->copy(
+            dirname(__DIR__) . '/config/constants.php',
+            $dest
+        );
+    }
+
+    /**
+     * Copies the config/constants_ldap.php file to a new client instance
+     *
+     * @param string $dest Destination file
+     *
+     * @return bool
+     */
+    public function copyLdapConstantsFile($dest)
+    {
+        return $this->fileSystem->copy(
+            dirname(__DIR__) . '/config/constants_ldap.php',
+            $dest
+        );
+    }
+
+    /**
+     * Copies a defined template folder to a new client instance, by default
+     * the default template located at ./template/default/ will be copied
+     *
+     * @param string $dest        Destination folder
+     * @param string $templateDir Template folder
+     *
+     * @return bool
+     */
+    public function copyTemplateFolder($dest, $templateDir = 'default')
+    {
+        // @todo add code here
     }
 }
