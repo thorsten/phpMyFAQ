@@ -252,14 +252,17 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
     /**
      * Returns the error string.
      *
-     * This function returns the last error string.
-     *
-     * @access  public
+     * @return mixed
      */
     public function error()
     {
         $errors = sqlsrv_errors();
-        return $errors['SQLSTATE'] . ': ' . $errors['message'];
+
+        if (null !== $errors) {
+            return $errors['SQLSTATE'] . ': ' . $errors['message'];
+        } else {
+            return null;
+        }
     }
 
     /**
