@@ -119,7 +119,8 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      */
     public function query($query)
     {
-        return sqlsrv_query($this->conn, $query);
+        $options = array('Scrollable' => SQLSRV_CURSOR_KEYSET);
+        return sqlsrv_query($this->conn, $query, array(), $options);
     }
 
     /**
