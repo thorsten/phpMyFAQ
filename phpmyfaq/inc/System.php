@@ -245,6 +245,30 @@ class PMF_System
         return ('sqlite' === $dbType || 'sqlite3' === $dbType) ? true : false;
     }
 
+    /**
+     * Creates a JSON object with all .php files of phpMyFAQ with their sha1 hashes
+     * @return string
+     */
+    public function createHashes()
+    {
+        $path  = dirname(__DIR__);
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($path),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        $hashes = array();
+
+        foreach ($files as $file) {
+            if ('php' === $file->getExtension() && ! preg_match('#/tests/#', $file->getPath())) {
+                $current = str_replace($path, '', $file->getPathname());
+                $hashes[$current] = sha1(file_get_contents($file->getPathname()));
+            }
+        }
+
+        return json_encode($hashes);
+    }
+
     //
     // Methods to clean a phpMyFAQ installation
     //

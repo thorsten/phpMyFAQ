@@ -116,11 +116,13 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
         if (DEBUG) {
             $this->sqllog .= PMF_Utils::debug($query);
         }
-        $result = sqlsrv_query($this->conn, $query);
+        $options = array('Scrollable' => SQLSRV_CURSOR_KEYSET);
+        $result  = sqlsrv_query($this->conn, $query, array(), $options);
         if (!$result) {
             $this->sqllog .= $this->error();
         }
         return $result;
+
     }
 
     /**
@@ -253,14 +255,17 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
     /**
      * Returns the error string.
      *
-     * This function returns the last error string.
-     *
-     * @access  public
+     * @return mixed
      */
     public function error()
     {
         $errors = sqlsrv_errors();
-        return $errors['SQLSTATE'] . ': ' . $errors['message'];
+
+        if (null !== $errors) {
+            return $errors['SQLSTATE'] . ': ' . $errors['message'];
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -295,7 +300,9 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
         // First, declare those tables that are referenced by others
         $this->tableNames[] = $prefix.'faquser';
 
-        $result = $this->query('SELECT name FROM sysobjects WHERE type = \'u\''.(('' == $prefix) ? '' : ' AND name LIKE \''.$prefix.'%\' ORDER BY name'));
+        $result = $this->query(
+            'SELECT name FROM sysobjects WHERE type = \'u\''.(('' == $prefix) ? '' : ' AND name LIKE \''.$prefix.'%\' ORDER BY name')
+        );
         while ($row = $this->fetchObject($result)) {
             foreach ($row as $tableName) {
                 if (!in_array($tableName, $this->tableNames)) {
