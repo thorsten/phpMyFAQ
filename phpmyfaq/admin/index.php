@@ -421,13 +421,14 @@ if (isset($auth) && in_array(true, $permission)) {
             </table>
         </section>
 
-        <section>
-            <header>
-                <h3><?php print $PMF_LANG['ad_online_info']; ?></h3>
-            </header>
-            <p>
+        <section class="row">
+            <div class="span5">
+                <header>
+                    <h3><?php print $PMF_LANG['ad_online_info']; ?></h3>
+                </header>
+                <p>
 <?php
-        $version = PMF_Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_STRING);        
+        $version = PMF_Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_STRING);
         if (!is_null($version) && $version == 'version') {
             $json   = file_get_contents('http://www.phpmyfaq.de/json/version.php');
             $result = json_decode($json);
@@ -435,7 +436,7 @@ if (isset($auth) && in_array(true, $permission)) {
                 $installed = $faqConfig->get('main.currentVersion');
                 $available = $result->stable;
                 printf(
-                    '<p class="alert alert-%s">%s <a href="http://www.phpmyfaq.de" target="_blank">phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>',
+                    '<p class="alert alert-%s">%s <a href="http://www.phpmyfaq.de" target="_blank">phpmyfaq.de</a>:<br/><strong>phpMyFAQ %s</strong>',
                     (-1 == version_compare($installed, $available)) ? 'danger' : 'info',
                     $PMF_LANG['ad_xmlrpc_latest'],
                     $available
@@ -450,67 +451,95 @@ if (isset($auth) && in_array(true, $permission)) {
 ?>
                 <form action="index.php" method="post">
                     <input type="hidden" name="param" value="version" />
-                    <input class="btn-primary btn-large" type="submit" value="<?php print $PMF_LANG["ad_xmlrpc_button"]; ?>" />
+                    <input class="btn-primary" type="submit" value="<?php print $PMF_LANG["ad_xmlrpc_button"]; ?>" />
                 </form>
 <?php
         }
 ?>
-            
-            </p>
+                </p>
+            </div>
+            <div class="span5">
+                <header>
+                    <h3>Online verification check</h3>
+                </header>
+                <p>
+<?php
+        $getJson = PMF_Filter::filterInput(INPUT_POST, 'getJson', FILTER_SANITIZE_STRING);
+        if (!is_null($getJson) && 'verify' === $getJson) {
+
+            $faqSystem = new PMF_System();
+
+            $localHashes  = json_decode($faqSystem->createHashes());
+            $remoteHashes = file_get_contents('http://www.phpmyfaq.de/json/verify.php?version=' . PMF_System::getVersion());
+
+        } else {
+?>
+                <form action="index.php" method="post">
+                    <input type="hidden" name="getJson" value="verify" />
+                    <input class="btn-primary" type="submit" value="Verfiy your phpMyFAQ installation" />
+                </form>
+<?php
+        }
+?>
+                </p>
+            </div>
         </section>
 
         <section>
             <header>
                 <h3><?php print $PMF_LANG['ad_system_info']; ?></h3>
             </header>
-            <table class="table table-striped">
-            <tbody>
-                <tr>
-                    <td style="width: 150px;"><strong>phpMyFAQ Version</strong></td>
-                    <td>phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?></td>
-                </tr>
-                <tr>
-                    <td><strong>Server Software</strong></td>
-                    <td><?php print $_SERVER["SERVER_SOFTWARE"]; ?></td>
-                </tr>
-                <tr>
-                    <td><strong>PHP Version</strong></td>
-                    <td>PHP <?php print phpversion(); ?></td>
-                </tr>
-                <tr>
-                    <td><strong>Register Globals</strong></td>
-                    <td><?php print ini_get('register_globals') == 1 ? 'on' : 'off'; ?></td>
-                </tr>
-                <tr>
-                    <td><strong>Safe Mode</strong></td>
-                    <td><?php print ini_get('safe_mode') == 1 ? 'on' : 'off'; ?></td>
-                </tr>
-                <tr>
-                    <td><strong>Open Basedir</strong></td>
-                    <td><?php print ini_get('open_basedir') == 1 ? 'on' : 'off'; ?></td>
-                </tr>
-                <tr>
-                    <td><strong>DB Server</strong></td>
-                    <td><?php print ucfirst($DB['type']); ?></td>
-                </tr>
-                <tr>
-                    <td><strong>DB Client Version</strong></td>
-                    <td><?php print $db->clientVersion(); ?></td>
-                </tr>
-                <tr>
-                    <td><strong>DB Server Version</strong></td>
-                    <td><?php print $db->serverVersion(); ?></td>
-                </tr>
-                <tr>
-                    <td><strong>Webserver Interface</strong></td>
-                    <td><?php print strtoupper(@php_sapi_name()); ?></td>
-                </tr>
-                <tr>
-                    <td><strong>PHP Extensions</strong></td>
-                    <td><?php print implode(', ', get_loaded_extensions()); ?></td>
-                </tr>
-            </tbody>
-            </table>
+            <div class="pmf-system-information">
+                <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td style="width: 150px;"><strong>phpMyFAQ Version</strong></td>
+                        <td>phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Server Software</strong></td>
+                        <td><?php print $_SERVER["SERVER_SOFTWARE"]; ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>PHP Version</strong></td>
+                        <td>PHP <?php print phpversion(); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Register Globals</strong></td>
+                        <td><?php print ini_get('register_globals') == 1 ? 'on' : 'off'; ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Safe Mode</strong></td>
+                        <td><?php print ini_get('safe_mode') == 1 ? 'on' : 'off'; ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Open Basedir</strong></td>
+                        <td><?php print ini_get('open_basedir') == 1 ? 'on' : 'off'; ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>DB Server</strong></td>
+                        <td><?php print ucfirst($DB['type']); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>DB Client Version</strong></td>
+                        <td><?php print $db->clientVersion(); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>DB Server Version</strong></td>
+                        <td><?php print $db->serverVersion(); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Webserver Interface</strong></td>
+                        <td><?php print strtoupper(@php_sapi_name()); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>PHP Extensions</strong></td>
+                        <td><?php print implode(', ', get_loaded_extensions()); ?></td>
+                    </tr>
+                </tbody>
+                </table>
+
+            </div>
 
             <div style="font-size: 5px; text-align: right; color: #f5f5f5">NOTE: Art is resistance.</div>
         </section>
