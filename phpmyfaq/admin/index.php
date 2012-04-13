@@ -385,7 +385,8 @@ if (isset($auth) && in_array(true, $permission)) {
         }
     } else {
         // start page with some information about the FAQ
-        $PMF_TABLE_INFO = $db->getTableStatus();
+        $faqTableInfo = $faqConfig->getDb()->getTableStatus();
+        $faqSystem = new PMF_System();
 ?>
 
             <header>
@@ -395,27 +396,27 @@ if (isset($auth) && in_array(true, $permission)) {
             <tbody>
                 <tr>
                     <td><strong><a href="?action=viewsessions"><?php print $PMF_LANG["ad_start_visits"]; ?></a></strong></td>
-                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX . "faqsessions"]; ?></td>
+                    <td><?php print $faqTableInfo[SQLPREFIX . "faqsessions"]; ?></td>
                 </tr>
                 <tr>
                     <td><strong><a href="?action=view"><?php print $PMF_LANG["ad_start_articles"]; ?></a></strong></td>
-                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX . "faqdata"]; ?></td>
+                    <td><?php print $faqTableInfo[SQLPREFIX . "faqdata"]; ?></td>
                 </tr>
                 <tr>
                     <td><strong><a href="?action=comments"><?php print $PMF_LANG["ad_start_comments"]; ?></strong></a></td>
-                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX . "faqcomments"]; ?></td>
+                    <td><?php print $faqTableInfo[SQLPREFIX . "faqcomments"]; ?></td>
                 </tr>
                 <tr>
                     <td><strong><a href="?action=question"><?php print $PMF_LANG["msgOpenQuestions"]; ?></strong></a></td>
-                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX . "faqquestions"]; ?></td>
+                    <td><?php print $faqTableInfo[SQLPREFIX . "faqquestions"]; ?></td>
                 </tr>
                 <tr>
                     <td><strong><a href="?action=news"><?php print $PMF_LANG["msgNews"]; ?></strong></a></td>
-                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX . "faqnews"]; ?></td>
+                    <td><?php print $faqTableInfo[SQLPREFIX . "faqnews"]; ?></td>
                 </tr>
                 <tr>
                     <td><strong><a href="?action=user&user_action=listallusers"><?php print $PMF_LANG['admin_mainmenu_users']; ?></strong></a></td>
-                    <td><?php print $PMF_TABLE_INFO[SQLPREFIX . 'faquser'] - 1; ?></td>
+                    <td><?php print $faqTableInfo[SQLPREFIX . 'faquser'] - 1; ?></td>
                 </tr>
             </tbody>
             </table>
@@ -513,110 +514,33 @@ if (isset($auth) && in_array(true, $permission)) {
 
         <section>
             <header>
-                <h3><?php print $PMF_LANG["ad_online_verification"] ?></h3>
-            </header>
-            <?php
-            $getJson = PMF_Filter::filterInput(INPUT_POST, 'getJson', FILTER_SANITIZE_STRING);
-            if (!is_null($getJson) && 'verify' === $getJson) {
-
-                $faqSystem = new PMF_System();
-
-                $localHashes = $faqSystem->createHashes();
-                $remoteHashes = file_get_contents(
-                    'http://www.phpmyfaq.de/api/verify/' . $faqconfig->get('main.currentVersion')
-                );
-
-                $diff = array_diff(
-                    json_decode($localHashes, true),
-                    json_decode($remoteHashes, true)
-                );
-
-                if (1 !== count($diff)) {
-                    printf('<p class="error">%s</p>', $PMF_LANG["ad_verification_notokay"]);
-                    print '<ul>';
-                    foreach ($diff as $file => $hash) {
-                        if ('created' === $file) {
-                            continue;
-                        }
-                        printf(
-                            '<li><span title="%s">%s</span></li>',
-                            $hash,
-                            $file
-                        );
-                    }
-                    print '</ul>';
-                } else {
-                    printf('<p class="success">%s</p>', $PMF_LANG["ad_verification_okay"]);
-                }
-
-            } else {
-                ?>
-                <p>
-                <form action="index.php" method="post">
-                    <input type="hidden" name="getJson" value="verify" />
-                    <input class="submit" type="submit"
-                           value="<?php print $PMF_LANG["ad_verification_button"] ?>" />
-                </form>
-                </p>
-                <?php
-            }
-            ?>
-        </section>
-
-        <section>
-            <header>
                 <h3><?php print $PMF_LANG['ad_system_info']; ?></h3>
             </header>
             <div class="pmf-system-information">
                 <table class="table table-striped">
                 <tbody>
+                    <?php
+                    $systemInformation = array(
+                        'phpMyFAQ Version'    => $faqSystem->getVersion(),
+                        'Server Software'     => $_SERVER['SERVER_SOFTWARE'],
+                        'PHP Version'         => PHP_VERSION,
+                        'Register Globals'    => ini_get('register_globals') == 1 ? 'on' : 'off',
+                        'safe Mode'           => ini_get('safe_mode') == 1 ? 'on' : 'off',
+                        'Open Basedir'        => ini_get('open_basedir') == 1 ? 'on' : 'off',
+                        'DB Server'           => PMF_Db::getType(),
+                        'DB Client Version'   => $faqConfig->getDb()->clientVersion(),
+                        'DB Server Version'   => $faqConfig->getDb()->serverVersion(),
+                        'Webserver Interface' => strtoupper(@php_sapi_name()),
+                        'PHP Extensions'      => implode(', ', get_loaded_extensions())
+                    );
+                    foreach ($systemInformation as $name => $info): ?>
                     <tr>
-                        <td style="width: 150px;"><strong>phpMyFAQ Version</strong></td>
-                        <td>phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?></td>
+                        <td class="span3"><strong><?php print $name ?></strong></td>
+                        <td><?php print $info ?></td>
                     </tr>
-                    <tr>
-                        <td><strong>Server Software</strong></td>
-                        <td><?php print $_SERVER["SERVER_SOFTWARE"]; ?></td>
-                    </tr>
-                    <tr>
-                        <td><strong>PHP Version</strong></td>
-                        <td>PHP <?php print phpversion(); ?></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Register Globals</strong></td>
-                        <td><?php print ini_get('register_globals') == 1 ? 'on' : 'off'; ?></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Safe Mode</strong></td>
-                        <td><?php print ini_get('safe_mode') == 1 ? 'on' : 'off'; ?></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Open Basedir</strong></td>
-                        <td><?php print ini_get('open_basedir') == 1 ? 'on' : 'off'; ?></td>
-                    </tr>
-                    <tr>
-                        <td><strong>DB Server</strong></td>
-                        <td><?php print ucfirst($DB['type']); ?></td>
-                    </tr>
-                    <tr>
-                        <td><strong>DB Client Version</strong></td>
-                        <td><?php print $db->clientVersion(); ?></td>
-                    </tr>
-                    <tr>
-                        <td><strong>DB Server Version</strong></td>
-                        <td><?php print $db->serverVersion(); ?></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Webserver Interface</strong></td>
-                        <td><?php print strtoupper(@php_sapi_name()); ?></td>
-                    </tr>
-                    <tr>
-                        <td><strong>PHP Extensions</strong></td>
-                        <td><?php print implode(', ', get_loaded_extensions()); ?></td>
-                    </tr>
+                    <?php endforeach; ?>
                 </tbody>
                 </table>
-
             </div>
 
             <div style="font-size: 5px; text-align: right; color: #f5f5f5">NOTE: Art is resistance.</div>
