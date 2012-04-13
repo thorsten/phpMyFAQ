@@ -239,7 +239,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
     {
         $select = sprintf("
            SELECT 
-               max(%d) as current_id 
+               max(%s) as current_id
            FROM 
                %s",
            $id,
