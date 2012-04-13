@@ -613,7 +613,7 @@ $PMF_LANG["lostpwd_text_1"] = "Thank you for requesting your account information
 $PMF_LANG["lostpwd_text_2"] = "Please set a new personal password in the admin section of your FAQ.";
 $PMF_LANG["lostpwd_mail_okay"] = "E-Mail was sent.";
 
-$PMF_LANG["ad_xmlrpc_button"] = "Get latest phpMyFAQ version number by web service";
+$PMF_LANG["ad_xmlrpc_button"] = "Click to check version of your phpMyFAQ installation";
 $PMF_LANG["ad_xmlrpc_latest"] = "Latest version available on";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
@@ -1177,8 +1177,12 @@ $LANG_CONF["records.enableDeleteQuestion"] = array(0 => "checkbox", 1 => "Delete
 $PMF_LANG["msg2answerFAQ"] = "Answered";
 
 // added v2.8.0-alpha - 2012-01-16 by Thorsten
-$PMF_LANG['headerUserControlPanel'] = 'User Control Panel';
+$PMF_LANG["headerUserControlPanel"] = 'User Control Panel';
 
 // added v2.8.0-alpha2 - 2012-03-15 by Thorsten
-$PMF_LANG['rememberMe'] = 'Remember me';
+$PMF_LANG["rememberMe"] = 'Remember me';
 $PMF_LANG["ad_menu_instances"] = "FAQ Multi-sites";
+$PMF_LANG["ad_online_verification"] = "Online verification check";
+$PMF_LANG["ad_verification_button"] = "Click to verify your phpMyFAQ installation";
+$PMF_LANG["ad_verification_notokay"] = "Your version of phpMyFAQ has local changes:";
+$PMF_LANG["ad_verification_okay"] = "Your version of phpMyFAQ was successfully verified.";

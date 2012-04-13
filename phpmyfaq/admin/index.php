@@ -426,7 +426,6 @@ if (isset($auth) && in_array(true, $permission)) {
                 <header>
                     <h3><?php print $PMF_LANG['ad_online_info']; ?></h3>
                 </header>
-                <p>
 <?php
         $version = PMF_Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_STRING);
         if (!is_null($version) && $version == 'version') {
@@ -445,14 +444,16 @@ if (isset($auth) && in_array(true, $permission)) {
                 if (-1 == version_compare($installed, $available)) {
                     print '<br />' . $PMF_LANG['ad_you_should_update'];
                 }
-                print '</p>';
             }
         } else {
 ?>
-                <form action="index.php" method="post">
-                    <input type="hidden" name="param" value="version" />
-                    <input class="btn-primary" type="submit" value="<?php print $PMF_LANG["ad_xmlrpc_button"]; ?>" />
-                </form>
+                <p>
+                    <form action="index.php" method="post">
+                        <input type="hidden" name="param" value="version" />
+                        <input class="btn-primary" type="submit"
+                               value="<?php print $PMF_LANG["ad_xmlrpc_button"]; ?>" />
+                    </form>
+                </p>
 <?php
         }
 ?>
@@ -460,7 +461,7 @@ if (isset($auth) && in_array(true, $permission)) {
             </div>
             <div class="span5">
                 <header>
-                    <h3>Online verification check</h3>
+                    <h3><?php print $PMF_LANG["ad_online_verification"] ?></h3>
                 </header>
 <?php
         $getJson = PMF_Filter::filterInput(INPUT_POST, 'getJson', FILTER_SANITIZE_STRING);
@@ -468,31 +469,45 @@ if (isset($auth) && in_array(true, $permission)) {
 
             $faqSystem = new PMF_System();
 
-            $localHashes  = json_decode($faqSystem->createHashes(), true);
-            $remoteHashes = json_decode(file_get_contents('http://www.phpmyfaq.de/api/verify/' . PMF_System::getVersion()), true);
+            $localHashes  = $faqSystem->createHashes();
+            $remoteHashes = file_get_contents('http://www.phpmyfaq.de/api/verify/' . PMF_System::getVersion());
 
-            $diff = array_diff($localHashes, $remoteHashes);
+            $diff = array_diff(
+                json_decode($localHashes, true),
+                json_decode($remoteHashes, true)
+            );
 
             if (0 !== count($diff)) {
-                print '<p class="alert alert-danger">Your version of phpMyFAQ has local changes in the following files:</p>';
+                printf('<p class="alert alert-danger">%s</p>', $PMF_LANG["ad_verification_notokay"]);
                 print '<ul>';
                 foreach ($diff as $file => $hash) {
-                    printf('<li>%s (sha1: %s)</li>', $file, $hash);
+                    if ('created' === $file) {
+                        continue;
+                    }
+                    printf(
+                        '<li><span class="pmf-popover" data-original-title="SHA-1" data-content="%s">%s</span></li>',
+                        $hash,
+                        $file
+                    );
                 }
                 print '</ul>';
             } else {
-                print '<p class="alert alert-success">Your version of phpMyFAQ was successfully verified.</p>';
+                printf('<p class="alert alert-success">%s</p>', $PMF_LANG["ad_verification_okay"]);
             }
 
         } else {
 ?>
-                <form action="index.php" method="post">
-                    <input type="hidden" name="getJson" value="verify" />
-                    <input class="btn-primary" type="submit" value="Verfiy your phpMyFAQ installation" />
-                </form>
+                <p>
+                    <form action="index.php" method="post">
+                        <input type="hidden" name="getJson" value="verify" />
+                        <input class="btn-primary" type="submit"
+                               value="<?php print $PMF_LANG["ad_verification_button"] ?>" />
+                    </form>
+                </p>
 <?php
         }
 ?>
+                <script>$(function(){ $('span[class="pmf-popover"]').popover();});</script>
             </div>
         </section>
 

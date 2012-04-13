@@ -1130,3 +1130,7 @@ $PMF_LANG['headerUserControlPanel'] = 'Persönlicher Bereich';
 // added v2.8.0-alpha2 - 2012-03-15 by Thorsten
 $PMF_LANG['rememberMe'] = 'Passwort merken';
 $PMF_LANG["ad_menu_instances"] = "FAQ Multi-Sites";
+$PMF_LANG["ad_online_verification"] = "Online-Verifikation";
+$PMF_LANG["ad_verification_button"] = "phpMyFAQ Installtion online überprüfen";
+$PMF_LANG["ad_verification_notokay"] = "Diese phpMyFAQ Installation hat lokale Änderungen:";
+$PMF_LANG["ad_verification_okay"] = "Diese phpMyFAQ Installation wurde erfolgreich überprüft.";
