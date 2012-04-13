@@ -13,6 +13,7 @@ Version 2.8.0-alpha2 - 2012-
 - added possibility to close and delete open questions (Peter Caesar)
 - added user control panel (Thorsten)
 - added support for Composer (Thorsten)
+- added online verification check (Thorsten, Florian)
 - dropped support for IBM DB2, Interbase/Firebird and Sybase (Thorsten)
 - improved usability of administration backend (Thorsten)
 - improved setup and update (Thorsten)
