@@ -249,7 +249,7 @@ if ($permission['editcateg']) {
             $categoryName = $cat['name'] . ' (' . $languageCodes[strtoupper($cat['lang'])] . ')';
         }
 
-        $level     = $cat['level'];
+        $level     = $cat['indent'];
         $leveldiff = $open - $level;
 
         if ($leveldiff > 1) {
