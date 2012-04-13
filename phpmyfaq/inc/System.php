@@ -257,11 +257,21 @@ class PMF_System
             RecursiveIteratorIterator::SELF_FIRST
         );
 
-        $hashes = array();
+        $hashes    = array();
+        $blacklist = array(
+            '/config/constants.php'      => false,
+            '/config/constants_ldap.php' => false,
+            '/config/database.php'       => false,
+            '/config/ldap.php'           => false
+        );
 
         foreach ($files as $file) {
             if ('php' === $file->getExtension() && ! preg_match('#/tests/#', $file->getPath())) {
                 $current = str_replace($path, '', $file->getPathname());
+
+                if (isset($blacklist[$current])) {
+                    continue;
+                }
                 $hashes[$current] = sha1(file_get_contents($file->getPathname()));
             }
         }
