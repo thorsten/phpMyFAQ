@@ -1116,9 +1116,9 @@ $PMF_LANG['msgTableOfContent'] = 'Inhaltsverzeichnis';
 // added 2.7.5 - 2012-03-02 by Thorsten
 $PMF_LANG["msgExportAllFaqs"] = "FAQ als PDF speichern";
 $PMF_LANG["ad_online_verification"] = "Online-Verifikation";
-$PMF_LANG["ad_verification_button"] = "phpMyFAQ Installtion online überprüfen";
-$PMF_LANG["ad_verification_notokay"] = "Diese phpMyFAQ Installation hat lokale Änderungen:";
-$PMF_LANG["ad_verification_okay"] = "Diese phpMyFAQ Installation wurde erfolgreich überprüft.";
+$PMF_LANG["ad_verification_button"] = "phpMyFAQ-Installtion online überprüfen";
+$PMF_LANG["ad_verification_notokay"] = "Diese phpMyFAQ-Installation hat lokale Änderungen:";
+$PMF_LANG["ad_verification_okay"] = "Diese phpMyFAQ-Installation wurde erfolgreich überprüft.";
 
 // added v2.8.0-alpha - 2011-09-29 by Thorsten
 $PMF_LANG['ad_menu_searchfaqs'] = 'FAQs suchen';
