@@ -5,10 +5,12 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.7.5 - 2012-03-
+Version 2.7.5 - 2012-04-
+- full support for Microsoft SQL Server Driver for PHP (Thorsten)
 - added experimental support for SQLite3 (Thorsten)
-- updaed Spanish translation (Reynaldo Martinez P.)
+- updated Spanish translation (Reynaldo Martinez P.)
 - fixed Slovak translation (Thorsten)
+- fixed IE9 related JavaScript issues (Thorsten)
 - fixed some bugs (Thorsten)
 
 Version 2.7.4 - 2012-02-22
