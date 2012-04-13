@@ -507,7 +507,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     }
 
     $sql_db = PMF_Filter::filterInput(INPUT_POST, 'sql_db', FILTER_SANITIZE_STRING);
-    if (is_null($sql_db) && $sql_type != 'sqlite' &&  $sql_type != 'sqlite3') {
+    if (is_null($sql_db) && ($sql_type != 'sqlite' ||  $sql_type != 'sqlite3')) {
         print "<p class=\"error\"><strong>Error:</strong> There's no DB database input.</p>\n";
         HTMLFooter();
         die();
