@@ -87,6 +87,7 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     function select_database(field) {
         switch (field.value) {
             case 'sqlite':
+            case 'sqlite3':
                 cssDelClass('dbsqlite', 'collapsed');
                 cssAddClass('dbdatafull', 'collapsed');
                 break;
@@ -486,33 +487,33 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     }
 
     $sql_server = PMF_Filter::filterInput(INPUT_POST, 'sql_server', FILTER_SANITIZE_STRING);
-    if (is_null($sql_server) && $sql_type != 'sqlite') {
+    if (is_null($sql_server) && $sql_type != 'sqlite' &&  $sql_type != 'sqlite3') {
         print "<p class=\"error\"><strong>Error:</strong> There's no DB server input.</p>\n";
         HTMLFooter();
         die();
     }
 
     $sql_user = PMF_Filter::filterInput(INPUT_POST, 'sql_user', FILTER_SANITIZE_STRING);
-    if (is_null($sql_user) && $sql_type != 'sqlite') {
+    if (is_null($sql_user) && $sql_type != 'sqlite' &&  $sql_type != 'sqlite3') {
         print "<p class=\"error\"><strong>Error:</strong> There's no DB username input.</p>\n";
         HTMLFooter();
         die();
     }
 
     $sql_passwort = PMF_Filter::filterInput(INPUT_POST, 'sql_passwort', FILTER_SANITIZE_STRING);
-    if (is_null($sql_passwort) && $sql_type == 'sqlite') {
+    if (is_null($sql_passwort) && $sql_type == 'sqlite' &&  $sql_type == 'sqlite3') {
         // Password can be empty...
         $sql_passwort = '';
     }
 
     $sql_db = PMF_Filter::filterInput(INPUT_POST, 'sql_db', FILTER_SANITIZE_STRING);
-    if (is_null($sql_db) && $sql_type != 'sqlite') {
+    if (is_null($sql_db) && $sql_type != 'sqlite' &&  $sql_type != 'sqlite3') {
         print "<p class=\"error\"><strong>Error:</strong> There's no DB database input.</p>\n";
         HTMLFooter();
         die();
     }
 
-    if ($sql_type == 'sqlite') {
+    if ($sql_type == 'sqlite' ||  $sql_type == 'sqlite3') {
         $sql_sqllitefile = PMF_Filter::filterInput(INPUT_POST, 'sql_sqlitefile', FILTER_SANITIZE_STRING);
         if (!is_null($sql_sqllitefile)) {
             $sql_server = $sql_sqllitefile; // We're using $sql_server, too!
@@ -677,7 +678,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     print '<p>';
 
     // Erase any table before starting creating the required ones
-    if ('sqlite' != $sql_type) {
+    if ('sqlite' != $sql_type &&  $sql_type != 'sqlite3') {
         db_uninstall();
     }
     // Start creating the required tables
