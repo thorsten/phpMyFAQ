@@ -251,13 +251,17 @@ class PMF_System
      */
     public function createHashes()
     {
+        $created = new DateTime();
+
         $path  = dirname(__DIR__);
         $files = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($path),
             RecursiveIteratorIterator::SELF_FIRST
         );
 
-        $hashes    = array();
+        $hashes    = array(
+            'created' => $created->format('Y-m-d H:i:sP')
+        );
         $blacklist = array(
             '/config/constants.php'      => false,
             '/config/constants_ldap.php' => false,
