@@ -78,7 +78,10 @@ class PMF_Instance_Setup
             } elseif (! @is_writable($this->_rootDir . $dir)) {
                 $faileddirs[] = $dir;
             } else {
-                @copy($this->_rootDir . '/install/index.html', $this->_rootDir . $dir . '/index.html');
+                @copy(
+                    $this->_rootDir . '/install/index.html',
+                    $this->_rootDir . $dir . '/index.html'
+                );
             }
         }
 
