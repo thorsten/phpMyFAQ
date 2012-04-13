@@ -215,7 +215,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
             WHERE
                     idx.id = OBJECT_ID(obj.name)
                 AND idx.indid < 2
-                AND obj.xtype = 'u'
+                AND obj.xtype = 'U'
             ORDER BY obj.name";
         $result = $this->query($query);
 
