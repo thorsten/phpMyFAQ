@@ -18,19 +18,8 @@
  * @since     2012-04-11
  */
 
-$path  = dirname(__DIR__);
-$files = new RecursiveIteratorIterator(
-    new RecursiveDirectoryIterator($path),
-    RecursiveIteratorIterator::SELF_FIRST
-);
+require dirname(__FILE__) . '/../inc/System.php';
 
-$hashes = array();
+$system = new PMF_System();
 
-foreach ($files as $file) {
-    if ('php' === $file->getExtension() && ! preg_match('#/tests/#', $file->getPath())) {
-        $current = str_replace($path, '', $file->getPathname());
-        $hashes[$current] = sha1(file_get_contents($file->getPathname()));
-    }
-}
-
-file_put_contents('hashes.json', json_encode($hashes));
+print $system->createHashes();
