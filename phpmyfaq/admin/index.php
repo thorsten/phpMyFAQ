@@ -430,7 +430,7 @@ if (isset($auth) && in_array(true, $permission)) {
 <?php
         $version = PMF_Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_STRING);
         if (!is_null($version) && $version == 'version') {
-            $json   = file_get_contents('http://www.phpmyfaq.de/json/version.php');
+            $json   = file_get_contents('http://www.phpmyfaq.de/api/version');
             $result = json_decode($json);
             if ($result instanceof stdClass) {
                 $installed = $faqConfig->get('main.currentVersion');
@@ -469,7 +469,7 @@ if (isset($auth) && in_array(true, $permission)) {
             $faqSystem = new PMF_System();
 
             $localHashes  = json_decode($faqSystem->createHashes(), true);
-            $remoteHashes = json_decode(file_get_contents('http://www.phpmyfaq.de/api/verify.php?version=' . PMF_System::getVersion()), true);
+            $remoteHashes = json_decode(file_get_contents('http://www.phpmyfaq.de/api/verify/' . PMF_System::getVersion()), true);
 
             $diff = array_diff($localHashes, $remoteHashes);
 
