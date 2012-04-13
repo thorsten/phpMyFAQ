@@ -24,10 +24,13 @@ Version 2.8.0-alpha2 - 2012-
 - updated bundled Twitter Bootstrap to version 2.0.2 (Thorsten)
 - fixed some bugs (Thorsten, Florian)
 
-Version 2.7.5 - 2012-03-
+Version 2.7.5 - 2012-04-
+- full support for Microsoft SQL Server Driver for PHP (Thorsten)
+- added online verification check (Thorsten, Florian)
 - added experimental support for SQLite3 (Thorsten)
-- updaed Spanish translation (Reynaldo Martinez P.)
+- updated Spanish translation (Reynaldo Martinez P.)
 - fixed Slovak translation (Thorsten)
+- fixed IE9 related JavaScript issues (Thorsten)
 - fixed some bugs (Thorsten)
 
 Version 2.7.4 - 2012-02-22

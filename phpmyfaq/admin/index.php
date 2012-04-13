@@ -513,6 +513,58 @@ if (isset($auth) && in_array(true, $permission)) {
 
         <section>
             <header>
+                <h3><?php print $PMF_LANG["ad_online_verification"] ?></h3>
+            </header>
+            <?php
+            $getJson = PMF_Filter::filterInput(INPUT_POST, 'getJson', FILTER_SANITIZE_STRING);
+            if (!is_null($getJson) && 'verify' === $getJson) {
+
+                $faqSystem = new PMF_System();
+
+                $localHashes = $faqSystem->createHashes();
+                $remoteHashes = file_get_contents(
+                    'http://www.phpmyfaq.de/api/verify/' . $faqconfig->get('main.currentVersion')
+                );
+
+                $diff = array_diff(
+                    json_decode($localHashes, true),
+                    json_decode($remoteHashes, true)
+                );
+
+                if (1 !== count($diff)) {
+                    printf('<p class="error">%s</p>', $PMF_LANG["ad_verification_notokay"]);
+                    print '<ul>';
+                    foreach ($diff as $file => $hash) {
+                        if ('created' === $file) {
+                            continue;
+                        }
+                        printf(
+                            '<li><span title="%s">%s</span></li>',
+                            $hash,
+                            $file
+                        );
+                    }
+                    print '</ul>';
+                } else {
+                    printf('<p class="success">%s</p>', $PMF_LANG["ad_verification_okay"]);
+                }
+
+            } else {
+                ?>
+                <p>
+                <form action="index.php" method="post">
+                    <input type="hidden" name="getJson" value="verify" />
+                    <input class="submit" type="submit"
+                           value="<?php print $PMF_LANG["ad_verification_button"] ?>" />
+                </form>
+                </p>
+                <?php
+            }
+            ?>
+        </section>
+
+        <section>
+            <header>
                 <h3><?php print $PMF_LANG['ad_system_info']; ?></h3>
             </header>
             <div class="pmf-system-information">

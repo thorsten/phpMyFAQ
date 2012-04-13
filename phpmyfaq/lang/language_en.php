@@ -1159,6 +1159,10 @@ $PMF_LANG['msgTableOfContent'] = 'Table of Content';
 
 // added 2.7.5 - 2012-03-02 by Thorsten
 $PMF_LANG["msgExportAllFaqs"] = "Print all as PDF";
+$PMF_LANG["ad_online_verification"] = "Online verification check";
+$PMF_LANG["ad_verification_button"] = "Click to verify your phpMyFAQ installation";
+$PMF_LANG["ad_verification_notokay"] = "Your version of phpMyFAQ has local changes:";
+$PMF_LANG["ad_verification_okay"] = "Your version of phpMyFAQ was successfully verified.";
 
 // added v2.8.0-alpha - 2011-09-22 by Anatoliy
 $PMF_LANG['cacheControlCenter'] = 'Cache configuration';
@@ -1182,7 +1186,3 @@ $PMF_LANG["headerUserControlPanel"] = 'User Control Panel';
 // added v2.8.0-alpha2 - 2012-03-15 by Thorsten
 $PMF_LANG["rememberMe"] = 'Remember me';
 $PMF_LANG["ad_menu_instances"] = "FAQ Multi-sites";
-$PMF_LANG["ad_online_verification"] = "Online verification check";
-$PMF_LANG["ad_verification_button"] = "Click to verify your phpMyFAQ installation";
-$PMF_LANG["ad_verification_notokay"] = "Your version of phpMyFAQ has local changes:";
-$PMF_LANG["ad_verification_okay"] = "Your version of phpMyFAQ was successfully verified.";

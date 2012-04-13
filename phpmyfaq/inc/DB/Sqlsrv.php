@@ -217,14 +217,12 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
             WHERE
                     idx.id = OBJECT_ID(obj.name)
                 AND idx.indid < 2
-                AND obj.xtype = 'u'
+                AND obj.xtype = 'U'
             ORDER BY obj.name";
         $result = $this->query($query);
 
         while ($row = $this->fetchObject($result)) {
-            if ('dtproperties' != $row->table_name) {
-                $tables[$row->table_name] = $row->table_rows;
-            }
+            $tables[$row->table_name] = $row->table_rows;
         }
 
         return $tables;
@@ -241,7 +239,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
     {
         $select = sprintf("
            SELECT 
-               max(%d) as current_id 
+               max(%s) as current_id
            FROM 
                %s",
            $id,
