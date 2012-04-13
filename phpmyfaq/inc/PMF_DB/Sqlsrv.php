@@ -220,9 +220,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
         $result = $this->query($query);
 
         while ($row = $this->fetch_object($result)) {
-            if ('dtproperties' != $row->table_name) {
-                $tables[$row->table_name] = $row->table_rows;
-            }
+            $tables[$row->table_name] = $row->table_rows;
         }
 
         return $tables;
