@@ -107,4 +107,43 @@ class PMF_System
     {
         return $this->missingExtensions;
     }
+
+    /**
+     * Creates a JSON object with all .php files of phpMyFAQ with their sha1 hashes
+     * @return string
+     */
+    public function createHashes()
+    {
+        $created = new DateTime();
+
+        $path  = dirname(dirname(__FILE__));
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($path),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        $hashes = array(
+            'created' => $created->format('Y-m-d H:i:sP')
+        );
+        $blacklist = array(
+            '/config/constants.php' => false,
+            '/config/constants_ldap.php' => false,
+            '/config/database.php' => false,
+            '/config/ldap.php' => false
+        );
+
+        foreach ($files as $file) {
+            if ('php' === $file->getExtension() && ! preg_match('#/tests/#', $file->getPath())) {
+                $current = str_replace($path, '', $file->getPathname());
+
+                if (isset($blacklist[$current])) {
+                    continue;
+                }
+                $hashes[$current] = sha1(file_get_contents($file->getPathname()));
+            }
+        }
+
+        return json_encode($hashes);
+    }
+
 }
