@@ -462,15 +462,27 @@ if (isset($auth) && in_array(true, $permission)) {
                 <header>
                     <h3>Online verification check</h3>
                 </header>
-                <p>
 <?php
         $getJson = PMF_Filter::filterInput(INPUT_POST, 'getJson', FILTER_SANITIZE_STRING);
         if (!is_null($getJson) && 'verify' === $getJson) {
 
             $faqSystem = new PMF_System();
 
-            $localHashes  = json_decode($faqSystem->createHashes());
-            $remoteHashes = file_get_contents('http://www.phpmyfaq.de/json/verify.php?version=' . PMF_System::getVersion());
+            $localHashes  = json_decode($faqSystem->createHashes(), true);
+            $remoteHashes = json_decode(file_get_contents('http://www.phpmyfaq.de/api/verify.php?version=' . PMF_System::getVersion()), true);
+
+            $diff = array_diff($localHashes, $remoteHashes);
+
+            if (0 !== count($diff)) {
+                print '<p class="alert alert-danger">Your version of phpMyFAQ has local changes in the following files:</p>';
+                print '<ul>';
+                foreach ($diff as $file => $hash) {
+                    printf('<li>%s (sha1: %s)</li>', $file, $hash);
+                }
+                print '</ul>';
+            } else {
+                print '<p class="alert alert-success">Your version of phpMyFAQ was successfully verified.</p>';
+            }
 
         } else {
 ?>
@@ -481,7 +493,6 @@ if (isset($auth) && in_array(true, $permission)) {
 <?php
         }
 ?>
-                </p>
             </div>
         </section>
 
