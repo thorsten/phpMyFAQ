@@ -746,7 +746,7 @@ if ($step == 3) {
         print '<div class="center">';
         $count = 0;
         foreach ($query as $key => $executeQuery) {
-            $result = @$db->query($executeQuery);
+            $result = $faqConfig->getDb()->query($executeQuery);
             print '.';
             if (!($key % 100)) {
                 print '<br />';
@@ -756,7 +756,7 @@ if ($step == 3) {
                 print '<p class="alert alert-error"><strong>Error:</strong> Please install your version of phpMyFAQ ' .
                       'once again or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.' .
                       '</p>';
-                printf('<p class="alert alert-error"><strong>DB error:</strong> %s</p>', $db->error());
+                printf('<p class="alert alert-error"><strong>DB error:</strong> %s</p>', $faqConfig->getDb()->error());
                 printf('<code>%s</code>', htmlentities($executeQuery));
                 HTMLFooter();
                 die();
@@ -803,16 +803,16 @@ if ($step == 3) {
         case 'mssql':
         case 'sqlsrv':
             // Get all table names
-            $db->getTableNames(SQLPREFIX);
-            foreach ($db->tableNames as $tableName) {
+            $faqConfig->getDb()->getTableNames(SQLPREFIX);
+            foreach ($faqConfig->getDb()->tableNames as $tableName) {
                 $query[] = 'DBCC DBREINDEX ('.$tableName.')';
             }
             break;
         case 'mysql':
         case 'mysqli':
             // Get all table names
-            $db->getTableNames(SQLPREFIX);
-            foreach ($db->tableNames as $tableName) {
+            $faqConfig->getDb()->getTableNames(SQLPREFIX);
+            foreach ($faqConfig->getDb()->tableNames as $tableName) {
                 $query[] = 'OPTIMIZE TABLE '.$tableName;
             }
             break;
@@ -825,12 +825,12 @@ if ($step == 3) {
     if (isset($query)) {
         print '<div class="center">';
         foreach ($query as $executeQuery) {
-            $result = $db->query($executeQuery);
+            $result = $faqConfig->getDb()->query($executeQuery);
             printf('<span title="%s">.</span>', $executeQuery);
             if (!$result) {
                 print '<p class="alert alert-error"><strong>Error:</strong> Please install your version of phpMyFAQ once again ' .
                       'or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.</p>';
-                printf('<p class="error"><strong>DB error:</strong> %s</p>', $db->error());
+                printf('<p class="error"><strong>DB error:</strong> %s</p>', $faqConfig->getDb()->error());
                 printf('<code>%s</code>', htmlentities($executeQuery));
                 HTMLFooter();
                 die();
