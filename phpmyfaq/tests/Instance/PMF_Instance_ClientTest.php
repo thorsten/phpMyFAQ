@@ -105,9 +105,8 @@ class PMF_Instance_ClientTest extends PHPUnit_Framework_TestCase
 
     public function testCopyTemplateFolder()
     {
-        $return = $this->PMF_Instance_Client->copyTemplateFolder(__DIR__);
+        $this->PMF_Instance_Client->copyTemplateFolder(__DIR__);
 
-        $this->assertTrue($return);
         $this->assertFileExists(__DIR__ . '/template/default/index.tpl');
     }
 }

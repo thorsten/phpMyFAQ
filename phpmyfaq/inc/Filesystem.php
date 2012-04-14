@@ -157,7 +157,7 @@ class PMF_Filesystem
                         $dest . '/' . $directoryName . '/' . $file
                     );
                 }  else {
-                    $this->recursiveCopy($source . '/' . $file, $dest);
+                    $this->recursiveCopy($source . '/' . $file, $dest . '/' . $directoryName);
                 }
             }
         }
