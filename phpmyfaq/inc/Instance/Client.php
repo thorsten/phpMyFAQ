@@ -83,7 +83,7 @@ class PMF_Instance_Client extends PMF_Instance
     public function copyConstantsFile($dest)
     {
         return $this->fileSystem->copy(
-            dirname(__DIR__) . '/config/constants.php',
+            $this->fileSystem->getRootPath() . '/config/constants.php',
             $dest
         );
     }
@@ -98,7 +98,7 @@ class PMF_Instance_Client extends PMF_Instance
     public function copyLdapConstantsFile($dest)
     {
         return $this->fileSystem->copy(
-            dirname(__DIR__) . '/config/constants_ldap.php',
+            $this->fileSystem->getRootPath() . '/config/constants_ldap.php',
             $dest
         );
     }

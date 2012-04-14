@@ -59,7 +59,7 @@ class PMF_Instance_ClientTest extends PHPUnit_Framework_TestCase
         $this->dbHandle = new PMF_DB_Sqlite3();
         $this->PMF_Configuration = new PMF_Configuration($this->dbHandle);
         $this->PMF_Configuration->config['security.useSslOnly'] = 'true';
-        $this->PMF_Filesystem = new PMF_Filesystem();
+        $this->PMF_Filesystem = new PMF_Filesystem(dirname(dirname(__DIR__)));
 
         $this->PMF_Instance = new PMF_Instance($this->PMF_Configuration);
         $this->PMF_Instance_Client = new PMF_Instance_Client($this->PMF_Configuration);
@@ -73,14 +73,24 @@ class PMF_Instance_ClientTest extends PHPUnit_Framework_TestCase
     protected function tearDown ()
     {
         $this->PMF_Instance_Client = null;
+        @unlink(__DIR__ . '/constants.test.php');
+        @unlink(__DIR__ . '/constants_ldap.test.php');
         parent::tearDown();
     }
-    /**
-     * @expectedException PMF_Exception
-     */
-    public function testExceptionOfCopyConstantsFile()
-    {
-        $return = $this->PMF_Instance_Client->copyConstantsFile(__DIR__);
 
+    public function testCopyConstantsFile()
+    {
+        $return = $this->PMF_Instance_Client->copyConstantsFile(__DIR__ . '/constants.test.php');
+
+        $this->assertTrue($return);
+        $this->assertFileExists(__DIR__ . '/constants.test.php');
+    }
+
+    public function testCopyLdapConstantsFile()
+    {
+        $return = $this->PMF_Instance_Client->copyLdapConstantsFile(__DIR__ . '/constants_ldap.test.php');
+
+        $this->assertTrue($return);
+        $this->assertFileExists(__DIR__ . '/constants_ldap.test.php');
     }
 }

@@ -37,19 +37,46 @@ class PMF_Filesystem
     /**
      * @var string
      */
-    private $_path;
+    private $rootPath;
+
+    /**
+     * @var string
+     */
+    private $path;
 
     /**
      * @var array
      */
-    private $_folders = array();
+    private $folders = array();
+
+    /**
+     * Constructor, sets the root path of the master phpMyFAQ installation
+     *
+     * @return PMF_Filesystem
+     */
+    public function __construct($rootPath = '')
+    {
+        if (empty($rootPath)) {
+            $this->rootPath = dirname(__DIR__);
+        } else {
+            $this->rootPath = $rootPath;
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getRootPath()
+    {
+        return $this->rootPath;
+    }
 
     /**
      * @param array $folders
      */
     public function setFolders(Array $folders)
     {
-        $this->_folders = $folders;
+        $this->folders = $folders;
     }
 
     /**
@@ -57,7 +84,7 @@ class PMF_Filesystem
      */
     public function getFolders()
     {
-        return $this->_folders;
+        return $this->folders;
     }
 
     /**
@@ -65,7 +92,7 @@ class PMF_Filesystem
      */
     public function setPath($path)
     {
-        $this->_path = $path;
+        $this->path = $path;
     }
 
     /**
@@ -73,7 +100,7 @@ class PMF_Filesystem
      */
     public function getPath()
     {
-        return $this->_path;
+        return $this->path;
     }
 
     /**
@@ -101,4 +128,5 @@ class PMF_Filesystem
 
         return true;
     }
+
 }
