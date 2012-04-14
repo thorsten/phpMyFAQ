@@ -24,7 +24,8 @@ Version 2.8.0-alpha2 - 2012-
 - updated bundled Twitter Bootstrap to version 2.0.2 (Thorsten)
 - fixed some bugs (Thorsten, Florian)
 
-Version 2.7.5 - 2012-04-
+Version 2.7.5 - 2012-04-14
+- fixed serious security issue in bundled ImageManager library (Thorsten)
 - full support for Microsoft SQL Server Driver for PHP (Thorsten)
 - added online verification check (Thorsten, Florian)
 - added experimental support for SQLite3 (Thorsten)

@@ -17,7 +17,7 @@
 		include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");
 		include_once(CLASS_PAGINATION);
 		$pagination = new pagination(false);
-		if (!empty($_GET['search']) && is_dir($_GET['search_folder']))
+		if(!empty($_GET['search']))
 		{
 			include_once(CLASS_SEARCH);
 			

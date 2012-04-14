@@ -10,7 +10,7 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARAT
 
 $user = PMF_User_CurrentUser::getFromSession($faqConfig);
 
-if ($user) {
+if ($user instanceof PMF_User_CurrentUser) {
     $_SESSION['ajax_user'] = true;
     header('Location: ' . appendQueryString(CONFIG_URL_HOME, makeQueryString()));
     exit;

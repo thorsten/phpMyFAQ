@@ -9,19 +9,22 @@
 	 */
 	
 	//FILESYSTEM CONFIG	<br>
+	define('AJAX_INIT_DONE', true);
 	require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "class.auth.php");	
 	define('CONFIG_QUERY_STRING_ENABLE', true); //Enable passed query string to setting the system configuration
-	
-	// Added for phpMyFAQ
-    define('PMF_ROOT_DIR', dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))));
+
+    // Added for phpMyFAQ
+    define('PMF_ROOT_DIR', dirname(dirname(dirname(dirname(dirname(__DIR__))))));
     define('IS_VALID_PHPMYFAQ', null);
-    require_once PMF_ROOT_DIR.'/inc/Bootstrap.php';
+    require_once PMF_ROOT_DIR . '/inc/Bootstrap.php';
     session_name(PMF_Session::PMF_COOKIE_NAME_AUTH);
-	
-	if (!isset($_SESSION)) {
+
+	if(!isset($_SESSION))
+	{
 		session_start();
 	}
-	if (!headers_sent()) {
+	if(!headers_sent())
+	{
 		header('Content-Type: text/html; charset=utf-8');
 	}
 	
@@ -109,4 +112,5 @@
 	define('CONFIG_URL_FILE_PASTE', 'ajax_file_paste.php');
 	
 
+>>>>>>> bbb7e31ca3c2d4ee575fdb3bedbe3278ab4276cf
 ?>

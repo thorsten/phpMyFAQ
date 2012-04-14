@@ -1,10 +1,9 @@
 <?php
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST']);
-    exit();
-}
-?>
-<div id="content">
+	if(!defined('AJAX_INIT_DONE'))
+	{
+		die('Permission denied');
+	}
+?><div id="content">
 <?php 
 
 		$count = 1;

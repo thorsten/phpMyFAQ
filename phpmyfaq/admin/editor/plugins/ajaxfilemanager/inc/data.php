@@ -1,8 +1,10 @@
-<pre>Array
+<?php
+	die();
+?><pre>Array
 (
-    [currentFolderPath] => ../uploaded/
-    [new_folder] => Test
+    [currentFolderPath] => ../../../../uploaded/
+    [new_folder] => Add
 )
 </pre>
 
-22/Sep/2008 13:17:12
+19/Mar/2011 07:41:56
