@@ -30,6 +30,7 @@ require_once 'PHPUnit/TextUI/TestRunner.php';
 // include Testsuites
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Category' . DIRECTORY_SEPARATOR . 'AllTests.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Faq' . DIRECTORY_SEPARATOR . 'AllTests.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'Instance' . DIRECTORY_SEPARATOR . 'AllTests.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Search' . DIRECTORY_SEPARATOR . 'AllTests.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'PMF_LinkTest.php';
 
@@ -52,6 +53,7 @@ class AllTests
         
         $suite->addTest(Category_AllTests::suite());
         $suite->addTest(Faq_AllTests::suite());
+        $suite->addTest(Instance_AllTests::suite());
         $suite->addTest(Search_AllTests::suite());
         $suite->addTestSuite('PMF_LinkTest');
         

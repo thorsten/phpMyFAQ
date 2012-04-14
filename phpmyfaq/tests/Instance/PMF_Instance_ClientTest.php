@@ -18,11 +18,13 @@
  */
 
 
-require_once dirname(__DIR__) . '/inc/DB/Driver.php';
-require_once dirname(__DIR__) . '/inc/DB/Sqlite3.php';
-require_once dirname(__DIR__) . '/inc/Exception.php';
-require_once dirname(__DIR__) . '/inc/Configuration.php';
-require_once dirname(__DIR__) . '/inc/Link.php';
+require_once dirname(dirname(__DIR__)) . '/inc/DB/Driver.php';
+require_once dirname(dirname(__DIR__)) . '/inc/DB/Sqlite3.php';
+require_once dirname(dirname(__DIR__)) . '/inc/Exception.php';
+require_once dirname(dirname(__DIR__)) . '/inc/Configuration.php';
+require_once dirname(dirname(__DIR__)) . '/inc/Filesystem.php';
+require_once dirname(dirname(__DIR__)) . '/inc/Instance.php';
+require_once dirname(dirname(__DIR__)) . '/inc/Instance/Client.php';
 
 /**
  * PMF_LinkTest
@@ -35,10 +37,12 @@ require_once dirname(__DIR__) . '/inc/Link.php';
  * @link      http://www.phpmyfaq.de
  * @since     2012-03-29
  */
-class PMF_LinkTest extends PHPUnit_Framework_TestCase
+class PMF_Instance_ClientTest extends PHPUnit_Framework_TestCase
 {
     private $dbHandle;
-    private $PMF_Link;
+    private $PMF_Filesystem;
+    private $PMF_Instance;
+    private $PMF_Instance_Client;
     private $PMF_Configuration;
 
     /**
@@ -55,7 +59,12 @@ class PMF_LinkTest extends PHPUnit_Framework_TestCase
         $this->dbHandle = new PMF_DB_Sqlite3();
         $this->PMF_Configuration = new PMF_Configuration($this->dbHandle);
         $this->PMF_Configuration->config['security.useSslOnly'] = 'true';
-        $this->PMF_Link = new PMF_Link('https://faq.example.org/my-test-faq/', $this->PMF_Configuration);
+        $this->PMF_Filesystem = new PMF_Filesystem();
+
+        $this->PMF_Instance = new PMF_Instance($this->PMF_Configuration);
+        $this->PMF_Instance_Client = new PMF_Instance_Client($this->PMF_Configuration);
+
+        $this->PMF_Instance_Client->setFileSystem($this->PMF_Filesystem);
     }
 
     /**
@@ -63,13 +72,15 @@ class PMF_LinkTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown ()
     {
-        $this->PMF_Link = null;
+        $this->PMF_Instance_Client = null;
         parent::tearDown();
     }
-
-    public function testGetSystemScheme()
+    /**
+     * @expectedException PMF_Exception
+     */
+    public function testExceptionOfCopyConstantsFile()
     {
-        $this->assertEquals('https://', $this->PMF_Link->getSystemScheme());
-    }
+        $return = $this->PMF_Instance_Client->copyConstantsFile(__DIR__);
 
+    }
 }
