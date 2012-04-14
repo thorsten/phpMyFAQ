@@ -114,6 +114,9 @@ class PMF_Instance_Client extends PMF_Instance
      */
     public function copyTemplateFolder($dest, $templateDir = 'default')
     {
-        // @todo add code here
+        $sourceTpl = $this->fileSystem->getRootPath() . '/template/' . $templateDir . '/';
+        $destTpl   = $dest . '/template/' . $templateDir . '/';
+
+        $this->fileSystem->recursiveCopy($sourceTpl, $destTpl);
     }
 }

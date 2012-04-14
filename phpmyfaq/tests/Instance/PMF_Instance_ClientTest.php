@@ -75,6 +75,15 @@ class PMF_Instance_ClientTest extends PHPUnit_Framework_TestCase
         $this->PMF_Instance_Client = null;
         @unlink(__DIR__ . '/constants.test.php');
         @unlink(__DIR__ . '/constants_ldap.test.php');
+        /*
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator(__DIR__ . '/template/default/'),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+        foreach ($files as $file) {
+            @unlink($file->getPathname());
+        }
+        */
         parent::tearDown();
     }
 
@@ -93,4 +102,14 @@ class PMF_Instance_ClientTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($return);
         $this->assertFileExists(__DIR__ . '/constants_ldap.test.php');
     }
+
+    /*
+    public function testCopyTemplateFolder()
+    {
+        $return = $this->PMF_Instance_Client->copyTemplateFolder(__DIR__);
+
+        $this->assertTrue($return);
+        $this->assertFileExists(__DIR__ . '/template/default/index.tpl');
+    }
+    */
 }

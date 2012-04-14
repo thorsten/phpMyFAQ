@@ -109,7 +109,7 @@ class PMF_Filesystem
      * @param string $source
      * @param string $dest
      *
-     * @return bool
+     * @return boolean
      */
     public function copy($source, $dest)
     {
@@ -127,6 +127,62 @@ class PMF_Filesystem
         }
 
         return true;
+    }
+
+    /**
+     * Copies recursively the source to the destination
+     *
+     * @param string $source
+     * @param string $dest
+     *
+     * @return boolean
+     */
+    public function recursiveCopy($source, $dest)
+    {
+        if (is_dir($source)) {
+            $directoryHandle = opendir($source);
+        }
+
+        $directoryName = substr($source, strrpos($source, '/') + 1);
+
+        $this->mkdir($dest . '/' . $directoryName, 0750);
+
+        while ($file = readdir($directoryHandle))
+        {
+            if ('.' != $file && '..' != $file) {
+
+                if (! is_dir($source . '/' . $file)) {
+                    $this->copy(
+                        $source . '/' . $file,
+                        $dest . '/' . $directoryName . '/' . $file
+                    );
+                }  else {
+                    $this->recursiveCopy($source . '/' . $file, $dest);
+                }
+            }
+        }
+
+        closedir($directoryHandle);
+
+        return true;
+    }
+
+    /**
+     * Makes directory
+     *
+     * @param string  $pathname  The directory path
+     * @param integer $mode      The mode is 0777 by default
+     * @param bool    $recursive Allows the creation of nested directories
+     *                           specified in the pathname.
+     *
+     * @return boolean
+     */
+    public function mkdir($pathname, $mode = 0777, $recursive = false)
+    {
+        if (is_dir($pathname)) {
+            return true; // Directory already exists
+        }
+        return mkdir($pathname, $mode, $recursive);
     }
 
 }
