@@ -1,4 +1,9 @@
 <?php
+	if(!defined('AJAX_INIT_DONE'))
+	{
+		die('Permission denied');
+	}
+?><?php
 	/**
 	 * class history
 	 * this class used to keep records of any changed to uploaded images under a session

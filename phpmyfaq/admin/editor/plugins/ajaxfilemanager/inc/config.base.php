@@ -1,4 +1,9 @@
 <?php
+	if(!defined('AJAX_INIT_DONE'))
+	{
+		die('Permission denied');
+	}
+?><?php
 	/**
 	 * sysem base config setting
 	 * @author Logan Cai (cailongqun [at] yahoo [dot] com [dot] cn)
@@ -7,10 +12,7 @@
 	 *
 	 */
 	
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST']);
-    exit();
-}
+
 error_reporting(E_ALL);	
 //error_reporting(E_ALL ^ E_NOTICE);	
 	
@@ -21,9 +23,9 @@ error_reporting(E_ALL);
 	 * turn off => false
 	 * by session => true
 	 */
-	define('CONFIG_ACCESS_CONTROL_MODE', true); 	
-	define("CONFIG_LOGIN_USERNAME", 'sdfgdfgdfgdgfdgsdfsdfg3454dsfb5e');
-	define('CONFIG_LOGIN_PASSWORD', 'ASDF@#%JHGSDFGasdkjfh3812764ksdjfbhkjxcf');
+    define('CONFIG_ACCESS_CONTROL_MODE', true);
+    define("CONFIG_LOGIN_USERNAME", 'sdfgdfgdfgdgfdgsdfsdfg3454dsfb5e');
+    define('CONFIG_LOGIN_PASSWORD', 'ASDF@#%JHGSDFGasdkjfh3812764ksdjfbhkjxcf');
 	define('CONFIG_LOGIN_PAGE', 'ajax_login.php'); //the url to the login page
 	
 	//SYSTEM MODE CONFIG
@@ -37,21 +39,23 @@ error_reporting(E_ALL);
 	define('CONFIG_SYS_THUMBNAIL_VIEW_ENABLE', true);//REMOVE THE thumbnail view if false
 	
 	//User Permissions
-	define('CONFIG_OPTIONS_DELETE', true);
-	define('CONFIG_OPTIONS_CUT', true);
-	define('CONFIG_OPTIONS_COPY', true);
-	define('CONFIG_OPTIONS_NEWFOLDER', true);
-	define('CONFIG_OPTIONS_RENAME', true);
-	define('CONFIG_OPTIONS_UPLOAD', true); //
+	define('CONFIG_OPTIONS_DELETE', true); //disable to delete folder
+	define('CONFIG_OPTIONS_CUT', true);	//disalbe to cut a file/folder
+	define('CONFIG_OPTIONS_COPY', true);	//disable to copy a file/folder
+	define('CONFIG_OPTIONS_NEWFOLDER', true); //disable to create new folder 
+	define('CONFIG_OPTIONS_RENAME', true); //disable to rename the file/folder
+	define('CONFIG_OPTIONS_UPLOAD', true); //disable to upload the file
 	define('CONFIG_OPTIONS_EDITABLE', true); //disable image editor and text editor
+	define('CONFIG_OPTIONS_SEARCH', true); //disable to search documents
 	//FILESYSTEM CONFIG
 		/*
 		* CONFIG_SYS_DEFAULT_PATH is the default folder where the files would be uploaded to
 			and it must be a folder under the CONFIG_SYS_ROOT_PATH or the same folder
 			these two paths accept relative path only, don't use absolute path
 		*/
-    define('CONFIG_SYS_DEFAULT_PATH', '../../../../images/'); //accept relative path only
-    define('CONFIG_SYS_ROOT_PATH', '../../../../images/');  //accept relative path only
+		
+	define('CONFIG_SYS_DEFAULT_PATH', '../../../../images/'); //accept relative path only
+	define('CONFIG_SYS_ROOT_PATH', '../../../../images/');	//accept relative path only
 	define('CONFIG_SYS_FOLDER_SHOWN_ON_TOP', true); //show your folders on the top of list if true or order by name 
 	define("CONFIG_SYS_DIR_SESSION_PATH", '/tmp');
 	define("CONFIG_SYS_PATTERN_FORMAT", 'list'); //three options: reg ,csv, list, this option define the parttern format for the following patterns
@@ -63,20 +67,20 @@ error_reporting(E_ALL);
 		 */
 	//more details about regular expression please visit http://nz.php.net/manual/en/function.eregi.php
 	define('CONFIG_SYS_INC_DIR_PATTERN', ''); //force listing of folders with such pattern(s). separated by , if multiple
-	define('CONFIG_SYS_EXC_DIR_PATTERN', 'CVS'); //will prevent listing of folders with such pattern(s). separated by , if multiple
+	define('CONFIG_SYS_EXC_DIR_PATTERN', ''); //will prevent listing of folders with such pattern(s). separated by , if multiple
 	define('CONFIG_SYS_INC_FILE_PATTERN', ''); //force listing of fiels with such pattern(s). separated by , if multiple
 	define('CONFIG_SYS_EXC_FILE_PATTERN', ''); //will prevent listing of files with such pattern(s). separated by , if multiple
 	define('CONFIG_SYS_DELETE_RECURSIVE', 1); //delete all contents within a specific folder if set to be 1
 	
 	//UPLOAD OPTIONS CONFIG
-	define('CONFIG_UPLOAD_MAXSIZE', 5000 * 1024 ); //by bytes
+	define('CONFIG_UPLOAD_MAXSIZE', 50 * 1024 & 1024 ); //by bytes
 	//define('CONFIG_UPLOAD_MAXSIZE', 2048); //by bytes
 	//define('CONFIG_UPLOAD_VALID_EXTS', 'txt');//
 
 	define('CONFIG_EDITABLE_VALID_EXTS', 'txt,htm,html,xml,js,css'); //make you include all these extension in CONFIG_UPLOAD_VALID_EXTS if you want all valid
 	
 	define('CONFIG_OVERWRITTEN', false); //overwirte when processing paste
-	define('CONFIG_UPLOAD_VALID_EXTS', 'gif,jpg,png,bmp,tif,zip,rar,gz,tar,mov,mpg,avi,asf,mpeg,wmv,aif,aiff,wav,mp3,swf,ppt,rtf,doc,pdf,txt');// // 
+	define('CONFIG_UPLOAD_VALID_EXTS', 'gif,jpg,png,txt'); // 
 	//define('CONFIG_UPLOAD_VALID_EXTS', 'gif,jpg,png,bmp,tif,zip,sit,rar,gz,tar,htm,html,mov,mpg,avi,asf,mpeg,wmv,aif,aiff,wav,mp3,swf,ppt,rtf,doc,pdf,xls,txt,xml,xsl,dtd');//
 	define("CONFIG_VIEWABLE_VALID_EXTS", 'gif,bmp,txt,jpg,png,tif,html,htm,js,css,xml,xsl,dtd,mp3,wav,wmv,wma,rm,rmvb,mov,swf');
 	//define('CONFIG_UPLOAD_VALID_EXTS', 'gif,jpg,png,txt'); // 
@@ -128,6 +132,7 @@ error_reporting(E_ALL);
 	
 	//General Option Declarations
 	//LANGAUGAE DECLARATIONNS
+
 	define('CONFIG_LANG_INDEX', 'language'); //the index in the session
 	define('CONFIG_LANG_DEFAULT', (CONFIG_QUERY_STRING_ENABLE && !empty($_GET['language']) && file_exists(DIR_LANG . secureFileName($_GET['language']) . '.php')?secureFileName($_GET['language']):'en')); //change it to be your language file base name, such en
 ?>

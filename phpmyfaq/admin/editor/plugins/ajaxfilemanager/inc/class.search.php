@@ -1,8 +1,9 @@
 <?php
-	if (!defined('IS_VALID_PHPMYFAQ')) {
-		header('Location: http://'.$_SERVER['HTTP_HOST']);
-		exit();
+	if(!defined('AJAX_INIT_DONE'))
+	{
+		die('Permission denied');
 	}
+?><?php
 	include_once(CLASS_FILE);
 	require_once(CLASS_SESSION_ACTION);
 	require_once(CLASS_MANAGER);
@@ -154,9 +155,9 @@
 								
 								$tem['path'] = backslashToSlash($finalPath);		
 								$tem['type'] = (is_dir($finalPath)?'folder':'file');
-								$tem['size'] = transformFileSize($tem['size']);
+/*								$tem['size'] = transformFileSize($tem['size']);
 								$tem['ctime'] = date(DATE_TIME_FORMAT, $tem['ctime']);
-								$tem['mtime'] = date(DATE_TIME_FORMAT, $tem['mtime']);
+								$tem['mtime'] = date(DATE_TIME_FORMAT, $tem['mtime']);*/
 								$tem['flag'] = (array_search($tem['path'], $selectedDocuments) !== false?($this->sessionAction->getAction() == "copy"?'copyFlag':'cutFlag'):'noFlag');
 								$tem['url'] = getFileUrl($tem['path']);
 								$this->rootFolderInfo['file']++;

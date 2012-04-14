@@ -1,8 +1,8 @@
 <?php
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST']);
-    exit();
-}
+	if(!defined('AJAX_INIT_DONE'))
+	{
+		die('Permission denied');
+	}
 ?>
 <div id="content">
 <table class="tableList" id="tableList" cellpadding="0" cellspacing="0" border="0">
@@ -34,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 									<td align="center" id="tdz<?php echo $count; ?>"><span id="flag<?php echo $count; ?>" class="<?php echo $file['flag']; ?>">&nbsp;</span><input type="checkbox"  name="check[]" id="cb<?php echo $count; ?>" value="<?php echo $file['path']; ?>" <?php echo $strDisabled; ?> />
 										</td>
 									<td align="center" class="fileColumns" id="tdst<?php echo $count; ?>">&nbsp;<a id="a<?php echo $count; ?>" href="<?php echo $file['path']; ?>" target="_blank"><span class="<?php echo $file['cssClass']; ?>">&nbsp;</span></a></td>
-									<td class="<?php echo $strClass; ?> docName"  id="tdnd<?php echo $count; ?>"><?php echo $file['name']; ?></td>
+									<td class="<?php echo $strClass; ?> docName"  id="tdnd<?php echo $count; ?>"><a id="a<?php echo $count; ?>" href="<?php echo $file['path']; ?>"><?php echo $file['name']; ?></a></td>
 									<td class="docInfo" id="tdrd<?php echo $count; ?>"><?php echo transformFileSize($file['size']); ?></td>
 									<td class="docInfo" id="tdth<?php echo $count; ?>"><?php echo @date(DATE_TIME_FORMAT,$file['mtime']); ?></td>
 								</tr>
@@ -45,7 +45,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 									<tr class="<?php echo $css; ?>" id="row<?php echo $count; ?>" >
 										<td align="center" id="tdz<?php echo $count; ?>"><span id="flag<?php echo $count; ?>" class="<?php echo $file['flag']; ?>">&nbsp;</span><input type="checkbox" name="check[]" id="cb<?php echo $count; ?>" value="<?php echo $file['path']; ?>" <?php echo $strDisabled; ?>/>
 										</td>
-										<td  lign="center" class="fileColumns" id="tdst<?php echo $count; ?>">&nbsp;<a id="a<?php echo $count; ?>" href="<?php echo $file['path']; ?>" <?php echo $file['cssClass'] == 'filePicture'?'rel="ajaxPhotos"':''; ?>  ><span class="<?php echo ($file['file']||$file['subdir']?$file['cssClass']:"folderEmpty"); ?>">&nbsp;</span></a></td>
+										<td  align="center" class="fileColumns" id="tdst<?php echo $count; ?>">&nbsp;<a id="a<?php echo $count; ?>" href="<?php echo $file['path']; ?>" <?php echo $file['cssClass'] == 'filePicture'?'rel="ajaxPhotos"':''; ?>  ><span class="<?php echo ($file['file']||$file['subdir']?$file['cssClass']:"folderEmpty"); ?>">&nbsp;</span></a></td>
 										<td class="<?php echo $strClass; ?> docName" id="tdnd<?php echo $count; ?>"><?php echo $file['name']; ?></td>
 										<td class="docInfo" id="tdrd<?php echo $count; ?>">&nbsp;</td>
 										<td class="docInfo" id="tdth<?php echo $count; ?>"><?php echo @date(DATE_TIME_FORMAT,$file['mtime']); ?></td>
