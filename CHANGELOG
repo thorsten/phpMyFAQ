@@ -5,7 +5,8 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.7.5 - 2012-04-
+Version 2.7.5 - 2012-04-14
+- fixed serious security issue in bundled ImageManager library (Thorsten)
 - full support for Microsoft SQL Server Driver for PHP (Thorsten)
 - added online verification check (Thorsten, Florian)
 - added experimental support for SQLite3 (Thorsten)
