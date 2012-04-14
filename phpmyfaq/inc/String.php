@@ -110,9 +110,9 @@ class PMF_String
      *
      * @return string
      */
-    public static function substr($str, $start, $length = null)
+    public static function substr($string, $start, $length = null)
     {
-        return self::$instance->substr($str, $start, $length);
+        return self::$instance->substr($string, $start, $length);
     }    
     
     
@@ -343,36 +343,40 @@ class PMF_String
     /**
      * Convert special chars to html entities
      *
-     * @param string $str
-     * @param int $quote_stype
-     * @param string $charset
-     * @param boolean $double_encode
+     * @param string  $string       The input string.
+     * @param integer $quoteStyle   Quote style
+     * @param string  $charset      Character set, UTF-8 by default
+     * @param boolean $doubleEncode If set to false, no encoding of existing entities
      *
      * @return string
      */
-    public static function htmlspecialchars($str, $quote_style = ENT_COMPAT, $charset = 'utf-8', $double_encode = false)
+    public static function htmlspecialchars($string, $quoteStyle = ENT_COMPAT, $charset = 'utf-8', $doubleEncode = false)
     {
-        return htmlspecialchars($str,
-                                $quote_style,
-                                $charset,
-                                $double_encode);
+        return htmlspecialchars(
+            $string,
+            $quoteStyle,
+            $charset,
+            $doubleEncode
+        );
     }
     
     /**
      * Convert all applicable characters to HTML entities
      *
-     * @param string  $string        The input string. 
-     * @param integer $quote_style   Quote style
-     * @param string  $charset       Character set, UTF-8 by default
-     * @param boolean $double_encode If set to false, no encoding of existing entities
+     * @param string  $string       The input string.
+     * @param integer $quoteStyle   Quote style
+     * @param string  $charset      Character set, UTF-8 by default
+     * @param boolean $doubleEncode If set to false, no encoding of existing entities
      *
      * @return string
      */
-    public static function htmlentities($string, $quote_style = ENT_COMPAT, $charset = 'utf-8', $double_encode = true)
+    public static function htmlentities($string, $quoteStyle = ENT_COMPAT, $charset = 'utf-8', $doubleEncode = true)
     {
-        return htmlentities($string,
-                            $quote_style,
-                            $charset,
-                            $double_encode);
+        return htmlentities(
+            $string,
+            $quoteStyle,
+            $charset,
+            $doubleEncode
+        );
     }
 }

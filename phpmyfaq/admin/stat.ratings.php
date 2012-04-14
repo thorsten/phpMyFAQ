@@ -51,8 +51,9 @@ if ($permission['viewlog']) {
 <?php
         }
 
-        $question = PMF_String::htmlspecialchars(trim($data['question']), ENT_QUOTES, 'utf-8');
-        $url      = sprintf('../index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+        $question = PMF_String::htmlspecialchars(trim($data['question']));
+        $url      = sprintf(
+            '../index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
             $data['category_id'],
             $data['id'],
             $data['lang']
