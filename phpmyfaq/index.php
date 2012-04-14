@@ -23,17 +23,32 @@
  */
 
 //
+// Define the named constant used as a check by any included PHP file
+//
+define('IS_VALID_PHPMYFAQ', null);
+
+//
 // Check if config/database.php exist -> if not, redirect to installer
 //
-if (!file_exists('config/database.php')) {
+if (file_exists('./multisite/multisite.php')) {
+    require './multisite/multisite.php';
+}
+//
+// Read configuration and constants
+//
+if (! defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
+    // Single instance configuration
+    define('PMF_CONFIG_DIR', __DIR__ . '/config');
+} else {
+    // Multi instance configuration
+    define('PMF_CONFIG_DIR', PMF_MULTI_INSTANCE_CONFIG_DIR);
+}
+
+if (!file_exists(PMF_CONFIG_DIR . '/database.php')) {
     header("Location: install/setup.php");
     exit();
 }
 
-//
-// Define the named constant used as a check by any included PHP file
-//
-define('IS_VALID_PHPMYFAQ', null);
 
 //
 // Autoload classes, prepend and start the PHP session
@@ -319,7 +334,7 @@ if (! is_null($solutionId)) {
         $keywords        = ',' . $faq->getRecordKeywords($id);
         $metaDescription = PMF_Utils::makeShorterText(strip_tags($faqData['content']), 12);
     }
-} 
+}
 
 //
 // Handle the Tagging ID
@@ -466,7 +481,7 @@ $tplMainPage = array(
                              $plr->getMsg('plmsgGuestOnline', $usersOnLine[0]) .
                              $plr->getMsg('plmsgRegisteredOnline',$usersOnLine[1]),
     'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
-    'copyright'           => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' . 
+    'copyright'           => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' .
                              $faqConfig->get('main.currentVersion'),
     'registerUser'        => '<a href="?action=register">' . $PMF_LANG['msgRegistration'] . '</a>',
     'sendPassword'        => '<a href="./admin/password.php">' . $PMF_LANG['lostPassword'] . '</a>'
@@ -504,7 +519,7 @@ if ('main' == $action || 'show' == $action) {
         );
     }
 }
-                             
+
 $stickyRecordsParams = $faq->getStickyRecords();
 if (!isset($stickyRecordsParams['error'])) {
     $tpl->parseBlock(
@@ -617,7 +632,7 @@ if ($faqConfig->get('records.orderingPopularFaqs') == 'visits') {
 } else {
     $param = 'voted';
 }
-    
+
 $toptenParams = $faq->getTopTen($param);
 if (!isset($toptenParams['error'])) {
     $tpl->parseBlock(
@@ -666,7 +681,7 @@ if ('artikel' == $action || 'show' == $action || is_numeric($solutionId)) {
 
     $faqHelper = PMF_Helper_Faq::getInstance($faqConfig);
     $faqHelper->setSsl((isset($_SERVER['HTTPS']) && is_null($_SERVER['HTTPS']) ? false : true));
-    
+
     $tpl->parseBlock(
         'rightBox',
         'socialLinks',

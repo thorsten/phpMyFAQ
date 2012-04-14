@@ -58,17 +58,6 @@ if (!$foundCurrPath) {
 ini_set('pcre.backtrack_limit', 100000000);
 ini_set('pcre.recursion_limit', 100000000);
 
-//
-// Read configuration and constants
-//
-if (! defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
-    // Single instance configuration
-    define('PMF_CONFIG_DIR', dirname(__DIR__) . '/config');
-} else {
-    // Multi instance configuration
-    define('PMF_CONFIG_DIR', PMF_MULTI_INSTANCE_CONFIG_DIR);
-}
-
 require PMF_CONFIG_DIR . '/database.php';
 require PMF_CONFIG_DIR . '/constants.php';
 
