@@ -111,6 +111,3 @@
 	define('CONFIG_URL_FILEnIMAGE_MANAGER', 'ajaxfilemanager.php');
 	define('CONFIG_URL_FILE_PASTE', 'ajax_file_paste.php');
 	
-
->>>>>>> bbb7e31ca3c2d4ee575fdb3bedbe3278ab4276cf
-?>
