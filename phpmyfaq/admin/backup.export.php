@@ -66,14 +66,14 @@ header('Pragma: no-cache');
 
 if ($permission['backup']) {
 
-    $db->getTableNames ( SQLPREFIX );
+    $faqConfig->getDb()->getTableNames ( SQLPREFIX );
     $tablenames   = '';
     $majorVersion = substr($faqConfig->get('main.currentVersion'), 0, 3);
     $dbHelper     = new PMF_DB_Helper($faqConfig);
 
     switch ($action) {
         case 'backup_content' :
-            foreach ($db->tableNames as $table) {
+            foreach ($faqConfig->getDb()->tableNames as $table) {
                 if ((SQLPREFIX . 'faqadminlog' == trim($table)) || (SQLPREFIX . 'faqsessions' == trim($table))) {
                     continue;
                 }
@@ -81,7 +81,7 @@ if ($permission['backup']) {
             }
             break;
         case 'backup_logs' :
-            foreach ($db->tableNames as $table) {
+            foreach ($faqConfig->getDb()->tableNames as $table) {
                 if ((SQLPREFIX . 'faqadminlog' == trim($table)) || (SQLPREFIX . 'faqsessions' == trim($table))) {
                     $tablenames .= $table . ' ';
                 }

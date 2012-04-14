@@ -46,7 +46,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     </div>
 <?php
     if (DEBUG) {
-        print '<div class="container">DEBUG INFORMATION:<br>'.$db->log().'</div>';
+        print '<div class="container">DEBUG INFORMATION:<br>'.$faqConfig->getDb()->log().'</div>';
     }
 ?>
 </footer>

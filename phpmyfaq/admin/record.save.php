@@ -125,7 +125,10 @@ if ($permission['editbt']) {
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_entry_savedsuc']);
             link_ondemand_javascript($record_id, $record_lang);
         } else {
-            printf('<p class="alert alert-error">%s</p>', print $PMF_LANG['ad_entry_savedfail'] . $db->error());
+            printf(
+                '<p class="alert alert-error">%s</p>',
+                print $PMF_LANG['ad_entry_savedfail'] . $faqConfig->getDb()->error()
+            );
         }
         
         if (!isset($categories['rubrik'])) {

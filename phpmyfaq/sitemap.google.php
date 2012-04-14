@@ -161,4 +161,4 @@ if (!is_null($getgezip) && (1 == $getgezip)) {
     print $sitemap;
 }
 
-$db->close();
+$faqConfig->getDb()->close();

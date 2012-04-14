@@ -120,4 +120,4 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/config/database.php')) {
 //
 // Disconnect from database
 //
-$db->close();
+$faqConfig->getDb()->close();

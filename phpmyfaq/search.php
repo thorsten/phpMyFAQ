@@ -75,10 +75,10 @@ if (!is_null($inputTag)) {
 //
 if (!is_null($inputSearchTerm) || !is_null($search)) {
     if (!is_null($inputSearchTerm)) {
-        $inputSearchTerm = $db->escape(strip_tags($inputSearchTerm));
+        $inputSearchTerm = $faqConfig->getDb()->escape(strip_tags($inputSearchTerm));
     }
     if (!is_null($search)) {
-        $inputSearchTerm = $db->escape(strip_tags($search));
+        $inputSearchTerm = $faqConfig->getDb()->escape(strip_tags($search));
     }
 
     $faqSearch->setCategory($category);

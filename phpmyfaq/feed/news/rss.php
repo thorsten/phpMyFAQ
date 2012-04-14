@@ -102,4 +102,4 @@ $headers = array(
 
 PMF_Helper_Http::sendWithHeaders($rssData, $headers);
 
-$db->close();
+$faqConfig->getDb()->close();

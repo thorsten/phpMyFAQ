@@ -242,7 +242,7 @@ if ($permission['editbt'] || $permission['delbt']) {
         $idsFound       = array();
         $faqsFound      = array();
 
-        while ($row = $db->fetchObject($result)) {
+        while ($row = $faqConfig->getDb()->fetchObject($result)) {
             
             if ($searchcat != 0 && $searchcat != (int)$row->category_id) {
                 continue;

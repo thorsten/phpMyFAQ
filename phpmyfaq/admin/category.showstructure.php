@@ -52,9 +52,9 @@ if ($permission['editcateg']) {
 
         // translate.category only returns non-existent languages to translate too
         if ($category->addCategory($category_data, $parent_id, $category_data['id'])) {
-            printf('<p>%s</p>', $PMF_LANG['ad_categ_translated']);
+            printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_translated']);
         } else {
-            printf('<p>%s</p>', $db->error());
+            printf('<p class="alert alert-error">%s</p>', $faqConfig->getDb()->error());
         }
     }
 

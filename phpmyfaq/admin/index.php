@@ -632,4 +632,4 @@ if (isset($auth) && in_array(true, $permission)) {
 
 require 'footer.php';
 
-$db->close();
+$faqConfig->getDb()->close();

@@ -176,13 +176,13 @@ showListTypeSelection();
                                         type='%s'
                                     AND id=%d",
                                 SQLPREFIX,
-                                $db->escape($params['type']),
+                                $faqConfig->getDb()->escape($params['type']),
                                 $posts['id']
                                 );
                     $row = false;
-                    $result = $db->query($query);
-                    if ($db->numRows($result) > 0) {
-                        $row = $db->fetchObject($result);
+                    $result = $faqConfig->getDb()->query($query);
+                    if ($faqConfig->getDb()->numRows($result) > 0) {
+                        $row = $faqConfig->getDb()->fetchObject($result);
                         $_owner = ($row->owner == $user->getLogin() ? true : false);
                         // check if chown ?
                         if ((!$_owner) && ($posts['chown'] == 'y') && ($_admin || ($posts['locked'] == 'n'))) {
@@ -194,11 +194,11 @@ showListTypeSelection();
                                             dtUpdateDate = '%s'
                                             WHERE id = %d",
                                         SQLPREFIX,
-                                        $db->escape($user->getLogin()),
-                                        $db->escape(date('YmdHis')),
+                                        $faqConfig->getDb()->escape($user->getLogin()),
+                                        $faqConfig->getDb()->escape(date('YmdHis')),
                                         $posts['id']
                                         );
-                            $db->query($query);
+                            $faqConfig->getDb()->query($query);
                             $_owner = true;
                             break;
                         }
@@ -214,7 +214,7 @@ showListTypeSelection();
                                         SQLPREFIX,
                                         $posts['id']
                                         );
-                            $db->query($query);
+                            $faqConfig->getDb()->query($query);
                             break;
                         }
                         // check whether we need to update info
@@ -231,14 +231,14 @@ showListTypeSelection();
                                         WHERE
                                             id=%d",
                                         SQLPREFIX,
-                                        $db->escape($posts['url']),
-                                        $db->escape($posts['reason']),
-                                        $db->escape($posts['enabled']),
-                                        $db->escape($posts['locked']),
-                                        $db->escape(date('YmdHis')),
+                                        $faqConfig->getDb()->escape($posts['url']),
+                                        $faqConfig->getDb()->escape($posts['reason']),
+                                        $faqConfig->getDb()->escape($posts['enabled']),
+                                        $faqConfig->getDb()->escape($posts['locked']),
+                                        $faqConfig->getDb()->escape(date('YmdHis')),
                                         $posts['id']
                                         );
-                            $db->query($query);
+                            $faqConfig->getDb()->query($query);
                         }
                         // check whethr we need to delete
                         if ($_owner && ($row->locked == 'n') && ($posts['delete'] == 'y')) {
@@ -251,7 +251,7 @@ showListTypeSelection();
                                         SQLPREFIX,
                                         $posts['id']
                                         );
-                            $db->query($query);
+                            $faqConfig->getDb()->query($query);
                         }
                     }
             }
@@ -268,14 +268,14 @@ showListTypeSelection();
                 ORDER BY
                     %s %s",
                 SQLPREFIX,
-                $db->escape($params['type']),
+                $faqConfig->getDb()->escape($params['type']),
                 $params['sortby'],
                 $params['sortorder']
                 );
-    $result = $db->query($query);
-    $pages = ceil($db->numRows($result) / $entriesPerPage);
+    $result = $faqConfig->getDb()->query($query);
+    $pages = ceil($faqConfig->getDb()->numRows($result) / $entriesPerPage);
     $page = $params['page'] = max(1,min($pages,$params['page']));
-    $result = $db->query($query);
+    $result = $faqConfig->getDb()->query($query);
 
 ?>
         <form method="post" action="<?php print issueURL(); ?>">
@@ -298,7 +298,7 @@ showListTypeSelection();
         $icurrent = 0;
         $istart = ($params['page'] - 1) * $entriesPerPage;
         $iend = $istart + $entriesPerPage;
-        while ($row = $db->fetchObject($result) && $iend >= $icurrent && $istart <= $icurrent++) {
+        while ($row = $faqConfig->getDb()->fetchObject($result) && $iend >= $icurrent && $istart <= $icurrent++) {
             $_owner = ($row->owner == $user->getLogin() ? true : false);
     ?>
             <tr>

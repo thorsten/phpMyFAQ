@@ -556,7 +556,7 @@ $tplNavigation['activeOpenQuestions'] = ('open' == $action) ? 'active' : '';
 //
 if (DEBUG) {
     $tplDebug = array(
-        'debugMessages' => '<div id="debug_main"><h2>DEBUG INFORMATION:</h2>' . $db->log() . '</div>'
+        'debugMessages' => '<div id="debug_main"><h2>DEBUG INFORMATION:</h2>' . $faqConfig->getDb()->log() . '</div>'
     );
 } else {
     $tplDebug = array(
@@ -724,4 +724,4 @@ if (!DEBUG) {
 }
 $tpl->render();
 
-$db->close();
+$faqConfig->getDb()->close();

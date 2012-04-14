@@ -220,7 +220,10 @@ if ($permission['editbt']) {
 
 <?php
         } else {
-            printf('<p class="alert alert-error">%s</p>',$PMF_LANG['ad_entry_savedfail'] . $db->error());
+            printf(
+                '<p class="alert alert-error">%s</p>',
+                $PMF_LANG['ad_entry_savedfail'] . $faqConfig->getDb()->error()
+            );
         }
 
     } else {

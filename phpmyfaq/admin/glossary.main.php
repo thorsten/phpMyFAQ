@@ -36,7 +36,7 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
         } else {
             print '<p class="alert alert-error">' . $PMF_LANG['ad_glossary_save_error'];
             print '<br />'.$PMF_LANG["ad_adus_dberr"].'<br />';
-            print $db->error() . '</p>';
+            print $faqConfig->getDb()->error() . '</p>';
         }
     }
 
@@ -49,7 +49,7 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
         } else {
             print '<p class="alert alert-error">' . $PMF_LANG['ad_glossary_update_error'];
             print '<br />'.$PMF_LANG["ad_adus_dberr"].'<br />';
-            print $db->error() . '</p>';
+            print $faqConfig->getDb()->error() . '</p>';
         }
     }
 
@@ -60,7 +60,7 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
         } else {
             print '<p class="alert alert-error">' . $PMF_LANG['ad_glossary_delete_error'];
             print '<br />'.$PMF_LANG["ad_adus_dberr"].'<br />';
-            print $db->error() . '</p>';
+            print $faqConfig->getDb()->error() . '</p>';
         }
     }
 

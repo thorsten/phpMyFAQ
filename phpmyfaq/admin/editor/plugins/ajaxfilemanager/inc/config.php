@@ -110,4 +110,3 @@
 	define('CONFIG_URL_IMG_THUMBNAIL', 'ajax_image_thumbnail.php');
 	define('CONFIG_URL_FILEnIMAGE_MANAGER', 'ajaxfilemanager.php');
 	define('CONFIG_URL_FILE_PASTE', 'ajax_file_paste.php');
-	

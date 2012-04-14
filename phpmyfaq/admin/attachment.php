@@ -209,7 +209,7 @@ if (!is_null($currentSave) && $currentSave == true && $auth && !$permission['add
     print $PMF_LANG["err_NotAuth"];
 }
 
-$db->close();
+$faqConfig->getDb()->close();
 ?>
 </body>
 </html>
