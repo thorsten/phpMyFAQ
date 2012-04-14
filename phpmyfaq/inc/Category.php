@@ -1259,7 +1259,7 @@ class PMF_Category
     {
         global $languageCodes;
 
-        $existcatlang = PMF_Utils::languageAvailable($category_id, 'faqcategories');
+        $existcatlang = $this->_config->getLanguage()->languageAvailable($category_id, 'faqcategories');
         $translated   = array();
 
         foreach ($existcatlang as $language) {
@@ -1290,12 +1290,13 @@ class PMF_Category
      *
      * @param  integer $category_id   Category id
      * @param  string  $selected_lang Selected language
+     *
      * @return string
      */
     public function getCategoryLanguagesToTranslate($category_id, $selected_lang)
     {
-        $output       = "";
-        $existcatlang = PMF_Utils::languageAvailable($category_id, 'faqcategories');
+        $output       = '';
+        $existcatlang = $this->_config->getLanguage()->languageAvailable($category_id, 'faqcategories');
 
         foreach (PMF_Language::getAvailableLanguages() as $lang => $langname) {
            if (!in_array(strtolower($lang),$existcatlang)) {

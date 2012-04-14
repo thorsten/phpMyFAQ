@@ -135,7 +135,7 @@ if (isset($linkArray['href'])) {
 $answer = $fixedContent; 
 
 // Check for the languages for a faq
-$arrLanguage    = PMF_Utils::languageAvailable($faq->faqRecord['id']);
+$arrLanguage    = $faqConfig->getLanguage()->languageAvailable($faq->faqRecord['id']);
 $switchLanguage = '';
 $check4Lang     = '';
 if (count($arrLanguage) > 1) {

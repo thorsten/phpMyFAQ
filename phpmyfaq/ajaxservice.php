@@ -31,7 +31,7 @@ $action   = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING)
 $ajaxlang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
 $code     = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
 
-$Language     = new PMF_Language();
+$Language     = new PMF_Language($faqConfig);
 $languageCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 require_once 'lang/language_en.php';
 $faqConfig->setLanguage($Language);

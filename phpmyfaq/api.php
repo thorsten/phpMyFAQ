@@ -41,7 +41,7 @@ $categoryId = PMF_Filter::filterInput(INPUT_GET, 'categoryId', FILTER_VALIDATE_I
 $recordId   = PMF_Filter::filterInput(INPUT_GET, 'recordId', FILTER_VALIDATE_INT);
 
 // Get language (default: english)
-$Language = new PMF_Language();
+$Language = new PMF_Language($faqConfig);
 $language = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 
 // Set language

@@ -67,7 +67,7 @@ if ($permission['editcateg']) {
                 <th><?php print $currentLanguage ?></th>
                 <?php
                 // get languages in use for all categories
-                $all_languages = PMF_Utils::languageAvailable(0, $table='faqcategories');
+                $all_languages = $faqConfig->getLanguage()->languageAvailable(0, $table='faqcategories');
                 foreach ($all_languages as $lang) {
                    $all_lang[$lang] = $languageCodes[strtoupper($lang)];
                 }

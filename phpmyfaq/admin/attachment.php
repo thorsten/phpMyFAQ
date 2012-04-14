@@ -48,7 +48,7 @@ $currentSave   = PMF_Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STR
 $currentAction = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 $currentToken  = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 
-$Language = new PMF_Language();
+$Language = new PMF_Language($faqConfig);
 $LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 
 require_once PMF_ROOT_DIR . '/lang/language_en.php';

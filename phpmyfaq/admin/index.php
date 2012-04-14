@@ -45,7 +45,7 @@ session_name(PMF_Session::PMF_COOKIE_NAME_AUTH);
 session_start();
 
 // get language (default: english)
-$Language = new PMF_Language();
+$Language = new PMF_Language($faqConfig);
 $LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 // Preload English strings
 require_once (PMF_ROOT_DIR.'/lang/language_en.php');

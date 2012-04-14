@@ -51,16 +51,72 @@ class PMF_Language
      * @var string
      */
     public static $language = '';
+
+    /**
+     * @var PMF_Configuration
+     */
+    private $config;
     
     /**
      * Constructor
      *
+     * @param PMF_Configuration $config
+     *
      * @return PMF_Language
      */
-    public function __construct()
+    public function __construct(PMF_Configuration $config)
     {
+        $this->config = $config;
     }
-    
+
+    /**
+     * Returns an array of country codes for a specific FAQ record ID,
+     * specific category ID or all languages used by FAQ records , categories
+     *
+     * @param  integer $id    ID
+     * @param  string  $table Specifies table
+     *
+     * @return array
+     */
+    public function languageAvailable($id, $table = 'faqdata')
+    {
+        $output = array();
+
+        if (isset($id)) {
+            if ($id == 0) {
+                // get languages for all ids
+                $distinct = ' DISTINCT ';
+                $where    = '';
+            } else {
+                // get languages for specified id
+                $distinct = '';
+                $where    = " WHERE id = ".$id;
+            }
+
+            $query = sprintf("
+                SELECT %s
+                    lang
+                FROM
+                    %s%s
+                %s",
+                $distinct,
+                SQLPREFIX,
+                $table,
+                $where
+            );
+
+            $result = $this->config->getDb()->query($query);
+
+            if ($this->config->getDb()->numRows($result) > 0) {
+                while ($row = $this->config->getDb()->fetchObject($result)) {
+                    $output[] = $row->lang;
+                }
+            }
+        }
+
+        return $output;
+    }
+
     /**
      * Sets the current language for phpMyFAQ user session
      *

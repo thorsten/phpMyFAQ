@@ -228,53 +228,6 @@ class PMF_Utils
     }
     
     /**
-     * Returns an array of country codes for a specific FAQ record ID, 
-     * specific category ID or all languages used by FAQ records , categories
-     *
-     * @param  integer $id    ID
-     * @param  string  $table Specifies table
-     * @return array
-     */
-    public static function languageAvailable($id, $table = 'faqdata')
-    {
-    	$db     = PMF_Db::getInstance();
-        $output = array();
-
-        if (isset($id)) {
-            if ($id == 0) {
-                // get languages for all ids
-                $distinct = ' DISTINCT ';
-                $where = '';
-            } else {
-                // get languages for specified id
-                $distinct = '';
-                $where = " WHERE id = ".$id;
-            }
-
-            $query = sprintf("
-                SELECT %s
-                    lang
-                FROM
-                    %s%s
-                %s",
-                $distinct,
-                SQLPREFIX,
-                $table,
-                $where);
-        
-            $result = $db->query($query);
-
-            if ($db->numRows($result) > 0) {
-                while ($row = $db->fetchObject($result)) {
-                    $output[] = $row->lang;
-                }
-            }
-        }
-
-        return $output;
-    }
-    
-    /**
      * This method chops a string
      *
      * @param string  $string String to chop

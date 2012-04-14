@@ -27,7 +27,7 @@ session_start();
 //
 // get language (default: english)
 //
-$Language = new PMF_Language();
+$Language = new PMF_Language($faqConfig);
 $LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 
 // Preload English strings

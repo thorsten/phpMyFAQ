@@ -31,7 +31,7 @@ $searchString = PMF_Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_ST
 $ajaxLanguage = PMF_Filter::filterInput(INPUT_POST, 'ajaxlanguage', FILTER_SANITIZE_STRING, 'en');
 $categoryId   = PMF_Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALIDATE_INT, '%');
 
-$language     = new PMF_Language();
+$language     = new PMF_Language($faqConfig);
 $languageCode = $language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 require_once 'lang/language_en.php';
 
