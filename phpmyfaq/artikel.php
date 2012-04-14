@@ -156,7 +156,7 @@ if (count($arrLanguage) > 1) {
 // List all faq attachments
 if ($faqConfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['active']) {
     
-    $attList = PMF_Attachment_Factory::fetchByRecordId($faq->faqRecord['id']);
+    $attList = PMF_Attachment_Factory::fetchByRecordId($faqConfig, $faq->faqRecord['id']);
     $outstr  = '';
     
     while (list(,$att) = each($attList)) {

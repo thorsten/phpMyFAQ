@@ -198,7 +198,7 @@ if ($permission['editbt']) {
                     $visits->add($record_id, $translated_lang);
 
                     // Set attachment relations
-                    $attachments = PMF_Attachment_Factory::fetchByRecordId($record_id);
+                    $attachments = PMF_Attachment_Factory::fetchByRecordId($faqConfig, $record_id);
                     foreach ($attachments as $attachment) {
                         if ($attachment instanceof PMF_Attachment_Abstract) {
                             $attachment->setId(null);

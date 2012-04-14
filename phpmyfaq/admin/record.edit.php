@@ -254,7 +254,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                             ?>
                             <ul class="adminAttachments">
                                 <?php
-                                $attList = PMF_Attachment_Factory::fetchByRecordId($faqData['id']);
+                                $attList = PMF_Attachment_Factory::fetchByRecordId($faqConfig, $faqData['id']);
                                 foreach ($attList as $att) {
                                     printf('<li><a href="../%s">%s</a> ',
                                         $att->buildUrl(),

@@ -52,11 +52,16 @@ class PMF_Attachment_Factory
     private static $storageType = null;
     
     /**
-     * Weither file encryption is enabled
+     * File encryption is enabled
      *
      * @var boolean
      */
     private static $encryptionEnabled = null;
+
+    /**
+     * @var PMF_Configuration
+     */
+    private $config;
     
     /**
      * Create an attachment exemplar
@@ -101,14 +106,15 @@ class PMF_Attachment_Factory
     /**
      * Fetch all record attachments
      *
+     * @param PMF_Configuration $config
      * @param integer $recordId ID of the record
      *
      * @return array
      */
-    public static function fetchByRecordId($recordId)
+    public static function fetchByRecordId(PMF_Configuration $config, $recordId)
     {
-        $retval = array();
-        $db     = PMF_Db::getInstance();
+        $this->config = $config;
+        $retval       = array();
         
         $sql = sprintf("
             SELECT
@@ -123,7 +129,7 @@ class PMF_Attachment_Factory
             $recordId,
             PMF_Language::$language);
         
-        $result = $db->fetchAll($db->query($sql));
+        $result = $this->config->getDb()->fetchAll($this->config->getDb()->query($sql));
         if ($result) {
             foreach ($result as $item) {
                 $retval[] = self::create($item->id);
