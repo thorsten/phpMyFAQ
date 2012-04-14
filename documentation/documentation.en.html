@@ -84,6 +84,7 @@ pre { font: 15px monospace; border: 1px solid gray; padding: 5px; }
             <li><a href="#5j">Exports</a></li>
             <li><a href="#5k">Backup</a></li>
             <li><a href="#5l">Configuration</a></li>
+            <li><a href="#5m">Multisite Configuration</a></li>
         </ol></li>
         <li><strong><a href="#6">Customizing phpMyFAQ</a></strong>
         <ol class="alpha">
@@ -230,7 +231,7 @@ pre { font: 15px monospace; border: 1px solid gray; padding: 5px; }
     Should you not meet the requirements, you cannot start the installation
     process.</p>
     <p>In case you have PHP below 5.3.2 installed you cannot use phpMyFAQ.</p>
-    <p>phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers 
+    <p>phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers
     are Mozilla Firefox 3.6 and later (Windows/MacOS X/Linux), Safari 5.x or later
     (MacOS X/Windows/iOS), Chrome 5 or later (Windows/MacOS X/Linux), Opera 11.0
     or later (Windows/MacOS X/Linux) and Internet Explorer 8 or later for Windows.
@@ -437,7 +438,7 @@ pre { font: 15px monospace; border: 1px solid gray; padding: 5px; }
         <li>supports automatic page break;</li>
         <li>supports automatic page numbering and page groups;</li>
         <li>supports automatic line break and text justification;</li>
-        <li>supports JPEG and PNG images natively, all images supported by GD 
+        <li>supports JPEG and PNG images natively, all images supported by GD
         (GD, GD2, GD2PART, GIF, JPEG, PNG, BMP, XBM, XPM)</li>
     </ul>
     <p><a href="#top">back to top</a></p>
@@ -923,8 +924,8 @@ sub vcl_fetch {
         category and the complete tag cloud of the whole FAQ.
     </p>
     <p><a href="#top">back to top</a></p>
-   
-   
+
+
     <hr style="width: 90%; height: 1px;"  />
     <p>
         <strong><a name="4k"></a>4.k. Public user registration</strong>
@@ -1100,8 +1101,8 @@ sub vcl_fetch {
     if you select an old revision and save them as a new one.</li>
 
     <li><strong>Date</strong><br />
-    You have three options for the FAQ creation date. You can choose to refresh the date 
-    of the FAQ entry for every update, or you can keep the date, or you can set an 
+    You have three options for the FAQ creation date. You can choose to refresh the date
+    of the FAQ entry for every update, or you can keep the date, or you can set an
     individual date for the FAQ entry.</li>
 
     <li><strong>Permissions</strong><br />
@@ -1289,6 +1290,49 @@ sub vcl_fetch {
 
     <hr style="width: 90%; height: 1px;"  />
     <p>
+        <strong><a name="5m"></a>5.m. Multisite Configuration</strong>
+    </p>
+    <ul>
+        <li>
+            In order to host several distinct installations (with different configs, different templates and
+            most importantly, different database credentials), but only want to update once,
+            you need to follow these steps:
+
+            <ul>
+              <li>
+                  Make sure you have the <tt>multisite/</tt> directory in your document root and <tt>multisite.php</tt>
+                  in it
+              </li>
+              <li>
+                  For every seperate installation there needs to be a subdirectory of <tt>multisite/</tt> named
+                  exactly like the hostname of the seperate installation.<br />
+                  For example, if you want to use <em>faq.example.org</em> and <em>beta.faq.example.org</em>,
+                  it needs to look like this:<br />
+<pre>
+.
+|-- [...]
+|-- config
+|   |-- constants_ldap.php
+|   |-- constants.php
+|   `-- database.php
+`-- multisite
+    |-- multisite.php
+    `-- beta.faq.example.org
+        |-- constants_ldap.php
+        |-- constants.php
+        `-- database.php
+</pre>
+              </li>
+              </li>
+              </li>
+            </ul>
+        </li>
+    </ul>
+    <p><a href="#top">back to top</a></p>
+
+
+    <hr style="width: 90%; height: 1px;"  />
+    <p>
         <strong><a name="6"></a>6. Customizing phpMyFAQ 2.8.x</strong>
     </p>
     <p>
@@ -1371,7 +1415,7 @@ sub vcl_fetch {
         <li>
             activate &lt;custom_template_set&gt; within Admin->Config->Main
         </li>
-    </ul>   
+    </ul>
     <p>
         <strong>Note:</strong> There is a magic variable <em>{tplSetName}</em> containing the name of the actual layout
         available in each template file.
@@ -1412,7 +1456,7 @@ sub vcl_fetch {
         <code>
         {"version":"2.8.0"}
         </code></li>
-        
+
         <li><strong>getApiVersion()</strong>
         <ul>
             <li>http://www.example.org/phpmyfaq/api.php?action=getApiVersion (standard)</li>
@@ -1425,13 +1469,13 @@ sub vcl_fetch {
         <code>
         {"apiVersion":1}
         </code></li>
-        
+
         <li><strong>search()</strong>
         <ul>
             <li>http://www.example.org/phpmyfaq/api.php?action=search&amp;lang=en&amp;q=phpMyFAQ (standard)</li>
             <li>http://www.example.org/phpmyfaq/api/search/en/phpMyFAQ (rewrite rules enabled)</li>
         </ul>
-        <p>You have two variables, <em>lang</em> for the language and <em>q</em> for the search term. You'll 
+        <p>You have two variables, <em>lang</em> for the language and <em>q</em> for the search term. You'll
         get an JSON object as result with the follwing structure:</p>
         <code>
     [
@@ -1453,7 +1497,7 @@ sub vcl_fetch {
         }
     ]
         </code></li>
-        
+
         <li><strong>getCategories()</strong>
         <ul>
             <li>http://www.example.org/phpmyfaq/api.php?action=getCategories (standard)</li>
@@ -1481,13 +1525,13 @@ sub vcl_fetch {
         "level":0}
     ]
         </code></li>
-        
+
         <li><strong>getFaqs()</strong>
         <ul>
             <li>http://www.example.org/phpmyfaq/api.php?action=getFaqs&amp;lang=en&amp;categoryId=1 (standard)</li>
             <li>http://www.example.org/phpmyfaq/api/getFaqs/en/1 (rewrite rules enabled)</li>
         </ul>
-        <p>You have two variables, <em>lang</em> for the language and <em>categoryId</em> for the category id. You'll 
+        <p>You have two variables, <em>lang</em> for the language and <em>categoryId</em> for the category id. You'll
         get an JSON object as result with the follwing structure:</p>
         <code>
     [
@@ -1512,13 +1556,13 @@ sub vcl_fetch {
         }
     ]
         </code></li>
-        
+
         <li><strong>getFaq()</strong>
         <ul>
             <li>http://www.example.org/phpmyfaq/api.php?action=getFaq&amp;lang=en&amp;recordId=1 (standard)</li>
             <li>http://www.example.org/phpmyfaq/api/getFaq/en/1 (rewrite rules enabled)</li>
         </ul>
-        <p>You have two variables, <em>lang</em> for the language and <em>recordId</em> for the record id. You'll 
+        <p>You have two variables, <em>lang</em> for the language and <em>recordId</em> for the record id. You'll
         get an JSON object as result with the follwing structure:</p>
         <code>
         {
@@ -1541,8 +1585,8 @@ sub vcl_fetch {
         "linkCheckDate":"0"
         }
         </code></li>
-        
-    </ul>    
+
+    </ul>
     <p><a href="#top">back to top</a></p>
 
     <hr style="width: 90%; height: 1px;"  />
