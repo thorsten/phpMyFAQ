@@ -103,7 +103,6 @@ class PMF_Instance_ClientTest extends PHPUnit_Framework_TestCase
         $this->assertFileExists(__DIR__ . '/constants_ldap.test.php');
     }
 
-    /*
     public function testCopyTemplateFolder()
     {
         $return = $this->PMF_Instance_Client->copyTemplateFolder(__DIR__);
@@ -111,5 +110,4 @@ class PMF_Instance_ClientTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($return);
         $this->assertFileExists(__DIR__ . '/template/default/index.tpl');
     }
-    */
 }

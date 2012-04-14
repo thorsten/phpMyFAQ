@@ -145,7 +145,7 @@ class PMF_Filesystem
 
         $directoryName = substr($source, strrpos($source, '/') + 1);
 
-        $this->mkdir($dest . '/' . $directoryName, 0750);
+        $this->mkdir($dest . '/' . $directoryName, 0750, true);
 
         while ($file = readdir($directoryHandle))
         {
@@ -182,6 +182,7 @@ class PMF_Filesystem
         if (is_dir($pathname)) {
             return true; // Directory already exists
         }
+
         return mkdir($pathname, $mode, $recursive);
     }
 
