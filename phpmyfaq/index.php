@@ -28,11 +28,12 @@
 define('IS_VALID_PHPMYFAQ', null);
 
 //
-// Check if config/database.php exist -> if not, redirect to installer
+// Check if multisite/multisite.php exist for Multisite support
 //
 if (file_exists('./multisite/multisite.php')) {
     require './multisite/multisite.php';
 }
+
 //
 // Read configuration and constants
 //
@@ -44,6 +45,9 @@ if (! defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
     define('PMF_CONFIG_DIR', PMF_MULTI_INSTANCE_CONFIG_DIR);
 }
 
+//
+// Check if config/database.php exist -> if not, redirect to installer
+//
 if (!file_exists(PMF_CONFIG_DIR . '/database.php')) {
     header("Location: install/setup.php");
     exit();
