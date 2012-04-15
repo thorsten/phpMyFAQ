@@ -1,9 +1,12 @@
-phpMyFAQ 2.7.5
+phpMyFAQ 2.7.6
 Codename "Prospero"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.7.6 - 2012-
+- updated Dutch translation
 
 Version 2.7.5 - 2012-04-14
 - fixed serious security issue in bundled ImageManager library (Thorsten)
