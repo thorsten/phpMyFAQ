@@ -55,7 +55,7 @@
 # phpMyFAQ
 #
 %define name        phpmyfaq
-%define version     2.7.5
+%define version     2.7.6
 %define release     1
 %define epoch       0
 
@@ -130,7 +130,7 @@ Requires:           apache
 %else
 Requires:           httpd
 %endif
-Requires:           php >= 5.2.0
+Requires:           php >= 5.2.3
 # GD is bundled into PHP starting from PHP 4.3.0
 Requires:           php-gd
 # We do not require MySQL but one among the several DB supported by phpMyFAQ.
@@ -153,6 +153,9 @@ installation script.
 
 %changelog
 ==========
+
+* Sun Apr 15 2012 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.6-1
+- New upstream version 2.7.6
 
 * Mon Feb 24 2012 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.5-1
 - New upstream version 2.7.5
