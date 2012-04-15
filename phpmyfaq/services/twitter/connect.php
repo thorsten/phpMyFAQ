@@ -37,4 +37,4 @@ if ($faqConfig->get('socialnetworks.twitterConsumerKey') === '' ||
     exit;
 }
 
-print '<a href="./redirect.php"><img src="./images/twitter.signin.png" alt="Sign in with Twitter"/></a>';
+print '<a href="./redirect.php"><img src="../img/twitter.signin.png" alt="Sign in with Twitter"/></a>';

@@ -17,7 +17,7 @@ phpmyfaq/config/database.bak.php
 phpmyfaq/config/index.html
 phpmyfaq/data*
 phpmyfaq/pdf*
-phpmyfaq/xml*
+phpmyfaq/images*
 phpmyfaq/attachments*
 phpmyfaq/inc/data.php
 phpmyfaq/inc/index.html

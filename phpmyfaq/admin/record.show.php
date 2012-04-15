@@ -338,7 +338,7 @@ if ($permission['editbt'] || $permission['delbt']) {
         <div class="categorylisting">
             <a href="javascript:void(0);"
                onclick="showhideCategory('category_<?php print $cid; ?>');">
-                <img src="../images/more.gif" width="11" height="11" alt="" />
+                <img src="../img/more.gif" width="11" height="11" alt="" />
                 <?php print $category->getPath($cid); ?>
             </a>
             <?php print $catInfo;?>

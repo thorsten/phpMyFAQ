@@ -662,7 +662,7 @@ class PMF_Category
                 $totFaqRecords += $number[$parent];
                 $num_entries    = '<span id="rssCategoryLink"> ('.$plr->GetMsg('plmsgEntries',$number[$parent]);
                 $num_entries   .= sprintf(
-                    ' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank"><img id="category_%d_RSS" src="images/feed.png" width="16" height="16" alt="RSS" border="0" /></a>',
+                    ' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank"><img id="category_%d_RSS" src="img/feed.png" width="16" height="16" alt="RSS" border="0" /></a>',
                     $parent,
                     $this->language,
                     $parent
@@ -769,7 +769,8 @@ class PMF_Category
         $oLink->text      = $categoryName;
 
         if ($hasChildren) {
-            $oLink->text .= sprintf(' <img src="images/more.gif" width="11" height="11" alt="%s" style="border: none; vertical-align: middle;" />',
+            $oLink->text .= sprintf(
+                ' <img src="img/more.gif" width="11" height="11" alt="%s" style="border: none; vertical-align: middle;" />',
                 $categoryName);
         }
 

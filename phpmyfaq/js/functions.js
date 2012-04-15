@@ -196,7 +196,7 @@ function saveFormValues(action, formName)
     var formValues = $('#formValues');
 
     $('#loader').show();
-    $('#loader').fadeIn(400).html('<img src="images/ajax-loader.gif" />Saving ...');
+    $('#loader').fadeIn(400).html('<img src="img/ajax-loader.gif" />Saving ...');
 
     $.ajax({
         type:     'post',
@@ -301,7 +301,7 @@ function checkQuestion()
     var formValues = $('#formValues');
 
     $('#loader').show();
-    $('#loader').fadeIn(400).html('<img src="images/ajax-loader.gif" />Saving ...');
+    $('#loader').fadeIn(400).html('<img src="img/ajax-loader.gif" />Saving ...');
 
     $.ajax({
         type:     'post',
