@@ -281,7 +281,7 @@ class PMF_Stopwords
             return true;
         }
 
-        $bannedWords = getBannedWords();
+        $bannedWords = $this->getBannedWords();
         // We just search a match of, at least, one banned word into $content
         $content = PMF_String::strtolower($content);
         if (is_array($bannedWords)) {

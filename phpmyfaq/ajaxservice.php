@@ -139,7 +139,7 @@ switch ($action) {
                         $faq->faqRecord['id'],
                         $faq->faqRecord['lang']
                     );
-                    $
+
                     $oLink            = new PMF_Link($faqUrl, $faqConfig);
                     $oLink->itemTitle = $faq->faqRecord['title'];
                     $urlToContent     = $oLink->toString();

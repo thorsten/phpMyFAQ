@@ -1,6 +1,7 @@
 <?php
 /**
  * Multisite support for phpMyFAQ.
+ *
  * HowTo:
  *  - Rename this file to <DOCROOT>/multisite/multisite.php
  *      i.e. /srv/www/faq.example.org/multisite/multisite.php

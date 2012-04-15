@@ -32,7 +32,7 @@
  </target>
 
  <target name="mergejs" description="Merges all JavaScript files into one file">
-     <concat destfile="${basedir}/phpmyfaq/js/phpmyfaq.js" force="yes">
+     <concat destfile="${basedir}/phpmyfaq/assets/js/phpmyfaq.js" force="yes">
          <filelist dir="${basedir}/vendor/bootstrap/js" files="bootstrap-transition.js" />
          <filelist dir="${basedir}/vendor/bootstrap/js" files="bootstrap-alert.js" />
          <filelist dir="${basedir}/vendor/bootstrap/js" files="bootstrap-button.js" />
@@ -45,7 +45,7 @@
          <filelist dir="${basedir}/vendor/bootstrap/js" files="bootstrap-scrollspy.js" />
          <filelist dir="${basedir}/vendor/bootstrap/js" files="bootstrap-tab.js" />
          <filelist dir="${basedir}/vendor/bootstrap/js" files="bootstrap-typeahead.js" />
-         <filelist dir="${basedir}/phpmyfaq/js" files="functions.js" />
+         <filelist dir="${basedir}/phpmyfaq/assets/js" files="functions.js" />
      </concat>
  </target>
 
