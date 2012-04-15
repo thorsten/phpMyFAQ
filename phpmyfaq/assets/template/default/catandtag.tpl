@@ -2,10 +2,10 @@
         <section class="well">
             <div id="social">
                 <a href="{link_facebook}" target="_blank">
-                    <img src="images/facebook.png" alt="{writeFacebookMsgTag}" title="{writeFacebookMsgTag}" width="32" height="32" border="0" />
+                    <img src="assets/img/facebook.png" alt="{writeFacebookMsgTag}" title="{writeFacebookMsgTag}" width="32" height="32" border="0" />
                 </a>
                 <a href="{link_twitter}" target="_blank">
-                    <img src="images/twitter.png" alt="{writeTwitterMsgTag}" title="{writeTwitterMsgTag}" width="32" height="32" border="0" />
+                    <img src="assets/img/twitter.png" alt="{writeTwitterMsgTag}" title="{writeTwitterMsgTag}" width="32" height="32" border="0" />
                 </a>
                 <a href="{link_delicious}" target="_blank">
                     <img src="assets/img/delicious.png" alt="{writeDeliciousMsgTag}" title="{writeDeliciousMsgTag}" width="32" height="32" border="0" />
