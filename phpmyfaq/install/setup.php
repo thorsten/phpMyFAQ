@@ -83,13 +83,13 @@ $instanceSetup->setRootDir(PMF_ROOT_DIR);
     <meta name="application-name" content="phpMyFAQ <?php print PMF_System::getVersion(); ?>">
     <meta name="copyright" content="(c) 2001-<?php print date('Y'); ?> phpMyFAQ Team">
 
-    <link rel="stylesheet" href="../template/default/css/style.css?v=1">
+    <link rel="stylesheet" href="../assets/template/default/css/style.css?v=1">
 
-    <script src="../js/libs/modernizr.min.js"></script>
-    <script src="../js/libs/jquery.min.js"></script>
+    <script src="../assets/js/libs/modernizr.min.js"></script>
+    <script src="../assets/js/libs/jquery.min.js"></script>
 
-    <link rel="shortcut icon" href="../template/default/favicon.ico">
-    <link rel="apple-touch-icon" href="../template/default/apple-touch-icon.png">
+    <link rel="shortcut icon" href="../assets/template/default/favicon.ico">
+    <link rel="apple-touch-icon" href="../assets/template/default/apple-touch-icon.png">
 
     <script type="text/javascript">
         function selectDatabaseSetup(field) {
@@ -190,7 +190,7 @@ if (! $system->checkphpMyFAQInstallation()) {
     die();
 }
 
-$dirs       = array('/attachments', '/config', '/data');
+$dirs       = array('/attachments', '/config', '/data', '/images');
 $faileddirs = $instanceSetup->checkDirs($dirs);
 
 if (sizeof($faileddirs)) {

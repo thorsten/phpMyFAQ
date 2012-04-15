@@ -112,13 +112,13 @@ if (is_null($currentAction) || !is_null($currentSave)) {
 
     <link rel="stylesheet" href="css/style.css?v=1">
 
-    <script src="../js/libs/modernizr.min.js"></script>
-    <script src="../js/libs/jquery.min.js"></script>
-    <script src="../js/functions.js"></script>
-    <script src="../js/phpmyfaq.js"></script>
+    <script src="../assets/js/libs/modernizr.min.js"></script>
+    <script src="../assets/js/libs/jquery.min.js"></script>
+    <script src="../assets/js/functions.js"></script>
+    <script src="../assets/js/phpmyfaq.js"></script>
 
-    <link rel="shortcut icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico">
-    <link rel="apple-touch-icon" href="../template/<?php print PMF_Template::getTplSetName(); ?>/apple-touch-icon.png">
+    <link rel="shortcut icon" href="../assets/template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico">
+    <link rel="apple-touch-icon" href="../assets/template/<?php print PMF_Template::getTplSetName(); ?>/apple-touch-icon.png">
 </head>
 <body class="attachments">
 

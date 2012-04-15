@@ -133,7 +133,7 @@
                 {writeComments}
             </div>
 
-            <script src="js/plugins/rating/jquery.rating.pack.js"></script>
+            <script src="assets/js/plugins/rating/jquery.rating.pack.js"></script>
             <script>
             $('.voting').rating({
                 callback: function(value, link){
@@ -147,16 +147,16 @@
                 $('form#formValues').submit(function() { return false; });
             });
             </script>
-            <script src="js/syntaxhighlighter/scripts/shCore.js"></script>
-            <script src="js/syntaxhighlighter/scripts/shAutoloader.js"></script>
+            <script src="assets/js/syntaxhighlighter/scripts/shCore.js"></script>
+            <script src="assets/js/syntaxhighlighter/scripts/shAutoloader.js"></script>
             <script>
             SyntaxHighlighter.autoloader(
-                'js jscript javascript  inc/js/syntaxhighlighter/scripts/shBrushJScript.js',
-                'applescript            inc/js/syntaxhighlighter/scripts/shBrushAppleScript.js',
-                'xml xhtml xslt html    inc/js/syntaxhighlighter/scripts/shBrushXml.js',
-                'bash shell             inc/js/syntaxhighlighter/scripts/shBrushBash.js',
-                'php                    inc/js/syntaxhighlighter/scripts/shBrushPhp.js',
-                'sql                    inc/js/syntaxhighlighter/scripts/shBrushSql.js'
+                'js jscript javascript  assets/js/syntaxhighlighter/scripts/shBrushJScript.js',
+                'applescript            assets/js/syntaxhighlighter/scripts/shBrushAppleScript.js',
+                'xml xhtml xslt html    assets/js/syntaxhighlighter/scripts/shBrushXml.js',
+                'bash shell             assets/js/syntaxhighlighter/scripts/shBrushBash.js',
+                'php                    assets/js/syntaxhighlighter/scripts/shBrushPhp.js',
+                'sql                    assets/js/syntaxhighlighter/scripts/shBrushSql.js'
             );
             SyntaxHighlighter.all();
             </script>

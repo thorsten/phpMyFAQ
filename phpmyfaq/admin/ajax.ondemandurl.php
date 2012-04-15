@@ -82,9 +82,9 @@ if (count(ob_list_handlers()) > 0) {
 
     <link rel="stylesheet" href="style/admin.css?v=1">
 
-    <script src="../inc/js/modernizr.min.js"></script>
-    <script src="../inc/js/jquery.min.js"></script>
-    <script src="../inc/js/functions.js"></script>
+    <script src="../assets/js/modernizr.min.js"></script>
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/functions.js"></script>
 </head>
 <body dir="<?php print $PMF_LANG["dir"]; ?>">
 <?php

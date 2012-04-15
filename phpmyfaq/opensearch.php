@@ -47,7 +47,7 @@ $opensearchXml->startElement('Image');
 $opensearchXml->writeAttribute('height', 16);
 $opensearchXml->writeAttribute('width', 16);
 $opensearchXml->writeAttribute('type', 'image/png');
-$opensearchXml->text($baseUrl . '/img/pmfsearch.png');
+$opensearchXml->text($baseUrl . '/assets/img/pmfsearch.png');
 
 $opensearchXml->endDocument();
 

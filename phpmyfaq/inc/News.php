@@ -164,7 +164,7 @@ class PMF_News
 
 
             $output .= sprintf(
-                '<header><h3><a name="news_%d" href="%s">%s <img class="goNews" src="img/more.gif" width="11" height="11" alt="%s" /></a></h3></header>',
+                '<header><h3><a name="news_%d" href="%s">%s <img class="goNews" src="assets/img/more.gif" width="11" height="11" alt="%s" /></a></h3></header>',
                 $item['id'],
                 $oLink->toString(),
                 $item['header'],

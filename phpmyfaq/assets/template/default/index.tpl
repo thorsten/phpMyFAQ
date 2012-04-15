@@ -26,14 +26,14 @@
     <meta property="og:description" content="{metaDescription}" />
     <meta property="og:image" content="" />
 
-    <link rel="stylesheet" href="template/{tplSetName}/css/{stylesheet}.css?v=1">
+    <link rel="stylesheet" href="assets/template/{tplSetName}/css/{stylesheet}.css?v=1">
 
-    <script src="js/libs/modernizr.min.js"></script>
-    <script src="js/libs/jquery.min.js"></script>
-    <script src="js/phpmyfaq.js"></script>
+    <script src="assets/js/libs/modernizr.min.js"></script>
+    <script src="assets/js/libs/jquery.min.js"></script>
+    <script src="assets/js/phpmyfaq.js"></script>
 
-    <link rel="shortcut icon" href="template/{tplSetName}/favicon.ico">
-    <link rel="apple-touch-icon" href="template/{tplSetName}/apple-touch-icon.png">
+    <link rel="shortcut icon" href="assets/template/{tplSetName}/favicon.ico">
+    <link rel="apple-touch-icon" href="assets/template/{tplSetName}/apple-touch-icon.png">
     
     <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="feed/news/rss.php">
     <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="feed/topten/rss.php">

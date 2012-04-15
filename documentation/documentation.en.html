@@ -88,8 +88,8 @@ pre { font: 15px monospace; border: 1px solid gray; padding: 5px; }
         </ol></li>
         <li><strong><a href="#6">Customizing phpMyFAQ</a></strong>
         <ol class="alpha">
-            <li><a href="#6a">The file template/default/index.tpl</a></li>
-            <li><a href="#6b">The file template/default/style.css</a></li>
+            <li><a href="#6a">The file assets/template/default/index.tpl</a></li>
+            <li><a href="#6b">The file assets/template/default/style.css</a></li>
             <li><a href="#6c">More Templates</a></li>
         </ol></li>
         <li><strong><a href="#7">Customizing phpMyFAQ</a></strong>
@@ -665,7 +665,7 @@ sub vcl_fetch {
     </p>
     <ul>
         <li>the file <strong>data.php</strong> in the directory <strong>inc/</strong> </li>
-        <li>all files in the <strong>template/</strong> directory</li>
+        <li>all files in the <strong>assets/template/</strong> directory</li>
         <li>the directory <strong>attachments/</strong></li>
         <li>the directory <strong>data/</strong></li>
         <li>the directory <strong>images/</strong></li>
@@ -681,14 +681,14 @@ sub vcl_fetch {
     </p>
     <p>
         The update script will move your template files to a folder <strong>backup/</strong> in the directory
-        <strong>template/</strong>. The default layout will be stored in the folder <strong>template/default/</strong>.
+        <strong>assets/template/</strong>. The default layout will be stored in the folder <strong>assets/template/default/</strong>.
     </p>
     <p>
         Note: We changed the character set for all languages and templates to UTF-8. If you notice problems with e.g.
         German umlauts you have to convert your templates to UTF-8 encoding.
     </p>
     <p>
-        Please copy the template file <strong>template/default/indexLogin.tpl</strong> into your template folder.
+        Please copy the template file <strong>assets/template/default/indexLogin.tpl</strong> into your template folder.
     </p>
     <p><a href="#top">back to top</a></p>
 
@@ -702,7 +702,7 @@ sub vcl_fetch {
     </p>
     <ul>
         <li>all files in the directory <strong>config/</strong> </li>
-        <li>all files in the directory <strong>template/</strong></li>
+        <li>all files in the directory <strong>assets/template/</strong></li>
         <li>the directory <strong>attachments/</strong></li>
         <li>the directory <strong>images/</strong></li>
     </ul>
@@ -716,7 +716,7 @@ sub vcl_fetch {
         1.0 to HTML5.
     </p>
     <p>
-        Please copy the template file <strong>template/default/indexLogin.tpl</strong> into your template folder.
+        Please copy the template file <strong>assets/template/default/indexLogin.tpl</strong> into your template folder.
     </p>
     <p><a href="#top">back to top</a></p>
 
@@ -730,7 +730,7 @@ sub vcl_fetch {
     </p>
     <ul>
         <li>all files in the directory <strong>config/</strong> </li>
-        <li>all files in the directory <strong>template/</strong></li>
+        <li>all files in the directory <strong>assets/template/</strong></li>
         <li>the directory <strong>attachments/</strong></li>
         <li>the directory <strong>images/</strong></li>
     </ul>
@@ -755,7 +755,7 @@ sub vcl_fetch {
     </p>
     <ul>
         <li>all files in the directory <strong>config/</strong> </li>
-        <li>all files in the directory <strong>template/</strong></li>
+        <li>all files in the directory <strong>assets/template/</strong></li>
         <li>the directory <strong>attachments/</strong></li>
         <li>the directory <strong>images/</strong></li>
     </ul>
@@ -1412,7 +1412,7 @@ sub vcl_fetch {
     <p>
         In phpMyFAQ code and layout are separated. The layout is based on several template files, that you can modify
         to suit your own needs. The most important files for phpMyFAQ's default layout can be found in the directory
-        <em>template/default/</em>. All original templates are valid HTML5 and we don't use tables for layout reasons.
+        <em>assets/template/default/</em>. All original templates are valid HTML5 and we don't use tables for layout reasons.
     </p>
     <p>
         <strong>Note:</strong> You can change the layout of the admin area using the CSS file
@@ -1423,7 +1423,7 @@ sub vcl_fetch {
 
     <hr style="width: 90%; height: 1px;"  />
     <p>
-        <strong><a name="6a"></a>6.a. The file template/default/index.tpl</strong>
+        <strong><a name="6a"></a>6.a. The file assets/template/default/index.tpl</strong>
     </p>
     <p>
         The default layout of phpMyFAQ is saved in the <strong>index.tpl</strong> file. This is a normal HTML5 file
@@ -1444,7 +1444,7 @@ sub vcl_fetch {
 
     <hr style="width: 90%; height: 1px;"  />
     <p>
-        <strong><a name="6b"></a>6.b. The file template/default/css/style.css</strong>
+        <strong><a name="6b"></a>6.b. The file assets/template/default/css/style.css</strong>
     </p>
     <p>
         All formatting such as fonts and the like can be modified in the CSS-file <strong>style.css</strong> for

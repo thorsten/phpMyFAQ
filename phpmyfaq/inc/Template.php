@@ -88,7 +88,7 @@ class PMF_Template
         
         foreach ($myTemplate as $templateName => $filename) {
             $this->templates[$templateName] = $this->_include(
-                'template/' . $tplSetName . '/' . $filename,
+                'assets/template/' . $tplSetName . '/' . $filename,
                 $templateName
             );
         }

@@ -104,7 +104,7 @@ tinyMCE.init({
     save_onsavecallback : "phpMyFAQSave",
 
     // Example content CSS (should be your site CSS)
-    content_css : "../template/<?php print PMF_Template::getTplSetName(); ?>/css/style.css,css/style.css",
+    content_css : "../assets/template/<?php print PMF_Template::getTplSetName(); ?>/css/style.css,css/style.css",
 
     // Drop lists for link/image/media/template dialogs
     template_external_list_url : "js/template_list.js",
@@ -171,27 +171,27 @@ function phpMyFAQSave()
 <!-- /tinyMCE -->
 
 <!-- SyntaxHighlighter -->
-<script src="../js/syntaxhighlighter/scripts/shCore.js"></script>
-<script src="../js/syntaxhighlighter/scripts/shBrushBash.js"></script>
-<script src="../js/syntaxhighlighter/scripts/shBrushCpp.js"></script>
-<script src="../js/syntaxhighlighter/scripts/shBrushCSharp.js"></script>
-<script src="../js/syntaxhighlighter/scripts/shBrushCss.js"></script>
-<script src="../js/syntaxhighlighter/scripts/shBrushDelphi.js"></script>
-<script src="../js/syntaxhighlighter/scripts/shBrushDiff.js"></script>
-<script src="../js/syntaxhighlighter/scripts/shBrushGroovy.js"></script>
-<script src="../js/syntaxhighlighter/scripts/shBrushJava.js"></script>
-<script src="../js/syntaxhighlighter/scripts/shBrushJScript.js"></script>
-<script src="../js/syntaxhighlighter/scripts/shBrushPhp.js"></script>
-<script src="../js/syntaxhighlighter/scripts/shBrushPerl.js"></script>
-<script src="../js/syntaxhighlighter/scripts/shBrushPlain.js"></script>
-<script src="../js/syntaxhighlighter/scripts/shBrushPython.js"></script>
-<script src="../js/syntaxhighlighter/scripts/shBrushRuby.js"></script>
-<script src="../js/syntaxhighlighter/scripts/shBrushScala.js"></script>
-<script src="../js/syntaxhighlighter/scripts/shBrushSql.js"></script>
-<script src="../js/syntaxhighlighter/scripts/shBrushVb.js"></script>
-<script src="../js/syntaxhighlighter/scripts/shBrushXml.js"></script>
-<link type="text/css" rel="stylesheet" href="../js/syntaxhighlighter/styles/shCore.css"/>
-<link type="text/css" rel="stylesheet" href="../js/syntaxhighlighter/styles/shThemeDefault.css"/>
+<script src="../assets/js/syntaxhighlighter/scripts/shCore.js"></script>
+<script src="../assets/js/syntaxhighlighter/scripts/shBrushBash.js"></script>
+<script src="../assets/js/syntaxhighlighter/scripts/shBrushCpp.js"></script>
+<script src="../assets/js/syntaxhighlighter/scripts/shBrushCSharp.js"></script>
+<script src="../assets/js/syntaxhighlighter/scripts/shBrushCss.js"></script>
+<script src="../assets/js/syntaxhighlighter/scripts/shBrushDelphi.js"></script>
+<script src="../assets/js/syntaxhighlighter/scripts/shBrushDiff.js"></script>
+<script src="../assets/js/syntaxhighlighter/scripts/shBrushGroovy.js"></script>
+<script src="../assets/js/syntaxhighlighter/scripts/shBrushJava.js"></script>
+<script src="../assets/js/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+<script src="../assets/js/syntaxhighlighter/scripts/shBrushPhp.js"></script>
+<script src="../assets/js/syntaxhighlighter/scripts/shBrushPerl.js"></script>
+<script src="../assets/js/syntaxhighlighter/scripts/shBrushPlain.js"></script>
+<script src="../assets/js/syntaxhighlighter/scripts/shBrushPython.js"></script>
+<script src="../assets/js/syntaxhighlighter/scripts/shBrushRuby.js"></script>
+<script src="../assets/js/syntaxhighlighter/scripts/shBrushScala.js"></script>
+<script src="../assets/js/syntaxhighlighter/scripts/shBrushSql.js"></script>
+<script src="../assets/js/syntaxhighlighter/scripts/shBrushVb.js"></script>
+<script src="../assets/js/syntaxhighlighter/scripts/shBrushXml.js"></script>
+<link type="text/css" rel="stylesheet" href="../assets/js/syntaxhighlighter/styles/shCore.css"/>
+<link type="text/css" rel="stylesheet" href="../assets/js/syntaxhighlighter/styles/shThemeDefault.css"/>
 <script type="text/javascript">
     SyntaxHighlighter.config.clipboardSwf = '../js/syntaxhighlighter/scripts/clipboard.swf';
     SyntaxHighlighter.all();

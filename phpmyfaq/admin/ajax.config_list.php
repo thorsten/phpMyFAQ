@@ -213,7 +213,7 @@ foreach ($LANG_CONF as $key => $value) {
 
             if (!isset($content)) {
                 print '<a target="_blank" href="../services/twitter/redirect.php">';
-                print '<img src="../img/twitter.signin.png" alt="Sign in with Twitter"/></a>';
+                print '<img src="../assets/img/twitter.signin.png" alt="Sign in with Twitter"/></a>';
                 print "<br />\n<br />\n";
             } elseif (isset($content)) {
                 print $content->screen_name . "<br />\n";
