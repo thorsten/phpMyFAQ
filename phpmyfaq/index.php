@@ -28,31 +28,12 @@
 define('IS_VALID_PHPMYFAQ', null);
 
 //
-// Check if multisite/multisite.php exist for Multisite support
-//
-if (file_exists('./multisite/multisite.php')) {
-    require './multisite/multisite.php';
-}
-
-//
-// Read configuration and constants
-//
-if (! defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
-    // Single instance configuration
-    define('PMF_CONFIG_DIR', __DIR__ . '/config');
-} else {
-    // Multi instance configuration
-    define('PMF_CONFIG_DIR', PMF_MULTI_INSTANCE_CONFIG_DIR);
-}
-
-//
 // Check if config/database.php exist -> if not, redirect to installer
 //
-if (!file_exists(PMF_CONFIG_DIR . '/database.php')) {
+if (!file_exists('config/database.php')) {
     header("Location: install/setup.php");
     exit();
 }
-
 
 //
 // Autoload classes, prepend and start the PHP session

@@ -113,8 +113,7 @@ class PMF_Attachment_Factory
      */
     public static function fetchByRecordId(PMF_Configuration $config, $recordId)
     {
-        $this->config = $config;
-        $retval       = array();
+        $retval = array();
         
         $sql = sprintf("
             SELECT
@@ -129,7 +128,7 @@ class PMF_Attachment_Factory
             $recordId,
             PMF_Language::$language);
         
-        $result = $this->config->getDb()->fetchAll($this->config->getDb()->query($sql));
+        $result = $config->getDb()->fetchAll($config->getDb()->query($sql));
         if ($result) {
             foreach ($result as $item) {
                 $retval[] = self::create($item->id);
