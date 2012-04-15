@@ -122,6 +122,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
     {
         return mysql_fetch_object($result);
     }
+
     /**
      * Fetch a result row as an object
      *

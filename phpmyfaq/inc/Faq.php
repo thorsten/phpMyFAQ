@@ -114,7 +114,7 @@ class PMF_Faq
      *
      * @var array
      */
-    private $groups = array();
+    private $groups = array(-1);
 
     /**
      * Flag for Group support
