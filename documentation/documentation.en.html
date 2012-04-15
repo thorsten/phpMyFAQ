@@ -55,7 +55,7 @@ pre { font: 15px monospace; border: 1px solid gray; padding: 5px; }
             <li><a href="#3d">Upgrading phpMyFAQ 2.8.x versions</a></li>
             <li><a href="#3e">Modifying templates for phpMyFAQ 2.8.x</a></li>
         </ol></li>
-        <li><strong><a href="#4">Front-end</a></strong>
+        <li><strong><a href="#4">frontend</a></strong>
         <ol class="alpha">
             <li><a href="#4a">Change languages</a></li>
             <li><a href="#4b">RSS Feeds</a></li>
@@ -124,9 +124,9 @@ pre { font: 15px monospace; border: 1px solid gray; padding: 5px; }
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="1a"></a><strong>1.a. License</strong></p>
     <p>
-        phpMyFAQ is published under the <a href="http://www.mozilla.org/MPL/2.0/">Mozilla Public License
-        Version 2.0</a> (MPL). This license guarantees you the free usage of phpMyFAQ, access to the source code and the
-        right to modify and distribute phpMyFAQ.
+        phpMyFAQ is published under the <a href="http://www.mozilla.org/MPL/2.0/">Mozilla Public License Version 2.0</a>
+        (MPL). This license guarantees you the free usage of phpMyFAQ, access to the source code and the right to modify
+        and distribute phpMyFAQ.
     </p>
     <p>
         The only restrictions apply to the copyright, which remains at all times at Thorsten Rinne and the phpMyFAQ
@@ -183,8 +183,10 @@ pre { font: 15px monospace; border: 1px solid gray; padding: 5px; }
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="2"></a>2.Installation</strong></p>
     <p><strong><a name="2a"></a>2.a. Requirements for phpMyFAQ</strong></p>
-    <p>phpMyFAQ addresses a database system via PHP. In order to install it you
-    will need a web server that meets the following requirements:</p>
+    <p>
+        phpMyFAQ addresses a database system via PHP. In order to install it you will need a web server that meets the
+        following requirements:
+    </p>
     <ul type="square">
         <li><strong><a href="http://www.php.net">PHP</a></strong>
         <ul type="circle">
@@ -217,26 +219,37 @@ pre { font: 15px monospace; border: 1px solid gray; padding: 5px; }
         </li>
         <li>correctly set: access permissions, owner, group</li>
     </ul>
-    <p>You can only run phpMyFAQ successfully, when the PHP directive safe_mode is
-    set to off, further constraints affect the directives open_basedir and disable_functions,
-    which can be set in the central php.ini or the httpd.conf respectively.</p>
-    <p>In case PHP runs as module of the Apache, you will have to be able to do a
-    chown on the files before installation. The files and directories must be owned
-    by the Apache user.</p>
-    <p>You can determine which versions your web server is running by creating a
-    file called <strong>info.php</strong> with the following content:</p>
-    <code>&lt;?php phpinfo(); ?&gt;</code>
-    <p>Upload this file to your webspace and open it using your browser. The
-    installation-script checks which version of PHP is installed on your server.
-    Should you not meet the requirements, you cannot start the installation
-    process.</p>
-    <p>In case you have PHP below 5.3.2 installed you cannot use phpMyFAQ.</p>
-    <p>phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers
-    are Mozilla Firefox 3.6 and later (Windows/MacOS X/Linux), Safari 5.x or later
-    (MacOS X/Windows/iOS), Chrome 5 or later (Windows/MacOS X/Linux), Opera 11.0
-    or later (Windows/MacOS X/Linux) and Internet Explorer 8 or later for Windows.
-    You have to enable JavaScript for the Ajax based functions as well.</p>
-    <p>If you're using <em>lighttpd</em> you have to set the following configuration:</p>
+    <p>
+        You can only run phpMyFAQ successfully, when the PHP directive safe_mode is set to off, further constraints
+        affect the directives open_basedir and disable_functions, which can be set in the central php.ini or the
+        httpd.conf respectively.
+    </p>
+    <p>
+        In case PHP runs as module of the Apache, you will have to be able to do a chown on the files before
+        installation. The files and directories must be owned by the webserver's user.
+    </p>
+    <p>
+        You can determine which versions your web server is running by creating a file called <strong>info.php</strong>
+        with the following content:
+        <code>&lt;?php phpinfo(); ?&gt;</code>
+    </p>
+    <p>
+        Upload this file to your webspace and open it using your browser. The installation-script checks which version
+        of PHP is installed on your server. Should you not meet the requirements, you cannot start the installation
+        process.
+    </p>
+    <p>
+        In case you have PHP below 5.3.2 installed you cannot use phpMyFAQ.
+    </p>
+    <p>
+        phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers are Mozilla Firefox 3.6 and later
+        (Windows/OS X/Linux), Safari 5.x or later (OS X/Windows/iOS), Chrome 5 or later (Windows/OS X/Linux), Opera 11.0
+        or later (Windows/OS X/Linux) and Internet Explorer 8 or later for Windows. You have to enable JavaScript for
+        the Ajax based functions as well.
+    </p>
+    <p>
+        If you're using <em>lighttpd</em> you have to set the following configuration:
+    </p>
     <code>cgi.fix_pathinfo 1</code>
     <p><a href="#top">back to top</a></p>
 
@@ -347,18 +360,36 @@ pre { font: 15px monospace; border: 1px solid gray; padding: 5px; }
 
     <hr style="width: 90%; height: 1px;" />
     <p><strong><a name="2f"></a>2.f. Automatic content negotiation</strong></p>
-    <p>To set the default language in your browser you have to set a variable
-    that gets passed to the web server. How this is done depends on the browser
-    you are using.</p>
+    <p>
+        To set the default language in your browser you have to set a variable that gets passed to the web server. How
+        this is done depends on the browser you are using.
+    </p>
     <ul>
-        <li>Mozilla Firefox<br />Tools -> Options -> Content -> Languages</li>
-        <li>Mozilla Seamonkey and later versions<code>Edit -> Preferences ->
-        Navigator -> Languages</code></li>
-        <li>Safari<br />Safari uses the MacOS X system preferences to determine
-        your preferred language:<code>System preferences -> International -> Language</code></li>
-        <li>Opera<br />Most versions:<code>File -> Preferences -> Languages</code>
-        Linux/*BSD versions 5.x and 6.x:<code>File -> Preferences -> Document -> Languages</code></li>
-        <li>Internet Explorer<br />Windows:<code>Tools or View or Extras -> Internet Options -> (General) Languages</code></li>
+        <li>
+            Mozilla Firefox<br />
+            <code>Tools -> Options -> Content -> Languages</code>
+        </li>
+        <li>
+            Mozilla Seamonkey and later versions<br />
+            <code>Edit -> Preferences -> Navigator -> Languages</code>
+        </li>
+        <li>
+            Google Chrome<br />
+            <code>Settings -> Details -> Language settings</code>
+        </li>
+        <li>
+            Safari<br />
+            Safari uses the OS X system preferences to determine your preferred language:<br />
+            <code>System preferences -> International -> Language</code>
+        </li>
+        <li>
+            Opera<br />
+            <code>File -> Preferences -> Languages</code>
+        </li>
+        <li>
+            Internet Explorer
+            <code>Tools or View or Extras -> Internet Options -> (General) Languages</code>
+        </li>
     </ul>
     <p><a href="#top">back to top</a></p>
 
@@ -375,31 +406,42 @@ pre { font: 15px monospace; border: 1px solid gray; padding: 5px; }
 
     <hr style="width: 90%; height: 1px;" />
     <p><strong><a name="2h"></a>2.h. Enabling mod_rewrite support</strong></p>
-    <p><em>Apache Web server</em></p>
-    <p>If you want to enable the search engine optimization you have to rename
-    the file _.htaccess to .htaccess in the root directory where your FAQ is located.
-    Then you have to activate the mod_rewrite support in the admin back-end in the
-    configuration page. You also have to edit the path information for the
-    "RewriteBase". If you installed phpMyFAQ on root directory "/" you should set in
+    <p>
+        <em>Apache Web server</em>
     </p>
-    <code>
-    RewriteBase /
-    </code>
-    <p><em>IIS Web server</em></p>
-    <p>If you want to enable the search engine optimization you have to rename
-    the file _httpd.ini to httpd.ini in the root directory where your FAQ is located.
-    Then you have to activate the URL rewrite support in the admin back-end in the
-    configuration page.</p>
-    <p><em>nginx Web server</em></p>
-    <p>If you want to enable the search engine optimization you have to copy the
-    rewrite rules in the file _nginx.conf to your nginx.conf. Then you
-    have to activate the URL rewrite support in the admin back-end in the
-    configuration page.</p>
-    <p><em>lighttpd Web server</em></p>
-    <p>If you want to enable the search engine optimization you have to copy the
-    rewrite rules in the file _lighttpd.conf to your lighttpd.conf. Then you
-    have to activate the URL rewrite support in the admin back-end in the
-    configuration page.</p>
+    <p>
+        If you want to enable the search engine optimization you have to rename the file _.htaccess to .htaccess in the 
+        root directory where your FAQ is located. Then you have to activate the mod_rewrite support in the admin backend
+        in the configuration page. You also have to edit the path information for the "RewriteBase". If you installed
+        phpMyFAQ on root directory "/" you should set in
+        <code>
+        RewriteBase /
+        </code>
+    </p>
+    <p>
+        <em>IIS Web server</em>
+    </p>
+    <p>
+        If you want to enable the search engine optimization you have to rename the file _httpd.ini to httpd.ini in the
+        root directory where your FAQ is located. Then you have to activate the URL rewrite support in the admin backend
+        in the configuration page.
+    </p>
+    <p>
+        <em>nginx Web server</em>
+    </p>
+    <p>
+        If you want to enable the search engine optimization you have to copy the rewrite rules in the file _nginx.conf
+        to your nginx.conf. Then you have to activate the URL rewrite support in the admin backend in the configuration
+        page.
+    </p>
+    <p>
+        <em>lighttpd Web server</em>
+    </p>
+    <p>
+        If you want to enable the search engine optimization you have to copy the rewrite rules in the file
+        _lighttpd.conf to your lighttpd.conf. Then you have to activate the URL rewrite support in the admin backend in
+        the configuration page.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -450,7 +492,7 @@ pre { font: 15px monospace; border: 1px solid gray; padding: 5px; }
     </p>
     <p>
         phpMyFAQ provides search plugins for Mozilla Firefox, Google Chrome and Internet Explorer 8 and later
-        based on the OpenSearch specification. Every user in the front-end can install it. With an installed search
+        based on the OpenSearch specification. Every user in the frontend can install it. With an installed search
         plugin you can search through the phpMyFAQ installation with the search box in upper right corner of Mozilla
         Firefox, Google Chrome or Internet Explorer.
     </p>
@@ -484,7 +526,7 @@ pre { font: 15px monospace; border: 1px solid gray; padding: 5px; }
     </ol>
     <p>
         The IPv4 and IPv6 Network addresses can be added or removed in the configuration panel in the administration
-        back-end. If you want to add banned words to phpMyFAQ, then you have to edit the file
+        backend. If you want to add banned words to phpMyFAQ, then you have to edit the file
         <em>inc/blockedwords.txt</em>. Please add only one word per line.
     </p>
     <p><a href="#top">back to top</a></p>
@@ -526,7 +568,6 @@ pre { font: 15px monospace; border: 1px solid gray; padding: 5px; }
             Download continuation isn't (yet?) supported.
         </li>
     </ul>
-    </p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -756,7 +797,7 @@ sub vcl_fetch {
 
     <hr style="width: 90%; height: 1px;"  />
     <p>
-        <strong><a name="4"></a>4. Front-end</strong>
+        <strong><a name="4"></a>4. frontend</strong>
     </p>
     <p>
         The public phpMyFAQ frontend has a simple, HTML5 based default layout based on
@@ -959,8 +1000,8 @@ sub vcl_fetch {
     </p>
     <code>http://www.example.com/faq/admin/index.php</code>
     <p>
-        You can also login in the public front-end and after the successful login you'll see a link to administration
-        back-end, too.
+        You can also login in the public frontend and after the successful login you'll see a link to administration
+        backend, too.
     </p>
     <p>
         If you have lost your password you can reset it. A new random password will be generated and sent to you via
@@ -971,7 +1012,7 @@ sub vcl_fetch {
         administration menu on the top, some statistics about visits, entries, news and comments in the middle of the
         page. At the bottom of the main admin page you'll see a button for version information. If you click on that
         button your version of phpMyFAQ will check the latest version number from our website phpmyfaq.de. We do not
-        log anything in this process! You can switch the current language in the administration back-end and you have
+        log anything in this process! You can switch the current language in the administration backend and you have
         an info box about the session timeout.
     </p>
     <p><a href="#top">back to top</a></p>
@@ -981,21 +1022,23 @@ sub vcl_fetch {
     <p>
         <strong><a name="5a"></a>5.a. User Administration</strong>
     </p>
-    <p>phpMyFAQ offers a flexible management of privileges (or rights) for different
-    users in the admin area. To search for a certain user just start typing the username
-    in the input form and you'll get a list of hits for usernames. It is possible to assign
-    different privileges to real people (represented by the term users). Those privileges
-    are very detailed and specific, so that you could allow a certain user to edit but
-    not to delete an entry. It is very important to contemplate which user shall get which
-    privileges. You could edit an entry by completely deleting all content, which would
-    be equivalent to deleting the whole entry. The number of possible users is not limited
-    by phpMyFAQ.</p>
-    <p>Keep in mind that new users have no privileges at all, you will have to assign
-    them by editing the user's profile. The <em>admin</em> user cannot be deleted,
-    nor can the name be changed.</p>
-    <p>A user without any permission in the admin section can still get read access
-    to categories and records. You can set the permissions on categories and records
-    in the category and record administration front-ends.</p>
+    <p>
+        phpMyFAQ offers a flexible management of privileges (or rights) for different users in the admin area. To search
+        for a certain user just start typing the username in the input form and you'll get a list of hits for usernames.
+        It is possible to assign different privileges to real people (represented by the term users). Those privileges
+        are very detailed and specific, so that you could allow a certain user to edit but not to delete an entry. It is
+        very important to contemplate which user shall get which privileges. You could edit an entry by completely
+        deleting all content, which would be equivalent to deleting the whole entry. The number of possible users is not
+        limited by phpMyFAQ.
+    </p>
+    <p>
+        Keep in mind that new users have no privileges at all, you will have to assign them by editing the user's
+        profile.
+    </p>
+    <p>
+        A user without any permission in the admin section can still gets read access to categories and records. You
+        can set the permissions on categories and records in the category and record administration frontends.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -1007,9 +1050,8 @@ sub vcl_fetch {
         the same way like for users described in the topic above.
     </p>
     <p>
-        Please note that the permissions for a group are higher rated than the 
-        permissions on a user. To enable the group permissions, please set the 
-        permission level from <em>basic</em> to <em>medium</em> in the main
+        Please note that the permissions for a group are higher rated than the permissions on a user. To enable the
+        group permissions, please set the permission level from <em>basic</em> to <em>medium</em> in the main
         configuration.
     </p>
     <p><a href="#top">back to top</a></p>
@@ -1017,127 +1059,157 @@ sub vcl_fetch {
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="5c"></a>5.c. Category Administration</strong></p>
-    <p>phpMyFAQ lets you create different categories and nested sub-categories for
-    your FAQ. You can also re-arrange your categories in a different order. It is
-    possible to use various languages per category, too; there's also a front-end about
-    all translated categories. For accessibility reasons you should add a small description
-    for every category. If you add a new category, you can set the permissions for
-    users and groups, and you can bind an administrator to that category. This is
-    quite nice if you want to share the work in your FAQ between various admin users.</p>
-    <p></p>
+    <p>
+        phpMyFAQ lets you create different categories and nested sub-categories for your FAQ. You can also re-arrange 
+        your categories in a different order. It is possible to use various languages per category, too; there's also a 
+        frontend about all translated categories. For accessibility reasons you should add a small description for every
+        category. If you add a new category, you can set the permissions for users and groups, and you can bind an
+        administrator to that category. This is quite nice if you want to share the work in your FAQ between various
+        admin users.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="5d"></a>5.d. Record Administration</strong></p>
-    <p>You can create entries directly in the admin area. Created entries are NOT
-    published by default. All available entries are listed on the page "edit FAQs".
-    By clicking on them the same interface that lets you create records will open up,
-    this time with all the relevant data of the specific entry. The meaning of the
-    fields is as follows:</p>
-
+    <p>
+        You can create entries directly in the admin area. Created entries are NOT published by default. All available
+        FAQs are listed on the page "Edit FAQs". By clicking on them the same interface that lets you create records
+        will open up, this time with all the relevant data of the specific entry. The meaning of the fields is as
+        follows:
+    </p>
     <ul>
 
-    <li><strong>Category</strong><br />
-    The place in the FAQ hierarchy where this entry will be published depends on
-    these settings. You can choose one or more categories where to store the entry.
-    If you want to add a FAQ record to more than one category you have to select
-    the categories with your mouse and press the CTRL key.</li>
+        <li>
+            <strong>Category</strong><br />
+            The place in the FAQ hierarchy where this entry will be published depends on these settings. You can choose
+            one or more categories where to store the entry. If you want to add a FAQ record to more than one category
+            you have to select the categories with your mouse and press the CTRL key.
+        </li>
 
-    <li><strong>Question</strong><br />
-    This is the question or headline of your entry. </li>
+        <li>
+            <strong>Question</strong><br />
+            This is the question or headline of your entry.
+        </li>
 
-    <li><strong>Answer</strong><br />The content is an answer to the question or a
-    solution for a problem. The content can be edited with the included WYSIWYG
-    (<strong>W</strong>hat <strong>Y</strong>ou <strong>S</strong>ee <strong>I</strong>s
-    <strong>W</strong>hat <strong>Y</strong>ou <strong>G</strong>et) editor when
-    JavaScript is enabled. You can place images where you want with the integrated
-    image manager.</li>
+        <li>
+            <strong>Answer</strong><br />
+            The content is an answer to the question or a solution for a problem. The content can be edited with the
+            included WYSIWYG (<strong>W</strong>hat <strong>Y</strong>ou <strong>S</strong>ee <strong>I</strong>s
+            <strong>W</strong>hat <strong>Y</strong>ou <strong>G</strong>et) editor when JavaScript is enabled. You can
+            place images where you want with the integrated image manager. The Editor can be disabled in the
+            configuration if you want.
+        </li>
 
-    <li><strong>Keywords</strong><br />
-    Keywords are relevant for searching through the database. In case you didn't
-    include a specific word in the entry itself, but it is closely related to the
-    content you may wish to include it as a keyword, so the entry will come up as a
-    search result. It is also possible to use non-related keywords so that a wrongly
-    entered search will also lead to the right results.</li>
+        <li><
+            strong>Keywords</strong><br />
+            Keywords are relevant for searching through the database. In case you didn't include a specific word in the
+            FAQ itself, but it is closely related to the content you may wish to include it as a keyword, so the FAQ
+            will come up as a search result. It is also possible to use non-related keywords so that a wrongly entered
+            search will also lead to the right results.
+        </li>
 
-    <li><strong>Tags</strong><br />
-    You can add some tags about the current entry here. An Ajax-based auto-completion
-    method helps you while typing your tags.</li>
+        <li>
+            <strong>Tags</strong><br />
+            You can add some tags about the current FAQ here. An Ajax-based auto-completion method helps you while
+            typing your tags.
+        </li>
 
-    <li><strong>Author</strong><br />
-    It is possible to specify an author for your entry.</li>
+        <li>
+            <strong>Author</strong><br />
+            It is possible to specify an author for your FAQ.
+        </li>
 
-    <li><strong>E-Mail</strong><br />
-    It is possible to specify the author's e-mail for your entry, but the e-mail
-    address won't be shown in the front-end.</li>
+        <li>
+            <strong>Email</strong><br />
+            It is possible to specify the author's e-mail for your FAQ, but the email address won't be shown in the
+            frontend.
+        </li>
 
-    <li><strong>Language</strong><br />
-    You can select the language of your entry. By default the selected language saved
-    in the configuration will be chosen. You can create entries in multiple languages
-    like this: Write an article in English (or any other language) and save it. Now
-    choose <em>edit records</em> and edit your English entry. Change the theme, content
-    and keywords and change language to, let's say Brazilian Portuguese. <em>Save</em>
-    the entry. Now you can, when you click <em>edit records</em>, see both entries in
-    your list, having the same id, yet different languages.</li>
+        <li>
+            <strong>Language</strong><br />
+            You can select the language of your FAQ. By default the selected language saved in the configuration will be
+            chosen. You can create entries in multiple languages like this: Write an article in English (or any other
+            language) and save it. Now choose <em>Edit FAQs</em> and edit your English FAQ record. Change the question,
+            answer and keywords and change language to, let's say Brazilian Portuguese. <em>Save</em> the FAQ record.
+            Now you can, when you click <em>edit records</em>, see both FAQs in your list, having the same id, yet
+            different languages.
+        </li>
 
-    <li><strong>Solution ID</strong><br />
-    Every entry generates automatically a so-called solution ID. All records can be
-    accessed directly by putting this ID into the search box.</li>
+        <li>
+            <strong>Solution ID</strong><br />
+            Every FAQ generates automatically a so-called solution ID. All records can be accessed directly by putting
+            this ID into the search box.
+        </li>
 
-    <li><strong>Active?</strong><br />
-    If an entry is "active" it is visible in the public area and will be included in
-    searches. Is it "deactivated" it will be invisible. Suggested entries are deactivated
-    by default to prevent any abuse.</li>
+        <li>
+            <strong>Active?</strong><br />
+            If a FAQ is "active" it is visible in the public area and will be included in searches. Is it
+            "deactivated" it will be invisible. Suggested FAQs are deactivated by default to prevent any abuse.
+        </li>
 
-    <li><strong>Sticky?</strong><br />
-    If an entry is "sticky" it is a very important FAQ record and will be shown always on
-    all pages on the right column. You should mark records as sticky if they are very important
-    for your whole FAQ. Sticky records also appear at the top positions of the lists of FAQ entries.</li>
+        <li>
+            <strong>Sticky?</strong><br />
+            If a FAQ is "sticky" it is a very important FAQ record and will be shown always on all pages on the right
+            column. You should mark records as sticky if they are very important for your whole FAQ. Sticky records also
+            appear at the top positions of the lists of FAQ entries.
+        </li>
 
-    <li><strong>Comments?</strong><br />
-    If you do not want to allow public comments for this entry you can disable the
-    feature here.</li>
+        <li>
+            <strong>Comments?</strong><br />
+            If you do not want to allow public comments for this FAQ you can disable the feature here.</li>
 
-    <li><strong>Revision</strong><br />
-    Like a wiki, phpMyFAQ 2 supports revisions of every entry. New revisions won't be
-    created automatically but you can create a new one if you click on "yes". The old
-    revision will be stored in the database and the new current revision will be displayed
-    in the public front-end. You can also bring back old revisions into the front-end
-    if you select an old revision and save them as a new one.</li>
+        <li>
+            <strong>Revision</strong><br />
+            Like a wiki, phpMyFAQ supports revisions of every entry. New revisions won't be created automatically but
+            you can create a new one if you click on "yes". The old revision will be stored in the database and the new
+            current revision will be displayed in the public frontend. You can also bring back old revisions into the
+            frontend if you select an old revision and save them as a new one.
+        </li>
 
-    <li><strong>Date</strong><br />
-    You have three options for the FAQ creation date. You can choose to refresh the date
-    of the FAQ entry for every update, or you can keep the date, or you can set an
-    individual date for the FAQ entry.</li>
+        <li>
+            <strong>Date</strong><br />
+            You have three options for the FAQ creation date. You can choose to refresh the date of the FAQ entry for
+            every update, or you can keep the date, or you can set an individual date for the FAQ entry.
+        </li>
 
-    <li><strong>Permissions</strong><br />
-    If you add or edit a new entry, you can set the permissions for users and groups.</li>
+        <li>
+            <strong>Permissions</strong><br />
+            If you add or edit a new entry, you can set the permissions for users and groups.
+        </li>
 
-    <li><strong>Record expiration time window</strong><br />
-    If you need to you can set a time frame from one date to a second date when the
-    FAQ entry should be valid and visible. Before and after this time frame the entry
-    isn't visible and cannot be accessed.</li>
+        <li>
+            <strong>Record expiration time window</strong><br />
+            If you need to you can set a time frame from one date to a second date when the FAQ entry should be valid
+            and visible. Before and after this time frame the entry isn't visible and cannot be accessed.
+        </li>
 
-    <li><strong>Date</strong><br />
-    Date of the last change.</li>
+        <li>
+            <strong>Date</strong><br />
+            Date of the last change.
+        </li>
 
-    <li><strong>Changed?</strong><br />
-    This field is reserved for comments that can reflect what changes have been applied
-    to a certain entry. This helps multiple admins to keep track of what happened
-    to the entry over time. Any information entered here will remain invisible in
-    the public area.</li>
+        <li>
+            <strong>Changed?</strong><br />
+            This field is reserved for comments that can reflect what changes have been applied to a certain entry.
+            This helps multiple admins to keep track of what happened to the entry over time. Any information entered
+            here will remain invisible in the public area.
+        </li>
 
-    <li><strong>Changelog</strong><br />
-    The changelog lists all previous changes, including user and date of change.</li>
+        <li>
+            <strong>Changelog</strong><br />The changelog lists all previous changes, including user and date of change.
+        </li>
     </ul>
 
-    <p>You can edit and delete all records as well. Please note that old revisions
-    won't be deleted.</p>
-    <p>phpMyFAQ lets visitors contribute to the FAQ by asking questions. Every visitor
-    is able to view these open questions in the public area, and may give an answer. If
-    you wish to get rid of open questions you can do so using this section. Alternatively
-    you can take over a question and answer it yourself and hereby add it to the FAQ.</p>
+    <p>
+        You can edit and delete all records as well. Please note that old revisions won't be deleted.
+    </p>
+    <p>
+        phpMyFAQ lets visitors contribute to the FAQ by asking questions. Every visitor is able to view these open
+        questions in the public area, and may give an answer. If you wish to get rid of open questions you can do so
+        using this section. Alternatively you can take over a question and answer it yourself and hereby add it to the
+        FAQ.
+    </p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -1146,7 +1218,7 @@ sub vcl_fetch {
         <strong><a name="5e"></a>5.e. Comment Administration</strong>
     </p>
     <p>
-        In this straight front-end you can see all comments that have been posted in the FAQs and the news. You cannot
+        In this straight frontend you can see all comments that have been posted in the FAQs and the news. You cannot
         edit comments but you can delete them with one easy click.
     </p>
     <p><a href="#top">back to top</a></p>
@@ -1159,7 +1231,7 @@ sub vcl_fetch {
     <p>
         A glossary is a list of terms in a particular domain of knowledge with the definitions for those terms. You can
         add, edit and delete glossary items here. The items will be automatically displayed in &lt;abbr&gt; tags in
-        the front-end.
+        the frontend.
     </p>
     <p><a href="#top">back to top</a></p>
 
@@ -1300,17 +1372,15 @@ sub vcl_fetch {
     </p>
     <ul>
         <li>
-            In order to host several distinct installations (with different configs, different templates and
-            most importantly, different database credentials), but only want to update once,
-            you need to follow these steps:
-
+            In order to host several distinct installations (with different configs, different templates and most
+            importantly, different database credentials), but only want to update once, you need to follow these steps:
             <ul>
-              <li>
-                  Make sure you have the <tt>multisite/</tt> directory in your document root and <tt>multisite.php</tt>
-                  in it
-              </li>
-              <li>
-                  For every seperate installation there needs to be a subdirectory of <tt>multisite/</tt> named
+                <li>
+                    Make sure you have the <em>multisite/</em> directory in your document root and <em>multisite.php</em>
+                    in it
+                </li>
+                <li>
+                  For every seperate installation there needs to be a subdirectory of <em>multisite/</em> named
                   exactly like the hostname of the seperate installation.<br />
                   For example, if you want to use <em>faq.example.org</em> and <em>beta.faq.example.org</em>,
                   it needs to look like this:<br />
@@ -1328,8 +1398,6 @@ sub vcl_fetch {
         |-- constants.php
         `-- database.php
 </pre>
-              </li>
-              </li>
               </li>
             </ul>
         </li>
@@ -1606,7 +1674,7 @@ sub vcl_fetch {
         Author: <a href="mailto:thorsten AT phpmyfaq DOT de">Thorsten Rinne</a><br />
         Co-Authors: <a href="mailto:stephan AT yauh DOT de">Stephan Hochhaus</a>,
         <a href="mailto:mgl-mail AT t-online DOT de">Markus Gläser</a><br />
-        Last update: 2012-01-02
+        Last update: 2012-04-15
     </p>
     <p>
         &copy; 2001-2012 phpMyFAQ Team
