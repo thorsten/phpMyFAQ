@@ -28,17 +28,21 @@
 define('IS_VALID_PHPMYFAQ', null);
 
 //
+// Bootstrapping
+//
+require_once 'inc/Bootstrap.php';
+
+//
 // Check if config/database.php exist -> if not, redirect to installer
 //
-if (!file_exists('config/database.php')) {
+if (!file_exists(PMF_CONFIG_DIR . '/database.php')) {
     header("Location: install/setup.php");
     exit();
 }
 
 //
-// Autoload classes, prepend and start the PHP session
+// Start the PHP session
 //
-require_once 'inc/Bootstrap.php';
 PMF_Init::cleanRequest();
 session_name(PMF_Session::PMF_COOKIE_NAME_AUTH);
 session_start();
