@@ -100,7 +100,8 @@ if ($news['active'] && (!$expired)) {
     $newsDate = '';
 }
 
-// Set the template variables
+$captchaHelper = new PMF_Helper_Captcha($faqConfig);
+
 $tpl->parse(
     'writeContent',
     array(
@@ -122,11 +123,7 @@ $tpl->parse(
         'defaultContentName'  => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
         'msgYourComment'      => $PMF_LANG['msgYourComment'],
         'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
-        'captchaFieldset'     => PMF_Helper_Captcha::getInstance($faqConfig)->renderCaptcha(
-            $captcha,
-            'writecomment',
-            $PMF_LANG['msgCaptcha']
-        ),
+        'captchaFieldset'     => $captchaHelper->renderCaptcha($captcha, 'writecomment', $PMF_LANG['msgCaptcha']),
         'writeComments'       => $comment->getComments($newsId, PMF_Comment::COMMENT_TYPE_NEWS)
     )
 );

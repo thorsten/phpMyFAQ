@@ -54,6 +54,8 @@ if (!is_null($id) && !is_null($srclang) && PMF_Language::isASupportedLanguage($s
     $faqSource = $oFaq->faqRecord;
 }
 
+$captchaHelper = new PMF_Helper_Captcha($faqConfig);
+
 $tpl->parse(
     'writeContent',
     array(
@@ -75,11 +77,7 @@ $tpl->parse(
         'msgNewTranslationMail'     => $PMF_LANG['msgNewTranslationMail'],
         'msgNewTranslationKeywords' => $PMF_LANG['msgNewTranslationKeywords'],
         'writeTransFaqLanguage'     => $translationLanguage,
-        'captchaFieldset'           => PMF_Helper_Captcha::getInstance($faqConfig)->renderCaptcha(
-            $captcha,
-            'translate',
-            $PMF_LANG['msgCaptcha']
-        ),
+        'captchaFieldset'           => $captchaHelper->renderCaptcha($captcha, 'translate', $PMF_LANG['msgCaptcha']),
         'msgNewTranslationSubmit'   => $PMF_LANG['msgNewTranslationSubmit'],
         'tinyMCELanguage'           => (PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en')
     )

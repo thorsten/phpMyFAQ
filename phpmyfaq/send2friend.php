@@ -42,6 +42,8 @@ $send2friendLink = sprintf('%s/index.php?action=artikel&amp;cat=%d&amp;id=%d&amp
     (int)$id,
     urlencode($artlang));
 
+$captchaHelper = new PMF_Helper_Captcha($faqConfig);
+
 $tpl->parse (
     'writeContent',
     array(
@@ -59,11 +61,7 @@ $tpl->parse (
         'msgS2FText2'        => $PMF_LANG['msgS2FText2'],
         'send2friendLink'    => $send2friendLink,
         'msgS2FMessage'      => $PMF_LANG['msgS2FMessage'],
-        'captchaFieldset'    => PMF_Helper_Captcha::getInstance($faqConfig)->renderCaptcha(
-            $captcha,
-            'send2friend',
-            $PMF_LANG['msgCaptcha']
-        ),
+        'captchaFieldset'    => $captchaHelper->renderCaptcha($captcha, 'send2friend', $PMF_LANG['msgCaptcha']),
         'msgS2FButton'       => $PMF_LANG['msgS2FButton']
     )
 );

@@ -31,53 +31,19 @@
 class PMF_Helper_Captcha extends PMF_Helper 
 {
     /**
-     * Instance
-     *
-     * @var PMF_Helper_Captcha
-     */
-    private static $instance = null;
-    
-    /**
      * Constructor
      *
      * @param PMF_Configuration $config
      *
      * @return PMF_Helper_Captcha
      */
-    private function __construct(PMF_Configuration $config)
+    public function __construct(PMF_Configuration $config)
     {
         $this->_config = $config;
     }
-    
-    /**
-     * Returns the single instance
-     *
-     * @param PMF_Configuration $config
-     *
-     * @access static
-     * @return PMF_Helper_Category
-     */
-    public static function getInstance(PMF_Configuration $config)
-    {
-        if (null == self::$instance) {
-            $className = __CLASS__;
-            self::$instance = new $className($config);
-        }
-        return self::$instance;
-    }
-   
-    /**
-     * __clone() Magic method to prevent cloning
-     *
-     * @return void
-     */
-    private function __clone()
-    {
-        
-    }
 
     /**
-     * Renders the main navigation
+     * Renders the captcha check
      *
      * @param string $legend Text of the HTML Legend element
      * @param string $img    HTML code for the Captcha image

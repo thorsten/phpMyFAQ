@@ -32,6 +32,8 @@ if (!is_null($showCaptcha)) {
     exit;
 }
 
+$captchaHelper = new PMF_Helper_Captcha($faqConfig);
+
 $tpl->parse (
     'writeContent',
     array(
@@ -46,11 +48,7 @@ $tpl->parse (
         'msgMessage'         => $PMF_LANG['msgMessage'],
         'msgS2FButton'       => $PMF_LANG['msgS2FButton'],
         'version'            => $faqConfig->get('main.currentVersion'),
-        'captchaFieldset'    => PMF_Helper_Captcha::getInstance($faqConfig)->renderCaptcha(
-            $captcha,
-            'contact',
-            $PMF_LANG['msgCaptcha']
-        )
+        'captchaFieldset'    => $captchaHelper->renderCaptcha($captcha, 'contact', $PMF_LANG['msgCaptcha'])
     )
 );
 

@@ -51,6 +51,8 @@ $category->buildTree();
 $helper = PMF_Helper_Category::getInstance();
 $helper->setCategory($category);
 
+$captchaHelper = new PMF_Helper_Captcha($faqConfig);
+
 $tpl->parse(
     'writeContent', 
     array(
@@ -70,11 +72,7 @@ $tpl->parse(
         'msgNewContentArticle'  => $PMF_LANG['msgNewContentArticle'],
         'msgNewContentKeywords' => $PMF_LANG['msgNewContentKeywords'],
         'msgNewContentLink'     => $PMF_LANG['msgNewContentLink'],
-        'captchaFieldset'       => PMF_Helper_Captcha::getInstance($faqConfig)->renderCaptcha(
-            $captcha,
-            'add',
-            $PMF_LANG['msgCaptcha']
-        ),
+        'captchaFieldset'       => $captchaHelper->renderCaptcha($captcha, 'add', $PMF_LANG['msgCaptcha']),
         'msgNewContentSubmit'   => $PMF_LANG['msgNewContentSubmit']
     )
 );

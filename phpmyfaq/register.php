@@ -33,6 +33,8 @@ if (!is_null($showCaptcha)) {
     exit;
 }
 
+$captchaHelper = new PMF_Helper_Captcha($faqConfig);
+
 $tpl->parse(
     'writeContent',
     array(
@@ -44,11 +46,7 @@ $tpl->parse(
         'realname'                   => $PMF_LANG["ad_user_realname"],
         'email'                      => $PMF_LANG["ad_entry_email"],
         'submitRegister'             => $PMF_LANG['submitRegister'],
-        'captchaFieldset'            => PMF_Helper_Captcha::getInstance($faqConfig)->renderCaptcha(
-            $captcha,
-            'register',
-            $PMF_LANG['msgCaptcha']
-        )
+        'captchaFieldset'            => $captchaHelper->renderCaptcha($captcha, 'register', $PMF_LANG['msgCaptcha'])
     )
 );
 

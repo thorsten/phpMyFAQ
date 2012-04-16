@@ -39,6 +39,8 @@ $categoryId = PMF_Filter::filterInput(INPUT_GET, 'category_id', FILTER_VALIDATE_
 $helper = PMF_Helper_Category::getInstance();
 $helper->setCategory($category);
 
+$captchaHelper = new PMF_Helper_Captcha($faqConfig);
+
 $tpl->parse(
     'writeContent',
     array(
@@ -52,11 +54,7 @@ $tpl->parse(
         'msgAskCategory'       => $PMF_LANG['msgAskCategory'],
         'printCategoryOptions' => $helper->renderCategoryOptions($categoryId),
         'msgAskYourQuestion'   => $PMF_LANG['msgAskYourQuestion'],
-        'captchaFieldset'      => PMF_Helper_Captcha::getInstance($faqConfig)->renderCaptcha(
-            $captcha,
-            'ask',
-            $PMF_LANG['msgCaptcha']
-        ),
+        'captchaFieldset'      => $captchaHelper->renderCaptcha($captcha, 'ask', $PMF_LANG['msgCaptcha']),
         'msgNewContentSubmit'  => $PMF_LANG['msgNewContentSubmit']
     )
 );

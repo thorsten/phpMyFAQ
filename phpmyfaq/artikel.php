@@ -253,7 +253,8 @@ if (isset($permission['addtranslation']) && $permission['addtranslation']) {
     );
 }
 
-$date = new PMF_Date($faqConfig);
+$date          = new PMF_Date($faqConfig);
+$captchaHelper = new PMF_Helper_Captcha($faqConfig);
 
 $tpl->parse('writeContent', array(
     'writeRubrik'                => $categoryName,
@@ -301,11 +302,7 @@ $tpl->parse('writeContent', array(
     'defaultContentName'         => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
     'msgYourComment'             => $PMF_LANG['msgYourComment'],
     'msgNewContentSubmit'        => $PMF_LANG['msgNewContentSubmit'],
-    'captchaFieldset'            => PMF_Helper_Captcha::getInstance($faqConfig)->renderCaptcha(
-        $captcha,
-        'writecomment',
-        $PMF_LANG['msgCaptcha']
-    ),
+    'captchaFieldset'            => $captchaHelper->renderCaptcha($captcha, 'writecomment',$PMF_LANG['msgCaptcha']),
     'writeComments'              => $faqComment->getComments($faq->faqRecord['id'], PMF_Comment::COMMENT_TYPE_FAQ),
     'msg_about_faq'              => $PMF_LANG['msg_about_faq']
     )
