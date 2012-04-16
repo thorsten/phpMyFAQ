@@ -112,7 +112,8 @@ if ($permission['editbt']) {
         $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $record_lang, $revision_id);
 
         // Create the visit entry
-        PMF_Visits::getInstance($faqConfig)->add($record_id);
+        $visits = new PMF_Visits($faqConfig);
+        $visits->add($record_id);
 
         // save or update the FAQ record
         if ($faq->isAlreadyTranslated($record_id, $record_lang)) {
@@ -165,7 +166,6 @@ if ($permission['editbt']) {
         if ($faqConfig->get('main.enableGoogleTranslation') === true && !empty($languages)) {
             
             $linkverifier = new PMF_Linkverifier($faqConfig, $user->getLogin());
-            $visits       = PMF_Visits::getInstance($faqConfig);
     
             $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
             $languages = explode(",", $languages);

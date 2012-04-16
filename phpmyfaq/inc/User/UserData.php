@@ -35,11 +35,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_User_UserData
 {
     /**
-     * database object
-     *
-     * @var PMF_DB_Driver
+     * @var PMF_Configuration
      */
-    private $db = null;
+    private $config = null;
 
     /**
      * associative array containing user data
@@ -53,16 +51,18 @@ class PMF_User_UserData
      *
      * @var int
      */
-    private $user_id = 0;
+    private $userId = 0;
 
     /**
-     * Constructor.
+     * Constructor
      *
-     * @return void
+     * @param PMF_Configuration $config
+     *
+     * @return PMF_User_UserData
      */
-    public function __construct()
+    public function __construct(PMF_Configuration $config)
     {
-        $this->db = PMF_Db::getInstance();
+        $this->config = $config;
     }
 
     /**
@@ -91,13 +91,13 @@ class PMF_User_UserData
                 user_id = %d",
             $fields,
             SQLPREFIX,
-            $this->user_id);
+            $this->userId);
         
-        $res = $this->db->query($select);
-        if ($this->db->numRows($res) != 1) {
+        $res = $this->config->getDb()->query($select);
+        if ($this->config->getDb()->numRows($res) != 1) {
             return false;
         }
-        $arr = $this->db->fetchArray($res);
+        $arr = $this->config->getDb()->fetchArray($res);
         if ($single_return and $field != '*') {
             return $arr[$field];
         }
@@ -136,17 +136,17 @@ class PMF_User_UserData
      * Loads the user-data from the database and returns an
      * associative array with the fields and values.
      *
-     * @param  integer $user_id User ID
+     * @param  integer $userId User ID
      * @return bool
      */
-    public function load($user_id)
+    public function load($userId)
     {
-        $user_id = (int)$user_id;
-        if (($user_id <= 0) && ($user_id != -1)) {
+        $userId = (int)$userId;
+        if (($userId <= 0) && ($userId != -1)) {
             return false;
         }
         
-        $this->user_id = $user_id;
+        $this->userId = $userId;
         $select        = sprintf("
             SELECT
                 last_modified, 
@@ -157,13 +157,13 @@ class PMF_User_UserData
             WHERE
                 user_id = %d",
             SQLPREFIX,
-            $this->user_id);
+            $this->userId);
             
-        $res = $this->db->query($select);
-        if ($this->db->numRows($res) != 1) {
+        $res = $this->config->getDb()->query($select);
+        if ($this->config->getDb()->numRows($res) != 1) {
             return false;
         }
-        $this->data = $this->db->fetchArray($res);
+        $this->data = $this->config->getDb()->fetchArray($res);
         return true;
     }
 
@@ -186,11 +186,11 @@ class PMF_User_UserData
                 user_id = %d",
             SQLPREFIX,
             date('YmdHis', $_SERVER['REQUEST_TIME']),
-            $this->db->escape($this->data['display_name']),
-            $this->db->escape($this->data['email']),
-            $this->user_id);
+            $this->config->getDb()->escape($this->data['display_name']),
+            $this->config->getDb()->escape($this->data['email']),
+            $this->userId);
             
-        $res = $this->db->query($update);
+        $res = $this->config->getDb()->query($update);
         if (!$res) {
             return false;
         }
@@ -202,17 +202,17 @@ class PMF_User_UserData
      * Adds a new user entry for user-data in the database.
      * Returns true on success, otherwise false.
      *
-     * @param  integer $user_id User ID
+     * @param  integer $userId User ID
      * @return bool
      */
-    public function add($user_id)
+    public function add($userId)
     {
-        $user_id = (int) $user_id;
-        if (($user_id <= 0) && ($user_id != -1)) {
+        $userId = (int) $userId;
+        if (($userId <= 0) && ($userId != -1)) {
             return false;
         }
             
-        $this->user_id = $user_id;
+        $this->userId = $userId;
         $insert        = sprintf("
             INSERT INTO
                 %sfaquserdata
@@ -220,10 +220,11 @@ class PMF_User_UserData
                 VALUES
             (%d, '%s')",
             SQLPREFIX,
-            $this->user_id,
-            date('YmdHis', $_SERVER['REQUEST_TIME']));
+            $this->userId,
+            date('YmdHis', $_SERVER['REQUEST_TIME'])
+        );
             
-        $res = $this->db->query($insert);
+        $res = $this->config->getDb()->query($insert);
         if (!$res) {
             return false;
         }
@@ -232,29 +233,29 @@ class PMF_User_UserData
     }
 
     /**
-     * Deletes the user-data entry for the given user-ID $user_id.
+     * Deletes the user-data entry for the given user-ID $userId.
      * Returns true on success, otherwise false.
      *
-     * @param  integer $user_id User ID
+     * @param  integer $userId User ID
      * @return bool
      */
-    public function delete($user_id)
+    public function delete($userId)
     {
-        $user_id = (int) $user_id;
-        if (($user_id <= 0) && ($user_id != -1)) {
+        $userId = (int) $userId;
+        if (($userId <= 0) && ($userId != -1)) {
             return false;
         }
             
-        $this->user_id = $user_id;
+        $this->userId = $userId;
         $delete        = sprintf("
             DELETE FROM
                 %sfaquserdata
             WHERE
                 user_id = %d",
             SQLPREFIX,
-            $this->user_id);
+            $this->userId);
         
-        $res = $this->db->query($delete);
+        $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }

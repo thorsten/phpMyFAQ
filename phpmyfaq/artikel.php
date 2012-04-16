@@ -58,7 +58,7 @@ if (0 == $solutionId) {
 
 $faqsession->userTracking('article_view', $faq->faqRecord['id']);
 
-$faqVisits = PMF_Visits::getInstance($faqConfig);
+$faqVisits = new PMF_Visits($faqConfig);
 $faqVisits->logViews($faq->faqRecord['id']);
 
 // Add Glossary entries

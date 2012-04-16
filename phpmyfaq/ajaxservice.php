@@ -64,7 +64,7 @@ $http->addHeader();
 // Set session
 $faqsession = new PMF_Session($faqConfig);
 $network    = new PMF_Network($faqConfig);
-$stopwords  = PMF_Stopwords::getInstance($faqConfig);
+$stopwords  = new PMF_Stopwords($faqConfig);
 
 if (!$network->checkIp($_SERVER['REMOTE_ADDR'])) {
     $message = array('error' => $PMF_LANG['err_bannedIP']);
@@ -304,7 +304,7 @@ switch ($action) {
             }
 
             // Activate visits
-            $visits = PMF_Visits::getInstance($faqConfig);
+            $visits = new PMF_Visits($faqConfig);
             $visits->add($recordId, $newData['lang']);
 
             if ($autoActivate) {
@@ -390,7 +390,7 @@ switch ($action) {
 
             if (1 != $save) {
 
-                $cleanQuestion = PMF_Stopwords::getInstance($faqConfig)->clean($question);
+                $cleanQuestion = $stopwords->clean($question);
 
                 $user            = new PMF_User_CurrentUser($faqConfig);
                 $faqSearch       = new PMF_Search($faqConfig);

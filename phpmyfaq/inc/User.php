@@ -217,7 +217,7 @@ class PMF_User
             }
         }
         // user data object
-        $this->userdata = new PMF_User_UserData();
+        $this->userdata = new PMF_User_UserData($this->_config);
     }
 
 
@@ -309,7 +309,7 @@ class PMF_User
         }
         // get user-data
         if (!$this->userdata instanceof PMF_User_UserData) {
-            $this->userdata = new PMF_User_UserData();
+            $this->userdata = new PMF_User_UserData($this->_config);
         }
         $this->userdata->load($this->getUserId());
         return true;
@@ -352,7 +352,7 @@ class PMF_User
         $this->status  = (string) $user['account_status'];
         // get user-data
         if (!$this->userdata instanceof PMF_User_UserData) {
-            $this->userdata = new PMF_User_UserData();
+            $this->userdata = new PMF_User_UserData($this->_config);
         }
         $this->userdata->load($this->getUserId());
         return true;
@@ -399,7 +399,7 @@ class PMF_User
 
         // get user-data
         if (!$this->userdata instanceof PMF_User_UserData) {
-            $this->userdata = new PMF_User_UserData();
+            $this->userdata = new PMF_User_UserData($this->_config);
         }
         $this->userdata->load($this->getUserId());
         return true;
@@ -488,7 +488,7 @@ class PMF_User
 
         $this->db->query($insert);
         if (!$this->userdata instanceof PMF_User_UserData) {
-            $this->userdata = new PMF_User_UserData($this->db);
+            $this->userdata = new PMF_User_UserData($this->_config);
         }
         $data = $this->userdata->add($this->getUserId());
         if (!$data) {
@@ -558,7 +558,7 @@ class PMF_User
         }
         
         if (!$this->userdata instanceof PMF_User_UserData) {
-            $this->userdata = new PMF_User_UserData($this->db);
+            $this->userdata = new PMF_User_UserData($this->_config);
         }
         $data = $this->userdata->delete($this->getUserId());
         if (!$data) {
@@ -762,6 +762,7 @@ class PMF_User
      * returns true if perm is a valid permission object.
      *
      * @param  PMF_Perm $perm Perm object
+     *
      * @return bool
      */
     private function checkPerm($perm)
@@ -769,7 +770,7 @@ class PMF_User
         if ($perm instanceof PMF_Perm) {
             return true;
         }
-        $this->errors[] = ERROR_USER_NO_PERM;
+        $this->errors[] = self::ERROR_USER_NO_PERM;
         return false;
     }
 
@@ -803,7 +804,7 @@ class PMF_User
     public function getUserData($field = '*')
     {
         if (!($this->userdata instanceof PMF_User_UserData)) {
-            $this->userdata = new PMF_User_UserData();
+            $this->userdata = new PMF_User_UserData($this->_config);
         }
         return $this->userdata->get($field);
     }
@@ -817,7 +818,7 @@ class PMF_User
     public function setUserData(Array $data)
     {
         if (!($this->userdata instanceof PMF_User_UserData)) {
-            $this->userdata = new PMF_User_UserData();
+            $this->userdata = new PMF_User_UserData($this->_config);
         }
         $this->userdata->load($this->getUserId());
         return $this->userdata->set(array_keys($data), array_values($data));

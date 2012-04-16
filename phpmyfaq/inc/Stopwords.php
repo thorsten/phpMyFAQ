@@ -37,13 +37,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Stopwords
 {
     /**
-     * Instance
-     *
-     * @var PMF_Stopwords
-     */
-    private static $instance = null;
-    
-    /**
      * @var PMF_Configuration
      */
     private $_config;
@@ -67,7 +60,7 @@ class PMF_Stopwords
      *
      * @return PMF_Stopwords
      */
-    private function __construct(PMF_Configuration $config)
+    public function __construct(PMF_Configuration $config)
     {
         $this->_config    = $config;
         $this->table_name = SQLPREFIX . "faqstopwords";
@@ -104,25 +97,7 @@ class PMF_Stopwords
     {
         $this->table_name = $table_name;
     }
-    
-    /**
-     * Returns the single instance
-     *
-     * @access static
-     *
-     * @param PMF_Configuration $config
-     *
-     * @return PMF_Stopwords
-     */
-    public static function getInstance(PMF_Configuration $config)
-    {
-        if (null == self::$instance) {
-            $className = __CLASS__;
-            self::$instance = new $className($config);
-        }
-        return self::$instance;
-    }
-    
+
     /**
      * Add a word to the stop words dictionary.
      * If the given word already exists, false is returned. 

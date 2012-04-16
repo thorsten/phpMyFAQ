@@ -38,14 +38,7 @@ class PMF_Visits
      * @var PMF_Configuration
      */
     private $_config;
-    
-    /**
-     * Instance
-     *
-     * @var PMF_Visits
-     */
-    private static $instance = null;
-    
+
     /**
      * Constructor
      *
@@ -53,37 +46,9 @@ class PMF_Visits
      *
      * @return PMF_Visits
      */
-    private function __construct(PMF_Configuration $config)
+    public function __construct(PMF_Configuration $config)
     {
         $this->_config = $config;
-    }
-
-
-    /**
-     * Returns the single instance
-     *
-     * @access static
-     *
-     * @param PMF_Configuration $config
-     *
-     * @return PMF_Visits
-     */
-    public static function getInstance(PMF_Configuration $config)
-    {
-        if (null == self::$instance) {
-            $className = __CLASS__;
-            self::$instance = new $className($config);
-        }
-        return self::$instance;
-    }
-   
-    /**
-     * __clone() Magic method to prevent cloning
-     *
-     * @return void
-     */
-    private function __clone()
-    {
     }
        
     /**
