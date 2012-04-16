@@ -17,12 +17,12 @@
  * @since     2010-06-06
  */
 
-require_once dirname(dirname(dirname(__DIR__))) . '/inc/Configuration.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/inc/functions.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/inc/Search.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/inc/Search/Database/Pgsql.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/inc/DB/Driver.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/inc/DB/Pgsql.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/phpmyfaq/inc/Configuration.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/phpmyfaq/inc/functions.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/phpmyfaq/inc/Search.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/phpmyfaq/inc/Search/Database/Pgsql.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/phpmyfaq/inc/DB/Driver.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/phpmyfaq/inc/DB/Pgsql.php';
 
 require_once dirname(dirname(__DIR__)) . '/Database/PostgressTest.php';
 

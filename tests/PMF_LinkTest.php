@@ -1,6 +1,6 @@
 <?php
 /**
- * Test case for PMF_Search_Database
+ * Test case for PMF_Link
  *
  * PHP Version 5.3
  *
@@ -11,34 +11,35 @@
  * @category  phpMyFAQ
  * @package   PMF_Tests
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
+ * @copyright 2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @since     2010-07-06
+ * @since     2012-03-29
  */
 
-require_once dirname(dirname(__DIR__)) . '/inc/Search/Factory.php';
-require_once dirname(dirname(__DIR__)) . '/inc/Language.php';
-require_once dirname(dirname(__DIR__)) . '/inc/String.php';
-require_once dirname(dirname(__DIR__)) . '/inc/String/Abstract.php';
-require_once dirname(dirname(__DIR__)) . '/inc/String/Mbstring.php';
+
+require_once dirname(__DIR__) . '/phpmyfaq/inc/DB/Driver.php';
+require_once dirname(__DIR__) . '/phpmyfaq/inc/DB/Sqlite3.php';
+require_once dirname(__DIR__) . '/phpmyfaq/inc/Exception.php';
+require_once dirname(__DIR__) . '/phpmyfaq/inc/Configuration.php';
+require_once dirname(__DIR__) . '/phpmyfaq/inc/Link.php';
 
 /**
- * Category test case
+ * PMF_LinkTest
  *
  * @category  phpMyFAQ
  * @package   PMF_Tests
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
+ * @copyright 2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @since     2010-07-06
+ * @since     2012-03-29
  */
-class PMF_Search_FactoryTest extends PHPUnit_Framework_TestCase
+class PMF_LinkTest extends PHPUnit_Framework_TestCase
 {
-    private $PMF_Configuration;
-
     private $dbHandle;
+    private $PMF_Link;
+    private $PMF_Configuration;
 
     /**
      * Prepares the environment before running a test.
@@ -49,8 +50,12 @@ class PMF_Search_FactoryTest extends PHPUnit_Framework_TestCase
 
         PMF_String::init('en');
 
+        $_SERVER['HTTP_HOST'] = 'faq.example.org';
+
         $this->dbHandle = new PMF_DB_Sqlite3();
         $this->PMF_Configuration = new PMF_Configuration($this->dbHandle);
+        $this->PMF_Configuration->config['security.useSslOnly'] = 'true';
+        $this->PMF_Link = new PMF_Link('https://faq.example.org/my-test-faq/', $this->PMF_Configuration);
     }
 
     /**
@@ -58,16 +63,13 @@ class PMF_Search_FactoryTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown ()
     {
-        $this->PMF_Search_Database = null;
+        $this->PMF_Link = null;
         parent::tearDown();
     }
 
-    public function testCreate()
+    public function testGetSystemScheme()
     {
-        $search = PMF_Search_Factory::create($this->PMF_Configuration, array('database' => 'sqlite'));
-
-        $this->assertEquals(new PMF_Search_Database_Sqlite($this->PMF_Configuration), $search);
-        $this->assertInstanceOf('PMF_Search_Database_Sqlite', $search);
+        $this->assertEquals('https://', $this->PMF_Link->getSystemScheme());
     }
 
 }

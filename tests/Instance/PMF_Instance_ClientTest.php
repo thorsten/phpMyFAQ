@@ -18,13 +18,13 @@
  */
 
 
-require_once dirname(dirname(__DIR__)) . '/inc/DB/Driver.php';
-require_once dirname(dirname(__DIR__)) . '/inc/DB/Sqlite3.php';
-require_once dirname(dirname(__DIR__)) . '/inc/Exception.php';
-require_once dirname(dirname(__DIR__)) . '/inc/Configuration.php';
-require_once dirname(dirname(__DIR__)) . '/inc/Filesystem.php';
-require_once dirname(dirname(__DIR__)) . '/inc/Instance.php';
-require_once dirname(dirname(__DIR__)) . '/inc/Instance/Client.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/DB/Driver.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/DB/Sqlite3.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/Exception.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/Configuration.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/Filesystem.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/Instance.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/Instance/Client.php';
 
 /**
  * PMF_LinkTest
@@ -59,7 +59,7 @@ class PMF_Instance_ClientTest extends PHPUnit_Framework_TestCase
         $this->dbHandle = new PMF_DB_Sqlite3();
         $this->PMF_Configuration = new PMF_Configuration($this->dbHandle);
         $this->PMF_Configuration->config['security.useSslOnly'] = 'true';
-        $this->PMF_Filesystem = new PMF_Filesystem(dirname(dirname(__DIR__)));
+        $this->PMF_Filesystem = new PMF_Filesystem(dirname(dirname(__DIR__)) . '/phpmyfaq');
 
         $this->PMF_Instance = new PMF_Instance($this->PMF_Configuration);
         $this->PMF_Instance_Client = new PMF_Instance_Client($this->PMF_Configuration);
