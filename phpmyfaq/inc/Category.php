@@ -840,12 +840,14 @@ class PMF_Category
             }
 
             $temp = $breadcrumb;
-        }
 
-        return '<ul class="breadcrumb">'. implode(
-            '<span class="divider">' . $separator . '</span>',
-            $temp
-        ) . '</ul>';
+            return '<ul class="breadcrumb">'. implode(
+                '<span class="divider">' . $separator . '</span>',
+                $temp
+            ) . '</ul>';
+        } else {
+            return implode($separator, $temp);
+        }
     }
 
     /**
