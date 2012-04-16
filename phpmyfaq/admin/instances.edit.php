@@ -14,7 +14,7 @@
  * @copyright 2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @since     2012-03-16
+ * @since     2012-04-16
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -58,7 +58,13 @@ if ($permission['editinstances']) {
         </div>
         <div class="control-group">
             <label class="control-label">Configuration:</label>
-
+            <div class="controls">
+            <?php
+            foreach ($instance->getInstanceConfig($instanceData->id) as $key => $config) {
+                print $key . ': ' . $config . '<br/>';
+            }
+            ?>
+            </div>
         </div>
         <div class="form-actions">
             <input class="btn-primary" type="submit" value="<?php print $PMF_LANG['ad_gen_save']; ?>" />

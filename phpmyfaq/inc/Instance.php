@@ -173,9 +173,10 @@ class PMF_Instance
 
     /**
      * Returns the configuration of the given instance ID
-     * @param $id
      *
-     * @return PMF_DB_Driver
+     * @param integer $id
+     *
+     * @return array
      */
     public function getInstanceConfig($id)
     {
@@ -196,6 +197,8 @@ class PMF_Instance
         foreach ($config as $items) {
             $this->instanceConfig[$items->config_name] = $items->config_value;
         }
+
+        return $this->instanceConfig;
     }
 
     /**
