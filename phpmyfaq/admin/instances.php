@@ -2,7 +2,7 @@
 /**
  * The main multi-site instances frontend
  *
- * PHP 5.2
+ * PHP 5.3
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -32,10 +32,35 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     </header>
 <?php
 if ($permission['editinstances']) {
+
     $instance = new PMF_Instance($faqConfig);
 
-?>
+    $instanceId = PMF_Filter::filterInput(INPUT_POST, 'instance_id', FILTER_VALIDATE_INT);
 
+    // Update client instance
+    if ('updateinstance' === $action && is_integer($instanceId)) {
+
+        $data = array();
+        $data['url']      = PMF_Filter::filterInput(INPUT_POST, 'url', FILTER_SANITIZE_STRING);
+        $data['instance'] = PMF_Filter::filterInput(INPUT_POST, 'instance', FILTER_SANITIZE_STRING);
+        $data['comment']  = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
+
+        if ($instance->updateInstance($instanceId, $data)) {
+            printf(
+                '<p class="alert alert-success">%s%s</p>',
+                '<a class="close" data-dismiss="alert" href="#">&times;</a>',
+                $PMF_LANG['ad_config_saved']
+            );
+        } else {
+            printf(
+                '<p class="alert alert-error">%s%s<br/>%s</p>',
+                '<a class="close" data-dismiss="alert" href="#">&times;</a>',
+                $PMF_LANG['ad_entryins_fail'],
+                $faqConfig->getDb()->error()
+            );
+        }
+    }
+?>
     <table class="table">
         <thead>
         <tr>
@@ -58,11 +83,14 @@ if ($permission['editinstances']) {
             <td><?php print $site->instance ?></td>
             <td><?php print $site->comment ?></td>
             <td>
-                <a href="javascript:;" id="edit-instance-<?php print $site->id ?>" class="btn btn-info pmf-instance-edit">edit</a>
+                <?php if (! $currentInstance->getConfig('isMaster') === true): ?>
+                <a href="?action=editinstance&instance_id=<?php print $site->id ?>" class="btn btn-info">edit</a>
+                <?php endif; ?>
             </td>
             <td>
                 <?php if (! $currentInstance->getConfig('isMaster') === true): ?>
-                <a href="javascript:;" id="delete-instance-<?php print $site->id ?>" class="btn btn-danger pmf-instance-delete">delete</a>
+                <a href="javascript:;" id="delete-instance-<?php print $site->id ?>"
+                   class="btn btn-danger pmf-instance-delete">delete</a>
                 <?php endif; ?>
             </td>
         </tr>
@@ -116,6 +144,7 @@ if ($permission['editinstances']) {
     </div>
 
     <script type="text/javascript">
+        // Add instance
         $('.pmf-instance-add').click(function(event) {
             event.preventDefault();
             var url = $('#url').val();
@@ -137,14 +166,16 @@ if ($permission['editinstances']) {
                         $('.table tbody').append(
                             '<tr id="row-instance-' + data.added + '">' +
                             '<td>' + data.added + '</td>' +
-                            '<td><a href="http://' + url + instance + '">' + url + '</a></td>' +
+                            '<td><a href="http://' + url + instance + '">http://' + url + '</a></td>' +
                             '<td>' + instance + '</td>' +
                             '<td>' + comment + '</td>' +
                             '<td>' +
-                            '<a href="javascript:;" id="edit-instance-' + data.added + '" class="btn btn-info pmf-instance-edit">edit</a>' +
+                            '<a href="javascript:;" id="edit-instance-' + data.added +
+                            '" class="btn btn-info pmf-instance-edit">edit</a>' +
                             '</td>' +
                             '<td>' +
-                            '<a href="javascript:;" id="delete-instance-' + data.added + '" class="btn btn-danger pmf-instance-delete">delete</a>' +
+                            '<a href="javascript:;" id="delete-instance-' + data.added +
+                            '" class="btn btn-danger pmf-instance-delete">delete</a>' +
                             '</td>' +
                             '</tr>'
                         );
@@ -155,6 +186,7 @@ if ($permission['editinstances']) {
 
         });
 
+        // Delete instance
         $('.pmf-instance-delete').click(function(event) {
             event.preventDefault();
             var targetId = event.target.id.split('-');

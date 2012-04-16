@@ -148,7 +148,7 @@ class PMF_Instance
 
         $result = $this->config->getDb()->query($select);
 
-        return $this->config->getDb()->fetchAll($result);
+        return $this->config->getDb()->fetchObject($result);
     }
 
     /**
@@ -168,7 +168,7 @@ class PMF_Instance
 
         $result = $this->config->getDb()->query($select);
 
-        return $this->config->getDb()->fetchAll($result);
+        return $this->config->getDb()->fetchObject($result);
     }
 
     /**
@@ -197,6 +197,29 @@ class PMF_Instance
             $this->instanceConfig[$items->config_name] = $items->config_value;
         }
     }
+
+    /**
+     * Updates the instance data
+     *
+     * @param integer $id
+     * @param array   $data
+     *
+     * @return boolean
+     */
+    public function updateInstance($id, Array $data)
+    {
+        $update = sprintf(
+            "UPDATE %sfaqinstances SET url = '%s', instance = '%s', comment = '%s' WHERE id = %d",
+            SQLPREFIX,
+            $data['url'],
+            $data['instance'],
+            $data['comment'],
+            (int)$id
+        );
+
+        return $this->config->getDb()->query($update);
+    }
+
 
     /**
      * Deletes an instance

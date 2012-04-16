@@ -42,7 +42,7 @@ switch ($ajaxAction) {
         $install  = PMF_Filter::filterInput(INPUT_GET, 'install', FILTER_SANITIZE_STRING);
 
         $data = array(
-            'url'      => $url,
+            'url'      => 'http://' . $url,
             'instance' => $instance,
             'comment'  => $comment
         );
