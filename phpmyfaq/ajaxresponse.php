@@ -91,7 +91,7 @@ if (!is_null($searchString)) {
     
     $faqSearchResult->reviewResultset($searchResult);
     
-    $faqSearchHelper = PMF_Helper_Search::getInstance($faqConfig);
+    $faqSearchHelper = new PMF_Helper_Search($faqConfig);
     $faqSearchHelper->setSearchterm($searchString);
     $faqSearchHelper->setCategory($category);
     $faqSearchHelper->setPlurals($plr);

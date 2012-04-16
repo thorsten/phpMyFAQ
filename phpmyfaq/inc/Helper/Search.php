@@ -35,13 +35,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Helper_Search extends PMF_Helper 
 {
     /**
-     * Instance
-     *
-     * @var PMF_Helper_Search
-     */
-    private static $instance = null;
-    
-    /**
      * Language
      *
      * @var PMF_Language
@@ -69,34 +62,10 @@ class PMF_Helper_Search extends PMF_Helper
      *
      * @return PMF_Helper_Search
      */
-    private function __construct(PMF_Configuration $config)
+    public function __construct(PMF_Configuration $config)
     {
         $this->_config = $config;
         $this->pmfLang = $this->getTranslations();
-    }
-    
-    /**
-     * Returns the single instance
-     *
-     * @access static
-     * @return PMF_Helper_Search
-     */
-    public static function getInstance(PMF_Configuration $config)
-    {
-        if (null == self::$instance) {
-            $className = __CLASS__;
-            self::$instance = new $className($config);
-        }
-        return self::$instance;
-    }
-   
-    /**
-     * __clone() Magic method to prevent cloning
-     *
-     * @return void
-     */
-    private function __clone()
-    {
     }
     
     /**
@@ -144,7 +113,7 @@ class PMF_Helper_Search extends PMF_Helper
     {
         return sprintf(
             '<a class="searchplugin" href="#" onclick="window.external.AddSearchProvider(\'%s\'); return false;">%s</a>',
-                $this->_config->get('main.referenceURL') . '/opensearch.php',
+            $this->_config->get('main.referenceURL') . '/opensearch.php',
             $this->translation['opensearch_plugin_install']
         );
     }

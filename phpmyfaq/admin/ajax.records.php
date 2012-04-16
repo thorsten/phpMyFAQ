@@ -86,10 +86,10 @@ switch($ajax_action) {
 
                 $faqSearchResult->reviewResultset($searchResult);
 
-                $faqSearchHelper = PMF_Helper_Search::getInstance($faqConfig);
-                $faqSearchHelper->setSearchterm($searchString);
+                $searchHelper = new PMF_Helper_Search($faqConfig);
+                $searchHelper->setSearchterm($searchString);
 
-                print $faqSearchHelper->renderAdminSuggestionResult($faqSearchResult);
+                print $searchHelper->renderAdminSuggestionResult($faqSearchResult);
             }
             
         } else {

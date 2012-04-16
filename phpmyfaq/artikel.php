@@ -195,7 +195,9 @@ $faqSearchResult->reviewResultset(
         $faq->faqRecord['keywords']
     )
 );
-$relatedFaqs = PMF_Helper_Search::getInstance($faqConfig)->renderRelatedFaqs($faqSearchResult, $faq->faqRecord['id']);
+
+$searchHelper = new PMF_Helper_Search($faqConfig);
+$relatedFaqs  = $searchHelper->renderRelatedFaqs($faqSearchResult, $faq->faqRecord['id']);
 
 // Show link to edit the faq?
 $editThisEntry = '';

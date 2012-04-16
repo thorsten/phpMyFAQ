@@ -145,15 +145,15 @@ $faqPagination     = new PMF_Pagination($faqConfig, $options);
 $categoryHelper = new PMF_Helper_Category();
 $categoryHelper->setCategory($category);
 
-$faqSearchHelper = PMF_Helper_Search::getInstance($faqConfig);
-$faqSearchHelper->setSearchterm($inputSearchTerm);
-$faqSearchHelper->setCategory($category);
-$faqSearchHelper->setPagination($faqPagination);
-$faqSearchHelper->setPlurals($plr);
-$faqSearchHelper->setSessionId($sids);
+$searchHelper = new PMF_Helper_Search($faqConfig);
+$searchHelper->setSearchterm($inputSearchTerm);
+$searchHelper->setCategory($category);
+$searchHelper->setPagination($faqPagination);
+$searchHelper->setPlurals($plr);
+$searchHelper->setSessionId($sids);
 
 if ('' == $searchResult && !is_null($inputSearchTerm)) {
-    $searchResult = $faqSearchHelper->renderSearchResult($faqSearchResult, $page);
+    $searchResult = $searchHelper->renderSearchResult($faqSearchResult, $page);
 }
 
 $tpl->parse('writeContent', array(
@@ -168,8 +168,8 @@ $tpl->parse('writeContent', array(
     'writeSendAdress'          => '?'.$sids.'action=search',
     'msgSearchWord'            => $PMF_LANG['msgSearchWord'],
     'printResult'              => $searchResult,
-    'openSearchLink'           => $faqSearchHelper->renderOpenSearchLink(),
+    'openSearchLink'           => $searchHelper->renderOpenSearchLink(),
     'msgMostPopularSearches'   => $PMF_LANG['msgMostPopularSearches'],
-    'printMostPopularSearches' => $faqSearchHelper->renderMostPopularSearches($mostPopularSearchData)));
+    'printMostPopularSearches' => $searchHelper->renderMostPopularSearches($mostPopularSearchData)));
 
 $tpl->merge('writeContent', 'index');
