@@ -269,15 +269,22 @@ class PMF_System
             '/config/ldap.php'           => false
         );
 
-        foreach ($files as $file) {
-            if ('php' === $file->getExtension() && ! preg_match('#/tests/#', $file->getPath())) {
-                $current = str_replace($path, '', $file->getPathname());
+        try {
 
-                if (isset($blacklist[$current])) {
-                    continue;
+            foreach ($files as $file) {
+
+                if (! preg_match('#/tests/#', $file->getPath()) && 'php' === $file->getExtension()) {
+                    $current = str_replace($path, '', $file->getPathname());
+
+                    if (isset($blacklist[$current])) {
+                        continue;
+                    }
+                    $hashes[$current] = sha1(file_get_contents($file->getPathname()));
                 }
-                $hashes[$current] = sha1(file_get_contents($file->getPathname()));
             }
+
+        } catch (UnexpectedValueException $e) {
+            $hashes[$current . ' failed'] = $e->getMessage();
         }
 
         return json_encode($hashes);
