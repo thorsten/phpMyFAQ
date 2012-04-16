@@ -79,7 +79,7 @@ if ($permission['editinstances']) {
         ?>
         <tr id="row-instance-<?php print $site->id ?>">
             <td><?php print $site->id ?></td>
-            <td><a href="http://<?php print $site->url.$site->instance ?>"><?php print $site->url ?></a></td>
+            <td><a href="<?php print $site->url . $site->instance ?>"><?php print $site->url ?></a></td>
             <td><?php print $site->instance ?></td>
             <td><?php print $site->comment ?></td>
             <td>

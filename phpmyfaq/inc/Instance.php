@@ -122,7 +122,7 @@ class PMF_Instance
     public function getAllInstances()
     {
         $select = sprintf(
-            "SELECT * FROM %sfaqinstances",
+            "SELECT * FROM %sfaqinstances ORDER BY id",
             SQLPREFIX
         );
 
@@ -240,7 +240,7 @@ class PMF_Instance
                 (int)$id
             ),
             sprintf(
-                "DELETE FROM %sfaqinstancesconfig WHERE instanceid = %d",
+                "DELETE FROM %sfaqinstances_config WHERE instance_id = %d",
                 SQLPREFIX,
                 (int)$id
             ),
