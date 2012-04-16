@@ -1,6 +1,6 @@
 <?php
 /**
- * Select an attachment and save it or create the SQL backup files
+ * Select an attachment and save it
  *
  * PHP Version 5.3
  *
@@ -17,8 +17,6 @@
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-17 
  */
-
-error_reporting(E_ALL);
 
 define('PMF_ROOT_DIR', dirname(__DIR__));
 
@@ -114,7 +112,6 @@ if (is_null($currentAction) || !is_null($currentSave)) {
 
     <script src="../assets/js/libs/modernizr.min.js"></script>
     <script src="../assets/js/libs/jquery.min.js"></script>
-    <script src="../assets/js/functions.js"></script>
     <script src="../assets/js/phpmyfaq.js"></script>
 
     <link rel="shortcut icon" href="../assets/template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico">

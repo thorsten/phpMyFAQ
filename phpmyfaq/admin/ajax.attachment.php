@@ -31,7 +31,7 @@ if ($att) {
     switch ($ajaxAction) {
         case 'delete':
             if ($att->delete()) {
-                print $PMF_LANG['ad_att_delsuc'];
+                print $PMF_LANG['msgAttachmentsDeleted'];
             } else {
                 print $PMF_LANG['ad_att_delfail'];
             }

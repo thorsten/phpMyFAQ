@@ -185,7 +185,6 @@ switch ($action) {
 
     <script src="../assets/js/libs/modernizr.min.js"></script>
     <script src="../assets/js/libs/jquery.min.js"></script>
-    <script src="../assets/js/functions.js"></script>
     <script src="../assets/js/phpmyfaq.js"></script>
 
     <script src="../assets/js/plugins/autocomplete/jquery.autocomplete.pack.js"></script>

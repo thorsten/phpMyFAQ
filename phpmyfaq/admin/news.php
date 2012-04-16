@@ -421,7 +421,7 @@ if ('addnews' == $action && $permission["addnews"]) {
     <form action="?action=deletenews" method="post">
     <input type="hidden" name="id" value="<?php print $delete_id; ?>" />
     <input type="hidden" name="really" value="yes" />
-    <input class="btn-primary" type="submit" name="submit" value="<?php print $PMF_LANG["ad_news_yesdelete"]; ?>" style="color: Red;" />
+    <input class="btn-warning" type="submit" name="submit" value="<?php print $PMF_LANG["ad_news_yesdelete"]; ?>" />
     <input class="btn-inverse" type="reset" onclick="javascript:history.back();" value="<?php print $PMF_LANG["ad_news_nodelete"]; ?>" />
     </form>
     </div>

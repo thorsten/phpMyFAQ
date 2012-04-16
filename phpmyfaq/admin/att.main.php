@@ -1,6 +1,6 @@
 <?php
 /**
- * Attachment administration interface
+ * Ajax interface for attachments
  *
  * PHP Version 5.3
  *
@@ -79,8 +79,7 @@ printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_attachment_admin']);
             /**
              * Ajax call for deleting attachments
              *
-             * @param  integer att_id Attachment id
-             * @return void
+             * @param att_id Attachment id
              */
             function deleteAttachment(att_id)
             {
@@ -92,8 +91,7 @@ printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_attachment_admin']);
                         data:    {attId: att_id},
                         success: function(msg) {
                             $('.att_' + att_id).fadeOut('slow');
-                            $('#saving_data_indicator').
-                                html('<p class="alert alert-success"><?php print $PMF_LANG['msgAttachmentsDeleted']; ?></p>');
+                            $('#saving_data_indicator').html('<p class="alert alert-success">' + msg + '</p>');
                         }
                     });
                 }

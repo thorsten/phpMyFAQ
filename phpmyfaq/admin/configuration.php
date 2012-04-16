@@ -146,25 +146,25 @@ if ($permission['editconfig']) {
 
         function getConfigList()
         {
-            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "main" }, function(data) {
+            $.get("index.php", { action: "ajax", ajax: "config_list", conf: "main" }, function(data) {
                 $('#configMain').append(data);
             });
-            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "records" }, function(data) {
+            $.get("index.php", { action: "ajax", ajax: "config_list", conf: "records" }, function(data) {
                 $('#configRecords').append(data);
             });
-            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "search" }, function(data) {
+            $.get("index.php", { action: "ajax", ajax: "config_list", conf: "search" }, function(data) {
                 $('#configSearch').append(data);
             });
-            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "security" }, function(data) {
+            $.get("index.php", { action: "ajax", ajax: "config_list", conf: "security" }, function(data) {
                 $('#configSecurity').append(data);
             });
-            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "spam" }, function(data) {
+            $.get("index.php", { action: "ajax", ajax: "config_list", conf: "spam" }, function(data) {
                 $('#configSpam').append(data);
             });
-            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "socialnetworks" }, function(data) {
+            $.get("index.php", { action: "ajax", ajax: "config_list", conf: "socialnetworks" }, function(data) {
                 $('#configSocialNetworks').append(data);
             });
-            $.get("index.php", {action: "ajax", ajax: "config_list", conf: "cache" }, function(data) {
+            $.get("index.php", { action: "ajax", ajax: "config_list", conf: "cache" }, function(data) {
                 $('#configCache').append(data);
             });
         }
