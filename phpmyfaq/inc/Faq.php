@@ -1615,17 +1615,18 @@ class PMF_Faq
      * @param   integer $question_id
      * @return  boolean
      */
-    function deleteQuestion($question_id)
+    function deleteQuestion($questionId)
     {
-        $query = sprintf('
+        $delete = sprintf('
             DELETE FROM
                 %sfaqquestions
             WHERE
                 id = %d',
             SQLPREFIX,
-            $question_id);
+            $questionId
+        );
 
-        $this->_config->getDb()->query($query);
+        $this->_config->getDb()->query($delete);
         return true;
     }
 

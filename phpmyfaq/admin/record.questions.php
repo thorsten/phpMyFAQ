@@ -22,6 +22,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+printf("<header><h2>%s</h2></header>", $PMF_LANG['msgOpenQuestions']);
+
 if ($permission['delquestion']) {
 
     $category = new PMF_Category($faqConfig, false);
@@ -29,7 +31,6 @@ if ($permission['delquestion']) {
     $category->setGroups($current_admin_groups);
     $date       = new PMF_Date($faqConfig);
     $questionId = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    $delete     = PMF_Filter::filterInput(INPUT_GET, 'delete', FILTER_SANITIZE_STRING, 'no');
     
     $toggle = PMF_Filter::filterInput(INPUT_GET, 'is_visible', FILTER_SANITIZE_STRING);
     if ($toggle == 'toggle') {
@@ -39,31 +40,32 @@ if ($permission['delquestion']) {
         }
     }
 
-    printf("<header><h2>%s</h2></header>", $PMF_LANG['msgOpenQuestions']);
-
-    if ($delete == 'yes') {
-        $faq->deleteQuestion($questionId);
-        printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_entry_delsuc']);
-    }
+    print '<div id="returnMessage"></div>';
 
     $openquestions = $faq->getAllOpenQuestions();
 
     if (count($openquestions) > 0) {
 ?>
-        <table class="table table-striped">
-        <thead>
-            <tr>
-                <th><?php print $PMF_LANG['ad_entry_author']; ?></th>
-                <th><?php print $PMF_LANG['ad_entry_theme']; ?></th>
-                <th><?php print $PMF_LANG['ad_entry_visibility']; ?>?</th>
-                <th><?php print $PMF_LANG['ad_gen_delete']; ?>?</th>
-            </tr>
-        </thead>
-        <tbody>
+    <form id="questionSelection" name="questionSelection" method="post">
+    <table class="table table-striped">
+    <thead>
+        <tr>
+            <th></th>
+            <th><?php print $PMF_LANG['ad_entry_author']; ?></th>
+            <th><?php print $PMF_LANG['ad_entry_theme']; ?></th>
+            <th colspan="2"><?php print $PMF_LANG['ad_entry_visibility']; ?>?</th>
+        </tr>
+    </thead>
+    <tbody>
 <?php
         foreach ($openquestions as $question) {
 ?>
         <tr>
+            <td>
+                <input id="questions[]"
+                       name="questions[]"
+                       value="<?php print $question['id']; ?>" type="checkbox" />
+            </td>
             <td>
                 <?php print $date->format(PMF_Date::createIsoDate($question['created'])); ?>
                 <br />
@@ -72,20 +74,16 @@ if ($permission['delquestion']) {
                 </a>
             </td>
             <td>
-                <div id="PMF_openQuestionsCategory"><?php print $category->categoryName[$question['category_id']]['name'] ?></div>
+                <strong><?php print $category->categoryName[$question['category_id']]['name'] ?></strong>
                 <br />
                 <?php print $question['question'] ?>
             </td>
             <td>
                 <a href="?action=question&amp;id=<?php print $question['id']; ?>&amp;is_visible=toggle">
-                    <?php print (('Y' == $question['is_visible']) ? $PMF_LANG['ad_gen_no'] : $PMF_LANG['ad_gen_yes']); ?>
+                    <?php print ('Y' == $question['is_visible']) ? $PMF_LANG['ad_gen_no'] : $PMF_LANG['ad_gen_yes']; ?>
                 </a>
             </td>
             <td>
-                <a onclick="return confirm('<?php print $PMF_LANG['ad_user_del_3'] ?>'); return false;" href="?action=question&amp;id=<?php print $question['id']; ?>&amp;delete=yes">
-                    <?php print $PMF_LANG['ad_gen_delete']; ?>
-                </a>
-                <br />
                 <?php if ($faqConfig->get('records.enableCloseQuestion') && $question['answer_id']) { ?>
                 <a href="?action=editentry&amp;id=<?php print $question['answer_id']; ?>&amp;lang=<?php print $LANGCODE; ?>">
                     <?php print $PMF_LANG['msg2answerFAQ']; ?>
@@ -101,8 +99,41 @@ if ($permission['delquestion']) {
 <?php
         }
 ?>
-        </tbody>
-        </table>
+    </tbody>
+    </table>
+    </form>
+
+    <p>
+        <input class="btn-danger" id="submitDeleteQuestions" type="submit" name="submit"
+               value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" />
+    </p>
+
+    <script type="text/javascript">
+        /* <![CDATA[ */
+        $('#submitDeleteQuestions').click(function() { deleteQuestions(); return false; });
+
+        function deleteQuestions()
+        {
+            var questions = $('#questionSelection').serialize();
+
+            $('#returnMessage').empty();
+            $.ajax({
+                type: 'POST',
+                url:  'index.php?action=ajax&ajax=records&ajaxaction=delete_question',
+                data: questions,
+                success: function(msg) {
+                    $('#saving_data_indicator').html('<img src="images/indicator.gif" /> deleting ...');
+                    $('tr td input:checked').parent().parent().fadeOut('slow');
+                    $('#saving_data_indicator').fadeOut('slow');
+                    $('#returnMessage').
+                            html('<p class="alert alert-success">' + msg + '</p>');
+                }
+            });
+            return false;
+        }
+
+        /* ]]> */
+    </script>
 <?php
     } else {
         print $PMF_LANG['msgNoQuestionsAvailable'];

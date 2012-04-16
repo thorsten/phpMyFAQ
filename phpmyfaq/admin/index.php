@@ -320,7 +320,7 @@ if (isset($auth) && in_array(true, $permission)) {
             case "saveentry":               require_once 'record.save.php'; break;
             case "delentry":                require_once 'record.delete.php'; break;
             case "delatt":                  require_once 'record.delatt.php'; break;
-            case "question":                require_once 'record.delquestion.php'; break;
+            case "question":                require_once 'record.questions.php'; break;
             case 'comments':                require_once 'record.comments.php'; break;
             // news administraion
             case 'news':                    

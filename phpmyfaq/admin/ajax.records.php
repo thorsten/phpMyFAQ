@@ -114,4 +114,25 @@ switch($ajax_action) {
             print $PMF_LANG['err_NotAuth'];
         }
         break;
+
+    // delete open questions
+    case 'delete_question':
+        if ($permission['delquestion']) {
+
+            $checks  = array(
+                'filter'  => FILTER_VALIDATE_INT,
+                'flags'   => FILTER_REQUIRE_ARRAY
+            );
+            $questionIds = PMF_Filter::filterInputArray(INPUT_POST, array('questions' => $checks));
+
+            if (!is_null($questionIds['questions'])) {
+                foreach ($questionIds['questions'] as $questionId) {
+                    $faq->deleteQuestion((int)$questionId);
+                }
+            }
+            print $PMF_LANG['ad_entry_delsuc'];
+        } else {
+            print $PMF_LANG['err_NotAuth'];
+        }
+        break;
 }
