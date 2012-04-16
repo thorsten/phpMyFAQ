@@ -30,9 +30,13 @@ if ($permission['backup']) {
         <fieldset>
             <legend><?php print $PMF_LANG["ad_csv_head"]; ?></legend>
             <p><?php print $PMF_LANG["ad_csv_make"]; ?></p>
-            <p align="center">
-                <a href="backup.export.php?action=backup_content"><?php print $PMF_LANG["ad_csv_linkdat"]; ?></a> |
-                <a href="backup.export.php?action=backup_logs"><?php print $PMF_LANG["ad_csv_linklog"]; ?></a>
+            <p>
+                <a class="btn btn-primary" href="backup.export.php?action=backup_content">
+                    <?php print $PMF_LANG["ad_csv_linkdat"]; ?>
+                </a>
+                <a class="btn btn-primary" href="backup.export.php?action=backup_logs">
+                    <?php print $PMF_LANG["ad_csv_linklog"]; ?>
+                </a>
             </p>
         </fieldset>
 
@@ -45,7 +49,7 @@ if ($permission['backup']) {
                 <input type="file" name="userfile" size="30" />
             </p>
             <p>
-                <input class="btn-primary btn-large" type="submit" value="<?php print $PMF_LANG["ad_csv_ok"]; ?>" />
+                <input class="btn-primary" type="submit" value="<?php print $PMF_LANG["ad_csv_ok"]; ?>" />
             </p>
         </fieldset>
         </form>
