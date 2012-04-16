@@ -2,8 +2,8 @@
 /**
  * The dynamic Google Sitemap builder.
  *
- * http://[...]/sitemap.google.php
- * http://[...]/sitemap.google.php?gz=1
+ * http://[...]/sitemap.xml.php
+ * http://[...]/sitemap.xml.php?gz=1
  * http://[...]/sitemap.xml
  * http://[...]/sitemap.gz
  * http://[...]/sitemap.xml.gz

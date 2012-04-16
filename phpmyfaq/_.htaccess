@@ -121,9 +121,9 @@ RewriteRule sitemap/([^\/]+)/([a-z\-]+)\.htm(l?)$   index.php?action=sitemap&let
 # * http://[...]/sitemap.xml
 # * http://[...]/sitemap.gz
 # * http://[...]/sitemap.xml.gz
-RewriteRule sitemap.xml$        sitemap.google.php [L]
-RewriteRule sitemap.gz$         sitemap.google.php?gz=1 [L]
-RewriteRule sitemap.xml.gz$     sitemap.google.php?gz=1 [L]
+RewriteRule sitemap.xml$        sitemap.xml.php [L]
+RewriteRule sitemap.gz$         sitemap.xml.php?gz=1 [L]
+RewriteRule sitemap.xml.gz$     sitemap.xml.php?gz=1 [L]
 
 # PMF tags page with page count
 # * http://[...]/tags/<ID>/<PAGE NUMBER>/<HEADER>.htm
