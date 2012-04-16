@@ -435,8 +435,8 @@ $usersOnLine    = $faqsession->getUsersOnline();
 $totUsersOnLine = $usersOnLine[0] + $usersOnLine[1];
 $systemUri      = $faqConfig->get('main.referenceURL') . '/';
 
-$helper = PMF_Helper_Category::getInstance();
-$helper->setCategory($category);
+$categoryHelper = new PMF_Helper_Category();
+$categoryHelper->setCategory($category);
 
 
 $keywordsArray = array_merge(explode(',', $keywords), explode(',', $faqConfig->get('main.metaKeywords')));
@@ -461,7 +461,7 @@ $tplMainPage = array(
     'action'              => $action,
     'dir'                 => $PMF_LANG['dir'],
     'msgCategory'         => $PMF_LANG['msgCategory'],
-    'showCategories'      => $helper->renderCategoryNavigation($cat),
+    'showCategories'      => $categoryHelper->renderNavigation($cat),
     'msgExportAllFaqs'    => $PMF_LANG['msgExportAllFaqs'],
     'languageBox'         => $PMF_LANG['msgLangaugeSubmit'],
     'writeLangAdress'     => $writeLangAdress,
@@ -668,7 +668,7 @@ if ('artikel' == $action || 'show' == $action || is_numeric($solutionId)) {
     $faqServices->setLanguage($lang);
     $faqServices->setQuestion($title);
 
-    $faqHelper = PMF_Helper_Faq::getInstance($faqConfig);
+    $faqHelper = new PMF_Helper_Faq($faqConfig);
     $faqHelper->setSsl((isset($_SERVER['HTTPS']) && is_null($_SERVER['HTTPS']) ? false : true));
 
     $tpl->parseBlock(

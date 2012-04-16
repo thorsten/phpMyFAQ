@@ -36,8 +36,8 @@ if ($permission['editbt'] || $permission['delbt']) {
     $category->transform(0);
 
     // Set the Category for the helper class
-    $helper = PMF_Helper_Category::getInstance();
-    $helper->setCategory($category);
+    $categoryHelper = new PMF_Helper_Category();
+    $categoryHelper->setCategory($category);
 
     $category->buildTree();
     
@@ -61,7 +61,7 @@ if ($permission['editbt'] || $permission['delbt']) {
             <label><?php print $PMF_LANG["msgCategory"]; ?>:</label>
             <select name="searchcat">
                 <option value="0"><?php print $PMF_LANG["msgShowAllCategories"]; ?></option>
-                <?php print $helper->renderCategoryOptions($searchcat); ?>
+                <?php print $categoryHelper->renderOptions($searchcat); ?>
             </select>
         </p>
         <p>

@@ -48,8 +48,8 @@ if (!is_null($inputQuestion)) {
 
 $category->buildTree();
 
-$helper = PMF_Helper_Category::getInstance();
-$helper->setCategory($category);
+$categoryHelper = new PMF_Helper_Category();
+$categoryHelper->setCategory($category);
 
 $captchaHelper = new PMF_Helper_Captcha($faqConfig);
 
@@ -65,7 +65,7 @@ $tpl->parse(
         'msgNewContentName'     => $PMF_LANG['msgNewContentName'],
         'msgNewContentMail'     => $PMF_LANG['msgNewContentMail'],
         'msgNewContentCategory' => $PMF_LANG['msgNewContentCategory'],
-        'printCategoryOptions'  => $helper->renderCategoryOptions($inputCategory),
+        'printCategoryOptions'  => $categoryHelper->renderOptions($inputCategory),
         'msgNewContentTheme'    => $PMF_LANG['msgNewContentTheme'],
         'readonly'              => $readonly,
         'printQuestion'         => $question,

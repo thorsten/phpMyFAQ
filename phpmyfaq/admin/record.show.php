@@ -34,8 +34,8 @@ if ($permission['editbt'] || $permission['delbt']) {
     $category->transform(0);
     
     // Set the Category for the helper class
-    $helper = PMF_Helper_Category::getInstance();
-    $helper->setCategory($category);
+    $categoryHelper = new PMF_Helper_Category();
+    $categoryHelper->setCategory($category);
 
     $category->buildTree();
     

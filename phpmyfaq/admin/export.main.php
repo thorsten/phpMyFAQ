@@ -39,9 +39,9 @@ if (!PMF_Db::checkOnEmptyTable('faqdata')) {
         $category->setUser($current_admin_user);
         $category->setGroups($current_admin_groups);
         $category->buildTree();
-        
-        $helper = PMF_Helper_Category::getInstance();
-        $helper->setCategory($category);
+
+        $categoryHelper = new PMF_Helper_Category();
+        $categoryHelper->setCategory($category);
 ?>
             <fieldset>
                 <legend><?php print($PMF_LANG['ad_export_which_cat']); ?></legend>
@@ -50,7 +50,7 @@ if (!PMF_Db::checkOnEmptyTable('faqdata')) {
                     <div class="controls">
                         <select name="catid" id="catid" size="1">
                             <option value="0"><?php print $PMF_LANG['msgShowAllCategories'] ?></option>
-                            <?php print $helper->renderCategoryOptions(); ?>
+                            <?php print $categoryHelper->renderOptions(); ?>
                         </select>
                     </div>
                 </div>

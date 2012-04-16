@@ -36,8 +36,8 @@ $category->buildTree();
 
 $categoryId = PMF_Filter::filterInput(INPUT_GET, 'category_id', FILTER_VALIDATE_INT, 0);
 
-$helper = PMF_Helper_Category::getInstance();
-$helper->setCategory($category);
+$categoryHelper = new PMF_Helper_Category();
+$categoryHelper->setCategory($category);
 
 $captchaHelper = new PMF_Helper_Captcha($faqConfig);
 
@@ -52,7 +52,7 @@ $tpl->parse(
         'defaultContentMail'   => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
         'defaultContentName'   => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
         'msgAskCategory'       => $PMF_LANG['msgAskCategory'],
-        'printCategoryOptions' => $helper->renderCategoryOptions($categoryId),
+        'printCategoryOptions' => $categoryHelper->renderOptions($categoryId),
         'msgAskYourQuestion'   => $PMF_LANG['msgAskYourQuestion'],
         'captchaFieldset'      => $captchaHelper->renderCaptcha($captcha, 'ask', $PMF_LANG['msgCaptcha']),
         'msgNewContentSubmit'  => $PMF_LANG['msgNewContentSubmit']

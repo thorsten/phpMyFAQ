@@ -142,8 +142,8 @@ $options = array(
     'layoutTpl'       => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>');
 
 $faqPagination     = new PMF_Pagination($faqConfig, $options);
-$faqCategoryHelper = PMF_Helper_Category::getInstance();
-$faqCategoryHelper->setCategory($category);
+$categoryHelper = new PMF_Helper_Category();
+$categoryHelper->setCategory($category);
 
 $faqSearchHelper = PMF_Helper_Search::getInstance($faqConfig);
 $faqSearchHelper->setSearchterm($inputSearchTerm);
@@ -164,7 +164,7 @@ $tpl->parse('writeContent', array(
     'checkedAllLanguages'      => $allLanguages ? ' checked="checked"' : '',
     'selectCategories'         => $PMF_LANG['msgSelectCategories'],
     'allCategories'            => $PMF_LANG['msgAllCategories'],
-    'printCategoryOptions'     => $faqCategoryHelper->renderCategoryOptions($inputCategory),
+    'printCategoryOptions'     => $categoryHelper->renderOptions($inputCategory),
     'writeSendAdress'          => '?'.$sids.'action=search',
     'msgSearchWord'            => $PMF_LANG['msgSearchWord'],
     'printResult'              => $searchResult,

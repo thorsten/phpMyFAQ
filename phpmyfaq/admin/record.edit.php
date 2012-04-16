@@ -31,9 +31,9 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     $category->setUser($current_admin_user);
     $category->setGroups($current_admin_groups);
     $category->buildTree();
-    
-    $helper = PMF_Helper_Category::getInstance();
-    $helper->setCategory($category);
+
+    $categoryHelper = new PMF_Helper_Category();
+    $categoryHelper->setCategory($category);
 
     $selectedCategory = '';
     $categories       = array();
@@ -598,7 +598,7 @@ if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
                     <div class="control-group">
                         <div class="controls">
                             <select name="rubrik[]" id="rubrik" size="5" multiple="multiple">
-                                <?php print $helper->renderCategoryOptions($categories); ?>
+                                <?php print $categoryHelper->renderOptions($categories); ?>
                             </select>
                         </div>
                     </div>

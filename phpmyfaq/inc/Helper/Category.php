@@ -22,7 +22,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * Helper
+ * PMF_Helper_Category
  *
  * @category  phpMyFAQ
  * @package   Helper
@@ -35,61 +35,22 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Helper_Category extends PMF_Helper 
 {
     /**
-     * Instance
-     *
-     * @var PMF_Helper_Category
-     */
-    private static $instance = null;
-    
-    /**
-     * Language
-     *
-     * @var string
-     */
-    private $language = null;
-    
-    /**
      * Constructor
      *
-     * @return 
-     */
-    private function __construct()
-    {
-        
-    }
-    
-    /**
-     * Returns the single instance
-     *
-     * @access static
      * @return PMF_Helper_Category
      */
-    public static function getInstance()
+    public function __construct()
     {
-        if (null == self::$instance) {
-            $className = __CLASS__;
-            self::$instance = new $className();
-        }
-        return self::$instance;
-    }
-   
-    /**
-     * __clone() Magic method to prevent cloning
-     *
-     * @return void
-     */
-    private function __clone()
-    {
-        
     }
 
     /**
      * Renders the main navigation
      *
      * @param  integer $activeCategory Selected category
+     *
      * @return string
      */
-    public function renderCategoryNavigation($activeCategory = 0)
+    public function renderNavigation($activeCategory = 0)
     {
         global $sids, $PMF_LANG;
 
@@ -185,7 +146,7 @@ class PMF_Helper_Category extends PMF_Helper
      *
      * @return string
      */
-    public function renderCategoryOptions($categoryId = '')
+    public function renderOptions($categoryId = '')
     {
         $categories = '';
 
@@ -218,5 +179,4 @@ class PMF_Helper_Category extends PMF_Helper
         }
         return $categories;
     }
-       
 }
