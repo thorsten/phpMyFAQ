@@ -57,7 +57,7 @@ $captcha = new PMF_Captcha($faqConfig);
 //$captcha->setSessionId($sids);
 
 // Send headers
-$http = PMF_Helper_Http::getInstance();
+$http = new PMF_Helper_Http();
 $http->setContentType('application/json');
 $http->addHeader();
 

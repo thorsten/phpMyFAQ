@@ -105,7 +105,8 @@ $category = new PMF_Category($faqConfig);
 $category->setUser($current_user);
 $category->setGroups($current_groups);
 
-$pdf = new PMF_Export_Pdf($faq, $category, $faqConfig);
+$pdf  = new PMF_Export_Pdf($faq, $category, $faqConfig);
+$http = new PMF_Helper_Http();
 
 session_cache_limiter('private');
 
@@ -125,7 +126,7 @@ if (true === $getAll) {
     if (is_null($currentCategory) || is_null($id)) {
         $headers[] = 'HTTP/1.1 403 Forbidden';
         $payload = 'Wrong HTTP GET parameters values.';
-        PMF_Helper_Http::sendWithHeaders($payload, $headers);
+        $http->sendWithHeaders($payload, $headers);
         exit();
     }
 
@@ -144,4 +145,4 @@ if (preg_match("/MSIE/i", $_SERVER["HTTP_USER_AGENT"])) {
     $headers[] = "Content-Type: application/pdf";
 }
 
-PMF_Helper_Http::sendWithHeaders($pdfFile, $headers);
+$http->sendWithHeaders($pdfFile, $headers);

@@ -29,6 +29,8 @@ $stopwordId    = PMF_Filter::filterInput(INPUT_GET, 'stopword_id', FILTER_VALIDA
 $stopword      = PMF_Filter::filterInput(INPUT_GET, 'stopword', FILTER_SANITIZE_STRING);
 $stopwordsLang = PMF_Filter::filterInput(INPUT_GET, 'stopwords_lang', FILTER_SANITIZE_STRING);
 
+$http = new PMF_Helper_Http();
+
 switch ($ajaxAction) {
 
     case 'add_instance':
@@ -63,7 +65,7 @@ switch ($ajaxAction) {
         } else {
             $payload = array('error' => $instanceId);
         }
-        PMF_Helper_Http::sendJsonWithHeaders($payload);
+        $http->sendJsonWithHeaders($payload);
         break;
 
     case 'delete_instance':
@@ -74,7 +76,7 @@ switch ($ajaxAction) {
             } else {
                 $payload = array('error' => $instanceId);
             }
-            PMF_Helper_Http::sendJsonWithHeaders($payload);
+            $http->sendJsonWithHeaders($payload);
         }
         break;
 
@@ -86,7 +88,7 @@ switch ($ajaxAction) {
             } else {
                 $payload = array('error' => $instanceId);
             }
-            PMF_Helper_Http::sendJsonWithHeaders($payload);
+            $http->sendJsonWithHeaders($payload);
         }
         break;
 
@@ -95,7 +97,7 @@ switch ($ajaxAction) {
             $stopwordsList = PMF_Stopwords::getInstance($faqConfig)->getByLang($stopwordsLang);
 
             $payload = $stopwordsList;
-            PMF_Helper_Http::sendJsonWithHeaders($payload);
+            $http->sendJsonWithHeaders($payload);
         }
         break;
 

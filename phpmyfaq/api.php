@@ -27,7 +27,7 @@ session_name(PMF_Session::PMF_COOKIE_NAME_AUTH);
 session_start();
 
 // Send headers
-$http = PMF_Helper_Http::getInstance();
+$http = new PMF_Helper_Http();
 $http->setContentType('application/json');
 $http->addHeader();
 

@@ -100,6 +100,7 @@ $headers = array(
     'Content-Length: '.strlen($rssData)
 );
 
-PMF_Helper_Http::sendWithHeaders($rssData, $headers);
+$http = new PMF_Helper_Http();
+$http->sendWithHeaders($rssData, $headers);
 
 $faqConfig->getDb()->close();

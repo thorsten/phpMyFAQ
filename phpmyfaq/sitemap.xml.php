@@ -152,7 +152,8 @@ if (!is_null($getgezip) && (1 == $getgezip)) {
         header('Content-Length: '.strlen($sitemapGz));
         print $sitemapGz;
     } else {
-        PMF_Helper_Http::getInstance()->printHTTPStatus404();
+        $http = new PMF_Helper_Http();
+        $http->sendStatus(404);
     }
 } else {
     header('Content-Type: text/xml');

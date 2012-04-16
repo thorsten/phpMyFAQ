@@ -1,18 +1,21 @@
 <?php
 /**
- * Helper class for phpMyFAQ categories
+ * HTTP Helper class for phpMyFAQ
  *
- * @package    phpMyFAQ
- * @subpackage Helper
- * @license    MPL
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2009-09-13
- * @version    SVN: $Id$
- * @copyright  2009-2012 phpMyFAQ Team
+ * PHP Version 5.3.0
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @package   PMF_Helper
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Florian Anderiasch <florian@phpmyfaq.de>
+ * @copyright 2009-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-09-13
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -20,64 +23,25 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * Helper
+ * PMF_Helper_Http
  *
- * @package    phpMyFAQ
- * @subpackage Helper
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2009-09-13
- * @copyright  2009 phpMyFAQ Team
+ * @category  phpMyFAQ
+ * @package   PMF_Helper
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Florian Anderiasch <florian@phpmyfaq.de>
+ * @copyright 2009-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-09-13
  */
 class PMF_Helper_Http extends PMF_Helper
 {
-    /**
-     * Instance
-     *
-     * @var PMF_Helper_Http
-     */
-    private static $instance = null;
-
     /**
      * Content type
      *
      * @var string
      */
     private $contentType = '';
-
-    /**
-     * Constructor
-     *
-     * @return
-     */
-    private function __construct()
-    {
-
-    }
-
-    /**
-     * Returns the single instance
-     *
-     * @access static
-     * @return PMF_Helper_Category
-     */
-    public static function getInstance()
-    {
-        if (null == self::$instance) {
-            $className = __CLASS__;
-            self::$instance = new $className();
-        }
-        return self::$instance;
-    }
-
-    /**
-     * __clone() Magic method to prevent cloning
-     *
-     * @return void
-     */
-    private function __clone()
-    {
-
-    }
 
     /**
      * Setter for content type
@@ -108,17 +72,24 @@ class PMF_Helper_Http extends PMF_Helper
     }
 
     /**
-     * Returns a 404 header
+     * Returns a HTTP status header
+     *
+     * @param integer $code HTTP status code
      *
      * @return void
      */
-    public function printHTTPStatus404()
+    public function sendStatus($code)
     {
-        if (('cgi' == PMF_String::substr(PHP_SAPI, 0, 3)) || isset($_SERVER['ALL_HTTP'])) {
-            header('Status: 404 Not Found');
-        } else {
-            header('HTTP/1.0 404 Not Found');
+        switch ($code) {
+            case 404:
+                if (('cgi' == PMF_String::substr(PHP_SAPI, 0, 3)) || isset($_SERVER['ALL_HTTP'])) {
+                    header('Status: 404 Not Found');
+                } else {
+                    header('HTTP/1.0 404 Not Found');
+                }
+                break;
         }
+
         exit();
     }
 
@@ -128,11 +99,11 @@ class PMF_Helper_Http extends PMF_Helper
      * @param mixed $payload What to send
      * @param string|array $headers Which headers to send
      *
-     * @return void
+     * @return string
      */
-    public static function sendJsonWithHeaders($payload, $headers = '')
+    public function sendJsonWithHeaders($payload, $headers = '')
     {
-        return self::sendWithHeaders($payload, $headers, true);
+        return $this->sendWithHeaders($payload, $headers, true);
     }
 
     /**
@@ -142,9 +113,9 @@ class PMF_Helper_Http extends PMF_Helper
      * @param string|array $headers Which headers to send
      * @param bool $isJson Send as JSON?
      *
-     * @return void
+     * @return string
      */
-    public static function sendWithHeaders($payload, $headers = '', $isJson = false)
+    public function sendWithHeaders($payload, $headers = '', $isJson = false)
     {
         $validHeaders = array();
         if (is_string($headers) && strlen($headers) > 0) {
