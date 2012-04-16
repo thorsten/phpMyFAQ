@@ -46,6 +46,18 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
     );
 
     /**
+     * Constructor
+     *
+     * @param PMF_Configuration $config
+     *
+     * @return PMF_Perm_Medium
+     */
+    public function __construct(PMF_Configuration $config)
+    {
+        parent::__construct($config);
+    }
+
+    /**
      * Returns true if the group specified by $group_id owns the
      * right given by $right_id, otherwise false.
      *
@@ -78,8 +90,8 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             $right_id,
             $group_id);
         
-        $res = $this->db->query($select);
-        if ($this->db->numRows($res) == 1) {
+        $res = $this->config->getDb()->query($select);
+        if ($this->config->getDb()->numRows($res) == 1) {
             return true;
         }
         return false;
@@ -114,9 +126,9 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             SQLPREFIX,
             $group_id);
         
-        $res    = $this->db->query($select);
+        $res    = $this->config->getDb()->query($select);
         $result = array();
-        while ($row = $this->db->fetchArray($res)) {
+        while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row['right_id'];
         }
         return $result;
@@ -176,7 +188,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             $group_id,
             $right_id);
             
-        $res = $this->db->query($insert);
+        $res = $this->config->getDb()->query($insert);
         if (!$res) {
             return false;
         }
@@ -208,7 +220,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             $group_id,
             $right_id);
             
-        $res = $this->db->query($delete);
+        $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
@@ -230,7 +242,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             return 0;
         }
         
-        $next_id    = $this->db->nextId(SQLPREFIX."faqgroup", "group_id");
+        $next_id    = $this->config->getDb()->nextId(SQLPREFIX."faqgroup", "group_id");
         $group_data = $this->checkGroupData($group_data);
         $insert     = sprintf("
             INSERT INTO
@@ -244,7 +256,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             $group_data['description'],
             (int)$group_data['auto_join']);
 
-        $res = $this->db->query($insert);
+        $res = $this->config->getDb()->query($insert);
         if (!$res) {
             return 0;
         }
@@ -265,7 +277,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         $comma        = "";
         
         foreach ($group_data as $key => $val) {
-            $set  .= $comma.$key." = '".$this->db->escape($checked_data[$key])."'";
+            $set  .= $comma.$key." = '".$this->config->getDb()->escape($checked_data[$key])."'";
             $comma = ",\n                ";
         }
         
@@ -280,7 +292,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 $set,
                 $group_id);
                 
-        $res = $this->db->query($update);
+        $res = $this->config->getDb()->query($update);
         
         if (!$res) {
             return false;
@@ -308,7 +320,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 group_id = %d",
             SQLPREFIX,
             $group_id);
-        $res = $this->db->query($delete);
+        $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
@@ -320,7 +332,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 group_id = %d",
             SQLPREFIX,
             $group_id);
-        $res = $this->db->query($delete);
+        $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
@@ -332,7 +344,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 group_id = %d",
             SQLPREFIX,
             $group_id);
-        $res = $this->db->query($delete);
+        $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
@@ -372,8 +384,8 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             $user_id,
             $group_id);
         
-        $res = $this->db->query($select);
-        if ($this->db->numRows($res) == 1) {
+        $res = $this->config->getDb()->query($select);
+        if ($this->config->getDb()->numRows($res) == 1) {
             return true;
         }
         return false;
@@ -408,9 +420,9 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             SQLPREFIX,
             $group_id);
         
-        $res    = $this->db->query($select);
+        $res    = $this->config->getDb()->query($select);
         $result = array();
-        while ($row = $this->db->fetchArray($res)) {
+        while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row['user_id'];
         }
         return $result;
@@ -445,7 +457,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             $user_id,
             $group_id);
             
-        $res = $this->db->query($insert);
+        $res = $this->config->getDb()->query($insert);
         if (!$res) {
             return false;
         }
@@ -476,7 +488,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             $user_id,
             $group_id);
             
-        $res = $this->db->query($delete);
+        $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
@@ -500,13 +512,13 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             WHERE
                 name = '%s'",
             SQLPREFIX,
-            $this->db->escape($name));
+            $this->config->getDb()->escape($name));
             
-        $res = $this->db->query($select);
-        if ($this->db->numRows($res) != 1) {
+        $res = $this->config->getDb()->query($select);
+        if ($this->config->getDb()->numRows($res) != 1) {
             return 0;
         }
-        $row = $this->db->fetchArray($res);
+        $row = $this->config->getDb()->fetchArray($res);
         return $row['group_id'];
     }
 
@@ -536,11 +548,11 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             SQLPREFIX,
             $group_id);
             
-        $res = $this->db->query($select);
-        if ($this->db->numRows($res) != 1) {
+        $res = $this->config->getDb()->query($select);
+        if ($this->config->getDb()->numRows($res) != 1) {
             return array();
         }
-        return $this->db->fetchArray($res);
+        return $this->config->getDb()->fetchArray($res);
     }
 
     /**
@@ -573,9 +585,9 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             SQLPREFIX,
             $user_id);
         
-        $res    = $this->db->query($select);
+        $res    = $this->config->getDb()->query($select);
         $result = array(-1);
-        while ($row = $this->db->fetchArray($res)) {
+        while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row['group_id'];
         }
         return $result;
@@ -596,9 +608,9 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 %sfaqgroup",
             SQLPREFIX);
             
-        $res    = $this->db->query($select);
+        $res    = $this->config->getDb()->query($select);
         $result = array();
-        while ($row = $this->db->fetchArray($res)) {
+        while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row['group_id'];
         }
 
@@ -667,8 +679,8 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             $right_id,
             $user_id);
         
-        $res = $this->db->query($select);
-        if ($this->db->numRows($res) == 1) {
+        $res = $this->config->getDb()->query($select);
+        if ($this->config->getDb()->numRows($res) == 1) {
             return true;
         }
         return false;
@@ -742,13 +754,13 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 auto_join = 1",
             SQLPREFIX);
             
-        $res = $this->db->query($select);
+        $res = $this->config->getDb()->query($select);
         if (!$res) {
             return false;
         }
         
         $auto_join = array();
-        while ($row = $this->db->fetchArray($res)) {
+        while ($row = $this->config->getDb()->fetchArray($res)) {
             $auto_join[] = $row['group_id'];
         }
         // add to groups
@@ -779,7 +791,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             SQLPREFIX,
             $user_id);
             
-        $res = $this->db->query($delete);
+        $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
@@ -823,9 +835,9 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             SQLPREFIX,
             $user_id);
         
-        $res    = $this->db->query($select);
+        $res    = $this->config->getDb()->query($select);
         $result = array();
-        while ($row = $this->db->fetchArray($res)) {
+        while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row['right_id'];
         }
         return $result;
@@ -852,7 +864,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             SQLPREFIX,
             $group_id);
             
-        $res = $this->db->query($delete);
+        $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
@@ -881,11 +893,11 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             SQLPREFIX,
             $group_id);
             
-        $res = $this->db->query($select);
-        if ($this->db->numRows($res) != 1) {
+        $res = $this->config->getDb()->query($select);
+        if ($this->config->getDb()->numRows($res) != 1) {
             return array();
         }
-        $row = $this->db->fetchArray($res);
+        $row = $this->config->getDb()->fetchArray($res);
         return $row['name'];
     }
 
@@ -910,7 +922,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             SQLPREFIX,
             $group_id);
             
-        $res = $this->db->query($delete);
+        $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }

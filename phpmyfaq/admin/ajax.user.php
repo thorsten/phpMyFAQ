@@ -65,7 +65,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
 
                     // Remove the user from groups
                     if ('medium' == $faqConfig->get('security.permLevel')) {
-                        $permissions = PMF_Perm::selectPerm('medium');
+                        $permissions = PMF_Perm::selectPerm('medium', $faqConfig);
                         $permissions->removeFromAllGroups($userId);
                     }
     

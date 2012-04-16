@@ -60,36 +60,35 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Perm
 {
     /**
-     * Database object created by PMF_Db
+     * Configuration object
      *
-     * @var PMF_Db_Driver
+     * @var PMF_Configuration
      */
-    protected $db = null;
+    protected $config;
 
     /**
      * Constructor
      *
      * @return void
      */
-    protected function __construct()
+    public function __construct(PMF_Configuration $config)
     {
-        $this->db = PMF_Db::getInstance(); 
+        $this->config = $config;
     }
     
     /**
-     * Selects a subclass of Perm.
+     * selectPerm() returns an instance of a subclass of Perm. $permLevel
+     * which subclass is returned.
      *
-     * selectPerm() returns an instance of a subclass of Perm. perm_level
-     * which subclass is returned. Allowed values and corresponding classnames
-     * defined in perm_typemap.
+     * @param string            $permLevel Permission level
+     * @param PMF_Configuration $config
      *
-     * @param  string $permLevel Permission level
      * @return PMF_Perm
      */
-    public static function selectPerm($permLevel)
+    public static function selectPerm($permLevel, PMF_Configuration $config)
     {
         // verify selected database
-        $perm      = new PMF_Perm();
+        $perm      = new PMF_Perm($config);
         $permLevel = ucfirst(strtolower($permLevel));
         
         if (!isset($permLevel)) {
@@ -102,7 +101,7 @@ class PMF_Perm
         }
 
         $permclass = 'PMF_Perm_' . $permLevel;
-        $perm      = new $permclass();
+        $perm      = new $permclass($config);
 
         return $perm;
     }

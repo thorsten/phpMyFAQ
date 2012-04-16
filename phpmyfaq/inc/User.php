@@ -192,7 +192,7 @@ class PMF_User
         $this->db = $this->_config->getDb();
 
         $permLevel = $this->_config->get('security.permLevel');
-        $perm      = PMF_Perm::selectPerm($permLevel);
+        $perm      = PMF_Perm::selectPerm($permLevel, $this->_config);
         if (!$this->addPerm($perm)) {
             return;
         }

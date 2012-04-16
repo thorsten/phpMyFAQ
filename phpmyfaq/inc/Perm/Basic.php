@@ -51,6 +51,18 @@ class PMF_Perm_Basic extends PMF_Perm
         'for_groups'    => true
     );
 
+    /**
+     * Constructor
+     *
+     * @param PMF_Configuration $config
+     *
+     * @return PMF_Perm_Basic
+     */
+    public function __construct(PMF_Configuration $config)
+    {
+        parent::__construct($config);
+    }
+
     // --- OPERATIONS ---
 
     /**
@@ -87,9 +99,9 @@ class PMF_Perm_Basic extends PMF_Perm
             $right_id,
             $user_id);
             
-        $res = $this->db->query($select);
+        $res = $this->config->getDb()->query($select);
         // return result
-        if ($this->db->numRows($res) == 1) {
+        if ($this->config->getDb()->numRows($res) == 1) {
             return true;
         }
         
@@ -123,9 +135,9 @@ class PMF_Perm_Basic extends PMF_Perm
             SQLPREFIX,
             $user_id);
             
-        $res    = $this->db->query($select);
+        $res    = $this->config->getDb()->query($select);
         $result = array();
-        while ($row = $this->db->fetchArray($res)) {
+        while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row['right_id'];
         }
         return $result;
@@ -158,7 +170,7 @@ class PMF_Perm_Basic extends PMF_Perm
             $user_id,
             $right_id);
         
-        $res = $this->db->query($insert);
+        $res = $this->config->getDb()->query($insert);
         if (!$res) {
             return false;
         }
@@ -185,7 +197,7 @@ class PMF_Perm_Basic extends PMF_Perm
             $user_id,
             $right_id);
             
-        $res = $this->db->query($delete);
+        $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
@@ -238,13 +250,13 @@ class PMF_Perm_Basic extends PMF_Perm
             SQLPREFIX,
             $right_id);
         
-        $res = $this->db->query($select);
-        if ($this->db->numRows($res) != 1) {
+        $res = $this->config->getDb()->query($select);
+        if ($this->config->getDb()->numRows($res) != 1) {
             return false;
         }
         
         // process right data
-        $right_data               = $this->db->fetchArray($res);
+        $right_data               = $this->config->getDb()->fetchArray($res);
         $right_data['for_users']  = (bool)$right_data['for_users'];
         $right_data['for_groups'] = (bool)$right_data['for_groups'];
         return $right_data;
@@ -289,7 +301,7 @@ class PMF_Perm_Basic extends PMF_Perm
             return 0;
         }
         
-        $nextId    = $this->db->nextId(SQLPREFIX."faqright", "right_id");
+        $nextId    = $this->config->getDb()->nextId(SQLPREFIX."faqright", "right_id");
         $rightData = $this->checkRightData($right_data);
         
         $insert = sprintf("
@@ -306,7 +318,7 @@ class PMF_Perm_Basic extends PMF_Perm
             isset($rightData['for_groups']) ? (int)$rightData['for_groups'] : 1
         );
 
-        if (! $this->db->query($insert)) {
+        if (! $this->config->getDb()->query($insert)) {
             return 0;
         }
         
@@ -341,7 +353,7 @@ class PMF_Perm_Basic extends PMF_Perm
             $set,
             $right_id);
             
-        $res = $this->db->query($update);
+        $res = $this->config->getDb()->query($update);
         if (!$res) {
             return false;
         }
@@ -367,7 +379,7 @@ class PMF_Perm_Basic extends PMF_Perm
             SQLPREFIX,
             $right_id);
         
-        $res = $this->db->query($delete);
+        $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
@@ -381,7 +393,7 @@ class PMF_Perm_Basic extends PMF_Perm
             SQLPREFIX,
             $right_id);
         
-        $res = $this->db->query($delete);
+        $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
@@ -395,12 +407,12 @@ class PMF_Perm_Basic extends PMF_Perm
             SQLPREFIX,
             $right_id);
         
-        $res = $this->db->query($delete);
+        $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
             
-        $res = $this->db->query($delete);
+        $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
@@ -425,13 +437,13 @@ class PMF_Perm_Basic extends PMF_Perm
             WHERE
                 name = '%s'",
             SQLPREFIX,
-            $this->db->escape($name));
+            $this->config->getDb()->escape($name));
         
-        $res = $this->db->query($select);
-        if ($this->db->numRows($res) != 1) {
+        $res = $this->config->getDb()->query($select);
+        if ($this->config->getDb()->numRows($res) != 1) {
             return 0;
         }
-        $row = $this->db->fetchArray($res);
+        $row = $this->config->getDb()->fetchArray($res);
         return $row['right_id'];
     }
 
@@ -450,9 +462,9 @@ class PMF_Perm_Basic extends PMF_Perm
                 %sfaqright",
             SQLPREFIX);
             
-        $res    = $this->db->query($select);
+        $res    = $this->config->getDb()->query($select);
         $result = array();
-        while ($row = $this->db->fetchArray($res)) {
+        while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row['right_id'];
         }
 
@@ -485,11 +497,11 @@ class PMF_Perm_Basic extends PMF_Perm
             SQLPREFIX,
             $order);
             
-        $res    = $this->db->query($select);
+        $res    = $this->config->getDb()->query($select);
         $result = array();
         $i      = 0;
         
-        while ($row = $this->db->fetchArray($res)) {
+        while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[$i] = $row;
             $i++;
         }
@@ -544,7 +556,7 @@ class PMF_Perm_Basic extends PMF_Perm
             SQLPREFIX,
             $user_id);
         
-        $res = $this->db->query($delete);
+        $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
