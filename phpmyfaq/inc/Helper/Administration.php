@@ -33,53 +33,12 @@
 class PMF_Helper_Administration
 {
     /**
-     * Instance
-     *
-     * @var PMF_Helper_Administration
-     */
-    private static $instance = null;
-    
-    /**
      * Array with permissions
      *
      * @var array
      */
     private $permission = array();
-    
-    /**
-     * Constructor
-     *
-     * @return PMF_Helper_Administration
-     */
-    private function __construct()
-    {
-    }
-    
-    /**
-     * Returns the single instance
-     *
-     * @access static
-     * @return PMF_Helper_Administration
-     */
-    public static function getInstance()
-    {
-        if (null == self::$instance) {
-            $className = __CLASS__;
-            self::$instance = new $className();
-        }
-        return self::$instance;
-    }
-   
-    /**
-     * __clone() Magic method to prevent cloning
-     *
-     * @return void
-     */
-    private function __clone()
-    {
-        
-    }
-    
+
     /**
      * Adds a menu entry according to user permissions.
      * ',' stands for 'or', '*' stands for 'and'

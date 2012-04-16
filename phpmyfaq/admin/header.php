@@ -39,7 +39,7 @@ $exportsPage       = false;
 $backupPage        = false;
 $configurationPage = false;
 
-$adminHelper = PMF_Helper_Administration::getInstance();
+$adminHelper = new PMF_Helper_Administration();
 $adminHelper->setPermission($permission);
 
 switch ($action) {
