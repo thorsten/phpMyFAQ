@@ -35,7 +35,11 @@ if ($permission['restore']) {
     if (isset($_FILES['userfile']) && 0 == $_FILES['userfile']['error']) {
         
         $ok  = 1;
-        // @todo: Add check if file is utf-8 encoded
+        $finfo = new finfo(FILEINFO_MIME_ENCODING);
+        if ('utf-8' == $finfo->file($_FILES['userfile']['tmp_name'])) {
+            print 'This file is not UTF_8 encoded.';
+            $ok = 0;
+        }
         $handle          = fopen($_FILES['userfile']['tmp_name'], 'r');
         $dat             = fgets($handle, 65536);
         $versionFound    = PMF_String::substr($dat, 0, 9);
