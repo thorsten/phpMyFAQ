@@ -198,10 +198,10 @@ class PMF_User_CurrentUser extends PMF_User
                 WHERE
                     user_id = %d",
                 SQLPREFIX,
-                $this->db->escape($name),
+                $this->config->getDb()->escape($name),
                 $this->getUserId()
             );
-            $res = $this->db->query($update);
+            $res = $this->config->getDb()->query($update);
             if (!$res) {
                 return false;
                 break;
@@ -296,11 +296,11 @@ class PMF_User_CurrentUser extends PMF_User
            $this->getUserId()
         );
            
-        $res = $this->db->query($select);
-        if (!$res or $this->db->numRows($res) != 1) {
+        $res = $this->config->getDb()->query($select);
+        if (!$res or $this->config->getDb()->numRows($res) != 1) {
             return array();
         }
-        return $this->db->fetchArray($res);
+        return $this->config->getDb()->fetchArray($res);
     }
 
     /**
@@ -348,9 +348,9 @@ class PMF_User_CurrentUser extends PMF_User
             $this->getUserId()
         );
                     
-        $res = $this->db->query($update);
+        $res = $this->config->getDb()->query($update);
         if (!$res) {
-            $this->errors[] = $this->db->error();
+            $this->errors[] = $this->config->getDb()->error();
             return false;
         }
 
@@ -399,10 +399,10 @@ class PMF_User_CurrentUser extends PMF_User
                 $this->getUserId()
         );
                 
-        $res = $this->db->query($update);
+        $res = $this->config->getDb()->query($update);
 
         if (!$res) {
-            $this->errors[] = $this->db->error();
+            $this->errors[] = $this->config->getDb()->error();
             return false;
         }
         
@@ -554,11 +554,11 @@ class PMF_User_CurrentUser extends PMF_User
             WHERE
                 user_id = %d",
             SQLPREFIX,
-            $this->db->escape($rememberMe),
+            $this->config->getDb()->escape($rememberMe),
             $this->getUserId()
         );
 
-        return $this->db->query($update);
+        return $this->config->getDb()->query($update);
     }
 
     /**
