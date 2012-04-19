@@ -873,38 +873,81 @@ class PMF_Faq
     /**
      * Deletes a record and all the dependencies
      *
-     * @param integer $record_id   Record id
-     * @param string  $record_lang Record language
+     * @param integer $recordId   Record id
+     * @param string  $recordLang Record language
      *
      * @return boolean
      */
-    public function deleteRecord($record_id, $record_lang)
+    public function deleteRecord($recordId, $recordLang)
     {
         $queries = array(
-            sprintf("DELETE FROM %sfaqchanges WHERE beitrag = %d AND lang = '%s'",
-                SQLPREFIX, $record_id, $record_lang),
-            sprintf("DELETE FROM %sfaqcategoryrelations WHERE record_id = %d AND record_lang = '%s'",
-                SQLPREFIX, $record_id, $record_lang),
-            sprintf("DELETE FROM %sfaqdata WHERE id = %d AND lang = '%s'",
-                SQLPREFIX, $record_id, $record_lang),
-            sprintf("DELETE FROM %sfaqdata_revisions WHERE id = %d AND lang = '%s'",
-                SQLPREFIX, $record_id, $record_lang),
-            sprintf("DELETE FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
-                SQLPREFIX, $record_id, $record_lang),
-            sprintf("DELETE FROM %sfaqdata_user WHERE record_id = %d",
-                SQLPREFIX, $record_id, $record_lang),
-            sprintf("DELETE FROM %sfaqdata_group WHERE record_id = %d",
-                SQLPREFIX, $record_id, $record_lang),
-            sprintf("DELETE FROM %sfaqdata_tags WHERE record_id = %d",
-                SQLPREFIX, $record_id),
-            sprintf('DELETE FROM %sfaqdata_tags WHERE %sfaqdata_tags.record_id NOT IN (SELECT %sfaqdata.id FROM %sfaqdata)',
-                SQLPREFIX, SQLPREFIX, SQLPREFIX, SQLPREFIX),
-            sprintf("DELETE FROM %sfaqcomments WHERE id = %d",
-                SQLPREFIX, $record_id),
-            sprintf("DELETE FROM %sfaqvoting WHERE artikel = %d",
-                SQLPREFIX, $record_id));
+            sprintf(
+                "DELETE FROM %sfaqchanges WHERE beitrag = %d AND lang = '%s'",
+                SQLPREFIX,
+                $recordId,
+                $recordLang
+            ),
+            sprintf(
+                "DELETE FROM %sfaqcategoryrelations WHERE record_id = %d AND record_lang = '%s'",
+                SQLPREFIX,
+                $recordId,
+                $recordLang
+            ),
+            sprintf(
+                "DELETE FROM %sfaqdata WHERE id = %d AND lang = '%s'",
+                SQLPREFIX,
+                $recordId,
+                $recordLang
+            ),
+            sprintf(
+                "DELETE FROM %sfaqdata_revisions WHERE id = %d AND lang = '%s'",
+                SQLPREFIX,
+                $recordId,
+                $recordLang
+            ),
+            sprintf(
+                "DELETE FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
+                SQLPREFIX,
+                $recordId,
+                $recordLang
+            ),
+            sprintf(
+                "DELETE FROM %sfaqdata_user WHERE record_id = %d",
+                SQLPREFIX,
+                $recordId,
+                $recordLang
+            ),
+            sprintf(
+                "DELETE FROM %sfaqdata_group WHERE record_id = %d",
+                SQLPREFIX,
+                $recordId,
+                $recordLang
+            ),
+            sprintf(
+                "DELETE FROM %sfaqdata_tags WHERE record_id = %d",
+                SQLPREFIX,
+                $recordId
+            ),
+            sprintf(
+                'DELETE FROM %sfaqdata_tags WHERE %sfaqdata_tags.record_id NOT IN (SELECT %sfaqdata.id FROM %sfaqdata)',
+                SQLPREFIX,
+                SQLPREFIX,
+                SQLPREFIX,
+                SQLPREFIX
+            ),
+            sprintf(
+                "DELETE FROM %sfaqcomments WHERE id = %d",
+                SQLPREFIX,
+                $recordId
+            ),
+            sprintf(
+                "DELETE FROM %sfaqvoting WHERE artikel = %d",
+                SQLPREFIX,
+                $recordId
+            )
+        );
 
-         foreach($queries as $query) {
+         foreach ($queries as $query) {
             $this->_config->getDb()->query($query);
          }
 
