@@ -148,6 +148,25 @@ class PMF_System
     }
 
     /**
+     * Returns all available templates as array
+     *
+     * @return array
+     */
+    public function getAvailableTemplates()
+    {
+        $tpls = array();
+
+        foreach (new DirectoryIterator(dirname(__DIR__) . '/assets/template') as $item) {
+
+            if (! $item->isDot() && $item->isDir()) {
+                $tpls[$item->getBasename()] = (PMF_Template::getTplSetName() == $item->getBasename() ? true : false);
+            }
+        }
+
+        return $tpls;
+    }
+
+    /**
      * Returns the current API version of phpMyFAQ for installation and
      * version in the database
      *

@@ -23,8 +23,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-require_once PMF_ROOT_DIR . '/lang/language_en.php';
-require_once PMF_ROOT_DIR . '/inc/libs/twitteroauth/twitteroauth.php';
+require PMF_ROOT_DIR . '/lang/language_en.php';
+require PMF_ROOT_DIR . '/inc/libs/twitteroauth/twitteroauth.php';
 
 if (!empty($_SESSION['access_token'])) {
     $connection = new TwitterOAuth(
@@ -43,7 +43,8 @@ $availableConfigModes = array(
         'records' => 1,
         'spam'    => 1,
         'search'  => 1,
-        'social'  => 1);
+        'social'  => 1
+);
 
 /**
  * @param  $key
@@ -121,17 +122,15 @@ function printInputFieldByType($key, $type)
                     print PMF_Perm::permOptions($faqConfig->get($key));
                     break;
                     
-                case "main.templateSet":
-                    /**
-                     * TODO: do get available template sets in the PMF_Template
-                     */
-                    foreach (new DirectoryIterator('../template') as $item) {
-                        if (!$item->isDot() && $item->isDir()) {
-                            $selected = PMF_Template::getTplSetName() == $item ? ' selected="selected"' : '';
-                            printf ("<option%s>%s</option>",
-                                $selected,
-                                $item);
-                        }
+                case 'main.templateSet':
+                    $faqSystem = new PMF_System();
+                    $templates = $faqSystem->getAvailableTemplates();
+
+                    foreach ($templates as $template => $selected) {
+                        printf ("<option%s>%s</option>",
+                            ($selected === true ? ' selected="selected"' : ''),
+                            $template
+                        );
                     }
                     break;
                     
