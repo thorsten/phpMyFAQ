@@ -310,10 +310,10 @@ class PMF_User
      * specified login.
      *
      * @param  string $login       Login name
-     * @param  bool   $raise_error Raise error?
+     * @param  bool   $raiseError Raise error?
      * @return bool
      */
-    public function getUserByLogin($login, $raise_error = true)
+    public function getUserByLogin($login, $raiseError = true)
     {
         $select = sprintf("
             SELECT
@@ -330,14 +330,14 @@ class PMF_User
         
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) !== 1) {
-            if ($raise_error) {
+            if ($raiseError) {
 
                 $this->errors[] = self::ERROR_USER_INCORRECT_LOGIN;
             }
             return false;
         }
         $user = $this->config->getDb()->fetchArray($res);
-        $this->userId = (int)     $user['user_id'];
+        $this->userId  = (int)    $user['user_id'];
         $this->login   = (string) $user['login'];
         $this->status  = (string) $user['account_status'];
         // get user-data
@@ -559,10 +559,10 @@ class PMF_User
         }
         
         $readOnly  = 0;
-        $auth_count = 0;
+        $authCount = 0;
         $delete     = array();
         foreach ($this->authContainer as $auth) {
-            $auth_count++;
+            $authCount++;
             if ($auth->setReadOnly()) {
                 $readOnly++;
                 continue;
@@ -570,7 +570,7 @@ class PMF_User
             $delete[] = $auth->delete($this->login);
         }
         
-        if ($readOnly == $auth_count) {
+        if ($readOnly == $authCount) {
             $this->errors[] = self::ERROR_USER_NO_AUTH_WRITABLE;
         }
         if (!in_array(true, $delete)) {
