@@ -35,20 +35,22 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Attachment_Collection
 {
     /**
-     * Database instance
+     * Configuration
      *
-     * @var PMF_Db_Driver
+     * @var PMF_Configuration
      */
-    protected $db;
+    protected $config;
 
     /**
      * Constructor
      *
-     * @return null
+     * @param PMF_Configuration $config
+     *
+     * @return PMF_Attachment_Collection
      */
-    public function __construct(PMF_DB_Driver $database)
+    public function __construct(PMF_Configuration $config)
     {
-        $this->db = $database;
+        $this->config = $config;
     }
 
     /**
@@ -81,10 +83,10 @@ class PMF_Attachment_Collection
             SQLPREFIX . 'faqdata'
         );
 
-        $result = $this->db->query($query);
+        $result = $this->config->getDb()->query($query);
         
         if ($result) {
-            $retval = $this->db->fetchAll($result);
+            $retval = $this->config->getDb()->fetchAll($result);
         }
         
         return $retval;

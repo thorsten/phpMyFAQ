@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $page = PMF_Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT);
 $page = 1 > $page ? 1 : $page;
 
-$fa           = new PMF_Attachment_Collection($db);
+$fa           = new PMF_Attachment_Collection($faqConfig);
 $itemsPerPage = 32;
 $allCrumbs    = $fa->getBreadcrumbs();
 

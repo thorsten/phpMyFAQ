@@ -297,23 +297,6 @@ class PMF_Utils
     }
 
     /**
-     * Returns the MIME type of a file according to the used PHP version
-     *
-     * @param string $filename Filename 
-     *
-     * @return string
-     */
-    public static function getMimeType($filename)
-    {
-        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-            return mime_content_type($filename);
-        } else {
-            $finfo = new finfo(FILEINFO_MIME_TYPE);
-            return $finfo->file($filename);
-        }
-    }
-
-    /**
      * debug_backtrace() wrapper function
      *
      * @param $string
