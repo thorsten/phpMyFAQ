@@ -1,6 +1,6 @@
 <?php
 /**
- * Provides methods for password encryption.
+ * Provides methods for password encryption
  *
  * PHP Version 5.3
  *
@@ -101,20 +101,22 @@ class PMF_Enc
      * object without database access and with an error message. See the
      * of the error() method for further details.
      *
-     * @param  string
+     * @param string            $encType
+     * @param PMF_Configuration $config
+     *
      * @return PMF_Enc
      */
-    public static function selectEnc($enctype, PMF_Configuration $config)
+    public static function selectEnc($encType, PMF_Configuration $config)
     {
         $enc     = new PMF_Enc($config);
-        $enctype = ucfirst(strtolower($enctype));
+        $encType = ucfirst(strtolower($encType));
 
-        if (!isset($enctype)) {
+        if (! isset($encType)) {
             $enc->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
             return $enc;
         }
 
-        $encClass = 'PMF_Enc_' . $enctype;
+        $encClass = 'PMF_Enc_' . $encType;
 
         if (!class_exists($encClass)) {
             $enc->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
@@ -127,8 +129,6 @@ class PMF_Enc
     /**
      * The string returned by error() contains messages for all errors that
      * during object processing. Messages are separated by new lines.
-     *
-     * Error messages are stored in the public array errors.
      *
      * @return string
      */
