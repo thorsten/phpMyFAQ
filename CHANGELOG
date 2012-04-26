@@ -22,7 +22,7 @@ Version 2.8.0-alpha2 - 2012-
 - improved CSS development with LESS (Thorsten)
 - updated bundled jQuery to version 1.7.1 (Thorsten)
 - updated bundled Modernizr to version 2.5.2 (Thorsten)
-- updated bundled Twitter Bootstrap to version 2.0.2 (Thorsten)
+- updated bundled Twitter Bootstrap to version 2.0.3 (Thorsten)
 - fixed some bugs (Thorsten, Florian)
 
 Version 2.7.5 - 2012-04-14
