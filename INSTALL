@@ -7,7 +7,7 @@ http://www.example.com/path/to/your/faq/install/setup.php
 Substitute www.example.com with your actual domain name. When the
 site is loaded enter the address of your database server
 (e.g. db.provider.com), your database username and password as well as the
-database name. The datebase must be availible before running the
+database name. The database must be available before running the
 installation script. You can leave the prefix-field empty. If you are
 planning on using multiple FAQs in one database you will have to use a
 tableprefix, though (i.e. sport for a sports-FAQ, weather for a
