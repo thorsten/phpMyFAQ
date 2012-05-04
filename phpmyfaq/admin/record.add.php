@@ -32,7 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 // Re-evaluate $user
 $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
 
-if ($permission['editbt']) {
+if ($permission['editbt']|| $permission['addbt']) {
 
     // Get submit action
     $submit        = PMF_Filter::filterInputArray(INPUT_POST, array('submit' => array('filter' => FILTER_VALIDATE_INT,

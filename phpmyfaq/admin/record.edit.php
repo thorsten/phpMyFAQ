@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 // Re-evaluate $user
 $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('security.ipCheck'));
 
-if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
+if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
     $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $category->buildTree();
