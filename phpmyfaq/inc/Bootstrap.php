@@ -76,6 +76,14 @@ if (! defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
     define('PMF_CONFIG_DIR', PMF_MULTI_INSTANCE_CONFIG_DIR);
 }
 
+//
+// Check if config/database.php exist -> if not, redirect to installer
+//
+if (!file_exists(PMF_CONFIG_DIR . '/database.php')) {
+    header("Location: install/setup.php");
+    exit();
+}
+
 require PMF_CONFIG_DIR . '/database.php';
 require PMF_CONFIG_DIR . '/constants.php';
 

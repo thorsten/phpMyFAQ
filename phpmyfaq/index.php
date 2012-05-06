@@ -33,14 +33,6 @@ define('IS_VALID_PHPMYFAQ', null);
 require_once 'inc/Bootstrap.php';
 
 //
-// Check if config/database.php exist -> if not, redirect to installer
-//
-if (!file_exists(PMF_CONFIG_DIR . '/database.php')) {
-    header("Location: install/setup.php");
-    exit();
-}
-
-//
 // Start the PHP session
 //
 PMF_Init::cleanRequest();
