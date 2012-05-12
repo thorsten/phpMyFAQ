@@ -500,7 +500,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         die();
     }
 
-    $sql_passwort = PMF_Filter::filterInput(INPUT_POST, 'sql_passwort', FILTER_SANITIZE_STRING);
+    $sql_passwort = PMF_Filter::filterInput(INPUT_POST, 'sql_passwort', FILTER_UNSAFE_RAW);
     if (is_null($sql_passwort) && $sql_type == 'sqlite' &&  $sql_type == 'sqlite3') {
         // Password can be empty...
         $sql_passwort = '';
