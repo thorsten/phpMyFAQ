@@ -1,20 +1,21 @@
 <?php
 /**
  * Turkish language file
- * 
- * @author    Zafer Gürsoy <zafergursoy@yahoo.com>
- * @author    Evren Yurtesen <yurtesen@ispro.net.tr>
- * @copyright 2006 - 2009 phpMyFAQ Team
  *
- * 
- * 
- * 
- * http://www.mozilla.org/MPL/
+ * PHP Version 5.3
  *
-
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @package   Translation
+ * @author    Zafer Gürsoy <zafergursoy@yahoo.com>
+ * @author    Evren Yurtesen <yurtesen@ispro.net.tr>
+ * @copyright 2006-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2004
  */
 
 $PMF_LANG["metaCharset"] = "UTF-8";

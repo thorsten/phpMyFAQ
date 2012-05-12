@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 // Re-evaluate $user
 $user = PMF_User_CurrentUser::getFromSession($faqConfig);
 
-if ($permission["editbt"] && !PMF_Db::checkOnEmptyTable('faqcategories')) {
+if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
     $category = new PMF_Category($faqConfig, false);
     $category->setUser($current_admin_user);

@@ -473,7 +473,9 @@ if (isset($auth) && in_array(true, $permission)) {
             $faqSystem = new PMF_System();
 
             $localHashes  = $faqSystem->createHashes();
-            $remoteHashes = file_get_contents('http://www.phpmyfaq.de/api/verify/' . PMF_System::getVersion());
+            $remoteHashes = file_get_contents(
+                'http://www.phpmyfaq.de/api/verify/' . $faqconfig->get('main.currentVersion')
+            );
 
             $diff = array_diff(
                 json_decode($localHashes, true),

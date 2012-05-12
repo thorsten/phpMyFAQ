@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 // Re-evaluate $user
 $user = PMF_User_CurrentUser::getFromSession($faqConfig);
 
-if ($permission['editbt']) {
+if ($permission['editbt']|| $permission['addbt']) {
 
     // FAQ data
     $dateStart     = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);

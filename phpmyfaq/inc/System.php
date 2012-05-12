@@ -287,13 +287,16 @@ class PMF_System
             '/config/database.php'       => false,
             '/config/ldap.php'           => false
         );
+        $current = '';
 
         try {
 
             foreach ($files as $file) {
 
-                if (! preg_match('#/tests/#', $file->getPath()) && 'php' === $file->getExtension()) {
-                    $current = str_replace($path, '', $file->getPathname());
+            if ('php' === pathinfo($file->getFilename(), PATHINFO_EXTENSION) &&
+                ! preg_match('#/tests/#', $file->getPath())
+            ) {
+                $current = str_replace($path, '', $file->getPathname());
 
                     if (isset($blacklist[$current])) {
                         continue;

@@ -406,7 +406,9 @@ if ($permission['editbt'] || $permission['delbt']) {
 ?>
         <tr class="record_<?php print $record['id']; ?>_<?php print $record['lang']; ?>">
             <td style="width: 24px; text-align: right;">
-                <?php print $record['id']; ?>
+                <a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>">
+                    <?php print $record['id']; ?>
+                </a>
             </td>
             <td style="width: 16px;">
                 <?php print $record['lang']; ?>
@@ -430,7 +432,8 @@ if ($permission['editbt'] || $permission['delbt']) {
                 </a>
 <?php
         if (isset($numCommentsByFaq[$record['id']])) {
-            printf('<br/>(<a href="?action=comments#record_id_%d">%d %s</a>)',
+            printf(
+                '<br/>(<a href="?action=comments#record_id_%d">%d %s</a>)',
                 $record['id'],
                 $numCommentsByFaq[$record['id']],
                 $PMF_LANG['ad_start_comments']

@@ -516,7 +516,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         die();
     }
 
-    $dbSetup['dbPassword'] = PMF_Filter::filterInput(INPUT_POST, 'sql_passwort', FILTER_SANITIZE_STRING);
+    $dbSetup['dbPassword'] = PMF_Filter::filterInput(INPUT_POST, 'sql_passwort', FILTER_UNSAFE_RAW);
     if (is_null($dbSetup['dbPassword']) && ! PMF_System::isSqlite($dbSetup['dbType'])) {
         // Password can be empty...
         $dbSetup['dbPassword'] = '';
