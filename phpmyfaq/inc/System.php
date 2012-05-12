@@ -134,7 +134,9 @@ class PMF_System
 
         foreach ($files as $file) {
 
-            if ('php' === $file->getExtension() && ! preg_match('#/tests/#', $file->getPath())) {
+            if ('php' === pathinfo($file->getFilename(), PATHINFO_EXTENSION) &&
+                ! preg_match('#/tests/#', $file->getPath())
+            ) {
                 $current = str_replace($path, '', $file->getPathname());
 
                 if (isset($blacklist[$current])) {
