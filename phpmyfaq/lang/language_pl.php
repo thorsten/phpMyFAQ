@@ -1,13 +1,8 @@
 <?php
-/******************************************************************************
- * File:				language_pl.php
- * Description:		    Polish language file
- * Authors:				Krzysztof Kudłacik <null@adres.pl>
- * Authors:				Sławomir Małusecki <mori@online-rpg.pl>
- * Authors:				Dariusz Grzesista  <darek@linux.rybnik.pl>
- * Date:				2004-06-24
- * Last Update:		    2009-08-04
- * Copyright:           (c) 2006 phpMyFAQ Team
+/**
+ * Polish language file
+ *
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,14 +13,25 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- ******************************************************************************/
+ *
+ * @category  phpMyFAQ
+ * @package   Translation
+ * @author    Krzysztof Kudłacik <null@adres.pl>
+ * @author    Sławomir Małusecki <mori@online-rpg.pl>
+ * @author    Dariusz Grzesista  <darek@linux.rybnik.pl>
+ * @copyright 2004-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-06-24
+ */
+
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'pl';
 $PMF_LANG['language'] = 'polski';
 $PMF_LANG['dir'] = 'ltr';
 $PMF_LANG['nplurals'] = '3';
 $PMF_LANG['msgCategory'] = 'Kategorie';
-$PMF_LANG['msgShowAllCategories'] = 'Pokaż wszystkie kategorie';
+$PMF_LANG['msgShowAllCategories'] = 'Wszystkie kategorie';
 $PMF_LANG['msgSearch'] = 'Szukaj';
 $PMF_LANG['msgAddContent'] = 'Dodaj artykuł';
 $PMF_LANG['msgQuestion'] = 'Zadaj pytanie';
@@ -420,7 +426,7 @@ $PMF_LANG['rightsLanguage']['edituser'] = 'edytuj użytkownika';
 $PMF_LANG['rightsLanguage']['deluser'] = 'usuń użytkownika';
 $PMF_LANG['rightsLanguage']['addbt'] = 'dodaj wpis';
 $PMF_LANG['rightsLanguage']['editbt'] = 'edytuj wpis';
-$PMF_LANG['rightsLanguage']['delbt'] = 'usuń użytkownika';
+$PMF_LANG['rightsLanguage']['delbt'] = 'usuń wpis';
 $PMF_LANG['rightsLanguage']['viewlog'] = 'pokaż dziennik';
 $PMF_LANG['rightsLanguage']['adminlog'] = 'pokaż dziennik admina';
 $PMF_LANG['rightsLanguage']['delcomment'] = 'usuń komentarz';
@@ -484,7 +490,7 @@ $PMF_LANG['lostpwd_mail_okay'] = 'E-mail został wysłany.';
 $PMF_LANG['ad_xmlrpc_button'] = 'Sprawdź najnowszą wersję phpMyFAQ';
 $PMF_LANG['ad_xmlrpc_latest'] = 'Najnowsza dostępna wersja na';
 $PMF_LANG['msgSitemap'] = 'Mapa serwisu';
-$PMF_LANG['msgInstantResponse'] = 'Natychmiastowa odpowiedź';
+$PMF_LANG['msgInstantResponse'] = 'Szybka odpowiedź';
 $PMF_LANG['msgInstantResponseMaxRecords'] = '. Wyświetl pierwsze %d rekordów.';
 $PMF_LANG['msgRegisterUser'] = 'Nie masz konta? Zarejestruj się.';
 $PMF_LANG['msgUsersOnline'] = '%d gości, %d zarejestrowanych';
