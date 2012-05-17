@@ -474,7 +474,7 @@ if (isset($auth) && in_array(true, $permission)) {
 
             $localHashes  = $faqSystem->createHashes();
             $remoteHashes = file_get_contents(
-                'http://www.phpmyfaq.de/api/verify/' . $faqconfig->get('main.currentVersion')
+                'http://www.phpmyfaq.de/api/verify/' . $faqConfig->get('main.currentVersion')
             );
 
             $diff = array_diff(
