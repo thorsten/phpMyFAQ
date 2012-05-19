@@ -13,6 +13,11 @@ systems, LDAP and Microsoft Active Directory support, and an easy to use
 installation script.
 
 
+Build status
+------------
+
+[![Build Status](https://secure.travis-ci.org/thorsten/phpMyFAQ.png?branch=2.7)](http://travis-ci.org/thorsten/phpMyFAQ)
+
 Installation
 ------------
 
