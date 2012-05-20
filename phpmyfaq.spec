@@ -160,6 +160,9 @@ installation script.
 * Wed Sep 28 2011 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.8.0.alpha-1
 - New upstream version 2.8.0-alpha
 
+* Sat May 19 2012 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.7-1
+- New upstream version 2.7.7
+
 * Sun Apr 15 2012 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.7.6-1
 - New upstream version 2.7.6
 

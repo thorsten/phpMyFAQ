@@ -25,8 +25,14 @@ Version 2.8.0-alpha2 - 2012-
 - updated bundled Twitter Bootstrap to version 2.0.3 (Thorsten)
 - fixed some bugs (Thorsten, Florian)
 
-Version 2.7.6 - 2012-
+Version 2.7.7 - 2012-
+-
+
+Version 2.7.6 - 2012-05-16
 - updated Dutch translation
+- updated Polish translation
+- updated Russian translation
+- fixed some bugs (Thorsten)
 
 Version 2.7.5 - 2012-04-14
 - fixed serious security issue in bundled ImageManager library (Thorsten)
