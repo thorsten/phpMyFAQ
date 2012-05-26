@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
 * $Id: language_bn.php,v 1.1 2008-04-23 16:22:36 thorstenr Exp $
 *
