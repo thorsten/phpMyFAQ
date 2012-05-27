@@ -2539,9 +2539,7 @@ class PMF_Faq
             case FAQ_QUERY_TYPE_EXPORT_PDF:
             case FAQ_QUERY_TYPE_EXPORT_XHTML:
             case FAQ_QUERY_TYPE_EXPORT_XML:
-                // Preferred ordering: Sitemap-like
-                // TODO: see if this sort is compatible with the current set of indexes
-                $query .= "\nORDER BY fd.thema";
+                $query .= "\nORDER BY fcr.category_id, fd.thema";
                 break;
             case FAQ_QUERY_TYPE_RSS_LATEST:
                 $query .= "\nORDER BY fd.datum DESC";
