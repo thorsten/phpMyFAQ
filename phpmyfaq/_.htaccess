@@ -1,5 +1,5 @@
 ##
-# phpMyFAQ 2.7 .htaccess file
+# phpMyFAQ .htaccess file for Apache 2.x
 #
 # The contents of this file are subject to the Mozilla Public License
 # Version 1.1 (the "License"); you may not use this file except in
@@ -14,9 +14,9 @@
 # @author    Thorsten Rinne <thorsten@phpmyfaq.de>
 # @author    Patrick Preuster <sica@php-q.net>
 # @author    Matteo Scaramuccia <matteo@scaramuccia.com>
-# @copyright 2004-2011 phpMyFAQ Team
-#  @license  http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
-#  @link     http://www.phpmyfaq.de
+# @copyright 2004-2012 phpMyFAQ Team
+# @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+# @link      http://www.phpmyfaq.de
 # @since     2004-11-13
 
 # always follow the symlinks
@@ -39,31 +39,31 @@ RewriteBase /phpmyfaq/
 #RewriteRule ^(.*)$                  underMaintenance.html [L]
 
 # show all categories
-RewriteCond %{REQUEST_URI}          showcat\.html$ [NC]
+RewriteCond %{REQUEST_URI}          /showcat\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=show [L,QSA]
 
 # the search page
-RewriteCond %{REQUEST_URI}          search\.html$ [NC]
+RewriteCond %{REQUEST_URI}          /search\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=search [L,QSA]
 
 # the add content page
-RewriteCond %{REQUEST_URI}          addcontent\.html$ [NC]
+RewriteCond %{REQUEST_URI}          /addcontent\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=add [L,QSA]
 
 # the ask question page
-RewriteCond %{REQUEST_URI}          ask\.html$ [NC]
+RewriteCond %{REQUEST_URI}          /ask\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=ask [L,QSA]
 
 # the open questions page
-RewriteCond %{REQUEST_URI}          open\.html$ [NC]
+RewriteCond %{REQUEST_URI}          /open\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=open [L,QSA]
 
 # the help page
-RewriteCond %{REQUEST_URI}          help\.html$ [NC]
+RewriteCond %{REQUEST_URI}          /help\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=help [L,QSA]
 
 # the contact page
-RewriteCond %{REQUEST_URI}          contact\.html$ [NC]
+RewriteCond %{REQUEST_URI}          /contact\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=contact [L,QSA]
 
 # a page with a record (backward compatibility)
