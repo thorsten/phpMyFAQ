@@ -339,17 +339,10 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
         }
 
         $title = html_entity_decode($title, ENT_QUOTES, 'utf-8');
-
-        $currentTextColor = $this->TextColor;
         
         $this->SetTextColor(0,0,0);
         $this->SetFont($this->currentFont, 'B', 18);
-        $this->MultiCell(0, 9, $title, 0, 'C', 0);
-        if ($this->enableBookmarks) {
-            $this->Bookmark(PMF_Utils::makeShorterText($this->question, 5));
-        }
-        
-        $this->TextColor = $currentTextColor;
+        $this->MultiCell(0, 9, $title, 0, 'C', 0);        
         $this->SetMargins(PDF_MARGIN_LEFT, $this->getLastH() + 5, PDF_MARGIN_RIGHT);
     }
 

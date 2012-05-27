@@ -106,6 +106,7 @@ $faq = new PMF_Faq($current_user, $current_groups);
 $faq->setLanguage($lang);
 
 $category = new PMF_Category($current_user, $current_groups);
+$tags     = new PMF_Tags($db, $Language);
 $pdf      = new PMF_Export_Pdf($faq, $category);
 
 session_cache_limiter('private');
