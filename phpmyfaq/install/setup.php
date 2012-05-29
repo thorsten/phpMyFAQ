@@ -646,7 +646,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         $ret = file_put_contents(
             $datafile,
             "<?php\n\$PMF_LDAP[\"ldap_server\"] = '" . $ldap_server . "';\n" .
-            "\$PMF_LDAP[\"ldap_port\"] = '" . $ldap_port . "';\n" .
+            "\$PMF_LDAP[\"ldap_port\"] = " . $ldap_port . ";\n" .
             "\$PMF_LDAP[\"ldap_user\"] = '" . $ldap_user . "';\n" .
             "\$PMF_LDAP[\"ldap_password\"] = '" . $ldap_password . "';\n" .
             "\$PMF_LDAP[\"ldap_base\"] = '" . $ldap_base . "';",
