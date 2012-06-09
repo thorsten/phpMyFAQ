@@ -333,11 +333,11 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
     public function Header()
     {
         if (array_key_exists($this->category, $this->categories)) {
-            $title = $this->categories[$this->category]['name'] . ': ' . $this->question;
+            $title = $this->categories[$this->category]['name'];
         } else {
-            $title = $this->question;
+            $title = '';
         }
-
+        
         $title = html_entity_decode($title, ENT_QUOTES, 'utf-8');
         
         $this->SetTextColor(0,0,0);
