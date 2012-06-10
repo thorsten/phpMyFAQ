@@ -77,7 +77,7 @@ $tpl->parse(
         'msgNewTranslationMail'     => $PMF_LANG['msgNewTranslationMail'],
         'msgNewTranslationKeywords' => $PMF_LANG['msgNewTranslationKeywords'],
         'writeTransFaqLanguage'     => $translationLanguage,
-        'captchaFieldset'           => $captchaHelper->renderCaptcha($captcha, 'translate', $PMF_LANG['msgCaptcha']),
+        'captchaFieldset'           => $captchaHelper->renderCaptcha($captcha, 'translate', $PMF_LANG['msgCaptcha'], $auth),
         'msgNewTranslationSubmit'   => $PMF_LANG['msgNewTranslationSubmit'],
         'tinyMCELanguage'           => (PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en')
     )

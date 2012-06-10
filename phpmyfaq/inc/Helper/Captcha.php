@@ -45,20 +45,18 @@ class PMF_Helper_Captcha extends PMF_Helper
     /**
      * Renders the captcha check
      *
-     * @param string $legend Text of the HTML Legend element
-     * @param string $img    HTML code for the Captcha image
-     * @param string $error  Error message
+     * @param PMF_Captcha $captcha
+     * @param string      $action
+     * @param string      $legend
+     * @param boolean     $auth
      *
      * @return string
      */
-    public function renderCaptcha(PMF_Captcha $captcha, $action, $legend, $error = '')
+    public function renderCaptcha(PMF_Captcha $captcha, $action, $legend, $auth = false)
     {
         $html = '';
-        
-        if ($this->_config->get('spam.enableCaptchaCode')) {
-            if ($error != '') {
-                $html .= sprintf('<div class="alert alert-error">%s</div>', $error);
-            }
+
+        if (true === $this->_config->get('spam.enableCaptchaCode') && is_null($auth)) {
             $html .= sprintf('<div class="controls"><label>%s</label>', $legend);
             $html .= $captcha->printCaptcha($action);
             $html .= sprintf(

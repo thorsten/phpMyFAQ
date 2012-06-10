@@ -46,7 +46,7 @@ $tpl->parse(
         'realname'                   => $PMF_LANG["ad_user_realname"],
         'email'                      => $PMF_LANG["ad_entry_email"],
         'submitRegister'             => $PMF_LANG['submitRegister'],
-        'captchaFieldset'            => $captchaHelper->renderCaptcha($captcha, 'register', $PMF_LANG['msgCaptcha'])
+        'captchaFieldset'            => $captchaHelper->renderCaptcha($captcha, 'register', $PMF_LANG['msgCaptcha'], $auth)
     )
 );
 

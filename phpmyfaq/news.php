@@ -123,7 +123,7 @@ $tpl->parse(
         'defaultContentName'  => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
         'msgYourComment'      => $PMF_LANG['msgYourComment'],
         'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
-        'captchaFieldset'     => $captchaHelper->renderCaptcha($captcha, 'writecomment', $PMF_LANG['msgCaptcha']),
+        'captchaFieldset'     => $captchaHelper->renderCaptcha($captcha, 'writecomment', $PMF_LANG['msgCaptcha'], $auth),
         'writeComments'       => $comment->getComments($newsId, PMF_Comment::COMMENT_TYPE_NEWS)
     )
 );
