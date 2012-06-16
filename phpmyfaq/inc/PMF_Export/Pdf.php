@@ -111,23 +111,22 @@ class PMF_Export_Pdf extends PMF_Export
 
         $categoryGroup = 0;
         foreach ($categories as $category) {
-
             foreach ($faqdata as $faq) {
-
-                $this->pdf->AddPage();
-                $this->pdf->setCategory($category['id']);
-                if ($category['id'] !== $categoryGroup) {
-                    $this->pdf->Bookmark(
-                        html_entity_decode(
-                            $this->category->categoryName[$category['id']]['name'], ENT_QUOTES, 'utf-8'
-                        ),
-                        $category['level'],
-                        0
-                    );
-                    $categoryGroup = $category['id'];
-                }
-
                 if ($faq['category_id'] === $category['id']) {
+
+                    $this->pdf->AddPage();
+                    $this->pdf->setCategory($category['id']);
+                    if ($category['id'] !== $categoryGroup) {
+                        $this->pdf->Bookmark(
+                            html_entity_decode(
+                                $this->category->categoryName[$category['id']]['name'], ENT_QUOTES, 'utf-8'
+                            ),
+                            $category['level'],
+                            0
+                        );
+                        $categoryGroup = $category['id'];
+                    }
+
                     $this->pdf->Bookmark(
                         html_entity_decode(
                             $faq['topic'], ENT_QUOTES, 'utf-8'
