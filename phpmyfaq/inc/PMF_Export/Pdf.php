@@ -137,10 +137,16 @@ class PMF_Export_Pdf extends PMF_Export
                 $this->pdf->setCategories($this->category->categoryName);
                 $this->pdf->AddPage();
                 if ($categories[$key] !== $categoryGroup) {
-                    $this->pdf->Bookmark($this->category->categoryName[$categories[$key]]['name'], 0, 0);
+                    $this->pdf->Bookmark(
+                        html_entity_decode(
+                            $this->category->categoryName[$categories[$key]]['name'], ENT_QUOTES, 'utf-8'
+                        ),
+                        0,
+                        0
+                    );
                     $categoryGroup = $categories[$key];
                 }
-                $this->pdf->Bookmark($questions[$key], 1, 0);
+                $this->pdf->Bookmark(html_entity_decode($questions[$key], ENT_QUOTES, 'utf-8'), 1, 0);
                 
                 $this->pdf->WriteHTML('<h2 align="center">' . $questions[$key] . '</h2>', true);
                 $this->pdf->Ln(10);
