@@ -142,12 +142,12 @@ class PMF_Export_Pdf extends PMF_Export
                 }
                 $this->pdf->Bookmark($questions[$key], 1, 0);
                 
-                $this->pdf->WriteHTML('<h1 align="center">' . $questions[$key] . '</h1>', true);
-                $this->pdf->Ln();
-                $this->pdf->Ln();
+                $this->pdf->WriteHTML('<h2 align="center">' . $questions[$key] . '</h2>', true);
+                $this->pdf->Ln(10);
 
                 $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 12);
                 $this->pdf->WriteHTML(trim($value));
+                $this->pdf->Ln(10);
                 
                 if (! empty($keywords[$key])) {
                     $this->pdf->Ln();

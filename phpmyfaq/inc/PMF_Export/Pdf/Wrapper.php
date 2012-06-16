@@ -268,10 +268,6 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
     /**
      * Constructor
      *
-     * @param  array  $category    Current category
-     * @param  string $thema       The title of the FAQ record
-     * @param  array  $categories  The array with all category names
-     * 
      * @return PMF_Export_Pdf_Wrapper
      */
     public function __construct()
