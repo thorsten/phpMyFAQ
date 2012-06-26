@@ -62,6 +62,21 @@ class PMF_Instance_Client extends PMF_Instance
     }
 
     /**
+     * Adds a new folder named by the given URL in /path/to/faq/multisite/
+     *
+     * @param string $url URL of the client instance
+     *
+     * @return bool
+     */
+    public function createClientFolder($url)
+    {
+        if (!$this->fileSystem instanceof PMF_Filesystem) {
+            $this->fileSystem = new PMF_Filesystem();
+        }
+        return $this->fileSystem->mkdir(dirname(__DIR__) . '/multisite/' . $url);
+    }
+
+    /**
      * Sets the PMF_Filesystem
      *
      * @param PMF_Filesystem $fileSystem

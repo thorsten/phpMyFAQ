@@ -108,32 +108,23 @@ if ($permission['editinstances']) {
                 <div class="control-group">
                     <label class="control-label"><?php print $PMF_LANG['ad_stat_report_url'] ?>:</label>
                     <div class="controls">
-                        <div class="input-prepend">
+                        <div class="input-prepend input-append">
                             <span class="add-on">http://</span>
-                            <input type="text" name="url" id="url" required="required"
-                                   value="<?php print $_SERVER['SERVER_NAME'] ?>">
+                            <input class="span2" type="text" name="url" id="url" required="required">
+                            <span class="add-on">.<?php print $_SERVER['SERVER_NAME'] ?></span>
                         </div>
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label">Instance:</label>
+                    <label class="control-label">Name of Instance:</label>
                     <div class="controls">
-                        <input type="text" name="instance" id="instance" required="required"
-                               value="<?php print dirname(dirname($_SERVER['SCRIPT_NAME'])) ?>">
+                        <input type="text" name="instance" id="instance" required="required">
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label">Site name:</label>
+                    <label class="control-label">Comment:</label>
                     <div class="controls">
                         <input type="text" name="comment" id="comment" required="required">
-                    </div>
-                </div>
-                <div class="control-group">
-                    <div class="controls">
-                        <label class="checkbox">
-                        <input type="checkbox" name="install" id="install" value="yes">
-                        install phpMyFAQ in given directory
-                        </label>
                     </div>
                 </div>
             </form>
