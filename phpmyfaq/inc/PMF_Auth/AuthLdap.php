@@ -152,7 +152,10 @@ class PMF_Auth_AuthLdap extends PMF_Auth implements PMF_Auth_AuthDriver
     {
         global $PMF_LDAP;
 
-
+        if ('' === trim($pass)) {
+            $this->errors[] = PMF_User::ERROR_USER_INCORRECT_PASSWORD;
+            return false;
+        }
 
         $bindLogin = $login;
         if ($PMF_LDAP['ldap_use_domain_prefix']) {
@@ -198,7 +201,7 @@ class PMF_Auth_AuthLdap extends PMF_Auth implements PMF_Auth_AuthDriver
      * @param string $login        Loginname
      * @param array  $optionslData Optional data
      * 
-     * @return integer
+     * @return string
      */
     public function checkLogin($login, Array $optionalData = null)
     {
