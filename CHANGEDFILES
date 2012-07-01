@@ -1,3 +1,22 @@
+CHANGED FILES FROM 2.7.6 -> 2.7.7
+
+./config/constants.php
+./inc/Faq.php
+./inc/PMF_Auth/AuthLdap.php
+./inc/PMF_Export/Pdf.php
+./inc/PMF_Export/Pdf/Wrapper.php
+./install/setup.php
+./install/update.php
+./lang/language_ar.php
+./lang/language_bn.php
+./lang/language_bs.php
+./lang/language_pl.php
+./lang/language_zh.php
+./_.htaccess
+./pdf.php
+
+
+
 CHANGED FILES FROM 2.7.5 -> 2.7.6
 
 ./admin/editor/langs/de.js
