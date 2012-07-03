@@ -18,7 +18,7 @@
  * @package   Administration
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2011 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-02
@@ -42,8 +42,13 @@ $downwards         = PMF_Filter::filterInput(INPUT_POST, 'downwards', FILTER_VAL
 $inlineDisposition = PMF_Filter::filterInput(INPUT_POST, 'dispos', FILTER_SANITIZE_STRING);
 $type              = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING, 'none');
 
-$faq      = new PMF_Faq();
+$faq = new PMF_Faq();
+$faq->setLanguage($lang);
+
 $category = new PMF_Category();
+$category->buildTree();
+
+$tags = new PMF_Tags($db, $Language);
 
 $export  = PMF_Export::create($faq, $category, $type);
 $content = $export->generate($categoryId, $downwards);
