@@ -1,9 +1,12 @@
-phpMyFAQ 2.7.7
+phpMyFAQ 2.7.8
 Codename "Prospero"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.7.8 - 2012-
+-
 
 Version 2.7.7 - 2012-07-01
 - added Bosnian translation (Alen Durmo)
