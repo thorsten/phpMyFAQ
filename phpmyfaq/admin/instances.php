@@ -33,9 +33,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <?php
 if ($permission['editinstances']) {
 
-    $instance = new PMF_Instance($faqConfig);
-
+    $instance   = new PMF_Instance($faqConfig);
     $instanceId = PMF_Filter::filterInput(INPUT_POST, 'instance_id', FILTER_VALIDATE_INT);
+
+    // Check, if /multisite is writeable
+    if (! is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite')) {
+        print '<p class="alert alert-error">The folder /multisite isn\'t writable.</p>';
+    }
 
     // Update client instance
     if ('updateinstance' === $action && is_integer($instanceId)) {
