@@ -29,7 +29,7 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 require_once PMF_ROOT_DIR.'/inc/Bootstrap.php';
 PMF_Init::cleanRequest();
-session_name(PMF_COOKIE_NAME_AUTH.trim($faqConfig->get('main.phpMyFAQToken')));
+session_name(PMF_Session::PMF_COOKIE_NAME_AUTH);
 session_start();
 
 $action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
@@ -66,8 +66,9 @@ header('Pragma: no-cache');
 
 if ($permission['backup']) {
 
-    $faqConfig->getDb()->getTableNames ( SQLPREFIX );
-    $tablenames   = '';
+    $faqConfig->getDb()->getTableNames(SQLPREFIX);
+    $tablePrefix  = (SQLPREFIX !== '') ? SQLPREFIX . '.phpmyfaq' : 'phpmyfaq';
+    $tableNames   = '';
     $majorVersion = substr($faqConfig->get('main.currentVersion'), 0, 3);
     $dbHelper     = new PMF_DB_Helper($faqConfig);
 
@@ -77,19 +78,19 @@ if ($permission['backup']) {
                 if ((SQLPREFIX . 'faqadminlog' == trim($table)) || (SQLPREFIX . 'faqsessions' == trim($table))) {
                     continue;
                 }
-                $tablenames .= $table . ' ';
+                $tableNames .= $table . ' ';
             }
             break;
         case 'backup_logs' :
             foreach ($faqConfig->getDb()->tableNames as $table) {
                 if ((SQLPREFIX . 'faqadminlog' == trim($table)) || (SQLPREFIX . 'faqsessions' == trim($table))) {
-                    $tablenames .= $table . ' ';
+                    $tableNames .= $table . ' ';
                 }
             }
             break;
     }
 
-    $text[] = "-- pmf" . $majorVersion . ": " . $tablenames;
+    $text[] = "-- pmf" . $majorVersion . ": " . $tableNames;
     $text[] = "-- DO NOT REMOVE THE FIRST LINE!";
     $text[] = "-- pmftableprefix: " . SQLPREFIX;
     $text[] = "-- DO NOT REMOVE THE LINES ABOVE!";
@@ -97,15 +98,25 @@ if ($permission['backup']) {
 
     switch ($action) {
         case 'backup_content' :
-            header('Content-Disposition: attachment; filename="phpmyfaq-data.'.date("Y-m-d-H-i-s").'.sql');
-            foreach (explode(' ', $tablenames) as $table) {
+            $header = sprintf(
+                'Content-Disposition: attachment; filename="%s-data.%s.sql',
+                $tablePrefix,
+                date("Y-m-d-H-i-s")
+            );
+            header($header);
+            foreach (explode(' ', $tableNames) as $table) {
                 print implode("\r\n", $text);
                 $text = $dbHelper->buildInsertQueries("SELECT * FROM " . $table, $table);
             }
             break;
         case 'backup_logs' :
-            header('Content-Disposition: attachment; filename="phpmyfaq-logs.'.date("Y-m-d-H-i-s").'.sql');
-            foreach (explode(' ', $tablenames) as $table) {
+            $header = sprintf(
+                'Content-Disposition: attachment; filename="%s-logs.%s.sql',
+                $tablePrefix,
+                date("Y-m-d-H-i-s")
+            );
+            header($header);
+            foreach (explode(' ', $tableNames) as $table) {
                 print implode("\r\n", $text);
                 $text = $dbHelper->buildInsertQueries("SELECT * FROM " . $table, $table);
             }
