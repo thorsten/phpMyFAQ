@@ -42,14 +42,13 @@ $(document).ready(function() {
  *
  * @return void
  */
-function pmfAutosave()
-{
+function pmfAutosave() {
 	var ed = tinyMCE.activeEditor;
 	if (ed.isDirty()) {
 		var formData = {};
 		formData.revision_id = $('#revision_id').attr('value');
 		formData.record_id = $('#record_id').attr('value');
-		formData.csrf = $('#csrf').attr('value');
+		formData.csrf = $('[name="csrf"]').attr('value');
 		formData.openQuestionId = $('#openQuestionId').attr('value');
 		formData.question = $('#question').attr('value');
 		formData.answer = ed.getContent();
@@ -59,6 +58,16 @@ function pmfAutosave()
 		formData.email = $('#email').attr('value');
 		formData.lang = $('#lang').attr('value');
 		formData.solution_id = $('#solution_id').attr('value');
+		formData.active = $('input:checked:[name="active"]').attr('value');
+		formData.sticky = $('#sticky').attr('value');
+		formData.comment = $('#comment').attr('value');
+		formData.grouppermission = $('[name="grouppermission"]').attr('value');
+		formData.userpermission = $('[name="userpermission"]').attr('value');
+		formData.restricted_users = $('[name="restricted_users"]').attr('value');
+		formData.dateActualize = $('#dateActualize').attr('value');
+		formData.dateKeep = $('#dateKeep').attr('value');
+		formData.dateCustomize = $('#dateCustomize').attr('value');
+		formData.date = $('#date').attr('value');
 
 		$.ajax({
 			url: pmfAutosaveAction(),
@@ -77,13 +86,16 @@ function pmfAutosave()
  *
  * @return string
  */
-function pmfAutosaveAction()
-{
+function pmfAutosaveAction() {
 	var act;
 	var fa = $('#faqEditor').attr('action');
 
 	act = '?action=ajax&ajax=autosave&' + fa.substr(1).replace(/action=/, 'do=');
 
 	return act;
+}
+
+function getYesNoVal(selector) {
+	
 }
 
