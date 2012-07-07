@@ -62,6 +62,8 @@ $mainConfig = array(
     'records.defaultAttachmentEncKey'         => '',
     'records.enableCloseQuestion'             => 'false',
     'records.enableDeleteQuestion'            => 'false',
+	'records.autosaveActive'                  => 'false',
+	'records.autosaveSecs'                    => '360',
 
     'search.useAjaxSearchOnStartpage'         => 'false',
     'search.numberSearchTerms'                => '10',
