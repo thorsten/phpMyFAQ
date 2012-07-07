@@ -38,6 +38,7 @@ $statisticsPage    = false;
 $exportsPage       = false;
 $backupPage        = false;
 $configurationPage = false;
+$edAutosave        = (('editentry' == $action) && $faqConfig->get('records.autosaveActive'));
 
 $adminHelper = new PMF_Helper_Administration();
 $adminHelper->setPermission($permission);
@@ -191,6 +192,11 @@ switch ($action) {
     <script src="../assets/js/plugins/datePicker/date.js"></script>
     <script src="../assets/js/plugins/datePicker/jquery.datePicker.js"></script>
     <script src="editor/tiny_mce.js?<?php print time(); ?>"></script>
+
+<?php if ($edAutosave): ?>
+	<script>var pmfAutosaveInterval = <?php echo $faqConfig->get('records.autosaveSecs') ?>;</script>
+    <script src="../assets/js/autosave.js"></script>
+<?php endif; ?>
     
     <link rel="shortcut icon" href="../assets/template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico">
     <link rel="apple-touch-icon" href="../assets/template/<?php print PMF_Template::getTplSetName(); ?>/apple-touch-icon.png">
