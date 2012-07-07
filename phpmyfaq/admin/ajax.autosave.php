@@ -85,7 +85,7 @@ if ('insertentry' == $do && ($permission['editbt']|| $permission['addbt']) ||
             'linkState'     => '',
             'linkDateCheck' => 0);
 
-		if ('saveentry' == $do) {
+		if ('saveentry' == $do || $record_id) {
 			/* Create a revision anyway, it's autosaving */
 			$faq->addNewRevision($record_id, $record_lang);
 			$revision_id++;
