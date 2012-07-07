@@ -21,9 +21,6 @@
  */
 
 $(document).ready(function() {
-	/* XXX autosave feature should be controllable through admin */
-	/* XXX interval time should be configurable through admin */
-
 	$(window).unload(function() {
 		//if (tinyMCE.activeEditor.isDirty()) {
 			var chk = confirm('Do you want to save the article before navigating away?');
