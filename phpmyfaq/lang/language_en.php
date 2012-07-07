@@ -1189,4 +1189,4 @@ $PMF_LANG["ad_menu_instances"] = "FAQ Multi-sites";
 
 // added v2.8.0-alpha3 - 2012-07-07 by Anatoliy
 $LANG_CONF['records.autosaveActive'] = array(0 => 'checkbox', 1 => 'Activate entry autosaving');
-$LANG_CONF['records.autosaveSecs'] = array(0 => 'input', 1 => 'Interval for autosaving (seconds)');
+$LANG_CONF['records.autosaveSecs'] = array(0 => 'input', 1 => 'Interval for autosaving in seconds, default 180');

@@ -43,7 +43,7 @@ if ('insertentry' == $do && ($permission['editbt']|| $permission['addbt']) ||
 	$author        = PMF_Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_STRING);
 	$email         = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 	$comment       = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
-	$record_id     = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+	$record_id     = PMF_Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
 	$solution_id   = PMF_Filter::filterInput(INPUT_POST, 'solution_id', FILTER_VALIDATE_INT);
 	$revision_id   = PMF_Filter::filterInput(INPUT_POST, 'revision_id', FILTER_VALIDATE_INT);
 	$changed       = PMF_Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
@@ -124,6 +124,7 @@ if ('insertentry' == $do && ($permission['editbt']|| $permission['addbt']) ||
 		} else if ('insertentry' == $do) {
 			unset($recordData['id']);
 			unset($recordData['revision_id']);
+			$revision_id = 1;
 			$record_id = $faq->addRecord($recordData);
 			if ($record_id) {
 				$faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $recordData['lang']);
@@ -146,13 +147,16 @@ if ('insertentry' == $do && ($permission['editbt']|| $permission['addbt']) ||
 			}
 		}
 
+		$out = array(
+			'msg' => sprintf("Item autosaved at revision %d", $revision_id),
+			'revision_id' => $revision_id,
+			'record_id' => $record_id,
+		);
 
-		$fmt = "Item autosaved at revision %d";
-
-		printf($fmt, $revision_id);
+		print json_encode($out);
 	}
 
 } else {
-    print "Unsuficcient article rights";
+    print json_encode(array("msg" => "Unsuficcient article rights"));
 }
 

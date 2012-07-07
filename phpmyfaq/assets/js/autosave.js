@@ -34,7 +34,7 @@ $(document).ready(function() {
 		//}
 	});
 
-	setInterval('pmfAutosave();', 10000);
+	setInterval('pmfAutosave();', pmfAutosaveInterval*1000);
 });
 
 /**
@@ -73,9 +73,16 @@ function pmfAutosave() {
 			url: pmfAutosaveAction(),
 			type: 'POST',
 			data: formData,
-			success: function(msg) {
-				$('#saving_data_indicator').html(msg);
+			success: function(r) {
+				var resp = $.parseJSON(r);
+
+				$('#saving_data_indicator').html(resp.msg);
+				
 				ed.isNotDirty = true;
+
+				$('#record_id').attr('value', resp.record_id);
+				$('#revision_id').attr('value', resp.revision_id);
+				/* XXX update more places on the page according to the new saved data */
 			}
 		});
 	}

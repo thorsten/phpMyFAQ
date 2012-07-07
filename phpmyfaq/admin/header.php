@@ -38,7 +38,7 @@ $statisticsPage    = false;
 $exportsPage       = false;
 $backupPage        = false;
 $configurationPage = false;
-$edAutosave        = ('editentry' == $action);
+$edAutosave        = (('editentry' == $action) && $faqConfig->get('records.autosaveActive'));
 
 $adminHelper = new PMF_Helper_Administration();
 $adminHelper->setPermission($permission);
@@ -194,6 +194,7 @@ switch ($action) {
     <script src="editor/tiny_mce.js?<?php print time(); ?>"></script>
 
 <?php if ($edAutosave): ?>
+	<script>var pmfAutosaveInterval = <?php echo $faqConfig->get('records.autosaveSecs') ?>;</script>
     <script src="../assets/js/autosave.js"></script>
 <?php endif; ?>
     
