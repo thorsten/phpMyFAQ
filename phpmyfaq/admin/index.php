@@ -278,6 +278,10 @@ if (isset($auth) && in_array(true, $permission)) {
             case 'att':
                 require 'ajax.attachment.php';
                 break;
+
+			case 'autosave':
+				require 'ajax.autosave.php';
+				break;
             }
         exit();
         }
