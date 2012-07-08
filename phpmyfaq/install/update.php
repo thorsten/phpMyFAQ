@@ -791,6 +791,9 @@ if ($step == 3) {
 
         $faqInstanceMaster = new PMF_Instance_Master($faqConfig);
         $faqInstanceMaster->createMaster($faqInstance);
+
+        $faqConfig->add('records.autosaveActive', 'false');
+        $faqConfig->add('records.autosaveSecs', '180');
     }
 
     // Always the last step: Update version number
