@@ -45,6 +45,7 @@
          <filelist dir="${basedir}/vendor/bootstrap/js" files="bootstrap-scrollspy.js" />
          <filelist dir="${basedir}/vendor/bootstrap/js" files="bootstrap-tab.js" />
          <filelist dir="${basedir}/vendor/bootstrap/js" files="bootstrap-typeahead.js" />
+         <filelist dir="${basedir}/phpmyfaq/assets/js" files="autosave.js" />
          <filelist dir="${basedir}/phpmyfaq/assets/js" files="functions.js" />
      </concat>
  </target>
