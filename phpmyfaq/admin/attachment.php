@@ -98,7 +98,7 @@ if (is_null($currentAction) || !is_null($currentSave)) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
     <title><?php print $faqConfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
-    <base href="<?php print $faqConfig->get('main.referenceURL'); ?>" />
+    <base href="<?php print $faqConfig->get('main.referenceURL'); ?>/admin/" />
     
     <meta name="description" content="Only Chuck Norris can divide by zero.">
     <meta name="author" content="phpMyFAQ Team">
@@ -125,7 +125,7 @@ if (is_null($currentAction) && $auth && $permission['addattachment']) {
     $recordId   = filter_input(INPUT_GET, 'record_id',   FILTER_VALIDATE_INT);
     $recordLang = filter_input(INPUT_GET, 'record_lang', FILTER_SANITIZE_STRING);
 ?>
-        <form action="?action=save" enctype="multipart/form-data" method="post">
+        <form action="attachment.php?action=save" enctype="multipart/form-data" method="post">
             <fieldset>
             <legend><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></legend>
                 <input type="hidden" name="MAX_FILE_SIZE" value="<?php print $faqConfig->get('records.maxAttachmentSize'); ?>" />
