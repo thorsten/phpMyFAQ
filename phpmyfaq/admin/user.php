@@ -568,14 +568,14 @@ function getUserData(user_id)
                     </a>
                 </td>
                 <td>
-                    <a href="?action=user&amp;user_id=<?php print $user->getUserData('user_id')?>">
+                    <a href="?action=user&amp;user_id=<?php print $user->getUserData('user_id')?>" class="btn btn-info">
                         <?php print $PMF_LANG['ad_user_edit'] ?>
                     </a>
                 </td>
                 <td>
                     <?php if ($user->getStatus() !== 'protected'): ?>
                     <a onclick="deleteUser(<?php print $user->getUserData('user_id') ?>); return false;"
-                       href="javascript:;">
+                       href="javascript:;" class="btn btn-danger">
                         <?php print $PMF_LANG['ad_user_delete'] ?>
                     </a>
                     <?php endif; ?>

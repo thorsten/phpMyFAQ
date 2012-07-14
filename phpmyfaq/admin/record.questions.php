@@ -79,17 +79,19 @@ if ($permission['delquestion']) {
                 <?php print $question['question'] ?>
             </td>
             <td>
-                <a href="?action=question&amp;id=<?php print $question['id']; ?>&amp;is_visible=toggle">
+                <a href="?action=question&amp;id=<?php print $question['id']; ?>&amp;is_visible=toggle"
+                   class="btn btn-info">
                     <?php print ('Y' == $question['is_visible']) ? $PMF_LANG['ad_gen_no'] : $PMF_LANG['ad_gen_yes']; ?>
                 </a>
             </td>
             <td>
                 <?php if ($faqConfig->get('records.enableCloseQuestion') && $question['answer_id']) { ?>
-                <a href="?action=editentry&amp;id=<?php print $question['answer_id']; ?>&amp;lang=<?php print $LANGCODE; ?>">
+                <a href="?action=editentry&amp;id=<?php print $question['answer_id']; ?>&amp;lang=<?php print $LANGCODE; ?>"
+                   class="btn btn-success">
                     <?php print $PMF_LANG['msg2answerFAQ']; ?>
                 </a>
                 <?php } else { ?>
-                <a href="?action=takequestion&amp;id=<?php print $question['id']; ?>">
+                <a href="?action=takequestion&amp;id=<?php print $question['id']; ?>" class="btn btn-success">
                     <?php print $PMF_LANG['ad_ques_take']; ?>
                 </a>
                 <?php } ?>

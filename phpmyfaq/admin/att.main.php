@@ -61,7 +61,7 @@ printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_attachment_admin']);
                     <td><?php print $item->filesize ?></td>
                     <td><?php print $item->mime_type ?></td>
                     <td>
-                        <a href="javascript:deleteAttachment(<?php print $item->id ?>); void(0);">
+                        <a href="javascript:deleteAttachment(<?php print $item->id ?>); void(0);" class="btn btn-danger">
                             <?php print $PMF_LANG['ad_gen_delete'] ?>
                         </a>
                     </td>
