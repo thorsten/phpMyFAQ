@@ -62,18 +62,25 @@ class PMF_Instance_Client extends PMF_Instance
     }
 
     /**
-     * Adds a new folder named by the given URL in /path/to/faq/multisite/
+     * Adds a new folder named by the given hostname in /path/to/faq/multisite/
      *
-     * @param string $url URL of the client instance
+     * @param string $hostname Hostname of the client instance
      *
      * @return bool
      */
-    public function createClientFolder($url)
+    public function createClientFolder($hostname)
     {
+        $clientDir = PMF_ROOT_DIR . '/multisite/' . $hostname;
+
         if (!$this->fileSystem instanceof PMF_Filesystem) {
             $this->fileSystem = new PMF_Filesystem();
         }
-        return $this->fileSystem->mkdir(dirname(__DIR__) . '/multisite/' . $url);
+
+        if (! is_writeable($clientDir)) {
+            return false;
+        }
+
+        return $this->fileSystem->mkdir($clientDir);
     }
 
     /**
@@ -99,7 +106,7 @@ class PMF_Instance_Client extends PMF_Instance
     {
         return $this->fileSystem->copy(
             $this->fileSystem->getRootPath() . '/config/constants.php',
-            $dest
+            $dest . '/constants.php'
         );
     }
 
@@ -114,7 +121,7 @@ class PMF_Instance_Client extends PMF_Instance
     {
         return $this->fileSystem->copy(
             $this->fileSystem->getRootPath() . '/config/constants_ldap.php',
-            $dest
+            $dest . '/constants_ldap.php'
         );
     }
 
@@ -130,7 +137,7 @@ class PMF_Instance_Client extends PMF_Instance
     public function copyTemplateFolder($dest, $templateDir = 'default')
     {
         $sourceTpl = $this->fileSystem->getRootPath() . '/assets/template/' . $templateDir;
-        $destTpl   = $dest . '/assets/template/';
+        $destTpl   = $dest . '/assets/template/' . $templateDir;
 
         $this->fileSystem->recursiveCopy($sourceTpl, $destTpl);
     }

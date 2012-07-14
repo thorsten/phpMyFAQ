@@ -44,12 +44,48 @@ if ($permission['editinstances']) {
     // Update client instance
     if ('updateinstance' === $action && is_integer($instanceId)) {
 
+        $clientInstance = new PMF_Instance_Client($faqConfig);
+
+        // Collect data for database
         $data = array();
         $data['url']      = PMF_Filter::filterInput(INPUT_POST, 'url', FILTER_SANITIZE_STRING);
         $data['instance'] = PMF_Filter::filterInput(INPUT_POST, 'instance', FILTER_SANITIZE_STRING);
         $data['comment']  = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
 
-        if ($instance->updateInstance($instanceId, $data)) {
+        // Update filesystem related changes
+        $urlParts = parse_url($data['url']);
+        $hostname = $urlParts['host'];
+
+        if ($clientInstance->createClientFolder($hostname)) {
+
+            $clientDir   = PMF_ROOT_DIR . '/multisite/' . $hostname;
+            $clientSetup = new PMF_Instance_Setup();
+            $clientSetup->setRootDir($clientDir);
+
+            $clientInstance->copyConstantsFile($clientDir);
+            $clientInstance->copyLdapConstantsFile($clientDir);
+
+            $dbSetup = array(
+                'dbServer'       => $DB['server'],
+                'dbUser'         => $DB['db'],
+                'dbPassword'     => $DB['password'],
+                'dbDatabaseName' => $DB['db'],
+                'dbPrefix'       => substr($hostname, 0, strpos($hostname, '.')),
+                'dbType'         => $DB['type']
+            );
+            $clientSetup->createDatabaseFile($dbSetup, '');
+
+            // @todo populate new database
+
+        } else {
+            printf(
+                '<p class="alert alert-error">%s%s</p>',
+                '<a class="close" data-dismiss="alert" href="#">&times;</a>',
+                'The folder /multisite is not writable.'
+            );
+        }
+
+        if ($clientInstance->updateInstance($instanceId, $data)) {
             printf(
                 '<p class="alert alert-success">%s%s</p>',
                 '<a class="close" data-dismiss="alert" href="#">&times;</a>',

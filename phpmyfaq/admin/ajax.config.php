@@ -2,7 +2,7 @@
 /**
  * AJAX: handling of Ajax configuration calls
  *
- * PHP 5.2
+ * PHP 5.3
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -48,15 +48,39 @@ switch ($ajaxAction) {
         );
 
         $faqInstance = new PMF_Instance($faqConfig);
-        $instanceId = $faqInstance->addInstance($data);
+        $instanceId  = $faqInstance->addInstance($data);
 
         $faqInstanceClient = new PMF_Instance_Client($faqConfig);
         $faqInstanceClient->createClient($faqInstance);
 
         if ('yes' === $install) {
-            $faqInstanceClient->createClientFolder($data['url']);
-            // @todo
-            // - copy /config folder stuff in that folder
+            $urlParts = parse_url($data['url']);
+            $hostname = $urlParts['host'];
+
+            if ($faqInstanceClient->createClientFolder($hostname)) {
+
+                $clientDir   = PMF_ROOT_DIR . '/multisite/' . $hostname;
+                $clientSetup = new PMF_Instance_Setup();
+                $clientSetup->setRootDir($clientDir);
+
+                $faqInstanceClient->copyConstantsFile($clientDir);
+                $faqInstanceClient->copyLdapConstantsFile($clientDir);
+
+                $dbSetup = array(
+                    'dbServer'       => $DB['server'],
+                    'dbUser'         => $DB['db'],
+                    'dbPassword'     => $DB['password'],
+                    'dbDatabaseName' => $DB['db'],
+                    'dbPrefix'       => substr($hostname, 0, strpos($hostname, '.')),
+                    'dbType'         => $DB['type']
+                );
+                $clientSetup->createDatabaseFile($dbSetup, '');
+
+                // @todo populate new database
+
+            } else {
+                $payload = array('error' => $instanceId);
+            }
         }
 
         if (0 !== $instanceId) {

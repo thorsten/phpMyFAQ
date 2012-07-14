@@ -91,14 +91,15 @@ class PMF_Instance_Setup
     /**
      * Creates the file /config/database.php
      *
-     * @param array $data
+     * @param array  $data   Array with database credentials
+     * @param string $folder Folder
      *
      * @return integer
      */
-    public function createDatabaseFile(Array $data)
+    public function createDatabaseFile(Array $data, $folder = '/config')
     {
         $ret = file_put_contents(
-            $this->_rootDir  . '/config/database.php',
+            $this->_rootDir . $folder . '/database.php',
             "<?php\n" .
             "\$DB['server'] = '" . $data['dbServer'] . "';\n" .
             "\$DB['user'] = '" . $data['dbUser'] . "';\n" .
@@ -115,14 +116,15 @@ class PMF_Instance_Setup
     /**
      * Creates the file /config/ldap.php
      *
-     * @param array $data
+     * @param array  $data   Array with LDAP credentials
+     * @param string $folder Folder
      *
      * @return integer
      */
-    public function createLdapFile(Array $data)
+    public function createLdapFile(Array $data, $folder = '/config')
     {
         $ret = file_put_contents(
-            $this->_rootDir  . '/config/database.php',
+            $this->_rootDir . $folder . '/config/ldap.php',
             "<?php\n" .
             "\$PMF_LDAP['ldap_server'] = '" . $data['ldapServer'] . "';\n" .
             "\$PMF_LDAP['ldap_port'] = '" . $data['ldapPort'] . "';\n" .
