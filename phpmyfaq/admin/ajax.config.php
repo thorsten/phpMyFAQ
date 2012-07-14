@@ -42,7 +42,7 @@ switch ($ajaxAction) {
         $install  = PMF_Filter::filterInput(INPUT_GET, 'install', FILTER_SANITIZE_STRING);
 
         $data = array(
-            'url'      => 'http://' . $url,
+            'url'      => 'http://' . $url . '.' . $_SERVER['SERVER_NAME'],
             'instance' => $instance,
             'comment'  => $comment
         );
@@ -60,7 +60,7 @@ switch ($ajaxAction) {
         }
 
         if (0 !== $instanceId) {
-            $payload = array('added' => $instanceId);
+            $payload = array('added' => $instanceId, 'url' => $data['url']);
         } else {
             $payload = array('error' => $instanceId);
         }

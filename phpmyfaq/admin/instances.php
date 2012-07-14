@@ -161,12 +161,12 @@ if ($permission['editinstances']) {
                         $('.table tbody').append(
                             '<tr id="row-instance-' + data.added + '">' +
                             '<td>' + data.added + '</td>' +
-                            '<td><a href="http://' + url + instance + '">http://' + url + '</a></td>' +
+                            '<td><a href="' + data.url + '">' + data.url + '</a></td>' +
                             '<td>' + instance + '</td>' +
                             '<td>' + comment + '</td>' +
                             '<td>' +
-                            '<a href="javascript:;" id="edit-instance-' + data.added +
-                            '" class="btn btn-info pmf-instance-edit">edit</a>' +
+                            '<a href="?action=editinstance&instance_id=' + data.added +
+                            '" class="btn btn-info">edit</a>' +
                             '</td>' +
                             '<td>' +
                             '<a href="javascript:;" id="delete-instance-' + data.added +
