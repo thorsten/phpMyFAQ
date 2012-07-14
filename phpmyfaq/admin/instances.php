@@ -62,8 +62,8 @@ if ($permission['editinstances']) {
             $clientSetup = new PMF_Instance_Setup();
             $clientSetup->setRootDir($clientDir);
 
-            $clientInstance->copyConstantsFile($clientDir);
-            $clientInstance->copyLdapConstantsFile($clientDir);
+            $faqInstanceClient->copyConstantsFile($clientDir . '/constants.php');
+            $faqInstanceClient->copyLdapConstantsFile($clientDir . '/constants_ldap.php');
 
             $dbSetup = array(
                 'dbServer'       => $DB['server'],

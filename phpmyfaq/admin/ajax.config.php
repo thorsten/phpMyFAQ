@@ -63,8 +63,8 @@ switch ($ajaxAction) {
                 $clientSetup = new PMF_Instance_Setup();
                 $clientSetup->setRootDir($clientDir);
 
-                $faqInstanceClient->copyConstantsFile($clientDir);
-                $faqInstanceClient->copyLdapConstantsFile($clientDir);
+                $faqInstanceClient->copyConstantsFile($clientDir . '/constants.php');
+                $faqInstanceClient->copyLdapConstantsFile($clientDir . '/constants_ldap.php');
 
                 $dbSetup = array(
                     'dbServer'       => $DB['server'],

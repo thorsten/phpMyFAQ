@@ -106,7 +106,7 @@ class PMF_Instance_Client extends PMF_Instance
     {
         return $this->fileSystem->copy(
             $this->fileSystem->getRootPath() . '/config/constants.php',
-            $dest . '/constants.php'
+            $dest
         );
     }
 
@@ -121,7 +121,7 @@ class PMF_Instance_Client extends PMF_Instance
     {
         return $this->fileSystem->copy(
             $this->fileSystem->getRootPath() . '/config/constants_ldap.php',
-            $dest . '/constants_ldap.php'
+            $dest
         );
     }
 
@@ -137,7 +137,7 @@ class PMF_Instance_Client extends PMF_Instance
     public function copyTemplateFolder($dest, $templateDir = 'default')
     {
         $sourceTpl = $this->fileSystem->getRootPath() . '/assets/template/' . $templateDir;
-        $destTpl   = $dest . '/assets/template/' . $templateDir;
+        $destTpl   = $dest . '/assets/template/';
 
         $this->fileSystem->recursiveCopy($sourceTpl, $destTpl);
     }
