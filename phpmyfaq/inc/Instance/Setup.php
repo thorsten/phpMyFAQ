@@ -60,6 +60,25 @@ class PMF_Instance_Setup
     }
 
     /**
+     * Creates the anonymous default user
+     *
+     * @param PMF_Configuration $faqConfig
+     *
+     * @return void
+     */
+    public function createAnonymousUser(PMF_Configuration $faqConfig)
+    {
+        $anonymous = new PMF_User($faqConfig);
+        $anonymous->createUser('anonymous', null, -1);
+        $anonymous->setStatus('protected');
+        $anonymousData = array(
+            'display_name' => 'Anonymous User',
+            'email'        => null
+        );
+        $anonymous->setUserData($anonymousData);
+    }
+
+    /**
      * Checks basic folders and creates them if necessary
      *
      * @param array $dirs

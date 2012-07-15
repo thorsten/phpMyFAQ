@@ -736,19 +736,11 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     // add default rights
     include 'rightdata.php';
     foreach ($mainRights as $right) {
-        $rightId = $admin->perm->addRight($right);
-        $admin->perm->grantUserRight($admin->getUserId(), $rightId);
+        $admin->perm->grantUserRight(1, $admin->perm->addRight($right));
     }
     
     // Add anonymous user account
-    $anonymous = new PMF_User($configuration);
-    $anonymous->createUser('anonymous', null, -1);
-    $anonymous->setStatus('protected');
-    $anonymousData = array(
-        'display_name' => 'Anonymous User',
-        'email'        => null
-    );
-    $anonymous->setUserData($anonymousData);
+    $instanceSetup->createAnonymousUser($faqConfig);
 
     // Add master instance
     $instanceData = array(
