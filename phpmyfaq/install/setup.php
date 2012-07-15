@@ -429,7 +429,6 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                             <input type="email" name="email" id="email" required="required" />
                             <p class="help-block">Please enter your email adress.</p>
                         </div>
-
                     </div>
                     <div class="control-group">
                         <label class="control-label" for="loginname">Your login name:</label>

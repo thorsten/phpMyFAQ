@@ -167,9 +167,28 @@ if ($permission['editinstances']) {
                         <input type="text" name="comment" id="comment" required="required">
                     </div>
                 </div>
+                <div class="control-group">
+                    <label class="control-label" for="email">Your email address:</label>
+                    <div class="controls">
+                        <input type="email" name="email" id="email" required="required" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Admin loginname:</label>
+                    <div class="controls">
+                        <input type="text" name="admin" id="admin" required="required">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="password">Your password:</label>
+                    <div class="controls">
+                        <input type="password" name="password" id="password" required="required" />
+                    </div>
+                </div>
             </form>
         </div>
         <div class="modal-footer">
+            <p>Caution: This will create a new phpMyFAQ instance!</p>
             <a href="javascript:;" class="btn btn-primary pmf-instance-add">Save changes</a>
         </div>
     </div>
@@ -178,14 +197,16 @@ if ($permission['editinstances']) {
         // Add instance
         $('.pmf-instance-add').click(function(event) {
             event.preventDefault();
-            var url = $('#url').val();
+            var url      = $('#url').val();
             var instance = $('#instance').val();
-            var comment = $('#comment').val();
-            var install = $('#install').val();
+            var comment  = $('#comment').val();
+            var email    = $('#email').val();
+            var admin    = $('#admin').val();
+            var password = $('#password').val();
 
             $.get('index.php',
                 { action: 'ajax', ajax: 'config', ajaxaction: 'add_instance',
-                  url: url, instance: instance, comment: comment, install: install
+                  url: url, instance: instance, comment: comment, email: email, admin: admin, password: password
                 },
                 function(data) {
                     if (typeof(data.added) === 'undefined') {

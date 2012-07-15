@@ -39,7 +39,9 @@ switch ($ajaxAction) {
         $url      = PMF_Filter::filterInput(INPUT_GET, 'url', FILTER_SANITIZE_STRING);
         $instance = PMF_Filter::filterInput(INPUT_GET, 'instance', FILTER_SANITIZE_STRING);
         $comment  = PMF_Filter::filterInput(INPUT_GET, 'comment', FILTER_SANITIZE_STRING);
-        $install  = PMF_Filter::filterInput(INPUT_GET, 'install', FILTER_SANITIZE_STRING);
+        $email    = PMF_Filter::filterInput(INPUT_GET, 'email', FILTER_VALIDATE_EMAIL);
+        $admin    = PMF_Filter::filterInput(INPUT_GET, 'admin', FILTER_SANITIZE_STRING);
+        $password = PMF_Filter::filterInput(INPUT_GET, 'password', FILTER_SANITIZE_STRING);
 
         $data = array(
             'url'      => 'http://' . $url . '.' . $_SERVER['SERVER_NAME'],
@@ -53,34 +55,30 @@ switch ($ajaxAction) {
         $faqInstanceClient = new PMF_Instance_Client($faqConfig);
         $faqInstanceClient->createClient($faqInstance);
 
-        if ('yes' === $install) {
-            $urlParts = parse_url($data['url']);
-            $hostname = $urlParts['host'];
+        $urlParts = parse_url($data['url']);
+        $hostname = $urlParts['host'];
 
-            if ($faqInstanceClient->createClientFolder($hostname)) {
+        if ($faqInstanceClient->createClientFolder($hostname)) {
 
-                $clientDir   = PMF_ROOT_DIR . '/multisite/' . $hostname;
-                $clientSetup = new PMF_Instance_Setup();
-                $clientSetup->setRootDir($clientDir);
+            $clientDir   = PMF_ROOT_DIR . '/multisite/' . $hostname;
+            $clientSetup = new PMF_Instance_Setup();
+            $clientSetup->setRootDir($clientDir);
 
-                $faqInstanceClient->copyConstantsFile($clientDir . '/constants.php');
-                $faqInstanceClient->copyLdapConstantsFile($clientDir . '/constants_ldap.php');
+            $faqInstanceClient->copyConstantsFile($clientDir . '/constants.php');
+            $faqInstanceClient->copyLdapConstantsFile($clientDir . '/constants_ldap.php');
 
-                $dbSetup = array(
-                    'dbServer'       => $DB['server'],
-                    'dbUser'         => $DB['db'],
-                    'dbPassword'     => $DB['password'],
-                    'dbDatabaseName' => $DB['db'],
-                    'dbPrefix'       => substr($hostname, 0, strpos($hostname, '.')),
-                    'dbType'         => $DB['type']
-                );
-                $clientSetup->createDatabaseFile($dbSetup, '');
+            $dbSetup = array(
+                'dbServer'       => $DB['server'],
+                'dbUser'         => $DB['db'],
+                'dbPassword'     => $DB['password'],
+                'dbDatabaseName' => $DB['db'],
+                'dbPrefix'       => substr($hostname, 0, strpos($hostname, '.')),
+                'dbType'         => $DB['type']
+            );
+            $clientSetup->createDatabaseFile($dbSetup, '');
 
-                // @todo populate new database
+            // @todo populate new database
 
-            } else {
-                $payload = array('error' => $instanceId);
-            }
         }
 
         if (0 !== $instanceId) {
