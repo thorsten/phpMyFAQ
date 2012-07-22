@@ -348,12 +348,12 @@ if ($step == 3) {
             }
         }
         
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.enableUpdate', 'false')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('security.useSslForLogins', 'false')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.currentApiVersion', '" . PMF_System::getApiVersion() . "')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.templateSet', 'default')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.numberSearchTerms', '10')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('records.orderingPopularFaqs', 'visits')";
+        $faqConfig->add('main.enableUpdate', 'false');
+        $faqConfig->add('security.useSslForLogins', 'false');
+        $faqConfig->add('main.currentApiVersion', PMF_System::getApiVersion());
+        $faqConfig->add('main.templateSet', 'default');
+        $faqConfig->add('main.numberSearchTerms', '10');
+        $faqConfig->add('records.orderingPopularFaqs', 'visits');
         /**
          * We did check in the first and second steps,
          * if the $templateDir and its contents are writable,
@@ -378,9 +378,9 @@ if ($step == 3) {
         /**
          * Attachments stuff
          */
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('records.attachmentsStorageType', '0')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('records.enableAttachmentEncryption', 'false')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('records.defaultAttachmentEncKey', '')";
+        $faqConfig->add('records.attachmentsStorageType', '0');
+        $faqConfig->add('records.enableAttachmentEncryption', 'false');
+        $faqConfig->add('records.defaultAttachmentEncKey', '');
         switch($DB['type']) {
             case 'pgsql':
                 $query[] = "CREATE TABLE " . SQLPREFIX . "faqattachment (
@@ -445,18 +445,18 @@ if ($step == 3) {
     // UPDATES FROM 2.6.0-RC
     //
     if (version_compare($version, '2.6.0-RC', '<')) {
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.optionalMailAddress', 'false')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.useAjaxSearchOnStartpage', 'false')";
+        $faqConfig->add('main.optionalMailAddress', 'false');
+        $faqConfig->add('main.useAjaxSearchOnStartpage', 'false');
     }
 
     //
     // UPDATES FROM 2.6.99
     //
     if (version_compare($version, '2.6.99', '<')) {
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('search.relevance', 'thema,content,keywords')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('search.enableRelevance', 'false')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.enableGoogleTranslation', 'false')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.googleTranslationKey', 'INSERT-YOUR-KEY')";
+        $faqConfig->add('search.relevance', 'thema,content,keywords');
+        $faqConfig->add('search.enableRelevance', 'false');
+        $faqConfig->add('main.enableGoogleTranslation', 'false');
+        $faqConfig->add('main.googleTranslationKey', 'INSERT-YOUR-KEY');
     }
 
     //
@@ -464,12 +464,12 @@ if ($step == 3) {
     //
     if (version_compare($version, '2.7.0-alpha', '<')) {
         // Add new config values
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.enableTwitterSupport', 'false')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.twitterConsumerKey', '')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.twitterConsumerSecret', '')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.twitterAccessTokenKey', '')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.twitterAccessTokenSecret', '')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('socialnetworks.enableFacebookSupport', 'false')";
+        $faqConfig->add('socialnetworks.enableTwitterSupport', 'false');
+        $faqConfig->add('socialnetworks.twitterConsumerKey', '');
+        $faqConfig->add('socialnetworks.twitterConsumerSecret', '');
+        $faqConfig->add('socialnetworks.twitterAccessTokenKey', '');
+        $faqConfig->add('socialnetworks.twitterAccessTokenSecret', '');
+        $faqConfig->add('socialnetworks.enableFacebookSupport', 'false');
 
         // Migrate faqquestion table to new structure
 
@@ -567,10 +567,10 @@ if ($step == 3) {
     // UPDATES FROM 2.7.0-beta2
     //
     if (version_compare($version, '2.7.0-beta2', '<')) {
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('security.ssoSupport', 'false')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('security.ssoLogoutRedirect', '')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('main.dateFormat', 'Y-m-d H:i')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('security.enableLoginOnly', 'false')";
+        $faqConfig->add('security.ssoSupport', 'false');
+        $faqConfig->add('security.ssoLogoutRedirect', '');
+        $faqConfig->add('main.dateFormat', 'Y-m-d H:i');
+        $faqConfig->add('security.enableLoginOnly', 'false');
     }
 
     //
@@ -617,7 +617,7 @@ if ($step == 3) {
     // UPDATES FROM 2.7.1
     //
     if (version_compare($version, '2.7.1', '<')) {
-        $query[] = "INSERT INTO ". SQLPREFIX . "faqconfig VALUES ('security.useSslOnly', 'false')";
+        $faqConfig->add('security.useSslOnly', 'false');
     }
 
     //
@@ -644,17 +644,17 @@ if ($step == 3) {
             (41, 'addcomment', 'Right to add comments in frontend', 1, 1)";
         $query[] = "INSERT INTO " . SQLPREFIX . "faquser_right (user_id, right_id) VALUES (1, 41)";
 
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('cache.varnishEnable', 'false')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('cache.varnishHost', '127.0.0.1')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('cache.varnishPort', '2000')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('cache.varnishSecret', '')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('cache.varnishTimeout', '500')";
+        $faqConfig->add('cache.varnishEnable', 'false');
+        $faqConfig->add('cache.varnishHost', '127.0.0.1');
+        $faqConfig->add('cache.varnishPort', '2000');
+        $faqConfig->add('cache.varnishSecret', '');
+        $faqConfig->add('cache.varnishTimeout', '500');
 
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('security.forcePasswordUpdate', 'true')";
+        $faqConfig->add('security.forcePasswordUpdate', 'true');
 
         $query[] = "ALTER TABLE " . SQLPREFIX . "faqquestions ADD answer_id INT NOT NULL DEFAULT 0";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('records.enableCloseQuestion', 'false')";
-        $query[] = "INSERT INTO " . SQLPREFIX . "faqconfig VALUES ('records.enableDeleteQuestion', 'false')";
+        $faqConfig->add('records.enableCloseQuestion', 'false');
+        $faqConfig->add('records.enableDeleteQuestion', 'false');
 
         $query[] = "CREATE TEMPORARY TABLE " . SQLPREFIX . "faquserlogin_temp (
                                 login varchar(128) NOT NULL,
