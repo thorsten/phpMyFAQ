@@ -19,12 +19,12 @@
 
 // Main
 $mainConfig = array(
-    'main.currentVersion'                     => '__PHPMYFAQ_VERSION__',
-    'main.currentApiVersion'                  => '__PHPMYFAQ_APIVERSION__',
+    'main.currentVersion'                     => PMF_System::getVersion(),
+    'main.currentApiVersion'                  => PMF_System::getApiVersion(),
     'main.language'                           => '__PHPMYFAQ_LANGUAGE__',
     'main.languageDetection'                  => 'true',
-    'main.phpMyFAQToken'                      => '__PHPMYFAQ_TOKEN__',
-    'main.referenceURL'                       => '',
+    'main.phpMyFAQToken'                      => md5(uniqid(rand())),
+    'main.referenceURL'                       => '__PHPMYFAQ_REFERENCE_URL__',
     'main.administrationMail'                 => 'webmaster@example.org',
     'main.contactInformations'                => '',
     'main.enableAdminLog'                     => 'true',
@@ -33,8 +33,7 @@ $mainConfig = array(
     'main.languageDetection'                  => 'true',
     'main.metaDescription'                    => 'phpMyFAQ should be the answer for all questions in life',
     'main.metaKeywords'                       => '',
-    'main.metaPublisher'                      => 'John Doe',
-    'main.referenceURL'                       => '',
+    'main.metaPublisher'                      => '__PHPMYFAQ_PUBLISHER__',
     'main.send2friendText'                    => '',
     'main.titleFAQ'                           => 'phpMyFAQ Codename Perdita',
     'main.urlValidateInterval'                => '86400',
@@ -82,7 +81,7 @@ $mainConfig = array(
     'security.forcePasswordUpdate'            => 'false',
 
     'spam.checkBannedWords'                   => 'true',
-    'spam.enableCaptchaCode'                  => 'true',
+    'spam.enableCaptchaCode'                  => (extension_loaded('gd') ? 'true' : 'false'),
     'spam.enableSafeEmail'                    => 'true',
 
     'socialnetworks.enableTwitterSupport'     => 'false',

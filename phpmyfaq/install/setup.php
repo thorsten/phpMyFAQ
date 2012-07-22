@@ -706,14 +706,9 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
     // add main configuration, add personal settings
     include 'configurationdata.php';
-    $mainConfig['spam.enableCaptchaCode']  = (extension_loaded('gd') ? 'true' : 'false');
     $mainConfig['main.metaPublisher']      = $realname;
     $mainConfig['main.administrationMail'] = $email;
-    $mainConfig['main.currentVersion']     = PMF_System::getVersion();
-    $mainConfig['main.currentApiVersion']  = PMF_System::getApiVersion();
     $mainConfig['main.language']           = $language;
-    $mainConfig['main.languageDetection']  = 'true';
-    $mainConfig['main.phpMyFAQToken']      = md5(uniqid(rand()));
     $mainConfig['security.permLevel']      = $permLevel;
 
     foreach ($mainConfig as $name => $value) {

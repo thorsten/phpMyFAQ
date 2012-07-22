@@ -44,6 +44,7 @@ if ($permission['editinstances']) {
     // Update client instance
     if ('updateinstance' === $action && is_integer($instanceId)) {
 
+        $system         = new PMF_System();
         $clientInstance = new PMF_Instance_Client($faqConfig);
 
         // Collect data for database
@@ -76,6 +77,9 @@ if ($permission['editinstances']) {
             $clientSetup->createDatabaseFile($dbSetup, '');
 
             // @todo populate new database
+            require PMF_ROOT_DIR . '/install/' . $DB['type'] . '.sql.php';
+            require PMF_ROOT_DIR . '/install/stopwords.sql.php';
+
 
         } else {
             printf(
