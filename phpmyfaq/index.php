@@ -62,7 +62,10 @@ $showCaptcha = PMF_Filter::filterInput(INPUT_GET, 'gen', FILTER_SANITIZE_STRING)
 if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE) && is_null($showCaptcha)) {
     // Overwrite English strings with the ones we have in the current language,
     // but don't include UTF-8 encoded files, these will break the captcha images
-    require_once 'lang/language_'.$LANGCODE.'.php';
+    if (! file_exists('lang/language_' . $LANGCODE . '.php')) {
+        $LANGCODE = 'en';
+    }
+    require_once 'lang/language_' . $LANGCODE . '.php';
 } else {
     $LANGCODE = 'en';
 }
