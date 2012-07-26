@@ -69,7 +69,7 @@ if ($faqconfig->get('security.enableLoginOnly')) {
 //
 // Get current user and group id - default: -1
 //
-if (!is_null($user) && $user instanceof PMF_User_CurrentUser) {
+if (isset($user) && !is_null($user) && $user instanceof PMF_User_CurrentUser) {
     $current_user = $user->getUserId();
     if ($user->perm instanceof PMF_Perm_PermMedium) {
         $current_groups = $user->perm->getUserGroups($current_user);
