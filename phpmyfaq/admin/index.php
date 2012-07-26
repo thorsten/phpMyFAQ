@@ -58,7 +58,10 @@ require_once (PMF_ROOT_DIR.'/lang/language_en.php');
 
 if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
     // Overwrite English strings with the ones we have in the current language
-    require_once PMF_ROOT_DIR.'/lang/language_'.$LANGCODE.'.php';
+    if (! file_exists(PMF_ROOT_DIR . 'lang/language_' . $LANGCODE . '.php')) {
+        $LANGCODE = 'en';
+    }
+    require_once PMF_ROOT_DIR . '/lang/language_' . $LANGCODE . '.php';
 } else {
     $LANGCODE = 'en';
 }
