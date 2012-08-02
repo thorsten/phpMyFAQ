@@ -118,8 +118,9 @@ $faqConfig->getAll();
 //
 // We always need a valid session!
 //
-// Avoid any PHP version to move sessions on URLs
-ini_set('session.use_only_cookies', 1);
+
+ini_set('session.use_only_cookies', 1); // Avoid any PHP version to move sessions on URLs
+ini_set('session.auto_start', 0);       // Prevent error to use session_start() if it's active in php.ini
 ini_set('session.use_trans_sid', 0);
 ini_set('url_rewriter.tags', '');
 
@@ -150,5 +151,31 @@ if ('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:(\\\\|/)%i', $confAtta
         define('PMF_ATTACHMENTS_DIR', $tmp);
     } else {
         define('PMF_ATTACHMENTS_DIR', false);
+    }
+}
+
+//
+// Fix if phpMyFAQ is running behind a proxy server
+//
+if (! isset($_SERVER['HTTP_HOST'])) {
+    if (isset($_SERVER['HTTP_X_FORWARDED_SERVER'])) {
+        $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_FORWARDED_SERVER'];
+    } else {
+        $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_FORWARDED_HOST'];
+    };
+}
+
+//
+// Fix undefined server variables in Windows IIS & CGI mode
+//
+if (! isset($_SERVER['SCRIPT_NAME'])) {
+    if(isset($_SERVER['SCRIPT_FILENAME'])) {
+        $_SERVER['SCRIPT_NAME'] = $_SERVER['SCRIPT_FILENAME'];
+    } elseif(isset($_SERVER['PATH_TRANSLATED'])) {
+        $_SERVER['SCRIPT_NAME'] = $_SERVER['PATH_TRANSLATED'];
+    } elseif(isset($_SERVER['PATH_INFO'])) {
+        $_SERVER['SCRIPT_NAME'] = $_SERVER['PATH_INFO'];
+    } elseif(isset($_SERVER['SCRIPT_URL'])) {
+        $_SERVER['SCRIPT_NAME'] = $_SERVER['SCRIPT_URL'];
     }
 }
