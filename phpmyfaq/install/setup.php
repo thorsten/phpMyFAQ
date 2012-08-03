@@ -25,7 +25,7 @@
  */
 
 define('COPYRIGHT', '&copy; 2001-2012 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
-define('PMF_ROOT_DIR', dirname(__DIR__));
+define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
 
 if (! defined('DEBUG')) {
@@ -63,7 +63,6 @@ function HTMLFooter()
 
 $system        = new PMF_System();
 $instanceSetup = new PMF_Instance_Setup();
-
 $instanceSetup->setRootDir(PMF_ROOT_DIR);
 
 ?>
