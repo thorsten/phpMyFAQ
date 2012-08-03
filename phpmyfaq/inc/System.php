@@ -348,10 +348,16 @@ class PMF_System
     /**
      * Print out the HTML5 Footer
      *
+     * @param bool $onePageBack
+     *
      * @return void
      */
-    public static function renderFooter()
+    public static function renderFooter($onePageBack = false)
     {
+        printf(
+            '<p><a href="javascript:history.back();">%s</a></p>',
+            'Back to the setup page.'
+        );
         printf(
             '</div></div></section><footer><div class="container"><p class="pull-right">%s</p><div></footer></body></html>',
             COPYRIGHT
