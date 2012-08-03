@@ -37,8 +37,8 @@
  * @param  int    $line     The line number the error was raised at.
  * @param  mixed  $context  It optionally contains an array of every variable
  *                          that existed in the scope the error was triggered in.
- * @since  2009-02-01
- * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
+ *
+ * @return bool
  */
 function pmf_error_handler($level, $message, $filename, $line, $context)
 {
@@ -64,8 +64,9 @@ function pmf_error_handler($level, $message, $filename, $line, $context)
     }
     // PHP 5.3.0+
     if (!defined('E_USER_DEPRECATED')) {
-        define('E_USER_DEPRECATED', 16384);        
-    }    
+        define('E_USER_DEPRECATED', 16384);
+    }
+
     $errorTypes = array(
         E_ERROR             => 'error',
         E_WARNING           => 'warning',
