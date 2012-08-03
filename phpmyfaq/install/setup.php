@@ -41,30 +41,6 @@ require PMF_ROOT_DIR . '/inc/Autoloader.php';
 require PMF_ROOT_DIR . '/inc/functions.php';
 require PMF_ROOT_DIR . '/install/questionnaire.php';
 
-//
-// Initalizing static string wrapper
-//
-PMF_String::init('en');
-
-$query = $uninst = array();
-
-/**
- * Print out the HTML5 Footer
- *
- * @return void
- */
-function HTMLFooter()
-{
-    printf(
-        '</div></div></section><footer><div class="container"><p class="pull-right">%s</p><div></footer></body></html>',
-        COPYRIGHT
-    );
-}
-
-$system        = new PMF_System();
-$instanceSetup = new PMF_Instance_Setup();
-$instanceSetup->setRootDir(PMF_ROOT_DIR);
-
 ?>
 <!doctype html>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
@@ -148,13 +124,24 @@ $instanceSetup->setRootDir(PMF_ROOT_DIR);
 
 if (version_compare(PHP_VERSION, PMF_System::VERSION_MINIMUM_PHP, '<')) {
     printf('<p class="alert alert-error">Sorry, but you need PHP %s or later!</p>', PMF_System::VERSION_MINIMUM_PHP);
-    HTMLFooter();
+    PMF_System::renderFooter();
     die();
 }
 
+//
+// Initalizing static string wrapper
+//
+PMF_String::init('en');
+
+$query = $uninst = array();
+
+$system        = new PMF_System();
+$instanceSetup = new PMF_Instance_Setup();
+$instanceSetup->setRootDir(PMF_ROOT_DIR);
+
 if (! function_exists('date_default_timezone_set')) {
     print '<p class="alert alert-error">Sorry, but setting a default timezone doesn\'t work in your environment!</p>';
-    HTMLFooter();
+    PMF_System::renderFooter();
     die();
 }
 
@@ -166,7 +153,7 @@ if (! $system->checkDatabase()) {
         printf('    <li>%s</li>', $database[1]);
     }
     print '</ul>';
-    HTMLFooter();
+    PMF_System::renderFooter();
     die();
 }
 
@@ -178,14 +165,14 @@ if (! $system->checkRequiredExtensions()) {
         printf('    <li>ext/%s</li>', $extension);
     }
     print '</ul>';
-    HTMLFooter();
+    PMF_System::renderFooter();
     die();
 }
 
 if (! $system->checkphpMyFAQInstallation()) {
     print '<p class="alert alert-error">It seems you\'re already running a version of phpMyFAQ. Please use the ' .
           '<a href="update.php">update script</a>.</p>';
-    HTMLFooter();
+    PMF_System::renderFooter();
     die();
 }
 
@@ -199,7 +186,7 @@ if (sizeof($faileddirs)) {
     }
     print '</ul><p class="alert alert-error">Please create it/them manually and/or change access to chmod 755 (or ' .
           'greater if necessary).</p>';
-    HTMLFooter();
+    PMF_System::renderFooter();
     die();
 }
 
@@ -471,7 +458,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         </div>
         </form>
 <?php
-    HTMLFooter();
+    PMF_System::renderFooter();
 } else {
 
     $dbSetup = array();
@@ -491,26 +478,26 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                 '<p class="alert alert-error"><strong>Error:</strong> Invalid server type: %s</p>',
                 $dbSetup['dbType']
             );
-            HTMLFooter();
+            PMF_System::renderFooter();
             die();
         }
     } else {
         print "<p class=\"alert alert-error\"><strong>Error:</strong> Please select a database type.</p>\n";
-        HTMLFooter();
+        PMF_System::renderFooter();
         die();
     }
 
     $dbSetup['dbServer'] = PMF_Filter::filterInput(INPUT_POST, 'sql_server', FILTER_SANITIZE_STRING);
     if (is_null($dbSetup['dbServer']) && ! PMF_System::isSqlite($dbSetup['dbType'])) {
         print "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a database server.</p>\n";
-        HTMLFooter();
+        PMF_System::renderFooter();
         die();
     }
 
     $dbSetup['dbUser'] = PMF_Filter::filterInput(INPUT_POST, 'sql_user', FILTER_SANITIZE_STRING);
     if (is_null($dbSetup['dbUser']) && ! PMF_System::isSqlite($dbSetup['dbType'])) {
         print "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a database username.</p>\n";
-        HTMLFooter();
+        PMF_System::renderFooter();
         die();
     }
 
@@ -523,7 +510,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     $dbSetup['dbDatabaseName'] = PMF_Filter::filterInput(INPUT_POST, 'sql_db', FILTER_SANITIZE_STRING);
     if (is_null($dbSetup['dbDatabaseName']) && ! PMF_System::isSqlite($dbSetup['dbType'])) {
         print "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a database name.</p>\n";
-        HTMLFooter();
+        PMF_System::renderFooter();
         die();
     }
 
@@ -531,7 +518,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         $dbSetup['dbServer'] = PMF_Filter::filterInput(INPUT_POST, 'sql_sqlitefile', FILTER_SANITIZE_STRING);
         if (is_null($dbSetup['dbServer'])) {
             print "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a SQLite database filename.</p>\n";
-            HTMLFooter();
+            PMF_System::renderFooter();
             die();
         }
     }
@@ -543,7 +530,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     $db->connect($dbSetup['dbServer'], $dbSetup['dbUser'], $dbSetup['dbPassword'], $dbSetup['dbDatabaseName']);
     if (!$db) {
         printf("<p class=\"alert alert-error\"><strong>DB Error:</strong> %s</p>\n", $db->error());
-        HTMLFooter();
+        PMF_System::renderFooter();
         die();
     }
 
@@ -559,21 +546,21 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         $ldapSetup['ldapServer'] = PMF_Filter::filterInput(INPUT_POST, 'ldap_server', FILTER_SANITIZE_STRING);
         if (is_null($ldapSetup['ldapServer'])) {
             print "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a LDAP server.</p>\n";
-            HTMLFooter();
+            PMF_System::renderFooter();
             die();
         }
         
         $ldapSetup['ldapPort'] = PMF_Filter::filterInput(INPUT_POST, 'ldap_port', FILTER_VALIDATE_INT);
         if (is_null($ldapSetup['ldapPort'])) {
             print "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a LDAP port.</p>\n";
-            HTMLFooter();
+            PMF_System::renderFooter();
             die();
         }
 
         $ldapSetup['ldapBase'] = PMF_Filter::filterInput(INPUT_POST, 'ldap_base', FILTER_SANITIZE_STRING);
         if (is_null($ldapSetup['ldapBase'])) {
             print "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a LDAP base search DN.</p>\n";
-            HTMLFooter();
+            PMF_System::renderFooter();
             die();
         }
 
@@ -593,7 +580,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         );
         if (!$ldap) {
             print "<p class=\"alert alert-error\"><strong>LDAP Error:</strong> " . $ldap->error() . "</p>\n";
-            HTMLFooter();
+            PMF_System::renderFooter();
             die();
         }
     }
@@ -602,7 +589,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     $loginname = PMF_Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_STRING);
     if (is_null($loginname)) {
         print '<p class="alert alert-error"><strong>Error:</strong> Please add a loginname for your account.</p>';
-        HTMLFooter();
+        PMF_System::renderFooter();
         die();
     }
 
@@ -610,27 +597,27 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     $password = PMF_Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
     if (is_null($password)) {
         print '<p class="alert alert-error"><strong>Error:</strong> Please add a password for the your account.</p>';
-        HTMLFooter();
+        PMF_System::renderFooter();
         die();
     }
     
     $password_retyped = PMF_Filter::filterInput(INPUT_POST, 'password_retyped', FILTER_SANITIZE_STRING);
     if (is_null($password_retyped)) {
         print '<p class="alert alert-error"><strong>Error:</strong> Please add a retyped password.</p>';
-        HTMLFooter();
+        PMF_System::renderFooter();
         die();
     }
     
     if (strlen($password) <= 5 || strlen($password_retyped) <= 5) {
         print '<p class="alert alert-error"><strong>Error:</strong> Your password and retyped password are too short.' .
               ' Please set your password and your retyped password with a minimum of 6 characters.</p>';
-        HTMLFooter();
+        PMF_System::renderFooter();
         die();
     }
     if ($password != $password_retyped) {
         print '<p class="alert alert-error"><strong>Error:</strong> Your password and retyped password are not equal.' .
               ' Please check your password and your retyped password.</p>';
-        HTMLFooter();
+        PMF_System::renderFooter();
         die();
     }
 
@@ -642,7 +629,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     // Write the DB variables in database.php
     if (! $instanceSetup->createDatabaseFile($dbSetup)) {
         print "<p class=\"alert alert-error\"><strong>Error:</strong> Setup cannot write to ./config/database.php.</p>";
-        HTMLFooter();
+        PMF_System::renderFooter();
         $system->cleanInstallation();
         die();
     }
@@ -651,7 +638,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     if (extension_loaded('ldap') && !is_null($ldapEnabled)) {
         if (! $instanceSetup->createLdapFile($ldapSetup)) {
             print "<p class=\"alert alert-error\"><strong>Error:</strong> Setup cannot write to ./config/ldap.php.</p>";
-            HTMLFooter();
+            PMF_System::renderFooter();
             $system->cleanInstallation();
             die();
         }
@@ -663,7 +650,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
     if (!$db) {
         print "<p class=\"alert alert-error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
-        HTMLFooter();
+        PMF_System::renderFooter();
         $system->cleanInstallation();
         die();
     }
@@ -691,7 +678,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             printf('<code>%s</code>', htmlentities($executeQuery));
             $system->dropTables($uninst);
             $system->cleanInstallation();
-            HTMLFooter();
+            PMF_System::renderFooter();
             die();
         }
         usleep(2500);
@@ -916,5 +903,5 @@ echo '</dl><input type="hidden" name="systemdata" value="'.PMF_String::htmlspeci
         print "<p class=\"alert alert-info\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
     }
     
-    HTMLFooter();
+    PMF_System::renderFooter();
 }

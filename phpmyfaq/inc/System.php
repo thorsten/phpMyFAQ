@@ -345,4 +345,17 @@ class PMF_System
         }
     }
 
+    /**
+     * Print out the HTML5 Footer
+     *
+     * @return void
+     */
+    public static function renderFooter()
+    {
+        printf(
+            '</div></div></section><footer><div class="container"><p class="pull-right">%s</p><div></footer></body></html>',
+            COPYRIGHT
+        );
+    }
+
 }
