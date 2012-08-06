@@ -60,11 +60,11 @@ if ($permission['viewlog']) {
     }
 ?>
         <form action="?action=sessionbrowse" method="post" style="display: inline;">
-        <fieldset>
-            <legend><?php print $PMF_LANG["ad_stat_sess"]; ?></legend>
-            
-            <p>
-                <label><?php print $PMF_LANG["ad_stat_days"]; ?>:</label>
+
+        <table class="table table-striped">
+            <tr>
+                <td><?php print $PMF_LANG["ad_stat_days"]; ?>:</td>
+                <td>
 <?php
     $danz  = 0;
     $first = 9999999999999999999999999;
@@ -85,20 +85,19 @@ if ($permission['viewlog']) {
 
     print $danz;
 ?>
-            </p>
-
-            <p>
-                <label><?php print $PMF_LANG["ad_stat_vis"]; ?>:</label>
-                <?php print $vanz = $session->getNumberOfSessions(); ?>
-            </p>
-
-            <p>
-                <label><?php print $PMF_LANG["ad_stat_vpd"]; ?>:</label>
-                <?php print (($danz != 0) ? round(($vanz / $danz),2) : 0); ?>
-            </p>
-
-            <p>
-                <label><?php print $PMF_LANG["ad_stat_fien"]; ?>:</label>
+                </td>
+            </tr>
+            <tr>
+                <td><?php print $PMF_LANG["ad_stat_vis"]; ?>:</td>
+                <td><?php print $vanz = $session->getNumberOfSessions(); ?></td>
+            </tr>
+            <tr>
+                <td><?php print $PMF_LANG["ad_stat_vpd"]; ?>:</td>
+                <td><?php print (($danz != 0) ? round(($vanz / $danz),2) : 0); ?></td>
+            </tr>
+            <tr>
+                <td><?php print $PMF_LANG["ad_stat_fien"]; ?>:</td>
+                <td>
 <?php
     if (is_file(PMF_ROOT_DIR."/data/tracking".date("dmY", $first))) {
         $fp = @fopen(PMF_ROOT_DIR."/data/tracking".date("dmY", $first), "r");
@@ -109,10 +108,11 @@ if ($permission['viewlog']) {
         print $PMF_LANG["ad_sess_noentry"];
     }
 ?>
-            </p>
-
-            <p>
-                <label><?php print $PMF_LANG["ad_stat_laen"]; ?>:</label>
+                </td>
+            </tr>
+            <tr>
+                <td><?php print $PMF_LANG["ad_stat_laen"]; ?>:</td>
+                <td>
 <?php
     if (is_file(PMF_ROOT_DIR."/data/tracking".date("dmY", $last))) {
         $fp = fopen(PMF_ROOT_DIR."/data/tracking".date("dmY", $last), "r");
@@ -139,11 +139,11 @@ if ($permission['viewlog']) {
     closedir($dir);
     sort($trackingDates);
 ?>
-            </p>
-
-            <p>
-                <label><?php print $PMF_LANG["ad_stat_browse"]; ?>:</label>
-                <select name="day" size="1">
+                </td>
+            </tr>
+            <tr>
+                <td><?php print $PMF_LANG["ad_stat_browse"]; ?>:</td>
+                <td><select name="day" size="1">
 <?php
     foreach ($trackingDates as $trackingDate) {
         printf('<option value="%d"', $trackingDate);
@@ -156,13 +156,10 @@ if ($permission['viewlog']) {
     }
 ?>
                 </select>
-            </p>
-
-            <p>
                 <input class="btn-primary" type="submit" name="statbrowse" value="<?php print $PMF_LANG["ad_stat_ok"]; ?>" />
-            </p>
-
-        </fieldset>
+                </td>
+            </tr>
+        </table>
         </form>
 
         <form action="?action=viewsessions" method="post" style="display: inline;">
