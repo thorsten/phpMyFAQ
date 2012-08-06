@@ -77,8 +77,9 @@ switch ($ajaxAction) {
             );
             $clientSetup->createDatabaseFile($dbSetup, '');
 
-            // @todo populate new database
+            $faqInstanceClient->createClientTables($dbSetup['dbPrefix']);
 
+            // @todo Add admin and anonymous user
         }
 
         if (0 !== $instanceId) {

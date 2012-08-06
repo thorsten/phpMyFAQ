@@ -76,10 +76,9 @@ if ($permission['editinstances']) {
             );
             $clientSetup->createDatabaseFile($dbSetup, '');
 
-            // @todo populate new database
-            require PMF_ROOT_DIR . '/install/' . $DB['type'] . '.sql.php';
-            require PMF_ROOT_DIR . '/install/stopwords.sql.php';
+            $faqInstanceClient->createClientTables($dbSetup['dbPrefix']);
 
+            // @todo Add admin and anonymous user
 
         } else {
             printf(

@@ -43,7 +43,6 @@ class PMF_Instance_Client extends PMF_Instance
      * Constructor
      *
      * @param PMF_Configuration $config
-     * @param PMF_Filesystem $fileSystem
      *
      * @return PMF_Instance_Client
      */
@@ -81,6 +80,44 @@ class PMF_Instance_Client extends PMF_Instance
         }
 
         return $this->fileSystem->mkdir($clientDir);
+    }
+
+    /**
+     * Creates all tables with the given table prefix from the master tables
+     *
+     * @param string $prefix SQL table prefix
+     *
+     * @return bool
+     */
+    public function createClientTables($prefix)
+    {
+        // First, create the client tables
+        foreach ($this->config->getDb()->tableNames as $tableName) {
+            $this->config->getDb()->query(
+                sprintf(
+                    'CREATE TABLE %s%s SELECT * FROM %s WHERE 1 = 2',
+                    $prefix,
+                    str_replace(SQLPREFIX, '', $tableName),
+                    $tableName
+                )
+            );
+        }
+
+        // Then, copy data from the tables "faqconfig" and "faqright"
+        $this->config->getDb()->query(
+            sprintf(
+                'INSERT INTO %sfaqconfig SELECT * FROM %sfaqconfig',
+                $prefix,
+                SQLPREFIX
+            )
+        );
+        $this->config->getDb()->query(
+            sprintf(
+                'INSERT INTO %sfaqright SELECT * FROM %sfaqright',
+                $prefix,
+                SQLPREFIX
+            )
+        );
     }
 
     /**
