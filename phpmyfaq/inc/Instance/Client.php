@@ -103,7 +103,7 @@ class PMF_Instance_Client extends PMF_Instance
             );
         }
 
-        // Then, copy data from the tables "faqconfig" and "faqright"
+        // Then, copy data from the tables "faqconfig" , "faqright" and "faquser_right"
         $this->config->getDb()->query(
             sprintf(
                 'INSERT INTO %sfaqconfig SELECT * FROM %sfaqconfig',
@@ -114,6 +114,13 @@ class PMF_Instance_Client extends PMF_Instance
         $this->config->getDb()->query(
             sprintf(
                 'INSERT INTO %sfaqright SELECT * FROM %sfaqright',
+                $prefix,
+                SQLPREFIX
+            )
+        );
+        $this->config->getDb()->query(
+            sprintf(
+                'INSERT INTO %sfaquser_right SELECT * FROM %sfaquserright WHERE user_id = 1',
                 $prefix,
                 SQLPREFIX
             )
