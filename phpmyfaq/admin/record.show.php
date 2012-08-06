@@ -303,17 +303,21 @@ if ($permission['editbt'] || $permission['delbt']) {
                     $catInfo        .= ' (';
                     $isBracketOpened = true;
                 }
-                $catInfo .= sprintf('<span id="category_%d_item_count">%d</span> %s', 
+                $catInfo .= sprintf(
+                    '<span id="category_%d_item_count">%d</span> %s',
                     $cid, 
                     $numRecordsByCat[$cid], 
-                    $PMF_LANG['msgEntries']);
+                    $PMF_LANG['msgEntries']
+                );
             }
             
             if (isset($numRecordsByCat[$cid]) && $numRecordsByCat[$cid] > $numActiveByCat[$cid]) {
-                $catInfo .= sprintf(', <span style="color: red;"><span id="js-active-records-%d">%d</span> %s</span>',
+                $catInfo .= sprintf(
+                    ', <span style="color: red;"><span id="js-active-records-%d">%d</span> %s</span>',
                     $cid,
-                    $numActiveByCat[$cid], 
-                    $PMF_LANG['ad_record_active']);
+                    $numRecordsByCat[$cid] - $numActiveByCat[$cid],
+                    $PMF_LANG['ad_record_inactive']
+                );
                 $needComma = true;
             }
             
@@ -347,7 +351,7 @@ if ($permission['editbt'] || $permission['delbt']) {
         </div>
         <div id="category_<?php print $cid; ?>" class="categorybox"
              style="display: <?php print ($currentcategory == $cid) ? 'block' : 'none'; ?>;">
-        <table class="list" style="width: 100%">
+        <table class="table table-striped">
         <thead>
         <tr>
             <th>
