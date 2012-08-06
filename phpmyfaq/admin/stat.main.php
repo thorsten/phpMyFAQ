@@ -162,13 +162,14 @@ if ($permission['viewlog']) {
         </table>
         </form>
 
-        <form action="?action=viewsessions" method="post" style="display: inline;">
+        <form action="?action=viewsessions" method="post" class="form-horizontal">
         <fieldset>
             <legend><?php print $PMF_LANG['ad_stat_management']; ?></legend>
 
-            <p>
-                <label><?php print $PMF_LANG['ad_stat_choose']; ?>:</label>
-                <select name="month" size="1">
+            <div class="control-group">
+                <label class="control-label" for="month"><?php print $PMF_LANG['ad_stat_choose']; ?>:</label>
+                <div class="controls">
+                    <select name="month" id="month" size="1">
 <?php
     $oldValue = mktime(0, 0, 0, 1, 1, 1970);
     $isFirstDate = true;
@@ -190,11 +191,12 @@ if ($permission['viewlog']) {
     }
 ?>
                 </select>
-            </p>
+                </div>
+            </div>
 
-            <p>
-            <input class="btn-primary" type="submit" name="statdelete" value="<?php print $PMF_LANG['ad_stat_delete']; ?>" />
-            </p>
+            <div class="form-actions">
+                <input class="btn-primary" type="submit" name="statdelete" value="<?php print $PMF_LANG['ad_stat_delete']; ?>" />
+            </div>
         </fieldset>
         </form>
 <?php
