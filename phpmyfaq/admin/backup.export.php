@@ -67,6 +67,7 @@ header('Pragma: no-cache');
 if ($permission['backup']) {
 
     $faqConfig->getDb()->getTableNames(PMF_Db::getTablePrefix());
+    $tables       = $tableNames = $this->config->getDb()->getTableNames(PMF_Db::getTablePrefix());
     $tablePrefix  = (PMF_Db::getTablePrefix() !== '') ? PMF_Db::getTablePrefix() . '.phpmyfaq' : 'phpmyfaq';
     $tableNames   = '';
     $majorVersion = substr($faqConfig->get('main.currentVersion'), 0, 3);
@@ -74,7 +75,7 @@ if ($permission['backup']) {
 
     switch ($action) {
         case 'backup_content' :
-            foreach ($faqConfig->getDb()->tableNames as $table) {
+            foreach ($tables as $table) {
                 if ((PMF_Db::getTablePrefix() . 'faqadminlog' == trim($table)) || (PMF_Db::getTablePrefix() . 'faqsessions' == trim($table))) {
                     continue;
                 }
@@ -82,7 +83,7 @@ if ($permission['backup']) {
             }
             break;
         case 'backup_logs' :
-            foreach ($faqConfig->getDb()->tableNames as $table) {
+            foreach ($tables as $table) {
                 if ((PMF_Db::getTablePrefix() . 'faqadminlog' == trim($table)) || (PMF_Db::getTablePrefix() . 'faqsessions' == trim($table))) {
                     $tableNames .= $table . ' ';
                 }
