@@ -296,6 +296,8 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
                 }
             }
         }
+
+        return $this->tableNames;
     }
 
     /**

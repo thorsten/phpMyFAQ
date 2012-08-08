@@ -216,6 +216,8 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
     /**
      * This function returns the table status.
      *
+     * @param  string $prefix Table prefix
+     *
      * @return  array
      */
     public function getTableNames($prefix = '')
@@ -231,6 +233,8 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
                 $this->tableNames[] = $row->name;
             }
         }
+
+        return $this->tableNames;
     }
 
     /**

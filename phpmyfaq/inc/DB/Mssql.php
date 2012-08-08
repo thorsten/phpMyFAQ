@@ -261,7 +261,9 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     /**
      * Returns an array with all table names
      *
-     * @return void
+     * @param  string $prefix Table prefix
+     *
+     * @return array
      */
     public function getTableNames($prefix = '')
     {
@@ -276,6 +278,8 @@ class PMF_DB_Mssql implements PMF_DB_Driver
                 }
             }
         }
+
+        return $this->tableNames;
     }
 
     /**

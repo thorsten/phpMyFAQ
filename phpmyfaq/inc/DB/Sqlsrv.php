@@ -291,7 +291,9 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
     /**
      * Gets an array with all table names
      *
-     * @return void
+     * @param  string $prefix Table prefix
+     *
+     * @return array
      */
     public function getTableNames($prefix = '')
     {
@@ -308,6 +310,8 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
                 }
             }
         }
+
+        return $this->tableNames;
     }
 
     /**

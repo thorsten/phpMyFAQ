@@ -240,6 +240,8 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
     /**
      * Returns an array with all table names
      *
+     * @param  string $prefix Table prefix
+     *
      * @return array
      */
     public function getTableNames($prefix = '')
@@ -253,6 +255,8 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
                 $this->tableNames[] = $row->name;
             }
         }
+
+        return $this->tableNames;
     }
 
     /**

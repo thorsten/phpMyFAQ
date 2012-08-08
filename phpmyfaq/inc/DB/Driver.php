@@ -135,7 +135,9 @@ interface PMF_DB_Driver
     /**
      * Returns an array with all table names
      *
-     * @return string
+     * @param  string $prefix Table prefix
+     *
+     * @return array
      */
     public function getTableNames($prefix = '');
 
