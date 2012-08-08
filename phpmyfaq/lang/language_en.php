@@ -1193,3 +1193,7 @@ $LANG_CONF['records.autosaveSecs'] = array(0 => 'input', 1 => 'Interval for auto
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
 $PMF_LANG['ad_record_inactive'] = 'FAQs inactive';
+$LANG_CONF["main.maintenanceMode"] = array(0 => "checkbox", 1 => "Set FAQ in maintenance mode");
+$PMF_LANG['msgMode'] = "Modus";
+$PMF_LANG['msgMaintenanceMode'] = "FAQ is in maintenance";
+$PMF_LANG['msgOnlineMode'] = "FAQ is online";

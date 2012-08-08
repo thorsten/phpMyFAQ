@@ -411,6 +411,15 @@ if ($faqConfig->get('security.enableLoginOnly')) {
     $indexSet = 'index.tpl';
 }
 
+
+//
+// phpMyFAQ installtion is in maintenance mode
+//
+if ($faqConfig->get('main.maintenanceMode')) {
+    $indexSet = 'indexMaintenance.tpl';
+}
+
+
 //
 // Load template files and set template variables
 //

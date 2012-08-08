@@ -398,8 +398,19 @@ if (isset($auth) && in_array(true, $permission)) {
             <header>
                 <h2><?php print $PMF_LANG['ad_pmf_info']; ?></h2>
             </header>
+
             <table class="table table-striped">
             <tbody>
+                <tr>
+                    <td><strong><a href="?action=config"><?php print $PMF_LANG['msgMode']; ?></a></strong></td>
+                    <td>
+                        <?php if ($faqConfig->get('main.maintenanceMode')): ?>
+                        <span class="label label-important"><?php print $PMF_LANG['msgMaintenanceMode']; ?></span>
+                        <?php else: ?>
+                        <span class="label label-success"><?php print $PMF_LANG['msgOnlineMode']; ?></span>
+                        <?php endif; ?>
+                    </td>
+                </tr>
                 <tr>
                     <td><strong><a href="?action=viewsessions"><?php print $PMF_LANG["ad_start_visits"]; ?></a></strong></td>
                     <td><?php print $faqTableInfo[PMF_Db::getTablePrefix() . "faqsessions"]; ?></td>

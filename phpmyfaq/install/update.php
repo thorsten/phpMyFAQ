@@ -160,6 +160,15 @@ if ($step == 1) {
                     </strong>
                 </p>
 
+<?php
+    if (version_compare($version, '2.8.0-alpha2', '>=')) {
+        if ($faqConfig->get('main.maintenanceMode')) {
+            print '<p class="alert alert-warning"><strong>Warning!</strong> Your phpMyFAQ installation is not in ' .
+            'maintenance mode, you should enable the maintenance mode in your administration.</p>';
+        }
+    }
+?>
+
                 <p>This update script will work <strong>only</strong> for the following versions:</p>
                 <ul type="square">
                     <li>phpMyFAQ 2.5.x (out of support since mid of 2010)</li>
@@ -794,6 +803,7 @@ if ($step == 3) {
 
         $faqConfig->add('records.autosaveActive', 'false');
         $faqConfig->add('records.autosaveSecs', '180');
+        $faqConfig->add('main.maintenanceMode', 'false');
     }
 
     // Always the last step: Update version number

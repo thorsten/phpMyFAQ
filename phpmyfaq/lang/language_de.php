@@ -1137,3 +1137,7 @@ $PMF_LANG["ad_menu_instances"] = "FAQ Multi-Sites";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
 $PMF_LANG['ad_record_inactive'] = 'FAQs inaktiv';
+$LANG_CONF["main.maintenanceMode"] = array(0 => "checkbox", 1 => "FAQ in Wartungs-Modus setzen");
+$PMF_LANG['msgMode'] = "Modus";
+$PMF_LANG['msgMaintenanceMode'] = "FAQ ist im Wartungs-Modus";
+$PMF_LANG['msgOnlineMode'] = "FAQ ist online";
