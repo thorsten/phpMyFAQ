@@ -79,21 +79,22 @@ switch ($ajaxAction) {
 
             $faqInstanceClient->createClientTables($dbSetup['dbPrefix']);
 
-            /*
+            PMF_Db::setTablePrefix($dbSetup['dbPrefix']);
+
             // add admin account and rights
-            $admin = new PMF_User($faqConfig);
-            $admin->createUser($admin, $password, 1);
-            $admin->setStatus('protected');
-            $adminData = array(
+            $instanceAdmin = new PMF_User($faqConfig);
+            $instanceAdmin->createUser($admin, $password, 1);
+            $instanceAdmin->setStatus('protected');
+            $instanceAdminData = array(
                 'display_name' => '',
                 'email'        => $email
             );
-            $admin->setUserData($adminData);
+            $instanceAdmin->setUserData($instanceAdminData);
 
             // Add anonymous user account
             $clientSetup->createAnonymousUser($faqConfig);
-            */
 
+            PMF_Db::setTablePrefix($DB['prefix']);
         }
 
         if (0 !== $instanceId) {

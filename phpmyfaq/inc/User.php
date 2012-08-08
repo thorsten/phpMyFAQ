@@ -475,7 +475,8 @@ class PMF_User
             $this->getUserId(),
             $this->config->getDb()->escape($login),
             $_SERVER['REQUEST_TIME'],
-            date('YmdHis', $_SERVER['REQUEST_TIME']));
+            date('YmdHis', $_SERVER['REQUEST_TIME'])
+        );
 
         $this->config->getDb()->query($insert);
         if (!$this->userdata instanceof PMF_User_UserData) {

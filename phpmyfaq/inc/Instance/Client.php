@@ -91,8 +91,10 @@ class PMF_Instance_Client extends PMF_Instance
      */
     public function createClientTables($prefix)
     {
+        $tableNames = $this->config->getDb()->getTableNames(PMF_Db::getTablePrefix());
+
         // First, create the client tables
-        foreach ($this->config->getDb()->tableNames as $tableName) {
+        foreach ($tableNames as $tableName) {
             $this->config->getDb()->query(
                 sprintf(
                     'CREATE TABLE %s%s SELECT * FROM %s WHERE 1 = 2',

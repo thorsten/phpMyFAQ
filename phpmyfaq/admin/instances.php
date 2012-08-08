@@ -49,57 +49,8 @@ if ($permission['editinstances']) {
 
         // Collect data for database
         $data = array();
-        $data['url']      = PMF_Filter::filterInput(INPUT_POST, 'url', FILTER_SANITIZE_STRING);
         $data['instance'] = PMF_Filter::filterInput(INPUT_POST, 'instance', FILTER_SANITIZE_STRING);
         $data['comment']  = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
-
-        // Update filesystem related changes
-        $urlParts = parse_url($data['url']);
-        $hostname = $urlParts['host'];
-
-        if ($clientInstance->createClientFolder($hostname)) {
-
-            $clientDir   = PMF_ROOT_DIR . '/multisite/' . $hostname;
-            $clientSetup = new PMF_Instance_Setup();
-            $clientSetup->setRootDir($clientDir);
-
-            $clientInstance->copyConstantsFile($clientDir . '/constants.php');
-            $clientInstance->copyLdapConstantsFile($clientDir . '/constants_ldap.php');
-
-            $dbSetup = array(
-                'dbServer'       => $DB['server'],
-                'dbUser'         => $DB['db'],
-                'dbPassword'     => $DB['password'],
-                'dbDatabaseName' => $DB['db'],
-                'dbPrefix'       => substr($hostname, 0, strpos($hostname, '.')),
-                'dbType'         => $DB['type']
-            );
-            $clientSetup->createDatabaseFile($dbSetup, '');
-
-            $clientInstance->createClientTables($dbSetup['dbPrefix']);
-
-            /*
-            // add admin account and rights
-            $admin = new PMF_User($faqConfig);
-            $admin->createUser($admin, $password, 1);
-            $admin->setStatus('protected');
-            $adminData = array(
-                'display_name' => '',
-                'email'        => $email
-            );
-            $admin->setUserData($adminData);
-
-            // Add anonymous user account
-            $clientSetup->createAnonymousUser($faqConfig);
-            */
-
-        } else {
-            printf(
-                '<p class="alert alert-error">%s%s</p>',
-                '<a class="close" data-dismiss="alert" href="#">&times;</a>',
-                'The folder /multisite is not writable.'
-            );
-        }
 
         if ($clientInstance->updateInstance($instanceId, $data)) {
             printf(

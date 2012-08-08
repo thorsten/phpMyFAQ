@@ -212,9 +212,8 @@ class PMF_Instance
     public function updateInstance($id, Array $data)
     {
         $update = sprintf(
-            "UPDATE %sfaqinstances SET url = '%s', instance = '%s', comment = '%s' WHERE id = %d",
+            "UPDATE %sfaqinstances SET instance = '%s', comment = '%s' WHERE id = %d",
             PMF_Db::getTablePrefix(),
-            $data['url'],
             $data['instance'],
             $data['comment'],
             (int)$id
