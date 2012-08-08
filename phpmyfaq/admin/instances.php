@@ -76,9 +76,22 @@ if ($permission['editinstances']) {
             );
             $clientSetup->createDatabaseFile($dbSetup, '');
 
-            $faqInstanceClient->createClientTables($dbSetup['dbPrefix']);
+            $clientInstance->createClientTables($dbSetup['dbPrefix']);
 
-            // @todo Add admin and anonymous user
+            /*
+            // add admin account and rights
+            $admin = new PMF_User($faqConfig);
+            $admin->createUser($admin, $password, 1);
+            $admin->setStatus('protected');
+            $adminData = array(
+                'display_name' => '',
+                'email'        => $email
+            );
+            $admin->setUserData($adminData);
+
+            // Add anonymous user account
+            $clientSetup->createAnonymousUser($faqConfig);
+            */
 
         } else {
             printf(
