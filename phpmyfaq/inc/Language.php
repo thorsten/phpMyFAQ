@@ -100,7 +100,7 @@ class PMF_Language
                     %s%s
                 %s",
                 $distinct,
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 $table,
                 $where
             );

@@ -465,8 +465,8 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
     // Check table prefix
     $dbSetup['dbPrefix'] = $sqltblpre = PMF_Filter::filterInput(INPUT_POST, 'sqltblpre', FILTER_SANITIZE_STRING, '');
-    if (!defined('SQLPREFIX')) {
-        define('SQLPREFIX', $dbSetup['dbPrefix']);
+    if (!defined('PMF_Db::getTablePrefix()')) {
+        define('PMF_Db::getTablePrefix()', $dbSetup['dbPrefix']);
     }
 
     // Check database entries

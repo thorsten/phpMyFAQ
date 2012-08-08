@@ -124,7 +124,7 @@ class PMF_Attachment_Factory
                 record_id = %d
             AND
                 record_lang = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $recordId,
             PMF_Language::$language);
         

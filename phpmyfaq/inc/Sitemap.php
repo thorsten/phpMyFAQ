@@ -147,9 +147,9 @@ class PMF_Sitemap
                         %s
                     ORDER BY
                         letters",
-                SQLPREFIX,
-                SQLPREFIX,
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
+                PMF_Db::getTablePrefix(),
+                PMF_Db::getTablePrefix(),
                 $this->_config->getLanguage()->getLanguage(),
                 $permPart
             );
@@ -176,9 +176,9 @@ class PMF_Sitemap
                         %s
                     ORDER BY
                         letters",
-                SQLPREFIX,
-                SQLPREFIX,
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
+                PMF_Db::getTablePrefix(),
+                PMF_Db::getTablePrefix(),
                 $this->_config->getLanguage()->getLanguage(),
                 $permPart
             );
@@ -263,10 +263,10 @@ class PMF_Sitemap
                         fd.active = 'yes'
                     AND
                         %s",
-                    SQLPREFIX,
-                    SQLPREFIX,
-                    SQLPREFIX,
-                    SQLPREFIX,
+                    PMF_Db::getTablePrefix(),
+                    PMF_Db::getTablePrefix(),
+                    PMF_Db::getTablePrefix(),
+                    PMF_Db::getTablePrefix(),
                     $letter,
                     $this->_config->getLanguage()->getLanguage(),
                     $permPart);
@@ -301,10 +301,10 @@ class PMF_Sitemap
                         fd.active = 'yes'
                     AND
                         %s",
-                    SQLPREFIX,
-                    SQLPREFIX,
-                    SQLPREFIX,
-                    SQLPREFIX,
+                    PMF_Db::getTablePrefix(),
+                    PMF_Db::getTablePrefix(),
+                    PMF_Db::getTablePrefix(),
+                    PMF_Db::getTablePrefix(),
                     $letter,
                     $this->_config->getLanguage()->getLanguage(),
                     $permPart);

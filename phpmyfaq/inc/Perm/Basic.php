@@ -93,9 +93,9 @@ class PMF_Perm_Basic extends PMF_Perm
                 fr.right_id = fur.right_id AND
                 fu.user_id  = %d AND
                 fu.user_id  = fur.user_id",
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $right_id,
             $user_id);
             
@@ -130,9 +130,9 @@ class PMF_Perm_Basic extends PMF_Perm
                 fr.right_id = fur.right_id AND
                 fu.user_id  = %d AND
                 fu.user_id  = fur.user_id",
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $user_id);
             
         $res    = $this->config->getDb()->query($select);
@@ -166,7 +166,7 @@ class PMF_Perm_Basic extends PMF_Perm
             (user_id, right_id)
                 VALUES
             (%d, %d)",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $user_id,
             $right_id);
         
@@ -193,7 +193,7 @@ class PMF_Perm_Basic extends PMF_Perm
             WHERE
                 user_id  = %d AND
                 right_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $user_id,
             $right_id);
             
@@ -247,7 +247,7 @@ class PMF_Perm_Basic extends PMF_Perm
                 %sfaqright
             WHERE
                 right_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $right_id);
         
         $res = $this->config->getDb()->query($select);
@@ -301,7 +301,7 @@ class PMF_Perm_Basic extends PMF_Perm
             return 0;
         }
         
-        $nextId    = $this->config->getDb()->nextId(SQLPREFIX."faqright", "right_id");
+        $nextId    = $this->config->getDb()->nextId(PMF_Db::getTablePrefix()."faqright", "right_id");
         $rightData = $this->checkRightData($right_data);
         
         $insert = sprintf("
@@ -310,7 +310,7 @@ class PMF_Perm_Basic extends PMF_Perm
             (right_id, name, description, for_users, for_groups)
                 VALUES
             (%d, '%s', '%s', %d, %d)",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $nextId,
             $rightData['name'],
             $rightData['description'],
@@ -349,7 +349,7 @@ class PMF_Perm_Basic extends PMF_Perm
                 %s
             WHERE
                 right_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $set,
             $right_id);
             
@@ -376,7 +376,7 @@ class PMF_Perm_Basic extends PMF_Perm
                 %sfaqright
             WHERE
                 right_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $right_id);
         
         $res = $this->config->getDb()->query($delete);
@@ -390,7 +390,7 @@ class PMF_Perm_Basic extends PMF_Perm
                 %sfaquser_right
             WHERE
                 right_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $right_id);
         
         $res = $this->config->getDb()->query($delete);
@@ -404,7 +404,7 @@ class PMF_Perm_Basic extends PMF_Perm
                 %sfaqgroup_right
             WHERE
                 right_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $right_id);
         
         $res = $this->config->getDb()->query($delete);
@@ -436,7 +436,7 @@ class PMF_Perm_Basic extends PMF_Perm
                 %sfaqright
             WHERE
                 name = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->config->getDb()->escape($name));
         
         $res = $this->config->getDb()->query($select);
@@ -460,7 +460,7 @@ class PMF_Perm_Basic extends PMF_Perm
                 right_id
             FROM
                 %sfaqright",
-            SQLPREFIX);
+            PMF_Db::getTablePrefix());
             
         $res    = $this->config->getDb()->query($select);
         $result = array();
@@ -494,7 +494,7 @@ class PMF_Perm_Basic extends PMF_Perm
                 %sfaqright
             ORDER BY
                 right_id %s",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $order);
             
         $res    = $this->config->getDb()->query($select);
@@ -553,7 +553,7 @@ class PMF_Perm_Basic extends PMF_Perm
                 %sfaquser_right
             WHERE
                 user_id  = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $user_id);
         
         $res = $this->config->getDb()->query($delete);

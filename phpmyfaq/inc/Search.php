@@ -74,7 +74,7 @@ class PMF_Search
     public function __construct(PMF_Configuration $config)
     {
         $this->_config = $config;
-        $this->_table  = SQLPREFIX . 'faqsearches';
+        $this->_table  = PMF_Db::getTablePrefix() . 'faqsearches';
     }
     
     /**
@@ -108,8 +108,8 @@ class PMF_Search
      */
     public function search($searchterm, $allLanguages = true)
     {
-        $fdTable   = SQLPREFIX . 'faqdata';
-        $fcrTable  = SQLPREFIX . 'faqcategoryrelations';
+        $fdTable   = PMF_Db::getTablePrefix() . 'faqdata';
+        $fcrTable  = PMF_Db::getTablePrefix() . 'faqcategoryrelations';
         $condition = array($fdTable . '.active' => "'yes'");
         $search    = PMF_Search_Factory::create($this->_config, array('database' => PMF_Db::getType()));
         

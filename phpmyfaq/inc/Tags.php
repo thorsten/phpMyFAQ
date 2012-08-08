@@ -95,9 +95,9 @@ class PMF_Tags
                 %s
                 %s
             ORDER BY tagging_name",
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             ($showInactive ? '' : "AND d.active = 'yes'"),
             (isset($search) && ($search != '') ? "AND tagging_name ".$like." '".$search."%'" : '')
         );
@@ -148,8 +148,8 @@ class PMF_Tags
                 dt.tagging_id = t.tagging_id
             ORDER BY
                 t.tagging_name",
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $record_id
         );
 
@@ -216,14 +216,14 @@ class PMF_Tags
                 if (!in_array(PMF_String::strtolower($tagging_name),
                               array_map(array('PMF_String', 'strtolower'), $current_tags))) {
                     // Create the new tag
-                    $new_tagging_id = $this->_config->getDb()->nextId(SQLPREFIX.'faqtags', 'tagging_id');
+                    $new_tagging_id = $this->_config->getDb()->nextId(PMF_Db::getTablePrefix().'faqtags', 'tagging_id');
                     $query = sprintf("
                         INSERT INTO
                             %sfaqtags
                         (tagging_id, tagging_name)
                             VALUES
                         (%d, '%s')",
-                        SQLPREFIX,
+                        PMF_Db::getTablePrefix(),
                         $new_tagging_id,
                         $tagging_name);
                     $this->_config->getDb()->query($query);
@@ -235,7 +235,7 @@ class PMF_Tags
                         (record_id, tagging_id)
                             VALUES
                         (%d, %d)",
-                        SQLPREFIX,
+                        PMF_Db::getTablePrefix(),
                         $record_id,
                         $new_tagging_id);
                     $this->_config->getDb()->query($query);
@@ -247,7 +247,7 @@ class PMF_Tags
                         (record_id, tagging_id)
                             VALUES
                         (%d, %d)",
-                        SQLPREFIX,
+                        PMF_Db::getTablePrefix(),
                         $record_id,
                         array_search(
                             PMF_String::strtolower($tagging_name),
@@ -279,7 +279,7 @@ class PMF_Tags
                 %sfaqdata_tags
             WHERE
                 record_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $record_id);
 
         $this->_config->getDb()->query($query);
@@ -313,8 +313,8 @@ class PMF_Tags
                 d.record_id
             HAVING
                 COUNT(d.record_id) = %d",
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             PMF_String::substr(implode("', '", $arrayOfTags), 0, -2),
             count($arrayOfTags)
         );
@@ -351,8 +351,8 @@ class PMF_Tags
                 (t.tagging_name IN ('%s'))
             GROUP BY
                 d.record_id",
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             PMF_String::substr(implode("', '", $arrayOfTags), 0, -2)
         );
 
@@ -383,7 +383,7 @@ class PMF_Tags
                 %sfaqtags
             WHERE
                 tagging_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $tagId
         );
 
@@ -485,9 +485,9 @@ class PMF_Tags
                 t.tagging_id = dt.tagging_id
             AND 
                 t.tagging_name = '%s'",
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $this->_config->getDb()->escape($tagName));
 
         $records = array();
@@ -522,8 +522,8 @@ class PMF_Tags
                 t.tagging_id = %d
             GROUP BY
                 record_id",
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $tagId);
 
         $records = array();
@@ -547,7 +547,7 @@ class PMF_Tags
                 COUNT(record_id) AS n
             FROM
                 %sfaqdata_tags',
-            SQLPREFIX
+            PMF_Db::getTablePrefix()
         );
 
         $result = $this->_config->getDb()->query($query);

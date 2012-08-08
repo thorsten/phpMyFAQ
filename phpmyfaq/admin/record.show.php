@@ -143,13 +143,13 @@ if ($permission['editbt'] || $permission['delbt']) {
     $searchterm     = PMF_Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
     
     if (!is_null($linkState)) {
-        $cond[SQLPREFIX.'faqdata.links_state'] = 'linkbad';
+        $cond[PMF_Db::getTablePrefix().'faqdata.links_state'] = 'linkbad';
         $linkState                             = ' checked="checked" ';
         $internalSearch                       .= '&amp;linkstate=linkbad';
     }
     if (!is_null($searchcat)) {
         $internalSearch .= "&amp;searchcat=" . $searchcat;
-        $cond[SQLPREFIX.'faqcategoryrelations.category_id'] = array_merge(
+        $cond[PMF_Db::getTablePrefix().'faqcategoryrelations.category_id'] = array_merge(
             array($searchcat),
             $category->getChildNodes($searchcat)
         );
@@ -209,8 +209,8 @@ if ($permission['editbt'] || $permission['delbt']) {
 
     } elseif ($action == "view" && !is_null($searchterm)) {
         
-        $fdTable  = SQLPREFIX . 'faqdata';
-        $fcrTable = SQLPREFIX . 'faqcategoryrelations';
+        $fdTable  = PMF_Db::getTablePrefix() . 'faqdata';
+        $fcrTable = PMF_Db::getTablePrefix() . 'faqcategoryrelations';
         $search   = PMF_Search_Factory::create($faqConfig, array('database' => PMF_Db::getType()));
 
         $search->setTable($fdTable)

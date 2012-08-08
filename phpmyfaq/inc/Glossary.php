@@ -81,7 +81,7 @@ class PMF_Glossary
                 %sfaqglossary
             WHERE
                 lang = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->_config->getLanguage()->getLanguage()
         );
             
@@ -198,7 +198,7 @@ class PMF_Glossary
                 %sfaqglossary
             WHERE
                 id = %d AND lang = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             (int)$id,
             $this->_config->getLanguage()->getLanguage()
         );
@@ -234,8 +234,8 @@ class PMF_Glossary
             (id, lang, item, definition)
                 VALUES
             (%d, '%s', '%s', '%s')",
-            SQLPREFIX,
-            $this->_config->getDb()->nextId(SQLPREFIX.'faqglossary', 'id'),
+            PMF_Db::getTablePrefix(),
+            $this->_config->getDb()->nextId(PMF_Db::getTablePrefix().'faqglossary', 'id'),
             $this->_config->getLanguage()->getLanguage(),
             $this->item,
             $this->definition
@@ -269,7 +269,7 @@ class PMF_Glossary
                 definition = '%s'
             WHERE
                 id = %d AND lang = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->item,
             $this->definition,
             (int)$id,
@@ -296,7 +296,7 @@ class PMF_Glossary
                 %sfaqglossary
             WHERE
                 id = %d AND lang = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             (int)$id,
             $this->_config->getLanguage()->getLanguage()
         );

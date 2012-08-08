@@ -63,7 +63,7 @@ class PMF_Logging
                 id
             FROM
                 %sfaqadminlog',
-            SQLPREFIX
+            PMF_Db::getTablePrefix()
         );
 
         return $this->_config->getDb()->numRows(
@@ -86,7 +86,7 @@ class PMF_Logging
             FROM
                 %sfaqadminlog
             ORDER BY id DESC',
-            SQLPREFIX
+            PMF_Db::getTablePrefix()
         );
 
         $result = $this->_config->getDb()->query($query);
@@ -120,8 +120,8 @@ class PMF_Logging
                 (id, time, usr, text, ip)
                     VALUES 
                 (%d, %d, %d, '%s', '%s')",
-                    SQLPREFIX,
-                    $this->_config->getDb()->nextId(SQLPREFIX.'faqadminlog', 'id'),
+                    PMF_Db::getTablePrefix(),
+                    $this->_config->getDb()->nextId(PMF_Db::getTablePrefix().'faqadminlog', 'id'),
                     $_SERVER['REQUEST_TIME'],
                     $user->userdata->get('user_id'),
                     $this->_config->getDb()->escape(nl2br($logText)),
@@ -146,7 +146,7 @@ class PMF_Logging
                 %sfaqadminlog
             WHERE
                 time < %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $_SERVER['REQUEST_TIME'] - 30 * 86400
         );
 

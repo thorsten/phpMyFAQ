@@ -96,7 +96,7 @@ class PMF_Comment
                 %sfaqcomments
             WHERE
                 id_comment = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $id);
 
         $result = $this->_config->getDb()->query($query);
@@ -135,7 +135,7 @@ class PMF_Comment
                 type = '%s'
             AND 
                 id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $type,
             $id);
 
@@ -203,8 +203,8 @@ class PMF_Comment
                 %sfaqcomments
             VALUES
                 (%d, %d, '%s', '%s', '%s', '%s', %d, '%s')",
-            SQLPREFIX,
-            $this->_config->getDb()->nextId(SQLPREFIX.'faqcomments', 'id_comment'),
+            PMF_Db::getTablePrefix(),
+            $this->_config->getDb()->nextId(PMF_Db::getTablePrefix().'faqcomments', 'id_comment'),
             $commentData['record_id'],
             $commentData['type'],
             $commentData['username'],
@@ -241,7 +241,7 @@ class PMF_Comment
                 id = %d
             AND
                 id_comment = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $recordId,
             $commentId
         );
@@ -273,7 +273,7 @@ class PMF_Comment
                 type = '%s'
             GROUP BY id
             ORDER BY id",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $type
         );
 
@@ -312,9 +312,9 @@ class PMF_Comment
             WHERE
                 type = '%s'",
             ($type == self::COMMENT_TYPE_FAQ) ? "fcg.category_id,\n" : '',
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             ($type == self::COMMENT_TYPE_FAQ) ? "LEFT JOIN
-                ".SQLPREFIX."faqcategoryrelations fcg
+                ".PMF_Db::getTablePrefix()."faqcategoryrelations fcg
             ON
                 fc.id = fcg.record_id\n" : '',
             $type

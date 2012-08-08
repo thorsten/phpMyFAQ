@@ -72,14 +72,14 @@ class PMF_Relation
             array('database' => PMF_Db::getType())
         );
 
-        $search->setTable(SQLPREFIX . 'faqdata AS fd')
+        $search->setTable(PMF_Db::getTablePrefix() . 'faqdata AS fd')
                ->setResultColumns(array(
                     'fd.id AS id',
                     'fd.lang AS lang',
                     'fcr.category_id AS category_id',
                     'fd.thema AS question',
                     'fd.content AS answer'))
-               ->setJoinedTable(SQLPREFIX . 'faqcategoryrelations AS fcr')
+               ->setJoinedTable(PMF_Db::getTablePrefix() . 'faqcategoryrelations AS fcr')
                ->setJoinedColumns(array(
                     'fd.id = fcr.record_id', 
                     'fd.lang = fcr.record_lang'))

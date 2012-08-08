@@ -70,7 +70,7 @@ class PMF_Visits
                 id = %d
             AND
                 lang = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $id,
             $this->_config->getLanguage()->getLanguage()
         );
@@ -104,7 +104,7 @@ class PMF_Visits
                 %sfaqvisits
             VALUES
                 (%d, '%s', %d, %d)",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $id,
             $this->_config->getLanguage()->getLanguage(),
             1,
@@ -135,7 +135,7 @@ class PMF_Visits
                 last_visit = %d
             WHERE
                 id = %d AND lang = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $_SERVER['REQUEST_TIME'],
             $id,
             $this->_config->getLanguage()->getLanguage()
@@ -161,7 +161,7 @@ class PMF_Visits
                 %sfaqvisits
              ORDER BY
                 visits DESC",
-            SQLPREFIX
+            PMF_Db::getTablePrefix()
             );
         $result = $this->_config->getDb()->query($query);
 

@@ -63,7 +63,7 @@ class PMF_Stopwords
     public function __construct(PMF_Configuration $config)
     {
         $this->_config    = $config;
-        $this->table_name = SQLPREFIX . "faqstopwords";
+        $this->table_name = PMF_Db::getTablePrefix() . "faqstopwords";
     }
     
     /**

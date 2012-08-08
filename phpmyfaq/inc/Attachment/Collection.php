@@ -79,8 +79,8 @@ class PMF_Attachment_Collection
                 fa.record_id = fd.id
             GROUP BY
                 fa.id",
-            SQLPREFIX . 'faqattachment',
-            SQLPREFIX . 'faqdata'
+            PMF_Db::getTablePrefix() . 'faqattachment',
+            PMF_Db::getTablePrefix() . 'faqdata'
         );
 
         $result = $this->config->getDb()->query($query);

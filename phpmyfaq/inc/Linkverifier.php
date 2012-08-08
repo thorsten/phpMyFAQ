@@ -249,7 +249,7 @@ class PMF_Linkverifier
     */
     public function loadConfigurationFromDB()
     {
-        $query = "SELECT type, url, reason FROM ".SQLPREFIX."faqlinkverifyrules WHERE enabled = 'y'";
+        $query = "SELECT type, url, reason FROM ".PMF_Db::getTablePrefix()."faqlinkverifyrules WHERE enabled = 'y'";
         $result = $this->_config->getDb()->query($query);
         while ($row = $this->_config->getDb()->fetchObject($result)) {
             switch (strtolower($row->type)) {
@@ -651,7 +651,7 @@ class PMF_Linkverifier
                 id = %d 
             AND 
                 lang='%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $state,
             $_SERVER['REQUEST_TIME'],
             $id,
@@ -701,7 +701,7 @@ class PMF_Linkverifier
                 id = %d 
             AND 
                 lang = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $id,
             $this->_config->getDb()->escape($artlang));
             
@@ -938,8 +938,8 @@ class PMF_Linkverifier
                             (id, type, url, reason, enabled, locked, owner, dtInsertDate, dtUpdateDate)
                         VALUES
                             (%d, '%s', '%s', '%s', 'y', 'n', '%s', '%s', '%s')",
-                        SQLPREFIX,
-                        $this->_config->getDb()->nextId(SQLPREFIX."faqlinkverifyrules", "id"),
+                        PMF_Db::getTablePrefix(),
+                        $this->_config->getDb()->nextId(PMF_Db::getTablePrefix()."faqlinkverifyrules", "id"),
                         $this->_config->getDb()->escape($type),
                         $this->_config->getDb()->escape($url),
                         $this->_config->getDb()->escape($reason),

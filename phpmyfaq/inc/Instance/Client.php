@@ -97,7 +97,7 @@ class PMF_Instance_Client extends PMF_Instance
                 sprintf(
                     'CREATE TABLE %s%s SELECT * FROM %s WHERE 1 = 2',
                     $prefix,
-                    str_replace(SQLPREFIX, '', $tableName),
+                    str_replace(PMF_Db::getTablePrefix(), '', $tableName),
                     $tableName
                 )
             );
@@ -108,21 +108,21 @@ class PMF_Instance_Client extends PMF_Instance
             sprintf(
                 'INSERT INTO %sfaqconfig SELECT * FROM %sfaqconfig',
                 $prefix,
-                SQLPREFIX
+                PMF_Db::getTablePrefix()
             )
         );
         $this->config->getDb()->query(
             sprintf(
                 'INSERT INTO %sfaqright SELECT * FROM %sfaqright',
                 $prefix,
-                SQLPREFIX
+                PMF_Db::getTablePrefix()
             )
         );
         $this->config->getDb()->query(
             sprintf(
                 'INSERT INTO %sfaquser_right SELECT * FROM %sfaquserright WHERE user_id = 1',
                 $prefix,
-                SQLPREFIX
+                PMF_Db::getTablePrefix()
             )
         );
     }

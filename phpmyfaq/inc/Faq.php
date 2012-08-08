@@ -243,11 +243,11 @@ class PMF_Faq
                 %s
             ORDER BY
                 %s.%s %s",
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $now,
             $now,
             $category_id,
@@ -376,11 +376,11 @@ class PMF_Faq
                 %s
             ORDER BY
                 fd.sticky DESC, %s.%s %s",
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $now,
             $now,
             $category_id,
@@ -548,11 +548,11 @@ class PMF_Faq
                 %s
             ORDER BY
                 %s %s",
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $now,
             $now,
             $records,
@@ -705,10 +705,10 @@ class PMF_Faq
                 fd.lang = '%s'
             AND
                 %s",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             isset($revision_id) ? 'faqdata_revisions': 'faqdata',
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $id,
             isset($revision_id) ? 'AND revision_id = '.$revision_id : '',
             $this->_config->getLanguage()->getLanguage(),
@@ -783,7 +783,7 @@ class PMF_Faq
     public function addRecord(Array $data, $new_record = true)
     {
         if ($new_record) {
-            $record_id = $this->_config->getDb()->nextId(SQLPREFIX.'faqdata', 'id');
+            $record_id = $this->_config->getDb()->nextId(PMF_Db::getTablePrefix().'faqdata', 'id');
         } else {
             $record_id = $data['id'];
         }
@@ -794,7 +794,7 @@ class PMF_Faq
                 %sfaqdata
             VALUES
                 (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s')",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $record_id,
             $data['lang'],
             $this->getSolutionId(),
@@ -848,7 +848,7 @@ class PMF_Faq
                 id = %d
             AND
                 lang = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $data['revision_id'],
             $data['active'],
             $data['sticky'],
@@ -883,66 +883,66 @@ class PMF_Faq
         $queries = array(
             sprintf(
                 "DELETE FROM %sfaqchanges WHERE beitrag = %d AND lang = '%s'",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 $recordId,
                 $recordLang
             ),
             sprintf(
                 "DELETE FROM %sfaqcategoryrelations WHERE record_id = %d AND record_lang = '%s'",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 $recordId,
                 $recordLang
             ),
             sprintf(
                 "DELETE FROM %sfaqdata WHERE id = %d AND lang = '%s'",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 $recordId,
                 $recordLang
             ),
             sprintf(
                 "DELETE FROM %sfaqdata_revisions WHERE id = %d AND lang = '%s'",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 $recordId,
                 $recordLang
             ),
             sprintf(
                 "DELETE FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 $recordId,
                 $recordLang
             ),
             sprintf(
                 "DELETE FROM %sfaqdata_user WHERE record_id = %d",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 $recordId,
                 $recordLang
             ),
             sprintf(
                 "DELETE FROM %sfaqdata_group WHERE record_id = %d",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 $recordId,
                 $recordLang
             ),
             sprintf(
                 "DELETE FROM %sfaqdata_tags WHERE record_id = %d",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 $recordId
             ),
             sprintf(
                 'DELETE FROM %sfaqdata_tags WHERE %sfaqdata_tags.record_id NOT IN (SELECT %sfaqdata.id FROM %sfaqdata)',
-                SQLPREFIX,
-                SQLPREFIX,
-                SQLPREFIX,
-                SQLPREFIX
+                PMF_Db::getTablePrefix(),
+                PMF_Db::getTablePrefix(),
+                PMF_Db::getTablePrefix(),
+                PMF_Db::getTablePrefix()
             ),
             sprintf(
                 "DELETE FROM %sfaqcomments WHERE id = %d",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 $recordId
             ),
             sprintf(
                 "DELETE FROM %sfaqvoting WHERE artikel = %d",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 $recordId
             )
         );
@@ -972,7 +972,7 @@ class PMF_Faq
                 id = %d
             AND
                 lang = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $record_id,
             $record_lang);
 
@@ -1010,7 +1010,7 @@ class PMF_Faq
                 id = %d
             AND
                 lang = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $table,
             $record_id,
             $record_lang);
@@ -1044,7 +1044,7 @@ class PMF_Faq
                     %sfaqcategoryrelations
                 VALUES
                     (%d, '%s', %d, '%s')",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 $_category,
                 $language,
                 $record_id,
@@ -1089,7 +1089,7 @@ class PMF_Faq
                 record_id = %d
             AND
                 record_lang = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $record_id,
             $record_lang);
         $this->_config->getDb()->query($query);
@@ -1134,9 +1134,9 @@ class PMF_Faq
                 fd.solution_id = %d
             AND
                 %s",
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $solution_id,
             $permPart);
 
@@ -1190,7 +1190,7 @@ class PMF_Faq
                 %sfaqdata
             WHERE
                 solution_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $solution_id);
 
         $result = $this->_config->getDb()->query($query);
@@ -1219,7 +1219,7 @@ class PMF_Faq
                 MAX(solution_id) AS solution_id
             FROM
                 %sfaqdata',
-            SQLPREFIX);
+            PMF_Db::getTablePrefix());
         $result = $this->_config->getDb()->query($query);
 
         if ($result && $row = $this->_config->getDb()->fetchObject($result)) {
@@ -1335,8 +1335,8 @@ class PMF_Faq
                 fd.lang = fcr.record_lang
             %s
             %s",
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $where,
             $orderBy);
 
@@ -1393,7 +1393,7 @@ class PMF_Faq
                 %sfaqdata
             WHERE
                 id = %d AND lang = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $id,
             $this->_config->getLanguage()->getLanguage()
             );
@@ -1432,7 +1432,7 @@ class PMF_Faq
                 lang = '%s'
             ORDER BY
                 revision_id",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $record_id,
             $record_lang);
 
@@ -1468,8 +1468,8 @@ class PMF_Faq
                 id = %d
             AND
                 lang = '%s'",
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $record_id,
             $record_lang);
         $this->_config->getDb()->query($query);
@@ -1496,7 +1496,7 @@ class PMF_Faq
             FROM
                 %sfaqdata
             WHERE id = %d AND lang = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $id,
             $this->_config->getLanguage()->getLanguage());
 
@@ -1535,7 +1535,7 @@ class PMF_Faq
                 id = %d 
             AND 
                 lang = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $recordId,
             $this->_config->getLanguage()->getLanguage());
 
@@ -1574,7 +1574,7 @@ class PMF_Faq
                 date_start <= '%s'
             AND
                 date_end   >= '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             null == $language ? '' : "AND lang = '".$language."'",
             $now,
             $now);
@@ -1665,7 +1665,7 @@ class PMF_Faq
                 %sfaqquestions
             WHERE
                 id = %d',
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $questionId
         );
 
@@ -1691,7 +1691,7 @@ class PMF_Faq
                 %sfaqquestions
             WHERE
                 id = %d',
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $question_id);
 
         $result = $this->_config->getDb()->query($query);
@@ -1721,7 +1721,7 @@ class PMF_Faq
                 is_visible = '%s'
             WHERE
                 id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $is_visible,
             $question_id);
         
@@ -1764,20 +1764,20 @@ class PMF_Faq
                 (fv.vote/fv.usr) AS avg,
                 fv.usr AS user
             FROM
-                '.SQLPREFIX.'faqvoting fv,
-                '.SQLPREFIX.'faqdata fd
+                '.PMF_Db::getTablePrefix().'faqvoting fv,
+                '.PMF_Db::getTablePrefix().'faqdata fd
             LEFT JOIN
-                '.SQLPREFIX.'faqcategoryrelations fcr
+                '.PMF_Db::getTablePrefix().'faqcategoryrelations fcr
             ON
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
             LEFT JOIN
-                '.SQLPREFIX.'faqdata_group AS fdg
+                '.PMF_Db::getTablePrefix().'faqdata_group AS fdg
             ON
                 fd.id = fdg.record_id
             LEFT JOIN
-                '.SQLPREFIX.'faqdata_user AS fdu
+                '.PMF_Db::getTablePrefix().'faqdata_user AS fdu
             ON
                 fd.id = fdu.record_id
             WHERE
@@ -1873,20 +1873,20 @@ class PMF_Faq
                 fv.visits AS visits,
                 fv.last_visit AS last_visit
             FROM
-                '.SQLPREFIX.'faqvisits fv,
-                '.SQLPREFIX.'faqdata fd
+                '.PMF_Db::getTablePrefix().'faqvisits fv,
+                '.PMF_Db::getTablePrefix().'faqdata fd
             LEFT JOIN
-                '.SQLPREFIX.'faqcategoryrelations fcr
+                '.PMF_Db::getTablePrefix().'faqcategoryrelations fcr
             ON
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
             LEFT JOIN
-                '.SQLPREFIX.'faqdata_group AS fdg
+                '.PMF_Db::getTablePrefix().'faqdata_group AS fdg
             ON
                 fd.id = fdg.record_id
             LEFT JOIN
-                '.SQLPREFIX.'faqdata_user AS fdu
+                '.PMF_Db::getTablePrefix().'faqdata_user AS fdu
             ON
                 fd.id = fdu.record_id
             WHERE
@@ -1983,20 +1983,20 @@ class PMF_Faq
                 fd.datum AS datum,
                 fv.visits AS visits
             FROM
-                '.SQLPREFIX.'faqvisits fv,
-                '.SQLPREFIX.'faqdata fd
+                '.PMF_Db::getTablePrefix().'faqvisits fv,
+                '.PMF_Db::getTablePrefix().'faqdata fd
             LEFT JOIN
-                '.SQLPREFIX.'faqcategoryrelations fcr
+                '.PMF_Db::getTablePrefix().'faqcategoryrelations fcr
             ON
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
             LEFT JOIN
-                '.SQLPREFIX.'faqdata_group AS fdg
+                '.PMF_Db::getTablePrefix().'faqdata_group AS fdg
             ON
                 fd.id = fdg.record_id
             LEFT JOIN
-                '.SQLPREFIX.'faqdata_user AS fdu
+                '.PMF_Db::getTablePrefix().'faqdata_user AS fdu
             ON
                 fd.id = fdu.record_id
             WHERE
@@ -2070,7 +2070,7 @@ class PMF_Faq
                 %sfaqvoting
             WHERE
                 artikel = %d AND (ip = '%s' AND datum > '%s')",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $id,
             $ip,
             $check);
@@ -2098,7 +2098,7 @@ class PMF_Faq
                 %sfaqvoting
             WHERE
                 artikel = %d',
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $record_id);
         if ($result = $this->_config->getDb()->query($query)) {
             if ($row = $this->_config->getDb()->fetchObject($result)) {
@@ -2128,8 +2128,8 @@ class PMF_Faq
                 %sfaqvoting
             VALUES
                 (%d, %d, %d, 1, %d, '%s')",
-            SQLPREFIX,
-            $this->_config->getDb()->nextId(SQLPREFIX.'faqvoting', 'id'),
+            PMF_Db::getTablePrefix(),
+            $this->_config->getDb()->nextId(PMF_Db::getTablePrefix().'faqvoting', 'id'),
             $votingData['record_id'],
             $votingData['vote'],
             $_SERVER['REQUEST_TIME'],
@@ -2153,8 +2153,8 @@ class PMF_Faq
                 %sfaqquestions
             VALUES
                 (%d, '%s', '%s', %d, '%s', '%s', '%s', %d)",
-            SQLPREFIX,
-            $this->_config->getDb()->nextId(SQLPREFIX.'faqquestions', 'id'),
+            PMF_Db::getTablePrefix(),
+            $this->_config->getDb()->nextId(PMF_Db::getTablePrefix().'faqquestions', 'id'),
             $this->_config->getDb()->escape($questionData['username']),
             $this->_config->getDb()->escape($questionData['email']),
             $questionData['category_id'],
@@ -2202,7 +2202,7 @@ class PMF_Faq
                 %sfaqquestions
             WHERE
                 id = %d',
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $id_question);
 
         if ($result = $this->_config->getDb()->query($query)) {
@@ -2239,7 +2239,7 @@ class PMF_Faq
             %s
             ORDER BY 
                 created ASC",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             ($all == false ? "WHERE is_visible = 'Y'" : ''));
 
         if ($result = $this->_config->getDb()->query($query)) {
@@ -2284,7 +2284,7 @@ class PMF_Faq
                 ip      = '%s'
             WHERE
                 artikel = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $votingData['vote'],
             $_SERVER['REQUEST_TIME'],
             $votingData['user_ip'],
@@ -2325,8 +2325,8 @@ class PMF_Faq
             (id, beitrag, lang, revision_id, usr, datum, what)
                 VALUES
             (%d, %d, '%s', %d, %d, %d, '%s')",
-            SQLPREFIX,
-            $this->_config->getDb()->nextId(SQLPREFIX.'faqchanges', 'id'),
+            PMF_Db::getTablePrefix(),
+            $this->_config->getDb()->nextId(PMF_Db::getTablePrefix().'faqchanges', 'id'),
             $id,
             $lang,
             $revision_id,
@@ -2360,7 +2360,7 @@ class PMF_Faq
             WHERE
                 beitrag = %d
             ORDER BY id DESC",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $record_id
             );
 
@@ -2499,9 +2499,9 @@ class PMF_Faq
             AND
                 fd.date_end   >= '%s'
             AND ",
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $now,
             $now);
         // faqvisits data selection
@@ -2606,7 +2606,7 @@ class PMF_Faq
             (record_id, %s_id)
                 VALUES
             (%d, %d)",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $mode,
             $mode,
             $record_id,
@@ -2640,7 +2640,7 @@ class PMF_Faq
                 %sfaqdata_%s
             WHERE
                 record_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $mode,
             $record_id);
         $this->_config->getDb()->query($query);
@@ -2673,7 +2673,7 @@ class PMF_Faq
             WHERE
                 record_id = %d",
             $mode,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $mode,
             (int)$record_id);
 
@@ -2707,25 +2707,25 @@ class PMF_Faq
                 fcr.category_id AS category_id,
                 fv.visits AS visits
             FROM
-                '.SQLPREFIX.'faqdata fd
+                '.PMF_Db::getTablePrefix().'faqdata fd
             LEFT JOIN
-                '.SQLPREFIX.'faqcategoryrelations fcr
+                '.PMF_Db::getTablePrefix().'faqcategoryrelations fcr
             ON
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
             LEFT JOIN
-                '.SQLPREFIX.'faqvisits fv
+                '.PMF_Db::getTablePrefix().'faqvisits fv
             ON
                 fd.id = fv.id
             AND
                 fv.lang = fd.lang
             LEFT JOIN
-                '.SQLPREFIX.'faqdata_group fdg
+                '.PMF_Db::getTablePrefix().'faqdata_group fdg
             ON
                 fd.id = fdg.record_id
             LEFT JOIN
-                '.SQLPREFIX.'faqdata_user fdu
+                '.PMF_Db::getTablePrefix().'faqdata_user fdu
             ON
                 fd.id = fdu.record_id
             WHERE
@@ -2793,7 +2793,7 @@ class PMF_Faq
                 %sfaqquestions
             WHERE
                 is_visible != 'Y'",
-            SQLPREFIX);
+            PMF_Db::getTablePrefix());
 
         $result = $this->_config->getDb()->query($query);
         $row = $this->_config->getDb()->fetchObject($result);
@@ -2816,7 +2816,7 @@ class PMF_Faq
                 is_visible = 'Y'
             ORDER BY
                 created ASC",
-            SQLPREFIX);
+            PMF_Db::getTablePrefix());
 
         $result = $this->_config->getDb()->query($query);
         $output = '';
@@ -2898,7 +2898,7 @@ class PMF_Faq
                     id = %d 
                 AND 
                     lang = '%s'",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 $type,
                 $flag, 
                 $id, 
@@ -2969,10 +2969,10 @@ class PMF_Faq
             AND 
                 fd.sticky = 1
             %s",
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $this->_config->getLanguage()->getLanguage(),
             $now,
             $now,
@@ -3045,7 +3045,7 @@ class PMF_Faq
     {
         $query = sprintf(
             'UPDATE %sfaqquestions SET answer_id = %d, category_id= %d, WHERE id= %d',
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $faqId,
             $categoryId,
             $openQuestionId

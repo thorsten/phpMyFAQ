@@ -73,7 +73,7 @@ class PMF_Configuration
                 config_name, config_value
             FROM
                 %s%s",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->_tableName
         );
             
@@ -236,7 +236,7 @@ class PMF_Configuration
                 %s%s
             VALUES
                 ('%s', '%s')",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->_tableName,
             $this->getDb()->escape(trim($name)),
             $this->getDb()->escape(trim($value))
@@ -273,7 +273,7 @@ class PMF_Configuration
                             config_value = '%s'
                         WHERE
                             config_name = '%s'",
-                        SQLPREFIX,
+                        PMF_Db::getTablePrefix(),
                         $this->_tableName,
                         $this->getDb()->escape(trim($value)),
                         $name

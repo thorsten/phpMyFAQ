@@ -76,11 +76,11 @@ class PMF_Instance
      */
     public function addInstance(Array $data)
     {
-        $this->setId($this->config->getDb()->nextId(SQLPREFIX . 'faqinstances', 'id'));
+        $this->setId($this->config->getDb()->nextId(PMF_Db::getTablePrefix() . 'faqinstances', 'id'));
 
         $insert = sprintf(
             "INSERT INTO %sfaqinstances VALUES (%d, '%s', '%s', '%s', NOW(), NOW())",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->getId(),
             $data['url'],
             $data['instance'],
@@ -123,7 +123,7 @@ class PMF_Instance
     {
         $select = sprintf(
             "SELECT * FROM %sfaqinstances ORDER BY id",
-            SQLPREFIX
+            PMF_Db::getTablePrefix()
         );
 
         $result = $this->config->getDb()->query($select);
@@ -142,7 +142,7 @@ class PMF_Instance
     {
         $select = sprintf(
             "SELECT * FROM %sfaqinstances WHERE id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             (int)$id
         );
 
@@ -162,7 +162,7 @@ class PMF_Instance
     {
         $select = sprintf(
             "SELECT * FROM %sfaqinstances WHERE url = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $url
         );
 
@@ -187,7 +187,7 @@ class PMF_Instance
                 %sfaqinstances_config
             WHERE
                 instance_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $id
         );
 
@@ -213,7 +213,7 @@ class PMF_Instance
     {
         $update = sprintf(
             "UPDATE %sfaqinstances SET url = '%s', instance = '%s', comment = '%s' WHERE id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $data['url'],
             $data['instance'],
             $data['comment'],
@@ -236,12 +236,12 @@ class PMF_Instance
         $deletes = array(
             sprintf(
                 "DELETE FROM %sfaqinstances WHERE id = %d",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 (int)$id
             ),
             sprintf(
                 "DELETE FROM %sfaqinstances_config WHERE instance_id = %d",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 (int)$id
             ),
         );
@@ -271,7 +271,7 @@ class PMF_Instance
                 %sfaqinstances_config
             VALUES
                 (%d, '%s', '%s')",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->getId(),
             $this->config->getDb()->escape(trim($name)),
             $this->config->getDb()->escape(trim($value))

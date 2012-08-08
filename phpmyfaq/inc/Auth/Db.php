@@ -79,7 +79,7 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
             (login, pass)
                 VALUES
             ('%s', '%s')",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->db->escape($login),
             $this->db->escape($this->encContainer->setSalt($login)->encrypt($pass)));
             
@@ -118,7 +118,7 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
                 pass = '%s'
             WHERE
                 login = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->db->escape($this->encContainer->setSalt($login)->encrypt($pass)),
             $this->db->escape($login)
         );
@@ -154,7 +154,7 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
                 %sfaquserlogin
             WHERE
                 login = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->db->escape($login));
             
         $delete = $this->db->query($delete);
@@ -192,7 +192,7 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
                 %sfaquserlogin
             WHERE
                 login = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->db->escape($login)
         );
             
@@ -252,7 +252,7 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
                 %sfaquserlogin
             WHERE
                 login = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->db->escape($login)
         );
             

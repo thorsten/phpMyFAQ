@@ -84,9 +84,9 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 fr.right_id = fgr.right_id AND
                 fg.group_id = fgr.group_id AND
                 fg.group_id = %d",
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $right_id,
             $group_id);
         
@@ -121,9 +121,9 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 fg.group_id = %d AND
                 fg.group_id = fgr.group_id AND
                 fr.right_id = fgr.right_id",
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $group_id);
         
         $res    = $this->config->getDb()->query($select);
@@ -184,7 +184,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             (group_id, right_id)
                 VALUES
             (%d, %d)",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $group_id,
             $right_id);
             
@@ -216,7 +216,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             WHERE
                 group_id = %d AND
                 right_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $group_id,
             $right_id);
             
@@ -242,7 +242,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             return 0;
         }
         
-        $next_id    = $this->config->getDb()->nextId(SQLPREFIX."faqgroup", "group_id");
+        $next_id    = $this->config->getDb()->nextId(PMF_Db::getTablePrefix()."faqgroup", "group_id");
         $group_data = $this->checkGroupData($group_data);
         $insert     = sprintf("
             INSERT INTO
@@ -250,7 +250,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             (group_id, name, description, auto_join)
                 VALUES
             (%d, '%s', '%s', '%s')",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $next_id,
             $group_data['name'],
             $group_data['description'],
@@ -288,7 +288,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 %s
             WHERE
                 group_id = %d",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 $set,
                 $group_id);
                 
@@ -318,7 +318,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 %sfaqgroup
             WHERE
                 group_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $group_id);
         $res = $this->config->getDb()->query($delete);
         if (!$res) {
@@ -330,7 +330,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 %sfaquser_group
             WHERE
                 group_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $group_id);
         $res = $this->config->getDb()->query($delete);
         if (!$res) {
@@ -342,7 +342,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 %sfaqgroup_right
             WHERE
                 group_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $group_id);
         $res = $this->config->getDb()->query($delete);
         if (!$res) {
@@ -378,9 +378,9 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 fu.user_id  = fug.user_id AND
                 fg.group_id = fug.group_id AND
                 fg.group_id = %d",
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $user_id,
             $group_id);
         
@@ -415,9 +415,9 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 fg.group_id = %d AND
                 fg.group_id = fug.group_id AND
                 fu.user_id  = fug.user_id",
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $group_id);
         
         $res    = $this->config->getDb()->query($select);
@@ -453,7 +453,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             (user_id, group_id)
                VALUES
             (%d, %d)",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $user_id,
             $group_id);
             
@@ -484,7 +484,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             WHERE
                 user_id  = %d AND
                 group_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $user_id,
             $group_id);
             
@@ -511,7 +511,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 %sfaqgroup
             WHERE
                 name = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->config->getDb()->escape($name));
             
         $res = $this->config->getDb()->query($select);
@@ -545,7 +545,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 %sfaqgroup
             WHERE
                 group_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $group_id);
             
         $res = $this->config->getDb()->query($select);
@@ -580,9 +580,9 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 fu.user_id  = %d AND
                 fu.user_id  = fug.user_id AND
                 fg.group_id = fug.group_id",
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $user_id);
         
         $res    = $this->config->getDb()->query($select);
@@ -606,7 +606,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 group_id
             FROM
                 %sfaqgroup",
-            SQLPREFIX);
+            PMF_Db::getTablePrefix());
             
         $res    = $this->config->getDb()->query($select);
         $result = array();
@@ -671,11 +671,11 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 fg.group_id = fug.group_id AND
                 fu.user_id  = fug.user_id AND
                 fu.user_id  = %d",
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $right_id,
             $user_id);
         
@@ -752,7 +752,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 %sfaqgroup
             WHERE
                 auto_join = 1",
-            SQLPREFIX);
+            PMF_Db::getTablePrefix());
             
         $res = $this->config->getDb()->query($select);
         if (!$res) {
@@ -788,7 +788,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 %sfaquser_group
             WHERE
                 user_id  = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $user_id);
             
         $res = $this->config->getDb()->query($delete);
@@ -828,11 +828,11 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 fg.group_id = fug.group_id AND
                 fg.group_id = fgr.group_id AND
                 fr.right_id = fgr.right_id",
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $user_id);
         
         $res    = $this->config->getDb()->query($select);
@@ -861,7 +861,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 %sfaqgroup_right
             WHERE
                 group_id  = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $group_id);
             
         $res = $this->config->getDb()->query($delete);
@@ -890,7 +890,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 %sfaqgroup
             WHERE
                 group_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $group_id);
             
         $res = $this->config->getDb()->query($select);
@@ -919,7 +919,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 %sfaquser_group
             WHERE
                 group_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $group_id);
             
         $res = $this->config->getDb()->query($delete);

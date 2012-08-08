@@ -66,8 +66,8 @@ header('Pragma: no-cache');
 
 if ($permission['backup']) {
 
-    $faqConfig->getDb()->getTableNames(SQLPREFIX);
-    $tablePrefix  = (SQLPREFIX !== '') ? SQLPREFIX . '.phpmyfaq' : 'phpmyfaq';
+    $faqConfig->getDb()->getTableNames(PMF_Db::getTablePrefix());
+    $tablePrefix  = (PMF_Db::getTablePrefix() !== '') ? PMF_Db::getTablePrefix() . '.phpmyfaq' : 'phpmyfaq';
     $tableNames   = '';
     $majorVersion = substr($faqConfig->get('main.currentVersion'), 0, 3);
     $dbHelper     = new PMF_DB_Helper($faqConfig);
@@ -75,7 +75,7 @@ if ($permission['backup']) {
     switch ($action) {
         case 'backup_content' :
             foreach ($faqConfig->getDb()->tableNames as $table) {
-                if ((SQLPREFIX . 'faqadminlog' == trim($table)) || (SQLPREFIX . 'faqsessions' == trim($table))) {
+                if ((PMF_Db::getTablePrefix() . 'faqadminlog' == trim($table)) || (PMF_Db::getTablePrefix() . 'faqsessions' == trim($table))) {
                     continue;
                 }
                 $tableNames .= $table . ' ';
@@ -83,7 +83,7 @@ if ($permission['backup']) {
             break;
         case 'backup_logs' :
             foreach ($faqConfig->getDb()->tableNames as $table) {
-                if ((SQLPREFIX . 'faqadminlog' == trim($table)) || (SQLPREFIX . 'faqsessions' == trim($table))) {
+                if ((PMF_Db::getTablePrefix() . 'faqadminlog' == trim($table)) || (PMF_Db::getTablePrefix() . 'faqsessions' == trim($table))) {
                     $tableNames .= $table . ' ';
                 }
             }
@@ -92,7 +92,7 @@ if ($permission['backup']) {
 
     $text[] = "-- pmf" . $majorVersion . ": " . $tableNames;
     $text[] = "-- DO NOT REMOVE THE FIRST LINE!";
-    $text[] = "-- pmftableprefix: " . SQLPREFIX;
+    $text[] = "-- pmftableprefix: " . PMF_Db::getTablePrefix();
     $text[] = "-- DO NOT REMOVE THE LINES ABOVE!";
     $text[] = "-- Otherwise this backup will be broken.";
 

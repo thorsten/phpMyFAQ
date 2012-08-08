@@ -402,27 +402,27 @@ if (isset($auth) && in_array(true, $permission)) {
             <tbody>
                 <tr>
                     <td><strong><a href="?action=viewsessions"><?php print $PMF_LANG["ad_start_visits"]; ?></a></strong></td>
-                    <td><?php print $faqTableInfo[SQLPREFIX . "faqsessions"]; ?></td>
+                    <td><?php print $faqTableInfo[PMF_Db::getTablePrefix() . "faqsessions"]; ?></td>
                 </tr>
                 <tr>
                     <td><strong><a href="?action=view"><?php print $PMF_LANG["ad_start_articles"]; ?></a></strong></td>
-                    <td><?php print $faqTableInfo[SQLPREFIX . "faqdata"]; ?></td>
+                    <td><?php print $faqTableInfo[PMF_Db::getTablePrefix() . "faqdata"]; ?></td>
                 </tr>
                 <tr>
                     <td><strong><a href="?action=comments"><?php print $PMF_LANG["ad_start_comments"]; ?></strong></a></td>
-                    <td><?php print $faqTableInfo[SQLPREFIX . "faqcomments"]; ?></td>
+                    <td><?php print $faqTableInfo[PMF_Db::getTablePrefix() . "faqcomments"]; ?></td>
                 </tr>
                 <tr>
                     <td><strong><a href="?action=question"><?php print $PMF_LANG["msgOpenQuestions"]; ?></strong></a></td>
-                    <td><?php print $faqTableInfo[SQLPREFIX . "faqquestions"]; ?></td>
+                    <td><?php print $faqTableInfo[PMF_Db::getTablePrefix() . "faqquestions"]; ?></td>
                 </tr>
                 <tr>
                     <td><strong><a href="?action=news"><?php print $PMF_LANG["msgNews"]; ?></strong></a></td>
-                    <td><?php print $faqTableInfo[SQLPREFIX . "faqnews"]; ?></td>
+                    <td><?php print $faqTableInfo[PMF_Db::getTablePrefix() . "faqnews"]; ?></td>
                 </tr>
                 <tr>
                     <td><strong><a href="?action=user&user_action=listallusers"><?php print $PMF_LANG['admin_mainmenu_users']; ?></strong></a></td>
-                    <td><?php print $faqTableInfo[SQLPREFIX . 'faquser'] - 1; ?></td>
+                    <td><?php print $faqTableInfo[PMF_Db::getTablePrefix() . 'faquser'] - 1; ?></td>
                 </tr>
             </tbody>
             </table>

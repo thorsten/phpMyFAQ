@@ -92,7 +92,7 @@ class PMF_News
                 lang = '%s'
             ORDER BY
                 datum DESC",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $now,
             $now,
             $active ? "AND active = 'y'" : '',
@@ -210,7 +210,7 @@ class PMF_News
                 lang = '%s'
             ORDER BY
                 datum DESC",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->_config->getLanguage()->getLanguage()
         );
             
@@ -254,7 +254,7 @@ class PMF_News
                 id = %d
             AND
                 lang = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $id,
             $this->_config->getLanguage()->getLanguage());
             
@@ -313,8 +313,8 @@ class PMF_News
             link, linktitel, target)
                 VALUES
             (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
-            SQLPREFIX,
-            $this->_config->getDb()->nextId(SQLPREFIX.'faqnews', 'id'),
+            PMF_Db::getTablePrefix(),
+            $this->_config->getDb()->nextId(PMF_Db::getTablePrefix().'faqnews', 'id'),
             $data['date'],
             $data['lang'],
             $data['header'],
@@ -365,7 +365,7 @@ class PMF_News
                 target = '%s'
             WHERE
                 id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $data['date'],
             $data['lang'],
             $data['header'],
@@ -403,7 +403,7 @@ class PMF_News
                 id = %d
             AND
                 lang = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $id,
             $this->language->getLanguage());
             

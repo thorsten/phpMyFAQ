@@ -90,7 +90,7 @@ class PMF_User_UserData
             WHERE
                 user_id = %d",
             $fields,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->userId);
         
         $res = $this->config->getDb()->query($select);
@@ -156,7 +156,7 @@ class PMF_User_UserData
                 %sfaquserdata
             WHERE
                 user_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->userId);
             
         $res = $this->config->getDb()->query($select);
@@ -184,7 +184,7 @@ class PMF_User_UserData
                 email         = '%s'
             WHERE
                 user_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             date('YmdHis', $_SERVER['REQUEST_TIME']),
             $this->config->getDb()->escape($this->data['display_name']),
             $this->config->getDb()->escape($this->data['email']),
@@ -219,7 +219,7 @@ class PMF_User_UserData
             (user_id, last_modified)
                 VALUES
             (%d, '%s')",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->userId,
             date('YmdHis', $_SERVER['REQUEST_TIME'])
         );
@@ -252,7 +252,7 @@ class PMF_User_UserData
                 %sfaquserdata
             WHERE
                 user_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->userId);
         
         $res = $this->config->getDb()->query($delete);

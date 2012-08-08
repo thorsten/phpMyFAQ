@@ -217,9 +217,9 @@ class PMF_Category
                 fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id
             ORDER BY
                 fc.id",
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $where);
 
         $result = $this->_config->getDb()->query($query);
@@ -248,7 +248,7 @@ class PMF_Category
             FROM
                 %sfaqcategories
             WHERE ',
-            SQLPREFIX);
+            PMF_Db::getTablePrefix());
 
         if (true == $parent_id) {
             $query .= 'parent_id = 0';
@@ -282,7 +282,7 @@ class PMF_Category
                 id, lang, parent_id, name, description, user_id
             FROM
                 %sfaqcategories",
-            SQLPREFIX);
+            PMF_Db::getTablePrefix());
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
             $query .= " WHERE lang = '".$this->language."'";
         }
@@ -593,8 +593,8 @@ class PMF_Category
                 fcr.record_id = fd.id
             AND
                 fcr.record_lang = fd.lang",
-            SQLPREFIX,
-            SQLPREFIX);
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix());
 
         if (strlen($this->language) > 0) {
             $query .= sprintf(" AND fd.lang = '%s'",
@@ -606,8 +606,8 @@ class PMF_Category
                 fd.active = 'yes'
             GROUP BY
                 fcr.category_id",
-            SQLPREFIX,
-            SQLPREFIX);
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix());
         $result = $this->_config->getDb()->query($query);
         if ($this->_config->getDb()->numRows($result) > 0) {
             while ($row = $this->_config->getDb()->fetchObject($result)) {
@@ -870,7 +870,7 @@ class PMF_Category
                 record_id = %d
             AND
                 record_lang = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $record_id,
             $record_lang);
 
@@ -914,8 +914,8 @@ class PMF_Category
                 fcr.category_lang = '%s'
             AND
                 fc.lang = '%s'",
-            SQLPREFIX,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $articleId,
             $this->language,
             $this->language);
@@ -992,7 +992,7 @@ class PMF_Category
 
         // If we only need a new language, we don't need a new category id
         if (is_null($id)) {
-            $id = $this->_config->getDb()->nextId(SQLPREFIX.'faqcategories', 'id');
+            $id = $this->_config->getDb()->nextId(PMF_Db::getTablePrefix().'faqcategories', 'id');
         }
 
         $query = sprintf("
@@ -1001,7 +1001,7 @@ class PMF_Category
             (id, lang, parent_id, name, description, user_id)
                 VALUES
             (%d, '%s', %d, '%s', '%s', %d)",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $id,
             $category_data['lang'],
             $parent_id,
@@ -1036,7 +1036,7 @@ class PMF_Category
                 id = %d
             AND
                 lang = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $category_data['name'],
             $category_data['description'],
             $category_data['user_id'],
@@ -1067,7 +1067,7 @@ class PMF_Category
                 user_id = %d
             WHERE
                 user_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $to,
             $from
             );
@@ -1094,7 +1094,7 @@ class PMF_Category
                 id = %d
             AND
                 lang = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $category_id,
             $category_lang);
 
@@ -1124,19 +1124,19 @@ class PMF_Category
         foreach ($tables as $pair) {
             foreach ($pair as $_table => $_field) {
                 $result = $result && $this->_config->getDb()->query(sprintf("UPDATE %s SET %s = %d WHERE %s = %d",
-                    SQLPREFIX.$_table,
+                    PMF_Db::getTablePrefix().$_table,
                     $_field,
                     $temp_cat,
                     $_field,
                     $category_id_2));
                 $result = $result && $this->_config->getDb()->query(sprintf("UPDATE %s SET %s = %d WHERE %s = %d",
-                    SQLPREFIX.$_table,
+                    PMF_Db::getTablePrefix().$_table,
                     $_field,
                     $category_id_2,
                     $_field,
                     $category_id_1));
                 $result = $result && $this->_config->getDb()->query(sprintf("UPDATE %s SET %s = %d WHERE %s = %d",
-                    SQLPREFIX.$_table,
+                    PMF_Db::getTablePrefix().$_table,
                     $_field,
                     $category_id_1,
                     $_field,
@@ -1149,19 +1149,19 @@ class PMF_Category
         foreach ($tables2 as $pair) {
             foreach ($pair as $_table => $_field) {
                 $result = $result && $this->_config->getDb()->query(sprintf("UPDATE %s SET %s = '%d' WHERE %s = '%d'",
-                    SQLPREFIX.$_table,
+                    PMF_Db::getTablePrefix().$_table,
                     $_field,
                     $temp_cat,
                     $_field,
                     $category_id_2));
                 $result = $result && $this->_config->getDb()->query(sprintf("UPDATE %s SET %s = '%d' WHERE %s = '%d'",
-                    SQLPREFIX.$_table,
+                    PMF_Db::getTablePrefix().$_table,
                     $_field,
                     $category_id_2,
                     $_field,
                     $category_id_1));
                 $result = $result && $this->_config->getDb()->query(sprintf("UPDATE %s SET %s = '%d' WHERE %s = '%d'",
-                    SQLPREFIX.$_table,
+                    PMF_Db::getTablePrefix().$_table,
                     $_field,
                     $category_id_1,
                     $_field,
@@ -1192,7 +1192,7 @@ class PMF_Category
                 parent_id = %d
             WHERE
                 id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $parent_id,
             $category_id);
         $this->_config->getDb()->query($query);
@@ -1215,7 +1215,7 @@ class PMF_Category
                 %sfaqcategories
             WHERE
                 id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $category_id);
         if (!$delete_all) {
            $query .= " AND lang = '".$category_lang."'";
@@ -1239,7 +1239,7 @@ class PMF_Category
                 %sfaqcategoryrelations
             WHERE
                 category_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $category_id);
         if (!$delete_all) {
            $query .= " AND category_lang = '".$category_lang."'";
@@ -1275,7 +1275,7 @@ class PMF_Category
                    id = %d
                AND
                    lang = '%s'",
-               SQLPREFIX,
+               PMF_Db::getTablePrefix(),
                $category_id,
                $language);
            $result = $this->_config->getDb()->query($query);
@@ -1327,7 +1327,7 @@ class PMF_Category
                 id, lang, parent_id, name, description, user_id
             FROM
                 %sfaqcategories",
-            SQLPREFIX);
+            PMF_Db::getTablePrefix());
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
             $query .= " WHERE lang != '".$this->language."'";
         }
@@ -1357,7 +1357,7 @@ class PMF_Category
                 %sfaqcategories
             WHERE
                 parent_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $parent_id);
         $result = $this->_config->getDb()->query($query);
 
@@ -1383,7 +1383,7 @@ class PMF_Category
 
         foreach ($categories as $category_id) {
         	$query = "SELECT * FROM %sfaqcategory_%s WHERE category_id = %d AND %s_id = %d";
-        	$query = sprintf($query, SQLPREFIX, $mode, $category_id, $mode, $id);
+        	$query = sprintf($query, PMF_Db::getTablePrefix(), $mode, $category_id, $mode, $id);
 
         	if($this->_config->getDb()->numRows($this->_config->getDb()->query($query))) {
         		continue;
@@ -1395,7 +1395,7 @@ class PMF_Category
                 (category_id, %s_id)
                     VALUES
                 (%d, %d)",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 $mode,
                 $mode,
                 $category_id,
@@ -1429,7 +1429,7 @@ class PMF_Category
                     %sfaqcategory_%s
                 WHERE
                     category_id = %d",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 $mode,
                 $category_id);
             $this->_config->getDb()->query($query);
@@ -1463,7 +1463,7 @@ class PMF_Category
             WHERE
                 category_id IN (%s)",
             $mode,
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $mode,
             implode(', ', $categories));
 
@@ -1494,8 +1494,8 @@ class PMF_Category
             AND
                 fcr.record_lang = fd.lang
             GROUP BY fcr.category_id",
-            SQLPREFIX,
-            SQLPREFIX);
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix());
 
         $result = $this->_config->getDb()->query($query);
         if ($this->_config->getDb()->numRows($result) > 0) {
@@ -1530,8 +1530,8 @@ class PMF_Category
                 fd.lang = fcr.category_lang
             ORDER BY
                 fcr.category_id, fd.id',
-             SQLPREFIX,
-             SQLPREFIX);
+             PMF_Db::getTablePrefix(),
+             PMF_Db::getTablePrefix());
         $result = $this->_config->getDb()->query($query);
 
         if ($this->_config->getDb()->numRows($result) > 0) {

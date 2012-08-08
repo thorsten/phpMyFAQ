@@ -20,7 +20,7 @@
 require_once 'PHPUnit/Extensions/Database/TestCase.php';
 require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/Db.php';
 
-define('SQLPREFIX', '');
+define('PMF_Db::getTablePrefix()', '');
 
 /**
  * Database_AbstractTest

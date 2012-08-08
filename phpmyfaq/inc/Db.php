@@ -49,7 +49,14 @@ class PMF_Db
      * @var string
      */
     private static $dbType = null;
-    
+
+    /**
+     * Table prefix
+     *
+     * @var string
+     */
+    private static $tablePrefix = null;
+
     /**
      * Constructor
      *
@@ -125,7 +132,7 @@ class PMF_Db
      */
     public static function checkOnEmptyTable($tableName)
     {
-        if (self::$instance->numRows(self::$instance->query('SELECT * FROM ' . SQLPREFIX . $tableName)) < 1) {
+        if (self::$instance->numRows(self::$instance->query('SELECT * FROM ' . PMF_Db::getTablePrefix() . $tableName)) < 1) {
             return true;
         } else {
             return false;
@@ -153,5 +160,25 @@ class PMF_Db
                 <p class="error">The error message of the database server:<br />$method</p>
             </body>
             </html>';
+    }
+
+    /**
+     * Sets the table prefix
+     *
+     * @param string $tablePrefix
+     */
+    public static function setTablePrefix($tablePrefix)
+    {
+        self::$tablePrefix = $tablePrefix;
+    }
+
+    /**
+     * Returns the table prefix
+     *
+     * @return string
+     */
+    public static function getTablePrefix()
+    {
+        return self::$tablePrefix;
     }
 }

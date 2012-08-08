@@ -197,7 +197,7 @@ class PMF_User_CurrentUser extends PMF_User
                     auth_source = '%s'
                 WHERE
                     user_id = %d",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 $this->config->getDb()->escape($name),
                 $this->getUserId()
             );
@@ -292,7 +292,7 @@ class PMF_User_CurrentUser extends PMF_User
                 %sfaquser
             WHERE
                 user_id = %d",
-           SQLPREFIX,
+           PMF_Db::getTablePrefix(),
            $this->getUserId()
         );
            
@@ -340,7 +340,7 @@ class PMF_User_CurrentUser extends PMF_User
                 ip = '%s'
             WHERE
                 user_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             session_id(),
             $_SERVER['REQUEST_TIME'],
             $updateLastlogin ?  "last_login = '".date('YmdHis', $_SERVER['REQUEST_TIME'])."'," : '',
@@ -395,7 +395,7 @@ class PMF_User_CurrentUser extends PMF_User
                 remember_me = NULL
             WHERE
                 user_id = %d",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 $this->getUserId()
         );
                 
@@ -553,7 +553,7 @@ class PMF_User_CurrentUser extends PMF_User
                 remember_me = '%s'
             WHERE
                 user_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->config->getDb()->escape($rememberMe),
             $this->getUserId()
         );

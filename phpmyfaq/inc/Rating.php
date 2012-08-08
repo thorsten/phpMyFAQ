@@ -114,9 +114,9 @@ class PMF_Rating
                         fv.usr
                     ORDER BY
                         fcr.category_id",
-                    SQLPREFIX,
-                    SQLPREFIX,
-                    SQLPREFIX);
+                    PMF_Db::getTablePrefix(),
+                    PMF_Db::getTablePrefix(),
+                    PMF_Db::getTablePrefix());
                 break;
 
              default:
@@ -149,9 +149,9 @@ class PMF_Rating
                         fv.usr
                     ORDER BY
                         fcr.category_id",
-                    SQLPREFIX,
-                    SQLPREFIX,
-                    SQLPREFIX);
+                    PMF_Db::getTablePrefix(),
+                    PMF_Db::getTablePrefix(),
+                    PMF_Db::getTablePrefix());
                 break;
         }
 
@@ -186,7 +186,7 @@ class PMF_Rating
                 %sfaqvoting
             WHERE
                 artikel = %d',
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $id);
        $result = $this->_config->getDb()->query($query);
        if ($this->_config->getDb()->numRows($result) > 0) {

@@ -248,7 +248,7 @@ abstract class PMF_Attachment_Abstract
                 %sfaqattachment
             WHERE 
                 id = %d", 
-            SQLPREFIX, 
+            PMF_Db::getTablePrefix(),
             (int)$this->id);
         
         $result = $this->db->query($sql);
@@ -282,7 +282,7 @@ abstract class PMF_Attachment_Abstract
      */
     public function saveMeta()
     {
-        $faqattTableName = sprintf('%sfaqattachment', SQLPREFIX);
+        $faqattTableName = sprintf('%sfaqattachment', PMF_Db::getTablePrefix());
 
         if (null == $this->id) {
             
@@ -327,7 +327,7 @@ abstract class PMF_Attachment_Abstract
                         SET virtual_hash = '%s',
                             mime_type = '%s'
                         WHERE id = %d",
-                        SQLPREFIX,
+                        PMF_Db::getTablePrefix(),
                         $this->virtualHash,
                         $this->readMimeType(),
                         $this->id);
@@ -396,7 +396,7 @@ abstract class PMF_Attachment_Abstract
                         FROM 
                              %sfaqattachment
                         WHERE virtual_hash = '%s'",
-                        SQLPREFIX,
+                        PMF_Db::getTablePrefix(),
                         $this->virtualHash);
         
         $result = $this->db->query($sql);
@@ -418,7 +418,7 @@ abstract class PMF_Attachment_Abstract
         $sql = sprintf("DELETE FROM
                              %sfaqattachment
                         WHERE id = %d",
-                        SQLPREFIX,
+                        PMF_Db::getTablePrefix(),
                         $this->id);
                         
         $this->db->query($sql);

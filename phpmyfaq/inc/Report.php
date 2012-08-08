@@ -99,12 +99,12 @@ class PMF_Report
             ORDER BY
                 fd.id
             ASC",
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix()
         );
 
         $result = $this->_config->getDb()->query($query);

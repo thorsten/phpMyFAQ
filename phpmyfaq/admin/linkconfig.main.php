@@ -175,7 +175,7 @@ showListTypeSelection();
                                 WHERE
                                         type='%s'
                                     AND id=%d",
-                                SQLPREFIX,
+                                PMF_Db::getTablePrefix(),
                                 $faqConfig->getDb()->escape($params['type']),
                                 $posts['id']
                                 );
@@ -193,7 +193,7 @@ showListTypeSelection();
                                             owner = '%s',
                                             dtUpdateDate = '%s'
                                             WHERE id = %d",
-                                        SQLPREFIX,
+                                        PMF_Db::getTablePrefix(),
                                         $faqConfig->getDb()->escape($user->getLogin()),
                                         $faqConfig->getDb()->escape(date('YmdHis')),
                                         $posts['id']
@@ -211,7 +211,7 @@ showListTypeSelection();
                                             locked='n'
                                         WHERE
                                             id=%d",
-                                        SQLPREFIX,
+                                        PMF_Db::getTablePrefix(),
                                         $posts['id']
                                         );
                             $faqConfig->getDb()->query($query);
@@ -230,7 +230,7 @@ showListTypeSelection();
                                             dtUpdateDate = '%s'
                                         WHERE
                                             id=%d",
-                                        SQLPREFIX,
+                                        PMF_Db::getTablePrefix(),
                                         $faqConfig->getDb()->escape($posts['url']),
                                         $faqConfig->getDb()->escape($posts['reason']),
                                         $faqConfig->getDb()->escape($posts['enabled']),
@@ -248,7 +248,7 @@ showListTypeSelection();
                                             %sfaqlinkverifyrules
                                         WHERE
                                             id = %d",
-                                        SQLPREFIX,
+                                        PMF_Db::getTablePrefix(),
                                         $posts['id']
                                         );
                             $faqConfig->getDb()->query($query);
@@ -267,7 +267,7 @@ showListTypeSelection();
                     type = '%s'
                 ORDER BY
                     %s %s",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 $faqConfig->getDb()->escape($params['type']),
                 $params['sortby'],
                 $params['sortorder']

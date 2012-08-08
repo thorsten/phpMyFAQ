@@ -264,7 +264,7 @@ class PMF_User
                 %sfaquser
             WHERE
                 user_id = %d",
-             SQLPREFIX,
+             PMF_Db::getTablePrefix(),
              (int) $userId);
              
         $res = $this->config->getDb()->query($select);
@@ -287,7 +287,7 @@ class PMF_User
                     %sfaquserlogin
                 WHERE
                     login = '%s'",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 $this->login
             );
                 
@@ -324,7 +324,7 @@ class PMF_User
                 %sfaquser
             WHERE
                 login = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->config->getDb()->escape($login)
         );
         
@@ -367,7 +367,7 @@ class PMF_User
                 %sfaquser
             WHERE
                 remember_me = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->config->getDb()->escape($cookie)
         );
 
@@ -412,7 +412,7 @@ class PMF_User
                 %sfaquser
             WHERE 
                 login LIKE '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->config->getDb()->escape($search.'%')
         );
 
@@ -459,7 +459,7 @@ class PMF_User
         
         // set user-ID
         if (0 == $userId) {
-            $this->userId = (int) $this->config->getDb()->nextId(SQLPREFIX.'faquser', 'user_id');
+            $this->userId = (int) $this->config->getDb()->nextId(PMF_Db::getTablePrefix().'faquser', 'user_id');
         } else {
             $this->userId = $userId;
         }
@@ -471,7 +471,7 @@ class PMF_User
             (user_id, login, session_timestamp, member_since)
                 VALUES
             (%d, '%s', %d, '%s')",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->getUserId(),
             $this->config->getDb()->escape($login),
             $_SERVER['REQUEST_TIME'],
@@ -539,7 +539,7 @@ class PMF_User
                 %sfaquser
             WHERE
                 user_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->userId
         );
             
@@ -651,7 +651,7 @@ class PMF_User
                 account_status = '%s'
             WHERE
                 user_id = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->config->getDb()->escape($status),
             $this->userId
         );
@@ -865,7 +865,7 @@ class PMF_User
                 %sfaquser
             %s
             ORDER BY user_id ASC",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             ($withoutAnonymous ? 'WHERE user_id <> -1' : '')
         );
 
@@ -901,7 +901,7 @@ class PMF_User
             %s
             ORDER BY
                login ASC",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             ($withoutAnonymous ? 'WHERE user_id <> -1' : ''));
 
         $res = $this->config->getDb()->query($select);

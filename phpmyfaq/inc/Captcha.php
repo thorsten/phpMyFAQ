@@ -228,7 +228,7 @@ class PMF_Captcha
      */
     public function getCaptchaCode()
     {
-        $query  = sprintf('SELECT id FROM %sfaqcaptcha', SQLPREFIX);
+        $query  = sprintf('SELECT id FROM %sfaqcaptcha', PMF_Db::getTablePrefix());
         $result = $this->_config->getDb()->query($query);
         while ($row = $this->_config->fetchArray($result)) {
             $this->code = $row['id'];
@@ -270,7 +270,7 @@ class PMF_Captcha
                 %sfaqcaptcha
             WHERE
                 id = '%s'",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $this->_config->getDb()->escape($captchaCode));
 
         if ($result = $this->_config->getDb()->query($query)) {
@@ -481,7 +481,7 @@ class PMF_Captcha
                %sfaqcaptcha 
            WHERE 
                id = '%s'",
-           SQLPREFIX,
+           PMF_Db::getTablePrefix(),
            $this->code
         );
         
@@ -498,7 +498,7 @@ class PMF_Captcha
                     (id, useragent, language, ip, captcha_time) 
                         VALUES 
                     ('%s', '%s', '%s', '%s', %d)", 
-                    SQLPREFIX, 
+                    PMF_Db::getTablePrefix(),
                     $this->code, 
                     $this->userAgent, 
                     $this->_config->getLanguage()->getLanguage(),
@@ -524,7 +524,7 @@ class PMF_Captcha
         if ($captchaCode == null) {
             $captchaCode = $this->code;
         }
-        $query = sprintf("DELETE FROM %sfaqcaptcha WHERE id = '%s'", SQLPREFIX, $captchaCode);
+        $query = sprintf("DELETE FROM %sfaqcaptcha WHERE id = '%s'", PMF_Db::getTablePrefix(), $captchaCode);
         $this->_config->getDb()->query($query);
     }
 
@@ -547,7 +547,7 @@ class PMF_Captcha
                 %sfaqcaptcha 
             WHERE 
                 captcha_time < %d", 
-            SQLPREFIX, 
+            PMF_Db::getTablePrefix(),
             $_SERVER['REQUEST_TIME'] - $time);
             
         $this->_config->getDb()->query($delete);

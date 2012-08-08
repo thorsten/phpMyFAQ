@@ -99,7 +99,7 @@ class PMF_Session
 
             if (0 == $bots && false == $banned) {
                 if (!isset($sid)) {
-                    $sid = $this->_config->getDb()->nextId(SQLPREFIX . 'faqsessions', 'sid');
+                    $sid = $this->_config->getDb()->nextId(PMF_Db::getTablePrefix() . 'faqsessions', 'sid');
                     // Sanity check: force the session cookie to contains the current $sid
                     if (!is_null($sidc) && (!$sidc != $sid)) {
                         self::setCookie(self::PMF_COOKIE_NAME_SESSIONID, $sid);
@@ -111,7 +111,7 @@ class PMF_Session
                         (sid, user_id, ip, time)
                             VALUES
                         (%d, %d, '%s', %d)",
-                        SQLPREFIX,
+                        PMF_Db::getTablePrefix(),
                         $sid,
                         ($user ? $user->getUserId() : -1),
                         $_SERVER['REMOTE_ADDR'],
@@ -152,7 +152,7 @@ class PMF_Session
                 %sfaqsessions
             WHERE
                 sid = %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $sid);
 
         $result = $this->_config->getDb()->query($query);
@@ -188,7 +188,7 @@ class PMF_Session
                 time < %d
             ORDER BY
                 time",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $firstHour,
             $lastHour);
 
@@ -216,7 +216,7 @@ class PMF_Session
                 sid
             FROM
                 %sfaqsessions",
-            SQLPREFIX);
+            PMF_Db::getTablePrefix());
 
         $result = $this->_config->getDb()->query($query);
         if ($result) {
@@ -243,7 +243,7 @@ class PMF_Session
                 time >= %d
             AND
                 time <= %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $first,
             $last);
 
@@ -275,7 +275,7 @@ class PMF_Session
                 ip = '%s'
             AND
                 time > %d",
-            SQLPREFIX,
+            PMF_Db::getTablePrefix(),
             $sessionId,
             $ip,
             $_SERVER['REQUEST_TIME'] - 86400
@@ -297,7 +297,7 @@ class PMF_Session
                 WHERE
                     sid = %d
                     AND ip = '%s'",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 $_SERVER['REQUEST_TIME'],
                 ($user ? $user->getUserId() : '-1'),
                 $sessionId,
@@ -333,7 +333,7 @@ class PMF_Session
                     user_id = -1
                 AND 
                     time > %d",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 $timeNow);
             $result = $this->_config->getDb()->query($query);
             
@@ -350,7 +350,7 @@ class PMF_Session
                     %sfaquser
                 WHERE
                     session_timestamp > %d",
-                SQLPREFIX,
+                PMF_Db::getTablePrefix(),
                 $timeNow);
             $result = $this->_config->getDb()->query($query);
             
