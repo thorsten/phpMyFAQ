@@ -8,7 +8,8 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 Version 2.7.8 - 2012-08-
 - updared Arabic translation
 - updated Spanish translation (Lisandro López Villatoro)
--
+- improved LDAP handling (Thorsten)
+- fixed some bugs (Thorsten)
 
 Version 2.7.7 - 2012-07-01
 - added Bosnian translation (Alen Durmo)
