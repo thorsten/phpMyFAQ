@@ -340,7 +340,8 @@ class PMF_User
             WHERE
                 login = '%s'",
             SQLPREFIX,
-            $this->db->escape_string($login));
+            $this->db->escape_string($login)
+        );
         
         $res = $this->db->query($select);
         if ($this->db->num_rows($res) !== 1) {
@@ -412,7 +413,7 @@ class PMF_User
         }
         
         // is $login valid?
-        $login = (string) $login;
+        $login = (string)$login;
         if (!$this->isValidLogin($login)) {
             return false;
         }

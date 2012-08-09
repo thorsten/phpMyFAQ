@@ -89,21 +89,28 @@ class PMF_Auth_AuthLdap extends PMF_Auth implements PMF_Auth_AuthDriver
 
     /**
      * Adds a new user account to the authentication table.
-     *
      * Returns true on success, otherwise false.
      *
-     * @param  string $login Loginname
+     * @param  string $login Login name
      * @param  string $pass  Password
+     *
      * @return boolean
      */
     public function add($login, $pass)
     {
-        $user   = new PMF_User();
+        $user = new PMF_User();
+        $user->setLoginMinLength(2); // LDAP user names can be very short!
+
         $result = $user->createUser($login, null);
         
         // Update user information from LDAP
-        $user->setUserData(array('display_name' => $this->ldap->getCompleteName($login),
-                                 'email'        => $this->ldap->getMail($login)));
+        $user->setUserData(
+            array(
+                'display_name' => $this->ldap->getCompleteName($login),
+                'email'        => $this->ldap->getMail($login)
+            )
+        );
+
         return $result;
     }
 
