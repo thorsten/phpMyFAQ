@@ -183,31 +183,30 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
         $revisions = $faq->getRevisionIds($faqData['id'], $faqData['lang']);
         if (count($revisions)) {
 ?>
-
-        <form id="selectRevision" name="selectRevision" method="post"
-              action="?action=editentry&amp;id=<?php echo $faqData['id'] ?>&amp;lang=<?php echo $faqData['lang'] ?>">
-        <fieldset>
-            <legend><?php echo $PMF_LANG['ad_changerev']; ?></legend>
-            <p>
-                <select name="revisionid_selected" onchange="selectRevision.submit();">
-                    <option value="<?php echo $faqData['revision_id']; ?>">
-                        <?php echo $PMF_LANG['ad_changerev']; ?>
-                    </option>
-<?php foreach ($revisions as $revisionId => $revisionData) { ?>
-                    <option value="<?php echo $revisionData['revision_id']; ?>" <?php if ($selectedRevisionId == $revisionData['revision_id']) { echo 'selected="selected"'; } ?> >
-                        <?php printf(
-                            '%s 1.%d: %s - %s',
-                            $PMF_LANG['ad_entry_revision'],
-                            $revisionData['revision_id'],
-                            PMF_Date::createIsoDate($revisionData['datum']),
-                            $revisionData['author']
-                        ); ?>
-                    </option>
-<?php } ?>
-                </select>
-            </p>
-        </fieldset>
-        </form>
+            <form id="selectRevision" name="selectRevision" method="post"
+                  action="?action=editentry&amp;id=<?php echo $faqData['id'] ?>&amp;lang=<?php echo $faqData['lang'] ?>">
+            <fieldset>
+                <legend><?php echo $PMF_LANG['ad_changerev']; ?></legend>
+                <p>
+                    <select name="revisionid_selected" onchange="selectRevision.submit();">
+                        <option value="<?php echo $faqData['revision_id']; ?>">
+                            <?php echo $PMF_LANG['ad_changerev']; ?>
+                        </option>
+    <?php foreach ($revisions as $revisionId => $revisionData) { ?>
+                        <option value="<?php echo $revisionData['revision_id']; ?>" <?php if ($selectedRevisionId == $revisionData['revision_id']) { echo 'selected="selected"'; } ?> >
+                            <?php printf(
+                                '%s 1.%d: %s - %s',
+                                $PMF_LANG['ad_entry_revision'],
+                                $revisionData['revision_id'],
+                                PMF_Date::createIsoDate($revisionData['datum']),
+                                $revisionData['author']
+                            ); ?>
+                        </option>
+    <?php } ?>
+                    </select>
+                </p>
+            </fieldset>
+            </form>
 <?php
         }
 
@@ -227,7 +226,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
             <input type="hidden" name="record_id" id="record_id" value="<?php echo $faqData['id']; ?>" />
             <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession(); ?>" />
             <input type="hidden" name="openQuestionID" id="openQuestionID" value="<?php echo $questionId; ?>"  />
-            <input type="hidden" name="notifiyUser" id="notifiyUser" value="<?php echo $notifyUser ?>" />
+            <input type="hidden" name="notifyUser" id="notifyUser" value="<?php echo $notifyUser ?>" />
 
             <div class="span9">
                 <!-- Question and answer -->
