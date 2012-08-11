@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Glossary
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2011 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-15
@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Glossary
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-15
@@ -69,10 +69,10 @@ class PMF_Glossary
     private $definition = '';
 
     /**
-    * Constructor
-    *
-    * @return void
-    */
+     * Constructor
+     *
+     * @return PMF_Glossary
+     */
     public function __construct()
     {
         $this->db       = PMF_Db::getInstance();
@@ -80,10 +80,10 @@ class PMF_Glossary
     }
 
     /**
-    * Gets all items and definitions from the database
-    *
-    * @return array
-    */
+     * Gets all items and definitions from the database
+     *
+     * @return array
+     */
     public function getAllGlossaryItems()
     {
         $items = array();
@@ -96,7 +96,8 @@ class PMF_Glossary
             WHERE
                 lang = '%s'",
             SQLPREFIX,
-            $this->language);
+            $this->language
+        );
             
         $result = $this->db->query($query);
         
@@ -104,7 +105,8 @@ class PMF_Glossary
             $items[] = array(
                 'id'         => $row->id,
                 'item'       => stripslashes($row->item),
-                'definition' => stripslashes($row->definition));
+                'definition' => stripslashes($row->definition)
+            );
         }
         return $items;
     }
@@ -125,7 +127,8 @@ class PMF_Glossary
             'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name',
             'face', 'size', 'dir', 'onclick', 'ondblclick', 'onmousedown',
             'onmouseup', 'onmouseover', 'onmousemove', 'onmouseout',
-            'onkeypress', 'onkeydown', 'onkeyup');
+            'onkeypress', 'onkeydown', 'onkeyup'
+        );
 
         foreach ($this->getAllGlossaryItems() as $item) {
             $this->definition = $item['definition'];
@@ -144,7 +147,8 @@ class PMF_Glossary
                 .'(\W+)('.$item['item'].')$'
                 .'/mis',
                 array($this, 'setAbbreviations'),
-                $content); 
+                $content
+            );
         }
 
         return $content;
@@ -176,11 +180,13 @@ class PMF_Glossary
         }
         
         if (!empty($item)) {
-            return sprintf('%s<abbr class="glossary" title="%s">%s</abbr>%s',
+            return sprintf(
+                '%s<abbr class="glossary" title="%s">%s</abbr>%s',
                 $prefix,
                 $this->definition,
                 $item,
-                $postfix);
+                $postfix
+            );
         }
         
         // Fallback: the original matched string
@@ -206,7 +212,8 @@ class PMF_Glossary
                 id = %d AND lang = '%s'",
             SQLPREFIX,
             (int)$id,
-            $this->language);
+            $this->language
+        );
             
         $result = $result = $this->db->query($query);
            
@@ -214,7 +221,8 @@ class PMF_Glossary
             $item = array(
                 'id'         => $row->id,
                 'item'       => stripslashes($row->item),
-                'definition' => stripslashes($row->definition));
+                'definition' => stripslashes($row->definition)
+            );
         }
         return $item;
     }
@@ -241,7 +249,8 @@ class PMF_Glossary
             $this->db->nextID(SQLPREFIX.'faqglossary', 'id'),
             $this->language,
             $this->db->escape_string($this->item),
-            $this->db->escape_string($this->definition));
+            $this->db->escape_string($this->definition)
+        );
 
         if ($this->db->query($query)) {
             return true;
@@ -274,7 +283,8 @@ class PMF_Glossary
             $this->db->escape_string($this->item),
             $this->db->escape_string($this->definition),
             (int)$id,
-            $this->language);
+            $this->language
+        );
 
         if ($this->db->query($query)) {
             return true;
@@ -297,7 +307,8 @@ class PMF_Glossary
                 id = %d AND lang = '%s'",
             SQLPREFIX,
             (int)$id,
-            $this->language);
+            $this->language
+        );
 
         if ($this->db->query($query)) {
             return true;
