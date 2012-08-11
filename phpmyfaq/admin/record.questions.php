@@ -27,8 +27,8 @@ printf("<header><h2>%s</h2></header>", $PMF_LANG['msgOpenQuestions']);
 if ($permission['delquestion']) {
 
     $category = new PMF_Category($faqConfig, false);
-    $category->setUser($current_admin_user);
-    $category->setGroups($current_admin_groups);
+    $category->setUser($currentAdminUser);
+    $category->setGroups($currentAdminGroups);
     $date       = new PMF_Date($faqConfig);
     $questionId = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     

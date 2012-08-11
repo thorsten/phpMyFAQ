@@ -36,8 +36,8 @@ if (!PMF_Db::checkOnEmptyTable('faqdata')) {
 
     if (!PMF_Db::checkOnEmptyTable('faqcategories')) {
         $category = new PMF_Category($faqConfig);
-        $category->setUser($current_admin_user);
-        $category->setGroups($current_admin_groups);
+        $category->setUser($currentAdminUser);
+        $category->setGroups($currentAdminGroups);
         $category->buildTree();
 
         $categoryHelper = new PMF_Helper_Category();

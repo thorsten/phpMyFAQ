@@ -25,29 +25,29 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $do = PMF_Filter::filterInput(INPUT_GET, 'do', FILTER_SANITIZE_STRING);
 
 if ('insertentry' == $do && ($permission['editbt']|| $permission['addbt']) ||
-	'saveentry' == $do && $permission['editbt']) {
+    'saveentry' == $do && $permission['editbt']) {
 
-	$user     = PMF_User_CurrentUser::getFromSession($faqConfig);
+    $user     = PMF_User_CurrentUser::getFromSession($faqConfig);
 
-	$dateStart     = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
-	$dateEnd       = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
-	$question      = PMF_Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRING);
-	$categories    = PMF_Filter::filterInputArray(INPUT_POST, array('rubrik' => array('filter' => FILTER_VALIDATE_INT,
-																					  'flags'  => FILTER_REQUIRE_ARRAY)));
-	$record_lang   = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-	$tags          = PMF_Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
-	$active        = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
-	$sticky        = PMF_Filter::filterInput(INPUT_POST, 'sticky', FILTER_SANITIZE_STRING);
-	$content       = PMF_Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
-	$keywords      = PMF_Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRING);
-	$author        = PMF_Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_STRING);
-	$email         = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-	$comment       = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
-	$record_id     = PMF_Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
-	$solution_id   = PMF_Filter::filterInput(INPUT_POST, 'solution_id', FILTER_VALIDATE_INT);
-	$revision_id   = PMF_Filter::filterInput(INPUT_POST, 'revision_id', FILTER_VALIDATE_INT);
-	$changed       = PMF_Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
-	
+    $dateStart     = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
+    $dateEnd       = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
+    $question      = PMF_Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRING);
+    $categories    = PMF_Filter::filterInputArray(INPUT_POST, array('rubrik' => array('filter' => FILTER_VALIDATE_INT,
+                                                                                      'flags'  => FILTER_REQUIRE_ARRAY)));
+    $record_lang   = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
+    $tags          = PMF_Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
+    $active        = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
+    $sticky        = PMF_Filter::filterInput(INPUT_POST, 'sticky', FILTER_SANITIZE_STRING);
+    $content       = PMF_Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
+    $keywords      = PMF_Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRING);
+    $author        = PMF_Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_STRING);
+    $email         = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+    $comment       = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
+    $record_id     = PMF_Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
+    $solution_id   = PMF_Filter::filterInput(INPUT_POST, 'solution_id', FILTER_VALIDATE_INT);
+    $revision_id   = PMF_Filter::filterInput(INPUT_POST, 'revision_id', FILTER_VALIDATE_INT);
+    $changed       = PMF_Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
+
     $user_permission   = PMF_Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING);
     $restricted_users  = ('all' == $user_permission) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT);
     $group_permission  = PMF_Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING);
@@ -59,13 +59,13 @@ if ('insertentry' == $do && ($permission['editbt']|| $permission['addbt']) ||
 
         $tagging  = new PMF_Tags($faqConfig);
 
-		$category = new PMF_Category($faqConfig, false);
-		$category->setUser($current_admin_user);
-		$category->setGroups($current_admin_groups);
+        $category = new PMF_Category($faqConfig, false);
+        $category->setUser($currentAdminUser);
+        $category->setGroups($currentAdminGroups);
 
-		if (!isset($categories['rubrik'])) {
-			$categories['rubrik'] = array();
-		}
+        if (!isset($categories['rubrik'])) {
+            $categories['rubrik'] = array();
+        }
 
         $recordData = array(
             'id'            => $record_id,
@@ -83,78 +83,79 @@ if ('insertentry' == $do && ($permission['editbt']|| $permission['addbt']) ||
             'dateStart'     => (empty($dateStart) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000'),
             'dateEnd'       => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959'),
             'linkState'     => '',
-            'linkDateCheck' => 0);
+            'linkDateCheck' => 0
+        );
 
-		if ('saveentry' == $do || $record_id) {
-			/* Create a revision anyway, it's autosaving */
-			$faq->addNewRevision($record_id, $record_lang);
-			$revision_id++;
+        if ('saveentry' == $do || $record_id) {
+            /* Create a revision anyway, it's autosaving */
+            $faq->addNewRevision($record_id, $record_lang);
+            $revision_id++;
 
-			$faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $record_lang, $revision_id);
+            $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $record_lang, $revision_id);
 
-			$visits = new PMF_Visits($faqConfig);
-			$visits->add($record_id);
+            $visits = new PMF_Visits($faqConfig);
+            $visits->add($record_id);
 
-			if ($faq->isAlreadyTranslated($record_id, $record_lang)) {
-				$faq->updateRecord($recordData);
-			} else {
-				$record_id = $faq->addRecord($recordData, false);
-			}
+            if ($faq->isAlreadyTranslated($record_id, $record_lang)) {
+                $faq->updateRecord($recordData);
+            } else {
+                $record_id = $faq->addRecord($recordData, false);
+            }
 
-			$faq->deleteCategoryRelations($record_id, $record_lang);
-			$faq->addCategoryRelations($categories['rubrik'], $record_id, $record_lang);
+            $faq->deleteCategoryRelations($record_id, $record_lang);
+            $faq->addCategoryRelations($categories['rubrik'], $record_id, $record_lang);
 
 
-			if ($tags != '') {
-				$tagging->saveTags($record_id, explode(',', $tags));
-			} else {
-				$tagging->deleteTagsFromRecordId($record_id);
-			}
+            if ($tags != '') {
+                $tagging->saveTags($record_id, explode(',', $tags));
+            } else {
+                $tagging->deleteTagsFromRecordId($record_id);
+            }
 
-			$faq->deletePermission('user', $record_id);
-			$faq->addPermission('user', $record_id, $restricted_users);
-			$category->deletePermission('user', $categories['rubrik']);
-			$category->addPermission('user', $categories['rubrik'], $restricted_users);
-			if ($faqConfig->get('security.permLevel') != 'basic') {
-				$faq->deletePermission('group', $record_id);
-				$faq->addPermission('group', $record_id, $restricted_groups);
-				$category->deletePermission('group', $categories['rubrik']);
-				$category->addPermission('group', $categories['rubrik'], $restricted_groups);
-			}
-		} else if ('insertentry' == $do) {
-			unset($recordData['id']);
-			unset($recordData['revision_id']);
-			$revision_id = 1;
-			$record_id = $faq->addRecord($recordData);
-			if ($record_id) {
-				$faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $recordData['lang']);
-				$visits = new PMF_Visits($faqConfig);
-				$visits->add($record_id);
+            $faq->deletePermission('user', $record_id);
+            $faq->addPermission('user', $record_id, $restricted_users);
+            $category->deletePermission('user', $categories['rubrik']);
+            $category->addPermission('user', $categories['rubrik'], $restricted_users);
+            if ($faqConfig->get('security.permLevel') != 'basic') {
+                $faq->deletePermission('group', $record_id);
+                $faq->addPermission('group', $record_id, $restricted_groups);
+                $category->deletePermission('group', $categories['rubrik']);
+                $category->addPermission('group', $categories['rubrik'], $restricted_groups);
+            }
+        } else if ('insertentry' == $do) {
+            unset($recordData['id']);
+            unset($recordData['revision_id']);
+            $revision_id = 1;
+            $record_id = $faq->addRecord($recordData);
+            if ($record_id) {
+                $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $recordData['lang']);
+                $visits = new PMF_Visits($faqConfig);
+                $visits->add($record_id);
 
-				$faq->addCategoryRelations($categories['rubrik'], $record_id, $recordData['lang']);
+                $faq->addCategoryRelations($categories['rubrik'], $record_id, $recordData['lang']);
 
-				if ($tags != '') {
-					$tagging->saveTags($record_id, explode(',',$tags));
-				}
+                if ($tags != '') {
+                    $tagging->saveTags($record_id, explode(',',$tags));
+                }
 
-				$faq->addPermission('user', $record_id, $restricted_users);
-				$category->addPermission('user', $categories['rubrik'], $restricted_users);
+                $faq->addPermission('user', $record_id, $restricted_users);
+                $category->addPermission('user', $categories['rubrik'], $restricted_users);
 
-				if ($faqConfig->get('security.permLevel') != 'basic') {
-					$faq->addPermission('group', $record_id, $restricted_groups);
-					$category->addPermission('group', $categories['rubrik'], $restricted_groups);
-				}
-			}
-		}
+                if ($faqConfig->get('security.permLevel') != 'basic') {
+                    $faq->addPermission('group', $record_id, $restricted_groups);
+                    $category->addPermission('group', $categories['rubrik'], $restricted_groups);
+                }
+            }
+        }
 
-		$out = array(
-			'msg' => sprintf("Item autosaved at revision %d", $revision_id),
-			'revision_id' => $revision_id,
-			'record_id' => $record_id,
-		);
+        $out = array(
+            'msg' => sprintf("Item autosaved at revision %d", $revision_id),
+            'revision_id' => $revision_id,
+            'record_id' => $record_id,
+        );
 
-		print json_encode($out);
-	}
+        print json_encode($out);
+    }
 
 } else {
     print json_encode(array("msg" => "Unsuficcient article rights"));

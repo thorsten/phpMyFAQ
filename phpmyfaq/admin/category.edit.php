@@ -26,8 +26,8 @@ if ($permission['editcateg']) {
 
     $id       = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
     $category = new PMF_Category($faqConfig, false);
-    $category->setUser($current_admin_user);
-    $category->setGroups($current_admin_groups);
+    $category->setUser($currentAdminUser);
+    $category->setGroups($currentAdminGroups);
     $categories      = $category->getAllCategories();
     $user_permission = $category->getPermissions('user', array($id));
 

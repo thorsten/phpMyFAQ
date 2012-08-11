@@ -179,8 +179,8 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             } else {
                 // Move the categories ownership to admin (id == 1)
                 $oCat = new PMF_Category($faqConfig, false);
-                $oCat->setUser($current_admin_user);
-                $oCat->setGroups($current_admin_groups);
+                $oCat->setUser($currentAdminUser);
+                $oCat->setGroups($currentAdminGroups);
                 $oCat->moveOwnership($userId, 1);
 
                 // Remove the user from groups

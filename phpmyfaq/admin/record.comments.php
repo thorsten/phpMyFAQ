@@ -30,8 +30,8 @@ if ($permission['delcomment']) {
 
     $comment  = new PMF_Comment($faqConfig);
     $category = new PMF_Category($faqConfig, false);
-    $category->setUser($current_admin_user);
-    $category->setGroups($current_admin_groups);
+    $category->setUser($currentAdminUser);
+    $category->setGroups($currentAdminGroups);
     $faq      = new PMF_Faq($faqConfig);
     $date     = new PMF_Date($faqConfig);
     

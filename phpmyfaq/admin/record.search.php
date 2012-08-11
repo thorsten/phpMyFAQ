@@ -31,8 +31,8 @@ if ($permission['editbt'] || $permission['delbt']) {
 
     // (re)evaluate the Category object w/o passing the user language
     $category = new PMF_Category($faqConfig, false);
-    $category->setUser($current_admin_user);
-    $category->setGroups($current_admin_groups);
+    $category->setUser($currentAdminUser);
+    $category->setGroups($currentAdminGroups);
     $category->transform(0);
 
     // Set the Category for the helper class

@@ -30,8 +30,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 if ($permission['editcateg']) {
 
     $category = new PMF_Category($faqConfig, false);
-    $category->setUser($current_admin_user);
-    $category->setGroups($current_admin_groups);
+    $category->setUser($currentAdminUser);
+    $category->setGroups($currentAdminGroups);
     $currentLink     = $_SERVER['SCRIPT_NAME'];
     $currentLanguage = $languageCodes[strtoupper($LANGCODE)];
     $all_languages   = array();

@@ -31,8 +31,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <?php
 if ($permission['delcateg']) {
     $category = new PMF_Category($faqConfig, false);
-    $category->setUser($current_admin_user);
-    $category->setGroups($current_admin_groups);
+    $category->setUser($currentAdminUser);
+    $category->setGroups($currentAdminGroups);
     $categories = $category->getAllCategories();
     $id         = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
     ?>

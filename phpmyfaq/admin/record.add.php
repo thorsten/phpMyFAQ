@@ -65,8 +65,8 @@ if ($permission['editbt']|| $permission['addbt']) {
         printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 
         $category = new PMF_Category($faqConfig, false);
-        $category->setUser($current_admin_user);
-        $category->setGroups($current_admin_groups);
+        $category->setUser($currentAdminUser);
+        $category->setGroups($currentAdminGroups);
         $tagging  = new PMF_Tags($faqConfig);
 
         $recordData     = array(

@@ -191,14 +191,14 @@ if ($action == 'logout' && $auth) {
 // Get current admin user and group id - default: -1
 //
 if (isset($user) && is_object($user)) {
-    $current_admin_user = $user->getUserId();
+    $currentAdminUser = $user->getUserId();
     if ($user->perm instanceof PMF_Perm_PermMedium) {
-        $current_admin_groups = $user->perm->getUserGroups($current_admin_user);
+        $currentAdminGroups = $user->perm->getUserGroups($currentAdminUser);
     } else {
-        $current_admin_groups = array(-1);
+        $currentAdminGroups = array(-1);
     }
-    if (0 == count($current_admin_groups)) {
-        $current_admin_groups = array(-1);
+    if (0 == count($currentAdminGroups)) {
+        $currentAdminGroups = array(-1);
     }
 }
 
