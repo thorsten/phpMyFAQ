@@ -108,6 +108,7 @@ class PMF_Glossary
                 'definition' => stripslashes($row->definition)
             );
         }
+        
         return $items;
     }
 
@@ -215,7 +216,7 @@ class PMF_Glossary
             $this->language
         );
             
-        $result = $result = $this->db->query($query);
+        $result = $this->db->query($query);
            
         while ($row = $this->db->fetch_object($result)) {
             $item = array(
