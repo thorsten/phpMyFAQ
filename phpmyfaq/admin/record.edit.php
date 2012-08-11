@@ -320,7 +320,10 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                                    value="<?php if (isset($tags)) { echo PMF_String::htmlspecialchars($tags); } ?>" />
                             <img style="display: none; margin-bottom: -5px;" id="tags_autocomplete_wait" src="images/indicator.gif" alt="waiting..." />
                             <script type="text/javascript">
-                                $('#tags').autocomplete("index.php?action=ajax&ajax=tags_list", { width: 260, selectFirst: false, multiple: true } );
+                                $('#tags').autocomplete(
+                                    "index.php?action=ajax&ajax=tags_list",
+                                    { width: 260, selectFirst: false, multiple: true }
+                                );
                             </script>
                             <span id="tagsHelp" style="display: none;"><?php echo $PMF_LANG['msgShowHelp']; ?></span>
                         </div>
