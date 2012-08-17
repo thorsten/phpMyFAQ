@@ -183,7 +183,8 @@ class PMF_User_CurrentUser extends PMF_User
                     user_id = %d",
                 SQLPREFIX,
                 $this->db->escape_string($name),
-                $this->getUserId());
+                $this->getUserId()
+            );
             $res = $this->db->query($update);
             if (!$res) {
                 return false;
@@ -385,6 +386,9 @@ class PMF_User_CurrentUser extends PMF_User
             $this->errors[] = $this->db->error();
             return false;
         }
+        
+        session_destroy();
+        
         return true;
     }
 

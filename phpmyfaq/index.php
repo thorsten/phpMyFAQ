@@ -81,9 +81,11 @@ PMF_String::init($LANGCODE);
 /**
  * Initialize attachment factory
  */
-PMF_Attachment_Factory::init($faqconfig->get('records.attachmentsStorageType'),
-                             $faqconfig->get('records.defaultAttachmentEncKey'),
-                             $faqconfig->get('records.enableAttachmentEncryption'));
+PMF_Attachment_Factory::init(
+    $faqconfig->get('records.attachmentsStorageType'),
+    $faqconfig->get('records.defaultAttachmentEncKey'),
+    $faqconfig->get('records.enableAttachmentEncryption')
+);
 
 //
 // Get user action
@@ -123,6 +125,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
             $loginVisibility = '';
             $user            = null;
             $action          = 'main';
+            session_destroy();
         }
     } else {
         // error
@@ -130,6 +133,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
         $loginVisibility = '';
         $user            = null;
         $action          = 'main';
+        session_destroy();
     }
 
 } else {
@@ -139,6 +143,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
         $auth = true;
     } else {
         $user = null;
+        session_destroy();
     }
 }
 
