@@ -54,11 +54,11 @@ session_start();
 $Language = new PMF_Language();
 $LANGCODE = $Language->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
 // Preload English strings
-require_once (PMF_ROOT_DIR.'/lang/language_en.php');
+require_once PMF_ROOT_DIR . '/lang/language_en.php';
 
 if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
     // Overwrite English strings with the ones we have in the current language
-    if (! file_exists(PMF_ROOT_DIR . 'lang/language_' . $LANGCODE . '.php')) {
+    if (! file_exists(PMF_ROOT_DIR . '/lang/language_' . $LANGCODE . '.php')) {
         $LANGCODE = 'en';
     }
     require_once PMF_ROOT_DIR . '/lang/language_' . $LANGCODE . '.php';
@@ -79,9 +79,11 @@ PMF_Template::setTplSetName($faqconfig->get('main.templateSet'));
 /**
  * Initialize attachment factory
  */
-PMF_Attachment_Factory::init($faqconfig->get('records.attachmentsStorageType'),
-                             $faqconfig->get('records.defaultAttachmentEncKey'),
-                             $faqconfig->get('records.enableAttachmentEncryption'));
+PMF_Attachment_Factory::init(
+    $faqconfig->get('records.attachmentsStorageType'),
+    $faqconfig->get('records.defaultAttachmentEncKey'),
+    $faqconfig->get('records.enableAttachmentEncryption')
+);
 
 //
 // Create a new FAQ object
