@@ -2,7 +2,7 @@
 /**
  * The rest/json application interface
  * 
- * PHP Version 5.2.0
+ * PHP Version 5.2
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -17,7 +17,7 @@
  * @category  phpMyFAQ 
  * @package   PMF_Service
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2011 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-03
@@ -100,6 +100,10 @@ switch ($action) {
         $faq = new PMF_Faq($current_user, $current_groups);
         $faq->getRecord($recordId);
         $result = $faq->faqRecord;
+        break;
+
+    default:
+        $result = 'I am completely operational, and all my circuits are functioning perfectly.';
         break;
 }
 
