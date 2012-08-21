@@ -661,7 +661,7 @@ if ('artikel' == $action || 'show' == $action || is_numeric($solutionId)) {
     $faqServices->setCategoryId($cat);
     $faqServices->setFaqId($id);
     $faqServices->setLanguage($lang);
-    $faqServices->setQuestion($title);
+    $faqServices->setQuestion($faq->getRecordTitle($id));
 
     $faqHelper = PMF_Helper_Faq::getInstance();
     $faqHelper->setSsl((isset($_SERVER['HTTPS']) && is_null($_SERVER['HTTPS']) ? false : true));

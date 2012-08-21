@@ -123,16 +123,17 @@ class PMF_Services
      */
     public function getShareOnTwitterLink()
     {
-        $url = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s',
+        $url = sprintf('%s?cat=%s&id=%d&lang=%s',
             PMF_Link::getSystemUri(),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()
         );
 
-        return sprintf('http://twitter.com/share?url=%s&amp;text=%s',
+        return sprintf(
+            'http://twitter.com/share?url=%s&text=%s',
             urlencode($url),
-            $this->getQuestion()
+            $this->getQuestion() . urlencode(' | ' . $url)
         );
     }
 
@@ -258,6 +259,6 @@ class PMF_Services
      */
     public function getQuestion()
     {
-        return urlencode($this->question);
+        return urlencode(trim($this->question));
     }
 }
