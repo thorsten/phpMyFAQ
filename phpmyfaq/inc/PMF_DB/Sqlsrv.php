@@ -258,7 +258,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
         $errors = sqlsrv_errors();
 
         if (null !== $errors) {
-            return $errors['SQLSTATE'] . ': ' . $errors['message'];
+            return $errors[0]['SQLSTATE'] . ': ' . $errors[0]['message'];
         } else {
             return null;
         }
