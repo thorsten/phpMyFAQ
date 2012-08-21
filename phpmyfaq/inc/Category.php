@@ -314,6 +314,9 @@ class PMF_Category
         if ($x != 0) {
             foreach ($tt as $d) {
                 $tmp = array();
+                if (! isset($this->categories[$d])) {
+                    continue;
+                }
                 foreach ($this->categories[$d] as $key => $value) {
                     $tmp[$key] = $value;
                 }
