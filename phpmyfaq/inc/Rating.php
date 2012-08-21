@@ -104,7 +104,7 @@ class PMF_Rating
     {
         $ratings = array();
 
-        switch($this->type) {
+        switch ($this->type) {
             case 'mssql':
             case 'sqlsrv':
                 // In order to remove this MS SQL 2000/2005 "limit" below:
