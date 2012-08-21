@@ -106,11 +106,13 @@ class PMF_Rating
 
         switch($this->type) {
             case 'mssql':
-            // In order to remove this MS SQL 2000/2005 "limit" below:
-            //   The text, ntext, and image data types cannot be compared or sorted, except when using IS NULL or LIKE operator.
-            // we'll cast faqdata.thema datatype from text to char(2000)
-            // Note: the char length is simply an heuristic value
-            // Doing so we'll also need to trim $row->thema to remove blank chars when it is shorter than 2000 chars
+            case 'sqlsrv':
+                // In order to remove this MS SQL 2000/2005 "limit" below:
+                //  The text, ntext, and image data types cannot be compared or sorted, except when using IS NULL or
+                //  LIKE operator.
+                // we'll cast faqdata.thema datatype from text to char(2000)
+                // Note: the char length is simply an heuristic value
+                // Doing so we'll also need to trim $row->thema to remove blank chars when it is shorter than 2000 chars
                 $query = sprintf("
                     SELECT
                         fd.id AS id,
@@ -142,7 +144,8 @@ class PMF_Rating
                         fcr.category_id",
                     SQLPREFIX,
                     SQLPREFIX,
-                    SQLPREFIX);
+                    SQLPREFIX
+                );
                 break;
 
              default:
@@ -177,19 +180,21 @@ class PMF_Rating
                         fcr.category_id",
                     SQLPREFIX,
                     SQLPREFIX,
-                    SQLPREFIX);
+                    SQLPREFIX
+                );
                 break;
         }
 
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_object($result)) {
-        	$ratings[] = array(
-        	   'id'          => $row->id,
-        	   'lang'        => $row->lang,
-        	   'category_id' => $row->category_id,
-        	   'question'    => $row->question,
-        	   'num'         => $row->num,
-        	   'usr'         => $row->usr);
+            $ratings[] = array(
+               'id'          => $row->id,
+               'lang'        => $row->lang,
+               'category_id' => $row->category_id,
+               'question'    => $row->question,
+               'num'         => $row->num,
+               'usr'         => $row->usr
+            );
         }
 
         return $ratings;
