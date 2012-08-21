@@ -107,7 +107,7 @@ PRIMARY KEY (id))";
 $query[] = "CREATE TABLE ".$sqltblpre."faqcategories (
 id integer NOT NULL,
 lang varchar(5) NOT NULL,
-parent_id SMALLINT NOT NULL,
+parent_id INTEGER NOT NULL,
 name varchar(255) NOT NULL,
 description varchar(255) DEFAULT NULL,
 user_id integer NOT NULL,
