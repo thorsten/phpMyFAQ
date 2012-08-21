@@ -259,7 +259,7 @@ if ($permission['editcateg']) {
                 print '</li>';
             }
             print '</ul></li>';
-        } elseif ($level == $open && $y != 0) {
+        } elseif ($level == $open) {
             print '</li>';
         }
 
