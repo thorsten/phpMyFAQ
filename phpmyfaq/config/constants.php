@@ -101,13 +101,6 @@ define("PMF_RSS_USE_SEO", true);
 define("PMF_SITEMAP_GOOGLE_USE_SEO", true);
 
 /**
- * This is the flag with which Yahoo sitemap will be forced to use the current PMF SEO URL schema
- *
- * @var const   true
- */
-define("PMF_SITEMAP_YAHOO_USE_SEO", true);
-
-/**
  * This is the flag with which the Tags Cloud list is limited to
  *
  * @var const   50
