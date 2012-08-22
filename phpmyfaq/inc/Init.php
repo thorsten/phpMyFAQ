@@ -24,7 +24,7 @@
  * @author    Stefan Esser <sesser@php.net>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Christian Stocker <chregu@bitflux.ch>
- * @copyright 2005-2011 phpMyFAQ Team
+ * @copyright 2005-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-24
@@ -35,7 +35,7 @@
 // - false      debug mode disabled
 // - true       debug mode enabled
 //
-define('DEBUG', true);
+define('DEBUG', false);
 if (DEBUG) {
     error_reporting(E_ALL & E_STRICT);
     ini_set('display_errors', 1);
