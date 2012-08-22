@@ -25,7 +25,7 @@
  * @since     2002-01-10
  */
 
-define('NEWVERSION', '2.7.8');
+define('NEWVERSION', '2.7.9');
 define('APIVERSION', 1);
 define('MINIMUM_PHP_VERSION', '5.2.3');
 define('COPYRIGHT', '&copy; 2001-2012 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
@@ -51,7 +51,7 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
 
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
     <meta name="application-name" content="phpMyFAQ <?php print NEWVERSION; ?>">
-    <meta name="copyright" content="(c) 2001-2011 phpMyFAQ Team">
+    <meta name="copyright" content="(c) 2001-2012 phpMyFAQ Team">
 
     <link rel="shortcut icon" href="../template/default/favicon.ico">
     <link rel="apple-touch-icon" href="../template/default/apple-touch-icon.png">

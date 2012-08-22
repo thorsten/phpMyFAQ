@@ -1,9 +1,12 @@
-phpMyFAQ 2.7.8
+phpMyFAQ 2.7.9
 Codename "Prospero"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.7.9 - 2012-09-
+-
 
 Version 2.7.8 - 2012-08-22
 - added experimental rewrite rules for Zeus Webserver (Chris Crawshaw)
