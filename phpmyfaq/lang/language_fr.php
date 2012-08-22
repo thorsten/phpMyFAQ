@@ -20,7 +20,7 @@
  * @author    Thomas Bassetto <tbassetto@gmail.com>
  * @author    Laurent J.V. Dubois <laurent.dubois@ljvd.com>
  * @author    Cédric Frayssinet
- * @copyright 2004-2011 phpMyFAQ Team
+ * @copyright 2004-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-19
@@ -31,9 +31,9 @@ $PMF_LANG['language'] = 'French';
 $PMF_LANG['dir'] = 'ltr';
 $PMF_LANG['nplurals'] = '2';
 $PMF_LANG['msgCategory'] = 'Catégories';
-$PMF_LANG['msgShowAllCategories'] = 'Voir toutes les catégories';
+$PMF_LANG['msgShowAllCategories'] = 'Toutes les catégories';
 $PMF_LANG['msgSearch'] = 'Recherche';
-$PMF_LANG['msgAddContent'] = 'Proposer une entrée';
+$PMF_LANG['msgAddContent'] = 'Ajout FAQ';
 $PMF_LANG['msgQuestion'] = 'Poser une question';
 $PMF_LANG['msgOpenQuestions'] = 'Questions ouvertes';
 $PMF_LANG['msgHelp'] = 'Aide';
