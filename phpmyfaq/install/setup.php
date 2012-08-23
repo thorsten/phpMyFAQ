@@ -721,7 +721,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     }
     
     // Add anonymous user account
-    $instanceSetup->createAnonymousUser($faqConfig);
+    $instanceSetup->createAnonymousUser($configuration);
 
     // Add master instance
     $instanceData = array(
