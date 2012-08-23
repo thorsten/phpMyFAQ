@@ -43,6 +43,7 @@ $mainConfig = array(
     'main.enableGoogleTranslation'            => 'false',
     'main.googleTranslationKey'               => '',
     'main.dateFormat'                         => 'Y-m-d H:i',
+    'main.maintenanceMode'                    => 'false',
 
     'records.numberOfRecordsPerPage'          => '10',
     'records.numberOfShownNewsEntries'        => '3',
