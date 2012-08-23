@@ -4,8 +4,6 @@
  *
  * PHP Version 5.3
  *
- *  http://www.mozilla.org/MPL/
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -69,6 +67,7 @@ class PMF_Db
      * Database factory
      *
      * @param string $type Database management system type
+     * @throws PMF_Exception
      *
      * @return PMF_DB_Driver
      */
@@ -141,6 +140,8 @@ class PMF_Db
     
     /**
      * Error page
+     *
+     * @param string $method
      *
      * @return string
      */
