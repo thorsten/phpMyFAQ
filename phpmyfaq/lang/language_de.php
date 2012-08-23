@@ -196,7 +196,7 @@ $PMF_LANG["ad_gen_or"] = "oder";
 
 // Benutzerverwaltung
 $PMF_LANG["ad_user"] = "Benutzerverwaltung";
-$PMF_LANG["ad_user_username"] = "Benutzername";
+$PMF_LANG["ad_user_username"] = "Loginname";
 $PMF_LANG["ad_user_rights"] = "Rechte";
 $PMF_LANG["ad_user_edit"] = "Bearbeiten";
 $PMF_LANG["ad_user_delete"] = "Löschen";
@@ -328,7 +328,7 @@ $PMF_LANG["ad_adus_add"] = "Hinzufügen";
 $PMF_LANG["ad_adus_suc"] = "Der Benutzer wurde <strong>erfolgreich</strong> hinzugefügt.";
 $PMF_LANG["ad_adus_edit"] = "Profil bearbeiten";
 $PMF_LANG["ad_adus_dberr"] = "<strong>Datenbankfehler!</strong>";
-$PMF_LANG["ad_adus_exerr"] = "Der Benutzername <strong>existiert</strong> bereits.";
+$PMF_LANG["ad_adus_exerr"] = "Der Loginname <strong>existiert</strong> bereits.";
 
 // Sessions
 $PMF_LANG["ad_sess_id"] = "ID";
@@ -366,12 +366,12 @@ $PMF_LANG["ad_rs_ahtf"] = "mit einem Durchschnitt größer 80%";
 $PMF_LANG["ad_rs_no"] = "Keine Bewertungen verfügbar.";
 
 // Auth
-$PMF_LANG["ad_auth_insert"] = "Bitte den persönlichen Benutzernamen und das Passwort eingeben.";
-$PMF_LANG["ad_auth_user"] = "Benutzername";
+$PMF_LANG["ad_auth_insert"] = "Bitte den persönlichen Loginname und das Passwort eingeben.";
+$PMF_LANG["ad_auth_user"] = "Loginname";
 $PMF_LANG["ad_auth_passwd"] = "Passwort";
 $PMF_LANG["ad_auth_ok"] = "OK";
 $PMF_LANG["ad_auth_reset"] = "Reset";
-$PMF_LANG["ad_auth_fail"] = "Falscher Benutzername oder Passwort.";
+$PMF_LANG["ad_auth_fail"] = "Falscher Loginname oder Passwort.";
 $PMF_LANG["ad_auth_sess"] = "Diese Session-ID ist ungültig/ausgelaufen.";
 
 // Added v0.8 - 24.05.2001 - Bastian - Admin
@@ -537,7 +537,7 @@ $PMF_LANG["ad_user_action"] = "Aktion";
 $PMF_LANG["ad_entry_email"] = "E-Mailadresse:";
 $PMF_LANG["ad_entry_allowComments"] = "Kommentare zulassen";
 $PMF_LANG["msgWriteNoComment"] = "Kommentieren nicht möglich";
-$PMF_LANG["ad_user_realname"] = "Realname:";
+$PMF_LANG["ad_user_realname"] = "Dein Name:";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF-Datei generieren";
 $PMF_LANG["ad_export_full_faq"] = "Die FAQ als PDF-Datei: ";
 $PMF_LANG["err_bannedIP"] = "Diese IP ist gesperrt.";
@@ -581,7 +581,7 @@ $PMF_LANG["ad_categ_desc"] = "Beschreibung";
 $PMF_LANG["ad_categ_change"] = "Austauschen mit";
 
 $PMF_LANG["lostPassword"] = "Passwort vergessen?";
-$PMF_LANG["lostpwd_err_1"] = "Fehler: Benutzername und E-Mailadresse nicht gefunden.";
+$PMF_LANG["lostpwd_err_1"] = "Fehler: Loginname und E-Mailadresse nicht gefunden.";
 $PMF_LANG["lostpwd_err_2"] = "Fehler: Falsche Eingaben!";
 $PMF_LANG["lostpwd_text_1"] = "Vielen Dank für die Abfrage deiner Account Informationen.";
 $PMF_LANG["lostpwd_text_2"] = "Bitte ein neues Passwort im Adminbereich der FAQ setzen.";
@@ -607,7 +607,7 @@ $PMF_LANG["ad_entry_new_revision"] = "Neue Revision:";
 $PMF_LANG["ad_entry_record_administration"] = "FAQ Bearbeitung";
 $PMF_LANG["ad_entry_revision"] = "Revision";
 $PMF_LANG["ad_changerev"] = "Revisionsauswahl";
-$PMF_LANG["msgCaptcha"] = "Bitte geben Sie den Captcha-Code ein";
+$PMF_LANG["msgCaptcha"] = "Bitte gebe den Captcha-Code ein";
 $PMF_LANG["msgSelectCategories"] = "Suche in ...";
 $PMF_LANG["msgAllCategories"] = "... allen Kategorien";
 $PMF_LANG["ad_you_should_update"] = "Ihre phpMyFAQ Installation ist veraltet. Sie sollten auf die neueste Version aktualisieren.";
@@ -880,10 +880,10 @@ $PMF_LANG["ad_online_info"] = "Online Versionsüberprüfung";
 $PMF_LANG["ad_system_info"] = "System Information";
 
 // added 2.5.0-alpha - 2008-01-25 by Elger
-$PMF_LANG["msgRegisterUser"] = "Anmelden";
-$PMF_LANG["ad_user_loginname"] = "Benutzername:";
+$PMF_LANG["msgRegisterUser"] = "Registrieren";
+$PMF_LANG["ad_user_loginname"] = "Loginname:";
 $PMF_LANG["errorRegistration"] = "Dieses Feld muss ausgefüllt sein!";
-$PMF_LANG["submitRegister"] = "Anmelden";
+$PMF_LANG["submitRegister"] = "Benutzer registrieren";
 $PMF_LANG["msgUserData"] = "Notwendige Benutzerinformationen für die Anmeldung";
 $PMF_LANG["captchaError"] = "Bitte geben Sie die korrekten CAPTCHA Daten ein!";
 $PMF_LANG["msgRegError"] = "Bitte korrigieren Sie die folgenden Fehler:";
@@ -1090,8 +1090,8 @@ $PMF_LANG["ad_stat_report_make_report"] = "Erstelle Report";
 $PMF_LANG["ad_stat_report_make_csv"] = "CSV-Export";
 
 // added v2.7.0-alpha2 - 2011-02-05 by Thorsten Rinne
-$PMF_LANG["msgRegistration"] = "Anmelden";
-$PMF_LANG["msgRegistrationCredentials"] = "Um sich anzumelden, muss der Name, ein Loginname und eine korrekte E-Mailadresse eingegeben werden.";
+$PMF_LANG["msgRegistration"] = "Registrierung neuer Benutzer";
+$PMF_LANG["msgRegistrationCredentials"] = "Um sich anzumelden, muss dein Name, dein Loginname und eine korrekte E-Mailadresse eingegeben werden.";
 $PMF_LANG["msgRegistrationNote"] = "Nach der erfolgreichen Anmeldung erhälst du eine Antwort über Freischaltung deiner Anmeldung.";
 
 // added v2.7.0-beta - 2011-06-13 by Thorsten
