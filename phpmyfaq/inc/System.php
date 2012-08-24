@@ -364,6 +364,7 @@ class PMF_System
             '</div></div></section><footer><div class="container"><p class="pull-right">%s</p><div></footer></body></html>',
             COPYRIGHT
         );
+        exit(-1);
     }
 
 }
