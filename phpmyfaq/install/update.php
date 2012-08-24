@@ -34,10 +34,9 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
 require_once PMF_ROOT_DIR . '/inc/Autoloader.php';
 require_once PMF_ROOT_DIR . '/config/constants.php';
 
-$step        = PMF_Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
-$version     = PMF_Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);
-$query       = array();
-$templateDir = '../template';
+$step    = PMF_Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
+$version = PMF_Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);
+$query   = array();
 
 if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     require PMF_ROOT_DIR . '/inc/data.php'; // before 2.6.0-alpha
@@ -188,13 +187,13 @@ if ($step == 1) {
                     <li>phpMyFAQ 2.0.x</li>
                 </ul>
                 <?php
-                if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable($templateDir)) {
-                    printf(
-                        '<p class="alert alert-error"><strong>Please change the directory %s and its contents ' .
-                        'writable (777 on Linux/UNIX).</strong></p>',
-                        $templateDir
-                    );
+                // 2.5 versions only
+                if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable('../template')) {
+                    echo '<p class="alert alert-error"><strong>Please change the directory ../template and its ' .
+                         'contents writable (777 on Linux/UNIX).</strong></p>';
                 }
+
+                // We only support updates from 2.5+
                 if (version_compare($version, '2.5.0', '>')) {
                     printf(
                         '<p class="alert alert-success">Your current phpMyFAQ version: %s</p>',
@@ -235,6 +234,7 @@ if ($step == 2) {
     
     // First backup old inc/data.php, then backup new config/bak.database.php and copy inc/data.php 
     // to config/database.php
+    // This is needed for 2.5 updates only
     if (file_exists(PMF_ROOT_DIR . '/inc/data.php')) {
         if (!copy(PMF_ROOT_DIR . '/inc/data.php', PMF_ROOT_DIR . '/config/database.bak.php') ||
             !copy(PMF_ROOT_DIR . '/inc/data.php', PMF_ROOT_DIR . '/config/database.php')) {
@@ -246,6 +246,7 @@ if ($step == 2) {
     }
     
     // The backup an existing config/database.php
+    // 2.6+ updates
     if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {
         if (!copy(PMF_ROOT_DIR . '/config/database.php', PMF_ROOT_DIR . '/config/database.bak.php')) {
             print "<p class=\"alert alert-error\"><strong>Error:</strong> The backup file ../config/database.bak.php " .
@@ -256,6 +257,7 @@ if ($step == 2) {
     }
     
     // Now backup and move LDAP setup if available
+    // This is needed for 2.5+ updates with aLDAP configuration file
     if (file_exists(PMF_ROOT_DIR . '/inc/dataldap.php')) {
         if (!copy(PMF_ROOT_DIR . '/inc/dataldap.php', PMF_ROOT_DIR . '/config/ldap.bak.php') ||
             !copy(PMF_ROOT_DIR . '/inc/dataldap.php', PMF_ROOT_DIR . '/config/ldap.php')) {
@@ -266,11 +268,12 @@ if ($step == 2) {
         }
     }
     
-
+    $oldTemplateDir   = '../template'; // 2.5 -> 2.8.0-alpha
+    $oldTemplateDir   = '../assets/template'; // 2.8.0-alpha2 and later
     $notWritableFiles = array();
-    foreach (new DirectoryIterator($templateDir) as $item) {
+    foreach (new DirectoryIterator($oldTemplateDir) as $item) {
         if ($item->isFile() && !$item->isWritable()) {
-            $notWritableFiles[] = "$templateDir/{$item->getFilename()}";
+            $notWritableFiles[] = "$oldTemplateDir/{$item->getFilename()}";
         }
     }
     if (version_compare($version, '2.6.0-alpha', '<') && (!is_writeable($templateDir) || !empty($notWritableFiles))) {
