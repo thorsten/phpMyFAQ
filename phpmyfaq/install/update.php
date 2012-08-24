@@ -42,7 +42,7 @@ $templateDir = '../template';
 if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     require PMF_ROOT_DIR . '/inc/data.php'; // before 2.6.0-alpha
 } else {
-    if (!file_exists(PMF_CONFIG_DIR . '/database.php')) {
+    if (!file_exists(PMF_ROOT_DIR . '/config/database.php')) {
         header("Location: setup.php");
         exit();
     }
