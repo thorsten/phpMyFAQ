@@ -184,7 +184,8 @@ class PMF_Search
             $this->_config->getDb()->nextId($this->_table, 'id'),
             $this->_config->getLanguage()->getLanguage(),
             $this->_config->getDb()->escape($searchterm),
-            $date->format('Y-m-d H:i:s'));
+            $date->format('Y-m-d H:i:s')
+        );
         
         $this->_config->getDb()->query($query);
     }

@@ -405,6 +405,8 @@ class PMF_User_CurrentUser extends PMF_User
             $this->errors[] = $this->config->getDb()->error();
             return false;
         }
+
+        session_destroy();
         
         return true;
     }

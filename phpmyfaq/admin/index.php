@@ -53,7 +53,10 @@ $faqConfig->setLanguage($Language);
 
 if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
     // Overwrite English strings with the ones we have in the current language
-    require_once PMF_ROOT_DIR.'/lang/language_'.$LANGCODE.'.php';
+    if (! file_exists(PMF_ROOT_DIR . '/lang/language_' . $LANGCODE . '.php')) {
+        $LANGCODE = 'en';
+    }
+    require_once PMF_ROOT_DIR . '/lang/language_' . $LANGCODE . '.php';
 } else {
     $LANGCODE = 'en';
 }
@@ -81,6 +84,7 @@ PMF_Attachment_Factory::init(
 // Initiazile caching
 //
 PMF_Cache::init($faqConfig);
+
 
 //
 // Create a new FAQ object

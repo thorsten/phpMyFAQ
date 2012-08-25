@@ -38,6 +38,9 @@ $type              = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE
 
 $faq      = new PMF_Faq($faqConfig);
 $category = new PMF_Category($faqConfig);
+$category->buildTree();
+
+$tags = new PMF_Tags($faqConfig);
 
 $export  = PMF_Export::create($faq, $category, $faqConfig, $type);
 $content = $export->generate($categoryId, $downwards);

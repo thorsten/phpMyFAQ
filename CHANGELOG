@@ -28,8 +28,25 @@ Version 2.8.0-alpha2 - 2012-08-
 - updated bundled Twitter Bootstrap to version 2.1.0 (Thorsten)
 - fixed some bugs (Thorsten, Florian)
 
-Version 2.7.7 - 2012-
--
+Version 2.7.9 - 2012-09-
+- updated French translation
+
+Version 2.7.8 - 2012-08-22
+- added experimental rewrite rules for Zeus Webserver (Chris Crawshaw)
+- updated Arabic translation
+- updated Dutch translation
+- updated Spanish translation (Lisandro López Villatoro)
+- improved LDAP handling (Thorsten)
+- fixed some bugs (Thorsten)
+
+Version 2.7.7 - 2012-07-01
+- added Bosnian translation (Alen Durmo)
+- improved complete PDF export (Thorsten)
+- updated Polish translation
+- updated Simplified Chinese translation
+- fixed Arabian and Bengali translation (Thorsten)
+- fixed some bugs (Thorsten)
+>>>>>>> e0ef4a52cee2a0f96a18ba1b10149218f7956cc0
 
 Version 2.7.6 - 2012-05-16
 - updated Dutch translation

@@ -52,7 +52,10 @@ $showCaptcha = PMF_Filter::filterInput(INPUT_GET, 'gen', FILTER_SANITIZE_STRING)
 if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE) && is_null($showCaptcha)) {
     // Overwrite English strings with the ones we have in the current language,
     // but don't include UTF-8 encoded files, these will break the captcha images
-    require_once 'lang/language_'.$LANGCODE.'.php';
+    if (! file_exists('lang/language_' . $LANGCODE . '.php')) {
+        $LANGCODE = 'en';
+    }
+    require_once 'lang/language_' . $LANGCODE . '.php';
 } else {
     $LANGCODE = 'en';
 }
@@ -123,6 +126,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
             $loginVisibility = '';
             $user            = null;
             $action          = 'login';
+            session_destroy();
         }
     } else {
         // error
@@ -130,6 +134,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
         $loginVisibility = '';
         $user            = null;
         $action          = 'login';
+        session_destroy();
     }
 
 } else {
@@ -143,6 +148,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
         $auth = true;
     } else {
         $user = null;
+        session_destroy();
     }
 }
 
@@ -667,7 +673,7 @@ if ('artikel' == $action || 'show' == $action || is_numeric($solutionId)) {
     $faqServices->setCategoryId($cat);
     $faqServices->setFaqId($id);
     $faqServices->setLanguage($lang);
-    $faqServices->setQuestion($title);
+    $faqServices->setQuestion($faq->getRecordTitle($id));
 
     $faqHelper = new PMF_Helper_Faq($faqConfig);
     $faqHelper->setSsl((isset($_SERVER['HTTPS']) && is_null($_SERVER['HTTPS']) ? false : true));

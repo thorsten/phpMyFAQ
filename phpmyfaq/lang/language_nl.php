@@ -893,3 +893,9 @@ $LANG_CONF['main.enableGoogleTranslation'] = array(0 => 'checkbox', 1 => 'Active
 $LANG_CONF['main.googleTranslationKey'] = array(0 => 'input', 1 => 'Google API sleutel');
 $LANG_CONF['socialnetworks.enableTwitterSupport'] = array(0 => 'checkbox', 1 => 'Twitter ondersteuning (standaard: gedeactiveerd)');
 $LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => 'input', 1 => 'Twitter Consumenten Sleutel');
+$PMF_LANG['msgExportAllFaqs'] = 'Print alles als PDF';
+$PMF_LANG['ad_menu_instances'] = 'FAQ Multi-sites';
+$PMF_LANG['ad_online_verification'] = 'Online verificatie check';
+$PMF_LANG['ad_verification_button'] = 'Klik voor je phpMyFAQ installatie te bevestigen';
+$PMF_LANG['ad_verification_notokay'] = 'Je versie van phpMyFAQ heeft locale veranderingen:';
+$PMF_LANG['ad_verification_okay'] = 'Jouw versie van phpMyFAQ is met succes geactiveerd!';

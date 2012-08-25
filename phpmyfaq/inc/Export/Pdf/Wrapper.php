@@ -269,10 +269,6 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
     /**
      * Constructor
      *
-     * @param  array  $category    Current category
-     * @param  string $thema       The title of the FAQ record
-     * @param  array  $categories  The array with all category names
-     *
      * @return PMF_Export_Pdf_Wrapper
      */
     public function __construct()
@@ -342,23 +338,16 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
     public function Header()
     {
         if (array_key_exists($this->category, $this->categories)) {
-            $title = $this->categories[$this->category]['name'] . ': ' . $this->question;
+            $title = $this->categories[$this->category]['name'];
         } else {
-            $title = $this->question;
+            $title = '';
         }
-
+        
         $title = html_entity_decode($title, ENT_QUOTES, 'utf-8');
-
-        $currentTextColor = $this->TextColor;
         
         $this->SetTextColor(0,0,0);
         $this->SetFont($this->currentFont, 'B', 18);
-        $this->MultiCell(0, 9, $title, 0, 'C', 0);
-        if ($this->enableBookmarks) {
-            $this->Bookmark(PMF_Utils::makeShorterText($this->question, 5));
-        }
-        
-        $this->TextColor = $currentTextColor;
+        $this->MultiCell(0, 9, $title, 0, 'C', 0);        
         $this->SetMargins(PDF_MARGIN_LEFT, $this->getLastH() + 5, PDF_MARGIN_RIGHT);
     }
 

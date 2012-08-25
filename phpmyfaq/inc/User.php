@@ -340,6 +340,7 @@ class PMF_User
         $this->userId  = (int)    $user['user_id'];
         $this->login   = (string) $user['login'];
         $this->status  = (string) $user['account_status'];
+
         // get user-data
         if (!$this->userdata instanceof PMF_User_UserData) {
             $this->userdata = new PMF_User_UserData($this->config);
@@ -446,7 +447,7 @@ class PMF_User
         }
         
         // is $login valid?
-        $login = (string) $login;
+        $login = (string)$login;
         if (!$this->isValidLogin($login)) {
             return false;
         }
