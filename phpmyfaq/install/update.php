@@ -269,7 +269,7 @@ if ($step == 2) {
     }
     
     $oldTemplateDir   = '../template'; // 2.5 -> 2.8.0-alpha
-    $oldTemplateDir   = '../assets/template'; // 2.8.0-alpha2 and later
+    $newTemplateDir   = '../assets/template'; // 2.8.0-alpha2 and later
     $notWritableFiles = array();
     foreach (new DirectoryIterator($oldTemplateDir) as $item) {
         if ($item->isFile() && !$item->isWritable()) {
