@@ -111,7 +111,7 @@ $http = new PMF_Helper_Http();
 if (true === $getAll) {
     $category->buildTree();
 }
-$tags = new PMF_Tags($db, $Language);
+$tags = new PMF_Tags($faqConfig);
 
 session_cache_limiter('private');
 
