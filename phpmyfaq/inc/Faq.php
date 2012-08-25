@@ -2902,8 +2902,9 @@ class PMF_Faq
                 $type,
                 $flag, 
                 $id, 
-                $lang);
-        
+                $lang
+            );
+            
             $retval = (bool)$this->_config->getDb()->query($update);
         
         }
