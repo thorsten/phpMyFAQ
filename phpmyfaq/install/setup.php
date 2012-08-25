@@ -897,13 +897,13 @@ echo '</dl><input type="hidden" name="systemdata" value="'.PMF_String::htmlspeci
     if (@unlink(basename($_SERVER['SCRIPT_NAME']))) {
         echo "<p class=\"alert alert-success\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";
     } else {
-        echo "<p class=\"alert alert-info\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
+        echo "<p class=\"alert alert-error\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
     }
     // Remove 'update.php' file
     if (@unlink(dirname($_SERVER['PATH_TRANSLATED']) . '/update.php')) {
         echo "<p class=\"alert alert-success\">The file <em>./install/update.php</em> was deleted automatically.</p>\n";
     } else {
-        echo "<p class=\"alert alert-info\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
+        echo "<p class=\"alert alert-error\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
     }
     
     PMF_System::renderFooter();

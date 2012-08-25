@@ -869,13 +869,13 @@ if ($step == 3) {
     if (@unlink(__DIR__ . '/setup.php')) {
         print "<p class=\"alert alert-success\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";
     } else {
-        print "<p class=\"alert alert-info\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
+        print "<p class=\"alert alert-error\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
     }
     // Remove 'update.php' file
     if (@unlink(__DIR__ . '/update.php')) {
         print "<p class=\"alert alert-success\">The file <em>./install/update.php</em> was deleted automatically.</p>\n";
     } else {
-        print "<p class=\"alert alert-info\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
+        print "<p class=\"alert alert-error\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
     }
 
     HTMLFooter();
