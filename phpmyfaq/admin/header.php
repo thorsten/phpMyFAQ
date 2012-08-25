@@ -73,6 +73,7 @@ switch ($action) {
     case 'showcategory':
     case 'editentry':
     case 'insertentry':
+    case 'saveentry':
     case 'view':
     case 'searchfaqs':
     case 'glossary':
