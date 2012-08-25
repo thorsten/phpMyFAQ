@@ -152,9 +152,9 @@ function form_checkAll(form_id)
  */
 function form_uncheckAll(form_id)
 {
-    var inputElements = document.getElementById(form_id).getElementsByTagName('input');
+    var inputElements = $('#' + form_id + ' input');
     for (var i = 0, ele; ele = inputElements[i]; i++) {
-        if (ele.type == "checkbox") {
+        if (ele.type === "checkbox") {
             ele.checked = false;
         }
     }

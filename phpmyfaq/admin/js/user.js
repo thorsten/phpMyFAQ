@@ -20,7 +20,6 @@
  * @param integer user_id User ID
  */
 function getUserRights(user_id) {
-    form_uncheckAll('rightsForm');
     $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=get_user_rights&user_id=" + user_id,
         function(data) {
             $.each(data, function(i, val) {
