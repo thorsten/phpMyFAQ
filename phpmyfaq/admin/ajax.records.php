@@ -42,10 +42,10 @@ switch($ajax_action) {
         if ($permission['approverec']) {
             if (!empty($items)) {
                 $faq = new PMF_Faq($faqConfig);
-
+                
                 foreach ($items as $item) {
                     if (is_array($item) && count($item) == 3 && PMF_Language::isASupportedLanguage($item[1])) {
-                        print $faq->updateRecordFlag((int)$item[0], addslashes($item[1]), (int)$item[2], 'active');
+                        print $faq->updateRecordFlag((int)$item[0], addslashes($item[1]), $item[2], 'active');
                     }
                 }
             }
