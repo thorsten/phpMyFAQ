@@ -23,16 +23,11 @@ define('COPYRIGHT', '&copy; 2001-2012 <a href="http://www.phpmyfaq.de/">phpMyFAQ
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
 
-if (! defined('DEBUG')) {
-    define('DEBUG', true);
-}
-
 if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     set_time_limit(0);
 }
 
-require_once PMF_ROOT_DIR . '/inc/Autoloader.php';
-require_once PMF_ROOT_DIR . '/config/constants.php';
+require PMF_ROOT_DIR . '/inc/Bootstrap.php';
 
 $step    = PMF_Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
 $version = PMF_Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);
@@ -47,13 +42,6 @@ if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     }
     require PMF_ROOT_DIR . '/config/database.php'; // after 2.6.0-alpha
 }
-require PMF_ROOT_DIR . '/inc/functions.php';
-
-define('PMF_Db::getTablePrefix()', $DB['prefix']);
-$db = PMF_Db::factory($DB["type"]);
-$db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
-
-$faqConfig = new PMF_Configuration($db);
 
 /**
  * Print out the HTML Footer
