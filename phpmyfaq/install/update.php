@@ -267,18 +267,24 @@ if ($step == 2) {
             $checkLdapSetupFile = true;
         }
     }
-    
+
     $oldTemplateDir   = '../template'; // 2.5 -> 2.8.0-alpha
     $newTemplateDir   = '../assets/template'; // 2.8.0-alpha2 and later
     $notWritableFiles = array();
-    foreach (new DirectoryIterator($oldTemplateDir) as $item) {
-        if ($item->isFile() && !$item->isWritable()) {
-            $notWritableFiles[] = "$oldTemplateDir/{$item->getFilename()}";
+    if (version_compare($version, '2.6.0-alpha', '<')) {
+        foreach (new DirectoryIterator($oldTemplateDir) as $item) {
+            if ($item->isFile() && !$item->isWritable()) {
+                $notWritableFiles[] = "$oldTemplateDir/{$item->getFilename()}";
+            }
         }
     }
-    if (version_compare($version, '2.6.0-alpha', '<') && (!is_writeable($templateDir) || !empty($notWritableFiles))) {
-        if (!is_writeable($templateDir)) {
-            printf("<p class=\"alert alert-error\"><strong>The directory %s isn't writable.</strong></p>\n", $templateDir);
+    
+    if (version_compare($version, '2.6.0-alpha', '<') && (!is_writeable($oldTemplateDir) || !empty($notWritableFiles))) {
+        if (!is_writeable($oldTemplateDir)) {
+            printf(
+                "<p class=\"alert alert-error\"><strong>The directory %s isn't writable.</strong></p>\n",
+                $oldTemplateDir
+            );
         }
         if (!empty($notWritableFiles)) {
             foreach ($notWritableFiles as $item) {
