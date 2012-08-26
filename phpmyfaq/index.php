@@ -438,8 +438,16 @@ $tpl = new PMF_Template(
     $faqConfig->get('main.templateSet')
 );
 
-$usersOnLine    = $faqsession->getUsersOnline();
-$totUsersOnLine = $usersOnLine[0] + $usersOnLine[1];
+if ($faqConfig->get('main.enableUserTracking')) {
+    $users       = $faqsession->getUsersOnline();
+    $totUsers    = $users[0] + $users[1];
+    $usersOnline = $plr->getMsg('plmsgUserOnline', $totUsers) . ' | ' .
+                   $plr->getMsg('plmsgGuestOnline', $users[0]) .
+                   $plr->getMsg('plmsgRegisteredOnline',$users[1]);
+} else {
+    $usersOnline = '';
+}
+
 $systemUri      = $faqConfig->get('main.referenceURL') . '/';
 
 $categoryHelper = new PMF_Helper_Category();
@@ -473,9 +481,7 @@ $tplMainPage = array(
     'languageBox'         => $PMF_LANG['msgLangaugeSubmit'],
     'writeLangAdress'     => $writeLangAdress,
     'switchLanguages'     => PMF_Language::selectLanguages($LANGCODE, true),
-    'userOnline'          => $plr->getMsg('plmsgUserOnline', $totUsersOnLine) . ' | ' .
-                             $plr->getMsg('plmsgGuestOnline', $usersOnLine[0]) .
-                             $plr->getMsg('plmsgRegisteredOnline',$usersOnLine[1]),
+    'userOnline'          => $usersOnline,
     'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
     'copyright'           => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' .
                              $faqConfig->get('main.currentVersion'),
