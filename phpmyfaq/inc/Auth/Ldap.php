@@ -99,10 +99,9 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
      */
     public function add($login, $pass)
     {
-        $user = new PMF_User($this->_config);
-        $user->setLoginMinLength(2); // LDAP user names can be very short!
-
+        $user   = new PMF_User($this->_config);
         $result = $user->createUser($login, null);
+
         $user->setStatus('active');
 
         // Update user information from LDAP

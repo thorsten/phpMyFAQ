@@ -125,11 +125,11 @@ class PMF_User
     private $login = '';
 
     /**
-     * minimum length of login string (default: 4)
+     * minimum length of login string (default: 2)
      *
      * @var int
      */
-    private $loginMinLength = 4;
+    private $loginMinLength = 2;
 
     /**
      * regular expression to find invalid login strings

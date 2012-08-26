@@ -530,7 +530,6 @@ switch ($action) {
 
             $message = array();
             $user    = new PMF_User($faqConfig);
-            $user->setLoginMinLength(4);
 
             // Create user account (login and password)
             // Note: password be automatically generated and sent by email as soon if admin switch user to "active"

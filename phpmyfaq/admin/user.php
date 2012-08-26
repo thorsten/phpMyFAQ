@@ -30,7 +30,6 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     $selectSize        = 10;
     $defaultUserAction = 'list';
     $defaultUserStatus = 'active';
-    $loginMinLength    = 4;
 
     // what shall we do?
     // actions defined by url: user_action=
@@ -222,7 +221,6 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         }
 
         // check login name
-        $user->setLoginMinLength($loginMinLength);
         if (!$user->isValidLogin($user_name)) {
             $user_name  = '';
             $messages[] = $PMF_LANG['ad_user_error_loginInvalid'];
