@@ -58,6 +58,7 @@ class PMF_User
     const ERROR_USER_INCORRECT_LOGIN = 'Specified login could not be found. ';
     const ERROR_USER_INCORRECT_PASSWORD = 'Specified password is not correct.';
     const ERROR_USER_INVALID_STATUS = 'Undefined user status.';
+    const ERROR_USER_LOGINNAME_TOO_SHORT = 'The chosen loginname is too short.';
     const ERROR_USER_LOGIN_NOT_UNIQUE = 'Specified login name already exists. ';
     const ERROR_USER_LOGIN_INVALID = 'The chosen login is invalid. A valid login has at least four characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ';
     const ERROR_USER_NO_AUTH = 'No authentication method specified. ';
@@ -449,6 +450,7 @@ class PMF_User
         // is $login valid?
         $login = (string)$login;
         if (!$this->isValidLogin($login)) {
+            $this->errors[] = self::ERROR_USER_LOGINNAME_TOO_SHORT;
             return false;
         }
         
@@ -460,7 +462,7 @@ class PMF_User
         
         // set user-ID
         if (0 == $userId) {
-            $this->userId = (int) $this->config->getDb()->nextId(PMF_Db::getTablePrefix().'faquser', 'user_id');
+            $this->userId = (int) $this->config->getDb()->nextId(PMF_Db::getTablePrefix() . 'faquser', 'user_id');
         } else {
             $this->userId = $userId;
         }
