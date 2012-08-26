@@ -108,6 +108,11 @@ $category->setGroups($current_groups);
 $pdf  = new PMF_Export_Pdf($faq, $category, $faqConfig);
 $http = new PMF_Helper_Http();
 
+if (true === $getAll) {
+    $category->buildTree();
+}
+$tags = new PMF_Tags($faqConfig);
+
 session_cache_limiter('private');
 
 $headers = array(

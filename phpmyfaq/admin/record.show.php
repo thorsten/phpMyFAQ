@@ -354,22 +354,18 @@ if ($permission['editbt'] || $permission['delbt']) {
         <table class="table table-striped">
         <thead>
         <tr>
-            <th>
+            <th colspan="2" style="width: 24px;">
                 <a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=desc">
                     &uarr;
                 </a>
-                &nbsp;
                 <a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=asc">
                     &darr;
                 </a>
             </th>
             <th>
-                &nbsp;
-            </th>
-            <th>
                 #
             </th>
-            <th style="text-align: left">
+            <th style="width: 72px;">
                 <input type="checkbox" id="sticky_category_block_<?php print $cid; ?>"
                        onclick="saveStatusForCategory(<?php print $cid; ?>, 'sticky')" />
                 &nbsp;<?php print $PMF_LANG['ad_record_sticky'] ?>
@@ -378,7 +374,6 @@ if ($permission['editbt'] || $permission['delbt']) {
                 <a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=desc">
                     &uarr;
                 </a>
-                &nbsp;
                 <a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=asc">
                     &darr;
                 </a>
@@ -387,7 +382,6 @@ if ($permission['editbt'] || $permission['delbt']) {
                 <a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=desc">
                     &uarr;
                 </a>
-                &nbsp;
                 <a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=asc">
                     &darr;
                 </a>
@@ -395,7 +389,7 @@ if ($permission['editbt'] || $permission['delbt']) {
             <th colspan="3">
                 &nbsp;
             </th>
-            <th style="text-align: left">
+            <th style="width: 84px;">
                 <?php if ($permission['approverec']) { ?>
                 <input type="checkbox" id="active_category_block_<?php print $cid; ?>"
                        onclick="saveStatusForCategory(<?php print $cid; ?>, 'active')" />

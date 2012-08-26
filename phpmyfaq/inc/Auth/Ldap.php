@@ -90,18 +90,20 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
 
     /**
      * Adds a new user account to the authentication table.
-     *
      * Returns true on success, otherwise false.
      *
-     * @param  string $login Loginname
+     * @param  string $login Login name
      * @param  string $pass  Password
+     *
      * @return boolean
      */
     public function add($login, $pass)
     {
         $user   = new PMF_User($this->_config);
         $result = $user->createUser($login, null);
-        
+
+        $user->setStatus('active');
+
         // Update user information from LDAP
         $user->setUserData(
             array(
@@ -109,6 +111,7 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
                 'email'        => $this->ldap->getMail($login)
             )
         );
+
         return $result;
     }
 
@@ -155,6 +158,11 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
      */
     public function checkPassword($login, $pass, Array $optionalData = null)
     {
+        if ('' === trim($pass)) {
+            $this->errors[] = PMF_User::ERROR_USER_INCORRECT_PASSWORD;
+            return false;
+        }
+
         $bindLogin = $login;
         if ($this->_ldapConfig['ldap_use_domain_prefix']) {
             if (array_key_exists('domain', $optionalData)) {
@@ -200,8 +208,8 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
      *
      * @param string $login        Loginname
      * @param array  $optionslData Optional data
-     *
-     * @return integer
+     * 
+     * @return string
      */
     public function checkLogin($login, Array $optionalData = null)
     {

@@ -482,26 +482,22 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                 $dbSetup['dbType']
             );
             PMF_System::renderFooter(true);
-            die();
         }
     } else {
         echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please select a database type.</p>\n";
         PMF_System::renderFooter(true);
-        die();
     }
 
     $dbSetup['dbServer'] = PMF_Filter::filterInput(INPUT_POST, 'sql_server', FILTER_SANITIZE_STRING);
     if (is_null($dbSetup['dbServer']) && ! PMF_System::isSqlite($dbSetup['dbType'])) {
         echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a database server.</p>\n";
         PMF_System::renderFooter(true);
-        die();
     }
 
     $dbSetup['dbUser'] = PMF_Filter::filterInput(INPUT_POST, 'sql_user', FILTER_SANITIZE_STRING);
     if (is_null($dbSetup['dbUser']) && ! PMF_System::isSqlite($dbSetup['dbType'])) {
         echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a database username.</p>\n";
         PMF_System::renderFooter(true);
-        die();
     }
 
     $dbSetup['dbPassword'] = PMF_Filter::filterInput(INPUT_POST, 'sql_passwort', FILTER_UNSAFE_RAW);
@@ -514,7 +510,6 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     if (is_null($dbSetup['dbDatabaseName']) && ! PMF_System::isSqlite($dbSetup['dbType'])) {
         echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a database name.</p>\n";
         PMF_System::renderFooter(true);
-        die();
     }
 
     if (PMF_System::isSqlite($dbSetup['dbType'])) {
@@ -522,7 +517,6 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         if (is_null($dbSetup['dbServer'])) {
             echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a SQLite database filename.</p>\n";
             PMF_System::renderFooter(true);
-            die();
         }
     }
 
@@ -534,7 +528,6 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     if (!$db) {
         printf("<p class=\"alert alert-error\"><strong>DB Error:</strong> %s</p>\n", $db->error());
         PMF_System::renderFooter(true);
-        die();
     }
 
     $configuration = new PMF_Configuration($db);
@@ -550,21 +543,18 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         if (is_null($ldapSetup['ldapServer'])) {
             echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a LDAP server.</p>\n";
             PMF_System::renderFooter(true);
-            die();
         }
         
         $ldapSetup['ldapPort'] = PMF_Filter::filterInput(INPUT_POST, 'ldap_port', FILTER_VALIDATE_INT);
         if (is_null($ldapSetup['ldapPort'])) {
             echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a LDAP port.</p>\n";
             PMF_System::renderFooter(true);
-            die();
         }
 
         $ldapSetup['ldapBase'] = PMF_Filter::filterInput(INPUT_POST, 'ldap_base', FILTER_SANITIZE_STRING);
         if (is_null($ldapSetup['ldapBase'])) {
             echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a LDAP base search DN.</p>\n";
             PMF_System::renderFooter(true);
-            die();
         }
 
         // LDAP User and LDAP password are optional
@@ -584,7 +574,6 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         if (!$ldap) {
             echo "<p class=\"alert alert-error\"><strong>LDAP Error:</strong> " . $ldap->error() . "</p>\n";
             PMF_System::renderFooter(true);
-            die();
         }
     }
 
@@ -593,7 +582,6 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     if (is_null($loginname)) {
         echo '<p class="alert alert-error"><strong>Error:</strong> Please add a loginname for your account.</p>';
         PMF_System::renderFooter(true);
-        die();
     }
 
     // check user entries
@@ -601,27 +589,23 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     if (is_null($password)) {
         echo '<p class="alert alert-error"><strong>Error:</strong> Please add a password for the your account.</p>';
         PMF_System::renderFooter(true);
-        die();
     }
     
     $password_retyped = PMF_Filter::filterInput(INPUT_POST, 'password_retyped', FILTER_SANITIZE_STRING);
     if (is_null($password_retyped)) {
         echo '<p class="alert alert-error"><strong>Error:</strong> Please add a retyped password.</p>';
         PMF_System::renderFooter(true);
-        die();
     }
     
     if (strlen($password) <= 5 || strlen($password_retyped) <= 5) {
         echo '<p class="alert alert-error"><strong>Error:</strong> Your password and retyped password are too short.' .
               ' Please set your password and your retyped password with a minimum of 6 characters.</p>';
         PMF_System::renderFooter(true);
-        die();
     }
     if ($password != $password_retyped) {
         echo '<p class="alert alert-error"><strong>Error:</strong> Your password and retyped password are not equal.' .
               ' Please check your password and your retyped password.</p>';
         PMF_System::renderFooter(true);
-        die();
     }
 
     $language  = PMF_Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_STRING, 'en');
@@ -632,18 +616,16 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     // Write the DB variables in database.php
     if (! $instanceSetup->createDatabaseFile($dbSetup)) {
         echo "<p class=\"alert alert-error\"><strong>Error:</strong> Setup cannot write to ./config/database.php.</p>";
-        PMF_System::renderFooter(true);
         $system->cleanInstallation();
-        die();
+        PMF_System::renderFooter(true);
     }
 
     // check LDAP if available
     if (extension_loaded('ldap') && !is_null($ldapEnabled)) {
         if (! $instanceSetup->createLdapFile($ldapSetup)) {
             echo "<p class=\"alert alert-error\"><strong>Error:</strong> Setup cannot write to ./config/ldap.php.</p>";
-            PMF_System::renderFooter(true);
             $system->cleanInstallation();
-            die();
+            PMF_System::renderFooter(true);
         }
     }
 
@@ -653,9 +635,8 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
     if (!$db) {
         echo "<p class=\"alert alert-error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
-        PMF_System::renderFooter(true);
         $system->cleanInstallation();
-        die();
+        PMF_System::renderFooter(true);
     }
 
     require $dbSetup['dbType'] . '.sql.php'; // CREATE TABLES
@@ -682,7 +663,6 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             $system->dropTables($uninst);
             $system->cleanInstallation();
             PMF_System::renderFooter(true);
-            die();
         }
         usleep(2500);
         $count++;
@@ -708,7 +688,12 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
     // add admin account and rights
     $admin = new PMF_User($configuration);
-    $admin->createUser($loginname, $password, 1);
+    if (! $admin->createUser($loginname, $password, 1)) {
+        echo "<p class=\"alert alert-error\"><strong>Fatal installation error:</strong> " .
+             "Couldn't create the admin user.</p>\n";
+        $system->cleanInstallation();
+        PMF_System::renderFooter(true);
+    }
     $admin->setStatus('protected');
     $adminData = array(
         'display_name' => $realname,
@@ -897,13 +882,13 @@ echo '</dl><input type="hidden" name="systemdata" value="'.PMF_String::htmlspeci
     if (@unlink(basename($_SERVER['SCRIPT_NAME']))) {
         echo "<p class=\"alert alert-success\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";
     } else {
-        echo "<p class=\"alert alert-info\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
+        echo "<p class=\"alert alert-error\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
     }
     // Remove 'update.php' file
     if (@unlink(dirname($_SERVER['PATH_TRANSLATED']) . '/update.php')) {
         echo "<p class=\"alert alert-success\">The file <em>./install/update.php</em> was deleted automatically.</p>\n";
     } else {
-        echo "<p class=\"alert alert-info\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
+        echo "<p class=\"alert alert-error\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
     }
     
     PMF_System::renderFooter();

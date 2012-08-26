@@ -52,7 +52,10 @@ $showCaptcha = PMF_Filter::filterInput(INPUT_GET, 'gen', FILTER_SANITIZE_STRING)
 if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE) && is_null($showCaptcha)) {
     // Overwrite English strings with the ones we have in the current language,
     // but don't include UTF-8 encoded files, these will break the captcha images
-    require_once 'lang/language_'.$LANGCODE.'.php';
+    if (! file_exists('lang/language_' . $LANGCODE . '.php')) {
+        $LANGCODE = 'en';
+    }
+    require_once 'lang/language_' . $LANGCODE . '.php';
 } else {
     $LANGCODE = 'en';
 }
@@ -123,6 +126,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
             $loginVisibility = '';
             $user            = null;
             $action          = 'login';
+            session_destroy();
         }
     } else {
         // error
@@ -130,6 +134,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
         $loginVisibility = '';
         $user            = null;
         $action          = 'login';
+        session_destroy();
     }
 
 } else {
@@ -143,6 +148,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
         $auth = true;
     } else {
         $user = null;
+        session_destroy();
     }
 }
 
@@ -432,8 +438,16 @@ $tpl = new PMF_Template(
     $faqConfig->get('main.templateSet')
 );
 
-$usersOnLine    = $faqsession->getUsersOnline();
-$totUsersOnLine = $usersOnLine[0] + $usersOnLine[1];
+if ($faqConfig->get('main.enableUserTracking')) {
+    $users       = $faqsession->getUsersOnline();
+    $totUsers    = $users[0] + $users[1];
+    $usersOnline = $plr->getMsg('plmsgUserOnline', $totUsers) . ' | ' .
+                   $plr->getMsg('plmsgGuestOnline', $users[0]) .
+                   $plr->getMsg('plmsgRegisteredOnline',$users[1]);
+} else {
+    $usersOnline = '';
+}
+
 $systemUri      = $faqConfig->get('main.referenceURL') . '/';
 
 $categoryHelper = new PMF_Helper_Category();
@@ -467,9 +481,7 @@ $tplMainPage = array(
     'languageBox'         => $PMF_LANG['msgLangaugeSubmit'],
     'writeLangAdress'     => $writeLangAdress,
     'switchLanguages'     => PMF_Language::selectLanguages($LANGCODE, true),
-    'userOnline'          => $plr->getMsg('plmsgUserOnline', $totUsersOnLine) . ' | ' .
-                             $plr->getMsg('plmsgGuestOnline', $usersOnLine[0]) .
-                             $plr->getMsg('plmsgRegisteredOnline',$usersOnLine[1]),
+    'userOnline'          => $usersOnline,
     'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
     'copyright'           => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' .
                              $faqConfig->get('main.currentVersion'),
@@ -667,7 +679,7 @@ if ('artikel' == $action || 'show' == $action || is_numeric($solutionId)) {
     $faqServices->setCategoryId($cat);
     $faqServices->setFaqId($id);
     $faqServices->setLanguage($lang);
-    $faqServices->setQuestion($title);
+    $faqServices->setQuestion($faq->getRecordTitle($id));
 
     $faqHelper = new PMF_Helper_Faq($faqConfig);
     $faqHelper->setSsl((isset($_SERVER['HTTPS']) && is_null($_SERVER['HTTPS']) ? false : true));

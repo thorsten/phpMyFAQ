@@ -232,6 +232,7 @@ $languageCodes = array(
     'BN' =>     'Bengali',
     'BO' =>     'Tibetan',
     'BR' =>     'Breton',
+    'BS' =>     'Bosnian',
     'CA' =>     'Catalan',
     'CO' =>     'Corsican',
     'CS' =>     'Czech',

@@ -320,7 +320,7 @@ class PMF_Category
                     foreach ($this->categories[$d] as $key => $value) {
                         $tmp[$key] = $value;
                     }
-                    $tmp["indent"] = $indent;
+                    $tmp['indent'] = $indent;
                     $this->catTree[] = $tmp;
                     $this->buildTree($tmp["id"], $indent + 1);
                 }

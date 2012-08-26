@@ -334,7 +334,9 @@ class PMF_Session
                 AND 
                     time > %d",
                 PMF_Db::getTablePrefix(),
-                $timeNow);
+                $timeNow
+            );
+
             $result = $this->_config->getDb()->query($query);
             
             if (isset($result)) {

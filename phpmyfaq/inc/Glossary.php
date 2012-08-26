@@ -94,6 +94,7 @@ class PMF_Glossary
                 'definition' => stripslashes($row->definition)
             );
         }
+
         return $items;
     }
 
@@ -128,7 +129,7 @@ class PMF_Glossary
                 .'(('.implode('|', $attributes).')="[^"]*'.$item['item'].'[^"]*")|'
                 // c. the glossary item could be everywhere as a distinct word
                 .'(\W+)('.$item['item'].')(\W+)|'
-                // d. the glossary item could be at the begining of the string as a distinct word
+                // d. the glossary item could be at the beginning of the string as a distinct word
                 .'^('.$item['item'].')(\W+)|'
                 // e. the glossary item could be at the end of the string as a distinct word
                 .'(\W+)('.$item['item'].')$'

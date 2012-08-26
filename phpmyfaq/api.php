@@ -2,7 +2,7 @@
 /**
  * The rest/json application interface
  *
- * PHP Version 5.3.0
+ * PHP Version 5.3
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -100,6 +100,10 @@ switch ($action) {
         $faq->setGroups($current_user);
         $faq->getRecord($recordId);
         $result = $faq->faqRecord;
+        break;
+
+    default:
+        $result = 'I am completely operational, and all my circuits are functioning perfectly.';
         break;
 }
 

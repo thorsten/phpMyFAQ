@@ -10,6 +10,9 @@
 # Mac OS X crap
 .DS_Store
 
+# Builds
+build/*
+
 # phpMyFAQ generated folders
 phpmyfaq/config/database.php
 phpmyfaq/config/database.bak.php

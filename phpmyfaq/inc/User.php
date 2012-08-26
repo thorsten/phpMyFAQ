@@ -125,11 +125,11 @@ class PMF_User
     private $login = '';
 
     /**
-     * minimum length of login string (default: 4)
+     * minimum length of login string (default: 2)
      *
      * @var int
      */
-    private $loginMinLength = 4;
+    private $loginMinLength = 2;
 
     /**
      * regular expression to find invalid login strings
@@ -340,6 +340,7 @@ class PMF_User
         $this->userId  = (int)    $user['user_id'];
         $this->login   = (string) $user['login'];
         $this->status  = (string) $user['account_status'];
+
         // get user-data
         if (!$this->userdata instanceof PMF_User_UserData) {
             $this->userdata = new PMF_User_UserData($this->config);
@@ -446,7 +447,7 @@ class PMF_User
         }
         
         // is $login valid?
-        $login = (string) $login;
+        $login = (string)$login;
         if (!$this->isValidLogin($login)) {
             return false;
         }

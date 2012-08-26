@@ -42,6 +42,11 @@ class PMF_Export_Pdf extends PMF_Export
     private $pdf = null;
     
     /**
+     * @var PMF_Tags
+     */
+    private $tags = null;
+    
+    /**
      * Constructor
      *
      * @param PMF_Faq           $faq      Faq object
@@ -79,6 +84,8 @@ class PMF_Export_Pdf extends PMF_Export
      */
     public function generate($categoryId = 0, $downwards = true, $language = '')
     {
+        global $PMF_LANG;
+
         // Set PDF options
         $this->pdf->enableBookmarks = true;
         $this->pdf->isFullExport    = true;
@@ -86,8 +93,7 @@ class PMF_Export_Pdf extends PMF_Export
 
         // Initialize categories
         $this->category->transform($categoryId);
-        
-        $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
+
         $this->pdf->setCategory($categoryId);
         $this->pdf->setCategories($this->category->categoryName);
         $this->pdf->SetCreator(
@@ -96,35 +102,71 @@ class PMF_Export_Pdf extends PMF_Export
             $this->_config->get('main.currentVersion')
         );
 
-        if (count($faqdata)) {
-            
-            $categories = $questions = $answers = $authors = $dates = array();
+        $faqdata    = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
+        $categories = $this->category->catTree;
 
-            $i = 0;
-            foreach ($faqdata as $data) {
-                $categories[$i] = $data['category_id'];
-                $questions[$i]  = $data['topic'];
-                $answers[$i]    = $data['content'];
-                $authors[$i]    = $data['author_name'];
-                $dates[$i]      = $data['lastmodified'];
-                $i++;
+        $categoryGroup = 0;
+        $this->pdf->AddPage();
+        foreach ($categories as $category) {
+            
+            if ($category['id'] !== $categoryGroup) {
+                $this->pdf->Bookmark(
+                    html_entity_decode(
+                        $this->category->categoryName[$category['id']]['name'], ENT_QUOTES, 'utf-8'
+                    ),
+                    $category['level'],
+                    0
+                );
+                $categoryGroup = $category['id'];
             }
             
-            // Create the PDF
-            foreach ($answers as $key => $value) {
-                $this->pdf->setCategory($categories[$key]);
-                $this->pdf->setQuestion($questions[$key]);
-                $this->pdf->setCategories($this->category->categoryName);
-                $this->pdf->AddPage();
-                $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 12);
-                $this->pdf->WriteHTML($value);
-            }
+            foreach ($faqdata as $faq) {
+                if ($faq['category_id'] === $category['id']) {
 
-            // remove default header/footer
-            $this->pdf->setPrintHeader(false);
-            $this->pdf->addFaqToc();
+                    $this->pdf->AddPage();
+                    $this->pdf->setCategory($category['id']);
+                    $this->pdf->Bookmark(
+                        html_entity_decode(
+                            $faq['topic'], ENT_QUOTES, 'utf-8'
+                        ),
+                        $category['level'] + 1,
+                        0
+                    );
+
+                    if ($this->tags instanceof PMF_Tags) {
+                        $tags = $this->tags->getAllTagsById($faq['id']);
+                    }
+
+                    $this->pdf->WriteHTML('<h2 align="center">' . $faq['topic'] . '</h2>', true);
+                    $this->pdf->Ln(10);
+
+                    $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 12);
+                    $this->pdf->WriteHTML(trim($faq['content']));
+                    $this->pdf->Ln(10);
+
+                    if (! empty($faq['keywords'])) {
+                        $this->pdf->Ln();
+                        $this->pdf->Write(5, $PMF_LANG['msgNewContentKeywords'] . ' ' . $faq['keywords']);
+                    }
+                    if (isset($tags) && 0 !== count($tags)) {
+                        $this->pdf->Ln();
+                        $this->pdf->Write(5, $PMF_LANG['ad_entry_tags'] . ': ' . implode(', ', $tags));
+                    }
+
+                    $this->pdf->Ln();
+                    $this->pdf->Ln();
+                    $this->pdf->Write(
+                        5,
+                        $PMF_LANG['msgLastUpdateArticle'] . PMF_Date::createIsoDate($faq['lastmodified'])
+                    );
+                }
+            }
         }
-        
+
+        // remove default header/footer
+        $this->pdf->setPrintHeader(false);
+        $this->pdf->addFaqToc();
+
         return $this->pdf->Output($filename);
     }
 
@@ -160,6 +202,9 @@ class PMF_Export_Pdf extends PMF_Export
         $this->pdf->AddPage();
         $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 12);
         $this->pdf->SetDisplayMode('real');
+        $this->pdf->Ln();
+        $this->pdf->WriteHTML('<h1 align="center">' . $faqData['title'] . '</h1>', true);
+        $this->pdf->Ln();
         $this->pdf->Ln();
         $this->pdf->WriteHTML(str_replace('../', '', $faqData['content']), true);
         $this->pdf->Ln();
