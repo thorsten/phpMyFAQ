@@ -147,11 +147,13 @@ class PMF_Enc
     /**
      * Setter for salt
      *
-     * @param string $salt
+     * @param string $login
+     *
+     * @return PMF_Enc
      */
-    public function setSalt($salt)
+    public function setSalt($login)
     {
-        $this->salt = $this->_config->get('main.referenceURL') . $salt;
+        $this->salt = $this->_config->get('security.salt') . $login;
 
         return $this;
     }

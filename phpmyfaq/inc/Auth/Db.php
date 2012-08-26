@@ -181,6 +181,7 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
      * @param  string $login        Loginname
      * @param  string $password     Password
      * @param  array  $optionslData Optional data
+     *
      * @return boolean
      */
     public function checkPassword($login, $password, Array $optionalData = null)
@@ -241,6 +242,7 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
      *
      * @param  string $login        Loginname
      * @param  array  $optionslData Optional data
+     *
      * @return integer
      */
     public function checkLogin($login, Array $optionalData = null)

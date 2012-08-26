@@ -161,7 +161,7 @@ if ($step == 1) {
 ?>
 
                 <p>This update script will work <strong>only</strong> for the following versions:</p>
-                <ul type="square">
+                <ul>
                     <li>phpMyFAQ 2.5.x (out of support since mid of 2010)</li>
                     <li>phpMyFAQ 2.6.x (out of support since end of 2011)</li>
                     <li>phpMyFAQ 2.7.x</li>
@@ -169,7 +169,7 @@ if ($step == 1) {
                 </ul>
 
                 <p>This update script <strong>will not</strong> work for the following versions:</p>
-                <ul type="square">
+                <ul>
                     <li>phpMyFAQ 0.x</li>
                     <li>phpMyFAQ 1.x</li>
                     <li>phpMyFAQ 2.0.x</li>
@@ -749,6 +749,7 @@ if ($step == 3) {
         $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faquser_right (user_id, right_id) VALUES (1, 44)";
 
         $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faquser ADD remember_me VARCHAR(150) NULL";
+
     }
 
     // Perform the queries for updating/migrating the database
@@ -805,6 +806,7 @@ if ($step == 3) {
         $faqConfig->add('records.autosaveActive', 'false');
         $faqConfig->add('records.autosaveSecs', '180');
         $faqConfig->add('main.maintenanceMode', 'false');
+        $faqConfig->add('security.salt', md5($faqConfig->get('main.referenceURL')));
     }
 
     // Always the last step: Update version number
