@@ -66,33 +66,37 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
 
     $glossaryItems = $glossary->getAllGlossaryItems();
 
-    print sprintf('<p>[ <a href="?action=addglossary">%s</a> ]</p>', $PMF_LANG['ad_glossary_add']);
+    printf('<p>[ <a href="?action=addglossary">%s</a> ]</p>', $PMF_LANG['ad_glossary_add']);
 
     print '<table class="table table-striped">';
-    print sprintf("<thead><tr><th class=\"list\">%s</th><th class=\"list\">%s</th><th style=\"width: 16px\">&nbsp;</th></tr></thead>", 
+    printf("<thead><tr><th class=\"list\">%s</th><th class=\"list\">%s</th><th style=\"width: 16px\">&nbsp;</th></tr></thead>",
         $PMF_LANG['ad_glossary_item'], 
-        $PMF_LANG['ad_glossary_definition']);
+        $PMF_LANG['ad_glossary_definition']
+    );
 
     foreach ($glossaryItems as $items) {
         print '<tr>';
         printf('<td><a href="%s%d">%s</a></td>', 
             '?action=editglossary&amp;id=', 
             $items['id'], 
-            $items['item']);
+            $items['item']
+        );
         printf('<td>%s</td>', 
-            $items['definition']);
+            $items['definition']
+        );
         printf('<td><a onclick="return confirm(\'%s\'); return false;" href="%s%d">',
             $PMF_LANG['ad_user_del_3'],
             '?action=deleteglossary&amp;id=', 
-            $items['id']);
-        printf('<img src="images/delete.png" width="16" height="16" alt="%s" title="%s" border="0" /></a></td>', 
-            $PMF_LANG['ad_entry_delete'], 
-            $PMF_LANG['ad_entry_delete']);
+            $items['id']
+        );
+        printf('<span title="%s" class="icon-trash"></span></a></td>',
+            $PMF_LANG['ad_entry_delete']
+        );
         print '</tr>';
     }
     print '</table>';
 
-    print sprintf('<p>[ <a href="?action=addglossary">%s</a> ]</p>', $PMF_LANG['ad_glossary_add']);
+    printf('<p>[ <a href="?action=addglossary">%s</a> ]</p>', $PMF_LANG['ad_glossary_add']);
 
 } else {
     print $PMF_LANG["err_NotAuth"];

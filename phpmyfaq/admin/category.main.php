@@ -299,37 +299,33 @@ if ($permission['editcateg']) {
         if ($cat["lang"] == $lang) {
            // add sub category (if current language)
            printf('
-            <a href="?action=addcategory&amp;cat=%s&amp;lang=%s"><img src="images/add.png" width="16" height="16" alt="%s" title="%s" border="0" /></a>&nbsp;',
+            <a href="?action=addcategory&amp;cat=%s&amp;lang=%s"><span title="%s" class="icon-plus-sign"></span></a>&nbsp;',
                $cat['id'],
                $cat['lang'],
-               $PMF_LANG['ad_quick_category'],
                $PMF_LANG['ad_quick_category']
            );
 
            // rename (sub) category (if current language)
            printf('
-               <a href="?action=editcategory&amp;cat=%s"><img src="images/edit.png" width="16" height="16" border="0" title="%s" alt="%s" /></a>&nbsp;',
+               <a href="?action=editcategory&amp;cat=%s"><span title="%s" class="icon-edit"></a>&nbsp;',
                $cat['id'],
-               $PMF_LANG['ad_kateg_rename'],
                $PMF_LANG['ad_kateg_rename']
            );
         }
 
         // translate category (always)
         printf(
-            '<a href="?action=translatecategory&amp;cat=%s"><img src="images/translate.png" width="16" height="16" border="0" title="%s" alt="%s" /></a>&nbsp;',
+            '<a href="?action=translatecategory&amp;cat=%s"><span title="%s" class="icon-share"></a>&nbsp;',
             $cat['id'],
-            $PMF_LANG['ad_categ_translate'],
             $PMF_LANG['ad_categ_translate']
         );
 
         // delete (sub) category (if current language)
         if (count($category->getChildren($cat['id'])) == 0 && $cat["lang"] == $lang) {
             printf(
-                '<a href="?action=deletecategory&amp;cat=%s&amp;catlang=%s"><img src="images/delete.png" width="16" height="16" alt="%s" title="%s" border="0" /></a>&nbsp;',
+                '<a href="?action=deletecategory&amp;cat=%s&amp;catlang=%s"><span title="%s" class="icon-trash"></a>&nbsp;',
                 $cat['id'],
                 $cat['lang'],
-                $PMF_LANG['ad_categ_delete'],
                 $PMF_LANG['ad_categ_delete']
             );
         }
@@ -337,19 +333,17 @@ if ($permission['editcateg']) {
         if ($cat["lang"] == $lang) {
            // cut category (if current language)
            printf(
-               '<a href="?action=cutcategory&amp;cat=%s"><img src="images/cut.png" width="16" height="16" alt="%s" border="0" title="%s" /></a>&nbsp;',
+               '<a href="?action=cutcategory&amp;cat=%s"><span title="%s" class="icon-move"></a>&nbsp;',
                $cat['id'],
-               $PMF_LANG['ad_categ_cut'],
                $PMF_LANG['ad_categ_cut']
            );
 
            if ($category->numParent($cat['parent_id']) > 1) {
               // move category (if current language) AND more than 1 category at the same level)
               printf(
-                  '<a href="?action=movecategory&amp;cat=%s&amp;parent_id=%s"><img src="images/move.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>',
+                  '<a href="?action=movecategory&amp;cat=%s&amp;parent_id=%s"><span title="%s" class="icon-resize-vertical"></a>',
                   $cat['id'],
                   $cat['parent_id'],
-                  $PMF_LANG['ad_categ_move'],
                   $PMF_LANG['ad_categ_move']
               );
            }

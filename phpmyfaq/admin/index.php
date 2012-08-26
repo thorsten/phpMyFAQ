@@ -472,8 +472,9 @@ if (isset($auth) && in_array(true, $permission)) {
                 <p>
                     <form action="index.php" method="post">
                         <input type="hidden" name="param" value="version" />
-                        <input class="btn-primary" type="submit"
-                               value="<?php print $PMF_LANG["ad_xmlrpc_button"]; ?>" />
+                        <button class="btn btn-primary" type="submit">
+                            <i class="icon-check icon-white"></i> <?php print $PMF_LANG["ad_xmlrpc_button"]; ?>
+                        </button>
                     </form>
                 </p>
 <?php
@@ -524,8 +525,9 @@ if (isset($auth) && in_array(true, $permission)) {
                 <p>
                     <form action="index.php" method="post">
                         <input type="hidden" name="getJson" value="verify" />
-                        <input class="btn-primary" type="submit"
-                               value="<?php print $PMF_LANG["ad_verification_button"] ?>" />
+                        <button class="btn btn-primary" type="submit">
+                            <i class="icon-certificate icon-white"></i> <?php print $PMF_LANG["ad_verification_button"] ?>
+                        </button>
                     </form>
                 </p>
 <?php
@@ -565,6 +567,8 @@ if (isset($auth) && in_array(true, $permission)) {
                 </tbody>
                 </table>
             </div>
+
+            <p>phpMyFAQ uses <a href="http://glyphicons.com/">Glyphicons</a>.</p>
 
             <div style="font-size: 5px; text-align: right; color: #f5f5f5">NOTE: Art is resistance.</div>
         </section>

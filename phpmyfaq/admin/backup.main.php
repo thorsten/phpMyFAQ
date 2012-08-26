@@ -32,10 +32,10 @@ if ($permission['backup']) {
             <p><?php print $PMF_LANG["ad_csv_make"]; ?></p>
             <p>
                 <a class="btn btn-primary" href="backup.export.php?action=backup_content">
-                    <?php print $PMF_LANG["ad_csv_linkdat"]; ?>
+                    <i class="icon-download icon-white"></i> <?php print $PMF_LANG["ad_csv_linkdat"]; ?>
                 </a>
                 <a class="btn btn-primary" href="backup.export.php?action=backup_logs">
-                    <?php print $PMF_LANG["ad_csv_linklog"]; ?>
+                    <i class="icon-download icon-white"></i> <?php print $PMF_LANG["ad_csv_linklog"]; ?>
                 </a>
             </p>
         </fieldset>
@@ -47,9 +47,9 @@ if ($permission['backup']) {
                 <label><?php print $PMF_LANG["ad_csv_file"]; ?>:</label>
                 <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
                 <input type="file" name="userfile" size="30" />
-            </p>
-            <p>
-                <input class="btn-primary" type="submit" value="<?php print $PMF_LANG["ad_csv_ok"]; ?>" />
+                <button class="btn btn-primary" type="submit">
+                    <i class="icon-upload icon-white"></i> <?php print $PMF_LANG["ad_csv_ok"]; ?>
+                </button>
             </p>
         </fieldset>
         </form>

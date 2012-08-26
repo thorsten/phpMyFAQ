@@ -94,7 +94,7 @@ if ($permission['viewlog']) {
             <td>
                 <a onclick="deleteSearchTerm('<?php print $searchItem['searchterm'] ?>', <?php print $searchItem['id'] ?>); return false;"
                    href="javascript:;">
-                    <img src="images/delete.png" width="16" height="16" alt="<?php print $PMF_LANG["ad_news_delete"]; ?>" border="0" />
+                    <span title="<?php print $PMF_LANG["ad_news_delete"]; ?>" class="icon-trash"></span>
                 </a>
             </td>
         </tr>

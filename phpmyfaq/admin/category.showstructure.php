@@ -98,13 +98,13 @@ if ($permission['editcateg']) {
         if ($cat['lang'] != $LANGCODE) {
            // translate category
            printf(
-               '<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><img src="images/translate.png" width="16" height="16" border="0" title="%s" alt="%s" /></a>',
+               '<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><span title="%s" class="icon-share"></span></a></a>',
                $currentLink,
                $cat['id'],
                $LANGCODE,
                $PMF_LANG['ad_categ_translate'],
-               $PMF_LANG['ad_categ_translate'],
-               $PMF_LANG['ad_categ_translate']);
+               $PMF_LANG['ad_categ_translate']
+           );
         }
         printf("&nbsp;%s<strong>%s</strong>",
             $indent,
@@ -124,21 +124,23 @@ if ($permission['editcateg']) {
                 $spokenLanguage = PMF_String::preg_replace('/\(.*\)/', '', $id_languages[$language]);
                 printf('<td title="%s: %s">',
                     $PMF_LANG['ad_categ_titel'],
-                    $spokenLanguage);
-                printf('<img src="images/ok.gif" width="22" height="18" border="0" title="%s: %s" alt=%s: %s\" /></td>',
+                    $spokenLanguage
+                );
+                printf(
+                    '<span title="%s: %s" class="icon-check"></span></td>',
                     $PMF_LANG['ad_categ_titel'],
-                    $spokenLanguage,
-                    $PMF_LANG['ad_categ_titel'],
-                    $spokenLanguage);
+                    $spokenLanguage
+                );
             } else {
                 printf('<td><a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s">',
                     $currentLink,
                     $cat['id'],
                     $lang,
                     $PMF_LANG['ad_categ_translate']);
-                printf('<img src="images/translate.png" width="16" height="16" border="0" title="%s" alt="%s" /></a>',
-                    $PMF_LANG['ad_categ_translate'],
-                    $PMF_LANG['ad_categ_translate']);
+                printf(
+                    '<span title="%s" class="icon-share"></span></a>',
+                    $PMF_LANG['ad_categ_translate']
+                );
             }
             print "</td>\n";
         }
