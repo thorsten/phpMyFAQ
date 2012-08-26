@@ -685,7 +685,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     }
 
     $configuration->update(array('main.referenceURL' => $link->getSystemUri('/install/setup.php')));
-    $configuration->add('security.salt', md5($link->getSystemUri('/install/setup.php')));
+    $configuration->add('security.salt', md5($configuration->get('main.referenceURL')));
 
     // add admin account and rights
     $admin = new PMF_User($configuration);
