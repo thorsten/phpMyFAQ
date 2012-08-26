@@ -61,8 +61,8 @@ ini_set('pcre.recursion_limit', 100000000);
 //
 // Check if multisite/multisite.php exist for Multisite support
 //
-if (file_exists('../multisite/multisite.php')) {
-    require '../multisite/multisite.php';
+if (file_exists(__DIR__ . '/../multisite/multisite.php')) {
+    require __DIR__ . '/../multisite/multisite.php';
 }
 
 //
