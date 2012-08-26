@@ -857,7 +857,7 @@ if ($step == 3) {
     print "</p>\n";
 
     print '<p class="alert alert-success">The database was updated successfully. Thank you very much for updating.</p>';
-    print '<p>Back to your <a href="../index.php">phpMyFAQ installation</a> and have fun! :-)</p>';
+    print '<h3>Back to your updated <a href="../index.php">phpMyFAQ installation</a> and have fun! :-)</h3>';
 
     // Remove backup files
     foreach (glob(PMF_ROOT_DIR.'/config/*.bak.php') as $filename) {
@@ -866,13 +866,13 @@ if ($step == 3) {
         }
     }
     // Remove 'setup.php' file
-    if (@unlink(__DIR__ . '/setup.php')) {
+    if (is_writeable(__DIR__ . '/setup.php') && @unlink(__DIR__ . '/setup.php')) {
         print "<p class=\"alert alert-success\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";
     } else {
         print "<p class=\"alert alert-error\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
     }
     // Remove 'update.php' file
-    if (@unlink(__DIR__ . '/update.php')) {
+    if (is_writeable(__DIR__ . '/update.php') && @unlink(__DIR__ . '/update.php')) {
         print "<p class=\"alert alert-success\">The file <em>./install/update.php</em> was deleted automatically.</p>\n";
     } else {
         print "<p class=\"alert alert-error\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
