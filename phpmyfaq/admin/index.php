@@ -443,7 +443,7 @@ if (isset($auth) && in_array(true, $permission)) {
             </table>
         </section>
 
-        <section class="row">
+        <section class="row-fluid">
             <div class="span5">
                 <header>
                     <h3><?php print $PMF_LANG['ad_online_info']; ?></h3>
@@ -537,7 +537,7 @@ if (isset($auth) && in_array(true, $permission)) {
             </div>
         </section>
 
-        <section>
+        <section class="row-fluid">
             <header>
                 <h3><?php print $PMF_LANG['ad_system_info']; ?></h3>
             </header>
