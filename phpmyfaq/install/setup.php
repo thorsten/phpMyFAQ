@@ -18,6 +18,7 @@
  * @author    Johannes Schlüter <johannes@php.net>
  * @author    Uwe Pries <uwe.pries@digartis.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author    Florian Anderiasch <florian@phpmyfaq.de>
  * @copyright 2002-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
@@ -40,9 +41,6 @@ require PMF_ROOT_DIR . '/config/constants.php';
 require PMF_ROOT_DIR . '/inc/Autoloader.php';
 require PMF_ROOT_DIR . '/inc/functions.php';
 require PMF_ROOT_DIR . '/install/questionnaire.php';
-
-$installer = new PMF_Installer();
-
 ?>
 <!doctype html>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
@@ -93,7 +91,6 @@ $installer = new PMF_Installer();
 </div>
 <![endif]-->
 
-
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
@@ -123,18 +120,12 @@ $installer = new PMF_Installer();
         </div>
         <div class="row" style="padding-left: 20px;">
 <?php
-
-
-
-
-
 //
 // Initalizing static string wrapper
 //
 PMF_String::init('en');
 
-$query = $uninst = array();
-
+$installer = new PMF_Installer();
 $system        = new PMF_System();
 
 $installer->checkBasicStuff();
@@ -383,271 +374,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 <?php
     PMF_System::renderFooter();
 } else {
-
-    $dbSetup = array();
-
-    // Check table prefix
-    $dbSetup['dbPrefix'] = $sqltblpre = PMF_Filter::filterInput(INPUT_POST, 'sqltblpre', FILTER_SANITIZE_STRING, '');
-    if ('' !== $dbSetup['dbPrefix']) {
-        PMF_Db::setTablePrefix($dbSetup['dbPrefix']);
-    }
-
-    // Check database entries
-    $dbSetup['dbType'] = PMF_Filter::filterInput(INPUT_POST, 'sql_type', FILTER_SANITIZE_STRING);
-    if (!is_null($dbSetup['dbType'])) {
-        $dbSetup['dbType'] = trim($dbSetup['dbType']);
-        if (! file_exists(PMF_ROOT_DIR . '/install/' . $dbSetup['dbType'] . '.sql.php')) {
-            printf(
-                '<p class="alert alert-error"><strong>Error:</strong> Invalid server type: %s</p>',
-                $dbSetup['dbType']
-            );
-            PMF_System::renderFooter(true);
-        }
-    } else {
-        echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please select a database type.</p>\n";
-        PMF_System::renderFooter(true);
-    }
-
-    $dbSetup['dbServer'] = PMF_Filter::filterInput(INPUT_POST, 'sql_server', FILTER_SANITIZE_STRING);
-    if (is_null($dbSetup['dbServer']) && ! PMF_System::isSqlite($dbSetup['dbType'])) {
-        echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a database server.</p>\n";
-        PMF_System::renderFooter(true);
-    }
-
-    $dbSetup['dbUser'] = PMF_Filter::filterInput(INPUT_POST, 'sql_user', FILTER_SANITIZE_STRING);
-    if (is_null($dbSetup['dbUser']) && ! PMF_System::isSqlite($dbSetup['dbType'])) {
-        echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a database username.</p>\n";
-        PMF_System::renderFooter(true);
-    }
-
-    $dbSetup['dbPassword'] = PMF_Filter::filterInput(INPUT_POST, 'sql_passwort', FILTER_UNSAFE_RAW);
-    if (is_null($dbSetup['dbPassword']) && ! PMF_System::isSqlite($dbSetup['dbType'])) {
-        // Password can be empty...
-        $dbSetup['dbPassword'] = '';
-    }
-
-    $dbSetup['dbDatabaseName'] = PMF_Filter::filterInput(INPUT_POST, 'sql_db', FILTER_SANITIZE_STRING);
-    if (is_null($dbSetup['dbDatabaseName']) && ! PMF_System::isSqlite($dbSetup['dbType'])) {
-        echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a database name.</p>\n";
-        PMF_System::renderFooter(true);
-    }
-
-    if (PMF_System::isSqlite($dbSetup['dbType'])) {
-        $dbSetup['dbServer'] = PMF_Filter::filterInput(INPUT_POST, 'sql_sqlitefile', FILTER_SANITIZE_STRING);
-        if (is_null($dbSetup['dbServer'])) {
-            echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a SQLite database filename.</p>\n";
-            PMF_System::renderFooter(true);
-        }
-    }
-
-    // check database connection
-    require PMF_ROOT_DIR . "/inc/DB/Driver.php";
-    PMF_Db::setTablePrefix($dbSetup['dbPrefix']);
-    $db = PMF_Db::factory($dbSetup['dbType']);
-    $db->connect($dbSetup['dbServer'], $dbSetup['dbUser'], $dbSetup['dbPassword'], $dbSetup['dbDatabaseName']);
-    if (!$db) {
-        printf("<p class=\"alert alert-error\"><strong>DB Error:</strong> %s</p>\n", $db->error());
-        PMF_System::renderFooter(true);
-    }
-
-    $configuration = new PMF_Configuration($db);
-
-    // check LDAP if available
-    $ldapEnabled = PMF_Filter::filterInput(INPUT_POST, 'ldap_enabled', FILTER_SANITIZE_STRING);
-    if (extension_loaded('ldap') && !is_null($ldapEnabled)) {
-
-        $ldapSetup = array();
-
-        // check LDAP entries
-        $ldapSetup['ldapServer'] = PMF_Filter::filterInput(INPUT_POST, 'ldap_server', FILTER_SANITIZE_STRING);
-        if (is_null($ldapSetup['ldapServer'])) {
-            echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a LDAP server.</p>\n";
-            PMF_System::renderFooter(true);
-        }
-        
-        $ldapSetup['ldapPort'] = PMF_Filter::filterInput(INPUT_POST, 'ldap_port', FILTER_VALIDATE_INT);
-        if (is_null($ldapSetup['ldapPort'])) {
-            echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a LDAP port.</p>\n";
-            PMF_System::renderFooter(true);
-        }
-
-        $ldapSetup['ldapBase'] = PMF_Filter::filterInput(INPUT_POST, 'ldap_base', FILTER_SANITIZE_STRING);
-        if (is_null($ldapSetup['ldapBase'])) {
-            echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a LDAP base search DN.</p>\n";
-            PMF_System::renderFooter(true);
-        }
-
-        // LDAP User and LDAP password are optional
-        $ldapSetup['ldapUser']     = PMF_Filter::filterInput(INPUT_POST, 'ldap_user', FILTER_SANITIZE_STRING, '');
-        $ldapSetup['ldapPassword'] = PMF_Filter::filterInput(INPUT_POST, 'ldap_password', FILTER_SANITIZE_STRING, '');
-
-        // check LDAP connection
-        require PMF_ROOT_DIR . "/inc/Ldap.php";
-        $ldap = new PMF_Ldap($configuration);
-        $ldap->connect(
-            $ldapSetup['ldapServer'],
-            $ldapSetup['ldapPort'],
-            $ldapSetup['ldapBase'],
-            $ldapSetup['ldapUser'],
-            $ldapSetup['ldapPassword']
-        );
-        if (!$ldap) {
-            echo "<p class=\"alert alert-error\"><strong>LDAP Error:</strong> " . $ldap->error() . "</p>\n";
-            PMF_System::renderFooter(true);
-        }
-    }
-
-    // check loginname
-    $loginname = PMF_Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_STRING);
-    if (is_null($loginname)) {
-        echo '<p class="alert alert-error"><strong>Error:</strong> Please add a loginname for your account.</p>';
-        PMF_System::renderFooter(true);
-    }
-
-    // check user entries
-    $password = PMF_Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
-    if (is_null($password)) {
-        echo '<p class="alert alert-error"><strong>Error:</strong> Please add a password for the your account.</p>';
-        PMF_System::renderFooter(true);
-    }
-    
-    $password_retyped = PMF_Filter::filterInput(INPUT_POST, 'password_retyped', FILTER_SANITIZE_STRING);
-    if (is_null($password_retyped)) {
-        echo '<p class="alert alert-error"><strong>Error:</strong> Please add a retyped password.</p>';
-        PMF_System::renderFooter(true);
-    }
-    
-    if (strlen($password) <= 5 || strlen($password_retyped) <= 5) {
-        echo '<p class="alert alert-error"><strong>Error:</strong> Your password and retyped password are too short.' .
-              ' Please set your password and your retyped password with a minimum of 6 characters.</p>';
-        PMF_System::renderFooter(true);
-    }
-    if ($password != $password_retyped) {
-        echo '<p class="alert alert-error"><strong>Error:</strong> Your password and retyped password are not equal.' .
-              ' Please check your password and your retyped password.</p>';
-        PMF_System::renderFooter(true);
-    }
-
-    $language  = PMF_Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_STRING, 'en');
-    $realname  = PMF_Filter::filterInput(INPUT_POST, 'realname', FILTER_SANITIZE_STRING, '');
-    $email     = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL, '');
-    $permLevel = PMF_Filter::filterInput(INPUT_POST, 'permLevel', FILTER_SANITIZE_STRING, 'basic');
-
-    $instanceSetup = new PMF_Instance_Setup();
-    $instanceSetup->setRootDir(PMF_ROOT_DIR);
-
-    // Write the DB variables in database.php
-    if (! $instanceSetup->createDatabaseFile($dbSetup)) {
-        echo "<p class=\"alert alert-error\"><strong>Error:</strong> Setup cannot write to ./config/database.php.</p>";
-        $system->cleanInstallation();
-        PMF_System::renderFooter(true);
-    }
-
-    // check LDAP if available
-    if (extension_loaded('ldap') && !is_null($ldapEnabled)) {
-        if (! $instanceSetup->createLdapFile($ldapSetup)) {
-            echo "<p class=\"alert alert-error\"><strong>Error:</strong> Setup cannot write to ./config/ldap.php.</p>";
-            $system->cleanInstallation();
-            PMF_System::renderFooter(true);
-        }
-    }
-
-    // connect to the database using config/database.php
-    require PMF_ROOT_DIR . '/config/database.php';
-    $db = PMF_Db::factory($dbSetup['dbType']);
-    $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
-    if (!$db) {
-        echo "<p class=\"alert alert-error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
-        $system->cleanInstallation();
-        PMF_System::renderFooter(true);
-    }
-
-    require $dbSetup['dbType'] . '.sql.php'; // CREATE TABLES
-    require 'stopwords.sql.php';  // INSERTs for stopwords
-
-    $system->setDatabase($db);
-
-    echo '<p>';
-
-    // Erase any table before starting creating the required ones
-    if (! PMF_System::isSqlite($dbSetup['dbType'])) {
-        $system->dropTables($uninst);
-    }
-    
-    // Start creating the required tables
-    $count = 0;
-    foreach ($query as $executeQuery) {
-        $result = @$db->query($executeQuery);
-        if (!$result) {
-            echo '<p class="alert alert-error"><strong>Error:</strong> Please install your version of phpMyFAQ once again or send
-            us a <a href=\"http://www.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
-            printf('<p class="alert alert-error"><strong>DB error:</strong> %s</p>', $db->error());
-            printf('<code>%s</code>', htmlentities($executeQuery));
-            $system->dropTables($uninst);
-            $system->cleanInstallation();
-            PMF_System::renderFooter(true);
-        }
-        usleep(2500);
-        $count++;
-        if (!($count % 10)) {
-            echo '| ';
-        }
-    }
-
-    $link = new PMF_Link(null, $configuration);
-
-    // add main configuration, add personal settings
-    include 'configurationdata.php';
-    $mainConfig['main.metaPublisher']      = $realname;
-    $mainConfig['main.administrationMail'] = $email;
-    $mainConfig['main.language']           = $language;
-    $mainConfig['security.permLevel']      = $permLevel;
-
-    foreach ($mainConfig as $name => $value) {
-        $configuration->add($name, $value);
-    }
-
-    $configuration->update(array('main.referenceURL' => $link->getSystemUri('/install/setup.php')));
-    $configuration->add('security.salt', md5($configuration->get('main.referenceURL')));
-
-    // add admin account and rights
-    $admin = new PMF_User($configuration);
-    if (! $admin->createUser($loginname, $password, 1)) {
-        echo "<p class=\"alert alert-error\"><strong>Fatal installation error:</strong> " .
-             "Couldn't create the admin user.</p>\n";
-        $system->cleanInstallation();
-        PMF_System::renderFooter(true);
-    }
-    $admin->setStatus('protected');
-    $adminData = array(
-        'display_name' => $realname,
-        'email'        => $email
-    );
-    $admin->setUserData($adminData);
-
-    // add default rights
-    include 'rightdata.php';
-    foreach ($mainRights as $right) {
-        $admin->perm->grantUserRight(1, $admin->perm->addRight($right));
-    }
-    
-    // Add anonymous user account
-    $instanceSetup->createAnonymousUser($configuration);
-
-    // Add master instance
-    $instanceData = array(
-        'url'      => $link->getSystemUri($_SERVER['SCRIPT_NAME']),
-        'instance' => $link->getSystemRelativeUri('install/setup.php'),
-        'comment'  => 'phpMyFAQ ' . PMF_System::getVersion()
-    );
-    $faqInstance = new PMF_Instance($configuration);
-    $faqInstance->addInstance($instanceData);
-
-    $faqInstanceMaster = new PMF_Instance_Master($configuration);
-    $faqInstanceMaster->createMaster($faqInstance);
-
-    echo '</p>';
-
+    $installer->startInstall();
 ?>
         <p class="alert alert-success">
             Wow, looks like the installation worked like a charm. This is pretty cool, isn't it? :-)
@@ -689,14 +416,16 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                 <a href="../admin/index.php">admin section</a>.
             </p>
 
+            <h3>The survey</h3>
+
             <fieldset>
                 <legend>General questions</legend>
                 <div class="control-group">
                     <label class="control-label">How do you act like?</label>
                         <div class="controls">
                         <select name="q[individual]">
-                            <option>as an individual</option>
-                            <option>as an organisation</option>
+                            <option value="as an individual">as an individual</option>
+                            <option value="as an organisation">as an organisation</option>
                         </select>
                     </div>
                 </div>
@@ -704,11 +433,11 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                     <label class="control-label">What kind of organisation is that?</label>
                     <div class="controls">
                         <select name="q[organisation]">
-                             <option>private held</option>
-                             <option>public held</option>
-                             <option>government organisation</option>
-                             <option>foundation</option>
-                             <option>other</option>
+                             <option value="private held">privately held</option>
+                             <option value="public held">publicly held</option>
+                             <option value="government organisation">governmental organisation</option>
+                             <option value="foundation">foundation</option>
+                             <option value="other">other</option>
                          </select>
                     </div>
                 </div>
@@ -717,13 +446,13 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             <fieldset>
                 <legend>Technical questions</legend>
                 <div class="control-group">
-                    <label class="control-label">Where did you installed phpMyFAQ?</label>
+                    <label class="control-label">Where did you install phpMyFAQ?</label>
                     <div class="controls">
                         <select name="q[server]">
-                            <option>server run by a hosting company</option>
-                            <option>public server run by you/your organisation</option>
-                            <option>private server run by you/your organisation</option>
-                            <option>Don't know</option>
+                            <option value="server run by a hosting company">server run by a hosting company</option>
+                            <option value="public server run by you/your organisation">public server run by you/your organisation</option>
+                            <option value="private server run by you/your organisation">private server run by you/your organisation</option>
+                            <option value="Don't know">Don't know</option>
                         </select>
                     </div>
                 </div>
@@ -772,8 +501,8 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
              </fieldset>
 
             <p class="alert alert-info">
-                Additional to your input we're going to submit some information about your system setup for statstic
-                purpose.
+                In addition to your input we're going to submit some information about your system setup for statistical
+                purposes.
             </p>
             <p class="alert alert-info">
                 We are not storing any personal information. You can see the data by clicking
@@ -782,12 +511,8 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
             <div id="configliste" class="hide">
                 <a href="#" onclick="hide('configliste'); return false;">hide again</a>
-                <dl>
 <?php
-$q = new PMF_Questionnaire_Data($mainConfig);
-$options = $q->get();
-array_walk($options, 'data_printer');
-echo '</dl><input type="hidden" name="systemdata" value="'.PMF_String::htmlspecialchars(serialize($q->get()), ENT_QUOTES).'" />';
+$installer->printDataList();
 ?>
             </div>
             <p style="text-align: center;">
@@ -802,18 +527,6 @@ echo '</dl><input type="hidden" name="systemdata" value="'.PMF_String::htmlspeci
             </p>
         </div>
 <?php
-    // Remove 'setup.php' file
-    if (@unlink(basename($_SERVER['SCRIPT_NAME']))) {
-        echo "<p class=\"alert alert-success\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";
-    } else {
-        echo "<p class=\"alert alert-error\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
-    }
-    // Remove 'update.php' file
-    if (@unlink(dirname($_SERVER['PATH_TRANSLATED']) . '/update.php')) {
-        echo "<p class=\"alert alert-success\">The file <em>./install/update.php</em> was deleted automatically.</p>\n";
-    } else {
-        echo "<p class=\"alert alert-error\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
-    }
-    
+    $installer->cleanUpFiles();
     PMF_System::renderFooter();
 }
