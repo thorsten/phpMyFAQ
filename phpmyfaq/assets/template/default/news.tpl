@@ -74,11 +74,10 @@
             </div>
 
             <script type="text/javascript" >
-            $(function() {
-                $('#submitcomment').click(function() {
-                    saveFormValues('savecomment', 'comment');
-                });
-                $('form#formValues').submit(function() { return false; });
+	    $('form#formValues').on('submit', function (e) {
+		e.preventDefault();
+		saveFormValues('savecomment', 'comment');
+		return false;
             });
             </script>
 

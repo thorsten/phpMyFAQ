@@ -70,8 +70,16 @@ if (!$network->checkIp($_SERVER['REMOTE_ADDR'])) {
     $message = array('error' => $PMF_LANG['err_bannedIP']);
 }
 
+// Check, if user is logged in
+$user = PMF_User_CurrentUser::getFromSession($faqConfig);
+if ($user instanceof PMF_User_CurrentUser) {
+    $isLoggedIn = true;
+} else {
+    $isLoggedIn = false;
+}
+
 if ('savevoting' !== $action && 'saveuserdata' !== $action && 'changepassword' !== $action &&
-    !$captcha->checkCaptchaCode($code)) {
+    !$captcha->checkCaptchaCode($code) && !$isLoggedIn) {
     $message = array('error' => $PMF_LANG['msgCaptcha']);
 }
 

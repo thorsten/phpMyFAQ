@@ -140,12 +140,13 @@
                     saveVoting('faq', {id}, value);
                 }
             });
-            $(function() {
-                $('#submitcomment').click(function() {
-                    saveFormValues('savecomment', 'comment');
-                });
-                $('form#formValues').submit(function() { return false; });
+
+	    $('form#formValues').on('submit', function (e) {
+		e.preventDefault();
+		saveFormValues('savecomment', 'comment');
+		return false;
             });
+
             </script>
             <script src="assets/js/syntaxhighlighter/scripts/shCore.js"></script>
             <script src="assets/js/syntaxhighlighter/scripts/shAutoloader.js"></script>
