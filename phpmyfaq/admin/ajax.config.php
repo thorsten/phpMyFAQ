@@ -69,7 +69,7 @@ switch ($ajaxAction) {
 
             $dbSetup = array(
                 'dbServer'       => $DB['server'],
-                'dbUser'         => $DB['db'],
+                'dbUser'         => $DB['user'],
                 'dbPassword'     => $DB['password'],
                 'dbDatabaseName' => $DB['db'],
                 'dbPrefix'       => substr($hostname, 0, strpos($hostname, '.')),
