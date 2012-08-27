@@ -148,7 +148,6 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
         $auth = true;
     } else {
         $user = null;
-        session_destroy();
     }
 }
 
