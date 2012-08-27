@@ -40,6 +40,13 @@ class PMF_Instance_Client extends PMF_Instance
     private $fileSystem;
 
     /**
+     * URL of the client
+     *
+     * @var string
+     */
+    private $clientUrl;
+
+    /**
      * Constructor
      *
      * @param PMF_Configuration $config
@@ -115,6 +122,13 @@ class PMF_Instance_Client extends PMF_Instance
         );
         $this->config->getDb()->query(
             sprintf(
+                "UPDATE %sfaqconfig SET config_value = '%s' WHERE config_name = 'main.referenceURL'",
+                $prefix,
+                $this->clientUrl
+            )
+        );
+        $this->config->getDb()->query(
+            sprintf(
                 'INSERT INTO %sfaqright SELECT * FROM %sfaqright',
                 $prefix,
                 PMF_Db::getTablePrefix()
@@ -186,5 +200,25 @@ class PMF_Instance_Client extends PMF_Instance
         $destTpl   = $dest . '/assets/template/';
 
         $this->fileSystem->recursiveCopy($sourceTpl, $destTpl);
+    }
+
+    /**
+     * Sets client URL
+     *
+     * @param string $clientUrl
+     */
+    public function setClientUrl($clientUrl)
+    {
+        $this->clientUrl = $clientUrl;
+    }
+
+    /**
+     * Returns client URL
+     *
+     * @return string
+     */
+    public function getClientUrl()
+    {
+        return $this->clientUrl;
     }
 }
