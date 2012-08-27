@@ -188,6 +188,31 @@ class PMF_System
     }
 
     /**
+     * Returns the locally supported databases.
+     *
+     * @param bool $html
+     * @return array
+     */
+    public function getSupportedSafeDatabases($html = false)
+    {
+        $retVal = array();
+        foreach ($this->getSupportedDatabases() as $extension => $database) {
+            if (extension_loaded($extension) && version_compare(PHP_VERSION, $database[0]) >= 0) {
+                // prevent MySQLi with zend.ze1_compatibility_mode enabled due to a few cloning isssues
+                if (($extension == 'mysqli') && ini_get('zend.ze1_compatibility_mode')) {
+                    continue;
+                }
+                if ($html) {
+                    $retVal[] = sprintf('<option value="%s">%s</option>', $extension, $database[1]);
+                } else {
+                    $retVal[$extension] = $database;
+                }
+            }
+        }
+        return $retVal;
+    }
+
+    /**
      * Checks for installed database extensions, if the first supported
      * extension is enabled, return true.
      *

@@ -41,6 +41,8 @@ require PMF_ROOT_DIR . '/inc/Autoloader.php';
 require PMF_ROOT_DIR . '/inc/functions.php';
 require PMF_ROOT_DIR . '/install/questionnaire.php';
 
+$installer = new PMF_Installer();
+
 ?>
 <!doctype html>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
@@ -122,10 +124,9 @@ require PMF_ROOT_DIR . '/install/questionnaire.php';
         <div class="row" style="padding-left: 20px;">
 <?php
 
-if (version_compare(PHP_VERSION, PMF_System::VERSION_MINIMUM_PHP, '<')) {
-    printf('<p class="alert alert-error">Sorry, but you need PHP %s or later!</p>', PMF_System::VERSION_MINIMUM_PHP);
-    PMF_System::renderFooter();
-}
+
+
+
 
 //
 // Initalizing static string wrapper
@@ -135,84 +136,13 @@ PMF_String::init('en');
 $query = $uninst = array();
 
 $system        = new PMF_System();
-$instanceSetup = new PMF_Instance_Setup();
-$instanceSetup->setRootDir(PMF_ROOT_DIR);
 
-if (! function_exists('date_default_timezone_set')) {
-    echo '<p class="alert alert-error">Sorry, but setting a default timezone doesn\'t work in your environment!</p>';
-    PMF_System::renderFooter();
-}
+$installer->checkBasicStuff();
+$installer->checkFilesystemPermissions();
 
-if (! $system->checkDatabase()) {
-    echo '<p class="alert alert-error">No supported database detected! Please install one of the following' .
-          ' database systems and enable the corresponding PHP extension in php.ini:</p>';
-    echo '<ul>';
-    foreach ($system->getSupportedDatabases() as $database) {
-        printf('    <li>%s</li>', $database[1]);
-    }
-    echo '</ul>';
-    PMF_System::renderFooter();
-}
-
-if (! $system->checkRequiredExtensions()) {
-    echo '<p class="alert alert-error">The following extensions are missing! Please enable the PHP extension(s) in ' .
-          'php.ini.</p>';
-    echo '<ul>';
-    foreach ($system->getMissingExtensions() as $extension) {
-        printf('    <li>ext/%s</li>', $extension);
-    }
-    echo '</ul>';
-    PMF_System::renderFooter();
-}
-
-if (! $system->checkphpMyFAQInstallation()) {
-    echo '<p class="alert alert-error">It seems you\'re already running a version of phpMyFAQ. Please use the ' .
-          '<a href="update.php">update script</a>.</p>';
-    PMF_System::renderFooter();
-    die();
-}
-
-$dirs       = array('/attachments', '/config', '/data', '/images');
-$failedDirs = $instanceSetup->checkDirs($dirs);
-$numDirs    = sizeof($failedDirs);
-
-if (1 <= $numDirs) {
-    printf(
-        '<p class="alert alert-error">The following %s could not be created or %s not writable:</p><ul>',
-        (1 < $numDirs) ? 'directories' : 'directory',
-        (1 < $numDirs) ? 'are' : 'is'
-    );
-    foreach ($failedDirs as $dir) {
-        echo "<li>$dir</li>\n";
-    }
-    printf(
-        '</ul><p class="alert alert-error">Please create %s manually and/or change access to chmod 755 (or ' .
-          'greater if necessary).</p>',
-        (1 < $numDirs) ? 'them' : 'it'
-    );
-    PMF_System::renderFooter();
-}
-
+// not yet POSTed
 if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST["sql_db"])) {
-
-    if ((@ini_get('safe_mode') == 'On' || @ini_get('safe_mode') === 1)) {
-        echo '<p class="alert alert-error">The PHP safe mode is enabled. You may have problems when phpMyFAQ tries to write ' .
-              ' in some directories.</p>';
-    }
-    if (! extension_loaded('gd')) {
-        echo '<p class="alert alert-error">You don\'t have GD support enabled in your PHP installation. Please enable GD ' .
-              'support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
-    }
-    if (! function_exists('imagettftext')) {
-        echo '<p class="alert alert-error">You don\'t have Freetype support enabled in the GD extension of your PHP ' .
-              'installation. Please enable Freetype support in GD extension otherwise the Captchas for spam ' .
-              'protection will be quite easy to break.</p>';
-    }
-    if (! extension_loaded('curl') || ! extension_loaded('openssl')) {
-        echo '<p class="alert alert-error">You don\'t have cURL and/or OpenSSL support enabled in your PHP installation. ' .
-              'Please enable cURL and/or OpenSSL support in your php.ini file otherwise you can\'t use the Twitter ' .
-              ' support.</p>';
-    }
+    $installer->checkNoncriticalSettings()
 ?>
         </div>
 
@@ -226,16 +156,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                         <div class="controls">
                             <select name="sql_type" id="sql_type" size="1" onchange="selectDatabaseSetup(this);">
 <?php
-    // check what extensions are loaded in PHP
-    foreach ($system->getSupportedDatabases() as $extension => $database) {
-        if (extension_loaded($extension) && version_compare(PHP_VERSION, $database[0]) >= 0) {
-            // prevent MySQLi with zend.ze1_compatibility_mode enabled due to a few cloning isssues
-            if (($extension == 'mysqli') && ini_get('zend.ze1_compatibility_mode')) {
-                continue;
-            }
-            printf('<option value="%s">%s</option>', $extension, $database[1]);
-        }
-    }
+    echo join('', $system->getSupportedSafeDatabases(true));
 ?>
                             </select>
                             <p class="help-block">Please select your preferred database type.</p>
@@ -297,11 +218,10 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                             </p>
                         </div>
                     </div>
-
                 </fieldset>
             </div>
 
-            <?php if (extension_loaded('ldap')): ?>
+<?php if (extension_loaded('ldap')): ?>
             <div class="span6">
                 <fieldset>
                 <legend>Add your LDAP setup</legend>
@@ -361,7 +281,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
             </div>
         </div>
         <div class="row">
-        <?php endif; ?>
+<?php endif; ?>
 
             <div class="span6">
                 <fieldset>
@@ -612,7 +532,10 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     $realname  = PMF_Filter::filterInput(INPUT_POST, 'realname', FILTER_SANITIZE_STRING, '');
     $email     = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL, '');
     $permLevel = PMF_Filter::filterInput(INPUT_POST, 'permLevel', FILTER_SANITIZE_STRING, 'basic');
-    
+
+    $instanceSetup = new PMF_Instance_Setup();
+    $instanceSetup->setRootDir(PMF_ROOT_DIR);
+
     // Write the DB variables in database.php
     if (! $instanceSetup->createDatabaseFile($dbSetup)) {
         echo "<p class=\"alert alert-error\"><strong>Error:</strong> Setup cannot write to ./config/database.php.</p>";
@@ -760,7 +683,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                 For further development we would like to get some feedback from our users. Therefore we'd ask you to
                 take a few minutes of your time to answer a few questions.
             </p>
-            <p>
+            <p class="alert alert-success">
                 If you don't want to participate in the survey, you can directly visit
                 <a href="../index.php">your version of phpMyFAQ</a> or login into your
                 <a href="../admin/index.php">admin section</a>.
