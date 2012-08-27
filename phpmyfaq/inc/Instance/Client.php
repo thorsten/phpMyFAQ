@@ -69,7 +69,7 @@ class PMF_Instance_Client extends PMF_Instance
      */
     public function createClientFolder($hostname)
     {
-        $clientDir = PMF_ROOT_DIR . '/multisite/' . $hostname;
+        $clientDir = PMF_ROOT_DIR . '/multisite/';
 
         if (!$this->fileSystem instanceof PMF_Filesystem) {
             $this->fileSystem = new PMF_Filesystem();
@@ -79,7 +79,7 @@ class PMF_Instance_Client extends PMF_Instance
             return false;
         }
 
-        return $this->fileSystem->mkdir($clientDir);
+        return $this->fileSystem->mkdir($clientDir . $hostname);
     }
 
     /**

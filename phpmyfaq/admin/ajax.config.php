@@ -95,6 +95,10 @@ switch ($ajaxAction) {
             $clientSetup->createAnonymousUser($faqConfig);
 
             PMF_Db::setTablePrefix($DB['prefix']);
+        } else {
+
+            $faqInstance->removeInstance($instanceId);
+            $payload = array('error' => 'Cannot create instance.');
         }
 
         if (0 !== $instanceId) {
