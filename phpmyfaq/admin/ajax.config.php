@@ -77,7 +77,7 @@ switch ($ajaxAction) {
             );
             $clientSetup->createDatabaseFile($dbSetup, '');
 
-            $faqInstanceClient->setClientUrl($hostname);
+            $faqInstanceClient->setClientUrl('http://' . $hostname);
             $faqInstanceClient->createClientTables($dbSetup['dbPrefix']);
 
             PMF_Db::setTablePrefix($dbSetup['dbPrefix']);
