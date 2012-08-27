@@ -58,7 +58,7 @@ class PMF_Comment
      *
      * @var string
      */
-    private $pmf_lang;
+    private $pmfStr;
 
     /**
      * Constructor
@@ -69,10 +69,10 @@ class PMF_Comment
      */
     public function __construct(PMF_Configuration $config)
     {
-        global $PMF_LANG;
+	global $pmfStr;
 
-	$this->config  = $config;
-        $this->pmf_lang = $PMF_LANG;
+	$this->config = $config;
+	$this->pmfStr = $pmfStr;
     }
 
     //
@@ -176,12 +176,13 @@ class PMF_Comment
         foreach ($comments as $item) {
             $output .= '<p class="comment">';
             $output .= '<img src="assets/img/bubbles.gif" />';
-            $output .= sprintf('<strong>%s<a href="mailto:%s">%s</a>:</strong><br />%s<br />%s</p>',
-                $this->pmf_lang['msgCommentBy'],
+	    $output .= sprintf(
+		'<strong>%s<a href="mailto:%s">%s</a>:</strong><br />%s<br />%s</p>',
+		$this->pmfStr['msgCommentBy'],
                 $mail->safeEmail($item['email']),
                 $item['user'],
-                nl2br($item['content']),
-                $this->pmf_lang['newsCommentDate'] .
+		$this->showShortComment($id, $item['content']),
+		$this->pmfStr['newsCommentDate'] .
                     $date->format(
                         PMF_Date::createIsoDate($item['date'], 'Y-m-d H:i', false)
                     )
@@ -337,5 +338,32 @@ class PMF_Comment
         }
 
         return $comments;
+    }
+
+    /**
+     * Adds some fancy HTML if a comment is too long
+     *
+     * @param integer $id
+     * @param string  $comment
+     *
+     * @return string
+     */
+    public function showShortComment($id, $comment)
+    {
+	$words    = explode(' ', nl2br($comment));
+	$numWords = 0;
+
+	$comment = '';
+	foreach ($words as $word) {
+	    $comment .= $word . ' ';
+	    if (15 === $numWords) {
+		$comment .= '<span class="comment-dots-' . $id . '">... </span>' .
+			    '<a onclick="showLongComment(' . $id . ')" class="comment-show-more-' . $id . '">show more</a>' .
+			    '<span class="comment-more-' . $id . ' hide">';
+	    }
+	    $numWords++;
+	}
+
+	return $comment . '</span>';
     }
 }

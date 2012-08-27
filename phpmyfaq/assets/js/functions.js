@@ -385,6 +385,15 @@ function closeWindow()
 }
 
 /**
+ * Show long comment
+ */
+function showLongComment(id) {
+    $('.comment-more-' + id).removeClass('hide');
+    $('.comment-dots-' + id).addClass('hide');
+    $('.comment-show-more-' + id).addClass('hide');
+}
+
+/**
  * General functions
  */
 $(document).ready(function() {

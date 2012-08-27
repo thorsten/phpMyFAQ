@@ -2363,6 +2363,7 @@ function refreshCaptcha(action)
         success: function(result) {
             $("#captchaImage").attr('src', 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime());
             $("#captcha").val('');
+	    $("#captcha").focus();
         }
     });
 }
@@ -2403,6 +2404,15 @@ function addAttachmentLink(attachmentId, fileName)
 function closeWindow()
 {
     window.close();
+}
+
+/**
+ * Show long comment
+ */
+function showLongComment(id) {
+    $('.comment-more-' + id).removeClass('hide');
+    $('.comment-dots-' + id).addClass('hide');
+    $('.comment-show-more-' + id).addClass('hide');
 }
 
 /**
