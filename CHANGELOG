@@ -20,7 +20,7 @@ Version 2.8.0-alpha3 - 2012-
 - added configurable maintenance mode (Thorsten)
 - dropped support for IBM DB2, Interbase/Firebird and Sybase (Thorsten)
 - improved usability of administration backend (Thorsten)
-- improved setup and update (Thorsten)
+- improved setup and update (Thorsten, Florian)
 - improved security with salted passwords (Thorsten)
 - improved CSS development with LESS (Thorsten)
 - simplified the link verification (Thorsten)

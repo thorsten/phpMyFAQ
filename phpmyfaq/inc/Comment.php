@@ -69,10 +69,10 @@ class PMF_Comment
      */
     public function __construct(PMF_Configuration $config)
     {
-	global $pmfStr;
+        global $pmfStr;
 
-	$this->config = $config;
-	$this->pmfStr = $pmfStr;
+        $this->config = $config;
+        $this->pmfStr = $pmfStr;
     }
 
     //
@@ -99,8 +99,8 @@ class PMF_Comment
             PMF_Db::getTablePrefix(),
             $id);
 
-	$result = $this->config->getDb()->query($query);
-	if (($this->config->getDb()->numRows($result) > 0) && ($row = $this->config->getDb()->fetchObject($result))) {
+        $result = $this->config->getDb()->query($query);
+        if (($this->config->getDb()->numRows($result) > 0) && ($row = $this->config->getDb()->fetchObject($result))) {
             $item = array(
                 'id'       => $row->id_comment,
                 'recordId' => $row->id,
@@ -140,9 +140,9 @@ class PMF_Comment
             $type,
             $id);
 
-	$result = $this->config->getDb()->query($query);
-	if ($this->config->getDb()->numRows($result) > 0) {
-	    while ($row = $this->config->getDb()->fetchObject($result)) {
+        $result = $this->config->getDb()->query($query);
+        if ($this->config->getDb()->numRows($result) > 0) {
+            while ($row = $this->config->getDb()->fetchObject($result)) {
                 $comments[] = array(
                     'id'      => $row->id_comment,
                     'content' => $row->comment,
@@ -169,20 +169,20 @@ class PMF_Comment
     public function getComments($id, $type)
     {
         $comments = $this->getCommentsData($id, $type);
-	$date     = new PMF_Date($this->config);
-	$mail     = new PMF_Mail($this->config);
+        $date     = new PMF_Date($this->config);
+        $mail     = new PMF_Mail($this->config);
 
         $output = '';
         foreach ($comments as $item) {
             $output .= '<p class="comment">';
             $output .= '<img src="assets/img/bubbles.gif" />';
-	    $output .= sprintf(
-		'<strong>%s<a href="mailto:%s">%s</a>:</strong><br />%s<br />%s</p>',
-		$this->pmfStr['msgCommentBy'],
+            $output .= sprintf(
+                '<strong>%s<a href="mailto:%s">%s</a>:</strong><br />%s<br />%s</p>',
+                $this->pmfStr['msgCommentBy'],
                 $mail->safeEmail($item['email']),
                 $item['user'],
-		$this->showShortComment($id, $item['content']),
-		$this->pmfStr['newsCommentDate'] .
+                $this->showShortComment($id, $item['content']),
+                $this->pmfStr['newsCommentDate'] .
                     $date->format(
                         PMF_Date::createIsoDate($item['date'], 'Y-m-d H:i', false)
                     )
@@ -206,7 +206,7 @@ class PMF_Comment
             VALUES
                 (%d, %d, '%s', '%s', '%s', '%s', %d, '%s')",
             PMF_Db::getTablePrefix(),
-	    $this->config->getDb()->nextId(PMF_Db::getTablePrefix().'faqcomments', 'id_comment'),
+            $this->config->getDb()->nextId(PMF_Db::getTablePrefix().'faqcomments', 'id_comment'),
             $commentData['record_id'],
             $commentData['type'],
             $commentData['username'],
@@ -216,7 +216,7 @@ class PMF_Comment
             $commentData['helped']
         );
 
-	if (!$this->config->getDb()->query($query)) {
+    if (!$this->config->getDb()->query($query)) {
             return false;
         }
 
@@ -248,7 +248,7 @@ class PMF_Comment
             $commentId
         );
 
-	if (!$this->config->getDb()->query($query)) {
+        if (!$this->config->getDb()->query($query)) {
             return false;
         }
 
@@ -279,9 +279,9 @@ class PMF_Comment
             $type
         );
 
-	$result = $this->config->getDb()->query($query);
-	if ($this->config->getDb()->numRows($result) > 0) {
-	    while ($row = $this->config->getDb()->fetchObject($result)) {
+        $result = $this->config->getDb()->query($query);
+        if ($this->config->getDb()->numRows($result) > 0) {
+            while ($row = $this->config->getDb()->fetchObject($result)) {
                 $num[$row->id] = $row->anz;
             }
         }
@@ -322,9 +322,9 @@ class PMF_Comment
             $type
         );
             
-	$result = $this->config->getDb()->query($query);
-	if ($this->config->getDb()->numRows($result) > 0) {
-	    while ($row = $this->config->getDb()->fetchObject($result)) {
+        $result = $this->config->getDb()->query($query);
+        if ($this->config->getDb()->numRows($result) > 0) {
+            while ($row = $this->config->getDb()->fetchObject($result)) {
                 $comments[] = array(
                     'comment_id'  => $row->comment_id,
                     'record_id'   => $row->record_id,
@@ -350,20 +350,20 @@ class PMF_Comment
      */
     public function showShortComment($id, $comment)
     {
-	$words    = explode(' ', nl2br($comment));
-	$numWords = 0;
+        $words    = explode(' ', nl2br($comment));
+        $numWords = 0;
 
-	$comment = '';
-	foreach ($words as $word) {
-	    $comment .= $word . ' ';
-	    if (15 === $numWords) {
-		$comment .= '<span class="comment-dots-' . $id . '">... </span>' .
-			    '<a onclick="showLongComment(' . $id . ')" class="comment-show-more-' . $id . '">show more</a>' .
-			    '<span class="comment-more-' . $id . ' hide">';
-	    }
-	    $numWords++;
-	}
+        $comment = '';
+        foreach ($words as $word) {
+            $comment .= $word . ' ';
+            if (15 === $numWords) {
+            $comment .= '<span class="comment-dots-' . $id . '">... </span>' .
+                        '<a onclick="showLongComment(' . $id . ')" class="comment-show-more-' . $id . '">show more</a>' .
+                        '<span class="comment-more-' . $id . ' hide">';
+            }
+            $numWords++;
+        }
 
-	return $comment . '</span>';
+        return $comment . '</span>';
     }
 }
