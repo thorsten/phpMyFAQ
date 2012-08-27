@@ -40,7 +40,6 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqgroup";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqgroup_right";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqinstances";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqinstances_config";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqlinkverifyrules";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqnews";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqquestions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqright";
@@ -254,19 +253,6 @@ instance_id INT(11) NOT NULL,
 config_name VARCHAR(255) NOT NULL default '',
 config_value VARCHAR(255) DEFAULT NULL,
 PRIMARY KEY (instance_id, config_name)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
-
-//faqlinkverifyrules
-$query[] = "CREATE TABLE ".$sqltblpre."faqlinkverifyrules (
-id int(11) NOT NULL default '0',
-type varchar(6) NOT NULL default '',
-url varchar(255) NOT NULL default '',
-reason varchar(255) NOT NULL default '',
-enabled enum('y','n') NOT NULL default 'y',
-locked enum('y','n') NOT NULL default 'n',
-owner varchar(255) NOT NULL default '',
-dtInsertDate varchar(15) NOT NULL default '',
-dtUpdateDate varchar(15) NOT NULL default '',
-PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqnews
 $query[] = "CREATE TABLE ".$sqltblpre."faqnews (

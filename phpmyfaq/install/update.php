@@ -809,6 +809,14 @@ if ($step == 3) {
         $faqConfig->add('security.salt', md5($faqConfig->get('main.referenceURL')));
     }
 
+    //
+    // UPDATES FROM 2.8.0-alpha3
+    //
+    if (version_compare($version, '2.8.0-alpha3', '<')) {
+
+        $query[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqlinkverifyrules";
+    }
+
     // Always the last step: Update version number
     if (version_compare($version, PMF_System::getVersion(), '<')) {
         $faqConfig->update(array('main.currentVersion' => PMF_System::getVersion()));

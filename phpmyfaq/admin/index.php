@@ -377,7 +377,6 @@ if (isset($auth) && in_array(true, $permission)) {
             case 'updateinstance':
             case 'instances':               require_once 'instances.php'; break;
             case 'editinstance':            require_once 'instances.edit.php'; break;
-            case 'linkconfig':              require_once 'linkconfig.main.php'; break;
             case 'stopwordsconfig':         require_once 'stopwordsconfig.main.php'; break;
             // functions for backup administration
             case 'backup':                  require_once 'backup.main.php'; break;

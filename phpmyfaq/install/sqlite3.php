@@ -36,7 +36,6 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqdata_user";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqglossary";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqgroup";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqgroup_right";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqlinkverifyrules";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqnews";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqquestions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqright";
@@ -235,20 +234,6 @@ $query[] = "CREATE TABLE ".$sqltblpre."faqgroup_right (
 group_id INT(11) NOT NULL,
 right_id INT(11) NOT NULL,
 PRIMARY KEY (group_id, right_id)
-)";
-
-//faqlinkverifyrules
-$query[] = "CREATE TABLE ".$sqltblpre."faqlinkverifyrules (
-id int(11) NOT NULL default '0',
-type varchar(6) NOT NULL default '',
-url varchar(255) NOT NULL default '',
-reason varchar(255) NOT NULL default '',
-enabled char(1) NOT NULL default 'y',
-locked char(1) NOT NULL default 'n',
-owner varchar(255) NOT NULL default '',
-dtInsertDate varchar(15) NOT NULL default '',
-dtUpdateDate varchar(15) NOT NULL default '',
-PRIMARY KEY (id)
 )";
 
 //faqnews

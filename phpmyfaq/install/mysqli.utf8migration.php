@@ -91,14 +91,6 @@ $query[] = "ALTER TABLE ".PMF_Db::getTablePrefix()."faqglossary MODIFY COLUMN de
 $query[] = "ALTER TABLE ".PMF_Db::getTablePrefix()."faqgroup MODIFY COLUMN name VARCHAR(25) CHARACTER SET utf8";
 $query[] = "ALTER TABLE ".PMF_Db::getTablePrefix()."faqgroup MODIFY COLUMN description TEXT  CHARACTER SET utf8";
 
-// Table faqlinkverifyrules
-$query[] = "ALTER TABLE ".PMF_Db::getTablePrefix()."faqlinkverifyrules MODIFY COLUMN type VARCHAR(6) CHARACTER SET utf8";
-$query[] = "ALTER TABLE ".PMF_Db::getTablePrefix()."faqlinkverifyrules MODIFY COLUMN url VARCHAR(255) CHARACTER SET utf8";
-$query[] = "ALTER TABLE ".PMF_Db::getTablePrefix()."faqlinkverifyrules MODIFY COLUMN reason VARCHAR(255) CHARACTER SET utf8";
-$query[] = "ALTER TABLE ".PMF_Db::getTablePrefix()."faqlinkverifyrules MODIFY COLUMN owner VARCHAR(255) CHARACTER SET utf8";
-$query[] = "ALTER TABLE ".PMF_Db::getTablePrefix()."faqlinkverifyrules MODIFY COLUMN dtInsertDate VARCHAR(15) CHARACTER SET utf8";
-$query[] = "ALTER TABLE ".PMF_Db::getTablePrefix()."faqlinkverifyrules MODIFY COLUMN dtUpdateDate VARCHAR(15) CHARACTER SET utf8";
-
 // Table faqnews
 $query[] = "ALTER TABLE ".PMF_Db::getTablePrefix()."faqnews MODIFY COLUMN lang VARCHAR(5) CHARACTER SET utf8";
 $query[] = "ALTER TABLE ".PMF_Db::getTablePrefix()."faqnews MODIFY COLUMN header VARCHAR(255) CHARACTER SET utf8";

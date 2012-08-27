@@ -135,7 +135,6 @@ class PMF_Linkverifier
             $this->addIgnoreProtocol("https:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "https"));
         }
         $this->addIgnoreProtocol("ftp:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "ftp"));
-
         $this->addIgnoreProtocol("gopher:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "gopher"));
         $this->addIgnoreProtocol("mailto:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "mailto"));
         $this->addIgnoreProtocol("telnet:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "telnet"));
@@ -144,9 +143,6 @@ class PMF_Linkverifier
         // Hack: these below are not real scheme for defining protocols like the ones above
         $this->addIgnoreProtocol("file:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "file"));
         $this->addIgnoreProtocol("javascript:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "javascript"));
-
-        // load list of URLs to ignore / fail
-        $this->loadConfigurationFromDB();
     }
 
     
@@ -207,26 +203,6 @@ class PMF_Linkverifier
     }
 
     /**
-     * This function adds entry to the internal ignore list.
-     * Some URL/sites makes PHP report 'connection failed', even when browsers can access them.
-     * URLs on ignore lists always reports as successful connect.
-     *
-     * @param string $url
-     * @param string $message
-     *
-     * @return boolean true, if successfully added, otherwise false
-     */
-    public function addIgnorelist($url = "", $message = "")
-    {
-        if ($url != "") {
-            $this->ignorelists[strtolower($url)] = $message;
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * @param string $protocol
      * @param string $message
      *
@@ -241,73 +217,6 @@ class PMF_Linkverifier
             return false;
         }
     }
-
-    /**
-     * load ignore/warnlists from database
-     *
-     * @return void
-    */
-    public function loadConfigurationFromDB()
-    {
-        $query = "SELECT type, url, reason FROM ".PMF_Db::getTablePrefix()."faqlinkverifyrules WHERE enabled = 'y'";
-        $result = $this->_config->getDb()->query($query);
-        while ($row = $this->_config->getDb()->fetchObject($result)) {
-            switch (strtolower($row->type)) {
-            case 'ignore':
-                $this->addIgnoreList($row->url, $row->reason);
-                break;
-            case 'warn':
-                $this->addWarnlist($row->url, $row->reason);
-                break;
-            }
-        }
-    }
-
-    /**
-     * This function verifies whether a URL is in IgnoreList.
-     *
-     * @param string $url
-     *
-     * @return string|boolean  $result false if URL should NOT be ignored. !false if ignored.
-     */
-    protected function checkIfIgnoreLink($url = "")
-    {
-        $url = strtolower($url);
-        foreach ($this->invalid_protocols as $_protocol => $_message) {
-            if (strpos($url, $_protocol) === 0) {
-                return $_message;
-            }
-        }
-
-        foreach ($this->ignorelists as $_url => $_message) {
-            if ($url == $_url) {
-                return $_message;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * This function verifies whether a URL should be forced as error (warnlist).
-     *
-     * @param string $url
-     *
-     * @return mixed $result false if URL should NOT be failed.. !false if qualifies as error.
-     */
-    protected function checkIfForceErrorLink($url = "")
-    {
-        $url = strtolower($url);
-
-        foreach ($this->warnlists as $_protocol => $_message) {
-            if (strpos($url, $_protocol) === 0) {
-                return $_message;
-            }
-        }
-
-        return false;
-    }
-
 
     /**
      * This function converts relative uri into absolute uri using specific reference point.
@@ -603,18 +512,8 @@ class PMF_Linkverifier
                     // Expand uri into absolute URL.
                     $_absurl           = $this->makeAbsoluteURL($_url, $referenceuri);
                     $_result['absurl'] = $_absurl;
-                    // If we should disallow this URL, mark as failed.
-                    if (($_result['reason'] = $this->checkIfForceErrorLink($_absurl)) !== false) {
-                        $_result['valid'] = false;
-                    } else {
-                        // If we should ignore this URL, mark as success
-                        if (($_result['reason'] = $this->checkIfIgnoreLink($_absurl)) !== false) {
-                            $_result['valid'] = true;
-                        } else {
-                            // See whether we can connect to this URL
-                            list($_result['valid'], $_result['redirects'], $_result['reason']) = $this->openURL($_absurl);
-                        }
-                    }
+
+                    list($_result['valid'], $_result['redirects'], $_result['reason']) = $this->openURL($_absurl);
                     $this->lastResult[$_type][$_url] = $_result;
                 }
             }
@@ -917,37 +816,6 @@ class PMF_Linkverifier
             return '';
         } else {
             return $output;
-        }
-    }
-
-    /**
-     * Add new entry into faqlinkverifyrules table
-     *
-     * @param   string $type
-     * @param   string $url
-     * @param   string $reason
-     *
-     * @return  void
-     */
-    public function addVerifyRule($type = '', $url = '', $reason = '')
-    {
-        if ($type != '' && $url != '') {
-            $query = sprintf(
-                        "INSERT INTO
-                            %sfaqlinkverifyrules
-                            (id, type, url, reason, enabled, locked, owner, dtInsertDate, dtUpdateDate)
-                        VALUES
-                            (%d, '%s', '%s', '%s', 'y', 'n', '%s', '%s', '%s')",
-                        PMF_Db::getTablePrefix(),
-                        $this->_config->getDb()->nextId(PMF_Db::getTablePrefix()."faqlinkverifyrules", "id"),
-                        $this->_config->getDb()->escape($type),
-                        $this->_config->getDb()->escape($url),
-                        $this->_config->getDb()->escape($reason),
-                        $this->user,
-                        date('YmdHis'),
-                        date('YmdHis')
-                        );
-            $this->_config->getDb()->query($query);
         }
     }
 }

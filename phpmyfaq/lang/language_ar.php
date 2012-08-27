@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Arabic language file
  *
@@ -534,20 +534,6 @@ $PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Ambiguous HTTP status <strong>%s<
 $PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'The <em>HEAD</em> method is not supported by the host <strong>%s</strong>, allowed methods: <strong>%s</strong>.';
 $PMF_LANG['ad_linkcheck_openurl_not_found'] = ' <strong>%s</strong>غير موجودة على الجهاز ';
 $PMF_LANG['ad_linkcheck_protocol_unsupported'] = 'البرتوكول غير مدعوم بخاصية إختبار الوصلات تلقائياً %s ';
-$PMF_LANG['ad_menu_linkconfig'] = 'إعداد مختبر الوصلات';
-$PMF_LANG['ad_linkcheck_config_title'] = 'إعدادات مختبر الوصلات';
-$PMF_LANG['ad_linkcheck_config_disabled'] = 'خاصية إختبار الوصلات معطلة';
-$PMF_LANG['ad_linkcheck_config_warnlist'] = 'URLs to warn';
-$PMF_LANG['ad_linkcheck_config_ignorelist'] = 'تجاهل الوصلات التالية';
-$PMF_LANG['ad_linkcheck_config_warnlist_description'] = 'URLs prefixed with items below will be issued warning regardless of whether it is valid.<br />Use this feature to detect soon-to-be defunct URLs';
-$PMF_LANG['ad_linkcheck_config_ignorelist_description'] = 'الوصلات التالية سيتم إعتبارها صحيحة بدون إختبارها بواسطة مختبر الوصلات<br />استخدم هذة الخاصية لتمرير الوصلات التى تفشل فى إختبار مختبر الوصلات ';
-$PMF_LANG['ad_linkcheck_config_th_id'] = 'ID#';
-$PMF_LANG['ad_linkcheck_config_th_url'] = 'وصلات للمشابهة';
-$PMF_LANG['ad_linkcheck_config_th_reason'] = 'سبب التشابة';
-$PMF_LANG['ad_linkcheck_config_th_owner'] = 'صاحب المداخلة';
-$PMF_LANG['ad_linkcheck_config_th_enabled'] = 'اختار لتفعيل المداخلة';
-$PMF_LANG['ad_linkcheck_config_th_locked'] = 'اختار لغلق الملكية';
-$PMF_LANG['ad_linkcheck_config_th_chown'] = 'اختار للحصول علي الملكية';
 $PMF_LANG['msgNewQuestionVisible'] = 'السؤال يجب أن تتم مراجعتةأولاً قبل أن ينشر .';
 $PMF_LANG['msgQuestionsWaiting'] = 'انتظار النشر بواسطة المشرفين :';
 $PMF_LANG['ad_entry_visibility'] = 'انشر ؟';

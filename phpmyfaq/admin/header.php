@@ -134,7 +134,6 @@ switch ($action) {
         $backupPage       = true;
         break;
     case 'config':
-    case 'linkconfig':
     case 'stopwordsconfig':
     case 'translist':
     case 'transedit':

@@ -40,7 +40,6 @@ $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqgroup CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqgroup_right CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqinstances CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqinstances_config CASCADE";
-$uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqlinkverifyrules CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqnews CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqquestions CASCADE";
 $uninst[] = "DROP TABLE IF EXISTS ".$sqltblpre."faqright CASCADE";
@@ -256,20 +255,6 @@ instance_id int4 NOT NULL,
 config_name VARCHAR(255) NOT NULL default '',
 config_value VARCHAR(255) DEFAULT NULL,
 PRIMARY KEY (instance_id, config_name)
-)";
-
-//faqlinkverifyrules
-$query[] = "CREATE TABLE ".$sqltblpre."faqlinkverifyrules (
-id SERIAL NOT NULL,
-type varchar(6) NOT NULL default '',
-url varchar(255) NOT NULL default '',
-reason varchar(255) NOT NULL default '',
-enabled char(1) NOT NULL default 'y',
-locked char(1) NOT NULL default 'n',
-owner varchar(255) NOT NULL default '',
-dtInsertDate varchar(15) NOT NULL default '',
-dtUpdateDate varchar(15) NOT NULL default '',
-PRIMARY KEY (id)
 )";
 
 //faqnews

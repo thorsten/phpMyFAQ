@@ -48,9 +48,6 @@ if ($linkverifier->isReady() == false) {
     exit();
 }
 
-
-$linkverifier->loadConfigurationFromDB();
-
 $id      = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $artlang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
 $lookup  = PMF_Filter::filterInput(INPUT_GET, 'lookup', FILTER_VALIDATE_INT);

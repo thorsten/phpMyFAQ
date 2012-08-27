@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
 * $Id: language_bn.php,v 1.1 2008-04-23 16:22:36 thorstenr Exp $
 *
@@ -674,20 +674,6 @@ $PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Ambiguous HTTP status <strong>%s<
 $PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'The <em>HEAD</em> method is not supported by the host <strong>%s</strong>, allowed methods: <strong>%s</strong>.';
 $PMF_LANG['ad_linkcheck_openurl_not_found'] = 'This resource cannot be found at host <strong>%s</strong>.';
 $PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protocol unsupported by Automatic link verification.';
-$PMF_LANG['ad_menu_linkconfig'] = 'URL Verifier';
-$PMF_LANG['ad_linkcheck_config_title'] = 'URL Verifier Configuration';
-$PMF_LANG['ad_linkcheck_config_disabled'] = 'URL Verifier feature disabled';
-$PMF_LANG['ad_linkcheck_config_warnlist'] = 'URLs to warn';
-$PMF_LANG['ad_linkcheck_config_ignorelist'] = 'URLs to ignore';
-$PMF_LANG['ad_linkcheck_config_warnlist_description'] = 'URLs prefixed with items below will be issued warning regardless of whether it is valid.<br />Use this feature to detect soon-to-be defunct URLs';
-$PMF_LANG['ad_linkcheck_config_ignorelist_description'] = 'Exact URLs listed below will be assumed valid without validation.<br />Use this feature to omit URLs that fail to validate using URL Verifier';
-$PMF_LANG['ad_linkcheck_config_th_id'] = 'ID#';
-$PMF_LANG['ad_linkcheck_config_th_url'] = 'URL to match';
-$PMF_LANG['ad_linkcheck_config_th_reason'] = 'Match reason';
-$PMF_LANG['ad_linkcheck_config_th_owner'] = 'Entry owner';
-$PMF_LANG['ad_linkcheck_config_th_enabled'] = 'Set to enable entry';
-$PMF_LANG['ad_linkcheck_config_th_locked'] = 'Set to lock ownership';
-$PMF_LANG['ad_linkcheck_config_th_chown'] = 'Set to obtain ownership';
 $PMF_LANG['msgNewQuestionVisible'] = 'প্রশ্নটি রিভিউ করার পর প্রকাশিত হবে।';
 $PMF_LANG['msgQuestionsWaiting'] = 'প্রকাশিত হওয়ার অপেক্ষায়: ';
 $PMF_LANG['ad_entry_visibility'] = 'Publish?';
