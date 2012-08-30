@@ -4851,6 +4851,9 @@ body {
 #main .star-rating-hover a {
   background-position: 0 -32px;
 }
+#main .pointer {
+  cursor: pointer;
+}
 footer {
   background: #2a333c;
   color: #f2f2f2;

@@ -1183,3 +1183,6 @@ $LANG_CONF["main.maintenanceMode"] = array(0 => "checkbox", 1 => "Set FAQ in mai
 $PMF_LANG['msgMode'] = "Modus";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ is in maintenance";
 $PMF_LANG['msgOnlineMode'] = "FAQ is online";
+
+// added v2.8.0-alpha3 - 2012-08-30 by Thorsten
+$PMF_LANG['msgShowMore'] = "show more";

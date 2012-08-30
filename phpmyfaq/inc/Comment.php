@@ -69,10 +69,10 @@ class PMF_Comment
      */
     public function __construct(PMF_Configuration $config)
     {
-        global $pmfStr;
+        global $PMF_LANG;
 
         $this->config = $config;
-        $this->pmfStr = $pmfStr;
+        $this->pmfStr = $PMF_LANG;
     }
 
     //
@@ -358,7 +358,8 @@ class PMF_Comment
             $comment .= $word . ' ';
             if (15 === $numWords) {
             $comment .= '<span class="comment-dots-' . $id . '">... </span>' .
-                        '<a onclick="showLongComment(' . $id . ')" class="comment-show-more-' . $id . '">show more</a>' .
+                        '<a onclick="showLongComment(' . $id . ')" class="comment-show-more-' . $id .
+                        ' pointer">' . $this->pmfStr['msgShowMore'] . '</a>' .
                         '<span class="comment-more-' . $id . ' hide">';
             }
             $numWords++;

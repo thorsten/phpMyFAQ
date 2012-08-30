@@ -1127,3 +1127,6 @@ $LANG_CONF["main.maintenanceMode"] = array(0 => "checkbox", 1 => "FAQ in Wartung
 $PMF_LANG['msgMode'] = "Modus";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ ist im Wartungs-Modus";
 $PMF_LANG['msgOnlineMode'] = "FAQ ist online";
+
+// added v2.8.0-alpha3 - 2012-08-30 by Thorsten
+$PMF_LANG['msgShowMore'] = "mehr zeigen";
