@@ -1,37 +1,37 @@
 <?php
-    /**
-     * The Installer class installs phpMyFAQ. Classy.
-     *
-     * PHP Version 5.3
-     *
-     * This Source Code Form is subject to the terms of the Mozilla Public License,
-     * v. 2.0. If a copy of the MPL was not distributed with this file, You can
-     * obtain one at http://mozilla.org/MPL/2.0/.
-     *
-     * @category  phpMyFAQ
-     * @package   Installer
-     * @author    Florian Anderiasch <florian@phpmyfaq.net>
-     * @copyright 2002-2012 phpMyFAQ Team
-     * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
-     * @link      http://www.phpmyfaq.de
-     * @since     2012-08-27
-     */
+/**
+ * The Installer class installs phpMyFAQ. Classy.
+ *
+ * PHP Version 5.3
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @package   Installer
+ * @author    Florian Anderiasch <florian@phpmyfaq.net>
+ * @copyright 2002-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2012-08-27
+ */
 
-    if (!defined('IS_VALID_PHPMYFAQ')) {
-        exit();
-    }
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
 
-    /**
-     * Installer
-     *
-     * @category  phpMyFAQ
-     * @package   Installer
-     * @author    Florian Anderiasch <florian@phpmyfaq.net>
-     * @copyright 2002-2012 phpMyFAQ Team
-     * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
-     * @link      http://www.phpmyfaq.de
-     * @since     2012-08-27
-     */
+/**
+ * Installer
+ *
+ * @category  phpMyFAQ
+ * @package   Installer
+ * @author    Florian Anderiasch <florian@phpmyfaq.net>
+ * @copyright 2002-2012 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2012-08-27
+ */
 
 class PMF_Installer
 {
