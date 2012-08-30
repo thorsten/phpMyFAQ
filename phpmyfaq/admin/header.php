@@ -38,7 +38,7 @@ $statisticsPage    = false;
 $exportsPage       = false;
 $backupPage        = false;
 $configurationPage = false;
-$edAutosave        = (('editentry' == $action) && $faqConfig->get('records.autosaveActive'));
+$edAutosave        = (('editentry' === $action) && $faqConfig->get('records.autosaveActive'));
 
 $adminHelper = new PMF_Helper_Administration();
 $adminHelper->setPermission($permission);
@@ -179,7 +179,7 @@ switch ($action) {
     <meta name="publisher" content="phpMyFAQ Team">
     <meta name="MSSmartTagsPreventParsing" content="true">
     
-    <link rel="stylesheet" href="css/style.css?v=1">
+    <link rel="stylesheet" href="assets/css/style.css?v=1">
     <link rel="stylesheet" href="../assets/js/plugins/autocomplete/jquery.autocomplete.css" type="text/css">
     <link rel="stylesheet" href="../assets/js/plugins/datePicker/datePicker.css" type="text/css">
 
@@ -193,7 +193,7 @@ switch ($action) {
     <script src="editor/tiny_mce.js?<?php print time(); ?>"></script>
 
 <?php if ($edAutosave): ?>
-	<script>var pmfAutosaveInterval = <?php echo $faqConfig->get('records.autosaveSecs') ?>;</script>
+    <script>var pmfAutosaveInterval = <?php echo $faqConfig->get('records.autosaveSecs') ?>;</script>
     <script src="../assets/js/autosave.js"></script>
 <?php endif; ?>
     

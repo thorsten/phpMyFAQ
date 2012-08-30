@@ -341,7 +341,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             <h2><?php print $PMF_LANG['ad_user']; ?></h2>
         </header>
 
-        <script type="text/javascript" src="js/user.js"></script>
+        <script type="text/javascript" src="assets/js/user.js"></script>
         <script type="text/javascript">
 /* <![CDATA[ */
 

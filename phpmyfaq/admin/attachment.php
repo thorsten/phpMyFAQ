@@ -108,7 +108,7 @@ if (is_null($currentAction) || !is_null($currentSave)) {
     <meta name="publisher" content="phpMyFAQ Team">
     <meta name="MSSmartTagsPreventParsing" content="true">
 
-    <link rel="stylesheet" href="css/style.css?v=1">
+    <link rel="stylesheet" href="assets/css/style.css?v=1">
 
     <script src="../assets/js/libs/modernizr.min.js"></script>
     <script src="../assets/js/libs/jquery.min.js"></script>
