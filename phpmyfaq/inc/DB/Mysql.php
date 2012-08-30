@@ -68,7 +68,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
      * @param string $password MySQL Password
      * @param string $db_name  MySQL Database name
      *
-     * @return boolean TRUE, if connected, otherwise false
+     * @return boolean
      */
     public function connect ($host, $user, $password, $db)
     {

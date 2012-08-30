@@ -37,6 +37,18 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 interface PMF_DB_Driver
 {
     /**
+     * Connects to the database
+     *
+     * @param string $host     Hostname
+     * @param string $user     Username
+     * @param string $password Password
+     * @param string $db       Database name
+     *
+     * @return boolean
+     */
+    public function connect($host, $user, $password, $db);
+
+    /**
      * Sends a query to the database.
      *
      * This function sends a query to the database.
