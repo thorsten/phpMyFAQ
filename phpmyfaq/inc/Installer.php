@@ -272,7 +272,6 @@ class PMF_Installer
         'main.enableAdminLog'                     => 'true',
         'main.enableRewriteRules'                 => 'false',
         'main.enableUserTracking'                 => 'true',
-        'main.languageDetection'                  => 'true',
         'main.metaDescription'                    => 'phpMyFAQ should be the answer for all questions in life',
         'main.metaKeywords'                       => '',
         'main.metaPublisher'                      => '__PHPMYFAQ_PUBLISHER__',
@@ -639,8 +638,8 @@ class PMF_Installer
             PMF_System::renderFooter(true);
         }
 
-        require $dbSetup['dbType'] . '.sql.php'; // CREATE TABLES
-        require 'stopwords.sql.php';  // INSERTs for stopwords
+        require PMF_ROOT_DIR . '/install/' . $dbSetup['dbType'] . '.sql.php'; // CREATE TABLES
+        require PMF_ROOT_DIR . '/install/stopwords.sql.php';  // INSERTs for stopwords
 
         $this->_system->setDatabase($db);
 
