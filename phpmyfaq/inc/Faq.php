@@ -2209,7 +2209,7 @@ class PMF_Faq
             if ($row = $this->_config->getDb()->fetchObject($result)) {
                 $question = array(
                     'id'            => $row->id,
-                    'user'          => $row->username,
+                    'username'      => $row->username,
                     'email'         => $row->email,
                     'category_id'   => $row->category_id,
                     'question'      => $row->question,

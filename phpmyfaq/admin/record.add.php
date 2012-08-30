@@ -115,7 +115,7 @@ if ($permission['editbt']|| $permission['addbt']) {
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_entry_savedsuc']);
 
             // Open question answered
-            $openQuestionId = PMF_Filter::filterInput(INPUT_POST, 'openQuestionID', FILTER_VALIDATE_INT);
+            $openQuestionId = PMF_Filter::filterInput(INPUT_POST, 'openQuestionId', FILTER_VALIDATE_INT);
             if ($openQuestionId) {
                 if ($faqConfig->get('records.enableDeleteQuestion')) { // deletes question
                     $faq->deleteQuestion($openQuestionId);

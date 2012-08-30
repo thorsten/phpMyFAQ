@@ -55,13 +55,15 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
         $selectedCategory = $question['category_id'];
         $faqData['title'] = $question['question'];
         $notifyUser       = $question['username'];
+        $notifyEmail      = $question['email'];
         $categories       = array(
             'category_id'   => $selectedCategory,
             'category_lang' => $faqData['lang']
         );
     } else {
-        $questionId = 0;
-        $notifyUser = '';
+        $questionId  = 0;
+        $notifyUser  = '';
+        $notifyEmail = '';
     }
 
     if ('editpreview' === $action) {
@@ -186,8 +188,9 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
             <input type="hidden" name="revision_id" id="revision_id" value="<?php echo $faqData['revision_id']; ?>" />
             <input type="hidden" name="record_id" id="record_id" value="<?php echo $faqData['id']; ?>" />
             <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession(); ?>" />
-            <input type="hidden" name="openQuestionID" id="openQuestionID" value="<?php echo $questionId; ?>"  />
+            <input type="hidden" name="openQuestionID" id="openQuestionId" value="<?php echo $questionId; ?>"  />
             <input type="hidden" name="notifyUser" id="notifyUser" value="<?php echo $notifyUser ?>" />
+            <input type="hidden" name="notifyUser" id="notifyEmail" value="<?php echo $notifyEmail ?>" />
 
             <!-- main editor window -->
             <div class="span9">
