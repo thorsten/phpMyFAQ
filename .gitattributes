@@ -1,3 +1,4 @@
-scripts                      export-ignore
-assets/template/default/less export-ignore
-tests                        export-ignore
+phpmyfaq/admin/assets/less            export-ignore
+phpmyfaq/assets/template/default/less export-ignore
+scripts                               export-ignore
+tests                                 export-ignore
