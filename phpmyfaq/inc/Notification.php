@@ -48,6 +48,13 @@ class PMF_Notification
     private $mail;
 
     /**
+     * Language strings
+     *
+     * @var string
+     */
+    private $pmfStr;
+
+    /**
      * Constructor
      *
      * @param PMF_Configuration
@@ -56,7 +63,34 @@ class PMF_Notification
      */
     public function __construct(PMF_Configuration $config)
     {
+        global $PMF_LANG;
+
         $this->config = $config;
+        $this->pmfStr = $PMF_LANG;
         $this->mail   = new PMF_Mail($this->config);
+        $this->mail->setReplyTo(
+            $this->config->get('main.administrationMail'),
+            $this->config->get('main.titleFAQ')
+        );
+    }
+
+    /**
+     * Sends a notification to user who added a question
+     *
+     * @param string $email    Email address of the user
+     * @param string $userName Name of the user
+     * @param string $url      URL of answered FAQ
+     *
+     * @return void
+     */
+    public function sendOpenQuestionAnswered($email, $userName, $url)
+    {
+        $this->mail->addTo($email, $userName);
+        $this->mail->subject = $this->config->get('main.titleFAQ') . ' - ' . $this->pmfStr['msgQuestionAnswered'];
+        $this->mail->message = sprintf(
+            $this->pmfStr['msgMessageQuestionAnswered'],
+            $this->config->get('main.titleFAQ')
+        ) . $url;
+        $this->mail->send();
     }
 }

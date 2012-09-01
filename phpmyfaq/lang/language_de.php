@@ -1130,3 +1130,5 @@ $PMF_LANG['msgOnlineMode'] = "FAQ ist online";
 
 // added v2.8.0-alpha3 - 2012-08-30 by Thorsten
 $PMF_LANG['msgShowMore'] = "mehr zeigen";
+$PMF_LANG['msgQuestionAnswered'] = "Frage beantwortet";
+$PMF_LANG['msgMessageQuestionAnswered'] = "Deine Frage bei %s wurde beantwortet. Hier kommst du zur Antwort:";

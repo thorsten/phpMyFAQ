@@ -116,12 +116,29 @@ if ($permission['editbt']|| $permission['addbt']) {
 
             // Open question answered
             $openQuestionId = PMF_Filter::filterInput(INPUT_POST, 'openQuestionId', FILTER_VALIDATE_INT);
-            if ($openQuestionId) {
+            if (null !== $openQuestionId) {
+
                 if ($faqConfig->get('records.enableDeleteQuestion')) { // deletes question
                     $faq->deleteQuestion($openQuestionId);
                 } else { // adds this faq record id to the related open question
                     $faq->updateQuestionAnswer($openQuestionId, $record_id, $categories['rubrik'][0]);
                 }
+
+                $url   = sprintf(
+                    '%s?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    $faqConfig->get('main.referenceURL'),
+                    $categories['rubrik'][0],
+                    $record_id,
+                    $record_lang
+                );
+                $oLink = new PMF_Link($url, $faqConfig);
+
+                // notify the user who added the question
+                $notifyEmail = PMF_Filter::filterInput(INPUT_POST, 'notifyEmail', FILTER_SANITIZE_EMAIL);
+                $notifyUser  = PMF_Filter::filterInput(INPUT_POST, 'notifyUser', FILTER_SANITIZE_STRING);
+
+                $notification = new PMF_Notification($faqConfig);
+                $notification->sendOpenQuestionAnswered($notifyEmail, $notifyUser, $oLink->toString());
             }
 
             // Call Link Verification
