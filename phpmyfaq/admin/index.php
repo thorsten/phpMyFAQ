@@ -37,7 +37,7 @@ if (!file_exists(PMF_ROOT_DIR . '/config/database.php')) {
 define('IS_VALID_PHPMYFAQ', null);
 
 //
-// Autoload classes, prepend and start the PHP session
+// Bootstrap phpMyFAQ and start the PHP session
 //
 require_once PMF_ROOT_DIR.'/inc/Bootstrap.php';
 PMF_Init::cleanRequest();
@@ -483,40 +483,44 @@ if (isset($auth) && in_array(true, $permission)) {
             </div>
             <div class="span5">
                 <header>
-                    <h3><?php print $PMF_LANG["ad_online_verification"] ?></h3>
+                    <h3><?php print $PMF_LANG['ad_online_verification'] ?></h3>
                 </header>
 <?php
         $getJson = PMF_Filter::filterInput(INPUT_POST, 'getJson', FILTER_SANITIZE_STRING);
         if (!is_null($getJson) && 'verify' === $getJson) {
 
-            $faqSystem = new PMF_System();
-
+            $faqSystem    = new PMF_System();
             $localHashes  = $faqSystem->createHashes();
             $remoteHashes = file_get_contents(
                 'http://www.phpmyfaq.de/api/verify/' . $faqConfig->get('main.currentVersion')
             );
 
-            $diff = array_diff(
-                json_decode($localHashes, true),
-                json_decode($remoteHashes, true)
-            );
-
-            if (0 !== count($diff)) {
-                printf('<p class="alert alert-danger">%s</p>', $PMF_LANG["ad_verification_notokay"]);
-                print '<ul>';
-                foreach ($diff as $file => $hash) {
-                    if ('created' === $file) {
-                        continue;
-                    }
-                    printf(
-                        '<li><span class="pmf-popover" data-original-title="SHA-1" data-content="%s">%s</span></li>',
-                        $hash,
-                        $file
-                    );
-                }
-                print '</ul>';
+            if (!is_array($remoteHashes)) {
+                echo '<p class="alert alert-danger">phpMyFAQ version mismatch - no verification possible.</p>';
             } else {
-                printf('<p class="alert alert-success">%s</p>', $PMF_LANG["ad_verification_okay"]);
+
+                $diff = array_diff(
+                    json_decode($localHashes, true),
+                    json_decode($remoteHashes, true)
+                );
+
+                if (0 !== count($diff)) {
+                    printf('<p class="alert alert-danger">%s</p>', $PMF_LANG["ad_verification_notokay"]);
+                    print '<ul>';
+                    foreach ($diff as $file => $hash) {
+                        if ('created' === $file) {
+                            continue;
+                        }
+                        printf(
+                            '<li><span class="pmf-popover" data-original-title="SHA-1" data-content="%s">%s</span></li>',
+                            $hash,
+                            $file
+                        );
+                    }
+                    print '</ul>';
+                } else {
+                    printf('<p class="alert alert-success">%s</p>', $PMF_LANG["ad_verification_okay"]);
+                }
             }
 
         } else {
