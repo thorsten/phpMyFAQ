@@ -89,9 +89,10 @@ switch ($action) {
     case 'updatenews';
     case 'delnews':
     case 'question':
+    case 'takequestion':
     case 'comments':
     case 'attachments':
-        $secLevelHeader = $PMF_LANG['admin_mainmenu_content'];
+        $secLevelHeader   = $PMF_LANG['admin_mainmenu_content'];
         $secLevelEntries .= $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('addbt', 'editentry', 'ad_entry_add', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit', $action);
