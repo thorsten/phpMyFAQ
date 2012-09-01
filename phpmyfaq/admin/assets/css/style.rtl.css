@@ -4229,7 +4229,7 @@ input[type="submit"].btn.btn-mini {
 .navbar .nav > .active > a,
 .navbar .nav > .active > a:hover,
 .navbar .nav > .active > a:focus {
-  color: #555555;
+  color: #999999;
   text-decoration: none;
   background-color: #262626;
   -webkit-box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.125);
@@ -4341,7 +4341,7 @@ input[type="submit"].btn.btn-mini {
 .navbar .nav li.dropdown.active > .dropdown-toggle,
 .navbar .nav li.dropdown.open.active > .dropdown-toggle {
   background-color: #262626;
-  color: #555555;
+  color: #999999;
 }
 .navbar .nav li.dropdown > .dropdown-toggle .caret {
   border-top-color: #eeeeee;
@@ -4350,8 +4350,8 @@ input[type="submit"].btn.btn-mini {
 .navbar .nav li.dropdown.open > .dropdown-toggle .caret,
 .navbar .nav li.dropdown.active > .dropdown-toggle .caret,
 .navbar .nav li.dropdown.open.active > .dropdown-toggle .caret {
-  border-top-color: #555555;
-  border-bottom-color: #555555;
+  border-top-color: #999999;
+  border-bottom-color: #999999;
 }
 .navbar .pull-right > li > .dropdown-menu,
 .navbar .nav > li > .dropdown-menu.pull-right {
@@ -9706,7 +9706,7 @@ input[type="submit"].btn.btn-mini {
 .navbar .nav > .active > a,
 .navbar .nav > .active > a:hover,
 .navbar .nav > .active > a:focus {
-  color: #555555;
+  color: #999999;
   text-decoration: none;
   background-color: #262626;
   -webkit-box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.125);
@@ -9818,7 +9818,7 @@ input[type="submit"].btn.btn-mini {
 .navbar .nav li.dropdown.active > .dropdown-toggle,
 .navbar .nav li.dropdown.open.active > .dropdown-toggle {
   background-color: #262626;
-  color: #555555;
+  color: #999999;
 }
 .navbar .nav li.dropdown > .dropdown-toggle .caret {
   border-top-color: #eeeeee;
@@ -9827,8 +9827,8 @@ input[type="submit"].btn.btn-mini {
 .navbar .nav li.dropdown.open > .dropdown-toggle .caret,
 .navbar .nav li.dropdown.active > .dropdown-toggle .caret,
 .navbar .nav li.dropdown.open.active > .dropdown-toggle .caret {
-  border-top-color: #555555;
-  border-bottom-color: #555555;
+  border-top-color: #999999;
+  border-bottom-color: #999999;
 }
 .navbar .pull-right > li > .dropdown-menu,
 .navbar .nav > li > .dropdown-menu.pull-right {

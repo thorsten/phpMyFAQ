@@ -24,6 +24,7 @@ Version 2.8.0-alpha3 - 2012-
 - improved setup and update (Thorsten, Florian)
 - improved security with salted passwords (Thorsten)
 - improved CSS development with LESS (Thorsten)
+- improved minified CSS output (Thorsten)
 - simplified the link verification (Thorsten)
 - updated bundled jQuery to version 1.8.0 (Thorsten)
 - updated bundled Modernizr to version 2.6.1 (Thorsten)
