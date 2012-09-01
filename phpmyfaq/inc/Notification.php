@@ -57,29 +57,6 @@ class PMF_Notification
     public function __construct(PMF_Configuration $config)
     {
         $this->config = $config;
-    }
-
-    /**
-     * Sets the Mail class
-     *
-     * @param \PMF_Mail $mail
-     *
-     * @return PMF_Notification
-     */
-    public function setMail($mail)
-    {
-        $this->mail = $mail;
-
-        return $this;
-    }
-
-    /**
-     * Returns the mail class
-     *
-     * @return \PMF_Mail
-     */
-    public function getMail()
-    {
-        return $this->mail;
+        $this->mail   = new PMF_Mail($this->config);
     }
 }
