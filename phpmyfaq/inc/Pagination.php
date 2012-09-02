@@ -261,13 +261,13 @@ class PMF_Pagination
         for ($page = 1; $page <= $pages; $page++) {
             
             if ($page > $this->adjacents && $page < $this->currentPage - $adjacents) {
-                $content[] = '&hellip;';
+                $content[] = '<li class="disabled"><a>&hellip;</a></li>';
                 $page      = $this->currentPage - $adjacents - 1;
                 continue;
             }
             
             if ($page > $this->currentPage + $adjacents && $page <= $pages - $this->adjacents) {
-                $content[] = '&hellip;';
+                $content[] = '<li class="disabled"><a>&hellip;</a></li>';
                 $page      = $pages - $this->adjacents;
                 continue;
             }
