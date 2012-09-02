@@ -40,9 +40,24 @@ if ($permission['adminlog'] && 'adminlog' == $action) {
     $start = ($page - 1) * $perpage;
     $ende  = $start + $perpage;
 
-    $PageSpan = PageSpan("<a href=\"?action=adminlog&amp;pages=".$pages."&amp;page=<NUM>\">", 1, $pages, $page);
+    $baseUrl = sprintf(
+        '%s?action=adminlog&amp;page=%d',
+        PMF_Link::getSystemRelativeUri(),
+        $page
+    );
 
-    $logging_data = $logging->getAll();
+    // Pagination options
+    $options = array(
+        'baseUrl'         => $baseUrl,
+        'total'           => $logging->getNumberOfEntries(),
+        'perPage'         => $perpage,
+        'pageParamName'   => 'page',
+        'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgNext'] . '</a>',
+        'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgPrevious'] . '</a>'
+    );
+    $pagination = new PMF_Pagination($faqConfig, $options);
+
+    $loggingData = $logging->getAll();
 ?>
     <h2><?php print $PMF_LANG["ad_adminlog"]; ?></h2>
     <table class="table table-striped">
@@ -56,14 +71,14 @@ if ($permission['adminlog'] && 'adminlog' == $action) {
     </thead>
     <tfoot>
         <tr>
-            <td colspan="4"><?php print $PageSpan; ?></td>
+            <td colspan="4"><?php echo $pagination->render(); ?></td>
         </tr>
     </tfoot>
     <tbody>
 <?php
     $counter = $displayedCounter = 0;
 
-    foreach ($logging_data as $logging_id => $logging_value) {
+    foreach ($loggingData as $logging_id => $logging_value) {
 
         if ($displayedCounter >= $perpage) {
             $displayedCounter++;

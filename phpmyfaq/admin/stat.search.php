@@ -42,7 +42,22 @@ if ($permission['viewlog']) {
     $start = ($page - 1) * $perpage;
     $ende  = $start + $perpage;
 
-    $PageSpan = PageSpan("<a href=\"?action=searchstats&amp;pages=".$pages."&amp;page=<NUM>\">", 1, $pages, $page);
+    $baseUrl = sprintf(
+        '%s?action=searchstats&amp;page=%d',
+        PMF_Link::getSystemRelativeUri(),
+        $page
+    );
+
+    // Pagination options
+    $options = array(
+        'baseUrl'         => $baseUrl,
+        'total'           => count($searchesList),
+        'perPage'         => $perpage,
+        'pageParamName'   => 'page',
+        'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgNext'] . '</a>',
+        'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgPrevious'] . '</a>'
+    );
+    $pagination = new PMF_Pagination($faqConfig, $options);
 ?>
         <div id="ajaxresponse"></div>
         <table class="table table-striped">
@@ -57,7 +72,7 @@ if ($permission['viewlog']) {
         </thead>
         <tfoot>
             <tr>
-                <td colspan="6"><?php print $PageSpan; ?></td>
+                <td colspan="6"><?php echo $pagination->render(); ?></td>
             </tr>
         </tfoot>
         <tbody>
