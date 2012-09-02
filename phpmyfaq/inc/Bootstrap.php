@@ -92,7 +92,6 @@ require PMF_CONFIG_DIR . '/constants.php';
 //
 define('PMF_INCLUDE_DIR', __DIR__);
 require PMF_INCLUDE_DIR . '/Autoloader.php';
-require PMF_INCLUDE_DIR . '/functions.php';
 // @todo: Linkverifier.php contains both PMF_Linkverifier class and
 // helper functions => move the fns into the class.
 require_once PMF_INCLUDE_DIR . '/Linkverifier.php';

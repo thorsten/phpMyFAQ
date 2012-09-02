@@ -39,7 +39,6 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
 
 require PMF_ROOT_DIR . '/config/constants.php';
 require PMF_ROOT_DIR . '/inc/Autoloader.php';
-require PMF_ROOT_DIR . '/inc/functions.php';
 require PMF_ROOT_DIR . '/install/questionnaire.php';
 ?>
 <!doctype html>
