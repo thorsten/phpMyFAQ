@@ -5,14 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Documentation for phpMyFAQ 2.8.x</title>
     <style type="text/css"><!--
-    body { margin: 0 auto; width: 960px; font: 15px/24px Helvetica, Arial, sans-serif; background-color: #F0F0F0; }
+    body { margin: 0 auto; width: 960px; font: 16px/28px Helvetica, Arial, sans-serif; background-color: #fff; }
     code { display: block; font-size: 16px; background-color: black; color: white; padding: 10px; width: 600px;
            margin-bottom: 22px; }
     a { color: #0000ff; }
     a:hover { color: #ff0000; }
     #doc { width: 70%; min-width: 550px; max-width:700px; }
     ol.alpha { list-style-type: lower-alpha; }
-pre { font: 15px monospace; border: 1px solid gray; padding: 5px; }
+    pre { font: 15px monospace; border: 1px solid gray; padding: 5px; }
     -->
     </style>
 </head>
@@ -37,7 +37,7 @@ pre { font: 15px monospace; border: 1px solid gray; padding: 5px; }
             <li><a href="#2e">Notes regarding the search-function</a></li>
             <li><a href="#2f">Automatic content negotiation</a></li>
             <li><a href="#2g">PHP settings</a></li>
-            <li><a href="#2h">Enabling mod_rewrite support</a></li>
+            <li><a href="#2h">Enabling support for SEO-friendly URLs</a></li>
             <li><a href="#2i">Enabling LDAP support</a></li>
             <li><a href="#2j">PDF export</a></li>
             <li><a href="#2k">Mozilla Firefox, Google Chrome and IE8+ search plugins</a></li>
@@ -187,9 +187,9 @@ pre { font: 15px monospace; border: 1px solid gray; padding: 5px; }
         phpMyFAQ addresses a database system via PHP. In order to install it you will need a web server that meets the
         following requirements:
     </p>
-    <ul type="square">
+    <ul>
         <li><strong><a href="http://www.php.net">PHP</a></strong>
-        <ul type="circle">
+        <ul>
             <li>from version 5.3.2 (recommended: latest PHP 5.x)</li>
             <li>register_globals = off (recommended)</li>
             <li>safe_mode = off (recommended)</li>
@@ -403,7 +403,7 @@ pre { font: 15px monospace; border: 1px solid gray; padding: 5px; }
 
 
     <hr style="width: 90%; height: 1px;" />
-    <p><strong><a name="2h"></a>2.h. Enabling mod_rewrite support</strong></p>
+    <p><strong><a name="2h"></a>2.h. Enabling support for SEO-friendly URLs</strong></p>
     <p>
         <em>Apache Web server</em>
     </p>
@@ -439,6 +439,14 @@ pre { font: 15px monospace; border: 1px solid gray; padding: 5px; }
         If you want to enable the search engine optimization you have to copy the rewrite rules in the file
         _lighttpd.conf to your lighttpd.conf. Then you have to activate the URL rewrite support in the admin backend in
         the configuration page.
+    </p>
+    <p>
+        <em>Zeus Web server</em>
+    </p>
+    <p>
+        If you want to enable the search engine optimization you have to use the rewrite rules in the file
+        rewrite.script. Then you have to activate the URL rewrite support in the admin backend in the configuration
+        page.
     </p>
     <p><a href="#top">back to top</a></p>
 
@@ -577,7 +585,7 @@ pre { font: 15px monospace; border: 1px solid gray; padding: 5px; }
         phpMyFAQ supports Twitter via OAuth. If you enable Twitter support in the social network configuration and add
         phpMyFAQ as a Twitter application on <a href="https://dev.twitter.com/apps/new">twitter.com</a>, all new FAQ
         additions in the administration backend will also post the question of the FAQ, the URL of the FAQ and all tags
-        as hashtags to Twitter.
+        as hashtags to Twitter, e.g. the tag "phpMyFAQ" will be converted to "#phpmyfaq".
     </p>
     <p><a href="#top">back to top</a></p>
 
@@ -1099,8 +1107,8 @@ sub vcl_fetch {
             configuration if you want.
         </li>
 
-        <li><
-            strong>Keywords</strong><br />
+        <li>
+            <strong>Keywords</strong><br />
             Keywords are relevant for searching through the database. In case you didn't include a specific word in the
             FAQ itself, but it is closely related to the content you may wish to include it as a keyword, so the FAQ
             will come up as a search result. It is also possible to use non-related keywords so that a wrongly entered
@@ -1378,8 +1386,8 @@ sub vcl_fetch {
                     in it
                 </li>
                 <li>
-                  For every seperate installation there needs to be a subdirectory of <em>multisite/</em> named
-                  exactly like the hostname of the seperate installation.<br />
+                  For every separate installation there needs to be a subdirectory of <em>multisite/</em> named
+                  exactly like the hostname of the separate installation.<br />
                   For example, if you want to use <em>faq.example.org</em> and <em>beta.faq.example.org</em>,
                   it needs to look like this:<br />
 <pre>
@@ -1410,7 +1418,8 @@ sub vcl_fetch {
     <p>
         In phpMyFAQ code and layout are separated. The layout is based on several template files, that you can modify
         to suit your own needs. The most important files for phpMyFAQ's default layout can be found in the directory
-        <em>assets/template/default/</em>. All original templates are valid HTML5 and we don't use tables for layout reasons.
+        <em>assets/template/default/</em>. All original templates are valid HTML5 and we don't use tables for layout
+        reasons.
     </p>
     <p>
         <strong>Note:</strong> You can change the layout of the admin area using the CSS file
@@ -1672,7 +1681,7 @@ sub vcl_fetch {
         Author: <a href="mailto:thorsten AT phpmyfaq DOT de">Thorsten Rinne</a><br />
         Co-Authors: <a href="mailto:stephan AT yauh DOT de">Stephan Hochhaus</a>,
         <a href="mailto:mgl-mail AT t-online DOT de">Markus Gläser</a><br />
-        Last update: 2012-04-15
+        Last update: 2012-09-03
     </p>
     <p>
         &copy; 2001-2012 phpMyFAQ Team
