@@ -100,7 +100,6 @@
                 </div>
                 {userOnline}
             </div>
-
             <div class="span6 main-content">
                 [globalSearchBox]
                 <section class="well search-box">
@@ -124,10 +123,8 @@
                     {msgSearch}
                 </section>
                 [/globalSuggestBox]
-
                 {writeContent}
             </div>
-
             <div class="span3">
                 {rightBox}
                 <section class="well">
@@ -141,7 +138,6 @@
                     </ul>
                 </section>
             </div>
-
         </div>
     </div>
 </section>
@@ -153,6 +149,7 @@
                 <ul class="footer-menu">
                     <li>{showSitemap}</li>
                     <li>{msgContact}</li>
+                    <li>{msgGlossary}</li>
                 </ul>
             </div>
             <div class="span6">

@@ -52,69 +52,89 @@
 </div>
  <![endif]-->
 
-<header id="header">
-    <h1>
-        <a title="{header}" href="{faqHome}">{header}</a>
-    </h1>
-</header>
-
-<nav>
-    <ul>
-        <li>{registerUser}</li>
-        <li>{sendPassword}</li>
-    </ul>
-</nav>
-
-<a id="top"></a>
-
-<div id="content">
-
-    <div id="mainContent">
-
-        <section>
-
-            <header>
-                <h2>{loginHeader}</h2>
-            </header>
-
-            {loginMessage}
-
-            <form action="{writeLoginPath}" method="post">
-                <input type="hidden" name="faqloginaction" value="{faqloginaction}"/>
-
-                <p>
-                    <label for="faqusername">{username}</label>
-                    <input type="text" name="faqusername" id="faqusername" size="16" required="required"
-                           autofocus="autofocus">
-                </p>
-                <p>
-                    <label for="faqpassword">{password}</label>
-                    <input type="password" size="16" name="faqpassword" id="faqpassword" required="required">
-                </p>
-                <p>
-                    <input class="submit" type="submit" value="{login}">
-                </p>
-
-            </form>
-
-        </section>
-
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <a class="brand" title="{header}" href="{faqHome}">{header}</a>
+        </div>
     </div>
-
 </div>
 
-<footer id="footer">
-    <div>
-        <section id="userOnline">
-            <p>{userOnline}</p>
-        </section>
-        <section>
-            <form action="{writeLangAdress}" method="post">
-            <p id="copyrightnote">
-                {copyright} | {switchLanguages} <input type="hidden" name="action" value="" />
+<section id="main">
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span3">
+            </div>
+            <div class="span6 main-content">
+                <section>
+                    <header>
+                        <h2>{loginHeader}</h2>
+                    </header>
+
+                    {loginMessage}
+
+                    <form class="form-horizontal" action="{writeLoginPath}" method="post">
+                        <input type="hidden" name="faqloginaction" value="{faqloginaction}"/>
+
+                        <div class="control-group">
+                            <label class="control-label" for="faqusername">{username}</label>
+                            <div class="controls">
+                                <input type="text" name="faqusername" id="faqusername" required="required" autofocus="autofocus">
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="faqpassword">{password}</label>
+                            <div class="controls">
+                                <input type="password" name="faqpassword" id="faqpassword" required="required">
+                                <p class="help-block">{sendPassword}</p>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <div class="controls">
+                                <label class="checkbox">
+                                    <input type="checkbox" id="faqrememberme" name="faqrememberme" value="rememberMe">
+                                {rememberMe}
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <input class="btn-primary btn-large" type="submit" value="{loginHeader}">
+                        </div>
+                    </form>
+
+                </section>
+            </div>
+            <div class="span3">
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span6">
+                <ul class="footer-menu">
+                    <li>{showSitemap}</li>
+                    <li>{msgContact}</li>
+                    <li>{msgGlossary}</li>
+                </ul>
+            </div>
+            <div class="span6">
+                <form action="{writeLangAdress}" method="post" class="pull-right">
+                {switchLanguages}
+                    <input type="hidden" name="action" value="" />
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <p class="copyright pull-right">
+            {copyright}
             </p>
-            </form>
-        </section>
+        </div>
     </div>
 </footer>
 

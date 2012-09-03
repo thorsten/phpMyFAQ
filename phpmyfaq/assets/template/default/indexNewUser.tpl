@@ -67,28 +67,36 @@
 
 <a id="top"></a>
 
-<div id="content">
-
-    <div id="mainContent">
-
+<section id="main">
+    <div class="container-fluid">
+        <div class="row-fluid">
         {writeContent}
-
+        </div>
     </div>
+</section>
 
-</div>
-
-<footer id="footer">
-    <div>
-        <section id="userOnline">
-            <p>{userOnline}</p>
-        </section>
-        <section>
-            <form action="{writeLangAdress}" method="post">
-            <p id="copyrightnote">
-                {copyright} | {switchLanguages} <input type="hidden" name="action" value="" />
+<footer>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span6">
+                <ul class="footer-menu">
+                    <li>{showSitemap}</li>
+                    <li>{msgContact}</li>
+                    <li>{msgGlossary}</li>
+                </ul>
+            </div>
+            <div class="span6">
+                <form action="{writeLangAdress}" method="post" class="pull-right">
+                {switchLanguages}
+                    <input type="hidden" name="action" value="" />
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <p class="copyright pull-right">
+            {copyright}
             </p>
-            </form>
-        </section>
+        </div>
     </div>
 </footer>
 
