@@ -174,22 +174,18 @@ if ($permission['editbt'] || $permission['delbt']) {
 ?>
     <form id="recordSelection" name="recordSelection" method="post">
     <fieldset>
-        <legend><?php print $PMF_LANG['ad_menu_entry_edit']; ?></legend>
 <?php
     $numCommentsByFaq = $comment->getNumberOfComments();
     $numRecordsByCat  = $category->getNumberOfRecordsOfCategory();
 
     // FIXME: Count "comments"/"entries" for each category also within a search context. Now the count is broken.
     // FIXME: we are not considering 'faqdata.links_state' for filtering the faqs.
-    if (!is_null($searchterm)) {
-
-        $matrix = $category->getCategoryRecordsMatrix();
-        foreach ($matrix as $catkey => $value) {
-            $numCommentsByCat[$catkey] = 0;
-            foreach ($value as $faqkey => $value) {
-                if (isset($numCommentsByFaq[$faqkey])) {
-                    $numCommentsByCat[$catkey] += $numCommentsByFaq[$faqkey];
-                }
+    $matrix = $category->getCategoryRecordsMatrix();
+    foreach ($matrix as $catkey => $value) {
+        $numCommentsByCat[$catkey] = 0;
+        foreach ($value as $faqkey => $value) {
+            if (isset($numCommentsByFaq[$faqkey])) {
+                $numCommentsByCat[$catkey] += $numCommentsByFaq[$faqkey];
             }
         }
     }
@@ -293,18 +289,12 @@ if ($permission['editbt'] || $permission['delbt']) {
         }
         
         foreach ($faq->faqRecords as $record) {
-            $catInfo         =  '';
-            $isBracketOpened = false;
-            $needComma       = false;
-            $cid             = $record['category_id'];
+            $catInfo =  '';
+            $cid     = $record['category_id'];
             
             if (isset($numRecordsByCat[$cid]) && ($numRecordsByCat[$cid] > 0)) {
-                if (!$isBracketOpened) {
-                    $catInfo        .= ' (';
-                    $isBracketOpened = true;
-                }
                 $catInfo .= sprintf(
-                    '<span id="category_%d_item_count">%d</span> %s',
+                    '<span class="label label-info" id="category_%d_item_count">%d %s</span> ',
                     $cid, 
                     $numRecordsByCat[$cid], 
                     $PMF_LANG['msgEntries']
@@ -313,26 +303,20 @@ if ($permission['editbt'] || $permission['delbt']) {
             
             if (isset($numRecordsByCat[$cid]) && $numRecordsByCat[$cid] > $numActiveByCat[$cid]) {
                 $catInfo .= sprintf(
-                    ', <span style="color: red;"><span id="js-active-records-%d">%d</span> %s</span>',
+                    '<span class="label label-important"><span id="js-active-records-%d">%d</span> %s</span> ',
                     $cid,
                     $numRecordsByCat[$cid] - $numActiveByCat[$cid],
                     $PMF_LANG['ad_record_inactive']
                 );
-                $needComma = true;
             }
             
             if (isset($numCommentsByCat[$cid]) && ($numCommentsByCat[$cid] > 0)) {
-                if (!$isBracketOpened) {
-                    $catInfo        .= ' (';
-                    $isBracketOpened = true;
-                }
-                $catInfo .= sprintf('%s%d %s',
-                    ($needComma ? ', ' : ''),
+                $catInfo .= sprintf('<span class="label label-inverse">%d %s</span>',
                     $numCommentsByCat[$cid],
                     $PMF_LANG['ad_start_comments']
                 );
             }
-            $catInfo .= $isBracketOpened ? ')' : '';
+            $catInfo .= '';
             
             if ($cid != $old) {
                 if ($old == 0) {
@@ -341,14 +325,14 @@ if ($permission['editbt'] || $permission['delbt']) {
                     print "        </tbody>\n        </table>\n        </div>";
                 }
 ?>
-        <div class="categorylisting">
-            <a href="javascript:void(0);"
+        <p class="categorylisting">
+            <a class="btn" href="javascript:void(0);"
                onclick="showhideCategory('category_<?php print $cid; ?>');">
-                <img src="../assets/img/more.gif" width="11" height="11" alt="" />
-                <?php print $category->getPath($cid); ?>
+                <i class="icon icon-arrow-right"></i>
+                <strong><?php print $category->getPath($cid); ?></strong>
+                <?php print $catInfo;?>
             </a>
-            <?php print $catInfo;?>
-        </div>
+        </p>
         <div id="category_<?php print $cid; ?>" class="categorybox"
              style="display: <?php print ($currentcategory == $cid) ? 'block' : 'none'; ?>;">
         <table class="table table-striped">
@@ -402,7 +386,7 @@ if ($permission['editbt'] || $permission['delbt']) {
 <?php
             }
 ?>
-        <tr class="record_<?php print $record['id']; ?>_<?php print $record['lang']; ?>">
+        <tr class="record_<?php  echo $record['id'] . '_' . $record['lang']; ?>'">
             <td style="width: 24px; text-align: right;">
                 <a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>">
                     <?php print $record['id']; ?>
@@ -431,7 +415,7 @@ if ($permission['editbt'] || $permission['delbt']) {
 <?php
         if (isset($numCommentsByFaq[$record['id']])) {
             printf(
-                '<br/>(<a href="?action=comments#record_id_%d">%d %s</a>)',
+                '<br/><a class="label label-inverse" href="?action=comments#record_id_%d">%d %s</a>',
                 $record['id'],
                 $numCommentsByFaq[$record['id']],
                 $PMF_LANG['ad_start_comments']
@@ -463,6 +447,8 @@ if ($permission['editbt'] || $permission['delbt']) {
                            onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'active');"
                            id="active_record_<?php print $cid . '_' . $record['id'] ?>"
                            <?php 'yes' == $record['active'] ? print 'checked="checked"' : print '    ' ?> />
+                <?php }  else { ?>
+                    <span class="label label-important"><i class="icon-white icon-ban-circle"></i></span>
                 <?php } ?>
             </td>
         </tr>
