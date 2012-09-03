@@ -146,16 +146,15 @@ class PMF_Linkverifier
     }
 
     
-	/**
-	 * Get current urls
-	 *
+    /**
+     * Get current urls
+     *
      * @return array $urlpool url list
      */
     public function getUrlpool()
     {
         return $this->urlpool;
     }
-
 
     /**
      * Returns whether linkverifier is ready to verify URLs.
@@ -226,11 +225,11 @@ class PMF_Linkverifier
      * will generate "http://example.com:8000/sample/test/foo.html"
      *
      * @param string $relativeuri
-     * @param string $message
+     * @param string $referenceuri
      *
      * @return string $result
      */
-    protected function makeAbsoluteURL($relativeuri = "", $referenceuri = "")
+    protected function makeAbsoluteURL($relativeuri = '', $referenceuri = '')
     {
         // If relativeuri is protocol we don't want to handle, don't process it.
         foreach ($this->invalid_protocols as $_protocol => $_message) {
@@ -301,16 +300,15 @@ class PMF_Linkverifier
 
     /**
      * Checks whether a URL can be opened.
-     *
      * if $redirect is specified, will handle Location: redirects.
      *
-     * @param string $url
-     * @param string $redirect
-     * @param string $loopsLeft
+     * @param string  $url
+     * @param string  $redirect
+     * @param integer $redirectCount
      *
-     * @result boolean true if connect successful. otherwise false
+     * @return array
      */
-    protected function openURL($url = "", $redirect = "", $redirectCount = 0)
+    protected function openURL($url = '', $redirect = '', $redirectCount = 0)
     {
         global $PMF_LANG;
 
@@ -458,7 +456,7 @@ class PMF_Linkverifier
         }
 
         // process response code
-        switch ( $code ) {
+        switch ($code) {
             // TODO: Add more explicit http status management
             case '200': // OK
                 $_reason = ($redirectCount > 0) ? sprintf($PMF_LANG['ad_linkcheck_openurl_redirected'],PMF_String::htmlspecialchars($url)) : "";
@@ -493,9 +491,9 @@ class PMF_Linkverifier
     /**
      * Perform link validation to each URLs found
      *
-     * @param   string $referenceuri
+     * @param string $referenceuri
      *
-     * @result  mixed  array of [protocol][url][info] = value
+     * @return array
      */
     public function VerifyURLs($referenceuri = '')
     {
@@ -586,7 +584,7 @@ class PMF_Linkverifier
      * @param string  $artlang
      * @param boolean $checkDate
      *
-     * @result mixed   false if entry does not exist. true if status expired, otherwise last link state text
+     * @return boolean|string
      */
     public function getEntryState($id = 0, $artlang = '', $checkDate = false)
     {
@@ -632,7 +630,7 @@ class PMF_Linkverifier
      * @param int    $id
      * @param string $artlang
      *
-     * @result string
+     * @return string
      */
     public function getEntryStateHTML($id = 0, $artlang = "")
     {
@@ -725,7 +723,7 @@ class PMF_Linkverifier
     * @param   string  $artlang
     * @param   boolean $cron
     *
-    * @result  string  HTML text, if $cron is false (default)
+    * @return  string  HTML text, if $cron is false (default)
     */
     public function verifyArticleURL($contents = '', $id = 0, $artlang = '', $cron = false)
     {
@@ -818,54 +816,4 @@ class PMF_Linkverifier
             return $output;
         }
     }
-}
-
-/**
- * Prints javascripts needed for AJAX verification on record add/save/clicked on listing
- *
- * @param   integer $id
- * @param   string  $lang
- */
-function link_ondemand_javascript($id, $lang) {
-?>
-<script type="text/javascript">
-<!--
-function ajaxOnDemandVerify(id, lang)
-{
-    var target = $('#onDemandVerifyResult');
-    var url = 'index.php';
-    var pars = 'action=ajax&ajax=onDemandURL&id=' + id + '&artlang=' + lang + '&lookup=1';
-    var myAjax = new jQuery.ajax({url: url,
-                                  type: 'get',
-                                  data: pars,
-                                  complete: ajaxOnDemandVerify_success,
-                                  error: ajaxOnDemandVerify_failure});
-    //TODO: Assign string
-    target.innerHTML = 'Querying LinkVerifier...';
-
-    function ajaxOnDemandVerify_success(XmlRequest)
-    {
-        target.html(XmlRequest.responseText);
-    }
-
-    function ajaxOnDemandVerify_failure(XmlRequest)
-    {
-        //TODO: Assign string
-        target.html('LinkVerifier failed (url probe timed out?)');
-    }
-}
-
-
-//-->
-</script>
-
-<div id="onDemandVerifyResult">
-<noscript>LinkVerifier feature disabled (Reason: Javascript not enabled)</noscript>
-</div>
-<script type="text/javascript">
-<!--
-    ajaxOnDemandVerify(<?php print $id; ?>, '<?php print $lang; ?>');
-//-->
-</script>
-<?php
 }

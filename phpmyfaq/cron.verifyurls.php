@@ -58,8 +58,6 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/config/database.php')) {
         require_once(PMF_ROOT_DIR.'/lang/language_'.LANGCODE.'.php');
     }
 
-    require_once(PMF_ROOT_DIR.'/inc/Linkverifier.php');
-    require_once(PMF_ROOT_DIR.'/inc/Faq.php');
     $oLnk     = new PMF_Linkverifier($faqConfig);
     $faq      = new PMF_Faq($faqConfig);
     $totStart = microtime(true);

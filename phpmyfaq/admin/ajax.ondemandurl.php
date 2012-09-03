@@ -117,6 +117,6 @@ if (!is_null($lookup)) {
 }
 
 ?>
-<?php link_ondemand_javascript($id, $artlang); ?>
+<?php PMF_Helper_Linkverifier::linkOndemandJavascript($id, $artlang); ?>
 </body>
 </html>

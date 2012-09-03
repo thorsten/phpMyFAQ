@@ -142,7 +142,7 @@ if ($permission['editbt']|| $permission['addbt']) {
             }
 
             // Call Link Verification
-            link_ondemand_javascript($record_id, $recordData['lang']);
+            PMF_Helper_Linkverifier::linkOndemandJavascript($record_id, $recordData['lang']);
 
             // Callback to Twitter if enabled
             if ($faqConfig->get('socialnetworks.enableTwitterSupport')) {
