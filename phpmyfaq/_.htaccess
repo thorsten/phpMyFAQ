@@ -1,21 +1,15 @@
 ##
 # phpMyFAQ .htaccess file for Apache 2.x
 #
-# The contents of this file are subject to the Mozilla Public License
-# Version 1.1 (the "License"); you may not use this file except in
-# compliance with the License. You may obtain a copy of the License at
-# http://www.mozilla.org/MPL/
-#
-# Software distributed under the License is distributed on an "AS IS"
-# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-# License for the specific language governing rights and limitations
-# under the License.
+# This Source Code Form is subject to the terms of the Mozilla Public License,
+# v. 2.0. If a copy of the MPL was not distributed with this file, You can
+# obtain one at http://mozilla.org/MPL/2.0/.
 #
 # @author    Thorsten Rinne <thorsten@phpmyfaq.de>
 # @author    Patrick Preuster <sica@php-q.net>
 # @author    Matteo Scaramuccia <matteo@scaramuccia.com>
 # @copyright 2004-2012 phpMyFAQ Team
-# @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+# @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
 # @link      http://www.phpmyfaq.de
 # @since     2004-11-13
 
@@ -65,6 +59,10 @@ RewriteRule ^(.*)$                  index.php?action=help [L,QSA]
 # the contact page
 RewriteCond %{REQUEST_URI}          /contact\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=contact [L,QSA]
+
+# the glossary page
+RewriteCond %{REQUEST_URI}          /glossary\.html$ [NC]
+RewriteRule ^(.*)$                  index.php?action=glossary [L,QSA]
 
 # a page with a record (backward compatibility)
 # * http://[...]/1_1_en.html

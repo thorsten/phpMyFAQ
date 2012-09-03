@@ -60,6 +60,10 @@ if matched then set URL = /index.php?action=help
 match URL into $ with ^/contact\.html$
 if matched then set URL = /index.php?action=contact
 
+# the glossary page
+match URL into $ with ^/glossary\.html$
+if matched then set URL = /index.php?action=glossary
+
 # the instant response page
 match URL into $ with ^/instantresponse\.html$
 if matched then set URL = /index.php?action=instantresponse

@@ -186,6 +186,7 @@ $allowedVariables = array(
     'ask'             => 1,
     'attachment'      => 1,
     'contact'         => 1,
+    'glossary'        => 1,
     'help'            => 1,
     'instantresponse' => 1,
     'login'           => 1,

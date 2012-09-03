@@ -83,6 +83,7 @@ class PMF_Link
     const PMF_LINK_GET_ACTION_ARTIKEL = 'artikel';
     const PMF_LINK_GET_ACTION_ASK = 'ask';
     const PMF_LINK_GET_ACTION_CONTACT = 'contact';
+    const PMF_LINK_GET_ACTION_GLOSSARY = 'glossary';
     const PMF_LINK_GET_ACTION_HELP = 'help';
     const PMF_LINK_GET_ACTION_LOGIN = 'login';
     const PMF_LINK_GET_ACTION_NEWS = 'news';
@@ -100,6 +101,7 @@ class PMF_Link
     const PMF_LINK_HTML_ADDCONTENT = 'addcontent.html';
     const PMF_LINK_HTML_ASK = 'ask.html';
     const PMF_LINK_HTML_CONTACT = 'contact.html';
+    const PMF_LINK_HTML_GLOSSARY = 'glossary.html';
     const PMF_LINK_HTML_HELP = 'help.html';
     const PMF_LINK_HTML_LOGIN = 'login.html';
     const PMF_LINK_HTML_OPEN = 'open.html';
@@ -576,7 +578,11 @@ class PMF_Link
                         case self::PMF_LINK_GET_ACTION_CONTACT:
                             $url .= self::PMF_LINK_HTML_CONTACT;
                             break;
-                            
+
+                        case self::PMF_LINK_GET_ACTION_GLOSSARY:
+                            $url .= self::PMF_LINK_HTML_GLOSSARY;
+                            break;
+
                         case self::PMF_LINK_GET_ACTION_HELP:
                             $url .= self::PMF_LINK_HTML_HELP;
                             break;
