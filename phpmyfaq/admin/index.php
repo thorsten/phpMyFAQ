@@ -196,7 +196,7 @@ if ($action == 'logout' && $auth) {
 //
 if (isset($user) && is_object($user)) {
     $currentAdminUser = $user->getUserId();
-    if ($user->perm instanceof PMF_Perm_PermMedium) {
+    if ($user->perm instanceof PMF_Perm_Medium) {
         $currentAdminGroups = $user->perm->getUserGroups($currentAdminUser);
     } else {
         $currentAdminGroups = array(-1);

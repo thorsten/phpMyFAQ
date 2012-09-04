@@ -58,7 +58,7 @@ PMF_String::init($languageCode);
 $user = PMF_User_CurrentUser::getFromSession($faqConfig);
 if (isset($user) && is_object($user)) {
     $current_user = $user->getUserId();
-    if ($user->perm instanceof PMF_Perm_PermMedium) {
+    if ($user->perm instanceof PMF_Perm_Medium) {
         $current_groups = $user->perm->getUserGroups($current_user);
     } else {
         $current_groups = array(-1);
