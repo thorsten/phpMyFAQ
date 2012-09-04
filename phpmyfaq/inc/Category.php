@@ -1374,32 +1374,30 @@ class PMF_Category
      */
     public function addPermission($mode, Array $categories, $id)
     {
-        if (!($mode == "user" || $mode == "group")) {
-            return false;
-        }
-        if (!is_array($categories)) {
+        if ('user' !== $mode || 'group' !== $mode) {
             return false;
         }
 
-        foreach ($categories as $category_id) {
-        	$query = "SELECT * FROM %sfaqcategory_%s WHERE category_id = %d AND %s_id = %d";
-        	$query = sprintf($query, PMF_Db::getTablePrefix(), $mode, $category_id, $mode, $id);
+        if (! is_array($categories)) {
+            return false;
+        }
 
-        	if($this->_config->getDb()->numRows($this->_config->getDb()->query($query))) {
-        		continue;
-        	}
+        foreach ($categories as $categoryId) {
+            $query = "SELECT * FROM %sfaqcategory_%s WHERE category_id = %d AND %s_id = %d";
+            $query = sprintf($query, PMF_Db::getTablePrefix(), $mode, $categoryId, $mode, $id);
 
-            $query = sprintf("
-                INSERT INTO
-                    %sfaqcategory_%s
-                (category_id, %s_id)
-                    VALUES
-                (%d, %d)",
+            if ($this->_config->getDb()->numRows($this->_config->getDb()->query($query))) {
+                continue;
+            }
+
+            $query = sprintf(
+                'INSERT INTO %sfaqcategory_%s (category_id, %s_id) VALUES (%d, %d)',
                 PMF_Db::getTablePrefix(),
                 $mode,
                 $mode,
-                $category_id,
-                $id);
+                $categoryId,
+                $id
+            );
 
             $this->_config->getDb()->query($query);
         }

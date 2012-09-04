@@ -45,22 +45,23 @@ if ($permission['editcateg']) {
         $category = new PMF_Category($faqConfig, false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
-        $parent_id     = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
+        $parentId      = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
         $category_data = array(
             'lang'        => PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING),
             'name'        => PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
             'description' => PMF_Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
-            'user_id'     => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT));
+            'user_id'     => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT)
+        );
 
         $userperm      = PMF_Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING);
-        $user_allowed  = ('all' == $userperm) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT);
+        $userAllowed  = ('all' == $userperm) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT);
         $groupperm     = PMF_Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING);
-        $group_allowed = ('all' == $groupperm) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_groups', FILTER_VALIDATE_INT);
+        $groupsAllowed = ('all' == $groupperm) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_groups', FILTER_VALIDATE_INT);
 
-        $category_id = $category->addCategory($category_data, $parent_id);
+        $category_id = $category->addCategory($category_data, $parentId);
         if ($category_id) {
-            $category->addPermission('user', array($category_id), $user_allowed);
-            $category->addPermission('group', array($category_id), $group_allowed);
+            $category->addPermission('user', array($category_id), $userAllowed);
+            $category->addPermission('group', array($category_id), $groupsAllowed);
                         
             // All the other translations            
             $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
@@ -79,13 +80,13 @@ if ($permission['editcateg']) {
                     $category_data = array_merge($category_data, array(
                         'id'          => $category_id,
                         'lang'        => $translated_lang,
-                        'parent_id'   => $parent_id,
+                        'parent_id'   => $parentId,
                         'name'        => $translated_name,
                         'description' => $translated_description,
                         'user_id'     => $user_id));
 
                     if (!$category->checkLanguage($category_id, $translated_lang)) {
-                        $category->addCategory($category_data, $parent_id, $category_id);
+                        $category->addCategory($category_data, $parentId, $category_id);
                     } else {
                         $category->updateCategory($category_data);
                     }
@@ -103,24 +104,24 @@ if ($permission['editcateg']) {
         $category = new PMF_Category($faqConfig, false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
-        $parent_id     = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
+        $parentId     = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
         $category_data = array(
             'id'          => PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT),
             'lang'        => PMF_Filter::filterInput(INPUT_POST, 'catlang', FILTER_SANITIZE_STRING),
-            'parent_id'   => $parent_id,
+            'parent_id'   => $parentId,
             'name'        => PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
             'description' => PMF_Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
             'user_id'     => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT));
 
         $userperm      = PMF_Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING);
-        $user_allowed  = ('all' == $userperm) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT);
+        $userAllowed  = ('all' == $userperm) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT);
         $groupperm     = PMF_Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING);
-        $group_allowed = ('all' == $groupperm) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_groups', FILTER_VALIDATE_INT);
+        $groupsAllowed = ('all' == $groupperm) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_groups', FILTER_VALIDATE_INT);
         
         if (!$category->checkLanguage($category_data['id'], $category_data['lang'])) {
-            if ($category->addCategory($category_data, $parent_id, $category_data['id']) &&
-                $category->addPermission('user', array($category_data['id']), $user_allowed) &&
-                $category->addPermission('group', array($category_data['id']), $group_allowed)) {
+            if ($category->addCategory($category_data, $parentId, $category_data['id']) &&
+                $category->addPermission('user', array($category_data['id']), $userAllowed) &&
+                $category->addPermission('group', array($category_data['id']), $groupsAllowed)) {
                 printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_translated']);
             } else {
                 printf('<p class="alert alert-error">%s</p>', $faqConfig->getDb()->error());
@@ -129,8 +130,8 @@ if ($permission['editcateg']) {
             if ($category->updateCategory($category_data)) {
                 $category->deletePermission('user', array($category_data['id']));
                 $category->deletePermission('group', array($category_data['id']));
-                $category->addPermission('user', array($category_data['id']), $user_allowed);
-                $category->addPermission('group', array($category_data['id']), $group_allowed);
+                $category->addPermission('user', array($category_data['id']), $userAllowed);
+                $category->addPermission('group', array($category_data['id']), $groupsAllowed);
                 printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_updated']);
             } else {
                 printf('<p class="alert alert-error">%s</p>', $faqConfig->getDb()->error());
@@ -155,13 +156,13 @@ if ($permission['editcateg']) {
                 $category_data = array_merge($category_data, array(
                     'id'          => $category_id,
                     'lang'        => $translated_lang,
-                    'parent_id'   => $parent_id,
+                    'parent_id'   => $parentId,
                     'name'        => $translated_name,
                     'description' => $translated_description,
                     'user_id'     => $user_id));
 
                 if (!$category->checkLanguage($category_id, $translated_lang)) {
-                    $category->addCategory($category_data, $parent_id, $category_id);
+                    $category->addCategory($category_data, $parentId, $category_id);
                 } else {
                     $category->updateCategory($category_data);
                 }
@@ -216,8 +217,8 @@ if ($permission['editcateg']) {
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
         $category_id = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
-        $parent_id   = PMF_Filter::filterInput(INPUT_POST, 'after', FILTER_VALIDATE_INT);
-        if ($category->updateParentCategory($category_id, $parent_id)) {
+        $parentId   = PMF_Filter::filterInput(INPUT_POST, 'after', FILTER_VALIDATE_INT);
+        if ($category->updateParentCategory($category_id, $parentId)) {
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_updated']);
         } else {
             printf(
