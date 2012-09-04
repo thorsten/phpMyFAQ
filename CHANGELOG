@@ -19,6 +19,7 @@ Version 2.8.0-alpha3 - 2012-
 - added online verification check (Thorsten, Florian)
 - added configurable maintenance mode (Thorsten)
 - added user notification for answered questions (Thorsten)
+- added documentation in Markdown (Thorsten)
 - dropped support for IBM DB2, Interbase/Firebird and Sybase (Thorsten)
 - improved usability of administration backend (Thorsten)
 - improved setup and update (Thorsten, Florian)
