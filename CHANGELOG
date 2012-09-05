@@ -29,7 +29,7 @@ Version 2.8.0-alpha3 - 2012-
 - simplified the link verification (Thorsten)
 - updated bundled jQuery to version 1.8.0 (Thorsten)
 - updated bundled Modernizr to version 2.6.1 (Thorsten)
-- updated bundled Twitter Bootstrap to version 2.1.0 (Thorsten)
+- updated bundled Twitter Bootstrap to version 2.1.1 (Thorsten)
 - fixed some bugs (Thorsten, Florian)
 
 Version 2.7.9 - 2012-09-
