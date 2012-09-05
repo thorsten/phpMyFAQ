@@ -70,7 +70,7 @@ require PMF_ROOT_DIR . '/install/questionnaire.php';
             switch (field.value) {
             case 'sqlite':
             case 'sqlite3':
-                $('#dbsqlite').show()
+                $('#dbsqlite').show();
                 $('#dbdatafull').hide();
                 break;
             default:

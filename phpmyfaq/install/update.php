@@ -117,18 +117,8 @@ function HTMLFooter()
             <div class="span10">
 <?php
 
-if (version_compare(PHP_VERSION, PMF_System::VERSION_MINIMUM_PHP, '<')) {
-    printf('<p class="alert alert-error">Sorry, but you need PHP %s or later!</p>', PMF_System::VERSION_MINIMUM_PHP);
-    HTMLFooter();
-    die();
-}
-
-if (! is_readable(PMF_ROOT_DIR.'/inc/data.php') && ! is_readable(PMF_ROOT_DIR.'/config/database.php')) {
-    print '<p class="alert alert-error">It seems you never run a version of phpMyFAQ.<br />' .
-          'Please use the <a href="setup.php">install script</a>.</p>';
-    HTMLFooter();
-    die();
-}
+$installer = new PMF_Installer();
+$installer->checkPreUpgrade();
 
 /**************************** STEP 1 OF 3 ***************************/
 if ($step == 1) {
