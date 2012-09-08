@@ -44,20 +44,23 @@ $options = array(
 );
 $pagination = new PMF_Pagination($faqConfig, $options);
 
-$output = array();
-foreach ($glossaryItems as $item) {
-    $output['item'][]       = $item['item'];
-    $output['definition'][] = $item['definition'];
+if (0 < count($glossaryItems)) {
+        
+    $output = array();
+    foreach ($glossaryItems as $item) {
+        $output['item'][]       = $item['item'];
+        $output['definition'][] = $item['definition'];
+    }
+    
+    $tpl->parseBlock(
+        'writeContent',
+        'glossaryItems',
+        array(
+            'item' => $output['item'],
+            'desc' => $output['definition']
+        )
+    );
 }
-
-$tpl->parseBlock(
-    'writeContent',
-    'glossaryItems',
-    array(
-        'item' => $output['item'],
-        'desc' => $output['definition']
-    )
-);
 
 $tpl->parse(
     'writeContent',
