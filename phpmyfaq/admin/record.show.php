@@ -118,7 +118,6 @@ if ($permission['editbt'] || $permission['delbt']) {
 
             function verifyEntryURL_failure(XmlRequest)
             {
-                //target.src = "images/url-noaccess.png";
                 getDivElement(id, lang).className = "url-noaccess";
                 target.html("<?php print($PMF_LANG['ad_linkcheck_feedback_url-noaccess']); ?>");
             }
@@ -133,53 +132,28 @@ if ($permission['editbt'] || $permission['delbt']) {
     $faq     = new PMF_Faq($faqConfig);
     $date    = new PMF_Date($faqConfig);
 
-    $cond           = $numCommentsByFaq = $numActiveByCat = array();
-    $internalSearch = $linkState = $searchterm = '';
-    $searchcat      = $currentcategory = 0;
-    $orderby        = 1;
-    $sortby         = null;
-    $linkState      = PMF_Filter::filterInput(INPUT_POST, 'linkstate', FILTER_SANITIZE_STRING);
-    $searchcat      = PMF_Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
-    $searchterm     = PMF_Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
-    
-    if (!is_null($linkState)) {
-        $cond[PMF_Db::getTablePrefix().'faqdata.links_state'] = 'linkbad';
-        $linkState                             = ' checked="checked" ';
-        $internalSearch                       .= '&amp;linkstate=linkbad';
-    }
-    if (!is_null($searchcat)) {
-        $internalSearch .= "&amp;searchcat=" . $searchcat;
-        $cond[PMF_Db::getTablePrefix().'faqcategoryrelations.category_id'] = array_merge(
-            array($searchcat),
-            $category->getChildNodes($searchcat)
-        );
-    }
-
-    $currentcategory = PMF_Filter::filterInput(INPUT_GET, 'category', FILTER_VALIDATE_INT);
-    $orderby         = PMF_Filter::filterInput(INPUT_GET, 'orderby', FILTER_SANITIZE_STRING, 1);
-    $sortby          = PMF_Filter::filterInput(INPUT_GET, 'sortby', FILTER_SANITIZE_STRING);
-    if ($orderby != 1) {
-        switch ($orderby) {
+    $selectedCategory = PMF_Filter::filterInput(INPUT_GET, 'category', FILTER_VALIDATE_INT, 0);
+    $orderBy          = PMF_Filter::filterInput(INPUT_GET, 'orderby', FILTER_SANITIZE_STRING, 1);
+    $sortBy           = PMF_Filter::filterInput(INPUT_GET, 'sortby', FILTER_SANITIZE_STRING);
+    if (1 !== $orderBy) {
+        switch ($orderBy) {
             case 'id':
-                $orderby = 1;
+                $orderBy = 1;
                 break;
             case 'title':
-                $orderby = 2;
+                $orderBy = 2;
                 break;
             case 'date':
-                $orderby = 3;
+                $orderBy = 3;
                 break;
         }
     }
 ?>
     <form id="recordSelection" name="recordSelection" method="post">
-    <fieldset>
 <?php
     $numCommentsByFaq = $comment->getNumberOfComments();
     $numRecordsByCat  = $category->getNumberOfRecordsOfCategory();
 
-    // FIXME: Count "comments"/"entries" for each category also within a search context. Now the count is broken.
-    // FIXME: we are not considering 'faqdata.links_state' for filtering the faqs.
     $matrix = $category->getCategoryRecordsMatrix();
     foreach ($matrix as $catkey => $value) {
         $numCommentsByCat[$catkey] = 0;
@@ -189,101 +163,21 @@ if ($permission['editbt'] || $permission['delbt']) {
             }
         }
     }
-    
-    if ($action == 'view' && is_null($searchterm)) {
 
-        $faq->getAllRecords($orderby, null, $sortby);
-        $laction        = 'view';
-        $internalSearch = '';
-        
-        foreach ($faq->faqRecords as $record) {
-            if (!isset($numActiveByCat[$record['category_id']])) {
-                $numActiveByCat[$record['category_id']] = 0;
-            }
-            $numActiveByCat[$record['category_id']] += $record['active'] == 'yes' ? 1 : 0;
+    $faq->getAllRecords($orderBy, null, $sortBy);
+    foreach ($faq->faqRecords as $record) {
+        if (!isset($numActiveByCat[$record['category_id']])) {
+            $numActiveByCat[$record['category_id']] = 0;
         }
-
-    } elseif ($action == "view" && !is_null($searchterm)) {
-        
-        $fdTable  = PMF_Db::getTablePrefix() . 'faqdata';
-        $fcrTable = PMF_Db::getTablePrefix() . 'faqcategoryrelations';
-        $search   = PMF_Search_Factory::create($faqConfig, array('database' => PMF_Db::getType()));
-
-        $search->setTable($fdTable)
-            ->setResultColumns(array(
-                $fdTable . '.id AS id',
-                $fdTable . '.lang AS lang',
-                $fdTable . '.solution_id AS solution_id',
-                $fcrTable . '.category_id AS category_id',
-                $fdTable . '.sticky AS sticky',
-                $fdTable . '.active AS active',
-                $fdTable . '.thema AS thema',
-                $fdTable . '.content AS content',
-                $fdTable . '.datum AS date'))
-            ->setJoinedTable($fcrTable)
-            ->setJoinedColumns(array(
-                $fdTable . '.id = ' . $fcrTable . '.record_id',
-                $fdTable . '.lang = ' . $fcrTable . '.record_lang'));
-        
-        if (is_numeric($searchterm)) {
-            $search->setMatchingColumns(array($fdTable . '.solution_id'));
-        } else {
-            $search->setMatchingColumns(array($fdTable . '.thema', $fdTable . '.content', $fdTable . '.keywords'));
-        }
-
-        $result         = $search->search($searchterm);
-        $laction        = 'view';
-        $internalSearch = '&amp;search='.$searchterm;
-        $wasSearch      = true;
-        $idsFound       = array();
-        $faqsFound      = array();
-
-        while ($row = $faqConfig->getDb()->fetchObject($result)) {
-            
-            if ($searchcat != 0 && $searchcat != (int)$row->category_id) {
-                continue;
-            }
-
-            if (in_array($row->id, $idsFound)) {
-                continue; // only show one entry if FAQ is in mulitple categories
-            }
-
-            $faqsFound[$row->category_id][$row->id] = array(
-                'id'          => $row->id,
-                'category_id' => $row->category_id,
-                'solution_id' => $row->solution_id,
-                'lang'        => $row->lang,
-                'active'      => $row->active,
-                'sticky'      => $row->sticky,
-                'title'       => $row->thema,
-                'content'     => $row->content,
-                'date'        => PMF_Date::createIsoDate($row->date)
-            );
-            
-            if (!isset($numActiveByCat[$row->category_id])) {
-                $numActiveByCat[$row->category_id] = 0;
-            }
-
-            $numActiveByCat[$row->category_id] += $row->active ? 1 : 0;
-
-            $idsFound[] = $row->id;
-        }
-
-        // Sort search result ordered by category ID
-        ksort($faqsFound);
-        foreach ($faqsFound as $categoryId => $faqFound) {
-            foreach ($faqFound as $singleFaq) {
-                $faq->faqRecords[] = $singleFaq;
-            }
-        }
+        $numActiveByCat[$record['category_id']] += $record['active'] == 'yes' ? 1 : 0;
     }
 
     if (count($faq->faqRecords) > 0) {
         $old     = 0;
-        $all_ids = $numVisits = array();
+        $all_ids = array();
 
-        $visits = new PMF_Visits($faqConfig);
-        
+        $visits    = new PMF_Visits($faqConfig);
+        $numVisits = array();
         foreach ($visits->getAllData() as $visit) {
             $numVisits[$visit['id']] = $visit['lang'];
         }
@@ -325,7 +219,7 @@ if ($permission['editbt'] || $permission['delbt']) {
                     print "        </tbody>\n        </table>\n        </div>";
                 }
 ?>
-        <p class="categorylisting">
+        <p>
             <a class="btn" href="javascript:void(0);"
                onclick="showhideCategory('category_<?php print $cid; ?>');">
                 <i class="icon icon-arrow-right"></i>
@@ -333,8 +227,7 @@ if ($permission['editbt'] || $permission['delbt']) {
                 <?php print $catInfo;?>
             </a>
         </p>
-        <div id="category_<?php print $cid; ?>" class="categorybox"
-             style="display: <?php print ($currentcategory == $cid) ? 'block' : 'none'; ?>;">
+        <div id="category_<?php print $cid; ?>" class="categorybox <?php print ($selectedCategory == $cid) ? '' : 'hide'; ?>">
         <table class="table table-striped">
         <thead>
         <tr>
@@ -461,7 +354,6 @@ if ($permission['editbt'] || $permission['delbt']) {
         </tbody>
         </table>
         </div>
-        </fieldset>
         </form>
     
         <script type="text/javascript">
