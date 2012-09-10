@@ -121,7 +121,7 @@ $headers = array(
     "Cache-Control: must-revalidate, post-check=0, pre-check=0",
 );
 
-if (true === $getAll) {
+if (true === $getAll && $permission['export']) {
 
     $filename = 'FAQs.pdf';
     $pdfFile  = $pdf->generate(0, true, $lang);

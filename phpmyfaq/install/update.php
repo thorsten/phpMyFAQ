@@ -805,6 +805,10 @@ if ($step == 3) {
     if (version_compare($version, '2.8.0-alpha3', '<')) {
 
         $query[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqlinkverifyrules";
+        $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faqright (right_id, name, description) VALUES
+            (45, 'export', 'Right to export the complete FAQ')";
+        $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faquser_right (user_id, right_id) VALUES (1, 45)";
+
     }
 
     // Always the last step: Update version number

@@ -258,6 +258,11 @@ class PMF_Installer
             'name' => 'delinstances',
             'description' => 'Right to delete multi-site instances'
         ),
+        // 45 => 'export'
+        array(
+            'name' => 'export',
+            'description' => 'Right to export the complete FAQ'
+        ),
     );
 
     protected $_mainConfig = array(
