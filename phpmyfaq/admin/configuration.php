@@ -2,7 +2,7 @@
 /**
  * The main configuration frontend
  *
- * PHP 5.2
+ * PHP 5.3
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -140,40 +140,6 @@ if ($permission['editconfig']) {
                 <input class="btn-inverse" type="reset" value="<?php print $PMF_LANG['ad_config_reset']; ?>" />
             </p>
         </form>
-
-        <script type="text/javascript">
-        /* <![CDATA[ */
-
-        function getConfigList()
-        {
-            $.get("index.php", { action: "ajax", ajax: "config_list", conf: "main" }, function(data) {
-                $('#configMain').append(data);
-            });
-            $.get("index.php", { action: "ajax", ajax: "config_list", conf: "records" }, function(data) {
-                $('#configRecords').append(data);
-            });
-            $.get("index.php", { action: "ajax", ajax: "config_list", conf: "search" }, function(data) {
-                $('#configSearch').append(data);
-            });
-            $.get("index.php", { action: "ajax", ajax: "config_list", conf: "security" }, function(data) {
-                $('#configSecurity').append(data);
-            });
-            $.get("index.php", { action: "ajax", ajax: "config_list", conf: "spam" }, function(data) {
-                $('#configSpam').append(data);
-            });
-            $.get("index.php", { action: "ajax", ajax: "config_list", conf: "socialnetworks" }, function(data) {
-                $('#configSocialNetworks').append(data);
-            });
-            $.get("index.php", { action: "ajax", ajax: "config_list", conf: "cache" }, function(data) {
-                $('#configCache').append(data);
-            });
-        }
-
-        getConfigList();
-
-        /* ]]> */
-        </script>
-
 <?php
     }
 } else {

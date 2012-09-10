@@ -86,6 +86,9 @@ function showhideCategory(id)
 function toggleConfig(container)
 {
     if ($('#config' + container).css('display') == 'none') {
+        $.get("index.php", { action: "ajax", ajax: "config_list", conf: container.toLowerCase() }, function(data) {
+            $('#config' + container).append(data);
+        });
         $('#config' + container).fadeIn("slow");
     } else {
         $('#config' + container).fadeOut("slow");
