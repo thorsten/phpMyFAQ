@@ -12,7 +12,7 @@
  * @package   Administration
  * @author    Gustavo Solt <gustavo.solt@mayflower.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2011 phpMyFAQ Team
+ * @copyright 2011-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2011-01-12
@@ -40,7 +40,7 @@ if ($permission['reports']) {
     $useUrl          = PMF_Filter::filterInput(INPUT_POST, 'report_url', FILTER_VALIDATE_INT);
     $useVisits       = PMF_Filter::filterInput(INPUT_POST, 'report_visits', FILTER_VALIDATE_INT);
 ?>
-    <table class="list">
+    <table class="table table-striped">
         <thead>
             <tr>
 <?php
@@ -65,7 +65,7 @@ if ($permission['reports']) {
     $report = new PMF_Report($faqConfig);
 
     foreach ($report->getReportingData() as $data) {
-        print '<tr>';
+        echo '<tr>';
         if ($useCategory) {
             if (0 != $data['category_parent']) {
                 printf('<td>%s</td>', $data['category_parent']);
@@ -77,7 +77,7 @@ if ($permission['reports']) {
             if (0 != $data['category_parent']) {
                 printf('<td>%s</td>', $data['category_name']);
             } else {
-                print '<td>n/a</td>';
+                echo '<td>n/a</td>';
             }
         }
         if ($useTranslation) {
@@ -115,28 +115,31 @@ if ($permission['reports']) {
         if ($useVisits) {
             printf('<td>%d</td>', $data['faq_visits']);
         }
-        print '</tr>';
+        echo '</tr>';
     }
 ?>
         </tbody>
     </table>
-    <br />
-    <form action="?action=reportexport" method="post" style="display: inline;">
-        <input type="hidden" name="report_category" id="report_category" value="<?php print $useCategory; ?>" /></td>
-        <input type="hidden" name="report_sub_category" id="report_sub_category" value="<?php print $useSubcategory; ?>" /></td>
-        <input type="hidden" name="report_translations" id="report_translations" value="<?php print $useTranslation; ?>" /></td>
-        <input type="hidden" name="report_language" id="report_language" value="<?php print $useLanguage; ?>" /></td>
-        <input type="hidden" name="report_id" id="report_id" value="<?php print $useId; ?>" /></td>
-        <input type="hidden" name="report_sticky" id="report_sticky" value="<?php print $useSticky; ?>" /></td>
-        <input type="hidden" name="report_title" id="report_title" value="<?php print $useTitle; ?>" /></td>
-        <input type="hidden" name="report_creation_date" id="report_creation_date" value="<?php print $useCreationDate; ?>" /></td>
-        <input type="hidden" name="report_owner" id="report_owner" value="<?php print $useOwner; ?>" /></td>
-        <input type="hidden" name="report_last_modified_person" id="report_last_modified_person" class="radio" value="<?php print $useLastModified; ?>">
-        <input type="hidden" name="report_url" id="report_url" value="<?php print $useUrl; ?>" /></td>
-        <input type="hidden" name="report_visits" id="report_visits" value="<?php print $useVisits; ?>" /></td>
-        <input class="btn-primary" type="submit" value="<?php print $PMF_LANG["ad_stat_report_make_csv"]; ?>" />
+    <form action="?action=reportexport" method="post">
+        <input type="hidden" name="report_category" id="report_category" value="<?php echo $useCategory; ?>" /></td>
+        <input type="hidden" name="report_sub_category" id="report_sub_category" value="<?php echo $useSubcategory; ?>" /></td>
+        <input type="hidden" name="report_translations" id="report_translations" value="<?php echo $useTranslation; ?>" /></td>
+        <input type="hidden" name="report_language" id="report_language" value="<?php echo $useLanguage; ?>" /></td>
+        <input type="hidden" name="report_id" id="report_id" value="<?php echo $useId; ?>" /></td>
+        <input type="hidden" name="report_sticky" id="report_sticky" value="<?php echo $useSticky; ?>" /></td>
+        <input type="hidden" name="report_title" id="report_title" value="<?php echo $useTitle; ?>" /></td>
+        <input type="hidden" name="report_creation_date" id="report_creation_date" value="<?php echo $useCreationDate; ?>" /></td>
+        <input type="hidden" name="report_owner" id="report_owner" value="<?php echo $useOwner; ?>" /></td>
+        <input type="hidden" name="report_last_modified_person" id="report_last_modified_person" class="radio" value="<?php echo $useLastModified; ?>">
+        <input type="hidden" name="report_url" id="report_url" value="<?php echo $useUrl; ?>" /></td>
+        <input type="hidden" name="report_visits" id="report_visits" value="<?php echo $useVisits; ?>" /></td>
+        <div class="form-actions">
+            <button class="btn btn-primary" type="submit">
+                <?php echo $PMF_LANG["ad_stat_report_make_csv"]; ?>
+            </button>
+        </div>
     </form>
 <?php
 } else {
-    print $PMF_LANG['err_NotAuth'];
+    echo $PMF_LANG['err_NotAuth'];
 }
