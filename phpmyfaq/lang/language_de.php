@@ -213,7 +213,7 @@ $PMF_LANG["ad_user_deleted"] = "Der Benutzer wurde erfolgreich gelöscht.";
 $PMF_LANG["ad_user_checkall"] = "Alle auswählen";
 
 // Beitragsverwaltung
-$PMF_LANG["ad_entry_aor"] = "Beitragsverwaltung";
+$PMF_LANG["ad_entry_aor"] = "FAQ Übersicht";
 $PMF_LANG["ad_entry_id"] = "ID";
 $PMF_LANG["ad_entry_topic"] = "Frage";
 $PMF_LANG["ad_entry_action"] = "Aktion";

@@ -27,23 +27,23 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   Faq
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-12-28
  */
 interface PMF_Faq_Interface
 {
-	/**
-	 * Creates a new entry
-	 *
-	 * @param integer $id   ID
-	 * @param array   $data Array of data
-	 *
-	 * @return boolean
-	 * @throws PMF_Faq_Exception
-	 */
-	public function create($id, Array $data);
+    /**
+     * Creates a new entry
+     *
+     * @param integer $id   ID
+     * @param array   $data Array of data
+     *
+     * @return boolean
+     * @throws PMF_Faq_Exception
+     */
+    public function create($id, Array $data);
 
     /**
      * Updates an existing entry
@@ -54,7 +54,7 @@ interface PMF_Faq_Interface
      * @return boolean
      * @throws PMF_Faq_Exception
      */
-	public function update($id, Array $data);
+    public function update($id, Array $data);
 
     /**
      * Deletes an entry
@@ -64,8 +64,8 @@ interface PMF_Faq_Interface
      * @return boolean
      * @throws PMF_Faq_Exception
      */
-	public function delete($id);
-	
+    public function delete($id);
+    
     /**
      * Fetches one entry
      *
@@ -74,18 +74,18 @@ interface PMF_Faq_Interface
      * @return array
      * @throws PMF_Faq_Exception
      */
-	public function fetch($id);
-	
+    public function fetch($id);
+    
     /**
      * Fetches all entries, if parameter = null, otherwise all from the given
      * array like array(1, 2, 3)
      *
-     * @param integer $id ID
+     * @param array $ids Array of IDs
      *
      * @return array
      * @throws PMF_Faq_Exception
      */
-	public function fetchAll(Array $ids = null);
+    public function fetchAll(Array $ids = null);
 
     /**
      * Sets the language
@@ -95,13 +95,13 @@ interface PMF_Faq_Interface
      * @return boolean
      * @throws PMF_Faq_Exception
      */
-	public function setLanguage($language);
-	
+    public function setLanguage($language);
+    
     /**
      * Returns the current language
      *
      * @return string
      * @throws PMF_Faq_Exception
      */
-	public function getLanguage();
+    public function getLanguage();
 }
