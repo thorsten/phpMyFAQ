@@ -1269,9 +1269,8 @@ class PMF_Faq
             }
         }
 
-        $orderBy = '';
         switch ($sortType) {
-        	
+
             case FAQ_SORTING_TYPE_CATID_FAQID:
                 $orderBy = sprintf("
             ORDER BY
@@ -1301,6 +1300,10 @@ class PMF_Faq
                 fcr.category_id,
                 fd.datum %s",
                     $sortOrder);
+                break;
+
+            default:
+                $orderBy = '';
                 break;
         }
 
@@ -1338,14 +1341,15 @@ class PMF_Faq
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             $where,
-            $orderBy);
+            $orderBy
+        );
 
         $result = $this->_config->getDb()->query($query);
 
         while ($row = $this->_config->getDb()->fetchObject($result)) {
-            $content        = $row->content;
-            $active         = ('yes' == $row->active);
-            $expired        = (date('YmdHis') > $row->date_end);
+            $content = $row->content;
+            $active  = ('yes' == $row->active);
+            $expired = (date('YmdHis') > $row->date_end);
 
             if (!$active) {
                 $content = $this->pmf_lang['err_inactiveArticle'];
@@ -1370,7 +1374,8 @@ class PMF_Faq
                 'comment'       => $row->comment,
                 'date'          => PMF_Date::createIsoDate($row->datum),
                 'dateStart'     => $row->date_start,
-                'dateEnd'       => $row->date_end);
+                'dateEnd'       => $row->date_end
+            );
         }
     }
 
