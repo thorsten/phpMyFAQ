@@ -34,10 +34,10 @@ $tt                 = new PMF_TransTool;
 
 printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_translations']);
 ?>
-        <p><?php print $PMF_LANG['msgChooseLanguageToTranslate'] ?>:</p>
+        <p><?php echo $PMF_LANG['msgChooseLanguageToTranslate'] ?>:</p>
 
         <?php if(!$isTransDirWritable):
-            print '<p class="alert alert-error">'. $PMF_LANG['msgLangDirIsntWritable'] . "</p>";
+            echo '<p class="alert alert-error">'. $PMF_LANG['msgLangDirIsntWritable'] . "</p>";
         endif; ?>
 
         <table class="table table-striped">
@@ -45,15 +45,17 @@ printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_translations']);
             <?php if($permission["addtranslation"] && $isTransDirWritable): ?>
             <tr>
                 <th colspan="6">
-                    <a href="?action=transadd"><?php print $PMF_LANG['msgTransToolAddNewTranslation'] ?></a>
+                    <a class="btn btn-primary" href="?action=transadd">
+                        <?php echo $PMF_LANG['msgTransToolAddNewTranslation'] ?>
+                    </a>
                 </th>
             </tr>
             <?php endif; ?>
             <tr>
-                <th><?php print $PMF_LANG['msgTransToolLanguage'] ?></th>
-                <th colspan="3"><?php print $PMF_LANG['msgTransToolActions'] ?></th>
-                <th><?php print $PMF_LANG['msgTransToolWritable'] ?></th>
-                <th><?php print $PMF_LANG['msgTransToolPercent'] ?></th>
+                <th><?php echo $PMF_LANG['msgTransToolLanguage'] ?></th>
+                <th colspan="3"><?php echo $PMF_LANG['msgTransToolActions'] ?></th>
+                <th><?php echo $PMF_LANG['msgTransToolWritable'] ?></th>
+                <th><?php echo $PMF_LANG['msgTransToolPercent'] ?></th>
             </tr>
         </thead>
         <tbody>
@@ -81,30 +83,47 @@ printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_translations']);
         $isLangFileWritable = is_writable($langDir . DIRECTORY_SEPARATOR . "language_$lang.php");
         $showActions        = $isTransDirWritable && $isLangFileWritable;
         ?>
-            <tr class="lang_<?php print $lang ?>_container">
-                <td><?php print $languageCodes[strtoupper($lang)] ?></td>
+            <tr class="lang_<?php echo $lang ?>_container">
+                <td><?php echo $languageCodes[strtoupper($lang)] ?></td>
                 <?php if($permission["edittranslation"] && $showActions): ?>
-                <td>[<a href="?action=transedit&amp;translang=<?php print $lang ?>" ><?php print $PMF_LANG['msgEdit'] ?></a>]</td>
+                <td>
+                    <a class="btn btn-primary" href="?action=transedit&amp;translang=<?php echo $lang ?>" >
+                        <i class="icon-edit icon-white"></i>
+                        <?php echo $PMF_LANG['msgEdit'] ?>
+                    </a>
+                </td>
                 <?php else: ?>
-                <td>[<?php print $PMF_LANG['msgEdit'] ?>]</td>
+                <td><?php echo $PMF_LANG['msgEdit'] ?></td>
                 <?php endif; ?>
                 <?php if($permission["deltranslation"] && $showActions): ?>
-                <td>[<a href="javascript: del('<?php print $lang ?>');" ><?php print $PMF_LANG['msgDelete'] ?></a>]</td>
+                <td>
+                    <a class="btn btn-danger" href="javascript: del('<?php echo $lang ?>');" >
+                        <i class="icon-remove icon-white"></i>
+                        <?php echo $PMF_LANG['msgDelete'] ?>
+                    </a>
+                </td>
                 <?php else: ?>
-                <td>[<?php print $PMF_LANG['msgDelete'] ?>]</td>
+                <td><?php echo $PMF_LANG['msgDelete'] ?></td>
                 <?php endif; ?>
                 <?php if($permission["edittranslation"] && $showActions): ?>
-                <td>[<a href="javascript: sendToTeam('<?php print $lang ?>');" ><?php print $PMF_LANG['msgTransToolSendToTeam'] ?></a>]</td>
+                <td>
+                    <a class="btn btn-success" href="javascript: sendToTeam('<?php echo $lang ?>');" >
+                        <i class="icon-upload icon-white"></i>
+                        <?php echo $PMF_LANG['msgTransToolSendToTeam'] ?>
+                    </a>
+                </td>
                 <?php else: ?>
-                <td>[<?php print $PMF_LANG['msgTransToolSendToTeam'] ?>]</td>
+                <td><?php echo $PMF_LANG['msgTransToolSendToTeam'] ?></td>
                 <?php endif;?>
                 <?php if($isLangFileWritable): ?>
-                <td><font color="green"><?php print $PMF_LANG['msgYes'] ?></font></td>
+                <td><i class="icon-ok-circle"></i> <?php echo $PMF_LANG['msgYes'] ?></td>
                 <?php else: ?>
-                <td><font color="red"><?php print $PMF_LANG['msgNo'] ?></font></td>
+                <td><i class="icon-ban-circle"></i> <?php echo $PMF_LANG['msgNo'] ?></td>
                 <?php endif; ?>
-                <td><?php print $tt->getTranslatedPercentage($langDir . DIRECTORY_SEPARATOR . "language_en.php",
-                                                            $langDir . DIRECTORY_SEPARATOR . "language_$lang.php"); ?>%</td>
+                <td><?php echo $tt->getTranslatedPercentage(
+                    $langDir . DIRECTORY_SEPARATOR . "language_en.php",
+                    $langDir . DIRECTORY_SEPARATOR . "language_$lang.php"
+                ); ?>%</td>
             </tr>
         <?php 
     }
@@ -121,21 +140,21 @@ printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_translations']);
          */
         function del(lang)
         {
-            if (!confirm('<?php print $PMF_LANG['msgTransToolSureDeleteFile'] ?>')) {
+            if (!confirm('<?php echo $PMF_LANG['msgTransToolSureDeleteFile'] ?>')) {
                 return;
             }
 
-            $('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php print $PMF_LANG['msgRemoving3Dots'] ?>');
+            $('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php echo $PMF_LANG['msgRemoving3Dots'] ?>');
 
             $.get('index.php?action=ajax&ajax=trans&ajaxaction=remove_lang_file',
                   {translang: lang},
                   function(retval, status) {
                       if (1*retval > 0 && 'success' == status) {
                           $('.lang_' + lang + '_container').fadeOut('slow');
-                          $('#saving_data_indicator').html('<?php print $PMF_LANG['msgTransToolFileRemoved'] ?>');
+                          $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolFileRemoved'] ?>');
                       } else {
-                          $('#saving_data_indicator').html('<?php print $PMF_LANG['msgTransToolErrorRemovingFile'] ?>');
-                          alert('<?php print $PMF_LANG['msgTransToolErrorRemovingFile'] ?>');
+                          $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolErrorRemovingFile'] ?>');
+                          alert('<?php echo $PMF_LANG['msgTransToolErrorRemovingFile'] ?>');
                       }
                 }
             );
@@ -150,7 +169,7 @@ printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_translations']);
          */
         function sendToTeam(lang)
         {
-             $('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php print $PMF_LANG['msgSending3Dots'] ?>');
+             $('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php echo $PMF_LANG['msgSending3Dots'] ?>');
 
              var msg = '';;
 
@@ -158,14 +177,14 @@ printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_translations']);
                      {translang: lang},
                      function(retval, status) {
                          if (1*retval > 0 && 'success' == status) {
-                             msg = '<?php print $PMF_LANG['msgTransToolFileSent'] ?>';
+                             msg = '<?php echo $PMF_LANG['msgTransToolFileSent'] ?>';
                          } else {
-                             msg = '<?php print $PMF_LANG['msgTransToolErrorSendingFile'] ?>';
+                             msg = '<?php echo $PMF_LANG['msgTransToolErrorSendingFile'] ?>';
                          }
                    }
                );
 
-             $('#saving_data_indicator').html('<?php print $PMF_LANG['msgTransToolFileSent'] ?>');
-             alert('<?php print $PMF_LANG['msgTransToolFileSent'] ?>');
+             $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolFileSent'] ?>');
+             alert('<?php echo $PMF_LANG['msgTransToolFileSent'] ?>');
         }
         </script>
