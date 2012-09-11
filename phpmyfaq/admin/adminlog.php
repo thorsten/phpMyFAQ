@@ -52,8 +52,8 @@ if ($permission['adminlog'] && 'adminlog' == $action) {
         'total'           => $logging->getNumberOfEntries(),
         'perPage'         => $perpage,
         'pageParamName'   => 'page',
-        'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgNext'] . '</a>',
-        'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgPrevious'] . '</a>'
+        'nextPageLinkTpl' => '<li><a href="{LINK_URL}">' . $PMF_LANG['msgNext'] . '</a></li>',
+        'prevPageLinkTpl' => '<li><a href="{LINK_URL}">' . $PMF_LANG['msgPrevious'] . '</a></li>'
     );
     $pagination = new PMF_Pagination($faqConfig, $options);
 
@@ -119,10 +119,13 @@ if ($permission['adminlog'] && 'adminlog' == $action) {
 ?>
     </tbody>
     </table>
+
+    <p>
+        <a class="btn btn-danger" href="?action=deleteadminlog">
+            <?php echo $PMF_LANG['ad_adminlog_del_older_30d'] ?>
+        </a>
+    </p>
 <?php
-
-    printf ('<p><a href="?action=deleteadminlog">%s</a></p>', $PMF_LANG['ad_adminlog_del_older_30d']);
-
 } elseif ($permission['adminlog'] && 'deleteadminlog' == $action) {
 
     if ($logging->delete()) {
