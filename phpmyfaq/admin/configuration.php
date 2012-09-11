@@ -28,10 +28,12 @@ if ($permission['editconfig']) {
     $userAction = PMF_Filter::filterInput(INPUT_GET, 'config_action', FILTER_SANITIZE_STRING, 'listConfig');
 
     // Save the configuration
-    if ('saveConfig' == $userAction) {
+    if ('saveConfig' === $userAction) {
 
-        $checks          = array('filter' => FILTER_SANITIZE_STRING,
-                                 'flags'  => FILTER_REQUIRE_ARRAY);
+        $checks = array(
+            'filter' => FILTER_SANITIZE_STRING,
+            'flags'  => FILTER_REQUIRE_ARRAY
+        );
         $editData        = PMF_Filter::filterInputArray(INPUT_POST, array('edit' => $checks));
         $message         = '';
         $userAction      = 'listConfig';
@@ -67,81 +69,87 @@ if ($permission['editconfig']) {
         $faqConfig->update($newConfigValues);
     }
     // Lists the current configuration
-    if ('listConfig' == $userAction) {
+    if ('listConfig' === $userAction) {
         $message    = '';
         $userAction = 'listConfig';
 ?>
 
         <header>
-            <h2><?php print $PMF_LANG['ad_config_edit']; ?></h2>
+            <h2><?php echo $PMF_LANG['ad_config_edit']; ?></h2>
         </header>
 
-        <div id="user_message"><?php print $message; ?></div>
+        <div id="user_message"><?php echo $message; ?></div>
 
         <form id="config_list" name="config_list" action="?action=config&amp;config_action=saveConfig" method="post">
-            <fieldset>
-                <legend>
-                    <a href="javascript:void(0);" onclick="javascript:toggleConfig('Main');">
-                        <?php print $PMF_LANG['mainControlCenter']; ?>
-                    </a>
-                </legend>
-                <div id="configMain" style="display: none;"></div>
-            </fieldset>
-            <fieldset>
-                <legend>
-                    <a href="javascript:void(0);" onclick="javascript:toggleConfig('Records');">
-                        <?php print $PMF_LANG['recordsControlCenter']; ?>
-                    </a>
-                </legend>
-                <div id="configRecords" style="display: none;"></div>
-            </fieldset>
-            <fieldset>
-                <legend>
-                    <a href="javascript:void(0);" onclick="javascript:toggleConfig('Search');">
-                        <?php print $PMF_LANG['searchControlCenter']; ?>
-                    </a>
-                </legend>
-                <div id="configSearch" style="display: none;"></div>
-            </fieldset>
-            <fieldset>
-                <legend>
-                    <a href="javascript:void(0);" onclick="javascript:toggleConfig('Security');">
-                        <?php print $PMF_LANG['securityControlCenter']; ?>
-                    </a>
-                </legend>
-                <div id="configSecurity" style="display: none;"></div>
-            </fieldset>
-            <fieldset>
-                <legend>
-                    <a href="javascript:void(0);" onclick="javascript:toggleConfig('Spam');">
-                        <?php print $PMF_LANG['spamControlCenter']; ?>
-                    </a>
-                </legend>
-                <div id="configSpam" style="display: none;"></div>
-            </fieldset>
-            <fieldset>
-                <legend>
-                    <a href="javascript:void(0);" onclick="javascript:toggleConfig('SocialNetworks');">
-                        <?php print $PMF_LANG['socialNetworksControlCenter']; ?>
-                    </a>
-                </legend>
-                <div id="configSocialNetworks" style="display: none;"></div>
-            </fieldset>
-            <fieldset>
-                <legend>
-                    <a href="javascript:void(0);" onclick="javascript:toggleConfig('Cache');">
-                        <?php print $PMF_LANG['cacheControlCenter']; ?>
-                    </a>
-                </legend>
-                <div id="configCache" style="display: none;"></div>
-            </fieldset>
+
             <p>
-                <input class="btn-primary" type="submit" value="<?php print $PMF_LANG['ad_config_save']; ?>" />
-                <input class="btn-inverse" type="reset" value="<?php print $PMF_LANG['ad_config_reset']; ?>" />
+                <a class="btn btn-inverse" href="javascript:void(0);" onclick="javascript:toggleConfig('Main');">
+                    <i class="icon-home icon-white"></i>
+                    <?php echo $PMF_LANG['mainControlCenter']; ?>
+                </a>
+            </p>
+            <div id="configMain" style="display: none;"></div>
+
+            <p>
+                <a class="btn btn-inverse" href="javascript:void(0);" onclick="javascript:toggleConfig('Records');">
+                    <i class="icon-th-list icon-white"></i>
+                    <?php echo $PMF_LANG['recordsControlCenter']; ?>
+                </a>
+            </p>
+            <div id="configRecords" style="display: none;"></div>
+
+            <p>
+                <a class="btn btn-inverse" href="javascript:void(0);" onclick="javascript:toggleConfig('Search');">
+                    <i class="icon-search icon-white"></i>
+                    <?php echo $PMF_LANG['searchControlCenter']; ?>
+                </a>
+            </p>
+            <div id="configSearch" style="display: none;"></div>
+
+            <p>
+                <a class="btn btn-inverse" href="javascript:void(0);" onclick="javascript:toggleConfig('Security');">
+                    <i class="icon-warning-sign icon-white"></i>
+                    <?php echo $PMF_LANG['securityControlCenter']; ?>
+                </a>
+            </p>
+            <div id="configSecurity" style="display: none;"></div>
+
+            <p>
+                <a class="btn btn-inverse" href="javascript:void(0);" onclick="javascript:toggleConfig('Spam');">
+                    <i class="icon-thumbs-down icon-white"></i>
+                    <?php echo $PMF_LANG['spamControlCenter']; ?>
+                </a>
+            </p>
+            <div id="configSpam" style="display: none;"></div>
+
+            <p>
+                <a class="btn btn-inverse" href="javascript:void(0);" onclick="javascript:toggleConfig('SocialNetworks');">
+                    <i class="icon-retweet icon-white"></i>
+                    <?php echo $PMF_LANG['socialNetworksControlCenter']; ?>
+                </a>
+            </p>
+            <div id="configSocialNetworks" style="display: none;"></div>
+
+            <!--
+            <p>
+                <a class="btn btn-inverse" href="javascript:void(0);" onclick="javascript:toggleConfig('Cache');">
+                    <?php echo $PMF_LANG['cacheControlCenter']; ?>
+                </a>
+            </p>
+            <div id="configCache" style="display: none;"></div>
+            -->
+
+            <p>
+                <button class="btn btn-primary" type="submit">
+                    <?php echo $PMF_LANG['ad_config_save']; ?>
+                </button>
+                <button class="btn btn-warning" type="reset">
+                    <?php echo $PMF_LANG['ad_config_reset']; ?>
+                </button>
             </p>
         </form>
 <?php
     }
 } else {
-    print $PMF_LANG['err_NotAuth'];
+    echo $PMF_LANG['err_NotAuth'];
 }
