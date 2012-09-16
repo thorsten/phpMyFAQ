@@ -1938,17 +1938,23 @@
  */
 
 $(document).ready(function() {
-    $(window).unload(function() {
-        if (tinyMCE.activeEditor.isDirty()) {
-            var chk = confirm('Do you want to save the article before navigating away?');
 
-            if (chk) {
-                pmfAutosave();
+    $(window).unload(function() {
+        if (tinyMCE.activeEditor !== null) {
+            if (tinyMCE.activeEditor.isDirty()) {
+                var chk = confirm('Do you want to save the article before navigating away?');
+
+                if (chk) {
+                    pmfAutosave();
+                }
             }
         }
     });
 
-    setInterval('pmfAutosave();', pmfAutosaveInterval*1000);
+    if (typeof  pmfAutosaveInterval !== 'undefined') {
+        setInterval('pmfAutosave();', pmfAutosaveInterval*1000);
+    }
+    
 });
 
 /**
