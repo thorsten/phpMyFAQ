@@ -656,7 +656,7 @@ $PMF_LANG['ad_session_expiring'] = 'Your session will expire in %d minutes: woul
 // added v1.6.2 - 2006-06-13 by Matteo
 $PMF_LANG['ad_stat_management'] = 'Sessions management';
 $PMF_LANG['ad_stat_choose'] = 'Choose the month';
-$PMF_LANG['ad_stat_delete'] = 'Delete immediately the selected sessions';
+$PMF_LANG['ad_stat_delete'] = 'Immediately delete the selected sessions?';
 
 // added v2.0.0 - 2005-09-15 by Thorsten and by Minoru TODA
 $PMF_LANG['ad_menu_glossary'] = 'Glossary';
@@ -706,7 +706,7 @@ $PMF_LANG['ad_linkcheck_config_th_owner'] = 'Entry owner';
 $PMF_LANG['ad_linkcheck_config_th_enabled'] = 'Set to enable entry';
 $PMF_LANG['ad_linkcheck_config_th_locked'] = 'Set to lock ownership';
 $PMF_LANG['ad_linkcheck_config_th_chown'] = 'Set to obtain ownership';
-$PMF_LANG['msgNewQuestionVisible'] = 'The question have to be reviewed first before getting public.';
+$PMF_LANG['msgNewQuestionVisible'] = 'The question has to be reviewed before going public.';
 $PMF_LANG['msgQuestionsWaiting'] = 'Waiting for publishing by the administrators: ';
 $PMF_LANG['ad_entry_visibility'] = 'Publish?';
 
@@ -740,7 +740,7 @@ $PMF_LANG['ad_group_error_noName'] = "Please enter a group name. ";
 $PMF_LANG['ad_group_error_delete'] = "Group could not be deleted. ";
 $PMF_LANG['ad_group_deleted'] = "The group was successfully deleted.";
 $PMF_LANG['ad_group_deleteGroup'] = "Delete Group";
-$PMF_LANG['ad_group_deleteQuestion'] = "Are you sure that this group shall be deleted?";
+$PMF_LANG['ad_group_deleteQuestion'] = "Are you sure you want to delete this group?";
 $PMF_LANG['ad_user_uncheckall'] = "Unselect All";
 $PMF_LANG['ad_group_membership'] = "Group Membership";
 $PMF_LANG['ad_group_members'] = "Members";
@@ -848,7 +848,7 @@ $PMF_LANG["ad_categ_remark_overview"] = "The correct order of categories will be
 
 // added v2.0.0 - 2006-10-15 by Matteo
 $PMF_LANG['msgUsersOnline'] = '%d Guests and %d Registered';
-$PMF_LANG['ad_adminlog_del_older_30d'] = 'Delete immediately logs older than 30 days';
+$PMF_LANG['ad_adminlog_del_older_30d'] = 'Immediately delete logs older than 30 days';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Older logs successfully deleted.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'No logs deleted: an error occurred performing the request.';
 
@@ -968,7 +968,7 @@ $PMF_LANG['msgEdit'] = 'Edit';
 $PMF_LANG['msgDelete'] = 'Delete';
 $PMF_LANG['msgYes'] = 'yes';
 $PMF_LANG['msgNo'] = 'no';
-$PMF_LANG['msgTransToolSureDeleteFile'] = 'Are you sure this language file must be deleted?';
+$PMF_LANG['msgTransToolSureDeleteFile'] = 'Are you sure you want to delete this language file?';
 $PMF_LANG['msgTransToolFileRemoved'] = 'Language file successfully removed';
 $PMF_LANG['msgTransToolErrorRemovingFile'] = 'Error removing the language file';
 $PMF_LANG['msgVariable'] = 'Variable';
@@ -1155,8 +1155,8 @@ $LANG_CONF['security.enableLoginOnly'] = array(0 => 'checkbox', 1 => 'Complete s
 
 // added v2.7.0-RC - 2011-08-18 by Thorsten
 $PMF_LANG['securityControlCenter'] = 'Security configuration';
-$PMF_LANG['ad_search_delsuc'] = 'The searchterm was successfully deleted.';
-$PMF_LANG['ad_search_delfail'] = 'The seachterm was not deleted.';
+$PMF_LANG['ad_search_delsuc'] = 'The search term was successfully deleted.';
+$PMF_LANG['ad_search_delfail'] = 'The search term was not deleted.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
 $PMF_LANG['msg_about_faq'] = 'About this FAQ';
