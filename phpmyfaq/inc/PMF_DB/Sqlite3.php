@@ -115,25 +115,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      */
     public function fetch_object($result)
     {
-        $array = $this->fetch_assoc($result);
-
-        $object    = new stdClass();
-        $reflector = new ReflectionObject($object);
-
-        for($i = 0; $i < $result->numColumns(); $i++) {
-            $name  = $result->columnName($i);
-            $value = $array[$name];
-
-            try {
-                $attribute = $reflector->getProperty($name);
-                $attribute->setAccessible(TRUE);
-                $attribute->setValue($object, $value);
-            } catch (ReflectionException $e) {
-                $object->$name = $value;
-            }
-        }
-
-        return $object;
+        return (object)$this->fetch_assoc($result);
     }
 
     /**
@@ -162,8 +144,8 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
             throw new Exception('Error while fetching result: ' . $this->error());
         }
 
-        while ($row = $this->fetch_object($result)) {
-            $ret[] = $row;
+        while ($row = $this->fetch_assoc($result)) {
+            $ret[] = (object)$row;
         }
 
         return $ret;
@@ -238,10 +220,10 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
     {
         $result = (int)$this->conn->querySingle(
             sprintf(
-                'SELECT max(%s) AS current_id FROM %s'
-            ),
-            $id,
-            $table
+                'SELECT max(%s) AS current_id FROM %s',
+                $id,
+                $table
+            )
         );
         return ($result + 1);
     }
