@@ -156,6 +156,7 @@ phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers are Moz
 If you're using *lighttpd* you have to set the following configuration:
 
 `cgi.fix_pathinfo 1`
+
 [back to top][64]
 
 * * *
@@ -847,6 +848,7 @@ Using the backup function it is possible to create a copy of the database to a s
     *   Make sure you have the *multisite/* directory in your document root and *multisite.php* in it
     *   For every separate installation there needs to be a subdirectory of *multisite/* named exactly like the hostname of the separate installation.
         For example, if you want to use *faq.example.org* and *beta.faq.example.org*, it needs to look like this:
+        
             .
             |-- [...]
             |-- config
@@ -1082,7 +1084,7 @@ Thank you for using phpMyFAQ! :-)
 
 Author: [Thorsten Rinne][88]
 Co-Authors: [Stephan Hochhaus][89], [Markus Gläser][90]
-Last update: 2012-09-03
+Last update: 2012-09-27
 
 © 2001-2012 phpMyFAQ Team
 
