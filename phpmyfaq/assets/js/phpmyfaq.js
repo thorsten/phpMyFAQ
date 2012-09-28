@@ -1937,9 +1937,11 @@
  * @since     2012-07-07
  */
 
-$(document).ready(function() {
+/*global clearInterval: false, clearTimeout: false, document: false, event: false, frames: false, history: false, Image: false, location: false, name: false, navigator: false, Option: false, parent: false, screen: false, setInterval: false, setTimeout: false, window: false, XMLHttpRequest: false */
 
-    $(window).unload(function() {
+$(document).ready(function () {
+    "use script";
+    $(window).unload(function () {
         if (tinyMCE.activeEditor !== null) {
             if (tinyMCE.activeEditor.isDirty()) {
                 var chk = confirm('Do you want to save the article before navigating away?');
@@ -1952,81 +1954,79 @@ $(document).ready(function() {
     });
 
     if (typeof pmfAutosaveInterval !== 'undefined') {
-        setInterval('pmfAutosave();', pmfAutosaveInterval*1000);
+        setInterval('pmfAutosave();', pmfAutosaveInterval * 1000);
     }
 
-});
+    /**
+     * Post autosave data via AJAX.
+     *
+     * @return void
+     */
+    function pmfAutosave() {
+        var ed = tinyMCE.activeEditor;
+        if (ed.isDirty()) {
+            var formData = {};
+            formData.revision_id = $('#revision_id').attr('value');
+            formData.record_id = $('#record_id').attr('value');
+            formData.csrf = $('[name="csrf"]').attr('value');
+            formData.openQuestionId = $('#openQuestionId').attr('value');
+            formData.question = $('#question').attr('value');
+            formData.answer = ed.getContent();
+            formData.keywords = $('#keywords').attr('value');
+            formData.tags = $('#tags').attr('value');
+            formData.author = $('#author').attr('value');
+            formData.email = $('#email').attr('value');
+            formData.lang = $('#lang').attr('value');
+            formData.solution_id = $('#solution_id').attr('value');
+            formData.active = $('input:checked:[name="active"]').attr('value');
+            formData.sticky = $('#sticky').attr('value');
+            formData.comment = $('#comment').attr('value');
+            formData.grouppermission = $('[name="grouppermission"]').attr('value');
+            formData.userpermission = $('[name="userpermission"]').attr('value');
+            formData.restricted_users = $('[name="restricted_users"]').attr('value');
+            formData.dateActualize = $('#dateActualize').attr('value');
+            formData.dateKeep = $('#dateKeep').attr('value');
+            formData.dateCustomize = $('#dateCustomize').attr('value');
+            formData.date = $('#date').attr('value');
 
-/**
- * Post autosave data via AJAX.
- *
- * @return void
- */
-function pmfAutosave() {
-    var ed = tinyMCE.activeEditor;
-    if (ed.isDirty()) {
-        var formData = {};
-        formData.revision_id = $('#revision_id').attr('value');
-        formData.record_id = $('#record_id').attr('value');
-        formData.csrf = $('[name="csrf"]').attr('value');
-        formData.openQuestionId = $('#openQuestionId').attr('value');
-        formData.question = $('#question').attr('value');
-        formData.answer = ed.getContent();
-        formData.keywords = $('#keywords').attr('value');
-        formData.tags = $('#tags').attr('value');
-        formData.author = $('#author').attr('value');
-        formData.email = $('#email').attr('value');
-        formData.lang = $('#lang').attr('value');
-        formData.solution_id = $('#solution_id').attr('value');
-        formData.active = $('input:checked:[name="active"]').attr('value');
-        formData.sticky = $('#sticky').attr('value');
-        formData.comment = $('#comment').attr('value');
-        formData.grouppermission = $('[name="grouppermission"]').attr('value');
-        formData.userpermission = $('[name="userpermission"]').attr('value');
-        formData.restricted_users = $('[name="restricted_users"]').attr('value');
-        formData.dateActualize = $('#dateActualize').attr('value');
-        formData.dateKeep = $('#dateKeep').attr('value');
-        formData.dateCustomize = $('#dateCustomize').attr('value');
-        formData.date = $('#date').attr('value');
+            $.ajax({
+                url: pmfAutosaveAction(),
+                type: 'POST',
+                data: formData,
+                success: function (r) {
+                    var resp = $.parseJSON(r);
 
-        $.ajax({
-            url: pmfAutosaveAction(),
-            type: 'POST',
-            data: formData,
-            success: function(r) {
-                var resp = $.parseJSON(r);
+                    $('#saving_data_indicator').html(resp.msg);
 
-                $('#saving_data_indicator').html(resp.msg);
-                
-                ed.isNotDirty = true;
+                    ed.isNotDirty = true;
 
-                $('#record_id').attr('value', resp.record_id);
-                $('#revision_id').attr('value', resp.revision_id);
-                /* XXX update more places on the page according to the new saved data */
-            }
-        });
+                    $('#record_id').attr('value', resp.record_id);
+                    $('#revision_id').attr('value', resp.revision_id);
+                    /* XXX update more places on the page according to the new saved data */
+                }
+            });
+        }
     }
-}
 
-/**
- * Produce AJAX autosave action.
- *
- * @return string
- */
-function pmfAutosaveAction() {
-    var act;
-    var fa = $('#faqEditor').attr('action');
+    /**
+     * Produce AJAX autosave action.
+     *
+     * @return string
+     */
+    function pmfAutosaveAction() {
+        var act,
+            fa = $("#faqEditor").attr("action");
 
-    act = '?action=ajax&ajax=autosave&' + fa.substr(1).replace(/action=/, 'do=');
+        act = "?action=ajax&ajax=autosave&" + fa.substr(1).replace(/action=/, "do=");
 
-    return act;
-}
+        return act;
+    }
 
-function getYesNoVal(selector) {
-    
-}
+    function getYesNoVal(selector) {
 
-/**
+    }
+
+});/**
  * Some JavaScript functions used in the admin backend
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
