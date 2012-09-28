@@ -5,8 +5,8 @@ php:
   - 5.4
 
 before_script:
-  - pyrus config-set auto_discover 1
-  - pyrus install phpunit/DbUnit
+  - pyrus set auto_discover 1
+  - pyrus install --force phpunit/DbUnit
   - phpenv rehash
 
 script: phpunit --configuration phpunit.xml --coverage-text
