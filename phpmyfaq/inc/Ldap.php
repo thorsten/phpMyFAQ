@@ -221,7 +221,7 @@ class PMF_Ldap
         $filter = sprintf(
             '(%s=%s)',
             $this->_ldapConfig['ldap_mapping']['username'],
-            $username
+            $this->quote($username)
         );
 
         if (true === $this->_ldapConfig['ldap_use_memberOf']) {
@@ -268,8 +268,11 @@ class PMF_Ldap
      */
     private function getLdapDn($username)
     {
-        $filter = "(" . $this->_ldapConfig['ldap_mapping']['username'] . "=" . $username . ")";
-        $sr     = ldap_search($this->ds, $this->base, $filter);
+        $filter = sprintf('(%s=%s)',
+            $this->_ldapConfig['ldap_mapping']['username'],
+            $this->quote($username)
+        );
+        $sr = ldap_search($this->ds, $this->base, $filter);
 
         if (! $sr) {
             $this->errno = ldap_errno($this->ds);
@@ -291,5 +294,21 @@ class PMF_Ldap
         }
 
         return ldap_get_dn($this->ds, $entryId);
+    }
+
+    /**
+     * Quotes LDAP strings in accordance with the RFC 2254
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    public function quote($string)
+    {
+        return str_replace(
+            array( '\\', ' ', '*', '(', ')' ),
+            array( '\\5c', '\\20', '\\2a', '\\28', '\\29' ),
+            $string
+        );
     }
 }
