@@ -91,7 +91,7 @@ class PMF_Auth_Sso extends PMF_Auth implements PMF_Auth_Driver
      *
      * @param  string $login        Loginname
      * @param  string $pass         Password
-     * @param  array  $optionslData Optional data
+     * @param  array  $optionalData Optional data
      * @return boolean
      */
     public function checkPassword($login, $pass, Array $optionalData = null)
