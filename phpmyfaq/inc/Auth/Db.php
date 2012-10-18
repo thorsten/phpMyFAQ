@@ -46,9 +46,9 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
     /**
      * Constructor
      *
-     * @param  string  $enctype   Type of encoding
-     * @param  boolean $read_only Readonly?
-     * @return void
+     * @param  PMF_Configuration $config
+     *
+     * @return PMF_Auth_Db
      */
     function __construct(PMF_Configuration $config)
     {
@@ -61,8 +61,8 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
      * Adds a new user account to the faquserlogin table. Returns true on
      * success, otherwise false. Error messages are added to the array errors.
      *
-     * @param string $login    Loginname
-     * @param string $password Password
+     * @param string $login Loginname
+     * @param string $pass  Password
      *
      * @return boolean
      */
