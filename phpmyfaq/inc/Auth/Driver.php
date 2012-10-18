@@ -84,7 +84,7 @@ interface PMF_Auth_Driver
      *
      * @param  string $login        Loginname
      * @param  string $pass         Password
-     * @param  array  $optionslData Optional data
+     * @param  array  $optionalData Optional data
      * @return boolean
      */
     public function checkPassword($login, $pass, Array $optionalData = array());
@@ -93,7 +93,7 @@ interface PMF_Auth_Driver
      * Does nothing. A function required to be a valid auth.
      *
      * @param  string $login        Loginname
-     * @param  array  $optionslData Optional data
+     * @param  array  $optionalData Optional data
      * @return integer
      */
     public function checkLogin($login, Array $optionalData = array());
