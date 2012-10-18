@@ -62,17 +62,17 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
     /**
      * Constructor
      *
-     * @param string  $enctype   Type of encoding
-     * @param boolean $read_only Readonly?
+     * @param  PMF_Configuration $config
      *
      * @return PMF_Auth_Ldap
      */
-    public function __construct($enctype = 'none', $read_only = false)
+    public function __construct(PMF_Configuration $config)
     {
+        $this->_config         = $config;
         $this->_ldapConfig     = $this->_config->getLdapConfig();
         $this->multipleServers = $this->_ldapConfig['ldap_use_multiple_servers'];
         
-        parent::__construct($enctype, $read_only);
+        parent::__construct($this->_config);
         
         $this->ldap = new PMF_Ldap($this->_config);
         $this->ldap->connect(
@@ -152,7 +152,7 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
      *
      * @param string $login        Loginname
      * @param string $pass         Password
-     * @param array  $optionslData Optional data
+     * @param array  $optionalData Optional data
      *
      * @return boolean
      */
@@ -207,7 +207,7 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
      * Does nothing. A function required to be a valid auth.
      *
      * @param string $login        Loginname
-     * @param array  $optionslData Optional data
+     * @param array  $optionalData Optional data
      * 
      * @return string
      */
