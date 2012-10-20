@@ -2048,6 +2048,9 @@ $(document).ready(function () {
 
 /*global clearInterval: false, clearTimeout: false, document: false, event: false, frames: false, history: false, Image: false, location: false, name: false, navigator: false, Option: false, parent: false, screen: false, setInterval: false, setTimeout: false, window: false, XMLHttpRequest: false */
 
+var toggleConfig,
+    showhideCategory;
+
 $(document).ready(function () {
     "use strict";
     /**
@@ -2101,10 +2104,10 @@ $(document).ready(function () {
     /**
      * Displays or hides a div block
      *
-     * @param  string id Id of the block
+     * @param id Id of the block
      * @return void
      */
-    function showhideCategory(id) {
+    showhideCategory = function showhideCategory(id) {
         var domId = $("#" + id);
         if (domId.css("display") === "none") {
             domId.fadeIn("slow");
@@ -2116,10 +2119,10 @@ $(document).ready(function () {
     /**
      * Displays or hides a configuration block
      *
-     * @param  string container
+     * @param container
      * @return void
      */
-    function toggleConfig(container) {
+    toggleConfig = function toggleConfig(container) {
         var configContainer = $("#config" + container);
         if (configContainer.css("display") === "none") {
             $.get("index.php", {
@@ -2138,7 +2141,7 @@ $(document).ready(function () {
     /**
      * selects all list options in the select with the given ID.
      *
-     * @param string
+     * @param select_id
      * @return void
      */
     function select_selectAll(select_id) {
@@ -2152,7 +2155,7 @@ $(document).ready(function () {
     /**
      * unselects all list options in the select with the given ID.
      *
-     * @param string
+     * @param select_id
      * @return void
      */
     function select_unselectAll(select_id) {
@@ -2166,7 +2169,7 @@ $(document).ready(function () {
     /**
      * checks all checkboxes in form with the given ID.
      *
-     * @param   string
+     * @param   form_id
      * @return  void
      */
     function form_checkAll(form_id) {
@@ -2183,7 +2186,7 @@ $(document).ready(function () {
     /**
      * unchecks all checkboxes in form with the given ID.
      *
-     * @param   string
+     * @param   form_id
      * @return  void
      */
     function form_uncheckAll(form_id) {
@@ -2214,7 +2217,7 @@ $(document).ready(function () {
     /**
      * Refreshes a captcha image
      *
-     * @param string action
+     * @param action
      */
     function refreshCaptcha(action) {
         $.ajax({
@@ -2230,7 +2233,7 @@ $(document).ready(function () {
     /**
      * Toggle fieldsets
      *
-     * @param string fieldset ID of the fieldset
+     * @param fieldset ID of the fieldset
      *
      * @return void
      */
@@ -2244,8 +2247,8 @@ $(document).ready(function () {
 
     /**
      * Adds the link to the attachment in the main FAQ window
-     * @param integer attachmentId
-     * @param string
+     * @param attachmentId
+     * @param fileName
      */
     function addAttachmentLink(attachmentId, fileName) {
         window.opener.
@@ -2274,10 +2277,10 @@ $(document).ready(function () {
     /**
      * Saves all content from the given form via Ajax
      *
-     * @param string action   Actions: savecomment, savefaq, savequestion,
-     *                        saveregistration, savevoting, sendcontact,
-     *                        sendtofriends
-     * @param string formName Name of the current form
+     * @param action   Actions: savecomment, savefaq, savequestion,
+     *                          saveregistration, savevoting, sendcontact,
+     *                          sendtofriends
+     * @param formName Name of the current form
      *
      * @return void
      */
@@ -2376,9 +2379,6 @@ $(document).ready(function () {
     /**
      * Checks the content of a question by Ajax
      *
-     * @param type
-     * @param id
-     * @param value
      */
     function checkQuestion() {
         var formValues = $('#formValues');
