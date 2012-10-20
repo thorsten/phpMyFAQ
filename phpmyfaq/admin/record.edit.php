@@ -256,7 +256,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                                     echo "</li>\n";
                                 }
                                 printf(
-                                    '<li><a href="#;" onclick="addAttachment(\'attachment.php?record_id=%d&amp;record_lang=%s&amp;rubrik=%d\', \'Attachment\', 550, 130); return false;">%s</a></li>',
+                                    '<li><a onclick="addAttachment(\'attachment.php?record_id=%d&amp;record_lang=%s&amp;rubrik=%d\', \'Attachment\', 550, 130); return false;">%s</a></li>',
                                     $faqData['id'],
                                     $faqData['lang'],
                                     $selectedCategory,
