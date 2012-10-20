@@ -80,7 +80,9 @@ if ($permission["passwd"]) {
             </div>
 
             <div class="form-actions">
-                <input class="btn-primary" type="submit" value="<?php print $PMF_LANG["ad_passwd_change"]; ?>" />
+                <button class="btn btn-primary" type="submit">
+                    <?php print $PMF_LANG["ad_passwd_change"]; ?>
+                </button>
             </div>
         </form>
 <?php

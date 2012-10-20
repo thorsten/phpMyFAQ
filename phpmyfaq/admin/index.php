@@ -643,7 +643,9 @@ if (isset($auth) && in_array(true, $permission)) {
                 </div>
 
                 <div class="form-actions">
-                    <input class="btn-primary btn-large" type="submit" value="<?php print $PMF_LANG["ad_auth_ok"]; ?>" />
+                    <button class="btn btn-primary" type="submit">
+                        <?php print $PMF_LANG["ad_auth_ok"]; ?>
+                    </button>
                 </div>
 <?php
     } else {

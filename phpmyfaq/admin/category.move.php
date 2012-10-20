@@ -47,7 +47,7 @@ if ($permission["editcateg"]) {
             <input type="hidden" name="cat" value="<?php print $id; ?>" />
             <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
             <div class="control-group">
-                <label><?php print $PMF_LANG["ad_categ_change"]; ?></label>
+                <label class="control-label"><?php print $PMF_LANG["ad_categ_change"]; ?></label>
                 <div class="controls">
                    <select name="change" size="1">
 <?php
@@ -63,7 +63,9 @@ if ($permission["editcateg"]) {
             </div>
 
             <div class="form-actions">
-                <input class="btn-primary" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" />
+                <button class="btn btn-primary" type="submit" name="submit">
+                    <?php print $PMF_LANG["ad_categ_updatecateg"]; ?>
+                </button>
             </div>
         </form>
 <?php

@@ -140,8 +140,12 @@ if ($groupAction == 'delete_confirm' && $permission['delgroup']) {
             <input type="hidden" name="group_id" value="<?php print $groupId; ?>" />
             <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
             <p>
-                <input class="btn-inverse" type="submit" name="cancel" value="<?php print $PMF_LANG['ad_gen_cancel']; ?>" />
-                <input class="btn-primary" type="submit" value="<?php print $PMF_LANG['ad_gen_save']; ?>" />
+                <button class="btn btn-inverse" type="submit" name="cancel">
+                    <?php print $PMF_LANG['ad_gen_cancel']; ?>
+                </button>
+                <button class="btn btn-primary" type="submit">
+                    <?php print $PMF_LANG['ad_gen_save']; ?>
+                </button>
             </p>
         </form>
 <?php
@@ -260,8 +264,12 @@ if ($groupAction == 'add' && $permission['addgroup']) {
             </div>
 
             <div class="form-actions">
-                <input class="btn-primary" type="submit" value="<?php print $PMF_LANG['ad_gen_save']; ?>" tabindex="4" />
-                <input class="btn-info" type="reset" name="cancel" value="<?php print $PMF_LANG['ad_gen_cancel']; ?>" tabindex="5" />
+                <button class="btn btn-primary" type="submit">
+                    <?php print $PMF_LANG['ad_gen_save']; ?>
+                </button>
+                <button class="btn btn-info" type="reset" name="cancel">
+                    <?php print $PMF_LANG['ad_gen_cancel']; ?>
+                </button>
             </div>
         </form>
 <?php
@@ -541,7 +549,9 @@ getGroupList();
                             </select>
                         </p>
                         <p>
-                            <input class="btn-danger" type="submit" value="<?php print $PMF_LANG['ad_gen_delete']; ?>" tabindex="2" />
+                            <button class="btn btn-danger" type="submit">
+                                <?php print $PMF_LANG['ad_gen_delete']; ?>
+                            </button>
                         </p>
                     </form>
                 </fieldset>
@@ -601,7 +611,9 @@ getGroupList();
                         </select>
                     </fieldset>
                     <p>
-                        <input class="btn-primary" type="submit" value="<?php print $PMF_LANG['ad_gen_save']; ?>" />
+                        <button class="btn btn-primary" type="submit">
+                            <?php print $PMF_LANG['ad_gen_save']; ?>
+                        </button>
                     </p>
                 </fieldset>
                 </form>
@@ -632,7 +644,9 @@ getGroupList();
                                 </p>
                             </div><!-- end #group_data_table -->
                             <p>
-                                <input class="btn-primary" type="submit" value="<?php print $PMF_LANG['ad_gen_save']; ?>" tabindex="4" />
+                                <button class="btn btn-primary" type="submit">
+                                    <?php print $PMF_LANG['ad_gen_save']; ?>
+                                </button>
                             </p>
                         </form>
                     </fieldset>
@@ -669,7 +683,9 @@ getGroupList();
                             <?php } ?>
                             </table>
                             <p>
-                                <input class="btn-primary" type="submit" value="<?php print $PMF_LANG['ad_gen_save']; ?>" />
+                                <button class="btn btn-primary" type="submit">
+                                    <?php print $PMF_LANG['ad_gen_save']; ?>
+                                </button>
                             </p>
                         </form>
                     </fieldset>

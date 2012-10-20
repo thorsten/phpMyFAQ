@@ -106,8 +106,9 @@ if ($permission['delquestion']) {
     </form>
 
     <p>
-        <input class="btn-danger" id="submitDeleteQuestions" type="submit" name="submit"
-               value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" />
+        <button class="btn btn-danger" id="submitDeleteQuestions" type="submit">
+            <?php print $PMF_LANG["ad_entry_delete"]; ?>
+        </button>
     </p>
 
     <script type="text/javascript">

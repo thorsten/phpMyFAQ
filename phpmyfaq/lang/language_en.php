@@ -314,7 +314,6 @@ $PMF_LANG["ad_categ_nodata"] = "No data found in database";
 $PMF_LANG["ad_categ_remark"] = "Please note that existing entries will not be visible anymore, if you delete the category. You must assign a new category for the article or delete the article.";
 $PMF_LANG["ad_categ_edit_1"] = "Edit";
 $PMF_LANG["ad_categ_edit_2"] = "Category";
-$PMF_LANG["ad_categ_add"] = "add Category";
 $PMF_LANG["ad_categ_added"] = "The category was added.";
 $PMF_LANG["ad_categ_updated"] = "The category was updated.";
 $PMF_LANG["ad_categ_del_yes"] = "yes, delete!";

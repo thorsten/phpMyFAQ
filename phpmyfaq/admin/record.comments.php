@@ -80,8 +80,9 @@ if ($permission['delcomment']) {
 ?>
         </table>
         <p>
-            <input class="btn-danger" id="submitFaqComments" type="submit" name="submit"
-                   value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" />
+            <button class="btn btn-danger" id="submitFaqComments" type="submit" name="submit">
+                <?php print $PMF_LANG["ad_entry_delete"]; ?>
+            </button>
         </p>
         </form>
 <?php
@@ -121,8 +122,9 @@ if ($permission['delcomment']) {
 ?>
         </table>
         <p>
-            <input class="btn-danger" id="submitNewsComments" type="submit" name="submit"
-                   value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" />
+            <button class="btn btn-danger" id="submitNewsComments" type="submit" name="submit">
+                <?php print $PMF_LANG["ad_entry_delete"]; ?>
+            </button>
         </p>
         </form>
 <?php

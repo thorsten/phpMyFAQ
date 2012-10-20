@@ -147,8 +147,12 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             <input type="hidden" name="user_id" value="<?php print $userId; ?>" />
             <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
             <p>
-                <input class="btn-danger" type="submit" value="<?php print $PMF_LANG["ad_gen_yes"]; ?>" />
-                <input class="btn-info" type="submit" name="cancel" value="<?php print $PMF_LANG["ad_gen_no"]; ?>" />
+                <button class="btn btn-danger" type="submit">
+                    <?php print $PMF_LANG["ad_gen_yes"]; ?>
+                </button>
+                <button class="btn btn-info" type="submit" name="cancel">
+                    <?php print $PMF_LANG["ad_gen_no"]; ?>
+                </button>
             </p>
         </form>
 <?php
@@ -325,8 +329,12 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             </div>
 
             <div class="form-actions">
-                <input class="btn-success" type="submit" value="<?php print $PMF_LANG["ad_gen_save"]; ?>" tabindex="6" />
-                <input class="btn-info" name="cancel" type="submit" value="<?php print $PMF_LANG['ad_gen_cancel']; ?>" tabindex="7" />
+                <button class="btn btn-success" type="submit">
+                    <?php print $PMF_LANG["ad_gen_save"]; ?>
+                </button>
+                <button class="btn btn-info" name="cancel" type="submit">
+                    <?php print $PMF_LANG['ad_gen_cancel']; ?>
+                </button>
             </div>
         </form>
 </div> <!-- end #user_create -->
@@ -407,15 +415,23 @@ function getUserData(user_id)
                         </script>
                         <p>
                             <input type="hidden" id="user_list_select" name="user_list_select" value="" />
-                            <input class="btn-danger" type="submit" value="<?php print $PMF_LANG['ad_gen_delete']; ?>" />
+                            <button class="btn btn-danger" type="submit">
+                                <?php print $PMF_LANG['ad_gen_delete']; ?>
+                            </button>
                         </p>
                     </form>
                 </fieldset>
                 <fieldset>
                     <p>
-                        [ <a href="?action=user&amp;user_action=add"><?php print $PMF_LANG["ad_user_add"]; ?></a> ]<br/>
+                        <a class="btn btn-success" href="?action=user&amp;user_action=add">
+                            <?php print $PMF_LANG["ad_user_add"]; ?>
+                        </a>
                         <?php if ($permission['edituser']): ?>
-                        [ <a href="?action=user&amp;user_action=listallusers"><?php print $PMF_LANG['list_all_users']; ?></a> ]
+                        <br/>
+                        <br/>
+                        <a class="btn btn-info" href="?action=user&amp;user_action=listallusers">
+                            <?php print $PMF_LANG['list_all_users']; ?>
+                        </a>
                         <?php endif; ?>
                     </p>
                 </fieldset>
@@ -437,7 +453,9 @@ function getUserData(user_id)
                         </p>
                         <div id="user_data_table"></div><!-- end #user_data_table -->
                         <p>
-                            <input class="btn-primary" type="submit" value="<?php print $PMF_LANG["ad_gen_save"]; ?>" tabindex="6" />
+                            <button class="btn btn-primary" type="submit">
+                                <?php print $PMF_LANG["ad_gen_save"]; ?>
+                            </button>
                         </p>
                     </form>
                 </fieldset>
@@ -473,7 +491,9 @@ function getUserData(user_id)
             <?php } ?>
                         </table>
                         <div class="button_row">
-                            <input class="btn-primary" type="submit" value="<?php print $PMF_LANG["ad_gen_save"]; ?>" />
+                            <button class="btn btn-primary" type="submit">
+                                <?php print $PMF_LANG["ad_gen_save"]; ?>
+                            </button>
                         </div>
                     </form>
                 </fieldset>

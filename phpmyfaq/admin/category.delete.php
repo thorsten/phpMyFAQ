@@ -42,30 +42,20 @@ if ($permission['delcateg']) {
             <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
 
             <div class="control-group">
-                <label><?php print $PMF_LANG['ad_categ_titel']; ?>:</label>
+                <label class="control-label"><?php print $PMF_LANG['ad_categ_titel']; ?>:</label>
                 <div class="controls">
                     <?php print $categories[$id]['name']; ?>
                 </div>
             </div>
 
             <div class="control-group">
-                <label><?php print $PMF_LANG['ad_categ_desc']; ?>:</label>
+                <label class="control-label"><?php print $PMF_LANG['ad_categ_desc']; ?>:</label>
                 <div class="controls">
                     <?php print $categories[$id]['description']; ?>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <div class="controls">
                     <label class="radio">
                         <input type="radio" checked name="deleteall" value="yes" />
                         <?php print $PMF_LANG['ad_categ_deletealllang']; ?>
                     </label>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <div class="controls">
                     <label class="radio">
                         <input type="radio" name="deleteall" value="no" />
                         <?php print $PMF_LANG['ad_categ_deletethislang']; ?>
@@ -74,8 +64,12 @@ if ($permission['delcateg']) {
             </div>
 
             <div class="form-actions">
-                <input class="btn-danger" type="submit" name="submit" value="<?php print $PMF_LANG['ad_categ_del_yes']; ?>" />&nbsp;&nbsp;
-                <input class="btn-success" type="reset" onclick="javascript:history.back();" value="<?php print $PMF_LANG['ad_categ_del_no']; ?>" />
+                <button class="btn btn-danger" type="submit" name="submit">
+                    <?php print $PMF_LANG['ad_categ_del_yes']; ?>
+                </button>
+                <a class="btn btn-success" onclick="javascript:history.back();">
+                    <?php print $PMF_LANG['ad_categ_del_no']; ?>
+                </a>
             </div>
         </form>
 <?php

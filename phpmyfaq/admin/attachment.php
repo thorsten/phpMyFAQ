@@ -134,7 +134,9 @@ if (is_null($currentAction) && $auth && $permission['addattachment']) {
                 <input type="hidden" name="save" value="TRUE" />
                 <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
                 <?php print $PMF_LANG["ad_att_att"]; ?> <input name="userfile" type="file" />
-                <input class="btn-primary" type="submit" value="<?php print $PMF_LANG["ad_att_butt"]; ?>" />
+                <button class="btn btn-primary" type="submit">
+                    <?php print $PMF_LANG['ad_att_butt']; ?>
+                </button>
             </fieldset>
         </form>
 <?php

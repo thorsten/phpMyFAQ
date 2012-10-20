@@ -42,7 +42,9 @@ if ($permission['addglossary']) {
             </div>
 
             <div class="form-actions">
-                <input class="btn-primary" type="submit" value="<?php print $PMF_LANG['ad_glossary_save']; ?>" />
+                <button class="btn btn-primary" type="submit">
+                    <?php print $PMF_LANG['ad_glossary_save']; ?>
+                </button>
             </div>
         </form>
 <?php

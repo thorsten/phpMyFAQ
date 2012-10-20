@@ -142,7 +142,9 @@ if ('addnews' == $action && $permission["addnews"]) {
             </fieldset>
 
             <div class="form-actions">
-                <input class="btn-primary" type="submit" value="<?php print $PMF_LANG['ad_news_add']; ?>" />
+                <button class="btn btn-primary" type="submit">
+                    <?php print $PMF_LANG['ad_news_add']; ?>
+                </button>
             </div>
         </form>
 <?php
@@ -152,7 +154,7 @@ if ('addnews' == $action && $permission["addnews"]) {
             <h2><?php print $PMF_LANG["msgNews"]; ?></h2>
         </header>
     
-        <div class="control-group"><a href="?action=addnews"><?php print $PMF_LANG["ad_menu_news_add"]; ?></a></p>
+        <div class="control-group"><a href="?action=addnews"><?php print $PMF_LANG["ad_menu_news_add"]; ?></a></div>
         <table class="table table-striped">
         <thead>
             <tr>
@@ -318,7 +320,9 @@ if ('addnews' == $action && $permission["addnews"]) {
         </fieldset>
 
         <div class="form-actions">
-            <input class="btn-primary" type="submit" value="<?php print $PMF_LANG['ad_news_edit']; ?>" />
+            <button class="btn btn-primary" type="submit">
+                <?php print $PMF_LANG['ad_news_edit']; ?>
+            </button>
         </div>
         </form>
 <?php
@@ -416,13 +420,17 @@ if ('addnews' == $action && $permission["addnews"]) {
     
     if ('no' == $precheck) {
 ?>
-    <div class="control-group"><?php print $PMF_LANG["ad_news_del"]; ?></p>
+    <div class="control-group"><?php print $PMF_LANG["ad_news_del"]; ?></div>
     <div align="center">
     <form action="?action=deletenews" method="post">
     <input type="hidden" name="id" value="<?php print $delete_id; ?>" />
     <input type="hidden" name="really" value="yes" />
-    <input class="btn-warning" type="submit" name="submit" value="<?php print $PMF_LANG["ad_news_yesdelete"]; ?>" />
-    <input class="btn-inverse" type="reset" onclick="javascript:history.back();" value="<?php print $PMF_LANG["ad_news_nodelete"]; ?>" />
+        <button class="btn btn-warning" type="submit" name="submit">
+            <?php print $PMF_LANG["ad_news_yesdelete"]; ?>
+        </button>
+        <a class="btn btn-inverse" onclick="javascript:history.back();">
+            <?php print $PMF_LANG["ad_news_nodelete"]; ?>
+        </a>
     </form>
     </div>
     

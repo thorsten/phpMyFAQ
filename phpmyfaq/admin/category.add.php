@@ -150,7 +150,9 @@ if ($permission["addcateg"]) {
     }
 ?>
             <div class="form-actions">
-                <input class="btn-primary" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_add"]; ?>" />
+                <button class="btn btn-primary" type="submit" name="submit">
+                    <?php print $PMF_LANG["ad_categ_add"]; ?>
+                </button>
             </div>
         </form>
     

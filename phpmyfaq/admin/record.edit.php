@@ -426,8 +426,12 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                     </div>
                     <?php if ($selectedRevisionId == $faqData['revision_id']): ?>
                     <div class="form-actions">
-                        <input class="btn-primary" type="submit" value="<?php echo $PMF_LANG["ad_entry_save"]; ?>" name="submit" />
-                        <input class="btn-info" type="reset" value="<?php echo $PMF_LANG["ad_gen_reset"]; ?>" />
+                        <button class="btn btn-primary" type="submit">
+                            <?php echo $PMF_LANG["ad_entry_save"]; ?>
+                        </button>
+                        <button class="btn btn-info" type="reset">
+                            <?php echo $PMF_LANG["ad_gen_reset"]; ?>
+                        </button>
                     </div>
                     <?php endif; ?>
                 </fieldset>

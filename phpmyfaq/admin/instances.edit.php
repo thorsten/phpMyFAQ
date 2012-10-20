@@ -67,8 +67,12 @@ if ($permission['editinstances']) {
             </div>
         </div>
         <div class="form-actions">
-            <input class="btn-primary" type="submit" value="<?php print $PMF_LANG['ad_gen_save']; ?>" />
-            <a class="btn btn-info" href="?action=instances"><?php print $PMF_LANG['ad_entry_back'] ?></a>
+            <button class="btn btn-primary" type="submit">
+                <?php print $PMF_LANG['ad_gen_save']; ?>
+            </button>
+            <a class="btn btn-info" href="?action=instances">
+                <?php print $PMF_LANG['ad_entry_back'] ?>
+            </a>
         </div>
     </form>
 <?php

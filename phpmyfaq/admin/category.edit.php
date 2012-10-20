@@ -153,7 +153,9 @@ if ($permission['editcateg']) {
     }
 ?>
             <div class="form-actions">
-                <input class="btn-primary" type="submit" name="submit" value="<?php print $PMF_LANG['ad_categ_updatecateg']; ?>" />
+                <button class="btn btn-primary" type="submit" name="submit">
+                    <?php print $PMF_LANG['ad_categ_updatecateg']; ?>
+                </button>
             </div>
     </form>
 <?php 
