@@ -360,8 +360,9 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                 Dude, this is an early alpha version. Please don't install this version on production!
             </p>
 
-            <input class="btn-primary btn-large" type="submit"
-                   value="Click to install phpMyFAQ <?php echo PMF_System::getVersion(); ?>" />
+            <button class="btn btn-primary btn-large" type="submit">
+                   Click to install phpMyFAQ <?php echo PMF_System::getVersion(); ?>
+            </button>
         </div>
         <div class="row" style="padding-left: 20px;">
             <p class="alert alert-info" style="margin-top: 20px;">
@@ -515,7 +516,9 @@ $installer->printDataList();
 ?>
             </div>
             <p style="text-align: center;">
-                <input class="btn-primary" type="submit" value="Click here to submit the data and finish the installation process" />
+                <button class="btn btn-primary" type="submit">
+                    Click here to submit the data and finish the installation process
+                </button>
             </p>
         </form>
         <div id="questionnaireThanks" style="display:none;">

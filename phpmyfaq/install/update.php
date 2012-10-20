@@ -197,7 +197,9 @@ if ($step == 1) {
                 </p>
 
                 <p style="text-align: center">
-                    <input class="btn-primary btn-large" type="submit" value="Go to step 2 of 3" />
+                    <button class="btn btn-primary btn-large" type="submit">
+                        Go to step 2 of 3
+                    </button>
                 </p>
             </fieldset>
         </form>
@@ -284,7 +286,9 @@ if ($step == 2) {
             <p>A backup of your database configuration file has been made.</p>
             <p>The configuration will be updated after the next step.</p>
             <p style="text-align: center;">
-                <input class="btn-primary btn-large" type="submit" value="Go to step 3 of 3" />
+                <button class="btn btn-primary btn-large" type="submit">
+                    Go to step 3 of 3
+                </button>
             </p>
         </fieldset>
         </form>
