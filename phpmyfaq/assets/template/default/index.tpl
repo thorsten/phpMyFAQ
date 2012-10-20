@@ -108,7 +108,9 @@
                         <input type="hidden" name="action" value="search" />
                         <input type="search" name="search" id="searchfield" size="30" placeholder="{searchBox} ..."
                                class="input-xlarge search-query" />
-                        <input type="submit" name="submit" value="{searchBox}" />
+                        <button class="btn btn-primary" type="submit" name="submit">
+                            {searchBox}
+                        </button>
                     </form>
                     {msgSearch}
                 </section>

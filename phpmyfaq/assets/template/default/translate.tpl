@@ -50,8 +50,9 @@
                 {captchaFieldset}
 
                 <p>
-                <input class="submit" type="submit" name="submit" id="submitfaq"
-                       value="{msgNewTranslationSubmit}" />
+                    <button class="btn btn-primary" type="submit" name="submit" id="submitfaq">
+                       {msgNewTranslationSubmit}
+                    </button>
                 </p>
 
             </form>

@@ -61,7 +61,9 @@
                 </div>
 
                 <div class="form-actions">
-                    <input class="btn-primary" type="submit" id="submitfaq" value="{msgNewContentSubmit}" />
+                    <button class="btn btn-primary" type="submit" id="submitfaq">
+                        {msgNewContentSubmit}
+                    </button>
                 </div>
             </form>
 

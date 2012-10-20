@@ -11,7 +11,9 @@
                 <div class="control-group">
                     <input id="searchfield" type="search" name="search" size="50" value="{searchString}"
                            class="input-xlarge search-query" autofocus="autofocus">
-                    <input class="btn-primary" type="submit" name="submit" value="{msgSearch}" />
+                    <button class="btn btn-primary" type="submit" name="submit">
+                        {msgSearch}
+                    </button>
                     <input type="hidden" name="action" value="search" />
                     <label class="checkbox">
                     <input type="checkbox"{checkedAllLanguages} name="langs" id="langs" value="all" />

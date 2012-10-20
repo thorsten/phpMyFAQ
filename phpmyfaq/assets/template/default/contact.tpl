@@ -34,7 +34,9 @@
                 </div>
 
                 <div class="form-actions">
-                    <input class="btn-primary" type="submit" id="submitcontact" value="{msgS2FButton}" />
+                    <button class="btn btn-primary" type="submit" id="submitcontact">
+                        {msgS2FButton}
+                    </button>
                 </div>
             </form>
             <script type="text/javascript" >

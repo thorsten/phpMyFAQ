@@ -47,7 +47,9 @@
                 <div id="qerror"></div>
 
                 <div class="form-actions">
-                    <input class="btn-primary" type="submit" id="submitquestion" value="{msgNewContentSubmit}">
+                    <button class="btn btn-primary" type="submit" id="submitquestion">
+                        {msgNewContentSubmit}
+                    </button>
                 </div>
 
             </form>

@@ -67,7 +67,9 @@
                 <div id="send2friends"></div>
 
                 <p>
-                    <input class="submit" type="submit" id="submitfriends" value="{msgS2FButton}" />
+                    <button class="btn btn-primary" type="submit" id="submitfriends">
+                        {msgS2FButton}
+                    </button>
                 </p>
             </form>
             <script type="text/javascript" >

@@ -81,7 +81,9 @@
                 <div class="tab-pane" id="addTranslation">
                     <form action="{translationUrl}" method="post">
                         {languageSelection}
-                        <input type="submit" name="submit" value="{msgTranslateSubmit}" />
+                            <button class="btn btn-primary" type="submit" name="submit">
+                                {msgTranslateSubmit}
+                            </button>
                     </form>
                 </div>
             </div>
@@ -113,7 +115,7 @@
                     <div class="control-group">
                         <label class="control-label" for="comment_text">{msgYourComment}</label>
                         <div class="controls">
-                            <textarea id="comment_text" name="comment_text" required="required" /></textarea>
+                            <textarea id="comment_text" name="comment_text" required="required"></textarea>
                         </div>
                     </div>
 
@@ -122,7 +124,9 @@
                     </div>
 
                     <div class="form-actions">
-                        <input class="btn-primary" id="submitcomment" type="submit" value="{msgNewContentSubmit}" />
+                        <button class="btn btn-primary" id="submitcomment" type="submit">
+                            {msgNewContentSubmit}
+                        </button>
                     </div>
                 </form>
             </div>

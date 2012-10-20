@@ -101,7 +101,9 @@
                         </div>
 
                         <div class="form-actions">
-                            <input class="btn-primary btn-large" type="submit" value="{loginHeader}">
+                            <button class="btn btn-primary btn-large" type="submit">
+                                {loginHeader}
+                            </button>
                         </div>
                     </form>
 

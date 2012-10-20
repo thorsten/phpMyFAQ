@@ -38,7 +38,9 @@
                 <div id="loader"></div>
 
                 <div class="form-actions">
-                    <input class="btn-primary" type="submit"  id="submitregistration" value="{submitRegister}" />
+                    <button class="btn btn-primary" type="submit"  id="submitregistration">
+                        {submitRegister}
+                    </button>
                 </div>
             </form>
             <script type="text/javascript" >

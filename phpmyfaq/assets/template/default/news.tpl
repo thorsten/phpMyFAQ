@@ -61,7 +61,9 @@
                     </div>
 
                     <div class="form-actions">
-                        <input class="btn-primary" id="submitcomment" type="submit" value="{msgNewContentSubmit}" />
+                        <button class="btn btn-primary" id="submitcomment" type="submit">
+                            {msgNewContentSubmit}
+                        </button>
                     </div>
 
                 </form>
@@ -74,10 +76,10 @@
             </div>
 
             <script type="text/javascript" >
-	    $('form#formValues').on('submit', function (e) {
-		e.preventDefault();
-		saveFormValues('savecomment', 'comment');
-		return false;
+            $('form#formValues').on('submit', function (e) {
+                e.preventDefault();
+                saveFormValues('savecomment', 'comment');
+                return false;
             });
             </script>
 

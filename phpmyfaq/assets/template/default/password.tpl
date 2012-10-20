@@ -21,7 +21,9 @@
                 </div>
 
                 <div class="form-actions">
-                    <input class="btn-primary" type="submit" id="changepassword" value="{msgSubmit}" />
+                    <button class="btn btn-primary" type="submit" id="changepassword">
+                        {msgSubmit}
+                    </button>
                 </div>
             </form>
 

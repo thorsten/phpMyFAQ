@@ -36,7 +36,9 @@
     </div>
 
     <div class="form-actions">
-        <input class="btn-primary" type="submit" id="submituserdata" value="{msgSave}" tabindex="6" />
+        <button class="btn btn-primary" type="submit" id="submituserdata">
+            {msgSave}
+        </button>
     </div>
 
     </form>
