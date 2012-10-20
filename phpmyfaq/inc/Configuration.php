@@ -208,7 +208,21 @@ class PMF_Configuration
      */
     public function setLdapConfig(Array $ldapConfig)
     {
-        $this->config['core.ldapConfig'] = $ldapConfig;
+        if (true === $ldapConfig['ldap_use_multiple_servers']) {
+            // Multiple LDAP servers
+            $key = 0;
+            while ($key >= 0) {
+                if (isset($ldapConfig[$key])) {
+                    $this->config['core.ldapConfig'][$key] = $ldapConfig[$key];
+                    $key++;
+                } else {
+                    break;
+                }
+            }
+        } else {
+            // one LDAP server
+            $this->config['core.ldapConfig'] = $ldapConfig;
+        }
     }
 
     /**
