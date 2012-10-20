@@ -37,7 +37,7 @@ class PMF_Instance
     /**
      * Configuration
      *
-     * @var PMFconfiguration
+     * @var PMF_Configuration
      */
     protected $config = null;
 
