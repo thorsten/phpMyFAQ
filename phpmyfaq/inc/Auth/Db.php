@@ -180,7 +180,7 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
      *
      * @param  string $login        Loginname
      * @param  string $password     Password
-     * @param  array  $optionslData Optional data
+     * @param  array  $optionalData Optional data
      *
      * @return boolean
      */
@@ -241,7 +241,7 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
      * Checks the number of entries of given login name
      *
      * @param  string $login        Loginname
-     * @param  array  $optionslData Optional data
+     * @param  array  $optionalData Optional data
      *
      * @return integer
      */
