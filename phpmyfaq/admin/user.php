@@ -466,11 +466,13 @@ function getUserData(user_id)
                     <form id="rightsForm" action="?action=user&amp;user_action=update_rights" method="post">
                         <input id="rights_user_id" type="hidden" name="user_id" value="0" />
                         <div>
-                            <span><a href="javascript:form_checkAll('rightsForm')">
-                                <?php print $PMF_LANG['ad_user_checkall']; ?></a>
-                            </span> |
                             <span>
-                                <a href="javascript:form_uncheckAll('rightsForm')">
+                                <a class="btn btn-small" href="javascript:formCheckAll('rightsForm')">
+                                    <?php print $PMF_LANG['ad_user_checkall']; ?>
+                                </a>
+                            </span>
+                            <span>
+                                <a class="btn btn-small" href="javascript:formUncheckAll('rightsForm')">
                                     <?php print $PMF_LANG['ad_user_uncheckall']; ?>
                                 </a>
                             </span>
@@ -577,7 +579,9 @@ function getUserData(user_id)
             ?>
             <tr class="row_user_id_<?php print $user->getUserId() ?>">
                 <td><?php print $user->getUserId() ?></td>
-                <td><?php print $user->getStatus() ?></td>
+                <td>
+                    <?php print $user->getStatus() ?>
+                </td>
                 <td><?php print $user->getUserData('display_name') ?></td>
                 <td><?php print $user->getLogin() ?></td>
                 <td>

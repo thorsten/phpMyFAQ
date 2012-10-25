@@ -2051,7 +2051,11 @@ $(document).ready(function () {
 var toggleConfig,
     toggleFieldset,
     showhideCategory,
-    addAttachment;
+    addAttachment,
+    selectSelectAll,
+    selectUnselectAll,
+    formCheckAll,
+    formUncheckAll;
 
 $(document).ready(function () {
     "use strict";
@@ -2146,8 +2150,8 @@ $(document).ready(function () {
      * @param select_id
      * @return void
      */
-    function select_selectAll(select_id) {
-        var selectOptions = $("#" + select_id).options,
+    selectSelectAll = function selectSelectAll(select_id) {
+        var selectOptions = $("#" + select_id + " option"),
             i = 0;
         for (i = 0; i < selectOptions.length; i += 1) {
             selectOptions[i].selected = true;
@@ -2160,8 +2164,8 @@ $(document).ready(function () {
      * @param select_id
      * @return void
      */
-    function select_unselectAll(select_id) {
-        var selectOptions = $("#" + select_id).options,
+    selectUnselectAll = function selectUnselectAll(select_id) {
+        var selectOptions = $("#" + select_id + " option"),
             i = 0;
         for (i = 0; i < selectOptions.length; i += 1) {
             selectOptions[i].selected = false;
@@ -2174,11 +2178,11 @@ $(document).ready(function () {
      * @param   form_id
      * @return  void
      */
-    function form_checkAll(form_id) {
-        var inputElements = $("#" + form_id).getElementsByTagName('input'),
-            i = 0,
+    formCheckAll = function formCheckAll(form_id) {
+        var inputElements = $("#" + form_id + " input"),
+            i,
             ele;
-        for (i = 0, ele; ele = inputElements[i]; i += 1) {
+        for (i = 0; ele = inputElements[i]; i += 1) {
             if (ele.type === "checkbox") {
                 ele.checked = true;
             }
@@ -2191,10 +2195,11 @@ $(document).ready(function () {
      * @param   form_id
      * @return  void
      */
-    function form_uncheckAll(form_id) {
+    formUncheckAll = function formUncheckAll(form_id) {
         var inputElements = $("#" + form_id + ' input'),
-            i = 0;
-        for (i = 0, ele; ele = inputElements[i]; i += 1) {
+            i,
+            ele;
+        for (i = 0; ele = inputElements[i]; i += 1) {
             if (ele.type === "checkbox") {
                 ele.checked = false;
             }

@@ -555,7 +555,11 @@ getGroupList();
                         </p>
                     </form>
                 </fieldset>
-                <p>[ <a href="?action=group&amp;group_action=add"><?php print $PMF_LANG['ad_group_add_link']; ?></a> ]</p>
+                <p>
+                    <a class="btn btn-success" href="?action=group&amp;group_action=add">
+                        <?php print $PMF_LANG['ad_group_add_link']; ?>
+                    </a>
+                </p>
             </div>
 
             <div class="span4" id="groupMemberships">
@@ -568,13 +572,12 @@ getGroupList();
                         <legend><?php print $PMF_LANG['ad_user_username']; ?></legend>
                         <p>
                             <span class="select_all">
-                                <a href="javascript:select_selectAll('group_user_list')">
+                                <a class="btn btn-small" href="javascript:selectSelectAll('group_user_list')">
                                     <?php print $PMF_LANG['ad_user_checkall']; ?>
                                 </a>
                             </span>
-                            |
                             <span class="unselect_all">
-                                <a href="javascript:select_unselectAll('group_user_list')">
+                                <a class="btn btn-small" href="javascript:selectUnselectAll('group_user_list')">
                                     <?php print $PMF_LANG['ad_user_uncheckall']; ?>
                                 </a>
                             </span>
@@ -594,13 +597,12 @@ getGroupList();
                         <legend><?php print $PMF_LANG['ad_group_members']; ?></legend>
                         <p>
                             <span class="select_all">
-                                <a href="javascript:select_selectAll('group_member_list')">
+                                <a class="btn btn-small" href="javascript:selectSelectAll('group_member_list')">
                                     <?php print $PMF_LANG['ad_user_checkall']; ?>
                                 </a>
                             </span>
-                            |
                             <span class="unselect_all">
-                                <a href="javascript:select_unselectAll('group_member_list')">
+                                <a class="btn btn-small" href="javascript:selectUnselectAll('group_member_list')">
                                     <?php print $PMF_LANG['ad_user_uncheckall']; ?>
                                 </a>
                             </span>
@@ -658,13 +660,12 @@ getGroupList();
                             <input id="rights_group_id" type="hidden" name="group_id" value="0" />
                             <div>
                                 <span class="select_all">
-                                    <a href="javascript:form_checkAll('rightsForm')">
+                                    <a class="btn btn-small" href="javascript:formCheckAll('rightsForm')">
                                         <?php print $PMF_LANG['ad_user_checkall']; ?>
                                     </a>
                                 </span>
-                                |
                                 <span class="unselect_all">
-                                    <a href="javascript:form_uncheckAll('rightsForm')">
+                                    <a class="btn btn-small" href="javascript:formUncheckAll('rightsForm')">
                                         <?php print $PMF_LANG['ad_user_uncheckall']; ?>
                                     </a>
                                 </span>
