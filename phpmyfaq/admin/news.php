@@ -154,7 +154,11 @@ if ('addnews' == $action && $permission["addnews"]) {
             <h2><?php print $PMF_LANG["msgNews"]; ?></h2>
         </header>
     
-        <div class="control-group"><a href="?action=addnews"><?php print $PMF_LANG["ad_menu_news_add"]; ?></a></div>
+        <p>
+            <a class="btn btn-success" href="?action=addnews">
+                <i class="icon-plus icon-white"></i> <?php print $PMF_LANG["ad_menu_news_add"]; ?>
+            </a>
+        </p>
         <table class="table table-striped">
         <thead>
             <tr>
