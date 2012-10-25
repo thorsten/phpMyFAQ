@@ -193,7 +193,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
             <input type="hidden" name="notifyEmail" id="notifyEmail" value="<?php echo $notifyEmail ?>" />
 
             <!-- main editor window -->
-            <div class="span9">
+            <div class="span8">
                 <fieldset class="form-inline">
                     <!-- Question -->
                     <div class="control-group">
@@ -246,25 +246,24 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                                     );
                                     if ($permission['delattachment']) {
                                         printf(
-                                            '[ <a href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s">%s</a> ]',
+                                            '<a class="label label-important" href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s"><i class="icon-trash icon-white"></i></a>',
                                             $faqData['id'],
                                             $att->getId(),
-                                            $faqData['lang'],
-                                            $PMF_LANG['ad_att_del']
+                                            $faqData['lang']
                                         );
                                     }
                                     echo "</li>\n";
                                 }
+                                ?>
+                            </ul>
+                            <?php
                                 printf(
-                                    '<li><a onclick="addAttachment(\'attachment.php?record_id=%d&amp;record_lang=%s&amp;rubrik=%d\', \'Attachment\', 550, 130); return false;">%s</a></li>',
+                                    '<a class="btn btn-success" onclick="addAttachment(\'attachment.php?record_id=%d&amp;record_lang=%s&amp;rubrik=%d\', \'Attachment\', 550, 130); return false;">%s</a>',
                                     $faqData['id'],
                                     $faqData['lang'],
                                     $selectedCategory,
                                     $PMF_LANG['ad_att_add']
                                 );
-                                ?>
-                            </ul>
-                            <?php
                             } else {
                                 echo $PMF_LANG['ad_att_nope'];
                             }
