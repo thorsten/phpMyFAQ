@@ -127,7 +127,7 @@ if ($permission['editcateg']) {
                     $spokenLanguage
                 );
                 printf(
-                    '<span title="%s: %s" class="icon-check"></span></td>',
+                    '<span title="%s: %s" class="label label-success"><i class="icon-check icon-white"></i></span></td>',
                     $PMF_LANG['ad_categ_titel'],
                     $spokenLanguage
                 );
@@ -138,7 +138,7 @@ if ($permission['editcateg']) {
                     $lang,
                     $PMF_LANG['ad_categ_translate']);
                 printf(
-                    '<span title="%s" class="icon-share"></span></a>',
+                    '<span title="%s" class="label label-inverse"><i class="icon-share icon-white"></i></span></a>',
                     $PMF_LANG['ad_categ_translate']
                 );
             }

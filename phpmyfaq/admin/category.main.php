@@ -25,12 +25,15 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <header>
             <h2><?php print $PMF_LANG['ad_menu_categ_edit']; ?></h2>
         </header>
-        <ul>
-            <li><a href="?action=addcategory"><?php print $PMF_LANG['ad_kateg_add']; ?></a></li>
-            <li><a href="?action=showcategory"><?php print $PMF_LANG['ad_categ_show'];?></a></li>
-        </ul>
+        <p>
+            <a class="btn btn-success" href="?action=addcategory">
+                <i class="icon-plus icon-white"></i> <?php print $PMF_LANG['ad_kateg_add']; ?>
+            </a>
+            <a class="btn btn-info" href="?action=showcategory">
+                <i class="icon-th icon-white"></i> <?php print $PMF_LANG['ad_categ_show'];?>
+            </a>
+        </p>
 <?php
-
 $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 if ('category' != $action && 'content' != $action && 
     (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken)) {
