@@ -271,7 +271,7 @@ switch ($action) {
     <div class="container-fluid">
         <div class="row-fluid">
             <?php if (isset($auth) && in_array(true, $permission)) { ?>
-            <div class="span3">
+            <div class="span2">
                 <div class="well categories">
                     <ul class="nav nav-list">
                         <li class="nav-header"><?php print $secLevelHeader; ?></li>
@@ -285,4 +285,4 @@ switch ($action) {
             </div>
             <?php } ?>
 
-            <div class="span9">
+            <div class="span10">

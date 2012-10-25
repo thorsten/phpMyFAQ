@@ -23,7 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 ?>
         <header>
-            <h2><?php print $PMF_LANG['ad_menu_categ_edit']; ?></h2>
+            <h2><?php print $PMF_LANG['ad_menu_categ_edit']; ?>
         </header>
         <p>
             <a class="btn btn-success" href="?action=addcategory">
@@ -291,19 +291,19 @@ if ($permission['editcateg']) {
         if (count($category->getChildren($cat['id'])) != 0) {
             // Show name and icon for expand the sub-categories
             printf(
-                "<strong><a href=\"javascript:;\" onclick=\"toggleFieldset('%d');\">%s</a></strong> ",
+                '<h4><a href="javascript:;" onclick="toggleFieldset(%d);">%s</a> </h4> ',
                 $cat['id'],
                 $categoryName
             );
         } else {
             // Show just the name
-            printf("<strong>%s</strong> ", $categoryName);
+            printf("<h4>%s</h4> ", $categoryName);
         }
 
         if ($cat["lang"] == $lang) {
            // add sub category (if current language)
            printf('
-            <a href="?action=addcategory&amp;cat=%s&amp;lang=%s"><span title="%s" class="icon-plus-sign"></span></a>&nbsp;',
+            <a class="btn btn-info btn-mini" href="?action=addcategory&amp;cat=%s&amp;lang=%s"><span title="%s" class="icon-plus-sign icon-white"></span></a> ',
                $cat['id'],
                $cat['lang'],
                $PMF_LANG['ad_quick_category']
@@ -311,7 +311,7 @@ if ($permission['editcateg']) {
 
            // rename (sub) category (if current language)
            printf('
-               <a href="?action=editcategory&amp;cat=%s"><span title="%s" class="icon-edit"></a>&nbsp;',
+               <a class="btn btn-info btn-mini" href="?action=editcategory&amp;cat=%s"><span title="%s" class="icon-edit icon-white"></a> ',
                $cat['id'],
                $PMF_LANG['ad_kateg_rename']
            );
@@ -319,7 +319,7 @@ if ($permission['editcateg']) {
 
         // translate category (always)
         printf(
-            '<a href="?action=translatecategory&amp;cat=%s"><span title="%s" class="icon-share"></a>&nbsp;',
+            '<a class="btn btn-info btn-mini" href="?action=translatecategory&amp;cat=%s"><span title="%s" class="icon-share icon-white"></a> ',
             $cat['id'],
             $PMF_LANG['ad_categ_translate']
         );
@@ -327,17 +327,19 @@ if ($permission['editcateg']) {
         // delete (sub) category (if current language)
         if (count($category->getChildren($cat['id'])) == 0 && $cat["lang"] == $lang) {
             printf(
-                '<a href="?action=deletecategory&amp;cat=%s&amp;catlang=%s"><span title="%s" class="icon-trash"></a>&nbsp;',
+                '<a class="btn btn-danger btn-mini" href="?action=deletecategory&amp;cat=%s&amp;catlang=%s"><span title="%s" class="icon-trash icon-white"></a> ',
                 $cat['id'],
                 $cat['lang'],
                 $PMF_LANG['ad_categ_delete']
             );
+        } else {
+            echo  '<a class="btn btn-inverse btn-mini" style="cursor: not-allowed;"><span class="icon-trash icon-white"></a> ';
         }
 
         if ($cat["lang"] == $lang) {
            // cut category (if current language)
            printf(
-               '<a href="?action=cutcategory&amp;cat=%s"><span title="%s" class="icon-move"></a>&nbsp;',
+               '<a class="btn btn-warning btn-mini" href="?action=cutcategory&amp;cat=%s"><span title="%s" class="icon-move icon-white"></a> ',
                $cat['id'],
                $PMF_LANG['ad_categ_cut']
            );
@@ -345,7 +347,7 @@ if ($permission['editcateg']) {
            if ($category->numParent($cat['parent_id']) > 1) {
               // move category (if current language) AND more than 1 category at the same level)
               printf(
-                  '<a href="?action=movecategory&amp;cat=%s&amp;parent_id=%s"><span title="%s" class="icon-resize-vertical"></a>',
+                  '<a class="btn btn-warning btn-mini" href="?action=movecategory&amp;cat=%s&amp;parent_id=%s"><span title="%s" class="icon-resize-vertical icon-white"></a> ',
                   $cat['id'],
                   $cat['parent_id'],
                   $PMF_LANG['ad_categ_move']
