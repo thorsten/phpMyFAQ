@@ -34,8 +34,8 @@ if ($permission["editcateg"]) {
         $PMF_LANG['ad_categ_trans_2'],
         $category->categoryName[$id]['name']);
 
-    $selected_lang = PMF_Filter::filterInput(INPUT_POST, 'trlang', FILTER_SANITIZE_STRING, $LANGCODE);
-    if ($selected_lang != $LANGCODE) {
+    $selectedLanguage = PMF_Filter::filterInput(INPUT_GET, 'trlang', FILTER_SANITIZE_STRING, $LANGCODE);
+    if ($selectedLanguage !== $LANGCODE) {
         $action  = "showcategory";
         $showcat = "yes";
     } else {
@@ -65,7 +65,7 @@ if ($permission["editcateg"]) {
     if ($faqConfig->get('main.enableGoogleTranslation') === true) {
 ?>    
             <input type="hidden" id="name" name="name" value="<?php print $category->categoryName[$id]['name']; ?>" />
-            <input type="hidden" id="catlang" name="lang" value="<?php print $selected_lang; ?>" />
+            <input type="hidden" id="catlang" name="lang" value="<?php print $selectedLanguage; ?>" />
             <input type="hidden" id="description" name="description" value="<?php print $category->categoryName[$id]['description']; ?>" />
         
             <div id="editTranslations">
@@ -91,23 +91,23 @@ if ($permission["editcateg"]) {
     } else {
 ?>
             <div class="control-group">
-                <label><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
+                <label class="control-label"><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
                 <div class="controls">
                     <input type="text" name="name" value="" />
                 </div>
             </div>
 
             <div class="control-group">
-                <label><?php print $PMF_LANG["ad_categ_lang"]; ?>:</label>
+                <label class="control-label"><?php print $PMF_LANG["ad_categ_lang"]; ?>:</label>
                 <div class="controls">
                     <select name="catlang" size="1">
-                        <?php print $category->getCategoryLanguagesToTranslate($id, $selected_lang); ?>
+                        <?php print $category->getCategoryLanguagesToTranslate($id, $selectedLanguage); ?>
                     </select>
                 </div>
             </div>
 
             <div class="control-group">
-                <label><?php print $PMF_LANG["ad_categ_desc"]; ?>:</label>
+                <label class="control-label"><?php print $PMF_LANG["ad_categ_desc"]; ?>:</label>
                 <div class="controls">
                     <textarea name="description" rows="3" cols="80"></textarea>
                 </div>
@@ -117,7 +117,7 @@ if ($permission["editcateg"]) {
     }
 ?>
             <div class="control-group">
-                <label><?php print $PMF_LANG["ad_categ_owner"]; ?>:</label>
+                <label class="control-label"><?php print $PMF_LANG["ad_categ_owner"]; ?>:</label>
                 <div class="controls">
                     <select name="user_id" size="1">
                         <?php print $user->getAllUserOptions($category->categoryName[$id]['user_id']); ?>
@@ -126,7 +126,7 @@ if ($permission["editcateg"]) {
             </div>
 
             <div class="control-group">
-                <label><?php print $PMF_LANG['ad_categ_transalready']; ?></label>
+                <label class="control-label"><?php print $PMF_LANG['ad_categ_transalready']; ?></label>
                 <div class="controls">
                     <ul>
                         <?php
