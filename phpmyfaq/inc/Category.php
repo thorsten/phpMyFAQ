@@ -1302,13 +1302,13 @@ class PMF_Category
         $existcatlang = $this->_config->getLanguage()->languageAvailable($category_id, 'faqcategories');
 
         foreach (PMF_Language::getAvailableLanguages() as $lang => $langname) {
-           if (!in_array(strtolower($lang),$existcatlang)) {
-              $output .= "\t<option value=\"".strtolower($lang)."\"";
-              if ($lang == $selected_lang) {
-                 $output .= " selected=\"selected\"";
-              }
-              $output .=  ">".$langname."</option>\n";
-           }
+            if (!in_array(strtolower($lang), $existcatlang)) {
+                $output .= "\t<option value=\"".strtolower($lang)."\"";
+                if ($lang == $selected_lang) {
+                    $output .= " selected=\"selected\"";
+                }
+                $output .=  ">".$langname."</option>\n";
+            }
         }
 
         return $output;
