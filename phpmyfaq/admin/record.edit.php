@@ -198,7 +198,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                     <!-- Question -->
                     <div class="control-group">
                         <div class="controls">
-                            <input type="text" name="question" id="question" maxlength="255" class="span8"
+                            <input type="text" name="question" id="question" maxlength="255" class="input-xxlarge"
                                    placeholder="<?php echo $PMF_LANG["ad_entry_theme"]; ?>" style="font-size: 24px; height: 30px;"
                                    value="<?php if (isset($faqData['title'])) { echo PMF_String::htmlspecialchars($faqData['title']); } ?>" />
                         </div>
@@ -230,7 +230,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                     <!-- Attachments -->
                     <?php if ($permission['addattachment']): ?>
                     <div class="control-group">
-                        <label><?php echo $PMF_LANG['ad_menu_attachments'] ?>:</label>
+                        <label class="control-label"><?php echo $PMF_LANG['ad_menu_attachments'] ?>:</label>
                         <div class="controls">
                             <?php
                             if (isset($faqData['id']) && $faqData['id'] != "") {
@@ -398,7 +398,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
             </div>
 
             <!-- sidebar -->
-            <div class="span3">
+            <div class="well span3">
                 <!-- form actions -->
                 <fieldset>
                     <div class="control-group">
@@ -439,14 +439,14 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                     <div class="control-group">
                         <label class="control-label"><?php echo $PMF_LANG["ad_entry_category"]; ?></label>
                         <div class="controls">
-                            <select name="rubrik[]" id="rubrik" size="5" multiple="multiple">
+                            <select name="rubrik[]" id="rubrik" size="5" multiple="multiple" class="input-medium">
                                 <?php echo $categoryHelper->renderOptions($categories); ?>
                             </select>
                         </div>
                     </div>
                 </fieldset>
                 <!-- Activation -->
-                <fieldset class="form-horizontal">
+                <fieldset>
                     <div class="control-group">
                         <label class="control-label" for="active"><?php echo $PMF_LANG["ad_entry_active"]; ?></label>
                         <div class="controls">
@@ -551,7 +551,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                             <label class="radio">
                                 <input type="radio" name="grouppermission"  value="restricted" <?php echo ($restrictedGroups ? 'checked="checked"' : ''); ?>/>
                                 <?php echo $PMF_LANG['ad_entry_restricted_groups']; ?>
-                                <select name="restricted_groups" size="1">
+                                <select name="restricted_groups" size="1" class="input-medium">
                                     <?php echo $user->perm->getAllGroupsOptions($groupPermission[0]); ?>
                                 </select>
                             </label>
@@ -570,7 +570,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                             <label class="radio">
                                 <input type="radio" name="userpermission"  value="restricted" <?php echo ($restrictedUsers ? 'checked="checked"' : ''); ?>/>
                                 <?php echo $PMF_LANG['ad_entry_restricted_users']; ?>
-                                <select name="restricted_users" size="1">
+                                <select name="restricted_users" size="1" class="input-medium">
                                     <?php echo $user->getAllUserOptions($userPermission[0]); ?>
                                 </select>
                             </label>
