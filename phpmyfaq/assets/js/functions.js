@@ -108,7 +108,7 @@ $(document).ready(function () {
                 ajax: "config_list",
                 conf: container.toLowerCase()
             }, function (data) {
-                $("#config" + container).append(data);
+                configContainer.append(data);
             });
             configContainer.fadeIn("slow");
         } else {

@@ -11433,3 +11433,12 @@ footer ul.footer-menu li {
 footer .copyright {
   color: #f2f2f2;
 }
+.form-horizontal .admin-config-label {
+  float: left;
+  width: 240px;
+  padding-top: 5px;
+  text-align: right;
+}
+.form-horizontal .admin-config-control {
+  margin-left: 260px;
+}

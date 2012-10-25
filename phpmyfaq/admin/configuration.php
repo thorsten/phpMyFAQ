@@ -73,14 +73,13 @@ if ($permission['editconfig']) {
         $message    = '';
         $userAction = 'listConfig';
 ?>
-
         <header>
             <h2><?php echo $PMF_LANG['ad_config_edit']; ?></h2>
         </header>
 
         <div id="user_message"><?php echo $message; ?></div>
-
-        <form id="config_list" name="config_list" action="?action=config&amp;config_action=saveConfig" method="post">
+        <form class="form-horizontal" id="config_list" name="config_list"
+              action="?action=config&amp;config_action=saveConfig" method="post">
 
             <p>
                 <a class="btn btn-inverse" href="javascript:void(0);" onclick="javascript:toggleConfig('Main');">

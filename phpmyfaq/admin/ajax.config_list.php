@@ -57,7 +57,7 @@ function printInputFieldByType($key, $type)
     switch ($type) {
 
         case 'area':
-            printf('<textarea name="edit[%s]" cols="60" rows="6" style="width: 300px;">%s</textarea>',
+            printf('<textarea name="edit[%s]" cols="60" rows="6" class="input-xxlarge">%s</textarea>',
                     $key,
                     str_replace('<', '&lt;', str_replace('>', '&gt;', $faqConfig->get($key))));
             printf("</div>\n");
@@ -73,14 +73,18 @@ function printInputFieldByType($key, $type)
             } else {
                 $value = str_replace('"', '&quot;', $faqConfig->get($key));
             }
-            printf('<input type="text" name="edit[%s]" size="75" value="%s" style="width: 300px;" />',
-                    $key,
-                    $value);
-            printf("</div>\n");
+            printf(
+                '<input class="%s" type="%s" name="edit[%s]" size="75" value="%s" />',
+                is_numeric($value) ? 'input-small' : 'input-xxlarge',
+                is_numeric($value) ? 'number' : 'text',
+                $key,
+                $value
+            );
+            echo "</div>\n";
             break;
 
         case 'select':
-            printf('<select name="edit[%s]" size="1" style="width: 300px;">', $key);
+            printf('<select name="edit[%s]" size="1" class="input-xlarge">', $key);
             
             switch ($key) {
                 
@@ -225,7 +229,7 @@ foreach ($LANG_CONF as $key => $value) {
         }
 ?>
             <div class="control-group">
-                <label>
+                <label class="control-label admin-config-label">
 <?php
         switch ($key) {
 
@@ -254,7 +258,7 @@ foreach ($LANG_CONF as $key => $value) {
         }
 ?>
                 </label>
-                <div class="controls">
+                <div class="controls admin-config-control">
                     <?php printInputFieldByType($key, $value[0]); ?>
                 </div>
 <?php
