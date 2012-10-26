@@ -11417,6 +11417,13 @@ body {
 #main .pointer {
   cursor: pointer;
 }
+#main .maintenance {
+  height: 300px;
+}
+#main .maintenance h1 {
+  text-align: center;
+  line-height: 300px;
+}
 footer {
   background: #2a333c;
   color: #f2f2f2;

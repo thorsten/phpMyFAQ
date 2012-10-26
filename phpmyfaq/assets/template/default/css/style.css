@@ -838,5 +838,6 @@ body{background:#f6f1eb;}
 #main .star-rating-on a{background-position:0 -16px !important;}
 #main .star-rating-hover a{background-position:0 -32px;}
 #main .pointer{cursor:pointer;}
+#main .maintenance{height:300px;}#main .maintenance h1{text-align:center;line-height:300px;}
 footer{background:#2a333c;color:#f2f2f2;padding-top:30px;}footer ul.footer-menu{list-style:none outside none;}footer ul.footer-menu li{float:left;list-style:none outside none;margin-right:22px;}
 footer .copyright{color:#f2f2f2;}
