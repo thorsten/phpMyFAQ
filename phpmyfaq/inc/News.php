@@ -396,8 +396,8 @@ class PMF_News
      */
     function deleteNews($id)
     {
-        $query = sprintf("
-            DELETE FROM
+        $query = sprintf(
+            "DELETE FROM
                 %sfaqnews
             WHERE
                 id = %d
@@ -405,7 +405,8 @@ class PMF_News
                 lang = '%s'",
             PMF_Db::getTablePrefix(),
             $id,
-            $this->language->getLanguage());
+            $this->_config->getLanguage()->getLanguage()
+        );
             
         if (!$this->_config->getDb()->query($query)) {
             return false;
