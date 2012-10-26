@@ -60,11 +60,12 @@ $rightVarsOnly  = &$_SESSION['trans']['rightVarsOnly'];
 
 
 $options = array(
-    'baseUrl'   => PMF_Link::getSystemRelativeUri('index.php') . '?' .
+    'baseUrl'         => PMF_Link::getSystemRelativeUri('index.php') . '?' .
                    str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
-    'total'     => count($_SESSION['trans']['leftVarsOnly']),
-    'perPage'   => $itemsPerPage,
-    'layoutTpl' => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>'
+    'total'           => count($_SESSION['trans']['leftVarsOnly']),
+    'perPage'         => $itemsPerPage,
+    'nextPageLinkTpl' => '<li><a href="{LINK_URL}">' . $PMF_LANG['msgNext'] . '</a></li>',
+    'prevPageLinkTpl' => '<li><a href="{LINK_URL}">' . $PMF_LANG['msgPrevious'] . '</a></li>'
 );
 
 $pagination = new PMF_Pagination($faqConfig, $options);
@@ -186,10 +187,17 @@ $NPluralsErrorReported = false;
         </tr>
         <tr>
             <td>&nbsp;</td>
-            <td><input type="button" value="<?php print $PMF_LANG['msgCancel'] ?>" onclick="location.href='?action=translist'" /></td>
-            <td><input type="button"
-                       value="<?php print $PMF_LANG['msgSave'] ?>"
-                       onclick="save()"<?php if (!is_writable(PMF_ROOT_DIR . "/lang/language_$translateLang.php")) { print ' disabled="disabled"'; } ?> /></td>
+            <td>
+                <button class="btn btn-inverse" type="button" onclick="location.href='?action=translist'">
+                    <?php print $PMF_LANG['msgCancel'] ?>
+                </button>
+            </td>
+            <td>
+                <button class="btn btn-success" type="button"
+                        onclick="save()"<?php if (!is_writable(PMF_ROOT_DIR . "/lang/language_$translateLang.php")) { print ' disabled="disabled"'; } ?>>
+                    <?php print $PMF_LANG['msgSave'] ?>
+                </button>
+            </td>
         </tr>
         </table>
         </form>
