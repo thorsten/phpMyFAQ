@@ -897,10 +897,10 @@ $PMF_LANG['ad_online_info'] = 'Online version check';
 $PMF_LANG['ad_system_info'] = 'System Information';
 
 // added 2.5.0-alpha - 2008-01-25 by Elger
-$PMF_LANG['msgRegisterUser'] = 'Register';
+$PMF_LANG['msgRegisterUser'] = 'Sign up';
 $PMF_LANG["ad_user_loginname"] = 'Login name:';
 $PMF_LANG['errorRegistration'] = 'This field is required!';
-$PMF_LANG['submitRegister'] = 'Register';
+$PMF_LANG['submitRegister'] = 'Create';
 $PMF_LANG['msgUserData'] = 'User information required for registration';
 $PMF_LANG['captchaError'] = 'Please enter the right captcha code!';
 $PMF_LANG['msgRegError'] = 'Following errors occured. Please correct them:';
