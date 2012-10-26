@@ -2052,10 +2052,21 @@ var toggleConfig,
     toggleFieldset,
     showhideCategory,
     addAttachment,
+    addEngine,
+    infoBox,
     selectSelectAll,
     selectUnselectAll,
     formCheckAll,
-    formUncheckAll;
+    formUncheckAll,
+    checkAll,
+    closeWindow,
+    addAttachmentLink,
+    refreshCaptcha,
+    showLongComment,
+    saveFormValues,
+    autoSuggest,
+    saveVoting,
+    checkQuestion;
 
 $(document).ready(function () {
     "use strict";
@@ -2074,14 +2085,14 @@ $(document).ready(function () {
             "width=" + width + ", height=" + height + ", toolbar=no, directories=no, status=no, scrollbars=no, resizable=yes, menubar=no"
         );
         popup.focus();
-    }
+    };
 
     /**
      * Checks all checkboxes
      * 
      * @param checkBox
      */
-    function checkAll(checkBox) {
+    checkAll = function checkAll(checkBox) {
         var v = checkBox.checked,
             f = checkBox.form,
             i = 0;
@@ -2090,7 +2101,7 @@ $(document).ready(function () {
                 f.elements[i].checked = v;
             }
         }
-    }
+    };
 
     /**
      *
@@ -2099,13 +2110,13 @@ $(document).ready(function () {
      * @param ext
      * @param cat
      */
-    function addEngine(uri, name, ext, cat) {
+    addEngine = function addEngine(uri, name, ext, cat) {
         if ((typeof window.sidebar === "object") && (typeof window.sidebar.addSearchEngine === "function")) {
             window.sidebar.addSearchEngine(uri + "/" + name + ".src", uri + "/images/" + name + "." + ext, name, cat);
         } else {
-            alert("Mozilla Firefox, Mozilla or Netscape 6 or later is needed to install the search plugin!");
+            window.alert("Mozilla Firefox, Mozilla or Netscape 6 or later is needed to install the search plugin!");
         }
-    }
+    };
 
     /**
      * Displays or hides a div block
@@ -2120,7 +2131,7 @@ $(document).ready(function () {
         } else {
             domId.fadeOut("slow");
         }
-    }
+    };
 
     /**
      * Displays or hides a configuration block
@@ -2136,13 +2147,13 @@ $(document).ready(function () {
                 ajax: "config_list",
                 conf: container.toLowerCase()
             }, function (data) {
-                $("#config" + container).append(data);
+                configContainer.append(data);
             });
             configContainer.fadeIn("slow");
         } else {
             configContainer.fadeOut("slow");
         }
-    }
+    };
 
     /**
      * selects all list options in the select with the given ID.
@@ -2156,7 +2167,7 @@ $(document).ready(function () {
         for (i = 0; i < selectOptions.length; i += 1) {
             selectOptions[i].selected = true;
         }
-    }
+    };
 
     /**
      * unselects all list options in the select with the given ID.
@@ -2170,7 +2181,7 @@ $(document).ready(function () {
         for (i = 0; i < selectOptions.length; i += 1) {
             selectOptions[i].selected = false;
         }
-    }
+    };
 
     /**
      * checks all checkboxes in form with the given ID.
@@ -2187,7 +2198,7 @@ $(document).ready(function () {
                 ele.checked = true;
             }
         }
-    }
+    };
 
     /**
      * unchecks all checkboxes in form with the given ID.
@@ -2204,14 +2215,14 @@ $(document).ready(function () {
                 ele.checked = false;
             }
         }
-    }
+    };
 
     /**
      * Displays or hides the info boxes
      *
      * @return void
      */
-    function infoBox(infobox_id) {
+    infoBox = function infoBox(infobox_id) {
         var domId = $("#" + infobox_id);
         if (domId.css("display") === "none") {
             $(".faqTabContent").hide();
@@ -2219,23 +2230,24 @@ $(document).ready(function () {
         } else {
             domId.hide();
         }
-    }
+    };
 
     /**
      * Refreshes a captcha image
      *
      * @param action
      */
-    function refreshCaptcha(action) {
+    refreshCaptcha = function refreshCaptcha(action) {
         $.ajax({
             url: 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime(),
-            success: function (result) {
+            success: function () {
+                var captcha = $("#captcha");
                 $("#captchaImage").attr('src', 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime());
-                $("#captcha").val('');
-                $("#captcha").focus();
+                captcha.val('');
+                captcha.focus();
             }
         });
-    }
+    };
 
     /**
      * Toggle fieldsets
@@ -2245,41 +2257,42 @@ $(document).ready(function () {
      * @return void
      */
     toggleFieldset = function toggleFieldset(fieldset) {
-        if ($('#div_' + fieldset).css('display') === 'none') {
-            $('#div_' + fieldset).fadeIn('fast');
+        var div = $('#div_' + fieldset);
+        if (div.css('display') === 'none') {
+            div.fadeIn('fast');
         } else {
-            $('#div_' + fieldset).fadeOut('fast');
+            div.fadeOut('fast');
         }
-    }
+    };
 
     /**
      * Adds the link to the attachment in the main FAQ window
      * @param attachmentId
      * @param fileName
      */
-    function addAttachmentLink(attachmentId, fileName) {
+    addAttachmentLink = function addAttachmentLink(attachmentId, fileName) {
         window.opener.
             $('.adminAttachments').
             append('<li><a href="../index.php?action=attachment&id=' + attachmentId + '">' + fileName + '</a></li>');
         window.close();
-    }
+    };
 
     /**
      * Closes the current window
      *
      */
-    function closeWindow() {
+    closeWindow = function closeWindow() {
         window.close();
-    }
+    };
 
     /**
      * Show long comment
      */
-    function showLongComment(id) {
+    showLongComment = function showLongComment(id) {
         $('.comment-more-' + id).removeClass('hide');
         $('.comment-dots-' + id).addClass('hide');
         $('.comment-show-more-' + id).addClass('hide');
-    }
+    };
 
     /**
      * Saves all content from the given form via Ajax
@@ -2291,7 +2304,7 @@ $(document).ready(function () {
      *
      * @return void
      */
-    function saveFormValues(action, formName) {
+    saveFormValues = function saveFormValues(action, formName) {
         var formValues = $('#formValues');
 
         $('#loader').show();
@@ -2319,14 +2332,14 @@ $(document).ready(function () {
         });
 
         return false;
-    }
+    };
 
     /**
      * Auto-suggest function for instant response
      *
      * @return void
      */
-    function autoSuggest() {
+    autoSuggest = function autoSuggest() {
         $('input#instantfield').keyup(function () {
             var search   = $('#instantfield').val(),
                 language = $('#ajaxlanguage').val(),
@@ -2350,7 +2363,7 @@ $(document).ready(function () {
         $('#instantform').submit(function () {
             return false;
         });
-    }
+    };
 
     /**
      * Saves the voting by Ajax
@@ -2359,7 +2372,7 @@ $(document).ready(function () {
      * @param id
      * @param value
      */
-    function saveVoting(type, id, value) {
+    saveVoting = function saveVoting(type, id, value) {
         $.ajax({
             type:     'post',
             url:      'ajaxservice.php?action=savevoting',
@@ -2381,13 +2394,13 @@ $(document).ready(function () {
         });
 
         return false;
-    }
+    };
 
     /**
      * Checks the content of a question by Ajax
      *
      */
-    function checkQuestion() {
+    checkQuestion = function checkQuestion() {
         var formValues = $('#formValues');
 
         $('#loader').show();
@@ -2423,6 +2436,6 @@ $(document).ready(function () {
         });
 
         return false;
-    }
+    };
 
 });
