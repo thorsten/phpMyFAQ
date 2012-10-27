@@ -137,9 +137,8 @@ $options = array(
     'total'           => $faqSearchResult->getNumberOfResults(),
     'perPage'         => $faqConfig->get('records.numberOfRecordsPerPage'),
     'pageParamName'   => 'seite',
-    'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgNext'] . '</a>',
-    'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgPrevious'] . '</a>',
-    'layoutTpl'       => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>');
+    'layoutTpl'       => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>'
+);
 
 $faqPagination     = new PMF_Pagination($faqConfig, $options);
 $categoryHelper = new PMF_Helper_Category();

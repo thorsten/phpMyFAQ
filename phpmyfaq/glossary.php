@@ -38,9 +38,7 @@ $options = array(
     'baseUrl'         => $baseUrl,
     'total'           => count($glossaryItems),
     'perPage'         => 15,
-    'pageParamName'   => 'page',
-    'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgNext'] . '</a>',
-    'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgPrevious'] . '</a>'
+    'pageParamName'   => 'page'
 );
 $pagination = new PMF_Pagination($faqConfig, $options);
 

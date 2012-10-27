@@ -51,9 +51,7 @@ if ($permission['adminlog'] && 'adminlog' == $action) {
         'baseUrl'         => $baseUrl,
         'total'           => $logging->getNumberOfEntries(),
         'perPage'         => $perpage,
-        'pageParamName'   => 'page',
-        'nextPageLinkTpl' => '<li><a href="{LINK_URL}">' . $PMF_LANG['msgNext'] . '</a></li>',
-        'prevPageLinkTpl' => '<li><a href="{LINK_URL}">' . $PMF_LANG['msgPrevious'] . '</a></li>'
+        'pageParamName'   => 'page'
     );
     $pagination = new PMF_Pagination($faqConfig, $options);
 

@@ -91,28 +91,28 @@ class PMF_Pagination
      *
      * @var string
      */
-    protected $nextPageLinkTpl = '<li><a href="{LINK_URL}">&gt;</a></li>';
+    protected $nextPageLinkTpl = '<li><a href="{LINK_URL}">&rarr;</a></li>';
     
     /**
      * Previous page link template
      *
      * @var string
      */
-    protected $prevPageLinkTpl = '<li><a href="{LINK_URL}">&lt;</a></li>';
+    protected $prevPageLinkTpl = '<li><a href="{LINK_URL}">&larr;</a></li>';
     
     /**
      * First page link template
      *
      * @var string
      */
-    protected $firstPageLinkTpl = '<li><a href="{LINK_URL}">←</a></li>';
+    protected $firstPageLinkTpl = '<li><a href="{LINK_URL}">&larrb;</a></li>';
     
     /**
      * Last page link template
      *
      * @var string
      */
-    protected $lastPageLinkTpl = '<li><a href="{LINK_URL}">→</a></li>';
+    protected $lastPageLinkTpl = '<li><a href="{LINK_URL}">&rarrb;</a></li>';
     
     /**
      * Layout template

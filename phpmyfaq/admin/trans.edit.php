@@ -60,12 +60,9 @@ $rightVarsOnly  = &$_SESSION['trans']['rightVarsOnly'];
 
 
 $options = array(
-    'baseUrl'         => PMF_Link::getSystemRelativeUri('index.php') . '?' .
-                   str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
-    'total'           => count($_SESSION['trans']['leftVarsOnly']),
-    'perPage'         => $itemsPerPage,
-    'nextPageLinkTpl' => '<li><a href="{LINK_URL}">' . $PMF_LANG['msgNext'] . '</a></li>',
-    'prevPageLinkTpl' => '<li><a href="{LINK_URL}">' . $PMF_LANG['msgPrevious'] . '</a></li>'
+    'baseUrl' => PMF_Link::getSystemRelativeUri('index.php') . '?' . str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
+    'total'   => count($_SESSION['trans']['leftVarsOnly']),
+    'perPage' => $itemsPerPage
 );
 
 $pagination = new PMF_Pagination($faqConfig, $options);

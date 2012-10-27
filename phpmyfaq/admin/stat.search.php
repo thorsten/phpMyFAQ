@@ -53,9 +53,7 @@ if ($permission['viewlog']) {
         'baseUrl'         => $baseUrl,
         'total'           => count($searchesList),
         'perPage'         => $perpage,
-        'pageParamName'   => 'page',
-        'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgNext'] . '</a>',
-        'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgPrevious'] . '</a>'
+        'pageParamName'   => 'page'
     );
     $pagination = new PMF_Pagination($faqConfig, $options);
 ?>

@@ -532,8 +532,6 @@ function getUserData(user_id)
             'total'           => $numUsers,
             'perPage'         => $perPage,
             'pageParamName'   => 'page',
-            'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgNext'] . '</a>',
-            'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $PMF_LANG['msgPrevious'] . '</a>',
             'layoutTpl'       => '<strong>{LAYOUT_CONTENT}</strong>'
         );
         $pagination = new PMF_Pagination($faqConfig, $options);
