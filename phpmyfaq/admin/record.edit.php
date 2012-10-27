@@ -93,7 +93,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
         $faqData['revision_id'] = PMF_Filter::filterInput(INPUT_POST, 'revision_id', FILTER_VALIDATE_INT, 0);
         $faqData['sticky']      = PMF_Filter::filterInput(INPUT_POST, 'sticky', FILTER_VALIDATE_INT);
         $faqData['tags']        = PMF_Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
-        $changed                = PMF_Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
+        $faqData['changed']     = PMF_Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
         $faqData['dateStart']   = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
         $faqData['dateEnd']     = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
         $faqData['content']     = html_entity_decode($faqData['content']);
@@ -105,12 +105,10 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
         if ((!isset($selectedCategory) && !isset($faqData['title'])) || !is_null($id)) {
             $logging = new PMF_Logging($faqConfig);
             $logging->logAdmin($user, 'Beitragedit, ' . $id);
-            $faqData['id']   = $id;
-            $faqData['lang'] = $lang;
 
-            $categories = $category->getCategoryRelationsFromArticle($faqData['id'], $faqData['lang']);
+            $categories = $category->getCategoryRelationsFromArticle($id, $lang);
 
-            $faq->getRecord($faqData['id'], null, true);
+            $faq->getRecord($id, null, true);
             $faqData         = $faq->faqRecord;
             $faqData['tags'] = implode(',', $tagging->getAllTagsById($faqData['id']));
             $queryString     = 'saveentry&amp;id=' . $faqData['id'];
@@ -174,6 +172,8 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
     $faqData['keywords'] = (isset($faqData['keywords']) ? PMF_String::htmlspecialchars($faqData['keywords']) : '');
     $faqData['author']   = (isset($faqData['author']) ? PMF_String::htmlspecialchars($faqData['author']) : $user->getUserData('display_name'));
     $faqData['email']    = (isset($faqData['email']) ? PMF_String::htmlspecialchars($faqData['email']) : $user->getUserData('email'));
+    $faqData['date']     = (isset($faqData['date']) ? $date->format($faqData['date']) : $date->format(date('Y-m-d H:i')));
+    $faqData['changed']  = (isset($faqData['changed']) ? $faqData['changed'] : '');
 
     if (isset($faqData['comment']) && $faqData['comment'] == 'y') {
         $faqData['comment'] = ' checked="checked"';
@@ -183,7 +183,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
         $faqData['comment'] = '';
     }
 
-    // Start output
+    // Start header
     if (0 !== $faqData['id'] && 'copyentry' !== $action) {
         $currentRevision = sprintf(
             ' <span class="badge badge-important">%s 1.%d</span> ',
@@ -225,8 +225,8 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                     <!-- Question -->
                     <div class="control-group">
                         <div class="controls">
-                            <input type="text" name="question" id="question" maxlength="255" class="input-xxlarge"
-                                   placeholder="<?php echo $PMF_LANG['ad_entry_theme']; ?>" style="font-size: 24px; height: 30px;"
+                            <input type="text" name="question" id="question" class="admin-question"
+                                   placeholder="<?php echo $PMF_LANG['ad_entry_theme']; ?>" maxlength="255"
                                    value="<?php echo $faqData['title'] ?>" />
                         </div>
                     </div>
@@ -240,8 +240,8 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                         </div>
                     </div>
                 </fieldset>
-                <!-- meta data -->
                 <fieldset class="form-horizontal">
+                    <!-- Meta data -->
                     <?php if ($faqConfig->get('main.enableGoogleTranslation') === true): ?>
                         <input type="hidden" id="lang" name="lang" value="<?php echo $faqData['lang']; ?>" />
                     <?php else: ?>
@@ -285,7 +285,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                             </ul>
                             <?php
                                 printf(
-                                    '<a class="btn btn-success" onclick="addAttachment(\'attachment.php?record_id=%d&amp;record_lang=%s&amp;rubrik=%d\', \'Attachment\', 550, 130); return false;">%s</a>',
+                                    '<a class="btn btn-success" onclick="addAttachment(\'attachment.php?record_id=%d&amp;record_lang=%s&amp;rubrik=%d\', \'Attachment\');">%s</a>',
                                     $faqData['id'],
                                     $faqData['lang'],
                                     $selectedCategory,
@@ -304,7 +304,8 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                         <div class="controls">
                             <input type="text" name="tags" id="tags"  maxlength="255"
                                    value="<?php echo $faqData['tags'] ?>" />
-                            <img style="display: none; margin-bottom: -5px;" id="tags_autocomplete_wait" src="images/indicator.gif" alt="waiting..." />
+                            <img style="display: none; margin-bottom: -5px;" id="tags_autocomplete_wait"
+                                 src="images/indicator.gif" alt="waiting..." />
                             <script type="text/javascript">
                                 $('#tags').autocomplete(
                                         "index.php?action=ajax&ajax=tags_list",
@@ -327,32 +328,30 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                 <fieldset class="form-horizontal">
                     <?php
                     if ('00000000000000' == $faqData['dateStart']) {
-                        $dateStart = '';
+                        $faqData['dateStart'] = '';
                     } else {
-                        $dateStart = preg_replace("/(\d{4})(\d{2})(\d{2}).*/", "$1-$2-$3", $faqData['dateStart']);
+                        $faqData['dateStart'] = preg_replace("/(\d{4})(\d{2})(\d{2}).*/", "$1-$2-$3", $faqData['dateStart']);
                     }
 
                     if ('99991231235959' == $faqData['dateEnd']) {
-                        $dateEnd = '';
+                        $faqData['dateEnd'] = '';
                     } else {
-                        $dateEnd = preg_replace("/(\d{4})(\d{2})(\d{2}).*/", "$1-$2-$3", $faqData['dateEnd']);
-                    }
-
-                    if (!isset($faqData['date'])) {
-                        $faqData['date'] = PMF_Date::createIsoDate(date('YmdHis'));
+                        $faqData['dateEnd'] = preg_replace("/(\d{4})(\d{2})(\d{2}).*/", "$1-$2-$3", $faqData['dateEnd']);
                     }
                     ?>
                     <legend><?php echo $PMF_LANG['ad_record_expiration_window']; ?></legend>
                     <div class="control-group">
                         <label class="control-label" for="dateStart"><?php echo $PMF_LANG['ad_news_from']; ?></label>
                         <div class="controls">
-                            <input name="dateStart" id="dateStart" class="date-pick span2" value="<?php echo $dateStart; ?>" maxlength="10" />
+                            <input name="dateStart" id="dateStart" class="date-pick span2"  maxlength="10"
+                                   value="<?php echo $faqData['dateStart']; ?>" />
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label" for="dateEnd"><?php echo $PMF_LANG['ad_news_to']; ?></label>
                         <div class="controls">
-                            <input name="dateEnd" id="dateEnd" class="date-pick span2" value="<?php echo $dateEnd; ?>" maxlength="10" />
+                            <input name="dateEnd" id="dateEnd" class="date-pick span2" maxlength="10"
+                                   value="<?php echo $faqData['dateEnd']; ?>" />
                         </div>
                     </div>
                 </fieldset>
@@ -377,19 +376,15 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                     <div class="control-group" id="editChangelog">
                         <label class="control-label"><?php echo $PMF_LANG["ad_entry_date"]; ?></label>
                         <div class="controls">
-                            <?php
-                            if (isset($faqData['date'])) {
-                                echo $date->format($faqData['date']);
-                            } else {
-                                echo $date->format(date('Y-m-d H:i'));
-                            }
-                            ?>
+                            <span class="input-medium uneditable-input"><?php echo $faqData['date'] ?></span>
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label" for="changed"><?php echo $PMF_LANG["ad_entry_changed"]; ?></label>
                         <div class="controls">
-                            <textarea name="changed" id="changed" class="span3"><?php if (isset($changed)) { echo $changed; } ?></textarea>
+                            <textarea name="changed" id="changed" class="span8">
+                                <?php echo $faqData['changed'] ?>
+                            </textarea>
                         </div>
                     </div>
                 </fieldset>
@@ -430,15 +425,18 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                         <label class="control-label" for="dateActualize"><?php echo $PMF_LANG["ad_entry_date"]; ?></label>
                         <div class="controls">
                             <label class="radio">
-                                <input type="radio" id="dateActualize" checked="checked" name="recordDateHandling" onchange="setRecordDate(this.id);" />
+                                <input type="radio" id="dateActualize" checked="checked" name="recordDateHandling"
+                                       onchange="setRecordDate(this.id);" />
                                 <?php echo $PMF_LANG['msgUpdateFaqDate']; ?>
                             </label>
                             <label class="radio">
-                                <input type="radio" id="dateKeep" name="recordDateHandling" onchange="setRecordDate(this.id);" />
+                                <input type="radio" id="dateKeep" name="recordDateHandling"
+                                       onchange="setRecordDate(this.id);" />
                                 <?php echo $PMF_LANG['msgKeepFaqDate']; ?>
                             </label>
                             <label class="radio">
-                                <input type="radio" id="dateCustomize" name="recordDateHandling" onchange="setRecordDate(this.id);" />
+                                <input type="radio" id="dateCustomize" name="recordDateHandling"
+                                       onchange="setRecordDate(this.id);" />
                                 <?php echo $PMF_LANG['msgEditFaqDat']; ?>
                             </label>
                         </div>
@@ -661,7 +659,6 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
         }
     }
 ?>
-
                 <?php if ($faqConfig->get('main.enableGoogleTranslation') === true):  ?>
                 <fieldset class="form-horizontal">
                     <legend>
