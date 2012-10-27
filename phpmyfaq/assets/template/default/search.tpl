@@ -9,15 +9,17 @@
             <form action="{writeSendAdress}" method="get" class="form-search">
 
                 <div class="control-group">
-                    <input id="searchfield" type="search" name="search" size="50" value="{searchString}"
-                           class="input-xlarge search-query" autofocus="autofocus">
-                    <button class="btn btn-primary" type="submit" name="submit">
-                        {msgSearch}
-                    </button>
-                    <input type="hidden" name="action" value="search" />
-                    <label class="checkbox">
+                    <div class="input-append">
+                        <input id="searchfield" type="search" name="search" value="{searchString}" autofocus
+                               class="input-xlarge search-query">
+                        <button class="btn btn-primary" type="submit" name="submit">
+                            {msgSearch}
+                        </button>
+                        <input type="hidden" name="action" value="search" />
+                    </div>
+                    <label class="checkbox inline">
                     <input type="checkbox"{checkedAllLanguages} name="langs" id="langs" value="all" />
-                    {searchOnAllLanguages}
+                     {searchOnAllLanguages}
                     </label>
                 </div>
 

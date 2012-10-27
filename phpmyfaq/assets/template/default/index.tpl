@@ -104,13 +104,15 @@
                 [globalSearchBox]
                 <section class="well search-box">
                     <form id="search" action="{writeSendAdress}" method="get" class="form-search">
-                        <input type="hidden" name="searchcategory" value="{categoryId}" />
-                        <input type="hidden" name="action" value="search" />
-                        <input type="search" name="search" id="searchfield" size="30" placeholder="{searchBox} ..."
-                               class="input-xlarge search-query" />
-                        <button class="btn btn-primary" type="submit" name="submit">
-                            {searchBox}
-                        </button>
+                        <div class="input-append">
+                            <input type="hidden" name="searchcategory" value="{categoryId}" />
+                            <input type="hidden" name="action" value="search" />
+                            <input type="search" name="search" id="searchfield" size="30" placeholder="{searchBox} ..."
+                                   class="input-xlarge search-query" />
+                            <button class="btn btn-primary" type="submit" name="submit">
+                                {searchBox}
+                            </button>
+                        </div>
                     </form>
                     {msgSearch}
                 </section>
