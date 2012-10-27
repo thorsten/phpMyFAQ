@@ -35,8 +35,17 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 class PMF_Installer
 {
+    /**
+     * PMF_System object
+     *
+     * @var PMF_System
+     */
     protected $_system;
 
+    /**
+     * Array with user rights
+     * @var array
+     */
     protected $_mainRights = array(
         //1 => "adduser",
         array(
@@ -265,6 +274,11 @@ class PMF_Installer
         ),
     );
 
+    /**
+     * Configuration array
+     *
+     * @var array
+     */
     protected $_mainConfig = array(
         'main.currentVersion'                     => null,
         'main.currentApiVersion'                  => null,
@@ -346,22 +360,26 @@ class PMF_Installer
     );
 
     /**
-     * Constructor.
+     * Constructor
+     *
+     * @return PMF_Installer
      */
     public function __construct()
     {
         $this->_system = new PMF_System();
         $dynMainConfig = array(
-            'main.currentVersion'                     => PMF_System::getVersion(),
-            'main.currentApiVersion'                  => PMF_System::getApiVersion(),
-            'main.phpMyFAQToken'                      => md5(uniqid(rand())),
-            'spam.enableCaptchaCode'                  => (extension_loaded('gd') ? 'true' : 'false'),
+            'main.currentVersion'    => PMF_System::getVersion(),
+            'main.currentApiVersion' => PMF_System::getApiVersion(),
+            'main.phpMyFAQToken'     => md5(uniqid(rand())),
+            'spam.enableCaptchaCode' => (extension_loaded('gd') ? 'true' : 'false'),
         );
         $this->_mainConfig = array_merge($this->_mainConfig, $dynMainConfig);
     }
 
     /**
      * Check absolutely necessary stuff and die
+     *
+     * @return void
      */
     public function checkBasicStuff()
     {
@@ -426,6 +444,11 @@ class PMF_Installer
         }
     }
 
+    /**
+     * Checks the minimum required PHP version, defined in PMF_System
+     *
+     * @return bool
+     */
     public function checkMinimumPhpVersion()
     {
         if (version_compare(PHP_VERSION, PMF_System::VERSION_MINIMUM_PHP, '<')) {
@@ -434,6 +457,11 @@ class PMF_Installer
         return true;
     }
 
+    /**
+     * Checks if the file permissions are okay
+     *
+     * @return void
+     */
     public function checkFilesystemPermissions()
     {
         $instanceSetup = new PMF_Instance_Setup();
@@ -461,6 +489,12 @@ class PMF_Installer
         }
     }
 
+    /**
+     * Checks some non critical settings and print some hints
+     *
+     * @todo We should return an array of messages
+     * @return void
+     */
     public function checkNoncriticalSettings()
     {
         if ((@ini_get('safe_mode') == 'On' || @ini_get('safe_mode') === 1)) {
@@ -483,11 +517,14 @@ class PMF_Installer
         }
     }
 
-    public function startInstall($DB = null)
+    /**
+     * Starts the installation
+     *
+     * @param array $DB
+     */
+    public function startInstall(Array $DB = null)
     {
-        $query = $uninst = array();
-
-        $dbSetup = array();
+        $query = $uninst = $dbSetup = array();
 
         // Check table prefix
         $dbSetup['dbPrefix'] = $sqltblpre = PMF_Filter::filterInput(INPUT_POST, 'sqltblpre', FILTER_SANITIZE_STRING, '');
@@ -750,6 +787,11 @@ class PMF_Installer
         echo '</p>';
     }
 
+    /**
+     * Cleanup all files after an installation
+     *
+     * @return void
+     */
     public function cleanUpFiles()
     {
         // Remove 'setup.php' file
@@ -766,12 +808,20 @@ class PMF_Installer
         }
     }
 
+    /**
+     * Echos the questionnaire data
+     *
+     * @return void
+     */
     public function printDataList()
     {
         $q = new PMF_Questionnaire_Data($this->_mainConfig);
         $options = $q->get();
         echo '<dl>' . PHP_EOL;
         array_walk($options, 'data_printer');
-        echo '</dl><input type="hidden" name="systemdata" value="'.PMF_String::htmlspecialchars(serialize($q->get()), ENT_QUOTES).'" />';
+        printf(
+            '</dl><input type="hidden" name="systemdata" value="%s" />',
+            PMF_String::htmlspecialchars(serialize($q->get()), ENT_QUOTES)
+        );
     }
 }

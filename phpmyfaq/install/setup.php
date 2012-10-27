@@ -125,7 +125,7 @@ require PMF_ROOT_DIR . '/install/questionnaire.php';
 PMF_String::init('en');
 
 $installer = new PMF_Installer();
-$system        = new PMF_System();
+$system    = new PMF_System();
 
 $installer->checkBasicStuff();
 $installer->checkFilesystemPermissions();
