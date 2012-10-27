@@ -404,15 +404,23 @@ class PMF_Installer
         }
     }
 
+    /**
+     * Checks for the minimum PHP requirement and if the database credentials file is readable
+     *
+     * @return void
+     */
     public function checkPreUpgrade()
     {
-        if (!$this->checkMinimumPhpVersion()) {
-            printf('<p class="alert alert-error">Sorry, but you need PHP %s or later!</p>', PMF_System::VERSION_MINIMUM_PHP);
+        if (! $this->checkMinimumPhpVersion()) {
+            printf(
+                '<p class="alert alert-error">Sorry, but you need PHP %s or later!</p>',
+                PMF_System::VERSION_MINIMUM_PHP
+            );
             PMF_System::renderFooter();
         }
 
-        if (! is_readable(PMF_ROOT_DIR.'/inc/data.php') && ! is_readable(PMF_ROOT_DIR.'/config/database.php')) {
-            print '<p class="alert alert-error">It seems you never run a version of phpMyFAQ.<br />' .
+        if (! is_readable(PMF_ROOT_DIR . '/inc/data.php') && ! is_readable(PMF_ROOT_DIR . '/config/database.php')) {
+            echo '<p class="alert alert-error">It seems you never run a version of phpMyFAQ.<br />' .
                 'Please use the <a href="setup.php">install script</a>.</p>';
             PMF_System::renderFooter();
         }
