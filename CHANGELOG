@@ -6,7 +6,7 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.8.0-alpha3 - 2012-
-- changed PHP requirement to PHP 5.3.2 (Thorsten)
+- changed PHP requirement to PHP 5.3.2 and later (Thorsten)
 - phpMyFAQ is now licensed under the terms of Mozilla Public License 2.0 (Thorsten, Florian)
 - added new and improved frontend and backend user interface based on Twitter Bootstrap (Thorsten)
 - added multi site support (Florian, Thorsten)
@@ -20,14 +20,15 @@ Version 2.8.0-alpha3 - 2012-
 - added configurable maintenance mode (Thorsten)
 - added user notification for answered questions (Thorsten)
 - added possibility to deactivate complete FAQ export (Thorsten)
-- added documentation in Markdown (Thorsten)
-- dropped support for IBM DB2, Interbase/Firebird and Sybase (Thorsten)
+- added documentation in Markdown with GitHub style HTML export (Thorsten)
 - improved usability of administration backend (Thorsten)
 - improved setup and update (Thorsten, Florian)
 - improved security with salted passwords (Thorsten)
+- improved attachment functionality (Thorsten)
 - improved CSS development with LESS (Thorsten)
 - improved minified CSS output (Thorsten)
 - simplified the link verification (Thorsten)
+- dropped support for IBM DB2, Interbase/Firebird and Sybase (Thorsten)
 - updated bundled jQuery to version 1.8.0 (Thorsten)
 - updated bundled Modernizr to version 2.6.1 (Thorsten)
 - updated bundled Twitter Bootstrap to version 2.1.1 (Thorsten)

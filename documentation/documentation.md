@@ -436,7 +436,7 @@ Upgrading to phpMyFAQ 2.8.x is possible from the following versions:
 *   phpMyFAQ 2.7.x
 *   phpMyFAQ 2.8.x
 
-If you're running an older version of phpMyFAQ we recommend a new and fresh install. If you need support for updating an old FAQ from the 1.x series, please send us an [e-mail][68].
+If you're running an older version of phpMyFAQ we recommend a new and fresh install. If you need support for updating an old FAQ from the 1.x or 2.0.x series, please send us an [e-mail][68].
 
 [back to top][64]
 
@@ -444,7 +444,7 @@ If you're running an older version of phpMyFAQ we recommend a new and fresh inst
 
 **3.a. Upgrading from phpMyFAQ 2.5.x**
 
-Upgrading from 2.5.x is a minor upgrade. Please make a full backup before you run the upgrade! First you have to delete all files **except**:
+Upgrading from 2.5.x is a major upgrade. Please make a full backup before you run the upgrade! First you have to delete all files **except**:
 
 *   the file **data.php** in the directory **inc/**
 *   all files in the **assets/template/** directory
@@ -469,7 +469,7 @@ Please copy the template file **assets/template/default/indexLogin.tpl** into yo
 
 **3.b. Upgrading from phpMyFAQ 2.6.x**
 
-Upgrading from 2.6.x is a minor upgrade. Please make a full backup before you run the upgrade! First you have to delete all files **except**:
+Upgrading from 2.6.x is a major upgrade. Please make a full backup before you run the upgrade! First you have to delete all files **except**:
 
 *   all files in the directory **config/**
 *   all files in the directory **assets/template/**
@@ -489,7 +489,7 @@ Please copy the template file **assets/template/default/indexLogin.tpl** into yo
 
 **3.c. Upgrading from phpMyFAQ 2.7.x**
 
-Upgrading from 2.7.x is a minor upgrade. Please make a full backup before you run the upgrade! First you have to delete all files **except**:
+Upgrading from 2.7.x is a major upgrade. Please make a full backup before you run the upgrade! First you have to delete all files **except**:
 
 *   all files in the directory **config/**
 *   all files in the directory **assets/template/**
@@ -507,7 +507,7 @@ Choose your installed phpMyFAQ version and click the button of the update script
 
 **3.d. Upgrading phpMyFAQ 2.8.x**
 
-Updating phpMyFAQ 2.8.x is fairly simple. Via FTP copy all new files from the phpMyFAQ package **except**:
+Updating an existing phpMyFAQ 2.8.x installation is fairly simple. Via FTP copy all new files from the phpMyFAQ package **except**:
 
 *   all files in the directory **config/**
 *   all files in the directory **assets/template/**
@@ -527,11 +527,11 @@ You can find the changed files between the 2.8.x versions in the file *CHANGEDFI
 
 **3.d. Modifying templates for phpMyFAQ 2.8.x**
 
-Your current 2.5.x, 2.6.x and 2.7.x templates are **barely** compatible with phpMyFAQ 2.8 because we changed the complete CSS framework to Twitter Bootstrap. We also using now a lot of Ajax in the frontend.
+Your current 2.5.x, 2.6.x and 2.7.x templates are **barely** compatible with phpMyFAQ 2.8 because we changed the complete CSS framework to Twitter Bootstrap. We're also using a lot of Ajax in the frontend now.
 
-We recommend you'll take a look at the main [Twitter Bootstrap documentation][81]. Please don't forget that the style sheets are written with [ LESS][82].
+We recommend you'll take a look at the main [Twitter Bootstrap documentation][81]. Please don't forget that the style sheets are written with [LESS][82].
 
-Note: We changed the character set for all languages and templates to UTF-8. If you notice problems with e.g. German umlauts you have to convert your templates to UTF-8 encoding. Please use UNIX file endings \n instead of Windows file endings with \r\n.
+Note: The character set for all languages and templates is UTF-8. If you notice problems with e.g. German umlauts you have to convert your templates to UTF-8 encoding. Please use UNIX file endings \n instead of Windows file endings with \r\n.
 
 [back to top][64]
 
@@ -539,7 +539,7 @@ Note: We changed the character set for all languages and templates to UTF-8. If 
 
 **4. Frontend**
 
-The public phpMyFAQ frontend has a simple, HTML5 based default layout based on [Twitter Bootstrap][81]. The header has the main links for the all categories, instant response, add FAQs, add questions, open questions, sitemap and contact. On the left side you only see the main categories. You can also change the current language at the bottom of the FAQ, use the global search in the center of the FAQ or use the login box in the upper right if you have a valid user account. On the right side you see a list of the most popular FAQ records, the latest records, and the sticky FAQ records. On the pages with the FAQ records you'll see the other records of the current category and the tag cloud if you're using tagging.
+The public phpMyFAQ frontend has a simple, HTML5/CCS3 based default layout based on [Twitter Bootstrap][81]. The header has the main links for the all categories, instant response, add FAQs, add questions, open questions, sitemap and contact. On the left side you only see the main categories. You can also change the current language at the bottom of the FAQ, use the global search in the center of the FAQ or use the login box in the upper right if you have a valid user account. On the right side you see a list of the most popular FAQ records, the latest records, and the sticky FAQ records. On the pages with the FAQ records you'll see the other records of the current category and the tag cloud if you're using tagging.
 
 [back to top][64]
 
@@ -704,42 +704,61 @@ phpMyFAQ lets you create different categories and nested sub-categories for your
 You can create entries directly in the admin area. Created entries are NOT published by default. All available FAQs are listed on the page "Edit FAQs". By clicking on them the same interface that lets you create records will open up, this time with all the relevant data of the specific entry. The meaning of the fields is as follows:
 
 *   **Category**
+    
     The place in the FAQ hierarchy where this entry will be published depends on these settings. You can choose one or more categories where to store the entry. If you want to add a FAQ record to more than one category you have to select the categories with your mouse and press the CTRL key.
 *   **Question**
+    
     This is the question or headline of your entry.
 *   **Answer**
+    
     The content is an answer to the question or a solution for a problem. The content can be edited with the included WYSIWYG (**W**hat **Y**ou **S**ee **I**s **W**hat **Y**ou **G**et) editor when JavaScript is enabled. You can place images where you want with the integrated image manager. The Editor can be disabled in the configuration if you want.
+*   **Language**
+    
+    You can select the language of your FAQ. By default the selected language saved in the configuration will be chosen. You can create entries in multiple languages like this: Write an article in English (or any other language) and save it. Now choose *Edit FAQs* and edit your English FAQ record. Change the question, answer and keywords and change language to, let's say Brazilian Portuguese. *Save* the FAQ record. Now you can, when you click *edit records*, see both FAQs in your list, having the same id, yet different languages.
+*	 **Attachments**
+	 
+	 You can add attachments like PDFs or any other binary data using the **Add attachment** button. If you click on the button, a popup opens and you can upload an attachment. Please keep in mind that the PHP configuration about upload size will be checked.
 *   **Keywords**
+    
     Keywords are relevant for searching through the database. In case you didn't include a specific word in the FAQ itself, but it is closely related to the content you may wish to include it as a keyword, so the FAQ will come up as a search result. It is also possible to use non-related keywords so that a wrongly entered search will also lead to the right results.
 *   **Tags**
+    
     You can add some tags about the current FAQ here. An Ajax-based auto-completion method helps you while typing your tags.
 *   **Author**
     It is possible to specify an author for your FAQ.
 *   **Email**
-    It is possible to specify the author's e-mail for your FAQ, but the email address won't be shown in the frontend.
-*   **Language**
-    You can select the language of your FAQ. By default the selected language saved in the configuration will be chosen. You can create entries in multiple languages like this: Write an article in English (or any other language) and save it. Now choose *Edit FAQs* and edit your English FAQ record. Change the question, answer and keywords and change language to, let's say Brazilian Portuguese. *Save* the FAQ record. Now you can, when you click *edit records*, see both FAQs in your list, having the same id, yet different languages.
+    It is possible to specify the author's email for your FAQ, but the email address won't be shown in the frontend.
 *   **Solution ID**
+    
     Every FAQ generates automatically a so-called solution ID. All records can be accessed directly by putting this ID into the search box.
 *   **Active?**
+    
     If a FAQ is "active" it is visible in the public area and will be included in searches. Is it "deactivated" it will be invisible. Suggested FAQs are deactivated by default to prevent any abuse.
 *   **Sticky?**
     If a FAQ is "sticky" it is a very important FAQ record and will be shown always on all pages on the right column. You should mark records as sticky if they are very important for your whole FAQ. Sticky records also appear at the top positions of the lists of FAQ entries.
 *   **Comments?**
+    
     If you do not want to allow public comments for this FAQ you can disable the feature here.
 *   **Revision**
+    
     Like a wiki, phpMyFAQ supports revisions of every entry. New revisions won't be created automatically but you can create a new one if you click on "yes". The old revision will be stored in the database and the new current revision will be displayed in the public frontend. You can also bring back old revisions into the frontend if you select an old revision and save them as a new one.
 *   **Date**
+
     You have three options for the FAQ creation date. You can choose to refresh the date of the FAQ entry for every update, or you can keep the date, or you can set an individual date for the FAQ entry.
 *   **Permissions**
+
     If you add or edit a new entry, you can set the permissions for users and groups.
 *   **Record expiration time window**
+
     If you need to you can set a time frame from one date to a second date when the FAQ entry should be valid and visible. Before and after this time frame the entry isn't visible and cannot be accessed.
 *   **Date**
+
     Date of the last change.
 *   **Changed?**
+
     This field is reserved for comments that can reflect what changes have been applied to a certain entry. This helps multiple admins to keep track of what happened to the entry over time. Any information entered here will remain invisible in the public area.
 *   **Changelog**
+
     The changelog lists all previous changes, including user and date of change.
 
 You can edit and delete all records as well. Please note that old revisions won't be deleted.
