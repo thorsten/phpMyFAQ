@@ -44,32 +44,40 @@ if ($permission['editbt'] || $permission['delbt']) {
     $linkVerifier = new PMF_Linkverifier($faqConfig, $user->getLogin());
 ?>
 
-    <form action="?action=view" method="post">
-    <fieldset>
-        <legend><?php print $PMF_LANG["msgSearch"]; ?></legend>
+    <form action="?action=view" method="post" class="form-horizontal form-search">
 
-        <p>
-            <label><?php print $PMF_LANG["msgSearchWord"]; ?>:</label>
-            <input type="text" name="searchterm" size="50" value="<?php print $searchterm; ?>" autofocus="autofocus" />
-            <?php if ($linkVerifier->isReady() == true): ?>
-            <br />
-            <input type="checkbox" name="linkstate" value="linkbad" />
-            <?php print $PMF_LANG['ad_linkcheck_searchbadonly']; ?>
-            <?php endif; ?>
-        </p>
-        <p>
-            <label><?php print $PMF_LANG["msgCategory"]; ?>:</label>
-            <select name="searchcat">
-                <option value="0"><?php print $PMF_LANG["msgShowAllCategories"]; ?></option>
-                <?php print $categoryHelper->renderOptions($searchcat); ?>
-            </select>
-        </p>
-        <p>
-            <button class="btn btn-primary" type="submit" name="submit">
-                <?php print $PMF_LANG["msgSearch"]; ?>
-            </button>
-        </p>
-    </fieldset>
+        <div class="control-group">
+            <label class="control-label"><?php print $PMF_LANG["msgSearchWord"]; ?>:</label>
+            <div class="input-append" style="margin-left: 20px;">
+                <input class="search-query" type="search" name="searchterm" autofocus
+                       value="<?php print $searchterm; ?>" />
+                <button class="btn btn-primary" type="submit" name="submit">
+                    <?php print $PMF_LANG["msgSearch"]; ?>
+                </button>
+            </div>
+        </div>
+
+        <?php if ($linkVerifier->isReady() == true): ?>
+        <div class="control-group">
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" name="linkstate" value="linkbad" />
+                    <?php print $PMF_LANG['ad_linkcheck_searchbadonly']; ?>
+                </label>
+            </div>
+        </div>
+        <?php endif; ?>
+
+        <div class="control-group">
+            <label class="control-label"><?php print $PMF_LANG["msgCategory"]; ?>:</label>
+            <div class="controls">
+                <select name="searchcat">
+                    <option value="0"><?php print $PMF_LANG["msgShowAllCategories"]; ?></option>
+                    <?php print $categoryHelper->renderOptions($searchcat); ?>
+                </select>
+            </div>
+        </div>
+
     </form>
 
 <?php
