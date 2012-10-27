@@ -42,17 +42,6 @@ if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     }
     require PMF_ROOT_DIR . '/config/database.php'; // after 2.6.0-alpha
 }
-
-/**
- * Print out the HTML Footer
- *
- * @return void
- */
-function HTMLFooter()
-{
-    printf('</div></div></section><footer><div class="container"><p class="pull-right">%s</p><div></footer></body></html>', COPYRIGHT);
-}
-
 ?>
 <!doctype html>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
@@ -64,11 +53,11 @@ function HTMLFooter()
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title>phpMyFAQ <?php print PMF_System::getVersion(); ?> Update</title>
+    <title>phpMyFAQ <?php echo PMF_System::getVersion(); ?> Update</title>
 
     <meta name="viewport" content="width=device-width;">
-    <meta name="application-name" content="phpMyFAQ <?php print PMF_System::getVersion(); ?>">
-    <meta name="copyright" content="(c) 2001-<?php print date('Y'); ?> phpMyFAQ Team">
+    <meta name="application-name" content="phpMyFAQ <?php echo PMF_System::getVersion(); ?>">
+    <meta name="copyright" content="(c) 2001-<?php echo date('Y'); ?> phpMyFAQ Team">
 
     <link rel="stylesheet" href="../assets/template/default/css/style.css?v=1">
 
@@ -109,7 +98,7 @@ function HTMLFooter()
     <div class="container">
         <div class="row" style="padding-left: 20px;">
             <div class="hero-unit hello-phpmyfaq" style="text-align: center; height: 55px;">
-                <h1>phpMyFAQ <?php print PMF_System::getVersion(); ?> Update</h1>
+                <h1>phpMyFAQ <?php echo PMF_System::getVersion(); ?> Update</h1>
             </div>
         </div>
         <div class="row" style="padding-left: 20px;">
@@ -121,16 +110,16 @@ $installer = new PMF_Installer();
 $installer->checkPreUpgrade();
 
 /**************************** STEP 1 OF 3 ***************************/
-if ($step == 1) {
+if ($step === 1) {
 
     $version = $faqConfig->get('main.currentVersion');
 ?>
         <form action="update.php?step=2" method="post">
-            <input name="version" type="hidden" value="<?php print $version; ?>"/>
+            <input name="version" type="hidden" value="<?php echo $version; ?>"/>
             <fieldset>
                 <legend>
                     <strong>
-                        phpMyFAQ <?php print PMF_System::getVersion(); ?> Update (Step 1 of 3)
+                        phpMyFAQ <?php echo PMF_System::getVersion(); ?> Update (Step 1 of 3)
                     </strong>
                 </legend>
 
@@ -143,13 +132,12 @@ if ($step == 1) {
 
 <?php
     if (version_compare($version, '2.8.0-alpha2', '>=')) {
-        if ($faqConfig->get('main.maintenanceMode')) {
-            print '<p class="alert alert-warning"><strong>Warning!</strong> Your phpMyFAQ installation is not in ' .
-            'maintenance mode, you should enable the maintenance mode in your administration.</p>';
+        if (! $faqConfig->get('main.maintenanceMode')) {
+            echo '<p class="alert alert-warning"><strong>Warning!</strong> Your phpMyFAQ installation is not in ' .
+            'maintenance mode, you should enable the maintenance mode in your administration backend.</p>';
         }
     }
 ?>
-
                 <p>This update script will work <strong>only</strong> for the following versions:</p>
                 <ul>
                     <li>phpMyFAQ 2.5.x (out of support since mid of 2010)</li>
@@ -182,7 +170,7 @@ if ($step == 1) {
                         '<p class="alert alert-error">Your current phpMyFAQ version: %s</p>',
                         $version
                     );
-                    print '<p>Please update to the latest phpMyFAQ 2.7 version first.</p>';
+                    echo '<p>Please update to the latest phpMyFAQ 2.7 version first.</p>';
                 }
                 if ('hash' !== PMF_ENCRYPTION_TYPE) {
                     printf(
@@ -204,7 +192,7 @@ if ($step == 1) {
             </fieldset>
         </form>
 <?php
-    HTMLFooter();
+    PMF_System::renderFooter();
 }
 
 /**************************** STEP 2 OF 3 ***************************/
@@ -218,7 +206,7 @@ if ($step == 2) {
     if (file_exists(PMF_ROOT_DIR . '/inc/data.php')) {
         if (!copy(PMF_ROOT_DIR . '/inc/data.php', PMF_ROOT_DIR . '/config/database.bak.php') ||
             !copy(PMF_ROOT_DIR . '/inc/data.php', PMF_ROOT_DIR . '/config/database.php')) {
-            print "<p class=\"alert alert-error\"><strong>Error:</strong> The backup file ../config/database.bak.php " .
+            echo "<p class=\"alert alert-error\"><strong>Error:</strong> The backup file ../config/database.bak.php " .
                   "could not be written. Please correct this!</p>";
         } else {
             $checkDatabaseSetupFile = true;
@@ -229,7 +217,7 @@ if ($step == 2) {
     // 2.6+ updates
     if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {
         if (!copy(PMF_ROOT_DIR . '/config/database.php', PMF_ROOT_DIR . '/config/database.bak.php')) {
-            print "<p class=\"alert alert-error\"><strong>Error:</strong> The backup file ../config/database.bak.php " .
+            echo "<p class=\"alert alert-error\"><strong>Error:</strong> The backup file ../config/database.bak.php " .
                   "could not be written. Please correct this!</p>";
         } else {
             $checkDatabaseSetupFile = true;
@@ -237,11 +225,11 @@ if ($step == 2) {
     }
     
     // Now backup and move LDAP setup if available
-    // This is needed for 2.5+ updates with aLDAP configuration file
+    // This is needed for 2.5+ updates with a LDAP configuration file
     if (file_exists(PMF_ROOT_DIR . '/inc/dataldap.php')) {
         if (!copy(PMF_ROOT_DIR . '/inc/dataldap.php', PMF_ROOT_DIR . '/config/ldap.bak.php') ||
             !copy(PMF_ROOT_DIR . '/inc/dataldap.php', PMF_ROOT_DIR . '/config/ldap.php')) {
-            print "<p class=\"alert alert-error\"><strong>Error:</strong> The backup file ../config/ldap.bak.php " .
+            echo "<p class=\"alert alert-error\"><strong>Error:</strong> The backup file ../config/ldap.bak.php " .
                   "could not be written. Please correct this!</p>";
         } else {
             $checkLdapSetupFile = true;
@@ -280,9 +268,9 @@ if ($step == 2) {
     if ($checkDatabaseSetupFile && $checkTemplateDirectory) {
 ?>
         <form action="update.php?step=3" method="post">
-        <input type="hidden" name="version" value="<?php print $version; ?>" />
+        <input type="hidden" name="version" value="<?php echo $version; ?>" />
         <fieldset>
-            <legend><strong>phpMyFAQ <?php print PMF_System::getVersion(); ?> Update (Step 2 of 3)</strong></legend>
+            <legend><strong>phpMyFAQ <?php echo PMF_System::getVersion(); ?> Update (Step 2 of 3)</strong></legend>
             <p>A backup of your database configuration file has been made.</p>
             <p>The configuration will be updated after the next step.</p>
             <p style="text-align: center;">
@@ -293,11 +281,10 @@ if ($step == 2) {
         </fieldset>
         </form>
 <?php
-        HTMLFooter();
+        PMF_System::renderFooter();
     } else {
-        print "<p class=\"alert alert-error\"><strong>Error:</strong> Your version of phpMyFAQ could not updated.</p>\n";
-        HTMLFooter();
-        die();
+        echo '<p class="alert alert-error"><strong>Error:</strong> Your version of phpMyFAQ could not updated.</p>';
+        PMF_System::renderFooter();
     }
 }
 
@@ -346,7 +333,7 @@ if ($step == 3) {
                 break;
                 
             default:
-                print '<p class="hint">Please read <a target="_blank" href="../docs/documentation.en.html">' .
+                echo '<p class="hint">Please read <a target="_blank" href="../docs/documentation.en.html">' .
                       'documenation</a> about migration to UTF-8.</p>';
                 break; 
             }
@@ -358,19 +345,18 @@ if ($step == 3) {
         $faqConfig->add('main.templateSet', 'default');
         $faqConfig->add('main.numberSearchTerms', '10');
         $faqConfig->add('records.orderingPopularFaqs', 'visits');
-        /**
-         * We did check in the first and second steps,
-         * if the $templateDir and its contents are writable,
-         * so now lets just backup existing templates
-         */
+
+        // We did check in the first and second steps,
+        // if the $templateDir and its contents are writable,
+        // so now lets just backup existing templates
         $templateBackupDir = "$templateDir/backup";
         while (file_exists($templateBackupDir)) {
             $templateBackupDir = $templateBackupDir . mt_rand();
         }
 
-        if (!mkdir($templateBackupDir, 0777)) {
-            die('<p class="error">Couldn\'t create the templates backup directory.</p>');
-            HTMLFooter();
+        if (! mkdir($templateBackupDir, 0777)) {
+            echo '<p class="alert alert-error">Couldn\'t create the templates backup directory.</p>';
+            PMF_System::renderFooter();
         }
         
         foreach (new DirectoryIterator($templateDir) as $item) {
@@ -379,9 +365,7 @@ if ($step == 3) {
             }
         }
         
-        /**
-         * Attachments stuff
-         */
+        // Attachments stuff
         $faqConfig->add('records.attachmentsStorageType', '0');
         $faqConfig->add('records.enableAttachmentEncryption', 'false');
         $faqConfig->add('records.defaultAttachmentEncKey', '');
@@ -405,7 +389,6 @@ if ($step == 3) {
                     contents bytea,
                     PRIMARY KEY (virtual_hash))";
                 break;
-                
             case 'mysqli':
             case 'mysql':
                 $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqattachment (
@@ -426,7 +409,6 @@ if ($step == 3) {
                     contents blob NOT NULL,
                     PRIMARY KEY (virtual_hash))";
                 break;
-                
             default:
                 /**
                  * Just try standard SQL and hope for the best
@@ -476,9 +458,7 @@ if ($step == 3) {
         $faqConfig->add('socialnetworks.enableFacebookSupport', 'false');
 
         // Migrate faqquestion table to new structure
-
         switch($DB['type']) {
-
             case 'pgsql':
                 $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions RENAME COLUMN ask_username TO username";
                 $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions RENAME COLUMN ask_usermail TO email";
@@ -486,7 +466,6 @@ if ($step == 3) {
                 $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions RENAME COLUMN ask_content TO question";
                 $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions RENAME COLUMN ask_date TO created";
                 break;
-
             case 'mssql':
             case 'sqlsrv':
                 $query[] = "EXEC sp_RENAME '" . PMF_Db::getTablePrefix() . "faqquestions.ask_username', 'username', 'COLUMN'";
@@ -495,7 +474,6 @@ if ($step == 3) {
                 $query[] = "EXEC sp_RENAME '" . PMF_Db::getTablePrefix() . "faqquestions.ask_content', 'question', 'COLUMN'";
                 $query[] = "EXEC sp_RENAME '" . PMF_Db::getTablePrefix() . "faqquestions.ask_date', 'created', 'COLUMN'";
                 break;
-
             case 'mysql':
             case 'mysqli':
                 $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions CHANGE ask_username username VARCHAR(100) NOT NULL";
@@ -504,7 +482,6 @@ if ($step == 3) {
                 $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions CHANGE ask_content question TEXT NOT NULL";
                 $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions CHANGE ask_date created VARCHAR(20) NOT NULL";
                 break;
-           
             case 'sqlite':
                 $query[] = "BEGIN TRANSACTION";
                 $query[] = "CREATE TEMPORARY TABLE " . PMF_Db::getTablePrefix() . "faqquestions_temp (
@@ -532,7 +509,6 @@ if ($step == 3) {
                 $query[] = "COMMIT";
                 break;
         }
-
 
         $query[] = "INSERT INTO ". PMF_Db::getTablePrefix() . "faqright (right_id, name, description, for_users, for_groups) VALUES
             (34, 'addattachment', 'Right to add attachments', 1, 1)";
@@ -661,15 +637,15 @@ if ($step == 3) {
         $faqConfig->add('records.enableDeleteQuestion', 'false');
 
         $query[] = "CREATE TEMPORARY TABLE " . PMF_Db::getTablePrefix() . "faquserlogin_temp (
-                                login varchar(128) NOT NULL,
-                                pass varchar(80) NOT NULL,
-                                PRIMARY KEY (login))";
+            login varchar(128) NOT NULL,
+            pass varchar(80) NOT NULL,
+            PRIMARY KEY (login))";
         $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faquserlogin_temp SELECT * FROM " . PMF_Db::getTablePrefix() . "faquserlogin";
         $query[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faquserlogin";
         $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faquserlogin (
-                                login varchar(128) NOT NULL,
-                                pass varchar(80) NOT NULL,
-                                PRIMARY KEY (login))";
+            login varchar(128) NOT NULL,
+            pass varchar(80) NOT NULL,
+            PRIMARY KEY (login))";
         $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faquserlogin SELECT * FROM " . PMF_Db::getTablePrefix() . "faquserlogin_temp";
         $query[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faquserlogin_temp";
     }
@@ -694,7 +670,6 @@ if ($step == 3) {
                     config_value VARCHAR(255) DEFAULT NULL,
                     PRIMARY KEY (instance_id, config_name))";
                 break;
-
             case 'mssql':
             case 'sqlsrv':
             case 'sqlite':
@@ -713,7 +688,6 @@ if ($step == 3) {
                     config_value VARCHAR(255) DEFAULT NULL,
                     PRIMARY KEY (instance_id, config_name))";
                 break;
-
             case 'mysql':
             case 'mysqli':
                 $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqinstances (
@@ -743,28 +717,32 @@ if ($step == 3) {
         $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faquser_right (user_id, right_id) VALUES (1, 44)";
 
         $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faquser ADD remember_me VARCHAR(150) NULL";
-
     }
 
     // Perform the queries for updating/migrating the database
     if (isset($query)) {
-        print '<div class="center">';
+        echo '<div class="center">';
         $count = 0;
         foreach ($query as $key => $executeQuery) {
             $result = $faqConfig->getDb()->query($executeQuery);
-            print '.';
+            echo '.';
             if (!($key % 100)) {
-                print '<br />';
+                echo '<br />';
             }
             if (!$result) {
-                print "</div>";
-                print '<p class="alert alert-error"><strong>Error:</strong> Please install your version of phpMyFAQ ' .
+                echo "</div>";
+                echo '<p class="alert alert-error"><strong>Error:</strong> Please update your version of phpMyFAQ ' .
                       'once again or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.' .
                       '</p>';
-                printf('<p class="alert alert-error"><strong>DB error:</strong> %s</p>', $faqConfig->getDb()->error());
-                printf('<code>%s</code>', htmlentities($executeQuery));
-                HTMLFooter();
-                die();
+                printf(
+                    '<p class="alert alert-error"><strong>DB error:</strong> %s</p>',
+                    $faqConfig->getDb()->error()
+                );
+                printf(
+                    '<code>%s</code>',
+                    htmlentities($executeQuery)
+                );
+                PMF_System::renderFooter();
             }
             usleep(10000);
             $count++;
@@ -772,7 +750,7 @@ if ($step == 3) {
                 ob_flush();
             }
         }
-        print "</div>";
+        echo "</div>";
     }
 
     // Clear the array with the queries
@@ -845,27 +823,25 @@ if ($step == 3) {
 
     // Perform the queries for optimizing the database
     if (isset($query)) {
-        print '<div class="center">';
+        echo '<div class="center">';
         foreach ($query as $executeQuery) {
             $result = $faqConfig->getDb()->query($executeQuery);
             printf('<span title="%s">.</span>', $executeQuery);
             if (!$result) {
-                print '<p class="alert alert-error"><strong>Error:</strong> Please install your version of phpMyFAQ once again ' .
+                echo '<p class="alert alert-error"><strong>Error:</strong> Please install your version of phpMyFAQ once again ' .
                       'or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.</p>';
                 printf('<p class="error"><strong>DB error:</strong> %s</p>', $faqConfig->getDb()->error());
                 printf('<code>%s</code>', htmlentities($executeQuery));
-                HTMLFooter();
-                die();
+                PMF_System::renderFooter();
             }
             usleep(10000);
         }
-        print "</div>";
+        echo "</div>";
     }
 
-    print "</p>\n";
-
-    print '<p class="alert alert-success">The database was updated successfully. Thank you very much for updating.</p>';
-    print '<h3>Back to your updated <a href="../index.php">phpMyFAQ installation</a> and have fun! :-)</h3>';
+    echo "</p>\n";
+    echo '<p class="alert alert-success">The database was updated successfully. Thank you very much for updating.</p>';
+    echo '<h3>Back to your updated <a href="../index.php">phpMyFAQ installation</a> and have fun! :-)</h3>';
 
     // Remove backup files
     foreach (glob(PMF_ROOT_DIR.'/config/*.bak.php') as $filename) {
@@ -875,16 +851,16 @@ if ($step == 3) {
     }
     // Remove 'setup.php' file
     if (is_writeable(__DIR__ . '/setup.php') && @unlink(__DIR__ . '/setup.php')) {
-        print "<p class=\"alert alert-success\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";
+        echo "<p class=\"alert alert-success\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";
     } else {
-        print "<p class=\"alert alert-error\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
+        echo "<p class=\"alert alert-error\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
     }
     // Remove 'update.php' file
     if (is_writeable(__DIR__ . '/update.php') && @unlink(__DIR__ . '/update.php')) {
-        print "<p class=\"alert alert-success\">The file <em>./install/update.php</em> was deleted automatically.</p>\n";
+        echo "<p class=\"alert alert-success\">The file <em>./install/update.php</em> was deleted automatically.</p>\n";
     } else {
-        print "<p class=\"alert alert-error\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
+        echo "<p class=\"alert alert-error\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
     }
 
-    HTMLFooter();
+    PMF_System::renderFooter();
 }
