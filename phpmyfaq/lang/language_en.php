@@ -55,7 +55,7 @@ $PMF_LANG["nplurals"] = "2";
 $PMF_LANG["msgCategory"] = "Categories";
 $PMF_LANG["msgShowAllCategories"] = "All categories";
 $PMF_LANG["msgSearch"] = "Search";
-$PMF_LANG["msgAddContent"] = "Add FAQ";
+$PMF_LANG["msgAddContent"] = "Add new FAQ";
 $PMF_LANG["msgQuestion"] = "Add question";
 $PMF_LANG["msgOpenQuestions"] = "Open questions";
 $PMF_LANG["msgHelp"] = "Help";
@@ -183,11 +183,11 @@ $PMF_LANG["help_search"] = "<p><strong>Search for records:</strong><br />With an
 $PMF_LANG["ad"] = "Administration";
 $PMF_LANG["ad_menu_user_administration"] = "Users";
 $PMF_LANG["ad_menu_entry_aprove"] = "Approve FAQs";
-$PMF_LANG["ad_menu_entry_edit"] = "Edit FAQs";
+$PMF_LANG["ad_menu_entry_edit"] = "Edit existing FAQs";
 $PMF_LANG["ad_menu_categ_add"] = "Add category";
 $PMF_LANG["ad_menu_categ_edit"] = "Edit category";
 $PMF_LANG["ad_menu_news_add"] = "Add news";
-$PMF_LANG["ad_menu_news_edit"] = "Edit news";
+$PMF_LANG["ad_menu_news_edit"] = "FAQ News";
 $PMF_LANG["ad_menu_open"] = "Open questions";
 $PMF_LANG["ad_menu_stat"] = "Statistics";
 $PMF_LANG["ad_menu_cookie"] = "Set cookies";
@@ -411,7 +411,7 @@ $PMF_LANG["ad_att_del"] = "Delete";
 $PMF_LANG["ad_att_nope"] = "Attachments can be added only while editing.";
 $PMF_LANG["ad_att_delsuc"] = "The attachment has been deleted successfully.";
 $PMF_LANG["ad_att_delfail"] = "An error occurred while deleting the attachment.";
-$PMF_LANG["ad_entry_add"] = "Add FAQ";
+$PMF_LANG["ad_entry_add"] = "Add new FAQ";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "A backup is a complete image of the database content. The format of the backup is a SQL transaction file, which can be imported using tools like phpMyAdmin or the commandline SQL client. A backup should be performed at least once a month.";
@@ -449,9 +449,9 @@ $PMF_LANG["ad_cookie"] = "Cookies";
 $PMF_LANG["ad_sess_head"] = "View sessions";
 
 // Added v1.1 - 06.01.2002 - Bastian
-$PMF_LANG["ad_menu_categ_edit"] = "Categories";
+$PMF_LANG["ad_menu_categ_edit"] = "FAQ Categories";
 $PMF_LANG["ad_menu_stat"] = "Rating Statistics";
-$PMF_LANG["ad_kateg_add"] = "add main Category";
+$PMF_LANG["ad_kateg_add"] = "Add top-level category";
 $PMF_LANG["ad_kateg_rename"] = "Rename";
 $PMF_LANG["ad_adminlog_date"] = "Date";
 $PMF_LANG["ad_adminlog_user"] = "User";
@@ -652,12 +652,12 @@ $PMF_LANG['ad_stat_choose'] = 'Choose the month';
 $PMF_LANG['ad_stat_delete'] = 'Delete immediately the selected sessions';
 
 // added v2.0.0 - 2005-09-15 by Thorsten and by Minoru TODA
-$PMF_LANG['ad_menu_glossary'] = 'Glossary';
+$PMF_LANG['ad_menu_glossary'] = 'FAQ Glossary';
 $PMF_LANG['ad_glossary_add'] = 'Add glossary entry';
 $PMF_LANG['ad_glossary_edit'] = 'Edit glossary entry';
-$PMF_LANG['ad_glossary_item'] = 'Item';
+$PMF_LANG['ad_glossary_item'] = 'Title';
 $PMF_LANG['ad_glossary_definition'] = 'Definition';
-$PMF_LANG['ad_glossary_save'] = 'Save entry';
+$PMF_LANG['ad_glossary_save'] = 'Save glossary';
 $PMF_LANG['ad_glossary_save_success'] = 'Glossary entry successfully saved!';
 $PMF_LANG['ad_glossary_save_error'] = 'The glossary entry could not saved because an error occurred.';
 $PMF_LANG['ad_glossary_update_success'] = 'Glossary entry successfully updated!';
@@ -737,7 +737,7 @@ $PMF_LANG['ad_export_view'] = 'view in-line';
 $PMF_LANG['ad_export_gen_xhtml'] = 'create XHTML file';
 
 // added v2.0.0 - 2006-07-22 by Matteo
-$PMF_LANG['ad_news_data'] = 'News data';
+$PMF_LANG['ad_news_data'] = 'FAQ News';
 $PMF_LANG['ad_news_author_name'] = 'Author name:';
 $PMF_LANG['ad_news_author_email'] = 'Author email:';
 $PMF_LANG['ad_news_set_active'] = 'Activate:';
@@ -802,7 +802,7 @@ $PMF_LANG["ad_categ_deletethislang"] = 'Delete in this language only?';
 $PMF_LANG["ad_categ_translated"] = "The category has been translated.";
 
 // added v2.0.0 - 2006-09-21 by Rudi
-$PMF_LANG["ad_categ_show"] = "Overview";
+$PMF_LANG["ad_categ_show"] = "Category overview";
 $PMF_LANG['ad_menu_categ_structure'] = "Category Overview including its languages";
 
 // added v2.0.0 - 2006-09-26 by Thorsten
@@ -1092,7 +1092,7 @@ $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 =>
 $LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Facebook support (default: deactivated)');
 
 // added 2.7.0-alpha - 2010-12-21 by Anatoliy Belsky
-$PMF_LANG["ad_menu_attachments"] = "Attachments";
+$PMF_LANG["ad_menu_attachments"] = "FAQ Attachments";
 $PMF_LANG["ad_menu_attachment_admin"] = "Attachment administration";
 $PMF_LANG['msgAttachmentsFilename'] = 'Filename';
 $PMF_LANG['msgAttachmentsFilesize'] = 'Filensize';
@@ -1158,7 +1158,7 @@ $LANG_CONF['cache.varnishSecret'] = array(0 => 'input', 1 => 'Varnish secret');
 $LANG_CONF['cache.varnishTimeout'] = array(0 => 'input', 1 => 'Varnish timeout');
 
 // added v2.8.0-alpha - 2011-09-29 by Thorsten
-$PMF_LANG['ad_menu_searchfaqs'] = 'Search FAQs';
+$PMF_LANG['ad_menu_searchfaqs'] = 'Search for FAQs';
 
 // added v2.8.0-alpha - 2012-01-13 by Peter
 $LANG_CONF["records.enableCloseQuestion"] = array(0 => "checkbox", 1 => "Close open question after answer?");
