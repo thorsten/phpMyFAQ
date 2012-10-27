@@ -92,7 +92,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
         $faqData['solution_id'] = PMF_Filter::filterInput(INPUT_POST, 'solution_id', FILTER_VALIDATE_INT);
         $faqData['revision_id'] = PMF_Filter::filterInput(INPUT_POST, 'revision_id', FILTER_VALIDATE_INT, 0);
         $faqData['sticky']      = PMF_Filter::filterInput(INPUT_POST, 'sticky', FILTER_VALIDATE_INT);
-        $tags                   = PMF_Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
+        $faqData['tags']        = PMF_Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
         $changed                = PMF_Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
         $faqData['dateStart']   = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
         $faqData['dateEnd']     = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
@@ -111,9 +111,9 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
             $categories = $category->getCategoryRelationsFromArticle($faqData['id'], $faqData['lang']);
 
             $faq->getRecord($faqData['id'], null, true);
-            $faqData       = $faq->faqRecord;
-            $tags          = implode(',', $tagging->getAllTagsById($faqData['id']));
-            $queryString = 'saveentry&amp;id=' . $faqData['id'];
+            $faqData         = $faq->faqRecord;
+            $faqData['tags'] = implode(',', $tagging->getAllTagsById($faqData['id']));
+            $queryString     = 'saveentry&amp;id=' . $faqData['id'];
         } else {
             $queryString = 'insertentry';
         }
@@ -145,7 +145,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
         $selectedRevisionId = $faqData['revision_id'];
     }
 
-    // Permissions
+    // User permissions
     $userPermission = $faq->getPermission('user', $faqData['id']);
     if (count($userPermission) == 0 || $userPermission[0] == -1) {
         $allUsers          = true;
@@ -156,6 +156,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
         $restrictedUsers = true;
     }
 
+    // Group permissions
     $groupPermission = $faq->getPermission('group', $faqData['id']);
     if (count($groupPermission) == 0 || $groupPermission[0] == -1) {
         $allGroups          = true;
@@ -166,16 +167,42 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
         $restrictedGroups = true;
     }
 
-    echo '<header><h2>' . $PMF_LANG['ad_entry_edit_1'];
-    if ($faqData['id'] != 0 && $action != 'copyentry') {
-        printf(
-            ' <span style="color: Red;">%d (%s 1.%d) </span> ',
-            $faqData['id'],
+    // Set data for forms
+    $faqData['title']    = (isset($faqData['title']) ? PMF_String::htmlspecialchars($faqData['title']) : '');
+    $faqData['content']  = (isset($faqData['content']) ? trim(PMF_String::htmlentities($faqData['content'])) : '');
+    $faqData['tags']     = (isset($faqData['tags']) ? PMF_String::htmlspecialchars($faqData['tags']) : '');
+    $faqData['keywords'] = (isset($faqData['keywords']) ? PMF_String::htmlspecialchars($faqData['keywords']) : '');
+    $faqData['author']   = (isset($faqData['author']) ? PMF_String::htmlspecialchars($faqData['author']) : $user->getUserData('display_name'));
+    $faqData['email']    = (isset($faqData['email']) ? PMF_String::htmlspecialchars($faqData['email']) : $user->getUserData('email'));
+
+    if (isset($faqData['comment']) && $faqData['comment'] == 'y') {
+        $faqData['comment'] = ' checked="checked"';
+    } elseif ($faqConfig->get('records.defaultAllowComments')) {
+        $faqData['comment'] = ' checked="checked"';
+    } else {
+        $faqData['comment'] = '';
+    }
+
+    // Start output
+    if (0 !== $faqData['id'] && 'copyentry' !== $action) {
+        $currentRevision = sprintf(
+            ' <span class="badge badge-important">%s 1.%d</span> ',
             $PMF_LANG['ad_entry_revision'],
             $selectedRevisionId
         );
+        printf(
+            '<header><h2>%s <span class="text-error">%s</span> %s %s</h2></header>',
+            $PMF_LANG['ad_entry_edit_1'],
+            (0 === $faqData['id'] ? '' : $faqData['id']),
+            $PMF_LANG['ad_entry_edit_2'],
+            $currentRevision
+        );
+    } else {
+        printf(
+            '<header><h2>%s</h2></header>',
+            $PMF_LANG['ad_entry_add']
+        );
     }
-    echo ' ' . $PMF_LANG["ad_entry_edit_2"].'</h2></header>';
 ?>
         <div class="row-fluid">
             <!-- Revisions -->
@@ -199,8 +226,8 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                     <div class="control-group">
                         <div class="controls">
                             <input type="text" name="question" id="question" maxlength="255" class="input-xxlarge"
-                                   placeholder="<?php echo $PMF_LANG["ad_entry_theme"]; ?>" style="font-size: 24px; height: 30px;"
-                                   value="<?php if (isset($faqData['title'])) { echo PMF_String::htmlspecialchars($faqData['title']); } ?>" />
+                                   placeholder="<?php echo $PMF_LANG['ad_entry_theme']; ?>" style="font-size: 24px; height: 30px;"
+                                   value="<?php echo $faqData['title'] ?>" />
                         </div>
                     </div>
                     <!-- Answer -->
@@ -208,7 +235,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                         <div class="controls">
                             <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
                             <textarea id="answer" name="answer" class="span8">
-                                <?php if (isset($faqData['content'])) { echo trim(PMF_String::htmlentities($faqData['content'])); } ?>
+                                <?php echo $faqData['content'] ?>
                             </textarea>
                         </div>
                     </div>
@@ -276,7 +303,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                         <label class="control-label" for="tags"><?php echo $PMF_LANG['ad_entry_tags']; ?>:</label>
                         <div class="controls">
                             <input type="text" name="tags" id="tags"  maxlength="255"
-                                   value="<?php if (isset($tags)) { echo PMF_String::htmlspecialchars($tags); } ?>" />
+                                   value="<?php echo $faqData['tags'] ?>" />
                             <img style="display: none; margin-bottom: -5px;" id="tags_autocomplete_wait" src="images/indicator.gif" alt="waiting..." />
                             <script type="text/javascript">
                                 $('#tags').autocomplete(
@@ -284,7 +311,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                                         { width: 260, selectFirst: false, multiple: true }
                                 );
                             </script>
-                            <span id="tagsHelp" style="display: none;"><?php echo $PMF_LANG['msgShowHelp']; ?></span>
+                            <span id="tagsHelp" class="hide"><?php echo $PMF_LANG['msgShowHelp']; ?></span>
                         </div>
                     </div>
                     <!-- Keywords -->
@@ -292,8 +319,8 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                         <label class="control-label" for="keywords"><?php echo $PMF_LANG["ad_entry_keywords"]; ?></label>
                         <div class="controls">
                             <input type="text" name="keywords" id="keywords"  maxlength="255"
-                                   value="<?php if (isset($faqData['keywords'])) { echo PMF_String::htmlspecialchars($faqData['keywords']); } ?>" />
-                            <span id="keywordsHelp" style="display: none;"><?php echo $PMF_LANG['msgShowHelp']; ?></span>
+                                   value="<?php echo $faqData['keywords'] ?>" />
+                            <span id="keywordsHelp" class="hide"><?php echo $PMF_LANG['msgShowHelp']; ?></span>
                         </div>
                     </div>
                 </fieldset>
@@ -334,16 +361,14 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                     <div class="control-group">
                         <label class="control-label" for="author"><?php echo $PMF_LANG["ad_entry_author"]; ?></label>
                         <div class="controls">
-                            <input type="text" name="author" id="author"
-                                   value="<?php if (isset($faqData['author'])) { echo PMF_String::htmlspecialchars($faqData['author']); } else { echo $user->getUserData('display_name'); } ?>" />
+                            <input type="text" name="author" id="author" value="<?php echo $faqData['author'] ?>" />
                         </div>
                     </div>
                     <!-- E-Mail -->
                     <div class="control-group">
                         <label class="control-label" for="email"><?php echo $PMF_LANG["ad_entry_email"]; ?></label>
                         <div class="controls">
-                            <input type="email" name="email" id="email"
-                                   value="<?php if (isset($faqData['email'])) { echo PMF_String::htmlspecialchars($faqData['email']); } else { echo $user->getUserData('email'); } ?>" />
+                            <input type="email" name="email" id="email" value="<?php echo $faqData['email'] ?>" />
                         </div>
                     </div>
                 </fieldset>
@@ -372,11 +397,11 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                 <?php if (is_numeric($faqData['id'])): ?>
                 <fieldset>
                     <legend>
-                        <a href="javascript:void(0);" onclick="javascript:toggleFieldset('ChangelogHistory');">
+                        <a href="javascript:void(0);" onclick="javascript:toggleFieldset('editChangelogHistory');">
                             <?php echo $PMF_LANG['ad_entry_changelog_history']; ?>
                         </a>
                     </legend>
-                    <div id="editChangelogHistory" style="display: none;">
+                    <div id="editChangelogHistory" class="hide">
                         <?php
                         foreach ($faq->getChangeEntries($faqData['id']) as $entry) {
                             $user->getUserById($entry['user']);
@@ -488,26 +513,21 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                         </div>
                     </div>
                     <div class="control-group">
-                        <?php
-                        if (isset($faqData['comment']) && $faqData['comment'] == 'y') {
-                            $suf = ' checked="checked"';
-                        } elseif ($faqConfig->get('records.defaultAllowComments')) {
-                            $suf = ' checked="checked"';
-                        } else {
-                            $suf = null;
-                        }
-                        ?>
-                        <label class="control-label" for="comment"><?php echo $PMF_LANG["ad_entry_allowComments"]; ?></label>
+                        <label class="control-label" for="comment">
+                            <?php echo $PMF_LANG['ad_entry_allowComments']; ?>
+                        </label>
                         <div class="controls">
                             <label class="checkbox">
-                                <input type="checkbox" name="comment" id="comment" value="y"<?php if (isset($suf)) { echo $suf; } ?> />
+                                <input type="checkbox" name="comment" id="comment" value="y"<?php echo $faqData['comment'] ?> />
                                 <?php echo $PMF_LANG['ad_gen_yes']; ?>
                             </label>
                         </div>
                     </div>
                     <?php if ($queryString != 'insertentry'): ?>
                     <div class="control-group">
-                        <label class="control-label" for="revision"><?php echo $PMF_LANG['ad_entry_new_revision']; ?></label>
+                        <label class="control-label" for="revision">
+                            <?php echo $PMF_LANG['ad_entry_new_revision']; ?>
+                        </label>
                         <?php
                         if ($queryString != 'insertentry') {
                             $rev_yes = ' checked="checked"';
@@ -636,8 +656,8 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
 
             $faq->language = $faqData['lang'];
             $faq->getRecord($faqData['id'], $selectedRevisionId, true);
-            $faqData = $faq->faqRecord;
-            $tags    = implode(',', $tagging->getAllTagsById($faqData['id']));
+            $faqData         = $faq->faqRecord;
+            $faqData['tags'] = implode(',', $tagging->getAllTagsById($faqData['id']));
         }
     }
 ?>
@@ -703,7 +723,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
     /**
      * Toggle fieldsets
      *
-     * @param string fieldset ID of the fieldset
+     * @param fieldset ID of the fieldset
      *
      * @return void
      */
@@ -718,8 +738,6 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
     
     /**
      * Toggle input date container show
-     *
-     * @param boolean show show or hide (optional)
      *
      * @return void
      */
@@ -748,7 +766,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
     /**
      * Shows help for keywords and tags input fields
      *
-     * @param string 
+     * @param option
      *
      * @return void
      */
@@ -861,7 +879,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
     /**
      * Call the init for a new tinyMCE
      *
-     * @param string field  id of the input to fill.
+     * @param field  id of the input to fill.
      *
      * @return void
      */
