@@ -259,9 +259,6 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                     <div class="control-group">
                         <label class="control-label"><?php echo $PMF_LANG['ad_menu_attachments'] ?>:</label>
                         <div class="controls">
-                            <?php
-                            if (isset($faqData['id']) && $faqData['id'] != "") {
-                            ?>
                             <ul class="adminAttachments">
                                 <?php
                                 $attList = PMF_Attachment_Factory::fetchByRecordId($faqConfig, $faqData['id']);
@@ -291,9 +288,6 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                                     $selectedCategory,
                                     $PMF_LANG['ad_att_add']
                                 );
-                            } else {
-                                echo $PMF_LANG['ad_att_nope'];
-                            }
                             ?>
                         </div>
                     </div>
