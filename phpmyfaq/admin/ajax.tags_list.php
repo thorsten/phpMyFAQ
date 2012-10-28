@@ -1,8 +1,6 @@
 <?php
 /**
- * AJAX: searches the tags
- *
- * @todo Switch code and logic to jQuery and PHP JSON extension
+ * AJAX: Search for tags
  *
  * PHP Version 5.3
  *
@@ -24,6 +22,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+// Send headers
+$http = new PMF_Helper_Http();
+$http->setContentType('application/json');
+$http->addHeader();
+
 header("Expires: Thu, 7 Apr 1977 14:47:00 GMT");
 header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
@@ -33,22 +36,25 @@ header("Vary: Negotiate,Accept");
 
 $oTag              = new PMF_Tags($faqConfig);
 $autoCompleteValue = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
-if (!is_null($autoCompleteValue)) {
+if (! is_null($autoCompleteValue)) {
+    if (strpos($autoCompleteValue, ',')) {
+        $arrayOfValues     = explode(',', $autoCompleteValue);
+        $autoCompleteValue = end($arrayOfValues);
+    }
     $tags = $oTag->getAllTags($autoCompleteValue, false, true);
 } else {
     $tags = $oTag->getAllTags();
 }
 
-if (count(ob_list_handlers()) > 0) {
-    ob_clean();
-}
-
 if ($permission['editbt']) {
     $i = 0;
+    $tagNames = array();
     foreach ($tags as $tagName) {
         $i++;
         if ($i <= PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE) {
-            print $tagName . "\n";
+            $tagNames[] = $tagName;
         }
     }
+
+    echo json_encode(array('tags' => $tagNames));
 }

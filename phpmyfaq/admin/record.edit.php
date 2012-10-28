@@ -296,15 +296,36 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                     <div class="control-group">
                         <label class="control-label" for="tags"><?php echo $PMF_LANG['ad_entry_tags']; ?>:</label>
                         <div class="controls">
-                            <input type="text" name="tags" id="tags"  maxlength="255"
-                                   value="<?php echo $faqData['tags'] ?>" />
-                            <img style="display: none; margin-bottom: -5px;" id="tags_autocomplete_wait"
-                                 src="images/indicator.gif" alt="waiting..." />
+                            <input type="text" name="tags" id="tags" value="<?php echo $faqData['tags'] ?>"
+                                   data-provide="typeahead" data-mode="multiple" />
                             <script type="text/javascript">
-                                $('#tags').autocomplete(
-                                        "index.php?action=ajax&ajax=tags_list",
-                                        { width: 260, selectFirst: false, multiple: true }
-                                );
+                                function extractor(query) {
+                                    var result = /([^,]+)$/.exec(query);
+                                    if(result && result[1])
+                                        return result[1].trim();
+                                    return '';
+                                }
+                                $('#tags').typeahead({
+                                    source: function (query, process) {
+                                        return $.get("index.php?action=ajax&ajax=tags_list", { q: query }, function (data) {
+                                            return process(data.tags);
+                                        });
+                                    },
+                                    updater: function(item) {
+                                        return this.$element.val().replace(/[^,]*$/,'')+item+',';
+                                    },
+                                    matcher: function (item) {
+                                        var tquery = extractor(this.query);
+                                        if(!tquery) return false;
+                                        return ~item.toLowerCase().indexOf(tquery)
+                                    },
+                                    highlighter: function (item) {
+                                        var query = extractor(this.query).replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&')
+                                        return item.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                                            return '<strong>' + match + '</strong>'
+                                        })
+                                    }
+                                });
                             </script>
                             <span id="tagsHelp" class="hide"><?php echo $PMF_LANG['msgShowHelp']; ?></span>
                         </div>
