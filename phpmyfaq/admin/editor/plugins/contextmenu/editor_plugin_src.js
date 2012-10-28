@@ -27,7 +27,7 @@
 		 * @param {string} url Absolute URL to where the plugin is located.
 		 */
 		init : function(ed) {
-			var t = this, showMenu, contextmenuNeverUseNative, realCtrlKey;
+			var t = this, showMenu, contextmenuNeverUseNative, realCtrlKey, hideMenu;
 
 			t.editor = ed;
 
@@ -42,6 +42,10 @@
 			 */
 			t.onContextMenu = new tinymce.util.Dispatcher(this);
 
+			hideMenu = function(e) {
+				hide(ed, e);
+			};
+
 			showMenu = ed.onContextMenu.add(function(ed, e) {
 				// Block TinyMCE menu on ctrlKey and work around Safari issue
 				if ((realCtrlKey !== 0 ? realCtrlKey : e.ctrlKey) && !contextmenuNeverUseNative)
@@ -53,14 +57,12 @@
 				if (e.target.nodeName == 'IMG')
 					ed.selection.select(e.target);
 
-				t._getMenu(ed).showMenu(e.clientX || e.pageX, e.clientY || e.pageX);
-				Event.add(ed.getDoc(), 'click', function(e) {
-					hide(ed, e);
-				});
+				t._getMenu(ed).showMenu(e.clientX || e.pageX, e.clientY || e.pageY);
+				Event.add(ed.getDoc(), 'click', hideMenu);
 
 				ed.nodeChanged();
 			});
-
+			
 			ed.onRemove.add(function() {
 				if (t._menu)
 					t._menu.removeAll();
@@ -78,8 +80,9 @@
 
 				if (t._menu) {
 					t._menu.removeAll();
-					t._menu.destroy();
-					Event.remove(ed.getDoc(), 'click', hide);
+					 t._menu.destroy();
+					Event.remove(ed.getDoc(), 'click', hideMenu);
+					t._menu = null;
 				}
 			};
 
@@ -111,19 +114,18 @@
 		},
 
 		_getMenu : function(ed) {
-			var t = this, m = t._menu, se = ed.selection, col = se.isCollapsed(), el = se.getNode() || ed.getBody(), am, p1, p2;
+			var t = this, m = t._menu, se = ed.selection, col = se.isCollapsed(), el = se.getNode() || ed.getBody(), am, p;
 
 			if (m) {
 				m.removeAll();
 				m.destroy();
 			}
 
-			p1 = DOM.getPos(ed.getContentAreaContainer());
-			p2 = DOM.getPos(ed.getContainer());
+			p = DOM.getPos(ed.getContentAreaContainer());
 
 			m = ed.controlManager.createDropMenu('contextmenu', {
-				offset_x : p1.x + ed.getParam('contextmenu_offset_x', 0),
-				offset_y : p1.y + ed.getParam('contextmenu_offset_y', 0),
+				offset_x : p.x + ed.getParam('contextmenu_offset_x', 0),
+				offset_y : p.y + ed.getParam('contextmenu_offset_y', 0),
 				constrain : 1,
 				keyboard_focus: true
 			});
