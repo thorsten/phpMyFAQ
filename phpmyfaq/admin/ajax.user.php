@@ -26,6 +26,11 @@ $ajaxAction = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_S
 $userId     = PMF_Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
 $usersearch = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
 
+// Send headers
+$http = new PMF_Helper_Http();
+$http->setContentType('application/json');
+$http->addHeader();
+
 if ($permission['adduser'] || $permission['edituser'] || $permission['deluser']) {
 
     $user = new PMF_User($faqConfig);
@@ -33,9 +38,14 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     switch ($ajaxAction) {
 
         case 'get_user_list':
+            $users = array();
             foreach ($user->searchUsers($usersearch) as $singleUser) {
-                print $singleUser['login'] . '|' .  $singleUser['user_id'] . "\n";
+                $users[] = array(
+                    'user_id' => $singleUser['user_id'],
+                    'name'    => $singleUser['login']
+                );
             }
+            echo json_encode($users);
             break;
 
         case 'get_user_data':

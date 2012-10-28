@@ -356,7 +356,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
 /**
  * Returns the user data as JSON object
  *
- * @param integer user_id User ID
+ * @param user_id User ID
  */
 function getUserData(user_id)
 {
@@ -396,22 +396,32 @@ function getUserData(user_id)
                     <form name="user_select" id="user_select" action="?action=user&amp;user_action=delete_confirm"
                           method="post">
 
-                        <label><?php print $PMF_LANG['ad_auth_user']; ?>:</label>
-                        <input type="text" id="user_list_autocomplete" name="user_list_search" autofocus="autofocus" />
+                        <label for="user_list_autocomplete"><?php print $PMF_LANG['ad_auth_user']; ?>:</label>
+                        <input type="text" id="user_list_autocomplete" name="user_list_search" data-provide="typeahead" />
                         <script type="text/javascript">
                         //<![CDATA[
-                            $('#user_list_autocomplete').
-                                autocomplete("index.php?action=ajax&ajax=user&ajaxaction=get_user_list", {
-                                    width: 180,
-                                    selectFirst: true
+                        var mappedIds,
+                            userNames;
+                        $('#user_list_autocomplete').typeahead({
+                            source: function (query, process) {
+                                return $.get("index.php?action=ajax&ajax=user&ajaxaction=get_user_list", { q: query }, function (data) {
+                                    mappedIds = [];
+                                    userNames = [];
+                                    $.each(data, function(i, user) {
+                                        mappedIds[user.name] = user.user_id;
+                                        userNames.push(user.name);
+                                    });
+                                    return process(userNames);
                                 });
-                            $('#user_list_autocomplete').result(function(event, data, formatted) {
-                                var user_id = data[1];
-                                $("#user_list_select").val(user_id);
-                                getUserData(user_id);
-                                getUserRights(user_id);
-                            });
-                            //]]>
+                            },
+                            updater: function(userName) {
+                                userId = mappedIds[userName];
+                                $("#user_list_select").val(userId);
+                                getUserData(userId);
+                                getUserRights(userId);
+                            }
+                        });
+                        //]]>
                         </script>
                         <p>
                             <input type="hidden" id="user_list_select" name="user_list_select" value="" />
