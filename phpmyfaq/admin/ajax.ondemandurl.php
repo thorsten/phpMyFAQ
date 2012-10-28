@@ -78,8 +78,6 @@ if (count(ob_list_handlers()) > 0) {
     <meta name="MSSmartTagsPreventParsing" content="true">
 
     <link rel="stylesheet" href="assets/css/style.css?v=1">
-    <link rel="stylesheet" href="../assets/js/plugins/autocomplete/jquery.autocomplete.css" type="text/css">
-    <link rel="stylesheet" href="../assets/js/plugins/datePicker/datePicker.css" type="text/css">
 
     <script src="../assets/js/libs/modernizr.min.js"></script>
     <script src="../assets/js/libs/jquery.min.js"></script>
