@@ -41,7 +41,7 @@ if ('addnews' == $action && $permission["addnews"]) {
             <div class="control-group">
                 <label class="control-label" for="newsheader"><?php print $PMF_LANG['ad_news_header']; ?></label>
                 <div class="controls">
-                    <input type="text" name="newsheader" id="newsheader" autofocus="autofocus" />
+                    <input class="input-xxlarge" type="text" name="newsheader" id="newsheader" />
                 </div>
             </div>
 
@@ -56,14 +56,14 @@ if ('addnews' == $action && $permission["addnews"]) {
             <div class="control-group">
                 <label class="control-label" for="authorName"><?php print $PMF_LANG['ad_news_author_name']; ?></label>
                 <div class="controls">
-                    <input type="text" name="authorName" id="authorName" value="<?php print $user->getUserData('display_name'); ?>"/>
+                    <input class="input-xxlarge" type="text" name="authorName" id="authorName" value="<?php print $user->getUserData('display_name'); ?>"/>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="authorEmail"><?php print $PMF_LANG['ad_news_author_email']; ?></label>
                 <div class="controls">
-                    <input type="email" name="authorEmail" id="authorEmail" value="<?php print $user->getUserData('email'); ?>"/>
+                    <input class="input-xxlarge" type="email" name="authorEmail" id="authorEmail" value="<?php print $user->getUserData('email'); ?>"/>
                 </div>
             </div>
 
@@ -90,7 +90,8 @@ if ('addnews' == $action && $permission["addnews"]) {
             <div class="control-group">
                 <label class="control-label" for="link"><?php print $PMF_LANG['ad_news_link_url']; ?></label>
                 <div class="controls">
-                <input type="text" name="link" id="link" value="http://" />
+                    <input class="input-xxlarge" type="url" name="link" id="link" value="http://" />
+                </div>
             </div>
 
             <div class="control-group">
@@ -130,14 +131,14 @@ if ('addnews' == $action && $permission["addnews"]) {
             <div class="control-group">
                 <label class="control-label" for="dateStart"><?php print $PMF_LANG['ad_news_from']; ?></label>
                 <div class="controls">
-                    <input name="dateStart" id="dateStart" class="date-pick" />
+                    <input type="date" name="dateStart" id="dateStart" class="date-pick" />
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="dateEnd"><?php print $PMF_LANG['ad_news_to']; ?></label>
                 <div class="controls">
-                    <input name="dateEnd" id="dateEnd" class="date-pick" />
+                    <input type="date" name="dateEnd" id="dateEnd" class="date-pick" />
                 </div>
             </fieldset>
 
@@ -440,10 +441,12 @@ if ('addnews' == $action && $permission["addnews"]) {
     
     <script type="text/javascript">
     /* <![CDATA[ */
-    $(function()
-    {
-        $('.date-pick').datePicker();
-    });
+    if (!Modernizr.inputtypes.date) {
+        $(function()
+        {
+            $('.date-pick').datePicker();
+        });
+    }
     /* ]]> */
     </script>
 <?php
