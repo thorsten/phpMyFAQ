@@ -6,11 +6,11 @@ various databases to store all data, PHP 5.3.2 (or higher) is needed in order to
 access this data. phpMyFAQ also offers a multi-language Content Management
 System with a WYSIWYG editor and an Image Manager, flexible multi-user support
 with user and group based permissions on categories and records, a wiki-like
-revision feature, a news system, user-tracking, language modules, enhanced
-automatic content negotiation, templates, PDF-support, a backup-system, a
-dynamic sitemap, related articles, tagging, RSS feeds, built-in spam protection
-systems, LDAP and Microsoft Active Directory support, and an easy to use
-installation script.
+revision feature, a news system, user-tracking, 40+ supported languages, enhanced
+automatic content negotiation, HTML5/CSS3 based templates, PDF-support, a
+backup-system, a dynamic sitemap, related FAQs, tagging, RSS feeds, built-in spam
+protection systems, OpenLDAP and Microsoft Active Directory support, and an easy
+to use installation script.
 
 
 Build status
@@ -53,9 +53,6 @@ jQuery
 http://jquery.com
 Licensed under the terms of the MIT License
 
-jQuery Autocomplete plugin
-Licensed under the terms of the MIT License
-
 jQuery datePicker plugin
 http://www.kelvinluck.com/
 Licensed under the terms of the MIT License
@@ -68,7 +65,7 @@ Modernizr
 http://www.modernizr.com/
 Licensed under the terms of the MIT and BSD licenses
 
-Twitter Bootstrap
+Bootstrap
 http://twitter.github.com/bootstrap/
 Licensed under the terms of the Apache License v2.0
 
