@@ -33,6 +33,7 @@ Version 2.8.0-alpha3 - 2012-
 - updated bundled Modernizr to version 2.6.2 (Thorsten)
 - updated bundled Bootstrap to version 2.2.1 (Thorsten)
 - updated bundled TinyMCE to version 3.5.7 (Thorsten)
+- updated PHP dependency management using Composer (Thorsten)
 - fixed some bugs (Thorsten, Florian)
 
 Version 2.7.9 - 2012-09-

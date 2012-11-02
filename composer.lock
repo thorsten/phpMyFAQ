@@ -1,0 +1,49 @@
+{
+    "hash": "4c1dc3c98336129c0dbbb961743f5861",
+    "packages": [
+        {
+            "name": "phpseclib",
+            "version": "master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpseclib/phpseclib.git",
+                "reference": "master"
+            },
+            "type": "library",
+            "installation-source": "source",
+            "time": "1351531285"
+        },
+        {
+            "name": "tcpdf",
+            "version": "master",
+            "source": {
+                "type": "git",
+                "url": "http://git.code.sf.net/p/tcpdf/code",
+                "reference": "master"
+            },
+            "type": "library",
+            "installation-source": "source",
+            "time": "1351095514"
+        },
+        {
+            "name": "twitteroauth",
+            "version": "master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/abraham/twitteroauth.git",
+                "reference": "master"
+            },
+            "type": "library",
+            "installation-source": "source",
+            "time": "1337376750"
+        }
+    ],
+    "packages-dev": null,
+    "aliases": [
+
+    ],
+    "minimum-stability": "dev",
+    "stability-flags": [
+
+    ]
+}

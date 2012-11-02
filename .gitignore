@@ -26,3 +26,14 @@ phpmyfaq/inc/index.html
 
 # .htaccess, if used
 phpmyfaq/.htaccess
+
+# Third party libraries
+phpmyfaq/inc/libs/phpseclib
+phpmyfaq/inc/libs/twitteroauth
+
+# Composer related stuff
+vendor/composer*
+vendor/phpseclib*
+vendor/tcpdf*
+vendor/twitteroauth*
+vendor/autoload.php
