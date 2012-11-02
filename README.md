@@ -1,5 +1,8 @@
-phpMyFAQ
---------
+# README
+
+[![Build Status](https://secure.travis-ci.org/thorsten/phpMyFAQ.png?branch=2.8)](http://travis-ci.org/thorsten/phpMyFAQ)
+
+## What is phpMyFAQ?
 
 phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports
 various databases to store all data, PHP 5.3.2 (or higher) is needed in order to
@@ -12,26 +15,28 @@ backup-system, a dynamic sitemap, related FAQs, tagging, RSS feeds, built-in spa
 protection systems, OpenLDAP and Microsoft Active Directory support, and an easy
 to use installation script.
 
+## Requirements
 
-Build status
-------------
-
-[![Build Status](https://secure.travis-ci.org/thorsten/phpMyFAQ.png?branch=2.8)](http://travis-ci.org/thorsten/phpMyFAQ)
-
-Installation
-------------
-
-See documentation/documentation.en.html for more information.
+phpMyFAQ is only supported on PHP 5.3.2 and up, you need a database as well. Supported
+databases are MySQL, PostgreSQL, Microsoft SQL Server and SQLite. Check our detailed 
+requirements on [phpmyfaq.de](http://www.phpmyfaq.de/requirements.php) for more information.
 
 
-License
--------
+## Installation
+
+The best way to install phpMyFAQ is to download it on [phpmyfaq.de](http://www.phpmyfaq.de/download.php)
+
+
+## License
 
 Mozilla Public License 2.0, see LICENSE for more information.
 
 
-Bundled libraries
------------------
+## Contributing
+
+Please check out our page about contributing on [phpmyfaq.de](http://www.phpmyfaq.de/contribute.php)
+
+## Bundled libraries
 
 **[TinyMCE](http://tinymce.moxiecode.com/)**  
 
