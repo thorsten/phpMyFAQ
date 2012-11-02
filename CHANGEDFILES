@@ -1,3 +1,47 @@
+CHANGED FILES FROM 2.7.8 -> 2.7.9
+
+./admin/editor/langs/cs.js
+./admin/editor/plugins/advhr/langs/cs_dlg.js
+./admin/editor/plugins/advimage/langs/cs_dlg.js
+./admin/editor/plugins/advlink/langs/cs_dlg.js
+./admin/editor/plugins/emotions/langs/cs_dlg.js
+./admin/editor/plugins/fullpage/langs/cs_dlg.js
+./admin/editor/plugins/media/langs/cs_dlg.js
+./admin/editor/plugins/paste/langs/cs_dlg.js
+./admin/editor/plugins/searchreplace/langs/cs_dlg.js
+./admin/editor/plugins/style/langs/cs_dlg.js
+./admin/editor/plugins/table/langs/cs_dlg.js
+./admin/editor/plugins/template/langs/cs_dlg.js
+./admin/editor/plugins/xhtmlxtras/langs/cs_dlg.js
+./admin/editor/themes/advanced/langs/cs.js
+./admin/editor/themes/advanced/langs/cs_dlg.js
+./admin/editor/themes/advanced/skins/cirkuit/content.css
+./admin/editor/themes/advanced/skins/cirkuit/dialog.css
+./admin/editor/themes/advanced/skins/cirkuit/img/butt2.png
+./admin/editor/themes/advanced/skins/cirkuit/img/button-bg.png
+./admin/editor/themes/advanced/skins/cirkuit/img/buttons.png
+./admin/editor/themes/advanced/skins/cirkuit/img/down_arrow.gif
+./admin/editor/themes/advanced/skins/cirkuit/img/fade-butt.png
+./admin/editor/themes/advanced/skins/cirkuit/img/icons.png
+./admin/editor/themes/advanced/skins/cirkuit/img/items.gif
+./admin/editor/themes/advanced/skins/cirkuit/img/menu-arrow.png
+./admin/editor/themes/advanced/skins/cirkuit/img/menu-check.png
+./admin/editor/themes/advanced/skins/cirkuit/img/progress.gif
+./admin/editor/themes/advanced/skins/cirkuit/img/tabs.gif
+./admin/editor/themes/advanced/skins/cirkuit/img/toolbarbg.png
+./admin/editor/themes/advanced/skins/cirkuit/ui.css
+./admin/editor/themes/simple/langs/cs.js
+./inc/PMF_DB/Sqlite3.php
+./install/setup.php
+./install/update.php
+./lang/language_cs.php
+./lang/language_de.php
+./lang/language_en.php
+./lang/language_fr.php
+./lang/language_nl.php
+
+
+
 CHANGED FILES FROM 2.7.6 -> 2.7.7
 
 ./config/constants.php
