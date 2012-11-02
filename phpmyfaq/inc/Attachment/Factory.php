@@ -21,9 +21,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'libs' . DIRECTORY_SEPARATOR .
-    'phpseclib' . DIRECTORY_SEPARATOR . 'Crypt' . DIRECTORY_SEPARATOR .'AES.php';
-                 
 /**
  * PMF_Atachment_Factory
  *
@@ -69,7 +66,7 @@ class PMF_Attachment_Factory
      * @param int    $id  ID
      * @param string $key Key
      *
-     * @return PMF_Attachment_File
+     * @return PMF_Attachment_File|PMF_Attachment_DB
      */
     public static function create($id = null, $key = null)
     {    
