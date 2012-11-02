@@ -22,32 +22,37 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-print sprintf('<header><h2>%s</h2></header>', $PMF_LANG['ad_glossary_add']);
+printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_glossary_add']);
 
 if ($permission['addglossary']) {
 ?>
         <form class="form-horizontal" action="?action=saveglossary" method="post">
             <div class="control-group">
-                <label class="control-label" for="item"><?php print $PMF_LANG['ad_glossary_item']; ?>:</label>
+                <label class="control-label" for="item"><?php echo $PMF_LANG['ad_glossary_item']; ?>:</label>
                 <div class="controls">
-                    <input type="text" name="item" id="item" />
+                    <input class="input-xxlarge" type="text" name="item" id="item" required />
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="definition"><?php print $PMF_LANG['ad_glossary_definition']; ?>:</label>
+                <label class="control-label" for="definition">
+                    <?php echo $PMF_LANG['ad_glossary_definition']; ?>:
+                </label>
                 <div class="controls">
-                    <textarea name="definition" id="definition" cols="50" rows="5"></textarea>
+                    <textarea class="input-xxlarge" name="definition" id="definition" cols="50" rows="5" required></textarea>
                 </div>
             </div>
 
             <div class="form-actions">
                 <button class="btn btn-primary" type="submit">
-                    <?php print $PMF_LANG['ad_glossary_save']; ?>
+                    <?php echo $PMF_LANG['ad_glossary_save']; ?>
                 </button>
+                <a class="btn btn-info" href="?action=glossary">
+                    <?php echo $PMF_LANG['ad_entry_back']; ?>
+                </a>
             </div>
         </form>
 <?php
 } else {
-    print $PMF_LANG["err_NotAuth"];
+    echo $PMF_LANG["err_NotAuth"];
 }

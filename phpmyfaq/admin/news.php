@@ -146,6 +146,9 @@ if ('addnews' == $action && $permission["addnews"]) {
                 <button class="btn btn-primary" type="submit">
                     <?php print $PMF_LANG['ad_news_add']; ?>
                 </button>
+                <a class="btn btn-info" href="?action=news">
+                    <?php echo $PMF_LANG['ad_entry_back']; ?>
+                </a>
             </div>
         </form>
 <?php
@@ -328,6 +331,9 @@ if ('addnews' == $action && $permission["addnews"]) {
             <button class="btn btn-primary" type="submit">
                 <?php print $PMF_LANG['ad_news_edit']; ?>
             </button>
+            <a class="btn btn-info" href="?action=news">
+                <?php echo $PMF_LANG['ad_entry_back']; ?>
+            </a>
         </div>
         </form>
 <?php

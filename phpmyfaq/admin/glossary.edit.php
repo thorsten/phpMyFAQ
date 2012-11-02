@@ -1,6 +1,6 @@
 <?php
 /**
- * Displays a form to edit an extisting glossary item
+ * Displays a form to edit an existing glossary item
  *
  * PHP Version 5.3
  *
@@ -22,7 +22,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-print sprintf('<header><h2>%s</h2></header>', $PMF_LANG['ad_glossary_edit']);
+printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_glossary_edit']);
 
 if ($permission['editglossary']) {
     $id           = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -30,28 +30,36 @@ if ($permission['editglossary']) {
     $glossaryItem = $glossary->getGlossaryItem($id);
 ?>
         <form class="form-horizontal" action="?action=updateglossary" method="post">
-            <input type="hidden" name="id" value="<?php print $glossaryItem['id']; ?>" />
+            <input type="hidden" name="id" value="<?php echo $glossaryItem['id']; ?>" />
             <div class="control-group">
-                <label class="control-label" for="item"><?php print $PMF_LANG['ad_glossary_item']; ?>:</label>
+                <label class="control-label" for="item"><?php echo $PMF_LANG['ad_glossary_item']; ?>:</label>
                 <div class="controls">
-                    <input type="text" name="item" id="item" value="<?php print $glossaryItem['item']; ?>" />
+                    <input class="input-xxlarge" type="text" name="item" id="item"
+                           value="<?php echo $glossaryItem['item']; ?>" required />
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="definition"><?php print $PMF_LANG['ad_glossary_definition']; ?>:</label>
+                <label class="control-label" for="definition">
+                    <?php echo $PMF_LANG['ad_glossary_definition']; ?>:
+                </label>
                 <div class="controls">
-                    <textarea name="definition" id="definition" cols="50" rows="3"><?php print $glossaryItem['definition']; ?></textarea>
+                    <textarea  class="input-xxlarge" name="definition" id="definition" cols="50" rows="3" required>
+<?php echo $glossaryItem['definition']; ?>
+                    </textarea>
                 </div>
             </div>
 
             <div class="form-actions">
-                <button class="btn-primary" type="submit">
-                    <?php print $PMF_LANG['ad_glossary_save']; ?>
+                <button class="btn btn-primary" type="submit">
+                    <?php echo $PMF_LANG['ad_glossary_save']; ?>
                 </button>
+                <a class="btn btn-info" href="?action=glossary">
+                    <?php echo $PMF_LANG['ad_entry_back']; ?>
+                </a>
             </div>
         </form>
 <?php
 } else {
-    print $PMF_LANG["err_NotAuth"];
+    echo $PMF_LANG["err_NotAuth"];
 }
