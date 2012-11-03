@@ -187,8 +187,9 @@ if ($action == 'logout' && $auth) {
     $user = null;
     $auth = null;
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
-    if ($faqConfig->get('security.ssoSupport') && !empty ($ssoLogout))
-        header ("Location:$ssoLogout");
+    if ($faqConfig->get('security.ssoSupport') && !empty ($ssoLogout)) {
+        header ("Location: $ssoLogout");
+    }
 }
 
 //
