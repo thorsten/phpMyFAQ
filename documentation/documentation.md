@@ -7,7 +7,7 @@
 2.  **[Installation][5]**
     1.  [Requirements][6]
     2.  [Preparations][7]
-    3.  [Install-Script][8]
+    3.  [Setup][8]
     4.  [First Steps][9]
     5.  [Notes regarding the search-function][10]
     6.  [Automatic content negotiation][11]
@@ -79,7 +79,7 @@ This documentation should help you with installing, administrating and using php
 
 **1.1. <a id="1.1"></a>License**
 
-phpMyFAQ is published under the [Mozilla Public License Version 2.0][65] (MPL). This license guarantees you the free usage of phpMyFAQ, access to the source code and the right to modify and distribute phpMyFAQ.
+phpMyFAQ is published under the [Mozilla Public License Version 2.0](http://www.mozilla.org/MPL/2.0/) (MPL). This license guarantees you the free usage of phpMyFAQ, access to the source code and the right to modify and distribute phpMyFAQ.
 
 The only restrictions apply to the copyright, which remains at all times at Thorsten Rinne and the phpMyFAQ Team. Any modified versions of phpMyFAQ will also fall under the terms of MPL. Any other program, that may only be accessing certain functions of phpMyFAQ is not affected by these restrictions and may be distributed under any type of license.
 
@@ -87,7 +87,7 @@ A commercial usage or commercially distribution of phpMyFAQ, e.g. on CD-ROMs, is
 
 We decided to use MPL as the licensing model for phpMyFAQ because we feel that it is a good compromise between the protection of the openness and free distribution on the one hand and the interaction with other software regardless of its licensing model. When compared to other licensing models its text is short and easily comprehensible, even for newcomers.
 
-This documentation is licensed under a [Creative Commons License][66].
+This documentation is licensed under a [Creative Commons License](http://creativecommons.org/licenses/by/2.0/).
 
 [back to top][64]
 
@@ -95,14 +95,14 @@ This documentation is licensed under a [Creative Commons License][66].
 
 **1.2. <a id="1.2"></a>Support**
 
-If you should run into any problems using phpMyFAQ check out our support forums at [forum.phpmyfaq.de][67]. There is no support for free by phone or email, please refrain from calling or mailing us.
+If you should run into any problems using phpMyFAQ check out our support forums at [forum.phpmyfaq.de](http://forum.phpmyfaq.de). You can also use our Twitter account [@phpMyFAQ](https://twitter.com/phpMyFAQ/) to ask us short question if they fit into 140 characters. There is no free support by phone or email, please refrain from calling or mailing us.
 
 The phpMyFAQ team offers the following paid services:
 
 *   Customizing
 *   Support
 
-If you're interested, just take a look at our [support page][68].
+If you're interested, just take a look at our [support page](http://www.phpmyfaq.de/support.php).
 
 [back to top][64]
 
@@ -110,7 +110,7 @@ If you're interested, just take a look at our [support page][68].
 
 **1.3. <a id="1.3"></a>Copyright**
 
-© 2001-2012 by Thorsten Rinne and phpMyFAQ Team under the [ Mozilla Public License 2.0][65]. All rights reserved.
+© 2001-2012 by Thorsten Rinne and phpMyFAQ Team under the [ Mozilla Public License 2.0](http://www.mozilla.org/MPL/2.0/). All rights reserved.
 
 [back to top][64]
 
@@ -122,7 +122,7 @@ If you're interested, just take a look at our [support page][68].
 
 phpMyFAQ addresses a database system via PHP. In order to install it you will need a web server that meets the following requirements:
 
-*   **[PHP][69]**
+*   **[PHP](http://www.php.net)**
     *   from version 5.3.2 (recommended: latest PHP 5.x)
     *   register_globals = off (recommended)
     *   safe_mode = off (recommended)
@@ -132,14 +132,14 @@ phpMyFAQ addresses a database system via PHP. In order to install it you will ne
     *   JSON support
     *   Filter support
     *   SPL support
-*   **Web server** ( [Apache][70] 2.x or [nginx][71] 0.7+ or [lighttpd][72] 1.0+ or [IIS][73] 7.0+)
+*   **Web server** ( [Apache](http://httpd.apache.org) 2.x or [nginx](http://www.nginx.net/) 0.7+ or [lighttpd](http://www.lighttpd.net) 1.0+ or [IIS](http://www.microsoft.com/) 6.0+ or Zeus Webserver)
 *   **Database server**
-    *   [MySQL][74] 5.x with the MySQL extension (recommended: 5.5.x)
-    *   [MySQL][74] 5.x with the MySQLi extension (recommended: 5.5.x)
-    *   [PostgreSQL][75] 8.x (recommended: latest 8.x)
-    *   [Microsoft SQL Server][76] 2000, 2005, 2008
-    *   [SQLite][77]
-    *   [MariaDB][78] 5.x (experimental)
+    *   [MySQL](http://www.mysql.com) 5.x with the MySQL extension (recommended: 5.5.x)
+    *   [MySQL](http://www.mysql.com) 5.x with the MySQLi extension (recommended: 5.5.x)
+    *   [PostgreSQL](http://www.postgresql.org) 8.x (recommended: latest 8.x)
+    *   [Microsoft SQL Server](http://www.microsoft.com/sql/) 2005, 2008, 2012
+    *   [SQLite](http://www.sqlite.org)
+    *   [MariaDB](http://montyprogram.com/mariadb/) 5.x (experimental)
 *   correctly set: access permissions, owner, group
 
 You can only run phpMyFAQ successfully, when the PHP directive safe\_mode is set to off, further constraints affect the directives open\_basedir and disable_functions, which can be set in the central php.ini or the httpd.conf respectively.
@@ -184,12 +184,13 @@ The database user needs the permissions for CREATE, DROP, ALTER, INDEX, INSERT, 
 
 * * *
 
-**2.3. <a id="2.3"></a>Install-Script**
+**2.3. <a id="2.3"></a>Setup**
 
 Open your browser and type in the following URL:
 
 `http://www.example.com/faq/install/setup.php`
-Substitute **www.example.com** with your actual domain name. When the site is loaded enter the address of your database server (e.g. db.provider.com), your database username and password as well as the database name. The database have to be created with UTF-8 chraracter set before running the installation script. You can leave the prefix-field empty. If you are planning on using multiple FAQs in one database you will have to use a table prefix, though (i.e. *sport* for a sports-FAQ, *weather* for a weather-FAQ, etc.). Please note that only letters and an underline: "_" can be used as the prefix.
+
+Substitute **www.example.com** with your actual domain name. When the site is loaded enter the address of your database server (e.g. db.provider.com), your database username and password as well as the database name. The database have to be created with UTF-8 chraracter set before running the installation script. You can leave the prefix-field empty. If you are planning on using multiple FAQs in one database you will have to use a table prefix, though (i.e. *sport* for a sports FAQ, *weather* for a weather FAQ, etc.). Please note that only letters and an underline: "_" can be used as the prefix.
 
 If your PHP was compiled with the LDAP extension you can add your LDAP information, too. You have to insert your LDAP information, too.
 
@@ -204,27 +205,29 @@ When using multiple FAQs you need to install them independently into different d
 You can enter the public area of your FAQ by entering
 
 `http://www.example.com/faq/index.php`
+
 into your browser's address field. Your FAQ will be empty and presented in the the standard layout.
 
 To configure phpMyFAQ point your browser to
 
 `http://www.example.com/faq/admin/index.php`
+
 Use the username **admin** and your selected password for your first login into the admin section.
 
 Some variables that doesn't change regularly, they can be edited in the file *config/constants.php*. You can change the
 
-*   the time zone of your server (default: "Europe/Berlin")
-*   the timeout in the admin section (default: 30 minutes)
-*   the timeout warning pop-up in the admin section (default: 5 minutes)
-*   the solution id start value (default: 1000)
-*   the incremental value of the solution id (default: 1)
-*   the number of records in the Top10 (default: 10)
-*   the number of latest records (default: 5)
-*   the number of open questions in the RSS feed (default: 50)
-*   flag with which Latest and Top Ten RSS feeds will be forced to use the current PMF SEO URL schema (default: true)
-*   flag with which Google site map will be forced to use the current PMF SEO URL schema (default: true)
-*   the number with which the Tags Cloud list is limited to (default: 50)
-*   the number with which the Auto-complete list is limited to (default: 20)
+* the time zone of your server (default: "Europe/Berlin")
+* the timeout in the admin section (default: 30 minutes)
+* the timeout warning pop-up in the admin section (default: 5 minutes)
+* the solution id start value (default: 1000)
+* the incremental value of the solution id (default: 1)
+* the number of records in the Top10 (default: 10)
+* the number of latest records (default: 5)
+* the number of open questions in the RSS feed (default: 50)
+* flag with which Latest and Top Ten RSS feeds will be forced to use the current PMF SEO URL schema (default: true)
+* flag with which Google site map will be forced to use the current PMF SEO URL schema (default: true)
+* the number with which the Tags Cloud list is limited to (default: 50)
+* the number with which the autocomplete list is limited to (default: 20)
 
 [back to top][64]
 
@@ -233,7 +236,7 @@ Some variables that doesn't change regularly, they can be edited in the file *co
 **2.5. <a id="2.5"></a>Notes regarding the search functionality**
 
 *   The boolean full-text search will only work with MySQL and if there are some entries in the database (5 or more). The term you are looking for should also not be in more than 50% of all your entries, or it will automatically be excluded from search. This is not a bug, but rather a feature of MySQL.
-*   The search on other databases is using the LIKE operator.
+*   The search on other databases are using currently the LIKE operator.
 
 [back to top][64]
 
@@ -275,10 +278,10 @@ To set the default language in your browser you have to set a variable that gets
 * Required extensions: GD, JSON, Session, MBString, Filter, XMLWriter, SPL
 * Recommended configuration:
 
-    register_globals = off
-    safe_mode = off (recommended)
-    memory_limit = 64M
-    file_upload = On
+    	register_globals = off
+    	safe_mode = off (recommended)
+    	memory_limit = 64M
+    	file_upload = on
 
 
 [back to top][64]
@@ -353,7 +356,7 @@ phpMyFAQ provides search plugins for Mozilla Firefox, Google Chrome and Internet
 
 **2.12. <a id="2.8"></a>Static solution ID**
 
-phpMyFAQ implements a static solution ID which never changes. This ID is displayed next to the question on a FAQ record page. You may think why do you need such an ID? If you have a record ID *1042* it is now possible to enter only the ID *1024* in the input field of the full-text search box and you'll be automatically redirected to the FAQ record with the ID *1024*. By default the numbers start at ID *1000* but you can change this value in the file *inc/constants.php*. You can also change the value of the incrementation of the static IDs.
+phpMyFAQ implements a static solution ID which never changes. This ID is displayed next to the question on a FAQ record page. You may think why do you need such an ID? If you have a record ID *1042* it is now possible to enter only the ID *1042* in the input field of the full-text search box and you'll be automatically redirected to the FAQ record with the ID *1042*. By default the numbers start at ID *1000* but you can change this value in the file *inc/constants.php*. You can also change the value of the incrementation of the static IDs.
 
 [back to top][64]
 
@@ -375,17 +378,17 @@ The IPv4 and IPv6 Network addresses can be added or removed in the configuration
 
 **2.14. <a id="2.14"></a>Attachments**
 
-phpMyFAQ supports encrypted attachments. The encryption is done using the [AES][79] algorithm implemented in mcrypt extension (if avaliable) or with native PHP Rijndael implementation. The key size vary depending on implementation used and can be max 256 bits long. Use of mcrypt extension is strongly recommended because of performance reasons, its avaliability is checked automatically at the run time.
+phpMyFAQ supports encrypted attachments. The encryption is done using the [AES](http://en.wikipedia.org/wiki/Advanced_Encryption_Standard) algorithm implemented in mcrypt extension (if avaliable) or with native PHP Rijndael implementation. The key size vary depending on implementation used and can be max 256 bits long. Use of mcrypt extension is strongly recommended because of performance reasons, its avaliability is checked automatically at the run time.
 
 See the migration section if you're migrating from earlier versions.
 
 Please be aware:
 
-*   Disabling encryption will cause all files be saved unencrypted. In this case you'll benefit sparing disk space, because identical files will be saved only once.
-*   Do not change the default attachment encryption key once files was uploaded. Doing so will cause all the previously uploaded files to be wrong decrypted. If you need to change the default key, you will have to re-upload all files.
-*   Always memorize your encryption keys. There is no way to decrypt files without a correct key.
-*   Files are always saved with names based on a virtual hash generated from several tokens (just like key and issue id etc), so there is no way to asses a file directly using the name it was uploaded under.
-*   Download continuation isn't (yet?) supported.
+* Disabling encryption will cause all files be saved unencrypted. In this case you'll benefit sparing disk space, because identical files will be saved only once.
+* Do not change the default attachment encryption key once files was uploaded. Doing so will cause all the previously uploaded files to be wrong decrypted. If you need to change the default key, you will have to re-upload all files.
+* Always memorize your encryption keys. There is no way to decrypt files without a correct key.
+* Files are always saved with names based on a virtual hash generated from several tokens (just like key and issue id etc), so there is no way to asses a file directly using the name it was uploaded under.
+* Download continuation isn't (yet?) supported.
 
 [back to top][64]
 
@@ -393,7 +396,7 @@ Please be aware:
 
 **2.15. <a id="2.8"></a>Twitter support**
 
-phpMyFAQ supports Twitter via OAuth. If you enable Twitter support in the social network configuration and add phpMyFAQ as a Twitter application on [twitter.com][80], all new FAQ additions in the administration backend will also post the question of the FAQ, the URL of the FAQ and all tags as hashtags to Twitter, e.g. the tag "phpMyFAQ" will be converted to "#phpmyfaq".
+phpMyFAQ supports Twitter via OAuth. If you enable Twitter support in the social network configuration and add phpMyFAQ as a Twitter application on [twitter.com](https://dev.twitter.com/apps/new), all new FAQ additions in the administration backend will also post the question of the FAQ, the URL of the FAQ and all tags as hashtags to Twitter, e.g. the tag "phpMyFAQ" will be converted to "#phpmyfaq".
 
 [back to top][64]
 
@@ -464,7 +467,7 @@ If you're running an older version of phpMyFAQ we recommend a new and fresh inst
 Upgrading from 2.5.x is a major upgrade. Please make a full backup before you run the upgrade! First you have to delete all files **except**:
 
 *   the file **data.php** in the directory **inc/**
-*   all files in the **assets/template/** directory
+*   all files in the **template/** directory
 *   the directory **attachments/**
 *   the directory **data/**
 *   the directory **images/**
@@ -472,7 +475,8 @@ Upgrading from 2.5.x is a major upgrade. Please make a full backup before you ru
 Open the following URL in your browser:
 
 `http://www.example.com/faq/install/update.php`
-Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. You have to update a lot of your template files due to the new, enhanced template engine.
+
+Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. You have to update a lot of your template files due to our change using the Bootstrap framework.
 
 The update script will move your template files to a folder **backup/** in the directory **assets/template/**. The default layout will be stored in the folder **assets/template/default/**.
 
@@ -489,14 +493,17 @@ Please copy the template file **assets/template/default/indexLogin.tpl** into yo
 Upgrading from 2.6.x is a major upgrade. Please make a full backup before you run the upgrade! First you have to delete all files **except**:
 
 *   all files in the directory **config/**
-*   all files in the directory **assets/template/**
+*   all files in the directory **template/**
 *   the directory **attachments/**
 *   the directory **images/**
 
 Open the following URL in your browser:
 
 `http://www.example.com/faq/install/update.php`
-Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. You have to update a lot of your template files due to our markup change from XHTML 1.0 to HTML5.
+
+Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. You have to update a lot of your template files due to our change using the Bootstrap framework.
+
+The update script will move your template files to a folder **backup/** in the directory **assets/template/**. The default layout will be stored in the folder **assets/template/default/**.
 
 Please copy the template file **assets/template/default/indexLogin.tpl** into your template folder.
 
@@ -509,14 +516,17 @@ Please copy the template file **assets/template/default/indexLogin.tpl** into yo
 Upgrading from 2.7.x is a major upgrade. Please make a full backup before you run the upgrade! First you have to delete all files **except**:
 
 *   all files in the directory **config/**
-*   all files in the directory **assets/template/**
+*   all files in the directory **template/**
 *   the directory **attachments/**
 *   the directory **images/**
 
 Open the following URL in your browser:
 
 `http://www.example.com/faq/install/update.php`
-Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. You have to update a lot of your template files due to our change to the Twitter Bootstrap framework.
+
+Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. You have to update a lot of your template files due to our change using the Bootstrap framework.
+
+The update script will move your template files to a folder **backup/** in the directory **assets/template/**. The default layout will be stored in the folder **assets/template/default/**.
 
 [back to top][64]
 
@@ -534,6 +544,7 @@ Updating an existing phpMyFAQ 2.8.x installation is fairly simple. Via FTP copy 
 Open the following URL in your browser:
 
 `http://www.example.com/faq/install/update.php`
+
 Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated.
 
 You can find the changed files between the 2.8.x versions in the file *CHANGEDFILES*.
@@ -544,9 +555,9 @@ You can find the changed files between the 2.8.x versions in the file *CHANGEDFI
 
 **3.5. <a id="3.5"></a>Modifying templates for phpMyFAQ 2.8.x**
 
-Your current 2.5.x, 2.6.x and 2.7.x templates are **barely** compatible with phpMyFAQ 2.8 because we changed the complete CSS framework to Twitter Bootstrap. We're also using a lot of Ajax in the frontend now.
+Your current 2.5.x, 2.6.x and 2.7.x templates are **barely** compatible with phpMyFAQ 2.8 because we changed the complete CSS framework to Bootstrap. We're also using a lot of Ajax based technologies and CSS3 in the frontend now.
 
-We recommend you'll take a look at the main [Twitter Bootstrap documentation][81]. Please don't forget that the style sheets are written with [LESS][82].
+We recommend you'll take a look at the main [Bootstrap documentation](http://twitter.github.com/bootstrap/). Please don't forget that the style sheets are written with [LESS](http://lesscss.org/). You have to compile the LESS files into CSS using a LESS compiler with node.js or a tool like [CodeKit](http://incident57.com/codekit/).
 
 Note: The character set for all languages and templates is UTF-8. If you notice problems with e.g. German umlauts you have to convert your templates to UTF-8 encoding. Please use UNIX file endings \n instead of Windows file endings with \r\n.
 
@@ -556,7 +567,7 @@ Note: The character set for all languages and templates is UTF-8. If you notice 
 
 **4. <a id="4"></a>Frontend**
 
-The public phpMyFAQ frontend has a simple, HTML5/CCS3 based default layout based on [Twitter Bootstrap][81]. The header has the main links for the all categories, instant response, add FAQs, add questions, open questions, sitemap and contact. On the left side you only see the main categories. You can also change the current language at the bottom of the FAQ, use the global search in the center of the FAQ or use the login box in the upper right if you have a valid user account. On the right side you see a list of the most popular FAQ records, the latest records, and the sticky FAQ records. On the pages with the FAQ records you'll see the other records of the current category and the tag cloud if you're using tagging.
+The public phpMyFAQ frontend has a simple, HTML5/CCS3 based default layout based on [Bootstrap](http://twitter.github.com/bootstrap/). The header has the main links for the all categories, instant response, add FAQs, add questions, open questions, sitemap and contact. On the left side you only see the main categories. You can also change the current language at the bottom of the FAQ, use the global search in the center of the FAQ or use the login box in the upper right if you have a valid user account. On the right side you see a list of the most popular FAQ records, the latest records, and the sticky FAQ records. On the pages with the FAQ records you'll see the other records of the current category and the tag cloud if you're using tagging.
 
 [back to top][64]
 
@@ -566,7 +577,7 @@ The public phpMyFAQ frontend has a simple, HTML5/CCS3 based default layout based
 
 As written above there's a select box for changing the current language. If you're visiting a phpMyFAQ powered FAQ, the current language will be the one you're browser is using or the language which was selected by the administrator of the FAQ. If you change the language you'll see the categories and records of your chosen language. If there are no entries in this language you'll see no entries. If you're switching to languages with right to left text direction (for example Arabic, Hebrew or Farsi) the whole default layout will be switching according to the text direction.
 
-**Note:** phpMyFAQ uses a WYSIWYG online editor that has support for multiple languages. However, phpMyFAQ comes only with English language pack installed so changing the current language will not change the language of WYSIWYG editor. If you would like to have WYSIWYG editor in another language, just download the latest [language pack][83], extract it and upload the extracted files to admin/editor directory under your phpMyFAQ's installation directory on your web server.
+**Note:** phpMyFAQ uses a WYSIWYG online editor that has support for multiple languages. However, phpMyFAQ comes only with English language pack installed so changing the current language will not change the language of WYSIWYG editor. If you would like to have WYSIWYG editor in another language, just download the latest [language pack](http://tinymce.moxiecode.com/download_i18n.php), extract it and upload the extracted files to admin/editor directory under your phpMyFAQ's installation directory on your web server.
 
 [back to top][64]
 
@@ -642,10 +653,10 @@ Note: Please do not forget to add also a translated category, otherwise you won'
 
 On every FAQ page there are a direct links to various social networks to share the current FAQ page. The supported social networks are:
 
-*   [Facebook][84]
-*   [Twitter][85]
-*   [delicious][86]
-*   [digg.com][87]
+*   [Facebook](http://www.facebook.com)
+*   [Twitter](http://www.twitter.com)
+*   [delicious](http://www.delicious.com/)
+*   [digg.com](http://www.digg.com)
 
 You can also click on a Facebook Like button or send the FAQ page URL up to 5 friends by e-mail. A PDF export and a button to print the FAQ is also available.
 
@@ -967,8 +978,8 @@ phpMyFAQ users have even more customization opportunities. The key feature is th
 
 Follow these steps to create a custom template set:
 
-*   copy the directory templates/default to templates/<custom\_template\_set>
-*   adjust template files in templates/<custom\_template\_set> to fit your needs
+*   copy the directory assets/templates/default to assets/templates/<custom\_template\_set>
+*   adjust template files in assets/templates/<custom\_template\_set> to fit your needs
 *   activate <custom\_template\_set> within Admin->Config->Main
 
 **Note:** There is a magic variable *{tplSetName}* containing the name of the actual layout available in each template file.
@@ -1137,12 +1148,14 @@ You can call the resources with the following URIs:
 Thank you for using phpMyFAQ! :-)
 
 Author: [Thorsten Rinne][88]
+
 Co-Authors: [Stephan Hochhaus][89], [Markus Gläser][90]
-Date: 2012-11-02
+
+Date: 2012-11-03
 
 © 2001-2012 phpMyFAQ Team
 
-This documentation is licensed under a [Creative Commons License][66].
+This documentation is licensed under a [Creative Commons License](http://creativecommons.org/licenses/by/2.0/).
 
 [back to top][64]
 
@@ -1210,29 +1223,6 @@ This documentation is licensed under a [Creative Commons License][66].
  [62]: #8.2
  [63]: #9
  [64]: #top
- [65]: http://www.mozilla.org/MPL/2.0/
- [66]: http://creativecommons.org/licenses/by/2.0/
- [67]: http://forum.phpmyfaq.de
- [68]: http://www.phpmyfaq.de/support.php
- [69]: http://www.php.net
- [70]: http://httpd.apache.org
- [71]: http://www.nginx.net/
- [72]: http://www.lighttpd.net
- [73]: http://www.microsoft.com/
- [74]: http://www.mysql.com
- [75]: http://www.postgresql.org
- [76]: http://www.microsoft.com/sql/
- [77]: http://www.sqlite.org
- [78]: http://montyprogram.com/mariadb/
- [79]: http://en.wikipedia.org/wiki/Advanced_Encryption_Standard
- [80]: https://dev.twitter.com/apps/new
- [81]: http://twitter.github.com/bootstrap/
- [82]: http://lesscss.org/
- [83]: http://tinymce.moxiecode.com/download_i18n.php
- [84]: http://www.facebook.com
- [85]: http://www.twitter.com
- [86]: http://www.delicious.com/
- [87]: http://www.digg.com
  [88]: mailto:thorsten AT phpmyfaq DOT de
  [89]: mailto:stephan AT yauh DOT de
  [90]: mailto:mgl-mail AT t-online DOT de

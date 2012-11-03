@@ -313,7 +313,7 @@ pre {
 <ol>
 <li><a href="#2.1">Requirements</a></li>
 <li><a href="#2.2">Preparations</a></li>
-<li><a href="#2.3">Install-Script</a></li>
+<li><a href="#2.3">Setup</a></li>
 <li><a href="#2.4">First Steps</a></li>
 <li><a href="#2.5">Notes regarding the search-function</a></li>
 <li><a href="#2.6">Automatic content negotiation</a></li>
@@ -429,7 +429,7 @@ pre {
 
 <p><strong>1.2. <a id="1.2"></a>Support</strong></p>
 
-<p>If you should run into any problems using phpMyFAQ check out our support forums at <a href="http://forum.phpmyfaq.de">forum.phpmyfaq.de</a>. There is no support for free by phone or email, please refrain from calling or mailing us.</p>
+<p>If you should run into any problems using phpMyFAQ check out our support forums at <a href="http://forum.phpmyfaq.de">forum.phpmyfaq.de</a>. You can also use our Twitter account <a href="https://twitter.com/phpMyFAQ/">@phpMyFAQ</a> to ask us short question if they fit into 140 characters. There is no free support by phone or email, please refrain from calling or mailing us.</p>
 
 <p>The phpMyFAQ team offers the following paid services:</p>
 
@@ -474,14 +474,14 @@ pre {
 <li>SPL support</li>
 </ul>
 </li>
-<li><strong>Web server</strong> ( <a href="http://httpd.apache.org">Apache</a> 2.x or <a href="http://www.nginx.net/">nginx</a> 0.7+ or <a href="http://www.lighttpd.net">lighttpd</a> 1.0+ or <a href="http://www.microsoft.com/">IIS</a> 7.0+)</li>
+<li><strong>Web server</strong> ( <a href="http://httpd.apache.org">Apache</a> 2.x or <a href="http://www.nginx.net/">nginx</a> 0.7+ or <a href="http://www.lighttpd.net">lighttpd</a> 1.0+ or <a href="http://www.microsoft.com/">IIS</a> 6.0+ or Zeus Webserver)</li>
 <li><strong>Database server</strong>
 
 <ul>
 <li><a href="http://www.mysql.com">MySQL</a> 5.x with the MySQL extension (recommended: 5.5.x)</li>
 <li><a href="http://www.mysql.com">MySQL</a> 5.x with the MySQLi extension (recommended: 5.5.x)</li>
 <li><a href="http://www.postgresql.org">PostgreSQL</a> 8.x (recommended: latest 8.x)</li>
-<li><a href="http://www.microsoft.com/sql/">Microsoft SQL Server</a> 2000, 2005, 2008</li>
+<li><a href="http://www.microsoft.com/sql/">Microsoft SQL Server</a> 2005, 2008, 2012</li>
 <li><a href="http://www.sqlite.org">SQLite</a></li>
 <li><a href="http://montyprogram.com/mariadb/">MariaDB</a> 5.x (experimental)</li>
 </ul>
@@ -535,12 +535,13 @@ Writing permission for your script is needed in this directory to be able to wri
 
 <hr />
 
-<p><strong>2.3. <a id="2.3"></a>Install-Script</strong></p>
+<p><strong>2.3. <a id="2.3"></a>Setup</strong></p>
 
 <p>Open your browser and type in the following URL:</p>
 
-<p><code>http://www.example.com/faq/install/setup.php</code>
-Substitute <strong>www.example.com</strong> with your actual domain name. When the site is loaded enter the address of your database server (e.g. db.provider.com), your database username and password as well as the database name. The database have to be created with UTF-8 chraracter set before running the installation script. You can leave the prefix-field empty. If you are planning on using multiple FAQs in one database you will have to use a table prefix, though (i.e. <em>sport</em> for a sports-FAQ, <em>weather</em> for a weather-FAQ, etc.). Please note that only letters and an underline: "_" can be used as the prefix.</p>
+<p><code>http://www.example.com/faq/install/setup.php</code></p>
+
+<p>Substitute <strong>www.example.com</strong> with your actual domain name. When the site is loaded enter the address of your database server (e.g. db.provider.com), your database username and password as well as the database name. The database have to be created with UTF-8 chraracter set before running the installation script. You can leave the prefix-field empty. If you are planning on using multiple FAQs in one database you will have to use a table prefix, though (i.e. <em>sport</em> for a sports FAQ, <em>weather</em> for a weather FAQ, etc.). Please note that only letters and an underline: "_" can be used as the prefix.</p>
 
 <p>If your PHP was compiled with the LDAP extension you can add your LDAP information, too. You have to insert your LDAP information, too.</p>
 
@@ -554,13 +555,15 @@ Substitute <strong>www.example.com</strong> with your actual domain name. When t
 
 <p>You can enter the public area of your FAQ by entering</p>
 
-<p><code>http://www.example.com/faq/index.php</code>
-into your browser's address field. Your FAQ will be empty and presented in the the standard layout.</p>
+<p><code>http://www.example.com/faq/index.php</code></p>
+
+<p>into your browser's address field. Your FAQ will be empty and presented in the the standard layout.</p>
 
 <p>To configure phpMyFAQ point your browser to</p>
 
-<p><code>http://www.example.com/faq/admin/index.php</code>
-Use the username <strong>admin</strong> and your selected password for your first login into the admin section.</p>
+<p><code>http://www.example.com/faq/admin/index.php</code></p>
+
+<p>Use the username <strong>admin</strong> and your selected password for your first login into the admin section.</p>
 
 <p>Some variables that doesn't change regularly, they can be edited in the file <em>config/constants.php</em>. You can change the</p>
 
@@ -576,7 +579,7 @@ Use the username <strong>admin</strong> and your selected password for your firs
 <li>flag with which Latest and Top Ten RSS feeds will be forced to use the current PMF SEO URL schema (default: true)</li>
 <li>flag with which Google site map will be forced to use the current PMF SEO URL schema (default: true)</li>
 <li>the number with which the Tags Cloud list is limited to (default: 50)</li>
-<li>the number with which the Auto-complete list is limited to (default: 20)</li>
+<li>the number with which the autocomplete list is limited to (default: 20)</li>
 </ul>
 
 
@@ -588,7 +591,7 @@ Use the username <strong>admin</strong> and your selected password for your firs
 
 <ul>
 <li>The boolean full-text search will only work with MySQL and if there are some entries in the database (5 or more). The term you are looking for should also not be in more than 50% of all your entries, or it will automatically be excluded from search. This is not a bug, but rather a feature of MySQL.</li>
-<li>The search on other databases is using the LIKE operator.</li>
+<li>The search on other databases are using currently the LIKE operator.</li>
 </ul>
 
 
@@ -636,10 +639,11 @@ Use the username <strong>admin</strong> and your selected password for your firs
 <li>Required extensions: GD, JSON, Session, MBString, Filter, XMLWriter, SPL</li>
 <li><p>Recommended configuration:</p>
 
-<p>  register_globals = off
+<pre><code>  register_globals = off
   safe_mode = off (recommended)
   memory_limit = 64M
-  file_upload = On</p></li>
+  file_upload = on
+</code></pre></li>
 </ul>
 
 
@@ -718,7 +722,7 @@ Use the username <strong>admin</strong> and your selected password for your firs
 
 <p><strong>2.12. <a id="2.8"></a>Static solution ID</strong></p>
 
-<p>phpMyFAQ implements a static solution ID which never changes. This ID is displayed next to the question on a FAQ record page. You may think why do you need such an ID? If you have a record ID <em>1042</em> it is now possible to enter only the ID <em>1024</em> in the input field of the full-text search box and you'll be automatically redirected to the FAQ record with the ID <em>1024</em>. By default the numbers start at ID <em>1000</em> but you can change this value in the file <em>inc/constants.php</em>. You can also change the value of the incrementation of the static IDs.</p>
+<p>phpMyFAQ implements a static solution ID which never changes. This ID is displayed next to the question on a FAQ record page. You may think why do you need such an ID? If you have a record ID <em>1042</em> it is now possible to enter only the ID <em>1042</em> in the input field of the full-text search box and you'll be automatically redirected to the FAQ record with the ID <em>1042</em>. By default the numbers start at ID <em>1000</em> but you can change this value in the file <em>inc/constants.php</em>. You can also change the value of the incrementation of the static IDs.</p>
 
 <p><a href="#top">back to top</a></p>
 
@@ -830,7 +834,7 @@ sub vcl_fetch {
 </ul>
 
 
-<p>If you're running an older version of phpMyFAQ we recommend a new and fresh install. If you need support for updating an old FAQ from the 1.x or 2.0.x series, please send us an <a href="http://www.phpmyfaq.de/support.php">e-mail</a>.</p>
+<p>If you're running an older version of phpMyFAQ we recommend a new and fresh install. If you need support for updating an old FAQ from the 1.x or 2.0.x series, please send us an [e-mail][68].</p>
 
 <p><a href="#top">back to top</a></p>
 
@@ -842,7 +846,7 @@ sub vcl_fetch {
 
 <ul>
 <li>the file <strong>data.php</strong> in the directory <strong>inc/</strong></li>
-<li>all files in the <strong>assets/template/</strong> directory</li>
+<li>all files in the <strong>template/</strong> directory</li>
 <li>the directory <strong>attachments/</strong></li>
 <li>the directory <strong>data/</strong></li>
 <li>the directory <strong>images/</strong></li>
@@ -851,8 +855,9 @@ sub vcl_fetch {
 
 <p>Open the following URL in your browser:</p>
 
-<p><code>http://www.example.com/faq/install/update.php</code>
-Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. You have to update a lot of your template files due to the new, enhanced template engine.</p>
+<p><code>http://www.example.com/faq/install/update.php</code></p>
+
+<p>Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. You have to update a lot of your template files due to our change using the Bootstrap framework.</p>
 
 <p>The update script will move your template files to a folder <strong>backup/</strong> in the directory <strong>assets/template/</strong>. The default layout will be stored in the folder <strong>assets/template/default/</strong>.</p>
 
@@ -870,7 +875,7 @@ Choose your installed phpMyFAQ version and click the button of the update script
 
 <ul>
 <li>all files in the directory <strong>config/</strong></li>
-<li>all files in the directory <strong>assets/template/</strong></li>
+<li>all files in the directory <strong>template/</strong></li>
 <li>the directory <strong>attachments/</strong></li>
 <li>the directory <strong>images/</strong></li>
 </ul>
@@ -878,8 +883,11 @@ Choose your installed phpMyFAQ version and click the button of the update script
 
 <p>Open the following URL in your browser:</p>
 
-<p><code>http://www.example.com/faq/install/update.php</code>
-Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. You have to update a lot of your template files due to our markup change from XHTML 1.0 to HTML5.</p>
+<p><code>http://www.example.com/faq/install/update.php</code></p>
+
+<p>Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. You have to update a lot of your template files due to our change using the Bootstrap framework.</p>
+
+<p>The update script will move your template files to a folder <strong>backup/</strong> in the directory <strong>assets/template/</strong>. The default layout will be stored in the folder <strong>assets/template/default/</strong>.</p>
 
 <p>Please copy the template file <strong>assets/template/default/indexLogin.tpl</strong> into your template folder.</p>
 
@@ -893,7 +901,7 @@ Choose your installed phpMyFAQ version and click the button of the update script
 
 <ul>
 <li>all files in the directory <strong>config/</strong></li>
-<li>all files in the directory <strong>assets/template/</strong></li>
+<li>all files in the directory <strong>template/</strong></li>
 <li>the directory <strong>attachments/</strong></li>
 <li>the directory <strong>images/</strong></li>
 </ul>
@@ -901,8 +909,11 @@ Choose your installed phpMyFAQ version and click the button of the update script
 
 <p>Open the following URL in your browser:</p>
 
-<p><code>http://www.example.com/faq/install/update.php</code>
-Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. You have to update a lot of your template files due to our change to the Twitter Bootstrap framework.</p>
+<p><code>http://www.example.com/faq/install/update.php</code></p>
+
+<p>Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. You have to update a lot of your template files due to our change using the Bootstrap framework.</p>
+
+<p>The update script will move your template files to a folder <strong>backup/</strong> in the directory <strong>assets/template/</strong>. The default layout will be stored in the folder <strong>assets/template/default/</strong>.</p>
 
 <p><a href="#top">back to top</a></p>
 
@@ -922,8 +933,9 @@ Choose your installed phpMyFAQ version and click the button of the update script
 
 <p>Open the following URL in your browser:</p>
 
-<p><code>http://www.example.com/faq/install/update.php</code>
-Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated.</p>
+<p><code>http://www.example.com/faq/install/update.php</code></p>
+
+<p>Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated.</p>
 
 <p>You can find the changed files between the 2.8.x versions in the file <em>CHANGEDFILES</em>.</p>
 
@@ -933,9 +945,9 @@ Choose your installed phpMyFAQ version and click the button of the update script
 
 <p><strong>3.5. <a id="3.5"></a>Modifying templates for phpMyFAQ 2.8.x</strong></p>
 
-<p>Your current 2.5.x, 2.6.x and 2.7.x templates are <strong>barely</strong> compatible with phpMyFAQ 2.8 because we changed the complete CSS framework to Twitter Bootstrap. We're also using a lot of Ajax in the frontend now.</p>
+<p>Your current 2.5.x, 2.6.x and 2.7.x templates are <strong>barely</strong> compatible with phpMyFAQ 2.8 because we changed the complete CSS framework to Bootstrap. We're also using a lot of Ajax based technologies and CSS3 in the frontend now.</p>
 
-<p>We recommend you'll take a look at the main <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap documentation</a>. Please don't forget that the style sheets are written with <a href="http://lesscss.org/">LESS</a>.</p>
+<p>We recommend you'll take a look at the main <a href="http://twitter.github.com/bootstrap/">Bootstrap documentation</a>. Please don't forget that the style sheets are written with <a href="http://lesscss.org/">LESS</a>. You have to compile the LESS files into CSS using a LESS compiler with node.js or a tool like <a href="http://incident57.com/codekit/">CodeKit</a>.</p>
 
 <p>Note: The character set for all languages and templates is UTF-8. If you notice problems with e.g. German umlauts you have to convert your templates to UTF-8 encoding. Please use UNIX file endings \n instead of Windows file endings with \r\n.</p>
 
@@ -945,7 +957,7 @@ Choose your installed phpMyFAQ version and click the button of the update script
 
 <p><strong>4. <a id="4"></a>Frontend</strong></p>
 
-<p>The public phpMyFAQ frontend has a simple, HTML5/CCS3 based default layout based on <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>. The header has the main links for the all categories, instant response, add FAQs, add questions, open questions, sitemap and contact. On the left side you only see the main categories. You can also change the current language at the bottom of the FAQ, use the global search in the center of the FAQ or use the login box in the upper right if you have a valid user account. On the right side you see a list of the most popular FAQ records, the latest records, and the sticky FAQ records. On the pages with the FAQ records you'll see the other records of the current category and the tag cloud if you're using tagging.</p>
+<p>The public phpMyFAQ frontend has a simple, HTML5/CCS3 based default layout based on <a href="http://twitter.github.com/bootstrap/">Bootstrap</a>. The header has the main links for the all categories, instant response, add FAQs, add questions, open questions, sitemap and contact. On the left side you only see the main categories. You can also change the current language at the bottom of the FAQ, use the global search in the center of the FAQ or use the login box in the upper right if you have a valid user account. On the right side you see a list of the most popular FAQ records, the latest records, and the sticky FAQ records. On the pages with the FAQ records you'll see the other records of the current category and the tag cloud if you're using tagging.</p>
 
 <p><a href="#top">back to top</a></p>
 
@@ -1378,8 +1390,8 @@ For example, if you want to use <em>faq.example.org</em> and <em>beta.faq.exampl
 <p>Follow these steps to create a custom template set:</p>
 
 <ul>
-<li>copy the directory templates/default to templates/&lt;custom_template_set></li>
-<li>adjust template files in templates/&lt;custom_template_set> to fit your needs</li>
+<li>copy the directory assets/templates/default to assets/templates/&lt;custom_template_set></li>
+<li>adjust template files in assets/templates/&lt;custom_template_set> to fit your needs</li>
 <li>activate &lt;custom_template_set> within Admin->Config->Main</li>
 </ul>
 
@@ -1574,9 +1586,11 @@ This method returns the phpMyFAQ version number as string.</p>
 
 <p>Thank you for using phpMyFAQ! :-)</p>
 
-<p>Author: <a href="mailto:thorsten">Thorsten Rinne</a>
-Co-Authors: <a href="mailto:stephan">Stephan Hochhaus</a>, <a href="mailto:mgl-mail">Markus Gläser</a>
-Date: 2012-11-02</p>
+<p>Author: <a href="mailto:thorsten">Thorsten Rinne</a></p>
+
+<p>Co-Authors: <a href="mailto:stephan">Stephan Hochhaus</a>, <a href="mailto:mgl-mail">Markus Gläser</a></p>
+
+<p>Date: 2012-11-03</p>
 
 <p>© 2001-2012 phpMyFAQ Team</p>
 
