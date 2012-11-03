@@ -158,10 +158,6 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission['adda
 <?php
     if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && !(filesize($_FILES["userfile"]["tmp_name"]) > $faqConfig->get('records.maxAttachmentSize'))) {
 
-        if (0 === $recordId) {
-            $recordId = $faqConfig->getDb()->nextId(PMF_Db::getTablePrefix() . 'faqdata', 'id');
-        }
-
         $att = PMF_Attachment_Factory::create();
         $att->setRecordId($recordId);
         $att->setRecordLang($recordLang);

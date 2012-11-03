@@ -280,12 +280,17 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                                 }
                                 ?>
                             </ul>
-                            <?php
+                                <?php
+                                if (0 === $faqData['id']) {
+                                    $faqData['id'] = $faqConfig->getDb()->nextId(
+                                        PMF_Db::getTablePrefix() . 'faqdata',
+                                        'id'
+                                    );
+                                }
                                 printf(
-                                    '<a class="btn btn-success" onclick="addAttachment(\'attachment.php?record_id=%d&amp;record_lang=%s&amp;rubrik=%d\', \'Attachment\');">%s</a>',
+                                    '<a class="btn btn-success" onclick="addAttachment(\'attachment.php?record_id=%d&amp;record_lang=%s\', \'Attachment\');">%s</a>',
                                     $faqData['id'],
                                     $faqData['lang'],
-                                    $selectedCategory,
                                     $PMF_LANG['ad_att_add']
                                 );
                             ?>
