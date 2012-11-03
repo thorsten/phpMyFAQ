@@ -197,7 +197,7 @@ $PMF_LANG["ad_gen_or"] = "oder";
 // Benutzerverwaltung
 $PMF_LANG["ad_user"] = "Benutzerverwaltung";
 $PMF_LANG["ad_user_username"] = "Loginname";
-$PMF_LANG["ad_user_rights"] = "Rechte";
+$PMF_LANG["ad_user_rights"] = "Rechte des Benutzer";
 $PMF_LANG["ad_user_edit"] = "Bearbeiten";
 $PMF_LANG["ad_user_delete"] = "Löschen";
 $PMF_LANG["ad_user_add"] = "Benutzer hinzufügen";
@@ -205,7 +205,6 @@ $PMF_LANG["ad_user_profou"] = "Profil des Benutzers";
 $PMF_LANG["ad_user_name"] = "Name";
 $PMF_LANG["ad_user_password"] = "Passwort";
 $PMF_LANG["ad_user_confirm"] = "Bestätigung";
-$PMF_LANG["ad_user_rights"] = "Rechte";
 $PMF_LANG["ad_user_del_1"] = "Soll der Benutzer ";
 $PMF_LANG["ad_user_del_2"] = " gelöscht werden?";
 $PMF_LANG["ad_user_del_3"] = "Sind Sie sicher?";
@@ -1131,3 +1130,17 @@ $PMF_LANG['msgOnlineMode'] = "FAQ ist online";
 $PMF_LANG['msgShowMore'] = "mehr zeigen";
 $PMF_LANG['msgQuestionAnswered'] = "Frage beantwortet";
 $PMF_LANG['msgMessageQuestionAnswered'] = "Deine Frage bei %s wurde beantwortet. Hier kommst du zur Antwort:";
+
+// added v2.8.0-alpha3 - 2012-11-03 by Thorsten
+$PMF_LANG["rightsLanguage"]["addattachment"] = "Anhänge hinzufügen";
+$PMF_LANG["rightsLanguage"]["editattachment"] = "Anhänge bearbeiten";
+$PMF_LANG["rightsLanguage"]["delattachment"] = "Anhänge löschen";
+$PMF_LANG["rightsLanguage"]["dlattachment"] = "Anhänge herunterladen";
+$PMF_LANG["rightsLanguage"]["reports"] = "Reports erstellen";
+$PMF_LANG["rightsLanguage"]["addfaq"] = "FAQs im Frontend hinzufügen";
+$PMF_LANG["rightsLanguage"]["addquestion"] = "Fragen im Frontend hinzufügen";
+$PMF_LANG["rightsLanguage"]["addcomment"] = "Kommentare im Frontend hinzufügen";
+$PMF_LANG["rightsLanguage"]["editinstances"] = "Mulit-Sites bearbeiten";
+$PMF_LANG["rightsLanguage"]["addinstances"] = "Multi-Sites hinzufügen";
+$PMF_LANG["rightsLanguage"]["delinstances"] = "Multi-Sites löschen";
+$PMF_LANG["rightsLanguage"]["export"] = "FAQs exportieren";
