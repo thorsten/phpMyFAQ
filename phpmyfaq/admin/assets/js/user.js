@@ -17,24 +17,24 @@
 /**
  * Fetches the user rights as JSON object and checks the checkboxes
  *
- * @param integer user_id User ID
+ * @param userId User ID
  */
-function getUserRights(user_id) {
-    $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=get_user_rights&user_id=" + user_id,
+function getUserRights(userId) {
+    $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=get_user_rights&user_id=" + userId,
         function(data) {
             $.each(data, function(i, val) {
                 $('#user_right_' + val).attr('checked', true);
             });
-            $('#rights_user_id').val(user_id);
+            $('#rights_userId').val(userId);
         });
 }
 
 /**
  * Updates the user data in forms
  *
- * @return void
+ * @param userId User ID
  */
-function updateUser(user_id) {
-    getUserData(user_id);
-    getUserRights(user_id);
+function updateUser(userId) {
+    getUserData(userId);
+    getUserRights(userId);
 }

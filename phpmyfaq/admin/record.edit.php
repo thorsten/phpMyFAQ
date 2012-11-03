@@ -303,35 +303,6 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                         <div class="controls">
                             <input type="text" name="tags" id="tags" value="<?php echo $faqData['tags'] ?>"
                                    data-provide="typeahead" data-mode="multiple" />
-                            <script type="text/javascript">
-                                function extractor(query) {
-                                    var result = /([^,]+)$/.exec(query);
-                                    if(result && result[1])
-                                        return result[1].trim();
-                                    return '';
-                                }
-                                $('#tags').typeahead({
-                                    source: function (query, process) {
-                                        return $.get("index.php?action=ajax&ajax=tags_list", { q: query }, function (data) {
-                                            return process(data.tags);
-                                        });
-                                    },
-                                    updater: function(item) {
-                                        return this.$element.val().replace(/[^,]*$/,'')+item+',';
-                                    },
-                                    matcher: function (item) {
-                                        var tquery = extractor(this.query);
-                                        if(!tquery) return false;
-                                        return ~item.toLowerCase().indexOf(tquery)
-                                    },
-                                    highlighter: function (item) {
-                                        var query = extractor(this.query).replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&')
-                                        return item.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
-                                            return '<strong>' + match + '</strong>'
-                                        })
-                                    }
-                                });
-                            </script>
                             <span id="tagsHelp" class="hide"><?php echo $PMF_LANG['msgShowHelp']; ?></span>
                         </div>
                     </div>
@@ -713,8 +684,35 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
     <script type="text/javascript">
     /* <![CDATA[ */
 
-    $(function()
-    {
+    function extractor(query) {
+        var result = /([^,]+)$/.exec(query);
+        if(result && result[1])
+            return result[1].trim();
+        return '';
+    }
+    $('#tags').typeahead({
+        source: function (query, process) {
+            return $.get("index.php?action=ajax&ajax=tags_list", { q: query }, function (data) {
+                return process(data.tags);
+            });
+        },
+        updater: function(item) {
+            return this.$element.val().replace(/[^,]*$/,'')+item+',';
+        },
+        matcher: function (item) {
+            var tquery = extractor(this.query);
+            if(!tquery) return false;
+            return ~item.toLowerCase().indexOf(tquery)
+        },
+        highlighter: function (item) {
+            var query = extractor(this.query).replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&')
+            return item.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                return '<strong>' + match + '</strong>'
+            })
+        }
+    });
+
+    $(function() {
         $('.date-pick').datePicker();
 
         $('#date').datePicker({startDate: '1900-01-01'});
@@ -744,8 +742,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
      *
      * @return void
      */
-    function toggleFieldset(fieldset)
-    {
+    function toggleFieldset(fieldset) {
         if ($('#edit' + fieldset).css('display') == 'none') {
             $('#edit' + fieldset).fadeIn('fast');
         } else {
@@ -758,16 +755,12 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
      *
      * @return void
      */
-    function showIDContainer()
-    {
+    function showIDContainer() {
         var display = 0 == arguments.length || !!arguments[0] ? 'block' : 'none';
-        
         $('#recordDateInputContainer').attr('style', 'display: ' + display);
     }
 
-
-    function setRecordDate(how)
-    {
+    function setRecordDate(how) {
         if('dateActualize' == how) {
             showIDContainer(false);
             $('#date').val('');
@@ -787,8 +780,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
      *
      * @return void
      */
-    function showHelp(option)
-    {
+    function showHelp(option) {
         $('#' + option + 'Help').fadeIn(500);
         $('#' + option + 'Help').fadeOut(2500);
     }
@@ -900,8 +892,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
      *
      * @return void
      */
-    function createTinyMCE(field)
-    {
+    function createTinyMCE(field) {
         tinyMCE.init({
             // General options
             mode     : "exact",
