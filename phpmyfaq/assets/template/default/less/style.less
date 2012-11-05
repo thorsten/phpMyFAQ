@@ -163,25 +163,24 @@ body {
       padding: 5px;
 
       // Voting
-      .star-rating s:hover {
-        color: @red;
-      }
-      .star-rating s {
-        color: black;
-        font-size: 50px;
-        cursor: default;
-        text-decoration: none;
-        line-height: 50px;
-      }
       .star-rating {
         padding: 2px;
-
-      }
-      .star-rating s:hover:before{
-        content: "\2605";
-      }
-      .star-rating s:before {
-        content: "\2606";
+        font-size: 50px;
+        line-height: 50px;
+        s {
+          color: black;
+          cursor: pointer;
+          text-decoration: none;
+        }
+        s:hover {
+          color: @red;
+        }
+        s:hover:before, s.voted {
+           content: "\2605";
+        }
+        s:before {
+          content: "\2606";
+        }
       }
     }
 

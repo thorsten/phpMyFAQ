@@ -839,10 +839,9 @@ body{background:#f6f1eb;}
 #main{background:#fffff9;padding-top:60px;}#main .categories{padding:8px 0;font-size:15px;}
 #main .search-box form{margin-bottom:5px;}#main .search-box form a{font-size:11px;}
 #main .nav{margin-bottom:0;}
-#main .tab-content{padding:5px;}#main .tab-content .star-rating s:hover{color:#9d261d;}
-#main .tab-content .star-rating s{color:black;font-size:50px;cursor:default;text-decoration:none;line-height:50px;}
-#main .tab-content .star-rating{padding:2px;}
-#main .tab-content .star-rating s:hover:before{content:"\2605";}
+#main .tab-content{padding:5px;}#main .tab-content .star-rating{padding:2px;font-size:50px;line-height:50px;}#main .tab-content .star-rating s{color:black;cursor:pointer;text-decoration:none;}
+#main .tab-content .star-rating s:hover{color:#9d261d;}
+#main .tab-content .star-rating s:hover:before,#main .tab-content .star-rating s.voted{content:"\2605";}
 #main .tab-content .star-rating s:before{content:"\2606";}
 #main .hello-phpmyfaq{background-color:#bb2818;background-image:-moz-linear-gradient(top, #cb3a25, #a20e05);background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#cb3a25), to(#a20e05));background-image:-webkit-linear-gradient(top, #cb3a25, #a20e05);background-image:-o-linear-gradient(top, #cb3a25, #a20e05);background-image:linear-gradient(to bottom, #cb3a25, #a20e05);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffcb3a25', endColorstr='#ffa20e05', GradientType=0);color:#f2f2f2;}#main .hello-phpmyfaq h1{color:#f2f2f2;font-size:44px;margin-bottom:16px;}
 #main .pointer{cursor:pointer;}

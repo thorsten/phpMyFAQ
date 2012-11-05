@@ -287,6 +287,7 @@ $tpl->parse('writeContent', array(
     'saveVotingID'               => $faq->faqRecord['id'],
     'saveVotingIP'               => $_SERVER['REMOTE_ADDR'],
     'msgAverageVote'             => $PMF_LANG['msgAverageVote'],
+    'renderVotingStars'          => '',
     'printVotings'               => $faqRating->getVotingResult($recordId),
     'switchLanguage'             => $switchLanguage,
     'msgVoteUseability'          => $PMF_LANG['msgVoteUseability'],

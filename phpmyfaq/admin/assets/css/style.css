@@ -11587,20 +11587,21 @@ body {
 #main .tab-content {
   padding: 5px;
 }
-#main .tab-content .star-rating s:hover {
-  color: #9d261d;
+#main .tab-content .star-rating {
+  padding: 2px;
+  font-size: 50px;
+  line-height: 50px;
 }
 #main .tab-content .star-rating s {
   color: black;
-  font-size: 50px;
-  cursor: default;
+  cursor: pointer;
   text-decoration: none;
-  line-height: 50px;
 }
-#main .tab-content .star-rating {
-  padding: 2px;
+#main .tab-content .star-rating s:hover {
+  color: #9d261d;
 }
-#main .tab-content .star-rating s:hover:before {
+#main .tab-content .star-rating s:hover:before,
+#main .tab-content .star-rating s.voted {
   content: "\2605";
 }
 #main .tab-content .star-rating s:before {

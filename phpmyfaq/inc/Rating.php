@@ -183,22 +183,25 @@ class PMF_Rating
      */
     function getVotingResult($id)
     {
-        $query = sprintf(
-            'SELECT
+        $query = sprintf('
+            SELECT
                 (vote/usr) as voting, usr
             FROM
                 %sfaqvoting
             WHERE
                 artikel = %d',
             PMF_Db::getTablePrefix(),
-            $id);
-       $result = $this->_config->getDb()->query($query);
-       if ($this->_config->getDb()->numRows($result) > 0) {
+            $id
+        );
+        $result = $this->_config->getDb()->query($query);
+        if ($this->_config->getDb()->numRows($result) > 0) {
             $row = $this->_config->getDb()->fetchObject($result);
-            return sprintf(' %s ('.$this->plr->GetMsg('plmsgVotes',$row->usr).')',
-                round($row->voting, 2));
+            return sprintf(
+                ' %s ('.$this->plr->GetMsg('plmsgVotes',$row->usr).')',
+                round($row->voting, 2)
+            );
        } else {
-            return '0 ('.$this->plr->GetMsg('plmsgVotes',0).')';
+            return '0 (' . $this->plr->GetMsg('plmsgVotes', 0) . ')';
        }
     }
 }
