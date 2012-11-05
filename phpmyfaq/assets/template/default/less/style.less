@@ -160,7 +160,29 @@ body {
     }
 
     .tab-content {
-        padding: 5px;
+      padding: 5px;
+
+      // Voting
+      .star-rating s:hover {
+        color: @red;
+      }
+      .star-rating s {
+        color: black;
+        font-size: 50px;
+        cursor: default;
+        text-decoration: none;
+        line-height: 50px;
+      }
+      .star-rating {
+        padding: 2px;
+
+      }
+      .star-rating s:hover:before{
+        content: "\2605";
+      }
+      .star-rating s:before {
+        content: "\2606";
+      }
     }
 
     .hello-phpmyfaq {
@@ -174,36 +196,6 @@ body {
         }
     }
 
-    // Voting
-    .rating-cancel, .star-rating {
-        float: left;
-        width: 17px;
-        height: 15px;
-        text-indent: -999em;
-        cursor: pointer;
-        display: block;
-        background: transparent;
-        overflow: hidden;
-    }
-    .rating-cancel, .star-rating a {
-        background: url(../../../assets/img/delete.gif) no-repeat 0 -16px;
-    }
-    .star-rating, .star-rating a {
-        background: url(../../../assets/img/star.gif) no-repeat 0 0px;
-    }
-    .rating-cancel a, .star-rating a {
-        display: block;
-        width: 16px;
-        height: 100%;
-        background-position: 0 0px;
-        border: 0;
-    }
-    .star-rating-on a {
-        background-position: 0 -16px !important;
-    }
-    .star-rating-hover a {
-        background-position: 0 -32px;
-    }
     .pointer {
         cursor: pointer;
     }

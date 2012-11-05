@@ -20,7 +20,7 @@
  * @since     2010-01-17
  */
 /*!
- * Bootstrap v2.2.0
+ * Bootstrap v2.2.1
  *
  * Copyright 2012 Twitter, Inc
  * Licensed under the Apache License v2.0
@@ -5798,7 +5798,7 @@ a.badge:hover {
  * @since     2010-01-17
  */
 /*!
- * Bootstrap v2.2.0
+ * Bootstrap v2.2.1
  *
  * Copyright 2012 Twitter, Inc
  * Licensed under the Apache License v2.0
@@ -11587,6 +11587,25 @@ body {
 #main .tab-content {
   padding: 5px;
 }
+#main .tab-content .star-rating s:hover {
+  color: #9d261d;
+}
+#main .tab-content .star-rating s {
+  color: black;
+  font-size: 50px;
+  cursor: default;
+  text-decoration: none;
+  line-height: 50px;
+}
+#main .tab-content .star-rating {
+  padding: 2px;
+}
+#main .tab-content .star-rating s:hover:before {
+  content: "\2605";
+}
+#main .tab-content .star-rating s:before {
+  content: "\2606";
+}
 #main .hello-phpmyfaq {
   background-color: #bb2818;
   background-image: -moz-linear-gradient(top, #cb3a25, #a20e05);
@@ -11602,39 +11621,6 @@ body {
   color: #f2f2f2;
   font-size: 44px;
   margin-bottom: 16px;
-}
-#main .rating-cancel,
-#main .star-rating {
-  float: left;
-  width: 17px;
-  height: 15px;
-  text-indent: -999em;
-  cursor: pointer;
-  display: block;
-  background: transparent;
-  overflow: hidden;
-}
-#main .rating-cancel,
-#main .star-rating a {
-  background: url(../../../assets/img/delete.gif) no-repeat 0 -16px;
-}
-#main .star-rating,
-#main .star-rating a {
-  background: url(../../../assets/img/star.gif) no-repeat 0 0px;
-}
-#main .rating-cancel a,
-#main .star-rating a {
-  display: block;
-  width: 16px;
-  height: 100%;
-  background-position: 0 0px;
-  border: 0;
-}
-#main .star-rating-on a {
-  background-position: 0 -16px !important;
-}
-#main .star-rating-hover a {
-  background-position: 0 -32px;
 }
 #main .pointer {
   cursor: pointer;

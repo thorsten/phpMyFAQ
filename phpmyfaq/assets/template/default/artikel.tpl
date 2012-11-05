@@ -59,20 +59,11 @@
                     {writeDateMsg}<br />{writeAuthor}<br />{writeRevision}<br />{editThisEntry}
                 </div>
                 <div class="tab-pane" id="votingForm">
-                    <form action="#" method="post" style="display: inline;">
-                    <fieldset>
-                        <legend>{msgVoteUseability}</legend>
+                    <form action="#" method="post" class="form-inline">
                         <input type="hidden" name="artikel" value="{saveVotingID}" />
-                        <div id="votings"></div>
-                        <div id="votingstars">
-                            <input class="voting" type="radio" name="vote" value="1" />
-                            <input class="voting" type="radio" name="vote" value="2" />
-                            <input class="voting" type="radio" name="vote" value="3" />
-                            <input class="voting" type="radio" name="vote" value="4" />
-                            <input class="voting" type="radio" name="vote" value="5" />
-                            <span><strong>{msgAverageVote}</strong><span id="rating">{printVotings}</span></span>
-                        </div>
-                    </fieldset>
+                        <div id="voting"></div>
+                        <div class="star-rating"><s><s><s><s><s></s></s></s></s></s></div>
+                        <p><strong>{msgAverageVote}</strong><span id="rating">{printVotings}</span></p>
                     </form>
                 </div>
                 <div class="tab-pane" id="switchAvailableLanguage">
@@ -101,21 +92,21 @@
                     <div class="control-group">
                         <label class="control-label" for="user">{msgNewContentName}</label>
                         <div class="controls">
-                            <input type="text" id="user" name="user" value="{defaultContentName}" required="required" />
+                            <input type="text" id="user" name="user" value="{defaultContentName}" required />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label class="control-label" for="mail">{msgNewContentMail}</label>
                         <div class="controls">
-                            <input type="email" id="mail" name="mail" value="{defaultContentMail}" required="required" />
+                            <input type="email" id="mail" name="mail" value="{defaultContentMail}" required />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label class="control-label" for="comment_text">{msgYourComment}</label>
                         <div class="controls">
-                            <textarea id="comment_text" name="comment_text" required="required"></textarea>
+                            <textarea id="comment_text" name="comment_text" required></textarea>
                         </div>
                     </div>
 
@@ -137,19 +128,19 @@
                 {writeComments}
             </div>
 
-            <script src="assets/js/plugins/rating/jquery.rating.pack.js"></script>
             <script>
-            $('.voting').rating({
-                callback: function(value, link){
-                    saveVoting('faq', {id}, value);
-                }
-            });
+                $(function() {
+                    $("div.star-rating > s, div.star-rating-rtl > s").on("click", function(e) {
+                        var numStars = $(e.target).parentsUntil("div").length + 1;
+                        saveVoting('faq', {id}, numStars);
+                    });
+                });
 
-	    $('form#formValues').on('submit', function (e) {
-		e.preventDefault();
-		saveFormValues('savecomment', 'comment');
-		return false;
-            });
+                $('form#formValues').on('submit', function (e) {
+                    e.preventDefault();
+                    saveFormValues('savecomment', 'comment');
+                    return false;
+                });
 
             </script>
             <script src="assets/js/syntaxhighlighter/scripts/shCore.js"></script>

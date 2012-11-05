@@ -62,10 +62,6 @@ Licensed under the terms of the MIT License
 
 Licensed under the terms of the MIT License
 
-**[jQuery Star Rating Plugin](http://www.fyneworks.com/)**
-
-Licensed under the terms of the MIT License
-
 **[Modernizr](http://www.modernizr.com/)**
 
 Licensed under the terms of the MIT and BSD licenses
