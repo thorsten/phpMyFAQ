@@ -214,6 +214,8 @@ abstract class PMF_Attachment_Abstract
     /**
      * Sets attachment id
      *
+     * @param integer $id
+     *
      * @return void
      */
     public function setId($id)
@@ -353,12 +355,14 @@ abstract class PMF_Attachment_Abstract
     /**
      * Generate hash based on current conditions
      *
-     * @return string
-     *
      * NOTE The way a file is saved in the filesystem
      * is based on md5 hash. If the file is unencrypted,
      * it's md5 hash is used directly, otherwise a
      * hash based on several tokens gets generated.
+     *
+     * @throws PMF_Attachment_Exception
+     *
+     * @return string
      */
     protected function mkVirtualHash()
     {
@@ -391,13 +395,11 @@ abstract class PMF_Attachment_Abstract
      */
     protected function linkedRecords()
     {
-        $sql = sprintf("SELECT
-                             COUNT(1) AS count
-                        FROM 
-                             %sfaqattachment
-                        WHERE virtual_hash = '%s'",
-                        PMF_Db::getTablePrefix(),
-                        $this->virtualHash);
+        $sql = sprintf(
+            "SELECT COUNT(1) AS count FROM  %sfaqattachment WHERE virtual_hash = '%s'",
+            PMF_Db::getTablePrefix(),
+            $this->virtualHash
+        );
         
         $result = $this->db->query($sql);
         
@@ -415,11 +417,11 @@ abstract class PMF_Attachment_Abstract
      */
     protected function deleteMeta()
     {
-        $sql = sprintf("DELETE FROM
-                             %sfaqattachment
-                        WHERE id = %d",
-                        PMF_Db::getTablePrefix(),
-                        $this->id);
+        $sql = sprintf(
+            "DELETE FROM %sfaqattachment WHERE id = %d",
+            PMF_Db::getTablePrefix(),
+            $this->id
+        );
                         
         $this->db->query($sql);
     }

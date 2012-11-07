@@ -160,7 +160,7 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
          * Won't delete the file if there are still some
          * records hanging on it
          */
-        if(!$this->linkedRecords()) {
+        if (!$this->linkedRecords()) {
             try {
                 $retval &= $this->getFile()->delete();
             } catch (Exception $e) {
@@ -169,9 +169,7 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
         }
         
         $this->deleteMeta();
-        
-        $this->__destruct();
-        
+
         return $retval;
     }
     
