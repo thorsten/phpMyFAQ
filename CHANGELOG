@@ -1,9 +1,12 @@
-phpMyFAQ 2.7.9
+phpMyFAQ 2.7.10
 Codename "Prospero"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.7.10 - 2012-12-
+-
 
 Version 2.7.9 - 2012-11-02
 - updated Czech translation (Jaroslav Síka)
