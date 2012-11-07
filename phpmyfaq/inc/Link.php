@@ -423,6 +423,8 @@ class PMF_Link
     /**
      * Returns the relative URI
      *
+     * @param string $path
+     *
      * @return string
      */
     public static function getSystemRelativeUri($path = null)
@@ -436,6 +438,8 @@ class PMF_Link
 
     /**
      * Returns the system URI
+     *
+     * @param string $path
      *
      * @return string
      */
@@ -691,6 +695,20 @@ class PMF_Link
         }
 
         return $url;
+    }
+
+    /**
+     * Returns the current URL
+     *
+     * @return string
+     */
+    public function getCurrentUrl()
+    {
+        if (!empty($_SERVER['HTTPS'])) {
+            return 'https://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+        } else {
+            return 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+        }
     }
     
     /**

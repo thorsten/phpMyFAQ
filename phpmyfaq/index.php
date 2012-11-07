@@ -458,6 +458,9 @@ $keywordsArray = array_filter($keywordsArray, 'strlen');
 shuffle($keywordsArray);
 $keywords = implode(',', $keywordsArray);
 
+$faqLink        = new PMF_Link($systemUri, $faqConfig);
+$currentPageUrl = $faqLink->getCurrentUrl();
+
 $tplMainPage = array(
     'msgLoginUser'        => $PMF_LANG['msgLoginUser'],
     'title'               => $faqConfig->get('main.titleFAQ') . $title,
@@ -472,6 +475,7 @@ $tplMainPage = array(
     'metaCharset'         => 'utf-8', // backwards compability
     'phpmyfaqversion'     => $faqConfig->get('main.currentVersion'),
     'stylesheet'          => $PMF_LANG['dir'] == 'rtl' ? 'style.rtl' : 'style',
+    'currentPageUrl'      => $currentPageUrl,
     'action'              => $action,
     'dir'                 => $PMF_LANG['dir'],
     'msgCategory'         => $PMF_LANG['msgCategory'],
@@ -587,12 +591,14 @@ if (DEBUG) {
 //
 if (isset($auth)) {
     if (in_array(true, $permission)) {
-        $adminSection = sprintf('<a href="%s">%s</a>',
+        $adminSection = sprintf(
+            '<a href="%s">%s</a>',
             $systemUri . 'admin/index.php',
             $PMF_LANG['adminSection']
         );
     } else {
-        $adminSection = sprintf('<a href="%s">%s</a>',
+        $adminSection = sprintf(
+            '<a href="%s">%s</a>',
             $systemUri . 'index.php?action=ucp',
             $PMF_LANG['headerUserControlPanel']
         );

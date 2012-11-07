@@ -27,14 +27,14 @@
     <meta property="og:image" content="" />
 
     <link rel="stylesheet" href="assets/template/{tplSetName}/css/{stylesheet}.css?v=1">
+    <link rel="shortcut icon" href="assets/template/{tplSetName}/favicon.ico">
+    <link rel="apple-touch-icon" href="assets/template/{tplSetName}/apple-touch-icon.png">
+    <link rel="canonical" href="{currentPageUrl}">
 
     <script src="assets/js/libs/modernizr.min.js"></script>
     <script src="assets/js/libs/jquery.min.js"></script>
     <script src="assets/js/phpmyfaq.js"></script>
 
-    <link rel="shortcut icon" href="assets/template/{tplSetName}/favicon.ico">
-    <link rel="apple-touch-icon" href="assets/template/{tplSetName}/apple-touch-icon.png">
-    
     <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="feed/news/rss.php">
     <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="feed/topten/rss.php">
     <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml" href="feed/latest/rss.php">
