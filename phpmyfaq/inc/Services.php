@@ -124,7 +124,7 @@ class PMF_Services
             $this->getLanguage()
         );
 
-        return sprintf('http://www.facebook.com/sharer.php?u=%s', urlencode($url));
+        return sprintf('https://www.facebook.com/sharer.php?u=%s', urlencode($url));
     }
 
     /**
@@ -142,7 +142,7 @@ class PMF_Services
         );
 
         return sprintf(
-            'http://twitter.com/share?url=%s&text=%s',
+            'https://twitter.com/share?url=%s&text=%s',
             urlencode($url),
             $this->getQuestion() . urlencode(' | ' . $url)
         );
@@ -162,7 +162,7 @@ class PMF_Services
             $this->getLanguage()
         );
 
-        return sprintf('http://www.delicious.com/save?url=%s&amp;title=%s',
+        return sprintf('https://www.delicious.com/save?url=%s&amp;title=%s',
             urlencode($url),
             $this->getQuestion()
         );
