@@ -3,7 +3,11 @@
             </div>
             
             <header>
-                <div id="solution_id">ID #{solution_id}</div>
+                <div id="solution_id">
+                    <a href="{solution_id_link}">
+                        ID #{solution_id}
+                    </a>
+                </div>
                 <h2>{writeThema}</h2>
             </header>
             

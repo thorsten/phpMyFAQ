@@ -261,6 +261,7 @@ $captchaHelper = new PMF_Helper_Captcha($faqConfig);
 $tpl->parse('writeContent', array(
     'writeRubrik'                => $categoryName,
     'solution_id'                => $faq->faqRecord['solution_id'],
+    'solution_id_link'           => PMF_Link::getSystemRelativeUri() . '?solution_id=' . $faq->faqRecord['solution_id'],
     'writeThema'                 => $question,
     'writeArticleCategoryHeader' => $PMF_LANG['msgArticleCategories'],
     'writeArticleCategories'     => $htmlAllCategories,
