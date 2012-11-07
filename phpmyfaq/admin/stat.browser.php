@@ -30,6 +30,7 @@ if ($permission['viewlog']) {
     
     $session     = new PMF_Session($faqConfig);
     $sessiondata = $session->getSessionsbyDate($firstHour, $lastHour);
+    $date        = new PMF_Date($faqConfig);
 ?>
         <header>
             <h2><?php print $PMF_LANG['ad_sess_session'] . ' ' . date("Y-m-d", $day); ?></h2>
