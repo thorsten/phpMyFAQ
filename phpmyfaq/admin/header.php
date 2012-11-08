@@ -214,25 +214,39 @@ switch ($action) {
                 <?php if (isset($auth) && in_array(true, $permission)): ?>
                 <ul class="nav">
                     <li<?php print ($dashboardPage ? ' class="active"' : ''); ?>>
-                        <a href="index.php"><?php print $PMF_LANG['admin_mainmenu_home']; ?></a>
+                        <a href="index.php">
+                            <i class="icon-home icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_home']; ?>
+                        </a>
                     </li>
                     <li<?php print ($userPage ? ' class="active"' : ''); ?>>
-                        <a href="index.php?action=user"><?php print $PMF_LANG['admin_mainmenu_users']; ?></a>
+                        <a href="index.php?action=user">
+                            <i class="icon-user icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_users']; ?>
+                        </a>
                     </li>
                     <li<?php print ($contentPage ? ' class="active"' : ''); ?>>
-                        <a href="index.php?action=content"><?php print $PMF_LANG['admin_mainmenu_content']; ?></a>
+                        <a href="index.php?action=content">
+                            <i class="icon-pencil icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_content']; ?>
+                        </a>
                     </li>
                     <li<?php print ($statisticsPage ? ' class="active"' : ''); ?>>
-                        <a href="index.php?action=statistics"><?php print $PMF_LANG['admin_mainmenu_statistics']; ?></a>
+                        <a href="index.php?action=statistics">
+                            <i class="icon-tasks icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_statistics']; ?>
+                        </a>
                     </li>
                     <li<?php print ($exportsPage ? ' class="active"' : ''); ?>>
-                        <a href="index.php?action=export"><?php print $PMF_LANG['admin_mainmenu_exports']; ?></a>
+                        <a href="index.php?action=export">
+                            <i class="icon-book icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_exports']; ?>
+                        </a>
                     </li>
                     <li<?php print ($backupPage ? ' class="active"' : ''); ?>>
-                        <a href="index.php?action=backup"><?php print $PMF_LANG['admin_mainmenu_backup']; ?></a>
+                        <a href="index.php?action=backup">
+                            <i class="icon-download-alt icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_backup']; ?>
+                        </a>
                     </li>
                     <li<?php print ($configurationPage ? ' class="active"' : ''); ?>>
-                        <a href="index.php?action=config"><?php print $PMF_LANG['admin_mainmenu_configuration']; ?></a>
+                        <a href="index.php?action=config">
+                            <i class="icon-wrench icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_configuration']; ?>
+                        </a>
                     </li>
                 </ul>
                 <ul class="nav pull-right">
@@ -250,7 +264,7 @@ switch ($action) {
                             </li>
                             <li class="divider"></li>
                             <li>
-                                <a href="index.php?action=logout"><?php print $PMF_LANG['admin_mainmenu_logout']; ?></a>
+                                <a href="index.php?action=logout"><i class="icon-off"></i> <?php print $PMF_LANG['admin_mainmenu_logout']; ?></a>
                             </li>
                         </ul>
                     </li>
