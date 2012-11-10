@@ -152,7 +152,9 @@ Upload this file to your webspace and open it using your browser. The installati
 
 In case you have PHP below 5.3.2 installed you cannot use phpMyFAQ.
 
-phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers are Mozilla Firefox 3.6 and later (Windows/OS X/Linux), Safari 5.x or later (OS X/Windows/iOS), Chrome 5 or later (Windows/OS X/Linux), Opera 11.0 or later (Windows/OS X/Linux) and Internet Explorer 8 or later for Windows. You have to enable JavaScript for the Ajax based functions as well.
+phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers are Mozilla Firefox 3.6 and later (Windows/OS X/Linux), Safari 5.x or later (OS X/Windows/iOS), Chrome 5 or later (Windows/OS X/Linux), Opera 11.0 or later (Windows/OS X/Linux) and Internet Explorer 7 or later for Windows. You have to enable JavaScript for the Ajax based functions as well.
+
+We recommend to use always the latest version of Firefox, Chrome, Safari, Opera and Internet Explorer.
 
 If you're using *lighttpd* you have to set the following configuration:
 
@@ -348,7 +350,7 @@ Main features of the PDF export:
 
 **2.11. <a id="2.11"></a>Mozilla Firefox, Google Chrome and IE8+ search plugins**
 
-phpMyFAQ provides search plugins for Mozilla Firefox, Google Chrome and Internet Explorer 8 and later based on the OpenSearch specification. Every user in the frontend can install it. With an installed search plugin you can search through the phpMyFAQ installation with the search box in upper right corner of Mozilla Firefox, Google Chrome or Internet Explorer.
+phpMyFAQ provides search plugins for Mozilla Firefox, Google Chrome and Internet Explorer 8+ based on the OpenSearch specification. Every user in the frontend can install it. With an installed search plugin you can search through the phpMyFAQ installation with the search box in upper right corner of Mozilla Firefox, Google Chrome or Internet Explorer.
 
 [back to top][64]
 
