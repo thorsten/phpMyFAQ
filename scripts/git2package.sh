@@ -26,7 +26,7 @@
 # @link      http://www.phpmyfaq.de
 # @version   2008-09-10
 
-# PMF Version
+# phpMyFAQ Version
 . scripts/version.sh
 
 if [ "x${MD5BIN}" = "x" ]; then
@@ -43,12 +43,12 @@ if [ "x${PMF_PACKAGE_FOLDER}" = "x" ]; then
 fi
 
 cwd=`pwd`
-gitdir=`git rev-parse --git-dir`
-dir=`dirname ${gitdir}`/phpmyfaq
-cd $dir
-
-(git archive --worktree-attributes --format=tar --prefix="${PMF_PACKAGE_FOLDER}/" HEAD | gzip -9 > $cwd/"${PMF_PACKAGE_FOLDER}.tar.gz" &&
- git archive --worktree-attributes --format=zip --prefix="${PMF_PACKAGE_FOLDER}/" --output="$cwd/${PMF_PACKAGE_FOLDER}.zip" HEAD) && 
-(cd $cwd && $MD5BIN "${PMF_PACKAGE_FOLDER}.tar.gz" > "${PMF_PACKAGE_FOLDER}.tar.gz.md5" &&
-    $MD5BIN "${PMF_PACKAGE_FOLDER}.zip" > "${PMF_PACKAGE_FOLDER}.zip.md5"
-) # Back to the folder from which the script was called
+git checkout-index -f -a --prefix=$cwd/build/${PMF_PACKAGE_FOLDER}/
+composer install
+mkdir -p $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/inc/libs/phpseclib/Crypt
+cp -r $cwd/vendor/phpseclib/phpseclib/Crypt $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/inc/libs/phpseclib/Crypt
+cp -r $cwd/vendor/twitteroauth/twitteroauth $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/inc/libs/twitteroauth
+tar cfvz ${PMF_PACKAGE_FOLDER}.tar.gz $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq
+zip -r ${PMF_PACKAGE_FOLDER}.zip $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq
+$MD5BIN "${PMF_PACKAGE_FOLDER}.tar.gz" > "${PMF_PACKAGE_FOLDER}.tar.gz.md5"
+$MD5BIN "${PMF_PACKAGE_FOLDER}.zip" > "${PMF_PACKAGE_FOLDER}.zip.md5"
