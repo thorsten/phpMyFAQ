@@ -45,10 +45,16 @@ fi
 cwd=`pwd`
 git checkout-index -f -a --prefix=$cwd/build/${PMF_PACKAGE_FOLDER}/
 composer install
+
 mkdir -p $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/inc/libs/phpseclib/Crypt
 cp -r $cwd/vendor/phpseclib/phpseclib/Crypt $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/inc/libs/phpseclib/Crypt
 cp -r $cwd/vendor/twitteroauth/twitteroauth $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/inc/libs/twitteroauth
-tar cfvz ${PMF_PACKAGE_FOLDER}.tar.gz $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq
+
+mkdir $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/phpmyfaq
+mv $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/* $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/phpmyfaq/
+
+tar cfvz ${PMF_PACKAGE_FOLDER}.tar.gz -C $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq .
 zip -r ${PMF_PACKAGE_FOLDER}.zip $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq
+
 $MD5BIN "${PMF_PACKAGE_FOLDER}.tar.gz" > "${PMF_PACKAGE_FOLDER}.tar.gz.md5"
 $MD5BIN "${PMF_PACKAGE_FOLDER}.zip" > "${PMF_PACKAGE_FOLDER}.zip.md5"
