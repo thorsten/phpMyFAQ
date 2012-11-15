@@ -21,6 +21,7 @@
 # @author    Thorsten Rinne <thorsten@phpmyfaq.de>
 # @author    Rene Treffer <treffer+phpmyfaq@measite.de>
 # @author    David Soria Parra <dsp@php.net>
+# @author    Florian Anderiasch <floroan@phpmyfaq.de>
 # @copyright 2008-2012 phpMyFAQ Team
 # @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
 # @link      http://www.phpmyfaq.de
@@ -59,6 +60,8 @@ mv $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/* $cwd/build/${PMF_PACKAGE_FOLDER}/
 tar cfvz ${PMF_PACKAGE_FOLDER}.tar.gz -C $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq .
 cd $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq
 zip -r $cwd/${PMF_PACKAGE_FOLDER}.zip phpmyfaq
+
+cd $cwd
 
 # md5sum
 $MD5BIN "${PMF_PACKAGE_FOLDER}.tar.gz" > "${PMF_PACKAGE_FOLDER}.tar.gz.md5"
