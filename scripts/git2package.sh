@@ -44,17 +44,25 @@ fi
 
 cwd=`pwd`
 git checkout-index -f -a --prefix=$cwd/build/${PMF_PACKAGE_FOLDER}/
-composer install
 
+# add deps
+composer install
 mkdir -p $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/inc/libs/phpseclib/Crypt
 cp -r $cwd/vendor/phpseclib/phpseclib/Crypt $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/inc/libs/phpseclib/Crypt
 cp -r $cwd/vendor/twitteroauth/twitteroauth $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/inc/libs/twitteroauth
 
+# prepare packaging
 mkdir $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/phpmyfaq
 mv $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/* $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/phpmyfaq/
 
+# build packages
 tar cfvz ${PMF_PACKAGE_FOLDER}.tar.gz -C $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq .
-zip -r ${PMF_PACKAGE_FOLDER}.zip $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq
+cd $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq
+zip -r $cwd/${PMF_PACKAGE_FOLDER}.zip phpmyfaq
 
+# md5sum
 $MD5BIN "${PMF_PACKAGE_FOLDER}.tar.gz" > "${PMF_PACKAGE_FOLDER}.tar.gz.md5"
 $MD5BIN "${PMF_PACKAGE_FOLDER}.zip" > "${PMF_PACKAGE_FOLDER}.zip.md5"
+
+# clean up
+rm -rf $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq
