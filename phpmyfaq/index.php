@@ -467,6 +467,7 @@ $main_template_vars = array(
     'dir'                 => $PMF_LANG['dir'],
     'msgCategory'         => $PMF_LANG['msgCategory'],
     'showCategories'      => $helper->renderCategoryNavigation($cat),
+    'topCategories'       => $helper->renderMainCategories(),
     'msgExportAllFaqs'    => $PMF_LANG['msgExportAllFaqs'],
     'languageBox'         => $PMF_LANG['msgLangaugeSubmit'],
     'writeLangAdress'     => $writeLangAdress,

@@ -168,6 +168,27 @@ class PMF_Helper_Category extends PMF_Helper
     }
 
     /**
+     * Returns all top-level categories in <li> tags
+     *
+     * @return string
+     */
+    public function renderMainCategories()
+    {
+        $categories = '';
+        foreach ($this->Category->categories as $cat) {
+            if (0 === (int)$cat['parent_id']) {
+                $categories .= sprintf(
+                    '<li><a href="?action=show&cat=%d">%s</a></li>',
+                    $cat['id'],
+                    $cat['name']
+                    );
+            }
+        }
+
+        return $categories;
+    }
+
+    /**
      * Get all categories in <option> tags
      *
      * @param  mixed $categoryId Category id or array of category ids
@@ -179,8 +200,12 @@ class PMF_Helper_Category extends PMF_Helper
         $categories = '';
 
         if (!is_array($categoryId)) {
-            $categoryId = array(array('category_id'   => $categoryId, 
-                                      'category_lang' => ''));
+            $categoryId = array(
+                array(
+                    'category_id'   => $categoryId,
+                    'category_lang' => ''
+                )
+            );
         }
 
         $i = 0;
