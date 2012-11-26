@@ -264,7 +264,7 @@ class PMF_Helper_Search extends PMF_Helper
                 );
             }
             
-            $html .= "<ul class=\"phpmyfaq_ul\">\n";
+            $html .= "<ul class=\"phpmyfaq-search-results\">\n";
 
             $counter = $displayedCounter = 0;
 
@@ -321,7 +321,7 @@ class PMF_Helper_Search extends PMF_Helper
                     $oLink->toHtmlAnchor()
                 );
                 $html .= sprintf(
-                    "<div class=\"searchpreview\"><strong>%s</strong> %s...</div><br />\n",
+                    "<small class=\"searchpreview\"><strong>%s</strong> %s...</small>\n",
                     $this->translation['msgSearchContent'],
                     $answerPreview
                 );

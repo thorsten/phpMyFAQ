@@ -167,9 +167,7 @@ class PMF_Search_Resultset
     /**
      * Returns the "reviewd" search results
      *
-     * @param array $resultset Array with search results
-     *
-     * @return void
+     * @return array $resultset Array with search results
      */
     public function getResultset()
     {

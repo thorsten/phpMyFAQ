@@ -11633,6 +11633,9 @@ body {
   text-align: center;
   line-height: 300px;
 }
+#main .phpmyfaq-search-results li {
+  padding-bottom: 5px;
+}
 footer {
   background: #28343b;
   color: #f2f2f2;
