@@ -149,7 +149,7 @@ textarea {
   clear: both;
 }
 .hide-text {
-  font: a;
+  font: 0/0 a;
   color: transparent;
   text-shadow: none;
   background-color: transparent;
@@ -5927,7 +5927,7 @@ textarea {
   clear: both;
 }
 .hide-text {
-  font: a;
+  font: 0/0 a;
   color: transparent;
   text-shadow: none;
   background-color: transparent;
@@ -11558,14 +11558,14 @@ body {
   background: #f6f1eb;
 }
 .navbar-inner {
-  background-color: #484d52;
-  background-image: -moz-linear-gradient(top, #52575c, #3a3f44);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#52575c), to(#3a3f44));
-  background-image: -webkit-linear-gradient(top, #52575c, #3a3f44);
-  background-image: -o-linear-gradient(top, #52575c, #3a3f44);
-  background-image: linear-gradient(to bottom, #52575c, #3a3f44);
+  background-color: #5e6971;
+  background-image: -moz-linear-gradient(top, #828c95, #28343b);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#828c95), to(#28343b));
+  background-image: -webkit-linear-gradient(top, #828c95, #28343b);
+  background-image: -o-linear-gradient(top, #828c95, #28343b);
+  background-image: linear-gradient(to bottom, #828c95, #28343b);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff52575c', endColorstr='#ff3a3f44', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff828c95', endColorstr='#ff28343b', GradientType=0);
 }
 #main {
   background: #fffff9;
@@ -11634,7 +11634,7 @@ body {
   line-height: 300px;
 }
 footer {
-  background: #2a333c;
+  background: #28343b;
   color: #f2f2f2;
   padding-top: 30px;
 }
