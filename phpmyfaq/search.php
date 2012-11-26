@@ -120,7 +120,8 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         urlencode($inputSearchTerm),
         $page,
         $languages,
-        $inputCategory);
+        $inputCategory
+    );
 } else {
     $baseUrl = sprintf('%s?%saction=search&amp;search=%s&amp;seite=%d%s&amp;searchcategory=%d',
         PMF_Link::getSystemRelativeUri(),
@@ -128,7 +129,8 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         urlencode($inputSearchTerm),
         $page,
         $languages,
-        $inputCategory);
+        $inputCategory
+    );
 }
 
 // Pagination options
@@ -137,10 +139,10 @@ $options = array(
     'total'           => $faqSearchResult->getNumberOfResults(),
     'perPage'         => $faqConfig->get('records.numberOfRecordsPerPage'),
     'pageParamName'   => 'seite',
-    'layoutTpl'       => '<p align="center"><strong>{LAYOUT_CONTENT}</strong></p>'
+    'layoutTpl'       => '<div align="center" class="pagination"><ul>{LAYOUT_CONTENT}</ul></div>'
 );
 
-$faqPagination     = new PMF_Pagination($faqConfig, $options);
+$faqPagination  = new PMF_Pagination($faqConfig, $options);
 $categoryHelper = new PMF_Helper_Category();
 $categoryHelper->setCategory($category);
 
