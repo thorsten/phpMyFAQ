@@ -22,35 +22,33 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 ?>
-
         <header>
             <h2><?php print $PMF_LANG['ad_categ_new']; ?></h2>
         </header>
-
 <?php
 if ($permission["addcateg"]) {
 
     $category = new PMF_Category($faqConfig, false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
-    $parent_id = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
+    $parentId = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
 ?>
         <form class="form-horizontal" action="?action=savecategory" method="post">
             <input type="hidden" id="lang" name="lang" value="<?php print $LANGCODE; ?>" />
-            <input type="hidden" name="parent_id" value="<?php print $parent_id; ?>" />
+            <input type="hidden" name="parent_id" value="<?php print $parentId; ?>" />
             <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
 <?php
-    if ($parent_id > 0) {
-        $user_allowed  = $category->getPermissions('user', array($parent_id));
-        $group_allowed = $category->getPermissions('group', array($parent_id));
+    if ($parentId > 0) {
+        $user_allowed  = $category->getPermissions('user', array($parentId));
+        $group_allowed = $category->getPermissions('group', array($parentId));
 ?>
             <input type="hidden" name="restricted_users" value="<?php print $user_allowed[0]; ?>" />
             <input type="hidden" name="restricted_groups" value="<?php print $group_allowed[0]; ?>" />
 <?php
         printf('<div class="control-group">%s: %s (%s)</div>',
             $PMF_LANG["msgMainCategory"],
-            $category->categoryName[$parent_id]["name"],
-            $languageCodes[PMF_String::strtoupper($category->categoryName[$parent_id]["lang"])]);
+            $category->categoryName[$parentId]["name"],
+            $languageCodes[PMF_String::strtoupper($category->categoryName[$parentId]["lang"])]);
     }
 ?>
             <div class="control-group">
@@ -71,13 +69,13 @@ if ($permission["addcateg"]) {
                 <label class="control-label" for="user_id"><?php print $PMF_LANG["ad_categ_owner"]; ?>:</label>
                 <div class="controls">
                     <select name="user_id" id="user_id" size="1">
-                    <?php print $user->getAllUserOptions(1); ?>
+                    <?php print $user->getAllUserOptions(); ?>
                     </select>
                 </div>
             </div>
 
 <?php
-    if ($parent_id == 0) {
+    if ($parentId == 0) {
         if ($faqConfig->get('security.permLevel') != 'basic') {
 ?>
             <div class="control-group">
@@ -91,8 +89,8 @@ if ($permission["addcateg"]) {
                         <input type="radio" name="grouppermission" value="restricted" />
                         <?php print $PMF_LANG['ad_entry_restricted_groups']; ?>
                     </label>
-                    <select name="restricted_groups" size="1">
-                        <?php print $user->perm->getAllGroupsOptions(1); ?>
+                    <select name="restricted_groups" size="3" multiple>
+                        <?php print $user->perm->getAllGroupsOptions(); ?>
                     </select>
                 </div>
             </div>

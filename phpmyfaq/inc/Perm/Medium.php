@@ -620,21 +620,25 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
     /**
      * Get all groups in <option> tags
      *
-     * @param  integer $groups Selected group
+     * @param array $groups Selected groups
+     *
      * @return string
      */
-    public function getAllGroupsOptions($groups = -1)
+    public function getAllGroupsOptions(Array $groups)
     {
-        $options = '';
+        $options   = '';
         $allGroups = $this->getAllGroups();
-        foreach ($allGroups as $group_id) {
-            if (-1 != $group_id) {
+
+        foreach ($allGroups as $groupId) {
+            if (-1 != $groupId) {
                 $options .= sprintf('<option value="%d"%s>%s</option>',
-                    $group_id,
-                    ($group_id == $groups) ? ' selected="selected"' : '',
-                    $this->getGroupName($group_id));
+                    $groupId,
+                    (in_array($groupId, $groups) ? ' selected="selected"' : ''),
+                    $this->getGroupName($groupId)
+                );
             }
         }
+
         return $options;
     }
 
@@ -874,12 +878,12 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
     /**
      * Returns the name of the group $group_id.
      *
-     * @param  integer $group_id Group ID
+     * @param  integer $groupId Group ID
      * @return string
      */
-    public function getGroupName($group_id)
+    public function getGroupName($groupId)
     {
-        if ($group_id <= 0 || !is_numeric($group_id)) {
+        if ($groupId <= 0 || !is_numeric($groupId)) {
             return false;
         }
         
@@ -891,7 +895,8 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             WHERE
                 group_id = %d",
             PMF_Db::getTablePrefix(),
-            $group_id);
+            $groupId
+        );
             
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) != 1) {
