@@ -1374,11 +1374,7 @@ class PMF_Category
      */
     public function addPermission($mode, Array $categories, $id)
     {
-        if ('user' !== $mode || 'group' !== $mode) {
-            return false;
-        }
-
-        if (! is_array($categories)) {
+        if ('user' !== $mode && 'group' !== $mode) {
             return false;
         }
 
