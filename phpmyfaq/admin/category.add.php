@@ -89,7 +89,7 @@ if ($permission["addcateg"]) {
                         <input type="radio" name="grouppermission" value="restricted" />
                         <?php print $PMF_LANG['ad_entry_restricted_groups']; ?>
                     </label>
-                    <select name="restricted_groups" size="3" multiple>
+                    <select name="restricted_groups[]" size="3" multiple>
                         <?php print $user->perm->getAllGroupsOptions(); ?>
                     </select>
                 </div>
