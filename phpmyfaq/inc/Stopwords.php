@@ -195,7 +195,7 @@ class PMF_Stopwords
      */
     public function getByLang($lang = null, $wordsOnly = false)
     {
-        $lang = is_null($lang) ? $this->_language->getLanguage() : $lang;
+        $lang = is_null($lang) ? $this->_config->getLanguage()->getLanguage() : $lang;
         $sql  = sprintf(
             "SELECT id, lang, LOWER(stopword) AS stopword FROM $this->table_name WHERE lang = '%s'",
             $lang
