@@ -61,10 +61,11 @@ if ($permission['editcateg']) {
         $groupperm     = PMF_Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING);
         $groupsAllowed = ('all' == $groupperm) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_groups', FILTER_VALIDATE_INT);
 
-        $category_id = $category->addCategory($category_data, $parentId);
-        if ($category_id) {
-            $category->addPermission('user', array($category_id), $userAllowed);
-            $category->addPermission('group', array($category_id), $groupsAllowed);
+        $categoryId = $category->addCategory($category_data, $parentId);
+
+        if ($categoryId) {
+            $category->addPermission('user', array($categoryId), $userAllowed);
+            $category->addPermission('group', array($categoryId), $groupsAllowed);
                         
             // All the other translations            
             $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
@@ -72,7 +73,7 @@ if ($permission['editcateg']) {
 
                 $languages     = explode(",", $languages);
                 $category_lang = $category_data['lang'];
-                $user_id       = $category_data['user_id'];                
+                $user_id       = $category_data['user_id'];
                 foreach ($languages as $translated_lang) {
                     if ($translated_lang == $category_lang) {
                         continue;
@@ -81,15 +82,15 @@ if ($permission['editcateg']) {
                     $translated_description = PMF_Filter::filterInput(INPUT_POST, 'description_translated_' . $translated_lang, FILTER_SANITIZE_STRING);
 
                     $category_data = array_merge($category_data, array(
-                        'id'          => $category_id,
+                        'id'          => $categoryId,
                         'lang'        => $translated_lang,
                         'parent_id'   => $parentId,
                         'name'        => $translated_name,
                         'description' => $translated_description,
                         'user_id'     => $user_id));
 
-                    if (!$category->checkLanguage($category_id, $translated_lang)) {
-                        $category->addCategory($category_data, $parentId, $category_id);
+                    if (!$category->checkLanguage($categoryId, $translated_lang)) {
+                        $category->addCategory($category_data, $parentId, $categoryId);
                     } else {
                         $category->updateCategory($category_data);
                     }
@@ -147,7 +148,7 @@ if ($permission['editcateg']) {
 
             $languages     = explode(",", $languages);
             $category_lang = $category_data['lang'];
-            $category_id   = $category_data['id'];
+            $categoryId   = $category_data['id'];
             $user_id       = $category_data['user_id'];
             foreach ($languages as $translated_lang) {
                 if ($translated_lang == $category_lang) {
@@ -157,15 +158,15 @@ if ($permission['editcateg']) {
                 $translated_description = PMF_Filter::filterInput(INPUT_POST, 'description_translated_' . $translated_lang, FILTER_SANITIZE_STRING);
 
                 $category_data = array_merge($category_data, array(
-                    'id'          => $category_id,
+                    'id'          => $categoryId,
                     'lang'        => $translated_lang,
                     'parent_id'   => $parentId,
                     'name'        => $translated_name,
                     'description' => $translated_description,
                     'user_id'     => $user_id));
 
-                if (!$category->checkLanguage($category_id, $translated_lang)) {
-                    $category->addCategory($category_data, $parentId, $category_id);
+                if (!$category->checkLanguage($categoryId, $translated_lang)) {
+                    $category->addCategory($category_data, $parentId, $categoryId);
                 } else {
                     $category->updateCategory($category_data);
                 }
@@ -199,10 +200,10 @@ if ($permission['editcateg']) {
         $category = new PMF_Category($faqConfig, false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
-        $category_id_1 = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
-        $category_id_2 = PMF_Filter::filterInput(INPUT_POST, 'change', FILTER_VALIDATE_INT);
+        $categoryId_1 = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
+        $categoryId_2 = PMF_Filter::filterInput(INPUT_POST, 'change', FILTER_VALIDATE_INT);
 
-        if ($category->swapCategories($category_id_1, $category_id_2)) {
+        if ($category->swapCategories($categoryId_1, $categoryId_2)) {
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_updated']);
         } else {
             printf(
@@ -219,9 +220,9 @@ if ($permission['editcateg']) {
         $category = new PMF_Category($faqConfig, false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
-        $category_id = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
+        $categoryId = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
         $parentId   = PMF_Filter::filterInput(INPUT_POST, 'after', FILTER_VALIDATE_INT);
-        if ($category->updateParentCategory($category_id, $parentId)) {
+        if ($category->updateParentCategory($categoryId, $parentId)) {
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_updated']);
         } else {
             printf(
