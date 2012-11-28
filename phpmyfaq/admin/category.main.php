@@ -61,6 +61,8 @@ if ($permission['editcateg']) {
         $groupperm     = PMF_Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING);
         $groupsAllowed = ('all' == $groupperm) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_groups', FILTER_VALIDATE_INT);
 
+        var_dump($_POST['restricted_groups']);
+        die();
         $categoryId = $category->addCategory($category_data, $parentId);
 
         if ($categoryId) {

@@ -58,10 +58,10 @@
     "minimum-stability": "dev",
     "scripts": {
         "post-install-cmd": [
-
+            "scripts/moveVendors.sh"
         ],
         "post-update-cmd": [
-
+            "scripts/moveVendors.sh"
         ]
     }
 }
