@@ -166,7 +166,12 @@ If you're using *lighttpd* you have to set the following configuration:
 
 **2.2. <a id="2.2"></a>Preparations**
 
-Please unzip the downloaded archive on your hard disk.
+You can install phpMyFAQ via one of the provided packages as .zip or .tar.gz or using Git. If you choose our package, download it and unzip the archive on your hard disk. If you want to use Git, please run the following commands on your shell:
+
+	$ git clone git@github.com:thorsten/phpMyFAQ.git
+	$ cd phpMyFAQ
+	$ curl -s https://getcomposer.org/installer | php
+	$ php composer.phar install
 
 You can modify the layout of phpMyFAQ using templates. A description of how this is done can be found [below][55]. Copy all unzipped files to your web server in a directory using FTP. A good choice would be the directory **faq/**.
 **Important:**
