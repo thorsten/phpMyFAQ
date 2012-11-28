@@ -50,19 +50,6 @@
      </concat>
  </target>
 
- <target name="get-php-libs" description="Fetches PHP based third party libraries and copy them to ./phpmyfaq/inc/libs/">
-  <!-- phpseclib -->
-  <copy todir="${basedir}/phpmyfaq/inc/libs/phpseclib/Crypt">
-   <fileset dir="${basedir}/vendor/phpseclib/phpseclib/Crypt/"/>
-  </copy>
-  <!-- twitteroauth -->
-  <copy todir="${basedir}/phpmyfaq/inc/libs/twitteroauth">
-   <fileset dir="${basedir}/vendor/twitteroauth/twitteroauth/"/>
-  </copy>
-  <!-- TCPDF -->
-
- </target>
-
  <target name="phpunit" description="Run unit tests and generate junit.xml and clover.xml">
   <exec executable="phpunit" failonerror="true">
     <arg line="--configuration phpunit.xml --coverage-text" />
