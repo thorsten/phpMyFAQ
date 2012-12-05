@@ -518,6 +518,17 @@ class PMF_Installer
     }
 
     /**
+     * Checks if we can store data via sessions. If not, e.g. an user can't
+     * login into the admin section
+     *
+     * @return bool
+     */
+    public function checkSessionSettings()
+    {
+        return true;
+    }
+
+    /**
      * Starts the installation
      *
      * @param array $DB
