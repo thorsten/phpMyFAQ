@@ -31,7 +31,7 @@ Version 2.8.0-beta - 2012-
 - dropped support for IBM DB2, Interbase/Firebird and Sybase (Thorsten)
 - updated bundled jQuery to version 1.8.2 (Thorsten)
 - updated bundled Modernizr to version 2.6.2 (Thorsten)
-- updated bundled Bootstrap to version 2.2.1 (Thorsten)
+- updated bundled Bootstrap to version 2.2.2 (Thorsten)
 - updated bundled TinyMCE to version 3.5.7 (Thorsten)
 - updated PHP dependency management using Composer (Thorsten)
 - updated Czech translation (Jaroslav Síka)
