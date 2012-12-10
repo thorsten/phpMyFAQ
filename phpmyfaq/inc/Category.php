@@ -1365,35 +1365,44 @@ class PMF_Category
     /**
      * Adds the category permissions for users and groups
      *
-     * @param  string  $mode       'group' or 'user'
-     * @param  array   $categories ID of the current category
-     * @param  integer $id         group ID or user ID
+     * @param string $mode       'group' or 'user'
+     * @param array  $categories ID of the current category
+     * @param array  $ids        Array of group or user IDs
+     *
      * @return boolean
      */
-    public function addPermission($mode, Array $categories, $id)
+    public function addPermission($mode, Array $categories, Array $ids)
     {
         if ('user' !== $mode && 'group' !== $mode) {
             return false;
         }
 
         foreach ($categories as $categoryId) {
-            $query = "SELECT * FROM %sfaqcategory_%s WHERE category_id = %d AND %s_id = %d";
-            $query = sprintf($query, PMF_Db::getTablePrefix(), $mode, $categoryId, $mode, $id);
+            foreach ($ids as $id) {
+                $query = sprintf(
+                    "SELECT * FROM %sfaqcategory_%s WHERE category_id = %d AND %s_id = %d",
+                    PMF_Db::getTablePrefix(),
+                    $mode,
+                    $categoryId,
+                    $mode,
+                    $id
+                );
 
-            if ($this->_config->getDb()->numRows($this->_config->getDb()->query($query))) {
-                continue;
+                if ($this->_config->getDb()->numRows($this->_config->getDb()->query($query))) {
+                    continue;
+                }
+
+                $query = sprintf(
+                    'INSERT INTO %sfaqcategory_%s (category_id, %s_id) VALUES (%d, %d)',
+                    PMF_Db::getTablePrefix(),
+                    $mode,
+                    $mode,
+                    $categoryId,
+                    $id
+                );
+
+                $this->_config->getDb()->query($query);
             }
-
-            $query = sprintf(
-                'INSERT INTO %sfaqcategory_%s (category_id, %s_id) VALUES (%d, %d)',
-                PMF_Db::getTablePrefix(),
-                $mode,
-                $mode,
-                $categoryId,
-                $id
-            );
-
-            $this->_config->getDb()->query($query);
         }
 
         return true;
