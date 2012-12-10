@@ -951,7 +951,7 @@ class PMF_User
      * sets the minimum login string length
      *
      * @param  integer $loginMinLength Minimum length of login name
-     * 
+     *
      * @return void
      */
     public function setLoginMinLength($loginMinLength)
