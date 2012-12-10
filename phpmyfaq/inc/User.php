@@ -924,7 +924,8 @@ class PMF_User
     /**
      * Get all users in <option> tags
      *
-     * @param  integer $userId User ID
+     * @param integer $id Selected user ID
+     *
      * @return string
      */
     public function getAllUserOptions($id = 1)
@@ -934,11 +935,13 @@ class PMF_User
         foreach ($allUsers as $userId) {
             if (-1 != $userId) {
                 $this->getUserById($userId);
-                $options .= sprintf('<option value="%d"%s>%s (%s)</option>',
+                $options .= sprintf(
+                    '<option value="%d"%s>%s (%s)</option>',
                     $userId,
                     (($userId == $id) ? ' selected="selected"' : ''),
-                    $this->getLogin(),
-                    $this->getUserData('display_name'));
+                    $this->getUserData('display_name'),
+                    $this->getLogin()
+                );
             }
         }
         return $options;
@@ -948,6 +951,7 @@ class PMF_User
      * sets the minimum login string length
      *
      * @param  integer $loginMinLength Minimum length of login name
+     * 
      * @return void
      */
     public function setLoginMinLength($loginMinLength)
