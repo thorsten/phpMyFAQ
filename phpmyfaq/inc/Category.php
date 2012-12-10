@@ -979,17 +979,14 @@ class PMF_Category
     /**
      * Adds a new category entry
      *
-     * @param  array   $category_data Array of category data
-     * @param  integer $parent_id     Parent id
-     * @param  integer $id            Category id
+     * @param array   $categoryData Array of category data
+     * @param integer $parentId     Parent id
+     * @param integer $id            Category id
+     *
      * @return integer
      */
-    public function addCategory(Array $category_data, $parent_id = 0, $id = null)
+    public function addCategory(Array $categoryData, $parentId = 0, $id = null)
     {
-        if (!is_array($category_data)) {
-            return false;
-        }
-
         // If we only need a new language, we don't need a new category id
         if (is_null($id)) {
             $id = $this->_config->getDb()->nextId(PMF_Db::getTablePrefix().'faqcategories', 'id');
@@ -1003,11 +1000,12 @@ class PMF_Category
             (%d, '%s', %d, '%s', '%s', %d)",
             PMF_Db::getTablePrefix(),
             $id,
-            $category_data['lang'],
-            $parent_id,
-            $category_data['name'],
-            $category_data['description'],
-            $category_data['user_id']);
+            $categoryData['lang'],
+            $parentId,
+            $categoryData['name'],
+            $categoryData['description'],
+            $categoryData['user_id']
+        );
         $this->_config->getDb()->query($query);
 
         return $id;
