@@ -24,8 +24,18 @@ requirements on [phpmyfaq.de](http://www.phpmyfaq.de/requirements.php) for more 
 
 ## Installation
 
-The best way to install phpMyFAQ is to download it on [phpmyfaq.de](http://www.phpmyfaq.de/download.php)
+### Package
 
+The best way to install phpMyFAQ is to download it on [phpmyfaq.de](http://www.phpmyfaq.de/download.php), unzip the package and open http://www.example.org/phpmyfaq/install/setup.php in your browser.
+
+### Git
+
+	$ git clone git://github.com/thorsten/phpMyFAQ.git
+	$ cd phpMyFAQ
+	$ curl -s https://getcomposer.org/installer | php
+	$ php composer.phar install
+	
+Then just open http://www.example.org/phpmyfaq/install/setup.php in your browser.
 
 ## License
 
