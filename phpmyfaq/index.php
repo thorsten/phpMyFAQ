@@ -461,6 +461,12 @@ $keywords = implode(',', $keywordsArray);
 $faqLink        = new PMF_Link($systemUri, $faqConfig);
 $currentPageUrl = $faqLink->getCurrentUrl();
 
+if (is_null($error)) {
+    $loginMessage = '<p>' . $PMF_LANG['ad_auth_insert'] . '</p>';
+} else {
+    $loginMessage = '<p class="error">' . $error . '</p>';
+}
+
 $tplMainPage = array(
     'msgLoginUser'        => $PMF_LANG['msgLoginUser'],
     'title'               => $faqConfig->get('main.titleFAQ') . $title,
@@ -489,7 +495,15 @@ $tplMainPage = array(
     'copyright'           => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' .
                              $faqConfig->get('main.currentVersion'),
     'registerUser'        => '<a href="?action=register">' . $PMF_LANG['msgRegistration'] . '</a>',
-    'sendPassword'        => '<a href="./admin/password.php">' . $PMF_LANG['lostPassword'] . '</a>'
+    'sendPassword'        => '<a href="./admin/password.php">' . $PMF_LANG['lostPassword'] . '</a>',
+    'loginHeader'         => $PMF_LANG['msgLoginUser'],
+    'loginMessage'        => $loginMessage,
+    'writeLoginPath'      => $systemUri . '?' . PMF_Filter::getFilteredQueryString(),
+    'faqloginaction'      => $action,
+    'login'               => $PMF_LANG['ad_auth_ok'],
+    'username'            => $PMF_LANG['ad_auth_user'],
+    'password'            => $PMF_LANG['ad_auth_passwd'],
+    'rememberMe'          => $PMF_LANG['rememberMe']
 );
 
 if ('main' == $action || 'show' == $action) {
