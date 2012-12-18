@@ -23,7 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($permission["editcateg"]) {
-    $category = new PMF_Category($faqConfig, false);
+    $category = new PMF_Category($faqConfig, array(), false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $category->buildTree();

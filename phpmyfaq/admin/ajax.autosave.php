@@ -59,7 +59,7 @@ if ('insertentry' == $do && ($permission['editbt']|| $permission['addbt']) ||
 
         $tagging  = new PMF_Tags($faqConfig);
 
-        $category = new PMF_Category($faqConfig, false);
+        $category = new PMF_Category($faqConfig, array(), false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
 

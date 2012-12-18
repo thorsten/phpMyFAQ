@@ -187,7 +187,7 @@ switch ($action) {
                 }
 
                 // Let the category owner get a copy of the message
-                $category = new PMF_Category($faqConfig);
+                $category   = new PMF_Category($faqConfig);
                 $categories = $category->getCategoryIdsFromArticle($faq->faqRecord['id']);
                 foreach ($categories as $_category) {
                     $userId = $category->getCategoryUser($_category);

@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <?php
 if ($permission['editcateg']) {
 
-    $category = new PMF_Category($faqConfig, false);
+    $category = new PMF_Category($faqConfig, array(), false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $currentLink     = $_SERVER['SCRIPT_NAME'];

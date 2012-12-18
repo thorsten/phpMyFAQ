@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 // Re-evaluate $user
 $user     = PMF_User_CurrentUser::getFromSession($faqConfig);
-$category = new PMF_Category($faqConfig, false);
+$category = new PMF_Category($faqConfig, array(), false);
 $category->setUser($currentAdminUser);
 $category->setGroups($currentAdminGroups);
 

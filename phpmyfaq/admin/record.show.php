@@ -27,8 +27,7 @@ printf("<header><h2>%s</h2><header>\n", $PMF_LANG['ad_entry_aor']);
 
 if ($permission['editbt'] || $permission['delbt']) {
 
-    // (re)evaluate the Category object w/o passing the user language
-    $category = new PMF_Category($faqConfig, false);
+    $category = new PMF_Category($faqConfig, array(), false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $category->transform(0);

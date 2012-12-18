@@ -126,19 +126,16 @@ class PMF_Category
     /**
      * Constructor
      *
-     * @param PMF_Configuration $config
-     * @param boolean           $withperm     With or without permission check
-     * @param boolean           $withLanguage With or without defined language
+     * @param PMF_Configuration $config   Configuration object
+     * @param array             $groups   Array with group IDs
+     * @param boolean           $withperm With or without permission check
      *
      * @return PMF_Category
      */
-    public function __construct(PMF_Configuration $config, $withperm = true, $withLanguage = true)
+    public function __construct(PMF_Configuration $config, $groups = array(), $withperm = true)
     {
         $this->_config = $config;
-
-        if ($withLanguage) {
-            $this->language = $this->_config->getLanguage()->getLanguage();
-        }
+        $this->setGroups($groups);
 
         $this->lineTab = $this->getOrderedCategories($withperm);
         for ($i = 0; $i < count($this->lineTab); $i++) {
@@ -220,7 +217,8 @@ class PMF_Category
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
-            $where);
+            $where
+        );
 
         $result = $this->_config->getDb()->query($query);
         while ($row = $this->_config->getDb()->fetchArray($result)) {
@@ -235,8 +233,9 @@ class PMF_Category
     /**
      * Gets the main categories and write them in an array
      *
-     * @param  string  $cat       Array of parent category ids
-     * @param  boolean $parent_id Only top level categories?
+     * @param  string  $categories Array of parent category ids
+     * @param  boolean $parent_id  Only top level categories?
+     *
      * @return array
      */
     public function getCategories($categories, $parent_id = true)

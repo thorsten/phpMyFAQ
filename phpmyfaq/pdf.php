@@ -101,9 +101,8 @@ $faq = new PMF_Faq($faqConfig);
 $faq->setUser($current_user);
 $faq->setGroups($current_groups);
 
-$category = new PMF_Category($faqConfig);
+$category = new PMF_Category($faqConfig, $current_groups, true);
 $category->setUser($current_user);
-$category->setGroups($current_groups);
 
 $pdf  = new PMF_Export_Pdf($faq, $category, $faqConfig);
 $http = new PMF_Helper_Http();

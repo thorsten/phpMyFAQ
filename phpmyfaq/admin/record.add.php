@@ -64,7 +64,7 @@ if ($permission['editbt']|| $permission['addbt']) {
         $logging->logAdmin($user, 'Beitragcreatesave');
         printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 
-        $category = new PMF_Category($faqConfig, false);
+        $category = new PMF_Category($faqConfig, array(), false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
         $tagging  = new PMF_Tags($faqConfig);

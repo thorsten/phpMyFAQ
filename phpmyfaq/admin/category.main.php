@@ -37,7 +37,7 @@ if ($permission['editcateg']) {
     // Save a new category
     if ($action == 'savecategory') {
 
-        $category = new PMF_Category($faqConfig, false);
+        $category = new PMF_Category($faqConfig, array(), false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
         $parentId     = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
@@ -125,7 +125,7 @@ if ($permission['editcateg']) {
     // Updates an existing category
     if ($action == 'updatecategory') {
 
-        $category = new PMF_Category($faqConfig, false);
+        $category = new PMF_Category($faqConfig, array(), false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
         $parentId     = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
@@ -225,7 +225,7 @@ if ($permission['editcateg']) {
     // Deletes an existing category
     if ($permission['delcateg'] && $action == 'removecategory') {
 
-        $category = new PMF_Category($faqConfig, false);
+        $category = new PMF_Category($faqConfig, array(), false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
         $id         = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
@@ -245,7 +245,7 @@ if ($permission['editcateg']) {
     // Moves a category
     if ($action == 'changecategory') {
 
-        $category = new PMF_Category($faqConfig, false);
+        $category = new PMF_Category($faqConfig, array(), false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
         $categoryId_1 = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
@@ -265,7 +265,7 @@ if ($permission['editcateg']) {
     // Pastes a category
     if ($action == 'pastecategory') {
 
-        $category = new PMF_Category($faqConfig, false);
+        $category = new PMF_Category($faqConfig, array(), false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
         $categoryId = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
@@ -297,7 +297,7 @@ if ($permission['editcateg']) {
     if (isset($category)) {
         unset($category);
     }
-    $category = new PMF_Category($faqConfig, false);
+    $category = new PMF_Category($faqConfig, array(), false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $category->getMissingCategories();

@@ -281,9 +281,8 @@ $faq->setGroups($current_groups);
 //
 // Create a new Category object
 //
-$category = new PMF_Category($faqConfig);
+$category = new PMF_Category($faqConfig, $current_groups, true);
 $category->setUser($current_user);
-$category->setGroups($current_groups);
 
 //
 // Create a new Tags object

@@ -30,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 <?php
 if ($permission['delcateg']) {
-    $category = new PMF_Category($faqConfig, false);
+    $category = new PMF_Category($faqConfig, array(), false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $categories = $category->getAllCategories();

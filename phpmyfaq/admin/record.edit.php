@@ -27,7 +27,7 @@ $user = PMF_User_CurrentUser::getFromSession($faqConfig);
 
 if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
-    $category = new PMF_Category($faqConfig, false);
+    $category = new PMF_Category($faqConfig, array(), false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $category->buildTree();

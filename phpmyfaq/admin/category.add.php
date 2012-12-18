@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <?php
 if ($permission['addcateg']) {
 
-    $category = new PMF_Category($faqConfig, false);
+    $category = new PMF_Category($faqConfig, array(), false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $parentId = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
