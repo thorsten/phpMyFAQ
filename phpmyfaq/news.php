@@ -41,7 +41,7 @@ if (is_null($newsId)) {
     exit();
 }
 
-$faqsession->userTracking('news_view', $id);
+$faqsession->userTracking('news_view', $categoryId);
 
 // Define the header of the page
 $newsMainHeader = $faqConfig->get('main.titleFAQ') . $PMF_LANG['msgNews'];
