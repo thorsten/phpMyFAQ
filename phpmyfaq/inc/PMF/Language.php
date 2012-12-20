@@ -209,7 +209,7 @@ class PMF_Language
         $search    = array("language_" , ".php");
         $languages = $languageFiles = array();
         
-        $dir = new DirectoryIterator(__DIR__ . '/../lang');
+        $dir = new DirectoryIterator(PMF_LANGUAGE_DIR);
         foreach ($dir as $fileinfo) {
             if (! $fileinfo->isDot()) {
                 $languageFiles[] = strtoupper(
