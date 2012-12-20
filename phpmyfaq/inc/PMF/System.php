@@ -156,7 +156,7 @@ class PMF_System
     {
         $tpls = array();
 
-        foreach (new DirectoryIterator(dirname(__DIR__) . '/assets/template') as $item) {
+        foreach (new DirectoryIterator(PMF_ROOT_DIR . '/assets/template') as $item) {
 
             if (! $item->isDot() && $item->isDir()) {
                 $tpls[$item->getBasename()] = (PMF_Template::getTplSetName() == $item->getBasename() ? true : false);
@@ -297,7 +297,7 @@ class PMF_System
     {
         $created = new DateTime();
 
-        $path  = dirname(__DIR__);
+        $path  = PMF_ROOT_DIR;
         $files = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($path),
             RecursiveIteratorIterator::SELF_FIRST

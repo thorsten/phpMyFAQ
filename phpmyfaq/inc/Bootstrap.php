@@ -89,6 +89,13 @@ if (!file_exists(PMF_CONFIG_DIR . '/database.php')) {
 require PMF_CONFIG_DIR . '/database.php';
 require PMF_CONFIG_DIR . '/constants.php';
 
+if (!defined('PMF_ROOT_DIR')) {
+    /**
+     * The root directory
+     */
+    define('PMF_ROOT_DIR', dirname(__DIR__));
+}
+
 /**
  * The include directory
  */
