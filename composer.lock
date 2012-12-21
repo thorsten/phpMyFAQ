@@ -9,23 +9,23 @@
                 "url": "https://github.com/phpseclib/phpseclib.git",
                 "reference": "master"
             },
-            "time": "2012-12-19 06:21:55",
             "type": "library",
-            "installation-source": "source"
+            "installation-source": "source",
+            "time": "2012-10-29 17:21:25"
         },
         {
             "name": "symfony/class-loader",
-            "version": "v2.1.5",
+            "version": "v2.1.6",
             "target-dir": "Symfony/Component/ClassLoader",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ClassLoader",
-                "reference": "v2.1.5"
+                "reference": "v2.1.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/ClassLoader/archive/v2.1.5.zip",
-                "reference": "v2.1.5",
+                "url": "https://github.com/symfony/ClassLoader/archive/v2.1.6.zip",
+                "reference": "v2.1.6",
                 "shasum": ""
             },
             "require": {
@@ -42,7 +42,6 @@
                     "Symfony\\Component\\ClassLoader": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -67,9 +66,9 @@
                 "url": "http://git.code.sf.net/p/tcpdf/code",
                 "reference": "master"
             },
-            "time": "2012-12-16 12:23:34",
             "type": "library",
-            "installation-source": "source"
+            "installation-source": "source",
+            "time": "2012-10-24 16:18:34"
         },
         {
             "name": "twitteroauth",
@@ -79,9 +78,9 @@
                 "url": "https://github.com/abraham/twitteroauth.git",
                 "reference": "master"
             },
-            "time": "2012-05-18 21:32:30",
             "type": "library",
-            "installation-source": "source"
+            "installation-source": "source",
+            "time": "2012-05-18 21:32:30"
         }
     ],
     "packages-dev": null,
