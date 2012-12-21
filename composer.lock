@@ -1,5 +1,5 @@
 {
-    "hash": "912b30d72af804f52765239a46aac85d",
+    "hash": "74c10dd9781a04920d295afd310f89cc",
     "packages": [
         {
             "name": "phpseclib",
@@ -9,9 +9,55 @@
                 "url": "https://github.com/phpseclib/phpseclib.git",
                 "reference": "master"
             },
+            "time": "2012-12-19 06:21:55",
             "type": "library",
-            "installation-source": "source",
-            "time": "1351531285"
+            "installation-source": "source"
+        },
+        {
+            "name": "symfony/class-loader",
+            "version": "v2.1.5",
+            "target-dir": "Symfony/Component/ClassLoader",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/ClassLoader",
+                "reference": "v2.1.5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/symfony/ClassLoader/archive/v2.1.5.zip",
+                "reference": "v2.1.5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "symfony/finder": "2.1.*"
+            },
+            "time": "2012-12-06 10:00:55",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\ClassLoader": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony ClassLoader Component",
+            "homepage": "http://symfony.com"
         },
         {
             "name": "tcpdf",
@@ -21,9 +67,9 @@
                 "url": "http://git.code.sf.net/p/tcpdf/code",
                 "reference": "master"
             },
+            "time": "2012-12-16 12:23:34",
             "type": "library",
-            "installation-source": "source",
-            "time": "1351095514"
+            "installation-source": "source"
         },
         {
             "name": "twitteroauth",
@@ -33,17 +79,19 @@
                 "url": "https://github.com/abraham/twitteroauth.git",
                 "reference": "master"
             },
+            "time": "2012-05-18 21:32:30",
             "type": "library",
-            "installation-source": "source",
-            "time": "1337376750"
+            "installation-source": "source"
         }
     ],
     "packages-dev": null,
     "aliases": [
 
     ],
-    "minimum-stability": "dev",
-    "stability-flags": [
-
-    ]
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "phpseclib": 20,
+        "tcpdf": 20,
+        "twitteroauth": 20
+    }
 }

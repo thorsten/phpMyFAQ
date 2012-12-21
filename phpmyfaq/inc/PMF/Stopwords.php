@@ -278,7 +278,7 @@ class PMF_Stopwords
     private function getBannedWords()
     {
         $bannedTrimmedWords = array();
-        $bannedWordsFile    = __DIR__ . '/blockedwords.txt';
+        $bannedWordsFile    = PMF_INCLUDE_DIR . '/blockedwords.txt';
         $bannedWords        = array();
 
         // Read the dictionary

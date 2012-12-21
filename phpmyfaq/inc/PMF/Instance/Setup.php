@@ -46,7 +46,7 @@ class PMF_Instance_Setup
      */
     public function __construct()
     {
-        $this->setRootDir(dirname(__DIR__));
+        $this->setRootDir(PMF_INCLUDE_DIR);
     }
 
     /**

@@ -18,13 +18,13 @@
  */
 
 
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/DB/Driver.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/DB/Sqlite3.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/Exception.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/Configuration.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/Filesystem.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/Instance.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/Instance/Client.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/DB/Driver.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/DB/Sqlite3.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Exception.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Configuration.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Filesystem.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Instance.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Instance/Client.php';
 
 /**
  * PMF_LinkTest

@@ -209,7 +209,7 @@ class PMF_Language
         $search    = array("language_" , ".php");
         $languages = $languageFiles = array();
         
-        $dir = new DirectoryIterator(__DIR__ . '/../lang');
+        $dir = new DirectoryIterator(PMF_LANGUAGE_DIR);
         foreach ($dir as $fileinfo) {
             if (! $fileinfo->isDot()) {
                 $languageFiles[] = strtoupper(
@@ -333,7 +333,7 @@ class PMF_Language
     public static function isASupportedTinyMCELanguage($langcode)
     {
         return file_exists(
-            dirname(__DIR__) . '/admin/editor/langs/' . $langcode . '.js'
+            PMF_ROOT_DIR . '/admin/editor/langs/' . $langcode . '.js'
         );
     }
     
