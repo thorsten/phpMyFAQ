@@ -18,11 +18,11 @@
  */
 
 
-require_once dirname(__DIR__) . '/phpmyfaq/inc/DB/Driver.php';
-require_once dirname(__DIR__) . '/phpmyfaq/inc/DB/Sqlite3.php';
-require_once dirname(__DIR__) . '/phpmyfaq/inc/Exception.php';
-require_once dirname(__DIR__) . '/phpmyfaq/inc/Configuration.php';
-require_once dirname(__DIR__) . '/phpmyfaq/inc/Link.php';
+require_once dirname(__DIR__) . '/phpmyfaq/inc/PMF/DB/Driver.php';
+require_once dirname(__DIR__) . '/phpmyfaq/inc/PMF/DB/Sqlite3.php';
+require_once dirname(__DIR__) . '/phpmyfaq/inc/PMF/Exception.php';
+require_once dirname(__DIR__) . '/phpmyfaq/inc/PMF/Configuration.php';
+require_once dirname(__DIR__) . '/phpmyfaq/inc/PMF/Link.php';
 
 /**
  * PMF_LinkTest

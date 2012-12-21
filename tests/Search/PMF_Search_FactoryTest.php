@@ -17,11 +17,11 @@
  * @since     2010-07-06
  */
 
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/Search/Factory.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/Language.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/String.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/String/Abstract.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/String/Mbstring.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Search/Factory.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Language.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/String.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/String/Abstract.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/String/Mbstring.php';
 
 /**
  * Category test case
