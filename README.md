@@ -84,6 +84,10 @@ Licensed under the terms of the Apache License v2.0
 
 Licensed under the terms of the GNU Lesser General Public License
 
+**[Symfony Components](http://www.symfony.com)**
+
+Licensed under the terms of the MIT License
+
 **[TCPDF](http://www.tcpdf.org)**
 
 Licensed under the terms of the GNU Lesser General Public License
