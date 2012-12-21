@@ -30,10 +30,12 @@ phpmyfaq/.htaccess
 # Third party libraries
 phpmyfaq/inc/libs/phpseclib
 phpmyfaq/inc/libs/twitteroauth
+phpmyfaq/inc/libs/Symfony
 
 # Composer related stuff
 vendor/composer*
 vendor/phpseclib*
+vendor/symfony*
 vendor/tcpdf*
 vendor/twitteroauth*
 vendor/autoload.php

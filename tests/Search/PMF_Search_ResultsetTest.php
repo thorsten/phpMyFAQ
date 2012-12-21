@@ -17,15 +17,15 @@
  * @since     2010-07-24
  */
 
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/Language.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/String.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/String/Abstract.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/String/Mbstring.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/Search/Resultset.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/DB/Driver.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/DB/Sqlite3.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/Exception.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/Configuration.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Language.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/String.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/String/Abstract.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/String/Mbstring.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Search/Resultset.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/DB/Driver.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/DB/Sqlite3.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Exception.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Configuration.php';
 
 /**
  * Category test case

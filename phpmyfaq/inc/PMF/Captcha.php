@@ -560,6 +560,6 @@ class PMF_Captcha
      */
     private function getFonts()
     {
-        return glob(__DIR__ . '/fonts/*.ttf');
+        return glob(PMF_INCLUDE_DIR . '/fonts/*.ttf');
     }
 }
