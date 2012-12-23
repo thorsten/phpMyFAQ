@@ -143,7 +143,6 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
         $auth = true;
     } else {
         $user = null;
-        session_destroy();
     }
 }
 
@@ -253,7 +252,7 @@ if ($faqconfig->get('main.enableUserTracking')) {
         }
     }
 } else {
-    if (!setcookie(PMF_GET_KEY_NAME_LANGUAGE, $LANGCODE, $_SERVER['REQUEST_TIME'] + PMF_LANGUAGE_EXPIRED_TIME)) {
+    if (!setcookie(PMF_COOKIE_NAME_LANGUAGE, $LANGCODE, $_SERVER['REQUEST_TIME'] + PMF_LANGUAGE_EXPIRED_TIME)) {
         $sids = sprintf('lang=%s&amp;', $LANGCODE);
     }
 }
