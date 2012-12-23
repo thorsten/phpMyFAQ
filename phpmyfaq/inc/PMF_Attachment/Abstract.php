@@ -421,15 +421,15 @@ abstract class PMF_Attachment_Abstract
      */
     protected function deleteMeta()
     {
-        $sql = sprintf("DELETE FROM
-                             %sfaqattachment
-                        WHERE id = %d",
-                        SQLPREFIX,
-                        $this->id);
+        $sql = sprintf(
+            "DELETE FROM %sfaqattachment WHERE id = %d",
+            SQLPREFIX,
+            $this->id
+        );
                         
         $this->db->query($sql);
     }
-    
+
     /**
      * Validate attached file with the real hash
      * 
