@@ -85,7 +85,8 @@ printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_attachment_admin']);
             /**
              * Ajax call for deleting attachments
              *
-             * @param  integer att_id Attachment id
+             * @param att_id Attachment id
+             *
              * @return void
              */
             function deleteAttachment(att_id)

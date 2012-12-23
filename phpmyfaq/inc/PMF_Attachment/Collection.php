@@ -17,10 +17,10 @@
  * @category  phpMyFAQ
  * @package   PMF_Attachment
  * @author    Anatoliy Belsky <ab@php.net>
- * @since     2010-12-13
+ * @since     2009-08-21
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2010 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -36,7 +36,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @since     2009-08-21
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2012 phpMyFAQ Team
  */
 class PMF_Attachment_Collection
 {
@@ -51,7 +51,6 @@ class PMF_Attachment_Collection
     /**
      * Constructor
      * 
-     * @return null
      */
     public function __construct()
     {
@@ -84,7 +83,10 @@ class PMF_Attachment_Collection
             JOIN
                 %s fd
             ON
-                fa.record_id = fd.id",
+                fa.record_id = fd.id
+            GROUP BY
+                fa.id
+            ",
             SQLPREFIX . 'faqattachment',
             SQLPREFIX . 'faqdata'
         );
