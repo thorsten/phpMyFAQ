@@ -1190,3 +1190,4 @@ $PMF_LANG['msgMessageQuestionAnswered'] = "Your question at %s was answered. Ple
 
 // added v2.8.0-beta - 2012-12-24 by Thorsten
 $LANG_CONF["records.randomSort"] = array(0 => "checkbox", 1 => "Sort FAQs randomly (default: deactivated)");
+$LANG_CONF['main.enableWysiwygEditorFrontend'] = array(0 => "checkbox", 1 => "Enable bundled WYSIWYG editor in frontend (default: disabled)");

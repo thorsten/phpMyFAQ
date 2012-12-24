@@ -798,6 +798,7 @@ if ($step == 3) {
     //
     if (version_compare($version, '2.8.0-beta', '<')) {
         $faqConfig->add('records.randomSort', 'false');
+        $faqConfig->add('main.enableWysiwygEditorFrontend', 'false');
     }
 
     // Always the last step: Update version number

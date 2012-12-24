@@ -298,6 +298,7 @@ class PMF_Installer
         'main.titleFAQ'                           => 'phpMyFAQ Codename Perdita',
         'main.urlValidateInterval'                => '86400',
         'main.enableWysiwygEditor'                => 'true',
+        'main.enableWysiwygEditorFrontend'        => 'false',
         'main.templateSet'                        => 'default',
         'main.optionalMailAddress'                => 'false',
         'main.enableGoogleTranslation'            => 'false',

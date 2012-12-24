@@ -1147,3 +1147,4 @@ $PMF_LANG["rightsLanguage"]["export"] = "FAQs exportieren";
 
 // added v2.8.0-beta - 2012-12-24 by Thorsten
 $LANG_CONF["records.randomSort"] = array(0 => "checkbox", 1 => "Zufällige Sortierung der FAQs (Standard: deaktiviert)");
+$LANG_CONF["main.enableWysiwygEditorFrontend"] = array(0 => "checkbox", 1 => "Aktivierung des WYSIWYG Editors im Frontend (Standard: deaktiviert)");
