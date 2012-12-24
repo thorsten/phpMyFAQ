@@ -11908,12 +11908,12 @@ footer ul.footer-menu li {
 footer .copyright {
   color: #f2f2f2;
 }
-input[type="text"].admin-question {
+textarea.admin-question {
   font-size: 24px;
   font-weight: normal;
   line-height: 30px;
   width: 530px;
-  height: 30px;
+  height: 66px;
 }
 .form-horizontal .admin-config-label {
   float: left;

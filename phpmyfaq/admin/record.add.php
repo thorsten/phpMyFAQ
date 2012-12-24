@@ -83,7 +83,8 @@ if ($permission['editbt']|| $permission['addbt']) {
             'dateStart'     => (empty($dateStart) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000'),
             'dateEnd'       => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959'),
             'linkState'     => '',
-            'linkDateCheck' => 0);
+            'linkDateCheck' => 0
+        );
         
         // Add new record and get that ID
         $record_id = $faq->addRecord($recordData);
@@ -104,11 +105,11 @@ if ($permission['editbt']|| $permission['addbt']) {
             }
             
             // Add user permissions
-            $faq->addPermission('user', $record_id, $restricted_users);
+            $faq->addPermission('user', $record_id, array($restricted_users));
             $category->addPermission('user', $categories['rubrik'], $restricted_users);
             // Add group permission
             if ($faqConfig->get('security.permLevel') != 'basic') {
-                $faq->addPermission('group', $record_id, $restricted_groups);
+                $faq->addPermission('group', $record_id, array($restricted_groups));
                 $category->addPermission('group', $categories['rubrik'], $restricted_groups);
             }
 

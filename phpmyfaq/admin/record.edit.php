@@ -225,9 +225,9 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                     <!-- Question -->
                     <div class="control-group">
                         <div class="controls">
-                            <input type="text" name="question" id="question" class="admin-question"
-                                   placeholder="<?php echo $PMF_LANG['ad_entry_theme']; ?>" maxlength="255"
-                                   value="<?php echo $faqData['title'] ?>" />
+                            <textarea name="question" id="question" class="admin-question span11" rows="2"
+                                      placeholder="<?php echo $PMF_LANG['ad_entry_theme']; ?>"><?php
+                                echo $faqData['title'] ?></textarea>
                         </div>
                     </div>
                     <!-- Answer -->

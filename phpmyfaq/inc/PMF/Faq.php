@@ -662,25 +662,29 @@ class PMF_Faq
     /**
      * Returns an array with all data from a FAQ record
      *
-     * @param  integer $record_id   Record id
-     * @param  integer $revision_id Revidion id
-     * @param  boolean $admin       must be true if it is called by an admin/author context
+     * @param integer $id         Record id
+     * @param integer $revisionId Revision id
+     * @param boolean $admin      Must be true if it is called by an admin/author context
      * @return void
      */
-    public function getRecord($id, $revision_id = null, $admin = false)
+    public function getRecord($id, $revisionId = null, $admin = false)
     {
         global $PMF_LANG;
 
         if ($this->groupSupport) {
-            $permPart = sprintf("( fdg.group_id IN (%s)
+            $permPart = sprintf(
+                "( fdg.group_id IN (%s)
             OR
                 (fdu.user_id = %d AND fdg.group_id IN (%s)))",
                 implode(', ', $this->groups),
                 $this->user,
-                implode(', ', $this->groups));
+                implode(', ', $this->groups)
+            );
         } else {
-            $permPart = sprintf("( fdu.user_id = %d OR fdu.user_id = -1 )",
-                $this->user);
+            $permPart = sprintf(
+                "( fdu.user_id = %d OR fdu.user_id = -1 )",
+                $this->user
+            );
         }
         
         $query = sprintf(
@@ -706,21 +710,23 @@ class PMF_Faq
             AND
                 %s",
             PMF_Db::getTablePrefix(),
-            isset($revision_id) ? 'faqdata_revisions': 'faqdata',
+            isset($revisionId) ? 'faqdata_revisions': 'faqdata',
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             $id,
-            isset($revision_id) ? 'AND revision_id = '.$revision_id : '',
+            isset($revisionId) ? 'AND revision_id = '.$revisionId : '',
             $this->_config->getLanguage()->getLanguage(),
-            ($admin) ? '1=1' : $permPart);
+            ($admin) ? '1=1' : $permPart
+        );
 
         $result = $this->_config->getDb()->query($query);
 
         if ($row = $this->_config->getDb()->fetchObject($result)) {
 
-            $content        = $row->content;
-            $active         = ('yes' == $row->active);
-            $expired        = (date('YmdHis') > $row->date_end);
+            $question = nl2br($row->thema);
+            $content  = $row->content;
+            $active   = ('yes' == $row->active);
+            $expired  = (date('YmdHis') > $row->date_end);
 
             if (!$admin) {
                 if (!$active) {
@@ -739,7 +745,7 @@ class PMF_Faq
                 'active'        => $row->active,
                 'sticky'        => $row->sticky,
                 'keywords'      => $row->keywords,
-                'title'         => $row->thema,
+                'title'         => $question,
                 'content'       => $content,
                 'author'        => $row->author,
                 'email'         => $row->email,
@@ -749,7 +755,7 @@ class PMF_Faq
                 'dateEnd'       => $row->date_end,
                 'linkState'     => $row->links_state,
                 'linkCheckDate' => $row->links_check_date
-                );
+            );
         } else {
             $this->faqRecord = array(
                 'id'            => $id,
@@ -769,7 +775,7 @@ class PMF_Faq
                 'dateEnd'       => '',
                 'linkState'     => '',
                 'linkCheckDate' => ''
-                );
+            );
         }
     }
 
@@ -1100,18 +1106,20 @@ class PMF_Faq
     /**
      * Returns an array with all data from a FAQ record
      *
-     * @param  integer $solution_id Solution ID
+     * @param  integer $solutionId Solution ID
      * @return void
      */
-    public function getRecordBySolutionId($solution_id)
+    public function getRecordBySolutionId($solutionId)
     {
         if ($this->groupSupport) {
-            $permPart = sprintf("( fdg.group_id IN (%s)
+            $permPart = sprintf(
+                "( fdg.group_id IN (%s)
             OR
                 (fdu.user_id = %d AND fdg.group_id IN (%s)))",
                 implode(', ', $this->groups),
                 $this->user,
-                implode(', ', $this->groups));
+                implode(', ', $this->groups)
+            );
         } else {
             $permPart = sprintf("( fdu.user_id = %d OR fdu.user_id = -1 )",
                 $this->user);
@@ -1137,15 +1145,18 @@ class PMF_Faq
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
-            $solution_id,
-            $permPart);
+            $solutionId,
+            $permPart
+        );
 
         $result = $this->_config->getDb()->query($query);
 
         if ($row = $this->_config->getDb()->fetchObject($result)) {
-            $content        = $row->content;
-            $active         = ('yes' == $row->active);
-            $expired        = (date('YmdHis') > $row->date_end);
+
+            $question = nl2br($row->thema);
+            $content  = $row->content;
+            $active   = ('yes' == $row->active);
+            $expired  = (date('YmdHis') > $row->date_end);
 
             if (!$active) {
                 $content = $this->pmf_lang['err_inactiveArticle'];
@@ -1162,7 +1173,7 @@ class PMF_Faq
                 'active'        => $row->active,
                 'sticky'        => $row->sticky,
                 'keywords'      => $row->keywords,
-                'title'         => $row->thema,
+                'title'         => $question,
                 'content'       => $content,
                 'author'        => $row->author,
                 'email'         => $row->email,
@@ -1171,7 +1182,8 @@ class PMF_Faq
                 'dateStart'     => $row->date_start,
                 'dateEnd'       => $row->date_end,
                 'linkState'     => $row->links_state,
-                'linkCheckDate' => $row->links_check_date);
+                'linkCheckDate' => $row->links_check_date
+            );
         }
     }
 
