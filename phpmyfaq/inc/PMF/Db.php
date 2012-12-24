@@ -74,14 +74,9 @@ class PMF_Db
     public static function factory($type)
     {
         self::$dbType = $type;
+        $class = 'PMF_DB_' . ucfirst($type);
         
-        $file = str_replace('\\', '/', __FILE__);
-        $dir  = substr($file, 0, strrpos($file, "/")) . '/DB/';
-        $type = ucfirst($type);
-        
-        if (file_exists($dir . $type . '.php')) {
-            require_once $dir . $type . '.php';
-            $class          = 'PMF_DB_' . $type;
+        if (class_exists($class)) {
             self::$instance = new $class;
             return self::$instance;
         } else {
