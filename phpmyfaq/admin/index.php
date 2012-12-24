@@ -37,12 +37,9 @@ if (!file_exists(PMF_ROOT_DIR . '/config/database.php')) {
 define('IS_VALID_PHPMYFAQ', null);
 
 //
-// Bootstrap phpMyFAQ and start the PHP session
+// Bootstrapping
 //
-require_once PMF_ROOT_DIR.'/inc/Bootstrap.php';
-PMF_Init::cleanRequest();
-session_name(PMF_Session::PMF_COOKIE_NAME_AUTH);
-session_start();
+require PMF_ROOT_DIR . '/inc/Bootstrap.php';
 
 // get language (default: english)
 $Language = new PMF_Language($faqConfig);

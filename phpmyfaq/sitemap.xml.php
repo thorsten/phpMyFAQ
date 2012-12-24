@@ -50,7 +50,10 @@ define('PMF_SITEMAP_GOOGLE_INDEX_FILENAME', 'sitemap_index.xml');
 define('PMF_ROOT_DIR', __DIR__);
 define('IS_VALID_PHPMYFAQ', null);
 
-require PMF_ROOT_DIR .'/inc/Bootstrap.php';
+//
+// Bootstrapping
+//
+require 'inc/Bootstrap.php';
 
 //
 // Initalizing static string wrapper
@@ -85,10 +88,6 @@ function buildSitemapNode($location, $lastmod = null, $changeFreq = null, $prior
 // we'll manage this issue using a Sitemap Index Files produced by this PHP code
 // including Sitemap URLs always produced by this same PHP code (see PMF_SITEMAP_GOOGLE_GET_INDEX)
 //
-
-PMF_Init::cleanRequest();
-session_name(PMF_Session::PMF_COOKIE_NAME_AUTH);
-session_start();
 
 $oFaq = new PMF_Faq($faqConfig);
 // Load the faq

@@ -17,14 +17,12 @@
  * @since     2009-09-03
  */
 
-//
-// Prepend and start the PHP session
-//
 define('IS_VALID_PHPMYFAQ', null);
+
+//
+// Bootstrapping
+//
 require 'inc/Bootstrap.php';
-PMF_Init::cleanRequest();
-session_name(PMF_Session::PMF_COOKIE_NAME_AUTH);
-session_start();
 
 // Send headers
 $http = new PMF_Helper_Http();

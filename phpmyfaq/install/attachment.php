@@ -31,12 +31,10 @@ if (!file_exists(PMF_ROOT_DIR . '/config/database.php')) {
 }
 
 //
-// Autoload classes, prepend and start the PHP session
+// Bootstrapping
 //
-require_once PMF_ROOT_DIR.'/inc/Bootstrap.php';
-PMF_Init::cleanRequest();
-session_name(PMF_Session::PMF_COOKIE_NAME_AUTH);
-session_start();
+require PMF_ROOT_DIR . '/inc/Bootstrap.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -20,10 +20,10 @@
 define('PMF_ROOT_DIR', dirname(dirname(__DIR__)));
 define('IS_VALID_PHPMYFAQ', null);
 
-require_once PMF_ROOT_DIR.'/inc/Bootstrap.php';
-PMF_Init::cleanRequest();
-session_name(PMF_Session::PMF_COOKIE_NAME_AUTH);
-session_start();
+//
+// Bootstrapping
+//
+require PMF_ROOT_DIR . '/inc/Bootstrap.php';
 
 //
 // get language (default: english)

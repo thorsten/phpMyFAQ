@@ -25,12 +25,9 @@ define('PMF_ROOT_DIR', dirname(__DIR__));
 define('IS_VALID_PHPMYFAQ', null);
 
 //
-// Autoload classes, prepend and start the PHP session
+// Bootstrapping
 //
-require_once PMF_ROOT_DIR.'/inc/Bootstrap.php';
-PMF_Init::cleanRequest();
-session_name(PMF_Session::PMF_COOKIE_NAME_AUTH);
-session_start();
+require PMF_ROOT_DIR . '/inc/Bootstrap.php';
 
 $action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 

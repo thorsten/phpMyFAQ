@@ -30,14 +30,7 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 // Bootstrapping
 //
-require_once 'inc/Bootstrap.php';
-
-//
-// Start the PHP session
-//
-PMF_Init::cleanRequest();
-session_name(PMF_Session::PMF_COOKIE_NAME_AUTH);
-session_start();
+require 'inc/Bootstrap.php';
 
 //
 // Get language (default: english)

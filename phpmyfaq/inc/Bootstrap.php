@@ -110,6 +110,7 @@ define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/lang');
 // Setting up PSR-0 autoloader for Symfony Components
 //
 require PMF_INCLUDE_DIR . '/libs/Symfony/Component/ClassLoader/UniversalClassLoader.php';
+
 $loader = new UniversalClassLoader();
 $loader->registerNamespace('Symfony', PMF_INCLUDE_DIR . '/libs');
 $loader->registerPrefix('PMF_', PMF_INCLUDE_DIR);
@@ -136,11 +137,17 @@ $faqConfig->getAll();
 //
 // We always need a valid session!
 //
-
 ini_set('session.use_only_cookies', 1); // Avoid any PHP version to move sessions on URLs
 ini_set('session.auto_start', 0);       // Prevent error to use session_start() if it's active in php.ini
 ini_set('session.use_trans_sid', 0);
 ini_set('url_rewriter.tags', '');
+
+//
+// Start the PHP session
+//
+PMF_Init::cleanRequest();
+session_name(PMF_Session::PMF_COOKIE_NAME_AUTH);
+session_start();
 
 //
 // Connect to LDAP server, when LDAP support is enabled
@@ -252,10 +259,13 @@ function pmf_error_handler($level, $message, $filename, $line, $context)
     }
 
     // Custom error message
-    $errorMessage = <<<EOD
-<br />
-<b>phpMyFAQ $errorType</b> [$level]: $message in <b>$filename</b> on line <b>$line</b><br />
-EOD;
+    $errorMessage = sprintf(
+        '<br><strong>phpMyFAQ %s</strong> [%s]: $message in <strong>%s</strong> on line <strong>%d</strong><br>',
+        $errorType,
+        $level,
+        $filename,
+        $line
+    );
 
     if (ini_get('display_errors')) {
         print $errorMessage;
@@ -265,7 +275,8 @@ EOD;
             $errorType,
             $message,
             $filename,
-            $line));
+            $line)
+        );
     }
 
     switch ($level) {

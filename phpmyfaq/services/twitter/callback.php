@@ -24,12 +24,11 @@
 define('PMF_ROOT_DIR', dirname(dirname(__DIR__)));
 define('IS_VALID_PHPMYFAQ', null);
 
-require_once PMF_ROOT_DIR . '/inc/Bootstrap.php';
-require_once PMF_ROOT_DIR . '/inc/libs/twitteroauth/twitteroauth.php';
-
-PMF_Init::cleanRequest();
-session_name(PMF_Session::PMF_COOKIE_NAME_AUTH);
-session_start();
+//
+// Bootstrapping
+//
+require PMF_ROOT_DIR . '/inc/Bootstrap.php';
+require PMF_ROOT_DIR . '/inc/libs/twitteroauth/twitteroauth.php';
 
 $oAuthToken    = PMF_Filter::filterInput(INPUT_GET, 'oauth_token', FILTER_SANITIZE_STRING);
 $oAuthVerifier = PMF_Filter::filterInput(INPUT_GET, 'oauth_verifier', FILTER_SANITIZE_STRING);

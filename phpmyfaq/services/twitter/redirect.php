@@ -24,12 +24,11 @@
 define('PMF_ROOT_DIR', dirname(dirname(__DIR__)));
 define('IS_VALID_PHPMYFAQ', null);
 
-require_once PMF_ROOT_DIR . '/inc/Bootstrap.php';
-require_once PMF_ROOT_DIR . '/inc/libs/twitteroauth/twitteroauth.php';
-
-PMF_Init::cleanRequest();
-session_name(PMF_Session::PMF_COOKIE_NAME_AUTH);
-session_start();
+//
+// Bootstrapping
+//
+require PMF_ROOT_DIR . '/inc/Bootstrap.php';
+require PMF_ROOT_DIR . '/inc/libs/twitteroauth/twitteroauth.php';
 
 $connection = new TwitterOAuth($faqConfig->get('socialnetworks.twitterConsumerKey'),
                                $faqConfig->get('socialnetworks.twitterConsumerSecret'));

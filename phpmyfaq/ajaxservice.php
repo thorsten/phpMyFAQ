@@ -20,12 +20,9 @@
 define('IS_VALID_PHPMYFAQ', null);
 
 //
-// Prepend and start the PHP session
+// Bootstrapping
 //
 require 'inc/Bootstrap.php';
-PMF_Init::cleanRequest();
-session_name(PMF_Session::PMF_COOKIE_NAME_AUTH);
-session_start();
 
 $action   = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 $ajaxlang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
