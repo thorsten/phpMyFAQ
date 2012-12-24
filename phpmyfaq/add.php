@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $captcha = new PMF_Captcha($faqConfig);
 $captcha->setSessionId($sids);
 
-if (!is_null($showCaptcha)) {
+if (! is_null($showCaptcha)) {
     $captcha->showCaptchaImg();
     exit;
 }
@@ -35,7 +35,6 @@ $faqsession->userTracking('new_entry', 0);
 // Get possible user input
 $inputQuestion = PMF_Filter::filterInput(INPUT_GET, 'question', FILTER_VALIDATE_INT);
 $inputCategory = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
-
 
 $question = $readonly = '';
 if (!is_null($inputQuestion)) {
@@ -52,6 +51,17 @@ $categoryHelper = new PMF_Helper_Category();
 $categoryHelper->setCategory($category);
 
 $captchaHelper = new PMF_Helper_Captcha($faqConfig);
+
+// Enable/Disable WYSIWYG editor
+if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
+    $tpl->parseBlock(
+        'writeContent',
+        'enableWysiwygEditor',
+        array(
+            'currentTimestamp' => $_SERVER['REQUEST_TIME']
+        )
+    );
+}
 
 $tpl->parse(
     'writeContent', 

@@ -6,23 +6,23 @@
                 <input type="hidden" value="{openQuestionID}" id="openQuestionID" name="openQuestionID" />
                 
                 <div class="control-group">
-                    <label class="control-label" class="control-label" for="name">{msgNewContentName}</label>
+                    <label class="control-label" for="name">{msgNewContentName}</label>
                     <div class="controls">
-                        <input type="text" name="name" id="name" value="{defaultContentName}"required />
+                        <input type="text" name="name" id="name" value="{defaultContentName}" required>
                     </div>
                 </div>
 
                 <div class="control-group">
                     <label class="control-label" for="email">{msgNewContentMail}:</label>
                     <div class="controls">
-                        <input type="email" name="email" id="email" value="{defaultContentMail}" required="required" />
+                        <input type="email" name="email" id="email" value="{defaultContentMail}" required>
                     </div>
                 </div>
 
                 <div class="control-group">
                     <label class="control-label" for="rubrik">{msgNewContentCategory}</label>
                     <div class="controls">
-                        <select name="rubrik[]" id="rubrik" multiple="multiple" size="5" required="true" />
+                        <select name="rubrik[]" id="rubrik" multiple="multiple" size="5" required>
                         {printCategoryOptions}
                         </select>
                     </div>
@@ -70,11 +70,31 @@
             <div id="loader"></div>
             <div id="faqs"></div>
 
-            <script type="text/javascript" >
-            $(function() {
-                $('#submitfaq').click(function() {
-                    saveFormValues('savefaq', 'faq');
+            [enableWysiwygEditor]
+            <script src="admin/editor/tiny_mce.js?{currentTimestamp}"></script>
+            <script type="text/javascript">
+                tinyMCE.init({
+                    mode : "exact",
+                    elements : "answer",
+                    theme : "advanced",
+                    theme_advanced_buttons1 : "bold,italic,underline,separator,strikethrough,justifyleft,justifycenter,justifyright,justifyfull,bullist,numlist,undo,redo,link,unlink",
+                    theme_advanced_buttons2 : "",
+                    theme_advanced_buttons3 : "",
+                    theme_advanced_toolbar_location : "top",
+                    theme_advanced_toolbar_align : "left",
+                    theme_advanced_statusbar_location : "bottom",
+                    use_native_selects : true,
+                    entity_encoding : "raw",
+                    extended_valid_elements : "code"
                 });
-                $('form#formValues').submit(function() { return false; });
-            });
+            </script>
+            [/enableWysiwygEditor]
+
+            <script type="text/javascript">
+                $(function() {
+                    $('#submitfaq').click(function() {
+                        saveFormValues('savefaq', 'faq');
+                    });
+                    $('form#formValues').submit(function() { return false; });
+                });
             </script>

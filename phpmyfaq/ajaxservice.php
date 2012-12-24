@@ -226,14 +226,25 @@ switch ($action) {
         $faqid       = PMF_Filter::filterInput(INPUT_POST, 'faqid', FILTER_VALIDATE_INT);
         $faqlanguage = PMF_Filter::filterInput(INPUT_POST, 'faqlanguage', FILTER_SANITIZE_STRING);
         $question    = PMF_Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
-        $answer      = PMF_Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_STRIPPED);
+        if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
+            $answer = PMF_Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
+            $answer = html_entity_decode($answer);
+        } else {
+            $answer = PMF_Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_STRIPPED);
+            $answer = nl2br($answer);
+        }
         $translation = PMF_Filter::filterInput(INPUT_POST, 'translated_answer', FILTER_SANITIZE_STRING);
         $contentlink = PMF_Filter::filterInput(INPUT_POST, 'contentlink', FILTER_VALIDATE_URL);
         $keywords    = PMF_Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRIPPED);
-        $categories  = PMF_Filter::filterInputArray(INPUT_POST, array(
-            'rubrik' => array(
-                'filter' => FILTER_VALIDATE_INT,
-                'flags'  => FILTER_REQUIRE_ARRAY)));
+        $categories  = PMF_Filter::filterInputArray(
+            INPUT_POST,
+            array(
+                'rubrik' => array(
+                    'filter' => FILTER_VALIDATE_INT,
+                    'flags'  => FILTER_REQUIRE_ARRAY
+                )
+            )
+        );
 
         // Check on translation
         if (is_null($answer) && !is_null($translation)) {
@@ -277,7 +288,7 @@ switch ($action) {
                 'thema'         => $question,
                 'active'        => ($autoActivate ? FAQ_SQL_ACTIVE_YES : FAQ_SQL_ACTIVE_NO),
                 'sticky'        => 0,
-                'content'       => nl2br($answer),
+                'content'       => $answer,
                 'keywords'      => $keywords,
                 'author'        => $name,
                 'email'         => $email,
