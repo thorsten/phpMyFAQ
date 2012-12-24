@@ -133,7 +133,7 @@
             xmlns:db="http://apstandard.com/ns/1/db"
             xmlns:apache="http://apstandard.com/ns/1/apache">
 
-            <php:version min="5.3.2"/>
+            <php:version min="5.3.3"/>
 
                 <php:extension>gd</php:extension>
                 <php:extension>json</php:extension>

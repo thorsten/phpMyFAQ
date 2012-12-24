@@ -130,7 +130,7 @@ Requires:           apache
 %else
 Requires:           httpd
 %endif
-Requires:           php >= 5.3.2
+Requires:           php >= 5.3.3
 # GD is bundled into PHP starting from PHP 4.3.0
 Requires:           php-gd
 # We do not require MySQL but one among the several DB supported by phpMyFAQ.

@@ -58,7 +58,7 @@ class PMF_System
     /**
      * Minimum required PHP version
      */
-    const VERSION_MINIMUM_PHP = '5.3.2';
+    const VERSION_MINIMUM_PHP = '5.3.3';
 
     /**
      * Array of required PHP extensions
