@@ -396,6 +396,14 @@ switch ($action) {
                 $visibility = 'Y';
             }
 
+            $questionData = array(
+                'username'    => $name,
+                'email'       => $email,
+                'category_id' => $ucategory,
+                'question'    => $question,
+                'is_visible'  => $visibility
+            );
+
             if (1 != $save) {
 
                 $cleanQuestion = $stopwords->clean($question);
@@ -445,13 +453,6 @@ switch ($action) {
                     
                 } else {
 
-                    $questionData = array(
-                        'username'    => $name,
-                        'email'       => $email,
-                        'category_id' => $ucategory,
-                        'question'    => $question,
-                        'is_visible'  => $visibility);
-
                     $faq->addQuestion($questionData);
 
                     $questionMail = "User: " . $questionData['username'] .
@@ -483,13 +484,6 @@ switch ($action) {
                 }
                 
             } else {
-
-                $questionData = array(
-                    'username'    => $name,
-                    'email'       => $email,
-                    'category_id' => $ucategory,
-                    'question'    => $question,
-                    'is_visible'  => $visibility);
 
                 $faq->addQuestion($questionData);
 
