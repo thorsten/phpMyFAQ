@@ -30,11 +30,14 @@ define('IS_VALID_PHPMYFAQ', null);
 require PMF_ROOT_DIR . '/inc/Bootstrap.php';
 require PMF_ROOT_DIR . '/inc/libs/twitteroauth/twitteroauth.php';
 
-$connection = new TwitterOAuth($faqConfig->get('socialnetworks.twitterConsumerKey'),
-                               $faqConfig->get('socialnetworks.twitterConsumerSecret'));
+$connection = new TwitterOAuth(
+    $faqConfig->get('socialnetworks.twitterConsumerKey'),
+    $faqConfig->get('socialnetworks.twitterConsumerSecret')
+);
 
-$requestToken = $connection->getRequestToken($faqConfig->get('main.referenceURL') .
-                                             '/services/twitter/callback.php');
+$requestToken = $connection->getRequestToken(
+    $faqConfig->get('main.referenceURL') . '/services/twitter/callback.php'
+);
 
 $_SESSION['oauth_token']        = $requestToken['oauth_token'];
 $_SESSION['oauth_token_secret'] = $requestToken['oauth_token_secret'];

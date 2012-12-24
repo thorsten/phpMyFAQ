@@ -38,10 +38,12 @@ if (!is_null($oAuthToken) && $_SESSION['oauth_token'] !== $oAuthToken) {
   header('Location: ./clearsessions.php');
 }
 
-$connection = new TwitterOAuth($faqConfig->get('socialnetworks.twitterConsumerKey'),
-                               $faqConfig->get('socialnetworks.twitterConsumerSecret'),
-                               $_SESSION['oauth_token'],
-                               $_SESSION['oauth_token_secret']);
+$connection = new TwitterOAuth(
+    $faqConfig->get('socialnetworks.twitterConsumerKey'),
+    $faqConfig->get('socialnetworks.twitterConsumerSecret'),
+    $_SESSION['oauth_token'],
+    $_SESSION['oauth_token_secret']
+);
 
 $accessToken              = $connection->getAccessToken($oAuthVerifier);
 $_SESSION['access_token'] = $accessToken;

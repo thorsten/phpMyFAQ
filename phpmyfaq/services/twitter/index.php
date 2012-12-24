@@ -38,10 +38,12 @@ if (empty($_SESSION['access_token']) ||
 
 $accessToken = $_SESSION['access_token'];
 
-$connection = new TwitterOAuth($faqConfig->get('socialnetworks.twitterConsumerKey'),
-                               $faqConfig->get('socialnetworks.twitterConsumerSecret'),
-                               $accessToken['oauth_token'],
-                               $accessToken['oauth_token_secret']);
+$connection = new TwitterOAuth(
+    $faqConfig->get('socialnetworks.twitterConsumerKey'),
+    $faqConfig->get('socialnetworks.twitterConsumerSecret'),
+    $accessToken['oauth_token'],
+    $accessToken['oauth_token_secret']
+);
 
 $content = $connection->get('account/verify_credentials');
 
