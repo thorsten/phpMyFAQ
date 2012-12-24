@@ -72,5 +72,5 @@ if ($permission["editcateg"]) {
         </form>
 <?php
 } else {
-	print $PMF_LANG["err_NotAuth"];
+    print $PMF_LANG["err_NotAuth"];
 }
