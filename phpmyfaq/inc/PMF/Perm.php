@@ -87,23 +87,14 @@ class PMF_Perm
      */
     public static function selectPerm($permLevel, PMF_Configuration $config)
     {
-        // verify selected database
-        $perm      = new PMF_Perm($config);
-        $permLevel = ucfirst(strtolower($permLevel));
-        
-        if (!isset($permLevel)) {
-            return $perm;
-        }
-        
-        $classfile = __DIR__ . DIRECTORY_SEPARATOR . 'Perm' . DIRECTORY_SEPARATOR . $permLevel . '.php';
-        if (!file_exists($classfile)) {
-            return $perm;
+        if (isset($permLevel)) {
+            $permclass = 'PMF_Perm_' . ucfirst(strtolower($permLevel));
+            if (class_exists($permclass)) {
+                return new $permclass($config);
+            }
         }
 
-        $permclass = 'PMF_Perm_' . $permLevel;
-        $perm      = new $permclass($config);
-
-        return $perm;
+        return new PMF_Perm($config);
     }
     
     /**
