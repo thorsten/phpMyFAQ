@@ -15,6 +15,7 @@ backup-system, a dynamic sitemap, related FAQs, tagging, RSS feeds, built-in spa
 protection systems, OpenLDAP and Microsoft Active Directory support, and an easy
 to use installation script.
 
+
 ## Requirements
 
 phpMyFAQ is only supported on PHP 5.3.2 and up, you need a database as well. Supported
@@ -30,12 +31,13 @@ The best way to install phpMyFAQ is to download it on [phpmyfaq.de](http://www.p
 
 ### Git
 
-	$ git clone git://github.com/thorsten/phpMyFAQ.git
-	$ cd phpMyFAQ
-	$ curl -s https://getcomposer.org/installer | php
-	$ php composer.phar install
-	
+    $ git clone git://github.com/thorsten/phpMyFAQ.git
+    $ cd phpMyFAQ
+    $ curl -s https://getcomposer.org/installer | php
+    $ php composer.phar install
+
 Then just open http://www.example.org/phpmyfaq/install/setup.php in your browser.
+
 
 ## License
 
