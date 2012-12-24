@@ -324,6 +324,7 @@ class PMF_Installer
         'records.enableDeleteQuestion'            => 'false',
         'records.autosaveActive'                  => 'false',
         'records.autosaveSecs'                    => '180',
+        'records.randomSort'                      => 'false',
 
         'search.useAjaxSearchOnStartpage'         => 'false',
         'search.numberSearchTerms'                => '10',

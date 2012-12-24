@@ -1187,3 +1187,6 @@ $PMF_LANG['msgOnlineMode'] = "FAQ is online";
 $PMF_LANG['msgShowMore'] = "show more";
 $PMF_LANG['msgQuestionAnswered'] = "Question answered";
 $PMF_LANG['msgMessageQuestionAnswered'] = "Your question at %s was answered. Please check it here:";
+
+// added v2.8.0-beta - 2012-12-24 by Thorsten
+$LANG_CONF["records.randomSort"] = array(0 => "checkbox", 1 => "Sort FAQs randomly (default: deactivated)");

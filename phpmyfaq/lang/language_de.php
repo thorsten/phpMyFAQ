@@ -1144,3 +1144,6 @@ $PMF_LANG["rightsLanguage"]["editinstances"] = "Mulit-Sites bearbeiten";
 $PMF_LANG["rightsLanguage"]["addinstances"] = "Multi-Sites hinzufügen";
 $PMF_LANG["rightsLanguage"]["delinstances"] = "Multi-Sites löschen";
 $PMF_LANG["rightsLanguage"]["export"] = "FAQs exportieren";
+
+// added v2.8.0-beta - 2012-12-24 by Thorsten
+$LANG_CONF["records.randomSort"] = array(0 => "checkbox", 1 => "Zufällige Sortierung der FAQs (Standard: deaktiviert)");

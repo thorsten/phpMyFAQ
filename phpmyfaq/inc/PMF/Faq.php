@@ -251,7 +251,7 @@ class PMF_Faq
             $now,
             $now,
             $category_id,
-            $this->_config->getLanguage()->getLanguage,
+            $this->_config->getLanguage()->getLanguage(),
             $permPart,
             $current_table,
             $this->_config->getDb()->escape($orderby),
@@ -301,24 +301,27 @@ class PMF_Faq
     /**
      * This function returns all not expired records from one category
      *
-     * @param  int     $category_id Category ID
-     * @param  string  $orderby     Order by
-     * @param  string  $sortby      Sorty by
+     * @param integer $categoryId Category ID
+     * @param string  $orderby    Order by
+     * @param string  $sortby     Sorty by
+     *
      * @return string
      */
-    public function showAllRecords($category_id, $orderby = 'id', $sortby = 'ASC')
+    public function showAllRecords($categoryId, $orderby = 'id', $sortby = 'ASC')
     {
         global $sids;
 
-        $page      = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
-        $output    = '';
+        $numPerPage = $this->_config->get('records.numberOfRecordsPerPage');
+        $page       = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
+        $output      = '';
 
         if ($orderby == 'visits') {
-            $current_table = 'fv';
+            $currentTable = 'fv';
         } else {
-            $current_table = 'fd';
+            $currentTable = 'fd';
         }
 
+        // Check for group supprt
         if ($this->groupSupport) {
             $permPart = sprintf("( fdg.group_id IN (%s)
             OR
@@ -331,7 +334,19 @@ class PMF_Faq
                 $this->user);
         }
 
-        $now = date('YmdHis');
+        // If random FAQs are activated, we don't need an order
+        if (true === $this->_config->get('records.randomSort')) {
+            $order = '';
+        } else {
+            $order = sprintf(
+                "ORDER BY fd.sticky DESC, %s.%s %s",
+                $currentTable,
+                $this->_config->getDb()->escape($orderby),
+                $this->_config->getDb()->escape($sortby)
+            );
+        }
+
+        $now   = date('YmdHis');
         $query = sprintf("
             SELECT
                 fd.id AS id,
@@ -374,8 +389,7 @@ class PMF_Faq
                 fd.lang = '%s'
             AND
                 %s
-            ORDER BY
-                fd.sticky DESC, %s.%s %s",
+            %s",
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
@@ -383,22 +397,20 @@ class PMF_Faq
             PMF_Db::getTablePrefix(),
             $now,
             $now,
-            $category_id,
+            $categoryId,
             $this->_config->getLanguage()->getLanguage(),
             $permPart,
-            $current_table,
-            $this->_config->getDb()->escape($orderby),
-            $this->_config->getDb()->escape($sortby));
+            $order
+        );
 
         $result = $this->_config->getDb()->query($query);
-
-        $num   = $this->_config->getDb()->numRows($result);
-        $pages = ceil($num / $this->_config->get("records.numberOfRecordsPerPage"));
+        $num    = $this->_config->getDb()->numRows($result);
+        $pages  = ceil($num / $numPerPage);
 
         if ($page == 1) {
             $first = 0;
         } else {
-            $first = ($page * $this->_config->get("records.numberOfRecordsPerPage")) - $this->_config->get("records.numberOfRecordsPerPage");
+            $first = $page * $numPerPage - $numPerPage;
         }
 
         if ($num > 0) {
@@ -409,9 +421,11 @@ class PMF_Faq
                     $pages . $this->pmf_lang['msgPages']);
             }
             $output .= '<ul class="phpmyfaq_ul">';
-            $counter = 0;
+
+            $counter          = 0;
             $displayedCounter = 0;
-            while (($row = $this->_config->getDb()->fetchObject($result)) && $displayedCounter < $this->_config->get("records.numberOfRecordsPerPage")) {
+            $renderedItems    = array();
+            while (($row = $this->_config->getDb()->fetchObject($result)) && $displayedCounter < $numPerPage) {
                 $counter ++;
                 if ($counter <= $first) {
                     continue;
@@ -436,17 +450,27 @@ class PMF_Faq
                             
                 $oLink = new PMF_Link($url, $this->_config);
                 $oLink->itemTitle = $oLink->text = $oLink->tooltip = $title;
-                
-                $listItem = sprintf(
+
+                // If random FAQs are activated, we don't need sticky FAQs
+                if (true === $this->_config->get('records.randomSort')) {
+                    $row->sticky = 0;
+                }
+
+                $renderedItems[] = sprintf(
                     '<li>%s<span id="viewsPerRecord"><br /><span class="little">(%s)</span>%s</span></li>',
                     $oLink->toHtmlAnchor(),
                     $this->plr->GetMsg('plmsgViews', $visits),
                     ($row->sticky == 1) ? '<br /><br />' : ''
                 );
-
-                $output .= $listItem;
             }
-            $output .= '</ul><span id="totFaqRecords" style="display: none;">'.$num.'</span>';
+
+            // If random FAQs are activated, shuffle the FAQs :-)
+            if (true === $this->_config->get('records.randomSort')) {
+                shuffle($renderedItems);
+            }
+
+            $output .= implode("\n", $renderedItems);
+            $output .= '</ul><span class="totalFaqRecords hide">'.$num.'</span>';
         } else {
             return false;
         }
@@ -455,7 +479,7 @@ class PMF_Faq
 
             $baseUrl = PMF_Link::getSystemRelativeUri() . '?' .
                        (empty($sids) ? '' : $sids) .
-                       'action=show&amp;cat=' . $category_id .
+                       'action=show&amp;cat=' . $categoryId .
                        '&amp;seite=' . $page;
 
             $options = array(

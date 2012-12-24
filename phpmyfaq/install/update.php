@@ -793,6 +793,13 @@ if ($step == 3) {
 
     }
 
+    //
+    // UPDATES FROM 2.8.0-beta
+    //
+    if (version_compare($version, '2.8.0-beta', '<')) {
+        $faqConfig->add('records.randomSort', 'false');
+    }
+
     // Always the last step: Update version number
     if (version_compare($version, PMF_System::getVersion(), '<')) {
         $faqConfig->update(array('main.currentVersion' => PMF_System::getVersion()));
