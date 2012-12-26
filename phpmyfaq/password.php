@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012 phpMyFAQ Team
+ * @copyright 2012-2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2012-03-26
@@ -22,16 +22,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-
-
 $tpl->parse(
     'writeContent',
     array(
-        'headerChangePassword'  => $PMF_LANG["ad_passwd_cop"],
-        'msgUsername'           => $PMF_LANG["ad_auth_user"],
-        'msgEmail'              => $PMF_LANG["ad_entry_email"],
-        'msgSubmit'             => $PMF_LANG["msgNewContentSubmit"],
-
+        'headerChangePassword' => $PMF_LANG['ad_passwd_cop'],
+        'msgUsername'          => $PMF_LANG['ad_auth_user'],
+        'msgEmail'             => $PMF_LANG['ad_entry_email'],
+        'msgSubmit'            => $PMF_LANG['msgNewContentSubmit']
     )
 );
 

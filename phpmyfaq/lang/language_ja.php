@@ -12,7 +12,7 @@
  * @package   Translation
  * @author    Tadashi Jokagi <http://poyo.jp/>
  * @author    Minoru TODA <todam@netjapan.co.jp>
- * @copyright 2004-2012 phpMyFAQ Team
+ * @copyright 2004-2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-19

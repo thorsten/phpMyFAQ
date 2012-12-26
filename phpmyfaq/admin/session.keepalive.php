@@ -15,7 +15,7 @@
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Uwe Pries <uwe.pries@digartis.de>
- * @copyright 2006-2012 phpMyFAQ Team
+ * @copyright 2006-2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2006-05-08
@@ -63,7 +63,7 @@ $refreshTime = (PMF_SESSION_ID_EXPIRES - PMF_SESSION_ID_REFRESH) * 60;
     <meta name="author" content="phpMyFAQ Team">
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
     <meta name="application-name" content="phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?>">
-    <meta name="copyright" content="(c) 2001-2012 phpMyFAQ Team">
+    <meta name="copyright" content="(c) 2001-2013 phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
 <?php
 if (isset($user) && ($refreshTime > 0)) {

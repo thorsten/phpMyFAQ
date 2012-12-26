@@ -39,16 +39,26 @@
                     </button>
                 </div>
             </form>
+
             <script type="text/javascript" >
-            $(function() {
-                $('#submitcontact').click(function() {
-                    saveFormValues('sendcontact', 'contact');
+                $(function() {
+                    $('#submitcontact').click(function() {
+                        saveFormValues('sendcontact', 'contact');
+                    });
+                    $('form#formValues').submit(function() { return false; });
                 });
-                $('form#formValues').submit(function() { return false; });
-            });
             </script>
             
-            <!-- DO NOT REMOVE THE COPYRIGHT NOTICE -->
-            <div id="version"><a href="http://www.phpmyfaq.de"><img src="assets/img/logo.png" width="88" height="31" alt="powered by phpMyFAQ {version}" title="powered by phpMyFAQ {version}" /></a></div>
-            <div id="copyright">&copy; 2001 - 2012 by <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> under the <a href="http://www.mozilla.org/MPL/MPL-1.1.html">Mozilla Public License</a>. All rights reserved.assets/template/CSS by <a href="http://www.rinne.info">Thorsten Rinne</a>.phpMyFAQ logo by <a href="http://www.lieven.be/">Lieven Op De Beeck</a></div>
-            <!-- DO NOT REMOVE THE COPYRIGHT NOTICE -->
+            <!-- PLEASE DO NOT REMOVE THE COPYRIGHT NOTICE -->
+            <div id="version">
+                <a href="http://www.phpmyfaq.de">
+                    <img src="assets/img/logo.png" width="88" height="31" alt="powered by phpMyFAQ {version}" title="powered by phpMyFAQ {version}" />
+                </a>
+            </div>
+            <div id="copyright">
+                &copy; 2001 - 2013 by <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> under the <a href="http://www.mozilla.org/MPL/2.0/">Mozilla Public License</a>.
+                All rights reserved.
+                Template/CSS by <a href="http://www.rinne.info">Thorsten Rinne</a>.
+                phpMyFAQ logo by <a href="http://www.lieven.be/">Lieven Op De Beeck</a>.
+            </div>
+            <!-- PLEASE DO NOT REMOVE THE COPYRIGHT NOTICE -->

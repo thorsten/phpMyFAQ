@@ -13,7 +13,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since     2009-10-07
  * @license   Mozilla Public License 1.1
- * @copyright 2009-2012 phpMyFAQ Team
+ * @copyright 2009-2013 phpMyFAQ Team
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {

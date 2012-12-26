@@ -6,7 +6,7 @@
  * @subpackage Translation
  * @author     Karoly SIMO <skaroly@bestdomain.ro>
  * @since      2004-11-09
- * @copyright  2004-2012 phpMyFAQ Team
+ * @copyright  2004-2013 phpMyFAQ Team
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can

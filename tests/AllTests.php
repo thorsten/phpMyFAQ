@@ -13,7 +13,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @copyright 2009-2012 phpMyFAQ Team
+ * @copyright 2009-2013 phpMyFAQ Team
  * @since     2009-05-16
  */
 
@@ -42,7 +42,7 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'PMF_LinkTest.php';
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @copyright 2009-2012 phpMyFAQ Team
+ * @copyright 2009-2013 phpMyFAQ Team
  * @since     2009-05-16
  */
 class AllTests

@@ -37,19 +37,16 @@
 # KNOWN ISSUES
 # 1. Relocation (rpm flag: --relocate OLDPATH=NEWPATH) is not working as expected
 #
+# This Source Code Form is subject to the terms of the Mozilla Public License,
+# v. 2.0. If a copy of the MPL was not distributed with this file, You can
+# obtain one at http://mozilla.org/MPL/2.0/.
+#
 # @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+# @copyright 2006-2013 phpMyFAQ Team
+# @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+# @link      http://www.phpmyfaq.de
 # @since     2006-07-05
-# @copyright 2006-2012 phpMyFAQ Team
 #
-# The contents of this file are subject to the Mozilla Public License
-# Version 1.1 (the "License"); you may not use this file except in
-# compliance with the License. You may obtain a copy of the License at
-# http://www.mozilla.org/MPL/
-#
-# Software distributed under the License is distributed on an "AS IS"
-# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-# License for the specific language governing rights and limitations
-# under the License.
 
 #
 # phpMyFAQ
@@ -142,7 +139,7 @@ Provides:           %{name}-%{version}
 
 %description
 phpMyFAQ is a multilingual, completely database-driven FAQ-system.
-It supports various databases to store all data, PHP 5.3.2 (or higher)
+It supports various databases to store all data, PHP 5.3.3 (or higher)
 is needed in order to access this data.
 phpMyFAQ also offers a Content Management-System with a WYSIWYG editor
 and an Image Manager, flexible multi-user support with LDAP support,

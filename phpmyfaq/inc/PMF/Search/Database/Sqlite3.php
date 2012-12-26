@@ -1,6 +1,6 @@
 <?php
 /**
- * phpMyFAQ SQL Server Driver for PHP based search classes
+ * phpMyFAQ SQlite based search classes
  *
  * PHP Version 5.3
  *
@@ -11,10 +11,10 @@
  * @category  phpMyFAQ
  * @package   PMF_Search_Database
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2013 phpMyFAQ Team
+ * @copyright 2012-2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @since     2010-07-06
+ * @since     2012-12-26
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -22,24 +22,22 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Search_Database_Sqlsrv
+ * PMF_Search_Database_Sqlite3
  *
  * @category  phpMyFAQ
  * @package   PMF_Search_Database
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2013 phpMyFAQ Team
+ * @copyright 2012-2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @since     2010-07-06
+ * @since     2012-12-26
  */
-class PMF_Search_Database_Sqlsrv extends PMF_Search_Database
+class PMF_Search_Database_Sqlite3 extends PMF_Search_Database
 {
     /**
      * Constructor
      *
      * @param PMF_Configuration
-     *
-     * @return PMF_Search_Abstract
      */
     public function __construct(PMF_Configuration $config)
     {
@@ -73,11 +71,12 @@ class PMF_Search_Database_Sqlsrv extends PMF_Search_Database
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
                 $this->getMatchClause($searchTerm),
-                $this->getConditions());
-            
+                $this->getConditions()
+            );
+
             $this->resultSet = $this->_config->getDb()->query($query);
         }
-        
+
         return $this->resultSet;
     }
 }
