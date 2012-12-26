@@ -31,6 +31,7 @@ define('LANGCODE', 'en');
 
 // Do not change anything below this line!
 define('PMF_ROOT_DIR', __DIR__);
+
 $output                    = '';
 $isCronRequest             = false;
 $isRequestedByCLI          = isset($_SERVER['argv']) && (isset($_SERVER['argv'][0]));
@@ -57,6 +58,14 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/config/database.php')) {
         require_once(PMF_ROOT_DIR.'/lang/language_'.LANGCODE.'.php');
     }
 
+    //Load plurals support for selected language
+    $plr = new PMF_Language_Plurals(LANGCODE);
+
+    //
+    // Initalizing static string wrapper
+    //
+    PMF_String::init(LANGCODE);
+
     $oLnk     = new PMF_Linkverifier($faqConfig);
     $faq      = new PMF_Faq($faqConfig);
     $totStart = microtime(true);
@@ -73,11 +82,10 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/config/database.php')) {
     $output  .= ' #'.$tot.', done in '.round($end - $start, 4).' sec.'.($isRequestedByWebLocalhost ? '' : "\n");;
     $output  .= ($isRequestedByWebLocalhost ? '' : "\n");
     if ($isRequestedByWebLocalhost) {
-        print '<pre>';
+        echo '<pre>';
     }
     $output = $output."\n";
-    print($output);
-    ob_flush();
+    echo $output;
 
     $i = 0;
     foreach ($_records as $_r) {
@@ -94,8 +102,7 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/config/database.php')) {
         if ($isRequestedByWebLocalhost) {
             $output = $output."\n";
         }
-        print($output);
-        ob_flush();
+        echo $output;
     }
 
     $output = '';
@@ -106,12 +113,11 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/config/database.php')) {
     if ($isRequestedByWebLocalhost) {
         $output = $output."\n";
     }
-    print($output);
+    echo $output;
 
     if ($isRequestedByWebLocalhost) {
-        print '</pre>';
+        echo '</pre>';
     }
-    ob_flush();
 }
 
 //
