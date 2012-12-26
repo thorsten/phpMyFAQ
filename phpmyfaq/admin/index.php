@@ -217,73 +217,77 @@ if (isset($auth) && in_array(true, $permission)) {
         if ($action == 'ajax') {
 
             switch ($_ajax) {
-            // Link verification
-            case 'verifyURL':
-                require_once 'ajax.verifyurl.php';
-                break;
-            case 'onDemandURL':
-                require_once 'ajax.ondemandurl.php';
-                break;
 
-            // Configuration management
-            case 'config_list':
-                require_once 'ajax.config_list.php';
-                break;
+                // Attachments
+                case 'att':
+                    require 'ajax.attachment.php';
+                    break;
 
-            case 'config':
-                require_once 'ajax.config.php';
-                break;
-                
-            // Tags management
-            case 'tags_list':
-                require_once 'ajax.tags_list.php';
-                break;
-                
-            // Comments
-            case 'comment':
-                require 'ajax.comment.php';
-                break;
-            
-            // Records
-            case 'records':	
-                require 'ajax.records.php';
-                break;
+                // Link verification
+                case 'verifyURL':
+                    require_once 'ajax.verifyurl.php';
+                    break;
+                case 'onDemandURL':
+                    require_once 'ajax.ondemandurl.php';
+                    break;
 
-            case 'recordSave':
-                require 'record.save.php';
-                break;
+                // Categories
+                case 'categories':
+                    require 'ajax.category.php';
+                    break;
 
-            case 'recordAdd':
-                require 'record.add.php';
-                break;
+                // Configuration management
+                case 'config_list':
+                    require_once 'ajax.config_list.php';
+                    break;
 
-            // Search
-            case 'search':
-                require 'ajax.search.php';
-                break;
+                case 'config':
+                    require_once 'ajax.config.php';
+                    break;
 
-            // Users
-            case 'user': 
-                require 'ajax.user.php';
-                break;
-            
-            // Groups
-            case 'group': 
-                require 'ajax.group.php';
-                break;
-            
-            // Interface translation
-            case 'trans':
-                require 'ajax.trans.php';
-                break;
-                
-            case 'att':
-                require 'ajax.attachment.php';
-                break;
+                // Tags management
+                case 'tags_list':
+                    require_once 'ajax.tags_list.php';
+                    break;
 
-			case 'autosave':
-				require 'ajax.autosave.php';
-				break;
+                // Comments
+                case 'comment':
+                    require 'ajax.comment.php';
+                    break;
+
+                // Records
+                case 'records':
+                    require 'ajax.records.php';
+                    break;
+                case 'recordSave':
+                    require 'record.save.php';
+                    break;
+                case 'recordAdd':
+                    require 'record.add.php';
+                    break;
+                case 'autosave':
+                    require 'ajax.autosave.php';
+                    break;
+
+                // Search
+                case 'search':
+                    require 'ajax.search.php';
+                    break;
+
+                // Users
+                case 'user':
+                    require 'ajax.user.php';
+                    break;
+
+                // Groups
+                case 'group':
+                    require 'ajax.group.php';
+                    break;
+
+                // Interface translation
+                case 'trans':
+                    require 'ajax.trans.php';
+                    break;
             }
         exit();
         }

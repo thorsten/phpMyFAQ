@@ -222,7 +222,7 @@ class PMF_Category
         );
 
         $result = $this->_config->getDb()->query($query);
-        
+
         while ($row = $this->_config->getDb()->fetchArray($result)) {
             $this->categoryName[$row['id']] = $row;
             $this->categories[] =& $this->categoryName[$row['id']];
