@@ -136,6 +136,7 @@ class PMF_Category
     {
         $this->_config = $config;
         $this->setGroups($groups);
+        $this->setLanguage($this->_config->getLanguage()->getLanguage());
 
         $this->lineTab = $this->getOrderedCategories($withperm);
         for ($i = 0; $i < count($this->lineTab); $i++) {
@@ -221,6 +222,7 @@ class PMF_Category
         );
 
         $result = $this->_config->getDb()->query($query);
+        
         while ($row = $this->_config->getDb()->fetchArray($result)) {
             $this->categoryName[$row['id']] = $row;
             $this->categories[] =& $this->categoryName[$row['id']];

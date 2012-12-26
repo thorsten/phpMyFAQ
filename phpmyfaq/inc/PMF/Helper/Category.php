@@ -142,17 +142,21 @@ class PMF_Helper_Category extends PMF_Helper
     /**
      * Get all categories in <option> tags
      *
-     * @param  mixed $categoryId Category id or array of category ids
+     * @param  array|integer $categoryId Category ID or array of category IDs
      *
      * @return string
      */
-    public function renderOptions($categoryId = '')
+    public function renderOptions($categoryId = 0)
     {
         $categories = '';
 
         if (!is_array($categoryId)) {
-            $categoryId = array(array('category_id'   => $categoryId, 
-                                      'category_lang' => ''));
+            $categoryId = array(
+                array(
+                    'category_id'   => $categoryId,
+                    'category_lang' => ''
+                )
+            );
         }
 
         $i = 0;
@@ -163,20 +167,23 @@ class PMF_Helper_Category extends PMF_Helper
             }
             $categories .= "\t<option value=\"".$cat['id']."\"";
 
-            if (0 == $i && count($categoryId) == 0) {
+
+
+            if (0 === $i && count($categoryId) === 0) {
                 $categories .= ' selected="selected"';
             } else {
                 foreach ($categoryId as $categoryid) {
-                    if ($cat['id'] == $categoryid['category_id']) {
+                    if ($cat['id'] === $categoryid['category_id']) {
                         $categories .= ' selected="selected"';
                     }
                 }
             }
 
             $categories .= ">";
-            $categories .= $indent.$cat['name'] . "</option>\n";
+            $categories .= $indent . $cat['name'] . "</option>\n";
             $i++;
         }
+
         return $categories;
     }
 }
