@@ -17,12 +17,10 @@
  * @since     2006-11-19
  */
 
-define('PMF_ROOT_DIR', __DIR__);
 define('IS_VALID_PHPMYFAQ', null);
 
-require PMF_ROOT_DIR . '/inc/Bootstrap.php';
-require PMF_ROOT_DIR . '/inc/Link.php';
-require 'lang/' . $faqConfig->get('main.language');
+require __DIR__ . '/inc/Bootstrap.php';
+require PMF_LANGUAGE_DIR . '/' . $faqConfig->get('main.language');
 
 $baseUrl   = $faqConfig->get('main.referenceURL');
 $searchUrl = $baseUrl . '/index.php?action=search';
