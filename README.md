@@ -19,17 +19,18 @@ to use installation script.
 ## Requirements
 
 phpMyFAQ is only supported on PHP 5.3.3 and up, you need a database as well. Supported
-databases are MySQL, PostgreSQL, Microsoft SQL Server and SQLite. Check our detailed 
+databases are MySQL, PostgreSQL, Microsoft SQL Server, SQLite and MariaDB. Check our detailed
 requirements on [phpmyfaq.de](http://www.phpmyfaq.de/requirements.php) for more information.
 
 
 ## Installation
 
-### Package
+### Package for end-users
 
-The best way to install phpMyFAQ is to download it on [phpmyfaq.de](http://www.phpmyfaq.de/download.php), unzip the package and open http://www.example.org/phpmyfaq/install/setup.php in your browser.
+The best way to install phpMyFAQ is to download it on [phpmyfaq.de](http://www.phpmyfaq.de/download.php),
+unzip the package and open http://www.example.org/phpmyfaq/install/setup.php in your browser.
 
-### Git
+### Git for developers
 
     $ git clone git://github.com/thorsten/phpMyFAQ.git
     $ cd phpMyFAQ
@@ -39,14 +40,39 @@ The best way to install phpMyFAQ is to download it on [phpmyfaq.de](http://www.p
 Then just open http://www.example.org/phpmyfaq/install/setup.php in your browser.
 
 
-## License
+## Versioning
 
-Mozilla Public License 2.0, see LICENSE for more information.
+For transparency and insight into our release cycle, and for striving to maintain backward compatibility,
+phpMyFAQ will be maintained under the Semantic Versioning guidelines as much as possible.
+
+Releases will be numbered with the following format:
+
+`<major>.<minor>.<patch>`
+
+And constructed with the following guidelines:
+
+* Breaking backward compatibility bumps the major (and resets the minor and patch)
+* New additions without breaking backward compatibility bumps the minor (and resets the patch)
+* Bug fixes and misc changes bumps the patch
+
+For more information on SemVer, please visit http://semver.org/.
+
+
+## Bug tracker
+
+Have a bug or a feature request? [Please open a new issue](https://github.com/thorsten/phpMyFAQ/issues).
+Before opening any issue, please search for existing issues.
 
 
 ## Contributing
 
 Please check out our page about contributing on [phpmyfaq.de](http://www.phpmyfaq.de/contribute.php)
+
+
+## License
+
+Mozilla Public License 2.0, see LICENSE for more information.
+
 
 ## Bundled libraries
 
@@ -100,4 +126,4 @@ Licensed under the terms of the MIT License
 
 
 
-Copyright (c) 2001-2012 Thorsten Rinne and the phpMyFAQ Team
+Copyright (c) 2001-2013 Thorsten Rinne and the phpMyFAQ Team
