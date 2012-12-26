@@ -29,31 +29,67 @@ $user = PMF_User_CurrentUser::getFromSession($faqConfig);
 if ($permission['editbt']|| $permission['addbt']) {
 
     // FAQ data
-    $dateStart     = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
-    $dateEnd       = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
-    $question      = PMF_Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRING);
-    $categories    = PMF_Filter::filterInputArray(INPUT_POST, array('rubrik' => array('filter' => FILTER_VALIDATE_INT,
-                                                                                      'flags'  => FILTER_REQUIRE_ARRAY)));
-    $record_lang   = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-    $tags          = PMF_Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
-    $active        = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
-    $sticky        = PMF_Filter::filterInput(INPUT_POST, 'sticky', FILTER_SANITIZE_STRING);
-    $content       = PMF_Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
-    $keywords      = PMF_Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRING);
-    $author        = PMF_Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_STRING);
-    $email         = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-    $comment       = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
-    $record_id     = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-    $solution_id   = PMF_Filter::filterInput(INPUT_POST, 'solution_id', FILTER_VALIDATE_INT);
-    $revision_id   = PMF_Filter::filterInput(INPUT_POST, 'revision_id', FILTER_VALIDATE_INT);
-    $changed       = PMF_Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
+    $dateStart  = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
+    $dateEnd    = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
+    $question   = PMF_Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRING);
+    $categories = PMF_Filter::filterInputArray(
+        INPUT_POST,
+        array(
+            'rubrik' => array(
+                'filter' => FILTER_VALIDATE_INT,
+                'flags'  => FILTER_REQUIRE_ARRAY
+            )
+        )
+    );
+    $recordLang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
+    $tags       = PMF_Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
+    $active     = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
+    $sticky     = PMF_Filter::filterInput(INPUT_POST, 'sticky', FILTER_SANITIZE_STRING);
+    $content    = PMF_Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
+    $keywords   = PMF_Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRING);
+    $author     = PMF_Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_STRING);
+    $email      = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+    $comment    = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
+    $recordId   = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+    $solutionId = PMF_Filter::filterInput(INPUT_POST, 'solution_id', FILTER_VALIDATE_INT);
+    $revisionId = PMF_Filter::filterInput(INPUT_POST, 'revision_id', FILTER_VALIDATE_INT);
+    $changed    = PMF_Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
     
     // Permissions
-    $user_permission   = PMF_Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING);
-    $restricted_users  = ('all' == $user_permission) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT);
-    $group_permission  = PMF_Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING);
-    $restricted_groups = ('all' == $group_permission) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_groups', FILTER_VALIDATE_INT);
-    
+
+    $permissions = array();
+    if ('all' === PMF_Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING)) {
+        $permissions += array(
+            'restricted_user' => array(
+                -1
+            )
+        );
+    } else {
+        $permissions += array(
+            'restricted_user' => array(
+                PMF_Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT)
+            )
+        );
+    }
+
+    if ('all' === PMF_Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING)) {
+        $permissions += array(
+            'restricted_groups' => array(
+                -1
+            )
+        );
+    } else {
+        $permissions += PMF_Filter::filterInputArray(
+            INPUT_POST,
+            array(
+                'restricted_groups' => array(
+                    'filter' => FILTER_VALIDATE_INT,
+                    'flags'  => FILTER_REQUIRE_ARRAY
+                )
+            )
+        );
+    }
+
     if (!isset($categories['rubrik'])) {
         $categories['rubrik'] = array();
     }
@@ -70,7 +106,7 @@ if ($permission['editbt']|| $permission['addbt']) {
         $tagging  = new PMF_Tags($faqConfig);
 
         $recordData     = array(
-            'lang'          => $record_lang,
+            'lang'          => $recordLang,
             'active'        => $active,
             'sticky'        => (!is_null($sticky) ? 1 : 0),
             'thema'         => html_entity_decode($question),
@@ -85,32 +121,32 @@ if ($permission['editbt']|| $permission['addbt']) {
             'linkState'     => '',
             'linkDateCheck' => 0
         );
-        
-        // Add new record and get that ID
-        $record_id = $faq->addRecord($recordData);
 
-        if ($record_id) {
+        // Add new record and get that ID
+        $recordId = $faq->addRecord($recordData);
+
+        if ($recordId) {
             // Create ChangeLog entry
-            $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $recordData['lang']);
+            $faq->createChangeEntry($recordId, $user->getUserId(), nl2br($changed), $recordData['lang']);
             // Create the visit entry
 
             $visits = new PMF_Visits($faqConfig);
-            $visits->add($record_id);
+            $visits->add($recordId);
 
             // Insert the new category relations
-            $faq->addCategoryRelations($categories['rubrik'], $record_id, $recordData['lang']);
+            $faq->addCategoryRelations($categories['rubrik'], $recordId, $recordData['lang']);
             // Insert the tags
             if ($tags != '') {
-                $tagging->saveTags($record_id, explode(',',$tags));
+                $tagging->saveTags($recordId, explode(',',$tags));
             }
             
             // Add user permissions
-            $faq->addPermission('user', $record_id, array($restricted_users));
-            $category->addPermission('user', $categories['rubrik'], $restricted_users);
+            $faq->addPermission('user', $recordId, $permissions['restricted_user']);
+            $category->addPermission('user', $categories['rubrik'], $permissions['restricted_user']);
             // Add group permission
             if ($faqConfig->get('security.permLevel') != 'basic') {
-                $faq->addPermission('group', $record_id, array($restricted_groups));
-                $category->addPermission('group', $categories['rubrik'], $restricted_groups);
+                $faq->addPermission('group', $recordId, $permissions['restricted_groups']);
+                $category->addPermission('group', $categories['rubrik'], $permissions['restricted_groups']);
             }
 
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_entry_savedsuc']);
@@ -122,15 +158,15 @@ if ($permission['editbt']|| $permission['addbt']) {
                 if ($faqConfig->get('records.enableDeleteQuestion')) { // deletes question
                     $faq->deleteQuestion($openQuestionId);
                 } else { // adds this faq record id to the related open question
-                    $faq->updateQuestionAnswer($openQuestionId, $record_id, $categories['rubrik'][0]);
+                    $faq->updateQuestionAnswer($openQuestionId, $recordId, $categories['rubrik'][0]);
                 }
 
                 $url   = sprintf(
                     '%s?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     $faqConfig->get('main.referenceURL'),
                     $categories['rubrik'][0],
-                    $record_id,
-                    $record_lang
+                    $recordId,
+                    $recordLang
                 );
                 $oLink = new PMF_Link($url, $faqConfig);
 
@@ -143,7 +179,7 @@ if ($permission['editbt']|| $permission['addbt']) {
             }
 
             // Call Link Verification
-            PMF_Helper_Linkverifier::linkOndemandJavascript($record_id, $recordData['lang']);
+            PMF_Helper_Linkverifier::linkOndemandJavascript($recordId, $recordData['lang']);
 
             // Callback to Twitter if enabled
             if ($faqConfig->get('socialnetworks.enableTwitterSupport')) {
@@ -156,8 +192,8 @@ if ($permission['editbt']|| $permission['addbt']) {
                 $link = PMF_Link::getSystemRelativeUri() .
                         sprintf('?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                             $category,
-                            $record_id,
-                            $record_lang);
+                            $recordId,
+                            $recordLang);
                 $link             = $faqConfig->get('main.referenceURL') . str_replace('/admin/','/', $link);
                 $oLink            = new PMF_Link($link, $faqConfig);
                 $oLink->itemTitle = $question;
@@ -176,17 +212,17 @@ if ($permission['editbt']|| $permission['addbt']) {
                 $linkverifier = new PMF_Linkverifier($faqConfig, $user->getLogin());
     
                 $languages = explode(",", $languages);
-                foreach ($languages as $translated_lang) {
-                    if ($translated_lang == $record_lang) {
+                foreach ($languages as $translatedLang) {
+                    if ($translatedLang == $recordLang) {
                         continue;
                     }
-                    $translated_question = PMF_Filter::filterInput(INPUT_POST, 'question_translated_' . $translated_lang, FILTER_SANITIZE_STRING);
-                    $translated_answer   = PMF_Filter::filterInput(INPUT_POST, 'answer_translated_' . $translated_lang, FILTER_SANITIZE_SPECIAL_CHARS);
-                    $translated_keywords = PMF_Filter::filterInput(INPUT_POST, 'keywords_translated_' . $translated_lang, FILTER_SANITIZE_STRING);
+                    $translated_question = PMF_Filter::filterInput(INPUT_POST, 'question_translated_' . $translatedLang, FILTER_SANITIZE_STRING);
+                    $translated_answer   = PMF_Filter::filterInput(INPUT_POST, 'answer_translated_' . $translatedLang, FILTER_SANITIZE_SPECIAL_CHARS);
+                    $translated_keywords = PMF_Filter::filterInput(INPUT_POST, 'keywords_translated_' . $translatedLang, FILTER_SANITIZE_STRING);
     
                     $recordData = array_merge($recordData, array(
-                        'id'            => $record_id,
-                        'lang'          => $translated_lang,
+                        'id'            => $recordId,
+                        'lang'          => $translatedLang,
                         'thema'         => html_entity_decode($translated_question),
                         'content'       => html_entity_decode($translated_answer),
                         'keywords'      => $translated_keywords,
@@ -194,33 +230,33 @@ if ($permission['editbt']|| $permission['addbt']) {
                         'email'         => $faqConfig->get('main.administrationMail')));
     
                     // Create ChangeLog entry
-                    $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $translated_lang);
+                    $faq->createChangeEntry($recordId, $user->getUserId(), nl2br($changed), $translatedLang);
     
                     // save or update the FAQ record
-                    if ($faq->isAlreadyTranslated($record_id, $translated_lang)) {
+                    if ($faq->isAlreadyTranslated($recordId, $translatedLang)) {
                         $faq->updateRecord($recordData);
                     } else {
                         $faq->addRecord($recordData, false);
                     }
     
                     // delete category relations
-                    $faq->deleteCategoryRelations($record_id, $translated_lang);
+                    $faq->deleteCategoryRelations($recordId, $translatedLang);
     
                     // save or update the category relations
-                    $faq->addCategoryRelations($categories['rubrik'], $record_id, $translated_lang);
+                    $faq->addCategoryRelations($categories['rubrik'], $recordId, $translatedLang);
     
                     // Copy Link Verification
-                    $linkverifier->markEntry($record_id, $translated_lang);
+                    $linkverifier->markEntry($recordId, $translatedLang);
 
                     // add faqvisit entry
-                    $visits->add($record_id, $translated_lang);
+                    $visits->add($recordId, $translatedLang);
 
                     // Set attachment relations
-                    $attachments = PMF_Attachment_Factory::fetchByRecordId($faqConfig, $record_id);
+                    $attachments = PMF_Attachment_Factory::fetchByRecordId($faqConfig, $recordId);
                     foreach ($attachments as $attachment) {
                         if ($attachment instanceof PMF_Attachment_Abstract) {
                             $attachment->setId(null);
-                            $attachment->setRecordLang($translated_lang);
+                            $attachment->setRecordLang($translatedLang);
                             $attachment->saveMeta();
                         }
                     }
@@ -231,7 +267,7 @@ if ($permission['editbt']|| $permission['addbt']) {
     <script type="text/javascript">
     $(document).ready(function(){
         setTimeout(function() {
-            window.location = "index.php?action=editentry&id=<?php print $record_id; ?>&lang=<?php print $recordData['lang'] ?>";
+            window.location = "index.php?action=editentry&id=<?php print $recordId; ?>&lang=<?php print $recordData['lang'] ?>";
             }, 5000);
         });
     </script>
@@ -251,7 +287,7 @@ if ($permission['editbt']|| $permission['addbt']) {
     <form action="?action=editpreview" method="post">
     <input type="hidden" name="question"            value="<?php print PMF_String::htmlspecialchars($question); ?>" />
     <input type="hidden" name="content" class="mceNoEditor" value="<?php print PMF_String::htmlspecialchars($content); ?>" />
-    <input type="hidden" name="lang"                value="<?php print $record_lang; ?>" />
+    <input type="hidden" name="lang"                value="<?php print $recordLang; ?>" />
     <input type="hidden" name="keywords"            value="<?php print $keywords; ?>" />
     <input type="hidden" name="tags"                value="<?php print $tags; ?>" />
     <input type="hidden" name="author"              value="<?php print $author; ?>" />
@@ -263,17 +299,17 @@ if ($permission['editbt']|| $permission['addbt']) {
             }
         }
 ?>
-    <input type="hidden" name="solution_id"         value="<?php print $solution_id; ?>" />
-    <input type="hidden" name="revision"            value="<?php print $revision_id; ?>" />
+    <input type="hidden" name="solution_id"         value="<?php print $solutionId; ?>" />
+    <input type="hidden" name="revision"            value="<?php print $revisionId; ?>" />
     <input type="hidden" name="active"              value="<?php print $active; ?>" />
     <input type="hidden" name="changed"             value="<?php print $changed; ?>" />
     <input type="hidden" name="comment"             value="<?php print $comment; ?>" />
     <input type="hidden" name="dateStart"           value="<?php print $dateStart; ?>" />
     <input type="hidden" name="dateEnd"             value="<?php print $dateEnd; ?>" />
     <input type="hidden" name="userpermission"      value="<?php print $user_permission; ?>" />
-    <input type="hidden" name="restricted_users"    value="<?php print $restricted_users; ?>" />
+    <input type="hidden" name="restricted_users"    value="<?php print $permissions['restricted_user']; ?>" />
     <input type="hidden" name="grouppermission"     value="<?php print $group_permission; ?>" />
-    <input type="hidden" name="restricted_group"    value="<?php print $restricted_groups; ?>" />
+    <input type="hidden" name="restricted_group"    value="<?php print $permissions['restricted_groups']; ?>" />
     <p align="center">
         <button class="btn btn-primary" type="submit" name="submit">
             <?php print $PMF_LANG['ad_entry_back']; ?>

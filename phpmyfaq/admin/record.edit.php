@@ -76,7 +76,15 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
         }
         
         $faqData['lang']  = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-        $selectedCategory = isset($_POST['rubrik']) ? $_POST['rubrik'] : null;
+        $selectedCategory = PMF_Filter::filterInputArray(
+            INPUT_POST,
+            array(
+                'rubrik' => array(
+                    'filter' => FILTER_VALIDATE_INT,
+                    'flags'  => FILTER_REQUIRE_ARRAY
+                )
+            )
+        );
         if (is_array($selectedCategory)) {
             foreach ($selectedCategory as $cats) {
                 $categories[] = array('category_id' => $cats, 'category_lang' => $faqData['lang']);
@@ -558,9 +566,9 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                                 <?php echo $PMF_LANG['ad_entry_all_groups']; ?>
                             </label>
                             <label class="radio">
-                                <input type="radio" name="grouppermission"  value="restricted" <?php echo ($restrictedGroups ? 'checked="checked"' : ''); ?>/>
+                                <input type="radio" name="grouppermission" value="restricted" <?php echo ($restrictedGroups ? 'checked="checked"' : ''); ?>/>
                                 <?php echo $PMF_LANG['ad_entry_restricted_groups']; ?>
-                                <select name="restricted_groups" size="1" class="input-medium">
+                                <select name="restricted_groups[]" size="3" class="input-medium" multiple>
                                     <?php echo $user->perm->getAllGroupsOptions($groupPermission); ?>
                                 </select>
                             </label>

@@ -2626,32 +2626,34 @@ class PMF_Faq
     /**
      * Adds the record permissions for users and groups
      *
-     * @param   string  $mode           'group' or 'user'
-     * @param   integer $record_id      ID of the current record
-     * @param   integer $id             group ID or user ID
+     * @param string  $mode      'group' or 'user'
+     * @param integer $recordId  ID of the current record
+     * @param array   $ids       Array of group or user IDs
+     *
      * @return  boolean
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function addPermission($mode, $record_id, $id)
+    function addPermission($mode, $recordId, $ids)
     {
-        if (!($mode == "user" || $mode == "group")) {
+        if ('user' !== $mode && 'group' !== $mode) {
             return false;
         }
 
-        $query = sprintf("
+        foreach ($ids as $id) {
+            $query = sprintf("
             INSERT INTO
                 %sfaqdata_%s
             (record_id, %s_id)
                 VALUES
             (%d, %d)",
-            PMF_Db::getTablePrefix(),
-            $mode,
-            $mode,
-            $record_id,
-            $id);
+                PMF_Db::getTablePrefix(),
+                $mode,
+                $mode,
+                $recordId,
+                $id
+            );
 
-        $this->_config->getDb()->query($query);
+            $this->_config->getDb()->query($query);
+        }
 
         return true;
     }
