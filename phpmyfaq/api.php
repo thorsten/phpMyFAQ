@@ -44,9 +44,9 @@ $language = $Language->setLanguage($faqConfig->get('main.languageDetection'), $f
 
 // Set language
 if (PMF_Language::isASupportedLanguage($language)) {
-    require 'lang/language_' . $language . '.php';
+    require PMF_LANGUAGE_DIR . '/language_' . $language . '.php';
 } else {
-    require 'lang/language_en.php';
+    require PMF_LANGUAGE_DIR . '/language_en.php';
 }
 
 $plr = new PMF_Language_Plurals($PMF_LANG);
