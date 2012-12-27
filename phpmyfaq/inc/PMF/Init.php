@@ -66,11 +66,6 @@ class PMF_Init
             $_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
         }
 
-        // remove global registered variables to avoid injections
-        if (ini_get('register_globals')) {
-            self::_unregisterGlobalVariables();
-        }
-
         // clean external variables
         $externals = array('_REQUEST', '_GET', '_POST', '_COOKIE');
         foreach ($externals as $external) {
@@ -79,9 +74,6 @@ class PMF_Init
                 // first clean XSS issues
                 $newvalues = $GLOBALS[$external];
                 $newvalues = self::_removeXSSGPC($newvalues);
-
-                // then remove magic quotes
-                $newvalues = self::_removeMagicQuotesGPC($newvalues);
 
                 // clean old array and insert cleaned data
                 foreach (array_keys($GLOBALS[$external]) as $key) {
@@ -180,66 +172,6 @@ class PMF_Init
             }
         }
         reset($_FILES);
-    }
-
-    /**
-     * This function deregisters the global variables only when 'register_globals = On'.
-     * Note: you must assure that 'session_start()' is called AFTER this function and not BEFORE,
-     *       otherwise each $_SESSION key will be set to NULL because $GLOBALS
-     *       has an entry, as copy-by-ref, for each $_SESSION key when 'register_globals = On'.
-     *
-     * @return void
-     */
-    private static function _unregisterGlobalVariables()
-    {
-        if (!ini_get('register_globals')) {
-            return;
-        }
-
-        if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS'])) {
-            die('GLOBALS overwrite attempt detected.');
-        }
-
-        $noUnset = array('GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_ENV', '_FILES');
-        $input   = array_merge($_GET, $_POST, $_COOKIE, $_SERVER, $_ENV, $_FILES, isset($_SESSION) && is_array($_SESSION) ? $_SESSION : array());
-        foreach (array_keys($input) as $k) {
-            if (!in_array($k, $noUnset) && isset($GLOBALS[$k])) {
-                $GLOBALS[$k] = null;
-                unset($GLOBALS[$k]);
-            }
-        }
-    }
-
-    /**
-     * This function removes the magic quotes if they are enabled.
-     *
-     * @param array $data Array of data
-     *
-     * @return array
-     */
-    private static function _removeMagicQuotesGPC(Array $data)
-    {
-        static $recursionCounter = 0;
-        // Avoid webserver crashes. For any detail, see: http://www.php-security.org/MOPB/MOPB-02-2007.html
-        // Note: 1000 is an heuristic value, large enough to be "transparent" to PMF.
-        if ($recursionCounter > 1000) {
-            die('Deep recursion attack detected.');
-        }
-
-        if (ini_get('magic_quotes_gpc')) {
-            $addedData = array();
-            foreach ($data as $key => $val) {
-                $key = addslashes($key);
-                if (is_array($val)) {
-                    $recursionCounter++;
-                    $addedData[$key] = self::_removeMagicQuotesGPC($val);
-                } else {
-                    $addedData[$key] = $val;
-                }
-            }
-            return $addedData;
-        }
-        return $data;
     }
 
     /**

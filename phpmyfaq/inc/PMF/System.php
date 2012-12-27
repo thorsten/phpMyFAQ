@@ -248,7 +248,33 @@ class PMF_System
         
         return true;
     }
-    
+
+    /**
+     * Checks if register_globals are activated
+     *
+     * @return boolean
+     */
+    public function checkRegisterGlobals()
+    {
+        if (ini_get('register_globals')) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Checks if magic_quotes_gpc are activated
+     *
+     * @return boolean
+     */
+    public function checkMagicQuotesGpc()
+    {
+        if (ini_get('magic_quotes_gpc')) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Checks for an installed phpMyFAQ version
      *

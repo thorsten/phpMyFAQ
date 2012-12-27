@@ -124,7 +124,8 @@ phpMyFAQ addresses a database system via PHP. In order to install it you will ne
 
 *   **[PHP](http://www.php.net)**
     *   from version 5.3.3 (recommended: latest PHP 5.x)
-    *   register_globals = off (recommended)
+    *   register_globals = off
+    *   magic_quotes_gpc = off
     *   safe_mode = off (recommended)
     *   memory_limit = 64M
     *   GD support
@@ -142,7 +143,7 @@ phpMyFAQ addresses a database system via PHP. In order to install it you will ne
     *   [MariaDB](http://montyprogram.com/mariadb/) 5.x (experimental)
 *   correctly set: access permissions, owner, group
 
-You can only run phpMyFAQ successfully, when the PHP directive safe\_mode is set to off, further constraints affect the directives open\_basedir and disable_functions, which can be set in the central php.ini or the httpd.conf respectively.
+You can only run phpMyFAQ successfully, when the PHP directives safe_mode, register_globals and magic_quotes_gpc is set to off, further constraints affect the directives open_basedir and disable_functions, which can be set in the central php.ini or the httpd.conf respectively.
 
 In case PHP runs as module of the Apache, you will have to be able to do a chown on the files before installation. The files and directories must be owned by the webserver's user.
 
