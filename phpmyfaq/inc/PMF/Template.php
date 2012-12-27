@@ -164,20 +164,22 @@ class PMF_Template
      */
     public function render()
     {
+        $output = '';
         foreach ($this->outputs as $val) {
-            print str_replace("\n\n", "\n", $val);
+            $output .= str_replace("\n\n", "\n", $val);
         }
+        return $output;
     }
 
     /**
      * This function adds two parsed templates
      *
-     * @param array $from Name of the template to add
-     * @param array $into Name of the new template
+     * @param string $from Name of the template to add
+     * @param string $into Name of the new template
      *
      * @return void
      */
-    public function add(Array $from, Array $into)
+    public function add($from, $into)
     {
         $this->outputs[$into] .= $this->outputs[$from];
         $this->outputs[$from]  = null;
@@ -234,7 +236,7 @@ class PMF_Template
      */
     public static function getTplSetName()
     {
-        return self::$tplSetName;   
+        return self::$tplSetName;
     }
     
     //
@@ -271,6 +273,8 @@ class PMF_Template
     private function _multiplyBlock($block, $blockContent)
     {
         $multiplyTimes = 0;
+        $replace       = array();
+        $tmpBlock      = array();
 
         //create the replacement array
         foreach ($blockContent as $var => $val) {
@@ -301,7 +305,7 @@ class PMF_Template
             }
         }
 
-        return implode('',$tmpBlock);
+        return implode('', $tmpBlock);
 
     }
 
@@ -310,7 +314,7 @@ class PMF_Template
      *
      * @param  string $tpl Block to read
      *
-     * @return string
+     * @return array
      */
     private function _readBlocks($tpl)
     {
@@ -352,17 +356,17 @@ class PMF_Template
     /**
      * This function checks the content
      *
-     * @param  string $content Content to check
+     * @param string $content Content to check
      *
-     * @return string
+     * @return array
      */
     private function _checkContent($content)
     {
         // Security measure: avoid the injection of php/shell-code
-        $search  = array('#<\?php#i', '#\{$\{#', '#<\?#', '#<\%#', '#`#', '#<script[^>]+php#mi');
+        $search      = array('#<\?php#i', '#\{$\{#', '#<\?#', '#<\%#', '#`#', '#<script[^>]+php#mi');
         $phppattern1 = "&lt;?php";
         $phppattern2 = "&lt;?";
-        $replace = array($phppattern1, '', $phppattern2, '', '' );
+        $replace     = array($phppattern1, '', $phppattern2, '', '' );
 
         // Hack: Backtick Fix
         $content = str_replace('`', '&acute;', $content);

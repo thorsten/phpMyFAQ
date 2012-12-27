@@ -748,6 +748,7 @@ $httpHeader->addHeader();
 if (!DEBUG) {
     ob_start('ob_gzhandler');
 }
-$tpl->render();
+
+echo $tpl->render();
 
 $faqConfig->getDb()->close();
