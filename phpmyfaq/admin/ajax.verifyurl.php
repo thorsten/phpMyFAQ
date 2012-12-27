@@ -31,14 +31,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-header("Expires: Thu, 7 Apr 1977 14:47:00 GMT");
-header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
-header("Cache-Control: no-store, no-cache, must-revalidate");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
-header("Content-type: text/html");
-header("Vary: Negotiate,Accept");
-header("Content-type: text/xml; charset=utf-8");
+$httpHeader = new PMF_Helper_Http();
+$httpHeader->setContentType('text/html');
+$httpHeader->addHeader();
 
 $linkverifier = new PMF_Linkverifier($faqConfig, $user->getLogin());
 if ($linkverifier->isReady() == false) {

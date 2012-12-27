@@ -27,13 +27,6 @@ $http = new PMF_Helper_Http();
 $http->setContentType('application/json');
 $http->addHeader();
 
-header("Expires: Thu, 7 Apr 1977 14:47:00 GMT");
-header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
-header("Cache-Control: no-store, no-cache, must-revalidate");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
-header("Vary: Negotiate,Accept");
-
 $oTag              = new PMF_Tags($faqConfig);
 $autoCompleteValue = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
 if (! is_null($autoCompleteValue)) {
