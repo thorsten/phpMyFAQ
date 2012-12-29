@@ -365,6 +365,9 @@ class PMF_Comment
             $numWords++;
         }
 
-        return $comment . '</span>';
+        // Convert URLs to HTML anchors
+
+
+        return PMF_Utils::parseUrl($comment) . '</span>';
     }
 }

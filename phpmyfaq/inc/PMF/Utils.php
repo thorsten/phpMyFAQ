@@ -85,7 +85,7 @@ class PMF_Utils
             )
         );
 
-        return file_get_contents($url, $flags, $ctx);
+        return file_get_contents($url, null, $ctx);
     }
 
     /**
@@ -104,7 +104,8 @@ class PMF_Utils
     /**
      * Returns a phpMyFAQ date
      *
-     * @param  integer $unixTime Unix timestamp
+     * @param integer $unixTime Unix timestamp
+     *
      * @return string
      */
     public static function getPMFDate($unixTime = NULL)
@@ -119,7 +120,8 @@ class PMF_Utils
     /**
      * Check if a given string could be a language
      *
-     * @param  string $lang Language
+     * @param string $lang Language
+     *
      * @return boolean
      */
     public static function isLanguage($lang)
@@ -130,7 +132,8 @@ class PMF_Utils
     /**
      * Checks if a date is a phpMyFAQ valid date
      *
-     * @param  integer $date Date
+     * @param integer $date Date
+     *
      * @return integer
      */
     public static function isLikeOnPMFDate($date)
@@ -152,8 +155,8 @@ class PMF_Utils
     /**
      * Shortens a string for a given number of words
      *
-     * @param  string  $str  String  
-     * @param  integer $char Characters
+     * @param string  $str  String
+     * @param integer $char Characters
      *
      * @return string
      *
@@ -182,9 +185,9 @@ class PMF_Utils
     /**
      * Resolves the PMF markers like e.g. %sitename%.
      *
-     * @public
-     * @static
-     * @param   string $text Text contains PMF markers
+     * @param string            $text Text contains PMF markers
+     * @param PMF_Configuration $config
+     *
      * @return  string
      */
     public static function resolveMarkers($text, PMF_Configuration $config)
@@ -205,7 +208,8 @@ class PMF_Utils
     /**
      * Shuffles an associative array without losing key associations
      *
-     * @param  array $data          Array of data
+     * @param array $data Array of data
+     *
      * @return array $shuffled_data Array of shuffled data
      */
     public static function shuffleData($data)
@@ -282,11 +286,9 @@ class PMF_Utils
      */
     public static function highlightNoLinks(Array $matches)
     {
-        $itemAsAttrName  = $matches[1];
-        $itemInAttrValue = isset($matches[2]) ? $matches[2] : ''; // $matches[3] is the attribute name
-        $prefix          = isset($matches[3]) ? $matches[3] : '';
-        $item            = isset($matches[4]) ? $matches[4] : '';
-        $postfix         = isset($matches[5]) ? $matches[5] : '';
+        $prefix  = isset($matches[3]) ? $matches[3] : '';
+        $item    = isset($matches[4]) ? $matches[4] : '';
+        $postfix = isset($matches[5]) ? $matches[5] : '';
 
         if (!empty($item)) {
             return '<span class="highlight">' . $prefix . $item . $postfix . '</span>';
@@ -321,4 +323,26 @@ class PMF_Utils
         return $ret;
     }
 
+    /**
+     * Parses a given string and convert all the URLs into links
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    public static function parseUrl($string)
+    {
+        $protocols = array('http://', 'https://', 'ftp://');
+
+        $string = str_replace($protocols, '', $string);
+        $string = str_replace('www.', 'http://www.', $string);
+        $string = preg_replace('|http://([a-zA-Z0-9-\./]+)|', '<a href="http://$1">$1</a>', $string);
+        $string = preg_replace(
+            '/(([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6})/',
+            '<a href="mailto:$1">$1</a>',
+            $string
+        );
+
+        return $string;
+    }
 }
