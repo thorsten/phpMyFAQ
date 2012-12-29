@@ -32,18 +32,27 @@ switch($ajaxAction) {
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
 
-        $categories = PMF_Filter::filterInputArray(
+        $ajaxData = PMF_Filter::filterInputArray(
             INPUT_POST,
             array(
                 'categories' => array(
-                    'filter' => FILTER_VALIDATE_INT,
-                    'flags'  => FILTER_REQUIRE_ARRAY
+                    'filter' => FILTER_SANITIZE_STRING,
+                    'flags'  => FILTER_REQUIRE_SCALAR
                 )
             )
         );
 
-        return json_encode(
-            $category->getPermissions('faq', $categories)
+        if (empty($ajaxData['categories'])) {
+            $categories = array(-1); // Access for all users and groups
+        } else {
+            $categories = explode(',', $ajaxData['categories']);
+        }
+
+        echo json_encode(
+            array(
+                'user'  => $category->getPermissions('user', $categories),
+                'group' => $category->getPermissions('group', $categories)
+            )
         );
 
         break;

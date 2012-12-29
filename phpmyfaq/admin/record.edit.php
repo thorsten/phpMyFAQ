@@ -461,7 +461,8 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                     <div class="control-group">
                         <label class="control-label"><?php echo $PMF_LANG["ad_entry_category"]; ?></label>
                         <div class="controls">
-                            <select name="rubrik[]" id="rubrik" size="5" multiple="multiple" class="input-medium">
+                            <select name="rubrik[]" id="phpmyfaq-categories" size="5" multiple="multiple"
+                                    class="input-medium">
                                 <?php echo $categoryHelper->renderOptions($categories); ?>
                             </select>
                         </div>
@@ -698,6 +699,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
             return result[1].trim();
         return '';
     }
+
     $('#tags').typeahead({
         source: function (query, process) {
             return $.get("index.php?action=ajax&ajax=tags_list", { q: query }, function (data) {
@@ -721,35 +723,43 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
     });
 
     $(function() {
+        // DatePicker
         $('.date-pick').datePicker();
-
         $('#date').datePicker({startDate: '1900-01-01'});
-        $('#date').bind('dateSelected', function (e, date, $td, status)
-        {
-            if(status) {
+        $('#date').bind('dateSelected', function (e, date, $td, status) {
+            if (status) {
                 var dt = new Date();
-
                 var hours   = dt.getHours();
                 var minutes = dt.getMinutes();
                 
-                $('#date').val(date.asString() +
-                               ' ' + (hours < 10 ? '0' : '') + hours +
-                               ':' + (minutes < 10 ? '0' : '') + minutes);
+                $('#date').val(
+                    date.asString() + ' ' + (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes
+                );
             }
         });
 
+        // Show help for keywords and users
         $('#keywords').focus(function() { showHelp('keywords'); });
         $('#tags').focus(function() { showHelp('tags'); });
-        
+
+        // Override FAQ permissions with Category permission to avoid confused users
+        $('#phpmyfaq-categories').click(function() {
+            var categories = $('#phpmyfaq-categories option:selected').map(function() {
+                return $(this).val();
+            }).get();
+
+            $.ajax({
+                type: 'POST',
+                url:  'index.php?action=ajax&ajax=categories&ajaxaction=getpermissions',
+                data: "categories=" + categories,
+                success: function(msg) {
+                    alert(msg);
+                }
+            });
+        });
     });
 
-    /**
-     * Toggle fieldsets
-     *
-     * @param fieldset ID of the fieldset
-     *
-     * @return void
-     */
+
     function toggleFieldset(fieldset) {
         if ($('#edit' + fieldset).css('display') == 'none') {
             $('#edit' + fieldset).fadeIn('fast');
@@ -757,37 +767,25 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
             $('#edit' + fieldset).fadeOut('fast');
         }
     }
-    
-    /**
-     * Toggle input date container show
-     *
-     * @return void
-     */
+
     function showIDContainer() {
         var display = 0 == arguments.length || !!arguments[0] ? 'block' : 'none';
         $('#recordDateInputContainer').attr('style', 'display: ' + display);
     }
 
     function setRecordDate(how) {
-        if('dateActualize' == how) {
+        if ('dateActualize' === how) {
             showIDContainer(false);
             $('#date').val('');
-        } else if ('dateKeep' == how) {
+        } else if ('dateKeep' === how) {
             showIDContainer(false);
             $('#date').val('<?php echo $faqData['date']; ?>');
-        } else if('dateCustomize' == how) {
+        } else if ('dateCustomize' === how) {
             showIDContainer(true);
             $('#date').val('');
         }
     }
-        
-    /**
-     * Shows help for keywords and tags input fields
-     *
-     * @param option
-     *
-     * @return void
-     */
+
     function showHelp(option) {
         $('#' + option + 'Help').fadeIn(500);
         $('#' + option + 'Help').fadeOut(2500);
