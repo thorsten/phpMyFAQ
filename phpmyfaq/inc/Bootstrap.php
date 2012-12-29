@@ -260,9 +260,10 @@ function pmf_error_handler($level, $message, $filename, $line, $context)
 
     // Custom error message
     $errorMessage = sprintf(
-        '<br><strong>phpMyFAQ %s</strong> [%s]: $message in <strong>%s</strong> on line <strong>%d</strong><br>',
+        '<br><strong>phpMyFAQ %s</strong> [%s]: %s in <strong>%s</strong> on line <strong>%d</strong><br>',
         $errorType,
         $level,
+        $message,
         $filename,
         $line
     );
