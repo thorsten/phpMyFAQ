@@ -464,7 +464,8 @@ pre {
 
 <ul>
 <li>from version 5.3.3 (recommended: latest PHP 5.x)</li>
-<li>register_globals = off (recommended)</li>
+<li>register_globals = off</li>
+<li>magic_quotes_gpc = off</li>
 <li>safe_mode = off (recommended)</li>
 <li>memory_limit = 64M</li>
 <li>GD support</li>
@@ -490,7 +491,7 @@ pre {
 </ul>
 
 
-<p>You can only run phpMyFAQ successfully, when the PHP directive safe_mode is set to off, further constraints affect the directives open_basedir and disable_functions, which can be set in the central php.ini or the httpd.conf respectively.</p>
+<p>You can only run phpMyFAQ successfully, when the PHP directives safe_mode, register_globals and magic_quotes_gpc is set to off, further constraints affect the directives open_basedir and disable_functions, which can be set in the central php.ini or the httpd.conf respectively.</p>
 
 <p>In case PHP runs as module of the Apache, you will have to be able to do a chown on the files before installation. The files and directories must be owned by the webserver's user.</p>
 
@@ -498,7 +499,7 @@ pre {
 
 <p>Upload this file to your webspace and open it using your browser. The installation-script checks which version of PHP is installed on your server. Should you not meet the requirements, you cannot start the installation process.</p>
 
-<p>In case you have PHP below 5.3.3 installed you cannot use phpMyFAQ.</p>
+<p>In case you have PHP below 5.3.2 installed you cannot use phpMyFAQ.</p>
 
 <p>phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers are Mozilla Firefox 3.6 and later (Windows/OS X/Linux), Safari 5.x or later (OS X/Windows/iOS), Chrome 5 or later (Windows/OS X/Linux), Opera 11.0 or later (Windows/OS X/Linux) and Internet Explorer 7 or later for Windows. You have to enable JavaScript for the Ajax based functions as well.</p>
 
@@ -955,7 +956,7 @@ sub vcl_fetch {
 
 <p>Your current 2.5.x, 2.6.x and 2.7.x templates are <strong>barely</strong> compatible with phpMyFAQ 2.8 because we changed the complete CSS framework to Bootstrap. We're also using a lot of Ajax based technologies and CSS3 in the frontend now.</p>
 
-<p>We recommend you'll take a look at the main <a href="http://twitter.github.com/bootstrap/">Bootstrap documentation</a>. Please don't forget that the style sheets are written with <a href="http://lesscss.org/">LESS</a>. You have to compile the LESS files into CSS using a LESS compiler with node.js or a tool like <a href="http://incident57.com/codekit/">CodeKit</a>.</p>
+<p>We recommend you'll take a look at the main <a href="http://getbootstrap.com/">Bootstrap documentation</a>. Please don't forget that the style sheets are written with <a href="http://lesscss.org/">LESS</a>. You have to compile the LESS files into CSS using a LESS compiler with node.js or a tool like <a href="http://incident57.com/codekit/">CodeKit</a>.</p>
 
 <p>Note: The character set for all languages and templates is UTF-8. If you notice problems with e.g. German umlauts you have to convert your templates to UTF-8 encoding. Please use UNIX file endings \n instead of Windows file endings with \r\n.</p>
 
@@ -965,7 +966,7 @@ sub vcl_fetch {
 
 <p><strong>4. <a id="4"></a>Frontend</strong></p>
 
-<p>The public phpMyFAQ frontend has a simple, HTML5/CCS3 based default layout based on <a href="http://twitter.github.com/bootstrap/">Bootstrap</a>. The header has the main links for the all categories, instant response, add FAQs, add questions, open questions, sitemap and contact. On the left side you only see the main categories. You can also change the current language at the bottom of the FAQ, use the global search in the center of the FAQ or use the login box in the upper right if you have a valid user account. On the right side you see a list of the most popular FAQ records, the latest records, and the sticky FAQ records. On the pages with the FAQ records you'll see the other records of the current category and the tag cloud if you're using tagging.</p>
+<p>The public phpMyFAQ frontend has a simple, HTML5/CCS3 based default layout based on <a href="http://getbootstrap.com/">Bootstrap</a>. The header has the main links for the all categories, instant response, add FAQs, add questions, open questions, sitemap and contact. On the left side you only see the main categories. You can also change the current language at the bottom of the FAQ, use the global search in the center of the FAQ or use the login box in the upper right if you have a valid user account. On the right side you see a list of the most popular FAQ records, the latest records, and the sticky FAQ records. On the pages with the FAQ records you'll see the other records of the current category and the tag cloud if you're using tagging.</p>
 
 <p><a href="#top">back to top</a></p>
 
@@ -1163,18 +1164,21 @@ sub vcl_fetch {
 <li><p><strong>Tags</strong></p>
 
 <p>You can add some tags about the current FAQ here. An Ajax-based auto-completion method helps you while typing your tags.</p></li>
-<li><strong>Author</strong>
-It is possible to specify an author for your FAQ.</li>
-<li><strong>Email</strong>
-It is possible to specify the author's email for your FAQ, but the email address won't be shown in the frontend.</li>
+<li><p><strong>Author</strong></p>
+
+<p>It is possible to specify an author for your FAQ.</p></li>
+<li><p><strong>Email</strong></p>
+
+<p>It is possible to specify the author's email for your FAQ, but the email address won't be shown in the frontend.</p></li>
 <li><p><strong>Solution ID</strong></p>
 
 <p>Every FAQ generates automatically a so-called solution ID. All records can be accessed directly by putting this ID into the search box.</p></li>
 <li><p><strong>Active?</strong></p>
 
 <p>If a FAQ is "active" it is visible in the public area and will be included in searches. Is it "deactivated" it will be invisible. Suggested FAQs are deactivated by default to prevent any abuse.</p></li>
-<li><strong>Sticky?</strong>
-If a FAQ is "sticky" it is a very important FAQ record and will be shown always on all pages on the right column. You should mark records as sticky if they are very important for your whole FAQ. Sticky records also appear at the top positions of the lists of FAQ entries.</li>
+<li><p><strong>Sticky?</strong></p>
+
+<p>If a FAQ is "sticky" it is a very important FAQ record and will be shown always on all pages on the right column. You should mark records as sticky if they are very important for your whole FAQ. Sticky records also appear at the top positions of the lists of FAQ entries.</p></li>
 <li><p><strong>Comments?</strong></p>
 
 <p>If you do not want to allow public comments for this FAQ you can disable the feature here.</p></li>
@@ -1186,7 +1190,7 @@ If a FAQ is "sticky" it is a very important FAQ record and will be shown always 
 <p>You have three options for the FAQ creation date. You can choose to refresh the date of the FAQ entry for every update, or you can keep the date, or you can set an individual date for the FAQ entry.</p></li>
 <li><p><strong>Permissions</strong></p>
 
-<p>If you add or edit a new entry, you can set the permissions for users and groups.</p></li>
+<p>If you add or edit a new entry, you can set the permissions for users and groups. Please note that the permissions of the chosen category override the permissions of the FAQ itself.</p></li>
 <li><p><strong>Record expiration time window</strong></p>
 
 <p>If you need to you can set a time frame from one date to a second date when the FAQ entry should be valid and visible. Before and after this time frame the entry isn't visible and cannot be accessed.</p></li>
@@ -1202,7 +1206,7 @@ If a FAQ is "sticky" it is a very important FAQ record and will be shown always 
 </ul>
 
 
-<p>You can edit and delete all records as well. Please note that old revisions won't be deleted.</p>
+<p>You can edit and delete all records as well. Please note that old revisions won't be deleted until the whole FAQ is deleted.</p>
 
 <p>phpMyFAQ lets visitors contribute to the FAQ by asking questions. Every visitor is able to view these open questions in the public area, and may give an answer. If you wish to get rid of open questions you can do so using this section. Alternatively you can take over a question and answer it yourself and hereby add it to the FAQ.</p>
 
@@ -1598,9 +1602,9 @@ This method returns the phpMyFAQ version number as string.</p>
 
 <p>Co-Authors: <a href="mailto:stephan">Stephan Hochhaus</a>, <a href="mailto:mgl-mail">Markus Gläser</a></p>
 
-<p>Date: 2012-11-03</p>
+<p>Date: 2012-13-29</p>
 
-<p>© 2001-2012 phpMyFAQ Team</p>
+<p>© 2001-2013 phpMyFAQ Team</p>
 
 <p>This documentation is licensed under a <a href="http://creativecommons.org/licenses/by/2.0/">Creative Commons License</a>.</p>
 
