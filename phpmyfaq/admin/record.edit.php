@@ -563,32 +563,32 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                         <label class="control-label" for="grouppermission"><?php echo $PMF_LANG['ad_entry_grouppermission']; ?></label>
                         <div class="controls">
                             <label class="radio">
-                                <input type="radio" id="grouppermission" name="grouppermission"  value="all" <?php echo ($allGroups ? 'checked="checked"' : ''); ?>/>
+                                <input type="radio" id="allgroups" name="grouppermission" value="all" <?php echo ($allGroups ? 'checked="checked"' : ''); ?>/>
                                 <?php echo $PMF_LANG['ad_entry_all_groups']; ?>
                             </label>
                             <label class="radio">
-                                <input type="radio" name="grouppermission" value="restricted" <?php echo ($restrictedGroups ? 'checked="checked"' : ''); ?>/>
+                                <input type="radio" id="restrictedgroups" name="grouppermission" value="restricted" <?php echo ($restrictedGroups ? 'checked="checked"' : ''); ?>/>
                                 <?php echo $PMF_LANG['ad_entry_restricted_groups']; ?>
-                                <select name="restricted_groups[]" size="3" class="input-medium" multiple>
+                                <select name="restricted_groups[]" size="3" class="input-medium selected-groups" multiple>
                                     <?php echo $user->perm->getAllGroupsOptions($groupPermission); ?>
                                 </select>
                             </label>
                         </div>
                     </div>
                     <?php else: ?>
-                    <input type="hidden" name="grouppermission"  value="all" />
+                    <input type="hidden" name="grouppermission" value="all" />
                     <?php endif; ?>
                     <div class="control-group">
                         <label class="control-label" for="userpermission"><?php echo $PMF_LANG['ad_entry_userpermission']; ?></label>
                         <div class="controls">
                             <label class="radio">
-                                <input type="radio" id="userpermission" name="userpermission"  value="all" <?php echo ($allUsers ? 'checked="checked"' : ''); ?>/>
+                                <input type="radio" id="allusers" name="userpermission" value="all" <?php echo ($allUsers ? 'checked="checked"' : ''); ?>/>
                                 <?php echo $PMF_LANG['ad_entry_all_users']; ?>
                             </label>
                             <label class="radio">
-                                <input type="radio" name="userpermission"  value="restricted" <?php echo ($restrictedUsers ? 'checked="checked"' : ''); ?>/>
+                                <input type="radio" id="restrictedusers" name="userpermission" value="restricted" <?php echo ($restrictedUsers ? 'checked="checked"' : ''); ?>/>
                                 <?php echo $PMF_LANG['ad_entry_restricted_users']; ?>
-                                <select name="restricted_users" size="1" class="input-medium">
+                                <select name="restricted_users" size="1" class="input-medium selected-groups">
                                     <?php echo $user->getAllUserOptions($userPermission[0]); ?>
                                 </select>
                             </label>
@@ -752,8 +752,29 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                 type: 'POST',
                 url:  'index.php?action=ajax&ajax=categories&ajaxaction=getpermissions',
                 data: "categories=" + categories,
-                success: function(msg) {
-                    alert(msg);
+                success: function(permissions) {
+                    var perms = jQuery.parseJSON(permissions);
+
+                    if ("-1" === perms.user[0]) {
+                        $('#restrictedusers').removeAttr("checked").attr("disabled", "disabled");
+                        $('#allusers').attr("checked","checked");
+                    } else {
+                        $('#allusers').removeAttr("checked").attr("disabled", "disabled");
+                        $('#restrictedusers').attr("checked","checked");
+                        $.each(perms.user, function(key, value) {
+                                $(".selected-users option[value='" + value + "']").attr('selected',true);
+                        });
+                    }
+                    if ("-1" === perms.group[0]) {
+                        $('#restrictedgroups').removeAttr("checked").attr("disabled", "disabled");
+                        $('#allgroups').attr("checked","checked");
+                    } else {
+                        $('#allgroups').removeAttr("checked").attr("disabled", "disabled");
+                        $('#restrictedgroups').attr("checked","checked");
+                        $.each(perms.group, function(key, value) {
+                            $(".selected-groups option[value='" + value + "']").attr('selected',true);
+                        });
+                    }
                 }
             });
         });
