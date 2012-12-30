@@ -614,7 +614,6 @@ class PMF_Installer
         }
 
         // check database connection
-        require PMF_ROOT_DIR . "/inc/DB/Driver.php";
         PMF_Db::setTablePrefix($dbSetup['dbPrefix']);
         $db = PMF_Db::factory($dbSetup['dbType']);
         $db->connect($dbSetup['dbServer'], $dbSetup['dbUser'], $dbSetup['dbPassword'], $dbSetup['dbDatabaseName']);

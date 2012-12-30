@@ -27,7 +27,10 @@
 
 define('COPYRIGHT', '&copy; 2001-2012 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
+define('PMF_INCLUDE_DIR', PMF_ROOT_DIR . '/inc');
 define('IS_VALID_PHPMYFAQ', null);
+
+use Symfony\Component\ClassLoader\UniversalClassLoader;
 
 if (! defined('DEBUG')) {
     define('DEBUG', true);
@@ -41,8 +44,18 @@ session_name('phpmyfaq-setup');
 session_start();
 
 require PMF_ROOT_DIR . '/config/constants.php';
-require PMF_ROOT_DIR . '/inc/Autoloader.php';
 require PMF_ROOT_DIR . '/install/questionnaire.php';
+
+//
+// Setting up PSR-0 autoloader for Symfony Components
+//
+require PMF_INCLUDE_DIR . '/libs/Symfony/Component/ClassLoader/UniversalClassLoader.php';
+
+$loader = new UniversalClassLoader();
+$loader->registerNamespace('Symfony', PMF_INCLUDE_DIR . '/libs');
+$loader->registerPrefix('PMF_', PMF_INCLUDE_DIR);
+$loader->register();
+
 ?>
 <!doctype html>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
@@ -514,9 +527,9 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
             <div id="configliste" class="hide">
                 <a href="#" onclick="hide('configliste'); return false;">hide again</a>
-<?php
-$installer->printDataList();
-?>
+                <?php
+                $installer->printDataList();
+                ?>
             </div>
             <p style="text-align: center;">
                 <button class="btn btn-primary" type="submit">
