@@ -126,101 +126,13 @@ if ($permission['editcateg']) {
                 </div>
             </div>
 
-<?php
-    if ($faqConfig->get('main.enableGoogleTranslation') === true) {
-?>
-            <header>
-                <h3><?php echo $PMF_LANG["ad_menu_translations"]; ?></h3>
-            </header>
-            <div id="editTranslations">
-            <?php
-            if ($faqConfig->get('main.googleTranslationKey') == '') {
-                echo $PMF_LANG["msgNoGoogleApiKeyFound"];
-            } else {
-            ?>
-            <div class="control-group">
-                <label class="control-label" for="langTo"><?php echo $PMF_LANG["ad_entry_locale"]; ?>:</label>
-                <div class="controls">
-                    <?php echo PMF_Language::selectLanguages($categories[$categoryId]['lang'], false, array(), 'langTo'); ?>
-                </div>
-            </div>
-            <input type="hidden" name="used_translated_languages" id="used_translated_languages" value="">
-            <div id="getedTranslations">
-            </div>
-            <?php } ?>
-        </div>
-    </fieldset>        
-<?php
-    }
-?>
             <div class="form-actions">
                 <button class="btn btn-primary" type="submit" name="submit">
                     <?php echo $PMF_LANG['ad_categ_updatecateg']; ?>
                 </button>
             </div>
     </form>
-<?php 
-    if ($faqConfig->get('main.enableGoogleTranslation') === true) {
-?>        
-    <script src="https://www.google.com/jsapi?key=<?php echo $faqConfig->get('main.googleTranslationKey')?>" type="text/javascript"></script>
-    <script type="text/javascript">
-    /* <![CDATA[ */
-    google.load("language", "1");
-
-    var langFromSelect = $("#catlang");
-    var langToSelect   = $("#langTo");       
-    
-    $("#langTo").val($("#catlang").val());
-        
-    // Add a onChange to the translation select
-    langToSelect.change(
-        function() {
-            var langTo = $(this).val();
-
-            if (!document.getElementById('name_translated_' + langTo)) {
-
-                // Add language value
-                var languages = $('#used_translated_languages').val();
-                if (languages == '') {
-                    $('#used_translated_languages').val(langTo);
-                } else {
-                    $('#used_translated_languages').val(languages + ',' + langTo);
-                }
-               
-                var fieldset = $('<fieldset></fieldset>')
-                    .append($('<legend></legend>').html($("#langTo option:selected").text()));
-
-                // Text for title
-                fieldset
-                    .append('<p>' +
-                            '<label class="control-label" for="name_translated_' + langTo + '">' +
-                            '<?php echo $PMF_LANG["ad_categ_titel"]; ?>:' +
-                            '</label>' +
-                            '<input type="text" id="name_translated_' + langTo + '" name="name_translated_' + langTo + '" maxlength="255" style="width: 300px;">' +
-                            '</p>');
-
-                // Textarea for description
-                fieldset
-                    .append('<p>' +
-                            '<label class="control-label" for="description_translated_' + langTo + '">' +
-                            '<?php echo $PMF_LANG["ad_categ_desc"]; ?>:' +
-                            '</label>' +
-                            '<textarea id="description_translated_' + langTo + '" name="description_translated_' + langTo + '" cols="80" rows="3" style="width: 300px;"></textarea>' +
-                            '</p>');
-
-                $('#getedTranslations').append(fieldset);
-            }
-
-            // Set the translated text
-            var langFrom = $('#catlang').val();
-            getGoogleTranslation('#name_translated_' + langTo, $('#name').val(), langFrom, langTo);
-            getGoogleTranslation('#description_translated_' + langTo, $('#description').val(), langFrom, langTo);
-        }
-    );
-    /* ]]> */
-    </script>
 <?php
-    }
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

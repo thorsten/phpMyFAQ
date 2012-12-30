@@ -301,8 +301,6 @@ class PMF_Installer
         'main.enableWysiwygEditorFrontend'        => 'false',
         'main.templateSet'                        => 'default',
         'main.optionalMailAddress'                => 'false',
-        'main.enableGoogleTranslation'            => 'false',
-        'main.googleTranslationKey'               => '',
         'main.dateFormat'                         => 'Y-m-d H:i',
         'main.maintenanceMode'                    => 'false',
 

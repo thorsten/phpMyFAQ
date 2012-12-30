@@ -828,13 +828,10 @@ $PMF_LANG['search.relevance.content-thema-keywords'] = '回答 - 質問 - キー
 $PMF_LANG['search.relevance.content-keywords-thema'] = '回答 - キーワード - 質問';
 $PMF_LANG['search.relevance.keywords-content-thema'] = 'キーワード - 回答 - 質問';
 $PMF_LANG['search.relevance.keywords-thema-content'] = 'キーワード - 質問 - 回答';
-$PMF_LANG['msgNoGoogleApiKeyFound'] = 'The Google API key が設定されていません。環境設定で設定してください。';
 $PMF_LANG['msgLoginUser'] = 'ログイン';
 $PMF_LANG['socialNetworksControlCenter'] = 'SNS設定';
 $LANG_CONF['search.relevance'] = array(0 => "select", 1 => "関連度による並び替え");
 $LANG_CONF['search.enableRelevance'] = array(0 => "checkbox", 1 => "関連度サポートを有効化する (初期値:無効)");
-$LANG_CONF['main.enableGoogleTranslation'] = array(0 => "checkbox", 1 => "Google 翻訳を有効化する (初期値:無効)");
-$LANG_CONF['main.googleTranslationKey'] = array(0 => "input", 1 => "Google API キー");
 $LANG_CONF['socialnetworks.enableTwitterSupport'] = array(0 => "checkbox", 1 => "Twitter サポート (初期値:無効)");
 $LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => "input", 1 => "Twitter コンシューマ・キー");
 $PMF_LANG['ad_menu_attachments'] = '添付ファイル';

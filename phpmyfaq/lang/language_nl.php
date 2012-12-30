@@ -870,13 +870,10 @@ $PMF_LANG['search.relevance.content-thema-keywords'] = 'Antwoord - Vraag - Trefw
 $PMF_LANG['search.relevance.content-keywords-thema'] = 'Antwoord - Trefwoorden - Vraag';
 $PMF_LANG['search.relevance.keywords-content-thema'] = 'Trefwoorden - Antwoord - Vraag';
 $PMF_LANG['search.relevance.keywords-thema-content'] = 'Trefwoorden - Vraag - Antwoord';
-$PMF_LANG['msgNoGoogleApiKeyFound'] = 'De Google API sleutel is leeg, stel er 1 in in de configuratie';
 $PMF_LANG['msgLoginUser'] = 'Login naam';
 $PMF_LANG['socialNetworksControlCenter'] = 'Sociale netwerken configuratie';
 $LANG_CONF['search.relevance'] = array(0 => 'select', 1 => 'Sorteer op relevantie');
 $LANG_CONF['search.enableRelevance'] = array(0 => 'checkbox', 1 => 'Activeer relevantie ondersteuning? (standaard: gedeactiveerd)');
-$LANG_CONF['main.enableGoogleTranslation'] = array(0 => 'checkbox', 1 => 'Activeer Google vertalingen (standaard: gedeactiveerd)');
-$LANG_CONF['main.googleTranslationKey'] = array(0 => 'input', 1 => 'Google API sleutel');
 $LANG_CONF['socialnetworks.enableTwitterSupport'] = array(0 => 'checkbox', 1 => 'Twitter ondersteuning (standaard: gedeactiveerd)');
 $LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => 'input', 1 => 'Twitter Consumenten Sleutel');
 $PMF_LANG['msgExportAllFaqs'] = 'Print alles als PDF';

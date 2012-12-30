@@ -260,6 +260,28 @@ class PMF_Configuration
     }
 
     /**
+     * Deletes a configuration item for the database
+     *
+     * @param string $name
+     *
+     * @return boolean
+     */
+    public function delete($name)
+    {
+        $delete = sprintf(
+            "DELETE FROM
+                %s%s
+            WHERE
+              config_name = '%s'",
+            PMF_Db::getTablePrefix(),
+            $this->_tableName,
+            $this->getDb()->escape(trim($name))
+        );
+
+        return $this->getDb()->query($delete);
+    }
+
+    /**
      * Updates all configuration items
      *
      * @param  array $newConfigs Array with new configuration values

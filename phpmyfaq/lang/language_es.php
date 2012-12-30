@@ -816,10 +816,7 @@ $PMF_LANG['search.relevance.content-thema-keywords'] = 'Respuesta - Pregunta - P
 $PMF_LANG['search.relevance.content-keywords-thema'] = 'Respuesta - Palabras clave - Pregunta';
 $PMF_LANG['search.relevance.keywords-content-thema'] = 'Palabras clave - Respuesta - Pregunta';
 $PMF_LANG['search.relevance.keywords-thema-content'] = 'Palabras clave - Pregunta - Respuesta';
-$LANG_CONF['main.enableGoogleTranslation'] = array(0 => "checkbox", 1 => "Activar las traducciones de Google? (Por defecto: desactivadas)");
-$LANG_CONF['main.googleTranslationKey'] = array(0 => 'input', 1 => 'Clave API de Google');
 $LANG_CONF['main.dateFormat'] = array(0 => 'input', 1 => 'Formato de fecha (por omisión: Y-m-d H:i)');
-$PMF_LANG['msgNoGoogleApiKeyFound'] = 'La clave API de Google está vacía, por favor provea una en la sección de configuración';
 $PMF_LANG['msgAttachmentNotFound'] = '	El archivo que está intentando descargar no se encontró en este servidor';
 $PMF_LANG['ad_sess_noentry'] = 'Sin entradas';
 $PMF_LANG['ad_adus_password'] = 'Contraseña';

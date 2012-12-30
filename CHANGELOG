@@ -31,6 +31,7 @@ Version 2.8.0-beta2 - 2013-
 - simplified the link verification (Thorsten)
 - dropped support for IBM DB2, Interbase/Firebird and Sybase (Thorsten)
 - dropped support for PHP register_globals and magic_quotes_gpc (Thorsten)
+- dropped support for Google Translate (Thorsten)
 - updated bundled jQuery to version 1.8.2 (Thorsten)
 - updated bundled Modernizr to version 2.6.2 (Thorsten)
 - updated bundled Bootstrap to version 2.2.2 (Thorsten)

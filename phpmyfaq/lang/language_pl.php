@@ -888,12 +888,9 @@ $PMF_LANG['search.relevance.content-thema-keywords'] = 'Odpowiedź - Pytanie - S
 $PMF_LANG['search.relevance.content-keywords-thema'] = 'Odpowiedź - Słowa kluczowe - Pytanie';
 $PMF_LANG['search.relevance.keywords-content-thema'] = 'Słowa kluczowe - Odpowiedź - Pytanie';
 $PMF_LANG['search.relevance.keywords-thema-content'] = 'Słowa kluczowe - Pytanie - Odpowiedź';
-$PMF_LANG['msgNoGoogleApiKeyFound'] = 'The Google API key is empty, please provide one in the configuration section';
 $PMF_LANG['msgLoginUser'] = 'Login';
 $PMF_LANG['socialNetworksControlCenter'] = 'Ustawienia społecznościowe';
 $LANG_CONF['search.relevance'] = array(0 => 'select', 1 => 'Sort by relevance');
 $LANG_CONF['search.enableRelevance'] = array(0 => 'checkbox', 1 => 'Activate relevance support? (default: disabled)');
-$LANG_CONF['main.enableGoogleTranslation'] = array(0 => 'checkbox', 1 => 'Activate Google translations (default: deactivated)');
-$LANG_CONF['main.googleTranslationKey'] = array(0 => 'input', 1 => 'Google API key');
 $LANG_CONF['socialnetworks.enableTwitterSupport'] = array(0 => 'checkbox', 1 => 'Twitter support (default: deactivated)');
 $LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => 'input', 1 => 'Twitter Consumer Key');

@@ -821,7 +821,6 @@ $PMF_LANG['search.relevance.content-thema-keywords'] = 'Ответ - Вопро�
 $PMF_LANG['search.relevance.content-keywords-thema'] = 'Ответ - Ключевые слова - Вопрос';
 $PMF_LANG['search.relevance.keywords-content-thema'] = 'Ключевые слова - Ответ - Вопрос';
 $PMF_LANG['search.relevance.keywords-thema-content'] = 'Ключевые слова - Вопрос - Ответ';
-$PMF_LANG['msgNoGoogleApiKeyFound'] = 'Не указан ключ Google API, проверьте конфигурацию';
 $PMF_LANG['msgLoginUser'] = 'Логин';
 $PMF_LANG['socialNetworksControlCenter'] = 'Интеграция с социальными сетями';
 $PMF_LANG['securityControlCenter'] = 'Конфигурация безопасности';
@@ -858,7 +857,6 @@ $LANG_CONF['spam.checkBannedWords'] = array(0 => "checkbox", 1 => "Провер�
 $LANG_CONF['spam.enableCaptchaCode'] = array(0 => "checkbox", 1 => "Использовать капчу для доступа к редактированию (по умолчанию: включено).");
 $LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Количество связанных записей");
 $LANG_CONF['main.templateSet'] = array(0 => "select", 1 => "Шаблон который будет использоваться");
-$LANG_CONF['main.enableGoogleTranslation'] = array(0 => "checkbox", 1 => "Включить перевод от Google (по умолчанию: выключено)");
 $LANG_CONF['main.enableWysiwygEditor'] = array(0 => "checkbox", 1 => "Включить визуальный (WYSIWYG) редактор (по умолчанию: включено)");
 $LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "Путь на сервере для прикреплённых файлов.<br /><small>Относительный путь означает папку внутри веб пространства</small>");
 $LANG_CONF['search.enableRelevance'] = array(0 => "checkbox", 1 => "Включить поддержку релевантности? (по умолчанию: выключено)");
@@ -871,7 +869,6 @@ $LANG_CONF['records.defaultAttachmentEncKey'] = array(0 => "input", 1 => ' Кл�
 $LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'Сортировать по:');
 $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Сортировать по:');
 $LANG_CONF['search.relevance'] = array(0 => 'select', 1 => 'Сортировать по релевантности');
-$LANG_CONF['main.googleTranslationKey'] = array(0 => 'input', 1 => 'Ключ Google API');
 $LANG_CONF['socialnetworks.enableTwitterSupport'] = array(0 => 'checkbox', 1 => 'Поддержка Twitter(по умолчанию: отключено)');
 $LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => 'input', 1 => 'Уникальный ключ (Twitter Consumer Key)');
 $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'Секретный ID (Twitter Consumer Secret)');

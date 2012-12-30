@@ -860,12 +860,9 @@ $PMF_LANG['search.relevance.content-thema-keywords'] = '答案 - 问题 - 关键
 $PMF_LANG['search.relevance.content-keywords-thema'] = '答案 - 关键字 - 问题';
 $PMF_LANG['search.relevance.keywords-content-thema'] = '关键字 - 答案 - 问题';
 $PMF_LANG['search.relevance.keywords-thema-content'] = '关键字 - 问题 - 答案';
-$PMF_LANG['msgNoGoogleApiKeyFound'] = 'Google API key 为空，请提供一个配置';
 $PMF_LANG['msgLoginUser'] = '登陆';
 $PMF_LANG['socialNetworksControlCenter'] = '社会化网络设置';
 $LANG_CONF['search.relevance'] = array(0 => 'select', 1 => '相关性排序');
 $LANG_CONF['search.enableRelevance'] = array(0 => 'checkbox', 1 => '激活相关性支持? (默认: 不启用)');
-$LANG_CONF['main.enableGoogleTranslation'] = array(0 => 'checkbox', 1 => '激活谷歌翻译 (默认: 不未激活)');
-$LANG_CONF['main.googleTranslationKey'] = array(0 => 'input', 1 => '谷歌API密钥');
 $LANG_CONF['socialnetworks.enableTwitterSupport'] = array(0 => 'checkbox', 1 => '推特支持 (默认: 不激活)');
 $LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => 'input', 1 => '推特客户密钥');

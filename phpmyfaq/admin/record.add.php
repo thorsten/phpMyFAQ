@@ -206,63 +206,7 @@ if ($permission['editbt']|| $permission['addbt']) {
             }
 
             // All the other translations
-            $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);            
-            if ($faqConfig->get('main.enableGoogleTranslation') === true && !empty($languages)) {
-                
-                $linkverifier = new PMF_Linkverifier($faqConfig, $user->getLogin());
-    
-                $languages = explode(",", $languages);
-                foreach ($languages as $translatedLang) {
-                    if ($translatedLang == $recordLang) {
-                        continue;
-                    }
-                    $translated_question = PMF_Filter::filterInput(INPUT_POST, 'question_translated_' . $translatedLang, FILTER_SANITIZE_STRING);
-                    $translated_answer   = PMF_Filter::filterInput(INPUT_POST, 'answer_translated_' . $translatedLang, FILTER_SANITIZE_SPECIAL_CHARS);
-                    $translated_keywords = PMF_Filter::filterInput(INPUT_POST, 'keywords_translated_' . $translatedLang, FILTER_SANITIZE_STRING);
-    
-                    $recordData = array_merge($recordData, array(
-                        'id'            => $recordId,
-                        'lang'          => $translatedLang,
-                        'thema'         => html_entity_decode($translated_question),
-                        'content'       => html_entity_decode($translated_answer),
-                        'keywords'      => $translated_keywords,
-                        'author'        => 'Google Translate',
-                        'email'         => $faqConfig->get('main.administrationMail')));
-    
-                    // Create ChangeLog entry
-                    $faq->createChangeEntry($recordId, $user->getUserId(), nl2br($changed), $translatedLang);
-    
-                    // save or update the FAQ record
-                    if ($faq->isAlreadyTranslated($recordId, $translatedLang)) {
-                        $faq->updateRecord($recordData);
-                    } else {
-                        $faq->addRecord($recordData, false);
-                    }
-    
-                    // delete category relations
-                    $faq->deleteCategoryRelations($recordId, $translatedLang);
-    
-                    // save or update the category relations
-                    $faq->addCategoryRelations($categories['rubrik'], $recordId, $translatedLang);
-    
-                    // Copy Link Verification
-                    $linkverifier->markEntry($recordId, $translatedLang);
-
-                    // add faqvisit entry
-                    $visits->add($recordId, $translatedLang);
-
-                    // Set attachment relations
-                    $attachments = PMF_Attachment_Factory::fetchByRecordId($faqConfig, $recordId);
-                    foreach ($attachments as $attachment) {
-                        if ($attachment instanceof PMF_Attachment_Abstract) {
-                            $attachment->setId(null);
-                            $attachment->setRecordLang($translatedLang);
-                            $attachment->saveMeta();
-                        }
-                    }
-
-                }
-            }
+            $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
 ?>
     <script type="text/javascript">
     $(document).ready(function(){

@@ -237,13 +237,6 @@ foreach ($LANG_CONF as $key => $value) {
                 printf($value[1], ini_get('upload_max_filesize'));
                 break;
 
-            case 'main.googleTranslationKey':
-                printf(
-                    '<a target="_blank" href="http://code.google.com/apis/loader/signup.html">%s</a>',
-                    $value[1]
-                );
-                break;
-
             case 'main.dateFormat':
                 printf(
                     '<a target="_blank" href="http://www.php.net/manual/%s/function.date.php">%s</a>',

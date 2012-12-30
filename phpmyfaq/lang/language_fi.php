@@ -835,9 +835,6 @@ $PMF_LANG['search.relevance.content-thema-keywords'] = 'Vastaus - Kysymys - Tunn
 $PMF_LANG['search.relevance.content-keywords-thema'] = 'Vastaus - Tunnisteet - Kysymys';
 $PMF_LANG['search.relevance.keywords-content-thema'] = 'Tunnisteet - Vastaus - Kysymys';
 $PMF_LANG['search.relevance.keywords-thema-content'] = 'tunnisteet - Kysymys - Vastaus';
-$LANG_CONF['main.enableGoogleTranslation'] = array(0 => "checkbox", 1 => "Aktivoi Googlen käännökset (oletus: ei käytössä)");
-$LANG_CONF['main.googleTranslationKey'] = array(0 => "input", 1 => "Google API -avain");
-$PMF_LANG['msgNoGoogleApiKeyFound'] = 'Google API -avain on tyhjä, lisää se asetussivulla';
 $PMF_LANG['msgLoginUser'] = 'Kirjaudu';
 $PMF_LANG['socialNetworksControlCenter'] = 'Social networks configuration';
 $LANG_CONF['socialnetworks.enableTwitterSupport'] = array(0 => "checkbox", 1 => "Twitter-tuki (oletus: ei valittu)");

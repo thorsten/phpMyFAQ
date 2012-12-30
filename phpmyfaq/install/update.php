@@ -792,6 +792,14 @@ if ($step == 3) {
         $faqConfig->add('main.enableWysiwygEditorFrontend', 'false');
     }
 
+    //
+    // UPDATED FROM 2.8.0-beta2
+    //
+    if (version_compare($version, '2.8.0-beta2', '<')) {
+        $faqConfig->delete('main.enableGoogleTranslation');
+        $faqConfig->delete('main.googleTranslationKey');
+    }
+
     // Always the last step: Update version number
     if (version_compare($version, PMF_System::getVersion(), '<')) {
         $faqConfig->update(array('main.currentVersion' => PMF_System::getVersion()));

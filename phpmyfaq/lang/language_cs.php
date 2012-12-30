@@ -1074,11 +1074,6 @@ $PMF_LANG['search.relevance.content-keywords-thema'] = 'Odpověď - Klíčová s
 $PMF_LANG['search.relevance.keywords-content-thema'] = 'Klíčová slova - Odpověď - Otázka';
 $PMF_LANG['search.relevance.keywords-thema-content'] = 'Klíčová slova - Otázka - Odpověď';
 
-// added v2.6.99 - 2010-11-30 by Gustavo Solt
-$LANG_CONF["main.enableGoogleTranslation"] = array(0 => "checkbox", 1 => "Aktivovat google překlady (výchozí: deackivováno)");
-$LANG_CONF['main.googleTranslationKey'] = array(0 => 'input', 1 => 'Google API klíč');
-$PMF_LANG["msgNoGoogleApiKeyFound"] = 'Google API klíč je prázdný, prosím zadejte ho v konfiguraci';
-
 // added 2.7.0-alpha - 2010-09-13 by Thorsten
 $PMF_LANG['msgLoginUser'] = 'Přihlášení';
 $PMF_LANG['socialNetworksControlCenter'] = 'Konfigurace sociálních sítí';

@@ -1075,11 +1075,6 @@ $PMF_LANG['search.relevance.content-keywords-thema'] = 'Resposta - Palavras-Chav
 $PMF_LANG['search.relevance.keywords-content-thema'] = 'Palavras-Chave - Resposta - Questão';
 $PMF_LANG['search.relevance.keywords-thema-content'] = 'Palavras-Chave - Questão - Resposta';
 
-// added v2.6.99 - 2010-11-30 by Gustavo Solt
-$LANG_CONF['main.enableGoogleTranslation'] = array(0 => 'checkbox', 1 => 'Ativar o <em>Google translations</em> <small>(pré-definição: desativado)</small>');
-$LANG_CONF['main.googleTranslationKey'] = array(0 => 'input', 1 => 'Google API key');
-$PMF_LANG['msgNoGoogleApiKeyFound'] = 'A <em>Google API key</em> está vazia: indique o seu valor na secção de configuração';
-
 // added 2.7.0-alpha - 2010-09-13 by Thorsten
 $PMF_LANG['msgLoginUser'] = '<em>Login</em>';
 $PMF_LANG['socialNetworksControlCenter'] = 'Configuração do suporte de Redes Sociais';

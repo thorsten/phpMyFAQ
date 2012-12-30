@@ -851,13 +851,10 @@ $PMF_LANG['search.relevance.content-thema-keywords'] = 'Réponse - Question - Mo
 $PMF_LANG['search.relevance.content-keywords-thema'] = 'Réponse - Mots-clés - Question';
 $PMF_LANG['search.relevance.keywords-content-thema'] = 'Mots-clés - Réponse - Question';
 $PMF_LANG['search.relevance.keywords-thema-content'] = 'Mots-clés - Question - Réponse';
-$PMF_LANG['msgNoGoogleApiKeyFound'] = 'La clé API Google est vide, s\'il vous plaît la fournir dans la section de configuration';
 $PMF_LANG['msgLoginUser'] = 'Connexion';
 $PMF_LANG['socialNetworksControlCenter'] = 'Configuration de réseaux sociaux';
 $LANG_CONF['search.relevance'] = array(0 => "select", 1 => "Tri par pertinence");
 $LANG_CONF['search.enableRelevance'] = array(0 => "checkbox", 1 => "Activer le soutien par pertinence? (défault: désactivé)");
-$LANG_CONF['main.enableGoogleTranslation'] = array(0 => "checkbox", 1 => "Activer traductions Google (défault: désactivé)");
-$LANG_CONF['main.googleTranslationKey'] = array(0 => "input", 1 => "Google clé d'API");
 $LANG_CONF['socialnetworks.enableTwitterSupport'] = array(0 => "checkbox", 1 => "Support Twitter (défault: désactivé)");
 $LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => "input", 1 => "Twitter Clé Consommateur");
 $PMF_LANG['ad_menu_attachments'] = 'Pièces jointes';
