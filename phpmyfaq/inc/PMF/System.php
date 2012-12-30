@@ -48,7 +48,7 @@ class PMF_System
     /**
      * Pre-release version
      */
-    const VERSION_PRERELEASE = 'beta';
+    const VERSION_PRERELEASE = 'beta2';
 
     /**
      * API version
@@ -87,9 +87,8 @@ class PMF_System
      * @var  array
      */
     private $_supportedDatabases = array(
-        'mysql'   => array(self::VERSION_MINIMUM_PHP, 'MySQL 5.x (ext/mysql)'),
-        'mysqli'  => array(self::VERSION_MINIMUM_PHP, 'MySQL 5.x (ext/mysqli)'),
-        'mysqli'  => array(self::VERSION_MINIMUM_PHP, 'MariaDB 5.x (experimental)'),
+        'mysqli'  => array(self::VERSION_MINIMUM_PHP, 'MySQL 5.x, MariaDB 5.x (ext/mysqli)'),
+        'mysql'   => array(self::VERSION_MINIMUM_PHP, 'MySQL 5.x (ext/mysql, deprecated)'),
         'pgsql'   => array(self::VERSION_MINIMUM_PHP, 'PostgreSQL 8.x'),
         'sqlite'  => array(self::VERSION_MINIMUM_PHP, 'SQLite'),
         'sqlite3' => array(self::VERSION_MINIMUM_PHP, 'SQLite 3 (only PHP 5.3+, experimental)'),
@@ -154,16 +153,16 @@ class PMF_System
      */
     public function getAvailableTemplates()
     {
-        $tpls = array();
+        $templates = array();
 
         foreach (new DirectoryIterator(PMF_ROOT_DIR . '/assets/template') as $item) {
 
             if (! $item->isDot() && $item->isDir()) {
-                $tpls[$item->getBasename()] = (PMF_Template::getTplSetName() == $item->getBasename() ? true : false);
+                $templates[$item->getBasename()] = (PMF_Template::getTplSetName() == $item->getBasename() ? true : false);
             }
         }
 
-        return $tpls;
+        return $templates;
     }
 
     /**

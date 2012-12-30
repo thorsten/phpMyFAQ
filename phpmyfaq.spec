@@ -151,6 +151,9 @@ installation script.
 %changelog
 ==========
 
+* Sun Dec 20 2012 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.8.0.beta2-1
+- New upstream version 2.8.0-beta2
+
 * Tue Nov 20 2012 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.8.0.beta-1
 - New upstream version 2.8.0-beta
 
