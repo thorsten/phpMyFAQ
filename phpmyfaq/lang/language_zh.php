@@ -6,7 +6,7 @@
  * @author    saphrfans <saphrfans@yahoo.com>
  * @author    Techice.Young <techice.young@prettymay.net>
  * @since     2004-06-23
- * @copyright 2004-2010 phpMyFAQ Team
+ * @copyright 2004-2013 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in

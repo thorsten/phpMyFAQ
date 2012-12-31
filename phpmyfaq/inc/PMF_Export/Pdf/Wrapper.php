@@ -19,7 +19,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Peter Beauvain <pbeauvain@web.de>
  * @author    Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
- * @copyright 2004-2012 phpMyFAQ Team
+ * @copyright 2004-2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-11-21
@@ -197,7 +197,7 @@ require K_PATH_MAIN . '/tcpdf.php';
  * @author    Peter Beauvain <pbeauvain@web.de>
  * @author    Olivier Plathey <olivier@fpdf.org>
  * @author    Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
- * @copyright 2004-2012 phpMyFAQ Team
+ * @copyright 2004-2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-11-21

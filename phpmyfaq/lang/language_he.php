@@ -8,7 +8,7 @@
  * @author      Niran Shay <nirshay1@012.net.il>
  * @author      Roy Ronen <royroy15@gmail.com>
  * @since       2004-08-27
- * @copyright   (c) 2004-2007 phpMyFAQ Team
+ * @copyright   (c) 2004-2013 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in

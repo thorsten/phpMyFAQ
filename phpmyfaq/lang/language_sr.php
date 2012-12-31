@@ -5,7 +5,7 @@
  * @author    Vanja Hrustic <vanja@vanja.com>
  * @author    Slavisa Milojkovic <s.milojkovic@gmail.com>
  * @since     2004-06-24
- * @copyright 2006-2008 phpMyFAQ Team
+ * @copyright 2006-2013 phpMyFAQ Team
  * @version   $Id: language_sr.php,v 1.26 2008-05-31 11:49:42 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License

@@ -19,7 +19,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2013 phpMyFAQ Team
  * @since     2009-05-16
  */
 
@@ -47,7 +47,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Search' . DIRECTORY_SEPA
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2013 phpMyFAQ Team
  * @since     2009-05-16
  */
 class AllTests

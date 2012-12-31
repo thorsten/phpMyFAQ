@@ -20,7 +20,7 @@
  * @author    Uwe Pries <uwe.pries@digartis.de>
  * @author    Sarah Hermann <sayh@gmx.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2012 phpMyFAQ Team
+ * @copyright 2005-2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-15

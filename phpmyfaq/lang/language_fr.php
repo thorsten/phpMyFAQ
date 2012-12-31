@@ -20,7 +20,7 @@
  * @author    Thomas Bassetto <tbassetto@gmail.com>
  * @author    Laurent J.V. Dubois <laurent.dubois@ljvd.com>
  * @author    Cédric Frayssinet
- * @copyright 2004-2012 phpMyFAQ Team
+ * @copyright 2004-2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-19

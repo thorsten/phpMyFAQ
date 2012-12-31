@@ -24,7 +24,7 @@
  * @author    Stefan Esser <sesser@php.net>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Christian Stocker <chregu@bitflux.ch>
- * @copyright 2005-2012 phpMyFAQ Team
+ * @copyright 2005-2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-24
@@ -156,7 +156,7 @@ if ('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:(\\\\|/)%i', $confAtta
  * @author    Stefan Esser <sesser@php.net>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Christian Stocker <chregu@bitflux.ch>
- * @copyright 2005-2010 phpMyFAQ Team
+ * @copyright 2005-2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-24

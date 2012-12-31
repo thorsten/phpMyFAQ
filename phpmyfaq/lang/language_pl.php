@@ -19,7 +19,7 @@
  * @author    Krzysztof Kudłacik <null@adres.pl>
  * @author    Sławomir Małusecki <mori@online-rpg.pl>
  * @author    Dariusz Grzesista  <darek@linux.rybnik.pl>
- * @copyright 2004-2012 phpMyFAQ Team
+ * @copyright 2004-2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-06-24

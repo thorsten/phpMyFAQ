@@ -8,7 +8,7 @@
  * @author     Andreas <hq6830@yahoo.no>
  * @author     Thomas Höjemo <thomas@snt.se>
  * @since      2004-07-28
- * @copyright  2004-2010 phpMyFAQ Team
+ * @copyright  2004-2013 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in

@@ -22,7 +22,7 @@
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @todo      Move all queries and functions into the class PMF_Linkverifier
- * @copyright 2005-2011 NetJapan, Inc. and phpMyFAQ Team
+ * @copyright 2005-2013 NetJapan, Inc. and phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-07

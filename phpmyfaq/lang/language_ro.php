@@ -6,7 +6,7 @@
  * @subpackage Translation
  * @author     Karoly SIMO <skaroly@bestdomain.ro>
  * @since      2004-11-09
- * @copyright  2004-2010 phpMyFAQ Team
+ * @copyright  2004-2013 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in

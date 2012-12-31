@@ -36,7 +36,7 @@ define('SQLPREFIX', '');
  * @author    Gustavo Solt <gustavo.solt@mayflower.de>
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2013 phpMyFAQ Team
  * @since     2009-05-16
  */
 abstract class Database_AbstractTest extends PHPUnit_Extensions_Database_TestCase

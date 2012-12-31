@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   Administraion
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2012 phpMyFAQ Team
+ * @copyright 2003-2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-26
@@ -174,7 +174,7 @@ switch ($action) {
     <meta name="author" content="phpMyFAQ Team">
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
     <meta name="application-name" content="phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?>">
-    <meta name="copyright" content="(c) 2001-2012 phpMyFAQ Team">
+    <meta name="copyright" content="(c) 2001-2013 phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
     <meta name="MSSmartTagsPreventParsing" content="true">
     

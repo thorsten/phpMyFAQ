@@ -7,7 +7,7 @@
  * @author     Thomas Zeithaml <seo@annatom.de>
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2005-08-21
- * @copyright  2005-2011 phpMyFAQ Team
+ * @copyright  2005-2013 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in

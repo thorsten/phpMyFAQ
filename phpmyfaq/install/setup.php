@@ -24,7 +24,7 @@
  * @author    Johannes Schlüter <johannes@php.net>
  * @author    Uwe Pries <uwe.pries@digartis.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2002-2012 phpMyFAQ Team
+ * @copyright 2002-2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-20
@@ -56,7 +56,7 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
 
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
     <meta name="application-name" content="phpMyFAQ <?php print VERSION; ?>">
-    <meta name="copyright" content="(c) 2001-2011 phpMyFAQ Team">
+    <meta name="copyright" content="(c) 2001-2013 phpMyFAQ Team">
     
     <link rel="shortcut icon" href="../template/default/favicon.ico">
     <link rel="apple-touch-icon" href="../template/default/apple-touch-icon.png">

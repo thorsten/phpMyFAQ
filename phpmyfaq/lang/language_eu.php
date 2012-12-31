@@ -7,7 +7,7 @@
 * @author       Jokin Lacalle Usabiaga<jlacalle@ordizia.ikastola.net>
 * @author       Maite Goñi Eizmendi<mgoni@ordizia.ikastola.net>
 * @since        2005-12-28
-* @copyright    (c) 2005-2006 phpMyFAQ Team
+* @copyright    (c) 2005-2013 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

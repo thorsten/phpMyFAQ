@@ -81,4 +81,4 @@ http://github.com/abraham/twitteroauth
 Licensed under the terms of the MIT License
 
 
-Copyright (c) 2001-2012 Thorsten Rinne and the phpMyFAQ Team
+Copyright (c) 2001-2013 Thorsten Rinne and the phpMyFAQ Team
