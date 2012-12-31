@@ -23,12 +23,12 @@
  * @since     2012-12-31
  */
 
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/Exception.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Attachment/Exception.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Attachment/Filesystem/Entry.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Attachment/Filesystem/File.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Attachment/Filesystem/File/Vanilla.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/inc/PMF_Attachment/Filesystem/File/Exception.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Exception.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Attachment/Exception.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Attachment/Filesystem/Entry.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Attachment/Filesystem/File.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Attachment/Filesystem/File/Vanilla.php';
+require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Attachment/Filesystem/File/Exception.php';
 
 
 /**
