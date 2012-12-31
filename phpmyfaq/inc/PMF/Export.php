@@ -82,13 +82,13 @@ class PMF_Export
 
         switch ($mode) {
             case 'pdf':
-                return new PMF_Export_Pdf($faq, $category);
+                return new PMF_Export_Pdf($faq, $category, $config);
                 break;
             case 'xml':
-                return new PMF_Export_Xml($faq, $category);
+                return new PMF_Export_Xml($faq, $category, $config);
                 break;
             case 'xhtml':
-                return new PMF_Export_Xhtml($faq, $category);
+                return new PMF_Export_Xhtml($faq, $category, $config);
                 break;
             default:
                 throw new PMF_Exception('Export not implemented!');
