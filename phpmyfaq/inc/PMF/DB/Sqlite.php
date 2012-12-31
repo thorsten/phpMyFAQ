@@ -63,7 +63,11 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
     /**
      * Connects to the database.
      *
-     * @param   string
+     * @param $host string
+     * @param bool
+     * @param bool
+     * @param bool
+     *
      * @return  boolean
      */
     public function connect($host, $user = false, $passwd = false, $db = false)
@@ -134,7 +138,10 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
      * Fetches a complete result as an object
      *
      * @param  resource      $result Resultset
-     * @return PMF_DB_Sqlite
+     *
+     * @throws Exception
+     *
+     * @return array
      */
     public function fetchAll($result)
     {

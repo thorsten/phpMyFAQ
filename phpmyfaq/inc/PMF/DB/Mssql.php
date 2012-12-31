@@ -64,9 +64,10 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      * Connects to the database.
      *
      * @param   string $host
-     * @param   string $username
-     * @param   string $password
-     * @param   string $db_name
+     * @param   string $user
+     * @param   string $passwd
+     * @param   string $db
+     *
      * @return  boolean TRUE, if connected, otherwise FALSE
      */
     public function connect($host, $user, $passwd, $db)
@@ -134,8 +135,11 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     /**
      * Fetches a complete result as an object
      *
-     * @param  resource     $result Resultset
-     * @return PMF_DB_Mssql
+     * @param resource $result Resultset
+     *
+     * @throws Exception
+     *
+     * @return array
      */
     public function fetchAll($result)
     {

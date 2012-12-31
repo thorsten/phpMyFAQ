@@ -64,6 +64,7 @@ class PMF_String_Basic extends PMF_String_Abstract
     /**
      * Create and return an instance
      *
+     * @param string $encoding
      * @param string $language
      *
      * @return PMF_String_Basic
@@ -113,9 +114,9 @@ class PMF_String_Basic extends PMF_String_Abstract
     /**
      * Get position of the first occurence of a string
      *
-     * @param string $haystack Haystack
-     * @param string $needle   Needle
-     * @param string $offset   Offset
+     * @param string  $haystack Haystack
+     * @param string  $needle   Needle
+     * @param integer $offset   Offset
      *
      * @return int
      */
@@ -123,7 +124,6 @@ class PMF_String_Basic extends PMF_String_Abstract
     {
         return strpos($haystack, $needle, $offset);
     }
-    
     
     /**
      * Make a string lower case
@@ -137,7 +137,6 @@ class PMF_String_Basic extends PMF_String_Abstract
         return strtolower($str);
     }
     
-    
     /**
      * Make a string upper case
      *
@@ -149,7 +148,6 @@ class PMF_String_Basic extends PMF_String_Abstract
     {
         return strtoupper($str);
     }
-
     
     /**
      * Get occurence of a string within another
@@ -165,23 +163,22 @@ class PMF_String_Basic extends PMF_String_Abstract
         return strstr($haystack, $needle, (boolean) $part);
     }
     
-    
     /**
-	 * Get last occurence of a string within another
-	 * @param string $haystack
-	 * @param string $needle
-	 *
-	 * @return string
+     * Get last occurence of a string within another
+     *
+     * @param string $haystack
+     * @param string $needle
+     *
+     * @return string
      */
     public function strrchr($haystack, $needle)
     {
         return strrchr($haystack, $needle);
     }
-    
-    
+
     /**
-     *
      * Count substring occurences
+     *
      * @param string $haystack
      * @param string $needle
      *
@@ -194,22 +191,22 @@ class PMF_String_Basic extends PMF_String_Abstract
     
     
     /**
-	 * Find position of last occurrence of a char in a string
-	 * @param string $haystack
-	 * @param string $needle
-	 * @param int $offset
-	 *
-	 * @return int
+     * Find position of last occurrence of a char in a string
+     *
+     * @param string $haystack
+     * @param string $needle
+     * @param int $offset
+     *
+     * @return int
      */
     public function strrpos($haystack, $needle, $offset = 0)
     {
         return strrpos($haystack, $needle, $offset);
     }
-    
-    
+
     /**
-     *
      * Match a regexp
+     *
      * @param string $pattern
      * @param string $subject
      * @param array &$matches
@@ -223,10 +220,9 @@ class PMF_String_Basic extends PMF_String_Abstract
         return preg_match($pattern, $subject, $matches, $flags, $offset);
     }
     
-    
     /**
-     *
      * Match a regexp globally
+     *
      * @param string $pattern
      * @param string $subject
      * @param array &$matches
@@ -240,9 +236,9 @@ class PMF_String_Basic extends PMF_String_Abstract
         return preg_match_all($pattern, $subject, $matches, $flags, $offset);
     }
     
-    
     /**
      * Split string by a regexp
+     *
      * @param string $pattern
      * @param string $subject
      * @param int $limit
@@ -254,10 +250,10 @@ class PMF_String_Basic extends PMF_String_Abstract
     {
         return preg_split($pattern, $subject, $limit, $flags);
     }
-    
-    
+
     /**
      * Search and replace by a regexp using a callback
+     *
      * @param string|array $pattern
      * @param function $callback
      * @param string|array $subject
@@ -270,10 +266,10 @@ class PMF_String_Basic extends PMF_String_Abstract
     {
         return preg_replace_callback($pattern, $callback, $subject, $limit, $count);
     }
-    
-    
+
     /**
      * Search and replace by a regexp
+     *
      * @param string|array $pattern
      * @param string|array $replacement
      * @param string|array $subject

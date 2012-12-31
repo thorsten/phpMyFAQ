@@ -66,9 +66,10 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      * This function connects to a MySQL database
      *
      * @param   string $host
-     * @param   string $username
-     * @param   string $password
-     * @param   string $db_name
+     * @param   string $user
+     * @param   string $passwd
+     * @param   string $db
+     *
      * @return  boolean true, if connected, otherwise false
      */
     public function connect($host, $user, $passwd, $db)
@@ -153,7 +154,10 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      * Fetches a complete result as an object
      *
      * @param  resource      $result Resultset
-     * @return PMF_DB_Mysqli
+     *
+     * @throws Exception
+     *
+     * @return array
      */
     public function fetchAll($result)
     {

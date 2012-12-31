@@ -166,8 +166,8 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
             throw new Exception('Error while fetching result: ' . $this->error());
         }
 
-        while ($row = $this->fetchObject($result)) {
-            $ret[] = $row;
+        while ($row = $this->fetch_assoc($result)) {
+            $ret[] = (object)$row;
         }
 
         return $ret;
@@ -187,7 +187,6 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
     /**
      * Logs the queries
      *
-     * @param   mixed $result
      * @return  integer
      */
     public function log()
@@ -248,10 +247,10 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
     {
         $result = (int)$this->conn->querySingle(
             sprintf(
-                'SELECT max(%s) AS current_id FROM %s'
-            ),
-            $id,
-            $table
+                'SELECT max(%s) AS current_id FROM %s',
+                $id,
+                $table
+            )
         );
         return ($result + 1);
     }

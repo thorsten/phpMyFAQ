@@ -125,5 +125,4 @@ Licensed under the terms of the GNU Lesser General Public License
 Licensed under the terms of the MIT License
 
 
-
 Copyright (c) 2001-2013 Thorsten Rinne and the phpMyFAQ Team

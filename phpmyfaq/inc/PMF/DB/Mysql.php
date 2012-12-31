@@ -64,9 +64,9 @@ class PMF_DB_Mysql implements PMF_DB_Driver
      * Connects to the database
      *
      * @param string $host     MySQL Hostname
-     * @param string $username MySQL Username
+     * @param string $user     MySQL Username
      * @param string $password MySQL Password
-     * @param string $db_name  MySQL Database name
+     * @param string $db       MySQL Database name
      *
      * @return boolean
      */
@@ -137,8 +137,11 @@ class PMF_DB_Mysql implements PMF_DB_Driver
     /**
      * Fetches a complete result as an object
      *
-     * @param  resource     $result Resultset
-     * @return PMF_DB_Mysql
+     * @param  resource $result Resultset
+     *
+     * @throws Exception
+     *
+     * @return array
      */
     public function fetchAll($result)
     {

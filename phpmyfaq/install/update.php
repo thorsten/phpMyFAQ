@@ -15,6 +15,7 @@
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2002-2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+
  * @link      http://www.phpmyfaq.de
  * @since     2002-01-10
  */
@@ -371,7 +372,7 @@ if ($step == 3) {
                     password_hash char(40) NULL,
                     filename varchar(255) NOT NULL,
                     filesize int NOT NULL,
-                    encrypted int NOT NULL DEFAULT FALSE,
+                    encrypted int NOT NULL DEFAULT 0,
                     mime_type varchar(255) NULL,
                     PRIMARY KEY (id))";
                 

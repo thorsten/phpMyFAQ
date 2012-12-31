@@ -140,6 +140,27 @@ class PMF_Helper_Category extends PMF_Helper
     }
 
     /**
+     * Returns all top-level categories in <li> tags
+     *
+     * @return string
+     */
+    public function renderMainCategories()
+    {
+        $categories = '';
+        foreach ($this->Category->categories as $cat) {
+            if (0 === (int)$cat['parent_id']) {
+                $categories .= sprintf(
+                    '<li><a href="?action=show&cat=%d">%s</a></li>',
+                    $cat['id'],
+                    $cat['name']
+                    );
+            }
+        }
+
+        return $categories;
+    }
+
+    /**
      * Get all categories in <option> tags
      *
      * @param  array|integer $categoryId Category ID or array of category IDs

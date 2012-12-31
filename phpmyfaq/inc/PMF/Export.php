@@ -72,7 +72,9 @@ class PMF_Export
      * @param PMF_Configuration $config   Configuration object
      * @param string            $mode     Export
      *
-     * @return PMF_Export
+     * @return mixed
+     *
+     * @throws PMF_Exception
      */
     public static function create(PMF_Faq $faq, PMF_Category $category, PMF_Configuration $config, $mode = 'pdf')
     {

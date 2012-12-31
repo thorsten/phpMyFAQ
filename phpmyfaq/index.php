@@ -248,7 +248,7 @@ if ($faqConfig->get('main.enableUserTracking')) {
         }
     }
 } else {
-    if (!setcookie(PMF_GET_KEY_NAME_LANGUAGE, $LANGCODE, $_SERVER['REQUEST_TIME'] + PMF_LANGUAGE_EXPIRED_TIME)) {
+    if (!setcookie(PMF_COOKIE_NAME_LANGUAGE, $LANGCODE, $_SERVER['REQUEST_TIME'] + PMF_LANGUAGE_EXPIRED_TIME)) {
         $sids = sprintf('lang=%s&amp;', $LANGCODE);
     }
 }
@@ -478,6 +478,7 @@ $tplMainPage = array(
     'dir'                 => $PMF_LANG['dir'],
     'msgCategory'         => $PMF_LANG['msgCategory'],
     'showCategories'      => $categoryHelper->renderNavigation($cat),
+    'topCategories'       => $categoryHelper->renderMainCategories(),
     'msgExportAllFaqs'    => $PMF_LANG['msgExportAllFaqs'],
     'languageBox'         => $PMF_LANG['msgLangaugeSubmit'],
     'writeLangAdress'     => $writeLangAdress,

@@ -41,8 +41,15 @@ Version 2.8.0-beta2 - 2013-
 - updated Czech translation (Jaroslav Síka)
 - fixed some bugs (Thorsten, Florian)
 
-Version 2.7.9 - 2012-09-
+Version 2.7.10 - 2013-01-
+-
+
+Version 2.7.9 - 2012-11-02
+- updated Czech translation (Jaroslav Síka)
+- updated Dutch translation
 - updated French translation
+- improved English translation
+- fixed some bugs (Thorsten)
 
 Version 2.7.8 - 2012-08-22
 - added experimental rewrite rules for Zeus Webserver (Chris Crawshaw)

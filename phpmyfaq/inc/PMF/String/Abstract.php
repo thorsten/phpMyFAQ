@@ -40,14 +40,12 @@ abstract class PMF_String_Abstract
      * @var string
      */
     const DEFAULT_ENCODING = 'utf-8';
-	
     
     /**
      * Default language
      * @var string
      */
     const DEFAULT_LANGUAGE = 'en';
-    
     
     /**
      * Encoding
@@ -56,13 +54,11 @@ abstract class PMF_String_Abstract
      */
     protected $encoding = self::DEFAULT_ENCODING;
     
-    
     /**
      * Language
      * @var string
      */
     protected $language = self::DEFAULT_LANGUAGE;
-    
     
     /**
      * Check if the string is a unicode string
@@ -90,7 +86,9 @@ abstract class PMF_String_Abstract
     /**
      * Set current encoding
      *
-     * @return string
+     * @param string $encoding
+     *
+     * @return void
      */
     public function setEncoding($encoding)
     {
@@ -100,6 +98,7 @@ abstract class PMF_String_Abstract
     
     /**
      * Get current encoding
+     *
      * @return string
      */
     public function getEncoding()

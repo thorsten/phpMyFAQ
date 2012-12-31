@@ -167,7 +167,7 @@ class PMF_Captcha
     /**
      * Setter for the captcha code length
      *
-     * @param integer $caplength Length of captch code
+     * @param integer $length Length of captch code
      *
      * @return void
      */

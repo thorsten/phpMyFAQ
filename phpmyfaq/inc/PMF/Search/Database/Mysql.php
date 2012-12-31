@@ -37,9 +37,7 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
     /**
      * Constructor
      *
-     * @param PMF_Configuration
-     *
-     * @return PMF_Search_Abstract
+     * @param PMF_Configuration $config
      */
     public function __construct(PMF_Configuration $config)
     {
@@ -118,7 +116,9 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
     /**
      * Add the matching columns into the columns for the resultset
      *
-     * @return PMF_Search_Database
+     * @param string $searchterm
+     *
+     * @return string
      */
     public function getMatchingColumnsAsResult($searchterm)
     {

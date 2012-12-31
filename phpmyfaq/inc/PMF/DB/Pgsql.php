@@ -62,7 +62,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      * Connects to the database.
      *
      * @param string $host     Database hostname
-     * @param string $username Database username
+     * @param string $user     Database username
      * @param string $password Password
      * @param string $database Database name
      *
@@ -146,7 +146,10 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      * Fetches a complete result as an object
      *
      * @param  resource     $result Resultset
-     * @return PMF_DB_Pgsql
+     *
+     * @throws Exception
+     *
+     * @return array
      */
     public function fetchAll($result)
     {
@@ -176,7 +179,6 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     /**
      * Logs the queries
      *
-     * @param   mixed $result
      * @return  integer
      */
     public function log()

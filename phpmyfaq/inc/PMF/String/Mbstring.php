@@ -40,7 +40,7 @@ class PMF_String_Mbstring extends PMF_String_Abstract
      * @var PMF_String_Mbstring
      */
     private static $instance;
-    
+
     /**
      *
      * Constructor
@@ -50,7 +50,7 @@ class PMF_String_Mbstring extends PMF_String_Abstract
     private final function __construct()
     {
     }
-    
+
     /**
      * Create and return an instance
      *
@@ -66,10 +66,10 @@ class PMF_String_Mbstring extends PMF_String_Abstract
             self::$instance->language = PMF_Language::isASupportedLanguage($language) ? $language : self::DEFAULT_LANGUAGE;
             mb_regex_encoding(self::$instance->encoding);
         }
-        
+
         return self::$instance;
     }
-    
+
     /**
      * Get string character count
      *
@@ -81,7 +81,7 @@ class PMF_String_Mbstring extends PMF_String_Abstract
     {
         return mb_strlen($str, $this->encoding);
     }
-    
+
     /**
      * Get a part of string
      *
@@ -94,16 +94,16 @@ class PMF_String_Mbstring extends PMF_String_Abstract
     public function substr($str, $start, $length = null)
     {
         $length = null == $length ? mb_strlen($str) : $length;
-        
+
         return mb_substr($str, $start, $length, $this->encoding);
     }
 
     /**
      * Get position of the first occurence of a string
      *
-     * @param string $haystack Haystack
-     * @param string $needle   Needle
-     * @param string $offset   Offset
+     * @param string  $haystack Haystack
+     * @param string  $needle   Needle
+     * @param integer $offset   Offset
      *
      * @return int
      */
@@ -111,7 +111,7 @@ class PMF_String_Mbstring extends PMF_String_Abstract
     {
         return mb_strpos($haystack, $needle, $offset, $this->encoding);
     }
-    
+
     /**
      * Make a string lower case
      *
@@ -123,7 +123,7 @@ class PMF_String_Mbstring extends PMF_String_Abstract
     {
         return mb_strtolower($str, $this->encoding);
     }
-        
+
     /**
      * Make a string upper case
      *
@@ -135,7 +135,7 @@ class PMF_String_Mbstring extends PMF_String_Abstract
     {
         return mb_strtoupper($str, $this->encoding);
     }
-    
+
     /**
      * Get first occurence of a string within another
      *
@@ -149,21 +149,21 @@ class PMF_String_Mbstring extends PMF_String_Abstract
     {
         return mb_strstr($haystack, $needle, $part, $this->encoding);
     }
-    
-    
+
+
     /**
-	 * Get last occurence of a string within another
-	 * @param string $haystack
-	 * @param string $needle
-	 *
-	 * @return string
+     * Get last occurence of a string within another
+     * @param string $haystack
+     * @param string $needle
+     *
+     * @return string
      */
     public function strrchr($haystack, $needle)
     {
         return mb_strrchr($haystack, $needle, false, $this->encoding);
     }
-    
-    
+
+
     /**
      *
      * Count substring occurences
@@ -177,7 +177,7 @@ class PMF_String_Mbstring extends PMF_String_Abstract
         return mb_substr_count($haystack, $needle, $this->encoding);
     }
 
-    
+
     /**
      *
      * Match a regexp
@@ -193,8 +193,8 @@ class PMF_String_Mbstring extends PMF_String_Abstract
     {
         return preg_match(self::appendU($pattern), $subject, $matches, $flags, $offset);
     }
-    
-    
+
+
     /**
      *
      * Match a regexp globally
@@ -210,8 +210,8 @@ class PMF_String_Mbstring extends PMF_String_Abstract
     {
         return preg_match_all(self::appendU($pattern), $subject, $matches, $flags, $offset);
     }
-    
-    
+
+
     /**
      * Split string by a regexp
      * @param string $pattern
@@ -225,8 +225,8 @@ class PMF_String_Mbstring extends PMF_String_Abstract
     {
         return preg_split(self::appendU($pattern), $subject, $limit, $flags);
     }
-    
-    
+
+
     /**
      * Search and replace by a regexp using a callback
      * @param string|array $pattern
@@ -246,11 +246,11 @@ class PMF_String_Mbstring extends PMF_String_Abstract
         } else {
             $pattern = self::appendU($pattern);
         }
-        
+
         return preg_replace_callback($pattern, $callback, $subject, $limit, $count);
     }
-    
-    
+
+
     /**
      * Search and replace by a regexp
      * @param string|array $pattern
@@ -270,11 +270,11 @@ class PMF_String_Mbstring extends PMF_String_Abstract
         } else {
             $pattern = self::appendU($pattern);
         }
-        
+
         return preg_replace($pattern, $replacement, $subject, $limit, $count);
     }
-    
-    
+
+
     /**
      * Append an u to the string. The string is supposed 
      * to be a regex prepared to use with a preg_* function
@@ -286,7 +286,7 @@ class PMF_String_Mbstring extends PMF_String_Abstract
     private static function appendU($str)
     {
         $str = (string) $str;
-        
+
         return self::isUTF8($str) ?  $str . 'u' : $str;
     }
 }    

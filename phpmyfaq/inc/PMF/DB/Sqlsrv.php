@@ -162,7 +162,10 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      * Fetches a complete result as an object
      *
      * @param  resource     $result Resultset
-     * @return PMF_DB_Mysql
+     *
+     * @throws Exception
+     *
+     * @return array
      */
     public function fetchAll($result)
     {

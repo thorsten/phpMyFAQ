@@ -39,8 +39,6 @@ class PMF_Attachment_DB extends PMF_Attachment_Abstract implements PMF_Attachmen
      * Constructor
      *
      * @param int $id attachment id
-     *
-     * @return null
      */
     public function __construct ($id = null)
     {

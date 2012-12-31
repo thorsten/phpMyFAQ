@@ -69,7 +69,6 @@ class PMF_Perm
     /**
      * Constructor
      *
-     * @return void
      */
     public function __construct(PMF_Configuration $config)
     {

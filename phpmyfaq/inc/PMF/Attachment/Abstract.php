@@ -22,7 +22,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Atachment_Abstract
+ * PMF_Attachment_Abstract
  *
  * @category  phpMyFAQ
  * @package   Attachment
@@ -161,7 +161,7 @@ abstract class PMF_Attachment_Abstract
      * @param string $key     encryption key
      * @param string $default if the key is default system wide
      *
-     * @return null
+     * @return void
      */
     public function setKey ($key, $default = true)
     {
@@ -238,7 +238,7 @@ abstract class PMF_Attachment_Abstract
      *
      * @return boolean
      */
-    protected function getMeta ()
+    protected function getMeta()
     {
         $retval = false;
         
@@ -355,6 +355,10 @@ abstract class PMF_Attachment_Abstract
     /**
      * Generate hash based on current conditions
      *
+     * @throws PMF_Attachment_Exception
+     *
+     * @return string
+     * 
      * NOTE The way a file is saved in the filesystem
      * is based on md5 hash. If the file is unencrypted,
      * it's md5 hash is used directly, otherwise a
@@ -425,7 +429,7 @@ abstract class PMF_Attachment_Abstract
                         
         $this->db->query($sql);
     }
-    
+
     /**
      * Validate attached file with the real hash
      *

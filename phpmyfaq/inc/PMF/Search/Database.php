@@ -80,8 +80,6 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      * Constructor
      *
      * @param PMF_Configuration
-     *
-     * @return PMF_Search_Abstract
      */
     public function __construct(PMF_Configuration $config)
     {

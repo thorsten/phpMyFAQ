@@ -101,8 +101,7 @@ interface PMF_DB_Driver
     /**
      * Logs the queries
      *
-     * @param   mixed $result
-     * @return  integer
+     * @return integer
      */
     public function log();
 
