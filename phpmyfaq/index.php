@@ -248,7 +248,7 @@ if ($faqConfig->get('main.enableUserTracking')) {
         }
     }
 } else {
-    if (!setcookie(PMF_COOKIE_NAME_LANGUAGE, $LANGCODE, $_SERVER['REQUEST_TIME'] + PMF_LANGUAGE_EXPIRED_TIME)) {
+    if (!setcookie(PMF_Session::PMF_COOKIE_NAME_AUTH, $LANGCODE, $_SERVER['REQUEST_TIME'] + PMF_LANGUAGE_EXPIRED_TIME)) {
         $sids = sprintf('lang=%s&amp;', $LANGCODE);
     }
 }
