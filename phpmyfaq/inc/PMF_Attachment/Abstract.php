@@ -134,8 +134,6 @@ abstract class PMF_Attachment_Abstract
      * Constructor
      * 
      * @param integer $id attachment id
-     * 
-     * @return null
      */
     public function __construct ($id = null)
     {   
@@ -242,7 +240,7 @@ abstract class PMF_Attachment_Abstract
      * 
      * @return boolean
      */
-    protected function getMeta ()
+    protected function getMeta()
     {
         $retval = false;
         
@@ -358,7 +356,9 @@ abstract class PMF_Attachment_Abstract
     
     /**
      * Generate hash based on current conditions
-     * 
+     *
+     * @throws PMF_Attachment_Exception
+     *
      * @return string
      * 
      * NOTE The way a file is saved in the filesystem

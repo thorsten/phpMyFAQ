@@ -200,7 +200,7 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
      *
      * @throws PMF_Attachment_Filesystem_File_Exception
      */
-    public static function deleteDir($path)
+    public function deleteDir($path)
     {
         if (!file_exists($path)) {
             throw new PMF_Attachment_Filesystem_File_Exception("Directory $path doesn't exist.");
