@@ -199,6 +199,8 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
      * @param string $path
      *
      * @throws PMF_Attachment_Filesystem_File_Exception
+     *
+     * @return boolean
      */
     public function deleteDir($path)
     {
@@ -221,6 +223,6 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
             }
         }
 
-        rmdir($path);
+        return rmdir($path);
     }
 }
