@@ -78,8 +78,6 @@ class PMF_Export
      */
     public static function create(PMF_Faq $faq, PMF_Category $category, PMF_Configuration $config, $mode = 'pdf')
     {
-        $this->_config = $config;
-
         switch ($mode) {
             case 'pdf':
                 return new PMF_Export_Pdf($faq, $category, $config);
