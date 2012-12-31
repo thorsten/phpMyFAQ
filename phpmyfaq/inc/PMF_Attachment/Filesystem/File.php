@@ -128,7 +128,7 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
         }
         
         if (!is_uploaded_file($this->path) && file_exists($this->path)) {
-            $retval = unlink($this->path);
+            $retval = $this->deleteDir(dirname($this->path));
         }
         
         return $retval;
