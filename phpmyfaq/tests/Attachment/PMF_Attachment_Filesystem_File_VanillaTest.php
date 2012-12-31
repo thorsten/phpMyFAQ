@@ -56,26 +56,30 @@ class PMF_Attachment_Filesystem_File_VanillaTest extends PHPUnit_Framework_TestC
     {
         parent::setUp();
 
-        copy(
-            dirname(__DIR__) . '/fixtures/foo.bar',
-            dirname(__DIR__) . '/fixtures/foo.bar.baz'
-        );
+        if (!file_exists(dirname(__DIR__) . '/fixtures/path-to-delete/')) {
+            mkdir(dirname(__DIR__) . '/fixtures/path-to-delete/');
+        }
+        copy(dirname(__DIR__) . '/fixtures/path/foo.bar', dirname(__DIR__) . '/fixtures/path-to-delete/foo.bar.baz');
 
         $this->PMF_Attachment_Filesystem_File_Vanilla = new PMF_Attachment_Filesystem_File_Vanilla(
-            dirname(__DIR__) . '/fixtures/foo.bar.baz'
+            dirname(__DIR__) . '/fixtures/path-to-delete/foo.bar.baz'
         );
     }
 
     public function testDelete()
     {
+        copy(dirname(__DIR__) . '/fixtures/path/foo.bar', dirname(__DIR__) . '/fixtures/path-to-delete/foo.bar.baz');
+
         $this->assertTrue($this->PMF_Attachment_Filesystem_File_Vanilla->delete());
     }
 
     public function testDeleteDir()
     {
+        copy(dirname(__DIR__) . '/fixtures/path/foo.bar', dirname(__DIR__) . '/fixtures/path-to-delete/foo.bar');
+
         $this->assertTrue(
             $this->PMF_Attachment_Filesystem_File_Vanilla->deleteDir(
-                dirname(__DIR__) . '/fixtures/path/'
+                dirname(__DIR__) . '/fixtures/path-to-delete/'
             )
         );
     }
