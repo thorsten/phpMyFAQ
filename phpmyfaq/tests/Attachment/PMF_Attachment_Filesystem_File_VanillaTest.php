@@ -62,7 +62,7 @@ class PMF_Attachment_Filesystem_File_VanillaTest extends PHPUnit_Framework_TestC
         );
 
         $this->PMF_Attachment_Filesystem_File_Vanilla = new PMF_Attachment_Filesystem_File_Vanilla(
-            dirname(__DIR__) . '/fixtures/foo.bar'
+            dirname(__DIR__) . '/fixtures/foo.bar.baz'
         );
     }
 
