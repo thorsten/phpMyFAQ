@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Attachment
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2011 phpMyFAQ Team
+ * @copyright 2009-2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-21
@@ -28,12 +28,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Atachment_Abstract
+ * PMF_Attachment_Filesystem_File
  * 
  * @category  phpMyFAQ
  * @package   PMF_Attachment
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2010 phpMyFAQ Team
+ * @copyright 2009-2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-21
@@ -59,9 +59,8 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
      * 
      * @param string $filepath path to file
      * @param string $mode     mode for fopen
-     * 
-     * @return null
-     * TODO check for correct mode if file doesn't exist
+     *
+     * @throws PMF_Attachment_Filesystem_File_Exception
      */
     public function __construct($filepath, $mode = self::MODE_READ)
     {
@@ -82,7 +81,7 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
      */
     public function __destruct()
     {
-        if(is_resource($this->handle)) {
+        if (is_resource($this->handle)) {
             fclose($this->handle);
         }
     }
@@ -114,17 +113,21 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
     abstract public function putChunk($chunk);
     
     /**
+     * Deletes the file
+     *
      * @see inc/PMF_Attachment/Filesystem/PMF_Attachment_Filesystem_Entry#delete()
+     *
+     * @return boolean
      */
     public function delete()
     {
         $retval = true;
         
-        if($this->handle) {
+        if ($this->handle) {
             fclose($this->handle);
         }
         
-        if(!is_uploaded_file($this->path) && file_exists($this->path)) {
+        if (!is_uploaded_file($this->path) && file_exists($this->path)) {
             $retval = unlink($this->path);
         }
         
@@ -171,9 +174,7 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
      */
     public function copyToSimple($target)
     {
-        $retval = false;
-        
-        if(is_uploaded_file($this->path)) {
+        if (is_uploaded_file($this->path)) {
             $retval = move_uploaded_file($this->path, $target);
         } else {
             $retval = copy($this->path, $target);
@@ -190,5 +191,36 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
     public function isOk()
     {
         return is_resource($this->handle);
+    }
+
+    /**
+     * Recursive deletion of path and file
+     *
+     * @param string $path
+     *
+     * @throws PMF_Attachment_Filesystem_File_Exception
+     */
+    public static function deleteDir($path)
+    {
+        if (!file_exists($path)) {
+            throw new PMF_Attachment_Filesystem_File_Exception("Directory $path doesn't exist.");
+        }
+
+        $it = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($path),
+            RecursiveIteratorIterator::CHILD_FIRST
+        );
+
+        foreach ($it as $file) {
+            if (in_array($file->getBasename(), array('.', '..'))) {
+                continue;
+            } elseif ($file->isDir()) {
+                rmdir($file->getPathname());
+            } elseif ($file->isFile() || $file->isLink()) {
+                unlink($file->getPathname());
+            }
+        }
+
+        rmdir($path);
     }
 }

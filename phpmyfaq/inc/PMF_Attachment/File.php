@@ -156,7 +156,7 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
     /**
      * Delete attachment
      * 
-     * @return null
+     * @return boolean
      */
     public function delete()
     {
@@ -191,7 +191,7 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
      * @param boolean $headers     if headers must be sent
      * @param string  $disposition diposition type (ignored if $headers false)
      * 
-     * @return null
+     * @return string
      */
     public function rawOut($headers = true, $disposition = 'attachment')
     {
@@ -206,25 +206,25 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
         }
         
         while (!$file->eof()) {
-            echo $file->getChunk();   
+            echo $file->getChunk();
         }
     }
     
     /**
      * Factory method to initialise the corresponding file object
      * 
-     * @param string $mode filemode for file open
+     * @param string $mode File mode for file open
      * 
-     * @return object
+     * @return PMF_Attachment_Filesystem_File_Vanilla|PMF_Attachment_Filesystem_File_Encrypted
      */
     private function getFile($mode = PMF_Attachment_Filesystem_File::MODE_READ)
     {
         if ($this->encrypted) {
             $file = new PMF_Attachment_Filesystem_File_Encrypted(
-                            $this->buildFilePath(),
-                            $mode,
-                            $this->key
-                            );
+                $this->buildFilePath(),
+                $mode,
+                $this->key
+            );
         } else {
             $file = new PMF_Attachment_Filesystem_File_Vanilla($this->buildFilePath(), $mode);
         }
