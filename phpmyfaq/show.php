@@ -28,8 +28,8 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
 
     $faqsession->userTracking('show_category', $currentCategory);
 
-    $parent         = $category->categoryName[$currentCategory]['parent_id'];
-    $name           = $category->categoryName[$currentCategory]['name'];
+    $catParent      = $category->categoryName[$currentCategory]['parent_id'];
+    $catName        = $category->categoryName[$currentCategory]['name'];
     $catDescription = $category->categoryName[$currentCategory]['description'];
     $records        = $faq->showAllRecords(
         $currentCategory,
@@ -37,7 +37,7 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
         $faqConfig->get('records.sortby')
     );
     
-    if (!$records) {
+    if (empty($records)) {
         $subCategory = new PMF_Category($faqConfig, $current_groups, true);
         $subCategory->setUser($current_user);
         $subCategory->transform($currentCategory);
@@ -45,15 +45,15 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
     }
 
     $up = '';
-    if ($parent != 0) {
+    if ($catParent != 0) {
         $url = sprintf(
             '%s?%saction=show&amp;cat=%d',
             PMF_Link::getSystemRelativeUri(),
             $sids,
-            $parent
+            $catParent
         );
         $oLink            = new PMF_Link($url, $faqConfig);
-        $oLink->itemTitle = $category->categoryName[$parent]['name'];
+        $oLink->itemTitle = $category->categoryName[$catParent]['name'];
         $oLink->text      = $PMF_LANG['msgCategoryUp'];
         $up               = $oLink->toHtmlAnchor();
     }
@@ -61,7 +61,7 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
     $tpl->parse(
         'writeContent',
         array(
-            'categoryHeader'      => $PMF_LANG['msgEntriesIn'].$name,
+            'categoryHeader'      => $PMF_LANG['msgEntriesIn'] . $catName,
             'categoryDescription' => $catDescription,
             'categoryContent'     => $records,
             'categoryLevelUp'     => $up
