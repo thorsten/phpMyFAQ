@@ -28,10 +28,10 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
 
     $faqsession->userTracking('show_category', $currentCategory);
 
-    $parent              = $category->categoryName[$currentCategory]['parent_id'];
-    $name                = $category->categoryName[$currentCategory]['name'];
-    $categoryDescription = $category->categoryName[$currentCategory]['description'];
-    $records             = $faq->showAllRecords(
+    $parent         = $category->categoryName[$currentCategory]['parent_id'];
+    $name           = $category->categoryName[$currentCategory]['name'];
+    $catDescription = $category->categoryName[$currentCategory]['description'];
+    $records        = $faq->showAllRecords(
         $currentCategory,
         $faqConfig->get('records.orderby'),
         $faqConfig->get('records.sortby')
@@ -61,13 +61,12 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
     $tpl->parse(
         'writeContent',
         array(
-            'writeCategory'            => $PMF_LANG['msgEntriesIn'].$name,
-            'writeCategoryDescription' => $categoryDescription,
-            'writeThemes'              => $records,
-            'writeOneThemeBack'        => $up
+            'categoryHeader'      => $PMF_LANG['msgEntriesIn'].$name,
+            'categoryDescription' => $catDescription,
+            'categoryContent'     => $records,
+            'categoryLevelUp'     => $up
         )
     );
-    $tpl->merge('writeContent', 'index');
 
 } else {
 
@@ -75,11 +74,12 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
     $tpl->parse(
         'writeContent',
         array(
-            'writeCategory'            => $PMF_LANG['msgFullCategories'],
-            'writeCategoryDescription' => '',
-            'writeThemes'              => $category->viewTree(),
-            'writeOneThemeBack'        => ''
+            'categoryHeader'      => $PMF_LANG['msgFullCategories'],
+            'categoryDescription' => '',
+            'categoryContent'     => $category->viewTree(),
+            'categoryLevelUp'     => ''
         )
     );
-    $tpl->merge('writeContent', 'index');
 }
+
+$tpl->merge('writeContent', 'index');

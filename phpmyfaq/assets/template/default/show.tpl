@@ -1,10 +1,10 @@
 <section>
             <header>
-                <h2>{writeCategory}</h2>
+                <h2>{categoryHeader}</h2>
             </header>
-            <p>{writeCategoryDescription}</p>
+            <p>{categoryDescription}</p>
 
-            {writeThemes}
+            {categoryContent}
 
-            <p>{writeOneThemeBack}</p>
+            <p>{categoryLevelUp}</p>
         </section>
