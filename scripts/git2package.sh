@@ -22,7 +22,7 @@
 # @author    Rene Treffer <treffer+phpmyfaq@measite.de>
 # @author    David Soria Parra <dsp@php.net>
 # @author    Florian Anderiasch <florian@phpmyfaq.de>
-# @copyright 2008-2012 phpMyFAQ Team
+# @copyright 2008-2013 phpMyFAQ Team
 # @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
 # @link      http://www.phpmyfaq.de
 # @version   2008-09-10
@@ -51,6 +51,7 @@ composer install
 mkdir -p $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/inc/libs/phpseclib/Crypt
 cp -r $cwd/vendor/phpseclib/phpseclib/Crypt $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/inc/libs/phpseclib/Crypt
 cp -r $cwd/vendor/twitteroauth/twitteroauth $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/inc/libs/twitteroauth
+cp -r $cwd/vendor/symfony/class-loader/* $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/inc/libs/
 
 # prepare packaging
 mkdir $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/phpmyfaq
