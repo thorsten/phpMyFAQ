@@ -18,8 +18,10 @@
  * @since 2012-04-11
  */
 
-require __DIR__ . '/../phpmyfaq/inc/System.php';
+define('PMF_ROOT_DIR', dirname(__DIR__) . '/phpmyfaq');
+
+require PMF_ROOT_DIR . '/inc/PMF/System.php';
 
 $system = new PMF_System();
 
-print $system->createHashes();
+echo $system->createHashes();
