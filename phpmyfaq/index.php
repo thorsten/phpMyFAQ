@@ -625,12 +625,18 @@ if (isset($auth)) {
     );
 
 } else {
+    
+    if ($faqConfig->get('main.maintenanceMode')) {
+        $msgLoginUser = '<a href="./admin/">%s</a>';
+    } else {
+        $msgLoginUser = '<a href="?action=login">%s</a>';
+    }
     $tpl->parseBlock(
         'index',
         'notLoggedIn',
         array(
             'msgRegisterUser' => '<a href="?action=register">' . $PMF_LANG['msgRegisterUser'] . '</a>',
-            'msgLoginUser'    => '<a href="?action=login">' . $PMF_LANG['msgLoginUser'] . '</a>',
+            'msgLoginUser'    => sprintf($msgLoginUser, $PMF_LANG['msgLoginUser']),
             'activeRegister'  => ('register' == $action) ? 'active' : '',
             'activeLogin'     => ('login' == $action) ? 'active' : ''
         )

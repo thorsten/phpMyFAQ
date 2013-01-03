@@ -54,6 +54,26 @@
     <div class="navbar-inner">
         <div class="container-fluid">
             <a class="brand" title="{header}" href="{faqHome}">{header}</a>
+            <nav class="nav-collapse">
+                <ul class="nav pull-right">
+                    [notLoggedIn]
+                    <li class="{activeLogin}">{msgLoginUser}</li>
+                    [/notLoggedIn]
+                    [userloggedIn]
+                    <li class="{activeUserControl}">{msgUserControl}</li>
+                    <li class="divider-vertical"></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <span title="{msgFullName}">{msgLoginName}</span><b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>{msgUserControlDropDown}</li>
+                            <li>{msgLogoutUser}</li>
+                        </ul>
+                    </li>
+                    [/userloggedIn]
+                </ul>
+            </nav>
         </div>
     </div>
 </div>
