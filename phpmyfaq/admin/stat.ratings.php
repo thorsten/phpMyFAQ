@@ -23,7 +23,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($permission['viewlog']) {
-    require_once(PMF_ROOT_DIR.'/inc/Rating.php');
 
     $category = new PMF_Category($faqConfig, array(), false);
     $category->setUser($currentAdminUser);
