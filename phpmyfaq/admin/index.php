@@ -497,7 +497,7 @@ if (isset($auth) && in_array(true, $permission)) {
                 'http://www.phpmyfaq.de/api/verify/' . $faqConfig->get('main.currentVersion')
             );
 
-            if (!is_array($remoteHashes)) {
+            if (!is_array(json_decode($remoteHashes, true))) {
                 echo '<p class="alert alert-danger">phpMyFAQ version mismatch - no verification possible.</p>';
             } else {
 
