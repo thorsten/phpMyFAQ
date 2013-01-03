@@ -373,11 +373,11 @@ class PMF_Session
      * @param integer $sessionId Session ID
      * @param integer $timeout   Cookie timeout
      *
-     * @return void
+     * @return boolean
      */
     public static function setCookie($name, $sessionId, $timeout = PMF_SESSION_EXPIRED_TIME)
     {
-        setcookie(
+        return setcookie(
             $name,
             $sessionId, 
             $_SERVER['REQUEST_TIME'] + PMF_SESSION_EXPIRED_TIME,

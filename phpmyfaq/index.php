@@ -209,8 +209,8 @@ if (function_exists('mb_language') && in_array($mbLanguage, $validMbStrings)) {
 // Found a session ID in _GET or _COOKIE?
 //
 $sid        = null;
-$sid_get    = PMF_Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
-$sid_cookie = PMF_Filter::filterInput(INPUT_COOKIE, PMF_Session::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
+$sidGet     = PMF_Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
+$sidCookie  = PMF_Filter::filterInput(INPUT_COOKIE, PMF_Session::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
 $faqsession = new PMF_Session($faqConfig);
 // Note: do not track internal calls
 $internal = false;
@@ -218,14 +218,14 @@ if (isset($_SERVER['HTTP_USER_AGENT'])) {
     $internal = (strpos($_SERVER['HTTP_USER_AGENT'], 'phpMyFAQ%2F') === 0);
 }
 if (!$internal) {
-    if (is_null($sid_get) && is_null($sid_cookie)) {
+    if (is_null($sidGet) && is_null($sidCookie)) {
         // Create a per-site unique SID
         $faqsession->userTracking('new_session', 0);
     } else {
-        if (!is_null($sid_cookie)) {
-            $faqsession->checkSessionId($sid_cookie, $_SERVER['REMOTE_ADDR']);
+        if (!is_null($sidCookie)) {
+            $faqsession->checkSessionId($sidCookie, $_SERVER['REMOTE_ADDR']);
         } else {
-            $faqsession->checkSessionId($sid_get, $_SERVER['REMOTE_ADDR']);
+            $faqsession->checkSessionId($sidGet, $_SERVER['REMOTE_ADDR']);
         }
     }
 }
@@ -237,18 +237,18 @@ $sids = '';
 if ($faqConfig->get('main.enableUserTracking')) {
     if (isset($sid)) {
         PMF_Session::setCookie(PMF_Session::PMF_COOKIE_NAME_AUTH, $sid);
-        if (is_null($sid_cookie)) {
+        if (is_null($sidCookie)) {
             $sids = sprintf('sid=%d&amp;lang=%s&amp;', $sid, $LANGCODE);
         }
-    } elseif (is_null($sid_get) || is_null($sid_cookie)) {
-        if (is_null($sid_cookie)) {
-            if (!is_null($sid_get)) {
-                $sids = sprintf('sid=%d&amp;lang=%s&amp;', $sid_get, $LANGCODE);
+    } elseif (is_null($sidGet) || is_null($sidCookie)) {
+        if (is_null($sidCookie)) {
+            if (!is_null($sidGet)) {
+                $sids = sprintf('sid=%d&amp;lang=%s&amp;', $sidGet, $LANGCODE);
             }
         }
     }
 } else {
-    if (!setcookie(PMF_Session::PMF_COOKIE_NAME_AUTH, $LANGCODE, $_SERVER['REQUEST_TIME'] + PMF_LANGUAGE_EXPIRED_TIME)) {
+    if (!PMF_Session::setCookie(PMF_Session::PMF_COOKIE_NAME_AUTH, $sid, $_SERVER['REQUEST_TIME'] + PMF_LANGUAGE_EXPIRED_TIME)) {
         $sids = sprintf('lang=%s&amp;', $LANGCODE);
     }
 }
