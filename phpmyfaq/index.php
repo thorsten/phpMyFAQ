@@ -625,7 +625,7 @@ if (isset($auth)) {
     );
 
 } else {
-    
+
     if ($faqConfig->get('main.maintenanceMode')) {
         $msgLoginUser = '<a href="./admin/">%s</a>';
     } else {
