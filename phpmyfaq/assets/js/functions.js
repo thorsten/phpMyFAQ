@@ -239,11 +239,20 @@ $(document).ready(function () {
      * Adds the link to the attachment in the main FAQ window
      * @param attachmentId
      * @param fileName
+     * @param recordId
+     * @param recordLang
      */
-    addAttachmentLink = function addAttachmentLink(attachmentId, fileName) {
+    addAttachmentLink = function addAttachmentLink(attachmentId, fileName, recordId, recordLang) {
         window.opener.
             $('.adminAttachments').
-            append('<li><a href="../index.php?action=attachment&id=' + attachmentId + '">' + fileName + '</a></li>');
+            append(
+                '<li>' +
+                '<a href="../index.php?action=attachment&id=' + attachmentId + '">' + fileName + '</a>' +
+                '<a class="label label-important" href="?action=delatt&amp;record_id=' + recordId +
+                '&amp;id=' + attachmentId + '&amp;lang=' + recordLang + '">' +
+                '<i class="icon-trash icon-white"></i></a>' +
+                '</li>'
+            );
         window.close();
     };
 

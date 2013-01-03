@@ -2050,7 +2050,7 @@
  * @category  phpMyFAQ
  * @package   JavaScript
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2012 phpMyFAQ Team
+ * @copyright 2012-3013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2012-07-07
@@ -2159,7 +2159,7 @@ $(document).ready(function () {
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2003-2012 phpMyFAQ Team
+ * @copyright 2003-2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2003-11-13
@@ -2386,11 +2386,20 @@ $(document).ready(function () {
      * Adds the link to the attachment in the main FAQ window
      * @param attachmentId
      * @param fileName
+     * @param recordId
+     * @param recordLang
      */
-    addAttachmentLink = function addAttachmentLink(attachmentId, fileName) {
+    addAttachmentLink = function addAttachmentLink(attachmentId, fileName, recordId, recordLang) {
         window.opener.
             $('.adminAttachments').
-            append('<li><a href="../index.php?action=attachment&id=' + attachmentId + '">' + fileName + '</a></li>');
+            append(
+                '<li>' +
+                '<a href="../index.php?action=attachment&id=' + attachmentId + '">' + fileName + '</a>' +
+                '<a class="label label-important" href="?action=delatt&amp;record_id=' + recordId +
+                '&amp;id=' + attachmentId + '&amp;lang=' + recordLang + '">' +
+                '<i class="icon-trash icon-white"></i></a>' +
+                '</li>'
+            );
         window.close();
     };
 
