@@ -236,7 +236,7 @@ if (!$internal) {
 $sids = '';
 if ($faqConfig->get('main.enableUserTracking')) {
     if (isset($sid)) {
-        PMF_Session::setCookie(PMF_Session::PMF_COOKIE_NAME_SESSIONID, $sid);
+        PMF_Session::setCookie(PMF_Session::PMF_COOKIE_NAME_AUTH, $sid);
         if (is_null($sid_cookie)) {
             $sids = sprintf('sid=%d&amp;lang=%s&amp;', $sid, $LANGCODE);
         }
