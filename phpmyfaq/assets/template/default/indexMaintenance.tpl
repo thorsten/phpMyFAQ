@@ -82,7 +82,7 @@
     <div class="container">
         <div class="row-fluid">
             <div class="well maintenance">
-                <h1>Sorry, we're back soon!</h1>
+                <h1>Sorry, we'll back soon!</h1>
             </div>
         </div>
     </div>
