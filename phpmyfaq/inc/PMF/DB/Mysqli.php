@@ -1,7 +1,7 @@
 <?php
 /**
- * The PMF_DB_Mysqli class provides methods and functions for MySQL 5.0.x,
- * 5.1.x, and 5.5.x databases.
+ * The PMF_DB_Mysqli class provides methods and functions for MySQL 5.x and
+ * MariaDB 5.x databases
  *
  * PHP Version 5.3
  *
@@ -40,55 +40,49 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     /**
      * The connection object
      *
-     * @var   mixed
-     * @see   connect(), query(), close()
+     * @var mysqli
      */
     private $conn = false;
 
     /**
      * The query log string
      *
-     * @var   string
-     * @see   query()
+     * @var string
      */
     private $sqllog = '';
 
     /**
      * Tables
      *
-     * @var     array
+     * @var array
      */
     public $tableNames = array();
 
     /**
      * Connects to the database.
      *
-     * This function connects to a MySQL database
-     *
-     * @param   string $host
-     * @param   string $user
-     * @param   string $passwd
-     * @param   string $db
+     * @param string $host     Hostname
+     * @param string $user     Username
+     * @param string $password Password
+     * @param string $db       Database name
      *
      * @return  boolean true, if connected, otherwise false
      */
-    public function connect($host, $user, $passwd, $db)
+    public function connect($host, $user, $password, $db)
     {
-        $this->conn = new mysqli($host, $user, $passwd, $db);
-        if (mysqli_connect_errno()) {
-            PMF_Db::errorPage(mysqli_connect_error());
+        $this->conn = new mysqli($host, $user, $password, $db);
+        if ($this->conn->connect_error) {
+            PMF_Db::errorPage($this->conn->connect_errno . ': ' . $this->conn->connect_error);
             die();
         }
         
-        /* change character set to UTF-8 */
+        // change character set to UTF-8
         if (!$this->conn->set_charset('utf8')) {
             PMF_Db::errorPage($this->error());
         }
         
         return true;
     }
-
-
 
     /**
      * Sends a query to the database.
@@ -108,8 +102,6 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
         return $result;
     }
 
-
-
     /**
     * Escapes a string for use in a query
     *
@@ -118,10 +110,8 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     */
     public function escape($string)
     {
-      return $this->conn->real_escape_string($string);
+        return $this->conn->real_escape_string($string);
     }
-
-
 
     /**
      * Fetch a result row as an object
@@ -135,7 +125,6 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     {
         return $result->fetch_object();
     }
-
 
     /**
      * Fetch a result row as an object
@@ -187,8 +176,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     /**
      * Logs the queries
      *
-     * @param   mixed $result
-     * @return  integer
+     * @return string
      */
     public function log()
     {
