@@ -23,18 +23,19 @@ define('IS_VALID_PHPMYFAQ', null);
 // Prepend and start the PHP session
 //
 require 'inc/Bootstrap.php';
-PMF_Init::cleanRequest();
-session_name(PMF_Session::PMF_COOKIE_NAME_AUTH);
-session_start();
 
 $searchString = PMF_Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
 $ajaxLanguage = PMF_Filter::filterInput(INPUT_POST, 'ajaxlanguage', FILTER_SANITIZE_STRING, 'en');
 $categoryId   = PMF_Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALIDATE_INT, '%');
 
 $language     = new PMF_Language($faqConfig);
-$languageCode = $language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
-require_once 'lang/language_en.php';
+$languageCode = $language->setLanguage(
+    $faqConfig->get('main.languageDetection'),
+    $faqConfig->get('main.language')
+);
 $faqConfig->setLanguage($language);
+
+require_once 'lang/language_en.php';
 
 if (PMF_Language::isASupportedLanguage($ajaxLanguage)) {
     $languageCode = trim($ajaxLanguage);
@@ -95,5 +96,5 @@ if (!is_null($searchString)) {
     $faqSearchHelper->setCategory($category);
     $faqSearchHelper->setPlurals($plr);
     
-    print $faqSearchHelper->renderInstantResponseResult($faqSearchResult);
+    echo $faqSearchHelper->renderInstantResponseResult($faqSearchResult);
 }
