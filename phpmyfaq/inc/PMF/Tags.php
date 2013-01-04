@@ -58,8 +58,9 @@ class PMF_Tags
     /**
      * Returns all tags
      *
-     * @param  string  $search Move the returned result set to be the result of a start-with search
-     * @param  boolean $limit  Limit the returned result set
+     * @param string  $search       Move the returned result set to be the result of a start-with search
+     * @param boolean $limit        Limit the returned result set
+     * @param boolean $showInactive Show inactive tags
      * @return array
      */
     public function getAllTags($search = null, $limit = false, $showInactive = false)
@@ -129,10 +130,10 @@ class PMF_Tags
     /**
      * Returns all tags for a FAQ record
      *
-     * @param  integer $record_id Record ID
+     * @param  integer $recordId Record ID
      * @return array
      */
-    public function getAllTagsById($record_id)
+    public function getAllTagsById($recordId)
     {
         $tags = array();
 
@@ -150,7 +151,7 @@ class PMF_Tags
                 t.tagging_name",
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
-            $record_id
+            $recordId
         );
 
         $result = $this->_config->getDb()->query($query);
@@ -166,47 +167,46 @@ class PMF_Tags
     /**
      * Returns all tags for a FAQ record
      *
-     * @param  integer $record_id Record ID
+     * @param integer $recordId Record ID
+     *
      * @return string
      */
-    public function getAllLinkTagsById($record_id)
+    public function getAllLinkTagsById($recordId)
     {
-        global $sids;
-        $taglisting = '';
+        $tagListing = '';
 
-        foreach ($this->getAllTagsById($record_id) as $tagging_id => $tagging_name) {
-            $title = PMF_String::htmlspecialchars($tagging_name, ENT_QUOTES, 'utf-8');
+        foreach ($this->getAllTagsById($recordId) as $taggingId => $taggingName) {
+            $title = PMF_String::htmlspecialchars($taggingName, ENT_QUOTES, 'utf-8');
             $url = sprintf(
                 '%s?action=search&amp;tagging_id=%d',
                 PMF_Link::getSystemRelativeUri(),
-                $tagging_id
+                $taggingId
             );
             $oLink            = new PMF_Link($url, $this->_config);
-            $oLink->itemTitle = $tagging_name;
-            $oLink->text      = $tagging_name;
+            $oLink->itemTitle = $taggingName;
+            $oLink->text      = $taggingName;
             $oLink->tooltip   = $title;
-            $taglisting      .= $oLink->toHtmlAnchor().', ';
+            $tagListing      .= $oLink->toHtmlAnchor().', ';
         }
 
-        return '' == $taglisting ? '-' : PMF_String::substr($taglisting, 0, -2);
+        return '' == $tagListing ? '-' : PMF_String::substr($tagListing, 0, -2);
     }
 
     /**
      * Saves all tags from a FAQ record
      *
-     * @param integer $record_id Record ID
-     * @param array   $tags      Array of tags
+     * @param integer $recordId Record ID
+     * @param array   $tags     Array of tags
+     *
+     * @return boolean
      */
-    public function saveTags($record_id, $tags)
+    public function saveTags($recordId, Array $tags)
     {
-        if (!is_array($tags)) {
-            return false;
-        }
         $current_tags = $this->getAllTags();
 
         // Delete all tag references for the faq record
         if (count($tags) > 0) {
-            $this->deleteTagsFromRecordId($record_id);
+            $this->deleteTagsFromRecordId($recordId);
         }
 
         // Store tags and references for the faq record
@@ -236,7 +236,7 @@ class PMF_Tags
                             VALUES
                         (%d, %d)",
                         PMF_Db::getTablePrefix(),
-                        $record_id,
+                        $recordId,
                         $new_tagging_id);
                     $this->_config->getDb()->query($query);
                 } else {
@@ -248,10 +248,10 @@ class PMF_Tags
                             VALUES
                         (%d, %d)",
                         PMF_Db::getTablePrefix(),
-                        $record_id,
+                        $recordId,
                         array_search(
                             PMF_String::strtolower($tagging_name),
-                            array_map(array('String', 'strtolower'), $current_tags)
+                            array_map(array('PMF_String', 'strtolower'), $current_tags)
                         )
                     );
                     $this->_config->getDb()->query($query);
@@ -265,12 +265,13 @@ class PMF_Tags
     /**
      * Deletes all tags from a given record id
      *
-     * @param  integer $record_id Record ID
+     * @param integer $recordId Record ID
+     *
      * @return boolean
      */
-    public function deleteTagsFromRecordId($record_id)
+    public function deleteTagsFromRecordId($recordId)
     {
-        if (!is_integer($record_id)) {
+        if (!is_integer($recordId)) {
             return false;
         }
 
@@ -280,7 +281,8 @@ class PMF_Tags
             WHERE
                 record_id = %d",
             PMF_Db::getTablePrefix(),
-            $record_id);
+            $recordId
+        );
 
         $this->_config->getDb()->query($query);
 
@@ -291,10 +293,11 @@ class PMF_Tags
     /**
      * Returns the FAQ record IDs where all tags are included
      *
-     * @param  array $arrayOfTags Array of Tags
+     * @param array $arrayOfTags Array of Tags
+     *
      * @return array
      */
-    public function getRecordsByIntersectionTags($arrayOfTags)
+    public function getRecordsByIntersectionTags(Array $arrayOfTags)
     {
         if (!is_array($arrayOfTags)) {
             return false;
@@ -331,10 +334,11 @@ class PMF_Tags
     /**
      * Returns all FAQ record IDs where all tags are included
      *
-     * @param  array $arrayOfTags Array of Tags
+     * @param array $arrayOfTags Array of Tags
+     *
      * @return array
      */
-    public function getRecordsByUnionTags($arrayOfTags)
+    public function getRecordsByUnionTags(Array $arrayOfTags)
     {
         if (!is_array($arrayOfTags)) {
             return false;
@@ -367,7 +371,8 @@ class PMF_Tags
     /**
      * Returns the tagged item
      *
-     * @param  integer $tagId Tagging ID
+     * @param integer $tagId Tagging ID
+     *
      * @return string
      */
     public function getTagNameById($tagId)
@@ -400,8 +405,6 @@ class PMF_Tags
      */
     public function printHTMLTagsCloud()
     {
-        global $sids;
-        
         $tags = array();
 
         // Limit the result set (see: PMF_TAGS_CLOUD_RESULT_SET_SIZE)
@@ -463,7 +466,8 @@ class PMF_Tags
     /**
      * Returns all FAQ record IDs where all tags are included
      *
-     * @param  string $tagName The name of the tag
+     * @param string $tagName The name of the tag
+     *
      * @return array
      */
     public function getRecordsByTagName($tagName)
@@ -502,7 +506,8 @@ class PMF_Tags
     /**
      * Returns all FAQ record IDs where all tags are included
      *
-     * @param  integer $tagId Tagging ID
+     * @param integer $tagId Tagging ID
+     *
      * @return array
      */
     public function getRecordsByTagId($tagId)
