@@ -147,7 +147,7 @@ $PMF_LANG["msgQuestionText"] = "Here you can see questions asked by other users.
 $PMF_LANG["msgHelpText"] = "<p>The structure of the FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) is quite simple. You can either search the <strong><a href=\"?action=show\">categories</a></strong> or let the <strong><a href=\"?action=search\">FAQ search engine</a></strong> search for keywords.</p>";
 
 // Contact
-$PMF_LANG["msgContactEMail"] = "Email to the webmaster:";
+$PMF_LANG["msgContactEMail"] = "Email the FAQ owner:";
 $PMF_LANG["msgMessage"] = "Your message:";
 
 // Startseite
