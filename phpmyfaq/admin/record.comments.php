@@ -22,9 +22,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-printf("<header><h2>%s</h2></header>\n", $PMF_LANG['ad_comment_administration']);
+printf(
+    '<header><h2><i class="icon-pencil"></i> %s</h2></header>',
+    $PMF_LANG['ad_comment_administration']
+);
 
-print '<div id="returnMessage"></div>';
+echo '<div id="returnMessage"></div>';
 
 if ($permission['delcomment']) {
 

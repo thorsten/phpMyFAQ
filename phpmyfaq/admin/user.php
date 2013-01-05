@@ -140,7 +140,9 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             } else {
 ?>
         <header>
-            <h2><?php print $PMF_LANG['ad_user_deleteUser']; ?> <strong><?php print $user->getLogin(); ?></strong></h2>
+            <h2>
+                <i class="icon-user"></i> <?php echo $PMF_LANG['ad_user_deleteUser'] ?> <?php echo $user->getLogin() ?>
+            </h2>
         </header>
         <p class="alert alert-danger"><?php print $PMF_LANG["ad_user_del_3"].' '.$PMF_LANG["ad_user_del_1"].' '.$PMF_LANG["ad_user_del_2"]; ?></p>
         <form action ="?action=user&amp;user_action=delete" method="post">
@@ -279,7 +281,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     if ($userAction == 'add' && $permission['adduser']) {
 ?>
         <header>
-            <h2><?php print $PMF_LANG["ad_adus_adduser"]; ?></h2>
+            <h2><i class="icon-user"></i> <?php echo $PMF_LANG["ad_adus_adduser"] ?></h2>
         </header>
 
         <div id="user_message"><?php print $message; ?></div>
@@ -345,7 +347,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     if ($userAction == 'list') {
 ?>
         <header>
-            <h2><?php print $PMF_LANG['ad_user']; ?></h2>
+            <h2><i class="icon-user"></i> <?php print $PMF_LANG['ad_user']; ?></h2>
         </header>
 
         <script type="text/javascript" src="assets/js/user.js"></script>
@@ -538,7 +540,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         $pagination = new PMF_Pagination($faqConfig, $options);
 ?>
         <header>
-            <h2><?php print $PMF_LANG['ad_user']; ?></h2>
+            <h2><i class="icon-user"></i> <?php print $PMF_LANG['ad_user']; ?></h2>
         </header>
         <div id="user_message"><?php print $message; ?></div>
         <table class="table table-striped">

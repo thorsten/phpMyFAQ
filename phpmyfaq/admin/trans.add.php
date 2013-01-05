@@ -30,7 +30,7 @@ if (isset($_SESSION['trans'])) {
     unset($_SESSION['trans']);
 }
 
-printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_translations']);
+printf('<header><h2><i class="icon-wrench"></i> %s</h2></header>', $PMF_LANG['ad_menu_translations']);
 ?>
         <form id="newTranslationForm">
         <table class="list" style="width: 100%">

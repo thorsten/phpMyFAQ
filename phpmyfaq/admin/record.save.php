@@ -108,7 +108,11 @@ if ($permission['editbt']) {
         // Save entry
         $logging = new PMF_Logging($faqConfig);
         $logging->logAdmin($user, 'Beitragsave ' . $recordId);
-        print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
+
+        printf(
+            '<header><h2><i class="icon-pencil"></i> %s</h2></header>',
+            $PMF_LANG['ad_entry_aor']
+        );
 
         $tagging = new PMF_Tags($faqConfig);
         

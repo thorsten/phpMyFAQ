@@ -22,7 +22,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_csv_backup']);
+printf('<header><h2><i class="icon-download-alt"></i> %s</h2></header>', $PMF_LANG['ad_csv_backup']);
 
 if ($permission['backup']) {
 ?>

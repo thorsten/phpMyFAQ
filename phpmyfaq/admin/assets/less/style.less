@@ -24,9 +24,57 @@
 // ------------------------------------
 @import "../../../assets/template/default/less/style.less";
 
-// Sprite icons path
-@iconSpritePath:          "../img/glyphicons-halflings.png";
-@iconWhiteSpritePath:     "../img/glyphicons-halflings-white.png";
+//
+// Font Awesome
+//
+@import "../../../../vendor/Font-Awesome/less/font-awesome.less";
+
+@FontAwesomePath: "../font";
+
+// Global admin styles
+header {
+  h2 {
+    .border-radius(4px);
+    #gradient > .vertical(#4A515B, #3C4049);
+    font-size: 18px;
+    color: @white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    margin-bottom: 1.25em;
+    padding: 5px 10px;
+  }
+  h3 {
+    .border-radius(4px);
+    #gradient > .vertical(#FAFAFA, #E9E9E9);
+    border: 1px solid #D5D5D5;
+    font-size: 16px;
+    padding: 5px 10px;
+  }
+}
+
+section {
+  margin-bottom: 1.5em;
+}
+
+// Dashboard
+.dashboard-stat {
+  background: @white;
+  .border-radius(5px);
+  border: 1px solid #D5D5D5;
+  height: 70px;
+  padding: 15px;
+  font-style: italic;
+  text-align: center;
+  span {
+    font-size: 18px;
+    font-weight: 600;
+    font-style: normal;
+    display: block;
+    margin-bottom: 0.4em;
+    a {
+      color: @gray;
+    }
+  }
+}
 
 // Add / edit FAQs
 textarea.admin-question {

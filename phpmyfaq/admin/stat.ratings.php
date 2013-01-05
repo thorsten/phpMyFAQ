@@ -33,7 +33,7 @@ if ($permission['viewlog']) {
     $oldcategory = 0;
 ?>
         <header>
-            <h2><?php print $PMF_LANG["ad_rs"] ?></h2>
+            <h2><i class="icon-tasks"></i> <?php print $PMF_LANG["ad_rs"] ?></h2>
         </header>
 
         <table class="table table-striped">

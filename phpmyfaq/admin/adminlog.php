@@ -57,7 +57,9 @@ if ($permission['adminlog'] && 'adminlog' == $action) {
 
     $loggingData = $logging->getAll();
 ?>
-    <h2><?php print $PMF_LANG["ad_adminlog"]; ?></h2>
+    <header>
+        <h2><i class="icon-tasks"></i> <?php print $PMF_LANG["ad_adminlog"]; ?></h2>
+    </header>
     <table class="table table-striped">
     <thead>
         <tr>

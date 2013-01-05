@@ -225,8 +225,13 @@ if ($permission['editbt']|| $permission['addbt']) {
         }
 
     } else {
-        printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
-        printf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_entryins_fail']);
+        printf(
+            '<header><h2><i class="icon-pencil"></i> %s</h2></header>',
+            $PMF_LANG['ad_entry_aor']
+        );
+        printf(
+            '<p class="alert alert-error">%s</p>', $PMF_LANG['ad_entryins_fail']
+        );
 ?>
     <form action="?action=editpreview" method="post">
     <input type="hidden" name="question"            value="<?php print PMF_String::htmlspecialchars($question); ?>" />

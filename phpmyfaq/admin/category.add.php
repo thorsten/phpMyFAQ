@@ -23,7 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 ?>
         <header>
-            <h2><?php echo $PMF_LANG['ad_categ_new'] ?></h2>
+            <h2><i class="icon-list"></i> <?php echo $PMF_LANG['ad_categ_new'] ?></h2>
         </header>
 <?php
 if ($permission['addcateg']) {

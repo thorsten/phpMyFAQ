@@ -22,7 +22,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_glossary_edit']);
+printf('<header><h2><i class="icon-list-ul"></i> %s</h2></header>', $PMF_LANG['ad_glossary_edit']);
 
 if ($permission['editglossary']) {
     $id           = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);

@@ -23,7 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_export']);
+printf('<header><h2><i class="icon-book"></i> %s</h2></header>', $PMF_LANG['ad_menu_export']);
 
 if ($permission['export'] && !PMF_Db::checkOnEmptyTable('faqdata')) {
 

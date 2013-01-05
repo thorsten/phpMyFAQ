@@ -204,7 +204,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
         );
     } else {
         printf(
-            '<header><h2>%s</h2></header>',
+            '<header><h2><i class="icon-pencil"></i> %s</h2></header>',
             $PMF_LANG['ad_entry_add']
         );
     }

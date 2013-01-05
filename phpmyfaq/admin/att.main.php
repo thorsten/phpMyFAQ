@@ -40,7 +40,7 @@ $pagination = new PMF_Pagination(
     )
 );
 
-printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_attachment_admin']);
+printf('<header><h2><i class="icon-file"></i> %s</h2></header>', $PMF_LANG['ad_menu_attachment_admin']);
 
 ?>
         <table class="table table-striped">
@@ -49,8 +49,7 @@ printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_attachment_admin']);
                     <th><?php print $PMF_LANG['msgAttachmentsFilename'] ?></th>
                     <th><?php print $PMF_LANG['msgTransToolLanguage'] ?></th>
                     <th><?php print $PMF_LANG['msgAttachmentsFilesize'] ?></th>
-                    <th><?php print $PMF_LANG['msgAttachmentsMimeType'] ?></th>
-                    <th><?php print $PMF_LANG['msgTransToolActions'] ?></th>
+                    <th colspan="2"><?php print $PMF_LANG['msgAttachmentsMimeType'] ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -61,8 +60,9 @@ printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_attachment_admin']);
                     <td><?php print $item->filesize ?></td>
                     <td><?php print $item->mime_type ?></td>
                     <td>
-                        <a href="javascript:deleteAttachment(<?php print $item->id ?>); void(0);" class="btn btn-danger">
-                            <?php print $PMF_LANG['ad_gen_delete'] ?>
+                        <a href="javascript:deleteAttachment(<?php print $item->id ?>); void(0);" class="btn btn-danger"
+                           title="<?php echo $PMF_LANG['ad_gen_delete'] ?>">
+                            <i class="icon-trash"></i>
                         </a>
                     </td>
                 </tr>

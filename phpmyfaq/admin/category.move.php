@@ -41,7 +41,7 @@ if ($permission["editcateg"]) {
     );
 ?>
         <header>
-            <h2><?php print $header ?></h2>
+            <h2><i class="icon-list"></i> <?php print $header ?></h2>
         </header>
         <form class="form-horizontal" action="?action=changecategory" method="post">
             <input type="hidden" name="cat" value="<?php print $id; ?>" />

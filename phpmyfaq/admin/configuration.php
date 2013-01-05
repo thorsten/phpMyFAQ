@@ -74,7 +74,7 @@ if ($permission['editconfig']) {
         $userAction = 'listConfig';
 ?>
         <header>
-            <h2><?php echo $PMF_LANG['ad_config_edit']; ?></h2>
+            <h2><i class="icon-wrench"></i> <?php echo $PMF_LANG['ad_config_edit']; ?></h2>
         </header>
 
         <div id="user_message"><?php echo $message; ?></div>

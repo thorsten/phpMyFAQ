@@ -23,7 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 ?>
         <header>
-            <h2><?php print $PMF_LANG['ad_passwd_cop']; ?></h2>
+            <h2><i class="icon-lock"></i> <?php print $PMF_LANG['ad_passwd_cop']; ?></h2>
         </header>
 <?php
 if ($permission["passwd"]) {

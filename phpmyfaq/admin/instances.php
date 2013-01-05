@@ -23,7 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 ?>
     <header>
-        <h2><?php print $PMF_LANG['ad_menu_instances']; ?></h2>
+        <h2><i class="icon-wrench"></i> <?php print $PMF_LANG['ad_menu_instances']; ?></h2>
         <?php if ($permission['addinstances']): ?>
         <div>
             <a class="btn btn-primary" data-toggle="modal" href="#pmf-modal-add-instance">add new phpMyFAQ site</a>

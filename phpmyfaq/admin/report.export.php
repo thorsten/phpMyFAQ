@@ -117,8 +117,6 @@ if ($permission['reports']) {
         $content .= "\r\n";
     }
 
-
-
     $oHttpStreamer = new PMF_HttpStreamer('csv', $content);
     $oHttpStreamer->send(PMF_HttpStreamer::HTTP_CONTENT_DISPOSITION_ATTACHMENT);
 

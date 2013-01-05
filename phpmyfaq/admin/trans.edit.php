@@ -76,7 +76,7 @@ $pageBar    = $pagination->render();
 $leftNPlurals  = (int)$_SESSION['trans']['leftVarsOnly']['PMF_LANG[nplurals]'];
 $rightNPlurals = (int)$rightVarsOnly['PMF_LANG[nplurals]'];
 
-printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_translations']);
+printf('<header><h2><i class="icon-wrench"></i> %s</h2></header>', $PMF_LANG['ad_menu_translations']);
 printf('<p style="color: red;">%s</p>', $PMF_LANG['msgTransToolNoteFileSaving']);
 
 $NPluralsErrorReported = false;

@@ -23,7 +23,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-printf("<header><h2>%s</h2><header>\n", $PMF_LANG['ad_entry_aor']);
+printf(
+    '<header><h2><i class="icon-pencil"></i> %s</h2><header>',
+    $PMF_LANG['ad_entry_aor']
+);
 
 if ($permission['editbt'] || $permission['delbt']) {
 

@@ -52,7 +52,7 @@ if ($permission['editcateg']) {
 ?>
 
         <header>
-            <h2><?php echo $header; ?></h2>
+            <h2><i class="icon-list"></i> <?php echo $header; ?></h2>
         </header>
 
         <form class="form-horizontal" action="?action=updatecategory" method="post">

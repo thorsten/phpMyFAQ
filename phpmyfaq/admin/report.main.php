@@ -25,7 +25,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 if ($permission['reports']) {
 ?>
-    <h2><?php echo $PMF_LANG['ad_menu_reports']; ?></h2>
+    <header>
+        <h2><i class="icon-tasks"></i>  <?php echo $PMF_LANG['ad_menu_reports']; ?></h2>
+    </header>
 
     <form class="form-horizontal" action="?action=reportview" method="post">
     <fieldset>

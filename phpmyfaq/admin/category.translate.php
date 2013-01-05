@@ -47,7 +47,7 @@ if ($permission["editcateg"]) {
     $group_permission = $category->getPermissions('group', array($id));
 ?>
         <header>
-            <h2><?php print $header ?></h2>
+            <h2><i class="icon-list"></i> <?php print $header ?></h2>
         </header>
         <form class="form-horizontal" action="?action=updatecategory" method="post">
             <input type="hidden" name="id" value="<?php print $id; ?>" />

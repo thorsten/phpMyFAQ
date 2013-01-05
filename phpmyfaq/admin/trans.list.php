@@ -32,7 +32,7 @@ $transDir           = new DirectoryIterator($langDir);
 $isTransDirWritable = is_writable($langDir);
 $tt                 = new PMF_TransTool;
 
-printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_translations']);
+printf('<header><h2><i class="icon-wrench"></i> %s</h2></header>', $PMF_LANG['ad_menu_translations']);
 ?>
         <p><?php echo $PMF_LANG['msgChooseLanguageToTranslate'] ?>:</p>
 

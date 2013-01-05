@@ -23,7 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 ?>
         <header>
-            <h2><?php print $PMF_LANG['ad_menu_categ_edit']; ?>
+            <h2><i class="icon-list"></i> <?php echo $PMF_LANG['ad_menu_categ_edit'] ?></h2>
         </header>
 <?php
 $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);

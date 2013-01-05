@@ -399,11 +399,38 @@ if (isset($auth) && in_array(true, $permission)) {
         $faqTableInfo = $faqConfig->getDb()->getTableStatus();
         $faqSystem = new PMF_System();
 ?>
-
             <header>
-                <h2><?php print $PMF_LANG['ad_pmf_info']; ?></h2>
+                <h2><i class="icon-dashboard"></i> <?php print $PMF_LANG['ad_pmf_info']; ?></h2>
             </header>
 
+            <section class="row-fluid">
+                <div class="dashboard-stat span2">
+                    <span><a href="?action=viewsessions"><?php echo $PMF_LANG['ad_start_visits'] ?></a></span>
+                    <?php echo $faqTableInfo[PMF_Db::getTablePrefix() . 'faqsessions']; ?>
+                </div>
+                <div class="dashboard-stat span2">
+                    <span><a href="?action=view"><?php echo $PMF_LANG["ad_start_articles"]; ?></a></span>
+                    <?php echo $faqTableInfo[PMF_Db::getTablePrefix() . "faqdata"]; ?>
+                </div>
+                <div class="dashboard-stat span2">
+                    <span><a href="?action=comments"><?php echo $PMF_LANG["ad_start_comments"]; ?></a></span>
+                    <?php echo $faqTableInfo[PMF_Db::getTablePrefix() . "faqcomments"]; ?>
+                </div>
+                <div class="dashboard-stat span2">
+                    <span><a href="?action=question"><?php echo $PMF_LANG["msgOpenQuestions"]; ?></a></span>
+                    <?php echo $faqTableInfo[PMF_Db::getTablePrefix() . "faqquestions"]; ?>
+                </div>
+                <div class="dashboard-stat span2">
+                    <span><a href="?action=news"><?php echo $PMF_LANG["msgNews"]; ?></a></span>
+                    <?php echo $faqTableInfo[PMF_Db::getTablePrefix() . "faqnews"]; ?>
+                </div>
+                <div class="dashboard-stat span2">
+                    <span><a href="?action=user&user_action=listallusers"><?php echo $PMF_LANG['admin_mainmenu_users']; ?></a></span>
+                    <?php echo $faqTableInfo[PMF_Db::getTablePrefix() . 'faquser'] - 1; ?>
+                </div>
+            </section>
+
+            <!--
             <table class="table table-striped">
             <tbody>
                 <tr>
@@ -416,36 +443,13 @@ if (isset($auth) && in_array(true, $permission)) {
                         <?php endif; ?>
                     </td>
                 </tr>
-                <tr>
-                    <td><strong><a href="?action=viewsessions"><?php print $PMF_LANG["ad_start_visits"]; ?></a></strong></td>
-                    <td><?php print $faqTableInfo[PMF_Db::getTablePrefix() . "faqsessions"]; ?></td>
-                </tr>
-                <tr>
-                    <td><strong><a href="?action=view"><?php print $PMF_LANG["ad_start_articles"]; ?></a></strong></td>
-                    <td><?php print $faqTableInfo[PMF_Db::getTablePrefix() . "faqdata"]; ?></td>
-                </tr>
-                <tr>
-                    <td><strong><a href="?action=comments"><?php print $PMF_LANG["ad_start_comments"]; ?></strong></a></td>
-                    <td><?php print $faqTableInfo[PMF_Db::getTablePrefix() . "faqcomments"]; ?></td>
-                </tr>
-                <tr>
-                    <td><strong><a href="?action=question"><?php print $PMF_LANG["msgOpenQuestions"]; ?></strong></a></td>
-                    <td><?php print $faqTableInfo[PMF_Db::getTablePrefix() . "faqquestions"]; ?></td>
-                </tr>
-                <tr>
-                    <td><strong><a href="?action=news"><?php print $PMF_LANG["msgNews"]; ?></strong></a></td>
-                    <td><?php print $faqTableInfo[PMF_Db::getTablePrefix() . "faqnews"]; ?></td>
-                </tr>
-                <tr>
-                    <td><strong><a href="?action=user&user_action=listallusers"><?php print $PMF_LANG['admin_mainmenu_users']; ?></strong></a></td>
-                    <td><?php print $faqTableInfo[PMF_Db::getTablePrefix() . 'faquser'] - 1; ?></td>
-                </tr>
             </tbody>
             </table>
+            -->
         </section>
 
         <section class="row-fluid">
-            <div class="span5">
+            <div class="span6">
                 <header>
                     <h3><?php print $PMF_LANG['ad_online_info']; ?></h3>
                 </header>
@@ -483,7 +487,7 @@ if (isset($auth) && in_array(true, $permission)) {
 ?>
                 </p>
             </div>
-            <div class="span5">
+            <div class="span6">
                 <header>
                     <h3><?php print $PMF_LANG['ad_online_verification'] ?></h3>
                 </header>
@@ -572,8 +576,6 @@ if (isset($auth) && in_array(true, $permission)) {
                 </tbody>
                 </table>
             </div>
-
-            <p>phpMyFAQ uses <a href="http://glyphicons.com/">Glyphicons</a>.</p>
 
             <div style="font-size: 5px; text-align: right; color: #f5f5f5">NOTE: Art is resistance.</div>
         </section>

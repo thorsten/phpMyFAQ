@@ -23,7 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($permission['editconfig']) {
-    printf('<header><h2>%s</h2></header>', $PMF_LANG['ad_menu_stopwordsconfig']);
+    printf('<header><h2><i class="icon-wrench"></i> %s</h2></header>', $PMF_LANG['ad_menu_stopwordsconfig']);
 
     $sortedLanguageCodes = $languageCodes;
     asort($sortedLanguageCodes);

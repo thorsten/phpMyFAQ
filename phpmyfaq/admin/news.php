@@ -31,7 +31,7 @@ $user = PMF_User_CurrentUser::getFromSession($faqConfig);
 if ('addnews' == $action && $permission["addnews"]) {
 ?>
         <header>
-            <h2><?php print $PMF_LANG['ad_news_data']; ?></h2>
+            <h2><i class="icon-pencil"></i> <?php print $PMF_LANG['ad_news_data']; ?></h2>
         </header>
 
         <form class="form-horizontal" id="faqEditor" name="faqEditor" action="?action=savenews" method="post">
@@ -155,7 +155,7 @@ if ('addnews' == $action && $permission["addnews"]) {
 } elseif ('news' == $action && $permission["editnews"]) {
 ?>
         <header>
-            <h2><?php print $PMF_LANG["msgNews"]; ?></h2>
+            <h2><i class="icon-pencil"></i> <?php print $PMF_LANG["msgNews"]; ?></h2>
         </header>
     
         <p>
@@ -206,7 +206,7 @@ if ('addnews' == $action && $permission["addnews"]) {
     $newsData = $news->getNewsEntry($id, true);
 ?>
         <header>
-            <h2><?php print $PMF_LANG['ad_news_data']; ?></h2>
+            <h2><i class="icon-pencil"></i> <?php print $PMF_LANG['ad_news_data']; ?></h2>
         </header>
 
         <form class="form-horizontal" action="?action=updatenews" method="post">
@@ -342,12 +342,22 @@ if ('addnews' == $action && $permission["addnews"]) {
     $comments = $oComment->getCommentsData($newsId, PMF_Comment::COMMENT_TYPE_NEWS);
     if (count($comments) > 0) {
 ?>
-            <div class="control-group"><strong><?php print $PMF_LANG["ad_entry_comment"] ?></strong></p>
+            <div class="control-group"><strong><?php print $PMF_LANG["ad_entry_comment"] ?></strong></div>
 <?php
     }
     foreach ($comments as $item) {
 ?>
-    <div class="control-group"><?php print $PMF_LANG["ad_entry_commentby"] ?> <a href="mailto:<?php print($item['email']); ?>"><?php print($item['user']); ?></a>:<br /><?php print($item['content']); ?><br /><?php print($PMF_LANG['newsCommentDate'].PMF_Date::createIsoDate($item['date'], 'Y-m-d H:i', false)); ?><a href="?action=delcomment&amp;artid=<?php print($newsId); ?>&amp;cmtid=<?php print($item['id']); ?>&amp;type=<?php print(PMF_Comment::COMMENT_TYPE_NEWS);?>"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></p>
+    <div class="control-group">
+        <?php print $PMF_LANG["ad_entry_commentby"] ?>
+        <a href="mailto:<?php print($item['email']); ?>">
+            <?php print($item['user']); ?>
+        </a>:<br />
+        <?php print($item['content']); ?><br />
+        <?php print($PMF_LANG['newsCommentDate'] . PMF_Date::createIsoDate($item['date'], 'Y-m-d H:i', false)); ?>
+        <a href="?action=delcomment&amp;artid=<?php print($newsId); ?>&amp;cmtid=<?php print($item['id']); ?>&amp;type=<?php print(PMF_Comment::COMMENT_TYPE_NEWS);?>">
+            <img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" />
+        </a>
+    </div>
 <?php
     }
 } elseif ('savenews' == $action && $permission["addnews"]) {
