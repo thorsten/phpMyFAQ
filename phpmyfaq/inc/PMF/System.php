@@ -48,7 +48,7 @@ class PMF_System
     /**
      * Pre-release version
      */
-    const VERSION_PRERELEASE = 'beta2';
+    const VERSION_PRERELEASE = 'beta3';
 
     /**
      * API version
