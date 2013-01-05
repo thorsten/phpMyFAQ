@@ -56,9 +56,6 @@
 @baseLineHeight:        18px;
 @textColor:             @grayDark;
 
-// Buttons
-@primaryButtonBackground:    @linkColor;
-
 // Component colors
 @zindexDropdown:          1000;
 @zindexPopover:           1010;
@@ -101,6 +98,11 @@
 @infoBackground:          #d9edf7;
 @infoBorder:              darken(spin(@infoBackground, -10), 7%);
 
+// Forms and Buttons
+.btn-primary {
+  .buttonBackground(#FBB450, #F89406);
+}
+
 //
 // The Grid
 // --------
@@ -119,7 +121,7 @@
 // phpMyFAQ styles
 // ---------------
 body {
-    background: #f5f5f5;
+    background: #f6f6f6;
 }
 
 .navbar-inner {

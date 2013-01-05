@@ -256,11 +256,15 @@ switch ($action) {
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <?php print $PMF_LANG['ad_session_expiration']; ?>: <span id="sessioncounter">Loading...</span>
+                                <a href="index.php?action=passwd">
+                                    <i class="icon-lock"></i> <?php echo $PMF_LANG['ad_menu_passwd'] ?>
+                                </a>
                             </li>
                             <li class="divider"></li>
                             <li>
-                                <a href="index.php?action=logout"><i class="icon-off"></i> <?php print $PMF_LANG['admin_mainmenu_logout']; ?></a>
+                                <a href="index.php?action=logout">
+                                    <i class="icon-off"></i> <?php echo $PMF_LANG['admin_mainmenu_logout']; ?>
+                                </a>
                             </li>
                         </ul>
                     </li>
@@ -286,8 +290,8 @@ switch ($action) {
                         <?php print $secLevelEntries; ?>
                         <li class="nav-header">Admin worklog</li>
                         <li><span id="saving_data_indicator"></span></li>
-                        <li class="nav-header">Found an issue?</li>
-                        <li><a href="https://github.com/thorsten/phpMyFAQ/issues/" target="_blank">Please report it here</a></li>
+                        <li class="nav-header"><?php echo $PMF_LANG['ad_session_expiration']; ?></li>
+                        <li><span id="sessioncounter">Loading...</span></li>
                     </ul>
                 </div>
             </div>
