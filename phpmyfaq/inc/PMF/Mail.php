@@ -278,7 +278,7 @@ class PMF_Mail
         // Sanity check
         if (!self::validateEmail($address)) {
             trigger_error(
-                "<b>Mail Class</b>: $address is not a valid e-mail address!",
+                "<strong>Mail Class</strong>: $address is not a valid e-mail address!",
                 E_USER_ERROR
             );
             return false;
@@ -287,7 +287,7 @@ class PMF_Mail
         // Don't allow duplicated addresses
         if (array_key_exists($address, $target)) {
             trigger_error(
-                "<b>Mail Class</b>: $address has been already added in '$targetAlias'!",
+                "<strong>Mail Class</strong>: $address has been already added in '$targetAlias'!",
                 E_USER_WARNING
             );
             return false;
@@ -511,7 +511,7 @@ class PMF_Mail
         if (count($target) > 0) {
             $keys = array_keys($target);
             trigger_error(
-                "<b>Mail Class</b>: a valid e-mail address, $keys[0], has been already added as '$targetAlias'!",
+                "<strong>Mail Class</strong>: a valid e-mail address, $keys[0], has been already added as '$targetAlias'!",
                 E_USER_ERROR
             );
             return false;
@@ -721,7 +721,7 @@ class PMF_Mail
         // Sanity check
         if (count($this->_to) + count($this->_cc) + count($this->_bcc) < 1) {
             trigger_error(
-                "<b>Mail Class</b>: you need at least to set one recipient among TO, CC and BCC!",
+                "<strong>Mail Class</strong>: you need at least to set one recipient among TO, CC and BCC!",
                 E_USER_ERROR
             );
             return false;
@@ -753,7 +753,6 @@ class PMF_Mail
         // i.e. we must prepare recipients, headers, body for the send() method
 
         // Prepare the recipients
-        $recipients = '';
         $to = array();
         foreach($this->_to as $address => $name) {
             $to[] = (empty($name) ? '' : $name.' ').'<'.$address.'>';
@@ -771,14 +770,16 @@ class PMF_Mail
         $this->_createBody();
 
         // Send the email adopting to the given MUA
-        $sent = false;
         $mua  = self::getMUA($this->agent);
-        switch($this->agent) {
+        switch ($this->agent) {
             case 'built-in':
                 $sent = $mua->send($recipients, $this->headers, $this->body);
                 break;
             default:
-                trigger_error("<b>Mail Class</b>: $this->agent has no implementation!", E_USER_ERROR);
+                trigger_error(
+                    "<strong>Mail Class</strong>: $this->agent has no implementation!",
+                    E_USER_ERROR
+                );
                 $sent = false;
         }
 
@@ -836,7 +837,7 @@ class PMF_Mail
 
         if ($inline) {
             trigger_error(
-                "<b>Mail Class</b>: inline option is not implemented yet.",
+                "<strong>Mail Class</strong>: inline option is not implemented yet.",
                 E_USER_ERROR
             );
         }
