@@ -87,7 +87,7 @@ if ($permission['editconfig']) {
                     <?php echo $PMF_LANG['mainControlCenter']; ?>
                 </a>
             </p>
-            <div id="configMain" style="display: none;"></div>
+            <div id="configMain" class="hide"></div>
 
             <p>
                 <a class="btn btn-inverse" href="javascript:void(0);" onclick="javascript:toggleConfig('Records');">
@@ -95,7 +95,7 @@ if ($permission['editconfig']) {
                     <?php echo $PMF_LANG['recordsControlCenter']; ?>
                 </a>
             </p>
-            <div id="configRecords" style="display: none;"></div>
+            <div id="configRecords" class="hide"></div>
 
             <p>
                 <a class="btn btn-inverse" href="javascript:void(0);" onclick="javascript:toggleConfig('Search');">
@@ -103,7 +103,7 @@ if ($permission['editconfig']) {
                     <?php echo $PMF_LANG['searchControlCenter']; ?>
                 </a>
             </p>
-            <div id="configSearch" style="display: none;"></div>
+            <div id="configSearch" class="hide"></div>
 
             <p>
                 <a class="btn btn-inverse" href="javascript:void(0);" onclick="javascript:toggleConfig('Security');">
@@ -111,7 +111,7 @@ if ($permission['editconfig']) {
                     <?php echo $PMF_LANG['securityControlCenter']; ?>
                 </a>
             </p>
-            <div id="configSecurity" style="display: none;"></div>
+            <div id="configSecurity" class="hide"></div>
 
             <p>
                 <a class="btn btn-inverse" href="javascript:void(0);" onclick="javascript:toggleConfig('Spam');">
@@ -119,7 +119,7 @@ if ($permission['editconfig']) {
                     <?php echo $PMF_LANG['spamControlCenter']; ?>
                 </a>
             </p>
-            <div id="configSpam" style="display: none;"></div>
+            <div id="configSpam" class="hide"></div>
 
             <p>
                 <a class="btn btn-inverse" href="javascript:void(0);" onclick="javascript:toggleConfig('SocialNetworks');">
@@ -127,7 +127,7 @@ if ($permission['editconfig']) {
                     <?php echo $PMF_LANG['socialNetworksControlCenter']; ?>
                 </a>
             </p>
-            <div id="configSocialNetworks" style="display: none;"></div>
+            <div id="configSocialNetworks" class="hide"></div>
 
             <!--
             <p>
@@ -135,7 +135,7 @@ if ($permission['editconfig']) {
                     <?php echo $PMF_LANG['cacheControlCenter']; ?>
                 </a>
             </p>
-            <div id="configCache" style="display: none;"></div>
+            <div id="configCache" class="hide"></div>
             -->
 
             <p>
