@@ -282,7 +282,14 @@ if ($groupAction == 'list') {
 ?>
 
         <header>
-            <h2><i class="icon-user"></i> <?php print $PMF_LANG['ad_menu_group_administration']; ?></h2>
+            <h2>
+                <i class="icon-user"></i> <?php print $PMF_LANG['ad_menu_group_administration']; ?>
+                <div class="pull-right">
+                    <a class="btn btn-success" href="?action=group&amp;group_action=add">
+                        <i class="icon-plus"></i> <?php print $PMF_LANG['ad_group_add_link']; ?>
+                    </a>
+                </div>
+            </h2>
         </header>
     
         <script type="text/javascript">
@@ -349,7 +356,7 @@ function clearGroupData()
 /**
  * Returns the group data as JSON object and fills the input forms
  *
- * @param integer group_id Group ID
+ * @param group_id Group ID
  */
 function getGroupData(group_id)
 {
@@ -379,7 +386,7 @@ function clearGroupRights()
 /**
  * Returns the group rights as JSON object and checks the checkboxes
  *
- * @param integer group_id Group ID
+ * @param group_id Group ID
  */
 function getGroupRights(group_id)
 {
@@ -434,7 +441,7 @@ function getUserList()
 {
     $.getJSON("index.php?action=ajax&ajax=group&ajaxaction=get_all_users",
         function(data) {
-    	$('#group_user_list').empty();
+        $('#group_user_list').empty();
             $.each(data, function(i, val) {
                 $('#group_user_list').append('<option value="' + val.user_id + '">' + val.login + '</option>');
             });
@@ -464,13 +471,13 @@ function getMemberList(group_id)
         return;
     }
     $.getJSON("index.php?action=ajax&ajax=group&ajaxaction=get_all_members&group_id=" + group_id,
-            function(data) {
-                $('#group_member_list').empty();
-                $.each(data, function(i, val) {
-                    $('#group_member_list').append('<option value="' + val.user_id + '">' + val.login + '</option>');
-                });
-                $('#update_member_group_id').val(group_id);
+        function(data) {
+            $('#group_member_list').empty();
+            $.each(data, function(i, val) {
+                $('#group_member_list').append('<option value="' + val.user_id + '">' + val.login + '</option>');
             });
+            $('#update_member_group_id').val(group_id);
+        });
 }
 
 /**
@@ -506,7 +513,7 @@ function addGroupMembers()
             });
 
             if (isMember == false) {
-            	$('#group_member_list').append('<option value="' + $(this).val() + '">' + $(this).text() + '</option>');
+                $('#group_member_list').append('<option value="' + $(this).val() + '">' + $(this).text() + '</option>');
             }
             
         });
@@ -557,11 +564,6 @@ getGroupList();
                         </p>
                     </form>
                 </fieldset>
-                <p>
-                    <a class="btn btn-success" href="?action=group&amp;group_action=add">
-                        <?php print $PMF_LANG['ad_group_add_link']; ?>
-                    </a>
-                </p>
             </div>
 
             <div class="span4" id="groupMemberships">

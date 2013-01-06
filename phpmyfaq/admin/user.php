@@ -347,7 +347,19 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     if ($userAction == 'list') {
 ?>
         <header>
-            <h2><i class="icon-user"></i> <?php print $PMF_LANG['ad_user']; ?></h2>
+            <h2>
+                <i class="icon-user"></i> <?php print $PMF_LANG['ad_user']; ?>
+                <div class="pull-right">
+                    <a class="btn btn-success" href="?action=user&amp;user_action=add">
+                        <i class="icon-plus"></i> <?php print $PMF_LANG["ad_user_add"]; ?>
+                    </a>
+                    <?php if ($permission['edituser']): ?>
+                    <a class="btn btn-info" href="?action=user&amp;user_action=listallusers">
+                        <i class="icon-list"></i> <?php print $PMF_LANG['list_all_users']; ?>
+                    </a>
+                    <?php endif; ?>
+                </div>
+            </h2>
         </header>
 
         <script type="text/javascript" src="assets/js/user.js"></script>
@@ -429,20 +441,6 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                             </button>
                         </p>
                     </form>
-                </fieldset>
-                <fieldset>
-                    <p>
-                        <a class="btn btn-success" href="?action=user&amp;user_action=add">
-                            <?php print $PMF_LANG["ad_user_add"]; ?>
-                        </a>
-                        <?php if ($permission['edituser']): ?>
-                        <br/>
-                        <br/>
-                        <a class="btn btn-info" href="?action=user&amp;user_action=listallusers">
-                            <?php print $PMF_LANG['list_all_users']; ?>
-                        </a>
-                        <?php endif; ?>
-                    </p>
                 </fieldset>
             </div>
             <div class="span4" id="userDetails">
@@ -540,7 +538,14 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         $pagination = new PMF_Pagination($faqConfig, $options);
 ?>
         <header>
-            <h2><i class="icon-user"></i> <?php print $PMF_LANG['ad_user']; ?></h2>
+            <h2>
+                <i class="icon-user"></i> <?php print $PMF_LANG['ad_user']; ?>
+                <div class="pull-right">
+                    <a class="btn btn-success" href="?action=user&amp;user_action=add">
+                        <i class="icon-plus"></i> <?php print $PMF_LANG["ad_user_add"]; ?>
+                    </a>
+                </div>
+            </h2>
         </header>
         <div id="user_message"><?php print $message; ?></div>
         <table class="table table-striped">
