@@ -124,5 +124,10 @@ Licensed under the terms of the GNU Lesser General Public License
 
 Licensed under the terms of the MIT License
 
+**[Font Awesome](http://fortawesome.github.com/Font-Awesome/)**
+
+Licenced under the terms of the SIL Open Font License and MIT License
+
+
 
 Copyright (c) 2001-2013 Thorsten Rinne and the phpMyFAQ Team
