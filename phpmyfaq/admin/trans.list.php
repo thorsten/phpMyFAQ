@@ -31,9 +31,20 @@ $langDir            = PMF_ROOT_DIR . DIRECTORY_SEPARATOR . "lang";
 $transDir           = new DirectoryIterator($langDir);
 $isTransDirWritable = is_writable($langDir);
 $tt                 = new PMF_TransTool;
-
-printf('<header><h2><i class="icon-wrench"></i> %s</h2></header>', $PMF_LANG['ad_menu_translations']);
 ?>
+        <header>
+            <h2>
+                <i class="icon-wrench"></i> <?php echo $PMF_LANG['ad_menu_translations'] ?>
+                <?php if($permission["addtranslation"] && $isTransDirWritable): ?>
+                <div class="pull-right">
+                    <a class="btn btn-success" href="?action=transadd">
+                        <i class="icon-plus"></i> <?php echo $PMF_LANG['msgTransToolAddNewTranslation'] ?>
+                    </a>
+                </div>
+                <?php endif; ?>
+            </h2>
+        </header>
+
         <p><?php echo $PMF_LANG['msgChooseLanguageToTranslate'] ?>:</p>
 
         <?php if(!$isTransDirWritable):
@@ -42,15 +53,6 @@ printf('<header><h2><i class="icon-wrench"></i> %s</h2></header>', $PMF_LANG['ad
 
         <table class="table table-striped">
         <thead>
-            <?php if($permission["addtranslation"] && $isTransDirWritable): ?>
-            <tr>
-                <th colspan="6">
-                    <a class="btn btn-primary" href="?action=transadd">
-                        <?php echo $PMF_LANG['msgTransToolAddNewTranslation'] ?>
-                    </a>
-                </th>
-            </tr>
-            <?php endif; ?>
             <tr>
                 <th><?php echo $PMF_LANG['msgTransToolLanguage'] ?></th>
                 <th colspan="3"><?php echo $PMF_LANG['msgTransToolActions'] ?></th>

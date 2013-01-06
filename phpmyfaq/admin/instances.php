@@ -23,12 +23,16 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 ?>
     <header>
-        <h2><i class="icon-wrench"></i> <?php print $PMF_LANG['ad_menu_instances']; ?></h2>
-        <?php if ($permission['addinstances']): ?>
-        <div>
-            <a class="btn btn-primary" data-toggle="modal" href="#pmf-modal-add-instance">add new phpMyFAQ site</a>
-        </div>
-        <?php endif; ?>
+        <h2>
+            <i class="icon-wrench"></i> <?php print $PMF_LANG['ad_menu_instances']; ?>
+            <?php if ($permission['addinstances']): ?>
+            <div class="pull-right">
+                <a class="btn btn-success" data-toggle="modal" href="#pmf-modal-add-instance">
+                    <i class="icon-plus"></i> add new phpMyFAQ site
+                </a>
+            </div>
+            <?php endif; ?>
+        </h2>
     </header>
 <?php
 if ($permission['editinstances']) {

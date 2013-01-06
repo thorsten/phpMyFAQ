@@ -155,14 +155,16 @@ if ('addnews' == $action && $permission["addnews"]) {
 } elseif ('news' == $action && $permission["editnews"]) {
 ?>
         <header>
-            <h2><i class="icon-pencil"></i> <?php print $PMF_LANG["msgNews"]; ?></h2>
+            <h2>
+                <i class="icon-pencil"></i> <?php echo $PMF_LANG["msgNews"] ?>
+                <div class="pull-right">
+                    <a class="btn btn-success" href="?action=addnews">
+                        <i class="icon-plus icon-white"></i> <?php echo $PMF_LANG["ad_menu_news_add"] ?>
+                    </a>
+                </div>
+            </h2>
         </header>
-    
-        <p>
-            <a class="btn btn-success" href="?action=addnews">
-                <i class="icon-plus icon-white"></i> <?php print $PMF_LANG["ad_menu_news_add"]; ?>
-            </a>
-        </p>
+
         <table class="table table-striped">
         <thead>
             <tr>

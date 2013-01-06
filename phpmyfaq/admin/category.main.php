@@ -23,7 +23,17 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 ?>
         <header>
-            <h2><i class="icon-list"></i> <?php echo $PMF_LANG['ad_menu_categ_edit'] ?></h2>
+            <h2>
+                <i class="icon-list"></i> <?php echo $PMF_LANG['ad_menu_categ_edit'] ?>
+                <div class="pull-right">
+                    <a class="btn btn-success" href="?action=addcategory">
+                        <i class="icon-plus icon-white"></i> <?php print $PMF_LANG['ad_kateg_add']; ?>
+                    </a>
+                    <a class="btn btn-info" href="?action=showcategory">
+                        <i class="icon-th icon-white"></i> <?php print $PMF_LANG['ad_categ_show'];?>
+                    </a>
+                </div>
+            </h2>
         </header>
 <?php
 $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
@@ -225,16 +235,7 @@ if ($permission['editcateg']) {
             );
         }
     }
-?>
-        <p>
-            <a class="btn btn-success" href="?action=addcategory">
-                <i class="icon-plus icon-white"></i> <?php print $PMF_LANG['ad_kateg_add']; ?>
-            </a>
-            <a class="btn btn-info" href="?action=showcategory">
-                <i class="icon-th icon-white"></i> <?php print $PMF_LANG['ad_categ_show'];?>
-            </a>
-        </p>
-<?php
+
     // Lists all categories
     $lang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING, $LANGCODE);
 
