@@ -246,6 +246,15 @@ switch ($action) {
                     </li>
                 </ul>
                 <ul class="nav pull-right">
+                    <li>
+                        <a href="?action=config">
+                        <?php if ($faqConfig->get('main.maintenanceMode')): ?>
+                        <span class="label label-important"><?php print $PMF_LANG['msgMaintenanceMode']; ?></span>
+                        <?php else: ?>
+                        <span class="label label-success"><?php print $PMF_LANG['msgOnlineMode']; ?></span>
+                        <?php endif; ?>
+                        </a>
+                    </li>
                     <li class="divider-vertical"></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">

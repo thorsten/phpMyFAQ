@@ -430,29 +430,11 @@ if (isset($auth) && in_array(true, $permission)) {
                 </div>
             </section>
 
-            <!--
-            <table class="table table-striped">
-            <tbody>
-                <tr>
-                    <td><strong><a href="?action=config"><?php print $PMF_LANG['msgMode']; ?></a></strong></td>
-                    <td>
-                        <?php if ($faqConfig->get('main.maintenanceMode')): ?>
-                        <span class="label label-important"><?php print $PMF_LANG['msgMaintenanceMode']; ?></span>
-                        <?php else: ?>
-                        <span class="label label-success"><?php print $PMF_LANG['msgOnlineMode']; ?></span>
-                        <?php endif; ?>
-                    </td>
-                </tr>
-            </tbody>
-            </table>
-            -->
-        </section>
-
-        <section class="row-fluid">
-            <div class="span6">
-                <header>
-                    <h3><?php print $PMF_LANG['ad_online_info']; ?></h3>
-                </header>
+            <section class="row-fluid">
+                <div class="span6">
+                    <header>
+                        <h3><?php print $PMF_LANG['ad_online_info']; ?></h3>
+                    </header>
 <?php
         $version = PMF_Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_STRING);
         if (!is_null($version) && $version == 'version') {
@@ -474,23 +456,23 @@ if (isset($auth) && in_array(true, $permission)) {
             }
         } else {
 ?>
-                <p>
-                    <form action="index.php" method="post">
-                        <input type="hidden" name="param" value="version" />
-                        <button class="btn btn-primary" type="submit">
-                            <i class="icon-check icon-white"></i> <?php print $PMF_LANG["ad_xmlrpc_button"]; ?>
-                        </button>
-                    </form>
-                </p>
+                    <p>
+                        <form action="index.php" method="post">
+                            <input type="hidden" name="param" value="version" />
+                            <button class="btn btn-primary" type="submit">
+                                <i class="icon-check icon-white"></i> <?php print $PMF_LANG["ad_xmlrpc_button"]; ?>
+                            </button>
+                        </form>
+                    </p>
 <?php
         }
 ?>
-                </p>
-            </div>
-            <div class="span6">
-                <header>
-                    <h3><?php print $PMF_LANG['ad_online_verification'] ?></h3>
-                </header>
+                    </p>
+                </div>
+                <div class="span6">
+                    <header>
+                        <h3><?php print $PMF_LANG['ad_online_verification'] ?></h3>
+                    </header>
 <?php
         $getJson = PMF_Filter::filterInput(INPUT_POST, 'getJson', FILTER_SANITIZE_STRING);
         if (!is_null($getJson) && 'verify' === $getJson) {
@@ -531,54 +513,54 @@ if (isset($auth) && in_array(true, $permission)) {
 
         } else {
 ?>
-                <p>
-                    <form action="index.php" method="post">
-                        <input type="hidden" name="getJson" value="verify" />
-                        <button class="btn btn-primary" type="submit">
-                            <i class="icon-certificate icon-white"></i> <?php print $PMF_LANG["ad_verification_button"] ?>
-                        </button>
-                    </form>
-                </p>
+                    <p>
+                        <form action="index.php" method="post">
+                            <input type="hidden" name="getJson" value="verify" />
+                            <button class="btn btn-primary" type="submit">
+                                <i class="icon-certificate icon-white"></i> <?php print $PMF_LANG["ad_verification_button"] ?>
+                            </button>
+                        </form>
+                    </p>
 <?php
         }
 ?>
-                <script>$(function(){ $('span[class="pmf-popover"]').popover();});</script>
-            </div>
-        </section>
+                    <script>$(function(){ $('span[class="pmf-popover"]').popover();});</script>
+                </div>
+            </section>
 
-        <section class="row-fluid">
-            <header>
-                <h3><?php print $PMF_LANG['ad_system_info']; ?></h3>
-            </header>
-            <div class="pmf-system-information">
-                <table class="table table-striped">
-                <tbody>
-                    <?php
-                    $systemInformation = array(
-                        'phpMyFAQ Version'    => $faqSystem->getVersion(),
-                        'Server Software'     => $_SERVER['SERVER_SOFTWARE'],
-                        'PHP Version'         => PHP_VERSION,
-                        'Register Globals'    => ini_get('register_globals') == 1 ? 'on' : 'off',
-                        'safe Mode'           => ini_get('safe_mode') == 1 ? 'on' : 'off',
-                        'Open Basedir'        => ini_get('open_basedir') == 1 ? 'on' : 'off',
-                        'DB Server'           => PMF_Db::getType(),
-                        'DB Client Version'   => $faqConfig->getDb()->clientVersion(),
-                        'DB Server Version'   => $faqConfig->getDb()->serverVersion(),
-                        'Webserver Interface' => strtoupper(@php_sapi_name()),
-                        'PHP Extensions'      => implode(', ', get_loaded_extensions())
-                    );
-                    foreach ($systemInformation as $name => $info): ?>
-                    <tr>
-                        <td class="span3"><strong><?php print $name ?></strong></td>
-                        <td><?php print $info ?></td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-                </table>
-            </div>
+            <section class="row-fluid">
+                <header>
+                    <h3><?php print $PMF_LANG['ad_system_info']; ?></h3>
+                </header>
+                <div class="pmf-system-information">
+                    <table class="table table-striped">
+                    <tbody>
+                        <?php
+                        $systemInformation = array(
+                            'phpMyFAQ Version'    => $faqSystem->getVersion(),
+                            'Server Software'     => $_SERVER['SERVER_SOFTWARE'],
+                            'PHP Version'         => PHP_VERSION,
+                            'Register Globals'    => ini_get('register_globals') == 1 ? 'on' : 'off',
+                            'safe Mode'           => ini_get('safe_mode') == 1 ? 'on' : 'off',
+                            'Open Basedir'        => ini_get('open_basedir') == 1 ? 'on' : 'off',
+                            'DB Server'           => PMF_Db::getType(),
+                            'DB Client Version'   => $faqConfig->getDb()->clientVersion(),
+                            'DB Server Version'   => $faqConfig->getDb()->serverVersion(),
+                            'Webserver Interface' => strtoupper(@php_sapi_name()),
+                            'PHP Extensions'      => implode(', ', get_loaded_extensions())
+                        );
+                        foreach ($systemInformation as $name => $info): ?>
+                        <tr>
+                            <td class="span3"><strong><?php print $name ?></strong></td>
+                            <td><?php print $info ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                    </table>
+                </div>
 
-            <div style="font-size: 5px; text-align: right; color: #f5f5f5">NOTE: Art is resistance.</div>
-        </section>
+                <div style="font-size: 5px; text-align: right; color: #f5f5f5">NOTE: Art is resistance.</div>
+            </section>
 <?php
     }
 // User is authenticated, but has no rights
