@@ -82,56 +82,56 @@ if ($permission['editconfig']) {
               action="?action=config&amp;config_action=saveConfig" method="post">
 
             <p>
-                <a class="btn btn-inverse" href="javascript:void(0);" onclick="javascript:toggleConfig('Main');">
+                <button class="btn btn-inverse toggleConfig" data-toggle="Main">
                     <i class="icon-home icon-white"></i>
                     <?php echo $PMF_LANG['mainControlCenter']; ?>
-                </a>
+                </button>
             </p>
             <div id="configMain" class="hide"></div>
 
             <p>
-                <a class="btn btn-inverse" href="javascript:void(0);" onclick="javascript:toggleConfig('Records');">
+                <button class="btn btn-inverse toggleConfig" data-toggle="Records">
                     <i class="icon-th-list icon-white"></i>
                     <?php echo $PMF_LANG['recordsControlCenter']; ?>
-                </a>
+                </button>
             </p>
             <div id="configRecords" class="hide"></div>
 
             <p>
-                <a class="btn btn-inverse" href="javascript:void(0);" onclick="javascript:toggleConfig('Search');">
+                <button class="btn btn-inverse toggleConfig" data-toggle="Search">
                     <i class="icon-search icon-white"></i>
                     <?php echo $PMF_LANG['searchControlCenter']; ?>
-                </a>
+                </button>
             </p>
             <div id="configSearch" class="hide"></div>
 
             <p>
-                <a class="btn btn-inverse" href="javascript:void(0);" onclick="javascript:toggleConfig('Security');">
+                <button class="btn btn-inverse toggleConfig" data-toggle="Security">
                     <i class="icon-warning-sign icon-white"></i>
                     <?php echo $PMF_LANG['securityControlCenter']; ?>
-                </a>
+                </button>
             </p>
             <div id="configSecurity" class="hide"></div>
 
             <p>
-                <a class="btn btn-inverse" href="javascript:void(0);" onclick="javascript:toggleConfig('Spam');">
+                <button class="btn btn-inverse toggleConfig"  data-toggle="Spam">
                     <i class="icon-thumbs-down icon-white"></i>
                     <?php echo $PMF_LANG['spamControlCenter']; ?>
-                </a>
+                </button>
             </p>
             <div id="configSpam" class="hide"></div>
 
             <p>
-                <a class="btn btn-inverse" href="javascript:void(0);" onclick="javascript:toggleConfig('SocialNetworks');">
+                <button class="btn btn-inverse toggleConfig" data-toggle="SocialNetworks">
                     <i class="icon-retweet icon-white"></i>
                     <?php echo $PMF_LANG['socialNetworksControlCenter']; ?>
-                </a>
+                </button>
             </p>
             <div id="configSocialNetworks" class="hide"></div>
 
             <!--
             <p>
-                <a class="btn btn-inverse" href="javascript:void(0);" onclick="javascript:toggleConfig('Cache');">
+                <a class="btn btn-inverse" onclick="javascript:toggleConfig('Cache');">
                     <?php echo $PMF_LANG['cacheControlCenter']; ?>
                 </a>
             </p>
@@ -147,6 +147,27 @@ if ($permission['editconfig']) {
                 </button>
             </p>
         </form>
+
+        <script type="text/javascript">
+            toggleConfig = function (e) {
+                e.preventDefault();
+                var configContainer = $("#config" + $(this).data('toggle'));
+
+                if ("hide" === configContainer.attr("class")) {
+                    $.get("index.php", {
+                        action: "ajax",
+                        ajax: "config_list",
+                        conf: $(this).data('toggle').toLowerCase()
+                    }, function (data) {
+                        configContainer.empty().append(data);
+                    });
+                    configContainer.fadeIn("slow").removeAttr("class");
+                } else {
+                    configContainer.fadeOut("slow").attr("class", "hide");
+                }
+            }
+            $('button.toggleConfig').on('click', toggleConfig);
+        </script>
 <?php
     }
 } else {

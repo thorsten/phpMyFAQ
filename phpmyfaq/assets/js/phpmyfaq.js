@@ -2167,8 +2167,7 @@ $(document).ready(function () {
 
 /*global clearInterval: false, clearTimeout: false, document: false, event: false, frames: false, history: false, Image: false, location: false, name: false, navigator: false, Option: false, parent: false, screen: false, setInterval: false, setTimeout: false, window: false, XMLHttpRequest: false */
 
-var toggleConfig,
-    toggleFieldset,
+var toggleFieldset,
     showhideCategory,
     addAttachment,
     addEngine,
@@ -2247,28 +2246,6 @@ $(document).ready(function () {
             domId.fadeIn("slow");
         } else {
             domId.fadeOut("slow");
-        }
-    };
-
-    /**
-     * Displays or hides a configuration block
-     *
-     * @param container
-     * @return void
-     */
-    toggleConfig = function toggleConfig(container) {
-        var configContainer = $("#config" + container);
-        if (configContainer.css("display") === "none") {
-            $.get("index.php", {
-                action: "ajax",
-                ajax: "config_list",
-                conf: container.toLowerCase()
-            }, function (data) {
-                configContainer.append(data);
-            });
-            configContainer.fadeIn("slow");
-        } else {
-            configContainer.fadeOut("slow");
         }
     };
 
