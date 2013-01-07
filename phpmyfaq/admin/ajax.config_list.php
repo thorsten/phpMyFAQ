@@ -178,7 +178,7 @@ function printInputFieldByType($key, $type)
                     break;
             }
             
-            print "</select>\n</p>\n";
+            print "</select>\n</div>\n";
             break;
 
         case 'checkbox':
