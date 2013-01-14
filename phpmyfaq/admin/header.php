@@ -295,6 +295,14 @@ switch ($action) {
             <div class="span2">
                 <div class="well categories">
                     <ul class="nav nav-list">
+                        <li class="nav-header"></li>
+                        <li>
+                            <?php
+                            $avatar = new PMF_Services_Gravatar($faqConfig);
+                            echo $avatar->getImage($user->getUserData('email'), array('size' => 40));
+                            echo $user->getUserData('display_name');
+                            ?>
+                        </li>
                         <li class="nav-header"><?php print $secLevelHeader; ?></li>
                         <?php print $secLevelEntries; ?>
                         <li class="nav-header">Admin worklog</li>
