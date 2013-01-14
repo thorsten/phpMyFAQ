@@ -22,6 +22,7 @@ Version 2.8.0-beta3 - 2013-
 - added possibility to deactivate complete FAQ export (Thorsten)
 - added possibility to random sorting of FAQs (Thorsten)
 - added documentation in Markdown with GitHub style HTML export (Thorsten)
+- added support for Gravatar (Thorsten)
 - improved usability of administration backend (Thorsten)
 - improved setup and update (Thorsten, Florian)
 - improved security with salted passwords (Thorsten)
