@@ -293,16 +293,22 @@ switch ($action) {
         <div class="row-fluid">
             <?php if (isset($auth) && in_array(true, $permission)) { ?>
             <div class="span2">
+                <div class="userpanel">
+                    <?php
+                    if ($faqConfig->get('main.enableGravatarSupport')) {
+                        $avatar = new PMF_Services_Gravatar($faqConfig);
+                        echo $avatar->getImage($user->getUserData('email'), array('size' => 30));
+                    }
+                    printf(
+                        '%s<br><small>%s</small>',
+                        $user->getUserData('display_name'),
+                        $user->getUserData('email')
+                    );
+                    ?>
+                </div>
+                <hr>
                 <div class="well categories">
                     <ul class="nav nav-list">
-                        <li class="nav-header"></li>
-                        <li>
-                            <?php
-                            $avatar = new PMF_Services_Gravatar($faqConfig);
-                            echo $avatar->getImage($user->getUserData('email'), array('size' => 40));
-                            echo $user->getUserData('display_name');
-                            ?>
-                        </li>
                         <li class="nav-header"><?php print $secLevelHeader; ?></li>
                         <?php print $secLevelEntries; ?>
                         <li class="nav-header">Admin worklog</li>

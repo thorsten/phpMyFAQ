@@ -303,6 +303,7 @@ class PMF_Installer
         'main.optionalMailAddress'                => 'false',
         'main.dateFormat'                         => 'Y-m-d H:i',
         'main.maintenanceMode'                    => 'false',
+        'main.enableGravatarSupport'              => 'false',
 
         'records.numberOfRecordsPerPage'          => '10',
         'records.numberOfShownNewsEntries'        => '3',

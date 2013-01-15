@@ -12956,6 +12956,20 @@ header h3 {
 section {
   margin-bottom: 1.5em;
 }
+.userpanel {
+  margin: 10px 5px;
+}
+.userpanel img {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border: 2px solid #222222;
+  margin-right: 5px;
+  float: left;
+}
+.userpanel small {
+  color: #999999;
+}
 .dashboard-stat {
   background: #ffffff;
   -webkit-border-radius: 5px;
