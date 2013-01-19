@@ -252,7 +252,7 @@ class PMF_Stopwords
     {
         // Sanity checks
         $content = trim($content);
-        if (('' == $content) && (!$this->_config->get('spam.checkBannedWords'))) {
+        if (('' === $content) || (!$this->_config->get('spam.checkBannedWords'))) {
             return true;
         }
 
