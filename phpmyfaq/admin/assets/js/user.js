@@ -25,7 +25,7 @@ function getUserRights(userId) {
             $.each(data, function(i, val) {
                 $('#user_right_' + val).attr('checked', true);
             });
-            $('#rights_userId').val(userId);
+            $('#rights_user_id').val(userId);
         });
 }
 
