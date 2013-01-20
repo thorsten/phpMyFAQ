@@ -47,6 +47,7 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
             $records = $subCategory->viewTree();
         }
         if (count($category->getChildNodes($currentCategory))) {
+            $categoryFaqsHeader = $PMF_LANG['msgSubCategories'];
             $subCategoryContent = $subCategory->viewTree();
         }
     }
@@ -71,7 +72,7 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
             'categoryHeader'      => $PMF_LANG['msgEntriesIn'] . $catName,
             'categoryDescription' => $catDescription,
             'categoryFaqsHeader'  => $PMF_LANG['msgEntries'],
-            'categorySubsHeader'  => $PMF_LANG['msgSubCategories'],
+            'categorySubsHeader'  => $categoryFaqsHeader,
             'categoryContent'     => $records,
             'subCategoryContent'  => $subCategoryContent,
             'categoryLevelUp'     => $up
@@ -87,7 +88,7 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
             'categoryHeader'      => $PMF_LANG['msgFullCategories'],
             'categoryDescription' => '',
             'categoryFaqsHeader'  => $PMF_LANG['msgEntries'],
-            'categorySubsHeader'  => $PMF_LANG['msgSubCategories'],
+            'categorySubsHeader'  => '',
             'categoryContent'     => $category->viewTree(),
             'subCategoryContent'  => $subCategoryContent,
             'categoryLevelUp'     => ''
