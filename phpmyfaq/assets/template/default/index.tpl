@@ -97,8 +97,10 @@
                         <li class="divider-horizontal"></li>
                         {showCategories}
                     </ul>
+                    <div class="users-online">
+                        <small>{userOnline}</small>
+                    </div>
                 </div>
-                {userOnline}
             </div>
             <div class="span6 main-content">
                 [globalSearchBox]

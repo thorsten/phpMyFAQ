@@ -4,7 +4,7 @@
             </header>
 
             <ul class="nav nav-tabs">
-                <li><a href="#faqs" data-toggle="tab">{categoryFaqsHeader}></a></li>
+                <li><a href="#faqs" data-toggle="tab">{categoryFaqsHeader}</a></li>
                 <li><a href="#subcategories" data-toggle="tab">{categorySubsHeader}</a></li>
             </ul>
 

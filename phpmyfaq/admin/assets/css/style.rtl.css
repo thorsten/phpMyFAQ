@@ -11863,6 +11863,10 @@ body {
   padding: 8px 0;
   font-size: 15px;
 }
+#main .users-online {
+  padding: 10px;
+  text-align: center;
+}
 #main .well,
 #main .breadcrumb {
   background-color: #f3f3f3;
