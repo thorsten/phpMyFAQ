@@ -185,18 +185,6 @@ class PMF_Faq
             $current_table = 'fd';
         }
 
-        if ($this->groupSupport) {
-            $permPart = sprintf("( fdg.group_id IN (%s)
-            OR
-                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
-                implode(', ', $this->groups),
-                $this->user,
-                implode(', ', $this->groups));
-        } else {
-            $permPart = sprintf("( fdu.user_id = %d OR fdu.user_id = -1 )",
-                $this->user);
-        }
-
         $now   = date('YmdHis');
         $query = sprintf("
             SELECT
@@ -239,7 +227,6 @@ class PMF_Faq
                 fcr.category_id = %d
             AND
                 fd.lang = '%s'
-            AND
                 %s
             ORDER BY
                 %s.%s %s",
@@ -252,7 +239,7 @@ class PMF_Faq
             $now,
             $category_id,
             $this->_config->getLanguage()->getLanguage(),
-            $permPart,
+            $this->queryPermission($this->groupSupport),
             $current_table,
             $this->_config->getDb()->escape($orderby),
             $this->_config->getDb()->escape($sortby));
@@ -321,19 +308,6 @@ class PMF_Faq
             $currentTable = 'fd';
         }
 
-        // Check for group supprt
-        if ($this->groupSupport) {
-            $permPart = sprintf("( fdg.group_id IN (%s)
-            OR
-                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
-                implode(', ', $this->groups),
-                $this->user,
-                implode(', ', $this->groups));
-        } else {
-            $permPart = sprintf("( fdu.user_id = %d OR fdu.user_id = -1 )",
-                $this->user);
-        }
-
         // If random FAQs are activated, we don't need an order
         if (true === $this->_config->get('records.randomSort')) {
             $order = '';
@@ -387,8 +361,7 @@ class PMF_Faq
                 fcr.category_id = %d
             AND
                 fd.lang = '%s'
-            AND
-                %s
+            %s
             %s",
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
@@ -399,9 +372,11 @@ class PMF_Faq
             $now,
             $categoryId,
             $this->_config->getLanguage()->getLanguage(),
-            $permPart,
+            $this->queryPermission($this->groupSupport),
             $order
         );
+
+        var_dump($query);
 
         $result = $this->_config->getDb()->query($query);
         $num    = $this->_config->getDb()->numRows($result);
@@ -516,18 +491,6 @@ class PMF_Faq
         $tagging_id = PMF_Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_VALIDATE_INT); 
         $output     = '';
 
-        if ($this->groupSupport) {
-            $permPart = sprintf("( fdg.group_id IN (%s)
-            OR
-                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
-                implode(', ', $this->groups),
-                $this->user,
-                implode(', ', $this->groups));
-        } else {
-            $permPart = sprintf("( fdu.user_id = %d OR fdu.user_id = -1 )",
-                $this->user);
-        }
-
         $now   = date('YmdHis');
         $query = sprintf("
             SELECT
@@ -568,7 +531,6 @@ class PMF_Faq
                 fd.id IN (%s)
             AND
                 fd.lang = '%s'
-            AND
                 %s
             ORDER BY
                 %s %s",
@@ -581,7 +543,7 @@ class PMF_Faq
             $now,
             $records,
             $this->_config->getLanguage()->getLanguage(),
-            $permPart,
+            $this->queryPermission($this->groupSupport),
             $this->_config->getDb()->escape($orderby),
             $this->_config->getDb()->escape($sortby));
 
@@ -695,22 +657,6 @@ class PMF_Faq
     {
         global $PMF_LANG;
 
-        if ($this->groupSupport) {
-            $permPart = sprintf(
-                "( fdg.group_id IN (%s)
-            OR
-                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
-                implode(', ', $this->groups),
-                $this->user,
-                implode(', ', $this->groups)
-            );
-        } else {
-            $permPart = sprintf(
-                "( fdu.user_id = %d OR fdu.user_id = -1 )",
-                $this->user
-            );
-        }
-        
         $query = sprintf(
             "SELECT
                  id, lang, solution_id, revision_id, active, sticky, keywords, 
@@ -731,7 +677,6 @@ class PMF_Faq
             %s
             AND
                 fd.lang = '%s'
-            AND
                 %s",
             PMF_Db::getTablePrefix(),
             isset($revisionId) ? 'faqdata_revisions': 'faqdata',
@@ -740,7 +685,7 @@ class PMF_Faq
             $id,
             isset($revisionId) ? 'AND revision_id = '.$revisionId : '',
             $this->_config->getLanguage()->getLanguage(),
-            ($admin) ? '1=1' : $permPart
+            ($admin) ? 'AND 1=1' : $this->queryPermission($this->groupSupport)
         );
 
         $result = $this->_config->getDb()->query($query);
@@ -1135,20 +1080,6 @@ class PMF_Faq
      */
     public function getRecordBySolutionId($solutionId)
     {
-        if ($this->groupSupport) {
-            $permPart = sprintf(
-                "( fdg.group_id IN (%s)
-            OR
-                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
-                implode(', ', $this->groups),
-                $this->user,
-                implode(', ', $this->groups)
-            );
-        } else {
-            $permPart = sprintf("( fdu.user_id = %d OR fdu.user_id = -1 )",
-                $this->user);
-        }
-        
         $query = sprintf(
             "SELECT
                 *
@@ -1164,13 +1095,12 @@ class PMF_Faq
                 fd.id = fdu.record_id
             WHERE
                 fd.solution_id = %d
-            AND
                 %s",
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             $solutionId,
-            $permPart
+            $this->queryPermission($this->groupSupport)
         );
 
         $result = $this->_config->getDb()->query($query);
@@ -1773,26 +1703,14 @@ class PMF_Faq
     /**
      * This function generates a data-set with the mosted voted recors
      *  
-     * @param  integer $count      Number of records
-     * @param  integer $categoryId Category ID
-     * @param  string  $language   Language
+     * @param  integer $count    Number of records
+     * @param  integer $category Category ID
+     * @param  string  $language Language
      * @return array
      */
     public function getTopVotedData($count = PMF_NUMBER_RECORDS_TOPTEN, $category = 0, $language = nuLL)
     {
         global $sids;
-                    
-        if ($this->groupSupport) {
-            $permPart = sprintf("( fdg.group_id IN (%s)
-            OR
-                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
-                implode(', ', $this->groups),
-                $this->user,
-                implode(', ', $this->groups));
-        } else {
-            $permPart = sprintf("( fdu.user_id = %d OR fdu.user_id = -1 )",
-                $this->user);
-        }
 
         $now = date('YmdHis');
         $query =
@@ -1838,8 +1756,7 @@ class PMF_Faq
                 fd.lang = \''.$language.'\'';
         }
         $query .= '
-            AND
-                '.$permPart.'
+                ' . $this->queryPermission($this->groupSupport) . '
             ORDER BY
                 avg DESC';
 
@@ -1891,18 +1808,6 @@ class PMF_Faq
     {
         global $sids;
 
-        if ($this->groupSupport) {
-            $permPart = sprintf("( fdg.group_id IN (%s)
-            OR
-                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
-                implode(', ', $this->groups),
-                $this->user,
-                implode(', ', $this->groups));
-        } else {
-            $permPart = sprintf("( fdu.user_id = %d OR fdu.user_id = -1 )",
-                $this->user);
-        }
-
         $now = date('YmdHis');
         $query =
 '            SELECT
@@ -1948,8 +1853,7 @@ class PMF_Faq
                 fd.lang = \''.$language.'\'';
         }
         $query .= '
-            AND
-                '.$permPart.'
+                ' . $this->queryPermission($this->groupSupport) . '
             ORDER BY
                 fv.visits DESC';
 
@@ -2001,19 +1905,7 @@ class PMF_Faq
     {
         global $sids;
 
-        if ($this->groupSupport) {
-            $permPart = sprintf("( fdg.group_id IN (%s)
-            OR
-                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
-                implode(', ', $this->groups),
-                $this->user,
-                implode(', ', $this->groups));
-        } else {
-            $permPart = sprintf("( fdu.user_id = %d OR fdu.user_id = -1 )",
-                $this->user);
-        }
-
-        $now = date('YmdHis');
+        $now   = date('YmdHis');
         $query =
 '            SELECT
                 fd.id AS id,
@@ -2053,8 +1945,7 @@ class PMF_Faq
                 fd.lang = \''.$language.'\'';
         }
         $query .= '
-            AND
-                '.$permPart.'
+                ' . $this->queryPermission($this->groupSupport) . '
             ORDER BY
                 fd.datum DESC';
 
@@ -2961,22 +2852,7 @@ class PMF_Faq
     private function getStickyRecordsData()
     {
         global $sids;
-        
-        if ($this->groupSupport) {
-            $permPart = sprintf("AND
-                ( fdg.group_id IN (%s)
-            OR
-                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
-                implode(', ', $this->groups),
-                $this->user,
-                implode(', ', $this->groups));
-        } else {
-            $permPart = sprintf("AND
-                ( fdu.user_id = %d OR fdu.user_id = -1 )",
-                $this->user);
-        }
-        
-        
+
         $now = date('YmdHis');
         $query = sprintf("
             SELECT
@@ -3018,7 +2894,8 @@ class PMF_Faq
             $this->_config->getLanguage()->getLanguage(),
             $now,
             $now,
-            $permPart);
+            $this->queryPermission($this->groupSupport)
+        );
 
         $result = $this->_config->getDb()->query($query);
         $sticky = array();
@@ -3083,7 +2960,7 @@ class PMF_Faq
      *
      * @return boolean
      */
-    function updateQuestionAnswer($openQuestionId, $faqId, $categoryId)
+    public function updateQuestionAnswer($openQuestionId, $faqId, $categoryId)
     {
         $query = sprintf(
             'UPDATE %sfaqquestions SET answer_id = %d, category_id= %d, WHERE id= %d',
@@ -3094,5 +2971,27 @@ class PMF_Faq
         );
 
         return $this->_config->getDb()->query($query);
+    }
+
+    /**
+     * Returns a part of a query to check permissions
+     *
+     * @param boolean $groupSupport
+     *
+     * @return string
+     */
+    private function queryPermission($groupSupport = false)
+    {
+        if ($groupSupport) {
+            return sprintf(
+                "AND ( fdg.group_id IN (%s) OR (fdu.user_id = %d OR fdg.group_id IN (%s)) )",
+                implode(', ', $this->groups),
+                $this->user,
+                implode(', ', $this->groups));
+        } else {
+            return sprintf(
+                "AND ( fdu.user_id = %d OR fdu.user_id = -1 )",
+                $this->user);
+        }
     }
 }
