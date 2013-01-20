@@ -11880,6 +11880,19 @@ body {
 #main .search-box form a {
   font-size: 11px;
 }
+#main header div {
+  position: relative;
+}
+#main header div img.ucp {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border: 2px solid #222222;
+  margin-right: 5px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
 #main .nav {
   margin-bottom: 0;
 }

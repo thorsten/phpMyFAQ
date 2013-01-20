@@ -71,10 +71,16 @@ class PMF_Services_Gravatar extends PMF_Services
         if (isset($params['force_default']) && $params['force_default'] === true) {
             $opts[] = 'forcedefault=y';
         }
+        if (!isset($params['class'])) {
+            $params['class'] = '';
+        }
 
         $gravatar = $imageUrl . (sizeof($opts) > 0 ? '?' . implode($opts, '&') : false);
 
-        return'<img src="'. $gravatar .'" alt="Gravatar">';
+        return sprintf(
+            '<img src="'. $gravatar .'" class="%s" alt="Gravatar">',
+            $params['class']
+        );
     }
 
     /**

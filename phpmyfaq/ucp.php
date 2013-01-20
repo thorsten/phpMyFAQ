@@ -24,10 +24,21 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 if ($user instanceof PMF_User) {
 
+    if ($faqConfig->get('main.enableGravatarSupport')) {
+        $gravatar    = new PMF_Services_Gravatar($faqConfig);
+        $gravatarImg = sprintf(
+            '<a target="_blank" href="http://www.gravatar.com">%s</a>',
+            $gravatar->getImage($user->getUserData('email'), array('class' => 'ucp pull-right', 'size' => 125))
+        );
+    } else {
+        $gravatarImg = '';
+    }
+
     $tpl->parse(
         'writeContent',
         array(
             'headerUserControlPanel' => $PMF_LANG['headerUserControlPanel'],
+            'ucpGravatarImage'       => $gravatarImg,
             'userid'                 => $user->getUserId(),
             'msgRealName'            => $PMF_LANG['ad_user_name'],
             'realname'               => $user->getUserData('display_name'),
