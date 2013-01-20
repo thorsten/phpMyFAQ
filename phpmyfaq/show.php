@@ -28,6 +28,8 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
 
     $faqsession->userTracking('show_category', $currentCategory);
 
+    $subCategoryContent  = '';
+
     $catParent      = $category->categoryName[$currentCategory]['parent_id'];
     $catName        = $category->categoryName[$currentCategory]['name'];
     $catDescription = $category->categoryName[$currentCategory]['description'];
@@ -36,12 +38,17 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
         $faqConfig->get('records.orderby'),
         $faqConfig->get('records.sortby')
     );
-    
-    if (empty($records)) {
+
+    if (empty($records) || $category->getChildNodes($currentCategory)) {
         $subCategory = new PMF_Category($faqConfig, $current_groups, true);
         $subCategory->setUser($current_user);
         $subCategory->transform($currentCategory);
-        $records = $subCategory->viewTree();
+        if (empty($records)) {
+            $records = $subCategory->viewTree();
+        }
+        if (count($category->getChildNodes($currentCategory))) {
+            $subCategoryContent = $subCategory->viewTree();
+        }
     }
 
     $up = '';
@@ -63,7 +70,10 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
         array(
             'categoryHeader'      => $PMF_LANG['msgEntriesIn'] . $catName,
             'categoryDescription' => $catDescription,
+            'categoryFaqsHeader'  => $PMF_LANG['msgEntries'],
+            'categorySubsHeader'  => $PMF_LANG['msgSubCategories'],
             'categoryContent'     => $records,
+            'subCategoryContent'  => $subCategoryContent,
             'categoryLevelUp'     => $up
         )
     );
@@ -76,7 +86,10 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
         array(
             'categoryHeader'      => $PMF_LANG['msgFullCategories'],
             'categoryDescription' => '',
+            'categoryFaqsHeader'  => $PMF_LANG['msgEntries'],
+            'categorySubsHeader'  => $PMF_LANG['msgSubCategories'],
             'categoryContent'     => $category->viewTree(),
+            'subCategoryContent'  => $subCategoryContent,
             'categoryLevelUp'     => ''
         )
     );
