@@ -456,13 +456,10 @@ class PMF_Faq
                        '&amp;seite=' . $page;
 
             $options = array(
-                'baseUrl'         => $baseUrl,
-                'total'           => $num,
-                'perPage'         => $this->_config->get('records.numberOfRecordsPerPage'),
-                'pageParamName'   => 'seite',
-                'seoName'         => $title,
-                'nextPageLinkTpl' => '<a href="{LINK_URL}">' . $this->pmf_lang['msgNext'] . '</a>',
-                'prevPageLinkTpl' => '<a href="{LINK_URL}">' . $this->pmf_lang['msgPrevious'] . '</a>'
+                'baseUrl'       => $baseUrl,
+                'total'         => $num,
+                'perPage'       => $this->_config->get('records.numberOfRecordsPerPage'),
+                'pageParamName' => 'seite'
             );
         
             $pagination = new PMF_Pagination($this->_config, $options);

@@ -87,7 +87,7 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
         array(
             'categoryHeader'      => $PMF_LANG['msgFullCategories'],
             'categoryDescription' => '',
-            'categoryFaqsHeader'  => $PMF_LANG['msgEntries'],
+            'categoryFaqsHeader'  => '',
             'categorySubsHeader'  => '',
             'categoryContent'     => $category->viewTree(),
             'subCategoryContent'  => $subCategoryContent,
