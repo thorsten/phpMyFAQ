@@ -376,8 +376,6 @@ class PMF_Faq
             $order
         );
 
-        var_dump($query);
-
         $result = $this->_config->getDb()->query($query);
         $num    = $this->_config->getDb()->numRows($result);
         $pages  = ceil($num / $numPerPage);
