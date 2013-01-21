@@ -430,7 +430,7 @@ class PMF_Faq
                 }
 
                 $renderedItems[] = sprintf(
-                    '<li>%s<span id="viewsPerRecord"><br /><span class="little">(%s)</span>%s</span></li>',
+                    '<li>%s<span id="viewsPerRecord"><br /><small>(%s)</small>%s</span></li>',
                     $oLink->toHtmlAnchor(),
                     $this->plr->GetMsg('plmsgViews', $visits),
                     ($row->sticky == 1) ? '<br /><br />' : ''
@@ -596,7 +596,7 @@ class PMF_Faq
                 $oLink->text = $title;
                 $oLink->tooltip = $title;
                 $listItem = sprintf(
-                    '<li>%s<br /><span class="little">(%s)</span></li>',
+                    '<li>%s<br /><small>(%s)</small></li>',
                     $oLink->toHtmlAnchor(),
                     $this->plr->GetMsg('plmsgViews',$visits)
                 );
@@ -1577,14 +1577,16 @@ class PMF_Faq
                 if ('visits' == $type) {
                     $output['title'][]  = PMF_Utils::makeShorterText($row['thema'], 8);
                     $output['url'][]    = $row['url'];
-                    $output['visits'][] = $this->plr->GetMsg('plmsgViews',$row['visits']);
+                    $output['visits'][] = $this->plr->GetMsg('plmsgViews', $row['visits']);
                 } else {
                     $output['title'][]  = PMF_Utils::makeShorterText($row['thema'], 8);
                     $output['url'][]    = $row['url'];
-                    $output['voted'][]  = sprintf('%s %s 5 - %s',
-                                                  round($row['avg'], 2),
-                                                  $this->pmf_lang['msgVoteFrom'],
-                                                  $this->plr->GetMsg('plmsgVotes', $row['user']));
+                    $output['voted'][]  = sprintf(
+                        '%s %s 5 - %s',
+                        round($row['avg'], 2),
+                        $this->pmf_lang['msgVoteFrom'],
+                        $this->plr->GetMsg('plmsgVotes', $row['user'])
+                    );
                 }
             }
         } else {

@@ -34,7 +34,7 @@
             </header>
             <ol>
                 [toptenList]
-                <li><a href="{toptenUrl}">{toptenTitle}</a> ({toptenVisits})</li>
+                <li><a href="{toptenUrl}">{toptenTitle}</a> <small>({toptenVisits})</small></li>
                 [/toptenList]
                 [toptenListError]
                 <li>{errorMsgTopTen}</li>
@@ -48,7 +48,7 @@
             </header>
             <ol>
                 [latestEntriesList]
-                <li><a href="{latestEntriesUrl}">{latestEntriesTitle}</a> ({latestEntriesDate})</li>
+                <li><a href="{latestEntriesUrl}">{latestEntriesTitle}</a> <small>({latestEntriesDate})</small></li>
                 [/latestEntriesList]
                 [latestEntriesListError]
                 <li>{errorMsgLatest}</li>
