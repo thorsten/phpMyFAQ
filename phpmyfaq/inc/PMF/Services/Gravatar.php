@@ -78,7 +78,8 @@ class PMF_Services_Gravatar extends PMF_Services
         $gravatar = $imageUrl . (sizeof($opts) > 0 ? '?' . implode($opts, '&') : false);
 
         return sprintf(
-            '<img src="'. $gravatar .'" class="%s" alt="Gravatar">',
+            '<img src="%s" class="%s" alt="Gravatar">',
+            $gravatar,
             $params['class']
         );
     }
