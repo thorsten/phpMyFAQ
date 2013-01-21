@@ -112,6 +112,7 @@ define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/lang');
 require PMF_INCLUDE_DIR . '/libs/Symfony/Component/ClassLoader/UniversalClassLoader.php';
 
 $loader = new UniversalClassLoader();
+$loader->registerNamespace('PMF', PMF_INCLUDE_DIR);
 $loader->registerNamespace('Symfony', PMF_INCLUDE_DIR . '/libs');
 $loader->registerPrefix('PMF_', PMF_INCLUDE_DIR);
 $loader->register();
