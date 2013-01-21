@@ -301,6 +301,7 @@ To set the default language in your browser you have to set a variable that gets
 *Apache Web server*
 
 If you want to enable the search engine optimization you have to rename the file \_.htaccess to .htaccess in the root directory where your FAQ is located. Then you have to activate the mod\_rewrite support in the admin backend in the configuration page. You also have to edit the path information for the "RewriteBase". If you installed phpMyFAQ on root directory "/" you should set in `RewriteBase /`
+Please check, if `AllowOverride All`	is set correctly in your httpd.conf file so that the .htaccess rules work.
 
 *IIS Web server*
 

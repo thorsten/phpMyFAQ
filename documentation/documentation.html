@@ -664,7 +664,8 @@ Writing permission for your script is needed in this directory to be able to wri
 
 <p><em>Apache Web server</em></p>
 
-<p>If you want to enable the search engine optimization you have to rename the file _.htaccess to .htaccess in the root directory where your FAQ is located. Then you have to activate the mod_rewrite support in the admin backend in the configuration page. You also have to edit the path information for the "RewriteBase". If you installed phpMyFAQ on root directory "/" you should set in <code>RewriteBase /</code></p>
+<p>If you want to enable the search engine optimization you have to rename the file _.htaccess to .htaccess in the root directory where your FAQ is located. Then you have to activate the mod_rewrite support in the admin backend in the configuration page. You also have to edit the path information for the "RewriteBase". If you installed phpMyFAQ on root directory "/" you should set in <code>RewriteBase /</code>
+Please check, if <code>AllowOverride All</code>    is set correctly in your httpd.conf file so that the .htaccess rules work.</p>
 
 <p><em>IIS Web server</em></p>
 
