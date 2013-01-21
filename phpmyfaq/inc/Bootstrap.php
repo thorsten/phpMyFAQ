@@ -146,7 +146,6 @@ ini_set('url_rewriter.tags', '');
 // Start the PHP session
 //
 PMF_Init::cleanRequest();
-session_name(PMF_Session::PMF_COOKIE_NAME_AUTH);
 session_start();
 
 //
