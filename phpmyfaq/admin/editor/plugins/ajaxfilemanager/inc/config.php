@@ -16,8 +16,7 @@
     // Added for phpMyFAQ
     define('PMF_ROOT_DIR', dirname(dirname(dirname(dirname(dirname(__DIR__))))));
     define('IS_VALID_PHPMYFAQ', null);
-    require_once PMF_ROOT_DIR . '/inc/Bootstrap.php';
-    session_name(PMF_Session::PMF_COOKIE_NAME_AUTH);
+    require PMF_ROOT_DIR . '/inc/Bootstrap.php';
 
 	if(!isset($_SESSION))
 	{
