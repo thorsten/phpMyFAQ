@@ -432,12 +432,15 @@ class PMF_User_CurrentUser extends PMF_User
         if (!isset($_SESSION[PMF_SESSION_CURRENT_USER]) || !isset($_SESSION[PMF_SESSION_ID_TIMESTAMP])) {
             return null;
         }
+
         // create a new CurrentUser object
         $user = new PMF_User_CurrentUser($config);
         $user->getUserById($_SESSION[PMF_SESSION_CURRENT_USER]);
+
         // user object is timed out
         if ($user->sessionIsTimedOut()) {
             $user->deleteFromSession();
+            $user->errors[] = 'Session timed out.';
             return null;
         }
         // session-id not found in user table
