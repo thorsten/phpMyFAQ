@@ -23,7 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 ?>
         <header>
-            <h2><i class="icon-lock"></i> <?php print $PMF_LANG['ad_passwd_cop']; ?></h2>
+            <h2><i class="icon-lock"></i> <?php echo $PMF_LANG['ad_passwd_cop']; ?></h2>
         </header>
 <?php
 if ($permission["passwd"]) {
@@ -32,21 +32,18 @@ if ($permission["passwd"]) {
     $save = PMF_Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);
     if (!is_null($save)) {
 
-        // Re-evaluate $user
-        $user = PMF_User_CurrentUser::getFromSession($faqConfig);
-
         // Define the (Local/Current) Authentication Source
-        $auth = new PMF_Auth($faqConfig);
-        $_authSource = $auth->selectAuth($user->getAuthSource('name'));
-        $_authSource->selectEncType($user->getAuthData('encType'));
-        $_authSource->setReadOnly($user->getAuthData('readOnly'));
+        $auth       = new PMF_Auth($faqConfig);
+        $authSource = $auth->selectAuth($user->getAuthSource('name'));
+        $authSource->selectEncType($user->getAuthData('encType'));
+        $authSource->setReadOnly($user->getAuthData('readOnly'));
         
-        $opasswd = PMF_Filter::filterInput(INPUT_POST, 'opass', FILTER_SANITIZE_STRING);
-        $npasswd = PMF_Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
-        $bpasswd = PMF_Filter::filterInput(INPUT_POST, 'bpass', FILTER_SANITIZE_STRING);
+        $oldPassword     = PMF_Filter::filterInput(INPUT_POST, 'opass', FILTER_SANITIZE_STRING);
+        $newPassword     = PMF_Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
+        $retypedPassword = PMF_Filter::filterInput(INPUT_POST, 'bpass', FILTER_SANITIZE_STRING);
 
-        if (($_authSource->checkPassword($user->getLogin(), $opasswd)) && ($npasswd == $bpasswd)) {
-            if (!$user->changePassword($npasswd)) {
+        if (($authSource->checkPassword($user->getLogin(), $oldPassword)) && ($newPassword == $retypedPassword)) {
+            if (!$user->changePassword($newPassword)) {
                 printf('<p class="alert alert-error">%s</p>', $PMF_LANG["ad_passwd_fail"]);
             }
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG["ad_passwdsuc"]);
@@ -55,25 +52,24 @@ if ($permission["passwd"]) {
         }
     }
 ?>
-
         <form class="form-horizontal" action="?action=passwd" method="post">
         <input type="hidden" name="save" value="newpassword" />
             <div class="control-group">
-                <label class="control-label" for="opass"><?php print $PMF_LANG["ad_passwd_old"]; ?></label>
+                <label class="control-label" for="opass"><?php echo $PMF_LANG["ad_passwd_old"]; ?></label>
                 <div class="controls">
                     <input type="password" name="opass" id="opass" required="required" />
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="npass"><?php print $PMF_LANG["ad_passwd_new"]; ?></label>
+                <label class="control-label" for="npass"><?php echo $PMF_LANG["ad_passwd_new"]; ?></label>
                 <div class="controls">
                     <input type="password" name="npass" id="npass" required="required" />
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="bpass"><?php print $PMF_LANG["ad_passwd_con"]; ?></label>
+                <label class="control-label" for="bpass"><?php echo $PMF_LANG["ad_passwd_con"]; ?></label>
                 <div class="controls">
                     <input type="password" name="bpass" id="bpass" required="required"  />
                 </div>
@@ -81,11 +77,11 @@ if ($permission["passwd"]) {
 
             <div class="form-actions">
                 <button class="btn btn-primary" type="submit">
-                    <?php print $PMF_LANG["ad_passwd_change"]; ?>
+                    <?php echo $PMF_LANG["ad_passwd_change"]; ?>
                 </button>
             </div>
         </form>
 <?php
 } else {
-    print $PMF_LANG["err_NotAuth"];
+    echo $PMF_LANG["err_NotAuth"];
 }

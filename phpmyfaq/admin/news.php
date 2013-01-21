@@ -25,9 +25,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $news = new PMF_News($faqConfig);
 
-// Re-evaluate $user
-$user = PMF_User_CurrentUser::getFromSession($faqConfig);
-
 if ('addnews' == $action && $permission["addnews"]) {
 ?>
         <header>
