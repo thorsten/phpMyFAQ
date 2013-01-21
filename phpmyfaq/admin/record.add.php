@@ -23,9 +23,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-// Re-evaluate $user
-$user = PMF_User_CurrentUser::getFromSession($faqConfig);
-
 if ($permission['editbt']|| $permission['addbt']) {
 
     // FAQ data
