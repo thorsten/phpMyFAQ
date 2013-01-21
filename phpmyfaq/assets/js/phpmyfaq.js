@@ -2484,14 +2484,13 @@ $(document).ready(function () {
             cache:    false,
             success:  function (json) {
                 if (json.success === undefined) {
-                    $('#votings').html('<p class="alert alert-error">' + json.error + '</p>');
+                    $('#votings').append('<p class="alert alert-error">' + json.error + '</p>');
                     $('#loader').hide();
                 } else {
-                    $('#votings').html('<p class="alert alert-success">' + json.success + '</p>');
-                    $('#rating').html(json.rating);
+                    $('#votings').append('<p class="alert alert-success">' + json.success + '</p>');
+                    $('#rating').empty().append(json.rating);
                     $('#votings').fadeIn("slow");
                     $('#loader').hide();
-                    $('#votingForm').hide();
                 }
             }
         });

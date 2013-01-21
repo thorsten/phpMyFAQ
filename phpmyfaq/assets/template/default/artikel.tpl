@@ -65,7 +65,7 @@
                 <div class="tab-pane" id="votingForm">
                     <form action="#" method="post" class="form-inline">
                         <input type="hidden" name="artikel" value="{saveVotingID}" />
-                        <div id="voting"></div>
+                        <div id="votings"></div>
                         <div class="star-rating"><s><s><s><s><s></s></s></s></s></s></div>
                         <p><strong>{msgAverageVote}</strong><span id="rating">{printVotings}</span></p>
                     </form>
