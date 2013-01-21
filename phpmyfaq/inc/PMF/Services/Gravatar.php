@@ -37,7 +37,7 @@ class PMF_Services_Gravatar extends PMF_Services
      */
     private $httpBaseUrl = 'http://gravatar.com/';
 
-    /*
+    /**
      * https://secure.gravatar.com/
      * 
      * @var string
@@ -48,7 +48,7 @@ class PMF_Services_Gravatar extends PMF_Services
      * Returns a image or the URL to the image of a Gravatar based off an email
      * address.
      *
-     * @param string $email  Email adress
+     * @param string $email  Email address
      * @param array  $params Allows multiple keys with values to give more control
      *
      * @return  string
@@ -79,7 +79,7 @@ class PMF_Services_Gravatar extends PMF_Services
 
         return sprintf(
             '<img src="%s" class="%s" alt="Gravatar">',
-            $gravatar,
+            htmlspecialchars($gravatar),
             $params['class']
         );
     }
@@ -98,7 +98,7 @@ class PMF_Services_Gravatar extends PMF_Services
     /**
      * Returns a MD5 hash of an email address.
      *
-     * @param string $email Email adress
+     * @param string $email Email address
      * @return string
      */
     public static function getHash($email)
