@@ -18,6 +18,7 @@
  */
 
 use Symfony\Component\ClassLoader\UniversalClassLoader;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 //
 // Debug mode:
@@ -36,6 +37,34 @@ if (DEBUG) {
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
+
+if (!defined('PMF_ROOT_DIR')) {
+    /**
+     * The root directory
+     */
+    define('PMF_ROOT_DIR', dirname(__DIR__));
+}
+
+/**
+ * The include directory
+ */
+define('PMF_INCLUDE_DIR', __DIR__);
+
+/**
+ * The directory where the translations reside
+ */
+define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/lang');
+
+//
+// Setting up PSR-0 autoloader for Symfony Components
+//
+require PMF_INCLUDE_DIR . '/libs/Symfony/Component/ClassLoader/UniversalClassLoader.php';
+
+$loader = new UniversalClassLoader();
+$loader->registerNamespace('PMF', PMF_INCLUDE_DIR);
+$loader->registerNamespace('Symfony', PMF_INCLUDE_DIR . '/libs');
+$loader->registerPrefix('PMF_', PMF_INCLUDE_DIR);
+$loader->register();
 
 //
 // Fix the PHP include path if PMF is running under a "strange" PHP configuration
@@ -82,40 +111,12 @@ if (! defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
 // Check if config/database.php exist -> if not, redirect to installer
 //
 if (!file_exists(PMF_CONFIG_DIR . '/database.php')) {
-    header("Location: install/setup.php");
-    exit();
+    RedirectResponse::create('install/setup.php')->send();
+    exit;
 }
 
 require PMF_CONFIG_DIR . '/database.php';
 require PMF_CONFIG_DIR . '/constants.php';
-
-if (!defined('PMF_ROOT_DIR')) {
-    /**
-     * The root directory
-     */
-    define('PMF_ROOT_DIR', dirname(__DIR__));
-}
-
-/**
- * The include directory
- */
-define('PMF_INCLUDE_DIR', __DIR__);
-
-/**
- * The directory where the translations reside
- */
-define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/lang');
-
-//
-// Setting up PSR-0 autoloader for Symfony Components
-//
-require PMF_INCLUDE_DIR . '/libs/Symfony/Component/ClassLoader/UniversalClassLoader.php';
-
-$loader = new UniversalClassLoader();
-$loader->registerNamespace('PMF', PMF_INCLUDE_DIR);
-$loader->registerNamespace('Symfony', PMF_INCLUDE_DIR . '/libs');
-$loader->registerPrefix('PMF_', PMF_INCLUDE_DIR);
-$loader->register();
 
 //
 // Set the error handler to our pmf_error_handler() function
