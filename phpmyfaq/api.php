@@ -17,6 +17,10 @@
  * @since     2009-09-03
  */
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+use PMF\Helper\ResponseWrapper;
+
 define('IS_VALID_PHPMYFAQ', null);
 
 //
@@ -24,10 +28,11 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 require 'inc/Bootstrap.php';
 
+$response = new JsonResponse;
+
 // Send headers
-$http = new PMF_Helper_Http();
-$http->setContentType('application/json');
-$http->addHeader();
+$responseWrapper = new ResponseWrapper($response);
+$responseWrapper->addCommonHeaders();
 
 // Set user permissions
 $currentUser   = -1;
@@ -106,4 +111,4 @@ switch ($action) {
 }
 
 // print result as JSON
-echo json_encode($result);
+$response->setData($result)->send();
