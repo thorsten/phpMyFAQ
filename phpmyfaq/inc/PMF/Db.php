@@ -142,7 +142,7 @@ class PMF_Db
      */
     public static function errorPage($method)
     {
-        print '<!DOCTYPE html>
+        echo '<!DOCTYPE html>
             <html lang="en" class="no-js">
             <head>
                 <meta charset="utf-8">
@@ -153,7 +153,7 @@ class PMF_Db
             </head>
             <body>
                 <p class="error">The connection to the database server could not be established.</p>
-                <p class="error">The error message of the database server:<br />$method</p>
+                <p class="error">The error message of the database server:<br />' . $method . '</p>
             </body>
             </html>';
     }
