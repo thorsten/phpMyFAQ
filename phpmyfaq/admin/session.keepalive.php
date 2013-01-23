@@ -32,22 +32,20 @@ define('IS_VALID_PHPMYFAQ', null);
 // Bootstrapping
 //
 require PMF_ROOT_DIR . '/inc/Bootstrap.php';
-
-// Preload English strings
-require PMF_ROOT_DIR.'/lang/language_en.php';
+require PMF_ROOT_DIR . '/lang/language_en.php';
 
 //
 // Get language (default: english)
 //
-$_language = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
-if (!is_null($_language) && PMF_Language::isASupportedLanguage($_language)) {
-    require PMF_ROOT_DIR.'/lang/language_' . $_language . '.php';
+$language = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+if (!is_null($language) && PMF_Language::isASupportedLanguage($language)) {
+    require PMF_ROOT_DIR . '/lang/language_' . $language . '.php';
 }
 
 //
 // Initalizing static string wrapper
 //
-PMF_String::init($_language);
+PMF_String::init($language);
 
 $user        = PMF_User_CurrentUser::getFromSession($faqConfig);
 $refreshTime = (PMF_SESSION_ID_EXPIRES - PMF_SESSION_ID_REFRESH) * 60;
@@ -65,30 +63,22 @@ $refreshTime = (PMF_SESSION_ID_EXPIRES - PMF_SESSION_ID_REFRESH) * 60;
     <meta name="application-name" content="phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?>">
     <meta name="copyright" content="(c) 2001-2013 phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
-<?php
-if (isset($user) && ($refreshTime > 0)) {
-?>
+<?php if (isset($user) && ($refreshTime > 0)) { ?>
     <script type="text/javascript">
-    /*<![CDATA[*/ <!--
-    function _PMFSessionTimeoutWarning()
-    {
+
+    function _PMFSessionTimeoutWarning() {
         if (window.confirm('<?php printf($PMF_LANG['ad_session_expiring'], PMF_SESSION_ID_REFRESH); ?>')) {
-            // Reload this iframe: session refreshed!
             location.href = location.href;
         }
     }
 
-    function _PMFSessionTimeoutClock(topRef, expire)
-    {
-        // decrease time
+    function _PMFSessionTimeoutClock(topRef, expire) {
         expire.setSeconds(expire.getSeconds() - 1);
-        // check if we're out of time and log out if needed
         if (expire.getFullYear() < 2009) {
             parent.location.search = '?action=logout';
             return;
         }
 
-        // refresh clock in GUI
         if (topRef) {
             topRef.innerHTML = ('' + expire).match(/\d\d:\d\d:\d\d/);
         }
@@ -96,19 +86,18 @@ if (isset($user) && ($refreshTime > 0)) {
 
     window.onload = function() {
         var expire = new Date(2009, 0, 1);
-        expire.setSeconds(<?php print PMF_SESSION_ID_EXPIRES; ?> * 60);
+        expire.setSeconds(<?php echo PMF_SESSION_ID_EXPIRES; ?> * 60);
         var topRef = top.document.getElementById('sessioncounter');
 
-        window.setTimeout(_PMFSessionTimeoutWarning, <?php print $refreshTime; ?> * 1000);
+        window.setTimeout(_PMFSessionTimeoutWarning, <?php echo $refreshTime; ?> * 1000);
         window.setInterval(function() {
             _PMFSessionTimeoutClock(topRef, expire);
-            }, 1000);
+        }, 1000);
     }
-    // --> /*]]>*/
     </script>
-<?php
-}
-?>
+<?php } ?>
 </head>
-<body></body>
+<body>
+
+</body>
 </html>
