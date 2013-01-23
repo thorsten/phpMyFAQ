@@ -64,13 +64,13 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      * @param string $host     Hostname
      * @param string $user     Username
      * @param string $password Password
-     * @param string $db       Database name
+     * @param string $database Database name
      *
      * @return  boolean true, if connected, otherwise false
      */
-    public function connect($host, $user, $password, $db)
+    public function connect($host, $user, $password, $database = '')
     {
-        $this->conn = new mysqli($host, $user, $password, $db);
+        $this->conn = new mysqli($host, $user, $password);
         if ($this->conn->connect_error) {
             PMF_Db::errorPage($this->conn->connect_errno . ': ' . $this->conn->connect_error);
             die();
@@ -80,8 +80,24 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
         if (!$this->conn->set_charset('utf8')) {
             PMF_Db::errorPage($this->error());
         }
-        
+
+        if ('' !== $database) {
+            return $this->selectDb($database);
+        }
+
         return true;
+    }
+
+    /**
+     * Connects to a given database
+     *
+     * @param string $database Database name
+     *
+     * @return boolean
+     */
+    public function selectDb($database)
+    {
+        return $this->conn->select_db($database);
     }
 
     /**

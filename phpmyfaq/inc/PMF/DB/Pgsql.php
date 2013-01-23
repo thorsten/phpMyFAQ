@@ -68,7 +68,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      *
      * @return boolean true, if connected, otherwise false
      */
-    public function connect ($host, $user, $password, $database)
+    public function connect ($host, $user, $password, $database = '')
     {
         $connectionString = sprintf(
             'host=%s port=5432 dbname=%s user=%s password=%s',
@@ -77,15 +77,28 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
             $user,
             $password
         );
-        /* if you use mysql_pconnect(), remove the next line: */
+
         $this->conn = pg_pconnect($connectionString);
-        /* comment out for more speed with mod_php or on Windows */
-        // $this->conn = @pg_pconnect($connectionString);
+
         if (empty($database) || $this->conn == false) {
             PMF_Db::errorPage(pg_last_error($this->conn));
             die();
         }
+
         $this->query("SET standard_conforming_strings=on");
+
+        return true;
+    }
+
+    /**
+     * Connects to a given database
+     *
+     * @param string $database Database name
+     *
+     * @return boolean
+     */
+    public function selectDb($database)
+    {
         return true;
     }
 

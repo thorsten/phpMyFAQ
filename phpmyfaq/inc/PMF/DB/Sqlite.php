@@ -63,20 +63,32 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
     /**
      * Connects to the database.
      *
-     * @param $host string
-     * @param bool
-     * @param bool
-     * @param bool
+     * @param string $host
+     * @param string
+     * @param string
+     * @param string
      *
      * @return  boolean
      */
-    public function connect($host, $user = false, $passwd = false, $db = false)
+    public function connect($host, $user, $passwd, $db = '')
     {
         $this->conn = sqlite_open($host, 0666);
         if (!$this->conn) {
             PMF_Db::errorPage(sqlite_error_string(sqlite_last_error($this->conn)));
             die();
         }
+        return true;
+    }
+
+    /**
+     * Connects to a given database
+     *
+     * @param string $database Database name
+     *
+     * @return boolean
+     */
+    public function selectDb($database)
+    {
         return true;
     }
 

@@ -60,16 +60,32 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
     /**
      * Connects to the database.
      *
-     * @param   string
+     * @param string $host
+     * @param string
+     * @param string
+     * @param string
+     *
      * @return  boolean
      */
-    public function connect($host, $user = false, $passwd = false, $db = false)
+    public function connect($host, $user, $passwd, $db = '')
     {
         $this->conn = new SQLite3($host);
         if (!$this->conn) {
             PMF_Db::errorPage($this->conn->lastErrorMsg());
             die();
         }
+        return true;
+    }
+
+    /**
+     * Connects to a given database
+     *
+     * @param string $database Database name
+     *
+     * @return boolean
+     */
+    public function selectDb($database)
+    {
         return true;
     }
 

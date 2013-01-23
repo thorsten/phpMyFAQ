@@ -66,21 +66,37 @@ class PMF_DB_Mysql implements PMF_DB_Driver
      * @param string $host     MySQL Hostname
      * @param string $user     MySQL Username
      * @param string $password MySQL Password
-     * @param string $db       MySQL Database name
+     * @param string $database       MySQL Database name
      *
      * @return boolean
      */
-    public function connect ($host, $user, $password, $db)
+    public function connect($host, $user, $password, $database = '')
     {
         $this->conn = mysql_connect($host, $user, $password);
-        if (empty($db) || $this->conn == false) {
+        if ($this->conn === false) {
             PMF_Db::errorPage($this->error());
             die();
         }
         
         mysql_set_charset('utf8', $this->conn);
-        
-        return mysql_select_db($db, $this->conn);
+
+        if ('' !== $database) {
+            return $this->selectDb($database);
+        }
+
+        return true;
+    }
+
+    /**
+     * Connects to a given database
+     *
+     * @param string $database Database name
+     *
+     * @return boolean
+     */
+    public function selectDb($database)
+    {
+        return mysql_select_db($database, $this->conn);
     }
 
     /**

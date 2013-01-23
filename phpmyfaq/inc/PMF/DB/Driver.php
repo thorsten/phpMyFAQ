@@ -37,7 +37,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 interface PMF_DB_Driver
 {
     /**
-     * Connects to the database
+     * Connects to the database server
      *
      * @param string $host     Hostname
      * @param string $user     Username
@@ -46,7 +46,16 @@ interface PMF_DB_Driver
      *
      * @return boolean
      */
-    public function connect($host, $user, $password, $db);
+    public function connect($host, $user, $password, $db = '');
+
+    /**
+     * Connects to a given database
+     *
+     * @param string $database Database name
+     *
+     * @return boolean
+     */
+    public function selectDb($database);
 
     /**
      * Sends a query to the database.

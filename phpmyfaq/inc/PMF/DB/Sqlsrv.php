@@ -70,14 +70,15 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      *
      * @param  string $host     A string specifying the name of the server to which a connection is being established
      * @param  string $user     Specifies the User ID to be used when connecting with SQL Server Authentication
-     * @param  string $passwd   Specifies the password associated with the User ID to be used when connecting with 
+     * @param  string $password Specifies the password associated with the User ID to be used when connecting with
      *                          SQL Server Authentication
      * @param  string $database Specifies the name of the database in use for the connection being established
+     * 
      * @return boolean true, if connected, otherwise false
      */
-    public function connect($host, $user, $passwd, $database)
+    public function connect($host, $user, $password, $database = '')
     {
-        $this->setConnectionOptions($user, $passwd, $database);
+        $this->setConnectionOptions($user, $password, $database);
         
         $this->conn = sqlsrv_connect($host, $this->connectionOptions);
         if (!$this->conn) {
@@ -86,7 +87,19 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
         }
         return true;
     }
-    
+
+    /**
+     * Connects to a given database
+     *
+     * @param string $database Database name
+     *
+     * @return boolean
+     */
+    public function selectDb($database)
+    {
+        return true;
+    }
+
     /**
      * Sets the connection options
      *

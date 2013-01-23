@@ -65,19 +65,37 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      *
      * @param   string $host
      * @param   string $user
-     * @param   string $passwd
-     * @param   string $db
+     * @param   string $password
+     * @param   string $database
      *
      * @return  boolean TRUE, if connected, otherwise FALSE
      */
-    public function connect($host, $user, $passwd, $db)
+    public function connect($host, $user, $password, $database = '')
     {
-        $this->conn = mssql_pconnect($host, $user, $passwd);
-        if (empty($db) OR $this->conn == false) {
+        $this->conn = mssql_pconnect($host, $user, $password);
+
+        if ($this->conn === false) {
             PMF_Db::errorPage(mssql_get_last_message());
             die();
         }
-        return mssql_select_db($db, $this->conn);
+
+        if ('' !== $database) {
+            return $this->selectDb($database);
+        }
+
+        return true;
+    }
+
+    /**
+     * Connects to a given database
+     *
+     * @param string $database Database name
+     *
+     * @return boolean
+     */
+    public function selectDb($database)
+    {
+        return mssql_select_db($database, $this->conn);
     }
 
     /**
