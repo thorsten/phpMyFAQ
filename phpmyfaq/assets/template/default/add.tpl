@@ -31,14 +31,14 @@
                 <div class="control-group">
                     <label class="control-label" for="question">{msgNewContentTheme}</label>
                     <div class="controls">
-                        <textarea cols="37" rows="3" name="question" id="question" required="required" {readonly} />{printQuestion}</textarea>
+                        <textarea cols="37" rows="3" name="question" id="question" required="required" {readonly}>{printQuestion}</textarea>
                     </div>
                 </div>
 
                 <div class="control-group">
                     <label class="control-label" for="answer">{msgNewContentArticle}</label>
                     <div class="controls">
-                        <textarea cols="37" rows="10" name="answer" id="answer" required="required" /></textarea>
+                        <textarea cols="37" rows="10" name="answer" id="answer" required="required"></textarea>
                     </div>
                 </div>
 
@@ -70,14 +70,25 @@
             <div id="loader"></div>
             <div id="faqs"></div>
 
+            <script type="text/javascript">
+                $(function() {
+                    $('#submitfaq').click(function() {
+                        saveFormValues('savefaq', 'faq');
+                    });
+                    $('form#formValues').submit(function() { return false; });
+                });
+            </script>
+
             [enableWysiwygEditor]
             <script src="admin/editor/tiny_mce.js?{currentTimestamp}"></script>
             <script type="text/javascript">
                 tinyMCE.init({
                     mode : "exact",
+                    language : "en",
                     elements : "answer",
                     theme : "advanced",
-                    theme_advanced_buttons1 : "bold,italic,underline,separator,strikethrough,justifyleft,justifycenter,justifyright,justifyfull,bullist,numlist,undo,redo,link,unlink",
+                    plugins : "fullscreen",
+                    theme_advanced_buttons1 : "bold,italic,underline,|,strikethrough,justifyleft,justifycenter,justifyright,justifyfull,bullist,numlist,undo,redo,link,unlink,|,fullscreen",
                     theme_advanced_buttons2 : "",
                     theme_advanced_buttons3 : "",
                     theme_advanced_toolbar_location : "top",
@@ -90,11 +101,3 @@
             </script>
             [/enableWysiwygEditor]
 
-            <script type="text/javascript">
-                $(function() {
-                    $('#submitfaq').click(function() {
-                        saveFormValues('savefaq', 'faq');
-                    });
-                    $('form#formValues').submit(function() { return false; });
-                });
-            </script>
