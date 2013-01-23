@@ -95,7 +95,7 @@
             [/enableWysiwygEditor]
 
             <script type="text/javascript">
-                $(function() {
+                $(document).ready(function() {
                     $('#submitfaq').click(function() {
                         if (undefined !== tinyMCE) {
                             tinyMCE.get("answer").setContent(tinyMCE.activeEditor.getContent());
