@@ -56,6 +56,17 @@ if (!is_null($id) && !is_null($srclang) && PMF_Language::isASupportedLanguage($s
 
 $captchaHelper = new PMF_Helper_Captcha($faqConfig);
 
+// Enable/Disable WYSIWYG editor
+if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
+    $tpl->parseBlock(
+        'writeContent',
+        'enableWysiwygEditor',
+        array(
+            'currentTimestamp' => $_SERVER['REQUEST_TIME']
+        )
+    );
+}
+
 $tpl->parse(
     'writeContent',
     array(
