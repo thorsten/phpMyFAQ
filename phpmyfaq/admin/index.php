@@ -21,14 +21,17 @@
  * @since     2002-09-16
  */
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
 define('PMF_ROOT_DIR', dirname(__DIR__));
 
 //
 // Check if config/database.php exist -> if not, redirect to installer
 //
 if (!file_exists(PMF_ROOT_DIR . '/config/database.php')) {
-    header("Location: ".str_replace('admin/index.php', '', $_SERVER['SCRIPT_NAME']).'install/setup.php');
-    exit();
+    RedirectResponse::create(str_replace('admin/index.php', '', $_SERVER['SCRIPT_NAME']).'install/setup.php')
+        ->send();
+    exit;
 }
 
 //
