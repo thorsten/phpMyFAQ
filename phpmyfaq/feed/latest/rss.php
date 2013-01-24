@@ -45,9 +45,10 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
 
 if ($faqConfig->get('security.enableLoginOnly')) {
     if (!isset($_SERVER['PHP_AUTH_USER'])) {
-        header('WWW-Authenticate: Basic realm="phpMyFAQ RSS Feeds"');
-        header('HTTP/1.0 401 Unauthorized');
-        exit;
+        $response = Response::create()
+            ->setStatusCode(401);
+        $response->headers->set('WWW-Authenticate', 'Basic realm="phpMyFAQ RSS Feeds"');
+        $response->send();
     } else {
         $user = new PMF_User_CurrentUser($faqConfig);
         if ($user->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) {
