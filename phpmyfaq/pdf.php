@@ -107,7 +107,6 @@ $category = new PMF_Category($faqConfig, $current_groups, true);
 $category->setUser($current_user);
 
 $pdf  = new PMF_Export_Pdf($faq, $category, $faqConfig);
-$http = new PMF_Helper_Http();
 
 if (true === $getAll) {
     $category->buildTree();
