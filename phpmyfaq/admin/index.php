@@ -492,7 +492,7 @@ if (isset($auth) && in_array(true, $permission)) {
                     json_decode($remoteHashes, true)
                 );
 
-                if (0 !== count($diff)) {
+                if (1 < count($diff)) {
                     printf('<p class="alert alert-danger">%s</p>', $PMF_LANG["ad_verification_notokay"]);
                     print '<ul>';
                     foreach ($diff as $file => $hash) {
