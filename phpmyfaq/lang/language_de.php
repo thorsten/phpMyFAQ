@@ -1146,3 +1146,6 @@ $LANG_CONF["main.enableWysiwygEditorFrontend"] = array(0 => "checkbox", 1 => "Ak
 
 // added v2.8.0-beta3 - 2013-01-15 by Thorsten
 $LANG_CONF["main.enableGravatarSupport"] = array(0 => "checkbox", 1 => "Gravatar Support (Standard: deaktiviert)");
+
+// added v2.8.0-RC - 2013-01-29 by Thorsten
+$PMF_LANG["ad_stopwords_desc"] = "Bitte wählen Sie eine Sprache aus, um neue Stopwörter hinzuzufügen oder zu bearbeiten.";

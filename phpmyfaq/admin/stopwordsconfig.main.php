@@ -29,12 +29,14 @@ if ($permission['editconfig']) {
     asort($sortedLanguageCodes);
     reset($sortedLanguageCodes);
 ?>
-
+        <p>
+            <?php echo $PMF_LANG['ad_stopwords_desc'] ?>
+        </p>
         <p>
             <select onchange="loadStopWordsByLang(this.options[this.selectedIndex].value)" id="stopwords_lang_selector">
             <option value="none">---</option>
 <?php foreach($sortedLanguageCodes as $key => $value) { ?>
-    <option value="<?php print strtolower($key); ?>"><?php print $value; ?></option>    
+    <option value="<?php echo strtolower($key); ?>"><?php echo $value; ?></option>    
 <?php } ?>
             </select>
             <span id="stopwords_loading_indicator"></span>
@@ -55,7 +57,7 @@ if ($permission['editconfig']) {
          * Load stop words by language, build html and put
          * it into stopwords_content container
          *
-         * @param string lang language to retrieve the stopwords by
+         * @param lang language to retrieve the stopwords by
          *
          * @return void
          */
@@ -81,7 +83,7 @@ if ($permission['editconfig']) {
         /**
          * Build complete html contents to view and edit stop words
          *
-         * @param array data Supposed is stop words json data
+         * @param data Supposed is stop words json data
          *
          * @return string
          */
@@ -114,7 +116,7 @@ if ($permission['editconfig']) {
             }
 
             html += '</table>';
-            html += '<a href="javascript: addStopWordInputElem();"><img src="images/add.gif" /></a>'
+            html += '<a class="btn btn-primary" href="javascript: addStopWordInputElem();"><i class="icon-add icon-white"></i> <?php echo $PMF_LANG['ad_config_stopword_input'] ?></a>';
 
             return html;
         }
@@ -123,8 +125,8 @@ if ($permission['editconfig']) {
         /**
          * Build an input element to view and edit stop word
          *
-         * @param string elem_id id of the html element
-         * @param string stopword
+         * @param elem_id id of the html element
+         * @param stopword
          *
          * @return string
          */
@@ -141,8 +143,8 @@ if ($permission['editconfig']) {
         /**
          * Id atribute is of the format stopword_<id>_<lang>
          *
-         * @param integer id database id of the word
-         * @param string lang
+         * @param id database id of the word
+         * @param lang
          *
          * @return string
          */
@@ -157,7 +159,7 @@ if ($permission['editconfig']) {
         /**
          * Parse the stopword element id and return a clean object
          *
-         * @param string elem_id input element id
+         * @param elem_id input element id
          *
          * @return object
          */
@@ -171,8 +173,8 @@ if ($permission['editconfig']) {
         /**
          * Handle enter press on a stop word input element
          *
-         * @param string elem_id input element id
-         * @param object e event
+         * @param elem_id input element id
+         * @param e event
          *
          * @return void
          */
@@ -196,7 +198,7 @@ if ($permission['editconfig']) {
         /**
          * Save stopword doing an ajax call
          *
-         * @param string elem_id input element id
+         * @param elem_id input element id
          *
          * @return void
          */
@@ -225,7 +227,7 @@ if ($permission['editconfig']) {
          * Save the value of the stop word input element.
          * This is bound on onfocus.
          *
-         * @param string elem_id input element id
+         * @param elem_id input element id
          *
          * @return void
          */
@@ -238,7 +240,7 @@ if ($permission['editconfig']) {
         /**
          * Handle stop word delete doing an ajax request.
          *
-         * @param string elem_id input element id
+         * @param elem_id input element id
          *
          * @return void
          */
@@ -267,7 +269,7 @@ if ($permission['editconfig']) {
          */
         function addStopWordInputElem()
         {
-            var word = prompt('<?php print $PMF_LANG["ad_config_stopword_input"]?>', '');
+            var word = prompt('<?php echo $PMF_LANG["ad_config_stopword_input"]?>', '');
             var lang = $('#stopwords_lang_selector').val();
 
             if(!!word) {
@@ -287,5 +289,5 @@ if ($permission['editconfig']) {
         </script>
 <?php
 } else {
-    print $PMF_LANG['err_NotAuth'];
+    echo $PMF_LANG['err_NotAuth'];
 }
