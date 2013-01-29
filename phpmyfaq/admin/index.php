@@ -431,6 +431,13 @@ if (isset($auth) && in_array(true, $permission)) {
             </section>
 
             <section class="row-fluid">
+                <header>
+                    <h3><?php echo $PMF_LANG["ad_stat_report_visits"] ?></h3>
+                </header>
+        
+            </section>
+
+            <section class="row-fluid">
                 <div class="span6">
                     <header>
                         <h3><?php print $PMF_LANG['ad_online_info']; ?></h3>
