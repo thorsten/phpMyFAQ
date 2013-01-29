@@ -57,16 +57,26 @@ class PMF_Helper_Captcha extends PMF_Helper
         $html = '';
 
         if (true === $this->_config->get('spam.enableCaptchaCode') && is_null($auth)) {
-            $html .= sprintf('<div class="controls"><label>%s</label>', $legend);
+            $html .= '<div class="control-group">';
+            $html .= '    <label class="control-label"></label>';
+            $html .= '    <div class="controls">';
             $html .= $captcha->printCaptcha($action);
+            $html .= '      </div>';
+            $html .= '</div>';
+            $html .= '<div class="control-group">';
+            $html .= sprintf('<label class="control-label">%s</label>', $legend);
+            $html .= '    <div class="controls">';
+            $html .= '        <div class="input-append">';
             $html .= sprintf(
-                '<input type="text" name="captcha" id="captcha" class="span2" size="%d" required="required" />',
+                '<input type="text" name="captcha" id="captcha" size="%d" required>',
                 $captcha->caplength
             );
             $html .= sprintf(
-                '<div class="captchaRefresh"><a href="javascript:;" onclick="refreshCaptcha(\'%s\');">%s</a></div>',
-                $action,
-                'click to refresh');
+                '<a class="btn" href="javascript:refreshCaptcha(\'%s\');"><i class="icon-refresh"></i></a>',
+                $action
+            );
+            $html .= '        </div>';
+            $html .= '    </div>';
             $html .= '</div>';
         }
         

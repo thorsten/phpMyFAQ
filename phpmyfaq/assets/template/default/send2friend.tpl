@@ -59,9 +59,7 @@
                     <textarea name="message" id="message" cols="37" rows="5"></textarea>
                 </p>
 
-                <p>
-                    {captchaFieldset}
-                </p>
+                {captchaFieldset}
 
                 <div id="loader"></div>
                 <div id="send2friends"></div>

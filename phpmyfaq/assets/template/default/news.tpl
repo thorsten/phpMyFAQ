@@ -56,9 +56,7 @@
                         </div>
                     </div>
 
-                    <div class="control-group">
                     {captchaFieldset}
-                    </div>
 
                     <div class="form-actions">
                         <button class="btn btn-primary" id="submitcomment" type="submit">

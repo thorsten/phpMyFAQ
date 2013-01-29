@@ -31,9 +31,7 @@
                     </div>
                 </div>
 
-                <div class="control-group">
-                    {captchaFieldset}
-                </div>
+                {captchaFieldset}
 
                 <div id="loader"></div>
 

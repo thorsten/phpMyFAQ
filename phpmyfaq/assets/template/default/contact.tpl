@@ -29,9 +29,7 @@
                     </div>
                 </div>
 
-                <div class="control-group">
-                    {captchaFieldset}
-                </div>
+                {captchaFieldset}
 
                 <div class="form-actions">
                     <button class="btn btn-primary" type="submit" id="submitcontact">
