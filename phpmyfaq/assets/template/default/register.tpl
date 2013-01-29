@@ -36,7 +36,7 @@
                 <div id="loader"></div>
 
                 <div class="form-actions">
-                    <button class="btn btn-primary" type="submit"  id="submitregistration">
+                    <button class="btn btn-primary" type="submit" id="submitregistration">
                         {submitRegister}
                     </button>
                 </div>
