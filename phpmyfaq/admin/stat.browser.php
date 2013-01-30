@@ -33,15 +33,15 @@ if ($permission['viewlog']) {
     $date        = new PMF_Date($faqConfig);
 ?>
         <header>
-            <h2><i class="icon-tasks"></i> <?php print $PMF_LANG['ad_sess_session'] . ' ' . date("Y-m-d", $day); ?></h2>
+            <h2><i class="icon-tasks"></i> <?php echo $PMF_LANG['ad_sess_session'] . ' ' . date("Y-m-d", $day); ?></h2>
         </header>
 
-        <table class="list" style="width: 100%">
+        <table class="table table-striped">
         <thead>
             <tr>
-                <th><?php print $PMF_LANG['ad_sess_ip']; ?></th>
-                <th><?php print $PMF_LANG['ad_sess_s_date']; ?></th>
-                <th><?php print $PMF_LANG['ad_sess_session']; ?></th>
+                <th><?php echo $PMF_LANG['ad_sess_ip']; ?></th>
+                <th><?php echo $PMF_LANG['ad_sess_s_date']; ?></th>
+                <th><?php echo $PMF_LANG['ad_sess_session']; ?></th>
             </tr>
         </thead>
         <tbody>
@@ -49,9 +49,9 @@ if ($permission['viewlog']) {
     foreach ($sessiondata as $sid => $data) {
 ?>
             <tr>
-                <td><?php print $data['ip']; ?></td>
-                <td><?php print $date->format(date("Y-m-d H:i", $data['time'])); ?></td>
-                <td><a href="?action=viewsession&amp;id=<?php print $sid; ?>"><?php print $sid; ?></a></td>
+                <td><?php echo $data['ip']; ?></td>
+                <td><?php echo $date->format(date("Y-m-d H:i", $data['time'])); ?></td>
+                <td><a href="?action=viewsession&amp;id=<?php echo $sid; ?>"><?php echo $sid; ?></a></td>
             </tr>
 <?php
     }
@@ -60,5 +60,5 @@ if ($permission['viewlog']) {
         </table>
 <?php
 } else {
-    print $PMF_LANG['err_NotAuth'];
+    echo $PMF_LANG['err_NotAuth'];
 }

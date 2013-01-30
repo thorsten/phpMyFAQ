@@ -23,7 +23,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($permission['viewlog']) {
-    require_once(PMF_ROOT_DIR.'/inc/Session.php');
 
     $sid = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
@@ -36,10 +35,10 @@ if ($permission['viewlog']) {
 
     $trackingdata = explode("\n", file_get_contents(PMF_ROOT_DIR.'/data/tracking'.date('dmY', $time)));
 ?>
-        <table class="list" style="width: 100%">
+        <table class="table table-striped">
         <tfoot>
             <tr>
-                <td colspan="2"><a href="?action=viewsessions"><?php print $PMF_LANG["ad_sess_back"]; ?></a></td>
+                <td colspan="2"><a href="?action=viewsessions"><?php echo $PMF_LANG["ad_sess_back"]; ?></a></td>
             </tr>
         </tfoot>
         <tbody>
@@ -51,27 +50,27 @@ if ($permission['viewlog']) {
                 $num++;
 ?>
             <tr>
-                <td><?php print date("Y-m-d H:i:s", $data[7]); ?></td>
-                <td><?php print $data[1]; ?> (<?php print $data[2]; ?>)</td>
+                <td><?php echo date("Y-m-d H:i:s", $data[7]); ?></td>
+                <td><?php echo $data[1]; ?> (<?php echo $data[2]; ?>)</td>
             </tr>
 <?php
                 if ($num == 1) {
 ?>
             <tr>
-                <td><?php print $PMF_LANG["ad_sess_referer"]; ?></td>
+                <td><?php echo $PMF_LANG["ad_sess_referer"]; ?></td>
                 <td>
-                    <a href="<?php print $data[5]; ?>" target="_blank">
-                        <?php print str_replace("?", "? ", $data[5]); ?>
+                    <a href="<?php echo $data[5]; ?>" target="_blank">
+                        <?php echo str_replace("?", "? ", $data[5]); ?>
                     </a>
                 </td>
             </tr>
             <tr>
-                <td><?php print $PMF_LANG["ad_sess_browser"]; ?></td>
-                <td><?php print $data[6]; ?></td>
+                <td><?php echo $PMF_LANG["ad_sess_browser"]; ?></td>
+                <td><?php echo $data[6]; ?></td>
             </tr>
             <tr>
-                <td><?php print $PMF_LANG["ad_sess_ip"]; ?>:</td>
-                <td><?php print $data[3]; ?></td>
+                <td><?php echo $PMF_LANG["ad_sess_ip"]; ?>:</td>
+                <td><?php echo $data[3]; ?></td>
             </tr>
 <?php
                 }
@@ -82,5 +81,5 @@ if ($permission['viewlog']) {
         </table>
 <?php
 } else {
-	print $PMF_LANG['err_NotAuth'];
+    echo $PMF_LANG['err_NotAuth'];
 }

@@ -434,7 +434,7 @@ if (isset($auth) && in_array(true, $permission)) {
                 <header>
                     <h3><?php echo $PMF_LANG["ad_stat_report_visits"] ?></h3>
                 </header>
-        
+
             </section>
 
             <section class="row-fluid">
