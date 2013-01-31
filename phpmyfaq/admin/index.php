@@ -431,10 +431,29 @@ if (isset($auth) && in_array(true, $permission)) {
             </section>
 
             <section class="row-fluid">
-                <header>
-                    <h3><?php echo $PMF_LANG["ad_stat_report_visits"] ?></h3>
-                </header>
-
+                <div class="span12">
+                    <header>
+                        <h3><?php echo $PMF_LANG["ad_stat_report_visits"] ?></h3>
+                    </header>
+                    <?php
+                    $session = new PMF_Session($faqConfig);
+                    $visits  = $session->getLast30DaysVisits();
+                    ?>
+                    <script type="text/javascript" src="../assets/js/plugins/jquery.sparkline.min.js"></script>
+                    <script type="text/javascript">
+                        $(function() {
+                            var visits = [<?php echo implode(',', $visits) ?>];
+                            $('.visits').sparkline(
+                                visits, {
+                                    type: 'bar',
+                                    barColor: '#fbc372',
+                                    barWidth: 32,
+                                    height: 200
+                                });
+                        });
+                    </script>
+                    <span class="visits">Loading...</span>
+                </div>
             </section>
 
             <section class="row-fluid">

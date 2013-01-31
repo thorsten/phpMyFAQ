@@ -190,13 +190,15 @@ class PMF_Session
                 time",
             PMF_Db::getTablePrefix(),
             $firstHour,
-            $lastHour);
+            $lastHour
+        );
 
         $result = $this->_config->getDb()->query($query);
         while ($row = $this->_config->getDb()->fetchObject($result)) {
             $sessions[$row->sid] = array(
                 'ip'   => $row->ip,
-                'time' => $row->time);
+                'time' => $row->time
+            );
         }
 
         return $sessions;
@@ -366,6 +368,50 @@ class PMF_Session
     }
 
     /**
+     * Calculates the number of visits per day the last 30 days
+     *
+     * @returns array
+     */
+    public function getLast30DaysVisits()
+    {
+        $stats  = array();
+        $visits = array();
+
+        $startDate = strtotime('-1 month');
+        $endDate   = $_SERVER['REQUEST_TIME'];
+
+        $query = sprintf("
+            SELECT
+                sid, time
+            FROM
+                %sfaqsessions
+            WHERE
+                time > %d
+            AND
+                time < %d;",
+            PMF_Db::getTablePrefix(),
+            $startDate,
+            $endDate
+        );
+        $result = $this->_config->getDb()->query($query);
+
+        while ($row = $this->_config->getDb()->fetchObject($result)) {
+            $visits[] = $row->time;
+        }
+
+        for ($date = $startDate; $date <= $endDate; $date += 86400) {
+            $stats[date('Y-m-d', $date)] = 0;
+            foreach ($visits as $visitDate) {
+                if (date('Y-m-d', $date) === date('Y-m-d', $visitDate)) {
+                    $stats[date('Y-m-d', $date)]++;
+                }
+            }
+        }
+
+        return $stats;
+    }
+
+    /**
      * Store the Session ID into a persistent cookie expiring
      * PMF_SESSION_EXPIRED_TIME seconds after the page request.
      *
@@ -380,7 +426,7 @@ class PMF_Session
         return setcookie(
             $name,
             $sessionId, 
-            $_SERVER['REQUEST_TIME'] + PMF_SESSION_EXPIRED_TIME,
+            $_SERVER['REQUEST_TIME'] + $timeout,
             dirname($_SERVER['SCRIPT_NAME'])
         );
     }

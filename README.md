@@ -100,6 +100,10 @@ Licensed under the terms of the MIT License
 
 Licensed under the terms of the MIT License
 
+**[jQuery Sparklines plugin](http://omnipotent.net/jquery.sparkline/)**
+
+Licensed under the terms of the New BSD License
+
 **[Modernizr](http://www.modernizr.com/)**
 
 Licensed under the terms of the MIT and BSD licenses
