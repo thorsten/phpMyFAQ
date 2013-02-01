@@ -1192,3 +1192,4 @@ $LANG_CONF["main.enableGravatarSupport"] = array(0 => "checkbox", 1 => "Gravatar
 
 // added v2.8.0-RC - 2013-01-29 by Thorsten
 $PMF_LANG["ad_stopwords_desc"] = "Please select a language to add or edit stopwords.";
+$PMF_LANG["ad_visits_per_day"] = "Visits per day";

@@ -205,7 +205,9 @@ switch ($action) {
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a class="brand" href="../index.php"><?php print $faqConfig->get('main.titleFAQ'); ?></a>
+            <a class="brand" href="../index.php" rel="tooltip" title="<?php print $faqConfig->get('main.titleFAQ'); ?>">
+                phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?>
+            </a>
             <div class="nav-collapse">
                 <?php if (isset($auth) && in_array(true, $permission)): ?>
                 <ul class="nav">
