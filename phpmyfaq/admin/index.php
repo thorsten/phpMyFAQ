@@ -337,7 +337,7 @@ if (isset($auth) && in_array(true, $permission)) {
             case 'addnews':
             case 'editnews':
             case 'savenews':
-            case 'updatenews':	
+            case 'updatenews':
             case 'deletenews':              require_once 'news.php'; break;
             // category administration
             case 'content':
@@ -376,6 +376,7 @@ if (isset($auth) && in_array(true, $permission)) {
             case 'reportview':              require_once 'report.view.php'; break;
             // functions for config administration
             case 'config':                  require_once 'configuration.php'; break;
+            case 'system':                  require_once 'system.php'; break;
             case 'updateinstance':
             case 'instances':               require_once 'instances.php'; break;
             case 'editinstance':            require_once 'instances.edit.php'; break;
@@ -553,38 +554,10 @@ if (isset($auth) && in_array(true, $permission)) {
 ?>
                     <script>$(function(){ $('span[class="pmf-popover"]').popover();});</script>
                 </div>
-            </section>
-
-            <section class="row-fluid">
-                <header>
-                    <h3><?php print $PMF_LANG['ad_system_info']; ?></h3>
-                </header>
-                <div class="pmf-system-information">
-                    <table class="table table-striped">
-                    <tbody>
-                        <?php
-                        $systemInformation = array(
-                            'phpMyFAQ Version'    => $faqSystem->getVersion(),
-                            'Server Software'     => $_SERVER['SERVER_SOFTWARE'],
-                            'PHP Version'         => PHP_VERSION,
-                            'DB Server'           => PMF_Db::getType(),
-                            'DB Client Version'   => $faqConfig->getDb()->clientVersion(),
-                            'DB Server Version'   => $faqConfig->getDb()->serverVersion(),
-                            'Webserver Interface' => strtoupper(@php_sapi_name()),
-                            'PHP Extensions'      => implode(', ', get_loaded_extensions())
-                        );
-                        foreach ($systemInformation as $name => $info): ?>
-                        <tr>
-                            <td class="span3"><strong><?php print $name ?></strong></td>
-                            <td><?php print $info ?></td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                    </table>
-                </div>
 
                 <div style="font-size: 5px; text-align: right; color: #f5f5f5">NOTE: Art is resistance.</div>
             </section>
+
 <?php
     }
 // User is authenticated, but has no rights

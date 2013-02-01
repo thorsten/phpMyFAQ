@@ -137,8 +137,10 @@ switch ($action) {
     case 'transadd':
     case 'upgrade':
     case 'instances':
+    case 'system':
         $secLevelHeader    = $PMF_LANG['admin_mainmenu_configuration'];
         $secLevelEntries  .= $adminHelper->addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
+        $secLevelEntries  .= $adminHelper->addMenuEntry('', 'system', 'ad_system_info', $action, false);
         $secLevelEntries  .= $adminHelper->addMenuEntry('editinstances+addinstances+delinstances', 'instances', 'ad_menu_instances', $action);
         $secLevelEntries  .= $adminHelper->addMenuEntry('editconfig', 'stopwordsconfig', 'ad_menu_stopwordsconfig', $action);
         $secLevelEntries  .= $adminHelper->addMenuEntry('edittranslation+addtranslation+deltranslation', 'translist', 'ad_menu_translations', $action);
@@ -151,6 +153,7 @@ switch ($action) {
         $secLevelEntries .= $adminHelper->addMenuEntry('addbt', 'editentry', 'ad_quick_record');
         $secLevelEntries .= $adminHelper->addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit');
         $secLevelEntries .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open');
+        $secLevelEntries .= $adminHelper->addMenuEntry('', 'system', 'ad_system_info', $action, false);
         $dashboardPage    = true;
         break;
 }
