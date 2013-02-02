@@ -33,15 +33,15 @@ if (! is_null($showCaptcha)) {
 $faqsession->userTracking('new_entry', 0);
 
 // Get possible user input
-$inputQuestion = PMF_Filter::filterInput(INPUT_GET, 'question', FILTER_VALIDATE_INT);
-$inputCategory = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+$selectedQuestion = PMF_Filter::filterInput(INPUT_GET, 'question', FILTER_VALIDATE_INT);
+$selectedCategory = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 
 $question = $readonly = '';
-if (!is_null($inputQuestion)) {
-    $oQuestion = $faq->getQuestion($inputQuestion);
+if (!is_null($selectedQuestion)) {
+    $oQuestion = $faq->getQuestion($selectedQuestion);
     $question  = $oQuestion['question'];
     if (PMF_String::strlen($question)) {
-        $readonly = ' readonly="readonly"';
+        $readonly = ' readonly';
     }
 }
 
@@ -69,13 +69,13 @@ $tpl->parse(
         'msgNewContentHeader'   => $PMF_LANG['msgNewContentHeader'],
         'msgNewContentAddon'    => $PMF_LANG['msgNewContentAddon'],
         'lang'                  => $Language->getLanguage(),
-        'openQuestionID'        => $inputQuestion,
+        'openQuestionID'        => $selectedQuestion,
         'defaultContentMail'    => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
         'defaultContentName'    => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
         'msgNewContentName'     => $PMF_LANG['msgNewContentName'],
         'msgNewContentMail'     => $PMF_LANG['msgNewContentMail'],
         'msgNewContentCategory' => $PMF_LANG['msgNewContentCategory'],
-        'printCategoryOptions'  => $categoryHelper->renderOptions($inputCategory),
+        'printCategoryOptions'  => $categoryHelper->renderOptions($selectedCategory),
         'msgNewContentTheme'    => $PMF_LANG['msgNewContentTheme'],
         'readonly'              => $readonly,
         'printQuestion'         => $question,
