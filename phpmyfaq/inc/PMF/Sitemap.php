@@ -122,7 +122,7 @@ class PMF_Sitemap
                 $this->user);
         }
 
-        $writeLetters = '<p id="sitemapletters">';
+        $writeLetters = '<ul class="nav">';
 
         if ($this->_config->getDb() instanceof PMF_DB_Sqlite || $this->_config->getDb() instanceof PMF_DB_Sqlite3) {
 
@@ -196,10 +196,10 @@ class PMF_Sitemap
                     $this->_config->getLanguage()->getLanguage());
                 $oLink         = new PMF_Link($url, $this->_config);
                 $oLink->text   = (string)$letters;
-                $writeLetters .= $oLink->toHtmlAnchor().' ';
+                $writeLetters .= '<li>' . $oLink->toHtmlAnchor().'</li>';
             }
         }
-        $writeLetters .= '</p>';
+        $writeLetters .= '</ul>';
 
         return $writeLetters;
     }

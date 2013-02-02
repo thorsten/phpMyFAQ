@@ -3,7 +3,12 @@
                 <h2>{writeCurrentLetter}</h2>
             </header>
 
-            <p>{writeLetters}</p>
+            <div class="navbar navbar-sitemap">
+                <div class="navbar-inner">
+                    {writeLetters}
+                </div>
+            </div>
+
             <p>{writeMap}</p>
         </section>
 

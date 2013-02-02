@@ -48,15 +48,12 @@
             </script>
             
             <!-- PLEASE DO NOT REMOVE THE COPYRIGHT NOTICE -->
-            <div id="version">
-                <a href="http://www.phpmyfaq.de">
-                    <img src="assets/img/logo.png" width="88" height="31" alt="powered by phpMyFAQ {version}" title="powered by phpMyFAQ {version}" />
-                </a>
-            </div>
             <div id="copyright">
+                <small>
                 &copy; 2001 - 2013 by <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> under the <a href="http://www.mozilla.org/MPL/2.0/">Mozilla Public License</a>.
-                All rights reserved.
-                Template/CSS by <a href="http://www.rinne.info">Thorsten Rinne</a>.
+                All rights reserved.<br>
+                Template/CSS by <a href="http://www.rinne.info">Thorsten Rinne</a>,
                 phpMyFAQ logo by <a href="http://www.lieven.be/">Lieven Op De Beeck</a>.
+                </small>
             </div>
             <!-- PLEASE DO NOT REMOVE THE COPYRIGHT NOTICE -->

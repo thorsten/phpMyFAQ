@@ -11952,6 +11952,9 @@ body {
 #main .phpmyfaq-search-results li {
   padding-bottom: 5px;
 }
+#main #copyright {
+  text-align: center;
+}
 footer {
   background: #28343b;
   color: #f2f2f2;

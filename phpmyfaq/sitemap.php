@@ -41,7 +41,7 @@ $tpl->parse (
     array(
         'writeLetters'       => $sitemap->getAllFirstLetters(),
         'writeMap'           => $sitemap->getRecordsFromLetter($currentLetter),
-        'writeCurrentLetter' => $currentLetter
+        'writeCurrentLetter' => empty($currentLetter) ? $PMF_LANG['msgSitemap'] : $currentLetter
     )
 );
 
