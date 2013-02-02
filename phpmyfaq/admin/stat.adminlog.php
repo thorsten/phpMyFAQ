@@ -58,20 +58,28 @@ if ($permission['adminlog'] && 'adminlog' == $action) {
     $loggingData = $logging->getAll();
 ?>
     <header>
-        <h2><i class="icon-tasks"></i> <?php print $PMF_LANG["ad_adminlog"]; ?></h2>
+        <h2>
+            <i class="icon-tasks"></i> <?php echo $PMF_LANG["ad_menu_adminlog"]; ?>
+            <div class="pull-right">
+                <a class="btn btn-danger" href="?action=deleteadminlog">
+                    <i class="icon-trash"></i> <?php echo $PMF_LANG['ad_adminlog_del_older_30d'] ?>
+                </a>
+            </div>
+        </h2>
     </header>
+
     <table class="table table-striped">
     <thead>
         <tr>
-            <th><?php print $PMF_LANG["ad_categ_id"]; ?></th>
-            <th><?php print $PMF_LANG["ad_adminlog_date"]; ?></th>
-            <th><?php print $PMF_LANG["ad_adminlog_user"]; ?></th>
-            <th><?php print $PMF_LANG["ad_adminlog_ip"]; ?></th>
+            <th><?php echo $PMF_LANG["ad_categ_id"]; ?></th>
+            <th><?php echo $PMF_LANG["ad_adminlog_date"]; ?></th>
+            <th><?php echo $PMF_LANG["ad_adminlog_user"]; ?></th>
+            <th colspan="2"><?php echo $PMF_LANG["ad_adminlog_ip"]; ?></th>
         </tr>
     </thead>
     <tfoot>
         <tr>
-            <td colspan="4"><?php echo $pagination->render(); ?></td>
+            <td colspan="5"><?php echo $pagination->render(); ?></td>
         </tr>
     </tfoot>
     <tbody>
@@ -93,26 +101,24 @@ if ($permission['adminlog'] && 'adminlog' == $action) {
         
         $user->getUserById($logging_value['usr']);
 ?>
-        <tr class="cell">
-            <td><?php print $logging_id; ?></td>
-            <td><?php print $date->format(date('Y-m-d H:i', $logging_value['time'])); ?></td>
-            <td><?php print $user->getLogin(); ?></td>
-            <td><?php print $logging_value['ip']; ?></td>
-        </tr>
-        <tr class="cell">
-            <td colspan="4"><?php
-        $text = $logging_value['text'];
-        $text = str_replace("Loginerror", $PMF_LANG["ad_log_lger"], $text);
-        $text = str_replace("Session expired", $PMF_LANG["ad_log_sess"], $text);
-        $text = str_replace("Useredit, ", $PMF_LANG["ad_log_edit"], $text);
-        $text = str_replace("Beitragcreatesave", $PMF_LANG["ad_log_crsa"], $text);
-        $text = str_replace("Beitragcreate", $PMF_LANG["ad_log_crea"], $text);
-        $text = str_replace("Usersave, ", $PMF_LANG["ad_log_ussa"], $text);
-        $text = str_replace("Userdel, ", $PMF_LANG["ad_log_usde"], $text);
-        $text = str_replace("Beitragedit, ", $PMF_LANG["ad_log_beed"], $text);
-        $text = str_replace("Beitragdel, ", $PMF_LANG["ad_log_bede"], $text);
-        print $text;
-?></td>
+        <tr>
+            <td><?php echo $logging_id; ?></td>
+            <td><?php echo $date->format(date('Y-m-d H:i', $logging_value['time'])); ?></td>
+            <td><?php echo $user->getLogin(); ?></td>
+            <td><?php echo $logging_value['ip']; ?></td>
+            <td><small><?php
+            $text = $logging_value['text'];
+            $text = str_replace("Loginerror", $PMF_LANG["ad_log_lger"], $text);
+            $text = str_replace("Session expired", $PMF_LANG["ad_log_sess"], $text);
+            $text = str_replace("Useredit, ", $PMF_LANG["ad_log_edit"], $text);
+            $text = str_replace("Beitragcreatesave", $PMF_LANG["ad_log_crsa"], $text);
+            $text = str_replace("Beitragcreate", $PMF_LANG["ad_log_crea"], $text);
+            $text = str_replace("Usersave, ", $PMF_LANG["ad_log_ussa"], $text);
+            $text = str_replace("Userdel, ", $PMF_LANG["ad_log_usde"], $text);
+            $text = str_replace("Beitragedit, ", $PMF_LANG["ad_log_beed"], $text);
+            $text = str_replace("Beitragdel, ", $PMF_LANG["ad_log_bede"], $text);
+            echo $text; ?></small>
+            </td>
         </tr>
 <?php
     }
@@ -120,11 +126,6 @@ if ($permission['adminlog'] && 'adminlog' == $action) {
     </tbody>
     </table>
 
-    <p>
-        <a class="btn btn-danger" href="?action=deleteadminlog">
-            <?php echo $PMF_LANG['ad_adminlog_del_older_30d'] ?>
-        </a>
-    </p>
 <?php
 } elseif ($permission['adminlog'] && 'deleteadminlog' == $action) {
 
@@ -134,5 +135,5 @@ if ($permission['adminlog'] && 'adminlog' == $action) {
         printf('<p class="error">%s</p>', $PMF_LANG['ad_adminlog_delete_failure']);
     }
 } else {
-    print $PMF_LANG["err_NotAuth"];
+    echo $PMF_LANG["err_NotAuth"];
 }

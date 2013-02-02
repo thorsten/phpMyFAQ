@@ -61,10 +61,10 @@ if ($permission['viewlog']) {
         <table class="table table-striped">
         <thead>
         <tr>
-            <th><?php print $PMF_LANG['ad_searchstats_search_term'] ?></th>
-            <th><?php print $PMF_LANG['ad_searchstats_search_term_count'] ?></th>
-            <th><?php print $PMF_LANG['ad_searchstats_search_term_lang'] ?></th>
-            <th colspan="2"><?php print $PMF_LANG['ad_searchstats_search_term_percentage'] ?></th>
+            <th><?php echo $PMF_LANG['ad_searchstats_search_term'] ?></th>
+            <th><?php echo $PMF_LANG['ad_searchstats_search_term_count'] ?></th>
+            <th><?php echo $PMF_LANG['ad_searchstats_search_term_lang'] ?></th>
+            <th colspan="2"><?php echo $PMF_LANG['ad_searchstats_search_term_percentage'] ?></th>
             <th>&nbsp;</th>
         </tr>
         </thead>
@@ -94,20 +94,20 @@ if ($permission['viewlog']) {
         
         $num = round(($searchItem['number']*100 / $searchesCount), 2);
 ?>
-        <tr class="row_search_id_<?php print $searchItem['id'] ?>">
-            <td><?php print PMF_String::htmlspecialchars($searchItem['searchterm']);  ?></td>
-            <td><?php print $searchItem['number'] ?></td>
-            <td><?php print $languageCodes[PMF_String::strtoupper($searchItem['lang'])] ?></td>
+        <tr class="row_search_id_<?php echo $searchItem['id'] ?>">
+            <td><?php echo PMF_String::htmlspecialchars($searchItem['searchterm']);  ?></td>
+            <td><?php echo $searchItem['number'] ?></td>
+            <td><?php echo $languageCodes[PMF_String::strtoupper($searchItem['lang'])] ?></td>
             <td>
                 <div class="progress progress-info" style="width: 50px;">
-                    <div class="bar" style="width: <?php print $num; ?>%;"></div>
+                    <div class="bar" style="width: <?php echo $num; ?>%;"></div>
                 </div>
             </td>
-            <td><?php print $num; ?>%</td>
+            <td><?php echo $num; ?>%</td>
             <td>
-                <a onclick="deleteSearchTerm('<?php print $searchItem['searchterm'] ?>', <?php print $searchItem['id'] ?>); return false;"
-                   href="javascript:;">
-                    <span title="<?php print $PMF_LANG["ad_news_delete"]; ?>" class="icon-trash"></span>
+                <a class="btn btn-danger" href="javascript:;"
+                   onclick="deleteSearchTerm('<?php echo $searchItem['searchterm'] ?>', <?php echo $searchItem['id'] ?>); return false;">
+                    <span title="<?php echo $PMF_LANG["ad_news_delete"]; ?>" class="icon-trash"></span>
                 </a>
             </td>
         </tr>
@@ -122,10 +122,11 @@ if ($permission['viewlog']) {
          * Ajax call to delete search term
          *
          * @param searchterm
+         * @param searchId
          */
         function deleteSearchTerm(searchterm, searchId)
         {
-            if (confirm('<?php print $PMF_LANG['ad_user_del_3'] ?>')) {
+            if (confirm('<?php echo $PMF_LANG['ad_user_del_3'] ?>')) {
                 $.getJSON("index.php?action=ajax&ajax=search&ajaxaction=delete_searchterm&searchterm=" + searchterm,
                 function(response) {
                     if (response == 1) {
@@ -144,5 +145,5 @@ if ($permission['viewlog']) {
 <?php 
 
 } else {
-    print $PMF_LANG['err_NotAuth'];
+    echo $PMF_LANG['err_NotAuth'];
 }

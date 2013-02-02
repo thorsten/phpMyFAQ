@@ -361,12 +361,11 @@ if (isset($auth) && in_array(true, $permission)) {
             case 'deleteglossary':          require_once 'glossary.main.php'; break;
             case 'addglossary':             require_once 'glossary.add.php'; break;
             case 'editglossary':            require_once 'glossary.edit.php'; break;
-            // adminlog administration
-            case 'adminlog':
-            case 'deleteadminlog':          require_once 'adminlog.php'; break;
             // functions for password administration
             case "passwd":                  require_once 'pwd.change.php'; break;
             // functions for session administration
+            case 'adminlog':
+            case 'deleteadminlog':          require_once 'stat.adminlog.php'; break;
             case "viewsessions":            require_once 'stat.main.php'; break;
             case "sessionbrowse":           require_once 'stat.browser.php'; break;
             case "viewsession":             require_once 'stat.show.php'; break;
