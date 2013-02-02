@@ -28,120 +28,122 @@ $news = new PMF_News($faqConfig);
 if ('addnews' == $action && $permission["addnews"]) {
 ?>
         <header>
-            <h2><i class="icon-pencil"></i> <?php print $PMF_LANG['ad_news_data']; ?></h2>
+            <h2><i class="icon-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
         </header>
 
         <form class="form-horizontal" id="faqEditor" name="faqEditor" action="?action=savenews" method="post">
         <fieldset>
-            <legend><?php print $PMF_LANG['ad_news_add']; ?></legend>
+            <legend><?php echo $PMF_LANG['ad_news_add']; ?></legend>
 
             <div class="control-group">
-                <label class="control-label" for="newsheader"><?php print $PMF_LANG['ad_news_header']; ?></label>
+                <label class="control-label" for="newsheader"><?php echo $PMF_LANG['ad_news_header']; ?></label>
                 <div class="controls">
-                    <input class="input-xxlarge" type="text" name="newsheader" id="newsheader" />
+                    <input class="input-xxlarge" type="text" name="newsheader">
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="news"><?php print $PMF_LANG['ad_news_text']; ?>:</label>
+                <label class="control-label" for="news"><?php echo $PMF_LANG['ad_news_text']; ?>:</label>
                 <div class="controls">
                     <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
-                    <textarea id="news" name="news" cols="84" rows="5"></textarea>
+                    <textarea name="news" cols="84" rows="5"></textarea>
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="authorName"><?php print $PMF_LANG['ad_news_author_name']; ?></label>
+                <label class="control-label" for="authorName"><?php echo $PMF_LANG['ad_news_author_name']; ?></label>
                 <div class="controls">
-                    <input class="input-xxlarge" type="text" name="authorName" id="authorName" value="<?php print $user->getUserData('display_name'); ?>"/>
+                    <input class="input-xxlarge" type="text" name="authorName" id="authorName" 
+                           value="<?php echo $user->getUserData('display_name'); ?>"/>
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="authorEmail"><?php print $PMF_LANG['ad_news_author_email']; ?></label>
+                <label class="control-label" for="authorEmail"><?php echo $PMF_LANG['ad_news_author_email']; ?></label>
                 <div class="controls">
-                    <input class="input-xxlarge" type="email" name="authorEmail" id="authorEmail" value="<?php print $user->getUserData('email'); ?>"/>
+                    <input class="input-xxlarge" type="email" name="authorEmail" id="authorEmail" 
+                           value="<?php echo $user->getUserData('email'); ?>"/>
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="active"><?php print $PMF_LANG['ad_news_set_active']; ?></label>
+                <label class="control-label" for="active"><?php echo $PMF_LANG['ad_news_set_active']; ?></label>
                 <div class="controls">
                     <label class="checkbox">
-                        <input type="checkbox" name="active" id="active" value="y" />
-                        <?php print $PMF_LANG['ad_gen_yes']; ?>
+                        <input type="checkbox" name="active" id="active" value="y">
+                        <?php echo $PMF_LANG['ad_gen_yes']; ?>
                     </label>
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="comment"><?php print $PMF_LANG['ad_news_allowComments']; ?></label>
+                <label class="control-label" for="comment"><?php echo $PMF_LANG['ad_news_allowComments']; ?></label>
                 <div class="controls">
                     <label class="checkbox">
-                        <input type="checkbox" name="comment" id="comment" value="y" />
-                        <?php print $PMF_LANG['ad_gen_yes']; ?>
+                        <input type="checkbox" name="comment" id="comment" value="y">
+                        <?php echo $PMF_LANG['ad_gen_yes']; ?>
                     </label>
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="link"><?php print $PMF_LANG['ad_news_link_url']; ?></label>
+                <label class="control-label" for="link"><?php echo $PMF_LANG['ad_news_link_url']; ?></label>
                 <div class="controls">
-                    <input class="input-xxlarge" type="url" name="link" id="link" value="http://" />
+                    <input class="input-xxlarge" type="url" name="link" id="link" value="http://">
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="linkTitle"><?php print $PMF_LANG['ad_news_link_title']; ?></label>
+                <label class="control-label" for="linkTitle"><?php echo $PMF_LANG['ad_news_link_title']; ?></label>
                 <div class="controls">
-                    <input type="text" name="linkTitle" id="linkTitle" />
+                    <input type="text" name="linkTitle" id="linkTitle">
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" ><?php print $PMF_LANG['ad_news_link_target']; ?></label>
+                <label class="control-label" ><?php echo $PMF_LANG['ad_news_link_target']; ?></label>
                 <div class="controls">
                     <label class="radio">
-                        <input type="radio" name="target" value="blank" />
-                        <?php print $PMF_LANG['ad_news_link_window'] ?>
+                        <input type="radio" name="target" value="blank">
+                        <?php echo $PMF_LANG['ad_news_link_window'] ?>
                     </label>
                     <label class="radio">
-                        <input type="radio" name="target" value="self" />
-                        <?php print $PMF_LANG['ad_news_link_faq'] ?>
+                        <input type="radio" name="target" value="self">
+                        <?php echo $PMF_LANG['ad_news_link_faq'] ?>
                     </label>
                     <label class="radio">
-                        <input type="radio" name="target" value="parent" />
-                        <?php print $PMF_LANG['ad_news_link_parent'] ?>
+                        <input type="radio" name="target" value="parent">
+                        <?php echo $PMF_LANG['ad_news_link_parent'] ?>
                     </label>
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
+                <label class="control-label" for="langTo"><?php echo $PMF_LANG["ad_entry_locale"]; ?>:</label>
                 <div class="controls">
-                    <?php print PMF_Language::selectLanguages($LANGCODE, false, array(), 'langTo'); ?>
+                    <?php echo PMF_Language::selectLanguages($LANGCODE, false, array(), 'langTo'); ?>
                 </div>
             </div>
         </fieldset>
             
         <fieldset>
-            <legend><?php print $PMF_LANG['ad_news_expiration_window']; ?></legend>
+            <legend><?php echo $PMF_LANG['ad_news_expiration_window']; ?></legend>
             <div class="control-group">
-                <label class="control-label" for="dateStart"><?php print $PMF_LANG['ad_news_from']; ?></label>
+                <label class="control-label" for="dateStart"><?php echo $PMF_LANG['ad_news_from']; ?></label>
                 <div class="controls">
-                    <input type="date" name="dateStart" id="dateStart" class="date-pick" />
+                    <input type="date" name="dateStart" id="dateStart" class="date-pick">
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="dateEnd"><?php print $PMF_LANG['ad_news_to']; ?></label>
+                <label class="control-label" for="dateEnd"><?php echo $PMF_LANG['ad_news_to']; ?></label>
                 <div class="controls">
-                    <input type="date" name="dateEnd" id="dateEnd" class="date-pick" />
+                    <input type="date" name="dateEnd" id="dateEnd" class="date-pick">
                 </div>
             </fieldset>
 
             <div class="form-actions">
                 <button class="btn btn-primary" type="submit">
-                    <?php print $PMF_LANG['ad_news_add']; ?>
+                    <?php echo $PMF_LANG['ad_news_add']; ?>
                 </button>
                 <a class="btn btn-info" href="?action=news">
                     <?php echo $PMF_LANG['ad_entry_back']; ?>
@@ -165,9 +167,8 @@ if ('addnews' == $action && $permission["addnews"]) {
         <table class="table table-striped">
         <thead>
             <tr>
-                <th><?php print $PMF_LANG["ad_news_headline"]; ?></th>
-                <th><?php print $PMF_LANG["ad_news_date"]; ?></th>
-                <th>&nbsp;</th>
+                <th><?php echo $PMF_LANG["ad_news_headline"]; ?></th>
+                <th colspan="2"><?php echo $PMF_LANG["ad_news_date"]; ?></th>
             </tr>
         </thead>
         <tbody>
@@ -178,23 +179,25 @@ if ('addnews' == $action && $permission["addnews"]) {
             foreach($newsHeader as $newsItem) {
 ?>
         <tr>
-            <td><?php print $newsItem['header']; ?></td>
-            <td><?php print $date->format($newsItem['date']); ?></td>
+            <td><?php echo $newsItem['header']; ?></td>
+            <td><?php echo $date->format($newsItem['date']); ?></td>
             <td>
-                <a href="?action=editnews&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_update"]; ?>">
-                    <span title="<?php print $PMF_LANG["ad_news_update"]; ?>" class="icon-edit"></span>
+                <a class="btn btn-primary" href="?action=editnews&amp;id=<?php echo $newsItem['id']; ?>">
+                    <span title="<?php echo $PMF_LANG["ad_news_update"]; ?>" class="icon-edit"></span>
                 </a>
                 &nbsp;&nbsp;
-                <a href="?action=deletenews&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_delete"]; ?>">
-                    <span title="<?php print $PMF_LANG["ad_news_delete"]; ?>" class="icon-trash"></span>
+                <a class="btn btn-danger" href="?action=deletenews&amp;id=<?php echo $newsItem['id']; ?>">
+                    <span title="<?php echo $PMF_LANG["ad_news_delete"]; ?>" class="icon-trash"></span>
                 </a>
             </td>
         </tr>
 <?php
             }
         } else {
-            printf('<tr><td colspan="3">%s</td></tr>',
-                $PMF_LANG['ad_news_nodata']);
+            printf(
+                '<tr><td colspan="3">%s</td></tr>',
+                $PMF_LANG['ad_news_nodata']
+            );
         }
 ?>
         </tbody>
@@ -205,104 +208,109 @@ if ('addnews' == $action && $permission["addnews"]) {
     $newsData = $news->getNewsEntry($id, true);
 ?>
         <header>
-            <h2><i class="icon-pencil"></i> <?php print $PMF_LANG['ad_news_data']; ?></h2>
+            <h2><i class="icon-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
         </header>
 
         <form class="form-horizontal" action="?action=updatenews" method="post">
         <fieldset>
-        <legend><?php print $PMF_LANG['ad_news_edit']; ?></legend>
+        <legend><?php echo $PMF_LANG['ad_news_edit']; ?></legend>
 
-            <input type="hidden" name="id" value="<?php print $newsData['id']; ?>" />
+            <input type="hidden" name="id" value="<?php echo $newsData['id']; ?>">
 
             <div class="control-group">
-                <label class="control-label" for="newsheader"><?php print $PMF_LANG['ad_news_header']; ?></label>
+                <label class="control-label" for="newsheader"><?php echo $PMF_LANG['ad_news_header']; ?></label>
                 <div class="controls">
                     <input type="text" name="newsheader" id="newsheader"
-                           value="<?php if (isset($newsData['header'])) { print $newsData['header']; } ?>" />
+                           value="<?php if (isset($newsData['header'])) { echo $newsData['header']; } ?>">
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="news"><?php print $PMF_LANG['ad_news_text']; ?>:</label>
+                <label class="control-label" for="news"><?php echo $PMF_LANG['ad_news_text']; ?>:</label>
                 <div class="controls">
                     <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
-                    <textarea id="news" name="news" cols="84" rows="5"><?php if (isset($newsData['content'])) { print htmlspecialchars($newsData['content'], ENT_QUOTES); } ?></textarea>
+                    <textarea id="news" name="news" cols="84" rows="5"><?php 
+                        if (isset($newsData['content'])) { 
+                            echo htmlspecialchars($newsData['content'], ENT_QUOTES); 
+                        }
+                    ?></textarea>
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="authorName"><?php print $PMF_LANG['ad_news_author_name']; ?></label>
+                <label class="control-label" for="authorName"><?php echo $PMF_LANG['ad_news_author_name']; ?></label>
                 <div class="controls">
-                    <input type="text" name="authorName" value="<?php print $newsData['authorName']; ?>" />
+                    <input type="text" name="authorName" value="<?php echo $newsData['authorName']; ?>">
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="authorEmail"><?php print $PMF_LANG['ad_news_author_email']; ?></label>
+                <label class="control-label" for="authorEmail"><?php echo $PMF_LANG['ad_news_author_email']; ?></label>
                 <div class="controls">
-                    <input type="email" name="authorEmail" value="<?php print $newsData['authorEmail']; ?>" />
+                    <input type="email" name="authorEmail" value="<?php echo $newsData['authorEmail']; ?>">
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="active"><?php print $PMF_LANG['ad_news_set_active']; ?></label>
+                <label class="control-label" for="active"><?php echo $PMF_LANG['ad_news_set_active']; ?></label>
                 <div class="controls">
                     <label class="checkbox">
-                        <input type="checkbox" name="active" id="active" value="y"<?php if (isset($newsData['active']) && $newsData['active']) { print " checked"; } ?> />
-                        <?php print $PMF_LANG['ad_gen_yes']; ?>
+                        <input type="checkbox" name="active" id="active" value="y"
+                            <?php if (isset($newsData['active']) && $newsData['active']) { echo " checked"; } ?>
+                        <?php echo $PMF_LANG['ad_gen_yes']; ?>
                     </label>
                 </div>
 
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="comment"><?php print $PMF_LANG['ad_news_allowComments']; ?></label>
+                <label class="control-label" for="comment"><?php echo $PMF_LANG['ad_news_allowComments']; ?></label>
                 <div class="controls">
                     <label class="checkbox">
-                        <input type="checkbox" name="comment" id="comment" value="y"<?php if (isset($newsData['allowComments']) && $newsData['allowComments']) { print " checked"; } ?> />
-                        <?php print $PMF_LANG['ad_gen_yes']; ?>
+                        <input type="checkbox" name="comment" id="comment" value="y"<?php if (isset($newsData['allowComments']) && $newsData['allowComments']) { echo " checked"; } ?>>
+                        <?php echo $PMF_LANG['ad_gen_yes']; ?>
                     </label>
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="link"><?php print $PMF_LANG['ad_news_link_url']; ?></label>
+                <label class="control-label" for="link"><?php echo $PMF_LANG['ad_news_link_url']; ?></label>
                 <div class="controls">
-                    <input type="url" name="link" value="<?php print $newsData['link']; ?>" />
+                    <input type="url" name="link" value="<?php echo $newsData['link']; ?>">
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="linkTitle"><?php print $PMF_LANG['ad_news_link_title']; ?></label>
+                <label class="control-label" for="linkTitle"><?php echo $PMF_LANG['ad_news_link_title']; ?></label>
                 <div class="controls">
-                    <input type="text" name="linkTitle" value="<?php print $newsData['linkTitle']; ?>" />
+                    <input type="text" name="linkTitle" value="<?php echo $newsData['linkTitle']; ?>">
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="linkTarget"><?php print $PMF_LANG['ad_news_link_target']; ?></label>
+                <label class="control-label" for="target"><?php echo $PMF_LANG['ad_news_link_target']; ?></label>
                 <div class="controls">
                     <label class="radio">
                         <input type="radio" name="target" value="blank" <?php if ('blank' == $newsData['target']) { ?>
-                           checked="checked"<?php } ?> />
-                        <?php print $PMF_LANG['ad_news_link_window'] ?>
+                           checked="checked"<?php } ?>>
+                        <?php echo $PMF_LANG['ad_news_link_window'] ?>
                     </label>
                     <label class="radio">
                         <input type="radio" name="target" value="self" <?php if ('self' == $newsData['target']) { ?>
-                           checked="checked"<?php } ?> />
-                        <?php print $PMF_LANG['ad_news_link_faq'] ?>
+                           checked="checked"<?php } ?>>
+                        <?php echo $PMF_LANG['ad_news_link_faq'] ?>
                     </label>
                     <label class="radio">
                         <input type="radio" name="target" value="parent" <?php if ('parent' == $newsData['target']) { ?>
-                           checked="checked"<?php } ?> />
-                        <?php print $PMF_LANG['ad_news_link_parent'] ?>
+                           checked="checked"<?php } ?>>
+                        <?php echo $PMF_LANG['ad_news_link_parent'] ?>
                     </label>
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="langTo"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
+                <label class="control-label" for="langTo"><?php echo $PMF_LANG["ad_entry_locale"]; ?>:</label>
                 <div class="controls">
-                <?php print PMF_Language::selectLanguages($newsData['lang'], false, array(), 'langTo'); ?>
+                <?php echo PMF_Language::selectLanguages($newsData['lang'], false, array(), 'langTo'); ?>
             </div>
         </fieldset>
 
@@ -312,23 +320,23 @@ if ('addnews' == $action && $permission["addnews"]) {
 ?>
 
         <fieldset>
-            <legend><?php print $PMF_LANG['ad_news_expiration_window']; ?></legend>
+            <legend><?php echo $PMF_LANG['ad_news_expiration_window']; ?></legend>
             <div class="control-group">
-                <label class="control-label" for="dateStart"><?php print $PMF_LANG['ad_news_from']; ?></label>
+                <label class="control-label" for="dateStart"><?php echo $PMF_LANG['ad_news_from']; ?></label>
                 <div class="controls">
-                <input name="dateStart" id="dateStart" class="date-pick" value="<?php print $dateStart; ?>" />
+                <input name="dateStart" id="dateStart" class="date-pick" value="<?php echo $dateStart; ?>">
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="dateEnd"><?php print $PMF_LANG['ad_news_to']; ?></label>
+                <label class="control-label" for="dateEnd"><?php echo $PMF_LANG['ad_news_to']; ?></label>
                 <div class="controls">
-                <input name="dateEnd" id="dateEnd" class="date-pick" value="<?php print $dateEnd; ?>" />
+                <input name="dateEnd" id="dateEnd" class="date-pick" value="<?php echo $dateEnd; ?>">
             </div>
         </fieldset>
 
         <div class="form-actions">
             <button class="btn btn-primary" type="submit">
-                <?php print $PMF_LANG['ad_news_edit']; ?>
+                <?php echo $PMF_LANG['ad_news_edit']; ?>
             </button>
             <a class="btn btn-info" href="?action=news">
                 <?php echo $PMF_LANG['ad_entry_back']; ?>
@@ -341,26 +349,30 @@ if ('addnews' == $action && $permission["addnews"]) {
     $comments = $oComment->getCommentsData($newsId, PMF_Comment::COMMENT_TYPE_NEWS);
     if (count($comments) > 0) {
 ?>
-            <div class="control-group"><strong><?php print $PMF_LANG["ad_entry_comment"] ?></strong></div>
+            <div class="control-group"><strong><?php echo $PMF_LANG["ad_entry_comment"] ?></strong></div>
 <?php
     }
     foreach ($comments as $item) {
 ?>
     <div class="control-group">
-        <?php print $PMF_LANG["ad_entry_commentby"] ?>
+        <?php echo $PMF_LANG["ad_entry_commentby"] ?>
         <a href="mailto:<?php print($item['email']); ?>">
             <?php print($item['user']); ?>
-        </a>:<br />
-        <?php print($item['content']); ?><br />
+        </a>:<br>
+        <?php print($item['content']); ?><br>
         <?php print($PMF_LANG['newsCommentDate'] . PMF_Date::createIsoDate($item['date'], 'Y-m-d H:i', false)); ?>
         <a href="?action=delcomment&amp;artid=<?php print($newsId); ?>&amp;cmtid=<?php print($item['id']); ?>&amp;type=<?php print(PMF_Comment::COMMENT_TYPE_NEWS);?>">
-            <img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" />
+            <img src="images/delete.gif" alt="<?php echo $PMF_LANG["ad_entry_delete"] ?>" title="<?php echo $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right">
         </a>
     </div>
 <?php
     }
 } elseif ('savenews' == $action && $permission["addnews"]) {
-
+?>
+        <header>
+            <h2><i class="icon-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
+        </header>
+<?php
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
     $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
     $header    = PMF_Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_STRIPPED);
@@ -397,7 +409,11 @@ if ('addnews' == $action && $permission["addnews"]) {
     }
     printf('<div class="control-group">&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
 } elseif ('updatenews' == $action && $permission["editnews"]) {
-
+?>
+        <header>
+            <h2><i class="icon-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
+        </header>
+<?php
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
     $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
     $header    = PMF_Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_STRIPPED);
@@ -412,19 +428,20 @@ if ('addnews' == $action && $permission["addnews"]) {
     $target    = PMF_Filter::filterInput(INPUT_POST, 'target', FILTER_SANITIZE_STRIPPED);
 
     $newsData = array(
-        'lang'          => $newslang,
-        'header'        => $header,
-        'content'       => html_entity_decode($content),
-        'authorName'    => $author,
-        'authorEmail'   => $email,
-        'active'        => (is_null($active)) ? 'n' : 'y',
-        'comment'       => (is_null($comment)) ? 'n' : 'y',
-        'dateStart'     => (empty($dateStart)) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000',
-        'dateEnd'       => (empty($dateEnd))   ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959',
-        'link'          => $link,
-        'linkTitle'     => $linktitle,
-        'date'          => date('YmdHis'),
-        'target'        => (is_null($target)) ? '' : $target);
+        'lang'        => $newslang,
+        'header'      => $header,
+        'content'     => html_entity_decode($content),
+        'authorName'  => $author,
+        'authorEmail' => $email,
+        'active'      => (is_null($active)) ? 'n' : 'y',
+        'comment'     => (is_null($comment)) ? 'n' : 'y',
+        'dateStart'   => (empty($dateStart)) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000',
+        'dateEnd'     => (empty($dateEnd))   ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959',
+        'link'        => $link,
+        'linkTitle'   => $linktitle,
+        'date'        => date('YmdHis'),
+        'target'      => (is_null($target)) ? '' : $target
+    );
     
     $newsId = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     if ($news->updateNewsEntry($newsId, $newsData)) {
@@ -434,22 +451,26 @@ if ('addnews' == $action && $permission["addnews"]) {
     }
     printf('<div class="control-group">&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
 } elseif ('deletenews' == $action && $permission["delnews"]) {
-
+?>
+        <header>
+            <h2><i class="icon-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
+        </header>
+<?php
     $precheck  = PMF_Filter::filterInput(INPUT_POST, 'really', FILTER_SANITIZE_STRING, 'no');
     $delete_id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     
     if ('no' == $precheck) {
 ?>
-    <div class="control-group"><?php print $PMF_LANG["ad_news_del"]; ?></div>
+    <div class="control-group"><?php echo $PMF_LANG["ad_news_del"]; ?></div>
     <div align="center">
     <form action="?action=deletenews" method="post">
-    <input type="hidden" name="id" value="<?php print $delete_id; ?>" />
-    <input type="hidden" name="really" value="yes" />
+    <input type="hidden" name="id" value="<?php echo $delete_id; ?>">
+    <input type="hidden" name="really" value="yes">
         <button class="btn btn-warning" type="submit" name="submit">
-            <?php print $PMF_LANG["ad_news_yesdelete"]; ?>
+            <?php echo $PMF_LANG["ad_news_yesdelete"]; ?>
         </button>
         <a class="btn btn-inverse" onclick="javascript:history.back();">
-            <?php print $PMF_LANG["ad_news_nodelete"]; ?>
+            <?php echo $PMF_LANG["ad_news_nodelete"]; ?>
         </a>
     </form>
     </div>
@@ -472,5 +493,5 @@ if ('addnews' == $action && $permission["addnews"]) {
         printf('<div class="control-group">&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
     }
 } else {
-    print $PMF_LANG["err_NotAuth"];
+    echo $PMF_LANG["err_NotAuth"];
 }
