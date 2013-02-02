@@ -26,22 +26,24 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $faqSystem = new PMF_System();
 ?>
 <header>
-    <h3><?php echo $PMF_LANG['ad_system_info']; ?></h3>
+    <h2><i class="icon-wrench"></i> <?php echo $PMF_LANG['ad_system_info']; ?></h2>
 </header>
 
 <table class="table table-striped">
     <tbody>
     <?php
     $systemInformation = array(
-        'phpMyFAQ Version'    => $faqSystem->getVersion(),
-        'Server Software'     => $_SERVER['SERVER_SOFTWARE'],
-        'PHP Version'         => PHP_VERSION,
-        'Server path'         => $_SERVER['DOCUMENT_ROOT'],
-        'DB Server'           => PMF_Db::getType(),
-        'DB Client Version'   => $faqConfig->getDb()->clientVersion(),
-        'DB Server Version'   => $faqConfig->getDb()->serverVersion(),
-        'Webserver Interface' => strtoupper(@php_sapi_name()),
-        'PHP Extensions'      => implode(', ', get_loaded_extensions())
+        'phpMyFAQ Version'           => $faqSystem->getVersion(),
+        'Server Software'            => $_SERVER['SERVER_SOFTWARE'],
+        'Server Document root'       => $_SERVER['DOCUMENT_ROOT'],
+        'phpMyFAQ installation path' => dirname(dirname($_SERVER['SCRIPT_FILENAME'])),
+        'PHP Version'                => PHP_VERSION,
+        'Webserver Interface'        => strtoupper(PHP_SAPI),
+        'PHP Extensions'             => implode(', ', get_loaded_extensions()),
+        'PHP Session path'           => session_save_path(),
+        'Database Server'            => PMF_Db::getType(),
+        'Database Server Version'    => $faqConfig->getDb()->serverVersion(),
+        'Database Client Version'    => $faqConfig->getDb()->clientVersion(),
     );
     foreach ($systemInformation as $name => $info): ?>
     <tr>
