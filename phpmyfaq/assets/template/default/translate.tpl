@@ -51,7 +51,7 @@
 
                 <div class="form-actions">
                     <button class="btn btn-primary" type="submit" id="submitfaq">
-                    {msgNewContentSubmit}
+                    {msgNewTranslationSubmit}
                     </button>
                 </div>
 
