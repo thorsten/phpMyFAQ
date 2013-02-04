@@ -1,6 +1,7 @@
 <?php
 /**
- * Adds a category
+ * Adds a new (sub-)category, a new sub-category inherits the permissions from
+ * its parent category.
  *
  * PHP Version 5.3
  *
@@ -39,11 +40,11 @@ if ($permission['addcateg']) {
             <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
 <?php
     if ($parentId > 0) {
-        $user_allowed  = $category->getPermissions('user', array($parentId));
-        $group_allowed = $category->getPermissions('group', array($parentId));
+        $userAllowed   = $category->getPermissions('user', array($parentId));
+        $groupsAllowed = $category->getPermissions('group', array($parentId));
 ?>
-            <input type="hidden" name="restricted_users" value="<?php echo $user_allowed[0] ?>">
-            <input type="hidden" name="restricted_groups" value="<?php echo $group_allowed[0] ?>">
+            <input type="hidden" name="restricted_users" value="<?php echo $userAllowed[0] ?>">
+            <input type="hidden" name="restricted_groups[]" value="<?php echo $groupsAllowed[0] ?>">
 <?php
         printf(
             '<div class="control-group">%s: %s (%s)</div>',
