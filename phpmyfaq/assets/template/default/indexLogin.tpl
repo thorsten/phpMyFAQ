@@ -58,12 +58,12 @@
     </div>
 </div>
 
-<section id="main">
+<section id="content">
     <div class="container-fluid">
         <div class="row-fluid">
-            <div class="span3">
+            <div class="span3" id="leftContent">
             </div>
-            <div class="span6 main-content">
+            <div class="span6" id="mainContent">
                 <section>
                     <header>
                         <h2>{loginHeader}</h2>
@@ -107,34 +107,32 @@
 
                 </section>
             </div>
-            <div class="span3">
+            <div class="span3" id="rightContent">
             </div>
         </div>
     </div>
 </section>
 
-<footer>
-    <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span6">
-                <ul class="footer-menu">
-                    <li>{showSitemap}</li>
-                    <li>{msgContact}</li>
-                    <li>{msgGlossary}</li>
-                </ul>
-            </div>
-            <div class="span6">
-                <form action="{writeLangAdress}" method="post" class="pull-right">
-                {switchLanguages}
-                    <input type="hidden" name="action" value="" />
-                </form>
-            </div>
+<footer id="footer" class="container-fluid">
+    <div class="row-fluid">
+        <div class="span6">
+            <ul class="footer-menu">
+                <li>{showSitemap}</li>
+                <li>{msgContact}</li>
+                <li>{msgGlossary}</li>
+            </ul>
         </div>
-        <div class="row">
-            <p class="copyright pull-right">
-            {copyright}
-            </p>
+        <div class="span6">
+            <form action="{writeLangAdress}" method="post" class="pull-right">
+            {switchLanguages}
+                <input type="hidden" name="action" value="" />
+            </form>
         </div>
+    </div>
+    <div class="row">
+        <p class="copyright pull-right">
+        {copyright}
+        </p>
     </div>
 </footer>
 

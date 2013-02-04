@@ -72,13 +72,13 @@
 
 // Navbar
 @navbarHeight:                    40px;
-@navbarBackground:                @grayDark;
-@navbarBackgroundHighlight:       @grayDarker;
+@navbarBackground:                #686f7a;
+@navbarBackgroundHighlight:       #686f7a;
 @navbarLinkBackgroundHover:       transparent;
 
-@navbarText:                      @grayLight;
+@navbarText:                      @grayLighter;
 @navbarLinkColor:                 @grayLighter;
-@navbarLinkColorActive:           @grayLight;
+@navbarLinkColorActive:           @white;
 @navbarLinkColorHover:            @white;
 
 // Form states and alerts
@@ -132,34 +132,27 @@ body {
 }
 
 .navbar-inner {
-  #gradient > .vertical(#333333, #232323);
+  #gradient > .vertical(#AFB3BA, #6C737E);
+  .divider-vertical {
+    border-left-color: #6C737E;
+    border-right-color: #AFB3BA;
+  }
 }
 
-#main {
+#content {
+
+  //
+  // Base definitions
+  //
   background: #fffff9;
   padding-top: 60px;
-
-  .categories {
-    padding: 8px 0;
-    font-size: 15px;
-  }
-  .users-online {
-    padding: 10px;
-    text-align: center;
-  }
-
   .well, .breadcrumb {
     #gradient > .vertical(#FAFAFA, #E9E9E9);
   }
-  .search-box {
-    form {
-      margin-bottom: 5px;
-      a {
-        font-size: 11px;
-      }
-    }
-  }
 
+  //
+  // Header
+  //
   header {
     div {
       position: relative;
@@ -173,83 +166,121 @@ body {
       }
     }
   }
+  //
+  // Categories
+  //
+  .categories {
+    padding: 8px 0;
+    font-size: 15px;
+    .users-online {
+      padding: 10px;
+      text-align: center;
+    }
+  }
 
+  //
+  // Search box
+  //
+  #searchBox {
+    .well();
+    form {
+      margin-bottom: 5px;
+      a {
+        font-size: 11px;
+      }
+    }
+  }
+
+  //
+  // Navigation
+  //
   .nav {
     margin-bottom: 0;
   }
 
-    .tab-content {
-      padding: 5px;
-
-      // Voting
-      .star-rating {
-        padding: 2px;
-        font-size: 50px;
-        line-height: 50px;
-        s {
-          color: black;
-          cursor: pointer;
-          text-decoration: none;
-        }
-        s:hover {
-          color: @red;
-        }
-        s:hover:before, s.voted {
-           content: "\2605";
-        }
-        s:before {
-          content: "\2606";
-        }
+  //
+  // FAQ pages
+  //
+  .tab-content {
+    padding: 5px;
+    // Voting
+    .star-rating {
+      padding: 2px;
+      font-size: 50px;
+      line-height: 50px;
+      s {
+        color: black;
+        cursor: pointer;
+        text-decoration: none;
+      }
+      s:hover {
+        color: @red;
+      }
+      s:hover:before, s.voted {
+         content: "\2605";
+      }
+      s:before {
+        content: "\2606";
       }
     }
+  }
 
-    .hello-phpmyfaq {
-        #gradient > .vertical(#cb3a25, #a20e05);
-        color: @pmfGrayLight;
-
-        h1 {
-            color: @pmfGrayLight;
-            font-size: 44px;
-            margin-bottom: 16px;
-        }
-    }
-
-    .pointer {
-        cursor: pointer;
-    }
-
-    .maintenance {
-        height: 300px;
-        h1 {
-            text-align: center;
-            line-height: 300px;
-        }
-    }
-
-    .phpmyfaq-search-results li {
-        padding-bottom: 5px;
-    }
+  .phpmyfaq-search-results li {
+    padding-bottom: 5px;
+  }
 
   #copyright {
     text-align: center;
   }
+  .pointer {
+    cursor: pointer;
+  }
+
+  //
+  // Setup
+  //
+  .hello-phpmyfaq {
+    #gradient > .vertical(#cb3a25, #a20e05);
+    color: @pmfGrayLight;
+
+    h1 {
+      color: @pmfGrayLight;
+      font-size: 44px;
+      margin-bottom: 16px;
+    }
+  }
+
+  //
+  // Maintenance mode
+  //
+  .maintenance {
+    height: 300px;
+    h1 {
+      text-align: center;
+      line-height: 300px;
+    }
+  }
+
 }
 
+//
+// Footer
+//
 footer {
     background: #28343b;
     color: @pmfGrayLight;
     padding-top: 30px;
 
     ul.footer-menu {
+      list-style: none outside none;
+      li {
+        float: left;
         list-style: none outside none;
-        li {
-            float: left;
-            list-style: none outside none;
-            margin-right: 22px;
-        }
+        margin-right: 22px;
+      }
     }
 
     .copyright {
-        color: @pmfGrayLight;
+      color: @pmfGrayLight;
     }
 }

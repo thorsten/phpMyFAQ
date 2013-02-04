@@ -78,7 +78,7 @@
     </div>
 </div>
 
-<section id="main">
+<section id="content">
     <div class="container">
         <div class="row-fluid">
             <div class="well maintenance">
@@ -88,13 +88,11 @@
     </div>
 </section>
 
-<footer>
-    <div class="container-fluid">
-        <div class="row">
-            <p class="copyright pull-right">
-            {copyright}
-            </p>
-        </div>
+<footer id="footer" class="container-fluid">
+    <div class="row">
+        <p class="copyright pull-right">
+        {copyright}
+        </p>
     </div>
 </footer>
 

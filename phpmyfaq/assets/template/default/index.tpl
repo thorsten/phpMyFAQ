@@ -86,90 +86,86 @@
     </div>
 </div>
 
-<section id="main">
-    <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span3">
-                <div class="well categories">
-                    <ul class="nav nav-list">
-                        <li class="home">{backToHome}</li>
-                        <li>{allCategories}</li>
-                        <li class="divider-horizontal"></li>
-                        {showCategories}
-                    </ul>
-                    <div class="users-online">
-                        <small>{userOnline}</small>
-                    </div>
+<section id="content" class="container-fluid">
+    <div class="row-fluid">
+        <div class="span3" id="leftContent">
+            <div class="well categories">
+                <ul class="nav nav-list">
+                    <li class="home">{backToHome}</li>
+                    <li>{allCategories}</li>
+                    <li class="divider-horizontal"></li>
+                    {showCategories}
+                </ul>
+                <div class="users-online">
+                    <small>{userOnline}</small>
                 </div>
             </div>
-            <div class="span6 main-content">
-                [globalSearchBox]
-                <section class="well search-box">
-                    <form id="search" action="{writeSendAdress}" method="get" class="form-search">
-                        <div class="input-append">
-                            <input type="hidden" name="searchcategory" value="{categoryId}" />
-                            <input type="hidden" name="action" value="search" />
-                            <input type="search" name="search" id="searchfield" size="30" placeholder="{searchBox} ..."
-                                   class="input-xlarge search-query" />
-                            <button class="btn btn-primary" type="submit" name="submit">
-                                {searchBox}
-                            </button>
-                        </div>
-                    </form>
-                    {msgSearch}
-                </section>
-                [/globalSearchBox]
-                [globalSuggestBox]
-                <section class="well search-box">
-                    <form id="instantform" action="?action=instantresponse" method="post" class="form-search">
-                        <input type="hidden" name="ajaxlanguage" id="ajaxlanguage" value="{ajaxlanguage}" />
-                        <input type="search" name="search" id="instantfield" class="input-xxlarge search-query" value=""
-                               placeholder="{msgDescriptionInstantResponse}" onfocus="autoSuggest(); return false;" />
-                    </form>
-                    {msgSearch}
-                </section>
-                [/globalSuggestBox]
-                {writeContent}
-            </div>
-            <div class="span3">
-                {rightBox}
-                <section class="well">
-                    <header>
-                        <h3>{stickyRecordsHeader}</h3>
-                    </header>
-                    <ul>
-                        [stickyRecordsList]
-                        <li><a href="{stickyRecordsUrl}">{stickyRecordsTitle}</a></li>
-                        [/stickyRecordsList]
-                    </ul>
-                </section>
-            </div>
+        </div>
+        <div class="span6" id="mainContent">
+            [globalSearchBox]
+            <section class="well" id="searchBox">
+                <form id="search" action="{writeSendAdress}" method="get" class="form-search">
+                    <div class="input-append">
+                        <input type="hidden" name="searchcategory" value="{categoryId}" />
+                        <input type="hidden" name="action" value="search" />
+                        <input type="search" name="search" id="searchfield" size="30" placeholder="{searchBox} ..."
+                               class="input-xlarge search-query" />
+                        <button class="btn btn-primary" type="submit" name="submit">
+                            {searchBox}
+                        </button>
+                    </div>
+                </form>
+                {msgSearch}
+            </section>
+            [/globalSearchBox]
+            [globalSuggestBox]
+            <section class="well" id="searchBox">
+                <form id="instantform" action="?action=instantresponse" method="post" class="form-search">
+                    <input type="hidden" name="ajaxlanguage" id="ajaxlanguage" value="{ajaxlanguage}" />
+                    <input type="search" name="search" id="instantfield" class="input-xxlarge search-query" value=""
+                           placeholder="{msgDescriptionInstantResponse}" onfocus="autoSuggest(); return false;" />
+                </form>
+                {msgSearch}
+            </section>
+            [/globalSuggestBox]
+            {writeContent}
+        </div>
+        <div class="span3" id="rightContent">
+            {rightBox}
+            <section class="well">
+                <header>
+                    <h3>{stickyRecordsHeader}</h3>
+                </header>
+                <ul>
+                    [stickyRecordsList]
+                    <li><a href="{stickyRecordsUrl}">{stickyRecordsTitle}</a></li>
+                    [/stickyRecordsList]
+                </ul>
+            </section>
         </div>
     </div>
 </section>
 
-<footer>
-    <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span6">
-                <ul class="footer-menu">
-                    <li>{showSitemap}</li>
-                    <li>{msgContact}</li>
-                    <li>{msgGlossary}</li>
-                </ul>
-            </div>
-            <div class="span6">
-                <form action="{writeLangAdress}" method="post" class="pull-right">
-                {switchLanguages}
-                    <input type="hidden" name="action" value="" />
-                </form>
-            </div>
+<footer id="footer" class="container-fluid">
+    <div class="row-fluid">
+        <div class="span6">
+            <ul class="footer-menu">
+                <li>{showSitemap}</li>
+                <li>{msgContact}</li>
+                <li>{msgGlossary}</li>
+            </ul>
         </div>
-        <div class="row">
-            <p class="copyright pull-right">
-                {copyright}
-            </p>
+        <div class="span6">
+            <form action="{writeLangAdress}" method="post" class="pull-right">
+            {switchLanguages}
+                <input type="hidden" name="action" value="" />
+            </form>
         </div>
+    </div>
+    <div class="row">
+        <p class="copyright pull-right">
+            {copyright}
+        </p>
     </div>
 </footer>
 

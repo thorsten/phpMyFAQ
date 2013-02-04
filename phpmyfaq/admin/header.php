@@ -293,7 +293,7 @@ switch ($action) {
     </div>
 </div>
 
-<div id="main">
+<div id="content">
     <div class="container-fluid">
         <div class="row-fluid">
             <?php if (isset($auth) && in_array(true, $permission)) { ?>
