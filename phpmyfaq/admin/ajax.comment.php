@@ -17,12 +17,16 @@
  * @since     2009-03-20
  */
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 $ajax_action = PMF_Filter::filterInput(INPUT_POST, 'ajaxaction', FILTER_SANITIZE_STRING);
+
+$response = new JsonResponse;
 
 if ('delete' == $ajax_action && $permission['delcomment']) {
 
@@ -52,7 +56,9 @@ if ('delete' == $ajax_action && $permission['delcomment']) {
         }
     }
     
-    print $ret;
+    $response->setData($ret);
 } else {
-    print 0;
+    $response->setData(0);
 }
+
+$response->send();

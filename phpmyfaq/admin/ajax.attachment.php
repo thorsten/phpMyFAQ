@@ -17,6 +17,8 @@
  * @since     2010-12-20
  */
 
+use Symfony\Component\HttpFoundation\Response;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
@@ -27,14 +29,18 @@ $attId      = PMF_Filter::filterInput(INPUT_GET, 'attId', FILTER_VALIDATE_INT);
 
 $att = PMF_Attachment_Factory::create($attId);
 
+$response = new Response;
+
 if ($att) {
     switch ($ajaxAction) {
         case 'delete':
             if ($att->delete()) {
-                print $PMF_LANG['msgAttachmentsDeleted'];
+                $response->setContent($PMF_LANG['msgAttachmentsDeleted']);
             } else {
-                print $PMF_LANG['ad_att_delfail'];
+                $response->setContent($PMF_LANG['ad_att_delfail']);
             }
             break;
     } 
 }
+
+$response->send();

@@ -17,6 +17,8 @@
  * @since     2011-08-24
  */
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
@@ -26,16 +28,16 @@ $ajaxAction = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_S
 $searchTerm = PMF_Filter::filterInput(INPUT_GET, 'searchterm', FILTER_SANITIZE_STRING);
 
 $search = new PMF_Search($faqConfig);
+$response = new JsonResponse;
 
 switch ($ajaxAction) {
 
     case 'delete_searchterm':
-
-        if ($search->deleteSearchTerm($searchTerm)) {
-            print true;
-        } else {
-            print false;
-        }
+        $response->setData(
+            $search->deleteSearchTerm($searchTerm)
+        );
 
         break;
 }
+
+$response->send();
