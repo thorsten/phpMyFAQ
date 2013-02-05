@@ -399,88 +399,11 @@ if (isset($auth) && in_array(true, $permission)) {
     }
 // User is authenticated, but has no rights
 } elseif (isset($auth) && !in_array(true, $permission)) {
-?>
-            <header>
-                <h2><?php print $PMF_LANG['ad_pmf_info']; ?></h2>
-            </header>
-
-            <p class="error"><?php print $PMF_LANG['err_NotAuth'] ?></p>
-
-<?php
+    require 'noperm.php';
 // User is NOT authenticated
 } else {
-?>
-
-            <header>
-                <h2>phpMyFAQ Login</h2>
-            </header>
-<?php
-    if (isset($error) && 0 < strlen($error)) {
-        $message = sprintf(
-            '<p class="alert alert-error">%s%s</p>',
-            '<a class="close" data-dismiss="alert" href="#">&times;</a>',
-            $error
-        );
-    } else {
-        $message = sprintf('<p>%s</p>', $PMF_LANG['ad_auth_insert']);
-    }
-    if ($action == 'logout') {
-        $message = sprintf(
-            '<p class="alert alert-success">%s%s</p>',
-            '<a class="close" data-dismiss="alert" href="#">&times;</a>',
-            $PMF_LANG['ad_logout']
-        );
-    }
-    
-    if (isset($_SERVER['HTTPS']) || !$faqConfig->get('security.useSslForLogins')) {
-?>
-
-            <?php print $message ?>
-
-            <form class="form-horizontal" action="index.php" method="post">
-
-                <div class="control-group">
-                    <label class="control-label" for="faqusername"><?php print $PMF_LANG["ad_auth_user"]; ?></label>
-                    <div class="controls">
-                        <input type="text" name="faqusername" id="faqusername" required="required" />
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label class="control-label" for="faqpassword"><?php print $PMF_LANG["ad_auth_passwd"]; ?></label>
-                    <div class="controls">
-                        <input type="password" name="faqpassword" id="faqpassword" required="required" />
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <div class="controls">
-                        <label class="checkbox">
-                            <input type="checkbox" id="faqrememberme" name="faqrememberme" value="rememberMe">
-                            <?php print $PMF_LANG['rememberMe'] ?>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="form-actions">
-                    <button class="btn btn-primary" type="submit">
-                        <?php print $PMF_LANG["ad_auth_ok"]; ?>
-                    </button>
-                </div>
-<?php
-    } else {
-        printf('<p><a href="https://%s%s">%s</a></p>',
-            $_SERVER['HTTP_HOST'],
-            $_SERVER['REQUEST_URI'],
-            $PMF_LANG['msgSecureSwitch']);
-    }
-?>
-            </form>
-<?php
+    require 'loginform.php';
 }
-?>
-    </div>
-<?php
 
 require 'footer.php';
 
