@@ -10,6 +10,9 @@
 # Mac OS X crap
 .DS_Store
 
+# CodeKit configuration
+codekit-config.json
+
 # Builds
 build/*
 
