@@ -33,6 +33,7 @@ $action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 
 $auth = false;
 $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+
 if ($user) {
     $auth = true;
 } else {
@@ -63,8 +64,7 @@ header('Pragma: no-cache');
 
 if ($permission['backup']) {
 
-    $faqConfig->getDb()->getTableNames(PMF_Db::getTablePrefix());
-    $tables       = $tableNames = $this->config->getDb()->getTableNames(PMF_Db::getTablePrefix());
+    $tables       = $tableNames = $faqConfig->getDb()->getTableNames(PMF_Db::getTablePrefix());
     $tablePrefix  = (PMF_Db::getTablePrefix() !== '') ? PMF_Db::getTablePrefix() . '.phpmyfaq' : 'phpmyfaq';
     $tableNames   = '';
     $majorVersion = substr($faqConfig->get('main.currentVersion'), 0, 3);
