@@ -3,14 +3,16 @@
             </div>
             
             <header>
-                <div id="solution_id">
-                    <a href="{solution_id_link}">
+                <div class="pull-right" id="solution_id">
+                    <a class="label label-info" href="{solution_id_link}">
                         ID #{solution_id}
                     </a>
                 </div>
                 <h2>{writeThema}</h2>
             </header>
-            
+
+            <hr>
+
             <article class="answer">
             {writeContent}
             </article>
