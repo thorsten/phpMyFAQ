@@ -90,9 +90,12 @@ $refreshTime = (PMF_SESSION_ID_EXPIRES - PMF_SESSION_ID_REFRESH) * 60;
         var topRef = top.document.getElementById('sessioncounter');
 
         window.setTimeout(_PMFSessionTimeoutWarning, <?php echo $refreshTime; ?> * 1000);
-        window.setInterval(function() {
-            _PMFSessionTimeoutClock(topRef, expire);
-        }, 1000);
+        window.setInterval(
+            function() {
+                _PMFSessionTimeoutClock(topRef, expire);
+            },
+            1000
+        );
     }
     </script>
 <?php } ?>

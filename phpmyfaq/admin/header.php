@@ -319,7 +319,7 @@ switch ($action) {
                         <li class="nav-header">Admin worklog</li>
                         <li><span id="saving_data_indicator"></span></li>
                         <li class="nav-header"><?php echo $PMF_LANG['ad_session_expiration']; ?></li>
-                        <li><span id="sessioncounter">Loading...</span></li>
+                        <li><span id="sessioncounter"><img src="images/indicator.gif"> Loading...</span></li>
                     </ul>
                 </div>
             </div>
