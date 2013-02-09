@@ -1,6 +1,6 @@
 <?php
 /**
- * Sitemap
+ * Sitemap frontend
  *
  * PHP Version 5.3
  *
@@ -19,7 +19,7 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
