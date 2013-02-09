@@ -12258,6 +12258,12 @@ body {
 #content .nav {
   margin-bottom: 0;
 }
+#content .highlight {
+  text-decoration: dotted;
+  border: 1px dashed #f89406;
+  background-color: #eeeeee;
+  padding: 1px;
+}
 #content .tab-content {
   padding: 5px;
 }

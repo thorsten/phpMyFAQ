@@ -32,6 +32,10 @@
                         </select>
                     </div>
                 </div>
+
+                <div class="pull-right">
+                    <small>{openSearchLink}</small>
+                </div>
             </form>
             </section>
                 
@@ -39,6 +43,5 @@
                     <h4>{msgMostPopularSearches}</h4>
                     {printMostPopularSearches}
                 </p>
-                
-                <p>{openSearchLink}</p>
+
         </section>

@@ -864,6 +864,7 @@ body{background:#f6f6f6;}
 #content .categories{padding:8px 0;font-size:15px;}#content .categories .users-online{padding:10px;text-align:center;}
 #content #searchBox{background-color:#f3f3f3;background-image:-moz-linear-gradient(top, #fafafa, #e9e9e9);background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#fafafa), to(#e9e9e9));background-image:-webkit-linear-gradient(top, #fafafa, #e9e9e9);background-image:-o-linear-gradient(top, #fafafa, #e9e9e9);background-image:linear-gradient(to bottom, #fafafa, #e9e9e9);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffafafa', endColorstr='#ffe9e9e9', GradientType=0);}#content #searchBox form{margin-bottom:5px;}#content #searchBox form a{font-size:11px;}
 #content .nav{margin-bottom:0;}
+#content .highlight{text-decoration:dotted;border:1px dashed #f89406;background-color:#eeeeee;padding:1px;}
 #content .tab-content{padding:5px;}#content .tab-content .star-rating{padding:2px;font-size:50px;line-height:50px;}#content .tab-content .star-rating s{color:black;cursor:pointer;text-decoration:none;}
 #content .tab-content .star-rating s:hover{color:#9d261d;}
 #content .tab-content .star-rating s:hover:before,#content .tab-content .star-rating s.voted{content:"\2605";}
