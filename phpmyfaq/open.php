@@ -18,17 +18,21 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 $faqsession->userTracking('open_questions', 0);
 
-$tpl->parse ('writeContent', array(
-    'msgOpenQuestions'   => $PMF_LANG['msgOpenQuestions'],
-    'msgQuestionText'    => $PMF_LANG['msgQuestionText'],
-    'msgDate_User'       => $PMF_LANG['msgDate_User'],
-    'msgQuestion2'       => $PMF_LANG['msgQuestion2'],
-    'printOpenQuestions' => $faq->printOpenQuestions()));
+$tpl->parse (
+    'writeContent',
+    array(
+        'msgOpenQuestions'   => $PMF_LANG['msgOpenQuestions'],
+        'msgQuestionText'    => $PMF_LANG['msgQuestionText'],
+        'msgDate_User'       => $PMF_LANG['msgDate_User'],
+        'msgQuestion2'       => $PMF_LANG['msgQuestion2'],
+        'printOpenQuestions' => $faq->printOpenQuestions()
+    )
+);
 
 $tpl->merge('writeContent', 'index');

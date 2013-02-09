@@ -2753,16 +2753,20 @@ class PMF_Faq
         if ($result && $this->_config->getDb()->numRows($result) > 0) {
             while ($row = $this->_config->getDb()->fetchObject($result)) {
                 $output .= '<tr class="openquestions">';
-                $output .= sprintf('<td valign="top" nowrap="nowrap">%s<br /><a href="mailto:%s">%s</a></td>',
+                $output .= sprintf(
+                    '<td><small>%s</small><br /><a href="mailto:%s">%s</a></td>',
                     $date->format(PMF_Date::createIsoDate($row->created)),
                     $mail->safeEmail($row->email),
-                    $row->username);
-                $output .= sprintf('<td valign="top"><strong>%s:</strong><br />%s</td>',
+                    $row->username
+                );
+                $output .= sprintf(
+                    '<td><strong>%s:</strong><br />%s</td>',
                     isset($category->categoryName[$row->category_id]['name']) ? $category->categoryName[$row->category_id]['name'] : '',
-                    strip_tags($row->question));
+                    strip_tags($row->question)
+                );
                 if ($this->_config->get('records.enableCloseQuestion') && $row->answer_id) {
                     $output .= sprintf(
-                        '<td valign="top"><a id="PMF_openQuestionAnswered" href="?%saction=artikel&amp;cat=%d&amp;id=%d">%s</a></td>',
+                        '<td><a id="PMF_openQuestionAnswered" href="?%saction=artikel&amp;cat=%d&amp;id=%d">%s</a></td>',
                         $sids,
                         $row->category_id,
                         $row->answer_id,
@@ -2770,7 +2774,7 @@ class PMF_Faq
                     );
                 } else {
                     $output .= sprintf(
-                        '<td valign="top"><a href="?%saction=add&amp;question=%d&amp;cat=%d">%s</a></td>',
+                        '<td><a class="btn btn-primary" href="?%saction=add&amp;question=%d&amp;cat=%d">%s</a></td>',
                         $sids,
                         $row->id,
                         $row->category_id,
@@ -2780,11 +2784,13 @@ class PMF_Faq
                 $output .= '</tr>';
             }
         } else {
-            $output = sprintf('<tr><td colspan="3">%s</td></tr>',
-                $this->pmf_lang['msgNoQuestionsAvailable']);
+            $output = sprintf(
+                '<tr><td colspan="3">%s</td></tr>',
+                $this->pmf_lang['msgNoQuestionsAvailable']
+            );
         }
 
-        return $output.$extraout;
+        return $output . $extraout;
     }
     
     /**
