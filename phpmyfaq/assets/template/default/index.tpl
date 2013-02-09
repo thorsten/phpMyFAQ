@@ -115,7 +115,7 @@
                         </button>
                     </div>
                 </form>
-                {msgSearch}
+                <small>{msgSearch}</small>
             </section>
             [/globalSearchBox]
             [globalSuggestBox]
@@ -125,7 +125,7 @@
                     <input type="search" name="search" id="instantfield" class="input-xxlarge search-query" value=""
                            placeholder="{msgDescriptionInstantResponse}" onfocus="autoSuggest(); return false;" />
                 </form>
-                {msgSearch}
+                <small>{msgSearch}</small>
             </section>
             [/globalSuggestBox]
             {writeContent}
