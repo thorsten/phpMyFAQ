@@ -101,13 +101,13 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
             $items['definition']
         );
         printf(
-            '<td><a onclick="return confirm(\'%s\'); return false;" href="%s%d">',
+            '<td><a class="btn btn-danger" onclick="return confirm(\'%s\'); return false;" href="%s%d">',
             $PMF_LANG['ad_user_del_3'],
             '?action=deleteglossary&amp;id=', 
             $items['id']
         );
         printf(
-            '<span title="%s" class="label label-important"><i class="icon-trash icon-white"></i></span></a></td>',
+            '<span title="%s"><i class="icon-trash icon-white"></i></span></a></td>',
             $PMF_LANG['ad_entry_delete']
         );
         echo '</tr>';

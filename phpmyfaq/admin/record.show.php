@@ -249,6 +249,13 @@ if ($permission['editbt'] || $permission['delbt']) {
                        onclick="saveStatusForCategory(<?php print $cid; ?>, 'sticky')" />
                 &nbsp;<?php print $PMF_LANG['ad_record_sticky'] ?>
             </th>
+            <th style="width: 84px;">
+                <?php if ($permission['approverec']) { ?>
+                <input type="checkbox" id="active_category_block_<?php print $cid; ?>"
+                       onclick="saveStatusForCategory(<?php print $cid; ?>, 'active')" />
+                &nbsp;<?php print $PMF_LANG['ad_record_active'] ?>
+                <?php } ?>
+            </th>
             <th>
                 <a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=desc">
                     &uarr;
@@ -267,13 +274,6 @@ if ($permission['editbt'] || $permission['delbt']) {
             </th>
             <th colspan="3">
                 &nbsp;
-            </th>
-            <th style="width: 84px;">
-                <?php if ($permission['approverec']) { ?>
-                <input type="checkbox" id="active_category_block_<?php print $cid; ?>"
-                       onclick="saveStatusForCategory(<?php print $cid; ?>, 'active')" />
-                &nbsp;<?php print $PMF_LANG['ad_record_active'] ?>
-                <?php } ?>
             </th>
         </tr>
         </thead>
@@ -303,6 +303,16 @@ if ($permission['editbt'] || $permission['delbt']) {
                     <?php $record['sticky'] ? print 'checked="checked"' : print '    ' ?> />
             </td>
             <td>
+                <?php if ($permission['approverec'] && isset($numVisits[$record['id']])) { ?>
+                <input type="checkbox" lang="<?php print $record['lang'] ?>"
+                       onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'active');"
+                       id="active_record_<?php print $cid . '_' . $record['id'] ?>"
+                    <?php 'yes' == $record['active'] ? print 'checked="checked"' : print '    ' ?> />
+                <?php }  else { ?>
+                <span class="label label-important"><i class="icon-white icon-ban-circle"></i></span>
+                <?php } ?>
+            </td>
+            <td>
                 <a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>"
                    title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'">
                     <?php print $record['title']; ?>
@@ -324,27 +334,17 @@ if ($permission['editbt'] || $permission['delbt']) {
                 <?php print $linkverifier->getEntryStateHTML($record['id'], $record['lang']); ?>
             </td>
             <td style="width: 16px;">
-                <a href="javascript:void(0);"
-                   onclick="javascript:deleteRecord(<?php print $record['id']; ?>, '<?php print $record['lang']; ?>'); return false;"
-                   title="<?php print $PMF_LANG["ad_user_delete"]; ?>">
-                    <i class="icon-trash"></i>
-                </a>
-            </td>
-            <td style="width: 16px;">
-                <a href="?action=copyentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>"
+                <a class="btn btn-info" href="?action=copyentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>"
                    title="<?php print $PMF_LANG['ad_categ_copy']; ?>">
                     <i class="icon-share"></i>
                 </a>
             </td>
-            <td>
-                <?php if ($permission['approverec'] && isset($numVisits[$record['id']])) { ?>
-                    <input type="checkbox" lang="<?php print $record['lang'] ?>"
-                           onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'active');"
-                           id="active_record_<?php print $cid . '_' . $record['id'] ?>"
-                           <?php 'yes' == $record['active'] ? print 'checked="checked"' : print '    ' ?> />
-                <?php }  else { ?>
-                    <span class="label label-important"><i class="icon-white icon-ban-circle"></i></span>
-                <?php } ?>
+            <td style="width: 16px;">
+                <a class="btn btn-danger" href="javascript:void(0);"
+                   onclick="javascript:deleteRecord(<?php print $record['id']; ?>, '<?php print $record['lang']; ?>'); return false;"
+                   title="<?php print $PMF_LANG["ad_user_delete"]; ?>">
+                    <i class="icon-trash"></i>
+                </a>
             </td>
         </tr>
 <?php

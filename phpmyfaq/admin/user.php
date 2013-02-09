@@ -553,7 +553,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             <tr>
                 <th><?php print $PMF_LANG['ad_entry_id'] ?></th>
                 <th><?php print $PMF_LANG['ad_user_status'] ?></th>
-                <th><?php print $PMF_LANG['ad_user_realname'] ?></th>
+                <th><?php print $PMF_LANG['msgNewContentName'] ?></th>
                 <th><?php print $PMF_LANG['ad_auth_user'] ?></th>
                 <th><?php print $PMF_LANG['msgNewContentMail'] ?></th>
                 <th colspan="2">&nbsp;</th>
@@ -585,9 +585,18 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             ?>
             <tr class="row_user_id_<?php print $user->getUserId() ?>">
                 <td><?php print $user->getUserId() ?></td>
-                <td>
-                    <?php print $user->getStatus() ?>
-                </td>
+                <td><i class="<?php
+                switch($user->getStatus()) {
+                    case 'active':
+                        echo "icon-ok";
+                        break;
+                    case 'blocked':
+                        echo 'icon-lock';
+                        break;
+                    case 'protected':
+                        echo 'icon-ok-sign';
+                        break;
+                } ?>"></i></td>
                 <td><?php print $user->getUserData('display_name') ?></td>
                 <td><?php print $user->getLogin() ?></td>
                 <td>
