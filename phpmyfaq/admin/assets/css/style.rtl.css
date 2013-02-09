@@ -12258,6 +12258,9 @@ body {
 #content .nav {
   margin-bottom: 0;
 }
+#content .answer {
+  margin-bottom: 20px;
+}
 #content .highlight {
   text-decoration: dotted;
   border: 1px dashed #f89406;

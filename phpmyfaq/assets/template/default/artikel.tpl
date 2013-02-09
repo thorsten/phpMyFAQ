@@ -11,9 +11,10 @@
                 <h2>{writeThema}</h2>
             </header>
             
-            <article id="answer">
+            <article class="answer">
             {writeContent}
             </article>
+
             <script>
                 $(function(){
                     $('a[rel="tooltip"]').tooltip();
@@ -58,7 +59,7 @@
                 [/addTranslation]
             </ul>
 
-            <div class="tab-content">
+            <div class="tab-content ">
                 <div class="tab-pane active" id="authorInfo">
                     {writeDateMsg}<br />{writeAuthor}<br />{writeRevision}<br />{editThisEntry}
                 </div>
@@ -66,19 +67,23 @@
                     <form action="#" method="post" class="form-inline">
                         <input type="hidden" name="artikel" value="{saveVotingID}" />
                         <div id="votings"></div>
-                        <div class="star-rating"><s><s><s><s><s></s></s></s></s></s></div>
-                        <p><strong>{msgAverageVote}</strong><span id="rating">{printVotings}</span></p>
+                        <div class="star-rating">
+                            <s><s><s><s><s></s></s></s></s></s>
+                        </div>
+                        <div class="pull-right">
+                            <strong>{msgAverageVote}</strong><span id="rating">{printVotings}</span>
+                        </div>
                     </form>
                 </div>
                 <div class="tab-pane" id="switchAvailableLanguage">
                     {switchLanguage}
                 </div>
                 <div class="tab-pane" id="addTranslation">
-                    <form action="{translationUrl}" method="post">
+                    <form action="{translationUrl}" method="post" class="form-inline">
                         {languageSelection}
-                            <button class="btn btn-primary" type="submit" name="submit">
-                                {msgTranslateSubmit}
-                            </button>
+                        <button class="btn btn-primary" type="submit" name="submit">
+                            {msgTranslateSubmit}
+                        </button>
                     </form>
                 </div>
             </div>

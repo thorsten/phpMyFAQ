@@ -44,6 +44,8 @@ class PMF_Helper_Faq extends PMF_Helper
     /**
      * Constructor
      *
+     * @param PMF_Configuration $config
+     *
      * @return PMF_Helper_Faq
      */
     public  function __construct(PMF_Configuration $config)

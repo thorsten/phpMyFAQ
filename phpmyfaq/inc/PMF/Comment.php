@@ -175,9 +175,9 @@ class PMF_Comment
         $output = '';
         foreach ($comments as $item) {
             $output .= '<p class="comment">';
-            $output .= '<img src="assets/img/bubbles.gif" />';
+            $output .= '<img class="commment-bubbles" src="assets/img/bubbles.gif" />';
             $output .= sprintf(
-                '<strong>%s<a href="mailto:%s">%s</a>:</strong><br />%s<br />%s</p>',
+                '<strong>%s<a href="mailto:%s">%s</a>:</strong><br />%s<br /><small>%s</small></p>',
                 $this->pmfStr['msgCommentBy'],
                 $mail->safeEmail($item['email']),
                 $item['user'],
