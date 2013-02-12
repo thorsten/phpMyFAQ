@@ -131,15 +131,17 @@ class PMF_DB_Helper
      */
     private static function alignTablePrefixByPattern($query, $startPattern, $oldValue, $newValue)
     {
-        $ret = $query;
+        $return  = $query;
+        $matches = array();
 
         PMF_String::preg_match_all("/^" . $startPattern . "\s+(\w+)(\s+|$)/i", $query, $matches);
+
         if (isset($matches[1][0])) {
-            $oldtablefullname = $matches[1][0];
-            $newtablefullname = $newValue . PMF_String::substr($oldtablefullname, PMF_String::strlen($oldValue));
-            $ret = PMF_String::str_replace($oldtablefullname, $newtablefullname, $query);
+            $oldTableFullName = $matches[1][0];
+            $newTableFullName = $newValue . PMF_String::substr($oldTableFullName, PMF_String::strlen($oldValue));
+            $return           = str_replace($oldTableFullName, $newTableFullName, $query);
         }
 
-        return $ret;
+        return $return;
     }
 }
