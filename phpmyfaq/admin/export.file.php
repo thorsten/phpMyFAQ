@@ -43,7 +43,7 @@ $inlineDisposition = PMF_Filter::filterInput(INPUT_POST, 'dispos', FILTER_SANITI
 $type              = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING, 'none');
 
 $faq = new PMF_Faq();
-$faq->setLanguage($lang);
+$faq->setLanguage($LANGCODE);
 
 $category = new PMF_Category();
 $category->buildTree();

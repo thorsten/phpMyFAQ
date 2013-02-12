@@ -108,7 +108,7 @@ class PMF_Export_Xhtml extends PMF_Export
         $this->xml->writeAttribute('dir', $PMF_LANG['dir']);
         
         if (count($faqdata)) {
-        	$lastCategory = 0;
+            $lastCategory = 0;
             foreach ($faqdata as $data) {
             
                 if ($data['category_id'] != $lastCategory) {
@@ -117,11 +117,13 @@ class PMF_Export_Xhtml extends PMF_Export
                 
                 $this->xml->writeElement('h2', strip_tags($data['topic']));
                 $this->xml->startElement('p');
-                $this->xml->writeRaw(html_entity_decode($data['content'], ENT_QUOTES, 'UTF-8'));
+                $this->xml->writeCdata(html_entity_decode($data['content'], ENT_QUOTES, 'UTF-8'));
                 $this->xml->endElement();
                 $this->xml->writeElement('p', $PMF_LANG['msgAuthor'] . ': ' .$data['author_email']);
-                $this->xml->writeElement('p', $PMF_LANG['msgLastUpdateArticle'] . 
-                                              PMF_Date::createIsoDate($data['lastmodified']));
+                $this->xml->writeElement(
+                    'p',
+                    $PMF_LANG['msgLastUpdateArticle'] . PMF_Date::createIsoDate($data['lastmodified'])
+                );
                 
                 $lastCategory = $data['category_id'];
             }
