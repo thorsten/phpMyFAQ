@@ -1,11 +1,11 @@
-phpMyFAQ 2.8.0-RC
+phpMyFAQ 2.8.0-RC2
 Codename "Perdita"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.8.0-RC - 2013-02-12
+Version 2.8.0-RC2 - 2013-02-
 - changed PHP requirement to PHP 5.3.3 and later (Thorsten)
 - phpMyFAQ is now licensed under the terms of Mozilla Public License 2.0 (Thorsten, Florian)
 - added new and improved frontend and backend user interface based on Twitter Bootstrap (Thorsten)
