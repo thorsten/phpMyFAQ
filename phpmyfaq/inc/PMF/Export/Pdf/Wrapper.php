@@ -457,4 +457,54 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
     {
         $this->faq = $faq;
     }
+
+    /**
+     * Extends the TCPDF::Image() method to handle base64 encoded images
+     *
+     * @param string  $file      Name of the file containing the image or a '@' character followed by the image data
+     *                           string. To link an image without embedding it on the document, set an asterisk character
+     *                           before the URL (i.e.: '*http://www.example.com/image.jpg').
+     * @param string  $x         Abscissa of the upper-left corner (LTR) or upper-right corner (RTL).
+     * @param string  $y         Ordinate of the upper-left corner (LTR) or upper-right corner (RTL).
+     * @param integer $w         Width of the image in the page. If not specified or equal to zero, it is automatically
+     *                           calculated.
+     * @param integer $h         Height of the image in the page. If not specified or equal to zero, it is automatically
+     *                           calculated.
+     * @param string  $type      Image format. Possible values are (case insensitive): JPEG and PNG (whitout GD library)
+     *                           and all images supported by GD: GD, GD2, GD2PART, GIF, JPEG, PNG, BMP, XBM, XPM;. If not
+     *                           specified, the type is inferred from the file extension.
+     * @param string  $link      URL or identifier returned by AddLink().
+     * @param string  $align     Indicates the alignment of the pointer next to image insertion relative to image height.
+     * @param boolean $resize    If true resize (reduce) the image to fit $w and $h (requires GD or ImageMagick library);
+     *                           if false do not resize; if 2 force resize in all cases (upscaling and downscaling).
+     * @param integer $dpi       dot-per-inch resolution used on resize
+     * @param string  $palign    Allows to center or align the image on the current line.
+     * @param boolean $ismask    true if this image is a mask, false otherwise
+     * @param mixed   $imgmask   Image object returned by this function or false
+     * @param integer $border    Indicates if borders must be drawn around the cell.
+     * @param mixed   $fitbox    If not false scale image dimensions proportionally to fit within the ($w, $h) box.
+     *                           $fitbox can be true or a 2 characters string indicating the image alignment inside the
+     *                           box. The first character indicate the horizontal alignment (L = left, C = center,
+     *                           R = right) the second character indicate the vertical algnment (T = top, M = middle,
+     *                           B = bottom).
+     * @param boolean $hidden    If true do not display the image.
+     * @param boolean $fitonpage If true the image is resized to not exceed page dimensions.
+     * @param boolean $alt       If true the image will be added as alternative and not directly printed (the ID of the
+     *                           image will be returned).
+     * @param array   $altimgs   Array of alternate images IDs. Each alternative image must be an array with two values:
+     *                           an integer representing the image ID (the value returned by the Image method) and a
+     *                           boolean value to indicate if the image is the default for printing.
+     *
+     * @return image information
+     */
+    public function Image($file, $x = '', $y = '', $w = 0, $h = 0, $type = '', $link = '', $align = '', $resize = false, $dpi = 300, $palign = '', $ismask = false, $imgmask = false, $border = 0, $fitbox = false, $hidden = false, $fitonpage = false, $alt = false, $altimgs = array())
+    {
+        if (!strpos($file, 'data:image/png;base64,') === false) {
+            $file = '@' . base64_decode(
+                chunk_split(str_replace(' ', '+', str_replace('data:image/png;base64,', '', $file)))
+            );
+        }
+
+        parent::Image($file, $x, $y, $w, $h, $type, $link, $align, $resize, $dpi, $palign, $ismask, $imgmask, $border, $fitbox, $hidden, $fitonpage, $alt, $altimgs);
+    }
 }
