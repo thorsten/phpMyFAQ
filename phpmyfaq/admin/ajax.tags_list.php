@@ -54,7 +54,7 @@ if ($permission['editbt']) {
     foreach ($tags as $tagName) {
         $i++;
         if ($i <= PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE) {
-            print $tagName . "\n";
+            echo utf8_decode($tagName) . "\n";
         }
     }
 }
