@@ -110,7 +110,7 @@ If you're interested, just take a look at our [support page](http://www.phpmyfaq
 
 **1.3. <a id="1.3"></a>Copyright**
 
-© 2001-2012 by Thorsten Rinne and phpMyFAQ Team under the [ Mozilla Public License 2.0](http://www.mozilla.org/MPL/2.0/). All rights reserved.
+© 2001-2013 by Thorsten Rinne and phpMyFAQ Team under the [ Mozilla Public License 2.0](http://www.mozilla.org/MPL/2.0/). All rights reserved.
 
 [back to top][64]
 
@@ -564,9 +564,11 @@ You can find the changed files between the 2.8.x versions in the file *CHANGEDFI
 
 **3.5. <a id="3.5"></a>Modifying templates for phpMyFAQ 2.8.x**
 
-Your current 2.5.x, 2.6.x and 2.7.x templates are **barely** compatible with phpMyFAQ 2.8 because we changed the complete CSS framework to Bootstrap. We're also using a lot of Ajax based technologies and CSS3 in the frontend now.
+Your current 2.5.x, 2.6.x and 2.7.x templates are **barely** compatible with phpMyFAQ 2.8 because we changed the complete CSS framework to Bootstrap. We're also using a lot of Ajax based technologies and CSS3 in the frontend now. We moved the login from a dropdown form to an own page with the login form. We also added a glossary page which you might know from the administration backend from older versions.
 
 We recommend you'll take a look at the main [Bootstrap documentation](http://getbootstrap.com/). Please don't forget that the style sheets are written with [LESS](http://lesscss.org/). You have to compile the LESS files into CSS using a LESS compiler with node.js or a tool like [CodeKit](http://incident57.com/codekit/).
+
+If you need help with theming phpMyFAQ please don't hesitate to ask in our [forum](http://forum.phpmyfaq.de/) or visit our [new theme page](http://www.phpmyfaq.de/themes). We will also release new themes from time to time on our homepage and release them as open source on our [Github page](https://github.com/phpMyFAQ/).
 
 Note: The character set for all languages and templates is UTF-8. If you notice problems with e.g. German umlauts you have to convert your templates to UTF-8 encoding. Please use UNIX file endings \n instead of Windows file endings with \r\n.
 
@@ -1177,7 +1179,7 @@ Author: [Thorsten Rinne][88]
 
 Co-Authors: [Stephan Hochhaus][89], [Markus Gläser][90]
 
-Date: 2012-13-29
+Date: 2013-02-13
 
 © 2001-2013 phpMyFAQ Team
 
