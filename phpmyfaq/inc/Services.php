@@ -71,7 +71,7 @@ class PMF_Services
      */
     public function getLink()
     {
-        $url = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s',
+        $url = sprintf('%s?action=artikel&amp;cat=%s&amp;id=%d&amp;lang=%s',
             PMF_Link::getSystemUri(),
             $this->getCategoryId(),
             $this->getFaqId(),
@@ -88,7 +88,7 @@ class PMF_Services
      */
     public function getDiggLink()
     {
-        $url = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s&amp;title=%s',
+        $url = sprintf('%s?action=artikel&amp;cat=%s&amp;id=%d&amp;lang=%s&amp;title=%s',
             PMF_Link::getSystemUri(),
             $this->getCategoryId(),
             $this->getFaqId(),
@@ -106,7 +106,7 @@ class PMF_Services
      */
     public function getShareOnFacebookLink()
     {
-        $url = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s',
+        $url = sprintf('%s?action=artikel&amp;cat=%s&amp;id=%d&amp;lang=%s',
             PMF_Link::getSystemUri(),
             $this->getCategoryId(),
             $this->getFaqId(),
@@ -123,7 +123,7 @@ class PMF_Services
      */
     public function getShareOnTwitterLink()
     {
-        $url = sprintf('%s?cat=%s&id=%d&lang=%s',
+        $url = sprintf('%s?action=artikel&amp;cat=%s&id=%d&lang=%s',
             PMF_Link::getSystemUri(),
             $this->getCategoryId(),
             $this->getFaqId(),
@@ -144,14 +144,15 @@ class PMF_Services
      */
     public function getBookmarkOnDeliciousLink()
     {
-        $url = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s',
+        $url = sprintf('%s?action=artikel&amp;cat=%s&amp;id=%d&amp;lang=%s',
             PMF_Link::getSystemUri(),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()
         );
 
-        return sprintf('http://www.delicious.com/save?url=%s&amp;title=%s',
+        return sprintf(
+            'http://www.delicious.com/save?url=%s&amp;title=%s',
             urlencode($url),
             $this->getQuestion()
         );
@@ -164,7 +165,8 @@ class PMF_Services
      */
     public function getSuggestLink()
     {
-        return sprintf('%s?action=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+        return sprintf(
+            '%s?action=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s',
             PMF_Link::getSystemUri(),
             $this->getCategoryId(),
             $this->getFaqId(),
@@ -179,16 +181,14 @@ class PMF_Services
      */
     public function getPdfLink()
     {
-        return sprintf('%spdf.php?cat=%d&amp;id=%d&amp;artlang=%s',
+        return sprintf(
+            '%spdf.php?cat=%d&amp;id=%d&amp;artlang=%s',
             PMF_Link::getSystemRelativeUri('index.php'),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()
         );
     }
-
-
-
 
     /**
      * @param integer $categoryId
