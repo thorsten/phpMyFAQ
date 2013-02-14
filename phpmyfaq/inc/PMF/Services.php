@@ -82,7 +82,7 @@ class PMF_Services
      */
     public function getLink()
     {
-        $url = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s',
+        $url = sprintf('%s?action=artikel&amp;cat=%s&amp;id=%d&amp;lang=%s',
             $this->_config->get('main.referenceURL'),
             $this->getCategoryId(),
             $this->getFaqId(),
@@ -99,7 +99,7 @@ class PMF_Services
      */
     public function getDiggLink()
     {
-        $url = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s&amp;title=%s',
+        $url = sprintf('%s?action=artikel&amp;cat=%s&amp;id=%d&amp;lang=%s&amp;title=%s',
             $this->_config->get('main.referenceURL'),
             $this->getCategoryId(),
             $this->getFaqId(),
@@ -117,7 +117,7 @@ class PMF_Services
      */
     public function getShareOnFacebookLink()
     {
-        $url = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s',
+        $url = sprintf('%s?action=artikel&amp;cat=%s&amp;id=%d&amp;lang=%s',
             $this->_config->get('main.referenceURL'),
             $this->getCategoryId(),
             $this->getFaqId(),
@@ -134,7 +134,7 @@ class PMF_Services
      */
     public function getShareOnTwitterLink()
     {
-        $url = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s',
+        $url = sprintf('%s?action=artikel&amp;cat=%s&amp;id=%d&amp;lang=%s',
             $this->_config->get('main.referenceURL'),
             $this->getCategoryId(),
             $this->getFaqId(),
@@ -155,14 +155,15 @@ class PMF_Services
      */
     public function getBookmarkOnDeliciousLink()
     {
-        $url = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s',
+        $url = sprintf('%s?action=artikel&amp;cat=%s&amp;id=%d&amp;lang=%s',
             $this->_config->get('main.referenceURL'),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()
         );
 
-        return sprintf('https://www.delicious.com/save?url=%s&amp;title=%s',
+        return sprintf(
+            'https://www.delicious.com/save?url=%s&amp;title=%s',
             urlencode($url),
             $this->getQuestion()
         );
@@ -197,9 +198,6 @@ class PMF_Services
             $this->getLanguage()
         );
     }
-
-
-
 
     /**
      * @param integer $categoryId
