@@ -628,7 +628,7 @@ if ($step == 3) {
         $faqConfig->add('records.enableCloseQuestion', 'false');
         $faqConfig->add('records.enableDeleteQuestion', 'false');
 
-        $query[] = "CREATE TEMPORARY TABLE " . PMF_Db::getTablePrefix() . "faquserlogin_temp (
+        $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faquserlogin_temp (
             login varchar(128) NOT NULL,
             pass varchar(80) NOT NULL,
             PRIMARY KEY (login))";
@@ -667,7 +667,7 @@ if ($step == 3) {
             case 'sqlite':
             case 'sqlite3':
                 $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqinstances (
-                    id INT(11) NOT NULL,
+                    id INT NOT NULL,
                     url VARCHAR(255) NOT NULL,
                     instance VARCHAR(255) NOT NULL,
                     comment TEXT NULL,
