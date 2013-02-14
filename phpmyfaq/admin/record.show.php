@@ -364,8 +364,8 @@ if ($permission['editbt'] || $permission['delbt']) {
         /**
          * Saves the sticky record status for the whole category
          *
-         * @param integer id   id
-         * @param string  type status type
+         * @param id   id
+         * @param type status type
          *
          * @return void
          */
@@ -389,9 +389,9 @@ foreach ($all_ids as $cat_id => $record_ids) {
         /**
          * Ajax call for saving the sticky record status
          *
-         * @param integer cid  category id
-         * @param integer ids  ids
-         * @param string  type status type
+         * @param cid  category id
+         * @param ids  ids
+         * @param type status type
          *
          * @return void
          */
@@ -401,8 +401,10 @@ foreach ($all_ids as $cat_id => $record_ids) {
             var data = {action: "ajax", ajax: 'records', ajaxaction: "save_" + type + "_records"};
 
             for (var i = 0; i < ids.length; i++) {
-                var status = $('#' + type + '_record_' + cid + '_' + ids[i]).attr('checked');
-                var lang   = $('#' + type + '_record_' + cid + '_' + ids[i]).attr('lang');
+                var statusId = '#' + type + '_record_' + cid + '_' + ids[i];
+                var status   = $(statusId).attr('checked') ? '' : 'checked';
+                var langId   = '#' + type + '_record_' + cid + '_' + ids[i];
+                var lang     = $(langId).attr('lang');
 
                 data['items[' + i + '][]'] = [ids[i], lang, status];
 
