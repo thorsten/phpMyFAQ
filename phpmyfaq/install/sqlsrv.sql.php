@@ -242,7 +242,7 @@ PRIMARY KEY(group_id, right_id)
 
 //faqinstances
 $query[] = "CREATE TABLE " . $sqltblpre . "faqinstances (
-id INT(11) NOT NULL,
+id INT NOT NULL,
 url VARCHAR(255) NOT NULL,
 instance VARCHAR(255) NOT NULL,
 comment TEXT NULL,
@@ -253,7 +253,7 @@ PRIMARY KEY (id)
 
 //faqinstances_config
 $query[] = "CREATE TABLE ".$sqltblpre."faqinstances_config (
-instance_id INT(11) NOT NULL,
+instance_id INT NOT NULL,
 config_name VARCHAR(255) NOT NULL default '',
 config_value VARCHAR(255) DEFAULT NULL,
 PRIMARY KEY (instance_id, config_name)
