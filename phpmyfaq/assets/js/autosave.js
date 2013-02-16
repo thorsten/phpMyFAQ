@@ -19,7 +19,7 @@
 $(document).ready(function () {
     "use script";
     $(window).unload(function () {
-        if (tinyMCE.activeEditor !== null) {
+        if (typeof tinyMCE !== 'undefined' && tinyMCE.activeEditor !== null) {
             if (tinyMCE.activeEditor.isDirty()) {
                 var chk = confirm('Do you want to save the article before navigating away?');
 
