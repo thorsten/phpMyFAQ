@@ -2943,14 +2943,25 @@ class PMF_Faq
 
         if (count($result) > 0) {
             foreach ($result as $row) {
-                $shortTitle         = PMF_Utils::makeShorterText($row['thema'], 8);
-                $output['title'][]  = $shortTitle;
-                $output['url'][]    = $row['url'];
+                $output[] = array(
+                    'title' => PMF_Utils::makeShorterText($row['thema'], 8),
+                    'url'   => $row['url']
+                );
             }
         } else {
-            $output['error'] = $this->pmf_lang['err_noTopTen'];
+            $output['error'] = sprintf('<li>%s</li>', $this->pmf_lang['err_noTopTen']);
         }
-
+        if (!isset($output['error'])) {
+            $html = '';
+            foreach ($output as $entry) {
+                $html .= sprintf(
+                    '<li><a href="%s">%s</a></li>',
+                    $entry['url'],
+                    $entry['title']
+                );
+            }
+            $output['html'] = $html;
+        }
         return $output;
     }
 

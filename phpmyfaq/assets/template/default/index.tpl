@@ -132,16 +132,16 @@
         </div>
         <div class="span3" id="rightContent">
             {rightBox}
+            [stickyFaqs]
             <section class="well">
                 <header>
                     <h3>{stickyRecordsHeader}</h3>
                 </header>
                 <ul>
-                    [stickyRecordsList]
-                    <li><a href="{stickyRecordsUrl}">{stickyRecordsTitle}</a></li>
-                    [/stickyRecordsList]
+                    {stickyRecordsList}
                 </ul>
             </section>
+            [/stickyFaqs]
         </div>
     </div>
 </section>

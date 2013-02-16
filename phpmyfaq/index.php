@@ -484,7 +484,6 @@ $tplMainPage = array(
     'writeLangAdress'     => $writeLangAdress,
     'switchLanguages'     => PMF_Language::selectLanguages($LANGCODE, true),
     'userOnline'          => $usersOnline,
-    'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
     'copyright'           => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' .
                              $faqConfig->get('main.currentVersion'),
     'registerUser'        => '<a href="?action=register">' . $PMF_LANG['msgRegistration'] . '</a>',
@@ -536,10 +535,10 @@ $stickyRecordsParams = $faq->getStickyRecords();
 if (!isset($stickyRecordsParams['error'])) {
     $tpl->parseBlock(
         'index',
-        'stickyRecordsList',
+        'stickyFaqs',
         array(
-            'stickyRecordsUrl'   => $stickyRecordsParams['url'],
-            'stickyRecordsTitle' => $stickyRecordsParams['title']
+            'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
+            'stickyRecordsList'   => $stickyRecordsParams['html']
         )
     );
 }
