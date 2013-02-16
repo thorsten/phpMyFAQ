@@ -1,12 +1,12 @@
 <?php
 /**
- * Manages authentication process using php sessions.
+ * Manages authentication process using PHP sessions.
  *
  * The CurrentUser class is an extension of the User class. It provides methods
  * manage user authentication using multiple database accesses. There are three
- * ways of making a new current user object, using the login() method,
- * getFromSession() method or manually. login() and getFromSession() may be
- * combined.
+ * ways of making a new current user object, using the login(), getFromSession(),
+ * getFromCookie() or manually. login(), getFromSession() and getFromCookie() may
+ * be combined.
  *
  * PHP Version 5.3
  *
@@ -33,9 +33,6 @@ define('PMF_SESSION_CURRENT_USER', 'PMF_CURRENT_USER');
 define('PMF_SESSION_ID_TIMESTAMP', 'PMF_SESSION_TIMESTAMP');
 define('PMF_SESSION_ID_EXPIRES', PMF_AUTH_TIMEOUT);
 define('PMF_SESSION_ID_REFRESH', PMF_AUTH_TIMEOUT_WARNING);
-define('PMF_LOGIN_BY_SESSION', true);
-define('PMF_LOGIN_BY_SESSION_FAILED', 'Could not login user from session. ');
-define('PMF_LOGIN_BY_AUTH_FAILED', 'Could not login with login and password. ');
 
 /**
  * PMF_User_CurrentUser
@@ -62,10 +59,9 @@ class PMF_User_CurrentUser extends PMF_User
     /**
      * Session timeout
      *
-     * Specifies the timeout for the session in minutes. If the
-     * session-ID was not updated for the last
-     * $this->_sessionTimeout minutes, the CurrentUser will be
-     * logged out automatically.
+     * Specifies the timeout for the session in minutes. If the session ID was
+     * not updated for the last $this->_sessionTimeout minutes, the CurrentUser
+     * will be logged out automatically if no cookie was set.
      *
      * @var integer
      */
@@ -74,14 +70,11 @@ class PMF_User_CurrentUser extends PMF_User
     /**
      * Session-ID timeout
      *
-     * Specifies the timeout for the session-ID in minutes. If the
-     * session-ID was not updated for the last
-     * $this->_sessionIdTimeout minutes, it will be updated. If
-     * set to 0, the session-ID will be updated on every click.
-     * The session-ID timeout must not be greater than Session
-     * timeout.
+     * Specifies the timeout for the session-ID in minutes. If the session ID
+     * was not updated for the last $this->_sessionIdTimeout minutes, it will
+     * be updated. If set to 0, the session ID will be updated on every click.
+     * The session ID timeout must not be greater than Session timeout.
      *
-     * @access private
      * @var int
      */
     private $_sessionIdTimeout = 1;
@@ -137,18 +130,18 @@ class PMF_User_CurrentUser extends PMF_User
         $optData = array();
         if (isset($this->_ldapConfig['ldap_use_domain_prefix'])) {
             if (($pos = strpos($login, '\\')) !== false) {
-                if ($pos != 0) {
+                if ($pos !== 0) {
                     $optData['domain'] = substr($login, 0, $pos);
                 }
 
-                $login = substr($login, $pos+1);
+                $login = substr($login, $pos + 1);
             }
         }
         
         // authenticate user by login and password
-        $loginError     = 0;
-        $passwordError  = 0;
-        $count          = 0;
+        $loginError    = 0;
+        $passwordError = 0;
+        $count         = 0;
         
         foreach ($this->authContainer as $name => $auth) {
             $count++;
@@ -170,22 +163,20 @@ class PMF_User_CurrentUser extends PMF_User
                 continue;
             }
             
-            // but hey, this must be a valid match!
-            // load user object
+            // but hey, this must be a valid match, so get user object
             $this->getUserByLogin($login);
-            // user is now logged in
             $this->_loggedIn = true;
-            // update last login info, session-id and save to session
             $this->updateSessionId(true);
             $this->saveToSession();
             $this->saveCrsfTokenToSession();
-            // save remember me cookie
+            // save remember me cookie if set
             if (true === $this->_rememberMe) {
-                $rememberMe = sha1(session_id());
+                $rememberMe = sha1($password);
                 $this->setRememberMe($rememberMe);
                 PMF_Session::setCookie(
                     PMF_Session::PMF_COOKIE_NAME_REMEMBERME,
-                    $rememberMe
+                    $rememberMe,
+                    $_SERVER['REQUEST_TIME'] + PMF_REMEMBERME_EXPIRED_TIME
                 );
             }
             
@@ -372,9 +363,11 @@ class PMF_User_CurrentUser extends PMF_User
      * Deletes the CurrentUser from the session. The user
      * will be logged out. Return true on success, otherwise false.
      *
+     * @param boolean $deleteCookie
+     *
      * @return boolean
      */
-    public function deleteFromSession()
+    public function deleteFromSession($deleteCookie = false)
     {
         // delete CSRF Token
         $this->deleteCsrfTokenFromSession();
@@ -391,11 +384,12 @@ class PMF_User_CurrentUser extends PMF_User
             UPDATE
                 %sfaquser
             SET
-                session_id = NULL,
-                remember_me = NULL
+                session_id = NULL
+                %s
             WHERE
                 user_id = %d",
                 PMF_Db::getTablePrefix(),
+                $deleteCookie ? ', remember_me = NULL' : '',
                 $this->getUserId()
         );
                 
