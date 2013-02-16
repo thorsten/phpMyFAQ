@@ -91,7 +91,8 @@ class PMF_User_UserData
                 user_id = %d",
             $fields,
             PMF_Db::getTablePrefix(),
-            $this->userId);
+            $this->userId
+        );
         
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) != 1) {
