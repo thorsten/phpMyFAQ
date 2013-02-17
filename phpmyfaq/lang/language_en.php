@@ -1193,3 +1193,17 @@ $LANG_CONF["main.enableGravatarSupport"] = array(0 => "checkbox", 1 => "Gravatar
 // added v2.8.0-RC - 2013-01-29 by Thorsten
 $PMF_LANG["ad_stopwords_desc"] = "Please select a language to add or edit stopwords.";
 $PMF_LANG["ad_visits_per_day"] = "Visits per day";
+
+// added v2.8.0-RC2 - 2013-02-17 by Thorsten
+$PMF_LANG["ad_instance_add"] = "Add a new phpMyFAQ multi site instance";
+$PMF_LANG["ad_instance_error_notwritable"] = "The folder /multisite isn\'t writable.";
+$PMF_LANG["ad_instance_url"] = "Instance URL";
+$PMF_LANG["ad_instance_path"] = "Instance path";
+$PMF_LANG["ad_instance_name"] = "Instance name";
+$PMF_LANG["ad_instance_email"] = "Your admin email";
+$PMF_LANG["ad_instance_admin"] = "Admin login name";
+$PMF_LANG["ad_instance_password"] = "Admin password";
+$PMF_LANG["ad_instance_hint"] = "Caution: It will take some seconds to create a new phpMyFAQ instance!";
+$PMF_LANG["ad_instance_button"] = "Save instance";
+$PMF_LANG["ad_instance_error_cannotdelete"] = "Could not delete instance ";
+$PMF_LANG["ad_instance_config"] = "Instance configuration";

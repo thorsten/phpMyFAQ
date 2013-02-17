@@ -23,7 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 ?>
     <header>
-        <h2><i class="icon-wrench"></i> <?php print $PMF_LANG['ad_menu_instances']; ?></h2>
+        <h2><i class="icon-wrench"></i> <?php echo $PMF_LANG['ad_menu_instances']; ?></h2>
     </header>
 <?php
 if ($permission['editinstances']) {
@@ -35,47 +35,47 @@ if ($permission['editinstances']) {
 
 ?>
     <form class="form-horizontal" action="?action=updateinstance" method="post">
-        <input type="hidden" name="instance_id" value="<?php print $instanceData->id ?>" />
+        <input type="hidden" name="instance_id" value="<?php echo $instanceData->id ?>" />
         <div class="control-group">
-            <label class="control-label"><?php print $PMF_LANG['ad_stat_report_url'] ?>:</label>
+            <label class="control-label"><?php echo $PMF_LANG["ad_instance_url"] ?>:</label>
             <div class="controls">
-                <input type="url" name="url" id="url" required="required" value="<?php print $instanceData->url ?>">
+                <input type="url" name="url" id="url" required="required" value="<?php echo $instanceData->url ?>">
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label">Path:</label>
+            <label class="control-label"><?php echo $PMF_LANG["ad_instance_path"] ?>:</label>
             <div class="controls">
                 <input type="text" name="instance" id="instance" required="required"
-                       value="<?php print $instanceData->instance ?>">
+                       value="<?php echo $instanceData->instance ?>">
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label">Site name:</label>
+            <label class="control-label"><?php echo $PMF_LANG["ad_instance_name"] ?>:</label>
             <div class="controls">
                 <input type="text" name="comment" id="comment" required="required"
-                       value="<?php print $instanceData->comment ?>">
+                       value="<?php echo $instanceData->comment ?>">
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label">Configuration:</label>
+            <label class="control-label"><?php echo $PMF_LANG["ad_instance_config"] ?>:</label>
             <div class="controls">
             <?php
             foreach ($instance->getInstanceConfig($instanceData->id) as $key => $config) {
-                print $key . ': ' . $config . '<br/>';
+                echo '<span class="uneditable-input">' . $key . ': ' . $config . '</span><br/>';
             }
             ?>
             </div>
         </div>
         <div class="form-actions">
             <button class="btn btn-primary" type="submit">
-                <?php print $PMF_LANG['ad_gen_save']; ?>
+                <?php echo $PMF_LANG["ad_instance_button"] ?>
             </button>
             <a class="btn btn-info" href="?action=instances">
-                <?php print $PMF_LANG['ad_entry_back'] ?>
+                <?php echo $PMF_LANG['ad_entry_back'] ?>
             </a>
         </div>
     </form>
 <?php
 } else {
-    print $PMF_LANG['err_NotAuth'];
+    echo $PMF_LANG['err_NotAuth'];
 }

@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <?php if ($permission['addinstances']): ?>
             <div class="pull-right">
                 <a class="btn btn-success" data-toggle="modal" href="#pmf-modal-add-instance">
-                    <i class="icon-plus"></i> add new phpMyFAQ site
+                    <i class="icon-plus"></i> <?php echo $PMF_LANG["ad_instance_add"] ?>
                 </a>
             </div>
             <?php endif; ?>
@@ -42,7 +42,10 @@ if ($permission['editinstances']) {
 
     // Check, if /multisite is writeable
     if (! is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite')) {
-        print '<p class="alert alert-error">The folder /multisite isn\'t writable.</p>';
+        printf(
+            '<p class="alert alert-error">%s</p>',
+            $PMF_LANG["ad_instance_error_notwritable"]
+        );
     }
 
     // Update client instance
@@ -76,9 +79,9 @@ if ($permission['editinstances']) {
         <thead>
         <tr>
             <th>#</th>
-            <th>URL</th>
-            <th>Path</th>
-            <th colspan="3">Site name</th>
+            <th><?php echo $PMF_LANG["ad_instance_url"] ?></th>
+            <th><?php echo $PMF_LANG["ad_instance_path"] ?></th>
+            <th colspan="3"><?php echo $PMF_LANG["ad_instance_name"] ?></th>
         </tr>
         </thead>
         <tbody>
@@ -94,16 +97,17 @@ if ($permission['editinstances']) {
             <td><?php print $site->instance ?></td>
             <td><?php print $site->comment ?></td>
             <td>
-                <?php if (! $currentInstance->getConfig('isMaster') === true): ?>
+                <?php if ($currentInstance->getConfig('isMaster') !== true): ?>
                 <a href="?action=editinstance&instance_id=<?php print $site->id ?>" class="btn btn-info">
                     <i class="icon-pencil"></i>
                 </a>
                 <?php endif; ?>
             </td>
             <td>
-                <?php if (! $currentInstance->getConfig('isMaster') === true): ?>
+                <?php if ($currentInstance->getConfig('isMaster') !== true): ?>
                 <a href="javascript:;" id="delete-instance-<?php print $site->id ?>"
-                   class="btn btn-danger pmf-instance-delete"><i class="icon-trash"></i></a>
+                   class="btn btn-danger pmf-instance-delete"><i class="icon-trash"></i>
+                </a>
                 <?php endif; ?>
             </td>
         </tr>
@@ -114,12 +118,12 @@ if ($permission['editinstances']) {
     <div class="modal fade" id="pmf-modal-add-instance">
         <div class="modal-header">
             <a class="close" data-dismiss="modal">×</a>
-            <h3>Add new phpMyFAQ site</h3>
+            <h3><?php echo $PMF_LANG["ad_instance_add"] ?></h3>
         </div>
         <div class="modal-body">
             <form class="form-horizontal" action="#" method="post">
                 <div class="control-group">
-                    <label class="control-label"><?php print $PMF_LANG['ad_stat_report_url'] ?>:</label>
+                    <label class="control-label"><?php echo $PMF_LANG["ad_instance_url"] ?>:</label>
                     <div class="controls">
                         <div class="input-prepend input-append">
                             <span class="add-on">http://</span>
@@ -129,31 +133,31 @@ if ($permission['editinstances']) {
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label">Path:</label>
+                    <label class="control-label"><?php echo $PMF_LANG["ad_instance_path"] ?>:</label>
                     <div class="controls">
                         <input type="text" name="instance" id="instance" required="required">
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label">Site name:</label>
+                    <label class="control-label"><?php echo $PMF_LANG["ad_instance_name"] ?>:</label>
                     <div class="controls">
                         <input type="text" name="comment" id="comment" required="required">
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="email">Your email address:</label>
+                    <label class="control-label" for="email"><?php echo $PMF_LANG["ad_instance_email"] ?>:</label>
                     <div class="controls">
                         <input type="email" name="email" id="email" required="required" />
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label">Admin loginname:</label>
+                    <label class="control-label"><?php echo $PMF_LANG["ad_instance_admin"] ?>:</label>
                     <div class="controls">
                         <input type="text" name="admin" id="admin" required="required">
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="password">Your password:</label>
+                    <label class="control-label" for="password"><?php echo $PMF_LANG["ad_instance_password"] ?>:</label>
                     <div class="controls">
                         <input type="password" name="password" id="password" required="required" />
                     </div>
@@ -161,8 +165,10 @@ if ($permission['editinstances']) {
             </form>
         </div>
         <div class="modal-footer">
-            <p>Caution: This will create a new phpMyFAQ instance!</p>
-            <a href="javascript:;" class="btn btn-primary pmf-instance-add">Save changes</a>
+            <p><?php echo $PMF_LANG["ad_instance_hint"] ?></p>
+            <button class="btn btn-primary pmf-instance-add">
+                <?php echo $PMF_LANG["ad_instance_button"] ?>
+            </button>
         </div>
     </div>
 
@@ -196,11 +202,11 @@ if ($permission['editinstances']) {
                             '<td>' + comment + '</td>' +
                             '<td>' +
                             '<a href="?action=editinstance&instance_id=' + data.added +
-                            '" class="btn btn-info">edit</a>' +
+                            '" class="btn btn-info"><i class="icon-pencil"></i></a>' +
                             '</td>' +
                             '<td>' +
                             '<a href="javascript:;" id="delete-instance-' + data.added +
-                            '" class="btn btn-danger pmf-instance-delete">delete</a>' +
+                            '" class="btn btn-danger pmf-instance-delete"><i class="icon-trash"></i></a>' +
                             '</td>' +
                             '</tr>'
                         );
@@ -223,7 +229,9 @@ if ($permission['editinstances']) {
                     function(data) {
                         if (typeof(data.deleted) === 'undefined') {
                             $('.table').after(
-                                '<div class="alert alert-error">Could not delete instance ' + data.error +'</div>'
+                                '<div class="alert alert-error">' +
+                                '<?php echo $PMF_LANG["ad_instance_error_cannotdelete"] ?> ' + data.error +
+                                '</div>'
                             );
                         } else {
                             $('#row-instance-' + id).fadeOut('slow');

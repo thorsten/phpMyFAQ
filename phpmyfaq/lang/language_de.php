@@ -1150,3 +1150,17 @@ $LANG_CONF["main.enableGravatarSupport"] = array(0 => "checkbox", 1 => "Gravatar
 // added v2.8.0-RC - 2013-01-29 by Thorsten
 $PMF_LANG["ad_stopwords_desc"] = "Bitte wählen Sie eine Sprache aus, um neue Stopwörter hinzuzufügen oder zu bearbeiten.";
 $PMF_LANG["ad_visits_per_day"] = "Besucher pro Tag";
+
+// added v2.8.0-RC2 - 2013-02-17 by Thorsten
+$PMF_LANG["ad_instance_add"] = "Neue phpMyFAQ Multisite Installation hinzufügen";
+$PMF_LANG["ad_instance_error_notwritable"] = "Der Ordner /multisite ist nicht schreibbar.";
+$PMF_LANG["ad_instance_url"] = "Instanz URL";
+$PMF_LANG["ad_instance_path"] = "Instanz Pfad";
+$PMF_LANG["ad_instance_name"] = "Instanz Name";
+$PMF_LANG["ad_instance_email"] = "Admin E-Mailadresse";
+$PMF_LANG["ad_instance_admin"] = "Admin Loginname";
+$PMF_LANG["ad_instance_password"] = "Admin Passwort";
+$PMF_LANG["ad_instance_hint"] = "Achtung: Die Erstellung einer neuen phpMyFAQ Instanz dauert einige Sekunden!";
+$PMF_LANG["ad_instance_button"] = "Instanz speichern";
+$PMF_LANG["ad_instance_error_cannotdelete"] = "Kann die Instanz nicht löschen ";
+$PMF_LANG["ad_instance_config"] = "Instanz-Konfiguration";
