@@ -78,7 +78,7 @@ if ($permission['editinstances']) {
             <th>#</th>
             <th>URL</th>
             <th>Instance</th>
-            <th colspan="4">site name</th>
+            <th colspan="3">site name</th>
         </tr>
         </thead>
         <tbody>
@@ -95,13 +95,15 @@ if ($permission['editinstances']) {
             <td><?php print $site->comment ?></td>
             <td>
                 <?php if (! $currentInstance->getConfig('isMaster') === true): ?>
-                <a href="?action=editinstance&instance_id=<?php print $site->id ?>" class="btn btn-info">edit</a>
+                <a href="?action=editinstance&instance_id=<?php print $site->id ?>" class="btn btn-info">
+                    <i class="icon-pencil"></i>
+                </a>
                 <?php endif; ?>
             </td>
             <td>
                 <?php if (! $currentInstance->getConfig('isMaster') === true): ?>
                 <a href="javascript:;" id="delete-instance-<?php print $site->id ?>"
-                   class="btn btn-danger pmf-instance-delete">delete</a>
+                   class="btn btn-danger pmf-instance-delete"><i class="icon-trash"></i></a>
                 <?php endif; ?>
             </td>
         </tr>
