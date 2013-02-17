@@ -52,12 +52,14 @@ class PMF_Filesystem
     /**
      * Constructor, sets the root path of the master phpMyFAQ installation
      *
+     * @param string $rootPath
+     *
      * @return PMF_Filesystem
      */
     public function __construct($rootPath = '')
     {
         if (empty($rootPath)) {
-            $this->rootPath = dirname(__DIR__);
+            $this->rootPath = dirname(dirname(__DIR__));
         } else {
             $this->rootPath = $rootPath;
         }
@@ -108,6 +110,8 @@ class PMF_Filesystem
      *
      * @param string $source
      * @param string $dest
+     *
+     * @throws PMF_Exception
      *
      * @return boolean
      */
