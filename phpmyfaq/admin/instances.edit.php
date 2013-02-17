@@ -43,7 +43,7 @@ if ($permission['editinstances']) {
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label">Instance:</label>
+            <label class="control-label">Path:</label>
             <div class="controls">
                 <input type="text" name="instance" id="instance" required="required"
                        value="<?php print $instanceData->instance ?>">

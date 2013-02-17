@@ -77,8 +77,8 @@ if ($permission['editinstances']) {
         <tr>
             <th>#</th>
             <th>URL</th>
-            <th>Instance</th>
-            <th colspan="3">site name</th>
+            <th>Path</th>
+            <th colspan="3">Site name</th>
         </tr>
         </thead>
         <tbody>
@@ -129,13 +129,13 @@ if ($permission['editinstances']) {
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label">Name of Instance:</label>
+                    <label class="control-label">Path:</label>
                     <div class="controls">
                         <input type="text" name="instance" id="instance" required="required">
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label">Comment:</label>
+                    <label class="control-label">Site name:</label>
                     <div class="controls">
                         <input type="text" name="comment" id="comment" required="required">
                     </div>
