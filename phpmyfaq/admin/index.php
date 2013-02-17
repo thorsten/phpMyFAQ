@@ -400,7 +400,18 @@ if (isset($auth) && in_array(true, $permission)) {
         $faqSystem = new PMF_System();
 ?>
             <header>
-                <h2><i class="icon-dashboard"></i> <?php print $PMF_LANG['ad_pmf_info']; ?></h2>
+                <h2>
+                    <div class="pull-right">
+                        <a href="?action=config">
+                            <?php if ($faqConfig->get('main.maintenanceMode')): ?>
+                            <span class="label label-important"><?php print $PMF_LANG['msgMaintenanceMode']; ?></span>
+                            <?php else: ?>
+                            <span class="label label-success"><?php print $PMF_LANG['msgOnlineMode']; ?></span>
+                            <?php endif; ?>
+                        </a>
+                    </div>
+                    <i class="icon-dashboard"></i> <?php print $PMF_LANG['ad_pmf_info']; ?>
+                </h2>
             </header>
 
             <section class="row-fluid">

@@ -28,10 +28,18 @@
 // Font Awesome
 //
 @import "../../../../vendor/Font-Awesome/less/font-awesome.less";
-
 @FontAwesomePath: "../font";
 
+//
+// Navbar
+//
+.navbar .nav > li > a {
+  padding: ((@navbarHeight - @baseLineHeight) / 2) 10px ((@navbarHeight - @baseLineHeight) / 2);
+}
+
+//
 // Global admin styles
+//
 header {
   h2 {
     .border-radius(4px);

@@ -13377,6 +13377,9 @@ ul.icons li [class*=" icon-"] {
 .icon-folder-open-alt:before {
   content: "\f115";
 }
+.navbar .nav > li > a {
+  padding: 11px 10px 11px;
+}
 header h2 {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;

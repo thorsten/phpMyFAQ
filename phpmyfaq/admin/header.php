@@ -209,7 +209,7 @@ switch ($action) {
                 <span class="icon-bar"></span>
             </a>
             <a class="brand" href="../index.php" rel="tooltip" title="<?php print $faqConfig->get('main.titleFAQ'); ?>">
-                phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?>
+                phpMyFAQ
             </a>
             <div class="nav-collapse">
                 <?php if (isset($auth) && in_array(true, $permission)): ?>
@@ -251,16 +251,6 @@ switch ($action) {
                     </li>
                 </ul>
                 <ul class="nav pull-right">
-                    <li>
-                        <a href="?action=config">
-                        <?php if ($faqConfig->get('main.maintenanceMode')): ?>
-                        <span class="label label-important"><?php print $PMF_LANG['msgMaintenanceMode']; ?></span>
-                        <?php else: ?>
-                        <span class="label label-success"><?php print $PMF_LANG['msgOnlineMode']; ?></span>
-                        <?php endif; ?>
-                        </a>
-                    </li>
-                    <li class="divider-vertical"></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <span title="<?php print $PMF_LANG['ad_user_loggedin'] . $user->getLogin(); ?>">
