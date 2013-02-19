@@ -95,7 +95,7 @@
             <script type="text/javascript">
                 $(document).ready(function() {
                     $('#submitfaq').click(function() {
-                        if (undefined !== tinyMCE) {
+                        if (typeof tinyMCE !== 'undefined' && undefined !== tinyMCE) {
                             tinyMCE.get("answer").setContent(tinyMCE.activeEditor.getContent());
                             document.getElementById("answer").value = tinyMCE.activeEditor.getContent();
                         }
