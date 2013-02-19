@@ -325,11 +325,11 @@ switch ($action) {
 
             if ($autoActivate) {
                 // Add user permissions
-                $faq->addPermission('user', $recordId, -1);
+                $faq->addPermission('user', $recordId, array(-1));
                 $category->addPermission('user', $categories['rubrik'], array(-1));
                 // Add group permission
                 if ($faqConfig->get('security.permLevel') != 'basic') {
-                    $faq->addPermission('group', $recordId, -1);
+                    $faq->addPermission('group', $recordId, array(-1));
                     $category->addPermission('group', $categories['rubrik'], array(-1));
                 }
             }
