@@ -93,7 +93,19 @@ class PMF_Session
 
             $network = new PMF_Network($this->_config);
 
-            if (!$network->checkIp($_SERVER['REMOTE_ADDR'])) {
+            // if we're running behind a reverse proxy like nginx/varnish, fix the client IP
+            $remoteAddr = $_SERVER['REMOTE_ADDR'];
+            $localAddresses = array(
+                '127.0.0.1',
+                '::1',
+            );
+            if (in_array($remoteAddr, $localAddresses) && isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                $remoteAddr = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            }
+            // clean up as well
+            $remoteAddr = preg_replace('([^0-9a-z:\.]+)i', '', $remoteAddr);
+
+            if (!$network->checkIp($remoteAddr)) {
                 $banned = true;
             }
 
@@ -114,7 +126,7 @@ class PMF_Session
                         PMF_Db::getTablePrefix(),
                         $sid,
                         ($user ? $user->getUserId() : -1),
-                        $_SERVER['REMOTE_ADDR'],
+                        $remoteAddr,
                         $_SERVER['REQUEST_TIME']
                     );
                     $this->_config->getDb()->query($query);
@@ -123,7 +135,7 @@ class PMF_Session
                 $data = $sid.';' . 
                         str_replace(';', ',', $action) . ';' . 
                         $id . ';' . 
-                        $_SERVER['REMOTE_ADDR'] . ';' . 
+                        $remoteAddr . ';' .
                         str_replace(';', ',', $_SERVER['QUERY_STRING']) . ';' . 
                         str_replace(';', ',', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '') . ';' . 
                         str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])) . ';' . 
