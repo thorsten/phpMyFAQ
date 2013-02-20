@@ -86,7 +86,7 @@ $faqSystem = new PMF_System();
                         visits, {
                             type: 'bar',
                             barColor: '#fbc372',
-                            barWidth: 32,
+                            barWidth: window.innerWidth / 42,
                             height: 200,
                             tooltipSuffix: ' <?php echo $PMF_LANG["ad_visits_per_day"] ?>'
                         });
