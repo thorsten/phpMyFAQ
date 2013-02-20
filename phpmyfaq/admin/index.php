@@ -45,7 +45,7 @@ require PMF_ROOT_DIR . '/inc/Bootstrap.php';
 $Language = new PMF_Language($faqConfig);
 $LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 // Preload English strings
-require_once (PMF_ROOT_DIR.'/lang/language_en.php');
+require (PMF_ROOT_DIR.'/lang/language_en.php');
 $faqConfig->setLanguage($Language);
 
 if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
@@ -53,7 +53,7 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
     if (! file_exists(PMF_ROOT_DIR . '/lang/language_' . $LANGCODE . '.php')) {
         $LANGCODE = 'en';
     }
-    require_once PMF_ROOT_DIR . '/lang/language_' . $LANGCODE . '.php';
+    require PMF_ROOT_DIR . '/lang/language_' . $LANGCODE . '.php';
 } else {
     $LANGCODE = 'en';
 }
@@ -91,9 +91,9 @@ $faq = new PMF_Faq($faqConfig);
 //
 // use mbstring extension if available and when possible
 //
-$valid_mb_strings = array('ja', 'en', 'uni');
-$mbLanguage = ($PMF_LANG['metaLanguage'] != 'ja') ? 'uni' : $PMF_LANG['metaLanguage'];
-if (function_exists('mb_language') && in_array($mbLanguage, $valid_mb_strings)) {
+$validMbStrings = array('ja', 'en', 'uni');
+$mbLanguage     = ($PMF_LANG['metaLanguage'] != 'ja') ? 'uni' : $PMF_LANG['metaLanguage'];
+if (function_exists('mb_language') && in_array($mbLanguage, $validMbStrings)) {
     mb_language($mbLanguage);
     mb_internal_encoding('utf-8');
 }
@@ -199,7 +199,7 @@ if (isset($user) && is_object($user)) {
     } else {
         $currentAdminGroups = array(-1);
     }
-    if (0 == count($currentAdminGroups)) {
+    if (0 === count($currentAdminGroups)) {
         $currentAdminGroups = array(-1);
     }
 }
@@ -217,77 +217,33 @@ if (isset($auth) && in_array(true, $permission)) {
         if ($action == 'ajax') {
 
             switch ($_ajax) {
-
                 // Attachments
-                case 'att':
-                    require 'ajax.attachment.php';
-                    break;
-
+                case 'att':         require 'ajax.attachment.php'; break;
                 // Link verification
-                case 'verifyURL':
-                    require_once 'ajax.verifyurl.php';
-                    break;
-                case 'onDemandURL':
-                    require_once 'ajax.ondemandurl.php';
-                    break;
-
+                case 'verifyURL':   require 'ajax.verifyurl.php'; break;
+                case 'onDemandURL': require 'ajax.ondemandurl.php'; break;
                 // Categories
-                case 'categories':
-                    require 'ajax.category.php';
-                    break;
-
+                case 'categories':  require 'ajax.category.php'; break;
                 // Configuration management
-                case 'config_list':
-                    require_once 'ajax.config_list.php';
-                    break;
-
-                case 'config':
-                    require_once 'ajax.config.php';
-                    break;
-
+                case 'config_list': require 'ajax.config_list.php'; break;
+                case 'config':      require 'ajax.config.php'; break;
                 // Tags management
-                case 'tags_list':
-                    require_once 'ajax.tags_list.php';
-                    break;
-
+                case 'tags_list':   require 'ajax.tags_list.php'; break;
                 // Comments
-                case 'comment':
-                    require 'ajax.comment.php';
-                    break;
-
+                case 'comment':     require 'ajax.comment.php'; break;
                 // Records
-                case 'records':
-                    require 'ajax.records.php';
-                    break;
-                case 'recordSave':
-                    require 'record.save.php';
-                    break;
-                case 'recordAdd':
-                    require 'record.add.php';
-                    break;
-                case 'autosave':
-                    require 'ajax.autosave.php';
-                    break;
-
+                case 'records':     require 'ajax.records.php'; break;
+                case 'recordSave':  require 'record.save.php'; break;
+                case 'recordAdd':   require 'record.add.php'; break;
+                case 'autosave':    require 'ajax.autosave.php'; break;
                 // Search
-                case 'search':
-                    require 'ajax.search.php';
-                    break;
-
+                case 'search':      require 'ajax.search.php'; break;
                 // Users
-                case 'user':
-                    require 'ajax.user.php';
-                    break;
-
+                case 'user':        require 'ajax.user.php'; break;
                 // Groups
-                case 'group':
-                    require 'ajax.group.php';
-                    break;
-
+                case 'group':       require 'ajax.group.php'; break;
                 // Interface translation
-                case 'trans':
-                    require 'ajax.trans.php';
-                    break;
+                case 'trans':      require 'ajax.trans.php'; break;
             }
         exit();
         }
@@ -307,7 +263,7 @@ switch($action) {
 }
 
 // Header of the admin page including the navigation
-require_once 'header.php';
+require 'header.php';
 
 // User is authenticated
 if (isset($auth) && in_array(true, $permission)) {
@@ -315,30 +271,30 @@ if (isset($auth) && in_array(true, $permission)) {
         // the various sections of the admin area
         switch ($action) {
             // functions for user administration
-            case 'user':                    require_once 'user.php'; break;
-            case 'group':                   require_once 'group.php'; break;
+            case 'user':              require 'user.php'; break;
+            case 'group':             require 'group.php'; break;
             // functions for record administration
             case 'viewinactive':
             case 'viewactive':
-            case 'view':                    require_once 'record.show.php'; break;
-            case 'searchfaqs':              require_once 'record.search.php'; break;
+            case 'view':              require 'record.show.php'; break;
+            case 'searchfaqs':        require 'record.search.php'; break;
             case "takequestion":
             case "editentry":
             case 'copyentry':
-            case "editpreview":             require_once 'record.edit.php'; break;
-            case "insertentry":             require_once 'record.add.php'; break;
-            case "saveentry":               require_once 'record.save.php'; break;
-            case "delentry":                require_once 'record.delete.php'; break;
-            case "delatt":                  require_once 'record.delatt.php'; break;
-            case "question":                require_once 'record.questions.php'; break;
-            case 'comments':                require_once 'record.comments.php'; break;
+            case "editpreview":       require 'record.edit.php'; break;
+            case "insertentry":       require 'record.add.php'; break;
+            case "saveentry":         require 'record.save.php'; break;
+            case "delentry":          require 'record.delete.php'; break;
+            case "delatt":            require 'record.delatt.php'; break;
+            case "question":          require 'record.questions.php'; break;
+            case 'comments':          require 'record.comments.php'; break;
             // news administraion
-            case 'news':                    
+            case 'news':
             case 'addnews':
             case 'editnews':
             case 'savenews':
             case 'updatenews':
-            case 'deletenews':              require_once 'news.php'; break;
+            case 'deletenews':        require 'news.php'; break;
             // category administration
             case 'content':
             case 'category':
@@ -346,53 +302,54 @@ if (isset($auth) && in_array(true, $permission)) {
             case 'updatecategory':
             case 'removecategory':
             case 'changecategory':
-            case 'pastecategory':           require_once 'category.main.php'; break;
-            case "addcategory":             require_once 'category.add.php'; break;
-            case "editcategory":            require_once 'category.edit.php'; break;
-            case "translatecategory":       require_once 'category.translate.php'; break;
-            case "deletecategory":          require_once 'category.delete.php'; break;
-            case "cutcategory":             require_once 'category.cut.php'; break;
-            case "movecategory":            require_once 'category.move.php'; break;
-            case "showcategory":            require_once 'category.showstructure.php'; break;
+            case 'pastecategory':     require 'category.main.php'; break;
+            case "addcategory":       require 'category.add.php'; break;
+            case "editcategory":      require 'category.edit.php'; break;
+            case "translatecategory": require 'category.translate.php'; break;
+            case "deletecategory":    require 'category.delete.php'; break;
+            case "cutcategory":       require 'category.cut.php'; break;
+            case "movecategory":      require 'category.move.php'; break;
+            case "showcategory":      require 'category.showstructure.php'; break;
             // glossary
             case 'glossary':
             case 'saveglossary':
             case 'updateglossary':
-            case 'deleteglossary':          require_once 'glossary.main.php'; break;
-            case 'addglossary':             require_once 'glossary.add.php'; break;
-            case 'editglossary':            require_once 'glossary.edit.php'; break;
+            case 'deleteglossary':    require 'glossary.main.php'; break;
+            case 'addglossary':       require 'glossary.add.php'; break;
+            case 'editglossary':      require 'glossary.edit.php'; break;
             // functions for password administration
-            case "passwd":                  require_once 'pwd.change.php'; break;
+            case "passwd":            require 'pwd.change.php'; break;
             // functions for session administration
             case 'adminlog':
-            case 'deleteadminlog':          require_once 'stat.adminlog.php'; break;
-            case "viewsessions":            require_once 'stat.main.php'; break;
-            case "sessionbrowse":           require_once 'stat.browser.php'; break;
-            case "viewsession":             require_once 'stat.show.php'; break;
-            case "statistics":              require_once 'stat.ratings.php'; break;
-            case "searchstats":             require_once 'stat.search.php'; break;
-            case 'reports':                 require_once 'report.main.php'; break;
-            case 'reportview':              require_once 'report.view.php'; break;
-            // functions for config administration
-            case 'config':                  require_once 'configuration.php'; break;
-            case 'system':                  require_once 'system.php'; break;
+            case 'deleteadminlog':    require 'stat.adminlog.php'; break;
+            case "viewsessions":      require 'stat.main.php'; break;
+            case "sessionbrowse":     require 'stat.browser.php'; break;
+            case "viewsession":       require 'stat.show.php'; break;
+            case "statistics":        require 'stat.ratings.php'; break;
+            case "searchstats":       require 'stat.search.php'; break;
+            // Reports
+            case 'reports':           require 'report.main.php'; break;
+            case 'reportview':        require 'report.view.php'; break;
+            // fConfig administration
+            case 'config':            require 'configuration.php'; break;
+            case 'system':            require 'system.php'; break;
             case 'updateinstance':
-            case 'instances':               require_once 'instances.php'; break;
-            case 'editinstance':            require_once 'instances.edit.php'; break;
-            case 'stopwordsconfig':         require_once 'stopwordsconfig.main.php'; break;
+            case 'instances':         require 'instances.php'; break;
+            case 'editinstance':      require 'instances.edit.php'; break;
+            case 'stopwordsconfig':   require 'stopwordsconfig.main.php'; break;
             // functions for backup administration
-            case 'backup':                  require_once 'backup.main.php'; break;
-            case 'restore':                 require_once 'backup.import.php'; break;
+            case 'backup':            require 'backup.main.php'; break;
+            case 'restore':           require 'backup.import.php'; break;
             // functions for FAQ export
-            case "export":                  require_once 'export.main.php'; break;
+            case "export":            require 'export.main.php'; break;
             // translation tools
-            case "transedit":               require_once 'trans.edit.php'; break;
-            case "translist":               require_once 'trans.list.php'; break;
-            case "transadd":                require_once 'trans.add.php'; break;
+            case "transedit":         require 'trans.edit.php'; break;
+            case "translist":         require 'trans.list.php'; break;
+            case "transadd":          require 'trans.add.php'; break;
             // attachment administration 
-            case "attachments":             require_once "att.main.php"; break;
+            case "attachments":       require "att.main.php"; break;
             
-            default:                        print "Error"; break;
+            default:                  echo "Dave, this conversation can serve no purpose anymore. Goodbye."; break;
         }
     } else {
         require 'dashboard.php';
