@@ -665,19 +665,15 @@ class PMF_Linkverifier
             }
         }
 
-        $output = sprintf('<div id="%s" class="url-%s">'
-                 .'<span id="%s">'
-                 .'<a href="javascript:onDemandVerifyURL(%d,\'%s\');">'
-                 .$PMF_LANG['ad_linkcheck_feedback_url-'.$src].'</a></span>'
-                 .'<img src="images/null.gif" id="%s"%s alt="" />'
-                 .'</div>',
-                 $divId,
-                 $src,
-                 $spanId,
-                 $id,
-                 $artlang,
-                 $imgId,
-                 $onLoad);
+        $output = sprintf(
+            '<div id="%s" class="url-%s"><span id="%s"><a href="javascript:onDemandVerifyURL(%d,\'%s\');">%s</a></span></div>',
+            $divId,
+            $src,
+            $spanId,
+            $id,
+            $artlang,
+            $PMF_LANG['ad_linkcheck_feedback_url-'.$src]
+        );
         return $output;
     }
 
