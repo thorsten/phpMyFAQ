@@ -281,7 +281,7 @@ if ($permission['editbt'] || $permission['delbt']) {
 <?php
             }
 ?>
-        <tr class="record_<?php  echo $record['id'] . '_' . $record['lang']; ?>'">
+        <tr id="record_<?php echo $record['id'] . '_' . $record['lang']; ?>">
             <td style="width: 24px; text-align: right;">
                 <a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>">
                     <?php print $record['id']; ?>
@@ -437,8 +437,9 @@ foreach ($all_ids as $cat_id => $record_ids) {
         /**
          * Ajax call for deleting records
          *
-         * @param  integer record_id   Record id
-         * @param  string  record_lang Record language
+         * @param record_id   Record id
+         * @param record_lang Record language
+         *
          * @return void
          */
         function deleteRecord(record_id, record_lang)
@@ -450,8 +451,8 @@ foreach ($all_ids as $cat_id => $record_ids) {
                     url:     "index.php?action=ajax&ajax=records&ajaxaction=delete_record",
                     data:    "record_id=" + record_id + "&record_lang=" + record_lang,
                     success: function(msg) {
+                        $("#record_" + record_id + "_" + record_lang).fadeOut("slow");
                         $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_delsuc']; ?>');
-                        $('.record_' + record_id + '_' + record_lang).fadeOut('slow');
                     }
                 });
             }
