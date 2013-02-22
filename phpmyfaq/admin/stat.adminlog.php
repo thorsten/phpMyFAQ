@@ -130,9 +130,9 @@ if ($permission['adminlog'] && 'adminlog' == $action) {
 } elseif ($permission['adminlog'] && 'deleteadminlog' == $action) {
 
     if ($logging->delete()) {
-        printf('<p class="success">%s</p>', $PMF_LANG['ad_adminlog_delete_success']);
+        printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_adminlog_delete_success']);
     } else {
-        printf('<p class="error">%s</p>', $PMF_LANG['ad_adminlog_delete_failure']);
+        printf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_adminlog_delete_failure']);
     }
 } else {
     echo $PMF_LANG["err_NotAuth"];
