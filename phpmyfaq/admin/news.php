@@ -324,13 +324,15 @@ if ('addnews' == $action && $permission["addnews"]) {
             <div class="control-group">
                 <label class="control-label" for="dateStart"><?php echo $PMF_LANG['ad_news_from']; ?></label>
                 <div class="controls">
-                <input name="dateStart" id="dateStart" class="date-pick" value="<?php echo $dateStart; ?>">
+                    <input name="dateStart" id="dateStart" class="date-pick" value="<?php echo $dateStart; ?>">
+                </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="dateEnd"><?php echo $PMF_LANG['ad_news_to']; ?></label>
                 <div class="controls">
-                <input name="dateEnd" id="dateEnd" class="date-pick" value="<?php echo $dateEnd; ?>">
+                    <input name="dateEnd" id="dateEnd" class="date-pick" value="<?php echo $dateEnd; ?>">
+                </div>
             </div>
         </fieldset>
 
