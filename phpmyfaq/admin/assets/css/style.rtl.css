@@ -12290,6 +12290,17 @@ body {
 #content .tab-content .star-rating s:before {
   content: "\2606";
 }
+#content .comment {
+  margin: 5px;
+  padding: 5px;
+  border: 1px #999999 solid;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+#content .comment img {
+  padding-right: 5px;
+}
 #content .phpmyfaq-search-results li {
   padding-bottom: 5px;
 }
