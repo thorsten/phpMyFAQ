@@ -56,7 +56,7 @@ if ($permission['viewlog']) {
         closedir($dir);
         $session->deleteSessions($first, $last);
 
-        printf('<p class="success">%s</p>', $PMF_LANG['ad_adminlog_delete_success']);
+        printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_adminlog_delete_success']);
     }
 ?>
         <form action="?action=sessionbrowse" method="post" style="display: inline;">
