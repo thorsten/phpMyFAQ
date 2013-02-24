@@ -43,6 +43,8 @@
 </head>
 <body dir="{dir}">
 
+<div id="wrapper"> <!-- used for sticky footer only -->
+
 <!--[if lt IE 8 ]>
 <div class="internet-explorer-error">
     Do you know that your Internet Explorer is out of date?<br/>
@@ -145,6 +147,8 @@
         </div>
     </div>
 </section>
+
+</div> <!-- end wrapper -->
 
 <footer id="footer" class="container-fluid">
     <div class="row-fluid">
