@@ -120,7 +120,7 @@ $PMF_LANG["msgSearchContent"] = "Answer: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Proposal for a new FAQ";
-$PMF_LANG["msgNewContentAddon"] = "Your proposal will not be published right away, but will be released by the administrator upon receipt. Required  fields are <strong>your Name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>question</strong> and <strong>answer</strong>. Please separate the keywords with commas only.";
+$PMF_LANG["msgNewContentAddon"] = "Your proposal will not be published right away, but will be released by the administrator upon receipt. Required  fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>question</strong> and <strong>answer</strong>. Please separate the keywords with commas only.";
 $PMF_LANG["msgNewContentName"] = "Your name:";
 $PMF_LANG["msgNewContentMail"] = "Email";
 $PMF_LANG["msgNewContentCategory"] = "Category:";
@@ -311,7 +311,7 @@ $PMF_LANG["ad_categ_update"] = "update";
 $PMF_LANG["ad_categ_delete"] = "delete";
 $PMF_LANG["ad_categ_updatecateg"] = "Update Category";
 $PMF_LANG["ad_categ_nodata"] = "No data found in database";
-$PMF_LANG["ad_categ_remark"] = "Please note that existing entries will not be visible anymore, if you delete the category. You must assign a new category for the article or delete the article.";
+$PMF_LANG["ad_categ_remark"] = "Please note that existing entries will not be visible any more, if you delete the category. You must assign a new category for the article or delete the article.";
 $PMF_LANG["ad_categ_edit_1"] = "Edit";
 $PMF_LANG["ad_categ_edit_2"] = "Category";
 $PMF_LANG["ad_categ_added"] = "The category was added.";
@@ -340,7 +340,7 @@ $PMF_LANG["ad_passwd_new"] = "New password:";
 $PMF_LANG["ad_passwd_con"] = "Retype password:";
 $PMF_LANG["ad_passwd_change"] = "Change password";
 $PMF_LANG["ad_passwd_suc"] = "Password changed successfully.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>ATTENTION:</strong><br />Cookie have to be set again!";
+$PMF_LANG["ad_passwd_remark"] = "<strong>ATTENTION:</strong><br />Cookie has to be set again!";
 $PMF_LANG["ad_passwd_fail"] = "The old password <strong>must</strong> be entered correctly and both new ones have to <strong>match</strong>.";
 
 // Adduser
@@ -519,7 +519,7 @@ $PMF_LANG["msgLangaugeSubmit"] = "Change language";
 $PMF_LANG["ad_entry_preview"] = "Preview";
 $PMF_LANG["ad_attach_1"] = "Please choose a directory for attachments first in configuration.";
 $PMF_LANG["ad_attach_2"] = "Please choose a link for attachments first in configuration.";
-$PMF_LANG["ad_attach_3"] = "The file attachment.php cannot be opened without proper authentification.";
+$PMF_LANG["ad_attach_3"] = "The file attachment.php cannot be opened without proper authentication.";
 $PMF_LANG["ad_attach_4"] = "The attached file must be smaller than %s Bytes.";
 $PMF_LANG["ad_menu_export"] = "Export your FAQ";
 $PMF_LANG["ad_export_1"] = "Built RSS-Feed on";
@@ -636,7 +636,7 @@ $PMF_LANG['ad_changerev'] = 'Select Revision';
 $PMF_LANG['msgCaptcha'] = "Please enter the captcha code";
 $PMF_LANG['msgSelectCategories'] = 'Search in ...';
 $PMF_LANG['msgAllCategories'] = '... all categories';
-$PMF_LANG['ad_you_should_update'] = 'Your phpMyFAQ installation is outdated. You should update to the latest available version.';
+$PMF_LANG['ad_you_should_update'] = 'Your phpMyFAQ installation is out of date. You should update to the latest available version.';
 $PMF_LANG['msgAdvancedSearch'] = 'Advanced search';
 
 // added v1.6.1 - 2006-04-25 by Matteoï and Thorsten
@@ -644,7 +644,7 @@ $PMF_LANG['spamControlCenter'] = 'Spam control center';
 $LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Print user email in a safe way (default: enabled).");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Check public form content against banned words (default: enabled).");
 $LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "Use a captcha code to allow public form submission (default: enabled).");
-$PMF_LANG['ad_session_expiring'] = 'Your session will expire in %d minutes: would you like to go on working?';
+$PMF_LANG['ad_session_expiring'] = 'Your session will expire in %d minutes: would you like to continue working?';
 
 // added v1.6.2 - 2006-06-13 by Matteo
 $PMF_LANG['ad_stat_management'] = 'Sessions management';
@@ -685,7 +685,7 @@ $PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Ambiguous HTTP status <strong>%s<
 $PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'The <em>HEAD</em> method is not supported by the host <strong>%s</strong>, allowed methods: <strong>%s</strong>.';
 $PMF_LANG['ad_linkcheck_openurl_not_found'] = 'This resource cannot be found at host <strong>%s</strong>.';
 $PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protocol unsupported by Automatic link verification.';
-$PMF_LANG['msgNewQuestionVisible'] = 'The question have to be reviewed first before getting public.';
+$PMF_LANG['msgNewQuestionVisible'] = 'The question has to first be reviewed before becoming public.';
 $PMF_LANG['msgQuestionsWaiting'] = 'Waiting for publishing by the administrators: ';
 $PMF_LANG['ad_entry_visibility'] = 'Publish?';
 
@@ -768,8 +768,8 @@ $PMF_LANG['admin_mainmenu_logout'] = 'Logout';
 $PMF_LANG["ad_categ_owner"] = 'Category owner';
 $PMF_LANG['adminSection'] = 'Administration';
 $PMF_LANG['err_expiredArticle'] = 'This entry is expired and can not be displayed';
-$PMF_LANG['err_expiredNews'] = 'This news is expired and can not be displayed';
-$PMF_LANG['err_inactiveNews'] = 'This news is in revision and can not be displayed';
+$PMF_LANG['err_expiredNews'] = 'This news item is expired and can not be displayed';
+$PMF_LANG['err_inactiveNews'] = 'This news item is in revision and can not be displayed';
 $PMF_LANG['msgSearchOnAllLanguages'] = 'search in all languages';
 $PMF_LANG['ad_entry_tags'] = 'Tags';
 $PMF_LANG['msg_tags'] = 'Tags';
