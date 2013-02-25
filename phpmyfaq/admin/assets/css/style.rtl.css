@@ -12267,6 +12267,9 @@ body {
   background-color: #eeeeee;
   padding: 1px;
 }
+#content .sticky-faqs {
+  margin-bottom: 20px;
+}
 #content .tab-content {
   padding: 5px;
 }

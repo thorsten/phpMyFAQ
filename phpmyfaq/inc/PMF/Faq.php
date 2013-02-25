@@ -430,10 +430,10 @@ class PMF_Faq
                 }
 
                 $renderedItems[] = sprintf(
-                    '<li>%s<span id="viewsPerRecord"><br /><small>(%s)</small>%s</span></li>',
+                    '<li%s>%s<span id="viewsPerRecord"><br /><small>(%s)</small></span></li>',
+                    ($row->sticky == 1) ? ' class="sticky-faqs"' : '',
                     $oLink->toHtmlAnchor(),
-                    $this->plr->GetMsg('plmsgViews', $visits),
-                    ($row->sticky == 1) ? '<br /><br />' : ''
+                    $this->plr->GetMsg('plmsgViews', $visits)
                 );
             }
 

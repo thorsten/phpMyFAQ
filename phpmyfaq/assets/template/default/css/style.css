@@ -866,6 +866,7 @@ body{background:#f6f6f6;}
 #content .nav{margin-bottom:0;}
 #content .answer{margin-bottom:20px;}
 #content .highlight{text-decoration:dotted;border:1px dashed #f89406;background-color:#eeeeee;padding:1px;}
+#content .sticky-faqs{margin-bottom:20px;}
 #content .tab-content{padding:5px;}#content .tab-content .star-rating{padding:2px;font-size:50px;line-height:50px;}#content .tab-content .star-rating s{color:black;cursor:pointer;text-decoration:none;}
 #content .tab-content .star-rating s:hover{color:#9d261d;}
 #content .tab-content .star-rating s:hover:before,#content .tab-content .star-rating s.voted{content:"\2605";}
