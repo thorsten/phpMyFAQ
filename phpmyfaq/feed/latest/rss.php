@@ -87,7 +87,7 @@ PMF_String::init($LANGCODE);
 
 $faq = new PMF_Faq($faqConfig);
 $faq->setUser($current_user);
-$faq->setGroups($current_user);
+$faq->setGroups($current_groups);
 
 $rssData = $faq->getLatestData(PMF_NUMBER_RECORDS_LATEST);
 $num     = count($rssData);
