@@ -7,9 +7,6 @@
                 <a href="{link_twitter}" target="_blank">
                     <img src="assets/img/twitter.png" alt="{writeTwitterMsgTag}" title="{writeTwitterMsgTag}" width="32" height="32" border="0" />
                 </a>
-                <a href="{link_delicious}" target="_blank">
-                    <img src="assets/img/delicious.png" alt="{writeDeliciousMsgTag}" title="{writeDeliciousMsgTag}" width="32" height="32" border="0" />
-                </a>
                 <a href="{link_digg}" target="_blank">
                     <img src="assets/img/digg.png" alt="{writeDiggMsgTag}" title="{writeDiggMsgTag}" width="32" height="32" border="0" />
                 </a>

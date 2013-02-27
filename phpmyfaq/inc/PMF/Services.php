@@ -149,27 +149,6 @@ class PMF_Services
     }
 
     /**
-     * Returns the current "Bookmark this on Delicious" URL
-     *
-     * @return string
-     */
-    public function getBookmarkOnDeliciousLink()
-    {
-        $url = sprintf('%s?action=artikel&amp;cat=%s&amp;id=%d&amp;lang=%s',
-            $this->_config->get('main.referenceURL'),
-            $this->getCategoryId(),
-            $this->getFaqId(),
-            $this->getLanguage()
-        );
-
-        return sprintf(
-            'https://www.delicious.com/save?url=%s&amp;title=%s',
-            urlencode($url),
-            $this->getQuestion()
-        );
-    }
-
-    /**
      * Returns the "Send 2 Friends" URL
      *
      * @return string
