@@ -10,38 +10,41 @@
                 "reference": "master"
             },
             "type": "library",
-            "installation-source": "source",
-            "time": "2012-10-29 17:21:25"
+            "time": "2013-02-14 18:10:36"
         },
         {
             "name": "symfony/class-loader",
-            "version": "v2.1.6",
+            "version": "v2.2.0",
             "target-dir": "Symfony/Component/ClassLoader",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/ClassLoader",
-                "reference": "v2.1.6"
+                "url": "https://github.com/symfony/ClassLoader.git",
+                "reference": "v2.2.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/ClassLoader/archive/v2.1.6.zip",
-                "reference": "v2.1.6",
+                "url": "https://api.github.com/repos/symfony/ClassLoader/zipball/v2.2.0",
+                "reference": "v2.2.0",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "require-dev": {
-                "symfony/finder": "2.1.*"
+                "symfony/finder": ">=2.0,<3.0"
             },
-            "time": "2012-12-06 10:00:55",
             "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "psr-0": {
-                    "Symfony\\Component\\ClassLoader": ""
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.2-dev"
                 }
             },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\ClassLoader\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -56,7 +59,8 @@
                 }
             ],
             "description": "Symfony ClassLoader Component",
-            "homepage": "http://symfony.com"
+            "homepage": "http://symfony.com",
+            "time": "2013-03-01 06:43:14"
         },
         {
             "name": "tcpdf",
@@ -67,8 +71,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "installation-source": "source",
-            "time": "2012-10-24 16:18:34"
+            "time": "2013-02-06 20:04:08"
         },
         {
             "name": "twitteroauth",
@@ -79,7 +82,6 @@
                 "reference": "master"
             },
             "type": "library",
-            "installation-source": "source",
             "time": "2012-05-18 21:32:30"
         }
     ],
