@@ -151,6 +151,9 @@ installation script.
 %changelog
 ==========
 
+* Sat Mar 02 2013 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.8.0.RC3-1
+- New upstream version 2.8.0-RC3
+
 * Tue Feb 12 2013 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.8.0.RC2-1
 - New upstream version 2.8.0-RC2
 
