@@ -5,7 +5,7 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.8.0-RC2 - 2013-02-
+Version 2.8.0-RC2 - 2013-03-02
 - changed PHP requirement to PHP 5.3.3 and later (Thorsten)
 - phpMyFAQ is now licensed under the terms of Mozilla Public License 2.0 (Thorsten, Florian)
 - added new and improved frontend and backend user interface based on Twitter Bootstrap (Thorsten)
@@ -45,9 +45,6 @@ Version 2.8.0-RC2 - 2013-02-
 - updated PHP dependency management using Composer (Thorsten)
 - updated Czech translation (Jaroslav Síka)
 - fixed some bugs (Thorsten, Florian)
-
-Version 2.7.10 - 2013-01-
--
 
 Version 2.7.9 - 2012-11-02
 - updated Czech translation (Jaroslav Síka)
