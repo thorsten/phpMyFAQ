@@ -16,7 +16,7 @@
                 <ul class="faqTabNav">
                     <li>
                         <a href="javascript:void(0);" onclick="infoBox('authorInfo')">
-                            About this news
+                            {msgAboutThisNews}
                         </a>
                     </li>
                 </ul>

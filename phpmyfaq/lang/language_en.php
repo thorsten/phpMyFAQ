@@ -1207,3 +1207,6 @@ $PMF_LANG["ad_instance_hint"] = "Caution: It will take some seconds to create a 
 $PMF_LANG["ad_instance_button"] = "Save instance";
 $PMF_LANG["ad_instance_error_cannotdelete"] = "Could not delete instance ";
 $PMF_LANG["ad_instance_config"] = "Instance configuration";
+
+// added v2.8.0-RC3 - 2013-03-03 by Thorsten
+$PMF_LANG["newsWriteComment"] = "About this news";

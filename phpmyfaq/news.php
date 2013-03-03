@@ -110,6 +110,7 @@ $tpl->parse(
         'writeHeader'         => $newsHeader,
         'writeContent'        => $newsContent,
         'writeDateMsg'        => $newsDate,
+        'msgAboutThisNews'    => $PMF_LANG['msgAboutThisNews'],
         'writeAuthor'         => ($news['active'] && (!$expired)) ? $PMF_LANG['msgAuthor'] . ': ' . $news['authorName'] : '',
         'editThisEntry'       => $editThisEntry,
         'writeCommentMsg'     => $commentMessage,
