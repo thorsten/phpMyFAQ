@@ -12,16 +12,13 @@
             </article>
             <!-- /News -->
 
-            <div id="faqTabs">
-                <ul class="faqTabNav">
-                    <li>
-                        <a href="javascript:void(0);" onclick="infoBox('authorInfo')">
-                            {msgAboutThisNews}
-                        </a>
-                    </li>
-                </ul>
-                <div class="faqTabContent" id="authorInfo" style="display: none;">
-                    {writeDateMsg}<br />{writeAuthor}<br />{editThisEntry}
+            <ul id="tab" class="nav nav-tabs">
+                <li><a href="#authorInfo" data-toggle="tab">{msgAboutThisNews}</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="authorInfo">
+                {writeDateMsg}<br />{writeAuthor}<br />{editThisEntry}
                 </div>
             </div>
 

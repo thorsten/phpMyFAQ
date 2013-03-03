@@ -1166,4 +1166,4 @@ $PMF_LANG["ad_instance_error_cannotdelete"] = "Kann die Instanz nicht löschen "
 $PMF_LANG["ad_instance_config"] = "Instanz-Konfiguration";
 
 // added v2.8.0-RC3 - 2013-03-03 by Thorsten
-$PMF_LANG["newsWriteComment"] = "Über diese Nachricht";
+$PMF_LANG["msgAboutThisNews"] = "Über diese Nachricht";
