@@ -218,13 +218,14 @@ body {
       padding: 2px;
       font-size: 50px;
       line-height: 50px;
+      text-align: center;
       s {
         color: black;
         cursor: pointer;
         text-decoration: none;
       }
       s:hover {
-        color: @red;
+        color: @pmfOrange;
       }
       s:hover:before, s.voted {
          content: "\2605";
@@ -233,6 +234,15 @@ body {
         content: "\2606";
       }
     }
+  }
+  .faq-information {
+    background-color: @white;
+    border-left: 1px solid @grayLighter;
+    border-bottom: 1px solid @grayLighter;
+    border-right: 1px solid @grayLighter;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    margin-bottom: 10px;
   }
   .comment {
     margin: 5px;

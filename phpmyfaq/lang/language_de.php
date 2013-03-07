@@ -52,7 +52,7 @@ $PMF_LANG["msgPages"] = " Seiten";
 $PMF_LANG["msgPrevious"] = "Vorherige";
 $PMF_LANG["msgNext"] = "Weitere";
 $PMF_LANG["msgCategoryUp"] = "zur nächst höheren Kategorie zurück";
-$PMF_LANG["msgLastUpdateArticle"] = "Letzte Änderung der FAQ: ";
+$PMF_LANG["msgLastUpdateArticle"] = "Letzte Änderung: ";
 $PMF_LANG["msgAuthor"] = "Verfasser der FAQ: ";
 $PMF_LANG["msgPrinterFriendly"] = "Druckerfreundliche Version";
 $PMF_LANG["msgPrintArticle"] = "FAQ ausdrucken";
@@ -1013,7 +1013,7 @@ $PMF_LANG["msgShowHelp"] = "Bitte Begriffe mit Komma trennen.";
 
 // added 2.6.0-RC - 2009-11-30 by Thorsten
 $PMF_LANG["msgUpdateFaqDate"] = "aktualisieren";
-$PMF_LANG["msgKeepFaqDate"] = "behalten"; 
+$PMF_LANG["msgKeepFaqDate"] = "behalten";
 $PMF_LANG["msgEditFaqDat"] = "ändern";
 $LANG_CONF["main.optionalMailAddress"] = array(0 => "checkbox", 1 => "Angabe der E-Mailadresse als Pflichtfeld (Standard: deaktiviert)");
 $LANG_CONF["search.useAjaxSearchOnStartpage"] = array(0 => "checkbox", 1 => "Sofortantwort auf der Startseite (Standard: deaktiviert)");

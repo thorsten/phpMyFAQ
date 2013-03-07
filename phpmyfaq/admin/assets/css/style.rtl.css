@@ -16657,6 +16657,7 @@ body {
   padding: 2px;
   font-size: 50px;
   line-height: 50px;
+  text-align: center;
 }
 #content .tab-content .star-rating s {
   color: black;
@@ -16664,7 +16665,7 @@ body {
   text-decoration: none;
 }
 #content .tab-content .star-rating s:hover {
-  color: #9d261d;
+  color: #ef7507;
 }
 #content .tab-content .star-rating s:hover:before,
 #content .tab-content .star-rating s.voted {
@@ -16672,6 +16673,15 @@ body {
 }
 #content .tab-content .star-rating s:before {
   content: "\2606";
+}
+#content .faq-information {
+  background-color: #ffffff;
+  border-left: 1px solid #eeeeee;
+  border-bottom: 1px solid #eeeeee;
+  border-right: 1px solid #eeeeee;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  margin-bottom: 10px;
 }
 #content .comment {
   margin: 5px;

@@ -99,7 +99,7 @@ if (!is_null($highlight) && $highlight != "/" && $highlight != "<" && $highlight
 // Search for href attribute links
 $oLnk->resetPool();
 $oLnk->parse_string($answer);
-$fixedContent = str_replace('href="#', 
+$fixedContent = str_replace('href="#',
     sprintf('href="index.php?action=artikel&amp;lang=%s&amp;cat=%d&amp;id=%d&amp;artlang=%s#',
         $LANGCODE,
         $currentCategory,
@@ -107,7 +107,7 @@ $fixedContent = str_replace('href="#',
         $LANGCODE),
     $answer);
 $oLnk->resetPool();
-$oLnk->parse_string($fixedContent); 
+$oLnk->parse_string($fixedContent);
 
 // Search for href attributes only
 $linkArray = $oLnk->getUrlpool();
@@ -132,7 +132,7 @@ if (isset($linkArray['href'])) {
     }
 }
 
-$answer = $fixedContent; 
+$answer = $fixedContent;
 
 // Check for the languages for a faq
 $arrLanguage    = $faqConfig->getLanguage()->languageAvailable($faq->faqRecord['id']);
@@ -155,10 +155,10 @@ if (count($arrLanguage) > 1) {
 
 // List all faq attachments
 if ($faqConfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['active']) {
-    
+
     $attList = PMF_Attachment_Factory::fetchByRecordId($faqConfig, $faq->faqRecord['id']);
     $outstr  = '';
-    
+
     while (list(,$att) = each($attList)) {
         $outstr .= sprintf('<a href="%s">%s</a>, ',
             $att->buildUrl(),
@@ -270,9 +270,9 @@ $tpl->parse('writeContent', array(
     'writeArticleTags'           => $faqTagging->getAllLinkTagsById($faq->faqRecord['id']),
     'writeRelatedArticlesHeader' => $PMF_LANG['msg_related_articles'] . ': ',
     'writeRelatedArticles'       => $relatedFaqs,
-    'writeDateMsg'               => $PMF_LANG['msgLastUpdateArticle'] . $date->format($faq->faqRecord['date']),
-    'writeRevision'              => $PMF_LANG['ad_entry_revision'] . ': 1.' . $faq->faqRecord['revision_id'],
-    'writeAuthor'                => $PMF_LANG['msgAuthor'] . ': ' . $faq->faqRecord['author'],
+    'writeDateMsg'               => '<dt>' . $PMF_LANG['msgLastUpdateArticle'] . '</dt><dd>' . $date->format($faq->faqRecord['date']) . '</dd>',
+    'writeRevision'              => '<dt>' . $PMF_LANG['ad_entry_revision'] . ':</dt><dd>1.' . $faq->faqRecord['revision_id'] . '</dd>',
+    'writeAuthor'                => '<dt>' . $PMF_LANG['msgAuthor'] . ':</dt><dd>' . $faq->faqRecord['author'] . '</dd>',
     'editThisEntry'              => $editThisEntry,
     'translationUrl'             => $translationUrl,
     'languageSelection'          => PMF_Language::selectLanguages($LANGCODE, false, $arrLanguage, 'translation'),

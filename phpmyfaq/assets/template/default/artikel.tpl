@@ -1,7 +1,7 @@
             <div id="breadcrumbs">
                 {writeRubrik}
             </div>
-            
+
             <header>
                 <div class="pull-right" id="solution_id">
                     <a class="label label-info" href="{solution_id_link}">
@@ -51,7 +51,7 @@
             </div>
 
             <ul id="tab" class="nav nav-tabs">
-                <li><a href="#authorInfo" data-toggle="tab">{msg_about_faq}</a></li>
+                <li class="active"><a href="#authorInfo" data-toggle="tab">{msg_about_faq}</a></li>
                 <li><a href="#votingForm" data-toggle="tab">{msgVoteUseability}</a></li>
                 [switchLanguage]
                 <li><a href="#switchAvailableLanguage" data-toggle="tab">{msgChangeLanguage}</a></li>
@@ -61,9 +61,14 @@
                 [/addTranslation]
             </ul>
 
-            <div class="tab-content ">
+            <div class="tab-content faq-information">
                 <div class="tab-pane active" id="authorInfo">
-                    {writeDateMsg}<br />{writeAuthor}<br />{writeRevision}<br />{editThisEntry}
+                    <dl class="dl-horizontal">
+                    {writeDateMsg}
+                    {writeAuthor}
+                    {writeRevision}
+                    </dl>
+                    {editThisEntry}
                 </div>
                 <div class="tab-pane" id="votingForm">
                     <form action="#" method="post" class="form-inline">
@@ -94,7 +99,7 @@
 
             <!-- Comment Form -->
             <a name="comment"></a>
-            <div id="commentForm" style="display: none;">
+            <div id="commentForm" class="hide">
                 <form id="formValues" action="#" method="post" class="form-horizontal">
                     <input type="hidden" name="id" id="id" value="{id}" />
                     <input type="hidden" name="lang" id="lang" value="{lang}" />
