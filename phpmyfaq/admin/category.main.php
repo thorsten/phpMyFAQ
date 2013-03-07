@@ -37,9 +37,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         </header>
 <?php
 $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
-if ('category' != $action && 'content' != $action && 
+if ('category' != $action && 'content' != $action &&
     (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken)) {
-    $permission['editcateg'] = false; 
+    $permission['editcateg'] = false;
 }
 
 if ($permission['editcateg']) {
@@ -96,8 +96,8 @@ if ($permission['editcateg']) {
         if ($categoryId) {
             $category->addPermission('user', array($categoryId), $permissions['restricted_user']);
             $category->addPermission('group', array($categoryId), $permissions['restricted_groups']);
-                        
-            // All the other translations            
+
+            // All the other translations
             $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_added']);
         } else {
@@ -172,8 +172,8 @@ if ($permission['editcateg']) {
                 printf('<p class="alert alert-error">%s</p>', $faqConfig->getDb()->error());
             }
         }
-        
-        // All the other translations            
+
+        // All the other translations
         $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
     }
 
@@ -188,7 +188,7 @@ if ($permission['editcateg']) {
         $deleteall  = PMF_Filter::filterInput(INPUT_POST, 'deleteall', FILTER_SANITIZE_STRING);
         $delete_all = strtolower($deleteall) == 'yes' ? true : false;
 
-        if ($category->deleteCategory($id, $lang, $delete_all) && 
+        if ($category->deleteCategory($id, $lang, $delete_all) &&
             $category->deleteCategoryRelation($id, $lang, $delete_all) &&
             $category->deletePermission('user', array($id)) && $category->deletePermission('group', array($id))) {
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_deleted']);
@@ -343,7 +343,7 @@ if ($permission['editcateg']) {
         if ($cat["lang"] == $lang) {
            // cut category (if current language)
            printf(
-               '<a class="btn btn-warning btn-mini" href="?action=cutcategory&amp;cat=%s"><span title="%s" class="icon-move icon-white"></a> ',
+               '<a class="btn btn-warning btn-mini" href="?action=cutcategory&amp;cat=%s"><span title="%s" class="icon-cut icon-white"></a> ',
                $cat['id'],
                $PMF_LANG['ad_categ_cut']
            );
@@ -368,7 +368,7 @@ if ($permission['editcateg']) {
     }
 
     print "</li>\n</ul>";
-    
+
     printf('<p class="alert alert-info">%s</p>', $PMF_LANG['ad_categ_remark']);
 } else {
     print $PMF_LANG['err_NotAuth'];
