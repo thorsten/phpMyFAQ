@@ -95,7 +95,7 @@ if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     </div>
 </div>
 
-<section id="main">
+<section id="content">
     <div class="container">
         <div class="row" style="padding-left: 20px;">
             <div class="hero-unit hello-phpmyfaq" style="text-align: center; height: 55px;">
@@ -196,8 +196,8 @@ if ($step === 1) {
 if ($step == 2) {
 
     $checkDatabaseSetupFile = $checkLdapSetupFile = $checkTemplateDirectory = false;
-    
-    // First backup old inc/data.php, then backup new config/bak.database.php and copy inc/data.php 
+
+    // First backup old inc/data.php, then backup new config/bak.database.php and copy inc/data.php
     // to config/database.php
     // This is needed for 2.5 updates only
     if (file_exists(PMF_ROOT_DIR . '/inc/data.php')) {
@@ -209,7 +209,7 @@ if ($step == 2) {
             $checkDatabaseSetupFile = true;
         }
     }
-    
+
     // The backup an existing config/database.php
     // 2.6+ updates
     if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {
@@ -220,7 +220,7 @@ if ($step == 2) {
             $checkDatabaseSetupFile = true;
         }
     }
-    
+
     // Now backup and move LDAP setup if available
     // This is needed for 2.5+ updates with a LDAP configuration file
     if (file_exists(PMF_ROOT_DIR . '/inc/dataldap.php')) {
@@ -243,7 +243,7 @@ if ($step == 2) {
             }
         }
     }
-    
+
     if (version_compare($version, '2.6.0-alpha', '<') && (!is_writeable($oldTemplateDir) || !empty($notWritableFiles))) {
         if (!is_writeable($oldTemplateDir)) {
             printf(
@@ -256,11 +256,11 @@ if ($step == 2) {
                 printf("<p class=\"alert alert-error\"><strong>The file %s isn't writable.</strong></p>\n", $item);
             }
         }
-        
+
     } else {
         $checkTemplateDirectory = true;
     }
-    
+
     // is everything is okay?
     if ($checkDatabaseSetupFile && $checkTemplateDirectory) {
 ?>
@@ -298,39 +298,39 @@ if ($step == 3) {
         $query[] = "DELETE FROM ". PMF_Db::getTablePrefix() . "faqstopwords";
         require 'stopwords.sql.php';
     }
-    
+
     //
     // UPDATES FROM 2.5.2
     if (version_compare($version, '2.5.3', '<')) {
         $query[] = "UPDATE ". PMF_Db::getTablePrefix() . "faqconfig SET config_name = 'spam.enableCaptchaCode'
             WHERE config_name = 'spam.enableCatpchaCode'";
     }
-    
+
     //
     // UPDATES FROM 2.6.0-alpha
     //
     if (version_compare($version, '2.6.0-alpha', '<')) {
-        
+
         require '../lang/' . $faqConfig->get('main.language');
-        
+
         if (isset($PMF_LANG['metaCharset']) && strtolower($PMF_LANG['metaCharset']) != 'utf-8') {
             // UTF-8 Migration
             switch($DB['type']) {
             case 'mysql':
                 include 'mysql.utf8migration.php';
                 break;
-                
+
             case 'mysqli':
                 include 'mysqli.utf8migration.php';
                 break;
-                
+
             default:
                 echo '<p class="hint">Please read <a target="_blank" href="../docs/documentation.en.html">' .
                       'documenation</a> about migration to UTF-8.</p>';
-                break; 
+                break;
             }
         }
-        
+
         $faqConfig->add('main.enableUpdate', 'false');
         $faqConfig->add('security.useSslForLogins', 'false');
         $faqConfig->add('main.currentApiVersion', PMF_System::getApiVersion());
@@ -350,13 +350,13 @@ if ($step == 3) {
             echo '<p class="alert alert-error">Couldn\'t create the templates backup directory.</p>';
             PMF_System::renderFooter();
         }
-        
+
         foreach (new DirectoryIterator($templateDir) as $item) {
             if ($item->isFile() && $item->isWritable()) {
                 rename("$templateDir/{$item->getFilename()}", "$templateBackupDir/{$item->getFilename()}");
             }
         }
-        
+
         // Attachments stuff
         $faqConfig->add('records.attachmentsStorageType', '0');
         $faqConfig->add('records.enableAttachmentEncryption', 'false');
@@ -375,7 +375,7 @@ if ($step == 3) {
                     encrypted int NOT NULL DEFAULT 0,
                     mime_type varchar(255) NULL,
                     PRIMARY KEY (id))";
-                
+
                 $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqattachment_file (
                     virtual_hash char(32) NOT NULL,
                     contents bytea,
@@ -395,7 +395,7 @@ if ($step == 3) {
                     encrypted tinyint NOT NULL DEFAULT 0,
                     mime_type varchar(255) NULL,
                     PRIMARY KEY (id))";
-                
+
                 $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqattachment_file (
                     virtual_hash char(32) NOT NULL,
                     contents blob NOT NULL,

@@ -121,7 +121,7 @@ $loader->register();
     </div>
 </div>
 
-<section id="main">
+<section id="content">
     <div class="container">
         <div class="row" style="padding-left: 20px;">
             <div class="hero-unit hello-phpmyfaq" style="text-align: center; height: 60px;">
