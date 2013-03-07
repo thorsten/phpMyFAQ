@@ -2307,7 +2307,7 @@ $(document).ready(function () {
     "use strict";
     /**
      * Open a small popup to upload an attachment
-     * 
+     *
      * @param pic
      * @param title
      */
@@ -2322,7 +2322,7 @@ $(document).ready(function () {
 
     /**
      * Checks all checkboxes
-     * 
+     *
      * @param checkBox
      */
     checkAll = function checkAll(checkBox) {
@@ -2347,7 +2347,7 @@ $(document).ready(function () {
         if ((typeof window.sidebar === "object") && (typeof window.sidebar.addSearchEngine === "function")) {
             window.sidebar.addSearchEngine(uri + "/" + name + ".src", uri + "/images/" + name + "." + ext, name, cat);
         } else {
-            window.alert("Mozilla Firefox, Mozilla or Netscape 6 or later is needed to install the search plugin!");
+            window.alert("Mozilla Firefox is needed to install the search plugin!");
         }
     };
 
@@ -2538,10 +2538,20 @@ $(document).ready(function () {
             cache:    false,
             success:  function (json) {
                 if (json.success === undefined) {
-                    $("#" + formName + 's').html('<p class="alert alert-error">' + json.error + '</p>');
+                    $("#" + formName + 's').html(
+                        '<p class="alert alert-error">' +
+                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                        json.error +
+                        '</p>'
+                    );
                     $('#loader').hide();
                 } else {
-                    $("#" + formName + 's').html('<p class="alert alert-success">' + json.success + '</p>');
+                    $("#" + formName + 's').html(
+                        '<p class="alert alert-success">' +
+                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                        json.success +
+                        '</p>'
+                    );
                     $("#" + formName + 's').fadeIn("slow");
                     $('#loader').hide();
                     $("#" + formName + 'Form').hide();
@@ -2601,10 +2611,19 @@ $(document).ready(function () {
             cache:    false,
             success:  function (json) {
                 if (json.success === undefined) {
-                    $('#votings').append('<p class="alert alert-error">' + json.error + '</p>');
+                    $('#votings').append(
+                        '<p class="alert alert-error">' +
+                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                        json.error +
+                        '</p>'
+                    );
                     $('#loader').hide();
                 } else {
-                    $('#votings').append('<p class="alert alert-success">' + json.success + '</p>');
+                    $('#votings').append(
+                        '<p class="alert alert-success">' +
+                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                        json.success +
+                        '</p>');
                     $('#rating').empty().append(json.rating);
                     $('#votings').fadeIn("slow");
                     $('#loader').hide();
@@ -2633,7 +2652,12 @@ $(document).ready(function () {
             cache:    false,
             success:  function (json) {
                 if (json.result === undefined && json.success === undefined) {
-                    $('#qerror').html('<p class="alert alert-error">' + json.error + '</p>');
+                    $('#qerror').html(
+                        '<p class="alert alert-error">' +
+                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                        json.error +
+                        '</p>'
+                    );
                     $('#loader').hide();
                 } else if (json.success === undefined) {
                     $('#qerror').empty();
@@ -2645,7 +2669,12 @@ $(document).ready(function () {
                     $('#captcha').val('');
                     refreshCaptcha('ask');
                 } else {
-                    $('#answers').html('<p class="alert alert-success">' + json.success + '</p>');
+                    $('#answers').html(
+                        '<p class="alert alert-success">' +
+                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                        json.success +
+                        '</p>'
+                    );
                     $('#answers').fadeIn("slow");
                     $('#answerForm').fadeOut('slow');
                     $('#loader').hide();
