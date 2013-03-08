@@ -69,6 +69,8 @@ $faqSystem = new PMF_System();
         </div>
     </section>
 
+    <?php if ($faqConfig->get('main.enableUserTracking')): ?>
+
     <section class="row-fluid">
         <div class="span12">
             <header>
@@ -95,6 +97,8 @@ $faqSystem = new PMF_System();
             <span class="visits">Loading...</span>
         </div>
     </section>
+
+    <?php endif; ?>
 
     <section class="row-fluid">
         <div class="span6">
