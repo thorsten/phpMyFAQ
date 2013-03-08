@@ -143,9 +143,6 @@ $PMF_LANG["msgQuestion2"] = "Question";
 $PMF_LANG["msg2answer"] = "Answer";
 $PMF_LANG["msgQuestionText"] = "Here you can see questions asked by other users. If you answer these question, your answers may be inserted into the FAQ.";
 
-// Help
-$PMF_LANG["msgHelpText"] = "<p>The structure of the FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) is quite simple. You can either search the <strong><a href=\"?action=show\">categories</a></strong> or let the <strong><a href=\"?action=search\">FAQ search engine</a></strong> search for keywords.</p>";
-
 // Contact
 $PMF_LANG["msgContactEMail"] = "Email the FAQ owner:";
 $PMF_LANG["msgMessage"] = "Your message:";
@@ -508,58 +505,42 @@ $PMF_LANG["msgMainCategory"] = "Main category";
 $PMF_LANG["ad_passwdsuc"] = "Your password has been changed.";
 
 // Added v1.3.0 - 04.03.2003 - Thorsten
-$PMF_LANG["msgPDF"] = "Show this as PDF file";
-$PMF_LANG["ad_xml_head"] = "XML-Backup";
-$PMF_LANG["ad_xml_hint"] = "Save all records of your FAQ in one XML file.";
-$PMF_LANG["ad_xml_gen"] = "create XML file";
 $PMF_LANG["ad_entry_locale"] = "Language";
 $PMF_LANG["msgLangaugeSubmit"] = "Change language";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
-$PMF_LANG["ad_entry_preview"] = "Preview";
-$PMF_LANG["ad_attach_1"] = "Please choose a directory for attachments first in configuration.";
-$PMF_LANG["ad_attach_2"] = "Please choose a link for attachments first in configuration.";
-$PMF_LANG["ad_attach_3"] = "The file attachment.php cannot be opened without proper authentification.";
 $PMF_LANG["ad_attach_4"] = "The attached file must be smaller than %s Bytes.";
 $PMF_LANG["ad_menu_export"] = "Export your FAQ";
-$PMF_LANG["ad_export_1"] = "Built RSS-Feed on";
-$PMF_LANG["ad_export_2"] = ".";
-$PMF_LANG["ad_export_file"] = "Error: Cannot write file.";
-$PMF_LANG["ad_export_news"] = "News RSS-Feed";
-$PMF_LANG["ad_export_topten"] = "Top 10 RSS-Feed";
-$PMF_LANG["ad_export_latest"] = "5 latest records RSS-Feed";
-$PMF_LANG["ad_export_pdf"] = "PDF-Export of all records";
-$PMF_LANG["ad_export_generate"] = "build RSS-Feed";
 
-$PMF_LANG["rightsLanguage"]['adduser'] = "add user";
-$PMF_LANG["rightsLanguage"]['edituser'] = "edit user";
-$PMF_LANG["rightsLanguage"]['deluser'] = "delete user";
-$PMF_LANG["rightsLanguage"]['addbt'] = "add record";
-$PMF_LANG["rightsLanguage"]['editbt'] = "edit record";
-$PMF_LANG["rightsLanguage"]['delbt'] = "delete record";
-$PMF_LANG["rightsLanguage"]['viewlog'] = "view log";
-$PMF_LANG["rightsLanguage"]['adminlog'] = "view admin log";
-$PMF_LANG["rightsLanguage"]['delcomment'] = "delete comment";
-$PMF_LANG["rightsLanguage"]['addnews'] = "add news";
-$PMF_LANG["rightsLanguage"]['editnews'] = "edit news";
-$PMF_LANG["rightsLanguage"]['delnews'] = "delete news";
-$PMF_LANG["rightsLanguage"]['addcateg'] = "add category";
-$PMF_LANG["rightsLanguage"]['editcateg'] = "edit category";
-$PMF_LANG["rightsLanguage"]['delcateg'] = "delete category";
-$PMF_LANG["rightsLanguage"]['passwd'] = "change password";
-$PMF_LANG["rightsLanguage"]['editconfig'] = "edit configuration";
-$PMF_LANG["rightsLanguage"]['addatt'] = "add attachments";
-$PMF_LANG["rightsLanguage"]['delatt'] = "delete attachments";
-$PMF_LANG["rightsLanguage"]['backup'] = "create backup";
-$PMF_LANG["rightsLanguage"]['restore'] = "restore backup";
-$PMF_LANG["rightsLanguage"]['delquestion'] = "delete open questions";
-$PMF_LANG["rightsLanguage"]['changebtrevs'] = "edit revisions";
+$PMF_LANG["rightsLanguage"]['adduser'] = "Add user";
+$PMF_LANG["rightsLanguage"]['edituser'] = "Edit user";
+$PMF_LANG["rightsLanguage"]['deluser'] = "Delete user";
+$PMF_LANG["rightsLanguage"]['addbt'] = "Add record";
+$PMF_LANG["rightsLanguage"]['editbt'] = "Edit record";
+$PMF_LANG["rightsLanguage"]['delbt'] = "Delete record";
+$PMF_LANG["rightsLanguage"]['viewlog'] = "View logs";
+$PMF_LANG["rightsLanguage"]['adminlog'] = "View admin log";
+$PMF_LANG["rightsLanguage"]['delcomment'] = "Delete comment";
+$PMF_LANG["rightsLanguage"]['addnews'] = "Add news";
+$PMF_LANG["rightsLanguage"]['editnews'] = "Edit news";
+$PMF_LANG["rightsLanguage"]['delnews'] = "Delete news";
+$PMF_LANG["rightsLanguage"]['addcateg'] = "Add category";
+$PMF_LANG["rightsLanguage"]['editcateg'] = "Edit category";
+$PMF_LANG["rightsLanguage"]['delcateg'] = "Delete category";
+$PMF_LANG["rightsLanguage"]['passwd'] = "Change passwords";
+$PMF_LANG["rightsLanguage"]['editconfig'] = "Edit configuration";
+$PMF_LANG["rightsLanguage"]['addatt'] = "Add attachments";
+$PMF_LANG["rightsLanguage"]['delatt'] = "Delete attachments";
+$PMF_LANG["rightsLanguage"]['backup'] = "Create backups";
+$PMF_LANG["rightsLanguage"]['restore'] = "Restore backups";
+$PMF_LANG["rightsLanguage"]['delquestion'] = "Delete open questions";
+$PMF_LANG["rightsLanguage"]['changebtrevs'] = "Edit revisions";
 
-$PMF_LANG["msgAttachedFiles"] = "attached files:";
+$PMF_LANG["msgAttachedFiles"] = "Attached files:";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
-$PMF_LANG["ad_user_action"] = "action";
-$PMF_LANG["ad_entry_email"] = "E-mail address:";
+$PMF_LANG["ad_user_action"] = "Action";
+$PMF_LANG["ad_entry_email"] = "Email:";
 $PMF_LANG["ad_entry_allowComments"] = "Allow comments:";
 $PMF_LANG["msgWriteNoComment"] = "You cannot comment on this entry";
 $PMF_LANG["ad_user_realname"] = "Real name:";
@@ -567,10 +548,6 @@ $PMF_LANG["ad_export_generate_pdf"] = "create PDF file";
 $PMF_LANG["ad_export_full_faq"] = "Your FAQ as a PDF file: ";
 $PMF_LANG["err_bannedIP"] = "Your IP address has been banned.";
 $PMF_LANG["err_SaveQuestion"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>.";
-
-// added v1.3.4 - 23.07.2003 - Thorsten
-$PMF_LANG["ad_entry_fontcolor"] = "Font color: ";
-$PMF_LANG["ad_entry_fontsize"] = "Font size: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "Language");
@@ -1058,7 +1035,7 @@ $PMF_LANG['msgShowHelp'] = 'Please seperate words by comma.';
 
 // added 2.6.0-RC - 2009-11-30 by Thorsten
 $PMF_LANG['msgUpdateFaqDate'] = 'update';
-$PMF_LANG['msgKeepFaqDate'] = 'keep'; 
+$PMF_LANG['msgKeepFaqDate'] = 'keep';
 $PMF_LANG['msgEditFaqDat'] = 'edit';
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Mail address as mandatory field (default: deactivated)');
 $LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Instant Response on startpage (default: deactivated)');
