@@ -52,13 +52,15 @@ if ($permission['editconfig']) {
         $newConfigValues = array();
         foreach ($editData['edit'] as $key => $value) {
             $newConfigValues[$key] = str_replace($forbiddenValues, '', $value);
+            $newConfigClass        = array_shift(array_values(explode('.', $key)));
         }
 
         foreach ($oldConfigValues as $key => $value) {
+            $oldConfigClass = array_shift(array_values(explode('.', $key)));
             if (isset($newConfigValues[$key])) {
                 continue;
             } else {
-                if ($oldConfigValues[$key] == 'true') {
+                if ($oldConfigClass === $newConfigClass && $oldConfigValues[$key] === 'true') {
                     $newConfigValues[$key] = 'false';
                 } else {
                     $newConfigValues[$key] = $oldConfigValues[$key];
@@ -66,7 +68,9 @@ if ($permission['editconfig']) {
             }
         }
 
-        $faqConfig->update($newConfigValues);
+        if (! is_null($editData)) {
+            $faqConfig->update($newConfigValues);
+        }
     }
     // Lists the current configuration
     if ('listConfig' === $userAction) {
@@ -163,7 +167,7 @@ if ($permission['editconfig']) {
                     });
                     configContainer.fadeIn("slow").removeAttr("class");
                 } else {
-                    configContainer.fadeOut("slow").attr("class", "hide");
+                    configContainer.fadeOut("slow").attr("class", "hide").empty();
                 }
             }
             $('button.toggleConfig').on('click', toggleConfig);
