@@ -75,7 +75,11 @@
                         <input type="hidden" name="artikel" value="{saveVotingID}" />
                         <div id="votings"></div>
                         <div class="star-rating">
-                            <s><s><s><s><s></s></s></s></s></s>
+                            <span data-stars="5">☆</span>
+                            <span data-stars="4">☆</span>
+                            <span data-stars="3">☆</span>
+                            <span data-stars="2">☆</span>
+                            <span data-stars="1">☆</span>
                         </div>
                         <div class="pull-right">
                             <strong>{msgAverageVote}</strong><span id="rating">{printVotings}</span>
@@ -144,8 +148,8 @@
 
             <script>
                 $(function() {
-                    $("div.star-rating > s, div.star-rating-rtl > s").on("click", function(e) {
-                        var numStars = $(e.target).parentsUntil("div").length + 1;
+                    $("div.star-rating > span").on("click", function(e) {
+                        var numStars = $(e.target).data("stars");
                         saveVoting('faq', {id}, numStars);
                     });
                 });

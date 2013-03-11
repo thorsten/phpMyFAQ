@@ -216,22 +216,21 @@ body {
     // Voting
     .star-rating {
       padding: 2px;
-      font-size: 50px;
+      font-size: 30px;
       line-height: 50px;
       text-align: center;
-      s {
-        color: black;
+      unicode-bidi: bidi-override;
+      direction: rtl;
+      > span {
+        display: inline-block;
+        position: relative;
         cursor: pointer;
-        text-decoration: none;
       }
-      s:hover {
-        color: @pmfOrange;
-      }
-      s:hover:before, s.voted {
-         content: "\2605";
-      }
-      s:before {
-        content: "\2606";
+      > span:hover:before,
+      > span:hover ~ span:before {
+        content: "\2605";
+        position: absolute;
+        cursor: pointer;
       }
     }
   }

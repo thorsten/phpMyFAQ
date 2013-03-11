@@ -16655,24 +16655,22 @@ body {
 }
 #content .tab-content .star-rating {
   padding: 2px;
-  font-size: 50px;
+  font-size: 30px;
   line-height: 50px;
   text-align: center;
+  unicode-bidi: bidi-override;
+  direction: rtl;
 }
-#content .tab-content .star-rating s {
-  color: black;
+#content .tab-content .star-rating > span {
+  display: inline-block;
+  position: relative;
   cursor: pointer;
-  text-decoration: none;
 }
-#content .tab-content .star-rating s:hover {
-  color: #ef7507;
-}
-#content .tab-content .star-rating s:hover:before,
-#content .tab-content .star-rating s.voted {
+#content .tab-content .star-rating > span:hover:before,
+#content .tab-content .star-rating > span:hover ~ span:before {
   content: "\2605";
-}
-#content .tab-content .star-rating s:before {
-  content: "\2606";
+  position: absolute;
+  cursor: pointer;
 }
 #content .faq-information {
   background-color: #ffffff;
