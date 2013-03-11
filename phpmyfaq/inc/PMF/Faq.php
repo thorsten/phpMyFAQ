@@ -2717,7 +2717,7 @@ class PMF_Faq
 
         $query = sprintf("
             SELECT
-                COUNT(*) AS num
+                COUNT(id) AS num
             FROM
                 %sfaqquestions
             WHERE
@@ -2731,7 +2731,7 @@ class PMF_Faq
 
         if ($numOfInvisibles > 0) {
             $extraout = sprintf(
-                '<tr><td colspan="3"><hr />%s%s</td></tr>',
+                '<tr><td colspan="3"><small>%s %s</small></td></tr>',
                 $this->pmf_lang['msgQuestionsWaiting'],
                 $numOfInvisibles
             );
