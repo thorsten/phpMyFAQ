@@ -2722,16 +2722,19 @@ class PMF_Faq
                 %sfaqquestions
             WHERE
                 is_visible != 'Y'",
-            PMF_Db::getTablePrefix());
+            PMF_Db::getTablePrefix()
+        );
 
         $result = $this->_config->getDb()->query($query);
-        $row = $this->_config->getDb()->fetchObject($result);
+        $row    = $this->_config->getDb()->fetchObject($result);
         $numOfInvisibles = $row->num;
 
         if ($numOfInvisibles > 0) {
-            $extraout = sprintf('<tr><td colspan="3"><hr />%s%s</td></tr>',
+            $extraout = sprintf(
+                '<tr><td colspan="3"><hr />%s%s</td></tr>',
                 $this->pmf_lang['msgQuestionsWaiting'],
-                $numOfInvisibles);
+                $numOfInvisibles
+            );
         } else {
             $extraout = '';
         }
@@ -2745,7 +2748,8 @@ class PMF_Faq
                 is_visible = 'Y'
             ORDER BY
                 created ASC",
-            PMF_Db::getTablePrefix());
+            PMF_Db::getTablePrefix()
+        );
 
         $result = $this->_config->getDb()->query($query);
         $output = '';
