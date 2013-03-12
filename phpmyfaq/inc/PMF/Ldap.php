@@ -131,7 +131,7 @@ class PMF_Ldap
         }
 
 
-        if ($this->_ldapConfig['ldap_use_anonymous_login']) {
+        if (isset($this->_ldapConfig['ldap_use_anonymous_login']) && $this->_ldapConfig['ldap_use_anonymous_login']) {
             $ldapBind = ldap_bind($this->ds); // Anonymous LDAP login
         } else {
             $ldapBind = ldap_bind($this->ds, $ldapUser, $ldapPassword);

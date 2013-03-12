@@ -653,7 +653,7 @@ class PMF_Installer
             $ldapSetup['ldapPassword'] = PMF_Filter::filterInput(INPUT_POST, 'ldap_password', FILTER_SANITIZE_STRING, '');
 
             // check LDAP connection
-            require PMF_ROOT_DIR . "/inc/Ldap.php";
+            require PMF_ROOT_DIR . "/inc/PMF/Ldap.php";
             $ldap = new PMF_Ldap($configuration);
             $ldap->connect(
                 $ldapSetup['ldapServer'],
@@ -716,7 +716,7 @@ class PMF_Installer
 
         // check LDAP if available
         if (extension_loaded('ldap') && !is_null($ldapEnabled)) {
-            if (! $instanceSetup->createLdapFile($ldapSetup)) {
+            if (! $instanceSetup->createLdapFile($ldapSetup, '')) {
                 echo "<p class=\"alert alert-error\"><strong>Error:</strong> Setup cannot write to ./config/ldap.php.</p>";
                 $this->_system->cleanInstallation();
                 PMF_System::renderFooter(true);
