@@ -30,8 +30,8 @@ $http->setContentType('application/json');
 $http->addHeader();
 
 // Set user permissions
-$current_user   = -1;
-$current_groups = array(-1);
+$currentUser   = -1;
+$currentGroups = array(-1);
 
 $action     = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 $language   = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING, 'en');
@@ -79,22 +79,23 @@ switch ($action) {
         break;
         
     case 'getCategories':
-        $category = new PMF_Category($faqConfig, $current_groups, true);
-        $category->setUser($current_user);
+        $category = new PMF_Category($faqConfig, $currentGroups, true);
+        $category->setUser($currentUser);
+        $category->setGroups($currentGroups);
         $result   = $category->categories;
         break;
         
     case 'getFaqs':
         $faq = new PMF_Faq($faqConfig);
-        $faq->setUser($current_user);
-        $faq->setGroups($current_user);
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentUser);
         $result = $faq->getAllRecordPerCategory($categoryId);
         break;
         
     case 'getFaq':
         $faq = new PMF_Faq($faqConfig);
-        $faq->setUser($current_user);
-        $faq->setGroups($current_user);
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentUser);
         $faq->getRecord($recordId);
         $result = $faq->faqRecord;
         break;
@@ -105,4 +106,4 @@ switch ($action) {
 }
 
 // print result as JSON
-print json_encode($result);
+echo json_encode($result);
