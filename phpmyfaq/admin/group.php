@@ -393,9 +393,9 @@ function getGroupRights(group_id)
     $.getJSON("index.php?action=ajax&ajax=group&ajaxaction=get_group_rights&group_id=" + group_id,
         function(data) {
             $.each(data, function(i, val) {
-                $('#group_right_' + val).attr('checked', true);
+                $("#group_right_" + val).prop("checked", true);
             });
-            $('#rights_group_id').val(group_id);
+            $("#rights_group_id").val(group_id);
         });
 }
 
