@@ -1,3 +1,31 @@
+CHANGED FILES FROM 2.8.0-RC2 -> 2.8.0-RC3
+
+./admin/assets/css/style.css
+./admin/assets/css/style.rtl.css
+./admin/category.main.php
+./admin/configuration.php
+./admin/dashboard.php
+./admin/group.php
+./assets/js/functions.js
+./assets/js/phpmyfaq.js
+./assets/template/default/artikel.tpl
+./assets/template/default/css/style.css
+./assets/template/default/less/style.less
+./assets/template/default/news.tpl
+./inc/PMF/Faq.php
+./inc/PMF/Installer.php
+./inc/PMF/Ldap.php
+./inc/PMF/System.php
+./install/setup.php
+./install/update.php
+./lang/language_de.php
+./lang/language_en.php
+./api.php
+./artikel.php
+./news.php
+
+
+
 CHANGED FILES FROM 2.8.0-RC -> 2.8.0-RC2
 
 ./admin/assets/css/style.css
