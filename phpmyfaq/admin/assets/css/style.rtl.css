@@ -16702,18 +16702,18 @@ body {
   cursor: pointer;
 }
 #content .hello-phpmyfaq {
-  background-color: #bb2818;
-  background-image: -moz-linear-gradient(top, #cb3a25, #a20e05);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#cb3a25), to(#a20e05));
-  background-image: -webkit-linear-gradient(top, #cb3a25, #a20e05);
-  background-image: -o-linear-gradient(top, #cb3a25, #a20e05);
-  background-image: linear-gradient(to bottom, #cb3a25, #a20e05);
+  background-color: #faa732;
+  background-image: -moz-linear-gradient(top, #fbb450, #f89406);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fbb450), to(#f89406));
+  background-image: -webkit-linear-gradient(top, #fbb450, #f89406);
+  background-image: -o-linear-gradient(top, #fbb450, #f89406);
+  background-image: linear-gradient(to bottom, #fbb450, #f89406);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffcb3a25', endColorstr='#ffa20e05', GradientType=0);
-  color: #f2f2f2;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffbb450', endColorstr='#fff89406', GradientType=0);
+  color: #ffffff;
 }
 #content .hello-phpmyfaq h1 {
-  color: #f2f2f2;
+  color: #ffffff;
   font-size: 44px;
   margin-bottom: 16px;
 }
