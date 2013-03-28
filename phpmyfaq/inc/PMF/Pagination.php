@@ -105,14 +105,14 @@ class PMF_Pagination
      *
      * @var string
      */
-    protected $firstPageLinkTpl = '<li><a href="{LINK_URL}">&larrb;</a></li>';
+    protected $firstPageLinkTpl = '<li><a href="{LINK_URL}">&#8676;</a></li>';
     
     /**
      * Last page link template
      *
      * @var string
      */
-    protected $lastPageLinkTpl = '<li><a href="{LINK_URL}">&rarrb;</a></li>';
+    protected $lastPageLinkTpl = '<li><a href="{LINK_URL}">&#8677;</a></li>';
     
     /**
      * Layout template
