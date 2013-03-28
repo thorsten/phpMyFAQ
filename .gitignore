@@ -40,5 +40,5 @@ vendor/composer*
 vendor/phpseclib*
 vendor/symfony*
 vendor/tcpdf*
-vendor/twitteroauth*
+vendor/twitter*
 vendor/autoload.php
