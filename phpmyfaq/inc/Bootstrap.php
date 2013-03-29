@@ -64,6 +64,7 @@ $loader = new UniversalClassLoader();
 $loader->registerNamespace('PMF', PMF_INCLUDE_DIR);
 $loader->registerNamespace('Symfony', PMF_INCLUDE_DIR . '/libs');
 $loader->registerPrefix('PMF_', PMF_INCLUDE_DIR);
+$loader->registerPrefix('Twig_', PMF_INCLUDE_DIR . '/libs');
 $loader->register();
 
 //

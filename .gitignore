@@ -34,11 +34,13 @@ phpmyfaq/.htaccess
 phpmyfaq/inc/libs/phpseclib
 phpmyfaq/inc/libs/twitteroauth
 phpmyfaq/inc/libs/Symfony
+phpmyfaq/inc/libs/Twig
 
 # Composer related stuff
 vendor/composer*
 vendor/phpseclib*
 vendor/symfony*
 vendor/tcpdf*
+vendor/twig*
 vendor/twitter*
 vendor/autoload.php
