@@ -265,6 +265,11 @@ switch($action) {
         break;
 }
 
+//Initializing Twig
+$twig = new Twig_Environment(
+    new Twig_Loader_Filesystem(PMF_ROOT_DIR . '/admin/assets/twig')
+);
+
 // Header of the admin page including the navigation
 require 'header.php';
 
