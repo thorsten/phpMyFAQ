@@ -1,0 +1,24 @@
+<header>
+    <h2>
+        <i class="icon-list"></i> {{ PMF_LANG['ad_menu_categ_edit'] }}
+        <div class="pull-right">
+            <a class="btn btn-success" href="?action=addcategory">
+                <i class="icon-plus icon-white"></i> {{ PMF_LANG['ad_kateg_add'] }}
+            </a>
+            <a class="btn btn-info" href="?action=showcategory">
+                <i class="icon-th icon-white"></i> {{ PMF_LANG['ad_categ_show'] }}
+            </a>
+        </div>
+    </h2>
+</header>
+
+{% if successMessage %}
+<p class="alert alert-success">{{ successMessage|raw }}</p>
+{% endif %}
+{% if errorMessage %}
+<p class="alert alert-error">{{ errorMessage|raw }}</p>
+{% endif %}
+
+{{ categoryTree|raw }}
+
+<p class="alert alert-info">{{ PMF_LANG['ad_categ_remark'] }}</p>
