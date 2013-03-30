@@ -1,0 +1,28 @@
+<header>
+    <h2>
+        <i class="icon-list"></i>
+        {{ PMF_LANG['ad_categ_move'] }}:
+        <em>{{ categoryName }}</em>
+    </h2>
+</header>
+<form class="form-horizontal" action="?action=changecategory" method="post">
+    <input type="hidden" name="cat" value="{{ id }}" />
+    <input type="hidden" name="csrf" value="{{ csrfToken }}" />
+    <div class="control-group">
+        <label class="control-label">{{ PMF_LANG["ad_categ_change"] }}</label>
+        <div class="controls">
+            <select name="change" size="1">
+                {% for currentId, currentCaption in categoryOptions %}
+                <option value="{{ currentId }}">{{ currentCaption }}</option>
+                {% endfor %}
+            </select>
+            <p class="help-block">{{ PMF_LANG['ad_categ_remark_move'] }}</p>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button class="btn btn-primary" type="submit" name="submit">
+            {{ PMF_LANG["ad_categ_updatecateg"] }}
+        </button>
+    </div>
+</form>
