@@ -271,13 +271,13 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         $twig->loadTemplate('user/add.twig')
             ->display(
                 array(
-                    'PMF_LANG' => $PMF_LANG,
-                    'csrfToken' => $user->getCsrfTokenFromSession(),
-                    'userEmail' => isset($user_email) ? $user_email : '',
-                    'userName' => isset($user_name) ? $user_name : '',
-                    'userPassword' => isset($user_password) ? $user_password : '',
+                    'PMF_LANG'            => $PMF_LANG,
+                    'csrfToken'           => $user->getCsrfTokenFromSession(),
+                    'userEmail'           => isset($user_email) ? $user_email : '',
+                    'userName'            => isset($user_name) ? $user_name : '',
+                    'userPassword'        => isset($user_password) ? $user_password : '',
                     'userPasswordConfirm' => isset($user_password_confirm) ? $user_password_confirm : '',
-                    'userRealName' => isset($user_realname) ? $user_realname : ''
+                    'userRealName'        => isset($user_realname) ? $user_realname : ''
                 )
             );
     }
