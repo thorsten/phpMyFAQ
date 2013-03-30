@@ -1,0 +1,33 @@
+<header>
+    <h2>
+        <i class="icon-list"></i>
+        {{ PMF_LANG['ad_menu_categ_structure'] }}
+    </h2>
+</header>
+
+{% if successMessage %}
+<p class="alert alert-success">{{ successMessage }}</p>
+{% endif %}
+
+{% if errorMessage %}
+<p class="alert alert-error">{{ errorMessage }}</p>
+{% endif %}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            {% for currentLanguage in allLanguages %}
+            <th>{{ currentLanguage }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for currentRow in categoryTable %}
+        <tr>
+            {{ currentRow|raw }}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<p>{{ PMF_LANG['ad_categ_remark_overview'] }}</p>

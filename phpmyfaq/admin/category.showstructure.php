@@ -19,14 +19,10 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://' . $_SERVER['SERVER_NAME'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
-?>
-        <header>
-            <h2><i class="icon-list"></i> <?php print $PMF_LANG['ad_menu_categ_structure'] ?></h2>
-        </header>
-<?php
+
 if ($permission['editcateg']) {
 
     $category = new PMF_Category($faqConfig, array(), false);
@@ -37,6 +33,14 @@ if ($permission['editcateg']) {
     $all_languages   = array();
     $all_lang        = array();
     $showcat         = PMF_Filter::filterInput(INPUT_POST, 'showcat', FILTER_SANITIZE_STRING);
+
+    $templateVars = array(
+        'PMF_LANG'       => $PMF_LANG,
+        'allLanguages'   => array($currentLanguage),
+        'categoryTable'  => array(),
+        'errorMessage'   => '',
+        'successMessage' => ''
+    );
 
     // translate an existing category
     if (!is_null($showcat) && $showcat == 'yes') {
@@ -52,105 +56,90 @@ if ($permission['editcateg']) {
 
         // translate.category only returns non-existent languages to translate too
         if ($category->addCategory($category_data, $parent_id, $category_data['id'])) {
-            printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_translated']);
+            $templateVars['successMessage'] = $PMF_LANG['ad_categ_translated'];
         } else {
-            printf('<p class="alert alert-error">%s</p>', $faqConfig->getDb()->error());
+            $templateVars['errorMessage'] = $faqConfig->getDb()->error();
         }
     }
 
     $category->getMissingCategories();
     $category->buildTree();
-?>
-        <table class="table table-striped">
-        <thead>
-            <tr>
-                <th><?php print $currentLanguage ?></th>
-                <?php
-                // get languages in use for all categories
-                $all_languages = $faqConfig->getLanguage()->languageAvailable(0, $table='faqcategories');
-                foreach ($all_languages as $lang) {
-                   $all_lang[$lang] = $languageCodes[strtoupper($lang)];
-                }
-                asort($all_lang);
-                foreach($all_lang as $lang => $language) {
-                   if ($language != $currentLanguage) {
-                      printf("<th>" . $language . "</th>\n", $language);
-                   }
-                }
-                ?>
-            </tr>
-        </thead>
-        <tbody>
-<?php
-    foreach ($category->catTree as $cat) {
 
-        print "<tr>\n";
-
-        $indent = '';
-        for ($i = 0; $i < $cat['indent']; $i++) {
-            $indent .= '&nbsp;&nbsp;&nbsp;';
+    // get languages in use for all categories
+    $all_languages = $faqConfig->getLanguage()->languageAvailable(0, $table = 'faqcategories');
+    foreach ($all_languages as $lang) {
+        $all_lang[$lang] = $languageCodes[strtoupper($lang)];
+    }
+    asort($all_lang);
+    foreach ($all_lang as $lang => $language) {
+        if ($language != $currentLanguage) {
+            $templateVars['allLanguages'][] = $language;
         }
+    }
+
+    foreach ($category->catTree as $cat) {
+        $currentRow = '';
+
+        $indent = str_repeat('&nbsp;&nbsp;&nbsp;', $cat['indent']);
         // category translated in this language?
-        ($cat['lang'] == $LANGCODE) ? $catname = $cat['name'] : $catname = $cat['name'].' ('.$languageCodes[strtoupper($cat['lang'])].')';
+        ($cat['lang'] == $LANGCODE) ? $catname = $cat['name'] : $catname = $cat['name'] . ' (' . $languageCodes[strtoupper($cat['lang'])] . ')';
 
         // show category name in actual language
-        print '<td>';
+        $currentRow .= '<td>';
         if ($cat['lang'] != $LANGCODE) {
-           // translate category
-           printf(
-               '<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><span title="%s" class="icon-share"></span></a></a>',
-               $currentLink,
-               $cat['id'],
-               $LANGCODE,
-               $PMF_LANG['ad_categ_translate'],
-               $PMF_LANG['ad_categ_translate']
-           );
+            // translate category
+            $currentRow .= sprintf(
+                '<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><span title="%s" class="icon-share"></span></a></a>',
+                $currentLink,
+                $cat['id'],
+                $LANGCODE,
+                $PMF_LANG['ad_categ_translate'],
+                $PMF_LANG['ad_categ_translate']
+            );
         }
-        printf("&nbsp;%s<strong>%s</strong>",
+        $currentRow .= sprintf("&nbsp;%s<strong>%s</strong>",
             $indent,
             $catname);
-        print "</td>\n";
-
+        $currentRow .= "</td>\n";
 
         // get languages in use for categories
         $id_languages = $category->getCategoryLanguagesTranslated($cat["id"]);
 
-        foreach($all_lang as $lang => $language) {
+        foreach ($all_lang as $lang => $language) {
             if ($language == $currentLanguage) {
                 continue;
             }
 
             if (array_key_exists($language, $id_languages)) {
                 $spokenLanguage = PMF_String::preg_replace('/\(.*\)/', '', $id_languages[$language]);
-                printf('<td title="%s: %s">',
+                $currentRow .= sprintf('<td title="%s: %s">',
                     $PMF_LANG['ad_categ_titel'],
                     $spokenLanguage
                 );
-                printf(
+                $currentRow .= sprintf(
                     '<span title="%s: %s" class="label label-success"><i class="icon-check icon-white"></i></span></td>',
                     $PMF_LANG['ad_categ_titel'],
                     $spokenLanguage
                 );
             } else {
-                printf('<td><a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s">',
+                $currentRow .= sprintf('<td><a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s">',
                     $currentLink,
                     $cat['id'],
                     $lang,
                     $PMF_LANG['ad_categ_translate']);
-                printf(
+                $currentRow .= sprintf(
                     '<span title="%s" class="label label-inverse"><i class="icon-share icon-white"></i></span></a>',
                     $PMF_LANG['ad_categ_translate']
                 );
             }
-            print "</td>\n";
+            $currentRow .= "</td>\n";
         }
-        print "</tr>\n";
+
+        $templateVars['categoryTable'][] = $currentRow;
     }
-?>
-        </tbody>
-        </table>
-<?php
-    printf('<p>%s</p>', $PMF_LANG['ad_categ_remark_overview']);
+
+    $twig->loadTemplate('category/showstructure.twig')
+        ->display($templateVars);
 } else {
-    print $PMF_LANG['err_NotAuth'];
+    require 'noperm.php';
 }
