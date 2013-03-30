@@ -1,0 +1,29 @@
+<header>
+    <h2>
+        <i class="icon-list"></i>
+        {{ PMF_LANG['ad_categ_move'] }}
+        {{ categoryName }}
+    </h2>
+</header>
+<form class="form-horizontal" action="?action=pastecategory" method="post">
+    <input type="hidden" name="cat" value="{{ id }}" />
+    <input type="hidden" name="csrf" value="{{ csrfToken }}" />
+    <div class="control-group">
+        <label class="control-label">{{ PMF_LANG['ad_categ_paste2'] }}</label>
+        <div class="controls">
+            <select name="after" size="1">
+                {% for currentId, currentCaption in categoryOptions %}
+                <option value="{{ currentId }}">{{ currentCaption }}</option>
+                {% endfor %}
+                {% if displayMainCatOption %}
+                <option value="0">{{ PMF_LANG['ad_categ_new_main_cat'] }}</option>
+                {% endif %}
+            </select>
+        </div>
+    </div>
+    <div class="form-actions">
+        <button class="btn btn-primary" type="submit" name="submit">
+            {{ PMF_LANG['ad_categ_updatecateg'] }}
+        </button>
+    </div>
+</form>
