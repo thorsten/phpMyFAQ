@@ -24,7 +24,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($permission['editcateg']) {
-
     $category = new PMF_Category($faqConfig, array(), false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
@@ -78,29 +77,18 @@ if ($permission['editcateg']) {
     }
 
     foreach ($category->catTree as $cat) {
-        $currentRow = '';
+        $currentRow = array(
+            'catname'               => $cat['name'],
+            'indent'                => str_repeat('&nbsp;&nbsp;&nbsp;', $cat['indent']),
+            'translations'          => array(),
+            'renderTranslateButton' => $cat['lang'] != $LANGCODE,
+            'translateButtonUrl'    => sprintf('?action=translatecategory&cat=%s&trlang=%s', $cat['id'], $LANGCODE)
+        );
 
-        $indent = str_repeat('&nbsp;&nbsp;&nbsp;', $cat['indent']);
         // category translated in this language?
-        ($cat['lang'] == $LANGCODE) ? $catname = $cat['name'] : $catname = $cat['name'] . ' (' . $languageCodes[strtoupper($cat['lang'])] . ')';
-
-        // show category name in actual language
-        $currentRow .= '<td>';
         if ($cat['lang'] != $LANGCODE) {
-            // translate category
-            $currentRow .= sprintf(
-                '<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><span title="%s" class="icon-share"></span></a></a>',
-                $currentLink,
-                $cat['id'],
-                $LANGCODE,
-                $PMF_LANG['ad_categ_translate'],
-                $PMF_LANG['ad_categ_translate']
-            );
+            $currentRow['catname'] .= ' (' . $languageCodes[strtoupper($cat['lang'])] . ')';
         }
-        $currentRow .= sprintf("&nbsp;%s<strong>%s</strong>",
-            $indent,
-            $catname);
-        $currentRow .= "</td>\n";
 
         // get languages in use for categories
         $id_languages = $category->getCategoryLanguagesTranslated($cat["id"]);
@@ -110,29 +98,24 @@ if ($permission['editcateg']) {
                 continue;
             }
 
+            $currentTranslation = array(
+                'isTranslated' => false,
+                'tooltip'      => ''
+            );
+
             if (array_key_exists($language, $id_languages)) {
-                $spokenLanguage = PMF_String::preg_replace('/\(.*\)/', '', $id_languages[$language]);
-                $currentRow .= sprintf('<td title="%s: %s">',
+                $currentTranslation['isTranslated'] = true;
+                $currentTranslation['tooltip']      = sprintf(
+                    '%s: %s',
                     $PMF_LANG['ad_categ_titel'],
-                    $spokenLanguage
-                );
-                $currentRow .= sprintf(
-                    '<span title="%s: %s" class="label label-success"><i class="icon-check icon-white"></i></span></td>',
-                    $PMF_LANG['ad_categ_titel'],
-                    $spokenLanguage
+                    PMF_String::preg_replace('/\(.*\)/', '', $id_languages[$language])
                 );
             } else {
-                $currentRow .= sprintf('<td><a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s">',
-                    $currentLink,
-                    $cat['id'],
-                    $lang,
-                    $PMF_LANG['ad_categ_translate']);
-                $currentRow .= sprintf(
-                    '<span title="%s" class="label label-inverse"><i class="icon-share icon-white"></i></span></a>',
-                    $PMF_LANG['ad_categ_translate']
-                );
+                $currentTranslation['translateButtonUrl'] = sprintf('?action=translatecategory&cat=%s&trlang=%s', $cat['id'], $lang);
+                $currentTranslation['tooltip']            = $PMF_LANG['ad_categ_translate'];
             }
-            $currentRow .= "</td>\n";
+
+            $currentRow['translations'][] = $currentTranslation;
         }
 
         $templateVars['categoryTable'][] = $currentRow;
