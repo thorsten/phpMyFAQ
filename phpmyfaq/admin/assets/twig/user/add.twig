@@ -1,0 +1,60 @@
+<header>
+    <h2><i class="icon-user"></i> {{ PMF_LANG['ad_adus_adduser'] }}</h2>
+</header>
+
+<div id="user_message"><?php print $message; ?></div>
+<div id="user_create">
+
+    <form class="form-horizontal" action="?action=user&amp;user_action=addsave" method="post">
+        <input type="hidden" name="csrf" value="{{ csrfToken }}" />
+
+        <div class="control-group">
+            <label class="control-label" for="user_name">{{ PMF_LANG['ad_adus_name'] }}</label>
+            <div class="controls">
+                <input type="text" name="user_name" id="user_name" required tabindex="1"
+                       value="{{ userName }}" />
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="user_realname">{{ PMF_LANG['ad_user_realname'] }}</label>
+            <div class="controls">
+                <input type="text" name="user_realname" id="user_realname" required tabindex="2"
+                       value="{{ userRealName }}" />
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="user_email">{{ PMF_LANG['ad_entry_email'] }}</label>
+            <div class="controls">
+                <input type="email" name="user_email" id="user_email" required tabindex="3"
+                       value="{{ userEmail }}" />
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="password">{{ PMF_LANG['ad_adus_password'] }}</label>
+            <div class="controls">
+                <input type="password" name="user_password" id="password" required tabindex="4"
+                       value="{{ userPassword }}" />
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="password_confirm">{{ PMF_LANG['ad_passwd_con'] }}</label>
+            <div class="controls">
+                <input type="password" name="user_password_confirm" id="password_confirm" required
+                       tabindex="5" value="{{ userPasswordConfirm }}" />
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button class="btn btn-success" type="submit">
+                {{ PMF_LANG['ad_gen_save'] }}
+            </button>
+            <a class="btn btn-info" href="?action=user">
+                {{ PMF_LANG['ad_gen_cancel'] }}
+            </a>
+        </div>
+    </form>
+</div> <!-- end #user_create -->

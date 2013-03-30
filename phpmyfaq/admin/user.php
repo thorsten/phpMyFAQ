@@ -138,26 +138,15 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                 $message   .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_protectedAccount']);
                 $userAction = $defaultUserAction;
             } else {
-?>
-        <header>
-            <h2>
-                <i class="icon-user"></i> <?php echo $PMF_LANG['ad_user_deleteUser'] ?> <?php echo $user->getLogin() ?>
-            </h2>
-        </header>
-        <p class="alert alert-danger"><?php print $PMF_LANG["ad_user_del_3"].' '.$PMF_LANG["ad_user_del_1"].' '.$PMF_LANG["ad_user_del_2"]; ?></p>
-        <form action ="?action=user&amp;user_action=delete" method="post">
-            <input type="hidden" name="user_id" value="<?php print $userId; ?>" />
-            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
-            <p align="center">
-                <button class="btn btn-danger" type="submit">
-                    <?php print $PMF_LANG["ad_gen_yes"]; ?>
-                </button>
-                <a class="btn btn-info" href="?action=user">
-                    <?php print $PMF_LANG["ad_gen_no"]; ?>
-                </a>
-            </p>
-        </form>
-<?php
+                $twig->loadTemplate('user/delete_confirm.twig')
+                    ->display(
+                        array(
+                            'PMF_LANG'  => $PMF_LANG,
+                            'csrfToken' => $user->getCsrfTokenFromSession(),
+                            'userId'    => $userId,
+                            'userLogin' => $user->getLogin()
+                        )
+                    );
             }
         }
     }
@@ -279,68 +268,18 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
 
     // show new user form
     if ($userAction == 'add' && $permission['adduser']) {
-?>
-        <header>
-            <h2><i class="icon-user"></i> <?php echo $PMF_LANG["ad_adus_adduser"] ?></h2>
-        </header>
-
-        <div id="user_message"><?php print $message; ?></div>
-        <div id="user_create">
-
-            <form class="form-horizontal" action="?action=user&amp;user_action=addsave" method="post">
-            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
-
-            <div class="control-group">
-                <label class="control-label" for="user_name"><?php print $PMF_LANG["ad_adus_name"]; ?></label>
-                <div class="controls">
-                    <input type="text" name="user_name" id="user_name" required tabindex="1"
-                           value="<?php print (isset($user_name) ? $user_name : ''); ?>" />
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label" for="user_realname"><?php print $PMF_LANG["ad_user_realname"]; ?></label>
-                <div class="controls">
-                <input type="text" name="user_realname" id="user_realname" required tabindex="2"
-                   value="<?php print (isset($user_realname) ? $user_realname : ''); ?>" />
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label" for="user_email"><?php print $PMF_LANG["ad_entry_email"]; ?></label>
-                <div class="controls">
-                    <input type="email" name="user_email" id="user_email" required tabindex="3"
-                           value="<?php print (isset($user_email) ? $user_email : ''); ?>" />
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label" for="password"><?php print $PMF_LANG["ad_adus_password"]; ?></label>
-                <div class="controls">
-                    <input type="password" name="user_password" id="password" required tabindex="4"
-                           value="<?php print (isset($user_password) ? $user_password : ''); ?>" />
-                </div>
-            </div>
-
-             <div class="control-group">
-                 <label class="control-label" for="password_confirm"><?php print $PMF_LANG["ad_passwd_con"]; ?></label>
-                 <div class="controls">
-                    <input type="password" name="user_password_confirm" id="password_confirm" required
-                           tabindex="5" value="<?php print (isset($user_password_confirm) ? $user_password_confirm : ''); ?>" />
-                 </div>
-            </div>
-
-            <div class="form-actions">
-                <button class="btn btn-success" type="submit">
-                    <?php print $PMF_LANG["ad_gen_save"]; ?>
-                </button>
-                <a class="btn btn-info" href="?action=user">
-                    <?php print $PMF_LANG['ad_gen_cancel']; ?>
-                </a>
-            </div>
-        </form>
-</div> <!-- end #user_create -->
-<?php
+        $twig->loadTemplate('user/add.twig')
+            ->display(
+                array(
+                    'PMF_LANG' => $PMF_LANG,
+                    'csrfToken' => $user->getCsrfTokenFromSession(),
+                    'userEmail' => isset($user_email) ? $user_email : '',
+                    'userName' => isset($user_name) ? $user_name : '',
+                    'userPassword' => isset($user_password) ? $user_password : '',
+                    'userPasswordConfirm' => isset($user_password_confirm) ? $user_password_confirm : '',
+                    'userRealName' => isset($user_realname) ? $user_realname : ''
+                )
+            );
     }
 
     // show list of users
@@ -644,5 +583,5 @@ function deleteUser(userId)
 <?php 
     }
 } else {
-    print $PMF_LANG['err_NotAuth'];
+    require 'noperm.php';
 }
