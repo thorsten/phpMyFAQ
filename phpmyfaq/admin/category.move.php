@@ -18,14 +18,14 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 if ($permission["editcateg"]) {
-    $id         = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
-    $parent_id  = PMF_Filter::filterInput(INPUT_GET, 'parent_id', FILTER_VALIDATE_INT);
-    $category = new PMF_Category($faqConfig, array(), false);
+    $id        = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+    $parent_id = PMF_Filter::filterInput(INPUT_GET, 'parent_id', FILTER_VALIDATE_INT);
+    $category  = new PMF_Category($faqConfig, array(), false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $categories = $category->getAllCategories();
@@ -36,11 +36,11 @@ if ($permission["editcateg"]) {
     $category->buildTree($parent_id);
 
     $templateVars = array(
-        'PMF_LANG' => $PMF_LANG,
-        'categoryName' => $category->categories[$id]['name'],
+        'PMF_LANG'        => $PMF_LANG,
+        'categoryName'    => $category->categories[$id]['name'],
         'categoryOptions' => array(),
-        'csrfToken' => $user->getCsrfTokenFromSession(),
-        'id' => $id
+        'csrfToken'       => $user->getCsrfTokenFromSession(),
+        'id'              => $id
     );
 
     foreach ($category->categories as $cat) {
