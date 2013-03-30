@@ -31,8 +31,8 @@ $templateVars = array(
     'languageSelector'    => PMF_Language::selectLanguages($LANGCODE, true),
     'pmfVersion'          => $faqConfig->get('main.currentVersion'),
     'sessionKeepaliveUrl' => 'session.keepalive.php?lang=' . $LANGCODE,
-    'userDisplayName'     => $user->userdata->get('display_name'),
-    'userId'              => $user->userdata->get('user_id')
+    'userDisplayName'     => isset($user) ? $user->userdata->get('display_name') : '',
+    'userId'              => isset($user) ? $user->userdata->get('user_id') : ''
 );
 
 $wysiwygActions = array(

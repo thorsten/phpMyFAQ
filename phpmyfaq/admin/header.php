@@ -39,9 +39,9 @@ $templateVars = array(
     'shortcutIcon'          => '../assets/template/' . PMF_Template::getTplSetName() . '/favicon.ico',
     'time'                  => time(),
     'titleFAQ'              => $faqConfig->get('main.titleFAQ'),
-    'userDisplayName'       => $user->getUserData('display_name'),
-    'userTooltip'           => $PMF_LANG['ad_user_loggedin'] . $user->getLogin(),
-    'userEmail'             => $user->getUserData('email')
+    'userDisplayName'       => isset($user) ? $user->getUserData('display_name'): '',
+    'userTooltip'           => isset($user) ? $PMF_LANG['ad_user_loggedin'] . $user->getLogin() : '',
+    'userEmail'             => isset($user) ? $user->getUserData('email') : ''
 );
 
 if (isset($user) && $faqConfig->get('main.enableGravatarSupport')) {
