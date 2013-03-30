@@ -1,0 +1,40 @@
+<header>
+    <h2><i class="icon-list"></i> {{ PMF_LANG['ad_categ_deletesure'] }}</h2>
+</header>
+
+<form class="form-horizontal" action="?action=removecategory" method="post">
+    <input type="hidden" name="cat" value="{{ id }}" />
+    <input type="hidden" name="lang" value="{{ LANGCODE }}" />
+    <input type="hidden" name="csrf" value="{{ csrfToken }}" />
+
+    <div class="control-group">
+        <label class="control-label">{{ PMF_LANG['ad_categ_titel'] }}:</label>
+        <div class="controls">
+            {{ categoryName }}
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">{{ PMF_LANG['ad_categ_desc'] }}:</label>
+        <div class="controls">
+            {{ categoryDescription }}
+            <label class="radio">
+                <input type="radio" checked name="deleteall" value="yes" />
+                {{ PMF_LANG['ad_categ_deletealllang'] }}
+            </label>
+            <label class="radio">
+                <input type="radio" name="deleteall" value="no" />
+                {{ PMF_LANG['ad_categ_deletethislang'] }}
+            </label>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button class="btn btn-danger" type="submit" name="submit">
+            {{ PMF_LANG['ad_categ_del_yes'] }}
+        </button>
+        <a class="btn btn-success" onclick="javascript:history.back();">
+            {{ PMF_LANG['ad_categ_del_no'] }}
+        </a>
+    </div>
+</form>
