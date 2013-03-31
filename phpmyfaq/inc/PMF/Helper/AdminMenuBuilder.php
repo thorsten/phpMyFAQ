@@ -91,7 +91,7 @@ class AdminMenuBuilder
             array(
                 'caption' => $caption,
                 'isActive' => $active == $action,
-                'linkUrl' => ($action != '') ? 'action=' . $action : ''
+                'linkUrl' => ($action != '') ? '?action=' . $action : ''
             )
         );
     }
