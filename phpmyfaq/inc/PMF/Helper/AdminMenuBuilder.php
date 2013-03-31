@@ -39,7 +39,7 @@ use Twig_Environment;
  */
 class AdminMenuBuilder
 {
-    const TEMPLATE = 'menuEntry.twig';
+    const TEMPLATE = 'sideNavigation.twig';
 
     /**
      * @var Twig_Environment
@@ -52,6 +52,16 @@ class AdminMenuBuilder
      * @var array
      */
     private $permission = array();
+
+    /**
+     * @var string
+     */
+    private $header;
+
+    /**
+     * @var array
+     */
+    private $entries = array();
 
     /**
      * @param Twig_Environment $twig
@@ -87,26 +97,29 @@ class AdminMenuBuilder
             $caption = 'No string for ' . $caption;
         }
         
-        return $this->renderMenuEntry(
-            array(
-                'caption' => $caption,
-                'isActive' => $active == $action,
-                'linkUrl' => ($action != '') ? '?action=' . $action : ''
-            )
+        $this->entries[] = array(
+            'caption' => $caption,
+            'isActive' => $active == $action,
+            'linkUrl' => ($action != '') ? '?action=' . $action : ''
         );
     }
 
     /**
-     * Render a menu entry
-     *
-     * @param array $context
      * @return string
      */
-    private function renderMenuEntry(array $context)
+    public function render()
     {
+        global $PMF_LANG;
+
         return $this->twig
             ->loadTemplate(self::TEMPLATE)
-            ->render($context);
+            ->render(
+                array(
+                    'PMF_LANG' => $PMF_LANG,
+                    'entries' => $this->entries,
+                    'header' => $this->header
+                )
+            );
     }
     
     /**
@@ -160,5 +173,13 @@ class AdminMenuBuilder
     public function setPermission(Array $permission)
     {
         $this->permission = $permission;
+    }
+
+    /**
+     * @param string $header
+     */
+    public function setHeader($header)
+    {
+        $this->header = $header;
     }
 }

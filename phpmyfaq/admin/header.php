@@ -54,20 +54,20 @@ if (isset($user) && $faqConfig->get('main.enableGravatarSupport')) {
     $templateVars['gravatarImage'] = '';
 }
 
-$adminHelper = new AdminMenuBuilder($twig);
-$adminHelper->setPermission($permission);
+$adminMenuBuilder = new AdminMenuBuilder($twig);
+$adminMenuBuilder->setPermission($permission);
 
 switch ($action) {
     case 'user':
     case 'group':
     case 'passwd':
     case 'cookies':
-        $templateVars['secLevelHeader'] = $PMF_LANG['admin_mainmenu_users'];
-        $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('adduser+edituser+deluser', 'user', 'ad_menu_user_administration', $action);
+        $adminMenuBuilder->setHeader($PMF_LANG['admin_mainmenu_users']);
+        $adminMenuBuilder->addMenuEntry('adduser+edituser+deluser', 'user', 'ad_menu_user_administration', $action);
         if ($faqConfig->get('security.permLevel') != 'basic') {
-            $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('addgroup+editgroup+delgroup', 'group', 'ad_menu_group_administration', $action);
+            $adminMenuBuilder->addMenuEntry('addgroup+editgroup+delgroup', 'group', 'ad_menu_group_administration', $action);
         }
-        $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('passwd', 'passwd', 'ad_menu_passwd', $action);
+        $adminMenuBuilder->addMenuEntry('passwd', 'passwd', 'ad_menu_passwd', $action);
         $templateVars['activePage'] = 'user';
         break;
     case 'content':
@@ -105,16 +105,16 @@ switch ($action) {
     case 'takequestion':
     case 'comments':
     case 'attachments':
-        $templateVars['secLevelHeader']   = $PMF_LANG['admin_mainmenu_content'];
-        $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit', $action);
-        $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('addbt', 'editentry', 'ad_entry_add', $action);
-        $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit', $action);
-        $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('editbt+delbt', 'searchfaqs', 'ad_menu_searchfaqs', $action);
-        $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('delcomment', 'comments', 'ad_menu_comments', $action);
-        $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open', $action);
-        $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('addglossary+editglossary+delglossary', 'glossary', 'ad_menu_glossary', $action);
-        $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('addnews+editnews+delnews', 'news', 'ad_menu_news_edit', $action);
-        $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('addattachment+editattachment+delattachment', 'attachments', 'ad_menu_attachments', $action);
+        $adminMenuBuilder->setHeader($PMF_LANG['admin_mainmenu_content']);
+        $adminMenuBuilder->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit', $action);
+        $adminMenuBuilder->addMenuEntry('addbt', 'editentry', 'ad_entry_add', $action);
+        $adminMenuBuilder->addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit', $action);
+        $adminMenuBuilder->addMenuEntry('editbt+delbt', 'searchfaqs', 'ad_menu_searchfaqs', $action);
+        $adminMenuBuilder->addMenuEntry('delcomment', 'comments', 'ad_menu_comments', $action);
+        $adminMenuBuilder->addMenuEntry('delquestion', 'question', 'ad_menu_open', $action);
+        $adminMenuBuilder->addMenuEntry('addglossary+editglossary+delglossary', 'glossary', 'ad_menu_glossary', $action);
+        $adminMenuBuilder->addMenuEntry('addnews+editnews+delnews', 'news', 'ad_menu_news_edit', $action);
+        $adminMenuBuilder->addMenuEntry('addattachment+editattachment+delattachment', 'attachments', 'ad_menu_attachments', $action);
         $templateVars['activePage'] = 'content';
         break;
     case 'statistics':
@@ -125,22 +125,22 @@ switch ($action) {
     case 'searchstats':
     case 'reports':
     case 'reportview':
-        $templateVars['secLevelHeader']   = $PMF_LANG['admin_mainmenu_statistics'];
-        $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('viewlog', 'statistics', 'ad_menu_stat', $action);
-        $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('viewlog', 'viewsessions', 'ad_menu_session', $action);
-        $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('adminlog', 'adminlog', 'ad_menu_adminlog', $action);
-        $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('viewlog', 'searchstats', 'ad_menu_searchstats', $action);
-        $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('reports', 'reports', 'ad_menu_reports', $action);
+        $adminMenuBuilder->setHeader($PMF_LANG['admin_mainmenu_statistics']);
+        $adminMenuBuilder->addMenuEntry('viewlog', 'statistics', 'ad_menu_stat', $action);
+        $adminMenuBuilder->addMenuEntry('viewlog', 'viewsessions', 'ad_menu_session', $action);
+        $adminMenuBuilder->addMenuEntry('adminlog', 'adminlog', 'ad_menu_adminlog', $action);
+        $adminMenuBuilder->addMenuEntry('viewlog', 'searchstats', 'ad_menu_searchstats', $action);
+        $adminMenuBuilder->addMenuEntry('reports', 'reports', 'ad_menu_reports', $action);
         $templateVars['activePage'] = 'statistics';
         break;
     case 'export':
-        $templateVars['secLevelHeader']   = $PMF_LANG['admin_mainmenu_exports'];
-        $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('', 'export', 'ad_menu_export', $action);
+        $adminMenuBuilder->setHeader($PMF_LANG['admin_mainmenu_exports']);
+        $adminMenuBuilder->addMenuEntry('', 'export', 'ad_menu_export', $action);
         $templateVars['activePage'] = 'exports';
         break;
     case 'backup':
-        $templateVars['secLevelHeader']   = $PMF_LANG['admin_mainmenu_backup'];
-        $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('', 'backup', 'ad_menu_export', $action);
+        $adminMenuBuilder->setHeader($PMF_LANG['admin_mainmenu_backup']);
+        $adminMenuBuilder->addMenuEntry('', 'backup', 'ad_menu_export', $action);
         $templateVars['activePage'] = 'backup';
         break;
     case 'config':
@@ -151,24 +151,26 @@ switch ($action) {
     case 'upgrade':
     case 'instances':
     case 'system':
-        $templateVars['secLevelHeader']    = $PMF_LANG['admin_mainmenu_configuration'];
-        $templateVars['secLevelEntries']  .= $adminHelper->addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
-        $templateVars['secLevelEntries']  .= $adminHelper->addMenuEntry('', 'system', 'ad_system_info', $action, false);
-        $templateVars['secLevelEntries']  .= $adminHelper->addMenuEntry('editinstances+addinstances+delinstances', 'instances', 'ad_menu_instances', $action);
-        $templateVars['secLevelEntries']  .= $adminHelper->addMenuEntry('editconfig', 'stopwordsconfig', 'ad_menu_stopwordsconfig', $action);
-        $templateVars['secLevelEntries']  .= $adminHelper->addMenuEntry('edittranslation+addtranslation+deltranslation', 'translist', 'ad_menu_translations', $action);
+        $adminMenuBuilder->setHeader($PMF_LANG['admin_mainmenu_configuration']);
+        $adminMenuBuilder->addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
+        $adminMenuBuilder->addMenuEntry('', 'system', 'ad_system_info', $action, false);
+        $adminMenuBuilder->addMenuEntry('editinstances+addinstances+delinstances', 'instances', 'ad_menu_instances', $action);
+        $adminMenuBuilder->addMenuEntry('editconfig', 'stopwordsconfig', 'ad_menu_stopwordsconfig', $action);
+        $adminMenuBuilder->addMenuEntry('edittranslation+addtranslation+deltranslation', 'translist', 'ad_menu_translations', $action);
         $templateVars['activePage'] = 'configuration';
         break;
     default:
-        $templateVars['secLevelHeader']   = $PMF_LANG['admin_mainmenu_home'];
-        $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit');
-        $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('addbt', 'editentry', 'ad_quick_record');
-        $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit');
-        $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open');
-        $templateVars['secLevelEntries'] .= $adminHelper->addMenuEntry('', 'system', 'ad_system_info', $action, false);
+        $adminMenuBuilder->setHeader($PMF_LANG['admin_mainmenu_home']);
+        $adminMenuBuilder->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit');
+        $adminMenuBuilder->addMenuEntry('addbt', 'editentry', 'ad_quick_record');
+        $adminMenuBuilder->addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit');
+        $adminMenuBuilder->addMenuEntry('delquestion', 'question', 'ad_menu_open');
+        $adminMenuBuilder->addMenuEntry('', 'system', 'ad_system_info', $action, false);
         $templateVars['activePage'] = 'dashboard';
         break;
 }
+
+$templateVars['sideNavigation'] = $adminMenuBuilder->render();
 
 $twig->loadTemplate('header.twig')
     ->display($templateVars);
