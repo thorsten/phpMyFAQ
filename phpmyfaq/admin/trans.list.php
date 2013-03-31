@@ -18,175 +18,65 @@
  * @since     2009-05-11
  */
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 clearstatcache();
-if(isset($_SESSION['trans'])) {
-    unset($_SESSION['trans']);
-}
+unset($_SESSION['trans']);
 
 $langDir            = PMF_ROOT_DIR . DIRECTORY_SEPARATOR . "lang";
 $transDir           = new DirectoryIterator($langDir);
 $isTransDirWritable = is_writable($langDir);
 $tt                 = new PMF_TransTool;
-?>
-        <header>
-            <h2>
-                <i class="icon-wrench"></i> <?php echo $PMF_LANG['ad_menu_translations'] ?>
-                <?php if($permission["addtranslation"] && $isTransDirWritable): ?>
-                <div class="pull-right">
-                    <a class="btn btn-success" href="?action=transadd">
-                        <i class="icon-plus"></i> <?php echo $PMF_LANG['msgTransToolAddNewTranslation'] ?>
-                    </a>
-                </div>
-                <?php endif; ?>
-            </h2>
-        </header>
 
-        <p><?php echo $PMF_LANG['msgChooseLanguageToTranslate'] ?>:</p>
+$templateVars = array(
+    'PMF_LANG'                      => $PMF_LANG,
+    'isTransDirWritable'            => $isTransDirWritable,
+    'renderAddNewTranslationButton' => $permission["addtranslation"] && $isTransDirWritable,
+    'translations'                  => array()
+);
 
-        <?php if(!$isTransDirWritable):
-            echo '<p class="alert alert-error">'. $PMF_LANG['msgLangDirIsntWritable'] . "</p>";
-        endif; ?>
+$sortedLangList = array();
 
-        <table class="table table-striped">
-        <thead>
-            <tr>
-                <th><?php echo $PMF_LANG['msgTransToolLanguage'] ?></th>
-                <th colspan="3"><?php echo $PMF_LANG['msgTransToolActions'] ?></th>
-                <th><?php echo $PMF_LANG['msgTransToolWritable'] ?></th>
-                <th><?php echo $PMF_LANG['msgTransToolPercent'] ?></th>
-            </tr>
-        </thead>
-        <tbody>
-<?php
-    $sortedLangList = array();
-    
-    foreach ($transDir as $file) {
-        if ($file->isFile() && '.php' == PMF_String::substr($file, -4) && 'bak' != PMF_String::substr($file, -7, -4)) {
-            $lang = str_replace(array('language_', '.php'), '', $file);
-
-            /**
-             * English is our exemplary language which won't be changed
-             */
-            if('en' == $lang) {
-                continue;
-            }
-            
-            $sortedLangList[] = $lang; 
-        }   
-    }
-    
-    sort($sortedLangList);
-    
-    while (list(,$lang) = each($sortedLangList)) { 
-        $isLangFileWritable = is_writable($langDir . DIRECTORY_SEPARATOR . "language_$lang.php");
-        $showActions        = $isTransDirWritable && $isLangFileWritable;
-        ?>
-            <tr class="lang_<?php echo $lang ?>_container">
-                <td><?php echo $languageCodes[strtoupper($lang)] ?></td>
-                <?php if($permission["edittranslation"] && $showActions): ?>
-                <td>
-                    <a class="btn btn-primary" href="?action=transedit&amp;translang=<?php echo $lang ?>" >
-                        <i class="icon-edit icon-white"></i>
-                        <?php echo $PMF_LANG['msgEdit'] ?>
-                    </a>
-                </td>
-                <?php else: ?>
-                <td><?php echo $PMF_LANG['msgEdit'] ?></td>
-                <?php endif; ?>
-                <?php if($permission["deltranslation"] && $showActions): ?>
-                <td>
-                    <a class="btn btn-danger" href="javascript: del('<?php echo $lang ?>');" >
-                        <i class="icon-remove icon-white"></i>
-                        <?php echo $PMF_LANG['msgDelete'] ?>
-                    </a>
-                </td>
-                <?php else: ?>
-                <td><?php echo $PMF_LANG['msgDelete'] ?></td>
-                <?php endif; ?>
-                <?php if($permission["edittranslation"] && $showActions): ?>
-                <td>
-                    <a class="btn btn-success" href="javascript: sendToTeam('<?php echo $lang ?>');" >
-                        <i class="icon-upload icon-white"></i>
-                        <?php echo $PMF_LANG['msgTransToolSendToTeam'] ?>
-                    </a>
-                </td>
-                <?php else: ?>
-                <td><?php echo $PMF_LANG['msgTransToolSendToTeam'] ?></td>
-                <?php endif;?>
-                <?php if($isLangFileWritable): ?>
-                <td><i class="icon-ok-circle"></i> <?php echo $PMF_LANG['msgYes'] ?></td>
-                <?php else: ?>
-                <td><i class="icon-ban-circle"></i> <?php echo $PMF_LANG['msgNo'] ?></td>
-                <?php endif; ?>
-                <td><?php echo $tt->getTranslatedPercentage(
-                    $langDir . DIRECTORY_SEPARATOR . "language_en.php",
-                    $langDir . DIRECTORY_SEPARATOR . "language_$lang.php"
-                ); ?>%</td>
-            </tr>
-        <?php 
-    }
-?>
-        </tbody>
-        </table>
-        <script>
-        /**
-         * Remove a language file
-         *
-         * @param string lang Language to remove
-         *
-         * @return void
-         */
-        function del(lang)
-        {
-            if (!confirm('<?php echo $PMF_LANG['msgTransToolSureDeleteFile'] ?>')) {
-                return;
-            }
-
-            $('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php echo $PMF_LANG['msgRemoving3Dots'] ?>');
-
-            $.get('index.php?action=ajax&ajax=trans&ajaxaction=remove_lang_file',
-                  {translang: lang},
-                  function(retval, status) {
-                      if (1*retval > 0 && 'success' == status) {
-                          $('.lang_' + lang + '_container').fadeOut('slow');
-                          $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolFileRemoved'] ?>');
-                      } else {
-                          $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolErrorRemovingFile'] ?>');
-                          alert('<?php echo $PMF_LANG['msgTransToolErrorRemovingFile'] ?>');
-                      }
-                }
-            );
-        }
+foreach ($transDir as $file) {
+    if ($file->isFile() && '.php' == PMF_String::substr($file, -4) && 'bak' != PMF_String::substr($file, -7, -4)) {
+        $lang = str_replace(array('language_', '.php'), '', $file);
 
         /**
-         * Send a translation file to the phpMyFAQ team
-         *
-         * @param string lang
-         *
-         * @return void
+         * English is our exemplary language which won't be changed
          */
-        function sendToTeam(lang)
-        {
-             $('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php echo $PMF_LANG['msgSending3Dots'] ?>');
-
-             var msg = '';;
-
-             $.get('index.php?action=ajax&ajax=trans&ajaxaction=send_translated_file',
-                     {translang: lang},
-                     function(retval, status) {
-                         if (1*retval > 0 && 'success' == status) {
-                             msg = '<?php echo $PMF_LANG['msgTransToolFileSent'] ?>';
-                         } else {
-                             msg = '<?php echo $PMF_LANG['msgTransToolErrorSendingFile'] ?>';
-                         }
-                   }
-               );
-
-             $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolFileSent'] ?>');
-             alert('<?php echo $PMF_LANG['msgTransToolFileSent'] ?>');
+        if ('en' == $lang) {
+            continue;
         }
-        </script>
+
+        $sortedLangList[] = $lang;
+    }
+}
+
+sort($sortedLangList);
+
+while (list(, $lang) = each($sortedLangList)) {
+    $isLangFileWritable   = is_writable($langDir . DIRECTORY_SEPARATOR . "language_$lang.php");
+    $showActions          = $isTransDirWritable && $isLangFileWritable;
+    $translatedPercentage = $tt->getTranslatedPercentage(
+        $langDir . DIRECTORY_SEPARATOR . "language_en.php",
+        $langDir . DIRECTORY_SEPARATOR . "language_$lang.php"
+    );
+
+    $currentTranslation = array(
+        'editButtonUrl'          => '?action=transedit&translang=' . $lang,
+        'isLangFileWritable'     => $isLangFileWritable,
+        'lang'                   => $lang,
+        'name'                   => $languageCodes[strtoupper($lang)],
+        'renderDeleteButton'     => $permission["deltranslation"] && $showActions,
+        'renderEditButton'       => $permission["edittranslation"] && $showActions,
+        'renderSendToTeamButton' => $permission["edittranslation"] && $showActions,
+        'translatedPercentage'   => $translatedPercentage . '%'
+    );
+
+    $templateVars['translations'][] = $currentTranslation;
+}
+
+$twig->loadTemplate('translation/list.twig')
+    ->display($templateVars);
