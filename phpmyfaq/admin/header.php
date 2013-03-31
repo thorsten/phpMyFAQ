@@ -17,6 +17,8 @@
  * @since     2003-02-26
  */
 
+use PMF\Helper\AdminMenuBuilder;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
@@ -52,7 +54,7 @@ if (isset($user) && $faqConfig->get('main.enableGravatarSupport')) {
     $templateVars['gravatarImage'] = '';
 }
 
-$adminHelper = new PMF_Helper_Administration();
+$adminHelper = new AdminMenuBuilder($twig);
 $adminHelper->setPermission($permission);
 
 switch ($action) {

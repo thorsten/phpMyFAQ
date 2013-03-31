@@ -18,26 +18,48 @@
  * @since     2010-01-19
  */
 
+namespace PMF\Helper;
+
+use Twig_Environment;
+
 /**
- * PMF_Helper_Administration
+ * AdminMenuBuilder
+ *
+ * Formerly known as PMF_Helper_Administration
  *
  * @category  phpMyFAQ
  * @package   Helper
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
+ * @author    Alexander M. Turek <me@derrabus.de>
  * @copyright 2010-2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-19
  */
-class PMF_Helper_Administration
+class AdminMenuBuilder
 {
+    const TEMPLATE = 'menuEntry.twig';
+
+    /**
+     * @var Twig_Environment
+     */
+    private $twig;
+
     /**
      * Array with permissions
      *
      * @var array
      */
     private $permission = array();
+
+    /**
+     * @param Twig_Environment $twig
+     */
+    function __construct(Twig_Environment $twig)
+    {
+        $this->twig = $twig;
+    }
 
     /**
      * Adds a menu entry according to user permissions.
@@ -55,29 +77,36 @@ class PMF_Helper_Administration
     {
         global $PMF_LANG;
 
-        if ($active == $action) {
-            $active = ' class="active"';
-        } else {
-            $active = '';
-        }
-        
-        if ($action != '') {
-            $action = "action=" . $action;
+        if ($checkPerm && !$this->evaluatePermission($restrictions)) {
+            return '';
         }
         
         if (isset($PMF_LANG[$caption])) {
-            $_caption = $PMF_LANG[$caption];
+            $caption = $PMF_LANG[$caption];
         } else {
-            $_caption = 'No string for ' . $caption;
+            $caption = 'No string for ' . $caption;
         }
         
-        $output = sprintf('<li%s><a href="?%s">%s</a></li>%s', $active, $action, $_caption, "\n");
-        
-        if ($checkPerm) {
-            return $this->evaluatePermission($restrictions) ? $output : '';
-        } else {
-            return $output;
-        }
+        return $this->renderMenuEntry(
+            array(
+                'caption' => $caption,
+                'isActive' => $active == $action,
+                'linkUrl' => ($action != '') ? 'action=' . $action : ''
+            )
+        );
+    }
+
+    /**
+     * Render a menu entry
+     *
+     * @param array $context
+     * @return string
+     */
+    private function renderMenuEntry(array $context)
+    {
+        return $this->twig
+            ->loadTemplate(self::TEMPLATE)
+            ->render($context);
     }
     
     /**
