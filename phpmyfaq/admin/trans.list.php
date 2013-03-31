@@ -56,7 +56,7 @@ foreach ($transDir as $file) {
 
 sort($sortedLangList);
 
-while (list(, $lang) = each($sortedLangList)) {
+foreach ($sortedLangList as $lang) {
     $isLangFileWritable   = is_writable($langDir . DIRECTORY_SEPARATOR . "language_$lang.php");
     $showActions          = $isTransDirWritable && $isLangFileWritable;
     $translatedPercentage = $tt->getTranslatedPercentage(
