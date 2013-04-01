@@ -1,0 +1,105 @@
+<header>
+    <h2>
+        <i class="icon-wrench"></i>
+        {{ PMF_LANG['ad_menu_translations'] }}
+    </h2>
+</header>
+
+<form id="newTranslationForm">
+    <table class="list" style="width: 100%">
+        <tr>
+            <td>{{ PMF_LANG['msgLanguage'] }}</td>
+            <td>
+                <select name="translang" id="translang">
+                    {% for code, name in languages %}
+                    <option value="{{ code }}">{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>{{ PMF_LANG['msgTransToolLanguageDir'] }}</td>
+            <td><select name="langdir"><option>ltr</option><option>rtl</option></select></td>
+        </tr>
+        <tr>
+            <td>{{ PMF_LANG['msgTransToolLanguageNumberOfPlurals'] }}</td>
+            <td><input name="langnplurals" /></td>
+        </tr>
+        <tr>
+            <td>{{ PMF_LANG['msgTransToolLanguageDesc'] }}</td>
+            <td><textarea name="langdesc"></textarea></td>
+        </tr>
+        <tr class="author_1_container">
+            <td>{{ PMF_LANG['msgAuthor'] }}</td>
+            <td><input name="author[]" /></td>
+        </tr>
+        <tr>
+            <td colspan="2"><a href="javascript: addAuthorContainer();">{{ PMF_LANG['msgTransToolAddAuthor'] }}</a></td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="button" value="{{ PMF_LANG['msgTransToolCreateTranslation'] }}" onclick="save()" /></td>
+        </tr>
+    </table>
+</form>
+{% autoescape 'js' %}
+<script>
+    var max_author = 1
+
+    /**
+     * Add an author input field to the form
+     * @return void
+     */
+    function addAuthorContainer()
+    {
+        var next_max_author = max_author + 1;
+        var next_author_html = '<tr class="author_' + next_max_author + '_container">' +
+                '<td>Author</td><td><input name="author[]" />' +
+                '<a href="javascript: delAuthorContainer(\'author_' + next_max_author + '_container\');void(0);" >' +
+                ' {{ PMF_LANG['msgTransToolRemove'] }}</a></td></tr>';
+        $('.author_' + max_author + '_container').after(next_author_html);
+        max_author++
+    }
+
+
+    function delAuthorContainer(id)
+    {
+        $('.' + id).fadeOut('slow');
+        $('.' + id).removeAttr('innerHTML');
+    }
+
+
+    /**
+     * Send the form data to the server to save
+     * a new translation and redirect to the edit form
+     * @return void
+     */
+    function save()
+    {
+        $('#saving_data_indicator').html('<img src="images/indicator.gif" /> {{ PMF_LANG['msgAdding3Dots'] }}');
+
+        var data = {}
+        var form = document.getElementById('newTranslationForm')
+        var author = []
+        for(var i=0; i < form.elements.length;i++) {
+            if('author[]' == form.elements[i].name) {
+                author.push(form.elements[i].value)
+            } else {
+                data[form.elements[i].name] = form.elements[i].value
+            }
+        }
+        data['author[]'] = author
+
+        $.post('index.php?action=ajax&ajax=trans&ajaxaction=save_added_trans',
+                data,
+                function(retval, status) {
+                    if(1*retval > 0 && 'success' == status) {
+                        $('#saving_data_indicator').html('{{ PMF_LANG['msgTransToolTransCreated'] }}');
+                        document.location = '?action=transedit&translang=' + $('#translang').val().toLowerCase()
+                    } else {
+                        $('#saving_data_indicator').html('{{ PMF_LANG['msgTransToolCouldntCreateTrans'] }}');
+                    }
+                }
+        );
+    }
+</script>
+{% endautoescape %}
