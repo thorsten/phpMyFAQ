@@ -1,5 +1,5 @@
 {
-    "hash": "c29ef60536953b7086f40e00e23cb135",
+    "hash": "8fe6688e50a770e49538abfd636766ef",
     "packages": [
         {
             "name": "phpseclib",
@@ -74,6 +74,33 @@
             "time": "2013-02-06 20:04:08"
         },
         {
+            "name": "twitter/bootstrap",
+            "version": "v2.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twitter/bootstrap.git",
+                "reference": "v2.3.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twitter/bootstrap/zipball/v2.3.1",
+                "reference": "v2.3.1",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "Sleek, intuitive, and powerful front-end framework for faster and easier web development.",
+            "homepage": "http://twitter.github.com/bootstrap/",
+            "keywords": [
+                "bootstrap",
+                "css"
+            ],
+            "time": "2013-03-01 05:24:27"
+        },
+        {
             "name": "twitteroauth",
             "version": "master",
             "source": {
@@ -85,7 +112,9 @@
             "time": "2012-05-18 21:32:30"
         }
     ],
-    "packages-dev": null,
+    "packages-dev": [
+
+    ],
     "aliases": [
 
     ],
@@ -94,5 +123,11 @@
         "phpseclib": 20,
         "tcpdf": 20,
         "twitteroauth": 20
-    }
+    },
+    "platform": {
+        "php": ">=5.3.3"
+    },
+    "platform-dev": [
+
+    ]
 }
