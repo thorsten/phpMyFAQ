@@ -54,7 +54,8 @@
         "symfony/class-loader":    ">=2.1",
         "phpseclib":               "master@dev",
         "tcpdf":                   "master@dev",
-        "twitteroauth":            "master@dev"
+        "twitteroauth":            "master@dev",
+        "twitter/bootstrap":       "2.3.*"
     },
     "minimum-stability": "stable",
     "scripts": {
