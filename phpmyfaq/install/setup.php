@@ -121,7 +121,7 @@ $loader->register();
     </div>
 </div>
 
-<section id="content">
+<section id="content" class="phpmyfaq-setup">
     <div class="container">
         <div class="row" style="padding-left: 20px;">
             <div class="hero-unit hello-phpmyfaq" style="text-align: center; height: 60px;">
@@ -136,7 +136,7 @@ $loader->register();
         <div class="row" style="padding-left: 20px;">
 <?php
 //
-// Initalizing static string wrapper
+// Initialize static string wrapper
 //
 PMF_String::init('en');
 

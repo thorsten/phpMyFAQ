@@ -95,7 +95,7 @@ if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     </div>
 </div>
 
-<section id="content">
+<section id="content" class="phpmyfaq-setup">
     <div class="container">
         <div class="row" style="padding-left: 20px;">
             <div class="hero-unit hello-phpmyfaq" style="text-align: center; height: 55px;">
