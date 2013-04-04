@@ -516,7 +516,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         $allUsers  = $user->getAllUsers();
         $numUsers  = count($allUsers);
         $page      = PMF_Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 0);
-        $perPage   = 25;
+        $perPage   = 10;
         $numPages  = ceil($numUsers / $perPage);
         $lastPage  = $page * $perPage;
         $firstPage = $lastPage - $perPage;
@@ -529,11 +529,10 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
 
         // Pagination options
         $options = array(
-            'baseUrl'         => $baseUrl,
-            'total'           => $numUsers,
-            'perPage'         => $perPage,
-            'pageParamName'   => 'page',
-            'layoutTpl'       => '<strong>{LAYOUT_CONTENT}</strong>'
+            'baseUrl'       => $baseUrl,
+            'total'         => $numUsers,
+            'perPage'       => $perPage,
+            'pageParamName' => 'page'
         );
         $pagination = new PMF_Pagination($faqConfig, $options);
 ?>
