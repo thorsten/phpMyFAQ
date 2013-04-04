@@ -40,6 +40,10 @@ RewriteRule ^(.*)$                  index.php?action=show [L,QSA]
 RewriteCond %{REQUEST_URI}          /search\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=search [L,QSA]
 
+# opensearch
+RewriteCond %{REQUEST_URI}          /opensearch\.html$ [NC]
+RewriteRule ^(.*)$                  opensearch.php [L,QSA]
+
 # the add content page
 RewriteCond %{REQUEST_URI}          /addcontent\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=add [L,QSA]
