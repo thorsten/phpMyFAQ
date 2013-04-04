@@ -306,11 +306,17 @@ class PMF_Link
     /**
      * Returns a search engine optimized title
      *
+     * @param string $title
+     *
      * @return string
      */
-    protected function getSEOItemTitle()
+    public function getSEOItemTitle($title = '')
     {
-        $itemTitle = trim($this->itemTitle);
+        if ('' === $title) {
+            $title = $this->itemTitle;
+        }
+
+        $itemTitle = trim($title);
         // Lower the case (aesthetic)
         $itemTitle = PMF_String::strtolower($itemTitle);
         // Use '_' for some other characters for:

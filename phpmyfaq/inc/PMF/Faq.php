@@ -300,7 +300,8 @@ class PMF_Faq
 
         $numPerPage = $this->_config->get('records.numberOfRecordsPerPage');
         $page       = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
-        $output      = '';
+        $output     = '';
+        $title      = '';
 
         if ($orderby == 'visits') {
             $currentTable = 'fv';
@@ -449,11 +450,25 @@ class PMF_Faq
         }
 
         if ($pages > 1) {
-
-            $baseUrl = PMF_Link::getSystemRelativeUri() . '?' .
-                       (empty($sids) ? '' : $sids) .
-                       'action=show&amp;cat=' . $categoryId .
-                       '&amp;seite=' . $page;
+            // Set base URL scheme
+            if ($this->_config->get('main.enableRewriteRules')) {
+                $link = new PMF_Link(PMF_Link::getSystemRelativeUri('index.php'), $this->_config);
+                $baseUrl = sprintf(
+                    "%scategory/%d/%d/%s.html",
+                    PMF_Link::getSystemRelativeUri('index.php'),
+                    $categoryId,
+                    $page,
+                    $link->getSEOItemTitle($title)
+                );
+            } else {
+                $baseUrl = sprintf(
+                    "%s?%saction=show&amp;cat=%d&amp;seite=%d",
+                    PMF_Link::getSystemRelativeUri(),
+                    (empty($sids) ? '' : $sids),
+                    $categoryId,
+                    $page
+                );
+            }
 
             $options = array(
                 'baseUrl'       => $baseUrl,
