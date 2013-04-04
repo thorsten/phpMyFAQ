@@ -334,8 +334,14 @@ class PMF_Link
         );
         // Hack: move some chars to "similar" but plain ASCII chars
         $itemTitle = str_replace(
-            array('à', 'è', 'é', 'ì', 'ò', 'ù', 'ä', 'ö', 'ü', 'ß', 'Ä', 'Ö', 'Ü'),
-            array('a', 'e', 'e', 'i', 'o', 'u', 'ae', 'oe', 'ue', 'ss', 'Ae', 'Oe', 'Ue'),
+            array(
+                'à', 'è', 'é', 'ì', 'ò', 'ù', 'ä', 'ö', 'ü', 'ß', 'Ä', 'Ö', 'Ü',
+                'č', 'ę', 'ė', 'į', 'š', 'ų', 'ū', 'ž'
+                ),
+            array(
+                'a', 'e', 'e', 'i', 'o', 'u', 'ae', 'oe', 'ue', 'ss', 'Ae', 'Oe', 'Ue',
+                'c', 'e', 'e', 'i', 's', 'u', 'u', 'z'
+            ),
             $itemTitle
         );
         // Clean up
