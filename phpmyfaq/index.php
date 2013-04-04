@@ -119,7 +119,6 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
             $loginVisibility = '';
             $user            = null;
             $action          = 'login';
-            session_destroy();
         }
     } else {
         // error
@@ -127,7 +126,6 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
         $loginVisibility = '';
         $user            = null;
         $action          = 'login';
-        session_destroy();
     }
 
 } else {
