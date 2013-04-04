@@ -513,7 +513,7 @@ function addGroupMembers()
             });
 
             if (isMember == false) {
-                $('#group_member_list').append('<option value="' + $(this).val() + '">' + $(this).text() + '</option>');
+                $('#group_member_list').append('<option value="' + $(this).val() + '" selected>' + $(this).text() + '</option>');
             }
             
         });
