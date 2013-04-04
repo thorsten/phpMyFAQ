@@ -44,7 +44,9 @@ if ($permission['addcateg']) {
         $groupsAllowed = $category->getPermissions('group', array($parentId));
 ?>
             <input type="hidden" name="restricted_users" value="<?php echo $userAllowed[0] ?>">
-            <input type="hidden" name="restricted_groups[]" value="<?php echo $groupsAllowed[0] ?>">
+            <?php foreach ($groupsAllowed as $group): ?>
+            <input type="hidden" name="restricted_groups[]" value="<?php echo $group ?>">
+            <?php endforeach; ?>
 <?php
         printf(
             '<div class="control-group">%s: %s (%s)</div>',
@@ -78,7 +80,7 @@ if ($permission['addcateg']) {
             </div>
 
 <?php
-    if ($parentId == 0) {
+    if ($parentId === 0) {
         if ($faqConfig->get('security.permLevel') != 'basic') {
 ?>
             <div class="control-group">
