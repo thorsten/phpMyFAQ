@@ -790,9 +790,10 @@ class PMF_Category
      * @param integer $id                Category ID
      * @param string  $separator         Path separator
      * @param boolean $renderAsMicroData Renders breadcrumbs as HTML5 microdata
+     * @param string  $useCssClass       Use CSS class "breadcrumb"
      * @return string
      */
-    public function getPath($id, $separator = ' &raquo; ', $renderAsMicroData = false)
+    public function getPath($id, $separator = ' &raquo; ', $renderAsMicroData = false, $useCssClass = 'breadcrumb')
     {
         global $sids;
 
@@ -842,10 +843,11 @@ class PMF_Category
 
             $temp = $breadcrumb;
 
-            return '<ul class="breadcrumb">'. implode(
-                '<span class="divider">' . $separator . '</span>',
-                $temp
-            ) . '</ul>';
+            return sprintf(
+                '<ul class="%s">%s</ul>',
+                $useCssClass,
+                implode('<span class="divider">' . $separator . '</span>', $temp)
+            );
         } else {
             return implode($separator, $temp);
         }

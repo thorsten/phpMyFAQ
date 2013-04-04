@@ -14,7 +14,38 @@
             <hr>
 
             <article class="answer">
-            {writeContent}
+                {writeContent}
+                [tagsAvailable]
+                {renderTags}
+                [/tagsAvailable]
+                [relatedFaqs]
+                <aside id="faqAccordion" class="accordion related-faqs">
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" href="#collapseRelatedFaqs" data-parent="#faqAccordion" data-toggle="collapse">
+                                {renderRelatedArticlesHeader}
+                            </a>
+                        </div>
+                        <div id="collapseRelatedFaqs" class="accordion-body collapse">
+                            <div class="accordion-inner">{renderRelatedArticles}</div>
+                        </div>
+                    </div>
+                </aside>
+                [/relatedFaqs]
+                [relatedCategories]
+                <aside id="faqAccordion" class="accordion related-categories">
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" href="#collapseRelatedCategories" data-parent="#faqAccordion" data-toggle="collapse">
+                                {renderRelatedCategoriesHeader}
+                            </a>
+                        </div>
+                        <div id="collapseRelatedCategories" class="accordion-body collapse">
+                            <div class="accordion-inner">{renderRelatedCategories}</div>
+                        </div>
+                    </div>
+                </aside>
+                [/relatedCategories]
             </article>
 
             <script>
@@ -22,33 +53,6 @@
                     $('a[rel="tooltip"]').tooltip();
                 });
             </script>
-
-            <div id="faqAccordion" class="accordion">
-                <div class="accordion-group">
-                    <div class="accordion-heading">
-                        <a class="accordion-toggle" href="#collapseOne" data-parent="#faqAccordion" data-toggle="collapse">Categories</a>
-                    </div>
-                    <div id="collapseOne" class="accordion-body collapse in">
-                        <div class="accordion-inner">{writeArticleCategories}</div>
-                    </div>
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" href="#collapseTwo" data-parent="#faqAccordion" data-toggle="collapse">{writeTagHeader}</a>
-                        </div>
-                        <div id="collapseTwo" class="accordion-body collapse">
-                            <div class="accordion-inner">{writeArticleTags}</div>
-                        </div>
-                    </div>
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" href="#collapseThree" data-parent="#faqAccordion" data-toggle="collapse">{writeRelatedArticlesHeader}</a>
-                        </div>
-                        <div id="collapseThree" class="accordion-body collapse">
-                            <div class="accordion-inner">{writeRelatedArticles}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <ul id="tab" class="nav nav-tabs">
                 <li class="active"><a href="#authorInfo" data-toggle="tab">{msg_about_faq}</a></li>
@@ -59,6 +63,7 @@
                 [addTranslation]
                 <li><a href="#addTranslation" data-toggle="tab">{msgTranslate}</a></li>
                 [/addTranslation]
+                <li>{editThisEntry}</li>
             </ul>
 
             <div class="tab-content faq-information">
@@ -68,7 +73,6 @@
                     {writeAuthor}
                     {writeRevision}
                     </dl>
-                    {editThisEntry}
                 </div>
                 <div class="tab-pane" id="votingForm">
                     <form action="#" method="post" class="form-inline">

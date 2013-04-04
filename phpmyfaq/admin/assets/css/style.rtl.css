@@ -16641,6 +16641,17 @@ body {
 #content .answer {
   margin-bottom: 20px;
 }
+#content .related-faqs {
+  margin-top: 20px;
+}
+#content .breadcrumb-related-categories li {
+  list-style-type: disc;
+}
+#content .breadcrumb-related-categories > li {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+}
 #content .highlight {
   text-decoration: dotted;
   border: 1px dashed #f89406;
