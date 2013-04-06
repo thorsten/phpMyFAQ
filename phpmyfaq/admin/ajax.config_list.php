@@ -50,7 +50,7 @@ $availableConfigModes = array(
  * @param  $type
  * @return void
  */
-function printInputFieldByType($key, $type)
+function renderInputForm($key, $type)
 {
     global $PMF_LANG, $faqConfig;
 
@@ -91,7 +91,7 @@ function printInputFieldByType($key, $type)
                 case 'main.language':
                     $languages = PMF_Language::getAvailableLanguages();
                     if (count($languages) > 0) {
-                        print PMF_Language::languageOptions(
+                        echo PMF_Language::languageOptions(
                             str_replace(
                                 array(
                                      'language_',
@@ -104,12 +104,12 @@ function printInputFieldByType($key, $type)
                             true
                         );
                     } else {
-                        print '<option value="language_en.php">English</option>';
+                        echo '<option value="language_en.php">English</option>';
                     }
                    break;
                 
                 case 'records.orderby':
-                    print PMF_Configuration::sortingOptions($faqConfig->get($key));
+                    echo PMF_Configuration::sortingOptions($faqConfig->get($key));
                     break;
                     
                 case 'records.sortby':
@@ -122,7 +122,7 @@ function printInputFieldByType($key, $type)
                     break;
                     
                 case 'security.permLevel':
-                    print PMF_Perm::permOptions($faqConfig->get($key));
+                    echo PMF_Perm::permOptions($faqConfig->get($key));
                     break;
                     
                 case 'main.templateSet':
@@ -178,15 +178,18 @@ function printInputFieldByType($key, $type)
                     break;
             }
             
-            print "</select>\n</div>\n";
+            echo "</select>\n</div>\n";
             break;
 
         case 'checkbox':
             printf('<input type="checkbox" name="edit[%s]" value="true"', $key);
             if ($faqConfig->get($key)) {
-                print ' checked="checked"';
+                echo ' checked';
             }
-            print " /></div>\n";
+            if ('security.ldapSupport' === $key && !extension_loaded('ldap')) {
+                echo ' disabled';
+            }
+            echo " /></div>\n";
             break;
             
         case 'print':
@@ -204,28 +207,28 @@ foreach ($LANG_CONF as $key => $value) {
     if (strpos($key, $configMode) === 0) {
         
         if ('socialnetworks.twitterConsumerKey' == $key) {
-            print '<p>';
+            echo '<p>';
             if ('' == $faqConfig->get('socialnetworks.twitterConsumerKey') ||
                 '' == $faqConfig->get('socialnetworks.twitterConsumerSecret')) {
 
-                print '<a target="_blank" href="https://dev.twitter.com/apps/new">Create Twitter APP for your site</a>';
-                print "<br />\n";
-                print "Your Callback URL is: " .$faqConfig->get('main.referenceURL') . "/services/twitter/callback.php";
+                echo '<a target="_blank" href="https://dev.twitter.com/apps/new">Create Twitter APP for your site</a>';
+                echo "<br />\n";
+                echo "Your Callback URL is: " .$faqConfig->get('main.referenceURL') . "/services/twitter/callback.php";
             }
 
             if (!isset($content)) {
-                print '<a target="_blank" href="../services/twitter/redirect.php">';
-                print '<img src="../assets/img/twitter.signin.png" alt="Sign in with Twitter"/></a>';
-                print "<br />\n<br />\n";
+                echo '<a target="_blank" href="../services/twitter/redirect.php">';
+                echo '<img src="../assets/img/twitter.signin.png" alt="Sign in with Twitter"/></a>';
+                echo "<br />\n<br />\n";
             } elseif (isset($content)) {
-                print $content->screen_name . "<br />\n";
-                print "<img src='" . $content->profile_image_url_https . "'><br />\n";
-                print "Follower: " . $content->followers_count . "<br />\n";
-                print "Status Count: " . $content->statuses_count . "<br />\n";
-                print "Status: " . $content->status->text . "<br />\n";
-                print "<br />\n";
+                echo $content->screen_name . "<br />\n";
+                echo "<img src='" . $content->profile_image_url_https . "'><br />\n";
+                echo "Follower: " . $content->followers_count . "<br />\n";
+                echo "Status Count: " . $content->statuses_count . "<br />\n";
+                echo "Status: " . $content->status->text . "<br />\n";
+                echo "<br />\n";
             }
-            print '</div>';
+            echo '</div>';
         }
 ?>
             <div class="control-group">
@@ -246,13 +249,13 @@ foreach ($LANG_CONF as $key => $value) {
                 break;
 
             default:
-                print $value[1];
+                echo $value[1];
                 break;
         }
 ?>
                 </label>
                 <div class="controls admin-config-control">
-                    <?php printInputFieldByType($key, $value[0]); ?>
+                    <?php renderInputForm($key, $value[0]); ?>
                 </div>
 <?php
     }
