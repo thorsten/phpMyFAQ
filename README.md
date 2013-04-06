@@ -132,6 +132,10 @@ Licensed under the terms of the MIT License
 
 Licenced under the terms of the SIL Open Font License and MIT License
 
+**[Twig](http://twig.sensiolabs.org/)**
+
+Licensed under the terms of the New BSD License
+
 
 
 Copyright (c) 2001-2013 Thorsten Rinne and the phpMyFAQ Team
