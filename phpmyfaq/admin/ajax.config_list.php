@@ -189,6 +189,12 @@ function renderInputForm($key, $type)
             if ('security.ldapSupport' === $key && !extension_loaded('ldap')) {
                 echo ' disabled';
             }
+            if ('security.useSslOnly' === $key && empty($_SERVER['HTTPS'])) {
+                echo ' disabled';
+            }
+            if ('security.ssoSupport' === $key && empty($_SERVER['REMOTE_USER'])) {
+                echo ' disabled';
+            }
             echo " /></div>\n";
             break;
             
