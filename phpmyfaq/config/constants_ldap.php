@@ -26,7 +26,7 @@ $PMF_LDAP['ldap_mapping'] = array (
 );
 
 // In a multi-domain environment, users may enter a prefix as domain, e.g. "DOMAIN\username"
-// If possible, you should use the Microsoft Glocal Catalog as LDAP-Server, which comes
+// If possible, you should use the Microsoft Global Catalog as LDAP-Server, which comes
 // with every ADS-Installation.
 $PMF_LDAP['ldap_use_domain_prefix'] = true;
 
