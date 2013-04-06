@@ -4,7 +4,7 @@
                 <form id="instantform" action="?action=instantresponse" method="post" class="form-search">
                     <input id="instantfield" type="search" name="search" value="{searchString}"
                            class="input-xxlarge search-query" placeholder="{msgDescriptionInstantResponse}"
-                           onfocus="autoSuggest(); return false;"/>
+                           onfocus="autoSuggest()"/>
                     <input id="ajaxlanguage" name="ajaxlanguage" type="hidden" value="{ajaxlanguage}" />
                 </form>
             </section>
