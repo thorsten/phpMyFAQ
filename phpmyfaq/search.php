@@ -125,7 +125,7 @@ if ($faqConfig->get('main.enableRewriteRules')) {
 } else {
     $baseUrl = sprintf('%s?%saction=search&amp;search=%s&amp;seite=%d%s&amp;searchcategory=%d',
         PMF_Link::getSystemRelativeUri(),
-        empty($sids) ? '' : '$sids&amp;',
+        empty($sids) ? '' : 'sids=' . $sids . '&amp;',
         urlencode($inputSearchTerm),
         $page,
         $languages,
