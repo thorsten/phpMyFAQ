@@ -1,0 +1,47 @@
+<header>
+    <h2>
+        <i class="icon-download-alt"></i>
+        {{ PMF_LANG['ad_csv_backup'] }}
+    </h2>
+</header>
+
+<form method="post" action="?action=restore" enctype="multipart/form-data">
+    <fieldset>
+        <legend>
+            {{ PMF_LANG['ad_csv_head'] }}
+        </legend>
+        <p>
+            {{ PMF_LANG['ad_csv_make'] }}
+        </p>
+        <p>
+            <a class="btn btn-primary" href="backup.export.php?action=backup_content">
+                <i class="icon-download icon-white"></i>
+                {{ PMF_LANG['ad_csv_linkdat'] }}
+            </a>
+            <a class="btn btn-primary" href="backup.export.php?action=backup_logs">
+                <i class="icon-download icon-white"></i>
+                {{ PMF_LANG['ad_csv_linklog'] }}
+            </a>
+        </p>
+    </fieldset>
+
+    <fieldset>
+        <legend>
+            {{ PMF_LANG['ad_csv_head2'] }}
+        </legend>
+        <p>
+            {{ PMF_LANG['ad_csv_restore'] }}
+        </p>
+        <p>
+            <label>
+                {{ PMF_LANG['ad_csv_file'] }}:
+            </label>
+            <input type="hidden" name="csrf" value="{{ csrfToken }}" />
+            <input type="file" name="userfile" size="30" />
+            <button class="btn btn-primary" type="submit">
+                <i class="icon-upload icon-white"></i>
+                {{ PMF_LANG['ad_csv_ok'] }}
+            </button>
+        </p>
+    </fieldset>
+</form>
