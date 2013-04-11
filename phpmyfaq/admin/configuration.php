@@ -52,11 +52,13 @@ if ($permission['editconfig']) {
         $newConfigValues = array();
         foreach ($editData['edit'] as $key => $value) {
             $newConfigValues[$key] = str_replace($forbiddenValues, '', $value);
-            $newConfigClass        = array_shift(array_values(explode('.', $key)));
+            $keyArray              = array_values(explode('.', $key));
+            $newConfigClass        = array_shift($keyArray);
         }
 
         foreach ($oldConfigValues as $key => $value) {
-            $oldConfigClass = array_shift(array_values(explode('.', $key)));
+            $keyArray       = array_values(explode('.', $key));
+            $oldConfigClass = array_shift($keyArray);
             if (isset($newConfigValues[$key])) {
                 continue;
             } else {
