@@ -19,7 +19,7 @@
  * @author    Eduardo Polidor
  * @author    Ivan Gil
  * @author    Lisandro López Villatoro
- * @copyright 2004-2013 phpMyFAQ Team
+ * @copyright 2004-2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2004-06-24
@@ -803,7 +803,7 @@ $LANG_CONF['records.defaultAttachmentEncKey'] = array(0 => "input", 1 => 'Clave 
 $PMF_LANG['ad_menu_upgrade'] = 'Actualizar';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Usted tiene la última versión de phpMyFAQ. Usted no necesita actualizar.';
 $LANG_CONF['security.useSslForLogins'] = array(0 => 'checkbox', 1 => "Sólo permitir el acceso con conexión segura? (Por defecto: desactivado)");
-$LANG_CONF['security.ssoSupport'] = array(0 => 'checkbox', 1 => "Soporte a Single Sign On (Por defecto: desactivado)");
+$LANG_CONF['security.ssoSupport'] = array(0 => 'checkbox', 1 => 'Soporte a Single Sign On (Por defecto: desactivado)');
 $LANG_CONF['security.ssoLogoutRedirect'] = array(0 => 'input', 1 => 'Servicio de redirección del Single Sign On al salir (URL)');
 $LANG_CONF['security.enableLoginOnly'] = array(0 => 'checkbox', 1 => "FAQ seguridad completa (Por defecto: desactivado)");
 $LANG_CONF['security.useSslOnly'] = array(0 => 'checkbox', 1 => "FAQ solo con SSL (Por defecto: desactivado)");
@@ -849,14 +849,12 @@ $PMF_LANG['rightsLanguage']['backup'] = 'crear respaldo';
 $LANG_CONF['spam.enableSafeEmail'] = array(0 => "checkbox", 1 => "Muestra email de usuario de forma segura (por omisión: deshabilitado).");
 $LANG_CONF['spam.checkBannedWords'] = array(0 => "checkbox", 1 => "Comparar contenido publico contra palabras bloqueadas (por omisión: deshabilitado).");
 $LANG_CONF['spam.enableCaptchaCode'] = array(0 => "checkbox", 1 => "Usar código captcha para habilitar enviar contenido del publico (por omisión: deshabilitado).");
-
 $LANG_CONF['socialnetworks.enableTwitterSupport'] = array(0 => "checkbox", 1 => "Soporte a Twitter (por omisión: deshabilitado)");
 $LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => 'input', 1 => 'Clave del cliente Twitter');
 $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'Consumidor Secreto Twitter');
 $LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => 'Token de acceso a Twitter');
 $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'Token secreto a Twitter');
 $LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Soporte a Facebook (por omisión: deshabilitado)');
-
 $PMF_LANG['admin_mainmenu_backup'] = 'Respaldo';
 $PMF_LANG['plmsgHomeArticlesOnline']['0'] = 'hay %d FAQ online';
 $PMF_LANG['plmsgHomeArticlesOnline']['1'] = 'hay %d FAQs online';
@@ -877,3 +875,30 @@ $PMF_LANG['plmsgEntries']['1'] = '%d FAQs';
 $PMF_LANG['plmsgUserOnline']['0'] = '%s usuarios conectados';
 $PMF_LANG['plmsgUserOnline']['1'] = '';
 $PMF_LANG['ad_user_password'] = 'Contraseña';
+$PMF_LANG['ad_menu_attachments'] = 'Attachments';
+$PMF_LANG['ad_menu_attachment_admin'] = 'Attachment administration';
+$PMF_LANG['msgAttachmentsFilename'] = 'Nombre del archivo';
+$PMF_LANG['msgAttachmentsFilesize'] = 'Tamaño del archivo';
+$PMF_LANG['msgAttachmentsMimeType'] = 'MIME Type';
+$PMF_LANG['msgAttachmentsWannaDelete'] = '¿Está seguro de querer borrar este archivo?';
+$PMF_LANG['msgAttachmentsDeleted'] = 'Archivo borrado con <strong>éxito</strong> .';
+$PMF_LANG['ad_menu_reports'] = 'Informes';
+$PMF_LANG['ad_stat_report_fields'] = 'Campos';
+$PMF_LANG['ad_stat_report_category'] = 'Categoría';
+$PMF_LANG['ad_stat_report_sub_category'] = 'Subcategoría';
+$PMF_LANG['ad_stat_report_translations'] = 'Traducción';
+$PMF_LANG['ad_stat_report_language'] = 'Idioma';
+$PMF_LANG['ad_stat_report_id'] = 'FAQ ID';
+$PMF_LANG['ad_stat_report_sticky'] = 'Sticky FAQ';
+$PMF_LANG['ad_stat_report_title'] = 'Pregunta';
+$PMF_LANG['ad_stat_report_creation_date'] = 'Fecha';
+$PMF_LANG['ad_stat_report_owner'] = 'Autor original';
+$PMF_LANG['ad_stat_report_last_modified_person'] = 'Último autor';
+$PMF_LANG['ad_stat_report_url'] = 'Dirección web';
+$PMF_LANG['ad_stat_report_visits'] = 'Visitas';
+$PMF_LANG['ad_stat_report_make_report'] = 'Generar informe';
+$PMF_LANG['ad_stat_report_make_csv'] = 'Exportar a CSV';
+$PMF_LANG['msgRegistration'] = 'Registro';
+$PMF_LANG['msgRegistrationCredentials'] = 'To register please enter your name, your loginname and a valid email address!';
+$PMF_LANG['msgRegistrationNote'] = 'After successful registration you will receive an answer soon after Administration has authorized your registration.';
+$PMF_LANG['ad_entry_changelog_history'] = 'Changelog history';
