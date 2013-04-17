@@ -155,8 +155,8 @@ $PMF_LANG["help_search"] = "<p><strong>Antwort finden:</strong><br />Mit der Ein
 // Menü
 $PMF_LANG["ad"] = "ADMIN-BEREICH";
 $PMF_LANG["ad_menu_user_administration"] = "Benutzerverwaltung";
-$PMF_LANG["ad_menu_entry_aprove"] = "FAQ-Beiträge freischalten";
-$PMF_LANG["ad_menu_entry_edit"] = "FAQ-Beiträge bearbeiten";
+$PMF_LANG["ad_menu_entry_aprove"] = "FAQs freischalten";
+$PMF_LANG["ad_menu_entry_edit"] = "FAQs bearbeiten";
 $PMF_LANG["ad_menu_categ_edit"] = "Kategorieverwaltung";
 $PMF_LANG["ad_menu_news_add"] = "News hinzufügen";
 $PMF_LANG["ad_menu_news_edit"] = "News";
@@ -455,7 +455,7 @@ $PMF_LANG["ad_log_beed"] = "Das Editierformular für den folgenden Beitrag ist a
 $PMF_LANG["ad_log_bede"] = "Der folgende Beitrag wurde gelöscht: ";
 
 $PMF_LANG["ad_start_visits"] = "Besuche";
-$PMF_LANG["ad_start_articles"] = "FAQ-Beiträge";
+$PMF_LANG["ad_start_articles"] = "FAQs";
 $PMF_LANG["ad_start_comments"] = "Kommentare";
 
 
