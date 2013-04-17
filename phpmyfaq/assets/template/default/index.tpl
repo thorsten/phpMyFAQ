@@ -128,7 +128,7 @@
                 <form id="instantform" action="?action=instantresponse" method="post" class="form-search">
                     <input type="hidden" name="ajaxlanguage" id="ajaxlanguage" value="{ajaxlanguage}" />
                     <input type="search" name="search" id="instantfield" class="input-xxlarge search-query" value=""
-                           placeholder="{msgDescriptionInstantResponse}" onfocus="autoSuggest(); return false;" />
+                           placeholder="{msgDescriptionInstantResponse}" />
                 </form>
                 <small>{msgSearch}</small>
             </section>
