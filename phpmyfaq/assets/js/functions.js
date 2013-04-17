@@ -35,7 +35,6 @@ var toggleFieldset,
     refreshCaptcha,
     showLongComment,
     saveFormValues,
-    autoSuggest,
     saveVoting,
     checkQuestion;
 
@@ -305,7 +304,7 @@ $(document).ready(function () {
      *
      * @return void
      */
-    autoSuggest = function autoSuggest() {
+    var autoSuggest = function autoSuggest() {
         $('input#instantfield').keyup(function () {
             var search   = $('#instantfield').val(),
                 language = $('#ajaxlanguage').val(),
@@ -330,6 +329,8 @@ $(document).ready(function () {
             return false;
         });
     };
+
+    autoSuggest();
 
     /**
      * Saves the voting by Ajax
