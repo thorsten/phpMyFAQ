@@ -189,6 +189,10 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
     }
 
     // Start header
+?>
+        <header>
+            <h2>
+<?php
     if (0 !== $faqData['id'] && 'copyentry' !== $action) {
         $currentRevision = sprintf(
             ' <span class="badge badge-important">%s 1.%d</span> ',
@@ -196,23 +200,58 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
             $selectedRevisionId
         );
         printf(
-            '<header><h2>%s <span class="text-error">%s</span> %s %s</h2></header>',
+            '<i class="icon-pencil"></i> %s <span class="text-error">%s</span> %s %s',
             $PMF_LANG['ad_entry_edit_1'],
             (0 === $faqData['id'] ? '' : $faqData['id']),
             $PMF_LANG['ad_entry_edit_2'],
             $currentRevision
         );
     } else {
-        printf(
-            '<header><h2><i class="icon-pencil"></i> %s</h2></header>',
-            $PMF_LANG['ad_entry_add']
-        );
+        printf('<i class="icon-pencil"></i> %s', $PMF_LANG['ad_entry_add']);
+    }
+    // Revisions
+    if ($permission["changebtrevs"]) {
+
+        $revisions = $faq->getRevisionIds($faqData['id'], $faqData['lang']);
+        if (count($revisions)) {
+            ?>
+                <div class="pull-right">
+                    <form id="selectRevision" name="selectRevision" method="post"
+                          action="?action=editentry&amp;id=<?php echo $faqData['id'] ?>&amp;lang=<?php echo $faqData['lang'] ?>">
+                        <select name="revisionid_selected" onchange="selectRevision.submit();">
+                            <option value="<?php echo $faqData['revision_id']; ?>">
+                                <?php echo $PMF_LANG['ad_changerev']; ?>
+                            </option>
+                            <?php foreach ($revisions as $revisionId => $revisionData) { ?>
+                                <option value="<?php echo $revisionData['revision_id']; ?>" <?php if ($selectedRevisionId == $revisionData['revision_id']) { echo 'selected="selected"'; } ?> >
+                                    <?php printf(
+                                        '%s 1.%d: %s - %s',
+                                        $PMF_LANG['ad_entry_revision'],
+                                        $revisionData['revision_id'],
+                                        PMF_Date::createIsoDate($revisionData['datum']),
+                                        $revisionData['author']
+                                    ); ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </form>
+                </div>
+        <?php
+        }
+
+        if (isset($selectedRevisionId) &&
+                isset($faqData['revision_id']) &&
+                $selectedRevisionId != $faqData['revision_id']) {
+
+            $faq->language = $faqData['lang'];
+            $faq->getRecord($faqData['id'], $selectedRevisionId, true);
+            $faqData         = $faq->faqRecord;
+            $faqData['tags'] = implode(',', $tagging->getAllTagsById($faqData['id']));
+        }
     }
 ?>
-        <div class="row-fluid">
-            <!-- Revisions -->
-
-        </div>
+            </h2>
+        </header>
 
         <div class="row-fluid">
 
@@ -435,7 +474,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                     </div>
                     <div id="recordDateInputContainer" class="control-group hide">
                         <div class="controls">
-                            <input type="text" name="date" id="date" maxlength="16" value="" />
+                            <input type="text" name="date" id="date" maxlength="16" value="" class="input-small" />
                         </div>
                     </div>
                     <?php if ($selectedRevisionId == $faqData['revision_id']): ?>
@@ -592,69 +631,6 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
             </form>
         </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<?php
-
-    if ($permission["changebtrevs"]) {
-
-        $revisions = $faq->getRevisionIds($faqData['id'], $faqData['lang']);
-        if (count($revisions)) {
-?>
-            <form id="selectRevision" name="selectRevision" method="post"
-                  action="?action=editentry&amp;id=<?php echo $faqData['id'] ?>&amp;lang=<?php echo $faqData['lang'] ?>">
-            <fieldset>
-                <legend><?php echo $PMF_LANG['ad_changerev']; ?></legend>
-                <p>
-                    <select name="revisionid_selected" onchange="selectRevision.submit();">
-                        <option value="<?php echo $faqData['revision_id']; ?>">
-                            <?php echo $PMF_LANG['ad_changerev']; ?>
-                        </option>
-    <?php foreach ($revisions as $revisionId => $revisionData) { ?>
-                        <option value="<?php echo $revisionData['revision_id']; ?>" <?php if ($selectedRevisionId == $revisionData['revision_id']) { echo 'selected="selected"'; } ?> >
-                            <?php printf(
-                                '%s 1.%d: %s - %s',
-                                $PMF_LANG['ad_entry_revision'],
-                                $revisionData['revision_id'],
-                                PMF_Date::createIsoDate($revisionData['datum']),
-                                $revisionData['author']
-                            ); ?>
-                        </option>
-    <?php } ?>
-                    </select>
-                </p>
-            </fieldset>
-            </form>
-<?php
-        }
-
-        if (isset($selectedRevisionId) &&
-            isset($faqData['revision_id']) &&
-            $selectedRevisionId != $faqData['revision_id']) {
-
-            $faq->language = $faqData['lang'];
-            $faq->getRecord($faqData['id'], $selectedRevisionId, true);
-            $faqData         = $faq->faqRecord;
-            $faqData['tags'] = implode(',', $tagging->getAllTagsById($faqData['id']));
-        }
-    }
-?>
-
-
-    
     <script type="text/javascript">
     /* <![CDATA[ */
 
