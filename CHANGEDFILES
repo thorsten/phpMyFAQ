@@ -1,3 +1,45 @@
+CHANGED FILES FROM 2.8.0-RC3 -> 2.8.0-RC4
+
+./admin/ajax.config_list.php
+./admin/assets/css/style.css
+./admin/assets/css/style.rtl.css
+./admin/assets/less/style.less
+./admin/assets/less/style.rtl.less
+./admin/category.add.php
+./admin/configuration.php
+./admin/editor/plugins/phpmyfaq/dialog.html
+./admin/group.php
+./admin/record.edit.php
+./admin/user.php
+./assets/js/functions.js
+./assets/js/phpmyfaq.js
+./assets/template/default/artikel.tpl
+./assets/template/default/css/style.css
+./assets/template/default/index.tpl
+./assets/template/default/instantresponse.tpl
+./assets/template/default/less/style.less
+./assets/template/default/less/style.rtl.less
+./config/constants_ldap.php
+./inc/Bootstrap.php
+./inc/PMF/Category.php
+./inc/PMF/Faq.php
+./inc/PMF/Link.php
+./inc/PMF/Pagination.php
+./inc/PMF/System.php
+./install/setup.php
+./install/update.php
+./lang/language_de.php
+./lang/language_en.php
+./lang/language_pt.php
+./_.htaccess
+./_nginx.conf
+./artikel.php
+./index.php
+./opensearch.php
+./search.php
+
+
+
 CHANGED FILES FROM 2.8.0-RC2 -> 2.8.0-RC3
 
 ./admin/assets/css/style.css
