@@ -326,7 +326,6 @@ pre {
 <li><a href="#2.13">Spam protection</a></li>
 <li><a href="#2.14">Attachments</a></li>
 <li><a href="#2.15">Twitter</a></li>
-<li><a href="#2.16">Caching</a></li>
 </ol>
 </li>
 <li><strong><a href="#3">Upgrading</a></strong>
@@ -779,54 +778,6 @@ Please check, if <code>AllowOverride All</code>    is set correctly in your http
 <p><strong>2.15. <a id="2.8"></a>Twitter support</strong></p>
 
 <p>phpMyFAQ supports Twitter via OAuth. If you enable Twitter support in the social network configuration and add phpMyFAQ as a Twitter application on <a href="https://dev.twitter.com/apps/new">twitter.com</a>, all new FAQ additions in the administration backend will also post the question of the FAQ, the URL of the FAQ and all tags as hashtags to Twitter, e.g. the tag "phpMyFAQ" will be converted to "#phpmyfaq".</p>
-
-<p><a href="#top">back to top</a></p>
-
-<hr />
-
-<p><strong>2.16. <a id="2.8"></a>Caching</strong></p>
-
-<p>phpMyFAQ supports server-side caching. Supported cache services are:</p>
-
-<ul>
-<li><p><strong>Varnish</strong>
-Required are Varnish Cache accelerator >=3.0 and Varnish PECL extension >= 0.9.1</p>
-
-<p>VCL sample, merge it with yours:</p>
-
-<pre><code>backend default {
-        .host = "127.0.0.1";
-        .port = "8070";
-}
-
-sub vcl_recv {
-        if (!(req.url ~ "^/admin.*")) {
-                unset req.http.cookie;
-        }
-}
-
-sub vcl_fetch {
-        if (!(req.url ~ "^/admin.*")) {
-                unset beresp.http.set-cookie;
-                unset beresp.http.expires;
-                unset beresp.http.cache-control;
-                unset beresp.http.pragma;
-                unset beresp.http.last-modified;
-
-                set beresp.ttl = 86000s;
-        }
-
-        if (req.url ~ "/.*(action=add|action=contact|action=ask).*") {
-                set beresp.ttl = 0s;
-        }
-}
-</code></pre>
-
-<p>As you can see, all cookie are deleted except the admin area, which allows the cache to perform on the frontend, but work as admin in the backend. Also for the non admin area all the cache related backend headers get deleted, and ttl is set to one day. There is almost much room for improvement. Please notify us, if you have discovered some essential VCL improvements to this sample, so we can improve this documentation.</p>
-
-<p>Once an article is saved, its cache and all related items cache is cleared.</p></li>
-</ul>
-
 
 <p><a href="#top">back to top</a></p>
 
@@ -1605,7 +1556,7 @@ This method returns the phpMyFAQ version number as string.</p>
 
 <p>Co-Authors: <a href="mailto:stephan">Stephan Hochhaus</a>, <a href="mailto:mgl-mail">Markus Gläser</a></p>
 
-<p>Date: 2013-02-13</p>
+<p>Date: 2013-04-21</p>
 
 <p>© 2001-2013 phpMyFAQ Team</p>
 
