@@ -152,57 +152,21 @@ if ('addnews' == $action && $permission["addnews"]) {
         </form>
 <?php
 } elseif ('news' == $action && $permission["editnews"]) {
-?>
-        <header>
-            <h2>
-                <i class="icon-pencil"></i> <?php echo $PMF_LANG["msgNews"] ?>
-                <div class="pull-right">
-                    <a class="btn btn-success" href="?action=addnews">
-                        <i class="icon-plus icon-white"></i> <?php echo $PMF_LANG["ad_menu_news_add"] ?>
-                    </a>
-                </div>
-            </h2>
-        </header>
+    $date       = new PMF_Date($faqConfig);
+    $newsHeader = $news->getNewsHeader();
+    foreach($newsHeader as $key => $newsItem) {
+        $newsHeader[$key]['date'] = $date->format($newsItem['date']);
+    }
 
-        <table class="table table-striped">
-        <thead>
-            <tr>
-                <th><?php echo $PMF_LANG["ad_news_headline"]; ?></th>
-                <th colspan="2"><?php echo $PMF_LANG["ad_news_date"]; ?></th>
-            </tr>
-        </thead>
-        <tbody>
-<?php
-        $newsHeader = $news->getNewsHeader();
-        $date       = new PMF_Date($faqConfig);
-        if (count($newsHeader)) {
-            foreach($newsHeader as $newsItem) {
-?>
-        <tr>
-            <td><?php echo $newsItem['header']; ?></td>
-            <td><?php echo $date->format($newsItem['date']); ?></td>
-            <td>
-                <a class="btn btn-primary" href="?action=editnews&amp;id=<?php echo $newsItem['id']; ?>">
-                    <span title="<?php echo $PMF_LANG["ad_news_update"]; ?>" class="icon-edit"></span>
-                </a>
-                &nbsp;&nbsp;
-                <a class="btn btn-danger" href="?action=deletenews&amp;id=<?php echo $newsItem['id']; ?>">
-                    <span title="<?php echo $PMF_LANG["ad_news_delete"]; ?>" class="icon-trash"></span>
-                </a>
-            </td>
-        </tr>
-<?php
-            }
-        } else {
-            printf(
-                '<tr><td colspan="3">%s</td></tr>',
-                $PMF_LANG['ad_news_nodata']
-            );
-        }
-?>
-        </tbody>
-        </table>
-<?php
+    $twig->loadTemplate('news/list.twig')
+        ->display(
+            array(
+                'PMF_LANG' => $PMF_LANG,
+                'newsHeader' => $newsHeader
+            )
+        );
+
+    unset($date, $newsHeader, $key, $newsItem);
 } elseif ('editnews' == $action && $permission['editnews']) {
     $id       = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $newsData = $news->getNewsEntry($id, true);
@@ -495,5 +459,5 @@ if ('addnews' == $action && $permission["addnews"]) {
         printf('<div class="control-group">&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
     }
 } else {
-    echo $PMF_LANG["err_NotAuth"];
+    require 'noperm.php';
 }
