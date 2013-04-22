@@ -1,0 +1,153 @@
+<header>
+    <h2>
+        <i class="icon-pencil"></i>
+        {{ PMF_LANG['ad_news_data'] }}
+    </h2>
+</header>
+
+<form class="form-horizontal" id="faqEditor" name="faqEditor" action="?action=savenews" method="post">
+    <fieldset>
+        <legend>
+            {{ PMF_LANG['ad_news_add'] }}
+        </legend>
+
+        <div class="control-group">
+            <label class="control-label" for="newsheader">
+                {{ PMF_LANG['ad_news_header'] }}
+            </label>
+            <div class="controls">
+                <input class="input-xxlarge" type="text" name="newsheader"/>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="news">
+                {{ PMF_LANG['ad_news_text'] }}:
+            </label>
+            <div class="controls">
+                <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
+                <textarea name="news" cols="84" rows="5"></textarea>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="authorName">
+                {{ PMF_LANG['ad_news_author_name'] }}
+            </label>
+            <div class="controls">
+                <input class="input-xxlarge" type="text" name="authorName" id="authorName"
+                       value="{{ userDisplayName }}"/>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="authorEmail">
+                {{ PMF_LANG['ad_news_author_email'] }}
+            </label>
+            <div class="controls">
+                <input class="input-xxlarge" type="email" name="authorEmail" id="authorEmail"
+                       value="{{ userEmail }}"/>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="active">
+                {{ PMF_LANG['ad_news_set_active'] }}
+            </label>
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" name="active" id="active" value="y"/>
+                    {{ PMF_LANG['ad_gen_yes'] }}
+                </label>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="comment">
+                {{ PMF_LANG['ad_news_allowComments'] }}
+            </label>
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" name="comment" id="comment" value="y"/>
+                    {{ PMF_LANG['ad_gen_yes'] }}
+                </label>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="link">
+                {{ PMF_LANG['ad_news_link_url'] }}</label>
+            <div class="controls">
+                <input class="input-xxlarge" type="url" name="link" id="link" value="http://"/>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="linkTitle">
+                {{ PMF_LANG['ad_news_link_title'] }}
+            </label>
+            <div class="controls">
+                <input type="text" name="linkTitle" id="linkTitle"/>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">
+                {{ PMF_LANG['ad_news_link_target'] }}
+            </label>
+            <div class="controls">
+                <label class="radio">
+                    <input type="radio" name="target" value="blank"/>
+                    {{ PMF_LANG['ad_news_link_window'] }}
+                </label>
+                <label class="radio">
+                    <input type="radio" name="target" value="self"/>
+                    {{ PMF_LANG['ad_news_link_faq'] }}
+                </label>
+                <label class="radio">
+                    <input type="radio" name="target" value="parent"/>
+                    {{ PMF_LANG['ad_news_link_parent'] }}
+                </label>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="langTo">
+                {{ PMF_LANG['ad_entry_locale'] }}:
+            </label>
+            <div class="controls">
+                {{ languageSelector|raw }}
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>
+            {{ PMF_LANG['ad_news_expiration_window'] }}
+        </legend>
+        <div class="control-group">
+            <label class="control-label" for="dateStart">
+                {{ PMF_LANG['ad_news_from'] }}
+            </label>
+            <div class="controls">
+                <input type="date" name="dateStart" id="dateStart" class="date-pick"/>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="dateEnd">
+                {{ PMF_LANG['ad_news_to'] }}
+            </label>
+            <div class="controls">
+                <input type="date" name="dateEnd" id="dateEnd" class="date-pick"/>
+            </div>
+    </fieldset>
+
+    <div class="form-actions">
+        <button class="btn btn-primary" type="submit">
+            {{ PMF_LANG['ad_news_add'] }}
+        </button>
+        <a class="btn btn-info" href="?action=news">
+            {{ PMF_LANG['ad_entry_back'] }}
+        </a>
+    </div>
+</form>
