@@ -218,11 +218,6 @@ if ('addnews' == $action && $permission["addnews"]) {
 <?php
     }
 } elseif ('savenews' == $action && $permission["addnews"]) {
-?>
-        <header>
-            <h2><i class="icon-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
-        </header>
-<?php
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
     $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
     $header    = PMF_Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_STRIPPED);
@@ -252,12 +247,15 @@ if ('addnews' == $action && $permission["addnews"]) {
         'target'        => (is_null($target)) ? '' : $target
     );
 
-    if ($news->addNewsEntry($newsData)) {
-        printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_news_updatesuc']);
-    } else {
-        printf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_news_insertfail']);
-    }
-    printf('<div class="control-group">&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
+    $success = $news->addNewsEntry($newsData);
+
+    $twig->loadTemplate('news/save.twig')
+        ->display(
+            array(
+                'PMF_LANG' => $PMF_LANG,
+                'success'  => $success
+            )
+        );
 } elseif ('updatenews' == $action && $permission["editnews"]) {
 ?>
         <header>
