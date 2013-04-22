@@ -195,7 +195,7 @@ if ($step === 1) {
 /**************************** STEP 2 OF 3 ***************************/
 if ($step == 2) {
 
-    $checkDatabaseSetupFile = $checkLdapSetupFile = $checkTemplateDirectory = false;
+    $checkDatabaseSetupFile = $checkLdapSetupFile = false;
 
     // First backup old inc/data.php, then backup new config/bak.database.php and copy inc/data.php
     // to config/database.php
@@ -233,36 +233,8 @@ if ($step == 2) {
         }
     }
 
-    $oldTemplateDir   = '../template'; // 2.5 -> 2.8.0-alpha
-    $newTemplateDir   = '../assets/template'; // 2.8.0-alpha2 and later
-    $notWritableFiles = array();
-    if (version_compare($version, '2.6.0-alpha', '<')) {
-        foreach (new DirectoryIterator($oldTemplateDir) as $item) {
-            if ($item->isFile() && !$item->isWritable()) {
-                $notWritableFiles[] = "$oldTemplateDir/{$item->getFilename()}";
-            }
-        }
-    }
-
-    if (version_compare($version, '2.6.0-alpha', '<') && (!is_writeable($oldTemplateDir) || !empty($notWritableFiles))) {
-        if (!is_writeable($oldTemplateDir)) {
-            printf(
-                "<p class=\"alert alert-error\"><strong>The directory %s isn't writable.</strong></p>\n",
-                $oldTemplateDir
-            );
-        }
-        if (!empty($notWritableFiles)) {
-            foreach ($notWritableFiles as $item) {
-                printf("<p class=\"alert alert-error\"><strong>The file %s isn't writable.</strong></p>\n", $item);
-            }
-        }
-
-    } else {
-        $checkTemplateDirectory = true;
-    }
-
     // is everything is okay?
-    if ($checkDatabaseSetupFile && $checkTemplateDirectory) {
+    if ($checkDatabaseSetupFile) {
 ?>
         <form action="update.php?step=3" method="post">
         <input type="hidden" name="version" value="<?php echo $version; ?>" />
@@ -337,25 +309,6 @@ if ($step == 3) {
         $faqConfig->add('main.templateSet', 'default');
         $faqConfig->add('main.numberSearchTerms', '10');
         $faqConfig->add('records.orderingPopularFaqs', 'visits');
-
-        // We did check in the first and second steps,
-        // if the $templateDir and its contents are writable,
-        // so now lets just backup existing templates
-        $templateBackupDir = "$templateDir/backup";
-        while (file_exists($templateBackupDir)) {
-            $templateBackupDir = $templateBackupDir . mt_rand();
-        }
-
-        if (! mkdir($templateBackupDir, 0777)) {
-            echo '<p class="alert alert-error">Couldn\'t create the templates backup directory.</p>';
-            PMF_System::renderFooter();
-        }
-
-        foreach (new DirectoryIterator($templateDir) as $item) {
-            if ($item->isFile() && $item->isWritable()) {
-                rename("$templateDir/{$item->getFilename()}", "$templateBackupDir/{$item->getFilename()}");
-            }
-        }
 
         // Attachments stuff
         $faqConfig->add('records.attachmentsStorageType', '0');

@@ -441,9 +441,9 @@ Open the following URL in your browser:
 
 Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. You have to update a lot of your template files due to our change using the Bootstrap framework.
 
-The update script will move your template files to a folder **backup/** in the directory **assets/template/**. The default layout will be stored in the folder **assets/template/default/**.
-
 Note: We changed the character set for all languages and templates to UTF-8. If you notice problems with e.g. German umlauts you have to convert your templates to UTF-8 encoding.
+
+You have to move your template files to the directory **assets/template/**. The default layout is be stored in the folder **assets/template/default/**.
 
 Please copy the template file **assets/template/default/indexLogin.tpl** into your template folder.
 
@@ -466,7 +466,7 @@ Open the following URL in your browser:
 
 Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. You have to update a lot of your template files due to our change using the Bootstrap framework.
 
-The update script will move your template files to a folder **backup/** in the directory **assets/template/**. The default layout will be stored in the folder **assets/template/default/**.
+You have to move your template files to the directory **assets/template/**. The default layout is be stored in the folder **assets/template/default/**.
 
 Please copy the template file **assets/template/default/indexLogin.tpl** into your template folder.
 
@@ -489,7 +489,7 @@ Open the following URL in your browser:
 
 Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. You have to update a lot of your template files due to our change using the Bootstrap framework.
 
-The update script will move your template files to a folder **backup/** in the directory **assets/template/**. The default layout will be stored in the folder **assets/template/default/**.
+You have to move your template files to the directory **assets/template/**. The default layout is be stored in the folder **assets/template/default/**.
 
 [back to top][64]
 
