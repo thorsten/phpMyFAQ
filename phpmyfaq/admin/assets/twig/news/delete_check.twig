@@ -1,0 +1,31 @@
+<header>
+    <h2>
+        <i class="icon-pencil"></i>
+        {{ PMF_LANG['ad_news_data'] }}
+    </h2>
+</header>
+
+<div class="control-group">{{ PMF_LANG["ad_news_del"]|raw }}</div>
+<div align="center">
+    <form action="?action=deletenews" method="post">
+        <input type="hidden" name="id" value="{{ deleteId }}">
+        <input type="hidden" name="really" value="yes">
+        <button class="btn btn-warning" type="submit" name="submit">
+            {{ PMF_LANG["ad_news_yesdelete"] }}
+        </button>
+        <a class="btn btn-inverse" onclick="javascript:history.back();">
+            {{ PMF_LANG["ad_news_nodelete"] }}
+        </a>
+    </form>
+</div>
+
+<script type="text/javascript">
+    /* <![CDATA[ */
+    if (!Modernizr.inputtypes.date) {
+        $(function()
+        {
+            $('.date-pick').datePicker();
+        });
+    }
+    /* ]]> */
+</script>

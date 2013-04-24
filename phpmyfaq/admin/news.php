@@ -297,46 +297,27 @@ if ('addnews' == $action && $permission["addnews"]) {
             )
         );
 } elseif ('deletenews' == $action && $permission["delnews"]) {
-?>
-        <header>
-            <h2><i class="icon-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
-        </header>
-<?php
     $precheck  = PMF_Filter::filterInput(INPUT_POST, 'really', FILTER_SANITIZE_STRING, 'no');
     $delete_id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    
+
     if ('no' == $precheck) {
-?>
-    <div class="control-group"><?php echo $PMF_LANG["ad_news_del"]; ?></div>
-    <div align="center">
-    <form action="?action=deletenews" method="post">
-    <input type="hidden" name="id" value="<?php echo $delete_id; ?>">
-    <input type="hidden" name="really" value="yes">
-        <button class="btn btn-warning" type="submit" name="submit">
-            <?php echo $PMF_LANG["ad_news_yesdelete"]; ?>
-        </button>
-        <a class="btn btn-inverse" onclick="javascript:history.back();">
-            <?php echo $PMF_LANG["ad_news_nodelete"]; ?>
-        </a>
-    </form>
-    </div>
-    
-    <script type="text/javascript">
-    /* <![CDATA[ */
-    if (!Modernizr.inputtypes.date) {
-        $(function()
-        {
-            $('.date-pick').datePicker();
-        });
-    }
-    /* ]]> */
-    </script>
-<?php
+        $twig->loadTemplate('news/delete_check.twig')
+            ->display(
+                array(
+                    'PMF_LANG' => $PMF_LANG,
+                    'deleteId' => $delete_id
+                )
+            );
     } else {
         $delete_id = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         $news->deleteNews($delete_id);
-        printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_news_delsuc']);
-        printf('<div class="control-group">&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
+
+        $twig->loadTemplate('news/delete_success.twig')
+            ->display(
+                array(
+                    'PMF_LANG' => $PMF_LANG
+                )
+            );
     }
 } else {
     require 'noperm.php';
