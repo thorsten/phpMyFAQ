@@ -1,0 +1,46 @@
+<header>
+    <h2>
+        <i class="icon-user"></i>
+        {{ PMF_LANG['ad_group_add'] }}
+    </h2>
+</header>
+
+<div id="user_message">{{ message|raw }}</div>
+<form class="form-horizontal" name="group_create" action="?action=group&amp;group_action=addsave" method="post">
+    <input type="hidden" name="csrf" value="{{ csrfToken }}" />
+
+    <div class="control-group">
+        <label class="control-label" for="group_name">{{ PMF_LANG['ad_group_name'] }}</label>
+        <div class="controls">
+            <input type="text" name="group_name" id="group_name" autofocus="autofocus"
+                   value="{{ groupName }}" tabindex="1" />
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="group_description">{{ PMF_LANG['ad_group_description'] }}</label>
+        <div class="controls">
+            <textarea name="group_description" id="group_description" cols="{{ descriptionCols }}"
+                      rows="{{ descriptionRows }}" tabindex="2"
+                    >{{ groupDescription }}</textarea>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="group_auto_join">{{ PMF_LANG['ad_group_autoJoin'] }}</label>
+        <div class="controls">
+            <input type="checkbox" name="group_auto_join" id="group_auto_join" value="1" tabindex="3"
+            {% if groupAutoJoin %}checked="checked"{% endif %} />
+
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button class="btn btn-primary" type="submit">
+            {{ PMF_LANG['ad_gen_save'] }}
+        </button>
+        <button class="btn btn-info" type="reset" name="cancel">
+            {{ PMF_LANG['ad_gen_cancel'] }}
+        </button>
+    </div>
+</form>

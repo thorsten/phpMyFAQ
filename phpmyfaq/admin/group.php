@@ -230,51 +230,20 @@ if (!isset($message))
 // show new group form
 if ($groupAction == 'add' && $permission['addgroup']) {
     $user = new PMF_User_CurrentUser($faqConfig);
-?>
-        <header>
-            <h2><i class="icon-user"></i> <?php print $PMF_LANG['ad_group_add']; ?></h2>
-        </header>
 
-        <div id="user_message"><?php print $message; ?></div>
-        <form class="form-horizontal" name="group_create" action="?action=group&amp;group_action=addsave" method="post">
-        <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
-
-            <div class="control-group">
-                <label class="control-label" for="group_name"><?php print $PMF_LANG['ad_group_name']; ?></label>
-                <div class="controls">
-                    <input type="text" name="group_name" id="group_name" autofocus="autofocus"
-                           value="<?php print (isset($group_name) ? $group_name : ''); ?>" tabindex="1" />
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label" for="group_description"><?php print $PMF_LANG['ad_group_description']; ?></label>
-                <div class="controls">
-                    <textarea name="group_description" id="group_description" cols="<?php print $descriptionCols; ?>"
-                              rows="<?php print $descriptionRows; ?>" tabindex="2"
-                    ><?php print (isset($group_description) ? $group_description : ''); ?></textarea>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label" for="group_auto_join"><?php print $PMF_LANG['ad_group_autoJoin']; ?></label>
-                <div class="controls">
-                    <input type="checkbox" name="group_auto_join" id="group_auto_join" value="1" tabindex="3"
-                    <?php print ((isset($group_auto_join) && $group_auto_join) ? ' checked="checked"' : ''); ?> />
-
-                </div>
-            </div>
-
-            <div class="form-actions">
-                <button class="btn btn-primary" type="submit">
-                    <?php print $PMF_LANG['ad_gen_save']; ?>
-                </button>
-                <button class="btn btn-info" type="reset" name="cancel">
-                    <?php print $PMF_LANG['ad_gen_cancel']; ?>
-                </button>
-            </div>
-        </form>
-<?php
+    $twig->loadTemplate('group/add.twig')
+        ->display(
+            array(
+                'PMF_LANG' => $PMF_LANG,
+                'csrfToken' => $user->getCsrfTokenFromSession(),
+                'descriptionCols' => $descriptionCols,
+                'descriptionRows' => $descriptionRows,
+                'groupAutoJoin' => !empty($group_auto_join),
+                'groupDescription' => isset($group_description) ? $group_description : '',
+                'groupName' => isset($group_name) ? $group_name : '',
+                'message' => $message
+            )
+        );
 } // end if ($groupAction == 'add')
 
 // show list of users
