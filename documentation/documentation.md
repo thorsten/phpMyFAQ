@@ -455,7 +455,7 @@ Please copy the template file **assets/template/default/indexLogin.tpl** into yo
 
 Upgrading from 2.6.x is a major upgrade. Please make a full backup before you run the upgrade! First you have to delete all files **except**:
 
-*   all files in the directory **config/**
+*   **database.php** and **ldap.php** (if you use LDAP) in the directory **config/**
 *   all files in the directory **template/**
 *   the directory **attachments/**
 *   the directory **images/**
@@ -478,7 +478,7 @@ Please copy the template file **assets/template/default/indexLogin.tpl** into yo
 
 Upgrading from 2.7.x is a major upgrade. Please make a full backup before you run the upgrade! First you have to delete all files **except**:
 
-*   all files in the directory **config/**
+*   **database.php** and **ldap.php** (if you use LDAP) in the directory **config/**
 *   all files in the directory **template/**
 *   the directory **attachments/**
 *   the directory **images/**
