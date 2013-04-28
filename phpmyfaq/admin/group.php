@@ -19,12 +19,12 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
-    exit();
+    header('Location: http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    exit;
 }
 
 if (!$permission['editgroup'] && !$permission['delgroup'] && !$permission['addgroup']) {
-    exit();
+    exit;
 }
 
 // set some parameters
@@ -51,7 +51,7 @@ if ($groupAction == 'update_members' && $permission['editgroup']) {
     $groupAction  = $defaultGroupAction;
     $groupId      = PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
     $groupMembers = isset($_POST['group_members']) ? $_POST['group_members'] : array();
-    
+
     if ($groupId == 0) {
         $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
     } else {
@@ -78,8 +78,8 @@ if ($groupAction == 'update_rights' && $permission['editgroup']) {
     if ($groupId == 0) {
         $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
     } else {
-        $user = new PMF_User($faqConfig);
-        $perm = $user->perm;
+        $user        = new PMF_User($faqConfig);
+        $perm        = $user->perm;
         $groupRights = isset($_POST['group_rights']) ? $_POST['group_rights'] : array();
         if (!$perm->refuseAllGroupRights($groupId)) {
             $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
@@ -127,30 +127,18 @@ if ($groupAction == 'delete_confirm' && $permission['delgroup']) {
     $perm    = $user->perm;
     $groupId = PMF_Filter::filterInput(INPUT_POST, 'group_list_select', FILTER_VALIDATE_INT, 0);
     if ($groupId <= 0) {
-        $message    .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
+        $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
         $groupAction = $defaultGroupAction;
     } else {
-        $group_data = $perm->getGroupData($groupId);
-?>
-        <header>
-            <h2>
-                <i class="icon-user"></i>  <?php echo $PMF_LANG['ad_group_deleteGroup'] ?> "<?php echo $group_data['name']; ?>"
-            </h2>
-        </header>
-        <p><?php print $PMF_LANG['ad_group_deleteQuestion']; ?></p>
-        <form action ="?action=group&amp;group_action=delete" method="post">
-            <input type="hidden" name="group_id" value="<?php print $groupId; ?>" />
-            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
-            <p>
-                <button class="btn btn-inverse" type="submit" name="cancel">
-                    <?php print $PMF_LANG['ad_gen_cancel']; ?>
-                </button>
-                <button class="btn btn-primary" type="submit">
-                    <?php print $PMF_LANG['ad_gen_save']; ?>
-                </button>
-            </p>
-        </form>
-<?php
+        $twig->loadTemplate('group/delete_confirm.twig')
+            ->display(
+                array(
+                    'PMF_LANG'  => $PMF_LANG,
+                    'csrfToken' => $user->getCsrfTokenFromSession(),
+                    'groupData' => $perm->getGroupData($groupId),
+                    'groupId'   => $groupId
+                )
+            );
     }
 }
 
@@ -161,7 +149,7 @@ if ($groupAction == 'delete' && $permission['delgroup']) {
     $csrfOkay  = true;
     $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
     if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
-        $csrfOkay = false; 
+        $csrfOkay = false;
     }
     $groupAction = $defaultGroupAction;
     if ($groupId <= 0) {
@@ -191,7 +179,7 @@ if ($groupAction == 'addsave' && $permission['addgroup']) {
     $csrfToken         = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 
     if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
-        $csrfOkay = false; 
+        $csrfOkay = false;
     }
     // check group name
     if ($group_name == '') {
@@ -212,11 +200,11 @@ if ($groupAction == 'addsave' && $permission['addgroup']) {
     // no errors, show list
     if (count($messages) == 0) {
         $groupAction = $defaultGroupAction;
-        $message = sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_group_suc']);
-    // display error messages and show form again
+        $message     = sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_group_suc']);
+        // display error messages and show form again
     } else {
         $groupAction = 'add';
-        $message = '<p class="alert alert-error">';
+        $message     = '<p class="alert alert-error">';
         foreach ($messages as $err) {
             $message .= $err . '<br />';
         }
@@ -234,14 +222,14 @@ if ($groupAction == 'add' && $permission['addgroup']) {
     $twig->loadTemplate('group/add.twig')
         ->display(
             array(
-                'PMF_LANG' => $PMF_LANG,
-                'csrfToken' => $user->getCsrfTokenFromSession(),
-                'descriptionCols' => $descriptionCols,
-                'descriptionRows' => $descriptionRows,
-                'groupAutoJoin' => !empty($group_auto_join),
+                'PMF_LANG'         => $PMF_LANG,
+                'csrfToken'        => $user->getCsrfTokenFromSession(),
+                'descriptionCols'  => $descriptionCols,
+                'descriptionRows'  => $descriptionRows,
+                'groupAutoJoin'    => !empty($group_auto_join),
                 'groupDescription' => isset($group_description) ? $group_description : '',
-                'groupName' => isset($group_name) ? $group_name : '',
-                'message' => $message
+                'groupName'        => isset($group_name) ? $group_name : '',
+                'message'          => $message
             )
         );
 } // end if ($groupAction == 'add')
@@ -259,16 +247,16 @@ if ($groupAction == 'list') {
     $twig->loadTemplate('group/list.twig')
         ->display(
             array(
-                'PMF_LANG' => $PMF_LANG,
-                'descriptionCols' => $descriptionCols,
-                'descriptionRows' => $descriptionRows,
-                'groupAutoJoin' => !empty($group_auto_join),
+                'PMF_LANG'         => $PMF_LANG,
+                'descriptionCols'  => $descriptionCols,
+                'descriptionRows'  => $descriptionRows,
+                'groupAutoJoin'    => !empty($group_auto_join),
                 'groupDescription' => isset($group_description) ? $group_description : '',
-                'groupName' => isset($group_name) ? $group_name : '',
-                'groupSelectSize' => $groupSelectSize,
+                'groupName'        => isset($group_name) ? $group_name : '',
+                'groupSelectSize'  => $groupSelectSize,
                 'memberSelectSize' => $memberSelectSize,
-                'message' => $message,
-                'rightsData' => $rightsData
+                'message'          => $message,
+                'rightsData'       => $rightsData
             )
         );
 }

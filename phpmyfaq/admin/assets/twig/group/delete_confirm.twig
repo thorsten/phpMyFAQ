@@ -1,0 +1,19 @@
+<header>
+    <h2>
+        <i class="icon-user"></i>
+        {{ PMF_LANG['ad_group_deleteGroup'] }} &quot;{{ groupData['name'] }}&quot;
+    </h2>
+</header>
+<p>{{ PMF_LANG['ad_group_deleteQuestion'] }}</p>
+<form action ="?action=group&amp;group_action=delete" method="post">
+    <input type="hidden" name="group_id" value="{{ groupId }}" />
+    <input type="hidden" name="csrf" value="{{ csrfToken }}" />
+    <p>
+        <button class="btn btn-inverse" type="submit" name="cancel">
+            {{ PMF_LANG['ad_gen_cancel'] }}
+        </button>
+        <button class="btn btn-primary" type="submit">
+            {{ PMF_LANG['ad_gen_save'] }}
+        </button>
+    </p>
+</form>
