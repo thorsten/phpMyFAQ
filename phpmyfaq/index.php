@@ -164,7 +164,7 @@ if (isset($auth)) {
 // Logout
 //
 if ('logout' === $action && isset($auth)) {
-    $user->deleteFromSession();
+    $user->deleteFromSession(true);
     $user = $auth = null;
     $action = 'main';
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
