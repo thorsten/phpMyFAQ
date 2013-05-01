@@ -180,7 +180,7 @@ if (isset($auth)) {
 
 // logout
 if ($action == 'logout' && $auth) {
-    $user->deleteFromSession();
+    $user->deleteFromSession(true);
     $user = null;
     $auth = null;
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');

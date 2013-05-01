@@ -400,6 +400,10 @@ class PMF_User_CurrentUser extends PMF_User
             return false;
         }
 
+        if ($deleteCookie) {
+            PMF_Session::setCookie(PMF_Session::PMF_COOKIE_NAME_REMEMBERME);
+        }
+
         session_destroy();
         
         return true;
