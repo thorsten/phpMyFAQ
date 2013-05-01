@@ -372,10 +372,6 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
         <div class="row" style="padding-left: 20px; text-align: center;">
 
-            <p class="alert alert-danger">
-                Dude, this is an early alpha version. Please don't install this version on production!
-            </p>
-
             <button class="btn btn-primary btn-large" type="submit">
                    Click to install phpMyFAQ <?php echo PMF_System::getVersion(); ?>
             </button>
