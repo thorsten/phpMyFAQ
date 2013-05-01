@@ -90,12 +90,12 @@ class PMF_Instance_Setup
         $failedDirs = array();
 
         foreach ($dirs as $dir) {
-            if (false === is_dir($this->_rootDir . $dir)) {
-                if (false === mkdir ($this->_rootDir . $dir, 0755)) {
+            if (false === is_writable($this->_rootDir . $dir)) {
+                $failedDirs[] = $dir;
+            } elseif (false === is_dir($this->_rootDir . $dir)) {
+                if (false === mkdir($this->_rootDir . $dir, 0755)) {
                     $failedDirs[] = $dir;
                 }
-            } elseif (false === is_writable($this->_rootDir . $dir)) {
-                $failedDirs[] = $dir;
             } else {
                 copy(
                     $this->_rootDir . '/install/index.html',
