@@ -88,12 +88,11 @@ class PMF_System
      */
     private $_supportedDatabases = array(
         'mysqli'  => array(self::VERSION_MINIMUM_PHP, 'MySQL 5.x, MariaDB 5.x (ext/mysqli)'),
-        'mysql'   => array(self::VERSION_MINIMUM_PHP, 'MySQL 5.x (ext/mysql, deprecated)'),
         'pgsql'   => array(self::VERSION_MINIMUM_PHP, 'PostgreSQL 8.x'),
         'sqlite'  => array(self::VERSION_MINIMUM_PHP, 'SQLite'),
         'sqlite3' => array(self::VERSION_MINIMUM_PHP, 'SQLite 3 (only PHP 5.3+, experimental)'),
-        'mssql'   => array(self::VERSION_MINIMUM_PHP, 'MS SQL Server 2005 / 2008'),
-        'sqlsrv'  => array(self::VERSION_MINIMUM_PHP, 'SQL Server Driver for PHP (experimental)')
+        'mssql'   => array(self::VERSION_MINIMUM_PHP, 'MS SQL Server (deprecated)'),
+        'sqlsrv'  => array(self::VERSION_MINIMUM_PHP, 'MS SQL Server Driver for PHP')
     );
 
     /**
@@ -284,7 +283,7 @@ class PMF_System
      */
     public function checkphpMyFAQInstallation()
     {
-        if (is_file(PMF_ROOT_DIR . '/inc/data.php') || is_file(PMF_ROOT_DIR . '/config/database.php')) {
+        if (is_file(PMF_ROOT_DIR . '/config/database.php')) {
             return false;
         } else {
             return true;

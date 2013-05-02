@@ -6,7 +6,9 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.9.0-dev - 2013-
--
+- added Symfony HTTP Foundation 2.2.1 (Alexander M. Turek)
+- added Twig 1.12.3 as new template engine (Alexander M. Turek)
+- dropped support for ext/mysql (Thorsten)
 
 Version 2.8.0 - 2013-04-
 - changed PHP requirement to PHP 5.3.3 and later (Thorsten)
