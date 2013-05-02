@@ -448,7 +448,7 @@ class PMF_Installer
             PMF_System::renderFooter();
         }
 
-        if (! is_readable(PMF_ROOT_DIR . '/inc/data.php') && ! is_readable(PMF_ROOT_DIR . '/config/database.php')) {
+        if (! is_readable(PMF_ROOT_DIR . '/config/database.php')) {
             echo '<p class="alert alert-error">It seems you never run a version of phpMyFAQ.<br />' .
                 'Please use the <a href="setup.php">install script</a>.</p>';
             PMF_System::renderFooter();
@@ -583,6 +583,12 @@ class PMF_Installer
         $dbSetup['dbServer'] = PMF_Filter::filterInput(INPUT_POST, 'sql_server', FILTER_SANITIZE_STRING);
         if (is_null($dbSetup['dbServer']) && ! PMF_System::isSqlite($dbSetup['dbType'])) {
             echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a database server.</p>\n";
+            PMF_System::renderFooter(true);
+        }
+
+        $dbSetup['dbPort'] = PMF_Filter::filterInput(INPUT_POST, 'sql_port', FILTER_VALIDATE_INT);
+        if (is_null($dbSetup['dbPort']) && ! PMF_System::isSqlite($dbSetup['dbType'])) {
+            echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a valid database port.</p>\n";
             PMF_System::renderFooter(true);
         }
 

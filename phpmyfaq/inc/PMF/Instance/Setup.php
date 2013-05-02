@@ -121,6 +121,7 @@ class PMF_Instance_Setup
             $this->_rootDir . $folder . '/database.php',
             "<?php\n" .
             "\$DB['server'] = '" . $data['dbServer'] . "';\n" .
+            "\$DB['port'] = '" . $data['dbPort'] . "';\n" .
             "\$DB['user'] = '" . $data['dbUser'] . "';\n" .
             "\$DB['password'] = '" . $data['dbPassword'] . "';\n" .
             "\$DB['db'] = '" . $data['dbDatabaseName'] . "';\n" .
