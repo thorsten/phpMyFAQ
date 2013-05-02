@@ -17,6 +17,8 @@
  * @since     2008-01-25
  */
 
+use Symfony\Component\HttpFoundation\Response;
+
 define('PMF_ROOT_DIR', dirname(dirname(__DIR__)));
 define('IS_VALID_PHPMYFAQ', null);
 
@@ -42,8 +44,10 @@ $faqConfig->setLanguage($Language);
 
 if ($faqConfig->get('security.enableLoginOnly')) {
     if (!isset($_SERVER['PHP_AUTH_USER'])) {
-        header('WWW-Authenticate: Basic realm="phpMyFAQ RSS Feeds"');
-        header('HTTP/1.0 401 Unauthorized');
+        $response = Response::create()
+            ->setStatusCode(401);
+        $response->headers->set('WWW-Authenticate', 'Basic realm="phpMyFAQ RSS Feeds"');
+        $response->send();
         exit;
     } else {
         $user = new PMF_User_CurrentUser($faqConfig);
@@ -139,12 +143,9 @@ $rss->endElement();
 $rss->endElement();
 $rssData = $rss->outputMemory();
 
-$headers = array(
-    'Content-Type: application/rss+xml',
-    'Content-Length: '.strlen($rssData)
-);
-
-$http = new PMF_Helper_Http();
-$http->sendWithHeaders($rssData, $headers);
+$response = Response::create($rssData);
+$response->headers->set('Content-Type', 'application/rss+xml');
+$response->headers->set('Content-Length', strlen($rssData));
+$response->send();
 
 $faqConfig->getDb()->close();

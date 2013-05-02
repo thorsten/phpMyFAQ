@@ -18,16 +18,17 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
-?>
-        <header>
-            <h2><i class="icon-lock"></i> <?php echo $PMF_LANG['ad_passwd_cop']; ?></h2>
-        </header>
-<?php
+
 if ($permission["passwd"]) {
-    
+    $templateVars = array(
+        'PMF_LANG'       => $PMF_LANG,
+        'successMessage' => '',
+        'errorMessage'   => ''
+    );
+
     // If we have to save a new password, do that first
     $save = PMF_Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);
     if (!is_null($save)) {
@@ -37,51 +38,26 @@ if ($permission["passwd"]) {
         $authSource = $auth->selectAuth($user->getAuthSource('name'));
         $authSource->selectEncType($user->getAuthData('encType'));
         $authSource->setReadOnly($user->getAuthData('readOnly'));
-        
+
         $oldPassword     = PMF_Filter::filterInput(INPUT_POST, 'opass', FILTER_SANITIZE_STRING);
         $newPassword     = PMF_Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
         $retypedPassword = PMF_Filter::filterInput(INPUT_POST, 'bpass', FILTER_SANITIZE_STRING);
 
         if (($authSource->checkPassword($user->getLogin(), $oldPassword)) && ($newPassword == $retypedPassword)) {
             if (!$user->changePassword($newPassword)) {
-                printf('<p class="alert alert-error">%s</p>', $PMF_LANG["ad_passwd_fail"]);
+                $templateVars['errorMessage'] = $PMF_LANG["ad_passwd_fail"];
+            } else {
+                $templateVars['successMessage'] = $PMF_LANG["ad_passwdsuc"];
             }
-            printf('<p class="alert alert-success">%s</p>', $PMF_LANG["ad_passwdsuc"]);
         } else {
-            printf('<p class="alert alert-error">%s</p>', $PMF_LANG["ad_passwd_fail"]);
+            $templateVars['errorMessage'] = $PMF_LANG["ad_passwd_fail"];
         }
     }
-?>
-        <form class="form-horizontal" action="?action=passwd" method="post">
-        <input type="hidden" name="save" value="newpassword" />
-            <div class="control-group">
-                <label class="control-label" for="opass"><?php echo $PMF_LANG["ad_passwd_old"]; ?></label>
-                <div class="controls">
-                    <input type="password" name="opass" id="opass" required="required" />
-                </div>
-            </div>
 
-            <div class="control-group">
-                <label class="control-label" for="npass"><?php echo $PMF_LANG["ad_passwd_new"]; ?></label>
-                <div class="controls">
-                    <input type="password" name="npass" id="npass" required="required" />
-                </div>
-            </div>
+    $twig->loadTemplate('user/passwd.twig')
+        ->display($templateVars);
 
-            <div class="control-group">
-                <label class="control-label" for="bpass"><?php echo $PMF_LANG["ad_passwd_con"]; ?></label>
-                <div class="controls">
-                    <input type="password" name="bpass" id="bpass" required="required"  />
-                </div>
-            </div>
-
-            <div class="form-actions">
-                <button class="btn btn-primary" type="submit">
-                    <?php echo $PMF_LANG["ad_passwd_change"]; ?>
-                </button>
-            </div>
-        </form>
-<?php
+    unset($templateVars);
 } else {
-    echo $PMF_LANG["err_NotAuth"];
+    require 'noperm.php';
 }

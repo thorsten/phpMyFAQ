@@ -17,6 +17,9 @@
  * @since     2009-04-04
  */
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+use PMF\Helper\ResponseWrapper;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
@@ -27,9 +30,9 @@ $userId     = PMF_Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT)
 $usersearch = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
 
 // Send headers
-$http = new PMF_Helper_Http();
-$http->setContentType('application/json');
-$http->addHeader();
+$response = new JsonResponse;
+$responseWrapper = new ResponseWrapper($response);
+$responseWrapper->addCommonHeaders();
 
 if ($permission['adduser'] || $permission['edituser'] || $permission['deluser']) {
 
@@ -45,7 +48,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
                     'name'    => $singleUser['login']
                 );
             }
-            echo json_encode($users);
+            $response->setData($users);
             break;
 
         case 'get_user_data':
@@ -54,12 +57,12 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
             $userdata           = $user->userdata->get('*');
             $userdata['status'] = $user->getStatus();
             $userdata['login']  = $user->getLogin();
-            print json_encode($userdata);
+            $response->setData($userdata);
             break;
 
         case 'get_user_rights':
             $user->getUserById($userId);
-            print json_encode($user->perm->getUserRights($userId));
+            $response->setData($user->perm->getUserRights($userId));
             break;
 
         case 'delete_user':
@@ -82,9 +85,9 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
                     $message = '<p class="success">' . $PMF_LANG['ad_user_deleted'] . '</p>';
                 }
             }
-            print json_encode($message);
+            $response->setData($message);
             break;
-
     }
-    
 }
+
+$response->send();

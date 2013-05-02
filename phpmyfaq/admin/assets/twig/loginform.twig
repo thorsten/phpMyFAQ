@@ -1,0 +1,51 @@
+<header>
+    <h2>phpMyFAQ Login</h2>
+</header>
+
+{% if displayError %}
+<p class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>{{ errorMessage }}</p>
+{% else %}
+<p>{{ PMF_LANG['ad_auth_insert'] }}</p>
+{% endif %}
+
+{% if displayLogoutMessage %}
+<p class="alert alert-success"><a class="close" data-dismiss="alert" href="#">&times;</a>{{ PMF_LANG['ad_logout'] }}</p>
+{% endif %}
+
+{% if not forceSecureSwitch %}
+
+<form class="form-horizontal" action="index.php" method="post">
+
+    <div class="control-group">
+        <label class="control-label" for="faqusername">{{ PMF_LANG['ad_auth_user'] }}</label>
+        <div class="controls">
+            <input type="text" name="faqusername" id="faqusername" required="required" />
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="faqpassword">{{ PMF_LANG['ad_auth_passwd'] }}</label>
+        <div class="controls">
+            <input type="password" name="faqpassword" id="faqpassword" required="required" />
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div class="controls">
+            <label class="checkbox">
+                <input type="checkbox" id="faqrememberme" name="faqrememberme" value="rememberMe">
+                {{ PMF_LANG['rememberMe'] }}
+            </label>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button class="btn btn-primary" type="submit">
+            {{ PMF_LANG["ad_auth_ok"] }}
+        </button>
+    </div>
+</form>
+
+{% else %}
+<p><a href="{{ secureSwitchUrl }}">{{ PMF_LANG['msgSecureSwitch'] }}</a></p>
+{% endif %}

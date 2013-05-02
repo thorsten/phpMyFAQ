@@ -1,0 +1,80 @@
+<header>
+    <h2>
+        <i class="icon-list"></i>
+        {{ PMF_LANG['ad_categ_edit_1'] }}
+        {{ categoryName }}
+        {{ PMF_LANG['ad_categ_edit_2'] }}
+    </h2>
+</header>
+
+<form class="form-horizontal" action="?action=updatecategory" method="post">
+    <input type="hidden" name="id" value="{{ categoryId }}">
+    <input type="hidden" id="catlang" name="catlang" value="{{ categoryLanguage }}">
+    <input type="hidden" name="parent_id" value="{{ parentId }}">
+    <input type="hidden" name="csrf" value="{{ csrfToken }}">
+
+    <div class="control-group">
+        <label>{{ PMF_LANG['ad_categ_titel'] }}:</label>
+        <div class="controls">
+            <input type="text" id="name" name="name" value="{{ categoryName }}">
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label>{{ PMF_LANG['ad_categ_desc'] }}:</label>
+        <div class="controls">
+            <textarea id="description" name="description" rows="3" cols="80">{{ categoryDescription }}</textarea>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label>{{ PMF_LANG['ad_categ_owner'] }}:</label>
+        <div class="controls">
+            <select name="user_id" size="1">
+                {{ userOptionsOwner|raw }}
+            </select>
+        </div>
+    </div>
+    {% if renderGroupPermissions %}
+    <div class="control-group">
+        <label>{{ PMF_LANG['ad_entry_grouppermission'] }}</label>
+        <div class="controls">
+            <label class="radio">
+                <input type="radio" name="grouppermission" value="all" {% if allGroups %}checked="checked"{% endif %}>
+                {{ PMF_LANG['ad_entry_all_groups'] }}
+            </label>
+            <label class="radio">
+                <input type="radio" name="grouppermission" value="restricted" {% if restrictedGroups %}checked="checked"{% endif %}>
+                {{ PMF_LANG['ad_entry_restricted_groups'] }}
+            </label>
+            <select name="restricted_groups[]" size="3" multiple>
+                {{ groupOptions|raw }}
+            </select>
+        </div>
+    </div>
+    {% else %}
+    <input type="hidden" name="grouppermission" value="all">
+    {% endif %}
+    <div class="control-group">
+        <label>{{ PMF_LANG['ad_entry_userpermission'] }}</label>
+        <div class="controls">
+            <label class="radio">
+                <input type="radio" name="userpermission" value="all" {% if allUsers %}checked="checked"{% endif %}>
+                {{ PMF_LANG['ad_entry_all_users'] }}
+            </label>
+            <label class="radio">
+                <input type="radio" name="userpermission" value="restricted" {% if restrictedUsers %}checked="checked"{% endif %}>
+                {{ PMF_LANG['ad_entry_restricted_users'] }}
+            </label>
+            <select name="restricted_users" size="1">
+                {{ userOptionsPermissions|raw }}
+            </select>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button class="btn btn-primary" type="submit" name="submit">
+            {{ PMF_LANG['ad_categ_updatecateg'] }}
+        </button>
+    </div>
+</form>

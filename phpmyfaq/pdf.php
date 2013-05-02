@@ -21,6 +21,8 @@
  * @since     2003-02-12
  */
 
+use Symfony\Component\HttpFoundation\Response;
+
 define('IS_VALID_PHPMYFAQ', null);
 
 //
@@ -105,7 +107,6 @@ $category = new PMF_Category($faqConfig, $current_groups, true);
 $category->setUser($current_user);
 
 $pdf  = new PMF_Export_Pdf($faq, $category, $faqConfig);
-$http = new PMF_Helper_Http();
 
 if (true === $getAll) {
     $category->buildTree();
@@ -114,26 +115,13 @@ $tags = new PMF_Tags($faqConfig);
 
 session_cache_limiter('private');
 
-$headers = array(
-    "Pragma: public",
-    "Expires: 0",
-    "Cache-Control: must-revalidate, post-check=0, pre-check=0",
-);
-
 if (true === $getAll && $permission['export']) {
-
     $filename = 'FAQs.pdf';
     $pdfFile  = $pdf->generate(0, true, $lang);
-
+} elseif (is_null($currentCategory) || is_null($id)) {
+    Response::create('Wrong HTTP GET parameters values.', 403)->send();
+    exit;
 } else {
-
-    if (is_null($currentCategory) || is_null($id)) {
-        $headers[] = 'HTTP/1.1 403 Forbidden';
-        $payload = 'Wrong HTTP GET parameters values.';
-        $http->sendWithHeaders($payload, $headers);
-        exit();
-    }
-
     $faq->getRecord($id);
     $faq->faqRecord['category_id'] = $currentCategory;
 
@@ -141,12 +129,15 @@ if (true === $getAll && $permission['export']) {
     $pdfFile  = $pdf->generateFile($faq->faqRecord, $filename);
 }
 
+$response = Response::create($pdfFile);
+$response->headers->set('Pragma', 'public');
+$response->headers->set('Expires', '0');
+$response->headers->set('Cache-Control', 'must-revalidate, post-check=0, pre-check=0');
+$response->headers->set('Content-type', 'application/pdf');
+
 if (preg_match("/MSIE/i", $_SERVER["HTTP_USER_AGENT"])) {
-    $headers[] = "Content-type: application/pdf";
-    $headers[] = "Content-Transfer-Encoding: binary";
-    $headers[] = "Content-Disposition: attachment; filename=" . $filename;
-} else {
-    $headers[] = "Content-Type: application/pdf";
+	$response->headers->set('Content-Transfer-Encoding', 'binary');
+	$response->headers->set('Content-Disposition', 'attachment; filename=' . $filename);
 }
 
-$http->sendWithHeaders($pdfFile, $headers);
+$response->send();

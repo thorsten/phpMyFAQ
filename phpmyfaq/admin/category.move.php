@@ -18,14 +18,14 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 if ($permission["editcateg"]) {
-    $id         = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
-    $parent_id  = PMF_Filter::filterInput(INPUT_GET, 'parent_id', FILTER_VALIDATE_INT);
-    $category = new PMF_Category($faqConfig, array(), false);
+    $id        = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+    $parent_id = PMF_Filter::filterInput(INPUT_GET, 'parent_id', FILTER_VALIDATE_INT);
+    $category  = new PMF_Category($faqConfig, array(), false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $categories = $category->getAllCategories();
@@ -34,41 +34,25 @@ if ($permission["editcateg"]) {
     unset($category->categories);
     $category->getCategories($parent_id, false);
     $category->buildTree($parent_id);
-    
-    $header = sprintf('%s: <em>%s</em>',
-        $PMF_LANG['ad_categ_move'],
-        $category->categories[$id]['name']
-    );
-?>
-        <header>
-            <h2><i class="icon-list"></i> <?php print $header ?></h2>
-        </header>
-        <form class="form-horizontal" action="?action=changecategory" method="post">
-            <input type="hidden" name="cat" value="<?php print $id; ?>" />
-            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
-            <div class="control-group">
-                <label class="control-label"><?php print $PMF_LANG["ad_categ_change"]; ?></label>
-                <div class="controls">
-                   <select name="change" size="1">
-<?php
-                    foreach ($category->categories as $cat) {
-                       if ($id != $cat["id"]) {
-                          printf("<option value=\"%s\">%s</option>", $cat['id'], $cat['name']);
-                       }
-                   }
-?>
-                    </select>
-                    <?php printf('<p class="help-block">%s</p>', $PMF_LANG['ad_categ_remark_move']); ?>
-                </div>
-            </div>
 
-            <div class="form-actions">
-                <button class="btn btn-primary" type="submit" name="submit">
-                    <?php print $PMF_LANG["ad_categ_updatecateg"]; ?>
-                </button>
-            </div>
-        </form>
-<?php
+    $templateVars = array(
+        'PMF_LANG'        => $PMF_LANG,
+        'categoryName'    => $category->categories[$id]['name'],
+        'categoryOptions' => array(),
+        'csrfToken'       => $user->getCsrfTokenFromSession(),
+        'id'              => $id
+    );
+
+    foreach ($category->categories as $cat) {
+        if ($id != $cat["id"]) {
+            $templateVars['categoryOptions'][$cat['id']] = $cat['name'];
+        }
+    }
+
+    $twig->loadTemplate('category/move.twig')
+        ->display($templateVars);
+
+    unset($templateVars, $category, $id, $parent_id, $cat);
 } else {
-    print $PMF_LANG["err_NotAuth"];
+    require 'noperm.php';
 }

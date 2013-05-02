@@ -19,6 +19,8 @@
  * @since     2006-07-23
  */
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
@@ -37,8 +39,9 @@ $oNews  = new PMF_News($faqConfig);
 $newsId = PMF_Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
 
 if (is_null($newsId)) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
-    exit();
+    RedirectResponse::create('http://'.$_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']))
+        ->send();
+    exit;
 }
 
 $faqsession->userTracking('news_view', $categoryId);

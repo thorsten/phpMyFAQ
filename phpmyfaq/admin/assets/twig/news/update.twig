@@ -1,0 +1,23 @@
+<header>
+    <h2>
+        <i class="icon-pencil"></i>
+        {{ PMF_LANG['ad_news_data'] }}
+    </h2>
+</header>
+
+{% if success %}
+<p class="alert alert-success">
+    {{ PMF_LANG['ad_news_updatesuc']|raw }}
+</p>
+{% else %}
+<p class="alert alert-error">
+    {{ PMF_LANG['ad_news_updatefail'] }}
+</p>
+{% endif %}
+
+<div class="control-group">
+    &rarr;
+    <a href="?action=news">
+        {{ PMF_LANG['msgNews'] }}
+    </a>
+</div>
