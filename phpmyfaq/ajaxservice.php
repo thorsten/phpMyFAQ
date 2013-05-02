@@ -17,6 +17,10 @@
  * @since     2010-09-15
  */
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+use PMF\Helper\ResponseWrapper;
+
 define('IS_VALID_PHPMYFAQ', null);
 
 //
@@ -53,10 +57,10 @@ PMF_String::init($languageCode);
 $captcha = new PMF_Captcha($faqConfig);
 //$captcha->setSessionId($sids);
 
-// Send headers
-$http = new PMF_Helper_Http();
-$http->setContentType('application/json');
-$http->addHeader();
+// Prepare response
+$response = new JsonResponse;
+$responseWrapper = new ResponseWrapper($response);
+$responseWrapper->addCommonHeaders();
 
 // Set session
 $faqsession = new PMF_Session($faqConfig);
@@ -81,8 +85,8 @@ if ('savevoting' !== $action && 'saveuserdata' !== $action && 'changepassword' !
 }
 
 if (isset($message['error'])) {
-    print json_encode($message);
-    exit();
+    $response->setData($message)->send();
+    exit;
 }
 
 // Save user generated content
@@ -792,4 +796,4 @@ switch ($action) {
         break;
 }
 
-print json_encode($message);
+$response->setData($message)->send();

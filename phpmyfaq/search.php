@@ -17,6 +17,8 @@
  * @since     2002-09-16
  */
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
@@ -102,11 +104,13 @@ if (is_numeric($inputSearchTerm) && PMF_SOLUTION_ID_START_VALUE <= $inputSearchT
     // Before a redirection we must force the PHP session update for preventing data loss
     session_write_close();
     if ($faqConfig->get('main.enableRewriteRules')) {
-        header('Location: ' . $faqConfig->get('main.referenceURL') . '/solution_id_' . $inputSearchTerm . '.html');
+        $location = $faqConfig->get('main.referenceURL') . '/solution_id_' . $inputSearchTerm . '.html';
     } else {
-        header('Location: ' . $faqConfig->get('main.referenceURL') . '/index.php?solution_id=' . $inputSearchTerm);
+        $location = $faqConfig->get('main.referenceURL') . '/index.php?solution_id=' . $inputSearchTerm;
     }
-    exit();
+    RedirectResponse::create($location)
+        ->send();
+    exit;
 }
 
 $category->buildTree();

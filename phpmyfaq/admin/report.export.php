@@ -18,6 +18,8 @@
  * @since     2011-01-12
  */
 
+use Symfony\Component\HttpFoundation\Response;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
@@ -117,7 +119,7 @@ if ($permission['reports']) {
         $content .= "\r\n";
     }
 
-    $oHttpStreamer = new PMF_HttpStreamer('csv', $content);
+    $oHttpStreamer = new PMF_HttpStreamer(Response::create(), 'csv', $content);
     $oHttpStreamer->send(PMF_HttpStreamer::HTTP_CONTENT_DISPOSITION_ATTACHMENT);
 
 }

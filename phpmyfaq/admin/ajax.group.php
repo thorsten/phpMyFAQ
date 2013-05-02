@@ -17,10 +17,14 @@
  * @since     2009-04-06
  */
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
+
+$response = new JsonResponse;
 
 $ajaxAction = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 $groupId    = PMF_Filter::filterInput(INPUT_GET, 'group_id', FILTER_VALIDATE_INT);
@@ -30,50 +34,54 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     $user      = new PMF_User($faqConfig);
     $userList  = $user->getAllUsers();
     $groupList = ($user->perm instanceof PMF_Perm_Medium) ? $user->perm->getAllGroups() : array();
+
+    switch ($ajaxAction) {
+        // Returns all groups
+        case 'get_all_groups':
+            $groups = array();
+            foreach ($groupList as $groupId) {
+                $data     = $user->perm->getGroupData($groupId);
+                $groups[] = array(
+                    'group_id' => $data['group_id'],
+                    'name'     => $data['name']
+                );
+            }
+            $response->setData($groups);
+            break;
     
-    // Returns all groups
-    if ('get_all_groups' == $ajaxAction) {
-        $groups = array();
-        foreach ($groupList as $groupId) {
-            $data     = $user->perm->getGroupData($groupId);
-            $groups[] = array(
-                'group_id' => $data['group_id'],
-                'name'     => $data['name']
-            );
-        }
-        echo json_encode($groups);
-    }
+        // Return the group data
+        case 'get_group_data':
+            $response->setData($user->perm->getGroupData($groupId));
+            break;
     
-    // Return the group data
-    if ('get_group_data' == $ajaxAction) {
-        echo json_encode($user->perm->getGroupData($groupId));
-    }
+        // Return the group rights
+        case 'get_group_rights':
+            $response->setData($user->perm->getGroupRights($groupId));
+            break;
     
-    // Return the group rights
-    if ('get_group_rights' == $ajaxAction) {
-         echo json_encode($user->perm->getGroupRights($groupId));
-    }
+        // Return all users
+        case 'get_all_users':
+            $users = array();
+            foreach ($userList as $single_user) {
+                $user->getUserById($single_user);
+                $users[] = array('user_id' => $user->getUserId(),
+                                 'login'   => $user->getLogin());
+            }
+            echo $response->setData($users);
+            break;
     
-    // Return all users
-    if ('get_all_users' == $ajaxAction) {
-        $users = array();
-        foreach ($userList as $single_user) {
-            $user->getUserById($single_user);
-            $users[] = array('user_id' => $user->getUserId(),
-                             'login'   => $user->getLogin());
-        }
-        echo json_encode($users);
-    }
-    
-    // Returns all group members
-    if ('get_all_members' == $ajaxAction) {
-        $memberList = $user->perm->getGroupMembers($groupId);
-        $members    = array();
-        foreach ($memberList as $single_member) {
-            $user->getUserById($single_member);
-            $members[] = array('user_id' => $user->getUserId(),
-                               'login'   => $user->getLogin());
-        }
-        echo json_encode($members);
+        // Returns all group members
+        case 'get_all_members':
+            $memberList = $user->perm->getGroupMembers($groupId);
+            $members    = array();
+            foreach ($memberList as $single_member) {
+                $user->getUserById($single_member);
+                $members[] = array('user_id' => $user->getUserId(),
+                                   'login'   => $user->getLogin());
+            }
+            echo $response->setData($members);
+            break;
     }
 }
+
+$response->send();

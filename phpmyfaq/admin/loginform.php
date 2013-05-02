@@ -18,70 +18,22 @@
  * @since     2013-02-05
  */
 
-?>
+$templateVars = array(
+    'PMF_LANG'             => $PMF_LANG,
+    'displayError'         => false,
+    'displayLogoutMessage' => $action == 'logout',
+    'forceSecureSwitch'    => false
+);
 
-    <header>
-        <h2>phpMyFAQ Login</h2>
-    </header>
-<?php
 if (isset($error) && 0 < strlen($error)) {
-    $message = sprintf(
-        '<p class="alert alert-error">%s%s</p>',
-        '<a class="close" data-dismiss="alert" href="#">&times;</a>',
-        $error
-    );
-} else {
-    $message = sprintf('<p>%s</p>', $PMF_LANG['ad_auth_insert']);
-}
-if ($action == 'logout') {
-    $message = sprintf(
-        '<p class="alert alert-success">%s%s</p>',
-        '<a class="close" data-dismiss="alert" href="#">&times;</a>',
-        $PMF_LANG['ad_logout']
-    );
+    $templateVars['displayError'] = true;
+    $templateVars['errorMessage'] = $error;
 }
 
-if (isset($_SERVER['HTTPS']) || !$faqConfig->get('security.useSslForLogins')) {
-    ?>
-
-    <?php print $message ?>
-
-    <form class="form-horizontal" action="index.php" method="post">
-
-    <div class="control-group">
-        <label class="control-label" for="faqusername"><?php print $PMF_LANG["ad_auth_user"]; ?></label>
-        <div class="controls">
-            <input type="text" name="faqusername" id="faqusername" required="required" />
-        </div>
-    </div>
-
-    <div class="control-group">
-        <label class="control-label" for="faqpassword"><?php print $PMF_LANG["ad_auth_passwd"]; ?></label>
-        <div class="controls">
-            <input type="password" name="faqpassword" id="faqpassword" required="required" />
-        </div>
-    </div>
-
-    <div class="control-group">
-        <div class="controls">
-            <label class="checkbox">
-                <input type="checkbox" id="faqrememberme" name="faqrememberme" value="rememberMe">
-                <?php print $PMF_LANG['rememberMe'] ?>
-            </label>
-        </div>
-    </div>
-
-    <div class="form-actions">
-        <button class="btn btn-primary" type="submit">
-            <?php print $PMF_LANG["ad_auth_ok"]; ?>
-        </button>
-    </div>
-<?php
-} else {
-    printf('<p><a href="https://%s%s">%s</a></p>',
-        $_SERVER['HTTP_HOST'],
-        $_SERVER['REQUEST_URI'],
-        $PMF_LANG['msgSecureSwitch']);
+if (!isset($_SERVER['HTTPS']) && $faqConfig->get('security.useSslForLogins')) {
+    $templateVars['forceSecureSwitch'] = true;
+    $templateVars['secureSwitchUrl']   = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 }
-?>
-</form>
+
+$twig->loadTemplate('loginform.twig')
+    ->display($templateVars);

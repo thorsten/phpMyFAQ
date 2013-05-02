@@ -26,41 +26,47 @@
  * @since     2005-09-30
  */
 
+use Symfony\Component\HttpFoundation\Response;
+use PMF\Helper\ResponseWrapper;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
-$httpHeader = new PMF_Helper_Http();
-$httpHeader->setContentType('text/html');
-$httpHeader->addHeader();
+$response = new Response;
+$responseWrapper = new ResponseWrapper($response);
+$responseWrapper->addCommonHeaders();
 
 $linkverifier = new PMF_Linkverifier($faqConfig, $user->getLogin());
 if ($linkverifier->isReady() == false) {
     if (count(ob_list_handlers()) > 0) {
         ob_clean();
     }
-    print "disabled";
-    exit();
+    $response
+        ->setContent("disabled")
+        ->send();
+    exit;
 }
 
 $id   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $lang = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
 
 if (!(isset($id) && isset($lang))) {
-    //header("X-DenyReason: id/lang bad");
-    header("HTTP/1.0 401 Unauthorized");
-    header("Status: 401 Unauthorized");
-    exit();
+    $response
+        ->setStatusCode(401)
+        ->send();
+    exit;
 }
 
 $faq->faqRecord = null;
 $faq->getRecord($id);
 
 if (!isset($faq->faqRecord['content'])) {
-    header("HTTP/1.0 401 Unauthorized");
-    header("Status: 401 Unauthorized");
-    exit();
+    $response
+        ->setStatusCode(401)
+        ->send();
+    exit;
 }
 
 if (count(ob_list_handlers()) > 0) {
@@ -70,5 +76,6 @@ if (count(ob_list_handlers()) > 0) {
 $linkverifier->parse_string($faq->faqRecord['content']);
 $linkverifier->VerifyURLs($faqConfig->get('main.referenceURL'));
 $linkverifier->markEntry($id, $lang);
-print $linkverifier->getLinkStateString();
-exit();
+$response
+    ->setContent($linkverifier->getLinkStateString())
+    ->send();

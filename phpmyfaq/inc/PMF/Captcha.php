@@ -19,6 +19,8 @@
  * @since     2006-02-04
  */
 
+use Symfony\Component\HttpFoundation\StreamedResponse;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
@@ -208,16 +210,28 @@ class PMF_Captcha
         $this->drawlines();
         $this->generateCaptchaCode($this->caplength);
         $this->drawText();
+
+        $response = new StreamedResponse;
+        $img = $this->img;
+
         if (function_exists('imagepng')) {
-            header('Content-Type: image/png');
-            imagepng($this->img);
+            $response->headers->set('Content-Type', 'image/png');
+            $response->setCallback(function() use ($img) {
+                imagepng($img);
+            });
         } elseif (function_exists('imagejpeg')) {
-            header('Content-Type: image/jpeg');
-            imagejpeg($this->img, '', ( int )$this->quality);
+            $response->headers->set('Content-Type', 'image/jpeg');
+            $quality = (int) $this->quality;
+            $response->setCallback(function() use ($img, $quality) {
+                imagejpeg($img, '', $quality);
+            });
         } elseif (function_exists('imagegif')) {
-            header('Content-Type: image/gif');
-            imagegif($this->img);
+            $response->headers->set('Content-Type', 'image/gif');
+            $response->setCallback(function() use ($img) {
+                imagegif($img);
+            });
         }
+        $response->send();
         imagedestroy($this->img);
     }
 

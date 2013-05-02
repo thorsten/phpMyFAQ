@@ -22,6 +22,11 @@
  * @since     2001-02-12
  */
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+
+use PMF\Helper\ResponseWrapper;
+
 //
 // Define the named constant used as a check by any included PHP file
 //
@@ -169,10 +174,12 @@ if ('logout' === $action && isset($auth)) {
     $action = 'main';
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
     if ($faqConfig->get('security.ssoSupport') && !empty ($ssoLogout)) {
-        header('Location: ' . $ssoLogout);
+        $location =  $ssoLogout;
     } else {
-        header('Location: ' . $faqConfig->get('main.referenceURL'));
+        $location = $faqConfig->get('main.referenceURL');
     }
+    RedirectResponse::create($location)->send();
+    exit;
 }
 
 //
@@ -741,16 +748,18 @@ $tpl->merge('rightBox', 'index');
 require_once $includePhp;
 
 //
+// Prepate the response
+//
+$response = Response::create();
+
+//
 // Send headers and print template
 //
-$httpHeader = new PMF_Helper_Http();
-$httpHeader->setContentType('text/html');
-$httpHeader->addHeader();
+$responseWrapper = new ResponseWrapper($response);
+$responseWrapper->addContentTypeHeader('text/html');
+$responseWrapper->addCommonHeaders();
 
-if (!DEBUG) {
-    ob_start('ob_gzhandler');
-}
-
-echo $tpl->render();
+$response->setContent($tpl->render());
+$response->send();
 
 $faqConfig->getDb()->close();

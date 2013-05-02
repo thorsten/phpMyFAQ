@@ -18,6 +18,10 @@
  * @since     2009-04-01
  */
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+use PMF\Helper\ResponseWrapper;
+
 if (!defined('IS_VALID_PHPMYFAQ') || !$permission['editconfig']) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
@@ -29,8 +33,9 @@ $stopwordId    = PMF_Filter::filterInput(INPUT_GET, 'stopword_id', FILTER_VALIDA
 $stopword      = PMF_Filter::filterInput(INPUT_GET, 'stopword', FILTER_SANITIZE_STRING);
 $stopwordsLang = PMF_Filter::filterInput(INPUT_GET, 'stopwords_lang', FILTER_SANITIZE_STRING);
 
-$http      = new PMF_Helper_Http();
 $stopwords = new PMF_Stopwords($faqConfig);
+
+$response = new JsonResponse;
 
 switch ($ajaxAction) {
 
@@ -107,7 +112,7 @@ switch ($ajaxAction) {
         } else {
             $payload = array('error' => $instanceId);
         }
-        $http->sendJsonWithHeaders($payload);
+        $response->setData($payload);
         break;
 
     case 'delete_instance':
@@ -118,7 +123,7 @@ switch ($ajaxAction) {
             } else {
                 $payload = array('error' => $instanceId);
             }
-            $http->sendJsonWithHeaders($payload);
+            $response->setData($payload);
         }
         break;
 
@@ -130,7 +135,7 @@ switch ($ajaxAction) {
             } else {
                 $payload = array('error' => $instanceId);
             }
-            $http->sendJsonWithHeaders($payload);
+            $response->setData($payload);
         }
         break;
 
@@ -139,7 +144,7 @@ switch ($ajaxAction) {
             $stopwordsList = $stopwords->getByLang($stopwordsLang);
 
             $payload = $stopwordsList;
-            $http->sendJsonWithHeaders($payload);
+            $response->setData($payload);
         }
         break;
 
@@ -161,3 +166,8 @@ switch ($ajaxAction) {
         }
         break;
 }
+
+$responseWrapper = new ResponseWrapper($response);
+$responseWrapper->addCommonHeaders();
+
+$response->send();

@@ -1,0 +1,77 @@
+<header>
+    <h2>
+        <i class="icon-user"></i> {{ PMF_LANG['ad_user'] }}
+        <div class="pull-right">
+            <a class="btn btn-success" href="?action=user&amp;user_action=add">
+                <i class="icon-plus"></i> {{ PMF_LANG['ad_user_add'] }}
+            </a>
+        </div>
+    </h2>
+</header>
+<div id="user_message">{{ message|raw }}</div>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>{{ PMF_LANG['ad_entry_id'] }}</th>
+        <th>{{ PMF_LANG['ad_user_status'] }}</th>
+        <th>{{ PMF_LANG['msgNewContentName'] }}</th>
+        <th>{{ PMF_LANG['ad_auth_user'] }}</th>
+        <th>{{ PMF_LANG['msgNewContentMail'] }}</th>
+        <th colspan="2">&nbsp;</th>
+    </tr>
+    </thead>
+    {% if displayPagination %}
+    <tfoot>
+    <tr>
+        <td colspan="7">{{ pagination|raw }}</td>
+    </tr>
+    </tfoot>
+    {% endif %}
+    <tbody>
+        {% for user in users %}
+        <tr class="row_user_id_{{ user['id'] }}">
+            <td>{{ user['id'] }}</td>
+            <td><i class="{{ user['icon'] }}"></i></td>
+            <td>{{ user['displayName'] }}</td>
+            <td>{{ user['loginName'] }}</td>
+            <td>
+                <a href="mailto:{{ user['email'] }}">
+                    {{ user['email'] }}
+                </a>
+            </td>
+            <td>
+                <a href="{{ user['editUrl'] }}" class="btn btn-info">
+                    {{ PMF_LANG['ad_user_edit'] }}
+                </a>
+            </td>
+            <td>
+                {% if user['showDeleteButton'] %}
+                <a onclick="deleteUser({{ user['id'] }}); return false;"
+                   href="javascript:;" class="btn btn-danger">
+                    {{ PMF_LANG['ad_user_delete'] }}
+                </a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<script type="text/javascript">
+    /* <![CDATA[ */
+    /**
+     * Ajax call to delete user
+     *
+     * @param userId
+     */
+    function deleteUser(userId)
+    {
+        if (confirm('{{ PMF_LANG['ad_user_del_3'] }}')) {
+        $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=delete_user&user_id=" + userId,
+                function(response) {
+                    $('#user_message').html(response);
+                    $('.row_user_id_' + userId).fadeOut('slow');
+                });
+        }
+    }
+    /* ]]> */
+</script>

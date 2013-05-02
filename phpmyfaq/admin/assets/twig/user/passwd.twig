@@ -1,0 +1,43 @@
+<header>
+    <h2>
+        <i class="icon-lock"></i>
+        {{ PMF_LANG['ad_passwd_cop'] }}
+    </h2>
+</header>
+
+{% if successMessage %}
+<p class="alert alert-success">{{ successMessage }}</p>
+{% endif %}
+{% if errorMessage %}
+<p class="alert alert-error">{{ errorMessage }}</p>
+{% endif %}
+
+<form class="form-horizontal" action="?action=passwd" method="post">
+    <input type="hidden" name="save" value="newpassword" />
+    <div class="control-group">
+        <label class="control-label" for="opass">{{ PMF_LANG['ad_passwd_old'] }}</label>
+        <div class="controls">
+            <input type="password" name="opass" id="opass" required="required" />
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="npass">{{ PMF_LANG['ad_passwd_new'] }}</label>
+        <div class="controls">
+            <input type="password" name="npass" id="npass" required="required" />
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="bpass">{{ PMF_LANG['ad_passwd_con'] }}</label>
+        <div class="controls">
+            <input type="password" name="bpass" id="bpass" required="required"  />
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button class="btn btn-primary" type="submit">
+            {{ PMF_LANG['ad_passwd_change'] }}
+        </button>
+    </div>
+</form>

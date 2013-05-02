@@ -1,0 +1,29 @@
+<h4>
+    {% if renderToggler %}<a href="javascript:;" onclick="toggleFieldset({{ id }});">{% endif %}
+        {{ name }}
+    {% if renderToggler %}</a>{% endif %}
+</h4>
+
+{% if renderAddButton %}
+<a class="btn btn-info btn-mini" href="{{ addButtonUrl }}"><span title="{{ PMF_LANG['ad_quick_category'] }}" class="icon-plus-sign icon-white"></span></a>
+{% endif %}
+
+{% if renderRenameButton %}
+<a class="btn btn-info btn-mini" href="{{ renameButtonUrl }}"><span title="{{ PMF_LANG['ad_kateg_rename'] }}" class="icon-edit icon-white"></a>
+{% endif %}
+
+<a class="btn btn-info btn-mini" href="{{ translateButtonUrl }}"><span title="{{ PMF_LANG['ad_categ_translate'] }}" class="icon-share icon-white"></a>
+
+{% if renderDeleteButton %}
+<a class="btn btn-danger btn-mini" href="{{ deleteButtonUrl }}"><span title="{{ PMF_LANG['ad_categ_delete'] }}" class="icon-trash icon-white"></a>
+{% else %}
+<a class="btn btn-inverse btn-mini" style="cursor: not-allowed;"><span class="icon-trash icon-white"></a>
+{% endif %}
+
+{% if renderCutButton %}
+<a class="btn btn-warning btn-mini" href="{{ cutButtonUrl }}"><span title="{{ PMF_LANG['ad_categ_cut'] }}" class="icon-cut icon-white"></a>
+{% endif %}
+
+{% if renderMoveButton %}
+<a class="btn btn-warning btn-mini" href="{{ moveButtonUrl }}"><span title="{{ PMF_LANG['ad_categ_move'] }}" class="icon-resize-vertical icon-white"></a>
+{% endif %}

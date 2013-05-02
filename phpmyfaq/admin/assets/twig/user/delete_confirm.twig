@@ -1,0 +1,18 @@
+<header>
+    <h2>
+        <i class="icon-user"></i> {{ PMF_LANG['ad_user_deleteUser'] }} {{ userLogin }}
+    </h2>
+</header>
+<p class="alert alert-danger">{{ PMF_LANG['ad_user_del_3'] }} {{ PMF_LANG['ad_user_del_1'] }} {{ PMF_LANG['ad_user_del_2'] }}</p>
+<form action ="?action=user&amp;user_action=delete" method="post">
+    <input type="hidden" name="user_id" value="{{ userId }}" />
+    <input type="hidden" name="csrf" value="{{ csrfToken }}" />
+    <p align="center">
+        <button class="btn btn-danger" type="submit">
+            {{ PMF_LANG['ad_gen_yes'] }}
+        </button>
+        <a class="btn btn-info" href="?action=user">
+            {{ PMF_LANG['ad_gen_no'] }}
+        </a>
+    </p>
+</form>

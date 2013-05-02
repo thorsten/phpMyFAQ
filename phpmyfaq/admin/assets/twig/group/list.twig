@@ -1,0 +1,412 @@
+<header>
+    <h2>
+        <i class="icon-user"></i> {{ PMF_LANG['ad_menu_group_administration'] }}
+        <div class="pull-right">
+            <a class="btn btn-success" href="?action=group&amp;group_action=add">
+                <i class="icon-plus"></i> {{ PMF_LANG['ad_group_add_link'] }}
+            </a>
+        </div>
+    </h2>
+</header>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+
+var groupList;
+
+/**
+ * Load groups as JSON using HTTP GET
+ *
+ * @return void
+ */
+function getGroupList()
+{
+    clearGroupList();
+    $.getJSON("index.php?action=ajax&ajax=group&ajaxaction=get_all_groups",
+            function(data) {
+                $.each(data, function(i, val) {
+                    $('#group_list_select').append('<option value="' + val.group_id + '">' + val.name + '</option>');
+                });
+            });
+    processGroupList();
+}
+
+/**
+ * Processes everything we need
+ *
+ * @return void
+ */
+function processGroupList()
+{
+    clearGroupData();
+    clearGroupRights();
+    clearUserList();
+    getUserList();
+    clearMemberList();
+}
+
+/**
+ * Removes all entries from the group list
+ *
+ * @return void
+ */
+function clearGroupList()
+{
+    $('#group_list_select').empty();
+}
+
+/**
+ * Removes all values from the group data form
+ *
+ * @return void
+ */
+function clearGroupData()
+{
+    $('#update_group_id').empty();
+    $('#update_group_name').empty();
+    $('#update_group_description').empty();
+    if ($('update_group_auto_join').attr('checked') == 'checked') {
+        $('update_group_auto_join').attr('checked', false);
+    }
+}
+
+/**
+ * Returns the group data as JSON object and fills the input forms
+ *
+ * @param group_id Group ID
+ */
+function getGroupData(group_id)
+{
+    $.getJSON("index.php?action=ajax&ajax=group&ajaxaction=get_group_data&group_id=" + group_id,
+            function(data) {
+                $('#update_group_id').val(data.group_id);
+                $('#update_group_name').val(data.name);
+                $('#update_group_description').val(data.description);
+                if (data.auto_join == 1) {
+                    $('#update_group_auto_join').attr('checked', true);
+                } else {
+                    $('#update_group_auto_join').attr('checked', false);
+                }
+            });
+}
+
+/**
+ * Unchecks all checkboxes
+ *
+ * @return void
+ */
+function clearGroupRights()
+{
+    $('#group_rights_table input').attr('checked', false);
+}
+
+/**
+ * Returns the group rights as JSON object and checks the checkboxes
+ *
+ * @param group_id Group ID
+ */
+function getGroupRights(group_id)
+{
+    $.getJSON("index.php?action=ajax&ajax=group&ajaxaction=get_group_rights&group_id=" + group_id,
+            function(data) {
+                $.each(data, function(i, val) {
+                    $("#group_right_" + val).prop("checked", true);
+                });
+                $("#rights_group_id").val(group_id);
+            });
+}
+
+/**
+ * Handles the group selection event
+ *
+ * @return void
+ */
+function groupSelect(evt)
+{
+    evt = (evt) ? evt : ((windows.event) ? windows.event : null);
+    if (evt) {
+        var select = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+        if (select && select.value > 0) {
+            clearGroupData();
+            getGroupData(select.value);
+            clearGroupRights();
+            getGroupRights(select.value);
+            clearUserList();
+            getUserList();
+            clearMemberList();
+            getMemberList(select.value);
+        }
+    }
+}
+
+/**
+ * Clears the user list
+ *
+ * @return void
+ */
+function clearUserList()
+{
+    $('#group_user_list option').empty();
+}
+
+/**
+ * Adds all users to the user list select box
+ *
+ * @return void
+ */
+function getUserList()
+{
+    $.getJSON("index.php?action=ajax&ajax=group&ajaxaction=get_all_users",
+            function(data) {
+                $('#group_user_list').empty();
+                $.each(data, function(i, val) {
+                    $('#group_user_list').append('<option value="' + val.user_id + '">' + val.login + '</option>');
+                });
+
+            });
+}
+
+/**
+ * Clears the member list
+ *
+ * @return void
+ */
+function clearMemberList()
+{
+    $('#group_member_list').empty();
+}
+
+/**
+ * Adds all members to the members list select box
+ *
+ * @return void
+ */
+function getMemberList(group_id)
+{
+    if (group_id == 0) {
+        clearMemberList();
+        return;
+    }
+    $.getJSON("index.php?action=ajax&ajax=group&ajaxaction=get_all_members&group_id=" + group_id,
+            function(data) {
+                $('#group_member_list').empty();
+                $.each(data, function(i, val) {
+                    $('#group_member_list').append('<option value="' + val.user_id + '">' + val.login + '</option>');
+                });
+                $('#update_member_group_id').val(group_id);
+            });
+}
+
+/**
+ * Adds a user to the group members selection list
+ *
+ * @return void
+ */
+function addGroupMembers()
+{
+    // make sure that a group is selected
+    var selected_group = $('#group_list_select option:selected');
+    if (selected_group.size() == 0) {
+        alert('Please choose a group.');
+        return;
+    }
+
+    // get selected users from list
+    var selected_users = $('#group_user_list option:selected');
+    if (selected_users.size() > 0) {
+        selected_users.each(function() {
+
+            var members  = $('#group_member_list option');
+            var isMember = false;
+            var user     = $(this);
+
+            members.each(function(member) {
+
+                if (user.val() == member) {
+                    isMember = true;
+                } else {
+                    isMember = false;
+                }
+            });
+
+            if (isMember == false) {
+                $('#group_member_list').append('<option value="' + $(this).val() + '" selected>' + $(this).text() + '</option>');
+            }
+
+        });
+    }
+}
+
+/**
+ *Remove users from a group
+ *
+ * @return void
+ */
+function removeGroupMembers()
+{
+    // make sure that a group is selected
+    var selected_user_list = $('#group_member_list option:selected');
+    if (selected_user_list.size() == 0) {
+        alert('Please choose a user. ');
+        return;
+    }
+
+    // remove selected members from list
+    selected_user_list.each(function(i, option){
+        document.getElementById('group_member_list').options[option.index] = null
+    })
+}
+
+getGroupList();
+/* ]]> */
+</script>
+
+<div id="user_message">{{ message|raw }}</div>
+<div class="row-fluid">
+
+    <div class="span4" id="group_list">
+        <fieldset>
+            <legend>{{ PMF_LANG['ad_groups'] }}</legend>
+            <form id="group_select" name="group_select" action="?action=group&amp;group_action=delete_confirm"
+                  method="post">
+                <p>
+                    <select name="group_list_select" id="group_list_select" style="width: 150px;"
+                            onchange="groupSelect(event)" size="{{ groupSelectSize }}" tabindex="1">
+                    </select>
+                </p>
+                <p>
+                    <button class="btn btn-danger" type="submit">
+                        {{ PMF_LANG['ad_gen_delete'] }}
+                    </button>
+                </p>
+            </form>
+        </fieldset>
+    </div>
+
+    <div class="span4" id="groupMemberships">
+        <form id="group_membership" name="group_membership" action="?action=group&amp;group_action=update_members"
+              method="post" onsubmit="select_selectAll('group_member_list')">
+            <input id="update_member_group_id" type="hidden" name="group_id" value="0" />
+            <fieldset>
+                <legend>{{ PMF_LANG['ad_group_membership'] }}</legend>
+                <fieldset id="group_userList">
+                    <legend>{{ PMF_LANG['ad_user_username'] }}</legend>
+                    <p>
+                            <span class="select_all">
+                                <a class="btn btn-small" href="javascript:selectSelectAll('group_user_list')">
+                                    {{ PMF_LANG['ad_user_checkall'] }}
+                                </a>
+                            </span>
+                            <span class="unselect_all">
+                                <a class="btn btn-small" href="javascript:selectUnselectAll('group_user_list')">
+                                    {{ PMF_LANG['ad_user_uncheckall'] }}
+                                </a>
+                            </span>
+                    </p>
+                    <select id="group_user_list" multiple="multiple" style="width: 150px;"
+                            size="{{ memberSelectSize }}">
+                        <option value="0">...user list...</option>
+                    </select>
+                </fieldset>
+                <div id="group_membershipButtons">
+                    <input class="btn-success" type="button" value="{{ PMF_LANG['ad_group_addMember'] }}"
+                           onclick="addGroupMembers()" />
+                    <input class="btn-danger" type="button" value="{{ PMF_LANG['ad_group_removeMember'] }}"
+                           onclick="removeGroupMembers()" />
+                </div>
+                <fieldset id="group_memberList">
+                    <legend>{{ PMF_LANG['ad_group_members'] }}</legend>
+                    <p>
+                            <span class="select_all">
+                                <a class="btn btn-small" href="javascript:selectSelectAll('group_member_list')">
+                                    {{ PMF_LANG['ad_user_checkall'] }}
+                                </a>
+                            </span>
+                            <span class="unselect_all">
+                                <a class="btn btn-small" href="javascript:selectUnselectAll('group_member_list')">
+                                    {{ PMF_LANG['ad_user_uncheckall'] }}
+                                </a>
+                            </span>
+                    </p>
+                    <select id="group_member_list" name="group_members[]" multiple="multiple" style="width: 150px;"
+                            size="{{ memberSelectSize }}">
+                        <option value="0">...member list...</option>
+                    </select>
+                </fieldset>
+                <p>
+                    <button class="btn btn-primary" type="submit">
+                        {{ PMF_LANG['ad_gen_save'] }}
+                    </button>
+                </p>
+            </fieldset>
+        </form>
+    </div>
+
+    <div class="span4" id="groupDetails">
+        <div id="group_data">
+            <fieldset>
+                <legend id="group_data_legend">{{ PMF_LANG['ad_group_details'] }}</legend>
+                <form action="?action=group&amp;group_action=update_data" method="post">
+                    <input id="update_group_id" type="hidden" name="group_id" value="0" />
+                    <div id="group_data_table">
+                        <p>
+                            <label class="control-label" for="update_group_name" class="small">{{ PMF_LANG['ad_group_name'] }}</label>
+                            <input id="update_group_name" type="text" name="name" style="width: 150px;"
+                                   tabindex="1" value="{{ groupName }}" />
+                        </p>
+                        <p>
+                            <label class="control-label" for="update_group_description" class="small">{{ PMF_LANG['ad_group_description'] }}</label>
+                            <textarea id="update_group_description" name="description" cols="{{ descriptionCols }}"
+                                      rows="{{ descriptionRows }}" style="width: 150px;"
+                                      tabindex="2">{{ groupDescription }}</textarea>
+                        </p>
+                        <p>
+                            <label class="control-label" for="update_group_auto_join" class="small">{{ PMF_LANG['ad_group_autoJoin'] }}</label>
+                            <input id="update_group_auto_join" type="checkbox" name="auto_join" value="1"
+                                   tabindex="3"{% if groupAutoJoin %} checked="checked"{% endif %} />
+                        </p>
+                    </div><!-- end #group_data_table -->
+                    <p>
+                        <button class="btn btn-primary" type="submit">
+                            {{ PMF_LANG['ad_gen_save'] }}
+                        </button>
+                    </p>
+                </form>
+            </fieldset>
+        </div> <!-- end #groupDetails -->
+        <div id="groupRights">
+            <fieldset>
+                <legend id="group_rights_legend">{{ PMF_LANG['ad_user_rights'] }}</legend>
+                <form id="rightsForm" action="?action=group&amp;group_action=update_rights" method="post">
+                    <input id="rights_group_id" type="hidden" name="group_id" value="0" />
+                    <div>
+                                <span class="select_all">
+                                    <a class="btn btn-small" href="javascript:formCheckAll('rightsForm')">
+                                        {{ PMF_LANG['ad_user_checkall'] }}
+                                    </a>
+                                </span>
+                                <span class="unselect_all">
+                                    <a class="btn btn-small" href="javascript:formUncheckAll('rightsForm')">
+                                        {{ PMF_LANG['ad_user_uncheckall'] }}
+                                    </a>
+                                </span>
+                    </div>
+                    <table id="group_rights_table">
+                        {% for right in rightsData %}
+                        <tr>
+                            <td><input id="group_right_{{ right['right_id'] }}" type="checkbox"
+                                       name="group_rights[]" value="{{ right['right_id'] }}"/></td>
+                            <td>{{ right['description'] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <p>
+                        <button class="btn btn-primary" type="submit">
+                            {{ PMF_LANG['ad_gen_save'] }}
+                        </button>
+                    </p>
+                </form>
+            </fieldset>
+        </div> <!-- end #groupRights -->
+    </div> <!-- end #groupDetails -->
+</div> <!-- end #groupInteface -->

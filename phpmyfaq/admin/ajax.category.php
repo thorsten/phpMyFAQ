@@ -17,10 +17,14 @@
  * @since     2012-12-26
  */
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
+
+$response = new JsonResponse;
 
 $ajaxAction = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 
@@ -48,7 +52,7 @@ switch($ajaxAction) {
             $categories = explode(',', $ajaxData['categories']);
         }
 
-        echo json_encode(
+        $response->setData(
             array(
                 'user'  => $category->getPermissions('user', $categories),
                 'group' => $category->getPermissions('group', $categories)
@@ -57,3 +61,5 @@ switch($ajaxAction) {
 
         break;
 }
+
+$response->send();

@@ -1,0 +1,66 @@
+<header>
+    <h2>
+        <i class="icon-list"></i>
+        {{ PMF_LANG['ad_categ_trans_1'] }}
+        {{ PMF_LANG['ad_categ_trans_2'] }}:
+        <em>{{ categoryName }}</em>
+    </h2>
+</header>
+<form class="form-horizontal" action="?action=updatecategory" method="post">
+    <input type="hidden" name="id" value="{{ id }}" />
+    <input type="hidden" name="parent_id" value="{{ parentId }}" />
+    <input type="hidden" name="showcat" value="{% if showcat %}yes{% else %}no{% endif %}" />
+    <input type="hidden" name="restricted_groups" value="{{ groupPermission }}" />
+    <input type="hidden" name="restricted_users" value="{{ userPermission }}" />
+    <input type="hidden" name="csrf" value="{{ csrfToken }}" />
+
+    <div class="control-group">
+        <label class="control-label">{{ PMF_LANG["ad_categ_titel"] }}:</label>
+        <div class="controls">
+            <input type="text" name="name" value="" />
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">{{ PMF_LANG["ad_categ_lang"] }}:</label>
+        <div class="controls">
+            <select name="catlang" size="1">
+                {{ languageOptions|raw }}
+            </select>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">{{ PMF_LANG["ad_categ_desc"] }}:</label>
+        <div class="controls">
+            <textarea name="description" rows="3" cols="80"></textarea>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">{{ PMF_LANG["ad_categ_owner"] }}:</label>
+        <div class="controls">
+            <select name="user_id" size="1">
+                {{ userOptions|raw }}
+            </select>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">{{ PMF_LANG['ad_categ_transalready'] }}</label>
+        <div class="controls">
+            <ul>
+                {% for language, namedesc in translations %}
+                <li><strong>{{ language }}</strong>: {{ namedesc }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button class="btn btn-primary" type="submit" name="submit">
+            {{ PMF_LANG["ad_categ_translatecateg"] }}
+        </button>
+    </div>
+
+</form>

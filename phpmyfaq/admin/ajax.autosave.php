@@ -17,10 +17,14 @@
  * @since     2012-07-07
  */
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
+
+$response = new JsonResponse;
 
 $do = PMF_Filter::filterInput(INPUT_GET, 'do', FILTER_SANITIZE_STRING);
 
@@ -148,16 +152,17 @@ if ('insertentry' == $do && ($permission['editbt']|| $permission['addbt']) ||
             }
         }
 
-        $out = array(
-            'msg' => sprintf("Item autosaved at revision %d", $revision_id),
-            'revision_id' => $revision_id,
-            'record_id' => $record_id,
+        $response->setData(
+            array(
+                'msg' => sprintf("Item autosaved at revision %d", $revision_id),
+                'revision_id' => $revision_id,
+                'record_id' => $record_id,
+            )
         );
-
-        print json_encode($out);
     }
 
 } else {
-    print json_encode(array("msg" => "Unsuficcient article rights"));
+    $response->setData(array("msg" => "Unsuficcient article rights"));
 }
 
+$response->send();

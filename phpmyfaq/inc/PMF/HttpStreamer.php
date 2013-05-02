@@ -17,6 +17,8 @@
  * @since     2005-11-02
  */
 
+use Symfony\Component\HttpFoundation\Response;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
@@ -93,13 +95,6 @@ class PMF_HttpStreamer
     private $disposition;
 
     /**
-     * HTTP streaming data
-     *
-     * @var string
-     */
-    private $content;
-
-    /**
      * HTTP streaming data length
      *
      * @var integer
@@ -107,19 +102,25 @@ class PMF_HttpStreamer
     private $size;
 
     /**
+     * @var Response
+     */
+    private $response;
+
+    /**
      * Constructor
      *
-     * @param string $type    Type
-     * @param string $content Content
-     *
-     * @return PMF_HttpStreamer
+     * @param Response $response
+     * @param string   $type     Type
+     * @param string   $content  Content
      */
-    function __construct($type, $content)
+    public function __construct(Response $response, $type, $content)
     {
+        $this->response    = $response;
         $this->type        = $type;
         $this->disposition = self::HTTP_CONTENT_DISPOSITION_INLINE;
-        $this->content     = $content;
-        $this->size        = strlen($this->content);
+        $this->size        = strlen($content);
+
+        $response->setContent($content);
     }
 
     /**
@@ -149,10 +150,7 @@ class PMF_HttpStreamer
         if (self::EXPORT_BUFFER_ENABLE) {
             ob_start();
         }
-        // Send the right HTTP headers
-        $this->_setHttpHeaders();
-        // Send the raw content
-        $this->_streamContent();
+        $this->response->send();
         // Manage output buffer flushing
         if (self::EXPORT_BUFFER_ENABLE) {
             ob_end_flush();
@@ -209,34 +207,25 @@ class PMF_HttpStreamer
 
         // Set the correct HTTP headers:
         // 1. Prevent proxies&browsers caching
-        header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-        header("Expires: 0");
-        header("Cache-Control: private, no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
-        header("Pragma: no-cache");
+        $this->response->headers->set("Last-Modified", gmdate("D, d M Y H:i:s") . " GMT");
+        $this->response->headers->set("Expires", "0");
+        $this->response->headers->set("Cache-Control", "private, no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
+        $this->response->headers->set("Pragma", "no-cache");
 
         // 2. Set the correct values for file streaming
-        header("Content-Type: ".$mimeType);
         if (($this->disposition == self::HTTP_CONTENT_DISPOSITION_ATTACHMENT) && 
              isset($_SERVER["HTTP_USER_AGENT"]) && !(strpos($_SERVER["HTTP_USER_AGENT"], "MSIE") === false)) {
-            header("Content-Type: application/force-download");
+            $this->response->headers->set("Content-Type", "application/force-download");
+        } else {
+            $this->response->headers->set("Content-Type", $mimeType);
         }
         // RFC2616, �19.5.1: $filename must be a quoted-string
-        header("Content-Disposition: " . $this->disposition."; filename=\"" . PMF_Export::getExportTimestamp() . "_" . $filename."\"");
+        $this->response->headers->set("Content-Disposition", $this->disposition."; filename=\"" . PMF_Export::getExportTimestamp() . "_" . $filename."\"");
         if (!empty($description)) {
-            header("Content-Description: " . $description);
+            $this->response->headers->set("Content-Description", $description);
         }
-        header("Content-Transfer-Encoding: binary");
-        header("Accept-Ranges: none");
-        header("Content-Length: " . $this->size);
-    }
-
-    /**
-     * Streams the content
-     *
-     * @return void
-     */
-    private function _streamContent()
-    {
-        print $this->content;
+        $this->response->headers->set("Content-Transfer-Encoding", "binary");
+        $this->response->headers->set("Accept-Ranges", "none");
+        $this->response->headers->set("Content-Length", $this->size);
     }
 }

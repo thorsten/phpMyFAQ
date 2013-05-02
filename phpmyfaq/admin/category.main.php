@@ -18,35 +18,27 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
-}
-?>
-        <header>
-            <h2>
-                <i class="icon-list"></i> <?php echo $PMF_LANG['ad_menu_categ_edit'] ?>
-                <div class="pull-right">
-                    <a class="btn btn-success" href="?action=addcategory">
-                        <i class="icon-plus icon-white"></i> <?php print $PMF_LANG['ad_kateg_add']; ?>
-                    </a>
-                    <a class="btn btn-info" href="?action=showcategory">
-                        <i class="icon-th icon-white"></i> <?php print $PMF_LANG['ad_categ_show'];?>
-                    </a>
-                </div>
-            </h2>
-        </header>
-<?php
-$csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
-if ('category' != $action && 'content' != $action &&
-    (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken)) {
-    $permission['editcateg'] = false;
 }
 
 if ($permission['editcateg']) {
+    $templateVars = array(
+        'PMF_LANG'        => $PMF_LANG,
+        'categoryTree'    => '',
+        'errorMessages'   => '',
+        'successMessages' => ''
+    );
+
+    $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+    if ('category' != $action && 'content' != $action &&
+        (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken)
+    ) {
+        $permission['editcateg'] = false;
+    }
 
     // Save a new category
     if ($action == 'savecategory') {
-
         $category = new PMF_Category($faqConfig, array(), false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
@@ -98,16 +90,15 @@ if ($permission['editcateg']) {
             $category->addPermission('group', array($categoryId), $permissions['restricted_groups']);
 
             // All the other translations
-            $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
-            printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_added']);
+            $languages                      = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
+            $templateVars['successMessage'] = $PMF_LANG['ad_categ_added'];
         } else {
-            printf('<p class="alert alert-error">%s</p>', $faqConfig->getDb()->error());
+            $templateVars['errorMessage'] = $faqConfig->getDb()->error();
         }
     }
 
     // Updates an existing category
     if ($action == 'updatecategory') {
-
         $category = new PMF_Category($faqConfig, array(), false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
@@ -156,10 +147,11 @@ if ($permission['editcateg']) {
         if (!$category->checkLanguage($categoryData['id'], $categoryData['lang'])) {
             if ($category->addCategory($categoryData, $parentId, $categoryData['id']) &&
                 $category->addPermission('user', array($categoryData['id']), $permissions['restricted_user']) &&
-                $category->addPermission('group', array($categoryData['id']), $permissions['restricted_groups'])) {
-                printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_translated']);
+                $category->addPermission('group', array($categoryData['id']), $permissions['restricted_groups'])
+            ) {
+                $templateVars['successMessage'] = $PMF_LANG['ad_categ_translated'];
             } else {
-                printf('<p class="alert alert-error">%s</p>', $faqConfig->getDb()->error());
+                $templateVars['errorMessage'] = $faqConfig->getDb()->error();
             }
         } else {
             if ($category->updateCategory($categoryData)) {
@@ -167,9 +159,9 @@ if ($permission['editcateg']) {
                 $category->deletePermission('group', array($categoryData['id']));
                 $category->addPermission('user', array($categoryData['id']), $permissions['restricted_user']);
                 $category->addPermission('group', array($categoryData['id']), $permissions['restricted_groups']);
-                printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_updated']);
+                $templateVars['successMessage'] = $PMF_LANG['ad_categ_updated'];
             } else {
-                printf('<p class="alert alert-error">%s</p>', $faqConfig->getDb()->error());
+                $templateVars['errorMessage'] = $faqConfig->getDb()->error();
             }
         }
 
@@ -179,7 +171,6 @@ if ($permission['editcateg']) {
 
     // Deletes an existing category
     if ($permission['delcateg'] && $action == 'removecategory') {
-
         $category = new PMF_Category($faqConfig, array(), false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
@@ -190,16 +181,17 @@ if ($permission['editcateg']) {
 
         if ($category->deleteCategory($id, $lang, $delete_all) &&
             $category->deleteCategoryRelation($id, $lang, $delete_all) &&
-            $category->deletePermission('user', array($id)) && $category->deletePermission('group', array($id))) {
-            printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_deleted']);
+            $category->deletePermission('user', array($id)) && $category->deletePermission('group', array($id))
+        ) {
+            $templateVars['successMessage'] = $PMF_LANG['ad_categ_deleted'];
         } else {
-            printf('<p class="alert alert-error">%s</p>', $faqConfig->getDb()->error());
+            $templateVars['errorMessage'] = $faqConfig->getDb()->error();
         }
+        unset($category, $id, $lang, $deleteall, $delete_all);
     }
 
     // Moves a category
     if ($action == 'changecategory') {
-
         $category = new PMF_Category($faqConfig, array(), false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
@@ -207,10 +199,10 @@ if ($permission['editcateg']) {
         $categoryId_2 = PMF_Filter::filterInput(INPUT_POST, 'change', FILTER_VALIDATE_INT);
 
         if ($category->swapCategories($categoryId_1, $categoryId_2)) {
-            printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_updated']);
+            $templateVars['successMessage'] = $PMF_LANG['ad_categ_updated'];
         } else {
-            printf(
-                '<p class="alert alert-error">%s<br />%s</p>',
+            $templateVars['errorMessage'] = sprintf(
+                '%s<br />%s',
                 $PMF_LANG['ad_categ_paste_error'],
                 $faqConfig->getDb()->error()
             );
@@ -219,17 +211,16 @@ if ($permission['editcateg']) {
 
     // Pastes a category
     if ($action == 'pastecategory') {
-
         $category = new PMF_Category($faqConfig, array(), false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
         $categoryId = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
         $parentId   = PMF_Filter::filterInput(INPUT_POST, 'after', FILTER_VALIDATE_INT);
         if ($category->updateParentCategory($categoryId, $parentId)) {
-            printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_updated']);
+            $templateVars['successMessage'] = $PMF_LANG['ad_categ_updated'];
         } else {
-            printf(
-                '<p class="alert alert-error">%s<br />%s</p>',
+            $templateVars['errorMessage'] = sprintf(
+                '%s<br />%s',
                 $PMF_LANG['ad_categ_paste_error'],
                 $faqConfig->getDb()->error()
             );
@@ -250,9 +241,8 @@ if ($permission['editcateg']) {
     $category->buildTree();
 
     $open = $lastCatId = $openDiv = 0;
-    print '<ul>';
+    $templateVars['categoryTree'] .= '<ul>';
     foreach ($category->catTree as $id => $cat) {
-
         $indent = '';
         for ($i = 0; $i < $cat['indent']; $i++) {
             $indent .= '&nbsp;&nbsp;&nbsp;';
@@ -270,106 +260,68 @@ if ($permission['editcateg']) {
 
         if ($leveldiff > 1) {
 
-            print '</li>';
+            $templateVars['categoryTree'] .= '</li>';
             for ($i = $leveldiff; $i > 1; $i--) {
-                print '</ul></div></li>';
+                $templateVars['categoryTree'] .= '</ul></div></li>';
             }
         }
 
         if ($level < $open) {
             if (($level - $open) == -1) {
-                print '</li>';
+                $templateVars['categoryTree'] .= '</li>';
             }
-            print '</ul></li>';
+            $templateVars['categoryTree'] .= '</ul></li>';
         } elseif ($level == $open) {
-            print '</li>';
+            $templateVars['categoryTree'] .= '</li>';
         }
 
         if ($level > $open) {
-            printf('<div id="div_%d" style="display: none;">', $lastCatId);
-            print '<ul><li>';
+            $templateVars['categoryTree'] .= sprintf('<div id="div_%d" style="display: none;">', $lastCatId);
+            $templateVars['categoryTree'] .= '<ul><li>';
         } else {
-            print '<li>';
+            $templateVars['categoryTree'] .= '<li>';
         }
 
-        if (count($category->getChildren($cat['id'])) != 0) {
-            // Show name and icon for expand the sub-categories
-            printf(
-                '<h4><a href="javascript:;" onclick="toggleFieldset(%d);">%s</a> </h4> ',
-                $cat['id'],
-                $categoryName
+        $templateVars['categoryTree'] .= $twig->loadTemplate('category/treeItem.twig')
+            ->render(
+                array(
+                    'PMF_LANG'           => $PMF_LANG,
+                    'id'                 => $cat['id'],
+                    'addButtonUrl'       => sprintf('?action=addcategory&cat=%s&lang=%s', $cat['id'], $cat['lang']),
+                    'cutButtonUrl'       => sprintf('?action=cutcategory&cat=%s', $cat['id']),
+                    'deleteButtonUrl'    => sprintf('?action=deletecategory&cat=%s&catlang=%s', $cat['id'], $cat['lang']),
+                    'moveButtonUrl'      => sprintf('?action=movecategory&cat=%s&parent_id=%s', $cat['id'], $cat['parent_id']),
+                    'name'               => $categoryName,
+                    'renameButtonUrl'    => sprintf('?action=editcategory&cat=%s', $cat['id']),
+                    // add sub category (if current language)
+                    'renderAddButton'    => $cat["lang"] == $lang,
+                    // cut category (if current language)
+                    'renderCutButton'    => $cat["lang"] == $lang,
+                    // delete (sub) category (if current language)
+                    'renderDeleteButton' => count($category->getChildren($cat['id'])) == 0 && $cat["lang"] == $lang,
+                    // move category (if current language) AND more than 1 category at the same level)
+                    'renderMoveButton'   => $cat["lang"] == $lang && $category->numParent($cat['parent_id']) > 1,
+                    // rename (sub) category (if current language)
+                    'renderRenameButton' => $cat["lang"] == $lang,
+                    'renderToggler'      => count($category->getChildren($cat['id'])) != 0,
+                    'translateButtonUrl' => sprintf('?action=translatecategory&cat=%s', $cat['id'])
+                )
             );
-        } else {
-            // Show just the name
-            printf("<h4>%s</h4> ", $categoryName);
-        }
-
-        if ($cat["lang"] == $lang) {
-           // add sub category (if current language)
-           printf('
-            <a class="btn btn-info btn-mini" href="?action=addcategory&amp;cat=%s&amp;lang=%s"><span title="%s" class="icon-plus-sign icon-white"></span></a> ',
-               $cat['id'],
-               $cat['lang'],
-               $PMF_LANG['ad_quick_category']
-           );
-
-           // rename (sub) category (if current language)
-           printf('
-               <a class="btn btn-info btn-mini" href="?action=editcategory&amp;cat=%s"><span title="%s" class="icon-edit icon-white"></a> ',
-               $cat['id'],
-               $PMF_LANG['ad_kateg_rename']
-           );
-        }
-
-        // translate category (always)
-        printf(
-            '<a class="btn btn-info btn-mini" href="?action=translatecategory&amp;cat=%s"><span title="%s" class="icon-share icon-white"></a> ',
-            $cat['id'],
-            $PMF_LANG['ad_categ_translate']
-        );
-
-        // delete (sub) category (if current language)
-        if (count($category->getChildren($cat['id'])) == 0 && $cat["lang"] == $lang) {
-            printf(
-                '<a class="btn btn-danger btn-mini" href="?action=deletecategory&amp;cat=%s&amp;catlang=%s"><span title="%s" class="icon-trash icon-white"></a> ',
-                $cat['id'],
-                $cat['lang'],
-                $PMF_LANG['ad_categ_delete']
-            );
-        } else {
-            echo  '<a class="btn btn-inverse btn-mini" style="cursor: not-allowed;"><span class="icon-trash icon-white"></a> ';
-        }
-
-        if ($cat["lang"] == $lang) {
-           // cut category (if current language)
-           printf(
-               '<a class="btn btn-warning btn-mini" href="?action=cutcategory&amp;cat=%s"><span title="%s" class="icon-cut icon-white"></a> ',
-               $cat['id'],
-               $PMF_LANG['ad_categ_cut']
-           );
-
-           if ($category->numParent($cat['parent_id']) > 1) {
-              // move category (if current language) AND more than 1 category at the same level)
-              printf(
-                  '<a class="btn btn-warning btn-mini" href="?action=movecategory&amp;cat=%s&amp;parent_id=%s"><span title="%s" class="icon-resize-vertical icon-white"></a> ',
-                  $cat['id'],
-                  $cat['parent_id'],
-                  $PMF_LANG['ad_categ_move']
-              );
-           }
-        }
 
         $open      = $level;
         $lastCatId = $cat['id'];
     }
 
     if ($open > 0) {
-        print str_repeat("</li>\n\t</ul>\n\t", $open);
+        $templateVars['categoryTree'] .= str_repeat("</li>\n\t</ul>\n\t", $open);
     }
 
-    print "</li>\n</ul>";
+    $templateVars['categoryTree'] .= "</li>\n</ul>";
 
-    printf('<p class="alert alert-info">%s</p>', $PMF_LANG['ad_categ_remark']);
+    $twig->loadTemplate('category/main.twig')
+        ->display($templateVars);
+
+    unset($templateVars, $csrfToken, $open, $level, $category, $id, $cat, $lang, $lastCatId);
 } else {
-    print $PMF_LANG['err_NotAuth'];
+    require 'noperm.php';
 }
