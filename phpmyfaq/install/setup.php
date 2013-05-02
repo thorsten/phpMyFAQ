@@ -89,7 +89,24 @@ $loader->register();
                 $('#dbsqlite').show();
                 $('#dbdatafull').hide();
                 break;
+            case 'mysqli':
+                $('#sql_port').val(3306);
+                $('#dbsqlite').hide();
+                $('#dbdatafull').show();
+                break;
+            case 'pgsql':
+                $('#sql_port').val(5432);
+                $('#dbsqlite').hide();
+                $('#dbdatafull').show();
+                break;
+            case 'mssql':
+            case 'sqlsrv':
+                $('#sql_port').val(1433);
+                $('#dbsqlite').hide();
+                $('#dbdatafull').show();
+                break;
             default:
+                $('#sql_port').val('');
                 $('#dbsqlite').hide();
                 $('#dbdatafull').show();
                 break;
@@ -178,7 +195,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                         <div class="control-group">
                             <label class="control-label" for="sql_port">Database port:</label>
                             <div class="controls">
-                                <input type="number" name="sql_port" id="sql_port" class="input-mini" />
+                                <input type="number" name="sql_port" id="sql_port" class="input-mini" value="3306" />
                                 <p class="help-block">Please enter your database port.</p>
                             </div>
                         </div>
