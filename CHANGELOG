@@ -1,9 +1,12 @@
-phpMyFAQ 2.8.0
-Codename "Perdita"
+phpMyFAQ 2.9.0-dev
+Codename "Proteus"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.9.0-dev - 2013-
+-
 
 Version 2.8.0 - 2013-04-
 - changed PHP requirement to PHP 5.3.3 and later (Thorsten)

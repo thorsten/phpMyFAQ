@@ -38,7 +38,7 @@ class PMF_System
     /**
      * Minor version
      */
-    const VERSION_MINOR = 8;
+    const VERSION_MINOR = 9;
 
     /**
      * Patchlevel
@@ -48,7 +48,7 @@ class PMF_System
     /**
      * Pre-release version
      */
-    const VERSION_PRERELEASE = null;
+    const VERSION_PRERELEASE = 'dev';
 
     /**
      * API version
