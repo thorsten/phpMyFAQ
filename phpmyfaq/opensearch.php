@@ -17,6 +17,8 @@
  * @since     2006-11-19
  */
 
+use Symfony\Component\HttpFoundation\Response;
+
 define('IS_VALID_PHPMYFAQ', null);
 
 require __DIR__ . '/inc/Bootstrap.php';
@@ -51,3 +53,7 @@ $xml->endDocument();
 
 header('Content-type: text/xml');
 print $xml->outputMemory(true);
+$response = Response::create()
+	->setContent($opensearchXml->outputMemory(true));
+$response->headers->set('Content-Type', 'text/xml');
+$response->send();

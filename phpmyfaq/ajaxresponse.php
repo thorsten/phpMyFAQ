@@ -17,6 +17,8 @@
  * @since     2007-03-27
  */
 
+use Symfony\Component\HttpFoundation\Response;
+
 define('IS_VALID_PHPMYFAQ', null);
 
 //
@@ -95,6 +97,7 @@ if (!is_null($searchString)) {
     $faqSearchHelper->setSearchterm($searchString);
     $faqSearchHelper->setCategory($category);
     $faqSearchHelper->setPlurals($plr);
-    
-    echo $faqSearchHelper->renderInstantResponseResult($faqSearchResult);
+
+    Response::create($faqSearchHelper->renderInstantResponseResult($faqSearchResult))
+        ->send();
 }

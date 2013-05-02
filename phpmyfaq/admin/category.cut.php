@@ -18,7 +18,7 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -27,50 +27,30 @@ if ($permission["editcateg"]) {
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $category->buildTree();
-    
+
     $id        = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
     $parent_id = $category->categoryName[$id]['parent_id'];
-    $header    = sprintf('%s: <em>%s</em>',
-                    $PMF_LANG['ad_categ_move'],
-                    $category->categoryName[$id]['name']);
-?>
-        <header>
-            <h2><i class="icon-list"></i> <?php print $header ?></h2>
-        </header>
-        <form class="form-horizontal" action="?action=pastecategory" method="post">
-            <input type="hidden" name="cat" value="<?php print $id; ?>" />
-            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
-            <div class="control-group">
-                <label class="control-label"><?php print $PMF_LANG["ad_categ_paste2"]; ?></label>
-                <div class="controls">
-                    <select name="after" size="1">
-<?php
+
+    $templateVars = array(
+        'PMF_LANG'             => $PMF_LANG,
+        'categoryName'         => $category->categoryName[$id]['name'],
+        'categoryOptions'      => array(),
+        'csrfToken'            => $user->getCsrfTokenFromSession(),
+        'displayMainCatOption' => $parent_id != 0,
+        'id'                   => $id
+    );
 
     foreach ($category->catTree as $cat) {
-        $indent = '';
-        for ($j = 0; $j < $cat['indent']; $j++) {
-            $indent .= '...';
-        }
+        $indent = str_repeat('…', $cat['indent']);
         if ($id != $cat['id']) {
-            printf("<option value=\"%s\">%s%s</option>\n", $cat['id'], $indent, $cat['name']);
+            $templateVars['categoryOptions'][$cat['id']] = $indent . $cat['name'];
         }
     }
 
-    if ($parent_id != 0) {
-        printf('<option value="0">%s</option>', $PMF_LANG['ad_categ_new_main_cat']);
-    }
+    $twig->loadTemplate('category/cut.twig')
+        ->display($templateVars);
 
-?>
-                    </select>
-                </div>
-            </div>
-            <div class="form-actions">
-                <button class="btn btn-primary" type="submit" name="submit">
-                    <?php print $PMF_LANG["ad_categ_updatecateg"]; ?>
-                </button>
-            </div>
-        </form>
-<?php
+    unset($templateVars, $category, $id, $cat, $indent);
 } else {
-    print $PMF_LANG["err_NotAuth"];
+    require 'noperm.php';
 }

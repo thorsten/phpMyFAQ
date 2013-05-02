@@ -1,0 +1,17 @@
+<header>
+    <h2>
+        <i class="icon-wrench"></i>
+        {{ PMF_LANG['ad_system_info'] }}
+    </h2>
+</header>
+
+<table class="table table-striped">
+    <tbody>
+        {% for name, info in systemInformation %}
+        <tr>
+            <td class="span3"><strong>{{ name }}</strong></td>
+            <td>{{ info }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

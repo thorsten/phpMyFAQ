@@ -17,15 +17,17 @@
  * @since     2005-12-15
  */
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+use PMF\Helper\ResponseWrapper;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
-// Send headers
-$http = new PMF_Helper_Http();
-$http->setContentType('application/json');
-$http->addHeader();
+$response = new JsonResponse;
+$responseWrapper = new ResponseWrapper($response);
+$responseWrapper->addCommonHeaders();
 
 $oTag              = new PMF_Tags($faqConfig);
 $autoCompleteValue = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
@@ -49,5 +51,7 @@ if ($permission['editbt']) {
         }
     }
 
-    echo json_encode(array('tags' => $tagNames));
+    $response->setData(array('tags' => $tagNames));
 }
+
+$response->send();

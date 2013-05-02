@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="{{ PMF_LANG['metaLanguage'] }}" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]> <html lang="{{ PMF_LANG['metaLanguage'] }}" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]> <html lang="{{ PMF_LANG['metaLanguage'] }}" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]> <html lang="{{ PMF_LANG['metaLanguage'] }}" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="{{ PMF_LANG['metaLanguage'] }}" class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>{{ titleFAQ }} - powered by phpMyFAQ {{ pmfVersion }}</title>
+    <base href="{{ baseUrl }}" />
+
+    <meta name="description" content="Only Chuck Norris can divide by zero.">
+    <meta name="author" content="phpMyFAQ Team">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+    <meta name="application-name" content="phpMyFAQ {{ pmfVersion }}">
+    <meta name="copyright" content="(c) 2001-2013 phpMyFAQ Team">
+    <meta name="publisher" content="phpMyFAQ Team">
+    <meta name="MSSmartTagsPreventParsing" content="true">
+
+    <link rel="stylesheet" href="assets/css/style.css?v=1">
+    <link rel="stylesheet" href="../assets/js/plugins/datePicker/datePicker.css" type="text/css">
+
+    <script src="../assets/js/libs/modernizr.min.js"></script>
+    <script src="../assets/js/libs/jquery.min.js"></script>
+    <script src="../assets/js/phpmyfaq.js"></script>
+
+    <script src="../assets/js/plugins/datePicker/date.js"></script>
+    <script src="../assets/js/plugins/datePicker/jquery.datePicker.js"></script>
+    <script src="editor/tiny_mce.js?{{ time }}"></script>
+
+    {% if editorAutosaveActive %}
+    <script>var pmfAutosaveInterval = {{ editorAutosaveSeconds }}};</script>
+    <script src="../assets/js/autosave.js"></script>
+    {% endif %}
+
+    <link rel="shortcut icon" href="{{ shortcutIcon }}">
+    <link rel="apple-touch-icon" href="{{ appleTouchIcon }}">
+</head>
+<body dir="{{ PMF_LANG["dir"] }}">
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="../index.php" rel="tooltip" title="{{ titleFAQ }}">
+                phpMyFAQ
+            </a>
+            <div class="nav-collapse">
+                {% if isAuthenticated %}
+                <ul class="nav">
+                    <li{% if activePage == 'dashboard' %} class="active"{% endif %}>
+                    <a href="index.php">
+                        <i class="icon-home icon-white"></i> {{ PMF_LANG['admin_mainmenu_home'] }}
+                    </a>
+                    </li>
+                    <li{% if activePage == 'user' %} class="active"{% endif %}>
+                    <a href="index.php?action=user">
+                        <i class="icon-user icon-white"></i> {{ PMF_LANG['admin_mainmenu_users'] }}
+                    </a>
+                    </li>
+                    <li{% if activePage == 'content' %} class="active"{% endif %}>
+                    <a href="index.php?action=content">
+                        <i class="icon-pencil icon-white"></i> {{ PMF_LANG['admin_mainmenu_content'] }}
+                    </a>
+                    </li>
+                    <li{% if activePage == 'statistics' %} class="active"{% endif %}>
+                    <a href="index.php?action=statistics">
+                        <i class="icon-tasks icon-white"></i> {{ PMF_LANG['admin_mainmenu_statistics'] }}
+                    </a>
+                    </li>
+                    <li{% if activePage == 'exports' %} class="active"{% endif %}>
+                    <a href="index.php?action=export">
+                        <i class="icon-book icon-white"></i> {{ PMF_LANG['admin_mainmenu_exports'] }}
+                    </a>
+                    </li>
+                    <li{% if activePage == 'backup' %} class="active"{% endif %}>
+                    <a href="index.php?action=backup">
+                        <i class="icon-download-alt icon-white"></i> {{ PMF_LANG['admin_mainmenu_backup'] }}
+                    </a>
+                    </li>
+                    <li{% if activePage == 'configuration' %} class="active"{% endif %}>
+                    <a href="index.php?action=config">
+                        <i class="icon-wrench icon-white"></i> {{ PMF_LANG['admin_mainmenu_configuration'] }}
+                    </a>
+                    </li>
+                </ul>
+                <ul class="nav pull-right">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <span title="{{ userTooltip }}">
+                                {{ userDisplayName }}
+                            </span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="index.php?action=passwd">
+                                    <i class="icon-lock"></i> {{ PMF_LANG['ad_menu_passwd'] }}
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="index.php?action=logout">
+                                    <i class="icon-off"></i> {{ PMF_LANG['admin_mainmenu_logout'] }}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                {% else %}
+                <ul class="nav">
+                    <li><a href="../index.php?action=password">{{ PMF_LANG["lostPassword"] }}</a></li>
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="content">
+    <div class="container-fluid">
+        <div class="row-fluid">
+            {% if isAuthenticated %}
+            <div class="span2">
+                <div class="userpanel">
+                    {{ gravatarImage|raw }}
+                    {{ userDisplayName }}<br><small>{{ userEmail }}</small>
+                </div>
+                <hr>
+                <div class="well categories">
+                    {{ sideNavigation|raw }}
+                </div>
+            </div>
+
+            <div class="span10">
+            {% else %}
+            <div class="span12">
+            {% endif %}

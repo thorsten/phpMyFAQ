@@ -1,0 +1,51 @@
+<header>
+    <h2>
+        <i class="icon-pencil"></i>
+        {{ PMF_LANG['msgNews'] }}
+        <div class="pull-right">
+            <a class="btn btn-success" href="?action=addnews">
+                <i class="icon-plus icon-white"></i>
+                {{ PMF_LANG['ad_menu_news_add'] }}
+            </a>
+        </div>
+    </h2>
+</header>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>
+            {{ PMF_LANG['ad_news_headline'] }}</th>
+        <th colspan="2">
+            {{ PMF_LANG['ad_news_date'] }}
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for newsItem in newsHeader %}
+    <tr>
+        <td>
+            {{ newsItem['header'] }}
+        </td>
+        <td>
+            {{ newsItem['date'] }}
+        </td>
+        <td>
+            <a class="btn btn-primary" href="?action=editnews&amp;id={{ newsItem['id'] }}">
+                <span title="{{ PMF_LANG['ad_news_update'] }}" class="icon-edit"></span>
+            </a>
+            &nbsp;&nbsp;
+            <a class="btn btn-danger" href="?action=deletenews&amp;id={{ newsItem['id'] }}">
+                <span title="{{ PMF_LANG['ad_news_delete'] }}" class="icon-trash"></span>
+            </a>
+        </td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="3">
+            {{ PMF_LANG['ad_news_nodata'] }}
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>

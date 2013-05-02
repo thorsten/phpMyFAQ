@@ -52,6 +52,8 @@
     "require": {
         "php":                     ">=5.3.3",
         "symfony/class-loader":    ">=2.1",
+        "symfony/http-foundation": ">=2.1",
+        "twig/twig":               "*",
         "phpseclib":               "master@dev",
         "tcpdf":                   "master@dev",
         "twitteroauth":            "master@dev",

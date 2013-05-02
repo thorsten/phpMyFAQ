@@ -17,6 +17,8 @@
  * @since     2012-01-12
  */
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
@@ -54,6 +56,7 @@ if ($user instanceof PMF_User) {
     $tpl->merge('writeContent', 'index');
 } else {
     // Redirect to login
-    header('Location: ' . $faqConfig->get('main.referenceURL') . '/');
-    exit();
+    RedirectResponse::create($faqConfig->get('main.referenceURL') . '/')
+        ->send();
+    exit;
 }

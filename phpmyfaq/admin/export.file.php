@@ -18,6 +18,8 @@
  * @since     2005-11-02
  */
 
+use Symfony\Component\HttpFoundation\Response;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
@@ -46,7 +48,7 @@ $export  = PMF_Export::create($faq, $category, $faqConfig, $type);
 $content = $export->generate($categoryId, $downwards);
 
 // Stream the file content
-$oHttpStreamer = new PMF_HttpStreamer($type, $content);
+$oHttpStreamer = new PMF_HttpStreamer(Response::create(), $type, $content);
 if ('inline' == $inlineDisposition) {
     $oHttpStreamer->send(PMF_HttpStreamer::HTTP_CONTENT_DISPOSITION_INLINE);
 } else {

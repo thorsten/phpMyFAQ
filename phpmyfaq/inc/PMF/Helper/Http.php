@@ -33,6 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-13
+ * @deprecated
  */
 class PMF_Helper_Http extends PMF_Helper
 {
@@ -69,72 +70,5 @@ class PMF_Helper_Http extends PMF_Helper
         header('Pragma: no-cache');
         header('Vary: Negotiate,Accept');
         header('Content-type: ' . $this->contentType);
-    }
-
-    /**
-     * Returns a HTTP status header
-     *
-     * @param integer $code HTTP status code
-     *
-     * @return void
-     */
-    public function sendStatus($code)
-    {
-        switch ($code) {
-            case 404:
-                if (('cgi' == PMF_String::substr(PHP_SAPI, 0, 3)) || isset($_SERVER['ALL_HTTP'])) {
-                    header('Status: 404 Not Found');
-                } else {
-                    header('HTTP/1.0 404 Not Found');
-                }
-                break;
-        }
-
-        exit();
-    }
-
-    /**
-     * Sends any kind of data with optional HTTP headers as JSON.
-     *
-     * @param mixed $payload What to send
-     * @param string|array $headers Which headers to send
-     *
-     * @return string
-     */
-    public function sendJsonWithHeaders($payload, $headers = '')
-    {
-        return $this->sendWithHeaders($payload, $headers, true);
-    }
-
-    /**
-     * Sends any kind of data with optional HTTP headers as text or JSON.
-     *
-     * @param mixed $payload What to send
-     * @param string|array $headers Which headers to send
-     * @param bool $isJson Send as JSON?
-     *
-     * @return string
-     */
-    public function sendWithHeaders($payload, $headers = '', $isJson = false)
-    {
-        $validHeaders = array();
-        if (is_string($headers) && strlen($headers) > 0) {
-            $validHeaders[] = $headers;
-        } elseif(is_array($headers)) {
-            foreach ($headers as $header) {
-                if (strlen($header) > 0) {
-                    $validHeaders[] = $header;
-                }
-            }
-        }
-        foreach ($validHeaders as $header) {
-            header($header);
-        }
-        if ($isJson) {
-            header('Content-Type: application/json');
-            print json_encode($payload);
-        } else {
-            print $payload;
-        }
     }
 }
