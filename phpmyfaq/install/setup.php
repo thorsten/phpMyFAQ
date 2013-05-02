@@ -161,9 +161,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                         <label class="control-label" for="sql_type">Database server:</label>
                         <div class="controls">
                             <select name="sql_type" id="sql_type" size="1" onchange="selectDatabaseSetup(this);">
-<?php
-    echo join('', $system->getSupportedSafeDatabases(true));
-?>
+                            <?php echo join('', $system->getSupportedSafeDatabases(true)) ?>
                             </select>
                             <p class="help-block">Please select your preferred database type.</p>
                         </div>
@@ -175,6 +173,13 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                             <div class="controls">
                                 <input type="text" name="sql_server" id="sql_server" required />
                                 <p class="help-block">Please enter the host of your database server.</p>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="sql_port">Database port:</label>
+                            <div class="controls">
+                                <input type="number" name="sql_port" id="sql_port" class="input-mini" />
+                                <p class="help-block">Please enter your database port.</p>
                             </div>
                         </div>
                         <div class="control-group">
