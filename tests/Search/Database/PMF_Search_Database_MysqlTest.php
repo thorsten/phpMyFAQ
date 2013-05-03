@@ -19,9 +19,9 @@
 
 require_once dirname(dirname(dirname(__DIR__))) . '/phpmyfaq/inc/PMF/Configuration.php';
 require_once dirname(dirname(dirname(__DIR__))) . '/phpmyfaq/inc/PMF/Search.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/phpmyfaq/inc/PMF/Search/Database/Mysql.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/phpmyfaq/inc/PMF/Search/Database/Mysqli.php';
 require_once dirname(dirname(dirname(__DIR__))) . '/phpmyfaq/inc/PMF/DB/Driver.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/phpmyfaq/inc/PMF/DB/Mysql.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/phpmyfaq/inc/PMF/DB/Mysqli.php';
 
 require_once dirname(dirname(__DIR__)) . '/Database/MysqlTest.php';
 
