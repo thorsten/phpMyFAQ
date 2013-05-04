@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     <header>
         <h2>
             <i class="icon-wrench"></i> <?php print $PMF_LANG['ad_menu_instances']; ?>
-            <?php if ($permission['addinstances']): ?>
+            <?php if ($permission['addinstances'] && is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite')): ?>
             <div class="pull-right">
                 <a class="btn btn-success" data-toggle="modal" href="#pmf-modal-add-instance">
                     <i class="icon-plus"></i> <?php echo $PMF_LANG["ad_instance_add"] ?>
