@@ -148,7 +148,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         <form action ="?action=user&amp;user_action=delete" method="post">
             <input type="hidden" name="user_id" value="<?php print $userId; ?>" />
             <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
-            <p align="center">
+            <p class="text-center">
                 <button class="btn btn-danger" type="submit">
                     <?php print $PMF_LANG["ad_gen_yes"]; ?>
                 </button>

@@ -464,7 +464,7 @@ if ('addnews' == $action && $permission["addnews"]) {
     if ('no' == $precheck) {
 ?>
     <div class="control-group"><?php echo $PMF_LANG["ad_news_del"]; ?></div>
-    <div align="center">
+    <div class="text-center">
     <form action="?action=deletenews" method="post">
     <input type="hidden" name="id" value="<?php echo $delete_id; ?>">
     <input type="hidden" name="really" value="yes">
