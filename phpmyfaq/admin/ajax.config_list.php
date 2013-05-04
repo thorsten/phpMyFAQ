@@ -199,10 +199,12 @@ function renderInputForm($key, $type)
             break;
             
         case 'print':
-            printf('<input type="hidden" name="edit[%s]" size="80" value="%s" />%s</div>',
-                    $key,
-                    str_replace('"', '&quot;', $faqConfig->get($key)),
-                    $faqConfig->get($key));
+            printf(
+                '<input type="text" readonly name="edit[%s]" class="input-mini uneditable-input" value="%s" /></div>',
+                $key,
+                str_replace('"', '&quot;', $faqConfig->get($key)),
+                $faqConfig->get($key)
+            );
             break;
     }
 }
