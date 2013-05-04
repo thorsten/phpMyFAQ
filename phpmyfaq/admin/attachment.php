@@ -177,7 +177,7 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission['adda
         }
 
         printf(
-            '<p align="center"><a href="javascript:;" onclick="addAttachmentLink(%d, \'%s\', %d, \'%s\');">%s</a></p>',
+            '<p class="text-center"><a href="#" onclick="addAttachmentLink(%d, \'%s\', %d, \'%s\');">%s</a></p>',
             $att->getId(),
             $att->getFilename(),
             $recordId,
