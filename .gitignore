@@ -41,4 +41,5 @@ vendor/phpseclib*
 vendor/symfony*
 vendor/tcpdf*
 vendor/twitter*
+vendor/jnaqsh*
 vendor/autoload.php

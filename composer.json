@@ -47,6 +47,18 @@
                     "reference": "master"
                 }
             }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name":    "jnaqsh/bootstrap",
+                "version": "master",
+                "source": {
+                    "url":       "https://github.com/jnaqsh/bootstrap.git",
+                    "type":      "git",
+                    "reference": "master"
+                }
+            }
         }
     ],
     "require": {
@@ -55,7 +67,8 @@
         "phpseclib":               "master@dev",
         "tcpdf":                   "master@dev",
         "twitteroauth":            "master@dev",
-        "twitter/bootstrap":       "2.3.*"
+        "twitter/bootstrap":       "2.3.*",
+        "jnaqsh/bootstrap":        "master@dev"
     },
     "minimum-stability": "stable",
     "scripts": {
