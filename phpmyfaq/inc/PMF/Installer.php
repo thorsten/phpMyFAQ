@@ -573,7 +573,7 @@ class PMF_Installer
         $dbSetup['dbType'] = PMF_Filter::filterInput(INPUT_POST, 'sql_type', FILTER_SANITIZE_STRING);
         if (!is_null($dbSetup['dbType'])) {
             $dbSetup['dbType'] = trim($dbSetup['dbType']);
-            if (! file_exists(PMF_ROOT_DIR . '/setup/' . $dbSetup['dbType'] . '.sql.php')) {
+            if (! file_exists(PMF_ROOT_DIR . '/setup/assets/sql/' . $dbSetup['dbType'] . '.sql.php')) {
                 printf(
                     '<p class="alert alert-error"><strong>Error:</strong> Invalid server type: %s</p>',
                     $dbSetup['dbType']
@@ -744,8 +744,8 @@ class PMF_Installer
             PMF_System::renderFooter(true);
         }
 
-        require PMF_ROOT_DIR . '/setup/' . $dbSetup['dbType'] . '.sql.php'; // CREATE TABLES
-        require PMF_ROOT_DIR . '/setup/stopwords.sql.php';  // INSERTs for stopwords
+        require PMF_ROOT_DIR . '/setup/assets/sql/' . $dbSetup['dbType'] . '.sql.php'; // CREATE TABLES
+        require PMF_ROOT_DIR . '/setup/assets/sql/stopwords.sql.php';  // INSERTs for stopwords
 
         $this->_system->setDatabase($db);
 
