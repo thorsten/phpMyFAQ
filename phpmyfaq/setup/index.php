@@ -72,102 +72,31 @@ $twig = new Twig_Environment(
     new Twig_Loader_Filesystem(PMF_ROOT_DIR . '/setup/assets/twig')
 );
 
-$templateVars = array(
-    'version'     => PMF_System::getVersion(),
-    'currentYear' => date('Y')
+$tplLayoutVars = array(
+    'version'           => PMF_System::getVersion(),
+    'currentYear'       => date('Y'),
+    'criticalErrors'    => $installer->checkBasicStuff(),
+    'filePermErrors'    => $installer->checkFilesystemPermissions(),
+    'nonCriticalErrors' => $installer->checkNoncriticalSettings()
 );
 
-// Check for really basic stuff
-$templateVars['criticalErrors'] = $installer->checkBasicStuff();
-$templateVars['filePermErrors'] = $installer->checkFilesystemPermissions();
+$twig->loadTemplate('layout.twig')->display($tplLayoutVars);
 
 // not yet POSTed
 if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST["sql_db"])) {
 
-    // Check for non critical errors
-    $templateVars['nonCriticalErrors'] = $installer->checkNoncriticalSettings();
-
-    $twig->loadTemplate('layout.twig')->display($templateVars);
+    $tplDatabaseVars = array(
+        'databases' => $system->getSupportedSafeDatabases(true),
+        'dirname'   => dirname(__DIR__)
+    );
 ?>
 
         <form class="form-horizontal" action="setup.php" method="post">
         <div class="row">
             <div class="span6">
-                <fieldset>
-                <legend>Add your database connection setup</legend>
-                    <div class="control-group">
-                        <label class="control-label" for="sql_type">Database server:</label>
-                        <div class="controls">
-                            <select name="sql_type" id="sql_type" size="1" onchange="selectDatabaseSetup(this);">
-                            <?php echo join('', $system->getSupportedSafeDatabases(true)) ?>
-                            </select>
-                            <p class="help-block">Please select your preferred database type.</p>
-                        </div>
-                    </div>
-
-                    <div id="dbdatafull">
-                        <div class="control-group">
-                            <label class="control-label" for="sql_server">Database hostname:</label>
-                            <div class="controls">
-                                <input type="text" name="sql_server" id="sql_server" required />
-                                <p class="help-block">Please enter the host of your database server.</p>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="sql_port">Database port:</label>
-                            <div class="controls">
-                                <input type="number" name="sql_port" id="sql_port" class="input-mini" value="3306" />
-                                <p class="help-block">Please enter your database port.</p>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="sql_user">Database user:</label>
-                            <div class="controls">
-                                <input type="text" name="sql_user" id="sql_user" />
-                                <p class="help-block">Please enter your database user.</p>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="sql_password">Database password:</label>
-                            <div class="controls">
-                                <input name="sql_passwort" type="password" id="sql_password" />
-                                <p class="help-block">Please enter your database password.</p>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="sql_db">Database name:</label>
-                            <div class="controls">
-                                <input type="text" name="sql_db" id="sql_db" required />
-                                <p class="help-block">Please enter your database name.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="dbsqlite" class="hide">
-                        <div class="control-group">
-                            <label class="control-label" for="sql_sqlitefile">SQLite database file:</label>
-                            <div class="controls">
-                                <input type="text" name="sql_sqlitefile" id="sql_sqlitefile"
-                                       value="<?php echo dirname(__DIR__); ?>" />
-                                <p class="help-block">
-                                    Please enter the full path to your SQLite datafile which should be outside your
-                                    docroot.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label" for="sqltblpre">Table prefix:</label>
-                        <div class="controls">
-                            <input type="text" name="sqltblpre" id="sqltblpre" />
-                            <p class="help-block">
-                                Please enter a table prefix here if you want to install more phpMyFAQ installations on
-                                one database.
-                            </p>
-                        </div>
-                    </div>
-                </fieldset>
+                <?php
+                $twig->loadTemplate('database.twig')->display($tplDatabaseVars);
+                ?>
             </div>
 
 <?php if (extension_loaded('ldap')): ?>

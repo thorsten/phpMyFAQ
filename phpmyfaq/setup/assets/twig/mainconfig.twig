@@ -1,0 +1,77 @@
+                <fieldset>
+                    <legend>Your phpMyFAQ setup</legend>
+                    <div class="control-group">
+                        <label class="control-label" for="language">Default language:</label>
+                        <div class="controls">
+                            <select name="language" size="1" id="language">
+                                <?php
+                                                if ($dir = @opendir(PMF_ROOT_DIR . '/lang')) {
+                                                    while ($dat = @readdir($dir)) {
+                                                        if (substr($dat, -4) == '.php') {
+                                                            printf('<option value="%s"', $dat);
+                                                            if ($dat == "language_en.php") {
+                                                                echo ' selected="selected"';
+                                                            }
+                                                            printf(
+                                                                '>%s</option>',
+                                $languageCodes[substr(strtoupper($dat), 9, 2)]
+                                );
+                                }
+                                }
+                                } else {
+                                echo '<option>english</option>';
+                                }
+                                ?>
+                            </select>
+                            <p class="help-block">Please select your default language.</p>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="permLevel">Permission level:</label>
+                        <div class="controls">
+                            <select id="permLevel" name="permLevel" size="1" required="required">
+                                <option value="basic">Basic (no group support)</option>
+                                <option value="medium">Medium (with group support)</option>
+                            </select>
+                            <p class="help-block">
+                                Complexity of rights and permissions.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="realname">Your name:</label>
+                        <div class="controls">
+                            <input type="text" name="realname" id="realname" required="required" />
+                            <p class="help-block">Please enter your real name.</p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="email">Your email address:</label>
+                        <div class="controls">
+                            <input type="email" name="email" id="email" required="required" />
+                            <p class="help-block">Please enter your email adress.</p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="loginname">Your login name:</label>
+                        <div class="controls">
+                            <input type="text" name="loginname" id="loginname" required="required" />
+                            <p class="help-block">Please enter your login name.</p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="password">Your password:</label>
+                        <div class="controls">
+                            <input type="password" name="password" id="password" required="required" />
+                            <p class="help-block">Please enter your password.</p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="password_retype">Retype password:</label>
+                        <div class="controls">
+                            <input type="password" name="password_retyped" id="password_retype" required="required" />
+                            <p class="help-block">Please retype your password.</p>
+                        </div>
+                    </div>
+                </fieldset>
