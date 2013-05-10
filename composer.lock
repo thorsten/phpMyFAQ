@@ -6,6 +6,17 @@
     "hash": "1d2eee2b274e2b92447bc180cff668ee",
     "packages": [
         {
+            "name": "jnaqsh/bootstrap",
+            "version": "master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jnaqsh/bootstrap.git",
+                "reference": "master"
+            },
+            "type": "library",
+            "time": "2013-03-29 11:41:20"
+        },
+        {
             "name": "phpseclib",
             "version": "master",
             "source": {
@@ -14,7 +25,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2013-02-14 18:10:36"
+            "time": "2013-05-01 13:13:41"
         },
         {
             "name": "symfony/class-loader",
@@ -125,7 +136,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2013-02-06 20:04:08"
+            "time": "2013-04-24 16:30:18"
         },
         {
             "name": "twig/twig",
@@ -212,7 +223,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2012-05-18 21:32:30"
+            "time": "2013-04-12 04:00:00"
         }
     ],
     "packages-dev": [
@@ -225,7 +236,8 @@
     "stability-flags": {
         "phpseclib": 20,
         "tcpdf": 20,
-        "twitteroauth": 20
+        "twitteroauth": 20,
+        "jnaqsh/bootstrap": 20
     },
     "platform": {
         "php": ">=5.3.3"

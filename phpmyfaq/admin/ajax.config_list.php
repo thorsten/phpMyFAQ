@@ -199,10 +199,12 @@ function renderInputForm($key, $type)
             break;
             
         case 'print':
-            printf('<input type="hidden" name="edit[%s]" size="80" value="%s" />%s</div>',
-                    $key,
-                    str_replace('"', '&quot;', $faqConfig->get($key)),
-                    $faqConfig->get($key));
+            printf(
+                '<input type="text" readonly name="edit[%s]" class="input-mini uneditable-input" value="%s" /></div>',
+                $key,
+                str_replace('"', '&quot;', $faqConfig->get($key)),
+                $faqConfig->get($key)
+            );
             break;
     }
 }
@@ -211,13 +213,14 @@ header("Content-type: text/html; charset=utf-8");
 
 foreach ($LANG_CONF as $key => $value) {
     if (strpos($key, $configMode) === 0) {
-        
+
         if ('socialnetworks.twitterConsumerKey' == $key) {
-            echo '<p>';
+            echo '<div class="control-group"><label class="control-label admin-config-label"></label>';
+            echo '<div class="controls admin-config-control">';
             if ('' == $faqConfig->get('socialnetworks.twitterConsumerKey') ||
                 '' == $faqConfig->get('socialnetworks.twitterConsumerSecret')) {
 
-                echo '<a target="_blank" href="https://dev.twitter.com/apps/new">Create Twitter APP for your site</a>';
+                echo '<a target="_blank" href="https://dev.twitter.com/apps/new">Create Twitter App for your FAQ</a>';
                 echo "<br />\n";
                 echo "Your Callback URL is: " .$faqConfig->get('main.referenceURL') . "/services/twitter/callback.php";
             }
@@ -225,15 +228,14 @@ foreach ($LANG_CONF as $key => $value) {
             if (!isset($content)) {
                 echo '<a target="_blank" href="../services/twitter/redirect.php">';
                 echo '<img src="../assets/img/twitter.signin.png" alt="Sign in with Twitter"/></a>';
-                echo "<br />\n<br />\n";
             } elseif (isset($content)) {
                 echo $content->screen_name . "<br />\n";
                 echo "<img src='" . $content->profile_image_url_https . "'><br />\n";
                 echo "Follower: " . $content->followers_count . "<br />\n";
                 echo "Status Count: " . $content->statuses_count . "<br />\n";
-                echo "Status: " . $content->status->text . "<br />\n";
-                echo "<br />\n";
+                echo "Status: " . $content->status->text;
             }
+            echo '</div>';
             echo '</div>';
         }
 ?>

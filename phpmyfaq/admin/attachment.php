@@ -153,7 +153,7 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission['adda
 ?>
 <p><strong><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></strong></p>
 <?php
-    if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && !(filesize($_FILES["userfile"]["tmp_name"]) > $faqConfig->get('records.maxAttachmentSize'))) {
+    if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && !(filesize($_FILES["userfile"]["size"]) > $faqConfig->get('records.maxAttachmentSize'))) {
 
         $att = PMF_Attachment_Factory::create();
         $att->setRecordId($recordId);
@@ -177,7 +177,7 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission['adda
         }
 
         printf(
-            '<p align="center"><a href="javascript:;" onclick="addAttachmentLink(%d, \'%s\', %d, \'%s\');">%s</a></p>',
+            '<p class="text-center"><a href="#" onclick="addAttachmentLink(%d, \'%s\', %d, \'%s\');">%s</a></p>',
             $att->getId(),
             $att->getFilename(),
             $recordId,
@@ -195,7 +195,7 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission['adda
         );
 
         printf(
-            '<p align="center"><a href="javascript:;" onclick="closeWindow();">%s</a></p>',
+            '<p class="text-center"><a href="javascript:;" onclick="closeWindow();">%s</a></p>',
             $PMF_LANG['ad_att_close']
         );
 

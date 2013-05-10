@@ -55,7 +55,7 @@ PMF_String::init($languageCode);
 
 // Check captcha
 $captcha = new PMF_Captcha($faqConfig);
-//$captcha->setSessionId($sids);
+$captcha->setSessionId($sids);
 
 // Prepare response
 $response = new JsonResponse;
@@ -83,7 +83,7 @@ if ('savevoting' !== $action && 'saveuserdata' !== $action && 'changepassword' !
     !$captcha->checkCaptchaCode($code) && !$isLoggedIn) {
     $message = array('error' => $PMF_LANG['msgCaptcha']);
 }
-
+    
 if (isset($message['error'])) {
     $response->setData($message)->send();
     exit;
@@ -251,7 +251,7 @@ switch ($action) {
         );
 
         // Check on translation
-        if (is_null($answer) && !is_null($translation)) {
+        if (empty($answer) && !is_null($translation)) {
             $answer = $translation;
         }
 

@@ -12,5 +12,5 @@
                 {writeNews}
             </article>
             <p>{showAllNews}</p>
-            <p align="center">{writeNumberOfArticles}</p>
+            <p class="text-center">{writeNumberOfArticles}</p>
         </section>

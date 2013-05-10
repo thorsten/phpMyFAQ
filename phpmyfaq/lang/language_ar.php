@@ -14,6 +14,7 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  */
+
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'ar';
 $PMF_LANG['language'] = 'Arabic';
@@ -441,7 +442,7 @@ $PMF_LANG['ad_user_realname'] = 'الإسم الحقيقي';
 $PMF_LANG['ad_export_generate_pdf'] = 'صنع ملف PDF ';
 $PMF_LANG['ad_export_full_faq'] = 'PDF أسئلتك على شكل ملف من نوع ';
 $PMF_LANG['err_bannedIP'] = ' الخاص بك تم إيقافه رقم الأى بي';
-$PMF_LANG['err_SaveQuestion'] = 'الحقول المطلوبة هي <font color=\"red\">إسمك</font>, <fo';
+$PMF_LANG['err_SaveQuestion'] = 'الحقول المطلوبة هي <span style=\"color: red\">إسمك</span>';
 $PMF_LANG['ad_entry_fontcolor'] = 'لون الخط : ';
 $PMF_LANG['ad_entry_fontsize'] = 'حجم الخط : ';
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "ملف اللغة");

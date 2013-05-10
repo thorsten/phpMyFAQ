@@ -18,7 +18,7 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -33,7 +33,7 @@ if ($permission['viewlog']) {
     $oldcategory = 0;
 ?>
         <header>
-            <h2><i class="icon-tasks"></i> <?php print $PMF_LANG["ad_rs"] ?></h2>
+            <h2><i class="icon-tasks"></i> <?php echo $PMF_LANG["ad_rs"] ?></h2>
         </header>
 
         <table class="table table-striped">
@@ -44,7 +44,7 @@ if ($permission['viewlog']) {
 ?>
             <tr>
                 <th colspan="6" style="text-align: left;">
-                    <strong><?php print $category->categoryName[$data['category_id']]['name']; ?></strong>
+                    <h4><?php echo $category->categoryName[$data['category_id']]['name']; ?></h4>
                 </th>
             </tr>
 <?php
@@ -59,14 +59,14 @@ if ($permission['viewlog']) {
         );
 ?>
             <tr>
-                <td><?php print $data['id']; ?></td>
-                <td><?php print $data['lang']; ?></td>
+                <td><?php echo $data['id']; ?></td>
+                <td><?php echo $data['lang']; ?></td>
                 <td>
-                    <a href="<?php print $url ?>" title="<?php print $question; ?>">
-                        <?php print PMF_Utils::makeShorterText($question, 14); ?>
+                    <a href="<?php echo $url ?>" title="<?php echo $question; ?>">
+                        <?php echo PMF_Utils::makeShorterText($question, 14); ?>
                     </a>
                 </td>
-                <td style="width: 60px;"><?php print $data['usr']; ?></td>
+                <td style="width: 60px;"><?php echo $data['usr']; ?></td>
                 <td style="width: 60px;">
                     <?php
                     if (round($data['num'] * 20) > 75) {
@@ -77,43 +77,43 @@ if ($permission['viewlog']) {
                         $progressBar = 'info';
                     }
                     ?>
-                    <div class="progress progress-<?php print $progressBar ?>" style="width: 50px;">
-                        <div class="bar" style="width: <?php print round($data['num'] * 20); ?>%;"></div>
+                    <div class="progress progress-<?php echo $progressBar ?>" style="width: 50px;">
+                        <div class="bar" style="width: <?php echo round($data['num'] * 20); ?>%;"></div>
                     </div>
                 </td>
-                <td style="width: 60px;"><?php print round($data['num'] * 20); ?>%</td>
+                <td style="width: 60px;"><?php echo round($data['num'] * 20); ?>%</td>
             </tr>
 <?php
         $oldcategory = $data['category_id'];
     }
 ?>
         </tbody>
-<?php
-    if ($numratings > 0) {
-?>
+<?php if ($numratings > 0) { ?>
+        <tfoot>
             <tr>
                 <td colspan="6">
+                    <small>
                     <span style="color: green; font-weight: bold;">
-                        <?php print $PMF_LANG["ad_rs_green"] ?>
+                        <?php echo $PMF_LANG["ad_rs_green"] ?>
                     </span>
-                    <?php print $PMF_LANG["ad_rs_ahtf"] ?>,
+                    <?php echo $PMF_LANG["ad_rs_ahtf"] ?>,
                     <span style="color: red; font-weight: bold;">
-                        <?php print $PMF_LANG["ad_rs_red"] ?>
+                        <?php echo $PMF_LANG["ad_rs_red"] ?>
                     </span>
-                    <?php print $PMF_LANG["ad_rs_altt"] ?>
+                    <?php echo $PMF_LANG["ad_rs_altt"] ?>
+                    </small>
                 </td>
             </tr>
-<?php
-    } else {
-?>
+        </tfoot>
+<?php } else { ?>
+        <tfoot>
             <tr>
-                <td colspan="5"><?php print $PMF_LANG["ad_rs_no"] ?></td>
+                <td colspan="6"><?php echo $PMF_LANG["ad_rs_no"] ?></td>
             </tr>
-<?php
-    }
-?>
+        </tfoot>
+<?php } ?>
         </table>
 <?php
 } else {
-    print $PMF_LANG["err_NotAuth"];
+    echo $PMF_LANG["err_NotAuth"];
 }

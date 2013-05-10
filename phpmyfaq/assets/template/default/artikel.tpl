@@ -165,6 +165,10 @@
                 });
 
             </script>
+            <style type="text/css" scoped>
+                @import "assets/js/syntaxhighlighter/styles/shCore.css";
+                @import "assets/js/syntaxhighlighter/styles/shThemeDefault.css";
+            </style>
             <script src="assets/js/syntaxhighlighter/scripts/shCore.js"></script>
             <script src="assets/js/syntaxhighlighter/scripts/shAutoloader.js"></script>
             <script>

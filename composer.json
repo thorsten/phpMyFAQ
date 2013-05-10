@@ -42,7 +42,19 @@
                 "name":    "twitteroauth",
                 "version": "master",
                 "source": {
-                    "url":       "https://github.com/abraham/twitteroauth.git",
+                    "url":       "https://github.com/thorsten/twitteroauth.git",
+                    "type":      "git",
+                    "reference": "master"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name":    "jnaqsh/bootstrap",
+                "version": "master",
+                "source": {
+                    "url":       "https://github.com/jnaqsh/bootstrap.git",
                     "type":      "git",
                     "reference": "master"
                 }
@@ -57,7 +69,8 @@
         "phpseclib":               "master@dev",
         "tcpdf":                   "master@dev",
         "twitteroauth":            "master@dev",
-        "twitter/bootstrap":       "2.3.*"
+        "twitter/bootstrap":       "2.3.*",
+        "jnaqsh/bootstrap":        "master@dev"
     },
     "minimum-stability": "stable",
     "scripts": {

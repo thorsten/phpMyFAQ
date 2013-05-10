@@ -114,7 +114,7 @@ $NPluralsErrorReported = false;
             // Report missing plural form support once.
             if (!$NPluralsErrorReported) {
                 print "<tr>\n";
-                print '<td align="center" colspan="3">'.sprintf($PMF_LANG['msgTransToolLanguagePluralNotSet'], $translateLang)."</td>\n";
+                print '<td class="text-center" colspan="3">'.sprintf($PMF_LANG['msgTransToolLanguagePluralNotSet'], $translateLang)."</td>\n";
                 print "</tr>\n";
                 $NPluralsErrorReported = true;
             }

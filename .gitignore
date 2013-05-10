@@ -43,4 +43,5 @@ vendor/symfony*
 vendor/tcpdf*
 vendor/twig*
 vendor/twitter*
+vendor/jnaqsh*
 vendor/autoload.php

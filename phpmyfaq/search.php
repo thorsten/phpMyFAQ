@@ -143,7 +143,7 @@ $options = array(
     'total'           => $faqSearchResult->getNumberOfResults(),
     'perPage'         => $faqConfig->get('records.numberOfRecordsPerPage'),
     'pageParamName'   => 'seite',
-    'layoutTpl'       => '<div align="center" class="pagination"><ul>{LAYOUT_CONTENT}</ul></div>'
+    'layoutTpl'       => '<div class="pagination text-center"><ul>{LAYOUT_CONTENT}</ul></div>'
 );
 
 $faqPagination  = new PMF_Pagination($faqConfig, $options);

@@ -578,7 +578,7 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         'opensearch'          => $systemUri . 'opensearch.php');
 }
 
-$tplNavigation['faqHome']             = $systemUri;
+$tplNavigation['faqHome']             = $faqConfig->get('main.referenceURL');
 $tplNavigation['activeQuickfind']     = ('instantresponse' == $action) ? 'active' : '';
 $tplNavigation['activeAddContent']    = ('add' == $action) ? 'active' : '';
 $tplNavigation['activeAddQuestion']   = ('ask' == $action) ? 'active' : '';
