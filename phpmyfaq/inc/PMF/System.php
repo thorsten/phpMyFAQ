@@ -87,12 +87,12 @@ class PMF_System
      * @var  array
      */
     private $_supportedDatabases = array(
-        'mysqli'  => array(self::VERSION_MINIMUM_PHP, 'MySQL 5.x, MariaDB 5.x (ext/mysqli)'),
-        'pgsql'   => array(self::VERSION_MINIMUM_PHP, 'PostgreSQL 8.x'),
-        'sqlite'  => array(self::VERSION_MINIMUM_PHP, 'SQLite'),
-        'sqlite3' => array(self::VERSION_MINIMUM_PHP, 'SQLite 3 (only PHP 5.3+, experimental)'),
-        'mssql'   => array(self::VERSION_MINIMUM_PHP, 'MS SQL Server (deprecated)'),
-        'sqlsrv'  => array(self::VERSION_MINIMUM_PHP, 'MS SQL Server Driver for PHP')
+        'mysqli'  => 'MySQL 5.x, MariaDB 5.x (ext/mysqli)',
+        'pgsql'   => 'PostgreSQL 8.x',
+        'sqlite'  => 'SQLite',
+        'sqlite3' => 'SQLite 3 (only PHP 5.3+, experimental)',
+        'mssql'   => 'MS SQL Server (deprecated)',
+        'sqlsrv'  => 'MS SQL Server Driver for PHP'
     );
 
     /**
@@ -195,13 +195,13 @@ class PMF_System
     {
         $retVal = array();
         foreach ($this->getSupportedDatabases() as $extension => $database) {
-            if (extension_loaded($extension) && version_compare(PHP_VERSION, $database[0]) >= 0) {
+            if (extension_loaded($extension)) {
                 // prevent MySQLi with zend.ze1_compatibility_mode enabled due to a few cloning isssues
                 if (($extension == 'mysqli') && ini_get('zend.ze1_compatibility_mode')) {
                     continue;
                 }
                 if ($html) {
-                    $retVal[] = sprintf('<option value="%s">%s</option>', $extension, $database[1]);
+                    $retVal[] = sprintf('<option value="%s">%s</option>', $extension, $database);
                 } else {
                     $retVal[$extension] = $database;
                 }
