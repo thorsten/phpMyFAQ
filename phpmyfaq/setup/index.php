@@ -87,7 +87,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     // Check for non critical errors
     $templateVars['nonCriticalErrors'] = $installer->checkNoncriticalSettings();
 
-    $twig->loadTemplate('header.twig')->display($templateVars);
+    $twig->loadTemplate('layout.twig')->display($templateVars);
 ?>
 
         <form class="form-horizontal" action="setup.php" method="post">
