@@ -195,7 +195,7 @@ The database user needs the permissions for CREATE, DROP, ALTER, INDEX, INSERT, 
 
 Open your browser and type in the following URL:
 
-`http://www.example.com/faq/install/setup.php`
+`http://www.example.com/faq/setup/setup.php`
 
 Substitute **www.example.com** with your actual domain name. When the site is loaded enter the address of your database server (e.g. db.provider.com), your database username and password as well as the database name. The database have to be created with UTF-8 chraracter set before running the installation script. You can leave the prefix-field empty. If you are planning on using multiple FAQs in one database you will have to use a table prefix, though (i.e. *sport* for a sports FAQ, *weather* for a weather FAQ, etc.). Please note that only letters and an underline: "_" can be used as the prefix.
 
@@ -437,7 +437,7 @@ Upgrading from 2.5.x is a major upgrade. Please make a full backup before you ru
 
 Open the following URL in your browser:
 
-`http://www.example.com/faq/install/update.php`
+`http://www.example.com/faq/setup/update.php`
 
 Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. You have to update a lot of your template files due to our change using the Bootstrap framework.
 
@@ -462,7 +462,7 @@ Upgrading from 2.6.x is a major upgrade. Please make a full backup before you ru
 
 Open the following URL in your browser:
 
-`http://www.example.com/faq/install/update.php`
+`http://www.example.com/faq/setup/update.php`
 
 Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. You have to update a lot of your template files due to our change using the Bootstrap framework.
 
@@ -485,7 +485,7 @@ Upgrading from 2.7.x is a major upgrade. Please make a full backup before you ru
 
 Open the following URL in your browser:
 
-`http://www.example.com/faq/install/update.php`
+`http://www.example.com/faq/setup/update.php`
 
 Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. You have to update a lot of your template files due to our change using the Bootstrap framework.
 
@@ -506,7 +506,7 @@ Updating an existing phpMyFAQ 2.8.x installation is fairly simple. Via FTP copy 
 
 Open the following URL in your browser:
 
-`http://www.example.com/faq/install/update.php`
+`http://www.example.com/faq/setup/update.php`
 
 Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated.
 

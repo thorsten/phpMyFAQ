@@ -573,7 +573,7 @@ if ($step == 3) {
 
         $instanceData = array(
             'url'      => $link->getSystemUri($_SERVER['SCRIPT_NAME']),
-            'instance' => $link->getSystemRelativeUri('install/update.php'),
+            'instance' => $link->getSystemRelativeUri('setup/update.php'),
             'comment'  => $faqConfig->get('main.titleFAQ')
         );
         $faqInstance = new PMF_Instance($faqConfig);
@@ -680,15 +680,15 @@ if ($step == 3) {
     }
     // Remove 'setup.php' file
     if (is_writeable(__DIR__ . '/setup.php') && @unlink(__DIR__ . '/setup.php')) {
-        echo "<p class=\"alert alert-success\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";
+        echo "<p class=\"alert alert-success\">The file <em>./setup/index.php</em> was deleted automatically.</p>\n";
     } else {
-        echo "<p class=\"alert alert-error\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
+        echo "<p class=\"alert alert-error\">Please delete the file <em>./setup/index.php</em> manually.</p>\n";
     }
     // Remove 'update.php' file
     if (is_writeable(__DIR__ . '/update.php') && @unlink(__DIR__ . '/update.php')) {
-        echo "<p class=\"alert alert-success\">The file <em>./install/update.php</em> was deleted automatically.</p>\n";
+        echo "<p class=\"alert alert-success\">The file <em>./setup/update.php</em> was deleted automatically.</p>\n";
     } else {
-        echo "<p class=\"alert alert-error\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
+        echo "<p class=\"alert alert-error\">Please delete the file <em>./setup/update.php</em> manually.</p>\n";
     }
 
     PMF_System::renderFooter();

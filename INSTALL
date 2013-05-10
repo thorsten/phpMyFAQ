@@ -2,7 +2,7 @@ phpMyFAQ Installation
 
 Open your browser and type in the following URL:
 
-http://www.example.com/path/to/your/faq/install/setup.php
+http://www.example.com/path/to/your/faq/setup/index.php
 
 Substitute www.example.com with your actual domain name. When the
 site is loaded enter the address of your database server
