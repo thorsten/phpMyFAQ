@@ -42,7 +42,7 @@
                 "name":    "twitteroauth",
                 "version": "master",
                 "source": {
-                    "url":       "https://github.com/abraham/twitteroauth.git",
+                    "url":       "https://github.com/thorsten/twitteroauth.git",
                     "type":      "git",
                     "reference": "master"
                 }
