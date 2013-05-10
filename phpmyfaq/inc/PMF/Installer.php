@@ -536,7 +536,7 @@ class PMF_Installer
                 'Please enable cURL and/or OpenSSL support in your php.ini file otherwise you can\'t use the Twitter ' .
                 ' support.</p>';
         }
-        if (! extension_loaded('finfo')) {
+        if (! extension_loaded('fileinfo')) {
             echo '<p class="alert alert-error">You don\'t have Fileinfo support enabled in your PHP installation. ' .
                 'Please enable Fileinfo support in your php.ini file otherwise you can\'t use our backup/restore ' .
                 'functionality.</p>';
