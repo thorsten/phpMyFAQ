@@ -58,6 +58,14 @@ $loader->registerPrefix('Twig_', PMF_INCLUDE_DIR . '/libs');
 $loader->register();
 
 //
+// Initialize static string wrapper
+//
+PMF_String::init('en');
+
+$installer = new PMF_Installer();
+$system    = new PMF_System();
+
+//
 // Initializing Twig
 //
 $twig = new Twig_Environment(
@@ -68,14 +76,6 @@ $templateVars = array(
     'version'     => PMF_System::getVersion(),
     'currentYear' => date('Y')
 );
-
-//
-// Initialize static string wrapper
-//
-PMF_String::init('en');
-
-$installer = new PMF_Installer();
-$system    = new PMF_System();
 
 // Check for really basic stuff
 $templateVars['criticalErrors'] = $installer->checkBasicStuff();
