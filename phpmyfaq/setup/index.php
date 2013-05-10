@@ -183,7 +183,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                                         }
                                     }
                                 } else {
-                                    echo '<option>english</option>';
+                                    echo '<option>English</option>';
                                 }
                             ?>
                             </select>
