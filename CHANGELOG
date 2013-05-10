@@ -40,7 +40,7 @@ Version 2.8.0 - 2013-04-
 - updated bundled Bootstrap to version 2.3.1 (Thorsten)
 - updated bundled TinyMCE to version 3.5.7 (Thorsten)
 - updated bundled Symfony ClassLoader to version 2.2.1 (Alexander M. Turek)
-- updated bundled Font Awesome to version 3.0 (Thorsten)
+- updated bundled Font Awesome to version 3.1 (Thorsten)
 - updated bundled jQuery Sparklines to version 2.1.1 (Thorsten)
 - updated PHP dependency management using Composer (Thorsten)
 - updated Czech translation (Jaroslav Síka)
