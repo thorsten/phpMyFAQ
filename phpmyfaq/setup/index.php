@@ -54,104 +54,21 @@ require PMF_INCLUDE_DIR . '/libs/Symfony/Component/ClassLoader/UniversalClassLoa
 $loader = new UniversalClassLoader();
 $loader->registerNamespace('Symfony', PMF_INCLUDE_DIR . '/libs');
 $loader->registerPrefix('PMF_', PMF_INCLUDE_DIR);
+$loader->registerPrefix('Twig_', PMF_INCLUDE_DIR . '/libs');
 $loader->register();
 
-?>
-<!doctype html>
-<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
-<!--[if IE 7 ]> <html lang="en" class="no-js ie7"> <![endif]-->
-<!--[if IE 8 ]> <html lang="en" class="no-js ie8"> <![endif]-->
-<!--[if IE 9 ]> <html lang="en" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+//
+// Initializing Twig
+//
+$twig = new Twig_Environment(
+    new Twig_Loader_Filesystem(PMF_ROOT_DIR . '/setup/assets/twig')
+);
 
-    <title>phpMyFAQ <?php echo PMF_System::getVersion(); ?> Setup</title>
+$templateVars = array(
+    'version'     => PMF_System::getVersion(),
+    'currentYear' => date('Y')
+);
 
-    <meta name="viewport" content="width=device-width;">
-    <meta name="application-name" content="phpMyFAQ <?php echo PMF_System::getVersion(); ?>">
-    <meta name="copyright" content="(c) 2001-<?php echo date('Y'); ?> phpMyFAQ Team">
-
-    <link rel="stylesheet" href="../assets/template/default/css/style.css?v=1">
-
-    <script src="../assets/js/libs/modernizr.min.js"></script>
-    <script src="../assets/js/libs/jquery.min.js"></script>
-
-    <link rel="shortcut icon" href="../assets/template/default/favicon.ico">
-    <link rel="apple-touch-icon" href="../assets/template/default/apple-touch-icon.png">
-
-    <script type="text/javascript">
-        function selectDatabaseSetup(field) {
-            switch (field.value) {
-            case 'sqlite':
-            case 'sqlite3':
-                $('#dbsqlite').show();
-                $('#dbdatafull').hide();
-                break;
-            case 'mysqli':
-                $('#sql_port').val(3306);
-                $('#dbsqlite').hide();
-                $('#dbdatafull').show();
-                break;
-            case 'pgsql':
-                $('#sql_port').val(5432);
-                $('#dbsqlite').hide();
-                $('#dbdatafull').show();
-                break;
-            case 'mssql':
-            case 'sqlsrv':
-                $('#sql_port').val(1433);
-                $('#dbsqlite').hide();
-                $('#dbdatafull').show();
-                break;
-            default:
-                $('#sql_port').val('');
-                $('#dbsqlite').hide();
-                $('#dbdatafull').show();
-                break;
-            }
-        }
-    </script>
-</head>
-<body>
-
-<!--[if lt IE 8 ]>
-<div class="internet-explorer-error">
-    Do you know that your Internet Explorer is out of date?<br/>
-    Please use Internet Explorer 8+, Mozilla Firefox 4+, Google Chrome, Apple Safari 5+ or Opera 11+
-</div>
-<![endif]-->
-
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <nav class="nav-collapse">
-                <ul class="nav">
-                    <li><a target="_blank" href="http://www.phpmyfaq.de/documentation.php">Documentation</a></li>
-                    <li><a target="_blank" href="http://www.phpmyfaq.de/support.php">Support</a></li>
-                    <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
-                    <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
-                </ul>
-            </nav>
-        </div>
-    </div>
-</div>
-
-<section id="content" class="phpmyfaq-setup">
-    <div class="container">
-        <div class="row" style="padding-left: 20px;">
-            <div class="hero-unit hello-phpmyfaq" style="text-align: center; height: 60px;">
-                <h1>phpMyFAQ <?php echo PMF_System::getVersion(); ?> Setup</h1>
-                <p>
-                    Did you already read the <a style="color: #ffffff; text-decoration: underline;"
-                    href="http://www.phpmyfaq.de/documentation.php">documentation</a> carefully before starting the
-                    phpMyFAQ setup? :-)
-                </p>
-            </div>
-        </div>
-        <div class="row" style="padding-left: 20px;">
-<?php
 //
 // Initialize static string wrapper
 //
@@ -160,14 +77,18 @@ PMF_String::init('en');
 $installer = new PMF_Installer();
 $system    = new PMF_System();
 
-$installer->checkBasicStuff();
-$installer->checkFilesystemPermissions();
+// Check for really basic stuff
+$templateVars['criticalErrors'] = $installer->checkBasicStuff();
+$templateVars['filePermErrors'] = $installer->checkFilesystemPermissions();
 
 // not yet POSTed
 if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST["sql_db"])) {
-    $installer->checkNoncriticalSettings()
+
+    // Check for non critical errors
+    $templateVars['nonCriticalErrors'] = $installer->checkNoncriticalSettings();
+
+    $twig->loadTemplate('header.twig')->display($templateVars);
 ?>
-        </div>
 
         <form class="form-horizontal" action="setup.php" method="post">
         <div class="row">

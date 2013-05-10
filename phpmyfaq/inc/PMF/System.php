@@ -397,6 +397,8 @@ class PMF_System
     /**
      * Print out the HTML5 Footer
      *
+     * @deprecated
+     *
      * @param bool $onePageBack
      *
      * @return void

@@ -380,57 +380,58 @@ class PMF_Installer
     /**
      * Check absolutely necessary stuff and die
      *
-     * @return void
+     * @return array
      */
     public function checkBasicStuff()
     {
+        $errors = array();
+
         if (!$this->checkMinimumPhpVersion()) {
-            printf('<p class="alert alert-error">Sorry, but you need PHP %s or later!</p>', PMF_System::VERSION_MINIMUM_PHP);
-            PMF_System::renderFooter();
+            $errors[] = sprintf(
+                'Sorry, but you need PHP %s or later!',
+                PMF_System::VERSION_MINIMUM_PHP
+            );
         }
 
         if (! function_exists('date_default_timezone_set')) {
-            echo '<p class="alert alert-error">Sorry, but setting a default timezone doesn\'t work in your environment!</p>';
-            PMF_System::renderFooter();
+            $errors[] = 'Sorry, but setting a default timezone doesn\'t work in your environment!';
         }
 
         if (! $this->_system->checkDatabase()) {
-            echo '<p class="alert alert-error">No supported database detected! Please install one of the following' .
-                ' database systems and enable the corresponding PHP extension in php.ini:</p>';
-            echo '<ul>';
+            $dbError = "No supported database detected! Please install one of the following database systems and " .
+                        "enable the corresponding PHP extension in php.ini:";
+            $dbError .= "<ul>";
             foreach ($this->_system->getSupportedDatabases() as $database) {
-                printf('    <li>%s</li>', $database[1]);
+                $dbError .= sprintf("    <li>%s</li>\n", $database[1]);
             }
-            echo '</ul>';
-            PMF_System::renderFooter();
+            $dbError .= "</ul>";
+            $errors[] = $dbError;
         }
 
         if (! $this->_system->checkRequiredExtensions()) {
-            echo '<p class="alert alert-error">The following extensions are missing! Please enable the PHP extension(s) in ' .
-                'php.ini.</p>';
-            echo '<ul>';
+            $extError  = "The following extensions are missing! Please enable the PHP extension(s) in php.ini.";
+            $extError .= "<ul>";
             foreach ($this->_system->getMissingExtensions() as $extension) {
-                printf('    <li>ext/%s</li>', $extension);
+                $extError .= sprintf("    <li>ext/%s</li>\n", $extension);
             }
-            echo '</ul>';
-            PMF_System::renderFooter();
+            $extError .= "</ul>";
+            $errors[] = $extError;
         }
 
         if (! $this->_system->checkRegisterGlobals()) {
-            echo '<p class="alert alert-error">Please disable register_globals!</p>';
-            PMF_System::renderFooter();
+            $errors[] = "Please disable register_globals!";
         }
 
         if (! $this->_system->checkMagicQuotesGpc()) {
-            echo '<p class="alert alert-error">Please disable magic_quotes_gpc!</p>';
-            PMF_System::renderFooter();
+            $errors[] = "Please disable magic_quotes_gpc!";
         }
 
         if (! $this->_system->checkphpMyFAQInstallation()) {
-            echo '<p class="alert alert-error">It seems you\'re already running a version of phpMyFAQ. Please use the ' .
-                '<a href="update.php">update script</a>.</p>';
-            PMF_System::renderFooter();
+            $errors[] = "It seems you're already running a version of phpMyFAQ. Please use the " .
+                        "<a href=\"update.php\">update script</a>.";
         }
+
+        return $errors;
     }
 
     /**
@@ -481,66 +482,67 @@ class PMF_Installer
     /**
      * Checks if the file permissions are okay
      *
-     * @return void
+     * @return string
      */
     public function checkFilesystemPermissions()
     {
         $instanceSetup = new PMF_Instance_Setup();
         $instanceSetup->setRootDir(PMF_ROOT_DIR);
 
+        $permError  = '';
         $dirs       = array('/attachments', '/config', '/data', '/images');
         $failedDirs = $instanceSetup->checkDirs($dirs);
         $numDirs    = sizeof($failedDirs);
 
         if (1 <= $numDirs) {
-            printf(
-                '<p class="alert alert-error">The following %s could not be created or %s not writable:</p><ul>',
+            $permError = sprintf(
+                'The following %s could not be created or %s not writable:<ul>',
                 (1 < $numDirs) ? 'directories' : 'directory',
                 (1 < $numDirs) ? 'are' : 'is'
             );
             foreach ($failedDirs as $dir) {
-                echo "<li>$dir</li>\n";
+                $permError .= sprintf("<li>%s</li>\n", $dir);
             }
-            printf(
-                '</ul><p class="alert alert-error">Please create %s manually and/or change access to chmod 755 (or ' .
-                    'greater if necessary).</p>',
+            $permError .= sprintf(
+                "</ul>Please create %s manually and/or change access to chmod 755 (or greater if necessary).",
                 (1 < $numDirs) ? 'them' : 'it'
             );
-            PMF_System::renderFooter();
         }
+
+        return $permError;
     }
 
     /**
      * Checks some non critical settings and print some hints
      *
-     * @todo We should return an array of messages
-     * @return void
+     * @return array
      */
     public function checkNoncriticalSettings()
     {
+        $errors = array();
+
         if ((@ini_get('safe_mode') == 'On' || @ini_get('safe_mode') === 1)) {
-            echo '<p class="alert alert-error">The PHP safe mode is enabled. You may have problems when phpMyFAQ tries to write ' .
-                ' in some directories.</p>';
+            $errors[] = "The PHP safe mode is enabled. You may have problems when phpMyFAQ tries to write in some " .
+                        "directories.";
         }
         if (! extension_loaded('gd')) {
-            echo '<p class="alert alert-error">You don\'t have GD support enabled in your PHP installation. Please enable GD ' .
-                'support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
+            $errors[] = "You don't have GD support enabled in your PHP installation. Please enable GD support in " .
+                        "your php.ini file otherwise you can't use Captchas for spam protection.";
         }
         if (! function_exists('imagettftext')) {
-            echo '<p class="alert alert-error">You don\'t have Freetype support enabled in the GD extension of your PHP ' .
-                'installation. Please enable Freetype support in GD extension otherwise the Captchas for spam ' .
-                'protection will be quite easy to break.</p>';
+            $errors[] = "You don't have Freetype support enabled in the GD extension of your PHP installation. " .
+                        "Please enable Freetype support in GD extension otherwise the Captchas for spam protection " .
+                        "will be quite easy to break.";
         }
         if (! extension_loaded('curl') || ! extension_loaded('openssl')) {
-            echo '<p class="alert alert-error">You don\'t have cURL and/or OpenSSL support enabled in your PHP installation. ' .
-                'Please enable cURL and/or OpenSSL support in your php.ini file otherwise you can\'t use the Twitter ' .
-                ' support.</p>';
+            $errors[] = "You don't have cURL and/or OpenSSL support enabled in your PHP installation. Please enable " .
+                        "cURL and/or OpenSSL support in your php.ini file otherwise you can't use the Twitter support.";
         }
         if (! extension_loaded('fileinfo')) {
-            echo '<p class="alert alert-error">You don\'t have Fileinfo support enabled in your PHP installation. ' .
-                'Please enable Fileinfo support in your php.ini file otherwise you can\'t use our backup/restore ' .
-                'functionality.</p>';
+            $errors[] = "You don't have Fileinfo support enabled in your PHP installation. Please enable Fileinfo " .
+                        "support in your php.ini file otherwise you can't use our backup/restore functionality.";
         }
+        return $errors;
     }
 
     /**
