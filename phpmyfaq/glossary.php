@@ -26,6 +26,8 @@ $page = PMF_Filter::filterInput(INPUT_GET, 'page' , FILTER_VALIDATE_INT, 1);
 
 $glossary      = new PMF_Glossary($faqConfig);
 $glossaryItems = $glossary->getAllGlossaryItems();
+$numItems      = count($glossaryItems);
+$itemsPerPage  = 10;
 
 $baseUrl = sprintf(
     '%s?action=glossary&amp;page=%d',
@@ -37,17 +39,20 @@ $baseUrl = sprintf(
 $options = array(
     'baseUrl'         => $baseUrl,
     'total'           => count($glossaryItems),
-    'perPage'         => 15,
+    'perPage'         => $itemsPerPage,
     'pageParamName'   => 'page'
 );
 $pagination = new PMF_Pagination($faqConfig, $options);
 
-if (0 < count($glossaryItems)) {
+if (0 < $numItems) {
         
-    $output = array();
-    foreach ($glossaryItems as $item) {
+    $output       = array();
+    $visibleItems = array_slice($glossaryItems, ($page - 1) * $itemsPerPage, $itemsPerPage);
+
+    foreach ($visibleItems as $item) {
         $output['item'][]       = $item['item'];
         $output['definition'][] = $item['definition'];
+        $i++;
     }
     
     $tpl->parseBlock(

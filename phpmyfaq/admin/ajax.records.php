@@ -63,13 +63,14 @@ switch($ajax_action) {
     // save sticky FAQs
     case 'save_sticky_records':
         if ($permission['editbt']) {
+
             if (!empty($items)) {
                 $faq = new PMF_Faq($faqConfig);
 
                 $output = '';
                 foreach ($items as $item) {
                     if (is_array($item) && count($item) == 3 && PMF_Language::isASupportedLanguage($item[1])) {
-                        $output .= $faq->updateRecordFlag((int)$item[0], addslashes($item[1]), (int)$item[2], 'sticky');
+                        $output .= $faq->updateRecordFlag((int)$item[0], addslashes($item[1]), $item[2], 'sticky');
                     }
                 }
                 $response->setContent($output);

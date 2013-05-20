@@ -59,7 +59,7 @@ cp -r $cwd/vendor/phpseclib/phpseclib/Crypt $cwd/build/${PMF_PACKAGE_FOLDER}/php
 cp -r $cwd/vendor/twitteroauth/twitteroauth $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/inc/libs/twitteroauth
 cp -r $cwd/vendor/symfony/*/* $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/inc/libs/
 cp -r $cwd/vendor/twig/twig/lib/Twig $cwd/phpmyfaq/inc/libs/
-cp -r $cwd/vendor/fontawesome/font $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/admin/assets
+cp -r $cwd/vendor/fontawesome/build/assets/font-awesome/font $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/admin/assets
 
 # prepare packaging
 mkdir $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/phpmyfaq
