@@ -31,17 +31,10 @@ phpmyfaq/inc/index.html
 phpmyfaq/.htaccess
 
 # Third party libraries
-phpmyfaq/inc/libs/phpseclib
-phpmyfaq/inc/libs/twitteroauth
-phpmyfaq/inc/libs/Symfony
-phpmyfaq/inc/libs/Twig
+phpmyfaq/inc/libs/*
+
+# Bower related stuff
+component/*
 
 # Composer related stuff
-vendor/composer*
-vendor/phpseclib*
-vendor/symfony*
-vendor/tcpdf*
-vendor/twig*
-vendor/twitter*
-vendor/jnaqsh*
-vendor/autoload.php
+vendor/*
