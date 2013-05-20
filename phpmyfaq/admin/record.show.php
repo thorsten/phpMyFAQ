@@ -247,13 +247,14 @@ if ($permission['editbt'] || $permission['delbt']) {
             <th style="width: 72px;">
                 <input type="checkbox" id="sticky_category_block_<?php print $cid; ?>"
                        onclick="saveStatusForCategory(<?php print $cid; ?>, 'sticky')" />
-                &nbsp;<?php print $PMF_LANG['ad_record_sticky'] ?>
+                &nbsp;<?php echo $PMF_LANG['ad_record_sticky'] ?>
             </th>
             <th style="width: 84px;">
                 <?php if ($permission['approverec']) { ?>
                 <input type="checkbox" id="active_category_block_<?php print $cid; ?>"
-                       onclick="saveStatusForCategory(<?php print $cid; ?>, 'active')" />
-                &nbsp;<?php print $PMF_LANG['ad_record_active'] ?>
+                       onclick="saveStatusForCategory(<?php print $cid; ?>, 'active')"
+                       <?php echo ($numRecordsByCat[$cid] == $numActiveByCat[$cid] ? 'checked="checked"' : '') ?>>
+                &nbsp;<?php echo $PMF_LANG['ad_record_active'] ?>
                 <?php } ?>
             </th>
             <th>
@@ -373,14 +374,13 @@ if ($permission['editbt'] || $permission['delbt']) {
         {
             var id_map = [];
 <?php 
-foreach ($all_ids as $cat_id => $record_ids) {
-    echo "        id_map[" . $cat_id . "] = [" . implode(',', $record_ids) . "];\n";
+foreach ($all_ids as $categoryId => $recordIds) {
+    echo "                id_map[" . $categoryId . "] = [" . implode(',', $recordIds) . "];\n";
 }
 ?>
-        for (var i = 0; i < id_map[id].length; i++) {
-                var status = $('#' + type + '_category_block_' + id).attr('checked');
-
-                $('#' + type + '_record_' + id + '_' + id_map[id][i]).attr('checked', status);
+            for (var i = 0; i < id_map[id].length; i++) {
+                var status = $('#' + type + '_category_block_' + id).prop('checked');
+                $('#' + type + '_record_' + id + '_' + id_map[id][i]).prop('checked', status);
             }
 
             saveStatus(id, id_map[id], type);
@@ -419,13 +419,19 @@ foreach ($all_ids as $cat_id => $record_ids) {
 
                         var catid              = same_records[j].id.match(/active_record_(\d+)_\d+/)[1];
                         var current_item_count = $('#js-active-records-' + catid).html();
-                        var delta              = status ? 1 : -1;
+                        var delta              = 'checked' === status ? -1 : 1;
 
                         $('#js-active-records-' + catid).html(current_item_count * 1 + delta);
                     }
                 } else {
                     for (var j = 0; j < same_records.length; j++) {
                         $('#' + same_records[j].id).attr('checked', status);
+
+                        var catid              = same_records[j].id.match(/active_record_(\d+)_\d+/)[1];
+                        var current_item_count = $('#js-active-records-' + catid).html();
+                        var delta              = 'checked' === status ? -1 : 1;
+
+                        $('#js-active-records-' + catid).html(current_item_count * 1 + delta);
                     }
                 }
             }
