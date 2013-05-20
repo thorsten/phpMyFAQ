@@ -45,29 +45,30 @@ switch($ajax_action) {
                 
                 foreach ($items as $item) {
                     if (is_array($item) && count($item) == 3 && PMF_Language::isASupportedLanguage($item[1])) {
-                        print $faq->updateRecordFlag((int)$item[0], addslashes($item[1]), $item[2], 'active');
+                        echo $faq->updateRecordFlag((int)$item[0], addslashes($item[1]), $item[2], 'active');
                     }
                 }
             }
         } else {
-            print $PMF_LANG['err_NotAuth'];
+            echo $PMF_LANG['err_NotAuth'];
         }
         break;
 
     // save sticky FAQs
     case 'save_sticky_records':
         if ($permission['editbt']) {
+
             if (!empty($items)) {
                 $faq = new PMF_Faq($faqConfig);
 
                 foreach ($items as $item) {
                     if (is_array($item) && count($item) == 3 && PMF_Language::isASupportedLanguage($item[1])) {
-                        print $faq->updateRecordFlag((int)$item[0], addslashes($item[1]), (int)$item[2], 'sticky');
+                        echo $faq->updateRecordFlag((int)$item[0], addslashes($item[1]), $item[2], 'sticky');
                     }
                 }
             }
         } else {
-            print $PMF_LANG['err_NotAuth'];
+            echo $PMF_LANG['err_NotAuth'];
         }
         break;
 
@@ -89,11 +90,11 @@ switch($ajax_action) {
                 $searchHelper = new PMF_Helper_Search($faqConfig);
                 $searchHelper->setSearchterm($searchString);
 
-                print $searchHelper->renderAdminSuggestionResult($faqSearchResult);
+                echo $searchHelper->renderAdminSuggestionResult($faqSearchResult);
             }
             
         } else {
-            print $PMF_LANG['err_NotAuth'];
+            echo $PMF_LANG['err_NotAuth'];
         }
         break;
 
@@ -108,10 +109,10 @@ switch($ajax_action) {
             $logging->logAdmin($user, 'Deleted FAQ ID ' . $recordId);
 
             $faq->deleteRecord($recordId, $recordLang);
-            print $PMF_LANG['ad_entry_delsuc'];
+            echo $PMF_LANG['ad_entry_delsuc'];
             
         } else {
-            print $PMF_LANG['err_NotAuth'];
+            echo $PMF_LANG['err_NotAuth'];
         }
         break;
 
@@ -130,9 +131,9 @@ switch($ajax_action) {
                     $faq->deleteQuestion((int)$questionId);
                 }
             }
-            print $PMF_LANG['ad_entry_delsuc'];
+            echo $PMF_LANG['ad_entry_delsuc'];
         } else {
-            print $PMF_LANG['err_NotAuth'];
+            echo $PMF_LANG['err_NotAuth'];
         }
         break;
 }
