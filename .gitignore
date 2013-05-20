@@ -34,7 +34,7 @@ phpmyfaq/.htaccess
 phpmyfaq/inc/libs/*
 
 # Bower related stuff
-component/*
+components/*
 
 # Composer related stuff
 vendor/*
