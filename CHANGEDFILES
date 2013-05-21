@@ -1,3 +1,41 @@
+CHANGED FILES FROM 2.8.0-RC4 -> 2.8.0
+
+./admin/ajax.config_list.php
+./admin/ajax.records.php
+./admin/assets/css/style.css
+./admin/assets/css/style.rtl.css
+./admin/attachment.php
+./admin/index.php
+./admin/instances.php
+./admin/news.php
+./admin/record.add.php
+./admin/record.show.php
+./admin/stat.ratings.php
+./admin/trans.edit.php
+./admin/user.php
+./assets/js/phpmyfaq.js
+./assets/template/default/artikel.tpl
+./assets/template/default/css/style.css
+./assets/template/default/css/style.rtl.css
+./assets/template/default/main.tpl
+./assets/template/default/show.tpl
+./inc/PMF/Category.php
+./inc/PMF/Installer.php
+./inc/PMF/Instance/Setup.php
+./inc/PMF/Session.php
+./inc/PMF/System.php
+./inc/PMF/User/CurrentUser.php
+./install/setup.php
+./install/update.php
+./lang/language_ar.php
+./ajaxservice.php
+./glossary.php
+./index.php
+./search.php
+./show.php
+
+
+
 CHANGED FILES FROM 2.8.0-RC3 -> 2.8.0-RC4
 
 ./admin/ajax.config_list.php
