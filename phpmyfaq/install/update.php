@@ -628,7 +628,7 @@ if ($step == 3) {
                     modified DATETIME NOT NULL,
                     PRIMARY KEY (id))";
                 $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqinstances_config (
-                    instance_id INT(11) NOT NULL,
+                    instance_id INT NOT NULL,
                     config_name VARCHAR(255) NOT NULL default '',
                     config_value VARCHAR(255) DEFAULT NULL,
                     PRIMARY KEY (instance_id, config_name))";
