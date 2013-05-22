@@ -1,9 +1,12 @@
-phpMyFAQ 2.8.0
+phpMyFAQ 2.8.1
 Codename "Perdita"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.8.1 - 2013-06-
+- fixed some bugs (Thorsten)
 
 Version 2.8.0 - 2013-05-21
 - changed PHP requirement to PHP 5.3.3 and later (Thorsten)
