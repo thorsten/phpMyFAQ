@@ -1638,8 +1638,9 @@ class PMF_Faq
     /**
      * Deletes a question for the table faquestion
      *
-     * @param   integer $question_id
-     * @return  boolean
+     * @param integer $questionId
+     *
+     * @return boolean
      */
     function deleteQuestion($questionId)
     {
@@ -1829,7 +1830,9 @@ class PMF_Faq
                 fd.datum AS datum,
                 fcr.category_id AS category_id,
                 fv.visits AS visits,
-                fv.last_visit AS last_visit
+                fv.last_visit AS last_visit,
+                fdg.group_id AS group_id,
+                fdu.user_id AS user_id
             FROM
                 '.PMF_Db::getTablePrefix().'faqvisits fv,
                 '.PMF_Db::getTablePrefix().'faqdata fd
@@ -1871,15 +1874,18 @@ class PMF_Faq
 
         $result = $this->_config->getDb()->query($query);
         $topten = array();
-        $data = array();
+        $data   = array();
 
         $i = 1;
         $oldId = 0;
         while (($row = $this->_config->getDb()->fetchObject($result)) && $i <= $count) {
             if ($oldId != $row->id) {
-                $data['visits'] = $row->visits;
-                $data['thema'] = $row->thema;
-                $data['date'] = $row->datum;
+                if ($this->user != $this->user || !in_array($row->group_id, $this->groups)) {
+                    continue;
+                }
+                $data['visits']     = $row->visits;
+                $data['thema']      = $row->thema;
+                $data['date']       = $row->datum;
                 $data['last_visit'] = $row->last_visit;
 
                 $title = $row->thema;
@@ -1909,8 +1915,9 @@ class PMF_Faq
      * This function generates an array with a specified number of most recent
      * published records
      *
-     * @param  integer $count    Number of recorsd
-     * @param  string  $language Language
+     * @param integer $count    Number of records
+     * @param string  $language Language
+     *
      * @return array
      */
     public function getLatestData($count = PMF_NUMBER_RECORDS_LATEST, $language = null)
@@ -1926,7 +1933,9 @@ class PMF_Faq
                 fd.thema AS thema,
                 fd.content AS content,
                 fd.datum AS datum,
-                fv.visits AS visits
+                fv.visits AS visits,
+                fdg.group_id AS group_id,
+                fdu.user_id AS user_id
             FROM
                 '.PMF_Db::getTablePrefix().'faqvisits fv,
                 '.PMF_Db::getTablePrefix().'faqdata fd
@@ -1969,6 +1978,9 @@ class PMF_Faq
         $oldId = 0;
         while (($row = $this->_config->getDb()->fetchObject($result)) && $i < $count ) {
             if ($oldId != $row->id) {
+                if ($this->user != $row->user_id || !in_array($row->group_id, $this->groups)) {
+                    continue;
+                }
                 $data['datum']   = $row->datum;
                 $data['thema']   = $row->thema;
                 $data['content'] = $row->content;
