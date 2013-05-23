@@ -28,6 +28,10 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     set_time_limit(0);
 }
 
+if (version_compare(PHP_VERSION, '5.3.3') < 0) {
+    die("Sorry, but you need PHP 5.3.3 or later!"); // Die hard because of "use"
+}
+
 require PMF_ROOT_DIR . '/inc/Bootstrap.php';
 
 $step    = PMF_Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
