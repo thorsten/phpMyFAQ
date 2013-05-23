@@ -30,6 +30,10 @@ define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('PMF_INCLUDE_DIR', PMF_ROOT_DIR . '/inc');
 define('IS_VALID_PHPMYFAQ', null);
 
+if (version_compare(PHP_VERSION, '5.3.3') < 0) {
+    die("Sorry, but you need PHP 5.3.3 or later!"); // Die hard because of "use"
+}
+
 use Symfony\Component\ClassLoader\UniversalClassLoader;
 
 if (! defined('DEBUG')) {
