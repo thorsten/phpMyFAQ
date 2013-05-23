@@ -809,6 +809,7 @@ $PMF_LANG["ad_menu_comments"] = "Kommentare";
 $PMF_LANG["ad_comment_administration"] = "Kommentarverwaltung";
 $PMF_LANG["ad_comment_faqs"] = "Kommentare in FAQs:";
 $PMF_LANG["ad_comment_news"] = "Kommentare in News:";
+$PMF_LANG['msgPDF'] = 'PDF-Version';
 $PMF_LANG["ad_groups"] = "Gruppen";
 
 // added v2.0.0 - 2007-03-10 by Thorsten

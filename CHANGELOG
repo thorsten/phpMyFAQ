@@ -10,7 +10,10 @@ Version 2.9.0-dev - 2013-
 - added Twig 1.12.3 as new template engine (Alexander M. Turek)
 - dropped support for ext/mysql (Thorsten)
 
-Version 2.8.0 - 2013-04-
+Version 2.8.1 - 2013-06-
+- fixed some bugs (Thorsten)
+
+Version 2.8.0 - 2013-05-21
 - changed PHP requirement to PHP 5.3.3 and later (Thorsten)
 - phpMyFAQ is now licensed under the terms of Mozilla Public License 2.0 (Thorsten, Florian)
 - added new and improved frontend and backend user interface based on Twitter Bootstrap (Thorsten)

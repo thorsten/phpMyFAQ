@@ -842,6 +842,7 @@ $PMF_LANG['ad_menu_comments'] = 'Comments';
 $PMF_LANG['ad_comment_administration'] = 'Comments administration';
 $PMF_LANG['ad_comment_faqs'] = 'Comments in FAQ records:';
 $PMF_LANG['ad_comment_news'] = 'Comments in News records:';
+$PMF_LANG['msgPDF'] = 'PDF version';
 $PMF_LANG['ad_groups'] = 'Groups';
 
 // added v2.0.0 - 2007-03-10 by Thorsten

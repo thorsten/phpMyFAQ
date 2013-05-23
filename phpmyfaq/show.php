@@ -22,13 +22,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$currentCategory = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+$currentCategory     = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+$subCategoryContent  = '';
 
 if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory])) {
 
     $faqsession->userTracking('show_category', $currentCategory);
-
-    $subCategoryContent  = '';
 
     $catParent      = $category->categoryName[$currentCategory]['parent_id'];
     $catName        = $category->categoryName[$currentCategory]['name'];

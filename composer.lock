@@ -219,11 +219,11 @@
             "version": "master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/abraham/twitteroauth.git",
+                "url": "https://github.com/thorsten/twitteroauth.git",
                 "reference": "master"
             },
             "type": "library",
-            "time": "2013-04-12 04:00:00"
+            "time": "2013-05-10 04:41:52"
         }
     ],
     "packages-dev": [
