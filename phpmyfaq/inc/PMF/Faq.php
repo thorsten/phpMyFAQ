@@ -452,16 +452,25 @@ class PMF_Faq
         if ($pages > 1) {
             // Set base URL scheme
             if ($this->_config->get('main.enableRewriteRules')) {
-                $link = new PMF_Link(PMF_Link::getSystemRelativeUri('index.php'), $this->_config);
-                $baseUrl = sprintf(
+                $link       = new PMF_Link(PMF_Link::getSystemRelativeUri('index.php'), $this->_config);
+                $useRewrite = true;
+                $baseUrl    = sprintf(
                     "%scategory/%d/%d/%s.html",
                     PMF_Link::getSystemRelativeUri('index.php'),
                     $categoryId,
                     $page,
                     $link->getSEOItemTitle($title)
                 );
+                $rewriteUrl = sprintf(
+                    "%scategory/%d/%%d/%s.html",
+                    PMF_Link::getSystemRelativeUri('index.php'),
+                    $categoryId,
+                    $link->getSEOItemTitle($title)
+                );
             } else {
-                $baseUrl = sprintf(
+                $useRewrite = true;
+                $rewriteUrl = '';
+                $baseUrl    = sprintf(
                     "%s?%saction=show&amp;cat=%d&amp;seite=%d",
                     PMF_Link::getSystemRelativeUri(),
                     (empty($sids) ? '' : $sids),
@@ -474,6 +483,8 @@ class PMF_Faq
                 'baseUrl'       => $baseUrl,
                 'total'         => $num,
                 'perPage'       => $this->_config->get('records.numberOfRecordsPerPage'),
+                'useRewrite'    => $useRewrite,
+                'rewriteUrl'    => $rewriteUrl,
                 'pageParamName' => 'seite'
             );
         

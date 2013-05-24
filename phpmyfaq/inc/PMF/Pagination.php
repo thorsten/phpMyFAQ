@@ -78,7 +78,7 @@ class PMF_Pagination
      * @var string
      */
     protected $linkTpl = '<li><a href="{LINK_URL}">{LINK_TEXT}</a></li>';
-    
+
     /**
      * Current page link template
      *
@@ -143,6 +143,20 @@ class PMF_Pagination
     protected $seoName = '';
 
     /**
+     * Use rewritten URLs without GET variables
+     *
+     * @var boolean
+     */
+    protected $useRewrite = false;
+
+    /**
+     * Rewritten URL format for page param
+     *
+     * @var string
+     */
+    protected $rewriteUrl = '';
+
+    /**
      * @var PMF_Configuration
      */
     private $_config;
@@ -167,6 +181,7 @@ class PMF_Pagination
      *                                   - lastPageLinkTpl
      *                                   - layoutTpl
      *                                   - pageParamName (default "page")
+     *                                   - useRewrite
      *
      * @return PMF_Pagination
      */
@@ -221,7 +236,15 @@ class PMF_Pagination
         if (isset($options['seoName'])) {
            $this->seoName = $options['seoName'];
         }
-        
+
+        if (isset($options['useRewrite'])) {
+            $this->useRewrite = $options['useRewrite'];
+        }
+
+        if (isset($options['rewriteUrl'])) {
+            $this->rewriteUrl = $options['rewriteUrl'];
+        }
+
         // Let this call to be last cuz it  needs some options to be set before
         $this->currentPage = $this->getCurrentPageFromUrl($this->baseUrl);
     }
@@ -334,13 +357,16 @@ class PMF_Pagination
      */
     protected function renderUrl($url, $page)
     {
-        $cleanedUrl = PMF_String::preg_replace(
-            array('$&(amp;|)' . $this->pageParamName . '=(\d+)$'),
-            '',
-            $url
-        );
-        
-        $url             = sprintf('%s&amp;%s=%d', $cleanedUrl, $this->pageParamName, $page);
+        if ($this->useRewrite) {
+
+            $url = sprintf($this->rewriteUrl, $page);
+
+        } else {
+
+            $cleanedUrl = PMF_String::preg_replace(array('$&(amp;|)' . $this->pageParamName . '=(\d+)$'), '', $url);
+            $url        = sprintf('%s&amp;%s=%d', $cleanedUrl, $this->pageParamName, $page);
+        }
+
         $link            = new PMF_Link($url, $this->_config);
         $link->itemTitle = $this->seoName;
 
