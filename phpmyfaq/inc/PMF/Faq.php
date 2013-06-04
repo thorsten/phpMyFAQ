@@ -709,8 +709,6 @@ class PMF_Faq
             ($isAdmin) ? 'AND 1=1' : $this->queryPermission($this->groupSupport)
         );
 
-        echo $query;
-
         $result = $this->_config->getDb()->query($query);
 
         if ($row = $this->_config->getDb()->fetchObject($result)) {
