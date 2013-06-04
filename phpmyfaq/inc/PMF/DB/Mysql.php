@@ -298,4 +298,14 @@ class PMF_DB_Mysql implements PMF_DB_Driver
             mysql_close($this->conn);
         }
     }
+
+    /**
+     * Destructor
+     *
+     * @return void
+     */
+    public function __destruct()
+    {
+        mysql_close($this->conn);
+    }
 }
