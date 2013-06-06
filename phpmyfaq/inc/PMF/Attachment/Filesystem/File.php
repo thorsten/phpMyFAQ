@@ -215,6 +215,9 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
             } elseif ($file->isDir()) {
                 rmdir($file->getPathname());
             } elseif ($file->isFile() || $file->isLink()) {
+                if (!is_writable($file->getPathname())) {
+                    throw new PMF_Attachment_Filesystem_File_Exception("$file->getPathname() can't be deleted.");
+                }
                 unlink($file->getPathname());
             }
         }
