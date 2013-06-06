@@ -2321,7 +2321,7 @@ class PMF_Faq
 
         $query = sprintf("
             SELECT
-                revision_id, usr, datum, what
+                DISTINCT revision_id, usr, datum, what
             FROM
                 %sfaqchanges
             WHERE
