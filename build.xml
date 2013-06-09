@@ -11,26 +11,6 @@
   <mkdir dir="${basedir}/build/pdepend"/>
  </target>
 
- <target name="sync" description="Updates all git submodules">
-  <exec executable="git">
-   <arg value="pull"/>
-   <arg value="origin"/>
-   <arg value="2.8"/>
-  </exec>
-  <exec executable="git">
-   <arg value="submodule"/>
-   <arg value="init"/>
-  </exec>
-  <exec executable="git">
-   <arg value="submodule"/>
-   <arg value="sync"/>
-  </exec>
-  <exec executable="git">
-   <arg value="submodule"/>
-   <arg value="update"/>
-  </exec>
- </target>
-
  <target name="mergejs" description="Merges all JavaScript files into one file">
      <concat destfile="${basedir}/phpmyfaq/assets/js/phpmyfaq.js" force="yes">
          <filelist dir="${basedir}/vendor/twitter/bootstrap/js" files="bootstrap-transition.js" />
@@ -80,7 +60,7 @@
    <arg line="./ xml codesize,design,naming,unusedcode
               --reportfile ${basedir}/build/logs/pmd.xml
               --exclude    ${basedir}/phpmyfaq/inc/libs,
-                           ${basedir}/phpmyfaq/tests" />
+                           ${basedir}/tests" />
   </exec>
  </target>
 
@@ -90,7 +70,7 @@
    <arg line="--log-pmd  ${basedir}/build/logs/pmd-cpd.xml
               --suffixes php
               --exclude  ${basedir}/phpmyfaq/inc/libs
-              --exclude  ${basedir}/phpmyfaq/tests ./" />
+              --exclude  ${basedir}/tests ./" />
   </exec>
  </target>
 
@@ -101,7 +81,7 @@
               --report-file=${basedir}/build/logs/checkstyle.xml 
               --standard=Zend
               --extensions=php
-              --ignore=${basedir}/phpmyfaq/inc/libs,${basedir}/phpmyfaq/tests ./" />
+              --ignore=${basedir}/phpmyfaq/inc/libs,${basedir}/tests ./" />
   </exec>
  </target>
 
@@ -117,9 +97,9 @@
    <arg line="--log         ${basedir}/build/logs
               --source      ${basedir}
               --output      ${basedir}/build/code-browser
-              --excludePCRE %(${basedir}/phpmyfaq/inc/libs/.*)|(${basedir}/build/.*)|(${basedir}/phpmyfaq/scripts/.*)|(${basedir}/phpmyfaq/tests/.*)%" />
+              --excludePCRE %(${basedir}/phpmyfaq/inc/libs/.*)|(${basedir}/build/.*)|(${basedir}/scripts/.*)|(${basedir}/tests/.*)%" />
   </exec>
  </target>
 
- <target name="build" depends="clean,sync,parallelTasks,phpunit,phpcb"/>
+ <target name="build" depends="clean,parallelTasks,phpunit,phpcb"/>
 </project>
