@@ -72,7 +72,7 @@ class PMF_Helper_Captcha extends PMF_Helper
                 $captcha->caplength
             );
             $html .= sprintf(
-                '<a class="btn" href="javascript:refreshCaptcha(\'%s\');"><i class="icon-refresh"></i></a>',
+                '<a class="btn" id="captcha-button" data-action="%s"><i class="icon-refresh"></i></a>',
                 $action
             );
             $html .= '        </div>';

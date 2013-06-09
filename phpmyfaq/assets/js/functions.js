@@ -32,7 +32,6 @@ var toggleFieldset,
     checkAll,
     closeWindow,
     addAttachmentLink,
-    refreshCaptcha,
     showLongComment,
     saveFormValues,
     saveVoting,
@@ -176,23 +175,6 @@ $(document).ready(function () {
         } else {
             domId.hide();
         }
-    };
-
-    /**
-     * Refreshes a captcha image
-     *
-     * @param action
-     */
-    refreshCaptcha = function refreshCaptcha(action) {
-        $.ajax({
-            url: 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime(),
-            success: function () {
-                var captcha = $("#captcha");
-                $("#captchaImage").attr('src', 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime());
-                captcha.val('');
-                captcha.focus();
-            }
-        });
     };
 
     /**
@@ -423,4 +405,17 @@ $(document).ready(function () {
         return false;
     };
 
+
+    $("#captcha-button").click(function() {
+        var action = $(this).data("action");
+        $.ajax({
+            url: 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime(),
+            success: function () {
+                var captcha = $("#captcha");
+                $("#captchaImage").attr('src', 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime());
+                captcha.val('');
+                captcha.focus();
+            }
+        });
+    });
 });
