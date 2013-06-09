@@ -241,7 +241,7 @@ $(document).ready(function () {
      *
      * @return void
      */
-    saveFormValues = function saveFormValues(action, formName) {
+    window.saveFormValues = function saveFormValues(action, formName) {
         var formValues = $('#formValues');
 
         $('#loader').show();
