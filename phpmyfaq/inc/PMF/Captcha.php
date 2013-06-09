@@ -208,10 +208,7 @@ class PMF_Captcha
         $this->drawlines();
         $this->generateCaptchaCode($this->caplength);
         $this->drawText();
-        if (function_exists('imagepng')) {
-            header('Content-Type: image/png');
-            imagepng($this->img);
-        } elseif (function_exists('imagejpeg')) {
+        if (function_exists('imagejpeg')) {
             header('Content-Type: image/jpeg');
             imagejpeg($this->img, '', ( int )$this->quality);
         } elseif (function_exists('imagegif')) {
