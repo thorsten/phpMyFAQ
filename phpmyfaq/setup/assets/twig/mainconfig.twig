@@ -4,24 +4,7 @@
                         <label class="control-label" for="language">Default language:</label>
                         <div class="controls">
                             <select name="language" size="1" id="language">
-                                <?php
-                                                if ($dir = @opendir(PMF_ROOT_DIR . '/lang')) {
-                                                    while ($dat = @readdir($dir)) {
-                                                        if (substr($dat, -4) == '.php') {
-                                                            printf('<option value="%s"', $dat);
-                                                            if ($dat == "language_en.php") {
-                                                                echo ' selected="selected"';
-                                                            }
-                                                            printf(
-                                                                '>%s</option>',
-                                $languageCodes[substr(strtoupper($dat), 9, 2)]
-                                );
-                                }
-                                }
-                                } else {
-                                echo '<option>english</option>';
-                                }
-                                ?>
+                                {{ languageOptions|raw }}
                             </select>
                             <p class="help-block">Please select your default language.</p>
                         </div>

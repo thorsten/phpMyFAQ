@@ -105,144 +105,22 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
 <?php if (extension_loaded('ldap')): ?>
             <div class="span6">
-                <fieldset>
-                <legend>Add your LDAP setup</legend>
-                    <div class="control-group">
-                        <label class="control-label" for="ldap_enabled">&nbsp;</label>
-                        <div class="controls">
-                            <label class="checkbox">
-                                <input id="ldap_enabled" type="checkbox" name="ldap_enabled" value="yes" />
-                                Enable LDAP support?
-                            </label>
-                            <p class="help-block">You can enable LDAP later if you like.</p>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="ldap_server">LDAP server host:</label>
-                        <div class="controls">
-                            <input type="text" name="ldap_server" id="ldap_server" />
-                            <p class="help-block">Please enter the host of your LDAP server.</p>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="ldap_port">LDAP server port:</label>
-                        <div class="controls">
-                            <input type="number" name="ldap_port" value="389" id="ldap_port" />
-                            <p class="help-block">Please enter the port of your LDAP server.</p>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="ldap_user">LDAP user DN:</label>
-                        <div class="controls">
-                            <input type="text" name="ldap_user" id="ldap_user" />
-                            <p class="help-block">Please enter your specified RDN username.</p>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="ldap_password">LDAP password:</label>
-                        <div class="controls">
-                            <input name="ldap_password" type="password" id="ldap_password" />
-                            <p class="help-block">Please enter your LDAP password.</p>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="ldap_base">LDAP base DN:</label>
-                        <div class="controls">
-                        <input type="text" name="ldap_base" id="ldap_base" />
-                            <p class="help-block">
-                                Please enter your distinguished name, e.g. 'cn=John Doe,ou=Accounts,o=My Company,c=US'.
-                            </p>
-                        </div>
-                    </div>
-                    <p class="alert alert-info">
-                        You can add additional LDAP configuration and more LDAP servers in the file
-                        config/constants_ldap.php.
-                    </p>
-
-                </fieldset>
+                <?php
+                $twig->loadTemplate('ldap.twig')->display($tplDatabaseVars);
+                ?>
             </div>
         </div>
         <div class="row">
 <?php endif; ?>
 
             <div class="span6">
-                <fieldset>
-                <legend>Your phpMyFAQ setup</legend>
-                    <div class="control-group">
-                        <label class="control-label" for="language">Default language:</label>
-                        <div class="controls">
-                            <select name="language" size="1" id="language">
-                            <?php
-                                if ($dir = @opendir(PMF_ROOT_DIR . '/lang')) {
-                                    while ($dat = @readdir($dir)) {
-                                        if (substr($dat, -4) == '.php') {
-                                            printf('<option value="%s"', $dat);
-                                            if ($dat == "language_en.php") {
-                                                echo ' selected="selected"';
-                                            }
-                                            printf(
-                                                '>%s</option>',
-                                                $languageCodes[substr(strtoupper($dat), 9, 2)]
-                                            );
-                                        }
-                                    }
-                                } else {
-                                    echo '<option>English</option>';
-                                }
-                            ?>
-                            </select>
-                            <p class="help-block">Please select your default language.</p>
-                        </div>
-                    </div>
 
-                    <div class="control-group">
-                        <label class="control-label" for="permLevel">Permission level:</label>
-                        <div class="controls">
-                                <select id="permLevel" name="permLevel" size="1" required="required">
-                                    <option value="basic">Basic (no group support)</option>
-                                    <option value="medium">Medium (with group support)</option>
-                            </select>
-                            <p class="help-block">
-                                Complexity of rights and permissions.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="realname">Your name:</label>
-                        <div class="controls">
-                            <input type="text" name="realname" id="realname" required="required" />
-                            <p class="help-block">Please enter your real name.</p>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="email">Your email address:</label>
-                        <div class="controls">
-                            <input type="email" name="email" id="email" required="required" />
-                            <p class="help-block">Please enter your email adress.</p>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="loginname">Your login name:</label>
-                        <div class="controls">
-                            <input type="text" name="loginname" id="loginname" required="required" />
-                            <p class="help-block">Please enter your login name.</p>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="password">Your password:</label>
-                        <div class="controls">
-                            <input type="password" name="password" id="password" required="required" />
-                            <p class="help-block">Please enter your password.</p>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="password_retype">Retype password:</label>
-                        <div class="controls">
-                            <input type="password" name="password_retyped" id="password_retype" required="required" />
-                            <p class="help-block">Please retype your password.</p>
-                        </div>
-                    </div>
-                </fieldset>
+                <?php
+                $tplConfigVars = array(
+                    'languageOptions' => $installer->renderLanguageOptions($languageCodes)
+                );
+                $twig->loadTemplate('mainconfig.twig')->display($tplConfigVars);
+                ?>
             </div>
         </div>
 

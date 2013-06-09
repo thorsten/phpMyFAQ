@@ -853,6 +853,36 @@ class PMF_Installer
     }
 
     /**
+     * Renders the <option> list with supported languages
+     *
+     * @param array $languageCodes
+     *
+     * @return string
+     */
+    public function renderLanguageOptions(Array $languageCodes)
+    {
+        $options = '';
+        if ($dir = @opendir(PMF_ROOT_DIR . '/lang')) {
+            while ($dat = @readdir($dir)) {
+                if (substr($dat, -4) == '.php') {
+                    $options .= sprintf('<option value="%s"', $dat);
+                    if ($dat == "language_en.php") {
+                        $options .= ' selected';
+                    }
+                    $options .= sprintf(
+                        '>%s</option>',
+                        $languageCodes[substr(strtoupper($dat), 9, 2)]
+                    );
+                }
+            }
+        } else {
+            $options = '<option>English</option>';
+        }
+
+        return $options;
+    }
+
+    /**
      * Echos the questionnaire data
      *
      * @return void
