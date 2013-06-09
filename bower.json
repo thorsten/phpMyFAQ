@@ -6,8 +6,10 @@
     "components"
   ],
   "dependencies": {
-    "jquery": "1.9.1",
-    "modernizr": "2.6.2",
-    "sparkline": "2.1.1"
+    "jquery":       "1.9.1",
+    "modernizr":    "2.6.2",
+    "bootstrap":    "2.3.2",
+    "font-awesome": "3.1.1",
+    "sparkline":    "2.1.1"
   }
 }

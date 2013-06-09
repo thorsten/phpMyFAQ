@@ -302,4 +302,14 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
             $this->conn->close();
         }
     }
+
+    /**
+     * Destructor
+     *
+     * @return void
+     */
+    public function __destruct()
+    {
+        $this->conn->close();
+    }
 }

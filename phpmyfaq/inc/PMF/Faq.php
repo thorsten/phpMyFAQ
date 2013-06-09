@@ -637,7 +637,7 @@ class PMF_Faq
         }
 
         if ($num > $this->_config->get('records.numberOfRecordsPerPage')) {
-            $output .= "<p align=\"center\"><strong>";
+            $output .= "<p class=\"text-center\"><strong>";
             if (!isset($page)) {
                 $page = 1;
             }
@@ -671,16 +671,16 @@ class PMF_Faq
      *
      * @param integer $id         Record id
      * @param integer $revisionId Revision id
-     * @param boolean $admin      Must be true if it is called by an admin/author context
+     * @param boolean $isAdmin      Must be true if it is called by an admin/author context
      * @return void
      */
-    public function getRecord($id, $revisionId = null, $admin = false)
+    public function getRecord($id, $revisionId = null, $isAdmin = false)
     {
         global $PMF_LANG;
 
         $query = sprintf(
             "SELECT
-                 id, lang, solution_id, revision_id, active, sticky, keywords, 
+                 DISTINCT id, lang, solution_id, revision_id, active, sticky, keywords,
                  thema, content, author, email, comment, datum, links_state, 
                  links_check_date, date_start, date_end
             FROM
@@ -706,7 +706,7 @@ class PMF_Faq
             $id,
             isset($revisionId) ? 'AND revision_id = '.$revisionId : '',
             $this->_config->getLanguage()->getLanguage(),
-            ($admin) ? 'AND 1=1' : $this->queryPermission($this->groupSupport)
+            ($isAdmin) ? 'AND 1=1' : $this->queryPermission($this->groupSupport)
         );
 
         $result = $this->_config->getDb()->query($query);
@@ -718,7 +718,7 @@ class PMF_Faq
             $active   = ('yes' == $row->active);
             $expired  = (date('YmdHis') > $row->date_end);
 
-            if (!$admin) {
+            if (!$isAdmin) {
                 if (!$active) {
                     $content = $this->pmf_lang['err_inactiveArticle'];
                 }
@@ -2321,7 +2321,7 @@ class PMF_Faq
 
         $query = sprintf("
             SELECT
-                revision_id, usr, datum, what
+                DISTINCT revision_id, usr, datum, what
             FROM
                 %sfaqchanges
             WHERE
@@ -3032,22 +3032,39 @@ class PMF_Faq
     /**
      * Returns a part of a query to check permissions
      *
-     * @param boolean $groupSupport
+     * @param boolean $hasGroupSupport
      *
      * @return string
      */
-    private function queryPermission($groupSupport = false)
+    protected function queryPermission($hasGroupSupport = false)
     {
-        if ($groupSupport) {
-            return sprintf(
-                "AND ( fdg.group_id IN (%s) OR (fdu.user_id = %d OR fdg.group_id IN (%s)) )",
-                implode(', ', $this->groups),
-                $this->user,
-                implode(', ', $this->groups));
+        if ($hasGroupSupport) {
+            if (-1 === $this->user) {
+                return sprintf(
+                    "AND fdg.group_id IN (%s)",
+                    implode(', ', $this->groups),
+                    $this->user,
+                    implode(', ', $this->groups));
+            } else {
+                return sprintf(
+                    "AND ( fdg.group_id IN (%s) OR (fdu.user_id = %d OR fdg.group_id IN (%s)) )",
+                    implode(', ', $this->groups),
+                    $this->user,
+                    implode(', ', $this->groups)
+                );
+            }
         } else {
-            return sprintf(
-                "AND ( fdu.user_id = %d OR fdu.user_id = -1 )",
-                $this->user);
+            if (-1 === $this->user) {
+                return sprintf(
+                    "AND fdu.user_id = %d",
+                    $this->user
+                );
+            } else {
+                return sprintf(
+                    "AND fdu.user_id = -1",
+                    $this->user
+                );
+            }
         }
     }
 }

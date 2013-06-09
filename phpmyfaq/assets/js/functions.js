@@ -32,7 +32,6 @@ var toggleFieldset,
     checkAll,
     closeWindow,
     addAttachmentLink,
-    refreshCaptcha,
     showLongComment,
     saveFormValues,
     saveVoting,
@@ -179,23 +178,6 @@ $(document).ready(function () {
     };
 
     /**
-     * Refreshes a captcha image
-     *
-     * @param action
-     */
-    refreshCaptcha = function refreshCaptcha(action) {
-        $.ajax({
-            url: 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime(),
-            success: function () {
-                var captcha = $("#captcha");
-                $("#captchaImage").attr('src', 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime());
-                captcha.val('');
-                captcha.focus();
-            }
-        });
-    };
-
-    /**
      * Toggle fieldsets
      *
      * @param fieldset ID of the fieldset
@@ -259,7 +241,7 @@ $(document).ready(function () {
      *
      * @return void
      */
-    saveFormValues = function saveFormValues(action, formName) {
+    window.saveFormValues = function saveFormValues(action, formName) {
         var formValues = $('#formValues');
 
         $('#loader').show();
@@ -423,4 +405,17 @@ $(document).ready(function () {
         return false;
     };
 
+
+    $("#captcha-button").click(function() {
+        var action = $(this).data("action");
+        $.ajax({
+            url: 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime(),
+            success: function () {
+                var captcha = $("#captcha");
+                $("#captchaImage").attr('src', 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime());
+                captcha.val('');
+                captcha.focus();
+            }
+        });
+    });
 });

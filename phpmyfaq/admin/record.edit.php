@@ -423,7 +423,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                 <?php if (is_numeric($faqData['id'])): ?>
                 <fieldset>
                     <legend>
-                        <a href="javascript:void(0);" onclick="javascript:toggleFieldset('editChangelogHistory');">
+                        <a id="toggleChangelog" class="pointer">
                             <?php echo $PMF_LANG['ad_entry_changelog_history']; ?>
                         </a>
                     </legend>
@@ -434,7 +434,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                             ?>
                             <p style="font-size: 10px;">
                                 <label>
-                                    <?php printf('%s  1.%d<br/>%s<br/>%s: %s',
+                                    <?php printf('%s  1.%d | %s | %s %s',
                                     $PMF_LANG['ad_entry_revision'],
                                     $entry['revision_id'],
                                     $date->format(date('Y-m-d H:i', $entry['date'])),
@@ -719,16 +719,16 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                 }
             });
         });
+
+        // Toggle changelog tab
+        $("#toggleChangelog").click(function() {
+            if ("hide" === $("#editChangelogHistory").attr("class")) {
+                $("#editChangelogHistory").fadeIn('fast').removeAttr("class");
+            } else {
+                $("#editChangelogHistory").fadeOut('fast').attr("class", "hide");
+            }
+        });
     });
-
-
-    function toggleFieldset(fieldset) {
-        if ($('#edit' + fieldset).css('display') == 'none') {
-            $('#edit' + fieldset).fadeIn('fast');
-        } else {
-            $('#edit' + fieldset).fadeOut('fast');
-        }
-    }
 
     function showIDContainer() {
         var display = 0 == arguments.length || !!arguments[0] ? 'block' : 'none';

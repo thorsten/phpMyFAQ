@@ -214,12 +214,7 @@ class PMF_Captcha
         $response = new StreamedResponse;
         $img = $this->img;
 
-        if (function_exists('imagepng')) {
-            $response->headers->set('Content-Type', 'image/png');
-            $response->setCallback(function() use ($img) {
-                imagepng($img);
-            });
-        } elseif (function_exists('imagejpeg')) {
+        if (function_exists('imagejpeg')) {
             $response->headers->set('Content-Type', 'image/jpeg');
             $quality = (int) $this->quality;
             $response->setCallback(function() use ($img, $quality) {
