@@ -474,7 +474,7 @@ function getMemberList(group_id)
         function(data) {
             $('#group_member_list').empty();
             $.each(data, function(i, val) {
-                $('#group_member_list').append('<option value="' + val.user_id + '">' + val.login + '</option>');
+                $('#group_member_list').append('<option value="' + val.user_id + '" selected>' + val.login + '</option>');
             });
             $('#update_member_group_id').val(group_id);
         });
