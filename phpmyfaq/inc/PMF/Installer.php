@@ -885,17 +885,18 @@ class PMF_Installer
     /**
      * Echos the questionnaire data
      *
-     * @return void
+     * @return string
      */
-    public function printDataList()
+    public function renderDataList()
     {
-        $q = new PMF_Questionnaire_Data($this->_mainConfig);
-        $options = $q->get();
-        echo '<dl>' . PHP_EOL;
+        $questionnaire = new PMF_Questionnaire_Data($this->_mainConfig);
+        $options       = $questionnaire->get();
+        $dataList      = '<dl>' . PHP_EOL;
         array_walk($options, 'data_printer');
-        printf(
+        $dataList .= sprintf(
             '</dl><input type="hidden" name="systemdata" value="%s" />',
-            PMF_String::htmlspecialchars(serialize($q->get()), ENT_QUOTES)
+            PMF_String::htmlspecialchars(serialize($questionnaire->get()), ENT_QUOTES)
         );
+        return $dataList;
     }
 }

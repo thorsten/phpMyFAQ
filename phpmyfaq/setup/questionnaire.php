@@ -178,21 +178,23 @@ class PMF_Questionnaire_Data
 /**
  * Output the data as an HTML Definition List.
  *
- * @param  mixed  $value Value
- * @param  string $key   Key
- * @param  string $ident Identian
+ * @param mixed  $value Value
+ * @param string $key   Key
+ * @param string $ident Identian
  *
- * @return  void
+ * @return string
  */
 function data_printer($value, $key, $ident = "\n\t")
 {
-    echo $ident, '<dt>', htmlentities($key), '</dt>', $ident, "\t", '<dd>';
+    $data = $ident . '<dt>' . htmlentities($key) . '</dt>' . $ident . "\t" . '<dd>';
     if (is_array($value)) {
-        echo '<dl>';
+        $data .=  '<dl>';
         array_walk($value, 'data_printer', $ident."\t");
-        echo $ident, "\t", '</dl>';
+        $data .= $ident . "\t" . '</dl>';
     } else {
-        echo htmlentities($value);
+        $data .= htmlentities($value);
     }
-    echo '</dd>';
+    $data .= '</dd>';
+
+    return $data;
 }

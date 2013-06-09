@@ -1,0 +1,150 @@
+        <p class="alert alert-success">
+            Wow, looks like the installation worked like a charm. This is pretty cool, isn't it? :-)
+        </p>
+
+        <script type="text/javascript">
+            //<![CDATA[
+            var iframect = 0;
+
+            function iframeUpdated() {
+                if (iframect++ == 0) {
+                    return;
+                }
+
+                $('#questionnaireForm').hide();
+                $('#questionnaireThanks').show();
+            }
+
+            function hide(item) {
+                $('#configliste').hide();
+            }
+
+            function show(item) {
+                $('#configliste').show();
+            }
+            //]]>
+        </script>
+        <iframe onload="iframeUpdated();" name="questionaireResult" style="display:none"></iframe>
+        <form action="http://www.phpmyfaq.de/stats/getstatdata.php" method="post" target="questionaireResult"
+              id="questionnaireForm" class="form-horizontal">
+
+            <p>
+                For further development we would like to get some feedback from our users. Therefore we'd ask you to
+                take a few minutes of your time to answer a few questions.
+            </p>
+            <p class="alert alert-success">
+                If you don't want to participate in the survey, you can directly visit
+                <a href="../index.php">your version of phpMyFAQ</a> or login into your
+                <a href="../admin/index.php">admin section</a>.
+            </p>
+
+            <h3>The survey</h3>
+
+            <fieldset>
+                <legend>General questions</legend>
+                <div class="control-group">
+                    <label class="control-label">How do you act like?</label>
+                    <div class="controls">
+                        <select name="q[individual]">
+                            <option value="as an individual">as an individual</option>
+                            <option value="as an organisation">as an organisation</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">What kind of organisation is that?</label>
+                    <div class="controls">
+                        <select name="q[organisation]">
+                            <option value="private held">privately held</option>
+                            <option value="public held">publicly held</option>
+                            <option value="government organisation">governmental organisation</option>
+                            <option value="foundation">foundation</option>
+                            <option value="other">other</option>
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Technical questions</legend>
+                <div class="control-group">
+                    <label class="control-label">Where did you install phpMyFAQ?</label>
+                    <div class="controls">
+                        <select name="q[server]">
+                            <option value="server run by a hosting company">server run by a hosting company</option>
+                            <option value="public server run by you/your organisation">public server run by you/your organisation</option>
+                            <option value="private server run by you/your organisation">private server run by you/your organisation</option>
+                            <option value="Don't know">Don't know</option>
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Beyond our own nose</legend>
+                <div class="control-group">
+                    <label class="control-label">Which PHP software do you also use?</label>
+                    <div class="controls">
+                        <input type="text" name="q[other]" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Are you using other web technologies?</label>
+                    <div class="controls">
+                        <label class="checkbox inline">
+                            <input type="checkbox" name="q[other][]" value="ASP" />ASP
+                        </label>
+                        <label class="checkbox inline">
+                            <input type="checkbox" name="q[other][]" value="ASP.NET" />ASP.NET
+                        </label>
+                        <label class="checkbox inline">
+                            <input type="checkbox" name="q[other][]" value="jsp" />JAVA JSP
+                        </label>
+                        <label class="checkbox inline">
+                            <input type="checkbox" name="q[other][]" value="perl" />Perl
+                        </label>
+                        <label class="checkbox inline">
+                            <input type="checkbox" name="q[other][]" value="ruby" />Ruby / Ruby on Rails
+                        </label>
+                        <label class="checkbox inline">
+                            <input type="checkbox" name="q[other][]" value="python" />Python
+                        </label>
+                        <label class="checkbox inline">
+                            <input type="checkbox" name="q[other][]" value="clojure" />Clojure
+                        </label>
+                        <label class="checkbox inline">
+                            <input type="checkbox" name="q[other][]" value="scala" />Scala
+                        </label>
+                        <label class="checkbox inline">
+                            <input type="checkbox" name="q[other][]" value="go" />Go
+                        </label>
+                    </div>
+                </div>
+            </fieldset>
+
+            <p class="alert alert-info">
+                In addition to your input we're going to submit some information about your system setup for statistical
+                purposes.
+            </p>
+            <p class="alert alert-info">
+                We are not storing any personal information. You can see the data by clicking
+                <a href="#" onclick="show('configliste'); return false;">here</a>.
+            </p>
+
+            <div id="configliste" class="hide">
+                <a href="#" onclick="hide('configliste'); return false;">hide again</a>
+                {{ dataList|raw }}
+            </div>
+            <p style="text-align: center;">
+                <button class="btn btn-primary" type="submit">
+                    Click here to submit the data and finish the installation process
+                </button>
+            </p>
+        </form>
+        <div id="questionnaireThanks" style="display:none;">
+            <p class="alert alert-success"><b>Thank you for giving your feedback!</b></p>
+            <p>
+                You can visit <a href="../index.php">your version of phpMyFAQ</a> or login into your
+                <a href="../admin/index.php">admin section</a>.
+            </p>
+        </div>
