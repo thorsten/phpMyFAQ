@@ -50,7 +50,7 @@
 </div>
  <![endif]-->
 
-<div class="navbar navbar-fixed-top">
+<div class="navbar navbar-fixed-top hidden-print">
     <div class="navbar-inner">
         <div class="container-fluid">
             <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -93,7 +93,7 @@
 
 <section id="content" class="container-fluid">
     <div class="row-fluid">
-        <div class="span3" id="leftContent">
+        <div class="span3 hidden-print" id="leftContent">
             <div class="well categories">
                 <ul class="nav nav-list">
                     <li class="home">{backToHome}</li>
@@ -108,7 +108,7 @@
         </div>
         <div class="span6" id="mainContent">
             [globalSearchBox]
-            <section class="well" id="searchBox">
+            <section class="well hidden-print" id="searchBox">
                 <form id="search" action="{writeSendAdress}" method="get" class="form-search">
                     <div class="input-append">
                         <input type="hidden" name="searchcategory" value="{categoryId}" />
@@ -124,7 +124,7 @@
             </section>
             [/globalSearchBox]
             [globalSuggestBox]
-            <section class="well" id="searchBox">
+            <section class="well hidden-print" id="searchBox">
                 <form id="instantform" action="?action=instantresponse" method="post" class="form-search">
                     <input type="hidden" name="ajaxlanguage" id="ajaxlanguage" value="{ajaxlanguage}" />
                     <input type="search" name="search" id="instantfield" class="input-xxlarge search-query" value=""
@@ -135,7 +135,7 @@
             [/globalSuggestBox]
             {writeContent}
         </div>
-        <div class="span3" id="rightContent">
+        <div class="span3 hidden-print" id="rightContent">
             {rightBox}
             [stickyFaqs]
             <section class="well">
@@ -151,7 +151,7 @@
     </div>
 </section>
 
-<footer id="footer" class="container-fluid">
+<footer id="footer" class="container-fluid hidden-print">
     <div class="row-fluid">
         <div class="span6">
             <ul class="footer-menu">
