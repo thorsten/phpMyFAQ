@@ -6,7 +6,10 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.8.1 - 2013-06-
-- fixed some bugs (Thorsten)
+- improved usability for group administration (Thorsten)
+- fixed broken updates for MS SQL and SQLite (Thorsten)
+- fixed IE8 related JavaScript issues (Thorsten)
+- fixed some minor bugs (Thorsten)
 
 Version 2.8.0 - 2013-05-21
 - changed PHP requirement to PHP 5.3.3 and later (Thorsten)
