@@ -617,7 +617,7 @@ getGroupList();
                         </select>
                     </fieldset>
                     <p>
-                        <button class="btn btn-primary" type="submit">
+                        <button class="btn btn-primary" onclick="javascript:selectSelectAll('group_member_list')" type="submit">
                             <?php print $PMF_LANG['ad_gen_save']; ?>
                         </button>
                     </p>
