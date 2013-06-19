@@ -123,7 +123,7 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
             fclose($this->handle);
         }
 
-        if ($this->path !== $_FILES['userfile']['tmp_name'] && file_exists($this->path)) {
+        if (isset($_FILES['userfile']) && $this->path !== $_FILES['userfile']['tmp_name'] && file_exists($this->path)) {
             $retval = $this->deleteDir(dirname($this->path));
         }
         
