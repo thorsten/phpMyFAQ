@@ -6,8 +6,7 @@
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="{metaLanguage}" class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    
+
     <title>{title}</title>
     <base href="{baseHref}" />
     
@@ -15,11 +14,8 @@
     <meta name="author" content="{metaPublisher}">
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
     <meta name="application-name" content="phpMyFAQ {phpmyfaqversion}">
-    <meta name="copyright" content="(c) 2001-2013 phpMyFAQ Team">
-    <meta name="publisher" content="{metaPublisher}">
     <meta name="robots" content="INDEX, FOLLOW">
     <meta name="revisit-after" content="7 days">
-    <meta name="MSSmartTagsPreventParsing" content="true">
 
     <!-- Share on Facebook -->
     <meta property="og:title" content="{title}" />
