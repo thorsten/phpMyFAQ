@@ -43,3 +43,6 @@ vendor/tcpdf*
 vendor/twitter*
 vendor/jnaqsh*
 vendor/autoload.php
+
+# node.js modules for development
+node_modules/*
