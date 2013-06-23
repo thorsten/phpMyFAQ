@@ -11,26 +11,6 @@
   <mkdir dir="${basedir}/build/pdepend"/>
  </target>
 
- <target name="sync" description="Updates all git submodules">
-  <exec executable="git">
-   <arg value="pull"/>
-   <arg value="origin"/>
-   <arg value="2.8"/>
-  </exec>
-  <exec executable="git">
-   <arg value="submodule"/>
-   <arg value="init"/>
-  </exec>
-  <exec executable="git">
-   <arg value="submodule"/>
-   <arg value="sync"/>
-  </exec>
-  <exec executable="git">
-   <arg value="submodule"/>
-   <arg value="update"/>
-  </exec>
- </target>
-
  <target name="mergejs" description="Merges all JavaScript files into one file">
      <concat destfile="${basedir}/phpmyfaq/assets/js/phpmyfaq.js" force="yes">
          <filelist dir="${basedir}/vendor/twitter/bootstrap/js" files="bootstrap-transition.js" />
