@@ -10,6 +10,7 @@ Version 2.9.0-dev - 2013-
 - added Twig 1.123.1 as new template engine (Alexander M. Turek, Thorsten)
 - added support for Bower (Thorsten)
 - updated bundled Symfony ClassLoader to version 2.3.0 (Thorsten)
+- updated bundled Font Awesome to version 3.2.1 (Thorsten)
 - dropped support for ext/mysql (Thorsten)
 
 Version 2.8.1 - 2013-06-
