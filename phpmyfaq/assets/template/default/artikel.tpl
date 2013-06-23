@@ -1,9 +1,9 @@
-            <div id="breadcrumbs">
+            <div id="breadcrumbs" class="hidden-print">
                 {writeRubrik}
             </div>
 
             <header>
-                <div class="pull-right" id="solution_id">
+                <div class="pull-right hidden-print" id="solution_id">
                     <a class="label label-info" href="{solution_id_link}">
                         ID #{solution_id}
                     </a>
@@ -19,7 +19,7 @@
                 {renderTags}
                 [/tagsAvailable]
                 [relatedFaqs]
-                <aside id="faqAccordion" class="accordion related-faqs">
+                <aside id="faqAccordion" class="accordion related-faqs hidden-print">
                     <div class="accordion-group">
                         <div class="accordion-heading">
                             <a class="accordion-toggle" href="#collapseRelatedFaqs" data-parent="#faqAccordion" data-toggle="collapse">
@@ -33,7 +33,7 @@
                 </aside>
                 [/relatedFaqs]
                 [relatedCategories]
-                <aside id="faqAccordion" class="accordion related-categories">
+                <aside id="faqAccordion" class="accordion related-categories hidden-print">
                     <div class="accordion-group">
                         <div class="accordion-heading">
                             <a class="accordion-toggle" href="#collapseRelatedCategories" data-parent="#faqAccordion" data-toggle="collapse">
@@ -54,7 +54,7 @@
                 });
             </script>
 
-            <ul id="tab" class="nav nav-tabs">
+            <ul id="tab" class="nav nav-tabs hidden-print">
                 <li class="active"><a href="#authorInfo" data-toggle="tab">{msg_about_faq}</a></li>
                 <li><a href="#votingForm" data-toggle="tab">{msgVoteUseability}</a></li>
                 [switchLanguage]
@@ -74,7 +74,7 @@
                     {writeRevision}
                     </dl>
                 </div>
-                <div class="tab-pane" id="votingForm">
+                <div class="tab-pane hidden-print" id="votingForm">
                     <form action="#" method="post" class="form-inline">
                         <input type="hidden" name="artikel" value="{saveVotingID}" />
                         <div id="votings"></div>
@@ -90,10 +90,10 @@
                         </div>
                     </form>
                 </div>
-                <div class="tab-pane" id="switchAvailableLanguage">
+                <div class="tab-pane hidden-print" id="switchAvailableLanguage">
                     {switchLanguage}
                 </div>
-                <div class="tab-pane" id="addTranslation">
+                <div class="tab-pane hidden-print" id="addTranslation">
                     <form action="{translationUrl}" method="post" class="form-inline">
                         {languageSelection}
                         <button class="btn btn-primary" type="submit" name="submit">
@@ -103,7 +103,7 @@
                 </div>
             </div>
 
-            <p>{writeCommentMsg}</p>
+            <p hidden-print>{writeCommentMsg}</p>
 
             <!-- Comment Form -->
             <a name="comment"></a>

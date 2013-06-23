@@ -6,8 +6,7 @@
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="{metaLanguage}" class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    
+
     <title>{title}</title>
     <base href="{baseHref}" />
     
@@ -15,11 +14,8 @@
     <meta name="author" content="{metaPublisher}">
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
     <meta name="application-name" content="phpMyFAQ {phpmyfaqversion}">
-    <meta name="copyright" content="(c) 2001-2013 phpMyFAQ Team">
-    <meta name="publisher" content="{metaPublisher}">
     <meta name="robots" content="INDEX, FOLLOW">
     <meta name="revisit-after" content="7 days">
-    <meta name="MSSmartTagsPreventParsing" content="true">
 
     <!-- Share on Facebook -->
     <meta property="og:title" content="{title}" />
@@ -50,7 +46,7 @@
 </div>
  <![endif]-->
 
-<div class="navbar navbar-fixed-top">
+<div class="navbar navbar-fixed-top hidden-print">
     <div class="navbar-inner">
         <div class="container-fluid">
             <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -93,7 +89,7 @@
 
 <section id="content" class="container-fluid">
     <div class="row-fluid">
-        <div class="span3" id="leftContent">
+        <div class="span3 hidden-print" id="leftContent">
             <div class="well categories">
                 <ul class="nav nav-list">
                     <li class="home">{backToHome}</li>
@@ -108,7 +104,7 @@
         </div>
         <div class="span6" id="mainContent">
             [globalSearchBox]
-            <section class="well" id="searchBox">
+            <section class="well hidden-print" id="searchBox">
                 <form id="search" action="{writeSendAdress}" method="get" class="form-search">
                     <div class="input-append">
                         <input type="hidden" name="searchcategory" value="{categoryId}" />
@@ -124,7 +120,7 @@
             </section>
             [/globalSearchBox]
             [globalSuggestBox]
-            <section class="well" id="searchBox">
+            <section class="well hidden-print" id="searchBox">
                 <form id="instantform" action="?action=instantresponse" method="post" class="form-search">
                     <input type="hidden" name="ajaxlanguage" id="ajaxlanguage" value="{ajaxlanguage}" />
                     <input type="search" name="search" id="instantfield" class="input-xxlarge search-query" value=""
@@ -135,7 +131,7 @@
             [/globalSuggestBox]
             {writeContent}
         </div>
-        <div class="span3" id="rightContent">
+        <div class="span3 hidden-print" id="rightContent">
             {rightBox}
             [stickyFaqs]
             <section class="well">
@@ -151,7 +147,7 @@
     </div>
 </section>
 
-<footer id="footer" class="container-fluid">
+<footer id="footer" class="container-fluid hidden-print">
     <div class="row-fluid">
         <div class="span6">
             <ul class="footer-menu">

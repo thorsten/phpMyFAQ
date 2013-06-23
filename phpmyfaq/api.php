@@ -53,6 +53,7 @@ if (PMF_Language::isASupportedLanguage($language)) {
 } else {
     require PMF_LANGUAGE_DIR . '/language_en.php';
 }
+$faqConfig->setLanguage($Language);
 
 $plr = new PMF_Language_Plurals($PMF_LANG);
 PMF_String::init($language);
@@ -100,7 +101,7 @@ switch ($action) {
     case 'getFaq':
         $faq = new PMF_Faq($faqConfig);
         $faq->setUser($currentUser);
-        $faq->setGroups($currentUser);
+        $faq->setGroups($currentGroups);
         $faq->getRecord($recordId);
         $result = $faq->faqRecord;
         break;

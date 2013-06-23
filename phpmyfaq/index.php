@@ -105,7 +105,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     if (!is_null($faqremember) && 'rememberMe' === $faqremember) {
         $user->enableRememberMe();
     }
-    if ($faqConfig->get('security.ldapSupport')) {
+    if ($faqConfig->get('security.ldapSupport') && function_exists('ldap_connect')) {
         $authLdap = new PMF_Auth_Ldap($faqConfig);
         $user->addAuth($authLdap, 'ldap');
     }
@@ -241,7 +241,7 @@ if (!$internal) {
 $sids = '';
 if ($faqConfig->get('main.enableUserTracking')) {
     if (isset($sid)) {
-        PMF_Session::setCookie(PMF_Session::PMF_COOKIE_NAME_AUTH, $sid);
+        PMF_Session::setCookie(PMF_Session::PMF_COOKIE_NAME_SESSIONID, $sid);
         if (is_null($sidCookie)) {
             $sids = sprintf('sid=%d&amp;lang=%s&amp;', $sid, $LANGCODE);
         }
@@ -253,7 +253,7 @@ if ($faqConfig->get('main.enableUserTracking')) {
         }
     }
 } else {
-    if (!PMF_Session::setCookie(PMF_Session::PMF_COOKIE_NAME_AUTH, $sid, $_SERVER['REQUEST_TIME'] + PMF_LANGUAGE_EXPIRED_TIME)) {
+    if (!PMF_Session::setCookie(PMF_Session::PMF_COOKIE_NAME_SESSIONID, $sid, $_SERVER['REQUEST_TIME'] + PMF_LANGUAGE_EXPIRED_TIME)) {
         $sids = sprintf('lang=%s&amp;', $LANGCODE);
     }
 }

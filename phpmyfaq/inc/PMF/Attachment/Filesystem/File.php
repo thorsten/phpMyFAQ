@@ -122,8 +122,8 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
         if ($this->handle) {
             fclose($this->handle);
         }
-        
-        if (!is_uploaded_file($this->path) && file_exists($this->path)) {
+
+        if (isset($_FILES['userfile']) && $this->path !== $_FILES['userfile']['tmp_name'] && file_exists($this->path)) {
             $retval = $this->deleteDir(dirname($this->path));
         }
         
@@ -216,7 +216,7 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
                 rmdir($file->getPathname());
             } elseif ($file->isFile() || $file->isLink()) {
                 if (!is_writable($file->getPathname())) {
-                    throw new PMF_Attachment_Filesystem_File_Exception("$file->getPathname() can't be deleted.");
+                    throw new PMF_Attachment_Filesystem_File_Exception("File can't be deleted.");
                 }
                 unlink($file->getPathname());
             }

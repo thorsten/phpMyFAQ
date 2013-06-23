@@ -2625,7 +2625,7 @@ $(document).ready(function () {
      * Checks the content of a question by Ajax
      *
      */
-    checkQuestion = function checkQuestion() {
+    window.checkQuestion = function checkQuestion() {
         var formValues = $('#formValues');
 
         $('#loader').show();
