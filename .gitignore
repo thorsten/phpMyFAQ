@@ -21,10 +21,8 @@ phpmyfaq/config/database.php
 phpmyfaq/config/database.bak.php
 phpmyfaq/config/index.html
 phpmyfaq/data*
-phpmyfaq/pdf*
 phpmyfaq/images*
 phpmyfaq/attachments*
-phpmyfaq/inc/data.php
 phpmyfaq/inc/index.html
 
 # .htaccess, if used
@@ -36,13 +34,7 @@ phpmyfaq/inc/libs/twitteroauth
 phpmyfaq/inc/libs/Symfony
 
 # Composer related stuff
-vendor/composer*
-vendor/phpseclib*
-vendor/symfony*
-vendor/tcpdf*
-vendor/twitter*
-vendor/jnaqsh*
-vendor/autoload.php
+vendor/*
 
 # node.js modules for development
 node_modules/*
