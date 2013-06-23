@@ -50,10 +50,33 @@ module.exports = function(grunt) {
                 boss: true,
                 eqnull: true,
                 browser: true,
-                globals: {}
+                globals: {
+                    "jQuery": true
+                }
             },
             gruntfile: {
                 src: 'Gruntfile.js'
+            },
+            /*beforeconcat: ['phpmyfaq/assets/js/autosave.js', 'phpmyfaq/assets/js/functions.js'],*/
+            /*afterconcat: ['phpmyfaq/assets/js/phpmyfaq.js']*/
+        },
+        less: {
+            development: {
+                files: {
+                    "phpmyfaq/assets/template/default/css/style.css": "phpmyfaq/assets/template/default/less/style.less",
+                    "phpmyfaq/assets/template/default/css/style.rtl.css": "phpmyfaq/assets/template/default/less/style.rtl.less"
+                }
+            }
+        },
+        cssmin: {
+            add_banner: {
+                options: {
+                    banner: '/* phpMyFAQ 2.8 */'
+                },
+                files: {
+                    "phpmyfaq/assets/template/default/css/style.css": ["phpmyfaq/assets/template/default/css/style.css"],
+                    "phpmyfaq/assets/template/default/css/style.rtl.css": ["phpmyfaq/assets/template/default/css/style.rtl.css"]
+                }
             }
         },
         watch: {
@@ -81,6 +104,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-csslint');
 
     // Default task.
-    grunt.registerTask('default', ['jshint', 'concat', 'uglify']);
+    grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'less', 'cssmin']);
 
 };
