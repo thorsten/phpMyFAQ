@@ -756,7 +756,7 @@ class PMF_Faq
                 'sticky'        => 0,
                 'keywords'      => '',
                 'title'         => '',
-                'content'       => $PMF_LANG['err_inactiveArticle'],
+                'content'       => $PMF_LANG['msgAccessDenied'],
                 'author'        => '',
                 'email'         => '',
                 'comment'       => '',
