@@ -1188,3 +1188,6 @@ $PMF_LANG["ad_instance_config"] = "Instance configuration";
 
 // added v2.8.0-RC3 - 2013-03-03 by Thorsten
 $PMF_LANG["msgAboutThisNews"] = "About this news";
+
+// added v.2.8.1 - 2013-06-23 by Thorsten
+$PMF_LANG["msgAccessDenied"] = "Access denied.";
