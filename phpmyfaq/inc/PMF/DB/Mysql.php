@@ -306,6 +306,8 @@ class PMF_DB_Mysql implements PMF_DB_Driver
      */
     public function __destruct()
     {
-        mysql_close($this->conn);
+        if (is_resource($this->conn)) {
+            mysql_close($this->conn);
+        }
     }
 }

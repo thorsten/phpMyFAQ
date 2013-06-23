@@ -310,6 +310,8 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      */
     public function __destruct()
     {
-        $this->conn->close();
+        if (is_resource($this->conn)) {
+            $this->conn->close();
+        }
     }
 }
