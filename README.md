@@ -36,6 +36,7 @@ unzip the package and open http://www.example.org/phpmyfaq/setup/index.php in yo
     $ cd phpMyFAQ
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
+    $ npm install
 
 Then just open http://www.example.org/phpmyfaq/setup/index.php in your browser.
 

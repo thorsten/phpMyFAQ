@@ -11,25 +11,6 @@
   <mkdir dir="${basedir}/build/pdepend"/>
  </target>
 
- <target name="mergejs" description="Merges all JavaScript files into one file">
-     <concat destfile="${basedir}/phpmyfaq/assets/js/phpmyfaq.js" force="yes">
-         <filelist dir="${basedir}/vendor/twitter/bootstrap/js" files="bootstrap-transition.js" />
-         <filelist dir="${basedir}/vendor/twitter/bootstrap/js" files="bootstrap-alert.js" />
-         <filelist dir="${basedir}/vendor/twitter/bootstrap/js" files="bootstrap-button.js" />
-         <filelist dir="${basedir}/vendor/twitter/bootstrap/js" files="bootstrap-carousel.js" />
-         <filelist dir="${basedir}/vendor/twitter/bootstrap/js" files="bootstrap-collapse.js" />
-         <filelist dir="${basedir}/vendor/twitter/bootstrap/js" files="bootstrap-dropdown.js" />
-         <filelist dir="${basedir}/vendor/twitter/bootstrap/js" files="bootstrap-modal.js" />
-         <filelist dir="${basedir}/vendor/twitter/bootstrap/js" files="bootstrap-tooltip.js" />
-         <filelist dir="${basedir}/vendor/twitter/bootstrap/js" files="bootstrap-popover.js" />
-         <filelist dir="${basedir}/vendor/twitter/bootstrap/js" files="bootstrap-scrollspy.js" />
-         <filelist dir="${basedir}/vendor/twitter/bootstrap/js" files="bootstrap-tab.js" />
-         <filelist dir="${basedir}/vendor/twitter/bootstrap/js" files="bootstrap-typeahead.js" />
-         <filelist dir="${basedir}/phpmyfaq/assets/js" files="autosave.js" />
-         <filelist dir="${basedir}/phpmyfaq/assets/js" files="functions.js" />
-     </concat>
- </target>
-
  <target name="phpunit" description="Run unit tests and generate junit.xml and clover.xml">
   <exec executable="phpunit" failonerror="true">
     <arg line="--configuration phpunit.xml --coverage-text" />
