@@ -36,5 +36,5 @@ components/*
 # Composer related stuff
 vendor/*
 
-# Local node.js modules
+# node.js modules for development
 node_modules/*
