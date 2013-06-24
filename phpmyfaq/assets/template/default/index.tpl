@@ -108,7 +108,7 @@
                     <div class="input-append">
                         <input type="hidden" name="searchcategory" value="{categoryId}" />
                         <input type="hidden" name="action" value="search" />
-                        <input type="search" name="search" id="searchfield" size="30" placeholder="{searchBox} ..."
+                        <input type="text" name="search" id="searchfield" placeholder="{searchBox} ..."
                                class="input-xlarge search-query" />
                         <button class="btn btn-primary" type="submit" name="submit">
                             {searchBox}
