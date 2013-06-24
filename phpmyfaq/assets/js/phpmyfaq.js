@@ -2036,14 +2036,14 @@
 
 }(window.jQuery);
 
-/*global clearInterval: false, clearTimeout: false, document: false, event: false, frames: false, history: false, Image: false, location: false, name: false, navigator: false, Option: false, parent: false, screen: false, setInterval: false, setTimeout: false, window: false, XMLHttpRequest: false */
+/*global document: false, window: false, $: false */
 
 $(document).ready(function () {
     "use script";
     $(window).unload(function () {
-        if (typeof tinyMCE !== 'undefined' && tinyMCE.activeEditor !== null) {
-            if (tinyMCE.activeEditor.isDirty()) {
-                var chk = confirm('Do you want to save the article before navigating away?');
+        if (typeof window.tinyMCE !== "undefined" && window.tinyMCE.activeEditor !== null) {
+            if (window.tinyMCE.activeEditor.isDirty()) {
+                var chk = window.confirm('Do you want to save the article before navigating away?');
 
                 if (chk) {
                     pmfAutosave();
@@ -2052,8 +2052,12 @@ $(document).ready(function () {
         }
     });
 
-    if (typeof pmfAutosaveInterval !== 'undefined') {
-        setInterval('pmfAutosave();', pmfAutosaveInterval * 1000);
+    if (typeof window.tinyMCE !== "undefined" && typeof pmfAutosaveInterval !== "undefined") {
+        setInterval(function () {
+            "use strict";
+            pmfAutosave();
+        },
+        window.pmfAutosaveInterval * 1000);
     }
 
     /**
@@ -2062,7 +2066,7 @@ $(document).ready(function () {
      * @return void
      */
     function pmfAutosave() {
-        var ed = tinyMCE.activeEditor;
+        var ed = window.tinyMCE.activeEditor;
         if (ed.isDirty()) {
             var formData = {};
             formData.revision_id = $('#revision_id').attr('value');
@@ -2120,13 +2124,8 @@ $(document).ready(function () {
 
         return act;
     }
-
-    function getYesNoVal(selector) {
-
-    }
-
 });
-/*global clearInterval: false, clearTimeout: false, document: false, event: false, frames: false, history: false, Image: false, location: false, name: false, navigator: false, Option: false, parent: false, screen: false, setInterval: false, setTimeout: false, window: false, XMLHttpRequest: false */
+/*global document: false, window: false, $: false */
 
 var toggleFieldset,
     showhideCategory,
@@ -2141,9 +2140,7 @@ var toggleFieldset,
     closeWindow,
     addAttachmentLink,
     showLongComment,
-    saveFormValues,
-    saveVoting,
-    checkQuestion;
+    saveVoting;
 
 $(document).ready(function () {
     "use strict";
@@ -2494,7 +2491,6 @@ $(document).ready(function () {
                     $('#loader').hide();
                     $('#formValues').append('<input type="hidden" name="save" value="1" />');
                     $('#captcha').val('');
-                    refreshCaptcha('ask');
                 } else {
                     $('#answers').html(
                         '<p class="alert alert-success">' +

@@ -62,8 +62,10 @@ module.exports = function(grunt) {
             gruntfile: {
                 src: 'Gruntfile.js'
             },
-            /*beforeconcat: ['phpmyfaq/assets/js/autosave.js', 'phpmyfaq/assets/js/functions.js'],*/
-            /*afterconcat: ['phpmyfaq/assets/js/phpmyfaq.js']*/
+            beforeconcat: [
+                'phpmyfaq/assets/js/autosave.js',
+                'phpmyfaq/assets/js/functions.js'
+            ],
         },
         less: {
             development: {
