@@ -23,7 +23,12 @@ module.exports = function(grunt) {
                 stripBanners: true
             },
             dist: {
-                src: ['vendor/twitter/bootstrap/js/*.js', 'phpmyfaq/assets/js/autosave.js', 'phpmyfaq/assets/js/functions.js'],
+                src: [
+                    'phpmyfaq/assets/js/libs/jquery.min.js',
+                    'vendor/twitter/bootstrap/js/*.js',
+                    'phpmyfaq/assets/js/autosave.js',
+                    'phpmyfaq/assets/js/functions.js'
+                ],
                 dest: 'phpmyfaq/assets/js/phpmyfaq.js'
             }
         },
@@ -33,7 +38,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 src: '<%= concat.dist.dest %>',
-                dest: 'phpmyfaq/assets/js/phpmyfaq.js'
+                dest: 'phpmyfaq/assets/js/phpmyfaq.min.js'
             }
         },
         jshint: {
@@ -74,8 +79,8 @@ module.exports = function(grunt) {
                     banner: '/* phpMyFAQ 2.8 */'
                 },
                 files: {
-                    "phpmyfaq/assets/template/default/css/style.css": ["phpmyfaq/assets/template/default/css/style.css"],
-                    "phpmyfaq/assets/template/default/css/style.rtl.css": ["phpmyfaq/assets/template/default/css/style.rtl.css"]
+                    "phpmyfaq/assets/template/default/css/style.min.css": ["phpmyfaq/assets/template/default/css/style.css"],
+                    "phpmyfaq/assets/template/default/css/style.rtl.min.css": ["phpmyfaq/assets/template/default/css/style.rtl.css"]
                 }
             }
         },
