@@ -7,10 +7,7 @@ module.exports = function(grunt) {
         meta: {
             version: '2.8.1'
         },
-        banner: '/*! phpMyFAQ - v2.8.1 - ' +
-            '* http://www.phpmyfaq.de/\n' +
-            '* Copyright (c) 2001 - 2013 Thorsten Rinne and phpMyFAQ Team' +
-            'Licensed MPL 2.0 */\n',
+        banner: '/*! phpMyFAQ v2.8 - http://www.phpmyfaq.de - Copyright (c) 2001 - 2013 Thorsten Rinne and phpMyFAQ Team */\n',
         // Task configuration.
         bower: {
             install: {
@@ -74,11 +71,13 @@ module.exports = function(grunt) {
             beforeconcat: [
                 'phpmyfaq/assets/js/autosave.js',
                 'phpmyfaq/assets/js/functions.js'
-            ],
+            ]
         },
         less: {
             development: {
                 files: {
+                    "phpmyfaq/admin/assets/css/style.css": "phpmyfaq/admin/assets/less/style.less",
+                    "phpmyfaq/admin/assets/css/style.rtl.css": "phpmyfaq/admin/assets/less/style.rtl.less",
                     "phpmyfaq/assets/template/default/css/style.css": "phpmyfaq/assets/template/default/less/style.less",
                     "phpmyfaq/assets/template/default/css/style.rtl.css": "phpmyfaq/assets/template/default/less/style.rtl.less"
                 }
@@ -87,9 +86,12 @@ module.exports = function(grunt) {
         cssmin: {
             add_banner: {
                 options: {
-                    banner: '/* phpMyFAQ 2.8 */'
+                    banner: '<%= banner %>',
+                    keepSpecialComments: 0
                 },
                 files: {
+                    "phpmyfaq/admin/assets/css/style.css": "phpmyfaq/admin/assets/css/style.css",
+                    "phpmyfaq/admin/assets/css/style.rtl.css": "phpmyfaq/admin/assets/css/style.rtl.css",
                     "phpmyfaq/assets/template/default/css/style.min.css": ["phpmyfaq/assets/template/default/css/style.css"],
                     "phpmyfaq/assets/template/default/css/style.rtl.min.css": ["phpmyfaq/assets/template/default/css/style.rtl.css"]
                 }
