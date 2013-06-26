@@ -25,7 +25,16 @@ module.exports = function(grunt) {
             dist: {
                 src: [
                     'phpmyfaq/assets/js/libs/jquery.min.js',
-                    'vendor/twitter/bootstrap/js/*.js',
+                    'vendor/twitter/bootstrap/js/bootstrap-tooltip.js',
+                    'vendor/twitter/bootstrap/js/bootstrap-transition.js',
+                    'vendor/twitter/bootstrap/js/bootstrap-alert.js',
+                    'vendor/twitter/bootstrap/js/bootstrap-button.js',
+                    'vendor/twitter/bootstrap/js/bootstrap-collapse.js',
+                    'vendor/twitter/bootstrap/js/bootstrap-dropdown.js',
+                    'vendor/twitter/bootstrap/js/bootstrap-modal.js',
+                    'vendor/twitter/bootstrap/js/bootstrap-popover.js',
+                    'vendor/twitter/bootstrap/js/bootstrap-tab.js',
+                    'vendor/twitter/bootstrap/js/bootstrap-typeahead.js',
                     'phpmyfaq/assets/js/autosave.js',
                     'phpmyfaq/assets/js/functions.js'
                 ],
