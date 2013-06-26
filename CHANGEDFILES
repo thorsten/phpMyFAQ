@@ -1,3 +1,45 @@
+CHANGED FILES FROM 2.8.0 -> 2.8.1
+
+./admin/assets/css/style.css
+./admin/assets/css/style.rtl.css
+./admin/attachment.php
+./admin/footer.php
+./admin/group.php
+./admin/index.php
+./admin/record.edit.php
+./assets/js/autosave.js
+./assets/js/functions.js
+./assets/js/phpmyfaq.js
+./assets/js/phpmyfaq.min.js
+./assets/template/default/artikel.tpl
+./assets/template/default/css/style.css
+./assets/template/default/css/style.min.css
+./assets/template/default/css/style.rtl.css
+./assets/template/default/css/style.rtl.min.css
+./assets/template/default/index.tpl
+./assets/template/default/indexLogin.tpl
+./assets/template/default/indexMaintenance.tpl
+./assets/template/default/indexNewUser.tpl
+./inc/PMF/Attachment/Filesystem/File.php
+./inc/PMF/Auth/AuthLdap.php
+./inc/PMF/Captcha.php
+./inc/PMF/DB/Mysql.php
+./inc/PMF/DB/Mysqli.php
+./inc/PMF/Faq.php
+./inc/PMF/Helper/Captcha.php
+./inc/PMF/Pagination.php
+./inc/PMF/System.php
+./install/setup.php
+./install/update.php
+./lang/language_ar.php
+./lang/language_de.php
+./lang/language_en.php
+./api.php
+./index.php
+./show.php
+
+
+
 CHANGED FILES FROM 2.8.0-RC4 -> 2.8.0
 
 ./admin/ajax.config_list.php

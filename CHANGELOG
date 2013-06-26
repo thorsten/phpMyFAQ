@@ -5,13 +5,14 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.8.1 - 2013-06-
+Version 2.8.1 - 2013-06-26
 - added support for Grunt (Thorsten)
 - added minified CSS and JavaScript code (Thorsten)
 - improved usability for group administration (Thorsten)
 - fixed broken updates for MS SQL and SQLite (Thorsten)
 - fixed IE8 related JavaScript issues (Thorsten)
 - fixed HTML5 validation errors (Thorsten)
+- fixed Arabic translation (Thorsten)
 - fixed some minor bugs (Thorsten)
 
 Version 2.8.0 - 2013-05-21
