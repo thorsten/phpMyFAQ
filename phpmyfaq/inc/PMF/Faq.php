@@ -1996,8 +1996,6 @@ class PMF_Faq
                     continue;
                 }
 
-                echo 'latest';
-
                 $data['datum']   = $row->datum;
                 $data['thema']   = $row->thema;
                 $data['content'] = $row->content;
