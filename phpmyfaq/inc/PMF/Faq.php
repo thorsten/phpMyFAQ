@@ -1891,9 +1891,11 @@ class PMF_Faq
         $oldId = 0;
         while (($row = $this->_config->getDb()->fetchObject($result)) && $i <= $count) {
             if ($oldId != $row->id) {
-                if ($this->user != $this->user || !in_array($row->group_id, $this->groups)) {
+
+                if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
                     continue;
                 }
+
                 $data['visits']     = $row->visits;
                 $data['thema']      = $row->thema;
                 $data['date']       = $row->datum;
@@ -1989,9 +1991,13 @@ class PMF_Faq
         $oldId = 0;
         while (($row = $this->_config->getDb()->fetchObject($result)) && $i < $count ) {
             if ($oldId != $row->id) {
-                if ($this->user != $row->user_id || !in_array($row->group_id, $this->groups)) {
+
+                if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
                     continue;
                 }
+
+                echo 'latest';
+
                 $data['datum']   = $row->datum;
                 $data['thema']   = $row->thema;
                 $data['content'] = $row->content;
@@ -3047,7 +3053,7 @@ class PMF_Faq
                     implode(', ', $this->groups));
             } else {
                 return sprintf(
-                    "AND ( fdg.group_id IN (%s) OR (fdu.user_id = %d OR fdg.group_id IN (%s)) )",
+                    "AND ( fdg.group_id IN (%s) OR (fdu.user_id IN (-1, %d) OR fdg.group_id IN (%s)) )",
                     implode(', ', $this->groups),
                     $this->user,
                     implode(', ', $this->groups)
