@@ -1,9 +1,12 @@
-phpMyFAQ 2.8.1
+phpMyFAQ 2.8.2-beta
 Codename "Perdita"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.8.2-beta -2013-07
+- fixed some minor bugs (Thorsten)
 
 Version 2.8.1 - 2013-06-26
 - added support for Grunt (Thorsten)
