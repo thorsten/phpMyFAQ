@@ -468,7 +468,7 @@ class PMF_Faq
                     $link->getSEOItemTitle($title)
                 );
             } else {
-                $useRewrite = true;
+                $useRewrite = false;
                 $rewriteUrl = '';
                 $baseUrl    = sprintf(
                     "%s?%saction=show&amp;cat=%d&amp;seite=%d",
@@ -487,7 +487,7 @@ class PMF_Faq
                 'rewriteUrl'    => $rewriteUrl,
                 'pageParamName' => 'seite'
             );
-        
+
             $pagination = new PMF_Pagination($this->_config, $options);
             $output    .= $pagination->render();
         }
