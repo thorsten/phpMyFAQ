@@ -478,6 +478,7 @@ $PMF_LANG["msgMainCategory"] = "übergeordnete Kategorie";
 $PMF_LANG["ad_passwdsuc"] = "Das Passwort wurde erfolgreich geändert!";
 
 // Added v1.3.0 - 04.03.2003 - Thorsten
+$PMF_LANG["ad_xml_gen"] = "Als XML-Datei exportieren";
 $PMF_LANG["ad_entry_locale"] = "Sprache";
 $PMF_LANG["msgLangaugeSubmit"] = "Sprache ändern";
 
@@ -517,7 +518,7 @@ $PMF_LANG["ad_entry_email"] = "E-Mail:";
 $PMF_LANG["ad_entry_allowComments"] = "Kommentare zulassen";
 $PMF_LANG["msgWriteNoComment"] = "Kommentieren nicht möglich";
 $PMF_LANG["ad_user_realname"] = "Dein Name:";
-$PMF_LANG["ad_export_generate_pdf"] = "PDF-Datei generieren";
+$PMF_LANG["ad_export_generate_pdf"] = "Als PDF-Datei exportieren";
 $PMF_LANG["ad_export_full_faq"] = "Die FAQ als PDF-Datei: ";
 $PMF_LANG["err_bannedIP"] = "Diese IP ist gesperrt.";
 $PMF_LANG["err_SaveQuestion"] = "Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong> und <strong>Frage</strong>!";
@@ -680,7 +681,7 @@ $PMF_LANG["ad_export_type_choose"] = "Bitte wählen Sie eines der unterstützten
 $PMF_LANG["ad_export_download_view"] = "Herunterladen oder Inline ansehen?";
 $PMF_LANG["ad_export_download"] = "Herunterladen";
 $PMF_LANG["ad_export_view"] = "Inline ansehen";
-$PMF_LANG["ad_export_gen_xhtml"] = "Erstelle eine XHTML Datei";
+$PMF_LANG["ad_export_gen_xhtml"] = "Als XHTML-Datei exportieren";
 $PMF_LANG["ad_export_gen_docbook"] = "Erstelle eine DocBook XML Datei";
 
 // added v2.0.0 - 2006-07-22 by Matteo
