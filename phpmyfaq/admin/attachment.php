@@ -85,25 +85,22 @@ if ($auth === true) {
 if (is_null($currentAction) || !is_null($currentSave)) {
 ?>
 <!DOCTYPE html>
-<!--[if lt IE 7 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie6"> <![endif]-->
-<!--[if IE 7 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie7"> <![endif]-->
-<!--[if IE 8 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie8"> <![endif]-->
-<!--[if IE 9 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js"> <!--<![endif]-->
+<!--[if lt IE 7 ]> <html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]> <html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]> <html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]> <html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title><?php print $faqConfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
-    <base href="<?php print $faqConfig->get('main.referenceURL'); ?>/admin/" />
+    <title><?php echo $faqConfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
+    <base href="<?php echo $faqConfig->get('main.referenceURL'); ?>/admin/" />
     
     <meta name="description" content="Only Chuck Norris can divide by zero.">
     <meta name="author" content="phpMyFAQ Team">
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
-    <meta name="application-name" content="phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?>">
-    <meta name="copyright" content="(c) 2001-2013 phpMyFAQ Team">
+    <meta name="application-name" content="phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?>">
     <meta name="publisher" content="phpMyFAQ Team">
-    <meta name="MSSmartTagsPreventParsing" content="true">
 
     <link rel="stylesheet" href="assets/css/style.css?v=1">
 
@@ -111,8 +108,8 @@ if (is_null($currentAction) || !is_null($currentSave)) {
     <script src="../assets/js/libs/jquery.min.js"></script>
     <script src="../assets/js/phpmyfaq.js"></script>
 
-    <link rel="shortcut icon" href="../assets/template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico">
-    <link rel="apple-touch-icon" href="../assets/template/<?php print PMF_Template::getTplSetName(); ?>/apple-touch-icon.png">
+    <link rel="shortcut icon" href="../assets/template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico">
+    <link rel="apple-touch-icon" href="../assets/template/<?php echo PMF_Template::getTplSetName(); ?>/apple-touch-icon.png">
 </head>
 <body class="attachments">
 
@@ -124,15 +121,18 @@ if (is_null($currentAction) && $auth && $permission['addattachment']) {
 ?>
         <form action="attachment.php?action=save" enctype="multipart/form-data" method="post">
             <fieldset>
-            <legend><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></legend>
-                <input type="hidden" name="MAX_FILE_SIZE" value="<?php print $faqConfig->get('records.maxAttachmentSize'); ?>" />
-                <input type="hidden" name="record_id" value="<?php print $recordId; ?>" />
-                <input type="hidden" name="record_lang" value="<?php print $recordLang; ?>" />
+            <legend>
+                <?php echo $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?>
+                (max <?php echo round($faqConfig->get('records.maxAttachmentSize') / pow(1024, 2), 2) ?> MB)
+            </legend>
+                <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $faqConfig->get('records.maxAttachmentSize'); ?>" />
+                <input type="hidden" name="record_id" value="<?php echo $recordId; ?>" />
+                <input type="hidden" name="record_lang" value="<?php echo $recordLang; ?>" />
                 <input type="hidden" name="save" value="TRUE" />
-                <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
-                <?php print $PMF_LANG["ad_att_att"]; ?> <input name="userfile" type="file" />
+                <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession(); ?>" />
+                <?php echo $PMF_LANG["ad_att_att"]; ?> <input name="userfile" type="file" />
                 <button class="btn btn-primary" type="submit">
-                    <?php print $PMF_LANG['ad_att_butt']; ?>
+                    <?php echo $PMF_LANG['ad_att_butt']; ?>
                 </button>
             </fieldset>
         </form>
@@ -144,14 +144,14 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
 }
 
 if (!is_null($currentAction) && $auth && !$permission['addattachment']) {
-    print $PMF_LANG['err_NotAuth'];
+    echo $PMF_LANG['err_NotAuth'];
 }
 
 if (!is_null($currentSave) && $currentSave == true && $auth && $permission['addattachment']) {
     $recordId   = filter_input(INPUT_POST, 'record_id',   FILTER_VALIDATE_INT);
     $recordLang = filter_input(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
 ?>
-<p><strong><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></strong></p>
+<p><strong><?php echo $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></strong></p>
 <?php
     if (is_uploaded_file($_FILES['userfile']['tmp_name']) && !($_FILES['userfile']['size'] > $faqConfig->get('records.maxAttachmentSize'))) {
 
@@ -167,13 +167,13 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission['adda
             $uploaded = $att->save($_FILES["userfile"]["tmp_name"], $_FILES["userfile"]["name"]);
             
             if ($uploaded) {
-                print "<p>".$PMF_LANG["ad_att_suc"]."</p>";
+                echo "<p>".$PMF_LANG["ad_att_suc"]."</p>";
             } else {
                 throw new Exception;
             }
         } catch (Exception $e) {
             $att->delete();
-            print "<p>".$PMF_LANG["ad_att_fail"]."</p>";
+            echo "<p>".$PMF_LANG["ad_att_fail"]."</p>";
         }
 
         printf(
@@ -204,7 +204,7 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission['adda
 
 }
 if (!is_null($currentSave) && $currentSave == true && $auth && !$permission['addattachment']) {
-    print $PMF_LANG["err_NotAuth"];
+    echo $PMF_LANG["err_NotAuth"];
 }
 
 $faqConfig->getDb()->close();
