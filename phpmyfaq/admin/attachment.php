@@ -130,10 +130,11 @@ if (is_null($currentAction) && $auth && $permission['addattachment']) {
                 <input type="hidden" name="record_lang" value="<?php echo $recordLang; ?>" />
                 <input type="hidden" name="save" value="TRUE" />
                 <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession(); ?>" />
-                <?php echo $PMF_LANG["ad_att_att"]; ?> <input name="userfile" type="file" />
+                <?php echo $PMF_LANG["ad_att_att"]; ?> <input name="userfile" type="file" id="fileUpload" />
                 <button class="btn btn-primary" type="submit">
                     <?php echo $PMF_LANG['ad_att_butt']; ?>
                 </button>
+                (<?php echo $PMF_LANG['msgAttachmentsFilesize'] ?>: <output id="filesize"></output>)
             </fieldset>
         </form>
 <?php
@@ -190,7 +191,7 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission['adda
             '<p>%s</p>',
             sprintf(
                 $PMF_LANG['ad_attach_4'],
-                $faqConfig->get('records.maxAttachmentSize')
+                round($faqConfig->get('records.maxAttachmentSize') / pow(1024, 2), 2)
             )
         );
 
@@ -209,5 +210,6 @@ if (!is_null($currentSave) && $currentSave == true && $auth && !$permission['add
 
 $faqConfig->getDb()->close();
 ?>
+<script src="assets/js/uploadcheck.js"></script>
 </body>
 </html>
