@@ -99,6 +99,7 @@ $faqSystem = new PMF_System();
     </section>
 
     <?php endif; ?>
+    <?php if ($permission['editconfig']): ?>
 
     <section class="row-fluid">
         <div class="span6">
@@ -199,3 +200,5 @@ $faqSystem = new PMF_System();
 
         <div style="font-size: 5px; text-align: right; color: #f5f5f5">NOTE: Art is resistance.</div>
     </section>
+
+    <?php endif; ?>

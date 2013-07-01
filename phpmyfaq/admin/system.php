@@ -23,7 +23,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqSystem = new PMF_System();
+if ($permission['editconfig']) {
+    $faqSystem = new PMF_System();
 ?>
 <header>
     <h2><i class="icon-wrench"></i> <?php echo $PMF_LANG['ad_system_info']; ?></h2>
@@ -53,3 +54,7 @@ $faqSystem = new PMF_System();
         <?php endforeach; ?>
     </tbody>
 </table>
+<?php
+} else {
+    echo $PMF_LANG['err_NotAuth'];
+}
