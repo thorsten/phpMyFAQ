@@ -193,7 +193,8 @@ class PMF_Captcha
             $this->height,
             $this->width,
             'Chuck Norris has counted to infinity. Twice.',
-            'click to refresh');
+            'click to refresh'
+        );
         return $output;
     }
 
@@ -210,7 +211,7 @@ class PMF_Captcha
         $this->drawText();
         if (function_exists('imagejpeg')) {
             header('Content-Type: image/jpeg');
-            imagejpeg($this->img, '', ( int )$this->quality);
+            imagejpeg($this->img, null, (int)$this->quality);
         } elseif (function_exists('imagegif')) {
             header('Content-Type: image/gif');
             imagegif($this->img);
