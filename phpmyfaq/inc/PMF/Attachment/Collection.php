@@ -64,13 +64,13 @@ class PMF_Attachment_Collection
 
         $query = sprintf("
             SELECT
-                fa.id,
-                fa.record_id,
-                fa.record_lang,
-                fa.filename,
-                fa.filesize,
-                fa.mime_type,
-                fd.thema
+                fa.id AS ID,
+                fa.record_id AS record_id,
+                fa.record_lang AS record_lang,
+                fa.filename AS filename,
+                fa.filesize AS filesize,
+                fa.mime_type AS mime_type,
+                fd.thema AS thema
             FROM
                 %s fa
             JOIN
