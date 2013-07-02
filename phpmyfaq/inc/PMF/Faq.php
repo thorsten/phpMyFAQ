@@ -680,7 +680,7 @@ class PMF_Faq
 
         $query = sprintf(
             "SELECT
-                 DISTINCT id, lang, solution_id, revision_id, active, sticky, keywords,
+                 id, lang, solution_id, revision_id, active, sticky, keywords,
                  thema, content, author, email, comment, datum, links_state, 
                  links_check_date, date_start, date_end
             FROM
@@ -698,7 +698,8 @@ class PMF_Faq
             %s
             AND
                 fd.lang = '%s'
-                %s",
+                %s
+            GROUP BY fd.id",
             PMF_Db::getTablePrefix(),
             isset($revisionId) ? 'faqdata_revisions': 'faqdata',
             PMF_Db::getTablePrefix(),
