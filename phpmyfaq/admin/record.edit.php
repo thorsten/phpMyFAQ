@@ -696,24 +696,24 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                 success: function(permissions) {
                     var perms = jQuery.parseJSON(permissions);
 
-                    if (-1 === perms.user[0]) {
-                        $('#restrictedusers').removeAttr("checked").attr("disabled", "disabled");
-                        $('#allusers').attr("checked","checked");
+                    if ("-1" === perms.user[0]) {
+                        $('#restrictedusers').prop('checked', false).prop("disabled", true);
+                        $('#allusers').prop('checked', true).prop("disabled", false);
                     } else {
-                        $('#allusers').removeAttr("checked").attr("disabled", "disabled");
-                        $('#restrictedusers').attr("checked","checked");
+                        $('#allusers').prop('checked', false).prop("disabled", true);
+                        $('#restrictedusers').prop('checked', true).prop("disabled", false);
                         $.each(perms.user, function(key, value) {
-                                $(".selected-users option[value='" + value + "']").attr('selected',true);
+                            $(".selected-users option[value='" + value + "']").prop('selected',true);
                         });
                     }
-                    if (-1 === perms.group[0]) {
-                        $('#restrictedgroups').removeAttr("checked").attr("disabled", "disabled");
-                        $('#allgroups').attr("checked","checked");
+                    if ("-1" === perms.group[0]) {
+                        $('#restrictedgroups').prop('checked', false).prop("disabled", true);
+                        $('#allgroups').prop('checked', true).prop("disabled", false);
                     } else {
-                        $('#allgroups').removeAttr("checked").attr("disabled", "disabled");
-                        $('#restrictedgroups').attr("checked","checked");
+                        $('#allgroups').prop('checked', false).prop("disabled", true);
+                        $('#restrictedgroups').prop('checked', true).prop("disabled", false);
                         $.each(perms.group, function(key, value) {
-                            $(".selected-groups option[value='" + value + "']").attr('selected',true);
+                            $(".selected-groups option[value='" + value + "']").prop('selected',true);
                         });
                     }
                 }
