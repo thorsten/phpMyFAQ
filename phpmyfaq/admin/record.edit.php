@@ -696,7 +696,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                 success: function(permissions) {
                     var perms = jQuery.parseJSON(permissions);
 
-                    if (-1 == (int)perms.user[0]) {
+                    if (-1 === perms.user[0]) {
                         $('#restrictedusers').removeAttr("checked").attr("disabled", "disabled");
                         $('#allusers').attr("checked","checked");
                     } else {
