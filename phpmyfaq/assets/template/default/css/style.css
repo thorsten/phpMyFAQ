@@ -6509,6 +6509,21 @@ body {
 #content .comment img {
   padding-right: 5px;
 }
+#content .relevance1 {
+  font-size: 80%;
+}
+#content .relevance2 {
+  font-size: 100%;
+}
+#content .relevance3 {
+  font-size: 120%;
+}
+#content .relevance4 {
+  font-size: 140%;
+}
+#content .relevance5 {
+  font-size: 160%;
+}
 #content .phpmyfaq-search-results li {
   padding-bottom: 5px;
 }
