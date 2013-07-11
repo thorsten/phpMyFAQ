@@ -663,7 +663,7 @@ class PMF_Category
                 $totFaqRecords += $number[$parent];
                 $num_entries    = '<span class="rssCategoryLink"> ('.$plr->GetMsg('plmsgEntries',$number[$parent]);
                 $num_entries   .= sprintf(
-                    ' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank"><img id="category_%d_RSS" src="assets/img/feed.png" width="16" height="16" alt="RSS" border="0" /></a>',
+                    ' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank"><img id="category_%d_RSS" src="assets/img/feed.png" width="16" height="16" alt="RSS"></a>',
                     $parent,
                     $this->language,
                     $parent

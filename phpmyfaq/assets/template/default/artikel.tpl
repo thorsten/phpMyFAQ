@@ -105,8 +105,7 @@
 
             <p hidden-print>{writeCommentMsg}</p>
 
-            <!-- Comment Form -->
-            <a name="comment"></a>
+            <a id="comment"></a>
             <div id="commentForm" class="hide">
                 <form id="formValues" action="#" method="post" class="form-horizontal">
                     <input type="hidden" name="id" id="id" value="{id}" />
@@ -143,7 +142,6 @@
                     </div>
                 </form>
             </div>
-            <!-- /Comment Form -->
 
             <div id="loader"></div>
             <div id="comments">
