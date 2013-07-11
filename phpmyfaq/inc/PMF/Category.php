@@ -846,7 +846,7 @@ class PMF_Category
             return sprintf(
                 '<ul class="%s">%s</ul>',
                 $useCssClass,
-                implode('<span class="divider">' . $separator . '</span>', $temp)
+                implode('<li class="divider">' . $separator . '</li>', $temp)
             );
         } else {
             return implode($separator, $temp);

@@ -6441,6 +6441,9 @@ body {
 #content .nav {
   margin-bottom: 0;
 }
+#content .divider {
+  padding: 0 10px 0 10px;
+}
 #content .answer {
   margin-bottom: 20px;
 }
