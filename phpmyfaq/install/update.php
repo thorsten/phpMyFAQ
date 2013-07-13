@@ -835,16 +835,8 @@ if ($step == 3) {
         $faqConfig->update(array('main.currentVersion' => PMF_System::getVersion()));
     }
 
-    // optimize tables
+    // optimize tables if possible
     switch ($DB["type"]) {
-        case 'mssql':
-        case 'sqlsrv':
-            // Get all table names
-            $faqConfig->getDb()->getTableNames(PMF_Db::getTablePrefix());
-            foreach ($faqConfig->getDb()->tableNames as $tableName) {
-                $query[] = 'DBCC DBREINDEX ('.$tableName.')';
-            }
-            break;
         case 'mysql':
         case 'mysqli':
             // Get all table names
