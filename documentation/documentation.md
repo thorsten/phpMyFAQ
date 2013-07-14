@@ -458,6 +458,7 @@ Upgrading from 2.6.x is a major upgrade. Please make a full backup before you ru
 *   **database.php** and **ldap.php** (if you use LDAP) in the directory **config/**
 *   all files in the directory **template/**
 *   the directory **attachments/**
+*   the directory **data/**
 *   the directory **images/**
 
 Open the following URL in your browser:
@@ -481,6 +482,7 @@ Upgrading from 2.7.x is a major upgrade. Please make a full backup before you ru
 *   **database.php** and **ldap.php** (if you use LDAP) in the directory **config/**
 *   all files in the directory **template/**
 *   the directory **attachments/**
+*   the directory **data/**
 *   the directory **images/**
 
 Open the following URL in your browser:
@@ -502,6 +504,7 @@ Updating an existing phpMyFAQ 2.8.x installation is fairly simple. Via FTP copy 
 *   all files in the directory **config/**
 *   all files in the directory **assets/template/**
 *   the directory **attachments/**
+*   the directory **data/**
 *   the directory **images/**
 
 Open the following URL in your browser:
