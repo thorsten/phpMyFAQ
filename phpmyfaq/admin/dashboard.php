@@ -72,8 +72,7 @@ if (!is_null($getJson) && 'verify' === $getJson) {
     $faqSystem    = new PMF_System();
     $localHashes  = $faqSystem->createHashes();
     $remoteHashes = file_get_contents(
-        'http://www.phpmyfaq.de/api/verify/2.8.0-RC3'
-//        'http://www.phpmyfaq.de/api/verify/' . $faqConfig->get('main.currentVersion')
+        'http://www.phpmyfaq.de/api/verify/' . $faqConfig->get('main.currentVersion')
     );
 
     if (!is_array(json_decode($remoteHashes, true))) {
@@ -105,3 +104,4 @@ $twig->loadTemplate('dashboard.twig')
     ->display($templateVars);
 
 unset($templateVars);
+

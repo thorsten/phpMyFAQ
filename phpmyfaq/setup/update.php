@@ -28,8 +28,8 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     set_time_limit(0);
 }
 
-if (version_compare(PHP_VERSION, '5.3.3') < 0) {
-    die("Sorry, but you need PHP 5.3.3 or later!"); // Die hard because of "use"
+if (version_compare(PHP_VERSION, '5.4.4') < 0) {
+    die("Sorry, but you need PHP 5.4.4 or later!"); // Die hard because of "use"
 }
 
 require PMF_ROOT_DIR . '/inc/Bootstrap.php';
@@ -697,16 +697,9 @@ if ($step == 3) {
         $faqConfig->update(array('main.currentVersion' => PMF_System::getVersion()));
     }
 
-    // optimize tables
+    // optimize tables if possible
     switch ($DB["type"]) {
-        case 'mssql':
-        case 'sqlsrv':
-            // Get all table names
-            $faqConfig->getDb()->getTableNames(PMF_Db::getTablePrefix());
-            foreach ($faqConfig->getDb()->tableNames as $tableName) {
-                $query[] = 'DBCC DBREINDEX ('.$tableName.')';
-            }
-            break;
+        case 'mysql':
         case 'mysqli':
             // Get all table names
             $faqConfig->getDb()->getTableNames(PMF_Db::getTablePrefix());

@@ -247,6 +247,7 @@ $languageCodes = array(
     'FJ' =>     'Fiji',
     'FO' =>     'Faeroese',
     'FR' =>     'French',
+    'FR-CA' =>  'French (Canada)',
     'FY' =>     'Frisian',
     'GA' =>     'Irish',
     'GD' =>     'Gaelic',

@@ -58,7 +58,7 @@ class PMF_System
     /**
      * Minimum required PHP version
      */
-    const VERSION_MINIMUM_PHP = '5.3.3';
+    const VERSION_MINIMUM_PHP = '5.4.4';
 
     /**
      * Array of required PHP extensions
@@ -80,7 +80,6 @@ class PMF_System
      */
     private $_missingExtensions = array();
 
-
     /**
      * Supported databases for phpMyFAQ.
      *
@@ -90,8 +89,7 @@ class PMF_System
         'mysqli'  => 'MySQL 5.x, MariaDB 5.x (ext/mysqli)',
         'pgsql'   => 'PostgreSQL 8.x',
         'sqlite'  => 'SQLite',
-        'sqlite3' => 'SQLite 3 (only PHP 5.3+, experimental)',
-        'mssql'   => 'MS SQL Server (deprecated)',
+        'sqlite3' => 'SQLite 3 (experimental)',
         'sqlsrv'  => 'MS SQL Server Driver for PHP'
     );
 

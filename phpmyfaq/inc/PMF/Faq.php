@@ -379,7 +379,7 @@ class PMF_Faq
 
         $result = $this->_config->getDb()->query($query);
         $num    = $this->_config->getDb()->numRows($result);
-        $pages  = ceil($num / $numPerPage);
+        $pages  = (int)ceil($num / $numPerPage);
 
         if ($page == 1) {
             $first = 0;
@@ -450,17 +450,10 @@ class PMF_Faq
         }
 
         if ($pages > 1) {
-            // Set base URL scheme
+            // Set rewrite URL, if needed
             if ($this->_config->get('main.enableRewriteRules')) {
                 $link       = new PMF_Link(PMF_Link::getSystemRelativeUri('index.php'), $this->_config);
                 $useRewrite = true;
-                $baseUrl    = sprintf(
-                    "%scategory/%d/%d/%s.html",
-                    PMF_Link::getSystemRelativeUri('index.php'),
-                    $categoryId,
-                    $page,
-                    $link->getSEOItemTitle($title)
-                );
                 $rewriteUrl = sprintf(
                     "%scategory/%d/%%d/%s.html",
                     PMF_Link::getSystemRelativeUri('index.php'),
@@ -468,16 +461,16 @@ class PMF_Faq
                     $link->getSEOItemTitle($title)
                 );
             } else {
-                $useRewrite = true;
+                $useRewrite = false;
                 $rewriteUrl = '';
-                $baseUrl    = sprintf(
-                    "%s?%saction=show&amp;cat=%d&amp;seite=%d",
-                    PMF_Link::getSystemRelativeUri(),
-                    (empty($sids) ? '' : $sids),
-                    $categoryId,
-                    $page
-                );
             }
+            $baseUrl = sprintf(
+                "%s?%saction=show&amp;cat=%d&amp;seite=%d",
+                PMF_Link::getSystemRelativeUri(),
+                (empty($sids) ? '' : $sids),
+                $categoryId,
+                $page
+            );
 
             $options = array(
                 'baseUrl'       => $baseUrl,
@@ -487,7 +480,7 @@ class PMF_Faq
                 'rewriteUrl'    => $rewriteUrl,
                 'pageParamName' => 'seite'
             );
-        
+
             $pagination = new PMF_Pagination($this->_config, $options);
             $output    .= $pagination->render();
         }
@@ -680,7 +673,7 @@ class PMF_Faq
 
         $query = sprintf(
             "SELECT
-                 DISTINCT id, lang, solution_id, revision_id, active, sticky, keywords,
+                 id, lang, solution_id, revision_id, active, sticky, keywords,
                  thema, content, author, email, comment, datum, links_state, 
                  links_check_date, date_start, date_end
             FROM
@@ -698,7 +691,8 @@ class PMF_Faq
             %s
             AND
                 fd.lang = '%s'
-                %s",
+                %s
+            GROUP BY fd.id",
             PMF_Db::getTablePrefix(),
             isset($revisionId) ? 'faqdata_revisions': 'faqdata',
             PMF_Db::getTablePrefix(),
@@ -1891,9 +1885,11 @@ class PMF_Faq
         $oldId = 0;
         while (($row = $this->_config->getDb()->fetchObject($result)) && $i <= $count) {
             if ($oldId != $row->id) {
-                if ($this->user != $this->user || !in_array($row->group_id, $this->groups)) {
+
+                if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
                     continue;
                 }
+
                 $data['visits']     = $row->visits;
                 $data['thema']      = $row->thema;
                 $data['date']       = $row->datum;
@@ -1989,9 +1985,11 @@ class PMF_Faq
         $oldId = 0;
         while (($row = $this->_config->getDb()->fetchObject($result)) && $i < $count ) {
             if ($oldId != $row->id) {
-                if ($this->user != $row->user_id || !in_array($row->group_id, $this->groups)) {
+
+                if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
                     continue;
                 }
+
                 $data['datum']   = $row->datum;
                 $data['thema']   = $row->thema;
                 $data['content'] = $row->content;
@@ -3047,7 +3045,7 @@ class PMF_Faq
                     implode(', ', $this->groups));
             } else {
                 return sprintf(
-                    "AND ( fdg.group_id IN (%s) OR (fdu.user_id = %d OR fdg.group_id IN (%s)) )",
+                    "AND ( fdg.group_id IN (%s) OR (fdu.user_id IN (-1, %d) OR fdg.group_id IN (%s)) )",
                     implode(', ', $this->groups),
                     $this->user,
                     implode(', ', $this->groups)

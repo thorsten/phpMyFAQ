@@ -7,10 +7,7 @@ module.exports = function(grunt) {
         meta: {
             version: '2.8.1'
         },
-        banner: '/*! phpMyFAQ - v2.8.1 - ' +
-            '* http://www.phpmyfaq.de/\n' +
-            '* Copyright (c) 2001 - 2013 Thorsten Rinne and phpMyFAQ Team' +
-            'Licensed MPL 2.0 */\n',
+        banner: '/*! phpMyFAQ v2.8 - http://www.phpmyfaq.de - Copyright (c) 2001 - 2013 Thorsten Rinne and phpMyFAQ Team */\n',
         // Task configuration.
         bower: {
             install: {
@@ -23,7 +20,21 @@ module.exports = function(grunt) {
                 stripBanners: true
             },
             dist: {
-                src: ['vendor/twitter/bootstrap/js/*.js', 'phpmyfaq/assets/js/autosave.js', 'phpmyfaq/assets/js/functions.js'],
+                src: [
+                    'phpmyfaq/assets/js/libs/jquery.min.js',
+                    'vendor/twitter/bootstrap/js/bootstrap-tooltip.js',
+                    'vendor/twitter/bootstrap/js/bootstrap-transition.js',
+                    'vendor/twitter/bootstrap/js/bootstrap-alert.js',
+                    'vendor/twitter/bootstrap/js/bootstrap-button.js',
+                    'vendor/twitter/bootstrap/js/bootstrap-collapse.js',
+                    'vendor/twitter/bootstrap/js/bootstrap-dropdown.js',
+                    'vendor/twitter/bootstrap/js/bootstrap-modal.js',
+                    'vendor/twitter/bootstrap/js/bootstrap-popover.js',
+                    'vendor/twitter/bootstrap/js/bootstrap-tab.js',
+                    'vendor/twitter/bootstrap/js/bootstrap-typeahead.js',
+                    'phpmyfaq/assets/js/autosave.js',
+                    'phpmyfaq/assets/js/functions.js'
+                ],
                 dest: 'phpmyfaq/assets/js/phpmyfaq.js'
             }
         },
@@ -33,7 +44,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 src: '<%= concat.dist.dest %>',
-                dest: 'phpmyfaq/assets/js/phpmyfaq.js'
+                dest: 'phpmyfaq/assets/js/phpmyfaq.min.js'
             }
         },
         jshint: {
@@ -50,10 +61,40 @@ module.exports = function(grunt) {
                 boss: true,
                 eqnull: true,
                 browser: true,
-                globals: {}
+                globals: {
+                    "jQuery": true
+                }
             },
             gruntfile: {
                 src: 'Gruntfile.js'
+            },
+            beforeconcat: [
+                'phpmyfaq/assets/js/autosave.js',
+                'phpmyfaq/assets/js/functions.js'
+            ]
+        },
+        less: {
+            development: {
+                files: {
+                    "phpmyfaq/admin/assets/css/style.css": "phpmyfaq/admin/assets/less/style.less",
+                    "phpmyfaq/admin/assets/css/style.rtl.css": "phpmyfaq/admin/assets/less/style.rtl.less",
+                    "phpmyfaq/assets/template/default/css/style.css": "phpmyfaq/assets/template/default/less/style.less",
+                    "phpmyfaq/assets/template/default/css/style.rtl.css": "phpmyfaq/assets/template/default/less/style.rtl.less"
+                }
+            }
+        },
+        cssmin: {
+            add_banner: {
+                options: {
+                    banner: '<%= banner %>',
+                    keepSpecialComments: 0
+                },
+                files: {
+                    "phpmyfaq/admin/assets/css/style.css": "phpmyfaq/admin/assets/css/style.css",
+                    "phpmyfaq/admin/assets/css/style.rtl.css": "phpmyfaq/admin/assets/css/style.rtl.css",
+                    "phpmyfaq/assets/template/default/css/style.min.css": ["phpmyfaq/assets/template/default/css/style.css"],
+                    "phpmyfaq/assets/template/default/css/style.rtl.min.css": ["phpmyfaq/assets/template/default/css/style.rtl.css"]
+                }
             }
         },
         watch: {
@@ -81,6 +122,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-csslint');
 
     // Default task.
-    grunt.registerTask('default', ['jshint', 'concat', 'uglify']);
+    grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'less', 'cssmin']);
 
 };

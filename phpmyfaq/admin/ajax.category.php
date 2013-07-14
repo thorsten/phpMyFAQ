@@ -49,7 +49,7 @@ switch($ajaxAction) {
         if (empty($ajaxData['categories'])) {
             $categories = array(-1); // Access for all users and groups
         } else {
-            $categories = explode(',', $ajaxData['categories']);
+            $categories = explode(',', (int)$ajaxData['categories']);
         }
 
         $response->setData(

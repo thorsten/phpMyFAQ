@@ -187,7 +187,7 @@ class PMF_Captcha
     public function printCaptcha($action)
     {
         $output = sprintf(
-            '<img id="captchaImage" src="%s?%saction=%s&amp;gen=img&amp;ck=%s" height="%d" width="%d" border="0" alt="%s" title="%s" />',
+            '<img id="captchaImage" src="%s?%saction=%s&amp;gen=img&amp;ck=%s" height="%d" width="%d" alt="%s" title="%s">',
             $_SERVER['SCRIPT_NAME'],
             $this->sids,
             $action,
@@ -195,7 +195,8 @@ class PMF_Captcha
             $this->height,
             $this->width,
             'Chuck Norris has counted to infinity. Twice.',
-            'click to refresh');
+            'click to refresh'
+        );
         return $output;
     }
 
@@ -218,8 +219,9 @@ class PMF_Captcha
             $response->headers->set('Content-Type', 'image/jpeg');
             $quality = (int) $this->quality;
             $response->setCallback(function() use ($img, $quality) {
-                imagejpeg($img, '', $quality);
+                imagejpeg($img, null, $quality);
             });
+
         } elseif (function_exists('imagegif')) {
             $response->headers->set('Content-Type', 'image/gif');
             $response->setCallback(function() use ($img) {

@@ -9,7 +9,7 @@
 
     <title>{title}</title>
     <base href="{baseHref}" />
-    
+
     <meta name="description" content="{metaDescription}">
     <meta name="author" content="{metaPublisher}">
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
@@ -22,14 +22,13 @@
     <meta property="og:description" content="{metaDescription}" />
     <meta property="og:image" content="" />
 
-    <link rel="stylesheet" href="assets/template/{tplSetName}/css/{stylesheet}.css?v=1">
+    <link rel="stylesheet" href="assets/template/{tplSetName}/css/{stylesheet}.min.css?v=1">
     <link rel="shortcut icon" href="assets/template/{tplSetName}/favicon.ico">
     <link rel="apple-touch-icon" href="assets/template/{tplSetName}/apple-touch-icon.png">
     <link rel="canonical" href="{currentPageUrl}">
 
     <script src="assets/js/libs/modernizr.min.js"></script>
-    <script src="assets/js/libs/jquery.min.js"></script>
-    <script src="assets/js/phpmyfaq.js"></script>
+    <script src="assets/js/phpmyfaq.min.js"></script>
 
     <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="feed/news/rss.php">
     <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="feed/topten/rss.php">
@@ -109,7 +108,7 @@
                     <div class="input-append">
                         <input type="hidden" name="searchcategory" value="{categoryId}" />
                         <input type="hidden" name="action" value="search" />
-                        <input type="search" name="search" id="searchfield" size="30" placeholder="{searchBox} ..."
+                        <input type="text" name="search" id="searchfield" placeholder="{searchBox} ..."
                                class="input-xlarge search-query" />
                         <button class="btn btn-primary" type="submit" name="submit">
                             {searchBox}
