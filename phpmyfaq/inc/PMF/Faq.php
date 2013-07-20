@@ -1047,27 +1047,28 @@ class PMF_Faq
     /**
      * Adds new category relation to a record
      *
-     * @param  mixed   $categories Category or array of categories
-     * @param  integer $record_id  Record id
-     * @param  string  $language   Language
+     * @param  mixed   $category  Category or array of categories
+     * @param  integer $record_id Record id
+     * @param  string  $language  Language
+     *
      * @return boolean
      */
     public function addCategoryRelation($category, $record_id, $language)
     {
         // Just a fallback when (wrong case) $category is an array
         if (is_array($category)) {
-            addCategoryRelations($category, $record_id, $language);
+            $this->addCategoryRelations($category, $record_id, $language);
         }
         $categories[] = $category;
 
-        return addCategoryRelations($categories, $record_id, $language);
+        return $this->addCategoryRelations($categories, $record_id, $language);
     }
 
     /**
      * Deletes category relations to a record
      *
-     * @param  integer $record_id Record id
-     * @param  string  $language  Language
+     * @param  integer $record_id   Record id
+     * @param  string  $record_lang Language
      * @return boolean
      */
     public function deleteCategoryRelations($record_id, $record_lang)
@@ -1886,8 +1887,14 @@ class PMF_Faq
         while (($row = $this->_config->getDb()->fetchObject($result)) && $i <= $count) {
             if ($oldId != $row->id) {
 
-                if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
-                    continue;
+                if ($this->groupSupport) {
+                    if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
+                        continue;
+                    }
+                } else {
+                    if (!in_array($row->user_id, array(-1, $this->user))) {
+                        continue;
+                    }
                 }
 
                 $data['visits']     = $row->visits;
@@ -1986,8 +1993,14 @@ class PMF_Faq
         while (($row = $this->_config->getDb()->fetchObject($result)) && $i < $count ) {
             if ($oldId != $row->id) {
 
-                if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
-                    continue;
+                if ($this->groupSupport) {
+                    if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
+                        continue;
+                    }
+                } else {
+                    if (!in_array($row->user_id, array(-1, $this->user))) {
+                        continue;
+                    }
                 }
 
                 $data['datum']   = $row->datum;
