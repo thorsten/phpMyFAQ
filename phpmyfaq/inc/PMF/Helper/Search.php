@@ -270,7 +270,7 @@ class PMF_Helper_Search extends PMF_Helper
 
             foreach ($resultSet->getResultset() as $result) {
                 if ($displayedCounter >= $confPerPage) {
-                    continue;
+                    break;
                 }
                 $counter++;
                 if ($counter <= $firstPage) {
