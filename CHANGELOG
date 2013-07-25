@@ -5,7 +5,7 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.8.2 -2013-07-
+Version 2.8.2 - 2013-07-25
 - added French Canada translation (Jacqueline Gazaille Tétreault)
 - improved attachment upload dialog with HTML5 File API (Thorsten)
 - updated Finnish translation (Pasi Pajukoski)

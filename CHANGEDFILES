@@ -1,3 +1,34 @@
+CHANGED FILES FROM 2.8.1 -> 2.8.1
+
+./admin/ajax.category.php
+./admin/assets/css/style.css
+./admin/assets/js/uploadcheck.js
+./admin/attachment.php
+./admin/dashboard.php
+./admin/record.edit.php
+./admin/system.php
+./assets/template/default/artikel.tpl
+./assets/template/default/catandtag.tpl
+./assets/template/default/css/style.css
+./assets/template/default/css/style.min.css
+./assets/template/default/less/style.less
+./assets/template/default/startpage.tpl
+./config/constants.php
+./inc/PMF/Attachment/Collection.php
+./inc/PMF/Captcha.php
+./inc/PMF/Category.php
+./inc/PMF/Faq.php
+./inc/PMF/Helper/Search.php
+./inc/PMF/System.php
+./install/update.php
+./lang/language_de.php
+./lang/language_en.php
+./lang/language_fi.php
+./lang/language_fr-ca.php
+./ajaxservice.php
+
+
+
 CHANGED FILES FROM 2.8.0 -> 2.8.1
 
 ./admin/assets/css/style.css
