@@ -1,9 +1,12 @@
-phpMyFAQ 2.8.2
+phpMyFAQ 2.8.3
 Codename "Perdita"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.8.3 - 2013-08-
+- fixed some minor bugs (Thorsten)
 
 Version 2.8.2 - 2013-07-25
 - added French Canada translation (Jacqueline Gazaille Tétreault)

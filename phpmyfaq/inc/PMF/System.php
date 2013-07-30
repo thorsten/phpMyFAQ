@@ -8,7 +8,7 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ 
+ * @category  phpMyFAQ
  * @package   PMF_System
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2013 phpMyFAQ Team
@@ -20,7 +20,7 @@
 /**
  * PMF_System
  *
- * @category  phpMyFAQ 
+ * @category  phpMyFAQ
  * @package   PMF_System
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2013 phpMyFAQ Team
@@ -43,7 +43,7 @@ class PMF_System
     /**
      * Patchlevel
      */
-    const VERSION_PATCHLEVEL = 2;
+    const VERSION_PATCHLEVEL = 3;
 
     /**
      * Pre-release version
@@ -224,10 +224,10 @@ class PMF_System
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * Checks for required PHP extensions
      *
@@ -240,11 +240,11 @@ class PMF_System
                 $this->_missingExtensions[] = $extension;
             }
         }
-        
+
         if (count($this->_missingExtensions) > 0) {
             return false;
         }
-        
+
         return true;
     }
 
@@ -290,7 +290,7 @@ class PMF_System
             return true;
         }
     }
-    
+
     /**
      * Returns all missing extensions
      *
