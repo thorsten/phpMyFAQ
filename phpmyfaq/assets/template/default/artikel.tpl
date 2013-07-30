@@ -50,7 +50,7 @@
 
             <script>
                 $(function(){
-                    $('a[rel="tooltip"]').tooltip();
+                    $('abbr[rel="tooltip"]').tooltip();
                 });
             </script>
 

@@ -6441,6 +6441,9 @@ body {
 #content .nav {
   margin-bottom: 0;
 }
+#content abbr {
+  color: #ef7507;
+}
 #content .answer {
   margin-bottom: 20px;
 }
