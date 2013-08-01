@@ -284,7 +284,6 @@ if (isset($auth) && in_array(true, $permission)) {
             case "editpreview":       require 'record.edit.php'; break;
             case "insertentry":       require 'record.add.php'; break;
             case "saveentry":         require 'record.save.php'; break;
-            case "delentry":          require 'record.delete.php'; break;
             case "delatt":            require 'record.delatt.php'; break;
             case "question":          require 'record.questions.php'; break;
             case 'comments':          require 'record.comments.php'; break;
