@@ -34,7 +34,7 @@ if ($permission['editinstances']) {
     $instanceData = $instance->getInstanceById($instanceId);
 
 ?>
-    <form class="form-horizontal" action="?action=updateinstance" method="post">
+    <form class="form-horizontal" action="?action=updateinstance" method="post" accept-charset="utf-8">
         <input type="hidden" name="instance_id" value="<?php echo $instanceData->id ?>" />
         <div class="control-group">
             <label class="control-label"><?php echo $PMF_LANG["ad_instance_url"] ?>:</label>

@@ -12,7 +12,7 @@
 
             {loginMessage}
 
-            <form class="form-horizontal" action="{writeLoginPath}" method="post">
+            <form class="form-horizontal" action="{writeLoginPath}" method="post" accept-charset="utf-8">
                 <input type="hidden" name="faqloginaction" value="{faqloginaction}"/>
 
                 <div class="control-group">

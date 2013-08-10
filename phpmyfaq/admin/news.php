@@ -31,7 +31,7 @@ if ('addnews' == $action && $permission["addnews"]) {
             <h2><i class="icon-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
         </header>
 
-        <form class="form-horizontal" id="faqEditor" name="faqEditor" action="?action=savenews" method="post">
+        <form class="form-horizontal" id="faqEditor" name="faqEditor" action="?action=savenews" method="post" accept-charset="utf-8">
         <fieldset>
             <legend><?php echo $PMF_LANG['ad_news_add']; ?></legend>
 
@@ -211,7 +211,7 @@ if ('addnews' == $action && $permission["addnews"]) {
             <h2><i class="icon-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
         </header>
 
-        <form class="form-horizontal" action="?action=updatenews" method="post">
+        <form class="form-horizontal" action="?action=updatenews" method="post" accept-charset="utf-8">
         <fieldset>
         <legend><?php echo $PMF_LANG['ad_news_edit']; ?></legend>
 
@@ -465,7 +465,7 @@ if ('addnews' == $action && $permission["addnews"]) {
 ?>
     <div class="control-group"><?php echo $PMF_LANG["ad_news_del"]; ?></div>
     <div class="text-center">
-    <form action="?action=deletenews" method="post">
+    <form action="?action=deletenews" method="post" accept-charset="utf-8">
     <input type="hidden" name="id" value="<?php echo $delete_id; ?>">
     <input type="hidden" name="really" value="yes">
         <button class="btn btn-warning" type="submit" name="submit">

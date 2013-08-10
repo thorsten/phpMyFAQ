@@ -55,7 +55,7 @@ if ($permission['editcateg']) {
             <h2><i class="icon-list"></i> <?php echo $header; ?></h2>
         </header>
 
-        <form class="form-horizontal" action="?action=updatecategory" method="post">
+        <form class="form-horizontal" action="?action=updatecategory" method="post" accept-charset="utf-8">
             <input type="hidden" name="id" value="<?php echo $categoryId; ?>">
             <input type="hidden" id="catlang" name="catlang" value="<?php echo $categories[$categoryId]['lang']; ?>">
             <input type="hidden" name="parent_id" value="<?php echo $categories[$categoryId]['parent_id']; ?>">

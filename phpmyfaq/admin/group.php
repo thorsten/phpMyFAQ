@@ -138,7 +138,7 @@ if ($groupAction == 'delete_confirm' && $permission['delgroup']) {
             </h2>
         </header>
         <p><?php print $PMF_LANG['ad_group_deleteQuestion']; ?></p>
-        <form action ="?action=group&amp;group_action=delete" method="post">
+        <form action ="?action=group&amp;group_action=delete" method="post" accept-charset="utf-8">
             <input type="hidden" name="group_id" value="<?php print $groupId; ?>" />
             <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
             <p>
@@ -236,7 +236,7 @@ if ($groupAction == 'add' && $permission['addgroup']) {
         </header>
 
         <div id="user_message"><?php print $message; ?></div>
-        <form class="form-horizontal" name="group_create" action="?action=group&amp;group_action=addsave" method="post">
+        <form class="form-horizontal" name="group_create" action="?action=group&amp;group_action=addsave" method="post" accept-charset="utf-8">
         <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
 
             <div class="control-group">
@@ -551,7 +551,7 @@ getGroupList();
                 <fieldset>
                     <legend><?php print $PMF_LANG['ad_groups']; ?></legend>
                     <form id="group_select" name="group_select" action="?action=group&amp;group_action=delete_confirm"
-                          method="post">
+                          method="post" accept-charset="utf-8">
                         <p>
                             <select name="group_list_select" id="group_list_select" style="width: 150px;"
                                     onchange="groupSelect(event)" size="<?php print $groupSelectSize; ?>" tabindex="1">
@@ -568,7 +568,7 @@ getGroupList();
 
             <div class="span4" id="groupMemberships">
                 <form id="group_membership" name="group_membership" action="?action=group&amp;group_action=update_members"
-                  method="post" onsubmit="select_selectAll('group_member_list')">
+                  method="post" onsubmit="select_selectAll('group_member_list')" accept-charset="utf-8">
                 <input id="update_member_group_id" type="hidden" name="group_id" value="0" />
                 <fieldset>
                     <legend><?php print $PMF_LANG['ad_group_membership']; ?></legend>
@@ -629,7 +629,7 @@ getGroupList();
                 <div id="group_data">
                     <fieldset>
                         <legend id="group_data_legend"><?php print $PMF_LANG['ad_group_details']; ?></legend>
-                        <form action="?action=group&amp;group_action=update_data" method="post">
+                        <form action="?action=group&amp;group_action=update_data" method="post" accept-charset="utf-8">
                             <input id="update_group_id" type="hidden" name="group_id" value="0" />
                             <div id="group_data_table">
                                 <p>
@@ -660,7 +660,7 @@ getGroupList();
                 <div id="groupRights">
                     <fieldset>
                         <legend id="group_rights_legend"><?php print $PMF_LANG['ad_user_rights']; ?></legend>
-                        <form id="rightsForm" action="?action=group&amp;group_action=update_rights" method="post">
+                        <form id="rightsForm" action="?action=group&amp;group_action=update_rights" method="post" accept-charset="utf-8">
                             <input id="rights_group_id" type="hidden" name="group_id" value="0" />
                             <div>
                                 <span class="select_all">

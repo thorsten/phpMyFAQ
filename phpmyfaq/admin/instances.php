@@ -121,7 +121,7 @@ if ($permission['editinstances']) {
             <h3><?php echo $PMF_LANG["ad_instance_add"] ?></h3>
         </div>
         <div class="modal-body">
-            <form class="form-horizontal" action="#" method="post">
+            <form class="form-horizontal" action="#" method="post" accept-charset="utf-8">
                 <div class="control-group">
                     <label class="control-label"><?php echo $PMF_LANG["ad_instance_url"] ?>:</label>
                     <div class="controls">

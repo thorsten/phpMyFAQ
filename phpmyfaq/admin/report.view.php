@@ -120,7 +120,7 @@ if ($permission['reports']) {
 ?>
         </tbody>
     </table>
-    <form action="?action=reportexport" method="post">
+    <form action="?action=reportexport" method="post" accept-charset="utf-8">
         <input type="hidden" name="report_category" id="report_category" value="<?php echo $useCategory; ?>" /></td>
         <input type="hidden" name="report_sub_category" id="report_sub_category" value="<?php echo $useSubcategory; ?>" /></td>
         <input type="hidden" name="report_translations" id="report_translations" value="<?php echo $useTranslation; ?>" /></td>

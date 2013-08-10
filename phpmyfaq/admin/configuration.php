@@ -84,7 +84,7 @@ if ($permission['editconfig']) {
         </header>
 
         <div id="user_message"><?php echo $message; ?></div>
-        <form class="form-horizontal" id="config_list" name="config_list"
+        <form class="form-horizontal" id="config_list" name="config_list" accept-charset="utf-8"
               action="?action=config&amp;config_action=saveConfig" method="post">
 
             <p>

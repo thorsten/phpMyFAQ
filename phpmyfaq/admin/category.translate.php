@@ -49,7 +49,7 @@ if ($permission["editcateg"]) {
         <header>
             <h2><i class="icon-list"></i> <?php print $header ?></h2>
         </header>
-        <form class="form-horizontal" action="?action=updatecategory" method="post">
+        <form class="form-horizontal" action="?action=updatecategory" method="post" accept-charset="utf-8">
             <input type="hidden" name="id" value="<?php print $id; ?>" />
             <input type="hidden" name="parent_id" value="<?php print $category->categoryName[$id]["parent_id"]; ?>" />
             <input type="hidden" name="showcat" value="<?php print $showcat; ?>" />

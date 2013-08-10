@@ -216,7 +216,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
         if (count($revisions)) {
             ?>
                 <div class="pull-right">
-                    <form id="selectRevision" name="selectRevision" method="post"
+                    <form id="selectRevision" name="selectRevision" method="post" accept-charset="utf-8"
                           action="?action=editentry&amp;id=<?php echo $faqData['id'] ?>&amp;lang=<?php echo $faqData['lang'] ?>">
                         <select name="revisionid_selected" onchange="selectRevision.submit();">
                             <option value="<?php echo $faqData['revision_id']; ?>">
@@ -255,7 +255,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
 
         <div class="row-fluid">
 
-            <form id="faqEditor" action="?action=<?php echo $queryString; ?>" method="post">
+            <form id="faqEditor" action="?action=<?php echo $queryString; ?>" method="post" accept-charset="utf-8">
             <input type="hidden" name="revision_id" id="revision_id" value="<?php echo $faqData['revision_id']; ?>" />
             <input type="hidden" name="record_id" id="record_id" value="<?php echo $faqData['id']; ?>" />
             <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession(); ?>" />

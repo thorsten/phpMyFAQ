@@ -49,7 +49,7 @@ if ($permission['delquestion']) {
 
     if (count($openquestions) > 0) {
 ?>
-    <form id="questionSelection" name="questionSelection" method="post">
+    <form id="questionSelection" name="questionSelection" method="post" accept-charset="utf-8">
     <table class="table table-striped">
     <thead>
         <tr>

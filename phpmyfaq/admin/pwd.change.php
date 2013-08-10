@@ -52,7 +52,7 @@ if ($permission["passwd"]) {
         }
     }
 ?>
-        <form class="form-horizontal" action="?action=passwd" method="post">
+        <form class="form-horizontal" action="?action=passwd" method="post" accept-charset="utf-8">
         <input type="hidden" name="save" value="newpassword" />
             <div class="control-group">
                 <label class="control-label" for="opass"><?php echo $PMF_LANG["ad_passwd_old"]; ?></label>

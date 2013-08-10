@@ -46,7 +46,7 @@ if ($permission['editbt'] || $permission['delbt']) {
     $linkVerifier = new PMF_Linkverifier($faqConfig, $user->getLogin());
 ?>
 
-    <form action="?action=view" method="post" class="form-horizontal form-search">
+    <form action="?action=view" method="post" class="form-horizontal form-search" accept-charset="utf-8">
 
         <div class="control-group">
             <label class="control-label"><?php print $PMF_LANG["msgSearchWord"]; ?>:</label>

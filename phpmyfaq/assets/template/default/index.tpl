@@ -104,7 +104,7 @@
         <div class="span6" id="mainContent">
             [globalSearchBox]
             <section class="well hidden-print" id="searchBox">
-                <form id="search" action="{writeSendAdress}" method="get" class="form-search">
+                <form id="search" action="{writeSendAdress}" method="get" class="form-search" accept-charset="utf-8">
                     <div class="input-append">
                         <input type="hidden" name="searchcategory" value="{categoryId}" />
                         <input type="hidden" name="action" value="search" />
@@ -120,7 +120,7 @@
             [/globalSearchBox]
             [globalSuggestBox]
             <section class="well hidden-print" id="searchBox">
-                <form id="instantform" action="?action=instantresponse" method="post" class="form-search">
+                <form id="instantform" action="?action=instantresponse" method="post" class="form-search" accept-charset="utf-8">
                     <input type="hidden" name="ajaxlanguage" id="ajaxlanguage" value="{ajaxlanguage}" />
                     <input type="search" name="search" id="instantfield" class="input-xxlarge search-query" value=""
                            placeholder="{msgDescriptionInstantResponse}" />
@@ -156,7 +156,7 @@
             </ul>
         </div>
         <div class="span6">
-            <form action="{writeLangAdress}" method="post" class="pull-right">
+            <form action="{writeLangAdress}" method="post" class="pull-right" accept-charset="utf-8">
             {switchLanguages}
                 <input type="hidden" name="action" value="" />
             </form>

@@ -7,7 +7,7 @@
 
     <div id="ucpReturnedMessage"></div>
 
-    <form class="form-horizontal" id="formValues" action="#" method="post">
+    <form class="form-horizontal" id="formValues" action="#" method="post" accept-charset="utf-8">
     <input type="hidden" name="userid" value="{userid}" />
 
         <div class="control-group">

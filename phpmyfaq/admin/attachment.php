@@ -119,7 +119,7 @@ if (is_null($currentAction) && $auth && $permission['addattachment']) {
     $recordId   = filter_input(INPUT_GET, 'record_id',   FILTER_VALIDATE_INT);
     $recordLang = filter_input(INPUT_GET, 'record_lang', FILTER_SANITIZE_STRING);
 ?>
-        <form action="attachment.php?action=save" enctype="multipart/form-data" method="post">
+        <form action="attachment.php?action=save" enctype="multipart/form-data" method="post" accept-charset="utf-8">
             <fieldset>
             <legend>
                 <?php echo $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?>

@@ -75,7 +75,7 @@
                     </dl>
                 </div>
                 <div class="tab-pane hidden-print" id="votingForm">
-                    <form action="#" method="post" class="form-inline">
+                    <form action="#" method="post" class="form-inline" accept-charset="utf-8">
                         <input type="hidden" name="artikel" value="{saveVotingID}" />
                         <div id="votings"></div>
                         <div class="star-rating">
@@ -94,7 +94,7 @@
                     {switchLanguage}
                 </div>
                 <div class="tab-pane hidden-print" id="addTranslation">
-                    <form action="{translationUrl}" method="post" class="form-inline">
+                    <form action="{translationUrl}" method="post" class="form-inline" accept-charset="utf-8">
                         {languageSelection}
                         <button class="btn btn-primary" type="submit" name="submit">
                             {msgTranslateSubmit}
@@ -107,7 +107,7 @@
 
             <a id="comment"></a>
             <div id="commentForm" class="hide">
-                <form id="formValues" action="#" method="post" class="form-horizontal">
+                <form id="formValues" action="#" method="post" class="form-horizontal" accept-charset="utf-8">
                     <input type="hidden" name="id" id="id" value="{id}" />
                     <input type="hidden" name="lang" id="lang" value="{lang}" />
                     <input type="hidden" name="type" id="type" value="faq" />

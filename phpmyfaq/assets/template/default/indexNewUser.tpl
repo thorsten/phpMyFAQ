@@ -78,7 +78,7 @@
             </ul>
         </div>
         <div class="span6">
-            <form action="{writeLangAdress}" method="post" class="pull-right">
+            <form action="{writeLangAdress}" method="post" class="pull-right" accept-charset="utf-8">
             {switchLanguages}
                 <input type="hidden" name="action" value="" />
             </form>

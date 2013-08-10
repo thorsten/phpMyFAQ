@@ -36,7 +36,7 @@ if ($permission['export'] && !PMF_Db::checkOnEmptyTable('faqdata')) {
         $categoryHelper = new PMF_Helper_Category();
         $categoryHelper->setCategory($category);
 ?>
-        <form class="form-horizontal" action="?action=exportfile" method="post">
+        <form class="form-horizontal" action="?action=exportfile" method="post" accept-charset="utf-8">
             <fieldset>
                 <legend><?php echo $PMF_LANG['ad_export_which_cat'] ?></legend>
                 <div class="control-group">

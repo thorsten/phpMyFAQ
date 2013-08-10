@@ -151,7 +151,7 @@ if ($permission['editbt'] || $permission['delbt']) {
         }
     }
 ?>
-    <form id="recordSelection" name="recordSelection" method="post">
+    <form id="recordSelection" name="recordSelection" method="post" accept-charset="utf-8">
 <?php
     $numCommentsByFaq = $comment->getNumberOfComments();
     $numRecordsByCat  = $category->getNumberOfRecordsOfCategory();

@@ -36,7 +36,7 @@ if ($permission['delcateg']) {
     $categories = $category->getAllCategories();
     $id         = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
     ?>
-        <form class="form-horizontal" action="?action=removecategory" method="post">
+        <form class="form-horizontal" action="?action=removecategory" method="post" accept-charset="utf-8">
             <input type="hidden" name="cat" value="<?php print $id; ?>" />
             <input type="hidden" name="lang" value="<?php print $LANGCODE; ?>" />
             <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />

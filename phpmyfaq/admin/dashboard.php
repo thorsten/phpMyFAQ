@@ -128,7 +128,7 @@ $faqSystem = new PMF_System();
             } else {
                 ?>
                 <p>
-                <form action="index.php" method="post">
+                <form action="index.php" method="post" accept-charset="utf-8">
                     <input type="hidden" name="param" value="version" />
                     <button class="btn btn-primary" type="submit">
                         <i class="icon-check icon-white"></i> <?php print $PMF_LANG["ad_xmlrpc_button"]; ?>
@@ -185,7 +185,7 @@ $faqSystem = new PMF_System();
             } else {
                 ?>
                 <p>
-                <form action="index.php" method="post">
+                <form action="index.php" method="post" accept-charset="utf-8">
                     <input type="hidden" name="getJson" value="verify" />
                     <button class="btn btn-primary" type="submit">
                         <i class="icon-certificate icon-white"></i> <?php print $PMF_LANG["ad_verification_button"] ?>

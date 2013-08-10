@@ -145,7 +145,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             </h2>
         </header>
         <p class="alert alert-danger"><?php print $PMF_LANG["ad_user_del_3"].' '.$PMF_LANG["ad_user_del_1"].' '.$PMF_LANG["ad_user_del_2"]; ?></p>
-        <form action ="?action=user&amp;user_action=delete" method="post">
+        <form action ="?action=user&amp;user_action=delete" method="post" accept-charset="utf-8">
             <input type="hidden" name="user_id" value="<?php print $userId; ?>" />
             <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
             <p class="text-center">
@@ -287,7 +287,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         <div id="user_message"><?php print $message; ?></div>
         <div id="user_create">
 
-            <form class="form-horizontal" action="?action=user&amp;user_action=addsave" method="post">
+            <form class="form-horizontal" action="?action=user&amp;user_action=addsave" method="post" accept-charset="utf-8">
             <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
 
             <div class="control-group">
@@ -405,7 +405,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                 <fieldset>
                     <legend><?php print $PMF_LANG["ad_user_username"]; ?></legend>
                     <form name="user_select" id="user_select" action="?action=user&amp;user_action=delete_confirm"
-                          method="post">
+                          method="post" accept-charset="utf-8">
 
                         <label for="user_list_autocomplete"><?php print $PMF_LANG['ad_auth_user']; ?>:</label>
                         <input type="text" id="user_list_autocomplete" name="user_list_search" data-provide="typeahead" />
@@ -446,7 +446,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             <div class="span4" id="userDetails">
                 <fieldset>
                     <legend id="user_data_legend"><?php print $PMF_LANG["ad_user_profou"]; ?></legend>
-                    <form action="?action=user&amp;user_action=update_data" method="post">
+                    <form action="?action=user&amp;user_action=update_data" method="post" accept-charset="utf-8">
                         <input id="update_user_id" type="hidden" name="user_id" value="0" />
                         <p>
                             <label for="user_status_select" class="small">
@@ -468,7 +468,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                 </fieldset>
             </div>
             <div class="span4" id="userRights">
-                <form id="rightsForm" action="?action=user&amp;user_action=update_rights" method="post">
+                <form id="rightsForm" action="?action=user&amp;user_action=update_rights" method="post" accept-charset="utf-8">
                     <fieldset>
                         <legend id="user_rights_legend"><?php print $PMF_LANG["ad_user_rights"]; ?></legend>
                         <input id="rights_user_id" type="hidden" name="user_id" value="0" />

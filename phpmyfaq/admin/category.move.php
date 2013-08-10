@@ -43,7 +43,7 @@ if ($permission["editcateg"]) {
         <header>
             <h2><i class="icon-list"></i> <?php print $header ?></h2>
         </header>
-        <form class="form-horizontal" action="?action=changecategory" method="post">
+        <form class="form-horizontal" action="?action=changecategory" method="post" accept-charset="utf-8">
             <input type="hidden" name="cat" value="<?php print $id; ?>" />
             <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
             <div class="control-group">

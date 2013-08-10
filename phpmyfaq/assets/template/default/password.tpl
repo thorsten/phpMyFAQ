@@ -4,7 +4,7 @@
                 <h2>{headerChangePassword}</h2>
             </header>
 
-            <form id="formValues" action="#" method="post" class="form-horizontal">
+            <form id="formValues" action="#" method="post" class="form-horizontal" accept-charset="utf-8">
 
                 <div class="control-group">
                     <label class="control-label">{msgUsername}</label>

@@ -26,7 +26,7 @@ printf('<header><h2><i class="icon-list-ul"></i> %s</h2></header>', $PMF_LANG['a
 
 if ($permission['addglossary']) {
 ?>
-        <form class="form-horizontal" action="?action=saveglossary" method="post">
+        <form class="form-horizontal" action="?action=saveglossary" method="post" accept-charset="utf-8">
             <div class="control-group">
                 <label class="control-label" for="item"><?php echo $PMF_LANG['ad_glossary_item']; ?>:</label>
                 <div class="controls">

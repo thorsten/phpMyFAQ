@@ -66,7 +66,7 @@
 
                     {loginMessage}
 
-                    <form class="form-horizontal" action="{writeLoginPath}" method="post">
+                    <form class="form-horizontal" action="{writeLoginPath}" method="post" accept-charset="utf-8">
                         <input type="hidden" name="faqloginaction" value="{faqloginaction}"/>
 
                         <div class="control-group">
@@ -118,7 +118,7 @@
             </ul>
         </div>
         <div class="span6">
-            <form action="{writeLangAdress}" method="post" class="pull-right">
+            <form action="{writeLangAdress}" method="post" class="pull-right" accept-charset="utf-8">
             {switchLanguages}
                 <input type="hidden" name="action" value="" />
             </form>

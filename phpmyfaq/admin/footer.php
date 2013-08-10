@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <footer>
     <div class="container-fluid">
         <div class="row">
-            <form action="index.php<?php print (isset($action) ? '?action=' . $action : ''); ?>" method="post" class="pull-right">
+            <form action="index.php<?php print (isset($action) ? '?action=' . $action : ''); ?>" method="post" class="pull-right" accept-charset="utf-8">
             <?php print PMF_Language::selectLanguages($LANGCODE, true); ?>
             </form>
         </div>

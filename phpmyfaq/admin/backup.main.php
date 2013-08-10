@@ -26,7 +26,7 @@ printf('<header><h2><i class="icon-download-alt"></i> %s</h2></header>', $PMF_LA
 
 if ($permission['backup']) {
 ?>
-        <form method="post" action="?action=restore" enctype="multipart/form-data">
+        <form method="post" action="?action=restore" enctype="multipart/form-data" accept-charset="utf-8">
         <fieldset>
             <legend><?php print $PMF_LANG["ad_csv_head"]; ?></legend>
             <p><?php print $PMF_LANG["ad_csv_make"]; ?></p>

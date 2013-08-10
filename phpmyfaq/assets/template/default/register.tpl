@@ -7,7 +7,7 @@
 
             <div id="registrations"></div>
 
-            <form class="form-horizontal" id="formValues" method="post" action="#">
+            <form class="form-horizontal" id="formValues" method="post" action="#" accept-charset="utf-8">
                 <input type="hidden" name="lang" id="lang" value="{lang}" />
 
                 <div class="control-group">
