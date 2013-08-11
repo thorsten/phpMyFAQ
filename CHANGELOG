@@ -6,6 +6,7 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.8.3 - 2013-08-
+- improved HTML / CSS code (Michael Meister)
 - fixed some minor bugs (Thorsten)
 
 Version 2.8.2 - 2013-07-25
