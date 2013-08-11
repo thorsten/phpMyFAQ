@@ -291,7 +291,7 @@ class PMF_Utils
         $postfix = isset($matches[5]) ? $matches[5] : '';
 
         if (!empty($item)) {
-            return '<span class="highlight">' . $prefix . $item . $postfix . '</span>';
+            return '<mark>' . $prefix . $item . $postfix . '</mark>';
         }
         
         // Fallback: the original matched string

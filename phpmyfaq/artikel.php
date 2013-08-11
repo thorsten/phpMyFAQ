@@ -89,8 +89,8 @@ if (!is_null($highlight) && $highlight != "/" && $highlight != "<" && $highlight
     $searchItems = explode(' ', $highlight);
 
     foreach ($searchItems as $item) {
-        $question   = PMF_Utils::setHighlightedString($question, $item);
-        $answer = PMF_Utils::setHighlightedString($answer, $item);
+        $question = PMF_Utils::setHighlightedString($question, $item);
+        $answer   = PMF_Utils::setHighlightedString($answer, $item);
     }
 }
 
