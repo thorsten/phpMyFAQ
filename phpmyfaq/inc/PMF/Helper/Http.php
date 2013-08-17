@@ -81,6 +81,12 @@ class PMF_Helper_Http extends PMF_Helper
     public function sendStatus($code)
     {
         switch ($code) {
+            case 301:
+                header('HTTP/1.1 301 Moved Permanently');
+                break;
+            case 403:
+                header('HTTP/1.1 403 Forbidden');
+                break;
             case 404:
                 if (('cgi' == PMF_String::substr(PHP_SAPI, 0, 3)) || isset($_SERVER['ALL_HTTP'])) {
                     header('Status: 404 Not Found');
@@ -91,6 +97,16 @@ class PMF_Helper_Http extends PMF_Helper
         }
 
         exit();
+    }
+
+    /**
+     * @param string $url URL to redirect
+     *
+     * @return void
+     */
+    public function redirect($url)
+    {
+        header('Location: ' . $url);
     }
 
     /**

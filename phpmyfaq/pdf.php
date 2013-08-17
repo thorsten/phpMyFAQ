@@ -128,9 +128,8 @@ if (true === $getAll && $permission['export']) {
 } else {
 
     if (is_null($currentCategory) || is_null($id)) {
-        $headers[] = 'HTTP/1.1 403 Forbidden';
-        $payload = 'Wrong HTTP GET parameters values.';
-        $http->sendWithHeaders($payload, $headers);
+        $http->sendStatus(301);
+        $http->redirect($faqConfig->get('main.referenceURL'));
         exit();
     }
 
