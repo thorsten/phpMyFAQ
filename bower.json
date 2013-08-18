@@ -1,15 +1,15 @@
 {
   "name": "phpMyFAQ",
-  "version": "2.9.0-dev",
+  "version": "3.0.0-dev",
   "main": "phpmyfaq.js",
   "ignore": [
     "components"
   ],
   "dependencies": {
     "modernizr":    "2.6.2",
-    "bootstrap":    "2.3.2",
+    "bootstrap":    "3.0.0",
     "font-awesome": "3.2.1",
     "sparkline":    "2.1.1",
-    "jquery":       "~1.10.1"
+    "jquery":       "2.0.0"
   }
 }

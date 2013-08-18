@@ -33,12 +33,12 @@ class PMF_System
     /**
      * Major version
      */
-    const VERSION_MAJOR = 2;
+    const VERSION_MAJOR = 3;
 
     /**
      * Minor version
      */
-    const VERSION_MINOR = 9;
+    const VERSION_MINOR = 0;
 
     /**
      * Patchlevel

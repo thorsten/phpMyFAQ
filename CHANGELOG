@@ -1,11 +1,11 @@
-phpMyFAQ 2.9.0-dev
-Codename "Proteus"
+phpMyFAQ 3.0.0-dev
+Codename "Poseidon"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.9.0-dev - 2013-
+Version 3.0.0-dev - 2014-
 - changed PHP requirement to PHP 5.4.4 and later (Thorsten)
 - added Symfony HTTP Foundation 2.3.0 (Alexander M. Turek, Thorsten)
 - added Twig 1.123.1 as new template engine (Alexander M. Turek, Thorsten)
@@ -21,7 +21,6 @@ Version 2.8.2 -2013-07-
 - fixed some minor bugs (Thorsten)
 
 Version 2.8.1 - 2013-06-26
->>>>>>> 934853cef29664a9a5deb59397173824fc9989c8
 - added support for Grunt (Thorsten)
 - added minified CSS and JavaScript code (Thorsten)
 - improved usability for group administration (Thorsten)
