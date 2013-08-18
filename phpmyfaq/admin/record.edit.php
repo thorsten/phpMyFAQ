@@ -696,7 +696,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                 success: function(permissions) {
                     var perms = jQuery.parseJSON(permissions);
 
-                    if ("-1" === perms.user[0]) {
+                    if (-1 === parseInt(perms.user[0])) {
                         $('#restrictedusers').prop('checked', false).prop("disabled", true);
                         $('#allusers').prop('checked', true).prop("disabled", false);
                     } else {
@@ -706,7 +706,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                             $(".selected-users option[value='" + value + "']").prop('selected',true);
                         });
                     }
-                    if ("-1" === perms.group[0]) {
+                    if (-1 === parseInt(perms.group[0])) {
                         $('#restrictedgroups').prop('checked', false).prop("disabled", true);
                         $('#allgroups').prop('checked', true).prop("disabled", false);
                     } else {

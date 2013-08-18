@@ -52,7 +52,8 @@ switch($ajaxAction) {
             array(
                 'user'  => $category->getPermissions('user', $categories),
                 'group' => $category->getPermissions('group', $categories)
-            )
+            ),
+            JSON_NUMERIC_CHECK
         );
 
         break;
