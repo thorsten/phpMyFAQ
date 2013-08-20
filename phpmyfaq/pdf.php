@@ -128,7 +128,6 @@ if (true === $getAll && $permission['export']) {
 } else {
 
     if (is_null($currentCategory) || is_null($id)) {
-        $http->sendStatus(301);
         $http->redirect($faqConfig->get('main.referenceURL'));
         exit();
     }
