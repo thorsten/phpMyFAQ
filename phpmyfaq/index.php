@@ -485,7 +485,7 @@ $tplMainPage = array(
     'copyright'           => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' .
                              $faqConfig->get('main.currentVersion'),
     'registerUser'        => '<a href="?action=register">' . $PMF_LANG['msgRegistration'] . '</a>',
-    'sendPassword'        => '<a href="./admin/password.php">' . $PMF_LANG['lostPassword'] . '</a>',
+    'sendPassword'        => '<a href="?action=password">' . $PMF_LANG['lostPassword'] . '</a>',
     'loginHeader'         => $PMF_LANG['msgLoginUser'],
     'loginMessage'        => $loginMessage,
     'writeLoginPath'      => $systemUri . '?' . PMF_Filter::getFilteredQueryString(),
