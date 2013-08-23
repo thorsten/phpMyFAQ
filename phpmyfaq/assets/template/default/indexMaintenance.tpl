@@ -77,7 +77,7 @@
     <div class="container">
         <div class="row-fluid">
             <div class="well maintenance">
-                <h1>Sorry, we'll be back soon!</h1>
+                <h1>We are performing scheduled maintenance operations. Please visit us later.</h1>
             </div>
         </div>
     </div>
