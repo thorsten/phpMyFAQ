@@ -99,7 +99,14 @@ class PMF_Auth_Sso extends PMF_Auth implements PMF_Auth_Driver
         if (!isset($_SERVER['REMOTE_USER'])) {
             return false;
         } else {
-            if ($_SERVER['REMOTE_USER'] == $login) {
+            // Check if "DOMAIN\user" or only "user"
+            $remoteUser = explode("\\", $_SERVER['REMOTE_USER']);
+            if (is_array($remoteUser)) {
+                $user = $remoteUser[1];
+            } else {
+                $user = $_SERVER['REMOTE_USER'];
+            }
+            if ($user === $login) {
                 return true;
             } else {
                 return false;
