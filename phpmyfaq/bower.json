@@ -1,0 +1,10 @@
+{
+  "name":    "phpMyFAQ",
+  "version": "2.9.0",
+  "main":    "phpmyfaq.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ]
+}
