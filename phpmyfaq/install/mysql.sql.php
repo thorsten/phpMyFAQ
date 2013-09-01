@@ -60,7 +60,7 @@ $query[] = "CREATE TABLE ".$sqltblpre."faqadminlog (
 id int(11) NOT NULL,
 time int(11) NOT NULL,
 usr int(11) NOT NULL,
-text text NOT NULL,
+`text` text NOT NULL,
 ip text NOT NULL,
 PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
