@@ -195,6 +195,9 @@ class PMF_Link
      */
     public function __construct($url, PMF_Configuration $config)
     {
+        if ('/' !== substr($url, -1)) {
+            $url = $url . '/';
+        }
         $this->url     = $url;
         $this->_config = $config;
     }
