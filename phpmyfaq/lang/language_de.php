@@ -675,7 +675,7 @@ $PMF_LANG["ad_group_removeMember"] = "-";
 
 // added v2.0.0 - 2006-07-20 by Matteo
 $PMF_LANG["ad_export_which_cat"] = "Begrenzung der exportierten FAQ-Inhalte (optional)";
-$PMF_LANG["ad_export_cat_downwards"] = "Absteigend?";
+$PMF_LANG["ad_export_cat_downwards"] = "Inklusive Unterkategorien?";
 $PMF_LANG["ad_export_type"] = "Exportformat";
 $PMF_LANG["ad_export_type_choose"] = "Bitte wählen Sie eines der unterstützten Formate:";
 $PMF_LANG["ad_export_download_view"] = "Herunterladen oder Inline ansehen?";
