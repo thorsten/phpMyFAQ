@@ -691,7 +691,9 @@ class PMF_Faq
             %s
             AND
                 fd.lang = '%s'
-                %s",
+                %s
+            GROUP BY
+                fd.id, fd.lang",
             PMF_Db::getTablePrefix(),
             isset($revisionId) ? 'faqdata_revisions': 'faqdata',
             PMF_Db::getTablePrefix(),
