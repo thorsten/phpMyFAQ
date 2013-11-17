@@ -294,12 +294,8 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
         // First, declare those tables that are referenced by others
         $this->tableNames[] = $prefix.'faquser';
 
-        if ('' !== $prefix) {
-            $prefix = "LIKE '" . $prefix . "%'";
-        }
-
         $query = sprintf(
-            'SELECT relname FROM pg_stat_user_tables WHERE relname %s ORDER BY relname',
+            "SELECT relname FROM pg_stat_user_tables WHERE relname LIKE '%sfaq%%' ORDER BY relname",
             $prefix
         );
 

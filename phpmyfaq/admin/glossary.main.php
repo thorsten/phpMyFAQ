@@ -38,8 +38,8 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
     $glossary = new PMF_Glossary($faqConfig);
 
     if ('saveglossary' == $action && $permission['addglossary']) {
-        $item       = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_STRIPPED);
-        $definition = PMF_Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_STRIPPED);
+        $item       = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_SPECIAL_CHARS);
+        $definition = PMF_Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_SPECIAL_CHARS);
         if ($glossary->addGlossaryItem($item, $definition)) {
             echo '<p class="alert alert-success"><a href="#" class="close" data-dismiss="alert">×</a>';
             echo $PMF_LANG['ad_glossary_save_success'] . '</p>';
@@ -53,8 +53,8 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
 
     if ('updateglossary' == $action && $permission['editglossary']) {
         $id         = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-        $item       = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_STRIPPED);
-        $definition = PMF_Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_STRIPPED);
+        $item       = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_SPECIAL_CHARS);
+        $definition = PMF_Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_SPECIAL_CHARS);
         if ($glossary->updateGlossaryItem($id, $item, $definition)) {
             echo '<p class="alert alert-success"><a href="#" class="close" data-dismiss="alert">×</a>';
             echo $PMF_LANG['ad_glossary_update_success'] . '</p>';

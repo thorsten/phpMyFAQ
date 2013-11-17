@@ -251,8 +251,8 @@ class PMF_Glossary
             PMF_Db::getTablePrefix(),
             $this->_config->getDb()->nextId(PMF_Db::getTablePrefix().'faqglossary', 'id'),
             $this->_config->getLanguage()->getLanguage(),
-            $this->item,
-            $this->definition
+            PMF_String::htmlspecialchars($this->item),
+            PMF_String::htmlspecialchars($this->definition)
         );
 
         if ($this->_config->getDb()->query($query)) {
@@ -284,8 +284,8 @@ class PMF_Glossary
             WHERE
                 id = %d AND lang = '%s'",
             PMF_Db::getTablePrefix(),
-            $this->item,
-            $this->definition,
+            PMF_String::htmlspecialchars($this->item),
+            PMF_String::htmlspecialchars($this->definition),
             (int)$id,
             $this->_config->getLanguage()->getLanguage()
         );

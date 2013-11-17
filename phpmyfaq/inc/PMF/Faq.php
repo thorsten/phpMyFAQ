@@ -691,7 +691,9 @@ class PMF_Faq
             %s
             AND
                 fd.lang = '%s'
-                %s",
+                %s
+            GROUP BY
+                fd.id, fd.lang",
             PMF_Db::getTablePrefix(),
             isset($revisionId) ? 'faqdata_revisions': 'faqdata',
             PMF_Db::getTablePrefix(),
@@ -2629,12 +2631,12 @@ class PMF_Faq
      * Returns the record permissions for users and groups
      *
      * @param   string  $mode           'group' or 'user'
-     * @param   integer $record_id
+     * @param   integer $recordId
      * @return  array
      * @access  boolean
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getPermission($mode, $record_id)
+    function getPermission($mode, $recordId)
     {
         $permissions = array();
 
@@ -2652,13 +2654,16 @@ class PMF_Faq
             $mode,
             PMF_Db::getTablePrefix(),
             $mode,
-            (int)$record_id);
+            (int)$recordId);
 
         $result = $this->_config->getDb()->query($query);
+
         if ($this->_config->getDb()->numRows($result) > 0) {
-            $row = $this->_config->getDb()->fetchObject($result);
-            $permissions[] = (int)$row->permission;
+            while (($row = $this->_config->getDb()->fetchObject($result))) {
+                $permissions[] = (int)$row->permission;
+            }
         }
+
         return $permissions;
     }
 

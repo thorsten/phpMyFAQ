@@ -81,12 +81,16 @@ if (! defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
 //
 // Check if config/database.php exist -> if not, redirect to installer
 //
-if (!file_exists(PMF_CONFIG_DIR . '/database.php')) {
+if (!file_exists(PMF_CONFIG_DIR . '/database.php') && !file_exists(PMF_ROOT_DIR . '/inc/data.php')) {
     header("Location: install/setup.php");
     exit();
 }
 
-require PMF_CONFIG_DIR . '/database.php';
+if (file_exists(PMF_ROOT_DIR . '/inc/data.php')) {
+    require PMF_ROOT_DIR . '/inc/data.php';
+} else {
+    require PMF_CONFIG_DIR . '/database.php';
+}
 require PMF_CONFIG_DIR . '/constants.php';
 
 if (!defined('PMF_ROOT_DIR')) {
