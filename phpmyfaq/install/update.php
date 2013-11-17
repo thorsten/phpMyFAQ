@@ -830,6 +830,17 @@ if ($step == 3) {
         $faqConfig->add('main.enableGravatarSupport', 'false');
     }
 
+    //
+    // UPDATES FROM 2.9.0-alpha
+    //
+    if (version_compare($version, '2.9.0-alpha', '<')) {
+        $faqConfig->delete('cache.varnishEnable');
+        $faqConfig->delete('cache.varnishHost');
+        $faqConfig->delete('cache.varnishPort');
+        $faqConfig->delete('cache.varnishSecret');
+        $faqConfig->delete('cache.varnishTimeout');
+    }
+
     // Always the last step: Update version number
     if (version_compare($version, PMF_System::getVersion(), '<')) {
         $faqConfig->update(array('main.currentVersion' => PMF_System::getVersion()));
