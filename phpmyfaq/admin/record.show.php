@@ -222,11 +222,9 @@ if ($permission['editbt'] || $permission['delbt']) {
                 }
 ?>
         <p>
-            <a class="btn" href="javascript:void(0);"
-               onclick="showhideCategory('category_<?php print $cid; ?>');">
+            <a class="btn showhideCategory" data-category-id="<?php echo $cid; ?>">
                 <i class="icon icon-arrow-right"></i>
-                <strong><?php print $category->getPath($cid); ?></strong>
-                <?php print $catInfo;?>
+                <strong><?php echo $category->getPath($cid); ?></strong> <?php echo $catInfo;?>
             </a>
         </p>
         <div id="category_<?php print $cid; ?>" class="categorybox <?php print ($selectedCategory == $cid) ? '' : 'hide'; ?>">
@@ -358,7 +356,8 @@ if ($permission['editbt'] || $permission['delbt']) {
         </table>
         </div>
         </form>
-    
+
+        <script type="text/javascript" src="assets/js/record.js"></script>
         <script type="text/javascript">
         /* <![CDATA[ */
 

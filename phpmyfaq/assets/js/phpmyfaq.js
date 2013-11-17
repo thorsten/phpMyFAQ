@@ -1701,7 +1701,6 @@ $(document).ready(function () {
 /*global document: false, window: false, $: false */
 
 var toggleFieldset,
-    showhideCategory,
     addAttachment,
     addEngine,
     infoBox,
@@ -1760,21 +1759,6 @@ $(document).ready(function () {
             window.sidebar.addSearchEngine(uri + "/" + name + ".src", uri + "/images/" + name + "." + ext, name, cat);
         } else {
             window.alert("Mozilla Firefox is needed to install the search plugin!");
-        }
-    };
-
-    /**
-     * Displays or hides a div block
-     *
-     * @param id Id of the block
-     * @return void
-     */
-    showhideCategory = function showhideCategory(id) {
-        var domId = $("#" + id);
-        if (domId.css("display") === "none") {
-            domId.fadeIn("slow");
-        } else {
-            domId.fadeOut("slow");
         }
     };
 
