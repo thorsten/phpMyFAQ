@@ -9,8 +9,8 @@
   ],
   "dependencies": {
     "modernizr": "~2.6.2",
-    "bootstrap": "~3.0.0",
-    "font-awesome": "~3.2.1",
+    "bootstrap": "~3.0.1",
+    "font-awesome": "~4.0.0",
     "sparkline": "~2.1.2",
     "tinymce": "~4.0.4",
     "jquery": "1.10.2"
