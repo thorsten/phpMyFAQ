@@ -47,18 +47,6 @@
                     "reference": "master"
                 }
             }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name":    "jnaqsh/bootstrap",
-                "version": "master",
-                "source": {
-                    "url":       "https://github.com/jnaqsh/bootstrap.git",
-                    "type":      "git",
-                    "reference": "master"
-                }
-            }
         }
     ],
     "require": {
@@ -66,8 +54,7 @@
         "symfony/class-loader":    ">=2.1",
         "phpseclib":               "master@dev",
         "tcpdf":                   "master@dev",
-        "twitteroauth":            "master@dev",
-        "jnaqsh/bootstrap":        "master@dev"
+        "twitteroauth":            "master@dev"
     },
     "minimum-stability": "stable",
     "scripts": {

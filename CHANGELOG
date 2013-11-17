@@ -6,7 +6,8 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.9.0-dev 2014-
--
+- added frontend dependency management using Bower (Thorsten)
+- updated bundled Symfony ClassLoader to version 2.3.7 (Thorsten)
 
 Version 2.8.3 - 2013-10-
 - improved HTML / CSS code (Michael Meister)

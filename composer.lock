@@ -3,19 +3,8 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "d7aae4fdf3a0dd373a5f8a3995a97998",
+    "hash": "c24018ac7af35e033185a384aa075366",
     "packages": [
-        {
-            "name": "jnaqsh/bootstrap",
-            "version": "master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jnaqsh/bootstrap.git",
-                "reference": "master"
-            },
-            "type": "library",
-            "time": "2013-03-29 11:41:20"
-        },
         {
             "name": "phpseclib",
             "version": "master",
@@ -29,29 +18,29 @@
         },
         {
             "name": "symfony/class-loader",
-            "version": "v2.2.1",
+            "version": "v2.3.7",
             "target-dir": "Symfony/Component/ClassLoader",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ClassLoader.git",
-                "reference": "v2.2.1"
+                "reference": "e5f3ef7ebd965a12699984df06b2a5bd439bd2a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ClassLoader/zipball/v2.2.1",
-                "reference": "v2.2.1",
+                "url": "https://api.github.com/repos/symfony/ClassLoader/zipball/e5f3ef7ebd965a12699984df06b2a5bd439bd2a0",
+                "reference": "e5f3ef7ebd965a12699984df06b2a5bd439bd2a0",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "require-dev": {
-                "symfony/finder": ">=2.0,<3.0"
+                "symfony/finder": "~2.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.2-dev"
+                    "dev-master": "2.3-dev"
                 }
             },
             "autoload": {
@@ -75,7 +64,7 @@
             ],
             "description": "Symfony ClassLoader Component",
             "homepage": "http://symfony.com",
-            "time": "2013-03-19 08:32:26"
+            "time": "2013-09-19 09:45:20"
         },
         {
             "name": "tcpdf",
@@ -110,8 +99,7 @@
     "stability-flags": {
         "phpseclib": 20,
         "tcpdf": 20,
-        "twitteroauth": 20,
-        "jnaqsh/bootstrap": 20
+        "twitteroauth": 20
     },
     "platform": {
         "php": ">=5.3.3"
