@@ -67,7 +67,6 @@
         "phpseclib":               "master@dev",
         "tcpdf":                   "master@dev",
         "twitteroauth":            "master@dev",
-        "twitter/bootstrap":       "2.3.*",
         "jnaqsh/bootstrap":        "master@dev"
     },
     "minimum-stability": "stable",
