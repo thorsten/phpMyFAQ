@@ -5,7 +5,7 @@
  * This script checks the complete environment, writes the database connection
  * parameters into the file config/database.php and the configuration into the database.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -30,8 +30,8 @@ define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('PMF_INCLUDE_DIR', PMF_ROOT_DIR . '/inc');
 define('IS_VALID_PHPMYFAQ', null);
 
-if (version_compare(PHP_VERSION, '5.3.3') < 0) {
-    die("Sorry, but you need PHP 5.3.3 or later!"); // Die hard because of "use"
+if (version_compare(PHP_VERSION, '5.4.4') < 0) {
+    die("Sorry, but you need PHP 5.4.4 or later!"); // Die hard because of "use"
 }
 
 use Symfony\Component\ClassLoader\UniversalClassLoader;

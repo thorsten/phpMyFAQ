@@ -50,7 +50,7 @@
         }
     ],
     "require": {
-        "php":                     ">=5.3.3",
+        "php":                     ">=5.4.4",
         "symfony/class-loader":    ">=2.1",
         "phpseclib":               "master@dev",
         "tcpdf":                   "master@dev",

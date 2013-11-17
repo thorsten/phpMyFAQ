@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "c24018ac7af35e033185a384aa075366",
+    "hash": "b99c1c7cc9ca9863f1346a682b5b490f",
     "packages": [
         {
             "name": "phpseclib",
@@ -102,7 +102,7 @@
         "twitteroauth": 20
     },
     "platform": {
-        "php": ">=5.3.3"
+        "php": ">=5.4.4"
     },
     "platform-dev": [
 

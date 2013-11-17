@@ -2,7 +2,7 @@
 /**
  * Main update script
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -15,7 +15,6 @@
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2002-2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
-
  * @link      http://www.phpmyfaq.de
  * @since     2002-01-10
  */
@@ -28,8 +27,8 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     set_time_limit(0);
 }
 
-if (version_compare(PHP_VERSION, '5.3.3') < 0) {
-    die("Sorry, but you need PHP 5.3.3 or later!"); // Die hard because of "use"
+if (version_compare(PHP_VERSION, '5.4.4') < 0) {
+    die("Sorry, but you need PHP 5.4.4 or later!"); // Die hard because of "use"
 }
 
 require PMF_ROOT_DIR . '/inc/Bootstrap.php';

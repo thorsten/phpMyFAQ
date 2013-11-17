@@ -68,7 +68,7 @@
 
 **1. <a id="1"></a>Introduction**
 
-phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports various databases to store all data, PHP 5.3.3 (or higher) is needed in order to access this data. phpMyFAQ also offers a multi-language Content Management-System with a WYSIWYG editor and an Image Manager, flexible multi-user support with user and group based permissions on categories and records, a wiki-like revision feature, a news system, user-tracking, language modules, enhanced automatic content negotiation, templates, extensive XML-support, PDF-support, a backup-system, a dynamic site map, related articles, tagging, RSS feeds, built-in spam protection systems, LDAP support, Twitter and Facebook support and an easy to use installation script.
+phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports various databases to store all data, PHP 5.4.4 (or higher) is needed in order to access this data. phpMyFAQ also offers a multi-language Content Management-System with a WYSIWYG editor and an Image Manager, flexible multi-user support with user and group based permissions on categories and records, a wiki-like revision feature, a news system, user-tracking, language modules, enhanced automatic content negotiation, templates, extensive XML-support, PDF-support, a backup-system, a dynamic site map, related articles, tagging, RSS feeds, built-in spam protection systems, LDAP support, Twitter and Facebook support and an easy to use installation script.
 
 This documentation should help you with installing, administrating and using phpMyFAQ.
 
@@ -122,7 +122,7 @@ If you're interested, just take a look at our [support page](http://www.phpmyfaq
 phpMyFAQ addresses a database system via PHP. In order to install it you will need a web server that meets the following requirements:
 
 *   **[PHP](http://www.php.net)**
-    *   from version 5.3.3 (recommended: latest PHP 5.x)
+    *   from version 5.4.4 (recommended: latest PHP 5.x)
     *   register_globals = off
     *   magic_quotes_gpc = off
     *   safe_mode = off (recommended)
@@ -150,7 +150,7 @@ You can determine which versions your web server is running by creating a file c
 
 Upload this file to your webspace and open it using your browser. The installation-script checks which version of PHP is installed on your server. Should you not meet the requirements, you cannot start the installation process.
 
-In case you have PHP below 5.3.2 installed you cannot use phpMyFAQ.
+In case you have PHP below 5.4.3 installed you cannot use phpMyFAQ.
 
 phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers are Mozilla Firefox 3.6 and later (Windows/OS X/Linux), Safari 5.x or later (OS X/Windows/iOS), Chrome 5 or later (Windows/OS X/Linux), Opera 11.0 or later (Windows/OS X/Linux) and Internet Explorer 7 or later for Windows. You have to enable JavaScript for the Ajax based functions as well.
 
