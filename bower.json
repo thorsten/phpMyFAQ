@@ -8,11 +8,11 @@
     "components"
   ],
   "dependencies": {
-    "modernizr": "~2.6.2",
-    "bootstrap": "~3.0.1",
-    "font-awesome": "~4.0.0",
+    "modernizr": "~2.6.3",
+    "bootstrap": "~3.0.2",
+    "font-awesome": "~4.0.3",
     "sparkline": "~2.1.2",
-    "tinymce": "~4.0.4",
+    "tinymce": "~4.0.10",
     "jquery": "1.10.2"
   }
 }
