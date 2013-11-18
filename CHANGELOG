@@ -5,7 +5,8 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.8.3 - 2013-10-
+Version 2.8.3 - 2013-11-18
+- fixed missing permission check on Image Manager (Thorsten)
 - improved HTML / CSS code (Michael Meister)
 - updated Brazilian Portuguese translation
 - updated Japanese translation
