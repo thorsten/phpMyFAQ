@@ -43,7 +43,7 @@ class PMF_System
     /**
      * Patchlevel
      */
-    const VERSION_PATCHLEVEL = 3;
+    const VERSION_PATCHLEVEL = 4;
 
     /**
      * Pre-release version
