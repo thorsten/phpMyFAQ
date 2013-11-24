@@ -237,11 +237,8 @@ class PMF_Pagination
            $this->seoName = $options['seoName'];
         }
 
-        if (isset($options['useRewrite'])) {
+        if (isset($options['useRewrite']) && isset($options['rewriteUrl'])) {
             $this->useRewrite = $options['useRewrite'];
-        }
-
-        if (isset($options['rewriteUrl'])) {
             $this->rewriteUrl = $options['rewriteUrl'];
         }
 
@@ -296,7 +293,7 @@ class PMF_Pagination
             }
             
             $link = $this->renderUrl($this->baseUrl, $page);
-            
+
             if ($page == $this->currentPage) {
                 $template = $this->currentPageLinkTpl;
             } else {
@@ -365,12 +362,10 @@ class PMF_Pagination
 
             $cleanedUrl = PMF_String::preg_replace(array('$&(amp;|)' . $this->pageParamName . '=(\d+)$'), '', $url);
             $url        = sprintf('%s&amp;%s=%d', $cleanedUrl, $this->pageParamName, $page);
+
         }
 
-        $link            = new PMF_Link($url, $this->_config);
-        $link->itemTitle = $this->seoName;
-
-        return $link->toString();
+        return $url;
     }
     
     /**
@@ -386,7 +381,7 @@ class PMF_Pagination
     {
         $search  = array(self::TPL_VAR_LINK_URL, self::TPL_VAR_LINK_TEXT);
         $replace = array($url, $linkText);
-        
+
         return str_replace($search, $replace, $tpl);
     }
     
