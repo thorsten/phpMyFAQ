@@ -19,7 +19,11 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    $protocol = 'http';
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+        $protocol = 'https';
+    }
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -230,7 +234,7 @@ if ($permission['editbt']|| $permission['addbt']) {
             '<p class="alert alert-error">%s</p>', $PMF_LANG['ad_entryins_fail']
         );
 ?>
-    <form action="?action=editpreview" method="post">
+    <form action="?action=editpreview" method="post" accept-charset="utf-8">
     <input type="hidden" name="question"            value="<?php print PMF_String::htmlspecialchars($question); ?>" />
     <input type="hidden" name="content" class="mceNoEditor" value="<?php print PMF_String::htmlspecialchars($content); ?>" />
     <input type="hidden" name="lang"                value="<?php print $recordLang; ?>" />

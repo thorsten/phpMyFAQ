@@ -3,7 +3,7 @@
                 <h2>{msgSend2Friend}</h2>
             </header>
 
-            <form class="form-horizontal" id="formValues" action="#" method="post">
+            <form class="form-horizontal" id="formValues" action="#" method="post" accept-charset="utf-8">
                 <input type="hidden" name="{msgS2FReferrer}" value="{send2friendLink}" />
                 <input type="hidden" name="lang" id="lang" value="{lang}" />
 

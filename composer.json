@@ -47,30 +47,16 @@
                     "reference": "master"
                 }
             }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name":    "jnaqsh/bootstrap",
-                "version": "master",
-                "source": {
-                    "url":       "https://github.com/jnaqsh/bootstrap.git",
-                    "type":      "git",
-                    "reference": "master"
-                }
-            }
         }
     ],
     "require": {
-        "php":                     ">=5.3.3",
+        "php":                     ">=5.4.4",
         "symfony/class-loader":    ">=2.3",
         "symfony/http-foundation": ">=2.3",
         "twig/twig":               "*",
         "phpseclib":               "master@dev",
         "tcpdf":                   "master@dev",
-        "twitteroauth":            "master@dev",
-        "twitter/bootstrap":       "2.3.*",
-        "jnaqsh/bootstrap":        "master@dev"
+        "twitteroauth":            "master@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",

@@ -202,6 +202,9 @@ body {
   //
   // FAQ pages
   //
+  abbr {
+    color: @pmfOrange;
+  }
   .divider {
     padding: 0 10px 0 10px;
   }
@@ -220,9 +223,6 @@ body {
       *display: inline;
       *zoom: 1;
     }
-  }
-  .highlight {
-    text-decoration: dotted; border: 1px dashed @linkColor; background-color: @grayLighter; padding: 1px;
   }
   .sticky-faqs {
     margin-bottom: 20px;
@@ -270,18 +270,23 @@ body {
   }
   .relevance1 {
     font-size: 80%;
+    font-weight: 100;
   }
   .relevance2 {
     font-size: 100%;
+    font-weight: 200;
   }
   .relevance3 {
     font-size: 120%;
+    font-weight: 300;
   }
   .relevance4 {
     font-size: 140%;
+    font-weight: 400;
   }
   .relevance5 {
     font-size: 160%;
+    font-weight: 500;
   }
 
   .phpmyfaq-search-results li {

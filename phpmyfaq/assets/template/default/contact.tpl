@@ -5,7 +5,7 @@
             <div id="loader"></div>
             <div id="contacts"></div>
 
-            <form class="form-horizontal" id="formValues" action="#" method="post">
+            <form class="form-horizontal" id="formValues" action="#" method="post" accept-charset="utf-8">
                 <input type="hidden" name="lang" id="lang" value="{lang}" />
 
                 <div class="control-group">

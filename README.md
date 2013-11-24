@@ -81,10 +81,6 @@ Mozilla Public License 2.0, see LICENSE for more information.
 
 Licensed under the terms of the GNU Lesser General Public License
 
-**[TinyMCE Ajax File Manager](http://www.phpletter.com/Our-Projects/Tinymce-Ajax-File-Manager-Project/)**
-
-Licensed under the terms of the Mozilla Public License
-
 **[SyntaxHighlighter](http://alexgorbatchev.com/wiki/SyntaxHighlighter)**
 
 Licensed under the terms of the GNU Lesser General Public License

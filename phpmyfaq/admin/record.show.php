@@ -19,7 +19,11 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    $protocol = 'http';
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+        $protocol = 'https';
+    }
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -151,7 +155,7 @@ if ($permission['editbt'] || $permission['delbt']) {
         }
     }
 ?>
-    <form id="recordSelection" name="recordSelection" method="post">
+    <form id="recordSelection" name="recordSelection" method="post" accept-charset="utf-8">
 <?php
     $numCommentsByFaq = $comment->getNumberOfComments();
     $numRecordsByCat  = $category->getNumberOfRecordsOfCategory();
@@ -222,11 +226,9 @@ if ($permission['editbt'] || $permission['delbt']) {
                 }
 ?>
         <p>
-            <a class="btn" href="javascript:void(0);"
-               onclick="showhideCategory('category_<?php print $cid; ?>');">
+            <a class="btn showhideCategory" data-category-id="<?php echo $cid; ?>">
                 <i class="icon icon-arrow-right"></i>
-                <strong><?php print $category->getPath($cid); ?></strong>
-                <?php print $catInfo;?>
+                <strong><?php echo $category->getPath($cid); ?></strong> <?php echo $catInfo;?>
             </a>
         </p>
         <div id="category_<?php print $cid; ?>" class="categorybox <?php print ($selectedCategory == $cid) ? '' : 'hide'; ?>">
@@ -358,7 +360,8 @@ if ($permission['editbt'] || $permission['delbt']) {
         </table>
         </div>
         </form>
-    
+
+        <script type="text/javascript" src="assets/js/record.js"></script>
         <script type="text/javascript">
         /* <![CDATA[ */
 

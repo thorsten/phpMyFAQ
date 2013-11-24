@@ -123,14 +123,14 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
             $error           = $PMF_LANG['ad_auth_fail'] . ' (' . $faqusername . ')';
             $loginVisibility = '';
             $user            = null;
-            $action          = 'login';
+            $action          = 'password' === $action ? 'password' : 'login';
         }
     } else {
         // error
         $error           = $PMF_LANG['ad_auth_fail'];
         $loginVisibility = '';
         $user            = null;
-        $action          = 'login';
+        $action          = 'password' === $action ? 'password' : 'login';
     }
 
 } else {
@@ -403,10 +403,17 @@ if ($faqConfig->get('security.enableLoginOnly')) {
     if ($auth) {
         $indexSet = 'index.tpl';
     } else {
-        if ('register' == $action || 'thankyou' == $action) {
-            $indexSet = 'indexNewUser.tpl';
-        } else {
-            $indexSet = 'indexLogin.tpl';
+        switch($action) {
+            case 'register':
+            case 'thankyou':
+                $indexSet = 'indexNewUser.tpl';
+                break;
+            case 'password':
+                $indexSet = 'indexPassword.tpl';
+                break;
+            default:
+                $indexSet = 'indexLogin.tpl';
+                break;
         }
     }
 } else {
@@ -465,42 +472,46 @@ if (is_null($error)) {
 }
 
 $tplMainPage = array(
-    'msgLoginUser'        => $PMF_LANG['msgLoginUser'],
-    'title'               => $faqConfig->get('main.titleFAQ') . $title,
-    'baseHref'            => $systemUri,
-    'version'             => $faqConfig->get('main.currentVersion'),
-    'header'              => str_replace('"', '', $faqConfig->get('main.titleFAQ')),
-    'metaTitle'           => str_replace('"', '', $faqConfig->get('main.titleFAQ')),
-    'metaDescription'     => $metaDescription,
-    'metaKeywords'        => $keywords,
-    'metaPublisher'       => $faqConfig->get('main.metaPublisher'),
-    'metaLanguage'        => $PMF_LANG['metaLanguage'],
-    'metaCharset'         => 'utf-8', // backwards compability
-    'phpmyfaqversion'     => $faqConfig->get('main.currentVersion'),
-    'stylesheet'          => $PMF_LANG['dir'] == 'rtl' ? 'style.rtl' : 'style',
-    'currentPageUrl'      => $currentPageUrl,
-    'action'              => $action,
-    'dir'                 => $PMF_LANG['dir'],
-    'msgCategory'         => $PMF_LANG['msgCategory'],
-    'showCategories'      => $categoryHelper->renderNavigation($cat),
-    'topCategories'       => $categoryHelper->renderMainCategories(),
-    'msgExportAllFaqs'    => $PMF_LANG['msgExportAllFaqs'],
-    'languageBox'         => $PMF_LANG['msgLangaugeSubmit'],
-    'writeLangAdress'     => $writeLangAdress,
-    'switchLanguages'     => PMF_Language::selectLanguages($LANGCODE, true),
-    'userOnline'          => $usersOnline,
-    'copyright'           => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' .
-                             $faqConfig->get('main.currentVersion'),
-    'registerUser'        => '<a href="?action=register">' . $PMF_LANG['msgRegistration'] . '</a>',
-    'sendPassword'        => '<a href="./admin/password.php">' . $PMF_LANG['lostPassword'] . '</a>',
-    'loginHeader'         => $PMF_LANG['msgLoginUser'],
-    'loginMessage'        => $loginMessage,
-    'writeLoginPath'      => $systemUri . '?' . PMF_Filter::getFilteredQueryString(),
-    'faqloginaction'      => $action,
-    'login'               => $PMF_LANG['ad_auth_ok'],
-    'username'            => $PMF_LANG['ad_auth_user'],
-    'password'            => $PMF_LANG['ad_auth_passwd'],
-    'rememberMe'          => $PMF_LANG['rememberMe']
+    'msgLoginUser'         => $PMF_LANG['msgLoginUser'],
+    'title'                => $faqConfig->get('main.titleFAQ') . $title,
+    'baseHref'             => $systemUri,
+    'version'              => $faqConfig->get('main.currentVersion'),
+    'header'               => str_replace('"', '', $faqConfig->get('main.titleFAQ')),
+    'metaTitle'            => str_replace('"', '', $faqConfig->get('main.titleFAQ')),
+    'metaDescription'      => $metaDescription,
+    'metaKeywords'         => $keywords,
+    'metaPublisher'        => $faqConfig->get('main.metaPublisher'),
+    'metaLanguage'         => $PMF_LANG['metaLanguage'],
+    'metaCharset'          => 'utf-8', // backwards compability
+    'phpmyfaqversion'      => $faqConfig->get('main.currentVersion'),
+    'stylesheet'           => $PMF_LANG['dir'] == 'rtl' ? 'style.rtl' : 'style',
+    'currentPageUrl'       => $currentPageUrl,
+    'action'               => $action,
+    'dir'                  => $PMF_LANG['dir'],
+    'msgCategory'          => $PMF_LANG['msgCategory'],
+    'showCategories'       => $categoryHelper->renderNavigation($cat),
+    'topCategories'        => $categoryHelper->renderMainCategories(),
+    'msgExportAllFaqs'     => $PMF_LANG['msgExportAllFaqs'],
+    'languageBox'          => $PMF_LANG['msgLangaugeSubmit'],
+    'writeLangAdress'      => $writeLangAdress,
+    'switchLanguages'      => PMF_Language::selectLanguages($LANGCODE, true),
+    'userOnline'           => $usersOnline,
+    'copyright'            => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' .
+                              $faqConfig->get('main.currentVersion'),
+    'registerUser'         => '<a href="?action=register">' . $PMF_LANG['msgRegistration'] . '</a>',
+    'sendPassword'         => '<a href="?action=password">' . $PMF_LANG['lostPassword'] . '</a>',
+    'loginHeader'          => $PMF_LANG['msgLoginUser'],
+    'loginMessage'         => $loginMessage,
+    'writeLoginPath'       => $systemUri . '?' . PMF_Filter::getFilteredQueryString(),
+    'faqloginaction'       => $action,
+    'login'                => $PMF_LANG['ad_auth_ok'],
+    'username'             => $PMF_LANG['ad_auth_user'],
+    'password'             => $PMF_LANG['ad_auth_passwd'],
+    'rememberMe'           => $PMF_LANG['rememberMe'],
+    'headerChangePassword' => $PMF_LANG['ad_passwd_cop'],
+    'msgUsername'          => $PMF_LANG['ad_auth_user'],
+    'msgEmail'             => $PMF_LANG['ad_entry_email'],
+    'msgSubmit'            => $PMF_LANG['msgNewContentSubmit']
 );
 
 if ('main' == $action || 'show' == $action) {

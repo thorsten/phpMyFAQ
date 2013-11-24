@@ -13,13 +13,16 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2002-2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
-
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-16
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    $protocol = 'http';
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+        $protocol = 'https';
+    }
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

@@ -3,13 +3,17 @@
   "version": "3.0.0-dev",
   "main": "phpmyfaq.js",
   "ignore": [
+    "**/.*",
+    "node_modules",
     "components"
   ],
   "dependencies": {
-    "modernizr":    "2.6.2",
-    "bootstrap":    "3.0.0",
-    "font-awesome": "3.2.1",
-    "sparkline":    "2.1.1",
-    "jquery":       "2.0.0"
+    "modernizr": "~2.6.3",
+    "bootstrap": "~3.0.2",
+    "rbootstrap": "~3.0.0",
+    "font-awesome": "~4.0.3",
+    "sparkline": "~2.1.2",
+    "tinymce": "~4.0.10",
+    "jquery": "1.10.2"
   }
 }

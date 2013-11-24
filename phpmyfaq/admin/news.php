@@ -19,7 +19,11 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    $protocol = 'http';
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+        $protocol = 'https';
+    }
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -35,6 +39,7 @@ if ('addnews' == $action && $permission["addnews"]) {
                 'userEmail'        => $user->getUserData('email')
             )
         );
+
 } elseif ('news' == $action && $permission["editnews"]) {
     $date       = new PMF_Date($faqConfig);
     $newsHeader = $news->getNewsHeader();
@@ -167,6 +172,7 @@ if ('addnews' == $action && $permission["addnews"]) {
                     'deleteId' => $delete_id
                 )
             );
+
     } else {
         $delete_id = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         $news->deleteNews($delete_id);

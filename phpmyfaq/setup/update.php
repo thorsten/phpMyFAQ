@@ -2,7 +2,7 @@
 /**
  * Main update script
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -15,7 +15,6 @@
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2002-2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
-
  * @link      http://www.phpmyfaq.de
  * @since     2002-01-10
  */
@@ -690,6 +689,17 @@ if ($step == 3) {
     //
     if (version_compare($version, '2.8.0-beta3', '<')) {
         $faqConfig->add('main.enableGravatarSupport', 'false');
+    }
+
+    //
+    // UPDATES FROM 2.9.0-alpha
+    //
+    if (version_compare($version, '2.9.0-alpha', '<')) {
+        $faqConfig->delete('cache.varnishEnable');
+        $faqConfig->delete('cache.varnishHost');
+        $faqConfig->delete('cache.varnishPort');
+        $faqConfig->delete('cache.varnishSecret');
+        $faqConfig->delete('cache.varnishTimeout');
     }
 
     // Always the last step: Update version number

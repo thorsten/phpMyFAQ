@@ -6,7 +6,7 @@
             {printResult}
             
             <section class="well" id="searchBox">
-            <form action="{writeSendAdress}" method="get" class="form-search">
+            <form action="{writeSendAdress}" method="get" class="form-search" accept-charset="utf-8">
 
                 <div class="control-group">
                     <div class="input-append">

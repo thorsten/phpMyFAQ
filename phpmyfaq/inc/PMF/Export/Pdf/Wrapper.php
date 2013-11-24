@@ -381,7 +381,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
         if ($this->enableBookmarks == false) {
             $this->SetY(-15);
             $this->SetFont($this->currentFont, '', 8);
-            $baseUrl = 'index.php';
+            $baseUrl = '/index.php';
             if (is_array($this->faq) && !empty($this->faq)) {
                 $baseUrl .= '?action=artikel&amp;';
                 if (array_key_exists($this->category, $this->categories)) {

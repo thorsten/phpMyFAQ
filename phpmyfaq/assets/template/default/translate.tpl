@@ -6,7 +6,7 @@
                 <h3>{msgNewTranslationPane}</h3>
             </header>
 
-            <form id="formValues" action="#" method="post" class="form-horizontal">
+            <form id="formValues" action="#" method="post" class="form-horizontal" accept-charset="utf-8">
                 <input type="hidden" name="faqid" id="faqid" value="{writeSourceFaqId}" />
                 <input type="hidden" name="faqlanguage" id="faqlanguage" value="{writeTransFaqLanguage}" />
                 <input type="hidden" name="rubrik[]" value="{categoryId}">

@@ -94,7 +94,7 @@ switch ($action) {
     case 'getFaqs':
         $faq = new PMF_Faq($faqConfig);
         $faq->setUser($currentUser);
-        $faq->setGroups($currentUser);
+        $faq->setGroups($currentGroups);
         $result = $faq->getAllRecordPerCategory($categoryId);
         break;
         

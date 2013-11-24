@@ -98,6 +98,11 @@ if (file_exists(__DIR__ . '/../multisite/multisite.php') && 'cli' !== PHP_SAPI) 
 }
 
 //
+// Set root dir
+//
+define('PMF_ROOT_DIR', dirname(__DIR__));
+
+//
 // Read configuration and constants
 //
 if (! defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
@@ -111,12 +116,17 @@ if (! defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
 //
 // Check if config/database.php exist -> if not, redirect to installer
 //
-if (!file_exists(PMF_CONFIG_DIR . '/database.php')) {
+
+if (!file_exists(PMF_CONFIG_DIR . '/database.php') && !file_exists(PMF_ROOT_DIR . '/inc/data.php')) {
     RedirectResponse::create('setup/index.php')->send();
-    exit;
+    exit();
 }
 
-require PMF_CONFIG_DIR . '/database.php';
+if (file_exists(PMF_ROOT_DIR . '/inc/data.php')) {
+    require PMF_ROOT_DIR . '/inc/data.php';
+} else {
+    require PMF_CONFIG_DIR . '/database.php';
+}
 require PMF_CONFIG_DIR . '/constants.php';
 
 //

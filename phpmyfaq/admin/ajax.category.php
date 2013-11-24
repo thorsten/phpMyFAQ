@@ -20,7 +20,11 @@
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    $protocol = 'http';
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+        $protocol = 'https';
+    }
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -56,7 +60,8 @@ switch($ajaxAction) {
             array(
                 'user'  => $category->getPermissions('user', $categories),
                 'group' => $category->getPermissions('group', $categories)
-            )
+            ),
+            JSON_NUMERIC_CHECK
         );
 
         break;

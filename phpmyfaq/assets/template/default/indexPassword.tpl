@@ -43,7 +43,7 @@
     Did you know that your Internet Explorer is out of date?<br/>
     Please use Internet Explorer 8+, Mozilla Firefox 4+, Google Chrome, Apple Safari 5+ or Opera 11+
 </div>
- <![endif]-->
+<![endif]-->
 
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
@@ -60,45 +60,45 @@
             </div>
             <div class="span6" id="mainContent">
                 <section>
+
                     <header>
-                        <h2>{loginHeader}</h2>
+                        <h2>{headerChangePassword}</h2>
                     </header>
 
-                    {loginMessage}
-
-                    <form class="form-horizontal" action="{writeLoginPath}" method="post" accept-charset="utf-8">
-                        <input type="hidden" name="faqloginaction" value="{faqloginaction}"/>
+                    <form id="formValues" action="#" method="post" class="form-horizontal" accept-charset="utf-8">
 
                         <div class="control-group">
-                            <label class="control-label" for="faqusername">{username}</label>
+                            <label class="control-label">{msgUsername}</label>
                             <div class="controls">
-                                <input type="text" name="faqusername" id="faqusername" required="required" autofocus="autofocus">
+                                <input type="text" name="username" required="required" autofocus="autofocus" />
                             </div>
                         </div>
 
                         <div class="control-group">
-                            <label class="control-label" for="faqpassword">{password}</label>
+                            <label class="control-label">{msgEmail}</label>
                             <div class="controls">
-                                <input type="password" name="faqpassword" id="faqpassword" required="required">
-                                <p class="help-block">{sendPassword}</p>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <div class="controls">
-                                <label class="checkbox">
-                                    <input type="checkbox" id="faqrememberme" name="faqrememberme" value="rememberMe">
-                                {rememberMe}
-                                </label>
+                                <input type="email" name="email" required="required" />
                             </div>
                         </div>
 
                         <div class="form-actions">
-                            <button class="btn btn-primary btn-large" type="submit">
-                                {loginHeader}
+                            <button class="btn btn-primary" type="submit" id="changepassword">
+                                {msgSubmit}
                             </button>
                         </div>
                     </form>
+
+                    <div id="loader"></div>
+                    <div id="changepasswords"></div>
+
+                    <script type="text/javascript" >
+                        $(function() {
+                            $('#changepassword').click(function() {
+                                saveFormValues('changepassword', 'changepassword');
+                            });
+                            $('form#formValues').submit(function() { return false; });
+                        });
+                    </script>
 
                 </section>
             </div>
@@ -110,23 +110,16 @@
 
 <footer id="footer" class="container-fluid">
     <div class="row-fluid">
-        <div class="span6">
-            <ul class="footer-menu">
-                <li>{showSitemap}</li>
-                <li>{msgContact}</li>
-                <li>{msgGlossary}</li>
-            </ul>
-        </div>
-        <div class="span6">
+        <div class="span12">
             <form action="{writeLangAdress}" method="post" class="pull-right" accept-charset="utf-8">
-            {switchLanguages}
+                {switchLanguages}
                 <input type="hidden" name="action" value="" />
             </form>
         </div>
     </div>
     <div class="row">
         <p class="copyright pull-right">
-        {copyright}
+            {copyright}
         </p>
     </div>
 </footer>

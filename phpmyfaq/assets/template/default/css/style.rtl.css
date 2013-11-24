@@ -6441,6 +6441,9 @@ body {
 #content .nav {
   margin-bottom: 0;
 }
+#content abbr {
+  color: #ef7507;
+}
 #content .answer {
   margin-bottom: 20px;
 }
@@ -6454,12 +6457,6 @@ body {
   display: inline-block;
   *display: inline;
   *zoom: 1;
-}
-#content .highlight {
-  text-decoration: dotted;
-  border: 1px dashed #f89406;
-  background-color: #eeeeee;
-  padding: 1px;
 }
 #content .sticky-faqs {
   margin-bottom: 20px;

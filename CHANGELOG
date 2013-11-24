@@ -6,15 +6,29 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 3.0.0-dev - 2014-
-- changed PHP requirement to PHP 5.4.4 and later (Thorsten)
 - added Symfony HTTP Foundation 2.3.0 (Alexander M. Turek, Thorsten)
 - added Twig 1.123.1 as new template engine (Alexander M. Turek, Thorsten)
 - added support for Bower (Thorsten)
-- updated bundled Symfony ClassLoader to version 2.3.0 (Thorsten)
-- updated bundled Font Awesome to version 3.2.1 (Thorsten)
 - dropped support for ext/mysql (Thorsten)
 
-Version 2.8.2 -2013-07-
+Version 2.9.0-dev 2014-
+- changed PHP requirement to PHP 5.4.4 and later (Thorsten)
+- added frontend dependency management using Bower (Thorsten)
+- updated bundled Symfony ClassLoader to version 2.3.7 (Thorsten)
+
+Version 2.8.4 - 2013-11-
+- updated Chinese (Traditional) translation
+
+Version 2.8.3 - 2013-11-18
+- fixed missing permission check on Image Manager (Thorsten)
+- improved HTML / CSS code (Michael Meister)
+- updated Brazilian Portuguese translation
+- updated Japanese translation
+- updated Spanish translation
+- updated Swedish translation
+- fixed some minor bugs (Thorsten)
+
+Version 2.8.2 - 2013-07-25
 - added French Canada translation (Jacqueline Gazaille Tétreault)
 - improved attachment upload dialog with HTML5 File API (Thorsten)
 - updated Finnish translation (Pasi Pajukoski)

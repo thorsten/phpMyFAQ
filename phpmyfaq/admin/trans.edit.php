@@ -18,7 +18,11 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    $protocol = 'http';
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+        $protocol = 'https';
+    }
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -81,7 +85,7 @@ printf('<p style="color: red;">%s</p>', $PMF_LANG['msgTransToolNoteFileSaving'])
 
 $NPluralsErrorReported = false;
 ?>
-        <form id="transDiffForm">
+        <form id="transDiffForm" accept-charset="utf-8">
         <table class="list" style="width: 100%">
         <tr>
             <th><?php print $PMF_LANG['msgVariable'] ?></th>

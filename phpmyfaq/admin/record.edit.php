@@ -18,7 +18,11 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    $protocol = 'http';
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+        $protocol = 'https';
+    }
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -216,7 +220,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
         if (count($revisions)) {
             ?>
                 <div class="pull-right">
-                    <form id="selectRevision" name="selectRevision" method="post"
+                    <form id="selectRevision" name="selectRevision" method="post" accept-charset="utf-8"
                           action="?action=editentry&amp;id=<?php echo $faqData['id'] ?>&amp;lang=<?php echo $faqData['lang'] ?>">
                         <select name="revisionid_selected" onchange="selectRevision.submit();">
                             <option value="<?php echo $faqData['revision_id']; ?>">
@@ -255,7 +259,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
 
         <div class="row-fluid">
 
-            <form id="faqEditor" action="?action=<?php echo $queryString; ?>" method="post">
+            <form id="faqEditor" action="?action=<?php echo $queryString; ?>" method="post" accept-charset="utf-8">
             <input type="hidden" name="revision_id" id="revision_id" value="<?php echo $faqData['revision_id']; ?>" />
             <input type="hidden" name="record_id" id="record_id" value="<?php echo $faqData['id']; ?>" />
             <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession(); ?>" />
@@ -696,7 +700,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                 success: function(permissions) {
                     var perms = jQuery.parseJSON(permissions);
 
-                    if ("-1" === perms.user[0]) {
+                    if (-1 === parseInt(perms.user[0])) {
                         $('#restrictedusers').prop('checked', false).prop("disabled", true);
                         $('#allusers').prop('checked', true).prop("disabled", false);
                     } else {
@@ -706,7 +710,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                             $(".selected-users option[value='" + value + "']").prop('selected',true);
                         });
                     }
-                    if ("-1" === perms.group[0]) {
+                    if (-1 === parseInt(perms.group[0])) {
                         $('#restrictedgroups').prop('checked', false).prop("disabled", true);
                         $('#allgroups').prop('checked', true).prop("disabled", false);
                     } else {

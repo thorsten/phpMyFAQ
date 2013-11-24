@@ -122,6 +122,11 @@ if (true === $getAll && $permission['export']) {
     Response::create('Wrong HTTP GET parameters values.', 403)->send();
     exit;
 } else {
+    if (is_null($currentCategory) || is_null($id)) {
+        $http->redirect($faqConfig->get('main.referenceURL'));
+        exit();
+    }
+
     $faq->getRecord($id);
     $faq->faqRecord['category_id'] = $currentCategory;
 

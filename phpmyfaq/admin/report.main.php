@@ -19,7 +19,11 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    $protocol = 'http';
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+        $protocol = 'https';
+    }
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -29,7 +33,7 @@ if ($permission['reports']) {
         <h2><i class="icon-tasks"></i>  <?php echo $PMF_LANG['ad_menu_reports']; ?></h2>
     </header>
 
-    <form class="form-horizontal" action="?action=reportview" method="post">
+    <form class="form-horizontal" action="?action=reportview" method="post" accept-charset="utf-8">
     <fieldset>
         <legend><?php echo $PMF_LANG["ad_stat_report_fields"]; ?></legend>
 

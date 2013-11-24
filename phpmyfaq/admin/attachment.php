@@ -15,7 +15,7 @@
  * @copyright 2002-2013 phpMyFAQ
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @since     2002-09-17 
+ * @since     2002-09-17
  */
 
 define('PMF_ROOT_DIR', dirname(__DIR__));
@@ -95,10 +95,10 @@ if (is_null($currentAction) || !is_null($currentSave)) {
 
     <title><?php echo $faqConfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
     <base href="<?php echo $faqConfig->get('main.referenceURL'); ?>/admin/" />
-    
+
     <meta name="description" content="Only Chuck Norris can divide by zero.">
     <meta name="author" content="phpMyFAQ Team">
-    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="application-name" content="phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?>">
     <meta name="publisher" content="phpMyFAQ Team">
 
@@ -119,7 +119,7 @@ if (is_null($currentAction) && $auth && $permission['addattachment']) {
     $recordId   = filter_input(INPUT_GET, 'record_id',   FILTER_VALIDATE_INT);
     $recordLang = filter_input(INPUT_GET, 'record_lang', FILTER_SANITIZE_STRING);
 ?>
-        <form action="attachment.php?action=save" enctype="multipart/form-data" method="post">
+        <form action="attachment.php?action=save" enctype="multipart/form-data" method="post" accept-charset="utf-8">
             <fieldset>
             <legend>
                 <?php echo $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?>
@@ -159,14 +159,14 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission['adda
         $att = PMF_Attachment_Factory::create();
         $att->setRecordId($recordId);
         $att->setRecordLang($recordLang);
-        
+
         /**
          * To add user defined key
          * $att->setKey($somekey, false);
          */
         try {
             $uploaded = $att->save($_FILES["userfile"]["tmp_name"], $_FILES["userfile"]["name"]);
-            
+
             if ($uploaded) {
                 echo "<p>".$PMF_LANG["ad_att_suc"]."</p>";
             } else {

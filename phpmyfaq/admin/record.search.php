@@ -18,7 +18,11 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    $protocol = 'http';
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+        $protocol = 'https';
+    }
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -46,7 +50,7 @@ if ($permission['editbt'] || $permission['delbt']) {
     $linkVerifier = new PMF_Linkverifier($faqConfig, $user->getLogin());
 ?>
 
-    <form action="?action=view" method="post" class="form-horizontal form-search">
+    <form action="?action=view" method="post" class="form-horizontal form-search" accept-charset="utf-8">
 
         <div class="control-group">
             <label class="control-label"><?php print $PMF_LANG["msgSearchWord"]; ?>:</label>

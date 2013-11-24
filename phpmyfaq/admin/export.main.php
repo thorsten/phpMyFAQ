@@ -19,7 +19,11 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    $protocol = 'http';
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+        $protocol = 'https';
+    }
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -36,7 +40,7 @@ if ($permission['export'] && !PMF_Db::checkOnEmptyTable('faqdata')) {
         $categoryHelper = new PMF_Helper_Category();
         $categoryHelper->setCategory($category);
 ?>
-        <form class="form-horizontal" action="?action=exportfile" method="post">
+        <form class="form-horizontal" action="?action=exportfile" method="post" accept-charset="utf-8">
             <fieldset>
                 <legend><?php echo $PMF_LANG['ad_export_which_cat'] ?></legend>
                 <div class="control-group">

@@ -6441,6 +6441,9 @@ body {
 #content .nav {
   margin-bottom: 0;
 }
+#content abbr {
+  color: #ef7507;
+}
 #content .divider {
   padding: 0 10px 0 10px;
 }
@@ -6457,12 +6460,6 @@ body {
   display: inline-block;
   *display: inline;
   *zoom: 1;
-}
-#content .highlight {
-  text-decoration: dotted;
-  border: 1px dashed #f89406;
-  background-color: #eeeeee;
-  padding: 1px;
 }
 #content .sticky-faqs {
   margin-bottom: 20px;
@@ -6511,18 +6508,23 @@ body {
 }
 #content .relevance1 {
   font-size: 80%;
+  font-weight: 100;
 }
 #content .relevance2 {
   font-size: 100%;
+  font-weight: 200;
 }
 #content .relevance3 {
   font-size: 120%;
+  font-weight: 300;
 }
 #content .relevance4 {
   font-size: 140%;
+  font-weight: 400;
 }
 #content .relevance5 {
   font-size: 160%;
+  font-weight: 500;
 }
 #content .phpmyfaq-search-results li {
   padding-bottom: 5px;

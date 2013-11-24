@@ -12,7 +12,7 @@
 
     <meta name="description" content="{metaDescription}">
     <meta name="author" content="{metaPublisher}">
-    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="application-name" content="phpMyFAQ {phpmyfaqversion}">
     <meta name="robots" content="INDEX, FOLLOW">
     <meta name="revisit-after" content="7 days">
@@ -77,7 +77,7 @@
     <div class="container">
         <div class="row-fluid">
             <div class="well maintenance">
-                <h1>Sorry, we'll be back soon!</h1>
+                <h1>We are performing scheduled maintenance operations. Please visit us later.</h1>
             </div>
         </div>
     </div>

@@ -19,7 +19,11 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    $protocol = 'http';
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+        $protocol = 'https';
+    }
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -89,8 +93,8 @@ if (!is_null($highlight) && $highlight != "/" && $highlight != "<" && $highlight
     $searchItems = explode(' ', $highlight);
 
     foreach ($searchItems as $item) {
-        $question   = PMF_Utils::setHighlightedString($question, $item);
-        $answer = PMF_Utils::setHighlightedString($answer, $item);
+        $question = PMF_Utils::setHighlightedString($question, $item);
+        $answer   = PMF_Utils::setHighlightedString($answer, $item);
     }
 }
 
@@ -145,7 +149,7 @@ if (count($arrLanguage) > 1) {
         $check4Lang .= ($lang == $language ? ' selected="selected"' : '');
         $check4Lang .= ">".$languageCodes[strtoupper($language)]."</option>\n";
     }
-    $switchLanguage .= "<form action=\"".$changeLanguagePath."\" method=\"post\" style=\"display: inline;\">\n";
+    $switchLanguage .= "<form accept-charset=\"utf-8\" action=\"".$changeLanguagePath."\" method=\"post\" style=\"display: inline;\">\n";
     $switchLanguage .= "<select name=\"artlang\" size=\"1\">\n";
     $switchLanguage .= $check4Lang;
     $switchLanguage .= "</select>\n";

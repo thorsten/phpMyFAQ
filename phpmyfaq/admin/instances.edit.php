@@ -18,9 +18,14 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    $protocol = 'http';
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+        $protocol = 'https';
+    }
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
+
 ?>
     <header>
         <h2><i class="icon-wrench"></i> <?php echo $PMF_LANG['ad_menu_instances']; ?></h2>
@@ -34,7 +39,7 @@ if ($permission['editinstances']) {
     $instanceData = $instance->getInstanceById($instanceId);
 
 ?>
-    <form class="form-horizontal" action="?action=updateinstance" method="post">
+    <form class="form-horizontal" action="?action=updateinstance" method="post" accept-charset="utf-8">
         <input type="hidden" name="instance_id" value="<?php echo $instanceData->id ?>" />
         <div class="control-group">
             <label class="control-label"><?php echo $PMF_LANG["ad_instance_url"] ?>:</label>

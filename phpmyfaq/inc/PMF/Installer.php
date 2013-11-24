@@ -351,13 +351,7 @@ class PMF_Installer
         'socialnetworks.twitterConsumerSecret'    => '',
         'socialnetworks.twitterAccessTokenKey'    => '',
         'socialnetworks.twitterAccessTokenSecret' => '',
-        'socialnetworks.enableFacebookSupport'    => 'false',
-
-        'cache.varnishEnable'                     => 'false',
-        'cache.varnishHost'                       => '127.0.0.1',
-        'cache.varnishPort'                       => '2000',
-        'cache.varnishSecret'                     => '',
-        'cache.varnishTimeout'                    => '500'
+        'socialnetworks.enableFacebookSupport'    => 'false'
     );
 
     /**

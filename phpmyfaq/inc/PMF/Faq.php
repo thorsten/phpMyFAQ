@@ -692,7 +692,8 @@ class PMF_Faq
             AND
                 fd.lang = '%s'
                 %s
-            GROUP BY fd.id",
+            GROUP BY
+                fd.id, fd.lang",
             PMF_Db::getTablePrefix(),
             isset($revisionId) ? 'faqdata_revisions': 'faqdata',
             PMF_Db::getTablePrefix(),
@@ -1047,27 +1048,28 @@ class PMF_Faq
     /**
      * Adds new category relation to a record
      *
-     * @param  mixed   $categories Category or array of categories
-     * @param  integer $record_id  Record id
-     * @param  string  $language   Language
+     * @param  mixed   $category  Category or array of categories
+     * @param  integer $record_id Record id
+     * @param  string  $language  Language
+     *
      * @return boolean
      */
     public function addCategoryRelation($category, $record_id, $language)
     {
         // Just a fallback when (wrong case) $category is an array
         if (is_array($category)) {
-            addCategoryRelations($category, $record_id, $language);
+            $this->addCategoryRelations($category, $record_id, $language);
         }
         $categories[] = $category;
 
-        return addCategoryRelations($categories, $record_id, $language);
+        return $this->addCategoryRelations($categories, $record_id, $language);
     }
 
     /**
      * Deletes category relations to a record
      *
-     * @param  integer $record_id Record id
-     * @param  string  $language  Language
+     * @param  integer $record_id   Record id
+     * @param  string  $record_lang Language
      * @return boolean
      */
     public function deleteCategoryRelations($record_id, $record_lang)
@@ -1886,8 +1888,14 @@ class PMF_Faq
         while (($row = $this->_config->getDb()->fetchObject($result)) && $i <= $count) {
             if ($oldId != $row->id) {
 
-                if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
-                    continue;
+                if ($this->groupSupport) {
+                    if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
+                        continue;
+                    }
+                } else {
+                    if (!in_array($row->user_id, array(-1, $this->user))) {
+                        continue;
+                    }
                 }
 
                 $data['visits']     = $row->visits;
@@ -1986,8 +1994,14 @@ class PMF_Faq
         while (($row = $this->_config->getDb()->fetchObject($result)) && $i < $count ) {
             if ($oldId != $row->id) {
 
-                if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
-                    continue;
+                if ($this->groupSupport) {
+                    if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
+                        continue;
+                    }
+                } else {
+                    if (!in_array($row->user_id, array(-1, $this->user))) {
+                        continue;
+                    }
                 }
 
                 $data['datum']   = $row->datum;
@@ -2617,12 +2631,12 @@ class PMF_Faq
      * Returns the record permissions for users and groups
      *
      * @param   string  $mode           'group' or 'user'
-     * @param   integer $record_id
+     * @param   integer $recordId
      * @return  array
      * @access  boolean
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getPermission($mode, $record_id)
+    function getPermission($mode, $recordId)
     {
         $permissions = array();
 
@@ -2640,13 +2654,16 @@ class PMF_Faq
             $mode,
             PMF_Db::getTablePrefix(),
             $mode,
-            (int)$record_id);
+            (int)$recordId);
 
         $result = $this->_config->getDb()->query($query);
+
         if ($this->_config->getDb()->numRows($result) > 0) {
-            $row = $this->_config->getDb()->fetchObject($result);
-            $permissions[] = (int)$row->permission;
+            while (($row = $this->_config->getDb()->fetchObject($result))) {
+                $permissions[] = (int)$row->permission;
+            }
         }
+
         return $permissions;
     }
 

@@ -18,7 +18,11 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    $protocol = 'http';
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+        $protocol = 'https';
+    }
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -29,7 +33,7 @@ if ($permission['editglossary']) {
     $glossary     = new PMF_Glossary($faqConfig);
     $glossaryItem = $glossary->getGlossaryItem($id);
 ?>
-        <form class="form-horizontal" action="?action=updateglossary" method="post">
+        <form class="form-horizontal" action="?action=updateglossary" method="post" accept-charset="utf-8">
             <input type="hidden" name="id" value="<?php echo $glossaryItem['id']; ?>" />
             <div class="control-group">
                 <label class="control-label" for="item"><?php echo $PMF_LANG['ad_glossary_item']; ?>:</label>

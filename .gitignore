@@ -10,9 +10,6 @@
 # Mac OS X crap
 .DS_Store
 
-# CodeKit configuration
-codekit-config.json
-
 # Builds
 build/*
 
@@ -35,6 +32,9 @@ components/*
 
 # Composer related stuff
 vendor/*
+
+# Bower related stuff
+components/*
 
 # node.js modules for development
 node_modules/*
