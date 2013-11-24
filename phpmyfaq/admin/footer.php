@@ -103,9 +103,6 @@ tinyMCE.init({
     entity_encoding         : "raw",
     extended_valid_elements : "code",
 
-    // Ajax-based file manager
-    file_browser_callback : "ajaxfilemanager",
-
     // Save function
     save_onsavecallback : "phpMyFAQSave",
 
@@ -121,30 +118,6 @@ tinyMCE.init({
         user_id  : "<?php print $user->userdata->get('user_id'); ?>"
     }
 });
-
-function ajaxfilemanager(field_name, url, type, win)
-{
-    var ajaxfilemanagerurl = "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-    switch (type) {
-        case "image":
-        case "media":
-        case "flash": 
-        case "file":
-            break;
-        default:
-            return false;
-    }
-    tinyMCE.activeEditor.windowManager.open({
-        url            : "editor/plugins/ajaxfilemanager/ajaxfilemanager.php",
-        width          : 640,
-        height         : 480,
-        inline         : "yes",
-        close_previous : "no"
-    },{
-        window : win,
-        input  : field_name
-    });
-}
 
 /**
  *
