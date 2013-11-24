@@ -24,7 +24,7 @@ use Symfony\Component\ClassLoader\UniversalClassLoader;
 // - false      debug mode disabled
 // - true       debug mode enabled
 //
-define('DEBUG', false);
+define('DEBUG', true);
 if (DEBUG) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
@@ -66,6 +66,11 @@ ini_set('pcre.recursion_limit', 100000000);
 if (file_exists(__DIR__ . '/../multisite/multisite.php') && 'cli' !== PHP_SAPI) {
     require __DIR__ . '/../multisite/multisite.php';
 }
+
+//
+// Set root dir
+//
+define('PMF_ROOT_DIR', dirname(__DIR__));
 
 //
 // Read configuration and constants
