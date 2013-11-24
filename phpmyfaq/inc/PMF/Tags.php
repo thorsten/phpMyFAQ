@@ -95,7 +95,7 @@ class PMF_Tags
                 1=1
                 %s
                 %s
-            ORDER BY tagging_name",
+            ORDER BY tagging_name ASC",
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
@@ -110,21 +110,8 @@ class PMF_Tags
               $allTags[$row->tagging_id] = $row->tagging_name;
            }
         }
-        
-        $numberOfItems = $limit ? PMF_TAGS_CLOUD_RESULT_SET_SIZE : $this->_config->getDb()->numRows($result);
-        
-        if (isset($allTags) && ($numberOfItems < count($allTags))) {
-            $keys = array_keys($allTags);
-            shuffle($keys);
-            foreach ($keys as $current_key) {
-                $tags[$current_key] = $allTags[$current_key];
-            }
-            $tags = array_slice($tags, 0, $numberOfItems, true);
-        } else {
-            $tags = PMF_Utils::shuffleData($allTags);
-        }
-        
-        return $tags;
+
+        return $allTags;
     }
 
     /**
@@ -411,6 +398,7 @@ class PMF_Tags
         // for avoiding an 'heavy' load during the evaluation
         // of the number of records for each tag
         $tagList = $this->getAllTags('', true);
+
         foreach ($tagList as $tagId => $tagName) {
             $totFaqByTag = count($this->getRecordsByTagName($tagName));
             if ($totFaqByTag > 0) {

@@ -68,6 +68,11 @@ if (file_exists(__DIR__ . '/../multisite/multisite.php') && 'cli' !== PHP_SAPI) 
 }
 
 //
+// Set root dir
+//
+define('PMF_ROOT_DIR', dirname(__DIR__));
+
+//
 // Read configuration and constants
 //
 if (! defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {

@@ -224,6 +224,25 @@ class Upload
 
 		}
 
+        // Don't allow .htaccess to be uploaded
+        if (strpos($this->_value['tmp_name'], '.htaccess')) {
+            return false;
+        }
+
+        // Check on MIME type to avoid upload of malicious PHP files
+        $phpMimeTypes = array(
+            'text/php',
+            'text/x-php',
+            'application/php',
+            'application/x-php',
+            'application/x-httpd-php',
+            'application/x-httpd-php-source'
+        );
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        if (in_array(finfo_file($finfo, $this->_value['tmp_name']), $phpMimeTypes)) {
+            return false;
+        }
+
 		if (@move_uploaded_file($this->_value['tmp_name'], $dest . $fileName)) {
 			@chmod($dest . $fileName, $this->uploadFileMode);
 			$this->fileName = $fileName;

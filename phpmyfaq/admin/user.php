@@ -21,7 +21,11 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    $protocol = 'http';
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+        $protocol = 'https';
+    }
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -532,6 +536,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             'baseUrl'       => $baseUrl,
             'total'         => $numUsers,
             'perPage'       => $perPage,
+            'useRewrite'    => false,
             'pageParamName' => 'page'
         );
         $pagination = new PMF_Pagination($faqConfig, $options);
@@ -561,7 +566,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         <?php if ($perPage < $numUsers): ?>
         <tfoot>
             <tr>
-                <td colspan="7"><?php print $pagination->render(); ?></td>
+                <td colspan="7"><?php echo $pagination->render(); ?></td>
             </tr>
         </tfoot>
         <?php endif; ?>
