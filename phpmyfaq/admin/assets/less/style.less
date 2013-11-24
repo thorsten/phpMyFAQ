@@ -22,7 +22,7 @@
 //
 // Font Awesome
 //
-@import "../../../../vendor/fontawesome/build/assets/font-awesome/less/font-awesome.less";
+@import "../../../../components/font-awesome/less/font-awesome.less";
 @FontAwesomePath: "../font";
 
 //
@@ -37,7 +37,6 @@
 //
 header {
   h2 {
-    .border-radius(4px);
     #gradient > .vertical(#6C737E, #3C4049);
     font-size: 18px;
     color: @white;
@@ -46,7 +45,6 @@ header {
     padding: 5px 10px;
   }
   h3 {
-    .border-radius(4px);
     #gradient > .vertical(#FAFAFA, #E9E9E9);
     border: 1px solid #D5D5D5;
     font-size: 15px;
@@ -61,7 +59,6 @@ section {
 .userpanel {
   margin: 10px 5px;
   img {
-    .border-radius(4px);
     border: 2px solid @grayDarker;
     margin-right: 5px;
     float: left;
@@ -74,7 +71,6 @@ section {
 // Dashboard
 .dashboard-stat {
   background: @white;
-  .border-radius(5px);
   border: 1px solid #D5D5D5;
   height: 70px;
   padding: 15px;
@@ -90,13 +86,6 @@ section {
       color: @gray;
     }
   }
-}
-
-// Add / edit FAQs
-textarea.admin-question {
-  #font > .shorthand(24px, normal, 30px);
-  .input-xxlarge;
-  height: 66px;
 }
 
 // Configuration
