@@ -95,7 +95,7 @@ class PMF_Tags
                 1=1
                 %s
                 %s
-            ORDER BY tagging_name ASC",
+            ORDER BY tagging_name",
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
@@ -411,6 +411,9 @@ class PMF_Tags
         // for avoiding an 'heavy' load during the evaluation
         // of the number of records for each tag
         $tagList = $this->getAllTags('', true);
+
+        sort($tagList);
+
         foreach ($tagList as $tagId => $tagName) {
             $totFaqByTag = count($this->getRecordsByTagName($tagName));
             if ($totFaqByTag > 0) {
