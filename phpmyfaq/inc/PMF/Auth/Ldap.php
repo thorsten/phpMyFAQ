@@ -101,6 +101,18 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
     {
         $user   = new PMF_User($this->_config);
         $result = $user->createUser($login, null);
+        $this->ldap = new PMF_Ldap($this->_config);
+        $this->ldap->connect(
+            $this->_ldapConfig['ldap_server'],
+            $this->_ldapConfig['ldap_port'],
+            $this->_ldapConfig['ldap_base'],
+            $this->_ldapConfig['ldap_user'],
+            $this->_ldapConfig['ldap_password']
+        );
+        
+        if ($this->ldap->error) {
+            $this->errors[] = $this->ldap->error;
+        } 
 
         $user->setStatus('active');
 
