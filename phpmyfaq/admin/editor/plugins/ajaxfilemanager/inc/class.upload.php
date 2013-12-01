@@ -229,6 +229,14 @@ class Upload
             return false;
         }
 
+        // Don't allow PHP files
+        $blacklist = array('.php', '.phtml', '.php3', '.php4', '.php5');
+        foreach ($blacklist as $item) {
+            if (preg_match("/$item\$/i", $this->_value['tmp_name'])) {
+                return false;
+            }
+        }
+
         // Don't allow nullbytes in uploaded files
         $this->_value['tmp_name'] = str_replace(chr(0), '', $this->_value['tmp_name']);
 
