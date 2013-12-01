@@ -78,8 +78,12 @@ class PMF_Configuration
         );
             
         $result = $this->getDb()->query($query);
-        $config = $this->getDb()->fetchAll($result);
-        
+        try {
+            $config = $this->getDb()->fetchAll($result);
+        } catch (Exception $e) {
+            // @todo Added proper handling of exception
+            echo $e->getMessage();
+        }
         foreach ($config as $items) {
             $this->config[$items->config_name] = $items->config_value;
         }
