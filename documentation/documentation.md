@@ -134,7 +134,6 @@ phpMyFAQ addresses a database system via PHP. In order to install it you will ne
     *   SPL support
 *   **Web server** ( [Apache](http://httpd.apache.org) 2.x or [nginx](http://www.nginx.net/) 0.7+ or [lighttpd](http://www.lighttpd.net) 1.0+ or [IIS](http://www.microsoft.com/) 6.0+ or Zeus Webserver)
 *   **Database server**
-    *   [MySQL](http://www.mysql.com) 5.x with the MySQL extension (recommended: 5.5.x)
     *   [MySQL](http://www.mysql.com) 5.x with the MySQLi extension (recommended: 5.5.x)
     *   [PostgreSQL](http://www.postgresql.org) 8.x (recommended: latest 8.x)
     *   [Microsoft SQL Server](http://www.microsoft.com/sql/) 2005, 2008, 2012

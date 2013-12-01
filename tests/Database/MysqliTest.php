@@ -30,7 +30,7 @@ require_once 'AbstractTest.php';
  * @copyright 2009-2013 phpMyFAQ Team
  * @since     2009-05-16
  */
-abstract class Database_MysqlTest extends Database_AbstractTest 
+abstract class Database_MysqliTest extends Database_AbstractTest
 {
     /**
      * Return the MySQL server settings.
@@ -45,6 +45,6 @@ abstract class Database_MysqlTest extends Database_AbstractTest
             "password" => '-',
             "db"       => 'phpmyfaqtest',
             "prefix"   => '',
-            "type"     => 'mysql');
+            "type"     => 'mysqli');
     }
 }

@@ -40,7 +40,7 @@ class PMF_Search_Factory
      * @param PMF_Configuration $config
      * @param array             $searchHandler Array with informations about search
      *                                         handlers, e.g.
-     *                                         array('database' => 'mysql')
+     *                                         array('database' => 'mysqli')
      *
      * @return PMF_Search_Abstract
      */

@@ -291,10 +291,6 @@ if ($step == 3) {
         if (isset($PMF_LANG['metaCharset']) && strtolower($PMF_LANG['metaCharset']) != 'utf-8') {
             // UTF-8 Migration
             switch($DB['type']) {
-            case 'mysql':
-                include 'mysql.utf8migration.php';
-                break;
-
             case 'mysqli':
                 include 'mysqli.utf8migration.php';
                 break;
@@ -338,7 +334,6 @@ if ($step == 3) {
                     PRIMARY KEY (virtual_hash))";
                 break;
             case 'mysqli':
-            case 'mysql':
                 $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqattachment (
                     id int(11) NOT NULL,
                     record_id int(11) NOT NULL,
@@ -422,7 +417,6 @@ if ($step == 3) {
                 $query[] = "EXEC sp_RENAME '" . PMF_Db::getTablePrefix() . "faqquestions.ask_content', 'question', 'COLUMN'";
                 $query[] = "EXEC sp_RENAME '" . PMF_Db::getTablePrefix() . "faqquestions.ask_date', 'created', 'COLUMN'";
                 break;
-            case 'mysql':
             case 'mysqli':
                 $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions CHANGE ask_username username VARCHAR(100) NOT NULL";
                 $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions CHANGE ask_usermail email VARCHAR(100) NOT NULL";
@@ -667,7 +661,6 @@ if ($step == 3) {
                     config_value VARCHAR(255) DEFAULT NULL,
                     PRIMARY KEY (instance_id, config_name))";
                 break;
-            case 'mysql':
             case 'mysqli':
                 $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqinstances (
                     id INT(11) NOT NULL,
@@ -847,7 +840,6 @@ if ($step == 3) {
 
     // optimize tables if possible
     switch ($DB["type"]) {
-        case 'mysql':
         case 'mysqli':
             // Get all table names
             $faqConfig->getDb()->getTableNames(PMF_Db::getTablePrefix());
