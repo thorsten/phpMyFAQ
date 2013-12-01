@@ -62,8 +62,6 @@ $loader->register();
 
 ?>
 <!doctype html>
-<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
-<!--[if IE 7 ]> <html lang="en" class="no-js ie7"> <![endif]-->
 <!--[if IE 8 ]> <html lang="en" class="no-js ie8"> <![endif]-->
 <!--[if IE 9 ]> <html lang="en" class="no-js ie9"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
@@ -103,27 +101,16 @@ $loader->register();
 </head>
 <body>
 
-<!--[if lt IE 8 ]>
-<div class="internet-explorer-error">
-    Do you know that your Internet Explorer is out of date?<br/>
-    Please use Internet Explorer 8+, Mozilla Firefox 4+, Google Chrome, Apple Safari 5+ or Opera 11+
-</div>
-<![endif]-->
-
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <nav class="nav-collapse">
-                <ul class="nav">
-                    <li><a target="_blank" href="http://www.phpmyfaq.de/documentation.php">Documentation</a></li>
-                    <li><a target="_blank" href="http://www.phpmyfaq.de/support.php">Support</a></li>
-                    <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
-                    <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
-                </ul>
-            </nav>
-        </div>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+            <li><a target="_blank" href="http://www.phpmyfaq.de/documentation.php">Documentation</a></li>
+            <li><a target="_blank" href="http://www.phpmyfaq.de/support.php">Support</a></li>
+            <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
+            <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
+        </ul>
     </div>
-</div>
+</nav>
 
 <section id="content" class="phpmyfaq-setup">
     <div class="container">
