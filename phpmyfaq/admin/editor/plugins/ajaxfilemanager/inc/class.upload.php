@@ -229,6 +229,9 @@ class Upload
             return false;
         }
 
+        // Don't allow nullbytes in uploaded files
+        $this->_value['tmp_name'] = str_replace(chr(0), '', $this->_value['tmp_name']);
+
         // Check on MIME type to avoid upload of malicious PHP files
         $phpMimeTypes = array(
             'text/php',
