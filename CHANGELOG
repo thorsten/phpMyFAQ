@@ -10,8 +10,11 @@ Version 2.9.0-dev 2014-
 - added frontend dependency management using Bower (Thorsten)
 - updated bundled Symfony ClassLoader to version 2.3.7 (Thorsten)
 
-Version 2.8.4 - 2013-11-
+Version 2.8.4 - 2013-11-26
+- fixed possible arbitrary PHP code execution (Thorsten)
 - updated Chinese (Traditional) translation
+- updated Dutch translation
+- fixed some minor bugs (Thorsten)
 
 Version 2.8.3 - 2013-11-18
 - fixed missing permission check on Image Manager (Thorsten)
