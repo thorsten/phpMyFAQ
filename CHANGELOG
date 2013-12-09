@@ -7,6 +7,8 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.8.5 - 2013-12-
 - fixed SSO logins with mod_auth_kerb (Stephane Lapie)
+- updated Dutch translation
+- fixed some minor bugs (Thorsten)
 
 Version 2.8.4 - 2013-11-26
 - fixed possible arbitrary PHP code execution (Thorsten)
