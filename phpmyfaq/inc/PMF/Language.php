@@ -143,7 +143,7 @@ class PMF_Language
         // Get the faq record language
         $_lang['artget'] = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
         if (!is_null($_lang['artget']) && !self::isASupportedLanguage($_lang['artget']) ) {
-            $_lang['get'] = null;
+            $_lang['artget'] = null;
         }
         // Get the language from the session
         if (isset($_SESSION['pmf_lang']) && self::isASupportedLanguage($_SESSION['pmf_lang']) ) {

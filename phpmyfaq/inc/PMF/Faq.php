@@ -363,6 +363,7 @@ class PMF_Faq
             AND
                 fd.lang = '%s'
             %s
+            GROUP BY fd.id
             %s",
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
