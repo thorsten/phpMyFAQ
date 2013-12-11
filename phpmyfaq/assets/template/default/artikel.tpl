@@ -103,7 +103,7 @@
                 </div>
             </div>
 
-            <p hidden-print>{writeCommentMsg}</p>
+            <p class="hidden-print">{writeCommentMsg}</p>
 
             <a id="comment"></a>
             <div id="commentForm" class="hide">
