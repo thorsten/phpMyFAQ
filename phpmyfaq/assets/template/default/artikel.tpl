@@ -163,7 +163,7 @@
                 });
 
             </script>
-            <style type="text/css" scoped>
+            <style scoped>
                 @import "assets/js/syntaxhighlighter/styles/shCore.css";
                 @import "assets/js/syntaxhighlighter/styles/shThemeDefault.css";
             </style>
