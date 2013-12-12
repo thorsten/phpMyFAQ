@@ -308,7 +308,7 @@ if (! is_null($solutionId)) {
         $lang            = $faqData['lang'];
         $title           = ' - ' . $faq->getRecordTitle($id);
         $keywords        = ',' . $faq->getRecordKeywords($id);
-        $metaDescription = PMF_Utils::makeShorterText(strip_tags($faqData['content']), 12);
+        $metaDescription = str_replace('"', '', PMF_Utils::makeShorterText(strip_tags($faqData['content']), 12));
     }
 }
 
