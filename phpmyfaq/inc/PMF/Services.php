@@ -142,7 +142,7 @@ class PMF_Services
         );
 
         return sprintf(
-            'https://twitter.com/share?url=%s&text=%s',
+            'https://twitter.com/share?url=%s&amp;text=%s',
             urlencode($url),
             $this->getQuestion() . urlencode(' | ' . $url)
         );
