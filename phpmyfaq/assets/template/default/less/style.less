@@ -1,5 +1,5 @@
 /**
- * phpMyFAQ 2.8 default layout
+ * phpMyFAQ 2.9 default layout
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -16,133 +16,31 @@
 
 //
 // Twitter Bootstrap
-// -----------------
+//
 @import "../../../../../components/bootstrap/less/bootstrap.less";
 
 //
-// Global values for phpMyFAQ
-// --------------------------
-
-// Links
-@linkColor:             #F89406;
-@linkColorHover:        darken(@linkColor, 10%);
-
-// Grays
-@black:                 #000;
-@grayDarker:            #222;
-@grayDark:              #333;
-@gray:                  #555;
-@grayLight:             #999;
-@grayLighter:           #eee;
-@white:                 #fff;
-
-// Accent colors
-@blue:                  #049cdb;
-@blueDark:              #0064cd;
-@green:                 #46a546;
-@red:                   #9d261d;
-@yellow:                #ffc40d;
-@orange:                #f89406;
-@pink:                  #c3325f;
-@purple:                #7a43b6;
-
-// phpMyFAQ special colors
-@pmfGrayLight:          #f2f2f2;
-@pmfOrange:             #ef7507;
-
-// Typography
-@baseFontSize:          14px;
-@baseFontFamily:        "Trebuchet MS", "Helvetica Neue", Helvetica, Arial, sans-serif;
-@baseLineHeight:        18px;
-@textColor:             @grayDark;
-
-// Component colors
-@zindexDropdown:          1000;
-@zindexPopover:           1010;
-@zindexTooltip:           1020;
-@zindexFixedNavbar:       1030;
-@zindexModalBackdrop:     1040;
-@zindexModal:             1050;
-
-// Input placeholder text color
-@placeholderText:         @grayLight;
-
-// Hr border color
-@hrBorder:                @grayLighter;
-
-// Navbar
-@navbarHeight:                    40px;
-@navbarBackground:                #686f7a;
-@navbarBackgroundHighlight:       #686f7a;
-@navbarLinkBackgroundHover:       transparent;
-
-@navbarText:                      @grayLighter;
-@navbarLinkColor:                 @white;
-@navbarLinkColorActive:           @white;
-@navbarLinkColorHover:            @grayLighter;
-
-// Form states and alerts
-@warningText:             #c09853;
-@warningBackground:       #fcf8e3;
-@warningBorder:           darken(spin(@warningBackground, -10), 3%);
-
-@errorText:               #b94a48;
-@errorBackground:         #f2dede;
-@errorBorder:             darken(spin(@errorBackground, -10), 3%);
-
-@successText:             #468847;
-@successBackground:       #dff0d8;
-@successBorder:           darken(spin(@successBackground, -10), 5%);
-
-@infoText:                #3a87ad;
-@infoBackground:          #d9edf7;
-@infoBorder:              darken(spin(@infoBackground, -10), 7%);
-
+// Global variables
 //
-// The Grid
-// --------
-
-// Default 940px grid
-@gridColumns:             12;
-@gridColumnWidth:         60px;
-@gridGutterWidth:         20px;
-@gridRowWidth:            (@gridColumns * @gridColumnWidth) + (@gridGutterWidth * (@gridColumns - 1));
-
-// Fluid grid
-@fluidGridColumnWidth:    6.382978723%;
-@fluidGridGutterWidth:    2.127659574%;
-
-//
-// Bundled Icons from Bootstrap
-//
-
-@iconSpritePath:          "../../../img/glyphicons-halflings.png";
-@iconWhiteSpritePath:     "../../../img/glyphicons-halflings-white.png";
+@import "variables.less";
 
 //
 // phpMyFAQ styles
-// ---------------
-body {
-  background: #f6f6f6;
-}
+//
 
-.navbar-inner {
-  #gradient > .vertical(#AFB3BA, #6C737E);
-  .divider-vertical {
-    border-left-color: #6C737E;
-    border-right-color: #AFB3BA;
-  }
-}
+@import url("//fonts.googleapis.com/css?family=Lato:400,700,900,400italic");
 
 #content {
 
   //
   // Base definitions
   //
-  background: #fffff9;
-  padding-top: 60px;
-  .well, .breadcrumb {
+  .breadcrumb {
     #gradient > .vertical(#FAFAFA, #E9E9E9);
+  }
+
+  .jumbotron {
+    text-align: center;
   }
 
   //
@@ -152,7 +50,7 @@ body {
     div {
       position: relative;
       img.ucp {
-        border: 2px solid @grayDarker;
+        border: 2px solid @gray-darker;
         margin-right: 5px;
         position: absolute;
         right: 0;
@@ -196,7 +94,7 @@ body {
   // FAQ pages
   //
   abbr {
-    color: @pmfOrange;
+    color: @pmf-orange;
   }
   .divider {
     padding: 0 10px 0 10px;
@@ -244,10 +142,10 @@ body {
     }
   }
   .faq-information {
-    background-color: @white;
-    border-left: 1px solid @grayLighter;
-    border-bottom: 1px solid @grayLighter;
-    border-right: 1px solid @grayLighter;
+    background-color: white;
+    border-left: 1px solid @gray-lighter;
+    border-bottom: 1px solid @gray-lighter;
+    border-right: 1px solid @gray-lighter;
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
     margin-bottom: 10px;
@@ -255,7 +153,7 @@ body {
   .comment {
     margin: 5px;
     padding: 5px;
-    border: 1px @grayLight solid;
+    border: 1px @gray-light solid;
     img {
       padding-right: 5px;
     }
@@ -300,20 +198,6 @@ body {
   }
 
   //
-  // Setup
-  //
-  .hello-phpmyfaq {
-    #gradient > .vertical(#FBB450, #F89406);
-    color: @white;
-
-    h1 {
-      color: @white;
-      font-size: 44px;
-      margin-bottom: 16px;
-    }
-  }
-
-  //
   // Maintenance mode
   //
   .maintenance {
@@ -331,7 +215,7 @@ body {
 //
 footer {
     background: #28343b;
-    color: @pmfGrayLight;
+    color: @gray-light;
     padding-top: 30px;
 
     ul.footer-menu {
@@ -344,6 +228,6 @@ footer {
     }
 
     .copyright {
-      color: @pmfGrayLight;
+      color: @gray-light;
     }
 }

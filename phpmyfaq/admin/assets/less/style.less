@@ -1,5 +1,5 @@
 /**
- * phpMyFAQ 2.8 default layout
+ * phpMyFAQ 2.9 default layout
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -26,20 +26,13 @@
 @FontAwesomePath: "../font";
 
 //
-// Navbar
-//
-.navbar .nav > li > a {
-  padding: ((@navbarHeight - @baseLineHeight) / 2) 10px ((@navbarHeight - @baseLineHeight) / 2);
-}
-
-//
 // Global admin styles
 //
 header {
   h2 {
     #gradient > .vertical(#6C737E, #3C4049);
     font-size: 18px;
-    color: @white;
+    color: white;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
     margin-bottom: 1.25em;
     padding: 5px 10px;
@@ -59,18 +52,18 @@ section {
 .userpanel {
   margin: 10px 5px;
   img {
-    border: 2px solid @grayDarker;
+    border: 2px solid @gray-darker;
     margin-right: 5px;
     float: left;
   }
   small {
-    color: @grayLight;
+    color: @gray-light;
   }
 }
 
 // Dashboard
 .dashboard-stat {
-  background: @white;
+  background: white;
   border: 1px solid #D5D5D5;
   height: 70px;
   padding: 15px;
