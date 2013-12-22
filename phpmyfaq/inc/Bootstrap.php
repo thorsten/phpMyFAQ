@@ -87,7 +87,7 @@ if (! defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
 // Check if config/database.php exist -> if not, redirect to installer
 //
 if (!file_exists(PMF_CONFIG_DIR . '/database.php') && !file_exists(PMF_ROOT_DIR . '/inc/data.php')) {
-    header("Location: install/setup.php");
+    header("Location: setup/index.php");
     exit();
 }
 

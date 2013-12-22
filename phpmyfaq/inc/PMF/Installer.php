@@ -567,7 +567,7 @@ class PMF_Installer
         $dbSetup['dbType'] = PMF_Filter::filterInput(INPUT_POST, 'sql_type', FILTER_SANITIZE_STRING);
         if (!is_null($dbSetup['dbType'])) {
             $dbSetup['dbType'] = trim($dbSetup['dbType']);
-            if (! file_exists(PMF_ROOT_DIR . '/install/' . $dbSetup['dbType'] . '.sql.php')) {
+            if (! file_exists(PMF_ROOT_DIR . '/setup/' . $dbSetup['dbType'] . '.sql.php')) {
                 printf(
                     '<p class="alert alert-error"><strong>Error:</strong> Invalid server type: %s</p>',
                     $dbSetup['dbType']
@@ -732,8 +732,8 @@ class PMF_Installer
             PMF_System::renderFooter(true);
         }
 
-        require PMF_ROOT_DIR . '/install/' . $dbSetup['dbType'] . '.sql.php'; // CREATE TABLES
-        require PMF_ROOT_DIR . '/install/stopwords.sql.php';  // INSERTs for stopwords
+        require PMF_ROOT_DIR . '/setup/' . $dbSetup['dbType'] . '.sql.php'; // CREATE TABLES
+        require PMF_ROOT_DIR . '/setup/stopwords.sql.php';  // INSERTs for stopwords
 
         $this->_system->setDatabase($db);
 
@@ -776,7 +776,7 @@ class PMF_Installer
             $configuration->add($name, $value);
         }
 
-        $configuration->update(array('main.referenceURL' => $link->getSystemUri('/install/setup.php')));
+        $configuration->update(array('main.referenceURL' => $link->getSystemUri('/setup/index.php')));
         $configuration->add('security.salt', md5($configuration->get('main.referenceURL')));
 
         // add admin account and rights
@@ -805,7 +805,7 @@ class PMF_Installer
         // Add master instance
         $instanceData = array(
             'url'      => $link->getSystemUri($_SERVER['SCRIPT_NAME']),
-            'instance' => $link->getSystemRelativeUri('install/setup.php'),
+            'instance' => $link->getSystemRelativeUri('setup/index.php'),
             'comment'  => 'phpMyFAQ ' . PMF_System::getVersion()
         );
         $faqInstance = new PMF_Instance($configuration);
@@ -826,15 +826,15 @@ class PMF_Installer
     {
         // Remove 'setup.php' file
         if (@unlink(basename($_SERVER['SCRIPT_NAME']))) {
-            echo "<p class=\"alert alert-success\">The file <em>./install/setup.php</em> was deleted automatically.</p>\n";
+            echo "<p class=\"alert alert-success\">The file <em>./setup/index.php</em> was deleted automatically.</p>\n";
         } else {
-            echo "<p class=\"alert alert-error\">Please delete the file <em>./install/setup.php</em> manually.</p>\n";
+            echo "<p class=\"alert alert-error\">Please delete the file <em>./setup/index.php</em> manually.</p>\n";
         }
         // Remove 'update.php' file
         if (@unlink(dirname($_SERVER['PATH_TRANSLATED']) . '/update.php')) {
-            echo "<p class=\"alert alert-success\">The file <em>./install/update.php</em> was deleted automatically.</p>\n";
+            echo "<p class=\"alert alert-success\">The file <em>./setup/update.php</em> was deleted automatically.</p>\n";
         } else {
-            echo "<p class=\"alert alert-error\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
+            echo "<p class=\"alert alert-error\">Please delete the file <em>./setup/update.php</em> manually.</p>\n";
         }
     }
 

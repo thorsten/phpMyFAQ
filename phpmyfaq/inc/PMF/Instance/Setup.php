@@ -98,7 +98,7 @@ class PMF_Instance_Setup
                 }
             } else {
                 copy(
-                    $this->_rootDir . '/install/index.html',
+                    $this->_rootDir . '/setup/index.html',
                     $this->_rootDir . $dir . '/index.html'
                 );
             }
