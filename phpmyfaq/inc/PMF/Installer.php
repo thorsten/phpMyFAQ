@@ -295,7 +295,7 @@ class PMF_Installer
         'main.metaKeywords'                       => '',
         'main.metaPublisher'                      => '__PHPMYFAQ_PUBLISHER__',
         'main.send2friendText'                    => '',
-        'main.titleFAQ'                           => 'phpMyFAQ Codename Perdita',
+        'main.titleFAQ'                           => 'phpMyFAQ Codename Proteus',
         'main.urlValidateInterval'                => '86400',
         'main.enableWysiwygEditor'                => 'true',
         'main.enableWysiwygEditorFrontend'        => 'false',
