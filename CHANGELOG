@@ -9,6 +9,11 @@ Version 2.9.0-dev 2014-
 - changed PHP requirement to PHP 5.4.4 and later (Thorsten)
 - added frontend dependency management using Bower (Thorsten)
 - updated bundled Symfony ClassLoader to version 2.3.7 (Thorsten)
+- updated bundled jQuery to version 1.10.2 (Thorsten)
+- updated bundled Bootstrap to version 3.0.3 (Thorsten)
+- updated bundled Font Awesome to version 4.0.3 (Thorsten)
+- updated bundled Modernizr to version 2.7.1 (Thorsten)
+- updated bundled TinyMCE to version 4.0.12 (Thorsten)
 - dropped support for ext/mysql (Thorsten)
 
 Version 2.8.5 - 2013-12-
