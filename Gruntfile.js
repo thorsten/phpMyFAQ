@@ -31,7 +31,6 @@ module.exports = function(grunt) {
                     'vendor/twitter/bootstrap/js/bootstrap-modal.js',
                     'vendor/twitter/bootstrap/js/bootstrap-popover.js',
                     'vendor/twitter/bootstrap/js/bootstrap-tab.js',
-                    'vendor/twitter/bootstrap/js/bootstrap-typeahead.js',
                     'phpmyfaq/assets/js/autosave.js',
                     'phpmyfaq/assets/js/functions.js'
                 ],
