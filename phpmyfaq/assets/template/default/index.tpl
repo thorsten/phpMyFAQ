@@ -38,13 +38,6 @@
 </head>
 <body dir="{dir}">
 
-<!--[if lt IE 8 ]>
-<div class="internet-explorer-error">
-    Do you know that your Internet Explorer is out of date?<br/>
-    Please use Internet Explorer 8+, Mozilla Firefox 4+, Google Chrome, Apple Safari 5+ or Opera 11+
-</div>
- <![endif]-->
-
 <nav class="navbar navbar-default hidden-print" role="navigation">
     <div class="container">
         <div class="navbar-header">
@@ -78,7 +71,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>{msgUserControlDropDown}</li>
-                        <li class="{activeUserControl}">{msgUserControl}</li>
+                        <li>{msgUserControl}</li>
                         <li>{msgLogoutUser}</li>
                     </ul>
                 </li>
@@ -87,8 +80,6 @@
         </div>
     </div>
 </nav>
-
-
 
 <section id="content" class="container">
     <div class="row">
