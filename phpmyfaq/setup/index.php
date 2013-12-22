@@ -165,7 +165,8 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                         <div class="form-group">
                             <label class="col-sm-4 control-label" for="sql_server">Host:</label>
                             <div class="col-sm-8">
-                                <input type="text" name="sql_server" id="sql_server" required class="form-control">
+                                <input type="text" name="sql_server" id="sql_server" required class="form-control"
+                                    placeholder="127.0.0.1">
                                 <p class="help-block">Please enter the host of your database server.</p>
                             </div>
                         </div>
@@ -226,45 +227,46 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="ldap_enabled">&nbsp;</label>
                         <div class="col-sm-8">
-                            <label class="checkbox">
-                                <input id="ldap_enabled" type="checkbox" name="ldap_enabled" value="yes" />
+                            <label class="checkbox-inline">
+                                <input id="ldap_enabled" type="checkbox" name="ldap_enabled" value="yes">
                                 Enable LDAP support?
                             </label>
                             <p class="help-block">You can enable LDAP later if you like.</p>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="ldap_server">LDAP server host:</label>
+                        <label class="col-sm-4 control-label" for="ldap_server">Host:</label>
                         <div class="col-sm-8">
-                            <input type="text" name="ldap_server" id="ldap_server" />
+                            <input type="text" name="ldap_server" id="ldap_server" class="form-control"
+                                   placeholder="127.0.0.1">
                             <p class="help-block">Please enter the host of your LDAP server.</p>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="ldap_port">LDAP server port:</label>
+                        <label class="col-sm-4 control-label" for="ldap_port">Port:</label>
                         <div class="col-sm-8">
-                            <input type="number" name="ldap_port" value="389" id="ldap_port" />
+                            <input type="number" name="ldap_port" value="389" id="ldap_port" class="form-control">
                             <p class="help-block">Please enter the port of your LDAP server.</p>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="ldap_user">LDAP user DN:</label>
+                        <label class="col-sm-4 control-label" for="ldap_user">User DN:</label>
                         <div class="col-sm-8">
-                            <input type="text" name="ldap_user" id="ldap_user" />
+                            <input type="text" name="ldap_user" id="ldap_user" class="form-control">
                             <p class="help-block">Please enter your specified RDN username.</p>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="ldap_password">LDAP password:</label>
+                        <label class="col-sm-4 control-label" for="ldap_password">Password:</label>
                         <div class="col-sm-8">
-                            <input name="ldap_password" type="password" id="ldap_password" />
+                            <input name="ldap_password" type="password" id="ldap_password" class="form-control">
                             <p class="help-block">Please enter your LDAP password.</p>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="ldap_base">LDAP base DN:</label>
+                        <label class="col-sm-4 control-label" for="ldap_base">Base DN:</label>
                         <div class="col-sm-8">
-                        <input type="text" name="ldap_base" id="ldap_base" />
+                        <input type="text" name="ldap_base" id="ldap_base" class="form-control">
                             <p class="help-block">
                                 Please enter your distinguished name, e.g. 'cn=John Doe,ou=Accounts,o=My Company,c=US'.
                             </p>
@@ -287,7 +289,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="language">Default language:</label>
                         <div class="col-sm-8">
-                            <select name="language" size="1" id="language">
+                            <select name="language" size="1" id="language" class="form-control">
                             <?php
                                 if ($dir = @opendir(PMF_ROOT_DIR . '/lang')) {
                                     while ($dat = @readdir($dir)) {
@@ -314,7 +316,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="permLevel">Permission level:</label>
                         <div class="col-sm-8">
-                                <select id="permLevel" name="permLevel" size="1" required="required">
+                                <select id="permLevel" name="permLevel" size="1" required class="form-control">
                                     <option value="basic">Basic (no group support)</option>
                                     <option value="medium">Medium (with group support)</option>
                             </select>
@@ -326,35 +328,35 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="realname">Your name:</label>
                         <div class="col-sm-8">
-                            <input type="text" name="realname" id="realname" required="required" />
+                            <input type="text" name="realname" id="realname" required class="form-control">
                             <p class="help-block">Please enter your real name.</p>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="email">Your email address:</label>
                         <div class="col-sm-8">
-                            <input type="email" name="email" id="email" required="required" />
+                            <input type="email" name="email" id="email" required class="form-control">
                             <p class="help-block">Please enter your email adress.</p>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="loginname">Your login name:</label>
                         <div class="col-sm-8">
-                            <input type="text" name="loginname" id="loginname" required="required" />
+                            <input type="text" name="loginname" id="loginname" required class="form-control">
                             <p class="help-block">Please enter your login name.</p>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="password">Your password:</label>
                         <div class="col-sm-8">
-                            <input type="password" name="password" id="password" required="required" />
+                            <input type="password" name="password" id="password" required class="form-control">
                             <p class="help-block">Please enter your password.</p>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="password_retype">Retype password:</label>
                         <div class="col-sm-8">
-                            <input type="password" name="password_retyped" id="password_retype" required="required" />
+                            <input type="password" name="password_retyped" id="password_retype" required class="form-control">
                             <p class="help-block">Please retype your password.</p>
                         </div>
                     </div>
