@@ -14,7 +14,7 @@
     <meta name="author" content="{metaPublisher}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="application-name" content="phpMyFAQ {phpmyfaqversion}">
-    <meta name="robots" content="INDEX, FOLLOW">
+    <meta name="robots" content="index, follow">
     <meta name="revisit-after" content="7 days">
 
     <!-- Share on Facebook -->
@@ -41,7 +41,7 @@
 <nav class="navbar navbar-default hidden-print" role="navigation">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#pmf-navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
