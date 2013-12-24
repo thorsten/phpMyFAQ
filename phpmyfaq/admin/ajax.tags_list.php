@@ -38,7 +38,7 @@ if (! is_null($autoCompleteValue)) {
         $arrayOfValues     = explode(',', $autoCompleteValue);
         $autoCompleteValue = end($arrayOfValues);
     }
-    $tags = $oTag->getAllTags($autoCompleteValue, false, true);
+    $tags = $oTag->getAllTags(strtolower($autoCompleteValue), false, true);
 } else {
     $tags = $oTag->getAllTags();
 }
