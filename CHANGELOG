@@ -6,8 +6,8 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 3.0.0-dev - 2014-
-- added Symfony HTTP Foundation 2.3.0 (Alexander M. Turek, Thorsten)
-- added Twig 1.123.1 as new template engine (Alexander M. Turek, Thorsten)
+- added Symfony HTTP Foundation 2.4 (Alexander M. Turek, Thorsten)
+- added Twig 1.15 as new template engine (Alexander M. Turek, Thorsten)
 - added support for Bower (Thorsten)
 - dropped support for ext/mysql (Thorsten)
 
