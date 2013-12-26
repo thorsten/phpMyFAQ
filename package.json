@@ -3,7 +3,8 @@
     "version": "3.0.0",
     "description": "phpMyFAQ",
     "main": "Gruntfile.js",
-    "dependencies": {
+    "dependencies": {},
+    "devDependencies": {
         "grunt": "~0.4.1",
         "grunt-contrib-clean": "~0.4.1",
         "grunt-contrib-copy": "~0.4.1",
@@ -15,11 +16,6 @@
         "grunt-contrib-uglify": "~0.2.2",
         "grunt-contrib-watch": "~0.4.4",
         "grunt-bower-task": "~0.2.3"
-    },
-    "devDependencies": {},
-    "scripts": {
-        "preinstall" : "npm install bower less grunt-cli -g",
-        "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
         "type": "git",
