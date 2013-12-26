@@ -97,14 +97,14 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
 
     <form class="form-horizontal" action="setup.php" method="post">
         <div class="row">
-            <div class="span6">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                 <?php
                 $twig->loadTemplate('database.twig')->display($tplDatabaseVars);
                 ?>
             </div>
 
             <?php if (extension_loaded('ldap')): ?>
-            <div class="span6">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                 <?php
                 $twig->loadTemplate('ldap.twig')->display($tplDatabaseVars);
                 ?>
@@ -113,7 +113,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
         <div class="row">
             <?php endif; ?>
 
-            <div class="span6">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                 <?php
                 $tplConfigVars = array(
                     'languageOptions' => $installer->renderLanguageOptions($languageCodes)
@@ -123,9 +123,8 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
             </div>
         </div>
 
-        <div class="row" style="padding-left: 20px; text-align: center;">
-
-            <button class="btn btn-primary btn-large" type="submit">
+        <div class="row text-center">
+            <button class="btn btn-primary btn-lg" type="submit">
                 Click to install phpMyFAQ <?php echo PMF_System::getVersion(); ?>
             </button>
         </div>

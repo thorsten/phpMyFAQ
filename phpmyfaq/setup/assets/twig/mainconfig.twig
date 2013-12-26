@@ -1,19 +1,19 @@
                 <fieldset>
-                    <legend>Your phpMyFAQ setup</legend>
-                    <div class="control-group">
-                        <label class="control-label" for="language">Default language:</label>
-                        <div class="controls">
-                            <select name="language" size="1" id="language">
+                    <legend>phpMyFAQ setup</legend>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="language">Default language:</label>
+                        <div class="col-sm-8">
+                            <select name="language" size="1" id="language" class="form-control">
                                 {{ languageOptions|raw }}
                             </select>
                             <p class="help-block">Please select your default language.</p>
                         </div>
                     </div>
 
-                    <div class="control-group">
-                        <label class="control-label" for="permLevel">Permission level:</label>
-                        <div class="controls">
-                            <select id="permLevel" name="permLevel" size="1" required="required">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="permLevel">Permission level:</label>
+                        <div class="col-sm-8">
+                            <select id="permLevel" name="permLevel" size="1" required class="form-control">
                                 <option value="basic">Basic (no group support)</option>
                                 <option value="medium">Medium (with group support)</option>
                             </select>
@@ -22,38 +22,38 @@
                             </p>
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label class="control-label" for="realname">Your name:</label>
-                        <div class="controls">
-                            <input type="text" name="realname" id="realname" required="required" />
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="realname">Your name:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="realname" id="realname" required class="form-control">
                             <p class="help-block">Please enter your real name.</p>
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label class="control-label" for="email">Your email address:</label>
-                        <div class="controls">
-                            <input type="email" name="email" id="email" required="required" />
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="email">Your email address:</label>
+                        <div class="col-sm-8">
+                            <input type="email" name="email" id="email" required class="form-control">
                             <p class="help-block">Please enter your email adress.</p>
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label class="control-label" for="loginname">Your login name:</label>
-                        <div class="controls">
-                            <input type="text" name="loginname" id="loginname" required="required" />
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="loginname">Your login name:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="loginname" id="loginname" required class="form-control">
                             <p class="help-block">Please enter your login name.</p>
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label class="control-label" for="password">Your password:</label>
-                        <div class="controls">
-                            <input type="password" name="password" id="password" required="required" />
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="password">Your password:</label>
+                        <div class="col-sm-8">
+                            <input type="password" name="password" id="password" required class="form-control">
                             <p class="help-block">Please enter your password.</p>
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label class="control-label" for="password_retype">Retype password:</label>
-                        <div class="controls">
-                            <input type="password" name="password_retyped" id="password_retype" required="required" />
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="password_retype">Retype password:</label>
+                        <div class="col-sm-8">
+                            <input type="password" name="password_retyped" id="password_retype" required class="form-control">
                             <p class="help-block">Please retype your password.</p>
                         </div>
                     </div>

@@ -30,24 +30,7 @@
                     $('#dbsqlite').show();
                     $('#dbdatafull').hide();
                     break;
-                case 'mysqli':
-                    $('#sql_port').val(3306);
-                    $('#dbsqlite').hide();
-                    $('#dbdatafull').show();
-                    break;
-                case 'pgsql':
-                    $('#sql_port').val(5432);
-                    $('#dbsqlite').hide();
-                    $('#dbdatafull').show();
-                    break;
-                case 'mssql':
-                case 'sqlsrv':
-                    $('#sql_port').val(1433);
-                    $('#dbsqlite').hide();
-                    $('#dbdatafull').show();
-                    break;
                 default:
-                    $('#sql_port').val('');
                     $('#dbsqlite').hide();
                     $('#dbdatafull').show();
                     break;
@@ -57,41 +40,31 @@
 </head>
 <body>
 
-<!--[if lt IE 8 ]>
-<div class="internet-explorer-error">
-    Do you know that your Internet Explorer is out of date?<br/>
-    Please use Internet Explorer 8+, Mozilla Firefox 4+, Google Chrome, Apple Safari 5+ or Opera 11+
-</div>
-<![endif]-->
-
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <nav class="nav-collapse">
-                <ul class="nav">
-                    <li><a target="_blank" href="http://www.phpmyfaq.de/documentation.php">Documentation</a></li>
-                    <li><a target="_blank" href="http://www.phpmyfaq.de/support.php">Support</a></li>
-                    <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
-                    <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
-                </ul>
-            </nav>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="collapse navbar-collapse" id="phpmyfaq-navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a target="_blank" href="http://www.phpmyfaq.de/documentation.php">Documentation</a></li>
+                <li><a target="_blank" href="http://www.phpmyfaq.de/support.php">Support</a></li>
+                <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
+                <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
+            </ul>
         </div>
     </div>
-</div>
+</nav>
 
 <section id="content" class="phpmyfaq-setup">
     <div class="container">
-        <div class="row" style="padding-left: 20px;">
-            <div class="hero-unit hello-phpmyfaq" style="text-align: center; height: 60px;">
+        <div class="row">
+            <div class="jumbotron hello-phpmyfaq">
                 <h1>phpMyFAQ {{ version }} Setup</h1>
                 <p>
-                    Did you already read the <a style="color: #ffffff; text-decoration: underline;"
-                                                href="http://www.phpmyfaq.de/documentation.php">documentation</a> carefully before starting the
+                    Did you already read the <a href="http://www.phpmyfaq.de/documentation.php">documentation</a> carefully before starting the
                     phpMyFAQ setup? :-)
                 </p>
             </div>
         </div>
-        <div class="row" style="padding-left: 20px;">
+        <div class="row">
 
             {% if criticalErrors|length > 0 %}
                 <div class="alert alert-error">
