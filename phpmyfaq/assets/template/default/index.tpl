@@ -89,7 +89,9 @@
                     <li class="home">{backToHome}</li>
                     <li>{allCategories}</li>
                     <li class="divider-horizontal"></li>
+                    [categoryListSection]
                     {showCategories}
+                    [/categoryListSection]
                 </ul>
                 <div class="users-online">
                     <small>{userOnline}</small>

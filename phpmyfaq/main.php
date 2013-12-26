@@ -43,11 +43,24 @@ if (!is_null($archived)) {
     $showAllNews      = sprintf('<a href="?%snewsid=0">%s</a>', $sids, $PMF_LANG['newsShowArchive']);
 }
 
-$tpl->parse('writeContent', array(
-    'writeNewsHeader'       => $writeNewsHeader,
-    'writeNewsRSS'          => $writeNewsRSS,
-    'writeNews'             => $news->getNews($archived),
-    'showAllNews'           => $showAllNews,
-    'writeNumberOfArticles' => $plr->getMsg('plmsgHomeArticlesOnline', $faq->getNumberOfRecords($LANGCODE))));
+$tpl->parseBlock(
+    'writeContent',
+    'tagListSection',
+    array(
+        'msgTags' => $PMF_LANG['msgPopularTags'],
+        'tagList' => $oTag->renderPopularTags(0)
+    )
+);
+
+$tpl->parse(
+    'writeContent',
+    array(
+        'writeNewsHeader'       => $writeNewsHeader,
+        'writeNewsRSS'          => $writeNewsRSS,
+        'writeNews'             => $news->getNews($archived),
+        'showAllNews'           => $showAllNews,
+        'writeNumberOfArticles' => $plr->getMsg('plmsgHomeArticlesOnline', $faq->getNumberOfRecords($LANGCODE))
+    )
+);
 
 $tpl->merge('writeContent', 'index');

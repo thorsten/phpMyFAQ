@@ -5,8 +5,9 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.9.0-dev 2014-
+Version 2.9.0-dev 2014-01-
 - changed PHP requirement to PHP 5.4.4 and later (Thorsten)
+- added tag intersection based search (Tomer Weinberg)
 - added frontend dependency management using Bower (Thorsten)
 - updated bundled Symfony ClassLoader to version 2.3.7 (Thorsten)
 - updated bundled jQuery to version 1.10.2 (Thorsten)

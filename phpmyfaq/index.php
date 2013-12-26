@@ -480,8 +480,6 @@ $tplMainPage = array(
     'action'               => $action,
     'dir'                  => $PMF_LANG['dir'],
     'msgCategory'          => $PMF_LANG['msgCategory'],
-    'showCategories'       => $categoryHelper->renderNavigation($cat),
-    'topCategories'        => $categoryHelper->renderMainCategories(),
     'msgExportAllFaqs'     => $PMF_LANG['msgExportAllFaqs'],
     'languageBox'          => $PMF_LANG['msgLangaugeSubmit'],
     'writeLangAdress'      => $writeLangAdress,
@@ -503,6 +501,15 @@ $tplMainPage = array(
     'msgUsername'          => $PMF_LANG['ad_auth_user'],
     'msgEmail'             => $PMF_LANG['ad_entry_email'],
     'msgSubmit'            => $PMF_LANG['msgNewContentSubmit']
+);
+
+$tpl->parseBlock(
+    'index',
+    'categoryListSection',
+    array(
+        'showCategories'  => $categoryHelper->renderNavigation($cat),
+        'topCategories'   => $categoryHelper->renderMainCategories(),
+    )
 );
 
 if ('main' == $action || 'show' == $action) {

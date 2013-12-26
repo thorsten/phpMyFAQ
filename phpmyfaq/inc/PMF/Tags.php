@@ -66,7 +66,7 @@ class PMF_Tags
     public function getAllTags($search = null, $limit = false, $showInactive = false)
     {
         global $DB;
-        $tags = $allTags = array();
+        $allTags = array();
 
         // Hack: LIKE is case sensitive under PostgreSQL
         switch ($DB['type']) {
@@ -104,7 +104,7 @@ class PMF_Tags
         );
 
         $result = $this->_config->getDb()->query($query);
-        
+
         if ($result) {
            while ($row = $this->_config->getDb()->fetchObject($result)) {
               $allTags[$row->tagging_id] = $row->tagging_name;
@@ -292,20 +292,26 @@ class PMF_Tags
 
         $query = sprintf("
             SELECT
-                d.record_id AS record_id
+                td.record_id AS record_id
             FROM
-                %sfaqdata_tags d, %sfaqtags t
+                %sfaqdata_tags td
+            JOIN
+                %sfaqtags t ON (td.tagging_id = t.tagging_id)
+            JOIN
+                %sfaqdata d ON (td.record_id = d.id)
             WHERE
-                t.tagging_id = d.tagging_id
-            AND
                 (t.tagging_name IN ('%s'))
+            AND
+                (d.lang = '%s')
             GROUP BY
-                d.record_id
+                td.record_id
             HAVING
-                COUNT(d.record_id) = %d",
+                COUNT(td.record_id) = %d",
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
-            PMF_String::substr(implode("', '", $arrayOfTags), 0, -2),
+            PMF_Db::getTablePrefix(),
+            implode("', '", $arrayOfTags),
+            $this->_config->getLanguage()->getLanguage(),
             count($arrayOfTags)
         );
 
@@ -548,6 +554,79 @@ class PMF_Tags
             return ($row->n > 0);
         }
 
+        return false;
+    }
+
+    /**
+     * @param integer $limit Specify the maximum amount of records to return
+     *
+     * @return Array $tagId => $tagFrequency
+     */
+    public function getPopularTags($limit = 0)
+    {
+        $tags = array();
+
+        $query = sprintf("
+            SELECT
+                COUNT(record_id) as freq, tagging_id
+            FROM
+                %sfaqdata_tags
+            JOIN
+                %sfaqdata ON id = record_id
+            WHERE
+              lang = '%s'
+            GROUP BY tagging_id
+            ORDER BY freq DESC",
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            $this->_config->getLanguage()->getLanguage()
+        );
+
+        $result = $this->_config->getDb()->query($query);
+        if ($result) {
+            while ($row = $this->_config->getDb()->fetchObject($result)) {
+                $tags[$row->tagging_id] = $row->freq;
+                if (--$limit === 0)
+                    break;
+            }
+        }
+        return $tags;
+    }
+
+    /**
+     * @param $limit
+     * @return string
+     */
+    public function renderPopularTags($limit)
+    {
+        $html = '';
+        foreach ($this->getPopularTags($limit) as $tagId => $tagFreq) {
+            $tagName   = $this->getTagNameById($tagId);
+            $direction = $this->is_english($tagName[0]) ? 'ltr' : 'rtl';
+            $html      .= sprintf(
+                '<a class="btn tag" style="direction:%s;" href="?action=search&amp;tagging_id=%d">%s (%d)</a>',
+                $direction,
+                $tagId,
+                $tagName,
+                $tagFreq
+            );
+
+        }
+
+        return $html;
+    }
+
+    /**
+     * @param $chr
+     *
+     * @return bool
+     */
+    public function is_english($chr)
+    {
+        if (($chr >= 'A') && ($chr <= 'Z'))
+                return true;
+        if (($chr >= 'a') && ($chr <= 'z'))
+                return true;
         return false;
     }
 }
