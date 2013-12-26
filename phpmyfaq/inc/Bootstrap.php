@@ -98,13 +98,6 @@ if (file_exists(__DIR__ . '/../multisite/multisite.php') && 'cli' !== PHP_SAPI) 
 }
 
 //
-// The root directory
-//
-if (! defined('PMF_ROOT_DIR')) {
-    define('PMF_ROOT_DIR', dirname(__DIR__));
-}
-
-//
 // Read configuration and constants
 //
 if (! defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
@@ -135,11 +128,6 @@ require PMF_CONFIG_DIR . '/constants.php';
  * The include directory
  */
 define('PMF_INCLUDE_DIR', __DIR__);
-
-/**
- * The directory where the translations reside
- */
-define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/lang');
 
 //
 // Setting up PSR-0 autoloader for Symfony Components
