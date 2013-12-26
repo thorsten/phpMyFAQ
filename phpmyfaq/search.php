@@ -64,6 +64,7 @@ if (is_null($user)) {
 $faqSearch       = new PMF_Search($faqConfig);
 $faqSearchResult = new PMF_Search_Resultset($user, $faq, $faqConfig);
 $tagging         = new PMF_Tags($faqConfig);
+$tagHelper       = new PMF_Helper_Tags();
 $tagSearch       = false;
 
 //
@@ -73,6 +74,8 @@ if (! is_null($inputTag) && '' !== $inputTag) {
     $tagSearch = true;
     $tags      = array();
     $tagIds    = explode(',', $inputTag);
+
+    $tagHelper->setTaggingIds($tagIds);
 
     foreach ($tagIds as $tagId) {
         if (! isset($tags[$tagId])) {
@@ -113,7 +116,7 @@ if (! is_null($inputTag) && '' !== $inputTag) {
 
         foreach ($relatedTags as $tagId => $relevance) {
 
-            $relTags .= renderRelatedTag($tagId, $tagging->getTagNameById($tagId), $relevance);
+            $relTags .= $tagHelper->renderRelatedTag($tagId, $tagging->getTagNameById($tagId), $relevance);
             if ($numTags++ > 20) {
                 break;
             }
@@ -216,7 +219,7 @@ if ($tagSearch) {
         'writeContent',
         'searchTagsSection',
         array(
-            'searchTags' => renderTagList($tags)
+            'searchTags' => $tagHelper->renderTagList($tags)
         )
     );
     $tpl->parseBlock(
@@ -268,64 +271,3 @@ $tpl->parse(
 );
 
 $tpl->merge('writeContent', 'index');
-
-// @todo move that code away!
-
-/**
- * @param array $tags
- * @return string
- */
-function renderTagList(Array $tags)
-{
-    $taglist = '';
-    foreach ($tags as $tagId => $tagName) {
-            $taglist .= renderSearchTag($tagId, $tagName, $tags);
-        }
-    return $taglist;
-}
-
-/**
- * @param $tagId
- * @param $tagName
- * @return string
- */
-function renderSearchTag($tagId, $tagName)
-{
-        $taggingIds = $_GET["tagging_id"];
-        $taggingIds = str_replace($tagId, '', $taggingIds);
-        $taggingIds = str_replace(' ', '', $taggingIds);
-        $taggingIds = str_replace(',,', ',', $taggingIds);
-        $taggingIds = trim($taggingIds, ',');
-
-        $direction = is_english($tagName[0]) ? 'ltr' : 'rtl';
-        return ($taggingIds != '') ?
-                sprintf('<a class="btn tag" style="direction: %s;" href="?action=search&amp;tagging_id=%s">%s | X</a> ', $direction, $taggingIds, $tagName) :
-                sprintf('<a class="btn tag" style="direction: %s;" href="?action=search&amp;search=">%s | X</a> ', $direction, $tagName);
-}
-
-/**
- * @param $tagId
- * @param $tagName
- * @param $relevance
- * @return string
- */
-function renderRelatedTag($tagId, $tagName, $relevance)
-{
-        $taggingIds = $_GET["tagging_id"];
-        $taggingIds = $taggingIds . ',' . $tagId;
-        $direction = is_english($tagName[0]) ? 'ltr' : 'rtl';
-        return sprintf('<a class="btn tag" style="direction:%s" href="?action=search&amp;tagging_id=%s">%s (%d)</a> ', $direction, $taggingIds, $tagName, $relevance);
-}
-
-/**
- * @param $chr
- * @return bool
- */
-function is_english($chr)
-{
-        if(($chr >= 'A') && ($chr <= 'Z'))
-                return true;
-    if(($chr >= 'a') && ($chr <= 'z'))
-                return true;
-    return false;
-}
