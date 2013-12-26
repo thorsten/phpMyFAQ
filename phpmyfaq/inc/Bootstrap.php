@@ -68,9 +68,11 @@ if (file_exists(__DIR__ . '/../multisite/multisite.php') && 'cli' !== PHP_SAPI) 
 }
 
 //
-// Set root dir
+// The root directory
 //
-define('PMF_ROOT_DIR', dirname(__DIR__));
+if (! defined('PMF_ROOT_DIR')) {
+    define('PMF_ROOT_DIR', dirname(__DIR__));
+}
 
 //
 // Read configuration and constants
@@ -97,13 +99,6 @@ if (file_exists(PMF_ROOT_DIR . '/inc/data.php')) {
     require PMF_CONFIG_DIR . '/database.php';
 }
 require PMF_CONFIG_DIR . '/constants.php';
-
-if (!defined('PMF_ROOT_DIR')) {
-    /**
-     * The root directory
-     */
-    define('PMF_ROOT_DIR', dirname(__DIR__));
-}
 
 /**
  * The include directory
