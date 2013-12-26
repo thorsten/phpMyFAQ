@@ -124,21 +124,6 @@ if (file_exists(PMF_ROOT_DIR . '/inc/data.php')) {
 }
 require PMF_CONFIG_DIR . '/constants.php';
 
-/**
- * The include directory
- */
-define('PMF_INCLUDE_DIR', __DIR__);
-
-//
-// Setting up PSR-0 autoloader for Symfony Components
-//
-require PMF_INCLUDE_DIR . '/libs/Symfony/Component/ClassLoader/UniversalClassLoader.php';
-
-$loader = new UniversalClassLoader();
-$loader->registerNamespace('Symfony', PMF_INCLUDE_DIR . '/libs');
-$loader->registerPrefix('PMF_', PMF_INCLUDE_DIR);
-$loader->register();
-
 //
 // Set the error handler to our pmf_error_handler() function
 //
