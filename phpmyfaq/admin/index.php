@@ -81,12 +81,6 @@ PMF_Attachment_Factory::init(
 );
 
 //
-// Initiazile caching
-//
-PMF_Cache::init($faqConfig);
-
-
-//
 // Create a new FAQ object
 //
 $faq = new PMF_Faq($faqConfig);

@@ -15,9 +15,24 @@ Version 2.9.0-dev 2014-
 - changed PHP requirement to PHP 5.4.4 and later (Thorsten)
 - added frontend dependency management using Bower (Thorsten)
 - updated bundled Symfony ClassLoader to version 2.3.7 (Thorsten)
+- updated bundled jQuery to version 1.10.2 (Thorsten)
+- updated bundled Bootstrap to version 3.0.3 (Thorsten)
+- updated bundled Font Awesome to version 4.0.3 (Thorsten)
+- updated bundled Modernizr to version 2.7.1 (Thorsten)
+- updated bundled TinyMCE to version 4.0.12 (Thorsten)
+- dropped support for ext/mysql (Thorsten)
 
-Version 2.8.4 - 2013-11-
+Version 2.8.5 - 2013-12-
+- fixed SSO logins with mod_auth_kerb (Stephane Lapie)
+- updated Dutch translation
+- updated European Portuguese translation
+- fixed some minor bugs (Thorsten)
+
+Version 2.8.4 - 2013-11-26
+- fixed possible arbitrary PHP code execution (Thorsten)
 - updated Chinese (Traditional) translation
+- updated Dutch translation
+- fixed some minor bugs (Thorsten)
 
 Version 2.8.3 - 2013-11-18
 - fixed missing permission check on Image Manager (Thorsten)

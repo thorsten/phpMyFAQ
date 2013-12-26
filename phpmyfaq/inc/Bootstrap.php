@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 // - false      debug mode disabled
 // - true       debug mode enabled
 //
-define('DEBUG', false);
+define('DEBUG', true);
 if (DEBUG) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
@@ -98,6 +98,13 @@ if (file_exists(__DIR__ . '/../multisite/multisite.php') && 'cli' !== PHP_SAPI) 
 }
 
 //
+// The root directory
+//
+if (! defined('PMF_ROOT_DIR')) {
+    define('PMF_ROOT_DIR', dirname(__DIR__));
+}
+
+//
 // Read configuration and constants
 //
 if (! defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
@@ -123,6 +130,26 @@ if (file_exists(PMF_ROOT_DIR . '/inc/data.php')) {
     require PMF_CONFIG_DIR . '/database.php';
 }
 require PMF_CONFIG_DIR . '/constants.php';
+
+/**
+ * The include directory
+ */
+define('PMF_INCLUDE_DIR', __DIR__);
+
+/**
+ * The directory where the translations reside
+ */
+define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/lang');
+
+//
+// Setting up PSR-0 autoloader for Symfony Components
+//
+require PMF_INCLUDE_DIR . '/libs/Symfony/Component/ClassLoader/UniversalClassLoader.php';
+
+$loader = new UniversalClassLoader();
+$loader->registerNamespace('Symfony', PMF_INCLUDE_DIR . '/libs');
+$loader->registerPrefix('PMF_', PMF_INCLUDE_DIR);
+$loader->register();
 
 //
 // Set the error handler to our pmf_error_handler() function

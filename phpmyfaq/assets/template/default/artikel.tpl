@@ -103,7 +103,7 @@
                 </div>
             </div>
 
-            <p hidden-print>{writeCommentMsg}</p>
+            <p class="hidden-print">{writeCommentMsg}</p>
 
             <a id="comment"></a>
             <div id="commentForm" class="hide">
@@ -163,7 +163,7 @@
                 });
 
             </script>
-            <style type="text/css" scoped>
+            <style scoped>
                 @import "assets/js/syntaxhighlighter/styles/shCore.css";
                 @import "assets/js/syntaxhighlighter/styles/shThemeDefault.css";
             </style>

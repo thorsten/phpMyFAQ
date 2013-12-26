@@ -23,7 +23,7 @@ require_once dirname(dirname(dirname(__DIR__))) . '/phpmyfaq/inc/PMF/Search/Data
 require_once dirname(dirname(dirname(__DIR__))) . '/phpmyfaq/inc/PMF/DB/Driver.php';
 require_once dirname(dirname(dirname(__DIR__))) . '/phpmyfaq/inc/PMF/DB/Mysqli.php';
 
-require_once dirname(dirname(__DIR__)) . '/Database/MysqlTest.php';
+require_once dirname(dirname(__DIR__)) . '/Database/MysqliTest.php';
 
 /**
  * Search test case
@@ -36,7 +36,7 @@ require_once dirname(dirname(__DIR__)) . '/Database/MysqlTest.php';
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-26
  */
-class PMF_Search_Database_MysqlTest extends Database_MysqlTest
+class PMF_Search_Database_MysqliTest extends Database_MysqliTest
 { 
     /**
      * Load the test data

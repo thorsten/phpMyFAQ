@@ -30,7 +30,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$parsed = parse_url('http://' . $_SERVER['SERVER_NAME'] . $_SERVER['SCRIPT_NAME']);
+$protocol = 'http';
+if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    $protocol = 'https';
+}
+$parsed = parse_url($protocol . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['SCRIPT_NAME']);
 if (isset($parsed['host']) && strlen($parsed['host']) > 0 && is_dir(__DIR__ . '/' . $parsed['host'])) {
     define('PMF_MULTI_INSTANCE_CONFIG_DIR', __DIR__ . '/' . $parsed['host']);
     unset($parsed);

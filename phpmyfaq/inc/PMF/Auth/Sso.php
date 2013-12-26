@@ -1,6 +1,7 @@
 <?php
 /**
  * Manages user authentication with Apache's SSO authentication, e.g. mod_sspi
+ * or mod_auth_kerb
  *
  * PHP Version 5.3
  *
@@ -35,12 +36,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Auth_Sso extends PMF_Auth implements PMF_Auth_Driver
 {
     /**
-     * Adds a new user account to the authentication table.
+     * Always returns true because of SSO
      *
-     * Returns true on success, otherwise false.
+     * @param string $login Loginname
+     * @param string $pass  Password
      *
-     * @param  string $login Loginname
-     * @param  string $pass  Password
      * @return boolean
      */
     public function add($login, $pass)
@@ -49,14 +49,11 @@ class PMF_Auth_Sso extends PMF_Auth implements PMF_Auth_Driver
     }
 
     /**
-     * Changes the password for the account specified by login.
+     * Always returns true because of SSO
      *
-     * Returns true on success, otherwise false.
+     * @param string $login Loginname
+     * @param string $pass  Password
      *
-     * Error messages are added to the array errors.
-     *
-     * @param  string $login Loginname
-     * @param  string $pass  Password
      * @return boolean
     */
     public function changePassword($login, $pass)
@@ -65,13 +62,10 @@ class PMF_Auth_Sso extends PMF_Auth implements PMF_Auth_Driver
     }
     
     /**
-     * Deletes the user account specified by login.
+     * Always returns true because of SSO
      *
-     * Returns true on success, otherwise false.
+     * @param string $login Loginname
      *
-     * Error messages are added to the array errors.
-     *
-     * @param  string $login Loginname
      * @return bool
      */
     public function delete($login)
@@ -80,18 +74,12 @@ class PMF_Auth_Sso extends PMF_Auth implements PMF_Auth_Driver
     }
     
     /**
-     * Checks the password for the given user account.
+     * Checks if the username of the remote user is equal to the login name
      *
-     * Returns true if the given password for the user account specified by
-     * is correct, otherwise false.
-     * Error messages are added to the array errors.
+     * @param string $login        Loginname
+     * @param string $pass         Password
+     * @param array  $optionalData Optional data
      *
-     * This function is only called when local authentication has failed, so
-     * we are about to create user account.
-     *
-     * @param  string $login        Loginname
-     * @param  string $pass         Password
-     * @param  array  $optionalData Optional data
      * @return boolean
      */
     public function checkPassword($login, $pass, Array $optionalData = null)
@@ -99,12 +87,17 @@ class PMF_Auth_Sso extends PMF_Auth implements PMF_Auth_Driver
         if (!isset($_SERVER['REMOTE_USER'])) {
             return false;
         } else {
-            // Check if "DOMAIN\user" or only "user"
-            $remoteUser = explode("\\", $_SERVER['REMOTE_USER']);
-            if (is_array($remoteUser)) {
+            // Check if "DOMAIN\user", "user@DOMAIN" or only "user"
+            $remoteUser = explode('\\', $_SERVER['REMOTE_USER']);
+            if (is_array($remoteUser) && count($remoteUser) > 1) {
                 $user = $remoteUser[1];
             } else {
-                $user = $_SERVER['REMOTE_USER'];
+                $remoteUser = explode('@', $_SERVER['REMOTE_USER']);
+                if (is_array($remoteUser) && count($remoteUser) > 1) {
+                    $user = $remoteUser[0];
+                } else {
+                    $user = $_SERVER['REMOTE_USER'];
+                }
             }
             if ($user === $login) {
                 return true;
@@ -115,11 +108,12 @@ class PMF_Auth_Sso extends PMF_Auth implements PMF_Auth_Driver
     }
 
     /**
-     * Does nothing. A function required to be a valid auth.
+     * Returns true, if $_SERVER['REMOTE_USER'] is set.
      *
-     * @param  string $login        Loginname
-     * @param  array  $optionalData Optional data
-     * @return integer
+     * @param string $login        Loginname
+     * @param array  $optionalData Optional data
+     *
+     * @return boolean
      */
     public function checkLogin($login, Array $optionalData = null)
     {

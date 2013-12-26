@@ -134,7 +134,6 @@ phpMyFAQ addresses a database system via PHP. In order to install it you will ne
     *   SPL support
 *   **Web server** ( [Apache](http://httpd.apache.org) 2.x or [nginx](http://www.nginx.net/) 0.7+ or [lighttpd](http://www.lighttpd.net) 1.0+ or [IIS](http://www.microsoft.com/) 6.0+ or Zeus Webserver)
 *   **Database server**
-    *   [MySQL](http://www.mysql.com) 5.x with the MySQL extension (recommended: 5.5.x)
     *   [MySQL](http://www.mysql.com) 5.x with the MySQLi extension (recommended: 5.5.x)
     *   [PostgreSQL](http://www.postgresql.org) 8.x (recommended: latest 8.x)
     *   [Microsoft SQL Server](http://www.microsoft.com/sql/) 2005, 2008, 2012
@@ -195,7 +194,7 @@ The database user needs the permissions for CREATE, DROP, ALTER, INDEX, INSERT, 
 
 Open your browser and type in the following URL:
 
-`http://www.example.com/faq/setup/setup.php`
+`http://www.example.com/faq/setup/index.php`
 
 Substitute **www.example.com** with your actual domain name. When the site is loaded enter the address of your database server (e.g. db.provider.com), your database username and password as well as the database name. The database have to be created with UTF-8 chraracter set before running the installation script. You can leave the prefix-field empty. If you are planning on using multiple FAQs in one database you will have to use a table prefix, though (i.e. *sport* for a sports FAQ, *weather* for a weather FAQ, etc.). Please note that only letters and an underline: "_" can be used as the prefix.
 
@@ -722,10 +721,10 @@ You can create entries directly in the admin area. Created entries are NOT publi
     
     You can select the language of your FAQ. By default the selected language saved in the configuration will be chosen. You can create entries in multiple languages like this: Write an article in English (or any other language) and save it. Now choose *Edit FAQs* and edit your English FAQ record. Change the question, answer and keywords and change language to, let's say Brazilian Portuguese. *Save* the FAQ record. Now you can, when you click *edit records*, see both FAQs in your list, having the same id, yet different languages.
     
-*	 **Attachments**
-	 
-	 You can add attachments like PDFs or any other binary data using the **Add attachment** button. If you click on the button, a popup opens and you can upload an attachment. Please keep in mind that the PHP configuration about upload size will be checked.
-	 
+*    **Attachments**
+
+    You can add attachments like PDFs or any other binary data using the **Add attachment** button. If you click on the button, a popup opens and you can upload an attachment. Please keep in mind that the PHP configuration about upload size will be checked.
+
 *   **Keywords**
     
     Keywords are relevant for searching through the database. In case you didn't include a specific word in the FAQ itself, but it is closely related to the content you may wish to include it as a keyword, so the FAQ will come up as a search result. It is also possible to use non-related keywords so that a wrongly entered search will also lead to the right results.

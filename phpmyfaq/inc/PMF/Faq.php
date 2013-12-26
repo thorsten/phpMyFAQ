@@ -363,6 +363,7 @@ class PMF_Faq
             AND
                 fd.lang = '%s'
             %s
+            GROUP BY fd.id
             %s",
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
@@ -664,7 +665,8 @@ class PMF_Faq
      *
      * @param integer $id         Record id
      * @param integer $revisionId Revision id
-     * @param boolean $isAdmin      Must be true if it is called by an admin/author context
+     * @param boolean $isAdmin    Must be true if it is called by an admin/author context
+     * 
      * @return void
      */
     public function getRecord($id, $revisionId = null, $isAdmin = false)
@@ -691,9 +693,7 @@ class PMF_Faq
             %s
             AND
                 fd.lang = '%s'
-                %s
-            GROUP BY
-                fd.id, fd.lang",
+                %s",
             PMF_Db::getTablePrefix(),
             isset($revisionId) ? 'faqdata_revisions': 'faqdata',
             PMF_Db::getTablePrefix(),

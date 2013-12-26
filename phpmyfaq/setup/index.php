@@ -30,8 +30,8 @@ define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('PMF_INCLUDE_DIR', PMF_ROOT_DIR . '/inc');
 define('IS_VALID_PHPMYFAQ', null);
 
-if (version_compare(PHP_VERSION, '5.3.3') < 0) {
-    die("Sorry, but you need PHP 5.3.3 or later!"); // Die hard because of "use"
+if (version_compare(PHP_VERSION, '5.4.4') < 0) {
+    die("Sorry, but you need PHP 5.4.4 or later!"); // Die hard because of "use"
 }
 
 use Symfony\Component\ClassLoader\UniversalClassLoader;
@@ -93,9 +93,9 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
         'databases' => $system->getSupportedSafeDatabases(true),
         'dirname'   => dirname(__DIR__)
     );
-?>
+    ?>
 
-        <form class="form-horizontal" action="setup.php" method="post">
+    <form class="form-horizontal" action="setup.php" method="post">
         <div class="row">
             <div class="span6">
                 <?php
@@ -103,7 +103,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                 ?>
             </div>
 
-<?php if (extension_loaded('ldap')): ?>
+            <?php if (extension_loaded('ldap')): ?>
             <div class="span6">
                 <?php
                 $twig->loadTemplate('ldap.twig')->display($tplDatabaseVars);
@@ -111,7 +111,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
             </div>
         </div>
         <div class="row">
-<?php endif; ?>
+            <?php endif; ?>
 
             <div class="span6">
                 <?php
@@ -126,7 +126,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
         <div class="row" style="padding-left: 20px; text-align: center;">
 
             <button class="btn btn-primary btn-large" type="submit">
-                   Click to install phpMyFAQ <?php echo PMF_System::getVersion(); ?>
+                Click to install phpMyFAQ <?php echo PMF_System::getVersion(); ?>
             </button>
         </div>
         <div class="row" style="padding-left: 20px;">
@@ -135,8 +135,8 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                 encryption. You can change the encryption type for passwords in <em>config/constants.php</em>.
             </p>
         </div>
-        </form>
-<?php
+    </form>
+    <?php
     PMF_System::renderFooter();
 } else {
     $installer->startInstall();
