@@ -655,7 +655,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
             return this.$element.val().replace(/[^,]*$/,'')+item+',';
         },
         matcher: function (item) {
-            var tquery = extractor(this.query);
+            var tquery = extractor(this.query.toLowerCase());
             if(!tquery) return false;
             return ~item.toLowerCase().indexOf(tquery)
         },
