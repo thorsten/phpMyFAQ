@@ -6150,3 +6150,7 @@ footer .copyright {
   font-size: 13px;
   color: #b4bcc2;
 }
+footer .debug-mode {
+  background-color: #b4bcc2;
+  color: #222222;
+}

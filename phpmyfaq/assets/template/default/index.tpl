@@ -172,6 +172,19 @@
             </div>
         </div>
     </div>
+
+    [debugMode]
+    <div class="container debug-mode">
+        <h3>DEBUG INFORMATION</h3>
+        <hr>
+        <h4>EXCEPTIONS</h4>
+        {debugExceptions}
+        <hr>
+        <h4>DATABASE QUERIES</h4>
+        {debugQueries}
+    </div>
+    [/debugMode]
+
 </footer>
 
 </body>

@@ -218,9 +218,8 @@ if (!$internal) {
         // Create a per-site unique SID
         try {
             $faqsession->userTracking('new_session', 0);
-
         } catch (PMF_Exception $e) {
-            // @todo handle the exception
+            $pmfExeptions[] = $e->getMessage();
         }
     } else {
         if (!is_null($sidCookie)) {
@@ -512,8 +511,8 @@ $tpl->parseBlock(
     'index',
     'categoryListSection',
     array(
-        'showCategories'  => $categoryHelper->renderNavigation($cat),
-        'topCategories'   => $categoryHelper->renderMainCategories(),
+        'showCategories' => $categoryHelper->renderNavigation($cat),
+        'topCategories'  => $categoryHelper->renderMainCategories(),
     )
 );
 
@@ -599,19 +598,6 @@ $tplNavigation['activeAddQuestion']   = ('ask' == $action) ? 'active' : '';
 $tplNavigation['activeOpenQuestions'] = ('open' == $action) ? 'active' : '';
 
 //
-// Add debug info if needed
-//
-if (DEBUG) {
-    $tplDebug = array(
-        'debugMessages' => '<div id="debug_main"><h2>DEBUG INFORMATION:</h2>' . $faqConfig->getDb()->log() . '</div>'
-    );
-} else {
-    $tplDebug = array(
-        'debugMessages' => ''
-    );
-}
-
-//
 // Show login box or logged-in user information
 //
 if (isset($auth)) {
@@ -660,11 +646,6 @@ if (isset($auth)) {
         )
     );
 }
-
-//
-// Get main template, set main variables
-//
-$tpl->parse('index', array_merge($tplMainPage, $tplNavigation, $tplDebug));
 
 // generate top ten list
 if ($faqConfig->get('records.orderingPopularFaqs') == 'visits') {
@@ -753,6 +734,22 @@ $tpl->parse(
         'allCatArticles'      => $faq->showAllRecordsWoPaging($cat)
     )
 );
+
+if (DEBUG) {
+    $tpl->parseBlock(
+        'index',
+        'debugMode',
+        array(
+            'debugExceptions' => implode('<br>', $pmfExeptions),
+            'debugQueries'    => $faqConfig->getDb()->log()
+        )
+    );
+}
+
+//
+// Get main template, set main variables
+//
+$tpl->parse('index', array_merge($tplMainPage, $tplNavigation));
 
 $tpl->merge('rightBox', 'index');
 

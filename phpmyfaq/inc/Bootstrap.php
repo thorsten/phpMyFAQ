@@ -208,6 +208,11 @@ if (! isset($_SERVER['SCRIPT_NAME'])) {
     }
 }
 
+//
+// phpMyFAQ exception log
+//
+$pmfExeptions = [];
+
 /**
  * phpMyFAQ custom error handler function, also to prevent the disclosure of
  * potential sensitive data.
