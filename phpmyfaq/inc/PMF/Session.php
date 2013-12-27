@@ -136,7 +136,7 @@ class PMF_Session
                         str_replace(';', ',', $action) . ';' . 
                         $id . ';' . 
                         $remoteAddr . ';' .
-                        str_replace(';', ',', $_SERVER['QUERY_STRING']) . ';' . 
+                        str_replace(';', ',', isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '') . ';' .
                         str_replace(';', ',', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '') . ';' . 
                         str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])) . ';' . 
                         $_SERVER['REQUEST_TIME'] . ";\n";

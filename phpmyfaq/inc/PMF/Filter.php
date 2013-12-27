@@ -2,7 +2,7 @@
 /**
  * ext/filter wrapper class
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -37,16 +37,16 @@ class PMF_Filter
     /**
      * Static wrapper method for filter_input()
      *
-     * @param  integer $type          Filter type
-     * @param  string  $variable_name Variable name
-     * @param  integer $filter        Filter 
-     * @param  mixed   $default       Default value
+     * @param  integer $type         Filter type
+     * @param  string  $variableName Variable name
+     * @param  integer $filter       Filter
+     * @param  mixed   $default      Default value
      *
      * @return mixed
      */
-    public static function filterInput ($type, $variable_name, $filter, $default = null)
+    public static function filterInput ($type, $variableName, $filter, $default = null)
     {
-        $return = filter_input($type, $variable_name, $filter);
+        $return = filter_input($type, $variableName, $filter);
         return (is_null($return) || $return === false) ? $default : $return;
     }
     
@@ -55,6 +55,7 @@ class PMF_Filter
      *
      * @param  integer $type       Filter type
      * @param  array   $definition Definition
+     *
      * @return mixed
      */
     public static function filterInputArray ($type, Array $definition)
@@ -67,7 +68,8 @@ class PMF_Filter
      *
      * @param  mixed   $variable Variable
      * @param  integer $filter   Filter
-     * @param  mixed   $default       Default value
+     * @param  mixed   $default  Default value
+     *
      * @return mixed
      */
     public static function filterVar ($variable, $filter, $default = null)
@@ -83,8 +85,13 @@ class PMF_Filter
      */
     public static function getFilteredQueryString()
     {
-        $urlData = $cleanUrlData = array();
-        
+        $urlData      = [];
+        $cleanUrlData = [];
+
+        if (! isset($_SERVER['QUERY_STRING'])) {
+            return '';
+        }
+
         parse_str($_SERVER['QUERY_STRING'], $urlData);
         
         foreach ($urlData as $key => $urlPart) {
