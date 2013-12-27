@@ -27,7 +27,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqsession->userTracking('sitemap', 0);
+try {
+    $faqsession->userTracking('sitemap', 0);
+} catch (PMF_Exception $e) {
+    // @todo handle the exception
+}
 
 $letter = PMF_Filter::filterInput(INPUT_GET, 'letter', FILTER_SANITIZE_STRIPPED);
 if (!is_null($letter) && (1 == PMF_String::strlen($letter))) {

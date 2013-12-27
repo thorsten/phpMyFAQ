@@ -32,6 +32,12 @@ if (is_null($error)) {
     $loginMessage = '<p class="alert alert-error">' . $error . '</p>';
 }
 
+try {
+    $faqsession->userTracking('login', 0);
+} catch (PMF_Exception $e) {
+    // @todo handle the exception
+}
+
 $tpl->parse(
     'writeContent',
     array(

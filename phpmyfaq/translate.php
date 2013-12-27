@@ -46,7 +46,11 @@ $faqSource['title']    = 'writeSourceTitle';
 $faqSource['content']  = 'writeSourceContent';
 $faqSource['keywords'] = 'writeSourceKeywords';
 
-$faqsession->userTracking('new_translation_entry', 0);
+try {
+    $faqsession->userTracking('new_translation_entry', 0);
+} catch (PMF_Exception $e) {
+    // @todo handle the exception
+}
 
 $id         = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $categoryId = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);

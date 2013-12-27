@@ -34,7 +34,11 @@ if (! is_null($showCaptcha)) {
     exit;
 }
 
-$faqsession->userTracking('new_entry', 0);
+try {
+    $faqsession->userTracking('new_entry', 0);
+} catch (PMF_Exception $e) {
+    // @todo handle the exception
+}
 
 // Get possible user input
 $selectedQuestion = PMF_Filter::filterInput(INPUT_GET, 'question', FILTER_VALIDATE_INT);

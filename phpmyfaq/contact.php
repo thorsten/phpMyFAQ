@@ -26,7 +26,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqsession->userTracking('contact', 0);
+try {
+    $faqsession->userTracking('contact', 0);
+} catch (PMF_Exception $e) {
+    // @todo handle the exception
+}
 
 $captcha = new PMF_Captcha($faqConfig);
 $captcha->setSessionId($sids);

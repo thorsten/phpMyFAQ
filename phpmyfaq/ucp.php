@@ -28,6 +28,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 if ($user instanceof PMF_User) {
 
+    try {
+        $faqsession->userTracking('user_control_panel', $user->getUserData('display_name'));
+    } catch (PMF_Exception $e) {
+        // @todo handle the exception
+    }
+
     if ($faqConfig->get('main.enableGravatarSupport')) {
         $gravatar    = new PMF_Services_Gravatar($faqConfig);
         $gravatarImg = sprintf(

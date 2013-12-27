@@ -119,7 +119,12 @@ switch ($action) {
         if (!is_null($username) && !empty($username) && !empty($mail) && !is_null($mail) && !is_null($comment) &&
             !empty($comment) && $stopwords->checkBannedWord($comment) && !$faq->commentDisabled($id, $languageCode, $type)) {
 
-            $faqsession->userTracking("save_comment", $id);
+            try {
+                $faqsession->userTracking('save_comment', $id);
+            } catch (PMF_Exception $e) {
+                // @todo handle the exception
+            }
+
             $commentData = array(
                 'record_id' => $id,
                 'type'      => $type,
@@ -207,7 +212,11 @@ switch ($action) {
 
                 $message = array('success' => $PMF_LANG['msgCommentThanks']);
             } else {
-                $faqsession->userTracking('error_save_comment', $id);
+                try {
+                    $faqsession->userTracking('error_save_comment', $id);
+                } catch (PMF_Exception $e) {
+                    // @todo handle the exception
+                }
                 $message = array('error' => $PMF_LANG['err_SaveComment']);
             }
         } else {
@@ -260,9 +269,17 @@ switch ($action) {
             $isNew = true;
             if (!is_null($faqid)) {
                 $isNew = false;
-                $faqsession->userTracking('save_new_translation_entry', 0);
+                try {
+                    $faqsession->userTracking('save_new_translation_entry', 0);
+                } catch (PMF_Exception $e) {
+                    // @todo handle the exception
+                }
             } else {
-                $faqsession->userTracking('save_new_entry', 0);
+                try {
+                    $faqsession->userTracking('save_new_entry', 0);
+                } catch (PMF_Exception $e) {
+                    // @todo handle the exception
+                }
             }
 
             $isTranslation = false;
@@ -590,7 +607,12 @@ switch ($action) {
         $userIp   = PMF_Filter::filterVar($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
 
         if (isset($vote) && $faq->votingCheck($recordId, $userIp) && $vote > 0 && $vote < 6) {
-            $faqsession->userTracking('save_voting', $recordId);
+
+            try {
+                $faqsession->userTracking('save_voting', $recordId);
+            } catch (PMF_Exception $e) {
+                // @todo handle the exception
+            }
 
             $votingData = array(
                 'record_id' => $recordId,
@@ -608,11 +630,19 @@ switch ($action) {
                 'rating'  => $faqRating->getVotingResult($recordId)
             );
         } elseif (!$faq->votingCheck($recordId, $userIp)) {
-            $faqsession->userTracking('error_save_voting', $recordId);
+            try {
+                $faqsession->userTracking('error_save_voting', $recordId);
+            } catch (PMF_Exception $e) {
+                // @todo handle the exception
+            }
             $message = array('error' => $PMF_LANG['err_VoteTooMuch']);
 
         } else {
-            $faqsession->userTracking('error_save_voting', $recordId);
+            try {
+                $faqsession->userTracking('error_save_voting', $recordId);
+            } catch (PMF_Exception $e) {
+                // @todo handle the exception
+            }
             $message = array('error' => $PMF_LANG['err_noVote']);
         }
 

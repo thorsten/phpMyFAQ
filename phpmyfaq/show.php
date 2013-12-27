@@ -31,7 +31,11 @@ $subCategoryContent  = '';
 
 if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory])) {
 
-    $faqsession->userTracking('show_category', $currentCategory);
+    try {
+        $faqsession->userTracking('show_category', $currentCategory);
+    } catch (PMF_Exception $e) {
+        // @todo handle the exception
+    }
 
     $catParent      = $category->categoryName[$currentCategory]['parent_id'];
     $catName        = $category->categoryName[$currentCategory]['name'];
@@ -90,7 +94,12 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
 
 } else {
 
-    $faqsession->userTracking('show_all_categories', 0);
+    try {
+        $faqsession->userTracking('show_all_categories', 0);
+    } catch (PMF_Exception $e) {
+        // @todo handle the exception
+    }
+
     $tpl->parse(
         'writeContent',
         array(

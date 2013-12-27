@@ -27,19 +27,21 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqsession->userTracking('instantresponse', 0);
-
-$searchString = $printInstantResponse = '';
+try {
+    $faqsession->userTracking('instantresponse', 0);
+} catch (PMF_Exception $e) {
+    // @todo handle the exception
+}
 
 $tpl->parse(
     'writeContent',
     array(
         'msgInstantResponse'            => $PMF_LANG['msgInstantResponse'],
         'msgDescriptionInstantResponse' => $PMF_LANG['msgDescriptionInstantResponse'],
-        'searchString'                  => $searchString,
+        'searchString'                  => '',
         'writeSendAdress'               => '?'.$sids.'action=instantresponse',
         'ajaxlanguage'                  => $LANGCODE,
-        'printInstantResponse'          => $printInstantResponse
+        'printInstantResponse'          => ''
     )
 );
 

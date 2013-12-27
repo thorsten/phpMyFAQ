@@ -26,7 +26,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqsession->userTracking('fulltext_search', 0);
+try {
+    $faqsession->userTracking('fulltext_search', 0);
+} catch (PMF_Exception $e) {
+    // @todo handle the exception
+}
 
 // Get possible user input
 $inputLanguage   = PMF_Filter::filterInput(INPUT_GET, 'langs', FILTER_SANITIZE_STRING);
@@ -151,7 +155,12 @@ if (!is_null($inputSearchTerm) || !is_null($search)) {
 // Change a little bit the $searchCategory value;
 $inputCategory = ('%' == $inputCategory) ? 0 : $inputCategory;
 
-$faqsession->userTracking('fulltext_search', $inputSearchTerm);
+try {
+    $faqsession->userTracking('fulltext_search', $inputSearchTerm);
+
+} catch (PMF_Exception $e) {
+    // @todo handle the exception
+}
 
 if (is_numeric($inputSearchTerm) && PMF_SOLUTION_ID_START_VALUE <= $inputSearchTerm && 
     0 < $faqSearchResult->getNumberOfResults()) {

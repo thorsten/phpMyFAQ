@@ -26,6 +26,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+try {
+    $faqsession->userTracking('glossary', 0);
+} catch (PMF_Exception $e) {
+    // @todo handle the exception
+}
+
 $page = PMF_Filter::filterInput(INPUT_GET, 'page' , FILTER_VALIDATE_INT, 1);
 
 $glossary      = new PMF_Glossary($faqConfig);

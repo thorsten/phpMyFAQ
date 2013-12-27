@@ -34,7 +34,11 @@ if (!is_null($showCaptcha)) {
     exit;
 }
 
-$faqsession->userTracking('send2friend', 0);
+try {
+    $faqsession->userTracking('send2friend', 0);
+} catch (PMF_Exception $e) {
+    // @todo handle the exception
+}
 
 $cat     = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 $id      = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);

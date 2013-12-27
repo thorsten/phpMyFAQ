@@ -34,7 +34,11 @@ if (!is_null($showCaptcha)) {
     exit;
 }
 
-$faqsession->userTracking('ask_question', 0);
+try {
+    $faqsession->userTracking('ask_question', 0);
+} catch (PMF_Exception $e) {
+    // @todo handle the exception
+}
 
 $category->buildTree();
 

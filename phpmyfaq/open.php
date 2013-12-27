@@ -26,7 +26,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqsession->userTracking('open_questions', 0);
+try {
+    $faqsession->userTracking('open_questions', 0);
+} catch (PMF_Exception $e) {
+    // @todo handle the exception
+}
 
 $tpl->parse (
     'writeContent',

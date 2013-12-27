@@ -61,7 +61,11 @@ if (0 == $solutionId) {
 }
 $recordId = $faq->faqRecord['id'];
 
-$faqsession->userTracking('article_view', $recordId);
+try {
+    $faqsession->userTracking('article_view', $recordId);
+} catch (PMF_Exception $e) {
+    // @todo handle the exception
+}
 
 $faqVisits = new PMF_Visits($faqConfig);
 $faqVisits->logViews($recordId);

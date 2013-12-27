@@ -26,6 +26,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+try {
+    $faqsession->userTracking('forgot_password', 0);
+} catch (PMF_Exception $e) {
+    // @todo handle the exception
+}
+
 $tpl->parse(
     'writeContent',
     array(

@@ -216,7 +216,12 @@ if (isset($_SERVER['HTTP_USER_AGENT'])) {
 if (!$internal) {
     if (is_null($sidGet) && is_null($sidCookie)) {
         // Create a per-site unique SID
-        $faqsession->userTracking('new_session', 0);
+        try {
+            $faqsession->userTracking('new_session', 0);
+
+        } catch (PMF_Exception $e) {
+            // @todo handle the exception
+        }
     } else {
         if (!is_null($sidCookie)) {
             $faqsession->checkSessionId($sidCookie, $_SERVER['REMOTE_ADDR']);

@@ -141,7 +141,12 @@ class PMF_Session
                         str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])) . ';' . 
                         $_SERVER['REQUEST_TIME'] . ";\n";
                 $file = './data/tracking' . date('dmY');
-                file_put_contents($file, $data, FILE_APPEND);
+
+                if (is_writeable($file)) {
+                    file_put_contents($file, $data, FILE_APPEND);
+                } else {
+                    throw new PMF_Exception('Cannot write to ' . $file);
+                }
             }
         }
     }
