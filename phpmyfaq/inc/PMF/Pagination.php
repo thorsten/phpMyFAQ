@@ -2,7 +2,7 @@
 /**
  * Pagination handler class
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -258,7 +258,7 @@ class PMF_Pagination
         $page = 1;
         
         if (!empty($url)) {
-            $match = array();
+            $match = [];
             if (PMF_String::preg_match('$&(amp;|)' . $this->pageParamName . '=(\d+)$', $url, $match)) {
                 $page = isset($match[2]) ? $match[2] : $page;
             }
@@ -274,7 +274,7 @@ class PMF_Pagination
      */
     public function render()
     {
-        $content   = array();
+        $content   = [];
         $pages     = ceil($this->total / $this->perPage);
         $adjacents = floor($this->adjacents / 2) >= 1 ? floor($this->adjacents / 2) : 1;
         

@@ -2,7 +2,7 @@
 /**
  * Select an attachment and save it
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -67,7 +67,7 @@ if ($user) {
 //
 // Get current user rights
 //
-$permission = array();
+$permission = [];
 if ($auth === true) {
     // read all rights, set them FALSE
     $allRights = $user->perm->getAllRightsData();

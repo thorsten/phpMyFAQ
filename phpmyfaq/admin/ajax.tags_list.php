@@ -2,7 +2,7 @@
 /**
  * AJAX: Search for tags
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -45,7 +45,7 @@ if (! is_null($autoCompleteValue)) {
 
 if ($permission['editbt']) {
     $i = 0;
-    $tagNames = array();
+    $tagNames = [];
     foreach ($tags as $tagName) {
         $i++;
         if ($i <= PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE) {

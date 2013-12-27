@@ -2,7 +2,7 @@
 /**
  * The main Comment class
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -87,7 +87,7 @@ class PMF_Comment
      */
     public function getCommentDataById($id)
     {
-        $item = array();
+        $item = [];
 
         $query = sprintf("
             SELECT
@@ -125,7 +125,7 @@ class PMF_Comment
      */
     public function getCommentsData($id, $type)
     {
-        $comments = array();
+        $comments = [];
 
         $query = sprintf("
             SELECT
@@ -263,7 +263,7 @@ class PMF_Comment
      */
     public function getNumberOfComments($type = self::COMMENT_TYPE_FAQ)
     {
-        $num = array();
+        $num = [];
 
         $query = sprintf("
             SELECT
@@ -297,7 +297,7 @@ class PMF_Comment
      */
     public function getAllComments($type = self::COMMENT_TYPE_FAQ)
     {
-        $comments = array();
+        $comments = [];
 
         $query = sprintf("
             SELECT

@@ -2,7 +2,7 @@
 /**
  * Attachment migration handler
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -62,14 +62,14 @@ class PMF_Attachment_Migration
      *
      * @var array
      */
-    protected $error = array();
+    protected $error = [];
     
     /**
      * Warnings
      *
      * @var array
      */
-    protected $warning = array();
+    protected $warning = [];
 
     /**
      * @var PMF_Configuration
@@ -94,7 +94,7 @@ class PMF_Attachment_Migration
      */
     protected function getOldFileList($dir)
     {
-        $list = array();
+        $list = [];
         
         $faq  = new PMF_Faq($this->_config);
         $faq->getAllRecords();
@@ -106,7 +106,7 @@ class PMF_Attachment_Migration
             $recordDir = "$dir/$record[id]";
             if(file_exists($recordDir) && is_dir($recordDir)) {
                 
-                $list[$record['id']]['files'] = array();
+                $list[$record['id']]['files'] = [];
                 foreach(new DirectoryIterator($recordDir) as $entry) {
                     if(!$entry->isDot() && $entry->isFile()) {
                         $list[$record['id']]['files'][] = "$recordDir/{$entry->getFilename()}";

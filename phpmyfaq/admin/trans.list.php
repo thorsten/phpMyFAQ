@@ -3,7 +3,7 @@
  * List avaliable interface translations and actions
  * depending on user right
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -67,7 +67,7 @@ $tt                 = new PMF_TransTool;
         </thead>
         <tbody>
 <?php
-    $sortedLangList = array();
+    $sortedLangList = [];
     
     foreach ($transDir as $file) {
         if ($file->isFile() && '.php' == PMF_String::substr($file, -4) && 'bak' != PMF_String::substr($file, -7, -4)) {

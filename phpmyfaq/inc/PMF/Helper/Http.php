@@ -2,7 +2,7 @@
 /**
  * HTTP Helper class for phpMyFAQ
  *
- * PHP Version 5.3.0
+ * PHP Version 5.4.0
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -133,7 +133,7 @@ class PMF_Helper_Http extends PMF_Helper
      */
     public function sendWithHeaders($payload, $headers = '', $isJson = false)
     {
-        $validHeaders = array();
+        $validHeaders = [];
         if (is_string($headers) && strlen($headers) > 0) {
             $validHeaders[] = $headers;
         } elseif(is_array($headers)) {

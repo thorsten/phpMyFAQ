@@ -2,7 +2,7 @@
 /**
  * The main category class
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -65,28 +65,28 @@ class PMF_Category
      *
      * @var  array
      */
-    public $categories = array();
+    public $categories = [];
 
     /**
      * The category names as an array.
      *
      * @var  array
      */
-    public $categoryName = array();
+    public $categoryName = [];
 
     /**
      * The category tree
      *
      * @var  array
      */
-    public $catTree = array();
+    public $catTree = [];
 
     /**
      * The children nodes
      *
      * @var  array
      */
-    private $children = array();
+    private $children = [];
 
     /**
      * The current language
@@ -100,14 +100,14 @@ class PMF_Category
      *
      * @var  array
      */
-    private $lineTab = array();
+    private $lineTab = [];
 
     /**
      * The tree with the tabs
      *
      * @var  array
      */
-    public $treeTab = array();
+    public $treeTab = [];
 
     /**
      * Symbol for each item
@@ -132,7 +132,7 @@ class PMF_Category
      *
      * @return PMF_Category
      */
-    public function __construct(PMF_Configuration $config, $groups = array(), $withperm = true)
+    public function __construct(PMF_Configuration $config, $groups = [], $withperm = true)
     {
         $this->_config = $config;
         $this->setGroups($groups);
@@ -303,7 +303,7 @@ class PMF_Category
      */
     public function buildTree($id_parent = 0, $indent = 0)
     {
-        $tt = array();
+        $tt = [];
         $x = 0;
         $loop = 0;
 
@@ -316,7 +316,7 @@ class PMF_Category
 
         if ($x != 0) {
             foreach ($tt as $d) {
-                $tmp = array();
+                $tmp = [];
                 if (isset($this->categories[$d])) {
                     foreach ($this->categories[$d] as $key => $value) {
                         $tmp[$key] = $value;
@@ -377,8 +377,8 @@ class PMF_Category
     public function transform($id)
     {
         $thisParent_id = 0;
-        $tree          = array();
-        $tabs          = isset($this->children[$id]) ? array_keys($this->children[$id]) : array();
+        $tree          = [];
+        $tabs          = isset($this->children[$id]) ? array_keys($this->children[$id]) : [];
         $num           = count($tabs);
 
         if ($id > 0) {
@@ -391,7 +391,7 @@ class PMF_Category
         if ($num > 0) {
             $symbol = 'minus';
         } else {
-            $temp = isset($this->children[$thisParent_id]) ? array_keys($this->children[$thisParent_id]) : array();
+            $temp = isset($this->children[$thisParent_id]) ? array_keys($this->children[$thisParent_id]) : [];
             if (isset($temp[count($temp)-1])) {
                 $symbol = ($id == $temp[count($temp)-1]) ? 'angle' : 'medium';
             }
@@ -452,7 +452,7 @@ class PMF_Category
      */
     public function getChildren($id)
     {
-        return isset($this->children[$id]) ? array_keys($this->children[$id]) : array();
+        return isset($this->children[$id]) ? array_keys($this->children[$id]) : [];
     }
 
     /**
@@ -463,7 +463,7 @@ class PMF_Category
      */
     public function getChildNodes($id)
     {
-        $childs = array();
+        $childs = [];
 
         if (isset($this->children[$id])) {
             foreach(array_keys($this->children[$id]) as $childId) {
@@ -496,7 +496,7 @@ class PMF_Category
     {
         if (($id > 0) && (isset($this->categoryName[$id]['level']))) {
             $thisLevel = $this->categoryName[$id]['level'];
-            $temp = array();
+            $temp = [];
             for ($i = $thisLevel; $i > 0; $i--) {
                 $id = $this->categoryName[$id]['parent_id'];
                 array_unshift($temp, $id);
@@ -800,7 +800,7 @@ class PMF_Category
         $ids = $this->getNodes($id);
         $num = count($ids);
 
-        $temp = $catid = $desc = $breadcrumb = array();
+        $temp = $catid = $desc = $breadcrumb = [];
 
         for ($i = 0; $i < $num; $i++) {
             $t = $this->getLineCategory($ids[$i]);
@@ -862,7 +862,7 @@ class PMF_Category
      */
     public function getCategoryRelationsFromArticle($record_id, $record_lang)
     {
-        $categories = array();
+        $categories = [];
 
         $query = sprintf("
             SELECT
@@ -925,7 +925,7 @@ class PMF_Category
 
         $result = $this->_config->getDb()->query($query);
         $num    = $this->_config->getDb()->numRows($result);
-        $this->categories = array();
+        $this->categories = [];
         if ($num > 0) {
             while ($row = $this->_config->getDb()->fetchArray($result)) {
                 $this->categories[] = $row;
@@ -960,7 +960,7 @@ class PMF_Category
     public function getCategoryIdsFromArticle($article_id)
     {
         $cats = $this->getCategoriesFromArticle($article_id);
-        $arr  = array();
+        $arr  = [];
         foreach ($cats as $cat) {
             $arr[] = $cat['id'];
         }
@@ -1264,7 +1264,7 @@ class PMF_Category
         global $languageCodes;
 
         $existcatlang = $this->_config->getLanguage()->languageAvailable($category_id, 'faqcategories');
-        $translated   = array();
+        $translated   = [];
 
         foreach ($existcatlang as $language) {
            $query = sprintf("
@@ -1451,7 +1451,7 @@ class PMF_Category
      */
     public function getPermissions($mode, Array $categories)
     {
-        $permissions = array();
+        $permissions = [];
         if (!($mode == "user" || $mode == "group")) {
             return false;
         }
@@ -1485,7 +1485,7 @@ class PMF_Category
      */
     public function getNumberOfRecordsOfCategory()
     {
-        $numRecordsByCat = array();
+        $numRecordsByCat = [];
 
         $query = sprintf("
             SELECT
@@ -1518,7 +1518,7 @@ class PMF_Category
      */
     public function getCategoryRecordsMatrix()
     {
-        $matrix = array();
+        $matrix = [];
 
         $query = sprintf('
             SELECT

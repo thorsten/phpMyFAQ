@@ -35,7 +35,7 @@ require PMF_ROOT_DIR . '/inc/Bootstrap.php';
 
 $step    = PMF_Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
 $version = PMF_Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);
-$query   = array();
+$query   = [];
 
 if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     require PMF_ROOT_DIR . '/inc/data.php'; // before 2.6.0-alpha
@@ -263,7 +263,7 @@ if ($step == 2) {
 /**************************** STEP 3 OF 3 ***************************/
 if ($step == 3) {
 
-    $images = array();
+    $images = [];
 
     //
     // UPDATES FROM 2.5.1
@@ -761,7 +761,7 @@ if ($step == 3) {
 
     // Clear the array with the queries
     unset($query);
-    $query = array();
+    $query = [];
 
     //
     // 2nd UPDATES FROM 2.8.0-alpha2

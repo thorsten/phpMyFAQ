@@ -2,7 +2,7 @@
 /**
  * Handles all the stuff for visits
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -152,7 +152,7 @@ class PMF_Visits
      */
     public function getAllData()
     {
-        $data = array();
+        $data = [];
 
         $query = sprintf("
             SELECT

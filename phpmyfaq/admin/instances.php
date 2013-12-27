@@ -60,7 +60,7 @@ if ($permission['editinstances']) {
         $clientInstance = new PMF_Instance_Client($faqConfig);
 
         // Collect data for database
-        $data = array();
+        $data = [];
         $data['instance'] = PMF_Filter::filterInput(INPUT_POST, 'instance', FILTER_SANITIZE_STRING);
         $data['comment']  = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
 

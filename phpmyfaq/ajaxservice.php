@@ -2,7 +2,7 @@
 /**
  * The Ajax Service Layer
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -171,7 +171,7 @@ switch ($action) {
                     "\n\n" .
                     wordwrap($comment, 72);
 
-                $send = array();
+                $send = [];
                 $mail = new PMF_Mail($faqConfig);
                 $mail->setReplyTo($commentData['usermail'], $commentData['username']);
                 $mail->addTo($emailTo);
@@ -335,7 +335,7 @@ switch ($action) {
             }
 
             // Let the PMF Administrator and the Category Owner to be informed by email of this new entry
-            $send = array();
+            $send = [];
             $mail = new PMF_Mail($faqConfig);
             $mail->setReplyTo($email, $name);
             $mail->addTo($faqConfig->get('main.administrationMail'));
@@ -419,8 +419,8 @@ switch ($action) {
                 $user            = new PMF_User_CurrentUser($faqConfig);
                 $faqSearch       = new PMF_Search($faqConfig);
                 $faqSearchResult = new PMF_Search_Resultset($user, $faq, $faqConfig);
-                $searchResult    = array();
-                $mergedResult    = array();
+                $searchResult    = [];
+                $mergedResult    = [];
 
                 foreach ($cleanQuestion as $word) {
                     $searchResult[] = $faqSearch->search($word);
@@ -538,7 +538,7 @@ switch ($action) {
         if (!is_null($loginname) && !empty($loginname) && !is_null($email) && !empty($email) &&
             !is_null($realname) && !empty($realname)) {
 
-            $message = array();
+            $message = [];
             $user    = new PMF_User($faqConfig);
 
             // Create user account (login and password)

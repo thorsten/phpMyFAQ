@@ -2,7 +2,7 @@
 /**
  * This is the page there a user can view all glossary items
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -50,7 +50,7 @@ $pagination = new PMF_Pagination($faqConfig, $options);
 
 if (0 < $numItems) {
         
-    $output       = array();
+    $output       = [];
     $visibleItems = array_slice($glossaryItems, ($page - 1) * $itemsPerPage, $itemsPerPage);
 
     foreach ($visibleItems as $item) {

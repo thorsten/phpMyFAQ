@@ -2,7 +2,7 @@
 /**
  * AJAX: handling of Ajax group calls
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -33,11 +33,11 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     
     $user      = new PMF_User($faqConfig);
     $userList  = $user->getAllUsers();
-    $groupList = ($user->perm instanceof PMF_Perm_Medium) ? $user->perm->getAllGroups() : array();
+    $groupList = ($user->perm instanceof PMF_Perm_Medium) ? $user->perm->getAllGroups() : [];
     
     // Returns all groups
     if ('get_all_groups' == $ajaxAction) {
-        $groups = array();
+        $groups = [];
         foreach ($groupList as $groupId) {
             $data     = $user->perm->getGroupData($groupId);
             $groups[] = array(
@@ -60,7 +60,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     
     // Return all users
     if ('get_all_users' == $ajaxAction) {
-        $users = array();
+        $users = [];
         foreach ($userList as $single_user) {
             $user->getUserById($single_user);
             $users[] = array('user_id' => $user->getUserId(),
@@ -72,7 +72,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     // Returns all group members
     if ('get_all_members' == $ajaxAction) {
         $memberList = $user->perm->getGroupMembers($groupId);
-        $members    = array();
+        $members    = [];
         foreach ($memberList as $single_member) {
             $user->getUserById($single_member);
             $members[] = array('user_id' => $user->getUserId(),

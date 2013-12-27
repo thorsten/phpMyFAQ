@@ -2,7 +2,7 @@
 /**
  * The FAQ record editor.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
-    $category = new PMF_Category($faqConfig, array(), false);
+    $category = new PMF_Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $category->buildTree();
@@ -37,7 +37,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
     $categoryHelper->setCategory($category);
 
     $selectedCategory = '';
-    $categories       = array();
+    $categories       = [];
     $faqData          = array(
         'id'          => 0,
         'lang'        => $LANGCODE,
@@ -142,7 +142,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
         $logging->logAdmin($user, 'Beitragcreate');
         $queryString = 'insertentry';
         if (!is_array($categories)) {
-            $categories = array();
+            $categories = [];
         }
     }
     
@@ -293,7 +293,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                     <div class="control-group">
                         <label class="control-label" for="lang"><?php echo $PMF_LANG["ad_entry_locale"]; ?>:</label>
                         <div class="controls">
-                            <?php echo PMF_Language::selectLanguages($faqData['lang'], false, array(), 'lang'); ?>
+                            <?php echo PMF_Language::selectLanguages($faqData['lang'], false, [], 'lang'); ?>
                         </div>
                      </div>
                 </fieldset>

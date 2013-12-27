@@ -2,7 +2,7 @@
 /**
  * The medium permission class provides group rights.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -132,7 +132,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         );
         
         $res    = $this->config->getDb()->query($select);
-        $result = array();
+        $result = [];
         while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row['right_id'];
         }
@@ -449,7 +449,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         );
         
         $res    = $this->config->getDb()->query($select);
-        $result = array();
+        $result = [];
         while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row['user_id'];
         }
@@ -585,7 +585,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) != 1) {
-            return array();
+            return [];
         }
         return $this->config->getDb()->fetchArray($res);
     }
@@ -646,7 +646,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         );
             
         $res    = $this->config->getDb()->query($select);
-        $result = array();
+        $result = [];
         while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row['group_id'];
         }
@@ -804,7 +804,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             return false;
         }
         
-        $auto_join = array();
+        $auto_join = [];
         while ($row = $this->config->getDb()->fetchArray($res)) {
             $auto_join[] = $row['group_id'];
         }
@@ -882,7 +882,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             $userId);
         
         $res    = $this->config->getDb()->query($select);
-        $result = array();
+        $result = [];
         while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row['right_id'];
         }
@@ -942,7 +942,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) != 1) {
-            return array();
+            return [];
         }
         $row = $this->config->getDb()->fetchArray($res);
         return $row['name'];

@@ -2,7 +2,7 @@
 /**
  * Shows the admin search frontend for FAQs
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -36,7 +36,7 @@ if ($permission['editbt'] || $permission['delbt']) {
     $searchcat  = PMF_Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
     $searchterm = PMF_Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
 
-    $category = new PMF_Category($faqConfig, array(), false);
+    $category = new PMF_Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $category->transform(0);

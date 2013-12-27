@@ -2,7 +2,7 @@
 /**
  * Shows the page with the FAQ record and - when available - the user comments
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -121,7 +121,7 @@ if (isset($linkArray['href'])) {
         $xpos = strpos($_url, 'index.php?action=artikel');
         if (!($xpos === false)) {
             // Get the Faq link title
-            $matches = array();
+            $matches = [];
             preg_match('/id=([\d]+)/ism', $_url, $matches);
             $_id    = $matches[1];
             $_title = $faq->getRecordTitle($_id, false);

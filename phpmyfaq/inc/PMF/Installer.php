@@ -2,7 +2,7 @@
 /**
  * The Installer class installs phpMyFAQ. Classy.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -555,7 +555,7 @@ class PMF_Installer
      */
     public function startInstall(Array $DB = null)
     {
-        $query = $uninst = $dbSetup = array();
+        $query = $uninst = $dbSetup = [];
 
         // Check table prefix
         $dbSetup['dbPrefix'] = $sqltblpre = PMF_Filter::filterInput(INPUT_POST, 'sqltblpre', FILTER_SANITIZE_STRING, '');
@@ -626,7 +626,7 @@ class PMF_Installer
         $ldapEnabled = PMF_Filter::filterInput(INPUT_POST, 'ldap_enabled', FILTER_SANITIZE_STRING);
         if (extension_loaded('ldap') && !is_null($ldapEnabled)) {
 
-            $ldapSetup = array();
+            $ldapSetup = [];
 
             // check LDAP entries
             $ldapSetup['ldapServer'] = PMF_Filter::filterInput(INPUT_POST, 'ldap_server', FILTER_SANITIZE_STRING);

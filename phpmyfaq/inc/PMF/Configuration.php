@@ -3,7 +3,7 @@
  * The main class for fetching the configuration, update and delete items. This
  * class is also a small Dependency Injection Container for phpMyFAQ.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -47,7 +47,7 @@ class PMF_Configuration
      *
      * @var array
      */
-    public $config = array();
+    public $config = [];
 
     /**
      * Constructor
@@ -236,7 +236,7 @@ class PMF_Configuration
      */
     public function getLdapConfig()
     {
-        return isset($this->config['core.ldapConfig']) ? $this->config['core.ldapConfig'] : array();
+        return isset($this->config['core.ldapConfig']) ? $this->config['core.ldapConfig'] : [];
     }
 
     /**

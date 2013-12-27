@@ -2,7 +2,7 @@
 /**
  * Helper class for Administration backend
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -37,7 +37,7 @@ class PMF_Helper_Administration
      *
      * @var array
      */
-    private $permission = array();
+    private $permission = [];
 
     /**
      * Adds a menu entry according to user permissions.

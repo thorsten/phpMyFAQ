@@ -2,7 +2,7 @@
 /**
  * Manages all language stuff
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -80,7 +80,7 @@ class PMF_Language
      */
     public function languageAvailable($id, $table = 'faqdata')
     {
-        $output = array();
+        $output = [];
 
         if (isset($id)) {
             if ($id == 0) {
@@ -127,7 +127,7 @@ class PMF_Language
      */
     public function setLanguage($configDetection, $configLanguage)
     {
-        $_lang = array();
+        $_lang = [];
         self::_getUserAgentLanguage();
 
         // Get language from: _POST, _GET, _COOKIE, phpMyFAQ configuration and the automatic language detection
@@ -207,7 +207,7 @@ class PMF_Language
         global $languageCodes;
         
         $search    = array("language_" , ".php");
-        $languages = $languageFiles = array();
+        $languages = $languageFiles = [];
         
         $dir = new DirectoryIterator(PMF_LANGUAGE_DIR);
         foreach ($dir as $fileinfo) {
@@ -241,7 +241,7 @@ class PMF_Language
      * @param  string  $id
      * @return string
      */
-    public static function selectLanguages($default, $submitOnChange = false, Array $excludedLanguages = array(), $id = 'language')
+    public static function selectLanguages($default, $submitOnChange = false, Array $excludedLanguages = [], $id = 'language')
     {
         global $languageCodes;
         
@@ -348,7 +348,7 @@ class PMF_Language
      */
     private function _getUserAgentLanguage()
     {
-        $matches = $languages = array();
+        $matches = $languages = [];
 
         if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
             // ISO Language Codes, 2-letters: ISO 639-1, <Country tag>[-<Country subtag>]

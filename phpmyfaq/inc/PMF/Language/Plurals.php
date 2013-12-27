@@ -2,7 +2,7 @@
 /**
  * The plurals class provides support for plural forms in PMF translations.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -39,7 +39,7 @@ class PMF_Language_Plurals
      *
      * @var array
      */
-    private $PMF_TRANSL = array();
+    private $PMF_TRANSL = [];
 
     /**
      * The number of plural forms for current language $lang

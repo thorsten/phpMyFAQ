@@ -2,7 +2,7 @@
 /**
  * Handle attachment downloads
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -32,7 +32,7 @@ if (headers_sent()) {
     die();
 }
 
-$attachmentErrors = array();
+$attachmentErrors = [];
 
 // authenticate with session information
 $user = PMF_User_CurrentUser::getFromSession($faqConfig);
@@ -77,5 +77,5 @@ if ($attachment && ($groupPermission || ($groupPermission && $userPermission))) 
 
 // If we're here, there was an error with file download
 $tpl->parseBlock('writeContent', 'attachmentErrors', array('item' => implode('<br/>', $attachmentErrors)));
-$tpl->parse('writeContent', array());
+$tpl->parse('writeContent', []);
 $tpl->merge('writeContent', 'index');

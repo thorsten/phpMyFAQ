@@ -3,7 +3,7 @@
  * The PMF_Template class provides methods and functions for the
  * template parser
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -42,28 +42,28 @@ class PMF_Template
      *
      * @var array
      */
-    public $templates = array();
+    public $templates = [];
 
     /**
      * The output array
      *
      * @var array
      */
-    private $outputs = array();
+    private $outputs = [];
 
     /**
      * The blocks array
      *
      * @var array
      */
-    private $blocks = array();
+    private $blocks = [];
 
     /**
      * array containing the touched blocks
      *
      * @var array
      */
-    private $blocksTouched = array();
+    private $blocksTouched = [];
 
     /**
      * Name of active template set
@@ -273,8 +273,8 @@ class PMF_Template
     private function _multiplyBlock($block, $blockContent)
     {
         $multiplyTimes = 0;
-        $replace       = array();
-        $tmpBlock      = array();
+        $replace       = [];
+        $tmpBlock      = [];
 
         //create the replacement array
         foreach ($blockContent as $var => $val) {
@@ -318,7 +318,7 @@ class PMF_Template
      */
     private function _readBlocks($tpl)
     {
-        $tmpBlocks = array();
+        $tmpBlocks = [];
         
         // read all blocks into $tmpBlocks
         PMF_String::preg_match_all('/\[([[:alpha:]]+)\]\s*[\W\w\s\{\}\<\>\=\"\/]*?\s*\[\/\1\]/', $tpl, $tmpBlocks);
@@ -342,7 +342,7 @@ class PMF_Template
                 $unblocked = str_replace('[/' . $name[0] . ']','',$unblocked);
             }
 
-            $hits = array();
+            $hits = [];
             PMF_String::preg_match_all('/\{.+?\}/', $unblocked, $hits);
             $tplBlocks['unblocked'] = $hits[0];
         } else {

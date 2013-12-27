@@ -3,7 +3,7 @@
  * The PMF_DB_Sqlite3 class provides methods and functions for a SQLite v3
  * database
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -55,7 +55,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      *
      * @var     array
      */
-    public $tableNames = array();
+    public $tableNames = [];
 
     /**
      * Connects to the database.
@@ -141,9 +141,9 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      */
     public function fetchArray($result)
     {
-        $ret = array();
+        $ret = [];
 
-        while ($res = $result->fetchArray()) {
+        while ($res = $result->fetch[]) {
             $ret[] = $res;
         }
 
@@ -159,7 +159,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      */
     public function fetchAssoc($result)
     {
-        $ret = array();
+        $ret = [];
 
         while ($res = $result->fetchArray(SQLITE3_ASSOC)) {
             $ret[] = $res;
@@ -177,7 +177,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      */
     public function fetchAll($result)
     {
-        $ret = array();
+        $ret = [];
         if (false === $result) {
             throw new Exception('Error while fetching result: ' . $this->error());
         }
@@ -197,7 +197,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      */
     public function numRows($result)
     {
-        return count($result->fetchArray());
+        return count($result->fetch[]);
     }
 
     /**
@@ -217,7 +217,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      */
     public function getTableStatus()
     {
-        $arr = array();
+        $arr = [];
 
         $result = $this->query("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
         while ($row = $this->fetchAssoc($result)) {

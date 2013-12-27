@@ -2,7 +2,7 @@
 /**
  * The PMF_Linkverifier class provides methods and functions for verifying URLs
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -72,37 +72,37 @@ class PMF_Linkverifier
      *
      * @var mixed
      */
-    protected $urlpool = array();
+    protected $urlpool = [];
 
     /* List of prohibited prefixes and messages
      *
      * @var mixed
      */
-    protected $warnlists = array();
+    protected $warnlists = [];
 
     /* List of URLs not to probe
      *
      * @var mixed
      */
-    protected $ignorelists = array();
+    protected $ignorelists = [];
 
     /* List of protocols we do not want to look at
      *
      * @var mixed
      */
-    protected $invalid_protocols = array();
+    protected $invalid_protocols = [];
 
     /* Last verify results (we might use it later)
      *
      * @var mixed
      */
-    protected $lastResult = array();
+    protected $lastResult = [];
 
     /* List of hosts that are slow to resolve.
      *
      * @var mixed
      */
-    protected $slow_hosts = array();
+    protected $slow_hosts = [];
 
     /**
      * User
@@ -179,7 +179,7 @@ class PMF_Linkverifier
      */
     public function resetPool()
     {
-        $this->urlpool = $this->lastResult = array();
+        $this->urlpool = $this->lastResult = [];
     }
 
     /**
@@ -282,10 +282,10 @@ class PMF_Linkverifier
     {
         $urlcount = 0;
         $types    = array('href', 'src', 'url');
-        $matches  = array();
+        $matches  = [];
 
         // Clean $this->urlpool
-        $this->urlpool = array();
+        $this->urlpool = [];
         while(list(,$type) = each($types)) {
             preg_match_all("|[^?&]$type\=(\"?'?`?)([[:alnum:]\:\#%?=;&@/\ \.\_\-\{\}]+)\\1|i", $string, $matches); 
             $sz = sizeof($matches[2]);
@@ -497,12 +497,12 @@ class PMF_Linkverifier
      */
     public function VerifyURLs($referenceuri = '')
     {
-        $this->lastResult = array();
+        $this->lastResult = [];
 
         foreach ($this->urlpool as $_type => $_value) {
             foreach ($_value as $_key => $_url) {
                 if (!(isset($result[$_type][$_url]))) {
-                    $_result              = array();
+                    $_result              = [];
                     $_result['type']      = $_type;
                     $_result['rawurl']    = $_url;
                     $_result['reference'] = $referenceuri;
@@ -753,7 +753,7 @@ class PMF_Linkverifier
             return ($cron ? '' : $output);
         }
 
-        $failreasons = $inforeasons = array();
+        $failreasons = $inforeasons = [];
         $output      = "    <h2>".$PMF_LANG['ad_linkcheck_checkResult']."</h2>\n";
         $output     .= '    <table class="verifyArticleURL">'."\n";
         foreach ($result as $type => $_value) {

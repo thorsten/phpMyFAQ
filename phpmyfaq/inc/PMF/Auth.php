@@ -17,7 +17,7 @@
  * selectDb(dbtype) may be called which returns a valid database-specific
  * object. See documentation of the static method selectDb for further details.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -70,7 +70,7 @@ class PMF_Auth
      *
      * @var array
      */
-    public $errors = array();
+    public $errors = [];
 
     /**
      * Short description of attribute read_only

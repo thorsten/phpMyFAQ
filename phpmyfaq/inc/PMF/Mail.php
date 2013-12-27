@@ -2,7 +2,7 @@
 /**
  * MUA (Mail User Agent) implementation.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -235,9 +235,9 @@ class PMF_Mail
     {
         // Set default value for public properties
         $this->agent       = 'built-in';
-        $this->attachments = array();
+        $this->attachments = [];
         $this->boundary    = self::createBoundary();
-        $this->headers     = array();
+        $this->headers     = [];
         $this->message     = '';
         $this->messageAlt  = '';
         $this->messageId   = '<'.$_SERVER['REQUEST_TIME'] . '.'. md5(microtime()) . '@' . self::getServerName() . '>';
@@ -246,15 +246,15 @@ class PMF_Mail
 
         // Set default value for private properties
         $this->_config     = $config;
-        $this->_bcc        = array();
-        $this->_cc         = array();
-        $this->_from       = array();
+        $this->_bcc        = [];
+        $this->_cc         = [];
+        $this->_from       = [];
         $this->_mailer     = 'phpMyFAQ on PHP/' . PHP_VERSION;
-        $this->_notifyTo   = array();
-        $this->_replyTo    = array();
-        $this->_returnPath = array();
-        $this->_sender     = array();
-        $this->_to         = array();
+        $this->_notifyTo   = [];
+        $this->_replyTo    = [];
+        $this->_returnPath = [];
+        $this->_sender     = [];
+        $this->_to         = [];
 
         // Set phpMyFAQ related data
         $this->_mailer = 'phpMyFAQ/' . $this->_config->get('main.currentVersion');
@@ -324,11 +324,11 @@ class PMF_Mail
      */          
     private function _createBody()
     {
-        $lines        = array();
+        $lines        = [];
         $mainBoundary = $this->boundary;
 
         // Cleanup body
-        $this->body = array();
+        $this->body = [];
 
         // Add lines
         if (strpos($this->contentType, 'multipart') !== false) {
@@ -412,7 +412,7 @@ class PMF_Mail
     private function _createHeaders()
     {
         // Cleanup headers
-        $this->headers = array();
+        $this->headers = [];
 
         // Check if the message consists of just a "plain" single item
         if (false === strpos($this->contentType, 'multipart')) {
@@ -431,7 +431,7 @@ class PMF_Mail
         $this->headers['Date'] = self::getDate(self::getTime());
 
         // Disposition-Notification-To, RFC 3798
-        $notifyTos = array();
+        $notifyTos = [];
         foreach($this->_notifyTo as $address => $name) {
             $notifyTos[] = (empty($name) ? '' : $name.' ').'<'.$address.'>';
         }
@@ -753,7 +753,7 @@ class PMF_Mail
         // i.e. we must prepare recipients, headers, body for the send() method
 
         // Prepare the recipients
-        $to = array();
+        $to = [];
         foreach($this->_to as $address => $name) {
             $to[] = (empty($name) ? '' : $name.' ').'<'.$address.'>';
         }
@@ -894,7 +894,7 @@ class PMF_Mail
      */          
     public function unsetFrom()
     {
-        $this->_from = array();
+        $this->_from = [];
 
         return true;
     }

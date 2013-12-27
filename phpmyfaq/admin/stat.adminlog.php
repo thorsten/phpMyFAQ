@@ -2,7 +2,7 @@
 /**
  * Overview of actions in the admin section
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  *  http://www.mozilla.org/MPL/
  *

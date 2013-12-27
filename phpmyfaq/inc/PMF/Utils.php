@@ -2,7 +2,7 @@
 /**
  * Utilities - Functions and Classes common to the whole phpMyFAQ architecture.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -214,7 +214,7 @@ class PMF_Utils
      */
     public static function shuffleData($data)
     {
-        $shuffled_data = array();
+        $shuffled_data = [];
 
         if (is_array($data)) {
             if (count($data) > 1) {

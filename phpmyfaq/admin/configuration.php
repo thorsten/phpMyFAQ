@@ -53,7 +53,7 @@ if ($permission['editconfig']) {
 
         // Set the new values
         $forbiddenValues = array('{', '}', '$');
-        $newConfigValues = array();
+        $newConfigValues = [];
         foreach ($editData['edit'] as $key => $value) {
             $newConfigValues[$key] = str_replace($forbiddenValues, '', $value);
             $keyArray              = array_values(explode('.', $key));

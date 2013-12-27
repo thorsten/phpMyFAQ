@@ -2,7 +2,7 @@
 /**
  * Cuts out a category
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($permission["editcateg"]) {
-    $category = new PMF_Category($faqConfig, array(), false);
+    $category = new PMF_Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $category->buildTree();

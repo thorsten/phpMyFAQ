@@ -2,7 +2,7 @@
 /**
  * The phpMyFAQ Captcha class
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -55,7 +55,7 @@ class PMF_Captcha
      *
      * @var array
      */
-    private $fonts = array();
+    private $fonts = [];
 
     /**
      * The captcha code
@@ -361,8 +361,8 @@ class PMF_Captcha
             $y   = rand($size + 3, $this->height-5);
             // $w1 += rand(- $this->width / 90, $this->width / 40 );
             $x   = $w1 + $w2*$p;
-            $c1 = array(); // fore char color
-            $c2 = array(); // back char color
+            $c1 = []; // fore char color
+            $c2 = []; // back char color
             do {
                 $c1['r'] = mt_rand(30, 199);
             } while ($c1['r'] == $this->_backgroundColor['r']);

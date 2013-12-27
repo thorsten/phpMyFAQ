@@ -3,7 +3,7 @@
  * The PMF_DB_Sqlite class provides methods and functions for a SQLite v2
  * database. This class is deprecated for PHP 5.3 and PHP 5.4.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -58,7 +58,7 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
      *
      * @var     array
      */
-    public $tableNames = array();
+    public $tableNames = [];
 
     /**
      * Connects to the database.
@@ -157,7 +157,7 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
      */
     public function fetchAll($result)
     {
-        $ret = array();
+        $ret = [];
         if (false === $result) {
             throw new Exception('Error while fetching result: ' . $this->error());
         }
@@ -198,7 +198,7 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
      */
     public function getTableStatus()
     {
-        $arr = array();
+        $arr = [];
 
         $result = $this->query("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
         while ($row = $this->fetchArray($result)) {

@@ -2,7 +2,7 @@
 /**
  * The main Tags class
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -66,7 +66,7 @@ class PMF_Tags
     public function getAllTags($search = null, $limit = false, $showInactive = false)
     {
         global $DB;
-        $allTags = array();
+        $allTags = [];
 
         // Hack: LIKE is case sensitive under PostgreSQL
         switch ($DB['type']) {
@@ -122,7 +122,7 @@ class PMF_Tags
      */
     public function getAllTagsById($recordId)
     {
-        $tags = array();
+        $tags = [];
 
         $query = sprintf("
             SELECT
@@ -315,7 +315,7 @@ class PMF_Tags
             count($arrayOfTags)
         );
 
-        $records = array();
+        $records = [];
         $result  = $this->_config->getDb()->query($query);
         while ($row = $this->_config->getDb()->fetchObject($result)) {
             $records[] = $row->record_id;
@@ -353,7 +353,7 @@ class PMF_Tags
             PMF_String::substr(implode("', '", $arrayOfTags), 0, -2)
         );
 
-        $records = array();
+        $records = [];
         $result  = $this->_config->getDb()->query($query);
         while ($row = $this->_config->getDb()->fetchObject($result)) {
             $records[] = $row->record_id;
@@ -398,7 +398,7 @@ class PMF_Tags
      */
     public function printHTMLTagsCloud()
     {
-        $tags = array();
+        $tags = [];
 
         // Limit the result set (see: PMF_TAGS_CLOUD_RESULT_SET_SIZE)
         // for avoiding an 'heavy' load during the evaluation
@@ -488,7 +488,7 @@ class PMF_Tags
             PMF_Db::getTablePrefix(),
             $this->_config->getDb()->escape($tagName));
 
-        $records = array();
+        $records = [];
         $result = $this->_config->getDb()->query($query);
         while ($row = $this->_config->getDb()->fetchObject($result)) {
             $records[] = $row->record_id;
@@ -525,7 +525,7 @@ class PMF_Tags
             PMF_Db::getTablePrefix(),
             $tagId);
 
-        $records = array();
+        $records = [];
         $result  = $this->_config->getDb()->query($query);
         while ($row = $this->_config->getDb()->fetchObject($result)) {
             $records[] = $row->record_id;
@@ -564,7 +564,7 @@ class PMF_Tags
      */
     public function getPopularTags($limit = 0)
     {
-        $tags = array();
+        $tags = [];
 
         $query = sprintf("
             SELECT

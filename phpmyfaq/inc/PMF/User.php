@@ -6,7 +6,7 @@
  * using getUserById() or by his nickname (login) using getUserByLogin(). New
  * are created using createNewUser().
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -109,14 +109,14 @@ class PMF_User
      *
      * @var array
      */
-    public $errors = array();
+    public $errors = [];
 
     /**
      * authentication container
      *
      * @var array
      */
-    protected $authContainer = array();
+    protected $authContainer = [];
     
     /**
      * login string
@@ -191,7 +191,7 @@ class PMF_User
         
         // authentication objects
         // always make a 'local' $auth object (see: $authData)
-        $this->authContainer = array();
+        $this->authContainer = [];
         $auth = new PMF_Auth($this->config);
         $authLocal = $auth->selectAuth($this->getAuthSource('name'));
         $authLocal->selectEncType($this->getAuthData('encType'));
@@ -420,10 +420,10 @@ class PMF_User
 
         $res = $this->config->getDb()->query($select);
         if (!$res) {
-            return array();
+            return [];
         }
 
-        $result = array();
+        $result = [];
         while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row;
         }
@@ -564,7 +564,7 @@ class PMF_User
         
         $readOnly  = 0;
         $authCount = 0;
-        $delete     = array();
+        $delete     = [];
         foreach ($this->authContainer as $auth) {
             $authCount++;
             if ($auth->setReadOnly()) {
@@ -684,7 +684,7 @@ class PMF_User
         foreach ($this->errors as $error) {
             $message .= $error."\n";
         }
-        $this->errors = array();
+        $this->errors = [];
         return $message;
     }
 
@@ -875,10 +875,10 @@ class PMF_User
 
         $res = $this->config->getDb()->query($select);
         if (!$res) {
-            return array();
+            return [];
         }
 
-        $result = array();
+        $result = [];
         while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row['user_id'];
         }
@@ -910,10 +910,10 @@ class PMF_User
 
         $res = $this->config->getDb()->query($select);
         if (!$res) {
-            return array();
+            return [];
         }
 
-        $result = array();
+        $result = [];
         while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[$row['user_id']] = $row;
         }

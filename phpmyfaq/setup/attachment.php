@@ -2,7 +2,7 @@
 /**
  * Attachment migration script
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -55,7 +55,7 @@ require PMF_ROOT_DIR . '/inc/Bootstrap.php';
     );
     
     $migration = new PMF_Attachment_Migration($faqConfig);
-    $options   = array();
+    $options   = [];
     
     switch ($migrationType) {
         case PMF_Attachment_Migration::MIGRATION_TYPE1:

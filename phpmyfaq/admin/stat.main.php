@@ -2,7 +2,7 @@
 /**
  * The main statistics page
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -134,7 +134,7 @@ if ($permission['viewlog']) {
     }
 
     $dir = opendir(PMF_ROOT_DIR."/data");
-    $trackingDates = array();
+    $trackingDates = [];
     while (false !== ($dat = readdir($dir))) {
         if ($dat != "." && $dat != ".." && strlen($dat) == 16 && !is_dir($dat)) {
             $trackingDates[] = PMF_Date::getTrackingFileDate($dat);

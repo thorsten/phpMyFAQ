@@ -67,7 +67,7 @@ switch($ajax_action) {
                 // in an array $valArr contents like  "number substring", "substring", "number substring", "substring", ...
                 $numVal = count($valArr);
                 if ($numVal > 1) {
-                    $newValArr = array();
+                    $newValArr = [];
                     for ($i = 0; $i < $numVal; $i += 2) {
                         if (is_numeric($valArr[$i])) {
                             // clearing quotes
@@ -114,7 +114,7 @@ switch($ajax_action) {
         }
         
         $newFileContents = '';
-        $tmpLines        = array();
+        $tmpLines        = [];
         
         /**
          * Read in the head of the file we're writing to
@@ -203,7 +203,7 @@ switch($ajax_action) {
 /**
  * %s
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can

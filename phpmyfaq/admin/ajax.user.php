@@ -2,7 +2,7 @@
 /**
  * AJAX: handling of Ajax user calls
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -42,7 +42,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     switch ($ajaxAction) {
 
         case 'get_user_list':
-            $users = array();
+            $users = [];
             foreach ($user->searchUsers($usersearch) as $singleUser) {
                 $users[] = array(
                     'user_id' => $singleUser['user_id'],
@@ -54,7 +54,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
 
         case 'get_user_data':
             $user->getUserById($userId);
-            $userdata           = array();
+            $userdata           = [];
             $userdata           = $user->userdata->get('*');
             $userdata['status'] = $user->getStatus();
             $userdata['login']  = $user->getLogin();
@@ -74,7 +74,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
                 if (!$user->deleteUser()) {
                     $message = $PMF_LANG['ad_user_error_delete'];
                 } else {
-                    $category = new PMF_Category($faqConfig, array(), false);
+                    $category = new PMF_Category($faqConfig, [], false);
                     $category->moveOwnership($userId, 1);
 
                     // Remove the user from groups

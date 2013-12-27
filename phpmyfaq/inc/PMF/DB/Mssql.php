@@ -3,7 +3,7 @@
  * The PMF_DB_Mssql class provides methods and functions for a Microsoft SQL
  * Server database.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -58,7 +58,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      *
      * @var     array
      */
-    public $tableNames = array();
+    public $tableNames = [];
 
     /**
      * Connects to the database.
@@ -161,7 +161,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      */
     public function fetchAll($result)
     {
-        $ret = array();
+        $ret = [];
         if (false === $result) {
             throw new Exception('Error while fetching result: ' . $this->error());
         }
@@ -202,7 +202,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      */
     public function getTableStatus()
     {
-        $tables = array();
+        $tables = [];
 
         $query = "
             SELECT

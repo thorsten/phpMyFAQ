@@ -2,7 +2,7 @@
 /**
  * The main User session class
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -187,7 +187,7 @@ class PMF_Session
      */
     public function getSessionsbyDate($firstHour, $lastHour)
     {
-        $sessions = array();
+        $sessions = [];
 
         $query = sprintf("
             SELECT
@@ -386,8 +386,8 @@ class PMF_Session
      */
     public function getLast30DaysVisits()
     {
-        $stats  = array();
-        $visits = array();
+        $stats  = [];
+        $visits = [];
 
         $startDate = strtotime('-1 month');
         $endDate   = $_SERVER['REQUEST_TIME'];

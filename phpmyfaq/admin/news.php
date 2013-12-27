@@ -2,7 +2,7 @@
 /**
  * The main administration file for the news.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -124,7 +124,7 @@ if ('addnews' == $action && $permission["addnews"]) {
             <div class="control-group">
                 <label class="control-label" for="langTo"><?php echo $PMF_LANG["ad_entry_locale"]; ?>:</label>
                 <div class="controls">
-                    <?php echo PMF_Language::selectLanguages($LANGCODE, false, array(), 'langTo'); ?>
+                    <?php echo PMF_Language::selectLanguages($LANGCODE, false, [], 'langTo'); ?>
                 </div>
             </div>
         </fieldset>
@@ -314,7 +314,7 @@ if ('addnews' == $action && $permission["addnews"]) {
             <div class="control-group">
                 <label class="control-label" for="langTo"><?php echo $PMF_LANG["ad_entry_locale"]; ?>:</label>
                 <div class="controls">
-                <?php echo PMF_Language::selectLanguages($newsData['lang'], false, array(), 'langTo'); ?>
+                <?php echo PMF_Language::selectLanguages($newsData['lang'], false, [], 'langTo'); ?>
             </div>
         </fieldset>
 

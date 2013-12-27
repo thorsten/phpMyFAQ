@@ -2,7 +2,7 @@
 /**
  * Service class for Gravatar support
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -53,11 +53,11 @@ class PMF_Services_Gravatar extends PMF_Services
      *
      * @return  string
      */
-    public function getImage($email, $params = array())
+    public function getImage($email, $params = [])
     {
         $imageUrl = $this->getUrl() . 'avatar/' . $this->getHash($email);
 
-        $opts = array();
+        $opts = [];
 
         if (isset($params['default'])) {
             $opts[] = 'default='. $params['default'];

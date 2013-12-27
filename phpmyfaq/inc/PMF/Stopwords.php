@@ -2,7 +2,7 @@
 /**
  * The main Stopwords class
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -203,7 +203,7 @@ class PMF_Stopwords
         
         $result = $this->_config->getDb()->query($sql);
         
-        $retval = array();
+        $retval = [];
         
         if ($wordsOnly) {
             while(($row = $this->_config->getDb()->fetchObject($result)) == true) {
@@ -228,7 +228,7 @@ class PMF_Stopwords
     {
         $words      = explode(' ', $input);
         $stop_words = $this->getByLang(null, true); 
-        $retval     = array();
+        $retval     = [];
         
         foreach ($words as $word) {
             $word = PMF_String::strtolower($word);
@@ -277,9 +277,9 @@ class PMF_Stopwords
      */
     private function getBannedWords()
     {
-        $bannedTrimmedWords = array();
+        $bannedTrimmedWords = [];
         $bannedWordsFile    = PMF_INCLUDE_DIR . '/blockedwords.txt';
-        $bannedWords        = array();
+        $bannedWords        = [];
 
         // Read the dictionary
         if (file_exists($bannedWordsFile) && is_readable($bannedWordsFile)) {

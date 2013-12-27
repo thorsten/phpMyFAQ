@@ -3,7 +3,7 @@
  * Adds a record in the database, handles the preview and checks for missing
  * category entries.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -58,7 +58,7 @@ if ($permission['editbt']|| $permission['addbt']) {
     
     // Permissions
 
-    $permissions = array();
+    $permissions = [];
     if ('all' === PMF_Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING)) {
         $permissions += array(
             'restricted_user' => array(
@@ -92,7 +92,7 @@ if ($permission['editbt']|| $permission['addbt']) {
     }
 
     if (!isset($categories['rubrik'])) {
-        $categories['rubrik'] = array();
+        $categories['rubrik'] = [];
     }
     
     if (!is_null($question) && !is_null($categories['rubrik'])) {
@@ -101,7 +101,7 @@ if ($permission['editbt']|| $permission['addbt']) {
         $logging->logAdmin($user, 'Beitragcreatesave');
         printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 
-        $category = new PMF_Category($faqConfig, array(), false);
+        $category = new PMF_Category($faqConfig, [], false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
         $tagging  = new PMF_Tags($faqConfig);

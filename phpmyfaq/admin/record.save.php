@@ -2,7 +2,7 @@
 /**
  * Save an existing FAQ record.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$category = new PMF_Category($faqConfig, array(), false);
+$category = new PMF_Category($faqConfig, [], false);
 $category->setUser($currentAdminUser);
 $category->setGroups($currentAdminGroups);
 
@@ -73,7 +73,7 @@ if ($permission['editbt']) {
     $date       = PMF_Filter::filterInput(INPUT_POST, 'date', FILTER_SANITIZE_STRING);
     
     // Permissions
-    $permissions = array();
+    $permissions = [];
     if ('all' === PMF_Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING)) {
         $permissions += array(
             'restricted_user' => array(
@@ -167,7 +167,7 @@ if ($permission['editbt']) {
         }
         
         if (!isset($categories['rubrik'])) {
-            $categories['rubrik'] = array();
+            $categories['rubrik'] = [];
         }
         
         // delete category relations

@@ -2,7 +2,7 @@
 /**
  * The phpMyFAQ Search class
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -155,7 +155,7 @@ class PMF_Search
         $result = $search->search($searchterm);
         
         if (!$this->_config->getDb()->numRows($result)) {
-            return array();
+            return [];
         } else {
             return $this->_config->getDb()->fetchAll($result);
         }
@@ -220,7 +220,7 @@ class PMF_Search
      */
     public function getMostPopularSearches($numResults = 7, $withLang = false)
     {
-        $searchResult = array();
+        $searchResult = [];
         
         $byLang = $withLang ? ', lang' : '';
         $query  = sprintf("

@@ -2,7 +2,7 @@
 /**
  * Class for checking system requirements
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -78,7 +78,7 @@ class PMF_System
      *
      * @var array
      */
-    private $_missingExtensions = array();
+    private $_missingExtensions = [];
 
 
     /**
@@ -152,7 +152,7 @@ class PMF_System
      */
     public function getAvailableTemplates()
     {
-        $templates = array();
+        $templates = [];
 
         foreach (new DirectoryIterator(PMF_ROOT_DIR . '/assets/template') as $item) {
 
@@ -193,7 +193,7 @@ class PMF_System
      */
     public function getSupportedSafeDatabases($html = false)
     {
-        $retVal = array();
+        $retVal = [];
         foreach ($this->getSupportedDatabases() as $extension => $database) {
             if (extension_loaded($extension) && version_compare(PHP_VERSION, $database[0]) >= 0) {
                 // prevent MySQLi with zend.ze1_compatibility_mode enabled due to a few cloning isssues

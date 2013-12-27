@@ -2,7 +2,7 @@
 /**
  * Footer of the admin area
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -137,7 +137,7 @@ function phpMyFAQSave()
     var data = {action: "ajax", ajax: 'recordSave'};
     <?php endif; ?>
     var id = $('#answer')[0].parentNode.parentNode.id;
-    $.each($('#' + id).serializeArray(), function(i, field) {
+    $.each($('#' + id).serialize[], function(i, field) {
         data[field.name] = field.value;
     });
     $.post("index.php", data, null);
