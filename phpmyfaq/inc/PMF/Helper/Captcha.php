@@ -57,24 +57,27 @@ class PMF_Helper_Captcha extends PMF_Helper
         $html = '';
 
         if (true === $this->_config->get('spam.enableCaptchaCode') && is_null($auth)) {
-            $html .= '<div class="control-group">';
-            $html .= '    <label class="control-label"></label>';
-            $html .= '    <div class="controls">';
+            $html .= '<div class="form-group">';
+            $html .= '    <label class="col-sm-4 control-label"></label>';
+            $html .= '    <div class="col-sm-8">';
+            $html .= '        <p class="form-control-static">';
             $html .= $captcha->printCaptcha($action);
-            $html .= '      </div>';
-            $html .= '</div>';
-            $html .= '<div class="control-group">';
-            $html .= sprintf('<label class="control-label">%s</label>', $legend);
-            $html .= '    <div class="controls">';
-            $html .= '        <div class="input-append">';
+            $html .= '        </p>';
             $html .= sprintf(
-                '<input type="text" name="captcha" id="captcha" size="%d" required>',
-                $captcha->caplength
-            );
-            $html .= sprintf(
-                '<a class="btn" id="captcha-button" data-action="%s"><i class="icon-refresh"></i></a>',
+                '<p class="help-block"><a id="captcha-button" data-action="%s">Refresh Captcha</a></p>',
                 $action
             );
+            $html .= '    </div>';
+            $html .= '</div>';
+            $html .= '<div class="form-group">';
+            $html .= sprintf('<label class="col-sm-4 control-label">%s</label>', $legend);
+            $html .= '    <div class="controls">';
+            $html .= '        <div class="col-sm-4">';
+            $html .= sprintf(
+                '<input type="text" name="captcha" id="captcha" size="%d" required class="form-control">',
+                $captcha->caplength
+            );
+
             $html .= '        </div>';
             $html .= '    </div>';
             $html .= '</div>';
