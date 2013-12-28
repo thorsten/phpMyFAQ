@@ -21,8 +21,8 @@ module.exports = function(grunt) {
             },
             dist: {
                 src: [
-                    'phpmyfaq/assets/js/libs/jquery.min.js',
-                    'components//bootstrap/js/tooltip.js',
+                    'components/jquery/jquery.js',
+                    'components/bootstrap/js/tooltip.js',
                     'components/bootstrap/js/transition.js',
                     'components/bootstrap/js/alert.js',
                     'components/bootstrap/js/button.js',
