@@ -56,6 +56,9 @@
         "tcpdf":                   "master@dev",
         "twitteroauth":            "master@dev"
     },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
     "minimum-stability": "stable",
     "scripts": {
         "post-install-cmd": [

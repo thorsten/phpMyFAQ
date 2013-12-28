@@ -143,7 +143,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
     {
         $ret = [];
 
-        while ($res = $result->fetch[]) {
+        while ($res = $result->fetchArray()) {
             $ret[] = $res;
         }
 
@@ -173,6 +173,8 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      *
      * @param resource $result Resultset
      *
+     * @throws Exception
+     *
      * @return array of stdClass
      */
     public function fetchAll($result)
@@ -197,7 +199,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      */
     public function numRows($result)
     {
-        return count($result->fetch[]);
+        return count($result->fetchArray());
     }
 
     /**
