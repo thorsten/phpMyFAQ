@@ -831,6 +831,7 @@ if ($step == 3) {
         $faqConfig->delete('cache.varnishPort');
         $faqConfig->delete('cache.varnishSecret');
         $faqConfig->delete('cache.varnishTimeout');
+        $faqConfig->add('search.enableHighlighting', 'true');
     }
 
     // Always the last step: Update version number

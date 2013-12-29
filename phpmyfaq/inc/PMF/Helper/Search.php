@@ -291,7 +291,7 @@ class PMF_Helper_Search extends PMF_Helper
                 $searchterm    = preg_quote($searchterm, '/');
                 $searchItems   = explode(' ', $searchterm);
                 
-                if (PMF_String::strlen($searchItems[0]) > 1) {
+                if ($this->_config->get('search.enableHighlighting') && PMF_String::strlen($searchItems[0]) > 1) {
                     foreach ($searchItems as $item) {
                          if (PMF_String::strlen($item) > 2) {
                              $question      = PMF_Utils::setHighlightedString($question, $item);

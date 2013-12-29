@@ -1194,5 +1194,6 @@ $PMF_LANG["msgAboutThisNews"] = "About this news";
 $PMF_LANG["msgAccessDenied"] = "Access denied.";
 
 // added v.2.9.0-alpha - 2013-12-26 by Thorsten
-$PMF_LANG['msgRelatedTags'] = 'Add Search Word';
-$PMF_LANG['msgPopularTags'] = 'Popular Search Words';
+$PMF_LANG["msgRelatedTags"] = 'Add Search Word';
+$PMF_LANG["msgPopularTags"] = 'Popular Search Words';
+$LANG_CONF["search.enableHighlighting"] = array(0 => "checkbox", 1 => "Highlight search terms");

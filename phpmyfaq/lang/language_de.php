@@ -1151,5 +1151,6 @@ $PMF_LANG["msgAboutThisNews"] = "Über diese Nachricht";
 $PMF_LANG["msgAccessDenied"] = "Zugriff verweigert.";
 
 // added v.2.9.0-alpha - 2013-12-26 by Thorsten
-$PMF_LANG['msgRelatedTags'] = 'Suchwort hinzufügen';
-$PMF_LANG['msgPopularTags'] = 'Beliebte Suchwörter';
+$PMF_LANG["msgRelatedTags"] = 'Suchwort hinzufügen';
+$PMF_LANG["msgPopularTags"] = 'Beliebte Suchwörter';
+$LANG_CONF["search.enableHighlighting"] = array(0 => "checkbox", 1 => "Gesuchte Wörter hervorheben");

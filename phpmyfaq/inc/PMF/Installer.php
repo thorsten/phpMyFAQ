@@ -330,6 +330,7 @@ class PMF_Installer
         'search.numberSearchTerms'                => '10',
         'search.relevance'                        => 'thema,content,keywords',
         'search.enableRelevance'                  => 'false',
+        'search.enableHighlighting'               => 'true',
 
         'security.permLevel'                      => 'basic',
         'security.ipCheck'                        => 'false',
