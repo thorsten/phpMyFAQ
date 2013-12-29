@@ -87,9 +87,9 @@ class PMF_System
      * @var  array
      */
     private $_supportedDatabases = array(
-        'mysqli'  => array(self::VERSION_MINIMUM_PHP, 'MySQL 5.x, MariaDB 5.x (ext/mysqli)'),
-        'pgsql'   => array(self::VERSION_MINIMUM_PHP, 'PostgreSQL 8.x'),
-        'sqlite'  => array(self::VERSION_MINIMUM_PHP, 'SQLite'),
+        'mysqli'  => array(self::VERSION_MINIMUM_PHP, 'MySQL / MariaDB'),
+        'pgsql'   => array(self::VERSION_MINIMUM_PHP, 'PostgreSQL'),
+        'sqlite'  => array(self::VERSION_MINIMUM_PHP, 'SQLite (deprecated)'),
         'sqlite3' => array(self::VERSION_MINIMUM_PHP, 'SQLite 3 (only PHP 5.3+, experimental)'),
         'mssql'   => array(self::VERSION_MINIMUM_PHP, 'MS SQL Server 2005 / 2008'),
         'sqlsrv'  => array(self::VERSION_MINIMUM_PHP, 'SQL Server Driver for PHP (experimental)')
@@ -155,9 +155,9 @@ class PMF_System
         $templates = [];
 
         foreach (new DirectoryIterator(PMF_ROOT_DIR . '/assets/template') as $item) {
-
+            $basename = $item->getBasename();
             if (! $item->isDot() && $item->isDir()) {
-                $templates[$item->getBasename()] = (PMF_Template::getTplSetName() == $item->getBasename() ? true : false);
+                $templates[$basename] = (PMF_Template::getTplSetName() === $basename ? true : false);
             }
         }
 
@@ -219,7 +219,7 @@ class PMF_System
     public function checkDatabase()
     {
         foreach ($this->_supportedDatabases as $extension => $database) {
-            if (extension_loaded ($extension)) {
+            if (extension_loaded($extension)) {
                 return true;
             }
         }
@@ -235,7 +235,7 @@ class PMF_System
     public function checkRequiredExtensions()
     {
         foreach ($this->_requiredExtensions as $extension) {
-            if (!extension_loaded ( $extension)) {
+            if (!extension_loaded($extension)) {
                 $this->_missingExtensions[] = $extension;
             }
         }
