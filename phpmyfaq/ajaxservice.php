@@ -85,13 +85,34 @@ if (isset($message['error'])) {
     exit();
 }
 
+
+// get user rights
+$permission = [];
+if ($isLoggedIn) {
+    // read all rights, set them FALSE
+    $allRights = $user->perm->getAllRightsData();
+    foreach ($allRights as $right) {
+        $permission[$right['name']] = false;
+    }
+    // check user rights, set them TRUE
+    $allUserRights = $user->perm->getAllUserRights($user->getUserId());
+    foreach ($allRights as $right) {
+        if (in_array($right['right_id'], $allUserRights))
+            $permission[$right['name']] = true;
+    }
+}
+
+
 // Save user generated content
 switch ($action) {
 
     // Comments
     case 'savecomment':
 
-        // @todo add check on "addcomment" permission
+        if (!$faqConfig->get('records.allowCommentsForGuests') && $permission['addcomment']) {
+            $message = array('error' => $PMF_LANG['err_NotAuth']);
+            break;
+        }
 
         $faq      = new PMF_Faq($faqConfig);
         $oComment = new PMF_Comment($faqConfig);
@@ -226,7 +247,11 @@ switch ($action) {
 
     case 'savefaq':
 
-        // @todo add check on "addfaq" permission
+        if (!$faqConfig->get('records.allowNewFaqsForGuests') && $permission['addfaq']) {
+            $message = array('error' => $PMF_LANG['err_NotAuth']);
+            break;
+        }
+
 
         $faq         = new PMF_Faq($faqConfig);
         $category    = new PMF_Category($faqConfig);
@@ -396,7 +421,10 @@ switch ($action) {
 
     case 'savequestion':
 
-        // @todo add check on "addquestion" permission
+        if (!$faqConfig->get('records.allowQuestionsForGuests') && $permission['addquestion']) {
+            $message = array('error' => $PMF_LANG['err_NotAuth']);
+            break;
+        }
 
         $faq        = new PMF_Faq($faqConfig);
         $cat        = new PMF_Category($faqConfig);

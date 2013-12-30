@@ -10,6 +10,7 @@ Version 2.9.0-dev 2014-01-
 - added tag intersection based search (Tomer Weinberg, Thorsten)
 - added configuration for enable/disable highlighting search terms (Thorsten)
 - added configuration for enable/disable RSS feeds (Thorsten)
+- added permissions for guests (Thorsten)
 - added support for multiple LDAP/AD servers (Bernhard Müller, Thorsten)
 - added frontend dependency management using Bower (Thorsten)
 - updated bundled Symfony ClassLoader to version 2.3.7 (Thorsten)

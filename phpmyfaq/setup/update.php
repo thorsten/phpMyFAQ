@@ -833,6 +833,9 @@ if ($step == 3) {
         $faqConfig->delete('cache.varnishTimeout');
         $faqConfig->add('search.enableHighlighting', 'true');
         $faqConfig->add('main.enableRssFeeds', 'true');
+        $faqConfig->add('records.allowCommentsForGuests', 'true');
+        $faqConfig->add('records.allowQuestionsForGuests', 'true');
+        $faqConfig->add('records.allowNewFaqsForGuests', 'true');
     }
 
     // Always the last step: Update version number

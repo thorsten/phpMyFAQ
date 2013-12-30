@@ -326,6 +326,9 @@ class PMF_Installer
         'records.autosaveActive'                  => 'false',
         'records.autosaveSecs'                    => '180',
         'records.randomSort'                      => 'false',
+        'records.allowCommentsForGuests'          => 'true',
+        'records.allowQuestionsForGuests'         => 'true',
+        'records.allowNewFaqsForGuests'           => 'true',
 
         'search.useAjaxSearchOnStartpage'         => 'false',
         'search.numberSearchTerms'                => '10',
