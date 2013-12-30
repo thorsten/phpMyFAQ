@@ -60,9 +60,6 @@ class PMF_ConfigurationTest extends PHPUnit_Framework_TestCase
         parent::tearDown();
     }
 
-    /**
-     * @covers setLdapConfig()
-     */
     public function testSetLdapConfigWithSingleServer()
     {
         global $PMF_LDAP;
@@ -91,9 +88,6 @@ class PMF_ConfigurationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->pmfConfig->getLdapServer());
     }
 
-    /**
-     * @covers setLdapConfig()
-     */
     public function testSetLdapConfigWithMultipleServers()
     {
         global $PMF_LDAP;
@@ -135,9 +129,6 @@ class PMF_ConfigurationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->pmfConfig->getLdapServer());
     }
 
-    /**
-     * @covers setLdapConfig()
-     */
     public function testSetLdapConfigWithMultipleServersButDisabled()
     {
         global $PMF_LDAP;
