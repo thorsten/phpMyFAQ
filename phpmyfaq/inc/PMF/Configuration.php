@@ -212,21 +212,38 @@ class PMF_Configuration
      */
     public function setLdapConfig(Array $ldapConfig)
     {
+        // Always add main LDAP server
+        $this->config['core.ldapServer'][0] = [
+            'ldap_server'   => $ldapConfig['ldap_server'],
+            'ldap_port'     => $ldapConfig['ldap_port'],
+            'ldap_user'     => $ldapConfig['ldap_user'],
+            'ldap_password' => $ldapConfig['ldap_password'],
+            'ldap_base'     => $ldapConfig['ldap_base']
+        ];
+
+        // Add multiple LDAP servers if enabled
         if (true === $ldapConfig['ldap_use_multiple_servers']) {
-            // Multiple LDAP servers
-            $key = 0;
-            while ($key >= 0) {
+            $key = 1;
+            while ($key >= 1) {
                 if (isset($ldapConfig[$key])) {
-                    $this->config['core.ldapConfig'][$key] = $ldapConfig[$key];
+                    $this->config['core.ldapServer'][$key] = $ldapConfig[$key];
                     $key++;
                 } else {
                     break;
                 }
             }
-        } else {
-            // one LDAP server
-            $this->config['core.ldapConfig'] = $ldapConfig;
         }
+
+        // Set LDAP configuration
+        $this->config['core.ldapConfig'] = [
+            'ldap_use_multiple_servers' => $ldapConfig['ldap_use_multiple_servers'],
+            'ldap_mapping'              => $ldapConfig['ldap_mapping'],
+            'ldap_use_domain_prefix'    => $ldapConfig['ldap_use_domain_prefix'],
+            'ldap_options'              => $ldapConfig['ldap_options'],
+            'ldap_use_memberOf'         => $ldapConfig['ldap_use_memberOf'],
+            'ldap_use_sasl'             => $ldapConfig['ldap_use_sasl'],
+            'ldap_use_anonymous_login'  => $ldapConfig['ldap_use_anonymous_login']
+        ];
     }
 
     /**
@@ -237,6 +254,16 @@ class PMF_Configuration
     public function getLdapConfig()
     {
         return isset($this->config['core.ldapConfig']) ? $this->config['core.ldapConfig'] : [];
+    }
+
+    /**
+     * Returns the LDAP server(s)
+     *
+     * @return array
+     */
+    public function getLdapServer()
+    {
+        return isset($this->config['core.ldapServer']) ? $this->config['core.ldapServer'] : [];
     }
 
     /**
