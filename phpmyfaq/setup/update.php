@@ -832,6 +832,7 @@ if ($step == 3) {
         $faqConfig->delete('cache.varnishSecret');
         $faqConfig->delete('cache.varnishTimeout');
         $faqConfig->add('search.enableHighlighting', 'true');
+        $faqConfig->add('main.enableRssFeeds', 'true');
     }
 
     // Always the last step: Update version number
@@ -840,7 +841,7 @@ if ($step == 3) {
     }
 
     // optimize tables if possible
-    switch ($DB["type"]) {
+    switch ($DB['type']) {
         case 'mysqli':
             // Get all table names
             $faqConfig->getDb()->getTableNames(PMF_Db::getTablePrefix());

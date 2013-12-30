@@ -1197,3 +1197,4 @@ $PMF_LANG["msgAccessDenied"] = "Access denied.";
 $PMF_LANG["msgRelatedTags"] = 'Add Search Word';
 $PMF_LANG["msgPopularTags"] = 'Popular Search Words';
 $LANG_CONF["search.enableHighlighting"] = array(0 => "checkbox", 1 => "Highlight search terms");
+$LANG_CONF["main.enableRssFeeds"] = array(0 => "checkbox", 1 => "RSS Feeds (default: enabled)");

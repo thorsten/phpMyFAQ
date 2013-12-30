@@ -1154,3 +1154,4 @@ $PMF_LANG["msgAccessDenied"] = "Zugriff verweigert.";
 $PMF_LANG["msgRelatedTags"] = 'Suchwort hinzufügen';
 $PMF_LANG["msgPopularTags"] = 'Beliebte Suchwörter';
 $LANG_CONF["search.enableHighlighting"] = array(0 => "checkbox", 1 => "Gesuchte Wörter hervorheben");
+$LANG_CONF["main.enableRssFeeds"] = array(0 => "checkbox", 1 => "RSS Feeds (Standard: aktiviert)");

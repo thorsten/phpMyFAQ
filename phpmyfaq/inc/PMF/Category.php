@@ -657,18 +657,20 @@ class PMF_Category
                 $output .= str_repeat("\t", $level + 1)."<li>";
             }
 
-            if (0 == $number[$parent] && 0 == $level) {
+            if (0 === $number[$parent] && 0 === $level) {
                 $num_entries = '';
             } else {
                 $totFaqRecords += $number[$parent];
-                $num_entries    = '<span class="rssCategoryLink"> ('.$plr->GetMsg('plmsgEntries',$number[$parent]);
-                $num_entries   .= sprintf(
-                    ' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank"><img id="category_%d_RSS" src="assets/img/feed.png" width="16" height="16" alt="RSS"></a>',
-                    $parent,
-                    $this->language,
-                    $parent
-                );
-                $num_entries   .= ')</span>';
+                $num_entries = '<span class="rssCategoryLink"> (' . $plr->GetMsg('plmsgEntries',$number[$parent]);
+                if ($this->_config->get('main.enableRssFeeds')) {
+                    $num_entries .= sprintf(
+                        ' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank"><img id="category_%d_RSS" src="assets/img/feed.png" width="16" height="16" alt="RSS"></a>',
+                        $parent,
+                        $this->language,
+                        $parent
+                    );
+                }
+                $num_entries .= ')</span>';
             }
 
             $url = sprintf(

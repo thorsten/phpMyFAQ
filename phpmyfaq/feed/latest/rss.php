@@ -85,6 +85,10 @@ if (isset($user) && !is_null($user) && $user instanceof PMF_User_CurrentUser) {
 //
 PMF_String::init($LANGCODE);
 
+if (!$faqConfig->get('main.enableRssFeeds')) {
+    exit();
+}
+
 $faq = new PMF_Faq($faqConfig);
 $faq->setUser($current_user);
 $faq->setGroups($current_groups);

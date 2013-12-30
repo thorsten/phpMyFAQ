@@ -47,6 +47,10 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
 //
 PMF_String::init($LANGCODE);
 
+if (!$faqConfig->get('main.enableRssFeeds')) {
+    exit();
+}
+
 $oNews          = new PMF_News($faqConfig);
 $showArchive    = false;
 $active         = true;

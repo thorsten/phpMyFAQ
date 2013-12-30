@@ -304,6 +304,7 @@ class PMF_Installer
         'main.dateFormat'                         => 'Y-m-d H:i',
         'main.maintenanceMode'                    => 'false',
         'main.enableGravatarSupport'              => 'false',
+        'main.enableRssFeeds'                     => 'true',
 
         'records.numberOfRecordsPerPage'          => '10',
         'records.numberOfShownNewsEntries'        => '3',

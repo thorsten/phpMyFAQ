@@ -79,6 +79,10 @@ if (isset($user) && !is_null($user) && $user instanceof PMF_User_CurrentUser) {
     $current_groups = array(-1);
 }
 
+if (!$faqConfig->get('main.enableRssFeeds')) {
+    exit();
+}
+
 $category_id = PMF_Filter::filterInput(INPUT_GET, 'category_id', FILTER_VALIDATE_INT);
 $category    = new PMF_Category($faqConfig);
 $category->setUser($current_user);
