@@ -1,3 +1,23 @@
+CHANGED FILES FROM 2.8.4 -> 2.8.5
+
+./admin/ajax.tags_list.php
+./admin/editor/plugins/ajaxfilemanager/inc/class.upload.php
+./admin/record.edit.php
+./assets/template/default/artikel.tpl
+./inc/Bootstrap.php
+./inc/PMF/Auth/Ldap.php
+./inc/PMF/Auth/Sso.php
+./inc/PMF/Faq.php
+./inc/PMF/Language.php
+./inc/PMF/Services.php
+./inc/PMF/System.php
+./lang/language_nl.php
+./lang/language_pt.php
+./multisite/multisite.php
+./index.php
+
+
+
 CHANGED FILES FROM 2.8.3 -> 2.8.4
 
 ./admin/ajax.attachment.php
