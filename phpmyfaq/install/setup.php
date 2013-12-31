@@ -25,7 +25,7 @@
  * @since     2002-08-20
  */
 
-define('COPYRIGHT', '&copy; 2001-2013 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2014 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('PMF_INCLUDE_DIR', PMF_ROOT_DIR . '/inc');
 define('IS_VALID_PHPMYFAQ', null);

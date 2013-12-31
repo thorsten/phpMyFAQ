@@ -1,9 +1,12 @@
-phpMyFAQ 2.8.5
+phpMyFAQ 2.8.6
 Codename "Perdita"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.8.6 - 2014-
+- updated Hungarian translation
 
 Version 2.8.5 - 2013-12-31
 - fixed SSO logins with mod_auth_kerb (Stephane Lapie)
