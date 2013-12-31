@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Filesystem
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2013 phpMyFAQ Team
+ * @copyright 2012-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2012-04-02
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Filesystem
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2013 phpMyFAQ Team
+ * @copyright 2012-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2012-04-02

@@ -20,7 +20,7 @@
  * @package   Administration
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2013 NetJapan, Inc. and phpMyFAQ Team
+ * @copyright 2005-2014 NetJapan, Inc. and phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-30
