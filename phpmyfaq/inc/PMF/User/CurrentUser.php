@@ -18,7 +18,7 @@
  * @package   User
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2013 phpMyFAQ Team
+ * @copyright 2005-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-28
@@ -41,7 +41,7 @@ define('PMF_SESSION_ID_REFRESH', PMF_AUTH_TIMEOUT_WARNING);
  * @package   User
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2013 phpMyFAQ Team
+ * @copyright 2005-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-28

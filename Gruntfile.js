@@ -7,7 +7,7 @@ module.exports = function(grunt) {
         meta: {
             version: '2.9'
         },
-        banner: '/*! phpMyFAQ v2.9 - http://www.phpmyfaq.de - Copyright (c) 2001 - 2013 Thorsten Rinne and phpMyFAQ Team */\n',
+        banner: '/*! phpMyFAQ v2.9 - http://www.phpmyfaq.de - Copyright (c) 2001 - 2014 Thorsten Rinne and phpMyFAQ Team */\n',
         // Task configuration.
         bower: {
             install: {
