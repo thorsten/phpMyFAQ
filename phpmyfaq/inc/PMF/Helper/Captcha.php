@@ -77,7 +77,7 @@ class PMF_Helper_Captcha extends PMF_Helper
                 '<input type="text" name="captcha" id="captcha" size="%d" required class="form-control">',
                 $captcha->caplength
             );
-
+            $html .= '            <span class="input-group-btn"><i class="glyphicon glyphicon-refresh"></i></span>';
             $html .= '        </div>';
             $html .= '    </div>';
             $html .= '</div>';
