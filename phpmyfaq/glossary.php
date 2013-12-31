@@ -2,7 +2,7 @@
 /**
  * This is the page there a user can view all glossary items
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2013 phpMyFAQ Team
+ * @copyright 2012-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2012-09-03
@@ -24,6 +24,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     }
     header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
+}
+
+try {
+    $faqsession->userTracking('glossary', 0);
+} catch (PMF_Exception $e) {
+    // @todo handle the exception
 }
 
 $page = PMF_Filter::filterInput(INPUT_GET, 'page' , FILTER_VALIDATE_INT, 1);
@@ -50,7 +56,7 @@ $pagination = new PMF_Pagination($faqConfig, $options);
 
 if (0 < $numItems) {
         
-    $output       = array();
+    $output       = [];
     $visibleItems = array_slice($glossaryItems, ($page - 1) * $itemsPerPage, $itemsPerPage);
 
     foreach ($visibleItems as $item) {

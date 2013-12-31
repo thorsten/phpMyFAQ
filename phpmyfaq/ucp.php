@@ -2,7 +2,7 @@
 /**
  * User Control Panel
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2013 phpMyFAQ Team
+ * @copyright 2012-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2012-01-12
@@ -29,6 +29,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($user instanceof PMF_User) {
+
+    try {
+        $faqsession->userTracking('user_control_panel', $user->getUserData('display_name'));
+    } catch (PMF_Exception $e) {
+        // @todo handle the exception
+    }
 
     if ($faqConfig->get('main.enableGravatarSupport')) {
         $gravatar    = new PMF_Services_Gravatar($faqConfig);

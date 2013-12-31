@@ -2,7 +2,7 @@
 /**
  * The main User session class
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Session
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2013 phpMyFAQ Team
+ * @copyright 2007-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-31
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Session
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2013 phpMyFAQ Team
+ * @copyright 2007-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-31
@@ -136,12 +136,17 @@ class PMF_Session
                         str_replace(';', ',', $action) . ';' . 
                         $id . ';' . 
                         $remoteAddr . ';' .
-                        str_replace(';', ',', $_SERVER['QUERY_STRING']) . ';' . 
+                        str_replace(';', ',', isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '') . ';' .
                         str_replace(';', ',', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '') . ';' . 
                         str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])) . ';' . 
                         $_SERVER['REQUEST_TIME'] . ";\n";
                 $file = './data/tracking' . date('dmY');
-                file_put_contents($file, $data, FILE_APPEND);
+
+                if (is_writeable($file)) {
+                    file_put_contents($file, $data, FILE_APPEND);
+                } else {
+                    throw new PMF_Exception('Cannot write to ' . $file);
+                }
             }
         }
     }
@@ -187,7 +192,7 @@ class PMF_Session
      */
     public function getSessionsbyDate($firstHour, $lastHour)
     {
-        $sessions = array();
+        $sessions = [];
 
         $query = sprintf("
             SELECT
@@ -386,8 +391,8 @@ class PMF_Session
      */
     public function getLast30DaysVisits()
     {
-        $stats  = array();
-        $visits = array();
+        $stats  = [];
+        $visits = [];
 
         $startDate = strtotime('-1 month');
         $endDate   = $_SERVER['REQUEST_TIME'];

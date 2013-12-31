@@ -2,7 +2,7 @@
 /**
  * Utilities - Functions and Classes common to the whole phpMyFAQ architecture.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @package   PMF_Utils
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2005-2013 phpMyFAQ Team
+ * @copyright 2005-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-01
@@ -42,7 +42,7 @@ define('HTTP_PARAMS_GET_TYPE', 'type');
  * @package   PMF_Utils
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2005-2013 phpMyFAQ Team
+ * @copyright 2005-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-01
@@ -214,7 +214,7 @@ class PMF_Utils
      */
     public static function shuffleData($data)
     {
-        $shuffled_data = array();
+        $shuffled_data = [];
 
         if (is_array($data)) {
             if (count($data) > 1) {
@@ -309,15 +309,15 @@ class PMF_Utils
     {
         // sometimes Zend Optimizer causes segfaults with debug_backtrace()
         if (extension_loaded('Zend Optimizer')) {
-            $ret = "<code>" . $string . "</code><br />\n";
+            $ret = "<pre>" . $string . "</pre><br>\n";
         } else {
             $debug = debug_backtrace();
             $ret   = '';
             if (isset($debug[2]['class'])) {
-                $ret  = $debug[2]['file'] . ":<br />";
+                $ret  = $debug[2]['file'] . ":<br>";
                 $ret .= $debug[2]['class'].$debug[1]['type'];
                 $ret .= $debug[2]['function'] . '() in line ' . $debug[2]['line'];
-                $ret .= ": <code>" . $string . "</code><br />\n";
+                $ret .= ": <pre>" . $string . "</pre><br>\n";
             }
         }
         return $ret;

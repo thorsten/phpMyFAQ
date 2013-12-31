@@ -2,7 +2,7 @@
 /**
  * The main Stopwords class
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @package   PMF_Stopwords
  * @author    Anatoliy Belsky
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2009-2013 phpMyFAQ Team
+ * @copyright 2009-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-01
@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_Stopwords
  * @author    Anatoliy Belsky
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2009-2013 phpMyFAQ Team
+ * @copyright 2009-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-01
@@ -203,7 +203,7 @@ class PMF_Stopwords
         
         $result = $this->_config->getDb()->query($sql);
         
-        $retval = array();
+        $retval = [];
         
         if ($wordsOnly) {
             while(($row = $this->_config->getDb()->fetchObject($result)) == true) {
@@ -228,7 +228,7 @@ class PMF_Stopwords
     {
         $words      = explode(' ', $input);
         $stop_words = $this->getByLang(null, true); 
-        $retval     = array();
+        $retval     = [];
         
         foreach ($words as $word) {
             $word = PMF_String::strtolower($word);
@@ -277,9 +277,9 @@ class PMF_Stopwords
      */
     private function getBannedWords()
     {
-        $bannedTrimmedWords = array();
+        $bannedTrimmedWords = [];
         $bannedWordsFile    = PMF_INCLUDE_DIR . '/blockedwords.txt';
-        $bannedWords        = array();
+        $bannedWords        = [];
 
         // Read the dictionary
         if (file_exists($bannedWordsFile) && is_readable($bannedWordsFile)) {

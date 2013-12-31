@@ -3,7 +3,7 @@
  * List avaliable interface translations and actions
  * depending on user right
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2013 phpMyFAQ Team
+ * @copyright 2009-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-05-11
@@ -47,7 +47,6 @@ $sortedLangList = array();
 foreach ($transDir as $file) {
     if ($file->isFile() && '.php' == PMF_String::substr($file, -4) && 'bak' != PMF_String::substr($file, -7, -4)) {
         $lang = str_replace(array('language_', '.php'), '', $file);
-
         /**
          * English is our exemplary language which won't be changed
          */

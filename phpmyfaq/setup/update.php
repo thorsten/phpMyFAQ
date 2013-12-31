@@ -13,13 +13,13 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Thomas Melchinger <t.melchinger@uni.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2002-2013 phpMyFAQ Team
+ * @copyright 2002-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2002-01-10
  */
 
-define('COPYRIGHT', '&copy; 2001-2013 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2014 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
 
@@ -35,7 +35,7 @@ require PMF_ROOT_DIR . '/inc/Bootstrap.php';
 
 $step    = PMF_Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
 $version = PMF_Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);
-$query   = array();
+$query   = [];
 
 if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     require PMF_ROOT_DIR . '/inc/data.php'; // before 2.6.0-alpha
@@ -245,7 +245,7 @@ if ($step == 2) {
 /**************************** STEP 3 OF 3 ***************************/
 if ($step == 3) {
 
-    $images = array();
+    $images = [];
 
     //
     // UPDATES FROM 2.6.99
@@ -630,7 +630,7 @@ if ($step == 3) {
 
     // Clear the array with the queries
     unset($query);
-    $query = array();
+    $query = [];
 
     //
     // 2nd UPDATES FROM 2.8.0-alpha2
@@ -700,6 +700,11 @@ if ($step == 3) {
         $faqConfig->delete('cache.varnishPort');
         $faqConfig->delete('cache.varnishSecret');
         $faqConfig->delete('cache.varnishTimeout');
+        $faqConfig->add('search.enableHighlighting', 'true');
+        $faqConfig->add('main.enableRssFeeds', 'true');
+        $faqConfig->add('records.allowCommentsForGuests', 'true');
+        $faqConfig->add('records.allowQuestionsForGuests', 'true');
+        $faqConfig->add('records.allowNewFaqsForGuests', 'true');
     }
 
     // Always the last step: Update version number
@@ -708,7 +713,7 @@ if ($step == 3) {
     }
 
     // optimize tables if possible
-    switch ($DB["type"]) {
+    switch ($DB['type']) {
         case 'mysqli':
             // Get all table names
             $faqConfig->getDb()->getTableNames(PMF_Db::getTablePrefix());

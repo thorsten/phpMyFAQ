@@ -2,7 +2,7 @@
 /**
  * Helper class for phpMyFAQ search
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  * @package   Helper
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2013 phpMyFAQ Team
+ * @copyright 2009-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-07
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   Helper
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2013 phpMyFAQ Team
+ * @copyright 2009-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-07
@@ -291,7 +291,7 @@ class PMF_Helper_Search extends PMF_Helper
                 $searchterm    = preg_quote($searchterm, '/');
                 $searchItems   = explode(' ', $searchterm);
                 
-                if (PMF_String::strlen($searchItems[0]) > 1) {
+                if ($this->_config->get('search.enableHighlighting') && PMF_String::strlen($searchItems[0]) > 1) {
                     foreach ($searchItems as $item) {
                          if (PMF_String::strlen($item) > 2) {
                              $question      = PMF_Utils::setHighlightedString($question, $item);

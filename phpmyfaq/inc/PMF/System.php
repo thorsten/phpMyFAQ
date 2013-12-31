@@ -2,7 +2,7 @@
 /**
  * Class for checking system requirements
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  * @package   PMF_System
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2013 phpMyFAQ Team
+ * @copyright 2010-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-13
@@ -23,7 +23,7 @@
  * @category  phpMyFAQ
  * @package   PMF_System
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2013 phpMyFAQ Team
+ * @copyright 2010-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-13
@@ -78,7 +78,7 @@ class PMF_System
      *
      * @var array
      */
-    private $_missingExtensions = array();
+    private $_missingExtensions = [];
 
     /**
      * Supported databases for phpMyFAQ.
@@ -86,9 +86,9 @@ class PMF_System
      * @var  array
      */
     private $_supportedDatabases = array(
-        'mysqli'  => 'MySQL 5.x, MariaDB 5.x (ext/mysqli)',
-        'pgsql'   => 'PostgreSQL 8.x',
-        'sqlite'  => 'SQLite',
+        'mysqli'  => 'MySQL, MariaDB',
+        'pgsql'   => 'PostgreSQL',
+        'sqlite'  => 'SQLite (deprecated)',
         'sqlite3' => 'SQLite 3 (experimental)',
         'sqlsrv'  => 'MS SQL Server Driver for PHP'
     );
@@ -150,12 +150,12 @@ class PMF_System
      */
     public function getAvailableTemplates()
     {
-        $templates = array();
+        $templates = [];
 
         foreach (new DirectoryIterator(PMF_ROOT_DIR . '/assets/template') as $item) {
-
+            $basename = $item->getBasename();
             if (! $item->isDot() && $item->isDir()) {
-                $templates[$item->getBasename()] = (PMF_Template::getTplSetName() == $item->getBasename() ? true : false);
+                $templates[$basename] = (PMF_Template::getTplSetName() === $basename ? true : false);
             }
         }
 
@@ -191,7 +191,7 @@ class PMF_System
      */
     public function getSupportedSafeDatabases($html = false)
     {
-        $retVal = array();
+        $retVal = [];
         foreach ($this->getSupportedDatabases() as $extension => $database) {
             if (extension_loaded($extension)) {
                 // prevent MySQLi with zend.ze1_compatibility_mode enabled due to a few cloning isssues
@@ -217,7 +217,7 @@ class PMF_System
     public function checkDatabase()
     {
         foreach ($this->_supportedDatabases as $extension => $database) {
-            if (extension_loaded ($extension)) {
+            if (extension_loaded($extension)) {
                 return true;
             }
         }
@@ -233,7 +233,7 @@ class PMF_System
     public function checkRequiredExtensions()
     {
         foreach ($this->_requiredExtensions as $extension) {
-            if (!extension_loaded ( $extension)) {
+            if (!extension_loaded($extension)) {
                 $this->_missingExtensions[] = $extension;
             }
         }

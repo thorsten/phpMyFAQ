@@ -2,7 +2,7 @@
 /**
  * AJAX: handling of Ajax record calls
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @package   Administration
  * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2013 phpMyFAQ Team
+ * @copyright 2009-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-31
@@ -35,7 +35,7 @@ $ajax_action = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_
 // array( 0 => array((int)id, (string)langugage, (int) checked)),
 //        1 => .....
 // )
-$items = isset($_GET['items']) && is_array($_GET['items']) ? $_GET['items'] : array();
+$items = isset($_GET['items']) && is_array($_GET['items']) ? $_GET['items'] : [];
 
 if (!isset($items[0][2])) {
     $items[0][2] = 0;

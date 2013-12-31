@@ -3,7 +3,7 @@
  * The PMF_DB_Sqlsrv class provides methods and functions for SQL Server Driver
  * for PHP from Microsoft.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Db
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2013 phpMyFAQ Team
+ * @copyright 2009-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-02-18
@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Db
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2013 phpMyFAQ Team
+ * @copyright 2009-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-02-18
@@ -54,14 +54,14 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      *
      * @var array
      */
-    private $connectionOptions = array();
+    private $connectionOptions = [];
 
     /**
      * Tables
      *
      * @var array
      */
-    public $tableNames = array();
+    public $tableNames = [];
 
     /**
      * Connects to the database.
@@ -130,7 +130,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
             $this->sqllog .= PMF_Utils::debug($query);
         }
         $options = array('Scrollable' => SQLSRV_CURSOR_KEYSET);
-        $result  = sqlsrv_query($this->conn, $query, array(), $options);
+        $result  = sqlsrv_query($this->conn, $query, [], $options);
         if (!$result) {
             $this->sqllog .= $this->error();
         }
@@ -182,7 +182,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      */
     public function fetchAll($result)
     {
-        $ret = array();
+        $ret = [];
         if (false === $result) {
             throw new Exception('Error while fetching result: ' . $this->error());
         }
@@ -223,7 +223,7 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
      */
     public function getTableStatus()
     {
-        $tables = array();
+        $tables = [];
         $query  = "
             SELECT
                 obj.name AS table_name,

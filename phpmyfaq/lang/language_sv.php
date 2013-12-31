@@ -8,7 +8,7 @@
  * @author     Andreas <hq6830@yahoo.no>
  * @author     Thomas Höjemo <thomas@snt.se>
  * @since      2004-07-28
- * @copyright  2004-2013 phpMyFAQ Team
+ * @copyright  2004-2014 phpMyFAQ Team
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can

@@ -11,7 +11,7 @@
  * The Google Sitemap protocol is described here:
  * http://www.google.com/webmasters/sitemaps/docs/en/protocol.html
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -20,7 +20,7 @@
  * @category  phpMyFAQ
  * @package   SEO
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2006-2013 phpMyFAQ Team
+ * @copyright 2006-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2006-06-26

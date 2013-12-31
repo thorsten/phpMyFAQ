@@ -2,7 +2,7 @@
 /**
  * LDAP constants for phpMyFAQ.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @package   PMF_Ldap
  * @author    Lars Scheithauer <lars.scheithauer@googlemail.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2013 phpMyFAQ Team
+ * @copyright 2009-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-05
@@ -33,8 +33,8 @@ $PMF_LDAP['ldap_use_domain_prefix'] = true;
 // LDAP-options to set
 // refer to the documentation of ldap_set_option() for information on available options
 $PMF_LDAP["ldap_options"] = array (
-    LDAP_OPT_PROTOCOL_VERSION => 3,
-    LDAP_OPT_REFERRALS        => 0
+    'LDAP_OPT_PROTOCOL_VERSION' => 3,
+    'LDAP_OPT_REFERRALS'        => 0
 );
 
 // Option for adding a check on LDAP groups

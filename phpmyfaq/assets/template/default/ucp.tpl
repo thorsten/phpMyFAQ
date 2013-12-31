@@ -10,38 +10,40 @@
     <form class="form-horizontal" id="formValues" action="#" method="post" accept-charset="utf-8">
     <input type="hidden" name="userid" value="{userid}" />
 
-        <div class="control-group">
-            <label class="control-label" for="name">{msgRealName}:</label>
-            <div class="controls">
-                <input type="text" name="name" id="name" required="required" tabindex="1" value="{realname}">
+        <div class="form-group">
+            <label class="col-sm-4 control-label" for="name">{msgRealName}:</label>
+            <div class="col-sm-8 controls">
+                <input type="text" name="name" id="name" tabindex="1" value="{realname}" class="form-control" required>
             </div>
         </div>
 
-        <div class="control-group">
-            <label class="control-label" for="email">{msgEmail}:</label>
-            <div class="controls">
-                <input type="email" name="email" id="email" required="required" tabindex="2" value="{email}">
+        <div class="form-group">
+            <label class="col-sm-4 control-label" for="email">{msgEmail}:</label>
+            <div class="col-sm-8 controls">
+                <input type="email" name="email" id="email" tabindex="2" value="{email}" class="form-control" required>
             </div>
         </div>
 
-        <div class="control-group">
-            <label class="control-label" for="password">{msgPassword}:</label>
-            <div class="controls">
-                <input type="password" name="password" id="password" tabindex="3" value="">
+        <div class="form-group">
+            <label class="col-sm-4 control-label" for="password">{msgPassword}:</label>
+            <div class="col-sm-8 controls">
+                <input type="password" name="password" id="password" tabindex="3" class="form-control">
             </div>
         </div>
 
-        <div class="control-group">
-            <label class="control-label" for="password_confirm">{msgConfirm}:</label>
-            <div class="controls">
-                <input type="password" name="password_confirm" id="password_confirm" tabindex="4" value="">
+        <div class="form-group">
+            <label class="col-sm-4 control-label" for="password_confirm">{msgConfirm}:</label>
+            <div class="col-sm-8 controls">
+                <input type="password" name="password_confirm" id="password_confirm" tabindex="4" class="form-control">
             </div>
         </div>
 
         <div class="form-actions">
-            <button class="btn btn-primary" type="submit" id="submituserdata">
-                {msgSave}
-            </button>
+            <div class="col-sm-offset-4 col-sm-8">
+                <button class="btn btn-primary" type="submit" id="submituserdata">
+                    {msgSave}
+                </button>
+            </div>
         </div>
 
     </form>

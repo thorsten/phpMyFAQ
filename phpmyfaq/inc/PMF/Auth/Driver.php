@@ -2,7 +2,7 @@
 /**
  * Interface for managing user authentication
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @package   Auth
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Alberto Cabello <alberto@unex.es>
- * @copyright 2009-2013 phpMyFAQ Team
+ * @copyright 2009-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-01
@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   Auth
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Alberto Cabello <alberto@unex.es>
- * @copyright 2009-2013 phpMyFAQ Team
+ * @copyright 2009-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-01
@@ -87,7 +87,7 @@ interface PMF_Auth_Driver
      * @param  array  $optionalData Optional data
      * @return boolean
      */
-    public function checkPassword($login, $pass, Array $optionalData = array());
+    public function checkPassword($login, $pass, Array $optionalData = []);
 
     /**
      * Does nothing. A function required to be a valid auth.
@@ -96,5 +96,5 @@ interface PMF_Auth_Driver
      * @param  array  $optionalData Optional data
      * @return integer
      */
-    public function checkLogin($login, Array $optionalData = array());
+    public function checkLogin($login, Array $optionalData = []);
 }

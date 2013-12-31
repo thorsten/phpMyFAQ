@@ -2,7 +2,7 @@
 /**
  * Select an attachment and save it
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2002-2013 phpMyFAQ
+ * @copyright 2002-2014 phpMyFAQ
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-17
@@ -67,7 +67,7 @@ if ($user) {
 //
 // Get current user rights
 //
-$permission = array();
+$permission = [];
 if ($auth === true) {
     // read all rights, set them FALSE
     $allRights = $user->perm->getAllRightsData();

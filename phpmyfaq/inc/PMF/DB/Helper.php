@@ -2,7 +2,7 @@
 /**
  * Helper class for database drivers
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @package   DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2012-2013 phpMyFAQ Team
+ * @copyright 2012-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2012-04-12
@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2012-2013 phpMyFAQ Team
+ * @copyright 2012-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2012-04-12
@@ -64,15 +64,15 @@ class PMF_DB_Helper
     public function buildInsertQueries($query, $table)
     {
         if (!$result = $this->_config->getDb()->query($query)) {
-            array();
+            [];
         }
-        $ret = array();
+        $ret = [];
 
         $ret[] = "\r\n-- Table: ".$table;
 
         while ($row = $this->_config->getDb()->fetchArray($result)) {
-            $p1 = array();
-            $p2 = array();
+            $p1 = [];
+            $p2 = [];
             foreach ($row as $key => $val) {
                 $p1[] = $key;
                 if ('rights' != $key && is_numeric($val)) {
@@ -132,7 +132,7 @@ class PMF_DB_Helper
     private static function alignTablePrefixByPattern($query, $startPattern, $oldValue, $newValue)
     {
         $return  = $query;
-        $matches = array();
+        $matches = [];
 
         PMF_String::preg_match_all("/^" . $startPattern . "\s+(\w+)(\s+|$)/i", $query, $matches);
 

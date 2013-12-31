@@ -214,20 +214,25 @@
 // Footer
 //
 footer {
-    background: @gray-darker;
-    padding-top: 30px;
+  background: @gray-darker;
+  padding-top: 30px;
 
-    ul.footer-menu {
+  ul.footer-menu {
+    list-style: none outside none;
+    li {
+      float: left;
       list-style: none outside none;
-      li {
-        float: left;
-        list-style: none outside none;
-        margin-right: 22px;
-      }
+      margin-right: 22px;
     }
+  }
 
-    .copyright {
-      font-size: @font-size-small;
-      color: @gray-light;
-    }
+  .copyright {
+    font-size: @font-size-small;
+    color: @gray-light;
+  }
+
+  .debug-mode {
+    background-color: @gray-light;
+    color: @gray-darker;
+  }
 }

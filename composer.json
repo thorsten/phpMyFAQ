@@ -60,7 +60,10 @@
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
-        "phpunit/dbunit":  "*"
+        "phpunit/dbunit": "1.3.*"
+    },
+    "config": {
+        "bin-dir": "bin"
     },
     "minimum-stability": "stable",
     "scripts": {

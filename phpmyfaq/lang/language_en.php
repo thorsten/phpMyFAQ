@@ -2,7 +2,7 @@
 /**
  * The English language file - try to be the best of British and American English
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -13,7 +13,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matthias Sommerfeld <mso@bluebirdy.de>
  * @author    Henning Schulzrinne <hgs@cs.columbia.edu>
- * @copyright 2004-2013 phpMyFAQ Team
+ * @copyright 2004-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-19
@@ -1192,3 +1192,12 @@ $PMF_LANG["msgAboutThisNews"] = "About this news";
 
 // added v.2.8.1 - 2013-06-23 by Thorsten
 $PMF_LANG["msgAccessDenied"] = "Access denied.";
+
+// added v.2.9.0-alpha - 2013-12-26 by Thorsten
+$PMF_LANG["msgRelatedTags"] = 'Add Search Word';
+$PMF_LANG["msgPopularTags"] = 'Popular Search Words';
+$LANG_CONF["search.enableHighlighting"] = array(0 => "checkbox", 1 => "Highlight search terms");
+$LANG_CONF["main.enableRssFeeds"] = array(0 => "checkbox", 1 => "RSS Feeds (default: enabled)");
+$LANG_CONF["records.allowCommentsForGuests"] = array(0 => "checkbox", 1 => "Allow comments for guests (default: enabled)");
+$LANG_CONF["records.allowQuestionsForGuests"] = array(0 => "checkbox", 1 => "Allow adding questions for guests (default: enabled)");
+$LANG_CONF["records.allowNewFaqsForGuests"] = array(0 => "checkbox", 1 => "Allow adding new FAQs (default: enabled)");

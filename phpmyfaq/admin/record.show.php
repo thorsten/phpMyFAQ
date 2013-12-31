@@ -2,7 +2,7 @@
 /**
  * Shows the list of records ordered by categories
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Minoru TODA <todam@netjapan.co.jp>
- * @copyright 2003-2013 phpMyFAQ Team
+ * @copyright 2003-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-23
@@ -34,7 +34,7 @@ printf(
 
 if ($permission['editbt'] || $permission['delbt']) {
 
-    $category = new PMF_Category($faqConfig, array(), false);
+    $category = new PMF_Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $category->transform(0);
@@ -101,7 +101,7 @@ if ($permission['editbt'] || $permission['delbt']) {
             function verifyEntryURL_success(XmlRequest)
             {
                 //target.src = "images/url-" + XmlRequest.responseText + ".png";
-                var allResponses = new Array();
+                var allResponses = new [];
                 allResponses['batch1'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-batch1']); ?>";
                 allResponses['batch2'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-batch2']); ?>";
                 allResponses['batch3'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-batch3']); ?>";
@@ -180,10 +180,10 @@ if ($permission['editbt'] || $permission['delbt']) {
 
     if (count($faq->faqRecords) > 0) {
         $old     = 0;
-        $all_ids = array();
+        $all_ids = [];
 
         $visits    = new PMF_Visits($faqConfig);
-        $numVisits = array();
+        $numVisits = [];
         foreach ($visits->getAllData() as $visit) {
             $numVisits[$visit['id']] = $visit['lang'];
         }

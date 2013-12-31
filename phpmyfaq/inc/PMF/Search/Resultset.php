@@ -2,7 +2,7 @@
 /**
  * Implements resultsets for phpMyFAQ search classes
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  * @package   Search
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2013 phpMyFAQ Team
+ * @copyright 2010-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   Search
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2013 phpMyFAQ Team
+ * @copyright 2010-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
@@ -45,7 +45,7 @@ class PMF_Search_Resultset
      *
      * @var array
      */
-    protected $rawResultset = array();
+    protected $rawResultset = [];
     
     /**
      * "Reviewed" search resultset with checked permissions and without 
@@ -53,7 +53,7 @@ class PMF_Search_Resultset
      *
      * @var array
      */
-    protected $reviewedResultset = array();
+    protected $reviewedResultset = [];
     
     /**
      * Ordering of resultset
@@ -110,7 +110,7 @@ class PMF_Search_Resultset
     {
         $this->setResultset($resultset);
         
-        $duplicateResults = array();
+        $duplicateResults = [];
         $currentUserId    = $this->user->getUserId();
         if ('medium' == $this->_config->get('security.permLevel')) {
             $currentGroupIds = $this->user->perm->getUserGroups($currentUserId);

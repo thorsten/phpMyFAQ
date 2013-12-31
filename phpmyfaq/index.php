@@ -5,7 +5,7 @@
  * the templates we need and set all internal variables to the template
  * variables. That's all.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -16,7 +16,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2001-2013 phpMyFAQ Team
+ * @copyright 2001-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2001-02-12
@@ -148,7 +148,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
 //
 // Get current user rights
 //
-$permission = array();
+$permission = [];
 if (isset($auth)) {
     // read all rights, set them FALSE
     $allRights = $user->perm->getAllRightsData();
@@ -223,7 +223,11 @@ if (isset($_SERVER['HTTP_USER_AGENT'])) {
 if (!$internal) {
     if (is_null($sidGet) && is_null($sidCookie)) {
         // Create a per-site unique SID
-        $faqsession->userTracking('new_session', 0);
+        try {
+            $faqsession->userTracking('new_session', 0);
+        } catch (PMF_Exception $e) {
+            $pmfExeptions[] = $e->getMessage();
+        }
     } else {
         if (!is_null($sidCookie)) {
             $faqsession->checkSessionId($sidCookie, $_SERVER['REMOTE_ADDR']);
@@ -487,8 +491,6 @@ $tplMainPage = array(
     'action'               => $action,
     'dir'                  => $PMF_LANG['dir'],
     'msgCategory'          => $PMF_LANG['msgCategory'],
-    'showCategories'       => $categoryHelper->renderNavigation($cat),
-    'topCategories'        => $categoryHelper->renderMainCategories(),
     'msgExportAllFaqs'     => $PMF_LANG['msgExportAllFaqs'],
     'languageBox'          => $PMF_LANG['msgLangaugeSubmit'],
     'writeLangAdress'      => $writeLangAdress,
@@ -510,6 +512,15 @@ $tplMainPage = array(
     'msgUsername'          => $PMF_LANG['ad_auth_user'],
     'msgEmail'             => $PMF_LANG['ad_entry_email'],
     'msgSubmit'            => $PMF_LANG['msgNewContentSubmit']
+);
+
+$tpl->parseBlock(
+    'index',
+    'categoryListSection',
+    array(
+        'showCategories' => $categoryHelper->renderNavigation($cat),
+        'topCategories'  => $categoryHelper->renderMainCategories(),
+    )
 );
 
 if ('main' == $action || 'show' == $action) {
@@ -594,19 +605,6 @@ $tplNavigation['activeAddQuestion']   = ('ask' == $action) ? 'active' : '';
 $tplNavigation['activeOpenQuestions'] = ('open' == $action) ? 'active' : '';
 
 //
-// Add debug info if needed
-//
-if (DEBUG) {
-    $tplDebug = array(
-        'debugMessages' => '<div id="debug_main"><h2>DEBUG INFORMATION:</h2>' . $faqConfig->getDb()->log() . '</div>'
-    );
-} else {
-    $tplDebug = array(
-        'debugMessages' => ''
-    );
-}
-
-//
 // Show login box or logged-in user information
 //
 if (isset($auth)) {
@@ -655,11 +653,6 @@ if (isset($auth)) {
         )
     );
 }
-
-//
-// Get main template, set main variables
-//
-$tpl->parse('index', array_merge($tplMainPage, $tplNavigation, $tplDebug));
 
 // generate top ten list
 if ($faqConfig->get('records.orderingPopularFaqs') == 'visits') {
@@ -748,6 +741,22 @@ $tpl->parse(
         'allCatArticles'      => $faq->showAllRecordsWoPaging($cat)
     )
 );
+
+if (DEBUG) {
+    $tpl->parseBlock(
+        'index',
+        'debugMode',
+        array(
+            'debugExceptions' => implode('<br>', $pmfExeptions),
+            'debugQueries'    => $faqConfig->getDb()->log()
+        )
+    );
+}
+
+//
+// Get main template, set main variables
+//
+$tpl->parse('index', array_merge($tplMainPage, $tplNavigation));
 
 $tpl->merge('rightBox', 'index');
 

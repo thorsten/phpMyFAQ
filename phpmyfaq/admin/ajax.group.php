@@ -2,7 +2,7 @@
 /**
  * AJAX: handling of Ajax group calls
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2013 phpMyFAQ Team
+ * @copyright 2009-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-06
@@ -37,12 +37,12 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     
     $user      = new PMF_User($faqConfig);
     $userList  = $user->getAllUsers();
-    $groupList = ($user->perm instanceof PMF_Perm_Medium) ? $user->perm->getAllGroups() : array();
+    $groupList = ($user->perm instanceof PMF_Perm_Medium) ? $user->perm->getAllGroups() : [];
 
     switch ($ajaxAction) {
         // Returns all groups
         case 'get_all_groups':
-            $groups = array();
+            $groups = [];
             foreach ($groupList as $groupId) {
                 $data     = $user->perm->getGroupData($groupId);
                 $groups[] = array(
@@ -65,7 +65,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     
         // Return all users
         case 'get_all_users':
-            $users = array();
+            $users = [];
             foreach ($userList as $single_user) {
                 $user->getUserById($single_user);
                 $users[] = array('user_id' => $user->getUserId(),
@@ -77,7 +77,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
         // Returns all group members
         case 'get_all_members':
             $memberList = $user->perm->getGroupMembers($groupId);
-            $members    = array();
+            $members    = [];
             foreach ($memberList as $single_member) {
                 $user->getUserById($single_member);
                 $members[] = array('user_id' => $user->getUserId(),

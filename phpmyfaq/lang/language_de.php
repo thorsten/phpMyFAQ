@@ -2,7 +2,7 @@
 /**
  * German language file
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -13,7 +13,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    A. Neufang <B_A_F_F@gmx.de>
  * @author    René-Roger Ziesack <rr-phpmyfaq.de@inf99.de>
- * @copyright 2004-2013 phpMyFAQ Team
+ * @copyright 2004-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-19
@@ -1149,3 +1149,12 @@ $PMF_LANG["msgAboutThisNews"] = "Über diese Nachricht";
 
 // added v.2.8.1 - 2013-06-23 by Thorsten
 $PMF_LANG["msgAccessDenied"] = "Zugriff verweigert.";
+
+// added v.2.9.0-alpha - 2013-12-26 by Thorsten
+$PMF_LANG["msgRelatedTags"] = 'Suchwort hinzufügen';
+$PMF_LANG["msgPopularTags"] = 'Beliebte Suchwörter';
+$LANG_CONF["search.enableHighlighting"] = array(0 => "checkbox", 1 => "Gesuchte Wörter hervorheben");
+$LANG_CONF["main.enableRssFeeds"] = array(0 => "checkbox", 1 => "RSS Feeds (Standard: aktiviert)");
+$LANG_CONF["records.allowCommentsForGuests"] = array(0 => "checkbox", 1 => "Erlaube Kommentare vom Gästen (Standard: aktiviert)");
+$LANG_CONF["records.allowQuestionsForGuests"] = array(0 => "checkbox", 1 => "Erlaube Fragen vom Gästen (Standard: aktiviert)");
+$LANG_CONF["records.allowNewFaqsForGuests"] = array(0 => "checkbox", 1 => "Erlaube neue FAQs vom Gästen (Standard: aktiviert)");

@@ -2,7 +2,7 @@
 /**
  * Frontend for categories or list of records
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2013 phpMyFAQ Team
+ * @copyright 2002-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-27
@@ -31,7 +31,11 @@ $subCategoryContent  = '';
 
 if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory])) {
 
-    $faqsession->userTracking('show_category', $currentCategory);
+    try {
+        $faqsession->userTracking('show_category', $currentCategory);
+    } catch (PMF_Exception $e) {
+        // @todo handle the exception
+    }
 
     $catParent      = $category->categoryName[$currentCategory]['parent_id'];
     $catName        = $category->categoryName[$currentCategory]['name'];
@@ -90,7 +94,12 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
 
 } else {
 
-    $faqsession->userTracking('show_all_categories', 0);
+    try {
+        $faqsession->userTracking('show_all_categories', 0);
+    } catch (PMF_Exception $e) {
+        // @todo handle the exception
+    }
+
     $tpl->parse(
         'writeContent',
         array(

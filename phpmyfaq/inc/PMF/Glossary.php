@@ -2,7 +2,7 @@
 /**
  * The main glossary class
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Glossary
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2013 phpMyFAQ Team
+ * @copyright 2005-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-15
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_Glossary
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2013 phpMyFAQ Team
+ * @copyright 2005-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-15
@@ -44,7 +44,7 @@ class PMF_Glossary
      *
      * @var array
      */
-    private $item = array();
+    private $item = [];
 
     /**
      * Definition of an item
@@ -72,7 +72,7 @@ class PMF_Glossary
      */
     public function getAllGlossaryItems()
     {
-        $items = array();
+        $items = [];
 
         $query = sprintf("
             SELECT
@@ -203,7 +203,7 @@ class PMF_Glossary
      */
     public function getGlossaryItem($id)
     {
-        $item = array();
+        $item = [];
 
         $query = sprintf("
             SELECT

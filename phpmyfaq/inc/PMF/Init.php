@@ -2,7 +2,7 @@
 /**
  * Some basic functions and PMF_Init class.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -18,7 +18,7 @@
  * @author    Stefan Esser <sesser@php.net>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Christian Stocker <chregu@bitflux.ch>
- * @copyright 2005-2013 phpMyFAQ Team
+ * @copyright 2005-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-24
@@ -42,7 +42,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Stefan Esser <sesser@php.net>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Christian Stocker <chregu@bitflux.ch>
- * @copyright 2005-2013 phpMyFAQ Team
+ * @copyright 2005-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-24
@@ -241,7 +241,7 @@ class PMF_Init
             die('Deep recursion attack detected.');
         }
 
-        $cleanData = array();
+        $cleanData = [];
         foreach ($data as $key => $val) {
             $key = self::_basicXSSClean($key);
             if (is_array($val)) {

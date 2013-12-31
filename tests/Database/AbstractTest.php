@@ -2,7 +2,7 @@
 /**
  * Abstract class for manage different databases.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -28,7 +28,7 @@ require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Db.php';
  * @author    Gustavo Solt <gustavo.solt@mayflower.de>
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @copyright 2009-2013 phpMyFAQ Team
+ * @copyright 2009-2014 phpMyFAQ Team
  * @since     2009-05-16
  */
 abstract class Database_AbstractTest extends PHPUnit_Extensions_Database_TestCase

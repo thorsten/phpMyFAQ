@@ -7,7 +7,7 @@ module.exports = function(grunt) {
         meta: {
             version: '3.0'
         },
-        banner: '/*! phpMyFAQ v3.0 - http://www.phpmyfaq.de - Copyright (c) 2001 - 2013 Thorsten Rinne and phpMyFAQ Team */\n',
+        banner: '/*! phpMyFAQ v3.0 - http://www.phpmyfaq.de - Copyright (c) 2001 - 2014 Thorsten Rinne and phpMyFAQ Team */\n',
         // Task configuration.
         bower: {
             install: {
@@ -21,8 +21,8 @@ module.exports = function(grunt) {
             },
             dist: {
                 src: [
-                    'phpmyfaq/assets/js/libs/jquery.min.js',
-                    'components//bootstrap/js/tooltip.js',
+                    'components/jquery/jquery.js',
+                    'components/bootstrap/js/tooltip.js',
                     'components/bootstrap/js/transition.js',
                     'components/bootstrap/js/alert.js',
                     'components/bootstrap/js/button.js',

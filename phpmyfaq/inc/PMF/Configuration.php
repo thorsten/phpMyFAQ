@@ -3,7 +3,7 @@
  * The main class for fetching the configuration, update and delete items. This
  * class is also a small Dependency Injection Container for phpMyFAQ.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @category  phpMyFAQ
  * @package   Configuration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2006-2013 phpMyFAQ Team
+ * @copyright 2006-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2006-01-04
@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   Configuration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2006-2013 phpMyFAQ Team
+ * @copyright 2006-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2006-01-04
@@ -47,7 +47,7 @@ class PMF_Configuration
      *
      * @var array
      */
-    public $config = array();
+    public $config = [];
 
     /**
      * Constructor
@@ -212,21 +212,38 @@ class PMF_Configuration
      */
     public function setLdapConfig(Array $ldapConfig)
     {
+        // Always add main LDAP server
+        $this->config['core.ldapServer'][0] = [
+            'ldap_server'   => $ldapConfig['ldap_server'],
+            'ldap_port'     => $ldapConfig['ldap_port'],
+            'ldap_user'     => $ldapConfig['ldap_user'],
+            'ldap_password' => $ldapConfig['ldap_password'],
+            'ldap_base'     => $ldapConfig['ldap_base']
+        ];
+
+        // Add multiple LDAP servers if enabled
         if (true === $ldapConfig['ldap_use_multiple_servers']) {
-            // Multiple LDAP servers
-            $key = 0;
-            while ($key >= 0) {
+            $key = 1;
+            while ($key >= 1) {
                 if (isset($ldapConfig[$key])) {
-                    $this->config['core.ldapConfig'][$key] = $ldapConfig[$key];
+                    $this->config['core.ldapServer'][$key] = $ldapConfig[$key];
                     $key++;
                 } else {
                     break;
                 }
             }
-        } else {
-            // one LDAP server
-            $this->config['core.ldapConfig'] = $ldapConfig;
         }
+
+        // Set LDAP configuration
+        $this->config['core.ldapConfig'] = [
+            'ldap_use_multiple_servers' => $ldapConfig['ldap_use_multiple_servers'],
+            'ldap_mapping'              => $ldapConfig['ldap_mapping'],
+            'ldap_use_domain_prefix'    => $ldapConfig['ldap_use_domain_prefix'],
+            'ldap_options'              => $ldapConfig['ldap_options'],
+            'ldap_use_memberOf'         => $ldapConfig['ldap_use_memberOf'],
+            'ldap_use_sasl'             => $ldapConfig['ldap_use_sasl'],
+            'ldap_use_anonymous_login'  => $ldapConfig['ldap_use_anonymous_login']
+        ];
     }
 
     /**
@@ -236,7 +253,17 @@ class PMF_Configuration
      */
     public function getLdapConfig()
     {
-        return isset($this->config['core.ldapConfig']) ? $this->config['core.ldapConfig'] : array();
+        return isset($this->config['core.ldapConfig']) ? $this->config['core.ldapConfig'] : [];
+    }
+
+    /**
+     * Returns the LDAP server(s)
+     *
+     * @return array
+     */
+    public function getLdapServer()
+    {
+        return isset($this->config['core.ldapServer']) ? $this->config['core.ldapServer'] : [];
     }
 
     /**

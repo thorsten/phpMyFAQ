@@ -65,6 +65,7 @@
             "description": "Symfony ClassLoader Component",
             "homepage": "http://symfony.com",
             "time": "2013-11-26 16:40:27"
+<<<<<<< HEAD
         },
         {
             "name": "symfony/http-foundation",
@@ -115,6 +116,8 @@
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
             "time": "2013-11-28 10:27:26"
+=======
+>>>>>>> e544c50e8c98eee2232c8fd85471c91edb6dec2e
         },
         {
             "name": "tcpdf",
@@ -359,6 +362,7 @@
             "version": "1.1.4",
             "source": {
                 "type": "git",
+<<<<<<< HEAD
                 "url": "git://github.com/sebastianbergmann/php-text-template.git",
                 "reference": "1.1.4"
             },
@@ -366,6 +370,15 @@
                 "type": "zip",
                 "url": "https://github.com/sebastianbergmann/php-text-template/zipball/1.1.4",
                 "reference": "1.1.4",
+=======
+                "url": "https://github.com/sebastianbergmann/php-text-template.git",
+                "reference": "5180896f51c5b3648ac946b05f9ec02be78a0b23"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-text-template/zipball/5180896f51c5b3648ac946b05f9ec02be78a0b23",
+                "reference": "5180896f51c5b3648ac946b05f9ec02be78a0b23",
+>>>>>>> e544c50e8c98eee2232c8fd85471c91edb6dec2e
                 "shasum": ""
             },
             "require": {
@@ -396,7 +409,11 @@
             "keywords": [
                 "template"
             ],
+<<<<<<< HEAD
             "time": "2012-10-31 11:15:28"
+=======
+            "time": "2012-10-31 18:15:28"
+>>>>>>> e544c50e8c98eee2232c8fd85471c91edb6dec2e
         },
         {
             "name": "phpunit/php-timer",
@@ -571,6 +588,7 @@
             "version": "1.2.3",
             "source": {
                 "type": "git",
+<<<<<<< HEAD
                 "url": "git://github.com/sebastianbergmann/phpunit-mock-objects.git",
                 "reference": "1.2.3"
             },
@@ -578,6 +596,15 @@
                 "type": "zip",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects/archive/1.2.3.zip",
                 "reference": "1.2.3",
+=======
+                "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
+                "reference": "5794e3c5c5ba0fb037b11d8151add2a07fa82875"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/5794e3c5c5ba0fb037b11d8151add2a07fa82875",
+                "reference": "5794e3c5c5ba0fb037b11d8151add2a07fa82875",
+>>>>>>> e544c50e8c98eee2232c8fd85471c91edb6dec2e
                 "shasum": ""
             },
             "require": {

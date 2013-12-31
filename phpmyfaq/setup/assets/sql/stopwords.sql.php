@@ -6,7 +6,7 @@
  * @subpackage Installation
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2009-05-04
- * @copyright  2009-2013 phpMyFAQ Team
+ * @copyright  2009-2014 phpMyFAQ Team
  * @version    SVN: $Id$
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,

@@ -2,7 +2,7 @@
 /**
  * phpMyFAQ database based search classes
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  * @package   Search
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2013 phpMyFAQ Team
+ * @copyright 2010-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   Search
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2013 phpMyFAQ Team
+ * @copyright 2010-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
@@ -53,28 +53,28 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      *
      * @var array
      */
-    protected $resultColumns = array();
+    protected $resultColumns = [];
     
     /**
      * Columns for the joined table
      *
      * @var array
      */
-    protected $joinedColumns = array();
+    protected $joinedColumns = [];
     
     /**
      * Matching columns for the search
      *
      * @var array
      */
-    protected $matchingColumns = array();
+    protected $matchingColumns = [];
     
     /**
      * Conditions columns with their values
      *
      * @var array
      */
-    protected $conditions = array();
+    protected $conditions = [];
     
     /**
      * Constructor

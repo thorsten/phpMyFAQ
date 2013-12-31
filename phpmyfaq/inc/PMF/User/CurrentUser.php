@@ -8,7 +8,7 @@
  * getFromCookie() or manually. login(), getFromSession() and getFromCookie() may
  * be combined.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -18,7 +18,7 @@
  * @package   User
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2013 phpMyFAQ Team
+ * @copyright 2005-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-28
@@ -41,7 +41,7 @@ define('PMF_SESSION_ID_REFRESH', PMF_AUTH_TIMEOUT_WARNING);
  * @package   User
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2013 phpMyFAQ Team
+ * @copyright 2005-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-28
@@ -84,7 +84,7 @@ class PMF_User_CurrentUser extends PMF_User
      *
      * @var array
      */
-    private $_ldapConfig = array();
+    private $_ldapConfig = [];
 
     /**
      * Remember me activated or deactivated
@@ -127,7 +127,7 @@ class PMF_User_CurrentUser extends PMF_User
      */
     public function login($login, $password)
     {
-        $optData = array();
+        $optData = [];
         if (isset($this->_ldapConfig['ldap_use_domain_prefix'])) {
             if (($pos = strpos($login, '\\')) !== false) {
                 if ($pos !== 0) {
@@ -289,7 +289,7 @@ class PMF_User_CurrentUser extends PMF_User
            
         $res = $this->config->getDb()->query($select);
         if (!$res or $this->config->getDb()->numRows($res) != 1) {
-            return array();
+            return [];
         }
         return $this->config->getDb()->fetchArray($res);
     }

@@ -13,6 +13,10 @@
     "font-awesome": "~4.0.3",
     "sparkline": "~2.1.2",
     "tinymce": "~4.0.12",
-    "jquery": "1.10.2"
+    "jquery": "1.10.2",
+    "bootstrap-datepicker": "~1.2.0"
+  },
+  "resolutions": {
+    "bootstrap": "~3.0.3"
   }
 }

@@ -12,7 +12,7 @@
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2005-2013 phpMyFAQ Team
+ * @copyright 2005-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-26
@@ -52,7 +52,7 @@ if ($permission['editconfig']) {
 
         // Set the new values
         $forbiddenValues = array('{', '}', '$');
-        $newConfigValues = array();
+        $newConfigValues = [];
         foreach ($editData['edit'] as $key => $value) {
             $newConfigValues[$key] = str_replace($forbiddenValues, '', $value);
             $keyArray              = array_values(explode('.', $key));

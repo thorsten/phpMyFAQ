@@ -2,7 +2,7 @@
 /**
  * Attachment handler class 
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -14,7 +14,7 @@
  * @since     2009-08-21
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @copyright 2009-2013 phpMyFAQ Team
+ * @copyright 2009-2014 phpMyFAQ Team
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -30,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @since     2009-08-21
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @copyright 2009-2013 phpMyFAQ Team
+ * @copyright 2009-2014 phpMyFAQ Team
  */
 class PMF_Attachment_Factory
 {
@@ -110,7 +110,7 @@ class PMF_Attachment_Factory
      */
     public static function fetchByRecordId(PMF_Configuration $config, $recordId)
     {
-        $retval = array();
+        $retval = [];
         
         $sql = sprintf("
             SELECT

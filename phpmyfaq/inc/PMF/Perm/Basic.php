@@ -2,7 +2,7 @@
 /**
  * The basic permission class provides user rights.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,7 +11,7 @@
  * @category  phpMyFAQ 
  * @package   Perm
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2005-2013 phpMyFAQ Team
+ * @copyright 2005-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ 
  * @package   Perm
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2005-2013 phpMyFAQ Team
+ * @copyright 2005-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
@@ -136,7 +136,7 @@ class PMF_Perm_Basic extends PMF_Perm
             $user_id);
             
         $res    = $this->config->getDb()->query($select);
-        $result = array();
+        $result = [];
         while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row['right_id'];
         }
@@ -463,7 +463,7 @@ class PMF_Perm_Basic extends PMF_Perm
             PMF_Db::getTablePrefix());
             
         $res    = $this->config->getDb()->query($select);
-        $result = array();
+        $result = [];
         while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row['right_id'];
         }
@@ -498,7 +498,7 @@ class PMF_Perm_Basic extends PMF_Perm
             $order);
             
         $res    = $this->config->getDb()->query($select);
-        $result = array();
+        $result = [];
         $i      = 0;
         
         while ($row = $this->config->getDb()->fetchArray($res)) {

@@ -2,7 +2,7 @@
 /**
  * Displays the group management frontend
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @package   Administration
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2013 phpMyFAQ Team
+ * @copyright 2005-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-15
@@ -54,8 +54,8 @@ if ($groupAction == 'update_members' && $permission['editgroup']) {
     $message      = '';
     $groupAction  = $defaultGroupAction;
     $groupId      = PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
-    $groupMembers = isset($_POST['group_members']) ? $_POST['group_members'] : array();
-
+    $groupMembers = isset($_POST['group_members']) ? $_POST['group_members'] : [];
+    
     if ($groupId == 0) {
         $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
     } else {
@@ -82,9 +82,9 @@ if ($groupAction == 'update_rights' && $permission['editgroup']) {
     if ($groupId == 0) {
         $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
     } else {
-        $user        = new PMF_User($faqConfig);
-        $perm        = $user->perm;
-        $groupRights = isset($_POST['group_rights']) ? $_POST['group_rights'] : array();
+        $user = new PMF_User($faqConfig);
+        $perm = $user->perm;
+        $groupRights = isset($_POST['group_rights']) ? $_POST['group_rights'] : [];
         if (!$perm->refuseAllGroupRights($groupId)) {
             $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
         }
@@ -106,7 +106,7 @@ if ($groupAction == 'update_data' && $permission['editgroup']) {
     if ($groupId == 0) {
         $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
     } else {
-        $groupData  = array();
+        $groupData  = [];
         $dataFields = array('name', 'description', 'auto_join');
         foreach ($dataFields as $field) {
             $groupData[$field] = PMF_Filter::filterInput(INPUT_POST, $field, FILTER_SANITIZE_STRING, '');
@@ -175,7 +175,7 @@ if ($groupAction == 'delete' && $permission['delgroup']) {
 if ($groupAction == 'addsave' && $permission['addgroup']) {
     $user              = new PMF_User($faqConfig);
     $message           = '';
-    $messages          = array();
+    $messages          = [];
     $group_name        = PMF_Filter::filterInput(INPUT_POST, 'group_name', FILTER_SANITIZE_STRING, '');
     $group_description = PMF_Filter::filterInput(INPUT_POST, 'group_description', FILTER_SANITIZE_STRING, '');
     $group_auto_join   = PMF_Filter::filterInput(INPUT_POST, 'group_auto_join', FILTER_SANITIZE_STRING, '');

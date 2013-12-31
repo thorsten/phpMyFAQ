@@ -2,7 +2,7 @@
 /**
  * The main FAQ class
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -15,7 +15,7 @@
  * @author    Georgi Korchev <korchev@yahoo.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
  * @author    Peter Caesar <p.caesar@osmaco.de>
- * @copyright 2005-2013 phpMyFAQ Team
+ * @copyright 2005-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-20
@@ -62,7 +62,7 @@ define('FAQ_SORTING_TYPE_FAQID', 4);
  * @author    Georgi Korchev <korchev@yahoo.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
  * @author    Peter Caesar <p.caesar@osmaco.de>
- * @copyright 2005-2013 phpMyFAQ Team
+ * @copyright 2005-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-20
@@ -93,14 +93,14 @@ class PMF_Faq
     *
     * @var  array
     */
-    public $faqRecord = array();
+    public $faqRecord = [];
 
     /**
     * All current FAQ records in an array
     *
     * @var  array
     */
-    public $faqRecords = array();
+    public $faqRecords = [];
 
     /**
      * Users
@@ -177,7 +177,7 @@ class PMF_Faq
     {
         global $sids;
 
-        $faqdata = array();
+        $faqdata = [];
 
         if ($orderby == 'visits') {
             $current_table = 'fv';
@@ -399,7 +399,7 @@ class PMF_Faq
 
             $counter          = 0;
             $displayedCounter = 0;
-            $renderedItems    = array();
+            $renderedItems    = [];
             while (($row = $this->_config->getDb()->fetchObject($result)) && $displayedCounter < $numPerPage) {
                 $counter ++;
                 if ($counter <= $first) {
@@ -1407,7 +1407,7 @@ class PMF_Faq
      */
     public function getRevisionIds($record_id, $record_lang)
     {
-        $revision_data = array();
+        $revision_data = [];
 
         $query = sprintf("
             SELECT
@@ -1592,7 +1592,7 @@ class PMF_Faq
         } else {
             $result = $this->getTopVotedData(PMF_NUMBER_RECORDS_TOPTEN, 0, $this->_config->getLanguage()->getLanguage());
         }
-        $output = array();
+        $output = [];
 
         if (count($result) > 0) {
             foreach ($result as $row) {
@@ -1627,7 +1627,7 @@ class PMF_Faq
     {
         $date   = new PMF_Date($this->_config);
         $result = $this->getLatestData(PMF_NUMBER_RECORDS_LATEST, $this->_config->getLanguage()->getLanguage());
-        $output = array();
+        $output = [];
         
         if (count ($result) > 0) {
             foreach ($result as $row) {
@@ -1781,8 +1781,8 @@ class PMF_Faq
                 avg DESC';
 
         $result = $this->_config->getDb()->query($query);
-        $topten = array();
-        $data = array();
+        $topten = [];
+        $data = [];
 
         $i = 1;
         $oldId = 0;
@@ -1880,8 +1880,8 @@ class PMF_Faq
                 fv.visits DESC';
 
         $result = $this->_config->getDb()->query($query);
-        $topten = array();
-        $data   = array();
+        $topten = [];
+        $data   = [];
 
         $i = 1;
         $oldId = 0;
@@ -1986,8 +1986,8 @@ class PMF_Faq
                 fd.datum DESC';
 
         $result = $this->_config->getDb()->query($query);
-        $latest = array();
-        $data = array();
+        $latest = [];
+        $data = [];
 
         $i = 0;
         $oldId = 0;
@@ -2172,7 +2172,7 @@ class PMF_Faq
             return $question;
         }
 
-        $question = array();
+        $question = [];
 
         $query = sprintf('
             SELECT
@@ -2208,7 +2208,7 @@ class PMF_Faq
      */
      public function getAllOpenQuestions($all = true)
      {
-        $questions = array();
+        $questions = [];
 
         $query = sprintf("
             SELECT
@@ -2329,7 +2329,7 @@ class PMF_Faq
      */
     function getChangeEntries($record_id)
     {
-        $entries = array();
+        $entries = [];
 
         $query = sprintf("
             SELECT
@@ -2369,14 +2369,14 @@ class PMF_Faq
      */
     function get($QueryType = FAQ_QUERY_TYPE_DEFAULT, $nCatid = 0, $bDownwards = true, $lang = '', $date = '')
     {
-        $faqs = array();
+        $faqs = [];
 
         $result = $this->_config->getDb()->query($this->_getSQLQuery($QueryType, $nCatid, $bDownwards, $lang, $date));
 
         if ($this->_config->getDb()->numRows($result) > 0) {
             $i = 0;
             while ($row = $this->_config->getDb()->fetchObject($result)) {
-                $faq = array();
+                $faq = [];
                 $faq['id']             = $row->id;
                 $faq['solution_id']    = $row->solution_id;
                 $faq['revision_id']    = $row->revision_id;
@@ -2638,7 +2638,7 @@ class PMF_Faq
      */
     function getPermission($mode, $recordId)
     {
-        $permissions = array();
+        $permissions = [];
 
         if (!($mode == 'user' || $mode == 'group')) {
             return false;
@@ -2958,8 +2958,8 @@ class PMF_Faq
         );
 
         $result = $this->_config->getDb()->query($query);
-        $sticky = array();
-        $data   = array();
+        $sticky = [];
+        $data   = [];
 
         $oldId = 0;
         while (($row = $this->_config->getDb()->fetchObject($result))) {
@@ -2996,7 +2996,7 @@ class PMF_Faq
     public function getStickyRecords()
     {
         $result = $this->getStickyRecordsData();
-        $output = array();
+        $output = [];
 
         if (count($result) > 0) {
             foreach ($result as $row) {

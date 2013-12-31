@@ -2,7 +2,7 @@
 /**
  * The Installer class installs phpMyFAQ. Classy.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  * @package   Installer
  * @author    Florian Anderiasch <florian@phpmyfaq.net>
- * @copyright 2002-2013 phpMyFAQ Team
+ * @copyright 2002-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2012-08-27
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   Installer
  * @author    Florian Anderiasch <florian@phpmyfaq.net>
- * @copyright 2002-2013 phpMyFAQ Team
+ * @copyright 2002-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2012-08-27
@@ -304,6 +304,7 @@ class PMF_Installer
         'main.dateFormat'                         => 'Y-m-d H:i',
         'main.maintenanceMode'                    => 'false',
         'main.enableGravatarSupport'              => 'false',
+        'main.enableRssFeeds'                     => 'true',
 
         'records.numberOfRecordsPerPage'          => '10',
         'records.numberOfShownNewsEntries'        => '3',
@@ -325,11 +326,15 @@ class PMF_Installer
         'records.autosaveActive'                  => 'false',
         'records.autosaveSecs'                    => '180',
         'records.randomSort'                      => 'false',
+        'records.allowCommentsForGuests'          => 'true',
+        'records.allowQuestionsForGuests'         => 'true',
+        'records.allowNewFaqsForGuests'           => 'true',
 
         'search.useAjaxSearchOnStartpage'         => 'false',
         'search.numberSearchTerms'                => '10',
         'search.relevance'                        => 'thema,content,keywords',
         'search.enableRelevance'                  => 'false',
+        'search.enableHighlighting'               => 'true',
 
         'security.permLevel'                      => 'basic',
         'security.ipCheck'                        => 'false',
@@ -557,7 +562,7 @@ class PMF_Installer
      */
     public function startInstall(Array $DB = null)
     {
-        $query = $uninst = $dbSetup = array();
+        $query = $uninst = $dbSetup = [];
 
         // Check table prefix
         $dbSetup['dbPrefix'] = $sqltblpre = PMF_Filter::filterInput(INPUT_POST, 'sqltblpre', FILTER_SANITIZE_STRING, '');
@@ -634,7 +639,7 @@ class PMF_Installer
         $ldapEnabled = PMF_Filter::filterInput(INPUT_POST, 'ldap_enabled', FILTER_SANITIZE_STRING);
         if (extension_loaded('ldap') && !is_null($ldapEnabled)) {
 
-            $ldapSetup = array();
+            $ldapSetup = [];
 
             // check LDAP entries
             $ldapSetup['ldapServer'] = PMF_Filter::filterInput(INPUT_POST, 'ldap_server', FILTER_SANITIZE_STRING);

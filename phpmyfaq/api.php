@@ -2,7 +2,7 @@
 /**
  * The rest/json application interface
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,7 +11,7 @@
  * @category  phpMyFAQ 
  * @package   PMF_Service
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2013 phpMyFAQ Team
+ * @copyright 2009-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-03
@@ -59,7 +59,7 @@ $plr = new PMF_Language_Plurals($PMF_LANG);
 PMF_String::init($language);
 
 // Set empty result
-$result = array();
+$result = [];
 
 // Handle actions
 switch ($action) {

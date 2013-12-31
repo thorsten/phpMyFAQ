@@ -109,7 +109,7 @@ If you're interested, just take a look at our [support page](http://www.phpmyfaq
 
 **1.3. <a id="1.3"></a>Copyright**
 
-© 2001-2013 by Thorsten Rinne and phpMyFAQ Team under the [ Mozilla Public License 2.0](http://www.mozilla.org/MPL/2.0/). All rights reserved.
+© 2001-2014 by Thorsten Rinne and phpMyFAQ Team under the [ Mozilla Public License 2.0](http://www.mozilla.org/MPL/2.0/). All rights reserved.
 
 [back to top][64]
 
@@ -1137,7 +1137,7 @@ Co-Authors: [Stephan Hochhaus][89], [Markus Gläser][90]
 
 Date: 2013-04-21
 
-© 2001-2013 phpMyFAQ Team
+© 2001-2014 phpMyFAQ Team
 
 This documentation is licensed under a [Creative Commons License](http://creativecommons.org/licenses/by/2.0/).
 

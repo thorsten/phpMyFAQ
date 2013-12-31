@@ -135,4 +135,4 @@ Licensed under the terms of the New BSD License
 
 
 
-Copyright (c) 2001-2013 Thorsten Rinne and the phpMyFAQ Team
+Copyright (c) 2001-2014 Thorsten Rinne and the phpMyFAQ Team

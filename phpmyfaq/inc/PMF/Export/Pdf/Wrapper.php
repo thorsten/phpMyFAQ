@@ -2,7 +2,7 @@
 /**
  * Main PDF class for phpMyFAQ which "just" extends the TCPDF library
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -13,7 +13,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Peter Beauvain <pbeauvain@web.de>
  * @author    Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
- * @copyright 2004-2013 phpMyFAQ Team
+ * @copyright 2004-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-11-21
@@ -191,7 +191,7 @@ require K_PATH_MAIN . '/tcpdf.php';
  * @author    Peter Beauvain <pbeauvain@web.de>
  * @author    Olivier Plathey <olivier@fpdf.org>
  * @author    Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
- * @copyright 2004-2013 phpMyFAQ Team
+ * @copyright 2004-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-11-21
@@ -217,7 +217,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
      *
      * @var array
      */
-    public $categories = array();
+    public $categories = [];
 
     /**
      * The current category
@@ -230,7 +230,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
      *
      * @var array
      */
-    public $faq = array();
+    public $faq = [];
     
     /**
      * Question
@@ -497,7 +497,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
      *
      * @return image information
      */
-    public function Image($file, $x = '', $y = '', $w = 0, $h = 0, $type = '', $link = '', $align = '', $resize = false, $dpi = 300, $palign = '', $ismask = false, $imgmask = false, $border = 0, $fitbox = false, $hidden = false, $fitonpage = false, $alt = false, $altimgs = array())
+    public function Image($file, $x = '', $y = '', $w = 0, $h = 0, $type = '', $link = '', $align = '', $resize = false, $dpi = 300, $palign = '', $ismask = false, $imgmask = false, $border = 0, $fitbox = false, $hidden = false, $fitonpage = false, $alt = false, $altimgs = [])
     {
         if (!strpos($file, 'data:image/png;base64,') === false) {
             $file = '@' . base64_decode(

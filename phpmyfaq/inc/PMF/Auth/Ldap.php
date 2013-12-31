@@ -2,7 +2,7 @@
 /**
  * Manages user authentication with LDAP server.
  *
- * PHP Version 5.3
+ * PHP Version 5.4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -13,7 +13,7 @@
  * @author    Alberto Cabello <alberto@unex.es>
  * @author    Lars Scheithauer <larsscheithauer@googlemail.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2013 phpMyFAQ Team
+ * @copyright 2009-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-01
@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Alberto Cabello <alberto@unex.es>
  * @author    Lars Scheithauer <larsscheithauer@googlemail.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2013 phpMyFAQ Team
+ * @copyright 2009-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-01
@@ -50,7 +50,20 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
      *
      * @var array
      */
-    private $_ldapConfig = array();
+    private $_ldapConfig = [];
+
+    /**
+     * LDAP server(s)
+     *
+     * @var array
+     */
+    private $ldapServer = [];
+
+    /**
+     * Internal key of the active LDAP server where user was found
+     * @var int
+     */
+    private $activeServer = 0;
 
     /**
      * Multiple LDAP servers
@@ -70,17 +83,18 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
     {
         $this->_config         = $config;
         $this->_ldapConfig     = $this->_config->getLdapConfig();
+        $this->ldapServer     = $this->_config->getLdapServer();
         $this->multipleServers = $this->_ldapConfig['ldap_use_multiple_servers'];
         
         parent::__construct($this->_config);
         
         $this->ldap = new PMF_Ldap($this->_config);
         $this->ldap->connect(
-            $this->_ldapConfig['ldap_server'],
-            $this->_ldapConfig['ldap_port'],
-            $this->_ldapConfig['ldap_base'],
-            $this->_ldapConfig['ldap_user'],
-            $this->_ldapConfig['ldap_password']
+            $this->ldapServer[$this->activeServer]['ldap_server'],
+            $this->ldapServer[$this->activeServer]['ldap_port'],
+            $this->ldapServer[$this->activeServer]['ldap_base'],
+            $this->ldapServer[$this->activeServer]['ldap_user'],
+            $this->ldapServer[$this->activeServer]['ldap_password']
         );
         
         if ($this->ldap->error) {
@@ -101,13 +115,13 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
     {
         $user   = new PMF_User($this->_config);
         $result = $user->createUser($login, null);
-        $this->ldap = new PMF_Ldap($this->_config);
+
         $this->ldap->connect(
-            $this->_ldapConfig['ldap_server'],
-            $this->_ldapConfig['ldap_port'],
-            $this->_ldapConfig['ldap_base'],
-            $this->_ldapConfig['ldap_user'],
-            $this->_ldapConfig['ldap_password']
+            $this->ldapServer[$this->activeServer]['ldap_server'],
+            $this->ldapServer[$this->activeServer]['ldap_port'],
+            $this->ldapServer[$this->activeServer]['ldap_base'],
+            $this->ldapServer[$this->activeServer]['ldap_user'],
+            $this->ldapServer[$this->activeServer]['ldap_password']
         );
         
         if ($this->ldap->error) {
@@ -175,19 +189,41 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
             return false;
         }
 
+        // Get active LDAP server for current user
+        if ($this->multipleServers) {
+            // Try all LDAP servers
+            foreach ($this->ldapServer as $key => $value) {
+
+                $this->ldap->connect(
+                    $this->ldapServer[$key]['ldap_server'],
+                    $this->ldapServer[$key]['ldap_port'],
+                    $this->ldapServer[$key]['ldap_base'],
+                    $this->ldapServer[$key]['ldap_user'],
+                    $this->ldapServer[$key]['ldap_password']
+                );
+                if ($this->ldap->error) {
+                    $this->errors[] = $this->ldap->error;
+                }
+
+                if (false !== $this->ldap->getDn($login)) {
+                    $this->activeServer = $key;
+                    break;
+                }
+            }
+        }
+
         $bindLogin = $login;
         if ($this->_ldapConfig['ldap_use_domain_prefix']) {
             if (array_key_exists('domain', $optionalData)) {
                 $bindLogin = $optionalData['domain'] . '\\' . $login;
             }
         } else {
-            $this->ldap = new PMF_Ldap($this->_config);
             $this->ldap->connect(
-                $this->_ldapConfig['ldap_server'],
-                $this->_ldapConfig['ldap_port'],
-                $this->_ldapConfig['ldap_base'],
-                $this->_ldapConfig['ldap_user'],
-                $this->_ldapConfig['ldap_password']
+                $this->ldapServer[$this->activeServer]['ldap_server'],
+                $this->ldapServer[$this->activeServer]['ldap_port'],
+                $this->ldapServer[$this->activeServer]['ldap_base'],
+                $this->ldapServer[$this->activeServer]['ldap_user'],
+                $this->ldapServer[$this->activeServer]['ldap_password']
             );
             if ($this->ldap->error) {
                 $this->errors[] = $this->ldap->error;
@@ -199,9 +235,9 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
         // Check user in LDAP
         $this->ldap = new PMF_Ldap($this->_config);
         $this->ldap->connect(
-            $this->_ldapConfig['ldap_server'],
-            $this->_ldapConfig['ldap_port'],
-            $this->_ldapConfig['ldap_base'],
+            $this->ldapServer[$this->activeServer]['ldap_server'],
+            $this->ldapServer[$this->activeServer]['ldap_port'],
+            $this->ldapServer[$this->activeServer]['ldap_base'],
             $bindLogin,
             $pass
         );

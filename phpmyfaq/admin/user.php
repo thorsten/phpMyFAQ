@@ -14,7 +14,7 @@
  * @author    Uwe Pries <uwe.pries@digartis.de>
  * @author    Sarah Hermann <sayh@gmx.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2013 phpMyFAQ Team
+ * @copyright 2005-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-15
@@ -54,10 +54,10 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         if ($userId == 0) {
             $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
-            $user = new PMF_User($faqConfig);
-            $perm = $user->perm;
-            // @todo: Add PMF_Filter::filterInputArray()
-            $userRights = isset($_POST['user_rights']) ? $_POST['user_rights'] : array();
+            $user       = new PMF_User($faqConfig);
+            $perm       = $user->perm;
+            // @todo: Add PMF_Filter::filterInput[]
+            $userRights = isset($_POST['user_rights']) ? $_POST['user_rights'] : [];
             if (!$perm->refuseAllUserRights($userId)) {
                 $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
             }
@@ -81,7 +81,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         if ($userId == 0) {
             $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
-            $userData                  = array();
+            $userData                  = [];
             $userData['display_name']  = PMF_Filter::filterInput(INPUT_POST, 'display_name', FILTER_SANITIZE_STRING, '');
             $userData['email']         = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL, '');
             $userData['last_modified'] = PMF_Filter::filterInput(INPUT_POST, 'last_modified', FILTER_SANITIZE_STRING, '');
@@ -176,7 +176,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                 $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_delete']);
             } else {
                 // Move the categories ownership to admin (id == 1)
-                $oCat = new PMF_Category($faqConfig, array(), false);
+                $oCat = new PMF_Category($faqConfig, [], false);
                 $oCat->setUser($currentAdminUser);
                 $oCat->setGroups($currentAdminGroups);
                 $oCat->moveOwnership($userId, 1);
@@ -200,7 +200,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     if ($userAction == 'addsave' && $permission['adduser']) {
         $user                  = new PMF_User($faqConfig);
         $message               = '';
-        $messages              = array();
+        $messages              = [];
         $user_name             = PMF_Filter::filterInput(INPUT_POST, 'user_name', FILTER_SANITIZE_STRING, '');
         $user_realname         = PMF_Filter::filterInput(INPUT_POST, 'user_realname', FILTER_SANITIZE_STRING, '');
         $user_password         = PMF_Filter::filterInput(INPUT_POST, 'user_password', FILTER_SANITIZE_STRING, '');
