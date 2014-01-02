@@ -50,7 +50,6 @@
             <a class="navbar-brand" title="{header}" href="{faqHome}">{header}</a>
         </div>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="pmf-navbar-collapse">
             <ul class="nav navbar-nav">
                 <li class="{activeQuickfind}">{showInstantResponse}</li>

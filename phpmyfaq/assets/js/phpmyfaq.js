@@ -1,4 +1,4 @@
-/*! phpMyFAQ v2.9 - http://www.phpmyfaq.de - Copyright (c) 2001 - 2013 Thorsten Rinne and phpMyFAQ Team */
+/*! phpMyFAQ v2.9 - http://www.phpmyfaq.de - Copyright (c) 2001 - 2014 Thorsten Rinne and phpMyFAQ Team */
 /*!
  * jQuery JavaScript Library v1.10.2
  * http://jquery.com/

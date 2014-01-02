@@ -184,14 +184,8 @@ switch ($action) {
     <meta name="MSSmartTagsPreventParsing" content="true">
 
     <link rel="stylesheet" href="assets/css/style.css?v=1">
-    <link rel="stylesheet" href="../assets/js/plugins/datePicker/datePicker.css" type="text/css">
 
-    <script src="../assets/js/libs/modernizr.min.js"></script>
-    <script src="../assets/js/libs/jquery.min.js"></script>
-    <script src="../assets/js/phpmyfaq.js"></script>
-
-    <script src="../assets/js/plugins/datePicker/date.js"></script>
-    <script src="../assets/js/plugins/datePicker/jquery.datePicker.js"></script>
+    <script src="../assets/js/phpmyfaq.min.jsjs"></script>
     <script src="editor/tiny_mce.js?<?php print time(); ?>"></script>
 
 <?php if ($edAutosave): ?>
@@ -204,119 +198,118 @@ switch ($action) {
 </head>
 <body dir="<?php print $PMF_LANG["dir"]; ?>">
 
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container-fluid">
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
-            <a class="brand" href="../index.php" rel="tooltip" title="<?php print $faqConfig->get('main.titleFAQ'); ?>">
-                phpMyFAQ
-            </a>
-            <div class="nav-collapse">
-                <?php if (isset($auth) && in_array(true, $permission)): ?>
-                <ul class="nav">
-                    <li<?php print ($dashboardPage ? ' class="active"' : ''); ?>>
-                        <a href="index.php">
-                            <i class="icon-home icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_home']; ?>
-                        </a>
-                    </li>
-                    <li<?php print ($userPage ? ' class="active"' : ''); ?>>
-                        <a href="index.php?action=user">
-                            <i class="icon-user icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_users']; ?>
-                        </a>
-                    </li>
-                    <li<?php print ($contentPage ? ' class="active"' : ''); ?>>
-                        <a href="index.php?action=content">
-                            <i class="icon-pencil icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_content']; ?>
-                        </a>
-                    </li>
-                    <li<?php print ($statisticsPage ? ' class="active"' : ''); ?>>
-                        <a href="index.php?action=statistics">
-                            <i class="icon-tasks icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_statistics']; ?>
-                        </a>
-                    </li>
-                    <li<?php print ($exportsPage ? ' class="active"' : ''); ?>>
-                        <a href="index.php?action=export">
-                            <i class="icon-book icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_exports']; ?>
-                        </a>
-                    </li>
-                    <li<?php print ($backupPage ? ' class="active"' : ''); ?>>
-                        <a href="index.php?action=backup">
-                            <i class="icon-download-alt icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_backup']; ?>
-                        </a>
-                    </li>
-                    <li<?php print ($configurationPage ? ' class="active"' : ''); ?>>
-                        <a href="index.php?action=config">
-                            <i class="icon-wrench icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_configuration']; ?>
-                        </a>
-                    </li>
-                </ul>
-                <ul class="nav pull-right">
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <span title="<?php print $PMF_LANG['ad_user_loggedin'] . $user->getLogin(); ?>">
-                            <?php print $user->getUserData('display_name'); ?>
-                            </span>
-                            <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="index.php?action=passwd">
-                                    <i class="icon-lock"></i> <?php echo $PMF_LANG['ad_menu_passwd'] ?>
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <a href="index.php?action=logout">
-                                    <i class="icon-off"></i> <?php echo $PMF_LANG['admin_mainmenu_logout']; ?>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-                <?php else: ?>
-                <ul class="nav">
-                    <li><a href="../index.php?action=password"><?php print $PMF_LANG["lostPassword"]; ?></a></li>
-                </ul>
-                <?php endif; ?>
-            </div>
-        </div>
+<nav class="navbar navbar-fixed-top hidden-print" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#pmf-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" title="<?php echo $faqConfig->get('main.titleFAQ') ?>" href="../index.php">
+            phpMyFAQ
+        </a>
     </div>
-</div>
+
+    <div class="collapse navbar-collapse" id="pmf-navbar-collapse">
+        <?php if (isset($auth) && in_array(true, $permission)): ?>
+        <ul class="nav navbar-nav">
+            <li<?php print ($dashboardPage ? ' class="active"' : ''); ?>>
+                <a href="index.php">
+                    <i class="icon-home icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_home']; ?>
+                </a>
+            </li>
+            <li<?php print ($userPage ? ' class="active"' : ''); ?>>
+                <a href="index.php?action=user">
+                    <i class="icon-user icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_users']; ?>
+                </a>
+            </li>
+            <li<?php print ($contentPage ? ' class="active"' : ''); ?>>
+                <a href="index.php?action=content">
+                    <i class="icon-pencil icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_content']; ?>
+                </a>
+            </li>
+            <li<?php print ($statisticsPage ? ' class="active"' : ''); ?>>
+                <a href="index.php?action=statistics">
+                    <i class="icon-tasks icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_statistics']; ?>
+                </a>
+            </li>
+            <li<?php print ($exportsPage ? ' class="active"' : ''); ?>>
+                <a href="index.php?action=export">
+                    <i class="icon-book icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_exports']; ?>
+                </a>
+            </li>
+            <li<?php print ($backupPage ? ' class="active"' : ''); ?>>
+                <a href="index.php?action=backup">
+                    <i class="icon-download-alt icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_backup']; ?>
+                </a>
+            </li>
+            <li<?php print ($configurationPage ? ' class="active"' : ''); ?>>
+                <a href="index.php?action=config">
+                    <i class="icon-wrench icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_configuration']; ?>
+                </a>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <span title="<?php print $PMF_LANG['ad_user_loggedin'] . $user->getLogin(); ?>">
+                    <?php print $user->getUserData('display_name'); ?>
+                    </span>
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="index.php?action=passwd">
+                            <i class="icon-lock"></i> <?php echo $PMF_LANG['ad_menu_passwd'] ?>
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="index.php?action=logout">
+                            <i class="icon-off"></i> <?php echo $PMF_LANG['admin_mainmenu_logout']; ?>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <?php else: ?>
+        <ul class="nav">
+            <li><a href="../index.php?action=password"><?php print $PMF_LANG["lostPassword"]; ?></a></li>
+        </ul>
+        <?php endif; ?>
+    </div>
+</nav>
 
 <div id="content">
-    <div class="container-fluid">
-        <div class="row-fluid">
-            <?php if (isset($auth) && in_array(true, $permission)) { ?>
-            <div class="span2">
-                <div class="userpanel">
-                    <?php
-                    if ($faqConfig->get('main.enableGravatarSupport')) {
-                        $avatar = new PMF_Services_Gravatar($faqConfig);
-                        echo $avatar->getImage($user->getUserData('email'), array('size' => 30));
-                    }
-                    printf(
-                        '%s<br><small>%s</small>',
-                        $user->getUserData('display_name'),
-                        $user->getUserData('email')
-                    );
-                    ?>
-                </div>
-                <hr>
-                <div class="well categories">
-                    <ul class="nav nav-list">
-                        <li class="nav-header"><?php print $secLevelHeader; ?></li>
-                        <?php print $secLevelEntries; ?>
-                        <li class="nav-header">Admin worklog</li>
-                        <li><span id="saving_data_indicator"></span></li>
-                        <li class="nav-header"><?php echo $PMF_LANG['ad_session_expiration']; ?></li>
-                        <li><span id="sessioncounter"><img src="images/indicator.gif"> Loading...</span></li>
-                    </ul>
-                </div>
+    <div class="row">
+        <?php if (isset($auth) && in_array(true, $permission)) { ?>
+        <div class="col-sm-2">
+            <div class="userpanel">
+                <?php
+                if ($faqConfig->get('main.enableGravatarSupport')) {
+                    $avatar = new PMF_Services_Gravatar($faqConfig);
+                    echo $avatar->getImage($user->getUserData('email'), array('size' => 30));
+                }
+                printf(
+                    '%s<br><small>%s</small>',
+                    $user->getUserData('display_name'),
+                    $user->getUserData('email')
+                );
+                ?>
             </div>
-            <?php } ?>
+            <hr>
+            <div class="well categories">
+                <ul class="nav nav-list">
+                    <li class="nav-header"><?php print $secLevelHeader; ?></li>
+                    <?php print $secLevelEntries; ?>
+                    <li class="nav-header">Admin worklog</li>
+                    <li><span id="saving_data_indicator"></span></li>
+                    <li class="nav-header"><?php echo $PMF_LANG['ad_session_expiration']; ?></li>
+                    <li><span id="sessioncounter"><img src="images/indicator.gif"> Loading...</span></li>
+                </ul>
+            </div>
+        </div>
+        <?php } ?>
 
-            <div class="span10">
+        <div class="col-sm-10">
