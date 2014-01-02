@@ -176,7 +176,6 @@ switch ($action) {
 
 $templateVars['sideNavigation'] = $adminMenuBuilder->render();
 
-$twig->loadTemplate('header.twig')
-    ->display($templateVars);
+$twig->loadTemplate('header.twig')->display($templateVars);
 
 unset($templateVars);
