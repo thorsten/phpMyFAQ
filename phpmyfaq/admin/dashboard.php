@@ -151,13 +151,32 @@ $faqSystem    = new PMF_System();
             $getJson = PMF_Filter::filterInput(INPUT_POST, 'getJson', FILTER_SANITIZE_STRING);
             if (!is_null($getJson) && 'verify' === $getJson) {
 
-                $faqSystem    = new PMF_System();
-                $localHashes  = $faqSystem->createHashes();
-                $remoteHashes = file_get_contents(
-                    'http://www.phpmyfaq.de/api/verify/' . $faqConfig->get('main.currentVersion')
+                set_error_handler(
+                    function ($severity, $message, $file, $line)
+                    {
+                        throw new ErrorException($message, $severity, $severity, $file, $line);
+                    }
                 );
 
-                if (!is_array(json_decode($remoteHashes, true))) {
+                $faqSystem         = new PMF_System();
+                $localHashes       = $faqSystem->createHashes();
+                $versionCheckError = true;
+                try {
+                    $remoteHashes = file_get_contents(
+                        'http://www.phpmyfaq.de/api/verify/' . $faqConfig->get('main.currentVersion')
+                    );
+                    if (!is_array(json_decode($remoteHashes, true))) {
+                        $versionCheckError = true;
+                    } else {
+                        $versionCheckError = false;
+                    }
+                } catch (ErrorException $e) {
+                    echo '<p class="alert alert-danger">phpMyFAQ version could not be checked.</p>';
+                }
+
+                restore_error_handler();
+
+                if ($versionCheckError) {
                     echo '<p class="alert alert-danger">phpMyFAQ version mismatch - no verification possible.</p>';
                 } else {
 
