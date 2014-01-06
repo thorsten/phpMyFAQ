@@ -263,11 +263,25 @@ class PMF_Utils
      */
     public static function setHighlightedString($string, $highlight)
     {
-        $attributes  = array(
-            'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name', 'face',
-            'size', 'dir', 'onclick', 'ondblclick', 'onmousedown', 'onmouseup',
-            'onmouseover', 'onmousemove', 'onmouseout', 'onkeypress', 'onkeydown',
-            'onkeyup');
+        $attributes = [
+            'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name',
+            'face', 'size', 'dir', 'rel', 'rev',
+            'onmouseenter', 'onmouseleave', 'onafterprint', 'onbeforeprint',
+            'onbeforeunload', 'onhashchange', 'onmessage', 'onoffline', 'ononline',
+            'onpopstate', 'onpagehide', 'onpageshow', 'onresize', 'onunload',
+            'ondevicemotion', 'ondeviceorientation', 'onabort', 'onblur',
+            'oncanplay', 'oncanplaythrough', 'onchange', 'onclick', 'oncontextmenu',
+            'ondblclick', 'ondrag', 'ondragend', 'ondragenter', 'ondragleave',
+            'ondragover', 'ondragstart', 'ondrop', 'ondurationchange', 'onemptied',
+            'onended', 'onerror', 'onfocus', 'oninput', 'oninvalid', 'onkeydown',
+            'onkeypress', 'onkeyup', 'onload', 'onloadeddata', 'onloadedmetadata',
+            'onloadstart', 'onmousedown', 'onmousemove', 'onmouseout', 'onmouseover',
+            'onmouseup', 'onmozfullscreenchange', 'onmozfullscreenerror', 'onpause',
+            'onplay', 'onplaying', 'onprogress', 'onratechange', 'onreset',
+            'onscroll', 'onseeked', 'onseeking', 'onselect', 'onshow', 'onstalled',
+            'onsubmit', 'onsuspend', 'ontimeupdate', 'onvolumechange', 'onwaiting',
+            'oncopy', 'oncut', 'onpaste', 'onbeforescriptexecute', 'onafterscriptexecute'
+        ];
         
         return PMF_String::preg_replace_callback(
             '/(' . $highlight . '="[^"]*")|' .
