@@ -111,7 +111,7 @@ class PMF_Glossary
             return '';
         }
 
-        $attributes = [
+        $attributes = array(
             'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name',
             'face', 'size', 'dir', 'rel', 'rev',
             'onmouseenter', 'onmouseleave', 'onafterprint', 'onbeforeprint',
@@ -129,7 +129,7 @@ class PMF_Glossary
             'onscroll', 'onseeked', 'onseeking', 'onselect', 'onshow', 'onstalled',
             'onsubmit', 'onsuspend', 'ontimeupdate', 'onvolumechange', 'onwaiting',
             'oncopy', 'oncut', 'onpaste', 'onbeforescriptexecute', 'onafterscriptexecute'
-        ];
+        );
 
         foreach ($this->getAllGlossaryItems() as $item) {
             $this->definition = $item['definition'];
