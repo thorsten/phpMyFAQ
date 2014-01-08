@@ -70,6 +70,10 @@
         "twitter/bootstrap":       "2.3.*",
         "jnaqsh/bootstrap":        "master@dev"
     },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*",
+        "phpunit/dbunit": "1.3.*"
+    },
     "minimum-stability": "stable",
     "scripts": {
         "post-install-cmd": [
