@@ -33,7 +33,7 @@ require_once __DIR__ . '/Category/AllTests.php';
 require_once __DIR__ . '/Faq/AllTests.php';
 require_once __DIR__ . '/Instance/AllTests.php';
 require_once __DIR__ . '/Search/AllTests.php';
-require_once __DIR__ . '/PMF_GlossaryTest.php';
+//require_once __DIR__ . '/PMF_GlossaryTest.php';
 require_once __DIR__ . '/PMF_LinkTest.php';
 
 /**
