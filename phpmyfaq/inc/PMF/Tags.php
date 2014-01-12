@@ -108,7 +108,7 @@ class PMF_Tags
         if ($result) {
             $i = 0;
             while ($row = $this->_config->getDb()->fetchObject($result)) {
-                if ($i <= $limit) {
+                if ($i < $limit) {
                     $allTags[$row->tagging_id] = $row->tagging_name;
                 } else {
                     break;
