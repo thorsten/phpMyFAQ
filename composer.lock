@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "1011f332b7440f55564d32ae81f8acb8",
+    "hash": "eac0af473adb871b6b93e614a177f325",
     "packages": [
         {
             "name": "phpseclib",
@@ -14,11 +14,11 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2013-12-26 11:00:33"
+            "time": "2013-05-01 13:13:41"
         },
         {
             "name": "symfony/class-loader",
-            "version": "v2.4.0",
+            "version": "v2.4.1",
             "target-dir": "Symfony/Component/ClassLoader",
             "source": {
                 "type": "git",
@@ -65,21 +65,20 @@
             "description": "Symfony ClassLoader Component",
             "homepage": "http://symfony.com",
             "time": "2013-11-26 16:40:27"
-<<<<<<< HEAD
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v2.4.0",
+            "version": "v2.4.1",
             "target-dir": "Symfony/Component/HttpFoundation",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "381245ba3e507a3e9c5b4c2cbf344a312fb6081d"
+                "reference": "6c6b8a7bcd7e2cc920cd6acace563fdbf121d844"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/381245ba3e507a3e9c5b4c2cbf344a312fb6081d",
-                "reference": "381245ba3e507a3e9c5b4c2cbf344a312fb6081d",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/6c6b8a7bcd7e2cc920cd6acace563fdbf121d844",
+                "reference": "6c6b8a7bcd7e2cc920cd6acace563fdbf121d844",
                 "shasum": ""
             },
             "require": {
@@ -115,9 +114,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
-            "time": "2013-11-28 10:27:26"
-=======
->>>>>>> e544c50e8c98eee2232c8fd85471c91edb6dec2e
+            "time": "2014-01-05 02:10:50"
         },
         {
             "name": "tcpdf",
@@ -128,7 +125,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2013-12-12 18:31:42"
+            "time": "2013-04-24 16:30:18"
         },
         {
             "name": "twig/twig",
@@ -188,7 +185,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2013-06-21 12:48:06"
+            "time": "2013-04-12 04:00:00"
         }
     ],
     "packages-dev": [
@@ -362,7 +359,6 @@
             "version": "1.1.4",
             "source": {
                 "type": "git",
-<<<<<<< HEAD
                 "url": "git://github.com/sebastianbergmann/php-text-template.git",
                 "reference": "1.1.4"
             },
@@ -370,15 +366,6 @@
                 "type": "zip",
                 "url": "https://github.com/sebastianbergmann/php-text-template/zipball/1.1.4",
                 "reference": "1.1.4",
-=======
-                "url": "https://github.com/sebastianbergmann/php-text-template.git",
-                "reference": "5180896f51c5b3648ac946b05f9ec02be78a0b23"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-text-template/zipball/5180896f51c5b3648ac946b05f9ec02be78a0b23",
-                "reference": "5180896f51c5b3648ac946b05f9ec02be78a0b23",
->>>>>>> e544c50e8c98eee2232c8fd85471c91edb6dec2e
                 "shasum": ""
             },
             "require": {
@@ -409,11 +396,7 @@
             "keywords": [
                 "template"
             ],
-<<<<<<< HEAD
             "time": "2012-10-31 11:15:28"
-=======
-            "time": "2012-10-31 18:15:28"
->>>>>>> e544c50e8c98eee2232c8fd85471c91edb6dec2e
         },
         {
             "name": "phpunit/php-timer",
@@ -588,7 +571,6 @@
             "version": "1.2.3",
             "source": {
                 "type": "git",
-<<<<<<< HEAD
                 "url": "git://github.com/sebastianbergmann/phpunit-mock-objects.git",
                 "reference": "1.2.3"
             },
@@ -596,15 +578,6 @@
                 "type": "zip",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects/archive/1.2.3.zip",
                 "reference": "1.2.3",
-=======
-                "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "5794e3c5c5ba0fb037b11d8151add2a07fa82875"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/5794e3c5c5ba0fb037b11d8151add2a07fa82875",
-                "reference": "5794e3c5c5ba0fb037b11d8151add2a07fa82875",
->>>>>>> e544c50e8c98eee2232c8fd85471c91edb6dec2e
                 "shasum": ""
             },
             "require": {
@@ -644,17 +617,17 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.4.0",
+            "version": "v2.4.1",
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "1ae235a1b9d3ad3d9f3860ff20acc072df95b7f5"
+                "reference": "4e1a237fc48145fae114b96458d799746ad89aa0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/1ae235a1b9d3ad3d9f3860ff20acc072df95b7f5",
-                "reference": "1ae235a1b9d3ad3d9f3860ff20acc072df95b7f5",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/4e1a237fc48145fae114b96458d799746ad89aa0",
+                "reference": "4e1a237fc48145fae114b96458d799746ad89aa0",
                 "shasum": ""
             },
             "require": {
@@ -687,7 +660,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2013-11-26 16:40:27"
+            "time": "2013-12-28 08:12:03"
         }
     ],
     "aliases": [
