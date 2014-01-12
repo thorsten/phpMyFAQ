@@ -59,17 +59,17 @@ class PMF_Tags
      * Returns all tags
      *
      * @param string  $search       Move the returned result set to be the result of a start-with search
-     * @param boolean $limit        Limit the returned result set
+     * @param integer $limit        Limit the returned result set
      * @param boolean $showInactive Show inactive tags
+     *
      * @return array
      */
-    public function getAllTags($search = null, $limit = false, $showInactive = false)
+    public function getAllTags($search = null, $limit = PMF_TAGS_CLOUD_RESULT_SET_SIZE, $showInactive = false)
     {
-        global $DB;
-        $tags = $allTags = array();
+        $allTags = array();
 
         // Hack: LIKE is case sensitive under PostgreSQL
-        switch ($DB['type']) {
+        switch (PMF_Db::getType()) {
             case 'pgsql':
                 $like = 'ILIKE';
                 break;
@@ -106,9 +106,15 @@ class PMF_Tags
         $result = $this->_config->getDb()->query($query);
         
         if ($result) {
-           while ($row = $this->_config->getDb()->fetchObject($result)) {
-              $allTags[$row->tagging_id] = $row->tagging_name;
-           }
+            $i = 0;
+            while ($row = $this->_config->getDb()->fetchObject($result)) {
+                if ($i <= $limit) {
+                    $allTags[$row->tagging_id] = $row->tagging_name;
+                } else {
+                    break;
+                }
+                $i++;
+            }
         }
 
         return $allTags;
@@ -397,7 +403,7 @@ class PMF_Tags
         // Limit the result set (see: PMF_TAGS_CLOUD_RESULT_SET_SIZE)
         // for avoiding an 'heavy' load during the evaluation
         // of the number of records for each tag
-        $tagList = $this->getAllTags('', true);
+        $tagList = $this->getAllTags('', PMF_TAGS_CLOUD_RESULT_SET_SIZE);
 
         foreach ($tagList as $tagId => $tagName) {
             $totFaqByTag = count($this->getRecordsByTagName($tagName));
