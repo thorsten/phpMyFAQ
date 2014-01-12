@@ -70,8 +70,8 @@ try {
 $faqVisits = new PMF_Visits($faqConfig);
 $faqVisits->logViews($recordId);
 
-// Add Glossary entries
-$question = $oGlossary->insertItemsIntoContent($faq->getRecordTitle($recordId));
+// Add Glossary entries for answers only
+$question = $faq->getRecordTitle($recordId);
 $answer   = $oGlossary->insertItemsIntoContent($faq->faqRecord['content']);
 
 // Set the path of the current category

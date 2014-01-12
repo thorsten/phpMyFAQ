@@ -34,6 +34,7 @@ require_once __DIR__ . '/Configuration/AllTests.php';
 require_once __DIR__ . '/Faq/AllTests.php';
 require_once __DIR__ . '/Instance/AllTests.php';
 require_once __DIR__ . '/Search/AllTests.php';
+//require_once __DIR__ . '/PMF_GlossaryTest.php';
 require_once __DIR__ . '/PMF_LinkTest.php';
 
 /**
@@ -59,6 +60,7 @@ class AllTests
         $suite->addTest(Faq_AllTests::suite());
         $suite->addTest(Instance_AllTests::suite());
         $suite->addTest(Search_AllTests::suite());
+        //$suite->addTestSuite('PMF_GlossaryTest');
         $suite->addTestSuite('PMF_LinkTest');
         
         return $suite;

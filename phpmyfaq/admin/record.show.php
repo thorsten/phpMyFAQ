@@ -138,6 +138,24 @@ if ($permission['editbt'] || $permission['delbt']) {
     $faq     = new PMF_Faq($faqConfig);
     $date    = new PMF_Date($faqConfig);
 
+    $internalSearch = '';
+    $linkState      = PMF_Filter::filterInput(INPUT_POST, 'linkstate', FILTER_SANITIZE_STRING);
+    $searchCat      = PMF_Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
+    $searchTerm     = PMF_Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
+
+    if (!is_null($linkState)) {
+        $cond[PMF_Db::getTablePrefix() . 'faqdata.links_state'] = 'linkbad';
+        $linkState                             = ' checked="checked" ';
+        $internalSearch                       .= '&amp;linkstate=linkbad';
+    }
+    if (!is_null($searchCat)) {
+        $internalSearch .= "&amp;searchcat=" . $searchCat;
+        $cond[PMF_Db::getTablePrefix() . 'faqcategoryrelations.category_id'] = array_merge(
+            array($searchCat),
+            $category->getChildNodes($searchCat)
+        );
+    }
+
     $selectedCategory = PMF_Filter::filterInput(INPUT_GET, 'category', FILTER_VALIDATE_INT, 0);
     $orderBy          = PMF_Filter::filterInput(INPUT_GET, 'orderby', FILTER_SANITIZE_STRING, 1);
     $sortBy           = PMF_Filter::filterInput(INPUT_GET, 'sortby', FILTER_SANITIZE_STRING);
@@ -170,12 +188,90 @@ if ($permission['editbt'] || $permission['delbt']) {
         }
     }
 
-    $faq->getAllRecords($orderBy, null, $sortBy);
-    foreach ($faq->faqRecords as $record) {
-        if (!isset($numActiveByCat[$record['category_id']])) {
-            $numActiveByCat[$record['category_id']] = 0;
+    if (is_null($searchTerm)) {
+
+        $faq->getAllRecords($orderBy, null, $sortBy);
+        foreach ($faq->faqRecords as $record) {
+            if (!isset($numActiveByCat[$record['category_id']])) {
+                $numActiveByCat[$record['category_id']] = 0;
+            }
+            $numActiveByCat[$record['category_id']] += $record['active'] == 'yes' ? 1 : 0;
         }
-        $numActiveByCat[$record['category_id']] += $record['active'] == 'yes' ? 1 : 0;
+
+    } else {
+
+        $fdTable  = PMF_Db::getTablePrefix() . 'faqdata';
+        $fcrTable = PMF_Db::getTablePrefix() . 'faqcategoryrelations';
+        $search   = PMF_Search_Factory::create($faqConfig, array('database' => PMF_Db::getType()));
+
+        $search->setTable($fdTable)
+            ->setResultColumns(array(
+                    $fdTable . '.id AS id',
+                    $fdTable . '.lang AS lang',
+                    $fdTable . '.solution_id AS solution_id',
+                    $fcrTable . '.category_id AS category_id',
+                    $fdTable . '.sticky AS sticky',
+                    $fdTable . '.active AS active',
+                    $fdTable . '.thema AS thema',
+                    $fdTable . '.content AS content',
+                    $fdTable . '.datum AS date'))
+            ->setJoinedTable($fcrTable)
+            ->setJoinedColumns(array(
+                    $fdTable . '.id = ' . $fcrTable . '.record_id',
+                    $fdTable . '.lang = ' . $fcrTable . '.record_lang'));
+
+        if (is_numeric($searchTerm)) {
+            $search->setMatchingColumns(array($fdTable . '.solution_id'));
+        } else {
+            $search->setMatchingColumns(array($fdTable . '.thema', $fdTable . '.content', $fdTable . '.keywords'));
+        }
+
+        $result         = $search->search($searchTerm);
+        $laction        = 'view';
+        $internalSearch = '&amp;search='.$searchTerm;
+        $wasSearch      = true;
+        $idsFound       = array();
+        $faqsFound      = array();
+
+        while ($row = $faqConfig->getDb()->fetchObject($result)) {
+
+            if ($searchCat != 0 && $searchCat != (int)$row->category_id) {
+                continue;
+            }
+
+            if (in_array($row->id, $idsFound)) {
+                continue; // only show one entry if FAQ is in mulitple categories
+            }
+
+            $faqsFound[$row->category_id][$row->id] = array(
+                'id'          => $row->id,
+                'category_id' => $row->category_id,
+                'solution_id' => $row->solution_id,
+                'lang'        => $row->lang,
+                'active'      => $row->active,
+                'sticky'      => $row->sticky,
+                'title'       => $row->thema,
+                'content'     => $row->content,
+                'date'        => PMF_Date::createIsoDate($row->date)
+            );
+
+            if (!isset($numActiveByCat[$row->category_id])) {
+                $numActiveByCat[$row->category_id] = 0;
+            }
+
+            $numActiveByCat[$row->category_id] += $row->active ? 1 : 0;
+
+            $idsFound[] = $row->id;
+        }
+
+        // Sort search result ordered by category ID
+        ksort($faqsFound);
+        foreach ($faqsFound as $categoryId => $faqFound) {
+            foreach ($faqFound as $singleFaq) {
+                $faq->faqRecords[] = $singleFaq;
+            }
+        }
+
     }
 
     if (count($faq->faqRecords) > 0) {

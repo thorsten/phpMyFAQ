@@ -38,7 +38,7 @@ if (! is_null($autoCompleteValue)) {
         $arrayOfValues     = explode(',', $autoCompleteValue);
         $autoCompleteValue = end($arrayOfValues);
     }
-    $tags = $oTag->getAllTags(strtolower($autoCompleteValue), false, true);
+    $tags = $oTag->getAllTags(strtolower($autoCompleteValue), PMF_TAGS_CLOUD_RESULT_SET_SIZE, true);
 } else {
     $tags = $oTag->getAllTags();
 }
