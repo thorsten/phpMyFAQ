@@ -67,7 +67,7 @@ class PMF_Db
      * Database factory
      *
      * @param string $type Database management system type
-     * 
+     *
      * @throws PMF_Exception
      *
      * @return PMF_DB_Driver
@@ -75,7 +75,12 @@ class PMF_Db
     public static function factory($type)
     {
         self::$dbType = $type;
-        $class = 'PMF_DB_' . ucfirst($type);
+
+        if (0 === strpos($type, 'pdo_')) {
+            $class = 'PMF_DB_Pdo_' . ucfirst(substr($type, 4));
+        } else {
+            $class = 'PMF_DB_' . ucfirst($type);
+        }
 
         if (class_exists($class)) {
             self::$instance = new $class;

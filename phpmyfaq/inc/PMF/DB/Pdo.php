@@ -1,6 +1,6 @@
 <?php
 /**
- * The PMF_DB_Pdo_mysql class is a PDO wrapper class for MySQL
+ * The PMF_DB_Pdo class is an abstract PDO wrapper
  *
  * PHP Version 5.4
  *
@@ -32,21 +32,21 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @link      http://www.phpmyfaq.de
  * @package   2014-01-18
  */
-class PMF_DB_Pdo implements PMF_DB_Driver
+abstract class PMF_DB_Pdo implements PMF_DB_Driver
 {
     /**
      * The connection object
      *
      * @var PDO
      */
-    private $conn = false;
+    protected $conn = false;
 
     /**
      * The query log string
      *
      * @var string
      */
-    private $sqllog = '';
+    protected $sqllog = '';
 
     /**
      * Tables
@@ -65,16 +65,7 @@ class PMF_DB_Pdo implements PMF_DB_Driver
      *
      * @return  boolean true, if connected, otherwise false
      */
-    public function connect($host, $user, $password, $database = '')
-    {
-        try {
-            $this->conn = new PDO('mysql:host=' . $host . ';dbname=' . $database . ';charset=UTF8', $user, $password);
-        } catch (PDOException $e) {
-            PMF_Db::errorPage('Database connection failed: ' . $e->getMessage());
-        }
-
-        return true;
-    }
+    abstract public function connect($host, $user, $password, $database = '');
 
     /**
      * Sends a query to the database.

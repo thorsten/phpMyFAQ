@@ -88,7 +88,7 @@ class PMF_System
      */
     private $_supportedDatabases = array(
         'mysqli'    => array(self::VERSION_MINIMUM_PHP, 'MySQL / MariaDB (ext/mysqli)'),
-        'pdo'       => array(self::VERSION_MINIMUM_PHP, 'MySQL / MariaDB (PDO_MYSQL, experimental)'),
+        'pdo_mysql' => array(self::VERSION_MINIMUM_PHP, 'MySQL / MariaDB (PDO_MYSQL, experimental)'),
         'pgsql'     => array(self::VERSION_MINIMUM_PHP, 'PostgreSQL'),
         'sqlite'    => array(self::VERSION_MINIMUM_PHP, 'SQLite (deprecated)'),
         'sqlite3'   => array(self::VERSION_MINIMUM_PHP, 'SQLite 3 (only PHP 5.3+, experimental)'),
