@@ -787,8 +787,10 @@ class PMF_Installer
         // add admin account and rights
         $admin = new PMF_User($configuration);
         if (! $admin->createUser($loginname, $password, 1)) {
-            echo "<p class=\"alert alert-error\"><strong>Fatal installation error:</strong> " .
-                "Couldn't create the admin user.</p>\n";
+            printf("<p class=\"alert alert-error\"><strong>Fatal installation error:</strong> " .
+                "Couldn't create the admin user: %s</p>\n",
+                $admin->error()
+            );
             $this->_system->cleanInstallation();
             PMF_System::renderFooter(true);
         }
