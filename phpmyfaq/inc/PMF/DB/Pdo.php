@@ -81,12 +81,10 @@ abstract class PMF_DB_Pdo implements PMF_DB_Driver
         }
 
         try {
-            $statement = $this->conn->query($query);
+            return $this->conn->query($query);
         } catch (PDOException $e) {
             $this->sqllog .= $e->getMessage();
         }
-
-        return $statement;
     }
 
     /**
@@ -98,7 +96,9 @@ abstract class PMF_DB_Pdo implements PMF_DB_Driver
      */
     public function escape($string)
     {
-        return $this->conn->quote($string);
+        // @todo quote() is not like mysql_real_escape_string()
+        //return $this->conn->quote($string);
+        return $string;
     }
 
     /**
