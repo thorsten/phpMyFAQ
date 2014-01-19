@@ -49,15 +49,6 @@ interface PMF_DB_Driver
     public function connect($host, $user, $password, $db = '');
 
     /**
-     * Connects to a given database
-     *
-     * @param string $database Database name
-     *
-     * @return boolean
-     */
-    public function selectDb($database);
-
-    /**
      * Sends a query to the database.
      *
      * This function sends a query to the database.

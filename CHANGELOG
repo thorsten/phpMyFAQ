@@ -13,6 +13,7 @@ Version 2.9.0-dev 2014-01-
 - added permissions for guests (Thorsten)
 - added support for multiple LDAP/AD servers (Bernhard Müller, Thorsten)
 - added frontend dependency management using Bower (Thorsten)
+- added support for PDO_MYSQL (Thorsten)
 - updated bundled Symfony ClassLoader to version 2.3.7 (Thorsten)
 - updated bundled jQuery to version 1.10.2 (Thorsten)
 - updated bundled Bootstrap to version 3.0.3 (Thorsten)

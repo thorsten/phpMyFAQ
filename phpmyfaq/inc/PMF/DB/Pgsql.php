@@ -91,18 +91,6 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     }
 
     /**
-     * Connects to a given database
-     *
-     * @param string $database Database name
-     *
-     * @return boolean
-     */
-    public function selectDb($database)
-    {
-        return true;
-    }
-
-    /**
      * Sends a query to the database.
      *
      * @param   string $query

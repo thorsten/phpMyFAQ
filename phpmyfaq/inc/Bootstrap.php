@@ -128,9 +128,14 @@ set_error_handler('pmf_error_handler');
 //
 // Create a database connection
 //
-PMF_Db::setTablePrefix($DB['prefix']);
-$db = PMF_Db::factory($DB['type']);
-$db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
+try {
+    PMF_Db::setTablePrefix($DB['prefix']);
+    $db = PMF_Db::factory($DB['type']);
+    $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
+} catch (PMF_Exception $e) {
+    PMF_Db::errorPage($e->getMessage());
+    exit(-1);
+}
 
 //
 // Fetch the configuration and add the database connection

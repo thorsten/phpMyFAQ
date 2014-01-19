@@ -1,7 +1,6 @@
 <?php
 /**
- * The PMF_DB_Mysqli class provides methods and functions for MySQL 5.x and
- * MariaDB 5.x databases
+ * The PMF_DB_Pdo_mysql class is a PDO wrapper class for MySQL
  *
  * PHP Version 5.4
  *
@@ -12,11 +11,10 @@
  * @category  phpMyFAQ
  * @package   DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    David Soria Parra <dsoria@gmx.net>
- * @copyright 2005-2014 phpMyFAQ Team
+ * @copyright 2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @package   2005-02-21
+ * @package   2014-01-18
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -24,23 +22,22 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_DB_Mysqli
+ * PMF_DB_Pdo_mysql
  *
  * @category  phpMyFAQ
  * @package   DB
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    David Soria Parra <dsoria@gmx.net>
- * @copyright 2005-2014 phpMyFAQ Team
+ * @copyright 2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @package   2005-02-21
+ * @package   2014-01-18
  */
-class PMF_DB_Mysqli implements PMF_DB_Driver
+class PMF_DB_Pdo implements PMF_DB_Driver
 {
     /**
      * The connection object
      *
-     * @var mysqli
+     * @var PDO
      */
     private $conn = false;
 
@@ -70,19 +67,10 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      */
     public function connect($host, $user, $password, $database = '')
     {
-        $this->conn = new mysqli($host, $user, $password);
-        if ($this->conn->connect_error) {
-            PMF_Db::errorPage($this->conn->connect_errno . ': ' . $this->conn->connect_error);
-            die();
-        }
-        
-        // change character set to UTF-8
-        if (!$this->conn->set_charset('utf8')) {
-            PMF_Db::errorPage($this->error());
-        }
-
-        if ('' !== $database) {
-            return $this->conn->select_db($database);
+        try {
+            $this->conn = new PDO('mysql:host=' . $host . ';dbname=' . $database . ';charset=UTF8', $user, $password);
+        } catch (PDOException $e) {
+            PMF_Db::errorPage('Database connection failed: ' . $e->getMessage());
         }
 
         return true;
@@ -91,90 +79,91 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     /**
      * Sends a query to the database.
      *
-     * @param   string $query
-     * @return  mixed $result
+     * @param string $query
+     *
+     * @return PDOStatement $statement
      */
     public function query($query)
     {
         if (DEBUG) {
             $this->sqllog .= PMF_Utils::debug($query);
         }
-        $result = $this->conn->query($query);
-        if (!$result) {
-            $this->sqllog .= $this->error();
+
+        try {
+            $statement = $this->conn->query($query);
+        } catch (PDOException $e) {
+            $this->sqllog .= $e->getMessage();
         }
-        return $result;
+
+        return $statement;
     }
 
     /**
-    * Escapes a string for use in a query
-    *
-    * @param   string
-    * @return  string
-    */
+     * Escapes a string for use in a query
+     *
+     * @param string $string
+     *
+     * @return  string
+     */
     public function escape($string)
     {
-        return $this->conn->real_escape_string($string);
+        return $this->conn->quote($string);
     }
 
     /**
      * Fetch a result row as an object
      *
-     * This function fetches a result row as an object.
+     * @param PDOStatement $statement
      *
-     * @param   mixed $result
-     * @return  mixed
+     * @return mixed
      */
-    public function fetchObject($result)
+    public function fetchObject($statement)
     {
-        return $result->fetch_object();
+        $statement->setFetchMode(PDO::FETCH_OBJ);
+        return $statement->fetch();
     }
 
     /**
-     * Fetch a result row as an object
+     * Fetch a result row as an associative array.
      *
-     * This function fetches a result as an associative array.
+     * @param PDOStatement $statement
      *
-     * @param   mixed $result
      * @return  array
      */
-    public function fetchArray($result)
+    public function fetchArray($statement)
     {
-        return $result->fetch_assoc();
+        $statement->setFetchMode(PDO::FETCH_ASSOC);
+        return $statement->fetch();
     }
 
     /**
      * Fetches a complete result as an object
      *
-     * @param  resource      $result Resultset
+     * @param  PDOStatement $statement
      *
      * @throws Exception
      *
      * @return array
      */
-    public function fetchAll($result)
+    public function fetchAll($statement)
     {
-        $ret = [];
-        if (false === $result) {
+        if (false === $statement) {
             throw new Exception('Error while fetching result: ' . $this->error());
         }
-        
-        while ($row = $this->fetchObject($result)) {
-            $ret[] = $row;
-        }
-        
-        return $ret;
+
+        return $statement->fetchAll(PDO::FETCH_OBJ  );
     }
-    
+
     /**
      * Number of rows in a result
      *
-     * @param   mixed $result
-     * @return  integer
+     * @param PDOStatement $statement
+     *
+     * @return integer
      */
-    public function numRows($result)
+    public function numRows($statement)
     {
-        return $result->num_rows;
+        return $statement->rowCount();
     }
 
     /**
@@ -187,11 +176,11 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
         return $this->sqllog;
     }
 
-     /**
-      * This function returns the table status.
-      *
-      * @return array
-      */
+    /**
+     * This function returns the table status.
+     *
+     * @return array
+     */
     public function getTableStatus()
     {
         $arr = [];
@@ -217,22 +206,24 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
                MAX(%s) AS current_id
            FROM
                %s",
-           $id,
-           $table);
-           
+            $id,
+            $table);
+
         $result  = $this->query($select);
-        $current = $result->fetch_row();
+        $current = $result->fetch();
         return $current[0] + 1;
     }
 
-     /**
-      * Returns the error string.
-      *
-      * @return string
-      */
+    /**
+     * Returns the error string.
+     *
+     * @return string
+     */
     public function error()
     {
-        return $this->conn->error;
+        $error = $this->conn->errorInfo();
+
+        return $error[0] . ': ' . $error[2];
     }
 
     /**
@@ -242,7 +233,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      */
     public function clientVersion()
     {
-        return $this->conn->get_client_info();
+        return $this->conn->getAttribute(PDO::ATTR_CLIENT_VERSION);
     }
 
     /**
@@ -252,7 +243,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      */
     public function serverVersion()
     {
-        return $this->conn->get_server_info();
+        return $this->conn->getAttribute(PDO::ATTR_SERVER_VERSION);
     }
 
     /**
@@ -287,7 +278,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     public function close()
     {
         if (is_resource($this->conn)) {
-            $this->conn->close();
+            $this->conn = null;
         }
     }
 
@@ -299,7 +290,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     public function __destruct()
     {
         if (is_resource($this->conn)) {
-            $this->conn->close();
+            $this->conn = null;
         }
     }
 }

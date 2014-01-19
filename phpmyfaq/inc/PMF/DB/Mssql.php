@@ -80,22 +80,10 @@ class PMF_DB_Mssql implements PMF_DB_Driver
         }
 
         if ('' !== $database) {
-            return $this->selectDb($database);
+            return mssql_select_db($database, $this->conn);
         }
 
         return true;
-    }
-
-    /**
-     * Connects to a given database
-     *
-     * @param string $database Database name
-     *
-     * @return boolean
-     */
-    public function selectDb($database)
-    {
-        return mssql_select_db($database, $this->conn);
     }
 
     /**

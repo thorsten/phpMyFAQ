@@ -89,18 +89,6 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
     }
 
     /**
-     * Connects to a given database
-     *
-     * @param string $database Database name
-     *
-     * @return boolean
-     */
-    public function selectDb($database)
-    {
-        return true;
-    }
-
-    /**
      * Sets the connection options
      *
      * @param  string $user     Specifies the User ID to be used when connecting with SQL Server Authentication
