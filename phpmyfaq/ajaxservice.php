@@ -51,7 +51,9 @@ PMF_String::init($languageCode);
 
 // Check captcha
 $captcha = new PMF_Captcha($faqConfig);
-$captcha->setSessionId($sids);
+$captcha->setSessionId(
+    PMF_Filter::filterInput(INPUT_COOKIE, PMF_Session::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT)
+);
 
 // Send headers
 $http = new PMF_Helper_Http();
