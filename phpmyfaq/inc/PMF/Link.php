@@ -717,9 +717,9 @@ class PMF_Link
     public function getCurrentUrl()
     {
         if (!empty($_SERVER['HTTPS'])) {
-            return 'https://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+            return 'https://' . $_SERVER['SERVER_NAME'] . PMF_String::htmlentities($_SERVER['REQUEST_URI']);
         } else {
-            return 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+            return 'http://' . $_SERVER['SERVER_NAME'] . PMF_String::htmlentities($_SERVER['REQUEST_URI']);
         }
     }
     
