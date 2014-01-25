@@ -29,6 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $faqTableInfo = $faqConfig->getDb()->getTableStatus();
 $faqSystem    = new PMF_System();
+$faqSession   = new PMF_Session($faqConfig);
 ?>
     <header>
         <h2>
@@ -48,7 +49,7 @@ $faqSystem    = new PMF_System();
     <section class="row-fluid">
         <div class="dashboard-stat span2">
             <span><a href="?action=viewsessions"><?php echo $PMF_LANG['ad_start_visits'] ?></a></span>
-            <?php echo $faqTableInfo[PMF_Db::getTablePrefix() . 'faqsessions']; ?>
+            <?php echo $faqSession->getNumberOfSessions() ?>
         </div>
         <div class="dashboard-stat span2">
             <span><a href="?action=view"><?php echo $PMF_LANG["ad_start_articles"]; ?></a></span>
