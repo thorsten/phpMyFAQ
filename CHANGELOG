@@ -9,6 +9,7 @@ Version 2.8.6 - 2014-01-
 - updated Hungarian translation
 - updated Spanish translation (Luis Carvalho)
 - updated bundled Symfony ClassLoader to version 2.4.1 (Thorsten)
+- fixed some minor bugs (Thorsten)
 
 Version 2.8.5 - 2013-12-31
 - fixed SSO logins with mod_auth_kerb (Stephane Lapie)
