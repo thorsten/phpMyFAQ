@@ -5,7 +5,8 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.8.6 - 2014-01-
+Version 2.8.6 - 2014-02-04
+- fixed IE8/9 only XSS and CSRF vulnerabilities (JPCERT, Thorsten)
 - updated Hungarian translation
 - updated Spanish translation (Luis Carvalho)
 - updated bundled Symfony ClassLoader to version 2.4.1 (Thorsten)
