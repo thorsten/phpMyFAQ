@@ -1,3 +1,10 @@
+CHANGED FILES FROM 2.8.6 -> 2.8.7
+
+./inc/PMF/System.php
+./inc/PMF/Utils.php
+
+
+
 CHANGED FILES FROM 2.8.5 -> 2.8.6
 
 ./admin/ajax.attachment.php
