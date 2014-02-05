@@ -263,7 +263,7 @@ class PMF_Utils
      */
     public static function setHighlightedString($string, $highlight)
     {
-        $attributes = [
+        $attributes = array(
             'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name',
             'face', 'size', 'dir', 'rel', 'rev',
             'onmouseenter', 'onmouseleave', 'onafterprint', 'onbeforeprint',
@@ -281,7 +281,7 @@ class PMF_Utils
             'onscroll', 'onseeked', 'onseeking', 'onselect', 'onshow', 'onstalled',
             'onsubmit', 'onsuspend', 'ontimeupdate', 'onvolumechange', 'onwaiting',
             'oncopy', 'oncut', 'onpaste', 'onbeforescriptexecute', 'onafterscriptexecute'
-        ];
+        );
         
         return PMF_String::preg_replace_callback(
             '/(' . $highlight . '="[^"]*")|' .
