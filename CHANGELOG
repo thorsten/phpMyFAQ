@@ -1,9 +1,12 @@
-phpMyFAQ 2.8.7
+phpMyFAQ 2.8.8
 Codename "Perdita"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.8.8 - 2014-
+-
 
 Version 2.8.7 - 2014-02-05
 - fixed PHP 5.4 related issue introduced in 2.8.6 (Thorsten)
