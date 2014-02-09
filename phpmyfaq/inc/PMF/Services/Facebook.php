@@ -17,6 +17,10 @@
  * @since     2010-09-05
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * PMF_Services_Facebook
  *
