@@ -203,7 +203,7 @@ class PMF_User
         // additionally, set given $auth objects
         if (count($auth) > 0) {
             foreach ($auth as $name => $authObject) {
-                if (!$this->addAuth($authObject, $name)) {
+		if (!$authObject instanceof PMF_Auth_Driver && !$this->addAuth($authObject, $name)) {
                     break;
                 }
             }
@@ -496,12 +496,13 @@ class PMF_User
             $pass = $this->createPassword();
         }
         $success = false;
+
         foreach ($this->authContainer as $name => $auth) {
             if ($auth->setReadOnly()) {
                 continue;
             }
             if (!$auth->add($login, $pass)) {
-                $this->errors[] = self::ERROR_USER_CANNOT_CREATE_USER.'in Auth '.$name;
+		$this->errors[] = self::ERROR_USER_CANNOT_CREATE_USER . 'in Auth ' . $name;
             } else {
                 $success = true;
             }
@@ -682,10 +683,10 @@ class PMF_User
     {
         $message = '';
         foreach ($this->errors as $error) {
-            $message .= $error."\n";
+	    $message .= $error . "<br>\n";
         }
         $this->errors = [];
-        return $message;
+	return $message . '<br>' . implode('<br>', debug_backtrace());
     }
 
     /**
@@ -714,8 +715,8 @@ class PMF_User
     /**
      * adds a new authentication object to the user object.
      *
-     * @param  PMF_Auth $auth Auth object
-     * @param  string   $name Auth name
+     * @param  PMF_Auth_Driver $auth PMF_Auth_Driver object
+     * @param  string          $name Auth name
      * @return boolean
      */
     public function addAuth($auth, $name)
