@@ -341,7 +341,8 @@ $query[] = "CREATE TABLE ".$sqltblpre."faquserdata (
 user_id INT(11) NOT NULL,
 last_modified VARCHAR(14) NULL,
 display_name VARCHAR(50) NULL,
-email VARCHAR(100) NULL) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
+email VARCHAR(100) NULL,
+PRIMARY KEY (user_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faquserlogin
 $query[] = "CREATE TABLE ".$sqltblpre."faquserlogin (
