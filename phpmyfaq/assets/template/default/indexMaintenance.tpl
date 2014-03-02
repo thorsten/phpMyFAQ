@@ -29,12 +29,6 @@
 
     <script src="assets/js/libs/modernizr.min.js"></script>
     <script src="assets/js/phpmyfaq.min.js"></script>
-
-    <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="feed/news/rss.php">
-    <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="feed/topten/rss.php">
-    <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml" href="feed/latest/rss.php">
-    <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml" href="feed/openquestions/rss.php">
-    <link rel="search" type="application/opensearchdescription+xml" title="{metaTitle}" href="{opensearch}">
 </head>
 <body dir="{dir}">
 
