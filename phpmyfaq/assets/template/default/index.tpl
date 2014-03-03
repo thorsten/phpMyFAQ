@@ -11,6 +11,7 @@
     <base href="{baseHref}" />
 
     <meta name="description" content="{metaDescription}">
+    <meta name="keywords" content="{metaKeywords}">
     <meta name="author" content="{metaPublisher}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="application-name" content="phpMyFAQ {phpmyfaqversion}">
