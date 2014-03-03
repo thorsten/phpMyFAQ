@@ -63,9 +63,17 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
             $columns    =  $this->getResultColumns();
             $columns   .= ($enableRelevance) ? $this->getMatchingColumnsAsResult($searchTerm) : '';
             $orderBy    = ($enableRelevance) ? 'ORDER BY ' . $this->getMatchingOrder() . ' DESC' : '';
-            $chars      = array (chr(150), chr(147), chr(148), chr(146), chr(34), '&quot;', '&#34;');
-            $replace    = array ("-", "\"", "\"", "'", "\"" , "\"", "\"");
-            $searchTerm = str_replace ($chars, $replace, $searchTerm);
+            $chars      = array(
+                "\xe2\x80\x98",
+                "\xe2\x80\x99",
+                "\xe2\x80\x9c",
+                "\xe2\x80\x9d",
+                "\xe2\x80\x93",
+                "\xe2\x80\x94",
+                "\xe2\x80\xa6"
+            );
+            $replace    = array("'", "'", '"', '"', '-', '--', '...');
+            $searchTerm = str_replace($chars, $replace, $searchTerm);
 
             $query = sprintf("
                 SELECT

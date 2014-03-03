@@ -62,8 +62,7 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
 
             $columns  =  $this->getResultColumns();
             $columns .= ($enableRelevance) ? $this->getMatchingColumnsAsResult($searchTerm) : '';
-
-            $orderBy = ($enableRelevance) ? 'ORDER BY ' . $this->getMatchingOrder() : '';
+            $orderBy  = ($enableRelevance) ? 'ORDER BY ' . $this->getMatchingOrder() : '';
 
             $query = sprintf("
                 SELECT

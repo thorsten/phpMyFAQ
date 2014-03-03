@@ -38,8 +38,6 @@ class PMF_Search_Database_Sqlsrv extends PMF_Search_Database
      * Constructor
      *
      * @param PMF_Configuration
-     *
-     * @return PMF_Search_Abstract
      */
     public function __construct(PMF_Configuration $config)
     {
