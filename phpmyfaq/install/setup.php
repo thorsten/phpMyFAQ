@@ -147,7 +147,7 @@ PMF_String::init('en');
 $installer = new PMF_Installer();
 $system    = new PMF_System();
 
-//$installer->checkBasicStuff();
+$installer->checkBasicStuff();
 $installer->checkFilesystemPermissions();
 
 // not yet POSTed
