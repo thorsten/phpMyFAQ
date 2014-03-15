@@ -303,14 +303,14 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                             <?php
                                 if ($dir = @opendir(PMF_ROOT_DIR . '/lang')) {
                                     while ($dat = @readdir($dir)) {
-                                        if (substr($dat, -4) == '.php') {
+                                        if (substr($dat, -4) === '.php') {
                                             printf('<option value="%s"', $dat);
                                             if ($dat == "language_en.php") {
                                                 echo ' selected="selected"';
                                             }
                                             printf(
                                                 '>%s</option>',
-                                                $languageCodes[substr(strtoupper($dat), 9, 2)]
+                                                $languageCodes[substr(strtoupper($dat), 9, -4)]
                                             );
                                         }
                                     }
