@@ -39,7 +39,7 @@ $tpl->parse(
         'sendPassword'   => '<a href="?action=password">' . $PMF_LANG['lostPassword'] . '</a>',
         'loginHeader'    => $PMF_LANG['msgLoginUser'],
         'loginMessage'   => $loginMessage,
-        'writeLoginPath' => $systemUri,
+        'writeLoginPath' => $faqSystem->getSystemUri($faqConfig),
         'faqloginaction' => $action,
         'login'          => $PMF_LANG['ad_auth_ok'],
         'username'       => $PMF_LANG['ad_auth_user'],

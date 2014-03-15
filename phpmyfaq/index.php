@@ -110,7 +110,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     }
     if ($user->login($faqusername, $faqpassword)) {
         if ($user->getStatus() != 'blocked') {
-            $auth   = true;
+            $auth = true;
             if (empty($action)) {
                 $action = $faqaction; // SSO logins don't have $faqaction
             }

@@ -222,7 +222,7 @@ class PMF_System
     {
         $mainUrl = $faqConfig->get('main.referenceURL');
 
-        if ('https' === $_ENV['REQUEST_SCHEME']) {
+        if (isset($_ENV['REQUEST_SCHEME']) && 'https' === $_ENV['REQUEST_SCHEME']) {
             if (false === strpos($mainUrl, 'https')) {
                 $mainUrl = str_replace('http://', 'https://', $mainUrl);
             }
