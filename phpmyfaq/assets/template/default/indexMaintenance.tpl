@@ -23,9 +23,9 @@
     <meta property="og:description" content="{metaDescription}" />
     <meta property="og:image" content="" />
 
-    <link rel="stylesheet" href="assets/template/{tplSetName}/css/{stylesheet}.min.css?v=1">
-    <link rel="shortcut icon" href="assets/template/{tplSetName}/favicon.ico">
-    <link rel="apple-touch-icon" href="assets/template/{tplSetName}/apple-touch-icon.png">
+    <link rel="stylesheet" href="{baseHref}assets/template/{tplSetName}/css/{stylesheet}.min.css?v=1">
+    <link rel="shortcut icon" href="{baseHref}assets/template/{tplSetName}/favicon.ico">
+    <link rel="apple-touch-icon" href="{baseHref}assets/template/{tplSetName}/apple-touch-icon.png">
     <link rel="canonical" href="{currentPageUrl}">
 
     <script src="assets/js/libs/modernizr.min.js"></script>
