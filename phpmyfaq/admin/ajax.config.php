@@ -154,9 +154,11 @@ switch ($ajaxAction) {
         if (null != $stopword && PMF_Language::isASupportedLanguage($stopwordsLang)) {
             $stopwords->setLanguage($stopwordsLang);
             if (null !== $stopwordId && -1 < $stopwordId) {
-                $stopwords->update($stopwordId, $stopword);
-            } elseif (!$oStopwords->match($stopword)){
-                $stopwords->add($stopword);
+                echo $stopwords->update($stopwordId, $stopword);
+            } elseif (!$stopwords->match($stopword)){
+                echo $stopwords->add($stopword);
+            } else {
+
             }
         }
         break;

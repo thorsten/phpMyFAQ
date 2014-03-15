@@ -109,15 +109,12 @@ class PMF_Stopwords
     public function add($word)
     {
         if (!$this->match($word)) {
-
-            $sql = "INSERT INTO $this->table_name VALUES(%d, '%s', '%s')";
             $sql = sprintf(
-                $sql,
+                "INSERT INTO $this->table_name VALUES(%d, '%s', '%s')",
                 $this->_config->getDb()->nextId($this->table_name, 'id'),
-                $this->_language->getLanguage(),
+                $this->_language,
                 $word
             );
-            
             $this->_config->getDb()->query($sql);
             
             return true;
@@ -129,8 +126,8 @@ class PMF_Stopwords
     /**
      * Update a word in the stop words dictionary
      *
-     * @param int $id
-     * @param strng $word
+     * @param int    $id
+     * @param string $word
      *
      * @return void
      */
@@ -141,7 +138,7 @@ class PMF_Stopwords
             $sql,
             $word,
             $id,
-            $this->_language->getLanguage()
+            $this->_language
         );
         
         $this->_config->getDb()->query($sql);
@@ -160,7 +157,7 @@ class PMF_Stopwords
         $sql = sprintf(
             "DELETE FROM $this->table_name WHERE id = %d AND lang = '%s'",
             $id,
-            $this->_language->getLanguage()
+            $this->_language
         );
         
         $this->_config->getDb()->query($sql);
@@ -176,9 +173,12 @@ class PMF_Stopwords
      */
     public function match($word)
     {
-        $sql = "SELECT id FROM $this->table_name WHERE LOWER(stopword) = LOWER('%s') AND lang = '%s'";
-        $sql = sprintf($sql, $word, $this->_language->getLanguage());
-        
+        $sql = sprintf(
+            "SELECT id FROM $this->table_name WHERE LOWER(stopword) = LOWER('%s') AND lang = '%s'",
+            $word,
+            $this->_language
+        );
+
         $result = $this->_config->getDb()->query($sql);
         
         return $this->_config->getDb()->numRows($result) > 0;
