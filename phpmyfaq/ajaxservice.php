@@ -255,8 +255,8 @@ switch ($action) {
         }
 
         if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) &&
-            !is_null($question) && !empty($question) && $stopwords->checkBannedWord(PMF_String::htmlspecialchars($question)) &&
-            !is_null($answer) && !empty($answer) && $stopwords->checkBannedWord(PMF_String::htmlspecialchars($answer)) &&
+            !is_null($question) && !empty($question) && $stopwords->checkBannedWord(strip_tags($question)) &&
+            !is_null($answer) && !empty($answer) && $stopwords->checkBannedWord(strip_tags($answer)) &&
             ((is_null($faqid) && !is_null($categories['rubrik'])) || (!is_null($faqid) && !is_null($faqlanguage) &&
             PMF_Language::isASupportedLanguage($faqlanguage)))) {
 
