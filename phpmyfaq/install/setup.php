@@ -147,7 +147,7 @@ PMF_String::init('en');
 $installer = new PMF_Installer();
 $system    = new PMF_System();
 
-$installer->checkBasicStuff();
+//$installer->checkBasicStuff();
 $installer->checkFilesystemPermissions();
 
 // not yet POSTed
@@ -302,18 +302,21 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                             <select name="language" size="1" id="language">
                             <?php
                                 if ($dir = @opendir(PMF_ROOT_DIR . '/lang')) {
+                                    $options = array();
                                     while ($dat = @readdir($dir)) {
+                                        $option = '';
                                         if (substr($dat, -4) === '.php') {
-                                            printf('<option value="%s"', $dat);
+                                            $option .= sprintf('<option value="%s"', $dat);
                                             if ($dat == "language_en.php") {
-                                                echo ' selected="selected"';
+                                                $option .= ' selected="selected"';
                                             }
-                                            printf(
-                                                '>%s</option>',
-                                                $languageCodes[substr(strtoupper($dat), 9, -4)]
-                                            );
+                                            $language = $languageCodes[substr(strtoupper($dat), 9, -4)];
+                                            $option  .= sprintf('>%s</option>', $language);
+                                            $options[$language] = $option;
                                         }
                                     }
+                                    ksort($options);
+                                    echo implode("\n", $options);
                                 } else {
                                     echo '<option>english</option>';
                                 }
