@@ -212,6 +212,26 @@ class PMF_System
     }
 
     /**
+     * Checks if the system URI is running with http or https
+     *
+     * @param PMF_Configuration $faqConfig
+     *
+     * @return mixed
+     */
+    public function getSystemUri(PMF_Configuration $faqConfig)
+    {
+        $mainUrl = $faqConfig->get('main.referenceURL');
+
+        if ('https' === $_ENV['REQUEST_SCHEME']) {
+            if (false === strpos($mainUrl, 'https')) {
+                $mainUrl = str_replace('http://', 'https://', $mainUrl);
+            }
+        }
+
+        return $mainUrl;
+    }
+
+    /**
      * Checks for installed database extensions, if the first supported
      * extension is enabled, return true.
      *

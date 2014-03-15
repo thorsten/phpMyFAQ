@@ -43,6 +43,8 @@ $edAutosave        = (('editentry' === $action) && $faqConfig->get('records.auto
 $adminHelper = new PMF_Helper_Administration();
 $adminHelper->setPermission($permission);
 
+$faqSystem = new PMF_System();
+
 switch ($action) {
     case 'user':
     case 'group':
@@ -163,22 +165,22 @@ switch ($action) {
 }
 ?>
 <!DOCTYPE html>
-<!--[if lt IE 7 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie6"> <![endif]-->
-<!--[if IE 7 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie7"> <![endif]-->
-<!--[if IE 8 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie8"> <![endif]-->
-<!--[if IE 9 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js"> <!--<![endif]-->
+<!--[if lt IE 7 ]> <html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]> <html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]> <html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]> <html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title><?php print $faqConfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?></title>
-    <base href="<?php print $faqConfig->get('main.referenceURL'); ?>/admin/" />
+    <title><?php echo $faqConfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?></title>
+    <base href="<?php echo $faqSystem->getSystemUri($faqConfig) ?>/admin/" />
 
     <meta name="description" content="Only Chuck Norris can divide by zero.">
     <meta name="author" content="phpMyFAQ Team">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-name" content="phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="application-name" content="phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?>">
     <meta name="copyright" content="(c) 2001-2014 phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
     <meta name="MSSmartTagsPreventParsing" content="true">
@@ -192,17 +194,17 @@ switch ($action) {
 
     <script src="../assets/js/plugins/datePicker/date.js"></script>
     <script src="../assets/js/plugins/datePicker/jquery.datePicker.js"></script>
-    <script src="editor/tiny_mce.js?<?php print time(); ?>"></script>
+    <script src="editor/tiny_mce.js?<?php echo time(); ?>"></script>
 
 <?php if ($edAutosave): ?>
     <script>var pmfAutosaveInterval = <?php echo $faqConfig->get('records.autosaveSecs') ?>;</script>
     <script src="../assets/js/autosave.js"></script>
 <?php endif; ?>
 
-    <link rel="shortcut icon" href="../assets/template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico">
-    <link rel="apple-touch-icon" href="../assets/template/<?php print PMF_Template::getTplSetName(); ?>/apple-touch-icon.png">
+    <link rel="shortcut icon" href="../assets/template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico">
+    <link rel="apple-touch-icon" href="../assets/template/<?php echo PMF_Template::getTplSetName(); ?>/apple-touch-icon.png">
 </head>
-<body dir="<?php print $PMF_LANG["dir"]; ?>">
+<body dir="<?php echo $PMF_LANG["dir"]; ?>">
 
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
@@ -212,53 +214,53 @@ switch ($action) {
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a class="brand" href="../index.php" rel="tooltip" title="<?php print $faqConfig->get('main.titleFAQ'); ?>">
+            <a class="brand" href="../index.php" rel="tooltip" title="<?php echo $faqConfig->get('main.titleFAQ'); ?>">
                 phpMyFAQ
             </a>
             <div class="nav-collapse">
                 <?php if (isset($auth) && in_array(true, $permission)): ?>
                 <ul class="nav">
-                    <li<?php print ($dashboardPage ? ' class="active"' : ''); ?>>
+                    <li<?php echo ($dashboardPage ? ' class="active"' : ''); ?>>
                         <a href="index.php">
-                            <i class="icon-home icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_home']; ?>
+                            <i class="icon-home icon-white"></i> <?php echo $PMF_LANG['admin_mainmenu_home']; ?>
                         </a>
                     </li>
-                    <li<?php print ($userPage ? ' class="active"' : ''); ?>>
+                    <li<?php echo ($userPage ? ' class="active"' : ''); ?>>
                         <a href="index.php?action=user">
-                            <i class="icon-user icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_users']; ?>
+                            <i class="icon-user icon-white"></i> <?php echo $PMF_LANG['admin_mainmenu_users']; ?>
                         </a>
                     </li>
-                    <li<?php print ($contentPage ? ' class="active"' : ''); ?>>
+                    <li<?php echo ($contentPage ? ' class="active"' : ''); ?>>
                         <a href="index.php?action=content">
-                            <i class="icon-pencil icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_content']; ?>
+                            <i class="icon-pencil icon-white"></i> <?php echo $PMF_LANG['admin_mainmenu_content']; ?>
                         </a>
                     </li>
-                    <li<?php print ($statisticsPage ? ' class="active"' : ''); ?>>
+                    <li<?php echo ($statisticsPage ? ' class="active"' : ''); ?>>
                         <a href="index.php?action=statistics">
-                            <i class="icon-tasks icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_statistics']; ?>
+                            <i class="icon-tasks icon-white"></i> <?php echo $PMF_LANG['admin_mainmenu_statistics']; ?>
                         </a>
                     </li>
-                    <li<?php print ($exportsPage ? ' class="active"' : ''); ?>>
+                    <li<?php echo ($exportsPage ? ' class="active"' : ''); ?>>
                         <a href="index.php?action=export">
-                            <i class="icon-book icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_exports']; ?>
+                            <i class="icon-book icon-white"></i> <?php echo $PMF_LANG['admin_mainmenu_exports']; ?>
                         </a>
                     </li>
-                    <li<?php print ($backupPage ? ' class="active"' : ''); ?>>
+                    <li<?php echo ($backupPage ? ' class="active"' : ''); ?>>
                         <a href="index.php?action=backup">
-                            <i class="icon-download-alt icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_backup']; ?>
+                            <i class="icon-download-alt icon-white"></i> <?php echo $PMF_LANG['admin_mainmenu_backup']; ?>
                         </a>
                     </li>
-                    <li<?php print ($configurationPage ? ' class="active"' : ''); ?>>
+                    <li<?php echo ($configurationPage ? ' class="active"' : ''); ?>>
                         <a href="index.php?action=config">
-                            <i class="icon-wrench icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_configuration']; ?>
+                            <i class="icon-wrench icon-white"></i> <?php echo $PMF_LANG['admin_mainmenu_configuration']; ?>
                         </a>
                     </li>
                 </ul>
                 <ul class="nav pull-right">
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <span title="<?php print $PMF_LANG['ad_user_loggedin'] . $user->getLogin(); ?>">
-                            <?php print $user->getUserData('display_name'); ?>
+                            <span title="<?php echo $PMF_LANG['ad_user_loggedin'] . $user->getLogin(); ?>">
+                            <?php echo $user->getUserData('display_name'); ?>
                             </span>
                             <b class="caret"></b>
                         </a>
@@ -279,7 +281,7 @@ switch ($action) {
                 </ul>
                 <?php else: ?>
                 <ul class="nav">
-                    <li><a href="../index.php?action=password"><?php print $PMF_LANG["lostPassword"]; ?></a></li>
+                    <li><a href="../index.php?action=password"><?php echo $PMF_LANG["lostPassword"]; ?></a></li>
                 </ul>
                 <?php endif; ?>
             </div>
@@ -308,8 +310,8 @@ switch ($action) {
                 <hr>
                 <div class="well categories">
                     <ul class="nav nav-list">
-                        <li class="nav-header"><?php print $secLevelHeader; ?></li>
-                        <?php print $secLevelEntries; ?>
+                        <li class="nav-header"><?php echo $secLevelHeader; ?></li>
+                        <?php echo $secLevelEntries; ?>
                         <li class="nav-header">Admin worklog</li>
                         <li><span id="saving_data_indicator"></span></li>
                         <li class="nav-header"><?php echo $PMF_LANG['ad_session_expiration']; ?></li>
