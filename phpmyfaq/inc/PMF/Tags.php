@@ -195,7 +195,7 @@ class PMF_Tags
      */
     public function saveTags($recordId, Array $tags)
     {
-        $current_tags = $this->getAllTags();
+        $currentTags = $this->getAllTags();
 
         // Delete all tag references for the faq record
         if (count($tags) > 0) {
@@ -203,22 +203,23 @@ class PMF_Tags
         }
 
         // Store tags and references for the faq record
-        foreach ($tags as $tagging_name) {
-            $tagging_name = trim($tagging_name);
-            if (PMF_String::strlen($tagging_name) > 0) {
-                if (!in_array(PMF_String::strtolower($tagging_name),
-                              array_map(array('PMF_String', 'strtolower'), $current_tags))) {
+        foreach ($tags as $tagName) {
+            $tagName = trim($tagName);
+            if (PMF_String::strlen($tagName) > 0) {
+                if (!in_array(PMF_String::strtolower($tagName),
+                              array_map(array('PMF_String', 'strtolower'), $currentTags))) {
                     // Create the new tag
-                    $new_tagging_id = $this->_config->getDb()->nextId(PMF_Db::getTablePrefix().'faqtags', 'tagging_id');
-                    $query = sprintf("
+                    $newTagId = $this->_config->getDb()->nextId(PMF_Db::getTablePrefix().'faqtags', 'tagging_id');
+                    $query    = sprintf("
                         INSERT INTO
                             %sfaqtags
                         (tagging_id, tagging_name)
                             VALUES
                         (%d, '%s')",
                         PMF_Db::getTablePrefix(),
-                        $new_tagging_id,
-                        $tagging_name);
+                        $newTagId,
+                        $tagName
+                    );
                     $this->_config->getDb()->query($query);
 
                     // Add the tag reference for the faq record
@@ -230,7 +231,8 @@ class PMF_Tags
                         (%d, %d)",
                         PMF_Db::getTablePrefix(),
                         $recordId,
-                        $new_tagging_id);
+                        $newTagId
+                    );
                     $this->_config->getDb()->query($query);
                 } else {
                     // Add the tag reference for the faq record
@@ -243,8 +245,8 @@ class PMF_Tags
                         PMF_Db::getTablePrefix(),
                         $recordId,
                         array_search(
-                            PMF_String::strtolower($tagging_name),
-                            array_map(array('PMF_String', 'strtolower'), $current_tags)
+                            PMF_String::strtolower($tagName),
+                            array_map(array('PMF_String', 'strtolower'), $currentTags)
                         )
                     );
                     $this->_config->getDb()->query($query);
