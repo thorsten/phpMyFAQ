@@ -108,26 +108,24 @@ class PMF_User_CurrentUser extends PMF_User
     }
 
     /**
-     * login()
+     * Checks the given login and password in all auth-objects. Returns true
+     * on success, otherwise false. Raises errors that can be checked using
+     * the error() method. On success, the CurrentUser instance will be
+     * labeled as logged in. The name of the successful auth container will
+     * be stored in the user table. A new auth object may be added by using
+     * addAuth() method. The given password must not be encrypted, since the
+     * auth object takes care about the encryption method.
      *
-     * Checks the given login and password in all auth-objects.
-     * Returns true on success, otherwise false. Raises errors
-     * that can be checked using the error() method. On success,
-     * the CurrentUser instance will be stored in the session and
-     * labeled as logged in. The name of the successful auth
-     * container will be stored in the user table.
-     * A new auth object may be added by using addAuth() method.
-     * The given password must not be encrypted, since the auth
-     * object takes care about the encryption method.
-     *
-     * @param string $login     Loginname
-     * @param string $password  Password
+     * @param string $login    Login name
+     * @param string $password Password
      *
      * @return bool
      */
     public function login($login, $password)
     {
         $optData = array();
+
+        // Additional code for LDAP: user\\domain
         if (isset($this->_ldapConfig['ldap_use_domain_prefix'])) {
             if (($pos = strpos($login, '\\')) !== false) {
                 if ($pos !== 0) {
@@ -135,6 +133,13 @@ class PMF_User_CurrentUser extends PMF_User
                 }
 
                 $login = substr($login, $pos + 1);
+            }
+        }
+
+        // Additional code for SSO: user@domain
+        if (($pos = strpos($login, '@')) !== false) {
+            if ($pos !== 0) {
+                $login = substr($login, 0, $pos);
             }
         }
         

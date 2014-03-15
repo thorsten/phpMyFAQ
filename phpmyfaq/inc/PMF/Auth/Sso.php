@@ -45,7 +45,14 @@ class PMF_Auth_Sso extends PMF_Auth implements PMF_Auth_Driver
      */
     public function add($login, $pass)
     {
-        return true;
+        $user   = new PMF_User($this->_config);
+        $result = $user->createUser($login, null);
+
+        if ($result) {
+            $user->setStatus('active');
+        }
+
+        return $result;
     }
 
     /**
