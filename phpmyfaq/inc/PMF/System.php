@@ -228,6 +228,10 @@ class PMF_System
             }
         }
 
+        if ('/' !== substr($mainUrl, -1)) {
+            $mainUrl .= '/';
+        }
+
         return $mainUrl;
     }
 
