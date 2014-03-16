@@ -3069,7 +3069,7 @@ class PMF_Faq
                 );
             }
         } else {
-            if (-1 === $this->user) {
+            if (-1 !== $this->user) {
                 return sprintf(
                     "AND fdu.user_id = %d",
                     $this->user
