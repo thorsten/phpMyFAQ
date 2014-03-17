@@ -117,7 +117,7 @@ class PMF_Tags
             }
         }
 
-        return $allTags;
+        return array_unique($allTags);
     }
 
     /**
