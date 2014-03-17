@@ -67,15 +67,23 @@ switch ($action) {
         break;
         
     case 'search':
-        $search       = new PMF_Search($faqConfig);
-        $searchString = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
-        $result       = $search->search($searchString, false);
-        $url          = $faqConfig->get('main.referenceURL') . '/index.php?action=artikel&cat=%d&id=%d&artlang=%s';
-        
-        foreach ($result as &$data) {
+        $faq             = new PMF_Faq($faqConfig);
+        $user            = new PMF_User($faqConfig);
+        $search          = new PMF_Search($faqConfig);
+        $faqSearchResult = new PMF_Search_Resultset($user, $faq, $faqConfig);
+
+        $searchString  = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
+        $searchResults = $search->search($searchString, false);
+        $url           = $faqConfig->get('main.referenceURL') . '/index.php?action=artikel&cat=%d&id=%d&artlang=%s';
+
+        $faqSearchResult->reviewResultset($searchResults);
+
+        $result = array();
+        foreach ($faqSearchResult->getResultset() as $data) {
             $data->answer = html_entity_decode(strip_tags($data->answer), ENT_COMPAT, 'utf-8');
             $data->answer = PMF_Utils::makeShorterText($data->answer, 12);
             $data->link   = sprintf($url, $data->category_id, $data->id, $data->lang);
+            $result[]     = $data;
         }
         break;
         
