@@ -346,7 +346,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                         <label class="control-label" for="tags"><?php echo $PMF_LANG['ad_entry_tags']; ?>:</label>
                         <div class="controls">
                             <input type="text" name="tags" id="tags" value="<?php echo $faqData['tags'] ?>"
-                                   data-provide="typeahead" data-mode="multiple" />
+                                   data-provide="typeahead" data-mode="multiple" autocomplete="off" />
                             <span id="tagsHelp" class="hide"><?php echo $PMF_LANG['msgShowHelp']; ?></span>
                         </div>
                     </div>
