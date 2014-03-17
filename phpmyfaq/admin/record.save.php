@@ -177,7 +177,7 @@ if ($permission['editbt']) {
 
         // Insert the tags
         if ($tags != '') {
-            $tagging->saveTags($recordId, explode(',', $tags));
+            $tagging->saveTags($recordId, explode(',', trim($tags)));
         } else {
             $tagging->deleteTagsFromRecordId($recordId);
         }
