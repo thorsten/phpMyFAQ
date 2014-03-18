@@ -1,3 +1,3 @@
 if [ "x${PMF_VERSION}" = "x" ]; then
-    PMF_VERSION="2.8.8"
+    PMF_VERSION="2.8.9"
 fi
