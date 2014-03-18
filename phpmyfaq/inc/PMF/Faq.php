@@ -3071,7 +3071,7 @@ class PMF_Faq
         } else {
             if (-1 !== $this->user) {
                 return sprintf(
-                    "AND fdu.user_id = %d",
+                    "AND ( fdu.user_id = %d OR fdu.user_id = -1 )",
                     $this->user
                 );
             } else {
