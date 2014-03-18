@@ -1,3 +1,47 @@
+CHANGED FILES FROM 2.8.7 -> 2.8.8
+
+./admin/ajax.config.php
+./admin/ajax.trans.php
+./admin/header.php
+./admin/record.add.php
+./admin/record.edit.php
+./admin/record.save.php
+./assets/template/default/index.tpl
+./assets/template/default/indexLogin.tpl
+./assets/template/default/indexMaintenance.tpl
+./assets/template/default/indexNewUser.tpl
+./assets/template/default/indexPassword.tpl
+./inc/PMF/Auth/Sso.php
+./inc/PMF/Export/Pdf/Wrapper.php
+./inc/PMF/Faq.php
+./inc/PMF/Search/Database/Mysql.php
+./inc/PMF/Search/Database/Mysqli.php
+./inc/PMF/Search/Database/Pgsql.php
+./inc/PMF/Search/Database/Sqlsrv.php
+./inc/PMF/Search/Resultset.php
+./inc/PMF/Services.php
+./inc/PMF/Services/Facebook.php
+./inc/PMF/Services/Gravatar.php
+./inc/PMF/Services/Twitter.php
+./inc/PMF/Stopwords.php
+./inc/PMF/String/Mbstring.php
+./inc/PMF/System.php
+./inc/PMF/Tags.php
+./inc/PMF/User/CurrentUser.php
+./inc/libs/tcpdf/fonts/uni2cid_ac15.php
+./inc/libs/tcpdf/fonts/uni2cid_ag15.php
+./inc/libs/tcpdf/fonts/uni2cid_aj16.php
+./inc/libs/tcpdf/fonts/uni2cid_ak12.php
+./install/setup.php
+./lang/language_de.php
+./ajaxservice.php
+./api.php
+./artikel.php
+./index.php
+./login.php
+
+
+
 CHANGED FILES FROM 2.8.6 -> 2.8.7
 
 ./inc/PMF/System.php
