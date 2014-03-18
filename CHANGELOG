@@ -6,8 +6,10 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.8.8 - 2014-03-
+- improved API security (Thorsten)
 - fixed search with Hebrew characters (Thorsten)
-- fixed PDF export with Czech characters (Thorsten)
+- fixed PDF export with Czech and Slovak characters (Thorsten)
+- fixed a lot of bugs (Thorsten)
 
 Version 2.8.7 - 2014-02-05
 - fixed PHP 5.4 related issue introduced in 2.8.6 (Thorsten)
