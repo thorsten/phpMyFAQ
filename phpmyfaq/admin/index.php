@@ -78,10 +78,9 @@ PMF_Attachment_Factory::init(
 );
 
 //
-// Initiazile caching
+// Create a new phpMyFAQ system object
 //
-PMF_Cache::init($faqConfig);
-
+$faqSystem = new PMF_System();
 
 //
 // Create a new FAQ object

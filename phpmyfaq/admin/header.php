@@ -43,8 +43,6 @@ $edAutosave        = (('editentry' === $action) && $faqConfig->get('records.auto
 $adminHelper = new PMF_Helper_Administration();
 $adminHelper->setPermission($permission);
 
-$faqSystem = new PMF_System();
-
 switch ($action) {
     case 'user':
     case 'group':
