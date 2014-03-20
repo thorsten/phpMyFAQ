@@ -390,6 +390,8 @@ class PMF_News
     /**
      * Deletes a news entry identified by its ID
      *
+     * @todo check if there are comments attached to the deleted news
+     *
      * @param integer $id News ID
      *
      * @return boolean
