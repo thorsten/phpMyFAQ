@@ -185,8 +185,8 @@ switch ($action) {
 
     <link rel="stylesheet" href="assets/css/style.css?v=1">
 
-    <script src="../assets/js/phpmyfaq.min.jsjs"></script>
-    <script src="editor/tiny_mce.js?<?php print time(); ?>"></script>
+    <script src="../assets/js/phpmyfaq.min.js"></script>
+    <script src="editor/tiny_mce.js?<?php echo time(); ?>"></script>
 
 <?php if ($edAutosave): ?>
     <script>var pmfAutosaveInterval = <?php echo $faqConfig->get('records.autosaveSecs') ?>;</script>
@@ -216,62 +216,58 @@ switch ($action) {
         <?php if (isset($auth) && in_array(true, $permission)): ?>
         <!-- @deprecated begin -->
         <ul class="nav navbar-nav">
-            <li<?php print ($dashboardPage ? ' class="active"' : ''); ?>>
-                <a href="index.php">
-                    <i class="icon-home icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_home']; ?>
-                </a>
-            </li>
-            <li<?php print ($userPage ? ' class="active"' : ''); ?>>
+            <li<?php echo ($userPage ? ' class="active"' : ''); ?>>
                 <a href="index.php?action=user">
-                    <i class="icon-user icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_users']; ?>
+                    <i class="icon-user icon-white"></i> <?php echo $PMF_LANG['admin_mainmenu_users']; ?>
                 </a>
             </li>
-            <li<?php print ($contentPage ? ' class="active"' : ''); ?>>
+            <li<?php echo ($contentPage ? ' class="active"' : ''); ?>>
                 <a href="index.php?action=content">
-                    <i class="icon-pencil icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_content']; ?>
+                    <i class="icon-pencil icon-white"></i> <?php echo $PMF_LANG['admin_mainmenu_content']; ?>
                 </a>
             </li>
-            <li<?php print ($statisticsPage ? ' class="active"' : ''); ?>>
+            <li<?php echo ($statisticsPage ? ' class="active"' : ''); ?>>
                 <a href="index.php?action=statistics">
-                    <i class="icon-tasks icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_statistics']; ?>
+                    <i class="icon-tasks icon-white"></i> <?php echo $PMF_LANG['admin_mainmenu_statistics']; ?>
                 </a>
             </li>
-            <li<?php print ($exportsPage ? ' class="active"' : ''); ?>>
+            <li<?php echo ($exportsPage ? ' class="active"' : ''); ?>>
                 <a href="index.php?action=export">
-                    <i class="icon-book icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_exports']; ?>
+                    <i class="icon-book icon-white"></i> <?php echo $PMF_LANG['admin_mainmenu_exports']; ?>
                 </a>
             </li>
-            <li<?php print ($backupPage ? ' class="active"' : ''); ?>>
+            <li<?php echo ($backupPage ? ' class="active"' : ''); ?>>
                 <a href="index.php?action=backup">
-                    <i class="icon-download-alt icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_backup']; ?>
+                    <i class="icon-download-alt icon-white"></i> <?php echo $PMF_LANG['admin_mainmenu_backup']; ?>
                 </a>
             </li>
-            <li<?php print ($configurationPage ? ' class="active"' : ''); ?>>
+            <li<?php echo ($configurationPage ? ' class="active"' : ''); ?>>
                 <a href="index.php?action=config">
-                    <i class="icon-wrench icon-white"></i> <?php print $PMF_LANG['admin_mainmenu_configuration']; ?>
+                    <i class="icon-wrench icon-white"></i> <?php echo $PMF_LANG['admin_mainmenu_configuration']; ?>
                 </a>
             </li>
         </ul>
         <!-- @deprecated end-->
 
-        <ul class="nav navbar-top-links navbar-right">
+        <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <span title="<?php print $PMF_LANG['ad_user_loggedin'] . $user->getLogin(); ?>">
-                        <?php print $user->getUserData('display_name'); ?>
+                    <b class="fa fa-user"></b>
+                    <span title="<?php echo $PMF_LANG['ad_user_loggedin'] . $user->getLogin(); ?>">
+                        <?php echo $user->getUserData('display_name'); ?>
                     </span>
-                    <b class="caret"></b>
+                    <b class="fa fa-caret-down"></b>
                 </a>
-                <ul class="dropdown-menu dropdown-user">
+                <ul class="dropdown-menu">
                     <li>
                         <a href="index.php?action=passwd">
-                            <i class="icon-lock"></i> <?php echo $PMF_LANG['ad_menu_passwd'] ?>
+                            <i class="fa fa-lock"></i> <?php echo $PMF_LANG['ad_menu_passwd'] ?>
                         </a>
                     </li>
                     <li class="divider"></li>
                     <li>
                         <a href="index.php?action=logout">
-                            <i class="icon-off"></i> <?php echo $PMF_LANG['admin_mainmenu_logout']; ?>
+                            <i class="fa fa-power-off"></i> <?php echo $PMF_LANG['admin_mainmenu_logout']; ?>
                         </a>
                     </li>
                 </ul>
@@ -280,7 +276,7 @@ switch ($action) {
 
         <?php else: ?>
         <ul class="nav navbar-top-links">
-            <li><a href="../index.php?action=password"><?php print $PMF_LANG["lostPassword"]; ?></a></li>
+            <li><a href="../index.php?action=password"><?php echo $PMF_LANG["lostPassword"]; ?></a></li>
         </ul>
         <?php endif; ?>
     </nav>
@@ -306,8 +302,13 @@ switch ($action) {
                         ?>
                     </div>
                 </li>
-                <li class="nav-header"><?php print $secLevelHeader; ?></li>
-                <?php print $secLevelEntries; ?>
+                <li<?php echo ($dashboardPage ? ' class="active"' : ''); ?>>
+                    <a href="index.php">
+                        <i class="icon-home icon-white"></i> <?php echo $PMF_LANG['admin_mainmenu_home']; ?>
+                    </a>
+                </li>
+                <li class="nav-header"><?php echo $secLevelHeader; ?></li>
+                <?php echo $secLevelEntries; ?>
                 <li class="nav-header">Admin worklog</li>
                 <li><span id="saving_data_indicator"></span></li>
                 <li class="nav-header"><?php echo $PMF_LANG['ad_session_expiration']; ?></li>
