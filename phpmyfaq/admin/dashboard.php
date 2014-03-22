@@ -31,52 +31,26 @@ $faqTableInfo = $faqConfig->getDb()->getTableStatus();
 $faqSystem    = new PMF_System();
 $faqSession   = new PMF_Session($faqConfig);
 ?>
-    <header>
-        <h2>
-            <div class="pull-right">
-                <a href="?action=config">
-                    <?php if ($faqConfig->get('main.maintenanceMode')): ?>
-                    <span class="label label-important"><?php print $PMF_LANG['msgMaintenanceMode']; ?></span>
-                    <?php else: ?>
-                    <span class="label label-success"><?php print $PMF_LANG['msgOnlineMode']; ?></span>
-                    <?php endif; ?>
-                </a>
-            </div>
-            <i class="icon-dashboard"></i> <?php print $PMF_LANG['ad_pmf_info']; ?>
-        </h2>
+    <header class="row">
+        <div class="col-lg-12">
+            <h2>
+                <div class="pull-right">
+                    <a href="?action=config">
+                        <?php if ($faqConfig->get('main.maintenanceMode')): ?>
+                        <span class="label label-important"><?php print $PMF_LANG['msgMaintenanceMode']; ?></span>
+                        <?php else: ?>
+                        <span class="label label-success"><?php print $PMF_LANG['msgOnlineMode']; ?></span>
+                        <?php endif; ?>
+                    </a>
+                </div>
+                <i class="icon-dashboard"></i> <?php print $PMF_LANG['ad_pmf_info']; ?>
+            </h2>
+        </div>
     </header>
 
-    <section class="row-fluid">
-        <div class="dashboard-stat span2">
-            <span><a href="?action=viewsessions"><?php echo $PMF_LANG['ad_start_visits'] ?></a></span>
-            <?php echo $faqSession->getNumberOfSessions() ?>
-        </div>
-        <div class="dashboard-stat span2">
-            <span><a href="?action=view"><?php echo $PMF_LANG["ad_start_articles"]; ?></a></span>
-            <?php echo $faqTableInfo[PMF_Db::getTablePrefix() . "faqdata"]; ?>
-        </div>
-        <div class="dashboard-stat span2">
-            <span><a href="?action=comments"><?php echo $PMF_LANG["ad_start_comments"]; ?></a></span>
-            <?php echo $faqTableInfo[PMF_Db::getTablePrefix() . "faqcomments"]; ?>
-        </div>
-        <div class="dashboard-stat span2">
-            <span><a href="?action=question"><?php echo $PMF_LANG["msgOpenQuestions"]; ?></a></span>
-            <?php echo $faqTableInfo[PMF_Db::getTablePrefix() . "faqquestions"]; ?>
-        </div>
-        <div class="dashboard-stat span2">
-            <span><a href="?action=news"><?php echo $PMF_LANG["msgNews"]; ?></a></span>
-            <?php echo $faqTableInfo[PMF_Db::getTablePrefix() . "faqnews"]; ?>
-        </div>
-        <div class="dashboard-stat span2">
-            <span><a href="?action=user&user_action=listallusers"><?php echo $PMF_LANG['admin_mainmenu_users']; ?></a></span>
-            <?php echo $faqTableInfo[PMF_Db::getTablePrefix() . 'faquser'] - 1; ?>
-        </div>
-    </section>
-
     <?php if ($faqConfig->get('main.enableUserTracking')): ?>
-
-    <section class="row-fluid">
-        <div class="span12">
+    <section class="row">
+        <div class="col-lg-8">
             <header>
                 <h3><?php echo $PMF_LANG["ad_stat_report_visits"] ?></h3>
             </header>
@@ -100,13 +74,60 @@ $faqSession   = new PMF_Session($faqConfig);
             </script>
             <span class="visits">Loading...</span>
         </div>
+        <div class="col-lg-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-bell fa-fw"></i> Notifications Panel
+                </div>
+                <div class="panel-body">
+                    <div class="list-group">
+                        <a href="?action=viewsessions" class="list-group-item">
+                            <i class="fa fa-bar-chart-o fa-fw"></i> <?php echo $PMF_LANG['ad_start_visits'] ?>
+                            <span class="pull-right text-muted small">
+                                <em><?php echo $faqSession->getNumberOfSessions() ?></em>
+                            </span>
+                        </a>
+                        <a href="?action=view" class="list-group-item">
+                            <i class="fa fa-list-alt fa-fw"></i> <?php echo $PMF_LANG["ad_start_articles"]; ?>
+                            <span class="pull-right text-muted small">
+                                <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix() . "faqdata"]; ?></em>
+                            </span>
+                        </a>
+                        <a href="?action=comments" class="list-group-item">
+                            <i class="fa fa-comment fa-fw"></i> <?php echo $PMF_LANG["ad_start_comments"]; ?>
+                            <span class="pull-right text-muted small">
+                                <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix() . "faqcomments"]; ?></em>
+                            </span>
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <i class="fa fa-question fa-fw"></i> <?php echo $PMF_LANG["msgOpenQuestions"]; ?>
+                            <span class="pull-right text-muted small">
+                                <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix() . "faqquestions"]; ?></em>
+                            </span>
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <i class="fa fa-list-alt fa-fw"></i> <?php echo $PMF_LANG["msgNews"]; ?>
+                            <span class="pull-right text-muted small">
+                                <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix() . "faqnews"]; ?></em>
+                            </span>
+                        </a>
+                        <a href="?action=user&user_action=listallusers" class="list-group-item">
+                            <i class="fa fa-users fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_users']; ?>
+                            <span class="pull-right text-muted small">
+                                <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix() . 'faquser'] - 1; ?></em>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
     <?php endif; ?>
     <?php if ($permission['editconfig']): ?>
 
-    <section class="row-fluid">
-        <div class="span6">
+    <section class="row">
+        <div class="col-lg-6">
             <header>
                 <h3><?php print $PMF_LANG['ad_online_info']; ?></h3>
             </header>
@@ -144,7 +165,7 @@ $faqSession   = new PMF_Session($faqConfig);
             ?>
             </p>
         </div>
-        <div class="span6">
+        <div class="clo-lg-6">
             <header>
                 <h3><?php print $PMF_LANG['ad_online_verification'] ?></h3>
             </header>
