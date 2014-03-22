@@ -186,6 +186,7 @@ switch ($action) {
     <link rel="stylesheet" href="assets/css/style.css?v=1">
 
     <script src="../assets/js/phpmyfaq.min.js"></script>
+    <script src="assets/js/sidebar.js"></script>
     <script src="editor/tiny_mce.js?<?php echo time(); ?>"></script>
 
 <?php if ($edAutosave): ?>
@@ -214,41 +215,6 @@ switch ($action) {
         </div>
 
         <?php if (isset($auth) && in_array(true, $permission)): ?>
-        <!-- @deprecated begin -->
-        <ul class="nav navbar-nav">
-            <li<?php echo ($userPage ? ' class="active"' : ''); ?>>
-                <a href="index.php?action=user">
-                    <i class="icon-user icon-white"></i> <?php echo $PMF_LANG['admin_mainmenu_users']; ?>
-                </a>
-            </li>
-            <li<?php echo ($contentPage ? ' class="active"' : ''); ?>>
-                <a href="index.php?action=content">
-                    <i class="icon-pencil icon-white"></i> <?php echo $PMF_LANG['admin_mainmenu_content']; ?>
-                </a>
-            </li>
-            <li<?php echo ($statisticsPage ? ' class="active"' : ''); ?>>
-                <a href="index.php?action=statistics">
-                    <i class="icon-tasks icon-white"></i> <?php echo $PMF_LANG['admin_mainmenu_statistics']; ?>
-                </a>
-            </li>
-            <li<?php echo ($exportsPage ? ' class="active"' : ''); ?>>
-                <a href="index.php?action=export">
-                    <i class="icon-book icon-white"></i> <?php echo $PMF_LANG['admin_mainmenu_exports']; ?>
-                </a>
-            </li>
-            <li<?php echo ($backupPage ? ' class="active"' : ''); ?>>
-                <a href="index.php?action=backup">
-                    <i class="icon-download-alt icon-white"></i> <?php echo $PMF_LANG['admin_mainmenu_backup']; ?>
-                </a>
-            </li>
-            <li<?php echo ($configurationPage ? ' class="active"' : ''); ?>>
-                <a href="index.php?action=config">
-                    <i class="icon-wrench icon-white"></i> <?php echo $PMF_LANG['admin_mainmenu_configuration']; ?>
-                </a>
-            </li>
-        </ul>
-        <!-- @deprecated end-->
-
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -287,7 +253,7 @@ switch ($action) {
         <div class="sidebar-collapse">
             <?php if (isset($auth) && in_array(true, $permission)) { ?>
             <ul class="nav" id="side-menu">
-                <li>
+                <li class="sidebar-userinfo">
                     <div class="userpanel">
                         <?php
                         if ($faqConfig->get('main.enableGravatarSupport')) {
@@ -304,15 +270,71 @@ switch ($action) {
                 </li>
                 <li<?php echo ($dashboardPage ? ' class="active"' : ''); ?>>
                     <a href="index.php">
-                        <i class="icon-home icon-white"></i> <?php echo $PMF_LANG['admin_mainmenu_home']; ?>
+                        <i class="fa fa-dashboard fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_home']; ?>
                     </a>
                 </li>
-                <li class="nav-header"><?php echo $secLevelHeader; ?></li>
-                <?php echo $secLevelEntries; ?>
-                <li class="nav-header">Admin worklog</li>
-                <li><span id="saving_data_indicator"></span></li>
-                <li class="nav-header"><?php echo $PMF_LANG['ad_session_expiration']; ?></li>
-                <li><span id="sessioncounter"><img src="images/indicator.gif"> Loading...</span></li>
+                <li<?php echo ($userPage ? ' class="active"' : ''); ?>>
+                    <a href="index.php?action=user">
+                        <i class="fa fa-users"></i> <?php echo $PMF_LANG['admin_mainmenu_users']; ?>
+                        <span class="fa arrow"></span></a>
+                    </a>
+                    <ul class="nav nav-second-level collapse <?php echo ($userPage ? 'in' : '') ?>">
+                        <?php echo $secLevelEntries; ?>
+                    </ul>
+                </li>
+                <li<?php echo ($contentPage ? ' class="active"' : ''); ?>>
+                    <a href="index.php?action=content">
+                        <i class="fa fa-edit fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_content']; ?>
+                        <span class="fa arrow"></span></a>
+                    </a>
+                    <ul class="nav nav-second-level collapse <?php echo ($contentPage ? 'in' : '') ?>">
+                        <?php echo $secLevelEntries; ?>
+                    </ul>
+                </li>
+                <li<?php echo ($statisticsPage ? ' class="active"' : ''); ?>>
+                    <a href="index.php?action=statistics">
+                        <i class="fa fa-tasks fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_statistics']; ?>
+                        <span class="fa arrow"></span></a>
+                    </a>
+                    <ul class="nav nav-second-level collapse <?php echo ($statisticsPage ? 'in' : '') ?>">
+                        <?php echo $secLevelEntries; ?>
+                    </ul>
+                </li>
+                <li<?php echo ($exportsPage ? ' class="active"' : ''); ?>>
+                    <a href="index.php?action=export">
+                        <i class="fa fa-book fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_exports']; ?>
+                    </a>
+                </li>
+                <li<?php echo ($backupPage ? ' class="active"' : ''); ?>>
+                    <a href="index.php?action=backup">
+                        <i class="fa fa-download fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_backup']; ?>
+                    </a>
+                    <ul class="nav nav-second-level collapse">
+                        <?php echo $secLevelEntries; ?>
+                    </ul>
+                </li>
+                <li<?php echo ($configurationPage ? ' class="active"' : ''); ?>>
+                    <a href="index.php?action=config">
+                        <i class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_configuration']; ?>
+                        <span class="fa arrow"></span></a>
+                    </a>
+                    <ul class="nav nav-second-level collapse <?php echo ($configurationPage ? 'in' : '') ?>">
+                        <?php echo $secLevelEntries; ?>
+                    </ul>
+                </li>
+
+                <li class="sidebar-adminlog">
+                    <div>
+                        <b class="fa fa-info-circle fa-fw"></b> Admin worklog<br>
+                        <span id="saving_data_indicator"></span>
+                    </div>
+                </li>
+                <li class="sidebar-sessioninfo">
+                    <div>
+                        <b class="fa fa-clock-o fa-fw"></b> <?php echo $PMF_LANG['ad_session_expiration']; ?>:
+                        <span id="sessioncounter"><img src="images/indicator.gif"> Loading...</span>
+                    </div>
+                </li>
             </ul>
             <?php } ?>
         </div>
