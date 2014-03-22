@@ -41,9 +41,8 @@ module.exports = function(grunt) {
             options: {
                 banner: '<%= banner %>'
             },
-            dist: {
-                src: '<%= concat.dist.dest %>',
-                dest: 'phpmyfaq/assets/js/phpmyfaq.min.js'
+            frontend: {
+                files: { 'phpmyfaq/assets/js/phpmyfaq.min.js': [ '<%= concat.dist.dest %>' ] }
             }
         },
         jshint: {
