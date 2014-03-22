@@ -1,6 +1,6 @@
 <?php
 /**
- * Displays the user managment frontend
+ * Displays the user management frontend
  *
  * PHP 5.2
  *
@@ -291,7 +291,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     if ($userAction == 'add' && $permission['adduser']) {
 ?>
         <header>
-            <h2><i class="icon-user"></i> <?php echo $PMF_LANG["ad_adus_adduser"] ?></h2>
+            <h2><i class="fa fa-user"></i> <?php echo $PMF_LANG["ad_adus_adduser"] ?></h2>
         </header>
 
         <div id="user_message"><?php print $message; ?></div>
@@ -356,20 +356,22 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     // show list of users
     if ($userAction == 'list') {
 ?>
-        <header>
-            <h2>
-                <i class="icon-user"></i> <?php print $PMF_LANG['ad_user']; ?>
-                <div class="pull-right">
-                    <a class="btn btn-success" href="?action=user&amp;user_action=add">
-                        <i class="icon-plus"></i> <?php print $PMF_LANG["ad_user_add"]; ?>
-                    </a>
-                    <?php if ($permission['edituser']): ?>
-                    <a class="btn btn-info" href="?action=user&amp;user_action=listallusers">
-                        <i class="icon-list"></i> <?php print $PMF_LANG['list_all_users']; ?>
-                    </a>
-                    <?php endif; ?>
-                </div>
-            </h2>
+        <header class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header">
+                    <i class="icon-user"></i> <?php print $PMF_LANG['ad_user']; ?>
+                    <div class="pull-right">
+                        <a class="btn btn-success" href="?action=user&amp;user_action=add">
+                            <i class="icon-plus"></i> <?php print $PMF_LANG["ad_user_add"]; ?>
+                        </a>
+                        <?php if ($permission['edituser']): ?>
+                        <a class="btn btn-info" href="?action=user&amp;user_action=listallusers">
+                            <i class="icon-list"></i> <?php print $PMF_LANG['list_all_users']; ?>
+                        </a>
+                        <?php endif; ?>
+                    </div>
+                </h2>
+            </div>
         </header>
 
         <script type="text/javascript" src="assets/js/user.js"></script>
@@ -410,15 +412,20 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         </script>
         <div id="user_message"><?php print $message; ?></div>
 
-        <div class="row-fluid">
-            <div class="span4" id="userAccounts">
-                <fieldset>
-                    <legend><?php print $PMF_LANG["ad_user_username"]; ?></legend>
+        <div class="row">
+            <div class="col-lg-4" id="userAccounts">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <?php print $PMF_LANG["ad_user_username"]; ?>
+                    </div>
+
                     <form name="user_select" id="user_select" action="?action=user&amp;user_action=delete_confirm"
                           method="post" accept-charset="utf-8">
+                    <div class="panel-body">
 
                         <label for="user_list_autocomplete"><?php print $PMF_LANG['ad_auth_user']; ?>:</label>
-                        <input type="text" id="user_list_autocomplete" name="user_list_search" data-provide="typeahead" />
+                        <input type="search" id="user_list_autocomplete" name="user_list_search" data-provide="typeahead"
+                            class="form-search">
                         <script type="text/javascript">
                         //<![CDATA[
                         var mappedIds,
@@ -444,72 +451,84 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                         });
                         //]]>
                         </script>
-                        <p>
-                            <input type="hidden" id="user_list_select" name="user_list_select" value="" />
-                            <button class="btn btn-danger" type="submit">
-                                <?php print $PMF_LANG['ad_gen_delete']; ?>
-                            </button>
-                        </p>
+                    </div>
+                    <div class="panel-footer">
+                        <input type="hidden" id="user_list_select" name="user_list_select" value="" />
+                        <button class="btn btn-danger" type="submit">
+                            <?php print $PMF_LANG['ad_gen_delete']; ?>
+                        </button>
+                    </div>
                     </form>
-                </fieldset>
+                </div>
             </div>
-            <div class="span4" id="userDetails">
-                <fieldset>
-                    <legend id="user_data_legend"><?php print $PMF_LANG["ad_user_profou"]; ?></legend>
+            <div class="col-lg-4" id="userDetails">
+                <div class="panel panel-default">
+                    <div class="panel-heading" id="user_data_legend">
+                        <?php print $PMF_LANG["ad_user_profou"]; ?>
+                    </div>
                     <form action="?action=user&amp;user_action=update_data" method="post" accept-charset="utf-8">
-                        <input id="update_user_id" type="hidden" name="user_id" value="0" />
-                        <p>
-                            <label for="user_status_select" class="small">
-                                <?php print $PMF_LANG['ad_user_status']; ?>
-                            </label>
-                            <select id="user_status_select" name="user_status" >
-                                <option value="active"><?php print $PMF_LANG['ad_user_active']; ?></option>
-                                <option value="blocked"><?php print $PMF_LANG['ad_user_blocked']; ?></option>
-                                <option value="protected"><?php print $PMF_LANG['ad_user_protected']; ?></option>
-                            </select>
-                        </p>
-                        <div id="user_data_table"></div><!-- end #user_data_table -->
-                        <p>
+                        <div class="panel-body">
+                            <input id="update_user_id" type="hidden" name="user_id" value="0" />
+                                <label for="user_status_select" class="small">
+                                    <?php print $PMF_LANG['ad_user_status']; ?>
+                                </label>
+                                <select id="user_status_select" name="user_status" >
+                                    <option value="active"><?php print $PMF_LANG['ad_user_active']; ?></option>
+                                    <option value="blocked"><?php print $PMF_LANG['ad_user_blocked']; ?></option>
+                                    <option value="protected"><?php print $PMF_LANG['ad_user_protected']; ?></option>
+                                </select>
+                            <div id="user_data_table"></div>
+                        </div>
+                        <div class="panel-footer">
                             <button class="btn btn-primary" type="submit">
                                 <?php print $PMF_LANG["ad_gen_save"]; ?>
                             </button>
-                        </p>
+                        </div>
                     </form>
-                </fieldset>
+                </div>
             </div>
-            <div class="span4" id="userRights">
+            <div class="col-lg-4" id="userRights">
                 <form id="rightsForm" action="?action=user&amp;user_action=update_rights" method="post" accept-charset="utf-8">
                     <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
-                    <fieldset>
-                        <legend id="user_rights_legend"><?php print $PMF_LANG["ad_user_rights"]; ?></legend>
-                        <input id="rights_user_id" type="hidden" name="user_id" value="0" />
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="user_rights_legend">
+                            <?php print $PMF_LANG["ad_user_rights"]; ?>
+                        </div>
+                        <div class="panel-body">
+                            <input id="rights_user_id" type="hidden" name="user_id" value="0" />
 
-                        <a class="btn btn-small" href="javascript:formCheckAll('rightsForm')">
-                            <?php print $PMF_LANG['ad_user_checkall']; ?>
-                        </a>
-                        <a class="btn btn-small" href="javascript:formUncheckAll('rightsForm')">
-                            <?php print $PMF_LANG['ad_user_uncheckall']; ?>
-                        </a>
-
-                        <?php foreach ($user->perm->getAllRightsData() as $right): ?>
-                        <label class="checkbox">
-                            <input id="user_right_<?php print $right['right_id']; ?>" type="checkbox"
-                                   name="user_rights[]" value="<?php print $right['right_id']; ?>"/>
-                            <?php
-                            if (isset($PMF_LANG['rightsLanguage'][$right['name']])) {
-                                echo $PMF_LANG['rightsLanguage'][$right['name']];
-                            } else {
-                                echo $right['description'];
-                            }
-                            ?>
-                        </label>
-                        <?php endforeach; ?>
-
-                        <button class="btn btn-primary" type="submit">
-                            <?php print $PMF_LANG["ad_gen_save"]; ?>
-                        </button>
-
-                    </fieldset>
+                            <ul class="list-group">
+                                <li class="list-group-item text-center">
+                                    <a class="btn btn-primary btn-sm" href="javascript:formCheckAll('rightsForm')">
+                                        <?php print $PMF_LANG['ad_user_checkall']; ?>
+                                    </a>
+                                    <a class="btn btn-primary btn-sm" href="javascript:formUncheckAll('rightsForm')">
+                                        <?php print $PMF_LANG['ad_user_uncheckall']; ?>
+                                    </a>
+                                </li>
+                            <?php foreach ($user->perm->getAllRightsData() as $right): ?>
+                                <li class="list-group-item">
+                                    <label class="checkbox">
+                                    <input id="user_right_<?php print $right['right_id']; ?>" type="checkbox"
+                                           name="user_rights[]" value="<?php print $right['right_id']; ?>"/>
+                                <?php
+                                if (isset($PMF_LANG['rightsLanguage'][$right['name']])) {
+                                    echo $PMF_LANG['rightsLanguage'][$right['name']];
+                                } else {
+                                    echo $right['description'];
+                                }
+                                ?>
+                                    </label>
+                                </li>
+                            <?php endforeach; ?>
+                            </ul>
+                        </div>
+                        <div class="panel-footer">
+                            <button class="btn btn-primary" type="submit">
+                                <?php print $PMF_LANG["ad_gen_save"]; ?>
+                            </button>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -548,15 +567,17 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         );
         $pagination = new PMF_Pagination($faqConfig, $options);
 ?>
-        <header>
-            <h2>
-                <i class="icon-user"></i> <?php print $PMF_LANG['ad_user']; ?>
-                <div class="pull-right">
-                    <a class="btn btn-success" href="?action=user&amp;user_action=add">
-                        <i class="icon-plus"></i> <?php print $PMF_LANG["ad_user_add"]; ?>
-                    </a>
-                </div>
-            </h2>
+        <header class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header">
+                    <i class="fa fa-user"></i> <?php print $PMF_LANG['ad_user']; ?>
+                    <div class="pull-right">
+                        <a class="btn btn-success" href="?action=user&amp;user_action=add">
+                            <i class="icon-plus"></i> <?php print $PMF_LANG["ad_user_add"]; ?>
+                        </a>
+                    </div>
+                </h2>
+            </div>
         </header>
         <div id="user_message"><?php print $message; ?></div>
         <table class="table table-striped">

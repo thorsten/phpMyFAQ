@@ -33,7 +33,7 @@ $faqSession   = new PMF_Session($faqConfig);
 ?>
     <header class="row">
         <div class="col-lg-12">
-            <h2>
+            <h2 class="page-header">
                 <div class="pull-right">
                     <a href="?action=config">
                         <?php if ($faqConfig->get('main.maintenanceMode')): ?>
